@@ -2669,6 +2669,7 @@ class Comp7SureShotEquipment(VisualScriptEquipment):
         params = super(Comp7SureShotEquipment, self).tooltipParams
         params['shotDispersionFactorsBuff'] = tuple(map(lambda b: (1.0 - b) * 100, self.shotDispersionFactors))
         params['gunReloadBuff'] = tuple(map(lambda b: b * 100, self.slvl))
+        params['killGunReloadBuff'] = tuple(map(lambda b: b * 100, self.sdlvl))
         return params
 
     def _readConfig(self, xmlCtx, section):
@@ -3042,11 +3043,11 @@ class ShotPassion(Equipment, CountableConsumableConfigReader):
         self.posteffectPrefab = _xml.readStringOrNone(xmlCtx, section, 'posteffectPrefab')
 
     def _readConfig(self, xmlCtx, section):
-        self.duration = _xml.readInt(xmlCtx, section, 'duration', 0)
+        self.duration = _xml.readPositiveFloat(xmlCtx, section, 'duration')
         self.increaseFactors = VehicleFactorsXmlReader.readFactors(xmlCtx, section, 'increaseFactors')
-        self.damageIncreasePerShot = _xml.readFloat(xmlCtx, section, 'damageIncreasePerShot', component_constants.ZERO_FLOAT)
-        self.maxDamageIncreasePerShot = _xml.readFloat(xmlCtx, section, 'maxDamageIncreasePerShot', component_constants.ZERO_FLOAT)
-        self.cooldownTime = _xml.readInt(xmlCtx, section, 'cooldownSeconds', component_constants.ZERO_INT)
+        self.damageIncreasePerShot = _xml.readNonNegativeFloat(xmlCtx, section, 'damageIncreasePerShot')
+        self.maxDamageIncreasePerShot = _xml.readNonNegativeFloat(xmlCtx, section, 'maxDamageIncreasePerShot')
+        self.cooldownTime = _xml.readNonNegativeFloat(xmlCtx, section, 'cooldownSeconds')
         self.readCountableConsumableConfig(xmlCtx, section)
 
     def _getDescription(self, descr):
@@ -3055,16 +3056,16 @@ class ShotPassion(Equipment, CountableConsumableConfigReader):
         return i18n.makeString(localizeDescr, duration=getNiceNumberFormat(self.duration), dmgPerShot=getNiceNumberFormat(self.damageIncreasePerShot * 100) + percentSymbol, maxDmgPerShot=getNiceNumberFormat(self.maxDamageIncreasePerShot * 100) + percentSymbol)
 
 
-class RecoilRecuperatorEquipment(VisualScriptEquipment):
+class BaseAbilityEquipment(VisualScriptEquipment):
     __slots__ = ('duration', 'factors')
 
     def __init__(self):
-        super(RecoilRecuperatorEquipment, self).__init__()
+        super(BaseAbilityEquipment, self).__init__()
         self.duration = component_constants.ZERO_FLOAT
         self.factors = []
 
     def _readConfig(self, xmlCtx, section):
-        super(RecoilRecuperatorEquipment, self)._readConfig(xmlCtx, section)
+        super(BaseAbilityEquipment, self)._readConfig(xmlCtx, section)
         self.duration = section.readFloat('duration')
         addFactors = VehicleFactorsXmlReader.readFactors(xmlCtx, section, 'additiveFactors')
         mulFactors = VehicleFactorsXmlReader.readFactors(xmlCtx, section, 'multiplicativeFactors')
@@ -3075,3 +3076,45 @@ class RecoilRecuperatorEquipment(VisualScriptEquipment):
             self.factors.append(VehicleAttribute(name, AttrsOperation.MUL, value))
 
         self._exportSlotsToVSE()
+
+
+class CoolantTankAbilityEquipment(BaseAbilityEquipment):
+    __slots__ = ('penaltyReloadTime',)
+
+    def __init__(self):
+        super(CoolantTankAbilityEquipment, self).__init__()
+        self.penaltyReloadTime = component_constants.ZERO_FLOAT
+
+    def _readConfig(self, xmlCtx, section):
+        super(CoolantTankAbilityEquipment, self)._readConfig(xmlCtx, section)
+        self.penaltyReloadTime = _xml.readPositiveFloat(xmlCtx, section, 'penaltyReloadTime')
+
+
+class TankRamAbilityEquipment(BaseAbilityEquipment):
+    __slots__ = ('cooldownAfterRamKill',)
+
+    def __init__(self):
+        super(TankRamAbilityEquipment, self).__init__()
+        self.cooldownAfterRamKill = component_constants.ZERO_FLOAT
+
+    def _readConfig(self, xmlCtx, section):
+        super(TankRamAbilityEquipment, self)._readConfig(xmlCtx, section)
+        self.cooldownAfterRamKill = _xml.readPositiveFloat(xmlCtx, section, 'cooldownAfterRamKill')
+
+
+class DamageModifierAbilityEquipment(BaseAbilityEquipment):
+    __slots__ = ('damageIncreasePerShot', 'maxDamageIncreasePerShot', 'damageFirstIncrease', 'addDuration')
+
+    def __init__(self):
+        super(DamageModifierAbilityEquipment, self).__init__()
+        self.damageIncreasePerShot = component_constants.ZERO_FLOAT
+        self.maxDamageIncreasePerShot = component_constants.ZERO_FLOAT
+        self.damageFirstIncrease = component_constants.ZERO_FLOAT
+        self.addDuration = component_constants.ZERO_FLOAT
+
+    def _readConfig(self, xmlCtx, section):
+        super(DamageModifierAbilityEquipment, self)._readConfig(xmlCtx, section)
+        self.damageIncreasePerShot = _xml.readPositiveFloat(xmlCtx, section, 'damageIncreasePerShot', component_constants.ZERO_FLOAT)
+        self.maxDamageIncreasePerShot = _xml.readPositiveFloat(xmlCtx, section, 'maxDamageIncreasePerShot', component_constants.ZERO_FLOAT)
+        self.damageFirstIncrease = _xml.readPositiveFloat(xmlCtx, section, 'damageFirstIncrease', component_constants.ZERO_FLOAT)
+        self.addDuration = _xml.readPositiveFloat(xmlCtx, section, 'addDuration', component_constants.ZERO_FLOAT)

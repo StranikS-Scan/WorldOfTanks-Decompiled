@@ -17,6 +17,9 @@ class SOUNDS(CONST_CONTAINER):
     FIRST_ENTER = 'armory_yard_enter_first'
     ENTER = 'armory_yard_enter'
     EXIT = 'armory_yard_exit'
+    SOUND_DRONE_SWITCH_GROUP = 'SWITCH_ext_AY_drone_switch'
+    SOUND_DRONE_01 = 'SWITCH_ext_AY_drone_01'
+    SOUND_DRONE_02 = 'SWITCH_ext_AY_drone_02'
 
 
 def getStageVoTapeRecorderName(stage):

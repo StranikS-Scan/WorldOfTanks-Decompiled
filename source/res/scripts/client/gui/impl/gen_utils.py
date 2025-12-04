@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen_utils.py
-from typing import Optional, Generator, Iterator
+from typing import Optional, Generator, Iterator, Iterable
 INVALID_RES_ID = -1
 
 class DynAccessor(object):
@@ -17,6 +17,15 @@ class DynAccessor(object):
 
     def dyn(self, attr, default=None):
         return getattr(self, attr, default or _g_invalid)
+
+    def recursiveDyn(self, attrs, default=None):
+        res = self
+        for src in attrs:
+            res = res.dyn(src)
+            if not res.isValid():
+                return default or _g_invalid
+
+        return res
 
     def num(self, attr, default=None):
         return getattr(self, 'c_{}'.format(attr), default or _g_invalid)

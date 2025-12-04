@@ -4,13 +4,14 @@ import json
 from typing import Tuple
 from functools import partial
 import BigWorld
+from armory_yard.gui.impl.lobby.feature.tooltips.armory_yard_currency_tooltip_view import ArmoryYardCurrencyTooltipView
 from armory_yard_constants import PDATA_KEY_ARMORY_YARD, SHOP_PDATA_KEY, SHOP_LAST_SEASON_COMPLETED
 from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_shop_buy_view_model import ArmoryYardShopBuyViewModel
 from armory_yard.gui.impl.lobby.feature.tooltips.armory_yard_wallet_not_available_tooltip_view import ArmoryYardWalletNotAvailableTooltipView
 from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_rewards_view_model import State
 from armory_yard.gui.impl.lobby.feature.armory_yard_shop_base import ArmoryYardShopBaseView
 from armory_yard.gui.impl.lobby.feature.tooltips.rest_reward_tooltip_view import RestRewardTooltipView
-from armory_yard.gui.shared.bonus_packers import getArmoryYardBuyViewPacker, packRestModel
+from armory_yard.gui.shared.bonus_packers import packRestModel, getArmoryYardBonusPacker
 from armory_yard.gui.shared.bonuses_sorter import bonusesSortKeyFunc
 from armory_yard.gui.shared.shop_bonus_packers import packShopItem, getBonusPacker
 from armory_yard.gui.window_events import showBuyGoldForArmoryYard, showArmoryYardShopWindow, showArmoryYardRewardWindow, showArmoryYardVehiclePreview, showArmoryYardShopRewardWindow, showArmoryYardShopBuyWindow
@@ -21,12 +22,12 @@ from gui.server_events.bonuses import getNonQuestBonuses, splitBonuses, mergeBon
 from gui.impl import backport
 from gui.shared.event_dispatcher import showHangar
 from gui.shared.money import Currency
-from frameworks.wulf import WindowFlags, WindowLayer, ViewSettings, ViewFlags, ViewModel
+from frameworks.wulf import WindowFlags, WindowLayer, ViewSettings, ViewFlags
 from gui.impl.gen import R
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
-from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
 from helpers import dependency
+from shared_utils import first
 from skeletons.gui.game_control import IWalletController, IArmoryYardShopController, IArmoryYardController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.impl import IGuiLoader
@@ -66,7 +67,7 @@ class ArmoryYardShopBuyView(ArmoryYardShopBaseView):
         elif contentID == R.views.armory_yard.lobby.feature.tooltips.ArmoryYardWalletNotAvailableTooltipView():
             return ArmoryYardWalletNotAvailableTooltipView()
         else:
-            return ViewImpl(ViewSettings(R.views.armory_yard.lobby.feature.tooltips.ShopCurrencyTooltipView(), model=ViewModel())) if contentID == R.views.armory_yard.lobby.feature.tooltips.ShopCurrencyTooltipView() else super(ArmoryYardShopBuyView, self).createToolTipContent(event, contentID)
+            return ArmoryYardCurrencyTooltipView(event.getArgument('currency')) if contentID == R.views.armory_yard.lobby.feature.tooltips.ArmoryYardCurrencyTooltipView() else super(ArmoryYardShopBuyView, self).createToolTipContent(event, contentID)
 
     def getTooltipData(self, event):
         return self.__tooltipData.get(event.getArgument('tooltipId'), None)
@@ -110,6 +111,7 @@ class ArmoryYardShopBuyView(ArmoryYardShopBaseView):
          (self.viewModel.onBack, self.onBack),
          (self.viewModel.onBuyProduct, self.onBuyProduct),
          (self.viewModel.onShowVehiclePreview, self.__onShowVehiclePreview),
+         (self.viewModel.onShowStylePreview, self.__onShowStylePreview),
          (self.__wallet.onWalletStatusChanged, self.__onWalletStatusChanged),
          (self.__armoryYardShopCtrl.onSettingsUpdate, self.__update),
          (self.__armoryYardShopCtrl.onProductsUpdate, self.__update),
@@ -151,6 +153,16 @@ class ArmoryYardShopBuyView(ArmoryYardShopBaseView):
                  'productID': self.__productId}), backBtnLabel=backport.text(R.strings.armory_shop.shopBuyView.backGoto()))
                 self.__armoryYardCtrl.cameraManager.goToHangar()
 
+    def __onShowStylePreview(self):
+        customization = first(self.__getProductData().get('bonus', {}).get('customizations', {}))
+        if customization:
+            styleID = customization.get('id', '')
+            self.onClose()
+            self.__armoryYardCtrl.isVehiclePreview = True
+            self.__armoryYardCtrl.showShopStylePreview(styleID=styleID, backCallback=partial(self.__armoryYardCtrl.goToArmoryYard, ctx={'loadShopBuyView': True,
+             'productID': self.__productId}))
+            self.__armoryYardCtrl.cameraManager.goToHangar()
+
     def __onPurchaseResponse(self, requestID, resultID, errorStr, data=None, isBundle=False, stages=0):
         Waiting.hide('buyItem')
         self.__isPurchasing = False
@@ -185,7 +197,7 @@ class ArmoryYardShopBuyView(ArmoryYardShopBaseView):
                 itemModel = model.item
                 itemModel.setItemID(self.__productId)
                 packShopItem(self.__productId, productData, itemModel, isLargeIcon=True)
-                itemModel.setAvailable(self.__armoryYardShopCtrl.isSeasonCompleted)
+                itemModel.setAvailable(self.__armoryYardShopCtrl.isProgressionCompleted)
                 self.__fillRewards(model.getRewards())
             return
 
@@ -207,7 +219,7 @@ class ArmoryYardShopBuyView(ArmoryYardShopBaseView):
         rewards = splitBonuses(mergeBonuses(rewards))
         rewards.sort(key=bonusesSortKeyFunc)
         isExceedsVisible = int(len(rewards) > self.viewModel.MAX_VISIBLE_REWARDS)
-        packBonusModelAndTooltipData(rewards[:self.viewModel.MAX_VISIBLE_REWARDS - isExceedsVisible], modelRewardsList, tooltipData=self.__tooltipData, packer=getArmoryYardBuyViewPacker())
+        packBonusModelAndTooltipData(rewards[:self.viewModel.MAX_VISIBLE_REWARDS - isExceedsVisible], modelRewardsList, tooltipData=self.__tooltipData, packer=getArmoryYardBonusPacker())
         if isExceedsVisible:
             packRestModel(rewards[self.viewModel.MAX_VISIBLE_REWARDS - isExceedsVisible:], modelRewardsList, self.__tooltipData, self.viewModel.MAX_VISIBLE_REWARDS - isExceedsVisible, restRewardsTextId=R.strings.armory_shop.shopBuyView.reward.rest())
         modelRewardsList.invalidate()
@@ -219,7 +231,7 @@ class ArmoryYardShopBuyView(ArmoryYardShopBaseView):
     def __checkAvailable(self, diff):
         if SHOP_LAST_SEASON_COMPLETED in diff.get(SHOP_PDATA_KEY, {}):
             with self.viewModel.transaction() as model:
-                model.item.setAvailable(self.__armoryYardShopCtrl.isSeasonCompleted)
+                model.item.setAvailable(self.__armoryYardShopCtrl.isProgressionCompleted)
 
     def __updatePlayerMoney(self, _=None):
         gold, tokens = self.__getPlayerMoney()
@@ -236,5 +248,5 @@ class ArmoryYardShopBuyView(ArmoryYardShopBaseView):
 class ArmoryYardShopBuyWindow(LobbyWindow):
     __slots__ = ()
 
-    def __init__(self, productId, onClosedCallback=None, onLoadedCallback=None):
-        super(ArmoryYardShopBuyWindow, self).__init__(wndFlags=WindowFlags.WINDOW, layer=WindowLayer.TOP_SUB_VIEW, content=ArmoryYardShopBuyView(R.views.armory_yard.lobby.feature.ArmoryYardShopBuyView(), productId, onClosedCallback=onClosedCallback, onLoadedCallback=onLoadedCallback))
+    def __init__(self, productId, parent=None, onClosedCallback=None, onLoadedCallback=None):
+        super(ArmoryYardShopBuyWindow, self).__init__(wndFlags=WindowFlags.WINDOW, layer=WindowLayer.TOP_SUB_VIEW, parent=parent, content=ArmoryYardShopBuyView(R.views.armory_yard.lobby.feature.ArmoryYardShopBuyView(), productId, onClosedCallback=onClosedCallback, onLoadedCallback=onLoadedCallback))

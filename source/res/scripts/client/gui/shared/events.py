@@ -301,12 +301,15 @@ class LobbySimpleEvent(HasCtxEvent):
     WAITING_SHOWN = 'waitingShown'
     WAITING_HIDDEN = 'waitingHidden'
     BATTLE_RESULTS_POSTED = 'battleResultsPosted'
+    TURN_LOBBY_DRAGGING_OFF = 'turnLobbyDraggingOff'
     BATTLE_RESULTS_SHOW_QUEST = 'battleResultsWindowShowQuest'
     CHANGE_SOUND_ENVIRONMENT = 'changeSoundEnvironment'
     VEHICLE_PREVIEW_HIDDEN = 'vehiclePreviewHidden'
     ENTITY_TOOLTIP_SHOW = 'entityTooltipShow'
     ENTITY_TOOLTIP_HIDE = 'entityTooltipHide'
     HANGAR_STATUS_CHANGED = 'hangarStatusChanged'
+    SWITCH_NEW_YEAR_VIEW = 'switchNewYearView'
+    SHOW_LOOT_BOX_VIEW = 'showLootBoxView'
 
 
 class MissionsEvent(HasCtxEvent):
@@ -361,6 +364,10 @@ class FightButtonEvent(LobbySimpleEvent):
 class LobbyHeaderMenuEvent(LobbySimpleEvent):
     TOGGLE_VISIBILITY = 'toggleVisibilityHeaderMenu'
     MENU_CLICK = 'headerMenuClick'
+
+
+class LobbyHeaderEvent(LobbySimpleEvent):
+    TOGGLE_VISIBILITY = 'toggleVisibilityHeader'
 
 
 class CloseWindowEvent(SharedEvent):
@@ -624,6 +631,7 @@ class VehicleBuyEvent(HasCtxEvent):
 
 
 class HangarVehicleEvent(HasCtxEvent):
+    ON_HERO_TANK_LABEL_UPDATE_REQUIRED = 'hangarVehicle/onHeroTankLabelUpdateRequired'
     ON_HERO_TANK_LOADED = 'hangarVehicle/onHeroTankLoaded'
     ON_HERO_TANK_DESTROY = 'hangarVehicle/onHeroTankDestroy'
     ON_PLATOON_TANK_LOADED = 'hangarVehicle/onPlatoonTankLoaded'
@@ -651,6 +659,30 @@ class HangarCustomizationEvent(HasCtxEvent):
 class SeniorityAwardsEvent(HasCtxEvent):
     ON_REWARD_VIEW_CLOSED = 'seniorityAwards/onRewardViewClosed'
     ON_ENTRY_VIEW_LOADED = 'seniorityAwards/onEntryViewLoaded'
+
+
+class LootboxesEvent(HasCtxEvent):
+    ON_REWARD_VIEW_CLOSED = 'lootboxes/onRewardViewClosed'
+    ON_MULTI_OPEN_VIEW_CLOSED = 'lootboxes/onMultiOpenViewClosed'
+    ON_SHOW_SPECIAL_REWARDS_CLOSED = 'lootboxes/onShowSpecialRewardsClosed'
+    ON_ENTRY_VIEW_LOADED = 'lootboxes/onEntryViewLoaded'
+    ON_MAIN_VIEW_CLOSED = 'lootboxes/onMainViewClosed'
+    ON_OPENING_START = 'lootboxes/onOpeningStart'
+    ON_OPENING_END = 'lootboxes/onOpeningEnd'
+    ON_OPEN_LOOTBOX = 'lootboxes/onOpenNext'
+    NEED_SHOW_REWARDS = 'lootboxes/needShowRewards'
+    NEED_STOP_ENTRY_VIDEO = 'lootboxes/needStopEntryVideo'
+    REMOVE_HIDE_VIEW = 'lootboxes/removeHideView'
+    HIDE_COMPLETE = 'lootboxes/hideComplete'
+    ON_VIDEO_OFF_MOVIE_LOADED = 'lootboxes/onVideoOffMovieLoaded'
+    ON_VIDEO_LOAD_ERROR = 'lootboxes/onVideoLoadError'
+    ON_TAB_SELECTED = 'lootboxes/onTabSelected'
+    NEED_DELIVERY_VIDEO_START = 'lootboxes/needDeliveryVideoStart'
+    NEED_DELIVERY_VIDEO_STOP = 'lootboxes/needDeliveryVideoStop'
+    ON_DELIVERY_VIDEO_END = 'lootboxes/onDeliveryVideoEnd'
+    ON_BOX_TRANSITION_END = 'lootboxes/onBoxTransitionEnd'
+    ON_STATISTICS_RESET = 'lootboxes/onStatisticsReset'
+    SWITCH_BOX_HOVER = 'lootboxes/switchBoxHover'
 
 
 class ReferralProgramEvent(HasCtxEvent):
@@ -825,7 +857,9 @@ class ArmoryYardEvent(HasCtxEvent):
     DESTROY_ARMORY_YARD_MAIN_VIEW = 'armoryYardEvents/destroyMainView'
     SHOW_ARMORY_YARD_BUY_VIEW = 'armoryYardEvents/showBuyView'
     SHOW_ARMORY_YARD_SHOP_BUY_VIEW = 'armoryYardEvents/shopBuyView'
+    SHOW_ARMORY_YARD_REROLL_VIEW = 'armoryYardEvents/rerollView'
     POI_ACTIVATED = 'ayPoiActivated'
+    STAGE_CLICKED = 'ayStageClicked'
 
 
 class Achievements20Event(HasCtxEvent):
@@ -856,3 +890,8 @@ class LobbyMarkersManagerEvent(HasCtxEvent):
     ON_MARKER_REMOVED = 'lobbyMarkersManager/removed'
     ON_MARKER_REQUEST = 'lobbyMarkersManager/request'
     ON_MARKER_RESPONSE = 'lobbyMarkersManager/response'
+
+
+class GiftSystemOperationEvent(HasCtxEvent):
+    GIFT_SENT = 'GiftSentEvent'
+    GIFT_OPENED = 'GiftOpenedEvent'

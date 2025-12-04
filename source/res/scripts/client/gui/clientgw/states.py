@@ -5,6 +5,7 @@ import BigWorld
 from adisp import adisp_process, adisp_async
 from client_request_lib.exceptions import ResponseCodes
 from debug_utils import LOG_WARNING, LOG_DEBUG
+from gui.battle_control import avatar_getter
 from gui.clans.restrictions import AccountClanLimits, DefaultAccountClanLimits
 from gui.clans.settings import LOGIN_STATE
 from gui.shared.utils import getPlayerDatabaseID, backoff
@@ -401,6 +402,8 @@ class AvailableState(_WebState):
                         self.__accessTokenData = AccessTokenData(data['access_token'], responseTime + float(data['expires_in']))
                     else:
                         LOG_DEBUG("Response of login to the clientgw doesn't contain data")
+        elif not response and avatar_getter.getArena():
+            LOG_DEBUG('Request cancelled. Possible the requester was changed after start battle.', response)
         else:
             LOG_WARNING('There is error while getting spa token for clientgw gate', response)
         self.__loginState = nextLoginState

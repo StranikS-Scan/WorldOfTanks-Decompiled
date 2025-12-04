@@ -16,7 +16,7 @@ from ClientUnitMgr import ClientUnitMgr, ClientUnitBrowser
 from ContactInfo import ContactInfo
 from OfflineMapCreator import g_offlineMapCreator
 from PlayerEvents import g_playerEvents as events
-from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer, ClientBattleRoyale, ArmoryYard, portal
+from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer, ClientBattleRoyale, ArmoryYard
 from account_helpers.dog_tags import DogTags
 from account_helpers.maps_training import MapsTraining
 from account_helpers.offers.sync_data import OffersSyncData
@@ -193,7 +193,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.referralProgram = g_accountRepository.referralProgram
         self.playStreak = g_accountRepository.playStreak
         self.paragons = g_accountRepository.paragons
-        self.portal = g_accountRepository.portal
         self.customFilesCache = g_accountRepository.customFilesCache
         self.commandProxy = g_accountRepository.commandProxy
         self.syncData.setAccount(self)
@@ -1261,7 +1260,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.referralProgram.synchronize(isFullSync, diff)
             self.playStreak.synchronize(isFullSync, diff)
             self.paragons.synchronize(isFullSync, diff)
-            self.portal.synchronize(isFullSync, diff)
             self._synchronizeServerSettings(diff)
             self._synchronizeDisabledPersonalMissions(diff)
             self._synchronizeEventNotifications(diff)
@@ -1524,7 +1522,6 @@ class _AccountRepository(object):
         self.freePremiumCrew = {}
         self.referralProgram = ReferralProgram(self.syncData)
         self.playStreak = PlayStreak(self.syncData)
-        self.portal = portal.Portal()
         self.gMap = ClientGlobalMap()
         self.onTokenReceived = Event.Event()
         self.requestID = AccountCommands.REQUEST_ID_UNRESERVED_MIN
@@ -1544,7 +1541,6 @@ def delAccountRepository():
         g_accountRepository.onTokenReceived.clear()
         g_accountRepository.prebattleInvitations.clear()
         g_accountRepository.paragons.clear()
-        g_accountRepository.portal.clear()
         g_accountRepository = None
         return
 

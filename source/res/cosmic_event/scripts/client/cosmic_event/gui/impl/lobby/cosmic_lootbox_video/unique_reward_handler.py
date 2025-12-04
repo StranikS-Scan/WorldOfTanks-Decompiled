@@ -29,7 +29,7 @@ def getUniqueCosmicRewardsData(resultData, itemsCache=None):
 
 
 class CosmicVideoReward(LootboxVideoRewardView):
-    __slots__ = ('__vehicles', '__dataIter')
+    __slots__ = ('__dataIter',)
 
     def __init__(self, layoutID, rewards):
         self.__dataIter = (vD for vD in rewards[REWARDS_DATA_CATEGORY])

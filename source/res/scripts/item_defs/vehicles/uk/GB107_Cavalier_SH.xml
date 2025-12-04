@@ -3059,7 +3059,6 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
-          <shotOffset>	-0.120000 0.000000 0.000000	</shotOffset>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -3083,7 +3082,9 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <shotOffset>	-0.117176 -0.003584 0	</shotOffset>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <effects>	shot_main	</effects>
           <camouflage>
             <tiling>	0.655 0.655 0.000000 0.000000	</tiling>
             <density>	114.474 120.617	</density>
@@ -3130,38 +3131,38 @@
             <collisionModelServer>	vehicles/british/GB107_Cavalier_SH/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB107_Cavalier_SH/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	-0 -0.008217 1.9349	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0 0.252938 0.252938	</anchorPosition>
+              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	-0 -0.008217 1.9349	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
-          <shotOffset>	-0.120000 0.000000 0.000000	</shotOffset>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000000 -0.00821702 1.9349	</anchorPosition>
-              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.000000 0.252938 0.252938	</anchorPosition>
-              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000000 -0.00821702 1.9349	</anchorPosition>
-              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
+          <shotOffset>	-0.117176 -0.003584 0	</shotOffset>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <effects>	shot_medium_mb	</effects>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
             <density>	102.288 86.6775	</density>
@@ -3200,38 +3201,38 @@
             <collisionModelServer>	vehicles/british/GB107_Cavalier_SH/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB107_Cavalier_SH/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	0.050658 -0.014454 2.29506	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0 0.19667 0.196671	</anchorPosition>
+              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	0.050658 -0.014454 2.29506	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
-          <shotOffset>	-0.120000 0.000000 0.000000	</shotOffset>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.0506577 -0.0144545 2.29506	</anchorPosition>
-              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.000000 0.19667 0.196671	</anchorPosition>
-              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.0506577 -0.0144545 2.29506	</anchorPosition>
-              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
+          <shotOffset>	-0.117176 -0.003584 0	</shotOffset>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <effects>	shot_main_mb	</effects>
           <camouflage>
             <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
             <density>	110.77 112.879	</density>
@@ -3249,29 +3250,28 @@
         <collisionModelClient>	vehicles/british/GB107_Cavalier_SH/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.118142 0.405121 0.95388	</gunPosition>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.993 -0.014 1.005 -0.095 1.085 0.046 0.719 0.369 0.423 0.797 0.092 0.469 0.083 0.473 0.190	</physicsShape>
+      <physicsShape>	0.993 -0.014 1.005 -0.095 1.085 0.046 0.719 0.369 0.423 0.797 0.092 0.469 0.083 0.473 0.19	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	31000	</slotId>
+          <anchorPosition>	0 0.82426 0	</anchorPosition>
+          <anchorDirection>	0 1 0	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	32000	</slotId>
+          <anchorPosition>	0 0.82426 0	</anchorPosition>
+          <anchorDirection>	0 1 0	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <customization>
         <customizableVehicleAreas>
           <paint>	TURRET	</paint>
           <camouflage>	TURRET	</camouflage>
         </customizableVehicleAreas>
       </customization>
-      <customizationSlots>
-        <slot>
-          <slotType>	paint	</slotType>
-          <slotId>	31000	</slotId>
-          <anchorPosition>	0.000000 0.82426 0.000000	</anchorPosition>
-          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
-        </slot>
-        <slot>
-          <slotType>	camouflage	</slotType>
-          <slotId>	32000	</slotId>
-          <anchorPosition>	0.000000 0.82426 0.000000	</anchorPosition>
-          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
-        </slot>
-      </customizationSlots>
       <camouflage>
         <tiling>	0.6 0.6 0.4 1.5	</tiling>
         <density>	120.602 120.647	</density>
@@ -3374,37 +3374,38 @@
             <collisionModelServer>	vehicles/british/GB107_Cavalier_SH/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB107_Cavalier_SH/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	-0 -0.008217 1.9349	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0 0.252938 0.252938	</anchorPosition>
+              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	-0 -0.008217 1.9349	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000000 -0.00821702 1.9349	</anchorPosition>
-              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.000000 0.252938 0.252938	</anchorPosition>
-              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000000 -0.00821702 1.9349	</anchorPosition>
-              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <shotOffset>	0.022806 -0.003258 0	</shotOffset>
+          <effects>	shot_medium_mb	</effects>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
             <density>	102.288 86.6775	</density>
@@ -3445,37 +3446,38 @@
             <collisionModelServer>	vehicles/british/GB107_Cavalier_SH/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB107_Cavalier_SH/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	0.050658 -0.014454 2.29506	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0 0.19667 0.196671	</anchorPosition>
+              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	0.050658 -0.014454 2.29506	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.0506577 -0.0144545 2.29506	</anchorPosition>
-              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.000000 0.19667 0.196671	</anchorPosition>
-              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.0506577 -0.0144545 2.29506	</anchorPosition>
-              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <shotOffset>	0.020356 -0.008717 0	</shotOffset>
+          <effects>	shot_main_mb	</effects>
           <camouflage>
             <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
             <density>	110.77 112.879	</density>
@@ -3516,37 +3518,38 @@
             <collisionModelServer>	vehicles/british/GB107_Cavalier_SH/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB107_Cavalier_SH/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	0.069802 0.009022 2.13575	</anchorPosition>
+              <anchorDirection>	-0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0 0.191093 0.191094	</anchorPosition>
+              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	0.069802 0.009022 2.13575	</anchorPosition>
+              <anchorDirection>	-0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.0698019 0.00902224 2.13575	</anchorPosition>
-              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.000000 0.191093 0.191094	</anchorPosition>
-              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.0698019 0.00902224 2.13575	</anchorPosition>
-              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <shotOffset>	0.021721 -0.003258 0	</shotOffset>
+          <effects>	shot_main	</effects>
           <camouflage>
             <tiling>	0.475 0.355 0.000000 0.53	</tiling>
             <density>	119.182 126.547	</density>
@@ -3595,20 +3598,19 @@
             <collisionModelServer>	vehicles/british/GB107_Cavalier_SH/collision/Gun_07.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB107_Cavalier_SH/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41000	</slotId>
-              <anchorPosition>	-0.00625001 -0.000649457 2.36623	</anchorPosition>
-              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <anchorPosition>	-0.00625 -0.000649 2.36623	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
               <slotId>	42000	</slotId>
-              <anchorPosition>	-0.00625001 -0.000649457 2.36623	</anchorPosition>
-              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <anchorPosition>	-0.00625 -0.000649 2.36623	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
@@ -3619,6 +3621,7 @@
             </customizableVehicleAreas>
           </customization>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <shotOffset>	0.02172 -0.003258 0	</shotOffset>
           <camouflage>
             <tiling>	0.9 0.6 0.000000 0.1	</tiling>
             <density>	108.94 108.038	</density>
@@ -3790,6 +3793,7 @@
             </slot>
           </customizationSlots>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <shotOffset>	-0.004344 -0.002172 0	</shotOffset>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
             <density>	102.288 86.6775	</density>
@@ -3853,6 +3857,7 @@
             </slot>
           </customizationSlots>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <shotOffset>	-0.004344 -0.004065 0	</shotOffset>
           <camouflage>
             <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
             <density>	110.77 112.879	</density>
@@ -3917,6 +3922,7 @@
             </customizableVehicleAreas>
           </customization>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <shotOffset>	-0.002172 -0.002171 0	</shotOffset>
           <camouflage>
             <tiling>	0.9 0.6 0.000000 0.1	</tiling>
             <density>	108.94 108.038	</density>

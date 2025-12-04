@@ -31,7 +31,7 @@ class UnseenEventManager(IUnseenEventsCounter):
         self.onUnseenEventUpdated({eventID: self.__unseenQuests[eventID]})
 
     def updateUnseenEvents(self, data):
-        self.__unseenQuests = data
+        self.__unseenQuests.update(data)
         self.onUnseenEventUpdated(data)
 
     def getAllUnseenEventsCount(self):

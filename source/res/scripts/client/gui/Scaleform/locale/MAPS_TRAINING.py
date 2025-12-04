@@ -687,4 +687,5 @@ class MAPS_TRAINING(object):
     BOTVEHICLETYPE_LIGHTTANK = '#maps_training:botVehicleType/lightTank'
     BOTVEHICLETYPE_AT_SPG = '#maps_training:botVehicleType/AT-SPG'
     BOTVEHICLETYPE_SPG = '#maps_training:botVehicleType/SPG'
+    BOTVEHICLEDESCRIPTION = '#maps_training:botVehicleDescription'
     BOTNAME = '#maps_training:botName'

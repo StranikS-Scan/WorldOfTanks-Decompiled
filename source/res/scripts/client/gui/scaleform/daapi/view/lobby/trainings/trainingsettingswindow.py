@@ -86,11 +86,7 @@ class TrainingSettingsWindow(TrainingWindowMeta):
     def getInfo(self):
         if not self.__isCreateRequest:
             self.__settings = self.__settings.fetch(self.prbEntity.getSettings())
-        if self.itemsCache.isSynced():
-            accountAttrs = self.itemsCache.items.stats.attributes
-        else:
-            accountAttrs = 0
-        _, maxBound = getTrainingBattleRoundLimits(accountAttrs)
+        _, maxBound = getTrainingBattleRoundLimits()
         if self.__isEpic:
             rTitle = R.strings.menu.epic_training.create.title() if self.__isCreateRequest else R.strings.menu.epic_training.info.settings.title()
         else:

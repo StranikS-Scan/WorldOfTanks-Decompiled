@@ -2,13 +2,16 @@
 # Embedded file name: scripts/common/dog_tags_common/config/validators.py
 import typing
 from dog_tags_common.config.common import ValidateException, TRIUMPH_GRADES, SKILL_GRADES, STARTING_COMPONENT_TYPES, DEDICATION_GRADES, RANKED_SKILL_GRADES
+from common import ComponentPurpose, ComponentViewType
 if typing.TYPE_CHECKING:
     from dog_tag_framework import ComponentDefinition, StartingComponents
-    from common import ComponentPurpose, ComponentViewType
 
 def validateCommon(component):
     if component.isDefault and component.isHidden:
         raise ValidateException(ValidateException.DEFAULT_HIDDEN, component.componentId)
+    if component.lightingUpTo is not None and component.purpose != ComponentPurpose.STATIC:
+        raise ValidateException(ValidateException.HAS_LIGHTING, component.componentId)
+    return
 
 
 def validateTriumphMedal(component):
@@ -67,6 +70,16 @@ def validateBase(component):
         raise ValidateException(ValidateException.HAS_UNLOCK_KEY, component.componentId, component.unlockKey)
     if component.grades is not None and len(component.grades) != 0:
         raise ValidateException(ValidateException.HAS_GRADES, component.componentId, component.grades)
+    return
+
+
+def validateStatic(component):
+    if component.isDefault:
+        raise ValidateException(ValidateException.CANNOT_BE_DEFAULT, component.componentId)
+    if component.grades is None or not len(component.grades):
+        raise ValidateException(ValidateException.HAS_GRADES, component.componentId, component.grades)
+    if component.progressKey:
+        raise ValidateException(ValidateException.HAS_PROGRESS_KEY, component.componentId)
     return
 
 

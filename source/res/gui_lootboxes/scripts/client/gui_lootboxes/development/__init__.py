@@ -3,7 +3,9 @@
 from account_helpers.AccountSettings import LOOT_BOXES_INTRO_SHOWN
 from gui.impl.gen import R
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui_lootboxes.development.dev_stat_fetcher import devStat
 from gui_lootboxes.gui.shared.event_dispatcher import showRewardScreenWindow
+from gui_lootboxes.skeletons.statistic_lootbox_controller import IStatisticLootBoxController
 from helpers import dependency
 from shared_utils import first
 from skeletons.gui.game_control import IGuiLootBoxesController
@@ -148,3 +150,12 @@ def getGuiLootBoxesCtr(guiLootBoxesCtrl=None):
 @dependency.replace_none_kwargs(guiLootBoxesCtrl=IGuiLootBoxesController)
 def devResetLootBoxesIntro(guiLootBoxesCtrl=None):
     guiLootBoxesCtrl.setSetting(LOOT_BOXES_INTRO_SHOWN, False)
+
+
+@dependency.replace_none_kwargs(statLootBoxCtrl=IStatisticLootBoxController)
+def getStatisticCtrl(statLootBoxCtrl=None):
+    return statLootBoxCtrl
+
+
+def initDevStat():
+    devStat()

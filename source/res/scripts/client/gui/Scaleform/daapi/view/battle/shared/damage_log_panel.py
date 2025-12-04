@@ -57,7 +57,12 @@ _SHELL_TYPES_TO_STR = {BATTLE_LOG_SHELL_TYPES.ARMOR_PIERCING: INGAME_GUI.DAMAGEL
  BATTLE_LOG_SHELL_TYPES.HE_MODERN: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
  BATTLE_LOG_SHELL_TYPES.HE_LEGACY_STUN: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
  BATTLE_LOG_SHELL_TYPES.HE_LEGACY_NO_STUN: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
- BATTLE_LOG_SHELL_TYPES.FLAME: INGAME_GUI.DAMAGELOG_SHELLTYPE_FLAME}
+ BATTLE_LOG_SHELL_TYPES.FLAME: INGAME_GUI.DAMAGELOG_SHELLTYPE_FLAME,
+ BATTLE_LOG_SHELL_TYPES.HE_MODERN_DF: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE_DF,
+ BATTLE_LOG_SHELL_TYPES.ARMOR_PIERCING_DF: INGAME_GUI.DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_DF,
+ BATTLE_LOG_SHELL_TYPES.HOLLOW_CHARGE_DF: INGAME_GUI.DAMAGELOG_SHELLTYPE_HOLLOW_CHARGE_DF,
+ BATTLE_LOG_SHELL_TYPES.ARMOR_PIERCING_CR_DF: INGAME_GUI.DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_CR_DF,
+ BATTLE_LOG_SHELL_TYPES.ARMOR_PIERCING_HE_DF: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE_DF}
 HIDDEN_SHELL = ''
 
 def _formatTotalValue(value):
@@ -339,27 +344,7 @@ class _DamageActionImgVOBuilder(_ActionImgVOBuilder):
             return self.__corrodingShotDmgIcon
         if info.isFireCircle():
             return self.__fireCircleDmgIcon
-        if info.isThunderStrike():
-            return self.__thunderStrikeIcon
-        if info.isGuidedMissile():
-            damageIcon = _IMAGES.DAMAGELOG_CORRODING_SHOT_16X16
-            receivedIcon = _IMAGES.DAMAGELOG_CORRODING_SHOT_ENEMY_16X16
-            if info.getType() == _ETYPE.RECEIVED_DAMAGE:
-                return receivedIcon
-            return damageIcon
-        if info.isSuperBossAura():
-            damageIcon = _IMAGES.DAMAGELOG_FIRE_CIRCLE_16X16
-            receivedIcon = _IMAGES.DAMAGELOG_FIRE_CIRCLE_ENEMY_16X16
-            if info.getType() == _ETYPE.RECEIVED_DAMAGE:
-                return receivedIcon
-            return damageIcon
-        if info.isSentinelAttack():
-            damageIcon = _IMAGES.DAMAGE_LOG_SENTINEL_ENEMY_16X16
-            receivedIcon = _IMAGES.DAMAGE_LOG_SENTINEL_ENEMY_16X16
-            if info.getType() == _ETYPE.RECEIVED_DAMAGE:
-                return receivedIcon
-            return damageIcon
-        return self.__ramIcon
+        return self.__thunderStrikeIcon if info.isThunderStrike() else self.__ramIcon
 
 
 class _AssistActionImgVOBuilder(_ActionImgVOBuilder):
@@ -486,9 +471,8 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
 
     def isSwitchToVehicle(self):
         observedVehID = self.__vehStateCtrl.getControllingVehicleID()
-        possessedVehID = self.__vehStateCtrl.getPossessedVehicleID()
         playerVehicleID = self.__arenaDP.getPlayerVehicleID()
-        return possessedVehID == observedVehID if possessedVehID is not None else playerVehicleID == observedVehID
+        return playerVehicleID == observedVehID
 
     def _populate(self):
         super(DamageLogPanel, self)._populate()

@@ -1,0 +1,127 @@
+<02_malinovka_ny.xml>
+  <name>	#arenas:02_malinovka_ny/name	</name>
+  <description>	#arenas:02_malinovka_ny/description	</description>
+  <geometry>	spaces/02_malinovka_ny	</geometry>
+  <estimatedLoad>	0.3	</estimatedLoad>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-500.000000 -500.000000	</bottomLeft>
+    <upperRight>	500.000000 500.000000	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/02_malinovka_ny/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	winter	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_winter_malinovka_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_malinovka_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_malinovka_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_malinovka_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_malinovka_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_malinovka_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_winter_02	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	env_Forest.bnk	</name>
+      </bank>
+    </loadBanks>
+  </soundRemapping>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <artilleryPreparationChance>	0.6	</artilleryPreparationChance>
+      <teamBasePositions>
+        <team1>
+          <position1>	75.599426 -391.914917	</position1>
+        </team1>
+        <team2>
+          <position2>	-372.467621 108.084656	</position2>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <domination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	430.100006 1.500000	</position>
+        </team1>
+        <team2>
+          <position>	46.099998 449.000000	</position>
+        </team2>
+      </teamSpawnPoints>
+      <controlPoint>	-44.264816 -87.251213	</controlPoint>
+    </domination>
+    <comp7>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-211.914032 424.352936	</position>
+        </team1>
+        <team2>
+          <position>	386.148010 -186.158997	</position>
+        </team2>
+      </teamSpawnPoints>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	162.393967 -36.008472	</position>
+          <type>	4	</type>
+        </point>
+        <point>
+          <position>	22.494562 -270.089539	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	-319.868958 -254.891327	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	-395.956421 172.337708	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	-45.416798 264.787842	</position>
+          <type>	4	</type>
+        </point>
+        <point>
+          <position>	386.517303 377.372314	</position>
+          <type>	4	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <teamBasePositions>
+        <team1>
+          <position1>	254.375000 211.523987	</position1>
+          <position2>	-336.161011 -65.242996	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+    </comp7>
+  </gameplayTypes>
+  <useAdvancedPhysics>	true	</useAdvancedPhysics>
+  <roadMap></roadMap>
+  <mapActivities></mapActivities>
+</02_malinovka_ny.xml>

@@ -99,7 +99,6 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
             ctrl.onPostMortemSwitched += self.__onPostMortemSwitched
             ctrl.onVehicleStateUpdated += self._onVehicleStateUpdated
             ctrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
-            ctrl.onVehiclePossessed += self.__onVehiclePossessed
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onMinimapFeedbackReceived += self.__onMinimapFeedbackReceived
@@ -118,7 +117,6 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
             ctrl.onPostMortemSwitched -= self.__onPostMortemSwitched
             ctrl.onVehicleStateUpdated -= self._onVehicleStateUpdated
             ctrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
-            ctrl.onVehiclePossessed -= self.__onVehiclePossessed
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onMinimapFeedbackReceived -= self.__onMinimapFeedbackReceived
@@ -160,9 +158,6 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
     @staticmethod
     def __getFlameDistance():
         return BigWorld.player().getVehicleDescriptor().shot.maxDistance
-
-    def __onVehiclePossessed(self):
-        self._invalidateMarkup(True)
 
     def initControlMode(self, mode, available):
         super(PersonalEntriesPlugin, self).initControlMode(mode, available)

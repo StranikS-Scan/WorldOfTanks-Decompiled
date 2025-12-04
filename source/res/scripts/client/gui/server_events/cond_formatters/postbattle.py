@@ -51,7 +51,7 @@ class MissionsPostBattleConditionsFormatter(MissionsBattleConditionsFormatter):
          'isAlive': _SurviveFormatter(),
          'achievements': _AchievementsFormatter(),
          'clanKills': _ClanKillsFormatter(),
-         'results': _BattleResultsFormatter(),
+         'results': BattleResultsFormatter(),
          'unitResults': _UnitResultsFormatter(),
          'crits': _CritsFormatter(),
          'multiStunEvent': _MultiStunEventFormatter(),
@@ -217,7 +217,7 @@ class _FirstBloodFormatter(EmptyMissionsFormatter):
     pass
 
 
-class _BattleResultsFormatter(SimpleMissionsFormatter):
+class BattleResultsFormatter(SimpleMissionsFormatter):
 
     @classmethod
     def _getTitle(cls, condition):
@@ -226,7 +226,7 @@ class _BattleResultsFormatter(SimpleMissionsFormatter):
         if topRangeLower < TOP_RANGE_LOWEST:
             return packSimpleTitle(i18n.makeString(QUESTS.DETAILS_CONDITIONS_TOP_TITLE, value=topRangeLower))
         elif value is None:
-            return super(_BattleResultsFormatter, cls)._getTitle()
+            return super(BattleResultsFormatter, cls)._getTitle()
         elif condition.keyName == 'markOfMastery':
             return packSimpleTitle(value)
         else:
@@ -251,7 +251,7 @@ class _BattleResultsFormatter(SimpleMissionsFormatter):
             return POSSIBLE_BATTLE_RESUTLS_KEYS[condition.keyName]
         else:
             LOG_ERROR('Condition is not supported.', condition.keyName)
-            return super(_BattleResultsFormatter, cls)._getIconKey()
+            return super(BattleResultsFormatter, cls)._getIconKey()
 
     def _getSortKey(self, condition):
         _, topRangeLower = condition.getMaxRange()
@@ -266,7 +266,7 @@ class _UnitResultsFormatter(SimpleMissionsFormatter):
             isAllAlive = condition.isAllAlive()
             if isAllAlive is not None:
                 result.append(self._packGui(condition))
-            resultsFormatter = _BattleResultsFormatter()
+            resultsFormatter = BattleResultsFormatter()
             for c in condition.getResults():
                 if not c.isHidden():
                     result.extend(resultsFormatter.format(c, event))

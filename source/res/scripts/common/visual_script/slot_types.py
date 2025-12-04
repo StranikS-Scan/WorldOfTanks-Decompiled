@@ -41,6 +41,7 @@ class SLOT_TYPE(object):
     E_VEHICLE_TANKMAN = 'EVehicleTankman'
     E_ARENA_PERIOD = 'EArenaPeriod'
     E_FINISH_REASON = 'EFinishReason'
+    E_VEH_COLLISION_SIDE = 'EVehCollisionSide'
 
 
 def arrayOf(slotType):

@@ -18,12 +18,8 @@ class StoryModeResultsFormatter(BattleResultsFormatter):
     @adisp_async
     @adisp_process
     def format(self, message, callback):
-        isForceOnboarding = message.data.get('isForceOnboarding', False)
-        if isForceOnboarding:
-            callback([])
-        else:
-            messages = yield super(StoryModeResultsFormatter, self).format(message)
-            callback(messages)
+        messages = yield super(StoryModeResultsFormatter, self).format(message)
+        callback(messages)
 
     def _prepareFormatData(self, message):
         templateName, ctx = super(StoryModeResultsFormatter, self)._prepareFormatData(message)

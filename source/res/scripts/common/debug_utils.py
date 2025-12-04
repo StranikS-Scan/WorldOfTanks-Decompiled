@@ -18,6 +18,20 @@ from contextlib import contextmanager
 from threading import RLock
 from soft_exception import SoftException
 _src_file_trim_to = re.compile('res/(?:%s|%s_ext)/(?:.*/)?scripts/' % (GAME_ROOT_DIR_NAME, GAME_ROOT_DIR_NAME))
+_g_trimmedFilenameByFullFilename = {}
+
+def _getTrimmedFilename(filename):
+    if filename in _g_trimmedFilenameByFullFilename:
+        return _g_trimmedFilenameByFullFilename[filename]
+    splitPaths = _src_file_trim_to.split(filename)
+    if len(splitPaths) == 2:
+        trimmedFilename = splitPaths[1]
+    else:
+        trimmedFilename = filename
+    _g_trimmedFilenameByFullFilename[filename] = trimmedFilename
+    return trimmedFilename
+
+
 _g_logMapping = {}
 _g_logLock = RLock()
 GCDUMP_CROWBAR_SWITCH = False
@@ -113,7 +127,7 @@ def init():
      'CRITICAL': BigWorld.logCritical,
      'HACK': BigWorld.logHack,
      'OBSOLETE': BigWorld.logWarning}
-    excepthook.init(not IS_CLIENT and _logLevel < LOG_LEVEL.SVR_RELEASE, _src_file_trim_to)
+    excepthook.init(not IS_CLIENT and _logLevel < LOG_LEVEL.SVR_RELEASE, _getTrimmedFilename)
 
 
 @_LogWrapper(LOG_LEVEL.RELEASE)
@@ -137,7 +151,7 @@ def LOG_CURRENT_EXCEPTION(tags=None, frame=1):
     msg += ''.join(format_exception(etype, value, tb, None))
     with _g_logLock:
         BigWorld.logError('EXCEPTION', _addTagsToMsg(tags, msg), None)
-        extMsg = excepthook.extendedTracebackAsString(_src_file_trim_to, None, None, etype, value, tb)
+        extMsg = excepthook.extendedTracebackAsString(_getTrimmedFilename, None, None, etype, value, tb)
         if extMsg:
             BigWorld.logError('EXCEPTION', _addTagsToMsg(tags, extMsg), None)
     return
@@ -165,7 +179,7 @@ def LOG_WRAPPED_CURRENT_EXCEPTION(wrapperName, orgName, orgSource, orgLineno):
     for ln in list:
         sys.stderr.write(ln.replace(wrapperName, orgName))
 
-    extMsg = excepthook.extendedTracebackAsString(_src_file_trim_to, wrapperName, orgName, etype, value, tb)
+    extMsg = excepthook.extendedTracebackAsString(_getTrimmedFilename, wrapperName, orgName, etype, value, tb)
     if extMsg:
         BigWorld.logError('EXCEPTION', extMsg, None)
     return
@@ -266,13 +280,7 @@ def _doLog(category, msg, args=None, kwargs={}, frameDepth=2):
 
 
 def _makeMsgHeader(frame):
-    filename = frame.f_code.co_filename
-    trim_match = _src_file_trim_to.findall(filename)
-    if trim_match:
-        trim_path = trim_match[0]
-        idx = filename.find(trim_path)
-        filename = filename[idx + len(trim_path):]
-    return '(%s, %d):' % (filename, frame.f_lineno)
+    return '({}, {})'.format(_getTrimmedFilename(frame.f_code.co_filename), frame.f_lineno)
 
 
 def _doLogFmt(prefix, fmt, *args):
@@ -287,7 +295,7 @@ def _addTagsToMsg(tags, msg):
 
 
 def makeFuncLocationString(func):
-    return excepthook.formatLocation(*excepthook.getLocationFromCode(_src_file_trim_to, func.func_code))
+    return excepthook.formatLocation(*excepthook.getLocationFromCode(_getTrimmedFilename, func.func_code))
 
 
 def trace(func):

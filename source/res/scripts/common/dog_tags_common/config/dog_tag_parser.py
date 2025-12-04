@@ -17,6 +17,13 @@ def _parseInt(attrValue, path):
         raise ParseException(ParseException.WRONG_PARAM_VALUE, path)
 
 
+def _parseFloat(attrValue, path):
+    try:
+        return float(attrValue)
+    except Exception:
+        raise ParseException(ParseException.WRONG_PARAM_VALUE, path)
+
+
 def _parseBool(attrValue, path):
     if attrValue.lower() in ('true', 'yes', '1'):
         return True
@@ -79,7 +86,8 @@ PARAM_PARSERS = {ParameterType.INT: _parseInt,
  ParameterType.VIEW_TYPE: _parseViewType,
  ParameterType.TYPE: _parseType,
  ParameterType.NUMBER_TYPE: _parseNumberType,
- ParameterType.FLOAT_LIST: _parseFloatList}
+ ParameterType.FLOAT_LIST: _parseFloatList,
+ ParameterType.FLOAT: _parseFloat}
 
 def _parseSection(sectionName, section, *builderAttrs):
     operationName, cls, operationParamNames, operationParamsInfo, operationDefaults = dtf.parserInfo[sectionName]

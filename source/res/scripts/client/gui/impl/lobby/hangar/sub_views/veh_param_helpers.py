@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/hangar/sub_views/veh_param_helpers.py
 from gui.impl import backport
 from gui.impl.gen.view_models.views.lobby.hangar.sub_views.vehicle_param_group_view_model import BuffIconType
-from gui.shared.gui_items import KPI, kpiFormatNoSignValue
+from gui.shared.gui_items import KPI, kpiFormatValue
 from gui.shared.items_parameters import MAX_RELATIVE_VALUE
 from gui.shared.items_parameters.comparator import PARAM_STATE
 from gui.shared.items_parameters.formatters import FORMAT_SETTINGS, KPI_FORMATTERS, KPIFormatter
@@ -87,13 +87,13 @@ def _cutDigits(value, nDigits=_NUMBER_DIGITS):
 def formatParameterValue(parameterName, paramValue, parameterState=None, formatSettings=None, allowSmartRound=True, showZeroDiff=False, isColorize=True, nDigits=_NUMBER_DIGITS):
     _listFormat = {'rounder': lambda v: backport.getIntegralFormat(int(v)),
      'separator': '/'}
-    _kpiNoSignValue = KPIFormatter(formatter=kpiFormatNoSignValue, separator=None, addEnding=True)
+    _kpiFormatValue = KPIFormatter(formatter=kpiFormatValue, separator=None, addEnding=True)
     formatSettings = formatSettings or FORMAT_SETTINGS
     settings = formatSettings.get(parameterName, _listFormat)
     doSmartRound = allowSmartRound and parameterName in _SMART_ROUND_PARAMS
     preprocessor = settings.get('preprocessor')
     if KPI.Name.hasValue(parameterName):
-        formatter, separator, addEnding = KPI_FORMATTERS.get(parameterName, _kpiNoSignValue)
+        formatter, separator, addEnding = KPI_FORMATTERS.get(parameterName, _kpiFormatValue)
         values = formatter(parameterName, paramValue, addEnding)
     elif preprocessor:
         values, separator, parameterState = preprocessor(paramValue, parameterState)

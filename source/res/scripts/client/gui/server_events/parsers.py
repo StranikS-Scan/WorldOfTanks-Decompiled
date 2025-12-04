@@ -3,7 +3,7 @@
 import typing
 import weakref
 from gui.server_events import formatters, conditions
-from gui.server_events.conditions import _Cumulativable, CumulativeResult, _ConditionsGroup
+from gui.server_events.conditions import Cumulativable, CumulativeResult, _ConditionsGroup
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache

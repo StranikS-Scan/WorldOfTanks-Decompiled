@@ -4,6 +4,7 @@ import logging
 from gui import SystemMessages
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.shared.event_dispatcher import showHangar
 from gui.shared.notifications import NotificationPriorityLevel
 from helpers import dependency
 from shared_utils import findFirst
@@ -31,6 +32,18 @@ def showStorageView(returnPlace=None, initialLootBoxId=0):
     window = LootBoxesStorageWindow(returnPlace, initialLootBoxId)
     window.load()
     return
+
+
+def showLootBoxesFullStatsWindow(statistic, category, lootbox, selectedLootBoxes, parent=None):
+    from gui_lootboxes.gui.impl.lobby.gui_lootboxes.lootboxes_full_stats_view import LootboxFullStatsWindow
+    window = LootboxFullStatsWindow(statistic, category, lootbox, selectedLootBoxes, parent=parent)
+    window.load()
+
+
+def backToFullStatisticView(statistic, category, lootbox, selectedLootBoxes):
+    showHangar()
+    showStorageView()
+    showLootBoxesFullStatsWindow(statistic, category, lootbox, selectedLootBoxes)
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)

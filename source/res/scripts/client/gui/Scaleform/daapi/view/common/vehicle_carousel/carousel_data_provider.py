@@ -19,7 +19,7 @@ from gui.shared.gui_items.dossier.achievements import isMarkOfMasteryAchieved
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers.i18n import makeString as ms
-from skeletons.gui.game_control import IBattleRoyaleController, IBootcampController, IDebutBoxesController, IEarlyAccessController, IParagonsController
+from skeletons.gui.game_control import IBattleRoyaleController, IBootcampController, IDebutBoxesController, IEarlyAccessController, IParagonsController, IComp7Controller
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsCache
 
@@ -66,6 +66,11 @@ def getStatusStrings(vState, vStateLvl=Vehicle.VEHICLE_STATE_LEVEL.INFO, substit
 @dependency.replace_none_kwargs(bootcampCtrl=IBootcampController, debutBoxCtrl=IDebutBoxesController, earlyAccessCtrl=IEarlyAccessController, paragonsCtrl=IParagonsController)
 def getVehicleDataVO(vehicle, bootcampCtrl=None, debutBoxCtrl=None, earlyAccessCtrl=None, paragonsCtrl=None):
     return _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl, earlyAccessCtrl, paragonsCtrl)
+
+
+@dependency.replace_none_kwargs(comp7Ctrl=IComp7Controller)
+def _getTooltipConstant(comp7Ctrl=None):
+    return TOOLTIPS_CONSTANTS.COMP7_CAROUSEL_VEHICLE if comp7Ctrl.isBattleModifiersAvailable() else TOOLTIPS_CONSTANTS.CAROUSEL_VEHICLE
 
 
 def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl, earlyAccessCtrl, paragonsCtrl):
@@ -143,7 +148,7 @@ def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl, earlyAccessCtrl, para
      'isEarnCrystals': vehicle.isEarnCrystals,
      'isCrystalsLimitReached': isCrystalsLimitReached,
      'isUseRightBtn': True,
-     'tooltip': TOOLTIPS_CONSTANTS.CAROUSEL_VEHICLE,
+     'tooltip': _getTooltipConstant(),
      'isWotPlusSlot': vehicle.isWotPlus,
      'extraImage': extraImage}
     if earlyAccessCtrl.isEnabled():
@@ -231,6 +236,12 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
             self._currentVehicleInvID = vehicle.invID
         return self._currentVehicleInvID
 
+    def selectFilteredVehicle(self, vehicle):
+        if vehicle is not None and vehicle.isInInventory:
+            self._selectedIdx = -1
+            self._currentVehicleInvID = vehicle.invID
+        return
+
     def updateVehicles(self, vehiclesCDs=None, filterCriteria=None, forceUpdate=False):
         if self._itemsCache is None:
             return
@@ -274,6 +285,7 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         self._selectedIdx = -1
         visibleVehiclesIntCDs = [ vehicle.intCD for vehicle in self._getCurrentVehicles() ]
         sortedVehicleIndices = self._getSortedIndices()
+        self._filteredIndices += self._getBeforeAdditionalItemsIndexes()
         for idx in sortedVehicleIndices:
             vehicle = self._vehicles[idx]
             if vehicle.intCD in visibleVehiclesIntCDs:
@@ -318,6 +330,9 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         return []
 
     def _getAdditionalItemsIndexes(self):
+        return []
+
+    def _getBeforeAdditionalItemsIndexes(self):
         return []
 
     def _syncRandomStats(self):

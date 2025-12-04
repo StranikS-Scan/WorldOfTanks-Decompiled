@@ -245,7 +245,7 @@ class VehicleInfoTooltipData(BlocksTooltipData):
                 text += text_styles.stats(backport.getIntegralFormat(frags))
         else:
             text = text_styles.main(backport.text(R.strings.tooltips.vehicle.statTrack.label()))
-        return formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(text), icon=backport.image(R.images.gui.maps.icons.library.statTrack()), padding=formatters.packPadding(left=75, top=-2, bottom=5), iconPadding=formatters.packPadding(top=2), titlePadding=formatters.packPadding(left=7))
+        return formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(text), icon=backport.image(R.images.gui.maps.icons.library.statTrack()), padding=formatters.packPadding(left=75, top=-2, bottom=5), iconPadding=formatters.packPadding(top=2), titlePadding=formatters.packPadding(left=4))
 
 
 class ExtendedVehicleInfoTooltipData(VehicleInfoTooltipData):

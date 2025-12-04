@@ -4,18 +4,18 @@ from functools import partial
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from CurrentVehicle import g_currentVehicle
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer, Array
-from frameworks.wulf.view.array import fillFloatsArray
+from frameworks.wulf.view.array import fillFloatsArray, fillIntsArray
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.impl.gen import R
 from gui.impl.lobby.collection.tooltips.collection_item_tooltip_view import CollectionItemTooltipView
 from gui.impl.lobby.common.view_helpers import packBonusModelAndTooltipData
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
-from gui.impl.lobby.loot_box.loot_box_helper import aggregateSimilarBonuses, isAllVehiclesObtainedInSlot
+from gui.impl.lobby.loot_box.loot_box_helper import aggregateSimilarBonuses
 from gui.impl.pub import ViewImpl, WindowImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.shared.event_dispatcher import showVehiclePreview, showHangar
 from helpers import dependency
-from shared_utils import findFirst
+from new_year.skeletons.new_year import INewYearController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IGuiLootBoxesController
@@ -76,6 +76,7 @@ class BonusProbabilitiesView(ViewImpl):
     __guiLootBoxes = dependency.descriptor(IGuiLootBoxesController)
     __itemsCache = dependency.descriptor(IItemsCache)
     __settingsCore = dependency.descriptor(ISettingsCore)
+    __nyCtl = dependency.descriptor(INewYearController)
     _COMMON_SOUND_SPACE = LOOT_BOXES_OVERLAY_SOUND_SPACE
 
     def __init__(self, layoutID, lootBox):
@@ -178,6 +179,7 @@ class BonusProbabilitiesView(ViewImpl):
         model.setLootboxID(self.__lootBox.getID())
         model.setLootboxTier(self.__lootBox.getTier())
         model.setHasLootLists(self.__lootBox.hasLootLists())
+        fillIntsArray(self.__lootBox.getGuaranteedFrequency(multiple=True), model.getGuaranteedFrequencies())
         slots = self.__lootBox.getBonusSlots()
         self.__updateLootLists()
         self.__updateSlots(self.viewModel.getSlots(), slots)
@@ -186,9 +188,9 @@ class BonusProbabilitiesView(ViewImpl):
     def __updateLootLists(self, model=None):
         if not self.__lootBox.hasLootLists():
             return
-        rotationStage = self.__getRotationStage()
+        rotationStage = self.__lootBox.getCurrentRotationStage()
         lootLists = self.__lootBox.getLootLists()
-        model.setRotationStage(rotationStage)
+        model.setRotationStage(rotationStage - 1)
         lootListsModel = model.getLootLists()
         lootListsModel.clear()
         for lootList in lootLists:
@@ -203,10 +205,11 @@ class BonusProbabilitiesView(ViewImpl):
         lbSlots = []
         for idx, slot in slots.iteritems():
             bonusesSortTags = self.__guiLootBoxes.getBonusesOrder(self.__lootBox.getCategory())
-            lbSlot = LootBoxSlot(id=idx, probabilities=slot.get('probability', [[0]])[0], bonuses=slot.get('bonuses', []), bonusesSortTags=bonusesSortTags)
+            lbSlot = LootBoxSlot(id=idx, probabilities=slot.get('probability', [0]), bonuses=slot.get('bonuses', []), bonusesSortTags=bonusesSortTags)
             lbSlots.append(lbSlot)
 
-        lbSlots = sorted(lbSlots, key=lambda x: (x.getBonusType().value, -x.getProbabilities()[0]))
+        if not self.__nyCtl.isLootboxTankType(self.__lootBox.getType()):
+            lbSlots = sorted(lbSlots, key=lambda x: (x.getBonusType().value, -x.getProbabilities()[0]))
         for slot in lbSlots:
             slotViewModel = slot.getViewData(self.__tooltipData)
             slotsArrayModel.addViewModel(slotViewModel)
@@ -215,17 +218,6 @@ class BonusProbabilitiesView(ViewImpl):
             self.__tooltipData.update({idx: data})
 
         slotsArrayModel.invalidate()
-
-    def __getRotationStage(self):
-        if not self.__lootBox.hasLootLists():
-            return 0
-        else:
-            rotationStage = self.__lootBox.getRotationStage()
-            lootLists = self.__lootBox.getLootLists()
-            firstSlot = findFirst(lambda x: x is not None, lootLists[rotationStage])
-            if firstSlot is not None:
-                rotationStage += isAllVehiclesObtainedInSlot(lootLists[rotationStage][firstSlot])
-            return rotationStage
 
 
 class BonusProbabilitiesWindow(WindowImpl):

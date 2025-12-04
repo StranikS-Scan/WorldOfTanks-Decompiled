@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: gui_lootboxes/scripts/client/gui_lootboxes/gui/impl/gen/view_models/views/lobby/gui_lootboxes/lootboxes_rewards_view_model.py
+from enum import Enum
 from frameworks.wulf import Array
 from gui.impl.gen import R
 from frameworks.wulf import ViewModel
@@ -7,13 +8,18 @@ from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusMo
 from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.key_type_model import KeyTypeModel
 from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.lootbox_key_view_model import LootboxKeyViewModel
 
+class Glows(Enum):
+    DEFAULT = 'DEFAULT'
+    UNIQUE = 'UNIQUE'
+
+
 class LootboxesRewardsViewModel(ViewModel):
     __slots__ = ('onClose', 'showVehicleInHangar', 'onRepeatOpen')
     ARG_REWARD_INDEX = 'tooltipId'
     MAX_MAIN_REWARDS = 3
     MAX_VISIBLE_REWARDS = 9
 
-    def __init__(self, properties=16, commands=3):
+    def __init__(self, properties=17, commands=3):
         super(LootboxesRewardsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -104,21 +110,27 @@ class LootboxesRewardsViewModel(ViewModel):
     def setCountFailKey(self, value):
         self._setNumber(13, value)
 
+    def getGlowType(self):
+        return Glows(self._getString(14))
+
+    def setGlowType(self, value):
+        self._setString(14, value.value)
+
     def getRewards(self):
-        return self._getArray(14)
+        return self._getArray(15)
 
     def setRewards(self, value):
-        self._setArray(14, value)
+        self._setArray(15, value)
 
     @staticmethod
     def getRewardsType():
         return BonusModel
 
     def getMainRewards(self):
-        return self._getArray(15)
+        return self._getArray(16)
 
     def setMainRewards(self, value):
-        self._setArray(15, value)
+        self._setArray(16, value)
 
     @staticmethod
     def getMainRewardsType():
@@ -140,6 +152,7 @@ class LootboxesRewardsViewModel(ViewModel):
         self._addBoolProperty('isNameLoading', False)
         self._addNumberProperty('lootBoxMaxOpenCount', 0)
         self._addNumberProperty('countFailKey', 0)
+        self._addStringProperty('glowType', Glows.DEFAULT.value)
         self._addArrayProperty('rewards', Array())
         self._addArrayProperty('mainRewards', Array())
         self.onClose = self._addCommand('onClose')

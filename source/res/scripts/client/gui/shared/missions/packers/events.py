@@ -17,12 +17,13 @@ from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.events_helpers import isPremium, isDailyQuest, isPremiumPlusAccount
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.shared.missions.packers.bonus import getDefaultBonusPacker, packMissionsBonusModelAndTooltipData
-from gui.shared.missions.packers.conditions import BonusConditionPacker, AYBonusConditionPacker
+from gui.shared.missions.packers.conditions import BonusConditionPacker
 from gui.shared.missions.packers.conditions import PostBattleConditionPacker
 from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller, IWotPlusController
 from skeletons.gui.server_events import IEventsCache
 from soft_exception import SoftException
+from new_year_common.items.components.ny_constants import CurrentNYConstants
 if typing.TYPE_CHECKING:
     from gui.server_events.event_items import ServerEventAbstract
     from gui.server_events.bonuses import SimpleBonus
@@ -102,14 +103,6 @@ class BattleQuestUIDataPacker(_EventUIDataPacker):
         if not model.bonusCondition.getItems() and not model.postBattleCondition.getItems():
             postBattleContitionPacker = PostBattleConditionPacker()
             postBattleContitionPacker.packDefaultCondition(model.postBattleCondition)
-
-
-class ArmoryYardQuestUIDataPacker(BattleQuestUIDataPacker):
-
-    def _packBonusConds(self, model):
-        bonusConditionPacker = AYBonusConditionPacker()
-        bonusConditionPacker.packBattlesBonusCond(self._event, model)
-        bonusConditionPacker.packWithPostBattleCondCheck(self._event, model.bonusCondition, bool(model.postBattleCondition.getItems()))
 
 
 class TokenUIDataPacker(_EventUIDataPacker):
@@ -270,11 +263,11 @@ def preformatEventBonuses(event, bonusFormatter=CurtailingAwardsComposer(DEFAULT
     return bonusFormatter.getFormattedBonuses(bonuses, size=AWARDS_SIZES.BIG)
 
 
-def getEventUIDataPacker(event, tooltipData=None):
+def getEventUIDataPacker(event, tooltipData=None, bonusPackerGetter=getDefaultBonusPacker):
     if event.getLevel() in constants.DailyQuestsLevels.SUBS:
         return DailySubscriptionQuestUIDataPacker(event, tooltipData=tooltipData)
-    elif isPremium(event.getID()) or isDailyQuest(event.getID()):
-        return DailyQuestUIDataPacker(event)
+    elif isPremium(event.getID()) or isDailyQuest(event.getID()) or event.getID().startswith(CurrentNYConstants.NY_QUESTS_PREFIX):
+        return DailyQuestUIDataPacker(event, bonusPackerGetter)
     elif event.getType() == constants.EVENT_TYPE.TOKEN_QUEST:
         return TokenUIDataPacker(event)
     elif event.getType() == constants.EVENT_TYPE.PERSONAL_QUEST:

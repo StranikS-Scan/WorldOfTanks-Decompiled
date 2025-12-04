@@ -2061,16 +2061,6 @@
     <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals lockOutfit	</tags>
     <level>	9	</level>
   </G171_E77_02>
-  <G00_Ratte>
-    <id>	41010	</id>
-    <userString>	#germany_vehicles:G00_Ratte	</userString>
-    <shortUserString>	#germany_vehicles:G00_Ratte_short	</shortUserString>
-    <description>	#germany_vehicles:G00_Ratte_descr	</description>
-    <price>	0	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank HD role_HT_assault siegeMode dualgun charger secret private cannot_be_sold lockCrew lockOutfit restoreWithStyle calculate_bbox	</tags>
-    <level>	1	</level>
-  </G00_Ratte>
   <G182_Mausekonig>
     <id>	31002	</id>
     <userString>	#germany_vehicles:G182_Mausekonig	</userString>
@@ -2097,6 +2087,19 @@
     <tags>	AT-SPG role_ATSPG_support heavyAT-SPG HD beast tankRammer_class1_user extraHealthReserve_class1_user improvedVentilation_class1_user antifragmentationLining_heavy_user earn_crystals special	</tags>
     <level>	10	</level>
   </G178_Sturmtiger_V1>
+  <G184_EisBaer>
+    <id>	31004	</id>
+    <userString>	#germany_vehicles:G184_EisBaer	</userString>
+    <shortUserString>	#germany_vehicles:G184_EisBaer_short	</shortUserString>
+    <description>	#germany_vehicles:G184_EisBaer_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:G184_EisBaer_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G184_EisBaer_long_special	</longDescriptionSpecial>
+    <price>	50000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_universal HD siegeMode autoSiege improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special earn_crystals secret testTank lockOutfit	</tags>
+    <level>	11	</level>
+  </G184_EisBaer>
   <G64_Panther_II_FL>
     <id>	31005	</id>
     <userString>	#germany_vehicles:Panther_II_FL	</userString>
@@ -2148,7 +2151,7 @@
     <price>	25000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG AT-SPG2 improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals special secret testTank lockOutfit	</tags>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG AT-SPG2 improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals special	</tags>
     <level>	10	</level>
   </G181_StuG_Maus_17cm>
   <G196_E_75_Ausf_B_Doppel>
@@ -2161,33 +2164,20 @@
     <price>	11000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_break HD heavyTank1 siegeMode dualgun charger improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user secret testTank lockOutfit	</tags>
+    <tags>	heavyTank role_HT_break HD heavyTank1 siegeMode dualgun charger improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user lockOutfit	</tags>
     <level>	8	</level>
   </G196_E_75_Ausf_B_Doppel>
-  <G89_Leopard1_ISP>
-    <id>	37000	</id>
-    <userString>	#germany_vehicles:Leopard1_ISP	</userString>
-    <shortUserString>	#germany_vehicles:Leopard1_ISP_short	</shortUserString>
-    <description>	#germany_vehicles:Leopard1_ISP_descr	</description>
-    <shortDescriptionSpecial>	#germany_vehicles:Leopard1_ISP_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#germany_vehicles:Leopard1_ISP_long_special	</longDescriptionSpecial>
+  <G1105_T-55_NVA_DDR_T>
+    <id>	35001	</id>
+    <userString>	#germany_vehicles:G1105_T-55_NVA_DDR_T	</userString>
+    <shortUserString>	#germany_vehicles:G1105_T-55_NVA_DDR_T_short	</shortUserString>
+    <description>	#germany_vehicles:G1105_T-55_NVA_DDR_T_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:G1105_T-55_NVA_DDR_T_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G1105_T-55_NVA_DDR_T_long_special	</longDescriptionSpecial>
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_sniper HD beast mediumTank1 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals private special secret lockCrew lockCrewSkills lockOutfit cannot_be_sold testTank fun_random	</tags>
-    <level>	10	</level>
-  </G89_Leopard1_ISP>
-  <G121_Grille_15_L63_ISP>
-    <id>	37001	</id>
-    <userString>	#germany_vehicles:G121_Grille_15_L63_ISP	</userString>
-    <shortUserString>	#germany_vehicles:G121_Grille_15_L63_ISP_short	</shortUserString>
-    <description>	#germany_vehicles:G121_Grille_15_L63_ISP_descr	</description>
-    <shortDescriptionSpecial>	#germany_vehicles:G121_Grille_15_L63_ISP_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#germany_vehicles:G121_Grille_15_L63_ISP_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	AT-SPG role_ATSPG_sniper HD mediumAT-SPG AT-SPG1 tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals private special secret lockCrew lockCrewSkills lockOutfit cannot_be_sold testTank fun_random	</tags>
-    <level>	10	</level>
-  </G121_Grille_15_L63_ISP>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank lockOutfit	</tags>
+    <level>	8	</level>
+  </G1105_T-55_NVA_DDR_T>
 </list.xml>

@@ -12,11 +12,11 @@ from gui.shared.gui_items.Vehicle import getVehicleClassTag
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
 from helpers import dependency
-from helpers.i18n import makeString
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared.utils import IHangarSpace
 from frameworks.wulf.gui_constants import WindowLayer
 from frameworks.wulf import WindowStatus
+from gui.impl.pub.pop_over_window import PopOverWindow
 if typing.TYPE_CHECKING:
     from cgf_components.marker_component import LobbyFlashMarker
     from gui.shared.events import HasCtxEvent
@@ -84,7 +84,7 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         self.__addCgfMarker(event.ctx['markerId'], event.ctx['flashMarkerComponent'], event.ctx['matrix'])
 
     def __addCgfMarker(self, markerId, markerComponent, matrix):
-        flashMarker = self.as_createCustomMarkerS(markerId, markerComponent.icon.replace('gui', '..'), makeString(markerComponent.textKey), markerComponent.iconPosition)
+        flashMarker = markerComponent(self, markerId, markerComponent)
         _logger.info('cgf marker created %s', flashMarker)
         self.__markersCache[markerId] = GUI.HangarVehicleMarker()
         self.__markersCache[markerId].setMarker(flashMarker, matrix)
@@ -127,7 +127,7 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
 
     def _canShowMarkers(self):
         windowsManager = self.guiLoader.windowsManager
-        windows = windowsManager.findWindows(lambda w: w.layer in self.__LAYERS_WITHOUT_MARKERS)
+        windows = windowsManager.findWindows(lambda w: w.layer in self.__LAYERS_WITHOUT_MARKERS and not isinstance(w, PopOverWindow))
         hangarIsExist = len(windowsManager.findWindows(lambda w: isinstance(w, SFWindow) and w.loadParams.viewKey.alias == VIEW_ALIAS.LOBBY_HANGAR)) > 0
         return len(windows) == 1 and hangarIsExist
 

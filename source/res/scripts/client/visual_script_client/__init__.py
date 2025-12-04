@@ -31,12 +31,14 @@ def registerForGeneral():
     import cgf_blocks
     import web_blocks
     import armory_yard_blocks
+    import new_year_blocks
     g_blockRegistrar.regBlocksFromModule(event_platform_blocks)
     g_blockRegistrar.regBlocksFromModule(arena_blocks)
     g_blockRegistrar.regBlocksFromModule(vehicle_blocks)
     g_blockRegistrar.regBlocksFromModule(scene_blocks)
     g_blockRegistrar.regBlocksFromModule(triggers_blocks)
     g_blockRegistrar.regBlocksFromModule(player_blocks)
+    g_blockRegistrar.regTypesFromModule(player_blocks)
     g_blockRegistrar.regBlocksFromModule(sound_blocks)
     g_blockRegistrar.regBlocksFromModule(game_settings_blocks)
     g_blockRegistrar.regBlocksFromModule(battle_hud_block)
@@ -44,6 +46,7 @@ def registerForGeneral():
     g_blockRegistrar.regBlocksFromModule(cgf_blocks)
     g_blockRegistrar.regBlocksFromModule(web_blocks)
     g_blockRegistrar.regBlocksFromModule(armory_yard_blocks)
+    g_blockRegistrar.regBlocksFromModule(new_year_blocks)
     g_blockRegistrar.regBlocksFromModule(camera_blocks)
     animated_hints_blocks.regBlocks(g_blockRegistrar)
     g_blockRegistrar.regContext(EntityContextClient)

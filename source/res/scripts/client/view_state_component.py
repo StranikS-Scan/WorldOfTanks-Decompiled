@@ -264,4 +264,7 @@ _VIEW_STATE_UPDATERS = {BuffDisplayedState.AOE_INSPIRE: _AoeInspireStateUpdater,
  BuffDisplayedState.ABILITY_JUGGERNAUT: _AbilityStateUpdater,
  BuffDisplayedState.ABILITY_CONCENTRATION: _AbilityStateUpdater,
  BuffDisplayedState.ABILITY_SURE_SHOT: _AbilityStateUpdater,
- BuffDisplayedState.ABILITY_RECOIL_RECUPERATOR: _AbilityStateUpdater}
+ BuffDisplayedState.ABILITY_RECOIL_RECUPERATOR: _AbilityStateUpdater,
+ BuffDisplayedState.ABILITY_COOLANT_TANK: _AbilityStateUpdater,
+ BuffDisplayedState.ABILITY_TANK_RAM: _AbilityStateUpdater,
+ BuffDisplayedState.ABILITY_SHOT_PASSION: _AbilityStateUpdater}

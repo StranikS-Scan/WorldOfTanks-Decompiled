@@ -97,7 +97,7 @@ class PCPlanHolder(object):
             for plan in self._plans:
                 yield plan.destroy()
 
-        yield th_await(distributeLoopOverTicks(asyncLoop(), maxPerTick=1, logID='clean'))
+        yield th_await(distributeLoopOverTicks(asyncLoop(), maxPerTick=1))
         del self._plans[:]
 
     def unloadPlan(self, perkID):

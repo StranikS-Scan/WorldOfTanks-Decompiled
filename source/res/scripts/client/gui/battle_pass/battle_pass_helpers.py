@@ -150,7 +150,7 @@ def showVideo(videoSource, onVideoClosed=None, isAutoClose=False):
             onVideoClosed()
         return
     from gui.impl.lobby.video.video_view import VideoViewWindow
-    window = VideoViewWindow(videoSource(), onVideoClosed=onVideoClosed, isAutoClose=isAutoClose, soundControl=AwardVideoSoundControl(videoSource()))
+    window = VideoViewWindow(videoSource=videoSource(), onVideoClosed=onVideoClosed, isAutoClose=isAutoClose, soundControl=AwardVideoSoundControl(videoSource()), viewId=R.views.lobby.video.video_view.VideoView())
     window.load()
 
 

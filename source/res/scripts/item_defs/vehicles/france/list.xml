@@ -97,16 +97,6 @@
     <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	4	</level>
   </F14_AMX40>
-  <F14_AMX40_portal>
-    <id>	40000	</id>
-    <userString>	#france_vehicles:AMX40_portal	</userString>
-    <shortUserString>	#france_vehicles:AMX40_portal_short	</shortUserString>
-    <description>	#france_vehicles:AMX40_descr	</description>
-    <price>	1	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user secret event_battles cannot_be_sold	</tags>
-    <level>	4	</level>
-  </F14_AMX40_portal>
   <F08_AMX_50_100>
     <id>	12	</id>
     <userString>	#france_vehicles:AMX_50_100	</userString>
@@ -360,16 +350,6 @@
     <tags>	lightTank private HD battle_royale lockOutfit lockCrew lockCrewSkills cannot_be_sold lockDevices lockEquipment lockShells secret siegeMode dualgun charger	</tags>
     <level>	1	</level>
   </F43_AMC_35_SH>
-  <F43_AMC_35_H>
-    <id>	20001	</id>
-    <userString>	#france_vehicles:F43_AMC_35_H	</userString>
-    <shortUserString>	#france_vehicles:F43_AMC_35_H_short	</shortUserString>
-    <description>	#france_vehicles:F43_AMC_35_H_descr	</description>
-    <price>	1	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank private HD lockOutfit lockCrew lockCrewSkills cannot_be_sold lockEquipment lockShells secret siegeMode dualgun charger portal event_battles mode_hidden	</tags>
-    <level>	1	</level>
-  </F43_AMC_35_H>
   <F64_AMX_50Fosh_155>
     <id>	54	</id>
     <userString>	#france_vehicles:AMX_50Fosh_155	</userString>
@@ -1101,7 +1081,7 @@
     <price>	11000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG role_ATSPG_support siegeMode dualgun charger HD mediumAT-SPG antifragmentationLining_medium_user private secretExtended secret testTank	</tags>
+    <tags>	AT-SPG role_ATSPG_support siegeMode dualgun charger HD mediumAT-SPG antifragmentationLining_medium_user extraHealthReserve_class1_user	</tags>
   </F128_Schneider_90_105_DCA_Oie>
   <F19_Lorraine40t_02>
     <id>	182	</id>
@@ -1180,6 +1160,19 @@
     <tags>	AT-SPG role_ATSPG_support HD mediumAT-SPG improvedVentilation_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
     <level>	8	</level>
   </F131_Coutelas>
+  <F134_ARL_Projet_F>
+    <id>	31006	</id>
+    <userString>	#france_vehicles:F134_ARL_Projet_F	</userString>
+    <shortUserString>	#france_vehicles:F134_ARL_Projet_F_short	</shortUserString>
+    <description>	#france_vehicles:F134_ARL_Projet_F_descr	</description>
+    <shortDescriptionSpecial>	#france_vehicles:F134_ARL_Projet_F_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#france_vehicles:F134_ARL_Projet_F_long_special	</longDescriptionSpecial>
+    <price>	50000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_assault HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals special secret testTank excludeCollisionObstacles lockOutfit	</tags>
+    <level>	11	</level>
+  </F134_ARL_Projet_F>
   <F133_Projet_57>
     <id>	31007	</id>
     <userString>	#france_vehicles:F133_Projet_57	</userString>
@@ -1260,17 +1253,30 @@
     <tags>	mediumTank role_MT_support HD mediumTank2 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user lockOutfit restoreWithStyle	</tags>
     <level>	8	</level>
   </F116_Bat_Chatillon_Bourrasque_02>
-  <F10_AMX_50B_ISP>
-    <id>	37000	</id>
-    <userString>	#france_vehicles:AMX_50_68t_ISP	</userString>
-    <shortUserString>	#france_vehicles:AMX_50_68t_ISP_short	</shortUserString>
-    <description>	#france_vehicles:AMX_50_68t_ISP_descr	</description>
-    <shortDescriptionSpecial>	#france_vehicles:AMX_50_68t_ISP_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#france_vehicles:AMX_50_68t_ISP_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
+  <F135_Schneider_120_AC_Gendarme_02>
+    <id>	31013	</id>
+    <userString>	#france_vehicles:F135_Schneider_120_AC_Gendarme_02	</userString>
+    <description>	#france_vehicles:F135_Schneider_120_AC_Gendarme_02_descr	</description>
+    <shortUserString>	#france_vehicles:F135_Schneider_120_AC_Gendarme_02_short	</shortUserString>
+    <shortDescriptionSpecial>	#france_vehicles:F135_Schneider_120_AC_Gendarme_02_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#france_vehicles:F135_Schneider_120_AC_Gendarme_02_long_special	</longDescriptionSpecial>
+    <level>	10	</level>
+    <price>	25000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_support HD heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals private special secret lockCrew lockCrewSkills lockOutfit cannot_be_sold testTank fun_random	</tags>
-    <level>	10	</level>
-  </F10_AMX_50B_ISP>
+    <tags>	AT-SPG role_ATSPG_support HD mediumAT-SPG extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals special lockOutfit restoreWithStyle	</tags>
+  </F135_Schneider_120_AC_Gendarme_02>
+  <F123_ERAC_105_Proto>
+    <id>	31014	</id>
+    <userString>	#france_vehicles:F123_ERAC_105_Proto	</userString>
+    <shortUserString>	#france_vehicles:F123_ERAC_105_Proto_short	</shortUserString>
+    <description>	#france_vehicles:F123_ERAC_105_Proto_descr	</description>
+    <shortDescriptionSpecial>	#france_vehicles:F123_ERAC_105_Proto_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#france_vehicles:F123_ERAC_105_Proto_long_special	</longDescriptionSpecial>
+    <price>	17500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank role_LT_universal HD scout improvedVentilation_class3_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user special secret testTank lockOutfit	</tags>
+    <level>	9	</level>
+  </F123_ERAC_105_Proto>
 </list.xml>

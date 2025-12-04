@@ -44,7 +44,7 @@ class ArmoryYardShopController(IArmoryYardShopController, IGlobalListener):
         return self.__products
 
     @property
-    def isSeasonCompleted(self):
+    def isProgressionCompleted(self):
         return self.__itemsCache.items.armoryYard.shopLastSeasonCompleted
 
     @property

@@ -1139,6 +1139,12 @@ class MESSENGER(object):
     PLATFORMCURRENCYMSG_DEBITED_EQUIP_COIN = '#messenger:platformCurrencyMsg/debited/equip_coin'
     PLATFORMCURRENCYMSG_RECEIVED_FAMECOIN = '#messenger:platformCurrencyMsg/received/famecoin'
     PLATFORMCURRENCYMSG_DEBITED_FAMECOIN = '#messenger:platformCurrencyMsg/debited/famecoin'
+    PLATFORMCURRENCYMSG_RECEIVED_NYRFOOD = '#messenger:platformCurrencyMsg/received/nyrfood'
+    PLATFORMCURRENCYMSG_DEBITED_NYRFOOD = '#messenger:platformCurrencyMsg/debited/nyrfood'
+    PLATFORMCURRENCYMSG_RECEIVED_NYRFUN = '#messenger:platformCurrencyMsg/received/nyrfun'
+    PLATFORMCURRENCYMSG_DEBITED_NYRFUN = '#messenger:platformCurrencyMsg/debited/nyrfun'
+    PLATFORMCURRENCYMSG_RECEIVED_NYRACTIV = '#messenger:platformCurrencyMsg/received/nyractiv'
+    PLATFORMCURRENCYMSG_DEBITED_NYRACTIV = '#messenger:platformCurrencyMsg/debited/nyractiv'
     PLATFORMCURRENCYMSG_RECEIVED_FREEXP = '#messenger:platformCurrencyMsg/received/freeXP'
     PLATFORMCURRENCYMSG_DEBITED_FREEXP = '#messenger:platformCurrencyMsg/debited/freeXP'
     SERVICECHANNELMESSAGES_RESOURCEWELL_PUT_TITLE = '#messenger:serviceChannelMessages/resourceWell/put/title'
@@ -1238,8 +1244,6 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_PLAYSTREAKFREEZES_BODY = '#messenger:serviceChannelMessages/playStreakFreezes/body'
     SERVICECHANNELMESSAGES_PLAYSTREAKFREEZESINPROGRESS_BODY = '#messenger:serviceChannelMessages/playStreakFreezesInProgress/body'
     SERVICECHANNELMESSAGES_PLAYSTREAKFREEZESEND_BODY = '#messenger:serviceChannelMessages/playStreakFreezesEnd/body'
-    PLATFORMCURRENCYMSG_RECEIVED_RAZLOM_COIN = '#messenger:platformCurrencyMsg/received/razlom_coin'
-    PLATFORMCURRENCYMSG_DEBITED_RAZLOM_COIN = '#messenger:platformCurrencyMsg/debited/razlom_coin'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_TRY_LATER,
      CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,

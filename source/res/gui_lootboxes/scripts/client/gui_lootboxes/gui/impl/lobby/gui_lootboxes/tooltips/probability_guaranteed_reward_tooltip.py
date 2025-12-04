@@ -4,6 +4,7 @@ from gui.impl.gen import R
 from frameworks.wulf import ViewSettings
 from gui.impl.pub import ViewImpl
 from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.tooltips.probability_guaranteed_reward_tooltip_model import ProbabilityGuaranteedRewardTooltipModel
+from gui_lootboxes.gui.shared.gui_helpers import fillLootBoxGuaranteedFrequencies
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 
@@ -23,5 +24,4 @@ class ProbabilityGuaranteedRewardTooltip(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         with self.viewModel.transaction() as vm:
-            attemptsAfterGuaranteed = self.__itemsCache.items.tokens.getAttemptsAfterGuaranteedRewards(self.__lootBox)
-            vm.setGuaranteedFrequency(self.__lootBox.getGuaranteedFrequency() - attemptsAfterGuaranteed)
+            fillLootBoxGuaranteedFrequencies(self.__lootBox, vm)

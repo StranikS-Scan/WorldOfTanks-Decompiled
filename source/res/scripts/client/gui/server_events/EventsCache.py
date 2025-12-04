@@ -23,7 +23,7 @@ from gui.server_events.modifiers import ACTION_MODIFIER_TYPE, ACTION_SECTION_TYP
 from gui.server_events.personal_missions_cache import PersonalMissionsCache
 from gui.server_events.prefetcher import Prefetcher
 from gui.shared.gui_items import ACTION_ENTITY_ITEM as aei, GUI_ITEM_TYPE
-from gui.shared.system_factory import collectQuestBuilders
+from gui.shared.system_factory import collectQuestBuilders, collectExtensionQuestsSources
 from gui.shared.utils.requesters.QuestsProgressRequester import QuestsProgressRequester
 from helpers import dependency, time_utils
 from items import getTypeOfCompactDescr
@@ -35,6 +35,7 @@ from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared.utils import IRaresCache
+from new_year_common.items.components.ny_constants import CurrentNYConstants
 if typing.TYPE_CHECKING:
     from typing import Optional, Dict, Callable, Union
     from gui.server_events.event_items import DailyTokenQuest, DailyQuest
@@ -85,6 +86,23 @@ class DefaultQuestMaker(object):
         return createQuest(self.__builders, qData.get('type', 0), qID, qData, progressRequester.getQuestProgress(qID), progressRequester.getTokenExpiryTime(qData.get('requiredToken')))
 
 
+def useCacheOnSyncComplete(method, *args, **kwargs):
+
+    def wrapper(self, *args, **kwargs):
+        isWithoutFilter = not (args or kwargs)
+        if self.cachedDataOnSyncComplete is not None and isWithoutFilter:
+            methodName = method.__name__
+            data = self.cachedDataOnSyncComplete.get(methodName)
+            if not data:
+                data = method(self, *args, **kwargs)
+                self.cachedDataOnSyncComplete[methodName] = data
+            return data
+        else:
+            return method(self, *args, **kwargs)
+
+    return wrapper
+
+
 class EventsCache(IEventsCache):
     USER_QUESTS = (EVENT_TYPE.BATTLE_QUEST,
      EVENT_TYPE.TOKEN_QUEST,
@@ -122,6 +140,8 @@ class EventsCache(IEventsCache):
         self.onPersonalQuestsVisited = Event(self.__em)
         self.__lockedQuestIds = {}
         self.__dailyQuests = None
+        self.__extensionQuestsSources = collectExtensionQuestsSources()
+        self.cachedDataOnSyncComplete = None
         return
 
     def init(self):
@@ -253,6 +273,7 @@ class EventsCache(IEventsCache):
                     callback(True)
             return
 
+    @useCacheOnSyncComplete
     def getQuests(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
 
@@ -273,6 +294,7 @@ class EventsCache(IEventsCache):
 
         return self.getQuests(userFilterFunc)
 
+    @useCacheOnSyncComplete
     def getAdvisableQuests(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
         isRankedSeasonOff = self.rankedController.getCurrentSeason() is None
@@ -326,6 +348,7 @@ class EventsCache(IEventsCache):
         svrGroups.update(self._getActionsGroups(filterFunc))
         return svrGroups
 
+    @useCacheOnSyncComplete
     def getHiddenQuests(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
 
@@ -341,6 +364,13 @@ class EventsCache(IEventsCache):
             return q.getType() == EVENT_TYPE.RANKED_QUEST and filterFunc(q)
 
         return self._getQuests(rankedFilterFunc)
+
+    def getNyCelebQuests(self, filterFunc=None):
+
+        def nyFilterFunc(q):
+            return q.getID().startswith(CurrentNYConstants.NY_CELEB_QUESTS_PREFIX) and q.isAvailable() and q.isStarted()
+
+        return self._getQuests(nyFilterFunc)
 
     def getAllQuests(self, filterFunc=None, includePersonalMissions=False):
         return self._getQuests(filterFunc, includePersonalMissions)
@@ -719,8 +749,14 @@ class EventsCache(IEventsCache):
         self.__prefetcher.ask()
         self.__syncActionsWithQuests()
         self.__invalidateCompensations()
+        self.__dispatchOnSyncCompleted(callback)
+        return
+
+    def __dispatchOnSyncCompleted(self, callback):
+        self.cachedDataOnSyncComplete = {}
         self.onSyncCompleted()
         callback(True)
+        self.cachedDataOnSyncComplete = None
         return
 
     def __invalidateCompensations(self):
@@ -794,21 +830,27 @@ class EventsCache(IEventsCache):
         questData = self.__getQuestsData()
         if questID in questData:
             return self._makeQuest(questID, questData[questID])
-        questData = self.__getPersonalQuestsData()
-        if questID in questData:
-            return self._makeQuest(questID, questData[questID])
-        questData = self.__getPersonalMissionsHiddenQuests()
-        if questID in questData:
-            return self._makeQuest(questID, questData[questID])
-        questData = self.__getDailyQuestsData()
-        if questID in questData:
-            return self._makeQuest(questID, questData[questID])
-        elif questID in motivation_quests.g_cache:
-            return self._makeQuest(questID, motivation_quests.g_cache.getQuestByID(questID).questData, maker=_motiveQuestMaker)
-        elif questID in customization_quests.g_cust_cache:
-            return self._makeQuest(questID, customization_quests.g_cust_cache[questID].questClientData)
         else:
-            return self._makeQuest(questID, static_quests.g_static_quest_cache[questID]) if questID in static_quests.g_static_quest_cache else None
+            questData = self.__getPersonalQuestsData()
+            if questID in questData:
+                return self._makeQuest(questID, questData[questID])
+            questData = self.__getPersonalMissionsHiddenQuests()
+            if questID in questData:
+                return self._makeQuest(questID, questData[questID])
+            questData = self.__getDailyQuestsData()
+            if questID in questData:
+                return self._makeQuest(questID, questData[questID])
+            if questID in motivation_quests.g_cache:
+                return self._makeQuest(questID, motivation_quests.g_cache.getQuestByID(questID).questData, maker=_motiveQuestMaker)
+            if questID in customization_quests.g_cust_cache:
+                return self._makeQuest(questID, customization_quests.g_cust_cache[questID].questClientData)
+            if questID in static_quests.g_static_quest_cache:
+                return self._makeQuest(questID, static_quests.g_static_quest_cache[questID])
+            for source in self.__extensionQuestsSources:
+                if source.isActive() and source.questInSource(questID):
+                    return self._makeQuest(questID, source.getQuestByID(questID))
+
+            return None
 
     def __getCommonQuestsIterator(self):
         questsData = self.__getQuestsData()
@@ -826,6 +868,11 @@ class EventsCache(IEventsCache):
         c11nQuests = customization_quests.g_cust_cache.values()
         for questDescr in c11nQuests:
             yield (questDescr.questID, self._makeQuest(questDescr.questID, questDescr.questClientData))
+
+        for source in self.__extensionQuestsSources:
+            if source.isActive():
+                for qID, qData in source.getQuestsData().iteritems():
+                    yield (qID, self._makeQuest(qID, qData))
 
     def __loadInvalidateCallback(self, duration):
         LOG_DEBUG('load quest window invalidation callback (secs)', duration)

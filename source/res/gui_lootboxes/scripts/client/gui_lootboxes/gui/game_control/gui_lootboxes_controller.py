@@ -61,6 +61,7 @@ class GuiLootBoxesController(IGuiLootBoxesController):
         self.onBoxesHistoryUpdate = Event.Event(self.__em)
         self.onBoxInfoUpdated = Event.Event(self.__em)
         self.onStorageVisited = Event.Event(self.__em)
+        self.onOpenLootboxesComplete = Event.SafeEvent(self.__em)
         self.__bonusesConfig = None
         self.__boxesCount = 0
         self.__boxKeysCount = 0

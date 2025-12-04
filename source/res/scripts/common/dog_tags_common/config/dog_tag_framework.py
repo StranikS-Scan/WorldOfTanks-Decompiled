@@ -5,7 +5,7 @@ import sys
 from functools import partial
 import typing
 from common import ParameterType, Visibility, ParseException, ComponentPurpose, ComponentViewType, ComponentNumberType
-from validators import validateTriumphMedal, validateTriumph, validateSkill, validateDedication, validateDedicationUnlock, validateBase, validateRankedSkill, validateViewType, validateCommon, validateStartingComponent
+from validators import validateTriumphMedal, validateTriumph, validateSkill, validateDedication, validateDedicationUnlock, validateBase, validateRankedSkill, validateViewType, validateCommon, validateStartingComponent, validateStatic
 if typing.TYPE_CHECKING:
     from typing import List
 
@@ -46,7 +46,8 @@ class ComponentBuilder(XMLObjBuilder):
      'src': (ParameterType.STR, Visibility.CLIENT),
      'minLevel': (ParameterType.INT, Visibility.ALL),
      'battleTypes': (ParameterType.INT_LIST, Visibility.ALL),
-     'glossaryName': (ParameterType.STR, Visibility.ALL)}
+     'glossaryName': (ParameterType.STR, Visibility.ALL),
+     'lightingUpTo': (ParameterType.FLOAT, Visibility.ALL)}
     DEFAULTS = {'isSecret': False,
      'isHidden': False,
      'isDefault': False,
@@ -62,7 +63,8 @@ class ComponentBuilder(XMLObjBuilder):
                                    validateDedication,
                                    validateDedicationUnlock],
      ComponentPurpose.RANKED_SKILL: [validateCommon, partial(validateViewType, viewType=ComponentViewType.ENGRAVING, purpose=ComponentPurpose.RANKED_SKILL), validateRankedSkill],
-     ComponentPurpose.BASE: [validateCommon, partial(validateViewType, viewType=ComponentViewType.BACKGROUND, purpose=ComponentPurpose.BASE), validateBase]}
+     ComponentPurpose.BASE: [validateCommon, partial(validateViewType, viewType=ComponentViewType.BACKGROUND, purpose=ComponentPurpose.BASE), validateBase],
+     ComponentPurpose.STATIC: [validateCommon, partial(validateViewType, viewType=ComponentViewType.ENGRAVING, purpose=ComponentPurpose.STATIC), validateStatic]}
 
     def __init__(self):
         super(ComponentBuilder, self).__init__(ComponentDefinition)
@@ -117,6 +119,9 @@ class ComponentBuilder(XMLObjBuilder):
 
     def glossaryName(self, value):
         self._component.glossaryName = value
+
+    def lightingUpTo(self, value):
+        self._component.lightingUpTo = value
 
     def validate(self):
         for validator in self.VALIDATORS.get(self._component.purpose, []):
@@ -176,6 +181,7 @@ class ComponentDefinition(object):
         self.minLevel = None
         self.battleTypes = None
         self.glossaryName = ''
+        self.lightingUpTo = None
         return
 
     def __str__(self):

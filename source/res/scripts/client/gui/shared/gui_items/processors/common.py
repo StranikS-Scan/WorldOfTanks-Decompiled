@@ -501,3 +501,13 @@ class BuyBattleAbilitiesProcessor(Processor):
 
         raise AsyncReturn(None)
         return
+
+
+class RequestSingleTokenProcessor(Processor):
+
+    def __init__(self, token):
+        super(RequestSingleTokenProcessor, self).__init__()
+        self.__token = token
+
+    def _request(self, callback):
+        BigWorld.player().requestSingleToken(self.__token, lambda _, code, errStr: self._response(code, callback, errStr=errStr))

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/dog_tags.py
 import BigWorld
 from dog_tags_common.components_config import componentConfigAdapter as cca
-from dog_tags_common.config.common import ComponentViewType
+from dog_tags_common.config.common import ComponentViewType, ComponentPurpose
 from dog_tags_common.number_formatter import formatComponentValue
 from dog_tags_common.player_dog_tag import PlayerDogTag
 from gui.dog_tag_composer import dogTagComposer, AssetSize
@@ -16,12 +16,12 @@ from skeletons.gui.shared import IItemsCache
 
 class DogTagInfoTooltip(BlocksTooltipData):
     itemsCache = dependency.descriptor(IItemsCache)
-    __titlePadding = formatters.packPadding(top=2)
-    __levelPadding = formatters.packPadding(top=-3, bottom=-5)
-    __imagePaddingTop = 13
-    __imagePaddingBottom = 5
-    __imageNegativeHeight = -120
-    __descriptionPadding = formatters.packPadding(bottom=-10)
+    _titlePadding = formatters.packPadding(top=2)
+    _levelPadding = formatters.packPadding(top=-3, bottom=-5)
+    _imagePaddingTop = 13
+    _imagePaddingBottom = 5
+    _imageNegativeHeight = -120
+    _descriptionPadding = formatters.packPadding(bottom=-10)
 
     def __init__(self, context):
         super(DogTagInfoTooltip, self).__init__(context, None)
@@ -36,22 +36,23 @@ class DogTagInfoTooltip(BlocksTooltipData):
         else:
             dogTag = PlayerDogTag.fromDict(self.itemsCache.items.getDogTag(int(userID)))
             componentProgress = dogTag.getComponentByType(comp.viewType)
-        items.append(formatters.packTextBlockData(text_styles.middleTitle(dogTagComposer.getComponentTitle(compId)), padding=self.__titlePadding))
+        items.append(formatters.packTextBlockData(text_styles.middleTitle(dogTagComposer.getComponentTitle(compId)), padding=self._titlePadding))
         typeLevelBlock = [text_styles.main(dogTagComposer.getComponentType(compId))]
         valueBlock = list()
         if comp.viewType == ComponentViewType.ENGRAVING:
-            typeLevelBlock.append(text_styles.main(', '))
-            typeLevelBlock.append(text_styles.neutral('{} {}'.format(backport.text(R.strings.dogtags.customization.tooltip.level()), componentProgress.grade + 1)))
+            if comp.purpose != ComponentPurpose.STATIC:
+                typeLevelBlock.append(text_styles.main(', '))
+                typeLevelBlock.append(text_styles.neutral('{} {}'.format(backport.text(R.strings.dogtags.customization.tooltip.level()), componentProgress.grade + 1)))
             valueBlock.append(text_styles.main('{}: '.format(backport.text(R.strings.dogtags.customization.tooltip.value()))))
             statValue = componentProgress.value
             statStr = formatComponentValue(getLanguageCode(), statValue, comp.numberType, specialReplacements=False)
             valueBlock.append(text_styles.neutral(statStr))
-        items.append(formatters.packTextBlockData(text_styles.concatStylesToSingleLine(*typeLevelBlock), padding=self.__levelPadding))
+        items.append(formatters.packTextBlockData(text_styles.concatStylesToSingleLine(*typeLevelBlock), padding=self._levelPadding))
         items.append(formatters.packTextBlockData(text_styles.concatStylesToSingleLine(*valueBlock)))
         if comp.viewType == ComponentViewType.BACKGROUND:
-            items.append(formatters.packImageBlockData(dogTagComposer.getComponentImageFullPath(AssetSize.SMALL, compId), padding=formatters.packPadding(top=self.__imagePaddingTop, bottom=self.__imagePaddingBottom)))
+            items.append(formatters.packImageBlockData(dogTagComposer.getComponentImageFullPath(AssetSize.SMALL, compId), padding=formatters.packPadding(top=self._imagePaddingTop, bottom=self._imagePaddingBottom)))
         else:
-            images = [formatters.packImageBlockData(dogTagComposer.getDefaultBackgroundImageFullPath(AssetSize.SMALL), padding=formatters.packPadding(top=self.__imagePaddingTop)), formatters.packImageBlockData(dogTagComposer.getComponentImageFullPath(AssetSize.SMALL, compId, componentProgress.grade), padding=formatters.packPadding(top=self.__imageNegativeHeight, bottom=self.__imagePaddingBottom))]
+            images = [formatters.packImageBlockData(dogTagComposer.getDefaultBackgroundImageFullPath(AssetSize.SMALL), padding=formatters.packPadding(top=self._imagePaddingTop)), formatters.packImageBlockData(dogTagComposer.getComponentImageFullPath(AssetSize.SMALL, compId, componentProgress.grade), padding=formatters.packPadding(top=self._imageNegativeHeight, bottom=self._imagePaddingBottom))]
             items.append(formatters.packBuildUpBlockData(blocks=images))
-        items.append(formatters.packTextBlockData(text=text_styles.main(dogTagComposer.getComponentDescription(compId)), padding=self.__descriptionPadding))
+        items.append(formatters.packTextBlockData(text=text_styles.main(dogTagComposer.getComponentDescription(compId)), padding=self._descriptionPadding))
         return [formatters.packBuildUpBlockData(blocks=items)]

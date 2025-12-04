@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/visual_script_client/player_blocks.py
 import weakref
 import BigWorld
+import Math
 from skeletons.gui.battle_session import IBattleSessionProvider
 from PlayerEvents import g_playerEvents
 from visual_script import ASPECT
@@ -10,6 +11,7 @@ from visual_script.dependency import dependencyImporter
 from visual_script.misc import errorVScript
 from visual_script.slot_types import SLOT_TYPE
 from visual_script.tunable_event_block import TunableEventBlock
+from visual_script.type import VScriptEnum
 from visual_script_client.vehicle_common import TunablePlayerVehicleEventBlock, getPartState, getPartNames, getPartName, TriggerListener
 import items.vehicles as vehicles
 from constants import EQUIPMENT_STAGES
@@ -543,3 +545,47 @@ class OnEquipmentUpdated(Block, PlayerMeta):
         self._equipmentStage.setValue(item.getStage())
         self._equipmentStageName.setValue(EQUIPMENT_STAGES.toString(item.getStage()))
         self._out.call()
+
+
+class EVehCollisionSide(VScriptEnum):
+    UNDEFINED = 0
+    LEFT = 1
+    RIGHT = 2
+
+
+class OnCollidedWithAliveEnemy(Block, PlayerMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(OnCollidedWithAliveEnemy, self).__init__(*args, **kwargs)
+        self._out = self._makeEventOutputSlot('out')
+        self._collisionSide = self._makeDataOutputSlot('collisionSide', SLOT_TYPE.E_VEH_COLLISION_SIDE, None)
+        self._position = self._makeDataOutputSlot('position', SLOT_TYPE.VECTOR3, None)
+        return
+
+    def onStartScript(self):
+        g_playerEvents.onCollisionWithOtherAliveVehicle += self.__onCollisionWithOtherAliveVehicle
+        self._collisionSide.setValue(EVehCollisionSide.UNDEFINED)
+
+    def onFinishScript(self):
+        g_playerEvents.onCollisionWithOtherAliveVehicle -= self.__onCollisionWithOtherAliveVehicle
+
+    def __onCollisionWithOtherAliveVehicle(self, position, isOtherAlly):
+        if isOtherAlly:
+            return
+        self.__calcCollisionSide(position)
+        self._position.setValue(position)
+        self._out.call()
+
+    def __calcCollisionSide(self, collisionPos):
+        avatar = self._avatar
+        if avatar is None:
+            return
+        else:
+            vehicleMatrix = avatar.inputHandler.steadyVehicleMatrixCalculator.outputMProv
+            rightVector = Math.Matrix(vehicleMatrix).applyToAxis(0)
+            vehiclePos = avatar.getOwnVehiclePosition()
+            collisionDirection = collisionPos - vehiclePos
+            collisionDirection.normalise()
+            dotProduct = collisionDirection.dot(rightVector)
+            self._collisionSide.setValue(EVehCollisionSide.LEFT if dotProduct < 0 else EVehCollisionSide.RIGHT)
+            return

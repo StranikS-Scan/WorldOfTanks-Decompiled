@@ -21,15 +21,18 @@ from helpers import dependency, time_utils
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.gui.game_control import IComp7Controller
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from gui.server_events.event_items import Quest
 _logger = logging.getLogger(__name__)
+_LOOTBOX_RES = R.views.dyn('gui_lootboxes').dyn('lobby').dyn('gui_lootboxes').dyn('tooltips').dyn('LootboxTooltip')
 _BonusData = namedtuple('_BonusData', ('bonus', 'tooltip'))
 
 class WeeklyQuestsPage(PageSubModelPresenter):
     __slots__ = ('__quests', '__bonusData', '__questsTimer')
     __eventsCache = dependency.descriptor(IEventsCache)
     __comp7Controller = dependency.descriptor(IComp7Controller)
+    __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, viewModel, parentView):
         super(WeeklyQuestsPage, self).__init__(viewModel, parentView)
@@ -66,6 +69,19 @@ class WeeklyQuestsPage(PageSubModelPresenter):
             return window
         else:
             return
+
+    def createToolTipContent(self, event, contentID):
+        if _LOOTBOX_RES.exists() and contentID == _LOOTBOX_RES():
+            from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import LootboxTooltip
+            tooltipId = event.getArgument('tooltipId')
+            if tooltipId is None:
+                return
+            tooltipData = self.__bonusData[tooltipId]
+            lootBoxID = tooltipData.tooltip.get('lootBoxID')
+            lootBox = self.__itemsCache.items.tokens.getLootBoxByID(int(lootBoxID))
+            return LootboxTooltip(lootBox)
+        else:
+            return super(WeeklyQuestsPage, self).createToolTipContent(event, contentID)
 
     def _getEvents(self):
         return ((self.__eventsCache.onSyncCompleted, self.__onEventsSyncCompleted), (self.__comp7Controller.onStatusUpdated, self.__onStatusUpdated))

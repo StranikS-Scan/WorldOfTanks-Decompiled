@@ -5,7 +5,7 @@ from collections import namedtuple
 from gui.shared.view_helpers.UsersInfoHelper import BatchUsersInfoHelper
 from gui_lootboxes.gui.bonuses.bonuses_packers import getRewardsBonusPacker, getMainRewardsBonusPacker
 from gui_lootboxes.gui.bonuses.bonuses_sorter import sortBonuses
-from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.lootboxes_rewards_view_model import LootboxesRewardsViewModel
+from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.lootboxes_rewards_view_model import LootboxesRewardsViewModel, Glows
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes import RegisteredTooltips
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes import gui_helpers
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.sound import LOOT_BOXES_OVERLAY_SOUND_SPACE
@@ -13,6 +13,7 @@ from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.additional_rewards_tool
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.compensation_tooltip import LootBoxesCompensationTooltip
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_key_tooltip import LootboxKeyTooltip
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import LootboxTooltip
+from ExtensionsManager import g_extensionsManager
 from constants import LOOTBOX_TOKEN_PREFIX, LOOTBOX_KEY_PREFIX
 from frameworks.wulf import WindowFlags, WindowLayer, ViewSettings
 from gui.impl.gen import R
@@ -82,6 +83,10 @@ class LootBoxesRewardScreen(ViewImpl):
 
     def createToolTipContent(self, event, contentID):
         tooltipData = self.getTooltipData(event)
+        if g_extensionsManager.isExtensionEnabled('new_year'):
+            if contentID == R.views.new_year.lobby.new_year.tooltips.NyCurrencyCompensationTooltip() and tooltipData:
+                from new_year.gui.impl.new_year.tooltips.ny_currency_compensation_tooltip import NYCurrencyCompensationTooltip
+                return NYCurrencyCompensationTooltip(*tooltipData.specialArgs)
         if contentID == R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.LootboxTooltip() and tooltipData:
             lootBoxID = tooltipData.get('lootBoxID')
             lootBox = self.__itemsCache.items.tokens.getLootBoxByID(int(lootBoxID))
@@ -194,7 +199,15 @@ class LootBoxesRewardScreen(ViewImpl):
                 vm.setPhraseRes(self.__getPhraseRes(self.__lootbox.getID(), phraseID))
             self.__fillRewardsModel(self.__rewards, model=vm)
             vm.setLootBoxOpenCount(self.__clientData.get('countOfOpened', 0))
+            self.setGlowType(self.__clientData, vm)
         return
+
+    def setGlowType(self, clientData, model):
+        uniqueOpening = clientData.get('uniqueOpening', False)
+        if uniqueOpening:
+            model.setGlowType(Glows.UNIQUE)
+        else:
+            model.setGlowType(Glows.DEFAULT)
 
     def __onClose(self):
         self.destroyWindow()

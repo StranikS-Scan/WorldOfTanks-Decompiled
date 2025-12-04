@@ -4,7 +4,9 @@ import logging
 import typing
 import WWISE
 from th_async import th_async
-from CurrentVehicle import HeroTankPreviewAppearance
+from armory_yard.skeletons.armory_yard_reroll_controller import IArmoryYardRerollController
+from armory_yard_constants import getConditionTokenByQuestID
+from CurrentVehicle import HeroTankPreviewAppearance, g_currentVehicle
 from frameworks.wulf import WindowFlags, WindowLayer, ViewFlags
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -25,9 +27,9 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
-def showArmoryYardRewardWindow(bonuses, state, stage=0, closeCallback=None, showImmediately=True, notificationMgr=None):
+def showArmoryYardRewardWindow(bonuses, state, stage=0, closeCallback=None, showImmediately=True, notificationMgr=None, isFinalReward=False):
     from armory_yard.gui.impl.lobby.feature.armory_yard_rewards_view import ArmoryYardRewardsWindow
-    window = ArmoryYardRewardsWindow(bonuses, state, stage, closeCallback)
+    window = ArmoryYardRewardsWindow(bonuses, state, stage, closeCallback, isFinalReward=isFinalReward)
     if showImmediately:
         window.load()
     else:
@@ -53,10 +55,10 @@ def showArmoryYardBuyWindow(armoryYard=None, parent=None, isBlurEnabled=False, o
 
 
 @dependency.replace_none_kwargs(armoryYard=IArmoryYardController)
-def showArmoryYardPostProgressionBuyWindow(armoryYard=None, parent=None, isBlurEnabled=False, onLoadedCallback=None):
-    from armory_yard.gui.impl.lobby.feature.armory_yard_post_progression_buy_view import ArmoryYardPostProgressionBuyWindow
+def showArmoryYardPurchaseStageBuyWindow(armoryYard=None, parent=None, isBlurEnabled=False, onLoadedCallback=None):
+    from armory_yard.gui.impl.lobby.feature.armory_yard_purchase_stage_buy_view import ArmoryYardPurchaseStageBuyWindow
     if armoryYard.isActive():
-        window = ArmoryYardPostProgressionBuyWindow(parent=parent, isBlurEnabled=isBlurEnabled, onLoadedCallback=onLoadedCallback)
+        window = ArmoryYardPurchaseStageBuyWindow(parent=parent, isBlurEnabled=isBlurEnabled, onLoadedCallback=onLoadedCallback)
         window.load()
 
 
@@ -75,9 +77,9 @@ def showArmoryYardShopWindow(parent=None, onLoadedCallback=None, armoryYardShopC
         ArmoryYardShopWindow(parent=parent, onLoadedCallback=onLoadedCallback).load()
 
 
-def showArmoryYardShopBuyWindow(productId, onClosedCallback=None, onLoadedCallback=None):
+def showArmoryYardShopBuyWindow(productId, parent=None, onClosedCallback=None, onLoadedCallback=None):
     from armory_yard.gui.impl.lobby.feature.armory_yard_shop_buy_view import ArmoryYardShopBuyWindow
-    ArmoryYardShopBuyWindow(productId, onClosedCallback=onClosedCallback, onLoadedCallback=onLoadedCallback).load()
+    ArmoryYardShopBuyWindow(productId, parent=parent, onClosedCallback=onClosedCallback, onLoadedCallback=onLoadedCallback).load()
 
 
 @dependency.replace_none_kwargs(armoryYard=IArmoryYardController)
@@ -98,11 +100,50 @@ def showArmoryYardVideoRewardWindow(vehicle):
     return
 
 
+@dependency.replace_none_kwargs(armoryYardReroll=IArmoryYardRerollController)
+def showArmoryYardQuestRerollWindow(conditionQuestID, questsToSelect=None, parent=None, armoryYardReroll=None):
+    from armory_yard.gui.impl.lobby.feature.armory_yard_reroll_view import ArmoryYardRerollViewWindow
+    if conditionQuestID is None:
+        _logger.error("Armory yard reroll window hasn't been shown. Quest ID is None")
+        return
+    else:
+        quests = armoryYardReroll.getConditionQuestsByID(getConditionTokenByQuestID(conditionQuestID))
+        if not quests:
+            _logger.error("Armory yard reroll window hasn't been shown. Quest is not found")
+            return
+        window = ArmoryYardRerollViewWindow(quests, questsToSelect=questsToSelect, parent=parent)
+        window.load()
+        return
+
+
+@dependency.replace_none_kwargs(armoryYardReroll=IArmoryYardRerollController)
+def showYardQuestRerollWindowByTokenQuestID(tokenQuestID, questsToSelect=None, parent=None, armoryYardReroll=None, onLoadedCallback=None):
+    from armory_yard.gui.impl.lobby.feature.armory_yard_reroll_view import ArmoryYardRerollViewWindow
+    tokenQuest = armoryYardReroll.getArmoryTokenQuestByID(tokenQuestID)
+    if tokenQuest is None:
+        _logger.error("Armory yard reroll window hasn't been shown. Token Quest is None")
+        if onLoadedCallback:
+            onLoadedCallback()
+        return
+    else:
+        quests = armoryYardReroll.getConditionQuestsByTokenQuest(tokenQuest)
+        if not quests:
+            _logger.error("Armory yard reroll window hasn't been shown. Quest is not found")
+            if onLoadedCallback:
+                onLoadedCallback()
+            return
+        window = ArmoryYardRerollViewWindow(quests, questsToSelect=questsToSelect, parent=parent, onLoadedCallback=onLoadedCallback)
+        window.load()
+        return
+
+
 @dependency.replace_none_kwargs(armoryYard=IArmoryYardController)
 def showArmoryYardIntroWindow(closeCallback=None, parent=None, armoryYard=None, loadedCallback=None):
     from armory_yard.gui.impl.lobby.feature.armory_yard_intro_view import ArmoryYardIntroWindow
+    from gui.shared.event_dispatcher import hideVehiclePreview
     finalRewardVehicle = armoryYard.getFinalRewardVehicle()
     if finalRewardVehicle:
+        hideVehiclePreview(back=False)
         window = ArmoryYardIntroWindow(finalRewardVehicle, closeCallback, parent=parent, loadedCallback=loadedCallback)
         window.load()
     else:
@@ -147,6 +188,25 @@ def showArmoryYardVehiclePreview(vehTypeCompDescr, showHeroTankText=False, backT
      'isHeroInteractive': isHeroInteractive,
      'isNeedHeroTankHidden': isNeedHeroTankHidden}), scope=EVENT_BUS_SCOPE.LOBBY)
     return
+
+
+def showArmoryYardStylePreview(vehCD=None, style=None, descr='', backCallback=None, backBtnDescrLabel='', *args, **kwargs):
+
+    def previewBackCbWrapper(*args, **kwargs):
+        if backCallback:
+            backCallback(*args, **kwargs)
+        g_eventBus.handleEvent(events.ArmoryYardEvent(events.ArmoryYardEvent.STAGE_UNMUTE_SOUND))
+
+    g_eventBus.handleEvent(events.ArmoryYardEvent(events.ArmoryYardEvent.STAGE_MUTE_SOUND))
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(HANGAR_ALIASES.ARMORY_YARD_STYLE_PREVIEW), ctx={'itemCD': vehCD or g_currentVehicle.item.intCD,
+     'style': style,
+     'styleDescr': descr,
+     'backCallback': previewBackCbWrapper,
+     'backPreviewAlias': kwargs.get('backPreviewAlias'),
+     'backBtnDescrLabel': backBtnDescrLabel,
+     'topPanelData': kwargs.get('topPanelData'),
+     'itemsPack': kwargs.get('itemsPack'),
+     'outfit': kwargs.get('outfit')}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def _createArmoryYardBrowserView(url, viewFlags, returnClb=None):

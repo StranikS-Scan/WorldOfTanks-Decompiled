@@ -4,7 +4,6 @@ from frameworks.wulf import ViewSettings, Array
 from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.tooltips.lootbox_tooltip_rotation_model import LootboxTooltipRotationModel
 from gui.impl.gen import R
 from gui.impl.lobby.common.view_helpers import packBonusModelAndTooltipData
-from gui.impl.lobby.loot_box.loot_box_helper import isAllVehiclesObtainedInSlot
 from shared_utils import first, findFirst
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
@@ -35,15 +34,7 @@ class LootboxRotationTooltip(ViewImpl):
             self.__setCompensation(vm)
             self.__setVehicle(vm)
             self.__setRewards(vm)
-            if self.__lootBox.hasLootLists():
-                rotationStage = self.__lootBox.getRotationStage()
-                lootLists = self.__lootBox.getLootLists()
-                firstSlot = findFirst(lambda x: x is not None, lootLists[rotationStage])
-                allVehiclesObtained = isAllVehiclesObtainedInSlot(lootLists[rotationStage][firstSlot], itemsCache=self.__itemsCache) if firstSlot is not None else False
-                vm.setStageRotation(rotationStage + allVehiclesObtained + 1)
-            else:
-                vm.setStageRotation(0)
-        return
+            vm.setStageRotation(self.__lootBox.getCurrentRotationStage())
 
     @staticmethod
     def __fillVehicle(model, vehicle):

@@ -92,7 +92,8 @@ class ShopBaseUIPacker(object):
         model.setTemplate(self.template)
         model.setCount(self.count)
         model.setTitle(self.title)
-        model.setImage(self.largeIcon if isLargeIcon else self.icon)
+        model.setImage(self.icon)
+        model.setLargeImage(self.largeIcon)
         model.setEffect(self.effect)
         model.setLongDescription(self.longDescription)
         model.setDescription(self.description)
@@ -209,7 +210,6 @@ class CustomizationPacker(ShopBaseUIPacker):
 
     def __init__(self, params):
         super(CustomizationPacker, self).__init__(1)
-        self.__productId = params[0]
         styleParams = params[1][0]
         styleType = styleParams['custType']
         self.__itemTypeID = GUI_ITEM_TYPE_INDICES.get(styleType) if styleType != 'projection_decal' else GUI_ITEM_TYPE.PROJECTION_DECAL
@@ -224,11 +224,11 @@ class CustomizationPacker(ShopBaseUIPacker):
 
     @property
     def icon(self):
-        return self.__item.iconUrl if self.__itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL else backport.image(self.__customizationImgPath.num(STORE_CONSTANTS.ICON_SIZE_SMALL).num(self.__productId)())
+        return self.__item.iconUrl if self.__itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL else backport.image(self.__customizationImgPath.num(STORE_CONSTANTS.ICON_SIZE_SMALL).num(self.__item.id)())
 
     @property
     def largeIcon(self):
-        return self.__item.iconUrl if self.__itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL else backport.image(self.__customizationImgPath.num(STORE_CONSTANTS.ICON_SIZE_MEDIUM).num(self.__productId)())
+        return self.__item.iconUrl if self.__itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL else backport.image(self.__customizationImgPath.num(STORE_CONSTANTS.ICON_SIZE_296).num(self.__item.id)())
 
     @property
     def title(self):
@@ -360,8 +360,10 @@ class ItemPacker(ShopBaseUIPacker):
             return ''
         elif self.__item.itemTypeID != GUI_ITEM_TYPE.BATTLE_BOOSTER:
             return self.__item.formattedShortDescription(self.__DEFAULT_TEMPLATE)
+        elif self.__item.isCrewBooster():
+            return self.__item.shortDescriptionSpecial
         else:
-            return self.__item.shortDescriptionSpecial if self.__item.isCrewBooster() else self.__item.getOptDeviceBoosterDescription(None, valueFormatter=self.__format)
+            return self.__item.getEconomicDirectivesDescription() if self.__item.isEconomicBooster() else self.__item.getOptDeviceBoosterDescription(None, valueFormatter=self.__format)
 
     @property
     def longDescription(self):
@@ -369,8 +371,10 @@ class ItemPacker(ShopBaseUIPacker):
             return _removeStringColorTags(self.__item.longDescriptionSpecial)
         elif self.__item.itemTypeID != GUI_ITEM_TYPE.BATTLE_BOOSTER:
             return self.__item.fullDescription
+        elif self.__item.isCrewBooster():
+            return self.__item.fullDescriptionSpecial
         else:
-            return self.__item.fullDescriptionSpecial if self.__item.isCrewBooster() else self.__item.getOptDeviceBoosterDescription(None)
+            return self.__item.getEconomicDirectivesDescription() if self.__item.isEconomicBooster() else self.__item.getOptDeviceBoosterDescription(None)
 
     @property
     def nationFlagIcon(self):
@@ -382,7 +386,7 @@ class ItemPacker(ShopBaseUIPacker):
 
     @property
     def template(self):
-        return TemplateType.MAINTAIN
+        return TemplateType.ECONOMICBOOSTER if self.__item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER and self.__item.isEconomicBooster() else TemplateType.MAINTAIN
 
     @property
     def itemType(self):

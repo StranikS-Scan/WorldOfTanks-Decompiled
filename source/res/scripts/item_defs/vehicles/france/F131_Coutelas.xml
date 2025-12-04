@@ -10,8 +10,8 @@
   <postProgressionTree>	role_ATSPG_support	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	33	</forward>
-    <backward>	12	</backward>
+    <forward>	30	</forward>
+    <backward>	10	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.226	</moving>
@@ -2101,9 +2101,9 @@
             </armor_21>
             <gun>	50	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	33	</reloadTime>
-          <aimingTime>	2.6	</aimingTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	30	</reloadTime>
+          <aimingTime>	2.4	</aimingTime>
           <clip>
             <count>	3	</count>
             <rate>	20	</rate>
@@ -2117,7 +2117,7 @@
           <turretYawLimits>	-30 30	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 1 10	</maxPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
           <customizationSlots>
             <slot>
@@ -2218,8 +2218,8 @@
         <slot>
           <slotType>	inscription	</slotType>
           <slotId>	34000	</slotId>
-          <rayStart>	-1.762156 0.466828 -0.002291	</rayStart>
-          <rayEnd>	-1.573691 0.399899 -0.00304	</rayEnd>
+          <rayStart>	-1.856391 0.500293 -0.001916	</rayStart>
+          <rayEnd>	-1.479456 0.366434 -0.003415	</rayEnd>
           <rayUp>	0.334587 0.942294 -0.011582	</rayUp>
           <size>	1	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
@@ -2228,8 +2228,8 @@
         <slot>
           <slotType>	inscription	</slotType>
           <slotId>	34001	</slotId>
-          <rayStart>	1.7609 0.466828 -0.002291	</rayStart>
-          <rayEnd>	1.572435 0.399899 -0.00304	</rayEnd>
+          <rayStart>	1.855135 0.500293 -0.001916	</rayStart>
+          <rayEnd>	1.4782 0.366434 -0.003415	</rayEnd>
           <rayUp>	-0.334587 0.942294 -0.011583	</rayUp>
           <size>	1	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
@@ -2630,20 +2630,20 @@
       <engines>
         <Maybach_HL_275>
           <smplEnginePower>	580	</smplEnginePower>
-          <smplFwMaxSpeed>	33	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
         </Maybach_HL_275>
       </engines>
       <chassis>
         <Chassis_F131_Coutelas>
           <grounds>
             <soft>
-              <rollingFriction>	0.2318	</rollingFriction>
+              <rollingFriction>	0.18544	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1352	</rollingFriction>
+              <rollingFriction>	0.10816	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.12558	</rollingFriction>
+              <rollingFriction>	0.10046	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

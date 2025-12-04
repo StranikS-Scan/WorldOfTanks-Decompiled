@@ -959,6 +959,54 @@
       </mul>
     </kpi>
   </role_XI_MBT_B_base_5>
+  <role_XI_universal_base_4>
+    <id>	744	</id>
+    <locName>	improved_suspension_1	</locName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/chassis/shotDispersionFactors/movement	</name>
+        <value>	0.975	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/chassis/shotDispersionFactors/rotation	</name>
+        <value>	0.975	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersionChassisMovement	</name>
+        <value>	0.975	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionChassisRotation	</name>
+        <value>	0.975	</value>
+      </mul>
+    </kpi>
+  </role_XI_universal_base_4>
+  <role_XI_universal_base_5>
+    <id>	745	</id>
+    <locName>	improved_suspension_1	</locName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/chassis/shotDispersionFactors/movement	</name>
+        <value>	0.975	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/chassis/shotDispersionFactors/rotation	</name>
+        <value>	0.975	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersionChassisMovement	</name>
+        <value>	0.975	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionChassisRotation	</name>
+        <value>	0.975	</value>
+      </mul>
+    </kpi>
+  </role_XI_universal_base_5>
   <role_heavyTank_pair_1_1>
     <id>	1011	</id>
     <imgName>	additionalGrousers	</imgName>
@@ -4535,13 +4583,9 @@
         <name>	miscAttrs/antifragmentationLiningFactor	</name>
         <value>	1.15	</value>
       </mul>
-      <add>
-        <name>	miscAttrs/stunResistanceDuration	</name>
-        <value>	0.08	</value>
-      </add>
       <mul>
         <name>	miscAttrs/crewChanceToHitFactor	</name>
-        <value>	0.8	</value>
+        <value>	0.75	</value>
       </mul>
       <mul>
         <name>	miscAttrs/healthFactor	</name>
@@ -4558,12 +4602,8 @@
         <value>	0.85	</value>
       </mul>
       <mul>
-        <name>	crewStunDuration	</name>
-        <value>	0.92	</value>
-      </mul>
-      <mul>
         <name>	crewHitChance	</name>
-        <value>	1.2	</value>
+        <value>	1.25	</value>
       </mul>
       <mul>
         <name>	vehicleStrength	</name>
@@ -4591,13 +4631,9 @@
         <name>	miscAttrs/antifragmentationLiningFactor	</name>
         <value>	0.85	</value>
       </mul>
-      <add>
-        <name>	miscAttrs/stunResistanceDuration	</name>
-        <value>	-0.08	</value>
-      </add>
       <mul>
         <name>	miscAttrs/crewChanceToHitFactor	</name>
-        <value>	1.2	</value>
+        <value>	1.25	</value>
       </mul>
     </modifiers>
     <kpi>
@@ -4614,12 +4650,8 @@
         <value>	1.15	</value>
       </mul>
       <mul>
-        <name>	crewStunDuration	</name>
-        <value>	1.08	</value>
-      </mul>
-      <mul>
         <name>	crewHitChance	</name>
-        <value>	0.8	</value>
+        <value>	0.75	</value>
       </mul>
     </kpi>
   </role_HT_flame_pair_4_2>
@@ -4951,4 +4983,100 @@
       </add>
     </kpi>
   </role_XI_Mausekonig_pair_5_2>
+  <role_XI_universal_pair_4_1>
+    <id>	7441	</id>
+    <imgName>	improvedEnginePower	</imgName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/enginePowerFactor	</name>
+        <value>	1.18	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/gunReloadTimeFactor	</name>
+        <value>	1.04	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	1.18	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunReloadTime	</name>
+        <value>	1.04	</value>
+      </mul>
+    </kpi>
+  </role_XI_universal_pair_4_1>
+  <role_XI_universal_pair_4_2>
+    <id>	7442	</id>
+    <imgName>	improvedGunBreech	</imgName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/gunReloadTimeFactor	</name>
+        <value>	0.96	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/enginePowerFactor	</name>
+        <value>	0.82	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunReloadTime	</name>
+        <value>	0.96	</value>
+      </mul>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	0.82	</value>
+      </mul>
+    </kpi>
+  </role_XI_universal_pair_4_2>
+  <role_XI_universal_pair_5_1>
+    <id>	7551	</id>
+    <imgName>	improvedSpeedIndicatorBackwards	</imgName>
+    <modifiers>
+      <add>
+        <name>	miscAttrs/backwardMaxSpeedKMHTerm	</name>
+        <value>	4	</value>
+      </add>
+      <mul>
+        <name>	miscAttrs/circularVisionRadiusBaseFactor	</name>
+        <value>	0.9	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleBackwardMaxSpeed	</name>
+        <value>	4	</value>
+      </add>
+      <mul>
+        <name>	vehicleCircularVisionRadius	</name>
+        <value>	0.9	</value>
+      </mul>
+    </kpi>
+  </role_XI_universal_pair_5_1>
+  <role_XI_universal_pair_5_2>
+    <id>	7552	</id>
+    <imgName>	improvedObservationDevice	</imgName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/circularVisionRadiusBaseFactor	</name>
+        <value>	1.1	</value>
+      </mul>
+      <add>
+        <name>	miscAttrs/backwardMaxSpeedKMHTerm	</name>
+        <value>	-4	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleCircularVisionRadius	</name>
+        <value>	1.1	</value>
+      </mul>
+      <add>
+        <name>	vehicleBackwardMaxSpeed	</name>
+        <value>	-4	</value>
+      </add>
+    </kpi>
+  </role_XI_universal_pair_5_2>
 </modifications.xml>

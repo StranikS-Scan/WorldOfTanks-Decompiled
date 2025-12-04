@@ -8,7 +8,6 @@
     <ArenaTriggerSystemComponent></ArenaTriggerSystemComponent>
     <AccountRankedComponent></AccountRankedComponent>
     <ArenaRankedComponent></ArenaRankedComponent>
-    <DynamicVehicleChangeComponent></DynamicVehicleChangeComponent>
   </StaticComponents>
   <DynamicComponents>
     <OwnVehicle></OwnVehicle>
@@ -35,6 +34,9 @@
     <VisualScriptEquipmentPublic></VisualScriptEquipmentPublic>
     <VisualScriptPlan></VisualScriptPlan>
     <AbilityEquipment></AbilityEquipment>
+    <CoolantTankAbilityEquipment></CoolantTankAbilityEquipment>
+    <TankRamAbilityEquipment></TankRamAbilityEquipment>
+    <DamageModifierAbilityEquipment></DamageModifierAbilityEquipment>
     <VehicleCircle></VehicleCircle>
     <VehicleRadarDetection></VehicleRadarDetection>
     <VehicleProximityDetection></VehicleProximityDetection>
@@ -66,7 +68,5 @@
     <SequenceNetworkSync></SequenceNetworkSync>
     <DualAccuracy></DualAccuracy>
     <RankedVoiceComponent></RankedVoiceComponent>
-    <MasterVehicleEventsListener></MasterVehicleEventsListener>
-    <VehicleTeamOverride></VehicleTeamOverride>
   </DynamicComponents>
 </components.xml>

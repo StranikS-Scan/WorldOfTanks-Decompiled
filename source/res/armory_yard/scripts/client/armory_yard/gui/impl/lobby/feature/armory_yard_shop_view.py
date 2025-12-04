@@ -3,15 +3,15 @@
 import logging
 from account_helpers.AccountSettings import ArmoryYard, AccountSettings
 from armory_yard.gui.impl.lobby.feature.armory_yard_shop_base import ArmoryYardShopBaseView
+from armory_yard.gui.impl.lobby.feature.tooltips.armory_yard_currency_tooltip_view import ArmoryYardCurrencyTooltipView
 from armory_yard.gui.impl.lobby.feature.tooltips.armory_yard_simple_tooltip_view import ArmoryYardSimpleTooltipView
 from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_shop_view_model import ArmoryYardShopViewModel, BackButtonState
 from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_main_view_model import TabId
 from armory_yard.gui.window_events import showArmoryYardShopBuyWindow
 from armory_yard.gui.shared.shop_bonus_packers import packShopItem
-from frameworks.wulf import WindowFlags, WindowLayer, ViewSettings, ViewFlags, ViewModel
+from frameworks.wulf import WindowFlags, WindowLayer, ViewSettings, ViewFlags
 from gui.impl.gen import R
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
-from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.impl.wrappers.user_compound_price_model import PriceModelBuilder
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopRootUrl
@@ -40,7 +40,7 @@ class ArmoryYardShopView(ArmoryYardShopBaseView):
     def __onBuyProduct(self, args):
         productId = int(args.get('productId', -1))
         if productId and productId in self.__ayShopCtrl.products:
-            showArmoryYardShopBuyWindow(productId, onClosedCallback=self.destroyWindow)
+            showArmoryYardShopBuyWindow(productId, parent=self.getParentWindow(), onClosedCallback=self.destroyWindow)
 
     def __onCurrencyUpdate(self):
         with self.viewModel.transaction() as vm:
@@ -52,6 +52,7 @@ class ArmoryYardShopView(ArmoryYardShopBaseView):
             return
         else:
             goldCost = self.__ayShopCtrl.conversionPrices.get(Currency.GOLD, None)
+            self.__onCurrencyUpdate()
             if goldCost is None:
                 _logger.error('ArmoryYardShop gold coins cost not valid')
                 self.destroyWindow()
@@ -61,7 +62,6 @@ class ArmoryYardShopView(ArmoryYardShopBaseView):
                 AccountSettings.setArmoryYard(ArmoryYard.ARMORY_SHOP_INTRO_VIEWED, True)
             with self.viewModel.transaction() as vm:
                 vm.setIsIntroVisible(isIntroViewed)
-                vm.setCurrency(self.__ayShopCtrl.ayCoins)
                 vm.setBackButtonState(BackButtonState.ARMORY if self.__ayCtrl.isArmoryVisiting else BackButtonState.INGAMESHOP)
                 PriceModelBuilder.fillPriceModel(vm.tokenPrice, Money.makeFrom(Currency.GOLD, goldCost))
                 items = vm.getItems()
@@ -109,7 +109,7 @@ class ArmoryYardShopView(ArmoryYardShopBaseView):
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.armory_yard.lobby.feature.tooltips.ArmoryYardSimpleTooltipView():
             return ArmoryYardSimpleTooltipView(event.getArgument('state'), event.getArgument('id'))
-        return ViewImpl(ViewSettings(R.views.armory_yard.lobby.feature.tooltips.ShopCurrencyTooltipView(), model=ViewModel())) if contentID == R.views.armory_yard.lobby.feature.tooltips.ShopCurrencyTooltipView() else super(ArmoryYardShopView, self).createToolTipContent(event, contentID)
+        return ArmoryYardCurrencyTooltipView(event.getArgument('currency')) if contentID == R.views.armory_yard.lobby.feature.tooltips.ArmoryYardCurrencyTooltipView() else super(ArmoryYardShopView, self).createToolTipContent(event, contentID)
 
 
 class ArmoryYardShopWindow(LobbyWindow):

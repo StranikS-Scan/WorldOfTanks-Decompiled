@@ -75,11 +75,11 @@ class ArmoryYardVehiclePreview(VehiclePreview, IGlobalListener):
             else:
                 viewPy.setPanelTextData(uniqueVehicleTitle='')
         elif alias == VEHPREVIEW_CONSTANTS.CREW_LINKAGE:
-            currVeh = g_currentPreviewVehicle.item.intCD
+            currVehCD = g_currentPreviewVehicle.item.intCD
             stepsRewards = self.__armoryYardCtrl.getStepsRewards()
-            stepCount = self.__armoryYardCtrl.getTotalSteps()
+            stepCount = self.__armoryYardCtrl.getFinalRewardStep()
             vehicleReward = stepsRewards.get(stepCount, {}).get('vehicles', {})
-            if not stepsRewards or currVeh not in vehicleReward:
+            if not stepsRewards or currVehCD not in vehicleReward:
                 vehicleReward = next((self.__AYShopCtrl.products[product]['bonus']['vehicles'] for product in self.__AYShopCtrl.products if g_currentPreviewVehicle.item.intCD in self.__AYShopCtrl.products[product].get('bonus', {}).get('vehicles', {})))
             finalVehicleBonus = getNonQuestBonuses(VehiclesBonus.VEHICLES_BONUS, vehicleReward)[0]
             vehicle = [VehiclesBonus.wrapToItemsPack(finalVehicleBonus)[0]]

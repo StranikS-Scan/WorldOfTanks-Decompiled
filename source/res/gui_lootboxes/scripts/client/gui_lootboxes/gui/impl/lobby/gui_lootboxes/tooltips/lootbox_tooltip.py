@@ -16,6 +16,7 @@ from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.tooltips.c
 from skeletons.gui.game_control import IGuiLootBoxesController
 from skeletons.gui.shared import IItemsCache
 from helpers import dependency
+from shared_utils import first
 
 def _getSortedBonuses(bonuses, bonusesSortTags):
     result = [ b for b in bonuses if b.isShowInGUI() and not b.isCompensation() ]
@@ -107,7 +108,7 @@ class ExtendedLootboxTooltip(ViewImpl):
         lbSlots = []
         for idx, slot in lootBoxSlots.iteritems():
             bonuses = slot.get('bonuses', [])
-            slotProbability = slot.get('probability', [[0]])[0][0] * 100
+            slotProbability = first(slot.get('probability', [0])) * 100
             if self.__isVehicleBonuses(bonuses):
                 self.__fillSpecialVehicleSlot(bonuses, bonusesSortTags, slotProbability)
                 continue

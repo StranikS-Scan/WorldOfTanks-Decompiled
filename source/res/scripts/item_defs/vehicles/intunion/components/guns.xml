@@ -28,6 +28,7 @@
     <_100mm_D54_obr_45>	31026	</_100mm_D54_obr_45>
     <_100mm_D-10T2S>	31027	</_100mm_D-10T2S>
     <QF_20_pounder_type_B>	31028	</QF_20_pounder_type_B>
+    <_105mm_M68>	31030	</_105mm_M68>
   </ids>
   <shared>
     <_13_2mm_Hotchkiss_mle_1930>
@@ -1451,6 +1452,64 @@
         </_105mm_HE_105_57>
       </shots>
     </_105mm_CN_105_G1>
+    <_105mm_M68>
+      <userString>	#intunion_vehicles:_105mm_M68	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	200000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.12	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	11	</reloadTime>
+      <maxAmmo>	46	</maxAmmo>
+      <aimingTime>	2.3	</aimingTime>
+      <weight>	1125	</weight>
+      <maxHealth>	194	</maxHealth>
+      <maxRegenHealth>	97	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.18	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_APDS_M392>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	1198	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	260 241	</piercingPower>
+        </_105mm_APDS_M392>
+        <_105mm_HC_M456>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	878	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	310 310	</piercingPower>
+        </_105mm_HC_M456>
+        <_105mm_HE_M393>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	878	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	94 94	</piercingPower>
+        </_105mm_HE_M393>
+      </shots>
+    </_105mm_M68>
     <_105mm_L52_Sharir>
       <userString>	#intunion_vehicles:_105mm_L52_Sharir	</userString>
       <tags></tags>

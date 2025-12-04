@@ -35,3 +35,7 @@ def computeDistanceFactor(shellDescr, distance, factorName):
         if not isAlmostEqual(result, 0.0):
             result /= maxDistance - prevDistance
         return prevFactor + result * (distance - prevDistance)
+
+
+def computeSpeedByParams(acceleration, maxDistance, speed):
+    return (2 * acceleration * maxDistance + speed ** 2) ** 0.5

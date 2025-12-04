@@ -9,6 +9,7 @@ from gui.impl.gen import R
 from gui.impl.lobby.loot_box.loot_box_helper import getLootBoxIDFromToken
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.currency import applyAll
+from gui_lootboxes.skeletons.statistic_lootbox_controller import IStatisticLootBoxController
 from helpers import time_utils, dependency
 from messenger import g_settings
 from messenger.formatters.service_channel import ServiceChannelFormatter, QuestAchievesFormatter, WaitItemsSyncFormatter, LootBoxAchievesFormatter
@@ -35,12 +36,13 @@ class LootBoxOpenedFormatter(ServiceChannelFormatter):
         self.__lootboxesAsRewards = self.__getLootboxesAsReceivedRewards(allRewards)
         header = message.get('header', self.__formHeader(openedLootBoxes))
         infoText = message.get('infoText', '')
+        nyCompensations = self.__nyCompensation(allRewards)
         receivedRewards, vehicleCompensatedRewards, collectionCompensatedRewards = self.__splitRewards(allRewards)
         dateFmt = backport.getDateTimeFormat(time_utils.getServerRegionalTime())
         openedFmt = self.__formOpenedBoxesSection(openedLootBoxes)
         failFmt = self.__formFailBoxesSection(openedLootBoxes, failedKeys)
         receivedRewardsFmt = self.__formReceivedRewardsSection(receivedRewards)
-        compensationFmt = self.__formCompensationSection(vehicleCompensatedRewards, collectionCompensatedRewards)
+        compensationFmt = self.__formCompensationSection(vehicleCompensatedRewards, collectionCompensatedRewards, nyCompensations)
         failKeyFmt = self.__formFailKeySection(usedKeys)
         mainText = openedFmt + failFmt + receivedRewardsFmt + compensationFmt + failKeyFmt
         formatted = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, ctx={'header': header,
@@ -135,10 +137,26 @@ class LootBoxOpenedFormatter(ServiceChannelFormatter):
                 receivedRewards.setdefault('tokens', {})[token] = allRewards['tokens'][token]
 
         for k, v in allRewards.iteritems():
-            if k != 'vehicles' and k != 'tokens':
+            if k not in ('vehicles', 'tokens', 'meta'):
                 receivedRewards[k] = v
 
         return (receivedRewards, vehicleCompensatedRewards, collectionCompensatedRewards)
+
+    def __nyCompensation(self, allRewards):
+        nyCompensations = {}
+        parsedTokens = []
+        for tokenID, tokenValue in allRewards.get('tokens', {}).iteritems():
+            if not tokenID.startswith('lb_comp:ny26_mandarin:'):
+                continue
+            amount = int(tokenID.split(':')[2])
+            count = tokenValue['count']
+            nyCompensations['NYComp'] = amount * count
+            parsedTokens.append(tokenID)
+
+        for tokenID in parsedTokens:
+            allRewards['tokens'].pop(tokenID, None)
+
+        return nyCompensations
 
     def __formReceivedRewardsSection(self, receivedRewards):
         if not receivedRewards:
@@ -164,17 +182,27 @@ class LootBoxOpenedFormatter(ServiceChannelFormatter):
 
         return self.__SEPARATOR.join(result)
 
-    def __formCompensationSection(self, vehicleCompensatedRewards, collectionCompensatedRewards):
-        if not vehicleCompensatedRewards and not collectionCompensatedRewards:
+    def __getNYCompensationString(self, compensatedCollections):
+        result = []
+        for count in compensatedCollections.values():
+            result.append(g_settings.htmlTemplates.format('battleQuestsNYMandarinsComp', ctx={'nyMandarins': backport.getIntegralFormat(count)}))
+
+        return self.__SEPARATOR.join(result)
+
+    def __formCompensationSection(self, vehicleCompensatedRewards, collectionCompensatedRewards, nyCompensations):
+        if not vehicleCompensatedRewards and not collectionCompensatedRewards and not nyCompensations:
             return ''
         title = text_styles.titleFont(backport.text(R.strings.lb_messenger.serviceChannelMessages.lootbox.openedLootBox.compensation.header()))
         vehicleCompensationFmt = self.__getVehicleCompensationString(vehicleCompensatedRewards)
         collectionsCompensationFmt = self.__getCollectionCompensationString(collectionCompensatedRewards)
+        nyCompensationFmt = self.__getNYCompensationString(nyCompensations)
         compensationFmt = title + self.__SEPARATOR
         if vehicleCompensationFmt:
             compensationFmt += vehicleCompensationFmt + self.__SEPARATOR
         if collectionsCompensationFmt:
             compensationFmt += collectionsCompensationFmt + self.__SEPARATOR
+        if nyCompensationFmt:
+            compensationFmt += nyCompensationFmt + self.__SEPARATOR
         return self.__SEPARATOR + compensationFmt
 
     def __getLootboxesAsReceivedRewards(self, allRewards):
@@ -190,6 +218,7 @@ class LootBoxOpenedFormatter(ServiceChannelFormatter):
 class LootBoxAutoOpenFormatter(WaitItemsSyncFormatter):
     __MESSAGE_TEMPLATE = 'LootBoxRewardsSysMessage'
     __SEPARATOR = '<br/>'
+    __statLootBoxCtrl = dependency.descriptor(IStatisticLootBoxController)
 
     def __init__(self, subFormatters=()):
         super(LootBoxAutoOpenFormatter, self).__init__()
@@ -237,6 +266,7 @@ class LootBoxAutoOpenFormatter(WaitItemsSyncFormatter):
                 if messageData is not None:
                     messageDataList.append(messageData)
         if messageDataList:
+            self.__statLootBoxCtrl._statLocalCache.requestBaseStat()
             callback(messageDataList)
             return
         else:

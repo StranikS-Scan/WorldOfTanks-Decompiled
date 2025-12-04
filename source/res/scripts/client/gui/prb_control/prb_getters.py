@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/prb_control/prb_getters.py
 from typing import TYPE_CHECKING
 import BigWorld
-from constants import QUEUE_TYPE, PREBATTLE_TYPE_NAMES, ARENA_GUI_TYPE, PREBATTLE_TYPE, DEFAULT_LANGUAGE, ACCOUNT_ATTR, PREBATTLE_ROLE, IS_DEVELOPMENT
+from constants import QUEUE_TYPE, PREBATTLE_TYPE_NAMES, ARENA_GUI_TYPE, PREBATTLE_TYPE, DEFAULT_LANGUAGE, PREBATTLE_ROLE, IS_DEVELOPMENT
 from gui.prb_control.settings import makePrebattleSettings, VEHICLE_MAX_LEVEL
 from helpers import dependency
 from skeletons.gui.game_control import IGameSessionController
@@ -286,5 +286,5 @@ def hasModalEntity():
     return getClientPrebattle() or getUnit()
 
 
-def getTrainingBattleRoundLimits(accountAttrs):
-    return (60, 14400) if accountAttrs & ACCOUNT_ATTR.DAILY_BONUS_1 else (300, 1800)
+def getTrainingBattleRoundLimits():
+    return (300, 1800)

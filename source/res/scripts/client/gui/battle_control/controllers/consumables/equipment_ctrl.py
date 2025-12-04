@@ -219,6 +219,9 @@ class _EquipmentItem(object):
     def getActivationCode(self, entityName=None, avatar=None):
         return None
 
+    def isActivated(self):
+        return self._stage == EQUIPMENT_STAGES.ACTIVE
+
     def clear(self):
         self._descriptor = None
         self._quantity = 0
@@ -1304,6 +1307,9 @@ class EquipmentsController(MethodsRules, IBattleController):
         self.onEquipmentAreaCreated = Event.Event(self._eManager)
         self.onEquipmentCooldownInPercent = Event.Event(self._eManager)
         self.onEquipmentCooldownTime = Event.Event(self._eManager)
+        self.onUpdateDamageModifier = Event.Event(self._eManager)
+        self.onShowGlowForSlot = Event.Event(self._eManager)
+        self.onShowBlinkReloadTime = Event.Event(self._eManager)
         self.onCombatEquipmentUsed = Event.Event(self._eManager)
         self._order = []
         self._equipments = {}
@@ -1443,6 +1449,14 @@ class EquipmentsController(MethodsRules, IBattleController):
 
     def getEquipments(self):
         return self._equipments
+
+    def getActivatedEquipments(self):
+        activatedEquipments = {}
+        for intCD, equipment in self._equipments.iteritems():
+            if equipment.isActivated():
+                activatedEquipments[intCD] = equipment
+
+        return activatedEquipments
 
     def getActivationCode(self, intCD, entityName=None, avatar=None):
         code = None

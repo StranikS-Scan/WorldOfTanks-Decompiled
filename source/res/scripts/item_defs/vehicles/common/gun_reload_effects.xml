@@ -118,6 +118,14 @@
       <loopShellLastDt>	0.5	</loopShellLastDt>
     </intuition_overrides>
   </reload_automat_reloading_50_75>
+  <dualgun_reload50_84>
+    <type>	DualGunReload	</type>
+    <sound>	gun_rld_dual_reloading_oneshell	</sound>
+    <runTimeDelta>	0.9	</runTimeDelta>
+    <ammoLowSound>	gun_rld_dual_reloading_oneshell_last	</ammoLowSound>
+    <runTimeDeltaAmmoLow>	0.5	</runTimeDeltaAmmoLow>
+    <caliber>	SWITCH_ext_rld_autoloader_caliber_50_75mm	</caliber>
+  </dualgun_reload50_84>
   <reload85_107>
     <type>	SimpleReload	</type>
     <duration>	1050.0	</duration>
@@ -305,4 +313,5 @@
       <loopShellLastDt>	0.5	</loopShellLastDt>
     </intuition_overrides>
   </reload_automat_reloading_155_170>
+  <reload_Gravizapa></reload_Gravizapa>
 </gun_reload_effects.xml>

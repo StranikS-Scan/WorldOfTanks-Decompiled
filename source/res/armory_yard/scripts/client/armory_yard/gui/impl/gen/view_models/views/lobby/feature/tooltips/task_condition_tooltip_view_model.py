@@ -6,7 +6,7 @@ from frameworks.wulf import ViewModel
 class TaskConditionTooltipViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=3, commands=0):
+    def __init__(self, properties=4, commands=0):
         super(TaskConditionTooltipViewModel, self).__init__(properties=properties, commands=commands)
 
     def getLevels(self):
@@ -25,11 +25,21 @@ class TaskConditionTooltipViewModel(ViewModel):
     def getVehicleTypesType():
         return unicode
 
-    def getBattleTypes(self):
+    def getVehicleNations(self):
         return self._getArray(2)
 
-    def setBattleTypes(self, value):
+    def setVehicleNations(self, value):
         self._setArray(2, value)
+
+    @staticmethod
+    def getVehicleNationsType():
+        return unicode
+
+    def getBattleTypes(self):
+        return self._getArray(3)
+
+    def setBattleTypes(self, value):
+        self._setArray(3, value)
 
     @staticmethod
     def getBattleTypesType():
@@ -39,4 +49,5 @@ class TaskConditionTooltipViewModel(ViewModel):
         super(TaskConditionTooltipViewModel, self)._initialize()
         self._addStringProperty('levels', '')
         self._addArrayProperty('vehicleTypes', Array())
+        self._addArrayProperty('vehicleNations', Array())
         self._addArrayProperty('battleTypes', Array())

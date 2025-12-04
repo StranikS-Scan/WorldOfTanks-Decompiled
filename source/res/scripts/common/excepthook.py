@@ -13,28 +13,24 @@ _SEQUENCE_TYPES = (list, set, tuple)
 _LINE_LIMIT = 25
 _ENABLE_EXTENDED_TRACEBACK = False
 
-def getLocationFromCode(fileNameToTrim, code, lineno=None):
+def getLocationFromCode(trimmedFilenameGetter, code, lineno=None):
     filename = code.co_filename
-    trim_match = fileNameToTrim.findall(filename)
-    if trim_match:
-        trim_path = trim_match[0]
-        idx = filename.find(trim_path)
-        filename = filename[idx + len(trim_path):]
+    trimmedFilename = trimmedFilenameGetter(filename)
     if lineno is None:
         lineno = code.co_firstlineno
     name = code.co_name
-    return (filename, lineno, name)
+    return (trimmedFilename, lineno, name)
 
 
 def formatLocation(filename, lineno, name):
     return 'File "%s", line %d, in %s' % (filename, lineno, name)
 
 
-def extendedTracebackAsString(fileNameToTrim, wrapperName, orgName, etype, value, tb):
-    return '\n'.join(extendedTracebackAsList(fileNameToTrim, wrapperName, orgName, etype, value, tb))
+def extendedTracebackAsString(trimmedFilenameGetter, wrapperName, orgName, etype, value, tb):
+    return '\n'.join(extendedTracebackAsList(trimmedFilenameGetter, wrapperName, orgName, etype, value, tb))
 
 
-def extendedTracebackAsList(fileNameToTrim, wrapperName, orgName, exctype, value, traceback):
+def extendedTracebackAsList(trimmedFilenameGetter, wrapperName, orgName, exctype, value, traceback):
     global _ENABLE_EXTENDED_TRACEBACK
     if not _ENABLE_EXTENDED_TRACEBACK:
         return []
@@ -46,7 +42,7 @@ def extendedTracebackAsList(fileNameToTrim, wrapperName, orgName, exctype, value
             n = 0
             while parent and n < _LINE_LIMIT:
                 fm = parent.tb_frame
-                filename, lineno, name = getLocationFromCode(fileNameToTrim, fm.f_code, parent.tb_lineno)
+                filename, lineno, name = getLocationFromCode(trimmedFilenameGetter, fm.f_code, parent.tb_lineno)
                 parent = parent.tb_next
                 n += 1
                 linecache.checkcache(filename)
@@ -126,15 +122,15 @@ def __processLocals(locals, localsProcessorCache):
     return {k:__processVar(k, v, localsProcessorCache) for k, v in locals.iteritems()}
 
 
-def __excepthook(originalExceptHook, fileNameToTrim, exctype, value, traceback):
+def __excepthook(originalExceptHook, trimmedFilenameGetter, exctype, value, traceback):
     originalExceptHook(exctype, value, traceback)
-    extMsg = extendedTracebackAsString(fileNameToTrim, None, None, exctype, value, traceback)
+    extMsg = extendedTracebackAsString(trimmedFilenameGetter, None, None, exctype, value, traceback)
     BigWorld.logError('EXCEPTION', extMsg, None)
     return
 
 
-def init(enableExtendedTraceBack, fileNameToTrim):
+def init(enableExtendedTraceBack, trimmedFilenameGetter):
     global _ENABLE_EXTENDED_TRACEBACK
     _ENABLE_EXTENDED_TRACEBACK = enableExtendedTraceBack
     if _ENABLE_EXTENDED_TRACEBACK:
-        sys.excepthook = partial(__excepthook, sys.excepthook, fileNameToTrim)
+        sys.excepthook = partial(__excepthook, sys.excepthook, trimmedFilenameGetter)

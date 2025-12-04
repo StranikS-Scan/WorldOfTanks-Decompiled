@@ -11,6 +11,8 @@ from constants import ATTACK_REASON, ATTACK_REASONS
 from debug_utils import LOG_WARNING
 from gui import GUI_NATIONS_ORDER_INDICES
 from gui.Scaleform.locale.QUESTS import QUESTS
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.server_events import formatters, events_constants
 from gui.server_events.formatters import getUniqueBonusTypes
 from gui.shared.system_factory import collectModeNameKwargsByBonusType
@@ -116,8 +118,36 @@ def _getCustomTitleValueFromConditionData(conditionData):
     return generalValue
 
 
-def _getCustomDescriptionValueFromConditionData(conditionData):
+def getCustomDescriptionValueFromConditionData(conditionData):
     return _getCustomTitleValueFromConditionData(conditionData)
+
+
+def iterKeyPath(key):
+    splitData = key.split(':')
+    if len(splitData) == 2:
+        poName, pathInPo = key.split(':')
+        if len(poName) > 1:
+            yield poName[1:]
+            for v in pathInPo.split('/'):
+                yield v
+
+
+def _getDescriptionString(data, keyName, valueFunc):
+    descrData = data.get(keyName)
+    if descrData:
+        if 'key' in descrData:
+            textResource = R.strings.recursiveDyn(iterKeyPath(descrData['key']))
+            if textResource.exists():
+                value = valueFunc(data)
+                if isinstance(value, (int, float)):
+                    pluralCount = int(value)
+                    value = backport.getNiceNumberFormat(value)
+                    return backport.ntext(textResource(), pluralCount, value=value)
+                return backport.text(textResource())
+            return descrData['key']
+        return getLocalizedData(data, keyName)
+    else:
+        return None
 
 
 _VehicleData = namedtuple('_VehicleData', 'isAvailable, discountValue, discountType')
@@ -195,22 +225,10 @@ class _Condition(_Typeable):
         raise SoftException('This method should not be reached in this context')
 
     def getCustomTitle(self):
-        titleData = self._data.get('title')
-        if titleData:
-            if 'key' in titleData:
-                return i18n.makeString(titleData['key'], value=_getCustomTitleValueFromConditionData(self._data))
-            return getLocalizedData(self._data, 'title')
-        else:
-            return None
+        return _getDescriptionString(self._data, 'title', _getCustomTitleValueFromConditionData)
 
     def getCustomDescription(self):
-        descrData = self._data.get('description')
-        if descrData:
-            if 'key' in descrData:
-                return i18n.makeString(descrData['key'], value=_getCustomDescriptionValueFromConditionData(self._data))
-            return getLocalizedData(self._data, 'description')
-        else:
-            return None
+        return _getDescriptionString(self._data, 'description', getCustomDescriptionValueFromConditionData)
 
     def isHidden(self):
         return self._data.get('hideInGui', False)
@@ -1148,7 +1166,7 @@ class Customization(_Requirement):
         return self._isInstalled
 
 
-class _Cumulativable(_Condition):
+class Cumulativable(_Condition):
     __metaclass__ = ABCMeta
 
     def getProgressPerGroup(self, curProgData=None, prevProgData=None):
@@ -1215,7 +1233,7 @@ class _Cumulativable(_Condition):
         return progress.get('bonusCount', 0) >= bonusLimit if bonusLimit is not None else False
 
 
-class BattlesCount(_Cumulativable):
+class BattlesCount(Cumulativable):
 
     def __init__(self, path, data, bonusCond, preBattleCond=None):
         super(BattlesCount, self).__init__('battles', dict(data), path)
@@ -1442,7 +1460,7 @@ class UnitResults(_Condition, _Negatable):
         return self._isAllAlive
 
 
-class CumulativeResult(_Cumulativable):
+class CumulativeResult(Cumulativable):
 
     def __init__(self, path, data, bonusCond, isUnit=False, preBattleCond=None):
         super(CumulativeResult, self).__init__('cumulative', dict(data), path)
@@ -1497,7 +1515,7 @@ class VehicleKills(_VehsListCondition):
         return 'VehicleKills<%s=%d>' % (self._relation, self._relationValue)
 
 
-class VehicleKillsCumulative(VehicleKills, _Cumulativable):
+class VehicleKillsCumulative(VehicleKills, Cumulativable):
 
     def __init__(self, path, data, bonusCond):
         super(VehicleKillsCumulative, self).__init__(path, dict(data))
@@ -1552,7 +1570,7 @@ class VehicleDamage(_CountOrTotalEventsCondition):
         return key
 
 
-class VehicleDamageCumulative(VehicleDamage, _Cumulativable):
+class VehicleDamageCumulative(VehicleDamage, Cumulativable):
 
     def __init__(self, path, data, bonusCond):
         super(VehicleDamageCumulative, self).__init__(path, dict(data))
@@ -1593,7 +1611,7 @@ class VehicleStun(_CountOrTotalEventsCondition):
         return QUESTS.DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT if self.isEventCount() else QUESTS.DETAILS_CONDITIONS_VEHICLESTUN
 
 
-class VehicleStunCumulative(VehicleStun, _Cumulativable):
+class VehicleStunCumulative(VehicleStun, Cumulativable):
 
     def __init__(self, path, data, bonusCond):
         super(VehicleStunCumulative, self).__init__(path, dict(data))
@@ -1669,7 +1687,7 @@ class FirstBlood(_Condition, _Negatable):
         return self._isFirstBlood
 
 
-class CumulativeSum(_Cumulativable):
+class CumulativeSum(Cumulativable):
 
     def __init__(self, path, data, bonusCond):
         super(CumulativeSum, self).__init__('cumulativeSum', dict(data), path)
@@ -1695,7 +1713,7 @@ def getProgressFromQuestWithSingleAccumulative(quest):
     conditions = quest.bonusCond.getConditions()
     if conditions and len(conditions.items) == 1:
         item = conditions.items[0]
-        if isinstance(item, _Cumulativable):
+        if isinstance(item, Cumulativable):
             currentProgress, totalProgress = item.getProgressPerGroup().get(None, [])[:2]
             return (currentProgress, totalProgress)
     return (None, None)

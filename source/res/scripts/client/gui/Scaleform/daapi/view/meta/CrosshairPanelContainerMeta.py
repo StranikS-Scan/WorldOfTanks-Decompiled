@@ -175,6 +175,9 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
     def as_setOverheatStateS(self, state):
         return self.flashObject.as_setOverheatState(state) if self._isDAAPIInited() else None
 
+    def as_setCoolantAbilityReloadingPenaltyS(self, seconds):
+        return self.flashObject.as_setCoolantAbilityReloadingPenalty(seconds) if self._isDAAPIInited() else None
+
     def as_setShotFlyTimeIndVisibilityS(self, isVisible):
         return self.flashObject.as_setShotFlyTimeIndVisibility(isVisible) if self._isDAAPIInited() else None
 
@@ -184,5 +187,11 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
     def as_setShotDamageIndVisibilityS(self, isVisible):
         return self.flashObject.as_setShotDamageIndVisibility(isVisible) if self._isDAAPIInited() else None
 
-    def as_setShotDamageIndValueS(self, value, state):
-        return self.flashObject.as_setShotDamageIndValue(value, state) if self._isDAAPIInited() else None
+    def as_setShotDamageIndValueS(self, value):
+        return self.flashObject.as_setShotDamageIndValue(value) if self._isDAAPIInited() else None
+
+    def as_animShotHitMarkerS(self, animState):
+        return self.flashObject.as_animShotHitMarker(animState) if self._isDAAPIInited() else None
+
+    def as_setShotHitMarkerVisibilityS(self, isVisible):
+        return self.flashObject.as_setShotHitMarkerVisibility(isVisible) if self._isDAAPIInited() else None

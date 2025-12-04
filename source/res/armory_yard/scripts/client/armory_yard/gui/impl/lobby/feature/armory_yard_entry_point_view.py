@@ -2,6 +2,7 @@
 # Embedded file name: armory_yard/scripts/client/armory_yard/gui/impl/lobby/feature/armory_yard_entry_point_view.py
 from armory_yard.gui.impl.lobby.feature.tooltips.entry_point_active_tooltip_view import EntryPointActiveTooltipView
 from armory_yard.gui.impl.lobby.feature.tooltips.entry_point_before_progression_tooltip_view import EntryPointBeforeProgressionTooltipView
+from armory_yard.skeletons.armory_yard_reroll_controller import IArmoryYardRerollController
 from frameworks.wulf import ViewFlags, ViewSettings
 from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_entry_point_view_model import ArmoryYardEntryPointViewModel
 from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_main_view_model import TabId
@@ -10,9 +11,12 @@ from gui.impl.pub import ViewImpl
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import IArmoryYardController
 from armory_yard_constants import State
+from skeletons.gui.shared import IItemsCache
 
 class ArmoryYardEntryPointView(ViewImpl):
     __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
+    __armoryYardRerollCtrl = dependency.descriptor(IArmoryYardRerollController)
+    __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         settings = ViewSettings(layoutID=R.views.armory_yard.lobby.feature.ArmoryYardEntryPointView(), flags=ViewFlags.VIEW, model=ArmoryYardEntryPointViewModel())
@@ -66,4 +70,5 @@ class ArmoryYardEntryPointView(ViewImpl):
             return
 
     def __onActionClick(self):
-        self.__armoryYardCtrl.goToArmoryYard(tabId=TabId.QUESTS)
+        rerollContext = self.__armoryYardRerollCtrl.getRerollContext()
+        self.__armoryYardCtrl.goToArmoryYard(tabId=TabId.QUESTS, ctx=rerollContext)

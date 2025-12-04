@@ -9,7 +9,7 @@ import BigWorld
 import GUI
 import Math
 from account_helpers.settings_core import settings_constants
-from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, StunTypes
+from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, StunTypes, EQUIPMENT_STAGES
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.battle_control.controllers.prebattle_setups_ctrl import IPrebattleSetupsListener
 from gui.Scaleform.daapi.view.battle.shared.formatters import formatHealthProgress, normalizeHealthPercent
@@ -53,7 +53,9 @@ _STATE_HANDLERS = {VEHICLE_VIEW_STATE.HEALTH: '_updateHealthFromServer',
  VEHICLE_VIEW_STATE.BERSERKER: '_updateBerserker',
  VEHICLE_VIEW_STATE.THUNDER_STRIKE: '_updateThunderStrike',
  VEHICLE_VIEW_STATE.AOE_INSPIRE: '_updateAoeInspire',
- VEHICLE_VIEW_STATE.ALLY_SUPPORT: '_updateAllySupport'}
+ VEHICLE_VIEW_STATE.ALLY_SUPPORT: '_updateAllySupport',
+ VEHICLE_VIEW_STATE.ABILITY: '_updateAbility'}
+_ABILITY_HANDLERS = {'tank_ram': 'as_showRammingS'}
 
 class STATUS_ID(CONST_CONTAINER):
     STUN = 0
@@ -397,6 +399,15 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener, IArenaVehiclesContr
     def _updateAllySupport(self, value):
         self._updateCrewBuff(buffName=VEHICLE_VIEW_STATE.ALLY_SUPPORT, isActive=not value.get('finishing', False), duration=value.get('endTime', 0))
 
+    def _updateAbility(self, _):
+        for name, handlerName in _ABILITY_HANDLERS.iteritems():
+            if self.__checkAbilityActive(name):
+                handler = getattr(self, handlerName, None)
+                if handler and callable(handler):
+                    handler()
+
+        return
+
     def _updateCrewBuff(self, buffName, isActive, duration):
         if isActive:
             self._crewBuffManager.setStatus(buffName, duration)
@@ -417,6 +428,11 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener, IArenaVehiclesContr
         stunInfo = StunInfo(stunType=StunTypes.DEFAULT.value, startTime=BigWorld.serverTime(), endTime=BigWorld.serverTime() + duration, duration=duration, totalTime=duration)
         self.__updateStunSources(objID, stunInfo)
         self.__updateStunAnimations(stunInfo)
+
+    def __checkAbilityActive(self, name):
+        equipments = self.sessionProvider.shared.equipments.getEquipments()
+        eq = next((eq for eq in equipments.itervalues() if eq.getDescriptor().name == name), None)
+        return eq is not None and eq.getStage() == EQUIPMENT_STAGES.ACTIVE
 
     def __updateMaxHealth(self):
         prebattleCtrl = self.sessionProvider.shared.prebattleSetups

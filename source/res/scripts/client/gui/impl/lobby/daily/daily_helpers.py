@@ -60,5 +60,13 @@ def modifyPostbattleConditions(quest, questModel):
             postBattleModel.setCurrent(1 if quest.isCompleted() else 0)
 
 
+def modifyTokenQuestConditions(quest, questModel):
+    token = quest.accountReqs.getConditions().items[0]
+    postBattleModel = findFirstConditionModel(questModel.postBattleCondition)
+    if postBattleModel:
+        postBattleModel.setCurrent(min(token.getNeededCount(), token.getReceivedCount()))
+        postBattleModel.setTotal(token.getNeededCount())
+
+
 def isRegularQuestsStateChanged(state, diff):
     return any((diff[stateVariable] != state for stateVariable in ('enabled', 'regularQuestsEnabled')))

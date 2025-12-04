@@ -83,6 +83,7 @@ class _PlayerEvents(object):
         self.onShowShooterTracer = Event.Event()
         self.onOverturnLevelUpdated = Event.Event()
         self.onProjectileExplosion = Event.Event()
+        self.onCollisionWithOtherAliveVehicle = Event.Event()
 
 
 g_playerEvents = _PlayerEvents()

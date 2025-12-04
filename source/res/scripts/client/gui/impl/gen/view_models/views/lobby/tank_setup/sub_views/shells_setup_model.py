@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.shell_slot_model 
 class ShellsSetupModel(BaseSetupModel):
     __slots__ = ('onShellUpdate',)
 
-    def __init__(self, properties=11, commands=8):
+    def __init__(self, properties=10, commands=8):
         super(ShellsSetupModel, self).__init__(properties=properties, commands=commands)
 
     def getShellsTempString(self):
@@ -22,29 +22,23 @@ class ShellsSetupModel(BaseSetupModel):
     def setInstalledCount(self, value):
         self._setNumber(6, value)
 
-    def getIsGoldShellLimit(self):
-        return self._getBool(7)
-
-    def setIsGoldShellLimit(self, value):
-        self._setBool(7, value)
-
     def getMaxCount(self):
-        return self._getNumber(8)
+        return self._getNumber(7)
 
     def setMaxCount(self, value):
-        self._setNumber(8, value)
+        self._setNumber(7, value)
 
     def getClipCount(self):
-        return self._getNumber(9)
+        return self._getNumber(8)
 
     def setClipCount(self, value):
-        self._setNumber(9, value)
+        self._setNumber(8, value)
 
     def getSlots(self):
-        return self._getArray(10)
+        return self._getArray(9)
 
     def setSlots(self, value):
-        self._setArray(10, value)
+        self._setArray(9, value)
 
     @staticmethod
     def getSlotsType():
@@ -54,7 +48,6 @@ class ShellsSetupModel(BaseSetupModel):
         super(ShellsSetupModel, self)._initialize()
         self._addStringProperty('shellsTempString', '')
         self._addNumberProperty('installedCount', 0)
-        self._addBoolProperty('isGoldShellLimit', False)
         self._addNumberProperty('maxCount', 0)
         self._addNumberProperty('clipCount', 1)
         self._addArrayProperty('slots', Array())

@@ -323,7 +323,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.invRotationOnBackMovement = False
             self.onSwitchingViewPoint = Event.Event()
             self.onGoodiesSnapshotUpdated = Event.Event()
-            self.onVehicleChangeFinished = Event.Event()
             self.__isVehicleAlive = True
             self.__firstHealthUpdate = True
             self.__deadOnLoading = False
@@ -600,7 +599,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             if ctrl is not None:
                 ctrl.updateAttachedVehicle(self.vehicle.id)
             self.__aimingBooster = None
-            self.onVehicleChangeFinished(self.vehicle.id)
         return
 
     def onSpaceLoaded(self):
@@ -1203,9 +1201,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 if self.vehicle:
                     self.vehicle.ownVehicle.initialUpdate(force=True)
             if not isAlive and wasAlive:
-                dynamicVehicleChangeComponent = self.components.get('DynamicVehicleChangeComponent')
-                if dynamicVehicleChangeComponent and dynamicVehicleChangeComponent.isActive():
-                    dynamicVehicleChangeComponent.onOriginalVehicleDeath()
                 if self.gunRotator:
                     self.gunRotator.stop()
                 if health > 0 and not isCrewActive:

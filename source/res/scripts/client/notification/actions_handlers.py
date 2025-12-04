@@ -5,6 +5,7 @@ import typing
 import BigWorld
 from CurrentVehicle import g_currentVehicle
 from adisp import adisp_process
+from armory_yard.skeletons.armory_yard_reroll_controller import IArmoryYardRerollController
 from constants import EventPhase
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import DialogsInterface, SystemMessages, makeHtmlString
@@ -21,6 +22,7 @@ from gui.customization.constants import CustomizationModeSource, CustomizationMo
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.paragons.navigation_view_model import TabId
+from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_main_view_model import TabId as ArmoryTabId
 from gui.impl.lobby.early_access.early_access_window_events import showEarlyAccessQuestsView, showEarlyAccessVehicleView
 from gui.impl.lobby.paragons.paragons_window_events import showParagonsNavigationView, showParagonsSelectRewardsWindow
 from gui.impl.lobby.poll.poll_browser_action import PollBrowserButtonHandler
@@ -1311,6 +1313,7 @@ class _OpenTradingCaravanRefill(_OpenShopSalesEventMainView):
 
 class _OpenArmoryYardMain(NavigationDisabledActionHandler):
     __ctrl = dependency.descriptor(IArmoryYardController)
+    __rerollCtrl = dependency.descriptor(IArmoryYardRerollController)
 
     @classmethod
     def getNotType(cls):
@@ -1321,11 +1324,17 @@ class _OpenArmoryYardMain(NavigationDisabledActionHandler):
         pass
 
     def doAction(self, model, entityID, action):
-        self.__ctrl.goToArmoryYard()
+        rerollContext = self.__rerollCtrl.getRerollContext()
+        if rerollContext is not None:
+            self.__ctrl.goToArmoryYard(tabId=ArmoryTabId.QUESTS, ctx=rerollContext)
+        else:
+            self.__ctrl.goToArmoryYard()
+        return
 
 
 class _OpenArmoryYardBuyView(NavigationDisabledActionHandler):
     __ctrl = dependency.descriptor(IArmoryYardController)
+    __rerollCtrl = dependency.descriptor(IArmoryYardRerollController)
 
     @classmethod
     def getNotType(cls):
@@ -1336,11 +1345,17 @@ class _OpenArmoryYardBuyView(NavigationDisabledActionHandler):
         pass
 
     def doAction(self, model, entityID, action):
-        self.__ctrl.goToArmoryYard(ctx={'loadBuyView': True})
+        rerollContext = self.__rerollCtrl.getRerollContext()
+        if rerollContext is not None:
+            self.__ctrl.goToArmoryYard(tabId=ArmoryTabId.QUESTS, ctx=rerollContext)
+        else:
+            self.__ctrl.goToArmoryYard(ctx={'loadBuyView': True})
+        return
 
 
 class _OpenArmoryYardQuest(NavigationDisabledActionHandler):
     __ctrl = dependency.descriptor(IArmoryYardController)
+    __rerollCtrl = dependency.descriptor(IArmoryYardRerollController)
 
     @classmethod
     def getNotType(cls):
@@ -1351,7 +1366,33 @@ class _OpenArmoryYardQuest(NavigationDisabledActionHandler):
         pass
 
     def doAction(self, model, entityID, action):
-        self.__ctrl.goToArmoryYardQuests()
+        rerollContext = self.__rerollCtrl.getRerollContext()
+        if rerollContext is not None:
+            self.__ctrl.goToArmoryYard(tabId=ArmoryTabId.QUESTS, ctx=rerollContext)
+        else:
+            self.__ctrl.goToArmoryYardQuests()
+        return
+
+
+class _OpenArmoryYardRerollQuest(NavigationDisabledActionHandler):
+    __ctrl = dependency.descriptor(IArmoryYardController)
+    __rerollCtrl = dependency.descriptor(IArmoryYardRerollController)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        rerollContext = self.__rerollCtrl.getRerollContext()
+        if rerollContext is not None:
+            self.__ctrl.goToArmoryYard(tabId=ArmoryTabId.QUESTS, ctx=rerollContext)
+        else:
+            self.__ctrl.goToArmoryYard(tabId=ArmoryTabId.PROGRESS)
+        return
 
 
 class _OpenWotPlusIntroView(ActionHandler):
@@ -1621,6 +1662,7 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenCollectionRewardHandler,
  _OpenArmoryYardMain,
  _OpenArmoryYardQuest,
+ _OpenArmoryYardRerollQuest,
  _OpenArmoryYardBuyView,
  _OpenAchievementsScreen,
  _OpenBarracksHandler,

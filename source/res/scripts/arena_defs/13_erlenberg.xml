@@ -45,20 +45,86 @@
       <winnerIfTimeout>	1	</winnerIfTimeout>
       <teamSpawnPoints>
         <team1>
-          <position>	-87.503 404.509	</position>
+          <position>	-87.502998 404.509003	</position>
         </team1>
         <team2>
-          <position>	76.002 -373.689	</position>
-          <position>	-105.753 -373.689	</position>
+          <position>	76.001999 -373.688995	</position>
+          <position>	-105.752998 -373.688995	</position>
         </team2>
       </teamSpawnPoints>
       <teamBasePositions>
         <team1>
-          <position1>	81.471542 440.415863	</position1>
+          <position1>	81.471550 440.415894	</position1>
         </team1>
         <team2></team2>
       </teamBasePositions>
     </assault>
+    <comp7>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-280.356750 442.483704	</position>
+        </team1>
+        <team2>
+          <position>	228.679092 -417.984894	</position>
+        </team2>
+      </teamSpawnPoints>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	-471.885040 -445.119263	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	49.657600 -48.012413	</position>
+          <type>	4	</type>
+        </point>
+        <point>
+          <position>	342.749634 127.835785	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	451.057617 450.374329	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	-341.156342 162.729126	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	-85.522850 -332.089478	</position>
+          <type>	4	</type>
+        </point>
+        <point>
+          <position>	-146.377487 379.997131	</position>
+          <type>	4	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <teamBasePositions>
+        <team1>
+          <position1>	186.183533 414.648865	</position1>
+          <position2>	-189.752686 8.291512	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+    </comp7>
   </gameplayTypes>
   <mapActivities>
     <scenario>

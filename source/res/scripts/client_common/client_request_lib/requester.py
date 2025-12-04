@@ -410,6 +410,30 @@ class UILoggingAccessor(BaseAccessor):
         return self._data_source.get_uilogging_session(callback)
 
 
+class NyTamagotchiAccessor(BaseAccessor):
+
+    def get_current_state(self, callback, notRecalc):
+        return self._data_source.ny_tamagotchi_get_current_state(callback, notRecalc=notRecalc)
+
+    def get_player_info(self, callback):
+        return self._data_source.ny_tamagotchi_get_player_info(callback)
+
+    def get_leaderboard_page(self, callback, page, isUserPage=False):
+        return self._data_source.ny_tamagotchi_get_leaderboard_page(callback, page, isUserPage)
+
+    def get_player_stats(self, callback):
+        return self._data_source.ny_tamagotchi_get_player_stats(callback)
+
+    def take_gift(self, callback):
+        return self._data_source.ny_tamagotchi_take_gift(callback)
+
+    def buy_items(self, callback, data):
+        return self._data_source.ny_tamagotchi_buy_items(callback, data)
+
+    def activate_items(self, callback, data):
+        return self._data_source.ny_tamagotchi_activate_items(callback, data)
+
+
 class Requester(object):
     available_data_sources = {'stagings': StagingDataAccessor,
      'fake': FakeDataAccessor,
@@ -433,6 +457,7 @@ class Requester(object):
     uilogging = RequestDescriptor(UILoggingAccessor)
     shop = RequestDescriptor(ShopAccessor)
     gold_wagon_info = RequestDescriptor(GoldWagonAccessor)
+    ny_tamagotchi = RequestDescriptor(NyTamagotchiAccessor)
 
     @classmethod
     def create_requester(cls, url_fetcher, config, client_lang=None, user_agent=None):

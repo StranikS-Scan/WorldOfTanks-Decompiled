@@ -24,7 +24,7 @@ if typing.TYPE_CHECKING:
     from Event import Event
     from gui.battle_results.reusable import _ReusableInfo
     from gui.server_events.event_items import Quest
-    from gui.server_events.conditions import _Cumulativable
+    from gui.server_events.conditions import Cumulativable
 _logger = logging.getLogger(__name__)
 _scoringToKey = [(ScoringTypeEnum.SHOT, 'cosmicScore/SHOT'),
  (ScoringTypeEnum.RAM, 'cosmicScore/RAMMING'),

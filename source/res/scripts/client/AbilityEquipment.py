@@ -2,16 +2,16 @@
 # Embedded file name: scripts/client/AbilityEquipment.py
 import BigWorld
 from constants import EQUIPMENT_STAGES as STAGES
-from helpers import dependency
 from items import vehicles
-from skeletons.gui.battle_session import IBattleSessionProvider
 from visual_script.misc import ASPECT
 from visual_script_client.contexts.ability_context import AbilityContextClient
 from script_component.DynamicScriptComponent import DynamicScriptComponent
 from helpers.fixed_dict import getVisualScriptEquipmentPublicState
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 
 class AbilityEquipment(DynamicScriptComponent):
-    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    _sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(AbilityEquipment, self).__init__()
@@ -47,3 +47,11 @@ class AbilityEquipment(DynamicScriptComponent):
             state = getVisualScriptEquipmentPublicState(self.equipmentStatePublic)
             getattr(self._context, STAGES.toString(state.stage))()
             return
+
+    def showGlowForSlot(self):
+        equipments = self._sessionProvider.shared.equipments
+        equipments.onShowGlowForSlot(self.compactDescr)
+
+    def showBlinkReloadTime(self):
+        equipments = self._sessionProvider.shared.equipments
+        equipments.onShowBlinkReloadTime()

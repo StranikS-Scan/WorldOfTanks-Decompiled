@@ -410,7 +410,10 @@ class VehicleCompareConfiguratorView(VehicleCompareConfiguratorViewMeta):
         currentVehicle = self._container.getCurrentVehicle()
         enableCamo = bool(cmp_helpers.getSuitableCamouflage(currentVehicle))
         topModulesFromStock = self._container.isTopModulesFromStock()
-        enableTopModules = not (currentVehicle.isPremium or topModulesFromStock)
+        if currentVehicle.isPremium and not topModulesFromStock:
+            enableTopModules = True
+        else:
+            enableTopModules = not (currentVehicle.isPremium or topModulesFromStock)
         isInInventory = self._container.getBasketVehCmpData().isInInventory()
         if isInInventory:
             self.__currentCrewMonitor = _CurrentCrewMonitor(self._container)

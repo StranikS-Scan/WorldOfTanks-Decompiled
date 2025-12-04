@@ -29,7 +29,7 @@ AUTO_SHOOT_FLAME_GUN = 'vehicleAutoShootFlameGun'
 THERMAL_VISION = 'vehicleThermalVision'
 
 def getPreparedShellItemType(item):
-    itemType = item.type
+    itemType = item.kind
     if item.isModernMechanics:
         itemType += _MODERN_POSTFIX
     elif item.hasStun:
@@ -127,7 +127,7 @@ class HangarShellAdvanced(BaseAdvancedTooltip):
 
     def _getBlocksList(self, *args, **kwargs):
         item = self._item
-        header = backport.text(R.strings.tooltips.advanced.header.shellType.dyn(item.type, default=R.invalid)())
+        header = backport.text(R.strings.tooltips.advanced.header.shellType.dyn(item.kind, default=R.invalid)())
         preparedItemType = getPreparedShellItemType(item)
         movie = SHELL_MOVIES.get(preparedItemType, None)
         return self._packAdvancedBlocks(movie=movie, header=header, description=preparedItemType)
@@ -349,6 +349,7 @@ TANKMAN_MOVIES = {'commander': 'crewCommander',
  'radioman': 'crewRadioOperator'}
 _MODERN_POSTFIX = '_MODERN'
 _STUN_POSTFIX = '_STUN'
+_DISTANCE_FACTOR_POSTFIX = '_DF'
 SHELL_MOVIES = {SHELL_TYPES.ARMOR_PIERCING: 'bulletAP',
  SHELL_TYPES.HOLLOW_CHARGE: 'bulletHEAT',
  SHELL_TYPES.HIGH_EXPLOSIVE: 'bulletHE',
@@ -357,4 +358,8 @@ SHELL_MOVIES = {SHELL_TYPES.ARMOR_PIERCING: 'bulletAP',
  SHELL_TYPES.HIGH_EXPLOSIVE + _MODERN_POSTFIX: 'bulletHEModern',
  SHELL_TYPES.HIGH_EXPLOSIVE + _STUN_POSTFIX: 'bulletHE',
  SHELL_TYPES.FLAME: 'bulletFlame',
- SHELL_TYPES.FLAME + _STUN_POSTFIX: 'bulletFlameStun'}
+ SHELL_TYPES.FLAME + _STUN_POSTFIX: 'bulletFlameStun',
+ SHELL_TYPES.ARMOR_PIERCING + _DISTANCE_FACTOR_POSTFIX: 'bulletAP_DF',
+ SHELL_TYPES.HIGH_EXPLOSIVE + _DISTANCE_FACTOR_POSTFIX + _MODERN_POSTFIX: 'bulletHEModern_DF',
+ SHELL_TYPES.HIGH_EXPLOSIVE + _DISTANCE_FACTOR_POSTFIX: 'bulletHEModern_DF',
+ SHELL_TYPES.HOLLOW_CHARGE + _DISTANCE_FACTOR_POSTFIX: 'bulletHEAT_DF'}

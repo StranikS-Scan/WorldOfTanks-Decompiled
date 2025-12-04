@@ -5,6 +5,7 @@ import constants
 import gui
 import nations
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
+from battle_modifiers_common import ModifiersContext
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE
@@ -442,6 +443,35 @@ class CarouselContext(InventoryContext):
 
     def buildItem(self, intCD):
         return self.itemsCache.items.getItemByCD(int(intCD))
+
+
+class Comp7CarouselContext(InventoryContext):
+    __comp7Controller = dependency.descriptor(IComp7Controller)
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, fieldsToExclude=None):
+        super(InventoryContext, self).__init__(fieldsToExclude)
+        self._component = TOOLTIP_COMPONENT.CAROUSEL
+
+    def getStatusConfiguration(self, item):
+        value = super(Comp7CarouselContext, self).getStatusConfiguration(item)
+        value.checkNotSuitable = True
+        return value
+
+    def getStatsConfiguration(self, item):
+        value = super(Comp7CarouselContext, self).getStatsConfiguration(item)
+        value.rentals = True
+        value.buyPrice = True
+        return value
+
+    def buildItem(self, intCD):
+        vehicle = self.itemsCache.items.getItemByCD(int(intCD))
+        modifiers = self.__comp7Controller.getBattleModifiersObject()
+        if modifiers is not None:
+            vehicle = self.__itemsCache.items.getVehicleCopy(vehicle)
+            vehicle.descriptor.battleModifiers = ModifiersContext(modifiers, vehType=vehicle.descriptor.type)
+            vehicle.descriptor.rebuildAttrs()
+        return vehicle
 
 
 class PMQuestsChainContext(ToolTipContext):

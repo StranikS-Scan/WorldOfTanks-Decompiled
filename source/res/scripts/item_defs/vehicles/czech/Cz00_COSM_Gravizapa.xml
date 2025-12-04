@@ -52,7 +52,6 @@
     <armor>
       <armor_1>	100	</armor_1>
     </armor>
-    <prefab>	content/CGFPrefabs/cosmic_event/cosmic_vehicle_shot_anim.prefab	</prefab>
     <prefab>	content/CGFPrefabs/cosmic_event/cosmic_vehicle_emissive.prefab	</prefab>
     <models>
       <undamaged>	vehicles/czech/Cz00_COSM_Gravizapa/normal/lod0/Hull.model	</undamaged>
@@ -67,7 +66,7 @@
     </swinging>
     <exhaust>
       <pixie>	cosmic_rpm	</pixie>
-      <nodes>	HP_effect_left HP_effect_right HP_effect_center	</nodes>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2 HP_Track_Exhaus_3	</nodes>
     </exhaust>
     <turretPositions>
       <turret>	0.000000 1.02769 -0.56318	</turret>

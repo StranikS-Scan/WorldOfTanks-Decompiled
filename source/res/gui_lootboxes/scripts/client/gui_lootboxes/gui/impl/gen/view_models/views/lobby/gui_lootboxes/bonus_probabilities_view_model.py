@@ -7,7 +7,7 @@ from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.slot_view_
 class BonusProbabilitiesViewModel(ViewModel):
     __slots__ = ('onClose', 'onPreview')
 
-    def __init__(self, properties=7, commands=2):
+    def __init__(self, properties=8, commands=2):
         super(BonusProbabilitiesViewModel, self).__init__(properties=properties, commands=commands)
 
     def getLootboxName(self):
@@ -38,23 +38,33 @@ class BonusProbabilitiesViewModel(ViewModel):
     def getSlotsType():
         return SlotViewModel
 
+    def getGuaranteedFrequencies(self):
+        return self._getArray(4)
+
+    def setGuaranteedFrequencies(self, value):
+        self._setArray(4, value)
+
+    @staticmethod
+    def getGuaranteedFrequenciesType():
+        return int
+
     def getHasLootLists(self):
-        return self._getBool(4)
+        return self._getBool(5)
 
     def setHasLootLists(self, value):
-        self._setBool(4, value)
+        self._setBool(5, value)
 
     def getRotationStage(self):
-        return self._getNumber(5)
+        return self._getNumber(6)
 
     def setRotationStage(self, value):
-        self._setNumber(5, value)
+        self._setNumber(6, value)
 
     def getLootLists(self):
-        return self._getArray(6)
+        return self._getArray(7)
 
     def setLootLists(self, value):
-        self._setArray(6, value)
+        self._setArray(7, value)
 
     @staticmethod
     def getLootListsType():
@@ -66,6 +76,7 @@ class BonusProbabilitiesViewModel(ViewModel):
         self._addNumberProperty('lootboxID', 0)
         self._addNumberProperty('lootboxTier', 0)
         self._addArrayProperty('slots', Array())
+        self._addArrayProperty('guaranteedFrequencies', Array())
         self._addBoolProperty('hasLootLists', False)
         self._addNumberProperty('rotationStage', 0)
         self._addArrayProperty('lootLists', Array())

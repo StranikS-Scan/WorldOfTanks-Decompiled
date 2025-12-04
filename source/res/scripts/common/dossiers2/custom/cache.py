@@ -30,6 +30,8 @@ def buildCache():
                 continue
             elif 'maps_training' in vehDescr.tags:
                 continue
+            elif 'event_battles' in vehDescr.tags:
+                continue
             vehiclesByLevel.setdefault(vehDescr.level, set()).add(vehDescr.compactDescr)
             for tag in ('beast', 'sinai', 'patton'):
                 if tag in vehDescr.tags:
@@ -39,8 +41,10 @@ def buildCache():
                 collectorVehiclesByNations.setdefault(nationIdx, set()).add(vehDescr.compactDescr)
                 collectorVehiclesLevelsByNations.setdefault(nationIdx, set()).add(vehDescr.level)
                 continue
-            if len(unlocksSources.get(vehDescr.compactDescr, set())) > 0 or len(vehicles.g_cache.vehicle(nationIdx, vehDescr.id).unlocksDescrs) > 0:
-                vehiclesInNationTree.add(vehDescr.compactDescr)
+            vehType = vehicles.g_cache.vehicle(nationIdx, vehDescr.id)
+            if not vehType.isPremium:
+                if len(unlocksSources.get(vehDescr.compactDescr, set())) > 0 or len(vehType.unlocksDescrs) > 0:
+                    vehiclesInNationTree.add(vehDescr.compactDescr)
 
         vehiclesInTree.update(vehiclesInNationTree)
         vehiclesInTreeByNation[nationIdx] = vehiclesInNationTree

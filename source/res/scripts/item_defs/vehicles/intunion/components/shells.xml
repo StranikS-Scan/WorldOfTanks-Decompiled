@@ -1216,6 +1216,60 @@
       </damage>
     </armorSpalls>
   </_105mm_HE_105_57>
+  <_105mm_APDS_M392>
+    <id>	31075	</id>
+    <userString>	#intunion_vehicles:_105mm_APDS_M392	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1010	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_APDS_M392>
+  <_105mm_HC_M456>
+    <id>	31076	</id>
+    <userString>	#intunion_vehicles:_105mm_HC_M456	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_105mm_HC_M456>
+  <_105mm_HE_M393>
+    <id>	31077	</id>
+    <userString>	#intunion_vehicles:_105mm_HE_M393	</userString>
+    <icon>	he_modern	</icon>
+    <price>	980	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	240	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_HE_M393>
   <_120mm_APDS_L15A5>
     <id>	31013	</id>
     <userString>	#intunion_vehicles:_120mm_APDS_L15A5	</userString>

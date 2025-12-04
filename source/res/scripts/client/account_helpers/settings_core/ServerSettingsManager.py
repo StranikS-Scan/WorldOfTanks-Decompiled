@@ -858,6 +858,7 @@ class ServerSettingsManager(object):
                                   NewYearStorageKeys.NY_WELCOME_NOTIFICATION: 2,
                                   NewYearStorageKeys.NY_PET_TOYS_REMOVED: 3,
                                   NewYearStorageKeys.NY_FIRST_QUEST_VIDEO_VISITED: 4,
+                                  NewYearStorageKeys.NY_TAMAGOTCHI_TUTORIAL_COMPLETED: 5,
                                   NewYearStorageKeys.DECORATIONS_POPOVER_VIEWED: 9,
                                   NewYearStorageKeys.DECORATIONS_POPOVER_BROKEN: 10}, offsets={NewYearStorageKeys.NY_FIRST_QUEST_ENTRANCE: Offset(11, 63 << 11)}),
      SETTINGS_SECTIONS.VERSUS_AI_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,

@@ -183,6 +183,7 @@ class DogTagsView(ViewImpl):
         model.setNewEngravingDedicationCount(counters[ComponentViewType.ENGRAVING][ComponentPurpose.DEDICATION])
         model.setNewEngravingTriumphCount(counters[ComponentViewType.ENGRAVING][ComponentPurpose.TRIUMPH])
         model.setNewEngravingSkillCount(counters[ComponentViewType.ENGRAVING][ComponentPurpose.SKILL])
+        model.setNewEngravingStaticCount(counters[ComponentViewType.ENGRAVING][ComponentPurpose.STATIC])
 
     @args2params(int, int)
     def __onEquip(self, background, engraving):

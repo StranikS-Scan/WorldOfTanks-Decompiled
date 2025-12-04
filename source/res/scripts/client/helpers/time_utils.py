@@ -444,3 +444,12 @@ def _getTimestampForUTC(year, month, day, hour=0, minute=0, second=0, microsecon
 
 def _getTimestampForLocal(year, month, day, hour=0, minute=0, second=0, microsecond=0):
     return getTimestampFromLocal(datetime.datetime(year, month, day, hour, minute, second, microsecond).timetuple())
+
+
+def hmFloatToHourFloat(timeValue):
+    v = float(timeValue)
+    h = int(v)
+    mm = int((v - h) * 100 + 1e-06)
+    if not 0 <= h < HOURS_IN_DAY or not 0 <= mm < MINUTES_IN_HOUR:
+        raise SoftException('Invalid human time H.MM: {}'.format(timeValue))
+    return h + mm / float(MINUTES_IN_HOUR)

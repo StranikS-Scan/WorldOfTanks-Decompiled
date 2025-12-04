@@ -30,12 +30,14 @@ class TooltipPurposeGroup(Enum):
     TRIUMPH = 'TRIUMPH'
     DEDICATION = 'DEDICATION'
     SEASON = 'SEASON'
+    STATIC = 'STATIC'
 
 
 class EngravingSection(Enum):
     TRIUMPH = 'TRIUMPH'
     DEDICATION = 'DEDICATION'
     SKILL = 'SKILL'
+    STATIC = 'STATIC'
 
 
 class BackgroundSection(Enum):
@@ -44,14 +46,19 @@ class BackgroundSection(Enum):
 
 PURPOSE_TO_TOOLTIP_PURPOSE_GROUP_MAP = {EngravingSection.SKILL: TooltipPurposeGroup.SEASON,
  EngravingSection.TRIUMPH: TooltipPurposeGroup.TRIUMPH,
- EngravingSection.DEDICATION: TooltipPurposeGroup.DEDICATION}
+ EngravingSection.DEDICATION: TooltipPurposeGroup.DEDICATION,
+ EngravingSection.STATIC: TooltipPurposeGroup.STATIC}
 SECTION_ORDER_MAP = {ComponentViewType.BACKGROUND: [BackgroundSection.TRIUMPH_MEDAL],
- ComponentViewType.ENGRAVING: [EngravingSection.DEDICATION, EngravingSection.SKILL, EngravingSection.TRIUMPH]}
+ ComponentViewType.ENGRAVING: [EngravingSection.DEDICATION,
+                               EngravingSection.SKILL,
+                               EngravingSection.TRIUMPH,
+                               EngravingSection.STATIC]}
 IN_SECTION_ORDER_WEIGHT = [ComponentPurpose.RANKED_SKILL, ComponentPurpose.SKILL]
 SECTION_BY_PURPOSE = {ComponentPurpose.TRIUMPH: EngravingSection.TRIUMPH,
  ComponentPurpose.SKILL: EngravingSection.SKILL,
  ComponentPurpose.RANKED_SKILL: EngravingSection.SKILL,
  ComponentPurpose.DEDICATION: EngravingSection.DEDICATION,
+ ComponentPurpose.STATIC: EngravingSection.STATIC,
  ComponentPurpose.BASE: BackgroundSection.TRIUMPH_MEDAL,
  ComponentPurpose.TRIUMPH_MEDAL: BackgroundSection.TRIUMPH_MEDAL}
 
@@ -207,6 +214,9 @@ class DogTagComposerLobby(DogTagComposerClient):
         model.setIsExternalUnlockOnly(componentDef.isExternalUnlockOnly)
         if componentDef.purpose == ComponentPurpose.SKILL and isUnlocked and currProgValue < componentDef.grades[0]:
             model.setIsDemoted(True)
+        if componentDef.purpose == ComponentPurpose.STATIC:
+            lightingUpTo = componentDef.lightingUpTo or 1.0
+            model.setLightingUpTo(lightingUpTo)
 
     @staticmethod
     def __getUnlockThresholdForGrade(compId, grade):

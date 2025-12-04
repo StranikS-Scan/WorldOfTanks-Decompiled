@@ -728,6 +728,14 @@
       <initialVisibility>	true	</initialVisibility>
     </attachment>
     <attachment>
+      <id>	31069	</id>
+      <name>	F134_ARL_Projet_F	</name>
+      <modelName>	vehicles/french/F134_ARL_Projet_F/SleeveEjection.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+      <hangarModelName>	vehicles/french/F134_ARL_Projet_F/Hangar_sleeve.prefab	</hangarModelName>
+    </attachment>
+    <attachment>
       <id>	31071	</id>
       <name>	G178_Sturmtiger_V1_3Dst_01_anim	</name>
       <modelName>	vehicles/german/G178_Sturmtiger_V1/_skin/G178_Sturmtiger_V1_3Dst_01/G178_Sturmtiger_V1_3Dst_01_anim.prefab	</modelName>
@@ -838,6 +846,14 @@
       <hangarModelName>	vehicles/british/GB139_Vulcan/GB139_Vulcan_hangar.prefab	</hangarModelName>
     </attachment>
     <attachment>
+      <id>	31089	</id>
+      <name>	F135_Schneider_120_AC_Gendarme_02	</name>
+      <modelName>	vehicles/french/F135_Schneider_120_AC_Gendarme_02/F135_Schneider_120_AC_Gendarme_02_anim.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+      <hangarModelName>	vehicles/french/F135_Schneider_120_AC_Gendarme_02/F135_Schneider_120_AC_Gendarme_02_hangar.prefab	</hangarModelName>
+    </attachment>
+    <attachment>
       <id>	31090	</id>
       <modelName>	vehicles/czech/Cz39_SD_122_49_Sekera/SleeveEjection.prefab	</modelName>
       <hangarModelName>	vehicles/czech/Cz39_SD_122_49_Sekera/Sleeve_hangar.prefab	</hangarModelName>
@@ -846,12 +862,89 @@
       <texture>	gui/maps/vehicles/styles/czech.png	</texture>
     </attachment>
     <attachment>
-      <id>	31080	</id>
-      <name>	G00_Ratte_anim	</name>
-      <modelName>	vehicles/german/G00_Ratte/G00_Ratte_anim.prefab	</modelName>
-      <hangarModelName>	vehicles/german/G00_Ratte/G00_Ratte_anim.prefab	</hangarModelName>
+      <id>	31091	</id>
+      <name>	GB140_Champion_sleeveEjection	</name>
+      <modelName>	vehicles/british/GB140_Champion/SleeveEjection.prefab	</modelName>
       <attachmentLogic>	prefab	</attachmentLogic>
       <initialVisibility>	true	</initialVisibility>
+      <hangarModelName>	vehicles/british/GB140_Champion/SleeveEjection_hangar.prefab	</hangarModelName>
+    </attachment>
+    <attachment>
+      <id>	31092	</id>
+      <name>	sleeveEjection	</name>
+      <modelName>	vehicles/british/GB143_Captain/SleeveEjection.prefab	</modelName>
+      <hangarModelName>	vehicles/british/GB143_Captain/SleeveEjection_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31093	</id>
+      <name>	F134_ARL_Projet_F_Ability	</name>
+      <modelName>	vehicles/french/F134_ARL_Projet_F/Ability.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31094	</id>
+      <name>	G184_EisBaer_Ability	</name>
+      <initialVisibility>	true	</initialVisibility>
+      <modelName>	vehicles/german/G184_EisBaer/Ability.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
+      <id>	31095	</id>
+      <name>	G184_EisBaer_SleeveEjection	</name>
+      <initialVisibility>	true	</initialVisibility>
+      <hangarModelName>	vehicles/german/G184_EisBaer/SleeveEjection_hangar.prefab	</hangarModelName>
+      <modelName>	vehicles/german/G184_EisBaer/SleeveEjection.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
+      <id>	31096	</id>
+      <name>	GB140_Champion_Ability	</name>
+      <modelName>	vehicles/british/GB140_Champion/Ability.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31098	</id>
+      <name>	GB134_FV242B_Condor_3Dst_01	</name>
+      <modelName>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_01/GB134_FV242B_Condor_3Dst_01_anim.prefab	</modelName>
+      <hangarModelName>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_01/GB134_FV242B_Condor_3Dst_01_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31101	</id>
+      <name>	F123_ERAC_105_Proto_anim	</name>
+      <modelName>	vehicles/french/F123_ERAC_105_Proto/SleeveEjection.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+      <hangarModelName>	vehicles/french/F123_ERAC_105_Proto/SleeveEjection_hangar.prefab	</hangarModelName>
+    </attachment>
+    <attachment>
+      <id>	31102	</id>
+      <name>	A175_OTAC_MT_58_02_3Dst_01	</name>
+      <modelName>	vehicles/american/A175_OTAC_MT_58/_skins/A175_OTAC_MT_58_02_3Dst_01/A175_OTAC_MT_58_02_3Dst.prefab	</modelName>
+      <hangarModelName>	vehicles/american/A175_OTAC_MT_58/_skins/A175_OTAC_MT_58_02_3Dst_01/A175_OTAC_MT_58_02_3Dst_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31103	</id>
+      <name>	sleeveEjection	</name>
+      <modelName>	vehicles/british/GB141_Celestial_2_51/SleeveEjection.prefab	</modelName>
+      <hangarModelName>	vehicles/british/GB141_Celestial_2_51/SleeveEjection_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31104	</id>
+      <name>	A38_T92_3Dst_01	</name>
+      <modelName>	vehicles/american/A38_T92/_skins/A38_T92_3Dst_01/A38_T92_3Dst_01.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+      <hangarModelName>	vehicles/american/A38_T92/_skins/A38_T92_3Dst_01/A38_T92_3Dst_01_hangar.prefab	</hangarModelName>
     </attachment>
   </itemGroup>
   <itemGroup>

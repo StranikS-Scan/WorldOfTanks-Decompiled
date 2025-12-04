@@ -211,17 +211,16 @@ class DailyQuestsPresenterPremium(DailyQuestsPresenterRegular):
     @replaceNoneKwargsModel
     def _updateModel(self, model=None):
         isEnabled = isPremiumQuestsEnable()
-        if not isEnabled:
-            return
-        quests = sorted(self.eventsCache.getDailyPremiumQuests().values(), key=dailyQuestsSortFunc)
         hasPremAcc = isPremiumPlusAccount()
-        isEnabled = isPremiumQuestsEnable()
         with model.transaction() as tx:
             tx.setHasPremiumAccount(hasPremAcc)
             tx.setIsEnabled(isEnabled)
-            if not isEnabled:
-                return
             questsModel = tx.getQuests()
+            if not isEnabled:
+                questsModel.clear()
+                questsModel.invalidate()
+                return
+            quests = sorted(self.eventsCache.getDailyPremiumQuests().values(), key=dailyQuestsSortFunc)
             self._updateQuestsInModel(questsModel, quests)
             self._updateRerollEnabledFlag(tx)
 

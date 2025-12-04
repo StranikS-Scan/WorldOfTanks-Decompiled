@@ -6,8 +6,11 @@ import time
 import typing
 from account_shared import getCustomizationItem
 from battle_pass_common import NON_VEH_CD
+from debug_utils import LOG_WARNING
 from dog_tags_common.components_config import componentConfigAdapter
 from soft_exception import SoftException
+from copy import deepcopy
+from WeakMethod import WeakMethodProxy
 if typing.TYPE_CHECKING:
     from typing import Dict, Optional
 
@@ -275,6 +278,10 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'noviceReset': __mergeNoviceReset,
  'paragonsUnlocks': __mergeParagonsUnlocks}
 
+def mergeTokens(total, key, value, isLeaf=False, count=1, *args):
+    __mergeTokens(total, key, value, isLeaf, count, *args)
+
+
 def _vehiclesInventoryChecker(account, key):
     invId = account._inventory.getVehicleInvID(key)
     return not account._rent.isVehicleRented(invId) or account._recycleBin.availableRestoreVehicle(key) if invId != 0 else account._recycleBin.availableRestoreVehicle(key)
@@ -396,7 +403,7 @@ DEEP_CHECKERS = {'groups': lambda nodeAcceptor, bonusNode, checkInventory, depth
 
 class BonusNodeAcceptor(object):
 
-    def __init__(self, account, bonusConfig=None, counters=None, bonusCache=None, probabilityStage=0, logTracker=None, shouldResetUsedLimits=True):
+    def __init__(self, account, bonusConfig=None, counters=None, bonusCache=None, probabilityStage=0, rotationLevel=0, logTracker=None, shouldResetUsedLimits=True):
         self.__account = account
         self.__limitsConfig = bonusConfig.get('limits', None) if bonusConfig else None
         self.__maxStage = bonusConfig.get('probabilityStageCount', 1) - 1 if bonusConfig else 0
@@ -414,7 +421,12 @@ class BonusNodeAcceptor(object):
         self.__logTracker = logTracker
         self.__usedLimits = set()
         self.__shouldResetUsedLimits = shouldResetUsedLimits
+        self.__maxRotationLevel = bonusConfig.get('rotationLevelCount', 1) - 1 if bonusConfig else 0
+        rotationLevel = min(rotationLevel, self.__maxRotationLevel)
+        self.__rotationsLevel = [rotationLevel, rotationLevel]
+        self.currentLimitsID = set()
         self.__initCounters(counters or {})
+        self._bonusTrack = []
         return
 
     def __initCounters(self, counters):
@@ -522,7 +534,8 @@ class BonusNodeAcceptor(object):
         else:
             beginStage, endStage, stagesCount = self.getStagesInfo()
             usedLimits = self.getUsedLimits()
-            return self.__logTracker.generateInfo(beginStage, endStage, stagesCount, usedLimits)
+            rotationLevel = self.getCurrentRotationLevel()
+            return self.__logTracker.generateInfo(beginStage, endStage, stagesCount, usedLimits, rotationLevel)
 
     def accept(self, bonusNode):
         if bonusNode.get('properties', {}).get('probabilityStageDependence', False):
@@ -546,6 +559,7 @@ class BonusNodeAcceptor(object):
     def reuse(self):
         self.__updateProbabilityStages()
         self.__resetFlags()
+        self.__updateRotationLevel()
         if not self.__limitsConfig:
             return
         else:
@@ -578,12 +592,103 @@ class BonusNodeAcceptor(object):
 
             return
 
+    def isOverStage(self, bonusNode):
+        return False if self.isBonusExists(bonusNode) else self.rotationCheck(bonusNode)
+
+    def isMaxRotationLevel(self):
+        return self.__rotationsLevel[1] == self.__maxRotationLevel
+
+    def rotationCheck(self, bonusNode):
+        rotationCheck = self.rotationCheck
+        isOverStage = self.isOverStage
+        getDict = bonusNode.get
+        val = getDict('groups')
+        if val is not None:
+            for sub in val:
+                if rotationCheck(sub):
+                    break
+            else:
+                return False
+
+        val = getDict('allof')
+        if val is not None:
+            for _, _, _, sub in val:
+                if isOverStage(sub):
+                    break
+            else:
+                return False
+
+        val = getDict('oneof')
+        if val is not None:
+            for _, _, _, sub in val[1]:
+                if isOverStage(sub):
+                    break
+            else:
+                return False
+
+        return True
+
+    def increaseRotationLevel(self):
+        if self.__rotationsLevel[1] < self.__maxRotationLevel:
+            self.__rotationsLevel[1] += 1
+            return
+        LOG_WARNING('The rotation level cannot be increased above the maximum, accountID: %d' % self.__account.id)
+
+    def getCurrentRotationLevel(self):
+        return self.__rotationsLevel[0]
+
+    def getRotationLevels(self):
+        return self.__rotationsLevel
+
+    def setModifiedRotationLevel(self, rotationLevel):
+        if rotationLevel <= self.__maxRotationLevel:
+            self.__rotationsLevel[1] = rotationLevel
+            return
+        LOG_WARNING('The rotation level cannot be set above the maximum, accountID: %d' % self.__account.id)
+
+    def isRotation(self):
+        return bool(self.__maxRotationLevel)
+
+    def __updateRotationLevel(self):
+        self.__rotationsLevel[0] = self.__rotationsLevel[1]
+
+    def reInitCounters(self, bonusConfig):
+        self.__limitsConfig = bonusConfig.get('limits', None) if bonusConfig else None
+        if self.__limitsConfig:
+            cooldowns = {}
+            uses = {}
+            bonusProbabilityUses = {}
+            for limitID, config in self.__limitsConfig.iteritems():
+                if 'guaranteedFrequency' in config or 'maxFrequency' in config or 'useBonusProbabilityAfter' in config:
+                    cooldowns[limitID], uses[limitID], bonusProbabilityUses[limitID] = self.__cooldowns.get(limitID, 0), self.__uses.get(limitID, 0), self.__bonusProbabilityUses.get(limitID, 0)
+
+            self.__cooldowns = cooldowns
+            self.__uses = uses
+            self.__bonusProbabilityUses = bonusProbabilityUses
+        else:
+            self.__cooldowns = None
+            self.__uses = None
+            self.__bonusProbabilityUses = None
+        return
+
+    def trackChoice(self, choice):
+        self._bonusTrack.append(choice)
+
+    def getBonusTrack(self):
+        return _packTrack(self._bonusTrack)
+
 
 class NodeVisitor(object):
+    SKIP_KEYS = frozenset(('config', 'properties', 'needsExpansion'))
 
     def __init__(self, mergers, args):
         self._mergers = mergers
         self._mergersArgs = args
+        self._handlers = {}
+        self.registerHandler('oneof', self.onOneOf)
+        self.registerHandler('allof', self.onAllOf)
+        self.registerHandler('groups', self.onGroup)
+        self.registerHandler('rotation', self.onRotations)
 
     def onOneOf(self, storage, values):
         raise NotImplementedError()
@@ -594,32 +699,43 @@ class NodeVisitor(object):
     def onGroup(self, storage, values):
         raise NotImplementedError()
 
+    def onRotations(self, storage, values):
+        raise NotImplementedError()
+
     def onMergeValue(self, storage, name, value, isLeaf):
         self._mergers[name](storage, name, value, isLeaf, *self._mergersArgs)
 
-    def beforeWalk(self, storage, bonusSection):
+    def _beforeWalk(self, storage, bonusSection):
+        return bonusSection
+
+    def _afterWalk(self, storage, bonusSection):
         pass
+
+    def registerHandler(self, key, func):
+        self._handlers[key] = WeakMethodProxy(func)
 
     def _walkSubsection(self, storage, bonusSection):
         result = {}
+        SKIP_KEYS = self.SKIP_KEYS
+        onMergeValue = self.onMergeValue
         for bonusName, bonusValue in bonusSection.iteritems():
-            if bonusName == 'oneof':
-                self.onOneOf(result, bonusValue)
-            if bonusName == 'allof':
-                self.onAllOf(result, bonusValue)
-            if bonusName == 'groups':
-                self.onGroup(result, bonusValue)
-            if bonusName in ('config', 'properties', 'needsExpansion'):
+            handler = self._handlers.get(bonusName)
+            if handler is not None:
+                handler(result, bonusValue)
+            if bonusName in SKIP_KEYS:
                 continue
-            self.onMergeValue(result, bonusName, bonusValue, True)
+            onMergeValue(result, bonusName, bonusValue, True)
 
         for name, value in result.iteritems():
-            self.onMergeValue(storage, name, value, False)
+            onMergeValue(storage, name, value, False)
+
+        return
 
     def walkBonuses(self, bonusSection, storage=None):
         result = storage if storage is not None else {}
-        self.beforeWalk(result, bonusSection)
+        bonusSection = self._beforeWalk(result, bonusSection)
         self._walkSubsection(result, bonusSection)
+        self._afterWalk(result, bonusSection)
         return result
 
 
@@ -635,6 +751,13 @@ class TrackVisitor(NodeVisitor):
                 self._walkSubsection(storage, bonusValue)
                 return
 
+    def onRotations(self, storage, values):
+        values = values['groups']
+        for bonusValue in values:
+            if next(self.__track):
+                self._walkSubsection(storage, bonusValue)
+                break
+
     def onAllOf(self, storage, values):
         for probability, bonusProbability, refGlobalID, bonusValue in values:
             if next(self.__track):
@@ -649,11 +772,8 @@ class ProbabilityVisitor(NodeVisitor):
 
     def __init__(self, nodeAcceptor, *args):
         super(ProbabilityVisitor, self).__init__(BONUS_MERGERS, args)
-        self.__bonusTrack = []
         self.__nodeAcceptor = nodeAcceptor
-
-    def getBonusTrack(self):
-        return _packTrack(self.__bonusTrack)
+        self.__preVisitor = PreVisitor(nodeAcceptor)
 
     def onOneOf(self, storage, values):
         rand = random.random()
@@ -691,7 +811,7 @@ class ProbabilityVisitor(NodeVisitor):
                 shouldCompensated = selectedValue.get('properties', {}).get('shouldCompensated', False)
                 if not isAcceptable(selectedValue, False) or shouldCompensated:
                     for i in xrange(len(bonusNodes)):
-                        self.__trackChoice(False)
+                        self.__nodeAcceptor.trackChoice(False)
 
                     return
             elif len(availableBonusNodes) == 1:
@@ -708,9 +828,9 @@ class ProbabilityVisitor(NodeVisitor):
                     raise SoftException('Unreachable code, oneof probability bug, random value: {}, available bonus nodes: {}'.format(randomValue, availableBonusNodes))
 
         for i in xrange(selectedIdx):
-            self.__trackChoice(False)
+            self.__nodeAcceptor.trackChoice(False)
 
-        self.__trackChoice(True)
+        self.__nodeAcceptor.trackChoice(True)
         acceptor.accept(selectedValue)
         self._walkSubsection(storage, selectedValue)
 
@@ -722,24 +842,30 @@ class ProbabilityVisitor(NodeVisitor):
             probability = bonusProbability if useBonusProbability else probabilities[probabilityStage]
             shouldVisitNodes = acceptor.getNodesForVisit(nodeLimitIDs)
             if shouldVisitNodes or probability > random.random() and acceptor.isAcceptable(bonusValue, False):
-                self.__trackChoice(True)
+                self.__nodeAcceptor.trackChoice(True)
                 self.__nodeAcceptor.accept(bonusValue)
                 self._walkSubsection(storage, bonusValue)
-            self.__trackChoice(False)
+            self.__nodeAcceptor.trackChoice(False)
 
     def onGroup(self, storage, values):
         for bonusValue in values:
             self._walkSubsection(storage, bonusValue)
 
-    def beforeWalk(self, storage, bonusSection):
+    def onRotations(self, storage, values):
+        pass
+
+    def _beforeWalk(self, storage, bonusSection):
+        bonusSection = self._preVisitorWalkBonuses(bonusSection)
         acceptor = self.__nodeAcceptor
         acceptor.reuse()
+        return bonusSection
 
-    def __trackChoice(self, choice):
-        self.__bonusTrack.append(choice)
+    def _preVisitorWalkBonuses(self, bonusSection):
+        return self.__preVisitor.walkBonuses(bonusSection) if self.__nodeAcceptor.isRotation() else bonusSection
 
 
 class StripVisitor(NodeVisitor):
+    NON_STRIPPED_PROPERTIES = ('mainRotationBranch',)
 
     class ValuesMerger:
 
@@ -751,9 +877,20 @@ class StripVisitor(NodeVisitor):
             storage[name] = value
 
     def __init__(self, needProbabilitiesInfo=False, requiredLimitIds=None):
+        super(StripVisitor, self).__init__(self.ValuesMerger(), tuple())
         self.__needProbabilitiesInfo = needProbabilitiesInfo
         self.__requiredLimitIds = requiredLimitIds
-        super(StripVisitor, self).__init__(self.ValuesMerger(), tuple())
+        self.registerHandler('properties', self.onProperties)
+
+    def onRotations(self, storage, values):
+        strippedValue = {}
+        self._walkSubsection(strippedValue, values)
+        storage['rotation'] = strippedValue
+
+    def onProperties(self, storage, values):
+        strippedProperties = {prop:values[prop] for prop in self.NON_STRIPPED_PROPERTIES if prop in values}
+        if strippedProperties:
+            storage['properties'] = strippedProperties
 
     def onOneOf(self, storage, values):
         strippedValues = []
@@ -765,7 +902,7 @@ class StripVisitor(NodeVisitor):
                 continue
             strippedValue = {}
             self._walkSubsection(strippedValue, bonusValue)
-            strippedValues.append(([probability if needProbabilitiesInfo else -1],
+            strippedValues.append((probability if needProbabilitiesInfo else [-1],
              -1,
              refGlobalID.intersection(requiredLimitIds) if refGlobalID and requiredLimitIds else None,
              strippedValue))
@@ -782,7 +919,7 @@ class StripVisitor(NodeVisitor):
                 continue
             strippedValue = {}
             self._walkSubsection(strippedValue, bonusValue)
-            strippedValues.append(([probability if needProbabilitiesInfo else -1],
+            strippedValues.append((probability if needProbabilitiesInfo else [-1],
              -1,
              refGlobalID.intersection(requiredLimitIds) if refGlobalID and requiredLimitIds else None,
              strippedValue))
@@ -798,3 +935,116 @@ class StripVisitor(NodeVisitor):
             strippedValues.append(strippedValue)
 
         storage['groups'] = strippedValues
+
+
+class PreVisitor(NodeVisitor):
+
+    class ValuesMerger:
+
+        def __getitem__(self, item):
+            return self.copyMerger
+
+        @staticmethod
+        def copyMerger(storage, name, value, isLeaf):
+            storage[name] = value
+
+    def __init__(self, nodeAcceptor):
+        super(PreVisitor, self).__init__(self.ValuesMerger(), tuple())
+        self.__nodeAcceptor = nodeAcceptor
+        self.registerHandler('config', self.onConfig)
+        self.registerHandler('properties', self.onProperties)
+        self.__handlersSet = set(self._handlers)
+
+    def _afterWalk(self, storage, bonusSection):
+        self._stripConfig(storage)
+
+    def _stripConfig(self, result):
+        if self.__nodeAcceptor.currentLimitsID:
+            limit = result['config']['limits']
+            result['config']['limits'] = {key:limit[key] for key in self.__nodeAcceptor.currentLimitsID}
+        self.__nodeAcceptor.reInitCounters(result['config'])
+
+    def onProperties(self, storage, values):
+        limitID = values.get('limitID')
+        if limitID:
+            self.__nodeAcceptor.currentLimitsID.update({limitID})
+        storage['properties'] = values
+
+    def onRotations(self, storage, values):
+        values = values['groups']
+        acceptor = self.__nodeAcceptor
+        rotationLevel = self.__nodeAcceptor.getCurrentRotationLevel()
+        if rotationLevel > 0:
+            for _ in xrange(rotationLevel):
+                acceptor.trackChoice(False)
+
+        rotationBonus = {}
+        for idx in xrange(rotationLevel, len(values)):
+            try:
+                rotationBonus.clear()
+                acceptor.currentLimitsID.clear()
+                self._walkSubsection(rotationBonus, values[idx])
+                acceptor.trackChoice(True)
+                break
+            except NeedIncreaseRotationLevel:
+                acceptor.trackChoice(False)
+                acceptor.increaseRotationLevel()
+
+        else:
+            raise SoftException('Unreachable code, rotation level bug %s' % values)
+
+        if not rotationBonus:
+            raise SoftException('Current rotation is empty, rotationLevels: {}, rotation: {}'.format(acceptor.getRotationLevels(), values))
+        storage.update(rotationBonus)
+
+    def onOneOf(self, storage, values):
+        limitIDs, values = values
+        oneofValues = []
+        for probabilities, bonusProbability, nodeLimitIDs, bonusValue in values:
+            if bonusValue.get('properties', {}).get('mainRotationBranch', False):
+                if not self.__nodeAcceptor.isMaxRotationLevel():
+                    if not self.__nodeAcceptor.isOverStage(bonusValue):
+                        raise NeedIncreaseRotationLevel()
+                oneofStorage = {}
+                self.__handlersSet.isdisjoint(bonusValue) or self._walkSubsection(oneofStorage, bonusValue)
+            oneofValues.append((probabilities,
+             bonusProbability,
+             nodeLimitIDs,
+             oneofStorage or bonusValue))
+
+        storage['oneof'] = (limitIDs, oneofValues)
+
+    def onAllOf(self, storage, values):
+        allOfValues = []
+        for probabilities, bonusProbability, nodeLimitIDs, bonusValue in values:
+            if bonusValue.get('properties', {}).get('mainRotationBranch', False):
+                if not self.__nodeAcceptor.isMaxRotationLevel():
+                    if not self.__nodeAcceptor.isOverStage(bonusValue):
+                        raise NeedIncreaseRotationLevel()
+                allOfstorage = {}
+                self.__handlersSet.isdisjoint(bonusValue) or self._walkSubsection(allOfstorage, bonusValue)
+            allOfValues.append((probabilities,
+             bonusProbability,
+             nodeLimitIDs,
+             allOfstorage or bonusValue))
+
+        storage['allof'] = allOfValues
+
+    def onGroup(self, storage, values):
+        groupValues = []
+        for bonusValue in values:
+            if bonusValue.get('properties', {}).get('mainRotationBranch', False):
+                if not self.__nodeAcceptor.isMaxRotationLevel():
+                    raise self.__nodeAcceptor.isOverStage(bonusValue) or NeedIncreaseRotationLevel()
+            groupStorage = {}
+            self._walkSubsection(groupStorage, bonusValue)
+            groupValues.append(groupStorage)
+
+        storage['groups'] = groupValues
+
+    def onConfig(self, storage, values):
+        storage['config'] = deepcopy(values)
+
+
+class NeedIncreaseRotationLevel(SoftException):
+    pass

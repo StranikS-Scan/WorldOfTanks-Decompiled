@@ -3,8 +3,9 @@
 import sys
 from math import ceil
 from constants import SHELL_TYPES
-from gui.shared.utils import SHELLS_COUNT_PROP_NAME, RELOAD_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, DISPERSION_RADIUS_PROP_NAME, AIMING_TIME_PROP_NAME, PIERCING_POWER_PROP_NAME, DAMAGE_PROP_NAME, SHELLS_PROP_NAME, STUN_DURATION_PROP_NAME, AUTO_RELOAD_PROP_NAME, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, RELOAD_TIME_SECS_PROP_NAME, DUAL_ACCURACY_COOLING_DELAY, BURST_FIRE_RATE, SHELLS_BURST_COUNT_PROP_NAME
+from gui.shared.utils import SHELLS_COUNT_PROP_NAME, RELOAD_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, DISPERSION_RADIUS_PROP_NAME, AIMING_TIME_PROP_NAME, PIERCING_POWER_PROP_NAME, DAMAGE_PROP_NAME, SHELLS_PROP_NAME, STUN_DURATION_PROP_NAME, AUTO_RELOAD_PROP_NAME, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, RELOAD_TIME_SECS_PROP_NAME, DUAL_ACCURACY_COOLING_DELAY, BURST_FIRE_RATE, SHELLS_BURST_COUNT_PROP_NAME, SHOT_SPEED_ACCELERATED_PROP_NAME
 from helpers import i18n, time_utils
+from helpers_common import computeSpeedByParams, computeDistanceFactor
 from items import vehicles, artefacts
 from items.components import component_constants
 RELATIVE_PARAMS = ('relativePower', 'relativeArmor', 'relativeMobility', 'relativeCamouflage', 'relativeVisibility', 'relativeAbility')
@@ -16,6 +17,7 @@ _DUAL_GUN_TAG = 'dualGun'
 _DUAL_ACCURACY_TAG = 'dualAccuracy'
 _AUTOSHOOT_TAG = 'autoShoot'
 _CLIP_TAG = 'clip'
+PIERCING_DISTANCES = (50, 500)
 
 def _updateMinMaxValues(targetDict, key, value):
     targetDict[key] = (min(targetDict[key][0], value), max(targetDict[key][1], value))
@@ -157,9 +159,23 @@ def calcGunParams(gunDescr, descriptors):
 
     for shot in gunDescr.shots:
         shell = shot.shell
-        result[PIERCING_POWER_PROP_NAME].append(shot.piercingPower[0])
-        result[DAMAGE_PROP_NAME].append(shell.damage[0])
-        result[SHELLS_PROP_NAME].append(i18n.makeString('#item_types:shell/kinds/' + shell.kind))
+        hasDistanceFactor = shell.distanceFactor is not None
+        if hasDistanceFactor:
+            shellKind = shell.kind + '_DF'
+            pierceFactor = computeDistanceFactor(shell, PIERCING_DISTANCES[0], 'pierceFactor')
+            minPiercingPower = int(shot.piercingPower[0] * pierceFactor)
+            pierceFactor = computeDistanceFactor(shell, PIERCING_DISTANCES[1], 'pierceFactor')
+            maxPiercingPower = int(shot.piercingPower[0] * pierceFactor)
+            piercingPower = ceil((maxPiercingPower + minPiercingPower) * 0.5)
+            minDmg, maxDmg = shell.randomizationDmgLimits
+            damage = ceil((maxDmg + minDmg) * 0.5)
+        else:
+            piercingPower = shot.piercingPower[0]
+            damage = shell.damage[0]
+            shellKind = shell.kind
+        result[PIERCING_POWER_PROP_NAME].append(piercingPower)
+        result[DAMAGE_PROP_NAME].append(damage)
+        result[SHELLS_PROP_NAME].append(i18n.makeString('#item_types:shell/kinds/' + shellKind))
         if shell.hasStun:
             stun = shell.stun
             result[STUN_DURATION_PROP_NAME].append(stun.stunDuration)
@@ -178,16 +194,26 @@ def calcGunParams(gunDescr, descriptors):
 
 def calcShellParams(descriptors):
     result = {PIERCING_POWER_PROP_NAME: (sys.maxint, -1),
-     DAMAGE_PROP_NAME: (sys.maxint, -1)}
+     DAMAGE_PROP_NAME: (sys.maxint, -1),
+     SHOT_SPEED_ACCELERATED_PROP_NAME: (0, 0)}
     for d in descriptors:
-        piercingPower = d.piercingPower[0]
         shell = d.shell
-        ppRand = shell.piercingPowerRandomization
-        curPiercingPower = (int(piercingPower - piercingPower * ppRand), int(ceil(piercingPower + piercingPower * ppRand)))
-        minDmg, maxDmg = shell.randomizationDmgLimits
-        curDamage = (int(minDmg), int(ceil(maxDmg)))
+        hasDistanceFactor = shell.distanceFactor is not None
+        piercingPower = d.piercingPower[0]
+        if hasDistanceFactor:
+            pierceFactor = computeDistanceFactor(shell, PIERCING_DISTANCES[0], 'pierceFactor')
+            piercingPower *= pierceFactor
+            pierceFactor = computeDistanceFactor(shell, PIERCING_DISTANCES[1], 'pierceFactor')
+            maxPiercingPower = d.piercingPower[0] * pierceFactor
+            curPiercingPower = (int(piercingPower), int(maxPiercingPower))
+        else:
+            ppRand = shell.piercingPowerRandomization
+            curPiercingPower = (int(piercingPower - piercingPower * ppRand), int(ceil(piercingPower + piercingPower * ppRand)))
         result[PIERCING_POWER_PROP_NAME] = (min(result[PIERCING_POWER_PROP_NAME][0], curPiercingPower[0]), max(result[PIERCING_POWER_PROP_NAME][1], curPiercingPower[1]))
+        minDmg, maxDmg = shell.randomizationDmgLimits
+        curDamage = (minDmg, maxDmg)
         result[DAMAGE_PROP_NAME] = (min(result[DAMAGE_PROP_NAME][0], curDamage[0]), max(result[DAMAGE_PROP_NAME][1], curDamage[1]))
+        result[SHOT_SPEED_ACCELERATED_PROP_NAME] = (d.speed, computeSpeedByParams(d.acceleration, d.maxDistance, d.speed))
 
     return result
 

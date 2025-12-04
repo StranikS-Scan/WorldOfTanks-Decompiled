@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/system_factory.py
+import typing
 from collections import defaultdict
+if typing.TYPE_CHECKING:
+    from typing import Iterable, List
 BATTLE_REPO = 1
 EQUIPMENT_ITEMS = 2
 SCALEFORM_COMMON_PACKAGES = 3
@@ -51,6 +54,8 @@ SHARED_REPO = 47
 CONVERTERS_EXT_DATA_FORMATTERS = 48
 BONUS_MERGERS = 49
 SERVICE_CHANNEL_SUBFORMATTERS = 50
+QUESTS_FROM_EXTENSIONS_SOURCE = 51
+FESTIVITY_FACTORY = 52
 
 class _CollectEventsManager(object):
 
@@ -148,6 +153,18 @@ def registerGameControllers(controllersList):
 
 def collectGameControllers(configurator):
     __collectEM.handleEvent(GAME_CONTROLLERS, ctx={'configurator': configurator})
+
+
+def registerFestivityFactory(factory):
+
+    def onCollect(ctx):
+        ctx['factories'].append(factory)
+
+    __collectEM.addListener(FESTIVITY_FACTORY, onCollect)
+
+
+def collectFestivityFactories():
+    return __collectEM.handleEvent(FESTIVITY_FACTORY, ctx={'factories': []}).get('factories', [])
 
 
 def registerBattleControllerRepo(guiType, repoCls):
@@ -590,10 +607,14 @@ def collectIngameHelpPagesBuilders():
     return __collectEM.handleEvent(INGAME_HELP_PAGES_BUILDERS, {'builders': []})['builders']
 
 
-def registerQuestBuilder(questBuilder):
+def registerQuestBuilder(questBuilder, index=None):
 
     def onCollect(ctx):
-        ctx['questBuilders'].append(questBuilder)
+        if index is None:
+            ctx['questBuilders'].append(questBuilder)
+        else:
+            ctx['questBuilders'].insert(index, questBuilder)
+        return
 
     __collectEM.addListener(QUEST_BUILDERS, onCollect)
 
@@ -769,3 +790,15 @@ def registerServiceChannelSubformatter(callContext, subformatter):
 
 def collectServiceChannelSubformatter(callContext):
     return __collectEM.handleEvent((SERVICE_CHANNEL_SUBFORMATTERS, callContext), ctx={'formatters': []}).get('formatters', [])
+
+
+def registerExtensionQuestsSources(sources):
+
+    def onCollect(ctx):
+        ctx['sources'].extend(sources)
+
+    __collectEM.addListener(QUESTS_FROM_EXTENSIONS_SOURCE, onCollect)
+
+
+def collectExtensionQuestsSources():
+    return __collectEM.handleEvent(QUESTS_FROM_EXTENSIONS_SOURCE, {'sources': []})['sources']

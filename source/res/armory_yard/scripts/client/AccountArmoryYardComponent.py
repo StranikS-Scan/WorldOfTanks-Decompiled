@@ -13,7 +13,7 @@ class AccountArmoryYardComponent(BigWorld.StaticScriptComponent):
         self.entity._doCmdIntStr(armory_yard_constants.CMD_BUY_STEP_TOKENS, count, currency, callback)
 
     def devAddToken(self, count, callback=None):
-        self.entity._doCmdInt(armory_yard_constants.DEV_CMD_ADD_TOKEN_S, count, callback)
+        self.entity._doCmdInt(armory_yard_constants.DEV_CMD_ADD_PROGRESSION_TOKEN, count, callback)
 
     def devAddArmoryCoin(self, count, callback=None):
         self.entity._doCmdInt(armory_yard_constants.DEV_CMD_ADD_ARMORY_COIN, count, callback)
@@ -24,8 +24,8 @@ class AccountArmoryYardComponent(BigWorld.StaticScriptComponent):
     def devCompleteCycle(self, cycle, number, callback=None):
         self.entity._doCmdInt2(armory_yard_constants.DEV_CMD_SET_CYCLE, cycle, number, callback)
 
-    def claimFinalReward(self, callback=None):
-        self.entity._doCmdInt(armory_yard_constants.CMD_CLAIM_FINAL_REWARD, 0, callback)
+    def claimRareReward(self, callback=None):
+        self.entity._doCmdInt(armory_yard_constants.CMD_CLAIM_RARE_REWARD, 0, callback)
 
     def buyShopProduct(self, product, count, data, callback=None):
         self.entity._doCmdInt2Str(armory_yard_constants.CMD_BUY_SHOP_PRODUCT, product, count, data, callback)

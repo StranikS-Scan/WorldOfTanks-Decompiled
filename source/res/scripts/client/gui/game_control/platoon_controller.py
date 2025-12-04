@@ -294,7 +294,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
 
     @adisp_async
     @adisp_process
-    def togglePlayerReadyAction(self, callback, checkAmmo=True):
+    def togglePlayerReadyAction(self, callback):
         if self.__waitingReadyAccept:
             callback(False)
             return
@@ -303,7 +303,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.__waitingReadyAccept = True
         if notReady:
             changeStatePossible = yield self.__lobbyContext.isHeaderNavigationPossible()
-        if changeStatePossible and notReady and not self.prbEntity.isCommander() and checkAmmo:
+        if changeStatePossible and notReady and not self.prbEntity.isCommander():
             changeStatePossible = yield functions.checkAmmoLevel((g_currentVehicle.item,))
         if changeStatePossible:
             self.prbEntity.togglePlayerReadyAction(True)
@@ -769,7 +769,6 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             unitMgr.onUnitJoined += self.__unitMgrOnUnitJoined
             unitMgr.onUnitLeft += self.__unitMgrOnUnitLeft
         self.startGlobalListening()
-        self.currentPlatoonLayouts = buildCurrentLayouts(self.getPrbEntityType())
         self.__settingsCore.onSettingsChanged += self.__onSettingsChanged
         self.__settingsCore.onSettingsApplied += self.__onSettingsApplied
         self.__hangarSpace.onSpaceCreate += self.__onHangarSpaceCreate

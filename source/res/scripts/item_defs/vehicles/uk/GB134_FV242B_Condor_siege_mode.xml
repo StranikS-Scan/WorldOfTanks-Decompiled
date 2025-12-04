@@ -70,6 +70,13 @@
       <undamaged>	vehicles/british/GB134_FV242B_Condor/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/british/GB134_FV242B_Condor/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/british/GB134_FV242B_Condor/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <GB134_FV242B_Condor_3Dst_01>
+          <undamaged>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_01/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_01/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_01/crash/lod0/Hull.model	</exploded>
+        </GB134_FV242B_Condor_3Dst_01>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -940,6 +947,13 @@
         <undamaged>	vehicles/british/GB134_FV242B_Condor/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/british/GB134_FV242B_Condor/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/british/GB134_FV242B_Condor/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <GB134_FV242B_Condor_3Dst_01>
+            <undamaged>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_01/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_01/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_01/crash/lod0/Chassis.model	</exploded>
+          </GB134_FV242B_Condor_3Dst_01>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -2211,6 +2225,28 @@
               <size>	0.66	</size>
               <isUVProportional>	false	</isUVProportional>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49002	</slotId>
+              <rayStart>	-0.22 0 5.23	</rayStart>
+              <rayEnd>	-0.22 0 5.83	</rayEnd>
+              <rayUp>	0.11 0 0	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <compatibleModels>	GB134_FV242B_Condor_3Dst_01	</compatibleModels>
+              <size>	0.6	</size>
+              <isUVProportional>	false	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49003	</slotId>
+              <rayStart>	0.22 0 5.23	</rayStart>
+              <rayEnd>	0.22 0 5.83	</rayEnd>
+              <rayUp>	0.11 0 0	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <compatibleModels>	GB134_FV242B_Condor_3Dst_01	</compatibleModels>
+              <size>	0.6	</size>
+              <isUVProportional>	false	</isUVProportional>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -2222,6 +2258,13 @@
             <undamaged>	vehicles/british/GB134_FV242B_Condor/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB134_FV242B_Condor/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/british/GB134_FV242B_Condor/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <GB134_FV242B_Condor_3Dst_01>
+                <undamaged>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_01/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_01/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_01/crash/lod0/Gun_01.model	</exploded>
+              </GB134_FV242B_Condor_3Dst_01>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/british/GB134_FV242B_Condor/collision/Gun_01.model	</collisionModelServer>
@@ -2257,6 +2300,13 @@
         <undamaged>	vehicles/british/GB134_FV242B_Condor/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/british/GB134_FV242B_Condor/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/british/GB134_FV242B_Condor/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <GB134_FV242B_Condor_3Dst_01>
+            <undamaged>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_01/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_01/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_01/crash/lod0/Turret_01.model	</exploded>
+          </GB134_FV242B_Condor_3Dst_01>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB134_FV242B_Condor/collision/Turret_01.model	</collisionModelServer>
@@ -2766,6 +2816,12 @@
           <scale>	2.706658 2.56778 2.706655	</scale>
           <showOn>	256	</showOn>
           <verticalMirror>	true	</verticalMirror>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0 0 0	</position>
+          <rotation>	0 0 0	</rotation>
         </slot>
       </customizationSlots>
       <customization>

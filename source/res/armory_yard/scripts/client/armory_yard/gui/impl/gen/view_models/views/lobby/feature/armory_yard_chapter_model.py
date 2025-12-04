@@ -19,7 +19,7 @@ class ChapterTokenState(IntEnum):
 class ArmoryYardChapterModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=8, commands=0):
+    def __init__(self, properties=9, commands=0):
         super(ArmoryYardChapterModel, self).__init__(properties=properties, commands=commands)
 
     def getId(self):
@@ -70,6 +70,12 @@ class ArmoryYardChapterModel(ViewModel):
     def setTotalTokens(self, value):
         self._setNumber(7, value)
 
+    def getIsPostProgression(self):
+        return self._getBool(8)
+
+    def setIsPostProgression(self, value):
+        self._setBool(8, value)
+
     def _initialize(self):
         super(ArmoryYardChapterModel, self)._initialize()
         self._addNumberProperty('id', 0)
@@ -80,3 +86,4 @@ class ArmoryYardChapterModel(ViewModel):
         self._addNumberProperty('tokenState')
         self._addNumberProperty('receivedTokens', 0)
         self._addNumberProperty('totalTokens', 0)
+        self._addBoolProperty('isPostProgression', False)

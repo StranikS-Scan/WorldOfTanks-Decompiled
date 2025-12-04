@@ -1,6 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: armory_yard/scripts/client/armory_yard/gui/impl/gen/view_models/views/lobby/feature/tooltips/armory_yard_currency_tooltip_view_model.py
+from enum import Enum
 from frameworks.wulf import ViewModel
+
+class ArmoryYardCurrencies(Enum):
+    ARMORYCOIN = 'armory_coin'
+    PROGRESSIONTOKEN = 'progression_token'
+
 
 class ArmoryYardCurrencyTooltipViewModel(ViewModel):
     __slots__ = ()
@@ -38,11 +44,11 @@ class ArmoryYardCurrencyTooltipViewModel(ViewModel):
     def setEndTimestamp(self, value):
         self._setNumber(4, value)
 
-    def getIsPostProgression(self):
-        return self._getBool(5)
+    def getCurrency(self):
+        return ArmoryYardCurrencies(self._getString(5))
 
-    def setIsPostProgression(self, value):
-        self._setBool(5, value)
+    def setCurrency(self, value):
+        self._setString(5, value.value)
 
     def _initialize(self):
         super(ArmoryYardCurrencyTooltipViewModel, self)._initialize()
@@ -51,4 +57,4 @@ class ArmoryYardCurrencyTooltipViewModel(ViewModel):
         self._addNumberProperty('questsForToken', 0)
         self._addNumberProperty('startTimestamp', 0)
         self._addNumberProperty('endTimestamp', 0)
-        self._addBoolProperty('isPostProgression', False)
+        self._addStringProperty('currency', ArmoryYardCurrencies.PROGRESSIONTOKEN.value)

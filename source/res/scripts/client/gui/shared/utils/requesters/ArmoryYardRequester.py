@@ -26,6 +26,16 @@ class ArmoryYardRequester(AbstractSyncDataRequester, IArmoryYardRequester):
         from armory_yard_constants import SHOP_PDATA_KEY, SHOP_PRODUCT_LIMITS
         return self._data.get(SHOP_PDATA_KEY, {}).get(SHOP_PRODUCT_LIMITS, {})
 
+    @property
+    def currentReroll(self):
+        from armory_yard_constants import CURRENT_REROLL_PDATA_KEY
+        return self._data.get(CURRENT_REROLL_PDATA_KEY, {})
+
+    @property
+    def overrideConditions(self):
+        from armory_yard_constants import QUEST_CONDITION_OVERRIDE_PDATA_KEY
+        return self._data.get(QUEST_CONDITION_OVERRIDE_PDATA_KEY, {})
+
     @adisp_async
     def _requestCache(self, callback):
         BigWorld.player().armoryYard.getCache(lambda resID, value: self._response(resID, value, callback))

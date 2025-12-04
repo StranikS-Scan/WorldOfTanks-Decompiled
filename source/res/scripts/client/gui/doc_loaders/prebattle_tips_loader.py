@@ -33,8 +33,8 @@ def readPreBattleTips(prebattleXmlPath):
         tipId = tipsSection.readString('id')
         status = tipsSection.readString('status', DEFAULT_STATUS)
         group = tipsSection.readString('group', DEFAULT_GROUP)
-        tipConfig = filters.get(filterId)
-        tips[tipId] = {'filter': tipConfig,
+        tipFiltersConfig = filters.get(filterId)
+        tips[tipId] = {'filter': tipFiltersConfig,
          'status': status,
          'group': group}
 

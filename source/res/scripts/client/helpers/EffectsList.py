@@ -175,6 +175,10 @@ class EffectsListPlayer(object):
         self.__data = dict()
         return
 
+    @property
+    def isStarted(self):
+        return self.__isStarted
+
     def play(self, model, startKeyPoint=None, callbackFunc=None, waitForKeyOff=False):
         needPlay, newKey = self.__isNeedToPlay(waitForKeyOff)
         if not needPlay:
@@ -799,7 +803,7 @@ class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
         if soundObject is not None:
             if self._dopplerEffect is not None:
                 soundObject.stopDopplerEffect()
-            stopSound = self.__stopEventSound.getSound()
+            stopSound = self.__stopEventSound.getSound(reason)
             if stopSound is not None:
                 soundObject.play(stopSound)
             else:
@@ -814,19 +818,27 @@ class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
 
 
 class _TracerStopEventSound(object):
-    __slots__ = ('_soundsName', '_sound')
+    _TracerSounds = namedtuple('TracerSounds', 'stopPC stopNPC stopFlyOut')
+    _EXPLOSION_REASON = 1
+    __slots__ = ('_soundsName', '_isPlayer')
 
     def __init__(self, dataSection):
-        defaultSounds = ('psb_pc_stop', 'psb_npc_stop')
-        self._soundsName = (dataSection.readString('wwstopSoundPC', defaultSounds[0]) if dataSection else defaultSounds[0], dataSection.readString('wwstopSoundNPC', defaultSounds[1]) if dataSection else defaultSounds[1])
-        self._sound = None
+        defaultSounds = self._TracerSounds(stopPC='psb_pc_stop', stopNPC='psb_npc_stop', stopFlyOut=None)
+        self._soundsName = defaultSounds
+        if dataSection:
+            self._soundsName = self._TracerSounds(stopPC=dataSection.readString('wwstopSoundPC', defaultSounds.stopPC), stopNPC=dataSection.readString('wwstopSoundNPC', defaultSounds.stopNPC), stopFlyOut=dataSection.readString('wwstopSoundFlyOut', defaultSounds.stopFlyOut))
+        self._isPlayer = False
         return
 
     def setSound(self, isPlayer):
-        self._sound = self._soundsName[0] if isPlayer else self._soundsName[1]
+        self._isPlayer = isPlayer
 
-    def getSound(self):
-        return self._sound
+    def getSound(self, reason):
+        stopFlyOut = self._soundsName.stopFlyOut
+        if reason != self._EXPLOSION_REASON and stopFlyOut is not None:
+            return stopFlyOut
+        else:
+            return self._soundsName.stopPC if self._isPlayer else self._soundsName.stopNPC
 
 
 class _CollisionSoundEffectDesc(_BaseSoundEvent):

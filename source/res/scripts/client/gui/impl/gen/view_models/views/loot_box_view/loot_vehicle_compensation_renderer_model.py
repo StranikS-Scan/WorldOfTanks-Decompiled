@@ -5,32 +5,32 @@ from gui.impl.gen.view_models.views.loot_box_view.loot_compensation_renderer_mod
 class LootVehicleCompensationRendererModel(LootCompensationRendererModel):
     __slots__ = ()
 
-    def __init__(self, properties=29, commands=0):
+    def __init__(self, properties=30, commands=0):
         super(LootVehicleCompensationRendererModel, self).__init__(properties=properties, commands=commands)
 
     def getVehicleName(self):
-        return self._getString(25)
-
-    def setVehicleName(self, value):
-        self._setString(25, value)
-
-    def getVehicleType(self):
         return self._getString(26)
 
-    def setVehicleType(self, value):
+    def setVehicleName(self, value):
         self._setString(26, value)
 
-    def getVehicleLvl(self):
+    def getVehicleType(self):
         return self._getString(27)
 
-    def setVehicleLvl(self, value):
+    def setVehicleType(self, value):
         self._setString(27, value)
 
+    def getVehicleLvl(self):
+        return self._getString(28)
+
+    def setVehicleLvl(self, value):
+        self._setString(28, value)
+
     def getIsElite(self):
-        return self._getBool(28)
+        return self._getBool(29)
 
     def setIsElite(self, value):
-        self._setBool(28, value)
+        self._setBool(29, value)
 
     def _initialize(self):
         super(LootVehicleCompensationRendererModel, self)._initialize()

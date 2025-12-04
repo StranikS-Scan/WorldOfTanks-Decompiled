@@ -7,6 +7,7 @@ import Windowing
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import MISSIONS_PAGE
+from new_year.ny_constants import NY_DAILY_QUESTS_VISITED
 from adisp import adisp_async as adispasync, adisp_process
 from gui.impl.lobby.daily.unseen_quests_component import getAvailableDailyQuests
 from gui.limited_ui.lui_rules_storage import LuiRules
@@ -50,6 +51,7 @@ from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from new_year_account_settings import getNYSetting
 TabData = namedtuple('TabData', ('alias',
  'linkage',
  'tooltip',
@@ -253,8 +255,6 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         if alias == QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS:
             viewPy.updateState(**self.__ctx)
         if alias == QUESTS_ALIASES.BATTLE_MATTERS_VIEW_PY_ALIAS:
-            if not self.__ctx:
-                self.__ctx['openMainView'] = True
             viewPy.updateState(**self.__ctx)
         self.__fireTabChangedEvent()
         return
@@ -446,9 +446,14 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                 newEventsCount = 0
                 if alias == QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS:
                     suitableEvents = getAvailableDailyQuests(self.eventsCache)
+                    for q in self.eventsCache.getNyCelebQuests():
+                        suitableEvents.append(q)
+
                 elif alias == QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS:
                     suitableEvents = tuple()
                     newEventsCount = self.__mapboxCtrl.getUnseenItemsCount()
+                    if not getNYSetting(NY_DAILY_QUESTS_VISITED):
+                        newEventsCount += 1
                 elif self.currentTab is not None and self.__currentTabAlias == alias:
                     suitableEvents = self.__getSuitableEvents(self.currentTab)
                 else:

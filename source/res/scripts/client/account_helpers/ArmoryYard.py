@@ -29,11 +29,16 @@ class ArmoryYard(object):
 
     def synchronize(self, isFullSync, diff):
         from armory_yard_constants import PDATA_KEY_ARMORY_YARD
+        from armory_yard_constants import CURRENT_REROLL_PDATA_KEY, QUEST_CONDITION_OVERRIDE_PDATA_KEY
         dataResetKey = (PDATA_KEY_ARMORY_YARD, '_r')
         if dataResetKey in diff:
             self.__cache[PDATA_KEY_ARMORY_YARD] = diff[dataResetKey]
         if PDATA_KEY_ARMORY_YARD in diff:
-            synchronizeDicts(diff[PDATA_KEY_ARMORY_YARD], self.__cache.setdefault(PDATA_KEY_ARMORY_YARD, {}))
+            armoryDiff = diff[PDATA_KEY_ARMORY_YARD]
+            synchronizeDicts(armoryDiff, self.__cache.setdefault(PDATA_KEY_ARMORY_YARD, {}))
+            for specialDictKey in (CURRENT_REROLL_PDATA_KEY, QUEST_CONDITION_OVERRIDE_PDATA_KEY):
+                if specialDictKey in armoryDiff and not armoryDiff[specialDictKey]:
+                    self.__cache[PDATA_KEY_ARMORY_YARD][specialDictKey] = {}
 
     def getCache(self, callback=None):
         if self.__ignore:

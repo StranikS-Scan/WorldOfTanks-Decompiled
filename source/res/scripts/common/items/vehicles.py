@@ -211,8 +211,7 @@ VEHICLE_MISC_ATTRIBUTE_FACTOR_NAMES = ('fuelTankHealthFactor',
  'chassisHealthAfterHysteresisFactor',
  'centerRotationFwdSpeedFactor',
  'moduleDamageFactor',
- 'engineAndFuelTanksDamageFactor',
- 'receivedDamageFactor')
+ 'engineAndFuelTanksDamageFactor')
 VEHICLE_MISC_ATTRIBUTE_FACTOR_INDICES = dict(((value, index) for index, value in enumerate(VEHICLE_MISC_ATTRIBUTE_FACTOR_NAMES)))
 
 class EnhancementItem(object):
@@ -335,7 +334,6 @@ def vehicleAttributeFactors():
      'repeatedStunDurationFactor': 1.0,
      'healthFactor': 1.0,
      'damageFactor': 1.0,
-     'receivedDamageFactor': 1.0,
      'enginePowerFactor': 1.0,
      'deathZones/sensitivityFactor': 1.0,
      'xRayFactor': 1.0,
@@ -355,12 +353,17 @@ def vehicleAttributeFactors():
      'engineAndFuelTanksDamageFactor': 1.0,
      'armorSpallsDamageFactor': 1.0,
      'deviceDamageFactor': 1.0,
+     'armorDamageFactor': 1.0,
      'gun/temperature/heatingFactor': 1.0,
      'gun/chargeTimeBonus': 0.0,
      'gun/reloadLockTimeBonus': 0.0,
      'gun/loadShellIntoDualGunBonus': 0.0,
-     'vehicle/canBeDamaged': True,
-     'vehicle/canBeRammed': True}
+     'ammoBayHealthFactor': 1.0,
+     'fuelTankHealthFactor': 1.0,
+     'engineHealthFactor': 1.0,
+     'chassisHealthFactor': 1.0,
+     'trackRammingDamageFactor': 1.0,
+     'penaltyReloadTime': 0.0}
     for ten in TANKMAN_EXTRA_NAMES:
         factors[ten + CHANCE_TO_HIT_SUFFIX_FACTOR] = 0.0
 
@@ -1548,7 +1551,6 @@ class VehicleDescriptor(object):
          'radioDistanceFactor': 0.0,
          'healthFactor': 1.0,
          'damageFactor': 1.0,
-         'receivedDamageFactor': 1.0,
          'enginePowerFactor': 1.0,
          'armorSpallsDamageDevicesFactor': 1.0,
          'increaseEnemySpottingTime': 0.0,
@@ -1594,7 +1596,9 @@ class VehicleDescriptor(object):
          'gun/shellSpeedFactor': 1.0,
          'spallsDeviceDamageFactor': 1.0,
          'deviceDamageFactor': 1.0,
-         'gun/temperature/heatingFactor': 1.0}
+         'armorDamageFactor': 1.0,
+         'gun/temperature/heatingFactor': 1.0,
+         'trackRammingDamageFactor': 1.0}
         if IS_CELLAPP or IS_CLIENT or IS_UE_EDITOR or IS_WEB or IS_BOT or onAnyApp:
             trackCenterOffset = chassis.topRightCarryingPoint[0]
             self.physics = {'weight': weight,
@@ -3186,14 +3190,6 @@ def isShellSuitableForGun(shellCompactDescr, gunDescr):
     return False
 
 
-def getShellWeightForGun(shellCompactDescr, gunDescr):
-    itemTypeID, nationID, shellTypeID = parseIntCompactDescr(shellCompactDescr)
-    shellID = (nationID, shellTypeID)
-    for shotDescr in gunDescr.shots:
-        if shotDescr.shell.id == shellID:
-            return shotDescr.ammoWeight
-
-
 def getEmptyAmmoForGun(gunDescr):
     ammo = []
     for shot in gunDescr.shots:
@@ -3242,19 +3238,18 @@ def calculateCarryingTriangles(carryingPoint):
 
 def _getAmmoForGun(gunDescr, defaultPortion=None):
     ammo = []
-    maxWeight = gunDescr.maxAmmo
+    maxCount = gunDescr.maxAmmo
     clipSize = gunDescr.clip[0]
-    currWeight = 0
+    currCount = 0
     for shot in gunDescr.shots:
         if defaultPortion is None:
             portion = shot.defaultPortion
         else:
             portion = defaultPortion
-        ammoWeight = shot.ammoWeight
-        shotCount = int(portion * maxWeight / clipSize / ammoWeight + 0.5) * clipSize
-        if currWeight + shotCount * ammoWeight > maxWeight:
-            shotCount = int((maxWeight - currWeight) / ammoWeight)
-        currWeight += shotCount * ammoWeight
+        shotCount = int(portion * maxCount / clipSize + 0.5) * clipSize
+        if currCount + shotCount > maxCount:
+            shotCount = maxCount - currCount
+        currCount += shotCount
         ammo.append(shot.shell.compactDescr)
         ammo.append(shotCount)
 
@@ -5340,7 +5335,6 @@ def _readShells(xmlPath, nationID):
 def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
     shell = vehicle_items.createShell(nationID, shellTypeID, name)
     shell.caliber = _xml.readPositiveFloat(xmlCtx, section, 'caliber')
-    shell.ammoWeight = _xml.readPositiveInt(xmlCtx, section, 'ammoWeight') if section.has_key('ammoWeight') else 1
     shell.isTracer = section.readBool('isTracer', False)
     if shell.isTracer:
         shell.isForceTracer = section.readBool('isForceTracer', False)
@@ -5475,9 +5469,9 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
     if section.has_key('distanceFactor'):
         shell.distanceFactor = distanceFactor = DistanceDamageFactor()
         subXmlCtx, subsection = _xml.getSubSectionWithContext(xmlCtx, section, 'distanceFactor')
-        for factorName in DistanceDamageFactor.__slots__:
-            if not subsection.has_key(factorName):
-                continue
+        for factorName in subsection.keys():
+            if not hasattr(distanceFactor, factorName):
+                _xml.raiseWrongXml(subXmlCtx, factorName, 'Unknown factor name')
             factors = _xml.readTupleOfNonNegativeFloats(subXmlCtx, subsection, factorName)
             if not len(factors):
                 _xml.raiseWrongXml(subXmlCtx, factorName, 'We dont allow empty factors ({})"'.format(factors))

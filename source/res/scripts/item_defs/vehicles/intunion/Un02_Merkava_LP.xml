@@ -88,6 +88,13 @@
       <undamaged>	vehicles/intunion/Un02_Merkava_LP/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/intunion/Un02_Merkava_LP/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/intunion/Un02_Merkava_LP/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <Un02_Merkava_LP_3Dst_01>
+          <undamaged>	vehicles/intunion/Un02_Merkava_LP/_skins/Un02_Merkava_LP_3Dst_01/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/intunion/Un02_Merkava_LP/_skins/Un02_Merkava_LP_3Dst_01/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/intunion/Un02_Merkava_LP/_skins/Un02_Merkava_LP_3Dst_01/crash/lod0/Hull.model	</exploded>
+        </Un02_Merkava_LP_3Dst_01>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -110,9 +117,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	1.570247 0.312063 3.586963	</rayStart>
-        <rayEnd>	1.570247 0.132379 3.499136	</rayEnd>
-        <rayUp>	0.017171 0.439073 -0.898287	</rayUp>
+        <rayStart>	0.796417 0.348718 3.51197	</rayStart>
+        <rayEnd>	0.796417 0.169034 3.424143	</rayEnd>
+        <rayUp>	0.017171 0.43907 -0.898289	</rayUp>
         <size>	0.32	</size>
         <isUVProportional>	false	</isUVProportional>
       </slot>
@@ -1090,6 +1097,59 @@
         <showOn>	16	</showOn>
         <clipAngle>	1.029046	</clipAngle>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15092	</slotId>
+        <tags>	direction_left_to_right formfactor_square	</tags>
+        <compatibleModels>	Un02_Merkava_LP_3Dst_01	</compatibleModels>
+        <position>	0.486967 1.794386 2.112505	</position>
+        <rotation>	0.242827 -0.000014 3.141559	</rotation>
+        <scale>	0.759361 0.297054 0.759362	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15093	</slotId>
+        <tags>	direction_left_to_right formfactor_square	</tags>
+        <compatibleModels>	Un02_Merkava_LP_3Dst_01	</compatibleModels>
+        <position>	0.30838 1.529926 3.130674	</position>
+        <rotation>	0.364126 -0.000018 3.141558	</rotation>
+        <scale>	0.746032 0.19574 0.746033	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15094	</slotId>
+        <tags>	formfactor_square direction_left_to_right	</tags>
+        <compatibleModels>	Un02_Merkava_LP_3Dst_01	</compatibleModels>
+        <position>	1.91122 0.99827 -0.416414	</position>
+        <rotation>	1.598548 -1.475673 -0.000001	</rotation>
+        <scale>	0.616242 0.616242 0.616243	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.029046	</clipAngle>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15095	</slotId>
+        <tags>	direction_right_to_left formfactor_square	</tags>
+        <compatibleModels>	Un02_Merkava_LP_3Dst_01	</compatibleModels>
+        <position>	-1.905231 0.99827 -0.416414	</position>
+        <rotation>	1.598548 1.475676 -0.000002	</rotation>
+        <scale>	0.616242 0.616242 0.616242	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.029046	</clipAngle>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15096	</slotId>
+        <tags>	formfactor_square direction_right_to_left	</tags>
+        <compatibleModels>	Un02_Merkava_LP_3Dst_01	</compatibleModels>
+        <position>	-0.747541 1.338018 -3.307853	</position>
+        <rotation>	1.909634 -0.000113 -0.000099	</rotation>
+        <scale>	0.553503 0.553502 0.553503	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.326974	</clipAngle>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1131,6 +1191,13 @@
         <undamaged>	vehicles/intunion/Un02_Merkava_LP/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/intunion/Un02_Merkava_LP/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/intunion/Un02_Merkava_LP/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <Un02_Merkava_LP_3Dst_01>
+            <undamaged>	vehicles/intunion/Un02_Merkava_LP/_skins/Un02_Merkava_LP_3Dst_01/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/intunion/Un02_Merkava_LP/_skins/Un02_Merkava_LP_3Dst_01/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/intunion/Un02_Merkava_LP/_skins/Un02_Merkava_LP_3Dst_01/crash/lod0/Chassis.model	</exploded>
+          </Un02_Merkava_LP_3Dst_01>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1255,6 +1322,57 @@
                   <row3>	-2.008000 1.190698 3.237953	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	Un02_Merkava_LP_3Dst_01	</modelsSet>
+                <boxCollider>
+                  <row0>	1.599799 0.338589 -0.002175	</row0>
+                  <row1>	-0.264070 1.247708 0.000586	</row1>
+                  <row2>	0.010472 -0.001309 7.499991	</row2>
+                  <row3>	-0.304000 1.265131 0.022530	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.000000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.500001	</row2>
+                  <row3>	-1.480000 1.445008 0.003304	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.000000 0.000000 -0.000698	</row0>
+                  <row1>	0.000133 0.231454 0.190864	</row1>
+                  <row2>	0.000269 -0.318107 0.385757	</row2>
+                  <row3>	-1.480000 1.347507 3.671432	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.000000 0.000000 -0.000697	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000209 0.000000 0.300000	</row2>
+                  <row3>	-1.480000 1.024864 3.872402	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.000000 0.000000 -0.000872	</row0>
+                  <row1>	-0.000204 0.188267 -0.233572	</row1>
+                  <row2>	0.000383 0.545001 0.439289	</row2>
+                  <row3>	-1.480000 1.152842 -3.894531	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 -0.000157	</row0>
+                  <row1>	0.000000 0.900000 0.000000	</row1>
+                  <row2>	0.003142 0.000000 6.000000	</row2>
+                  <row3>	-2.000000 1.003654 0.000187	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.724125 0.534456	</row1>
+                  <row2>	0.000000 -0.593841 0.804584	</row2>
+                  <row3>	-2.006000 1.299715 -3.166340	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.838865 -0.326048	</row1>
+                  <row2>	0.000000 0.362276 0.932072	</row2>
+                  <row3>	-2.008000 1.190698 3.237953	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -1312,6 +1430,57 @@
                 </wheelGroup>
               </wheelGroups>
               <hullCollider>
+                <boxCollider>
+                  <row0>	1.599799 -0.338589 -0.002293	</row0>
+                  <row1>	0.264070 1.247705 -0.000151	</row1>
+                  <row2>	0.010472 -0.001309 7.499990	</row2>
+                  <row3>	0.304000 1.265130 0.022530	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.000000 0.000000 -0.000524	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.003927 0.000000 7.500000	</row2>
+                  <row3>	1.480000 1.445010 0.003304	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.000000 0.000000 -0.000698	</row0>
+                  <row1>	0.000133 0.231454 0.190864	</row1>
+                  <row2>	0.000269 -0.318107 0.385757	</row2>
+                  <row3>	1.480000 1.347510 3.671430	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.000000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 0.300000	</row2>
+                  <row3>	1.480000 1.024860 3.872400	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.999999 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.188267 -0.233572	</row1>
+                  <row2>	0.000000 0.545001 0.439289	</row2>
+                  <row3>	1.480000 1.152840 -3.894530	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.900000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.000001	</row2>
+                  <row3>	2.007000 1.003649 0.000191	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.724125 0.534456	</row1>
+                  <row2>	0.000000 -0.593841 0.804584	</row2>
+                  <row3>	2.002000 1.299709 -3.166340	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.838865 -0.326048	</row1>
+                  <row2>	0.000000 0.362276 0.932072	</row2>
+                  <row3>	2.012000 1.190699 3.237953	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	Un02_Merkava_LP_3Dst_01	</modelsSet>
                 <boxCollider>
                   <row0>	1.599799 -0.338589 -0.002293	</row0>
                   <row1>	0.264070 1.247705 -0.000151	</row1>
@@ -1765,6 +1934,12 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <Un02_Merkava_LP_3Dst_01>
+              <segmentModelLeft>	vehicles/intunion/Un02_Merkava_LP/track/segment_L.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/intunion/Un02_Merkava_LP/track/segment_R.model	</segmentModelRight>
+            </Un02_Merkava_LP_3Dst_01>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -2375,6 +2550,17 @@
               <size>	0.63	</size>
               <isUVProportional>	false	</isUVProportional>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0 0 3.29	</rayStart>
+              <rayEnd>	0 0 3.79	</rayEnd>
+              <rayUp>	0.12 0 0	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <compatibleModels>	Un02_Merkava_LP_3Dst_01	</compatibleModels>
+              <size>	0.63	</size>
+              <isUVProportional>	false	</isUVProportional>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -2386,12 +2572,20 @@
             <undamaged>	vehicles/intunion/Un02_Merkava_LP/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/intunion/Un02_Merkava_LP/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/intunion/Un02_Merkava_LP/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <Un02_Merkava_LP_3Dst_01>
+                <undamaged>	vehicles/intunion/Un02_Merkava_LP/_skins/Un02_Merkava_LP_3Dst_01/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/intunion/Un02_Merkava_LP/_skins/Un02_Merkava_LP_3Dst_01/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/intunion/Un02_Merkava_LP/_skins/Un02_Merkava_LP_3Dst_01/crash/lod0/Gun_01.model	</exploded>
+              </Un02_Merkava_LP_3Dst_01>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/intunion/Un02_Merkava_LP/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/intunion/Un02_Merkava_LP/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <effects>	shot_large	</effects>
           <camouflage>
             <density>	182.283142 183.263046	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
@@ -2453,6 +2647,17 @@
               <size>	0.63	</size>
               <isUVProportional>	false	</isUVProportional>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0 0 4.422	</rayStart>
+              <rayEnd>	0 0 5.052	</rayEnd>
+              <rayUp>	0.12 0 0	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <compatibleModels>	Un02_Merkava_LP_3Dst_01	</compatibleModels>
+              <size>	0.63	</size>
+              <isUVProportional>	false	</isUVProportional>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -2464,12 +2669,20 @@
             <undamaged>	vehicles/intunion/Un02_Merkava_LP/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/intunion/Un02_Merkava_LP/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/intunion/Un02_Merkava_LP/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <Un02_Merkava_LP_3Dst_01>
+                <undamaged>	vehicles/intunion/Un02_Merkava_LP/_skins/Un02_Merkava_LP_3Dst_01/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/intunion/Un02_Merkava_LP/_skins/Un02_Merkava_LP_3Dst_01/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/intunion/Un02_Merkava_LP/_skins/Un02_Merkava_LP_3Dst_01/crash/lod0/Gun_02.model	</exploded>
+              </Un02_Merkava_LP_3Dst_01>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/intunion/Un02_Merkava_LP/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/intunion/Un02_Merkava_LP/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <effects>	shot_large	</effects>
           <camouflage>
             <density>	171.889862 172.86647	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
@@ -2480,6 +2693,13 @@
         <undamaged>	vehicles/intunion/Un02_Merkava_LP/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/intunion/Un02_Merkava_LP/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/intunion/Un02_Merkava_LP/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <Un02_Merkava_LP_3Dst_01>
+            <undamaged>	vehicles/intunion/Un02_Merkava_LP/_skins/Un02_Merkava_LP_3Dst_01/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/intunion/Un02_Merkava_LP/_skins/Un02_Merkava_LP_3Dst_01/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/intunion/Un02_Merkava_LP/_skins/Un02_Merkava_LP_3Dst_01/crash/lod0/Turret_01.model	</exploded>
+          </Un02_Merkava_LP_3Dst_01>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/intunion/Un02_Merkava_LP/collision/Turret_01.model	</collisionModelServer>
@@ -2894,6 +3114,18 @@
           <hiddenForUser>	true	</hiddenForUser>
           <showOn>	256	</showOn>
           <clipAngle>	1.317025	</clipAngle>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35037	</slotId>
+          <tags>	formfactor_square direction_left_to_right	</tags>
+          <compatibleModels>	Un02_Merkava_LP_3Dst_01	</compatibleModels>
+          <position>	-0.105878 2.529298 -0.180355	</position>
+          <rotation>	0.107528 -0.000005 3.14159	</rotation>
+          <scale>	0.9474 0.947396 0.947396	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.873014	</clipAngle>
+          <verticalMirror>	true	</verticalMirror>
         </slot>
       </customizationSlots>
       <customization>

@@ -8,11 +8,13 @@ from gui.shared import g_eventBus
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents
 from helpers import dependency
 from skeletons.gui.game_control import ICalendarController
+from skeletons.gui.impl import INewYearNavigation
 from skeletons.gui.shared.utils import IHangarSpace
 
 class HangarPoster(ClientSelectableObject):
     _hangarSpace = dependency.descriptor(IHangarSpace)
     _calendarController = dependency.descriptor(ICalendarController)
+    _newYearNavigation = dependency.descriptor(INewYearNavigation)
 
     def __init__(self):
         super(HangarPoster, self).__init__()
@@ -41,13 +43,16 @@ class HangarPoster(ClientSelectableObject):
         ctx = event.ctx
         state = ctx['state']
         entityId = ctx['entityId']
-        if state == CameraMovementStates.FROM_OBJECT:
-            if self.__isHangarVehicleEntity(entityId):
-                self.setEnable(False)
+        enabled = None
+        if self._newYearNavigation.getCurrentObject() is not None:
+            enabled = True
+        elif state == CameraMovementStates.FROM_OBJECT:
+            enabled = not self.__isHangarVehicleEntity(entityId)
         elif state == CameraMovementStates.ON_OBJECT:
-            if self.__isHangarVehicleEntity(entityId):
-                if not self.enabled:
-                    self.setEnable(True)
+            enabled = self.__isHangarVehicleEntity(entityId)
+        if enabled is not None and enabled != self.enabled:
+            self.setEnable(enabled)
+        return
 
     def __isHangarVehicleEntity(self, entityId):
         return entityId == self._hangarSpace.space.vehicleEntityId

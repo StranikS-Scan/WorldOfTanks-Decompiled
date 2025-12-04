@@ -59,6 +59,7 @@ class LootBoxWebApi(object):
             limitsSection['attempts_after_guaranteed'] = attemptsAfterGuaranteed
             limitsSection['guaranteed_frequency'] = lootBox.getGuaranteedFrequency()
             limitsSection['guaranteedLevels'] = lootBox.getGuaranteedVehicleLevelsRange()
+            limitsSection['current_rotation_stage'] = lootBox.getCurrentRotationStage()
         for idx, slotData in lootBox.getBonusSlots().iteritems():
             result['slots'][idx] = self.__parseSlot(slotData)
 
@@ -77,7 +78,7 @@ class LootBoxWebApi(object):
         result = {}
         aggregatedBonusesMap = {}
         supportedTypesByWrappers = set(_BONUS_WRAPPERS.keys() + _SPECIAL_BONUS_ALIASES.keys())
-        result.update({'probability': round(slotData.get('probability', [[0]])[0][0] * 100, 2),
+        result.update({'probability': round(slotData.get('probability', [0])[0] * 100, 2),
          'bonuses': []})
         for bonus in slotData.get('bonuses', []):
             bonusList = bonus.getWrappedLootBoxesBonusList()

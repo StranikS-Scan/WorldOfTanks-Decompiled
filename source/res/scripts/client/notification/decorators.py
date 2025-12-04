@@ -6,6 +6,7 @@ from CurrentVehicle import g_currentVehicle
 from debug_utils import LOG_ERROR
 from frameworks.wulf import WindowLayer
 from PlayerEvents import g_playerEvents
+from gifts.gifts_common import GiftEventID
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsBattleRoyale
@@ -37,6 +38,7 @@ from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE, 
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IMapboxController, IResourceWellController, ISeniorityAwardsController, IEarlyAccessController, IParagonsController
 from skeletons.gui.impl import IGuiLoader
+from skeletons.gui.game_control import IGiftSystemController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
 if typing.TYPE_CHECKING:
@@ -60,16 +62,17 @@ class _NotificationDecorator(object):
         self._isOrderChanged = False
         self._entityID = entityID
         self._entity = entity
+        self._settings = settings
         self._make(entity, settings)
 
     def __repr__(self):
         return '{0:>s}(typeID = {1:n}, entityID = {2:n})'.format(self.__class__.__name__, self.getType(), self.getID())
 
     def __cmp__(self, other):
-        return cmp(self.getOrder(), other.getOrder())
+        return cmp(self.getOrder(), other.getOrder()) if isinstance(other, _NotificationDecorator) else -1
 
     def __eq__(self, other):
-        return self.getType() == other.getType() and self.getID() == other.getID()
+        return isinstance(other, _NotificationDecorator) and self.getType() == other.getType() and self.getID() == other.getID()
 
     def clear(self):
         self._entityID = 0
@@ -116,6 +119,18 @@ class _NotificationDecorator(object):
         result = False
         if self._settings:
             result = self._settings.isNotify
+        return result
+
+    def onlyNCList(self):
+        result = False
+        if self._settings:
+            result = self._settings.onlyNCList
+        return result
+
+    def onlyPopUp(self):
+        result = False
+        if self._settings:
+            result = self._settings.onlyPopUp
         return result
 
     def showAt(self):
@@ -173,6 +188,15 @@ class _NotificationDecorator(object):
     def decrementCounterOnHidden(self):
         return True
 
+    def resetCounter(self):
+        return True
+
+    def getCount(self):
+        pass
+
+    def updateCounter(self):
+        return False
+
 
 class SearchCriteria(_NotificationDecorator):
     __slots__ = ('_typeID',)
@@ -218,7 +242,7 @@ class MessageDecorator(_NotificationDecorator):
                 self._settings.showAt = _makeShowTime()
         message = formatted.copy() if formatted else {}
         for key in _ICONS_FIELDS:
-            if key in formatted:
+            if key in message:
                 message[key] = makePathToIcon(message[key])
             message[key] = ''
 
@@ -263,6 +287,23 @@ class EmailConfirmationReminderMessageDecorator(MessageDecorator):
 
     def getGroup(self):
         return NotificationGroup.OFFER
+
+
+class PsaCoinReminderMessageDecorator(MessageDecorator):
+
+    def __init__(self, entityID, coinCount, msgPrLevel=NotificationPriorityLevel.LOW):
+        entity = g_settings.msgTemplates.format('PsaCoinReminder', ctx={'count': str(coinCount)}, data={'savedData': coinCount})
+        settings = NotificationGuiSettings(isNotify=True, priorityLevel=msgPrLevel)
+        super(PsaCoinReminderMessageDecorator, self).__init__(entityID, entity, settings)
+
+    def getType(self):
+        return NOTIFICATION_TYPE.PSACOIN_REMINDER
+
+    def getGroup(self):
+        return NotificationGroup.OFFER
+
+    def getSavedData(self):
+        return self._vo['message'].get('savedData', 0)
 
 
 class LockButtonMessageDecorator(MessageDecorator):
@@ -1430,6 +1471,26 @@ class BattleMattersReminderDecorator(MessageDecorator):
         if self.__battleMattersController.isActive():
             state |= NOTIFICATION_BUTTON_STATE.ENABLED
         return (state, tooltip)
+
+
+class GiftSystemOperationsFactory(object):
+    __giftsController = dependency.descriptor(IGiftSystemController)
+    __OPENED_DECORATORS = {}
+    __SENT_DECORATORS = {}
+
+    @classmethod
+    def createGiftOpenedDecorator(cls, clientID, model, ctx):
+        lootboxID = ctx['lootbox'].getID()
+        eventID = cls.__giftsController.getSettings().itemToEventID.get(lootboxID, GiftEventID.UNKNOWN)
+        return cls.__OPENED_DECORATORS.get(eventID, cls.__createNothing)(clientID, model, ctx)
+
+    @classmethod
+    def createGiftSentDecorator(cls, clientID, model, ctx):
+        return cls.__SENT_DECORATORS.get(ctx['eventID'], cls.__createNothing)(clientID, model, ctx)
+
+    @classmethod
+    def __createNothing(cls, *_):
+        return None
 
 
 class EarlyAccessDecorator(MessageDecorator):

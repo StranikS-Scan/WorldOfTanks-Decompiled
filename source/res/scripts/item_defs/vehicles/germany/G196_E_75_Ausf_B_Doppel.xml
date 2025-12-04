@@ -12,7 +12,7 @@
   <postProgressionTree>	role_HT_break	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	40	</forward>
+    <forward>	35	</forward>
     <backward>	15	</backward>
   </speedLimits>
   <invisibility>
@@ -1076,11 +1076,11 @@
       <price>	30000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	240	</armor_1>
+        <armor_1>	250	</armor_1>
         <armor_2>	200	</armor_2>
         <armor_3>	120	</armor_3>
         <armor_4>	60	</armor_4>
-        <armor_5>	40	</armor_5>
+        <armor_5>	45	</armor_5>
         <armor_6>	40	</armor_6>
         <armor_7>	150	</armor_7>
         <armor_8>	0	</armor_8>
@@ -1130,7 +1130,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <reloadTime>	7	</reloadTime>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <aimingTime>	2.8	</aimingTime>
           <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <multiGunEffects>	shot_dualgun1_main_mb_L shot_dualgun1_main_mb_R	</multiGunEffects>
@@ -1273,8 +1273,8 @@
     <detailed>
       <engines>
         <Maybach_HL_295>
-          <smplEnginePower>	1000	</smplEnginePower>
-          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
+          <smplEnginePower>	850	</smplEnginePower>
+          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </Maybach_HL_295>
       </engines>
       <chassis>
@@ -1310,4 +1310,5 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	1.0	</alpha>
   </emblems>
+  <customDefaultCamouflage>	true	</customDefaultCamouflage>
 </G196_E_75_Ausf_B_Doppel.xml>

@@ -494,7 +494,12 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'comp7_5_1_champion'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'comp7_5_1_legend'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'portal2025Medal_1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
- (_AB.SINGLE, 'portal2025Medal_2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement)}
+ (_AB.SINGLE, 'portal2025Medal_2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'comp7_5_2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'comp7_5_2_champion'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'comp7_5_2_legend'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'NY26_AtmsphrLevel'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'NY26_CelebTaskCompleted'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement)}
 for _nID, _ in enumerate(nations.NAMES):
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'tankExpert%d' % _nID] = _NationAchieveFactory.get(_as.nation_specific.TankExpertAchievement, _nID)
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'mechanicEngineer%d' % _nID] = _NationAchieveFactory.get(_as.nation_specific.MechEngineerAchievement, _nID)

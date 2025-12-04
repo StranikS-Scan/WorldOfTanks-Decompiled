@@ -179,3 +179,6 @@ class INGAME_HELP(object):
     DETAILSHELP_DUALGUNWITHAUTORELOADCLIP_DESCRIPTION = '#ingame_help:detailsHelp/dualgunWithAutoreloadClip/description'
     DETAILSHELP_DUALGUNWITHCLIP_TITLE = '#ingame_help:detailsHelp/dualgunWithClip/title'
     DETAILSHELP_DUALGUNWITHCLIP_DESCRIPTION = '#ingame_help:detailsHelp/dualgunWithClip/description'
+    DETAILSHELP_DISTANCEDAMAGE_HEADERTITLE = '#ingame_help:detailsHelp/distanceDamage/headerTitle'
+    DETAILSHELP_DISTANCEDAMAGE_TITLE = '#ingame_help:detailsHelp/distanceDamage/title'
+    DETAILSHELP_DISTANCEDAMAGE_DESCRIPTION = '#ingame_help:detailsHelp/distanceDamage/description'

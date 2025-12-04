@@ -68,12 +68,13 @@
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
       <condition>
+        <global-active>	_NY_navigation_disabled	</global-active>
+        <global-active>	_HaveNewBadge	</global-active>
         <condition-and>
           <condition-hint-showed>
             <hint-id>	DogTagProfileHint	</hint-id>
             <value>	False	</value>
           </condition-hint-showed>
-          <global-active>	_HaveNewBadge	</global-active>
         </condition-and>
       </condition>
     </hint>
@@ -169,6 +170,22 @@
         </condition-and>
       </condition>
       <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
+    <hint>	LootProbabilityHint	  <item-id>	LootProbability	</item-id>
+      <text>	_(#tutorial:probabilitiesOverlay/probabilityHint)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	enabled	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
       <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
     <hint>	BlueprintsResearchButtonHint	  <item-id>	BlueprintsResearchButton	</item-id>
@@ -310,6 +327,7 @@
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
       <condition>
+        <global-active>	_NY_navigation_disabled	</global-active>
         <global-active>	_Personal_reserves_available	</global-active>
         <class-condition>	LimitedUIHintChecker	  <path>	gui.limited_ui.lui_tutorial_hints	</path>
           <arguments>	PersonalReservesHangarHint	</arguments>
@@ -344,7 +362,9 @@
         <loop>	True	</loop>
       </arrow>
       <ignore-outside-click>	True	</ignore-outside-click>
+      <update-runtime>	True	</update-runtime>
       <condition>
+        <global-active>	_NY_navigation_disabled	</global-active>
         <condition-and>
           <condition-hint-showed>
             <hint-id>	DogTagHangarHint	</hint-id>
@@ -421,6 +441,7 @@
         </simple-state>
       </checked-ui-state>
       <condition>
+        <global-active>	_NY_navigation_disabled	</global-active>
         <condition-and>
           <condition-hint-showed>
             <hint-id>	SessionStatsSettingsBtnHint	</hint-id>
@@ -479,6 +500,9 @@
           <value>	True	</value>
         </simple-state>
       </checked-ui-state>
+      <condition>
+        <global-active>	_NY_navigation_disabled	</global-active>
+      </condition>
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
@@ -966,7 +990,6 @@
       <condition>
         <global-active>	_isPM3Enabled	</global-active>
         <global-inactive>	cosmicActive	</global-inactive>
-        <global-inactive>	portalActive	</global-inactive>
         <class-condition>	LimitedUIHintChecker	  <path>	gui.limited_ui.lui_tutorial_hints	</path>
           <arguments>	NewCampaignHint	</arguments>
         </class-condition>
@@ -1043,7 +1066,6 @@
           <service>	IParagonsController	  <path>	skeletons.gui.game_control	</path>
           </service>
           <global-inactive>	cosmicActive	</global-inactive>
-          <global-inactive>	portalActive	</global-inactive>
         </condition-and>
       </condition>
       <update-runtime>	True	</update-runtime>

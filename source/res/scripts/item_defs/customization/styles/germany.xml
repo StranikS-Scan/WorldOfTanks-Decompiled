@@ -2506,36 +2506,4 @@
     <maxNumber>	1	</maxNumber>
     <tags>	progression_required	</tags>
   </itemGroup>
-  <itemGroup>
-    <season>	ALL	</season>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
-    <historical>	0	</historical>
-    <vehicleFilter>
-      <include>
-        <vehicles>	germany:G00_Ratte	</vehicles>
-      </include>
-    </vehicleFilter>
-    <style>
-      <id>	31378	</id>
-      <userString>	#vehicle_customization:Ratte_style_01/name	</userString>
-      <description>	#vehicle_customization:Ratte_style_01/description	</description>
-      <longDescriptionSpecial>	#vehicle_customization:Ratte_style_01/longDescription	</longDescriptionSpecial>
-      <outfits>
-        <outfit>
-          <season>	all	</season>
-          <camouflages>
-            <item>
-              <id>	31348	</id>
-              <patternSize>	1	</patternSize>
-              <appliedTo>	4368	</appliedTo>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-        </outfit>
-      </outfits>
-      <texture>	gui/maps/vehicles/styles/Ratte_Style.png	</texture>
-    </style>
-    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
-    <tags>	lockedOnVehicle	</tags>
-  </itemGroup>
 </germany.xml>

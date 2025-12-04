@@ -172,11 +172,11 @@
     <G04>	31005	</G04>
     <MB509>	31006	</MB509>
     <Maybach_HL_230>	31007	</Maybach_HL_230>
+    <MB_838_CAM_500_EB>	31008	</MB_838_CAM_500_EB>
     <Maybach_HL_234P60_02>	31009	</Maybach_HL_234P60_02>
     <MB509_StGM>	31010	</MB509_StGM>
     <Maybach_HL_295>	31012	</Maybach_HL_295>
-    <MB-838_CAM-500_1_ISP>	37000	</MB-838_CAM-500_1_ISP>
-    <Maybach_HL_234_ISP>	37001	</Maybach_HL_234_ISP>
+    <W-55_T>	35001	</W-55_T>
     <Maybach_HL_210P30_Ausf_A_IGR>	60001	</Maybach_HL_210P30_Ausf_A_IGR>
     <Maybach_HL_230_TRM_P30_IGR>	60002	</Maybach_HL_230_TRM_P30_IGR>
     <Maybach_HL_230_TRM_P45_IGR>	60003	</Maybach_HL_230_TRM_P45_IGR>
@@ -197,7 +197,6 @@
     <Maybach_HL_230_TRM_P45_NewOnBoarding__0>	64012	</Maybach_HL_230_TRM_P45_NewOnBoarding__0>
     <Porsche_Typ_100_3_NewOnBoarding>	64013	</Porsche_Typ_100_3_NewOnBoarding>
     <Maybach_HL_230_TRM_P30_NewOnBoarding>	64014	</Maybach_HL_230_TRM_P30_NewOnBoarding>
-    <MAN_V12Z32_44>	41010	</MAN_V12Z32_44>
   </ids>
   <shared>
     <SPA_19TB_mod_43_german>
@@ -1076,23 +1075,6 @@
       <rpm_min>	436	</rpm_min>
       <rpm_max>	2803	</rpm_max>
     </Maybach_HL_234>
-    <Maybach_HL_234_ISP>
-      <userString>	#germany_vehicles:Maybach_HL_234_ISP	</userString>
-      <tags>	gasoline	</tags>
-      <level>	10	</level>
-      <price>	120000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <power>	850	</power>
-      <weight>	1200	</weight>
-      <maxHealth>	360	</maxHealth>
-      <maxRegenHealth>	170	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	436	</rpm_min>
-      <rpm_max>	2803	</rpm_max>
-    </Maybach_HL_234_ISP>
     <G04>
       <userString>	#germany_vehicles:G04	</userString>
       <tags>	gasoline	</tags>
@@ -1969,24 +1951,23 @@
       <rpm_min>	485	</rpm_min>
       <rpm_max>	1930	</rpm_max>
     </MB-838_CAM-500_1>
-    <MB-838_CAM-500_1_ISP>
-      <userString>	#germany_vehicles:MB-838_CAM-500_1_ISP	</userString>
-      <shortUserString>	#germany_vehicles:MB-838_CAM-500_1_ISP_short	</shortUserString>
+    <MB_838_CAM_500_EB>
+      <userString>	#germany_vehicles:MB_838_CAM_500_EB	</userString>
       <tags>	diesel	</tags>
-      <level>	10	</level>
-      <price>	95000	</price>
+      <level>	11	</level>
+      <price>	195000	</price>
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
       <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
-      <power>	830	</power>
+      <power>	1100	</power>
       <weight>	1700	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	170	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.1	</fireStartingChance>
-      <rpm_min>	485	</rpm_min>
-      <rpm_max>	1930	</rpm_max>
-    </MB-838_CAM-500_1_ISP>
+      <rpm_min>	350	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </MB_838_CAM_500_EB>
     <Maybach_HL_210_TRM_P30>
       <userString>	#germany_vehicles:Maybach_HL_210_TRM_P30	</userString>
       <shortUserString>	#germany_vehicles:Maybach_HL_210_TRM_P30_short	</shortUserString>
@@ -2257,7 +2238,7 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
       <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
-      <power>	1000	</power>
+      <power>	850	</power>
       <weight>	1200	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	129	</maxRegenHealth>
@@ -2782,6 +2763,23 @@
       <rpm_min>	249	</rpm_min>
       <rpm_max>	2452	</rpm_max>
     </W-55>
+    <W-55_T>
+      <userString>	#germany_vehicles:W-55_T	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	60000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <power>	580	</power>
+      <weight>	940	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	319	</rpm_min>
+      <rpm_max>	2261	</rpm_max>
+    </W-55_T>
     <Hotchkiss_6_Zyl_Benzin_154_PS>
       <userString>	#germany_vehicles:Hotchkiss_6_Zyl_Benzin_154_PS	</userString>
       <tags>	gasoline	</tags>
@@ -3521,22 +3519,5 @@
       <rpm_max>	2200	</rpm_max>
       <notInShop>	True	</notInShop>
     </Maybach_HL_230_TRM_P30_NewOnBoarding>
-    <MAN_V12Z32_44>
-      <userString>	#germany_vehicles:MAN_V12Z32_44	</userString>
-      <tags>	diesel	</tags>
-      <level>	10	</level>
-      <price>	132000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
-      <power>	17000	</power>
-      <weight>	130000	</weight>
-      <maxHealth>	360	</maxHealth>
-      <maxRegenHealth>	170	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.1	</fireStartingChance>
-      <rpm_min>	300	</rpm_min>
-      <rpm_max>	2300	</rpm_max>
-    </MAN_V12Z32_44>
   </shared>
 </engines.xml>

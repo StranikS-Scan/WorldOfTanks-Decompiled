@@ -898,7 +898,7 @@ class GiftEventConfig(namedtuple('_GiftEventConfig', ('eventID',
         return self.giftEventState == GiftEventState.DISABLED
 
 
-class GiftSystemConfig(namedtuple('_GiftSystemConfig', ('events',))):
+class GiftSystemConfig(namedtuple('_GiftSystemConfig', ('events', 'itemToEventID'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
@@ -919,7 +919,16 @@ class GiftSystemConfig(namedtuple('_GiftSystemConfig', ('events',))):
 
     @classmethod
     def __packEventConfigs(cls, data):
-        data['events'] = {eID:makeTupleByDict(GiftEventConfig, eData) for eID, eData in data['events'].iteritems()}
+        events = {eID:makeTupleByDict(GiftEventConfig, eData) for eID, eData in data['events'].iteritems()}
+        data['events'], data['itemToEventID'] = events, cls.__getItemToEventMap(events)
+
+    @classmethod
+    def __getItemToEventMap(cls, events):
+        result = {}
+        for eventID, eventConfig in events.iteritems():
+            result.update({itemID:eventID for itemID in eventConfig.giftItemIDs})
+
+        return result
 
 
 class _WellRewardConfig(namedtuple('_WellRewardConfig', ('bonus',
@@ -1343,13 +1352,14 @@ class PreModerationConfig(namedtuple('_PreModerationConfig', ('prebattleDescript
 GUI_LOOT_BOXES_CONFIG = 'gui_loot_boxes_config'
 
 class _GuiLootBoxesConfig(object):
-    __slots__ = ('__isEnabled', '__lootBoxBuyDayLimit', '__isBuyAvailable', '__shopCategoryUrl')
+    __slots__ = ('__isEnabled', '__lootBoxBuyDayLimit', '__isBuyAvailable', '__shopCategoryUrl', '__isShowStatistic')
 
     def __init__(self, **kwargs):
         super(_GuiLootBoxesConfig, self).__init__()
         self.__isEnabled = kwargs.get('enabled', False)
         self.__lootBoxBuyDayLimit = kwargs.get('lootBoxBuyDayLimit', 0)
         self.__isBuyAvailable = kwargs.get('isBuyAvailable', False)
+        self.__isShowStatistic = kwargs.get('isShowStatistic', False)
         self.__shopCategoryUrl = kwargs.get('shopCategoryUrl', '')
 
     @property
@@ -1384,12 +1394,15 @@ class ArmoryYardConfig(namedtuple('ArmoryYardConfig', ('isEnabled',
  'activeHoursCountdown',
  'announcementCountdown',
  'starterPacks',
- 'postProgression',
- 'shop'))):
+ 'purchaseStage',
+ 'shop',
+ 'rerollSubsection',
+ 'seasonsConfig',
+ 'postProgression'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, isPaused=False, seasons={}, animations={}, cycleTimes={}, tokenBase='', receivedRewardTokenPostfix='', stageTokenPostfix='', currencyTokenPostfix='', tokenCost={}, rewards={}, introVideoLink='', infoPageLink='', activeHoursCountdown=0, announcementCountdown=0, starterPacks={}, postProgression={}, shop={})
+        defaults = dict(isEnabled=False, isPaused=False, seasons={}, animations={}, cycleTimes={}, tokenBase='', receivedRewardTokenPostfix='', stageTokenPostfix='', currencyTokenPostfix='', tokenCost={}, rewards={}, introVideoLink='', infoPageLink='', activeHoursCountdown=0, announcementCountdown=0, starterPacks={}, purchaseStage={}, shop={}, rerollSubsection={}, seasonsConfig={}, postProgression={})
         defaults.update(kwargs)
         return super(ArmoryYardConfig, cls).__new__(cls, **defaults)
 
@@ -1404,6 +1417,18 @@ class ArmoryYardConfig(namedtuple('ArmoryYardConfig', ('isEnabled',
     @classmethod
     def defaults(cls):
         return cls()
+
+    @property
+    def rerollPrices(self):
+        return self.rerollSubsection.get('rerollPrices', {})
+
+    def getDefaultConditionByQuestID(self, groupName, questID):
+        return findFirst(lambda d: d[0] == questID, self.rerollSubsection.get('defaultQuests', {}).get(groupName, []), (None, None))[1]
+
+    def iterByDefaultRerollQuests(self):
+        for data in self.rerollSubsection.get('defaultQuests', {}).itervalues():
+            for tokenQuestID, conditionID in data:
+                yield (tokenQuestID, conditionID)
 
 
 class _LimitedUIConfig(namedtuple('_LimitedUIConfig', ('enabled', 'rules', 'version'))):
@@ -1795,6 +1820,27 @@ class ParagonsConfig(object):
         return tuple(((defaultValue if vehicleValues[idx] is None else vehicleValues[idx]) for idx, defaultValue in enumerate(defaultValues)))
 
 
+class _LootBoxStatisticsConfig(namedtuple('_LootBoxStatisticsConfig', ('enabled',))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(enabled=False)
+        defaults.update(kwargs)
+        return super(_LootBoxStatisticsConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -1857,6 +1903,7 @@ class ServerSettings(object):
         self.__playStreakConfig = _PlayStreakConfig()
         self.__blackMarketConfig = _BlackMarketConfig()
         self.__ingameBrowserEventConfig = _IngameBrowserEventConfig()
+        self.__lootBoxStatisticsConfig = _LootBoxStatisticsConfig.defaults()
         self.__schemaManager = getSchemaManager()
         self.set(serverSettings)
 
@@ -2044,6 +2091,8 @@ class ServerSettings(object):
             self.__paragonsConfig = ParagonsConfig(self.__serverSettings[Configs.PARAGONS_CONFIG.value])
         else:
             self.__paragonsConfig = ParagonsConfig.defaults()
+        if Configs.LOOTBOX_STATISTICS_CONFIG.value in self.__serverSettings:
+            self.__lootBoxStatisticsConfig = makeTupleByDict(_LootBoxStatisticsConfig, self.__serverSettings[Configs.LOOTBOX_STATISTICS_CONFIG.value])
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -2184,6 +2233,8 @@ class ServerSettings(object):
             self.__updateBlackMarketConfig(serverSettingsDiff)
         if Configs.INGAME_BROWSER_EVENT_CONFIG.value in serverSettingsDiff:
             self.__updateIngameBrowserEventConfig(serverSettingsDiff)
+        if Configs.LOOTBOX_STATISTICS_CONFIG.value in serverSettingsDiff:
+            self.__updateLootBoxStatisticsConfig(serverSettingsDiff)
         self.__schemaManager.update(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
@@ -2457,6 +2508,9 @@ class ServerSettings(object):
 
     def isLootBoxesEnabled(self):
         return self.__getGlobalSetting('isLootBoxesEnabled')
+
+    def isLootBoxEnabled(self, boxId):
+        return self.__getGlobalSetting('lootBoxes_config', {}).get(boxId, {}).get('enabled', False)
 
     def isAnonymizerEnabled(self):
         return self.__getGlobalSetting('isAnonymizerEnabled', False)
@@ -2786,6 +2840,12 @@ class ServerSettings(object):
     def getIngameBrowserEventConfig(self):
         return self.__getGlobalSetting(Configs.INGAME_BROWSER_EVENT_CONFIG.value, {})
 
+    def getLootBoxStatisticsConfig(self):
+        return self.__getGlobalSetting(Configs.LOOTBOX_STATISTICS_CONFIG.value, {})
+
+    def getNYConfig(self):
+        return self.__getGlobalSetting('ny_config', {})
+
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)
 
@@ -2973,6 +3033,9 @@ class ServerSettings(object):
 
     def __updateModeSelectorConfig(self, diff):
         self.__modeSelectorConfig = self.__modeSelectorConfig.replace(diff[Configs.MODE_SELECTOR_CONFIG.value])
+
+    def __updateLootBoxStatisticsConfig(self, diff):
+        self.__lootBoxStatisticsConfig = self.__lootBoxStatisticsConfig.replace(diff[Configs.LOOTBOX_STATISTICS_CONFIG.value])
 
 
 def serverSettingsChangeListener(*configKeys):

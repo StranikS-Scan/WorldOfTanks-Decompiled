@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: gui_lootboxes/scripts/client/gui_lootboxes/gui/bonuses/bonuses_sorter.py
+import itertools
 import typing
 from constants import LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, LOOTBOX_KEY_PREFIX
 from gui.server_events.bonuses import VehiclesBonus, splitBonuses
@@ -12,6 +13,12 @@ from helpers import dependency
 from shared_utils import first
 from skeletons.gui.game_control import IGuiLootBoxesController
 VEHICLE_MAX_LEVEL = 10
+__VEHICLES_REVERSED_COUNTER = itertools.count(0, -1)
+__CURRENCY_ORDER = (Currency.GOLD,
+ Currency.CREDITS,
+ Currency.FREE_XP,
+ Currency.CRYSTAL,
+ Currency.EQUIP_COIN)
 
 def _getCustomizationTag(bonus):
     item = bonus.getC11nItem(first(bonus.getCustomizations()))
@@ -88,6 +95,7 @@ BONUS_TAG_HANDLER_MAP = {Currency.CREDITS: lambda b: BonusesSortTags.CURRENCY,
  'dossier': lambda b: BonusesSortTags.CUSTOMIZATION,
  'tmanToken': _getTankmenTokenTag,
  'battleToken': _getTokensTag,
+ 'lootBoxToken': _getTokensTag,
  'freeXP': lambda b: BonusesSortTags.CURRENCY,
  'entitlements': lambda b: BonusesSortTags.CURRENCY}
 
@@ -116,7 +124,8 @@ def getTokensSortKey(bonus, guiLootBoxController=None):
 BONUSES_KEY_FUNC = {'items': lambda b: first(b.getItems()),
  'crewBooks': lambda b: first(b.getItems()),
  'vehicles': getVehBonusSortKey,
- 'battleToken': getTokensSortKey}
+ 'battleToken': getTokensSortKey,
+ 'lootBoxToken': getTokensSortKey}
 
 def _defaultBonusKeyFunc(bonus):
     return bonus.getName()
@@ -130,5 +139,18 @@ def getBonusesSortKeyFunc(order):
     return lambda b: (order.index(getBonusSortTag(b)), BONUSES_KEY_FUNC.get(b.getName(), _defaultBonusKeyFunc)(b))
 
 
-def sortBonuses(bonuses, order):
-    return sorted(splitBonuses(bonuses), key=getBonusesSortKeyFunc(order))
+def sortBonuses(bonuses, order, sortFunc=getBonusesSortKeyFunc):
+    return sorted(splitBonuses(bonuses), key=sortFunc(order))
+
+
+def getStatisticSortKeyFunc(order):
+    mapping = {'items': lambda b: first(b.getItems()),
+     'crewBooks': lambda b: first(b.getItems()),
+     'battleToken': getTokensSortKey,
+     'vehicles': lambda b: next(__VEHICLES_REVERSED_COUNTER),
+     Currency.CREDITS: lambda b: __CURRENCY_ORDER.index(b.getName()),
+     Currency.GOLD: lambda b: __CURRENCY_ORDER.index(b.getName()),
+     Currency.CRYSTAL: lambda b: __CURRENCY_ORDER.index(b.getName()),
+     Currency.FREE_XP: lambda b: __CURRENCY_ORDER.index(b.getName()),
+     Currency.EQUIP_COIN: lambda b: __CURRENCY_ORDER.index(b.getName())}
+    return lambda b: (order.index(getBonusSortTag(b)), mapping.get(b.getName(), _defaultBonusKeyFunc)(b))

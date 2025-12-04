@@ -19,6 +19,8 @@ def getClientServicesConfig(manager):
     from skeletons.map_activities import IMapActivities
     from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
     from skeletons.vehicle_appearance_cache import IAppearanceCache
+    from system_events import g_systemEvents
+    g_systemEvents.onDependencyManagerCreated(manager)
     manager.addInstance(IConnectionManager, connection_mgr.ConnectionManager(), finalizer='fini')
     manager.addInstance(IMapActivities, MapActivities.MapActivities(), finalizer='destroy')
     manager.addInstance(IBattleDynamicObjectsCache, dyn_objects_cache.BattleDynamicObjectsCache(), finalizer='destroy')

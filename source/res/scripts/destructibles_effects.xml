@@ -667,6 +667,25 @@
         </effects>
       </variant1>
     </inf_env414_Pole_Fall_1>
+    <inf_env414_pole_fall_ny_fracture>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env414_pole_fall_ny.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_pole	</wwsound>
+            <params></params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_env414_pole_fall_ny_fracture>
     <inf_env414_Pole_Touchdown>
       <variant1>
         <stages>
@@ -5682,49 +5701,6 @@
         </effects>
       </variant1>
     </hd_env_EU_483_MoabitBridge_04>
-    <hd_env_evt_p25_0013_mushrooms>
-      <variant1>
-        <stages>
-          <base>	35.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/environment/objects/hd_env_evt_p25_0013_mushrooms.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	ev_portal_amb_map_mashroom_smash	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_env_evt_p25_0013_mushrooms>
-    <hd_env_EVT_P25_0027_BigBoard>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/environment/buildings/inf_env_am_016_advertisingbigboard_02.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <debrisAmount>	60.000000	</debrisAmount>
-              <weight>	7000.000000	</weight>
-              <metal_1>	50.000000	</metal_1>
-              <glass>	20.000000	</glass>
-              <metal_2>	25.000000	</metal_2>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_env_EVT_P25_0027_BigBoard>
     <hd_env_SU_002_YoungLenin>
       <variant1>
         <stages>
@@ -23702,6 +23678,52 @@
         </effects>
       </variant1>
     </inf_env_ASJP_004_SmallcartTwoWheel_02>
+    <inf_env_balldestr_ny>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/objects/inf_env_balldestr_ny.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <debrisAmount>	42.000000	</debrisAmount>
+              <weight>	1300.000000	</weight>
+              <glass>	36.000000	</glass>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_env_balldestr_ny>
+    <inf_env_deerdestr_ny>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/objects/inf_env_deerdestr_ny.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <debrisAmount>	55.000000	</debrisAmount>
+              <glass>	55.000000	</glass>
+              <weight>	2000.000000	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_env_deerdestr_ny>
     <inf_env_EU_001_FallenTree>
       <variant1>
         <stages>
@@ -26197,6 +26219,29 @@
         </effects>
       </variant1>
     </inf_gaf011_FenceTile_2>
+    <inf_gaf011_fencetile_ny>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_gaf011_fencetile_ny.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	30	</wood_2>
+              <debrisAmount>	100	</debrisAmount>
+              <weight>	2490	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_gaf011_fencetile_ny>
     <inf_gaf011_fence_01_02>
       <variant1>
         <stages>
@@ -54704,6 +54749,42 @@
         </effects>
       </variant1>
     </tree_Birch_Colored_bush_single_01_touchdown>
+    <tree_Birch_Dry_2m_fall>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/Broadleaves/tree_Birch_Dry_2m_fall.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_creak_small	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_Birch_Dry_2m_fall>
+    <tree_Birch_Dry_2m_touchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/Broadleaves/tree_Birch_Dry_2m_touchdown.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_down_small	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_Birch_Dry_2m_touchdown>
     <tree_Birch_Dry_Frost_16m_fall>
       <variant1>
         <stages>

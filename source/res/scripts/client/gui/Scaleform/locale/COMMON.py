@@ -23,6 +23,7 @@ class COMMON(object):
     DURATION_DAYS = '#common:duration/days'
     DURATION_HOURS = '#common:duration/hours'
     DURATION_MINUTES = '#common:duration/minutes'
+    DURATION_SHORTMINUTES = '#common:duration/shortMinutes'
     DURATION_SECONDS = '#common:duration/seconds'
     DURATION_UNLIMITED = '#common:duration/unlimited'
     RELATIVEDATETIME_NOW = '#common:relativeDateTime/now'

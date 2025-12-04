@@ -69,11 +69,8 @@
       </teamBasePositions>
     </maps_training>
     <comp7>
-      <boundingBox>
-        <bottomLeft>	-300.0 -300.0	</bottomLeft>
-        <upperRight>	500.0 500.0	</upperRight>
-      </boundingBox>
-      <minimap>	spaces/02_malinovka/mmap_comp7.dds	</minimap>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
       <visualScript>
         <server>
           <plan>	PointsOfInterest/pointsOfInterest	</plan>
@@ -93,31 +90,45 @@
       </recon>
       <teamSpawnPoints>
         <team1>
-          <position>	453.762756 -6.593873	</position>
+          <position>	-211.913971 424.352844	</position>
         </team1>
         <team2>
-          <position>	-15.519567 444.727203	</position>
+          <position>	386.147888 -186.158585	</position>
         </team2>
       </teamSpawnPoints>
       <pointsOfInterestUDO>
         <point>
-          <position>	484.170898 484.114014	</position>
-          <type>	1	</type>
+          <position>	386.517303 377.372375	</position>
+          <type>	4	</type>
         </point>
         <point>
-          <position>	203.813583 -20.585743	</position>
-          <type>	2	</type>
+          <position>	-45.416740 264.787933	</position>
+          <type>	4	</type>
         </point>
         <point>
-          <position>	-1.259892 209.836945	</position>
-          <type>	2	</type>
+          <position>	162.401367 -36.019058	</position>
+          <type>	4	</type>
         </point>
         <point>
-          <position>	-31.461014 -37.588860	</position>
-          <type>	1	</type>
+          <position>	22.494549 -270.089600	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	-319.869019 -254.891373	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	-395.956482 172.337723	</position>
+          <type>	3	</type>
         </point>
       </pointsOfInterestUDO>
-      <controlPoint>	311.075958 306.079224	</controlPoint>
+      <teamBasePositions>
+        <team1>
+          <position1>	254.374878 211.523956	</position1>
+          <position2>	-336.160614 -65.242966	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
     </comp7>
     <bob>
       <boundingBox>

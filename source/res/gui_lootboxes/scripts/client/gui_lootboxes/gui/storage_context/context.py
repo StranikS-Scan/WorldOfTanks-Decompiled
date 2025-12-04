@@ -32,10 +32,17 @@ class GlobalEvents(IntEnum):
 class ReturnPlaces(IntEnum):
     TO_HANGAR = 0
     TO_SHOP = 1
-    TO_NY_CUSTOMIZATION = 2
+    TO_CUSTOM = 2
     TO_SHARDS = 3
     TO_REFERRAL = 4
     TO_BIRTHDAY = 5
+    TO_FIR = 6
+    TO_LIGHTS = 7
+    TO_INSTALLATIONS = 8
+    TO_FAIR = 9
+    TO_SKATING = 10
+    TO_ATTRACTION = 11
+    TO_PET = 12
 
 
 def _handlerOnOpenClick(eventData):
@@ -84,6 +91,7 @@ def _handleRequestToOpen(context, event, eventLootBoxesCtrl=None):
     if eventLootBoxesCtrl.isEnabled() and lootBox is not None and lootBox.isEnabled:
         result = yield LootBoxOpenProcessor(lootBox, count, keyID).request()
         if result and result.success:
+            eventLootBoxesCtrl.onOpenLootboxesComplete(result)
             auxData = result.auxData
             auxData['clientData'] = {'openWithKey': True if keyID else False}
             auxData['clientData'].update({'usedKeys': {keyID: count}})

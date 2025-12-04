@@ -80,7 +80,6 @@ ORDERS_FILTER = 'ORDERS_FILTER'
 CURRENT_VEHICLE = 'current'
 ROYALE_VEHICLE = 'ROYALE_VEHICLE'
 BOOTCAMP_VEHICLE = 'BOOTCAMP_VEHICLE'
-PORTAL_VEHICLE = 'PORTAL_VEHICLE'
 LOBBY_MENU_MANUAL_TRIGGER_SHOWN = 'lobby_menu_manual_trigger_shown'
 LOBBY_MENU_BOOTCAMP_TRIGGER_SHOWN = 'lobby_menu_bootcamp_trigger_shown'
 MANUAL_NEW_CONTENT = 'manual_new_content'
@@ -259,6 +258,9 @@ LOOT_BOXES_KEY_VIEWED_COUNT = 'lootBoxesKeyViewedCount'
 LOOT_BOXES_VIEWED_HAS_INFINITE = 'lootBoxesViewedHasInfinite'
 LOOT_BOXES_COUNT = 'lootBoxesCount'
 LOOT_BOXES_LAST_ADDED_ID = 'lootBoxesLastAdded'
+LOOT_BOXES_SHORT_STAT_STATE = 'lootBoxesShortStatState'
+LOOT_BOXES_STATS_HINT_STATE = 'lootBoxesStatsHintState'
+LOOT_BOXES_STATS_NO_BOX_HINT_STATE = 'lootBoxesStatsNoBoxHintState'
 KEY_LOOTBOX_TRIGGER_HINT_SHOWN = 'keyLootboxTriggerHintShown'
 COLLECTIONS_SECTION = 'collections'
 COLLECTIONS_INTRO_SHOWN = 'collectionsIntroShown'
@@ -291,24 +293,6 @@ ACHIEVEMENTS_EDITING_ENABLED_STATUS = 'achievementsEditingEnabledStatus'
 ACHIEVEMENTS_MEDAL_ADDED_STATUS = 'achievementsMedalAddedStatus'
 ACHIEVEMENTS_RATING_CHANGED_STATUS = 'achievementsRatingChangedStatus'
 ACHIEVEMENTS_MEDAL_COUNT_INFO = 'achievementsMedalCountInfo'
-NEW_YEAR = 'newYear'
-NY_DAILY_QUESTS_VISITED = 'NYDailyQuestsVisited'
-NY_BONUS_DAILY_QUEST_VISITED = 'NYBonusDailyQuestVisited'
-NY_OLD_COLLECTIONS_BY_YEAR_VISITED = 'NYOldCollectionsByYearVisited'
-NY_OLD_REWARDS_BY_YEAR_VISITED = 'NYOldRewardsByYearVisited'
-NY_LAST_SEEN_LEVEL_INFO = 'NYLastSeenLevelInfo'
-NY_LAST_SEEN_TOTAL_BONUS = 'NYLastSeenTotalBonus'
-NY_INTRO_SEEN = 'NYIntroSeen'
-NY_DAILY_QUESTS_HOVERED = 'NYDailyQuestsHovered'
-NY_WEEKLY_QUESTS_HOVERED = 'NYWeeklyQuestsHovered'
-NY_DAILY_MEDIA = 'NYDailyMedia'
-NY_GENERATION_TIME = 'NYGenerationTime'
-NY_DAILY_VIDEO_DAY_VISITED = 'NYFirstVideoDayVisited'
-NY_DAILY_VIDEO_VISITED_AT = 'NYFirstVideoVisitedAt'
-NY_FIRST_VIDEO_SHUFFLE = 'NYFirstVideoShuffle'
-NY_ACTIVE_WIDGET_TRANSITION_SHOWN = 'NyActiveWidgetTransitionShown'
-NY_PET_SLOT_VISITED = 'NyPetSlotVisited'
-NY_GREETINGS_SEEN = 'NYGreetingsSeen'
 PREMIUM_QUESTS_NOTIFICATION = 'PremiumPurchased'
 
 class BattleMatters(object):
@@ -331,6 +315,9 @@ class Winback(object):
 class ArmoryYard(object):
     ARMORY_YARD_SETTINGS = 'armoryYardSettings'
     ARMORY_YARD_LAST_INTRO_VIEWED = 'armoryYardLastIntroViewed'
+    ARMORY_YARD_REROLL_INTRO_VIEWED = 'armoryYardRerollIntroViewed'
+    ARMORY_YARD_REROLL_BUTTON_HINT_VIEWED = 'armoryYardRerollButtonHintViewed'
+    ARMORY_YARD_REROLL_LAST_CURRENCY = 'armoryYardRerollLastCurrency'
     ARMORY_YARD_PREV_COMPLETED_QUESTS = 'armoryYardPrevCompletedQuests'
     ARMORY_SHOP_INTRO_VIEWED = 'armoryShopIntroViewed'
     EVENT_ANNOUNCEMENT = 'announcement'
@@ -974,7 +961,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
  KEY_FAVORITES: {BOOTCAMP_VEHICLE: 0,
                  CURRENT_VEHICLE: 0,
                  ROYALE_VEHICLE: 0,
-                 PORTAL_VEHICLE: 0,
                  FALLOUT_VEHICLES: {}},
  KEY_MANUAL: {LOBBY_MENU_MANUAL_TRIGGER_SHOWN: False,
               LOBBY_MENU_BOOTCAMP_TRIGGER_SHOWN: False,
@@ -1394,37 +1380,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                  LOOT_BOXES_VIEWED_HAS_INFINITE: False,
                                  LOOT_BOXES_COUNT: {},
                                  LOOT_BOXES_LAST_ADDED_ID: 0,
-                                 KEY_LOOTBOX_TRIGGER_HINT_SHOWN: False},
-                NEW_YEAR: {NY_DAILY_QUESTS_VISITED: False,
-                           NY_BONUS_DAILY_QUEST_VISITED: False,
-                           NY_OLD_COLLECTIONS_BY_YEAR_VISITED: {18: False,
-                                                                19: False,
-                                                                20: False,
-                                                                21: False,
-                                                                22: False,
-                                                                23: False,
-                                                                24: False},
-                           NY_OLD_REWARDS_BY_YEAR_VISITED: {18: False,
-                                                            19: False,
-                                                            20: False,
-                                                            21: False,
-                                                            22: False,
-                                                            23: False,
-                                                            24: False},
-                           NY_LAST_SEEN_LEVEL_INFO: {'level': 1,
-                                                     'points': 0},
-                           NY_INTRO_SEEN: False,
-                           NY_LAST_SEEN_TOTAL_BONUS: 0,
-                           NY_DAILY_QUESTS_HOVERED: {},
-                           NY_WEEKLY_QUESTS_HOVERED: {},
-                           NY_DAILY_MEDIA: [],
-                           NY_GENERATION_TIME: 0,
-                           NY_DAILY_VIDEO_VISITED_AT: 0,
-                           NY_DAILY_VIDEO_DAY_VISITED: False,
-                           NY_FIRST_VIDEO_SHUFFLE: False,
-                           NY_ACTIVE_WIDGET_TRANSITION_SHOWN: False,
-                           NY_PET_SLOT_VISITED: False,
-                           NY_GREETINGS_SEEN: False}},
+                                 LOOT_BOXES_SHORT_STAT_STATE: 0,
+                                 LOOT_BOXES_STATS_HINT_STATE: 0,
+                                 LOOT_BOXES_STATS_NO_BOX_HINT_STATE: 0,
+                                 KEY_LOOTBOX_TRIGGER_HINT_SHOWN: False}},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
@@ -1610,7 +1569,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                    ArmoryYard.STYLE_QUEST_ENDS: False,
                                    ArmoryYard.ARMORY_YARD_CURRENT_SEASON: None,
                                    ArmoryYard.AY_SECTION_LAST_LISTENED_MESSAGE: 0,
-                                   ArmoryYard.ARMORY_SHOP_INTRO_VIEWED: False},
+                                   ArmoryYard.ARMORY_SHOP_INTRO_VIEWED: False,
+                                   ArmoryYard.ARMORY_YARD_REROLL_INTRO_VIEWED: False,
+                                   ArmoryYard.ARMORY_YARD_REROLL_BUTTON_HINT_VIEWED: False,
+                                   ArmoryYard.ARMORY_YARD_REROLL_LAST_CURRENCY: None},
  EarlyAccess.EARLY_ACCESS_SETTINGS: {EarlyAccess.EARLY_ACCESS_CURRENT_SEASON: None,
                                      EarlyAccess.EVENT_ANNOUNCEMENT: False,
                                      EarlyAccess.EVENT_PAUSED: False,
@@ -2311,19 +2273,6 @@ class AccountSettings(object):
             if currVersion < 67:
                 for key, section in _filterAccountSection(ads):
                     accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
-                    if NEW_YEAR in accSettings.keys():
-                        accSettings.deleteSection(NEW_YEAR)
-                    accUiFlags = AccountSettings._readSection(section, KEY_UI_FLAGS)
-                    for uiKey in {NY_DAILY_QUESTS_VISITED,
-                     NY_BONUS_DAILY_QUEST_VISITED,
-                     NY_OLD_COLLECTIONS_BY_YEAR_VISITED,
-                     NY_OLD_REWARDS_BY_YEAR_VISITED,
-                     NY_LAST_SEEN_LEVEL_INFO,
-                     'NYCelebrityQuestsCompletedMask',
-                     'NYCelebrityQuestsVisitedMask',
-                     'NYCelebrityCompletedQuestsAnimationShownMask'}.intersection(accUiFlags.keys()):
-                        accUiFlags.deleteSection(uiKey)
-
                     if GUI_LOOT_BOXES in accSettings.keys():
                         lootBoxesSettings = _unpack(accSettings[GUI_LOOT_BOXES].asString)
                         lootBoxesSettings[LOOT_BOXES_INTRO_SHOWN] = False
@@ -2395,6 +2344,16 @@ class AccountSettings(object):
                             newNaVisited = [ q for q in quests['naVisited'] if not q.startswith('dq:') ]
                             quests['naVisited'] = newNaVisited
                         accSettings.write(QUESTS, _pack(quests))
+
+            if currVersion < 76:
+                for key, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    if GUI_LOOT_BOXES in accSettings.keys():
+                        lootBoxesSettings = _unpack(accSettings[GUI_LOOT_BOXES].asString)
+                        lootBoxesSettings[LOOT_BOXES_SHORT_STAT_STATE] = 0
+                        lootBoxesSettings[LOOT_BOXES_STATS_HINT_STATE] = 0
+                        lootBoxesSettings[LOOT_BOXES_STATS_NO_BOX_HINT_STATE] = 0
+                        accSettings.write(GUI_LOOT_BOXES, _pack(lootBoxesSettings))
 
             ads.writeInt('version', AccountSettings.version)
         return
@@ -2469,8 +2428,8 @@ class AccountSettings(object):
         return cls._getValue(name, KEY_SETTINGS)
 
     @classmethod
-    def setSettings(cls, name, value):
-        cls._setValue(name, value, KEY_SETTINGS)
+    def setSettings(cls, name, value, force=False):
+        cls._setValue(name, value, KEY_SETTINGS, force)
 
     @staticmethod
     def getManualData(name):

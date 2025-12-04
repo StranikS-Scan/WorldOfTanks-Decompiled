@@ -99,7 +99,6 @@
       <pillbox></pillbox>
       <dog></dog>
       <excluded_from_sandbox></excluded_from_sandbox>
-      <calculate_bbox></calculate_bbox>
       <testTank></testTank>
       <inGame></inGame>
       <telecom></telecom>
@@ -163,8 +162,8 @@
       <rentEligible></rentEligible>
       <bot_hunter></bot_hunter>
       <debutBoxes></debutBoxes>
-      <portal></portal>
       <preferential></preferential>
+      <excludeCollisionObstacles></excludeCollisionObstacles>
     </tags>
   </vehicle>
   <vehicleChassis>
@@ -189,6 +188,7 @@
     <description>	#item_types:gun/desc	</description>
     <tags>
       <clip></clip>
+      <GLUM></GLUM>
     </tags>
   </vehicleGun>
   <vehicleEngine>
@@ -305,7 +305,6 @@
       <poiEquipment></poiEquipment>
       <visualScriptAbilityEquipment></visualScriptAbilityEquipment>
       <abilityEquipment></abilityEquipment>
-      <portal_ability></portal_ability>
       <public></public>
       <stopOutsideBattle></stopOutsideBattle>
     </tags>

@@ -101,7 +101,6 @@ class BattleMattersMissionComponent(InjectComponentAdaptor, BattleMattersViewMet
                 return (BattleMattersVehicleSelectionView, [kwargs.get('tokenID')])
             if openMainRewardView:
                 return (BattleMattersMainRewardView, [])
-        _logger.error('This method should have at least one True parameter.')
         return (BattleMattersMainView, [])
 
     def __onStateChanged(self):

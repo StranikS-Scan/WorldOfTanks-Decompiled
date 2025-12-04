@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.common.missions.quest_model import QuestModel
 class ArmoryYardQuestModel(QuestModel):
     __slots__ = ()
 
-    def __init__(self, properties=19, commands=0):
+    def __init__(self, properties=21, commands=0):
         super(ArmoryYardQuestModel, self).__init__(properties=properties, commands=commands)
 
     def getChapterId(self):
@@ -41,33 +41,49 @@ class ArmoryYardQuestModel(QuestModel):
     def getVehicleTypesType():
         return unicode
 
-    def getBattleTypes(self):
+    def getVehicleNations(self):
         return self._getArray(15)
 
-    def setBattleTypes(self, value):
+    def setVehicleNations(self, value):
         self._setArray(15, value)
+
+    @staticmethod
+    def getVehicleNationsType():
+        return unicode
+
+    def getBattleTypes(self):
+        return self._getArray(16)
+
+    def setBattleTypes(self, value):
+        self._setArray(16, value)
 
     @staticmethod
     def getBattleTypesType():
         return int
 
     def getCurrent(self):
-        return self._getNumber(16)
-
-    def setCurrent(self, value):
-        self._setNumber(16, value)
-
-    def getTotal(self):
         return self._getNumber(17)
 
-    def setTotal(self, value):
+    def setCurrent(self, value):
         self._setNumber(17, value)
 
+    def getTotal(self):
+        return self._getNumber(18)
+
+    def setTotal(self, value):
+        self._setNumber(18, value)
+
     def getIconKey(self):
-        return self._getString(18)
+        return self._getString(19)
 
     def setIconKey(self, value):
-        self._setString(18, value)
+        self._setString(19, value)
+
+    def getEarned(self):
+        return self._getNumber(20)
+
+    def setEarned(self, value):
+        self._setNumber(20, value)
 
     def _initialize(self):
         super(ArmoryYardQuestModel, self)._initialize()
@@ -75,7 +91,9 @@ class ArmoryYardQuestModel(QuestModel):
         self._addArrayProperty('levels', Array())
         self._addBoolProperty('showLevelsAsRange', False)
         self._addArrayProperty('vehicleTypes', Array())
+        self._addArrayProperty('vehicleNations', Array())
         self._addArrayProperty('battleTypes', Array())
         self._addNumberProperty('current', 0)
         self._addNumberProperty('total', 0)
         self._addStringProperty('iconKey', '')
+        self._addNumberProperty('earned', 0)

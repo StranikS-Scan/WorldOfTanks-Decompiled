@@ -7409,11 +7409,11 @@
       <smokeOpacity>	10.	</smokeOpacity>
       <attrFactorMods>
         <circularVisionRadius>
-          <value>	-0.75	</value>
+          <value>	-0.95	</value>
           <ignoreAllies>	True	</ignoreAllies>
         </circularVisionRadius>
         <crewRolesFactor>
-          <value>	-0.35	</value>
+          <value>	-0.25	</value>
           <ignoreAllies>	True	</ignoreAllies>
         </crewRolesFactor>
       </attrFactorMods>
@@ -8561,7 +8561,7 @@
       </duration>
       <radius>	30	  <exports>	vse tooltip	</exports>
       </radius>
-      <heal>	20 50 120	  <exports>	vse	</exports>
+      <heal>	20 40 60	  <exports>	vse	</exports>
       </heal>
       <secondaryHealDebuff>	25	  <exports>	vse tooltip	</exports>
       </secondaryHealDebuff>
@@ -8585,7 +8585,7 @@
       </visualScript>
       <cooldownSeconds>	15	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <duration>	20	  <exports>	vse tooltip	</exports>
+      <duration>	15	  <exports>	vse tooltip	</exports>
       </duration>
       <crewBuff>	10 15 20	  <exports>	vse tooltip	</exports>
       </crewBuff>
@@ -8713,7 +8713,7 @@
       </cooldownSeconds>
       <delay>	3	  <exports>	vse tooltip	</exports>
       </delay>
-      <radius>	10 12 15	  <exports>	vse tooltip	</exports>
+      <radius>	8 10 12	  <exports>	vse tooltip	</exports>
       </radius>
       <damage>	100 250 500	  <exports>	vse tooltip	</exports>
       </damage>
@@ -8757,7 +8757,7 @@
       </visualScript>
       <cooldownSeconds>	12	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <gunReloadTimeBuff>	0.65 0.45 0.25	  <exports>	vse	</exports>
+      <gunReloadTimeBuff>	0.65 0.4 0.2	  <exports>	vse	</exports>
       </gunReloadTimeBuff>
     </script>
   </comp7_fast_recharge>
@@ -8775,7 +8775,7 @@
           <plan>	comp7Abilities/juggernaut_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	10	  <exports>	vse	</exports>
+      <cooldownSeconds>	5	  <exports>	vse	</exports>
       </cooldownSeconds>
       <duration>	15 20 30	  <exports>	vse tooltip	</exports>
       </duration>
@@ -8785,7 +8785,7 @@
       </stunDurationFactor>
       <repairBuff>	50	  <exports>	vse tooltip	</exports>
       </repairBuff>
-      <gunReloadBoost>	6.0	  <exports>	vse tooltip	</exports>
+      <gunReloadBoost>	7.0	  <exports>	vse tooltip	</exports>
       </gunReloadBoost>
     </script>
   </comp7_juggernaut>
@@ -8809,7 +8809,7 @@
       </duration>
       <shotDispersionFactors>	0.8 0.6 0.4	  <exports>	vse	</exports>
       </shotDispersionFactors>
-      <slvl>	0.7 0.85 0.97	  <exports>	vse	</exports>
+      <slvl>	1 1.2 1.5	  <exports>	vse	</exports>
       </slvl>
       <sdlvl>	0.7 0.85 0.97	  <exports>	vse	</exports>
       </sdlvl>
@@ -8831,7 +8831,7 @@
       </visualScript>
       <cooldownSeconds>	20	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <duration>	10 15 20	  <exports>	vse tooltip	</exports>
+      <duration>	10 15 25	  <exports>	vse tooltip	</exports>
       </duration>
       <dispersionFactor>	0.001	  <exports>	vse tooltip	</exports>
       </dispersionFactor>
@@ -8859,7 +8859,7 @@
       </cooldownSeconds>
       <duration>	6	  <exports>	vse tooltip	</exports>
       </duration>
-      <healDuration>	6	  <exports>	vse tooltip	</exports>
+      <healDuration>	5	  <exports>	vse tooltip	</exports>
       </healDuration>
       <baseHeal>	50	  <exports>	vse tooltip	</exports>
       </baseHeal>
@@ -8986,6 +8986,18 @@
       </finalDispersion>
     </script>
     <kpi>
+      <add>
+        <name>	vehicleGunKillReloadTime	</name>
+        <value>	-50	</value>
+      </add>
+      <mul>
+        <name>	vehicleFinalDispersion	</name>
+        <value>	-50	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionAfterShot	</name>
+        <value>	-70	</value>
+      </mul>
       <mul>
         <name>	vehicleGunShotDispersionChassisMovement	</name>
         <value>	-70	</value>
@@ -8998,18 +9010,6 @@
         <name>	vehicleGunShotDispersionTurretRotation	</name>
         <value>	-70	</value>
       </mul>
-      <mul>
-        <name>	vehicleGunShotDispersionAfterShot	</name>
-        <value>	-70	</value>
-      </mul>
-      <mul>
-        <name>	vehicleFinalDispersion	</name>
-        <value>	-50	</value>
-      </mul>
-      <add>
-        <name>	vehicleGunKillReloadTime	</name>
-        <value>	-50	</value>
-      </add>
     </kpi>
     <tooltipSection>	equipment	</tooltipSection>
   </sure_shot>
@@ -9053,18 +9053,6 @@
       </minTimeBetweenReloadBoost>
     </script>
     <kpi>
-      <mul>
-        <name>	vehicleEnginePower	</name>
-        <value>	75	</value>
-      </mul>
-      <mul>
-        <name>	vehicleRepairSpeed	</name>
-        <value>	75	</value>
-      </mul>
-      <mul>
-        <name>	crewStunDuration	</name>
-        <value>	-25	</value>
-      </mul>
       <add>
         <name>	vehicleGunReloadTimeReceiveShot	</name>
         <value>	-3	</value>
@@ -9074,6 +9062,18 @@
         <value>	10	</value>
         <specValue>	1	</specValue>
       </add>
+      <mul>
+        <name>	vehicleRepairSpeed	</name>
+        <value>	75	</value>
+      </mul>
+      <mul>
+        <name>	crewStunDuration	</name>
+        <value>	-25	</value>
+      </mul>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	75	</value>
+      </mul>
     </kpi>
   </juggernaut>
   <concentration>
@@ -9116,6 +9116,15 @@
       </reloadFactor>
     </script>
     <kpi>
+      <add>
+        <name>	vehicleGunAndGunClipCooldown	</name>
+        <value>	-50	</value>
+        <specValue>	1.25	</specValue>
+      </add>
+      <mul>
+        <name>	vehicleGunShotDispersionAfterShot	</name>
+        <value>	30	</value>
+      </mul>
       <mul>
         <name>	vehicleGunShotDispersionChassisMovement	</name>
         <value>	30	</value>
@@ -9128,15 +9137,6 @@
         <name>	vehicleGunShotDispersionTurretRotation	</name>
         <value>	30	</value>
       </mul>
-      <mul>
-        <name>	vehicleGunShotDispersionAfterShot	</name>
-        <value>	30	</value>
-      </mul>
-      <add>
-        <name>	vehicleGunAndGunClipCooldown	</name>
-        <value>	-50	</value>
-        <specValue>	1.25	</specValue>
-      </add>
     </kpi>
   </concentration>
   <recoil_recuperator>
@@ -9151,7 +9151,7 @@
     <activationSound>	ability_start_button	</activationSound>
     <deactivationSound>	ability_stop_button	</deactivationSound>
     <refillSound>	ability_recharging	</refillSound>
-    <script>	RecoilRecuperatorEquipment	  <visualScript>
+    <script>	BaseAbilityEquipment	  <visualScript>
         <client>
           <plan>	abilities/base_ability_controller_client	</plan>
         </client>
@@ -9174,6 +9174,18 @@
       </multiplicativeFactors>
     </script>
     <kpi>
+      <add>
+        <name>	chargeTimeBonus	</name>
+        <value>	-1	</value>
+      </add>
+      <add>
+        <name>	loadShellIntoDualGunBonus	</name>
+        <value>	-6	</value>
+      </add>
+      <mul>
+        <name>	vehicleGunShotDispersionAfterShot	</name>
+        <value>	20	</value>
+      </mul>
       <mul>
         <name>	vehicleGunShotDispersionChassisMovement	</name>
         <value>	30	</value>
@@ -9187,25 +9199,199 @@
         <value>	30	</value>
       </mul>
       <mul>
-        <name>	vehicleGunShotDispersionAfterShot	</name>
-        <value>	20	</value>
-      </mul>
-      <mul>
         <name>	vehicleEnginePower	</name>
         <value>	50	</value>
       </mul>
-      <add>
-        <name>	chargeTimeBonus	</name>
-        <value>	-1	</value>
-      </add>
-      <add>
-        <name>	loadShellIntoDualGunBonus	</name>
-        <value>	-6	</value>
-      </add>
       <add>
         <name>	speedLimitsBonus	</name>
         <value>	5	</value>
       </add>
     </kpi>
   </recoil_recuperator>
+  <coolant_tank>
+    <id>	11004	</id>
+    <userString>	#artefacts:coolant_tank/name	</userString>
+    <description>	#artefacts:coolant_tank/descr	</description>
+    <icon>	coolant_tank 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale abilityEquipment	</tags>
+    <type>	battleAbilities	</type>
+    <activationSound>	ability_start_button	</activationSound>
+    <deactivationSound>	ability_stop_button	</deactivationSound>
+    <refillSound>	ability_recharging	</refillSound>
+    <script>	CoolantTankAbilityEquipment	  <visualScript>
+        <client>
+          <plan>	abilities/base_ability_controller_client	</plan>
+        </client>
+      </visualScript>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	3	</reuseCount>
+      <duration>	25	</duration>
+      <penaltyReloadTime>	7	</penaltyReloadTime>
+      <additiveFactors></additiveFactors>
+      <multiplicativeFactors>
+        <gun-reloadTime>	0.4	</gun-reloadTime>
+        <gun-shotDispersionFactors-afterShot>	0.5	</gun-shotDispersionFactors-afterShot>
+      </multiplicativeFactors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunReloadTime	</name>
+        <value>	-60	</value>
+      </mul>
+      <add>
+        <name>	vehicleGunReloadPenalty	</name>
+        <value>	7	</value>
+      </add>
+      <mul>
+        <name>	vehicleGunShotDispersionAfterShot	</name>
+        <value>	-50	</value>
+      </mul>
+    </kpi>
+  </coolant_tank>
+  <tank_ram>
+    <id>	11005	</id>
+    <userString>	#artefacts:tank_ram/name	</userString>
+    <description>	#artefacts:tank_ram/descr	</description>
+    <icon>	tank_ram 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale abilityEquipment	</tags>
+    <type>	battleAbilities	</type>
+    <activationSound>	ability_start_button	</activationSound>
+    <deactivationSound>	ability_stop_button	</deactivationSound>
+    <refillSound>	ability_recharging	</refillSound>
+    <script>	TankRamAbilityEquipment	  <visualScript>
+        <client>
+          <plan>	abilities/base_ability_controller_client	</plan>
+        </client>
+      </visualScript>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	4	</reuseCount>
+      <duration>	20	</duration>
+      <cooldownAfterRamKill>	0.5	</cooldownAfterRamKill>
+      <additiveFactors>
+        <vehicle-fwMaxSpeedBonus>	10	</vehicle-fwMaxSpeedBonus>
+        <vehicle-bkMaxSpeedBonus>	10	</vehicle-bkMaxSpeedBonus>
+      </additiveFactors>
+      <multiplicativeFactors>
+        <ramming>	1.5	</ramming>
+        <engine-power>	3.5	</engine-power>
+        <ammoBayHealthFactor>	1.5	</ammoBayHealthFactor>
+        <fuelTankHealthFactor>	1.5	</fuelTankHealthFactor>
+        <engineHealthFactor>	1.5	</engineHealthFactor>
+        <chassisHealthFactor>	1.5	</chassisHealthFactor>
+        <vehicle-rotationSpeed>	0.3	</vehicle-rotationSpeed>
+        <trackRammingDamageFactor>	1.5	</trackRammingDamageFactor>
+      </multiplicativeFactors>
+    </script>
+    <kpi>
+      <add>
+        <name>	abilityCooldownBonus	</name>
+        <value>	-50	</value>
+      </add>
+      <mul>
+        <name>	vehicleAmmoBayEngineFuelStrength	</name>
+        <value>	50	</value>
+      </mul>
+      <mul>
+        <name>	vehicleChassisStrength	</name>
+        <value>	50	</value>
+      </mul>
+      <mul>
+        <name>	vehicleRamDamageResistance	</name>
+        <value>	-50	</value>
+      </mul>
+      <mul>
+        <name>	trackRammingDamageFactor	</name>
+        <value>	-50	</value>
+      </mul>
+      <mul>
+        <name>	damageEnemiesByRamming	</name>
+        <value>	50	</value>
+      </mul>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	250	</value>
+      </mul>
+      <add>
+        <name>	speedLimitsBonus	</name>
+        <value>	10	</value>
+      </add>
+    </kpi>
+  </tank_ram>
+  <shot_passion>
+    <id>	11006	</id>
+    <userString>	#artefacts:shotPassion/name	</userString>
+    <description>	#artefacts:shotPassion/descr	</description>
+    <icon>	shotPassion 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale trigger abilityEquipment	</tags>
+    <type>	battleAbilities	</type>
+    <activationSound>	ability_start_button	</activationSound>
+    <deactivationSound>	ability_stop_button	</deactivationSound>
+    <refillSound>	ability_recharging	</refillSound>
+    <posteffectPrefab>	content/CGFPrefabs/steel_hunter/shot_passion_posteffect.prefab	</posteffectPrefab>
+    <usagePrefab>	content/CGFPrefabs/steel_hunter/shot_passion.prefab	</usagePrefab>
+    <script>	DamageModifierAbilityEquipment	  <visualScript>
+        <client>
+          <plan>	abilities/base_ability_controller_client	</plan>
+        </client>
+      </visualScript>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <damageFirstIncrease>	0.5	</damageFirstIncrease>
+      <addDuration>	4	</addDuration>
+      <reuseCount>	3	</reuseCount>
+      <consumeAmmo>	True	</consumeAmmo>
+      <duration>	15	</duration>
+      <damageIncreasePerShot>	0.15	</damageIncreasePerShot>
+      <maxDamageIncreasePerShot>	0.95	</maxDamageIncreasePerShot>
+      <additiveFactors></additiveFactors>
+      <multiplicativeFactors>
+        <chassis-shotDispersionFactors-movement>	0.8	</chassis-shotDispersionFactors-movement>
+        <chassis-shotDispersionFactors-rotation>	0.8	</chassis-shotDispersionFactors-rotation>
+        <gun-shotDispersionFactors-turretRotation>	0.8	</gun-shotDispersionFactors-turretRotation>
+        <gun-shotDispersionFactors-afterShot>	0.8	</gun-shotDispersionFactors-afterShot>
+        <gun-aimingTime>	0.8	</gun-aimingTime>
+        <gun-reloadTime>	0.8	</gun-reloadTime>
+      </multiplicativeFactors>
+    </script>
+    <kpi>
+      <add>
+        <name>	abilityDurationBonus	</name>
+        <value>	4	</value>
+      </add>
+      <add>
+        <name>	vehicleGunDamage	</name>
+        <value>	50	</value>
+        <specValue>	15	</specValue>
+      </add>
+      <mul>
+        <name>	vehicleGunReloadTime	</name>
+        <value>	-20	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunAimSpeed	</name>
+        <value>	20	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionAfterShot	</name>
+        <value>	-20	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionChassisMovement	</name>
+        <value>	-20	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionChassisRotation	</name>
+        <value>	-20	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionTurretRotation	</name>
+        <value>	-20	</value>
+      </mul>
+    </kpi>
+  </shot_passion>
 </equipments.xml>

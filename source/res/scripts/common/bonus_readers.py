@@ -20,6 +20,7 @@ from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE, INVOICE_LIMITS, ENTITLEMENT_OPS, DailyQuestsLevels, MAX_LOG_EXT_INFO_LEN, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from soft_exception import SoftException
 from customization_quests_common import validateCustomizationQuestToken
+from items import _xml
 if TYPE_CHECKING:
     from ResMgr import DataSection
 __all__ = ['readBonusSection', 'readUTC', 'SUPPORTED_BONUSES']
@@ -893,6 +894,8 @@ def __readBonus_optionalData(config, bonusReaders, section, eventType):
         properties['compensation'] = section['compensation'].asBool
     if section.has_key('shouldCompensated'):
         properties['shouldCompensated'] = section['shouldCompensated'].asBool
+    if section.has_key('mainRotationBranch'):
+        properties['mainRotationBranch'] = section['mainRotationBranch'].asBool
     if section.has_key('surprise'):
         properties['surprise'] = section['surprise'].asBool
     if IS_DEVELOPMENT:
@@ -957,7 +960,7 @@ def __readBonus_oneof(config, bonusReaders, bonus, section, eventType):
         else:
             for i in xrange(probabilityStageCount):
                 equalProbabilityValues[i] += probabilitiesList[i]
-                if isAlmostEqual(probabilitiesList[i], 0.0) and subBonus.get('properties', {}).get('compensation', False):
+                if isAlmostEqual(probabilitiesList[i], 0.0, epsilon=5e-06) and subBonus.get('properties', {}).get('compensation', False):
                     if nullProbabilityCompensations[i]:
                         raise SoftException("Compensation with 0.0 probability already exists inside 'oneof'")
                     nullProbabilityCompensations[i] = True
@@ -1013,6 +1016,21 @@ def __readBonus_oneof(config, bonusReaders, bonus, section, eventType):
         raise SoftException('Sum of bonus probabilities != 100', maximumBonusProbability)
     bonus.setdefault('groups', []).append({'oneof': (resultLimitIDs if resultLimitIDs else None, oneOfTemp)})
     return resultLimitIDs
+
+
+def __readBonusRotation(config, bonusReaders, section, eventType, checkLimit):
+    bonus = {}
+    if config.get('probabilityStageCount'):
+        raise SoftException('probabilityStageCount is not allowed to be used with rotation')
+    limitIDs, subBonus = __readBonusSubSection(config, bonusReaders, section['rotation'], eventType, checkLimit)
+    if not set(subBonus.keys()) == {'groups'}:
+        raise _xml.raiseWrongXml(None, 'rotation', 'The rotation should consist only <group> nodes.')
+    rotationLevelCount = len(subBonus['groups'])
+    if rotationLevelCount <= 1:
+        raise SoftException('The number of nodes <group> must be greater than 1')
+    config.setdefault('rotationLevelCount', rotationLevelCount)
+    bonus['rotation'] = subBonus
+    return (limitIDs, bonus)
 
 
 def __readBonus_dogTag(bonus, _name, section, eventType, checkLimit):
@@ -1138,7 +1156,8 @@ _RESERVED_NAMES = frozenset(['config',
  'shouldCompensated',
  'probabilityStageDependence',
  'bonusProbability',
- 'depthLevel'])
+ 'depthLevel',
+ 'mainRotationBranch'])
 SUPPORTED_BONUSES = set(__BONUS_READERS.iterkeys())
 __SORTED_BONUSES = sorted(SUPPORTED_BONUSES)
 SUPPORTED_BONUSES_IDS = dict(((n, i) for i, n in enumerate(__SORTED_BONUSES)))
@@ -1191,6 +1210,8 @@ def __readBonusConfig(section):
             config['showBonusInfo'] = data.asBool
         if name == 'showProbabilitiesInfo':
             config['showProbabilitiesInfo'] = data.asBool
+        if name == 'rotationLevelCount':
+            raise SoftException('<rotationLevelCount> is a reserved field, cannot be filled in')
         raise SoftException('Unknown config section: {}'.format(name))
 
     limitIDsLen = sum([ len(limitID) for limitID in config.get('limits', {}) ])
@@ -1205,7 +1226,8 @@ def readBonusSection(bonusRange, section, eventType=None, checkLimit=True):
     else:
         bonusReaders = getBonusReaders(bonusRange)
         config = __readBonusConfig(section['config']) if section.has_key('config') else {}
-        limitIDs, bonus = __readBonusSubSection(config, bonusReaders, section, eventType, checkLimit)
+        readerBonus = __readBonusRotation if section.has_key('rotation') else __readBonusSubSection
+        limitIDs, bonus = readerBonus(config, bonusReaders, section, eventType, checkLimit)
         if config:
             bonus['config'] = config
         return bonus

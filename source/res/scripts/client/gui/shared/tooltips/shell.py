@@ -126,11 +126,12 @@ class HeaderBlockConstructor(ShellTooltipBlockConstructor):
 
     def construct(self):
         shell = self.shell
+        shellKind = self.shell.kind
         formattedParameters = params_formatters.getFormattedParamsList(shell.descriptor, self._params)
         paramName = ModuleTooltipBlockConstructor.CALIBER
         paramValue = dict(formattedParameters).get(paramName)
-        formatterType = shell.type if shell.type in _PARAMS_FORMATTERS_BY_KIND else self.DEFAULT_FORMATTER
-        headerText = formatters.packTitleDescBlock(title=text_styles.highTitle(shell.userName), desc=text_styles.concatStylesToMultiLine(text_styles.main(backport.text(R.strings.item_types.shell.kinds.dyn(shell.type)())), _PARAMS_FORMATTERS_BY_KIND[formatterType](paramName, paramValue)), padding=formatters.packPadding(left=-15), descPadding=formatters.packPadding(top=4), gap=-4)
+        formatterType = shellKind if shellKind in _PARAMS_FORMATTERS_BY_KIND else self.DEFAULT_FORMATTER
+        headerText = formatters.packTitleDescBlock(title=text_styles.highTitle(shell.userName), desc=text_styles.concatStylesToMultiLine(text_styles.main(backport.text(R.strings.item_types.shell.kinds.dyn(shellKind)())), _PARAMS_FORMATTERS_BY_KIND[formatterType](paramName, paramValue)), padding=formatters.packPadding(left=-15), descPadding=formatters.packPadding(top=4), gap=-4)
         headerImage = formatters.packImageBlockData(img=shell.getBonusIcon(size='big'), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(right=30, top=-5, bottom=-5))
         return [headerText, headerImage]
 
@@ -274,23 +275,26 @@ class CommonStatsBlockConstructor(_BaseCommonStatsBlockConstructor):
 
     def _getDamagePackInfo(self):
         distanceDmg = self.shell.descriptor.distanceDmg
-        if distanceDmg is None:
-            return
-        else:
+        distanceFactor = self.shell.descriptor.distanceFactor
+        if distanceDmg is not None:
             distance = distanceDmg.distance
             return backport.text(R.strings.menu.moduleInfo.params.distanceDamage(), minDmg=backport.getNiceNumberFormat(distance.min), maxDmg=backport.getNiceNumberFormat(distance.max))
+        else:
+            return backport.text(R.strings.menu.moduleInfo.params.piercingDistanceFactor.footnote()) if distanceFactor is not None else None
 
     def _getAvgPiercingPowerPackInfo(self, pTable, tableData):
         asteriksTitle = None
         value = None
         if pTable != NO_DATA:
-            asteriksTitle = self._getAvgPiercingPowerTitle(pTable, tableData)
+            asteriksTitle = self._getAvgPiercingFootnote(pTable, tableData)
         if tableData and pTable is not None:
             value = '%s-%s' % (tableData[0][0], tableData[-1][0])
         return (value, asteriksTitle)
 
-    def _getAvgPiercingPowerTitle(self, pTable, tableData):
+    def _getAvgPiercingFootnote(self, pTable, tableData):
         if pTable is not None and tableData:
+            if self.shell.descriptor.distanceFactor is not None:
+                return backport.text(R.strings.menu.moduleInfo.params.piercingDistanceFactor.footnote())
             return backport.text(R.strings.menu.moduleInfo.params.piercingDistance.footnote(), minDist=tableData[0][1], maxDist=tableData[-1][1])
         else:
             return backport.text(R.strings.menu.moduleInfo.params.noPiercingDistance.footnoteFlame()) if self.shell.type == SHELL_TYPES.FLAME else backport.text(R.strings.menu.moduleInfo.params.noPiercingDistance.footnote())
@@ -313,6 +317,7 @@ class CommonStatsBlockConstructor(_BaseCommonStatsBlockConstructor):
             block = [formatters.packTitleDescBlock(title=text_styles.middleTitle(_ms(TOOLTIPS.TANKCARUSEL_MAINPROPERTY)), padding=formatters.packPadding(bottom=8))]
             asteriks = _ASTERISK
             asteriksTitles = []
+            hasDistanceFactor = self.shell.descriptor.distanceFactor
             for paramName, paramValue in params_formatters.getFormattedParamsList(self.shell.descriptor, self._params):
                 if paramName == ModuleTooltipBlockConstructor.CALIBER:
                     continue
@@ -327,10 +332,19 @@ class CommonStatsBlockConstructor(_BaseCommonStatsBlockConstructor):
                     paramValue = value or paramValue
                 if paramName == 'damage':
                     asteriksTitle = self._getDamagePackInfo()
+                if paramName == 'shotSpeed' and hasDistanceFactor:
+                    continue
+                if paramName == 'shotSpeedAccelerated' and not hasDistanceFactor:
+                    continue
+                if paramName == 'shotSpeedAccelerated' and hasDistanceFactor:
+                    asteriksTitle = backport.text(R.strings.menu.moduleInfo.params.piercingDistanceFactor.footnote())
                 if asteriksTitle is not None:
-                    asteriksTitles.append(asteriksTitle)
+                    if asteriksTitles and asteriksTitles[-1] != asteriksTitle:
+                        asteriksTitles.append(asteriksTitle)
+                        asteriks += _ASTERISK
+                    elif not asteriksTitles:
+                        asteriksTitles.append(asteriksTitle)
                     paramUnits += asteriks
-                    asteriks += _ASTERISK
                 block.append(self._packParameterBlock(backport.text(R.strings.menu.moduleInfo.params.dyn(paramName)()), paramValue, paramUnits))
 
             asteriks = ''

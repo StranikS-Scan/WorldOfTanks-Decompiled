@@ -15,7 +15,7 @@ from gui.vehicle_view_states import createState4CurrentVehicle
 from helpers import dependency
 from items.vehicles import VehicleDescr
 from helpers import isPlayerAccount, i18n
-from account_helpers.AccountSettings import AccountSettings, BOOTCAMP_VEHICLE, CURRENT_VEHICLE, ROYALE_VEHICLE, PORTAL_VEHICLE
+from account_helpers.AccountSettings import AccountSettings, BOOTCAMP_VEHICLE, CURRENT_VEHICLE, ROYALE_VEHICLE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.formatters import icons
@@ -289,9 +289,6 @@ class _CurrentVehicle(_CachedVehicle):
     def isOnlyForBattleRoyaleBattles(self):
         return self.isPresent() and self.item.isOnlyForBattleRoyaleBattles
 
-    def isOnlyForPortalBattlesVehicle(self):
-        return self.isPresent() and self.item.isOnlyForPortalBattlesVehicle
-
     def isInBootcamp(self):
         return bool(self.bootcampController.isInBootcamp())
 
@@ -403,8 +400,6 @@ class _CurrentVehicle(_CachedVehicle):
             AccountSettings.setFavorites(ROYALE_VEHICLE, vehInvID)
         elif self.isInBootcamp():
             AccountSettings.setFavorites(BOOTCAMP_VEHICLE, vehInvID)
-        elif self.isOnlyForPortalBattlesVehicle():
-            AccountSettings.setFavorites(PORTAL_VEHICLE, vehInvID)
         else:
             AccountSettings.setFavorites(CURRENT_VEHICLE, vehInvID)
         self.refreshModel()

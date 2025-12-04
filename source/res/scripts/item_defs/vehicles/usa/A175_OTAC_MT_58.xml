@@ -62,7 +62,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	16310	</weight>
-    <maxHealth>	1600	</maxHealth>
+    <maxHealth>	1500	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	180	</maxRegenHealth>
@@ -978,8 +978,8 @@
       <splineDesc>
         <trackPair>
           <trackPairIdx>	0	</trackPairIdx>
-          <segmentModelLeft>	vehicles/american/A175_OTAC_MT_58/track/segment.model	</segmentModelLeft>
-          <segmentModelRight>	vehicles/american/A175_OTAC_MT_58/track/segment.model	</segmentModelRight>
+          <segmentModelLeft>	vehicles/american/A175_OTAC_MT_58/track/segment_L.model	</segmentModelLeft>
+          <segmentModelRight>	vehicles/american/A175_OTAC_MT_58/track/segment_R.model	</segmentModelRight>
           <left>	vehicles/american/A175_OTAC_MT_58/track/left.track	</left>
           <right>	vehicles/american/A175_OTAC_MT_58/track/right.track	</right>
           <segmentLength>	0.128	</segmentLength>
@@ -1000,7 +1000,7 @@
           <segmentsInnerThickness>	-0.074884	</segmentsInnerThickness>
           <segmentsPlaneOffset>	-1.385	</segmentsPlaneOffset>
           <mainSegment>
-            <model>	vehicles/american/A175_OTAC_MT_58/track/segment.model	</model>
+            <model>	vehicles/american/A175_OTAC_MT_58/track/segment_L.model	</model>
             <length>	0.128264	</length>
           </mainSegment>
           <springsLength>
@@ -1202,7 +1202,7 @@
           <segmentsInnerThickness>	-0.082907	</segmentsInnerThickness>
           <segmentsPlaneOffset>	1.385	</segmentsPlaneOffset>
           <mainSegment>
-            <model>	vehicles/american/A175_OTAC_MT_58/track/segment.model	</model>
+            <model>	vehicles/american/A175_OTAC_MT_58/track/segment_R.model	</model>
             <length>	0.127356	</length>
           </mainSegment>
           <springsLength>
@@ -1450,7 +1450,7 @@
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8000	</weight>
       <maxHealth>	400	</maxHealth>
-      <rotationSpeed>	38	</rotationSpeed>
+      <rotationSpeed>	36	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
         <maxRegenHealth>	85	</maxRegenHealth>
@@ -1464,6 +1464,10 @@
       </surveyingDeviceHealth>
       <guns>
         <_152mm_XM81E1>	shared	  <maxAmmo>	28	</maxAmmo>
+          <unlocks>
+            <gun>	_105mm_T254	  <cost>	10	</cost>
+            </gun>
+          </unlocks>
           <armor>
             <armor_1>	330	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -1477,8 +1481,8 @@
             </armor_9>
             <gun>	60	</gun>
           </armor>
-          <shotDispersionRadius>	0.01	</shotDispersionRadius>
-          <reloadTime>	20	</reloadTime>
+          <shotDispersionRadius>	0.05	</shotDispersionRadius>
+          <reloadTime>	21	</reloadTime>
           <aimingTime>	1.1	</aimingTime>
           <invisibilityFactorAtShot>	0.15	</invisibilityFactorAtShot>
           <pitchLimits>
@@ -1545,6 +1549,88 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_152mm_XM81E1>
+        <_105mm_T254>	shared	  <maxAmmo>	50	</maxAmmo>
+          <armor>
+            <armor_1>	330	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_9>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_9>
+            <gun>	40	</gun>
+          </armor>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	8.4	</reloadTime>
+          <aimingTime>	2.1	</aimingTime>
+          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.34 10 0.40 0 0.60 0 0.66 10 1 10	</maxPitch>
+          </pitchLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	3.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	-0.000025 0.195603 1.347109	</anchorPosition>
+              <anchorDirection>	-0 0 0	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	-0.000042 0.278887 0.275187	</anchorPosition>
+              <anchorDirection>	-0 0 0	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	-0.000025 0.195603 1.34711	</anchorPosition>
+              <anchorDirection>	-0 0 0	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49000	</slotId>
+              <rayStart>	0 0.02 1.23	</rayStart>
+              <rayEnd>	0 0.02 1.73	</rayEnd>
+              <rayUp>	0.18 0 0	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <size>	0.5	</size>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <models>
+            <undamaged>	vehicles/american/A175_OTAC_MT_58/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/american/A175_OTAC_MT_58/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/american/A175_OTAC_MT_58/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A175_OTAC_MT_58/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A175_OTAC_MT_58/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_large	</effects>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
+          <camouflage>
+            <tiling>	0.925 0.925 0.000000 0.000000	</tiling>
+            <density>	58.9585 117.917	</density>
+            <aoTextureSize>	256 256	</aoTextureSize>
+          </camouflage>
+        </_105mm_T254>
       </guns>
       <models>
         <undamaged>	vehicles/american/A175_OTAC_MT_58/normal/lod0/Turret_01.model	</undamaged>
@@ -2091,26 +2177,35 @@
     </detailed>
   </physics>
   <extras>
-    <surprise>	NoneExtra : CustomAttributeModifier	  <modifiers>
+    <surprise>	NoneExtra : CustomAttributeModifier	  <vehicleFilter>
+        <include>
+          <componentFilters>
+            <gun>
+              <tags>	GLUM	</tags>
+            </gun>
+          </componentFilters>
+        </include>
+      </vehicleFilter>
+      <modifiers>
         <mul>
           <name>	dynAttrs/chassis/shotDispersionFactors/movement	</name>
-          <value>	100.0	</value>
+          <value>	12.5	</value>
         </mul>
         <mul>
           <name>	dynAttrs/chassis/shotDispersionFactors/rotation	</name>
-          <value>	100.0	</value>
+          <value>	12.5	</value>
         </mul>
         <mul>
           <name>	dynAttrs/gun/shotDispersionFactors/afterShot	</name>
-          <value>	100.0	</value>
+          <value>	12.5	</value>
         </mul>
         <mul>
           <name>	dynAttrs/gun/shotDispersionFactors/turretRotation	</name>
-          <value>	100.0	</value>
+          <value>	6.0	</value>
         </mul>
         <mul>
           <name>	dynAttrs/gun/aimingTime	</name>
-          <value>	0.25	</value>
+          <value>	0.55	</value>
         </mul>
       </modifiers>
     </surprise>

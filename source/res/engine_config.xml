@@ -151,7 +151,6 @@
     <disablePreloads>	false	</disablePreloads>
     <enforcePreloads>	false	</enforcePreloads>
     <entityCollision>	false	</entityCollision>
-    <particlesActive>	true	</particlesActive>
     <movementThreshold>	0.25	</movementThreshold>
   </entities>
   <ui>
@@ -387,6 +386,12 @@
           <name>	music_interactive_part_15.pck	</name>
         </bank>
         <bank>
+          <name>	music_interactive_alternative.bnk	</name>
+        </bank>
+        <bank>
+          <name>	music_interactive_alternative_part_01.pck	</name>
+        </bank>
+        <bank>
           <name>	wheel_vehicle_GUI.pck	</name>
         </bank>
         <bank>
@@ -405,10 +410,10 @@
           <name>	field_modernization.bnk	</name>
         </bank>
         <bank>
-          <name>	ev_portal_music.bnk	</name>
+          <name>	hangar_h03_mt_ny_voiceover.bnk	</name>
         </bank>
         <bank>
-          <name>	ev_portal_music.pck	</name>
+          <name>	hangar_h03_mt_ny_voiceover.pck	</name>
         </bank>
       </SFX_soundbanks_loadonce>
       <SFX_soundbanks_hangar>
@@ -601,6 +606,15 @@
         <bank>
           <name>	style_3D_F133_Projet_57_Ampere.bnk	</name>
         </bank>
+        <bank>
+          <name>	style_3D_A38_T92_3Dst_01.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_A175_OTAC_MT_58_02_3Dst_01.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_GB134_FV242B_Condor_3Dst_01.bnk	</name>
+        </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
         <bank>
@@ -775,6 +789,15 @@
         </bank>
         <bank>
           <name>	style_3D_F133_Projet_57_Ampere.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_A38_T92_3Dst_01.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_A175_OTAC_MT_58_02_3Dst_01.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_GB134_FV242B_Condor_3Dst_01.bnk	</name>
         </bank>
       </SFX_soundbanks_arena>
       <SFX_soundbanks_editor>

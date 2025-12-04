@@ -28,6 +28,8 @@ from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from new_year.skeletons.new_year import INewYearController
+from new_year.gui.game_control.ny_controller import isAllNyQuestsCompleted
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Window
     from gui.server_events.event_items import ServerEventAbstract, DailyQuest
@@ -54,6 +56,7 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
     itemsCache = dependency.descriptor(IItemsCache)
     __gui = dependency.descriptor(IGuiLoader)
     __playStreakController = dependency.descriptor(IPlayStreakController)
+    __nyController = dependency.descriptor(INewYearController)
 
     def __init__(self):
         settings = ViewSettings(R.views.lobby.daily.DailyQuestWidget(), ViewFlags.VIEW, DailyQuestsWidgetViewModel())
@@ -111,7 +114,9 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
          (self.viewModel.onPlayStreakClick, self.__onPlayStreakClick),
          (self.gameSession.onPremiumTypeChanged, self._onPremiumTypeChanged),
          (self.__playStreakController.onDataUpdated, self.__onPlayStreakUpdated),
-         (self.lobbyContext.getServerSettings().onServerSettingsChange, self.__onServerSettingsChanged))
+         (self.viewModel.onNyQuestsClick, self.__onNyQuestsClick),
+         (self.lobbyContext.getServerSettings().onServerSettingsChange, self.__onServerSettingsChanged),
+         (self.__nyController.onStateChanged, self.__updateNY))
 
     def _getListeners(self):
         return ((LobbySimpleEvent.CLOSE_HELPLAYOUT, self.__onHelpLayoutHide, EVENT_BUS_SCOPE.LOBBY), (LobbySimpleEvent.SHOW_HELPLAYOUT, self.__onHelpLayoutShow, EVENT_BUS_SCOPE.LOBBY))
@@ -172,6 +177,7 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
             self.__packQuestsModel(modelQuests, quests)
             self.__packQuestsModel(modelPremiumQuests, premiumQuests)
             self.__updateQuestsToBeIndicatedCompleted(tx, quests + premiumQuests, self.viewModel.getVisible())
+            self.__updateNyQuests(tx)
 
     def _markVisited(self):
         if self.__layout == LARGE_WIDGET_LAYOUT_ID:
@@ -203,8 +209,20 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
 
     def __onPlayStreakClick(self):
         showDailyQuests(subTab=DailyTabs.SERIAL)
-        if not AccountSettings.getPlayStreak(PlayStreak.PLAY_STREAK_CLICK):
-            AccountSettings.setPlayStreak(PlayStreak.PLAY_STREAK_CLICK, True)
+
+    def __onNyQuestsClick(self):
+        if not self.__nyController.isEnabled():
+            return
+        showDailyQuests(subTab=DailyTabs.NYQUESTS)
+
+    def __updateNyQuests(self, model):
+        isNYEnabled = self.__nyController.isEnabled()
+        model.setIsNyEnabled(isNYEnabled)
+        model.setIsAllNyQuestsComplete(isNYEnabled and isAllNyQuestsCompleted(self.__eventsCache))
+
+    def __updateNY(self):
+        with self.viewModel.transaction() as tx:
+            self.__updateNyQuests(tx)
 
     def __onHelpLayoutShow(self, _):
         windows = self.__gui.windowsManager.findWindows(predicateTooltipWindow)
@@ -221,6 +239,8 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
         self._markVisited()
 
     def __onServerSettingsChanged(self, diff=None):
+        with self.viewModel.transaction() as vm:
+            self.__updateNyQuests(vm)
         if PremiumConfigs.PREM_QUESTS not in diff:
             return
         diffConfig = diff.get(PremiumConfigs.PREM_QUESTS)

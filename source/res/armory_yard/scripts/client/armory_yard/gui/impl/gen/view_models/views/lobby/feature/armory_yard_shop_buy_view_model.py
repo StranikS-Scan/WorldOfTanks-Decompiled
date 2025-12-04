@@ -6,10 +6,10 @@ from gui.impl.gen.view_models.common.missions.bonuses.item_bonus_model import It
 from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_shop_item import ArmoryYardShopItem
 
 class ArmoryYardShopBuyViewModel(ViewModel):
-    __slots__ = ('onBuyProduct', 'onBack', 'onClose', 'onShowVehiclePreview')
+    __slots__ = ('onBuyProduct', 'onBack', 'onClose', 'onShowVehiclePreview', 'onShowStylePreview')
     MAX_VISIBLE_REWARDS = 4
 
-    def __init__(self, properties=6, commands=4):
+    def __init__(self, properties=6, commands=5):
         super(ArmoryYardShopBuyViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -66,3 +66,4 @@ class ArmoryYardShopBuyViewModel(ViewModel):
         self.onBack = self._addCommand('onBack')
         self.onClose = self._addCommand('onClose')
         self.onShowVehiclePreview = self._addCommand('onShowVehiclePreview')
+        self.onShowStylePreview = self._addCommand('onShowStylePreview')

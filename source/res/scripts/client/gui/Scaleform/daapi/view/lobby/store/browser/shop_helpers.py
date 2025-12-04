@@ -163,7 +163,3 @@ def getCosmic2024ShopUrl():
 
 def getComp7ProductsUrl():
     return _getUrl('comp7Products')
-
-
-def getPortalShopUrl():
-    return _getUrl('portalShop')

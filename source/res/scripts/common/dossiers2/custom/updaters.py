@@ -2,8 +2,10 @@
 # Embedded file name: scripts/common/dossiers2/custom/updaters.py
 import sys
 import struct
+import nations
 from functools import partial
 from comp7_helpers import archiveSeasonsGriffin, archiveMaxSeasonsGriffin, archiveCutSeasonsGriffin, addSeasonRecord, archiveSeasonsWolf, archiveMaxSeasonsWolf, archiveCutSeasonsWolf
+from dossiers2.custom.helpers import getTankExpertRequirements
 from dossiers2.common.updater_utils import getNewStaticSizeBlockValues, getStaticSizeBlockRecordValues
 from dossiers2.common.updater_utils import getDictBlockRecordValues, updateDictRecords
 from dossiers2.common.updater_utils import getNewBinarySetBlockValues, setStaticSizeBlockRecordValues
@@ -16,7 +18,7 @@ from VersionUpdater import VersionUpdaterBase
 from serialization import ComponentBinSerializer
 from wotdecorators import singleton
 from debug_utils import LOG_DEBUG_DEV
-ACCOUNT_DOSSIER_VERSION = 157
+ACCOUNT_DOSSIER_VERSION = 158
 ACCOUNT_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromAccountDossier%d'
 VEHICLE_DOSSIER_VERSION = 115
 VEHICLE_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromVehicleDossier%d'
@@ -7203,6 +7205,128 @@ def __updateFromAccountDossier156(compDescr):
     archiveCutSeasonsWolf(seasonsNumber, updateCtx)
     setVersion(updateCtx, 157)
     return (157, updateCtx['dossierCompDescr'])
+
+
+def __updateFromAccountDossier157(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'a15x15Cut',
+     'rareAchievements',
+     'total',
+     'a7x7Cut',
+     'max15x15',
+     'max7x7',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'historicalAchievements',
+     'historicalCut',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortBattlesCut',
+     'fortSorties',
+     'maxFortSorties',
+     'fortSortiesCut',
+     'fortBattlesInClan',
+     'maxFortBattlesInClan',
+     'fortSortiesInClan',
+     'maxFortSortiesInClan',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements',
+     'rated7x7',
+     'maxRated7x7',
+     'achievementsRated7x7',
+     'rated7x7Cut',
+     'globalMapMiddle',
+     'globalMapChampion',
+     'globalMapAbsolute',
+     'maxGlobalMapMiddle',
+     'maxGlobalMapChampion',
+     'maxGlobalMapAbsolute',
+     'globalMapCommonCut',
+     'fallout',
+     'falloutCut',
+     'maxFallout',
+     'falloutAchievements',
+     'ranked',
+     'maxRanked',
+     'rankedCut',
+     'rankedSeasons',
+     'a30x30',
+     'a30x30Cut',
+     'max30x30',
+     'markOfMasteryCut',
+     'playerBadges',
+     'epicBattle',
+     'epicBattleCut',
+     'maxEpicBattle',
+     'epicBattleAchievements',
+     'rankedSeason1',
+     'rankedSeason2',
+     'rankedSeason3',
+     'maxRankedSeason1',
+     'maxRankedSeason2',
+     'maxRankedSeason3',
+     'rankedCutSeason1',
+     'rankedCutSeason2',
+     'rankedCutSeason3',
+     'rankedArchive',
+     'maxRankedArchive',
+     'rankedCutArchive',
+     'epicSeasons',
+     'battleRoyaleSeasons',
+     'ranked_10x10',
+     'maxRanked_10x10',
+     'rankedCut_10x10',
+     'steamAchievements',
+     'comp7Season1',
+     'maxComp7Season1',
+     'comp7CutSeason1',
+     'comp7Season2',
+     'maxComp7Season2',
+     'comp7CutSeason2',
+     'mtAchievements',
+     'mt_versusAI',
+     'mt_maxVersusAI',
+     'mt_versusAICut',
+     'comp7Season3',
+     'maxComp7Season3',
+     'comp7CutSeason3',
+     'comp7ArchiveGriffin',
+     'maxComp7ArchiveGriffin',
+     'comp7CutArchiveGriffin',
+     'comp7Season4',
+     'maxComp7Season4',
+     'comp7CutSeason4']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    vehTypeFrags = {vehID:kills for (vehID), kills in getDictBlockRecordValues(updateCtx, 'vehTypeFrags', 'I', 'H').iteritems()}
+    achievementsExpertPacking = {'tankExpertStrg': (86, 'H')}
+    resultBits = 0
+    res = getTankExpertRequirements(vehTypeFrags)
+    for record, value in res.iteritems():
+        if len(value) <= 0:
+            bitNum = int(record.split('tankExpert')[1]) + 1 if record.split('tankExpert')[1] else 0
+            resultBits |= 1 << bitNum
+
+    tankExpertValue = getStaticSizeBlockRecordValues(updateCtx, 'achievements', achievementsExpertPacking)
+    medalsAchieved = tankExpertValue.get('tankExpertStrg', 0) | resultBits
+    records = [(86, 'H', medalsAchieved)]
+    updateStaticSizeBlockRecords(updateCtx, 'achievements', records)
+    setVersion(updateCtx, 158)
+    return (158, updateCtx['dossierCompDescr'])
 
 
 def __updateFromVehicleDossier64(compDescr):

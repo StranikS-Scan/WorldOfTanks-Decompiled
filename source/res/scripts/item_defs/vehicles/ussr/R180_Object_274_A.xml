@@ -1053,7 +1053,7 @@
           <trackPairIdx>	0	</trackPairIdx>
           <leftMaterial>	track_mat_L_skinned	</leftMaterial>
           <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-          <textureScale>	-2.3	</textureScale>
+          <textureScale>	-2.8	</textureScale>
           <trackDebris>
             <isLeft>	true	</isLeft>
             <destructionEffect></destructionEffect>
@@ -1246,7 +1246,7 @@
         <group>
           <isLeft>	true	</isLeft>
           <template>	W_L	</template>
-          <radius>	0.280119	</radius>
+          <radius>	0.29	</radius>
           <startIndex>	0	</startIndex>
           <count>	7	</count>
         </group>
@@ -1274,7 +1274,7 @@
         <group>
           <isLeft>	false	</isLeft>
           <template>	W_R	</template>
-          <radius>	0.280119	</radius>
+          <radius>	0.29	</radius>
           <startIndex>	0	</startIndex>
           <count>	7	</count>
         </group>
@@ -1294,7 +1294,7 @@
       <topRightCarryingPoint>	1.44875 2.13773	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
-      <trackThickness>	-0.003	</trackThickness>
+      <trackThickness>	0	</trackThickness>
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>
@@ -1432,7 +1432,7 @@
           <left>	vehicles/russian/R180_Object_274_A/track/left.track	</left>
           <right>	vehicles/russian/R180_Object_274_A/track/right.track	</right>
           <segmentLength>	0.148	</segmentLength>
-          <segmentOffset>	0.182	</segmentOffset>
+          <segmentOffset>	0.16	</segmentOffset>
           <atlas>
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
@@ -1443,8 +1443,8 @@
       <physicalTracks>
         <left>
           <segmentsCount>	90	</segmentsCount>
-          <segmentsOuterThickness>	0.042857	</segmentsOuterThickness>
-          <segmentsInnerThickness>	-0.004486	</segmentsInnerThickness>
+          <segmentsOuterThickness>	0.03	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.005	</segmentsInnerThickness>
           <segmentsPlaneOffset>	-1.449	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
@@ -1538,7 +1538,7 @@
             <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L4	</name>
-              <startAngle>	-2.85291	</startAngle>
+              <startAngle>	-2.75	</startAngle>
               <teethCount>	10	</teethCount>
             </sync>
             <sync>
@@ -1638,8 +1638,8 @@
         </left>
         <right>
           <segmentsCount>	90	</segmentsCount>
-          <segmentsOuterThickness>	0.042857	</segmentsOuterThickness>
-          <segmentsInnerThickness>	-0.004486	</segmentsInnerThickness>
+          <segmentsOuterThickness>	0.03	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.005	</segmentsInnerThickness>
           <segmentsPlaneOffset>	1.449	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
@@ -1733,7 +1733,7 @@
             <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R4	</name>
-              <startAngle>	-2.8678	</startAngle>
+              <startAngle>	-2.75	</startAngle>
               <teethCount>	10	</teethCount>
             </sync>
             <sync>

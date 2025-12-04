@@ -259,6 +259,9 @@ class MENU(object):
     TANKCAROUSEL_VEHICLESTATES_INPREMIUMIGRONLY = '#menu:tankCarousel/vehicleStates/inPremiumIgrOnly'
     TANKCAROUSEL_VEHICLESTATES_BUYTANK = '#menu:tankCarousel/vehicleStates/buyTank'
     TANKCAROUSEL_VEHICLESTATES_BUYTANKEMPTYCOUNT = '#menu:tankCarousel/vehicleStates/buyTankEmptyCount'
+    TANKCAROUSEL_VEHICLESTATES_NYTANK = '#menu:tankCarousel/vehicleStates/nyTank'
+    TANKCAROUSEL_VEHICLESTATES_NYTANKEMPTYCOUNT = '#menu:tankCarousel/vehicleStates/nyTankEmptyCount'
+    TANKCAROUSEL_VEHICLESTATES_NYTANKSLOTSFULL = '#menu:tankCarousel/vehicleStates/nyTankSlotsFull'
     TANKCAROUSEL_VEHICLESTATES_BUYSLOT = '#menu:tankCarousel/vehicleStates/buySlot'
     TANKCAROUSEL_VEHICLESTATES_RESTORETANK = '#menu:tankCarousel/vehicleStates/restoreTank'
     TANKCAROUSEL_VEHICLESTATES_RESTORETANKCOUNT = '#menu:tankCarousel/vehicleStates/restoreTankCount'
@@ -533,10 +536,14 @@ class MENU(object):
     TANK_PARAMS_AUTORELOADTIME = '#menu:tank_params/autoReloadTime'
     TANK_PARAMS_RELOADTIMESECS = '#menu:tank_params/reloadTimeSecs'
     TANK_PARAMS_PIERCINGPOWER = '#menu:tank_params/piercingPower'
+    TANK_PARAMS_DISTANCEFACTORPIERCINGPOWER = '#menu:tank_params/distanceFactorPiercingPower'
+    TANK_PARAMS_SHORTENED_DISTANCEFACTORPIERCINGPOWER = '#menu:tank_params/shortened/distanceFactorPiercingPower'
     TANK_PARAMS_DAMAGE = '#menu:tank_params/damage'
     TANK_PARAMS_DISTANCEDAMAGE = '#menu:tank_params/distanceDamage'
+    TANK_PARAMS_DISTANCEFACTORDAMAGE = '#menu:tank_params/distanceFactorDamage'
     TANK_PARAMS_AVGDAMAGE = '#menu:tank_params/avgDamage'
     TANK_PARAMS_SHOTSPEED = '#menu:tank_params/shotSpeed'
+    TANK_PARAMS_SHOTSPEEDACCELERATED = '#menu:tank_params/shotSpeedAccelerated'
     TANK_PARAMS_AVGPIERCINGPOWER = '#menu:tank_params/avgPiercingPower'
     TANK_PARAMS_SHORTENED_AVGPIERCINGPOWER = '#menu:tank_params/shortened/avgPiercingPower'
     TANK_PARAMS_AVGDAMAGEPERMINUTE = '#menu:tank_params/avgDamagePerMinute'
@@ -626,6 +633,8 @@ class MENU(object):
     EXTRAPARAMS_DESC = '#menu:extraParams/desc'
     EXTRAPARAMS_NAME_VEHICLEGUNSHOTDISPERSION = '#menu:extraParams/name/vehicleGunShotDispersion'
     EXTRAPARAMS_NAME_VEHICLEGUNRELOADTIMERECEIVESHOT = '#menu:extraParams/name/vehicleGunReloadTimeReceiveShot'
+    EXTRAPARAMS_NAME_VEHICLEGUNRELOADTIME = '#menu:extraParams/name/vehicleGunReloadTime'
+    EXTRAPARAMS_NAME_VEHICLEGUNRELOADPENALTY = '#menu:extraParams/name/vehicleGunReloadPenalty'
     EXTRAPARAMS_NAME_LIMITSFORGUNBOOST = '#menu:extraParams/name/limitsForGunBoost'
     EXTRAPARAMS_NAME_TEMPERATURESTATESCOUNT = '#menu:extraParams/name/temperatureStatesCount'
     EXTRAPARAMS_NAME_TEMPERATUREHEATINGTIME = '#menu:extraParams/name/temperatureHeatingTime'
@@ -667,17 +676,21 @@ class MENU(object):
     EXTRAPARAMS_NAME_DEMASKMOVINGFACTOR = '#menu:extraParams/name/demaskMovingFactor'
     EXTRAPARAMS_NAME_DEMASKFOLIAGEFACTOR = '#menu:extraParams/name/demaskFoliageFactor'
     EXTRAPARAMS_NAME_VEHICLEGUNSHOTDISPERSIONAFTERSHOT = '#menu:extraParams/name/vehicleGunShotDispersionAfterShot'
+    EXTRAPARAMS_NAME_ABILITYDURATIONBONUS = '#menu:extraParams/name/abilityDurationBonus'
+    EXTRAPARAMS_NAME_ABILITYCOOLDOWNBONUS = '#menu:extraParams/name/abilityCooldownBonus'
+    EXTRAPARAMS_NAME_VEHICLEGUNDAMAGE = '#menu:extraParams/name/vehicleGunDamage'
     EXTRAPARAMS_NAME_VEHICLEGUNSHOTDISPERSIONCHASSISMOVEMENT = '#menu:extraParams/name/vehicleGunShotDispersionChassisMovement'
     EXTRAPARAMS_NAME_VEHICLEGUNSHOTDISPERSIONCHASSISROTATION = '#menu:extraParams/name/vehicleGunShotDispersionChassisRotation'
     EXTRAPARAMS_NAME_VEHICLEGUNSHOTDISPERSIONTURRETROTATION = '#menu:extraParams/name/vehicleGunShotDispersionTurretRotation'
     EXTRAPARAMS_NAME_VEHICLEGUNSHOTDISPERSIONWHILEGUNDAMAGED = '#menu:extraParams/name/vehicleGunShotDispersionWhileGunDamaged'
     EXTRAPARAMS_NAME_VEHICLERAMDAMAGERESISTANCE = '#menu:extraParams/name/vehicleRamDamageResistance'
+    EXTRAPARAMS_NAME_VEHICLEGUNAIMSPEED = '#menu:extraParams/name/vehicleGunAimSpeed'
     EXTRAPARAMS_NAME_STUNRESISTANCEEFFECTFACTOR = '#menu:extraParams/name/stunResistanceEffectFactor'
     EXTRAPARAMS_NAME_COMMANDERHITCHANCE = '#menu:extraParams/name/commanderHitChance'
     EXTRAPARAMS_NAME_RADIOMANHITCHANCE = '#menu:extraParams/name/radiomanHitChance'
     EXTRAPARAMS_NAME_WOUNDEDCREWEFFICIENCY = '#menu:extraParams/name/woundedCrewEfficiency'
     EXTRAPARAMS_NAME_VEHICLEFUELTANKLESIONCHANCE = '#menu:extraParams/name/vehicleFuelTankLesionChance'
-    EXTRAPARAMS_NAME_VEHICLERAMCHASSISDAMAGERESISTANCE = '#menu:extraParams/name/vehicleRamChassisDamageResistance'
+    EXTRAPARAMS_NAME_TRACKRAMMINGDAMAGEFACTOR = '#menu:extraParams/name/trackRammingDamageFactor'
     EXTRAPARAMS_NAME_DAMAGEENEMIESBYRAMMING = '#menu:extraParams/name/damageEnemiesByRamming'
     EXTRAPARAMS_NAME_VEHICLEINVISIBILITYAFTERSHOT = '#menu:extraParams/name/vehicleInvisibilityAfterShot'
     EXTRAPARAMS_NAME_DAMAGEANDPIERCINGDISTRIBUTIONLOWERBOUND = '#menu:extraParams/name/damageAndPiercingDistributionLowerBound'
@@ -1155,6 +1168,7 @@ class MENU(object):
     MODULEINFO_HYDRAULICAUTOSIEGECHASSISLABEL = '#menu:moduleInfo/hydraulicAutoSiegeChassisLabel'
     MODULEINFO_HYDRAULICWHEELEDCHASSISLABEL = '#menu:moduleInfo/hydraulicWheeledChassisLabel'
     MODULEINFO_PARAMS_SHOTSPEED = '#menu:moduleInfo/params/shotSpeed'
+    MODULEINFO_PARAMS_SHOTSPEEDACCELERATED = '#menu:moduleInfo/params/shotSpeedAccelerated'
     MODULEINFO_TURBOSHAFTENGINE = '#menu:moduleInfo/turboshaftEngine'
     MODULEINFO_ROCKETACCELERATIONENGINE = '#menu:moduleInfo/rocketAccelerationEngine'
     MODULEINFO_THERMALVISIONTURRET = '#menu:moduleInfo/thermalVisionTurret'
@@ -1226,6 +1240,7 @@ class MENU(object):
     MODULEINFO_PARAMS_PIERCINGDISTANCE = '#menu:moduleInfo/params/piercingDistance'
     MODULEINFO_PARAMS_MAXSHOTDISTANCE = '#menu:moduleInfo/params/maxShotDistance'
     MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTEFLAME = '#menu:moduleInfo/params/noPiercingDistance/footnoteFlame'
+    MODULEINFO_PARAMS_PIERCINGDISTANCEFACTOR_FOOTNOTE = '#menu:moduleInfo/params/piercingDistanceFactor/footnote'
     MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE = '#menu:moduleInfo/params/noPiercingDistance/footnote'
     MODULEINFO_PARAMS_PIERCINGDISTANCE_FOOTNOTE = '#menu:moduleInfo/params/piercingDistance/footnote'
     MODULEINFO_PARAMS_DISTANCEDAMAGE = '#menu:moduleInfo/params/distanceDamage'
@@ -1273,6 +1288,7 @@ class MENU(object):
     VEHICLEINFO_PARAMS_PIERCINGPOWER = '#menu:vehicleInfo/params/piercingPower'
     VEHICLEINFO_PARAMS_AVGDAMAGE = '#menu:vehicleInfo/params/avgDamage'
     VEHICLEINFO_PARAMS_SHOTSPEED = '#menu:vehicleInfo/params/shotSpeed'
+    VEHICLEINFO_PARAMS_SHOTSPEEDACCELERATED = '#menu:vehicleInfo/params/shotSpeedAccelerated'
     VEHICLEINFO_PARAMS_AVGPIERCINGPOWER = '#menu:vehicleInfo/params/avgPiercingPower'
     VEHICLEINFO_PARAMS_TURRETROTATIONSPEED = '#menu:vehicleInfo/params/turretRotationSpeed'
     VEHICLEINFO_PARAMS_CIRCULARVISIONRADIUS = '#menu:vehicleInfo/params/circularVisionRadius'
@@ -1835,7 +1851,6 @@ class MENU(object):
     BONUSTYPE_43 = '#menu:bonusType/43'
     BONUSTYPE_44 = '#menu:bonusType/44'
     BONUSTYPE_50 = '#menu:bonusType/50'
-    BONUSTYPE_61 = '#menu:bonusType/61'
     FORTIFICATIONCTX_ASSIGNEDPLAYERS = '#menu:fortificationCtx/assignedPlayers'
     FORTIFICATIONCTX_PREPAREORDER = '#menu:fortificationCtx/prepareOrder'
     FORTIFICATIONCTX_CLANDESCRIPTION_OPENCLANCARD = '#menu:fortificationCtx/clanDescription/openClanCard'
@@ -2362,7 +2377,6 @@ class MENU(object):
     CONTEXTMENU_CREWWIDGETDISMISS = '#menu:contextMenu/crewWidgetDismiss'
     CONTEXTMENU_CREWWIDGETQUICKTRAINING = '#menu:contextMenu/crewWidgetQuickTraining'
     CONTEXTMENU_CREWWIDGETCHANGESPECIALIZATION = '#menu:contextMenu/crewWidgetChangeSpecialization'
-    CONTEXTMENU_CREATEPORTALSQUAD = '#menu:contextMenu/createPortalSquad'
     CONTEXTMENU_ENUM = (CONTEXTMENU_EXCHANGE,
      CONTEXTMENU_VEHICLEINFO,
      CONTEXTMENU_VEHICLEINFOEX,
@@ -2471,8 +2485,7 @@ class MENU(object):
      CONTEXTMENU_CREWWIDGETSENDTOTOBARRACKS,
      CONTEXTMENU_CREWWIDGETDISMISS,
      CONTEXTMENU_CREWWIDGETQUICKTRAINING,
-     CONTEXTMENU_CREWWIDGETCHANGESPECIALIZATION,
-     CONTEXTMENU_CREATEPORTALSQUAD)
+     CONTEXTMENU_CREWWIDGETCHANGESPECIALIZATION)
     NATIONS_ENUM = (NATIONS_TITLE,
      NATIONS_USSR,
      NATIONS_GERMANY,
@@ -2526,6 +2539,9 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_INPREMIUMIGRONLY,
      TANKCAROUSEL_VEHICLESTATES_BUYTANK,
      TANKCAROUSEL_VEHICLESTATES_BUYTANKEMPTYCOUNT,
+     TANKCAROUSEL_VEHICLESTATES_NYTANK,
+     TANKCAROUSEL_VEHICLESTATES_NYTANKEMPTYCOUNT,
+     TANKCAROUSEL_VEHICLESTATES_NYTANKSLOTSFULL,
      TANKCAROUSEL_VEHICLESTATES_BUYSLOT,
      TANKCAROUSEL_VEHICLESTATES_RESTORETANK,
      TANKCAROUSEL_VEHICLESTATES_RESTORETANKCOUNT,
@@ -2748,10 +2764,14 @@ class MENU(object):
      TANK_PARAMS_AUTORELOADTIME,
      TANK_PARAMS_RELOADTIMESECS,
      TANK_PARAMS_PIERCINGPOWER,
+     TANK_PARAMS_DISTANCEFACTORPIERCINGPOWER,
+     TANK_PARAMS_SHORTENED_DISTANCEFACTORPIERCINGPOWER,
      TANK_PARAMS_DAMAGE,
      TANK_PARAMS_DISTANCEDAMAGE,
+     TANK_PARAMS_DISTANCEFACTORDAMAGE,
      TANK_PARAMS_AVGDAMAGE,
      TANK_PARAMS_SHOTSPEED,
+     TANK_PARAMS_SHOTSPEEDACCELERATED,
      TANK_PARAMS_AVGPIERCINGPOWER,
      TANK_PARAMS_SHORTENED_AVGPIERCINGPOWER,
      TANK_PARAMS_AVGDAMAGEPERMINUTE,

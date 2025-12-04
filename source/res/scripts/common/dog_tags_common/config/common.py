@@ -30,6 +30,7 @@ class ComponentPurpose(Enum):
     DEDICATION = 'DEDICATION'
     SKILL = 'SKILL'
     RANKED_SKILL = 'RANKED_SKILL'
+    STATIC = 'STATIC'
 
 
 SEND_NEW_GRADING_NOTIFICATION = (ComponentPurpose.TRIUMPH, ComponentPurpose.DEDICATION)
@@ -82,6 +83,8 @@ class ValidateException(DogTagsException):
     DEFAULT_HIDDEN = 12
     CANNOT_BE_DEFAULT = 13
     UNLOCK_KEY_AND_EXTERNAL_UNLOCK = 14
+    HAS_PROGRESS_KEY = 15
+    HAS_LIGHTING = 16
     ERR_STR = {HAS_GRADES: PREFIX + 'Component with id = %s cannot have grades. Grades: %s',
      HAS_UNLOCK_KEY: PREFIX + 'Component with id = %s cannot have unlockKey. UnlockKey: %s',
      WRONG_NUMBER_OF_GRADES: PREFIX + 'Component with id = %s has wrong number of grades. It should have %s grades.',
@@ -93,7 +96,9 @@ class ValidateException(DogTagsException):
      SHOULD_BE_DEFAULT_OR_HAS_UNLOCK_KEY: PREFIX + 'Component with id = %s should be default or has unlock key or has external unlock flag',
      DEFAULT_HIDDEN: PREFIX + 'Component with id=%s is default AND hidden. This is forbidden.',
      CANNOT_BE_DEFAULT: PREFIX + 'Component with id=%s is default but this is forbidden.',
-     UNLOCK_KEY_AND_EXTERNAL_UNLOCK: PREFIX + 'Component with id=%s has unlock key and external unlock flag.'}
+     UNLOCK_KEY_AND_EXTERNAL_UNLOCK: PREFIX + 'Component with id=%s has unlock key and external unlock flag.',
+     HAS_PROGRESS_KEY: PREFIX + 'Component of type STATIC with id=%s cannot has progress key.',
+     HAS_LIGHTING: PREFIX + 'Custom lighting is supported only for STATIC components.'}
 
     def __str__(self):
         return ValidateException.ERR_STR[self.err] % ((self.err,) + self.args)
@@ -109,6 +114,7 @@ class ParameterType(Enum):
     TYPE = 6
     NUMBER_TYPE = 7
     FLOAT_LIST = 8
+    FLOAT = 9
 
 
 class Visibility(Enum):

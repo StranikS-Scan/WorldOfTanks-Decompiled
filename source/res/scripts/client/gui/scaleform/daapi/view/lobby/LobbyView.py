@@ -155,6 +155,7 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         self.addListener(events.GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade, EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.HIDE_LOBBY_SUB_CONTAINER_ITEMS, self.__hideSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.REVEAL_LOBBY_SUB_CONTAINER_ITEMS, self.__revealSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
+        self.addListener(events.LobbyHeaderEvent.TOGGLE_VISIBILITY, self.__onToggleVisibilityHeader, scope=EVENT_BUS_SCOPE.LOBBY)
         g_playerEvents.onEntityCheckOutEnqueued += self._onEntityCheckoutEnqueued
         g_playerEvents.onAccountBecomeNonPlayer += self._onAccountBecomeNonPlayer
         viewLifecycleHandler = _LobbySubViewsLifecycleHandler()
@@ -189,6 +190,7 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.gui.windowsManager.onViewStatusChanged -= self.__onViewStatusChanged
         self.gui.windowsManager.onWindowStatusChanged -= self.__onViewStatusChanged
+        self.removeListener(events.LobbyHeaderEvent.TOGGLE_VISIBILITY, self.__onToggleVisibilityHeader, scope=EVENT_BUS_SCOPE.LOBBY)
         View._dispose(self)
         return
 
@@ -265,3 +267,6 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
     def __onSettingsChanged(self, diff):
         if GRAPHICS.UI_EFFECTS in diff:
             self.__updateUIEffectSettingsChanged()
+
+    def __onToggleVisibilityHeader(self, event):
+        self.as_setHeaderVisibleS(event.ctx.get('visible', False))

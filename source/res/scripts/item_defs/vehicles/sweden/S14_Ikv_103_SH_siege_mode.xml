@@ -3140,7 +3140,6 @@
             <collisionModelClient>	vehicles/sweden/S14_Ikv_103_SH/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-          <shotOffset>	0.000000 0.022667 0.000000	</shotOffset>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3172,6 +3171,7 @@
           </customizationSlots>
           <effects>	shot_large	</effects>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <shotOffset>	0 0.020757 0	</shotOffset>
           <camouflage>
             <density>	168.594 171.679	</density>
             <aoTextureSize>	1024 1024	</aoTextureSize>

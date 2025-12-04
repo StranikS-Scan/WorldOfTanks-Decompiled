@@ -3,6 +3,7 @@
 import typing
 if typing.TYPE_CHECKING:
     from gui.impl.pub import ViewImpl
+    from frameworks.wulf import ViewEvent
 
 class RegisteredTooltips(object):
     REGISTERED_SIMPLE_TOOLTIPS = {}

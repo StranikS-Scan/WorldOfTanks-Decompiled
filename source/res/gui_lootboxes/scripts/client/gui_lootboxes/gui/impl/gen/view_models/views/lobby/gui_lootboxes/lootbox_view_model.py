@@ -8,7 +8,7 @@ from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.guaranteed
 class LootboxViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=17, commands=0):
+    def __init__(self, properties=18, commands=0):
         super(LootboxViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -97,31 +97,37 @@ class LootboxViewModel(ViewModel):
     def setIsInfinite(self, value):
         self._setBool(13, value)
 
+    def getHasUniqueBack(self):
+        return self._getBool(14)
+
+    def setHasUniqueBack(self, value):
+        self._setBool(14, value)
+
     def getUnlockKeyIDs(self):
-        return self._getArray(14)
+        return self._getArray(15)
 
     def setUnlockKeyIDs(self, value):
-        self._setArray(14, value)
+        self._setArray(15, value)
 
     @staticmethod
     def getUnlockKeyIDsType():
         return int
 
     def getBonusGroups(self):
-        return self._getArray(15)
+        return self._getArray(16)
 
     def setBonusGroups(self, value):
-        self._setArray(15, value)
+        self._setArray(16, value)
 
     @staticmethod
     def getBonusGroupsType():
         return unicode
 
     def getProgressionStage(self):
-        return self._getNumber(16)
+        return self._getNumber(17)
 
     def setProgressionStage(self, value):
-        self._setNumber(16, value)
+        self._setNumber(17, value)
 
     def _initialize(self):
         super(LootboxViewModel, self)._initialize()
@@ -139,6 +145,7 @@ class LootboxViewModel(ViewModel):
         self._addStringProperty('descriptionKey', 'unknown')
         self._addResourceProperty('videoRes', R.invalid())
         self._addBoolProperty('isInfinite', True)
+        self._addBoolProperty('hasUniqueBack', False)
         self._addArrayProperty('unlockKeyIDs', Array())
         self._addArrayProperty('bonusGroups', Array())
         self._addNumberProperty('progressionStage', 0)

@@ -8,17 +8,20 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl import backport
 from gui.impl.gen import R
 from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_rewards_vehicle_model import ArmoryYardRewardsVehicleModel
-from armory_yard_constants import isArmoryYardBattleToken, FEATURE_NAME_BASE
-from gui.impl.backport import createTooltipData, TooltipData
+from armory_yard_constants import isArmoryYardBattleToken, FEATURE_NAME_BASE, ARMORY_YARD_COIN_NAME
+from gui.impl.backport import TooltipData
 from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
-from gui.server_events.bonuses import getNonQuestBonuses, splitBonuses, mergeBonuses, VehiclesBonus, TokensBonus
+from gui.impl.gen.view_models.common.missions.bonuses.icon_bonus_model import IconBonusModel
+from gui.server_events.bonuses import getNonQuestBonuses, splitBonuses, mergeBonuses, VehiclesBonus, TokensBonus, CurrenciesBonus, CustomizationsBonus
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import getNationLessName
-from gui.shared.missions.packers.bonus import getDefaultBonusPackersMap, BaseBonusUIPacker, BonusUIPacker, BACKPORT_TOOLTIP_CONTENT_ID, TokenBonusUIPacker, SimpleBonusUIPacker, VehiclesBonusUIPacker, getDefaultBonusPacker
+from gui.shared.missions.packers.bonus import getDefaultBonusPackersMap, BonusUIPacker, BACKPORT_TOOLTIP_CONTENT_ID, TokenBonusUIPacker, VehiclesBonusUIPacker, getDefaultBonusPacker, PremiumDaysBonusPacker, getLocalizedBonusName, SimpleBonusUIPacker, CustomizationBonusUIPacker
 from items.vehicles import getVehicleClassFromVehicleType
 from gui.battle_pass.battle_pass_bonuses_packers import TmanTemplateBonusPacker
 if typing.TYPE_CHECKING:
     BonusModelType = typing.TypeVar('BonusModelType', bound=BonusModel)
     from gui.shared.gui_items.Vehicle import Vehicle
+    from typing import List
     from frameworks.wulf import Array
     from gui.impl.gen.view_models.views.lobby.battle_pass.reward_item_model import RewardItemModel
 _logger = logging.getLogger(__name__)
@@ -53,28 +56,98 @@ class ArmoryYardTokenBonusUIPacker(TokenBonusUIPacker):
         return model
 
 
-class ArmoryYardMainVehiclesBonusUIPacker(BaseBonusUIPacker):
+class ArmoryYardCurrencyBonusUIPacker(SimpleBonusUIPacker):
 
     @classmethod
     def _pack(cls, bonus):
-        return [ cls._packVehicle(vehicle, vehicleInfo) for vehicle, vehicleInfo in bonus.getVehicles() ]
+        label = getLocalizedBonusName(bonus.getCode())
+        return [cls._packSingleBonus(bonus, label if label else '')]
+
+    @classmethod
+    def _packCommon(cls, bonus, model):
+        model.setName(bonus.getCode())
+        model.setIsCompensation(bonus.isCompensation())
+        return model
+
+    @classmethod
+    def _packSingleBonus(cls, bonus, label):
+        model = cls._getBonusModel()
+        cls._packCommon(bonus, model)
+        model.setValue(str(bonus.getValue()))
+        model.setLabel(label)
+        return model
 
     @classmethod
     def _getToolTip(cls, bonus):
-        return [ createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.ARMORY_YARD_AWARD_VEHICLE, specialArgs=[vehicle.intCD]) for vehicle, _ in bonus.getVehicles() ]
+        tooltipData = [TooltipData(tooltip=None, isSpecial=True, specialAlias=None, specialArgs=[bonus.getCode()])]
+        return tooltipData
 
     @classmethod
     def _getContentId(cls, bonus):
-        return [ BACKPORT_TOOLTIP_CONTENT_ID for _ in bonus.getVehicles() ]
+        return [R.views.armory_yard.lobby.feature.tooltips.ArmoryYardCurrencyTooltipView() if bonus.getCode() == ARMORY_YARD_COIN_NAME else BACKPORT_TOOLTIP_CONTENT_ID]
+
+
+class ArmoryCustomizationBonusUIPacker(CustomizationBonusUIPacker):
 
     @classmethod
-    def _packVehicle(cls, vehicle, _):
-        vehicleModel = ArmoryYardRewardsVehicleModel()
-        packVehicleModel(vehicleModel, vehicle)
-        return vehicleModel
+    def _pack(cls, bonus):
+        result = []
+        for item in bonus.getCustomizations():
+            if item is None:
+                continue
+            label = cls._getLabel(bonus.getC11nItem(item))
+            result.append(cls._packSingleBonus(bonus, item, label))
+
+        return result
+
+    @classmethod
+    def _packSingleBonus(cls, bonus, item, label):
+        model = cls._getBonusModel()
+        cls._packCommon(bonus, model)
+        model.setValue(str(item.get('value', 0)))
+        model.setIcon(str(bonus.getC11nItem(item).itemTypeName))
+        model.setIcon(cls._getIcon(bonus, bonus.getC11nItem(item)))
+        model.setLabel(label)
+        return model
+
+    @classmethod
+    def _getLabel(cls, c11nItem):
+        userName = c11nItem.userName
+        elementBonusR = R.strings.vehicle_customization.elementBonus.desc.dyn(c11nItem.itemFullTypeName, R.invalid)
+        return backport.text(elementBonusR(), value=userName) if elementBonusR else userName
+
+    @classmethod
+    def _getIcon(cls, bonus, c11Item):
+        return str(c11Item.itemTypeName) + '_3d' if c11Item.itemTypeID == GUI_ITEM_TYPE.STYLE and c11Item.is3D else str(c11Item.itemTypeName)
+
+
+class ArmoryUniqueCustomizationBonusUIPacker(ArmoryCustomizationBonusUIPacker):
+
+    @classmethod
+    def _getIcon(cls, bonus, c11Item):
+        itemTypeName = str(c11Item.itemTypeName)
+        iconName = '{}_{}'.format(itemTypeName + '_3d' if c11Item.itemTypeID == GUI_ITEM_TYPE.STYLE and c11Item.is3D else itemTypeName, c11Item.innationID)
+        if R.images.gui.maps.icons.quests.bonuses.s600x450.dyn(iconName).exists():
+            return iconName
+        return itemTypeName + '_3d' if c11Item.itemTypeID == GUI_ITEM_TYPE.STYLE and c11Item.is3D else itemTypeName
 
 
 class ArmoryYardVehiclesBonusUIPacker(VehiclesBonusUIPacker):
+
+    @classmethod
+    def _packVehicle(cls, bonus, vehInfo, vehicle):
+        vehicleModel = ArmoryYardRewardsVehicleModel()
+        packVehicleModel(vehicleModel, vehicle)
+        rentDays = bonus.getRentDays(vehInfo)
+        rentBattles = bonus.getRentBattles(vehInfo)
+        rentWins = bonus.getRentWins(vehInfo)
+        rentSeason = bonus.getRentSeason(vehInfo)
+        rentCycle = bonus.getRentCycle(vehInfo)
+        isRent = rentDays or rentBattles or rentWins or rentSeason or rentCycle
+        vehicleModel.setName(cls._createUIName(bonus, isRent))
+        vehicleModel.setIsCompensation(bonus.isCompensation())
+        vehicleModel.setLabel(cls._getLabel(vehicle))
+        return vehicleModel
 
     @classmethod
     def _packTooltip(cls, bonus, vehicle, vehInfo):
@@ -109,43 +182,37 @@ class ArmoryYardTmanTemplateBonusPacker(TmanTemplateBonusPacker):
         return model
 
 
-class ArmoryYardPremiumDaysPacker(SimpleBonusUIPacker):
-
-    @classmethod
-    def _packCommon(cls, bonus, model):
-        model.setName('premium_universal')
-        model.setIsCompensation(bonus.isCompensation())
-        return model
-
-
-def getArmoryYardBonusPackersMap():
+def getArmoryYardBonusPackersMap(hasBattleTokens=True):
     packersMap = getDefaultBonusPackersMap()
-    packersMap.update({'vehicles': ArmoryYardMainVehiclesBonusUIPacker,
-     'battleToken': ArmoryYardTokenBonusUIPacker,
+    packersMap.update({'vehicles': ArmoryYardVehiclesBonusUIPacker,
      'tmanToken': ArmoryYardTmanTemplateBonusPacker,
-     PREMIUM_ENTITLEMENTS.PLUS: ArmoryYardPremiumDaysPacker})
+     PREMIUM_ENTITLEMENTS.PLUS: PremiumDaysBonusPacker,
+     'currencies': ArmoryYardCurrencyBonusUIPacker,
+     'customizations': ArmoryCustomizationBonusUIPacker})
+    if hasBattleTokens:
+        packersMap.update({'battleToken': ArmoryYardTokenBonusUIPacker})
     return packersMap
 
 
-def getArmoryYardBuyViewBonusPackersMap():
+def getArmoryYardMainRewardBonusPackersMap():
     packersMap = getArmoryYardBonusPackersMap()
-    packersMap.update({'vehicles': ArmoryYardVehiclesBonusUIPacker})
+    packersMap.update({'customizations': ArmoryUniqueCustomizationBonusUIPacker})
     return packersMap
 
 
-def getArmoryYardBonusPacker():
-    return BonusUIPacker(getArmoryYardBonusPackersMap())
+def getArmoryYardBonusPacker(hasBattleTokens=True):
+    return BonusUIPacker(getArmoryYardBonusPackersMap(hasBattleTokens))
 
 
-def getArmoryYardBuyViewPacker():
-    return BonusUIPacker(getArmoryYardBuyViewBonusPackersMap())
+def getArmoryYardMainRewardBonusPacker():
+    return BonusUIPacker(getArmoryYardMainRewardBonusPackersMap())
 
 
 def packVehicleModel(vehicleModel, vehicle):
     vehicleModel.setVehicleImg(getNationLessName(vehicle.name))
     vehicleModel.setVehicleName(vehicle.userName)
-    vehicleModel.setVehicleLvl(vehicle.level)
-    vehicleModel.setVehicleType(getVehicleClassFromVehicleType(vehicle.descriptor.type))
+    vehicleModel.setLevel(vehicle.level)
+    vehicleModel.setType(getVehicleClassFromVehicleType(vehicle.descriptor.type))
     vehicleModel.setIsElite(vehicle.isElite)
 
 

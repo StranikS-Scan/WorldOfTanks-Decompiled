@@ -493,7 +493,7 @@ class AssemblyStageIndexManager(CGF.ComponentManager):
         return sorted(self.__stageGroupParts[stageIndex])
 
     def stageHasDurationPart(self, stageIndex):
-        return len(self.__stageGroupDuration[stageIndex]) > 0
+        return len(self.__stageGroupDuration.get(stageIndex, {})) > 0
 
     def tryHideUnnecessaryPartsAfterStage(self, stage):
         for toHideAfterStage, gameObject in self.__toHideListAfterStageGO:
@@ -546,7 +546,7 @@ class AssemblyStageIndexManager(CGF.ComponentManager):
         return self.__schemeStageRange[0] <= stage <= self.__schemeStageRange[1]
 
     def getCameraDataByStageIndex(self, stageIndex):
-        return self.__stageCameras[stageIndex]
+        return self.__stageCameras[stageIndex] if stageIndex in self.__stageCameras else self.__stageCameras[sorted(self.__stageCameras.keys())[-1]]
 
     def stageIsPlaying(self, stageIndex):
         if self.isSchemeStage(stageIndex):
@@ -555,7 +555,9 @@ class AssemblyStageIndexManager(CGF.ComponentManager):
                 return animatorComponent.isPlaying()
             return False
         else:
-            go = self.__stageIndexToStageGO[stageIndex]
+            go = self.__stageIndexToStageGO.get(stageIndex)
+            if not go:
+                return False
             if self.__hierarchyManager.getChildren(go) is not None:
                 for child in self.__hierarchyManager.getChildren(go):
                     _, animatorComponent = partAnimatorComponent(child)

@@ -7,7 +7,6 @@ from gui.impl.lobby.tank_setup.array_providers.base import VehicleBaseArrayProvi
 from gui.impl.wrappers.user_compound_price_model import BuyPriceModelBuilder
 from gui.shared.items_parameters import params_helper
 from gui.shared.items_parameters.formatters import MEASURE_UNITS, formatParameter
-from items.components.component_constants import DEFAULT_GUN_CLIP, DEFAULT_GUN_BURST
 from post_progression_common import TankSetupGroupsId
 from helpers import dependency, i18n
 from skeletons.gui.shared import IItemsCache
@@ -20,6 +19,10 @@ _SHELLS_INFO_PARAMS = (('distanceDamage', 'avgDamage'),
  ('explosionRadius',),
  ('flameMaxDistance',),
  ('stunMaxDuration',))
+_DISTANCE_FACTOR_PARAMS = {'avgPiercingPower': ('piercingPower', 'distanceFactorPiercingPower'),
+ 'avgDamage': ('damage', 'distanceFactorDamage'),
+ 'shotSpeed': ('shotSpeedAccelerated', 'shotSpeedAccelerated')}
+_DISTANCE_FACTOR_KEYS = _DISTANCE_FACTOR_PARAMS.keys()
 
 class ShellProvider(VehicleBaseArrayProvider):
     __slots__ = ('_interactor',)
@@ -51,7 +54,7 @@ class ShellProvider(VehicleBaseArrayProvider):
         super(ShellProvider, self).updateSlot(model, item, ctx)
         buyPrice = item.getBuyPrice()
         if model.getIntCD() != item.intCD:
-            model.setType(item.type)
+            model.setType(item.kind)
             model.setName(item.userName)
             model.setIntCD(item.intCD)
             model.setItemTypeID(item.itemTypeID)
@@ -70,8 +73,6 @@ class ShellProvider(VehicleBaseArrayProvider):
         model.setCount(item.count)
         shellsSetupLayouts = vehicle.shells.setupLayouts
         inTankCount = max(item.count, shellsSetupLayouts.ammoLoadedInOtherSetups(item.intCD))
-        model.setMaxCount(int(vehicle.gun.maxAmmo / item.ammoWeight))
-        model.setAvailableCount(self.getAvailableAmmoCountForItem(item))
         model.setItemsInStorage(max(boughtCount - inTankCount, 0))
         if vehicle.isSetupSwitchActive(TankSetupGroupsId.EQUIPMENT_AND_SHELLS):
             model.setItemsInVehicle(inTankCount)
@@ -82,25 +83,19 @@ class ShellProvider(VehicleBaseArrayProvider):
         if buyCount:
             BuyPriceModelBuilder.fillPriceModelByItemPrice(model.totalPrice, buyPrice * buyCount, checkBalanceAvailability=True)
 
-    def getAvailableAmmoCountForItem(self, item):
-        vehicle = self._getVehicle()
-        numberLoadedShells = sum((shell.count * shell.ammoWeight for shell in self._getCurrentLayout() if shell != item))
-        currentAmmoRemainder = vehicle.gun.maxAmmo - numberLoadedShells
-        gun = vehicle.descriptor.gun
-        clip = gun.clip
-        burst = gun.burst
-        burstSize = burst[0] if burst != DEFAULT_GUN_BURST else 1
-        multiplicityIndex = clip[0] if clip != DEFAULT_GUN_CLIP else burstSize
-        availableAmmoCount = int(currentAmmoRemainder / item.ammoWeight)
-        return availableAmmoCount - availableAmmoCount % multiplicityIndex
-
     def _fillSpecification(self, model, item):
         specifications = model.getSpecifications()
         specifications.clear()
         shellParam = params_helper.getParameters(item, self._getVehicle().descriptor)
+        hasDistanceFactor = item.descriptor.distanceFactor is not None
         for rowParams in _SHELLS_INFO_PARAMS:
             for paramName in rowParams:
-                formattedParam = formatParameter(paramName, shellParam.get(paramName))
+                if hasDistanceFactor and paramName in _DISTANCE_FACTOR_KEYS:
+                    overridedParamName, visualParamName = _DISTANCE_FACTOR_PARAMS[paramName]
+                    formattedParam = formatParameter(overridedParamName, shellParam.get(overridedParamName))
+                    paramName = visualParamName
+                else:
+                    formattedParam = formatParameter(paramName, shellParam.get(paramName))
                 if formattedParam is None:
                     continue
                 model = self._getSpecificationsModel(paramName, formattedParam)

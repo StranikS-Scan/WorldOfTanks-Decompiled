@@ -50,4 +50,3 @@ class BATTLEDAMAGELOG_IMAGES(object):
     DAMAGELOG_ARTILLERY_ENEMY_16X16 = 'damageLog_artillery_enemy_16x16'
     DAMAGELOG_ARTILLERY_EQ_16X16 = 'damageLog_artillery_eq_16x16'
     DAMAGELOG_ARTILLERY_EQ_ENEMY_16X16 = 'damageLog_artillery_eq_enemy_16x16'
-    DAMAGE_LOG_SENTINEL_ENEMY_16X16 = 'damageLog_sentinel_enemy_16x16'

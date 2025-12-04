@@ -11,6 +11,7 @@ import Event
 from TemperatureGunController import getPlayerVehicleTemperatureGunController
 from constants import VEHICLE_SETTING, ReloadRestriction, DUAL_GUN
 from gui.battle_control.avatar_getter import getPlayerVehicle
+from helpers_common import computeDistanceFactor, computeSpeedByParams
 from shared_utils import CONST_CONTAINER
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_ERROR
 from gui.battle_control import avatar_getter
@@ -32,6 +33,7 @@ _DualGunState = namedtuple('_DualGunState', 'left right')
 _TIME_CORRECTION_THRESHOLD = 0.01
 _IGNORED_RELOADING_TIME = 0.15
 _CANT_CHANGE_SHELL_OVERHEAT = 'cantChangeShellGunOverheated'
+_PIERCING_DISTANCES = (50, 500)
 _logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.vehicle_modules import Shell
@@ -60,10 +62,11 @@ class _GunSettings(namedtuple('_GunSettings', 'clip burst dualgun shots reloadEf
             nationID, itemID = shotDescr.shell.id
             intCD = vehicles.makeIntCompactDescrByID('shell', nationID, itemID)
             shots[intCD] = (shotIdx,
-             shotDescr.piercingPower[0],
+             shotDescr.piercingPower,
              shotDescr.speed,
              shotDescr.shell,
-             shotDescr.maxDistance)
+             shotDescr.maxDistance,
+             shotDescr.acceleration)
 
         isDualGun = 'dualGun' in gun.tags
         autoReload = gun.autoreload if 'autoreload' in gun.tags else None
@@ -101,10 +104,21 @@ class _GunSettings(namedtuple('_GunSettings', 'clip burst dualgun shots reloadEf
 
     def getPiercingPower(self, intCD):
         if intCD in self.shots:
-            power = self.shots[intCD][1]
+            _, piercing, _, _, maxDistance, _ = self.shots[intCD]
+            shellDescr = self.getShellDescriptor(intCD)
+            if shellDescr.distanceFactor is not None:
+                piercings = []
+                for distance in _PIERCING_DISTANCES:
+                    if distance > maxDistance:
+                        distance = int(maxDistance)
+                    pierceFactor = computeDistanceFactor(shellDescr, distance, 'pierceFactor')
+                    piercingPower = int(piercing[0] * pierceFactor)
+                    piercings.append(piercingPower)
+
+                return tuple(piercings)
+            return piercing
         else:
-            power = 0
-        return power
+            return (0, 0)
 
     def getShellDescriptor(self, intCD):
         if intCD in self.shots:
@@ -126,6 +140,11 @@ class _GunSettings(namedtuple('_GunSettings', 'clip burst dualgun shots reloadEf
         else:
             speed = -1
         return speed
+
+    def getMinMaxShotSpeed(self, intCD):
+        if intCD in self.shots:
+            _, _, speed, _, maxDistance, acceleration = self.shots[intCD]
+            return (speed, computeSpeedByParams(acceleration, maxDistance, speed))
 
     def getMaxDistance(self, intCD):
         if intCD in self.shots:
@@ -456,6 +475,7 @@ class AmmoController(MethodsRules, ViewComponentsController):
         self.onGunAutoReloadBoostUpdated = Event.Event(self.__eManager)
         self.onShellChangeTimeUpdated = Event.Event(self.__eManager)
         self.onShellsCleared = Event.Event(self.__eManager)
+        self.onPenaltyReloadTimeUpdated = Event.Event(self.__eManager)
         self.__ammo = {}
         self._order = []
         self._reloadingState = reloadingState or ReloadingTimeState()
@@ -555,6 +575,13 @@ class AmmoController(MethodsRules, ViewComponentsController):
             self.__nextShellCD = None
         self.processDelayer('setCurrentShellCD')
         return
+
+    def updatePenaltyReloadTime(self, reloadTimeFactor, penaltyTime, appliedPenaltyReloadTime):
+        penaltyReloadTime = 0.0
+        if penaltyTime >= 0:
+            baseTime = (self.getGunReloadingState().getBaseValue() - appliedPenaltyReloadTime) / reloadTimeFactor
+            penaltyReloadTime = round(baseTime + penaltyTime, 2)
+        self.onPenaltyReloadTimeUpdated(penaltyReloadTime)
 
     @MethodsRules.delayable()
     def setGunSettings(self, gun):

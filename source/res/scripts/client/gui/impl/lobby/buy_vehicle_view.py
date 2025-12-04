@@ -809,8 +809,11 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
             if not self.__isPurchaseCurrencyAvailable(currency):
                 isEnabled &= totalPriceMoney.get(currency) <= statsMoney.get(currency)
 
-        if self.__isTradeIn() and self.__tradeInVehicleToSell is not None:
-            isEnabled &= self.__isValidTradeOffSelected() and self.__tradeInVehicleToSell.isReadyToTradeOff
+        if self.__isTradeIn():
+            if self.__tradeInVehicleToSell is not None:
+                isEnabled &= self.__isValidTradeOffSelected() and self.__tradeInVehicleToSell.isReadyToTradeOff
+            else:
+                isEnabled &= self.__vehicle.intCD not in self.__shop.getHiddens()
         self.viewModel.equipmentBlock.setBuyBtnIsEnabled(isEnabled)
         return
 

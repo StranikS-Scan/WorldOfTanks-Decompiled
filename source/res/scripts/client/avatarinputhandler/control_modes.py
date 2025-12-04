@@ -15,7 +15,6 @@ import CommandMapping
 import SoundGroups
 import TriggersManager
 import VideoCamera
-import ATGMCamera
 import cameras
 import constants
 import math_utils
@@ -318,12 +317,6 @@ class VideoCameraControlMode(_GunControlMode):
 
     def _createCamera(self, cameraDataSection):
         self._cam = VideoCamera.VideoCamera(cameraDataSection)
-
-
-class ATGMCameraControlMode(VideoCameraControlMode):
-
-    def _createCamera(self, cameraDataSection):
-        self._cam = ATGMCamera.ATGMCamera(cameraDataSection)
 
 
 class DebugControlMode(IControlMode):

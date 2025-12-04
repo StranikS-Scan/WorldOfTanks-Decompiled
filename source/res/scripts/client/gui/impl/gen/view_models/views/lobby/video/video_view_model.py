@@ -6,7 +6,7 @@ from frameworks.wulf import ViewModel
 class VideoViewModel(ViewModel):
     __slots__ = ('onCloseBtnClick', 'onVideoStarted', 'onVideoStopped', 'onLoadError')
 
-    def __init__(self, properties=5, commands=4):
+    def __init__(self, properties=8, commands=4):
         super(VideoViewModel, self).__init__(properties=properties, commands=commands)
 
     def getVideoSource(self):
@@ -39,6 +39,24 @@ class VideoViewModel(ViewModel):
     def setIsVignetteVisible(self, value):
         self._setBool(4, value)
 
+    def getIsAutoClose(self):
+        return self._getBool(5)
+
+    def setIsAutoClose(self, value):
+        self._setBool(5, value)
+
+    def getCanEscape(self):
+        return self._getBool(6)
+
+    def setCanEscape(self, value):
+        self._setBool(6, value)
+
+    def getUiShowDelay(self):
+        return self._getNumber(7)
+
+    def setUiShowDelay(self, value):
+        self._setNumber(7, value)
+
     def _initialize(self):
         super(VideoViewModel, self)._initialize()
         self._addResourceProperty('videoSource', R.invalid())
@@ -46,6 +64,9 @@ class VideoViewModel(ViewModel):
         self._addBoolProperty('isWindowAccessible', True)
         self._addBoolProperty('isUIVisible', False)
         self._addBoolProperty('isVignetteVisible', True)
+        self._addBoolProperty('isAutoClose', True)
+        self._addBoolProperty('canEscape', True)
+        self._addNumberProperty('uiShowDelay', -1)
         self.onCloseBtnClick = self._addCommand('onCloseBtnClick')
         self.onVideoStarted = self._addCommand('onVideoStarted')
         self.onVideoStopped = self._addCommand('onVideoStopped')

@@ -10184,18 +10184,160 @@
     </paint>
   </itemGroup>
   <itemGroup>
-    <name>	Bot_Paint_138	</name>
-    <season>	ALL	</season>
-    <historical>	0	</historical>
+    <name>	NY_01_Paint_139	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
     <paint>
-      <id>	31388	</id>
-      <color>	17 17 21 255	</color>
+      <id>	31409	</id>
+      <color>	97 62 51 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <texture>	gui/maps/vehicles/repaints/germany_color_01.png	</texture>
+      <userString>	#vehicle_customization:NY_01_Paint_139/name	</userString>
+      <description>	#vehicle_customization:NY_01_Paint_139/description	</description>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	NY_02_Paint_139	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31410	</id>
+      <color>	13 36 51 255	</color>
       <gloss>	0.6	</gloss>
-      <metallic>	0.25	</metallic>
+      <metallic>	0.3	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_26.png	</texture>
+      <userString>	#vehicle_customization:NY_02_Paint_139/name	</userString>
+      <description>	#vehicle_customization:NY_02_Paint_139/description	</description>
+    </paint>
+    <tags>	hiddenInUI	</tags>
+  </itemGroup>
+  <itemGroup>
+    <name>	NY_03_Paint_139	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31411	</id>
+      <color>	217 143 48 255	</color>
+      <gloss>	0.61	</gloss>
+      <metallic>	0.61	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_15.png	</texture>
+      <userString>	#vehicle_customization:NY_03_Paint_139/name	</userString>
+      <description>	#vehicle_customization:NY_03_Paint_139/description	</description>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	NY_04_Paint_139	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31412	</id>
+      <color>	0 0 0 255	</color>
+      <gloss>	0.5	</gloss>
+      <metallic>	0.15	</metallic>
       <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
-      <userString>	#vehicle_customization:Bot_Paint_138/name	</userString>
-      <description>	#vehicle_customization:Bot_Paint_138/description	</description>
+      <userString>	#vehicle_customization:NY_04_Paint_01_139/name	</userString>
+      <description>	#vehicle_customization:NY_04_Paint_01_139/description	</description>
+    </paint>
+    <paint>
+      <id>	31413	</id>
+      <color>	94 0 3 255	</color>
+      <gloss>	0.7	</gloss>
+      <metallic>	0.2	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_40.png	</texture>
+      <userString>	#vehicle_customization:NY_04_Paint_02_139/name	</userString>
+      <description>	#vehicle_customization:NY_04_Paint_02_139/description	</description>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	NatiskTiger_Paint_139	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <paint>
+      <id>	31419	</id>
+      <color>	22 22 22 255	</color>
+      <gloss>	0.3	</gloss>
+      <metallic>	0.3	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <userString>	#vehicle_customization:NatiskTiger_01_Paint_139/name	</userString>
+      <description>	#vehicle_customization:NatiskTiger_01_Paint_139/description	</description>
+    </paint>
+    <paint>
+      <id>	31420	</id>
+      <color>	55 55 55 255	</color>
+      <gloss>	0.3	</gloss>
+      <metallic>	0.1	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_27.png	</texture>
+      <userString>	#vehicle_customization:NatiskTiger_Paint_02_139/name	</userString>
+      <description>	#vehicle_customization:NatiskTiger_Paint_02_139/description	</description>
+    </paint>
+    <paint>
+      <id>	31421	</id>
+      <color>	30 32 33 255	</color>
+      <gloss>	0.2	</gloss>
+      <metallic>	0.1	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <userString>	#vehicle_customization:NatiskTiger_Paint_03_139/name	</userString>
+      <description>	#vehicle_customization:NatiskTiger_Paint_03_139/description	</description>
+    </paint>
+    <paint>
+      <id>	31422	</id>
+      <color>	54 37 16 255	</color>
+      <gloss>	0.22	</gloss>
+      <metallic>	0.55	</metallic>
+      <texture>	gui/maps/vehicles/repaints/czech_color_05.png	</texture>
+      <userString>	#vehicle_customization:NatiskTiger_Paint_04_139/name	</userString>
+      <description>	#vehicle_customization:NatiskTiger_Paint_04_139/description	</description>
+    </paint>
+    <paint>
+      <id>	31423	</id>
+      <color>	43 31 43 255	</color>
+      <gloss>	0.2	</gloss>
+      <metallic>	0.3	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_01.png	</texture>
+      <userString>	#vehicle_customization:NatiskTiger_Paint_05_139/name	</userString>
+      <description>	#vehicle_customization:NatiskTiger_Paint_05_139/description	</description>
+    </paint>
+    <paint>
+      <id>	31424	</id>
+      <color>	37 39 46 255	</color>
+      <gloss>	0.18	</gloss>
+      <metallic>	0.12	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_27.png	</texture>
+      <userString>	#vehicle_customization:NatiskTiger_Paint_06_139/name	</userString>
+      <description>	#vehicle_customization:NatiskTiger_Paint_06_139/description	</description>
     </paint>
     <tags>	hiddenInUI	</tags>
     <priceGroup>	paints 20g notInShop	</priceGroup>
@@ -10204,6 +10346,317 @@
         <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <name>	BloggerNY_Paint_139	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31425	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_08.png	</texture>
+      <userString>	#vehicle_customization:BloggerNY_Paint_139/name	</userString>
+      <description>	#vehicle_customization:BloggerNY_Paint_139/description	</description>
+      <color>	174 110 0 255	</color>
+      <gloss>	0.75	</gloss>
+      <metallic>	0.8	</metallic>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	NY_06_Paint_139	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31415	</id>
+      <color>	39 37 17 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.3	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_12.png	</texture>
+      <userString>	#vehicle_customization:NY_06_Paint_01_139/name	</userString>
+      <description>	#vehicle_customization:NY_06_Paint_01_139/description	</description>
+    </paint>
+    <paint>
+      <id>	31416	</id>
+      <color>	214 150 34 255	</color>
+      <gloss>	0.5	</gloss>
+      <metallic>	0.7	</metallic>
+      <texture>	gui/maps/vehicles/repaints/lebwa.png	</texture>
+      <userString>	#vehicle_customization:NY_06_Paint_02_139/name	</userString>
+      <description>	#vehicle_customization:NY_06_Paint_02_139/description	</description>
+    </paint>
+    <paint>
+      <id>	31417	</id>
+      <color>	99 102 29 255	</color>
+      <gloss>	0.8	</gloss>
+      <metallic>	0.8	</metallic>
+      <texture>	gui/maps/vehicles/repaints/china_color_01.png	</texture>
+      <userString>	#vehicle_customization:NY_06_Paint_03_139/name	</userString>
+      <description>	#vehicle_customization:NY_06_Paint_03_139/description	</description>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	NY_05_Paint_139	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31414	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_40.png	</texture>
+      <userString>	#vehicle_customization:NY_05_Paint_139/name	</userString>
+      <description>	#vehicle_customization:NY_05_Paint_139/description	</description>
+      <color>	38 23 23 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.4	</metallic>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	TradibgCaravan_02_Paint_139	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <paint>
+      <id>	31408	</id>
+      <color>	43 50 56 255	</color>
+      <gloss>	0.634	</gloss>
+      <metallic>	0.506	</metallic>
+      <userString>	#vehicle_customization:TradibgCaravan_02_Paint_139/name	</userString>
+      <description>	#vehicle_customization:TradibgCaravan_02_Paint_139/description	</description>
+      <texture>	gui/maps/vehicles/repaints/custom_color_27.png	</texture>
+    </paint>
+    <tags>	hiddenInUI	</tags>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <name>	AY_R226_Object_757A_Paint_139	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr	</nations>
+        <levels>	9	</levels>
+        <vehicles>	ussr:R226_Object_757A	</vehicles>
+      </include>
+    </vehicleFilter>
+    <paint>
+      <id>	31418	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <userString>	#vehicle_customization:_R226_Object_757A_Paint_139/name	</userString>
+      <description>	#vehicle_customization:_R226_Object_757A_Paint_139/description	</description>
+      <color>	28 28 28 255	</color>
+      <gloss>	0.634	</gloss>
+      <metallic>	0.506	</metallic>
+      <maxNumber>	1	</maxNumber>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	TradibgCaravan_01_Paint_139	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <paint>
+      <id>	31405	</id>
+      <color>	186 184 164 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_14.png	</texture>
+      <userString>	#vehicle_customization:TradibgCaravan_01_Paint_Summer_139/name	</userString>
+      <description>	#vehicle_customization:TradibgCaravan_01_Paint_Summer_139/description	</description>
+    </paint>
+    <paint>
+      <id>	31406	</id>
+      <color>	140 140 140 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_10.png	</texture>
+      <userString>	#vehicle_customization:TradibgCaravan_01_Paint_Winter_139/name	</userString>
+      <description>	#vehicle_customization:TradibgCaravan_01_Paint_Winter_139/description	</description>
+    </paint>
+    <paint>
+      <id>	31407	</id>
+      <color>	171 147 106 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_13.png	</texture>
+      <userString>	#vehicle_customization:TradibgCaravan_01_Paint_Desert_139/name	</userString>
+      <description>	#vehicle_customization:TradibgCaravan_01_Paint_Desert_139/description	</description>
+    </paint>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <name>	Calendar_Paint_137	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <paint>
+      <id>	31392	</id>
+      <color>	70 107 115 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_05.png	</texture>
+      <userString>	#vehicle_customization:Calendar_Paint_137/name	</userString>
+      <description>	#vehicle_customization:Calendar_Paint_137/description	</description>
+    </paint>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <name>	ArmoryYard7_Paint_139	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <paint>
+      <id>	31402	</id>
+      <color>	97 96 39 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <season>	summer	</season>
+      <userString>	#vehicle_customization:ArmoryYard7_Paint_Summer_139/name	</userString>
+      <description>	#vehicle_customization:ArmoryYard7_Paint_Summer_139/description	</description>
+      <texture>	gui/maps/vehicles/repaints/china_color_01.png	</texture>
+    </paint>
+    <paint>
+      <id>	31403	</id>
+      <color>	104 134 143 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <season>	winter	</season>
+      <userString>	#vehicle_customization:ArmoryYard7_Paint_Winter_139/name	</userString>
+      <description>	#vehicle_customization:ArmoryYard7_Paint_Winter_139/description	</description>
+      <texture>	gui/maps/vehicles/repaints/custom_color_39.png	</texture>
+    </paint>
+    <paint>
+      <id>	31404	</id>
+      <color>	102 79 51 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <season>	desert	</season>
+      <userString>	#vehicle_customization:ArmoryYard7_Paint_Desert_139/name	</userString>
+      <description>	#vehicle_customization:ArmoryYard7_Paint_Desert_139/description	</description>
+      <texture>	gui/maps/vehicles/repaints/italy_color_02.png	</texture>
+    </paint>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <paint>
+      <id>	31432	</id>
+      <color>	174 110 0 255	</color>
+      <gloss>	0.75	</gloss>
+      <metallic>	0.8	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_15.png	</texture>
+      <userString>	#vehicle_customization:BloggerNYSale_Paint_139/name	</userString>
+      <description>	#vehicle_customization:BloggerNYSale_Paint_139/description	</description>
+    </paint>
+    <name>	BloggerNYSale_Paint_139	</name>
+    <tags>	hiddenInUI	</tags>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <name>	NY_Seleb_Paint_139	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31426	</id>
+      <texture>	gui/maps/vehicles/repaints/primer_marmot_01.png	</texture>
+      <userString>	#vehicle_customization:NY_Seleb_Paint_01_139/name	</userString>
+      <description>	#vehicle_customization:NY_Seleb_Paint_01_139/description	</description>
+      <color>	117 43 37 255	</color>
+      <gloss>	0.69	</gloss>
+      <metallic>	0.14	</metallic>
+    </paint>
+    <paint>
+      <id>	31427	</id>
+      <texture>	gui/maps/vehicles/repaints/italy_base_color.png	</texture>
+      <userString>	#vehicle_customization:NY_Seleb_Paint_02_139/name	</userString>
+      <description>	#vehicle_customization:NY_Seleb_Paint_02_139/description	</description>
+      <color>	181 154 99 255	</color>
+      <gloss>	0.84	</gloss>
+      <metallic>	0.23	</metallic>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	Celebrity_Paint_139	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R112_T54_45_02	</vehicles>
+      </include>
+    </vehicleFilter>
+    <paint>
+      <id>	31428	</id>
+      <color>	16 33 56 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_26.png	</texture>
+      <userString>	#vehicle_customization:Celebrity_Paint139/name	</userString>
+      <description>	#vehicle_customization:Celebrity_Paint139/description	</description>
+    </paint>
   </itemGroup>
   <itemGroup>
     <name>	theboys	</name>

@@ -2668,4 +2668,104 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <style>
+      <id>	31459	</id>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <id>	31102	</id>
+              <slotId>	18000	</slotId>
+            </item>
+          </attachments>
+          <projection_decals>
+            <item>
+              <id>	31383	</id>
+              <slotId>	35000	</slotId>
+            </item>
+            <item>
+              <id>	31383	</id>
+              <slotId>	15000	</slotId>
+            </item>
+          </projection_decals>
+          <insignias>
+            <item>
+              <id>	31046	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+      <modelsSet>	A175_OTAC_MT_58_02_3Dst_01	</modelsSet>
+      <userString>	#vehicle_customization:A175_OTAC_MT_58_02_Style/name	</userString>
+      <description>	#vehicle_customization:A175_OTAC_MT_58_02_Style/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:A175_OTAC_MT_58_02_Style/longDescription	</longDescriptionSpecial>
+      <texture>	gui/maps/vehicles/styles/A175_OTAC_MT_58_02.png	</texture>
+    </style>
+    <tags>	styleStatTrackFrags lockedOnVehicle	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A175_OTAC_MT_58_02	</vehicles>
+        <nations>	usa	</nations>
+      </include>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	31434	</id>
+      <texture>	gui/maps/vehicles/styles/A38_T92_3Dst_01.png	</texture>
+      <userString>	#vehicle_customization:special_style/A38_T92_3Dst_01/name	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/A38_T92_3Dst_01/longDescription	</longDescriptionSpecial>
+      <modelsSet>	A38_T92_3Dst_01	</modelsSet>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <id>	31104	</id>
+              <slotId>	18000	</slotId>
+            </item>
+          </attachments>
+          <insignias>
+            <item>
+              <id>	31042	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+    </style>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A38_T92	</vehicles>
+      </include>
+    </vehicleFilter>
+    <maxNumber>	1	</maxNumber>
+  </itemGroup>
 </usa.xml>

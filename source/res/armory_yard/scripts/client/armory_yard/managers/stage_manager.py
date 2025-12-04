@@ -17,6 +17,7 @@ from gui.shared.events import ArmoryYardEvent
 from armory_yard.gui.Scaleform.daapi.view.lobby.hangar.sounds import ArmoryYardVideoSoundControl
 from armory_yard.managers.fade_manager import ArmoryYardFadeManager, ArmoryYardFadeState
 from adisp import adisp_process
+POSTPROGRESSION_STATE_ANIMATION_DURATION = 2.0
 
 def showVideo(videoName, onVideoClose, isAutoClose=True):
     videoSource = R.videos.armory_yard.dyn(videoName)
@@ -30,7 +31,7 @@ def showVideo(videoName, onVideoClose, isAutoClose=True):
         g_eventBus.handleEvent(ArmoryYardEvent(ArmoryYardEvent.STAGE_UNMUTE_SOUND))
 
     g_eventBus.handleEvent(ArmoryYardEvent(ArmoryYardEvent.STAGE_MUTE_SOUND))
-    window = VideoViewWindow(videoSource(), onVideoClosed=onVideoCloseWrapper, isAutoClose=isAutoClose, soundControl=ArmoryYardVideoSoundControl(videoSource()))
+    window = VideoViewWindow(viewId=R.views.armory_yard.lobby.feature.GfVideoView(), videoSource=videoSource(), onVideoClosed=onVideoCloseWrapper, isAutoClose=isAutoClose, soundControl=ArmoryYardVideoSoundControl(videoSource()), isUiVisible=False)
     window.load()
 
 
@@ -134,6 +135,9 @@ class StageManager(CallbackDelayer, TimeDeltaMeter):
 
         return
 
+    def isPostProgressionStep(self, step):
+        return self.__armoryYardCtrl.startStepOfPostProgression <= step
+
     def destroy(self):
         self.__clear()
         self.__eventManager.clear()
@@ -157,6 +161,8 @@ class StageManager(CallbackDelayer, TimeDeltaMeter):
                     self.__stageQueue.put((stage, None))
             if self.cgfStageManager.isSchemeStage(stage):
                 self.__stageQueue.put((stage, 0))
+            if self.isPostProgressionStep(stage):
+                self.__stageQueue.put((stage, None))
 
         if not self.__stageQueue.empty() and not self.__isPlaying and self.__currentStage is None:
             self.cgfStageManager.turnOffHighlight()
@@ -207,15 +213,23 @@ class StageManager(CallbackDelayer, TimeDeltaMeter):
     def playProgress(self, start, stageCount):
         self.startStages(start, start + stageCount, forceUpdate=start == 0)
 
+    def getStageVideoName(self, stage):
+        return self.cgfStageManager.stageVideoName(stage)
+
     def gotToPositionByStage(self, stage, instantly=True):
         self.__armoryYardCtrl.cameraManager.goToPosition(self.cgfStageManager.getCameraDataByStageIndex(stage), instantly=instantly)
 
     def __setStartStage(self, stage, extraDuration=0.0):
-        if self.cgfStageManager.stageHasDurationPart(stage):
+        if self.isPostProgressionStep(stage):
+            self.onStartStage(stage, POSTPROGRESSION_STATE_ANIMATION_DURATION + extraDuration, skipCameraTransition=False)
+        elif self.cgfStageManager.stageHasDurationPart(stage):
             stageDuration = self.cgfStageManager.stageDuration(stage) + extraDuration
             self.onStartStage(stage, stageDuration or 1.0, skipCameraTransition=False)
         else:
             self.onStartStage(stage, 1.0 + extraDuration, skipCameraTransition=True)
+
+    def playStageVideo(self, videoName):
+        self.__fadeInProcess(partial(showVideo, videoName, self.__fadeOutProcess))
 
     def __update(self):
         if self.__paused:
@@ -263,6 +277,8 @@ class StageManager(CallbackDelayer, TimeDeltaMeter):
                 stageGroupDuration = 0.0
                 if self.cgfStageManager.stageHasDurationPart(self.__currentStage):
                     stageGroupDuration = self.cgfStageManager.stageGroupDuration(self.__currentStage, self.__currentGroup) + self.__xrayDuration
+                elif self.isPostProgressionStep(self.__currentStage):
+                    stageGroupDuration = POSTPROGRESSION_STATE_ANIMATION_DURATION
                 if not self.__hidedDetailsOnStage and self.cgfStageManager.stageIsPlaying(self.__currentStage):
                     self.cgfStageManager.tryHideUnnecessaryPartsOnStage(self.__currentStage)
                     self.__hidedDetailsOnStage = True
@@ -294,14 +310,23 @@ class StageManager(CallbackDelayer, TimeDeltaMeter):
             return 0.0
 
     @adisp_process
-    def __fadeIn(self, fadeCallback=None):
-        self.pause()
+    def __fadeInProcess(self, fadeCallback=None):
         result = yield self.__fadeManager.startFade()
         if fadeCallback is not None and result in (ArmoryYardFadeState.released, ArmoryYardFadeState.destroying):
             fadeCallback()
         return
 
     @adisp_process
+    def __fadeOutProcess(self, fadeCallback=None):
+        result = yield self.__fadeManager.startFade(fadeIn=False)
+        if fadeCallback is not None and result in (ArmoryYardFadeState.released, ArmoryYardFadeState.destroying):
+            fadeCallback()
+        return
+
+    def __fadeIn(self, fadeCallback=None):
+        self.pause()
+        self.__fadeInProcess(fadeCallback)
+
     def __fadeOut(self, fadeCallback=None):
         self.cgfStageManager.deactivateAllStage()
         self.setStage(self.__currentStage)
@@ -310,11 +335,7 @@ class StageManager(CallbackDelayer, TimeDeltaMeter):
         self.resume()
         if not self.__fadeManager.isActive():
             return
-        else:
-            result = yield self.__fadeManager.startFade(fadeIn=False)
-            if fadeCallback is not None and result in (ArmoryYardFadeState.released, ArmoryYardFadeState.destroying):
-                fadeCallback()
-            return
+        self.__fadeOutProcess(fadeCallback)
 
     @cached_property
     def cgfStageManager(self):

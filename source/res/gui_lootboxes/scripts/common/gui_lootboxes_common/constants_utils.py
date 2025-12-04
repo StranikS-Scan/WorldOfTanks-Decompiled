@@ -19,6 +19,11 @@ def addBonusPackerToMainRewardsMap(packer):
     EXTRA_BONUS_PACKER_MAPS_MAIN_REWARDS.update(packer)
 
 
+def addBonusPackerToStatisticsMap(packer):
+    from gui_lootboxes.gui.bonuses.bonuses_packers import EXTRA_BONUS_PACKER_STATISTICS
+    EXTRA_BONUS_PACKER_STATISTICS.update(packer)
+
+
 def addBonusesOrder(bonusConfigPath, bonusesSortTags=None, bonusTagsHandlers=None, bonusesKeyFunc=None):
     from gui_lootboxes.gui.bonuses.bonuses_order_config import BONUSES_CONFIG_PATH_LIST
     BONUSES_CONFIG_PATH_LIST.append(bonusConfigPath)

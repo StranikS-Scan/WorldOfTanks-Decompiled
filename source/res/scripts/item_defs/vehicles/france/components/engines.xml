@@ -122,18 +122,15 @@
     <Maybach_HL_295_F_bob>	31009	</Maybach_HL_295_F_bob>
     <Maybach_HL_275>	31010	</Maybach_HL_275>
     <Saurer_MP_65>	31011	</Saurer_MP_65>
+    <Saurer_MP_65F>	31012	</Saurer_MP_65F>
     <Maybach_HL_295_FA_02>	31013	</Maybach_HL_295_FA_02>
-    <Maybach_HL_295_F_ISP>	37000	</Maybach_HL_295_F_ISP>
+    <Hispano_180CH>	31014	</Hispano_180CH>
     <Development_Engine>	65000	</Development_Engine>
     <AMX_B_271_SH>	10000	</AMX_B_271_SH>
     <Detroit_Diesel_6V53T_SH>	10001	</Detroit_Diesel_6V53T_SH>
     <Hispano-Suiza_HS110_SH>	10002	</Hispano-Suiza_HS110_SH>
-    <AMX_B_271_H>	20001	</AMX_B_271_H>
-    <Detroit_Diesel_6V53T_H>	20002	</Detroit_Diesel_6V53T_H>
-    <Hispano-Suiza_HS110_H>	20003	</Hispano-Suiza_HS110_H>
     <_6F11SRY_MapsTraining_Dummy_SPG_2>	11	</_6F11SRY_MapsTraining_Dummy_SPG_2>
     <Maybach_HL_230_bootcamp>	1002	</Maybach_HL_230_bootcamp>
-    <Aster_portal>	40000	</Aster_portal>
   </ids>
   <shared>
     <Somua_S-40>
@@ -1096,23 +1093,6 @@
       <rpm_min>	324	</rpm_min>
       <rpm_max>	2050	</rpm_max>
     </Aster>
-    <Aster_portal>
-      <userString>	#france_vehicles:Aster	</userString>
-      <tags>	diesel	</tags>
-      <level>	2	</level>
-      <price>	750	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
-      <power>	150	</power>
-      <weight>	540	</weight>
-      <maxHealth>	50	</maxHealth>
-      <maxRegenHealth>	25	</maxRegenHealth>
-      <repairCost>	2	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	324	</rpm_min>
-      <rpm_max>	2050	</rpm_max>
-    </Aster_portal>
     <Somua_LM>
       <userString>	#france_vehicles:Somua_LM	</userString>
       <tags>	gasoline	</tags>
@@ -1312,6 +1292,23 @@
       <rpm_min>	400	</rpm_min>
       <rpm_max>	2100	</rpm_max>
     </Saurer_MP_65>
+    <Saurer_MP_65F>
+      <userString>	#france_vehicles:Saurer_MP_65F	</userString>
+      <tags>	diesel	</tags>
+      <level>	11	</level>
+      <price>	110000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
+      <power>	1500	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	300	</rpm_min>
+      <rpm_max>	2300	</rpm_max>
+    </Saurer_MP_65F>
     <Aster_M>
       <userString>	#france_vehicles:Aster_M	</userString>
       <tags>	diesel	</tags>
@@ -1492,23 +1489,6 @@
       <rpm_min>	411	</rpm_min>
       <rpm_max>	2282	</rpm_max>
     </Maybach_HL_295_F>
-    <Maybach_HL_295_F_ISP>
-      <userString>	#france_vehicles:Maybach_HL_295_F_ISP	</userString>
-      <tags>	gasoline	</tags>
-      <level>	10	</level>
-      <notInShop>	true	</notInShop>
-      <price>	123000	</price>
-      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
-      <power>	1200	</power>
-      <weight>	750	</weight>
-      <maxHealth>	360	</maxHealth>
-      <maxRegenHealth>	170	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	411	</rpm_min>
-      <rpm_max>	2282	</rpm_max>
-    </Maybach_HL_295_F_ISP>
     <Maybach_HL_295_F_bob>
       <userString>	#france_vehicles:Maybach_HL_295_F	</userString>
       <tags>	gasoline	</tags>
@@ -2107,6 +2087,23 @@
       <rpm_min>	379	</rpm_min>
       <rpm_max>	2060	</rpm_max>
     </E_9>
+    <Hispano_180CH>
+      <userString>	#france_vehicles:Hispano_180CH	</userString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	75000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	260	</power>
+      <weight>	380	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	449	</rpm_min>
+      <rpm_max>	2360	</rpm_max>
+    </Hispano_180CH>
     <Maybach_HL_295_IGR>
       <userString>	#igr_vehicles:Maybach_HL_295_IGR	</userString>
       <tags>	gasoline	</tags>
@@ -2278,57 +2275,6 @@
       <rpm_min>	300	</rpm_min>
       <rpm_max>	2300	</rpm_max>
     </Hispano-Suiza_HS110_SH>
-    <AMX_B_271_H>
-      <userString>	#france_vehicles:AMX_B_271_H	</userString>
-      <tags>	gasoline	</tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
-      <power>	600	</power>
-      <weight>	1000	</weight>
-      <maxHealth>	103	</maxHealth>
-      <maxRegenHealth>	65	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	399	</rpm_min>
-      <rpm_max>	2551	</rpm_max>
-    </AMX_B_271_H>
-    <Detroit_Diesel_6V53T_H>
-      <userString>	#france_vehicles:Detroit_Diesel_6V53T_H	</userString>
-      <tags>	diesel	</tags>
-      <level>	3	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
-      <power>	900	</power>
-      <weight>	1000	</weight>
-      <maxHealth>	103	</maxHealth>
-      <maxRegenHealth>	65	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	450	</rpm_min>
-      <rpm_max>	2000	</rpm_max>
-    </Detroit_Diesel_6V53T_H>
-    <Hispano-Suiza_HS110_H>
-      <userString>	#france_vehicles:Hispano-Suiza_HS110_H	</userString>
-      <tags>	diesel	</tags>
-      <level>	3	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
-      <power>	1200	</power>
-      <weight>	1000	</weight>
-      <maxHealth>	103	</maxHealth>
-      <maxRegenHealth>	65	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	300	</rpm_min>
-      <rpm_max>	2300	</rpm_max>
-    </Hispano-Suiza_HS110_H>
     <_6F11SRY_MapsTraining_Dummy_SPG_2>
       <userString>	#france_vehicles:_6F11SRY	</userString>
       <tags>	diesel	</tags>

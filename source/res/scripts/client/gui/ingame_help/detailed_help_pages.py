@@ -42,6 +42,7 @@ class HelpPagePriority(object):
     TANK_WITH_ABILITY = 11
     AUTOSHOOT_FLAMETHROWER = 11
     THERMAL_VISION = 11
+    DISTANCE_DAMAGE_SHELL = 11
     DUAL_GUN_WITH_AUTORELOAD_CLIP = 12
     DUAL_GUN_WITH_CLIP = 12
 
@@ -240,6 +241,31 @@ class AutoshootFlameTankPagesBuilder(DetailedHelpPagesBuilder):
         ctx['isAutoShootFlamethrower'] = isAutoShootFlamethrower = vehicle is not None and vehicle.typeDescriptor.isAutoShootFlamethrower
         ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or isAutoShootFlamethrower
         return
+
+
+class DistanceDamagePagesBuilder(DetailedHelpPagesBuilder):
+    _SUITABLE_CTX_KEYS = ('isDistanceDamageShell',)
+
+    @classmethod
+    def priority(cls):
+        return HelpPagePriority.DISTANCE_DAMAGE_SHELL
+
+    @classmethod
+    def buildPages(cls, ctx):
+        pages = []
+        addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.distanceDamage.headerTitle()), backport.text(R.strings.ingame_help.detailsHelp.distanceDamage.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.distanceDamage.description())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.unguidedMissile.distanceDamage()), hintCtx=HelpHintContext.MECHANICS)
+        return pages
+
+    @classmethod
+    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        if vehicle is None:
+            ctx['hasUniqueVehicleHelpScreen'] = False
+            return
+        else:
+            shot = vehicle.typeDescriptor.shot
+            ctx['isDistanceDamageShell'] = bool(shot.shell.distanceFactor)
+            ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or ctx['isDistanceDamageShell']
+            return
 
 
 class AssaultTankPagesBuilder(DetailedHelpPagesBuilder):
@@ -614,4 +640,5 @@ registerIngameHelpPagesBuilders((SiegeModePagesBuilder,
  AutoshootFlameTankPagesBuilder,
  ThermalVisionPagesBuilder,
  DualgunWithAutoreloadClip,
- DualgunWithClip))
+ DualgunWithClip,
+ DistanceDamagePagesBuilder))

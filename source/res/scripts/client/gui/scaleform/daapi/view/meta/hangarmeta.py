@@ -87,3 +87,6 @@ class HangarMeta(View):
 
     def as_updateUiEffectsStateS(self, isEnabled):
         return self.flashObject.as_updateUiEffectsState(isEnabled) if self._isDAAPIInited() else None
+
+    def as_shouldInjectNyBtnTipS(self, isEnabled):
+        return self.flashObject.as_shouldInjectNyBtnTip(isEnabled) if self._isDAAPIInited() else None

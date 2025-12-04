@@ -63,7 +63,6 @@ class LuiRules(enum.Enum):
     C7N_BUBBLE = 'CustomizationBubble'
     COMMON_CHAT = 'CommonChat'
     CHANNELS = 'Channels'
-    PORTAL_ENTRY_POINT = 'PortalEntryPoint'
 
 
 class _LimitedUIRule(namedtuple('_LimitedUIRule', ('idx', 'expression', 'tokens', 'message'))):

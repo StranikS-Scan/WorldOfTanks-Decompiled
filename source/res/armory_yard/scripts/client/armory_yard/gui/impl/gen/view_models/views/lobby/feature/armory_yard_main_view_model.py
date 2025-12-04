@@ -5,15 +5,15 @@ from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
 from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_chapter_model import ArmoryYardChapterModel
 from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_level_model import ArmoryYardLevelModel
-from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_quest_model import ArmoryYardQuestModel
-from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_rewards_vehicle_model import ArmoryYardRewardsVehicleModel
+from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_quest_sub_model import ArmoryYardQuestSubModel
 
 class State(Enum):
     BEFOREPROGRESSION = 'beforeProgression'
     ACTIVE = 'active'
-    POSTPROGRESSION = 'postProgression'
+    PURCHASESTAGE = 'purchaseStage'
     COMPLETED = 'completed'
     DISABLED = 'disabled'
+    INTRO = 'intro'
 
 
 class AnimationStatus(IntEnum):
@@ -42,6 +42,7 @@ class SimpleTooltipStates(IntEnum):
     TAB = 0
     CHAPTER = 1
     SHOPINFO = 2
+    STEP = 3
 
 
 class BuyButtonState(IntEnum):
@@ -51,37 +52,35 @@ class BuyButtonState(IntEnum):
 
 
 class ArmoryYardMainViewModel(ViewModel):
-    __slots__ = ('onMoveSpace', 'onStartMoving', 'onTabChange', 'onClose', 'onPlayAnimation', 'onSkipAnimation', 'onAboutEvent', 'onCollectReward', 'onBuyTokens', 'onShowVehiclePreview', 'onShopOpen')
+    __slots__ = ('onMoveSpace', 'onStartMoving', 'onTabChange', 'onClose', 'onPlayAnimation', 'onSkipAnimation', 'onAboutEvent', 'onCollectReward', 'onBuyTokens', 'onShowVehiclePreview', 'onShowStylePreview', 'onShopOpen', 'onPlayStageSound', 'onQuestReroll', 'onChapterSelect')
     TOOLTIP_ID_ARG = 'tooltipId'
     FINAL_REWARD_TOOLTIP_TYPE = 'finalReward'
 
-    def __init__(self, properties=17, commands=11):
+    def __init__(self, properties=25, commands=15):
         super(ArmoryYardMainViewModel, self).__init__(properties=properties, commands=commands)
 
-    @property
-    def finalReward(self):
-        return self._getViewModel(0)
-
-    @staticmethod
-    def getFinalRewardType():
-        return ArmoryYardRewardsVehicleModel
-
     def getState(self):
-        return State(self._getString(1))
+        return State(self._getString(0))
 
     def setState(self, value):
-        self._setString(1, value.value)
+        self._setString(0, value.value)
 
     def getTabId(self):
-        return TabId(self._getNumber(2))
+        return TabId(self._getNumber(1))
 
     def setTabId(self, value):
-        self._setNumber(2, value.value)
+        self._setNumber(1, value.value)
 
     def getCurrentLevel(self):
-        return self._getNumber(3)
+        return self._getNumber(2)
 
     def setCurrentLevel(self, value):
+        self._setNumber(2, value)
+
+    def getStartStepOfPostProgression(self):
+        return self._getNumber(3)
+
+    def setStartStepOfPostProgression(self, value):
         self._setNumber(3, value)
 
     def getViewedLevel(self):
@@ -124,7 +123,7 @@ class ArmoryYardMainViewModel(ViewModel):
 
     @staticmethod
     def getQuestsType():
-        return ArmoryYardQuestModel
+        return ArmoryYardQuestSubModel
 
     def getAnimationLevel(self):
         return self._getNumber(9)
@@ -150,36 +149,84 @@ class ArmoryYardMainViewModel(ViewModel):
     def setToTimestamp(self, value):
         self._setNumber(12, value)
 
+    def getReceivedTokensCount(self):
+        return self._getNumber(13)
+
+    def setReceivedTokensCount(self, value):
+        self._setNumber(13, value)
+
+    def getTotalTokensCount(self):
+        return self._getNumber(14)
+
+    def setTotalTokensCount(self, value):
+        self._setNumber(14, value)
+
+    def getMaxNumberOfSteps(self):
+        return self._getNumber(15)
+
+    def setMaxNumberOfSteps(self, value):
+        self._setNumber(15, value)
+
     def getAnimationStatus(self):
-        return AnimationStatus(self._getNumber(13))
+        return AnimationStatus(self._getNumber(16))
 
     def setAnimationStatus(self, value):
-        self._setNumber(13, value.value)
+        self._setNumber(16, value.value)
 
     def getReplay(self):
-        return self._getBool(14)
+        return self._getBool(17)
 
     def setReplay(self, value):
-        self._setBool(14, value)
+        self._setBool(17, value)
 
     def getShopButtonVisible(self):
-        return self._getBool(15)
+        return self._getBool(18)
 
     def setShopButtonVisible(self, value):
-        self._setBool(15, value)
+        self._setBool(18, value)
 
     def getBuyButtonState(self):
-        return BuyButtonState(self._getNumber(16))
+        return BuyButtonState(self._getNumber(19))
 
     def setBuyButtonState(self, value):
-        self._setNumber(16, value.value)
+        self._setNumber(19, value.value)
+
+    def getFreeRerollCount(self):
+        return self._getNumber(20)
+
+    def setFreeRerollCount(self, value):
+        self._setNumber(20, value)
+
+    def getRerollCountDown(self):
+        return self._getNumber(21)
+
+    def setRerollCountDown(self, value):
+        self._setNumber(21, value)
+
+    def getIsRerollEnabled(self):
+        return self._getBool(22)
+
+    def setIsRerollEnabled(self, value):
+        self._setBool(22, value)
+
+    def getIsRerollButtonTriggerEnabled(self):
+        return self._getBool(23)
+
+    def setIsRerollButtonTriggerEnabled(self, value):
+        self._setBool(23, value)
+
+    def getIsPostProgression(self):
+        return self._getBool(24)
+
+    def setIsPostProgression(self, value):
+        self._setBool(24, value)
 
     def _initialize(self):
         super(ArmoryYardMainViewModel, self)._initialize()
-        self._addViewModelProperty('finalReward', ArmoryYardRewardsVehicleModel())
         self._addStringProperty('state')
         self._addNumberProperty('tabId')
         self._addNumberProperty('currentLevel', 0)
+        self._addNumberProperty('startStepOfPostProgression', 0)
         self._addNumberProperty('viewedLevel', 0)
         self._addNumberProperty('rewardStatus')
         self._addArrayProperty('chapters', Array())
@@ -189,10 +236,18 @@ class ArmoryYardMainViewModel(ViewModel):
         self._addNumberProperty('levelDuration', 0)
         self._addNumberProperty('fromTimestamp', 0)
         self._addNumberProperty('toTimestamp', 0)
+        self._addNumberProperty('receivedTokensCount', 0)
+        self._addNumberProperty('totalTokensCount', 0)
+        self._addNumberProperty('maxNumberOfSteps', 0)
         self._addNumberProperty('animationStatus')
         self._addBoolProperty('replay', False)
         self._addBoolProperty('shopButtonVisible', False)
         self._addNumberProperty('buyButtonState')
+        self._addNumberProperty('freeRerollCount', 0)
+        self._addNumberProperty('rerollCountDown', 0)
+        self._addBoolProperty('isRerollEnabled', False)
+        self._addBoolProperty('isRerollButtonTriggerEnabled', False)
+        self._addBoolProperty('isPostProgression', False)
         self.onMoveSpace = self._addCommand('onMoveSpace')
         self.onStartMoving = self._addCommand('onStartMoving')
         self.onTabChange = self._addCommand('onTabChange')
@@ -203,4 +258,8 @@ class ArmoryYardMainViewModel(ViewModel):
         self.onCollectReward = self._addCommand('onCollectReward')
         self.onBuyTokens = self._addCommand('onBuyTokens')
         self.onShowVehiclePreview = self._addCommand('onShowVehiclePreview')
+        self.onShowStylePreview = self._addCommand('onShowStylePreview')
         self.onShopOpen = self._addCommand('onShopOpen')
+        self.onPlayStageSound = self._addCommand('onPlayStageSound')
+        self.onQuestReroll = self._addCommand('onQuestReroll')
+        self.onChapterSelect = self._addCommand('onChapterSelect')

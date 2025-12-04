@@ -1145,7 +1145,7 @@ class PremiumDaysBonusPacker(SimpleBonusUIPacker):
         if days in cls._ICONS_AVAILABLE:
             model.setName(bonus.getName())
         else:
-            model.setName('premium_universal')
+            model.setName('premium_plus_universal')
         model.setValue(str(bonus.getValue()))
         model.setLabel(label)
         return model
@@ -1272,9 +1272,11 @@ def packMissionsBonusModelAndTooltipData(bonuses, packer, model, tooltipData=Non
                     bonusTooltipList = list(bonusTooltipList)
                 else:
                     bonusList = sorted(bonusList, cmp=sort(bonus.getName()))
+            bonusContentIdList = packer.getContentId(bonus)
             for bonusIndex, item in enumerate(bonusList):
                 item.setIndex(bonusIndexTotal)
                 tooltipIdx = str(bonusIndexTotal)
+                item.setTooltipContentId(str(bonusContentIdList[bonusIndex]))
                 if hasattr(item, 'setTooltipId'):
                     item.setTooltipId(tooltipIdx)
                 model.addViewModel(item)

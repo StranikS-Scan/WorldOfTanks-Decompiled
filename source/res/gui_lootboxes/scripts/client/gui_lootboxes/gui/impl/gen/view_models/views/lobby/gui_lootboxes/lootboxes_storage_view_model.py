@@ -23,18 +23,23 @@ class ReturnPlace(IntEnum):
     TO_SHARDS = 3
     TO_REFERRAL = 4
     TO_FIR = 5
-    TO_LIGHTS = 6
+    TO_TEREM = 6
     TO_INSTALLATIONS = 7
     TO_FAIR = 8
-    TO_SKATING = 9
-    TO_ATTRACTION = 10
+    TO_SNOW_SLIDE = 9
+    TO_FIREWORKS = 10
     TO_PET = 11
 
 
-class LootboxesStorageViewModel(ViewModel):
-    __slots__ = ('openLootBoxes', 'onClose', 'buyBox', 'openningFinished', 'onLootboxSelected', 'changeAnimationEnabledSetting', 'showBonusProbabilities', 'hideTriggerHint', 'onError', 'showLootBoxInfoPage')
+class Glows(Enum):
+    DEFAULT = 'DEFAULT'
+    UNIQUE = 'UNIQUE'
 
-    def __init__(self, properties=10, commands=10):
+
+class LootboxesStorageViewModel(ViewModel):
+    __slots__ = ('openLootBoxes', 'onClose', 'onCloseEsc', 'buyBox', 'openningFinished', 'onLootboxSelected', 'changeAnimationEnabledSetting', 'showBonusProbabilities', 'hideTriggerHint', 'onError', 'showLootBoxInfoPage', 'showStatistic')
+
+    def __init__(self, properties=15, commands=12):
         super(LootboxesStorageViewModel, self).__init__(properties=properties, commands=commands)
 
     def getLootboxes(self):
@@ -105,6 +110,36 @@ class LootboxesStorageViewModel(ViewModel):
     def setIfHasUniqueURL(self, value):
         self._setBool(9, value)
 
+    def getGlowType(self):
+        return Glows(self._getString(10))
+
+    def setGlowType(self, value):
+        self._setString(10, value.value)
+
+    def getIsShowZeroStateStatistic(self):
+        return self._getBool(11)
+
+    def setIsShowZeroStateStatistic(self, value):
+        self._setBool(11, value)
+
+    def getIsShowStatistic(self):
+        return self._getBool(12)
+
+    def setIsShowStatistic(self, value):
+        self._setBool(12, value)
+
+    def getIsShowStatisticHint(self):
+        return self._getBool(13)
+
+    def setIsShowStatisticHint(self, value):
+        self._setBool(13, value)
+
+    def getIsShowStatisticHintNoBoxes(self):
+        return self._getBool(14)
+
+    def setIsShowStatisticHintNoBoxes(self, value):
+        self._setBool(14, value)
+
     def _initialize(self):
         super(LootboxesStorageViewModel, self)._initialize()
         self._addArrayProperty('lootboxes', Array())
@@ -117,8 +152,14 @@ class LootboxesStorageViewModel(ViewModel):
         self._addBoolProperty('isShowTriggerHint', False)
         self._addBoolProperty('isShowInfoButton', False)
         self._addBoolProperty('ifHasUniqueURL', True)
+        self._addStringProperty('glowType', Glows.DEFAULT.value)
+        self._addBoolProperty('isShowZeroStateStatistic', False)
+        self._addBoolProperty('isShowStatistic', False)
+        self._addBoolProperty('isShowStatisticHint', False)
+        self._addBoolProperty('isShowStatisticHintNoBoxes', False)
         self.openLootBoxes = self._addCommand('openLootBoxes')
         self.onClose = self._addCommand('onClose')
+        self.onCloseEsc = self._addCommand('onCloseEsc')
         self.buyBox = self._addCommand('buyBox')
         self.openningFinished = self._addCommand('openningFinished')
         self.onLootboxSelected = self._addCommand('onLootboxSelected')
@@ -127,3 +168,4 @@ class LootboxesStorageViewModel(ViewModel):
         self.hideTriggerHint = self._addCommand('hideTriggerHint')
         self.onError = self._addCommand('onError')
         self.showLootBoxInfoPage = self._addCommand('showLootBoxInfoPage')
+        self.showStatistic = self._addCommand('showStatistic')

@@ -112,15 +112,6 @@ class _DamageEfficiencyInfo(_FeedbackEventEfficiencyInfo):
     def isFortArtilleryEqDamage(self, primary=True):
         return self.__damage.isFortArtilleryEq(primary=primary)
 
-    def isGuidedMissile(self, primary=True):
-        return self.__damage.isGuidedMissile(primary=primary)
-
-    def isSuperBossAura(self, primary=True):
-        return self.__damage.isSuperBossAura(primary=primary)
-
-    def isSentinelAttack(self, primary=True):
-        return self.__damage.isSentinelAttack(primary=primary)
-
     def getShellType(self):
         return self.__damage.getShellType()
 

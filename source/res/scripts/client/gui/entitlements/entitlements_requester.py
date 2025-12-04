@@ -9,7 +9,7 @@ from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.gui.web import IWebController
 if typing.TYPE_CHECKING:
-    from typing import List
+    from typing import List, Optional
 _logger = logging.getLogger(__name__)
 
 class EntitlementsRequester(object):
@@ -36,6 +36,8 @@ class EntitlementsRequester(object):
 
     def __onRequestDone(self, ctx):
         request = self.__findRequest(ctx)
+        if not request:
+            return
         request.clear()
         self.__requests.remove(request)
 

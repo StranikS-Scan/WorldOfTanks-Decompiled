@@ -677,7 +677,7 @@ class _ShellData(_VSDItemData):
 
     def __init__(self, shell, inInventory, onOtherVehicle):
         super(_ShellData, self).__init__(shell, _INVENTORY_SHELLS if inInventory else FITTING_TYPES.SHELL)
-        self._flashData['kind'] = shell.type
+        self._flashData['kind'] = shell.kind
         self._flashData['count'] = shell.inventoryCount if inInventory else shell.count
         self.toInventory = onOtherVehicle or shell.isPremium
 

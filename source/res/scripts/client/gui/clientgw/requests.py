@@ -6,6 +6,7 @@ from client_request_lib.exceptions import ResponseCodes
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from gui.clans import formatters as clan_fmts
 from gui.clans.settings import DEFAULT_COOLDOWN, REQUEST_TIMEOUT
+from gui.clientgw.ny_tamagotchi.handlers import NyTamagotchiRequestHandlers
 from gui.shared.rq_cooldown import RequestCooldownManager, REQUEST_SCOPE
 from gui.shared.utils.requesters.RequestsController import RequestsController
 from gui.shared.utils.requesters.abstract import Response, ClientRequestsByIDProcessor
@@ -112,6 +113,7 @@ class ClientgwRequestsController(RequestsController):
         self.__handlers.update(AgateRequestHandlers(requester).get())
         self.__handlers.update(ShopRequestHandlers(requester).get())
         self.__handlers.update(GoldWagonRequestHandlers(requester).get())
+        self.__handlers.update(NyTamagotchiRequestHandlers(requester).get())
 
     def fini(self):
         super(ClientgwRequestsController, self).fini()

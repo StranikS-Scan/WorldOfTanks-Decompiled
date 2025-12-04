@@ -6,6 +6,7 @@ from gui.impl.gen import R
 from frameworks.wulf import ViewSettings
 from gui.impl.pub import ViewImpl
 from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.tooltips.guaranteed_reward_tooltip_model import GuaranteedRewardTooltipModel
+from gui_lootboxes.gui.shared.gui_helpers import fillLootBoxGuaranteedFrequencies
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
@@ -28,9 +29,9 @@ class GuaranteedRewardTooltip(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         with self.viewModel.transaction() as vm:
             fillIntsArray(self.__lootBox.getGuaranteedVehicleLevelsRange(), vm.getLevelsRange())
-            vm.setGuaranteedFrequency(self.__lootBox.getGuaranteedFrequency())
             vm.setVehiclesOnly(self.__lootBox.isVehicleGuaranteedOnly())
             vm.setMultipleStages(self.__lootBox.isMultipleStage())
+            fillLootBoxGuaranteedFrequencies(self.__lootBox, vm)
             lootBoxes = self.__itemsCache.items.tokens.getLootBoxes().values()
             boxesWithSameHistoryName = [ lb.getUserNameKey() for lb in lootBoxes if lb.getHistoryName() == self.__lootBox.getHistoryName() ]
             if len(boxesWithSameHistoryName) > 1:

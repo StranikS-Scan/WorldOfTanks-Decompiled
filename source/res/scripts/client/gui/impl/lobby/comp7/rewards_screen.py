@@ -17,16 +17,19 @@ from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from comp7_ranks_common import Comp7Division
     from frameworks.wulf.view.view_event import ViewEvent
     from gui.server_events.event_items import TokenQuest
 _MAX_MAIN_REWARDS_COUNT = 4
 _MAIN_REWARDS = ('styleProgress', 'dossier_badge', 'dogTagComponents')
+_LOOTBOX_RES = R.views.dyn('gui_lootboxes').dyn('lobby').dyn('gui_lootboxes').dyn('tooltips').dyn('LootboxTooltip')
 _BonusData = namedtuple('_BonusData', ('bonus', 'tooltip'))
 
 class _BaseRewardsView(ViewImpl):
     __slots__ = ('_bonusData',)
+    _itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.comp7.RewardsScreen())
@@ -51,13 +54,22 @@ class _BaseRewardsView(ViewImpl):
         return super(_BaseRewardsView, self).createToolTip(event)
 
     def createToolTipContent(self, event, contentID):
-        if contentID == R.views.lobby.tooltips.AdditionalRewardsTooltip():
+        if _LOOTBOX_RES.exists() and contentID == _LOOTBOX_RES():
+            from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import LootboxTooltip
+            tooltipId = event.getArgument('tooltipId')
+            if tooltipId is None:
+                return
+            tooltipData = self._bonusData[int(tooltipId)]
+            lootBoxID = tooltipData.tooltip.get('lootBoxID')
+            lootBox = self._itemsCache.items.tokens.getLootBoxByID(int(lootBoxID))
+            return LootboxTooltip(lootBox)
+        elif contentID == R.views.lobby.tooltips.AdditionalRewardsTooltip():
             showCount = int(event.getArgument('showCount'))
             showCount += self._getMainRewardsCount()
             bonuses = [ d.bonus for d in self._bonusData[showCount:] ]
             return AdditionalRewardsTooltip(bonuses)
         else:
-            return None
+            return
 
     def _initialize(self, *args, **kwargs):
         super(_BaseRewardsView, self)._initialize(*args, **kwargs)

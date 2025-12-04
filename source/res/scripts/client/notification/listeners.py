@@ -2,20 +2,18 @@
 # Embedded file name: scripts/client/notification/listeners.py
 import copy
 import json
-import logging
 import time
 import datetime
 import weakref
+import logging
 from collections import defaultdict
 from functools import partial
 import typing
 import WWISE
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_MARATHON_STARTED, TRADING_CARAVAN_NOTIFICATIONS, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, ArmoryYard, REFERRAL_PROGRAM_PGB_FULL, SUBSCRIPTION_LAST_EXPIRATION_NOTIFICATION, BattleMatters, EarlyAccess, Paragons, PREMIUM_QUESTS_NOTIFICATION, CUSTOM_NOTIFICATIONS, BLACK_MARKET_AUCTION_NOTIFICATIONS
+from account_helpers.AccountSettings import INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_MARATHON_STARTED, TRADING_CARAVAN_NOTIFICATIONS, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, REFERRAL_PROGRAM_PGB_FULL, SUBSCRIPTION_LAST_EXPIRATION_NOTIFICATION, BattleMatters, EarlyAccess, Paragons, PREMIUM_QUESTS_NOTIFICATION, CUSTOM_NOTIFICATIONS, BLACK_MARKET_AUCTION_NOTIFICATIONS
 from adisp import adisp_process
-from armory_yard.gui.shared.formatters import formatSpentCurrencies, formatPurchaseItems, formatBundlePurchase
-from armory_yard_constants import State
 from personal_missions import PM_BRANCH
 from paragons_helpers import pushParagonsBranchIsUnavalableMessage, pushParagonsBranchIsAvalableMessage, pushParagonsEnableMessage, pushParagonsContinuingMessage, pushParagonsBranchResetAvailableMessage, pushParagonsNewStageAvailableMessage, pushParagonsDisableMessage
 from renewable_subscription_common.settings_constants import WotPlusState
@@ -69,15 +67,15 @@ from helpers.time_utils import getTimestampByStrDate
 from messenger import MessengerEntry
 from messenger.formatters import TimeFormatter
 from messenger.m_constants import PROTO_TYPE, SCH_CLIENT_MSG_TYPE, USER_ACTION_ID, GFNotificationTemplates
+from ids_generators import SequenceIDGenerator
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from nations import AVAILABLE_NAMES
-from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, FriendshipRequestDecorator, CustomNotificationsStartDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, NotifyCenterPopUpDecorator, WotPlusIntroViewMessageDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator, TradingCaravanRefillDecorator, EarlyAccessDecorator, BlackMarketVehicleAuctionStageStartDecorator, BlackMarketVehicleAuctionStageFinishDecorator, BlackMarketAuctionStageStartDecorator, BlackMarketAuctionStageFinishDecorator
+from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, FriendshipRequestDecorator, CustomNotificationsStartDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, NotifyCenterPopUpDecorator, WotPlusIntroViewMessageDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator, TradingCaravanRefillDecorator, EarlyAccessDecorator, BlackMarketVehicleAuctionStageStartDecorator, BlackMarketVehicleAuctionStageFinishDecorator, BlackMarketAuctionStageStartDecorator, BlackMarketAuctionStageFinishDecorator, GiftSystemOperationsFactory, PsaCoinReminderMessageDecorator
 from notification.settings import NOTIFICATION_TYPE, NotificationData
-from shared_utils import first
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICollectionsSystemController, IEventsNotificationsController, IGameSessionController, ILimitedUIController, IResourceWellController, ISeniorityAwardsController, ISteamCompletionController, IArmoryYardController, IReferralProgramController, IWotPlusController, IEarlyAccessController, IArmoryYardShopController, IParagonsController, IUnseenEventsCounter
+from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICollectionsSystemController, IEventsNotificationsController, IGameSessionController, ILimitedUIController, IResourceWellController, ISeniorityAwardsController, ISteamCompletionController, IReferralProgramController, IWotPlusController, IEarlyAccessController, IParagonsController, IUnseenEventsCounter
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -85,12 +83,12 @@ from skeletons.gui.login_manager import ILoginManager
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.system_messages import ISystemMessages
 from tutorial.control.context import GLOBAL_FLAG
 from tutorial.control.game_vars import getVehicleByIntCD
 from th_async import th_async, th_await
+from shared_utils import first
 if typing.TYPE_CHECKING:
-    from typing import List, Dict, Optional, Any, Type, Tuple
+    from typing import List, Dict, Optional, Any, Type
     from notification.NotificationsModel import NotificationsModel
     from gui.platform.wgnp.steam_account.statuses import SteamAccEmailStatus
     from collections_common import Collection
@@ -1810,7 +1808,9 @@ class IntegratedAuctionListener(_NotificationListener):
         for notification in self.__eventNotifications.getEventsNotifications():
             if notification.eventType == AUCTION_FINISH_EVENT_TYPE:
                 data = json.loads(notification.data)
-                if self.__getTimeToStart(getTimestampByStrDate(str(data['startDate']))) <= self.__TIME_TO_SHOW_SOON:
+                startDate = getTimestampByStrDate(str(data['startDate']))
+                endDate = getTimestampByStrDate(str(data['endDate']))
+                if startDate - self.__TIME_TO_SHOW_SOON <= time_utils.getServerUTCTime() < endDate:
                     return True
 
         return False
@@ -2235,173 +2235,6 @@ class CollectionsListener(_NotificationListener, EventsHandler):
         SystemMessages.pushMessage(text=backport.text(self.__NOTIFICATIONS.eventEnabled.text()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.CollectionsEnabled)
 
 
-class ArmoryYardListener(_NotificationListener):
-    __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
-    __armoryYardShopCtrl = dependency.descriptor(IArmoryYardShopController)
-    __limitedUIController = dependency.descriptor(ILimitedUIController)
-    __armoryYardText = R.strings.armory_yard.notifications
-    __systemMessages = dependency.descriptor(ISystemMessages)
-    __lastTimeErrorShown = 0
-    __timeDelay = 2
-    ARMORY_YARD_TEXT = R.strings.armory_yard.notifications
-    ARMORY_YARD_SHOP_TEXT = R.strings.armory_shop.notifications
-    CURRENCY_TYPE_MAP = {Currency.GOLD: (SM_TYPE.FinancialTransactionWithGold, ARMORY_YARD_TEXT.payed.priceGold),
-     Currency.CRYSTAL: (SM_TYPE.FinancialTransactionWithCrystal, ARMORY_YARD_TEXT.payed.priceCrystal)}
-
-    def start(self, model):
-        super(ArmoryYardListener, self).start(model)
-        if not self.__limitedUIController.isRuleCompleted(LuiRules.ARMORY_YARD_ENTRY_POINT):
-            self.__limitedUIController.startObserve(LuiRules.ARMORY_YARD_ENTRY_POINT, self.__onLuiRuleCompleted)
-        else:
-            self.__subscribe()
-        return True
-
-    def stop(self):
-        if not self.__limitedUIController.isRuleCompleted(LuiRules.ARMORY_YARD_ENTRY_POINT):
-            self.__limitedUIController.stopObserve(LuiRules.ARMORY_YARD_ENTRY_POINT, self.__onLuiRuleCompleted)
-        else:
-            self.__unsubscribe()
-        super(ArmoryYardListener, self).stop()
-
-    def __onLuiRuleCompleted(self, *_):
-        self.__limitedUIController.stopObserve(LuiRules.ARMORY_YARD_ENTRY_POINT, self.__onLuiRuleCompleted)
-        self.__subscribe()
-
-    def __subscribe(self):
-        self.__armoryYardCtrl.onCheckNotify += self.__onCheckNotify
-        self.__armoryYardCtrl.onAnnouncement += self.__announcement
-        self.__armoryYardCtrl.onPayed += self.__payed
-        self.__armoryYardCtrl.onServerSwitchChange += self.__switchChange
-        self.__armoryYardCtrl.onStyleQuestEnds += self.__onStyleQuestEnds
-        self.__armoryYardCtrl.onProgressUpdated += self.__checkChapter
-        self.__armoryYardCtrl.onQuestsUpdated += self.__checkChapter
-        self.__armoryYardCtrl.onCollectReward += self.__collectReward
-        self.__armoryYardCtrl.onPayedError += self.__paymentError
-        self.__armoryYardCtrl.onBundleOutTime += self.__bundleOutTime
-        self.__armoryYardShopCtrl.onPurchaseComplete += self.__onShopPurchaseComplete
-        self.__armoryYardShopCtrl.onPurchaseError += self.__paymentError
-        self.__lastTimeErrorShown = 0
-        self.__onCheckNotify()
-
-    def __unsubscribe(self):
-        self.__armoryYardCtrl.onCheckNotify -= self.__onCheckNotify
-        self.__armoryYardCtrl.onAnnouncement -= self.__announcement
-        self.__armoryYardCtrl.onPayed -= self.__payed
-        self.__armoryYardCtrl.onServerSwitchChange -= self.__switchChange
-        self.__armoryYardCtrl.onStyleQuestEnds -= self.__onStyleQuestEnds
-        self.__armoryYardCtrl.onProgressUpdated -= self.__checkChapter
-        self.__armoryYardCtrl.onQuestsUpdated -= self.__checkChapter
-        self.__armoryYardCtrl.onCollectReward -= self.__collectReward
-        self.__armoryYardCtrl.onPayedError -= self.__paymentError
-        self.__armoryYardCtrl.onBundleOutTime -= self.__bundleOutTime
-        self.__armoryYardShopCtrl.onPurchaseComplete -= self.__onShopPurchaseComplete
-        self.__armoryYardShopCtrl.onPurchaseError -= self.__paymentError
-        self.__lastTimeErrorShown = 0
-
-    def __getHeader(self):
-        return backport.text(self.ARMORY_YARD_TEXT.title())
-
-    def __getShopHeader(self):
-        return backport.text(self.ARMORY_YARD_SHOP_TEXT.title())
-
-    def __collectReward(self):
-        SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.collectRewards()), type=SystemMessages.SM_TYPE.ArmoryYardMain, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(self.ARMORY_YARD_TEXT.rewards.title())})
-
-    def __switchChange(self):
-        if self.__armoryYardCtrl.getState() != State.DISABLED:
-            _, endDate = self.__armoryYardCtrl.getSeasonInterval()
-            SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.switcher.enabled(), endDate=backport.getDateTimeFormat(endDate)), type=SystemMessages.SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
-        else:
-            SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.switcher.disabled()), type=SystemMessages.SM_TYPE.ErrorHeader, priority=NotificationPriorityLevel.HIGH, messageData={'header': self.__getHeader()})
-
-    def __announcement(self, startDate, chapterInfo=None):
-        if chapterInfo is None and not AccountSettings.getArmoryYard(ArmoryYard.EVENT_ANNOUNCEMENT):
-            vehicle = self.__armoryYardCtrl.getFinalRewardVehicle()
-            isSpecial = vehicle.isSpecial
-            typeName = 'premium'
-            if isSpecial and vehicle.type.endswith('SPG'):
-                typeName = 'specialSPG'
-            elif isSpecial:
-                typeName = 'special'
-            SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.announcement.event(), startDate=backport.getDateTimeFormat(startDate), typeName=backport.text(self.ARMORY_YARD_TEXT.announcement.dyn(typeName)()), tankName=vehicle.userName, tankLevel=int2roman(vehicle.level), roleName=backport.text(self.ARMORY_YARD_TEXT.announcement.dyn(vehicle.type.replace('-', '_'))())), type=SystemMessages.SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
-        else:
-            key = '%s_%s' % (ArmoryYard.ANNOUNCEMENT_CHAPTER_PREFIX, chapterInfo.ID)
-            if not AccountSettings.getArmoryYard(key):
-                AccountSettings.setArmoryYard(key, True)
-                SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.announcement.chapter(), count=chapterInfo.ordinalNumber, chapter_name=backport.text(R.strings.armory_yard.mainView.chapter.index.dyn('c_%d' % chapterInfo.ordinalNumber)()), startDate=backport.getDateTimeFormat(startDate)), type=SystemMessages.SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
-        return
-
-    def __getShopPurchaseSMType(self, currencies):
-        currencies = dict(currencies)
-        isGold, isCoins = currencies.get(Currency.GOLD, 0) > 0, currencies.get(Currency.AYCOIN, 0) > 0
-        if isGold and isCoins:
-            return SystemMessages.SM_TYPE.FinancialTransactionWithGoldAndArmoryCoinsHeader
-        return SystemMessages.SM_TYPE.FinancialTransactionWithArmoryCoinsHeader if isCoins else SystemMessages.SM_TYPE.FinancialTransactionWithGoldHeader
-
-    def __onShopPurchaseComplete(self, productId, currencies, rewards, isBundle):
-        SystemMessages.pushMessage(text=backport.text(R.strings.armory_shop.notifications.financialTransaction(), date=TimeFormatter.getLongDatetimeFormat(time_utils.getServerUTCTime()), currencies=formatSpentCurrencies(currencies)), type=self.__getShopPurchaseSMType(currencies), priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(R.strings.messenger.serviceChannelMessages.currencyUpdate.financial_transaction())})
-        text = formatBundlePurchase(productId, rewards) if isBundle else formatPurchaseItems(rewards)
-        smType = SystemMessages.SM_TYPE.ArmoryYardBundlePurchase if isBundle else SystemMessages.SM_TYPE.InformationHeader
-        SystemMessages.pushMessage(text=text, type=smType, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.titles.purchase())})
-
-    def __payed(self, isPostProgression, count, price=None, currency=Currency.GOLD):
-        bodySection = self.ARMORY_YARD_TEXT.postPayed if isPostProgression else self.ARMORY_YARD_TEXT.payed
-        messageType = SystemMessages.SM_TYPE.FinancialTransactionBuyAYFreeCoins if isPostProgression else SystemMessages.SM_TYPE.FinancialTransactionBuyAYCoins
-        messageResID = bodySection.single() if count == 1 else bodySection.multiple()
-        SystemMessages.pushMessage(text=backport.text(messageResID, count=count), type=messageType, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
-        if price is None or currency not in self.CURRENCY_TYPE_MAP:
-            return
-        else:
-            systemMessageType, _ = self.CURRENCY_TYPE_MAP[currency]
-            SystemMessages.pushMessage(text=backport.text(R.strings.armory_shop.notifications.financialTransaction(), date=TimeFormatter.getLongDatetimeFormat(time_utils.getServerUTCTime()), currencies=formatSpentCurrencies([(currency, price.getSignValue(currency))])), type=systemMessageType, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(R.strings.messenger.serviceChannelMessages.currencyUpdate.financial_transaction())})
-            return
-
-    def __paymentError(self):
-        currentTime = time_utils.getServerUTCTime()
-        if currentTime - self.__lastTimeErrorShown < self.__timeDelay:
-            return
-        self.__lastTimeErrorShown = currentTime
-        SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.payed.error()), type=SystemMessages.SM_TYPE.ErrorHeader, priority=NotificationPriorityLevel.HIGH, messageData={'header': self.__getHeader()})
-
-    def __bundleOutTime(self):
-        SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.bundleOutTime()), type=SystemMessages.SM_TYPE.ErrorHeader, priority=NotificationPriorityLevel.HIGH, messageData={'header': self.__getHeader()})
-
-    def __checkState(self):
-        state = self.__armoryYardCtrl.getState()
-        armoryIsActiveMessageWasShown = AccountSettings.getArmoryYard(State.ACTIVE.value)
-        currentStateMessageWasShown = AccountSettings.getArmoryYard(state.value)
-        if not self.__armoryYardCtrl.isActive() or currentStateMessageWasShown and armoryIsActiveMessageWasShown:
-            return
-        AccountSettings.setArmoryYard(state.value, True)
-        if not armoryIsActiveMessageWasShown:
-            SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.active()), type=SystemMessages.SM_TYPE.ArmoryYardMain, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
-            AccountSettings.setArmoryYard(State.ACTIVE.value, True)
-        if state == State.POSTPROGRESSION and not currentStateMessageWasShown and not self.__armoryYardCtrl.isCompleted():
-            SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.postProgression()), type=SystemMessages.SM_TYPE.ArmoryYardPostprogression, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
-
-    def __checkChapter(self):
-        if self.__armoryYardCtrl.getState() != State.ACTIVE:
-            return
-        nowTime = time_utils.getServerUTCTime()
-        for cycle in self.__armoryYardCtrl.serverSettings.getCurrentSeason().getAllCycles().values():
-            key = '%s_%s' % (ArmoryYard.START_CHAPTER_PREFIX, cycle.ID)
-            if cycle.startDate <= nowTime < cycle.endDate and not AccountSettings.getArmoryYard(key):
-                AccountSettings.setArmoryYard(key, True)
-                SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.started.chapter.untitled()), type=SystemMessages.SM_TYPE.ArmoryYardOpenChapter, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
-
-    def __onCheckNotify(self):
-        if not self.__armoryYardCtrl.isEnabled():
-            return
-        self.__armoryYardCtrl.checkAnnouncement()
-        self.__checkState()
-        self.__checkChapter()
-
-    def __onStyleQuestEnds(self, endDate):
-        if not AccountSettings.getArmoryYard(ArmoryYard.STYLE_QUEST_ENDS):
-            AccountSettings.setArmoryYard(ArmoryYard.STYLE_QUEST_ENDS, True)
-            SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.styleQuest(), endDate=backport.getDateTimeFormat(endDate)), type=SystemMessages.SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
-
-
 class ReferralProgramListener(_NotificationListener):
     __referralProgramController = dependency.descriptor(IReferralProgramController)
 
@@ -2583,6 +2416,112 @@ class BattleMattersTaskReminderListener(BaseReminderListener, EventsHandler):
     def __isToday(timestamp):
         todayStart, todayEnd = time_utils.getDayTimeBoundsForLocal(time_utils.getServerUTCTime())
         return todayStart <= timestamp <= todayEnd
+
+
+class PsaCoinReminderListener(_NotificationListener):
+    __bootCampController = dependency.descriptor(IBootcampController)
+    __saCtrl = dependency.descriptor(ISeniorityAwardsController)
+    __itemsCache = dependency.descriptor(IItemsCache)
+    MSG_ID = 0
+
+    def start(self, model):
+        result = super(PsaCoinReminderListener, self).start(model)
+        if result:
+            self.__saCtrl.onUpdated += self.__tryNotify
+            self.__itemsCache.onSyncCompleted += self.__tryNotify
+            self.__tryNotify()
+        return result
+
+    def stop(self):
+        super(PsaCoinReminderListener, self).stop()
+        self.__saCtrl.onUpdated -= self.__tryNotify
+        self.__itemsCache.onSyncCompleted -= self.__tryNotify
+
+    def __tryNotify(self, *_):
+        if self.__bootCampController.isInBootcamp():
+            return
+        coinsCount = self.__saCtrl.getSACoin()
+        if not self.__saCtrl.isEnabled or coinsCount <= 0:
+            self.__onCoinsRemoved()
+        else:
+            msgPrLevel = NotificationPriorityLevel.LOW
+            notification = PsaCoinReminderMessageDecorator(self.MSG_ID, coinsCount, msgPrLevel)
+            self.__onCoinsAdded(notification)
+
+    def __onCoinsAdded(self, newNotification):
+        model = self._model()
+        if model:
+            prevNotifacation = model.getNotification(NOTIFICATION_TYPE.PSACOIN_REMINDER, newNotification.getID())
+            if prevNotifacation is None:
+                model.addNotification(newNotification)
+            else:
+                savedCount = newNotification.getSavedData()
+                prevSavedCount = prevNotifacation.getSavedData()
+                if prevSavedCount != savedCount:
+                    model.updateNotification(NOTIFICATION_TYPE.PSACOIN_REMINDER, newNotification.getID(), newNotification.getEntity(), False)
+        return
+
+    def __onCoinsRemoved(self):
+        model = self._model()
+        if model:
+            model.removeNotification(NOTIFICATION_TYPE.PSACOIN_REMINDER, self.MSG_ID)
+
+
+class GiftSystemOperationsListener(_NotificationListener, UsersInfoHelper):
+    __NOTIFICATION_TYPE = NOTIFICATION_TYPE.GIFT_SYSTEM_OPERATION
+
+    def __init__(self):
+        super(GiftSystemOperationsListener, self).__init__()
+        self.__idGenerator = SequenceIDGenerator()
+        self.__userNamePendingNotifications = defaultdict(set)
+
+    def start(self, model):
+        result = super(GiftSystemOperationsListener, self).start(model)
+        g_eventBus.addListener(events.GiftSystemOperationEvent.GIFT_SENT, self.__onGiftSent)
+        g_eventBus.addListener(events.GiftSystemOperationEvent.GIFT_OPENED, self.__onGiftOpened)
+        return result
+
+    def stop(self):
+        self.__userNamePendingNotifications.clear()
+        g_eventBus.removeListener(events.GiftSystemOperationEvent.GIFT_SENT, self.__onGiftSent)
+        g_eventBus.removeListener(events.GiftSystemOperationEvent.GIFT_OPENED, self.__onGiftOpened)
+        super(GiftSystemOperationsListener, self).stop()
+
+    def onUserNamesReceived(self, names):
+        model = self._model()
+        if not model:
+            return
+        for userDBID, userName in names.iteritems():
+            if userDBID not in self.__userNamePendingNotifications:
+                continue
+            for entityID in self.__userNamePendingNotifications[userDBID]:
+                operationDecorator = model.getNotification(self.__NOTIFICATION_TYPE, entityID)
+                if not operationDecorator:
+                    continue
+                operationDecorator.setUserInfo(userName)
+                model.updateNotification(self.__NOTIFICATION_TYPE, entityID, operationDecorator.getEntity(), False)
+
+            self.__userNamePendingNotifications[userDBID] = set()
+
+    def __onGiftOpened(self, event):
+        self.__addOperationNofication(GiftSystemOperationsFactory.createGiftOpenedDecorator, event.ctx)
+
+    def __onGiftSent(self, event):
+        self.__addOperationNofication(GiftSystemOperationsFactory.createGiftSentDecorator, event.ctx)
+
+    def __addOperationNofication(self, factory, ctx):
+        model = self._model()
+        if not model:
+            return
+        notification = factory(self.__idGenerator.next(), model, ctx)
+        userName = self.getUserName(notification.getUserID())
+        if userName:
+            notification.initUserInfo(userName, self.getUserClanAbbrev(notification.getUserID()))
+        else:
+            self.__userNamePendingNotifications[notification.getUserID()].add(notification.getID())
+            self.syncUsersInfo()
+        if notification:
+            model.addNotification(notification)
 
 
 class EarlyAccessListener(_NotificationListener):
@@ -2979,7 +2918,6 @@ registerNotificationsListeners((ServiceChannelListener,
  SeniorityAwardsQuestListener,
  SeniorityAwardsTokenListener,
  CollectionsListener,
- ArmoryYardListener,
  ReferralProgramListener,
  BattleMattersTaskReminderListener,
  TradingCaravanListener,

@@ -49,7 +49,12 @@ class BasePerksController(object):
      'reverseEnginePower',
      'gun/changeShell/reloadFactor',
      'crewRolesFactor',
-     'gun/temperature/heatingFactor'}
+     'gun/temperature/heatingFactor',
+     'ammoBayHealthFactor',
+     'fuelTankHealthFactor',
+     'engineHealthFactor',
+     'chassisHealthFactor',
+     'trackRammingDamageFactor'}
     _additiveAttributeFactors = {'crewLevelIncrease',
      'healthBurnPerSecLossFraction',
      'stunResistanceEffect',

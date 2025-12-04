@@ -10,6 +10,7 @@ class GuiLootBoxesControllerStub(IGuiLootBoxesController):
     onKeysUpdate = Event.Event()
     onWelcomeScreenClosed = Event.Event()
     onStorageVisited = Event.Event()
+    onOpenLootboxesComplete = Event.Event()
 
     @property
     def isConsumesEntitlements(self):
@@ -89,3 +90,6 @@ class GuiLootBoxesControllerStub(IGuiLootBoxesController):
 
     def getGuiLootBoxByTokenID(self, tokenID):
         return None
+
+    def getInfoPageURL(self, lootboxType):
+        pass

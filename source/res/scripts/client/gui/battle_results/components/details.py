@@ -255,6 +255,7 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         isTotalShown |= self.__addEventsMoney(baseCredits, premiumCredits, goldRecords)
         isTotalShown |= self.__addSubsTeamBonus(baseCredits, premiumCredits)
         isTotalShown |= self.__addStatsItemIfExists('birthdayEconomicsBonus', baseCredits, premiumCredits, False, None, 'birthdayCreditsBonus')
+        isTotalShown |= self.__addStatsItemIfExists('newYear', baseCredits, premiumCredits, False, None, 'newYearCreditsFactor')
         isTotalShown |= self.__addReferralSystemFactor(baseCredits, premiumCredits)
         isTotalShown |= self.__addStatsItemIfExists('directives', baseCredits, premiumCredits, False, None, 'directivesCredits', 'directivesCreditsFactor100')
         self._addEmptyRow()
@@ -461,6 +462,7 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
         if showSquadLabels:
             self.__addSquadXPDetails(baseXP, premiumXP)
         self._addAOGASFactor(baseXP)
+        self.__addNewYearXPs(baseXP, premiumXP, baseFreeXP, premiumFreeXP)
         if self.getNextComponentIndex() < 7:
             self._addEmptyRow()
         self.__addXPsViolationPenalty()
@@ -536,6 +538,20 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
              'column2': style.makeFreeXpLabel(baseFreeXPValue, canBeFaded=baseCanBeFaded),
              'column4': style.makeFreeXpLabel(premiumFreeXPValue, canBeFaded=premiumCanBeFaded)}
             self._addStatsRow('boosters', **columns)
+
+    def __addNewYearXPs(self, baseXP, premiumXP, baseFreeXP, premiumFreeXP):
+        baseXPValue = baseXP.getRecord('newYearXp') + baseXP.findRecord('newYearXpFactor')
+        premiumXPValue = premiumXP.getRecord('newYearXp') + premiumXP.findRecord('newYearXpFactor')
+        baseFreeXPValue = baseFreeXP.getRecord('newYearFreeXp') + baseFreeXP.findRecord('newYearFreeXpFactor')
+        premiumFreeXPValue = premiumFreeXP.getRecord('newYearFreeXp') + premiumFreeXP.findRecord('newYearFreeXpFactor')
+        if baseXPValue or premiumXPValue or baseFreeXPValue or premiumFreeXPValue:
+            baseCanBeFaded = not self.hasAnyPremium
+            premiumCanBeFaded = self.hasAnyPremium
+            columns = {'column1': style.makeXpLabel(baseXPValue, canBeFaded=baseCanBeFaded),
+             'column3': style.makeXpLabel(premiumXPValue, canBeFaded=premiumCanBeFaded),
+             'column2': style.makeFreeXpLabel(baseFreeXPValue, canBeFaded=baseCanBeFaded),
+             'column4': style.makeFreeXpLabel(premiumFreeXPValue, canBeFaded=premiumCanBeFaded)}
+            self._addStatsRow('vehicleBranch', **columns)
 
     def __addEventXPs(self, baseXP, premiumXP, baseFreeXP, premiumFreeXP):
         baseXPValue = baseXP.findRecord('eventXPList_') + baseXP.findRecord('eventXPFactor100List_')

@@ -6,14 +6,15 @@ from gui.impl.pub import ViewImpl
 from gui.impl.gen import R
 
 class TaskConditionTooltipView(ViewImpl):
-    __slots__ = ('__vehicleLevels', '__vehicleTypes', '__battleTypes')
+    __slots__ = ('__vehicleLevels', '__vehicleTypes', '__battleTypes', '__vehicleNations')
 
-    def __init__(self, vehicleLevels, vehicleTypes, battleTypes):
+    def __init__(self, vehicleLevels, vehicleTypes, battleTypes, vehicleNations):
         settings = ViewSettings(R.views.armory_yard.lobby.feature.tooltips.TaskConditionTooltipView())
         settings.flags = ViewFlags.VIEW
         settings.model = TaskConditionTooltipViewModel()
         self.__vehicleLevels = vehicleLevels
         self.__vehicleTypes = vehicleTypes
+        self.__vehicleNations = vehicleNations
         self.__battleTypes = battleTypes
         super(TaskConditionTooltipView, self).__init__(settings)
 
@@ -30,6 +31,11 @@ class TaskConditionTooltipView(ViewImpl):
         model.setLevels(str(self.__vehicleLevels))
         array = model.getVehicleTypes()
         for item in self.__vehicleTypes.split(','):
+            array.addString(item)
+
+        array.invalidate()
+        array = model.getVehicleNations()
+        for item in self.__vehicleNations.split(','):
             array.addString(item)
 
         array.invalidate()

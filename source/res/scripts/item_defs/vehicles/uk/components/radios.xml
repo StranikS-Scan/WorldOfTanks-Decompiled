@@ -34,15 +34,16 @@
     <C13B42_bob>	31005	</C13B42_bob>
     <SR_C45>	31006	</SR_C45>
     <SR_C42>	31007	</SR_C42>
+    <SR_C42_C>	31008	</SR_C42_C>
     <SR_C42_S>	31009	</SR_C42_S>
     <WS_N19_Special>	31010	</WS_N19_Special>
+    <SR_C42_CP>	31011	</SR_C42_CP>
+    <N19Mk3_C>	31012	</N19Mk3_C>
     <C42_T>	35001	</C42_T>
     <SR_C45_T>	35002	</SR_C45_T>
     <C42_FL>	501	</C42_FL>
     <C45_7x7>	502	</C45_7x7>
     <N22_LT_FL>	503	</N22_LT_FL>
-    <C45_ISP>	37000	</C45_ISP>
-    <C13B42_ISP>	37001	</C13B42_ISP>
     <C42_IGR>	60001	</C42_IGR>
     <N19Mk3_IGR>	60002	</N19Mk3_IGR>
     <N22_IGR>	60003	</N22_IGR>
@@ -51,9 +52,6 @@
     <N19Mk1_SH>	10000	</N19Mk1_SH>
     <C45A_SH>	10001	</C45A_SH>
     <C42_B47_SH>	10002	</C42_B47_SH>
-    <N19Mk1_H>	20000	</N19Mk1_H>
-    <C45A_H>	20001	</C45A_H>
-    <C42_B47_H>	20002	</C42_B47_H>
     <N19Mk3_MapsTraining_Dummy_MT_2>	3	</N19Mk3_MapsTraining_Dummy_MT_2>
   </ids>
   <shared>
@@ -287,6 +285,18 @@
       <maxRegenHealth>	84	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </N19Mk3>
+    <N19Mk3_C>
+      <userString>	#gb_vehicles:N19Mk3_C	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	22000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	550	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </N19Mk3_C>
     <C42>
       <userString>	#gb_vehicles:C42	</userString>
       <tags></tags>
@@ -322,6 +332,30 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </SR_C42>
+    <SR_C42_C>
+      <userString>	#gb_vehicles:SR_C42_C	</userString>
+      <tags></tags>
+      <level>	11	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </SR_C42_C>
+    <SR_C42_CP>
+      <userString>	#gb_vehicles:SR_C42_CP	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </SR_C42_CP>
     <SR_C42_A>
       <userString>	#gb_vehicles:C42	</userString>
       <tags></tags>
@@ -405,18 +439,6 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </C13B42>
-    <C13B42_ISP>
-      <userString>	#gb_vehicles:C13B42_ISP	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	55000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	80	</weight>
-      <distance>	750	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </C13B42_ISP>
     <C13B42_bob>
       <userString>	#gb_vehicles:C13B42	</userString>
       <tags></tags>
@@ -441,18 +463,6 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </C45>
-    <C45_ISP>
-      <userString>	#gb_vehicles:C45_ISP	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	45600	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	40	</weight>
-      <distance>	750	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </C45_ISP>
     <C45T>
       <userString>	#gb_vehicles:C45	</userString>
       <tags></tags>
@@ -663,48 +673,6 @@
       <radarRadius>	510	</radarRadius>
       <radarCooldown>	30	</radarCooldown>
     </C42_B47_SH>
-    <N19Mk1_H>
-      <userString>	#gb_vehicles:N19Mk1_H	</userString>
-      <tags></tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	2000	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <radarRadius>	390	</radarRadius>
-      <radarCooldown>	30	</radarCooldown>
-    </N19Mk1_H>
-    <C45A_H>
-      <userString>	#gb_vehicles:C45A_H	</userString>
-      <tags></tags>
-      <level>	2	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	2000	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <radarRadius>	290	</radarRadius>
-      <radarCooldown>	20	</radarCooldown>
-    </C45A_H>
-    <C42_B47_H>
-      <userString>	#gb_vehicles:C42_B47_H	</userString>
-      <tags></tags>
-      <level>	2	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	2000	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <radarRadius>	510	</radarRadius>
-      <radarCooldown>	30	</radarCooldown>
-    </C42_B47_H>
     <N19Mk3_MapsTraining_Dummy_MT_2>
       <userString>	#gb_vehicles:N19Mk3	</userString>
       <tags></tags>

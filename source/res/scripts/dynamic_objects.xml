@@ -295,15 +295,6 @@
       </pixie>
     </effects>
   </FireCircleEffect>
-  <InfluenceZoneCircleVisual>
-    <ally>
-      <visual>	content/Interface/TargetPoint/circle_reload_aura.model	</visual>
-      <color>	0xFF8FD0DC	</color>
-      <enableAccurateCollision>	False	</enableAccurateCollision>
-      <maxUpdateInterval>	0.04	</maxUpdateInterval>
-      <overTerrainHeight>	0.5	</overTerrainHeight>
-    </ally>
-  </InfluenceZoneCircleVisual>
   <InspireAreaVisual>
     <ally>
       <visual>	content/Interface/TargetPoint/inspire.model	</visual>
@@ -663,20 +654,6 @@
       </effect>
     </enemy>
   </epicMinesIdleEffect>
-  <epicMinesIdleBlueEffect>
-    <ally>
-      <effect>
-        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_allies_blue.seq	</path_fwd>
-        <path>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_allies_blue.seq	</path>
-      </effect>
-    </ally>
-    <enemy>
-      <effect>
-        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_enemy.seq	</path_fwd>
-        <path>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_enemy.seq	</path>
-      </effect>
-    </enemy>
-  </epicMinesIdleBlueEffect>
   <minesBlowUpEffect>
     <timeline>
       <lightingEnd>	0.22	</lightingEnd>

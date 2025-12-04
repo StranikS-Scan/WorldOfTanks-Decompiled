@@ -41,6 +41,7 @@ if typing.TYPE_CHECKING:
     from gui.shared.event_bus import SharedEvent
     from gui.shared.gui_items import Tankman, Vehicle, ItemsCollection
     from gui.shared.gui_items.artefacts import OptionalDevice
+    from gui.shared.gui_items.customization.c11n_items import Customization
     from gui.shared.gui_items.fitting_item import RentalInfoProvider
     from gui.shared.gui_items.gui_item_economics import ItemPrice
     from gui.shared.gui_items.loot_box import LootBox, LootBoxKey
@@ -545,7 +546,7 @@ class IPlatoonController(IGameController):
     def setPlatoonPopoverPosition(self, xPopoverOffset):
         raise NotImplementedError
 
-    def togglePlayerReadyAction(self, callback, checkAmmo=True):
+    def togglePlayerReadyAction(self, callback):
         raise NotImplementedError
 
     def getChannelController(self):
@@ -1738,6 +1739,9 @@ class ICraftmachineController(IGameController):
 
 class ICalendarController(IGameController):
 
+    def mustShow(self):
+        raise NotImplementedError
+
     def updateHeroAdventActionInfo(self):
         raise NotImplementedError
 
@@ -1787,11 +1791,52 @@ class IClanNotificationController(IGameController):
 
 class IFestivityController(IGameController):
     onStateChanged = None
+    onUpdateSlot = None
+    onSetHangToyEffectEnabled = None
 
     def isEnabled(self):
         raise NotImplementedError
 
+    def isInProgress(self):
+        raise NotImplementedError
+
+    def isPostEvent(self):
+        raise NotImplementedError
+
     def getHangarQuestsFlagData(self):
+        raise NotImplementedError
+
+    def getHangarWidgetLinkage(self):
+        raise NotImplementedError
+
+    def getHangarEdgeColor(self):
+        raise NotImplementedError
+
+    def isWidgetVisible(self, prbState, alias=None):
+        raise NotImplementedError
+
+    def isCreditBonusVisible(self, prbState):
+        raise NotImplementedError
+
+    def isOnboardingFinished(self):
+        raise NotImplementedError
+
+    @property
+    def tutorial(self):
+        raise NotImplementedError
+
+
+class IFestivityTutorialController(IGameController):
+    onIntroComplete = None
+
+    def shouldStartIntro(self):
+        raise NotImplementedError
+
+    @property
+    def isActive(self):
+        raise NotImplementedError
+
+    def tryStartIntro(self):
         raise NotImplementedError
 
 
@@ -2521,6 +2566,7 @@ class IGuiLootBoxesController(IGameController, IEntitlementsConsumer):
     onBoxesHistoryUpdate = None
     onBoxInfoUpdated = None
     onStorageVisited = None
+    onOpenLootboxesComplete = None
 
     @property
     def isConsumesEntitlements(self):
@@ -2590,6 +2636,9 @@ class IGuiLootBoxesController(IGameController, IEntitlementsConsumer):
         raise NotImplementedError
 
     def getGuiLootBoxByTokenID(self, tokenID):
+        raise NotImplementedError
+
+    def getInfoPageURL(self, lootboxType):
         raise NotImplementedError
 
 
@@ -3295,6 +3344,26 @@ class IArmoryYardController(IGameController):
     def isPaused(self):
         raise NotImplementedError
 
+    @property
+    def isPostProgressionState(self):
+        raise NotImplementedError
+
+    @property
+    def currentSeason(self):
+        raise NotImplementedError
+
+    @property
+    def currentSeasonID(self):
+        raise NotImplementedError
+
+    @property
+    def maxNumberOfSteps(self):
+        raise NotImplementedError
+
+    @property
+    def startStepOfPostProgression(self):
+        raise NotImplementedError
+
     def getCollectableRewards(self):
         raise NotImplementedError
 
@@ -3319,7 +3388,7 @@ class IArmoryYardController(IGameController):
     def getProgressionTimes(self):
         raise NotImplementedError
 
-    def getPostProgressionTimes(self):
+    def getPurchaseStageTimes(self):
         raise NotImplementedError
 
     def totalTokensInChapter(self, cycleID):
@@ -3328,7 +3397,7 @@ class IArmoryYardController(IGameController):
     def iterProgressionQuests(self):
         raise NotImplementedError
 
-    def getCurrencyTokenCount(self):
+    def getProgressionTokenCount(self):
         raise NotImplementedError
 
     def getProgressionLevel(self):
@@ -3337,13 +3406,13 @@ class IArmoryYardController(IGameController):
     def getCurrentProgress(self):
         raise NotImplementedError
 
-    def getTotalSteps(self):
-        raise NotImplementedError
-
     def getStepsRewards(self):
         raise NotImplementedError
 
     def getFinalRewardVehicle(self):
+        raise NotImplementedError
+
+    def getFinalProgressionRewardStyle(self):
         raise NotImplementedError
 
     def getCurrencyTokenCost(self, currency):
@@ -3367,7 +3436,10 @@ class IArmoryYardController(IGameController):
     def isEnabled(self):
         raise NotImplementedError
 
-    def isClaimedFinalReward(self):
+    def isClaimedProgressionReward(self):
+        raise NotImplementedError
+
+    def isClaimedPostProgressionReward(self):
         raise NotImplementedError
 
     def isQuestActive(self):
@@ -3376,7 +3448,7 @@ class IArmoryYardController(IGameController):
     def isSceneLoaded(self):
         raise NotImplementedError
 
-    def isPostProgressionActive(self):
+    def isPurchaseStageActive(self):
         raise NotImplementedError
 
     def getAvailableQuestsCount(self):
@@ -3386,9 +3458,6 @@ class IArmoryYardController(IGameController):
         raise NotImplementedError
 
     def getState(self):
-        raise NotImplementedError
-
-    def getRequiredVehicleTypeAndLevelsForQuest(self, questID):
         raise NotImplementedError
 
     def update(self):
@@ -3409,9 +3478,6 @@ class IArmoryYardController(IGameController):
     def isStarterPackAvailable(self):
         raise NotImplementedError
 
-    def disableVideoStreaming(self):
-        raise NotImplementedError
-
     def getStarterPackSettings(self):
         raise NotImplementedError
 
@@ -3421,10 +3487,10 @@ class IArmoryYardController(IGameController):
     def checkAnnouncement(self):
         raise NotImplementedError
 
-    def payedTokensLeft(self):
+    def bundleTokensLeft(self):
         raise NotImplementedError
 
-    def isPostProgressionEnabled(self):
+    def isPurchaseStageEnabled(self):
         raise NotImplementedError
 
     def getTokenCurrencies(self):
@@ -3436,7 +3502,34 @@ class IArmoryYardController(IGameController):
     def getHangarFlagData(self):
         raise NotImplementedError
 
+    def getFinalRewardStep(self):
+        raise NotImplementedError
+
+    def getFinalPostProgressionRewardStep(self):
+        raise NotImplementedError
+
     def updateVisibilityHangarHeaderMenu(self, isVisible=False):
+        raise NotImplementedError
+
+    def totalTokensInPostProgressionChapter(self):
+        raise NotImplementedError
+
+    def receivedTokensInPostProgressionChapter(self):
+        raise NotImplementedError
+
+    def iterCyclePostProgressionQuests(self):
+        raise NotImplementedError
+
+    def getTokensInfoMainProgression(self):
+        raise NotImplementedError
+
+    def showVehiclePreview(self, isAnimationActive=False, disableAnimation=None, backCallback=None):
+        raise NotImplementedError
+
+    def showStylePreview(self, isAnimationActive=False, disableAnimation=None, backLabel=None, backCallback=None):
+        raise NotImplementedError
+
+    def showShopStylePreview(self, styleID=None, backCallback=None):
         raise NotImplementedError
 
 
@@ -3464,7 +3557,7 @@ class IArmoryYardShopController(IGameController):
         raise NotImplementedError
 
     @property
-    def isSeasonCompleted(self):
+    def isProgressionCompleted(self):
         raise NotImplementedError
 
     def isBundle(self, productId):

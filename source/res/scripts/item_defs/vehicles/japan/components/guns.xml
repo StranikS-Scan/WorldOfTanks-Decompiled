@@ -68,6 +68,7 @@
     <_105mm_Type_92_Gun_Mod1952_test>	31005	</_105mm_Type_92_Gun_Mod1952_test>
     <_149mm_Gun_Type_97_7x7>	31006	</_149mm_Gun_Type_97_7x7>
     <_150mm_Howitzer_Type96_O_I_120>	31007	</_150mm_Howitzer_Type96_O_I_120>
+    <_106mm_M40_Recoilless_Dual_Gun>	31008	</_106mm_M40_Recoilless_Dual_Gun>
     <_90mm_Gun_Type61_IGR>	60001	</_90mm_Gun_Type61_IGR>
     <_75mm_Gun_Type5_M1_auto_IGR>	60002	</_75mm_Gun_Type5_M1_auto_IGR>
     <_105mm_Rifled_Gun_IGR>	60003	</_105mm_Rifled_Gun_IGR>
@@ -3286,6 +3287,57 @@
         </_105mm_HE_Type_92B_test>
       </shots>
     </_105mm_Type_92_Gun_Mod1952_test>
+    <_106mm_M40_Recoilless_Dual_Gun>
+      <userString>	#japan_vehicles:_106mm_M40_Recoilless_Dual_Gun	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	120000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.08	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	dualgun_reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	10	</reloadTime>
+      <maxAmmo>	50	</maxAmmo>
+      <aimingTime>	2.3	</aimingTime>
+      <weight>	420	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_106mm_HEP_M346A1>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	600	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	150 150	</piercingPower>
+        </_106mm_HEP_M346A1>
+        <_106mm_HEAT_M344A1>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	800	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	230 230	</piercingPower>
+        </_106mm_HEAT_M344A1>
+      </shots>
+    </_106mm_M40_Recoilless_Dual_Gun>
     <_120mm_Short_Barrel_Gun>
       <userString>	#japan_vehicles:_120mm_Short_Barrel_Gun	</userString>
       <tags></tags>

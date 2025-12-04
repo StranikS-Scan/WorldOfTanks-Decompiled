@@ -153,8 +153,6 @@ class ARENA_BONUS_TYPE_CAPS():
     DISABLE_AUTO_AIM = 'DISABLE_AUTO_AIM'
     PARAGONS = 'PARAGONS'
     ECONOMIC_DIRECTIVES = 'ECONOMIC_DIRECTIVES'
-    DYNAMIC_VEHICLE_CHANGE = 'DYNAMIC_VEHICLE_CHANGE'
-    PORTAL = 'PORTAL'
     DISABLE_AUTO_AIM = 'DISABLE_AUTO_AIM'
     RTS_COMPONENT = 'RTS_COMPONENT'
     DISABLE_DEFAULT_SIXTH_SENSE = 'DISABLE_DEFAULT_SIXTH_SENSE'
@@ -182,9 +180,14 @@ class ARENA_BONUS_TYPE_CAPS():
     _typeToCaps = {}
     OVERRIDE_BONUS_CAPS = None
     defaultSet = frozenset()
+    __cacheCheckAny = {}
+    __cacheCheckAll = {}
+    __CAP_TYPES = (set, frozenset)
 
     @staticmethod
     def init():
+        ARENA_BONUS_TYPE_CAPS.__cacheCheckAny.clear()
+        ARENA_BONUS_TYPE_CAPS.__cacheCheckAll.clear()
         if not ARENA_BONUS_TYPE_CAPS._typeToCaps:
             import bonus_caps_config
             ARENA_BONUS_TYPE_CAPS._typeToCaps = bonus_caps_config.readConfig()
@@ -209,30 +212,49 @@ class ARENA_BONUS_TYPE_CAPS():
 
     @staticmethod
     def checkAny(arenaBonusType, *args, **kwargs):
+        noKwargsArguments = (arenaBonusType, args)
+        if not kwargs and noKwargsArguments in ARENA_BONUS_TYPE_CAPS.__cacheCheckAny:
+            return ARENA_BONUS_TYPE_CAPS.__cacheCheckAny[noKwargsArguments]
         caps = ARENA_BONUS_TYPE_CAPS.get(arenaBonusType, **kwargs)
+        isAny = False
+        capsTypes = ARENA_BONUS_TYPE_CAPS.__CAP_TYPES
         for cap in args:
             if isinstance(cap, str):
                 if cap in caps:
-                    return True
-            if isinstance(cap, (set, frozenset)):
+                    isAny = True
+                    break
+            if isinstance(cap, capsTypes):
                 if len(cap & caps) > 0:
-                    return True
+                    isAny = True
+                    break
 
-        return False
+        if not kwargs:
+            ARENA_BONUS_TYPE_CAPS.__cacheCheckAny[noKwargsArguments] = isAny
+        return isAny
 
     @staticmethod
     def checkAll(arenaBonusType, *args, **kwargs):
+        noKwargsArguments = (arenaBonusType, args)
+        if not kwargs and noKwargsArguments in ARENA_BONUS_TYPE_CAPS.__cacheCheckAll:
+            return ARENA_BONUS_TYPE_CAPS.__cacheCheckAll[noKwargsArguments]
         caps = ARENA_BONUS_TYPE_CAPS.get(arenaBonusType, **kwargs)
+        isAll = True
+        capsTypes = ARENA_BONUS_TYPE_CAPS.__CAP_TYPES
         for cap in args:
             if isinstance(cap, str):
                 if cap not in caps:
-                    return False
-            if isinstance(cap, (set, frozenset)):
+                    isAll = False
+                    break
+            if isinstance(cap, capsTypes):
                 if len(cap & caps) != len(cap):
-                    return False
-            return False
+                    isAll = False
+                    break
+            isAll = False
+            break
 
-        return True
+        if not kwargs:
+            ARENA_BONUS_TYPE_CAPS.__cacheCheckAll[noKwargsArguments] = isAll
+        return isAll
 
 
 def parseArenaBonusType(parsedBonusTypes, bonusTypes, arenaBonusTypeCap):

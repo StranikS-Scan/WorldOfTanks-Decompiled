@@ -110,7 +110,11 @@ def getGameControllersConfig(manager):
         method(interface, controller, finalizer='fini')
 
     _config(_interface.ISeniorityAwardsController, _SeniorityAwardsController())
-    _config(_interface.IFestivityController, manager.getService(IFestivityFactory).getController())
+    festivityFactory = manager.getService(IFestivityFactory)
+    festivityController = festivityFactory.getController()
+    _config(_interface.IFestivityController, festivityController)
+    if festivityFactory.getChildControllerInterface() is not None:
+        manager.addInstance(festivityFactory.getChildControllerInterface(), festivityController)
     _config(_interface.IReloginController, _Relogin())
     _config(_interface.IAOGASController, _AOGAS())
     _config(_interface.IGameSessionController, _GameSessions())
@@ -195,3 +199,4 @@ def getGameControllersConfig(manager):
     _config(_interface.IBlackMarketController, BlackMarketController())
     _config(_interface.IUnseenEventsCounter, UnseenEventManager())
     collectGameControllers(_config)
+    return

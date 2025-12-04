@@ -17,7 +17,7 @@ from personal_missions_constants import CONDITION_ICON
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from typing import Dict, List, Optional, Union
-    from gui.server_events.conditions import _Condition, _Cumulativable, _VehsListCondition
+    from gui.server_events.conditions import _Condition, Cumulativable, _VehsListCondition
     from gui.server_events.event_items import ServerEventAbstract
     from gui.server_events.formatters import PreFormattedCondition, ProgressData
 
@@ -35,6 +35,9 @@ class ConditionsFormatter(object):
 
     def hasFormatter(self, conditionName):
         return conditionName in self.__formatters
+
+    def updateFormatters(self, formatters):
+        self.__formatters.update(formatters)
 
     def _packCondition(self, *args, **kwargs):
         raise NotImplementedError

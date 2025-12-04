@@ -25,18 +25,20 @@ def _visionRadiusCalcDiff(value, originalValue):
     return value - originalValue
 
 
-_SUPPORTED_MODIFIERS = {'visionRadius': ('circularVisionRadius', _visionRadiusCalcDiff),
+_SUPPORTED_PENALTIES = {'visionRadius': ('circularVisionRadius', _visionRadiusCalcDiff),
  'radioDistance': ('radioDistance', _simpleValueDiff),
- 'vehicleHealth': ('maxHealth', _simpleValueDiff),
  'thermalVisionDistance': ('thermalVisionDistance', _simpleValueDiff)}
+_SUPPORTED_BONUSES = {'vehicleHealth': 'vehicleHealth',
+ 'reloadTime': 'reloadTime',
+ 'autoreloadTime': 'autoReloadTime'}
 
 @dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
 def appendBattleModifiersPenalties(penalties, modifiedParams, originalParams, comp7Controller=None):
     modifiers = comp7Controller.getBattleModifiersObject()
     if modifiers is not None:
         for _, modifier in modifiers:
-            if modifier.gameplayImpact == 2 and modifier.param.name in _SUPPORTED_MODIFIERS:
-                paramName, calcDiff = _SUPPORTED_MODIFIERS.get(modifier.param.name)
+            if modifier.gameplayImpact == 2 and modifier.param.name in _SUPPORTED_PENALTIES:
+                paramName, calcDiff = _SUPPORTED_PENALTIES.get(modifier.param.name)
                 if paramName not in modifiedParams or paramName not in originalParams:
                     continue
                 section = penalties.get(paramName, [])
@@ -54,8 +56,8 @@ def appendBattleModifiersBonuses(bonuses, comp7Controller=None):
     modifiers = comp7Controller.getBattleModifiersObject()
     if modifiers is not None:
         for _, modifier in modifiers:
-            if modifier.gameplayImpact == 1 and modifier.param.name in _SUPPORTED_MODIFIERS:
-                bonuses.add((modifier.param.name, BonusTypes.BATTLE_MODIFIERS))
+            if modifier.gameplayImpact == 1 and modifier.param.name in _SUPPORTED_BONUSES:
+                bonuses.add((_SUPPORTED_BONUSES[modifier.param.name], BonusTypes.BATTLE_MODIFIERS))
 
     return
 

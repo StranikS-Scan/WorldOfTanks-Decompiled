@@ -19,11 +19,15 @@ class GuaranteedRewardTooltipModel(ViewModel):
     def getLevelsRangeType():
         return int
 
-    def getGuaranteedFrequency(self):
-        return self._getNumber(1)
+    def getGuaranteedFrequencies(self):
+        return self._getArray(1)
 
-    def setGuaranteedFrequency(self, value):
-        self._setNumber(1, value)
+    def setGuaranteedFrequencies(self, value):
+        self._setArray(1, value)
+
+    @staticmethod
+    def getGuaranteedFrequenciesType():
+        return int
 
     def getGuaranteedBoxNameKeys(self):
         return self._getArray(2)
@@ -50,7 +54,7 @@ class GuaranteedRewardTooltipModel(ViewModel):
     def _initialize(self):
         super(GuaranteedRewardTooltipModel, self)._initialize()
         self._addArrayProperty('levelsRange', Array())
-        self._addNumberProperty('guaranteedFrequency', 0)
+        self._addArrayProperty('guaranteedFrequencies', Array())
         self._addArrayProperty('guaranteedBoxNameKeys', Array())
         self._addBoolProperty('vehiclesOnly', True)
         self._addBoolProperty('multipleStages', False)

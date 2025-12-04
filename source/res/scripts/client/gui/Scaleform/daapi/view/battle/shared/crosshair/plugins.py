@@ -11,10 +11,11 @@ from AvatarInputHandler import gun_marker_ctrl, aih_global_binding
 from AvatarInputHandler.spg_marker_helpers.spg_marker_helpers import SPGShotResultEnum
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
+import SoundGroups
 from Vehicle import Vehicle
 from account_helpers.settings_core.settings_constants import GRAPHICS, AIM, GAME, SPGAim, MARKERS
 from aih_constants import CHARGE_MARKER_STATE, CTRL_MODE_NAME as CTRL_MODE
-from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, DUALGUN_CHARGER_STATUS, SERVER_TICK_LENGTH, DUAL_GUN, ARENA_PERIOD
+from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, DUALGUN_CHARGER_STATUS, SERVER_TICK_LENGTH, DUAL_GUN
 from debug_utils import LOG_WARNING
 from gui import makeHtmlString, GUI_SETTINGS
 from gui.Scaleform.daapi.view.battle.shared.crosshair.settings import SHOT_RESULT_TO_ALT_COLOR
@@ -39,6 +40,7 @@ from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from gui.shared.utils.TimeInterval import TimeInterval
 from gui.shared.utils.plugins import IPlugin
+from shared_utils import first, findFirst
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from helpers.events_handler import EventsHandler
@@ -492,6 +494,7 @@ class AmmoPlugin(CrosshairPlugin):
         ctrl.onCurrentShellReset += self.__onCurrentShellReset
         ctrl.onDebuffFinished += self.__onDebuffFinished
         ctrl.onShellChangeTimeUpdated += self.__onShellChangeTimeUpdated
+        ctrl.onPenaltyReloadTimeUpdated += self.__onPenaltyReloadTimeUpdated
         vehStateCtrl.onVehicleControlling += self.__onVehicleControlling
         vehStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
         g_replayEvents.onPause += self.__onReplayPaused
@@ -515,6 +518,7 @@ class AmmoPlugin(CrosshairPlugin):
             ctrl.onCurrentShellChanged -= self.__onCurrentShellChanged
             ctrl.onCurrentShellReset -= self.__onCurrentShellReset
             ctrl.onDebuffFinished -= self.__onDebuffFinished
+            ctrl.onPenaltyReloadTimeUpdated -= self.__onPenaltyReloadTimeUpdated
         g_replayEvents.onPause -= self.__onReplayPaused
         if vehStateCtrl is not None:
             vehStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
@@ -550,6 +554,9 @@ class AmmoPlugin(CrosshairPlugin):
         if self._isHideAmmo():
             self._parentObj.as_setNetVisibleS(CROSSHAIR_CONSTANTS.VISIBLE_NET)
         self._parentObj.as_setShellChangeTimeS(*ctrl.updateShellChangeTime())
+
+    def __onPenaltyReloadTimeUpdated(self, value):
+        self._parentObj.as_setCoolantAbilityReloadingPenaltyS(value)
 
     def __setReloadingState(self, state):
         self.__reloadAnimator.setReloading(state)
@@ -625,16 +632,7 @@ class AmmoPlugin(CrosshairPlugin):
         baseValue = round(state.getBaseValue(), 1)
         if self.__shellsInClip == 0:
             baseValue = self.__reCalcFirstShellAutoReload(baseValue)
-
-        def isRedText():
-            arenaPeriod = ARENA_PERIOD.IDLE
-            avatar = BigWorld.player()
-            periodCtrl = avatar.guiSessionProvider.shared.arenaPeriod
-            if periodCtrl is not None:
-                arenaPeriod = periodCtrl.getPeriod()
-            return self.__shellsInClip == 0 and arenaPeriod == ARENA_PERIOD.BATTLE
-
-        self.__reloadAnimator.setClipAutoLoading(timeLeft, baseValue, isStun=stunned, isTimerOn=True, isRedText=isRedText())
+        self.__reloadAnimator.setClipAutoLoading(timeLeft, baseValue, isStun=stunned, isTimerOn=True, isRedText=self.__shellsInClip == 0)
         self.__autoReloadSnapshot = state
 
     def __onGunAutoReloadBoostUpd(self, state, stateDuration, stateTotalTime, extraData):
@@ -749,6 +747,9 @@ class VehicleStatePlugin(CrosshairPlugin):
         if ctrl is None:
             raise SoftException('Feedback adaptor is not found')
         ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
+        equipmentCtrl = self.sessionProvider.shared.equipments
+        if equipmentCtrl is not None:
+            equipmentCtrl.onShowBlinkReloadTime += self.__onGunReloadBoost
         return
 
     def stop(self):
@@ -760,6 +761,9 @@ class VehicleStatePlugin(CrosshairPlugin):
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
+        equipmentCtrl = self.sessionProvider.shared.equipments
+        if equipmentCtrl is not None:
+            equipmentCtrl.onShowBlinkReloadTime -= self.__onGunReloadBoost
         return
 
     def __setHealth(self, health):
@@ -1206,8 +1210,7 @@ class ShotDonePlugin(CrosshairPlugin):
         return
 
     def __onShotDone(self):
-        if self.sessionProvider.shared.ammo.getGunSettings().hasAutoReload():
-            self._parentObj.as_showShotS()
+        self._parentObj.as_showShotS()
 
 
 class SpeedometerWheeledTech(CrosshairPlugin):
@@ -1734,14 +1737,18 @@ class DualAccuracyGunPlugin(CrosshairPlugin):
 
 
 class DistanceFactorGunPlugin(CrosshairPlugin, EventsHandler):
-    __slots__ = ('_callbackManager',)
+    __slots__ = ('_callbackManager', '_isDistanceFactor', '_isAcceleration', '__damage')
     TICK_TIME = 0.5
-    HIGH_FACTOR = 1.3
-    LOW_FACTOR = 1.0
+    _RTPC_HIT_SOUND = 'RTPC_ext_hitmarker_unguided_missile'
+    _HIGH_DAMAGE_VALUE = 0.7
+    _FEEDBACK_IDS = (FEEDBACK_EVENT_ID.PLAYER_KILLED_ENEMY, FEEDBACK_EVENT_ID.PLAYER_DAMAGED_HP_ENEMY, FEEDBACK_EVENT_ID.PLAYER_DAMAGED_DEVICE_ENEMY)
 
     def __init__(self, parentObj):
         super(DistanceFactorGunPlugin, self).__init__(parentObj)
         self._callbackManager = CallbackDelayer()
+        self._isDistanceFactor = False
+        self._isAcceleration = False
+        self.__damage = (0, 0)
 
     def start(self):
         super(DistanceFactorGunPlugin, self).start()
@@ -1756,30 +1763,84 @@ class DistanceFactorGunPlugin(CrosshairPlugin, EventsHandler):
         super(DistanceFactorGunPlugin, self).stop()
 
     def _getEvents(self):
+        events = []
+        feedbackCtrl = self.sessionProvider.shared.feedback
+        if feedbackCtrl is not None:
+            events.append((feedbackCtrl.onPlayerFeedbackReceived, self.__onPlayerFeedbackReceived))
+        ammoCtrl = self.sessionProvider.shared.ammo
+        if ammoCtrl is not None:
+            events.append((ammoCtrl.onCurrentShellChanged, self.__onCurrentShellChanged))
         vStateCtrl = self.sessionProvider.shared.vehicleState
-        return ((vStateCtrl.onVehicleControlling, self.__onVehicleControlling),) if vStateCtrl is not None else super(DistanceFactorGunPlugin, self)._getEvents()
+        if vStateCtrl is not None:
+            events.append((vStateCtrl.onVehicleControlling, self.__onVehicleControlling))
+        return events
+
+    def __onPlayerFeedbackReceived(self, events):
+        if self._isDistanceFactor or self._isAcceleration:
+            events = [ item for item in events if item.getType() in self._FEEDBACK_IDS ]
+            events.sort(key=lambda item: self._FEEDBACK_IDS.index(item.getType()))
+            if not events:
+                return
+            isKill = first(events).getType() == FEEDBACK_EVENT_ID.PLAYER_KILLED_ENEMY
+            for event in events:
+                etype = event.getType()
+                extra = event.getExtra()
+                isShot = extra and extra.isShot()
+                indicatorState = None
+                degreeOfDamage = 0
+                if etype == FEEDBACK_EVENT_ID.PLAYER_DAMAGED_DEVICE_ENEMY and isShot:
+                    indicatorState = 'low'
+                elif etype == FEEDBACK_EVENT_ID.PLAYER_DAMAGED_HP_ENEMY and isShot:
+                    degreeOfDamage = 1.0 if isKill else self.__getDegreeOfDamage(extra.getDamage())
+                    isHighDamage = degreeOfDamage > self._HIGH_DAMAGE_VALUE
+                    indicatorState = 'max' if isHighDamage or isKill else 'low'
+                if indicatorState is not None:
+                    SoundGroups.g_instance.setRTPC(self._RTPC_HIT_SOUND, degreeOfDamage)
+                    SoundGroups.g_instance.playSound2D(backport.sound(R.sounds.hitmarker_unguided_missile()))
+                    self.parentObj.as_animShotHitMarkerS(indicatorState)
+                    break
+
+        return
+
+    def __onCurrentShellChanged(self, currentIntCD):
+        vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
+        if vehicle:
+            shot = findFirst(lambda x: x.shell.compactDescr == currentIntCD, vehicle.typeDescriptor.gun.shots)
+            if shot:
+                self.__udapteShellStatus(shot)
+                if self._isAcceleration or self._isDistanceFactor:
+                    self.__damage = shot.shell.dmgLimits
+
+    def __getDegreeOfDamage(self, damage):
+        minDamage, maxDamage = self.__damage
+        return 1.0 if minDamage == maxDamage else round(1.0 - (maxDamage - damage) / (maxDamage - minDamage), 2)
 
     def __onVehicleControlling(self, vehicle):
         if not vehicle:
             return
         shot = vehicle.typeDescriptor.shot
-        isDistanceFactor = bool(shot.shell.distanceFactor)
-        isAcceleration = shot.acceleration > 0
-        self.parentObj.as_setShotDamageIndVisibilityS(isDistanceFactor)
-        self.parentObj.as_setShotFlyTimeIndVisibilityS(isAcceleration)
-        if isAcceleration or isDistanceFactor:
+        self.__udapteShellStatus(shot)
+        self.parentObj.as_setShotDamageIndVisibilityS(self._isDistanceFactor)
+        self.parentObj.as_setShotFlyTimeIndVisibilityS(self._isAcceleration)
+        self.parentObj.as_setShotHitMarkerVisibilityS(self._isDistanceFactor or self._isAcceleration)
+        if self._isAcceleration or self._isDistanceFactor:
+            self.__damage = shot.shell.dmgLimits
             self._callbackManager.delayCallback(0, self.__update)
         else:
             self._callbackManager.clearCallbacks()
+
+    def __udapteShellStatus(self, shot):
+        self._isDistanceFactor = bool(shot.shell.distanceFactor)
+        self._isAcceleration = shot.acceleration > 0
 
     @noexceptReturn(TICK_TIME)
     def __update(self):
         target = BigWorld.target()
         player = BigWorld.player()
         vehicle = player.vehicle
-        if not isinstance(target, Vehicle) or target.health <= 0 or not target.isCrewActive or target.publicInfo['team'] == vehicle.publicInfo['team']:
+        if not isinstance(target, Vehicle) or target.health <= 0 or not target.isCrewActive or not vehicle or target.publicInfo['team'] == vehicle.publicInfo['team']:
             self.parentObj.as_setShotFlyTimeIndValueS(0)
-            self.parentObj.as_setShotDamageIndValueS(0, CROSSHAIR_CONSTANTS.SHOT_DAMAGE_IND_LOW)
+            self.parentObj.as_setShotDamageIndValueS(0)
             return self.TICK_TIME
         shotDescr = vehicle.typeDescriptor.shot
         distance = vehicle.position.distTo(target.position)
@@ -1799,14 +1860,13 @@ class DistanceFactorGunPlugin(CrosshairPlugin, EventsHandler):
         shellDescr = shotDescr.shell
         if not shellDescr.distanceFactor:
             return
+        minDamage, maxDamage = shotDescr.shell.dmgLimits
         factor = computeDistanceFactor(shellDescr, distance, 'damageFactor')
-        damage = int(factor * shellDescr.damage[0])
-        colorState = CROSSHAIR_CONSTANTS.SHOT_DAMAGE_IND_MEDIUM
-        if factor > self.HIGH_FACTOR:
-            colorState = CROSSHAIR_CONSTANTS.SHOT_DAMAGE_IND_HIGH
-        elif factor < self.LOW_FACTOR:
-            colorState = CROSSHAIR_CONSTANTS.SHOT_DAMAGE_IND_LOW
-        self.parentObj.as_setShotDamageIndValueS(damage, colorState)
+        factor *= computeDistanceFactor(shellDescr, distance, 'armorFactor')
+        damage = shellDescr.damage[0]
+        damage = int(factor * damage)
+        percent = int((damage - minDamage) * 100 / (maxDamage - minDamage))
+        self.parentObj.as_setShotDamageIndValueS(percent)
 
 
 class TemperatureGunPlugin(CrosshairPlugin):

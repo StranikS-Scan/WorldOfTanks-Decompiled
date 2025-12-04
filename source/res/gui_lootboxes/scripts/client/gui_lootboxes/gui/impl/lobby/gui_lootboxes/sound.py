@@ -19,6 +19,7 @@ class Sounds(Enum):
     INTRO_SPACE_NAME = 'loot_boxes_intro'
     LOOT_BOX_ENTER_FIRST = 'lootboxes_enter_first'
     VIDEO_REWARD_SPACE_NAME = 'lootbox_reward_video'
+    CANCEL_SHORT_STATISTIC = 'researches_premium_panel_slide_out'
 
 
 LOOT_BOXES_SOUND_SPACE = CommonSoundSpaceSettings(name=Sounds.STORAGE_SPACE_NAME.value, entranceStates={Sounds.STATE_PLACE.value: Sounds.STATE_LOOTBOXES.value}, exitStates={Sounds.STATE_PLACE.value: Sounds.STATE_HANGAR_PLACE.value}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent=Sounds.LOOT_BOX_EXIT.value)

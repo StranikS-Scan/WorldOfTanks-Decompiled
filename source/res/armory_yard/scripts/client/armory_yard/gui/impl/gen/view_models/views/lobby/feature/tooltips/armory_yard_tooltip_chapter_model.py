@@ -14,7 +14,7 @@ class TooltipChapterState(Enum):
 class ArmoryYardTooltipChapterModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=7, commands=0):
+    def __init__(self, properties=8, commands=0):
         super(ArmoryYardTooltipChapterModel, self).__init__(properties=properties, commands=commands)
 
     def getId(self):
@@ -59,6 +59,12 @@ class ArmoryYardTooltipChapterModel(ViewModel):
     def setLockedUntilQuestsComplete(self, value):
         self._setNumber(6, value)
 
+    def getIsPostProgression(self):
+        return self._getBool(7)
+
+    def setIsPostProgression(self, value):
+        self._setBool(7, value)
+
     def _initialize(self):
         super(ArmoryYardTooltipChapterModel, self)._initialize()
         self._addNumberProperty('id', 0)
@@ -68,3 +74,4 @@ class ArmoryYardTooltipChapterModel(ViewModel):
         self._addNumberProperty('announcementTimestamp', 0)
         self._addNumberProperty('justBeforeStartTimestamp', 0)
         self._addNumberProperty('lockedUntilQuestsComplete', 0)
+        self._addBoolProperty('isPostProgression', False)

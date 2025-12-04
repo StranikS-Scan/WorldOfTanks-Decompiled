@@ -49,9 +49,10 @@ class HollowChargeType(ShellType):
 
 
 class DistanceDamageFactor(object):
-    __slots__ = ('damageFactor', 'pierceFactor', 'deviceFactor', 'spallsDamageFactor', 'spallsDeviceFactor')
+    __slots__ = ('armorFactor', 'damageFactor', 'pierceFactor', 'deviceFactor', 'spallsDamageFactor', 'spallsDeviceFactor')
 
     def __init__(self):
+        self.armorFactor = component_constants.EMPTY_TUPLE
         self.damageFactor = component_constants.EMPTY_TUPLE
         self.pierceFactor = component_constants.EMPTY_TUPLE
         self.deviceFactor = component_constants.EMPTY_TUPLE

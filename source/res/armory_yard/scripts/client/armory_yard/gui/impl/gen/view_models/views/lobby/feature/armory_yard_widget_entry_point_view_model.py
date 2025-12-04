@@ -6,7 +6,7 @@ from frameworks.wulf import ViewModel
 class State(Enum):
     BEFOREPROGRESSION = 'beforeProgression'
     ACTIVE = 'active'
-    POSTPROGRESSION = 'postProgression'
+    PURCHASESTAGE = 'purchaseStage'
     COMPLETED = 'completed'
     DISABLED = 'disabled'
 
@@ -14,7 +14,7 @@ class State(Enum):
 class ArmoryYardWidgetEntryPointViewModel(ViewModel):
     __slots__ = ('onAction',)
 
-    def __init__(self, properties=6, commands=1):
+    def __init__(self, properties=7, commands=1):
         super(ArmoryYardWidgetEntryPointViewModel, self).__init__(properties=properties, commands=commands)
 
     def getState(self):
@@ -53,6 +53,12 @@ class ArmoryYardWidgetEntryPointViewModel(ViewModel):
     def setIsLowPreset(self, value):
         self._setBool(5, value)
 
+    def getIsQuestRerollState(self):
+        return self._getBool(6)
+
+    def setIsQuestRerollState(self, value):
+        self._setBool(6, value)
+
     def _initialize(self):
         super(ArmoryYardWidgetEntryPointViewModel, self)._initialize()
         self._addStringProperty('state')
@@ -61,4 +67,5 @@ class ArmoryYardWidgetEntryPointViewModel(ViewModel):
         self._addNumberProperty('currentTime', 0)
         self._addBoolProperty('isRewardAvailable', False)
         self._addBoolProperty('isLowPreset', False)
+        self._addBoolProperty('isQuestRerollState', False)
         self.onAction = self._addCommand('onAction')

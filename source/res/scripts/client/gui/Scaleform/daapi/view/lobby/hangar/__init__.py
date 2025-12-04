@@ -144,3 +144,11 @@ class HangarPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.MANUAL_CHAPTER_VIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.MANUAL_BROWSER_VIEW, self.loadViewByCtxEvent))
         super(HangarPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
+
+
+def getHangarConfig(manager):
+    from gui.Scaleform.daapi.view.lobby.hangar.Hangar import HangarSoundSpaceSettings
+    from gui.sounds.filters import StatesGroup, States
+    settings = HangarSoundSpaceSettings(name='hangar', entranceStates={'STATE_hangar_place': 'STATE_hangar_place_garage',
+     StatesGroup.HANGAR_FILTERED: States.HANGAR_FILTERED_OFF}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
+    manager.addInstance(HangarSoundSpaceSettings, settings)

@@ -25,7 +25,7 @@ def __parseSlotBonusInfoSection(slotBonusInfo):
         sectionLimitIDsMap, sectionBonuses = {}, []
         for key, data in slotBonusInfo.subBonusRawData.iteritems():
             if key == 'groups':
-                groupsSectionLimitIDsmap, groupsSectionBonuses = __parseGroupsBonusInfoSection(data, slotBonusInfo)
+                groupsSectionLimitIDsmap, groupsSectionBonuses = parseGroupsBonusInfoSection(data, slotBonusInfo)
                 sectionLimitIDsMap = groupsSectionLimitIDsmap
                 sectionBonuses.extend(groupsSectionBonuses)
             sectionBonuses.extend(getNonQuestBonuses(key, data))
@@ -35,19 +35,19 @@ def __parseSlotBonusInfoSection(slotBonusInfo):
         return (0, [], {})
 
 
-def __parseGroupsBonusInfoSection(groups, slotBonusInfo):
+def parseGroupsBonusInfoSection(groups, slotBonusInfo):
     limitIDsMap = dict()
     bonuses = []
     for groupData in groups:
         oneOfBonusInfo = OneOfBonusInfo(*groupData.get('oneof', ([], {})))
-        sectionLimitIDsMap, sectionBonuses = __parseOneOfBonusInfoSection(oneOfBonusInfo)
-        __updateLimitIDsMap(limitIDsMap, slotBonusInfo, sectionLimitIDsMap, sectionBonuses)
+        sectionLimitIDsMap, sectionBonuses = parseOneOfBonusInfoSection(oneOfBonusInfo)
+        updateLimitIDsMap(limitIDsMap, slotBonusInfo, sectionLimitIDsMap, sectionBonuses)
         bonuses.extend(sectionBonuses)
 
     return (limitIDsMap, bonuses)
 
 
-def __parseOneOfBonusInfoSection(oneOfBonusInfo):
+def parseOneOfBonusInfoSection(oneOfBonusInfo):
     limitIDsMap = dict()
     bonuses = []
     if oneOfBonusInfo is None:
@@ -58,17 +58,17 @@ def __parseOneOfBonusInfoSection(oneOfBonusInfo):
             if bonusInfo and bonusInfo.subBonusRawData:
                 for k, v in bonusInfo.subBonusRawData.iteritems():
                     if k == 'groups':
-                        sectionLimitIDsMap, sectionBonuses = __parseGroupsBonusInfoSection(v, bonusInfo)
-                        __updateLimitIDsMap(limitIDsMap, bonusInfo, sectionLimitIDsMap, sectionBonuses)
+                        sectionLimitIDsMap, sectionBonuses = parseGroupsBonusInfoSection(v, bonusInfo)
+                        updateLimitIDsMap(limitIDsMap, bonusInfo, sectionLimitIDsMap, sectionBonuses)
                         bonuses.extend(sectionBonuses)
                     sectionBonuses = getNonQuestBonuses(k, v)
-                    __updateLimitIDsMap(limitIDsMap, bonusInfo, {}, sectionBonuses)
+                    updateLimitIDsMap(limitIDsMap, bonusInfo, {}, sectionBonuses)
                     bonuses.extend(sectionBonuses)
 
         return (limitIDsMap, bonuses)
 
 
-def __updateLimitIDsMap(resultLimitIDsMap, parentNodeBonusInfo, childLimitIDsMap, childBonuses):
+def updateLimitIDsMap(resultLimitIDsMap, parentNodeBonusInfo, childLimitIDsMap, childBonuses):
     for childLimitID, childLimitBonuses in childLimitIDsMap.iteritems():
         resultLimitIDsMap.setdefault(childLimitID, []).extend(childLimitBonuses)
 

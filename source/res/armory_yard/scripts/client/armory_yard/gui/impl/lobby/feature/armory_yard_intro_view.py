@@ -39,8 +39,9 @@ class ArmoryYardIntroView(ViewImpl):
             vm.setVehicleType(getVehicleClassFromVehicleType(finalRewardVehicle.descriptor.type))
             vm.setVehicleLvl(finalRewardVehicle.level)
             vm.setIsElite(finalRewardVehicle.isElite)
-            vm.setStartDate(currentSeason.getStartDate())
-            vm.setEndDate(currentSeason.getEndDate())
+            if currentSeason:
+                vm.setStartDate(currentSeason.getStartDate())
+                vm.setEndDate(currentSeason.getEndDate())
             url = self.__armoryYardCtrl.serverSettings.getModeSettings().introVideoLink
             if url:
                 vm.setHasIntroVideoLink(True)
@@ -67,11 +68,18 @@ class ArmoryYardIntroView(ViewImpl):
         showArmoryYardIntroVideo(url, parent=self.getParentWindow())
 
     def __setIntroViewed(self):
-        AccountSettings.setArmoryYard(ArmoryYard.ARMORY_YARD_LAST_INTRO_VIEWED, self.__armoryYardCtrl.serverSettings.getCurrentSeason().getSeasonID())
+        currentSeason = self.__armoryYardCtrl.serverSettings.getCurrentSeason()
+        if currentSeason:
+            AccountSettings.setArmoryYard(ArmoryYard.ARMORY_YARD_LAST_INTRO_VIEWED, currentSeason.getSeasonID())
 
     def __onEventUpdated(self):
-        if not self.__armoryYardCtrl.isEnabled():
+        if not self.__armoryYardCtrl.isEnabled() or self.__armoryYardCtrl.isPaused:
             self.destroyWindow()
+            if self.__closeCallback:
+                self.__closeCallback()
+            self.__closeCallback = None
+            self.__armoryYardCtrl.onLoadingHangar()
+        return
 
     def __close(self):
         self.destroyWindow()

@@ -11,6 +11,7 @@ from story_mode_common.story_mode_constants import LOGGER_NAME
 _logger = getLogger(LOGGER_NAME)
 
 class StoryModeStatsComposer(IStatsComposer):
+    _fromNotifications = set()
     _storyModeCtrl = dependency.descriptor(IStoryModeController)
 
     def __init__(self, _):
@@ -31,17 +32,19 @@ class StoryModeStatsComposer(IStatsComposer):
 
     @staticmethod
     def onShowResults(arenaUniqueID):
-        pass
+        StoryModeStatsComposer._fromNotifications.add(arenaUniqueID)
 
     def onResultsPosted(self, arenaUniqueID):
         resultVO = self._block.getVO()
         isForceOnboarding = resultVO['isForceOnboarding']
-        if isForceOnboarding:
+        isFromNotifications = arenaUniqueID in StoryModeStatsComposer._fromNotifications
+        if isForceOnboarding and not isFromNotifications:
             if not self._storyModeCtrl.isEnabled():
                 self._storyModeCtrl.skipOnboarding()
                 return
             missionId = resultVO['missionId']
             finishResult = resultVO['finishResult']
+            finishReason = resultVO['finishReason']
             if finishResult == PLAYER_TEAM_RESULT.WIN:
                 nextMission = self._storyModeCtrl.getNextMission(missionId)
                 if missionId == self._storyModeCtrl.missions.onboardingLastMissionId or nextMission is None:
@@ -49,7 +52,9 @@ class StoryModeStatsComposer(IStatsComposer):
                 else:
                     showPrebattleAndGoToQueue(missionId=nextMission.missionId)
             else:
-                showOnboardingBattleResultWindow(finishReason=finishResult, missionId=missionId)
+                showOnboardingBattleResultWindow(finishReason=finishReason, missionId=missionId)
         else:
             showBattleResultWindow(arenaUniqueID)
+        if isFromNotifications:
+            StoryModeStatsComposer._fromNotifications.remove(arenaUniqueID)
         return

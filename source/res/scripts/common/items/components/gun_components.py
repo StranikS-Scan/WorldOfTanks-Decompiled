@@ -10,10 +10,10 @@ SpinEffect = namedtuple('SpinEffect', ('activationSound', 'deactivationSound'))
 DEFAULT_TEMPERATURE_SEGMENT_SIZE = 5
 
 class GunShot(legacy_stuff.LegacyStuff):
-    __slots__ = ('shell', 'defaultPortion', 'piercingPower', 'speed', 'gravity', 'maxDistance', 'maxHeight', 'acceleration', 'ignoreDispersion', 'ammoWeight')
+    __slots__ = ('shell', 'defaultPortion', 'piercingPower', 'speed', 'gravity', 'maxDistance', 'maxHeight', 'acceleration', 'ignoreDispersion')
     __metaclass__ = ReflectionMetaclass
 
-    def __init__(self, shell, defaultPortion, piercingPower, speed, gravity, maxDistance, maxHeight, acceleration, ignoreDispersion, ammoWeight):
+    def __init__(self, shell, defaultPortion, piercingPower, speed, gravity, maxDistance, maxHeight, acceleration, ignoreDispersion):
         super(GunShot, self).__init__()
         self.shell = shell
         self.defaultPortion = defaultPortion
@@ -24,7 +24,6 @@ class GunShot(legacy_stuff.LegacyStuff):
         self.maxHeight = maxHeight
         self.acceleration = acceleration
         self.ignoreDispersion = ignoreDispersion
-        self.ammoWeight = ammoWeight
 
     def __repr__(self):
         res = '{}(' + ', '.join((aName + '=' + str(getattr(self, aName)) for aName in self.__slots__)) + ')'

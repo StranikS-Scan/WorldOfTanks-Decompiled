@@ -3572,7 +3572,7 @@
         </item>
         <item>	action	  <name>	section	</name>
         </item>
-        <item>	1431.1	  <name>	weight	</name>
+        <item>	1431.11	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	epic_battle	  <name>	mode	</name>
@@ -3587,7 +3587,22 @@
         </item>
         <item>	action	  <name>	section	</name>
         </item>
-        <item>	1431.2	  <name>	weight	</name>
+        <item>	1431.12	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	epic_battle	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	epicBattleAchievements:saboteur	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1431.13	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	epic_battle	  <name>	mode	</name>
@@ -4983,6 +4998,21 @@
         <item>	action	  <name>	section	</name>
         </item>
         <item>	1442.022	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:BattlePassCommonPr_18_5_Marathon	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1442.023	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	random	  <name>	mode	</name>
@@ -7338,6 +7368,36 @@
         <item>	action	  <name>	section	</name>
         </item>
         <item>	1444.95	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:clan_season_25_first	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	999.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:clan_season_25_last	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	999.1	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	random	  <name>	mode	</name>

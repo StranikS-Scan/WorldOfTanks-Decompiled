@@ -304,6 +304,19 @@ class CustomizationsSeller(Processor):
         return
 
 
+class CustomizationsTagsSetter(Processor):
+
+    def __init__(self, itemCD, mask, tagValue=0):
+        super(CustomizationsTagsSetter, self).__init__()
+        self.itemCD = itemCD
+        self.mask = mask
+        self.tagValue = tagValue
+
+    def _request(self, callback):
+        _logger.debug('Make server request to set customizations tags %s, item %s, value %s', self.mask, self.itemCD, self.tagValue)
+        BigWorld.player().inventory.setCustomizationTags(self.itemCD, self.mask, self.tagValue, lambda code, ctx={}: self._response(code, callback, ctx=ctx))
+
+
 class BadgesSelector(Processor):
 
     def __init__(self, badges=None):
@@ -501,13 +514,3 @@ class BuyBattleAbilitiesProcessor(Processor):
 
         raise AsyncReturn(None)
         return
-
-
-class RequestSingleTokenProcessor(Processor):
-
-    def __init__(self, token):
-        super(RequestSingleTokenProcessor, self).__init__()
-        self.__token = token
-
-    def _request(self, callback):
-        BigWorld.player().requestSingleToken(self.__token, lambda _, code, errStr: self._response(code, callback, errStr=errStr))

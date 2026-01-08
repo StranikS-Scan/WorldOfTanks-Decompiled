@@ -43,7 +43,9 @@ class VehicleParameters(VehicleParametersMeta):
         self._setDPUseAnimAndRebuild(useAnim)
 
     def rebuildParams(self):
-        self._vehParamsDP.rebuildList(self._getVehicleCache())
+        if self._vehParamsDP is not None:
+            self._vehParamsDP.rebuildList(self._getVehicleCache())
+        return
 
     def _createDataProvider(self):
         return _VehParamsDataProvider(_VehParamsGenerator())

@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/team_bases_ctrl.py
-from collections import defaultdict
 import BattleReplay
 import BigWorld
 import SoundGroups
+from collections import defaultdict
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from constants import TEAMS_IN_ARENA
@@ -39,13 +39,13 @@ class ITeamBasesListener(object):
     def setOffsetForEnemyPoints(self):
         pass
 
-    def addCapturingTeamBase(self, clientID, playerTeam, points, rate, timeLeft, invadersCnt, capturingStopped):
+    def addCapturingTeamBase(self, clientID, playerTeam, points, rate, timeLeft, invadersCnt, capturingStopped, extraInvader=False):
         pass
 
     def addCapturedTeamBase(self, clientID, playerTeam, timeLeft, invadersCnt):
         pass
 
-    def updateTeamBasePoints(self, clientID, points, rate, timeLeft, invadersCnt):
+    def updateTeamBasePoints(self, clientID, points, rate, timeLeft, invadersCnt, extraInvader=False):
         pass
 
     def stopTeamBaseCapturing(self, clientID, points):
@@ -223,8 +223,7 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
     def _teamBaseLeft(self, points, invadersCnt):
         return not points
 
-    def _removeBarEntry(self, clientID, baseTeam):
-        self.__clientIDs.remove(clientID)
+    def _removeBarEntry(self, baseTeam):
         self.__stopCaptureSound(baseTeam)
 
     def _containsClientID(self, clientID):
@@ -243,6 +242,16 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
         for viewCmp in self._viewComponents:
             viewCmp.addCapturingTeamBase(clientID, playerTeam, points, self._getProgressRate(), timeLeft, invadersCnt, capturingStopped)
 
+    def _clearClientEntry(self, clientID):
+        self.__clearUpdateCallback(clientID)
+        self.__clientIDs.discard(clientID)
+        self.__points.pop(clientID, None)
+        self.__captured.discard(clientID)
+        for viewCmp in self._viewComponents:
+            viewCmp.removeTeamBase(clientID)
+
+        return
+
     def __onTeamChanged(self, teamID):
         for clientID in self.__clientIDs:
             self.__clearUpdateCallback(clientID)
@@ -259,7 +268,9 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
         return len([ i for i in self.__clientIDs if i & team != 0 and i != exclude ]) > 0
 
     def __playCaptureSound(self, playerTeam, baseTeam):
-        if baseTeam not in self.__sounds:
+        if baseTeam in self.__sounds:
+            return
+        else:
             if playerTeam ^ baseTeam:
                 soundID = _BASE_CAPTURE_SOUND_NAME_ENEMY
             else:
@@ -274,7 +285,7 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
             except Exception:
                 LOG_CURRENT_EXCEPTION()
 
-        return
+            return
 
     def __stopCaptureSound(self, team):
         sound = self.__sounds.pop(team, None)
@@ -339,8 +350,4 @@ class BattleTeamsBasesPlayer(BattleTeamsBasesController):
 
 
 def createTeamsBasesCtrl(setup):
-    if setup.isReplayPlaying:
-        ctrl = BattleTeamsBasesPlayer()
-    else:
-        ctrl = BattleTeamsBasesController()
-    return ctrl
+    return BattleTeamsBasesPlayer() if setup.isReplayPlaying else BattleTeamsBasesController()

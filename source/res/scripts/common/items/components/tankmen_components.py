@@ -30,6 +30,7 @@ class SPECIAL_VOICE_TAG(object):
     HW_CREW = 'crewHWvoice'
     ARIA_CREW = 'ariaCrew'
     A157F = 'a157FSpecialVoice'
+    BP_18_5_STALCRAFT = 'bp18_5_stalcraft_specialVoice'
     BATTLE_OF_BLOGGERS = ('ru1_LebwaSpecialVoice', 'ru2_YushaSpecialVoice', 'ru3_Amway921SpecialVoice', 'ru4_KorbenDallasSpecialVoice', 'eu1_MailandSpecialVoice', 'eu2_Skill4ltuSpecialVoice', 'eu3_DezgamezSpecialVoice', 'eu4_AwesomeEpicGuysSpecialVoice')
     BATTLE_OF_BLOGGERS_2021 = ('bb21_ru1_Yusha_specialVoice', 'bb21_ru1_Vspishka_specialVoice', 'bb21_ru2_Amway921_specialVoice', 'bb21_ru2_Korbendailas_specialVoice', 'bb21_ru3_Lebwa_specialVoice', 'bb21_ru3_Inspirer_specialVoice', 'bb21_ru4_Evilgranny_specialVoice', 'bb21_ru4_Nearyou_specialVoice', 'bb21_eu1_Circon_specialVoice', 'bb21_eu2_Dakillzor_specialVoice', 'bb21_eu3_Newmulti2k_specialVoice', 'bb21_eu4_Orzanel_specialVoice', 'bb21_na1_Cabbagemechanic_specialVoice', 'bb21_na2_Tragicloss_specialVoice', 'bb21_na3_Cmdraf_specialVoice', 'bb21_asia1_Mastertortoise_specialVoice', 'bb21_asia2_Summertiger_specialVoice', 'bb21_asia3_Maharlika_specialVoice')
     G_I_JOE_TWITCH_2021 = ('duke_specialVoice', 'cobra_specialVoice')
@@ -58,7 +59,8 @@ class SPECIAL_VOICE_TAG(object):
      WITCHES_CREW,
      HW_CREW,
      CELEBRITY_2023,
-     A157F) + BATTLE_OF_BLOGGERS + BATTLE_OF_BLOGGERS_2021 + G_I_JOE_TWITCH_2021 + WHITE_TIGER_EVENT_2021 + WHITE_TIGER_EVENT_2022 + BPH_MT_2022 + MOSFILM_2023 + HW_2023 + KIN_DZA_DZA_2024 + BATTLE_OF_BLOGGERS_2025 + PORTAL_2025 + NY_2026
+     A157F,
+     BP_18_5_STALCRAFT) + BATTLE_OF_BLOGGERS + BATTLE_OF_BLOGGERS_2021 + G_I_JOE_TWITCH_2021 + WHITE_TIGER_EVENT_2021 + WHITE_TIGER_EVENT_2022 + BPH_MT_2022 + MOSFILM_2023 + HW_2023 + KIN_DZA_DZA_2024 + BATTLE_OF_BLOGGERS_2025 + PORTAL_2025 + NY_2026
 
 
 class SPECIAL_CREW_TAG(object):

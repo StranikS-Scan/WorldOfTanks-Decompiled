@@ -233,6 +233,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         self.__quickShellChangerIsActive = False
         self.__isInDebuff = False
         self.onEngineStateChange = Event()
+        self.onAutoShootStateChange = Event()
         self.__cameraTargetMatrix = Math.AdaptiveMatrixProvider()
         self.set_postmortemViewPointName()
         return
@@ -790,7 +791,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
                 if player.isObserver() and player.isObserverFPV and self.id == attachedVehicle.id:
                     player.switchObserverFPV()
             if self.isPlayerVehicle:
-                TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.PLAYER_RECEIVE_DAMAGE, attackerId=attackerID)
+                TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.PLAYER_RECEIVE_DAMAGE, attackerId=attackerID, vehicleId=self.id, damageContext=None)
             if attackReasonID == ATTACK_REASON_INDICES[ATTACK_REASON.WORLD_COLLISION]:
                 damageFactor = (self.__prevHealth - newHealth) * 100.0 / self.maxHealth
                 if damageFactor > 1:
@@ -1012,6 +1013,8 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
                     self.appearance.setupGunMatrixTargets(avatar.gunRotator)
             if hasattr(self.filter, 'allowStrafeCompensation'):
                 self.filter.allowStrafeCompensation = not self.isPlayerVehicle
+            if hasattr(self.filter, 'gravityOnLag') and self.typeDescriptor.isAirCraft:
+                self.filter.gravityOnLag = Math.Vector3(0, 0, 0)
             self.isStarted = True
             if not self.appearance.isObserver:
                 self.show(True)

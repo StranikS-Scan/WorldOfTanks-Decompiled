@@ -6,6 +6,7 @@ import GUI
 from account_helpers.AccountSettings import AccountSettings, COLOR_SETTINGS_TAB_IDX, APPLIED_COLOR_SETTINGS
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.settings_constants import GRAPHICS, COLOR_GRADING_TECHNIQUE_DEFAULT
+from account_helpers.settings_core.settings_logging import logPlayerSettingsBeforeChange, logPlayerSettingsAfterChange
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.common.settings.mixins import LayerVisibilityMixin
 from gui.Scaleform.daapi.view.meta.ColorSettingsViewMeta import ColorSettingsViewMeta
@@ -71,11 +72,16 @@ class ColorSettingsView(LayerVisibilityMixin, ColorSettingsViewMeta):
                 diff.update({settings_constants.GRAPHICS.COLOR_GRADING_TECHNIQUE: COLOR_GRADING_TECHNIQUE_DEFAULT})
             diff[COLOR_SETTINGS.COLOR_GRADING_TECHNIQUE] = 0
             diff[COLOR_SETTINGS.COLOR_FILTER_INTENSITY] = 25
+        settingsChanged = self.__hasChangesInSettings(diff.keys(), diff)
+        if settingsChanged:
+            logPlayerSettingsBeforeChange()
         self.settingsCore.applySettings(diff)
         lastAppliedSettings = AccountSettings.getSettings(APPLIED_COLOR_SETTINGS)
         lastAppliedSettings[self.__selectedTabIdx] = diff
         AccountSettings.setSettings(APPLIED_COLOR_SETTINGS, lastAppliedSettings)
         BigWorld.commitPendingGraphicsSettings()
+        if settingsChanged:
+            logPlayerSettingsAfterChange()
         self.destroy()
 
     def onTabSelected(self, selectedTab):

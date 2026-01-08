@@ -4490,6 +4490,11 @@
           <radius>	150	</radius>
           <spottingDuration>	80.0	</spottingDuration>
         </entity>
+        <entity>
+          <name>	FLBasicMine	</name>
+          <radius>	150	</radius>
+          <spottingDuration>	80.0	</spottingDuration>
+        </entity>
       </entitiesToSearch>
       <scanPointsAmount>	4	</scanPointsAmount>
       <antepositions>	0	</antepositions>
@@ -4543,6 +4548,11 @@
         </entity>
         <entity>
           <name>	BasicMine	</name>
+          <radius>	150	</radius>
+          <spottingDuration>	80.0	</spottingDuration>
+        </entity>
+        <entity>
+          <name>	FLBasicMine	</name>
           <radius>	150	</radius>
           <spottingDuration>	80.0	</spottingDuration>
         </entity>
@@ -4603,6 +4613,11 @@
           <radius>	150	</radius>
           <spottingDuration>	80.0	</spottingDuration>
         </entity>
+        <entity>
+          <name>	FLBasicMine	</name>
+          <radius>	150	</radius>
+          <spottingDuration>	80.0	</spottingDuration>
+        </entity>
       </entitiesToSearch>
       <scanPointsAmount>	4	</scanPointsAmount>
       <antepositions>	0	</antepositions>
@@ -4657,6 +4672,11 @@
         </entity>
         <entity>
           <name>	BasicMine	</name>
+          <radius>	150	</radius>
+          <spottingDuration>	80.0	</spottingDuration>
+        </entity>
+        <entity>
+          <name>	FLBasicMine	</name>
           <radius>	150	</radius>
           <spottingDuration>	80.0	</spottingDuration>
         </entity>
@@ -4717,6 +4737,11 @@
           <radius>	150	</radius>
           <spottingDuration>	80.0	</spottingDuration>
         </entity>
+        <entity>
+          <name>	FLBasicMine	</name>
+          <radius>	150	</radius>
+          <spottingDuration>	80.0	</spottingDuration>
+        </entity>
       </entitiesToSearch>
       <scanPointsAmount>	4	</scanPointsAmount>
       <antepositions>	0	</antepositions>
@@ -4774,6 +4799,11 @@
           <radius>	150	</radius>
           <spottingDuration>	80.0	</spottingDuration>
         </entity>
+        <entity>
+          <name>	FLBasicMine	</name>
+          <radius>	150	</radius>
+          <spottingDuration>	80.0	</spottingDuration>
+        </entity>
       </entitiesToSearch>
       <scanPointsAmount>	4	</scanPointsAmount>
       <antepositions>	0	</antepositions>
@@ -4828,6 +4858,11 @@
         </entity>
         <entity>
           <name>	BasicMine	</name>
+          <radius>	150	</radius>
+          <spottingDuration>	80.0	</spottingDuration>
+        </entity>
+        <entity>
+          <name>	FLBasicMine	</name>
           <radius>	150	</radius>
           <spottingDuration>	80.0	</spottingDuration>
         </entity>
@@ -9269,7 +9304,7 @@
       </visualScript>
       <cooldownSeconds>	90	</cooldownSeconds>
       <reuseCount>	4	</reuseCount>
-      <duration>	20	</duration>
+      <duration>	25	</duration>
       <cooldownAfterRamKill>	0.5	</cooldownAfterRamKill>
       <additiveFactors>
         <vehicle-fwMaxSpeedBonus>	10	</vehicle-fwMaxSpeedBonus>
@@ -9277,12 +9312,12 @@
       </additiveFactors>
       <multiplicativeFactors>
         <ramming>	1.5	</ramming>
-        <engine-power>	3.5	</engine-power>
+        <engine-power>	3.0	</engine-power>
         <ammoBayHealthFactor>	1.5	</ammoBayHealthFactor>
         <fuelTankHealthFactor>	1.5	</fuelTankHealthFactor>
         <engineHealthFactor>	1.5	</engineHealthFactor>
         <chassisHealthFactor>	1.5	</chassisHealthFactor>
-        <vehicle-rotationSpeed>	0.3	</vehicle-rotationSpeed>
+        <vehicle-rotationSpeed>	0.33	</vehicle-rotationSpeed>
         <trackRammingDamageFactor>	1.5	</trackRammingDamageFactor>
       </multiplicativeFactors>
     </script>
@@ -9313,7 +9348,7 @@
       </mul>
       <mul>
         <name>	vehicleEnginePower	</name>
-        <value>	250	</value>
+        <value>	200	</value>
       </mul>
       <add>
         <name>	speedLimitsBonus	</name>

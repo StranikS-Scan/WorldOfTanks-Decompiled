@@ -20,7 +20,7 @@ from gui.shared.items_parameters.params_helper import SimplifiedBarVO
 from gui.shared.money import MONEY_UNDEFINED, Currency
 from gui.shared.tooltips import getComplexStatusWULF, getUnlockPrice, TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS, makeRemovalPriceBlock
-from gui.shared.utils import GUN_CLIP, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, AIMING_TIME_PROP_NAME, RELOAD_TIME_PROP_NAME, GUN_AUTO_RELOAD, AUTO_RELOAD_PROP_NAME, DISPERSION_RADIUS, RELOAD_TIME_SECS_PROP_NAME, DUAL_GUN_RATE_TIME, DUAL_GUN_CHARGE_TIME, BURST_FIRE_RATE, BURST_TIME_INTERVAL, BURST_COUNT, BURST_SIZE, GUN_DUAL_GUN, GUN_CAN_BE_CLIP, GUN_CAN_BE_AUTO_RELOAD, GUN_CAN_BE_DUAL_GUN, TURBOSHAFT_ENGINE_POWER, ROCKET_ACCELERATION_ENGINE_POWER, DUAL_ACCURACY_COOLING_DELAY, AUOTSHOOT_FLAME_OVERHEAT_COOLING_TIME, AUTOSHOOT_FLAME_CHANGE_SHELL_TIME, GUN_AUTOSHOOT_FLAME, GUN_CAN_BE_AUTOSHOOT_FLAME, AVG_DAMAGE_PER_SECOND, FLAME_MAX_DISTANCE, THERMAL_VISION_DISTANCE, THERMAL_VISION_RELOAD_TIME, THERMAL_VISION_OBSERVE_TIME, THERMAL_VISION_REUSE_AND_DURATION, GUN_AUTO_RELOAD_DUAL_GUN, GUN_CLIP_DUAL_GUN
+from gui.shared.utils import GUN_CLIP, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, AIMING_TIME_PROP_NAME, RELOAD_TIME_PROP_NAME, GUN_AUTO_RELOAD, AUTO_RELOAD_PROP_NAME, DISPERSION_RADIUS, RELOAD_TIME_SECS_PROP_NAME, DUAL_GUN_RATE_TIME, DUAL_GUN_CHARGE_TIME, BURST_FIRE_RATE, BURST_TIME_INTERVAL, BURST_COUNT, BURST_SIZE, GUN_DUAL_GUN, GUN_CAN_BE_CLIP, GUN_CAN_BE_AUTO_RELOAD, GUN_CAN_BE_DUAL_GUN, TURBOSHAFT_ENGINE_POWER, ROCKET_ACCELERATION_ENGINE_POWER, DUAL_ACCURACY_COOLING_DELAY, AUOTSHOOT_FLAME_OVERHEAT_COOLING_TIME, AUTOSHOOT_FLAME_CHANGE_SHELL_TIME, GUN_AUTOSHOOT_FLAME, GUN_CAN_BE_AUTOSHOOT_FLAME, AVG_DAMAGE_PER_SECOND, FLAME_MAX_DISTANCE, THERMAL_VISION_DISTANCE, THERMAL_VISION_RELOAD_TIME, THERMAL_VISION_OBSERVE_TIME, THERMAL_VISION_REUSE_AND_DURATION, GUN_AUTO_RELOAD_DUAL_GUN, GUN_CLIP_DUAL_GUN, GUN_CAN_BE_AUTOSHOOT, GUN_AUTOSHOOT
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers.i18n import makeString as _ms
@@ -49,6 +49,7 @@ class _ModuleExtraStatuses(CONST_CONTAINER):
     CLIP_GUN = 'clipGun'
     FLAME_GUN = 'flameGun'
     AUTOSHOOT_FLAME_GUN = 'autoShootFlameGun'
+    AUTOSHOOT_GUN = 'autoShootGun'
     DUAL_GUN = 'dualGun'
     DUAL_ACCURACY_GUN = 'dualAccuracyGun'
     TURBOSHAFT_ENGINE = 'turboshaftEngine'
@@ -72,6 +73,7 @@ _MODULE_EXTRA_STATUS_RESOURCES = {_ModuleExtraStatuses.AUTOLOADER_GUN: (_STR_EXT
  _ModuleExtraStatuses.CLIP_GUN: (_STR_EXTRA_PATH.clipGunLabel, _IMG_EXTRA_PATH.magazineGunIcon),
  _ModuleExtraStatuses.FLAME_GUN: (_STR_EXTRA_PATH.flameGunLabel, _IMG_EXTRA_PATH.flameGunIcon),
  _ModuleExtraStatuses.AUTOSHOOT_FLAME_GUN: (_STR_EXTRA_PATH.autoShootFlameGunLabel, _IMG_EXTRA_PATH.flameGunIcon),
+ _ModuleExtraStatuses.AUTOSHOOT_GUN: (_STR_EXTRA_PATH.autoShootGunLabel, _IMG_EXTRA_PATH.autoShootGun),
  _ModuleExtraStatuses.DUAL_GUN: (_STR_EXTRA_PATH.dualGunLabel, _IMG_EXTRA_PATH.dualGun),
  _ModuleExtraStatuses.DUAL_ACCURACY_GUN: (_STR_EXTRA_PATH.dualAccuracyGunLabel, _IMG_EXTRA_PATH.dualAccuracy),
  _ModuleExtraStatuses.TURBOSHAFT_ENGINE: (_STR_EXTRA_PATH.turboshaftEngine, _IMG_EXTRA_PATH.turbineEngineIcon),
@@ -201,6 +203,7 @@ class ModuleTooltipBlockConstructor(object):
     DUAL_ACCURACY_MODULE_PARAM = 'dualAccuracy'
     DEFAULT_PARAM = 'default'
     AUTOSHOOT_FLAME_GUN_MODULE_PARAM = 'autoShootFlameGun'
+    AUTOSHOOT_GUN_MODULE_PARAM = 'autoShootGun'
     AUTO_RELOAD_DUAL_GUN_MODULE_PARAM = 'autoReloadDualGun'
     CLIP_DUAL_GUN_MODULE_PARAM = 'clipDualGun'
     MODULE_PARAMS = {GUI_ITEM_TYPE.CHASSIS: ('rotationSpeed', 'maxSteeringLockAngle', 'vehicleChassisRepairSpeed', 'chassisRepairTime', 'vehicleGunShotStabilizationChassisMovement', 'vehicleGunShotStabilizationChassisRotation'),
@@ -285,6 +288,21 @@ class ModuleTooltipBlockConstructor(object):
                                         AUOTSHOOT_FLAME_OVERHEAT_COOLING_TIME,
                                         DISPERSION_RADIUS,
                                         AIMING_TIME_PROP_NAME),
+     AUTOSHOOT_GUN_MODULE_PARAM: ('avgDamageList',
+                                  'avgPiercingPower',
+                                  SHELLS_COUNT_PROP_NAME,
+                                  'shellsBurstCount',
+                                  SHELL_RELOADING_TIME_PROP_NAME,
+                                  RELOAD_MAGAZINE_TIME_PROP_NAME,
+                                  BURST_TIME_INTERVAL,
+                                  BURST_COUNT,
+                                  BURST_SIZE,
+                                  'avgDamagePerMinute',
+                                  'stunMaxDurationList',
+                                  DISPERSION_RADIUS,
+                                  DUAL_ACCURACY_COOLING_DELAY,
+                                  'maxShotDistance',
+                                  AIMING_TIME_PROP_NAME),
      AUTO_RELOAD_DUAL_GUN_MODULE_PARAM: ('avgDamageList',
                                          'avgPiercingPower',
                                          SHELLS_COUNT_PROP_NAME,
@@ -694,6 +712,8 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                 elif reloadingType == GUN_CAN_BE_AUTOSHOOT_FLAME or reloadingType == GUN_AUTOSHOOT_FLAME:
                     highlightPossible = serverSettings.checkFlamethrowerHighlights(increase=True)
                     paramsKeyName = self.AUTOSHOOT_FLAME_GUN_MODULE_PARAM
+                elif reloadingType == GUN_CAN_BE_AUTOSHOOT or reloadingType == GUN_AUTOSHOOT:
+                    paramsKeyName = self.AUTOSHOOT_GUN_MODULE_PARAM
                 elif reloadingType == GUN_AUTO_RELOAD_DUAL_GUN:
                     highlightPossible = serverSettings.checkAutoReloadDualGunHighlights(increase=True)
                     paramsKeyName = self.AUTO_RELOAD_DUAL_GUN_MODULE_PARAM
@@ -772,6 +792,8 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                 result.append(_ModuleExtraStatuses.AUTOSHOOT_FLAME_GUN)
             else:
                 result.append(_ModuleExtraStatuses.FLAME_GUN)
+        elif module.isAutoShootGun(vDescr):
+            result.append(_ModuleExtraStatuses.AUTOSHOOT_GUN)
         elif module.isClipGun(vDescr):
             result.append(_ModuleExtraStatuses.CLIP_GUN)
         elif module.isAutoReloadableDualGun(vDescr):

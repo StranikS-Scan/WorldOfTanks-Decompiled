@@ -121,3 +121,8 @@ class BattleRoyaleBorderCtrl(ArenaBorderController):
 
     def _applySetting(self, showMode, _, color):
         super(BattleRoyaleBorderCtrl, self)._applySetting(_SHOW_MODE.SHOW_ALWAYS, _DISPLAY_MODE.TYPE_DOTTED, color)
+
+
+def createBorderController(setup):
+    guiVisitor = setup.arenaVisitor.gui
+    return BattleRoyaleBorderCtrl() if guiVisitor.isBattleRoyale() else ArenaBorderController()

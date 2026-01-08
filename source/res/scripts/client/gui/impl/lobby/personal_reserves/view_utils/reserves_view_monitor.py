@@ -18,7 +18,7 @@ class ReservesViewMonitor(ViewImpl, EventSystemEntity):
     def _initialize(self, *args, **kwargs):
         super(ReservesViewMonitor, self)._initialize(*args, **kwargs)
         self.addListener(ViewEventType.LOAD_VIEW, self.__onLobbyViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.__viewMonitor.init(self, [R.views.lobby.personal_reserves.ReservesIntroView(), R.views.lobby.personal_reserves.ReservesConversionView()])
+        self.__viewMonitor.init(self, [R.views.lobby.personal_reserves.ReservesIntroView()])
 
     def _finalize(self):
         super(ReservesViewMonitor, self)._finalize()

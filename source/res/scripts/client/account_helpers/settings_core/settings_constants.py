@@ -29,6 +29,7 @@ class GRAPHICS(CONST_CONTAINER):
     BRIGHTNESS_CORRECTION = 'brightnessCorrection'
     CONTRAST_CORRECTION = 'contrastCorrection'
     SATURATION_CORRECTON = 'saturationCorrection'
+    GAMMA = 'gamma'
     COLOR_FILTER_SETTING = 'colorFilter'
     COLOR_FILTER_IMAGES = 'colorFilterImages'
     FOV = 'fov'
@@ -191,6 +192,8 @@ class CONTROLS(CONST_CONTAINER):
     BACK_DRAFT_INVERSION = 'backDraftInvert'
     KEYBOARD = 'keyboard'
     KEYBOARD_IMPORTANT_BINDS = 'keyboardImportantBinds'
+    KEYS_LAYOUT = 'keysLayout'
+    KEYS_TOOLTIPS = 'keysTooltips'
 
 
 class AIM(CONST_CONTAINER):
@@ -404,6 +407,7 @@ class OnceOnlyHints(CONST_CONTAINER):
     PARAGONS_ENTRY_POINT_HINT = 'ParagonsEntryPointHint'
     PARAGONS_RESEARCH_BUTTON_HINT = 'ParagonsResearchButtonHint'
     BIRTHDAY_POSTBATTLE_EXTRA_TAB_HINT = 'BirthdayPostbattleExtraTabHint'
+    EPIC_SUPPLY_INFO_HINT = 'EpicSupplyInfoHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):
@@ -524,7 +528,6 @@ class NewYearStorageKeys(CONST_CONTAINER):
     NY_WELCOME_NOTIFICATION = 'NYWelcomeNotification'
     NY_PET_TOYS_REMOVED = 'NyPetToysRemoved'
     NY_FIRST_QUEST_VIDEO_VISITED = 'NyFirstQuestVideoVisited'
-    NY_TAMAGOTCHI_TUTORIAL_COMPLETED = 'NYTamagotchiTutorial'
     NY_FIRST_QUEST_ENTRANCE = 'NYFirstQuestEntrance'
     DECORATIONS_POPOVER_VIEWED = 'decorationsPopoverViewed'
     DECORATIONS_POPOVER_BROKEN = 'decorationsPopoverBroken'

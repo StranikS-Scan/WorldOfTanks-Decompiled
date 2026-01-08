@@ -18,6 +18,7 @@ from items import ITEM_TYPE_INDICES, vehicles as vehs_core
 from post_progression_common import TankSetupGroupsId
 if typing.TYPE_CHECKING:
     from gui.impl.gen_utils import DynAccessor
+    from typing import Optional
 
 def rnd_choice(*args):
     args = list(args)
@@ -88,6 +89,10 @@ def makeTooltip(header=None, body=None, note=None, attention=None):
     if attention is not None:
         res_str += '{ATTENTION}%s{/ATTENTION}' % makeString(attention)
     return res_str
+
+
+def makeComplexTooltipByResource(resource, note=None, attention=None):
+    return makeTooltip(header=backport.text(resource.header()), body=backport.text(resource.body()), note=note, attention=attention)
 
 
 @adisp_async

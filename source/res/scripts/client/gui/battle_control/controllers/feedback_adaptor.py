@@ -236,6 +236,9 @@ class BattleFeedbackAdaptor(IBattleController):
     def invalidateThermalVisionFinishTime(self, vehicleID, data):
         self.onVehicleFeedbackReceived(_FET.THERMAL_VISION_TIME, vehicleID, data)
 
+    def invalidateFLSupplyRepairTimer(self, vehicleID, data):
+        self.onVehicleFeedbackReceived(_FET.FRONTLINE_SUPPLY_REPAIR_TIMER, vehicleID, data)
+
     def markObjectiveOnMinimap(self, senderID, hqIdx, cmdName):
         self.onMinimapFeedbackReceived(_FET.MINIMAP_MARK_OBJECTIVE, senderID, (hqIdx, _CELL_BLINKING_DURATION, cmdName))
 

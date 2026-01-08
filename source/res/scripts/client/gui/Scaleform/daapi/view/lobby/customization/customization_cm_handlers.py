@@ -32,6 +32,7 @@ class CustomizationOptions(object):
     STYLE_INFO = 'styleInfo'
     EDIT_STYLE = 'editStyle'
     BASE_STYLE = 'baseStyle'
+    MARK_FAVORITES = 'markFavorites'
 
 
 class CustomizationItemCMHandler(AbstractContextMenuHandler):
@@ -47,7 +48,8 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
          CustomizationOptions.PROLONGATION_OFF: 'changeAutoRent',
          CustomizationOptions.STYLE_INFO: 'showStyleInfo',
          CustomizationOptions.EDIT_STYLE: 'enterEditMode',
-         CustomizationOptions.BASE_STYLE: 'clearStyle'})
+         CustomizationOptions.BASE_STYLE: 'clearStyle',
+         CustomizationOptions.MARK_FAVORITES: 'markFavorites'})
         self.onSelected = Event(self._eManager)
         self._item = self.itemsCache.items.getItemByCD(self._intCD)
         self.__ctx = self.service.getCtx()
@@ -83,6 +85,9 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
         else:
             self.__ctx.mode.removeItems(True, self._intCD)
 
+    def markFavorites(self):
+        self.__ctx.updateCustomizationFavorits(self._item)
+
     def showStyleInfo(self):
         self.__ctx.events.onShowStyleInfo(self._item)
 
@@ -108,6 +113,7 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
             menuItems += self.__separateItem(self.__getRentBtn(item))
         menuItems += self.__separateItem(self.__getSellBtn(item))
         menuItems.append(self.__getRemoveBtn(item))
+        menuItems.append(self.__getFavoritesBtn(item))
         return menuItems
 
     def _initFlashValues(self, ctx):
@@ -209,4 +215,9 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
         else:
             enabled = isInstalled
         btn = self._makeItem(optId=CustomizationOptions.REMOVE_FROM_TANK, optLabel=MENU.cst_item_ctx_menu(textKey), optInitData={'enabled': enabled})
+        return btn
+
+    def __getFavoritesBtn(self, item):
+        textKey = 'unmarkAsFavorite' if item.markedAsFavorite else 'markAsFavorite'
+        btn = self._makeItem(optId=CustomizationOptions.MARK_FAVORITES, optLabel=MENU.cst_item_ctx_menu(textKey), optInitData={'enabled': True})
         return btn

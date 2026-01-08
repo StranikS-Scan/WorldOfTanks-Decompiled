@@ -188,7 +188,9 @@
     <_90mm_AT_Gun_M3B1>	31021	</_90mm_AT_Gun_M3B1>
     <_152mm_XM81E1>	31022	</_152mm_XM81E1>
     <QF_6_pounder_Mk_III_02>	31023	</QF_6_pounder_Mk_III_02>
+    <_152mm_Pentomic_Gun>	31024	</_152mm_Pentomic_Gun>
     <_105mm_T254>	31025	</_105mm_T254>
+    <_152mm_XM81_59>	31027	</_152mm_XM81_59>
     <_120mm_Gun_M58A_T>	31007	</_120mm_Gun_M58A_T>
     <_105mm_Gun_T5E1_832>	35000	</_105mm_Gun_T5E1_832>
     <_120mm_RHD_MBT_T>	35001	</_120mm_RHD_MBT_T>
@@ -9304,6 +9306,122 @@
         </_152mm_HE_XM657E2_2>
       </shots>
     </_152mm_XM81E1>
+    <_152mm_Pentomic_Gun>
+      <userString>	#usa_vehicles:_152mm_Pentomic_Gun	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	130000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.68	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.14	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_huge	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	20	</reloadTime>
+      <maxAmmo>	20	</maxAmmo>
+      <aimingTime>	5.0	</aimingTime>
+      <weight>	1230	</weight>
+      <maxHealth>	194	</maxHealth>
+      <maxRegenHealth>	97	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.15	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.5	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.44	</turretRotation>
+        <afterShot>	6.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_152mm_HEAT_M409_O>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	754	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	250 250	</piercingPower>
+        </_152mm_HEAT_M409_O>
+        <_152mm_APFSDS_XM578E1_O>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	754	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	310 310	</piercingPower>
+        </_152mm_APFSDS_XM578E1_O>
+        <_152mm_HE_XM657E2_O>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	754	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	152 152	</piercingPower>
+        </_152mm_HE_XM657E2_O>
+      </shots>
+    </_152mm_Pentomic_Gun>
+    <_152mm_XM81_59>
+      <userString>	#usa_vehicles:_152mm_XM81_59	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	250000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.68	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.14	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_huge	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	20	</reloadTime>
+      <maxAmmo>	20	</maxAmmo>
+      <aimingTime>	5.0	</aimingTime>
+      <weight>	510	</weight>
+      <maxHealth>	230	</maxHealth>
+      <maxRegenHealth>	115	</maxRegenHealth>
+      <repairCost>	11	</repairCost>
+      <invisibilityFactorAtShot>	0.15	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.5	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.44	</turretRotation>
+        <afterShot>	6.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_152mm_APFSDS_XM578E1_59>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	1350	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	254 233	</piercingPower>
+        </_152mm_APFSDS_XM578E1_59>
+        <_152mm_HEAT_M409_59>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	683	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	330 330	</piercingPower>
+        </_152mm_HEAT_M409_59>
+        <_152mm_HE_XM657E2_59>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	683	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	90 90	</piercingPower>
+        </_152mm_HE_XM657E2_59>
+      </shots>
+    </_152mm_XM81_59>
     <_155mm_AT_Gun_T7>
       <userString>	#usa_vehicles:_155mm_AT_Gun_T7	</userString>
       <tags></tags>

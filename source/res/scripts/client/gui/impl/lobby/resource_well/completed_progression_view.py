@@ -50,6 +50,8 @@ class CompletedProgressionView(ViewImpl):
             serialNumber = getSerialNumber(resourceWell=self.__resourceWell)
             model.setIsTop(bool(serialNumber))
             model.setPersonalNumber(serialNumber)
+            model.setVehicleRole(self.__vehicle.roleLabel if self.__vehicle.role else '')
+            model.setVehicleFullDescription(self.__vehicle.longDescriptionSpecial)
             fillVehicleInfo(model.vehicleInfo, self.__vehicle)
 
     def __close(self):

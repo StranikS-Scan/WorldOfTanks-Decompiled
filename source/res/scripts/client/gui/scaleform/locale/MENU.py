@@ -259,9 +259,6 @@ class MENU(object):
     TANKCAROUSEL_VEHICLESTATES_INPREMIUMIGRONLY = '#menu:tankCarousel/vehicleStates/inPremiumIgrOnly'
     TANKCAROUSEL_VEHICLESTATES_BUYTANK = '#menu:tankCarousel/vehicleStates/buyTank'
     TANKCAROUSEL_VEHICLESTATES_BUYTANKEMPTYCOUNT = '#menu:tankCarousel/vehicleStates/buyTankEmptyCount'
-    TANKCAROUSEL_VEHICLESTATES_NYTANK = '#menu:tankCarousel/vehicleStates/nyTank'
-    TANKCAROUSEL_VEHICLESTATES_NYTANKEMPTYCOUNT = '#menu:tankCarousel/vehicleStates/nyTankEmptyCount'
-    TANKCAROUSEL_VEHICLESTATES_NYTANKSLOTSFULL = '#menu:tankCarousel/vehicleStates/nyTankSlotsFull'
     TANKCAROUSEL_VEHICLESTATES_BUYSLOT = '#menu:tankCarousel/vehicleStates/buySlot'
     TANKCAROUSEL_VEHICLESTATES_RESTORETANK = '#menu:tankCarousel/vehicleStates/restoreTank'
     TANKCAROUSEL_VEHICLESTATES_RESTORETANKCOUNT = '#menu:tankCarousel/vehicleStates/restoreTankCount'
@@ -678,6 +675,7 @@ class MENU(object):
     EXTRAPARAMS_NAME_VEHICLEGUNSHOTDISPERSIONAFTERSHOT = '#menu:extraParams/name/vehicleGunShotDispersionAfterShot'
     EXTRAPARAMS_NAME_ABILITYDURATIONBONUS = '#menu:extraParams/name/abilityDurationBonus'
     EXTRAPARAMS_NAME_ABILITYCOOLDOWNBONUS = '#menu:extraParams/name/abilityCooldownBonus'
+    EXTRAPARAMS_NAME_VEHICLEGUNSPECDAMAGE = '#menu:extraParams/name/vehicleGunSpecDamage'
     EXTRAPARAMS_NAME_VEHICLEGUNDAMAGE = '#menu:extraParams/name/vehicleGunDamage'
     EXTRAPARAMS_NAME_VEHICLEGUNSHOTDISPERSIONCHASSISMOVEMENT = '#menu:extraParams/name/vehicleGunShotDispersionChassisMovement'
     EXTRAPARAMS_NAME_VEHICLEGUNSHOTDISPERSIONCHASSISROTATION = '#menu:extraParams/name/vehicleGunShotDispersionChassisRotation'
@@ -1152,6 +1150,7 @@ class MENU(object):
     MODULEINFO_CLIPGUNLABEL = '#menu:moduleInfo/clipGunLabel'
     MODULEINFO_FLAMEGUNLABEL = '#menu:moduleInfo/flameGunLabel'
     MODULEINFO_AUTOSHOOTFLAMEGUNLABEL = '#menu:moduleInfo/autoShootFlameGunLabel'
+    MODULEINFO_AUTOSHOOTGUNLABEL = '#menu:moduleInfo/autoShootGunLabel'
     MODULEINFO_AUTORELOADGUNLABEL = '#menu:moduleInfo/autoReloadGunLabel'
     MODULEINFO_AUTORELOADGUNLABEL_BOOST = '#menu:moduleInfo/autoReloadGunLabel/boost'
     MODULEINFO_DUALGUNLABEL = '#menu:moduleInfo/dualGunLabel'
@@ -1195,6 +1194,7 @@ class MENU(object):
     MODULEINFO_PARAMS_ENGINEPOWER = '#menu:moduleInfo/params/enginePower'
     MODULEINFO_PARAMS_CALIBER = '#menu:moduleInfo/params/caliber'
     MODULEINFO_PARAMS_SHELLSCOUNT = '#menu:moduleInfo/params/shellsCount'
+    MODULEINFO_PARAMS_AUTOSHOOTSHELLSCOUNT = '#menu:moduleInfo/params/autoShootShellsCount'
     MODULEINFO_PARAMS_SHELLSBURSTCOUNT = '#menu:moduleInfo/params/shellsBurstCount'
     MODULEINFO_PARAMS_SHELLSFLAMEBURSTCOUNT = '#menu:moduleInfo/params/shellsFlameBurstCount'
     MODULEINFO_PARAMS_SHELLRELOADINGTIME = '#menu:moduleInfo/params/shellReloadingTime'
@@ -1723,6 +1723,7 @@ class MENU(object):
     CONTEXTMENU_CREATEMAPBOXSQUAD = '#menu:contextMenu/createMapboxSquad'
     CONTEXTMENU_CREATECOMP7SQUAD = '#menu:contextMenu/createComp7Squad'
     CONTEXTMENU_CREATERANKEDSQUAD = '#menu:contextMenu/createRankedSquad'
+    CONTEXTMENU_CREATEEPICSQUAD = '#menu:contextMenu/createEpicSquad'
     CONTEXTMENU_INVITE = '#menu:contextMenu/invite'
     CONTEXTMENU_APPEAL = '#menu:contextMenu/appeal'
     CONTEXTMENU_INCORRECTBEHAVIOR = '#menu:contextMenu/incorrectBehavior'
@@ -2199,6 +2200,8 @@ class MENU(object):
     CST_ITEM_CTX_MENU_PUTONTHIRD = '#menu:cst_item_ctx_menu/putOnThird'
     CST_ITEM_CTX_MENU_UNLOAD = '#menu:cst_item_ctx_menu/unload'
     CST_ITEM_CTX_MENU_DECONSTRUCT = '#menu:cst_item_ctx_menu/deconstruct'
+    CST_ITEM_CTX_MENU_MARKASFAVORITE = '#menu:cst_item_ctx_menu/markAsFavorite'
+    CST_ITEM_CTX_MENU_UNMARKASFAVORITE = '#menu:cst_item_ctx_menu/unmarkAsFavorite'
     VIEWHEADER_BACKBTN_LABEL = '#menu:viewHeader/backBtn/label'
     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE = '#menu:viewHeader/backBtn/descrLabel/techtree'
     VIEWHEADER_BACKBTN_DESCRLABEL_HANGAR = '#menu:viewHeader/backBtn/descrLabel/hangar'
@@ -2437,6 +2440,7 @@ class MENU(object):
      CONTEXTMENU_CREATEMAPBOXSQUAD,
      CONTEXTMENU_CREATECOMP7SQUAD,
      CONTEXTMENU_CREATERANKEDSQUAD,
+     CONTEXTMENU_CREATEEPICSQUAD,
      CONTEXTMENU_INVITE,
      CONTEXTMENU_APPEAL,
      CONTEXTMENU_INCORRECTBEHAVIOR,
@@ -2539,9 +2543,6 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_INPREMIUMIGRONLY,
      TANKCAROUSEL_VEHICLESTATES_BUYTANK,
      TANKCAROUSEL_VEHICLESTATES_BUYTANKEMPTYCOUNT,
-     TANKCAROUSEL_VEHICLESTATES_NYTANK,
-     TANKCAROUSEL_VEHICLESTATES_NYTANKEMPTYCOUNT,
-     TANKCAROUSEL_VEHICLESTATES_NYTANKSLOTSFULL,
      TANKCAROUSEL_VEHICLESTATES_BUYSLOT,
      TANKCAROUSEL_VEHICLESTATES_RESTORETANK,
      TANKCAROUSEL_VEHICLESTATES_RESTORETANKCOUNT,
@@ -2998,7 +2999,9 @@ class MENU(object):
      CST_ITEM_CTX_MENU_PUTONSECOND,
      CST_ITEM_CTX_MENU_PUTONTHIRD,
      CST_ITEM_CTX_MENU_UNLOAD,
-     CST_ITEM_CTX_MENU_DECONSTRUCT)
+     CST_ITEM_CTX_MENU_DECONSTRUCT,
+     CST_ITEM_CTX_MENU_MARKASFAVORITE,
+     CST_ITEM_CTX_MENU_UNMARKASFAVORITE)
     INTERNET_PROVIDER_ALL_NAME_ENUM = (INTERNET_PROVIDER_LOCALPARTNER2_NAME,
      INTERNET_PROVIDER_LOCALPARTNER3_NAME,
      INTERNET_PROVIDER_LOCALPARTNER4_NAME,

@@ -47,14 +47,16 @@ class ComponentBuilder(XMLObjBuilder):
      'minLevel': (ParameterType.INT, Visibility.ALL),
      'battleTypes': (ParameterType.INT_LIST, Visibility.ALL),
      'glossaryName': (ParameterType.STR, Visibility.ALL),
-     'lightingUpTo': (ParameterType.FLOAT, Visibility.ALL)}
+     'lightingUpTo': (ParameterType.FLOAT, Visibility.ALL),
+     'skipProgressInDescr': (ParameterType.BOOL, Visibility.CLIENT)}
     DEFAULTS = {'isSecret': False,
      'isHidden': False,
      'isDefault': False,
      'isDeprecated': False,
      'isExternalUnlockOnly': False,
      'numberType': ComponentNumberType.NUMBER,
-     'glossaryName': ''}
+     'glossaryName': '',
+     'skipProgressInDescr': False}
     VALIDATORS = {ComponentPurpose.TRIUMPH_MEDAL: [validateCommon, partial(validateViewType, viewType=ComponentViewType.BACKGROUND, purpose=ComponentPurpose.TRIUMPH_MEDAL), validateTriumphMedal],
      ComponentPurpose.TRIUMPH: [validateCommon, partial(validateViewType, viewType=ComponentViewType.ENGRAVING, purpose=ComponentPurpose.TRIUMPH), validateTriumph],
      ComponentPurpose.SKILL: [validateCommon, partial(validateViewType, viewType=ComponentViewType.ENGRAVING, purpose=ComponentPurpose.SKILL), validateSkill],
@@ -123,6 +125,9 @@ class ComponentBuilder(XMLObjBuilder):
     def lightingUpTo(self, value):
         self._component.lightingUpTo = value
 
+    def skipProgressInDescr(self, value):
+        self._component.skipProgressInDescr = value
+
     def validate(self):
         for validator in self.VALIDATORS.get(self._component.purpose, []):
             validator(self._component)
@@ -149,13 +154,11 @@ class StartingComponentsBuilder(XMLObjBuilder):
         if len(self._compsID) != len(set(self._compsID)):
             raise ParseException(ParseException.STARTING_COMPONENT_DUPLICITY)
         for c in self._compsID:
-            found = False
             for cd in self.__componentDefs:
                 if cd.componentId == c:
-                    found = True
                     self._component.components.append(cd)
-
-            if not found:
+                    break
+            else:
                 raise ParseException(ParseException.STARTING_COMPONENT_INVALID_ID, c)
 
         return super(StartingComponentsBuilder, self).build()
@@ -182,10 +185,11 @@ class ComponentDefinition(object):
         self.battleTypes = None
         self.glossaryName = ''
         self.lightingUpTo = None
+        self.skipProgressInDescr = False
         return
 
     def __str__(self):
-        return "[id: {componentId}, {purpose}, {viewType}, unlock keys: {unlockKey}, progress keys: {progressKey}, hidden: {isHidden}, default: {isDefault}, deprecated: {isDeprecated}, grades: {grades}, secret: {isSecret}, only external unlock: {isExternalUnlockOnly}, src: '{src}']".format(componentId=self.componentId, purpose='None' if self.purpose is None else self.purpose.value, viewType='None' if self.viewType is None else self.viewType.value, unlockKey=self.unlockKey, progressKey=self.progressKey, isHidden=self.isHidden, isDefault=self.isDefault, isDeprecated=self.isDeprecated, grades=self.grades, isSecret=self.isSecret, isExternalUnlockOnly=self.isExternalUnlockOnly, src=self.src)
+        return "[id: {componentId}, {purpose}, {viewType}, unlock keys: {unlockKey}, progress keys: {progressKey}, hidden: {isHidden}, default: {isDefault}, deprecated: {isDeprecated}, grades: {grades}, secret: {isSecret}, only external unlock: {isExternalUnlockOnly}, src: '{src}', skipProgressInDescr: {skipProgressInDescr}]".format(componentId=self.componentId, purpose='None' if self.purpose is None else self.purpose.value, viewType='None' if self.viewType is None else self.viewType.value, unlockKey=self.unlockKey, progressKey=self.progressKey, isHidden=self.isHidden, isDefault=self.isDefault, isDeprecated=self.isDeprecated, grades=self.grades, isSecret=self.isSecret, isExternalUnlockOnly=self.isExternalUnlockOnly, src=self.src, skipProgressInDescr=self.skipProgressInDescr)
 
     def __repr__(self):
         return self.__str__()

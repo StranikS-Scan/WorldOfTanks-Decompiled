@@ -713,3 +713,6 @@ class _ClientArenaVisitor(IClientArenaVisitor):
     @catch_attribute_exception(default=_ClientArenaSkeleton.componentSystem)
     def getComponentSystem(self):
         return self._arena.componentSystem
+
+    def getComponent(self, name):
+        return getattr(self.getComponentSystem(), name, None)

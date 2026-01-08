@@ -122,6 +122,9 @@ class ISettingsCore(object):
     def clearStorages(self):
         raise NotImplementedError
 
+    def getSettings(self, excludedNames=None):
+        raise NotImplementedError
+
     def setOverrideSettings(self, overrideDict, disableStorages):
         raise NotImplementedError
 

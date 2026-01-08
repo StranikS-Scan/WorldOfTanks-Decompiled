@@ -10,6 +10,9 @@ class FortClanBattleRoomMeta(BaseRallyRoomView):
     def openConfigureWindow(self):
         self._printOverrideError('openConfigureWindow')
 
+    def openFreezeJournal(self):
+        self._printOverrideError('openFreezeJournal')
+
     def toggleRoomStatus(self):
         self._printOverrideError('toggleRoomStatus')
 

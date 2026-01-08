@@ -49,6 +49,10 @@ class IConnectionManager(object):
         raise NotImplementedError
 
     @property
+    def lastSessionID(self):
+        raise NotImplementedError
+
+    @property
     def databaseID(self):
         raise NotImplementedError
 

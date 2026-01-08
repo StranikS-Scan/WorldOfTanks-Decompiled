@@ -32,7 +32,7 @@ class PlayerPanelStateSetting(object):
     @classmethod
     def read(cls):
         state = cls.settingsCore.getSetting(GAME.PLAYERS_PANELS_STATE)
-        return state if state in _PLAYERS_PANEL_STATE_RANGE else PLAYERS_PANEL_STATE.MEDIUM
+        return state if state in _PLAYERS_PANEL_STATE_RANGE else PLAYERS_PANEL_STATE.LONG
 
     @classmethod
     def write(cls, state):

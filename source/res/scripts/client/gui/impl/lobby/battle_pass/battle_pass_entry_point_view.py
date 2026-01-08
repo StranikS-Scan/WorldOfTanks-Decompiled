@@ -6,6 +6,7 @@ from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.daapi.view.meta.BattlePassEntryPointMeta import BattlePassEntryPointMeta
 from gui.battle_pass.battle_pass_helpers import getSupportedCurrentArenaBonusType
 from gui.impl.gen import R
+from shared_utils import first
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_entry_point_view_model import AnimationState, BPState, BattlePassEntryPointViewModel, ChapterType
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view import BattlePassCompletedTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view import BattlePassInProgressTooltipView
@@ -18,6 +19,7 @@ from gui.prb_control.formatters.invites import getPreQueueName
 from gui.server_events.events_dispatcher import showMissionsBattlePass
 from gui.shared import EVENT_BUS_SCOPE, events
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
+from gui.battle_pass.battle_pass_helpers import getIsBpPointsShopEntryPointActive
 from helpers import dependency
 from helpers.events_handler import EventsHandler
 from helpers.time_utils import MS_IN_SECOND
@@ -295,13 +297,16 @@ class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
                 chapterTypes.addString(str(chType))
 
             chapterTypes.invalidate()
+            isPointsVisible = getIsBpPointsShopEntryPointActive()
+            availableChapter = first(self.__battlePass.getChapterIDs())
+            chapterID = availableChapter if self.__battlePass.isSingleChapter() else self.chapterID
             tx.setIsSmall(self.__isSmall)
             tx.setTooltipID(self._getTooltip())
             tx.setChapterType(ChapterType.MARATHON if self.hasMarathon else ChapterType.DEFAULT)
             tx.setIsResourceAvailable(self.isResourceAvailable)
             tx.setPrevLevel(getPresentLevel(_g_entryLastState.level))
             tx.setLevel(getPresentLevel(self.level))
-            tx.setChapterID(self.chapterID)
+            tx.setChapterID(chapterID or 0)
             tx.setPreviousChapterID(_g_entryLastState.chapterID)
             tx.setPrevProgression(_g_entryLastState.progress)
             tx.setProgression(self.progress)
@@ -309,7 +314,7 @@ class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
             tx.setNotChosenRewardCount(isNotChosenRewardCount)
             tx.setIsProgressionCompleted(self.isCompleted)
             tx.setIsChapterChosen(self.isChapterChosen)
-            tx.setFreePoints(self.freePoints)
+            tx.setFreePoints(self.freePoints if isPointsVisible else 0)
             tx.setHasBattlePass(self.isBought)
             tx.setAnimState(self.__getAnimationState())
             tx.setIsFirstShow(_g_entryLastState.isFirstShow)

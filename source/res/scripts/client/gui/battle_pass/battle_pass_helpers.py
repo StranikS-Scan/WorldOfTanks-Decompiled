@@ -32,8 +32,9 @@ if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import TmanTemplateTokensBonus
     from gui.shared.gui_items.customization.c11n_items import Customization
 _logger = logging.getLogger(__name__)
-_CUSTOMIZATION_BONUS_NAME = 'customizations'
+CUSTOMIZATION_BONUS_NAME = 'customizations'
 TANKMAN_BONUS_NAME = 'tmanToken'
+VEHICLE_BONUS_NAME = 'vehicles'
 TokenPositions = namedtuple('TokenPositions', ['free', 'paid'])
 
 def chaptersIDsComparator(firstID, secondID):
@@ -84,6 +85,18 @@ def getExtraIntroVideoURL():
 
 def getIntroSlidesNames():
     return GUI_SETTINGS.battlePassIntroSlides
+
+
+def getBattlePassShopEntryPointsConfig():
+    return GUI_SETTINGS.battlePassShopEntryPointsConfig
+
+
+def getIsBpPointsShopEntryPointActive():
+    return getBattlePassShopEntryPointsConfig()['isBpPointsShopEntryPointActive']
+
+
+def getIsBpCoinShopEntryPointActive():
+    return getBattlePassShopEntryPointsConfig()['isBpCoinShopEntryPointActive']
 
 
 def getMarathonIntroSlidesNames():
@@ -220,10 +233,14 @@ def getDataByTankman(tankman):
     iconName = tankman.getIconByNation(nation)
     tankmanName = tankman.getFullUserNameByNation(nation)
     skills = tankman.getAllKnownSkills()
+    voiceTag = tankman.getSpecialVoiceTag()
     newSkillCount, _ = tankman.getNewSkillCount(onlyFull=True)
     if newSkillCount > 0:
         skills += [SKILLS.TYPE_NEW_SKILL] * (newSkillCount - skills.count(SKILLS.TYPE_NEW_SKILL))
-    return (iconName, tankmanName, skills)
+    return (iconName,
+     tankmanName,
+     skills,
+     voiceTag)
 
 
 def getOfferTokenByGift(tokenID):

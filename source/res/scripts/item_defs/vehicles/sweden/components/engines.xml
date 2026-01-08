@@ -54,6 +54,14 @@
     <AVS_1195_SH>	1001	</AVS_1195_SH>
     <Meteor_Mark_IV_Mod_271_SH>	1002	</Meteor_Mark_IV_Mod_271_SH>
     <Continental_AV_1790_5B>	31001	</Continental_AV_1790_5B>
+    <Boeing_502_10>	31003	</Boeing_502_10>
+    <Rolls_Royce_K60>	31004	</Rolls_Royce_K60>
+    <Rolls_Royce_K60_M1>	31005	</Rolls_Royce_K60_M1>
+    <_2_st_Scania_Vabis_L_603_1S>	31006	</_2_st_Scania_Vabis_L_603_1S>
+    <Volvo_A8BS>	31007	</Volvo_A8BS>
+    <Boeing_502_10_T>	35001	</Boeing_502_10_T>
+    <Rolls_Royce_K60_M1_T>	35002	</Rolls_Royce_K60_M1_T>
+    <Volvo_A8BS_T>	35003	</Volvo_A8BS_T>
   </ids>
   <shared>
     <Daimler_Benz_m_1910>
@@ -267,6 +275,22 @@
       <rpm_min>	396	</rpm_min>
       <rpm_max>	2531	</rpm_max>
     </_2_st_Scania_Vabis_L_603_1>
+    <_2_st_Scania_Vabis_L_603_1S>
+      <userString>	#sweden_vehicles:_2_st_Scania_Vabis_L_603_1S	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	10500	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	324	</power>
+      <weight>	1080	</weight>
+      <maxHealth>	123	</maxHealth>
+      <maxRegenHealth>	58	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	396	</rpm_min>
+      <rpm_max>	2531	</rpm_max>
+    </_2_st_Scania_Vabis_L_603_1S>
     <SFA_B42>
       <userString>	#sweden_vehicles:SFA_B42	</userString>
       <tags>	gasoline	</tags>
@@ -315,6 +339,39 @@
       <rpm_min>	324	</rpm_min>
       <rpm_max>	2761	</rpm_max>
     </Volvo_A8B>
+    <Volvo_A8BS>
+      <userString>	#sweden_vehicles:Volvo_A8BS	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	13700	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	410	</power>
+      <weight>	1050	</weight>
+      <maxHealth>	123	</maxHealth>
+      <maxRegenHealth>	58	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	324	</rpm_min>
+      <rpm_max>	2761	</rpm_max>
+    </Volvo_A8BS>
+    <Volvo_A8BS_T>
+      <userString>	#sweden_vehicles:Volvo_A8BS_T	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	13700	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	410	</power>
+      <weight>	1050	</weight>
+      <maxHealth>	123	</maxHealth>
+      <maxRegenHealth>	58	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	324	</rpm_min>
+      <rpm_max>	2761	</rpm_max>
+    </Volvo_A8BS_T>
     <_2_st_Scania_Vabis_607>
       <userString>	#sweden_vehicles:_2_st_Scania_Vabis_607	</userString>
       <tags>	gasoline	</tags>
@@ -875,6 +932,89 @@
       <rpm_min>	379	</rpm_min>
       <rpm_max>	2060	</rpm_max>
     </Saab_Scania_DS14_Alt_3>
+    <Rolls_Royce_K60>
+      <userString>	#sweden_vehicles:Rolls_Royce_K60	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	40000	</price>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <power>	490	</power>
+      <weight>	910	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	2100	</rpm_max>
+    </Rolls_Royce_K60>
+    <Rolls_Royce_K60_M1>
+      <userString>	#sweden_vehicles:Rolls_Royce_K60_M1	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	44000	</price>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <power>	560	</power>
+      <weight>	910	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	2100	</rpm_max>
+    </Rolls_Royce_K60_M1>
+    <Rolls_Royce_K60_M1_T>
+      <userString>	#sweden_vehicles:Rolls_Royce_K60_M1_T	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	44000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <power>	560	</power>
+      <weight>	910	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	2100	</rpm_max>
+    </Rolls_Royce_K60_M1_T>
+    <Boeing_502_10>
+      <userString>	#sweden_vehicles:Boeing_502_10	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
+      <power>	1080	</power>
+      <weight>	910	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	360	</rpm_min>
+      <rpm_max>	2180	</rpm_max>
+    </Boeing_502_10>
+    <Boeing_502_10_T>
+      <userString>	#sweden_vehicles:Boeing_502_10_T	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
+      <power>	1080	</power>
+      <weight>	910	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	360	</rpm_min>
+      <rpm_max>	2180	</rpm_max>
+    </Boeing_502_10_T>
     <Development_Engine>
       <userString>	Development Engine	</userString>
       <tags>	diesel	</tags>

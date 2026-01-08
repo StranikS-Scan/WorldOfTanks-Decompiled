@@ -6,6 +6,8 @@ from th_async import th_async, th_await, await_callback
 from gui.impl.lobby.tank_setup.tank_setup_sounds import playSound, TankSetupSoundEvents
 from gui.impl.lobby.tank_setup.configurations.epic_battle_ability import EpicBattleTabsController, EpicBattleDealPanel
 from gui.impl.lobby.tank_setup.sub_views.base_equipment_setup import BaseEquipmentSetupSubView
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE
+from gui.shared.events import AmmunitionSetupViewEvent
 from gui.shared.event_dispatcher import showFrontlineInfoWindow
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -118,6 +120,8 @@ class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
     def canQuit(self, skipApplyAutoRenewal=None):
         if self._asyncActionLock.isLocked:
             raise AsyncReturn(False)
+        if not self.__epicController.isEnabled():
+            raise AsyncReturn(True)
         currentItems = self._interactor.getChangedList()
         result = True
         hasEnoughPoints = self.__epicController.getSkillPoints() >= self.__totalPurchasePrice
@@ -216,6 +220,10 @@ class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
             self.__uiEpicBattleLogger.resumeAction(EpicBattleLogActions.VIEW_WATCHED.value)
 
     def __onEpicUpdated(self, diff):
+        if not self.__epicController.isEnabled():
+            self.__updateProvider()
+            g_eventBus.handleEvent(AmmunitionSetupViewEvent(AmmunitionSetupViewEvent.CLOSE_VIEW), EVENT_BUS_SCOPE.LOBBY)
+            return
         if 'abilityPts' in diff:
             pointsAmount = diff['abilityPts']
             self._viewModel.setPointsAmount(pointsAmount)

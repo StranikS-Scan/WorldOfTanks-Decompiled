@@ -3,6 +3,7 @@
 from itertools import chain
 import BigWorld
 from account_helpers.settings_core import settings_constants, options
+from account_helpers.settings_core.settings_logging import logPlayerSettingsBeforeChange, logPlayerSettingsAfterChange
 from gui.shared.utils import graphics
 from gui.shared.utils.monitor_settings import g_monitorSettings
 from helpers import dependency
@@ -86,6 +87,8 @@ class SettingsParams(object):
 
     def apply(self, diff, restartApproved):
         diff = self.__settingsDiffPreprocessing(diff)
+        if diff:
+            logPlayerSettingsBeforeChange()
         applyMethod = self.getApplyMethod(diff)
         self.settingsCore.applySettings(diff)
         confirmators = self.settingsCore.applyStorages(restartApproved)
@@ -93,6 +96,8 @@ class SettingsParams(object):
         if set(graphics.GRAPHICS_SETTINGS.ALL()) & set(diff.keys()):
             BigWorld.commitPendingGraphicsSettings()
         self.settingsCore.clearStorages()
+        if diff:
+            logPlayerSettingsAfterChange()
         return applyMethod == options.APPLY_METHOD.RESTART
 
     def getApplyMethod(self, diff):

@@ -29,6 +29,7 @@ from gui.impl.lobby.mode_selector.mode_selector_data_provider import ModeSelecto
 from gui.impl.lobby.mode_selector.popovers.random_battle_popover import RandomBattlePopover
 from gui.impl.lobby.mode_selector.sound_constants import MODE_SELECTOR_SOUND_SPACE
 from gui.impl.lobby.mode_selector.tooltips.simply_format_tooltip import SimplyFormatTooltipView
+from gui.impl.lobby.stronghold.tooltips.stronghold_main_widget_tooltip import StrongholdMainWidgetTooltip
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.tooltip_window import SimpleTooltipContent
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
@@ -38,7 +39,7 @@ from gui.shared.system_factory import registerModeSelectorTooltips, collectModeS
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IBootcampController, IComp7Controller, IRankedBattlesController
+from skeletons.gui.game_control import IBootcampController, IComp7Controller, IRankedBattlesController, IEpicBattleMetaGameController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from uilogging.deprecated.bootcamp.constants import BC_LOG_KEYS, BC_LOG_ACTIONS
@@ -71,7 +72,8 @@ def _getTooltipByContentIdMap():
      R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView(): BattlePassCompletedTooltipView,
      R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView(): partial(BattlePassInProgressTooltipView, battleType=QUEUE_TYPE.RANDOMS),
      R.views.lobby.comp7.tooltips.MainWidgetTooltip(): MainWidgetTooltip,
-     R.views.lobby.comp7.tooltips.RankInactivityTooltip(): RankInactivityTooltip}
+     R.views.lobby.comp7.tooltips.RankInactivityTooltip(): RankInactivityTooltip,
+     R.views.lobby.stronghold.tooltips.StrongholdMainWidgetTooltip(): StrongholdMainWidgetTooltip}
 
 
 registerModeSelectorTooltips(_SIMPLE_TOOLTIP_IDS, _getTooltipByContentIdMap())
@@ -86,6 +88,7 @@ class ModeSelectorView(ViewImpl):
     __gui = dependency.descriptor(IGuiLoader)
     __comp7Controller = dependency.descriptor(IComp7Controller)
     __rankedBattleController = dependency.descriptor(IRankedBattlesController)
+    __epicBattleController = dependency.descriptor(IEpicBattleMetaGameController)
     layoutID = R.views.lobby.mode_selector.ModeSelectorView()
     _areWidgetsVisible = False
 
@@ -184,6 +187,7 @@ class ModeSelectorView(ViewImpl):
         self.viewModel.onShowMapSelectionClicked += self.__showMapSelectionClickHandler
         self.viewModel.onShowWidgetsClicked += self.__showWidgetsClickHandler
         self.viewModel.onInfoClicked += self.__infoClickHandler
+        self.__epicBattleController.onUpdated += self.__refresh
         self.__dataProvider = self.__dataProvider or ModeSelectorDataProvider()
         self.__dataProvider.onListChanged += self.__dataProviderListChangeHandler
         self.__updateViewModel(self.viewModel)
@@ -222,6 +226,7 @@ class ModeSelectorView(ViewImpl):
         self.__rankedBattleController.onGameModeStatusUpdated -= self.__refresh
         self.__rankedBattleController.onUpdated -= self.__refresh
         self.__rankedBattleController.onGameModeStatusTick -= self.__refresh
+        self.__epicBattleController.onUpdated -= self.__refresh
         self.viewModel.onItemClicked -= self.__itemClickHandler
         self.viewModel.onShowMapSelectionClicked -= self.__showMapSelectionClickHandler
         self.viewModel.onShowWidgetsClicked -= self.__showWidgetsClickHandler
@@ -357,7 +362,7 @@ class ModeSelectorView(ViewImpl):
             self.close()
 
     def __refresh(self, *_):
-        if self.__comp7Controller.isAvailable() or self.__rankedBattleController.isAvailable():
+        if any((self.__comp7Controller.isAvailable(), self.__rankedBattleController.isAvailable(), self.__epicBattleController.isEnabled())):
             self.__dataProvider.updateItems()
         else:
             self.refresh()

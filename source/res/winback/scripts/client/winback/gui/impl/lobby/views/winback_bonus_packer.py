@@ -41,6 +41,7 @@ if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
     from gui.server_events.bonuses import SimpleBonus, TmanTemplateTokensBonus
     from account_helpers.offers.offer_bonuses import NationalBlueprintOfferBonus
+    from gui.server_events.recruit_helper import _BaseRecruitInfo
 _logger = logging.getLogger(__name__)
 WINBACK_DISCOUNTS = 'winbackDiscounts'
 _BONUS_COUNT = 'count'
@@ -347,6 +348,14 @@ class TmanTemplateCountableBonusPacker(TmanTemplateBonusPacker):
         if tokenRecord.count > 1:
             model.setValue(str(tokenRecord.count))
         return model
+
+    @classmethod
+    def _getBonusModel(cls):
+        return RewardItemModel()
+
+    @classmethod
+    def _addAdditionalData(cls, recruitInfo, model):
+        pass
 
 
 class ExtendedCurrencyBonusUIPacker(SimpleBonusUIPacker):

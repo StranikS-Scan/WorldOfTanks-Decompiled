@@ -212,6 +212,7 @@ class DogTagComposerLobby(DogTagComposerClient):
         model.setIsDeprecated(componentDef.isDeprecated)
         model.setProgressNumberType(componentDef.numberType.value)
         model.setIsExternalUnlockOnly(componentDef.isExternalUnlockOnly)
+        model.setSkipProgressInDescr(componentDef.skipProgressInDescr)
         if componentDef.purpose == ComponentPurpose.SKILL and isUnlocked and currProgValue < componentDef.grades[0]:
             model.setIsDemoted(True)
         if componentDef.purpose == ComponentPurpose.STATIC:

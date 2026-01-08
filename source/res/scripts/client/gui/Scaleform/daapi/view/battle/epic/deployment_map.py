@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic/deployment_map.py
 import GUI
-from gui.Scaleform.daapi.view.battle.epic.minimap import _FRONT_LINE_DEV_VISUALIZATION_SUPPORTED, DevelopmentRespawnEntriesPlugin, EpicGlobalSettingsPlugin, HeadquartersStatusEntriesPlugin, MINIMAP_SCALE_TYPES, METERS_IN_1X_ZOOM, ProtectionZoneEntriesPlugin, RespawningPersonalEntriesPlugin, RecoveringVehiclesPlugin, SectorBaseEntriesPlugin, SectorOverlayEntriesPlugin, SectorStatusEntriesPlugin, StepRepairPointEntriesPlugin, EpicMinimapPingPlugin
+from gui.Scaleform.daapi.view.battle.epic.minimap import _FRONT_LINE_DEV_VISUALIZATION_SUPPORTED, DevelopmentRespawnEntriesPlugin, EpicGlobalSettingsPlugin, HeadquartersStatusEntriesPlugin, MINIMAP_SCALE_TYPES, METERS_IN_1X_ZOOM, ProtectionZoneEntriesPlugin, RespawningPersonalEntriesPlugin, EpicArenaVehiclesPlugin, SectorBaseEntriesPlugin, SectorOverlayEntriesPlugin, SectorStatusEntriesPlugin, StepRepairPointEntriesPlugin, EpicMinimapPingPlugin, OwnDirectionPlugin
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings
 from gui.Scaleform.daapi.view.battle.shared.minimap.component import _IMAGE_PATH_FORMATTER
 from gui.Scaleform.daapi.view.meta.EpicDeploymentMapMeta import EpicDeploymentMapMeta
 from gui.Scaleform.genConsts.LAYER_NAMES import LAYER_NAMES
 from gui.battle_control import minimap_utils
+from gui.shared.events import RespawnViewEvent
 _S_NAME = settings.ENTRY_SYMBOL_NAME
 _C_NAME = settings.CONTAINER_NAME
 _DEPLOY_MAP_PATH = '_level0.root.{}.main.epicDeploymentMap.mapContainer.entriesContainer'.format(LAYER_NAMES.VIEWS)
@@ -23,6 +24,16 @@ class EpicDeploymentMapComponent(EpicDeploymentMapMeta):
     def _populate(self):
         super(EpicDeploymentMapComponent, self)._populate()
         self._updateThermalSectorSize(METERS_IN_1X_ZOOM, MINIMAP_SCALE_TYPES.REAL_SCALE)
+        self.addListener(RespawnViewEvent.ON_RESPAWN_VIEW_SHOW, self.__onRespawnViewShow)
+        self.addListener(RespawnViewEvent.ON_RESPAWN_VIEW_HIDE, self.__onRespawnViewHide)
+
+    def _dispose(self):
+        super(EpicDeploymentMapComponent, self)._dispose()
+        self.removeListener(RespawnViewEvent.ON_RESPAWN_VIEW_SHOW, self.__onRespawnViewShow)
+        self.removeListener(RespawnViewEvent.ON_RESPAWN_VIEW_HIDE, self.__onRespawnViewHide)
+
+    def __setRespawnMode(self, respawnMode):
+        self.getPlugin('own_direction').setRespawnMode(respawnMode)
 
     def getVisualBounds(self):
         if not self._bounds:
@@ -68,7 +79,8 @@ class EpicDeploymentMapComponent(EpicDeploymentMapMeta):
         if visitor.hasRespawns() and visitor.hasSectors():
             setup['epic_sector_states'] = SectorStatusEntriesPlugin
             setup['protection_zones'] = ProtectionZoneEntriesPlugin
-            setup['vehicles'] = RecoveringVehiclesPlugin
+            setup['vehicles'] = EpicArenaVehiclesPlugin
+            setup['own_direction'] = OwnDirectionPlugin
         if visitor.hasDestructibleEntities():
             setup['epic_hqs'] = DeploymentHeadquartersStatusEntriesPlugin
         if visitor.hasStepRepairPoints():
@@ -92,6 +104,12 @@ class EpicDeploymentMapComponent(EpicDeploymentMapMeta):
 
     def _getMinimapTexture(self, arenaVisitor):
         return _IMAGE_PATH_FORMATTER.format(arenaVisitor.type.getOverviewMapTexture())
+
+    def __onRespawnViewShow(self, *args):
+        self.__setRespawnMode(True)
+
+    def __onRespawnViewHide(self, *args):
+        self.__setRespawnMode(False)
 
 
 class DeploymentSectorBaseEntriesPlugin(SectorBaseEntriesPlugin):

@@ -134,6 +134,9 @@ class AvatarEpicData(object):
         self.__isCurrentPlayerSectorGroupAllowed = goodGroup
         lane = componentSystem.sectorComponent.getSectorById(sectorID).playerGroup
         componentSystem.playerDataComponent.setPhysicalLane(lane, groupID)
+        flComponent = self.dynamicComponents.get('avatarFrontlineComponent')
+        if flComponent:
+            flComponent.setCurrentSector(sectorID)
         return
 
     def onStepRepairPointAction(self, repairPointIndex, action, nextActionTime, pointsHealed):

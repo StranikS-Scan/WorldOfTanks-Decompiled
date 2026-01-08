@@ -1433,6 +1433,9 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
     def replaceOfferByReward(self, bonuses):
         raise NotImplementedError
 
+    def getSectorsProgression(self):
+        raise NotImplementedError
+
     def replaceOfferByGift(self, bonuses):
         raise NotImplementedError
 
@@ -1467,6 +1470,9 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
         raise NotImplementedError
 
     def storeCycle(self):
+        raise NotImplementedError
+
+    def getSupplyParams(self):
         raise NotImplementedError
 
 
@@ -1739,9 +1745,6 @@ class ICraftmachineController(IGameController):
 
 class ICalendarController(IGameController):
 
-    def mustShow(self):
-        raise NotImplementedError
-
     def updateHeroAdventActionInfo(self):
         raise NotImplementedError
 
@@ -1791,52 +1794,11 @@ class IClanNotificationController(IGameController):
 
 class IFestivityController(IGameController):
     onStateChanged = None
-    onUpdateSlot = None
-    onSetHangToyEffectEnabled = None
 
     def isEnabled(self):
         raise NotImplementedError
 
-    def isInProgress(self):
-        raise NotImplementedError
-
-    def isPostEvent(self):
-        raise NotImplementedError
-
     def getHangarQuestsFlagData(self):
-        raise NotImplementedError
-
-    def getHangarWidgetLinkage(self):
-        raise NotImplementedError
-
-    def getHangarEdgeColor(self):
-        raise NotImplementedError
-
-    def isWidgetVisible(self, prbState, alias=None):
-        raise NotImplementedError
-
-    def isCreditBonusVisible(self, prbState):
-        raise NotImplementedError
-
-    def isOnboardingFinished(self):
-        raise NotImplementedError
-
-    @property
-    def tutorial(self):
-        raise NotImplementedError
-
-
-class IFestivityTutorialController(IGameController):
-    onIntroComplete = None
-
-    def shouldStartIntro(self):
-        raise NotImplementedError
-
-    @property
-    def isActive(self):
-        raise NotImplementedError
-
-    def tryStartIntro(self):
         raise NotImplementedError
 
 
@@ -1942,6 +1904,9 @@ class IBattlePassController(IGameController):
         raise NotImplementedError
 
     def isValidChapterID(self, chapterID):
+        raise NotImplementedError
+
+    def isSingleChapter(self):
         raise NotImplementedError
 
     def getChapterType(self, chapterID):
@@ -2191,6 +2156,9 @@ class IBattlePassController(IGameController):
         raise NotImplementedError
 
     def getTimeToLimitReset(self):
+        raise NotImplementedError
+
+    def getQuestTokensInChapter(self):
         raise NotImplementedError
 
 
@@ -2638,9 +2606,6 @@ class IGuiLootBoxesController(IGameController, IEntitlementsConsumer):
     def getGuiLootBoxByTokenID(self, tokenID):
         raise NotImplementedError
 
-    def getInfoPageURL(self, lootboxType):
-        raise NotImplementedError
-
 
 class IGuiLootBoxesIntroController(IGameController):
 
@@ -2754,10 +2719,6 @@ class ISeniorityAwardsController(IGameController):
         raise NotImplementedError
 
     @property
-    def isNeedToShowOfferNotification(self):
-        raise NotImplementedError
-
-    @property
     def pendingReminderTimestamp(self):
         raise NotImplementedError
 
@@ -2768,9 +2729,6 @@ class ISeniorityAwardsController(IGameController):
         raise NotImplementedError
 
     def getSACoin(self):
-        raise NotImplementedError
-
-    def replaceCompTokens(self, rewards):
         raise NotImplementedError
 
 
@@ -2918,6 +2876,9 @@ class ICollectiveGoalEntryPointController(IGameController):
 
 class ICollectiveGoalMarathonsController(IGameController):
     onMarathonUpdated = None
+
+    def getEventName(self):
+        raise NotImplementedError
 
 
 class IUniversalFlagEntryPointController(IGameController):
@@ -4452,4 +4413,57 @@ class IBlackMarketController(IGameController):
         raise NotImplementedError
 
     def getLastOfferStartDate(self):
+        raise NotImplementedError
+
+
+class IEpicBattleController(IGameController):
+    onQuestChanged = None
+    onQuestProgressChanged = None
+    onCurrentSectorChanged = None
+    onOwnSectorsChanged = None
+    onSectorProgressionChanged = None
+    onProgressionModelChanged = None
+    onSupplyActivated = None
+    onAirshipCome = None
+
+    def setQuest(self, questName):
+        raise NotImplementedError
+
+    def setOwnSectors(self, sectors):
+        raise NotImplementedError
+
+    def setCurrentSector(self, sectorID):
+        raise NotImplementedError
+
+    def getQuest(self):
+        raise NotImplementedError
+
+    def getQuestProgress(self):
+        raise NotImplementedError
+
+    def getAimSector(self):
+        raise NotImplementedError
+
+    def getOwnSectors(self):
+        raise NotImplementedError
+
+    def getCurrentSector(self):
+        raise NotImplementedError
+
+    def updateQuestProgress(self, questName, progressesInfo):
+        raise NotImplementedError
+
+    def reset(self):
+        raise NotImplementedError
+
+    def setSectorProgression(self, progression):
+        raise NotImplementedError
+
+    def getSectorProgression(self):
+        raise NotImplementedError
+
+    def isOnOwnSector(self):
+        raise NotImplementedError
+
+    def getSectorName(self, sectorID):
         raise NotImplementedError

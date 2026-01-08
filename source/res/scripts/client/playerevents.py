@@ -55,6 +55,7 @@ class _PlayerEvents(object):
         self.onAvatarBecomePlayer = Event.Event()
         self.onAvatarBecomeNonPlayer = Event.Event()
         self.onArenaPeriodChange = Event.Event()
+        self.onArenaStateChange = Event.Event()
         self.onAvatarReady = Event.Event()
         self.onBattleResultsReceived = Event.Event()
         self.onAvatarVehicleLeaveWorld = Event.Event()

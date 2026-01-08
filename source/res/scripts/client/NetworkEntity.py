@@ -4,6 +4,7 @@ import CGF
 import BigWorld
 import cgf_network
 from debug_utils import LOG_DEBUG_DEV
+cache = dict()
 
 class NetworkEntity(BigWorld.Entity):
     ignoreEntityGOSync = True
@@ -18,9 +19,12 @@ class NetworkEntity(BigWorld.Entity):
             direction = (self.yaw, self.pitch, self.roll)
             LOG_DEBUG_DEV('New NetworkEntity [{}][{}] position {} rotation {} scale {}'.format(self.id, self.unique_id, self.position, direction, self.scale))
 
+    def onConnected(self):
+        cache[self.unique_id] = self.entityGameObject
+
     def onLeaveWorld(self):
-        self.entityGameObject = None
-        if CGF.removeNetworkEntity(self.spaceID, self, self.unique_id):
+        if CGF.removeGameObject(cache[self.unique_id]):
+            self.entityGameObject = None
             LOG_DEBUG_DEV('Removed NetworkEntity [{}]'.format(self.id))
         return
 

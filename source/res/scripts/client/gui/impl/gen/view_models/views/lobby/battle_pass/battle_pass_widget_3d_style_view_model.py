@@ -1,21 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/battle_pass/battle_pass_widget_3d_style_view_model.py
 from frameworks.wulf import ViewModel
-from gui.impl.gen.view_models.common.vehicle_info_model import VehicleInfoModel
+from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_vehicle_widget_view_model import BattlePassVehicleWidgetViewModel
 
 class BattlePassWidget3DStyleViewModel(ViewModel):
-    __slots__ = ('onPreviewClick', 'onMarathonPreviewClick')
+    __slots__ = ('onPreviewClick', 'onMarathonPreviewClick', 'onSoundClick')
 
-    def __init__(self, properties=5, commands=2):
+    def __init__(self, properties=6, commands=3):
         super(BattlePassWidget3DStyleViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
-    def vehicleInfo(self):
+    def vehicle(self):
         return self._getViewModel(0)
 
     @staticmethod
-    def getVehicleInfoType():
-        return VehicleInfoModel
+    def getVehicleType():
+        return BattlePassVehicleWidgetViewModel
 
     def getStyleName(self):
         return self._getString(1)
@@ -41,12 +41,20 @@ class BattlePassWidget3DStyleViewModel(ViewModel):
     def setIntCD(self, value):
         self._setNumber(4, value)
 
+    def getIsPaidReward(self):
+        return self._getBool(5)
+
+    def setIsPaidReward(self, value):
+        self._setBool(5, value)
+
     def _initialize(self):
         super(BattlePassWidget3DStyleViewModel, self)._initialize()
-        self._addViewModelProperty('vehicleInfo', VehicleInfoModel())
+        self._addViewModelProperty('vehicle', BattlePassVehicleWidgetViewModel())
         self._addStringProperty('styleName', '')
         self._addNumberProperty('styleId', 0)
         self._addStringProperty('marathonRewardId', '')
         self._addNumberProperty('intCD', 0)
+        self._addBoolProperty('isPaidReward', False)
         self.onPreviewClick = self._addCommand('onPreviewClick')
         self.onMarathonPreviewClick = self._addCommand('onMarathonPreviewClick')
+        self.onSoundClick = self._addCommand('onSoundClick')

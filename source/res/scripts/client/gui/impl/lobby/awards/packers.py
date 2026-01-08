@@ -2,20 +2,17 @@
 # Embedded file name: scripts/client/gui/impl/lobby/awards/packers.py
 import logging
 import typing
-from typing import List
 from adisp import adisp_async, adisp_process
-from constants import RentType, OFFER_TOKEN_PREFIX, SENIORITY_AWARDS_COMPENSATION_BONUS
+from constants import RentType, OFFER_TOKEN_PREFIX
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.battle_pass.battle_pass_bonuses_packers import TmanTemplateBonusPacker
 from gui.impl import backport
 from gui.impl.backport import createTooltipData
 from gui.impl.gen import R
-from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
 from gui.impl.gen.view_models.views.lobby.awards.reward_model import RewardModel, RentTypeEnum
 from gui.impl.lobby.awards import SupportedTokenTypes
 from gui.impl.lobby.awards.prefetch import TokenDataPrefetcher
 from gui.impl.lobby.awards.tooltip import VEH_FOR_CHOOSE_ID
-from gui.impl.lobby.seniority_awards.bonuses import SelectBonusPacker, SACompensationBonusPacker
 from gui.shared.gui_items.Vehicle import getNationLessName, getIconResourceName
 from gui.shared.missions.packers.bonus import VehiclesBonusUIPacker, getDefaultBonusPackersMap, BaseBonusUIPacker, AsyncBonusUIPacker, BACKPORT_TOOLTIP_CONTENT_ID, Customization3Dand2DbonusUIPacker, CustomizationBonusUIPacker, BonusUIPacker
 from gui.shared.utils.functions import makeTooltip
@@ -24,7 +21,7 @@ from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from gui.server_events.bonuses import VehiclesBonus, TokensBonus, SaCoinCompensationBonus
+    from gui.server_events.bonuses import VehiclesBonus, TokensBonus
     from gui.impl.backport import TooltipData
     from gui.platform.catalog_service.controller import _PurchaseDescriptor
     from gui.shared.gui_items.Vehicle import Vehicle
@@ -251,47 +248,7 @@ class _AdditionalCustomizationBonusUIPacker(CustomizationBonusUIPacker):
         return model
 
 
-class SaCoinCompensationBonusUIPacker(BaseBonusUIPacker):
-
-    @classmethod
-    def _pack(cls, bonus):
-        return [cls._packSaCoinSingleBonus(bonus)]
-
-    @classmethod
-    def _packSingleBonus(cls, bonus):
-        model = cls._getBonusModel()
-        cls._packCommon(bonus, model)
-        model.setLabel(bonus.getName())
-        model.setValue(str(bonus.getCount()))
-        return model
-
-    @classmethod
-    def _packSaCoinSingleBonus(cls, bonus):
-        model = cls._getBonusModel()
-        model.setName(bonus.getName())
-        model.setLabel(bonus.getName())
-        model.setIsCompensation(bonus.isCompensation())
-        model.setValue(str(bonus.getCount()))
-        model.setTooltipContentId(str(R.views.lobby.seniority_awards.tooltips.SeniorityAwardsCompensationTooltip()))
-        return model
-
-    @classmethod
-    def _getBonusModel(cls):
-        return BonusModel()
-
-    @classmethod
-    def _getToolTip(cls, bonus):
-        return [createTooltipData(isSpecial=True, specialArgs=[bonus.getCompensationReason(), bonus])]
-
-    @classmethod
-    def _getContentId(cls, bonus):
-        return [R.views.lobby.seniority_awards.tooltips.SeniorityAwardsCompensationTooltip()]
-
-
 def getAdditionalAwardsBonusPacker():
     mapping = getDefaultBonusPackersMap()
-    mapping.update({'customizations': _AdditionalCustomizationBonusUIPacker(),
-     'sacoin': SaCoinCompensationBonusUIPacker(),
-     'selectableBonus': SelectBonusPacker(),
-     SENIORITY_AWARDS_COMPENSATION_BONUS: SACompensationBonusPacker()})
+    mapping.update({'customizations': _AdditionalCustomizationBonusUIPacker()})
     return BonusUIPacker(mapping)

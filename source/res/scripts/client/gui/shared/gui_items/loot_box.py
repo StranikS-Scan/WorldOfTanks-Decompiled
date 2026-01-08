@@ -27,7 +27,7 @@ class NewYearLootBoxes(CONST_CONTAINER):
     SPECIAL = 'newYear_special'
     SPECIAL_AUTO = 'newYear_special_auto'
     COMMON = 'newYear_usual'
-    SURPRISE_COIN = 'ny_2026_surprise'
+    SURPRISE_COIN = 'ny_2025_surprise'
 
 
 class NewYearCategories(CONST_CONTAINER):
@@ -241,7 +241,7 @@ class LootBox(GUIItem):
         return self.__weight
 
     def isFree(self):
-        return self.__type in ('newYear_usual', 'ny_2024_VI')
+        return self.__type == NewYearLootBoxes.COMMON
 
     def isEnabled(self):
         return self.__isEnabled

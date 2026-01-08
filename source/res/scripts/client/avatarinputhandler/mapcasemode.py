@@ -120,7 +120,7 @@ class _FLMinesSensor(object):
         return
 
     def isIntersectMine(self):
-        allyMines = [ e for e in BigWorld.entities.values() if e.__class__.__name__ == 'BasicMine' and self._sessionProvider.getArenaDP().isAlly(e.ownerVehicleID) ]
+        allyMines = [ e for e in BigWorld.entities.values() if (e.__class__.__name__ == 'BasicMine' or e.__class__.__name__ == 'FLBasicMine') and self._sessionProvider.getArenaDP().isAlly(e.ownerVehicleID) ]
         return any(self.__intersectChecker(allyMines))
 
 
@@ -764,6 +764,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
     _ZOOMSWICHER_STATE = 4
 
     def __init__(self, dataSection, avatarInputHandler):
+        super(MapCaseControlModeBase, self).__init__()
         CallbackDelayer.__init__(self)
         self._acceptsArcadeState = True
         self.__cam = self._createCamera(dataSection['camera'], dataSection.readVector2('defaultOffset'))

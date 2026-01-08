@@ -31,8 +31,5 @@ class HangarHeaderMeta(BaseDAAPIComponent):
     def as_setEarlyAccessEntryPointS(self, value):
         return self.flashObject.as_setEarlyAccessEntryPoint(value) if self._isDAAPIInited() else None
 
-    def as_setNYEntryPointS(self, value):
-        return self.flashObject.as_setNYEntryPoint(value) if self._isDAAPIInited() else None
-
     def as_updateEconomyWidgetS(self, value):
         return self.flashObject.as_updateEconomyWidget(value) if self._isDAAPIInited() else None

@@ -9,6 +9,7 @@ from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.MinimapGrid import MinimapGrid
 from gui.Scaleform.daapi.view.lobby.MinimapLobby import MinimapLobby
+from gui.Scaleform.daapi.view.lobby.clans.clan_helpers import getStrongholdEventFreezeJournalUrl
 from gui.Scaleform.daapi.view.lobby.fortifications.vo_converters import FILTER_STATE, makeStrongholdsSlotsVOs, makeSortieVO, makeStrongholdVehicleVO
 from gui.Scaleform.daapi.view.lobby.prb_windows.stronghold_action_button_state_vo import StrongholdActionButtonStateVO
 from gui.Scaleform.daapi.view.lobby.rally import rally_dps
@@ -28,10 +29,11 @@ from gui.prb_control.entities.base.unit.listener import IStrongholdListener
 from gui.prb_control.entities.base.unit.listener import IUnitListener
 from gui.prb_control.entities.stronghold.unit.ctx import SetReserveUnitCtx, UnsetReserveUnitCtx
 from gui.prb_control.entities.base.external_battle_unit.base_external_battle_ctx import ChangeVehTypesInSlotFilterCtx, ChangeVehiclesInSlotFilterCtx
-from gui.prb_control.items.stronghold_items import REQUISITION_TYPE
+from gui.prb_control.items.stronghold_items import REQUISITION_TYPE, RESERVE_ITEMS
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_FLAG
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showStrongholds
 from gui.shared.utils.functions import getViewName, makeTooltip
 from gui.shared.view_helpers import UsersInfoHelper
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -179,6 +181,9 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
             browser.ignoreKeyEvents = True
         else:
             self.__changeModeBrowserId = 0
+
+    def openFreezeJournal(self):
+        showStrongholds(getStrongholdEventFreezeJournalUrl())
 
     def onUpdateHeader(self, header, isFirstBattle, isUnitFreezed):
         self._updateMiniMapData(header.getCurrentBattle(), header.getClan())
@@ -356,10 +361,16 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
     def _updateReserves(self, reserve, reserveOrder):
         slots = []
         enabled = []
-        for index, groupType in enumerate(reserveOrder):
+        reserves = set(reserve.getAvailableReserves().keys())
+        availableGroups = {group for group, items in RESERVE_ITEMS.items() if reserves.intersection(set(items))}
+        index = 0
+        for groupType in reserveOrder:
+            if groupType not in availableGroups:
+                continue
             reserveVO, enable = self.__updateReserve(groupType, reserve, index)
             slots.append(reserveVO)
             enabled.append(enable)
+            index += 1
 
         self.as_setReservesDataS(slots)
         self.as_setReservesEnabledS(enabled)

@@ -82,7 +82,8 @@ class HoverManager(CGF.ComponentManager):
     @tickGroup(groupName='Simulation')
     def tick(self):
         gameObjectID = None
-        if GUI.mcursor().inWindow and GUI.mcursor().inFocus and self._hangarSpace.isSelectionEnabled:
+        cursor = GUI.mcursor()
+        if cursor.inWindow and cursor.inFocus and self._hangarSpace.isSelectionEnabled:
             if self.__currentExternalHoverId is not None:
                 gameObjectID = self.__currentExternalHoverId
             elif self._hangarSpace.isCursorOver3DScene:

@@ -105,6 +105,8 @@ def updateAccountDossier(dossierDescr, battleResults, dossierXP, vehDossiers, ma
 
     if checkAny(bonusType, BONUS_CAPS.DOSSIER_RANKED):
         updateAggregatedValues(dossierDescr.expand('ranked_10x10'), dossierDescr.expand('ranked_10x10'), battleResults, dossierXP, frags8p)
+    if checkAny(bonusType, BONUS_CAPS.DOSSIER_EPIC_BATTLE):
+        __processSupplyKillList(dossierDescr, battleResults['suppliesKilled'])
     if checkAny(bonusType, BONUS_CAPS.DOSSIER_MAX15X15):
         max15x15 = dossierDescr['max15x15']
         for record in maxValuesChanged:
@@ -329,6 +331,15 @@ def __processKillList(dossierDescr, killList):
             achievements[record] += frags
 
     return frags8p
+
+
+def __processSupplyKillList(dossierDescr, supplyKillList):
+    if not supplyKillList:
+        return 0
+    vehTypeFrags = dossierDescr['vehTypeFrags']
+    vehTypeFragsGet = vehTypeFrags.get
+    for vehTypeCompDescr in supplyKillList:
+        vehTypeFrags[vehTypeCompDescr] = min(vehTypeFragsGet(vehTypeCompDescr, 0) + 1, 60001)
 
 
 def updateAggregatedValues(block, block2, results, dossierXP, frags8p, winnerTeam=None):

@@ -500,6 +500,14 @@ def whiteTitle12(text):
     return _formatText('whiteTitle12', text)
 
 
+def cream15(text):
+    return _formatText('cream15', text)
+
+
+def styleName(text):
+    return _formatText('styleName', text)
+
+
 def getRawStyles(names):
     return dict(((name, _getStyle(name)) for name in names))
 

@@ -102,3 +102,22 @@ class Sector(BigWorld.Entity):
             BigWorld.cancelCallback(self.__startDestructionCallback)
             self.__startDestructionCallback = None
         return
+
+    @property
+    def minX(self):
+        return self.position.x - self.lengthX / 2.0
+
+    @property
+    def maxX(self):
+        return self.position.x + self.lengthX / 2.0
+
+    @property
+    def minZ(self):
+        return self.position.z - self.lengthZ / 2.0
+
+    @property
+    def maxZ(self):
+        return self.position.z + self.lengthZ / 2.0
+
+    def isInSector(self, position):
+        return self.minX <= position.x < self.maxX and self.minZ <= position.z < self.maxZ

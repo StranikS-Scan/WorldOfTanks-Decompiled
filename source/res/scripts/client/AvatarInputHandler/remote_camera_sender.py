@@ -8,18 +8,20 @@ from AvatarInputHandler.commands.input_handler_command import InputHandlerComman
 from AvatarInputHandler.control_modes import ArcadeControlMode, SniperControlMode, DualGunControlMode, StrategicControlMode, ArtyControlMode, OnlyArtyControlMode
 from BigWorld import ArcadeAimingSystem, SniperAimingSystem, DualGunAimingSystem, StrategicAimingSystem, ArtyAimingSystem
 from AvatarInputHandler.MapCaseMode import MapCaseControlModeBase
-from system_events import g_systemEvents
+SENDING_TIMER_TIMEOUT = 0.05
 
 class RemoteCameraSender(InputHandlerCommand):
 
     def __init__(self, avatarInputHandler):
         self.__aih = weakref.proxy(avatarInputHandler)
-        g_systemEvents.onBeforeSend += self.__sendCameraData
+        self.__cameraSenderTimer = BigWorld.callback(SENDING_TIMER_TIMEOUT, self.__sendCameraData)
 
     def destroy(self):
-        g_systemEvents.onBeforeSend -= self.__sendCameraData
+        BigWorld.cancelCallback(self.__cameraSenderTimer)
 
     def __sendCameraData(self):
+        self.__cameraSenderTimer = None
+        self.__cameraSenderTimer = BigWorld.callback(SENDING_TIMER_TIMEOUT, self.__sendCameraData)
         from BigWorld import OnlyArtyAimingSystem
         player = BigWorld.player()
         if player.isObserver() or not player.arena.hasObservers:

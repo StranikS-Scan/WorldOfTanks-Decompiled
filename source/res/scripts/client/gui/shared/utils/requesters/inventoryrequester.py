@@ -4,18 +4,20 @@ import typing
 from itertools import imap
 from collections import namedtuple, defaultdict
 from copy import deepcopy
+import items
 import BigWorld
 from adisp import adisp_async
 from constants import CustomizationInvData, SkinInvData, VEHICLE_NO_INV_ID
 from debug_utils import LOG_DEBUG
 from items import vehicles, tankmen, getTypeOfCompactDescr, parseIntCompactDescr, makeIntCompactDescrByID
 from items.components.c11n_components import C11N_PROGRESS_LEVEL_IDX, C11N_PROGRESS_PROGRESS_IDX, C11N_PROGRESS_VALUE_IDX
-from items.components.c11n_constants import UNBOUND_VEH_KEY
+from items.components.c11n_constants import UNBOUND_VEH_KEY, TagsetBuilder, CustomizationType
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from nation_change.nation_change_helpers import activeInNationGroup
 from post_progression_common import VehiclesPostProgression, VehicleState, EXT_DATA_SLOT_KEY, EXT_DATA_PROGRESSION_KEY
 from skeletons.gui.shared.utils.requesters import IInventoryRequester
+from soft_exception import SoftException
 _DUMMY_VEH_POST_PROGRESSION = VehiclesPostProgression({VehiclesPostProgression.ROOT_KEY: {}})
 
 class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
@@ -114,6 +116,27 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
 
     def getC11nItemNoveltyData(self, itemIntCD):
         return self.__newC11nItems.get(itemIntCD, {})
+
+    def getCustomizationsOrderIndex(self, itemIntCD):
+        cType, idx = self.splitCustomizationsIntDescr(itemIntCD)
+        customizationData = self.getCacheValue(GUI_ITEM_TYPE.CUSTOMIZATION, {})
+        orderingData = customizationData.get(CustomizationInvData.ORDERING, {})
+        typeOrderingData = orderingData.get(cType, {})
+        return typeOrderingData.get(idx, 0)
+
+    @staticmethod
+    def splitCustomizationsIntDescr(intDescr):
+        itemType, customizationType, id = items.parseIntCompactDescr(intDescr)
+        if itemType != GUI_ITEM_TYPE.CUSTOMIZATION or customizationType not in CustomizationType.FULL_CUSTOMIZATION_RANGE:
+            raise SoftException('intDescr is not correct customization item int descriptor', intDescr)
+        return (customizationType, id)
+
+    def isFavoriteCustomization(self, itemIntCD):
+        cType, idx = self.splitCustomizationsIntDescr(itemIntCD)
+        customizationData = self.getCacheValue(GUI_ITEM_TYPE.CUSTOMIZATION, {})
+        tagsData = customizationData.get(CustomizationInvData.TAG_MASK, {})
+        typeOrderingData = tagsData.get(cType, {})
+        return bool(typeOrderingData.get(idx, 0) & TagsetBuilder.FAVORITES)
 
     def getC11nItemsNoveltyCounters(self, vehicleType):
         vehicleIntCD = vehicleType.compactDescr

@@ -60,12 +60,14 @@
     <SEM_25A_EB>	31006	</SEM_25A_EB>
     <_10WSc_02>	31007	</_10WSc_02>
     <_10WSc_StGM>	31008	</_10WSc_StGM>
+    <SEM25_A>	31009	</SEM25_A>
     <FuG12D>	31010	</FuG12D>
     <R113_T>	35001	</R113_T>
     <FuG7A_IGR>	60001	</FuG7A_IGR>
     <FuG12_IGR>	60002	</FuG12_IGR>
     <FuG7_IGR>	60003	</FuG7_IGR>
     <_10WSc_IGR>	60004	</_10WSc_IGR>
+    <Radio_Supply>	60005	</Radio_Supply>
     <FuG2_bootcamp>	64001	</FuG2_bootcamp>
     <Development_Radio>	65535	</Development_Radio>
     <FuG12_MapsTraining_Dummy_HT_1>	18	</FuG12_MapsTraining_Dummy_HT_1>
@@ -603,6 +605,18 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </SEM25_1>
+    <SEM25_A>
+      <userString>	#germany_vehicles:SEM25_A	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	50	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </SEM25_A>
     <SEM_25A>
       <userString>	#germany_vehicles:SEM_25A	</userString>
       <tags></tags>
@@ -959,5 +973,17 @@
       <repairCost>	0.5	</repairCost>
       <notInShop>	True	</notInShop>
     </FuG5_NewOnBoarding>
+    <Radio_Supply>
+      <userString>	#germany_vehicles:Radio_Supply	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	1	</weight>
+      <distance>	400	</distance>
+      <maxHealth>	1000	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </Radio_Supply>
   </shared>
 </radios.xml>

@@ -2,14 +2,14 @@
 # Embedded file name: scripts/client/dyn_objects_cache.py
 import logging
 from collections import namedtuple
-import typing
 import BigWorld
 import CGF
 import resource_helper
+import typing
 from constants import ARENA_GUI_TYPE
+from items.components.component_constants import ZERO_FLOAT
 from gui.shared.system_factory import registerDynObjCache, collectDynObjCache
 from gui.shared.utils.graphics import isRendererPipelineDeferred
-from items.components.component_constants import ZERO_FLOAT
 from shared_utils import first
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 from vehicle_systems.stricted_loading import makeCallbackWeak
@@ -254,15 +254,34 @@ class _EpicBattleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
     def __init__(self):
         super(_EpicBattleDynObjects, self).__init__()
         self.__minesEffects = None
+        self.__supplyPrefabs = set()
         return
 
     def init(self, dataSection):
         if not self._initialized:
+            self.__cachePrefabs(dataSection)
             self.__minesEffects = _MinesEffects(plantEffect=_MinesPlantEffect(dataSection), idleEffect=_EpicMinesIdleEffect(dataSection), destroyEffect=_MinesDestroyEffect(dataSection), placeMinesEffect='epicMinesDecalEffect', blowUpEffectName='epicMinesBlowUpEffect', activationEffect='epicMinesActivationDecalEffect')
             super(_EpicBattleDynObjects, self).init(dataSection)
 
+    def clear(self):
+        if self.__supplyPrefabs:
+            CGF.clearGameObjectsCache(list(self.__supplyPrefabs))
+            self.__supplyPrefabs.clear()
+        self._initialized = False
+        super(_EpicBattleDynObjects, self).clear()
+
+    def destroy(self):
+        self.clear()
+        super(_EpicBattleDynObjects, self).destroy()
+
     def getMinesEffect(self):
         return self.__minesEffects
+
+    def __cachePrefabs(self, dataSection):
+        for prefab in dataSection['epicPrefabs'].values():
+            self.__supplyPrefabs.add(prefab.asString)
+
+        CGF.cacheGameObjects(list(self.__supplyPrefabs), False)
 
 
 class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):

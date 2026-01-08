@@ -227,7 +227,7 @@ class ConcealmentBonus(object):
 
 
 class Customization(FittingItem):
-    __slots__ = ('_boundVehicles', '_bonus', '_installedVehicles', '__noveltyData', '__progressingData', '__installedCount', '__boundInventoryCount', '__fullInventoryCount', '__fullCount', '__questProgressInfo')
+    __slots__ = ('_boundVehicles', '_bonus', '_installedVehicles', '__noveltyData', '__progressingData', '__installedCount', '__boundInventoryCount', '__fullInventoryCount', '__fullCount', '__questProgressInfo', '__orderingNumber', '__markedAsFavorite')
     _service = dependency.descriptor(ICustomizationService)
     eventsCache = dependency.descriptor(IEventsCache)
 
@@ -244,6 +244,8 @@ class Customization(FittingItem):
         self.__fullInventoryCount = None
         self.__fullCount = None
         self.__questProgressInfo = None
+        self.__orderingNumber = 0
+        self.__markedAsFavorite = False
         if proxy is not None and proxy.inventory.isSynced():
             installedVehicles = proxy.inventory.getC11nItemAppliedVehicles(self.intCD)
             invCount = proxy.inventory.getItems(GUI_ITEM_TYPE.CUSTOMIZATION, self.intCD)
@@ -256,6 +258,8 @@ class Customization(FittingItem):
             self._inventoryCount = self._boundVehicles.pop(UNBOUND_VEH_KEY, 0)
             self.__noveltyData = proxy.inventory.getC11nItemNoveltyData(intCompactDescr)
             self.__progressingData = proxy.inventory.getC11nProgressionDataForItem(intCompactDescr)
+            self.__orderingNumber = proxy.inventory.getCustomizationsOrderIndex(intCompactDescr)
+            self.__markedAsFavorite = proxy.inventory.isFavoriteCustomization(intCompactDescr)
         self._isUnlocked = True
         return
 
@@ -348,6 +352,14 @@ class Customization(FittingItem):
     @property
     def inventoryCount(self):
         return self._inventoryCount
+
+    @property
+    def orderingNumber(self):
+        return self.__orderingNumber
+
+    @property
+    def markedAsFavorite(self):
+        return self.__markedAsFavorite
 
     def getBonusIcon(self, size='small'):
         return RES_ICONS.getBonusIcon(size, self.itemTypeName)

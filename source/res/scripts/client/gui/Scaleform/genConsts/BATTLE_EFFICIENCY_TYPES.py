@@ -40,6 +40,7 @@ class BATTLE_EFFICIENCY_TYPES(object):
     DAMAGE_BY_ARTILLERY = 'damageByArtillery'
     RECEIVED_BY_ARTILLERY = 'receivedByArtillery'
     RECEIVED_BY_DEATH_ZONE = 'receivedByDeathZone'
+    SUPPLY_DESTRUCTION = 'supplyKill'
     DEATH_ZONE = 'deathZone'
     BERSERKER = 'berserker'
     SPAWNED_BOT_DMG = 'spawnedBotDmg'

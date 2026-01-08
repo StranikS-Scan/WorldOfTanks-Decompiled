@@ -3,7 +3,10 @@
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
 from dossiers2.custom.cache import getCache as getDossiersCache
 from abstract import SimpleProgressAchievement
-from abstract.mixins import Deprecated
+from abstract.mixins import Deprecated, HasVehiclesList
+from collections import namedtuple
+from supply_shared import Supply
+from items import vehicles
 
 class BeasthunterAchievement(SimpleProgressAchievement):
     __slots__ = ()
@@ -209,3 +212,47 @@ class WolfAmongSheepAchievement(Deprecated, SimpleProgressAchievement):
 
     def _readProgressValue(self, dossier):
         return dossier.getRecordValue(_AB.TEAM_7X7, 'wolfAmongSheep')
+
+
+class SaboteurAchievement(HasVehiclesList, SimpleProgressAchievement):
+    __slots__ = ()
+    VehicleData = namedtuple('VehicleData', 'name icon')
+    _LIST_NAME = 'vehiclesToKill'
+
+    def __init__(self, dossier, value=None):
+        self.__vehTypeCompDescrs = self._getSuppliesList(dossier)
+        SimpleProgressAchievement.__init__(self, 'saboteur', _AB.EPIC_BATTLE, dossier, value)
+        HasVehiclesList.__init__(self)
+
+    def _readProgressValue(self, dossier):
+        return dossier.getRecordValue(_AB.EPIC_BATTLE, 'saboteurProgress')
+
+    def _getVehiclesDescrsList(self):
+        return self.__vehTypeCompDescrs
+
+    def _getSuppliesList(self, dossier):
+        suppliesList = []
+        displayOrderSupplies = [Supply.PILLBOX,
+         Supply.FLAMER,
+         Supply.MORTAR,
+         Supply.AIRSHIP]
+        allSupplies = getDossiersCache()['vehiclesByTag'].get('supply', set())
+        killedSupplies = set()
+        if dossier:
+            killedSupplies = set(dossier.getBlock('vehTypeFrags').iterkeys())
+        leftKilledSupplies = allSupplies - killedSupplies
+        for supplyID in displayOrderSupplies:
+            for supply in leftKilledSupplies:
+                if Supply.SUPPLY_ID_TO_TAG[supplyID] in vehicles.getItemByCompactDescr(supply).tags:
+                    suppliesList.append(supply)
+                    break
+
+        return suppliesList
+
+    def getVehiclesData(self):
+        result = []
+        for vCD in self._getVehiclesDescrsList():
+            vehicle = self.itemsCache.items.getItemByCD(vCD)
+            result.append(self.VehicleData(vehicle.userName, vehicle.iconSmall))
+
+        return [ i._asdict() for i in result ]

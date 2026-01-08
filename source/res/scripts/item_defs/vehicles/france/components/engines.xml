@@ -107,6 +107,7 @@
     <Saurer_1000_7x7>	504	</Saurer_1000_7x7>
     <Detroit_Diesel_6V53T_FL>	31001	</Detroit_Diesel_6V53T_FL>
     <Mathis_300_FL>	505	</Mathis_300_FL>
+    <Peugeot_PRV_V6_F3_FL>	506	</Peugeot_PRV_V6_F3_FL>
     <Detroit_Diesel_6V53T-S_FL>	31003	</Detroit_Diesel_6V53T-S_FL>
     <Maybach_HL_295_IGR>	60001	</Maybach_HL_295_IGR>
     <Detroit_Diesel_6V53T-S_IGR>	60002	</Detroit_Diesel_6V53T-S_IGR>
@@ -1300,7 +1301,7 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
       <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
-      <power>	1500	</power>
+      <power>	1300	</power>
       <weight>	1000	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	170	</maxRegenHealth>
@@ -1952,6 +1953,23 @@
       <rpm_min>	400	</rpm_min>
       <rpm_max>	3200	</rpm_max>
     </Peugeot_PRV_V6_F3>
+    <Peugeot_PRV_V6_F3_FL>
+      <userString>	#france_vehicles:Peugeot_PRV_V6_F3	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	46000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	285	</power>
+      <weight>	400	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </Peugeot_PRV_V6_F3_FL>
     <Somua_V4>
       <userString>	#france_vehicles:Somua_V4	</userString>
       <tags>	gasoline	</tags>

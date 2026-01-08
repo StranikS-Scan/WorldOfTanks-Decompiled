@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.common.vehicle_info_model import VehicleInfoModel
 class CompletedProgressionViewModel(ViewModel):
     __slots__ = ('onViewLoaded', 'onClose', 'onShowVehicle', 'onAboutClick')
 
-    def __init__(self, properties=3, commands=4):
+    def __init__(self, properties=5, commands=4):
         super(CompletedProgressionViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -29,11 +29,25 @@ class CompletedProgressionViewModel(ViewModel):
     def setPersonalNumber(self, value):
         self._setString(2, value)
 
+    def getVehicleRole(self):
+        return self._getString(3)
+
+    def setVehicleRole(self, value):
+        self._setString(3, value)
+
+    def getVehicleFullDescription(self):
+        return self._getString(4)
+
+    def setVehicleFullDescription(self, value):
+        self._setString(4, value)
+
     def _initialize(self):
         super(CompletedProgressionViewModel, self)._initialize()
         self._addViewModelProperty('vehicleInfo', VehicleInfoModel())
         self._addBoolProperty('isTop', False)
         self._addStringProperty('personalNumber', '')
+        self._addStringProperty('vehicleRole', '')
+        self._addStringProperty('vehicleFullDescription', '')
         self.onViewLoaded = self._addCommand('onViewLoaded')
         self.onClose = self._addCommand('onClose')
         self.onShowVehicle = self._addCommand('onShowVehicle')

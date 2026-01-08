@@ -10583,6 +10583,46 @@
     </vehicleFilter>
   </itemGroup>
   <itemGroup>
+    <name>	ClanSeason_Paint_140	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F68_AMX_Chasseur_de_char_46_02	</vehicles>
+      </include>
+    </vehicleFilter>
+    <paint>
+      <id>	31429	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_11.png	</texture>
+      <userString>	#vehicle_customization:ClanSeason_Paint_01_140/name	</userString>
+      <description>	#vehicle_customization:ClanSeason_Paint_01_140/description	</description>
+      <color>	218 230 255 255	</color>
+      <gloss>	0.77	</gloss>
+      <metallic>	1	</metallic>
+    </paint>
+    <paint>
+      <id>	31430	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_17.png	</texture>
+      <userString>	#vehicle_customization:ClanSeason_Paint_02_140/name	</userString>
+      <description>	#vehicle_customization:ClanSeason_Paint_02_140/description	</description>
+      <color>	181 181 181 255	</color>
+      <gloss>	0.65	</gloss>
+      <metallic>	0.67	</metallic>
+    </paint>
+    <paint>
+      <id>	31431	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <userString>	#vehicle_customization:ClanSeason_Paint_03_140/name	</userString>
+      <description>	#vehicle_customization:ClanSeason_Paint_03_140/description	</description>
+      <color>	38 38 38 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.203	</metallic>
+    </paint>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
@@ -10636,6 +10676,50 @@
     </paint>
   </itemGroup>
   <itemGroup>
+    <name>	23February_Paint_140	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <paint>
+      <id>	31440	</id>
+      <color>	143 130 106 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.4	</metallic>
+      <userString>	#vehicle_customization:23February_Paint_140/name	</userString>
+      <description>	#vehicle_customization:23February_Paint_140/description	</description>
+      <texture>	gui/maps/vehicles/repaints/custom_color_DEV.png	</texture>
+    </paint>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <name>	MarchEight_Paint_140	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <paint>
+      <id>	31439	</id>
+      <color>	179 136 26 255	</color>
+      <gloss>	0.7	</gloss>
+      <metallic>	0.3	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_04.png	</texture>
+      <userString>	#vehicle_customization:MarchEight_Paint_140/name	</userString>
+      <description>	#vehicle_customization:MarchEight_Paint_140/description	</description>
+    </paint>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
     <name>	Celebrity_Paint_139	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
@@ -10655,6 +10739,182 @@
       <texture>	gui/maps/vehicles/repaints/custom_color_26.png	</texture>
       <userString>	#vehicle_customization:Celebrity_Paint139/name	</userString>
       <description>	#vehicle_customization:Celebrity_Paint139/description	</description>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	ClanSeasonProgression_Paint_140	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8 9 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31433	</id>
+      <color>	153 132 101 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:ClanSeasonProgression_01_Paint_140/name	</userString>
+      <description>	#vehicle_customization:ClanSeasonProgression_01_Paint_140/description	</description>
+      <texture>	gui/maps/vehicles/repaints/china_color_04.png	</texture>
+    </paint>
+    <paint>
+      <id>	31434	</id>
+      <color>	115 92 63 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:ClanSeasonProgression_02_Paint_140/name	</userString>
+      <description>	#vehicle_customization:ClanSeasonProgression_02_Paint_140/description	</description>
+      <texture>	gui/maps/vehicles/repaints/china_color_06.png	</texture>
+    </paint>
+    <paint>
+      <id>	31435	</id>
+      <color>	64 59 57 255	</color>
+      <gloss>	0.4	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:ClanSeasonProgression_03_Paint_140/name	</userString>
+      <description>	#vehicle_customization:ClanSeasonProgression_03_Paint_140/description	</description>
+      <texture>	gui/maps/vehicles/repaints/usa_color_06.png	</texture>
+    </paint>
+    <paint>
+      <id>	31436	</id>
+      <color>	38 33 28 255	</color>
+      <gloss>	0.4	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:ClanSeasonProgression_04_Paint_140/name	</userString>
+      <description>	#vehicle_customization:ClanSeasonProgression_04_Paint_140/description	</description>
+      <texture>	gui/maps/vehicles/repaints/custom_color_40.png	</texture>
+    </paint>
+    <paint>
+      <id>	31437	</id>
+      <color>	38 28 21 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:ClanSeasonProgression_05_Paint_140/name	</userString>
+      <description>	#vehicle_customization:ClanSeasonProgression_05_Paint_140/description	</description>
+      <texture>	gui/maps/vehicles/repaints/custom_color_40.png	</texture>
+    </paint>
+    <paint>
+      <id>	31438	</id>
+      <color>	38 28 21 255	</color>
+      <gloss>	0.5	</gloss>
+      <metallic>	0.2	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_40.png	</texture>
+      <userString>	#vehicle_customization:ClanSeasonProgression_06_Paint_140/name	</userString>
+      <description>	#vehicle_customization:ClanSeasonProgression_06_Paint_140/description	</description>
+    </paint>
+    <tags>	hiddenInUI	</tags>
+  </itemGroup>
+  <itemGroup>
+    <name>	BP18Stalcraft_03_Paint_140	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <paint>
+      <id>	31446	</id>
+      <color>	26 26 26 255	</color>
+      <gloss>	0.7	</gloss>
+      <metallic>	0.6	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_DEV.png	</texture>
+      <userString>	#vehicle_customization:BP18Stalcraft_03_Paint_01_140/name	</userString>
+      <description>	#vehicle_customization:BP18Stalcraft_03_Paint_01_140/description	</description>
+    </paint>
+    <paint>
+      <id>	31447	</id>
+      <color>	11 35 61 255	</color>
+      <gloss>	0.8	</gloss>
+      <metallic>	0.5	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_DEV.png	</texture>
+      <userString>	#vehicle_customization:BP18Stalcraft_03_Paint_02_140/name	</userString>
+      <description>	#vehicle_customization:BP18Stalcraft_03_Paint_02_140/description	</description>
+    </paint>
+    <paint>
+      <id>	31448	</id>
+      <color>	23 23 23 255	</color>
+      <gloss>	0.7	</gloss>
+      <metallic>	0.3	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_DEV.png	</texture>
+      <userString>	#vehicle_customization:BP18Stalcraft_03_Paint_03_140/name	</userString>
+      <description>	#vehicle_customization:BP18Stalcraft_03_Paint_03_140/description	</description>
+    </paint>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <name>	BP18Stalcraft_01_Paint_140	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31450	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_DEV.png	</texture>
+      <userString>	#vehicle_customization:BP18Stalcraft_01_Paint_140/name	</userString>
+      <description>	#vehicle_customization:BP18Stalcraft_01_Paint_140/description	</description>
+      <color>	53 69 33 255	</color>
+      <gloss>	0.7	</gloss>
+      <metallic>	0.2	</metallic>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	BP18Stalcraft_02_Paint_140	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31445	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_DEV.png	</texture>
+      <userString>	#vehicle_customization:BP18Stalcraft_02_Paint_140/name	</userString>
+      <description>	#vehicle_customization:BP18Stalcraft_02_Paint_140/description	</description>
+      <color>	15 41 48 255	</color>
+      <gloss>	0.5	</gloss>
+      <metallic>	0.3	</metallic>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	CSKA_01_Paint_140	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31449	</id>
+      <userString>	#vehicle_customization:CSKA_01_Paint_140/name	</userString>
+      <description>	#vehicle_customization:CSKA_01_Paint_140/description	</description>
+      <color>	153 19 26 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.3	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_DEV.png	</texture>
+      <tags>	hiddenInUI	</tags>
     </paint>
   </itemGroup>
 </custom_paints.xml>

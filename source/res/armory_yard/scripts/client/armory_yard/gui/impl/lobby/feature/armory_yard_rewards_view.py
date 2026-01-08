@@ -146,7 +146,7 @@ class ArmoryYardRewardsView(ViewImpl):
     def __hasAllRewards(self):
         hasAllSimpleReward = self.__armoryYardCtrl.getProgressionLevel() >= self.__armoryYardCtrl.maxNumberOfSteps - 1
         hasAllToken = self.__armoryYardCtrl.getProgressionTokenCount() == self.__armoryYardCtrl.maxNumberOfSteps
-        return self.__armoryYardCtrl.isActive() and hasAllSimpleReward and hasAllToken
+        return bool(self.__armoryYardCtrl.isActive() and hasAllSimpleReward and hasAllToken)
 
 
 class ArmoryYardRewardsWindow(LobbyWindow):

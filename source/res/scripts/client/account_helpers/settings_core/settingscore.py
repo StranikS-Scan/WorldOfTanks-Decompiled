@@ -7,6 +7,7 @@ from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings
 from account_helpers.settings_core.ServerSettingsManager import ServerSettingsManager, SETTINGS_SECTIONS
 from account_helpers.settings_core.settings_constants import SPGAim, CONTOUR
+from account_helpers.settings_core.options import SettingType
 from adisp import adisp_process
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.locale.SETTINGS import SETTINGS
@@ -198,27 +199,28 @@ class SettingsCore(ISettingsCore):
          (GRAPHICS.VERTICAL_SYNC, options.VerticalSyncSetting()),
          (GRAPHICS.GRAPHICS_QUALITY_HD_SD, options.GraphicsQualityNote()),
          (GRAPHICS.GRAPHICS_QUALITY_HD_SD_HIGH, options.GraphicsHigtQualityNote()),
-         (GRAPHICS.GAMMA_SETTING, options.ReadOnlySetting(lambda : SETTINGS.GAMMABTN_LABEL)),
-         (GRAPHICS.NATIVE_RESOLUTION, options.ReadOnlySetting(graphics.getNativeResolutionIndex)),
+         (GRAPHICS.GAMMA_SETTING, options.GlobalReadOnlySetting(lambda : SETTINGS.GAMMABTN_LABEL)),
+         (GRAPHICS.NATIVE_RESOLUTION, options.HardwareReadOnlySetting(graphics.getNativeResolutionIndex)),
          (GRAPHICS.COLOR_GRADING_TECHNIQUE, options.ColorGradingSetting(GRAPHICS.COLOR_GRADING_TECHNIQUE, True)),
          (GRAPHICS.BRIGHTNESS_CORRECTION, options.BrightnessCorrectionSetting(True)),
          (GRAPHICS.CONTRAST_CORRECTION, options.ContrastCorrectionSetting(True)),
          (GRAPHICS.SATURATION_CORRECTON, options.SaturationCorrectionSetting(True)),
+         (GRAPHICS.GAMMA, options.GammaSetting()),
          (GRAPHICS.COLOR_FILTER_INTENSITY, options.ColorFilterIntensitySetting(True)),
-         (GRAPHICS.COLOR_FILTER_SETTING, options.ReadOnlySetting(lambda : SETTINGS.COLORCORRECTIONBTN_LABEL)),
-         (GRAPHICS.COLOR_FILTER_IMAGES, options.ReadOnlySetting(lambda : graphics.getGraphicSettingImages('COLOR_GRADING_TECHNIQUE'))),
+         (GRAPHICS.COLOR_FILTER_SETTING, options.GlobalReadOnlySetting(lambda : SETTINGS.COLORCORRECTIONBTN_LABEL)),
+         (GRAPHICS.COLOR_FILTER_IMAGES, options.GlobalReadOnlySetting(lambda : graphics.getGraphicSettingImages('COLOR_GRADING_TECHNIQUE'))),
          (GRAPHICS.FOV, options.FOVSetting(GRAPHICS.FOV, storage=FOV_SETTINGS_STORAGE)),
-         (GRAPHICS.GRAPHICS_SETTINGS_LIST, options.ReadOnlySetting(graphics.GRAPHICS_SETTINGS.ALL)),
+         (GRAPHICS.GRAPHICS_SETTINGS_LIST, options.HardwareReadOnlySetting(graphics.GRAPHICS_SETTINGS.ALL)),
          (GRAPHICS.INTERFACE_SCALE, options.InterfaceScaleSetting(GRAPHICS.INTERFACE_SCALE)),
          (GRAPHICS.DYNAMIC_RENDERER, options.DynamicRendererSetting()),
          (GRAPHICS.DYNAMIC_FOV_ENABLED, options.DynamicFOVEnabledSetting(storage=FOV_SETTINGS_STORAGE)),
          (GRAPHICS.VERTICAL_SYNC, options.VerticalSyncSetting()),
          (GRAPHICS.COLOR_BLIND, options.AccountDumpSetting(GRAPHICS.COLOR_BLIND, GRAPHICS.COLOR_BLIND)),
-         (GRAPHICS.TESSELLATION_SUPPORTED, options.ReadOnlySetting(BigWorld.isTesselationSupported)),
+         (GRAPHICS.TESSELLATION_SUPPORTED, options.HardwareReadOnlySetting(BigWorld.isTesselationSupported)),
          (GRAPHICS.IS_SD_QUALITY, options.GraphicsQuality()),
          (SOUND.MASTER_TOGGLE, options.SoundEnableSetting()),
          (SOUND.SOUND_QUALITY, options.SoundQualitySetting()),
-         (SOUND.SOUND_QUALITY_VISIBLE, options.ReadOnlySetting(options.SoundQualitySetting.isAvailable)),
+         (SOUND.SOUND_QUALITY_VISIBLE, options.HardwareReadOnlySetting(options.SoundQualitySetting.isAvailable)),
          (SOUND.SUBTITLES, options.AccountSetting(SOUND.SUBTITLES)),
          (SOUND.MASTER, options.SoundSetting('master')),
          (SOUND.MUSIC, options.SoundSetting('music')),
@@ -259,7 +261,7 @@ class SettingsCore(ISettingsCore):
          (CONTROLS.MOUSE_VERT_INVERSION, options.MouseInversionSetting(CONTROLS.MOUSE_VERT_INVERSION, 'vertInvert', storage=CONTROLS_SETTINGS_STORAGE)),
          (CONTROLS.BACK_DRAFT_INVERSION, options.BackDraftInversionSetting(storage=CONTROLS_SETTINGS_STORAGE)),
          (CONTROLS.KEYBOARD, options.KeyboardSettings()),
-         (CONTROLS.KEYBOARD_IMPORTANT_BINDS, options.ReadOnlySetting(options.KeyboardSettings.getKeyboardImportantBinds)),
+         (CONTROLS.KEYBOARD_IMPORTANT_BINDS, options.GlobalReadOnlySetting(options.KeyboardSettings.getKeyboardImportantBinds)),
          (AIM.ARCADE, options.AimSetting(AIM.ARCADE, storage=AIM_SETTINGS_STORAGE)),
          (AIM.SNIPER, options.AimSetting(AIM.SNIPER, storage=AIM_SETTINGS_STORAGE)),
          (SPGAim.SHOTS_RESULT_INDICATOR, options.SPGAimSetting(SPGAim.SHOTS_RESULT_INDICATOR, storage=SPG_AIM_SETTINGS_STORAGE)),
@@ -436,6 +438,9 @@ class SettingsCore(ISettingsCore):
         for storage in self.__storages.values():
             if storage not in self.__disabledStorages:
                 storage.clear()
+
+    def getSettings(self, excludedNames=None):
+        return (self.__options.fetch(SettingType.GLOBAL, excludedNames), self.__options.fetch(SettingType.LOCAL, excludedNames))
 
     def setOverrideSettings(self, overrideDict, disableStorages):
         if self.__overriddenUserSettings is not None:

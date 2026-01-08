@@ -16,11 +16,11 @@ from gui.impl.pub.notification_commands import WindowNotificationCommand, EventN
 from gui.paragons.paragons_constants import PARAGONS_POST_BATTLE_FAKE_QUEST_ID
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.selectable_reward.common import BattleMattersSelectableRewardManager
+from gui.server_events import anniversary_helper, awards, events_helpers, recruit_helper
 from gui.server_events.events_helpers import getLootboxesFromBonuses, isC11nQuest
 from gui.server_events.finders import BRANCH_TO_OPERATION_IDS
 from gui.shared import EVENT_BUS_SCOPE, event_dispatcher as shared_events, events, g_eventBus
 from gui.shared.event_dispatcher import showProgressiveItemsView, hideWebBrowserOverlay, showBrowserOverlayView
-from gui.server_events import awards, events_helpers, recruit_helper, anniversary_helper
 from gui.shared.events import PersonalMissionsEvent
 from helpers import dependency
 from personal_missions import PM_BRANCH
@@ -448,15 +448,6 @@ def showActions(tab=None, anchor=None):
 @dependency.replace_none_kwargs(armoryYardCtrl=IArmoryYardController)
 def goToArmoryYardQuests(armoryYardCtrl=None):
     armoryYardCtrl.goToArmoryYardQuests()
-
-
-@dependency.replace_none_kwargs(debutBoxesCtrl=IDebutBoxesController)
-def showDebutBoxesQuests(debutBoxesCtrl=None):
-    groupId = None
-    if debutBoxesCtrl.isEnabled():
-        groupId = debutBoxesCtrl.getGroupID()
-    showMissionsGrouped(groupID=groupId, anchor=groupId)
-    return
 
 
 def _showMissions(**kwargs):

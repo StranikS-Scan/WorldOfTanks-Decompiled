@@ -3,6 +3,7 @@
 import math
 import BigWorld
 from gui.battle_control import avatar_getter
+from gui.shared.events import RespawnViewEvent
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.Scaleform.daapi.view.meta.EpicRespawnViewMeta import EpicRespawnViewMeta
@@ -139,12 +140,14 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
     def hide(self):
         self.as_resetRespawnStateS()
         self.__ammunitionPanel.hide()
+        self.fireEvent(RespawnViewEvent(RespawnViewEvent.ON_RESPAWN_VIEW_HIDE))
         if self.__countDownIsPlaying is True:
             self.__playCountDownSound(False)
         BigWorld.enableGUIBackground(False, False)
 
     def show(self, selectedID, vehs, cooldowns, limits=0):
         self.__ammunitionPanel.show(selectedID, vehs, cooldowns, limits=0)
+        self.fireEvent(RespawnViewEvent(RespawnViewEvent.ON_RESPAWN_VIEW_SHOW))
         self.__updateSlotData(vehs, cooldowns, limits)
         self.__carousel.show()
         BigWorld.enableGUIBackground(True, False)

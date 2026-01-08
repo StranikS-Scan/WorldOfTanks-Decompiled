@@ -35,7 +35,7 @@ class ChapterType(Enum):
 class BattlePassProgressionsViewModel(CommonViewModel):
     __slots__ = ('onClose', 'onActionClick', 'onTakeClick', 'onTakeAllClick', 'onOpenShopClick', 'onAboutClick', 'onPointsInfoClick', 'onBpbitClick', 'onBpcoinClick', 'onTakeRewardsClick', 'onFinishedAnimation', 'onLevelsAnimationFinished', 'onChapterChoice', 'onViewLoaded', 'onTasksClick', 'onBuyBP', 'onBuyStages')
 
-    def __init__(self, properties=48, commands=18):
+    def __init__(self, properties=52, commands=18):
         super(BattlePassProgressionsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -278,45 +278,69 @@ class BattlePassProgressionsViewModel(CommonViewModel):
     def setIsSeasonEndingSoon(self, value):
         self._setBool(41, value)
 
+    def getIsSingleChapter(self):
+        return self._getBool(42)
+
+    def setIsSingleChapter(self, value):
+        self._setBool(42, value)
+
     def getChapterType(self):
-        return ChapterType(self._getString(42))
+        return ChapterType(self._getString(43))
 
     def setChapterType(self, value):
-        self._setString(42, value.value)
+        self._setString(43, value.value)
 
     def getAvailableChapterTypes(self):
-        return self._getArray(43)
-
-    def setAvailableChapterTypes(self, value):
-        self._setArray(43, value)
-
-    def getAvailableBattleTypes(self):
         return self._getArray(44)
 
-    def setAvailableBattleTypes(self, value):
+    def setAvailableChapterTypes(self, value):
         self._setArray(44, value)
+
+    def getAvailableBattleTypes(self):
+        return self._getArray(45)
+
+    def setAvailableBattleTypes(self, value):
+        self._setArray(45, value)
 
     @staticmethod
     def getAvailableBattleTypesType():
         return int
 
     def getExpireTime(self):
-        return self._getNumber(45)
+        return self._getNumber(46)
 
     def setExpireTime(self, value):
-        self._setNumber(45, value)
+        self._setNumber(46, value)
 
     def getHasActiveChapter(self):
-        return self._getBool(46)
-
-    def setHasActiveChapter(self, value):
-        self._setBool(46, value)
-
-    def getShowHint(self):
         return self._getBool(47)
 
-    def setShowHint(self, value):
+    def setHasActiveChapter(self, value):
         self._setBool(47, value)
+
+    def getShowHint(self):
+        return self._getBool(48)
+
+    def setShowHint(self, value):
+        self._setBool(48, value)
+
+    def getIsBpCoinShopEntryPointActive(self):
+        return self._getBool(49)
+
+    def setIsBpCoinShopEntryPointActive(self, value):
+        self._setBool(49, value)
+
+    def getIsBpPointsShopEntryPointActive(self):
+        return self._getBool(50)
+
+    def setIsBpPointsShopEntryPointActive(self, value):
+        self._setBool(50, value)
+
+    def getProgressionQuestVehicleName(self):
+        return self._getString(51)
+
+    def setProgressionQuestVehicleName(self, value):
+        self._setString(51, value)
 
     def _initialize(self):
         super(BattlePassProgressionsViewModel, self)._initialize()
@@ -358,12 +382,16 @@ class BattlePassProgressionsViewModel(CommonViewModel):
         self._addBoolProperty('isStyleTaken', False)
         self._addBoolProperty('isStyleProgressive', False)
         self._addBoolProperty('isSeasonEndingSoon', False)
+        self._addBoolProperty('isSingleChapter', False)
         self._addStringProperty('chapterType')
         self._addArrayProperty('availableChapterTypes', Array())
         self._addArrayProperty('availableBattleTypes', Array())
         self._addNumberProperty('expireTime', 0)
         self._addBoolProperty('hasActiveChapter', False)
         self._addBoolProperty('showHint', False)
+        self._addBoolProperty('isBpCoinShopEntryPointActive', False)
+        self._addBoolProperty('isBpPointsShopEntryPointActive', False)
+        self._addStringProperty('progressionQuestVehicleName', '')
         self.onClose = self._addCommand('onClose')
         self.onActionClick = self._addCommand('onActionClick')
         self.onTakeClick = self._addCommand('onTakeClick')

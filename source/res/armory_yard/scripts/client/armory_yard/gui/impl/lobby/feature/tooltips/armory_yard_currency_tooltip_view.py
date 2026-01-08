@@ -24,18 +24,18 @@ class ArmoryYardCurrencyTooltipView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(ArmoryYardCurrencyTooltipView, self)._onLoading()
-        if not self.__armoryYardCtrl.isEnabled():
-            return
         with self.viewModel.transaction() as tx:
             seasonStart, seasonEnd = self.__armoryYardCtrl.getSeasonInterval()
             totalTokens, receivedTokens = self.__armoryYardCtrl.getTokensInfoMainProgression()
             if self.__currency == ArmoryYardCurrencies.ARMORYCOIN.value:
                 receivedTokens = self.__ayShopCtrl.ayCoins
             tx.setReceivedTokens(receivedTokens)
-            tx.setTotalTokens(totalTokens)
+            tx.setTotalTokens(totalTokens or 0)
             currentSeason = self.__armoryYardCtrl.serverSettings.getCurrentSeason()
-            firstCycleInfo = currentSeason.getFirstCycleInfo().ID if currentSeason else 1
-            tx.setQuestsForToken(self.__armoryYardCtrl.totalTokensInChapter(firstCycleInfo))
-            tx.setStartTimestamp(seasonStart)
-            tx.setEndTimestamp(seasonEnd)
+            firstCycleInfo = currentSeason.getFirstCycleInfo().ID if currentSeason else None
+            if firstCycleInfo:
+                tx.setQuestsForToken(self.__armoryYardCtrl.totalTokensInChapter(firstCycleInfo))
+            tx.setStartTimestamp(seasonStart or 0)
+            tx.setEndTimestamp(seasonEnd or 0)
             tx.setCurrency(ArmoryYardCurrencies(self.__currency))
+        return

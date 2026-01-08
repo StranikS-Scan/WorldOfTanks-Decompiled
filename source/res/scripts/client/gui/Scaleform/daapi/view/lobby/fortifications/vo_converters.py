@@ -3,8 +3,10 @@
 from gui.Scaleform.daapi.view.lobby.cyberSport import PLAYER_GUI_STATUS
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeSlotsVOs, MAX_PLAYER_COUNT_ALL, makeTotalLevelLabel, makeUnitStateLabel, makeVehicleVO
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
+from gui.clans.clan_cache import g_clanCache
 from gui.clans.stronghold_event_requester import FrozenVehiclesConstants
 from gui.prb_control import settings
+from gui.prb_control.entities.stronghold.unit.entity import LEVELS_FROZEN_VEHICLES
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from helpers import i18n
 from shared_utils import BitmaskHelper
@@ -89,6 +91,8 @@ def makeSortieVO(unitEntity, isCommander, unitMgrID=None, canInvite=True, maxPla
     _, slots = makeStrongholdsSlotsVOs(unitEntity, unitMgrID, maxPlayerCount)
     if fullData.playerInfo.isInSlot:
         disableCanBeTakenButtonInSlots(slots)
+    isEventActive = g_clanCache.strongholdEventProvider.isRunning() and g_clanCache.strongholdEventProvider.getSettings().getSprintType() != 'GM'
+    canUnfreeze = isEventActive and unitEntity.isSortie() and unitEntity.getMinLevel() in LEVELS_FROZEN_VEHICLES
     if fullData.flags.isLocked() or unitEntity.isStrongholdUnitFreezed() or unitEntity.inPlayersMatchingMode():
         setFreezedInSlots(slots)
         canAssignToSlot = False
@@ -105,7 +109,8 @@ def makeSortieVO(unitEntity, isCommander, unitMgrID=None, canInvite=True, maxPla
      'sumLevels': sumLevelsStr,
      'sumLevelsError': canDoAction,
      'slots': slots,
-     'description': unitEntity.getCensoredComment(unitMgrID=unitMgrID)}
+     'description': unitEntity.getCensoredComment(unitMgrID=unitMgrID),
+     'canUnfreeze': canUnfreeze}
 
 
 def disableCanBeTakenButtonInSlots(slots):

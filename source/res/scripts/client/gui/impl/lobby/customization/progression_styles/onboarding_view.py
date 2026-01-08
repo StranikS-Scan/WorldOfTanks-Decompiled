@@ -19,7 +19,7 @@ def _onCustomizationLoadedCallback(styleCD, service=None):
     if not styleCD:
         return
     ctx = service.getCtx()
-    ctx.changeMode(CustomizationModes.STYLED, CustomizationTabs.STYLES)
+    ctx.changeMode(CustomizationModes.STYLED, CustomizationTabs.STYLES_3D)
     ctx.selectItem(styleCD)
 
 

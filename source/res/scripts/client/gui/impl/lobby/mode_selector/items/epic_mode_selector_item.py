@@ -49,8 +49,9 @@ class EpicModeSelectorItem(ModeSelectorLegacyItem):
         super(EpicModeSelectorItem, self)._onDisposing()
 
     def __onEpicUpdate(self, *_):
-        self.__fillViewModel()
-        self.onCardChange()
+        if self.__epicController.isEnabled():
+            self.__fillViewModel()
+            self.onCardChange()
         self.__epicController.onGameModeStatusTick()
 
     def __onEventEnded(self):

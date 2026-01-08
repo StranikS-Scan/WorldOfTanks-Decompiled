@@ -6,7 +6,7 @@ from CurrentVehicle import g_currentVehicle
 from adisp import adisp_async, adisp_process
 from constants import CLIENT_COMMAND_SOURCES
 from gui.Scaleform.daapi.view.lobby.customization.context.customization_mode import CustomizationMode
-from gui.Scaleform.daapi.view.lobby.customization.shared import OutfitInfo, CustomizationTabs, customizationSlotIdToUid, CustomizationSlotUpdateVO, getStylePurchaseItems, removeItemFromEditableStyle, fitOutfit, getCurrentVehicleAvailableRegionsMap, getEditableStyleOutfitDiff, removeUnselectedItemsFromEditableStyle
+from gui.Scaleform.daapi.view.lobby.customization.shared import OutfitInfo, customizationSlotIdToUid, CustomizationSlotUpdateVO, getStylePurchaseItems, removeItemFromEditableStyle, fitOutfit, getCurrentVehicleAvailableRegionsMap, getEditableStyleOutfitDiff, removeUnselectedItemsFromEditableStyle, CustomizationTabs
 from gui.customization.constants import CustomizationModes
 from gui.customization.shared import C11nId, PurchaseItem
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -30,7 +30,7 @@ _logger = logging.getLogger(__name__)
 
 class StyledMode(CustomizationMode):
     modeId = CustomizationModes.STYLED
-    _tabs = CustomizationTabs.MODES[modeId]
+    _tabs = CustomizationTabs.STYLES_ALL
     STYLE_SLOT = C11nId(areaId=Area.MISC, slotType=GUI_ITEM_TYPE.STYLE, regionIdx=0)
     _settingsCore = dependency.descriptor(ISettingsCore)
 
@@ -50,10 +50,6 @@ class StyledMode(CustomizationMode):
     @property
     def modifiedStyle(self):
         return self.__modifiedStyle
-
-    def changeTab(self, tabId, itemCD=None):
-        if tabId != CustomizationTabs.STYLES:
-            _logger.warning('There is no tabs in styled customization mode')
 
     def isAutoRentEnabled(self):
         return self.__autoRentEnabled

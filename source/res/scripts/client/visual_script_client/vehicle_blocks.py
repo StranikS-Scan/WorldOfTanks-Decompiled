@@ -597,3 +597,27 @@ class HangarGetVehicleInsigniaRank(Block, VehicleMeta):
     @classmethod
     def blockAspects(cls):
         return [ASPECT.HANGAR]
+
+
+class OnVehicleAutoShootStateChange(Block, VehicleMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(OnVehicleAutoShootStateChange, self).__init__(*args, **kwargs)
+        self._vehicle = None
+        self._inVehicle = self._makeDataInputSlot('vehicle', SLOT_TYPE.VEHICLE)
+        self._out = self._makeEventOutputSlot('out')
+        self._outAutoShootState = self._makeDataOutputSlot('autoShootState', SLOT_TYPE.INT, None)
+        return
+
+    def onStartScript(self):
+        self._vehicle = self._inVehicle.getValue()
+        if self._vehicle:
+            self._vehicle.onAutoShootStateChange += self.__onAutoShootStateChange
+
+    def onFinishScript(self):
+        if self._vehicle:
+            self._vehicle.onAutoShootStateChange -= self.__onAutoShootStateChange
+
+    def __onAutoShootStateChange(self, autoShootState):
+        self._outAutoShootState.setValue(autoShootState)
+        self._out.call()

@@ -7,7 +7,6 @@ from skeletons.gui.server_events import IEventsCache
 PERSONAL_MISSION_TOKEN = 'token:pt:final:s%s:t%s'
 MAIN_PERSONAL_MISSION_TOKEN = PERSONAL_MISSION_TOKEN + ':main'
 ADD_PERSONAL_MISSION_TOKEN = PERSONAL_MISSION_TOKEN + ':add'
-COMPLETED_PERSONAL_TOKEN = PERSONAL_MISSION_TOKEN + ':complete'
 PERSONAL_MISSION_BADGES_TOKEN = 'token:pt:s%s:badges'
 FINAL_PERSONAL_MISSION_TOKEN = 'pt_final_s%s_t%s'
 CHAMPION_BADGES_BY_BRANCH = {PM_BRANCH.REGULAR: 'pt_final_badge',
@@ -29,13 +28,6 @@ def getFinalTokenQuestIdByOperationId(operationId):
      PM_BRANCH.PERSONAL_MISSION_2: 2,
      PM_BRANCH.PERSONAL_MISSION_3: 3}
     return FINAL_PERSONAL_MISSION_TOKEN % (season[getBranchByOperationId(operationId)], operationId)
-
-
-def getFinalTokensQuestIdBySeasonId(seasonId):
-    branchIdBySeasonId = {1: PM_BRANCH.REGULAR,
-     2: PM_BRANCH.PERSONAL_MISSION_2,
-     3: PM_BRANCH.PERSONAL_MISSION_3}
-    return [ COMPLETED_PERSONAL_TOKEN % (seasonId, operationId) for operationId in BRANCH_TO_OPERATION_IDS[branchIdBySeasonId[seasonId]] ]
 
 
 def getAdditionalTokenQuestIdByOperationId(operationId, addCamouflage=False, addBadge=False):

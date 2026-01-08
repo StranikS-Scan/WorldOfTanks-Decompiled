@@ -5,6 +5,7 @@ import re
 from itertools import chain
 import typing
 from adisp import adisp_async, adisp_process
+from gui.impl.lobby.stronghold.stronghold_helpers import isClanSeasonProgressQuest, isClanSeasonQuest
 from personal_missions_constants import PM3_PREFIX_NAME
 from shared_utils import findFirst, first
 import constants
@@ -32,7 +33,7 @@ from helpers import dependency, int2roman
 from helpers import time_utils
 from messenger import g_settings
 from messenger.formatters import TimeFormatter
-from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter, InvoiceReceivedFormatter, BattleMattersQuestAchievesFormatter, CollectionsFormatter, Comp7QualificationRewardsFormatter
+from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter, InvoiceReceivedFormatter, BattleMattersQuestAchievesFormatter, CollectionsFormatter, Comp7QualificationRewardsFormatter, ClanSeasonProgressRewardsFormatter
 from messenger.formatters.service_channel_helpers import getRewardsForQuests, EOL, MessageData, getCustomizationItemData, getDefaultMessage, DEFAULT_MESSAGE, popCollectionEntitlements
 from messenger.proto.bw.wrappers import ServiceChannelMessage
 from paragons_common import isParagonsQuestID
@@ -40,6 +41,7 @@ from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.game_control import ICollectionsSystemController, IRankedBattlesController, ISeniorityAwardsController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 from skeletons.gui.system_messages import ISystemMessages
 _logger = logging.getLogger(__name__)
 
@@ -144,6 +146,88 @@ class RankedTokenQuestFormatter(AsyncTokenQuestsSubFormatter):
     @classmethod
     def _isQuestOfThisGroup(cls, questID):
         return ranked_helpers.isRankedQuestID(questID)
+
+
+class ClanSeasonProgressionFormatter(AsyncTokenQuestsSubFormatter):
+    __MESSAGE_TEMPLATE = 'ClanSeasonProgressReward'
+    __CLAN_SEASON_PROGRESS_TOKEN = 'clan_season_progress'
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self):
+        super(ClanSeasonProgressionFormatter, self).__init__()
+        self._achievesFormatter = ClanSeasonProgressRewardsFormatter()
+
+    @adisp_async
+    @adisp_process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        messageData = MessageData(None, None)
+        if isSynced:
+            data = message.data or {}
+            dataQuestIDs = data.get('completedQuestIDs', set())
+            dataQuestIDs.update(data.get('rewardsGottenQuestIDs', set()))
+            completedQuestIDs = self.getQuestOfThisGroup(dataQuestIDs)
+            questsData = getRewardsForQuests(message, self.getQuestOfThisGroup(completedQuestIDs))
+            dossierData = questsData.get('dossier', {})
+            popUpRecords = message.data.get('popUpRecords', set())
+            if popUpRecords:
+                message.data['popUpRecords'] = popUpRecords
+            popUps = self._getDossierPopUps(dossierData, popUpRecords)
+            if popUps:
+                questsData.update({'popUpRecords': popUps})
+            formattedRewards = self._achievesFormatter.formatQuestAchieves(questsData, asBattleFormatter=False, processCustomizations=True, processTokens=True)
+            tokenCount = self.__itemsCache.items.tokens.getTokenCount(self.__CLAN_SEASON_PROGRESS_TOKEN)
+            title = backport.text(R.strings.system_messages.stronghold.clanSeason.progression.title(), level=tokenCount)
+            formattedMessage = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, {'title': title,
+             'body': formattedRewards})
+            settings = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE)
+            messageData = MessageData(formattedMessage, settings)
+        callback([messageData])
+        return
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        return isClanSeasonProgressQuest(questID)
+
+
+class ClanSeasonQuestFormatter(AsyncTokenQuestsSubFormatter):
+    __MESSAGE_TEMPLATE = 'ClanSeasonQuestReward'
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self):
+        super(ClanSeasonQuestFormatter, self).__init__()
+        self._achievesFormatter = ClanSeasonProgressRewardsFormatter()
+
+    @adisp_async
+    @adisp_process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        messageData = MessageData(None, None)
+        if isSynced:
+            data = message.data or {}
+            dataQuestIDs = data.get('completedQuestIDs', set())
+            dataQuestIDs.update(data.get('rewardsGottenQuestIDs', set()))
+            completedQuestIDs = self.getQuestOfThisGroup(dataQuestIDs)
+            questsData = getRewardsForQuests(message, self.getQuestOfThisGroup(completedQuestIDs))
+            dossierData = questsData.get('dossier', {})
+            popUpRecords = message.data.get('popUpRecords', set())
+            if popUpRecords:
+                message.data['popUpRecords'] = popUpRecords
+            popUps = self._getDossierPopUps(dossierData, popUpRecords)
+            if popUps:
+                questsData.update({'popUpRecords': popUps})
+            formattedRewards = self._achievesFormatter.formatQuestAchieves(questsData, asBattleFormatter=False, processCustomizations=True, processTokens=True)
+            title = backport.text(R.strings.system_messages.stronghold.clanSeason.quest.title())
+            formattedMessage = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, {'title': title,
+             'body': formattedRewards})
+            settings = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE)
+            messageData = MessageData(formattedMessage, settings)
+        callback([messageData])
+        return
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        return isClanSeasonQuest(questID)
 
 
 class RankedSeasonTokenQuestFormatter(RankedTokenQuestFormatter):
@@ -516,7 +600,6 @@ class PersonalMissionsFormatter(PersonalMissionsTokenQuestsFormatter):
 
 
 class SeniorityAwardsFormatter(AsyncTokenQuestsSubFormatter):
-    __OFFER_TOKEN_NAME = constants.SENIORITY_AWARDS_COMPENSATION_BONUS + ':offer'
     __MESSAGE_TEMPLATE = 'SeniorityAwardsQuest'
     __seniorityAwardCtrl = dependency.descriptor(ISeniorityAwardsController)
 
@@ -527,14 +610,9 @@ class SeniorityAwardsFormatter(AsyncTokenQuestsSubFormatter):
         messageDataList = []
         if isSynced:
             data = message.data or {}
-            completedQuestIDs = self.__getNeededQuests(data.get('completedQuestIDs', set()))
+            completedQuestIDs = self.getQuestOfThisGroup(data.get('completedQuestIDs', set()))
             detailedRewards = data.get('detailedRewards', {})
-            rewards = {}
-            for qID in completedQuestIDs:
-                rewards.update(detailedRewards.get(qID, {}))
-
-            rewards = self.__seniorityAwardCtrl.replaceCompTokens(rewards)
-            mergedRewards = getMergedBonusesFromDicts([rewards])
+            mergedRewards = getMergedBonusesFromDicts((detailedRewards.get(qID, {}) for qID in completedQuestIDs))
             messageData = self.__buildMessage(mergedRewards, message)
             if messageData is not None:
                 messageDataList.append(messageData)
@@ -545,20 +623,9 @@ class SeniorityAwardsFormatter(AsyncTokenQuestsSubFormatter):
         return
 
     @classmethod
-    def __getNeededQuests(cls, questIDs):
-        return set((quest for quest in questIDs if cls.__isNeededQuest(quest)))
-
-    @classmethod
-    def __isNeededQuest(cls, questID):
-        questPrefix = cls.__seniorityAwardCtrl.seniorityQuestPrefix
-        return True if questPrefix and questID.startswith(questPrefix) else False
-
-    @classmethod
     def _isQuestOfThisGroup(cls, questID):
         questPrefix = cls.__seniorityAwardCtrl.seniorityQuestPrefix
-        if questPrefix and questID.startswith(questPrefix):
-            return True
-        return True if questID.startswith(constants.SENIORITY_AWARDS_COMP_QUEST_PREFIX) else False
+        return questID.startswith(questPrefix) if questPrefix else False
 
     def __buildMessage(self, rewards, message):
         data = message.data or {}
@@ -569,13 +636,9 @@ class SeniorityAwardsFormatter(AsyncTokenQuestsSubFormatter):
         if popUps:
             questData['popUpRecords'] = popUps
         questData.update(rewards)
-        compensationData = {'tokens': {self.__OFFER_TOKEN_NAME: questData.get('tokens', {}).pop(self.__OFFER_TOKEN_NAME, {})},
-         'meta': questData.pop('meta', {})}
         fmt = self._achievesFormatter.formatQuestAchieves(questData, asBattleFormatter=False)
-        compensation = self._achievesFormatter.formatQuestAchieves(compensationData, asBattleFormatter=False)
         if fmt is not None:
-            templateParams = {'achieves': fmt,
-             'compensation': compensation or ''}
+            templateParams = {'achieves': fmt}
             settings = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE)
             formatted = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, templateParams)
             return MessageData(formatted, settings)

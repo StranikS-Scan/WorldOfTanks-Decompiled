@@ -74,11 +74,11 @@ _LAYERS = [WindowLayer.OVERLAY,
  WindowLayer.SERVICE_LAYOUT]
 
 class VideoView(ViewImpl):
-    __slots__ = ('__onVideoStartedHandle', '__onVideoStoppedHandle', '__onVideoClosedHandle', '__isAutoClose', '__soundControl', '__previouslyVisibleLayers', '__app', '__videoSource', '__isUiVisible', '__backLayersAreVisible')
+    __slots__ = ('__onVideoStartedHandle', '__onVideoStoppedHandle', '__onVideoClosedHandle', '__isAutoClose', '__soundControl', '__previouslyVisibleLayers', '__app', '__videoSource', '__isUiVisible')
     __appFactory = dependency.descriptor(IAppLoader)
 
     def __init__(self, viewId, *args, **kwargs):
-        settings = ViewSettings(viewId or R.views.lobby.video.video_view.VideoView())
+        settings = ViewSettings(viewId or R.views.lobby.video_view.GfVideoView())
         settings.model = VideoViewModel()
         settings.args = args
         settings.kwargs = kwargs
@@ -92,7 +92,6 @@ class VideoView(ViewImpl):
         self.__previouslyVisibleLayers = []
         self.__app = self.__appFactory.getApp()
         self.__videoSource = kwargs.get('videoSource')
-        self.__backLayersAreVisible = True
 
     @property
     def viewModel(self):
@@ -108,9 +107,6 @@ class VideoView(ViewImpl):
             language = getClientLanguage()
             self.viewModel.setSubtitleTrack(_LOCALE_TO_SUBTITLE_MAP.get(language, 0))
             self.viewModel.setIsWindowAccessible(Windowing.isWindowAccessible())
-            self.viewModel.setCanEscape(kwargs.get('canEscape', True))
-            self.viewModel.setIsUIVisible(kwargs.get('isUIVisible', False))
-            self.viewModel.setUiShowDelay(kwargs.get('uiShowDelay', -1))
             g_playerEvents.onAccountBecomeNonPlayer += self.__removeClosedHandle
             Windowing.addWindowAccessibilitynHandler(self.__onWindowAccessibilityChanged)
             switchVideoOverlaySoundFilter(on=True)
@@ -185,20 +181,18 @@ class VideoView(ViewImpl):
             containerManager = self.__app.containerManager
             self.__previouslyVisibleLayers = containerManager.getVisibleLayers()
             containerManager.setVisibleLayers(_LAYERS)
-            self.__backLayersAreVisible = False
         return
 
     def __showBack(self):
         BigWorld.worldDrawEnabled(True)
-        if self.__app is not None and not self.__backLayersAreVisible:
+        if self.__app is not None:
             self.__app.containerManager.setVisibleLayers(self.__previouslyVisibleLayers)
-            self.__backLayersAreVisible = True
         return
 
 
 class VideoViewWindow(LobbyWindow):
     __slots__ = ()
 
-    def __init__(self, viewId=None, parent=None, *args, **kwargs):
-        super(VideoViewWindow, self).__init__(content=VideoView(viewId=viewId, *args, **kwargs), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, layer=WindowLayer.OVERLAY, decorator=None, parent=parent)
+    def __init__(self, viewId=None, *args, **kwargs):
+        super(VideoViewWindow, self).__init__(content=VideoView(viewId=viewId, *args, **kwargs), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, layer=WindowLayer.OVERLAY, decorator=None)
         return

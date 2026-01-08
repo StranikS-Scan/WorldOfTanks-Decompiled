@@ -1,0 +1,19 @@
+<SupplySpawnPoint.def>
+  <Domain>	CELL	</Domain>
+  <NonChunk>	True	</NonChunk>
+  <Properties>
+    <defaultModelName>
+      <Type>	STRING	</Type>
+      <Default>	helpers/models/PVESpawnPoint_Tank.model	</Default>
+    </defaultModelName>
+    <name>
+      <Type>	STRING	</Type>
+      <Editable>	True	</Editable>
+    </name>
+    <sectorID>
+      <Type>	UINT8	</Type>
+      <Editable>	True	</Editable>
+      <Default>	0	</Default>
+    </sectorID>
+  </Properties>
+</SupplySpawnPoint.def>

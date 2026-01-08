@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic/missions_panel.py
 import math
+import BigWorld
 from gui.Scaleform.daapi.view.meta.EpicMissionsPanelMeta import EpicMissionsPanelMeta
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from helpers import time_utils
 from gui.battle_control.controllers.epic_missions_ctrl import PlayerMission
 from helpers.CallbackDelayer import CallbackDelayer
-import BigWorld
 
 class EpicMissionsPanel(EpicMissionsPanelMeta, CallbackDelayer):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -16,8 +16,8 @@ class EpicMissionsPanel(EpicMissionsPanelMeta, CallbackDelayer):
         EpicMissionsPanelMeta.__init__(self)
         CallbackDelayer.__init__(self)
         self.__nearestHQ = None
-        self.__timeCB = None
         self.__currentEndTime = 0
+        self.__currentMission = None
         return
 
     def start(self):
@@ -39,6 +39,7 @@ class EpicMissionsPanel(EpicMissionsPanelMeta, CallbackDelayer):
             ctrl.onPlayerMissionReset -= self.__onPlayerMissionReset
             ctrl.onPlayerMissionTimerSet -= self.__onPlayerMissionTimerSet
             ctrl.onNearestObjectiveChanged -= self.__onNearestObjectiveChanged
+        self.__killTimeCallback()
         EpicMissionsPanelMeta._dispose(self)
         CallbackDelayer.destroy(self)
 
@@ -63,7 +64,10 @@ class EpicMissionsPanel(EpicMissionsPanelMeta, CallbackDelayer):
         self.as_setMissionDescriptionValueS('')
 
     def __onPlayerMissionUpdated(self, mission, additionalDescription=None):
-        self.as_setPrimaryMissionS(mission.generateData())
+        newMission = mission.generateData()
+        if self.__currentMission != newMission:
+            self.__currentMission = newMission
+            self.as_setPrimaryMissionS(newMission)
         if additionalDescription is not None:
             self.as_setMissionDescriptionValueS(additionalDescription)
         return

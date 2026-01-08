@@ -118,6 +118,24 @@
       <loopShellLastDt>	0.5	</loopShellLastDt>
     </intuition_overrides>
   </reload_automat_reloading_50_75>
+  <autoloader_reload50_75>
+    <type>	AutoReload	</type>
+    <duration>	1100.0	</duration>
+    <sound>	gun_rld_autoloader_short_oneshell	</sound>
+    <reloadStart>	gun_rld_autoloader_long_start	</reloadStart>
+    <autoLoaderFull>	gun_rld_autoloader_full_complete	</autoLoaderFull>
+    <lastShellAlert>	gun_rld_autoloader_short_lastshell	</lastShellAlert>
+    <clipShellLoad>	gun_rld_autoloader_long_oneshell	</clipShellLoad>
+    <clipShellLoadDuration>	700.0	</clipShellLoadDuration>
+    <ammoLow>	gun_rld_autoloader_no_enough_shells	</ammoLow>
+    <almostComplete>	gun_rld_autoloader_full_almost_complete	</almostComplete>
+    <shotFail>	gun_rld_autoloader_shot_fail	</shotFail>
+    <almostCompleteDuration>	6000.0	</almostCompleteDuration>
+    <caliber>	SWITCH_ext_rld_autoloader_caliber_50_75mm	</caliber>
+    <intuition_overrides>
+      <reloadStart>	gun_rld_intuition_autoloader_long_start	</reloadStart>
+    </intuition_overrides>
+  </autoloader_reload50_75>
   <dualgun_reload50_84>
     <type>	DualGunReload	</type>
     <sound>	gun_rld_dual_reloading_oneshell	</sound>
@@ -225,6 +243,24 @@
       <loopShellLastDt>	0.5	</loopShellLastDt>
     </intuition_overrides>
   </reload_automat_reloading_115_152>
+  <autoloader_reload115_152>
+    <type>	AutoReload	</type>
+    <duration>	1100.0	</duration>
+    <sound>	gun_rld_autoloader_short_oneshell	</sound>
+    <reloadStart>	gun_rld_autoloader_long_start	</reloadStart>
+    <autoLoaderFull>	gun_rld_autoloader_full_complete	</autoLoaderFull>
+    <lastShellAlert>	gun_rld_autoloader_short_lastshell	</lastShellAlert>
+    <clipShellLoad>	gun_rld_autoloader_long_oneshell	</clipShellLoad>
+    <clipShellLoadDuration>	700.0	</clipShellLoadDuration>
+    <ammoLow>	gun_rld_autoloader_no_enough_shells	</ammoLow>
+    <almostComplete>	gun_rld_autoloader_full_almost_complete	</almostComplete>
+    <shotFail>	gun_rld_autoloader_shot_fail	</shotFail>
+    <almostCompleteDuration>	6000.0	</almostCompleteDuration>
+    <caliber>	SWITCH_ext_rld_autoloader_caliber_115_152mm	</caliber>
+    <intuition_overrides>
+      <reloadStart>	gun_rld_intuition_autoloader_long_start	</reloadStart>
+    </intuition_overrides>
+  </autoloader_reload115_152>
   <dualgun_reload115_152>
     <type>	DualGunReload	</type>
     <sound>	gun_rld_dual_reloading_oneshell	</sound>

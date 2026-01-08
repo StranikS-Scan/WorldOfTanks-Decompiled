@@ -36,11 +36,7 @@ class PlayerDogTag(object):
     def __init__(self, comps):
         self._components = {}
         for comp in comps:
-            if self._components.get(comp.componentDefinition.viewType, None):
-                raise SoftException('Cannot have more than one component of the same view type')
             self._components[comp.componentDefinition.viewType] = comp
-
-        return
 
     def getComponentByType(self, viewType):
         return self._components.get(viewType, None)

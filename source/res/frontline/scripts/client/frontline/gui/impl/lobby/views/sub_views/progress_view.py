@@ -13,11 +13,13 @@ from gui.impl.gen import R
 from gui.impl.pub import ViewImpl
 from gui.shared.event_dispatcher import showShop, closeFrontlineContainerWindow
 from skeletons.gui.game_control import IEpicBattleMetaGameController
+from skeletons.gui.shared import IItemsCache
 from uilogging.epic_battle.constants import EpicBattleLogKeys, EpicBattleLogActions, EpicBattleLogButtons
 from uilogging.epic_battle.loggers import EpicBattleLogger
 
 class ProgressView(ViewImpl):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
+    __itemsCache = dependency.instance(IItemsCache)
     __slots__ = ('__tooltipItems', '__frontlineLevel', '__frontlineProgress', '__maxLevel', '__uiEpicBattleLogger')
 
     def __init__(self, layoutID=R.views.frontline.lobby.ProgressView(), **kwargs):
@@ -39,7 +41,11 @@ class ProgressView(ViewImpl):
 
     @createTooltipContentDecorator()
     def createToolTipContent(self, event, contentID):
-        if contentID in RegisteredFrontlineTooltips.REGISTERED_SIMPLE_TOOLTIPS:
+        lootBoxId = self.__tooltipItems.get(event.getArgument('tooltipId'), {}).get('lootBoxID')
+        if lootBoxId:
+            from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import LootboxTooltip
+            return LootboxTooltip(self.__itemsCache.items.tokens.getLootBoxByID(lootBoxId))
+        elif contentID in RegisteredFrontlineTooltips.REGISTERED_SIMPLE_TOOLTIPS:
             view = RegisteredFrontlineTooltips.REGISTERED_SIMPLE_TOOLTIPS.get(contentID)
             return view()
         elif contentID in RegisteredFrontlineTooltips.REGISTERED_TOOLTIPS:

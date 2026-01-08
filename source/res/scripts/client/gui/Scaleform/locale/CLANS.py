@@ -509,6 +509,7 @@ class CLANS(object):
     BANNER_INFO_BATTLESEND = '#clans:banner/info/battlesEnd'
     BANNER_INFO_BATTLESTODAY = '#clans:banner/info/battlesToday'
     BANNER_INFO_BATTLESTOMORROW = '#clans:banner/info/battlesTomorrow'
+    BANNER_INFO_BATTLESNOW = '#clans:banner/info/battlesNow'
     BANNER_CHOOSETIME = '#clans:banner/chooseTime'
     BANNER_SEASONDATE_SEASONNOTSTARTED = '#clans:banner/seasonDate/seasonNotStarted'
     BANNER_SEASONDATE_SEASONLASTS = '#clans:banner/seasonDate/seasonLasts'

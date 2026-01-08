@@ -80,6 +80,8 @@ class EpicBattleConsumablesPanel(ConsumablesPanel):
         else:
             arena = self.sessionProvider.arenaVisitor.getArenaSubscription()
             vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
+            if vehicle is None:
+                return
             vehClass = getVehicleClassFromVehicleType(vehicle.typeDescriptor.type)
             if arena is None:
                 return

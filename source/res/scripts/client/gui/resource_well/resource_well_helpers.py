@@ -5,7 +5,7 @@ import typing
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import GUI_START_BEHAVIOR
 from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
-from constants import RESOURCE_WELL_FORBIDDEN_TOKEN
+from constants import RESOURCE_WELL_FORBIDDEN_TOKEN, RESOURCE_WELL_ALL_SEASON_FORBIDDEN_TOKEN
 from gui.resource_well.resource_well_constants import ProgressionState, CHANNEL_NAME_PREFIX
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency, time_utils
@@ -41,7 +41,7 @@ def getForbiddenAccountToken(resourceWell=None):
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache, resourceWell=IResourceWellController)
 def isForbiddenAccount(itemsCache=None, resourceWell=None):
-    return itemsCache.items.tokens.getToken(getForbiddenAccountToken(resourceWell=resourceWell)) is not None
+    return (itemsCache.items.tokens.getToken(getForbiddenAccountToken(resourceWell=resourceWell)) or itemsCache.items.tokens.getToken(RESOURCE_WELL_ALL_SEASON_FORBIDDEN_TOKEN)) is not None
 
 
 @dependency.replace_none_kwargs(resourceWell=IResourceWellController, itemsCache=IItemsCache)

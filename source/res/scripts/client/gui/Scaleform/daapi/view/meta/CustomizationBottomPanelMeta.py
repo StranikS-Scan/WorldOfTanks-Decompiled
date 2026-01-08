@@ -25,9 +25,6 @@ class CustomizationBottomPanelMeta(BaseDAAPIComponent):
     def onSelectHotFilter(self, index, value):
         self._printOverrideError('onSelectHotFilter')
 
-    def switchMode(self, index):
-        self._printOverrideError('switchMode')
-
     def returnToStyledMode(self):
         self._printOverrideError('returnToStyledMode')
 
@@ -43,9 +40,6 @@ class CustomizationBottomPanelMeta(BaseDAAPIComponent):
     def as_setBottomPanelInitDataS(self, data):
         return self.flashObject.as_setBottomPanelInitData(data) if self._isDAAPIInited() else None
 
-    def as_setSwitchersDataS(self, data):
-        return self.flashObject.as_setSwitchersData(data) if self._isDAAPIInited() else None
-
     def as_setBottomPanelTabsDataS(self, data):
         return self.flashObject.as_setBottomPanelTabsData(data) if self._isDAAPIInited() else None
 
@@ -54,9 +48,6 @@ class CustomizationBottomPanelMeta(BaseDAAPIComponent):
 
     def as_setCarouselDataS(self, data):
         return self.flashObject.as_setCarouselData(data) if self._isDAAPIInited() else None
-
-    def as_setCarouselInfoLabelDataS(self, text, tooltip):
-        return self.flashObject.as_setCarouselInfoLabelData(text, tooltip) if self._isDAAPIInited() else None
 
     def as_setFilterDataS(self, data):
         return self.flashObject.as_setFilterData(data) if self._isDAAPIInited() else None
@@ -76,8 +67,8 @@ class CustomizationBottomPanelMeta(BaseDAAPIComponent):
     def as_setEditableProgressionRequiredStyleHintVisibilityS(self, value):
         return self.flashObject.as_setEditableProgressionRequiredStyleHintVisibility(value) if self._isDAAPIInited() else None
 
-    def as_showPopoverBtnIconS(self, src, tooltip):
-        return self.flashObject.as_showPopoverBtnIcon(src, tooltip) if self._isDAAPIInited() else None
+    def as_updatePopoverBtnS(self, icon, alias, tooltip):
+        return self.flashObject.as_updatePopoverBtn(icon, alias, tooltip) if self._isDAAPIInited() else None
 
     def as_getDataProviderS(self):
         return self.flashObject.as_getDataProvider() if self._isDAAPIInited() else None

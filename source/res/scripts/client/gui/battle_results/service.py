@@ -36,7 +36,6 @@ class BattleResultsService(IBattleResultsService):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    __slots__ = ('__composers', '__buy', '__eventsManager', 'onResultPosted', '__appliedAddXPBonus')
 
     def __init__(self):
         super(BattleResultsService, self).__init__()

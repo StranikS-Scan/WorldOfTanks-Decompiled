@@ -11,11 +11,11 @@ from helpers import i18n, time_utils
 from skeletons.gui.battle_session import IBattleSessionProvider
 _MAX_INVADERS_COUNT = 3
 
-class _TeamBaseSettingItem(object):
-    __slots__ = ('_weight', '_color', '_capturing', '_captured', 'captured', '_blocked', '_arenaTypeID', '_team', '_baseID', '_subTypeBaseID')
+class TeamBaseSettingItem(object):
+    __slots__ = ('_weight', '_color', '_capturing', '_captured', '_blocked', '_arenaTypeID', '_team', '_baseID', '_subTypeBaseID')
 
     def __init__(self, weight, color, capturing, captured, blocked):
-        super(_TeamBaseSettingItem, self).__init__()
+        super(TeamBaseSettingItem, self).__init__()
         self._weight = weight
         self._color = color
         self._capturing = capturing
@@ -71,19 +71,25 @@ _SETTINGS_TO_CONTROL_POINT = {0: (4,
      i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_BASE_CAPTURED_BY_NOTIFICATION),
      i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_BASE_CAPTURED_NOTIFICATION),
      i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_BASE_CAPTURE_BLOCKED))}
+_DEFAULT_SETTINGS = (0, 'green', '%s %s', '%s %s', '%s %s')
 
-def _getSettingItem(clientID, ownTeam, arenaTypeID):
+def buildTeamBaseSettingItem(clientID, ownTeam, arenaTypeID, teamSettingsMap, teamItemCls):
     baseTeam, baseID = team_bases_ctrl.parseClientTeamBaseID(clientID)
-    itemSettings = (0, 'green', '%s %s', '%s %s', '%s %s')
     key = baseTeam ^ ownTeam
     if isControlPointExists(arenaTypeID):
-        if key in _SETTINGS_TO_CONTROL_POINT:
-            itemSettings = _SETTINGS_TO_CONTROL_POINT[key]
-    elif key in _SETTINGS_TO_TEAM:
-        itemSettings = _SETTINGS_TO_TEAM[key]
-    item = _TeamBaseSettingItem(*itemSettings)
+        settingsMap = _SETTINGS_TO_CONTROL_POINT
+        itemCls = TeamBaseSettingItem
+    else:
+        settingsMap = teamSettingsMap
+        itemCls = teamItemCls
+    itemSettings = settingsMap.get(key, _DEFAULT_SETTINGS)
+    item = itemCls(*itemSettings)
     item.setup(arenaTypeID, baseID, baseTeam)
     return item
+
+
+def _getSettingItem(clientID, ownTeam, arenaTypeID):
+    return buildTeamBaseSettingItem(clientID, ownTeam, arenaTypeID, _SETTINGS_TO_TEAM, TeamBaseSettingItem)
 
 
 class TeamBasesPanel(TeamBasesPanelMeta, team_bases_ctrl.ITeamBasesListener):
@@ -96,10 +102,10 @@ class TeamBasesPanel(TeamBasesPanelMeta, team_bases_ctrl.ITeamBasesListener):
     def setOffsetForEnemyPoints(self):
         self.as_setOffsetForEnemyPointsS()
 
-    def addCapturingTeamBase(self, clientID, playerTeam, points, _, timeLeft, invadersCnt, capturingStopped):
-        item = _getSettingItem(clientID, playerTeam, self.sessionProvider.arenaVisitor.type.getID())
+    def addCapturingTeamBase(self, clientID, playerTeam, points, _, timeLeft, invadersCnt, capturingStopped, extraInvader=False):
+        item = self.makeSettingItem(clientID, playerTeam)
         title = item.getCapturingString(points)
-        self.as_addS(clientID, item.getWeight(), item.getColor(), title, points, time_utils.getTimeLeftFormat(timeLeft), self.__getInvadersCountStr(invadersCnt))
+        self.as_addS(clientID, item.getWeight(), item.getColor(), title, points, time_utils.getTimeLeftFormat(timeLeft), self.__getInvadersCountStr(invadersCnt), extraInvader)
         self.__basesDict[clientID] = item
         if capturingStopped:
             if invadersCnt > 0:
@@ -107,19 +113,19 @@ class TeamBasesPanel(TeamBasesPanelMeta, team_bases_ctrl.ITeamBasesListener):
             else:
                 self.stopTeamBaseCapturing(clientID, points)
 
-    def addCapturedTeamBase(self, clientID, playerTeam, timeLeft, invadersCnt):
-        item = _getSettingItem(clientID, playerTeam, self.sessionProvider.arenaVisitor.type.getID())
+    def addCapturedTeamBase(self, clientID, playerTeam, timeLeft, invadersCnt, extraInvader=False):
+        item = self.makeSettingItem(clientID, playerTeam)
         title = item.getCapturedString()
-        self.as_addS(clientID, item.getWeight(), item.getColor(), title, 100, time_utils.getTimeLeftFormat(timeLeft), self.__getInvadersCountStr(invadersCnt))
+        self.as_addS(clientID, item.getWeight(), item.getColor(), title, 100, time_utils.getTimeLeftFormat(timeLeft), self.__getInvadersCountStr(invadersCnt), extraInvader)
         self.__basesDict[clientID] = item
 
-    def updateTeamBasePoints(self, clientID, points, rate, timeLeft, invadersCnt):
+    def updateTeamBasePoints(self, clientID, points, rate, timeLeft, invadersCnt, extraInvader=False):
         item = self.__basesDict.get(clientID, None)
         if not item:
             return
         else:
             capturingString = item.getCapturingString(points)
-            self.as_updateCaptureDataS(clientID, points, rate, time_utils.getTimeLeftFormat(timeLeft), self.__getInvadersCountStr(invadersCnt), capturingString, item.getColor())
+            self.as_updateCaptureDataS(clientID, points, rate, time_utils.getTimeLeftFormat(timeLeft), self.__getInvadersCountStr(invadersCnt), capturingString, extraInvader, item.getColor())
             return
 
     def blockTeamBaseCapturing(self, clientID, points):
@@ -128,17 +134,19 @@ class TeamBasesPanel(TeamBasesPanelMeta, team_bases_ctrl.ITeamBasesListener):
             return
         else:
             color = 'gray' if self.sessionProvider.arenaVisitor.getArenaGuiType() in ARENA_GUI_TYPE.EPIC_RANGE else item.getColor()
-            self.as_updateCaptureDataS(clientID, points, 0, '-:-', '-', item.getBlockedString(), color)
+            self.as_updateCaptureDataS(clientID, points, 0, '-:-', -1, item.getBlockedString(), False, color)
             return
 
     def stopTeamBaseCapturing(self, clientID, points):
+        if clientID not in self.__basesDict:
+            return
         self.as_stopCaptureS(clientID, points)
 
     def setTeamBaseCaptured(self, clientID, playerTeam):
         if clientID in self.__basesDict:
             item = self.__basesDict[clientID]
         else:
-            item = _getSettingItem(clientID, playerTeam, self.sessionProvider.arenaVisitor.type.getID())
+            item = self.makeSettingItem(clientID, playerTeam)
         self.as_setCapturedS(clientID, item.getCapturedString())
 
     def removeTeamBase(self, clientID):
@@ -150,6 +158,9 @@ class TeamBasesPanel(TeamBasesPanelMeta, team_bases_ctrl.ITeamBasesListener):
         self.__basesDict.clear()
         self.as_clearS()
 
+    def makeSettingItem(self, clientID, playerTeam):
+        return _getSettingItem(clientID, playerTeam, self.sessionProvider.arenaVisitor.type.getID())
+
     @staticmethod
     def __getInvadersCountStr(count):
-        return str(count) if count < _MAX_INVADERS_COUNT else str(_MAX_INVADERS_COUNT)
+        return count if count < _MAX_INVADERS_COUNT else _MAX_INVADERS_COUNT

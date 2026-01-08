@@ -11,6 +11,10 @@ class DAMAGE_SOURCE_TYPES(object):
     ARTILLERY = 'artillery'
     AIRSTRIKE = 'airstrike'
     FORT_ARTILLERY = 'fort_artillery'
+    PILLBOX = 'supply_Pillbox'
+    MORTAR = 'supply_Mortar'
+    FLAMER = 'supply_Flamer'
+    AIRSHIP = 'supply_Airship'
     DAMAGE_SOURCES = [HEAVY_TANK,
      MEDIUM_TANK,
      LIGHT_TANK,
@@ -18,4 +22,8 @@ class DAMAGE_SOURCE_TYPES(object):
      SPG,
      ARTILLERY,
      AIRSTRIKE,
-     FORT_ARTILLERY]
+     FORT_ARTILLERY,
+     PILLBOX,
+     MORTAR,
+     FLAMER,
+     AIRSHIP]

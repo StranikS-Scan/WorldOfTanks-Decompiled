@@ -5,9 +5,9 @@ from frameworks.wulf import ViewModel
 from frontline.gui.impl.gen.view_models.views.lobby.views.frontline_container_tab_model import FrontlineContainerTabModel
 
 class FrontlineContainerViewModel(ViewModel):
-    __slots__ = ('onTabChange', 'onClose')
+    __slots__ = ('onTabChange', 'onClose', 'onInfo')
 
-    def __init__(self, properties=2, commands=2):
+    def __init__(self, properties=2, commands=3):
         super(FrontlineContainerViewModel, self).__init__(properties=properties, commands=commands)
 
     def getCurrentTabId(self):
@@ -32,3 +32,4 @@ class FrontlineContainerViewModel(ViewModel):
         self._addArrayProperty('tabs', Array())
         self.onTabChange = self._addCommand('onTabChange')
         self.onClose = self._addCommand('onClose')
+        self.onInfo = self._addCommand('onInfo')

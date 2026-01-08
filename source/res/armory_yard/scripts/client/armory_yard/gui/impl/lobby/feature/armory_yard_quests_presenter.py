@@ -4,7 +4,7 @@ import logging
 import typing
 from operator import attrgetter
 from account_helpers.AccountSettings import ArmoryYard, AccountSettings
-from armory_yard.gui.shared.models_helpers import updateArmoryConditionQuestsModel, visitQuestInModel
+from armory_yard.gui.shared.models_helpers import updateArmoryConditionQuestsModel, visitQuestInModel, updateArmoryBattleQuestsModel
 from armory_yard.skeletons.armory_yard_reroll_controller import IArmoryYardRerollController
 from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_quest_sub_model import ArmoryYardQuestSubModel, QuestStatus
 from gui.impl.gui_decorators import args2params
@@ -219,16 +219,18 @@ class _QuestsTabPresenter(object):
             totalQuests += 1
             questSubModel = ArmoryYardQuestSubModel()
             questsModel = questSubModel.getQuests()
-            questsCompleted, tokenQuestID = updateArmoryConditionQuestsModel(questsModel, quests, self.__tooltipData, cycleID, not self.__armoryYardCtrl.isPostProgressionState)
-            questsModel.invalidate()
-            questSubModel.setTokenQuestID(tokenQuestID)
-            if tokenQuestID:
-                tokenQuest = self.__eventsCache.getQuestByID(tokenQuestID)
-                tokenQuestCompleted = tokenQuest.isCompleted() if tokenQuest is not None else False
+            if self.__armoryYardRerollCtrl.isRerollEnabled():
+                questsCompleted, tokenQuestID = updateArmoryConditionQuestsModel(questsModel, quests, self.__tooltipData, cycleID, not self.__armoryYardCtrl.isPostProgressionState)
+                questSubModel.setTokenQuestID(tokenQuestID)
+                if tokenQuestID:
+                    tokenQuest = self.__eventsCache.getQuestByID(tokenQuestID)
+                    tokenQuestCompleted = tokenQuest.isCompleted() if tokenQuest is not None else False
+                    questsCompleted = questsCompleted or tokenQuestCompleted
             else:
-                tokenQuestCompleted = False
+                questsCompleted = updateArmoryBattleQuestsModel(questsModel, quests, self.__tooltipData, cycleID, not self.__armoryYardCtrl.isPostProgressionState)
+            questsModel.invalidate()
             questSubModel.setStatus(QuestStatus.ACTIVE)
-            if questsCompleted or tokenQuestCompleted:
+            if questsCompleted:
                 completedQuests += 1
                 questSubModel.setStatus(QuestStatus.DONE)
             elif isPostProgression:

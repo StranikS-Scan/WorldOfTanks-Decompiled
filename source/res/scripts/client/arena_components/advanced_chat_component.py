@@ -1,15 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/arena_components/advanced_chat_component.py
 import logging
+import BigWorld
 from collections import OrderedDict, defaultdict, namedtuple
 from functools import partial
 from enum import Enum
-import BigWorld
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from arena_component_system.client_arena_component_system import ClientArenaComponent
 from battleground.location_point_manager import g_locationPointManager
-from chat_commands_consts import ReplyState, _COMMAND_NAME_TRANSFORM_MARKER_TYPE, BATTLE_CHAT_COMMAND_NAMES, _DEFAULT_ACTIVE_COMMAND_TIME, _DEFAULT_SPG_AREA_COMMAND_TIME, MarkerType, ONE_SHOT_COMMANDS_TO_REPLIES, COMMAND_RESPONDING_MAPPING
+from chat_commands_consts import ReplyState, _COMMAND_NAME_TRANSFORM_MARKER_TYPE, BATTLE_CHAT_COMMAND_NAMES, _DEFAULT_ACTIVE_COMMAND_TIME, MarkerType, ONE_SHOT_COMMANDS_TO_REPLIES, COMMAND_RESPONDING_MAPPING, VEHICLE_COMMANDS_FOR_ONE_SEGMENT_USE
 from constants import ARENA_BONUS_TYPE
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
@@ -121,6 +121,8 @@ class AdvancedChatComponent(ClientArenaComponent):
                 commandName = _ACTIONS.battleChatCommandFromActionID(commandID).name
                 if commandName not in BATTLE_CHAT_COMMANDS_BY_NAMES:
                     continue
+                if commandName in VEHICLE_COMMANDS_FOR_ONE_SEGMENT_USE:
+                    return (ReplyState.NO_REPLY, commandName)
                 hasRepliedTo = avatar_getter.getPlayerVehicleID() in commandData.owners
                 if hasRepliedTo:
                     return (ReplyState.CAN_CANCEL_REPLY, commandName)
@@ -499,10 +501,11 @@ class AdvancedChatComponent(ClientArenaComponent):
             self.sessionProvider.shared.feedback.onCommandAdded(commandTargetID, markerType)
         updateCmdType = ChatCommandChange.CHAT_CMD_WAS_REPLIED if commandName in AUTOCOMMIT_COMMAND_NAMES else ChatCommandChange.CHAT_CMD_TRIGGERED
         self.__chatCommandsUpdated(markerType, commandTargetID, commandID, commandCreatorID, updateCmdType)
-        isTemporarySticky = command and not command.isInSilentMode() and command.isTemporarySticky() and not commandCreatorID == avatar_getter.getPlayerVehicleID()
+        isCmdCreatedByPlayer = commandCreatorID == avatar_getter.getPlayerVehicleID()
+        isTemporarySticky = command and not command.isInSilentMode() and command.isTemporarySticky() and not isCmdCreatedByPlayer or commandName == BATTLE_CHAT_COMMAND_NAMES.FOCUS_SUPPLY
         if isTemporarySticky:
             self.__temporaryStickyCommands[commandID][commandTargetID] = (commandTargetID, markerType)
-        if commandCreatorID == avatar_getter.getPlayerVehicleID() and commandName in AUTOCOMMIT_COMMAND_NAMES or isTemporarySticky:
+        if isCmdCreatedByPlayer and commandName in AUTOCOMMIT_COMMAND_NAMES or isTemporarySticky:
             BigWorld.callback(0.1, partial(self.__setInFocusCB, commandID, commandTargetID, markerType, commandName in ONE_SHOT_COMMANDS_TO_REPLIES.keys(), isTemporarySticky))
         return
 
@@ -590,7 +593,7 @@ class AdvancedChatComponent(ClientArenaComponent):
         cmdName = _ACTIONS.battleChatCommandFromActionID(cmdID).name
         cmdCreatorID = self.__getCommandCreatorVehID(cmd)
         cmdTargetID = self.__getTargetIDForCommandName(cmdName, cmd)
-        cmdDuration = _DEFAULT_ACTIVE_COMMAND_TIME if cmdName != BATTLE_CHAT_COMMAND_NAMES.SPG_AIM_AREA else _DEFAULT_SPG_AREA_COMMAND_TIME
+        cmdDuration = cmd.getActiveCmdTime()
         markerType = _COMMAND_NAME_TRANSFORM_MARKER_TYPE[cmdName]
         if cmdName in (BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY, BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY, BATTLE_CHAT_COMMAND_NAMES.SOS):
             arenaDP = self.sessionProvider.getArenaDP()

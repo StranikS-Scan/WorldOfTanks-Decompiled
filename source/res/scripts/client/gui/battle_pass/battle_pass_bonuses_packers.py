@@ -13,24 +13,27 @@ from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusMo
 from gui.impl.gen.view_models.common.missions.bonuses.token_bonus_model import TokenBonusModel
 from gui.impl.gen.view_models.constants.item_highlight_types import ItemHighlightTypes
 from gui.impl.gen.view_models.views.lobby.battle_pass.reward_item_model import RewardItemModel
+from gui.impl.gen.view_models.views.lobby.battle_pass.tankman_bonus_model import TankmanBonusModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.vehicle_bonus_model import VehicleBonusModel
 from gui.server_events.awards_formatters import BATTLE_BONUS_X5_TOKEN, CREW_BONUS_X3_TOKEN
 from gui.server_events.bonuses import BlueprintsBonusSubtypes
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization import CustomizationTooltipContext
-from gui.shared.missions.packers.bonus import BACKPORT_TOOLTIP_CONTENT_ID, BaseBonusUIPacker, BlueprintBonusUIPacker, BonusUIPacker, CrewBookBonusUIPacker, DossierBonusUIPacker, GoodiesBonusUIPacker, ItemBonusUIPacker, SimpleBonusUIPacker, TokenBonusUIPacker, VehiclesBonusUIPacker, getDefaultBonusPackersMap
+from gui.shared.missions.packers.bonus import BACKPORT_TOOLTIP_CONTENT_ID, BaseBonusUIPacker, BlueprintBonusUIPacker, BonusUIPacker, CrewBookBonusUIPacker, DossierBonusUIPacker, GoodiesBonusUIPacker, ItemBonusUIPacker, SimpleBonusUIPacker, TokenBonusUIPacker, VehiclesBonusUIPacker, getDefaultBonusPackersMap, DogTagComponentsUIPacker
 from gui.shared.money import Currency
 from helpers import dependency
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from shared_utils import first
 from skeletons.gui.offers import IOffersDataProvider
 if typing.TYPE_CHECKING:
-    from gui.server_events.bonuses import BattlePassQuestChainTokensBonus, BattlePassRandomQuestTokensBonus, SimpleBonus, TmanTemplateTokensBonus, CustomizationsBonus, PlusPremiumDaysBonus, DossierBonus, BattlePassSelectTokensBonus, BattlePassStyleProgressTokenBonus, VehicleBlueprintBonus, GoodiesBonus
+    from gui.server_events.bonuses import BattlePassQuestChainTokensBonus, BattlePassRandomQuestTokensBonus, SimpleBonus, TmanTemplateTokensBonus, CustomizationsBonus, PlusPremiumDaysBonus, DossierBonus, BattlePassSelectTokensBonus, BattlePassStyleProgressTokenBonus, VehicleBlueprintBonus, GoodiesBonus, DogTagComponentBonus
     from account_helpers.offers.events_data import OfferEventData, OfferGift
     from gui.shared.gui_items.Vehicle import Vehicle
     from gui.goodies.goodie_items import Booster
     from gui.server_events.bonuses import TokensBonus
+    from typing import Optional
+    from gui.server_events.recruit_helper import _BaseRecruitInfo
 _logger = logging.getLogger(__name__)
 
 def getBattlePassBonusPackersMap():
@@ -59,7 +62,8 @@ def getBattlePassBonusPackersMap():
      Currency.CREDITS: currencyBonusUIPacker,
      Currency.CRYSTAL: currencyBonusUIPacker,
      Currency.GOLD: currencyBonusUIPacker,
-     Currency.EQUIP_COIN: currencyBonusUIPacker})
+     Currency.EQUIP_COIN: currencyBonusUIPacker,
+     'dogTagComponents': BattlePassDogTagComponentsUIPacker()})
     return mapping
 
 
@@ -147,7 +151,7 @@ class TmanTemplateBonusPacker(_BattlePassFinalBonusPacker):
                 bonusImageName = 'tankwoman'
             else:
                 bonusImageName = 'tankman'
-            model = RewardItemModel()
+            model = cls._getBonusModel()
             cls._packCommon(bonus, model)
             model.setIcon(bonusImageName)
             tankManFullName = recruitInfo.getFullUserName()
@@ -155,6 +159,7 @@ class TmanTemplateBonusPacker(_BattlePassFinalBonusPacker):
             model.setLabel(tankManFullName)
             model.setBigIcon('_'.join([bonusImageName, recruitInfo.getGroupName()]))
             model.setIsCollectionEntity(cls._isCollectionItem(recruitInfo.getGroupName()))
+            cls._addAdditionalData(recruitInfo, model)
             cls._injectAwardID(model, recruitInfo.getGroupName())
             return model
 
@@ -175,6 +180,15 @@ class TmanTemplateBonusPacker(_BattlePassFinalBonusPacker):
                 result.append(BACKPORT_TOOLTIP_CONTENT_ID)
 
         return result
+
+    @classmethod
+    def _getBonusModel(cls):
+        return TankmanBonusModel()
+
+    @classmethod
+    def _addAdditionalData(cls, recruitInfo, model):
+        model.setWithUniqueVoice(recruitInfo.getSpecialVoiceTag() is not None)
+        return
 
 
 class BattlePassCustomizationsBonusPacker(_BattlePassFinalBonusPacker):
@@ -655,6 +669,28 @@ class BattlePassBerthsBonusPacker(SimpleBonusUIPacker):
     @classmethod
     def _getBonusModel(cls):
         return RewardItemModel()
+
+
+class BattlePassDogTagComponentsUIPacker(DogTagComponentsUIPacker):
+
+    @classmethod
+    def _getBonusModel(cls):
+        return RewardItemModel()
+
+    @classmethod
+    def _packDogTag(cls, bonus, dogTagRecord):
+        model = super(BattlePassDogTagComponentsUIPacker, cls)._packDogTag(bonus, dogTagRecord)
+        model.setBigIcon(model.getIcon())
+        model.setUserName(model.getLabel())
+        return model
+
+    @classmethod
+    def _getToolTip(cls, bonus):
+        return [ cls._getDogTagTooltip(dogTagRecord, bonus.getContext().get('withBackground', None)) for dogTagRecord in bonus.getUnlockedComponents() ]
+
+    @classmethod
+    def _getDogTagTooltip(cls, dogTagRecord, withBackground=None):
+        return TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.DOG_TAGS_INFO, specialArgs=[dogTagRecord.componentId, None, withBackground])
 
 
 @contextmanager

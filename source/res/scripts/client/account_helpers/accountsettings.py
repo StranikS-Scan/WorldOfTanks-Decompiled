@@ -293,7 +293,26 @@ ACHIEVEMENTS_EDITING_ENABLED_STATUS = 'achievementsEditingEnabledStatus'
 ACHIEVEMENTS_MEDAL_ADDED_STATUS = 'achievementsMedalAddedStatus'
 ACHIEVEMENTS_RATING_CHANGED_STATUS = 'achievementsRatingChangedStatus'
 ACHIEVEMENTS_MEDAL_COUNT_INFO = 'achievementsMedalCountInfo'
+NEW_YEAR = 'newYear'
+NY_DAILY_QUESTS_VISITED = 'NYDailyQuestsVisited'
+NY_BONUS_DAILY_QUEST_VISITED = 'NYBonusDailyQuestVisited'
+NY_OLD_COLLECTIONS_BY_YEAR_VISITED = 'NYOldCollectionsByYearVisited'
+NY_OLD_REWARDS_BY_YEAR_VISITED = 'NYOldRewardsByYearVisited'
+NY_LAST_SEEN_LEVEL_INFO = 'NYLastSeenLevelInfo'
+NY_LAST_SEEN_TOTAL_BONUS = 'NYLastSeenTotalBonus'
+NY_INTRO_SEEN = 'NYIntroSeen'
+NY_DAILY_QUESTS_HOVERED = 'NYDailyQuestsHovered'
+NY_WEEKLY_QUESTS_HOVERED = 'NYWeeklyQuestsHovered'
+NY_DAILY_MEDIA = 'NYDailyMedia'
+NY_GENERATION_TIME = 'NYGenerationTime'
+NY_DAILY_VIDEO_DAY_VISITED = 'NYFirstVideoDayVisited'
+NY_DAILY_VIDEO_VISITED_AT = 'NYFirstVideoVisitedAt'
+NY_FIRST_VIDEO_SHUFFLE = 'NYFirstVideoShuffle'
+NY_ACTIVE_WIDGET_TRANSITION_SHOWN = 'NyActiveWidgetTransitionShown'
+NY_PET_SLOT_VISITED = 'NyPetSlotVisited'
+NY_GREETINGS_SEEN = 'NYGreetingsSeen'
 PREMIUM_QUESTS_NOTIFICATION = 'PremiumPurchased'
+DEFERRED_LOG_PLAYER_SETTINGS_ACTIONS = 'DeferredLogPlayerSettingsActions'
 
 class BattleMatters(object):
     BATTLE_MATTERS_SETTINGS = 'battleMattersSettings'
@@ -388,6 +407,40 @@ class BlackMarket(object):
     BLACK_MARKET_SETTINGS = 'BlackMarketSettings'
     BLACK_MARKET_ENTRY_CLICKED = 'BlackMarketEntryClicked'
     BLACK_MARKET_LAST_PHASE_SEEN = 'BlackMarketLastPhaseSeen'
+
+
+class CustomizationFilter(object):
+    CUSTOMIZATION_FILTER = 'customizationFilter'
+    PAINTS_GROUP = 'paintsGroup'
+    PROJECTION_DECALS_GROUP = 'projectionDecalsGroup'
+    EMBLEMS_GROUP = 'emblemsGroup'
+    INSCRIPTIONS_GROUP = 'inscriptionsGroup'
+    STYLES_2D_GROUP = 'styles2dGroup'
+    DISPLAY_GROUP = 'displayGroup'
+    FORMFACTOR_SQUARE = 'formfactor_square'
+    FORMFACTOR_RECT1X2 = 'formfactor_rect1x2'
+    FORMFACTOR_RECT1X3 = 'formfactor_rect1x3'
+    FORMFACTOR_RECT1X4 = 'formfactor_rect1x4'
+    FORMFACTOR_RECT1X6 = 'formfactor_rect1x6'
+    HISTORIC = 'historic'
+    NON_HISTORIC = 'nonHistoric'
+    FANTASTICAL = 'fantastical'
+    INVENTORY = 'inventory'
+    APPLIED = 'applied'
+    FAVORITE = 'favorite'
+    ON_ANOTHER_VEH = 'onAnotherVeh'
+    ONLY_PROGRESSION_DECALS = 'onlyProgressionDecals'
+    ONLY_EDITABLE_STYLES = 'onlyEditableStyles'
+    ONLY_NON_EDITABLE_STYLES = 'onlyNonEditableStyles'
+    ONLY_PROGRESSION_STYLES = 'onlyProgressionStyles'
+
+
+class Epic(object):
+    EPIC_SETTINGS = 'epicSettings'
+    SUPPLY_PILLBOX_HINT_VIEWED = 'supplyPillboxHintViewed'
+    SUPPLY_MORTAR_HINT_VIEWED = 'supplyMortarHintViewed'
+    SUPPLY_FLAMER_HINT_VIEWED = 'supplyFlamerHintViewed'
+    SUPPLY_AIRSHIP_HINT_VIEWED = 'supplyAirshipHintViewed'
 
 
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
@@ -957,7 +1010,29 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                PROFILE_TECHNIQUE_MEMBER: {'selectedColumn': 4,
                                           'selectedColumnSorting': 'descending'},
                SPEAKERS_DEVICE: 0,
-               UNIT_FILTER: {GAME.UNIT_FILTER: 4095}},
+               UNIT_FILTER: {GAME.UNIT_FILTER: 4095},
+               CustomizationFilter.CUSTOMIZATION_FILTER: {CustomizationFilter.PAINTS_GROUP: -1,
+                                                          CustomizationFilter.PROJECTION_DECALS_GROUP: -1,
+                                                          CustomizationFilter.EMBLEMS_GROUP: -1,
+                                                          CustomizationFilter.INSCRIPTIONS_GROUP: -1,
+                                                          CustomizationFilter.STYLES_2D_GROUP: -1,
+                                                          CustomizationFilter.DISPLAY_GROUP: 0,
+                                                          CustomizationFilter.FORMFACTOR_SQUARE: False,
+                                                          CustomizationFilter.FORMFACTOR_RECT1X2: False,
+                                                          CustomizationFilter.FORMFACTOR_RECT1X3: False,
+                                                          CustomizationFilter.FORMFACTOR_RECT1X4: False,
+                                                          CustomizationFilter.FORMFACTOR_RECT1X6: False,
+                                                          CustomizationFilter.HISTORIC: False,
+                                                          CustomizationFilter.NON_HISTORIC: False,
+                                                          CustomizationFilter.FANTASTICAL: False,
+                                                          CustomizationFilter.INVENTORY: False,
+                                                          CustomizationFilter.APPLIED: False,
+                                                          CustomizationFilter.FAVORITE: False,
+                                                          CustomizationFilter.ON_ANOTHER_VEH: False,
+                                                          CustomizationFilter.ONLY_PROGRESSION_DECALS: False,
+                                                          CustomizationFilter.ONLY_EDITABLE_STYLES: False,
+                                                          CustomizationFilter.ONLY_NON_EDITABLE_STYLES: False,
+                                                          CustomizationFilter.ONLY_PROGRESSION_STYLES: False}},
  KEY_FAVORITES: {BOOTCAMP_VEHICLE: 0,
                  CURRENT_VEHICLE: 0,
                  ROYALE_VEHICLE: 0,
@@ -1109,7 +1184,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 GAME.ENABLE_THERMAL_VISION_SECTOR_EFFECT: True,
                 'hangarCamPeriod': 1,
                 'hangarCamParallaxEnabled': True,
-                'players_panel': {'state': 2,
+                'players_panel': {'state': 3,
                                   'showLevels': True,
                                   'showTypes': True},
                 'epic_random_players_panel': {'state': 5},
@@ -1383,7 +1458,38 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                  LOOT_BOXES_SHORT_STAT_STATE: 0,
                                  LOOT_BOXES_STATS_HINT_STATE: 0,
                                  LOOT_BOXES_STATS_NO_BOX_HINT_STATE: 0,
-                                 KEY_LOOTBOX_TRIGGER_HINT_SHOWN: False}},
+                                 KEY_LOOTBOX_TRIGGER_HINT_SHOWN: False},
+                NEW_YEAR: {NY_DAILY_QUESTS_VISITED: False,
+                           NY_BONUS_DAILY_QUEST_VISITED: False,
+                           NY_OLD_COLLECTIONS_BY_YEAR_VISITED: {18: False,
+                                                                19: False,
+                                                                20: False,
+                                                                21: False,
+                                                                22: False,
+                                                                23: False,
+                                                                24: False},
+                           NY_OLD_REWARDS_BY_YEAR_VISITED: {18: False,
+                                                            19: False,
+                                                            20: False,
+                                                            21: False,
+                                                            22: False,
+                                                            23: False,
+                                                            24: False},
+                           NY_LAST_SEEN_LEVEL_INFO: {'level': 1,
+                                                     'points': 0},
+                           NY_INTRO_SEEN: False,
+                           NY_LAST_SEEN_TOTAL_BONUS: 0,
+                           NY_DAILY_QUESTS_HOVERED: {},
+                           NY_WEEKLY_QUESTS_HOVERED: {},
+                           NY_DAILY_MEDIA: [],
+                           NY_GENERATION_TIME: 0,
+                           NY_DAILY_VIDEO_VISITED_AT: 0,
+                           NY_DAILY_VIDEO_DAY_VISITED: False,
+                           NY_FIRST_VIDEO_SHUFFLE: False,
+                           NY_ACTIVE_WIDGET_TRANSITION_SHOWN: False,
+                           NY_PET_SLOT_VISITED: False,
+                           NY_GREETINGS_SEEN: False},
+                DEFERRED_LOG_PLAYER_SETTINGS_ACTIONS: set()},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
@@ -1606,7 +1712,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                    PlayStreak.PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN_WIDGET: 0,
                                    PlayStreak.PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN_TAB: 0},
  BlackMarket.BLACK_MARKET_SETTINGS: {BlackMarket.BLACK_MARKET_ENTRY_CLICKED: False,
-                                     BlackMarket.BLACK_MARKET_LAST_PHASE_SEEN: None}}
+                                     BlackMarket.BLACK_MARKET_LAST_PHASE_SEEN: None},
+ Epic.EPIC_SETTINGS: {Epic.SUPPLY_AIRSHIP_HINT_VIEWED: False,
+                      Epic.SUPPLY_FLAMER_HINT_VIEWED: False,
+                      Epic.SUPPLY_PILLBOX_HINT_VIEWED: False,
+                      Epic.SUPPLY_MORTAR_HINT_VIEWED: False}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:
@@ -2273,6 +2383,19 @@ class AccountSettings(object):
             if currVersion < 67:
                 for key, section in _filterAccountSection(ads):
                     accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    if NEW_YEAR in accSettings.keys():
+                        accSettings.deleteSection(NEW_YEAR)
+                    accUiFlags = AccountSettings._readSection(section, KEY_UI_FLAGS)
+                    for uiKey in {NY_DAILY_QUESTS_VISITED,
+                     NY_BONUS_DAILY_QUEST_VISITED,
+                     NY_OLD_COLLECTIONS_BY_YEAR_VISITED,
+                     NY_OLD_REWARDS_BY_YEAR_VISITED,
+                     NY_LAST_SEEN_LEVEL_INFO,
+                     'NYCelebrityQuestsCompletedMask',
+                     'NYCelebrityQuestsVisitedMask',
+                     'NYCelebrityCompletedQuestsAnimationShownMask'}.intersection(accUiFlags.keys()):
+                        accUiFlags.deleteSection(uiKey)
+
                     if GUI_LOOT_BOXES in accSettings.keys():
                         lootBoxesSettings = _unpack(accSettings[GUI_LOOT_BOXES].asString)
                         lootBoxesSettings[LOOT_BOXES_INTRO_SHOWN] = False
@@ -2428,8 +2551,8 @@ class AccountSettings(object):
         return cls._getValue(name, KEY_SETTINGS)
 
     @classmethod
-    def setSettings(cls, name, value, force=False):
-        cls._setValue(name, value, KEY_SETTINGS, force)
+    def setSettings(cls, name, value):
+        cls._setValue(name, value, KEY_SETTINGS)
 
     @staticmethod
     def getManualData(name):
@@ -2604,6 +2727,14 @@ class AccountSettings(object):
     @staticmethod
     def setBlackMarket(name, value):
         AccountSettings._setValue(name, value, BlackMarket.BLACK_MARKET_SETTINGS)
+
+    @staticmethod
+    def getEpic(name):
+        return AccountSettings._getValue(name, Epic.EPIC_SETTINGS, True)
+
+    @staticmethod
+    def setEpic(name, value):
+        AccountSettings._setValue(name, value, Epic.EPIC_SETTINGS, True)
 
     @staticmethod
     def _getValue(name, setting, force=False):

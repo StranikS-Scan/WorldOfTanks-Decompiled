@@ -63,8 +63,12 @@ class HangarWindowsWebApiMixin(object):
         return
 
     @w2c(W2CSchema, 'show_xp_exchange_window')
-    def openXPExchangeWindow(self, _):
-        shared_events.showExchangeXPWindow()
+    def openXPExchangeWindow(self, cmd):
+        needXP = cmd.custom_parameters.get('needXP')
+        if needXP:
+            rate, _ = self.itemsCache.items.shop.freeXPConversion
+            needXP = (int(needXP) + rate - 1) // rate * rate
+        shared_events.showExchangeXPWindow(needXP=needXP)
 
     @w2c(W2CSchema, 'show_buy_slot_window')
     def openBuySlotWindow(self, _):

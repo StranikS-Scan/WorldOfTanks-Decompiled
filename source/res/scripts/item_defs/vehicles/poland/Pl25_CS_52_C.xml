@@ -66,7 +66,7 @@
       <armor_22>	40	</armor_22>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-    <weight>	16000	</weight>
+    <weight>	16020	</weight>
     <maxHealth>	1000	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
@@ -1846,8 +1846,8 @@
             <minPitch>	0 -17 1 -17	</minPitch>
             <maxPitch>	0 7 0.366894 7 0.390556 3 0.609444 3 0.633106 7 1 7	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <reloadTime>	6.7	</reloadTime>
+          <shotDispersionRadius>	0.3	</shotDispersionRadius>
+          <reloadTime>	11	</reloadTime>
           <aimingTime>	1.9	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
@@ -2341,7 +2341,7 @@
     <detailed>
       <engines>
         <GTD_M11>
-          <smplEnginePower>	710	</smplEnginePower>
+          <smplEnginePower>	720	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </GTD_M11>
       </engines>
@@ -2349,13 +2349,13 @@
         <Chassis_Pl25_CS_52_C>
           <grounds>
             <soft>
-              <rollingFriction>	0.2093	</rollingFriction>
+              <rollingFriction>	0.1293	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.06465	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.01855	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/sounds/epic_sound_constants.py
+from supply_shared import Supply
 from gui.Scaleform.genConsts.GAME_MESSAGES_CONSTS import GAME_MESSAGES_CONSTS
 from epic_constants import EPIC_BATTLE_TEAM_ID
 
@@ -96,6 +97,12 @@ class EPIC_SOUND(object):
     BF_EB_ALL_ENEMIES_DESTROYED = {True: 'eb_all_enemies_destroyed_VICTORY',
      False: 'eb_all_enemies_destroyed_DEFEAT'}
     BF_EB_STOP_TICKING = 'time_countdown_stop'
+    BF_EB_SUPPLY_UNLOCKED = {Supply.PILLBOX: 'eb_activation_dot_object',
+     Supply.FLAMER: 'eb_activation_flamethrower_object',
+     Supply.MORTAR: 'eb_activation_rszo_object',
+     Supply.AIRSHIP: 'eb_activation_airship_object'}
+    BF_EB_SUPPLY_ACTIVE_POSITIVE = 'eb_zone_airship_object'
+    BF_EB_SUPPLY_ACTIVE = 'eb_activity_zone_airship_object'
     BF_EB_VO_MESSAGES = {GAME_MESSAGES_CONSTS.BASE_CAPTURED: BF_EB_ZONE_CAPTURED_DEF,
      GAME_MESSAGES_CONSTS.BASE_CAPTURED_POSITIVE: BF_EB_ZONE_CAPTURED_ATK,
      GAME_MESSAGES_CONSTS.OBJECTIVE_DESTROYED: BF_EB_MAIN_OBJECTIVES_ONE_DESTROYED,
@@ -115,7 +122,10 @@ class EPIC_SOUND(object):
      GAME_MESSAGES_CONSTS.OBJECTIVE_UNDER_ATTACK_POSITIVE: BF_EB_OBJECTIVE_UNDER_ATTACK_ATK,
      GAME_MESSAGES_CONSTS.RETREAT_SUCCESSFUL: BF_EB_RETREAT_SUCCESSFUL,
      GAME_MESSAGES_CONSTS.GENERAL_RANK_REACHED: BF_EB_GENERAL,
-     GAME_MESSAGES_CONSTS.RANK_UP: BF_EB_RANK_UP}
+     GAME_MESSAGES_CONSTS.RANK_UP: BF_EB_RANK_UP,
+     GAME_MESSAGES_CONSTS.SUPPLY_UNLOCKED: BF_EB_SUPPLY_UNLOCKED,
+     GAME_MESSAGES_CONSTS.SUPPLY_ACTIVE_POSITIVE: BF_EB_SUPPLY_ACTIVE_POSITIVE,
+     GAME_MESSAGES_CONSTS.SUPPLY_ACTIVE: BF_EB_SUPPLY_ACTIVE}
     EB_UI_REPPAIR_POINT_COMPLETED = 'eb_ui_repair_point'
     EB_UI_REPPAIR_POINT_PROGRESS = 'eb_ui_repair_point_progress'
     EB_UI_REPPAIR_POINT_PROGRESS_STOP = 'eb_ui_repair_point_progress_stop'
@@ -136,6 +146,18 @@ class EPIC_SOUND(object):
     EB_UI_CANNON_DESTRUCTION_EMERGENCE = 'eb_ui_cannon_destruction_emergence'
     EB_UI_CANNON_DESTRUCTION_CROSS = 'eb_ui_cannon_destruction_cross'
     EB_UI_CANNON_DESTRUCTION_DISAPPEARANCE = 'eb_ui_cannon_destruction_disappearance'
+    EB_AMBIENT_PROGRESS_PAGE_ENTER = 'eb_ambient_progress_page_enter'
+    EB_AMBIENT_PROGRESS_PAGE_EXIT = 'eb_ambient_progress_page_exit'
+    EB_SUPPLY_UNLOCKED = 'eb_activity_object'
+    EB_UI_SUPPLY_UNLOCKED = 'eb_ui_activity_object'
+    EB_AIRSHIP_SPOTTED = 'eb_enemy_sighted_for_team'
+    QUESTS_VIEW_ACTIVATION = 'eb_ui_zone_attack_disappearance'
+    QUESTS_VIEW_PROGRESSION = 'eb_ui_zone_attack_emergence'
+    QUESTS_VIEW_NEW = 'eb_new_task_ready'
+    QUESTS_VIEW_COMPLETED = 'eb_task_completed'
+    QUESTS_VIEW_NOT_AVAILABLE = 'eb_task_not_available'
+    QUESTS_VIEW_AVAILABLE = 'eb_task_available_again'
+    EB_CHANGE_RESPAWN_DIRECTION = 'eb_ui_button_battle_press'
 
 
 class BF_EB_MAIN_OBJECTIVES_SOUND_NOTIFICATIONS(object):

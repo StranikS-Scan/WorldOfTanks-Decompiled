@@ -4,11 +4,14 @@ from gui.Scaleform.daapi.view.battle.shared.base_stats import StatsBase
 
 class EpicFullStatsMeta(StatsBase):
 
-    def as_initializeTextS(self, myLaneText, allLanesText):
-        return self.flashObject.as_initializeText(myLaneText, allLanesText) if self._isDAAPIInited() else None
+    def as_initializeTextS(self, myLaneText, allLanesText, questsText):
+        return self.flashObject.as_initializeText(myLaneText, allLanesText, questsText) if self._isDAAPIInited() else None
 
     def as_setIsInteractiveS(self, value):
         return self.flashObject.as_setIsInteractive(value) if self._isDAAPIInited() else None
 
     def as_setGeneralBonusS(self, value):
         return self.flashObject.as_setGeneralBonus(value) if self._isDAAPIInited() else None
+
+    def as_toggleQuestsTabS(self, value):
+        return self.flashObject.as_toggleQuestsTab(value) if self._isDAAPIInited() else None

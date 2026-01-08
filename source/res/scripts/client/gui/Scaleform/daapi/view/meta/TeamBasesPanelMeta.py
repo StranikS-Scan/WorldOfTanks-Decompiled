@@ -4,8 +4,8 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class TeamBasesPanelMeta(BaseDAAPIComponent):
 
-    def as_addS(self, barId, sortWeight, colorType, title, points, captureTime, vehiclesCount):
-        return self.flashObject.as_add(barId, sortWeight, colorType, title, points, captureTime, vehiclesCount) if self._isDAAPIInited() else None
+    def as_addS(self, barId, sortWeight, colorType, title, points, captureTime, vehiclesCount, hasSupply):
+        return self.flashObject.as_add(barId, sortWeight, colorType, title, points, captureTime, vehiclesCount, hasSupply) if self._isDAAPIInited() else None
 
     def as_removeS(self, id):
         return self.flashObject.as_remove(id) if self._isDAAPIInited() else None
@@ -13,8 +13,8 @@ class TeamBasesPanelMeta(BaseDAAPIComponent):
     def as_stopCaptureS(self, id, points):
         return self.flashObject.as_stopCapture(id, points) if self._isDAAPIInited() else None
 
-    def as_updateCaptureDataS(self, id, points, rate, captureTime, vehiclesCount, captureString, colorType):
-        return self.flashObject.as_updateCaptureData(id, points, rate, captureTime, vehiclesCount, captureString, colorType) if self._isDAAPIInited() else None
+    def as_updateCaptureDataS(self, id, points, rate, captureTime, vehiclesCount, captureString, hasSupply, colorType):
+        return self.flashObject.as_updateCaptureData(id, points, rate, captureTime, vehiclesCount, captureString, hasSupply, colorType) if self._isDAAPIInited() else None
 
     def as_setCapturedS(self, id, title):
         return self.flashObject.as_setCaptured(id, title) if self._isDAAPIInited() else None

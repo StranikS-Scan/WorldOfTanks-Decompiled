@@ -682,36 +682,5 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/agate/api/v5/inventory/getInventoryEntitlements/'
         return self._request_data(callback, url, method='POST', post_data=entitlementsFilter)
 
-    def ny_tamagotchi_get_current_state(self, callback, notRecalc):
-        url = '/nytamagochi/api/player/current_state'
-        return self._request_data(callback, url, method='GET', get_data={'not_recalc': notRecalc})
-
-    def ny_tamagotchi_get_player_info(self, callback):
-        url = '/nytamagochi/api/player/info'
-        return self._request_data(callback, url, method='GET')
-
-    def ny_tamagotchi_get_leaderboard_page(self, callback, page, isUserPage=False):
-        url = '/nytamagochi/api/leaderboard'
-        return self._request_data(callback, url, method='GET', get_data={'page': page,
-         'current_user_page': isUserPage})
-
-    def ny_tamagotchi_get_player_stats(self, callback):
-        url = '/nytamagochi/api/player/stats'
-        return self._request_data(callback, url, method='GET')
-
-    def ny_tamagotchi_take_gift(self, callback):
-        url = '/nytamagochi/api/gift'
-        return self._request_data(callback, url, method='POST')
-
-    def ny_tamagotchi_buy_items(self, callback, data):
-        url = '/nytamagochi/api/inventory/buy'
-        headers = {'content-type': 'application/json'}
-        return self._request_data(callback, url, method='POST', headers=headers, post_data=data)
-
-    def ny_tamagotchi_activate_items(self, callback, data):
-        url = '/nytamagochi/api/inventory/activate'
-        headers = {'content-type': 'application/json'}
-        return self._request_data(callback, url, method='POST', headers=headers, post_data=data)
-
     def _get_formatted_language_code(self):
         return self.client_lang.replace('_', '-')

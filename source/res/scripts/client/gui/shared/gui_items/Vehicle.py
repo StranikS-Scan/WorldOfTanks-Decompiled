@@ -175,6 +175,7 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     WOT_PLUS = constants.VEHICLE_WOT_PLUS_TAG
     NO_CREW_TRANSFER_PENALTY_TAG = constants.VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG
     HIDDEN = 'hidden_in_hangar'
+    RESTORE_WITH_STYLE = 'restoreWithStyle'
 
 
 DISCLAIMER_TAGS = frozenset((VEHICLE_TAGS.T34_DISCLAIMER,))
@@ -597,10 +598,10 @@ class Vehicle(FittingItem):
         return
 
     def _getOutfitComponent(self, proxy, style, styleProgressionLevel, styleSerialNumber, season):
-        if style is not None and season != SeasonType.EVENT:
+        if style is not None:
             return self.__getStyledOutfitComponent(proxy, style, styleProgressionLevel, styleSerialNumber, season)
         else:
-            return self.__getEmptyOutfitComponent() if self._isStyleInstalled and season != SeasonType.EVENT else self.__getCustomOutfitComponent(proxy, season)
+            return self.__getEmptyOutfitComponent() if self._isStyleInstalled else self.__getCustomOutfitComponent(proxy, season)
 
     @classmethod
     def _parserOptDevs(cls, layoutList, proxy):
@@ -1319,6 +1320,10 @@ class Vehicle(FittingItem):
     @property
     def isOutfitLocked(self):
         return checkForTags(self.tags, VEHICLE_TAGS.OUTFIT_LOCKED)
+
+    @property
+    def isRestoreWithStyle(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.RESTORE_WITH_STYLE)
 
     @property
     def isProgressionDecalsOnly(self):

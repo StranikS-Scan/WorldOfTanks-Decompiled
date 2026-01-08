@@ -1,11 +1,11 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/1.39.0.0</Path>
-    <Path mask="*.mtmod" mode="recursive" root="res">./mods/1.39.0.0</Path>
+    <Path cacheSubdirs="true">./res_mods/1.40.0.0</Path>
+    <Path mask="*.mtmod" mode="recursive" root="res">./mods/1.40.0.0</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part1.pkg</Package>
-      <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part3.pkg</Package>
+      <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
       <Package type="hd">./res/packages/shared_content_hd-part2.pkg</Package>
       <Package type="hd">./res/packages/shared_content_hd-part1.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/shared_content_sandbox-part1.pkg</Package>
@@ -16,15 +16,9 @@
       <Package type="sd,hd">./res/packages/01_karelia.pkg</Package>
       <Package type="hd">./res/packages/01_karelia_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/01_karelia_bin.pkg</Package>
-      <Package type="sd,hd">./res/packages/01_karelia_ny.pkg</Package>
-      <Package type="hd">./res/packages/01_karelia_ny_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/01_karelia_ny_bin.pkg</Package>
       <Package type="sd,hd">./res/packages/02_malinovka.pkg</Package>
       <Package type="hd">./res/packages/02_malinovka_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/02_malinovka_bin.pkg</Package>
-      <Package type="sd,hd">./res/packages/02_malinovka_ny.pkg</Package>
-      <Package type="hd">./res/packages/02_malinovka_ny_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/02_malinovka_ny_bin.pkg</Package>
       <Package type="sd,hd">./res/packages/03_campania_big.pkg</Package>
       <Package type="hd">./res/packages/03_campania_big_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/03_campania_big_bin.pkg</Package>
@@ -34,9 +28,6 @@
       <Package type="sandbox,sd,hd">./res/packages/05_prohorovka.pkg</Package>
       <Package type="hd">./res/packages/05_prohorovka_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/05_prohorovka_bin.pkg</Package>
-      <Package type="sd,hd">./res/packages/05_prohorovka_ny.pkg</Package>
-      <Package type="hd">./res/packages/05_prohorovka_ny_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/05_prohorovka_ny_bin.pkg</Package>
       <Package type="sd,hd">./res/packages/06_ensk.pkg</Package>
       <Package type="hd">./res/packages/06_ensk_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/06_ensk_bin.pkg</Package>
@@ -202,12 +193,12 @@
       <Package type="sd,hd">./res/packages/h00_armory_yard.pkg</Package>
       <Package type="hd">./res/packages/h00_armory_yard_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/h00_armory_yard_bin.pkg</Package>
-      <Package type="sd,hd">./res/packages/h03_mt_ny_2026.pkg</Package>
-      <Package type="hd">./res/packages/h03_mt_ny_2026_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/h03_mt_ny_2026_bin.pkg</Package>
       <Package type="sd,hd">./res/packages/h08_mt_hangar.pkg</Package>
       <Package type="hd">./res/packages/h08_mt_hangar_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/h08_mt_hangar_bin.pkg</Package>
+      <Package type="sd,hd">./res/packages/h10_mt_23feb_2026.pkg</Package>
+      <Package type="hd">./res/packages/h10_mt_23feb_2026_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/h10_mt_23feb_2026_bin.pkg</Package>
       <Package type="sd,hd">./res/packages/h33_battle_royale_2021.pkg</Package>
       <Package type="hd">./res/packages/h33_battle_royale_2021_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/h33_battle_royale_2021_bin.pkg</Package>
@@ -234,7 +225,6 @@
       <Package type="sandbox,sd,hd">./res/packages/in_battle_achievements.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/misc.pkg</Package>
       <Package type="hd">./res/packages/misc_hd.pkg</Package>
-      <Package type="sandbox,sd,hd">./res/packages/new_year.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/particles.pkg</Package>
       <Package type="hd">./res/packages/particles_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/scripts.pkg</Package>

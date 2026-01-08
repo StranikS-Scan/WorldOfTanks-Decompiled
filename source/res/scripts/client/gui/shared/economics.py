@@ -1,10 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/economics.py
+import operator
 import typing
 from collections import namedtuple
 from ItemRestore import getVehicleRestorePrice
 from gui.shared.money import Money, Currency
+from helpers import dependency
 from rent_common import makeRentID
+from skeletons.gui.shared import IItemsCache
 
 class ActualPrice(object):
     RESTORE_PRICE = 1
@@ -80,3 +83,14 @@ def getGUIPrice(item, money, exchangeRate):
         if item.hasRestoreCooldown():
             return item.minRentPrice or item.restorePrice
     return item.minRentPrice or item.getBuyPrice(preferred=False).price
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def getAllPossibleXP(itemsCache=None):
+    from gui.shared.utils.requesters import REQ_CRITERIA
+    criteria = REQ_CRITERIA.VEHICLE.FULLY_ELITE
+    eliteVehicles = itemsCache.items.getVehicles(criteria)
+    dirtyResult = sum(map(operator.attrgetter('xp'), eliteVehicles.values()))
+    exchangeRate = itemsCache.items.shop.freeXPConversion[0]
+    result = min(int(dirtyResult / exchangeRate) * exchangeRate, itemsCache.items.stats.gold * exchangeRate)
+    return result

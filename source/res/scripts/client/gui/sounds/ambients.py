@@ -362,7 +362,7 @@ class BattlePassSoundEnv(SoundEnv):
 class MarathonPageSoundEnv(SoundEnv):
 
     def __init__(self, soundsCtrl):
-        super(MarathonPageSoundEnv, self).__init__(soundsCtrl, 'marathon', filters=(SoundFilters.MARATHON_FILTER,))
+        super(MarathonPageSoundEnv, self).__init__(soundsCtrl, 'marathon', filters=(SoundFilters.MARATHON_FILTER, SoundFilters.HANGAR_PLACE_TASKS_EVENTS))
 
 
 class MissionsCategoriesSoundEnv(SoundEnv):

@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/radial_menu.py
 import logging
-from collections import namedtuple, defaultdict
 import GUI
 import Keys
 import CommandMapping
+from collections import namedtuple, defaultdict
 from AvatarInputHandler import aih_global_binding
 from aih_constants import CTRL_MODE_NAME
 from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES, ReplyState, MarkerType, DefaultMarkerSubType, ONE_SHOT_COMMANDS_TO_REPLIES, INVALID_MARKER_SUBTYPE, LocationMarkerSubType
@@ -14,7 +14,7 @@ from gui.Scaleform.locale.INGAME_HELP import INGAME_HELP
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 from gui.battle_control import event_dispatcher as gui_event_dispatcher, avatar_getter
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
-from gui.battle_control.controllers.chat_cmd_ctrl import KB_MAPPING
+from gui.battle_control.controllers.chat_cmd_ctrl import KB_MAPPING, CONTEXT_ACTIONS, COMMIT_ACTIONS
 from gui.shared.SoundEffectsId import SoundEffectsId
 from gui.shared.utils.key_mapping import getScaleformKey, BW_TO_SCALEFORM
 from helpers import dependency
@@ -90,50 +90,30 @@ _CAN_CANCEL_REPLY_SHORTCUT = Shortcut(title=INGAME_HELP.RADIALMENU_CANCEL_REPLY,
 _CONFIRM_SHORTCUT = Shortcut(title=INGAME_HELP.RADIALMENU_POSITIVE, action=BATTLE_CHAT_COMMAND_NAMES.REPLY, icon=RADIAL_MENU_CONSTS.YES, groups=RADIAL_MENU_CONSTS.ALL_TARGET_STATES, bState=RADIAL_MENU_CONSTS.NORMAL_BUTTON_STATE, indexInGroup=RADIAL_MENU_CONSTS.ELEMENT_INDEX_FIRST)
 _THANKS_SHORTCUT = Shortcut(title=INGAME_HELP.RADIALMENU_THANKS, action=BATTLE_CHAT_COMMAND_NAMES.THANKS, icon=RADIAL_MENU_CONSTS.THANK_YOU, groups=RADIAL_MENU_CONSTS.ALL_TARGET_STATES, bState=RADIAL_MENU_CONSTS.NORMAL_BUTTON_STATE, indexInGroup=RADIAL_MENU_CONSTS.ELEMENT_INDEX_FIRST)
 _EMPTY_BUTTON_SHORTCUT = Shortcut(title=RADIAL_MENU_CONSTS.EMPTY_BUTTON_STATE, action=RADIAL_MENU_CONSTS.EMPTY_BUTTON_STATE, icon=RADIAL_MENU_CONSTS.EMPTY_BUTTON_STATE, groups=RADIAL_MENU_CONSTS.ALL_TARGET_STATES, bState=RADIAL_MENU_CONSTS.EMPTY_BUTTON_STATE, indexInGroup=RADIAL_MENU_CONSTS.ELEMENT_INDEX_FIRST)
-BOTTOM_SHORTCUT_SETS = {}
-UPPER_SHORTCUT_SETS = {}
-for s in REGULAR_BOTTOM_STATIC_SHORTCUTS:
-    for group in s.groups:
-        if group not in BOTTOM_SHORTCUT_SETS:
-            BOTTOM_SHORTCUT_SETS[group] = list()
-        BOTTOM_SHORTCUT_SETS[group].append(s)
 
-for s in REGULAR_UPPER_STATIC_SHORTCUTS:
-    for group in s.groups:
-        if group not in UPPER_SHORTCUT_SETS:
-            UPPER_SHORTCUT_SETS[group] = list()
-        UPPER_SHORTCUT_SETS[group].append(s)
+def buildShortcutMap(shortcuts):
+    result = {}
+    for s in shortcuts:
+        for group in s.groups:
+            result.setdefault(group, []).append(s)
+
+    return result
+
+
+_BOTTOM_SHORTCUT_SETS = buildShortcutMap(REGULAR_BOTTOM_STATIC_SHORTCUTS)
+_UPPER_SHORTCUT_SETS = buildShortcutMap(REGULAR_UPPER_STATIC_SHORTCUTS)
 
 def getKeyFromAction(action):
-    if action in (BATTLE_CHAT_COMMAND_NAMES.DEFEND_BASE,
-     BATTLE_CHAT_COMMAND_NAMES.ATTACK_BASE,
-     BATTLE_CHAT_COMMAND_NAMES.HELPME,
-     BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION,
-     BATTLE_CHAT_COMMAND_NAMES.ATTACK_OBJECTIVE,
-     BATTLE_CHAT_COMMAND_NAMES.DEFEND_OBJECTIVE,
-     BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY,
-     BATTLE_CHAT_COMMAND_NAMES.REPLY,
-     BATTLE_CHAT_COMMAND_NAMES.CANCEL_REPLY):
+    if action in CONTEXT_ACTIONS:
         shortcut = CommandMapping.g_instance.getName(CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND)
-        scaleFormKey = getScaleformKey(CommandMapping.g_instance.get(shortcut))
-    elif action in (BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE,
-     BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE,
-     BATTLE_CHAT_COMMAND_NAMES.ATTACKING_OBJECTIVE,
-     BATTLE_CHAT_COMMAND_NAMES.DEFENDING_OBJECTIVE,
-     BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY_WITH_SPG,
-     BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY,
-     BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY,
-     BATTLE_CHAT_COMMAND_NAMES.SPG_AIM_AREA,
-     BATTLE_CHAT_COMMAND_NAMES.GOING_THERE):
+    elif action in COMMIT_ACTIONS:
         shortcut = CommandMapping.g_instance.getName(CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMIT)
-        scaleFormKey = getScaleformKey(CommandMapping.g_instance.get(shortcut))
     elif action in KB_MAPPING:
         cmd = KB_MAPPING[action]
         shortcut = CommandMapping.g_instance.getName(cmd)
-        scaleFormKey = getScaleformKey(CommandMapping.g_instance.get(shortcut))
     else:
         return 0
-    return scaleFormKey
+    return getScaleformKey(CommandMapping.g_instance.get(shortcut))
 
 
 class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
@@ -143,7 +123,7 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
 
     def __init__(self):
         super(RadialMenu, self).__init__()
-        self.__crosshairData = None
+        self._crosshairData = None
         self.__stateData = None
         self.__isVisible = False
         return
@@ -155,22 +135,22 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
         chatCommands = self.sessionProvider.shared.chatCommands
         if chatCommands is None:
             return
-        elif action == RADIAL_MENU_CONSTS.EMPTY_BUTTON_STATE or self.__crosshairData is None:
+        elif action == RADIAL_MENU_CONSTS.EMPTY_BUTTON_STATE or self._crosshairData is None:
             self.__setVisibility(False)
             return
         else:
             if action == BATTLE_CHAT_COMMAND_NAMES.REPLY:
-                if self.__crosshairData.replyState == ReplyState.CAN_CONFIRM and self.__crosshairData.replyToAction in ONE_SHOT_COMMANDS_TO_REPLIES.keys():
-                    chatCommands.handleChatCommand(ONE_SHOT_COMMANDS_TO_REPLIES[self.__crosshairData.replyToAction], targetID=self.__crosshairData.targetID)
+                if self._crosshairData.replyState == ReplyState.CAN_CONFIRM and self._crosshairData.replyToAction in ONE_SHOT_COMMANDS_TO_REPLIES.keys():
+                    chatCommands.handleChatCommand(ONE_SHOT_COMMANDS_TO_REPLIES[self._crosshairData.replyToAction], targetID=self._crosshairData.targetID)
                 else:
-                    chatCommands.sendReplyChatCommand(self.__crosshairData.targetID, self.__crosshairData.replyToAction)
+                    chatCommands.sendReplyChatCommand(self._crosshairData.targetID, self._crosshairData.replyToAction)
             elif action == BATTLE_CHAT_COMMAND_NAMES.CANCEL_REPLY:
-                chatCommands.sendCancelReplyChatCommand(self.__crosshairData.targetID, self.__crosshairData.replyToAction)
+                chatCommands.sendCancelReplyChatCommand(self._crosshairData.targetID, self._crosshairData.replyToAction)
             elif action in (BATTLE_CHAT_COMMAND_NAMES.GOING_THERE, BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION, BATTLE_CHAT_COMMAND_NAMES.SPG_AIM_AREA):
                 chatCommands.sendAdvancedPositionPing(action, isInRadialMenu=True)
             else:
-                chatCommands.handleChatCommand(action, targetID=self.__crosshairData.targetID, isInRadialMenu=True)
-            self.__crosshairData = None
+                chatCommands.handleChatCommand(action, targetID=self._crosshairData.targetID, isInRadialMenu=True)
+            self._crosshairData = None
             self.__setVisibility(False)
             return
 
@@ -198,11 +178,11 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
             return
         else:
             if reshowPreviousState:
-                targetID, targetMarkerType, crosshairType, _, _ = self.__crosshairData
+                targetID, targetMarkerType, crosshairType, _, _ = self._crosshairData
                 replyState, replyToAction = chatCommands.getReplyStateForTargetIDAndMarkerType(targetID, targetMarkerType)
             else:
                 targetID, targetMarkerType, crosshairType, replyState, replyToAction = chatCommands.getAimedAtTargetData()
-            menuState = self.__getRadialMenuState(targetID, targetMarkerType, crosshairType, replyState, replyToAction)
+            menuState = self._getRadialMenuState(targetID, targetMarkerType, crosshairType, replyState, replyToAction)
             replyStateDiff = self.__generateDiffStateDict(menuState, replyState, replyToAction, targetID)
             ctrl = self.sessionProvider.shared.crosshair
             if ctrl is not None:
@@ -214,9 +194,9 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
                 self.app.registerGuiKeyHandler(self)
             self.__setVisibility(True)
             self._showInternal(menuState, replyStateDiff, position)
-            if RadialMenu.__isMarkerEmptyLocationOrOutOfBorder(self.__crosshairData.targetMarkerType, self.__crosshairData.targetMarkerSubtype):
+            if RadialMenu.__isMarkerEmptyLocationOrOutOfBorder(self._crosshairData.targetMarkerType, self._crosshairData.targetMarkerSubtype):
                 self.delayCallback(self._REFRESH_TIME_IN_SECONDS, self.__checkForValidLocationMarkerLoop)
-            if RadialMenu.__isCanRespondToAlly(self.__crosshairData.targetMarkerType, self.__crosshairData.targetMarkerSubtype, self.__crosshairData.replyState):
+            if RadialMenu.__isCanRespondToAlly(self._crosshairData.targetMarkerType, self._crosshairData.targetMarkerSubtype, self._crosshairData.replyState):
                 self.delayCallback(self._REFRESH_TIME_IN_SECONDS, self.__checkForTemporaryRespondUpdateLoop)
             return
 
@@ -260,6 +240,24 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
         cursorX, cursorY = GUI.mcursor().position
         self.as_showS(cursorX, cursorY, radialState, diff, position)
 
+    def _getRadialMenuState(self, targetID, targetMarkerType, targetMarkerSubtype, replyState, replyToAction):
+        viewState = self._getViewStateForMarker(targetMarkerType, targetMarkerSubtype)
+        viewState = self.__adjustStateForSPG(viewState, replyState)
+        self._crosshairData = CrosshairData(targetID, targetMarkerType, targetMarkerSubtype, replyState, replyToAction)
+        return self._sanitizeViewState(viewState)
+
+    def _getViewStateForMarker(self, targetMarkerType, targetMarkerSubtype):
+        if targetMarkerType in _MARKERS_TYPE_TO_SUBTYPE_MAP and targetMarkerSubtype in _MARKERS_TYPE_TO_SUBTYPE_MAP[targetMarkerType]:
+            return _MARKERS_TYPE_TO_SUBTYPE_MAP[targetMarkerType][targetMarkerSubtype]
+        _logger.warning("Marker subtype name '%s' is not defined for '%s'.", targetMarkerSubtype, targetMarkerType)
+        return RADIAL_MENU_CONSTS.TARGET_STATE_DEFAULT
+
+    def _sanitizeViewState(self, viewState):
+        return viewState if viewState in RADIAL_MENU_CONSTS.ALL_TARGET_STATES else RADIAL_MENU_CONSTS.TARGET_STATE_DEFAULT
+
+    def _getUpperShortcuts(self):
+        return _UPPER_SHORTCUT_SETS
+
     def __setVisibility(self, newState):
         if newState == self.__isVisible:
             return
@@ -281,33 +279,23 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
              'key': getKeyFromAction(shortcutData.action)}
 
         for state in RADIAL_MENU_CONSTS.ALL_TARGET_STATES:
-            bottomShortcuts = map(createShortcut, BOTTOM_SHORTCUT_SETS[state])
+            bottomShortcuts = map(createShortcut, _BOTTOM_SHORTCUT_SETS[state])
             if state == RADIAL_MENU_CONSTS.TARGET_STATE_ALLY:
                 regularShortcuts = map(createShortcut, ALLY_UPPER_SHORTCUTS_DEFAULT)
             else:
-                regularShortcuts = map(createShortcut, UPPER_SHORTCUT_SETS[state])
+                regularShortcuts = map(createShortcut, self._getUpperShortcuts().get(state, []))
             self.__stateData.append({'state': state,
              'bottomShortcuts': bottomShortcuts,
              'regularShortcuts': regularShortcuts})
 
         self.as_buildDataS(self.__stateData)
 
-    def __getRadialMenuState(self, targetID, targetMarkerType, targetMarkerSubtype, replyState, replyToAction):
-        if targetMarkerType in _MARKERS_TYPE_TO_SUBTYPE_MAP and targetMarkerSubtype in _MARKERS_TYPE_TO_SUBTYPE_MAP[targetMarkerType]:
-            viewState = _MARKERS_TYPE_TO_SUBTYPE_MAP[targetMarkerType][targetMarkerSubtype]
-        else:
-            _logger.warning("Marker subtype name '%s' is not defined for '%s'.", targetMarkerSubtype, targetMarkerType)
-            viewState = RADIAL_MENU_CONSTS.TARGET_STATE_DEFAULT
-        if self.sessionProvider.getArenaDP().getVehicleInfo().isSPG():
-            if viewState == RADIAL_MENU_CONSTS.TARGET_STATE_ENEMY:
-                viewState = RADIAL_MENU_CONSTS.TARGET_STATE_SPG_ENEMY
-            elif viewState == RADIAL_MENU_CONSTS.TARGET_STATE_DEFAULT:
-                if replyState == ReplyState.CAN_REPLY:
-                    viewState = RADIAL_MENU_CONSTS.TARGET_STATE_DEFAULT
-                else:
-                    viewState = RADIAL_MENU_CONSTS.TARGET_STATE_SPG_DEFAULT
-        self.__crosshairData = CrosshairData(targetID, targetMarkerType, targetMarkerSubtype, replyState, replyToAction)
-        return viewState if viewState in RADIAL_MENU_CONSTS.ALL_TARGET_STATES else RADIAL_MENU_CONSTS.TARGET_STATE_DEFAULT
+    def __adjustStateForSPG(self, viewState, replyState):
+        if not self.sessionProvider.getArenaDP().getVehicleInfo().isSPG():
+            return viewState
+        if viewState == RADIAL_MENU_CONSTS.TARGET_STATE_ENEMY:
+            return RADIAL_MENU_CONSTS.TARGET_STATE_SPG_ENEMY
+        return RADIAL_MENU_CONSTS.TARGET_STATE_SPG_DEFAULT if viewState == RADIAL_MENU_CONSTS.TARGET_STATE_DEFAULT and replyState != ReplyState.CAN_REPLY else viewState
 
     def __playSound(self, soundName):
         if self.app.soundManager is not None:
@@ -316,7 +304,7 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
 
     def __generateDiffStateDict(self, targetState, replyState, replyAction, targetID):
         resultingDiffList = []
-        if targetState not in UPPER_SHORTCUT_SETS and targetState != RADIAL_MENU_CONSTS.TARGET_STATE_ALLY or targetState not in BOTTOM_SHORTCUT_SETS or self.__stateData is None:
+        if targetState not in self._getUpperShortcuts() and targetState != RADIAL_MENU_CONSTS.TARGET_STATE_ALLY or targetState not in _BOTTOM_SHORTCUT_SETS or self.__stateData is None:
             return resultingDiffList
         else:
             if targetState == RADIAL_MENU_CONSTS.TARGET_STATE_ALLY:
@@ -328,7 +316,7 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
             return resultingDiffList
 
     def __populateWithNonAllyData(self, replyState, resultingDiffList, targetState):
-        for shortcut in UPPER_SHORTCUT_SETS[targetState]:
+        for shortcut in self._getUpperShortcuts()[targetState]:
             buttonData = defaultdict()
             RadialMenu.__copyShortcutData(buttonData=buttonData, shortcut=shortcut)
             if shortcut.indexInGroup == RADIAL_MENU_CONSTS.ELEMENT_INDEX_FIRST:
@@ -381,7 +369,7 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
 
     def __handleSpgView(self, resultingDiffList, targetState):
         if self.sessionProvider.getArenaDP().getVehicleInfo().isSPG() and avatar_getter.getInputHandler().ctrlModeName in (CTRL_MODE_NAME.STRATEGIC, CTRL_MODE_NAME.ARTY, CTRL_MODE_NAME.MAP_CASE) and targetState in (RADIAL_MENU_CONSTS.TARGET_STATE_SPG_DEFAULT, RADIAL_MENU_CONSTS.TARGET_STATE_SPG_ENEMY) and not resultingDiffList:
-            for shortcut in UPPER_SHORTCUT_SETS[targetState]:
+            for shortcut in self._getUpperShortcuts()[targetState]:
                 buttonData = defaultdict()
                 RadialMenu.__copyShortcutData(buttonData, shortcut)
                 if shortcut.indexInGroup == RADIAL_MENU_CONSTS.ELEMENT_INDEX_SIXTH:
@@ -414,20 +402,20 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
         self.__reshow(removedID, markerType, markerType != MarkerType.LOCATION_MARKER_TYPE)
 
     def __reshow(self, removedID, markerType, reshowPreviousState):
-        if not self.__isVisible or self.__crosshairData is None:
+        if not self.__isVisible or self._crosshairData is None:
             return
         else:
-            if self.__crosshairData.targetID == removedID and markerType == self.__crosshairData.targetMarkerType:
+            if self._crosshairData.targetID == removedID and markerType == self._crosshairData.targetMarkerType:
                 self.show(reshowPreviousState)
             return
 
     def __onVehicleMarkerRemoved(self, vehicleID):
-        if self.__crosshairData is not None and self.__crosshairData.targetID == vehicleID:
+        if self._crosshairData is not None and self._crosshairData.targetID == vehicleID:
             self.delayCallback(self._REFRESH_TIME_IN_SECONDS, self.__reshow, vehicleID, MarkerType.VEHICLE_MARKER_TYPE, False)
         return
 
     def __onVehicleFeedbackReceived(self, eventID, vehicleID, value):
-        if eventID == FEEDBACK_EVENT_ID.VEHICLE_DEAD and self.__crosshairData is not None and self.__crosshairData.targetID == vehicleID:
+        if eventID == FEEDBACK_EVENT_ID.VEHICLE_DEAD and self._crosshairData is not None and self._crosshairData.targetID == vehicleID:
             self.delayCallback(self._REFRESH_TIME_IN_SECONDS, self.__reshow, vehicleID, MarkerType.VEHICLE_MARKER_TYPE, False)
         return
 
@@ -436,18 +424,18 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
             self.__reshow(addedID, markerType, True)
 
     def __checkForValidLocationMarkerLoop(self):
-        if self.__crosshairData is None or not self.__isVisible:
+        if self._crosshairData is None or not self.__isVisible:
             return
         else:
             chatCommands = self.sessionProvider.shared.chatCommands
             _, targetMarkerType, targetMarkerSubtype, _, _ = chatCommands.getAimedAtTargetData()
-            if RadialMenu.__isMarkerEmptyLocationOrOutOfBorder(targetMarkerType, targetMarkerSubtype) and targetMarkerType != self.__crosshairData.targetMarkerType:
+            if RadialMenu.__isMarkerEmptyLocationOrOutOfBorder(targetMarkerType, targetMarkerSubtype) and targetMarkerType != self._crosshairData.targetMarkerType:
                 self.show(reshowPreviousState=False)
             hasDelayedCallback = self.hasDelayedCallback(self.__checkForValidLocationMarkerLoop)
             return self._REFRESH_TIME_IN_SECONDS if not hasDelayedCallback else None
 
     def __checkForTemporaryRespondUpdateLoop(self):
-        if self.__crosshairData is None or not self.__isVisible:
+        if self._crosshairData is None or not self.__isVisible:
             return
         else:
             chatCommands = self.sessionProvider.shared.chatCommands

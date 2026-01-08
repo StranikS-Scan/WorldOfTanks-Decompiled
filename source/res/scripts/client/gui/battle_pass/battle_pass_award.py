@@ -24,12 +24,16 @@ class BattlePassAwardsManager(object):
         cls.__bonusesLayoutController.init()
 
     @classmethod
-    def composeBonuses(cls, rewards, ctx=None):
+    def composeBonuses(cls, rewards, ctx=None, withSort=True):
         bonuses = []
         for reward in rewards:
             bonuses.extend(awardsFactory(reward, ctx))
 
-        return cls.sortBonuses(bonuses)
+        if withSort:
+            return cls.sortBonuses(bonuses)
+        bonuses = mergeBonuses(bonuses)
+        bonuses = splitBonuses(bonuses)
+        return bonuses
 
     @classmethod
     def sortBonuses(cls, bonuses):
@@ -51,6 +55,10 @@ class BattlePassAwardsManager(object):
         return cls.__bonusesLayoutController.getBigIcon(bonus)
 
     @classmethod
+    def getPriority(cls, bonus):
+        return cls.__bonusesLayoutController.getPriority(bonus)
+
+    @classmethod
     def uniteTokenBonuses(cls, bonuses):
         keys = []
         splitKey = ''
@@ -67,3 +75,31 @@ class BattlePassAwardsManager(object):
                 bonus.setValue(result)
 
         return bonuses
+
+    @classmethod
+    def preprocessDogTags(cls, bonuses):
+        dogTagEngraving = None
+        dogTagBackgroundId = None
+        dogTagBackground = None
+        dogTagCount = 0
+        for bonus in bonuses:
+            if bonus.getName() == 'dogTagComponents':
+                for background in bonus.getUnlockedBackgrounds():
+                    dogTagBackgroundId = background.componentId
+                    dogTagBackground = bonus
+                    dogTagCount += 1
+
+                engravings = bonus.getUnlockedEngravings()
+                if engravings:
+                    dogTagEngraving = bonus
+                    dogTagCount += len(engravings)
+            if dogTagCount > 2:
+                return bonuses
+
+        if dogTagBackground is not None and dogTagEngraving is not None:
+            result = [ b for b in bonuses if b != dogTagBackground and b != dogTagEngraving ]
+            dogTagEngraving.updateContext({'withBackground': dogTagBackgroundId})
+            result.append(dogTagEngraving)
+            return result
+        else:
+            return bonuses

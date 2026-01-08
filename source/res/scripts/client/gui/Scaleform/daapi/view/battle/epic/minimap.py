@@ -2,16 +2,22 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic/minimap.py
 import logging
 import os
+import CommandMapping
 import BigWorld
 import GUI
 import Math
+from account_helpers.settings_core.settings_constants import CONTROLS
+from gui.shared.utils.key_mapping import getReadableKey
+from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES, MarkerType, ReplyState
+from constants import IS_DEVELOPMENT, SECTOR_STATE
+from coordinate_system import AXIS_ALIGNED_DIRECTION as AAD
+from epic_constants import EPIC_BATTLE_TEAM_ID, Direction
+from gui.sounds.epic_sound_constants import EPIC_SOUND
+from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
+from skeletons.account_helpers.settings_core import ISettingsCore
 from account_helpers import AccountSettings
 from aih_constants import CTRL_MODE_NAME
 from arena_component_system.sector_base_arena_component import ID_TO_BASENAME
-from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES, MarkerType, ReplyState
-from constants import IS_DEVELOPMENT
-from coordinate_system import AXIS_ALIGNED_DIRECTION as AAD
-from epic_constants import EPIC_BATTLE_TEAM_ID
 from gui.Scaleform.daapi.view.battle.classic.minimap import GlobalSettingsPlugin
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings, plugins, common
 from gui.Scaleform.daapi.view.battle.shared.minimap.common import SimplePlugin
@@ -21,7 +27,9 @@ from gui.Scaleform.genConsts.BATTLE_MINIMAP_CONSTS import BATTLE_MINIMAP_CONSTS
 from gui.Scaleform.genConsts.LAYER_NAMES import LAYER_NAMES
 from gui.battle_control import minimap_utils, avatar_getter
 from gui.battle_control.battle_constants import PROGRESS_CIRCLE_TYPE, SECTOR_STATE_ID, FEEDBACK_EVENT_ID
-from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
+from supply_shared import Supply
+from helpers import dependency
+from skeletons.gui.game_control import IEpicBattleController
 _C_NAME = settings.CONTAINER_NAME
 _S_NAME = settings.ENTRY_SYMBOL_NAME
 _EPIC_TEAM_POINTS = settings.CONTAINER_NAME.TEAM_POINTS
@@ -65,6 +73,7 @@ class MINIMAP_SCALE_TYPES(object):
 
 
 class EpicMinimapComponent(EpicMinimapMeta):
+    __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(EpicMinimapComponent, self).__init__()
@@ -76,12 +85,18 @@ class EpicMinimapComponent(EpicMinimapMeta):
 
     def _populate(self):
         super(EpicMinimapComponent, self)._populate()
+        self.__settingsCore.onSettingsApplied += self.__onSettingsApplied
         mode = AccountSettings.getSettings('epicMinimapZoom')
         if mode > self.__maxZoomMode:
             mode = self.__maxZoomMode
         self.updateZoomMode(mode)
         self.__rangeScale = self.__calculateRangeScale(_ZOOM_MODE_MIN, self.__maxZoomMode, mode)
+        self.__updateMinimapKeyButton()
         self._updateThermalSectorSize(METERS_IN_1X_ZOOM, MINIMAP_SCALE_TYPES.REAL_SCALE)
+
+    def _dispose(self):
+        self.__settingsCore.onSettingsApplied -= self.__onSettingsApplied
+        super(EpicMinimapComponent, self)._dispose()
 
     def setMinimapCenterEntry(self, entryID):
         component = self.getComponent()
@@ -113,6 +128,8 @@ class EpicMinimapComponent(EpicMinimapMeta):
             self.as_setZoomModeS(self.__mode, self.__zoomText())
 
     def onZoomModeChanged(self, change):
+        if not self.__canChangeZoom():
+            return
         mode = self.__mode + change * _ZOOM_MODE_STEP
         if mode > self.__maxZoomMode:
             mode = self.__maxZoomMode
@@ -146,7 +163,7 @@ class EpicMinimapComponent(EpicMinimapMeta):
         if visitor.hasRespawns() and visitor.hasSectors():
             setup['epic_sectorstates'] = SectorStatusEntriesPlugin
             setup['protection_zones'] = ProtectionZoneEntriesPlugin
-            setup['vehicles'] = RecoveringVehiclesPlugin
+            setup['vehicles'] = EpicArenaVehiclesPlugin
         if visitor.hasDestructibleEntities():
             setup['epic_hqs'] = HeadquartersStatusEntriesPlugin
         if visitor.hasStepRepairPoints():
@@ -174,6 +191,13 @@ class EpicMinimapComponent(EpicMinimapMeta):
         d2 = abs(topRightY - bottomLeftY)
         return max(d1, d2) / METERS_IN_1X_ZOOM
 
+    def __onSettingsApplied(self, diff):
+        if CONTROLS.KEYBOARD in diff:
+            self.__updateMinimapKeyButton()
+
+    def __updateMinimapKeyButton(self):
+        self.as_setMinimapKeyButtonS(getReadableKey(CommandMapping.CMD_MINIMAP_VISIBLE))
+
     def __zoomText(self):
         return str(round(self.__mode, 1)) + _ZOOM_MULTIPLIER_TEXT
 
@@ -183,18 +207,25 @@ class EpicMinimapComponent(EpicMinimapMeta):
         p = (current - minScale) / (maxScale - minScale)
         return (1 - p) * _DOWN_SCALE + p * _UP_SCALE
 
+    def __canChangeZoom(self):
+        if BigWorld.player().isVehicleAlive:
+            return True
+        else:
+            iah = avatar_getter.getInputHandler()
+            return iah is not None and iah.ctrlModeName == CTRL_MODE_NAME.DEATH_FREE_CAM
 
-class RecoveringVehiclesPlugin(ArenaVehiclesPlugin):
+
+class EpicArenaVehiclesPlugin(ArenaVehiclesPlugin):
 
     def start(self):
-        super(RecoveringVehiclesPlugin, self).start()
+        super(EpicArenaVehiclesPlugin, self).start()
         arena = self.sessionProvider.arenaVisitor.getArenaSubscription()
         if arena is not None:
             arena.onVehicleRecovered += self.__arena_onVehicleRecovered
         return
 
     def stop(self):
-        super(RecoveringVehiclesPlugin, self).stop()
+        super(EpicArenaVehiclesPlugin, self).stop()
         arena = self.sessionProvider.arenaVisitor.getArenaSubscription()
         if arena is not None:
             arena.onVehicleRecovered -= self.__arena_onVehicleRecovered
@@ -205,6 +236,15 @@ class RecoveringVehiclesPlugin(ArenaVehiclesPlugin):
             entry = self._entries[vehicleID]
             if entry.setActive(False):
                 self._setActive(entry.getID(), False)
+
+    def _getVehicleClassTag(self, vehicleType):
+        return Supply.getSupplyTag(vehicleType) if Supply.isSupply(vehicleType.tags) else super(EpicArenaVehiclesPlugin, self)._getVehicleClassTag(vehicleType)
+
+    def _useVehicleAoIMarker(self, entry):
+        return entry is not None and entry.getClassTag() in Supply.SUPPLY_TAG_LIST
+
+    def _getSpottedSoundName(self, entry):
+        return EPIC_SOUND.EB_AIRSHIP_SPOTTED if entry.getClassTag() == Supply.SUPPLY_ID_TO_TAG[Supply.AIRSHIP] else super(EpicArenaVehiclesPlugin, self)._getSpottedSoundName(entry)
 
 
 class RespawningPersonalEntriesPlugin(PersonalEntriesPlugin):
@@ -785,6 +825,123 @@ class ProtectionZoneEntriesPlugin(SimplePlugin):
         entryID = self._addEntry(symbol, _EPIC_PROTECTION_ZONE, matrix=matrix, active=True)
         self._parentObj.setEntryParameters(entryID, doClip=False, scaleType=MINIMAP_SCALE_TYPES.REAL_SCALE)
         return entryID
+
+
+class OwnDirectionPlugin(SimplePlugin):
+    epicBattleController = dependency.descriptor(IEpicBattleController)
+    __slots__ = ('__currentDirection', '__selectedDirection', '__isInPostmortem', '__isInRespawnMode', '__lastSelectedDirection', '__playerDataComp')
+
+    def __init__(self, parentObj):
+        super(OwnDirectionPlugin, self).__init__(parentObj)
+        self.__currentDirection = None
+        self.__selectedDirection = None
+        self.__lastSelectedDirection = None
+        self.__isInPostmortem = False
+        self.__isInRespawnMode = False
+        self.__playerDataComp = None
+        self.__setOwnSectors(self.epicBattleController.getOwnSectors())
+        return
+
+    def start(self):
+        super(OwnDirectionPlugin, self).start()
+        ctrl = self.sessionProvider.dynamic.respawn
+        if ctrl is not None:
+            ctrl.onRequestPointForRespawn += self.__onRequestPointForRespawn
+        ctrl = self.sessionProvider.shared.vehicleState
+        if ctrl is not None:
+            ctrl.onPostMortemSwitched += self.__onPostMortemChanged
+            ctrl.onRespawnBaseMoving += self.__onPostMortemChanged
+        self.epicBattleController.onOwnSectorsChanged += self.__onOwnSectorsChanged
+        self.__playerDataComp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'playerDataComponent', None)
+        return
+
+    def fini(self):
+        super(OwnDirectionPlugin, self).fini()
+        ctrl = self.sessionProvider.dynamic.respawn
+        if ctrl is not None:
+            ctrl.onRequestPointForRespawn -= self.__onRequestPointForRespawn
+        ctrl = self.sessionProvider.shared.vehicleState
+        if ctrl is not None:
+            ctrl.onPostMortemSwitched -= self.__onPostMortemChanged
+            ctrl.onRespawnBaseMoving -= self.__onPostMortemChanged
+        self.epicBattleController.onOwnSectorsChanged -= self.__onOwnSectorsChanged
+        return
+
+    def setRespawnMode(self, respawnMode):
+        self.__isInRespawnMode = respawnMode
+        if respawnMode and self.__playerDataComp is not None:
+            self.__updateSelectedDirectionByLane(self.__playerDataComp.respawnLane)
+        self.__updateUI()
+        return
+
+    def __updateSelectedDirectionByLane(self, laneID):
+        direction = Direction.LANE_TO_DIRECTION[laneID]
+        if direction is None:
+            return
+        else:
+            self.__selectedDirection = direction
+            return
+
+    def __setOwnSectors(self, ownSectors):
+        if ownSectors:
+            self.__updateCurrentDirection(ownSectors)
+            self.__updateUI()
+
+    def __onPostMortemChanged(self, *args):
+        self.__isInPostmortem = self.sessionProvider.shared.vehicleState.isInPostmortem
+        self.__updateUI()
+
+    def __updateCurrentDirection(self, ownSectors):
+        sectorComponent = self.sessionProvider.arenaVisitor.getComponent('sectorComponent')
+        if sectorComponent is None:
+            _logger.error('Expected SectorComponent not present!')
+            return
+        else:
+            for direction, v in sectorComponent.getDirections().iteritems():
+                if v.issubset(ownSectors):
+                    self.__currentDirection = self.__lastSelectedDirection = direction
+                    return
+
+            return
+
+    def __onOwnSectorsChanged(self, ownSectors):
+        self.__setOwnSectors(ownSectors)
+
+    def __updateUI(self):
+        if self.__currentDirection:
+            if self.__selectedDirection != self.__currentDirection and self.__lastSelectedDirection != self.__selectedDirection:
+                self._playSound2D(EPIC_SOUND.EB_CHANGE_RESPAWN_DIRECTION)
+            self.__lastSelectedDirection = self.__selectedDirection
+            if self.__isInPostmortem and not self.__isInRespawnMode:
+                self.parentObj.as_setDirectionS('', '')
+            else:
+                self.parentObj.as_setDirectionS(self.__currentDirection, self.__selectedDirection or self.__currentDirection)
+
+    def __onRequestPointForRespawn(self, position):
+        sectorComponent = self.sessionProvider.arenaVisitor.getComponent('sectorComponent')
+        if sectorComponent is None:
+            _logger.error('Expected SectorComponent not present!')
+            return
+        else:
+            nextSectorID = None
+            for sector in sectorComponent.sectors:
+                if sector.isInSector(position):
+                    nextSectorID = sector.sectorID
+                    break
+
+            directions = sectorComponent.getDirections()
+            topSectors = directions[Direction.TOP]
+            if nextSectorID in topSectors and sectorComponent.getSectorById(nextSectorID).state == SECTOR_STATE.OPEN:
+                self.__selectedDirection = Direction.TOP
+            else:
+                for direction in (Direction.LEFT, Direction.CENTER, Direction.RIGHT):
+                    sectors = directions[direction]
+                    if nextSectorID in sectors:
+                        self.__selectedDirection = direction
+                        break
+
+            self.__updateUI()
+            return
 
 
 class SectorOverlayEntriesPlugin(SectorStatusEntriesPlugin):

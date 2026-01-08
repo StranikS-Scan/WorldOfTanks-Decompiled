@@ -29,6 +29,7 @@ from gui.Scaleform.daapi.view.battle.shared.minimap import common
 from gui.Scaleform.daapi.view.battle.shared.minimap import entries
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings
 from gui.Scaleform.daapi.view.battle.shared.minimap.settings import ENTRY_SYMBOL_NAME, SettingsTypes
+from gui.Scaleform.genConsts.BATTLE_MINIMAP_CONSTS import BATTLE_MINIMAP_CONSTS
 from gui.battle_control import avatar_getter, minimap_utils, matrix_factory
 from gui.battle_control.arena_info.interfaces import IVehiclesAndPositionsController, IArenaVehiclesController
 from gui.battle_control.arena_info.settings import INVALIDATE_OP
@@ -855,8 +856,11 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         vehicleType = vInfo.vehicleType
         return vehicleType.shortNameWithPrefix
 
+    def _getVehicleClassTag(self, vehicleType):
+        return vehicleType.classTag
+
     def _setVehicleInfo(self, vehicleID, entry, vInfo, guiProps, isSpotted=False):
-        classTag = vInfo.vehicleType.classTag
+        classTag = self._getVehicleClassTag(vInfo.vehicleType)
         name = self._getDisplayedName(vInfo)
         if classTag is not None:
             entry.setVehicleInfo(not guiProps.isFriend, guiProps.name(), classTag, vInfo.isAlive())
@@ -908,10 +912,12 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         self.__clearAoIToFarCallback(vehicleID)
         if self.__showDestroyEntries and entry.setAlive(False) and not entry.wasSpotted():
             isPermanent = self.__isDestroyImmediately
+            state = BATTLE_MINIMAP_CONSTS.STATE_DEAD_PERMANENT
             if not isPermanent:
+                state = BATTLE_MINIMAP_CONSTS.STATE_DEFAULT
                 self.__setDestroyCallback(vehicleID)
             self._move(entry.getID(), _C_NAME.DEAD_VEHICLES)
-            self._invoke(entry.getID(), 'setDead', isPermanent)
+            self._invoke(entry.getID(), 'setDead', state)
         else:
             self.__setActive(entry, False)
 
@@ -930,7 +936,10 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
 
     def _setInAoI(self, entry, isInAoI):
         if entry.setInAoI(isInAoI):
-            self._invoke(entry.getID(), 'setInAoI', isInAoI)
+            self._invoke(entry.getID(), 'setInAoI', isInAoI, self._useVehicleAoIMarker(entry))
+
+    def _useVehicleAoIMarker(self, entry):
+        return False
 
     def _showVehicle(self, vehicleID, location):
         matrix = matrix_factory.makeVehicleMPByLocation(vehicleID, location, self._arenaVisitor.getArenaPositions())
@@ -1012,12 +1021,15 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             animation = ''
         return animation
 
-    @staticmethod
-    def __playSpottedSound(entry):
+    def __playSpottedSound(self, entry):
+        soundEventName = self._getSpottedSoundName(entry)
         soundNotifications = avatar_getter.getSoundNotifications()
         if soundNotifications is not None:
-            soundNotifications.play('enemy_sighted_for_team', position=Math.Matrix(entry.getMatrix()).translation)
+            soundNotifications.play(soundEventName, position=Math.Matrix(entry.getMatrix()).translation)
         return
+
+    def _getSpottedSoundName(self, entry):
+        pass
 
     def __clearDestroyCallback(self, vehicleID):
         callbackID = self.__destroyCallbacksIDs.pop(vehicleID, None)

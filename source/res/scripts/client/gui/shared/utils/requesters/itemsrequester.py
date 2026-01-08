@@ -254,7 +254,6 @@ class REQ_CRITERIA(object):
         ACTIVE_OR_MAIN_IN_NATION_GROUP = RequestCriteria(PredicateCondition(lambda item: item.activeInNationGroup if item.isInInventory else isMainInNationGroupSafe(item.intCD)))
         FAVORITE = RequestCriteria(PredicateCondition(lambda item: item.isFavorite))
         PREMIUM = RequestCriteria(PredicateCondition(lambda item: item.isPremium))
-        SPECIAL = RequestCriteria(PredicateCondition(lambda item: item.isSpecial))
         READY = RequestCriteria(PredicateCondition(lambda item: item.isReadyToFight))
         OBSERVER = RequestCriteria(PredicateCondition(lambda item: item.isObserver))
         EARN_CRYSTALS = RequestCriteria(PredicateCondition(lambda item: item.isEarnCrystals))
@@ -303,7 +302,6 @@ class REQ_CRITERIA(object):
         CAN_SELL = RequestCriteria(PredicateCondition(lambda item: item.canSell))
         CAN_NOT_BE_SOLD = RequestCriteria(PredicateCondition(lambda item: item.canNotBeSold))
         IS_IN_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isInBattle))
-        IS_IN_UNIT = RequestCriteria(PredicateCondition(lambda item: item.isInUnit))
         SECRET = RequestCriteria(PredicateCondition(lambda item: item.isSecret))
         NAME_VEHICLE = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableUserName)))
         NAME_VEHICLE_WITH_SHORT = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableShortUserName or nameVehicle in item.searchableUserName)))
@@ -876,7 +874,8 @@ class ItemsRequester(IItemsRequester):
                  CustomizationInvData.NOVELTY_DATA,
                  CustomizationInvData.DRESSED,
                  CustomizationInvData.PROGRESSION,
-                 CustomizationInvData.SERIAL_NUMBERS)
+                 CustomizationInvData.SERIAL_NUMBERS,
+                 CustomizationInvData.TAG_MASK)
                 for storageKey in storageKeys:
                     for cType, items in itemsDiff.get(storageKey, {}).iteritems():
                         for idx in items.iterkeys():
@@ -998,13 +997,15 @@ class ItemsRequester(IItemsRequester):
 
         def asyncGetItems():
             for typeID in itemTypeID:
+                if BigWorld.player() is None:
+                    break
                 itemGetter = self.getItemByCD
                 protector = criteria.getIntCDProtector()
                 if protector is not None and protector.isUnlinked():
                     callback(result)
                 for intCD in vehicle_items_getter.getItemsIterator(self.__shop.getItemsData(), nationID, typeID, onlyWithPrices):
                     if BigWorld.player() is None:
-                        return
+                        break
                     if protector is not None and protector.isTriggered(intCD):
                         continue
                     item = itemGetter(intCD)
@@ -1014,8 +1015,14 @@ class ItemsRequester(IItemsRequester):
 
             return
 
-        yield future_async.th_await(future_async.distributeLoopOverTicks(asyncGetItems(), minPerTick=minPerTick, maxPerTick=maxPerTick, logID='getItemsAsync', tickLength=0.0))
-        callback(result)
+        try:
+            try:
+                yield future_async.distributeLoopOverTicks(asyncGetItems(), minPerTick=minPerTick, maxPerTick=maxPerTick, logID='getItemsAsync', tickLength=0.0)
+            except future_async.BrokenPromiseError:
+                LOG_DEBUG('getItemsAsync has been destroyed without user decision')
+
+        finally:
+            callback(result)
 
     def getTankmen(self, criteria=REQ_CRITERIA.TANKMAN.ACTIVE):
         result = self.getInventoryTankmen(criteria)

@@ -21,9 +21,10 @@ from gui.battle_pass.battle_pass_bonuses_packers import TmanTemplateBonusPacker
 if typing.TYPE_CHECKING:
     BonusModelType = typing.TypeVar('BonusModelType', bound=BonusModel)
     from gui.shared.gui_items.Vehicle import Vehicle
-    from typing import List
+    from typing import List, Optional
     from frameworks.wulf import Array
     from gui.impl.gen.view_models.views.lobby.battle_pass.reward_item_model import RewardItemModel
+    from gui.server_events.recruit_helper import _BaseRecruitInfo
 _logger = logging.getLogger(__name__)
 _ARMORY_YARD_REST_ICON_NAME = 'default'
 
@@ -180,6 +181,14 @@ class ArmoryYardTmanTemplateBonusPacker(TmanTemplateBonusPacker):
             model.setItem('tankman')
             model.setName('items')
         return model
+
+    @classmethod
+    def _getBonusModel(cls):
+        return RewardItemModel()
+
+    @classmethod
+    def _addAdditionalData(cls, recruitInfo, model):
+        pass
 
 
 def getArmoryYardBonusPackersMap(hasBattleTokens=True):

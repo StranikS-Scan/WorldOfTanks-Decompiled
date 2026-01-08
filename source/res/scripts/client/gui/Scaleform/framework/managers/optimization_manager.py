@@ -141,6 +141,10 @@ class ExternalFullscreenGraphicsOptimizationComponent(object):
         self.__optimizationID = None
         return
 
+    @property
+    def isActive(self):
+        return self.__optimizationID is not None
+
     def init(self):
         g_eventBus.addListener(GameEvent.CHANGE_APP_RESOLUTION, self.__onAppResolutionChanged, scope=EVENT_BUS_SCOPE.GLOBAL)
         app = self.__appLoader.getApp()

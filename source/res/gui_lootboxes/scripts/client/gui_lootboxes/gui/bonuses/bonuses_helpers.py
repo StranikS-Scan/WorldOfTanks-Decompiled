@@ -9,7 +9,6 @@ from helpers import dependency
 from skeletons.gui.system_messages import ISystemMessages
 TOKEN_COMPENSATION_TEMPLATE = 'lb_comp:{}:{}:{}:{}'
 TOKEN_COMPENSATION_PREFIX = 'lb_comp:'
-CURRENCY_TOKENS = ('ny26_mandarin',)
 _logger = logging.getLogger(__name__)
 
 def preformatCompensationValue(rewards):
@@ -19,7 +18,6 @@ def preformatCompensationValue(rewards):
         if tokenID.startswith(TOKEN_COMPENSATION_PREFIX):
             compValue += _getCompensationValueFromToken(tokenID)
 
-    _modifyLBCompensation(rewards)
     for currency in Currency.ALL:
         if compValue.get(currency, 0) > 0:
             currencyValue = rewards.pop(currency, 0)
@@ -29,22 +27,6 @@ def preformatCompensationValue(rewards):
                     rewards[currency] = max(newCurrencyValue, 0)
 
     return
-
-
-def _modifyLBCompensation(rewards):
-    tokens = rewards.get('tokens', {})
-    popTokens = set()
-    for tokenName, info in tokens.iteritems():
-        if tokenName.startswith(TOKEN_COMPENSATION_PREFIX):
-            currency, amount, _, _ = parseCompenstaionToken(tokenName)
-            if currency in CURRENCY_TOKENS:
-                amount *= info['count']
-                tokens[currency]['count'] = tokens[currency]['count'] - amount
-                if tokens[currency]['count'] == 0:
-                    popTokens.add(currency)
-
-    for tokenName in popTokens:
-        tokens.pop(tokenName)
 
 
 def _getCompensationVehicleValue(vehiclesList):

@@ -37,7 +37,8 @@ class _ClassicComponentsConfig(ComponentsConfig):
          (BATTLE_CTRL_ID.ARENA_LOAD_PROGRESS, (DynamicAliases.DRONE_MUSIC_PLAYER,)),
          (BATTLE_CTRL_ID.GAME_MESSAGES_PANEL, (BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,)),
          (BATTLE_CTRL_ID.PREBATTLE_SETUPS_CTRL, (BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL, BATTLE_VIEW_ALIASES.DAMAGE_PANEL)),
-         (BATTLE_CTRL_ID.AMMO, (BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL, BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL))), viewsConfig=((DynamicAliases.DRONE_MUSIC_PLAYER, drone_music_player.DroneMusicPlayer), (DynamicAliases.PREBATTLE_TIMER_SOUND_PLAYER, StartCountdownSoundPlayer)))
+         (BATTLE_CTRL_ID.AMMO, (BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL, BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL)),
+         (BATTLE_CTRL_ID.BATTLE_CONTEXT_HINTS, (BATTLE_VIEW_ALIASES.INFO_BATTLE_CONTEXT_HINT, BATTLE_VIEW_ALIASES.SIXTH_SENSE_CONTEXT_HINT, BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL))), viewsConfig=((DynamicAliases.DRONE_MUSIC_PLAYER, drone_music_player.DroneMusicPlayer), (DynamicAliases.PREBATTLE_TIMER_SOUND_PLAYER, StartCountdownSoundPlayer)))
 
 
 COMMON_CLASSIC_CONFIG = _ClassicComponentsConfig()
@@ -185,6 +186,10 @@ class ClassicPage(SharedPage):
         periodCtrl = self.sessionProvider.shared.arenaPeriod
         if battleCtx.isPlayerObserver() and periodCtrl.getPeriod() in (ARENA_PERIOD.WAITING, ARENA_PERIOD.PREBATTLE):
             self._setComponentsVisibility(hidden={BATTLE_VIEW_ALIASES.DAMAGE_PANEL, BATTLE_VIEW_ALIASES.BATTLE_DAMAGE_LOG_PANEL})
+        hintsCtrl = self.sessionProvider.dynamic.battleContextHintsCtrl
+        if hintsCtrl is not None and hintsCtrl.isStarted():
+            self._setComponentsVisibility(visible={BATTLE_VIEW_ALIASES.INFO_BATTLE_CONTEXT_HINT, BATTLE_VIEW_ALIASES.SIXTH_SENSE_CONTEXT_HINT})
+        return
 
     def _handleGUIToggled(self, event):
         if not self._fullStatsAlias or not self.as_isComponentVisibleS(self._fullStatsAlias):

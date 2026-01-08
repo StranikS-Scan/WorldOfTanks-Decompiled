@@ -38,6 +38,7 @@ from gui.impl.backport.backport_context_menu import BackportContextMenuWindow
 from gui.impl.backport.backport_context_menu import createContextMenuData
 from gui.impl.lobby.battle_royale import BATTLE_ROYALE_LOCK_SOURCE_NAME
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
+from gui.battle_pass.battle_pass_helpers import getIsBpPointsShopEntryPointActive
 from skeletons.connection_mgr import IConnectionManager
 from battle_pass_common import getPresentLevel
 from messenger.storage import storage_getter
@@ -241,19 +242,19 @@ class BrBattleResultsViewInLobby(ViewImpl):
         battlePassModel.setChapterID(chapterID)
         state = BattlePassProgress.BP_STATE_DISABLED
         bpController = self.__battlePassController
-        hasExtra = bpController.hasMarathon()
         isBought = all((bpController.isBought(chapterID=chapter) for chapter in bpController.getChapterIDs()))
         if self.__brController.isBattlePassAvailable(self.__arenaBonusType) and not self.__isObserverResult:
             state = BattlePassProgress.BP_STATE_BOUGHT if isBought else BattlePassProgress.BP_STATE_NORMAL
         if battlePassData['battlePassComplete']:
-            battlePassModel.setFreePoints(battlePassData['availablePoints'])
+            battlePassModel.setFreePoints(battlePassData['availablePoints'] if getIsBpPointsShopEntryPointActive() else 0)
             battlePassModel.setProgressionState(BattlePassProgress.PROGRESSION_COMPLETED)
         else:
-            battlePassModel.setFreePoints(currentLevelPoints)
+            battlePassModel.setFreePoints(currentLevelPoints if getIsBpPointsShopEntryPointActive() else 0)
             battlePassModel.setProgressionState(BattlePassProgress.PROGRESSION_IN_PROGRESS)
         battlePassModel.setIsBattlePassPurchased(battlePassData['hasBattlePass'])
-        battlePassModel.setHasExtra(hasExtra)
         battlePassModel.setBattlePassState(state)
+        battlePassModel.setIsSingleChapter(bpController.isSingleChapter())
+        battlePassModel.setIsBpPointsShopEntryPointActive(getIsBpPointsShopEntryPointActive())
 
     def __setLeaderboard(self, leaderboardModel):
         leaderboard = self.__data.get(BRSections.LEADERBOARD)

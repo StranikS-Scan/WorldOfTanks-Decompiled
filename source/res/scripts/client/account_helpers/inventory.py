@@ -580,6 +580,18 @@ class Inventory(object):
             self.__account.shop.waitForSync(partial(self.__equipOptDevsSequenceOnShopSynced, vehInvID, devices, callback))
             return
 
+    def setCustomizationTags(self, itemCD, mask, newValue, callback):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            proxy = None
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            self.__commandsProxy.perform(AccountCommands.CMD_MARK_CUSTOMIZATION_ITEM, itemCD, mask, int(newValue), proxy)
+            return
+
     def __onGetItemsResponse(self, itemTypeIdx, callback, resultID):
         if resultID < 0:
             if callback is not None:

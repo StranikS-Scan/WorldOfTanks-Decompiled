@@ -167,8 +167,7 @@ def readInt(xmlCtx, section, subsectionName, minVal=None, maxVal=None):
     if v == wrongVal:
         raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
     if minVal is not None and v < minVal or maxVal is not None and v > maxVal:
-        msg = 'subsection is wrong with restrictions {} {} {}'
-        msg.format('minVal = {}'.format(minVal) if minVal is not None else '', 'maxVal = {}'.format(minVal) if maxVal is not None else '', ', value = {}'.format(v) if v != wrongVal else '')
+        msg = 'subsection is wrong with restrictions {} {} {}'.format('minVal = {}'.format(minVal) if minVal is not None else '', 'maxVal = {}'.format(minVal) if maxVal is not None else '', ',value = {}'.format(v) if v != wrongVal else '')
         raiseWrongXml(xmlCtx, subsectionName if subsectionName else section.name, msg)
     return v
 

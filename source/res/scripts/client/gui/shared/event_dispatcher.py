@@ -2,9 +2,9 @@
 # Embedded file name: scripts/client/gui/shared/event_dispatcher.py
 import logging
 import typing
-import adisp
 from operator import attrgetter
 from BWUtil import AsyncReturn
+import adisp
 from CurrentVehicle import HeroTankPreviewAppearance
 from constants import GameSeasonType, RentType
 from debug_utils import LOG_WARNING
@@ -619,7 +619,6 @@ def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, 
                 else:
                     showHeroTankPreview(vehTypeCompDescr, previewAlias=previewAlias, previewBackCb=previewBackCb, previousBackAlias=previousBackAlias, hangarVehicleCD=hangarVehicleCD)
             ClientSelectableCameraObject.switchCamera(entity, 'HeroTank')
-            entity.onSelect()
             break
 
     return
@@ -958,12 +957,6 @@ def showSeniorityRewardAwardWindow(completedQuests, data, notificationMgr=None):
     from gui.impl.lobby.seniority_awards.seniority_reward_award_view import SeniorityRewardAwardWindow
     window = SeniorityRewardAwardWindow(completedQuests, data, R.views.lobby.seniority_awards.SeniorityAwardsView())
     notificationMgr.append(WindowNotificationCommand(window))
-
-
-def showSeniorityVehicleSelectorWindow(giftToken):
-    from gui.impl.lobby.seniority_awards.vehicle_selector import VehicleSelectorWindow
-    window = VehicleSelectorWindow(giftToken)
-    window.load()
 
 
 @dependency.replace_none_kwargs(battlePassController=IBattlePassController)
@@ -2094,15 +2087,6 @@ def closeViewsWithFlags(ignoreViews, viewFlags):
             view.destroyWindow()
 
 
-def showPersonalReservesConversion():
-    from gui.impl.lobby.personal_reserves.reserves_conversion_view import ReservesConversionView
-    uiLoader = dependency.instance(IGuiLoader)
-    contentResId = R.views.lobby.personal_reserves.ReservesConversionView()
-    if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
-        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.personal_reserves.ReservesConversionView(), ReservesConversionView, ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
-    return
-
-
 def showComp7MetaRootView(tabId=None, *args):
     from gui.impl.lobby.comp7.meta_view.meta_root_view import MetaRootView
     g_eventBus.handleEvent(events.Comp7Event(events.Comp7Event.OPEN_META), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -2296,11 +2280,6 @@ def getTechTreeLoadEvent(nation, blueprintMode=False):
 def showDailyQuestsIntroWindow():
     from gui.impl.lobby.daily.daily_intro_screen_view import DailyIntroScreenViewWindow
     DailyIntroScreenViewWindow(parent=getParentWindow()).load()
-
-
-def showNyDailyQuestsInfoWindow():
-    from gui.impl.lobby.daily.ny_daily_quests_info_view import NyDailyQuestsInfoViewWindow
-    NyDailyQuestsInfoViewWindow(parent=getParentWindow()).load()
 
 
 @dependency.replace_none_kwargs(guiLoader=IGuiLoader)

@@ -23,6 +23,7 @@ from gui.battle_control.battle_constants import DEVICE_STATES_RANGE, DEVICE_STAT
 from gui.battle_control.battle_constants import HIT_INDICATOR_MAX_ON_SCREEN
 from gui.battle_control.battle_constants import PREDICTION_INDICATOR_MAX_ON_SCREEN
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CROSSHAIR_VIEW_ID
+from gui.battle_control.battle_context_hints.common import HintId
 from gui.battle_control.controllers.hit_direction_ctrl import IHitIndicator, HitType
 from gui.shared.crits_mask_parser import critsParserGenerator
 from gui.shared.utils.TimeInterval import TimeInterval
@@ -34,6 +35,7 @@ from shared_utils import CONST_CONTAINER, safeCancelCallback
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
+from th_async import th_async, th_await, delay
 if typing.TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor
     from _WWISEStubs import PySound
@@ -474,6 +476,7 @@ class SixthSenseIndicator(SixthSenseMeta):
         super(SixthSenseIndicator, self)._dispose()
         return
 
+    @th_async
     def __show(self, immidiate=False):
         if not self.__enabled:
             return
@@ -481,9 +484,16 @@ class SixthSenseIndicator(SixthSenseMeta):
             if not immidiate and self.__detectionSoundEvent is not None:
                 self.__playSoundEvent(self.__detectionSoundEvent)
                 self.sessionProvider.shared.optionalDevices.soundManager.playLightbulbEffect()
-            self.as_showS(immidiate)
+            timeout = 0
             if not immidiate:
                 self.__callbackID = BigWorld.callback(GUI_SETTINGS.sixthSenseDuration / 1000.0, self.__showPermanent)
+                hintsCtrl = self.sessionProvider.dynamic.battleContextHintsCtrl
+                if hintsCtrl is not None:
+                    activated = hintsCtrl.activateHint(HintId.PLAYER_VEHICLE_OBSERVED)
+                    if activated:
+                        timeout = 0.1
+            yield th_await(delay(timeout))
+            self.as_showS(immidiate)
             return
 
     def __showPermanent(self):

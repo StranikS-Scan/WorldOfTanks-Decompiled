@@ -55,7 +55,6 @@ CONVERTERS_EXT_DATA_FORMATTERS = 48
 BONUS_MERGERS = 49
 SERVICE_CHANNEL_SUBFORMATTERS = 50
 QUESTS_FROM_EXTENSIONS_SOURCE = 51
-FESTIVITY_FACTORY = 52
 
 class _CollectEventsManager(object):
 
@@ -153,18 +152,6 @@ def registerGameControllers(controllersList):
 
 def collectGameControllers(configurator):
     __collectEM.handleEvent(GAME_CONTROLLERS, ctx={'configurator': configurator})
-
-
-def registerFestivityFactory(factory):
-
-    def onCollect(ctx):
-        ctx['factories'].append(factory)
-
-    __collectEM.addListener(FESTIVITY_FACTORY, onCollect)
-
-
-def collectFestivityFactories():
-    return __collectEM.handleEvent(FESTIVITY_FACTORY, ctx={'factories': []}).get('factories', [])
 
 
 def registerBattleControllerRepo(guiType, repoCls):

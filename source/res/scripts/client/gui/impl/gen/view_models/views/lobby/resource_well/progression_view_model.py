@@ -16,7 +16,7 @@ class ProgressionState(Enum):
 class ProgressionViewModel(ViewModel):
     __slots__ = ('onPreview', 'onAboutClick', 'onResourcesContribute', 'onResourcesReturn', 'onHangarShow', 'onViewLoaded', 'onClose')
 
-    def __init__(self, properties=11, commands=7):
+    def __init__(self, properties=12, commands=7):
         super(ProgressionViewModel, self).__init__(properties=properties, commands=commands)
 
     def getStartDate(self):
@@ -37,63 +37,70 @@ class ProgressionViewModel(ViewModel):
     def setTimeLeft(self, value):
         self._setNumber(2, value)
 
-    def getServerTimestamp(self):
+    def getBeforeEventTimeLeft(self):
         return self._getNumber(3)
 
-    def setServerTimestamp(self, value):
+    def setBeforeEventTimeLeft(self, value):
         self._setNumber(3, value)
 
+    def getServerTimestamp(self):
+        return self._getNumber(4)
+
+    def setServerTimestamp(self, value):
+        self._setNumber(4, value)
+
     def getIsEventEndingSoon(self):
-        return self._getBool(4)
+        return self._getBool(5)
 
     def setIsEventEndingSoon(self, value):
-        self._setBool(4, value)
+        self._setBool(5, value)
 
     def getTopRewardPlayersCount(self):
-        return self._getNumber(5)
-
-    def setTopRewardPlayersCount(self, value):
-        self._setNumber(5, value)
-
-    def getRegularRewardVehiclesCount(self):
         return self._getNumber(6)
 
-    def setRegularRewardVehiclesCount(self, value):
+    def setTopRewardPlayersCount(self, value):
         self._setNumber(6, value)
 
+    def getRegularRewardVehiclesCount(self):
+        return self._getNumber(7)
+
+    def setRegularRewardVehiclesCount(self, value):
+        self._setNumber(7, value)
+
     def getRewards(self):
-        return self._getArray(7)
+        return self._getArray(8)
 
     def setRewards(self, value):
-        self._setArray(7, value)
+        self._setArray(8, value)
 
     @staticmethod
     def getRewardsType():
         return RewardModel
 
     def getProgressionState(self):
-        return ProgressionState(self._getString(8))
+        return ProgressionState(self._getString(9))
 
     def setProgressionState(self, value):
-        self._setString(8, value.value)
+        self._setString(9, value.value)
 
     def getProgression(self):
-        return self._getNumber(9)
+        return self._getNumber(10)
 
     def setProgression(self, value):
-        self._setNumber(9, value)
+        self._setNumber(10, value)
 
     def getVehicleName(self):
-        return self._getString(10)
+        return self._getString(11)
 
     def setVehicleName(self, value):
-        self._setString(10, value)
+        self._setString(11, value)
 
     def _initialize(self):
         super(ProgressionViewModel, self)._initialize()
         self._addNumberProperty('startDate', 0)
         self._addNumberProperty('endDate', 0)
         self._addNumberProperty('timeLeft', 0)
+        self._addNumberProperty('beforeEventTimeLeft', 0)
         self._addNumberProperty('serverTimestamp', 0)
         self._addBoolProperty('isEventEndingSoon', False)
         self._addNumberProperty('topRewardPlayersCount', 0)

@@ -6,3 +6,6 @@ class EpicDeploymentMapMeta(EpicMinimapMeta):
 
     def as_setMapDimensionsS(self, widthPx, heightPx):
         return self.flashObject.as_setMapDimensions(widthPx, heightPx) if self._isDAAPIInited() else None
+
+    def as_setDirectionS(self, currentDirection, selectedDirection):
+        return self.flashObject.as_setDirection(currentDirection, selectedDirection) if self._isDAAPIInited() else None

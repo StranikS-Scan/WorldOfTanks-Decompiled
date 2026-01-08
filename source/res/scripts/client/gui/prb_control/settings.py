@@ -174,6 +174,7 @@ class PREBATTLE_ACTION_NAME(object):
     BATTLE_ROYALE_SQUAD = 'battleRoyaleSquad'
     MAPBOX_SQUAD = 'mapboxSquad'
     COMP7_SQUAD = 'comp7Squad'
+    EPIC_SQUAD = 'epicSquad'
     RANKED_SQUAD = 'rankedSquad'
     TOURNAMENT = 'tournament'
     CLAN = 'clan'

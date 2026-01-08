@@ -35,31 +35,56 @@
     <freqX>	0	</freqX>
     <freqZ>	0	</freqZ>
   </water>
-  <numPlayerGroups>	3	</numPlayerGroups>
-  <playerGroupLimit>	10	</playerGroupLimit>
   <gameplayTypes>
     <ctf30x30>
+      <numPlayerGroups>	3	</numPlayerGroups>
+      <playerGroupLimit>	10	</playerGroupLimit>
       <teamSpawnPoints>
         <team1>
-          <position>	-27.661 -684.602	</position>
-          <position>	93.589 -640.343	</position>
-          <position>	350.985 -466.222	</position>
+          <position>	-27.660999 -684.601990	</position>
+          <position>	93.588997 -640.343018	</position>
+          <position>	350.984985 -466.221985	</position>
         </team1>
         <team2>
-          <position>	-310.345 374.131	</position>
-          <position>	-106.261 355.306	</position>
-          <position>	-30.516 493.922	</position>
+          <position>	-310.345001 374.131012	</position>
+          <position>	-106.261002 355.306000	</position>
+          <position>	-30.516001 493.921997	</position>
         </team2>
       </teamSpawnPoints>
       <teamBasePositions>
         <team1>
-          <position1>	69.251045 -529.359802	</position1>
+          <position1>	69.251053 -529.359863	</position1>
         </team1>
         <team2>
-          <position2>	-80.632751 337.295380	</position2>
+          <position2>	-80.632759 337.295410	</position2>
         </team2>
       </teamBasePositions>
     </ctf30x30>
+    <assault2>
+      <maxPlayersInTeam>	15	</maxPlayersInTeam>
+      <boundingBox>
+        <bottomLeft>	-700.000000 -700.000000	</bottomLeft>
+        <upperRight>	200.000000 200.000000	</upperRight>
+      </boundingBox>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-25.220552 -584.548218	</position>
+        </team1>
+        <team2>
+          <position>	-455.497772 96.293610	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	-441.086395 -510.007751	</position1>
+          <position2>	51.328571 -191.838882	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+      <minimap>	spaces/222_er_clime/mmap_assault2.dds	</minimap>
+    </assault2>
   </gameplayTypes>
   <roadMap></roadMap>
   <mapActivities></mapActivities>

@@ -2319,6 +2319,46 @@
   <_106mm_HEP_M346A1>
     <id>	31010	</id>
     <userString>	#japan_vehicles:_106mm_HEP_M346A1	</userString>
+    <icon>	he_modern_premium	</icon>
+    <price>	5600	</price>
+    <improved>	true	</improved>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	106	</caliber>
+    <explosionRadius>	1.95	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.95	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	200	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_106mm_HEP_M346A1>
+  <_106mm_HEAT_M344A1>
+    <id>	31011	</id>
+    <userString>	#japan_vehicles:_106mm_HEAT_M344A1	</userString>
+    <icon>	hc	</icon>
+    <price>	1400	</price>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	106	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	300	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_106mm_HEAT_M344A1>
+  <_106mm_HEP_M346A2>
+    <id>	31012	</id>
+    <userString>	#japan_vehicles:_106mm_HEP_M346A2	</userString>
     <icon>	he_modern	</icon>
     <price>	1200	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
@@ -2328,34 +2368,18 @@
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	450	</armor>
+      <armor>	400	</armor>
       <devices>	150	</devices>
     </damage>
     <armorSpalls>
       <impactRadius>	1.95	</impactRadius>
       <coneAngle>	90	</coneAngle>
       <damage>
-        <armor>	225	</armor>
+        <armor>	200	</armor>
         <devices>	75	</devices>
       </damage>
     </armorSpalls>
-  </_106mm_HEP_M346A1>
-  <_106mm_HEAT_M344A1>
-    <id>	31011	</id>
-    <userString>	#japan_vehicles:_106mm_HEAT_M344A1	</userString>
-    <icon>	hc_premium	</icon>
-    <price>	4800	</price>
-    <improved>	true	</improved>
-    <kind>	HOLLOW_CHARGE	</kind>
-    <caliber>	106	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainHollowCharge	</effects>
-    <damage>
-      <armor>	365	</armor>
-      <devices>	150	</devices>
-    </damage>
-    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
-  </_106mm_HEAT_M344A1>
+  </_106mm_HEP_M346A2>
   <_120mm_Anti_Submarine_APHE>
     <id>	62	</id>
     <userString>	#japan_vehicles:_120mm_Anti_Submarine_APHE	</userString>

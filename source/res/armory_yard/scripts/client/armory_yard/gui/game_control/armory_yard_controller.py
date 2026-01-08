@@ -17,7 +17,7 @@ from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_main_v
 from armory_yard.managers.sound_manager import setSoundDroneMode
 from armory_yard.managers.camera_manager import CameraManager
 from armory_yard.managers.scene_loading_manager import SceneLoadingManager
-from constants import Configs
+from constants import Configs, EVENT_TYPE
 from gui.server_events.events_helpers import isArmoryYardQuest
 from gui.shared.events import ArmoryYardEvent
 from gui.shared.money import Money, Currency, ZERO_MONEY
@@ -53,9 +53,10 @@ from gui.shared.utils.functions import makeTooltip
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from typing import Tuple, Callable, List
+    from typing import Tuple, Callable, List, Optional
     from season_common import GameSeason
     from armory_yard.gui.shared.armory_dynamic_quest import ArmoryDynamicQuest
+    from gui.server_events.event_items import Quest
 _logger = logging.getLogger(__name__)
 
 class BundleState(Enum):
@@ -300,9 +301,12 @@ class ArmoryYardController(IArmoryYardController):
         for questID in self.__eventsCache.getGroups().get(groupName, Group(0, {})).getGroupEvents():
             quest = self.__eventsCache.getQuestByID(questID)
             if quest is not None:
-                condQuests = self.__rerollController.getConditionQuestsByTokenQuest(quest)
-                if condQuests is not None:
-                    yield condQuests
+                if self.__rerollController.isRerollEnabled():
+                    condQuests = self.__rerollController.getConditionQuestsByTokenQuest(quest)
+                    if condQuests is not None:
+                        yield condQuests
+                elif quest.getType() == EVENT_TYPE.BATTLE_QUEST:
+                    yield [quest]
 
         return
 

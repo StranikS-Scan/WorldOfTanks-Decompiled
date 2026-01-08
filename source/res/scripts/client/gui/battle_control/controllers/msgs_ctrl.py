@@ -2,9 +2,9 @@
 # Embedded file name: scripts/client/gui/battle_control/controllers/msgs_ctrl.py
 import weakref
 import BigWorld
-from helpers import dependency
 import BattleReplay
 import Event
+from helpers import dependency
 from ReplayEvents import g_replayEvents
 from constants import ATTACK_REASON_INDICES as _AR_INDICES
 from gui.battle_control.arena_info.arena_vos import EPIC_BATTLE_KEYS
@@ -12,6 +12,7 @@ from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.controllers.interfaces import IBattleController
 from items.battle_royale import isSpawnedBot, isHunterBot
 from skeletons.gui.battle_session import IBattleSessionProvider
+from supply_shared import Supply
 
 class _ENTITY_TYPE(object):
     UNKNOWN = 'unknown'
@@ -300,6 +301,15 @@ class EpicBattleMessagesController(BattleMessagesController):
                 if playerLane != targetLane and playerLane != attackerLane:
                     return False
         return True
+
+    def showAllyHitMessage(self, vehicleID=None, isMultiHit=False):
+        if vehicleID is not None:
+            vType = self._battleCtx.getVehicleInfo(vID=vehicleID).vehicleType
+            if Supply.isSupply(vType.tags):
+                self.onShowPlayerMessageByKey('ALLY_HIT_SUPPLY', {'entity': '({})'.format(vType.shortNameWithPrefix)}, (('entity', vehicleID),))
+                return
+        super(EpicBattleMessagesController, self).showAllyHitMessage(vehicleID, isMultiHit)
+        return
 
 
 @dependency.replace_none_kwargs(battleSessionProvider=IBattleSessionProvider)

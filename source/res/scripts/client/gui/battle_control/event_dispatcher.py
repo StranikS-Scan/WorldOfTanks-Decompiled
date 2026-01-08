@@ -160,3 +160,7 @@ def showCommanderCamHint(show):
 
 def togglePiercingDebugPanel():
     g_eventBus.handleEvent(GameEvent(GameEvent.TOGGLE_DEBUG_PIERCING_PANEL), scope=_SCOPE)
+
+
+def activateBattleContextHint():
+    g_eventBus.handleEvent(GameEvent(GameEvent.BATTLE_CONTEXT_HINT_ACTIVATED), scope=_SCOPE)

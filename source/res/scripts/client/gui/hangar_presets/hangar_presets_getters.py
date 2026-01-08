@@ -82,6 +82,11 @@ class Comp7PresetsGetter(DefaultPresetsGetter):
     _QUEUE_TYPE = QUEUE_TYPE.COMP7
 
 
+class WgshPresetsGetter(DefaultPresetsGetter):
+    __slots__ = ()
+    _QUEUE_TYPE = QUEUE_TYPE.STRONGHOLD_UNITS
+
+
 class MapboxPresetsGetter(DefaultPresetsGetter):
     __slots__ = ()
     _QUEUE_TYPE = QUEUE_TYPE.MAPBOX

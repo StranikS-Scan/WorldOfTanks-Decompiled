@@ -6,8 +6,10 @@ from constants import QUEUE_TYPE
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.prb_control import prbDispatcherProperty
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.base import vehicleAmmoCheck
+from gui.prb_control.entities.base.ctx import LeavePrbAction
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueEntryPoint, PreQueueEntity, PreQueueSubscriber
 from gui.prb_control.entities.epic.pre_queue.actions_validator import EpicActionsValidator
 from gui.prb_control.entities.epic.pre_queue.ctx import EpicQueueCtx
@@ -20,6 +22,7 @@ from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG, PRE_QUEUE_JOIN_ERRORS
 from gui.prb_control.storages import prequeue_storage_getter
 from gui.periodic_battles.models import PrimeTimeStatus
+from adisp import adisp_process
 from helpers import dependency, i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
@@ -85,8 +88,17 @@ class EpicEntity(PreQueueEntity):
             return SelectResult(True)
         return SelectResult(True, EpicSquadEntryPoint(accountsToInvite=action.accountsToInvite)) if name == PREBATTLE_ACTION_NAME.SQUAD else super(EpicEntity, self).doSelectAction(action)
 
+    def onKickedFromQueue(self, queueType, *args):
+        super(EpicEntity, self).onKickedFromQueue(queueType, *args)
+        if not self.__epicController.isEnabled():
+            self._doLeave()
+
     def getPermissions(self, pID=None, **kwargs):
         return EpicPermissions(self.isInQueue())
+
+    @prbDispatcherProperty
+    def _prbDispatcher(self):
+        return None
 
     def _createActionsValidator(self):
         return EpicActionsValidator(self)
@@ -112,3 +124,7 @@ class EpicEntity(PreQueueEntity):
 
     def _exitFromQueueUI(self):
         g_eventDispatcher.loadHangar()
+
+    @adisp_process
+    def _doLeave(self, isExit=True):
+        yield self._prbDispatcher.doLeaveAction(LeavePrbAction(isExit))

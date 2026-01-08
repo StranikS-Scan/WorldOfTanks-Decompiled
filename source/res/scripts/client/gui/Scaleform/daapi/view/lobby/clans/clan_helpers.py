@@ -26,5 +26,15 @@ def getStrongholdEventUrl(lobbyContext=None):
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def getStrongholdEventProgressionUrl(lobbyContext=None):
+    return lobbyContext.getServerSettings().getClansConfig().get(ClansConfig.STRONGHOLD_EVENT_PROGRESSION_URL)
+
+
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def getStrongholdEventBattleModeSettings(lobbyContext=None):
     return lobbyContext.getServerSettings().getClansConfig().get(ClansConfig.STRONGHOLD_EVENT_BATTLE_MODE, ('', 0))
+
+
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def getStrongholdEventFreezeJournalUrl(lobbyContext=None):
+    return lobbyContext.getServerSettings().getClansConfig().get(ClansConfig.STRONGHOLD_EVENT_FREEZE_JOURNAL_URL)

@@ -75,6 +75,10 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     LIMITED_UI_2 = 'LIMITED_UI_2'
     ARMORY_YARD = 'ARMORY_YARD'
     NEW_YEAR = 'NEW_YEAR'
+    BATTLE_CONTEXT_HINTS = 'BATTLE_CONTEXT_HINTS'
+    BATTLE_CONTEXT_HINTS_2 = 'BATTLE_CONTEXT_HINTS_2'
+    BATTLE_CONTEXT_HINTS_3 = 'BATTLE_CONTEXT_HINTS_3'
+    BATTLE_CONTEXT_HINTS_GROUP = (BATTLE_CONTEXT_HINTS, BATTLE_CONTEXT_HINTS_2, BATTLE_CONTEXT_HINTS_3)
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2, ONCE_ONLY_HINTS_3)
 
 
@@ -159,6 +163,29 @@ class LIMITED_UI_SPAM_OFF(CONST_CONTAINER):
 class ARMORY_YARD_KEYS(CONST_CONTAINER):
     BUILD_PROGRESS = 'buildProgress'
     CURRENT_SEASON = 'currentSeason'
+
+
+class BATTLE_CONTEXT_HINTS(CONST_CONTAINER):
+    PLAYER_VEHICLE_OBSERVED = 'PlayerVehicleObserved'
+    KILLED_WHILE_OBSERVED = 'KilledWhileObserved'
+    IN_SAFETY_WHILE_NOT_OBSERVED = 'InSafetyWhileNotObserved'
+    ENGINE_DAMAGE_REPAIR_KIT = 'EngineDamageRepairKit'
+    AMMUNITION_DAMAGE_REPAIR_KIT = 'AmmunitionDamageRepairKit'
+    FUELTANK_DAMAGE_REPAIR_KIT = 'FueltankDamageRepairKit'
+    GUN_ROTATOR_DAMAGE_REPAIR_KIT = 'GunRotatorDamageRepairKit'
+    GUN_DAMAGE_REPAIR_KIT = 'GunDamageRepairKit'
+    AMMUNITION_CRIT = 'AmmunitionCrit'
+    FUELTANK_CRIT = 'FueltankCrit'
+    GUN_ROTATOR_DESTROY_REPAIR_KIT = 'GunRotatorDestroyRepairKit'
+    ENGINE_DESTROY_REPAIR_KIT = 'EngineDestroyRepairKit'
+    GUN_DESTROY_REPAIR_KIT = 'GunDestroyRepairKit'
+    TRACK_DESTROY_REPAIR_KIT = 'TrackDestroyRepairKit'
+    MODULE_DAMAGE = 'ModuleDamage'
+    COMMANDER_DAMAGE_MED_KIT = 'CommanderDamageMedKit'
+    DRIVER_DAMAGE_MED_KIT = 'DriverDamageMedKit'
+    GUNNER_DAMAGE_MED_KIT = 'GunnerDamageMedKit'
+    LOADER_DAMAGE_MED_KIT = 'LoaderDamageMedKit'
+    RADIOMAN_DAMAGE_MED_KIT = 'RadiomanDamageMedKit'
 
 
 class ServerSettingsManager(object):
@@ -589,7 +616,8 @@ class ServerSettingsManager(object):
                                            OnceOnlyHints.PARAGONS_ENTRY_POINT_HINT: 7,
                                            OnceOnlyHints.PARAGONS_RESEARCH_BUTTON_HINT: 8,
                                            OnceOnlyHints.BIRTHDAY_POSTBATTLE_EXTRA_TAB_HINT: 9,
-                                           OnceOnlyHints.ADD_ECONOMIC_DIRECTIVES_HINT: 10}, offsets={}),
+                                           OnceOnlyHints.ADD_ECONOMIC_DIRECTIVES_HINT: 10,
+                                           OnceOnlyHints.EPIC_SUPPLY_INFO_HINT: 11}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESET_CRITS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -858,7 +886,6 @@ class ServerSettingsManager(object):
                                   NewYearStorageKeys.NY_WELCOME_NOTIFICATION: 2,
                                   NewYearStorageKeys.NY_PET_TOYS_REMOVED: 3,
                                   NewYearStorageKeys.NY_FIRST_QUEST_VIDEO_VISITED: 4,
-                                  NewYearStorageKeys.NY_TAMAGOTCHI_TUTORIAL_COMPLETED: 5,
                                   NewYearStorageKeys.DECORATIONS_POPOVER_VIEWED: 9,
                                   NewYearStorageKeys.DECORATIONS_POPOVER_BROKEN: 10}, offsets={NewYearStorageKeys.NY_FIRST_QUEST_ENTRANCE: Offset(11, 63 << 11)}),
      SETTINGS_SECTIONS.VERSUS_AI_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
@@ -915,7 +942,27 @@ class ServerSettingsManager(object):
                                                      'role_SPG': 25,
                                                      'role_SPG_flame': 26,
                                                      'role_SPG_assault': 27,
-                                                     'paragons': 29}, offsets={})}
+                                                     'paragons': 29}, offsets={}),
+     SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS: Section(masks={}, offsets={BATTLE_CONTEXT_HINTS.PLAYER_VEHICLE_OBSERVED: Offset(0, 31),
+                                              BATTLE_CONTEXT_HINTS.KILLED_WHILE_OBSERVED: Offset(5, 127 << 5),
+                                              BATTLE_CONTEXT_HINTS.IN_SAFETY_WHILE_NOT_OBSERVED: Offset(12, 15 << 12),
+                                              BATTLE_CONTEXT_HINTS.ENGINE_DAMAGE_REPAIR_KIT: Offset(16, 7 << 16),
+                                              BATTLE_CONTEXT_HINTS.AMMUNITION_DAMAGE_REPAIR_KIT: Offset(19, 7 << 19),
+                                              BATTLE_CONTEXT_HINTS.FUELTANK_DAMAGE_REPAIR_KIT: Offset(22, 7 << 22),
+                                              BATTLE_CONTEXT_HINTS.GUN_ROTATOR_DAMAGE_REPAIR_KIT: Offset(25, 7 << 25),
+                                              BATTLE_CONTEXT_HINTS.GUN_DAMAGE_REPAIR_KIT: Offset(28, 7 << 28)}),
+     SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS_2: Section(masks={}, offsets={BATTLE_CONTEXT_HINTS.AMMUNITION_CRIT: Offset(0, 7),
+                                                BATTLE_CONTEXT_HINTS.FUELTANK_CRIT: Offset(3, 7 << 3),
+                                                BATTLE_CONTEXT_HINTS.GUN_ROTATOR_DESTROY_REPAIR_KIT: Offset(6, 7 << 6),
+                                                BATTLE_CONTEXT_HINTS.ENGINE_DESTROY_REPAIR_KIT: Offset(9, 7 << 9),
+                                                BATTLE_CONTEXT_HINTS.GUN_DESTROY_REPAIR_KIT: Offset(12, 7 << 12),
+                                                BATTLE_CONTEXT_HINTS.TRACK_DESTROY_REPAIR_KIT: Offset(15, 7 << 15),
+                                                BATTLE_CONTEXT_HINTS.MODULE_DAMAGE: Offset(18, 3 << 18),
+                                                BATTLE_CONTEXT_HINTS.COMMANDER_DAMAGE_MED_KIT: Offset(20, 7 << 20),
+                                                BATTLE_CONTEXT_HINTS.DRIVER_DAMAGE_MED_KIT: Offset(23, 7 << 23),
+                                                BATTLE_CONTEXT_HINTS.GUNNER_DAMAGE_MED_KIT: Offset(26, 7 << 26),
+                                                BATTLE_CONTEXT_HINTS.LOADER_DAMAGE_MED_KIT: Offset(29, 7 << 29)}),
+     SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS_3: Section(masks={}, offsets={BATTLE_CONTEXT_HINTS.RADIOMAN_DAMAGE_MED_KIT: Offset(0, 7)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -1392,7 +1439,10 @@ class ServerSettingsManager(object):
          SETTINGS_SECTIONS.LIMITED_UI_2: {},
          SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS: {},
          'nyStorage': {},
-         SETTINGS_SECTIONS.ARMORY_YARD: {}}
+         SETTINGS_SECTIONS.ARMORY_YARD: {},
+         SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS: {},
+         SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS_2: {},
+         SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS_3: {}}
         yield migrateToVersion(currentVersion, self._core, data)
         self._setSettingsSections(data)
         callback(self)
@@ -1560,6 +1610,12 @@ class ServerSettingsManager(object):
             clearLimitedUI = clear.get(luiStorage, 0)
             if limitedUI or clearLimitedUI:
                 settings[luiStorage] = self._buildSectionSettings(luiStorage, limitedUI) ^ clearLimitedUI
+
+        for hintsSection in SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS_GROUP:
+            hints = data.get(hintsSection, {})
+            clearHints = clear.get(hintsSection, 0)
+            if hints or clearHints:
+                settings[hintsSection] = self._buildSectionSettings(hintsSection, hints) ^ clearHints
 
         version = data.get(VERSION)
         if version is not None:

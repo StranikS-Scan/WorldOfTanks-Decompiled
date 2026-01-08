@@ -95,7 +95,6 @@ BONUS_TAG_HANDLER_MAP = {Currency.CREDITS: lambda b: BonusesSortTags.CURRENCY,
  'dossier': lambda b: BonusesSortTags.CUSTOMIZATION,
  'tmanToken': _getTankmenTokenTag,
  'battleToken': _getTokensTag,
- 'lootBoxToken': _getTokensTag,
  'freeXP': lambda b: BonusesSortTags.CURRENCY,
  'entitlements': lambda b: BonusesSortTags.CURRENCY}
 
@@ -124,8 +123,7 @@ def getTokensSortKey(bonus, guiLootBoxController=None):
 BONUSES_KEY_FUNC = {'items': lambda b: first(b.getItems()),
  'crewBooks': lambda b: first(b.getItems()),
  'vehicles': getVehBonusSortKey,
- 'battleToken': getTokensSortKey,
- 'lootBoxToken': getTokensSortKey}
+ 'battleToken': getTokensSortKey}
 
 def _defaultBonusKeyFunc(bonus):
     return bonus.getName()

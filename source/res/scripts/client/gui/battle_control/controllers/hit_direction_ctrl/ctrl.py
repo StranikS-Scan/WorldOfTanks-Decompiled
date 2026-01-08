@@ -17,6 +17,7 @@ from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
+from supply_shared import Supply
 _logger = logging.getLogger(__name__)
 
 class HitDirectionController(IViewComponentsController):
@@ -91,7 +92,8 @@ class HitDirectionController(IViewComponentsController):
         atackerVehType = atackerVehInfo.vehicleType
         isAlly = self.__arenaDP.isAllyTeam(atackerVehInfo.team)
         playerVehType = self.__arenaDP.getVehicleInfo(damagedID).vehicleType
-        hitData = HitData(yaw=hitDirYaw, attackerID=attackerID, isAlly=isAlly, damage=damage, attackerVehName=atackerVehType.shortNameWithPrefix, isBlocked=isBlocked, attackerVehClassTag=atackerVehType.classTag, critFlags=critFlags, playerVehMaxHP=playerVehType.maxHealth, isHighExplosive=isHighExplosive, attackReasonID=attackReasonID, friendlyFireMode=self.__isFriendlyFireMode())
+        attackerTag = self._getAttackerTag(atackerVehType)
+        hitData = HitData(yaw=hitDirYaw, attackerID=attackerID, isAlly=isAlly, damage=damage, attackerVehName=atackerVehType.shortNameWithPrefix, isBlocked=isBlocked, attackerVehClassTag=attackerTag, critFlags=critFlags, playerVehMaxHP=playerVehType.maxHealth, isHighExplosive=isHighExplosive, attackReasonID=attackReasonID, friendlyFireMode=self.__isFriendlyFireMode())
         return self.__uiHitComponents[HitType.HIT_DAMAGE].pull.addHit(hitData)
 
     def addArtyHitPrediction(self, yaw):
@@ -121,6 +123,9 @@ class HitDirectionController(IViewComponentsController):
     def _hideAllHits(self):
         for uiComponent in self.__uiHitComponents.itervalues():
             uiComponent.pull.hideAllHits()
+
+    def _getAttackerTag(self, attackerVehType):
+        return attackerVehType.classTag
 
     def __isFriendlyFireMode(self):
         isFriendlyFireMode = self.sessionProvider.arenaVisitor.bonus.isFriendlyFireMode()
@@ -152,3 +157,9 @@ class HitDirectionControllerPlayer(HitDirectionController):
     def stopControl(self):
         self._hideAllHits()
         super(HitDirectionControllerPlayer, self).stopControl()
+
+
+class EpicHitDirectionController(HitDirectionController):
+
+    def _getAttackerTag(self, attackerVehType):
+        return Supply.getSupplyTag(attackerVehType) if Supply.isSupply(attackerVehType.tags) else super(EpicHitDirectionController, self)._getAttackerTag(attackerVehType)

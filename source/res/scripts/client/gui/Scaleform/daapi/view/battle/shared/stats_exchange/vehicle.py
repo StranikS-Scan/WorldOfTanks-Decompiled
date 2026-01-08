@@ -15,32 +15,43 @@ class ISortedIDsComposer(object):
 
 
 class VehiclesSortedIDsComposer(broker.SingleSideComposer, ISortedIDsComposer):
-    __slots__ = ('_items',)
+    __slots__ = ('_items', '_collectionClass')
 
     def __init__(self, voField='vehiclesIDs', sortKey=vos_collections.VehicleInfoSortKey):
         super(VehiclesSortedIDsComposer, self).__init__(voField=voField, sortKey=sortKey)
+        self._collectionClass = vos_collections.VehiclesInfoCollection
 
     def addSortIDs(self, isEnemy, arenaDP):
-        self._items = vos_collections.VehiclesInfoCollection().ids(arenaDP)
+        self._items = self._collectionClass(sortKey=self._sortKey).ids(arenaDP)
+        self.filterIDs(arenaDP)
 
     def removeObserverIDs(self, arenaDP):
         self._items = [ vID for vID in self._items if not arenaDP.getVehicleInfo(vID).vehicleType.isObserver ]
+
+    def filterIDs(self, arenaDP):
+        self.removeObserverIDs(arenaDP)
 
 
 class AllySortedIDsComposer(VehiclesSortedIDsComposer):
     __slots__ = ()
 
+    def __init__(self, voField='vehiclesIDs', sortKey=vos_collections.VehicleInfoSortKey):
+        super(AllySortedIDsComposer, self).__init__(voField, sortKey)
+        self._collectionClass = vos_collections.AllyItemsCollection
+
     def addSortIDs(self, isEnemy, arenaDP):
-        self._items = vos_collections.AllyItemsCollection(sortKey=self._sortKey).ids(arenaDP)
-        self.removeObserverIDs(arenaDP)
+        super(AllySortedIDsComposer, self).addSortIDs(isEnemy, arenaDP)
 
 
 class EnemySortedIDsComposer(VehiclesSortedIDsComposer):
     __slots__ = ()
 
+    def __init__(self, voField='vehiclesIDs', sortKey=vos_collections.VehicleInfoSortKey):
+        super(EnemySortedIDsComposer, self).__init__(voField, sortKey)
+        self._collectionClass = vos_collections.EnemyItemsCollection
+
     def addSortIDs(self, isEnemy, arenaDP):
-        self._items = vos_collections.EnemyItemsCollection(sortKey=self._sortKey).ids(arenaDP)
-        self.removeObserverIDs(arenaDP)
+        super(EnemySortedIDsComposer, self).addSortIDs(isEnemy, arenaDP)
 
 
 class BiSortedIDsComposer(broker.BiDirectionComposer, ISortedIDsComposer):

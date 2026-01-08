@@ -175,10 +175,7 @@ class _CustomizationCloseConfirmatorsHelper(CloseConfirmatorsHelper):
         return result
 
     def getRestrictedGuiImplViews(self):
-        return super(_CustomizationCloseConfirmatorsHelper, self).getRestrictedGuiImplViews() + [R.views.lobby.common.BrowserView(),
-         R.views.lobby.personal_reserves.ReservesActivationView(),
-         R.views.lobby.personal_reserves.ReservesConversionView(),
-         R.views.lobby.personal_reserves.ReservesIntroView()]
+        return super(_CustomizationCloseConfirmatorsHelper, self).getRestrictedGuiImplViews() + [R.views.lobby.common.BrowserView(), R.views.lobby.personal_reserves.ReservesActivationView(), R.views.lobby.personal_reserves.ReservesIntroView()]
 
     def start(self, closeConfirmator):
         super(_CustomizationCloseConfirmatorsHelper, self).start(closeConfirmator)
@@ -449,7 +446,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             self.soundManager.playInstantSound(SOUNDS.APPLY)
             if self.__ctx.mode.isRegion:
                 outfit = self.__ctx.mode.currentOutfit
-                slotType = CustomizationTabs.SLOT_TYPES[self.__ctx.mode.tabId]
+                slotType = CustomizationTabs.SLOT_TYPES[self.__ctx.tabId]
                 emptyRegions = getEmptyRegions(outfit, slotType)
                 self.service.highlightRegions(emptyRegions)
             if component is not None and not component.isFilled():
@@ -754,7 +751,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__ctx.events.onHideStyleInfo += self.__onHideStyleInfo
         self.__ctx.events.onEditModeEnabled += self.__onEditModeEnabled
         self.__ctx.events.onGetItemBackToHand += self.__onGetItemBackToHand
-        self.__ctx.events.onCloseWindow += self.onCloseWindow
         self.__ctx.events.onSlotSelected += self.__onSlotSelected
         self.__ctx.events.onSlotUnselected += self.__onSlotUnselected
         self.__ctx.events.onAnchorsStateChanged += self.__onAnchorsStateChanged
@@ -857,7 +853,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__ctx.events.onHideStyleInfo -= self.__onHideStyleInfo
         self.__ctx.events.onEditModeEnabled -= self.__onEditModeEnabled
         self.__ctx.events.onGetItemBackToHand -= self.__onGetItemBackToHand
-        self.__ctx.events.onCloseWindow -= self.onCloseWindow
         self.__ctx.events.onSlotSelected -= self.__onSlotSelected
         self.__ctx.events.onSlotUnselected -= self.__onSlotUnselected
         self.__ctx.events.onAnchorsStateChanged -= self.__onAnchorsStateChanged
@@ -867,9 +862,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         if self.__initAnchorsPositionsCallback is not None:
             BigWorld.cancelCallback(self.__initAnchorsPositionsCallback)
             self.__initAnchorsPositionsCallback = None
-        exitCallback = self.__ctx.getExitCallback()
-        if exitCallback is not None:
-            exitCallback.destroy()
         super(MainView, self)._dispose()
         self.__ctx = None
         self.service.closeCustomization()
@@ -889,16 +881,26 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
 
     def __selectFirstVisibleTab(self):
         visibleTabs = self.__bottomPanel.getVisibleTabs()
-        if visibleTabs:
-            self.__ctx.mode.changeTab(visibleTabs[0])
+        currentStyle = self.__ctx.mode.currentOutfit.style
+        isInstalled = self.service.isStyleInstalled()
+        if currentStyle is not None and isInstalled:
+            if currentStyle.is3D and CustomizationTabs.STYLES_3D in visibleTabs:
+                self.__ctx.changeTab(CustomizationTabs.STYLES_3D)
+            elif CustomizationTabs.STYLES_2D in visibleTabs:
+                self.__ctx.changeTab(CustomizationTabs.STYLES_2D)
+            return
         else:
-            _logger.info('There is no visible customization tabs for current vehicle: %s', g_currentVehicle.item)
+            if CustomizationTabs.CAMOUFLAGES in visibleTabs:
+                self.__ctx.changeTab(CustomizationTabs.CAMOUFLAGES)
+            else:
+                _logger.info('There is no visible customization tabs for current vehicle: %s', g_currentVehicle.item)
+            return
 
     def __updateAnchorsData(self):
         self.as_setAnchorsDataS(self._getUpdatedAnchorsData())
 
     def __onRegionHighlighted(self, areaId, regionIdx, highlightingType, highlightingResult):
-        if self.__ctx.mode.tabId in (CustomizationTabs.MODIFICATIONS, CustomizationTabs.STYLES):
+        if self.__ctx.tabId in (CustomizationTabs.MODIFICATIONS,) + CustomizationTabs.STYLES_ALL:
             areaId = Area.MISC
         slotType = self.__ctx.mode.slotType
         if areaId != -1 and regionIdx != -1:
@@ -995,7 +997,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
 
     def __onSlotSelected(self, slotId):
         if self.__ctx.mode.isRegion:
-            if self.__ctx.mode.tabId in (CustomizationTabs.MODIFICATIONS, CustomizationTabs.STYLES):
+            if self.__ctx.tabId in (CustomizationTabs.MODIFICATIONS,) + CustomizationTabs.STYLES_ALL:
                 applyArea = ApplyArea.ALL
             else:
                 applyArea = appliedToFromSlotsIds([slotId])
@@ -1044,7 +1046,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         isDndEnable = True
         if self.__propertiesSheet.visible:
             isDndEnable = False
-        if self.__ctx.mode.tabId in (CustomizationTabs.MODIFICATIONS, CustomizationTabs.STYLES):
+        if self.__ctx.tabId in (CustomizationTabs.MODIFICATIONS,) + CustomizationTabs.STYLES_ALL:
             isDndEnable = False
         self.as_enableDNDS(isDndEnable)
 
@@ -1106,7 +1108,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         anchorVOs = self.__ctx.mode.getAnchorVOs()
         if self.__ctx.mode.isRegion:
             typeRegions = CUSTOMIZATION_ALIASES.ANCHOR_TYPE_REGION
-        elif self.__ctx.mode.tabId == CustomizationTabs.PROJECTION_DECALS:
+        elif self.__ctx.tabId == CustomizationTabs.PROJECTION_DECALS:
             typeRegions = CUSTOMIZATION_ALIASES.ANCHOR_TYPE_PROJECTION_DECAL
         else:
             typeRegions = CUSTOMIZATION_ALIASES.ANCHOR_TYPE_DECAL

@@ -680,16 +680,6 @@ class Progression2dStyleFormater(object):
                  'progressDiff': '+ %s' % backport.getIntegralFormat(0),
                  'progressDiffTooltip': TOOLTIPS.QUESTS_PROGRESS_EARNEDINBATTLE,
                  'questState': state})
-        if event.accountReqs.getTokens():
-            state = cls.getStatus(isCompleted)
-            progresses.append({'progrTooltip': None,
-             'progrBarType': formatters.PROGRESS_BAR_TYPE.SIMPLE,
-             'maxProgrVal': 1,
-             'currentProgrVal': 1,
-             'description': event.getDescription(),
-             'progressDiff': '+ %s' % backport.getIntegralFormat(0),
-             'progressDiffTooltip': TOOLTIPS.QUESTS_PROGRESS_EARNEDINBATTLE,
-             'questState': state})
         title = ''
         itemCD = cls.c11nService.getItemCDByQuestID(event.getID())
         if itemCD:

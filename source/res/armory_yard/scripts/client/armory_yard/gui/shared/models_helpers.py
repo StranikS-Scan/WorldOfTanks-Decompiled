@@ -12,7 +12,38 @@ from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import Iterable, Tuple, Dict, Set
     from armory_yard.gui.shared.armory_dynamic_quest import ArmoryDynamicQuest as ADQuest
+    from gui.server_events.event_items import Quest
     from frameworks.wulf import Array
+
+def _createArmoryQuestModel(quest, tooltipData, chapterID=0, hasBattleTokens=True):
+    vehicleClasses, vehicleLevels, vehicleNations = getRequiredVehicleDescrForQuest(quest)
+    packer = ArmoryYardQuestUIDataPacker(quest, bonusPackerGetter=lambda : getArmoryYardBonusPacker(hasBattleTokens))
+    questModel = packer.pack(model=QuestModel())
+    questModel.setChapterId(chapterID)
+    vehicleTypes = questModel.getVehicleTypes()
+    vehicleTypes.clear()
+    for vehicleClass in vehicleClasses:
+        vehicleTypes.addString(vehicleClass)
+
+    vehicleTypes.invalidate()
+    vehicleNationsModel = questModel.getVehicleNations()
+    vehicleNationsModel.clear()
+    for vehicleNationID in vehicleNations:
+        vehicleNationsModel.addString(NAMES[vehicleNationID])
+
+    vehicleNationsModel.invalidate()
+    battleTypes = questModel.getBattleTypes()
+    battleTypes.clear()
+    battleConditions = quest.preBattleCond.getConditions().find('bonusTypes')
+    for battleType in battleConditions.getValue():
+        battleTypes.addNumber(battleType)
+
+    battleTypes.invalidate()
+    fillIntsArray(vehicleLevels, questModel.getLevels())
+    questModel.setShowLevelsAsRange(isShowLevelsAsRange(vehicleLevels))
+    tooltipData.update(packer.getTooltipData())
+    return questModel
+
 
 def updateArmoryConditionQuestsModel(questsModel, quests, tooltipData, chapterID=0, hasBattleTokens=True):
     questsCompleted = False
@@ -50,6 +81,17 @@ def updateArmoryConditionQuestsModel(questsModel, quests, tooltipData, chapterID
         questsModel.addViewModel(questModel)
 
     return (questsCompleted, tokenQuestID)
+
+
+def updateArmoryBattleQuestsModel(questsModel, quests, tooltipData, chapterID=0, hasBattleTokens=True):
+    questsCompleted = False
+    for quest in quests:
+        if quest.isCompleted():
+            questsCompleted = True
+        questModel = _createArmoryQuestModel(quest, tooltipData, chapterID, hasBattleTokens)
+        questsModel.addViewModel(questModel)
+
+    return questsCompleted
 
 
 def isShowLevelsAsRange(levels):

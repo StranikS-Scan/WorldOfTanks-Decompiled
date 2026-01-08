@@ -86,10 +86,10 @@ class _Condition(IBattleFieldListener, IAbstractPeriodView, ITeamBasesListener):
     def getSeverity(self):
         return self.__severity
 
-    def addCapturingTeamBase(self, clientID, playerTeam, points, rate, timeLeft, invadersCnt, capturingStopped):
+    def addCapturingTeamBase(self, clientID, playerTeam, points, rate, timeLeft, invadersCnt, capturingStopped, extraInvader=False):
         return False
 
-    def updateTeamBasePoints(self, clientID, points, rate, timeLeft, invadersCnt):
+    def updateTeamBasePoints(self, clientID, points, rate, timeLeft, invadersCnt, extraInvader=False):
         return False
 
     def removeTeamBase(self, clientID):
@@ -236,7 +236,7 @@ class _BaseCaptureCondition(_Condition):
         pass
 
     @_initCondition
-    def addCapturingTeamBase(self, clientID, playerTeam, points, rate, timeLeft, invadersCnt, capturingStopped):
+    def addCapturingTeamBase(self, clientID, playerTeam, points, rate, timeLeft, invadersCnt, capturingStopped, extraInvader=False):
         baseTeam, _ = team_bases_ctrl.parseClientTeamBaseID(clientID)
         if self._getValidBaseMask() == baseTeam ^ playerTeam:
             self.__pointsToBase[clientID] = points
@@ -245,7 +245,7 @@ class _BaseCaptureCondition(_Condition):
         return False
 
     @_initCondition
-    def updateTeamBasePoints(self, clientID, points, rate, timeLeft, invadersCnt):
+    def updateTeamBasePoints(self, clientID, points, rate, timeLeft, invadersCnt, extraInvader=False):
         if clientID in self.__pointsToBase:
             self.__pointsToBase[clientID] = points
             self.__setRtpcGlobal(points, invadersCnt)
@@ -360,11 +360,11 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
         return
 
     @_delegate
-    def addCapturingTeamBase(self, clientID, playerTeam, points, rate, timeLeft, invadersCnt, capturingStopped):
+    def addCapturingTeamBase(self, clientID, playerTeam, points, rate, timeLeft, invadersCnt, capturingStopped, extraInvader=False):
         pass
 
     @_delegate
-    def updateTeamBasePoints(self, clientID, points, rate, timeLeft, invadersCnt):
+    def updateTeamBasePoints(self, clientID, points, rate, timeLeft, invadersCnt, extraInvader=False):
         pass
 
     @_delegate

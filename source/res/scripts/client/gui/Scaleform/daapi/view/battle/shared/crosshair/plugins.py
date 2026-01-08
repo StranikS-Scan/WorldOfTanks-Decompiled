@@ -1813,7 +1813,10 @@ class DistanceFactorGunPlugin(CrosshairPlugin, EventsHandler):
 
     def __getDegreeOfDamage(self, damage):
         minDamage, maxDamage = self.__damage
-        return 1.0 if minDamage == maxDamage else round(1.0 - (maxDamage - damage) / (maxDamage - minDamage), 2)
+        if minDamage >= maxDamage:
+            return 1.0
+        damage = max(min(damage, maxDamage), minDamage)
+        return round(1.0 - (float(maxDamage) - damage) / (maxDamage - minDamage), 2)
 
     def __onVehicleControlling(self, vehicle):
         if not vehicle:

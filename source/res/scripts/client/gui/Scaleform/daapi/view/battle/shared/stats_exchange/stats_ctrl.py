@@ -108,7 +108,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         from gui.battle_control.arena_info import vos_collections
         collection = vos_collections.VehiclesInfoCollection()
         for vInfoVO in collection.iterator(arenaDP):
-            if vInfoVO.isObserver():
+            if self._shouldSkipVehicleInfo(vInfoVO):
                 continue
             isEnemy, overrides = self._getTeamOverrides(vInfoVO, arenaDP)
             with exchange.getCollectedComponent(isEnemy) as item:
@@ -125,7 +125,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         collection = vos_collections.VehiclesItemsCollection()
         for vos in collection.iterator(arenaDP):
             vInfoVO, vStatsVO = vos
-            if vInfoVO.isObserver():
+            if self._shouldSkipVehicleInfo(vInfoVO):
                 continue
             self._statsCollector.addVehicleStatsUpdate(vInfoVO, vStatsVO)
             isEnemy = self.__isEnemyTeam(arenaDP, vInfoVO.team)
@@ -161,7 +161,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         exchange = self._exchangeBroker.getVehiclesInfoExchange()
         reusable = set()
         for flags, vInfoVO in updated:
-            if vInfoVO.isObserver():
+            if self._shouldSkipVehicleInfo(vInfoVO):
                 continue
             isEnemy, overrides = self._getTeamOverrides(vInfoVO, arenaDP)
             if flags & INVALIDATE_OP.SORTING > 0:
@@ -191,7 +191,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             exchange.addVehicleInfo(vo)
             if flags & INVALIDATE_OP.SORTING > 0:
                 exchange.addSortIDs(arenaDP)
-            if not vo.isObserver():
+            if not self._shouldSkipVehicleInfo(vo):
                 self._statsCollector.addVehicleStatusUpdate(vo)
             exchange.addTotalStats(self._statsCollector.getTotalStats(self._arenaVisitor, self.sessionProvider))
             data = exchange.get()
@@ -207,7 +207,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         getVehicleInfo = arenaDP.getVehicleInfo
         for flags, vStatsVO in updated:
             vInfoVO = getVehicleInfo(vStatsVO.vehicleID)
-            if vInfoVO.isObserver():
+            if self._shouldSkipVehicleInfo(vInfoVO):
                 continue
             self._statsCollector.addVehicleStatsUpdate(vInfoVO, vStatsVO)
             isEnemy = self.__isEnemyTeam(arenaDP, vInfoVO.team)
@@ -381,6 +381,9 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         selectedQuest = questProgress.getSelectedQuest()
         if selectedQuest:
             self.as_setQuestStatusS(self.__getStatusData(selectedQuest))
+
+    def _shouldSkipVehicleInfo(self, vInfoVO):
+        return vInfoVO.isObserver()
 
     def __getStatusData(self, selectedQuest):
         if selectedQuest.isOnPause:

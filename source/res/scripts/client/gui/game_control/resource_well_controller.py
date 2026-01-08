@@ -98,7 +98,7 @@ class ResourceWellController(IResourceWellController, EventsHandler):
         return findFirst(lambda reward: reward.isSerial == isTop, self.__getConfig().rewards.itervalues()).sequence
 
     def getRewardLeftCount(self, isTop):
-        return (self.__getSerialRewardLeftCount() if isTop else self.__getRegularRewardLeftCount()) or 0
+        return (self.__getSerialRewardLeftCount() if isTop else self.__getRegularRewardLeftCount()) or 0 if self.isActive() else self.getRewardLimit(isTop) or 0
 
     def isRewardEnabled(self, isTop):
         topRewardLeftCount = self.getRewardLeftCount(isTop=True)

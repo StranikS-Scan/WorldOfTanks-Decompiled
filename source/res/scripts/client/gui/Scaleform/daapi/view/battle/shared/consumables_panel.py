@@ -9,6 +9,7 @@ import BigWorld
 import CommandMapping
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from constants import EQUIPMENT_STAGES, SHELL_TYPES
+from gui.battle_control.battle_context_hints.common import HintId
 from gui.battle_control.controllers.consumables.ammo_ctrl import IAmmoListener
 from gui.shared.items_parameters.formatters import formatParameter
 from gui.shared.utils import DISTANCE_DAMAGE_PROP_NAME, DAMAGE_PROP_NAME, SHOT_SPEED_ACCELERATED_PROP_NAME
@@ -22,7 +23,7 @@ from gui.Scaleform.genConsts.CONSUMABLES_PANEL_SETTINGS import CONSUMABLES_PANEL
 from gui.Scaleform.genConsts.ANIMATION_TYPES import ANIMATION_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
-from gui.battle_control.battle_constants import CROSSHAIR_VIEW_ID, getVehicleDeviceInComplexItemName
+from gui.battle_control.battle_constants import CROSSHAIR_VIEW_ID, getVehicleDeviceInComplexItemName, DEVICE_STATE_CRITICAL
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, DEVICE_STATE_DESTROYED
 from gui.battle_control.controllers.consumables.equipment_ctrl import IgnoreEntitySelection
 from gui.battle_control.controllers.consumables.equipment_ctrl import NeedEntitySelection, InCooldownError
@@ -163,6 +164,19 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
             return True
         return False
 
+    def showContextHint(self, intCD, eqTag):
+        if intCD not in self._cds:
+            return
+        index = self._cds.index(intCD)
+        text = backport.text(R.strings.battle_hints.contextHint.consumablesPanel.repairkit())
+        if eqTag == 'medkit':
+            text = backport.text(R.strings.battle_hints.contextHint.consumablesPanel.medkit())
+        self.as_showContextHintS(index, str(text))
+
+    def hideContextHint(self, applied):
+        animId = CONSUMABLES_PANEL_SETTINGS.CONTEXT_HINT_ANIM_ID_GREEN if applied else CONSUMABLES_PANEL_SETTINGS.CONTEXT_HINT_ANIM_ID_NONE
+        self.as_hideContextHintS(animId)
+
     def _populate(self):
         self.as_setPanelSettingsS(self._getPanelSettings(), self.__isExtendedAnim())
         super(ConsumablesPanel, self)._populate()
@@ -235,7 +249,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         self.__shellsTooltipData[idx] = (intCD, descriptor, gunSettings)
         keyCode, sfKeyCode = self._genKey(idx)
         self._extraKeys[idx] = self._keys[keyCode] = partial(self.__handleAmmoPressed, intCD)
-        tooltipText = self.__makeShellTooltip(descriptor, gunSettings.getPiercingPower(intCD), gunSettings.getShotSpeed(intCD), gunSettings.getMaxDistance(intCD), gunSettings.getMinMaxShotSpeed(intCD))
+        tooltipText = self.__makeShellTooltip(descriptor, gunSettings, intCD)
         icon = descriptor.icon[0]
         iconName = icon.split('.png')[0]
         shellIconPath = backport.image(R_AMMO_ICON.dyn(iconName)())
@@ -421,7 +435,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
             return
         for _, tooltipData in self.__shellsTooltipData.iteritems():
             shellCD, descriptor, gunSettings = tooltipData
-            toolTip = self.__makeShellTooltip(descriptor, gunSettings.getPiercingPower(shellCD), gunSettings.getShotSpeed(shellCD), gunSettings.getMaxDistance(shellCD), gunSettings.getMinMaxShotSpeed(intCD), 1 + value)
+            toolTip = self.__makeShellTooltip(descriptor, gunSettings, shellCD, 1 + value)
             self.as_updateTooltipS(idx=self._cds.index(shellCD), tooltipStr=toolTip)
 
         if value == 0:
@@ -580,7 +594,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
             sfKey = getScaleformKey(bwKey)
         return (bwKey, sfKey)
 
-    def __makeShellTooltip(self, descriptor, piercingPower, shotSpeed, maxDistance, minMaxShotSpeed, damageMultiplier=_DEFAULT_DAMAGE_MULTIPLIER):
+    def __makeShellTooltip(self, descriptor, gunSettings, intCD, damageMultiplier=_DEFAULT_DAMAGE_MULTIPLIER):
         kind = descriptor.kind
         hasDistanceFactor = descriptor.distanceFactor is not None
         if hasDistanceFactor:
@@ -591,8 +605,16 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         projSpeedFactor = vehicles.g_cache.commonConfig['miscParams']['projectileSpeedFactor']
         header = backport.text(R.strings.ingame_gui.shells_kinds.dyn(kind)(), caliber=backport.getNiceNumberFormat(descriptor.caliber), userString=descriptor.userString)
         if GUI_SETTINGS.technicalInfo:
+            piercingPower = gunSettings.getPiercingPower(intCD)
+            shotSpeed = gunSettings.getShotSpeed(intCD)
+            maxDistance = gunSettings.getMaxDistance(intCD)
+            minMaxShotSpeed = gunSettings.getMinMaxShotSpeed(intCD)
             params = []
-            params.append(self.__getDamageParam(descriptor, damageMultiplier))
+            if gunSettings.isCassetteClip() and gunSettings.hasAutoShoot():
+                params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.damagePerShot(), value=backport.getNiceNumberFormat(descriptor.avgDamage)))
+                params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.damagePerCassete(), value=backport.getNiceNumberFormat(int(round(descriptor.avgDamage * gunSettings.clip.size)))))
+            else:
+                params.append(self.__getDamageParam(descriptor, damageMultiplier))
             if piercingPower[0] > 0 and piercingPower[1] > 0:
                 if hasDistanceFactor:
                     params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.distanceFactorPiercingPower(), value=formatParameter(PIERCING_POWER_PROP_NAME, piercingPower)))
@@ -835,14 +857,23 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
                 deviceName, deviceState, actualState = value
                 itemName = getVehicleDeviceInComplexItemName(deviceName)
                 equipmentTag = 'medkit' if itemName in TANKMEN_ROLES_ORDER_DICT['enum'] else 'repairkit'
-                if deviceState == actualState and deviceState == DEVICE_STATE_DESTROYED:
-                    for intCD, _ in ctrl.iterEquipmentsByTag(equipmentTag, _isEquipmentAvailableToUse):
-                        self._showEquipmentGlow(self._cds.index(intCD))
+                hintsCtrl = self.sessionProvider.dynamic.battleContextHintsCtrl
+                if hintsCtrl is not None:
+                    if deviceState == actualState and deviceState in (DEVICE_STATE_CRITICAL, DEVICE_STATE_DESTROYED):
+                        if list(ctrl.iterEquipmentsByTag(equipmentTag, _isEquipmentAvailableToUse)):
+                            hintId = self.__getBattleHintID(equipmentTag, deviceName, deviceState)
+                            if hintId is not None:
+                                context = {'equipmentTag': equipmentTag}
+                                hintsCtrl.activateHint(hintId, context)
+                if hintsCtrl is None or not hintsCtrl.isHintShowing():
+                    if deviceState == actualState and deviceState == DEVICE_STATE_DESTROYED:
+                        for intCD, _ in ctrl.iterEquipmentsByTag(equipmentTag, _isEquipmentAvailableToUse):
+                            self._showEquipmentGlow(self._cds.index(intCD))
 
-                elif deviceState != DEVICE_STATE_DESTROYED:
-                    for intCD, equipment in ctrl.iterEquipmentsByTag(equipmentTag):
-                        if not self.__canApplyingGlowEquipment(equipment):
-                            self.__clearEquipmentGlow(self._cds.index(intCD))
+                    elif deviceState != DEVICE_STATE_DESTROYED:
+                        for intCD, equipment in ctrl.iterEquipmentsByTag(equipmentTag):
+                            if not self.__canApplyingGlowEquipment(equipment):
+                                self.__clearEquipmentGlow(self._cds.index(intCD))
 
                 idx = int(self.as_updateEntityStateS(itemName, actualState))
                 if 0 < idx < len(self._cds):
@@ -1008,3 +1039,34 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         description = '\n\n'.join((description, usageStr))
         toolTip = TOOLTIP_FORMAT.format(ability.userString, description)
         return toolTip
+
+    @staticmethod
+    def __getBattleHintID(equipmentTag, deviceName, deviceState):
+        if equipmentTag == 'medkit':
+            if deviceState != DEVICE_STATE_DESTROYED:
+                return None
+            crewRole = deviceName[:-1] if deviceName[-1].isdigit() else deviceName
+            hintMap = {'commander': HintId.COMMANDER_DAMAGE_MED_KIT,
+             'driver': HintId.DRIVER_DAMAGE_MED_KIT,
+             'gunner': HintId.GUNNER_DAMAGE_MED_KIT,
+             'loader': HintId.LOADER_DAMAGE_MED_KIT,
+             'radioman': HintId.RADIOMAN_DAMAGE_MED_KIT}
+            return hintMap.get(crewRole)
+        elif equipmentTag == 'repairkit':
+            devName = getVehicleDeviceInComplexItemName(deviceName)
+            if deviceState == DEVICE_STATE_CRITICAL:
+                hintMap = {'engine': HintId.ENGINE_DAMAGE_REPAIR_KIT,
+                 'ammoBay': HintId.AMMUNITION_DAMAGE_REPAIR_KIT,
+                 'fuelTank': HintId.FUELTANK_DAMAGE_REPAIR_KIT,
+                 'turretRotator': HintId.GUN_ROTATOR_DAMAGE_REPAIR_KIT,
+                 'gun': HintId.GUN_DAMAGE_REPAIR_KIT}
+                return hintMap.get(devName)
+            if deviceState == DEVICE_STATE_DESTROYED:
+                hintMap = {'turretRotator': HintId.GUN_ROTATOR_DESTROY_REPAIR_KIT,
+                 'engine': HintId.ENGINE_DESTROY_REPAIR_KIT,
+                 'gun': HintId.GUN_DESTROY_REPAIR_KIT,
+                 'chassis': HintId.TRACK_DESTROY_REPAIR_KIT}
+                return hintMap.get(devName)
+            return None
+        else:
+            return None

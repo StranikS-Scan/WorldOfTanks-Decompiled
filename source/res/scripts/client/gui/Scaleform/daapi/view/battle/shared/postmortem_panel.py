@@ -336,14 +336,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
                     showVehicle = True
                     vInfoVO = battleCtx.getArenaDP().getVehicleInfo(killerVehID)
                     vTypeInfoVO = vInfoVO.vehicleType
-                    vehClass = Vehicle.getTypeVPanelIconPath(vTypeInfoVO.classTag)
-                    if not vTypeInfoVO.isOnlyForBattleRoyaleBattles:
-                        vehImg = _VEHICLE_SMALL_ICON_RES_PATH.format(vTypeInfoVO.iconName)
-                        vehLvl = int2roman(vTypeInfoVO.level)
-                    else:
-                        vehImg = _BR_VEHICLE_SMALL_ICON_RES_PATH.format(vTypeInfoVO.iconName)
-                        vehLvl = None
-                    vehName = vTypeInfoVO.shortNameWithPrefix
+                    vehClass, vehImg, vehLvl, vehName = self._buildVehicleDeathDisplayData(vTypeInfoVO)
                     killerUserVO = self._makeKillerVO(vInfoVO)
                 else:
                     showVehicle = False
@@ -355,6 +348,23 @@ class PostmortemPanel(_SummaryPostmortemPanel):
             else:
                 self.as_setDeadReasonInfoS('', False, None, None, None, None, None)
         return
+
+    def _buildVehicleDeathDisplayData(self, vTypeInfoVO, vehClass=None, vehImg=None, vehLvl=None, vehName=None):
+        if vehClass != '':
+            classTag = vehClass or vTypeInfoVO.classTag
+            vehClass = Vehicle.getTypeVPanelIconPath(classTag)
+        iconName = vehImg or vTypeInfoVO.iconName
+        if vTypeInfoVO.isOnlyForBattleRoyaleBattles:
+            vehImg = _BR_VEHICLE_SMALL_ICON_RES_PATH.format(iconName)
+        else:
+            vehImg = _VEHICLE_SMALL_ICON_RES_PATH.format(iconName)
+        if vehLvl is None:
+            vehLvl = None if vTypeInfoVO.isOnlyForBattleRoyaleBattles else int2roman(vTypeInfoVO.level)
+        vehName = vehName or vTypeInfoVO.shortNameWithPrefix
+        return (vehClass,
+         vehImg,
+         vehLvl,
+         vehName)
 
     def _makeKillerVO(self, vInfoVO):
         fullName = self.sessionProvider.getCtx().getPlayerFullNameParts(vInfoVO.vehicleID, showVehShortName=False)

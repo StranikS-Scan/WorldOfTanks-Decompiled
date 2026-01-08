@@ -4001,6 +4001,115 @@
 				500 1.35	</pierceFactor>
     </distanceFactor>
   </_152mm_HEAT_M409>
+  <_152mm_APFSDS_XM578E1_O>
+    <id>	31056	</id>
+    <userString>	#usa_vehicles:_152mm_APFSDS_XM578E1_O	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	5200	</price>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <improved>	True	</improved>
+    <caliber>	152	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	650	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_152mm_APFSDS_XM578E1_O>
+  <_152mm_HE_XM657E2_O>
+    <id>	31057	</id>
+    <userString>	#usa_vehicles:_152mm_HE_XM657E2_O	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1360	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	152	</caliber>
+    <explosionRadius>	5.11	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	840	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	5.11	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	420	</armor>
+        <devices>	100	</devices>
+      </damage>
+    </armorSpalls>
+  </_152mm_HE_XM657E2_O>
+  <_152mm_HEAT_M409_O>
+    <id>	31058	</id>
+    <userString>	#usa_vehicles:_152mm_HEAT_M409_O	</userString>
+    <icon>	hc	</icon>
+    <price>	1200	</price>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	152	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	650	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_152mm_HEAT_M409_O>
+  <_152mm_APFSDS_XM578E1_59>
+    <id>	31065	</id>
+    <userString>	#usa_vehicles:_152mm_APFSDS_XM578E1_59	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1560	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	152	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	750	</armor>
+      <devices>	203	</devices>
+    </damage>
+  </_152mm_APFSDS_XM578E1_59>
+  <_152mm_HE_XM657E2_59>
+    <id>	31066	</id>
+    <userString>	#usa_vehicles:_152mm_HE_XM657E2_59	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1280	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	152	</caliber>
+    <explosionRadius>	5.11	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	1000	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	5.11	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	500	</armor>
+        <devices>	100	</devices>
+      </damage>
+    </armorSpalls>
+  </_152mm_HE_XM657E2_59>
+  <_152mm_HEAT_M409_59>
+    <id>	31067	</id>
+    <userString>	#usa_vehicles:_152mm_HEAT_M409_59	</userString>
+    <icon>	hc_premium	</icon>
+    <improved>	true	</improved>
+    <price>	5600	</price>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	152	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	750	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_152mm_HEAT_M409_59>
   <_155mm_AP_M111>
     <id>	33	</id>
     <userString>	#usa_vehicles:_155mm_AP_M111	</userString>

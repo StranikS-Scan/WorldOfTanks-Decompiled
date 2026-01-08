@@ -45,7 +45,7 @@ from debug_utils import LOG_NOTE, LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION, L
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData
 from messenger import g_settings as messenger_settings
 from account_helpers.AccountSettings import AccountSettings, SPEAKERS_DEVICE, COLOR_SETTINGS_TAB_IDX, APPLIED_COLOR_SETTINGS
-from account_helpers.settings_core.settings_constants import SOUND, SPGAimEntranceModeOptions, GRAPHICS, COLOR_GRADING_TECHNIQUE_DEFAULT
+from account_helpers.settings_core.settings_constants import SOUND, SPGAimEntranceModeOptions, GRAPHICS, COLOR_GRADING_TECHNIQUE_DEFAULT, CONTROLS
 from messenger.storage import storage_getter
 from shared_utils import CONST_CONTAINER, forEach
 from gui import GUI_SETTINGS
@@ -82,6 +82,11 @@ def highestPriorityMethod(methods):
     if APPLY_METHOD.DELAYED in methods:
         return APPLY_METHOD.DELAYED
     return APPLY_METHOD.NEXT_BATTLE if APPLY_METHOD.NEXT_BATTLE in methods else APPLY_METHOD.NORMAL
+
+
+class SettingType(Enum):
+    GLOBAL = 'global'
+    LOCAL = 'local'
 
 
 SettingsExtraData = namedtuple('SettingsExtraData', 'current options extraData')
@@ -188,6 +193,10 @@ class SettingAbstract(ISetting):
     def isEqual(self, value):
         return self.get() == value
 
+    def getType(self):
+        _logger.warning('The method must be inherited for correct settings logging.')
+        return None
+
 
 class SettingsContainer(ISetting):
 
@@ -225,6 +234,21 @@ class SettingsContainer(ISetting):
     def get(self, names=None):
         settings = self.__filter(self.indices.keys(), names)
         return dict(self.__forEach(settings, lambda n, p: (n, p.get())))
+
+    def fetch(self, type, excludedNames=None):
+        result = {}
+        for name, param in self.settings:
+            if excludedNames is not None and name in excludedNames:
+                continue
+            if isinstance(param, SettingsContainer):
+                values = param.fetch(type, excludedNames)
+                if values:
+                    result[name] = values
+            if isinstance(param, SettingAbstract):
+                if param.getType() == type:
+                    result[name] = param.get()
+
+        return result
 
     def apply(self, values, names=None):
         settings = self.__filter(values.keys(), names)
@@ -291,12 +315,27 @@ class ReadOnlySetting(SettingAbstract):
         return self.readerDelegate()
 
 
+class GlobalReadOnlySetting(ReadOnlySetting):
+
+    def getType(self):
+        return SettingType.GLOBAL
+
+
+class HardwareReadOnlySetting(ReadOnlySetting):
+
+    def getType(self):
+        return SettingType.LOCAL
+
+
 class SoundSetting(SettingAbstract):
     VOLUME_MULT = 100
 
     def __init__(self, soundGroup, isPreview=True):
         super(SoundSetting, self).__init__(isPreview)
         self.group = soundGroup
+
+    def getType(self):
+        return SettingType.LOCAL
 
     def __toGuiVolume(self, volume):
         return round(volume * self.VOLUME_MULT)
@@ -322,6 +361,9 @@ class SoundEnableSetting(SettingAbstract):
 
     def getApplyMethod(self, value):
         return APPLY_METHOD.RESTART
+
+    def getType(self):
+        return SettingType.LOCAL
 
     def _get(self):
         return self.soundsCtrl.isEnabled()
@@ -368,6 +410,9 @@ class AccountSetting(SettingAbstract):
         self.subKey = subKey
         super(AccountSetting, self).__init__(False)
 
+    def getType(self):
+        return SettingType.LOCAL
+
     def _getSettings(self):
         return AccountSettings.getSettings(self.key)
 
@@ -400,6 +445,9 @@ class StorageSetting(RegularSetting):
     def __init__(self, settingName, storage, isPreview=False):
         super(StorageSetting, self).__init__(settingName, isPreview)
         self._storage = weakref.proxy(storage)
+
+    def getType(self):
+        return SettingType.GLOBAL
 
     def _get(self):
         return self._storage.extract(self.settingName, self._default)
@@ -485,6 +533,9 @@ class UserPrefsSetting(SettingAbstract):
     def __init__(self, sectionName=None, isPreview=False):
         super(UserPrefsSetting, self).__init__(isPreview)
         self.sectionName = sectionName
+
+    def getType(self):
+        return SettingType.LOCAL
 
     def _readValue(self, section):
         return None
@@ -573,6 +624,9 @@ class PreferencesSetting(SettingAbstract):
         super(PreferencesSetting, self).__init__(isPreview)
         BigWorld.subscribeToSavePreferences(self._savePrefsCallback)
         BigWorld.subscribeToReadPreferences(self._readPrefsCallback)
+
+    def getType(self):
+        return SettingType.LOCAL
 
     def _savePrefsCallback(self, prefsRoot):
         pass
@@ -696,7 +750,7 @@ class VOIPCaptureDevicesSetting(UserPrefsStringSetting):
         return options.index(deviceName) if deviceName in options else -1
 
 
-class VOIPSupportSetting(ReadOnlySetting):
+class VOIPSupportSetting(HardwareReadOnlySetting):
 
     def __init__(self):
         super(VOIPSupportSetting, self).__init__(self.__isSupported)
@@ -804,6 +858,9 @@ class DevMapsSetting(StorageAccountSetting):
 
 class TripleBufferedSetting(SettingAbstract):
 
+    def getType(self):
+        return SettingType.LOCAL
+
     def _get(self):
         return BigWorld.isTripleBuffered()
 
@@ -813,6 +870,9 @@ class TripleBufferedSetting(SettingAbstract):
 
 class VerticalSyncSetting(SettingAbstract):
 
+    def getType(self):
+        return SettingType.LOCAL
+
     def _get(self):
         return BigWorld.isVideoVSync()
 
@@ -821,6 +881,9 @@ class VerticalSyncSetting(SettingAbstract):
 
 
 class DynamicRendererSetting(SettingAbstract):
+
+    def getType(self):
+        return SettingType.LOCAL
 
     def _get(self):
         return round(BigWorld.getDRRAutoscalerBaseScale(), 2) * 100
@@ -855,6 +918,9 @@ class ColorFilterIntensitySetting(_AdjustValueSetting):
     def getDefaultValue(self):
         return self.DEFAULT_FILTER_INTENSITY * 100
 
+    def getType(self):
+        return SettingType.LOCAL
+
 
 class BrightnessCorrectionSetting(_AdjustValueSetting):
     DEFAULT_BRIGHTNESS = 0.5
@@ -869,6 +935,9 @@ class BrightnessCorrectionSetting(_AdjustValueSetting):
 
     def getDefaultValue(self):
         return self.DEFAULT_BRIGHTNESS * 100
+
+    def getType(self):
+        return SettingType.LOCAL
 
 
 class ContrastCorrectionSetting(_AdjustValueSetting):
@@ -885,6 +954,9 @@ class ContrastCorrectionSetting(_AdjustValueSetting):
     def getDefaultValue(self):
         return self.DEFAULT_CONTRAST * 100
 
+    def getType(self):
+        return SettingType.LOCAL
+
 
 class SaturationCorrectionSetting(_AdjustValueSetting):
     DEFAULT_SATURATION = 1
@@ -899,6 +971,22 @@ class SaturationCorrectionSetting(_AdjustValueSetting):
 
     def getDefaultValue(self):
         return self.DEFAULT_SATURATION * 100
+
+    def getType(self):
+        return SettingType.LOCAL
+
+
+class GammaSetting(_AdjustValueSetting):
+
+    def getType(self):
+        return SettingType.LOCAL
+
+    def _get(self):
+        value = round(BigWorld.PyGammaWizard().gamma, 2) * 100
+        return self._adjustValue(value)
+
+    def _set(self, value):
+        pass
 
 
 class LensEffectSetting(StorageDumpSetting):
@@ -963,6 +1051,9 @@ class GraphicSetting(SettingAbstract):
 
     def getApplyMethod(self, value):
         return BigWorld.getGraphicsSettingApplyMethod(self.name, int(value))
+
+    def getType(self):
+        return SettingType.LOCAL
 
     def refresh(self):
         self._currentValue = graphics.getGraphicsSetting(self.name)
@@ -1041,6 +1132,9 @@ class MonitorSetting(SettingAbstract):
         result = super(MonitorSetting, self).pack()
         result.update({'real': g_monitorSettings.activeMonitor})
         return result
+
+    def getType(self):
+        return SettingType.LOCAL
 
 
 class WindowSizeSetting(PreferencesSetting):
@@ -1750,6 +1844,9 @@ class MouseSetting(ControlSetting):
         else:
             return
 
+    def getType(self):
+        return SettingType.LOCAL
+
     def _getDefault(self):
         return self.default
 
@@ -1826,6 +1923,9 @@ class FOVSetting(RegularSetting):
 
     def isEqual(self, value):
         return self._get() == tuple(value)
+
+    def getType(self):
+        return SettingType.LOCAL
 
 
 class StaticFOVSetting(UserPrefsFloatSetting):
@@ -1955,6 +2055,9 @@ class KeyboardSetting(ControlSetting):
             mapping = self.getDefaultValue()
         return mapping
 
+    def getType(self):
+        return SettingType.LOCAL
+
 
 class KeyboardSettings(SettingsContainer):
     KEYS_LAYOUT = (('movement', (('forward', 'CMD_MOVE_FORWARD'),
@@ -2005,7 +2108,8 @@ class KeyboardSettings(SettingsContainer):
      'chargeFire': 'SettingsKeyChargeFire',
      'highlightLocation': 'SettingsKeyHighlightLocation',
      'highlightTarget': 'SettingsKeyHighlightTarget',
-     'showRadialMenu': 'SettingsKeyShowRadialMenu'}
+     'showRadialMenu': 'SettingsKeyShowRadialMenu',
+     'showQuestProgress': 'SettingsKeyShowQuestProgress'}
     __hiddenGroups = set()
 
     def __init__(self):
@@ -2013,7 +2117,7 @@ class KeyboardSettings(SettingsContainer):
             self.hideGroup('minimap', hide=True)
         if not GUI_SETTINGS.voiceChat:
             self.hideGroup('voicechat', hide=True)
-        settings = [('keysLayout', ReadOnlySetting(self._getLayout)), ('keysTooltips', ReadOnlySetting(lambda : self.KEYS_TOOLTIPS))]
+        settings = [(CONTROLS.KEYS_LAYOUT, GlobalReadOnlySetting(self._getLayout)), (CONTROLS.KEYS_TOOLTIPS, GlobalReadOnlySetting(lambda : self.KEYS_TOOLTIPS))]
         for group in self._getLayout(True):
             for setting in group['values']:
                 settings.append((setting['key'], KeyboardSetting(setting['cmd'])))
@@ -2217,6 +2321,9 @@ class SoundSpeakersPresetSetting(SettingAbstract):
             presetID = presetIDs[index]
             return presetID in (SPEAKERS_CONFIG.AUTO_DETECTION, self.soundsCtrl.system.getSystemSpeakersPresetID())
         return False
+
+    def getType(self):
+        return SettingType.LOCAL
 
     def _get(self):
         presetID = self.soundsCtrl.system.getUserSpeakersPresetID()
@@ -2771,6 +2878,9 @@ class InterfaceScaleSetting(UserPrefsFloatSetting):
 class GraphicsQualityNote(SettingAbstract):
     _GRAPHICS_QUALITY_TYPES = {CONTENT_TYPE.SD_TEXTURES, CONTENT_TYPE.TUTORIAL, CONTENT_TYPE.SANDBOX}
 
+    def getType(self):
+        return SettingType.LOCAL
+
     def _get(self):
         return '{0}{1}  {2}{3}'.format("<font face='$FieldFont' size='13' color='#595950'>", i18n.makeString(SETTINGS.GRAPHICSQUALITYHDSD_SD), icons.info(), '</font>') if ResMgr.activeContentType() in self._GRAPHICS_QUALITY_TYPES else ''
 
@@ -2781,6 +2891,9 @@ class GraphicsQualityNote(SettingAbstract):
 class GraphicsHigtQualityNote(SettingAbstract):
     _GRAPHICS_QUALITY_TYPES = {CONTENT_TYPE.SD_TEXTURES}
 
+    def getType(self):
+        return SettingType.LOCAL
+
     def _get(self):
         return '{0}{1}  {2}{3}'.format("<font face='$FieldFont' size='13' color='#595950'>", i18n.makeString(SETTINGS.GRAPHICSQUALITYHDSD_SD), icons.alert(), '</font>') if ResMgr.activeContentType() in self._GRAPHICS_QUALITY_TYPES else ''
 
@@ -2789,6 +2902,9 @@ class GraphicsHigtQualityNote(SettingAbstract):
 
 
 class GraphicsQuality(SettingAbstract):
+
+    def getType(self):
+        return SettingType.LOCAL
 
     def _get(self):
         return ResMgr.activeContentType() == CONTENT_TYPE.SD_TEXTURES
@@ -2802,6 +2918,9 @@ class AnonymizerSetting(AccountDumpSetting):
 
     def __init__(self, settingName):
         super(AnonymizerSetting, self).__init__(settingName, settingName, 'anonymized')
+
+    def getType(self):
+        return SettingType.GLOBAL
 
     @storage_getter('users')
     def usersStorage(self):

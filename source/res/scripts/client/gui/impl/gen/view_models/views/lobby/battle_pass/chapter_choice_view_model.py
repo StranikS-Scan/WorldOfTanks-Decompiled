@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.collection_entry_point_vie
 class ChapterChoiceViewModel(ViewModel):
     __slots__ = ('onPreviewClick', 'onChapterSelect', 'onAboutClick', 'onPointsInfoClick', 'onBuyClick', 'onBpbitClick', 'onBpcoinClick', 'onTakeRewardsClick', 'onViewLoaded', 'onClose', 'onActivateChapter')
 
-    def __init__(self, properties=9, commands=11):
+    def __init__(self, properties=12, commands=11):
         super(ChapterChoiceViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -71,6 +71,24 @@ class ChapterChoiceViewModel(ViewModel):
     def setShowHint(self, value):
         self._setBool(8, value)
 
+    def getIsBpCoinShopEntryPointActive(self):
+        return self._getBool(9)
+
+    def setIsBpCoinShopEntryPointActive(self, value):
+        self._setBool(9, value)
+
+    def getIsBpPointsShopEntryPointActive(self):
+        return self._getBool(10)
+
+    def setIsBpPointsShopEntryPointActive(self, value):
+        self._setBool(10, value)
+
+    def getIsSingleChapter(self):
+        return self._getBool(11)
+
+    def setIsSingleChapter(self, value):
+        self._setBool(11, value)
+
     def _initialize(self):
         super(ChapterChoiceViewModel, self)._initialize()
         self._addViewModelProperty('collectionEntryPoint', CollectionEntryPointViewModel())
@@ -82,6 +100,9 @@ class ChapterChoiceViewModel(ViewModel):
         self._addBoolProperty('isChooseRewardsEnabled', True)
         self._addNumberProperty('freePoints', 0)
         self._addBoolProperty('showHint', False)
+        self._addBoolProperty('isBpCoinShopEntryPointActive', False)
+        self._addBoolProperty('isBpPointsShopEntryPointActive', False)
+        self._addBoolProperty('isSingleChapter', False)
         self.onPreviewClick = self._addCommand('onPreviewClick')
         self.onChapterSelect = self._addCommand('onChapterSelect')
         self.onAboutClick = self._addCommand('onAboutClick')

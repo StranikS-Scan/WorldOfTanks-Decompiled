@@ -9,6 +9,7 @@ from time import time as timestamp
 from collections import namedtuple
 from itertools import izip, chain
 from Math import Vector3
+from coordinate_system import AXIS_ALIGNED_DIRECTION
 from realm import CURRENT_REALM, IS_CT
 try:
     import BigWorld
@@ -959,10 +960,6 @@ RENEWABLE_SUBSCRIPTION_CONFIG = 'renewable_subscription_config'
 PLAYER_SUBSCRIPTIONS_CONFIG = 'player_subscriptions_config'
 IS_LOOT_BOXES_ENABLED = 'isLootBoxesEnabled'
 SENIORITY_AWARDS_CONFIG = 'seniority_awards_config'
-SENIORITY_AWARDS_COMP_QUEST_PREFIX = 'wdr25_comp_quest:'
-SENIORITY_AWARDS_COMP_TOKEN_PREFIX = 'wdr25_check_comp_quests:'
-SENIORITY_AWARDS_VEHICLE_OFFER = 'offer:seniority:vehicle_10_gift:1'
-SENIORITY_AWARDS_COMPENSATION_BONUS = 'compensation_token'
 MAGNETIC_AUTO_AIM_CONFIG = 'magnetic_auto_aim_config'
 BATTLE_NOTIFIER_CONFIG = 'battle_notifier_config'
 BATTLE_ACHIEVEMENTS_CONFIG = 'battle_achievements_config'
@@ -1016,6 +1013,10 @@ class Configs(enum.Enum):
     BLACK_MARKET_CONFIG = 'black_market_config'
     INGAME_BROWSER_EVENT_CONFIG = 'ingame_browser_event_config'
     LOOTBOX_STATISTICS_CONFIG = 'lootbox_statistics_config'
+    BATTLE_CONTEXT_HINTS_CONFIG = 'battle_context_hints_config'
+    SETTINGS_LOGGING_CONFIG = 'settings_logging_config'
+    RANDOM_MATCHMAKER_CONFIG = 'random_matchmaker_config'
+    WGSH_MODIFIER_CONFIG = 'wgsh_modifiers_config'
 
 
 INBATTLE_CONFIGS = ['spgRedesignFeatures',
@@ -1024,7 +1025,8 @@ INBATTLE_CONFIGS = ['spgRedesignFeatures',
  'epic_config',
  'vehicle_post_progression_config',
  Configs.COMP7_CONFIG.value,
- Configs.FUN_RANDOM_CONFIG.value]
+ Configs.FUN_RANDOM_CONFIG.value,
+ Configs.BATTLE_CONTEXT_HINTS_CONFIG.value]
 
 class RESTRICTION_TYPE:
     NONE = 0
@@ -1869,19 +1871,6 @@ class REQUEST_COOLDOWN:
     ANONYMIZER = 1.0
     UPDATE_IN_BATTLE_PLAYER_RELATIONS = 1.0
     FLUSH_RELATIONS = 1.0
-    NEW_YEAR_SLOT_FILL = 0.4
-    NEW_YEAR_CRAFT = 0.5
-    NEW_YEAR_CRAFT_OLD_TOYS = 0.5
-    NEW_YEAR_BREAK_TOYS = 1.0
-    NEW_YEAR_SEE_INVENTORY_TOYS = 0.5
-    NEW_YEAR_SEE_COLLECTION_TOYS = 0.5
-    NEW_YEAR_SELECT_DISCOUNT = 1.0
-    NEW_YEAR_VIEW_ALBUM = 0.5
-    NEW_YEAR_CONVERT_FILLERS = 1.0
-    NEW_YEAR_FILL_OLD_COLLECTION = 0.5
-    NEW_YEAR_BUY_MACHINE_COINS = 1.0
-    NEW_YEAR_UPGRADE_OBJECT_LEVEL = 1.0
-    NEW_YEAR_BUY_TOY = 1.0
     EQUIP_ENHANCEMENT = 1.0
     DISMOUNT_ENHANCEMENT = 1.0
     BUY_BATTLE_PASS = 1.0
@@ -1938,6 +1927,8 @@ class REQUEST_COOLDOWN:
     GET_STATISTIC_LOOTBOX = 5.0
     ARMORY_YARD_REROLL_ARMORY_QUEST = 1.0
     ARMORY_YARD_ACCEPT_REROLL_ARMORY_QUEST = 1.0
+    CMD_SELL_VEHICLE = 1.0
+    MARK_CUSTOMIZATION_ITEM = 0.5
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -2285,10 +2276,6 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.BATTLE_MATTERS_QUESTS: 'battle matters quests show reward info',
  USER_SERVER_SETTINGS.QUESTS_PROGRESS: 'feedback quests progress',
  91: 'Loot box last viewed count',
- 92: 'Oriental loot box last viewed count',
- 93: 'New year loot box last viewed count',
- 94: 'Fairytale loot box last viewed count',
- 95: 'Christmas loot box last viewed count',
  USER_SERVER_SETTINGS.SESSION_STATS: 'sessiong statistics settings',
  97: 'BattlePass carouse filter 1',
  98: 'Battle Pass Storage',
@@ -2299,7 +2286,6 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  103: 'Mapbox carousel filter 1',
  104: 'Mapbox carousel filter 2',
  USER_SERVER_SETTINGS.NEW_YEAR: 'New Year settings storage',
- 106: 'Common loot box last viewed count',
  USER_SERVER_SETTINGS.CONTOUR: 'Contour settings',
  107: 'Fun Random carousel filter 1',
  108: 'Fun Random carousel filter 2',
@@ -2312,7 +2298,10 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  115: 'Once only hints',
  31001: 'Armory Yard progression',
  31002: 'Versus AI carousel filter 1',
- 31003: 'Versus AI carousel filter 2'}
+ 31003: 'Versus AI carousel filter 2',
+ 31004: 'Battle context hints counters',
+ 31005: 'Battle context hints counters, section2',
+ 31006: 'Battle context hints counters, section3'}
 
 class TOKEN_TYPE:
     XMPPCS = 1
@@ -2434,6 +2423,8 @@ class CustomizationInvData(object):
     PROGRESSION = 5
     OUTFITS_POOL = 6
     SERIAL_NUMBERS = 7
+    ORDERING = 8
+    TAG_MASK = 9
 
 
 class SkinInvData(object):
@@ -3228,10 +3219,12 @@ class ClansConfig(object):
     QUEST_URL = 'clanQuestUrl'
     CRAFT_MACHINE_URL = 'craftMachineUrl'
     STRONGHOLD_EVENT_URL = 'strongholdEventUrl'
+    STRONGHOLD_EVENT_PROGRESSION_URL = 'strongholdEventProgressionUrl'
     NOTIFICATION_START_TIME = 'notificationStartTime'
     ON_ENTER_CLAN_BONUS = 'onEnterClanBonus'
     STRONGHOLD_EVENT_ENABLED = 'strongholdEventEnabled'
     STRONGHOLD_EVENT_BATTLE_MODE = 'strongholdEventBattleMode'
+    STRONGHOLD_EVENT_FREEZE_JOURNAL_URL = 'strongholdEventFreezeJournalUrl'
 
 
 class EnhancementsConfig(object):
@@ -3601,6 +3594,7 @@ class BATTLE_MODE_LOCK_MASKS(object):
 
 
 RESOURCE_WELL_FORBIDDEN_TOKEN = 'rws{}_forbidden'
+RESOURCE_WELL_ALL_SEASON_FORBIDDEN_TOKEN = 'rws_forbidden'
 QUESTS_SUPPORTED_EXCLUDE_TAGS = {'collectorVehicle',
  'special',
  'secret',
@@ -3804,3 +3798,8 @@ class UNIQUE_UNLOCK_FEATURE_NAMES:
 
 ALL_EVENT_TYPES_FOR_BONUSES = 'all'
 EXTENSIONS_BONUSES = {}
+
+class FRONTLINE_PROGRESSION:
+    BORDERS_Z = 4
+    BORDERS_X = 4
+    DIRECTION = AXIS_ALIGNED_DIRECTION.PLUS_Z

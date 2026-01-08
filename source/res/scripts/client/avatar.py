@@ -851,7 +851,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     return True
                 isEpicBattle = self.arenaBonusType in [constants.ARENA_BONUS_TYPE.EPIC_BATTLE, constants.ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING]
                 isBR = ARENA_BONUS_TYPE_CAPS.checkAny(self.arenaBonusType, ARENA_BONUS_TYPE_CAPS.BATTLEROYALE)
-                if cmdMap.isFired(CommandMapping.CMD_QUEST_PROGRESS_SHOW, key) and not isBR and not isEpicBattle and (mods != 2 or not isDown) and self.lobbyContext.getServerSettings().isPersonalMissionsEnabled():
+                if cmdMap.isFired(CommandMapping.CMD_QUEST_PROGRESS_SHOW, key) and (mods != 2 or not isDown) and (isEpicBattle or not isBR and self.lobbyContext.getServerSettings().isPersonalMissionsEnabled()):
                     gui_event_dispatcher.toggleFullStatsQuestProgress(isDown)
                     return True
                 supportsBoosters = ARENA_BONUS_TYPE_CAPS.checkAny(self.arenaBonusType, ARENA_BONUS_TYPE_CAPS.BOOSTERS)
@@ -1544,7 +1544,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 self.__showDamageIconAndPlaySound(damageCode, extra, vehicleID, ignoreMessages)
             if damageCode not in self.__damageInfoNoNotification:
                 self.guiSessionProvider.shared.messages.showVehicleDamageInfo(self, damageCode, vehicleID, entityID, extra, equipmentID, ignoreMessages)
-            TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.PLAYER_RECEIVE_DAMAGE, attackerId=entityID)
+            damageContext = {'damageCode': damageCode,
+             'extra': extra}
+            TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.PLAYER_RECEIVE_DAMAGE, attackerId=entityID, vehicleId=vehicleID, damageContext=damageContext)
             return
 
     def showShotResults(self, results):
@@ -2204,6 +2206,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         g_playerEvents.isPlayerEntityChanging = True
         g_playerEvents.onPlayerEntityChanging()
         self.__cancelWaitingForCharge()
+        g_playerEvents.onArenaStateChange(False, ARENA_PERIOD.AFTERBATTLE)
         self.__setIsOnArena(False)
         self.base.leaveArena(None)
         replayCtrl = BattleReplay.g_replayCtrl
@@ -2520,7 +2523,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
             BattleReplay.g_replayCtrl.onClientReady()
             self.base.setClientReady()
-            if self.arena.period == ARENA_PERIOD.BATTLE:
+            period = self.arena.period
+            isBattle = period == ARENA_PERIOD.BATTLE
+            g_playerEvents.onArenaStateChange(isBattle, period)
+            if isBattle:
                 self.__setIsOnArena(True)
                 battleTime = BigWorld.serverTime() - (self.arena.periodEndTime - self.arena.periodLength)
                 BigWorld.notifyBattleTime(self.spaceID, battleTime)
@@ -2831,7 +2837,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             return
 
     def __onArenaPeriodChange(self, period, periodEndTime, periodLength, periodAdditionalInfo):
-        self.__setIsOnArena(period == ARENA_PERIOD.BATTLE)
+        isBattle = period == ARENA_PERIOD.BATTLE
+        self.__setIsOnArena(isBattle)
+        g_playerEvents.onArenaStateChange(isBattle, period)
         if period == ARENA_PERIOD.BATTLE and period > self.__prevArenaPeriod:
             if self.arenaBonusType == constants.ARENA_BONUS_TYPE.EPIC_BATTLE:
                 if self.__prevArenaPeriod >= 0:

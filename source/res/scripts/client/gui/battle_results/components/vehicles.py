@@ -23,8 +23,8 @@ from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
 from items import vehicles
 from gui.battle_results.reusable.shared import VehicleSummarizeInfo
-if typing.TYPE_CHECKING:
-    from gui.battle_results.reusable.shared import VehicleDetailedInfo
+from gui.battle_results.reusable.shared import VehicleDetailedInfo
+from supply_shared import Supply
 _STAT_STUN_FIELD_NAMES = ('damageAssistedStun', 'stunNum', 'stunDuration')
 
 def _getStunFilter():
@@ -315,7 +315,7 @@ class StrongholdVehicleStatValuesBlock(RegularVehicleStatValuesBlock):
 
 
 class EpicVehicleStatValuesBlock(base.StatsBlock):
-    __slots__ = ('_team', '_isPersonal', '_filters', 'shots', 'hits', 'explosionHits', 'damageDealt', 'sniperDamageDealt', 'destructiblesDamageDealt', 'equipmentDamageDealt', 'directHitsReceived', 'piercingsReceived', 'noDamageDirectHitsReceived', 'explosionHitsReceived', 'damageBlockedByArmor', 'teamHitsDamage', 'spotted', 'damagedKilled', 'damageAssisted', 'equipmentDamageAssisted', 'damageAssistedStun', 'stunNum', 'capturePoints', 'timesDestroyed', 'teamSpecificStat', '__rawDamageAssistedStun', '__rawStunNum', '__fieldsReplacer')
+    __slots__ = ('_team', '_isPersonal', '_filters', 'shots', 'hits', 'explosionHits', 'damageDealt', 'sniperDamageDealt', 'destructiblesDamageDealt', 'equipmentDamageDealt', 'directHitsReceived', 'piercingsReceived', 'noDamageDirectHitsReceived', 'explosionHitsReceived', 'damageBlockedByArmor', 'teamHitsDamage', 'spotted', 'damagedKilled', 'damageAssisted', 'equipmentDamageAssisted', 'damageAssistedStun', 'stunNum', 'capturePoints', 'timesDestroyed', 'damageToSupplies', 'damageFromSupplies', 'suppliesDestroyed', 'distributedSupplyDamage', 'distributedSupplyBasePoints', 'teamSpecificStat', '__rawDamageAssistedStun', '__rawStunNum', '__fieldsReplacer')
 
     def __init__(self, meta=None, field='', *path):
         super(EpicVehicleStatValuesBlock, self).__init__(meta, field, *path)
@@ -342,6 +342,8 @@ class EpicVehicleStatValuesBlock(base.StatsBlock):
         self.__rawStunNum = result.stunNum
         if self.__rawStunNum == 0:
             self.addFilters(_STAT_STUN_FIELD_NAMES)
+        if isinstance(result, VehicleDetailedInfo):
+            self.addFilters(('distributedSupplyDamage', 'distributedSupplyBasePoints'))
         self.shots = style.getIntegralFormatIfNoEmpty(result.shots)
         self.hits = (result.directEnemyHits, result.piercingEnemyHits)
         self.explosionHits = style.getIntegralFormatIfNoEmpty(result.explosionHits)
@@ -362,6 +364,11 @@ class EpicVehicleStatValuesBlock(base.StatsBlock):
         self.damageAssistedStun = style.getIntegralFormatIfNoEmpty(result.damageAssistedStun)
         self.stunNum = style.getIntegralFormatIfNoEmpty(result.stunNum)
         self.capturePoints = (result.capturePoints, result.droppedCapturePoints)
+        self.damageToSupplies = style.getIntegralFormatIfNoEmpty(result.damageToSupplies)
+        self.damageFromSupplies = style.getIntegralFormatIfNoEmpty(result.damageFromSupplies)
+        self.suppliesDestroyed = style.getIntegralFormatIfNoEmpty(result.suppliesDestroyed)
+        self.distributedSupplyDamage = style.getIntegralFormatIfNoEmpty(result.distributedSupplyDamage)
+        self.distributedSupplyBasePoints = (result.distributedSupplyCapturePoints, result.distributedSupplyDefensePoints)
 
     def getVO(self):
         vo = []
@@ -418,10 +425,11 @@ class AllEpicVehicleStatValuesBlock(base.StatsBlock):
         isPersonal, iterator = result
         add = self.addNextComponent
         stunFilter = _getStunFilter()
+        supplyDistributedFilter = ('distributedSupplyDamage', 'distributedSupplyBasePoints')
         for vehicle in iterator:
             block = EpicVehicleStatValuesBlock()
             block.setPersonal(isPersonal)
-            block.addFilters(stunFilter)
+            block.addFilters(stunFilter + supplyDistributedFilter)
             block.setRecord(vehicle, reusable)
             add(block)
 
@@ -511,12 +519,9 @@ class TeamStatsBlock(base.StatsBlock):
     def setRecord(self, result, reusable):
         personalInfo = reusable.getPlayerInfo()
         personalDBID = personalInfo.dbID
-        if personalInfo.squadIndex:
-            personalPrebattleID = personalInfo.prebattleID
-        else:
-            personalPrebattleID = 0
+        personalPrebattleID = personalInfo.prebattleID if personalInfo.squadIndex else 0
         for idx, item in enumerate(result):
-            if item.vehicle is not None and item.vehicle.isObserver:
+            if self._shouldSkipItem(item):
                 continue
             player = item.player
             isPersonal = player.dbID == personalDBID
@@ -529,7 +534,9 @@ class TeamStatsBlock(base.StatsBlock):
             block.setRecord(item, reusable)
             self.addComponent(self.getNextComponentIndex(), block)
 
-        return
+    def _shouldSkipItem(self, item):
+        vehicle = item.vehicle
+        return vehicle is not None and vehicle.isObserver
 
 
 class RegularTeamStatsBlock(TeamStatsBlock):
@@ -551,6 +558,12 @@ class EpicTeamStatsBlock(TeamStatsBlock):
 
     def __init__(self, meta=None, field='', *path):
         super(EpicTeamStatsBlock, self).__init__(EpicVehicleStatsBlock, meta, field, *path)
+
+    def _shouldSkipItem(self, item):
+        baseSkip = super(EpicTeamStatsBlock, self)._shouldSkipItem(item)
+        vehicle = item.vehicle
+        supplySkip = vehicle is not None and Supply.isSupply(vehicle.tags)
+        return baseSkip or supplySkip
 
 
 class StrongholdTeamStatsBlock(TeamStatsBlock):

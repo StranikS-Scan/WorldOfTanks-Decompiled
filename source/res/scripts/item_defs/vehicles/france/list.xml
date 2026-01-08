@@ -1237,7 +1237,7 @@
     <price>	11000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_support HD mediumTank1 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
+    <tags>	mediumTank role_MT_support HD mediumTank1 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank lockOutfit restoreWithStyle	</tags>
     <level>	8	</level>
   </F68_AMX_Chasseur_de_char_46_02>
   <F116_Bat_Chatillon_Bourrasque_02>
@@ -1279,4 +1279,18 @@
     <tags>	lightTank role_LT_universal HD scout improvedVentilation_class3_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user special secret testTank lockOutfit	</tags>
     <level>	9	</level>
   </F123_ERAC_105_Proto>
+  <F110_Lynx_6x6_FL>
+    <id>	31015	</id>
+    <userString>	#france_vehicles:F110_Lynx_6x6_FL	</userString>
+    <shortUserString>	#france_vehicles:F110_Lynx_6x6_FL_short	</shortUserString>
+    <description>	#france_vehicles:F110_Lynx_6x6_descr	</description>
+    <shortDescriptionSpecial>	#france_vehicles:F110_Lynx_6x6_FL_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#france_vehicles:F110_Lynx_6x6_FL_long_special	</longDescriptionSpecial>
+    <price>	1	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	lightTank role_LT_wheeled private epic_battles HD wheeledVehicle magneticAutoAim speedometer siegeMode scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_light_user	</tags>
+    <level>	8	</level>
+  </F110_Lynx_6x6_FL>
 </list.xml>

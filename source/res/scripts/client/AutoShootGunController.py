@@ -5,6 +5,7 @@ import typing
 import weakref
 import BigWorld
 import CGF
+import Math
 from auto_shoot_guns.auto_shoot_guns_common import AutoShootGunState
 from constants import SERVER_TICK_LENGTH
 from gui.battle_control.controllers.auto_shoot_guns.auto_shoot_helpers import getGunSoundObject
@@ -12,20 +13,23 @@ from gui.battle_control.controllers.auto_shoot_guns.auto_shoot_wrappers import c
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from PlayerEvents import g_playerEvents
+from helpers.events_handler import EventsHandler
 from skeletons.gui.battle_session import IBattleSessionProvider
 from vehicle_systems.model_assembler import loadAppearancePrefab
+from vehicle_systems.tankStructure import TankNodeNames
 if typing.TYPE_CHECKING:
     from cgf_components.auto_shoot_guns_component import AutoShootingGunBurstPixie
     from GenericComponents import ParticleComponent
     from Vehicular import GunRecoilAnimator
 _logger = logging.getLogger(__name__)
+_RTPC_SHELLS_REMAIN = 'RTPC_ext_autoguns_medium_counter'
 
 def getPlayerVehicleAutoShootGunController():
     vehicle = BigWorld.player().getVehicleAttached()
     return vehicle.dynamicComponents.get('autoShootGunController', None) if vehicle is not None and vehicle.isPlayerVehicle and vehicle.isAlive() else None
 
 
-class AutoShootGunShootingAnimator(CallbackDelayer):
+class AutoShootGunShootingAnimator(CallbackDelayer, EventsHandler):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, vehicle, controller):
@@ -35,19 +39,28 @@ class AutoShootGunShootingAnimator(CallbackDelayer):
         self.__activationSound = self.__deactivationSound = ''
         self.__burstParticles = dict()
         self.__recoilAnimators = set()
-        self.__shotObjects = set()
+        self.__shotObjects = list()
+        self.__loadedShells = dict()
+        self._subscribe()
+
+    def _getEvents(self):
+        ammo = self.__sessionProvider.shared.ammo
+        return ((ammo.onShellsUpdated, self.__onShellsUpdated), (ammo.onShellsAdded, self.__onShellsAdded)) if ammo is not None else super(AutoShootGunShootingAnimator, self)._getEvents()
 
     def initSoundParams(self, isPlayerVehicle, activationSounds, deactivationSounds):
-        self.__activationSound = activationSounds.getEvents()[0 if isPlayerVehicle else 1]
-        self.__deactivationSound = deactivationSounds.getEvents()[0 if isPlayerVehicle else 1]
+        soundIndex = 0 if isPlayerVehicle else 1
+        self.__activationSound = activationSounds.getEvents()[soundIndex]
+        self.__deactivationSound = deactivationSounds.getEvents()[soundIndex]
 
     def destroy(self):
         self.__vehicle = None
         self.__controller = None
-        self.__shotObjects.clear()
+        self.__shotObjects = []
         self.__burstParticles.clear()
         self.__recoilAnimators.clear()
         self.__activationSound = self.__deactivationSound = ''
+        self.__loadedShells.clear()
+        self._unsubscribe()
         super(AutoShootGunShootingAnimator, self).destroy()
         return
 
@@ -60,10 +73,10 @@ class AutoShootGunShootingAnimator(CallbackDelayer):
         burstRate = self.__controller.getShootRatePerSecond()
         if burstRate > 0.0:
             recoilAnimator.shotsPerSec = burstRate
-            recoilAnimator.enableLoop()
+            recoilAnimator.enableLoop(0)
 
     def addShotGameObject(self, shotGameObject):
-        self.__shotObjects.add(shotGameObject)
+        self.__shotObjects.append(shotGameObject)
 
     def removeBurstParticleComponent(self, particleConfig, particleComponent):
         self.__burstParticles.pop(particleConfig, particleComponent)
@@ -72,43 +85,81 @@ class AutoShootGunShootingAnimator(CallbackDelayer):
         self.__recoilAnimators.discard(recoilAnimator)
 
     def removeShotGameObject(self, shotGameObject):
-        self.__shotObjects.discard(shotGameObject)
+        self.__shotObjects.remove(shotGameObject)
 
-    def updateAutoShootingStatus(self, stateStatus):
+    def receiveShotsImpulse(self, dt):
+        appearance = self.__vehicle.appearance
+        if appearance is None or appearance.compoundModel is None:
+            return
+        else:
+            shootRatePerSecond = self.__controller.getShootRatePerSecond()
+            if shootRatePerSecond == 0.0:
+                return
+            gunNode = appearance.compoundModel.node(TankNodeNames.GUN_INCLINATION)
+            appearance.receiveShotImpulse(Math.Matrix(gunNode).applyVector(Math.Vector3(0, 0, -1)), appearance.typeDescriptor.gun.impulse * shootRatePerSecond * dt)
+            return dt
+
+    def updateAutoShootingStatus(self, stateStatus, gunIndex):
         burstInProgress = self.hasDelayedCallback(self.__updateBurst)
         if stateStatus is None or stateStatus.state != AutoShootGunState.SHOOT:
             self.stopCallback(self.__updateBurst)
+            self.stopCallback(self.receiveShotsImpulse)
             self.__deactivateBurst(burstInProgress)
             return
         elif not burstInProgress:
             self.delayCallback(SERVER_TICK_LENGTH, self.__updateBurst)
-            self.__activateBurst()
+            self.delayCallback(SERVER_TICK_LENGTH / 2, self.receiveShotsImpulse, SERVER_TICK_LENGTH / 2)
+            self.__activateBurst(gunIndex)
             return
         else:
             self.__updateBurst()
             return
 
-    def __activateBurst(self):
-        gunSoundObject = getGunSoundObject(self.__vehicle)
-        self.__updateBurstParticles(self.__controller.getShootRatePerSecond())
-        gunSoundObject.play(self.__activationSound)
+    def __activateBurst(self, gunIndex):
+        self.__showBurstStart(gunIndex)
+        self.__updateBurst()
+        getGunSoundObject(self.__vehicle).play(self.__activationSound)
 
     def __deactivateBurst(self, burstInProgress):
         getGunSoundObject(self.__vehicle).play(self.__deactivationSound if burstInProgress else '')
         self.__updateBurstParticles(0.0)
+        for recoilAnimator in self.__recoilAnimators:
+            recoilAnimator.disableLoop()
 
-    def __showBurstStart(self):
-        for shotGameObject in self.__shotObjects:
+    def __showBurstStart(self, gunIndex):
+        if len(self.__shotObjects) > gunIndex >= 0:
+            shotGameObject = self.__shotObjects[gunIndex]
             shotGameObject.deactivate()
             shotGameObject.activate()
+        for recoilAnimator in self.__recoilAnimators:
+            recoilAnimator.enableLoop(gunIndex)
 
-    @staticmethod
-    def __updateBurst():
+    def __updateBurst(self):
+        rate = self.__controller.getShootRatePerSecond()
+        self.__updateBurstRecoil(rate)
+        self.__updateBurstParticles(rate)
         return SERVER_TICK_LENGTH
 
     def __updateBurstParticles(self, rate):
         for particleConfig, particleComponent in self.__burstParticles.iteritems():
             particleComponent.setEmissionRate(rate * particleConfig.rateFactor)
+
+    def __updateBurstRecoil(self, rate):
+        for recoilAnimator in self.__recoilAnimators:
+            recoilAnimator.shotsPerSec = rate
+
+    def __onShellsUpdated(self, intCD, quantity, *args):
+        vehicle = self.__vehicle
+        if not vehicle.isPlayerVehicle:
+            return
+        if vehicle.typeDescriptor.isClipGun:
+            shellsPercent = self.__sessionProvider.shared.ammo.getClipPercentLeft()
+        else:
+            shellsPercent = float(quantity) / self.__loadedShells[intCD]
+        getGunSoundObject(vehicle).setRTPC(_RTPC_SHELLS_REMAIN, shellsPercent * 100)
+
+    def __onShellsAdded(self, intCD, _, quantity, *args):
+        self.__loadedShells[intCD] = quantity
 
 
 class AutoShootGunController(BigWorld.DynamicScriptComponent):
@@ -122,6 +173,7 @@ class AutoShootGunController(BigWorld.DynamicScriptComponent):
         self.__shootingPrefab = ''
         self.__shootingAnimator = AutoShootGunShootingAnimator(self.entity, self)
         self.__defaultShootRate = 0.0
+        self.__gunIndex = 0
         self.__initAutoShootingAppearance()
         self.__initAutoShootingAvatar()
         return
@@ -152,10 +204,14 @@ class AutoShootGunController(BigWorld.DynamicScriptComponent):
             self.__updateAutoShootingAvatar()
         if self.__appearanceInited and self.__isAppearanceReady():
             self.__updateAutoShootingAppearance()
+        state = self.stateStatus.state if self.stateStatus is not None else AutoShootGunState.NONE
+        self.entity.onAutoShootStateChange(state)
+        return
 
     def onDestroy(self):
         self.entity.onAppearanceReady -= self.__onAppearanceReady
         g_playerEvents.onAvatarReady -= self.__onAvatarReady
+        g_playerEvents.onShowShooterTracer -= self.__onShowShooterTracer
         self.__shootingAnimator.destroy()
         if self.__prefabRoot is not None:
             _logger.debug('QFG: removeGameObject (onDestroy) for %s', self.entity.id)
@@ -219,17 +275,23 @@ class AutoShootGunController(BigWorld.DynamicScriptComponent):
             return
         self.__prefabRoot = root
 
+    def __onShowShooterTracer(self, shooter, gunIndex):
+        if self.entity.id != shooter.id:
+            return
+        self.__gunIndex = gunIndex
+
     def __initAutoShootingAvatar(self):
         if self.__isAvatarReady():
             self.__onAvatarReady()
         else:
             g_playerEvents.onAvatarReady += self.__onAvatarReady
+            g_playerEvents.onShowShooterTracer += self.__onShowShooterTracer
 
     def __initAutoShootingAppearance(self):
-        if self.__isAppearanceReady():
+        forceReloading = self.entity.publicInfo.compDescr != self.entity.typeDescriptor.makeCompactDescr()
+        if not forceReloading and self.__isAppearanceReady():
             self.__onAppearanceReady()
-        else:
-            self.entity.onAppearanceReady += self.__onAppearanceReady
+        self.entity.onAppearanceReady += self.__onAppearanceReady
 
     def __updateAutoShootingAvatar(self):
         player = BigWorld.player()
@@ -243,4 +305,4 @@ class AutoShootGunController(BigWorld.DynamicScriptComponent):
             return
 
     def __updateAutoShootingAppearance(self):
-        self.__shootingAnimator.updateAutoShootingStatus(self.stateStatus)
+        self.__shootingAnimator.updateAutoShootingStatus(self.stateStatus, self.__gunIndex)

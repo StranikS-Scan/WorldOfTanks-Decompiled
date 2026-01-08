@@ -62,6 +62,7 @@
     <_120mm_Type_60_Gun>	63	</_120mm_Type_60_Gun>
     <_120mm_Type_71_Gun>	64	</_120mm_Type_71_Gun>
     <_90mm_Type_51J>	65	</_90mm_Type_51J>
+    <_105mm_Type_92_Gun_Mod1952_FL>	501	</_105mm_Type_92_Gun_Mod1952_FL>
     <_150mm_45_41st_Year_Type_7x7>	31002	</_150mm_45_41st_Year_Type_7x7>
     <_88mm_Type3_Gun_test>	31003	</_88mm_Type3_Gun_test>
     <_120mm_Type_71_Gun_test>	31004	</_120mm_Type_71_Gun_test>
@@ -3229,6 +3230,64 @@
         </_105mm_HE_Type_92B>
       </shots>
     </_105mm_Type_92_Gun_Mod1952>
+    <_105mm_Type_92_Gun_Mod1952_FL>
+      <userString>	#japan_vehicles:_105mm_Type_92_Gun_Mod1952	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	128000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.12	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	10	</reloadTime>
+      <maxAmmo>	50	</maxAmmo>
+      <aimingTime>	2.3	</aimingTime>
+      <weight>	1750	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_AP_Type_92>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1160	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	228 212	</piercingPower>
+        </_105mm_AP_Type_92>
+        <_105mm_HEAT_Type_92>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	980	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	280 280	</piercingPower>
+        </_105mm_HEAT_Type_92>
+        <_105mm_HE_Type_92B>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	980	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	53 53	</piercingPower>
+        </_105mm_HE_Type_92B>
+      </shots>
+    </_105mm_Type_92_Gun_Mod1952_FL>
     <_105mm_Type_92_Gun_Mod1952_test>
       <userString>	#japan_vehicles:_105mm_Type_92_Gun_Mod1952	</userString>
       <tags></tags>
@@ -3322,20 +3381,27 @@
         <whileGunDamaged>	2.0	</whileGunDamaged>
       </shotDispersionFactors>
       <shots>
-        <_106mm_HEP_M346A1>
-          <defaultPortion>	1.0	</defaultPortion>
-          <speed>	600	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	150 150	</piercingPower>
-        </_106mm_HEP_M346A1>
         <_106mm_HEAT_M344A1>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	800	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	230 230	</piercingPower>
+          <piercingPower>	220 220	</piercingPower>
         </_106mm_HEAT_M344A1>
+        <_106mm_HEP_M346A1>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	600	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	130 130	</piercingPower>
+        </_106mm_HEP_M346A1>
+        <_106mm_HEP_M346A2>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	600	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	50 50	</piercingPower>
+        </_106mm_HEP_M346A2>
       </shots>
     </_106mm_M40_Recoilless_Dual_Gun>
     <_120mm_Short_Barrel_Gun>

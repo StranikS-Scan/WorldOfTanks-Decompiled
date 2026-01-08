@@ -44,6 +44,8 @@ from AvatarInputHandler.commands.vehicle_upgrade_control import VehicleUpdateCon
 from AvatarInputHandler.commands.vehicle_upgrade_control import VehicleUpgradePanelControl
 from AvatarInputHandler.remote_camera_sender import RemoteCameraSender
 from AvatarInputHandler.siege_mode_player_notifications import SiegeModeSoundNotifications, SiegeModeCameraShaker, TurboshaftModeSoundNotifications
+from AvatarInputHandler.player_cache import PlayerCacheController
+from avatar_helpers.player_cache import IPlayerCacheController
 from Event import Event
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import ARENA_PERIOD, AIMING_MODE
@@ -1087,3 +1089,7 @@ class _VertScreenshotCamera(object):
         BigWorld.setWatcher('Render/Terrain/AdaptiveMesh/cascades enabled', False)
         BigWorld.setWatcher('Render/Water/out land water', False)
         LOG_DEBUG('Vertical screenshot camera is enabled')
+
+
+def getAvatarInputHandlerConfig(manager):
+    manager.addInstance(IPlayerCacheController, PlayerCacheController(), finalizer='destroy')

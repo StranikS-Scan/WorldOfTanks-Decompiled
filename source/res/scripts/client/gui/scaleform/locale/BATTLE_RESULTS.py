@@ -250,6 +250,11 @@ class BATTLE_RESULTS(object):
     TEAM_STATS_LABELS_CAPTUREPOINTSVAL = '#battle_results:team/stats/labels_capturePointsVal'
     TEAM_STATS_LABELS_MILEAGE = '#battle_results:team/stats/labels_mileage'
     TEAM_STATS_LABELS_TIMESDESTROYED = '#battle_results:team/stats/labels_timesDestroyed'
+    TEAM_STATS_LABELS_DAMAGETOSUPPLIES = '#battle_results:team/stats/labels_damageToSupplies'
+    TEAM_STATS_LABELS_DAMAGEFROMSUPPLIES = '#battle_results:team/stats/labels_damageFromSupplies'
+    TEAM_STATS_LABELS_SUPPLIESDESTROYED = '#battle_results:team/stats/labels_suppliesDestroyed'
+    TEAM_STATS_LABELS_DISTRIBUTEDSUPPLYDAMAGE = '#battle_results:team/stats/labels_distributedSupplyDamage'
+    TEAM_STATS_LABELS_DISTRIBUTEDSUPPLYBASEPOINTS = '#battle_results:team/stats/labels_distributedSupplyBasePoints'
     TEAM_STATS_LABELS_FLAGS = '#battle_results:team/stats/labels_flags'
     TEAM_STATS_LABELS_DEATHS = '#battle_results:team/stats/labels_deaths'
     TEAM_STATS_MILEAGE = '#battle_results:team/stats/mileage'
@@ -292,8 +297,6 @@ class BATTLE_RESULTS(object):
     DETAILS_CALCULATIONS_BASE = '#battle_results:details/calculations/base'
     DETAILS_CALCULATIONS_XPRECORD = '#battle_results:details/calculations/xpRecord'
     DETAILS_CALCULATIONS_SQUADBONUS = '#battle_results:details/calculations/squadBonus'
-    DETAILS_CALCULATIONS_NEWYEAR = '#battle_results:details/calculations/newYear'
-    DETAILS_CALCULATIONS_VEHICLEBRANCH = '#battle_results:details/calculations/vehicleBranch'
     DETAILS_CALCULATIONS_NOPENALTY = '#battle_results:details/calculations/noPenalty'
     DETAILS_CALCULATIONS_EVENT = '#battle_results:details/calculations/event'
     DETAILS_CALCULATIONS_SUBSTEAMBONUS = '#battle_results:details/calculations/subsTeamBonus'
@@ -308,6 +311,8 @@ class BATTLE_RESULTS(object):
     DETAILS_CALCULATIONS_FRIENDLYFIRERANKEDXPPENALTY = '#battle_results:details/calculations/friendlyFireRankedXpPenalty'
     DETAILS_CALCULATIONS_FRIENDLYFIRECOMPENSATION = '#battle_results:details/calculations/friendlyFireCompensation'
     DETAILS_CALCULATIONS_PLAYERRANKXP = '#battle_results:details/calculations/playerRankXP'
+    DETAILS_CALCULATIONS_FRONTLINEXP = '#battle_results:details/calculations/frontlineXP'
+    DETAILS_CALCULATIONS_DISTRIBUTEDXP = '#battle_results:details/calculations/distributedXP'
     DETAILS_CALCULATIONS_AUTOREPAIR = '#battle_results:details/calculations/autoRepair'
     DETAILS_CALCULATIONS_AUTOLOAD = '#battle_results:details/calculations/autoLoad'
     DETAILS_CALCULATIONS_AUTOEQUIP = '#battle_results:details/calculations/autoEquip'
@@ -381,8 +386,6 @@ class BATTLE_RESULTS(object):
      DETAILS_CALCULATIONS_BASE,
      DETAILS_CALCULATIONS_XPRECORD,
      DETAILS_CALCULATIONS_SQUADBONUS,
-     DETAILS_CALCULATIONS_NEWYEAR,
-     DETAILS_CALCULATIONS_VEHICLEBRANCH,
      DETAILS_CALCULATIONS_NOPENALTY,
      DETAILS_CALCULATIONS_EVENT,
      DETAILS_CALCULATIONS_SUBSTEAMBONUS,
@@ -397,6 +400,8 @@ class BATTLE_RESULTS(object):
      DETAILS_CALCULATIONS_FRIENDLYFIRERANKEDXPPENALTY,
      DETAILS_CALCULATIONS_FRIENDLYFIRECOMPENSATION,
      DETAILS_CALCULATIONS_PLAYERRANKXP,
+     DETAILS_CALCULATIONS_FRONTLINEXP,
+     DETAILS_CALCULATIONS_DISTRIBUTEDXP,
      DETAILS_CALCULATIONS_AUTOREPAIR,
      DETAILS_CALCULATIONS_AUTOLOAD,
      DETAILS_CALCULATIONS_AUTOEQUIP,
@@ -456,6 +461,11 @@ class BATTLE_RESULTS(object):
      TEAM_STATS_LABELS_CAPTUREPOINTSVAL,
      TEAM_STATS_LABELS_MILEAGE,
      TEAM_STATS_LABELS_TIMESDESTROYED,
+     TEAM_STATS_LABELS_DAMAGETOSUPPLIES,
+     TEAM_STATS_LABELS_DAMAGEFROMSUPPLIES,
+     TEAM_STATS_LABELS_SUPPLIESDESTROYED,
+     TEAM_STATS_LABELS_DISTRIBUTEDSUPPLYDAMAGE,
+     TEAM_STATS_LABELS_DISTRIBUTEDSUPPLYBASEPOINTS,
      TEAM_STATS_LABELS_FLAGS,
      TEAM_STATS_LABELS_DEATHS,
      TEAM_STATS_LABELS_DAMAGEDEALTBYSKILLS,

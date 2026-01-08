@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic/page.py
+import CommandMapping
+import BigWorld
 from gui.Scaleform.daapi.view.battle.classic.page import DynamicAliases as ClassicDynAliases
 from gui.Scaleform.daapi.view.battle.shared.start_countdown_sound_player import StartCountdownSoundPlayer
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
@@ -12,9 +14,7 @@ from gui.Scaleform.daapi.view.battle.epic import markers2d
 from gui.Scaleform.daapi.view.battle.shared import crosshair
 from gui.Scaleform.daapi.view.battle.epic import finish_sound_player, drone_music_player
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
-import CommandMapping
 from constants import ARENA_PERIOD
-import BigWorld
 from gui.Scaleform.daapi.view.battle.shared.page import ComponentsConfig
 from shared_utils import CONST_CONTAINER
 
@@ -93,7 +93,8 @@ _GAME_UI = {BATTLE_VIEW_ALIASES.VEHICLE_ERROR_MESSAGES,
  BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL,
  BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL,
  BATTLE_VIEW_ALIASES.CALLOUT_PANEL,
- BATTLE_VIEW_ALIASES.PERKS_PANEL}
+ BATTLE_VIEW_ALIASES.PERKS_PANEL,
+ BATTLE_VIEW_ALIASES.EPIC_PROGRESSION_CMP}
 _SPECTATOR_UI = {BATTLE_VIEW_ALIASES.EPIC_SPECTATOR_VIEW,
  BATTLE_VIEW_ALIASES.DEBUG_PANEL,
  BATTLE_VIEW_ALIASES.PLAYER_MESSAGES,
@@ -128,7 +129,10 @@ _STATE_TO_UI = {PageStates.GAME: _GAME_UI,
                       BATTLE_VIEW_ALIASES.EPIC_DEPLOYMENT_MAP,
                       BATTLE_VIEW_ALIASES.BATTLE_MESSENGER,
                       BATTLE_VIEW_ALIASES.BATTLE_TIMER},
- PageStates.COUNTDOWN: _GAME_UI.difference({BATTLE_VIEW_ALIASES.EPIC_REINFORCEMENT_PANEL, BATTLE_VIEW_ALIASES.EPIC_MISSIONS_PANEL, BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL}).union({BATTLE_VIEW_ALIASES.PREBATTLE_TIMER, BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL}),
+ PageStates.COUNTDOWN: _GAME_UI.difference({BATTLE_VIEW_ALIASES.EPIC_REINFORCEMENT_PANEL,
+                        BATTLE_VIEW_ALIASES.EPIC_MISSIONS_PANEL,
+                        BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,
+                        BATTLE_VIEW_ALIASES.EPIC_PROGRESSION_CMP}).union({BATTLE_VIEW_ALIASES.PREBATTLE_TIMER, BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL}),
  PageStates.SPECTATOR_DEATHCAM: _SPECTATOR_UI.union({BATTLE_VIEW_ALIASES.DAMAGE_PANEL,
                                  BATTLE_VIEW_ALIASES.EPIC_REINFORCEMENT_PANEL,
                                  BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL,
@@ -137,7 +141,6 @@ _STATE_TO_UI = {PageStates.GAME: _GAME_UI,
  PageStates.SPECTATOR_FOLLOW: _SPECTATOR_UI.union({BATTLE_VIEW_ALIASES.DAMAGE_PANEL,
                                BATTLE_VIEW_ALIASES.RECOVERY_PANEL,
                                BATTLE_VIEW_ALIASES.STATUS_NOTIFICATIONS_PANEL,
-                               BATTLE_VIEW_ALIASES.EPIC_MISSIONS_PANEL,
                                BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL}),
  PageStates.GAME_OVER: _GAME_UI.difference({BATTLE_VIEW_ALIASES.EPIC_REINFORCEMENT_PANEL,
                         BATTLE_VIEW_ALIASES.EPIC_MISSIONS_PANEL,
@@ -160,6 +163,9 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
         self.__topState = PageStates.NONE
         self.__activeState = PageStates.NONE
         return
+
+    def _handleToggleFullStatsQuestProgress(self, event):
+        self._toggleFullStats(event.ctx['isDown'])
 
     def _invalidateState(self):
         if self.__topState != PageStates.NONE:
@@ -306,6 +312,9 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
             return
 
     def _toggleFullStats(self, isShown, permanent=None, tabAlias=None):
+        manager = self.app.containerManager
+        if manager.isModalViewsIsExists() and isShown:
+            return
         if not isShown and self.__topState == PageStates.TABSCREEN:
             self.__topState = PageStates.NONE
         elif isShown and self.__topState != PageStates.RADIAL:

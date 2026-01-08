@@ -946,7 +946,10 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'comp7_5_2_champion',
  'comp7_5_2_legend',
  'NY26_AtmsphrLevel',
- 'NY26_CelebTaskCompleted']
+ 'NY26_CelebTaskCompleted',
+ 'clan_season_25_first',
+ 'clan_season_25_last',
+ 'BattlePassCommonPr_18_5_Marathon']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -1220,7 +1223,10 @@ _singleAchievementsPopUps = ['titleSniper',
  'comp7_5_2_champion',
  'comp7_5_2_legend',
  'NY26_AtmsphrLevel',
- 'NY26_CelebTaskCompleted']
+ 'NY26_CelebTaskCompleted',
+ 'clan_season_25_first',
+ 'clan_season_25_last',
+ 'BattlePassCommonPr_18_5_Marathon']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, SINGLE_ACHIEVEMENTS_DEPENDENCIES, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',
@@ -1299,8 +1305,10 @@ EPIC_BATTLE_ACHIEVEMENTS_BLOCK_LAYOUT = ['occupyingForce',
  'generalOfTheArmy',
  'supremeGun',
  'smallArmy',
- 'frontlineMedal']
-_epicBattleAchievementsPopUps = ['frontlineMedal']
+ 'frontlineMedal',
+ 'saboteur',
+ 'saboteurProgress']
+_epicBattleAchievementsPopUps = ['frontlineMedal', 'saboteur']
 _epicBattleAchievementsBlockBuilder = StaticSizeBlockBuilder('epicBattleAchievements', EPIC_BATTLE_ACHIEVEMENTS_BLOCK_LAYOUT, EPIC_BATTLE_STATS_DEPENDENCIES, _epicBattleAchievementsPopUps)
 _epicBattleSeasonsBlockBuilder = DictBlockBuilder('epicSeasons', 'II', 'HHBHH', {})
 _battleRoyaleSeasonsBlockBuilder = DictBlockBuilder('battleRoyaleSeasons', 'II', 'HHH', {})

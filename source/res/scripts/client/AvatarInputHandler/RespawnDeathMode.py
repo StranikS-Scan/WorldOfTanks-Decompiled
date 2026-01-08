@@ -21,6 +21,7 @@ class RespawnDeathMode(IControlMode):
     __aimOffset = aih_global_binding.bindRO(aih_global_binding.BINDING_ID.AIM_OFFSET)
 
     def __init__(self, dataSection, avatarInputHandler):
+        super(RespawnDeathMode, self).__init__()
         self.__aih = weakref.proxy(avatarInputHandler)
         self.__cam = ArcadeCamera(dataSection['camera'], dataSection.readVector2('defaultOffset'))
         self.__isEnabled = False

@@ -100,6 +100,7 @@ class ProgressionView(ViewImpl):
         isEventEnding = isEventEndingsSoon(resourceWell=self.__resourceWell)
         model.setIsEventEndingSoon(isEventEnding)
         model.setTimeLeft(self.__resourceWell.getFinishTime() - time_utils.getServerUTCTime())
+        model.setBeforeEventTimeLeft(max(0, self.__resourceWell.getStartTime() - time_utils.getServerUTCTime()))
         model.setServerTimestamp(time_utils.getServerUTCTime())
         if isEventEnding:
             self.__notifier.stopNotification()

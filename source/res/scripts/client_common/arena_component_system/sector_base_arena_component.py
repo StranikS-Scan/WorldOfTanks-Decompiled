@@ -33,6 +33,7 @@ class SectorBaseArenaComponent(ClientArenaComponent):
         self.onSectorBasePointsUpdate = Event.Event(self._eventManager)
         self.onSectorBaseActiveStateChanged = Event.Event(self._eventManager)
         self.onSectorBasePlayerAction = Event.Event(self._eventManager)
+        self.onExtraInvaderUpdate = Event.Event(self._eventManager)
         return
 
     def destroy(self):
@@ -49,6 +50,9 @@ class SectorBaseArenaComponent(ClientArenaComponent):
 
     def sectorBasePointsUpdated(self, sectorBase):
         self.onSectorBasePointsUpdate(sectorBase.baseID, sectorBase.isPlayerTeam(), sectorBase.capturePercentage, sectorBase.capturingStopped, sectorBase.invadersCount, sectorBase.expectedCaptureTime)
+
+    def extraInvaderUpdate(self, sectorBase):
+        self.onExtraInvaderUpdate(sectorBase.baseID, sectorBase.hasExtraInvader)
 
     def sectorBaseCaptured(self, sectorBase):
         self.onSectorBaseCaptured(sectorBase.baseID, sectorBase.isPlayerTeam())

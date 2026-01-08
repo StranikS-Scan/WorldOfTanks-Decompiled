@@ -4,9 +4,9 @@
     <commander></commander>
     <gunner></gunner>
     <driver></driver>
-    <loader></loader>
-    <loader></loader>
     <radioman></radioman>
+    <loader></loader>
+    <loader></loader>
   </crew>
   <supplySlots>	5 1 1 6 6 6 7 8 8 8	</supplySlots>
   <postProgressionTree>	role_HT_assault	</postProgressionTree>
@@ -48,12 +48,12 @@
       <armor_3>	180	</armor_3>
       <armor_4>	200	</armor_4>
       <armor_5>	50	</armor_5>
-      <armor_6>	250	</armor_6>
-      <armor_7>	200	</armor_7>
+      <armor_6>	200	</armor_6>
+      <armor_7>	250	</armor_7>
       <armor_8>	0	</armor_8>
       <armor_9>	40	</armor_9>
       <armor_10>	40	</armor_10>
-      <armor_11>	180	</armor_11>
+      <armor_11>	250	</armor_11>
       <armor_12>	200	</armor_12>
       <armor_13>	200	</armor_13>
       <armor_14>	200	</armor_14>
@@ -1871,8 +1871,8 @@
         <armor_2>	280	</armor_2>
         <armor_3>	200	</armor_3>
         <armor_4>	200	</armor_4>
-        <armor_5>	50	</armor_5>
-        <armor_6>	120	</armor_6>
+        <armor_5>	60	</armor_5>
+        <armor_6>	180	</armor_6>
         <armor_7>	220	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	230	</armor_9>
@@ -1912,13 +1912,13 @@
           <armor>
             <armor_1>	280	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	220	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	280	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_5>	280	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
             <armor_6>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
@@ -1931,13 +1931,13 @@
             <maxPitch>	0 8 0.42 8 0.44 5 0.56 5 0.58 8 1 8	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	16.7	</reloadTime>
+          <reloadTime>	12	</reloadTime>
           <clip>
-            <count>	3	</count>
+            <count>	2	</count>
             <rate>	15	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	16.5 14.7 13	</reloadTime>
+            <reloadTime>	12 18	</reloadTime>
           </autoreload>
           <aimingTime>	2.9	</aimingTime>
           <invisibilityFactorAtShot>	0.162	</invisibilityFactorAtShot>
@@ -2573,7 +2573,7 @@
               <rollingFriction>	0.1449	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.04465	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

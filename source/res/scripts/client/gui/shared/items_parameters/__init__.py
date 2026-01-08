@@ -76,9 +76,12 @@ def isBurstGun(gunDescr):
 
 
 def getShotsPerMinute(descriptor, reloadTime, autoReloadGun=False):
+    hasClippedAutoReloadGun = isClipGun(descriptor) and autoReloadGun
     hasClippedDualGun = isClipGun(descriptor) and isDualGun(descriptor)
     if hasClippedDualGun and autoReloadGun:
         return __getShotsPerMinuteForClippedDualgunWithAutorelaod(descriptor, reloadTime)
+    if hasClippedAutoReloadGun:
+        return __getShotsPerMinuteForClippedGunWithAutorelaod(descriptor, reloadTime)
     clip = descriptor.clip
     burst = descriptor.burst
     if autoReloadGun or hasClippedDualGun:
@@ -102,6 +105,10 @@ def __getShotsPerMinuteForClippedDualgunWithAutorelaod(descriptor, reloadTime):
     timeRemaining = time_utils.ONE_MINUTE - value
     counter += timeRemaining / shellLoading
     return counter
+
+
+def __getShotsPerMinuteForClippedGunWithAutorelaod(descriptor, reloadTime):
+    return time_utils.ONE_MINUTE / reloadTime
 
 
 def calcGunParams(gunDescr, descriptors):

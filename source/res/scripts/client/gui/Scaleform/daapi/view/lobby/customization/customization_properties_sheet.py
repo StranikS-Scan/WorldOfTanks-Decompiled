@@ -316,7 +316,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             return
 
     def __applyToOtherAreas(self, installItem):
-        if self.__ctx.mode.tabId not in (CustomizationTabs.PAINTS, CustomizationTabs.CAMOUFLAGES):
+        if self.__ctx.tabId not in (CustomizationTabs.PAINTS, CustomizationTabs.CAMOUFLAGES):
             return
         if installItem:
             self.__ctx.mode.installItemToAllTankAreas(self.__ctx.season, self._attachedAnchor.slotType, self._currentSlotData)
@@ -330,7 +330,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
 
     def __applyToOtherSeasons(self):
         if not self._isItemAppliedToAll:
-            if self.__ctx.mode.tabId == CustomizationTabs.PROJECTION_DECALS:
+            if self.__ctx.tabId == CustomizationTabs.PROJECTION_DECALS:
                 lockedSeasons = []
                 for season in SeasonType.COMMON_SEASONS:
                     outfit = self.__ctx.mode.getModifiedOutfit(season)
@@ -389,12 +389,12 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             return
 
     def __updateItemAppliedToAllFlag(self):
-        if self.__ctx.mode.tabId in (CustomizationTabs.PAINTS, CustomizationTabs.CAMOUFLAGES):
+        if self.__ctx.tabId in (CustomizationTabs.PAINTS, CustomizationTabs.CAMOUFLAGES):
             if self.__isEditableStyle():
                 self._isItemAppliedToAll = self.__isItemAppliedToAllSeasons()
             else:
                 self._isItemAppliedToAll = self.__isItemAppliedToAllRegions()
-        elif self.__ctx.mode.tabId in (CustomizationTabs.MODIFICATIONS,
+        elif self.__ctx.tabId in (CustomizationTabs.MODIFICATIONS,
          CustomizationTabs.EMBLEMS,
          CustomizationTabs.INSCRIPTIONS,
          CustomizationTabs.PROJECTION_DECALS):

@@ -40,17 +40,20 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.epic import super_platoon_panel
     from gui.Scaleform.daapi.view.battle.epic import consumables_panel
     from gui.Scaleform.daapi.view.common.filter_popover import BattleTankCarouselFilterPopover
-    from gui.Scaleform.daapi.view.battle.shared import ribbons_panel
     from gui.Scaleform.daapi.view.battle.epic import ingame_rank_panel
-    from gui.Scaleform.daapi.view.battle.classic import team_bases_panel
+    from gui.Scaleform.daapi.view.battle.epic import ribbons_panel
+    from gui.Scaleform.daapi.view.battle.epic import team_bases_panel
     from gui.Scaleform.daapi.view.battle.shared.hint_panel import component
     from gui.Scaleform.daapi.view.battle.shared import battle_timers
-    from gui.Scaleform.daapi.view.battle.shared import messages
+    from gui.Scaleform.daapi.view.battle.epic import messages as epic_messages
     from gui.impl.battle.battle_page.ammunition_panel import prebattle_ammunition_panel_inject, respawn_ammunition_panel_inject
     from gui.Scaleform.daapi.view.battle.shared import postmortem_panel
     from gui.Scaleform.daapi.view.battle.shared import perks_panel
+    from frontline.gui.Scaleform.daapi.view.battle.sector_progression import SectorProgressionInject
+    from frontline.views.quests_view import EpicBattleQuestInject
+    from frontline.views.quests_tab_view import EpicBattleQuestTabInject
     return (ViewSettings(VIEW_ALIAS.EPIC_BATTLE_PAGE, page.EpicBattlePage, 'epicBattlePage.swf', WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, team_bases_panel.TeamBasesPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, team_bases_panel.EpicTeamBasesPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_LOADING, battle_loading.EpicBattleLoading, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_TANK_CAROUSEL, battle_carousel.BattleTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(BATTLE_VIEW_ALIASES.EPIC_CAROUSEL_FILTER_POPOVER, BattleTankCarouselFilterPopover, 'epicCarouselFilterPopover.swf', WindowLayer.TOP_WINDOW, BATTLE_VIEW_ALIASES.EPIC_CAROUSEL_FILTER_POPOVER, BATTLE_VIEW_ALIASES.EPIC_CAROUSEL_FILTER_POPOVER, SETTINGS_WINDOW_SCOPE),
@@ -58,7 +61,7 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_SCORE_PANEL, score_panel.EpicScorePanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_MISSIONS_PANEL, missions_panel.EpicMissionsPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PERKS_PANEL, perks_panel.PerksPanel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.RIBBONS_PANEL, ribbons_panel.BattleRibbonsPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.RIBBONS_PANEL, ribbons_panel.EpicRibbonsPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_TIMER, battle_timer.EpicBattleTimer, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_RESPAWN_VIEW, respawn.EpicBattleRespawn, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.MINIMAP, minimap.EpicMinimapComponent, ScopeTemplates.DEFAULT_SCOPE),
@@ -70,12 +73,15 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.FULL_STATS, full_stats.EpicFullStatsComponent, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_STATISTIC_DATA_CONTROLLER, stats_exchange.EpicStatisticsDataController, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_SPECTATOR_VIEW, spectator_view.EpicSpectatorView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_PROGRESSION_CMP, SectorProgressionInject, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_BATTLE_QUESTS, EpicBattleQuestInject, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_BATTLE_QUESTS_TAB, EpicBattleQuestTabInject, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.RECOVERY_PANEL, recovery_panel.RecoveryPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.SUPER_PLATOON_PANEL, super_platoon_panel.SuperPlatoonPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, consumables_panel.EpicBattleConsumablesPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_INGAME_RANK, ingame_rank_panel.InGameRankPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.HINT_PANEL, component.BattleHintPanel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.PLAYER_MESSAGES, messages.PlayerMessages, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.PLAYER_MESSAGES, epic_messages.EpicPlayerMessages, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL, prebattle_ammunition_panel_inject.PrebattleAmmunitionPanelInject, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_RESPAWN_AMMUNITION_PANEL, respawn_ammunition_panel_inject.EpicRespawnAmmunitionPanelInject, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL, postmortem_panel.PostmortemPanel, ScopeTemplates.DEFAULT_SCOPE),

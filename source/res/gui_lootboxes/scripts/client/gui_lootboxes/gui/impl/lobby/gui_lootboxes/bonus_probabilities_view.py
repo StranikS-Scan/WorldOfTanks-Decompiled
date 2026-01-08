@@ -15,7 +15,6 @@ from gui.impl.pub import ViewImpl, WindowImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.shared.event_dispatcher import showVehiclePreview, showHangar
 from helpers import dependency
-from new_year.skeletons.new_year import INewYearController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IGuiLootBoxesController
@@ -76,7 +75,6 @@ class BonusProbabilitiesView(ViewImpl):
     __guiLootBoxes = dependency.descriptor(IGuiLootBoxesController)
     __itemsCache = dependency.descriptor(IItemsCache)
     __settingsCore = dependency.descriptor(ISettingsCore)
-    __nyCtl = dependency.descriptor(INewYearController)
     _COMMON_SOUND_SPACE = LOOT_BOXES_OVERLAY_SOUND_SPACE
 
     def __init__(self, layoutID, lootBox):
@@ -208,8 +206,7 @@ class BonusProbabilitiesView(ViewImpl):
             lbSlot = LootBoxSlot(id=idx, probabilities=slot.get('probability', [0]), bonuses=slot.get('bonuses', []), bonusesSortTags=bonusesSortTags)
             lbSlots.append(lbSlot)
 
-        if not self.__nyCtl.isLootboxTankType(self.__lootBox.getType()):
-            lbSlots = sorted(lbSlots, key=lambda x: (x.getBonusType().value, -x.getProbabilities()[0]))
+        lbSlots = sorted(lbSlots, key=lambda x: (x.getBonusType().value, -x.getProbabilities()[0]))
         for slot in lbSlots:
             slotViewModel = slot.getViewData(self.__tooltipData)
             slotsArrayModel.addViewModel(slotViewModel)

@@ -5,6 +5,7 @@ from constants import ARENA_GUI_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_control.arena_info.interfaces import IArenaController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, REUSABLE_BATTLE_CTRL_IDS, getBattleCtrlName
+from gui.battle_control.battle_context_hints.classic_battle_context_hints_config import createClassicBattleContextHintsController
 from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, bootcamp_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, vehicle_state_ctrl, view_points_ctrl, epic_respawn_ctrl, progress_circle_ctrl, ingame_help_ctrl, epic_maps_ctrl, default_maps_ctrl, epic_spectator_ctrl, epic_missions_ctrl, game_notification_ctrl, epic_team_bases_ctrl, anonymizer_fakes_ctrl, game_restrictions_msgs_ctrl, callout_ctrl, deathzones_ctrl, dog_tags_ctrl, team_health_bar_ctrl, battle_notifier_ctrl, prebattle_setups_ctrl, perk_ctrl
 from gui.battle_control.controllers import aiming_sounds_ctrl
 from gui.battle_control.controllers import battle_hints_ctrl
@@ -16,6 +17,7 @@ from gui.battle_control.controllers.battle_spam_ctrl import battle_spam_ctrl
 from gui.battle_control.controllers.appearance_cache_ctrls.default_appearance_cache_ctrl import DefaultAppearanceCacheController
 from gui.battle_control.controllers.appearance_cache_ctrls.event_appearance_cache_ctrl import EventAppearanceCacheController
 from gui.battle_control.controllers.appearance_cache_ctrls.maps_training_appearance_cache_ctrl import MapsTrainingAppearanceCacheController
+from gui.battle_control.controllers.appearance_cache_ctrls.epic_appearance_cache_ctrl import EpicAppearanceCacheController
 from gui.battle_control.controllers.comp7_prebattle_setup_ctrl import Comp7PrebattleSetupController
 from gui.battle_control.controllers.comp7_voip_ctrl import Comp7VOIPController
 from gui.battle_control.controllers.quest_progress import quest_progress_ctrl
@@ -321,6 +323,10 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
     def rankedVOIPController(self):
         return self._repository.getController(BATTLE_CTRL_ID.RANKED_VOIP_CTRL)
 
+    @property
+    def battleContextHintsCtrl(self):
+        return self._repository.getController(BATTLE_CTRL_ID.BATTLE_CONTEXT_HINTS)
+
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):
     __slots__ = ()
@@ -404,18 +410,14 @@ class SharedControllersRepository(_ControllersRepository):
         feedback = feedback_adaptor.createFeedbackAdaptor(setup)
         repository.addController(feedback)
         repository.addController(messages)
-        repository.addController(chat_cmd_ctrl.ChatCommandsController(setup, feedback, ammo))
+        repository.addController(chat_cmd_ctrl.createChatCommandsController(setup, feedback, ammo))
         repository.addController(drr_scale_ctrl.DRRScaleController(messages))
         repository.addController(personal_efficiency_ctrl.createEfficiencyCtrl(setup, feedback, state))
         repository.addController(game_restrictions_msgs_ctrl.createGameRestrictionsMessagesController())
         repository.addArenaController(bootcamp_ctrl.BootcampController(), setup)
         repository.addArenaController(quest_progress_ctrl.createQuestProgressController(), setup)
         repository.addArenaController(view_points_ctrl.ViewPointsController(setup), setup)
-        guiVisitor = setup.arenaVisitor.gui
-        if guiVisitor.isBattleRoyale():
-            repository.addArenaController(arena_border_ctrl.BattleRoyaleBorderCtrl(), setup)
-        else:
-            repository.addArenaController(arena_border_ctrl.ArenaBorderController(), setup)
+        repository.addArenaController(arena_border_ctrl.createBorderController(setup), setup)
         repository.addArenaController(anonymizer_fakes_ctrl.AnonymizerFakesController(setup), setup)
         repository.addArenaViewController(prebattle_setups_ctrl.PrebattleSetupsController(), setup)
         repository.addArenaViewController(arena_load_ctrl.createArenaLoadController(setup), setup)
@@ -475,6 +477,16 @@ class ClassicControllersRepository(_ControllersRepositoryByBonuses):
         return DefaultAppearanceCacheController(setup)
 
 
+class RandomControllerRepository(ClassicControllersRepository):
+    __slots__ = ()
+
+    @classmethod
+    def create(cls, setup):
+        repository = super(RandomControllerRepository, cls).create(setup)
+        repository.addViewController(createClassicBattleContextHintsController(), setup)
+        return repository
+
+
 class EpicControllersRepository(_ControllersRepository):
     __slots__ = ()
 
@@ -492,7 +504,7 @@ class EpicControllersRepository(_ControllersRepository):
         repository.addViewController(epic_missions_ctrl.EpicMissionsController(setup), setup)
         repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
         repository.addArenaViewController(epic_team_bases_ctrl.createEpicTeamsBasesCtrl(setup), setup)
-        repository.addArenaController(DefaultAppearanceCacheController(setup), setup)
+        repository.addArenaController(EpicAppearanceCacheController(setup), setup)
         repository.addViewController(battle_hints_ctrl.createBattleHintsController(), setup)
         return repository
 
@@ -566,6 +578,9 @@ class RankedControllerRepository(ClassicControllersRepository):
         repository.addArenaController(RankedVOIPController(), setup)
         return repository
 
+
+for guiType in (ARENA_GUI_TYPE.RANDOM, ARENA_GUI_TYPE.TRAINING):
+    registerBattleControllerRepo(guiType, RandomControllerRepository)
 
 for guiType in ARENA_GUI_TYPE.EPIC_RANGE:
     registerBattleControllerRepo(guiType, EpicControllersRepository)

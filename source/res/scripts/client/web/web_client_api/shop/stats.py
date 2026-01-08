@@ -13,6 +13,7 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils.requesters import IStatsRequester
 from web.common import formatBalance, formatWalletCurrencyStatuses
 from web.web_client_api import Field, W2CSchema, w2c
+from gui.shared.economics import getAllPossibleXP
 _logger = logging.getLogger(__name__)
 
 class _GetInventoryEntitlementsSchema(W2CSchema):
@@ -96,6 +97,10 @@ class BalanceWebApiMixin(object):
         yield {'success': result and self.__entitlementsController.isCacheInited() and not self.__entitlementsController.isCodesWasFailedInLastRequest(cmd.codes),
          'entitlements': entitlements}
         return
+
+    @w2c(W2CSchema, 'get_all_possible_freexp')
+    def getAllPossibleXP(self, _):
+        return getAllPossibleXP()
 
     @adisp.adisp_async
     @th_async

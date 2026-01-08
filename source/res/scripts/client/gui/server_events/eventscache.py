@@ -35,7 +35,6 @@ from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared.utils import IRaresCache
-from new_year_common.items.components.ny_constants import CurrentNYConstants
 if typing.TYPE_CHECKING:
     from typing import Optional, Dict, Callable, Union
     from gui.server_events.event_items import DailyTokenQuest, DailyQuest
@@ -86,23 +85,6 @@ class DefaultQuestMaker(object):
         return createQuest(self.__builders, qData.get('type', 0), qID, qData, progressRequester.getQuestProgress(qID), progressRequester.getTokenExpiryTime(qData.get('requiredToken')))
 
 
-def useCacheOnSyncComplete(method, *args, **kwargs):
-
-    def wrapper(self, *args, **kwargs):
-        isWithoutFilter = not (args or kwargs)
-        if self.cachedDataOnSyncComplete is not None and isWithoutFilter:
-            methodName = method.__name__
-            data = self.cachedDataOnSyncComplete.get(methodName)
-            if not data:
-                data = method(self, *args, **kwargs)
-                self.cachedDataOnSyncComplete[methodName] = data
-            return data
-        else:
-            return method(self, *args, **kwargs)
-
-    return wrapper
-
-
 class EventsCache(IEventsCache):
     USER_QUESTS = (EVENT_TYPE.BATTLE_QUEST,
      EVENT_TYPE.TOKEN_QUEST,
@@ -141,7 +123,6 @@ class EventsCache(IEventsCache):
         self.__lockedQuestIds = {}
         self.__dailyQuests = None
         self.__extensionQuestsSources = collectExtensionQuestsSources()
-        self.cachedDataOnSyncComplete = None
         return
 
     def init(self):
@@ -273,7 +254,6 @@ class EventsCache(IEventsCache):
                     callback(True)
             return
 
-    @useCacheOnSyncComplete
     def getQuests(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
 
@@ -294,7 +274,6 @@ class EventsCache(IEventsCache):
 
         return self.getQuests(userFilterFunc)
 
-    @useCacheOnSyncComplete
     def getAdvisableQuests(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
         isRankedSeasonOff = self.rankedController.getCurrentSeason() is None
@@ -348,7 +327,6 @@ class EventsCache(IEventsCache):
         svrGroups.update(self._getActionsGroups(filterFunc))
         return svrGroups
 
-    @useCacheOnSyncComplete
     def getHiddenQuests(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
 
@@ -364,13 +342,6 @@ class EventsCache(IEventsCache):
             return q.getType() == EVENT_TYPE.RANKED_QUEST and filterFunc(q)
 
         return self._getQuests(rankedFilterFunc)
-
-    def getNyCelebQuests(self, filterFunc=None):
-
-        def nyFilterFunc(q):
-            return q.getID().startswith(CurrentNYConstants.NY_CELEB_QUESTS_PREFIX) and q.isAvailable() and q.isStarted()
-
-        return self._getQuests(nyFilterFunc)
 
     def getAllQuests(self, filterFunc=None, includePersonalMissions=False):
         return self._getQuests(filterFunc, includePersonalMissions)
@@ -749,14 +720,8 @@ class EventsCache(IEventsCache):
         self.__prefetcher.ask()
         self.__syncActionsWithQuests()
         self.__invalidateCompensations()
-        self.__dispatchOnSyncCompleted(callback)
-        return
-
-    def __dispatchOnSyncCompleted(self, callback):
-        self.cachedDataOnSyncComplete = {}
         self.onSyncCompleted()
         callback(True)
-        self.cachedDataOnSyncComplete = None
         return
 
     def __invalidateCompensations(self):

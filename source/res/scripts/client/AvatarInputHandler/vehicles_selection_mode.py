@@ -187,6 +187,7 @@ class VehiclesSelectionControlMode(IControlMode):
     __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, config, avatarInputHandler):
+        super(VehiclesSelectionControlMode, self).__init__()
         self.__aih = weakref.proxy(avatarInputHandler)
         self.__camManager = _CameraManager(config['camera'])
         self.__arenaPeriod = None

@@ -2,24 +2,16 @@
 # Embedded file name: scripts/client/gui/impl/lobby/seniority_awards/seniority_reward_award_view.py
 import logging
 import re
-import typing
-import th_async
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP
-from constants import SENIORITY_AWARDS_VEHICLE_OFFER
 from gui.impl.gen.view_models.views.lobby.common.vehicle_model import VehicleModel
-from gui.impl.gen.view_models.views.lobby.seniority_awards.main_reward_bonus_model import MainRewardBonusModel
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
-from gui.impl.lobby.seniority_awards.tooltips.seniority_awards_compensation_tooltip import SeniorityAwardsCompensationTooltip
-from gui.impl.lobby.seniority_awards.vehicle_selector import VehicleSelectorWindow
-from gui.server_events.bonuses import VehiclesBonus
 from helpers import dependency, time_utils
-from frameworks.wulf import ViewSettings, WindowLayer, Array
+from frameworks.wulf import ViewSettings, WindowLayer
 from gui.game_control.seniority_awards_controller import SACOIN
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.auxiliary.rewards_helper import getRewardTooltipContent
 from gui.impl import backport
-from gui.impl.pub.dialog_window import DialogButtons
 from gui.impl.auxiliary.rewards_helper import getSeniorityAwardsRewardsAndBonuses
 from gui.impl.backport import BackportTooltipWindow, createTooltipData
 from gui.impl.gen import R
@@ -31,41 +23,30 @@ from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.shared.gui_items.Vehicle import getNationLessName, getIconResourceName, Vehicle
 from gui.shared.event_dispatcher import showShop
-from gui_lootboxes.gui.bonuses.bonuses_packers import LootBoxVehiclesBonusUIPacker
-from shared_utils import first
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getPlayerSeniorityAwardsUrl
-if typing.TYPE_CHECKING:
-    from gui.impl.auxiliary.rewards_helper import SeniorityAwards
-    from gui.impl.pub.dialog_window import DialogResult
 _logger = logging.getLogger(__name__)
 REG_EXP_QUEST_SUBTYPE = ':([Y, y]\\d*)|:([A,a,B,b][T,t])'
 _T50_2_STYLE_NAME = backport.text(R.strings.vehicle_customization.special_style.t50_2())
 _EXCLUDED_BONUSES = ('slots',)
-_BONUSES_ORDER = ({'getName': 'selectableBonus'},
- {'getName': 'freeTokens_0'},
- {'getName': 'sacoin'},
- {'getName': 'freeTokens_2'},
+_BONUSES_ORDER = ({'getLabel': _T50_2_STYLE_NAME},
  {'getName': 'crystal'},
  {'getName': 'credits'},
  {'getName': 'premium_plus'},
- {'getName': 'dossier_achievement'},
- {'getName': 'badge'},
- {'getLabel': _T50_2_STYLE_NAME},
  {'getName': 'customizations',
   'getIcon': 'style'},
- {'getIcon': 'projectionDecal'},
- {'getName': 'customizations',
-  'getIcon': 'emblem'},
- {'getIcon': 'universalBook'},
- {'getIcon': 'recertificationForm'},
  {'getName': 'goodies',
   'getIcon': 'credits'},
  {'getName': 'goodies',
-  'getIcon': 'xp'})
-_MAX_MAIN_REWARDS = 2
-_MAIN_BONUSES = (lambda bonus: bonus.getName() == 'selectableBonus', lambda bonus: bonus.getName() == 'credits' and bonus.getIsCompensation(), lambda bonus: bonus.getName() == 'crystal')
+  'getIcon': 'xp'},
+ {'getIcon': 'universalBook'},
+ {'getIcon': 'recertificationForm'},
+ {'getName': 'badge'},
+ {'getName': 'dossier_achievement'},
+ {'getIcon': 'projectionDecal'},
+ {'getName': 'customizations',
+  'getIcon': 'emblem'})
 
 def _keySortOrder(bonus, _):
     for index, criteria in enumerate(_BONUSES_ORDER):
@@ -130,10 +111,6 @@ class SeniorityRewardAwardView(ViewImpl):
             return super(SeniorityRewardAwardView, self).createToolTip(event)
 
     def createToolTipContent(self, event, contentID):
-        if contentID == R.views.lobby.seniority_awards.tooltips.SeniorityAwardsCompensationTooltip():
-            tooltipData = self.__getBackportTooltipData(event)
-            if tooltipData:
-                return SeniorityAwardsCompensationTooltip(*tooltipData.specialArgs)
         tooltipData = self.__getBackportTooltipData(event)
         return getRewardTooltipContent(event, tooltipData)
 
@@ -143,7 +120,6 @@ class SeniorityRewardAwardView(ViewImpl):
         self.__updateBonuses(data)
         self.__tooltipData = {}
         with self.viewModel.transaction() as vm:
-            self.__setMainRewards(vm)
             self.__setRewards(vm)
             self.__setBonuses(vm)
             self.__setSpecialCurrency(vm)
@@ -159,14 +135,12 @@ class SeniorityRewardAwardView(ViewImpl):
 
     def _initialize(self, *args, **kwargs):
         super(SeniorityRewardAwardView, self)._initialize(*args, **kwargs)
-        self.viewModel.onOpenShop += self.__onOpenBtnClick
-        self.viewModel.onSelectVehicle += self.__onSelectVehicleBtnClick
+        self.viewModel.onOpenBtnClick += self.__onOpenBtnClick
 
     def _finalize(self):
         self.__bonuses = None
         self.__vehicles = None
-        self.viewModel.onOpenShop -= self.__onOpenBtnClick
-        self.viewModel.onSelectVehicle -= self.__onSelectVehicleBtnClick
+        self.viewModel.onOpenBtnClick -= self.__onOpenBtnClick
         super(SeniorityRewardAwardView, self)._finalize()
         return
 
@@ -188,7 +162,7 @@ class SeniorityRewardAwardView(ViewImpl):
     def __setBonuses(self, viewModel):
         bonusesList = viewModel.getBonuses()
         bonusesList.clear()
-        for index, (bonus, tooltip) in enumerate(self.__bonuses, start=3):
+        for index, (bonus, tooltip) in enumerate(self.__bonuses):
             tooltipId = str(index)
             bonus.setTooltipId(tooltipId)
             bonus.setIndex(index)
@@ -196,31 +170,6 @@ class SeniorityRewardAwardView(ViewImpl):
             self.__tooltipData[tooltipId] = tooltip
 
         bonusesList.invalidate()
-
-    def __setMainRewards(self, viewModel):
-        mainRewardList = viewModel.getMainRewards()
-        mainRewardList.clear()
-        bonusesToRemove = []
-        count = 0
-        for criteria in _MAIN_BONUSES:
-            if count >= _MAX_MAIN_REWARDS:
-                break
-            for bonus, tooltip in self.__bonuses:
-                if count >= _MAX_MAIN_REWARDS:
-                    break
-                if criteria(bonus):
-                    index = str(count)
-                    bonus.setTooltipId(index)
-                    bonus.setIndex(index)
-                    mainRewardList.addViewModel(bonus)
-                    self.__tooltipData[index] = tooltip
-                    bonusesToRemove.append((bonus, tooltip))
-                    count += 1
-
-        for bonusToRemove in bonusesToRemove:
-            self.__bonuses.remove(bonusToRemove)
-
-        mainRewardList.invalidate()
 
     def __setSpecialCurrency(self, viewModel):
         currencyCount = self.__specialCurrencies.get(SACOIN)
@@ -264,44 +213,6 @@ class SeniorityRewardAwardView(ViewImpl):
         if not self.viewModel.getIsShopOnOpenLocked():
             showShop(getPlayerSeniorityAwardsUrl())
         self.destroyWindow()
-
-    @th_async.th_async
-    def __onSelectVehicleBtnClick(self, args=None):
-        window = VehicleSelectorWindow(SENIORITY_AWARDS_VEHICLE_OFFER)
-        window.load()
-        result = yield th_async.th_await(window.wait())
-        _logger.info('VehicleSelectorWindow return result=%s', result)
-        if result.result == DialogButtons.CANCEL:
-            return
-        elif len(result.data) > 1:
-            self.__replaceMainRewards(result.data)
-            return
-        else:
-            mainRewardIndex = None
-            if args is not None:
-                mainRewardIndex = args.get('rewardIndex')
-                if mainRewardIndex is not None:
-                    mainRewardIndex = int(mainRewardIndex)
-            self.__replaceMainRewardByIndex(first(result.data), mainRewardIndex)
-            return
-
-    def __replaceMainRewardByIndex(self, vehIntCD, index):
-        mainRewardsList = self.getViewModel().getMainRewards()
-        vehBonus = VehiclesBonus('vehicles', {vehIntCD: {'noCrew': True}})
-        vehBonusModel = first(LootBoxVehiclesBonusUIPacker.pack(vehBonus))
-        vehBonusTooltipModel = first(LootBoxVehiclesBonusUIPacker.getToolTip(vehBonus))
-        if index is not None and vehBonusModel is not None:
-            if len(mainRewardsList) > index >= 0:
-                vehBonusModel.setIndex(str(index))
-                vehBonusModel.setTooltipId(str(index))
-                mainRewardsList.setViewModel(index, vehBonusModel)
-                self.__tooltipData[str(index)] = vehBonusTooltipModel
-        mainRewardsList.invalidate()
-        return
-
-    def __replaceMainRewards(self, vehiclesIntCDs):
-        for index, vehIntCD in enumerate(vehiclesIntCDs):
-            self.__replaceMainRewardByIndex(vehIntCD, index)
 
 
 class SeniorityRewardAwardWindow(LobbyNotificationWindow):

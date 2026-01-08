@@ -6,17 +6,20 @@ from constants import IS_BOT, IS_WEB, IS_CLIENT, ARENA_TYPE_XML_PATH
 from constants import ARENA_BONUS_TYPE_IDS, ARENA_GAMEPLAY_IDS, ARENA_GAMEPLAY_NAMES, TEAMS_IN_ARENA, HAS_DEV_RESOURCES, MinimapLayerType
 from constants import IS_CELLAPP, IS_BASEAPP
 from constants import CHAT_COMMAND_FLAGS
+from constants import FRONTLINE_PROGRESSION
 from coordinate_system import AXIS_ALIGNED_DIRECTION
 from items.vehicles import CAMOUFLAGE_KINDS
 from debug_utils import LOG_CURRENT_EXCEPTION
 from items import _xml
-from typing import Dict
 from soft_exception import SoftException
 from collections import defaultdict
 from data_structures import DictObj
 from visual_script.misc import ASPECT, VisualScriptTag, readVisualScriptPlanParams, readVisualScriptPlans
 from SpaceVisibilityFlags import SpaceVisibilityFlagsFactory, SpaceVisibilityFlags
 from Math import Vector2
+import typing
+if typing.TYPE_CHECKING:
+    from typing import Dict, Set
 if IS_CLIENT:
     from helpers import i18n
     import WWISE
@@ -28,6 +31,7 @@ g_cache = {}
 g_geometryCache = {}
 g_spaceCache = {}
 g_geometryNamesToIDs = {}
+g_geometryNamesToGameplayNames = {}
 g_gameplayNames = set()
 g_gameplaysMask = 0
 
@@ -72,6 +76,7 @@ def init(isFullCache=True):
     global g_gameplayNames
     global g_cache
     global g_geometryNamesToIDs
+    global g_geometryNamesToGameplayNames
     global g_gameplaysMask
     rootSection = ResMgr.openSection(_LIST_XML)
     if rootSection is None:
@@ -96,6 +101,9 @@ def init(isFullCache=True):
     ResMgr.purge(_DEFAULT_XML, True)
     g_gameplaysMask = getGameplaysMask(g_gameplayNames)
     g_geometryNamesToIDs = {arenaType.geometryName:arenaType.geometryID for arenaType in g_cache.itervalues()}
+    for arenaType in g_cache.itervalues():
+        g_geometryNamesToGameplayNames.setdefault(arenaType.geometryName, set()).add(arenaType.gameplayName)
+
     return
 
 
@@ -778,6 +786,15 @@ class EpicSectorGrid(object):
         self.bordersZ = sorted(_readFloatArray(key + '/bordersZ', 'border', section, defaultXml))
         self.bordersX = sorted(_readFloatArray(key + '/bordersX', 'border', section, defaultXml))
         self.owningTeam = section.readInt(key + '/owningTeam', 1)
+        self.__validate()
+
+    def __validate(self):
+        if self.mainDirection != FRONTLINE_PROGRESSION.DIRECTION:
+            raise SoftException('Unsupported axis aligned direction. Expected: {}, in fact: {}.'.format(FRONTLINE_PROGRESSION.DIRECTION, self.mainDirection))
+        if len(self.bordersZ) != FRONTLINE_PROGRESSION.BORDERS_Z:
+            raise SoftException('Unsupported borders size (Z order). Expected: {}, in fact: {}.'.format(FRONTLINE_PROGRESSION.BORDERS_Z, self.bordersZ))
+        if len(self.bordersX) != FRONTLINE_PROGRESSION.BORDERS_X:
+            raise SoftException('Unsupported borders size (X order). Expected: {}, in fact: {}.'.format(FRONTLINE_PROGRESSION.BORDERS_X, self.bordersX))
 
 
 def __readWeatherPresets(section):

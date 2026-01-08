@@ -36,13 +36,12 @@ class LootBoxOpenedFormatter(ServiceChannelFormatter):
         self.__lootboxesAsRewards = self.__getLootboxesAsReceivedRewards(allRewards)
         header = message.get('header', self.__formHeader(openedLootBoxes))
         infoText = message.get('infoText', '')
-        nyCompensations = self.__nyCompensation(allRewards)
         receivedRewards, vehicleCompensatedRewards, collectionCompensatedRewards = self.__splitRewards(allRewards)
         dateFmt = backport.getDateTimeFormat(time_utils.getServerRegionalTime())
         openedFmt = self.__formOpenedBoxesSection(openedLootBoxes)
         failFmt = self.__formFailBoxesSection(openedLootBoxes, failedKeys)
         receivedRewardsFmt = self.__formReceivedRewardsSection(receivedRewards)
-        compensationFmt = self.__formCompensationSection(vehicleCompensatedRewards, collectionCompensatedRewards, nyCompensations)
+        compensationFmt = self.__formCompensationSection(vehicleCompensatedRewards, collectionCompensatedRewards)
         failKeyFmt = self.__formFailKeySection(usedKeys)
         mainText = openedFmt + failFmt + receivedRewardsFmt + compensationFmt + failKeyFmt
         formatted = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, ctx={'header': header,
@@ -142,22 +141,6 @@ class LootBoxOpenedFormatter(ServiceChannelFormatter):
 
         return (receivedRewards, vehicleCompensatedRewards, collectionCompensatedRewards)
 
-    def __nyCompensation(self, allRewards):
-        nyCompensations = {}
-        parsedTokens = []
-        for tokenID, tokenValue in allRewards.get('tokens', {}).iteritems():
-            if not tokenID.startswith('lb_comp:ny26_mandarin:'):
-                continue
-            amount = int(tokenID.split(':')[2])
-            count = tokenValue['count']
-            nyCompensations['NYComp'] = amount * count
-            parsedTokens.append(tokenID)
-
-        for tokenID in parsedTokens:
-            allRewards['tokens'].pop(tokenID, None)
-
-        return nyCompensations
-
     def __formReceivedRewardsSection(self, receivedRewards):
         if not receivedRewards:
             return ''
@@ -182,27 +165,17 @@ class LootBoxOpenedFormatter(ServiceChannelFormatter):
 
         return self.__SEPARATOR.join(result)
 
-    def __getNYCompensationString(self, compensatedCollections):
-        result = []
-        for count in compensatedCollections.values():
-            result.append(g_settings.htmlTemplates.format('battleQuestsNYMandarinsComp', ctx={'nyMandarins': backport.getIntegralFormat(count)}))
-
-        return self.__SEPARATOR.join(result)
-
-    def __formCompensationSection(self, vehicleCompensatedRewards, collectionCompensatedRewards, nyCompensations):
-        if not vehicleCompensatedRewards and not collectionCompensatedRewards and not nyCompensations:
+    def __formCompensationSection(self, vehicleCompensatedRewards, collectionCompensatedRewards):
+        if not vehicleCompensatedRewards and not collectionCompensatedRewards:
             return ''
         title = text_styles.titleFont(backport.text(R.strings.lb_messenger.serviceChannelMessages.lootbox.openedLootBox.compensation.header()))
         vehicleCompensationFmt = self.__getVehicleCompensationString(vehicleCompensatedRewards)
         collectionsCompensationFmt = self.__getCollectionCompensationString(collectionCompensatedRewards)
-        nyCompensationFmt = self.__getNYCompensationString(nyCompensations)
         compensationFmt = title + self.__SEPARATOR
         if vehicleCompensationFmt:
             compensationFmt += vehicleCompensationFmt + self.__SEPARATOR
         if collectionsCompensationFmt:
             compensationFmt += collectionsCompensationFmt + self.__SEPARATOR
-        if nyCompensationFmt:
-            compensationFmt += nyCompensationFmt + self.__SEPARATOR
         return self.__SEPARATOR + compensationFmt
 
     def __getLootboxesAsReceivedRewards(self, allRewards):

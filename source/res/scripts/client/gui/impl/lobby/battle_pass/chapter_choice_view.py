@@ -25,6 +25,7 @@ from gui.impl.pub import ViewImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.server_events.events_dispatcher import showMissionsBattlePass
 from gui.shared import events, EVENT_BUS_SCOPE
+from gui.battle_pass.battle_pass_helpers import getIsBpPointsShopEntryPointActive
 from gui.shared.event_dispatcher import hideVehiclePreview, showBattlePassBuyWindow, showBattlePassHowToEarnPointsView, showBrowserOverlayView, showHangar, showShop, showStylePreview, showStyleProgressionPreview, showCollectionWindow, showVehiclePreviewWithoutBottomPanel
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController
@@ -114,12 +115,13 @@ class ChapterChoiceView(ViewImpl):
             self.__updateBPBitCount(model=model)
             self.__updateFreePoints(model=model)
             model.setIsBattlePassCompleted(self.__battlePass.isCompleted())
+            model.setIsSingleChapter(self.__battlePass.isSingleChapter())
 
     def __updateChapters(self, chapters):
         chapters.clear()
         for chapterID in sorted(self.__battlePass.getChapterIDs(), cmp=chaptersIDsComparator):
             chapterModel = ChapterModel()
-            if self.__battlePass.getRewardType(chapterID) == FinalReward.STYLE:
+            if self.__battlePass.getRewardType(chapterID) in (FinalReward.STYLE, FinalReward.MIXED):
                 style = getStyleForChapter(chapterID)
                 chapterModel.setStyleName(style.userName)
                 vehicleCD = getVehicleCDForStyle(style, itemsCache=self.__itemsCache)
@@ -170,7 +172,7 @@ class ChapterChoiceView(ViewImpl):
 
     @replaceNoneKwargsModel
     def __updateFreePoints(self, model=None):
-        model.setFreePoints(self.__battlePass.getFreePoints())
+        model.setFreePoints(self.__battlePass.getFreePoints() if getIsBpPointsShopEntryPointActive() else 0)
 
     def __onPointsUpdated(self, *_):
         self.__setTriggerHint()
@@ -206,7 +208,7 @@ class ChapterChoiceView(ViewImpl):
             return
         else:
             hideVehiclePreview(back=False)
-            if self.__battlePass.getRewardType(chapterID) == FinalReward.VEHICLE:
+            if self.__battlePass.getRewardType(chapterID) in (FinalReward.VEHICLE, FinalReward.MIXED):
                 self.__showFinalRewardVehiclePreview(chapterID)
                 self.destroyWindow()
                 return
@@ -244,7 +246,7 @@ class ChapterChoiceView(ViewImpl):
             character = getTankmanInfo(characterBonus)
             if character is None:
                 return ''
-            _, characterName, _ = getDataByTankman(character)
+            _, characterName, _, _ = getDataByTankman(character)
             return characterName
 
     def __showProgressionStylePreview(self, style, vehicleCD):

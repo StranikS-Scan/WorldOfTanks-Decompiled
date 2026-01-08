@@ -116,18 +116,21 @@ class ArmoryYardRerollController(IArmoryYardRerollController):
         return self.getFreeRerollsCount(getGroupName(cycleID))
 
     def getNextFreeRerollTimestamp(self):
+        if not self.isRerollEnabled():
+            return 0
         rerollSubsection = self.__armoryYardController.serverSettings.getModeSettings().rerollSubsection
         dailyFreeRerollUpdate = rerollSubsection.get('dailyFreeRerollUpdate')
         if not dailyFreeRerollUpdate:
-            return
+            return 0
         freeRerollDaysDelta = rerollSubsection.get('freeRerollDaysDelta')
         if not freeRerollDaysDelta:
-            return
+            return 0
         currentDatetime = time_utils.getDateTimeInUTC(time_utils.getCurrentTimestamp())
         return getNextFreeRerollUpdateTimestamp(dailyFreeRerollUpdate, freeRerollDaysDelta, currentDatetime)
 
     def getFreeRerollCountdown(self):
-        return int(max(self.getNextFreeRerollTimestamp() - time_utils.getCurrentLocalServerTimestamp(), 0))
+        nextFreeRerollTimestamp = self.getNextFreeRerollTimestamp() or 0
+        return int(max(nextFreeRerollTimestamp - time_utils.getCurrentLocalServerTimestamp(), 0))
 
     def isRerollEnabled(self):
         rerollSubsection = self.__armoryYardController.serverSettings.getModeSettings().rerollSubsection

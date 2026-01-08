@@ -802,7 +802,6 @@ class SYSTEM_MESSAGES(object):
     WALLET_NOT_AVAILABLE_GOLD = '#system_messages:wallet/not_available_gold'
     WALLET_NOT_AVAILABLE_FREEXP = '#system_messages:wallet/not_available_freexp'
     SENIORITY_AWARDS_CLAIM_REWARD_FAILED = '#system_messages:seniority_awards/claim_reward_failed'
-    SENIORITY_AWARDS_REWARDCHOICE_ERROR = '#system_messages:seniority_awards/rewardChoice/error'
     PERSONALMISSIONS_SELECT_SUCCESS = '#system_messages:personalMissions/select/success'
     PERSONALMISSIONS_SELECT_SERVER_ERROR = '#system_messages:personalMissions/select/server_error'
     PERSONALMISSIONS_SELECT_SERVER_ERROR_WRONG_ARGS_TYPE = '#system_messages:personalMissions/select/server_error/WRONG_ARGS_TYPE'
@@ -1058,6 +1057,8 @@ class SYSTEM_MESSAGES(object):
     FORTIFICATION_ERRORS_BAD_SORTIE_PERIPHERY_ID = '#system_messages:fortification/errors/BAD_SORTIE_PERIPHERY_ID'
     FORTIFICATION_ERRORS_BAD_LEVEL_PLANNED_ATTACK = '#system_messages:fortification/errors/BAD_LEVEL_PLANNED_ATTACK'
     FORTIFICATION_ERRORS_DISCONNECTED_FROM_CENTER = '#system_messages:fortification/errors/DISCONNECTED_FROM_CENTER'
+    STRONGHOLD_CLANSEASON_PROGRESSION_TITLE = '#system_messages:stronghold/clanSeason/progression/title'
+    STRONGHOLD_CLANSEASON_QUEST_TITLE = '#system_messages:stronghold/clanSeason/quest/title'
     BUTTONS_GOTOPOLL = '#system_messages:buttons/goToPoll'
     BUTTONS_GOTOSURVEY = '#system_messages:buttons/goToSurvey'
     BUTTONS_GOTOAPPLICATIONFORM = '#system_messages:buttons/goToApplicationForm'
@@ -2318,7 +2319,6 @@ class SYSTEM_MESSAGES(object):
      WALLET_NOT_AVAILABLE_GOLD,
      WALLET_NOT_AVAILABLE_FREEXP,
      SENIORITY_AWARDS_CLAIM_REWARD_FAILED,
-     SENIORITY_AWARDS_REWARDCHOICE_ERROR,
      PERSONALMISSIONS_SELECT_SUCCESS,
      PERSONALMISSIONS_SELECT_SERVER_ERROR,
      PERSONALMISSIONS_SELECT_SERVER_ERROR_WRONG_ARGS_TYPE,
@@ -2574,6 +2574,8 @@ class SYSTEM_MESSAGES(object):
      FORTIFICATION_ERRORS_BAD_SORTIE_PERIPHERY_ID,
      FORTIFICATION_ERRORS_BAD_LEVEL_PLANNED_ATTACK,
      FORTIFICATION_ERRORS_DISCONNECTED_FROM_CENTER,
+     STRONGHOLD_CLANSEASON_PROGRESSION_TITLE,
+     STRONGHOLD_CLANSEASON_QUEST_TITLE,
      BUTTONS_GOTOPOLL,
      BUTTONS_GOTOSURVEY,
      BUTTONS_GOTOAPPLICATIONFORM,

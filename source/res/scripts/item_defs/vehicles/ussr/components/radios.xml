@@ -83,8 +83,13 @@
     <R123M_168>	31054	</R123M_168>
     <_9RSA_02>	31055	</_9RSA_02>
     <R113_S>	31056	</R113_S>
+    <_10RT_26_TET>	31057	</_10RT_26_TET>
     <_10RT_26_278>	31058	</_10RT_26_278>
+    <R_113_M>	31059	</R_113_M>
     <_10RZ>	31060	</_10RZ>
+    <_10RK_F>	31061	</_10RK_F>
+    <_10RT-26E_90>	31062	</_10RT-26E_90>
+    <R123_M>	31068	</R123_M>
     <_10R_U18_T>	31018	</_10R_U18_T>
     <R113M_279_T>	35003	</R113M_279_T>
     <_10RT-26M>	220	</_10RT-26M>
@@ -122,6 +127,7 @@
     <_9RM_MapsTraining_Player_MT_2>	38	</_9RM_MapsTraining_Player_MT_2>
     <_10RK_MapsTraining_Dummy_HT_2>	39	</_10RK_MapsTraining_Dummy_HT_2>
     <_9RM_O_NewOnBoarding>	10012	</_9RM_O_NewOnBoarding>
+    <Baloon_Radio>	40010	</Baloon_Radio>
   </ids>
   <shared>
     <_71-TK-1>
@@ -459,6 +465,18 @@
       <maxRegenHealth>	100	</maxRegenHealth>
       <repairCost>	1	</repairCost>
     </_10RZ>
+    <R_113_M>
+      <userString>	#ussr_vehicles:R_113_M	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52200	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	42	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R_113_M>
     <R_113_M_T>
       <userString>	#ussr_vehicles:R_113_M	</userString>
       <tags></tags>
@@ -482,6 +500,18 @@
       <maxRegenHealth>	125	</maxRegenHealth>
       <repairCost>	1.5	</repairCost>
     </_10RK>
+    <_10RK_F>
+      <userString>	#ussr_vehicles:_10RK_F	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	18600	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	440	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	125	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </_10RK_F>
     <_10RK_W>
       <userString>	#ussr_vehicles:_10RK_W	</userString>
       <tags></tags>
@@ -993,6 +1023,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	4	</repairCost>
     </_10RT-26E>
+    <_10RT-26E_90>
+      <userString>	#ussr_vehicles:_10RT-26E_90	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	56500	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	30	</weight>
+      <distance>	760	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+    </_10RT-26E_90>
     <_10RT-26E_T>
       <userString>	#ussr_vehicles:_10RT-26E_T	</userString>
       <tags></tags>
@@ -1041,6 +1083,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	4	</repairCost>
     </_10RT_26>
+    <_10RT_26_TET>
+      <userString>	#ussr_vehicles:_10RT_26_TET	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	56500	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	30	</weight>
+      <distance>	760	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+    </_10RT_26_TET>
     <_10RT_26_TET_T>
       <userString>	#ussr_vehicles:_10RT_26_TET	</userString>
       <tags></tags>
@@ -1149,6 +1203,18 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </R123M>
+    <R123_M>
+      <userString>	#ussr_vehicles:R123_M	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	51600	</price>
+      <weight>	80	</weight>
+      <distance>	850	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </R123_M>
     <R123M_168>
       <userString>	#ussr_vehicles:R123M_168	</userString>
       <tags></tags>
@@ -1305,6 +1371,18 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </_10RK-26M>
+    <Baloon_Radio>
+      <userString>	#ussr_vehicles:Baloon_Radio	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	51600	</price>
+      <weight>	160	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </Baloon_Radio>
     <_10RK_IGR>
       <userString>	#igr_vehicles:_10RK_IGR	</userString>
       <tags></tags>

@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/cgf_components/marker_component.py
 import logging
-import typing
 from collections import defaultdict
 import CGF
 import GUI
@@ -15,11 +14,9 @@ from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, reg
 from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery, autoregister
 from constants import IS_CLIENT
 from frameworks.wulf import ViewStatus
-from gui.impl import backport
 from gui.impl.gen import R
 from helpers import dependency
 from gui.shared import events, EVENT_BUS_SCOPE, g_eventBus
-from helpers.i18n import makeString
 from skeletons.gui.impl import IGuiLoader
 if IS_CLIENT:
     from skeletons.gui.battle_session import IBattleSessionProvider
@@ -33,25 +30,6 @@ else:
 
 
 _logger = logging.getLogger(__name__)
-if typing.TYPE_CHECKING:
-    from gui.Scaleform.framework.entities import BaseDAAPIComponent
-    from gui.Scaleform.daapi.view.lobby.lobby_vehicle_marker_view import LobbyVehicleMarkerView
-
-class MarkerType(object):
-    CUSTOM = 'Custom'
-    RACCOON = 'Raccoon'
-
-
-def _createCustomMarker(lobbyView, markerId, component):
-    return lobbyView.as_createCustomMarkerS(markerId, component.icon.replace('gui', '..'), makeString(component.textKey), component.iconPosition)
-
-
-def _createRaccoonMarker(lobbyView, markerId, _):
-    return lobbyView.as_createRaccoonMarkerS(markerId, backport.text(R.strings.ny.raccoon.marker.label()))
-
-
-MARKER_CREATORS = {MarkerType.CUSTOM: _createCustomMarker,
- MarkerType.RACCOON: _createRaccoonMarker}
 
 @registerComponent
 class LobbyFlashMarker(object):
@@ -59,11 +37,6 @@ class LobbyFlashMarker(object):
     icon = ComponentProperty(type=CGFMetaTypes.STRING, editorName='marker icon', value='gui/maps/icons/marathon/marker/video.png', annotations={'path': '*.png'})
     textKey = ComponentProperty(type=CGFMetaTypes.STRING, editorName='marker text key', value='#marathon:3dObject/showVideo')
     iconPosition = ComponentProperty(type=CGFMetaTypes.STRING, editorName='icon position', value='')
-    createType = ComponentProperty(type=CGFMetaTypes.STRING, editorName='creation method type', value=MarkerType.CUSTOM, annotations={'comboBox': {MarkerType.CUSTOM: MarkerType.CUSTOM,
-                  MarkerType.RACCOON: MarkerType.RACCOON}})
-
-    def __call__(self, *args, **kwargs):
-        return MARKER_CREATORS[self.createType](*args, **kwargs)
 
 
 @registerComponent
@@ -107,7 +80,7 @@ class LobbyMarkersManager(CGF.ComponentManager):
     def deactivate(self):
         g_eventBus.removeListener(events.LobbyMarkersManagerEvent.ON_MARKER_REQUEST, self.__onMarkerRequested, EVENT_BUS_SCOPE.LOBBY)
 
-    @onAddedQuery(CGF.GameObject, LobbyFlashMarker, TransformComponent, tickGroup='postHierarchyUpdate')
+    @onAddedQuery(CGF.GameObject, LobbyFlashMarker, TransformComponent)
     def handleMarkerAdded(self, gameObject, flashMarkerComponent, transformComponent):
         matrix = transformComponent.worldTransform
         g_eventBus.handleEvent(events.LobbyMarkersManagerEvent(events.LobbyMarkersManagerEvent.ON_MARKER_ADDED, ctx=_getMarkerData(gameObject.id, flashMarkerComponent, matrix)), scope=EVENT_BUS_SCOPE.LOBBY)

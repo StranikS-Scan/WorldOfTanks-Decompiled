@@ -2,21 +2,25 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/epic_battles_widget.py
 from collections import namedtuple
 import SoundGroups
+from account_helpers.settings_core.settings_constants import OnceOnlyHints
+from frontline.gui.impl.gen.view_models.views.lobby.views.frontline_container_tab_model import TabType
 from gui.Scaleform.daapi.view.lobby.epicBattle.after_battle_reward_view_helpers import getProgressionIconVODict
 from gui.Scaleform.daapi.view.meta.EpicBattlesWidgetMeta import EpicBattlesWidgetMeta
 from gui.shared.event_dispatcher import showFrontlineContainerWindow
 from gui.shared.utils.scheduled_notifications import PeriodicNotifier
 from helpers import dependency, time_utils
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from gui.ClientUpdateManager import g_clientUpdateManager
 from epic_constants import EPIC_CHOICE_REWARD_OFFER_GIFT_TOKENS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from uilogging.epic_battle.constants import EpicBattleLogKeys
 from uilogging.epic_battle.loggers import EpicBattleTooltipLogger
-EpicBattlesWidgetVO = namedtuple('EpicBattlesWidgetVO', ('epicMetaLevelIconData', 'points', 'counterValue'))
+EpicBattlesWidgetVO = namedtuple('EpicBattlesWidgetVO', ('epicMetaLevelIconData', 'points', 'counterValue', 'isSupplyHint'))
 
 class EpicBattlesWidget(EpicBattlesWidgetMeta):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
+    __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(EpicBattlesWidget, self).__init__()
@@ -25,7 +29,10 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
         return
 
     def onWidgetClick(self):
-        showFrontlineContainerWindow()
+        tabType = TabType.PROGRESS
+        if self.__isSupplyHint():
+            tabType = TabType.SUPPLY
+        showFrontlineContainerWindow(tabType)
 
     def onSoundTrigger(self, triggerName):
         SoundGroups.g_instance.playSound2D(triggerName)
@@ -72,7 +79,10 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
         if season is not None:
             cycleNumber = self.__epicController.getCurrentOrNextActiveCycleNumber(season)
         level = currentLevel if self.__epicController.isCurrentCycleActive() or currentLevel > 1 else None
-        return EpicBattlesWidgetVO(epicMetaLevelIconData=getProgressionIconVODict(cycleNumber, level), points=str(self.__getSkillPoints()), counterValue=self.__epicController.getNotChosenRewardCount())
+        return EpicBattlesWidgetVO(epicMetaLevelIconData=getProgressionIconVODict(cycleNumber, level), points=str(self.__getSkillPoints()), counterValue=self.__epicController.getNotChosenRewardCount(), isSupplyHint=self.__isSupplyHint())
+
+    def __isSupplyHint(self):
+        return not self.__settingsCore.serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.EPIC_SUPPLY_INFO_HINT)
 
     def __getSkillPoints(self):
         season = self.__epicController.getCurrentSeason()

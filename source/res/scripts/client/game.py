@@ -276,10 +276,6 @@ def onChangeEnvironments(inside):
     pass
 
 
-def onBeforeSend():
-    g_systemEvents.onBeforeSend()
-
-
 def onRecreateDevice():
     gui_personality.onRecreateDevice()
 

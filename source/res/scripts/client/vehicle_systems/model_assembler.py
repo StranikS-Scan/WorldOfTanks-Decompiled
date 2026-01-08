@@ -429,7 +429,8 @@ def createMultiGunRecoils(appearance, lodLink, gunNodes):
 def assembleMultiGunRecoil(appearance, lodLink):
     recoil = appearance.typeDescriptor.gun.recoil
     multiGun = appearance.typeDescriptor.turret.multiGun
-    if multiGun is not None and recoil is not None:
+    autoShoot = appearance.typeDescriptor.gun.autoShoot
+    if multiGun is not None and recoil is not None and autoShoot == component_constants.DEFAULT_GUN_AUTOSHOOT:
         appearance.gunAnimators = createMultiGunRecoils(appearance, lodLink, multiGun)
     else:
         appearance.gunAnimators = None

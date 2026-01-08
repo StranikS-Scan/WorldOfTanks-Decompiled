@@ -3,11 +3,13 @@
 from gui.Scaleform.daapi.view.meta.SecondaryEntryPointMeta import SecondaryEntryPointMeta
 from gui.impl.gen import R
 from gui.impl import backport
+from gui.shared.utils.functions import makeComplexTooltipByResource
 from helpers import dependency
+from shared_utils import first
 from skeletons.gui.game_control import IBattlePassController
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.Scaleform.locale.BATTLE_PASS import BATTLE_PASS
 from gui.impl.lobby.battle_pass.battle_pass_entry_point_view import BaseBattlePassEntryPointView
+from gui.battle_pass.battle_pass_helpers import getIsBpPointsShopEntryPointActive
 _R_TOOLTIPS = R.views.lobby.battle_pass.tooltips
 _R_IMAGES = R.images.gui.maps.icons.library.hangarEntryPoints.battlePass
 _TOOLTIPS = {_R_TOOLTIPS.BattlePassNotStartedTooltipView(): TOOLTIPS_CONSTANTS.BATTLE_PASS_NOT_STARTED,
@@ -49,6 +51,7 @@ class BattlePassSecondaryEntryPointWidget(SecondaryEntryPointMeta, BaseBattlePas
             flagIcon = backport.image(_R_IMAGES.dyn('flag_chapter_{}'.format(self.chapterID), default=_R_IMAGES.flag_default)()) if self.chapterID > 0 else None
             gameModeIsEnabled = self.__battlePass.isGameModeEnabled(self.__arenaBonusType)
             isEnabled = gameModeIsEnabled and self.__battlePass.isActive() and self.__battlePass.isEnabled()
+            isPointsVisible = self.isCompleted and getIsBpPointsShopEntryPointActive()
             data = {'flagIcon': flagIcon,
              'icon': self.__getIcon(),
              'altIcon': self.__getAltIcon(isEnabled),
@@ -58,7 +61,7 @@ class BattlePassSecondaryEntryPointWidget(SecondaryEntryPointMeta, BaseBattlePas
              'isBought': self.isBought,
              'isPaused': self.isPaused,
              'chapterID': self.chapterID,
-             'points': self.freePoints if self.isCompleted else 0}
+             'points': self.freePoints if isPointsVisible else 0}
             self.__updateTooltipData(data, self.__arenaBonusType, gameModeIsEnabled)
             self.as_setDataS(data)
             if not self.__battlePass.isDisabled():
@@ -68,11 +71,17 @@ class BattlePassSecondaryEntryPointWidget(SecondaryEntryPointMeta, BaseBattlePas
     def _getCurrentArenaBonusType(self):
         return self.__arenaBonusType
 
+    def __getChapterID(self):
+        availableChapter = first(self.__battlePass.getChapterIDs())
+        return availableChapter if self.__battlePass.isSingleChapter() else self.chapterID
+
     def __getIcon(self):
         isCompleted = self.isCompleted
         isBought = self.isBought
         isMarathonChapter = self.__battlePass.isMarathonChapter(self.chapterID)
+        chapterID = self.__getChapterID()
         shieldTemplate = 'shield{}{}{}'
+        customShieldTemplate = 'c_{}_shield{}{}{}'
         plateColor = '_normal'
         borderColor = '_gold' if isBought else '_silver'
         postfix = '' if self.__battlePass.hasActiveChapter() or isCompleted and self.freePoints > 0 else '_closed'
@@ -80,19 +89,24 @@ class BattlePassSecondaryEntryPointWidget(SecondaryEntryPointMeta, BaseBattlePas
             plateColor = '_marathon'
         elif isBought or isCompleted:
             plateColor = '_blue'
-        icon = _R_IMAGES.dyn(shieldTemplate.format(plateColor, borderColor, postfix))()
-        return backport.image(icon)
+        customIcon = _R_IMAGES.dyn(customShieldTemplate.format(chapterID, plateColor, borderColor, postfix), default=_R_IMAGES.dyn(shieldTemplate.format(plateColor, borderColor, postfix)))()
+        return backport.image(customIcon)
 
     def __getAltIcon(self, isEnabled):
+        progressionType = 'gold' if self.isBought else 'silver'
+        customIcon = None
         if self.chapterID > 0:
             iconTemplate = 'icon_{}_chapter_{}'
-            progressionType = 'gold' if self.isBought else 'silver'
             icon = _R_IMAGES.dyn(iconTemplate.format(progressionType, self.chapterID), default=_R_IMAGES.icon_default)()
         elif self.isCompleted:
-            icon = _R_IMAGES.icon_completed_gold() if self.isBought else _R_IMAGES.icon_completed_silver()
+            chapterID = self.__getChapterID()
+            customIconTemplate = 'c_{}_icon_completed_{}'
+            iconTemplate = 'icon_completed_{}'
+            icon = _R_IMAGES.dyn(iconTemplate.format(progressionType))()
+            customIcon = _R_IMAGES.dyn(customIconTemplate.format(chapterID, progressionType), default=_R_IMAGES.dyn(iconTemplate.format(progressionType)))()
         else:
             icon = _R_IMAGES.icon_chapter_empty()
-        return backport.image(icon)
+        return backport.image(customIcon) if customIcon else backport.image(icon)
 
     def __getExtraIcon(self):
         if self.hasMarathon:
@@ -105,14 +119,14 @@ class BattlePassSecondaryEntryPointWidget(SecondaryEntryPointMeta, BaseBattlePas
             tooltip = _TOOLTIPS.get(self._getTooltip(), '')
             tooltipType = TOOLTIPS_CONSTANTS.WULF
         elif not self.__battlePass.isEnabled():
-            tooltip = BATTLE_PASS.TOOLTIPS_ENTRYPOINT_DISABLED
+            tooltip = makeComplexTooltipByResource(R.strings.battle_pass.tooltips.entryPoint.disabled)
             tooltipType = TOOLTIPS_CONSTANTS.COMPLEX
         else:
             tooltip = backport.text(R.strings.battle_pass.tooltips.secondaryEntryPoint.disabled.num(currentArenaBonusType)())
             if tooltip:
                 tooltipType = TOOLTIPS_CONSTANTS.SIMPLE
             else:
-                tooltip = BATTLE_PASS.TOOLTIPS_ENTRYPOINT_DISABLED
+                tooltip = makeComplexTooltipByResource(R.strings.battle_pass.tooltips.entryPoint.disabled)
                 tooltipType = TOOLTIPS_CONSTANTS.COMPLEX
-        data['tooltip'] = str(tooltip)
+        data['tooltip'] = tooltip
         data['tooltipType'] = tooltipType

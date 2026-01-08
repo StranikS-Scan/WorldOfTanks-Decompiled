@@ -11,7 +11,7 @@
   <postProgressionTree>	role_HT_universal	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	35	</forward>
+    <forward>	30	</forward>
     <backward>	15	</backward>
   </speedLimits>
   <invisibility>
@@ -43,7 +43,7 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	180	</armor_1>
+      <armor_1>	160	</armor_1>
       <armor_2>	150	</armor_2>
       <armor_3>	100	</armor_3>
       <armor_4>	80	</armor_4>
@@ -74,6 +74,13 @@
       <undamaged>	vehicles/british/GB143_Captain/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/british/GB143_Captain/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/british/GB143_Captain/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <GB143_Captain_3Dst_01>
+          <undamaged>	vehicles/british/GB143_Captain/_skins/GB143_Captain_3Dst_01/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/british/GB143_Captain/_skins/GB143_Captain_3Dst_01/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/british/GB143_Captain/_skins/GB143_Captain_3Dst_01/crash/lod0/Hull.model	</exploded>
+        </GB143_Captain_3Dst_01>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -820,6 +827,12 @@
         <scale>	4.281439 4.281438 4.281438	</scale>
         <showOn>	16	</showOn>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -850,8 +863,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	24	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.16	</vehicleMovement>
-        <vehicleRotation>	0.16	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -861,6 +874,13 @@
         <undamaged>	vehicles/british/GB143_Captain/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/british/GB143_Captain/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/british/GB143_Captain/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <GB143_Captain_3Dst_01>
+            <undamaged>	vehicles/british/GB143_Captain/_skins/GB143_Captain_3Dst_01/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB143_Captain/_skins/GB143_Captain_3Dst_01/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB143_Captain/_skins/GB143_Captain_3Dst_01/crash/lod0/Chassis.model	</exploded>
+          </GB143_Captain_3Dst_01>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1937,7 +1957,7 @@
       <price>	30000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	275	</armor_1>
+        <armor_1>	250	</armor_1>
         <armor_2>	250	</armor_2>
         <armor_3>	120	</armor_3>
         <armor_4>	90	</armor_4>
@@ -1949,8 +1969,8 @@
         <armor_10>	127	</armor_10>
         <armor_11>	190	</armor_11>
         <armor_12>	254	</armor_12>
-        <armor_13>	206	</armor_13>
-        <armor_14>	270	</armor_14>
+        <armor_13>	152	</armor_13>
+        <armor_14>	152	</armor_14>
         <armor_15>	152	</armor_15>
         <armor_16>	160	</armor_16>
         <armor_17>	120	</armor_17>
@@ -1994,13 +2014,13 @@
           <reloadTime>	8	</reloadTime>
           <aimingTime>	2.5	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.06	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.36 10 0.42 2 0.58 2 0.64 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 8.00 0.36000 8.00 0.42000 2.00 0.58000 2.00 0.64000 8.00 1.00000 8.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.095	</invisibilityFactorAtShot>
           <multiGunEffects>	shot_dualgun_large_L shot_dualgun_large_R	</multiGunEffects>
@@ -2081,6 +2101,13 @@
             <undamaged>	vehicles/british/GB143_Captain/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB143_Captain/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/british/GB143_Captain/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <GB143_Captain_3Dst_01>
+                <undamaged>	vehicles/british/GB143_Captain/_skins/GB143_Captain_3Dst_01/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/british/GB143_Captain/_skins/GB143_Captain_3Dst_01/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/british/GB143_Captain/_skins/GB143_Captain_3Dst_01/crash/lod0/Gun_01.model	</exploded>
+              </GB143_Captain_3Dst_01>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/british/GB143_Captain/collision/Gun_01.model	</collisionModelServer>
@@ -2097,6 +2124,13 @@
         <undamaged>	vehicles/british/GB143_Captain/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/british/GB143_Captain/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/british/GB143_Captain/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <GB143_Captain_3Dst_01>
+            <undamaged>	vehicles/british/GB143_Captain/_skins/GB143_Captain_3Dst_01/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB143_Captain/_skins/GB143_Captain_3Dst_01/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/british/GB143_Captain/_skins/GB143_Captain_3Dst_01/crash/lod0/Turret_01.model	</exploded>
+          </GB143_Captain_3Dst_01>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB143_Captain/collision/Turret_01.model	</collisionModelServer>
@@ -2443,6 +2477,12 @@
           <scale>	1.649454 0.824722 1.649441	</scale>
           <showOn>	256	</showOn>
         </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0 0 0	</position>
+          <rotation>	0 0 0	</rotation>
+        </slot>
       </customizationSlots>
       <customization>
         <customizableVehicleAreas>
@@ -2485,7 +2525,7 @@
       <engines>
         <Rolls_Royce_Griffon_180C>
           <smplEnginePower>	1200	</smplEnginePower>
-          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
         </Rolls_Royce_Griffon_180C>
       </engines>
       <chassis>

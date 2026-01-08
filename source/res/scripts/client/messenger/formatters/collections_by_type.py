@@ -2,15 +2,13 @@
 # Embedded file name: scripts/client/messenger/formatters/collections_by_type.py
 from chat_shared import SYS_MESSAGE_TYPE as _SM_TYPE
 from gui.gift_system.proxy import GiftSystemMessagesProxy
-from gui.shared.system_factory import registerMessengerClientFormatter, registerTokenQuestsSubFormatters, registerMessengerServerFormatter, registerConvertersSubFormatter, registerServiceChannelSubformatter
+from gui.shared.system_factory import registerMessengerClientFormatter, registerTokenQuestsSubFormatters, registerMessengerServerFormatter, registerConvertersSubFormatter
 from messenger.formatters import service_channel as _sc
 from messenger.formatters import wot_plus as _wotPlusFormatters
 from messenger.formatters import token_quest_subformatters
 from messenger.formatters.new_year_post_event.converter_formatters import NewYearMandarinsConverterFormatter
 from messenger.formatters.daily_quests_initial_event.converter_formatters import DailyQuestsEpicCompensationFormatter
-from messenger.formatters.service_channel import QuestAchievesFormatter, SeniorityAwardsCompensationExtQuestAchievesSubFormatter, IQuestAchievesSubformatter
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
-registerServiceChannelSubformatter((QuestAchievesFormatter, IQuestAchievesSubformatter), SeniorityAwardsCompensationExtQuestAchievesSubFormatter)
 registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFormatter(),
  token_quest_subformatters.RecruitQuestsFormatter(),
  token_quest_subformatters.RankedSeasonTokenQuestFormatter(),
@@ -24,15 +22,12 @@ registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFor
  token_quest_subformatters.BattleMattersAwardsFormatter(),
  token_quest_subformatters.Comp7RewardsFormatter(),
  token_quest_subformatters.CrewPerksFormatter(),
- token_quest_subformatters.ParagonsTokenQuestsSubformatter()))
-registerConvertersSubFormatter('newYear26', NewYearMandarinsConverterFormatter)
+ token_quest_subformatters.ParagonsTokenQuestsSubformatter(),
+ token_quest_subformatters.ClanSeasonProgressionFormatter(),
+ token_quest_subformatters.ClanSeasonQuestFormatter()))
+registerConvertersSubFormatter('newYear25', NewYearMandarinsConverterFormatter)
 registerConvertersSubFormatter('dailyQuests', DailyQuestsEpicCompensationFormatter)
-_HANGAR_QUESTS_SUB_FORMATTERS = [token_quest_subformatters.BattleMattersAwardsFormatter()]
-
-def registerHangarQuestSubFormatters(formatters):
-    _HANGAR_QUESTS_SUB_FORMATTERS.extend(formatters)
-
-
+_HANGAR_QUESTS_SUB_FORMATTERS = (token_quest_subformatters.BattleMattersAwardsFormatter(),)
 _PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMissionsFormatter(),)
 SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.serverRebootCancelled.index(): _sc.ServerRebootCancelledFormatter(),
@@ -130,7 +125,6 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.resourceWellReward.index(): _sc.ResourceWellRewardFormatter(),
  _SM_TYPE.resourceWellNoVehicles.index(): _sc.ResourceWellNoVehiclesFormatter(),
  _SM_TYPE.customization2dProgressionChanged.index(): _sc.Customization2DProgressionChangedFormatter(),
- _SM_TYPE.personalReservesHaveBeenConverted.index(): _sc.PersonalReservesHaveBeenConvertedFormatter(),
  _SM_TYPE.fairplay.index(): _sc.FairplayFormatter(),
  _SM_TYPE.collectionsItems.index(): _sc.CollectionsItemsFormatter(),
  _SM_TYPE.collectionsReward.index(): _sc.CollectionsRewardFormatter(),
@@ -241,7 +235,6 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.resourceWellReward.index(), _sc.ResourceWellRewardFormatter())
     registerMessengerServerFormatter(_SM_TYPE.resourceWellNoVehicles.index(), _sc.ResourceWellNoVehiclesFormatter())
     registerMessengerServerFormatter(_SM_TYPE.customization2dProgressionChanged.index(), _sc.Customization2DProgressionChangedFormatter())
-    registerMessengerServerFormatter(_SM_TYPE.personalReservesHaveBeenConverted.index(), _sc.PersonalReservesHaveBeenConvertedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.fairplay.index(), _sc.FairplayFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE, _sc.ClientSysMessageFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.PREMIUM_ACCOUNT_EXPIRY_MSG, _sc.PremiumAccountExpiryFormatter())

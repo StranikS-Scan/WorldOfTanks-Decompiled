@@ -16,12 +16,13 @@ from gui.customization.constants import CustomizationModes
 from gui.hangar_cameras.c11n_hangar_camera_manager import C11nHangarCameraManager
 from gui.shared.utils.decorators import adisp_process
 from helpers import dependency
-from items.components.c11n_constants import SeasonType
+from items.components.c11n_constants import SeasonType, TagsetBuilder
 from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from soft_exception import SoftException
+from gui.shared.gui_items.processors.common import CustomizationsTagsSetter
 if typing.TYPE_CHECKING:
     from gui.customization.shared import C11nId, PurchaseItem
     from gui.customization.constants import CustomizationModeSource
@@ -63,7 +64,6 @@ class _CustomizationEvents(object):
         self.onEditModeEnabled = Event.Event(self._eventsManager)
         self.onPersonalNumberCleared = Event.Event(self._eventsManager)
         self.onProlongStyleRent = Event.Event(self._eventsManager)
-        self.onCloseWindow = Event.Event(self._eventsManager)
 
     def fini(self):
         self._eventsManager.clear()
@@ -78,6 +78,7 @@ class CustomizationContext(object):
         self._vehicle = None
         self.__season = None
         self.__modeId = None
+        self.__tabId = None
         self.__startModeId = None
         self.__modes = {CustomizationModes.CUSTOM: CustomMode(self),
          CustomizationModes.STYLED: StyledMode(self),
@@ -89,7 +90,8 @@ class CustomizationContext(object):
         self.__c11nCameraManager = C11nHangarCameraManager()
         self.__stylesDiffsCache = StyleDiffsCache()
         self.__carouselItems = None
-        self.__exitCallback = None
+        self.__carouselItemsCounts = None
+        self.__newHiddenElementsCount = None
         return
 
     @property
@@ -127,6 +129,10 @@ class CustomizationContext(object):
         return self.__modeId
 
     @property
+    def tabId(self):
+        return self.__tabId
+
+    @property
     def startModeId(self):
         return self.__startModeId
 
@@ -157,6 +163,22 @@ class CustomizationContext(object):
     def setIsItemsOnAnotherVeh(self, value):
         self.__isItemsOnAnotherVeh = value
 
+    @property
+    def carouselItemsCounts(self):
+        return self.__carouselItemsCounts
+
+    @carouselItemsCounts.setter
+    def carouselItemsCounts(self, value):
+        self.__carouselItemsCounts = value
+
+    @property
+    def newHiddenElementsCount(self):
+        return self.__newHiddenElementsCount
+
+    @newHiddenElementsCount.setter
+    def newHiddenElementsCount(self, value):
+        self.__newHiddenElementsCount = value
+
     def init(self, season=None, modeId=None, tabId=None):
         if not g_currentVehicle.isPresent():
             raise SoftException('There is no vehicle in hangar for customization.')
@@ -167,6 +189,7 @@ class CustomizationContext(object):
         g_currentVehicle.onChanged += self.__onVehicleChanged
         self.__season = season or self.__getStartSeason()
         self.__modeId = modeId or self.__getStartMode()
+        self.__tabId = tabId or self.__getStartTab()
         self.__startModeId = self.modeId
         self.mode.start(tabId)
         self.__events = _CustomizationEvents()
@@ -192,23 +215,42 @@ class CustomizationContext(object):
         self.__modes.clear()
         return
 
+    def changeTab(self, tabId, itemCD=None):
+        if self.__tabId == tabId:
+            return
+        self.__tabId = tabId
+        if self.__modeId != CustomizationModes.EDITABLE_STYLE:
+            newModeId = CustomizationModes.STYLED if tabId in CustomizationTabs.STYLES_ALL else CustomizationModes.CUSTOM
+            if newModeId != self.__modeId:
+                self.changeMode(newModeId, tabId)
+                return
+        self.mode.unselectItem()
+        self.mode.unselectSlot()
+        self.events.onTabChanged(tabId, itemCD)
+
     def changeMode(self, modeId, tabId=None, source=None):
         if modeId not in CustomizationModes.ALL:
             _logger.warning('Wrong customization mode: %s', modeId)
             return
-        if self.__modeId == modeId:
+        elif self.__modeId == modeId:
             return
-        prevMode = self.mode
-        prevMode.unselectItem()
-        prevMode.unselectSlot()
-        prevMode.stop()
-        newMode = self.__modes[modeId]
-        newMode.start(tabId=tabId, source=source)
-        self.__modeId = modeId
-        self.refreshOutfit()
-        self.events.onBeforeModeChange()
-        self.events.onModeChanged(modeId, prevMode.modeId)
-        self.events.onTabChanged(self.mode.tabId)
+        else:
+            prevMode = self.mode
+            prevMode.unselectItem()
+            prevMode.unselectSlot()
+            prevMode.stop()
+            newMode = self.__modes[modeId]
+            newMode.start(source=source)
+            if tabId is not None and tabId not in newMode.tabs:
+                tabId = None
+                _logger.warning('Wrong tabId: %s for current customization mode: %s', tabId, self.__ctx.modeId)
+            self.__tabId = tabId or first(newMode.tabs)
+            self.__modeId = modeId
+            self.refreshOutfit()
+            self.events.onBeforeModeChange()
+            self.events.onModeChanged(modeId, prevMode.modeId)
+            self.events.onTabChanged(self.tabId)
+            return
 
     def editStyle(self, intCD, source=None):
         style = self._service.getItemByCD(intCD)
@@ -227,14 +269,6 @@ class CustomizationContext(object):
             self.changeMode(CustomizationModes.EDITABLE_STYLE, source=source)
             return
 
-    def getExitCallback(self):
-        return self.__exitCallback
-
-    def previewStyle(self, style, exitCallback=None, source=None):
-        self.__exitCallback = exitCallback
-        self.changeMode(CustomizationModes.STYLED, source=source)
-        self.events.onShowStyleInfo(style)
-
     def canEditStyle(self, itemCD):
         if self.__modeId in (CustomizationModes.STYLED, CustomizationModes.EDITABLE_STYLE):
             outfit = self.mode.getModifiedOutfit()
@@ -250,7 +284,7 @@ class CustomizationContext(object):
     def changeModeWithProgressionDecal(self, itemCD, scrollToItem=False):
         goToEditableStyle = self.canEditStyle(itemCD)
         self.changeMode(CustomizationModes.EDITABLE_STYLE if goToEditableStyle else CustomizationModes.CUSTOM)
-        self.mode.changeTab(CustomizationTabs.PROJECTION_DECALS, itemCD=itemCD if scrollToItem else None)
+        self.changeTab(CustomizationTabs.PROJECTION_DECALS, itemCD=itemCD if scrollToItem else None)
         return
 
     def changeSeason(self, season):
@@ -298,6 +332,10 @@ class CustomizationContext(object):
         self._itemsCache.onSyncCompleted += self.__onCacheResync
         callback(None)
         return
+
+    @adisp.adisp_process
+    def updateCustomizationFavorits(self, item):
+        yield CustomizationsTagsSetter(item.intCD, TagsetBuilder.FAVORITES, not item.markedAsFavorite).request()
 
     def isOutfitsModified(self):
         if self.isModeChanged:
@@ -363,3 +401,6 @@ class CustomizationContext(object):
 
     def __getStartMode(self):
         return CustomizationModes.STYLED if self._service.isStyleInstalled() else CustomizationModes.CUSTOM
+
+    def __getStartTab(self):
+        return CustomizationTabs.CUSTOM_ALL[0]

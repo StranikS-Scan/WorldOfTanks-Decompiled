@@ -478,7 +478,10 @@ class CommonTankAppearance(ScriptGameObject):
 
             if additionalChassisParts:
                 collisionData += tuple(additionalChassisParts)
-            self.collisions.connect(self.id, ColliderTypes.VEHICLE_COLLIDER, collisionData)
+            colliderType = ColliderTypes.VEHICLE_COLLIDER
+            if self.typeDescriptor.isAirCraft:
+                colliderType = ColliderTypes.AIRCRAFT_COLLIDER
+            self.collisions.connect(self.id, colliderType, collisionData)
         return
 
     def computeVehicleHeight(self):

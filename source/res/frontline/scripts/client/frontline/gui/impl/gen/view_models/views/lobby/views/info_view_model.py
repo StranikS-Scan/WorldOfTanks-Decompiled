@@ -8,7 +8,7 @@ from frontline.gui.impl.gen.view_models.views.lobby.views.skill_category_base_mo
 class InfoViewModel(ViewModel):
     __slots__ = ('onClose',)
 
-    def __init__(self, properties=14, commands=1):
+    def __init__(self, properties=21, commands=1):
         super(InfoViewModel, self).__init__(properties=properties, commands=commands)
 
     def getValidVehicleLevels(self):
@@ -75,41 +75,83 @@ class InfoViewModel(ViewModel):
     def setVentilationDestructiblesArmor(self, value):
         self._setNumber(9, value)
 
+    def getMortarRespawnTime(self):
+        return self._getNumber(10)
+
+    def setMortarRespawnTime(self, value):
+        self._setNumber(10, value)
+
+    def getAirshipRespawnTime(self):
+        return self._getNumber(11)
+
+    def setAirshipRespawnTime(self, value):
+        self._setNumber(11, value)
+
+    def getPillboxRespawnTime(self):
+        return self._getNumber(12)
+
+    def setPillboxRespawnTime(self, value):
+        self._setNumber(12, value)
+
+    def getFlamerRespawnTime(self):
+        return self._getNumber(13)
+
+    def setFlamerRespawnTime(self, value):
+        self._setNumber(13, value)
+
+    def getAirshipCaptureDuration(self):
+        return self._getNumber(14)
+
+    def setAirshipCaptureDuration(self, value):
+        self._setNumber(14, value)
+
+    def getAirshipHullDamageFactor(self):
+        return self._getReal(15)
+
+    def setAirshipHullDamageFactor(self, value):
+        self._setReal(15, value)
+
+    def getAirshipTurretDamageFactor(self):
+        return self._getReal(16)
+
+    def setAirshipTurretDamageFactor(self, value):
+        self._setReal(16, value)
+
     def getSkillsCategories(self):
-        return self._getArray(10)
+        return self._getArray(17)
 
     def setSkillsCategories(self, value):
-        self._setArray(10, value)
+        self._setArray(17, value)
 
     @staticmethod
     def getSkillsCategoriesType():
         return SkillCategoryBaseModel
 
     def getRanksWithPoints(self):
-        return self._getArray(11)
+        return self._getArray(18)
 
     def setRanksWithPoints(self, value):
-        self._setArray(11, value)
+        self._setArray(18, value)
 
     @staticmethod
     def getRanksWithPointsType():
         return RankItemModel
 
     def getWinTablePoints(self):
-        return self._getArray(12)
+        return self._getArray(19)
 
     def setWinTablePoints(self, value):
-        self._setArray(12, value)
+        self._setArray(19, value)
 
     @staticmethod
     def getWinTablePointsType():
         return int
 
     def getLoseTablePoints(self):
-        return self._getArray(13)
+        return self._getArray(20)
 
     def setLoseTablePoints(self, value):
-        self._setArray(13, value)
+        self._setArray(20, value)
 
     @staticmethod
     def getLoseTablePointsType():
@@ -127,6 +169,13 @@ class InfoViewModel(ViewModel):
         self._addNumberProperty('backDestructiblesArmor', 0)
         self._addNumberProperty('doorDestructiblesArmor', 0)
         self._addNumberProperty('ventilationDestructiblesArmor', 0)
+        self._addNumberProperty('mortarRespawnTime', 0)
+        self._addNumberProperty('airshipRespawnTime', 0)
+        self._addNumberProperty('pillboxRespawnTime', 0)
+        self._addNumberProperty('flamerRespawnTime', 0)
+        self._addNumberProperty('airshipCaptureDuration', 0)
+        self._addRealProperty('airshipHullDamageFactor', 0.0)
+        self._addRealProperty('airshipTurretDamageFactor', 0.0)
         self._addArrayProperty('skillsCategories', Array())
         self._addArrayProperty('ranksWithPoints', Array())
         self._addArrayProperty('winTablePoints', Array())

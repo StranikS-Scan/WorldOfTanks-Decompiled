@@ -60,6 +60,9 @@ class IntroView(ViewImpl):
             hasMarathon = self.__battlePass.hasMarathon()
             if hasMarathon:
                 slidesNames = getMarathonIntroSlidesNames()
+                marathonChapterId = self.__battlePass.getMarathonChapterID()
+                tx.setMarathonChapterStartDate(self.__battlePass.getChapterStartDate(marathonChapterId))
+                tx.setMarathonChapterEndDate(self.__battlePass.getChapterExpiration(marathonChapterId))
             else:
                 slidesNames = getIntroSlidesNames()
             slides = tx.getSlides()

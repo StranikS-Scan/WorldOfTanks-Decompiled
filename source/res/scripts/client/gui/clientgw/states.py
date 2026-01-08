@@ -402,7 +402,7 @@ class AvailableState(_WebState):
                         self.__accessTokenData = AccessTokenData(data['access_token'], responseTime + float(data['expires_in']))
                     else:
                         LOG_DEBUG("Response of login to the clientgw doesn't contain data")
-        elif not response and avatar_getter.getArena():
+        elif not response and avatar_getter.isPlayerOnArena():
             LOG_DEBUG('Request cancelled. Possible the requester was changed after start battle.', response)
         else:
             LOG_WARNING('There is error while getting spa token for clientgw gate', response)

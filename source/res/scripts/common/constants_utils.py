@@ -193,14 +193,6 @@ def addVehicleTags(unitMgrFlag, requiredTags, forbiddenTags, newTags, personalit
     LOG_DEBUG(msg)
 
 
-def addVignetteSettings(viewName, value, personality):
-    from gui.shared.vignette_settings_switcher import _VIEWS_TO_VIGNETTE_CHANGE
-    if viewName in _VIEWS_TO_VIGNETTE_CHANGE:
-        raise SoftException('_VIEWS_TO_VIGNETTE_CHANGE already has {value}. Personality: {p}'.format(value=viewName, p=personality))
-    _VIEWS_TO_VIGNETTE_CHANGE[viewName] = value
-    LOG_DEBUG('_VIEWS_TO_VIGNETTE_CHANGE:{viewName} was added. Personality: {p}'.format(viewName=viewName, p=personality))
-
-
 def addBonusReaderFromExtension(bonusName, reader, personality):
     from bonus_readers import __BONUS_READERS, SUPPORTED_BONUSES, SUPPORTED_BONUSES_IDS, SUPPORTED_BONUSES_NAMES
     if bonusName in __BONUS_READERS:
@@ -252,8 +244,6 @@ def addBonusApplierFromExtension(bonusName, applier, personality):
     from quest_bonus import BONUS_APPLIERS
     if bonusName in BONUS_APPLIERS:
         raise SoftException('BONUS_APPLIERS already has {value}. Personality: {p}'.format(value=bonusName, p=personality))
-    if 'nyToyFragments' == bonusName:
-        return
     BONUS_APPLIERS.update({bonusName: applier})
     LOG_DEBUG('BONUS_APPLIERS:{bonusName} was added. Personality: {p}'.format(bonusName=bonusName, p=personality))
 

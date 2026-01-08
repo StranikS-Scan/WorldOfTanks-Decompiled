@@ -137,7 +137,8 @@ class ArmoryYardMainView(ViewImpl, IGlobalListener):
     def _updateModelData(self):
         self.__updateFreeRerollCount()
         with self.viewModel.transaction() as vm:
-            vm.setRerollCountDown(self.__armoryYardRerollCtrl.getFreeRerollCountdown())
+            if self.__armoryYardRerollCtrl.isRerollEnabled():
+                vm.setRerollCountDown(self.__armoryYardRerollCtrl.getFreeRerollCountdown())
             vm.setIsRerollEnabled(self.__armoryYardRerollCtrl.isRerollEnabled())
             vm.setIsPostProgression(self.__armoryYardCtrl.isPostProgressionState)
             maxNumberOfSteps = self.__armoryYardCtrl.maxNumberOfSteps

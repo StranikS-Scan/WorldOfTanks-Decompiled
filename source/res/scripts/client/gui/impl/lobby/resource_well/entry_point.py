@@ -9,6 +9,7 @@ from gui.impl.lobby.resource_well.tooltips.entry_point_tooltip import EntryPoint
 from gui.impl.pub import ViewImpl
 from gui.resource_well.resource_well_constants import RESOURCE_WELL_PDATA_KEY
 from gui.resource_well.resource_well_helpers import isForbiddenAccount, getForbiddenAccountToken
+from constants import RESOURCE_WELL_ALL_SEASON_FORBIDDEN_TOKEN
 from gui.shared.event_dispatcher import showResourceWellProgressionWindow
 from helpers import dependency
 from shared_utils import nextTick
@@ -114,7 +115,7 @@ class EntryPoint(ViewImpl):
         if RESOURCE_WELL_PDATA_KEY in diff:
             self.__updateModel()
         tokens = diff.get('tokens', {})
-        if getForbiddenAccountToken(resourceWell=self.__resourceWell) in tokens:
+        if getForbiddenAccountToken(resourceWell=self.__resourceWell) or RESOURCE_WELL_ALL_SEASON_FORBIDDEN_TOKEN in tokens:
             self.__updateModel()
 
     @nextTick

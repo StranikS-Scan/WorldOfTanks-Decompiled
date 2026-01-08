@@ -1,0 +1,33 @@
+<AvatarFrontlineComponent.def>
+  <Properties>
+    <questName>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </questName>
+    <sectors>
+      <Type>	TUPLE	  <of>	UINT8	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </sectors>
+    <sectorProgression>
+      <Type>	TUPLE	  <of>	INT16	</of>
+        <size>	2	</size>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </sectorProgression>
+  </Properties>
+  <ClientMethods>
+    <updateQuestProgress>
+      <Arg>	STRING	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </updateQuestProgress>
+    <notifySupplyActivated>
+      <Arg>	UINT8	</Arg>
+    </notifySupplyActivated>
+    <notifyAirshipCome>
+      <Arg>	BOOL	</Arg>
+    </notifyAirshipCome>
+  </ClientMethods>
+  <DefaultKeyName>	avatarFrontlineComponent	</DefaultKeyName>
+</AvatarFrontlineComponent.def>

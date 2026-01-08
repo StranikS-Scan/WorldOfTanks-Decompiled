@@ -23,7 +23,7 @@ _logger = logging.getLogger(__name__)
 
 class SelectableRewardManager(object):
     _itemsCache = dependency.descriptor(IItemsCache)
-    __offersDataProvider = dependency.descriptor(IOffersDataProvider)
+    _offersDataProvider = dependency.descriptor(IOffersDataProvider)
     _FEATURE = None
     _SINGLE_GIFT_PROCESSOR = ReceiveOfferGiftProcessor
     _MULTIPLE_GIFT_PROCESSOR = ReceiveMultipleOfferGiftsProcessor
@@ -85,7 +85,7 @@ class SelectableRewardManager(object):
             extractor = extractor or cls.defaultGiftExtractor
             offer = cls._getBonusOffer(bonus)
             result = []
-            receivedGifts = cls.__offersDataProvider.getReceivedGifts(offer.id)
+            receivedGifts = cls._offersDataProvider.getReceivedGifts(offer.id)
             for giftId, count in receivedGifts.iteritems():
                 if count > 0:
                     gift = offer.getGift(giftId)
@@ -96,7 +96,7 @@ class SelectableRewardManager(object):
 
     @classmethod
     def isAvailableBonus(cls, tokenID):
-        offer = SelectableRewardManager.__offersDataProvider.getOfferByToken(tokenID)
+        offer = cls._offersDataProvider.getOfferByToken(tokenID)
         return offer is not None and offer.isOfferAvailable
 
     @classmethod
@@ -118,20 +118,20 @@ class SelectableRewardManager(object):
         if offer is None:
             return 0
         else:
-            offerDataReceivedGifts = cls.__offersDataProvider.getReceivedGifts(offer.id)
+            offerDataReceivedGifts = cls._offersDataProvider.getReceivedGifts(offer.id)
             countReceivedGifts = sum(offerDataReceivedGifts.itervalues())
             return offer.availableTokens + countReceivedGifts
 
     @classmethod
     def getTokenByGiftToken(cls, giftToken):
-        offer = cls.__offersDataProvider.getOfferByGiftToken(giftToken)
+        offer = cls._offersDataProvider.getOfferByGiftToken(giftToken)
         return None if offer is None else offer.token
 
     @classmethod
     def getRemainedChoicesForFeature(cls):
         result = 0
         for token in cls.__getFeatureTokens():
-            offer = cls.__offersDataProvider.getOfferByToken(token)
+            offer = cls._offersDataProvider.getOfferByToken(token)
             if offer is not None:
                 result += offer.availableTokens
 
@@ -143,7 +143,7 @@ class SelectableRewardManager(object):
 
     @classmethod
     def getRewardProperties(cls, tokenID):
-        offer = SelectableRewardManager.__offersDataProvider.getOfferByToken(tokenID)
+        offer = cls._offersDataProvider.getOfferByToken(tokenID)
         return {} if offer is None else offer.properties
 
     @classmethod
@@ -152,7 +152,7 @@ class SelectableRewardManager(object):
 
     @classmethod
     def _getBonusOffer(cls, bonus):
-        return cls.__offersDataProvider.getOfferByToken(cls._getBonusOfferToken(bonus))
+        return cls._offersDataProvider.getOfferByToken(cls._getBonusOfferToken(bonus))
 
     @classmethod
     def _getBonusOfferToken(cls, bonus):
@@ -181,7 +181,6 @@ class BattlePassSelectableRewardManager(SelectableRewardManager):
 
 
 class PersonalMissionsSelectableRewardManager(SelectableRewardManager):
-    __offersDataProvider = dependency.descriptor(IOffersDataProvider)
     _FEATURE = Features.PERSONAL_MISSIONS
     __REWARD_EXTRA_ENDING = '_gift'
 
@@ -196,7 +195,7 @@ class PersonalMissionsSelectableRewardManager(SelectableRewardManager):
     def isAvailableBonus(cls, tokenID):
         if tokenID.startswith(PM3_OFFER_TOKEN_PREFIX):
             tokenID = tokenID.replace(PersonalMissionsSelectableRewardManager.__REWARD_EXTRA_ENDING, '')
-        offer = cls.__offersDataProvider.getOfferByToken(tokenID)
+        offer = cls._offersDataProvider.getOfferByToken(tokenID)
         return offer is not None and offer.isOfferAvailable
 
 
@@ -216,6 +215,11 @@ class EpicSelectableRewardManager(SelectableRewardManager):
     def getTabTooltipData(cls, selectableBonus):
         tokenID = selectableBonus.getValue().keys()[0]
         return TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.EPIC_BATTLE_INSTRUCTION_TOOLTIP, specialArgs=[_getGiftTokenFromOffer(tokenID)]) if cls.isFeatureReward(tokenID) else None
+
+    @classmethod
+    def isAvailableBonus(cls, tokenID):
+        offer = cls._offersDataProvider.getOfferByGiftToken(tokenID)
+        return offer is not None and offer.isOfferAvailable
 
 
 class BattleMattersSelectableRewardManager(SelectableRewardManager):

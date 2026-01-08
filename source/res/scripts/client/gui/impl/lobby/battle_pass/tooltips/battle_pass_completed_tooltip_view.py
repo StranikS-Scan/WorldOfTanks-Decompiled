@@ -4,6 +4,7 @@ from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view_model import BattlePassCompletedTooltipViewModel
 from gui.impl.pub import ViewImpl
+from gui.battle_pass.battle_pass_helpers import getIsBpPointsShopEntryPointActive
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 
@@ -27,3 +28,5 @@ class BattlePassCompletedTooltipView(ViewImpl):
         with self.getViewModel().transaction() as model:
             model.setIsBattlePassPurchased(isBought)
             model.setNotChosenRewardCount(self.__battlePassController.getNotChosenRewardCount())
+            model.setIsBpPointsShopEntryPointActive(getIsBpPointsShopEntryPointActive())
+            model.setIsSingleChapter(self.__battlePassController.isSingleChapter())

@@ -2,20 +2,22 @@
 # Embedded file name: scripts/client/AvatarInputHandler/epic_battle_death_mode.py
 import GUI
 import BigWorld
-from ClientArena import CollisionResult
 import constants
 import CommandMapping
+import Math
+import Keys
+import SoundGroups
+import ResMgr
+from ClientArena import CollisionResult
 from aih_constants import CTRL_MODE_NAME
 from control_modes import VideoCameraControlMode, PostMortemControlMode
 from VideoCamera import VideoCamera, _Inertia, KeySensor
-import Math
-import Keys
+from PostmortemDelay import PostmortemDelay
+from supply_shared import Supply
 from helpers import isPlayerAvatar
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.battle_control.controllers.epic_spectator_ctrl import SPECTATOR_MODE
-import SoundGroups
-import ResMgr
 
 class EpicVideoCamera(VideoCamera):
 
@@ -93,18 +95,40 @@ class EpicVideoCamera(VideoCamera):
         return endPos
 
     def _update(self):
-        if BigWorld.player().target is not None and BigWorld.player().target.__class__.__name__ == 'Vehicle' and self.__selectedTargetID is not BigWorld.player().target.id:
-            vehicleDesc = BigWorld.player().arena.vehicles.get(BigWorld.player().target.id)
-            if vehicleDesc['isAlive'] and vehicleDesc['team'] == BigWorld.player().team:
-                self.__selectedTargetID = BigWorld.player().target.id
-                specCtrl = self.guiSessionProvider.dynamic.spectator
-                if self.__selectedTargetID != specCtrl.spectatedVehicle:
-                    specCtrl.spectatedVehicleChanged(self.__selectedTargetID)
-        elif BigWorld.player().target is None and self.__selectedTargetID is not None:
+        player = BigWorld.player()
+        target = player.target
+        specCtrl = self.guiSessionProvider.dynamic.spectator
+
+        def resetTarget():
             self.__selectedTargetID = None
-            specCtrl = self.guiSessionProvider.dynamic.spectator
             specCtrl.spectatedVehicleChanged(None)
-        return VideoCamera._update(self)
+            return
+
+        def shouldReset():
+            if target is None:
+                return True
+            elif target.__class__.__name__ != 'Vehicle':
+                return True
+            elif target.id == self.__selectedTargetID:
+                return True
+            vehicleDesc = player.arena.vehicles.get(target.id)
+            if not vehicleDesc or not vehicleDesc['isAlive'] or vehicleDesc['team'] != player.team:
+                return True
+            elif Supply.isSupply(vehicleDesc['vehicleType'].type.tags):
+                resetTarget()
+                return True
+            else:
+                return False
+
+        if shouldReset():
+            if target is None and self.__selectedTargetID is not None:
+                resetTarget()
+            return VideoCamera._update(self)
+        else:
+            self.__selectedTargetID = target.id
+            if self.__selectedTargetID != specCtrl.spectatedVehicle:
+                specCtrl.spectatedVehicleChanged(self.__selectedTargetID)
+            return VideoCamera._update(self)
 
 
 class DeathFreeCamMode(VideoCameraControlMode):
@@ -160,16 +184,19 @@ class DeathFreeCamMode(VideoCameraControlMode):
         return False
 
     def __switchToVehicle(self, toId=None):
-        vehicleDesc = BigWorld.player().arena.vehicles.get(toId)
+        player = BigWorld.player()
+        vehicles = player.arena.vehicles
+        vehicleDesc = vehicles.get(toId)
         if vehicleDesc is None:
             return
+        elif not vehicleDesc['isAlive'] or vehicleDesc['team'] != player.team or Supply.isSupply(vehicleDesc['vehicleType'].type.tags):
+            return
         else:
-            if vehicleDesc['isAlive'] and vehicleDesc['team'] == BigWorld.player().team:
-                targetMode = CTRL_MODE_NAME.POSTMORTEM
-                BigWorld.player().inputHandler.onControlModeChanged(targetMode, postmortemParams=None, newVehicleID=toId, bPostmortemDelay=False, respawn=True, camMatrix=BigWorld.camera().matrix, transitionDuration=self._cameraTransitionDurations[targetMode])
-                BigWorld.player().inputHandler.onCameraChanged(targetMode, toId)
-                if toId is None:
-                    self.guiSessionProvider.switchToPostmortem(False)
+            targetMode = CTRL_MODE_NAME.POSTMORTEM
+            player.inputHandler.onControlModeChanged(targetMode, postmortemParams=None, newVehicleID=toId, bPostmortemDelay=False, respawn=True, camMatrix=BigWorld.camera().matrix, transitionDuration=self._cameraTransitionDurations[targetMode])
+            player.inputHandler.onCameraChanged(targetMode, toId)
+            if toId is None:
+                self.guiSessionProvider.switchToPostmortem(False)
             return
 
     def __onRespawnInfoUpdated(self, respawnInfo):
@@ -222,6 +249,10 @@ class DeathTankFollowMode(PostMortemControlMode):
                 return True
             return False
 
+    @classmethod
+    def _getPostmortemDelay(cls, *args, **kwargs):
+        return EpicPostmortemCamera(*args, **kwargs)
+
     def _onMatrixBound(self, isStatic):
         super(DeathTankFollowMode, self)._onMatrixBound(isStatic)
         cameraTransitionDuration = self._cameraTransitionDurations.get(CTRL_MODE_NAME.POSTMORTEM, -1)
@@ -240,3 +271,14 @@ class DeathTankFollowMode(PostMortemControlMode):
         if vehicleID is not None:
             self.selectPlayer(vehicleID)
         return
+
+
+class EpicPostmortemCamera(PostmortemDelay):
+    __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
+
+    def _startKillerVision(self):
+        vInfo = self.__guiSessionProvider.getArenaDP().getVehicleInfo(self._killerVehicleID)
+        if Supply.isAirShip(vInfo.vehicleType.tags):
+            player = BigWorld.player()
+            self._killerVehicleID = player.playerVehicleID
+        super(EpicPostmortemCamera, self)._startKillerVision()

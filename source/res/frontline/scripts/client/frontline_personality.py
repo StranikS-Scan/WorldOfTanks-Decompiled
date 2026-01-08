@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline_personality.py
+import epic_game_controllers
 from account_helpers.AccountSettings import AccountSettings, KEY_SETTINGS
 from frontline_common.constants import ACCOUNT_DEFAULT_SETTINGS
 from constants import ARENA_GUI_TYPE, PREBATTLE_TYPE, QUEUE_TYPE, ARENA_BONUS_TYPE
@@ -32,6 +33,7 @@ def preInit():
     battleMode = ClientFrontlineBattleMode(__name__)
     battleMode.registerBannerEntryPointValidatorMethod()
     battleMode.registerBannerEntryPointLUIRule()
+    epic_game_controllers.register()
 
 
 def init():

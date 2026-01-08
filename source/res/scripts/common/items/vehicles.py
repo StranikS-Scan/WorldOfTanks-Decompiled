@@ -13,7 +13,7 @@ import typing
 from Math import Vector2, Vector3
 from backports.functools_lru_cache import lru_cache
 from collections import namedtuple
-from auto_shoot_guns.auto_shoot_guns_common import CLIP_MIN_RATE, CLIP_MAX_INTERVAL
+from auto_shoot_guns.auto_shoot_guns_common import AUTOSHOOT_MAX_INTERVAL
 from constants import ACTION_LABEL_TO_TYPE, SHELL_TYPES_LIST, ROLE_LABEL_TO_TYPE, ROLE_TYPE, DamageAbsorptionLabelToType, ROLE_LEVELS, ROLE_TYPE_TO_LABEL, VEHICLE_HEALTH_DECIMALS, CHANCE_TO_HIT_SUFFIX_FACTOR, IGR_TYPE, IS_RENTALS_ENABLED, IS_CELLAPP, IS_BASEAPP, IS_CLIENT, IS_UE_EDITOR, IS_BOT, IS_WEB, IS_PROCESS_REPLAY, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE_STATE, VEHICLE_MODE, VEHICLE_CLASSES, ShootImpulseApplicationPoint, AVAILABLE_STUN_TYPES_NAMES, StunTypes, HAS_EXPLOSION_EFFECT, HAS_EXPLOSION, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from functools import partial
@@ -529,6 +529,7 @@ class VehicleDescriptor(object):
     isClipGun = property(lambda self: 'clip' in self.gun.tags)
     isAutoReloadGun = property(lambda self: 'autoreload' in self.gun.tags)
     isPreferential = property(lambda self: self.type.preferential)
+    isAirCraft = property(lambda self: 'aircraft' in self.type.tags)
 
     @property
     def circularVisionRadius(self):
@@ -4522,11 +4523,13 @@ def _readMultiGun(xmlCtx, section, subsection):
 
 
 def _readMultiGunState(xmlCtx, section, multiGun):
+    if multiGun is None:
+        _xml.raiseWrongXml(xmlCtx, 'multiGunState', 'multiGunState specified without multiGun')
     sequence = map(int, _xml.readStringOrEmpty(xmlCtx, section, 'sequence').split())
+    if set(sequence) - set(range(0, len(multiGun))):
+        _xml.raiseWrongXml(xmlCtx, 'multiGunState', 'sequence contains invalid gunIndex')
     patterns = {}
     if IS_CLIENT or IS_UE_EDITOR:
-        if multiGun is None:
-            _xml.raiseWrongXml(xmlCtx, 'multiGunState', 'multiGunState specified without multiGun')
         patternIndex = 1
         patterns[-patternIndex] = range(0, len(multiGun))
         if section.has_key('patterns'):
@@ -5274,8 +5277,8 @@ def _readGunClipAutoShoot(xmlCtx, section):
     shotDispersionPerSec = _xml.readNonNegativeFloat(xmlCtx, section, 'autoShoot/shotDispersionPerSec', 0.0)
     maxShotDispersion = _xml.readNonNegativeFloat(xmlCtx, section, 'autoShoot/maxShotDispersion', 0.0)
     shotInterval = 1.0 / _xml.readPositiveFloat(xmlCtx, section, 'autoShoot/rate', 10)
-    if shotInterval > CLIP_MAX_INTERVAL:
-        _xml.raiseWrongXml(xmlCtx, 'autoShoot/rate', "rate can't be lower than {}".format(CLIP_MIN_RATE))
+    if shotInterval > AUTOSHOOT_MAX_INTERVAL:
+        _xml.raiseWrongXml(xmlCtx, 'autoShoot/rate', "rate can't be lower than {}".format(1.0 / AUTOSHOOT_MAX_INTERVAL))
     return component_constants.AutoShoot(shotDispersionPerSec=shotDispersionPerSec, maxShotDispersion=maxShotDispersion, shotInterval=shotInterval)
 
 

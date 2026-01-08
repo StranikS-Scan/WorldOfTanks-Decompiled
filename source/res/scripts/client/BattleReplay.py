@@ -84,6 +84,7 @@ class CallbackDataNames(object):
     GUN_DAMAGE_SOUND = 'gunDamagedSound'
     ON_TARGET_VEHICLE_CHANGED = 'onTargetVehicleChanged'
     MT_CONFIG_CALLBACK = 'mapsTrainingConfigurationCallback'
+    BATTLE_CONTEXT_HINTS_COUNTERS_CALLBACK = 'battleContextHintsCountersCallback'
 
 
 class SimulatedAoI(object):

@@ -44,7 +44,11 @@ class RewardsView(ViewImpl):
 
     @createTooltipContentDecorator()
     def createToolTipContent(self, event, contentID):
-        if contentID in RegisteredFrontlineTooltips.REGISTERED_SIMPLE_TOOLTIPS:
+        lootBoxId = self.__tooltipItems.get(event.getArgument('tooltipId'), {}).get('lootBoxID')
+        if lootBoxId:
+            from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import LootboxTooltip
+            return LootboxTooltip(self.__itemsCache.items.tokens.getLootBoxByID(lootBoxId))
+        elif contentID in RegisteredFrontlineTooltips.REGISTERED_SIMPLE_TOOLTIPS:
             view = RegisteredFrontlineTooltips.REGISTERED_SIMPLE_TOOLTIPS.get(contentID)
             return view()
         elif contentID in RegisteredFrontlineTooltips.REGISTERED_TOOLTIPS:

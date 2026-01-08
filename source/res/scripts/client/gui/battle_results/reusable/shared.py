@@ -363,6 +363,34 @@ class _VehicleInfo(object):
         raise NotImplementedError
 
     @property
+    def damageToSupplies(self):
+        raise NotImplementedError
+
+    @property
+    def damageFromSupplies(self):
+        raise NotImplementedError
+
+    @property
+    def suppliesDestroyed(self):
+        raise NotImplementedError
+
+    @property
+    def distributedSupplyDamage(self):
+        raise NotImplementedError
+
+    @property
+    def distributedSupplyCapturePoints(self):
+        raise NotImplementedError
+
+    @property
+    def distributedSupplyDefensePoints(self):
+        raise NotImplementedError
+
+    @property
+    def questsCompleted(self):
+        raise NotImplementedError
+
+    @property
     def equipmentDamageDealt(self):
         raise NotImplementedError
 
@@ -375,7 +403,7 @@ class _VehicleInfo(object):
 
 
 class VehicleDetailedInfo(_VehicleInfo):
-    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingEnemyHits', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_artilleryFortEquipDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directEnemyHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller', '_isKilledByTeamKiller', '_rollouts', '_respawns', '_deathCount', '_equipmentDamageDealt', '_equipmentDamageAssisted', '_xpForAttack', '_xpForAssist', '_xpOther', '_xpPenalty', '_numDefended', '_vehicleNumCaptured', '_numRecovered', '_destructiblesNumDestroyed', '_destructiblesDamageDealt', '_achievedLevel', '_prestigePoints', '_roleSkillUsed', '_healthRepair', '_alliedHealthRepair', '_entityCaptured')
+    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingEnemyHits', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_artilleryFortEquipDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directEnemyHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller', '_isKilledByTeamKiller', '_rollouts', '_respawns', '_deathCount', '_equipmentDamageDealt', '_equipmentDamageAssisted', '_xpForAttack', '_xpForAssist', '_xpOther', '_xpPenalty', '_numDefended', '_vehicleNumCaptured', '_numRecovered', '_destructiblesNumDestroyed', '_destructiblesDamageDealt', '_achievedLevel', '_prestigePoints', '_roleSkillUsed', '_healthRepair', '_alliedHealthRepair', '_entityCaptured', '_damageToSupplies', '_damageFromSupplies', '_suppliesDestroyed', '_distributedSupplyDamage', '_distributedSupplyCapturePoints', '_distributedSupplyDefensePoints', '_questsCompleted')
 
     def __init__(self, vehicleID, vehicle, player, deathReason=DEATH_REASON_ALIVE):
         super(VehicleDetailedInfo, self).__init__(vehicleID, player, deathReason)
@@ -435,6 +463,13 @@ class VehicleDetailedInfo(_VehicleInfo):
         self._roleSkillUsed = 0
         self._healthRepair = 0
         self._alliedHealthRepair = 0
+        self._damageToSupplies = 0
+        self._damageFromSupplies = 0
+        self._suppliesDestroyed = 0
+        self._distributedSupplyDamage = 0
+        self._distributedSupplyCapturePoints = 0
+        self._distributedSupplyDefensePoints = 0
+        self._questsCompleted = 0
         self._entityCaptured = {}
 
     @property
@@ -468,6 +503,34 @@ class VehicleDetailedInfo(_VehicleInfo):
     @property
     def damageDealt(self):
         return self._damageDealt + self.destructiblesDamageDealt
+
+    @property
+    def damageToSupplies(self):
+        return self._damageToSupplies
+
+    @property
+    def damageFromSupplies(self):
+        return self._damageFromSupplies
+
+    @property
+    def suppliesDestroyed(self):
+        return self._suppliesDestroyed
+
+    @property
+    def distributedSupplyDamage(self):
+        return self._distributedSupplyDamage
+
+    @property
+    def distributedSupplyCapturePoints(self):
+        return self._distributedSupplyCapturePoints
+
+    @property
+    def distributedSupplyDefensePoints(self):
+        return self._distributedSupplyDefensePoints
+
+    @property
+    def questsCompleted(self):
+        return self._questsCompleted
 
     @property
     def tdamageDealt(self):
@@ -736,6 +799,13 @@ class VehicleDetailedInfo(_VehicleInfo):
         info._healthRepair = vehicleRecords.get('healthRepair', 0)
         info._alliedHealthRepair = vehicleRecords.get('alliedHealthRepair', 0)
         info._entityCaptured = vehicleRecords.get('entityCaptured', {})
+        info._damageToSupplies = vehicleRecords.get('damageToSupplies', 0)
+        info._damageFromSupplies = vehicleRecords.get('damageFromSupplies', 0)
+        info._suppliesDestroyed = vehicleRecords.get('suppliesDestroyed', 0)
+        info._distributedSupplyDamage = vehicleRecords.get('distributedSupplyDamage', 0)
+        info._distributedSupplyCapturePoints = vehicleRecords.get('distributedSupplyCapturePoints', 0)
+        info._distributedSupplyDefensePoints = vehicleRecords.get('distributedSupplyDefensePoints', 0)
+        info._questsCompleted = vehicleRecords.get('frontlineQuestsCompleted', 0)
         cls._setSharedRecords(info, vehicleRecords)
         return info
 
@@ -988,6 +1058,34 @@ class VehicleSummarizeInfo(_VehicleInfo):
     @property
     def destructiblesDamageDealt(self):
         return self._accumulate('destructiblesDamageDealt')
+
+    @property
+    def damageToSupplies(self):
+        return self._accumulate('damageToSupplies')
+
+    @property
+    def damageFromSupplies(self):
+        return self._accumulate('damageFromSupplies')
+
+    @property
+    def suppliesDestroyed(self):
+        return self._accumulate('suppliesDestroyed')
+
+    @property
+    def distributedSupplyDamage(self):
+        return self.avatar.extensionInfo.get('distributedSupplyDamage', 0) if self.avatar is not None else 0
+
+    @property
+    def distributedSupplyCapturePoints(self):
+        return self.avatar.extensionInfo.get('distributedSupplyCapturePoints', 0) if self.avatar is not None else 0
+
+    @property
+    def distributedSupplyDefensePoints(self):
+        return self.avatar.extensionInfo.get('distributedSupplyDefensePoints', 0) if self.avatar is not None else 0
+
+    @property
+    def questsCompleted(self):
+        return self._accumulate('questsCompleted')
 
     @property
     def equipmentDamageDealt(self):

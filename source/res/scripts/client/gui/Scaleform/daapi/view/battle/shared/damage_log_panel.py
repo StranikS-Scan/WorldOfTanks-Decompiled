@@ -119,7 +119,7 @@ class _VehicleVOModel(_VOModel):
         self.vehicleName = vehicleName
 
 
-class _VehicleVOBuilder(_IVOBuilder):
+class VehicleVOBuilder(_IVOBuilder):
 
     def buildVO(self, info, arenaDP):
         vo = _VehicleVOModel()
@@ -128,12 +128,15 @@ class _VehicleVOBuilder(_IVOBuilder):
         return vo
 
     def _populateVO(self, vehicleVO, info, arenaDP):
-        vTypeInfoVO = arenaDP.getVehicleInfo(info.getArenaVehicleID()).vehicleType
-        vehicleVO.vehicleTypeImg = _VEHICLE_CLASS_TAGS_ICONS.get(vTypeInfoVO.classTag, '')
-        vehicleVO.vehicleName = vTypeInfoVO.shortNameWithPrefix
+        vehicleType = arenaDP.getVehicleInfo(info.getArenaVehicleID()).vehicleType
+        vehicleVO.vehicleTypeImg = self._getVehicleTypeIcon(vehicleType)
+        vehicleVO.vehicleName = vehicleType.shortNameWithPrefix
+
+    def _getVehicleTypeIcon(self, vehicleType):
+        return _VEHICLE_CLASS_TAGS_ICONS.get(vehicleType.classTag, '')
 
 
-class _ReceivedHitVehicleVOBuilder(_VehicleVOBuilder):
+class _ReceivedHitVehicleVOBuilder(VehicleVOBuilder):
 
     def _populateVO(self, vehicleVO, info, arenaDP):
         super(_ReceivedHitVehicleVOBuilder, self)._populateVO(vehicleVO, info, arenaDP)
@@ -358,24 +361,49 @@ class _AssistActionImgVOBuilder(_ActionImgVOBuilder):
         return _IMAGES.DAMAGELOG_COORDINATE_16X16 if info.getBattleEventType() == _BET.RADIO_ASSIST else super(_AssistActionImgVOBuilder, self)._getImage(info)
 
 
-_DEFAULT_VEHICLE_VO_BUILDER = _VehicleVOBuilder()
-_EMPTY_SHELL_VO_BUILDER = _EmptyShellVOBuilder()
+EMPTY_SHELL_VO_BUILDER = _EmptyShellVOBuilder()
+_DEFAULT_VEHICLE_VO_BUILDER = VehicleVOBuilder()
 _DAMAGE_VALUE_VO_BUILDER = _DamageValueVOBuilder()
-_ETYPE_TO_RECORD_VO_BUILDER = {_ETYPE.DAMAGE: _LogRecordVOBuilder(_DEFAULT_VEHICLE_VO_BUILDER, _EMPTY_SHELL_VO_BUILDER, _DAMAGE_VALUE_VO_BUILDER, _DamageActionImgVOBuilder(shotIcon=_IMAGES.DAMAGELOG_DAMAGE_16X16, fireIcon=_IMAGES.DAMAGELOG_FIRE_16X16, ramIcon=_IMAGES.DAMAGELOG_RAM_16X16, wcIcon=_IMAGES.DAMAGELOG_ICON_WORLD_COLLISION, mineFieldIcon=_IMAGES.DAMAGELOG_MINE_FIELD_16X16, spawnBotDmgIcon=_IMAGES.DAMAGELOG_YOUR_SPAWNED_BOT_DMG_16X16, corrodingShotIcon=_IMAGES.DAMAGELOG_CORRODING_SHOT_16X16, fireCircleDmgIcon=_IMAGES.DAMAGELOG_FIRE_CIRCLE_16X16, clingBranderDmgIcon=_IMAGES.DAMAGELOG_CLING_BRANDER_16X16, thunderStrikeIcon=_IMAGES.DAMAGELOG_THUNDER_STRIKE_16X16, airstrikeIcon=_IMAGES.DAMAGELOG_AIRSTRIKE_EQ_16X16, artilleryIcon=_IMAGES.DAMAGELOG_ARTILLERY_EQ_16X16)),
- _ETYPE.RECEIVED_DAMAGE: _LogRecordVOBuilder(_ReceivedHitVehicleVOBuilder(), _DamageShellVOBuilder(), _DAMAGE_VALUE_VO_BUILDER, _DamageActionImgVOBuilder(shotIcon=_IMAGES.DAMAGELOG_DAMAGE_ENEMY_16X16, fireIcon=_IMAGES.DAMAGELOG_BURN_ENEMY_16X16, ramIcon=_IMAGES.DAMAGELOG_RAM_ENEMY_16X16, wcIcon=_IMAGES.DAMAGELOG_DAMAGE_ENEMY_16X16, mineFieldIcon=_IMAGES.DAMAGELOG_BY_MINE_FIELD_16X16, berserkerIcon=_IMAGES.DAMAGELOG_BERSERKER_16X16, spawnBotDmgIcon=_IMAGES.DAMAGELOG_DMG_BY_SPAWNED_BOT_16X16, smokeDmgIcon=_IMAGES.DAMAGELOG_DMG_BY_SMOKE_16X16, corrodingShotIcon=_IMAGES.DAMAGELOG_CORRODING_SHOT_ENEMY_16X16, fireCircleDmgIcon=_IMAGES.DAMAGELOG_FIRE_CIRCLE_ENEMY_16X16, clingBranderDmgIcon=_IMAGES.DAMAGELOG_CLING_BRANDER_ENEMY_16X16, thunderStrikeIcon=_IMAGES.DAMAGELOG_THUNDER_STRIKE_ENEMY_16X16, airstrikeIcon=_IMAGES.DAMAGELOG_AIRSTRIKE_EQ_ENEMY_16X16, artilleryIcon=_IMAGES.DAMAGELOG_ARTILLERY_EQ_ENEMY_16X16, airstrikeZoneIcon=_IMAGES.DAMAGELOG_AIRSTRIKE_ENEMY_16X16, deathZoneIcon=_IMAGES.DAMAGELOG_ARTILLERY_ENEMY_16X16)),
- _ETYPE.BLOCKED_DAMAGE: _LogRecordVOBuilder(_DEFAULT_VEHICLE_VO_BUILDER, _ShellVOBuilder(), _DAMAGE_VALUE_VO_BUILDER, _ActionImgVOBuilder(image=_IMAGES.DAMAGELOG_REFLECT_16X16)),
- _ETYPE.ASSIST_DAMAGE: _LogRecordVOBuilder(_DEFAULT_VEHICLE_VO_BUILDER, _EMPTY_SHELL_VO_BUILDER, _DAMAGE_VALUE_VO_BUILDER, _AssistActionImgVOBuilder()),
- _ETYPE.RECEIVED_CRITICAL_HITS: _LogRecordVOBuilder(_ReceivedHitVehicleVOBuilder(), _CritsShellVOBuilder(), _CriticalHitValueVOBuilder(), _ActionImgVOBuilder(image=_IMAGES.DAMAGELOG_CRITICAL_ENEMY_16X16)),
- _ETYPE.STUN: _LogRecordVOBuilder(_DEFAULT_VEHICLE_VO_BUILDER, _EMPTY_SHELL_VO_BUILDER, _DAMAGE_VALUE_VO_BUILDER, _ActionImgVOBuilder(image=_IMAGES.DAMAGELOG_STUN_16X16))}
 
-class _LogViewComponent(object):
+def makeDamageBuilder(vehicleBuilder=None, shellBuilder=None, valueBuilder=None, actionBuilder=None):
+    return _LogRecordVOBuilder(vehicleBuilder or _DEFAULT_VEHICLE_VO_BUILDER, shellBuilder or EMPTY_SHELL_VO_BUILDER, valueBuilder or _DAMAGE_VALUE_VO_BUILDER, actionBuilder or _DamageActionImgVOBuilder(shotIcon=_IMAGES.DAMAGELOG_DAMAGE_16X16, fireIcon=_IMAGES.DAMAGELOG_FIRE_16X16, ramIcon=_IMAGES.DAMAGELOG_RAM_16X16, wcIcon=_IMAGES.DAMAGELOG_ICON_WORLD_COLLISION, mineFieldIcon=_IMAGES.DAMAGELOG_MINE_FIELD_16X16, spawnBotDmgIcon=_IMAGES.DAMAGELOG_YOUR_SPAWNED_BOT_DMG_16X16, corrodingShotIcon=_IMAGES.DAMAGELOG_CORRODING_SHOT_16X16, fireCircleDmgIcon=_IMAGES.DAMAGELOG_FIRE_CIRCLE_16X16, clingBranderDmgIcon=_IMAGES.DAMAGELOG_CLING_BRANDER_16X16, thunderStrikeIcon=_IMAGES.DAMAGELOG_THUNDER_STRIKE_16X16, airstrikeIcon=_IMAGES.DAMAGELOG_AIRSTRIKE_EQ_16X16, artilleryIcon=_IMAGES.DAMAGELOG_ARTILLERY_EQ_16X16))
+
+
+def makeReceivedDamageBuilder(vehicleBuilder=None, shellBuilder=None, valueBuilder=None, actionBuilder=None):
+    return _LogRecordVOBuilder(vehicleBuilder or _ReceivedHitVehicleVOBuilder(), shellBuilder or _DamageShellVOBuilder(), valueBuilder or _DAMAGE_VALUE_VO_BUILDER, actionBuilder or _DamageActionImgVOBuilder(shotIcon=_IMAGES.DAMAGELOG_DAMAGE_ENEMY_16X16, fireIcon=_IMAGES.DAMAGELOG_BURN_ENEMY_16X16, ramIcon=_IMAGES.DAMAGELOG_RAM_ENEMY_16X16, wcIcon=_IMAGES.DAMAGELOG_DAMAGE_ENEMY_16X16, mineFieldIcon=_IMAGES.DAMAGELOG_BY_MINE_FIELD_16X16, berserkerIcon=_IMAGES.DAMAGELOG_BERSERKER_16X16, spawnBotDmgIcon=_IMAGES.DAMAGELOG_DMG_BY_SPAWNED_BOT_16X16, smokeDmgIcon=_IMAGES.DAMAGELOG_DMG_BY_SMOKE_16X16, corrodingShotIcon=_IMAGES.DAMAGELOG_CORRODING_SHOT_ENEMY_16X16, fireCircleDmgIcon=_IMAGES.DAMAGELOG_FIRE_CIRCLE_ENEMY_16X16, clingBranderDmgIcon=_IMAGES.DAMAGELOG_CLING_BRANDER_ENEMY_16X16, thunderStrikeIcon=_IMAGES.DAMAGELOG_THUNDER_STRIKE_ENEMY_16X16, airstrikeIcon=_IMAGES.DAMAGELOG_AIRSTRIKE_EQ_ENEMY_16X16, artilleryIcon=_IMAGES.DAMAGELOG_ARTILLERY_EQ_ENEMY_16X16, airstrikeZoneIcon=_IMAGES.DAMAGELOG_AIRSTRIKE_ENEMY_16X16, deathZoneIcon=_IMAGES.DAMAGELOG_ARTILLERY_ENEMY_16X16))
+
+
+def makeBlockedDamageBuilder(vehicleBuilder=None, shellBuilder=None, valueBuilder=None, actionBuilder=None):
+    return _LogRecordVOBuilder(vehicleBuilder or _DEFAULT_VEHICLE_VO_BUILDER, shellBuilder or _ShellVOBuilder(), valueBuilder or _DAMAGE_VALUE_VO_BUILDER, actionBuilder or _ActionImgVOBuilder(image=_IMAGES.DAMAGELOG_REFLECT_16X16))
+
+
+def makeAssistDamageBuilder(vehicleBuilder=None, shellBuilder=None, valueBuilder=None, actionBuilder=None):
+    return _LogRecordVOBuilder(vehicleBuilder or _DEFAULT_VEHICLE_VO_BUILDER, shellBuilder or EMPTY_SHELL_VO_BUILDER, valueBuilder or _DAMAGE_VALUE_VO_BUILDER, actionBuilder or _AssistActionImgVOBuilder())
+
+
+def makeReceivedCriticalHitsBuilder(vehicleBuilder=None, shellBuilder=None, valueBuilder=None, actionBuilder=None):
+    return _LogRecordVOBuilder(vehicleBuilder or _ReceivedHitVehicleVOBuilder(), shellBuilder or _CritsShellVOBuilder(), valueBuilder or _CriticalHitValueVOBuilder(), actionBuilder or _ActionImgVOBuilder(image=_IMAGES.DAMAGELOG_CRITICAL_ENEMY_16X16))
+
+
+def makeStunBuilder(vehicleBuilder=None, shellBuilder=None, valueBuilder=None, actionBuilder=None):
+    return _LogRecordVOBuilder(vehicleBuilder or _DEFAULT_VEHICLE_VO_BUILDER, shellBuilder or EMPTY_SHELL_VO_BUILDER, valueBuilder or _DAMAGE_VALUE_VO_BUILDER, actionBuilder or _ActionImgVOBuilder(image=_IMAGES.DAMAGELOG_STUN_16X16))
+
+
+_ETYPE_TO_RECORD_VO_BUILDER = {_ETYPE.DAMAGE: makeDamageBuilder(),
+ _ETYPE.RECEIVED_DAMAGE: makeReceivedDamageBuilder(),
+ _ETYPE.BLOCKED_DAMAGE: makeBlockedDamageBuilder(),
+ _ETYPE.ASSIST_DAMAGE: makeAssistDamageBuilder(),
+ _ETYPE.RECEIVED_CRITICAL_HITS: makeReceivedCriticalHitsBuilder(),
+ _ETYPE.STUN: makeStunBuilder()}
+
+class LogViewComponent(object):
 
     def __init__(self):
-        super(_LogViewComponent, self).__init__()
+        super(LogViewComponent, self).__init__()
         self.__setListProxy = None
         self.__addToListProxy = None
         self.__efficiencyCtrl = None
-        self.__arenaDP = None
+        self._arenaDP = None
         self.__logViewMode = _VIEW_MODE.SHOW_ALWAYS
         self.__isVisible = True
         self.__contentMask = 0
@@ -386,13 +414,13 @@ class _LogViewComponent(object):
         self.__setListProxy = setListProxyMethod
         self.__addToListProxy = addToListProxyMethod
         self.__efficiencyCtrl = efficiencyCtrl
-        self.__arenaDP = arenaDP
+        self._arenaDP = arenaDP
 
     def dispose(self):
         self.__setListProxy = None
         self.__addToListProxy = None
         self.__efficiencyCtrl = None
-        self.__arenaDP = None
+        self._arenaDP = None
         return
 
     def clear(self):
@@ -445,7 +473,7 @@ class _LogViewComponent(object):
 
     def _buildLogMessageVO(self, info):
         builder = _ETYPE_TO_RECORD_VO_BUILDER[info.getType()]
-        return builder.buildVO(info, self.__arenaDP)
+        return builder.buildVO(info, self._arenaDP)
 
 
 class DamageLogPanel(BattleDamageLogPanelMeta):
@@ -465,14 +493,17 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         self.__totalDamageContentMask = 0
         self.__totalValues = defaultdict(int)
         self._totalEvents = None
-        self.__topLog = _LogViewComponent()
-        self.__bottomLog = _LogViewComponent()
+        self.__topLog = self._getLogViewComponentClass()
+        self.__bottomLog = self._getLogViewComponentClass()
         return
 
     def isSwitchToVehicle(self):
         observedVehID = self.__vehStateCtrl.getControllingVehicleID()
         playerVehicleID = self.__arenaDP.getPlayerVehicleID()
         return playerVehicleID == observedVehID
+
+    def _getLogViewComponentClass(self):
+        return LogViewComponent()
 
     def _populate(self):
         super(DamageLogPanel, self)._populate()

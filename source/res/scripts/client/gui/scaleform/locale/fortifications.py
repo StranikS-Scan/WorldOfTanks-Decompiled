@@ -41,6 +41,7 @@ class FORTIFICATIONS(object):
     DISCONNECTED_WARNINGDESCRIPTIONCENTERUNAVAILABLE = '#fortifications:disconnected/WarningDescriptionCenterUnavailable'
     FORTBATTLEROOM_LISTHEADER_CLANPLAYERS = '#fortifications:fortBattleRoom/listHeader/clanPlayers'
     FORTBATTLEROOM_LISTHEADER_LEGIONARIESPLAYERS = '#fortifications:fortBattleRoom/listHeader/legionariesPlayers'
+    FORTBATTLEROOM_FREEZEJOURNAL = '#fortifications:fortBattleRoom/freezeJournal'
     STRONGHOLDMAP_RANDOMMAP = '#fortifications:strongholdmap/randomMap'
     STRONGHOLDBUILDS_POINT1 = '#fortifications:strongholdbuilds/point1'
     STRONGHOLDBUILDS_POINT2 = '#fortifications:strongholdbuilds/point2'
@@ -129,8 +130,13 @@ class FORTIFICATIONS(object):
     UNIT_WINDOW_WILLSEARCHPLAYERS = '#fortifications:unit/window/willSearchPlayers'
     FORTVEHPOPOVER_BTNSAVE = '#fortifications:fortVehPopover/btnSave'
     TOOLTIP_VEHICLETYPES_BODY = '#fortifications:tooltip/vehicleTypes/body'
+    BATTLEMODIFIERS_TITLE = '#fortifications:battleModifiers/title'
+    BATTLEMODIFIERS_BODY = '#fortifications:battleModifiers/body'
+    BATTLEMODIFIERS_SORTIE = '#fortifications:battleModifiers/sortie'
+    BATTLEMODIFIERS_FORTBATTLE = '#fortifications:battleModifiers/fortBattle'
     INSPIRE_INSPIRING = '#fortifications:inspire/inspiring'
     INSPIRE_INSPIRED = '#fortifications:inspire/inspired'
+    BATTLEMODIFIERSGM_TITLE = '#fortifications:battleModifiersGM/title'
     STRONGHOLDDIRECTION_ENUM = (STRONGHOLDDIRECTION_A,
      STRONGHOLDDIRECTION_B,
      STRONGHOLDDIRECTION_C,

@@ -4127,7 +4127,11 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_85mm_S-31>
-        <_107mm_ZiS-6>	shared	  <maxAmmo>	54	</maxAmmo>
+        <_107mm_ZiS-6>	shared	  <unlocks>
+            <vehicle>	R235_KV_4_Fedorenko	  <cost>	52500	</cost>
+            </vehicle>
+          </unlocks>
+          <maxAmmo>	54	</maxAmmo>
           <armor>
             <armor_1>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>

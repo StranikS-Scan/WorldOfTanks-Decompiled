@@ -456,7 +456,7 @@ class _AutoReloadingBoostStateCtrl(object):
 
 
 class AmmoController(MethodsRules, ViewComponentsController):
-    __slots__ = ('__eManager', 'onShellsAdded', 'onShellsUpdated', 'onNextShellChanged', 'onCurrentShellChanged', 'onGunSettingsSet', 'onGunReloadTimeSet', 'onGunAutoReloadTimeSet', 'onGunAutoReloadBoostUpdated', '_autoReloadingBoostState', 'onShellsCleared', '__ammo', '_order', '__currShellCD', '__nextShellCD', '__gunSettings', '_reloadingState', '_autoReloadingState', '__autoShoots', '__weakref__', 'onDebuffStarted', '__quickChangerActive', 'onShellChangeTimeUpdated', '__shellChangeTime', '__quickChangerFactor', '__dualGunShellChangeTime', '__dualGunQuickChangeReady', '__quickChangerInProcess', '__temperatureGunQuickChangeReady')
+    __slots__ = ('__eManager', 'onShellsAdded', 'onShellsUpdated', 'onNextShellChanged', 'onCurrentShellChanged', 'onGunSettingsSet', 'onGunReloadTimeSet', 'onGunAutoReloadTimeSet', 'onGunAutoReloadBoostUpdated', '_autoReloadingBoostState', 'onShellsCleared', '__ammo', '_order', '__currShellCD', '__nextShellCD', '__gunSettings', '_reloadingState', '_autoReloadingState', '__autoShoots', '__weakref__', 'onDebuffStarted', '__quickChangerActive', 'onShellChangeTimeUpdated', '__shellChangeTime', '__quickChangerFactor', '__dualGunShellChangeTime', '__dualGunQuickChangeReady', '__quickChangerInProcess', '__temperatureGunQuickChangeReady', '__penaltyReloadTime')
     __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, reloadingState=None):
@@ -494,6 +494,7 @@ class AmmoController(MethodsRules, ViewComponentsController):
         self.__temperatureGunQuickChangeReady = False
         self.__quickChangerInProcess = False
         self.__debuffOn = False
+        self.__penaltyReloadTime = 0
         return
 
     def __repr__(self):
@@ -578,6 +579,7 @@ class AmmoController(MethodsRules, ViewComponentsController):
 
     def updatePenaltyReloadTime(self, reloadTimeFactor, penaltyTime, appliedPenaltyReloadTime):
         penaltyReloadTime = 0.0
+        self.__penaltyReloadTime = appliedPenaltyReloadTime
         if penaltyTime >= 0:
             baseTime = (self.getGunReloadingState().getBaseValue() - appliedPenaltyReloadTime) / reloadTimeFactor
             penaltyReloadTime = round(baseTime + penaltyTime, 2)
@@ -889,9 +891,9 @@ class AmmoController(MethodsRules, ViewComponentsController):
 
     def getQuickShellChangeTime(self):
 
-        def getRestrictedTime(changeTime, quickChangerFactor, restriction):
+        def getRestrictedTime(changeTime, quickChangerFactor, restriction, penalty=0):
             minValue = 0.1
-            quickChangeTime = changeTime * quickChangerFactor
+            quickChangeTime = (changeTime - penalty) * quickChangerFactor + penalty
             if quickChangeTime < restriction:
                 quickChangeTime = min(restrict, changeTime)
             return max(quickChangeTime, minValue)
@@ -901,7 +903,7 @@ class AmmoController(MethodsRules, ViewComponentsController):
         if vehicle is not None:
             restrict = ReloadRestriction.getBy(vehicle.typeDescriptor)
         shellChangeTime = self.__shellChangeTime
-        quickShellChangeTime = getRestrictedTime(shellChangeTime, self.__quickChangerFactor, restrict)
+        quickShellChangeTime = getRestrictedTime(shellChangeTime, self.__quickChangerFactor, restrict, self.__penaltyReloadTime)
         if self.__gunSettings.isDualGun:
             activeIdx = self.__dualGunShellChangeTime.activeIdx
             if activeIdx == 0:

@@ -1,10 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/script_component/DynamicScriptComponent.py
-import logging
 import BigWorld
+from debug_utils import LOG_DEBUG
 from PlayerEvents import g_playerEvents
 from shared_utils import nextTick
-_logger = logging.getLogger(__name__)
 
 class DynamicScriptComponent(BigWorld.DynamicScriptComponent):
 
@@ -14,14 +13,14 @@ class DynamicScriptComponent(BigWorld.DynamicScriptComponent):
             nextTick(self._onAvatarReady)()
         else:
             g_playerEvents.onAvatarReady += self.__onAvatarReady
-        _logger.debug('%s.__init__. EntityID=%s', self.__class__.__name__, self.entity.id)
+        LOG_DEBUG('%s.__init__. EntityID=%s' % (self.__class__.__name__, self.entity.id))
 
     @property
     def _isAvatarReady(self):
         return BigWorld.player().userSeesWorld()
 
     def onDestroy(self):
-        _logger.debug('%s.onDestroy. EntityID=%s', self.__class__.__name__, self.entity.id)
+        LOG_DEBUG('%s.onDestroy. EntityID=%s' % (self.__class__.__name__, self.entity.id))
         g_playerEvents.onAvatarReady -= self.__onAvatarReady
 
     def onLeaveWorld(self):

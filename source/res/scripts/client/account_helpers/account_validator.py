@@ -52,11 +52,13 @@ class AccountValidator(object):
         handlers = self._getHandlers()
         for handler in handlers:
             try:
-                yield th_async.th_await(handler())
+                yield handler()
             except ValidateException as e:
                 _logger.error('There is exception while validating item %s (%s)', e.itemData, e.msg)
                 callback(e.code)
                 return
+            except th_async.BrokenPromiseError:
+                _logger.debug('%s has been destroyed without user decision', self)
 
         callback(ValidationCodes.OK)
 
@@ -76,12 +78,16 @@ class InventoryVehiclesValidator(AccountValidator):
 
         def createVehicleDescrAsync():
             for invID, vehCompDescr in vehsInvData.get('compDescr', {}).items():
+                if BigWorld.player() is None:
+                    break
                 try:
                     yield vehicles.VehicleDescr(vehCompDescr)
                 except Exception as e:
                     raise ValidateException(e.message, ValidationCodes.VEHICLE_MISMATCH, _packItemData(GUI_ITEM_TYPE.VEHICLE, (invID, vehCompDescr)))
 
-        yield th_async.th_await(th_async.distributeLoopOverTicks(createVehicleDescrAsync(), minPerTick=10, maxPerTick=100, logID='createVehicleDescrAsync', tickLength=0.0))
+            return
+
+        yield th_async.distributeLoopOverTicks(createVehicleDescrAsync(), minPerTick=10, maxPerTick=100, logID='createVehicleDescrAsync', tickLength=0.0)
 
         def validateTankmanAsync():
             for vehInvData in inventory.getItemsData(GUI_ITEM_TYPE.VEHICLE).values():
@@ -94,7 +100,7 @@ class InventoryVehiclesValidator(AccountValidator):
 
             return
 
-        yield th_async.th_await(th_async.distributeLoopOverTicks(validateTankmanAsync(), minPerTick=10, maxPerTick=100, logID='validateTankmanAsync', tickLength=0.0))
+        yield th_async.distributeLoopOverTicks(validateTankmanAsync(), minPerTick=10, maxPerTick=100, logID='validateTankmanAsync', tickLength=0.0)
 
 
 class InventoryOutfitValidator(AccountValidator):
@@ -125,7 +131,7 @@ class InventoryOutfitValidator(AccountValidator):
 
             return
 
-        yield th_async.th_await(th_async.distributeLoopOverTicks(validateOutfitsAsync(), minPerTick=10, maxPerTick=100, logID='validateOutfitsAsync', tickLength=0.0))
+        yield th_async.distributeLoopOverTicks(validateOutfitsAsync(), minPerTick=10, maxPerTick=100, logID='validateOutfitsAsync', tickLength=0.0)
 
 
 class InventoryTankmenValidator(AccountValidator):
@@ -140,7 +146,7 @@ class InventoryTankmenValidator(AccountValidator):
         def validateInventoryTankmenAsync():
             for invID, tmanCompDescr in tmenInvData.get('compDescr', {}).items():
                 if BigWorld.player() is None:
-                    return
+                    break
                 try:
                     yield tankmen.TankmanDescr(tmanCompDescr)
                 except Exception as e:
@@ -148,4 +154,4 @@ class InventoryTankmenValidator(AccountValidator):
 
             return
 
-        yield th_async.th_await(th_async.distributeLoopOverTicks(validateInventoryTankmenAsync(), minPerTick=10, maxPerTick=100, logID='validateOutfitsAsync', tickLength=0.0))
+        yield th_async.distributeLoopOverTicks(validateInventoryTankmenAsync(), minPerTick=10, maxPerTick=100, logID='validateOutfitsAsync', tickLength=0.0)

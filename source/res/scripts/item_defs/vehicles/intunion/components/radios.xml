@@ -1,5 +1,6 @@
 <radios.xml>
   <ids>
+    <N22_FL>	501	</N22_FL>
     <N19Mk1>	31001	</N19Mk1>
     <N19Mk2>	31002	</N19Mk2>
     <AN_VRC_12>	31003	</AN_VRC_12>
@@ -19,6 +20,9 @@
     <_9RM>	31017	</_9RM>
     <R113>	31018	</R113>
     <AN_VRC_12M>	31019	</AN_VRC_12M>
+    <R_123>	31020	</R_123>
+    <R_113_68>	31023	</R_113_68>
+    <R_123_T>	35001	</R_123_T>
     <Development_Radio>	65000	</Development_Radio>
   </ids>
   <shared>
@@ -122,6 +126,18 @@
       <maxRegenHealth>	84	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </N22>
+    <N22_FL>
+      <userString>	#intunion_vehicles:N22	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	36000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	615	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </N22_FL>
     <SCR_538>
       <userString>	#intunion_vehicles:SCR_538	</userString>
       <tags></tags>
@@ -192,6 +208,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </R_113>
+    <R_113_68>
+      <userString>	#intunion_vehicles:R_113_68	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	42	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R_113_68>
     <SCR_506>
       <userString>	#intunion_vehicles:SCR_506	</userString>
       <tags></tags>
@@ -236,6 +264,30 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </R113>
+    <R_123>
+      <userString>	#intunion_vehicles:R_123	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	42	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R_123>
+    <R_123_T>
+      <userString>	#intunion_vehicles:R_123_T	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	42	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R_123_T>
     <Development_Radio>
       <userString>	Development Radio	</userString>
       <tags></tags>

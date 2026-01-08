@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/arena_component_system/sectors_arena_component.py
 from collections import defaultdict
-from client_arena_component_system import ClientArenaComponent
 import Event
+import Math
 from constants import SECTOR_STATE
 from debug_utils import LOG_WARNING
-import Math
-from epic_constants import EPIC_BATTLE_TEAM_ID
+from epic_constants import EPIC_BATTLE_TEAM_ID, Direction
+from client_arena_component_system import ClientArenaComponent
+from shared_utils import findFirst
 
 class SectorGroup(object):
     id = property(lambda self: self.__id)
@@ -251,3 +252,14 @@ class SectorsArenaComponent(ClientArenaComponent):
     def setWayPointBorderMarkerRepetitionRules(self, teamID, rule):
         self.__wayPointRepetitionRules[teamID] = rule
         self.onWaypointsRepetitionRulesChanged()
+
+    def getDirections(self):
+        directions = {}
+        left, center, right = sorted(self.__playerGroups.keys())
+        directions[Direction.LEFT] = frozenset(self.__playerGroups[left].sectors.values())
+        directions[Direction.CENTER] = frozenset(self.__playerGroups[center].sectors.values())
+        directions[Direction.RIGHT] = frozenset(self.__playerGroups[right].sectors.values())
+        topSectorGroup = findFirst(lambda x: len(x.sectors) == 3, self.__sectorGroups.values())
+        if topSectorGroup:
+            directions[Direction.TOP] = frozenset([ sector.sectorID for sector in topSectorGroup.sectors ])
+        return directions

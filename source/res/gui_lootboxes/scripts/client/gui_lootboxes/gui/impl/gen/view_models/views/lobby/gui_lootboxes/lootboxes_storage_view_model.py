@@ -23,11 +23,11 @@ class ReturnPlace(IntEnum):
     TO_SHARDS = 3
     TO_REFERRAL = 4
     TO_FIR = 5
-    TO_TEREM = 6
+    TO_LIGHTS = 6
     TO_INSTALLATIONS = 7
     TO_FAIR = 8
-    TO_SNOW_SLIDE = 9
-    TO_FIREWORKS = 10
+    TO_SKATING = 9
+    TO_ATTRACTION = 10
     TO_PET = 11
 
 

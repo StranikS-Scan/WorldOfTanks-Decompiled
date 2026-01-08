@@ -19,8 +19,6 @@ class RES_COMMON(object):
     MAPS_ICONS_CREW_TANKMANCHANGEANDRECRUITVIEW_BG = '../maps/icons/crew/tankmanChangeAndRecruitView/bg.png'
     MAPS_ICONS_CRYSTALSINFO_BG = '../maps/icons/crystalsInfo/bg.png'
     MAPS_ICONS_CUSTOMIZATION_PROGRESSION_STYLES_STAGE_SWITCHER_BG = '../maps/icons/customization/progression_styles/stage_switcher/bg.png'
-    MAPS_ICONS_DAILY_NEWYEAR_BG = '../maps/icons/daily/newYear/bg.png'
-    MAPS_ICONS_DAILY_NEWYEAR_INFO_BG = '../maps/icons/daily/newYear/info/bg.png'
     MAPS_ICONS_DEDICATION_BG = '../maps/icons/dedication/bg.png'
     MAPS_ICONS_DEMOUNTKIT_BG = '../maps/icons/demountKit/bg.png'
     MAPS_ICONS_EARLY_ACCESS_BUY_TOKENS_CARD_BIG_BG = '../maps/icons/early_access/buy_tokens/card_big/bg.png'

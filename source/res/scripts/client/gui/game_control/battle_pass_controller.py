@@ -9,7 +9,7 @@ from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
 from adisp import adisp_process
 from account_helpers.AccountSettings import AccountSettings, WIDGET_HINT_TRIGGER
-from battle_pass_common import BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS, BATTLE_PASS_CONFIG_NAME, BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_PDATA_KEY, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME, BattlePassConfig, BattlePassConsts, BattlePassState, getBattlePassPassTokenName, BattlePassChapterType, getMaxAvalable3DStyleProgressInChapter
+from battle_pass_common import BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS, BATTLE_PASS_CONFIG_NAME, BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_PDATA_KEY, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME, BattlePassConfig, BattlePassConsts, BattlePassState, getBattlePassPassTokenName, BattlePassChapterType, BATTLE_PASS_RANDOM_QUEST_TOKEN_PREFIX, BattlePassCapsFlow, getMaxAvalable3DStyleProgressInChapter
 from constants import ARENA_BONUS_TYPE, OFFERS_ENABLED_KEY, QUEUE_TYPE
 from gui.battle_pass.battle_pass_award import BattlePassAwardsManager, awardsFactory
 from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift, getPointsInfoStringID
@@ -27,8 +27,10 @@ from shared_utils import findFirst, first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.shared import IItemsCache
+from tutorial.control.game_vars import getVehicleByIntCD
 from tutorial.control.context import MARATHON_POSTFIX
 _logger = logging.getLogger(__name__)
 TopPoints = namedtuple('TopPoints', ['label', 'winPoint', 'losePoint'])
@@ -41,11 +43,13 @@ class BattlePassController(IBattlePassController, EventsHandler):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __offersProvider = dependency.descriptor(IOffersDataProvider)
     __settingsCore = dependency.descriptor(ISettingsCore)
+    __eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):
         self.__oldPoints = 0
         self.__oldLevel = 0
         self.__currentMode = None
+        self.__questTokenID = None
         self.__eventsManager = EventManager()
         self.__seasonChangeNotifier = SimpleNotifier(self.__getTimeToNotifySeasonChanged, self.__onNotifySeasonChanged)
         self.__marathonChapterNotifier = SimpleNotifier(self.__getTimeToMarathonChapterExpired, self.__onNotifyMarathonChapterExpired)
@@ -139,7 +143,7 @@ class BattlePassController(IBattlePassController, EventsHandler):
         return self.__getConfig().seasonFinish <= time_utils.getServerUTCTime()
 
     def isValidBattleType(self, prbEntity):
-        return prbEntity.getQueueType() in (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.MAPBOX, QUEUE_TYPE.STRONGHOLD_UNITS)
+        return prbEntity.getQueueType() in (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.MAPBOX)
 
     def isGameModeEnabled(self, arenaBonusType):
         return self.__getConfig().isGameModeEnabled(arenaBonusType)
@@ -174,15 +178,16 @@ class BattlePassController(IBattlePassController, EventsHandler):
         return self.__getConfig().getMaxChapterLevel(chapterId)
 
     def hasMarathon(self):
-        isMarathonChapter = self.isMarathonChapter
-        return any((isMarathonChapter(chID) for chID in self.getChapterIDs()))
+        return any((self.isMarathonChapter(chID) for chID in self.getChapterIDs()))
 
     def hasResource(self):
-        isResourceChapter = self.isResourceChapter
-        return any((isResourceChapter(chID) for chID in self.getChapterIDs()))
+        return any((self.isResourceChapter(chID) for chID in self.getChapterIDs()))
 
     def isValidChapterID(self, chapterID):
         return chapterID in self.__getConfig().chapters.keys()
+
+    def isSingleChapter(self):
+        return len(self.__getConfig().chapters) == 1
 
     def getChapterType(self, chapterID):
         chapterType = findFirst(lambda chapters: chapterID in chapters[1], self.__getConfig().getGroupChapterByType().iteritems(), default=(BattlePassChapterType.DEFAULT.value, 0))
@@ -291,6 +296,9 @@ class BattlePassController(IBattlePassController, EventsHandler):
     def getChapterExpiration(self, chapterID):
         return self.__getConfig().getChapterExpireTimestamp(chapterID) if self.isMarathonChapter(chapterID) else 0
 
+    def getChapterStartDate(self, chapterID):
+        return self.__getConfig().getChapterStartTimestamp(chapterID) if self.isMarathonChapter(chapterID) else 0
+
     def getChapterRemainingTime(self, chapterID):
         remainingTime = 0
         if self.isMarathonChapter(chapterID):
@@ -307,6 +315,42 @@ class BattlePassController(IBattlePassController, EventsHandler):
 
     def getRewardLogic(self):
         return self.__rewardLogic
+
+    def getQuestTokensInChapter(self, chapterID):
+        _, maxLevel = self.getChapterLevelInterval(chapterID)
+        lastLevelRewards = [self.__getConfig().getFreeReward(chapterID, maxLevel), self.__getConfig().getPaidReward(chapterID, maxLevel)]
+        tokens = []
+        for item in lastLevelRewards:
+            if 'tokens' in item:
+                for token in item['tokens'].keys():
+                    if token.startswith(BATTLE_PASS_RANDOM_QUEST_TOKEN_PREFIX):
+                        tokens.append(token)
+
+        return tokens
+
+    def getProgressionQuest(self, chapterID):
+        chapterTokens = self.getQuestTokensInChapter(chapterID)
+        if not chapterTokens:
+            return
+        else:
+            if self.__questTokenID is not None:
+                quest = self.__eventsCache.getAllQuests().get(self.__questTokenID)
+                if quest is not None:
+                    return quest
+                self.__questTokenID = None
+            quests = self.__eventsCache.getAllQuests().values()
+            quest = first((q for q in quests for token in q.accountReqs.getTokens() if token.getID() in chapterTokens))
+            if quest is not None:
+                self.__questTokenID = quest.getID()
+            return quest
+
+    def getProgressionVehicle(self, chapterID):
+        quest = self.getProgressionQuest(chapterID)
+        if quest is None:
+            return
+        else:
+            vehicleTypeCD = first(quest.vehicleReqs.getAvailableVehiclesCD())
+            return getVehicleByIntCD(vehicleTypeCD)
 
     def getSingleAward(self, chapterId, level, awardType=BattlePassConsts.REWARD_FREE, needSort=True):
         reward = {}
@@ -372,6 +416,18 @@ class BattlePassController(IBattlePassController, EventsHandler):
             result.append(bonus)
 
         return result
+
+    def isPaidReward(self, chapterId, rewardType):
+        _, maxLevel = self.getChapterLevelInterval(chapterId)
+        for reward in self.getSingleAward(chapterId, maxLevel, BattlePassConsts.REWARD_PAID, False):
+            if reward.getName() == rewardType:
+                return True
+
+        for reward in self.getSingleAward(chapterId, maxLevel, BattlePassConsts.REWARD_FREE, False):
+            if reward.getName() == rewardType:
+                return False
+
+        return None
 
     def isChooseRewardEnabled(self, awardType, chapterId, level):
         if level > self.getLevelInChapter(chapterId):
@@ -546,7 +602,11 @@ class BattlePassController(IBattlePassController, EventsHandler):
 
     def getVehicleProgression(self, intCD):
         points, shift = self.__itemsCache.items.battlePass.getVehiclePoints(intCD)
-        cap = self.__getConfig().vehWeekCapByShift(shift)
+        cap = None
+        if self.__getConfig().capsFlow == BattlePassCapsFlow.WEEK.value:
+            cap = self.__getConfig().vehWeekCapByShift(shift)
+        elif self.__getConfig().capsFlow == BattlePassCapsFlow.FACTOR.value:
+            cap = self.__getConfig().vehFactorCapByShift(shift)
         return (points, cap)
 
     def getMinVehLevelToEarnPoints(self):
@@ -651,7 +711,8 @@ class BattlePassController(IBattlePassController, EventsHandler):
         return ((self.__lobbyContext.getServerSettings().onServerSettingsChange, self.__onConfigChanged),
          (self.__lobbyContext.getServerSettings().onServerSettingsChange, self.__onOffersStateChanged),
          (self.__itemsCache.onSyncCompleted, self.__onSyncCompleted),
-         (self.__offersProvider.onOffersUpdated, self.__onOffersUpdated))
+         (self.__offersProvider.onOffersUpdated, self.__onOffersUpdated),
+         (self.__eventsCache.onSyncCompleted, self.__onEventsCacheResync))
 
     def __stop(self):
         self.__seasonChangeNotifier.stopNotification()
@@ -716,6 +777,10 @@ class BattlePassController(IBattlePassController, EventsHandler):
     @serverSettingsChangeListener(OFFERS_ENABLED_KEY)
     def __onOffersStateChanged(self, diff):
         self.__onOffersUpdated()
+
+    def __onEventsCacheResync(self, *args, **kwargs):
+        self.__questTokenID = None
+        return
 
     def __onSyncCompleted(self, _, diff):
         if BATTLE_PASS_PDATA_KEY not in diff:
@@ -782,4 +847,5 @@ class BattlePassController(IBattlePassController, EventsHandler):
         self.__oldPoints = 0
         self.__oldLevel = 0
         self.__currentMode = None
+        self.__questTokenID = None
         return

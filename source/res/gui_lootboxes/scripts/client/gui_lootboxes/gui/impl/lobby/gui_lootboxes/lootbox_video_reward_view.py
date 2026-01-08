@@ -64,7 +64,7 @@ def packVideoRewardConfig(lootboxCategory, videoRes, videoRewardConfig):
 
 
 class LootboxVideoRewardView(BaseUniqueRewardsView):
-    __slots__ = ('_bonus', '_soundControl', '__isWindowAccessibleHandlerInit', '_videoRes', '_isGuaranteedReward', '_videoConfig', '_lootbox', '__soundStarted')
+    __slots__ = ('_bonus', '_soundControl', '__isWindowAccessibleHandlerInit', '_videoRes', '_isGuaranteedReward', '_videoConfig', '_lootbox')
     __itemsCache = dependency.descriptor(IItemsCache)
     _COMMON_SOUND_SPACE = LOOT_BOXES_REWARD_VIDEO_SOUND_SPACE
 
@@ -77,7 +77,6 @@ class LootboxVideoRewardView(BaseUniqueRewardsView):
         self.__isWindowAccessibleHandlerInit = False
         self._videoConfig = None
         self._lootbox = lootbox
-        self.__soundStarted = False
         if isValidVideoConfig(REWARD_VIDEO_CONFIG):
             self._videoConfig = REWARD_VIDEO_CONFIG
         else:
@@ -90,7 +89,6 @@ class LootboxVideoRewardView(BaseUniqueRewardsView):
         if self.__isWindowAccessibleHandlerInit:
             Windowing.removeWindowAccessibilityHandler(self._onWindowAccessibilityChanged)
             self.__isWindowAccessibleHandlerInit = False
-        self.__soundStarted = False
         self._soundControl.stop()
         super(LootboxVideoRewardView, self)._finalize()
 
@@ -126,11 +124,11 @@ class LootboxVideoRewardView(BaseUniqueRewardsView):
             vm.setLootboxType(self._lootbox.getType())
             vm.setLootboxID(self._lootbox.getID())
             if self._videoConfig is not None:
-                videoHasFooter = self._videoConfig[self._getVideoConfigKey()][self._bonus.getName()]['hasFooter']
+                videoHasFooter = self._videoConfig[self._lootbox.getCategory()][self._bonus.getName()]['hasFooter']
                 vm.setHasVideoFooter(videoHasFooter)
                 rewardVideos = vm.getRewardVideos()
                 rewardVideos.clear()
-                for videoConfig in packVideoRewardConfig(self._getVideoConfigKey(), self._videoRes, self._videoConfig[self._getVideoConfigKey()][self._bonus.getName()]['videos']):
+                for videoConfig in packVideoRewardConfig(self._lootbox.getCategory(), self._videoRes, self._videoConfig[self._lootbox.getCategory()][self._bonus.getName()]['videos']):
                     rewardVideoConfig = RewardVideoModel()
                     rewardVideoConfig.setVideoResName(videoConfig['videoResName'])
                     rewardVideoConfig.setDuration(videoConfig['duration'])
@@ -146,30 +144,20 @@ class LootboxVideoRewardView(BaseUniqueRewardsView):
                 _logger.error('Invalid video config')
         return
 
-    def _getVideoConfigKey(self):
-        return self._lootbox.getCategory()
-
     def _onClose(self):
         self.destroyWindow()
 
     def _onVideoStarted(self):
-        self._startVideoSound()
+        self._soundControl.start()
         if not Windowing.isWindowAccessible():
             self._soundControl.pause()
 
     def _onWindowAccessibilityChanged(self, isWindowAccessible):
         if isWindowAccessible:
-            if self.__soundStarted:
-                self._soundControl.unpause()
-            else:
-                self._startVideoSound()
+            self._soundControl.unpause()
         else:
             self._soundControl.pause()
         self.viewModel.setIsWindowAccessible(isWindowAccessible)
-
-    def _startVideoSound(self):
-        self.__soundStarted = True
-        self._soundControl.start()
 
 
 class LootboxVideoRewardWindow(LobbyWindow):

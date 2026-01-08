@@ -28,10 +28,11 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
     _MAX_VISIBLE_AWARDS = 6
     _BONUS_ORDER_PRIORITY = {'battlePassPoints': 1,
      'abilityPts': 2,
-     'crystal': 3,
-     'goodies': 4,
-     EPIC_SELECT_BONUS_NAME: 5,
-     'crewBooks': 6}
+     'lootBoxToken': 3,
+     'crystal': 4,
+     'goodies': 5,
+     EPIC_SELECT_BONUS_NAME: 6,
+     'crewBooks': 7}
     _MIDDLE_PRIORITY = 50
     _awardsFormatter = EpicCurtailingAwardsComposer(_MAX_VISIBLE_AWARDS, getEpicBattleViewAwardPacker())
     __eventsCache = dependency.descriptor(IEventsCache)

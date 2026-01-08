@@ -481,6 +481,8 @@ class TokenQuestsWindowHandler(ServiceChannelHandler):
 
 
 class SeniorityAwardsWindowHandler(ServiceChannelHandler):
+    itemsCache = dependency.descriptor(IItemsCache)
+    eventsCache = dependency.descriptor(IEventsCache)
     seniorityAwardCtrl = dependency.descriptor(ISeniorityAwardsController)
 
     def __init__(self, awardCtrl):
@@ -520,7 +522,6 @@ class SeniorityAwardsWindowHandler(ServiceChannelHandler):
     def _showAward(self, ctx=None):
         if self.__mergedRewards:
             self.seniorityAwardCtrl.markRewardReceived()
-            self.__mergedRewards = self.seniorityAwardCtrl.replaceCompTokens(self.__mergedRewards)
             showSeniorityRewardAwardWindow(self.__completedQuests, self.__mergedRewards)
             self.__mergedRewards = None
             self.__questsData = None

@@ -32,10 +32,6 @@ class HangarSelectableLogic(BaseSelectableLogic):
         super(HangarSelectableLogic, self).fini()
         return
 
-    @property
-    def selected3DEntity(self):
-        return self.__selected3DEntity
-
     def _onNotifyCursorOver3dScene(self, isCursorOver3dScene):
         if self.__selected3DEntity:
             if isCursorOver3dScene:

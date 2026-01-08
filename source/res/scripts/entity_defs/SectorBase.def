@@ -94,6 +94,11 @@
       <Type>	UINT8	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </invadersCount>
+    <hasExtraInvader>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </hasExtraInvader>
     <expectedCaptureTime>
       <Type>	FLOAT32	</Type>
       <Flags>	ALL_CLIENTS	</Flags>

@@ -182,9 +182,13 @@ class VehicleMarker(Marker):
         guiMP = vProxy.model.node(TankNodeNames.GUI)
         rootM = rootMP.localMatrix
         guiM = guiMP.localMatrix
-        offset = guiM.translation - rootM.translation
+        offset = guiM.translation - rootM.translation + cls.adjustOffset(vProxy)
         rootCalculator = vProxy.model.getWorldMatrixCalculator(TankNodeNames.HULL_SWINGING)
         return GUI.VehicleMarkersMatrixProvider(rootCalculator, offset)
+
+    @classmethod
+    def adjustOffset(cls, vProxy):
+        return Math.Vector3(0, 0, 0)
 
     def getMatrixProvider(self):
         return self.fetchMatrixProvider(self._vProxy) if self._vProxy is not None else None

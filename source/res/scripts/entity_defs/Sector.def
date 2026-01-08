@@ -75,6 +75,10 @@
       <Type>	PYTHON	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </cp>
+    <isLast>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isLast>
   </Properties>
   <CellMethods>
     <start></start>

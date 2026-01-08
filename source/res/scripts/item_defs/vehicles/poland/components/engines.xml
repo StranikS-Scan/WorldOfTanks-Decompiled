@@ -48,6 +48,7 @@
     <GTD_2T5x2>	51	</GTD_2T5x2>
     <W_2_57D>	52	</W_2_57D>
     <W_2_58D>	53	</W_2_58D>
+    <GTD_2T5x2_FL>	501	</GTD_2T5x2_FL>
     <SGT_3Cz_M_02>	31001	</SGT_3Cz_M_02>
     <GTD_2T6x2_T>	31002	</GTD_2T6x2_T>
     <MT_50T_T>	31003	</MT_50T_T>
@@ -429,7 +430,7 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <power>	710	</power>
+      <power>	720	</power>
       <weight>	2000	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	170	</maxRegenHealth>
@@ -911,6 +912,23 @@
       <rpm_min>	319	</rpm_min>
       <rpm_max>	2833	</rpm_max>
     </GTD_2T5x2>
+    <GTD_2T5x2_FL>
+      <userString>	#poland_vehicles:GTD_2T5x2	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	52000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
+      <power>	680	</power>
+      <weight>	2200	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	319	</rpm_min>
+      <rpm_max>	2833	</rpm_max>
+    </GTD_2T5x2_FL>
     <GTD_2T5x2_T>
       <userString>	#poland_vehicles:GTD_2T5x2	</userString>
       <tags>	gasoline	</tags>

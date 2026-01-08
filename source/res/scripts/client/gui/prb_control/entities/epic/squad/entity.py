@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/prb_control/entities/epic/squad/entity.py
 import account_helpers
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
+from gui.prb_control.entities.epic.squad.actions_handler import EpicSquadActionsHandler
 from gui.prb_control.entities.epic.squad.components import RestrictedFlamethrowerDataProvider, RestrictedSPGDataProvider
 from gui.prb_control.entities.epic.squad.actions_validator import EpicSquadActionsValidator
 from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEntity
@@ -9,10 +10,10 @@ from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
 from gui.prb_control.entities.base.squad.ctx import SquadSettingsCtx
 from helpers import dependency
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
+from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.prb_control.entities.random.squad.actions_handler import BalancedSquadActionsHandler
 from gui.prb_control.storages import prequeue_storage_getter
 from gui.prb_control.entities.epic.pre_queue.vehicles_watcher import EpicVehiclesWatcher
 
@@ -31,6 +32,7 @@ class EpicSquadEntryPoint(SquadEntryPoint):
 class EpicSquadEntity(SquadEntity):
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    epicController = dependency.descriptor(IEpicBattleMetaGameController)
 
     def __init__(self):
         self._isBalancedSquad = False
@@ -75,6 +77,9 @@ class EpicSquadEntity(SquadEntity):
     def getQueueType(self):
         return QUEUE_TYPE.EPIC
 
+    def getConfirmDialogMeta(self, ctx):
+        return None if not self.epicController.isEnabled() else super(EpicSquadEntity, self).getConfirmDialogMeta(ctx)
+
     @property
     def _showUnitActionNames(self):
         return (PREBATTLE_ACTION_NAME.SQUAD,)
@@ -107,7 +112,7 @@ class EpicSquadEntity(SquadEntity):
             self.unit_onUnitRosterChanged()
 
     def _createActionsHandler(self):
-        return BalancedSquadActionsHandler(self)
+        return EpicSquadActionsHandler(self)
 
     def _createActionsValidator(self):
         return EpicSquadActionsValidator(self)

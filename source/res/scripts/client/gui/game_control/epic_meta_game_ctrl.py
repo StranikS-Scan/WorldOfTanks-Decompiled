@@ -145,6 +145,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         self.__isEpicSoundMode = False
         self.__showedResultsForArenas = []
         self.__eventEndedNotifier = None
+        self.__callbackID = None
         return
 
     def init(self):
@@ -162,7 +163,11 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         self.onEventEnded.clear()
         self.clearNotification()
         self.stopGlobalListening()
+        if self.__callbackID is not None:
+            BigWorld.cancelCallback(self.__callbackID)
+            self.__callbackID = None
         super(EpicBattleMetaGameController, self).fini()
+        return
 
     def onLobbyInited(self, ctx):
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__updateEpicMetaGameSettings
@@ -181,6 +186,8 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         if self.prbEntity is not None:
             enableSound = bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.EPIC)
             self.__updateSounds(enableSound)
+        if not self.isEnabled() and self.isEpicPrbActive():
+            self.__selectRandomBattle()
         return
 
     def onDisconnected(self):
@@ -419,6 +426,15 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         return self.__itemsCache.items.epicMetaGame
 
     def showWelcomeScreenIfNeed(self):
+        currentSeason = self.getActiveSeason()
+        if currentSeason is not None:
+            seasonId = currentSeason.getSeasonID()
+            from frontline_account_settings import isWelcomeScreenViewed, setWelcomeScreenViewed
+            if not isWelcomeScreenViewed(seasonId):
+                from gui.shared.event_dispatcher import showFrontlineWelcomeWindow
+                showFrontlineWelcomeWindow()
+                setWelcomeScreenViewed(seasonId)
+                return True
         return False
 
     def getNumAbilitySlots(self, vehicleType):
@@ -535,6 +551,12 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
 
         return result
 
+    def getSectorsProgression(self):
+        return self.__metaSettings.sectorsProgressionConfig
+
+    def getSupplyParams(self):
+        return self.__metaSettings.supplyParams
+
     def __addSkillPointsBonus(self, bonuses, level):
         skillPoints = self.__abilityPointsForLevel[level - 1]
         if skillPoints > 0:
@@ -635,6 +657,8 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
             self.__setData()
             self.onUpdated(diff['epic_config'])
             self.__resetTimer()
+            if not self.isEnabled() and self.isEpicPrbActive():
+                self.__selectRandomBattle()
 
     def __resetTimer(self):
         self.startNotification()
@@ -778,3 +802,16 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
     def __onTokensUpdate(self, diff):
         if any((key.startswith(EPIC_CHOICE_REWARD_OFFER_GIFT_TOKENS) for key in diff.keys())):
             pass
+
+    def __selectRandomBattle(self):
+        self.__callbackID = BigWorld.callback(0, self.__doSelectRandomPrb)
+
+    @adisp.adisp_process
+    def __doSelectRandomPrb(self):
+        self.__callbackID = None
+        if self.prbDispatcher is None:
+            _logger.error('Prebattle dispatcher is not defined')
+            return
+        else:
+            yield self.prbDispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.RANDOM))
+            return

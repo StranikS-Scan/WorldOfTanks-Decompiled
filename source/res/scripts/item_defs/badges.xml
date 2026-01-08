@@ -5473,5 +5473,71 @@
         </item>
       </value>
     </badge>
+    <badge>
+      <name>	clan_season_silver	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	31068	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	6.142	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	clan_season_bronze	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	31069	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	6.141	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	memory_symbol	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	158	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.008	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	red	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
   </badges>
 </badges.xml>

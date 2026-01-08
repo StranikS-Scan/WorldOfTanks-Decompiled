@@ -63,18 +63,12 @@ class ARENAS(object):
     TYPE_DOMINATION3_DESCRIPTION = '#arenas:type/domination3/description'
     C_01_KARELIA_NAME = '#arenas:01_karelia/name'
     C_01_KARELIA_DESCRIPTION = '#arenas:01_karelia/description'
-    C_01_KARELIA_NY_NAME = '#arenas:01_karelia_ny/name'
-    C_01_KARELIA_NY_DESCRIPTION = '#arenas:01_karelia_ny/description'
     C_02_MALINOVKA_NAME = '#arenas:02_malinovka/name'
     C_02_MALINOVKA_DESCRIPTION = '#arenas:02_malinovka/description'
-    C_02_MALINOVKA_NY_NAME = '#arenas:02_malinovka_ny/name'
-    C_02_MALINOVKA_NY_DESCRIPTION = '#arenas:02_malinovka_ny/description'
     C_04_HIMMELSDORF_NAME = '#arenas:04_himmelsdorf/name'
     C_04_HIMMELSDORF_DESCRIPTION = '#arenas:04_himmelsdorf/description'
     C_05_PROHOROVKA_NAME = '#arenas:05_prohorovka/name'
     C_05_PROHOROVKA_DESCRIPTION = '#arenas:05_prohorovka/description'
-    C_05_PROHOROVKA_NY_NAME = '#arenas:05_prohorovka_ny/name'
-    C_05_PROHOROVKA_NY_DESCRIPTION = '#arenas:05_prohorovka_ny/description'
     C_06_ENSK_NAME = '#arenas:06_ensk/name'
     C_06_ENSK_DESCRIPTION = '#arenas:06_ensk/description'
     C_07_LAKEVILLE_NAME = '#arenas:07_lakeville/name'
@@ -207,8 +201,6 @@ class ARENAS(object):
     C_505_CAUCASUS_NAME = '#arenas:505_caucasus/name'
     C_505_CAUCASUS_DESCRIPTION = '#arenas:505_caucasus/description'
     MODIFIED = '#arenas:modified'
-    H03_MT_NY_2026_NAME = '#arenas:h03_mt_ny_2026/name'
-    H03_MT_NY_2026_DESCRIPTION = '#arenas:h03_mt_ny_2026/description'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -269,18 +261,12 @@ class ARENAS(object):
      TYPE_DOMINATION3_DESCRIPTION,
      C_01_KARELIA_NAME,
      C_01_KARELIA_DESCRIPTION,
-     C_01_KARELIA_NY_NAME,
-     C_01_KARELIA_NY_DESCRIPTION,
      C_02_MALINOVKA_NAME,
      C_02_MALINOVKA_DESCRIPTION,
-     C_02_MALINOVKA_NY_NAME,
-     C_02_MALINOVKA_NY_DESCRIPTION,
      C_04_HIMMELSDORF_NAME,
      C_04_HIMMELSDORF_DESCRIPTION,
      C_05_PROHOROVKA_NAME,
      C_05_PROHOROVKA_DESCRIPTION,
-     C_05_PROHOROVKA_NY_NAME,
-     C_05_PROHOROVKA_NY_DESCRIPTION,
      C_06_ENSK_NAME,
      C_06_ENSK_DESCRIPTION,
      C_07_LAKEVILLE_NAME,
@@ -412,9 +398,7 @@ class ARENAS(object):
      H08_MT_HANGAR_DESCRIPTION,
      C_505_CAUCASUS_NAME,
      C_505_CAUCASUS_DESCRIPTION,
-     MODIFIED,
-     H03_MT_NY_2026_NAME,
-     H03_MT_NY_2026_DESCRIPTION)
+     MODIFIED)
 
     @classmethod
     def all(cls, key0):

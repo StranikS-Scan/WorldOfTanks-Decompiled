@@ -4,9 +4,10 @@ import typing
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.battle.shared import personal_reserves_tab
+from gui.Scaleform.daapi.view.battle.shared.damage.damage_log_panel_override import DamageLogPanelOverride
+from gui.Scaleform.daapi.view.battle.shared.messages.vehicle_messages_override import VehicleMessageOverride
+from gui.Scaleform.daapi.view.battle.shared.menu_radial.radial_menu_override import RadialMenuOverride
 from gui.Scaleform.daapi.view.battle.shared.page import SharedPage
-from gui.Scaleform.daapi.view.bootcamp.BCVehicleMessages import BCVehicleMessages
-from gui.Scaleform.daapi.view.bootcamp.component_override import BootcampComponentOverride
 from gui.Scaleform.framework import ViewSettings, ScopeTemplates, ComponentSettings, ConditionalViewSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
@@ -35,13 +36,13 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.shared import callout_panel
     from gui.Scaleform.daapi.view.battle.shared import battle_notifier
     return (ViewSettings(VIEW_ALIAS.INGAME_MENU, ingame_menu.IngameMenu, 'ingameMenu.swf', WindowLayer.TOP_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canClose=False, canDrag=False),
-     ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_DAMAGE_LOG_PANEL, damage_log_panel.DamageLogPanel, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.INGAME_HELP, ingame_help.IngameHelpWindow, 'ingameHelpWindow.swf', WindowLayer.WINDOW, None, ScopeTemplates.DEFAULT_SCOPE, canClose=False, canDrag=False, isModal=True),
      ViewSettings(VIEW_ALIAS.INGAME_DETAILS_HELP, ingame_help.IngameDetailsHelpWindow, 'ingameDetailsHelpWindow.swf', WindowLayer.WINDOW, None, ScopeTemplates.DEFAULT_SCOPE, canClose=False, canDrag=False, isModal=True),
      ComponentSettings(BATTLE_VIEW_ALIASES.DEBUG_PANEL, debug_panel.DebugPanel, ScopeTemplates.DEFAULT_SCOPE),
-     ConditionalViewSettings(BATTLE_VIEW_ALIASES.VEHICLE_MESSAGES, BootcampComponentOverride(messages.VehicleMessages, BCVehicleMessages), None, WindowLayer.UNDEFINED, None, None, ScopeTemplates.DEFAULT_SCOPE),
+     ConditionalViewSettings(BATTLE_VIEW_ALIASES.BATTLE_DAMAGE_LOG_PANEL, DamageLogPanelOverride(damage_log_panel.DamageLogPanel), None, WindowLayer.UNDEFINED, None, None, ScopeTemplates.DEFAULT_SCOPE),
+     ConditionalViewSettings(BATTLE_VIEW_ALIASES.VEHICLE_MESSAGES, VehicleMessageOverride(messages.VehicleMessages), None, WindowLayer.UNDEFINED, None, None, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.VEHICLE_ERROR_MESSAGES, messages.VehicleErrorMessages, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.RADIAL_MENU, radial_menu.RadialMenu, None, WindowLayer.UNDEFINED, None, ScopeTemplates.DEFAULT_SCOPE),
+     ConditionalViewSettings(BATTLE_VIEW_ALIASES.RADIAL_MENU, RadialMenuOverride(radial_menu.RadialMenu), None, WindowLayer.UNDEFINED, None, None, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.DAMAGE_INFO_PANEL, damage_info_panel.DamageInfoPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.SIXTH_SENSE, indicators.SixthSenseIndicator, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.MINIMAP_ON_BATTLE_LOADING, battle_loading_minimap.BattleLoadingMinimapComponent, ScopeTemplates.DEFAULT_SCOPE),

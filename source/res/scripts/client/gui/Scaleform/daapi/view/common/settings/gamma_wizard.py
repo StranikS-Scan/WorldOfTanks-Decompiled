@@ -8,6 +8,7 @@ from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import makeTooltip
+from account_helpers.settings_core.settings_logging import logPlayerSettingsBeforeChange, logPlayerSettingsAfterChange
 
 class GammaWizardView(LayerVisibilityMixin, GammaWizardViewMeta):
     MIN_VALUE = 0
@@ -22,6 +23,7 @@ class GammaWizardView(LayerVisibilityMixin, GammaWizardViewMeta):
         self._gammaWizard = BigWorld.PyGammaWizard()
         self._currentGammaValue = 0
         self._changeGammaValue = 0
+        self._gammaValueChanged = False
         self.updateTexture(x, y, size)
         self._gammaWizard.enable = True
         self.fireEvent(GameEvent(GameEvent.HIDE_EXTERNAL_COMPONENTS), scope=EVENT_BUS_SCOPE.GLOBAL)
@@ -33,6 +35,7 @@ class GammaWizardView(LayerVisibilityMixin, GammaWizardViewMeta):
          size)
 
     def onApply(self):
+        self._gammaValueChanged = self._currentGammaValue != self._changeGammaValue
         self._currentGammaValue = self._changeGammaValue
         self.destroy()
 
@@ -65,11 +68,14 @@ class GammaWizardView(LayerVisibilityMixin, GammaWizardViewMeta):
          'minValue': self.MIN_VALUE,
          'maxValue': self.MAX_VALUE,
          'defaultValue': self.DEFAULT_VALUE})
+        logPlayerSettingsBeforeChange()
         return
 
     def _dispose(self):
         self._gammaWizard.gamma = self._changeGammaValue
         self._gammaWizard.enable = False
+        if self._gammaValueChanged:
+            logPlayerSettingsAfterChange()
         self.removeListener(GameEvent.ON_BACKGROUND_ALPHA_CHANGE, self.__onExternalBackgroundAlphaChange, EVENT_BUS_SCOPE.GLOBAL)
         if self.app is not None:
             self.app.setBackgroundAlpha(self._savedBackgroundAlpha)

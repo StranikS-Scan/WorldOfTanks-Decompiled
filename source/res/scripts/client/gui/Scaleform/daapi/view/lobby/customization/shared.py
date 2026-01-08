@@ -9,6 +9,7 @@ import BigWorld
 import Math
 import nations
 from AccountCommands import isCodeValid
+from account_helpers.AccountSettings import CustomizationFilter
 from CurrentVehicle import g_currentVehicle
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from constants import REQUEST_COOLDOWN
@@ -24,6 +25,7 @@ from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
 from gui.shared.formatters import icons, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER, VEHICLE_TAGS
+from gui.shared.gui_items.customization.c11n_items import Style
 from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.money import Money
 from gui.shared.utils import code2str
@@ -31,7 +33,7 @@ from helpers import dependency, int2roman
 from helpers.func_utils import CallParams, cooldownCallerDecorator
 from helpers.i18n import makeString as _ms
 from items import parseIntCompactDescr
-from items.components.c11n_components import getItemSlotType
+from items.components.c11n_components import getItemSlotType, StyleItem
 from items.components.c11n_constants import SeasonType, ProjectionDecalFormTags
 from items.vehicles import VEHICLE_CLASS_TAGS
 from shared_utils import first
@@ -45,6 +47,8 @@ from vehicle_outfit.outfit import Area, Outfit
 from vehicle_outfit.packers import ProjectionDecalPacker
 _logger = logging.getLogger(__name__)
 EMPTY_PERSONAL_NUMBER = ''
+STYLE_2D_PREFIX = '2d'
+STYLE_3D_PREFIX = '3d'
 
 class CustomizationTabs(object):
     DEFAULT = -1
@@ -54,49 +58,83 @@ class CustomizationTabs(object):
     EMBLEMS = 4
     INSCRIPTIONS = 5
     MODIFICATIONS = 6
-    STYLES = 7
+    STYLES_2D = 7
+    STYLES_3D = 8
     ALL = (PAINTS,
      CAMOUFLAGES,
      PROJECTION_DECALS,
      EMBLEMS,
      INSCRIPTIONS,
      MODIFICATIONS,
-     STYLES)
+     STYLES_2D,
+     STYLES_3D)
+    CUSTOM_ALL = (PAINTS,
+     CAMOUFLAGES,
+     PROJECTION_DECALS,
+     EMBLEMS,
+     INSCRIPTIONS,
+     MODIFICATIONS)
+    STYLES_ALL = (STYLES_3D, STYLES_2D)
     REGIONS = (PAINTS,
      CAMOUFLAGES,
      MODIFICATIONS,
-     STYLES)
-    MODES = {CustomizationModes.CUSTOM: (PAINTS,
-                                 CAMOUFLAGES,
-                                 PROJECTION_DECALS,
-                                 EMBLEMS,
-                                 INSCRIPTIONS,
-                                 MODIFICATIONS),
-     CustomizationModes.STYLED: (STYLES,),
-     CustomizationModes.EDITABLE_STYLE: (PAINTS,
-                                         CAMOUFLAGES,
-                                         PROJECTION_DECALS,
-                                         EMBLEMS,
-                                         INSCRIPTIONS,
-                                         MODIFICATIONS)}
+     STYLES_2D,
+     STYLES_3D)
+    GROUPS = ((STYLES_3D,), (STYLES_2D,), (CAMOUFLAGES,
+      PAINTS,
+      PROJECTION_DECALS,
+      EMBLEMS,
+      INSCRIPTIONS,
+      MODIFICATIONS))
     SLOT_TYPES = {PAINTS: GUI_ITEM_TYPE.PAINT,
      CAMOUFLAGES: GUI_ITEM_TYPE.CAMOUFLAGE,
      PROJECTION_DECALS: GUI_ITEM_TYPE.PROJECTION_DECAL,
      EMBLEMS: GUI_ITEM_TYPE.EMBLEM,
      INSCRIPTIONS: GUI_ITEM_TYPE.INSCRIPTION,
      MODIFICATIONS: GUI_ITEM_TYPE.MODIFICATION,
-     STYLES: GUI_ITEM_TYPE.STYLE}
+     STYLES_2D: GUI_ITEM_TYPE.STYLE,
+     STYLES_3D: GUI_ITEM_TYPE.STYLE}
     ITEM_TYPES = {PAINTS: (GUI_ITEM_TYPE.PAINT,),
      CAMOUFLAGES: (GUI_ITEM_TYPE.CAMOUFLAGE,),
      PROJECTION_DECALS: (GUI_ITEM_TYPE.PROJECTION_DECAL,),
      EMBLEMS: (GUI_ITEM_TYPE.EMBLEM,),
      INSCRIPTIONS: (GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.PERSONAL_NUMBER),
      MODIFICATIONS: (GUI_ITEM_TYPE.MODIFICATION,),
-     STYLES: (GUI_ITEM_TYPE.STYLE,)}
+     STYLES_2D: (GUI_ITEM_TYPE.STYLE,),
+     STYLES_3D: (GUI_ITEM_TYPE.STYLE,)}
+    STYLE_PREFIX = {STYLES_2D: STYLE_2D_PREFIX,
+     STYLES_3D: STYLE_3D_PREFIX}
+    TAB_TO_GROUP = {PAINTS: CustomizationFilter.PAINTS_GROUP,
+     PROJECTION_DECALS: CustomizationFilter.PROJECTION_DECALS_GROUP,
+     EMBLEMS: CustomizationFilter.EMBLEMS_GROUP,
+     INSCRIPTIONS: CustomizationFilter.INSCRIPTIONS_GROUP,
+     STYLES_2D: CustomizationFilter.STYLES_2D_GROUP}
 
 
-ITEM_TYPE_TO_TAB = {value:key for key, values in CustomizationTabs.ITEM_TYPES.iteritems() for value in values}
-ITEM_TYPE_TO_SLOT_TYPE = {itemType:CustomizationTabs.SLOT_TYPES[tabId] for itemType, tabId in ITEM_TYPE_TO_TAB.iteritems()}
+def getTabGroupId(tabId):
+    for group in CustomizationTabs.GROUPS:
+        if tabId in group:
+            return (CustomizationTabs.GROUPS.index(group), group.index(tabId))
+
+
+__CUSTOM_ITEM_TYPE_TO_TAB = {value:tab for tab in CustomizationTabs.CUSTOM_ALL for value in CustomizationTabs.ITEM_TYPES[tab]}
+
+def getTabByItem(item):
+    if isinstance(item, (Style, StyleItem)):
+        if item.is3D:
+            return CustomizationTabs.STYLES_3D
+        return CustomizationTabs.STYLES_2D
+    return __CUSTOM_ITEM_TYPE_TO_TAB[item.itemTypeID]
+
+
+ITEM_TYPE_TO_SLOT_TYPE = {GUI_ITEM_TYPE.PAINT: GUI_ITEM_TYPE.PAINT,
+ GUI_ITEM_TYPE.CAMOUFLAGE: GUI_ITEM_TYPE.CAMOUFLAGE,
+ GUI_ITEM_TYPE.PROJECTION_DECAL: GUI_ITEM_TYPE.PROJECTION_DECAL,
+ GUI_ITEM_TYPE.EMBLEM: GUI_ITEM_TYPE.EMBLEM,
+ GUI_ITEM_TYPE.INSCRIPTION: GUI_ITEM_TYPE.INSCRIPTION,
+ GUI_ITEM_TYPE.PERSONAL_NUMBER: GUI_ITEM_TYPE.INSCRIPTION,
+ GUI_ITEM_TYPE.MODIFICATION: GUI_ITEM_TYPE.MODIFICATION,
+ GUI_ITEM_TYPE.STYLE: GUI_ITEM_TYPE.STYLE}
 REGIONS_SLOTS = tuple((CustomizationTabs.SLOT_TYPES[tabId] for tabId in CustomizationTabs.REGIONS))
 APPLIED_TO_TYPES = (GUI_ITEM_TYPE.EMBLEM,
  GUI_ITEM_TYPE.INSCRIPTION,
@@ -457,17 +495,20 @@ def getCurrentVehicleAvailableRegionsMap():
 def checkSlotsFilling(outfit, slotType):
     availableCount = 0
     filledCount = 0
-    for areaId in Area.ALL:
-        regionsIndexes = getAvailableRegions(areaId, slotType)
-        availableCount += len(regionsIndexes)
-        for regionIdx in regionsIndexes:
-            intCD = outfit.getContainer(areaId).slotFor(slotType).getItemCD(regionIdx)
-            if intCD:
-                filledCount += 1
+    if slotType == GUI_ITEM_TYPE.STYLE:
+        return (1, 0 if outfit.style is None else 1)
+    else:
+        for areaId in Area.ALL:
+            regionsIndexes = getAvailableRegions(areaId, slotType)
+            availableCount += len(regionsIndexes)
+            for regionIdx in regionsIndexes:
+                intCD = outfit.getContainer(areaId).slotFor(slotType).getItemCD(regionIdx)
+                if intCD:
+                    filledCount += 1
 
-    if slotType in QUANTITY_LIMITED_CUSTOMIZATION_TYPES:
-        availableCount = min(availableCount, QUANTITY_LIMITED_CUSTOMIZATION_TYPES[slotType])
-    return (availableCount, filledCount)
+        if slotType in QUANTITY_LIMITED_CUSTOMIZATION_TYPES:
+            availableCount = min(availableCount, QUANTITY_LIMITED_CUSTOMIZATION_TYPES[slotType])
+        return (availableCount, filledCount)
 
 
 def isSlotLocked(outfit, slotId):

@@ -12,6 +12,10 @@ from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.daapi.view.lobby.tank_setup.ammunition_setup_vehicle import g_tankSetupVehicle
+from gui.impl.lobby.hangar.modified_vehicle import g_modifiedVehicle
+from gui.impl.lobby.hangar.modified_vehicle_parameters import modifiedVehiclesComparator
+from gui.impl.lobby.stronghold.stronghold_helpers import getBattleModifiersObject, getBattleModifiersByPrbEntity, getBattleModifiersDomain
+from gui.prb_control.dispatcher import g_prbLoader
 from gui.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.daapi.view.lobby.veh_post_progression.veh_post_progression_vehicle import g_postProgressionVehicle
@@ -474,6 +478,35 @@ class Comp7CarouselContext(InventoryContext):
         return vehicle
 
 
+class ModifiedCarouselContext(InventoryContext):
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, fieldsToExclude=None):
+        super(InventoryContext, self).__init__(fieldsToExclude)
+        self._component = TOOLTIP_COMPONENT.CAROUSEL
+
+    def getStatusConfiguration(self, item):
+        value = super(ModifiedCarouselContext, self).getStatusConfiguration(item)
+        value.checkNotSuitable = True
+        return value
+
+    def getStatsConfiguration(self, item):
+        value = super(ModifiedCarouselContext, self).getStatsConfiguration(item)
+        value.rentals = True
+        value.buyPrice = True
+        return value
+
+    def buildItem(self, intCD):
+        vehicle = self.itemsCache.items.getItemByCD(int(intCD))
+        dispatcher = g_prbLoader.getDispatcher()
+        modifiers = getBattleModifiersObject(getBattleModifiersByPrbEntity(dispatcher.getEntity()))
+        if modifiers is not None:
+            vehicle = self.__itemsCache.items.getVehicleCopy(vehicle)
+            vehicle.descriptor.battleModifiers = ModifiersContext(modifiers, vehType=vehicle.descriptor.type)
+            vehicle.descriptor.rebuildAttrs()
+        return vehicle
+
+
 class PMQuestsChainContext(ToolTipContext):
 
     def __init__(self, fieldsToExclude=None):
@@ -549,6 +582,19 @@ class HangarParamContext(BaseHangarParamContext):
 
     def buildItem(self, *args, **kwargs):
         return g_currentVehicle.item
+
+
+class ModifiedVehicleParamContext(HangarParamContext):
+
+    def getComparator(self):
+        return modifiedVehiclesComparator(g_modifiedVehicle.item, g_modifiedVehicle.defaultItem)
+
+    def buildItem(self, *args, **kwargs):
+        return g_modifiedVehicle.item
+
+    @staticmethod
+    def getBattleModifiersType():
+        return getBattleModifiersDomain()
 
 
 class PreviewParamContext(HangarParamContext):

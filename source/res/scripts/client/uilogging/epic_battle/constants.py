@@ -25,6 +25,7 @@ class EpicBattleLogKeys(Enum):
     AFTER_BATTLE_VIEW = 'after_battle_view'
     REWARDS_SELECTION_VIEW = 'rewards_selection_view'
     AWARDS_VIEW = 'awards_view'
+    SUPPLY_OBJECTS_VIEW = 'supply_objects_view'
 
 
 class EpicBattleLogButtons(Enum):
@@ -49,6 +50,7 @@ class EpicBattleLogTabs(Enum):
     SKILLS_TAB = 'skills_tab'
     REWARDS_TAB = 'rewards_tab'
     INFO_TAB = 'info_tab'
+    SUPPLY_OBJECTS_TAB = 'supply_objects_tab'
 
 
 class EpicBattleLogAdditionalInfo(Enum):

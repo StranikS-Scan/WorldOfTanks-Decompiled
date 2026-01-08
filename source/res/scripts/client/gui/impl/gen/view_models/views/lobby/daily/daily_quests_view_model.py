@@ -13,13 +13,12 @@ class DailyTabs(IntEnum):
     QUESTS = 0
     PREMIUM = 1
     SERIAL = 2
-    NYQUESTS = 3
 
 
 class DailyQuestsViewModel(ViewModel):
-    __slots__ = ('onClose', 'onTabClick', 'onInfoClick', 'onShowInfo', 'onNyInfoClick', 'changePersonVoicesEnabled', 'onStartStopPersonVoice', 'onInfoToggle', 'onBuyPremiumBtnClick', 'onRerollEnabled', 'onClaimRewards')
+    __slots__ = ('onClose', 'onTabClick', 'onInfoClick', 'onShowInfo', 'onInfoToggle', 'onBuyPremiumBtnClick', 'onRerollEnabled', 'onClaimRewards')
 
-    def __init__(self, properties=12, commands=11):
+    def __init__(self, properties=9, commands=8):
         super(DailyQuestsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -64,49 +63,27 @@ class DailyQuestsViewModel(ViewModel):
     def getDailyBattleTypesType():
         return unicode
 
-    def getNyBattleTypes(self):
+    def getSerialEnterBattleTypes(self):
         return self._getArray(6)
 
-    def setNyBattleTypes(self, value):
-        self._setArray(6, value)
-
-    @staticmethod
-    def getNyBattleTypesType():
-        return unicode
-
-    def getSerialEnterBattleTypes(self):
-        return self._getArray(7)
-
     def setSerialEnterBattleTypes(self, value):
-        self._setArray(7, value)
+        self._setArray(6, value)
 
     @staticmethod
     def getSerialEnterBattleTypesType():
         return unicode
 
     def getCurrentTabIdx(self):
-        return self._getNumber(8)
+        return self._getNumber(7)
 
     def setCurrentTabIdx(self, value):
-        self._setNumber(8, value)
+        self._setNumber(7, value)
 
     def getIntroSeen(self):
-        return self._getBool(9)
+        return self._getBool(8)
 
     def setIntroSeen(self, value):
-        self._setBool(9, value)
-
-    def getIsPersonVoicesNowPlaying(self):
-        return self._getBool(10)
-
-    def setIsPersonVoicesNowPlaying(self, value):
-        self._setBool(10, value)
-
-    def getIsPersonVoicesEnabled(self):
-        return self._getBool(11)
-
-    def setIsPersonVoicesEnabled(self, value):
-        self._setBool(11, value)
+        self._setBool(8, value)
 
     def _initialize(self):
         super(DailyQuestsViewModel, self)._initialize()
@@ -116,19 +93,13 @@ class DailyQuestsViewModel(ViewModel):
         self._addBoolProperty('isDailyPremEnabled', False)
         self._addBoolProperty('isSerialEnterEnabled', False)
         self._addArrayProperty('dailyBattleTypes', Array())
-        self._addArrayProperty('nyBattleTypes', Array())
         self._addArrayProperty('serialEnterBattleTypes', Array())
         self._addNumberProperty('currentTabIdx', 0)
         self._addBoolProperty('introSeen', False)
-        self._addBoolProperty('isPersonVoicesNowPlaying', False)
-        self._addBoolProperty('isPersonVoicesEnabled', False)
         self.onClose = self._addCommand('onClose')
         self.onTabClick = self._addCommand('onTabClick')
         self.onInfoClick = self._addCommand('onInfoClick')
         self.onShowInfo = self._addCommand('onShowInfo')
-        self.onNyInfoClick = self._addCommand('onNyInfoClick')
-        self.changePersonVoicesEnabled = self._addCommand('changePersonVoicesEnabled')
-        self.onStartStopPersonVoice = self._addCommand('onStartStopPersonVoice')
         self.onInfoToggle = self._addCommand('onInfoToggle')
         self.onBuyPremiumBtnClick = self._addCommand('onBuyPremiumBtnClick')
         self.onRerollEnabled = self._addCommand('onRerollEnabled')

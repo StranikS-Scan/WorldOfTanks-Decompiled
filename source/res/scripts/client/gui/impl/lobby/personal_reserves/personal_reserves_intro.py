@@ -5,7 +5,7 @@ from frameworks.wulf import ViewFlags, ViewSettings
 from gui.impl.gen.view_models.views.lobby.personal_reserves.reserves_intro_view_model import ReservesIntroViewModel
 from gui.impl.lobby.personal_reserves.reserves_constants import PERSONAL_RESERVES_SOUND_SPACE
 from gui.impl.lobby.personal_reserves.view_utils.reserves_view_monitor import ReservesViewMonitor
-from gui.shared.event_dispatcher import showPersonalReservesConversion, closeViewsExceptReservesActivationView
+from gui.shared.event_dispatcher import closeViewsExceptReservesActivationView
 from helpers import dependency
 from skeletons.gui.impl import IGuiLoader
 from uilogging.personal_reserves.loggers import PersonalReservesMetricsLogger
@@ -33,17 +33,12 @@ class PersonalReservesIntro(ReservesViewMonitor):
     def _initialize(self, *args, **kwargs):
         super(PersonalReservesIntro, self)._initialize()
         self.viewModel.onClose += self.close
-        self.viewModel.onConversionInfoClicked += self.onConversionInfoClicked
         self._uiLogger.onViewInitialize()
 
     def _finalize(self):
         self.viewModel.onClose -= self.close
-        self.viewModel.onConversionInfoClicked -= self.onConversionInfoClicked
         super(PersonalReservesIntro, self)._finalize()
         self._uiLogger.onViewFinalize()
-
-    def onConversionInfoClicked(self):
-        showPersonalReservesConversion()
 
     def close(self):
         if self.__callbackOnClose and callable(self.__callbackOnClose):

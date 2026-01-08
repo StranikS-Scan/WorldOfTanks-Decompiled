@@ -16,6 +16,7 @@
     <setRemoteCamera>
       <Exposed></Exposed>
       <Arg>	REMOTE_CAMERA_DATA	</Arg>
+      <IsImmediate>	true	</IsImmediate>
     </setRemoteCamera>
   </CellMethods>
 </VehicleObserver.def>

@@ -11,9 +11,11 @@ from helpers import time_utils
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from helpers.i18n import makeString
 from gui.sounds.epic_sound_constants import EPIC_SOUND
+from supply_shared import Supply
 
 class EpicSpectatorView(EpicSpectatorViewMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    DEATH_FROM_SUPPLY_CODE = 'DEATH_FROM_SUPPLY'
 
     def __init__(self):
         super(EpicSpectatorView, self).__init__()
@@ -88,6 +90,23 @@ class EpicSpectatorView(EpicSpectatorViewMeta):
             self._showOwnDeathInfo()
         else:
             self._showPlayerInfo()
+
+    def _buildVehicleDeathDisplayData(self, vTypeInfoVO, vehClass=None, vehImg=None, vehLvl=None, vehName=None):
+        if Supply.isSupply(vTypeInfoVO.tags):
+            vehClass = ''
+            vehLvl = ''
+        return super(EpicSpectatorView, self)._buildVehicleDeathDisplayData(vTypeInfoVO, vehClass=vehClass, vehImg=vehImg, vehLvl=vehLvl, vehName=vehName)
+
+    def _prepareMessage(self, code, killerVehID, device=None):
+        arenaDP = self.sessionProvider.getArenaDP()
+        vInfo = arenaDP.getVehicleInfo(killerVehID) if killerVehID else None
+        if vInfo and Supply.isSupply(vInfo.vehicleType.tags):
+            code = self.DEATH_FROM_SUPPLY_CODE
+        super(EpicSpectatorView, self)._prepareMessage(code, killerVehID, device)
+        return
+
+    def _makeKillerVO(self, vInfoVO):
+        return {} if Supply.isSupply(vInfoVO.vehicleType.tags) else super(EpicSpectatorView, self)._makeKillerVO(vInfoVO)
 
     def __onBattleSessionStart(self):
         self._addGameListeners()

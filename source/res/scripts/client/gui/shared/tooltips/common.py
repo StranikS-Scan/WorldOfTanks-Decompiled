@@ -1219,6 +1219,17 @@ class SettingsKeyHighlightTarget(BlocksTooltipData):
         return tooltipBlocks
 
 
+class SettingsKeyShowQuestProgress(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(SettingsKeyShowQuestProgress, self).__init__(context, TOOLTIP_TYPE.CONTROL)
+
+    def _packBlocks(self, *args, **kwargs):
+        tooltipBlocks = super(SettingsKeyShowQuestProgress, self)._packBlocks(*args, **kwargs)
+        tooltipBlocks.append(formatters.packTitleDescBlock(text_styles.highTitle(TOOLTIPS.SETTINGS_KEYSHOWQUESTPROGRESS_TITLE), text_styles.main(TOOLTIPS.SETTINGS_KEYSHOWQUESTPROGRESS_BODY)))
+        return tooltipBlocks
+
+
 class SettingsKeyShowRadialMenu(BlocksTooltipData):
 
     def __init__(self, context):

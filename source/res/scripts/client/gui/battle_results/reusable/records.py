@@ -58,8 +58,6 @@ class ReplayRecord(ResultRecord):
 
     def _getFactor(self):
         name = self._name.lower()
-        if name.endswith('factor1000') or name.endswith('factors1000'):
-            return 1000
         if name.endswith('factor100') or name.endswith('factors100'):
             return 100
         return 10 if name.endswith('factor10') or name.endswith('factors10') else 1
@@ -102,12 +100,6 @@ class ReplayRecords(ResultRecord):
     __BIRTHDAY_MAP = {'eventCreditsFactor100List_mt_birthday_economics##credits_gold': 'birthdayCreditsBonus',
      'eventXPFactor100List_mt_birthday_economics##xp_freeXP': 'birthdayXPFactorBonus',
      'eventFreeXPFactor100List_mt_birthday_economics##xp_freeXP': 'birthdayFreeXPFactorBonus'}
-    __NEW_YEAR_MAP = {'eventFreeXPList_nyBattleBonus##xp_freeXP': 'newYearFreeXp',
-     'eventFreeXPFactor100List_nyBattleBonus##xp_freeXP': 'newYearFreeXpFactor',
-     'eventXPList_nyBattleBonus##xp_freeXP': 'newYearXp',
-     'eventXPFactor100List_nyBattleBonus##xp_freeXP': 'newYearXpFactor',
-     'eventCreditsList_nyBattleBonus##credits_gold': 'newYearCredits',
-     'eventCreditsFactor1000List_nyBattleBonus##credits_gold': 'newYearCreditsFactor'}
 
     def __init__(self, replay, *last):
         super(ReplayRecords, self).__init__()
@@ -151,15 +143,11 @@ class ReplayRecords(ResultRecord):
     def _addRecord(self, op, name, value, diff):
         if op in _SUPPORTED_OPS:
             clazz = _SUPPORTED_OPS[op]
-            newName = self.__remapForBirthday(name)
-            newName = self.__remapForNewYear(name)
-            self._records[newName] = clazz(newName, value, diff)
+            birthdayName = self.__remapForBirthday(name)
+            self._records[birthdayName] = clazz(birthdayName, value, diff)
 
     def __remapForBirthday(self, name):
         return self.__BIRTHDAY_MAP[name] if name in self.__BIRTHDAY_MAP else name
-
-    def __remapForNewYear(self, name):
-        return self.__NEW_YEAR_MAP[name] if name in self.__NEW_YEAR_MAP else name
 
 
 class RecordsIterator(ResultRecord):

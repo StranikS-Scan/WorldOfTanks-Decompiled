@@ -23,7 +23,9 @@ class BattlePassNoChapterTooltipView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(BattlePassNoChapterTooltipView, self)._onLoading(*args, **kwargs)
+        resourceChapterID = self.__battlePassController.getResourceChapterID()
         with self.getViewModel().transaction() as model:
             model.setPoints(self.__battlePassController.getFreePoints())
-            model.setIsResourceActive(self.__battlePassController.isCompleted() and not self.__battlePassController.isResourceChaptersCompleted())
-            model.setChapterName(backport.text(R.strings.battle_pass.chapter.fullName.num(self.__battlePassController.getResourceChapterID())()))
+            model.setIsResourceActive(self.__battlePassController.isCompleted() and not self.__battlePassController.isResourceChaptersCompleted() and resourceChapterID)
+            resourceChapterText = backport.text(R.strings.battle_pass.chapter.fullName.num(resourceChapterID)()) if resourceChapterID else ''
+            model.setChapterName(resourceChapterText)

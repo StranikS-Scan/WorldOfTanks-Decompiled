@@ -1,20 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/customization_bottom_panel.py
-from collections import namedtuple
+from collections import namedtuple, OrderedDict
 import typing
 import BigWorld
 from CurrentVehicle import g_currentVehicle
-from account_helpers.AccountSettings import AccountSettings, CUSTOMIZATION_SECTION, PROJECTION_DECAL_HINT_SHOWN_FIELD, CUSTOMIZATION_STYLE_ITEMS_VISITED
+from account_helpers.AccountSettings import AccountSettings, CUSTOMIZATION_SECTION, CustomizationFilter, PROJECTION_DECAL_HINT_SHOWN_FIELD, CUSTOMIZATION_STYLE_ITEMS_VISITED
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.customization_carousel import CustomizationCarouselDataProvider, comparisonKey, FilterTypes, FilterAliases
 from gui.Scaleform.daapi.view.lobby.customization.customization_item_vo import buildCustomizationItemDataVO
-from gui.Scaleform.daapi.view.lobby.customization.shared import checkSlotsFilling, isItemUsedUp, getEditableStylesExtraNotificationCounter, getItemTypesAvailableForVehicle, CustomizationTabs, getMultiSlot, BillPopoverButtons
+from gui.Scaleform.daapi.view.lobby.customization.shared import checkSlotsFilling, isItemUsedUp, getTabGroupId, CustomizationTabs, getMultiSlot, BillPopoverButtons
 from gui.Scaleform.daapi.view.meta.CustomizationBottomPanelMeta import CustomizationBottomPanelMeta
-from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.customization.constants import CustomizationModes, CustomizationModeSource
 from gui.customization.shared import SEASON_TYPE_TO_NAME, getTotalPurchaseInfo, isVehicleCanBeCustomized, C11nId
@@ -23,18 +21,69 @@ from gui.impl.gen import R
 from gui.shared.formatters import text_styles, icons, getItemPricesVO, getMoneyVO
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
+from gui.shared.gui_items.customization.c11n_items import Style
 from gui.shared.money import Money
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from items.components.c11n_constants import SeasonType, EDITABLE_STYLE_STORAGE_DEPTH
+from items.components.c11n_constants import SeasonType
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from tutorial.hints_manager import HINT_SHOWN_STATUS
 from vehicle_outfit.outfit import Area
+
+class CarouselFilterTypes(object):
+    GROUP = 'group'
+    DISPLAY_GROUP = 'displayGroup'
+    HISTORIC = 'historic'
+    NON_HISTORIC = 'nonHistoric'
+    FANTASTICAL = 'fantastical'
+    INVENTORY = 'inventory'
+    APPLIED = 'applied'
+    FAVORITE = 'favorite'
+    FORMFACTOR_GROUPS = 'formfactorGroups'
+    ON_ANOTHER_VEH = 'onAnotherVeh'
+    ONLY_PROGRESSION_DECALS = 'onlyProgressionDecals'
+    ONLY_EDITABLE_STYLES = 'onlyEditableStyles'
+    ONLY_NON_EDITABLE_STYLES = 'onlyNonEditableStyles'
+    ONLY_PROGRESSION_STYLES = 'onlyProgressionStyles'
+    VO_TYPE_TO_FILTER = {'purchasedEnabled': INVENTORY,
+     'historicEnabled': HISTORIC,
+     'nonHistoricEnabled': NON_HISTORIC,
+     'fantasticalEnabled': FANTASTICAL,
+     'appliedEnabled': APPLIED,
+     'favoriteEnabled': FAVORITE,
+     'hideOnAnotherVehEnabled': ON_ANOTHER_VEH,
+     'showOnlyProgressionDecalsEnabled': ONLY_PROGRESSION_DECALS,
+     'showOnlyEditableStylesEnabled': ONLY_EDITABLE_STYLES,
+     'showOnlyNonEditableStylesEnabled': ONLY_NON_EDITABLE_STYLES,
+     'showOnlyProgressionStylesEnabled': ONLY_PROGRESSION_STYLES}
+
+
+FILTER_TYPES_MAPPING = {CarouselFilterTypes.HISTORIC: FilterTypes.HISTORIC,
+ CarouselFilterTypes.NON_HISTORIC: FilterTypes.HISTORIC,
+ CarouselFilterTypes.FANTASTICAL: FilterTypes.HISTORIC,
+ CarouselFilterTypes.INVENTORY: FilterTypes.INVENTORY,
+ CarouselFilterTypes.APPLIED: FilterTypes.APPLIED,
+ CarouselFilterTypes.FAVORITE: FilterTypes.FAVORITE,
+ CarouselFilterTypes.FORMFACTOR_GROUPS: FilterTypes.FORMFACTORS,
+ CarouselFilterTypes.ON_ANOTHER_VEH: FilterTypes.USED_UP,
+ CarouselFilterTypes.ONLY_PROGRESSION_DECALS: FilterTypes.PROGRESSION,
+ CarouselFilterTypes.ONLY_EDITABLE_STYLES: FilterTypes.EDITABLE_STYLES,
+ CarouselFilterTypes.ONLY_NON_EDITABLE_STYLES: FilterTypes.EDITABLE_STYLES,
+ CarouselFilterTypes.ONLY_PROGRESSION_STYLES: FilterTypes.PROGRESSION_STYLE}
+FILTER_ALIAS_MAPPING = {CarouselFilterTypes.HISTORIC: FilterAliases.HISTORIC,
+ CarouselFilterTypes.NON_HISTORIC: FilterAliases.NON_HISTORIC,
+ CarouselFilterTypes.FANTASTICAL: FilterAliases.FANTASTICAL,
+ CarouselFilterTypes.ONLY_EDITABLE_STYLES: FilterAliases.EDITABLE_STYLES,
+ CarouselFilterTypes.ONLY_NON_EDITABLE_STYLES: FilterAliases.NON_EDITABLE_STYLES}
+HOT_FILTER_MAPPING = {FilterTypes.INVENTORY: CarouselFilterTypes.INVENTORY,
+ FilterTypes.APPLIED: CarouselFilterTypes.APPLIED,
+ FilterTypes.FAVORITE: CarouselFilterTypes.FAVORITE}
 CustomizationCarouselDataVO = namedtuple('CustomizationCarouselDataVO', ('displayString', 'isZeroCount', 'shouldShow', 'itemLayoutSize', 'bookmarks', 'arrows', 'showSeparators'))
+STYLE_TAB_LABEL_TMPL = '{}-{}'
 
 class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -73,13 +122,15 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__ctx.events.onGetItemBackToHand += self.__onGetItemBackToHand
         g_currentVehicle.onChanged += self.__onVehicleChanged
         g_clientUpdateManager.addMoneyCallback(self.__setBottomPanelBillData)
-        self.__setFooterInitData()
         self.__setBottomPanelBillData()
-        self.__updatePopoverBtnIcon()
+        self.__updatePopoverBtn()
         self.__c11nSettings = AccountSettings.getSettings(CUSTOMIZATION_SECTION)
+        self.__c11nFilterSettings = AccountSettings.getFilter(CustomizationFilter.CUSTOMIZATION_FILTER)
         self.__serverSettings = self.settingsCore.serverSettings
         self.__stageSwitcherVisibility = False
-        BigWorld.callback(0.0, lambda : self.__onTabChanged(self.__ctx.mode.tabId))
+        self.__applyCurrentFilter()
+        self.__setFooterInitData()
+        BigWorld.callback(0.0, lambda : self.__onTabChanged(self.__ctx.tabId))
 
     def _dispose(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -105,6 +156,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__ctx = None
         self._selectedItem = None
         self.__c11nSettings = None
+        self.__c11nFilterSettings = None
         self.__serverSettings = None
         super(CustomizationBottomPanel, self)._dispose()
         return
@@ -115,31 +167,30 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     def returnToStyledMode(self):
         self.__changeMode(CustomizationModes.STYLED)
 
-    def switchMode(self, index):
-        self.__changeMode(CustomizationModes.ALL[index])
-
     def onSelectHotFilter(self, index, value):
-        filterType = (FilterTypes.INVENTORY, FilterTypes.APPLIED)[index]
+        filterType = (FilterTypes.INVENTORY, FilterTypes.APPLIED, FilterTypes.FAVORITE)[index]
         self._carouselDP.updateCarouselFilter(filterType, value)
+        self.__refreshHotFilters()
+        self.__setFilterSettings({HOT_FILTER_MAPPING[filterType]: value})
         self.__rebuildCarousel()
         self.__updateHints()
 
     def showGroupFromTab(self, tabIndex):
-        self.__ctx.mode.changeTab(tabIndex)
+        self.__ctx.changeTab(tabIndex)
 
     def onSelectItem(self, index, intCD, progressionLevel):
         if intCD != -1:
             self.__ctx.mode.selectItem(intCD, progressionLevel)
-            if self.__ctx.mode.tabId == CustomizationTabs.PROJECTION_DECALS:
+            if self.__ctx.tabId == CustomizationTabs.PROJECTION_DECALS:
                 self.__onProjectionDecalOnlyOnceHintHidden(record=True)
-            elif self.__ctx.mode.tabId == CustomizationTabs.STYLES:
+            elif self.__ctx.tabId in CustomizationTabs.STYLES_ALL:
                 self.__onEditableStylesHintsHidden(record=True)
         else:
             self.__ctx.mode.unselectItem()
 
     def onEditItem(self, intCD):
         self.__ctx.editStyle(intCD, source=CustomizationModeSource.CAROUSEL)
-        self.__updatePopoverBtnIcon()
+        self.__updatePopoverBtn()
 
     def onItemIsNewAnimationShown(self, intCD):
         visitedSet = AccountSettings.getSettings(CUSTOMIZATION_STYLE_ITEMS_VISITED)
@@ -170,35 +221,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
 
     def __changeMode(self, modeId):
         self.__ctx.changeMode(modeId, source=CustomizationModeSource.BOTTOM_PANEL)
-        self.__updatePopoverBtnIcon()
-
-    def __updateStyleLabel(self):
-        label = ''
-        tooltip = None
-        if self.__ctx.mode.modeId == CustomizationModes.STYLED:
-            showSpecialLabel = False
-            counter = 0
-            for intCD in self._carouselDP.collection:
-                item = self.service.getItemByCD(intCD)
-                if item.itemTypeID != GUI_ITEM_TYPE.STYLE:
-                    break
-                if item.canBeEditedForVehicle(g_currentVehicle.item.intCD):
-                    counter += 1
-                if counter > EDITABLE_STYLE_STORAGE_DEPTH:
-                    showSpecialLabel = True
-                    break
-
-            if showSpecialLabel:
-                storedStylesCount = len(self.service.getStoredStyleDiffs())
-                img = icons.makeImageTag(backport.image(R.images.gui.maps.icons.customization.edited_big()))
-                label = text_styles.vehicleStatusSimpleText(backport.text(R.strings.vehicle_customization.savedStyles.label(), img=img, current=storedStylesCount, max=EDITABLE_STYLE_STORAGE_DEPTH))
-                tooltipHeader = text_styles.middleTitle(backport.text(R.strings.tooltips.customization.savedStyles.title(), img=img, current=storedStylesCount, max=EDITABLE_STYLE_STORAGE_DEPTH))
-                tooltipBody = text_styles.main(backport.text(R.strings.tooltips.customization.savedStyles.body(), max=EDITABLE_STYLE_STORAGE_DEPTH))
-                tooltip = makeTooltip(tooltipHeader, tooltipBody)
-            else:
-                label = text_styles.main(backport.text(R.strings.vehicle_customization.defaultStyle.label()))
-        self.as_setCarouselInfoLabelDataS(label, tooltip)
-        return
+        self.__updatePopoverBtn()
 
     def __onInstallNextCarouselItem(self, reverse):
         if self.__ctx.mode.selectedSlot is None:
@@ -211,16 +234,16 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             return
 
     def __onSlotSelected(self, *_, **__):
-        if self.__ctx.mode.tabId == CustomizationTabs.PROJECTION_DECALS:
+        if self.__ctx.tabId == CustomizationTabs.PROJECTION_DECALS:
             self.__rebuildCarousel(scroll=True)
         else:
             self._carouselDP.refresh()
             self.__updateSelection(scroll=True)
-        self.__updatePopoverBtnIcon()
+        self.__updatePopoverBtn()
         self.__updateFilterMessage()
 
     def __onSlotUnselected(self):
-        if self.__ctx.mode.tabId == CustomizationTabs.PROJECTION_DECALS:
+        if self.__ctx.tabId == CustomizationTabs.PROJECTION_DECALS:
             prevSelected = self._selectedItem
             self.__rebuildCarousel()
             if prevSelected is not None:
@@ -229,7 +252,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             self._carouselDP.refresh()
             self.__updateSelection(scroll=True)
         self.__updateFilterMessage()
-        self.__updatePopoverBtnIcon()
+        self.__updatePopoverBtn()
         return
 
     def __setNotificationCounters(self):
@@ -241,23 +264,23 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         if self.__ctx.modeId == CustomizationModes.EDITABLE_STYLE:
             itemFilter = self.__ctx.mode.style.isItemInstallable
         else:
-            itemFilter = lambda item: self.__filterAvailableStyles(item, vehicle)
+            itemFilter = lambda item: self.__filterAvailableItems(item, vehicle)
         for tabId in visibleTabs:
             tabItemTypes = CustomizationTabs.ITEM_TYPES[tabId]
+            if tabId in CustomizationTabs.STYLES_ALL:
+                noveltyCounter = 0
+                newItems = [ item for item in vehicle.getNewC11nItems(proxy) if isinstance(item, Style) ]
+                for item in newItems:
+                    if item.is3D and tabId == CustomizationTabs.STYLES_3D or not item.is3D and tabId == CustomizationTabs.STYLES_2D:
+                        noveltyCounter += item.getNoveltyCounter(vehicle)
+
+                tabsCounters.append(noveltyCounter)
             tabsCounters.append(vehicle.getC11nItemsNoveltyCounter(proxy, itemTypes=tabItemTypes, season=season, itemFilter=itemFilter))
 
-        if self.__ctx.modeId == CustomizationModes.STYLED:
-            availableItemTypes = getItemTypesAvailableForVehicle() - {GUI_ITEM_TYPE.STYLE}
-            switchersCounter = vehicle.getC11nItemsNoveltyCounter(proxy, itemTypes=availableItemTypes, itemFilter=itemFilter)
-        else:
-            switchersCounter = vehicle.getC11nItemsNoveltyCounter(proxy, itemTypes=(GUI_ITEM_TYPE.STYLE,), itemFilter=itemFilter)
-            styles = self._carouselDP.getItemsData(season, CustomizationModes.STYLED, CustomizationTabs.STYLES)
-            switchersCounter += getEditableStylesExtraNotificationCounter(styles)
-        self.as_setNotificationCountersS({'tabsCounters': tabsCounters,
-         'switchersCounter': switchersCounter})
+        self.as_setNotificationCountersS({'tabsCounters': tabsCounters})
 
     @staticmethod
-    def __filterAvailableStyles(item, vehicle):
+    def __filterAvailableItems(item, vehicle):
         return False if item.isStyleOnly else item.inventoryCount or item.installedCount(vehicle.intCD)
 
     def __resetTabs(self):
@@ -266,16 +289,17 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
 
     def __updateTabs(self):
         tabsData, pluses = self.__getItemTabsData()
-        if self.__ctx.modeId == CustomizationModes.STYLED or not tabsData:
+        if not tabsData:
             selectedTab = -1
         else:
-            selectedTab = self.__ctx.mode.tabId
+            selectedTab = self.__ctx.tabId
         self.as_setBottomPanelTabsDataS({'tabsDP': tabsData,
-         'selectedTab': selectedTab})
+         'selectedTab': selectedTab,
+         'isEditable': self.__ctx.modeId == CustomizationModes.EDITABLE_STYLE})
         self.as_setBottomPanelTabsPlusesS(pluses)
 
     def __setFooterInitData(self):
-        self.as_setBottomPanelInitDataS({'tabsAvailableRegions': CustomizationTabs.MODES[CustomizationModes.CUSTOM],
+        self.as_setBottomPanelInitDataS({'tabsAvailableRegions': CustomizationTabs.ALL,
          'filtersVO': {'popoverAlias': VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER,
                        'mainBtn': {'value': RES_ICONS.MAPS_ICONS_BUTTONS_FILTER,
                                    'tooltip': VEHICLE_CUSTOMIZATION.CAROUSEL_FILTER_MAINBTN},
@@ -283,13 +307,14 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
                                        'tooltip': VEHICLE_CUSTOMIZATION.CAROUSEL_FILTER_STORAGEBTN,
                                        'selected': self._carouselDP.isFilterApplied(FilterTypes.INVENTORY)}, {'value': RES_ICONS.MAPS_ICONS_BUTTONS_EQUIPPED_ICON,
                                        'tooltip': VEHICLE_CUSTOMIZATION.CAROUSEL_FILTER_EQUIPPEDBTN,
-                                       'selected': self._carouselDP.isFilterApplied(FilterTypes.APPLIED)}]}})
-        self.__updateSetSwitcherData()
+                                       'selected': self._carouselDP.isFilterApplied(FilterTypes.APPLIED)}, {'value': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_FAVORITE_FILTER,
+                                       'tooltip': VEHICLE_CUSTOMIZATION.CAROUSEL_FILTER_FAVORITEBTN,
+                                       'selected': self._carouselDP.isFilterApplied(FilterTypes.FAVORITE)}]}})
         self.__setNotificationCounters()
         self.__updateFilterMessage()
 
     def __updateFilterMessage(self):
-        self.as_carouselFilterMessageS('{}{}\n{}'.format(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICONFILLED, vSpace=-3), text_styles.neutral(VEHICLE_CUSTOMIZATION.CAROUSEL_MESSAGE_HEADER), text_styles.main(self.__getFilterMessage())))
+        self.as_carouselFilterMessageS(text_styles.leadingText('{}{}\n{}'.format(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICONFILLED, vSpace=-3), text_styles.cream15(VEHICLE_CUSTOMIZATION.CAROUSEL_MESSAGE_HEADER), text_styles.main(self.__getFilterMessage())), 6))
 
     def __getFilterMessage(self):
         selectedSlot = self.__ctx.mode.selectedSlot
@@ -301,40 +326,21 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
                     return backport.text(R.strings.vehicle_customization.carousel.message.noProgressionDecals())
             return backport.text(R.strings.vehicle_customization.carousel.message.description())
 
-    def __updateSetSwitcherData(self):
-        switchersData = self.__getSwitcherInitData()
-        self.as_setSwitchersDataS(switchersData)
-
-    def __getSwitcherInitData(self):
-        selectedIndex = CustomizationModes.ALL.index(self.__ctx.modeId)
-        if self.__ctx.modeId == CustomizationModes.CUSTOM:
-            popoverAlias = VIEW_ALIAS.CUSTOMIZATION_ITEMS_POPOVER
-        else:
-            style = self.__ctx.mode.currentOutfit.style
-            if style is not None and style.isEditable:
-                if style.isQuestsProgression:
-                    popoverAlias = VIEW_ALIAS.CUSTOMIZATION_PROGRESSIVE_KIT_POPOVER
-                else:
-                    popoverAlias = VIEW_ALIAS.CUSTOMIZATION_EDITED_KIT_POPOVER
-            else:
-                popoverAlias = VIEW_ALIAS.CUSTOMIZATION_KIT_POPOVER
-        styles = self._carouselDP.getItemsData(self.__ctx.season, CustomizationModes.STYLED, CustomizationTabs.STYLES)
-        styleName = self.__ctx.mode.style.descriptor.userString if self.__ctx.modeId == CustomizationModes.EDITABLE_STYLE else ''
-        data = {'leftLabel': VEHICLE_CUSTOMIZATION.SWITCHER_NAME_CUSTSOMSTYLE,
-         'rightLabel': VEHICLE_CUSTOMIZATION.SWITCHER_NAME_DEFAULTSTYLE,
-         'selectedIndex': selectedIndex,
-         'popoverAlias': popoverAlias,
-         'rightEnabled': bool(styles),
-         'isEditable': self.__ctx.modeId == CustomizationModes.EDITABLE_STYLE,
-         'editableTooltip': backport.text(R.strings.vehicle_customization.customization.customizationTrigger.tooltip.editableStyle(), styleName=styleName)}
-        return data
-
     def __buildCustomizationCarouselDataVO(self):
         isZeroCount = self._carouselDP.itemCount == 0
         countStyle = text_styles.error if isZeroCount else text_styles.main
         displayString = text_styles.main('{} / {}'.format(countStyle(str(self._carouselDP.itemCount)), str(self._carouselDP.totalItemCount)))
+        self.__ctx.carouselItemsCounts = (self._carouselDP.itemCount, self._carouselDP.totalItemCount)
         shouldShow = self._carouselDP.hasAppliedFilter()
-        return CustomizationCarouselDataVO(displayString, isZeroCount, shouldShow, itemLayoutSize=self._carouselDP.getItemSizeData(), bookmarks=self._carouselDP.getBookmarskData(), arrows=self._carouselDP.getArrowsData(), showSeparators=self._carouselDP.getShowSeparatorsData())._asdict()
+        if self.__c11nFilterSettings.get(CustomizationFilter.DISPLAY_GROUP):
+            bookmarks = self._carouselDP.getBookmarskData()
+            arrows = self._carouselDP.getArrowsData()
+            showSeparators = self._carouselDP.getShowSeparatorsData()
+        else:
+            bookmarks = []
+            arrows = []
+            showSeparators = False
+        return CustomizationCarouselDataVO(displayString, isZeroCount or self._carouselDP.hasNewNonFilteredItem(), shouldShow, itemLayoutSize=self._carouselDP.getItemSizeData(), bookmarks=bookmarks, arrows=arrows, showSeparators=showSeparators)._asdict()
 
     def __setBottomPanelBillData(self, *_):
         purchaseItems = self.__ctx.mode.getPurchaseItems()
@@ -436,13 +442,17 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.as_hideBillS()
 
     def __refreshHotFilters(self):
-        self.as_setCarouselFiltersDataS({'hotFilters': [self._carouselDP.isFilterApplied(FilterTypes.INVENTORY), self._carouselDP.isFilterApplied(FilterTypes.APPLIED)]})
+        self.as_setCarouselFiltersDataS({'hotFilters': [self._carouselDP.isFilterApplied(FilterTypes.INVENTORY), self._carouselDP.isFilterApplied(FilterTypes.APPLIED), self._carouselDP.isFilterApplied(FilterTypes.FAVORITE)],
+         'newHiddenElementsCount': self._carouselDP.refreshNewHiddenElementsCount()})
 
     def __clearFilter(self):
+        self.__c11nFilterSettings = AccountSettings.getFilterDefaults((CustomizationFilter.CUSTOMIZATION_FILTER,))
+        AccountSettings.setFilter(CustomizationFilter.CUSTOMIZATION_FILTER, self.__c11nFilterSettings)
         self._carouselDP.clearFilter()
         self.__refreshHotFilters()
 
     def __rebuildCarousel(self, scroll=False):
+        self.__applyCurrentFilter()
         self._carouselDP.invalidateFilteredItems()
         self._carouselDP.buildList()
         self._carouselDP.refresh()
@@ -478,8 +488,6 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     def __getItemTabsData(self):
         tabsData = []
         pluses = []
-        if self.__ctx.modeId == CustomizationModes.STYLED:
-            return (tabsData, pluses)
         visibleTabs = self.getVisibleTabs()
         outfit = self.__ctx.mode.currentOutfit
         for tabId in visibleTabs:
@@ -487,40 +495,90 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             itemTypeName = GUI_ITEM_TYPE_NAMES[slotType]
             slotsCount, filledSlotsCount = checkSlotsFilling(outfit, slotType)
             showPlus = filledSlotsCount < slotsCount
-            tabsData.append({'label': _ms(ITEM_TYPES.customizationPlural(itemTypeName)),
-             'icon': RES_ICONS.getCustomizationIcon(itemTypeName),
-             'tooltip': makeTooltip(ITEM_TYPES.customizationPlural(itemTypeName), TOOLTIPS.customizationItemTab(itemTypeName)),
-             'id': tabId})
+            groupId, _ = getTabGroupId(tabId)
+            labelR = R.strings.item_types.customization.plural
+            tooltipR = R.strings.tooltips.customization.tabs
+            tabStr = itemTypeName
+            if tabId in CustomizationTabs.STYLES_ALL:
+                labelR = labelR.style
+                tooltipR = tooltipR.style
+                prefix = CustomizationTabs.STYLE_PREFIX[tabId]
+                tabStr = 'c_{}'.format(prefix)
+                iconName = '{}_{}_hover'.format(itemTypeName, prefix)
+            else:
+                iconName = '{}_hover'.format(itemTypeName)
+            icon = backport.image(R.images.gui.maps.icons.customization.customization_icon.dyn(iconName)())
+            label = backport.text(labelR.dyn(tabStr)())
+            tooltip = backport.text(tooltipR.dyn(tabStr).body())
+            tabsData.append({'label': label,
+             'icon': icon,
+             'tooltip': makeTooltip(label, tooltip),
+             'id': tabId,
+             'groupId': groupId})
             pluses.append(showPlus)
 
         return (tabsData, pluses)
 
+    def __applyCarouselFilter(self, kwargs):
+        for key, value in kwargs.iteritems():
+            filterType = FILTER_TYPES_MAPPING.get(key)
+            filterAlias = FILTER_ALIAS_MAPPING.get(key)
+            if FILTER_TYPES_MAPPING.get(key):
+                if FILTER_ALIAS_MAPPING.get(key):
+                    self._carouselDP.updateCarouselFilter(filterType, value, filterAlias)
+                else:
+                    self._carouselDP.updateCarouselFilter(filterType, value)
+
     def __onCarouselFiltered(self, **kwargs):
-        if 'group' in kwargs:
-            self._carouselDP.updateSelectedGroup(kwargs['group'])
-        if 'historic' in kwargs:
-            self._carouselDP.updateCarouselFilter(FilterTypes.HISTORIC, kwargs['historic'], FilterAliases.HISTORIC)
-        if 'nonHistoric' in kwargs:
-            self._carouselDP.updateCarouselFilter(FilterTypes.HISTORIC, kwargs['nonHistoric'], FilterAliases.NON_HISTORIC)
-        if 'fantastical' in kwargs:
-            self._carouselDP.updateCarouselFilter(FilterTypes.HISTORIC, kwargs['fantastical'], FilterAliases.FANTASTICAL)
-        if 'inventory' in kwargs:
-            self._carouselDP.updateCarouselFilter(FilterTypes.INVENTORY, kwargs['inventory'])
-        if 'applied' in kwargs:
-            self._carouselDP.updateCarouselFilter(FilterTypes.APPLIED, kwargs['applied'])
-        if 'formfactorGroups' in kwargs:
-            self._carouselDP.updateCarouselFilter(FilterTypes.FORMFACTORS, kwargs['formfactorGroups'])
-        if 'onAnotherVeh' in kwargs:
-            self._carouselDP.updateCarouselFilter(FilterTypes.USED_UP, kwargs['onAnotherVeh'])
-        if 'onlyProgressionDecals' in kwargs:
-            self._carouselDP.updateCarouselFilter(FilterTypes.PROGRESSION, kwargs['onlyProgressionDecals'])
-        if 'onlyEditableStyles' in kwargs:
-            self._carouselDP.updateCarouselFilter(FilterTypes.EDITABLE_STYLES, kwargs['onlyEditableStyles'], FilterAliases.EDITABLE_STYLES)
-        if 'onlyNonEditableStyles' in kwargs:
-            self._carouselDP.updateCarouselFilter(FilterTypes.EDITABLE_STYLES, kwargs['onlyNonEditableStyles'], FilterAliases.NON_EDITABLE_STYLES)
+        if CarouselFilterTypes.GROUP in kwargs:
+            self._carouselDP.updateSelectedGroup(kwargs[CarouselFilterTypes.GROUP])
+        self.__applyCarouselFilter(kwargs)
         self.__refreshHotFilters()
+        self.__setFilterSettings(kwargs)
         self.__rebuildCarousel()
         self.__updateHints()
+
+    def __setFilterSettings(self, kwargs):
+        currentFilterTab = CustomizationTabs.TAB_TO_GROUP.get(self.__ctx.tabId)
+        for key, value in kwargs.iteritems():
+            if key == CarouselFilterTypes.GROUP:
+                self.__c11nFilterSettings[currentFilterTab] = value
+                continue
+            if key == CarouselFilterTypes.FORMFACTOR_GROUPS:
+                for formfactor, formfactorValue in value.iteritems():
+                    self.__c11nFilterSettings[formfactor] = formfactorValue
+
+                continue
+            self.__c11nFilterSettings[key] = value
+
+        AccountSettings.setFilter(CustomizationFilter.CUSTOMIZATION_FILTER, self.__c11nFilterSettings)
+
+    def __applyCurrentFilter(self):
+        carouselFilterData = self._carouselDP.getFilterData()
+        currentFilterTab = CustomizationTabs.TAB_TO_GROUP.get(self.__ctx.tabId)
+        if currentFilterTab:
+            groupFilter = self.__c11nFilterSettings[currentFilterTab]
+            if groupFilter == -1:
+                groupFilter = carouselFilterData['groupCount'] - 1
+            if groupFilter != -1:
+                self._carouselDP.updateSelectedGroup(groupFilter)
+        for key, value in carouselFilterData.iteritems():
+            if key == CarouselFilterTypes.GROUP:
+                continue
+            if key == CarouselFilterTypes.FORMFACTOR_GROUPS:
+                if value:
+                    formfactorGroups = OrderedDict({CustomizationFilter.FORMFACTOR_SQUARE: self.__c11nFilterSettings[CustomizationFilter.FORMFACTOR_SQUARE],
+                     CustomizationFilter.FORMFACTOR_RECT1X2: self.__c11nFilterSettings[CustomizationFilter.FORMFACTOR_RECT1X2],
+                     CustomizationFilter.FORMFACTOR_RECT1X3: self.__c11nFilterSettings[CustomizationFilter.FORMFACTOR_RECT1X3],
+                     CustomizationFilter.FORMFACTOR_RECT1X4: self.__c11nFilterSettings[CustomizationFilter.FORMFACTOR_RECT1X4],
+                     CustomizationFilter.FORMFACTOR_RECT1X6: self.__c11nFilterSettings[CustomizationFilter.FORMFACTOR_RECT1X6]})
+                    self._carouselDP.updateCarouselFilter(FilterTypes.FORMFACTORS, formfactorGroups)
+                continue
+            filterType = CarouselFilterTypes.VO_TYPE_TO_FILTER.get(key)
+            if filterType:
+                currentFilterValue = self.__c11nFilterSettings[filterType]
+                if value != currentFilterValue:
+                    self.__applyCarouselFilter({filterType: currentFilterValue})
 
     def __onCacheResync(self, reason, items):
         if not g_currentVehicle.isPresent():
@@ -532,28 +590,27 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__updateTabs()
         self.__setBottomPanelBillData()
         self.__rebuildCarousel()
-        self.__updateStyleLabel()
         self.__setNotificationCounters()
 
     def __onVehicleChanged(self):
         self._carouselDP.invalidateItems()
         self.__updateTabs()
-        self.resetFilter()
-        self.__updatePopoverBtnIcon()
+        self.refreshFilterData()
+        self.__rebuildCarousel()
+        self.__updatePopoverBtn()
         self.__setBottomPanelBillData()
         self.__setFooterInitData()
-        self.__scrollToNewItem()
-        self.__updateStyleLabel()
+        self.__scrollToPreferredItem()
 
     def __onSeasonChanged(self, seasonType):
         self.__updateTabs()
         self.__rebuildCarousel()
-        self.__updatePopoverBtnIcon()
+        self.__updatePopoverBtn()
         self.__setBottomPanelBillData()
         self.__setNotificationCounters()
-        self.__scrollToNewItem()
+        self.__scrollToPreferredItem()
 
-    def __updatePopoverBtnIcon(self):
+    def __updatePopoverBtn(self):
         imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_DEFAULT_LIST30X16
         tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_ITEMSPOPOVER_BTN_STYLE_DISABLED
         if self.__ctx.modeId != CustomizationModes.STYLED:
@@ -566,7 +623,19 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             seasonName = SEASON_TYPE_TO_NAME.get(self.__ctx.season)
             mapName = VEHICLE_CUSTOMIZATION.getMapName(seasonName)
             tooltip = _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_ITEMSPOPOVER_BTN_DISABLED, mapType=_ms(mapName))
-        self.as_showPopoverBtnIconS(imgSrc, tooltip)
+        if self.__ctx.modeId == CustomizationModes.CUSTOM:
+            popoverAlias = VIEW_ALIAS.CUSTOMIZATION_ITEMS_POPOVER
+        else:
+            style = self.__ctx.mode.currentOutfit.style
+            if style is not None and style.isEditable:
+                if style.isQuestsProgression:
+                    popoverAlias = VIEW_ALIAS.CUSTOMIZATION_PROGRESSIVE_KIT_POPOVER
+                else:
+                    popoverAlias = VIEW_ALIAS.CUSTOMIZATION_EDITED_KIT_POPOVER
+            else:
+                popoverAlias = VIEW_ALIAS.CUSTOMIZATION_KIT_POPOVER
+        self.as_updatePopoverBtnS(imgSrc, popoverAlias, tooltip)
+        return
 
     def __onItemsInstalled(self, item, slotId, season, component):
         self.__updateTabs()
@@ -574,20 +643,18 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__rebuildCarousel()
         if slotId == self.__ctx.mode.selectedSlot and (season is None or season == self.__ctx.season):
             self.__scrollToItem(item.intCD, self._selectedItem.id == item.id)
-        self.__updateSetSwitcherData()
         return
 
     def __onTabChanged(self, tabIndex, itemCD=None):
         self.__updateTabs()
         self.__rebuildCarousel()
-        self.__updateStyleLabel()
-        self.__updateSetSwitcherData()
+        self.__refreshHotFilters()
         self.__setNotificationCounters()
         itemCD = itemCD or self.__updateHints()
         if itemCD is not None:
             self.__scrollToItem(itemCD)
         elif self._selectedItem is None:
-            self.__scrollToNewItem()
+            self.__scrollToPreferredItem()
         return
 
     def __onItemsRemoved(self, *_, **__):
@@ -597,40 +664,58 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__rebuildCarousel()
         if selectedItem is not None:
             self.__scrollToItem(selectedItem.intCD, immediately=True)
-        self.__updateSetSwitcherData()
         return
 
     def __onModeChanged(self, modeId, prevModeId):
-        self._carouselDP.onModeChanged(modeId, prevModeId)
+        self._carouselDP.modeChanged(modeId, prevModeId)
         self.__setBottomPanelBillData()
         self.__setFooterInitData()
-        self.__refreshHotFilters()
-        self.__resetTabs()
         if modeId == CustomizationModes.EDITABLE_STYLE:
             record = self.__ctx.mode.source in (CustomizationModeSource.CAROUSEL, CustomizationModeSource.PROPERTIES_SHEET, CustomizationModeSource.CONTEXT_MENU)
             self.__onEditableStylesHintsHidden(record=record)
-        self.__updatePopoverBtnIcon()
+        self.__updatePopoverBtn()
 
     def __onChangesCanceled(self):
         self.__updateTabs()
         self.__setBottomPanelBillData()
-        self.__updatePopoverBtnIcon()
+        self.__updatePopoverBtn()
         self._carouselDP.invalidateFilteredItems()
         self.__rebuildCarousel()
-        self.__updateSetSwitcherData()
 
     def __onComponentChanged(self, slotId, refreshCarousel):
         self.__setBottomPanelBillData()
         if refreshCarousel:
             self.__rebuildCarousel()
 
-    def __scrollToNewItem(self):
-        itemTypes = CustomizationTabs.ITEM_TYPES[self.__ctx.mode.tabId]
+    def __scrollToPreferredItem(self):
+        tabId = self.__ctx.mode.tabId
+        itemTypes = CustomizationTabs.ITEM_TYPES[tabId]
         newItems = sorted(g_currentVehicle.item.getNewC11nItems(g_currentVehicle.itemsCache.items), key=comparisonKey)
         for item in newItems:
-            if item.itemTypeID in itemTypes and item.season & self.__ctx.season:
-                self.__scrollToItem(item.intCD)
-                break
+            if tabId in CustomizationTabs.STYLES_ALL:
+                if self.__isStyleTabHasItem(item, tabId):
+                    self.__scrollToItem(item.intCD, immediately=True)
+                    return
+                continue
+            if item.itemTypeID in itemTypes and item.season & self.__ctx.season and self.__filterAvailableItems(item, g_currentVehicle.item):
+                self.__scrollToItem(item.intCD, immediately=True)
+                return
+
+        if tabId in CustomizationTabs.STYLES_ALL:
+            style = self.__ctx.mode.modifiedStyle
+            if style is not None and self.__isStyleTabHasItem(style, tabId) and style in self._carouselDP.getItemsData():
+                self.__scrollToItem(style.intCD, immediately=True)
+            return
+        else:
+            for item in self._carouselDP.getItemsData():
+                if item.intCD in self.__ctx.mode.currentOutfit.items() and item.itemTypeID in itemTypes and item.season & self.__ctx.season:
+                    self.__scrollToItem(item.intCD, immediately=True)
+                    return
+
+            return
+
+    def __isStyleTabHasItem(self, item, tabId):
+        return True if isinstance(item, Style) and (item.is3D and tabId == CustomizationTabs.STYLES_3D or not item.is3D and tabId == CustomizationTabs.STYLES_2D) else False
 
     def __scrollToItem(self, itemCD, immediately=False):
         self.as_scrollToSlotS(itemCD, immediately)
@@ -663,16 +748,16 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         if self._selectedItem is not None and scroll:
             self.__scrollToItem(self._selectedItem.intCD, True)
         self.__updateStageSwitcherVisibility()
-        self.__updatePopoverBtnIcon()
+        self.__updatePopoverBtn()
         return
 
     def __updateHints(self):
         intCD = None
-        if self.__ctx.mode.tabId == CustomizationTabs.PROJECTION_DECALS:
+        if self.__ctx.tabId == CustomizationTabs.PROJECTION_DECALS:
             self.__onProjectionDecalOnlyOnceHintShown()
         else:
             self.__onProjectionDecalOnlyOnceHintHidden()
-        if self.__ctx.mode.tabId == CustomizationTabs.STYLES:
+        if self.__ctx.tabId in CustomizationTabs.STYLES_ALL:
             intCD = self.__onEditableStylesHintsShown()
         else:
             self.__onEditableStylesHintsHidden()
@@ -731,7 +816,8 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             if not editableStylesVisited or not editableProgressionRequiredStylesVisited:
                 editable = None
                 editableProgressionRequired = None
-                styles = self._carouselDP.getCarouselData(modeId=CustomizationModes.STYLED, tabId=CustomizationTabs.STYLES)
+                styles = self._carouselDP.getCarouselData(modeId=CustomizationModes.STYLED, tabId=CustomizationTabs.STYLES_2D)
+                styles.extend(self._carouselDP.getCarouselData(modeId=CustomizationModes.STYLED, tabId=CustomizationTabs.STYLES_3D))
                 for intCD in styles:
                     item = self.service.getItemByCD(intCD)
                     if item.itemTypeID != GUI_ITEM_TYPE.STYLE:

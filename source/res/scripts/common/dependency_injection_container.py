@@ -55,6 +55,10 @@ def descriptor(class_):
     return _ServiceDescriptor(class_)
 
 
+def fabricDescriptor(fabric, key):
+    return _FabricDescriptor(fabric, key)
+
+
 class replace_none_kwargs(object):
 
     def __init__(self, **services):
@@ -229,3 +233,51 @@ class _RuntimeItem(_DependencyItem):
         self.__creator = None
         super(_RuntimeItem, self).clear()
         return
+
+
+class _FabricDescriptor(_ServiceDescriptor):
+    __slots__ = ('__key',)
+
+    def __init__(self, class_, key):
+        super(_FabricDescriptor, self).__init__(class_)
+        self.__key = key
+
+    def __get__(self, inst, owner=None):
+        if inst is None:
+            return self
+        else:
+            value = getattr(inst, self.__key)
+            return super(_FabricDescriptor, self).__get__(inst, owner).resolve(value)
+
+
+class IDependencyFabric(object):
+    __slots__ = ('_default', '__values')
+
+    def __init__(self, default):
+        self.__values = {}
+        self._default = default
+
+    def __repr__(self):
+        return '{}(default = {}, values = {})'.format(self.__class__.__name__, self._default, self.__values)
+
+    def _validate(self, key, value):
+        return key not in self.__values
+
+    def add(self, key, value):
+        if not self._validate(key, value):
+            raise DependencyError('Item validate was failed ({}, {})'.format(key, value))
+        self.__values[key] = value
+
+    def resolve(self, key):
+        return self.__values.get(key, self._default)
+
+
+class IClassDependencyFabric(IDependencyFabric):
+
+    def __init__(self, default):
+        super(IClassDependencyFabric, self).__init__(default)
+        if not inspect.isclass(default):
+            raise DependencyError('Default value {} is invalid'.format(default))
+
+    def _validate(self, key, class_):
+        return False if not inspect.isclass(class_) or not issubclass(class_, self._default) else super(IClassDependencyFabric, self)._validate(key, class_)

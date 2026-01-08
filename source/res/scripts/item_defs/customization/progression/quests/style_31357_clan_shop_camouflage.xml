@@ -1,0 +1,284 @@
+<style_31357_clan_shop_camouflage.xml>
+  <quests>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	cust_progress_31357_1_2	</id>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	cust_progress_31357_1	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </token>
+          </account>
+          <battle>
+            <bonusTypes>	20 21 13	</bonusTypes>
+          </battle>
+          <vehicle>
+            <customization>
+              <hideInGui></hideInGui>
+              <styleId>	31357	</styleId>
+            </customization>
+          </vehicle>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	50	</count>
+          </battles>
+        </common>
+        <postBattle>
+          <win>
+            <description>
+              <key>	#vehicle_customization:customization/tooltip/quests/clan_shop_progression_31357_1_2/condition	</key>
+            </description>
+          </win>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31357_1	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	2	</count>
+          <limit>	2	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	cust_progress_31357_1_3	</id>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	cust_progress_31357_1	</id>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </token>
+          </account>
+          <battle>
+            <bonusTypes>	20 21 13	</bonusTypes>
+          </battle>
+          <vehicle>
+            <customization>
+              <hideInGui></hideInGui>
+              <styleId>	31357	</styleId>
+            </customization>
+          </vehicle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <cumulative>
+            <description>
+              <key>	#vehicle_customization:customization/tooltip/quests/clan_shop_progression_31357_1_3/condition	</key>
+            </description>
+            <damageDealt>	300000	</damageDealt>
+          </cumulative>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31357_1	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	3	</count>
+          <limit>	3	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	cust_progress_31357_1_4	</id>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	cust_progress_31357_1	</id>
+              <greaterOrEqual>	3	</greaterOrEqual>
+            </token>
+          </account>
+          <battle>
+            <bonusTypes>	20 21 13	</bonusTypes>
+          </battle>
+          <vehicle>
+            <customization>
+              <hideInGui></hideInGui>
+              <styleId>	31357	</styleId>
+            </customization>
+          </vehicle>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	100	</count>
+          </battles>
+        </common>
+        <postBattle>
+          <win>
+            <description>
+              <key>	#vehicle_customization:customization/tooltip/quests/clan_shop_progression_31357_1_4/condition	</key>
+            </description>
+          </win>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31357_1	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	4	</count>
+          <limit>	4	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	clan_shop_progression_31357_2	</id>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	20 21 13	</bonusTypes>
+          </battle>
+          <vehicle>
+            <customization>
+              <hideInGui></hideInGui>
+              <styleId>	31357	</styleId>
+            </customization>
+          </vehicle>
+        </preBattle>
+        <common>
+          <cumulativeExt>
+            <results>
+              <description>
+                <key>	#vehicle_customization:customization/tooltip/quests/clan_shop_progression_31357_2/condition	</key>
+              </description>
+              <key>	kills	</key>
+              <greaterOrEqual>	50	</greaterOrEqual>
+            </results>
+          </cumulativeExt>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31357_2	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+          <limit>	1	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	clan_shop_progression_31357_3	</id>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	20 21 13	</bonusTypes>
+          </battle>
+          <vehicle>
+            <customization>
+              <description>
+                <key>	#vehicle_customization:customization/tooltip/quests/clan_shop_progression_31357_3/condition	</key>
+              </description>
+              <styleId>	31357	</styleId>
+            </customization>
+          </vehicle>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	75	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31357_3	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+          <limit>	1	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	clan_shop_progression_31357_4	</id>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	20 21 13	</bonusTypes>
+          </battle>
+          <vehicle>
+            <customization>
+              <hideInGui></hideInGui>
+              <styleId>	31357	</styleId>
+            </customization>
+          </vehicle>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	50	</count>
+          </battles>
+        </common>
+        <postBattle>
+          <win>
+            <description>
+              <key>	#vehicle_customization:customization/tooltip/quests/clan_shop_progression_31357_4/condition	</key>
+            </description>
+          </win>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31357_4	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+          <limit>	1	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	clan_shop_progression_31357_5	</id>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	20 21 13	</bonusTypes>
+          </battle>
+          <vehicle>
+            <customization>
+              <hideInGui></hideInGui>
+              <styleId>	31357	</styleId>
+            </customization>
+          </vehicle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <cumulative>
+            <description>
+              <key>	#vehicle_customization:customization/tooltip/quests/clan_shop_progression_31357_5/condition	</key>
+            </description>
+            <damageDealt>	100000	</damageDealt>
+          </cumulative>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31357_5	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+          <limit>	1	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+  </quests>
+</style_31357_clan_shop_camouflage.xml>

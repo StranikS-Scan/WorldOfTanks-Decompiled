@@ -110,6 +110,12 @@ class SectorBase(BigWorld.Entity):
             sectorBaseComponent.sectorBasePointsUpdated(self)
         return
 
+    def set_hasExtraInvader(self, oldValue):
+        sectorBaseComponent = BigWorld.player().arena.componentSystem.sectorBaseComponent
+        if sectorBaseComponent is not None:
+            sectorBaseComponent.extraInvaderUpdate(self)
+        return
+
     def set_pointsPercentage(self, oldValue):
         sectorBaseComponent = BigWorld.player().arena.componentSystem.sectorBaseComponent
         self.capturePercentage = float(self.pointsPercentage) / 100

@@ -1,7 +1,8 @@
 <engine_config.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <personality>	game	</personality>
   <appTitle>	Мир танков	</appTitle>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -39,8 +40,10 @@
       <correctionBigStep>	0.1	</correctionBigStep>
       <minScale>	0.5	</minScale>
     </DRRAutoscaler>
-    <globalVBSize>	12582912	</globalVBSize>
-    <globalIBSize>	131072	</globalIBSize>
+    <globalVBSize>	4194304	</globalVBSize>
+    <globalIBSize>	43690	</globalIBSize>
+    <instancingVBSize>	8388608	</instancingVBSize>
+    <instancingIBSize>	87382	</instancingIBSize>
     <streaming>
       <ULTRA>	1.0	</ULTRA>
       <MAX>	0.6	</MAX>
@@ -272,6 +275,9 @@
         <bank>
           <name>	inbattle_communication_pc.bnk	</name>
         </bank>
+        <bank>
+          <name>	vo_context_hints.bnk	</name>
+        </bank>
       </voice_soundbanks>
       <SFX_soundbanks_loadonce>
         <bank>
@@ -386,12 +392,6 @@
           <name>	music_interactive_part_15.pck	</name>
         </bank>
         <bank>
-          <name>	music_interactive_alternative.bnk	</name>
-        </bank>
-        <bank>
-          <name>	music_interactive_alternative_part_01.pck	</name>
-        </bank>
-        <bank>
           <name>	wheel_vehicle_GUI.pck	</name>
         </bank>
         <bank>
@@ -408,12 +408,6 @@
         </bank>
         <bank>
           <name>	field_modernization.bnk	</name>
-        </bank>
-        <bank>
-          <name>	hangar_h03_mt_ny_voiceover.bnk	</name>
-        </bank>
-        <bank>
-          <name>	hangar_h03_mt_ny_voiceover.pck	</name>
         </bank>
       </SFX_soundbanks_loadonce>
       <SFX_soundbanks_hangar>
@@ -615,6 +609,15 @@
         <bank>
           <name>	style_3D_GB134_FV242B_Condor_3Dst_01.bnk	</name>
         </bank>
+        <bank>
+          <name>	style_3D_GB143_Captain_3Dst_01.bnk	</name>
+        </bank>
+        <bank>
+          <name>	loginscreen.bnk	</name>
+        </bank>
+        <bank>
+          <name>	silver_hunt.bnk	</name>
+        </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
         <bank>
@@ -798,6 +801,9 @@
         </bank>
         <bank>
           <name>	style_3D_GB134_FV242B_Condor_3Dst_01.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_GB143_Captain_3Dst_01.bnk	</name>
         </bank>
       </SFX_soundbanks_arena>
       <SFX_soundbanks_editor>

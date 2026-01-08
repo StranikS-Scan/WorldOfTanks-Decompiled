@@ -6,9 +6,9 @@ from gui.impl.gen.view_models.views.lobby.daily.play_streak.play_streak_widget_m
 from gui.impl.gen.view_models.views.lobby.daily.widget_quest_model import WidgetQuestModel
 
 class DailyQuestsWidgetViewModel(ViewModel):
-    __slots__ = ('onQuestClick', 'onDisappear', 'onPlayStreakClick', 'onNyQuestsClick')
+    __slots__ = ('onQuestClick', 'onDisappear', 'onPlayStreakClick')
 
-    def __init__(self, properties=8, commands=4):
+    def __init__(self, properties=6, commands=3):
         super(DailyQuestsWidgetViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -61,18 +61,6 @@ class DailyQuestsWidgetViewModel(ViewModel):
     def getIndicateCompleteQuestsType():
         return bool
 
-    def getIsAllNyQuestsComplete(self):
-        return self._getBool(6)
-
-    def setIsAllNyQuestsComplete(self, value):
-        self._setBool(6, value)
-
-    def getIsNyEnabled(self):
-        return self._getBool(7)
-
-    def setIsNyEnabled(self, value):
-        self._setBool(7, value)
-
     def _initialize(self):
         super(DailyQuestsWidgetViewModel, self)._initialize()
         self._addViewModelProperty('playStreak', PlayStreakWidgetModel())
@@ -81,9 +69,6 @@ class DailyQuestsWidgetViewModel(ViewModel):
         self._addNumberProperty('countdown', 0)
         self._addBoolProperty('visible', False)
         self._addArrayProperty('indicateCompleteQuests', Array())
-        self._addBoolProperty('isAllNyQuestsComplete', False)
-        self._addBoolProperty('isNyEnabled', False)
         self.onQuestClick = self._addCommand('onQuestClick')
         self.onDisappear = self._addCommand('onDisappear')
         self.onPlayStreakClick = self._addCommand('onPlayStreakClick')
-        self.onNyQuestsClick = self._addCommand('onNyQuestsClick')

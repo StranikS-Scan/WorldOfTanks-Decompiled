@@ -4,9 +4,9 @@ from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.common.vehicle_info_model import VehicleInfoModel
 
 class IntroViewModel(ViewModel):
-    __slots__ = ('showVideo', 'onClose')
+    __slots__ = ('onClose',)
 
-    def __init__(self, properties=3, commands=2):
+    def __init__(self, properties=3, commands=1):
         super(IntroViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -34,5 +34,4 @@ class IntroViewModel(ViewModel):
         self._addViewModelProperty('vehicleInfo', VehicleInfoModel())
         self._addNumberProperty('topRewardPlayersCount', 0)
         self._addNumberProperty('regularRewardVehiclesCount', 0)
-        self.showVideo = self._addCommand('showVideo')
         self.onClose = self._addCommand('onClose')

@@ -7,7 +7,7 @@ import BigWorld
 from CurrentVehicle import g_currentVehicle
 from adisp import adisp_process, adisp_async
 from gui.Scaleform.daapi.view.lobby.customization.context.customization_mode import CustomizationMode
-from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs, isSlotFilled, isItemsQuantityLimitReached, fitPersonalNumber, formatPersonalNumber, EMPTY_PERSONAL_NUMBER, customizationSlotIdToUid, CustomizationSlotUpdateVO, getCustomPurchaseItems
+from gui.Scaleform.daapi.view.lobby.customization.shared import isSlotFilled, isItemsQuantityLimitReached, fitPersonalNumber, formatPersonalNumber, getCustomPurchaseItems, EMPTY_PERSONAL_NUMBER, customizationSlotIdToUid, CustomizationSlotUpdateVO, CustomizationTabs
 from gui.Scaleform.daapi.view.lobby.customization.shared import getOutfitWithoutItems
 from gui.customization.constants import CustomizationModes
 from gui.customization.shared import C11nId, PurchaseItem, getAvailableRegions
@@ -32,7 +32,7 @@ class CustomMode(CustomizationMode):
     __SELFINSTALL_ITEM_TYPES = {GUI_ITEM_TYPE.MODIFICATION: C11nId(areaId=Area.MISC, slotType=GUI_ITEM_TYPE.MODIFICATION, regionIdx=0),
      GUI_ITEM_TYPE.STYLE: C11nId(areaId=Area.MISC, slotType=GUI_ITEM_TYPE.STYLE, regionIdx=0)}
     modeId = CustomizationModes.CUSTOM
-    _tabs = CustomizationTabs.MODES[modeId]
+    _tabs = CustomizationTabs.CUSTOM_ALL
 
     def __init__(self, ctx):
         super(CustomMode, self).__init__(ctx)
@@ -388,6 +388,8 @@ class CustomMode(CustomizationMode):
         if g_currentVehicle.isPresent():
             for areaId in Area.ALL:
                 slot = self.currentOutfit.getContainer(areaId).slotFor(self.slotType)
+                if slot is None:
+                    continue
                 for regionIdx, anchor in g_currentVehicle.item.getAnchors(self.slotType, areaId):
                     if anchor.hiddenForUser:
                         continue

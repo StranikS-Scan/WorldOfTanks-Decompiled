@@ -14,7 +14,6 @@ from gui.customization.constants import CustomizationModes, CustomizationModeSou
 from gui.customization.shared import SeasonType, C11nId
 from gui.shared.utils.decorators import adisp_process as wrappedProcess
 from helpers import dependency
-from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import ISoundEventChecker
 from skeletons.gui.shared import IItemsCache
@@ -53,8 +52,12 @@ class CustomizationMode(object):
         return self._isInited
 
     @property
+    def tabs(self):
+        return self._tabs
+
+    @property
     def tabId(self):
-        return self._tabId
+        return self._ctx.tabId
 
     @property
     def source(self):
@@ -88,14 +91,9 @@ class CustomizationMode(object):
     def _events(self):
         return self._ctx.events
 
-    def start(self, tabId=None, source=None):
-        if tabId is not None and tabId not in self._tabs:
-            tabId = None
-            _logger.warning('Wrong tabId: %s for current customization mode: %s', tabId, self._ctx.modeId)
-        self._tabId = tabId or first(self._tabs)
+    def start(self, source=None):
         self._source = source or CustomizationModeSource.UNDEFINED
         self._onStart()
-        return
 
     def stop(self):
         self._onStop()
@@ -107,17 +105,6 @@ class CustomizationMode(object):
         self._isInited = False
         self._ctx = None
         return
-
-    def changeTab(self, tabId, itemCD=None):
-        if tabId not in self._tabs:
-            _logger.warning('Wrong tabId: %s for current customization mode: %s', tabId, self._ctx.modeId)
-            return
-        if self._tabId == tabId:
-            return
-        self.unselectItem()
-        self.unselectSlot()
-        self._tabId = tabId
-        self._events.onTabChanged(tabId, itemCD)
 
     def selectSlot(self, slotId):
         if self._selectSlot(slotId):

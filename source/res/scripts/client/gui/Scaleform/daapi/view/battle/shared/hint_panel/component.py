@@ -63,12 +63,14 @@ class BattleHintPanel(BattleHintPanelMeta, IAbstractPeriodView):
     def _populate(self):
         super(BattleHintPanel, self)._populate()
         self.addListener(events.GameEvent.BATTLE_LOADING, self.__handleBattleLoading, EVENT_BUS_SCOPE.BATTLE)
+        self.addListener(events.GameEvent.BATTLE_CONTEXT_HINT_ACTIVATED, self.__onBattleContextHintActivated, EVENT_BUS_SCOPE.BATTLE)
         self._initPlugins()
 
     def _dispose(self):
         self._finiPlugins()
         self._hints = None
         self.removeListener(events.GameEvent.BATTLE_LOADING, self.__handleBattleLoading, scope=EVENT_BUS_SCOPE.BATTLE)
+        self.removeListener(events.GameEvent.BATTLE_CONTEXT_HINT_ACTIVATED, self.__onBattleContextHintActivated, scope=EVENT_BUS_SCOPE.BATTLE)
         if self.__invalidateCallbackID is not None:
             BigWorld.cancelCallback(self.__invalidateCallbackID)
         self.__invalidateCallbackID = None
@@ -109,7 +111,7 @@ class BattleHintPanel(BattleHintPanelMeta, IAbstractPeriodView):
         else:
             hintData = self.__getActiveHintData()
             isHintActive = bool(hintData)
-            hintCanBeDisplayed = isHintActive and self.__isBattleLoaded
+            hintCanBeDisplayed = isHintActive and self.__isBattleLoaded and not self.__isBattleContextHintActivated()
             if hintCanBeDisplayed:
                 btnID, hint = hintData
                 self.as_setDataS(hint.vKey, hint.key, hint.messageLeft, hint.messageRight, hint.offsetX, hint.offsetY, hint.reducedPanning, hint.centeredMessage)
@@ -121,6 +123,13 @@ class BattleHintPanel(BattleHintPanelMeta, IAbstractPeriodView):
     def __handleBattleLoading(self, event):
         self.__isBattleLoaded = not event.ctx['isShown']
         self.__invalidateBtnHint()
+
+    def __isBattleContextHintActivated(self):
+        hintsCtrl = self.__sessionProvider.dynamic.battleContextHintsCtrl
+        return hintsCtrl is not None and hintsCtrl.isHintActivated()
+
+    def __onBattleContextHintActivated(self, event):
+        self.__invalidateBtnHint(True)
 
 
 class HintPluginsCollection(PluginsCollection):

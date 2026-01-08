@@ -570,7 +570,9 @@ class PreBattleHintPlugin(HintPanelPlugin):
     @classmethod
     def isSuitable(cls):
         guiType = cls.sessionProvider.arenaVisitor.getArenaGuiType()
-        return not cls.sessionProvider.isReplayPlaying and guiType != ARENA_GUI_TYPE.RANKED and guiType != ARENA_GUI_TYPE.BATTLE_ROYALE and guiType != ARENA_GUI_TYPE.MAPS_TRAINING
+        hintsCtrl = cls.sessionProvider.dynamic.battleContextHintsCtrl
+        needToShowBattleContextHints = hintsCtrl is not None and hintsCtrl.needToShowPrebattleHint()
+        return not cls.sessionProvider.isReplayPlaying and guiType != ARENA_GUI_TYPE.RANKED and guiType != ARENA_GUI_TYPE.BATTLE_ROYALE and guiType != ARENA_GUI_TYPE.MAPS_TRAINING and not needToShowBattleContextHints
 
     def start(self):
         prbSettings = dict(AccountSettings.getSettings(PRE_BATTLE_HINT_SECTION))

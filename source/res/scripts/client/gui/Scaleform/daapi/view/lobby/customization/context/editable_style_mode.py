@@ -32,7 +32,7 @@ _logger = logging.getLogger(__name__)
 
 class EditableStyleMode(CustomMode):
     modeId = CustomizationModes.EDITABLE_STYLE
-    _tabs = CustomizationTabs.MODES[modeId]
+    _tabs = CustomizationTabs.CUSTOM_ALL
     _settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, ctx):

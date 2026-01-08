@@ -23,7 +23,6 @@ from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller, IWotPlusController
 from skeletons.gui.server_events import IEventsCache
 from soft_exception import SoftException
-from new_year_common.items.components.ny_constants import CurrentNYConstants
 if typing.TYPE_CHECKING:
     from gui.server_events.event_items import ServerEventAbstract
     from gui.server_events.bonuses import SimpleBonus
@@ -263,11 +262,11 @@ def preformatEventBonuses(event, bonusFormatter=CurtailingAwardsComposer(DEFAULT
     return bonusFormatter.getFormattedBonuses(bonuses, size=AWARDS_SIZES.BIG)
 
 
-def getEventUIDataPacker(event, tooltipData=None, bonusPackerGetter=getDefaultBonusPacker):
+def getEventUIDataPacker(event, tooltipData=None):
     if event.getLevel() in constants.DailyQuestsLevels.SUBS:
         return DailySubscriptionQuestUIDataPacker(event, tooltipData=tooltipData)
-    elif isPremium(event.getID()) or isDailyQuest(event.getID()) or event.getID().startswith(CurrentNYConstants.NY_QUESTS_PREFIX):
-        return DailyQuestUIDataPacker(event, bonusPackerGetter)
+    elif isPremium(event.getID()) or isDailyQuest(event.getID()):
+        return DailyQuestUIDataPacker(event)
     elif event.getType() == constants.EVENT_TYPE.TOKEN_QUEST:
         return TokenUIDataPacker(event)
     elif event.getType() == constants.EVENT_TYPE.PERSONAL_QUEST:

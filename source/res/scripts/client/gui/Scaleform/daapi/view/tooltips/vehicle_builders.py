@@ -8,6 +8,7 @@ __all__ = ('getTooltipBuilders',)
 def getTooltipBuilders():
     return (DataBuilder(TOOLTIPS_CONSTANTS.CAROUSEL_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.VehicleInfoTooltipData(contexts.CarouselContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.COMP7_CAROUSEL_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.VehicleInfoTooltipData(contexts.Comp7CarouselContext())),
+     DataBuilder(TOOLTIPS_CONSTANTS.MODIFIED_CAROUSEL_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.VehicleInfoTooltipData(contexts.ModifiedCarouselContext())),
      InventoryVehicleBuilder(TOOLTIPS_CONSTANTS.INVENTORY_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI),
      DataBuilder(TOOLTIPS_CONSTANTS.TECHTREE_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.VehicleInfoTooltipData(contexts.TechTreeContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.TECHTREE_VEHICLE_STATUS, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.VehicleStatusTooltipData(contexts.TechTreeContext())),
@@ -30,7 +31,8 @@ def getTooltipBuilders():
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_CREW_MEMBER, TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_CREW_MEMBER_UI, vehicle.VehiclePreviewCrewMemberTooltipData(contexts.PreviewContext()), advanced.TankmanPreviewTooltipAdvanced(contexts.PreviewContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.TECHTREE_VEHICLE_ANNOUNCEMENT, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, vehicle.VehicleAnnouncementParametersTooltipData(contexts.VehicleAnnouncementContext())),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_ROLES, None, vehicle_roles.VehicleRolesTooltipContentWindowData(contexts.ToolTipContext(None))),
-     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_STAT_TRACK, None, vehicle.StatTrackTooltipData(contexts.ToolTipContext(None))))
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_STAT_TRACK, None, vehicle.StatTrackTooltipData(contexts.ToolTipContext(None))),
+     AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.MODIFIED_VEHICLE_PARAMS_TOOLTIP, None, vehicle.VehicleAdvancedParametersTooltipData(contexts.ModifiedVehicleParamContext()), advanced.VehicleParametersAdvanced(contexts.ModifiedVehicleParamContext()), condition=vehicle.BaseVehicleParametersTooltipData.readyForAdvanced))
 
 
 class InventoryVehicleBuilder(DataBuilder):

@@ -38,6 +38,8 @@ from gui.Scaleform.daapi.view.dialogs.rally_dialog_meta import StrongholdConfirm
 from gui.SystemMessages import SM_TYPE
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE
+from gui.shared.events import StrongholdEvent
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils.requesters.abstract import Response
 from gui.clientgw.strongholds.contexts import StrongholdJoinBattleCtx, StrongholdUpdateCtx, StrongholdMatchmakingInfoCtx, StrongholdLeaveModeCtx, SlotVehicleFiltersUpdateCtx, StrongholdEventGetFrozenVehiclesCtx, StrongholdGetForbiddenVehiclesCtx
@@ -551,6 +553,10 @@ class StrongholdEntity(UnitEntity):
             ctx = StrongholdUpdateCtx(unitMgrId=unitMgrId, rev=rev, waitingID='')
             self._requestsProcessor.doRequest(ctx, 'updateStronghold', callback=self.__onStrongholdUpdate)
 
+    def getMinLevel(self):
+        header = self.__strongholdSettings.getHeader()
+        return header.getMinLevel()
+
     def strongholdDataChanged(self):
         if self.isStrongholdSettingsValid():
             header = self.__strongholdSettings.getHeader()
@@ -597,6 +603,10 @@ class StrongholdEntity(UnitEntity):
 
     def isSortie(self):
         return self.__strongholdSettings.isSortie()
+
+    def getHeaderType(self):
+        header = self.__strongholdSettings.getHeader()
+        return header.getType()
 
     def getRosterSettings(self):
         return self.__updateRosterSettings() if self.isStrongholdSettingsValid() else self._rosterSettings
@@ -934,6 +944,7 @@ class StrongholdEntity(UnitEntity):
                     if listener is not None:
                         listener()
 
+            g_eventBus.handleEvent(StrongholdEvent(StrongholdEvent.STRONGHOLD_UPDATED), scope=EVENT_BUS_SCOPE.LOBBY)
             return
 
     def __checkBattleMode(self, header, isFirstBattle):

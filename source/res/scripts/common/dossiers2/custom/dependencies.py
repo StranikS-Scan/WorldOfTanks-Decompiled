@@ -239,7 +239,7 @@ def _set_VEH_TYPE_FRAGS_DEPENDENCIES():
     global VEH_TYPE_FRAGS_DEPENDENCIES
     cache = getCache()
     VEH_TYPE_FRAGS_DEPENDENCIES.update({cache['mausTypeCompDescr']: [_updateMousebane],
-     '_insert_': [_updateTankExpert]})
+     '_insert_': [_updateTankExpert, _updateSaboteur]})
 
 
 CLAN_STATS_DEPENDENCIES = {}
@@ -1074,6 +1074,19 @@ def _updateRP2018sergeant(dossierDescr, dossierBlockDescr, key, value, prevValue
     if newMedalClass is not None:
         dossierDescr['achievements'][medalName] = newMedalClass
     return
+
+
+def _updateSaboteur(dossierDescr, dossierBlockDescr, key, value):
+    cache = getCache()
+    allSupplies = cache['vehiclesByTag'].get('supply', set())
+    if key not in allSupplies:
+        return
+    killedVehTypes = set(dossierBlockDescr.iterkeys())
+    diff = allSupplies - killedVehTypes
+    dossierDescr['epicBattleAchievements']['saboteurProgress'] = len(allSupplies) - len(diff)
+    if not bool(diff):
+        dossierDescr['epicBattleAchievements']['saboteur'] = True
+        dossierDescr.addPopUp('epicBattleAchievements', 'saboteur', True)
 
 
 def __getNewMedalClass(medalConfigName, valueToCheck, curMedalClass):

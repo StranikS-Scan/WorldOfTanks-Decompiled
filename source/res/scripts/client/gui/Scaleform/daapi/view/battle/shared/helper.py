@@ -13,4 +13,6 @@ def getClipType(gunSettings):
             clipType = CROSSHAIR_CASSETTE_TYPES.CASSETTE
             if gunSettings.isMultiGun():
                 clipType = CROSSHAIR_CASSETTE_TYPES.MULTIPLE_BARREL_CASSETTE
+            elif gunSettings.hasAutoShoot():
+                clipType = CROSSHAIR_CASSETTE_TYPES.AUTO_GUN_CASSETTE
     return clipType

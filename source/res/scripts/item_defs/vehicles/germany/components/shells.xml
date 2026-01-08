@@ -14,6 +14,8 @@
     <he_spg_stun>	HIGH_EXPLOSIVE_SPG_STUN.png 0 0	</he_spg_stun>
     <ap_fsds>	ARMOR_PIERCING_FSDS.png 0 0	</ap_fsds>
     <ap_fsds_premium>	ARMOR_PIERCING_FSDS_PREMIUM.png 0 0	</ap_fsds_premium>
+    <flame>	FLAME.png 0 0	</flame>
+    <flame_alternative>	FLAME_ALTERNATIVE.png 0 0	</flame_alternative>
   </icons>
   <_7.92mm_AP>
     <id>	96	</id>
@@ -1956,7 +1958,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainArmorPiercing	</effects>
     <damage>
-      <armor>	250	</armor>
+      <armor>	320	</armor>
       <devices>	135	</devices>
     </damage>
   </_100mm_BR-412D_T>
@@ -1971,7 +1973,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainHollowCharge	</effects>
     <damage>
-      <armor>	250	</armor>
+      <armor>	320	</armor>
       <devices>	135	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
@@ -1988,14 +1990,14 @@
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	320	</armor>
+      <armor>	440	</armor>
       <devices>	135	</devices>
     </damage>
     <armorSpalls>
       <impactRadius>	1.76	</impactRadius>
       <coneAngle>	90	</coneAngle>
       <damage>
-        <armor>	160	</armor>
+        <armor>	440	</armor>
         <devices>	70	</devices>
       </damage>
     </armorSpalls>
@@ -2997,6 +2999,60 @@
       </damage>
     </armorSpalls>
   </_120mm_Sprgr56>
+  <_120mm_Pzgr57>
+    <id>	31036	</id>
+    <userString>	#germany_vehicles:_120mm_Pzgr57	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1110	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	410	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_Pzgr57>
+  <_120mm_HlGr57>
+    <id>	31037	</id>
+    <userString>	#germany_vehicles:_120mm_HlGr57	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	410	</armor>
+      <devices>	160	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_120mm_HlGr57>
+  <_120mm_Sprgr57>
+    <id>	31038	</id>
+    <userString>	#germany_vehicles:_120mm_Sprgr57	</userString>
+    <icon>	he_modern	</icon>
+    <price>	955	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	120	</caliber>
+    <explosionRadius>	2.42	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	520	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.42	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	260	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_120mm_Sprgr57>
   <_128mm_Pzgr_N4>
     <id>	112	</id>
     <userString>	#germany_vehicles:_128mm_Pzgr_N4	</userString>
@@ -5354,4 +5410,69 @@
     </damage>
     <notInShop>	True	</notInShop>
   </_88mm_Pzgr39_NewOnBoarding>
+  <Wurfgranate_41_Spreng>
+    <id>	60001	</id>
+    <userString>	#germany_vehicles:Wurfgranate_41_Spreng	</userString>
+    <icon>	he_spg	</icon>
+    <price>	1	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	150	</caliber>
+    <explosionRadius>	13	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mortal	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <deviceDamagePossibility>
+      <protectFromIndirectHits>	internal tankmen	</protectFromIndirectHits>
+    </deviceDamagePossibility>
+  </Wurfgranate_41_Spreng>
+  <Feuermischung>
+    <id>	60002	</id>
+    <userString>	#germany_vehicles:Feuermischung	</userString>
+    <icon>	flame	</icon>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	FLAME	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	10	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	G00_Feuerbunker	</effects>
+    <hasStun>	false	</hasStun>
+    <stunType>	FLAME	</stunType>
+    <stunInPoint>	true	</stunInPoint>
+    <stunDuration>	2	</stunDuration>
+    <damage>
+      <armor>	50	</armor>
+      <devices>	20	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damageAbsorption>	SPALLS	</damageAbsorption>
+      <useEffectiveArmor></useEffectiveArmor>
+      <damage>
+        <armor>	100	</armor>
+        <devices>	20	</devices>
+      </damage>
+    </armorSpalls>
+    <hitDeviceChanceMultiplier>	0	</hitDeviceChanceMultiplier>
+    <hitCrewChanceMultiplier>	0	</hitCrewChanceMultiplier>
+    <secondaryAttackReason>	autoshoot	</secondaryAttackReason>
+  </Feuermischung>
+  <_75mm_Bunker_Shell>
+    <id>	60003	</id>
+    <userString>	#germany_vehicles:_75mm_Bunker_Shell	</userString>
+    <icon>	ap	</icon>
+    <price>	1	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_Bunker_Shell>
 </shells.xml>

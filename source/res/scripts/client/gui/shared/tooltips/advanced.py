@@ -26,6 +26,7 @@ DISABLED_ITEMS_ID = 12793
 CHASSIS_TRACK_WITHIN_TRACK = 'vehicleTrackWithinTrackChassis'
 MULTI_TRACK_CHASSIS = 'vehicleMultiTrackChassis'
 AUTO_SHOOT_FLAME_GUN = 'vehicleAutoShootFlameGun'
+AUTO_SHOOT_GUN = 'vehicleAutoShootGun'
 THERMAL_VISION = 'vehicleThermalVision'
 
 def getPreparedShellItemType(item):
@@ -180,6 +181,9 @@ class HangarModuleAdvanced(BaseAdvancedTooltip):
         if itemId == FITTING_TYPES.VEHICLE_GUN and item.isAutoShootFlameGun():
             movieKey = AUTO_SHOOT_FLAME_GUN
             descrKey = AUTO_SHOOT_FLAME_GUN
+        if itemId == FITTING_TYPES.VEHICLE_GUN and item.isAutoShootGun():
+            movieKey = AUTO_SHOOT_GUN
+            descrKey = AUTO_SHOOT_GUN
         if itemId == FITTING_TYPES.VEHICLE_TURRET and item.hasThermalVision():
             movieKey = THERMAL_VISION
             descrKey = THERMAL_VISION
@@ -290,6 +294,7 @@ MODULE_MOVIES = {'largeRepairkit': 'consumablesRepairKitBig',
  'vehicleGun': 'moduleGun',
  'vehicleDualGun': 'moduleDualGun',
  AUTO_SHOOT_FLAME_GUN: 'moduleTemperatureGun',
+ AUTO_SHOOT_GUN: 'moduleAutogun',
  'vehicleRadio': 'moduleRadio',
  'vehicleEngine': 'moduleEngine',
  'vehicleChassis': 'moduleSuspension',

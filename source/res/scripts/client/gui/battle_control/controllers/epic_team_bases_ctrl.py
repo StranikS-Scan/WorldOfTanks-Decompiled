@@ -9,6 +9,7 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from team_bases_ctrl import BattleTeamsBasesController, makeClientTeamBaseID
 
 class EpicBattleTeamsBasesController(BattleTeamsBasesController):
+    __slots__ = ('__capturedBasesDict', '__currentBaseID', '__currentBaseTeam', '__extraInvadersSet')
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
@@ -16,6 +17,7 @@ class EpicBattleTeamsBasesController(BattleTeamsBasesController):
         self.__capturedBasesDict = {}
         self.__currentBaseID = None
         self.__currentBaseTeam = EPIC_BATTLE_TEAM_ID.TEAM_DEFENDER
+        self.__extraInvadersSet = set()
         return
 
     def startControl(self, battleCtx, arenaVisitor):
@@ -30,6 +32,7 @@ class EpicBattleTeamsBasesController(BattleTeamsBasesController):
         if sectorBaseComp is not None:
             sectorBaseComp.onSectorBaseCaptured += self.__onSectorBaseCaptured
             sectorBaseComp.onSectorBasePointsUpdate += self.__onSectorBasePointsUpdate
+            sectorBaseComp.onExtraInvaderUpdate += self.__onExtraInvaderUpdate
         else:
             LOG_ERROR('Expected SectorBaseComponent not present!')
         return
@@ -43,6 +46,7 @@ class EpicBattleTeamsBasesController(BattleTeamsBasesController):
         if sectorBaseComp is not None:
             sectorBaseComp.onSectorBaseCaptured -= self.__onSectorBaseCaptured
             sectorBaseComp.onSectorBasePointsUpdate -= self.__onSectorBasePointsUpdate
+            sectorBaseComp.onExtraInvaderUpdate -= self.__onExtraInvaderUpdate
         super(EpicBattleTeamsBasesController, self).stopControl()
         return
 
@@ -55,24 +59,30 @@ class EpicBattleTeamsBasesController(BattleTeamsBasesController):
         points, timeLeftTimeStamp, invadersCnt, stopped = self._getPoints(clientID)
         if stopped:
             return
+        extraInvader = self.__currentBaseID in self.__extraInvadersSet
+        if extraInvader:
+            invadersCnt -= 1
         timeLeft = timeLeftTimeStamp - BigWorld.serverTime()
         rate = self._getProgressRate()
         if self._viewComponents and self._getSnapDictForClientID(clientID) != (points, rate, timeLeft) and points > 0:
             self._setSnapForClientID(clientID, points, rate, timeLeft)
             for viewCmp in self._viewComponents:
-                viewCmp.updateTeamBasePoints(clientID, points, rate, timeLeft, invadersCnt)
+                viewCmp.updateTeamBasePoints(clientID, points, rate, timeLeft, invadersCnt, extraInvader)
 
     def __invalidateTeamBasePoints(self, baseID, points, timeLeft, invadersCnt, capturingStopped):
-        self.__currentBaseID = None
-        if points > 0:
-            self.__currentBaseID = baseID
+        self.__currentBaseID = baseID if points > 0 else None
         super(EpicBattleTeamsBasesController, self).invalidateTeamBasePoints(self.__currentBaseTeam, baseID, points, timeLeft, invadersCnt, capturingStopped)
+        if points == 0 and invadersCnt == 0:
+            self._removeBarEntry(self.__currentBaseTeam)
         return
 
     def _addCapturingTeamBase(self, clientID, playerTeam, points, timeLeft, invadersCnt, capturingStopped):
         timeLeftTimeStamp = timeLeft - BigWorld.serverTime()
+        extraInvader = self.__currentBaseID in self.__extraInvadersSet
+        if extraInvader:
+            invadersCnt -= 1
         for viewCmp in self._viewComponents:
-            viewCmp.addCapturingTeamBase(clientID, playerTeam, points, self._getProgressRate(), timeLeftTimeStamp, invadersCnt, capturingStopped)
+            viewCmp.addCapturingTeamBase(clientID, playerTeam, points, self._getProgressRate(), timeLeftTimeStamp, invadersCnt, capturingStopped, extraInvader)
 
     def __invalidateTeamBaseCaptured(self, baseID):
         if not self.__isInMyLane(baseID):
@@ -84,12 +94,11 @@ class EpicBattleTeamsBasesController(BattleTeamsBasesController):
             for viewCmp in self._viewComponents:
                 viewCmp.removeTeamBase(clientID)
 
-            self._removeBarEntry(clientID, self.__currentBaseTeam)
+            self._removeBarEntry(self.__currentBaseTeam)
             return
 
     def __onPlayerPhysicalLaneUpdated(self, laneID):
         if not self.__currentBaseID:
-            self.clearViewComponents()
             return
         else:
             componentSystem = self.sessionProvider.arenaVisitor.getComponentSystem()
@@ -98,13 +107,13 @@ class EpicBattleTeamsBasesController(BattleTeamsBasesController):
                 LOG_ERROR('Expected SectorBaseComponent not present!')
                 return
             baseLane = sectorBaseComp.getSectorForSectorBase(self.__currentBaseID).playerGroup
-            if baseLane != laneID:
-                clientID = makeClientTeamBaseID(self.__currentBaseTeam, self.__currentBaseID)
-                for viewCmp in self._viewComponents:
-                    viewCmp.removeTeamBase(clientID)
-
-                self.__currentBaseID = None
-                self._removeBarEntry(clientID, self.__currentBaseTeam)
+            if baseLane == laneID:
+                return
+            baseID = self.__currentBaseID
+            clientID = makeClientTeamBaseID(self.__currentBaseTeam, baseID)
+            self._clearClientEntry(clientID)
+            self.__currentBaseID = None
+            self._removeBarEntry(self.__currentBaseTeam)
             return
 
     def __isInMyLane(self, baseID):
@@ -112,24 +121,33 @@ class EpicBattleTeamsBasesController(BattleTeamsBasesController):
         sectorBaseComp = getattr(componentSystem, 'sectorBaseComponent', None)
         if sectorBaseComp is None:
             LOG_ERROR('Expected SectorBaseComponent not present!')
-            return
+            return False
         else:
             playerData = getattr(componentSystem, 'playerDataComponent', None)
             if playerData is None:
                 LOG_ERROR('Expected PlayerDataComponent not present!')
-                return
+                return False
             baseLane = sectorBaseComp.getSectorForSectorBase(baseID).playerGroup
-            return False if baseLane != playerData.physicalLane else True
+            return baseLane == playerData.physicalLane
 
     def __onSectorBaseCaptured(self, baseId, isPlayerTeam):
         self.__capturedBasesDict[baseId] = True
         self.__invalidateTeamBaseCaptured(baseId)
 
     def __onSectorBasePointsUpdate(self, baseId, isPlayerTeam, points, capturingStopped, invadersCount, expectedCaptureTime):
-        if not self.__isInMyLane(baseId) or baseId in self.__capturedBasesDict or expectedCaptureTime < 0:
+        if not self.__isInMyLane(baseId) or baseId in self.__capturedBasesDict:
+            return
+        isEndOfCapture = points == 0 and invadersCount == 0 and capturingStopped
+        if expectedCaptureTime < 0 and not isEndOfCapture:
             return
         truePoints = points * 100
         self.__invalidateTeamBasePoints(baseId, truePoints, expectedCaptureTime, invadersCount, capturingStopped)
+
+    def __onExtraInvaderUpdate(self, baseID, hasExtraInvader):
+        if bool(hasExtraInvader):
+            self.__extraInvadersSet.add(baseID)
+        else:
+            self.__extraInvadersSet.discard(baseID)
 
 
 class EpicBattleTeamsBasesPlayer(EpicBattleTeamsBasesController):
@@ -142,8 +160,4 @@ class EpicBattleTeamsBasesPlayer(EpicBattleTeamsBasesController):
 
 
 def createEpicTeamsBasesCtrl(setup):
-    if setup.isReplayPlaying:
-        ctrl = EpicBattleTeamsBasesPlayer()
-    else:
-        ctrl = EpicBattleTeamsBasesController()
-    return ctrl
+    return EpicBattleTeamsBasesPlayer() if setup.isReplayPlaying else EpicBattleTeamsBasesController()

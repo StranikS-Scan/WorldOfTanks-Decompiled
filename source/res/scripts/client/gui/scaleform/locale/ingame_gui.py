@@ -69,6 +69,7 @@ class INGAME_GUI(object):
     PLAYER_MESSAGES_TANKMAN_RESTORED = '#ingame_gui:player_messages/TANKMAN_RESTORED'
     PLAYER_MESSAGES_DEVICE_REPAIRED = '#ingame_gui:player_messages/DEVICE_REPAIRED'
     PLAYER_MESSAGES_ALLY_HIT = '#ingame_gui:player_messages/ALLY_HIT'
+    PLAYER_MESSAGES_ALLY_HIT_SUPPLY = '#ingame_gui:player_messages/ALLY_HIT_SUPPLY'
     PLAYER_MESSAGES_ALLY_BASE_CAPTURED_NOTIFICATION = '#ingame_gui:player_messages/ally_base_captured_notification'
     PLAYER_MESSAGES_ENEMY_BASE_CAPTURED_NOTIFICATION = '#ingame_gui:player_messages/enemy_base_captured_notification'
     PLAYER_MESSAGES_BASE_CAPTURED_NOTIFICATION = '#ingame_gui:player_messages/base_captured_notification'
@@ -134,6 +135,11 @@ class INGAME_GUI(object):
     CHAT_SHORTCUTS_AFFIRMATIVE = '#ingame_gui:chat_shortcuts/affirmative'
     CHAT_SHORTCUTS_NEGATIVE = '#ingame_gui:chat_shortcuts/negative'
     CHAT_SHORTCUTS_ATTENTION_TO_CELL = '#ingame_gui:chat_shortcuts/attention_to_cell'
+    CHAT_SHORTCUTS_DEFEND_SUPPLY = '#ingame_gui:chat_shortcuts/defend_supply'
+    CHAT_SHORTCUTS_DEFENDING_SUPPLY = '#ingame_gui:chat_shortcuts/defending_supply'
+    CHAT_SHORTCUTS_SUPPLY_SELF_REPAIR = '#ingame_gui:chat_shortcuts/supply_self_repair'
+    CHAT_SHORTCUTS_ATTACK_SUPPLY = '#ingame_gui:chat_shortcuts/attack_supply'
+    CHAT_SHORTCUTS_ATTACKING_SUPPLY = '#ingame_gui:chat_shortcuts/attacking_supply'
     CHAT_SHORTCUTS_GLOBAL_MSG_ATK_SAVE_TANKS = '#ingame_gui:chat_shortcuts/global_msg/atk/save_tanks'
     CHAT_SHORTCUTS_GLOBAL_MSG_DEF_SAVE_TANKS = '#ingame_gui:chat_shortcuts/global_msg/def/save_tanks'
     CHAT_SHORTCUTS_GLOBAL_MSG_ATK_TIME = '#ingame_gui:chat_shortcuts/global_msg/atk/time'
@@ -250,6 +256,8 @@ class INGAME_GUI(object):
     SHELLS_KINDS_PARAMS_DAMAGE = '#ingame_gui:shells_kinds/params/damage'
     SHELLS_KINDS_PARAMS_DAMAGERANGE = '#ingame_gui:shells_kinds/params/damageRange'
     SHELLS_KINDS_PARAMS_DAMAGEPERSECOND = '#ingame_gui:shells_kinds/params/damagePerSecond'
+    SHELLS_KINDS_PARAMS_DAMAGEPERSHOT = '#ingame_gui:shells_kinds/params/damagePerShot'
+    SHELLS_KINDS_PARAMS_DAMAGEPERCASSETE = '#ingame_gui:shells_kinds/params/damagePerCassete'
     SHELLS_KINDS_PARAMS_PIERCINGPOWER = '#ingame_gui:shells_kinds/params/piercingPower'
     SHELLS_KINDS_PARAMS_DISTANCEFACTORPIERCINGPOWER = '#ingame_gui:shells_kinds/params/distanceFactorPiercingPower'
     SHELLS_KINDS_PARAMS_SHOTSPEED = '#ingame_gui:shells_kinds/params/shotSpeed'
@@ -350,6 +358,10 @@ class INGAME_GUI(object):
     EPIC_PLAYERS_PANEL_STATE_TOGGLE_HEADER = '#ingame_gui:epic_players_panel/state/toggle/header'
     EPIC_PLAYERS_PANEL_STATE_TOGGLE_BODY = '#ingame_gui:epic_players_panel/state/toggle/body'
     EPIC_PLAYERS_PANEL_STATE_TOGGLE_NOTE = '#ingame_gui:epic_players_panel/state/toggle/note'
+    PLAYER_MESSAGES_EPIC_ALLY_BASE_CAPTURED_BY_NOTIFICATION = '#ingame_gui:player_messages/epic_ally_base_captured_by_notification'
+    PLAYER_MESSAGES_EPIC_ENEMY_BASE_CAPTURED_BY_NOTIFICATION = '#ingame_gui:player_messages/epic_enemy_base_captured_by_notification'
+    PLAYER_MESSAGES_EPIC_ALLY_BASE_CAPTURED_NOTIFICATION = '#ingame_gui:player_messages/epic_ally_base_captured_notification'
+    PLAYER_MESSAGES_EPIC_ENEMY_BASE_CAPTURED_NOTIFICATION = '#ingame_gui:player_messages/epic_enemy_base_captured_notification'
     VEHICLE_MESSAGES_DEVICE_CRITICAL_AT_WORLD_COLLISION_SELF_SUICIDE = '#ingame_gui:vehicle_messages/DEVICE_CRITICAL_AT_WORLD_COLLISION_SELF_SUICIDE'
     VEHICLE_MESSAGES_DEVICE_CRITICAL_AT_WORLD_COLLISION_ENEMY_SELF = '#ingame_gui:vehicle_messages/DEVICE_CRITICAL_AT_WORLD_COLLISION_ENEMY_SELF'
     VEHICLE_MESSAGES_DEVICE_CRITICAL_AT_WORLD_COLLISION_ALLY_SELF = '#ingame_gui:vehicle_messages/DEVICE_CRITICAL_AT_WORLD_COLLISION_ALLY_SELF'
@@ -397,12 +409,14 @@ class INGAME_GUI(object):
     POSTMORTEM_MESSAGES_DEATH_FROM_OVERTURN_ENEMY_SELF = '#ingame_gui:postmortem_messages/DEATH_FROM_OVERTURN_ENEMY_SELF'
     POSTMORTEM_MESSAGES_DEATH_FROM_OVERTURN_ALLY_SELF = '#ingame_gui:postmortem_messages/DEATH_FROM_OVERTURN_ALLY_SELF'
     POSTMORTEM_MESSAGES_DEATH_FROM_MINE_EXPLOSION = '#ingame_gui:postmortem_messages/DEATH_FROM_MINE_EXPLOSION'
+    POSTMORTEM_MESSAGES_DEATH_FROM_SUPPLY = '#ingame_gui:postmortem_messages/DEATH_FROM_SUPPLY'
     PLAYER_MESSAGES_DEATH_FROM_SHOT_SELF_ALLY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_SELF_ALLY'
     PLAYER_MESSAGES_DEATH_FROM_SHOT_SELF_ALLY_ARTILLERY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_SELF_ALLY_ARTILLERY'
     PLAYER_MESSAGES_DEATH_FROM_SHOT_SELF_ALLY_BOMBER = '#ingame_gui:player_messages/DEATH_FROM_SHOT_SELF_ALLY_BOMBER'
     PLAYER_MESSAGES_DEATH_FROM_SHOT_SELF_ENEMY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_SELF_ENEMY'
     PLAYER_MESSAGES_DEATH_FROM_SHOT_SELF_ENEMY_ARTILLERY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_SELF_ENEMY_ARTILLERY'
     PLAYER_MESSAGES_DEATH_FROM_SHOT_SELF_ENEMY_BOMBER = '#ingame_gui:player_messages/DEATH_FROM_SHOT_SELF_ENEMY_BOMBER'
+    PLAYER_MESSAGES_DEATH_FROM_SHOT_SELF_ENEMY_SUPPLY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_SELF_ENEMY_SUPPLY'
     PLAYER_MESSAGES_DEATH_FROM_MINE_EXPLOSION_SELF_ENEMY_ARCADE = '#ingame_gui:player_messages/DEATH_FROM_MINE_EXPLOSION_SELF_ENEMY_ARCADE'
     PLAYER_MESSAGES_DEATH_FROM_SHOT_ALLY_ALLY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_ALLY_ALLY'
     PLAYER_MESSAGES_DEATH_FROM_SHOT_ALLY_ALLY_ARTILLERY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_ALLY_ALLY_ARTILLERY'
@@ -410,6 +424,8 @@ class INGAME_GUI(object):
     PLAYER_MESSAGES_DEATH_FROM_SHOT_ALLY_ENEMY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_ALLY_ENEMY'
     PLAYER_MESSAGES_DEATH_FROM_SHOT_ALLY_ENEMY_ARTILLERY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_ALLY_ENEMY_ARTILLERY'
     PLAYER_MESSAGES_DEATH_FROM_SHOT_ALLY_ENEMY_BOMBER = '#ingame_gui:player_messages/DEATH_FROM_SHOT_ALLY_ENEMY_BOMBER'
+    PLAYER_MESSAGES_DEATH_FROM_SHOT_ALLY_ENEMY_SUPPLY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_ALLY_ENEMY_SUPPLY'
+    PLAYER_MESSAGES_DEATH_FROM_SHOT_SUPPLY_ALLY_ENEMY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_SUPPLY_ALLY_ENEMY'
     PLAYER_MESSAGES_DEATH_FROM_MINE_EXPLOSION_ALLY_ENEMY_ARCADE = '#ingame_gui:player_messages/DEATH_FROM_MINE_EXPLOSION_ALLY_ENEMY_ARCADE'
     PLAYER_MESSAGES_DEATH_FROM_SHOT_ALLY_SUICIDE = '#ingame_gui:player_messages/DEATH_FROM_SHOT_ALLY_SUICIDE'
     PLAYER_MESSAGES_DEATH_FROM_SHOT_ALLY_SUICIDE_ARTILLERY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_ALLY_SUICIDE_ARTILLERY'
@@ -420,6 +436,10 @@ class INGAME_GUI(object):
     PLAYER_MESSAGES_DEATH_FROM_SHOT_ENEMY_ALLY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_ENEMY_ALLY'
     PLAYER_MESSAGES_DEATH_FROM_SHOT_ENEMY_ALLY_ARTILLERY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_ENEMY_ALLY_ARTILLERY'
     PLAYER_MESSAGES_DEATH_FROM_SHOT_ENEMY_ALLY_BOMBER = '#ingame_gui:player_messages/DEATH_FROM_SHOT_ENEMY_ALLY_BOMBER'
+    PLAYER_MESSAGES_DEATH_FROM_SHOT_ENEMY_ALLY_SUPPLY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_ENEMY_ALLY_SUPPLY'
+    PLAYER_MESSAGES_DEATH_FROM_SHOT_SUPPLY_ENEMY_ALLY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_SUPPLY_ENEMY_ALLY'
+    PLAYER_MESSAGES_DEATH_FROM_SHOT_SUPPLY_ENEMY_ALLY_SUPPLY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_SUPPLY_ENEMY_ALLY_SUPPLY'
+    PLAYER_MESSAGES_DEATH_FROM_SHOT_SUPPLY_ALLY_ENEMY_SUPPLY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_SUPPLY_ALLY_ENEMY_SUPPLY'
     PLAYER_MESSAGES_DEATH_FROM_MINE_EXPLOSION_ENEMY_ALLY_ARCADE = '#ingame_gui:player_messages/DEATH_FROM_MINE_EXPLOSION_ENEMY_ALLY_ARCADE'
     PLAYER_MESSAGES_DEATH_FROM_SHOT_ENEMY_ENEMY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_ENEMY_ENEMY'
     PLAYER_MESSAGES_DEATH_FROM_SHOT_ENEMY_ENEMY_ARTILLERY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_ENEMY_ENEMY_ARTILLERY'
@@ -1087,6 +1107,11 @@ class INGAME_GUI(object):
      CHAT_SHORTCUTS_AFFIRMATIVE,
      CHAT_SHORTCUTS_NEGATIVE,
      CHAT_SHORTCUTS_ATTENTION_TO_CELL,
+     CHAT_SHORTCUTS_DEFEND_SUPPLY,
+     CHAT_SHORTCUTS_DEFENDING_SUPPLY,
+     CHAT_SHORTCUTS_SUPPLY_SELF_REPAIR,
+     CHAT_SHORTCUTS_ATTACK_SUPPLY,
+     CHAT_SHORTCUTS_ATTACKING_SUPPLY,
      CHAT_SHORTCUTS_GLOBAL_MSG_ATK_SAVE_TANKS,
      CHAT_SHORTCUTS_GLOBAL_MSG_DEF_SAVE_TANKS,
      CHAT_SHORTCUTS_GLOBAL_MSG_ATK_TIME,

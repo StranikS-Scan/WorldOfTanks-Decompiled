@@ -635,11 +635,11 @@ class VehicleParams(_ParameterBase):
 
     @property
     def avgDamagePerMinute(self):
-        return None if self.__hasAutoShoot() else round(max(self.__calcReloadTime()) * self.avgDamage)
+        return None if self._itemDescr.isAutoShootFlamethrower else round(max(self.__calcReloadTime()) * self.avgDamage)
 
     @property
     def avgDamagePerSecond(self):
-        return round(self.reloadTimePerSecond * self.avgDamage) if self.__hasAutoShoot() else None
+        return round(self.reloadTimePerSecond * self.avgDamage) if self._itemDescr.isAutoShootFlamethrower else None
 
     @property
     def avgDamagePerMinuteSituational(self):
@@ -670,15 +670,15 @@ class VehicleParams(_ParameterBase):
 
     @property
     def reloadTime(self):
-        return None if self.__hasAutoReload() or self.__hasDualGun() or self.__hasAutoShoot() else min(self.__calcReloadTime())
+        return None if self.__hasAutoReload() or self.__hasDualGun() or self._itemDescr.isAutoShootFlamethrower else min(self.__calcReloadTime())
 
     @property
     def reloadTimePerSecond(self):
-        return 1 / self._itemDescr.gun.autoShoot.shotInterval if self.__hasAutoShoot() else None
+        return 1 / self._itemDescr.gun.autoShoot.shotInterval if self._itemDescr.isAutoShootFlamethrower else None
 
     @property
     def reloadTimeSituational(self):
-        return None if self.__hasAutoReload() or self.__hasDualGun() or self.__hasAutoShoot() else min(self.__calcReloadTime(isSituational=True))
+        return None if self.__hasAutoReload() or self.__hasDualGun() or self._itemDescr.isAutoShootFlamethrower else min(self.__calcReloadTime(isSituational=True))
 
     @property
     def turretRotationSpeed(self):
@@ -1550,7 +1550,7 @@ class GunParams(WeightedParam):
     @property
     def reloadTimePerSecond(self):
         gun = self.__getSelectedVehicleGun()
-        return 1 / gun.autoShoot.shotInterval if isAutoShootFlameGun(gun) else None
+        return 1 / gun.autoShoot.shotInterval if isAutoShootGun(gun) else None
 
     @property
     def autoShootFlameChangeShellTime(self):
@@ -1651,7 +1651,7 @@ class ShellParams(CompatibleParams):
 
     @property
     def damagePerSecond(self):
-        if self._vehicleDescr and self._vehicleDescr.isAutoShootGunVehicle:
+        if self._vehicleDescr and self._vehicleDescr.isAutoShootFlamethrower:
             gun = self._vehicleDescr.gun
             return self.avgDamage / gun.autoShoot.shotInterval
         else:

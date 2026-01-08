@@ -9,11 +9,23 @@
       <VehicleFLRegenerationKitComponent></VehicleFLRegenerationKitComponent>
       <StealthRadarComponent></StealthRadarComponent>
       <ArenaFLBattleModifiersComponent></ArenaFLBattleModifiersComponent>
+      <VehicleFrontlineComponent></VehicleFrontlineComponent>
+      <AvatarFrontlineComponent></AvatarFrontlineComponent>
+      <FrontlineSectorsProgression></FrontlineSectorsProgression>
+      <SupplyResurrectComponent></SupplyResurrectComponent>
     </DynamicComponents>
   </Components>
   <IsEnabled>	True	</IsEnabled>
   <Personality>	frontline_personality	</Personality>
   <Entities>
-    <ClientServerEntities></ClientServerEntities>
+    <ClientServerEntities>
+      <FLBasicMine></FLBasicMine>
+    </ClientServerEntities>
   </Entities>
+  <cgf>
+    <script>
+      <module>	client.cgf.cgf_mechanics	</module>
+      <module>	common.frontline_cgf.epic_battles_components	</module>
+    </script>
+  </cgf>
 </extension.xml>

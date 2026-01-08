@@ -67,9 +67,11 @@ class USER(object):
     CREATE_MAPBOX_SQUAD = 'createMapboxSquad'
     CREATE_COMP7_SQUAD = 'createComp7Squad'
     CREATE_RANKED_SQUAD = 'createRankedSquad'
+    CREATE_EPIC_SQUAD = 'createEpicSquad'
 
 
 _CM_ICONS = {USER.END_REFERRAL_COMPANY: 'endReferralCompany'}
+_ADD_SQUAD_COLOR = 13347959
 
 class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -188,6 +190,9 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     def createRankedSquad(self):
         self._doSelect(PREBATTLE_ACTION_NAME.RANKED_SQUAD, (self.databaseID,))
 
+    def createEpicSquad(self):
+        self._doSelect(PREBATTLE_ACTION_NAME.EPIC_SQUAD, (self.databaseID,))
+
     def invite(self):
         user = self.usersStorage.getUser(self.databaseID)
         if self.prbEntity.getPermissions().canSendInvite():
@@ -214,7 +219,8 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
          USER.REQUEST_FRIENDSHIP: 'requestFriendship',
          USER.CREATE_MAPBOX_SQUAD: 'createMapboxSquad',
          USER.CREATE_COMP7_SQUAD: 'createComp7Squad',
-         USER.CREATE_RANKED_SQUAD: 'createRankedSquad'}
+         USER.CREATE_RANKED_SQUAD: 'createRankedSquad',
+         USER.CREATE_EPIC_SQUAD: 'createEpicSquad'}
         if not IS_CHINA:
             handlers.update({USER.SET_MUTED: 'setMuted',
              USER.UNSET_MUTED: 'unsetMuted'})
@@ -289,33 +295,32 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     def _addSquadInfo(self, options, isIgnored):
         if not isIgnored and not self.isSquadCreator() and self.prbDispatcher is not None:
             canCreate = not self.prbEntity.isInQueue()
-            if not any([ self.__isSquadAlreadyCreated(prbType) for prbType in (PREBATTLE_TYPE.SQUAD,
-             PREBATTLE_TYPE.EPIC,
-             PREBATTLE_TYPE.FUN_RANDOM,
-             PREBATTLE_TYPE.VERSUS_AI) ]):
-                isEnabled = self.__epicCtrl.isCurrentCycleActive() if self.__epicCtrl.isEpicPrbActive() else True
-                options.append(self._makeItem(USER.CREATE_SQUAD, MENU.contextmenu(USER.CREATE_SQUAD), optInitData={'enabled': canCreate and isEnabled}))
+            if not any([ self.__isSquadAlreadyCreated(prbType) for prbType in (PREBATTLE_TYPE.SQUAD, PREBATTLE_TYPE.FUN_RANDOM, PREBATTLE_TYPE.VERSUS_AI) ]):
+                options.append(self._makeItem(USER.CREATE_SQUAD, MENU.contextmenu(USER.CREATE_SQUAD), optInitData={'enabled': canCreate}))
+            if self.__epicCtrl.isEnabled() and not self.__isSquadAlreadyCreated(PREBATTLE_TYPE.EPIC):
+                options.append(self._makeItem(USER.CREATE_EPIC_SQUAD, MENU.contextmenu(USER.CREATE_EPIC_SQUAD), optInitData={'enabled': canCreate,
+                 'textColor': _ADD_SQUAD_COLOR}))
             if self.__eventBattlesCtrl.isEnabled() and not self.__isSquadAlreadyCreated(PREBATTLE_TYPE.EVENT):
                 options.append(self._makeItem(USER.CREATE_EVENT_SQUAD, MENU.contextmenu(USER.CREATE_EVENT_SQUAD), optInitData={'enabled': canCreate,
-                 'textColor': 13347959}))
+                 'textColor': _ADD_SQUAD_COLOR}))
             if self.__battleRoyale.isEnabled() and not self.__isSquadAlreadyCreated(PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT) and not self.__isSquadAlreadyCreated(PREBATTLE_TYPE.BATTLE_ROYALE):
                 primeTimeStatus, _, _ = self.__battleRoyale.getPrimeTimeStatus()
                 options.append(self._makeItem(USER.CREATE_BATTLE_ROYALE_SQUAD, MENU.contextmenu(USER.CREATE_BATTLE_ROYALE_SQUAD), optInitData={'enabled': canCreate and primeTimeStatus == PrimeTimeStatus.AVAILABLE,
-                 'textColor': 13347959}))
+                 'textColor': _ADD_SQUAD_COLOR}))
             if self.__mapboxCtrl.isEnabled() and not self.__isSquadAlreadyCreated(PREBATTLE_TYPE.MAPBOX):
                 isOptionEnabled = canCreate and self.__mapboxCtrl.isActive() and self.__mapboxCtrl.isInPrimeTime()
                 options.append(self._makeItem(USER.CREATE_MAPBOX_SQUAD, backport.text(R.strings.menu.contextMenu.createMapboxSquad()), optInitData={'enabled': isOptionEnabled,
-                 'textColor': 13347959}))
+                 'textColor': _ADD_SQUAD_COLOR}))
             if self.__comp7Ctrl.isEnabled():
                 primeTimeStatus, _, _ = self.__comp7Ctrl.getPrimeTimeStatus()
                 isEnabled = primeTimeStatus == PrimeTimeStatus.AVAILABLE and not self.__comp7Ctrl.isBanned and not self.__comp7Ctrl.isOffline and self.__comp7Ctrl.hasSuitableVehicles() and self.__comp7Ctrl.isQualificationSquadAllowed()
                 options.append(self._makeItem(USER.CREATE_COMP7_SQUAD, MENU.contextmenu(USER.CREATE_COMP7_SQUAD), optInitData={'enabled': canCreate and isEnabled,
-                 'textColor': 13347959}))
+                 'textColor': _ADD_SQUAD_COLOR}))
             if self.__rankedCtrl.isEnabled():
                 primeTimeStatus, _, _ = self.__rankedCtrl.getPrimeTimeStatus()
                 isEnabled = primeTimeStatus == PrimeTimeStatus.AVAILABLE and self.__rankedCtrl.hasSuitableVehicles()
                 options.append(self._makeItem(USER.CREATE_RANKED_SQUAD, MENU.contextmenu(USER.CREATE_RANKED_SQUAD), optInitData={'enabled': canCreate and isEnabled,
-                 'textColor': 13347959}))
+                 'textColor': _ADD_SQUAD_COLOR}))
         return options
 
     def _addPrebattleInfo(self, options, userCMInfo):
@@ -655,7 +660,6 @@ class UserContextMenuInfo(object):
         self.canAddToIgnore = True
         self.canDoDenunciations = True
         self.isFriend = False
-        self.isAnySub = False
         self.isIgnored = False
         self.isTemporaryIgnored = False
         self.isMuted = False
@@ -666,7 +670,6 @@ class UserContextMenuInfo(object):
         self.isCurrentPlayer = False
         if self.user is not None:
             self.isFriend = self.user.isFriend()
-            self.isAnySub = self.user.isAnySub()
             self.isIgnored = self.user.isIgnored()
             self.isTemporaryIgnored = self.user.isTemporaryIgnored()
             self.isMuted = self.user.isMuted()

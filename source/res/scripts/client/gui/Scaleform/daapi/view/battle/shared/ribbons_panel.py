@@ -20,6 +20,7 @@ from gui.Scaleform.daapi.view.battle.shared.ribbons_aggregator import DAMAGE_SOU
 from items import tankmen
 from items.battle_royale import isSpawnedBot, isBattleRoyale
 from shared_utils import findFirst
+from supply_shared import Supply
 _logger = logging.getLogger(__name__)
 _RIBBON_SOUNDS_ENABLED = True
 _SHOW_RIBBON_SOUND_NAME = 'show_ribbon'
@@ -71,12 +72,11 @@ _BATTLE_EVENTS_SETTINGS_TO_BATTLE_EFFICIENCY_TYPES = {BATTLE_EVENTS.ENEMY_HP_DAM
  BATTLE_EVENTS.ENEMY_ASSIST_STUN: (_BET.ASSIST_STUN,)}
 
 def _getVehicleData(arenaDP, vehArenaID):
-    vTypeInfoVO = arenaDP.getVehicleInfo(vehArenaID).vehicleType
-    vehicleClassTag = vTypeInfoVO.classTag or ''
-    vehicleName = vTypeInfoVO.shortNameWithPrefix
-    if isBattleRoyale(vTypeInfoVO.tags) and isSpawnedBot(vTypeInfoVO.tags):
-        vehicleClassTag = ''
-    return (vehicleName, vehicleClassTag)
+    vehicleType = arenaDP.getVehicleInfo(vehArenaID).vehicleType
+    vehicleName = vehicleType.shortNameWithPrefix
+    if Supply.isSupply(vehicleType.tags):
+        return (vehicleName, Supply.getSupplyTag(vehicleType))
+    return (vehicleName, '') if isBattleRoyale(vehicleType.tags) and isSpawnedBot(vehicleType.tags) else (vehicleName, vehicleType.classTag or '')
 
 
 def _formatCounter(counter):
@@ -147,18 +147,13 @@ def _receivedCriticalHitRibbonFormatter(ribbon, arenaDP, updater):
     updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=_formatCounter(ribbon.getExtraValue()))
 
 
-def _killRibbonFormatter(ribbon, arenaDP, updater):
+def killRibbonFormatter(ribbon, arenaDP, updater, ribbonType=None):
     vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
     value = ribbon.getExtraValue()
     leftFieldStr = backport.getIntegralFormat(value) if value else ''
     bonusRibbonLabelID = _BRL.BASE_BONUS_LABEL if ribbon.isRoleBonus() else _BRL.NO_BONUS
-    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=leftFieldStr, bonusRibbonLabelID=bonusRibbonLabelID, role=ribbon.role())
-
-
-def _epicEventRibbonFormatter(ribbon, arenaDP, updater):
-    value = ribbon.getExtraValue()
-    leftFieldStr = backport.getIntegralFormat(value) if value else ''
-    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), leftFieldStr=leftFieldStr)
+    ribbonType = ribbonType or ribbon.getType()
+    updater(ribbonID=ribbon.getID(), ribbonType=ribbonType, vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=leftFieldStr, bonusRibbonLabelID=bonusRibbonLabelID, role=ribbon.role())
 
 
 _RIBBONS_FMTS = {_BET.CAPTURE: _baseRibbonFormatter,
@@ -173,19 +168,13 @@ _RIBBONS_FMTS = {_BET.CAPTURE: _baseRibbonFormatter,
  _BET.WORLD_COLLISION: _singleVehRibbonFormatter,
  _BET.ASSIST_TRACK: _singleVehRibbonFormatter,
  _BET.ASSIST_SPOT: _singleVehRibbonFormatter,
- _BET.DESTRUCTION: _killRibbonFormatter,
+ _BET.DESTRUCTION: killRibbonFormatter,
  _BET.RECEIVED_DAMAGE: _singleVehRibbonFormatter,
  _BET.RECEIVED_CRITS: _receivedCriticalHitRibbonFormatter,
  _BET.RECEIVED_RAM: _receivedRamRibbonFormatter,
  _BET.RECEIVED_BURN: _singleVehRibbonFormatter,
  _BET.RECEIVED_WORLD_COLLISION: _singleVehRibbonFormatter,
  _BET.ASSIST_STUN: _singleVehRibbonFormatter,
- _BET.VEHICLE_RECOVERY: _epicEventRibbonFormatter,
- _BET.ENEMY_SECTOR_CAPTURED: _epicEventRibbonFormatter,
- _BET.DESTRUCTIBLE_DAMAGED: _epicEventRibbonFormatter,
- _BET.DESTRUCTIBLE_DESTROYED: _epicEventRibbonFormatter,
- _BET.DESTRUCTIBLES_DEFENDED: _epicEventRibbonFormatter,
- _BET.DEFENDER_BONUS: _epicEventRibbonFormatter,
  _BET.BASE_CAPTURE_BLOCKED: _baseRibbonFormatter,
  _BET.ASSIST_BY_ABILITY: _singleVehRibbonFormatter,
  _BET.DEATH_ZONE: _singleVehRibbonFormatter,
@@ -296,6 +285,54 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
     def _shouldShowRibbon(self, ribbon):
         return self.__checkUserPreferences(ribbon) and self.__checkControllingOwnVehicle()
 
+    def _getRibbonFormatter(self, ribbonType):
+        return _RIBBONS_FMTS.get(ribbonType)
+
+    def _getViewData(self):
+        return [[_BET.ARMOR, backport.text(R.strings.ingame_gui.efficiencyRibbons.armor())],
+         [_BET.DEFENCE, backport.text(R.strings.ingame_gui.efficiencyRibbons.defence())],
+         [_BET.DAMAGE, backport.text(R.strings.ingame_gui.efficiencyRibbons.damage())],
+         [_BET.ASSIST_SPOT, backport.text(R.strings.ingame_gui.efficiencyRibbons.assistSpot())],
+         [_BET.ASSIST_TRACK, backport.text(R.strings.ingame_gui.efficiencyRibbons.assistTrack())],
+         [_BET.BURN, backport.text(R.strings.ingame_gui.efficiencyRibbons.burn())],
+         [_BET.CAPTURE, backport.text(R.strings.ingame_gui.efficiencyRibbons.capture())],
+         [_BET.DESTRUCTION, backport.text(R.strings.ingame_gui.efficiencyRibbons.kill())],
+         [_BET.DETECTION, backport.text(R.strings.ingame_gui.efficiencyRibbons.spotted())],
+         [_BET.RAM, backport.text(R.strings.ingame_gui.efficiencyRibbons.ram())],
+         [_BET.CRITS, backport.text(R.strings.ingame_gui.efficiencyRibbons.crits())],
+         [_BET.WORLD_COLLISION, backport.text(R.strings.ingame_gui.efficiencyRibbons.worldCollision())],
+         [_BET.RECEIVED_CRITS, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedCrits())],
+         [_BET.RECEIVED_DAMAGE, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedDamage())],
+         [_BET.RECEIVED_BURN, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedBurn())],
+         [_BET.RECEIVED_RAM, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedRam())],
+         [_BET.STUN, backport.text(R.strings.ingame_gui.efficiencyRibbons.stun())],
+         [_BET.ASSIST_STUN, backport.text(R.strings.ingame_gui.efficiencyRibbons.assistStun())],
+         [_BET.BASE_CAPTURE_BLOCKED, backport.text(R.strings.ingame_gui.efficiencyRibbons.defence())],
+         [_BET.ASSIST_BY_ABILITY, backport.text(R.strings.ingame_gui.efficiencyRibbons.assistByAbility())],
+         [_BET.DEATH_ZONE, backport.text(R.strings.ingame_gui.efficiencyRibbons.deathZone())],
+         [_BET.STATIC_DEATH_ZONE, backport.text(R.strings.ingame_gui.efficiencyRibbons.staticDeathZone())],
+         [_BET.BERSERKER, backport.text(R.strings.ingame_gui.efficiencyRibbons.berserker())],
+         [_BET.SPAWNED_BOT_DMG, backport.text(R.strings.ingame_gui.efficiencyRibbons.spawnedBotDmg())],
+         [_BET.DAMAGE_BY_ARTILLERY, backport.text(R.strings.ingame_gui.efficiencyRibbons.ArtilleryDmg())],
+         [_BET.RECEIVED_BY_ARTILLERY, backport.text(R.strings.ingame_gui.efficiencyRibbons.ArtilleryDmg())],
+         [_BET.DAMAGE_BY_AIRSTRIKE, backport.text(R.strings.ingame_gui.efficiencyRibbons.AirstrikeDmg())],
+         [_BET.RECEIVED_BY_AIRSTRIKE, backport.text(R.strings.ingame_gui.efficiencyRibbons.AirstrikeDmg())],
+         [_BET.RECEIVED_BY_DEATH_ZONE, backport.text(R.strings.ingame_gui.efficiencyRibbons.CannonDmg())],
+         [_BET.RECEIVED_BY_SMOKE, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedBySmoke())],
+         [_BET.RECEIVED_WORLD_COLLISION, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedWorldCollision())],
+         [_BET.RECEIVED_DMG_BY_SPAWNED_BOT, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedDmgBySpawnedBot())],
+         [_BET.DAMAGE_BY_MINEFIELD, backport.text(R.strings.ingame_gui.efficiencyRibbons.damageByMinefield())],
+         [_BET.RECEIVED_BY_MINEFIELD, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedByMinefield())],
+         [_BET.DEALT_DMG_BY_CORRODING_SHOT, backport.text(R.strings.ingame_gui.efficiencyRibbons.dealtDamageByCorrodingShot())],
+         [_BET.RECEIVED_BY_CORRODING_SHOT, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedByCorrodingShot())],
+         [_BET.DEALT_DMG_BY_FIRE_CIRCLE, backport.text(R.strings.ingame_gui.efficiencyRibbons.dealtDamageByFireCircle())],
+         [_BET.RECEIVED_BY_FIRE_CIRCLE, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedByFireCircle())],
+         [_BET.DEALT_DMG_BY_CLING_BRANDER, backport.text(R.strings.ingame_gui.efficiencyRibbons.dealtDamageByClingBrander())],
+         [_BET.RECEIVED_BY_CLING_BRANDER, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedByClingBrander())],
+         [_BET.DEALT_DMG_BY_THUNDER_STRIKE, backport.text(R.strings.ingame_gui.efficiencyRibbons.dealtDamageByThunderStrike())],
+         [_BET.RECEIVED_BY_THUNDER_STRIKE, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedByThunderStrike())],
+         [_BET.PERK, '']]
+
     def __processDelayedRibbons(self):
         for ribbon, method in ((self.__ribbonsAggregator.getRibbon(ribbonID), method) for ribbonID, method in self.__delayedRibbons):
             if self.__canBeShown(ribbon):
@@ -326,9 +363,9 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
             return
         if self._shouldShowRibbon(ribbon):
             ribbonType = ribbon.getType()
-            if ribbonType in _RIBBONS_FMTS:
-                updater = _RIBBONS_FMTS[ribbonType]
-                updater(ribbon, self.__arenaDP, method)
+            formatter = self._getRibbonFormatter(ribbonType)
+            if formatter:
+                formatter(ribbon, self.__arenaDP, method)
             else:
                 _logger.error('Could not find formatter for ribbon type %s', ribbonType)
         else:
@@ -389,52 +426,5 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
         return avatar_getter.getPlayerVehicleID() == self.sessionProvider.shared.vehicleState.getControllingVehicleID()
 
     def __setupView(self):
-        self.as_setupS([[_BET.ARMOR, backport.text(R.strings.ingame_gui.efficiencyRibbons.armor())],
-         [_BET.DEFENCE, backport.text(R.strings.ingame_gui.efficiencyRibbons.defence())],
-         [_BET.DAMAGE, backport.text(R.strings.ingame_gui.efficiencyRibbons.damage())],
-         [_BET.ASSIST_SPOT, backport.text(R.strings.ingame_gui.efficiencyRibbons.assistSpot())],
-         [_BET.ASSIST_TRACK, backport.text(R.strings.ingame_gui.efficiencyRibbons.assistTrack())],
-         [_BET.BURN, backport.text(R.strings.ingame_gui.efficiencyRibbons.burn())],
-         [_BET.CAPTURE, backport.text(R.strings.ingame_gui.efficiencyRibbons.capture())],
-         [_BET.DESTRUCTION, backport.text(R.strings.ingame_gui.efficiencyRibbons.kill())],
-         [_BET.DETECTION, backport.text(R.strings.ingame_gui.efficiencyRibbons.spotted())],
-         [_BET.RAM, backport.text(R.strings.ingame_gui.efficiencyRibbons.ram())],
-         [_BET.CRITS, backport.text(R.strings.ingame_gui.efficiencyRibbons.crits())],
-         [_BET.WORLD_COLLISION, backport.text(R.strings.ingame_gui.efficiencyRibbons.worldCollision())],
-         [_BET.RECEIVED_CRITS, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedCrits())],
-         [_BET.RECEIVED_DAMAGE, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedDamage())],
-         [_BET.RECEIVED_BURN, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedBurn())],
-         [_BET.RECEIVED_RAM, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedRam())],
-         [_BET.RECEIVED_WORLD_COLLISION, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedWorldCollision())],
-         [_BET.STUN, backport.text(R.strings.ingame_gui.efficiencyRibbons.stun())],
-         [_BET.ASSIST_STUN, backport.text(R.strings.ingame_gui.efficiencyRibbons.assistStun())],
-         [_BET.VEHICLE_RECOVERY, backport.text(R.strings.ingame_gui.efficiencyRibbons.vehicleRecovery())],
-         [_BET.ENEMY_SECTOR_CAPTURED, backport.text(R.strings.ingame_gui.efficiencyRibbons.enemySectorCaptured())],
-         [_BET.DESTRUCTIBLE_DAMAGED, backport.text(R.strings.ingame_gui.efficiencyRibbons.destructibleDamaged())],
-         [_BET.DESTRUCTIBLE_DESTROYED, backport.text(R.strings.ingame_gui.efficiencyRibbons.destructibleDestroyed())],
-         [_BET.DESTRUCTIBLES_DEFENDED, backport.text(R.strings.ingame_gui.efficiencyRibbons.destructiblesDefended())],
-         [_BET.DEFENDER_BONUS, backport.text(R.strings.ingame_gui.efficiencyRibbons.defenderBonus())],
-         [_BET.BASE_CAPTURE_BLOCKED, backport.text(R.strings.ingame_gui.efficiencyRibbons.defence())],
-         [_BET.ASSIST_BY_ABILITY, backport.text(R.strings.ingame_gui.efficiencyRibbons.assistByAbility())],
-         [_BET.DEATH_ZONE, backport.text(R.strings.ingame_gui.efficiencyRibbons.deathZone())],
-         [_BET.STATIC_DEATH_ZONE, backport.text(R.strings.ingame_gui.efficiencyRibbons.staticDeathZone())],
-         [_BET.BERSERKER, backport.text(R.strings.ingame_gui.efficiencyRibbons.berserker())],
-         [_BET.SPAWNED_BOT_DMG, backport.text(R.strings.ingame_gui.efficiencyRibbons.spawnedBotDmg())],
-         [_BET.RECEIVED_DMG_BY_SPAWNED_BOT, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedDmgBySpawnedBot())],
-         [_BET.DAMAGE_BY_MINEFIELD, backport.text(R.strings.ingame_gui.efficiencyRibbons.damageByMinefield())],
-         [_BET.RECEIVED_BY_MINEFIELD, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedByMinefield())],
-         [_BET.DAMAGE_BY_ARTILLERY, backport.text(R.strings.ingame_gui.efficiencyRibbons.ArtilleryDmg())],
-         [_BET.RECEIVED_BY_ARTILLERY, backport.text(R.strings.ingame_gui.efficiencyRibbons.ArtilleryDmg())],
-         [_BET.DAMAGE_BY_AIRSTRIKE, backport.text(R.strings.ingame_gui.efficiencyRibbons.AirstrikeDmg())],
-         [_BET.RECEIVED_BY_AIRSTRIKE, backport.text(R.strings.ingame_gui.efficiencyRibbons.AirstrikeDmg())],
-         [_BET.RECEIVED_BY_DEATH_ZONE, backport.text(R.strings.ingame_gui.efficiencyRibbons.CannonDmg())],
-         [_BET.RECEIVED_BY_SMOKE, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedBySmoke())],
-         [_BET.DEALT_DMG_BY_CORRODING_SHOT, backport.text(R.strings.ingame_gui.efficiencyRibbons.dealtDamageByCorrodingShot())],
-         [_BET.RECEIVED_BY_CORRODING_SHOT, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedByCorrodingShot())],
-         [_BET.DEALT_DMG_BY_FIRE_CIRCLE, backport.text(R.strings.ingame_gui.efficiencyRibbons.dealtDamageByFireCircle())],
-         [_BET.RECEIVED_BY_FIRE_CIRCLE, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedByFireCircle())],
-         [_BET.DEALT_DMG_BY_CLING_BRANDER, backport.text(R.strings.ingame_gui.efficiencyRibbons.dealtDamageByClingBrander())],
-         [_BET.RECEIVED_BY_CLING_BRANDER, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedByClingBrander())],
-         [_BET.DEALT_DMG_BY_THUNDER_STRIKE, backport.text(R.strings.ingame_gui.efficiencyRibbons.dealtDamageByThunderStrike())],
-         [_BET.RECEIVED_BY_THUNDER_STRIKE, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedByThunderStrike())],
-         [_BET.PERK, '']], self.__isExtendedAnim, self.__enabled, self.__isWithRibbonName, self.__isWithVehName, [backport.text(R.strings.ingame_gui.efficiencyRibbons.bonusRibbon())])
+        viewData = self._getViewData()
+        self.as_setupS(viewData, self.__isExtendedAnim, self.__enabled, self.__isWithRibbonName, self.__isWithVehName, [backport.text(R.strings.ingame_gui.efficiencyRibbons.bonusRibbon())])

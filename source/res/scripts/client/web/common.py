@@ -34,6 +34,7 @@ def formatBalance(stats):
 def formatWalletCurrencyStatuses(stats):
     statuses = {Currency.currencyExternalName(currencyCode):WalletController.STATUS.getKeyByValue(statusCode).lower() for currencyCode, statusCode in stats.currencyStatuses.iteritems() if currencyCode in Currency.ALL}
     statuses.update({currencyCode:WalletController.STATUS.getKeyByValue(statusCode).lower() for currencyCode, statusCode in stats.dynamicCurrencyStatuses.iteritems()})
+    statuses['free_xp'] = WalletController.STATUS.getKeyByValue(stats.currencyStatuses[Currency.FREE_XP]).lower()
     return statuses
 
 

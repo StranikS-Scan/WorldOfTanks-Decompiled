@@ -7,7 +7,7 @@ from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control.entities.base.unit.listener import IUnitListener
-from gui.prb_control.items.stronghold_items import ARTILLERY_STRIKE, INSPIRATION
+from gui.prb_control.items.stronghold_items import ARTILLERY_STRIKE, INSPIRATION, RESERVE_ITEMS, REQUISITION_TYPE
 from gui.shared.events import CSReserveSelectEvent
 from gui.shared.formatters import text_styles
 from gui.shared.items_parameters import params_helper, formatters
@@ -68,9 +68,51 @@ class FortReserveSelectPopover(FittingSelectPopoverMeta, IUnitListener):
         if entity is None:
             return
         else:
-            order = entity.getStrongholdSettings().getReserveOrder()
-            groupType = order[self._slotIndex]
+            slots = self.__getReserveOrder()
+            groupType = slots[self._slotIndex]
             return vo_converters.getReserveGroupTitle(groupType)
+
+    def __getReserveOrder(self):
+        slots = []
+        reserve = self.prbEntity.getStrongholdSettings().getReserve()
+        reserveOrder = self.prbEntity.getStrongholdSettings().getReserveOrder()
+        reserves = set(reserve.getAvailableReserves().keys())
+        availableGroups = {group for group, items in RESERVE_ITEMS.items() if reserves.intersection(set(items))}
+        index = 0
+        for groupType in reserveOrder:
+            if groupType not in availableGroups:
+                continue
+            slots.append(groupType)
+            index += 1
+
+        return slots
+
+    def __updateReserve(self, groupType, reserveData, slotIndex):
+        current = None
+        group = reserveData.getUniqueReservesByGroupType(groupType)
+        selectedReserves = reserveData.getSelectedReserves()
+        for reserve in group:
+            if reserve in selectedReserves:
+                current = reserve
+                break
+
+        unitPermissions = self.prbEntity.getPermissions()
+        havePermissions = unitPermissions.canChangeConsumables()
+        slotType = None
+        level = 0
+        reserveId = 0
+        if current:
+            slotType = current.getType()
+            level = current.getLevel()
+            reserveId = current.getId()
+        isRequisition = groupType == REQUISITION_TYPE
+        disabledByRequisition = isRequisition and not self.prbEntity.isFirstBattle()
+        empty = len(group) == 0
+        isInBattle = self.prbEntity.getFlags().isInArena()
+        enabled = havePermissions and not empty and not isInBattle and not disabledByRequisition
+        tooltip, tooltipType = vo_converters.makeReserveSlotTooltipVO(current, groupType, empty, havePermissions, isInBattle, disabledByRequisition)
+        vo = vo_converters.makeReserveSlotVO(slotType, groupType, reserveId, level, slotIndex, tooltip, tooltipType)
+        return (vo, enabled)
 
     def __buildList(self):
         entity = self.prbEntity
@@ -78,8 +120,8 @@ class FortReserveSelectPopover(FittingSelectPopoverMeta, IUnitListener):
             return
         else:
             selectedIdxs = entity.getStrongholdSettings().getReserve().getSelectedReserves()
-            order = entity.getStrongholdSettings().getReserveOrder()
-            groupType = order[self._slotIndex]
+            slots = self.__getReserveOrder()
+            groupType = slots[self._slotIndex]
             modulesList = []
             reserves = entity.getStrongholdSettings().getReserve()
             group = reserves.getUniqueReservesByGroupType(groupType)

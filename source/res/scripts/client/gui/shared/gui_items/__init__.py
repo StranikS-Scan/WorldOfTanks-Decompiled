@@ -294,6 +294,7 @@ class KPI(object):
         VEHICLE_GUN_SHOT_DISPERSION_WHILE_GUN_DAMAGED = 'vehicleGunShotDispersionWhileGunDamaged'
         VEHICLE_GUN_SHOT_FULL_DISPERSION = 'vehicleGunShotFullDispersion'
         VEHICLE_GUN_DAMAGE = 'vehicleGunDamage'
+        VEHICLE_GUN_SPEC_DAMAGE = 'vehicleGunSpecDamage'
         VEHICLE_AMMO_BAY_STRENGTH = 'vehicleAmmoBayStrength'
         VEHICLE_FUEL_TANK_STRENGTH = 'vehicleFuelTankStrength'
         VEHICLE_ENGINE_STRENGTH = 'vehicleEngineStrength'

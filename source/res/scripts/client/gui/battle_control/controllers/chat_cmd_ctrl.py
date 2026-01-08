@@ -94,6 +94,29 @@ PROHIBITED_IF_SPECTATOR = [BATTLE_CHAT_COMMAND_NAMES.GOING_THERE,
  BATTLE_CHAT_COMMAND_NAMES.NAVIGATION_POINT,
  BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION,
  BATTLE_CHAT_COMMAND_NAMES.FLAG_POINT]
+CONTEXT_ACTIONS = {BATTLE_CHAT_COMMAND_NAMES.DEFEND_BASE,
+ BATTLE_CHAT_COMMAND_NAMES.ATTACK_BASE,
+ BATTLE_CHAT_COMMAND_NAMES.HELPME,
+ BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION,
+ BATTLE_CHAT_COMMAND_NAMES.ATTACK_OBJECTIVE,
+ BATTLE_CHAT_COMMAND_NAMES.DEFEND_OBJECTIVE,
+ BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY,
+ BATTLE_CHAT_COMMAND_NAMES.REPLY,
+ BATTLE_CHAT_COMMAND_NAMES.CANCEL_REPLY,
+ BATTLE_CHAT_COMMAND_NAMES.ATTACK_SUPPLY,
+ BATTLE_CHAT_COMMAND_NAMES.DEFEND_SUPPLY,
+ BATTLE_CHAT_COMMAND_NAMES.SELF_REPAIR_SUPPLY}
+COMMIT_ACTIONS = {BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE,
+ BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE,
+ BATTLE_CHAT_COMMAND_NAMES.ATTACKING_OBJECTIVE,
+ BATTLE_CHAT_COMMAND_NAMES.DEFENDING_OBJECTIVE,
+ BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY_WITH_SPG,
+ BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY,
+ BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY,
+ BATTLE_CHAT_COMMAND_NAMES.SPG_AIM_AREA,
+ BATTLE_CHAT_COMMAND_NAMES.GOING_THERE,
+ BATTLE_CHAT_COMMAND_NAMES.ATTACKING_SUPPLY,
+ BATTLE_CHAT_COMMAND_NAMES.DEFENDING_SUPPLY}
 
 def getAimedAtPositionWithinBorders(aimOffsetX, aimOffsetY):
     ray, _ = getWorldRayAndPoint(aimOffsetX, aimOffsetY)
@@ -110,15 +133,23 @@ def getAimedAtPositionWithinBorders(aimOffsetX, aimOffsetY):
         return
 
 
+def createChatCommandsController(setup, feedback, ammo):
+    guiVisitor = setup.arenaVisitor.gui
+    if guiVisitor.isInEpicRange():
+        from gui.battle_control.controllers.epic_chat_cmd_ctrl import EpicChatCommandsController
+        return EpicChatCommandsController(setup, feedback, ammo)
+    return ChatCommandsController(setup, feedback, ammo)
+
+
 class ChatCommandsController(IBattleController):
-    __slots__ = ('__isEnabled', '__arenaDP', '__feedback', '__ammo', '__markersManager', '__chatCommandsEnabled')
+    __slots__ = ('__isEnabled', '_arenaDP', '__feedback', '__ammo', '__markersManager', '__chatCommandsEnabled')
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
     _aimOffset = aih_global_binding.bindRW(aih_global_binding.BINDING_ID.AIM_OFFSET)
 
     def __init__(self, setup, feedback, ammo):
         super(ChatCommandsController, self).__init__()
-        self.__arenaDP = weakref.proxy(setup.arenaDP)
+        self._arenaDP = weakref.proxy(setup.arenaDP)
         self.__feedback = weakref.proxy(feedback)
         self.__ammo = weakref.proxy(ammo)
         self.__markersManager = None
@@ -137,7 +168,7 @@ class ChatCommandsController(IBattleController):
         g_eventBus.addListener(events.MarkersManagerEvent.MARKERS_CREATED, self.__onMarkersManagerMarkersCreated, EVENT_BUS_SCOPE.BATTLE)
 
     def stopControl(self):
-        self.__arenaDP = None
+        self._arenaDP = None
         self.__feedback = None
         self.__ammo = None
         self.__markersManager = None
@@ -154,7 +185,7 @@ class ChatCommandsController(IBattleController):
             if targetMarkerType == MarkerType.INVALID_MARKER_TYPE and self.__markersManager:
                 tID, tMarkerType, tMarkerSubType = self.__markersManager.getCurrentlyAimedAtMarkerIDAndType()
                 needCorrectCheck = tMarkerType == MarkerType.VEHICLE_MARKER_TYPE
-                if not needCorrectCheck or self.__isTargetCorrect(BigWorld.player(), BigWorld.entities.get(tID)):
+                if not needCorrectCheck or self._isTargetCorrect(BigWorld.player(), BigWorld.entities.get(tID)):
                     targetID, targetMarkerType, markerSubType = tID, tMarkerType, tMarkerSubType
             if targetMarkerType == MarkerType.INVALID_MARKER_TYPE and getAimedAtPositionWithinBorders(self._aimOffset[0], self._aimOffset[1]) is not None:
                 targetMarkerType = MarkerType.LOCATION_MARKER_TYPE
@@ -182,38 +213,47 @@ class ChatCommandsController(IBattleController):
         else:
             for chatCmd, keyboardCmd in KB_MAPPING.iteritems():
                 if cmdMap.isFired(keyboardCmd, key):
-                    if chatCmd in DIRECT_ACTION_BATTLE_CHAT_COMMANDS:
-                        self.handleChatCommand(chatCmd)
-                        return
-                    targetID, targetMarkerType, markerSubType, replyState, replyToAction = self.getAimedAtTargetData()
-                    if chatCmd in (BATTLE_CHAT_COMMAND_NAMES.THANKS, BATTLE_CHAT_COMMAND_NAMES.TURNBACK):
-                        replyState = ReplyState.NO_REPLY
-                    if replyState == ReplyState.NO_REPLY:
-                        if chatCmd in TARGET_TYPE_TRANSLATION_MAPPING and targetMarkerType in TARGET_TYPE_TRANSLATION_MAPPING[chatCmd] and markerSubType in TARGET_TYPE_TRANSLATION_MAPPING[chatCmd][targetMarkerType]:
-                            action = TARGET_TYPE_TRANSLATION_MAPPING[chatCmd][targetMarkerType][markerSubType]
-                        else:
-                            _logger.debug('Action %s (at key %s) is not supported for target type %s (cut type: %s)', chatCmd, key, targetMarkerType, markerSubType)
-                            return
-                        if action == BATTLE_CHAT_COMMAND_NAMES.HELPME:
-                            if advChatCmp.isTargetAllyCommittedToMe(targetID):
-                                action = BATTLE_CHAT_COMMAND_NAMES.THANKS
-                        self.handleChatCommand(action, targetID=targetID)
-                    else:
-                        if chatCmd == CONTEXTCOMMAND2 and replyState != ReplyState.CAN_REPLY:
-                            return
-                        if replyState == ReplyState.CAN_CANCEL_REPLY:
-                            self.sendCancelReplyChatCommand(targetID, replyToAction)
-                        elif replyState == ReplyState.CAN_REPLY:
-                            if replyToAction in (BATTLE_CHAT_COMMAND_NAMES.HELPME, BATTLE_CHAT_COMMAND_NAMES.SOS):
-                                self.handleChatCommand(BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY, targetID=targetID)
-                            else:
-                                self.sendReplyChatCommand(targetID, replyToAction)
-                        elif replyState == ReplyState.CAN_CONFIRM and replyToAction in ONE_SHOT_COMMANDS_TO_REPLIES.keys():
-                            self.handleChatCommand(ONE_SHOT_COMMANDS_TO_REPLIES[replyToAction], targetID=targetID)
-                        elif replyState == ReplyState.CAN_RESPOND and replyToAction in COMMAND_RESPONDING_MAPPING.keys():
-                            self.handleChatCommand(COMMAND_RESPONDING_MAPPING[replyToAction], targetID=targetID)
+                    self._handleContextChatCommandForMappedKey(chatCmd, key, advChatCmp)
 
             return
+
+    def _handleContextChatCommandForMappedKey(self, chatCmd, key, advChatCmp):
+        if chatCmd in DIRECT_ACTION_BATTLE_CHAT_COMMANDS:
+            self.handleChatCommand(chatCmd)
+            return
+        targetID, markerType, markerSubType, replyState, replyToAction = self.getAimedAtTargetData()
+        if chatCmd in (BATTLE_CHAT_COMMAND_NAMES.THANKS, BATTLE_CHAT_COMMAND_NAMES.TURNBACK):
+            replyState = ReplyState.NO_REPLY
+        if replyState == ReplyState.NO_REPLY:
+            self._handleNoReplyChatCommand(chatCmd, key, advChatCmp, targetID, markerType, markerSubType)
+        else:
+            self._handleReplyChatCommand(chatCmd, targetID, replyState, replyToAction)
+
+    def _handleNoReplyChatCommand(self, chatCmd, key, advChatCmp, targetID, targetMarkerType, markerSubType):
+        if chatCmd in TARGET_TYPE_TRANSLATION_MAPPING and targetMarkerType in TARGET_TYPE_TRANSLATION_MAPPING[chatCmd] and markerSubType in TARGET_TYPE_TRANSLATION_MAPPING[chatCmd][targetMarkerType]:
+            action = TARGET_TYPE_TRANSLATION_MAPPING[chatCmd][targetMarkerType][markerSubType]
+        else:
+            _logger.debug('Action %s (at key %s) is not supported for target type %s (cut type: %s)', chatCmd, key, targetMarkerType, markerSubType)
+            return
+        if action == BATTLE_CHAT_COMMAND_NAMES.HELPME:
+            if advChatCmp.isTargetAllyCommittedToMe(targetID):
+                action = BATTLE_CHAT_COMMAND_NAMES.THANKS
+        self.handleChatCommand(action, targetID=targetID)
+
+    def _handleReplyChatCommand(self, chatCmd, targetID, replyState, replyToAction):
+        if chatCmd == CONTEXTCOMMAND2 and replyState != ReplyState.CAN_REPLY:
+            return
+        if replyState == ReplyState.CAN_CANCEL_REPLY:
+            self.sendCancelReplyChatCommand(targetID, replyToAction)
+        elif replyState == ReplyState.CAN_REPLY:
+            if replyToAction in (BATTLE_CHAT_COMMAND_NAMES.HELPME, BATTLE_CHAT_COMMAND_NAMES.SOS):
+                self.handleChatCommand(BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY, targetID=targetID)
+            else:
+                self.sendReplyChatCommand(targetID, replyToAction)
+        elif replyState == ReplyState.CAN_CONFIRM and replyToAction in ONE_SHOT_COMMANDS_TO_REPLIES:
+            self.handleChatCommand(ONE_SHOT_COMMANDS_TO_REPLIES[replyToAction], targetID=targetID)
+        elif replyState == ReplyState.CAN_RESPOND and replyToAction in COMMAND_RESPONDING_MAPPING:
+            self.handleChatCommand(COMMAND_RESPONDING_MAPPING[replyToAction], targetID=targetID)
 
     def sendAdvancedPositionPing(self, action, isInRadialMenu=False):
         aimedAtPosition = getAimedAtPositionWithinBorders(self._aimOffset[0], self._aimOffset[1])
@@ -228,27 +268,18 @@ class ChatCommandsController(IBattleController):
             return
         player = BigWorld.player()
         command = self.proto.battleCmd.createReplyByName(targetID, action, player.id)
-        if command:
-            self.__sendChatCommand(command)
-        else:
-            _logger.error('Reply command not valid for command id: %d', targetID)
+        self._sendChatCommand(command, 'Reply command not valid for command id: %d' % targetID)
 
     def sendCancelReplyChatCommand(self, targetID, action):
         if not avatar_getter.isVehicleAlive():
             return
         player = BigWorld.player()
         command = self.proto.battleCmd.createCancelReplyByName(targetID, action, player.id)
-        if command:
-            self.__sendChatCommand(command)
-        else:
-            _logger.error('Cancel reply command not valid for command id: %d', targetID)
+        self._sendChatCommand(command, 'Cancel reply command not valid for command id: %d' % targetID)
 
     def sendClearChatCommandsFromTarget(self, targetID, targetMarkerType):
         command = self.proto.battleCmd.createClearChatCommandsFromTarget(targetID, targetMarkerType)
-        if command:
-            self.__sendChatCommand(command)
-        else:
-            _logger.error('Clear chat commands not valid for command id: %d and marker type: %s', targetID, targetMarkerType)
+        self._sendChatCommand(command, 'Clear chat commands not valid for command id: %d and marker type: %s' % (targetID, targetMarkerType))
 
     def handleChatCommand(self, action, targetID=None, isInRadialMenu=False):
         player = BigWorld.player()
@@ -277,10 +308,7 @@ class ChatCommandsController(IBattleController):
             command = self.proto.battleCmd.createByPosition(positionVec, name, time)
         else:
             command = self.proto.battleCmd.createByPosition(positionVec, name)
-        if command:
-            self.__sendChatCommand(command)
-        else:
-            _logger.error('Minimap command for position (%d, %d, %d) not found', positionVec.x, positionVec.y, positionVec.z)
+        self._sendChatCommand(command, 'Minimap command for position (%d, %d, %d) not found' % (positionVec.x, positionVec.y, positionVec.z))
 
     def sendAttentionToObjective(self, hqIdx, isAtk, action=None):
         if self.__isEnabled is False:
@@ -291,10 +319,7 @@ class ChatCommandsController(IBattleController):
                 if not isAtk:
                     action = BATTLE_CHAT_COMMAND_NAMES.DEFEND_OBJECTIVE
             command = self.proto.battleCmd.createByObjectiveIndex(hqIdx, isAtk, action)
-            if command:
-                self.__sendChatCommand(command)
-            else:
-                _logger.error('Minimap command for objective with id: %d not found', hqIdx)
+            self._sendChatCommand(command, 'Minimap command for objective with id: %d not found' % hqIdx)
             return
 
     def sendCommandToBase(self, baseIdx, cmdName, baseName=''):
@@ -303,31 +328,22 @@ class ChatCommandsController(IBattleController):
         if self.sessionProvider.arenaVisitor.gui.isInEpicRange():
             baseName = ID_TO_BASENAME[baseIdx]
         command = self.proto.battleCmd.createByBaseIndexAndName(baseIdx, cmdName, baseName)
-        if command:
-            self.__sendChatCommand(command)
-        else:
-            _logger.error('Command not found: %s', cmdName)
+        self._sendChatCommand(command, cmdName)
 
     def sendCommand(self, cmdName):
         if self.__isProhibitedToSendIfDeadOrObserver(cmdName) or self.__isEnabled is False:
             return
         command = self.proto.battleCmd.createByName(cmdName)
-        if command:
-            self.__sendChatCommand(command)
-        else:
-            _logger.error('Command not found: %s', cmdName)
+        self._sendChatCommand(command, cmdName)
 
     def sendEpicGlobalCommand(self, cmdName, baseName=''):
         if self.__isProhibitedToSendIfDeadOrObserver(cmdName) or self.__isEnabled is False:
             return
         command = self.proto.battleCmd.createByGlobalMsgName(cmdName, baseName)
-        if command:
-            self.__sendChatCommand(command)
-        else:
-            _logger.error('Command not found: %s', cmdName)
+        self._sendChatCommand(command, cmdName)
 
     def sendTargetedCommand(self, cmdName, targetID, isInRadialMenu=False):
-        if self.__isProhibitedToSendIfDeadOrObserver(cmdName) or self.__isEnabled is False or not self.__arenaDP.getVehicleInfo(targetID).isAlive():
+        if self.__isProhibitedToSendIfDeadOrObserver(cmdName) or self.__isEnabled is False or not self._arenaDP.getVehicleInfo(targetID).isAlive():
             return
         if self.__isSPG() and cmdName == BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY or self.__isSPGAndInStrategicOrArtyMode() and cmdName == BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY and isInRadialMenu is False:
             shellsLeft = self.__ammo.getAllShellsQuantityLeft()
@@ -335,10 +351,7 @@ class ChatCommandsController(IBattleController):
             command = self.proto.battleCmd.createSPGAimTargetCommand(targetID, time)
         else:
             command = self.proto.battleCmd.createByNameTarget(cmdName, targetID)
-        if command:
-            self.__sendChatCommand(command)
-        else:
-            _logger.error('Targeted command(%s) was not found or targetID(%d) is not valid', cmdName, targetID)
+        self._sendChatCommand(command, cmdName)
 
     def sendReloadingCommand(self):
         if not avatar_getter.isPlayerOnArena() or self.__isEnabled is False:
@@ -348,14 +361,21 @@ class ChatCommandsController(IBattleController):
             if tempCtrl is not None and tempCtrl.isOverheated:
                 timeLeft = math.ceil(tempCtrl.getCoolingTime())
                 command = self.proto.battleCmd.createOverheatCantShootCommand(timeLeft)
-                self.__sendChatCommand(command)
+                self._sendChatCommand(command)
                 return
             state = self.__ammo.getGunReloadingState()
             command = self.proto.battleCmd.create4Reload(self.__ammo.getGunSettings().isCassetteClip(), math.ceil(state.getTimeLeft()), self.__ammo.getShellsQuantityLeft())
-            if command:
-                self.__sendChatCommand(command)
-            else:
-                _logger.error('Can not create reloading command')
+            self._sendChatCommand(command, 'reloading command')
+            return
+
+    def _sendChatCommand(self, command, cmdName=None):
+        if command is None:
+            _logger.error('Command not found: %s', cmdName or '<unknown>')
+            return
+        else:
+            controller = MessengerEntry.g_instance.gui.channelsCtrl.getController(command.getClientID())
+            if controller:
+                controller.sendCommand(command)
             return
 
     def __isProhibitedToSendIfDeadOrObserver(self, name):
@@ -372,11 +392,6 @@ class ChatCommandsController(IBattleController):
         reloadTime = reloadState.getTimeLeft()
         return reloadTime
 
-    def __sendChatCommand(self, command):
-        controller = MessengerEntry.g_instance.gui.channelsCtrl.getController(command.getClientID())
-        if controller:
-            controller.sendCommand(command)
-
     def __onSettingsChanged(self, diff):
         enableBattleCommunication = diff.get(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION)
         if enableBattleCommunication is None:
@@ -391,7 +406,7 @@ class ChatCommandsController(IBattleController):
         targetID = -1
         markerSubType = INVALID_MARKER_SUBTYPE
         targetMarkerType = MarkerType.INVALID_MARKER_TYPE
-        if self.__isTargetCorrect(player, target):
+        if self._isTargetCorrect(player, target):
             if isinstance(target, DestructibleEntity.DestructibleEntity):
                 targetID = target.destructibleEntityID
                 targetMarkerType = MarkerType.HEADQUARTER_MARKER_TYPE
@@ -406,7 +421,7 @@ class ChatCommandsController(IBattleController):
                 markerSubType = DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE
         return (targetID, targetMarkerType, markerSubType)
 
-    def __isTargetCorrect(self, player, target):
+    def _isTargetCorrect(self, player, target):
         if target is not None and isinstance(target, DestructibleEntity.DestructibleEntity):
             if target.isAlive():
                 if player is not None and isPlayerAvatar():
@@ -414,7 +429,7 @@ class ChatCommandsController(IBattleController):
         if target is not None and isinstance(target, Vehicle.Vehicle):
             if target.isAlive():
                 if player is not None and isPlayerAvatar():
-                    vInfo = self.__arenaDP.getVehicleInfo(target.id)
+                    vInfo = self._arenaDP.getVehicleInfo(target.id)
                     isAlly = target.publicInfo['team'] == player.team
                     return not vInfo.isChatCommandsDisabled(isAlly)
         return False

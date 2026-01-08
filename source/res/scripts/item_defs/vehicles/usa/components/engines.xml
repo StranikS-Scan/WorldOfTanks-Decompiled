@@ -169,7 +169,9 @@
     <AVI_1790_8>	31026	</AVI_1790_8>
     <Ford_GAA_B1>	31027	</Ford_GAA_B1>
     <LDS_750>	31028	</LDS_750>
+    <Cat_LDS_750>	31032	</Cat_LDS_750>
     <Wright_Continental_R-975C1L_02>	31029	</Wright_Continental_R-975C1L_02>
+    <Continental_AOSI_1195_6_O>	31030	</Continental_AOSI_1195_6_O>
     <Continental_AOSI_1195_5_T>	31009	</Continental_AOSI_1195_5_T>
     <Continental_AV-1790-3_832>	35000	</Continental_AV-1790-3_832>
     <Continental_AVCR_MBT_T>	35001	</Continental_AVCR_MBT_T>
@@ -2142,6 +2144,24 @@
       <rpm_min>	682	</rpm_min>
       <rpm_max>	2240	</rpm_max>
     </Continental_AOSI_1195_6_4>
+    <Continental_AOSI_1195_6_O>
+      <userString>	#usa_vehicles:Continental_AOSI_1195_6_O	</userString>
+      <shortUserString>	#usa_vehicles:Continental_AOSI_1195_6_O_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	90000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	710	</power>
+      <weight>	1025	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	682	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
+    </Continental_AOSI_1195_6_O>
     <Continental_AOI-1195-5_L>
       <userString>	#usa_vehicles:Continental_AOI-1195-5_L	</userString>
       <shortUserString>	#usa_vehicles:Continental_AOI-1195-5_L_short	</shortUserString>
@@ -2887,6 +2907,23 @@
       <rpm_min>	349	</rpm_min>
       <rpm_max>	2201	</rpm_max>
     </LDS_750_T>
+    <Cat_LDS_750>
+      <userString>	#usa_vehicles:Cat_LDS_750	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <power>	500	</power>
+      <weight>	760	</weight>
+      <maxHealth>	285	</maxHealth>
+      <maxRegenHealth>	142	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	429	</rpm_min>
+      <rpm_max>	2041	</rpm_max>
+    </Cat_LDS_750>
     <Continental_AOI-628-2_IGR>
       <userString>	#igr_vehicles:Continental_AOI-628-2_IGR	</userString>
       <shortUserString>	#igr_vehicles:Continental_AOI-628-2_IGR_short	</shortUserString>

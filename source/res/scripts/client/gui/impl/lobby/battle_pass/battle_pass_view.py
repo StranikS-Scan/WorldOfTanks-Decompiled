@@ -6,6 +6,7 @@ from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.MissionsBattlePassViewMeta import MissionsBattlePassViewMeta
 from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
+from gui.Scaleform.framework.managers.optimization_manager import ExternalFullscreenGraphicsOptimizationComponent
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.battle_pass.battle_pass_helpers import getExtraIntroVideoURL, getIntroVideoURL, isIntroVideoExist, isExtraIntroVideoExist
 from gui.impl import backport
@@ -77,13 +78,14 @@ class _IntroVideoManager(object):
 
 
 class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassViewMeta):
-    __slots__ = ('__isDummyVisible', '__introVideoManager')
+    __slots__ = ('__isDummyVisible', '__introVideoManager', '__graphicOptimization')
     __battlePass = dependency.descriptor(IBattlePassController)
 
     def __init__(self):
         super(BattlePassViewsHolderComponent, self).__init__()
         self.__isDummyVisible = False
         self.__introVideoManager = _IntroVideoManager()
+        self.__graphicOptimization = ExternalFullscreenGraphicsOptimizationComponent()
 
     def finalize(self):
         self._dispose()
@@ -119,11 +121,15 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
         if self._injectView is not None:
             self._injectView.updateData()
             self._injectView.startListeners()
+        if not self.__graphicOptimization.isActive:
+            self.__graphicOptimization.init()
         return
 
     def stop(self):
         if self._injectView is not None:
             self._injectView.stopListeners()
+        if self.__graphicOptimization.isActive:
+            self.__graphicOptimization.fini()
         return
 
     def _onPopulate(self):
@@ -141,6 +147,8 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
         self.__introVideoManager.init()
         if self._isMarathonIntroShow() or not _hasTrueInBPStorage(_INTRO_SHOWN):
             showBattlePassIntro()
+        if not self.__graphicOptimization.isActive:
+            self.__graphicOptimization.init()
 
     def _dispose(self):
         if self.__introVideoManager is not None:
@@ -148,6 +156,8 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
         self.__battlePass.onBattlePassSettingsChange -= self.__onSettingsChanged
         self.stop()
         super(BattlePassViewsHolderComponent, self)._dispose()
+        if self.__graphicOptimization.isActive:
+            self.__graphicOptimization.fini()
         return
 
     def _addInjectContentListeners(self):
@@ -183,6 +193,8 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
         def isExtraActiveFirstTime():
             return ctrl.hasMarathon() and not self.__introVideoManager.isExtraVideoShown and isExtraIntroVideoExist()
 
+        if ctrl.isSingleChapter():
+            return _R_VIEWS.BattlePassProgressionsView()
         if self._isMarathonFirstEnter():
             _setFalseToBPStorage(_EXTRA_CHAPTER_FIRST_ENTER)
             return _R_VIEWS.ChapterChoiceView()

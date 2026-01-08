@@ -2,8 +2,8 @@
 # Embedded file name: gui_lootboxes/scripts/client/gui_lootboxes/messenger/formatters/auto_boxes_subformatters.py
 import typing
 import BigWorld
-from dossiers2.ui.achievements import BADGES_BLOCK
 from adisp import adisp_async, adisp_process
+from dossiers2.ui.achievements import BADGES_BLOCK
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.server_events.bonuses import getMergedBonusesFromDicts
@@ -11,8 +11,8 @@ from gui.shared.gui_items.dossier import getAchievementFactory
 from gui.shared.gui_items.loot_box import ALL_LUNAR_NY_LOOT_BOX_TYPES, EventLootBoxes, WTLootBoxes, NewYearLootBoxes
 from helpers import dependency
 from messenger import g_settings
-from messenger.formatters.service_channel import QuestAchievesFormatter, LootBoxAchievesFormatter, ServiceChannelFormatter, WaitItemsSyncFormatter
-from messenger.formatters.service_channel_helpers import MessageData, getRewardsForBoxes, getCustomizationItemData
+from messenger.formatters.service_channel import LootBoxAchievesFormatter, QuestAchievesFormatter, ServiceChannelFormatter, WaitItemsSyncFormatter
+from messenger.formatters.service_channel_helpers import MessageData, getCustomizationItemData, getRewardsForBoxes
 from skeletons.gui.shared import IItemsCache
 
 class IAutoLootBoxSubFormatter(object):

@@ -58,6 +58,9 @@ class CollectiveGoalMarathonsController(ICollectiveGoalMarathonsController):
     def __getConfig(self):
         return self.__lobbyContext.getServerSettings().collectiveGoalMarathonsConfig
 
+    def getEventName(self):
+        return self.__getConfig().eventName
+
     def __updateMarathonEvent(self):
         marathon = self.__marathonEventsController.getMarathon(COLLECTIVE_GOAL_MARATHON_PREFIX)
         marathon.setState()

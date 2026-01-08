@@ -1,15 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/vehicle_passenger/passenger_ctrl.py
+from __future__ import absolute_import
 import typing
 import weakref
 import Event
+from constants import UNKNOWN_VEHICLE_ID
 from gui.battle_control import avatar_getter
-from gui.battle_control.battle_constants import BATTLE_CTRL_ID, VEHICLE_VIEW_STATE, UNKNOWN_VEHICLE_ID
+from gui.battle_control.battle_constants import BATTLE_CTRL_ID, VEHICLE_VIEW_STATE
 from gui.battle_control.controllers.vehicle_passenger.passenger_interfaces import IVehiclePassengerController
+from gui.shared.utils.decorators import ReprInjector
 if typing.TYPE_CHECKING:
     from gui.battle_control.controllers.vehicle_state_ctrl import VehicleStateController
     from Vehicle import Vehicle
 
+@ReprInjector.simple('currentVehicleID', ('__isCurrentVehicleAlive', 'isCurrentVehicleAlive'), ('__isCurrentVehicleFPV', 'isCurrentVehicleFPV'), ('__playerVehicleID', 'playerVehicleID'))
 class VehiclePassengerController(IVehiclePassengerController):
     __slots__ = ('__playerVehicleID', '__isCurrentVehicleAlive', '__isCurrentVehicleFPV', '__vehStateCtrl', '__eManager', 'onVehiclePassengerUpdating', 'onVehiclePassengerUpdate')
 

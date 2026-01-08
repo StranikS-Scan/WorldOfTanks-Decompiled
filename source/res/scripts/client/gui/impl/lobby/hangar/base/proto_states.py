@@ -13,6 +13,7 @@ from gui.Scaleform.framework.entities.View import ViewKey
 from gui.game_control.loadout_controller import updateInteractor
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.lobby.hangar.easy_tank_equip_state import generateEasyTankEquipStates, EasyTankEquipStatePrototype
 from gui.impl.lobby.hangar.random.sound_manager import ALL_VEHICLES_SOUND_SPACE
 from gui.impl.lobby.tank_setup.tank_setup_sounds import playEnterTankSetupView, playExitTankSetupView
 from gui.lobby_state_machine.states import SFViewLobbyState, LobbyState, LobbyStateDescription, TopScopeTopLayerState, SubScopeSubLayerState, LobbyStateFlags
@@ -281,7 +282,7 @@ def generateBasicLoadoutStateClasses(parentHangarStateCls, loadoutResource, load
      GeneratedConsumablesLoadoutState)
 
 
-def generateBasicHangarStateClasses(parentStateCls, hangarResource, hangarPrototypeCls=_HangarStatePrototype, defaultHangarPrototypeCls=_DefaultHangarStatePrototype, allVehiclesPrototypeCls=_AllVehiclesStatePrototype):
+def generateBasicHangarStateClasses(parentStateCls, hangarResource, hangarPrototypeCls=_HangarStatePrototype, defaultHangarPrototypeCls=_DefaultHangarStatePrototype, allVehiclesPrototypeCls=_AllVehiclesStatePrototype, easyTankEquipPrototypeCls=EasyTankEquipStatePrototype):
 
     @parentStateCls.parentOf
     class GeneratedHangarState(hangarPrototypeCls):
@@ -294,12 +295,14 @@ def generateBasicHangarStateClasses(parentStateCls, hangarResource, hangarProtot
             lsm = self.getMachine()
             lsm.addState(GeneratedDefaultHangarState(flags=StateFlags.INITIAL))
             lsm.addState(GeneratedAllVehiclesState())
+            lsm.addState(_generatedEasyTankEquipStateCls())
             super(GeneratedHangarState, self).registerStates()
 
         def registerTransitions(self):
             lsm = self.getMachine()
             lsm.addNavigationTransitionFromParent(lsm.getStateByCls(GeneratedDefaultHangarState))
             lsm.addNavigationTransitionFromParent(lsm.getStateByCls(GeneratedAllVehiclesState))
+            lsm.addNavigationTransitionFromParent(lsm.getStateByCls(_generatedEasyTankEquipStateCls))
             super(GeneratedHangarState, self).registerTransitions()
 
     @GeneratedHangarState.parentOf
@@ -313,4 +316,8 @@ def generateBasicHangarStateClasses(parentStateCls, hangarResource, hangarProtot
     class GeneratedAllVehiclesState(allVehiclesPrototypeCls):
         STATE_ID = allVehiclesPrototypeCls.STATE_ID or 'allVehicles'
 
-    return (GeneratedHangarState, GeneratedDefaultHangarState, GeneratedAllVehiclesState)
+    _generatedEasyTankEquipStateCls = generateEasyTankEquipStates(GeneratedHangarState, easyTankEquipPrototypeCls)
+    return (GeneratedHangarState,
+     GeneratedDefaultHangarState,
+     GeneratedAllVehiclesState,
+     _generatedEasyTankEquipStateCls)

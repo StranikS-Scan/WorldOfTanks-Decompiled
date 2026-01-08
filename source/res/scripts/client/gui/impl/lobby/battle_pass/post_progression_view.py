@@ -78,6 +78,11 @@ class PostProgressionPresenter(ViewComponent[PostProgressionViewModel]):
         super(PostProgressionPresenter, self)._onLoading(*args, **kwargs)
         self.__fillModel()
 
+    def _finalize(self):
+        self.__saveLastProgress()
+        self.__saveLastCycle()
+        super(PostProgressionPresenter, self)._finalize()
+
     def _getEvents(self):
         return ((self.viewModel.onOpenInfoPage, self.__showInfoPage),
          (self.viewModel.onOpenPointsInfo, self.__showPointsInfo),
@@ -188,8 +193,6 @@ class PostProgressionPresenter(ViewComponent[PostProgressionViewModel]):
             self.__animationState |= _AnimationState.NEW_PROGRESS_STATE
         if completedCyclesCount != previousBattlePassCyclesSeen:
             self.__animationState |= _AnimationState.NEW_CYCLE_STATE
-        self.__saveLastProgress()
-        self.__saveLastCycle()
 
     def __getLevelModel(self, level):
         model = LevelModel()
@@ -268,6 +271,8 @@ class PostProgressionPresenter(ViewComponent[PostProgressionViewModel]):
     def __onProgressAchieved(self):
         self.__animationState &= ~_AnimationState.NEW_PROGRESS_STATE
         if self.__animationState == _AnimationState.NORMAL_STATE:
+            self.__saveLastProgress()
+            self.__saveLastCycle()
             self.__updateProgression()
 
     def __onCycleCompleted(self):
@@ -275,6 +280,8 @@ class PostProgressionPresenter(ViewComponent[PostProgressionViewModel]):
         currentChapterPoints = self.__battlePass.getPointsInChapter(self.__chapterID)
         currentChapterPoints %= self.__battlePass.getLevelsConfig(self.__chapterID)[-1]
         if self.__animationState == _AnimationState.NORMAL_STATE and not currentChapterPoints:
+            self.__saveLastProgress()
+            self.__saveLastCycle()
             self.__updateProgression()
 
     def __saveLastProgress(self):

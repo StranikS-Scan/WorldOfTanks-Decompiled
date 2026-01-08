@@ -104,8 +104,17 @@ class CustomizationState(LobbyState, EventsHandler, SubhangarStateGroupConfigPro
     def _getListeners(self):
         return ((events.CustomizationEvent.CLOSE, self.__showHangar, EVENT_BUS_SCOPE.LOBBY),)
 
+    def _getEvents(self):
+        return ((self.__hangarSpace.onSpaceChanged, self.__onSpaceChanged),)
+
     @staticmethod
     def __showHangar(event):
+        showHangar()
+
+    def __onSpaceChanged(self):
+        machine = self.getMachine()
+        mainState = machine.getStateByCls(_MainState)
+        mainState.proceedWithoutSave = True
         showHangar()
 
 

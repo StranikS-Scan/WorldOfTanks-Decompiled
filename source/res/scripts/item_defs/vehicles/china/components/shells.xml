@@ -1,4 +1,5 @@
 <shells.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <icons>
     <ap>	ARMOR_PIERCING.png 0 0	</ap>
     <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
@@ -4959,6 +4960,63 @@
       </damage>
     </armorSpalls>
   </_152mm_Sha_bao_152ZPL>
+  <_152mm_Chuan_bei_152ZPL_1>
+    <id>	190	</id>
+    <userString>	#china_vehicles:_152mm_Chuan_bei_152ZPL_1	</userString>
+    <icon>	ap	</icon>
+    <price>	1999	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	152	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	100	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_152mm_Chuan_bei_152ZPL_1>
+  <_152mm_Po_152ZPL_1>
+    <id>	191	</id>
+    <userString>	#china_vehicles:_152mm_Po_152ZPL_1	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	7600	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	152	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	100	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_152mm_Po_152ZPL_1>
+  <_152mm_Sha_bao_152ZPL_1>
+    <id>	192	</id>
+    <userString>	#china_vehicles:_152mm_Sha_bao_152ZPL_1	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1346	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	152	</caliber>
+    <explosionRadius>	3.66	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	100	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	3.66	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	50	</armor>
+        <devices>	100	</devices>
+      </damage>
+    </armorSpalls>
+  </_152mm_Sha_bao_152ZPL_1>
   <_160mm_CB_76>
     <id>	128	</id>
     <userString>	#china_vehicles:_160mm_CB_76	</userString>

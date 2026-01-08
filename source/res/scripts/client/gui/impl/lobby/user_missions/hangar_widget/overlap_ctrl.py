@@ -21,6 +21,7 @@ class OverlapCtrlMixin(object):
         self.__isWindowOverlapped = False
         self.__isUpdateQueued = False
         self.__deferredUpdates = []
+        self.__lsmViewAliases = set()
         self.__isFullUpdate = False
         self._isFinalized = False
         self._updateWindowOverlapped()
@@ -39,6 +40,11 @@ class OverlapCtrlMixin(object):
 
     def initOverlapCtrl(self):
         self._lobbyStateMachine = getLobbyStateMachine()
+        for state in self._lobbyStateMachine.getRecursiveChildrenStates():
+            stateViewKey = state.getViewKey()
+            if not stateViewKey:
+                continue
+            self.__lsmViewAliases.add(stateViewKey.alias)
 
     @property
     def hasDeferModelUpdate(self):
@@ -81,7 +87,7 @@ class OverlapCtrlMixin(object):
             size = window.size
             return size[0] > self._MIN_WINDOW_WIDTH and size[1] > self._MIN_WINDOW_HEIGHT
 
-        windows = self.gui.windowsManager.findWindows(lambda w: w.layer in self.__RESTRICTED_LAYERS and w.windowStatus in self.__ACTIVE_WINDOW_STATUSES and _isValidWindowSize(w))
+        windows = self.gui.windowsManager.findWindows(lambda w: w.layer in self.__RESTRICTED_LAYERS and w.windowStatus in self.__ACTIVE_WINDOW_STATUSES and _isValidWindowSize(w) and getattr(w.content, 'layoutID', None) not in self.__lsmViewAliases)
         self.__isWindowOverlapped = bool(windows)
 
     def _rawUpdate(self):

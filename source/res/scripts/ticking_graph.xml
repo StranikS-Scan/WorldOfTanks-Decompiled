@@ -7,6 +7,10 @@
     <journalUpdate></journalUpdate>
     <clientRecreate></clientRecreate>
     <networkObjectsUpdate></networkObjectsUpdate>
+    <gunEffectsUpdate></gunEffectsUpdate>
+    <variablesOnChangePreUpdate></variablesOnChangePreUpdate>
+    <variablesOnChangeUpdate></variablesOnChangeUpdate>
+    <variablesOnChangePostUpdate></variablesOnChangePostUpdate>
     <transformPreUpdate></transformPreUpdate>
     <transformUpdate></transformUpdate>
     <transformPostUpdate></transformPostUpdate>
@@ -16,9 +20,6 @@
     <compositionUpdate></compositionUpdate>
     <vehicleHierarchyPostUpdate></vehicleHierarchyPostUpdate>
     <postModelUpdate></postModelUpdate>
-    <addAttributeModifier></addAttributeModifier>
-    <addAttributeStorage></addAttributeStorage>
-    <removeAttributeModifier></removeAttributeModifier>
   </Init>
   <Simulation>
     <PreSimulation>

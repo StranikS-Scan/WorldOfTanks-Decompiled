@@ -281,7 +281,8 @@ class _TipsValidator(object):
          _RankedBattlesValidator(),
          _PostProgressionValidator(),
          _ChassisTypeValidator(),
-         _VehPropertyValidator())
+         _VehPropertyValidator(),
+         _MechanicsValidator())
 
     def validateRegularTip(self, tipFilter, ctx=None):
         if not tipFilter:
@@ -368,13 +369,28 @@ class _VehPropertyValidator(object):
         return not requiredProperty or getattr(ctx['vehicleType'], requiredProperty, False)
 
 
+class _MechanicsValidator(object):
+
+    @staticmethod
+    def validate(tipFilter, ctx):
+        mechanics = tipFilter['mechanics']
+        if mechanics is None:
+            return True
+        else:
+            included = mechanics['include']
+            if included and not included & ctx['vehicleType'].vehicleMechanics:
+                return False
+            excluded = mechanics['exclude']
+            return not excluded or not excluded & ctx['vehicleType'].vehicleMechanics
+
+
 class _BattlesValidator(object):
 
     @staticmethod
     def validate(tipFilter, ctx):
         battlesCount = ctx.get('battlesCount')
         minBattles, maxBattles = tipFilter['minBattles'], tipFilter['maxBattles']
-        return minBattles <= battlesCount <= maxBattles
+        return minBattles <= battlesCount and (not maxBattles or battlesCount <= maxBattles)
 
 
 class _ArenaGuiTypeValidator(object):

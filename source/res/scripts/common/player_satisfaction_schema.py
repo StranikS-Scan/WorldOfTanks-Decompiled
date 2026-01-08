@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/player_satisfaction_schema.py
-from base_schema_manager import GameParamsSchema
+from game_params_common.schema import GameParamsSchema
 from constants import Configs
 from dict2model import fields, models
 from dict2model.schemas import Schema
@@ -33,4 +33,4 @@ class PlayerSatisfactionConfigModel(models.Model):
 
 
 playerSatisfactionSchema = GameParamsSchema[PlayerSatisfactionConfigModel](gameParamsKey=Configs.PLAYER_SATISFACTION_CONFIG.value, fields={'enabled': fields.Boolean(required=True),
- 'enabledInterfaces': fields.Nested(_interfacesSchema, required=True)}, modelClass=PlayerSatisfactionConfigModel, checkUnknown=True)
+ 'enabledInterfaces': fields.Nested(_interfacesSchema, required=True)}, modelClass=PlayerSatisfactionConfigModel, checkUnknown=True, usedInReplay=True)

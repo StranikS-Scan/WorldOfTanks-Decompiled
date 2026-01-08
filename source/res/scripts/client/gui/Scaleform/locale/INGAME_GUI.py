@@ -34,6 +34,7 @@ class INGAME_GUI(object):
     PLAYER_ERRORS_CANT_SHOOT_GUN_DAMAGED = '#ingame_gui:player_errors/cant_shoot/gun_damaged'
     PLAYER_ERRORS_CANT_SHOOT_GUN_RELOAD = '#ingame_gui:player_errors/cant_shoot/gun_reload'
     PLAYER_ERRORS_CANT_SHOOT_GUN_LOCKED = '#ingame_gui:player_errors/cant_shoot/gun_locked'
+    PLAYER_ERRORS_CANT_SHOOT_GUN_OVERHEATED = '#ingame_gui:player_errors/cant_shoot/gun_overheated'
     PLAYER_ERRORS_CANT_SWITCH_ENGINE_DESTROYED = '#ingame_gui:player_errors/cant_switch/engine_destroyed'
     PLAYER_ERRORS_CANT_SWITCH_GUN_DESTROYED = '#ingame_gui:player_errors/cant_switch/gun_destroyed'
     PLAYER_ERRORS_CANT_SWITCH_ONE_SHELL_LEFT = '#ingame_gui:player_errors/cant_switch/one_shell_left'
@@ -98,6 +99,7 @@ class INGAME_GUI(object):
     CHAT_SHORTCUTS_RELOADING_READY = '#ingame_gui:chat_shortcuts/reloading_ready'
     CHAT_SHORTCUTS_RELOADING_READY_CASSETTE = '#ingame_gui:chat_shortcuts/reloading_ready_cassette'
     CHAT_SHORTCUTS_RELOADING_UNAVAILABLE = '#ingame_gui:chat_shortcuts/reloading_unavailable'
+    CHAT_SHORTCUTS_OVERHEATED_GUN = '#ingame_gui:chat_shortcuts/overheated_gun'
     CHAT_SHORTCUTS_SPG_AIM_AREA_GRIDINFO = '#ingame_gui:chat_shortcuts/spg_aim_area_gridInfo'
     CHAT_SHORTCUTS_SPG_AIM_AREA = '#ingame_gui:chat_shortcuts/spg_aim_area'
     CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING_GRIDINFO = '#ingame_gui:chat_shortcuts/spg_aim_area_reloading_gridInfo'
@@ -159,6 +161,7 @@ class INGAME_GUI(object):
     CHAT_EXAMPLE_TURN_BACK = '#ingame_gui:chat_example/turn_back'
     CHAT_EXAMPLE_RELOADING_READY_CASSETTE = '#ingame_gui:chat_example/reloading_ready_cassette'
     CHAT_EXAMPLE_RELOADING_UNAVAILABLE = '#ingame_gui:chat_example/reloading_unavailable'
+    CHAT_EXAMPLE_OVERHEATED_GUN = '#ingame_gui:chat_example/overheated_gun'
     CHAT_EXAMPLE_HELP_ME = '#ingame_gui:chat_example/help_me'
     CHAT_EXAMPLE_HELP_ME_EX = '#ingame_gui:chat_example/help_me_ex'
     CHAT_EXAMPLE_POSITIVE = '#ingame_gui:chat_example/positive'
@@ -727,6 +730,7 @@ class INGAME_GUI(object):
     SIEGEMODE_HINT_RECHARGEABLENITRO = '#ingame_gui:siegeMode/hint/rechargeableNitro'
     SIEGEMODE_HINT_TARGETDESIGNATOR = '#ingame_gui:siegeMode/hint/targetDesignator'
     SIEGEMODE_HINT_TWINGUN = '#ingame_gui:siegeMode/hint/twinGun'
+    SIEGEMODE_HINT_STAGEDJETBOOSTERS = '#ingame_gui:siegeMode/hint/stagedJetBoosters'
     EFFICIENCYRIBBONS_ENEMYSECTORCAPTURED = '#ingame_gui:efficiencyRibbons/enemySectorCaptured'
     EFFICIENCYRIBBONS_DESTRUCTIBLEDAMAGED = '#ingame_gui:efficiencyRibbons/destructibleDamaged'
     EFFICIENCYRIBBONS_DESTRUCTIBLEDESTROYED = '#ingame_gui:efficiencyRibbons/destructibleDestroyed'
@@ -1062,6 +1066,7 @@ class INGAME_GUI(object):
      CHAT_SHORTCUTS_RELOADING_READY,
      CHAT_SHORTCUTS_RELOADING_READY_CASSETTE,
      CHAT_SHORTCUTS_RELOADING_UNAVAILABLE,
+     CHAT_SHORTCUTS_OVERHEATED_GUN,
      CHAT_SHORTCUTS_SPG_AIM_AREA_GRIDINFO,
      CHAT_SHORTCUTS_SPG_AIM_AREA,
      CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING_GRIDINFO,
@@ -1122,6 +1127,7 @@ class INGAME_GUI(object):
      CHAT_EXAMPLE_TURN_BACK,
      CHAT_EXAMPLE_RELOADING_READY_CASSETTE,
      CHAT_EXAMPLE_RELOADING_UNAVAILABLE,
+     CHAT_EXAMPLE_OVERHEATED_GUN,
      CHAT_EXAMPLE_HELP_ME,
      CHAT_EXAMPLE_HELP_ME_EX,
      CHAT_EXAMPLE_POSITIVE,

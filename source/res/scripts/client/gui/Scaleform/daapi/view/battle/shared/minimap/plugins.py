@@ -19,7 +19,7 @@ from account_helpers.settings_core.options import MinimapArtyHitSetting
 from account_helpers.settings_core.settings_constants import GAME
 from battleground.location_point_manager import g_locationPointManager
 from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES, ReplyState, MarkerType, LocationMarkerSubType, ONE_SHOT_COMMANDS_TO_REPLIES, INVALID_VEHICLE_POSITION
-from constants import VISIBILITY, AOI, VEHICLE_BUNKER_TURRET_TAG
+from constants import VISIBILITY, AOI
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
 from gui import GUI_SETTINGS, InputHandler
 from gui.Scaleform.daapi.view.battle.shared.minimap import common
@@ -803,7 +803,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
 
     def _skipMarker(self, vInfo, vProxy=None):
         isAlive = vProxy.isAlive() if vProxy is not None else vInfo.isAlive()
-        return vInfo.vehicleID == self.__playerVehicleID or vInfo.isObserver() or not isAlive or VEHICLE_BUNKER_TURRET_TAG in vInfo.vehicleType.tags
+        return vInfo.vehicleID == self.__playerVehicleID or vInfo.isObserver() or not isAlive
 
     def _setVehicleInfo(self, vehicleID, entry, vInfo, guiProps, isSpotted=False):
         classTag = vInfo.vehicleType.classTag

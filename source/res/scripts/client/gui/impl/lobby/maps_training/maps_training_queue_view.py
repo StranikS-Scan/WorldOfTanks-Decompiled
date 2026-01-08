@@ -27,7 +27,7 @@ class MapsTrainingQueueView(MapsTrainingBaseView):
     _WAIT_TIME_LONG = 180
 
     def __init__(self, *args, **kwargs):
-        super(MapsTrainingQueueView, self).__init__(viewResource=R.views.lobby.maps_training.MapsTrainingQueue(), viewModel=MapsTrainingQueueModel())
+        super(MapsTrainingQueueView, self).__init__(viewResource=R.views.mono.maps_training.maps_training_queue(), viewModel=MapsTrainingQueueModel())
         self.__timerCallback = None
         self.__queueCallback = None
         self.__createTime = kwargs['ctx'].get('createTime', getCurrentTimestamp())

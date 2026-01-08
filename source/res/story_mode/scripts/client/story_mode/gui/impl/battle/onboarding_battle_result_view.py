@@ -19,7 +19,7 @@ if typing.TYPE_CHECKING:
 
 class OnboardingBattleResultView(ViewImpl):
     __slots__ = ('_finishReason', '_missionId', '_uiLogger')
-    LAYOUT_ID = R.views.story_mode.battle.OnboardingBattleResultView()
+    LAYOUT_ID = R.views.story_mode.mono.battle.onboarding_battle_result_view()
     _storyModeCtrl = dependency.descriptor(IStoryModeController)
 
     def __init__(self, finishReason, missionId):

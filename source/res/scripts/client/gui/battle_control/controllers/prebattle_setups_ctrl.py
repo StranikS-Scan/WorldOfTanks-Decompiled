@@ -332,7 +332,7 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
             self.__updateState(_States.SELECTION_STARTED)
 
     def __updateAmmoCtrl(self):
-        self.__sessionProvider.shared.ammo.updateForNewSetup(self.__vehicle.descriptor, self.__vehicle.shells.installed.getItems())
+        self.__sessionProvider.shared.ammo.updateForNewSetup(self.__playerVehicleID, self.__vehicle.descriptor, self.__vehicle.shells.installed.getItems())
 
     def __updateAmmoCtrlParams(self, factors):
         ammoCtrl = self.__sessionProvider.shared.ammo

@@ -1,15 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/OverheatStacksController.py
-import BigWorld
 import typing
+import BigWorld
 from constants import OVERHEAT_GAIN_STATE as STATE
-from items.components.shared_components import OverheatStacksParams
+from gui.shared.utils.decorators import ReprInjector
 from math_utils import clamp
-from vehicles.components.vehicle_component import VehicleMechanicPrefabDynamicComponent
+from vehicles.components.vehicle_component import VehicleDynamicComponent
+from vehicles.components.vehicle_prefabs import createMechanicPrefabSpawner
+from vehicles.mechanics.common import IMechanicComponent
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from vehicles.mechanics.mechanic_helpers import getVehicleDescrMechanicParams
 from vehicles.mechanics.mechanic_states import createMechanicStatesEvents, IMechanicStatesComponent, IMechanicState
 if typing.TYPE_CHECKING:
+    from items.components.shared_components import OverheatStacksParams
     from vehicles.mechanics.mechanic_states import MechanicStatesEvents
+_LOG_OVERHEAT_STACKS_DEBUG = False
 
+@ReprInjector.simple('level', 'gainState', 'startTime', 'endTime', 'delayTimerElapsed', 'stackTimeElapsed')
 class OverheatStacksState(typing.NamedTuple('OverheatStacksState', (('level', int),
  ('gainState', STATE),
  ('startTime', int),
@@ -54,18 +61,27 @@ class OverheatStacksState(typing.NamedTuple('OverheatStacksState', (('level', in
         return self.level != other.level or self.gainState != other.gainState
 
 
-class OverheatStacksController(VehicleMechanicPrefabDynamicComponent, IMechanicStatesComponent):
+@ReprInjector.withParent()
+class OverheatStacksController(VehicleDynamicComponent, IMechanicComponent, IMechanicStatesComponent):
 
     def __init__(self):
         super(OverheatStacksController, self).__init__()
         self.__params = None
-        self.__statesEvents = createMechanicStatesEvents(self)
+        self.__mechanicPrefabSpawner = createMechanicPrefabSpawner(self.entity, self)
+        self.__statesEvents = createMechanicStatesEvents(self, withDebug=_LOG_OVERHEAT_STACKS_DEBUG)
         self._initComponent()
         return
 
     @property
+    def vehicleMechanic(self):
+        return VehicleMechanic.OVERHEAT_STACKS
+
+    @property
     def statesEvents(self):
         return self.__statesEvents
+
+    def getComponentParams(self):
+        return self.__params
 
     def getMechanicState(self):
         return OverheatStacksState.fromComponentStatus(self.curLevel, self.gainState, self.timeElapsed, self.delayTimerElapsed, self.timeNextGain, self.__params)
@@ -92,9 +108,14 @@ class OverheatStacksController(VehicleMechanicPrefabDynamicComponent, IMechanicS
         self._updateComponentAppearance()
 
     def _onAppearanceReady(self):
-        self.__params = self.entity.typeDescriptor.mechanicsParams[OverheatStacksParams.MECHANICS_NAME]
-        self.__statesEvents.processStatePrepared()
         super(OverheatStacksController, self)._onAppearanceReady()
+        self.__mechanicPrefabSpawner.loadAppearancePrefab()
+        self.__statesEvents.processStatePrepared()
 
-    def _onComponentAppearanceUpdate(self):
+    def _onComponentAppearanceUpdate(self, **kwargs):
+        super(OverheatStacksController, self)._onComponentAppearanceUpdate(**kwargs)
         self.__statesEvents.updateMechanicState(self.getMechanicState())
+
+    def _collectComponentParams(self, typeDescriptor):
+        super(OverheatStacksController, self)._collectComponentParams(typeDescriptor)
+        self.__params = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanic)

@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: resource_well/scripts/client/resource_well/gui/feature/resource.py
+from __future__ import absolute_import
 from collections import OrderedDict
 import typing
+from future.builtins import str
+from future.utils import itervalues, iteritems
 import nations
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
@@ -9,11 +12,11 @@ from gui import NONE_NATION_NAME
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.backport import createTooltipData, TooltipData
-from resource_well.gui.feature.constants import ResourceType
-from resource_well.gui.feature.resources_sort import getComparatorByType, getTypeComparator
 from gui.shared.money import Currency
 from gui.shared.utils.requesters.blueprints_requester import makeIntelligenceCD, makeNationalCD, getFragmentNationID
 from helpers import dependency
+from resource_well.gui.feature.constants import ResourceType
+from resource_well.gui.feature.resources_sort import sortByResourceType, getSorterByResourceType
 from shared_utils import findFirst
 from skeletons.gui.resource_well import IResourceWellController
 from skeletons.gui.shared import IItemsCache
@@ -140,19 +143,19 @@ class NationalBlueprintResource(BlueprintResource):
         return nations.MAP.get(getFragmentNationID(fragmentCD), nations.NONE_INDEX)
 
 
-def _currencyResourceFactory(resourceType, resources):
-    return [ CurrencyResource(resource.name, resource.rate, resource.limit, resourceType) for resource in resources if resource.name in Currency.GUI_ALL + (CURRENCIES_CONSTANTS.FREE_XP,) ]
+def _currencyResourceFactory(resources):
+    return [ CurrencyResource(resource.name, resource.rate, resource.limit, ResourceType.CURRENCY.value) for resource in resources if resource.name in Currency.GUI_ALL + (CURRENCIES_CONSTANTS.FREE_XP,) ]
 
 
-def _blueprintResourceFactory(resourceType, resources):
+def _blueprintResourceFactory(resources):
     result = []
     for resource in resources:
         fragmentCD = int(resource.name)
         fragmentType = getFragmentType(fragmentCD)
         if fragmentType == BlueprintTypes.INTELLIGENCE_DATA:
-            result.append(IntelligenceBlueprintResource(fragmentCD, resource.rate, resource.limit, resourceType))
+            result.append(IntelligenceBlueprintResource(fragmentCD, resource.rate, resource.limit, ResourceType.BLUEPRINTS.value))
         if fragmentType == BlueprintTypes.NATIONAL:
-            result.append(NationalBlueprintResource(fragmentCD, resource.rate, resource.limit, resourceType))
+            result.append(NationalBlueprintResource(fragmentCD, resource.rate, resource.limit, ResourceType.BLUEPRINTS.value))
 
     return result
 
@@ -162,20 +165,22 @@ _RESOURCE_FACTORIES = {ResourceType.CURRENCY: _currencyResourceFactory,
 
 def processResourcesConfig(resourcesConfig):
     result = {}
-    for resourceType, resources in resourcesConfig.iteritems():
-        factory = _RESOURCE_FACTORIES.get(ResourceType.getMember(resourceType))
-        if callable(factory):
-            result[resourceType] = sorted(factory(resourceType, resources.values()), cmp=getComparatorByType(resourceType))
+    for resourceTypeStr, resources in resourcesConfig.items():
+        resourceType = ResourceType.getMember(resourceTypeStr)
+        factory = _RESOURCE_FACTORIES.get(resourceType)
+        sorter = getSorterByResourceType(resourceType)
+        if resourceType and factory and sorter:
+            result[resourceType] = sorted(factory(itervalues(resources)), key=sorter)
 
-    return OrderedDict(sorted(result.items(), key=lambda (resType, _): resType, cmp=getTypeComparator()))
+    return OrderedDict(sorted(iteritems(result), key=lambda x: sortByResourceType(x[0])))
 
 
 @dependency.replace_none_kwargs(resourceWell=IResourceWellController)
 def processLoadingResources(rewardID, loadingResources, resourceWell=None):
     processedResources = []
     processedConfig = processResourcesConfig(resourceWell.config.getRewardConfig(rewardID).resources)
-    for name, count in loadingResources.iteritems():
-        for resources in processedConfig.itervalues():
+    for name, count in iteritems(loadingResources):
+        for resources in itervalues(processedConfig):
             resource = findFirst(lambda res, resName=name: res.guiName == resName, resources)
             if resource is not None:
                 processedResources.append((resource, count))
@@ -187,13 +192,13 @@ def processLoadingResources(rewardID, loadingResources, resourceWell=None):
 def mergeResources(splitResources, rewardID, resourceWell=None):
     mergedResources = []
     resourcesConfig = resourceWell.config.getRewardConfig(rewardID).resources
-    for resType, resource in splitResources.iteritems():
-        for name, count in resource.iteritems():
-            resourceConfig = findFirst(lambda config, resName=name: config.name == str(resName), resourcesConfig[resType].values())
+    for resType, resource in iteritems(splitResources):
+        for name, count in iteritems(resource):
+            resourceConfig = findFirst(lambda config, resName=name: config.name == str(resName), itervalues(resourcesConfig[resType]))
             if resourceConfig is not None:
                 factory = _RESOURCE_FACTORIES.get(ResourceType.getMember(resType))
                 if callable(factory):
-                    mergedResources.append((factory(resType, [resourceConfig])[0], count))
+                    mergedResources.append((factory([resourceConfig])[0], count))
 
     return mergedResources
 

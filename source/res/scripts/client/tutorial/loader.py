@@ -40,7 +40,7 @@ class RunCtx(object):
     def __init__(self, cache, **kwargs):
         super(RunCtx, self).__init__()
         self.cache = cache
-        self.databaseID = kwargs.get('databaseID', 0L)
+        self.databaseID = kwargs.get('databaseID', 0)
         self.restart = kwargs.get('restart', False)
         self.isFirstStart = kwargs.get('isFirstStart', False)
         self.isAfterBattle = kwargs.get('isAfterBattle', False)

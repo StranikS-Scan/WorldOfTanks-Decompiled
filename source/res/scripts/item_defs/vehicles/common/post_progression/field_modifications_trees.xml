@@ -1367,6 +1367,177 @@
       </step>
     </steps>
   </role_MT_support>
+  <role_MT_support_temperatureGun>
+    <id>	7000	</id>
+    <rootStep>	1	</rootStep>
+    <steps>
+      <step>
+        <id>	1	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	feature	</type>
+          <value>	shells_consumables_switch	</value>
+        </action>
+        <unlocks>	2	</unlocks>
+        <level>	1	</level>
+      </step>
+      <step>
+        <id>	2	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_mediumTank_base_1	</value>
+        </action>
+        <unlocks>	3 701	</unlocks>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	701	</id>
+        <price>	unlockPairModificationCost	</price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_MT_support_temperatureGun_pair_1	</value>
+        </action>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	3	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	feature	</type>
+          <value>	opt_dev_boosters_switch	</value>
+        </action>
+        <unlocks>	4	</unlocks>
+        <level>	3	</level>
+      </step>
+      <step>
+        <id>	4	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_mediumTank_base_2	</value>
+        </action>
+        <unlocks>	5 202	</unlocks>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	202	</id>
+        <price>	unlockPairModificationCost	</price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_mediumTank_pair_2	</value>
+        </action>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	5	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_mediumTank_base_3	</value>
+        </action>
+        <unlocks>	6 203	</unlocks>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	203	</id>
+        <price>	unlockPairModificationCost	</price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_mediumTank_pair_3	</value>
+        </action>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	6	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	feature	</type>
+          <value>	roleSlot	</value>
+        </action>
+        <unlocks>	7	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	8	</minLevel>
+              <maxLevel>	10	</maxLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	6	</level>
+      </step>
+      <step>
+        <id>	7	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_MT_support_base_4	</value>
+        </action>
+        <unlocks>	8 704	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+              <maxLevel>	10	</maxLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	704	</id>
+        <price>	unlockPairModificationCost	</price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_MT_support_temperatureGun_pair_4	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+              <maxLevel>	10	</maxLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	8	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_MT_support_base_5	</value>
+        </action>
+        <unlocks>	705	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+              <maxLevel>	10	</maxLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+      <step>
+        <id>	705	</id>
+        <price>	unlockPairModificationCost	</price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_MT_support_pair_5	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+              <maxLevel>	10	</maxLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+    </steps>
+  </role_MT_support_temperatureGun>
   <role_ATSPG_assault>
     <id>	3106	</id>
     <rootStep>	1	</rootStep>

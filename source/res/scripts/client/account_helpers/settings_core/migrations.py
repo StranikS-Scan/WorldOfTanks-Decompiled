@@ -6,7 +6,6 @@ from account_helpers.AccountSettings import NEW_SETTINGS_COUNTER
 from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys, OnceOnlyHints, ScorePanelStorageKeys, SPGAim, GuiSettingsBehavior
 from adisp import adisp_process, adisp_async
 from debug_utils import LOG_DEBUG
-from gui.server_events.pm_constants import PM_TUTOR_FIELDS
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCache
 from skeletons.gui.game_control import IIGRController
@@ -409,7 +408,7 @@ def _migrateTo41(core, data, initialized):
 
 
 def _migrateTo42(core, data, initialized):
-    data['uiStorage'][PM_TUTOR_FIELDS.GREETING_SCREEN_SHOWN] = False
+    pass
 
 
 def _migrateTo43(core, data, initialized):
@@ -1449,6 +1448,28 @@ def _migrateTo150(core, data, initialized):
                 clear[section] = clear.get(section, 0) | settingOffset
 
 
+def _migrateTo151(core, data, initialized):
+    pass
+
+
+def _migrateTo152(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.UI_STORAGE, 0)
+    clear = data['clear']
+    settingOffset = 268435456
+    if storedValue & settingOffset:
+        clear['uiStorage'] = clear.get('uiStorage', 0) | settingOffset
+
+
+def _migrateTo153(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.UI_STORAGE, 0)
+    settingOffset = 1
+    if storedValue & settingOffset:
+        clear = data['clear']
+        clear['uiStorage'] = clear.get('uiStorage', 0) | settingOffset
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -2043,6 +2064,18 @@ _versions = ((1,
   False),
  (150,
   _migrateTo150,
+  False,
+  False),
+ (151,
+  _migrateTo151,
+  False,
+  False),
+ (152,
+  _migrateTo152,
+  False,
+  False),
+ (153,
+  _migrateTo153,
   False,
   False))
 

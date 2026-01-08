@@ -202,7 +202,6 @@ class PQCache(object):
         self.__tileIDchainIDToPotapovQuestID = {}
         self.__tileIDchainIDToFinalPotapovQuestID = {}
         self.__tileIDchainIDToInitialPotapovQuestID = {}
-        self.__potapovQuestNameToQuestId = {}
         self.__readQuestList(auxData=auxData)
 
     def questByPotapovQuestID(self, potapovQuestID):
@@ -239,10 +238,11 @@ class PQCache(object):
     def branchByPotapovQuestID(self, potapovQuestID):
         return PQ_BRANCH.TYPE_TO_NAME[self.questByPotapovQuestID(potapovQuestID).branch]
 
-    def getPotapovQuestIDByQuestName(self, questName):
-        if questName not in self.__potapovQuestNameToQuestId:
-            raise SoftException('Invalid potapov quest name (%s)' % (questName,))
-        return self.__potapovQuestNameToQuestId[questName]
+    def getPotapovQuestNameByQuestID(self, questID):
+        return self.questByPotapovQuestID(questID).generalQuestID
+
+    def getPotapovQuestIDByName(self, questName):
+        return self.getPotapovQuestIDByUniqueID('{}_main'.format(questName))
 
     def __iter__(self):
         return self.__questUniqueIDToPotapovQuestID.iteritems()
@@ -257,7 +257,7 @@ class PQCache(object):
         self.__tileIDchainIDToPotapovQuestID = tileIDchainIDToPotapovQuestID = {}
         self.__tileIDchainIDToFinalPotapovQuestID = tileIDchainIDToFinalPotapovQuestID = {}
         self.__tileIDchainIDToInitialPotapovQuestID = tileIDchainIDToInitialPotapovQuestID = {}
-        self.__potapovQuestNameToQuestId = ids = {}
+        ids = {}
         curTime = int(time.time())
         xmlSource = quest_xml_source.Source()
         for qname, qsection in section.items():

@@ -7,14 +7,13 @@ from gui.battle_pass.battle_pass_award import BattlePassAwardsManager
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData, useBigAwardInjection
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
 from gui.battle_pass.battle_pass_helpers import getStyleInfoForChapter
-from gui.battle_pass.sounds import BattlePassSounds
+from gui.battle_pass.sounds import BattlePassSounds, switchDialogBPSoundFilter
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_awards_view_model import BattlePassAwardsViewModel, RewardReason
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.event_dispatcher import showBattlePass
-from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 MAP_REWARD_REASON = {BattlePassRewardReason.PURCHASE_BATTLE_PASS: RewardReason.BUY_BATTLE_PASS,
@@ -69,6 +68,7 @@ class BattlePassAwardsView(ViewImpl):
 
     def _onLoading(self, bonuses, packageBonuses, data, needNotifyClosing, *args, **kwargs):
         super(BattlePassAwardsView, self)._onLoading(*args, **kwargs)
+        switchDialogBPSoundFilter()
         chapterID = data.get('chapter', 0)
         newLevel = data.get('newLevel', 0) or 0
         reason = data.get('reason', BattlePassRewardReason.DEFAULT)
@@ -98,7 +98,6 @@ class BattlePassAwardsView(ViewImpl):
         self.__setAwards(bonuses, isFinalReward)
         isRewardSelected = reason == BattlePassRewardReason.SELECT_REWARD
         self.viewModel.setIsNeedToShowOffer(not (isBattlePassPurchased or isRewardSelected))
-        switchHangarOverlaySoundFilter(on=True)
         SoundGroups.g_instance.playSound2D(BattlePassSounds.HOLIDAY_REWARD_SCREEN if self.__battlePass.isHoliday() else BattlePassSounds.REWARD_SCREEN)
         self.__needNotifyClosing = needNotifyClosing
         return
@@ -111,7 +110,7 @@ class BattlePassAwardsView(ViewImpl):
     def _finalize(self):
         super(BattlePassAwardsView, self)._finalize()
         self.__tooltipItems = None
-        switchHangarOverlaySoundFilter(on=False)
+        switchDialogBPSoundFilter(on=False)
         self.__closeCallback = None
         self.__showBuyCallback = None
         if callable(self.__exitCallback):

@@ -630,3 +630,5 @@ class MAPS_TRAINING(object):
     BOTVEHICLETYPE_AT_SPG = '#maps_training:botVehicleType/AT-SPG'
     BOTVEHICLETYPE_SPG = '#maps_training:botVehicleType/SPG'
     BOTNAME = '#maps_training:botName'
+    PROGRESS = '#maps_training:progress'
+    COUNTTITLE = '#maps_training:countTitle'

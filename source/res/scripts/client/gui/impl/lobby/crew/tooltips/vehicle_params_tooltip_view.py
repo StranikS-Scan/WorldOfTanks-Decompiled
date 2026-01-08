@@ -14,12 +14,13 @@ from gui.impl.gen.view_models.views.lobby.crew.tooltips.vehicle_params_note impo
 from gui.impl.gen.view_models.views.lobby.crew.tooltips.vehicle_params_tooltip_view_model import VehicleParamsTooltipViewModel
 from gui.impl.pub import ViewImpl
 from gui.shared.gui_items import KPI
+from gui.shared.items_parameters import isTemperatureGun
 from gui.shared.items_parameters import formatters as param_formatter
 from gui.shared.items_parameters.bonus_helper import isSituationalBonus
 from gui.shared.items_parameters.comparator import addParameterValuesOfTheSameType
 from gui.shared.items_parameters.formatters import isRelativeParameter
 from gui.shared.items_parameters.param_name_helper import getVehicleParameterText
-from gui.shared.items_parameters.params import PIERCING_DISTANCES
+from gui.shared.items_parameters.params_constants import PIERCING_DISTANCES
 from gui.shared.utils import CHASSIS_REPAIR_TIME, SHOT_DISPERSION_ANGLE, DUAL_ACCURACY_COOLING_DELAY, ROCKET_ACCELERATION_ENGINE_POWER, RELOAD_TIME_SECS_PROP_NAME, RELOAD_TIME_PROP_NAME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, DUAL_GUN_CHARGE_TIME, AUTO_RELOAD_PROP_NAME, AIMING_TIME_PROP_NAME, AUTO_SHOOT_CLIP_FIRE_RATE, isRomanNumberForbidden
 from helpers import i18n
 from items import perks, vehicles, tankmen, parseIntCompactDescr
@@ -235,19 +236,20 @@ class BaseVehicleAdvancedParamsTooltipView(BaseVehicleParamsTooltipView):
             title = backport.text(R.strings.menu.extraParams.header(), paramName=backport.text(getVehicleParameterText(self._paramName, isPositive=True)))
             desc = backport.text(R.strings.menu.extraParams.name.dyn(self._paramName, R.strings.menu.extraParams.desc)())
         else:
-            titleParamName = param_formatter.getTitleParamName(vehicle, self._paramName)
+            vehDescr = vehicle.descriptor if vehicle is not None else None
+            titleParamName = param_formatter.getTitleParamName(vehDescr, self._paramName)
             title = self.__getTitleStr(titleParamName)
             model.setUnitOfMeasurement(param_formatter.getMeasureUnitsForParameter(vehicle, self._paramName))
             if self._paramName == AUTORELOAD_TIME and self._hasExtendedInfo():
                 desc = self._getAutoReloadTimeDescription()
             elif self._paramName == CHASSIS_REPAIR_TIME and vehicle and vehicle.isTrackWithinTrack:
                 desc = backport.text(R.strings.tooltips.tank_params.desc.chassisRepairTimeYoh())
-            elif self._paramName == SHOT_DISPERSION_ANGLE and vehicle and vehicle.descriptor.hasDualAccuracy:
-                desc = backport.text(R.strings.tooltips.tank_params.desc.shotDispersionAngle.withDualAccuracy())
             elif self._paramName == RELOAD_TIME_SECS_PROP_NAME and vehicle and vehicle.descriptor.isTwinGunVehicle:
                 desc = backport.text(R.strings.tooltips.tank_params.desc.reloadTimeSecs.twinGun())
-            elif self._paramName == SHOT_DISPERSION_ANGLE and vehicle and vehicle.descriptor.isTwinGunVehicle:
-                desc = backport.text(R.strings.tooltips.tank_params.desc.shotDispersionAngle.twinGun())
+            elif self._paramName == AIMING_TIME_PROP_NAME and vehicle and isTemperatureGun(vehicle.descriptor):
+                desc = backport.text(R.strings.tooltips.tank_params.desc.temperatureAimingTime())
+            elif self._paramName == SHOT_DISPERSION_ANGLE:
+                desc = self._getShotDispersionAngleDescription(vehicle)
             else:
                 desc = backport.text(R.strings.tooltips.tank_params.desc.dyn(self._paramName)())
         if isRelativeParameter(self._paramName) and self._context.isApproximately:
@@ -267,10 +269,11 @@ class BaseVehicleAdvancedParamsTooltipView(BaseVehicleParamsTooltipView):
         if self._paramName == AUTORELOAD_TIME and self._hasExtendedInfo():
             notes = model.getFooterNotes()
             note = VehicleParamsNote()
-            note.setIcon(R.images.gui.maps.icons.modules.autoLoaderGunBoost())
+            note.setIcon(R.images.gui.maps.icons.vehicle_hub.mechanics.x20x20.autoLoaderGunBoost())
             note.setTitle(self._getAutoReloadTimeExtendedDescription())
             note.setTheme(NoteThemeEnum.AUTORELOADTIME)
             notes.addViewModel(note)
+        return
 
     def _hasExtendedInfo(self):
         return True
@@ -280,6 +283,13 @@ class BaseVehicleAdvancedParamsTooltipView(BaseVehicleParamsTooltipView):
 
     def _getAutoReloadTimeExtendedDescription(self):
         return backport.text(R.strings.tooltips.tank_params.desc.autoReloadTime.boost.shortDescription())
+
+    def _getShotDispersionAngleDescription(self, vehicle):
+        if vehicle and vehicle.descriptor.hasDualAccuracy:
+            return backport.text(R.strings.tooltips.tank_params.desc.shotDispersionAngle.withDualAccuracy())
+        if vehicle and vehicle.descriptor.isTwinGunVehicle:
+            return backport.text(R.strings.tooltips.tank_params.desc.shotDispersionAngle.twinGun())
+        return backport.text(R.strings.tooltips.tank_params.desc.temperatureShotDispersionAngle()) if vehicle and isTemperatureGun(vehicle.descriptor) else backport.text(R.strings.tooltips.tank_params.desc.dyn(self._paramName)())
 
     def __getTitleStr(self, titleParamName):
         strPath = R.strings.menu.tank_params.dyn(titleParamName)

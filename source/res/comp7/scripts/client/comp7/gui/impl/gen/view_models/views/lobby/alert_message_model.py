@@ -33,11 +33,11 @@ class AlertMessageModel(ViewModel):
     def setBanTimeleftInSeconds(self, value):
         self._setNumber(1, value)
 
-    def getStartEventTimestamp(self):
-        return self._getNumber(2)
+    def getStartEventDateTime(self):
+        return self._getString(2)
 
-    def setStartEventTimestamp(self, value):
-        self._setNumber(2, value)
+    def setStartEventDateTime(self, value):
+        self._setString(2, value)
 
     def getLevels(self):
         return self._getArray(3)
@@ -53,6 +53,6 @@ class AlertMessageModel(ViewModel):
         super(AlertMessageModel, self)._initialize()
         self._addStringProperty('state')
         self._addNumberProperty('banTimeleftInSeconds', 0)
-        self._addNumberProperty('startEventTimestamp', 0)
+        self._addStringProperty('startEventDateTime', '')
         self._addArrayProperty('levels', Array())
         self.onClick = self._addCommand('onClick')

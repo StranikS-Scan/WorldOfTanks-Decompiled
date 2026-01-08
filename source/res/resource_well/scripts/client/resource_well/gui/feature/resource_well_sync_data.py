@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: resource_well/scripts/client/resource_well/gui/feature/resource_well_sync_data.py
+from __future__ import absolute_import
 from typing import Dict
 from account_helpers import AccountSyncData
 from resource_well_common.feature_constants import RESOURCE_WELL_PDATA_KEY

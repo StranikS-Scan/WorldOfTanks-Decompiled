@@ -19,13 +19,16 @@ class FrontlineLobbyHeaderHelper(DefaultLobbyHeaderHelper):
 
 def getFightBtnTooltipData(result):
     state = result.restriction
-    if state == PRE_QUEUE_RESTRICTION.LIMIT_LEVEL:
+    if state == PRE_QUEUE_RESTRICTION.MODE_IS_IN_PREANNOUNCE:
+        return makeTooltip(None, backport.text(R.strings.fl_tooltips.commonTooltip.eventStartSoon()))
+    elif state == PRE_QUEUE_RESTRICTION.LIMIT_LEVEL:
         header = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.epicBattleVehLevel.header())
         body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.epicBattleVehLevel.body(), requirements=backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.epicBattleVehLevel.requirements(), level=toRomanRangeString(result.ctx['levels'])))
         return makeTooltip(header, body)
-    if state == PRE_QUEUE_RESTRICTION.VEHICLE_WILL_BE_UNLOCKED:
+    elif state == PRE_QUEUE_RESTRICTION.VEHICLE_WILL_BE_UNLOCKED:
         rStringShort = R.strings.menu.headerButtons.fightBtn.tooltip.epicBattleSituationalVehicle
         header = backport.text(rStringShort.header())
         body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.epicBattleSituationalVehicle.body(), forStartBattle=backport.text(rStringShort.levels.forStartBattle(), levels=toRomanRangeString(result.ctx['vehicleLevelsForStartBattle'])), willBeUnlocked=backport.text(rStringShort.levels.willBeUnlocked(), levels=toRomanRangeString(result.ctx['unlockableInBattleVehLevels'])))
         return makeTooltip(header, body)
-    return getCommonFightBtnTooltipData(result) or getRandomTooltipData(result, isInSquad=True)
+    else:
+        return getCommonFightBtnTooltipData(result) or getRandomTooltipData(result, isInSquad=True)

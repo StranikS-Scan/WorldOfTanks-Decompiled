@@ -3,7 +3,8 @@
 from Event import Event
 from sound_notifications import SiegeModeSoundNotifications, TurboshaftModeSoundNotifications, TwinGunModeSoundNotifications, PillboxSiegeSoundNotifications
 from camera_shaker import SiegeModeCameraShaker
-from vehicles.mechanics.mechanic_info import hasVehicleMechanic, VehicleMechanic
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic
 
 class SiegeModeNotifier(object):
 
@@ -53,7 +54,7 @@ class SiegeModeNotifier(object):
     @staticmethod
     def _getSoundNotifications(typeDescr):
         notificationsCls = None
-        if hasVehicleMechanic(typeDescr, VehicleMechanic.PILLBOX_SIEGE_MODE):
+        if hasVehicleDescrMechanic(typeDescr, VehicleMechanic.PILLBOX_SIEGE_MODE):
             notificationsCls = PillboxSiegeSoundNotifications
         elif typeDescr.hasHydraulicChassis or typeDescr.isWheeledVehicle:
             notificationsCls = SiegeModeSoundNotifications

@@ -18,7 +18,7 @@ _VehicleShortInfo.__new__.__defaults__ = (0,
 
 def _getVehiclesGenerator(vehicles):
     for vehicleID, data in vehicles.iteritems():
-        accountDBID = 0L
+        accountDBID = 0
         items = []
         if data is None:
             continue
@@ -27,7 +27,7 @@ def _getVehiclesGenerator(vehicles):
                 continue
             if 'typeCompDescr' not in item:
                 continue
-            accountDBID = item.get('accountDBID', 0L)
+            accountDBID = item.get('accountDBID', 0)
             intCD = item['typeCompDescr']
             info = _VehicleShortInfo(intCD, item.get('team', 0), accountDBID, item.get('deathReason', DEATH_REASON_ALIVE), item.get('isTeamKiller', False))
             items.append(info)

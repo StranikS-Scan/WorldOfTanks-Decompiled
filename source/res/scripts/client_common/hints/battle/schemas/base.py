@@ -12,6 +12,7 @@ from gui import makeHtmlString, g_htmlTemplates
 from helpers import i18n, dependency
 from hints.battle.schemas.const import HTML_TEMPLATE_PATH, MIN_SHOW_TIME_LOWER_LIMIT, MIN_SHOW_TIME_UPPER_LIMIT, DEFAULT_MIN_SHOW_TIME, DEFAULT_WAIT_TIME, DEFAULT_SHOW_TIME, DEFAULT_COOLDOWN_TIME
 from hints_common.battle.schemas.base import CommonHintSchema, CommonHintModel, HMCPropsType, HMCContextType
+from py2to3 import patched_typing
 from skeletons.gui.battle_session import IBattleSessionProvider
 if typing.TYPE_CHECKING:
     from typing import Optional
@@ -131,7 +132,7 @@ CHMSoundType = typing.TypeVar('CHMSoundType', bound=ClientHintSoundModel)
 CHMLifecycleType = typing.TypeVar('CHMLifecycleType', bound=ClientHintLifecycleModel)
 CHMHistoryType = typing.TypeVar('CHMHistoryType', bound=ClientHintHistoryModel)
 
-class ClientHintModel(CommonHintModel[HMCPropsType, HMCContextType], typing.Generic[HMCPropsType, HMCContextType, CHMTextType, CHMVisualType, CHMSoundType, CHMLifecycleType, CHMHistoryType]):
+class ClientHintModel(CommonHintModel[HMCPropsType, HMCContextType], patched_typing.Generic[HMCPropsType, HMCContextType, CHMTextType, CHMVisualType, CHMSoundType, CHMLifecycleType, CHMHistoryType]):
     __slots__ = ('text', 'visual', 'sound', 'lifecycle', 'history')
     _sessionProvider = dependency.descriptor(IBattleSessionProvider)
 

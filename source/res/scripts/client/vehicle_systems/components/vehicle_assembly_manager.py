@@ -14,11 +14,13 @@ from cgf_components.client_worlds_helpers import ClientWorld, clientWorldsManage
 from cgf_script.managers_registrator import autoregister, onAddedQuery
 from constants import IS_UE_EDITOR
 from vehicle_systems import vehicle_composition as veh_comp
-from vehicle_systems.components import vehicle_variable_storage, gun_info
+from vehicle_systems.components import vehicle_variable_storage
 from vehicle_systems.tankStructure import TankPartNames, TankRenderMode, ModelStates
 if typing.TYPE_CHECKING:
     from common_tank_appearance import CommonTankAppearance
     from gui.hangar_vehicle_appearance import HangarVehicleAppearance
+    from vehicle_systems.components.vehicle_variable_storage import VariableType
+    TAppearance = typing.Union[HangarVehicleAppearance, CommonTankAppearance]
 _logger = logging.getLogger(__name__)
 
 class Assembler(object):
@@ -65,6 +67,11 @@ class TurretGunRotationAssembler(Assembler):
         return
 
     def __getMatrixProvider(self, slotName, appearance):
+        if IS_UE_EDITOR:
+            if slotName == veh_comp.VehicleSlots.TURRET_COLLISION.value:
+                return appearance.turretMatrix
+            if slotName == veh_comp.VehicleSlots.GUN_COLLISION.value:
+                return appearance.gunMatrix
         if slotName == veh_comp.VehicleSlots.TURRET.value:
             return appearance.turretMatrix
         else:
@@ -173,10 +180,7 @@ class SwingingAnimationManager(Assembler):
 
 
 class DecalsAssembler(Assembler):
-    _SLOTS = (veh_comp.VehicleSlots.CHASSIS.value,
-     veh_comp.VehicleSlots.HULL.value,
-     veh_comp.VehicleSlots.TURRET.value,
-     veh_comp.VehicleSlots.GUN.value)
+    _SLOTS = (veh_comp.VehicleSlots.HULL.value, veh_comp.VehicleSlots.TURRET.value, veh_comp.VehicleSlots.GUN.value)
 
     def checkSlotMarker(self, slotMarker):
         return slotMarker.slotName in self._SLOTS
@@ -192,10 +196,10 @@ class DecalsAssembler(Assembler):
             fashion = getattr(appearance.fashions, slotMarker.slotName, None)
             if fashion is None:
                 return _logger.error('Failed to setup GPU Decals receiver for game object: %s. Missing fashion for part: %s', gameObject.name, slotMarker.slotName)
-            gameObject.removeComponentByType(GenericComponents.FashionComponent)
-            gameObject.createComponent(GenericComponents.FashionComponent, fashion, partIdx)
-            gameObject.removeComponentByType(GpuDecals.GpuDecalsReceiverComponent)
-            gameObject.createComponent(GpuDecals.GpuDecalsReceiverComponent)
+            if gameObject.findComponentByType(GenericComponents.FashionComponent) is None:
+                gameObject.createComponent(GenericComponents.FashionComponent, fashion, partIdx)
+            if gameObject.findComponentByType(GpuDecals.GpuDecalsReceiverComponent) is None:
+                gameObject.createComponent(GpuDecals.GpuDecalsReceiverComponent)
         return
 
 
@@ -214,9 +218,35 @@ class GunInfoAssembler(Assembler):
             if typeDescr is None:
                 _logger.error('typeDescriptor of appearance is None')
                 return
-            if not typeDescr.gun.prefabBased:
+            if self._isStorageRequired(typeDescr):
                 vehicle_variable_storage.createForGun(appearance, gameObject)
-                gun_info.createGunInfo(gameObject, typeDescr.turret, typeDescr.gun)
+        return
+
+    @staticmethod
+    def update(appearance, varName, value):
+        typeDescr = appearance.typeDescriptor
+        if typeDescr is not None and not GunInfoAssembler._isStorageRequired(typeDescr):
+            return
+        else:
+            gunGo = GenericComponents.findSlot(appearance.gameObject, veh_comp.VehicleSlots.GUN.value)
+            if gunGo.isValid():
+                vehicle_variable_storage.update(gunGo, varName, value)
+            return
+
+    @staticmethod
+    def _isStorageRequired(typeDescriptor):
+        return not typeDescriptor.gun.prefabBased
+
+
+class CompositionReadinessNotifier(Assembler):
+
+    def checkSlotMarker(self, slotMarker):
+        return slotMarker.slotName == GenericComponents.COMPOSITION_ROOT_SLOT_NAME
+
+    def assemble(self, gameObject, slotMarker):
+        appearance = veh_comp.findParentVehicleAppearance(gameObject)
+        if appearance is not None:
+            appearance.setCompositionReady(True)
         return
 
 
@@ -228,8 +258,9 @@ class VehicleAssemblyManager(CGF.ComponentManager):
      _AssemblerData(ClientWorld.BATTLE | ClientWorld.EDITOR, RecoilAssembler),
      _AssemblerData(ClientWorld.BATTLE | ClientWorld.EDITOR, MultiGunRecoilAssembler),
      _AssemblerData(ClientWorld.BATTLE | ClientWorld.EDITOR, SwingingAnimationManager),
-     _AssemblerData(ClientWorld.BATTLE | ClientWorld.HANGAR | ClientWorld.EDITOR, DecalsAssembler),
-     _AssemblerData(ClientWorld.BATTLE | ClientWorld.EDITOR, GunInfoAssembler))
+     _AssemblerData(ClientWorld.AllWorlds, DecalsAssembler),
+     _AssemblerData(ClientWorld.BATTLE | ClientWorld.EDITOR, GunInfoAssembler),
+     _AssemblerData(ClientWorld.AllWorlds, CompositionReadinessNotifier))
 
     def __init__(self):
         super(VehicleAssemblyManager, self).__init__()

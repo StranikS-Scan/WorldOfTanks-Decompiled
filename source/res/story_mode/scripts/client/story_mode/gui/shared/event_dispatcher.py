@@ -15,7 +15,7 @@ from story_mode.gui.fade_in_out import UseStoryModeFading
 from story_mode.gui.scaleform.daapi.view.model.video_settings_model import getIntroVideoSettings
 from story_mode.gui.story_mode_gui_constants import VIEW_ALIAS
 from story_mode.skeletons.story_mode_controller import IStoryModeController
-from story_mode_common.story_mode_constants import LOGGER_NAME, FIRST_MISSION_ID
+from story_mode_common.story_mode_constants import LOGGER_NAME, MissionId
 _logger = getLogger(LOGGER_NAME)
 
 class _ArenaLoadedChecker(IArenaLoadController):
@@ -54,7 +54,7 @@ def isViewLoaded(layoutID):
 
 @ifNotArenaLoaded
 def showIntro(missionId):
-    missionId = missionId or FIRST_MISSION_ID
+    missionId = missionId or MissionId.ONE
     videoData = getIntroVideoSettings()
     isMissionHasVideo = next((mission for mission in videoData.missions if mission.id == missionId), None)
     if isMissionHasVideo:
@@ -77,14 +77,14 @@ def showOutroVideo(missionId, arenaUniqueID):
 
 
 @ifNotArenaLoaded
-@UseStoryModeFading(waitForLayoutReady=R.views.story_mode.battle.PrebattleWindow())
+@UseStoryModeFading(waitForLayoutReady=R.views.story_mode.mono.battle.prebattle_window())
 def showPrebattleWindow(missionId):
     _logger.debug('showPrebattleWindow')
     from story_mode.gui.impl.battle.prebattle_window import PrebattleWindow
     PrebattleWindow(missionId=missionId).load()
 
 
-@UseStoryModeFading(waitForLayoutReady=R.views.story_mode.battle.PrebattleWindow())
+@UseStoryModeFading(waitForLayoutReady=R.views.story_mode.mono.battle.prebattle_window())
 def showPrebattleAndGoToQueue(missionId):
     _logger.debug('showPrebattleAndGoToQueue')
     showPrebattleWindow(missionId=missionId)
@@ -92,14 +92,14 @@ def showPrebattleAndGoToQueue(missionId):
     storyModeCtrl.goToQueue()
 
 
-@UseStoryModeFading(waitForLayoutReady=R.views.story_mode.battle.EpilogueWindow())
+@UseStoryModeFading(waitForLayoutReady=R.views.story_mode.mono.battle.epilogue_window())
 def showEpilogueWindow():
     _logger.debug('showEpilogueWindow')
     from story_mode.gui.impl.battle.epilogue_window import EpilogueWindow
     EpilogueWindow().load()
 
 
-@UseStoryModeFading(waitForLayoutReady=R.views.story_mode.battle.OnboardingBattleResultView())
+@UseStoryModeFading(waitForLayoutReady=R.views.story_mode.mono.battle.onboarding_battle_result_view())
 def showOnboardingBattleResultWindow(finishReason, missionId):
     _logger.debug('showOnboardingBattleResultWindow')
     from story_mode.gui.impl.battle.onboarding_battle_result_view import OnboardingBattleResultWindow
@@ -108,23 +108,23 @@ def showOnboardingBattleResultWindow(finishReason, missionId):
 
 def showQueueWindow(isSkipButtonVisible=False):
     _logger.debug('showQueueWindow: isSkipButtonVisible%s', isSkipButtonVisible)
-    from story_mode.gui.impl.common.onboarding_queue_view import OnboardingQueueWindow
+    from story_mode.gui.impl.lobby.onboarding_queue_view import OnboardingQueueWindow
     window = OnboardingQueueWindow(isButtonVisible=isSkipButtonVisible)
     window.load()
     return window
 
 
-@UseStoryModeFading(show=False, waitForLayoutReady=R.views.story_mode.common.CongratulationsWindow())
+@UseStoryModeFading(show=False, waitForLayoutReady=R.views.story_mode.mono.lobby.congratulations_window())
 def showCongratulationsWindow(isCloseVisible=False, onClose=None, awardData=None):
     _logger.debug('showCongratulationsWindow')
-    from story_mode.gui.impl.common.congratulations_window import CongratulationsWindow
+    from story_mode.gui.impl.lobby.congratulations_window import CongratulationsWindow
     window = CongratulationsWindow(isCloseVisible=isCloseVisible, onClose=onClose, awardData=awardData)
     window.load()
 
 
 def showBattleResultWindow(arenaUniqueId):
-    from story_mode.gui.impl.lobby.battle_result_view import BattleResultWindow
-    BattleResultWindow(arenaUniqueId).load()
+    from story_mode.gui.impl.lobby.states import StoryModeBattleResultsState
+    StoryModeBattleResultsState.goTo(arenaUniqueId=arenaUniqueId)
 
 
 def sendViewLoadedEvent(layoutID):
@@ -133,11 +133,11 @@ def sendViewLoadedEvent(layoutID):
 
 def showEventWelcomeWindow():
     from story_mode.gui.impl.lobby.event_welcome_view import EventWelcomeWindow
-    EventWelcomeWindow(R.views.story_mode.lobby.EventWelcomeView()).load()
+    EventWelcomeWindow(R.views.story_mode.mono.lobby.event_welcome_view()).load()
 
 
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
 def showNewbieAdvertisingWindow(notificationMgr=None):
     from story_mode.gui.impl.lobby.newbie_advertising_view import NewbieAdvertisingWindow
-    command = WindowNotificationCommand(NewbieAdvertisingWindow(R.views.story_mode.lobby.NewbieAdvertisingView()))
+    command = WindowNotificationCommand(NewbieAdvertisingWindow(R.views.story_mode.mono.lobby.newbie_advertising_view()))
     notificationMgr.append(command)

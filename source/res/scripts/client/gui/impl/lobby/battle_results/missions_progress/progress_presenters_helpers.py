@@ -1,0 +1,36 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
+# Embedded file name: scripts/client/gui/impl/lobby/battle_results/missions_progress/progress_presenters_helpers.py
+from collections import namedtuple
+from constants import BATTLE_PROGRESS_CATEGORY
+from gui.battle_results.progress.progress_filters import dailyQuestsProgressFilter, weeklyQuestsProgressFilter, battleMattersProgressFilter, prestigeProgressFilter, battlePassProgressFilter, personalMissionProgressFilter, vehicleProgressFilter, commonBattleQuestsProgressFilter
+from gui.impl.lobby.battle_results.missions_progress.battle_matters_progress import BattleMattersProgressPresenter
+from gui.impl.lobby.battle_results.missions_progress.battle_pass_progress import BattlePassProgressPresenter
+from gui.impl.lobby.battle_results.missions_progress.common_battle_quests_progress import CommonBattleQuestsProgressPresenter
+from gui.impl.lobby.battle_results.missions_progress.daily_missions_progress import DailyMissionsProgressPresenter
+from gui.impl.lobby.battle_results.missions_progress.prestige_progress import PrestigeProgressPresenter
+from gui.impl.lobby.battle_results.missions_progress.weekly_missions_progress import WeeklyMissionsProgressPresenter
+from gui.impl.lobby.battle_results.missions_progress.personal_missions_progress import PersonalMissionsProgressPresenter
+from gui.impl.lobby.battle_results.missions_progress.new_module_vehicle_progress import NewModuleVehicleProgressPresenter
+from gui.shared.system_factory import registerProgressionPresenter, collectProgressionPresenters
+from helpers import dependency
+from skeletons.gui.server_events import IEventsCache
+ProgressPresenterEntry = namedtuple('ProgressPresenterEntry', ('progressFilter', 'presenter'))
+registerProgressionPresenter(BATTLE_PROGRESS_CATEGORY.BATTLE_MATTERS, ProgressPresenterEntry(battleMattersProgressFilter, BattleMattersProgressPresenter))
+registerProgressionPresenter(BATTLE_PROGRESS_CATEGORY.DAILY_QUESTS, ProgressPresenterEntry(dailyQuestsProgressFilter, DailyMissionsProgressPresenter))
+registerProgressionPresenter(BATTLE_PROGRESS_CATEGORY.WEEKLY_QUESTS, ProgressPresenterEntry(weeklyQuestsProgressFilter, WeeklyMissionsProgressPresenter))
+registerProgressionPresenter(BATTLE_PROGRESS_CATEGORY.PRESTIGE, ProgressPresenterEntry(prestigeProgressFilter, PrestigeProgressPresenter))
+registerProgressionPresenter(BATTLE_PROGRESS_CATEGORY.BATTLE_PASS, ProgressPresenterEntry(battlePassProgressFilter, BattlePassProgressPresenter))
+registerProgressionPresenter(BATTLE_PROGRESS_CATEGORY.PERSONAL_MISSONS_3, ProgressPresenterEntry(personalMissionProgressFilter, PersonalMissionsProgressPresenter))
+registerProgressionPresenter(BATTLE_PROGRESS_CATEGORY.RESEARCH_NEW_MODULES_AND_VEHICLES, ProgressPresenterEntry(vehicleProgressFilter, NewModuleVehicleProgressPresenter))
+registerProgressionPresenter(BATTLE_PROGRESS_CATEGORY.COMMON_QUESTS, ProgressPresenterEntry(commonBattleQuestsProgressFilter, CommonBattleQuestsProgressPresenter))
+
+@dependency.replace_none_kwargs(eventsCache=IEventsCache)
+def getProgressionCategoriesPresenters(eventsCache=None):
+    presenters = []
+    allCommonQuests = eventsCache.getQuests()
+    allCommonQuests.update(eventsCache.getHiddenQuests(lambda q: q.isShowedPostBattle()))
+    questsLists = collectProgressionPresenters()
+    for categoryProgressFilter, presenter in questsLists.values():
+        presenters.append((categoryProgressFilter, presenter, allCommonQuests))
+
+    return presenters

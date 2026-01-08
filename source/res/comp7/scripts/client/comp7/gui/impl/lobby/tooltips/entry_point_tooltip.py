@@ -12,10 +12,10 @@ from skeletons.gui.game_control import IComp7Controller
 class Comp7EntryPointTooltip(Comp7CoreEntryPointTooltip):
     __comp7Controller = dependency.descriptor(IComp7Controller)
 
-    def __init__(self):
+    def __init__(self, eventBanner):
         settings = ViewSettings(R.views.comp7.mono.lobby.tooltips.entry_point_tooltip())
         settings.model = EntryPointTooltipModel()
-        super(Comp7EntryPointTooltip, self).__init__(settings)
+        super(Comp7EntryPointTooltip, self).__init__(settings, eventBanner=eventBanner)
 
     @property
     def _modeController(self):

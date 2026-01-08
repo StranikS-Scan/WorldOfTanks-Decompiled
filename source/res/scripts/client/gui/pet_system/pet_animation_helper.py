@@ -1,8 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/pet_system/pet_animation_helper.py
-from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.pet_system.synergy_helper import SynergyItem
-from gui.shared import g_eventBus
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.gui.shared.utils import IHangarSpace
 from helpers import dependency
@@ -26,7 +24,6 @@ class PetPrefabProxy(CallbackDelayer):
         self.onUpdatePetStaticTrigger = Event(self.__em)
         self.onUpdatePetSynergy = Event(self.__em)
         self.__isAFKState = False
-        g_eventBus.addListener(CameraRelatedEvents.IDLE_CAMERA, self._cameraIdle)
 
     def clear(self):
         self.__em.clear()
@@ -58,8 +55,8 @@ class PetPrefabProxy(CallbackDelayer):
     def petSynergyLevel(self):
         return SynergyItem.getSynergyLevel(self._ctrl.getPetIDInHangar())
 
-    def _cameraIdle(self, event):
-        self.__isAFKState = event.ctx['started']
+    def cameraIdle(self, isAFK):
+        self.__isAFKState = isAFK
         self.setPetStaticTrigger(self.petStaticTrigger)
 
     def getPlaceName(self, isInStorage=None):

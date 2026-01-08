@@ -42,6 +42,7 @@ from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prestige.prestige_helpers import hasVehiclePrestige
 from gui.promo.hangar_teaser_widget import TeaserViewer
+from gui.server_events.pm_constants import IS_REGULAR_QUEST_ENABLED
 from gui.shared import EVENT_BUS_SCOPE, event_dispatcher as shared_events, events
 from gui.shared.events import AmmunitionPanelViewEvent, LobbySimpleEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -245,7 +246,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.epicController.onGameModeStatusTick += self.__updateAlertMessage
         self._promoController.onNewTeaserReceived += self.__onTeaserReceived
         self.hangarSpace.lockVehicleSelectable(self)
-        self.__lootBoxes.onStatusChanged += self.__onLootBoxesStatusChanged
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
         g_playerEvents.onPrebattleInvitationAccepted += self.__onPrebattleInvitationAccepted
         unitMgr = prb_getters.getClientUnitMgr()
@@ -284,7 +284,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.removeListener(AmmunitionPanelViewEvent.CLOSE_VIEW, self.__oAmmunitionPanelViewClose, scope=EVENT_BUS_SCOPE.LOBBY)
         self.__limitedUIController.stopObserve(LUI_RULES.EasyTankEquipEntryPoint, self.__updateEasyTankEquipState)
         self.itemsCache.onSyncCompleted -= self.onCacheResync
-        self.__lootBoxes.onStatusChanged -= self.__onLootBoxesStatusChanged
         g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
         self.hangarSpace.onVehicleChangeStarted -= self.__onVehicleLoading
         self.hangarSpace.onVehicleChanged -= self.__onVehicleLoaded
@@ -549,7 +548,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         return
 
     def __onServerSettingChanged(self, diff):
-        if 'isRegularQuestEnabled' in diff:
+        if IS_REGULAR_QUEST_ENABLED in diff:
             self.__updateHeaderComponent()
         if 'isCustomizationEnabled' in diff or 'isNationChangeEnabled' in diff:
             self.__updateState()
@@ -604,9 +603,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __onResetUnitJoiningProgress(self):
         self.__isUnitJoiningInProgress = False
-
-    def __onLootBoxesStatusChanged(self):
-        self.__updateCarouselEventEntryState()
 
     def __updateCarouselEventEntryState(self):
         self.as_updateCarouselEventEntryStateS(isAnyEntryVisible())

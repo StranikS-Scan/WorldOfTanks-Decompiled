@@ -44,9 +44,6 @@ class CalloutPanel(CalloutPanelMeta):
         self.__reset()
         self.onHidingFinished()
 
-    def __reset(self):
-        self.__hidingInProgress = False
-
     def setShowData(self, senderVehicleID, cmdName):
         vInfoVO = self.sessionProvider.getArenaDP().getVehicleInfo(senderVehicleID)
         if not vInfoVO:
@@ -70,6 +67,24 @@ class CalloutPanel(CalloutPanelMeta):
             self.as_setHideDataS(answered, cmdName)
             return
 
+    def _populate(self):
+        super(CalloutPanel, self)._populate()
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl is not None:
+            crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
+            self.__onCrosshairViewChanged(crosshairCtrl.getViewID())
+        return
+
     def _dispose(self):
         self.onHidingFinished.clear()
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl is not None:
+            crosshairCtrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
         super(CalloutPanel, self)._dispose()
+        return
+
+    def __reset(self):
+        self.__hidingInProgress = False
+
+    def __onCrosshairViewChanged(self, viewID):
+        self.as_setCrosshairTypeS(viewID=viewID)

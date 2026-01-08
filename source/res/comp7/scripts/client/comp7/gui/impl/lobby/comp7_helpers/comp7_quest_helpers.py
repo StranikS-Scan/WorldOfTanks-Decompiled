@@ -4,10 +4,11 @@ import logging
 import re
 import typing
 from comp7_common_const import COMP7_OFFER_YEARLY_REWARD_TOKEN_PREFIX, Comp7QuestType, offerWeeklyQuestsRewardTokenPrefixBySeasonNumber, weeklyQuestsCompleteTokenName, COMP7_YEARLY_REWARD_TOKEN, COMP7_OFFER_PREFIX
-from gui.server_events.event_items import Quest
+from gui.server_events.cond_formatters.bonus import BattlesCountFormatter
 from gui.shared.items_cache import ItemsCache
+from gui.shared.missions.packers.conditions import getDefaultVehicleCondFormatter, getDefaultPostBattleCondFormatter, getDefaultMissionsBonusConditionsFormatter
 from helpers import dependency
-from shared_utils import findFirst
+from shared_utils import findFirst, first
 from skeletons.gui.game_control import IComp7Controller
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -16,6 +17,10 @@ if typing.TYPE_CHECKING:
     from comp7_ranks_common import Comp7Division
     from comp7.helpers.comp7_server_settings import Comp7RanksConfig
     from comp7.gui.game_control.comp7_controller import Comp7Controller
+    from gui.server_events.cond_formatters.bonus import MissionsBonusConditionsFormatter
+    from gui.server_events.cond_formatters.postbattle import MissionsPostBattleConditionsFormatter
+    from gui.server_events.cond_formatters.vehicle import MissionsVehicleConditionsFormatter
+    from gui.server_events.event_items import Quest
 _logger = logging.getLogger(__name__)
 
 def isComp7Quest(qID, seasonNumber=None):
@@ -146,3 +151,23 @@ class Comp7ParsedQuestID(object):
             return self
         else:
             return None
+
+
+def getDescriptionAndProgressFromC11nDecalQuest(quest, vehicleCondFormatter=getDefaultVehicleCondFormatter(), postBattleCondFormatter=getDefaultPostBattleCondFormatter(), missionsBonusCondsFmt=getDefaultMissionsBonusConditionsFormatter()):
+    vehCond = vehicleCondFormatter.format(quest.vehicleReqs, quest)
+    postBattleCond = postBattleCondFormatter.format(quest.postBattleCond, quest)
+    bonusCond = missionsBonusCondsFmt.format(quest.bonusCond, quest)
+    vehCond = first(vehCond, [])
+    bonusCond = first(bonusCond, [])
+    orItem = first(postBattleCond, [])
+    andItem = first(orItem + vehCond + bonusCond)
+    description = first(andItem.descrData.args)
+    battleCountCondition = quest.bonusCond.getConditions().find('battles')
+    if battleCountCondition is None:
+        currentProgress = andItem.current or 0
+        maxProgress = andItem.total or 0
+    else:
+        battlesCount = first(BattlesCountFormatter(bool(postBattleCond)).format(battleCountCondition, quest))
+        currentProgress = battlesCount.current
+        maxProgress = battlesCount.total
+    return (description, currentProgress, maxProgress)

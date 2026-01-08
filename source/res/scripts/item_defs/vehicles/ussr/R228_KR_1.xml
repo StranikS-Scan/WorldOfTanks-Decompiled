@@ -23,6 +23,9 @@
     <camouflageNet>
       <invisibilityBonus>	0.05 0.075	</invisibilityBonus>
     </camouflageNet>
+    <deluxeCamouflageNet>
+      <invisibilityBonus>	0.075	</invisibilityBonus>
+    </deluxeCamouflageNet>
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.03 0.04	</invisibilityBonus>
     </additionalInvisibilityDevice>
@@ -2199,36 +2202,16 @@
   <mechanics>
     <improvedRamming>
       <damageBonusStageSize>	5	</damageBonusStageSize>
+      <damageBonusBasicFactor>	0.2	</damageBonusBasicFactor>
+      <damageBonusChangeFactor>	0.95	</damageBonusChangeFactor>
       <trackDamageBonusStageSize>	5	</trackDamageBonusStageSize>
+      <trackDamageBonusBasicFactor>	1.1	</trackDamageBonusBasicFactor>
+      <trackDamageBonusChangeFactor>	0.985	</trackDamageBonusChangeFactor>
       <reductionDamageBonusStageSize>	5	</reductionDamageBonusStageSize>
+      <reductionDamageBonusBasicFactor>	0.01	</reductionDamageBonusBasicFactor>
+      <reductionDamageBonusChangeFactor>	1.3	</reductionDamageBonusChangeFactor>
       <damageValueToShowAnimation>	400	</damageValueToShowAnimation>
       <effectSpeedThreshold>	30	</effectSpeedThreshold>
-      <modifiers>
-        <add>
-          <name>	dynAttrs/improvedRammingDamageBonus/basicFactor	</name>
-          <value>	0.2	</value>
-        </add>
-        <mul>
-          <name>	dynAttrs/improvedRammingDamageBonus/changeFactor	</name>
-          <value>	0.95	</value>
-        </mul>
-        <mul>
-          <name>	dynAttrs/improvedRammingTrackDamageBonus/basicFactor	</name>
-          <value>	1.1	</value>
-        </mul>
-        <mul>
-          <name>	dynAttrs/improvedRammingTrackDamageBonus/changeFactor	</name>
-          <value>	0.985	</value>
-        </mul>
-        <add>
-          <name>	dynAttrs/improvedRammingDamageReductionBonus/basicFactor	</name>
-          <value>	0.01	</value>
-        </add>
-        <mul>
-          <name>	dynAttrs/improvedRammingDamageReductionBonus/changeFactor	</name>
-          <value>	1.3	</value>
-        </mul>
-      </modifiers>
     </improvedRamming>
   </mechanics>
   <emblems>

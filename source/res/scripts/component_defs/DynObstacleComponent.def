@@ -1,0 +1,21 @@
+<DynObstacleComponent.def>
+  <Properties>
+    <modelPath>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </modelPath>
+    <localMatrix>
+      <Type>	PYTHON	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </localMatrix>
+    <isHidden>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isHidden>
+    <applyOverlay>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </applyOverlay>
+  </Properties>
+</DynObstacleComponent.def>

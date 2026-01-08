@@ -20,8 +20,8 @@ from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.controllers.sound_ctrls.epic_battle_sounds import EpicBattleSoundController
 from gui.shared import EVENT_BUS_SCOPE, events
 from shared_utils import CONST_CONTAINER
-from vehicles.mechanics.mechanic_info import hasVehicleMechanic
 from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic
 
 class DynamicAliases(CONST_CONTAINER):
     EPIC_FINISH_SOUND_PLAYER = 'epicFinishSoundPlayer'
@@ -212,7 +212,7 @@ class FrontlineBattlePage(FrontlineBattlePageMeta, BattleGUIKeyHandler):
             ctrl = self.sessionProvider.shared.vehicleState
             vehicle = ctrl.getControllingVehicle()
             if vehicle is not None:
-                hasPillboxMode = hasVehicleMechanic(vehicle.typeDescriptor, VehicleMechanic.PILLBOX_SIEGE_MODE)
+                hasPillboxMode = hasVehicleDescrMechanic(vehicle.typeDescriptor, VehicleMechanic.PILLBOX_SIEGE_MODE)
                 if (vehicle.typeDescriptor.hasSiegeMode or vehicle.isTrackWithinTrack) and not hasPillboxMode:
                     self._swapVisibleStates(visibleUI, hiddenUI, BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
                 else:

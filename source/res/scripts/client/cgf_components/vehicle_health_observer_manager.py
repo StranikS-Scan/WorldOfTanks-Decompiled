@@ -29,7 +29,7 @@ class VehicleHealthObserverManager(CGF.ComponentManager):
         stateSwitcher.requestState(currentState)
         self.__switchersGroupedByVehicle[vehicle.id].append(go)
         self.__switchersToVehiclesMap[go.id] = vehicle.id
-        vehicle.onVehicleHealthChanged += self.__onHealthChanged
+        vehicle.events.onVehicleHealthChanged += self.__onHealthChanged
 
     @onRemovedQuery(CGF.GameObject, StateSwitcherComponent, VehicleHealthObserverComponent)
     def onRemoved(self, go, stateSwitcher, vehicleHealthObserverComponent):
@@ -45,7 +45,7 @@ class VehicleHealthObserverManager(CGF.ComponentManager):
             vehicle = BigWorld.entities.get(vehicleID)
             if vehicle and not vehicle.isDestroyed:
                 _logger.debug('No switchers left. Unsubscribing from vehicle %s', vehicle.id)
-                vehicle.onVehicleHealthChanged -= self.__onHealthChanged
+                vehicle.events.onVehicleHealthChanged -= self.__onHealthChanged
             return
 
     @staticmethod

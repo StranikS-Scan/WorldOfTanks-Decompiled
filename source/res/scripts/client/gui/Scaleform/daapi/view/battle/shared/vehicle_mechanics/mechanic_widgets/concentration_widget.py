@@ -1,24 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/vehicle_mechanics/mechanic_widgets/concentration_widget.py
+from __future__ import absolute_import
 import typing
 import CommandMapping
-from backports.functools_lru_cache import lru_cache
+from cache import last_cached_method
 from constants import CONCENTRATION_MODE_STATE
+from events_containers.common.containers import ContainersListener
 from events_handler import eventHandler
 from gui.Scaleform.daapi.view.battle.shared.vehicle_mechanics.mechanic_widgets.vehicle_mechanic_widget import HotKeyData
 from gui.Scaleform.daapi.view.meta.ConcentrationWidgetMeta import ConcentrationWidgetMeta
 from gui.Scaleform.genConsts.MECHANICS_WIDGET_CONST import MECHANICS_WIDGET_CONST
 from gui.veh_mechanics.battle.updaters.hotkey_updaters import HotKeysViewUpdater
-from gui.veh_mechanics.battle.updaters.mechanic_passenger_view_updater import VehicleMechanicPassengerUpdater
-from gui.veh_mechanics.battle.updaters.mechanic_states_view_updater import VehicleMechanicStatesUpdater
-from vehicles.components.component_events import ComponentListener
+from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import VehicleMechanicPassengerUpdater
+from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
 from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 if typing.TYPE_CHECKING:
     from ConcentrationModeComponent import ConcentrationModeState
     from gui.veh_mechanics.battle.updaters.updaters_common import IViewUpdater
 
-class ConcentrationMechanicWidget(ConcentrationWidgetMeta, ComponentListener, IMechanicStatesListenerLogic):
+class ConcentrationMechanicWidget(ConcentrationWidgetMeta, ContainersListener, IMechanicStatesListenerLogic):
     _CONCENTRATION_UI_STATES = {CONCENTRATION_MODE_STATE.IDLE: MECHANICS_WIDGET_CONST.IDLE,
      CONCENTRATION_MODE_STATE.DEPLOYING: MECHANICS_WIDGET_CONST.PREPARING,
      CONCENTRATION_MODE_STATE.READY: MECHANICS_WIDGET_CONST.READY,
@@ -49,22 +50,22 @@ class ConcentrationMechanicWidget(ConcentrationWidgetMeta, ComponentListener, IM
         super(ConcentrationMechanicWidget, self)._populate()
 
     def _dispose(self):
-        super(ConcentrationMechanicWidget, self)._dispose()
         self.__progressUpdaters.clear()
+        super(ConcentrationMechanicWidget, self)._dispose()
 
     def _getViewUpdaters(self):
-        return [VehicleMechanicPassengerUpdater(VehicleMechanic.CONCENTRATION_MODE, self), VehicleMechanicStatesUpdater(VehicleMechanic.CONCENTRATION_MODE, self), HotKeysViewUpdater(self._HOT_KEY_MAP.keys(), self)]
+        return [VehicleMechanicPassengerUpdater(VehicleMechanic.CONCENTRATION_MODE, self), VehicleMechanicStatesUpdater(VehicleMechanic.CONCENTRATION_MODE, self), HotKeysViewUpdater(list(self._HOT_KEY_MAP.keys()), self)]
 
     def __getDisplayState(self, state):
         return self._CONCENTRATION_UI_STATES[state.state]
 
     def __invalidateAll(self, state, isInstantly=False):
         uiState = self.__getDisplayState(state)
-        self.__invalidateProgress.cache_clear()
+        self.__invalidateProgress.reset()
         self.__invalidateProgress(uiState, state.progress, state.timeLeft)
         self.as_setStateS(uiState, isInstantly)
 
-    @lru_cache(maxsize=None)
+    @last_cached_method()
     def __invalidateProgress(self, uiState, progress, timeLeft):
         if uiState in self.__progressUpdaters:
             self.__progressUpdaters[uiState](progress)

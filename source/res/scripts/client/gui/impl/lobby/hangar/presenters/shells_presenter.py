@@ -15,7 +15,7 @@ from gui.impl.lobby.tank_setup.interactors.shell import ShellInteractor
 from gui.impl.wrappers.user_compound_price_model import BuyPriceModelBuilder
 from gui.shared import sound_helpers
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.items_parameters import isAutoReloadGun, params_helper, isTwinGun
+from gui.shared.items_parameters import params_helper, getShellsLoadSize
 from gui.shared.items_parameters.formatters import formatParameter, MEASURE_UNITS
 from helpers import i18n, dependency
 from post_progression_common import TankSetupGroupsId
@@ -82,7 +82,7 @@ class ShellsPresenter(LoadoutPresenterBase[ShellsModel]):
                 interactorShells = self._interactor.getInstalledLayout()
             installedCount = sum((shell.count for shell in interactorShells))
             gun = currentVehicle.gun.descriptor
-            clip = self.__setupClipCount(gun)
+            clip = getShellsLoadSize(gun)
             with self.getViewModel().transaction() as model:
                 model.setAmmoMaxSize(ammoMaxSize)
                 model.setInstalledCount(installedCount)
@@ -100,11 +100,6 @@ class ShellsPresenter(LoadoutPresenterBase[ShellsModel]):
             self._updateDealPanel()
             return
 
-    def __setupClipCount(self, gun):
-        if isAutoReloadGun(gun):
-            return 1
-        return 2 if isTwinGun(gun) else gun.clip[0]
-
     def __updateShellItem(self, shellModels, shellModel):
         for index, item in enumerate(shellModels):
             if item.getIntCD() == shellModel.getIntCD():
@@ -119,14 +114,12 @@ class ShellsPresenter(LoadoutPresenterBase[ShellsModel]):
         oldCount = self._interactor.getCurrentLayout()[self._interactor.getCurrentShellSlotID(intCD)].count
         currentVehicle = self._vehInteractingItem.getItem()
         gun = currentVehicle.gun.descriptor
-        isCassetteClip = gun.clip[0] > 1
-        clip = self.__setupClipCount(gun)
-        if isCassetteClip or isTwinGun(gun):
-            if oldCount % clip != 0:
-                if newCount > oldCount:
-                    newCount = (oldCount + clip - 1) // clip * clip
-                elif newCount < oldCount:
-                    newCount = oldCount // clip * clip
+        clip = getShellsLoadSize(gun)
+        if oldCount % clip != 0:
+            if newCount > oldCount:
+                newCount = (oldCount + clip - 1) // clip * clip
+            elif newCount < oldCount:
+                newCount = oldCount // clip * clip
         totalCount = oldCount + (self.getViewModel().getAmmoMaxSize() - self.getViewModel().getInstalledCount())
         self._interactor.changeShell(intCD, newCount)
         if totalCount != 0:

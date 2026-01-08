@@ -1,29 +1,31 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/vehicle_mechanics/mechanic_widgets/charge_shot_widget.py
+from __future__ import absolute_import
 import typing
+from builtins import round
 import CommandMapping
+from events_containers.common.containers import ContainersListener
+from events_containers.components.life_cycle import IComponentLifeCycleListenerLogic
 from events_handler import eventHandler
 from gui.Scaleform.daapi.view.battle.shared.vehicle_mechanics.mechanic_widgets.vehicle_mechanic_widget import HotKeyData
 from gui.Scaleform.daapi.view.meta.ChargeShotWidgetMeta import ChargeShotWidgetMeta
 from gui.Scaleform.genConsts.MECHANICS_WIDGET_CONST import MECHANICS_WIDGET_CONST
 from gui.battle_control.battle_constants import CANT_SHOOT_ERROR
 from gui.veh_mechanics.battle.updaters.hotkey_updaters import HotKeysViewUpdater
-from gui.veh_mechanics.battle.updaters.mechanic_life_cycle_view_updater import VehicleMechanicLifeCycleUpdater
-from gui.veh_mechanics.battle.updaters.mechanic_passenger_view_updater import VehicleMechanicPassengerUpdater
-from gui.veh_mechanics.battle.updaters.mechanic_states_view_updater import VehicleMechanicStatesUpdater
+from gui.veh_mechanics.battle.updaters.mechanics.mechanic_life_cycle_updater import VehicleMechanicLifeCycleUpdater
+from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import VehicleMechanicPassengerUpdater
+from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
 from gui.veh_mechanics.battle.updaters.current_shell_damage_updater import CurrentShellDamageUpdater
 from gui.veh_mechanics.battle.updaters.shot_blocked_upater import ShotBlockedUpdater
-from vehicles.components.component_life_cycle import IComponentLifeCycleListener
 from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
-from vehicles.components.component_events.events_listener import ComponentListener
 if typing.TYPE_CHECKING:
     from typing import List, Optional
-    from _weakref import ProxyType
-    from ChargeShotComponent import ChargeShotState, ChargeShotComponent
+    from ChargeShotComponent import ChargeShotState
+    from items.components.shared_components import ChargeShotParams
     from gui.veh_mechanics.battle.updaters.updaters_common import IViewUpdater
 
-class ChargeShotMechanicWidget(ChargeShotWidgetMeta, ComponentListener, IMechanicStatesListenerLogic, IComponentLifeCycleListener):
+class ChargeShotMechanicWidget(ChargeShotWidgetMeta, ContainersListener, IMechanicStatesListenerLogic, IComponentLifeCycleListenerLogic):
     _HOT_KEY_MAP = {CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION: [HotKeyData(VehicleMechanicCommand.ACTIVATE.value, False)]}
 
     def __init__(self):
@@ -49,14 +51,9 @@ class ChargeShotMechanicWidget(ChargeShotWidgetMeta, ComponentListener, IMechani
         self.__invalidateProgress(state)
 
     @eventHandler
-    def onComponentParamsCollected(self, component):
-        params = component.params
-        if params is None:
-            return
-        else:
-            self.__damageFactorsPerLevel = params.damageFactorsPerLevel
-            self.__invalidateExpectedDamage(self.__baseDamage)
-            return
+    def onComponentParamsCollected(self, params):
+        self.__damageFactorsPerLevel = params.damageFactorsPerLevel
+        self.__invalidateExpectedDamage(self.__baseDamage)
 
     def onCurrentShellDamageChanged(self, newDamage):
         self.__invalidateExpectedDamage(newDamage)
@@ -69,7 +66,7 @@ class ChargeShotMechanicWidget(ChargeShotWidgetMeta, ComponentListener, IMechani
         return [VehicleMechanicLifeCycleUpdater(VehicleMechanic.CHARGE_SHOT, self),
          VehicleMechanicPassengerUpdater(VehicleMechanic.CHARGE_SHOT, self),
          VehicleMechanicStatesUpdater(VehicleMechanic.CHARGE_SHOT, self),
-         HotKeysViewUpdater(self._HOT_KEY_MAP.keys(), self),
+         HotKeysViewUpdater(list(self._HOT_KEY_MAP.keys()), self),
          CurrentShellDamageUpdater(self),
          ShotBlockedUpdater(self)]
 

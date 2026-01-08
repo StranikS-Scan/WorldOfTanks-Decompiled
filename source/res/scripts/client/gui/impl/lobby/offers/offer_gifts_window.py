@@ -47,11 +47,12 @@ class OfferGiftsWindow(ViewImpl):
     _offersNovelty = dependency.descriptor(IOffersNovelty)
     _externalBrowser = dependency.descriptor(IExternalLinksController)
 
-    def __init__(self, layoutID, offerID, overrideSuccessCallback=None):
+    def __init__(self, layoutID, offerID, overrideSuccessCallback=None, overrideOnBackCallback=None):
         settings = ViewSettings(layoutID=layoutID, flags=ViewFlags.LOBBY_SUB_VIEW, model=OfferModel())
         super(OfferGiftsWindow, self).__init__(settings)
         self._offerID = offerID
         self.__overrideSuccessCallback = overrideSuccessCallback
+        self.__overrideOnBackCallback = overrideOnBackCallback
 
     @property
     def _serverSettings(self):
@@ -257,9 +258,15 @@ class OfferGiftsWindow(ViewImpl):
             event_dispatcher.showHangar()
             self.destroyWindow()
 
-    def _onBack(self):
-        event_dispatcher.showStorage(defaultSection=STORAGE_CONSTANTS.OFFERS)
-        self.destroyWindow()
+    def _onBack(self, _=None):
+        if self.__overrideOnBackCallback:
+            self.destroyWindow()
+            self.__overrideOnBackCallback()
+            self.__overrideOnBackCallback = None
+        else:
+            event_dispatcher.showStorage(defaultSection=STORAGE_CONSTANTS.OFFERS)
+            self.destroyWindow()
+        return
 
     def _onLearnMore(self):
         localization = ResMgr.openSection(self._offersProvider.getCdnResourcePath(self._offerItem.cdnLocFilePath, relative=False))

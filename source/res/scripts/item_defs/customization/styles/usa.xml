@@ -3358,4 +3358,53 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A191_Ares_90_C	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1241	</id>
+      <texture>	gui/maps/vehicles/styles/2_0_progression_a.png	</texture>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/2_0_progression_a	</userString>
+      <description>	#vehicle_customization:special_style/2_0_progression_a_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/2_0_progression_a_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1262	</id>
+              <appliedTo>	272	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	1263	</id>
+              <appliedTo>	4096	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	7	</item>
+          </modifications>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </usa.xml>

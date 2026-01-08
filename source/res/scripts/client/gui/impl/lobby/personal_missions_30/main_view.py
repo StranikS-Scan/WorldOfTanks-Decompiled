@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/personal_missions_30/main_view.py
-from collections import OrderedDict
 from functools import partial
 import SoundGroups
 from account_helpers.settings_core.settings_constants import PersonalMission3
 from constants import DAILY_QUESTS_CONFIG, Configs
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
 from gui import SystemMessages
+from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getCurrentOperationLastInstalledDetail
 from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.impl import backport
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
@@ -30,10 +30,11 @@ from gui.impl.lobby.personal_missions_30.personal_mission_constants import Intro
 from gui.impl.lobby.personal_missions_30.state import MissionsState, AssemblingState, ProgressionState
 from gui.impl.lobby.personal_missions_30.tooltips.mission_progress_tooltip import MissionProgressTooltip
 from gui.impl.lobby.personal_missions_30.tooltips.missions_category_tooltip import MissionsCategoryTooltip
-from gui.impl.lobby.personal_missions_30.views_helpers import isIntroShown, getQuestsByOperationsChains, firstUnclaimedOperation, getMissionConfigData, getDetailNameByToken, isVehDetailInstalled, getMainRewardInfo, getNextNotStartedOperation, showRewardVehicleInHangar, getOperationStatus, getStageNumberByDetailId, hasAssemblingVideo, isOperationAvailableByVehicles, wasOperationActivatedBefore, getRegularQuestsPMPoints
+from gui.impl.lobby.personal_missions_30.views_helpers import isIntroShown, getQuestsByOperationsChains, getMissionConfigData, getDetailNameByToken, isVehDetailInstalled, getMainRewardInfo, showRewardVehicleInHangar, getOperationStatus, getStageNumberByDetailId, hasAssemblingVideo, getRegularQuestsPMPoints, getVehicleDetails, getDetailedOperationStatus, getSortedPm3Operations, showStageAssemblingVideo
 from gui.impl.pub import ViewImpl, WindowImpl
 from gui.server_events.events_dispatcher import showMissions
 from gui.server_events.events_helpers import isDailyQuestsEnable, isWeeklyQuestsEnable
+from gui.server_events.pm_constants import IS_PM3_QUEST_ENABLED, DISABLED_PM_OPERATIONS, DISABLED_PM_MISSIONS
 from gui.shared.event_dispatcher import showPM30OperationIntroWindow, showPM30RewardsWindow, showVehicleHubOverview, showHangar
 from gui.shared.gui_items.processors import quests as quests_proc
 from gui.shared.gui_items.processors.quests import PMActivateSeason, PM3GetQuestRewards
@@ -41,8 +42,8 @@ from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import decorators
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
-from personal_missions import PM_BRANCH
-from shared_utils import findFirst, first
+from personal_missions import PM_BRANCH, g_cache as pm_cache
+from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IAchievements20EarningController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -70,7 +71,7 @@ class MainView(ViewImpl):
         self.__viewWasShown = False
         self.__needQuestsUpdate = True
         self.__pm3Campaign = self.__eventsCache.getPersonalMissions().getCampaignsForBranch(PM_BRANCH.PERSONAL_MISSION_3).get(PM3_CAMPAIGN_ID)
-        self.__pm3Operations = self.__getSortedPm3Operations()
+        self.__pm3Operations = getSortedPm3Operations()
         self.__operationsToUpdate = {operationID:False for operationID in self.__pm3Operations.keys()}
         self.__operation = self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.V2_BRANCHES).get(operationID)
         self.__lastInstalledDetail = self.__settingsCore.serverSettings.getPM3InstalledVehDetails()
@@ -91,13 +92,8 @@ class MainView(ViewImpl):
     def getOperationID(self):
         return self.__operation.getID()
 
-    def initCurrentOperation(self):
-        self.__assemblingManager.init()
-        self.__assemblingManager.setHangarProgressionStateOn()
-        self.__assemblingManager.changeVehicleGO(self.__operation.getID(), self.__getOperationLastInstalledDetail(self.__operation))
-        hangarManager = self.__assemblingManager.getHangarOperationsManager()
-        if hangarManager:
-            hangarManager.onVehicleClick += self.__onGoToAssembling
+    def isCurrentOperationFullCompleted(self):
+        return self.__operation.isFullCompleted()
 
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.mono.personal_missions_30.tooltips.mission_progress_tooltip():
@@ -108,7 +104,8 @@ class MainView(ViewImpl):
                 missions = self.__quests.get(self.__operation.getID(), {}).get(category.value, {}).values()
             missionIndex = int(event.getArgument('missionIndex'))
             if 0 <= missionIndex < len(missions):
-                return MissionProgressTooltip(mission=missions[missionIndex])
+                mission = missions[missionIndex]
+                return MissionProgressTooltip(mission=mission, isCompleted=mission.isCompleted())
         elif contentID == R.views.mono.personal_missions_30.tooltips.missions_category_tooltip():
             return MissionsCategoryTooltip(category=MissionCategory(event.getArgument('category')), operation=self.__operation)
         return super(MainView, self).createToolTipContent(event, contentID)
@@ -118,8 +115,6 @@ class MainView(ViewImpl):
             self.__updateViewModel(operationToUpdate=self.__operation)
         if self.viewModel.getMainScreenState() == MainScreenState.MISSIONS:
             self.__blur.disable()
-        elif self.viewModel.getMainScreenState() == MainScreenState.ASSEMBLING:
-            self.__assemblingManager.switchCameraToMainPosition(isOperationFullCompleted=self.__operation.isFullCompleted(), callback=partial(self.viewModel.setAnimationState, AnimationState.CONTINUE_BACK))
         self.viewModel.setMainScreenState(MainScreenState.PROGRESSION)
 
     def setMissionsState(self):
@@ -133,8 +128,19 @@ class MainView(ViewImpl):
     def setAssemblingState(self):
         self.viewModel.setMainScreenState(MainScreenState.ASSEMBLING)
 
+    def setAnimationState(self, state):
+        self.viewModel.setAnimationState(state)
+
+    def setCameraFlightInProgress(self, isInProgress):
+        self.viewModel.setCameraFlightInProgress(isInProgress)
+
+    def getMainScreenState(self):
+        return self.viewModel.getMainScreenState()
+
     def _getEvents(self):
         cameraEvents = self.__assemblingManager.getCameraEvents(self.viewModel)
+        hangarManager = self.__assemblingManager.getHangarOperationsManager()
+        hangarManagerEvents = [(hangarManager.onVehicleClick, self.__onGoToAssembling)] if hangarManager is not None else []
         viewEvents = [(self.viewModel.onBack, self.__onBack),
          (self.viewModel.onSwitchOperation, self.__onSelectOperation),
          (self.viewModel.showOperationVehicleVideo, self.__showOperationVehicleVideo),
@@ -154,13 +160,8 @@ class MainView(ViewImpl):
          (self.__eventsCache.onPMSyncCompleted, self.__onPmEventsSync),
          (self.__eventsCache.onSyncCompleted, self.__onCommonSync),
          (self.__itemsCache.onPMSyncCompleted, self.__onPmItemsSync),
-         (self.__itemsCache.onSyncCompleted, self.__onItemsSyncCompleted),
-         (self.__assemblingManager.onCameraFlightStarted, self.__onCameraFlightStarted),
-         (self.__assemblingManager.onCameraFlightFinished, self.__onCameraFlightFinished),
-         (self.__assemblingManager.onAssemblingVideoFinished, self.__onAssemblingVideoFinished),
-         (self.__assemblingManager.onAssemblingAnimationStarted, self.__onAssemblingAnimationStarted),
-         (self.__assemblingManager.onAssemblingAnimationFinished, self.__onAssemblingAnimationFinished)]
-        return viewEvents + cameraEvents
+         (self.__itemsCache.onSyncCompleted, self.__onItemsSyncCompleted)]
+        return viewEvents + cameraEvents + hangarManagerEvents
 
     def _onLoading(self, *args, **kwargs):
         super(MainView, self)._onLoading(*args, **kwargs)
@@ -175,9 +176,6 @@ class MainView(ViewImpl):
         if self.__viewWasShown:
             self.__setCheckedPM3PointsData()
         super(MainView, self)._finalize()
-        hangarManager = self.__assemblingManager.getHangarOperationsManager()
-        if hangarManager:
-            hangarManager.onVehicleClick -= self.__onGoToAssembling
         self.__blur.fini()
 
     def __onCommonSync(self, *_):
@@ -188,9 +186,6 @@ class MainView(ViewImpl):
                 self.__fillAdditionalMissionsModel(operationModel, operation)
                 self.__fillDetails(operationModel, operation)
 
-        if self.__operation.isFullCompleted() and self.__assemblingManager.isSwitchingToFreeCameraNeeded():
-            self.__assemblingManager.switchCameraToMainPosition(isOperationFullCompleted=True, callback=partial(self.viewModel.setAnimationState, AnimationState.CONTINUE_BACK))
-
     def __onPmEventsSync(self, diff):
         self.__setAllOperationsUpdateStatus(needUpdate=True)
         if self.viewModel.getMainScreenState() != MainScreenState.MISSIONS:
@@ -200,8 +195,9 @@ class MainView(ViewImpl):
         if diff:
             pm3Quests = diff.get('potapovQuests', {}).get('pm3', {}).get(('selected', '_r'), set())
             if diff.get('pm3_progress', {}):
-                for questsID in diff.get('pm3_progress', {}):
-                    pm3Quests.add(questsID)
+                for questName in diff.get('pm3_progress', {}):
+                    questID = pm_cache.getPersonalMissionIDByName(questName)
+                    pm3Quests.add(questID)
 
         if pm3Quests:
             self.__updateMissions(pm3Quests)
@@ -228,8 +224,8 @@ class MainView(ViewImpl):
                 tx.setActiveOperationId(self.__operation.getID())
                 self.__fillRewardTankModel(tx)
                 self.__fillOperationStatusModel(tx)
-        self.__assemblingManager.changeVehicleGO(self.__operation.getID(), self.__getOperationLastInstalledDetail(self.__operation))
-        self.__assemblingManager.switchCameraToMainPosition(isOperationFullCompleted=self.__operation.isFullCompleted())
+        self.__assemblingManager.changeVehicleGO(self.__operation.getID(), getCurrentOperationLastInstalledDetail(self.__operation))
+        self.__assemblingManager.switchCameraToMainPosition(isOperationFullCompleted=self.isCurrentOperationFullCompleted())
         ProgressionState.goTo(operationID=self.__operation.getID())
 
     def __onOperationStatusButtonClick(self):
@@ -243,11 +239,11 @@ class MainView(ViewImpl):
     @args2params(str)
     def __onDetailInfo(self, detailId):
         if not getLobbyStateMachine().isStateEntered(AssemblingState.STATE_ID):
-            AssemblingState.goTo()
+            AssemblingState.goTo(operationID=self.__operation.getID(), state=self.viewModel.getMainScreenState().value)
         self.__assemblingManager.switchCameraToStagePosition(getStageNumberByDetailId(detailId), callback=partial(self.viewModel.setAnimationState, AnimationState.CONTINUE_DETAIL_INFO))
 
     def __onGoToAssembling(self):
-        AssemblingState.goTo()
+        AssemblingState.goTo(operationID=self.__operation.getID(), state=self.viewModel.getMainScreenState().value)
         self.viewModel.setAnimationState(AnimationState.ASSEMBLING)
         SoundGroups.g_instance.playSound2D(SoundsKeys.VEHICLE_CLICK)
 
@@ -273,10 +269,10 @@ class MainView(ViewImpl):
 
     @args2params(MissionCategory)
     def __onMissionShow(self, category):
-        MissionsState.goTo(category=category)
+        MissionsState.goTo(category=category, operationID=self.__operation.getID(), state=self.viewModel.getMainScreenState().value)
 
     def setMissionViewCategory(self, category):
-        self.viewModel.missionsModel.setMissionsCategory(category)
+        self.viewModel.missionsModel.setMissionsCategory(MissionCategory(category))
 
     @staticmethod
     def __onAdditionalMissionShow():
@@ -291,12 +287,6 @@ class MainView(ViewImpl):
     @args2params(AnimationState)
     def __updateAnimationState(self, animationState):
         self.viewModel.setAnimationState(animationState)
-
-    def __onCameraFlightStarted(self):
-        self.viewModel.setCameraFlightInProgress(True)
-
-    def __onCameraFlightFinished(self):
-        self.viewModel.setCameraFlightInProgress(False)
 
     def __showVehiclePreview(self):
         vehicleBonus = self.__operation.getPM3VehicleBonus()
@@ -322,22 +312,12 @@ class MainView(ViewImpl):
         if state:
             state.goBack()
 
-    def __onAssemblingVideoFinished(self, stageNumber):
-        AssemblingState.goTo()
-        self.__assemblingManager.switchCameraToStagePosition(stageNumber, callback=partial(self.viewModel.setAnimationState, AnimationState.CONTINUE_CLAIM_DETAIL))
-
-    def __onAssemblingAnimationStarted(self):
-        AssemblingState.goTo()
-
-    def __onAssemblingAnimationFinished(self):
-        self.viewModel.setAnimationState(AnimationState.CONTINUE_CLAIM_DETAIL)
-
     def __showOperationVehicleVideo(self):
         showPM30OperationIntroWindow(self.__operation.getID(), force=True)
 
     @args2params(str)
     def __showDetailVideo(self, detailId):
-        self.__assemblingManager.showStageAssemblingVideo(getStageNumberByDetailId(detailId))
+        showStageAssemblingVideo(self.getOperationID(), getStageNumberByDetailId(detailId))
 
     def __onServerSettingsChanged(self, diff=None):
         diff = diff or {}
@@ -345,8 +325,8 @@ class MainView(ViewImpl):
             operationModel = self.__getOperationFromModel(self.__operation.getID())
             with operationModel.transaction() as tx:
                 self.__fillAdditionalMissionsModel(tx, self.__operation)
-        if 'isPM3QuestEnabled' in diff and not diff['isPM3QuestEnabled'] or 'disabledPMOperations' in diff or 'disabledPersonalMissions' in diff:
-            if not diff.get('isPM3QuestEnabled', True) or self.__operation.getID() in diff.get('disabledPMOperations', {}):
+        if IS_PM3_QUEST_ENABLED in diff and not diff[IS_PM3_QUEST_ENABLED] or DISABLED_PM_OPERATIONS in diff or DISABLED_PM_MISSIONS in diff:
+            if not diff.get(IS_PM3_QUEST_ENABLED, True) or self.__operation.getID() in diff.get(DISABLED_PM_OPERATIONS, {}):
                 showHangar()
                 return
             self.__setAllOperationsUpdateStatus(True)
@@ -386,7 +366,7 @@ class MainView(ViewImpl):
 
             def onFinalRewardWindowClosed(doStateChange=True):
                 if doStateChange:
-                    self.__onAssemblingVideoFinished(MAX_DETAIL_ID)
+                    self.__assemblingManager.onAssemblingVideoFinished(MAX_DETAIL_ID)
                 self.__achievementsController.resume()
 
             showPM30RewardsWindow(ctx={'questID': quest.getID(),
@@ -403,19 +383,11 @@ class MainView(ViewImpl):
             if res and res.userMsg:
                 SystemMessages.pushMessage(res.userMsg, priority=NotificationPriorityLevel.MEDIUM, type=SystemMessages.SM_TYPE.ErrorSimple)
 
-    def __getSortedPm3Operations(self):
-        return OrderedDict(sorted(self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.V2_BRANCHES).items()))
-
     def __getOperationFromModel(self, operationID):
         return first([ operationModel for operationModel in self.viewModel.getOperations() if operationModel.getOperationId() == operationID ], None)
 
-    def __getOperationLastInstalledDetail(self, operation):
-        if operation.isCompleted():
-            return MAX_DETAIL_ID
-        return 0 if not operation.isStarted() else self.__lastInstalledDetail
-
     def __updateViewModel(self, operationToUpdate=None):
-        self.__pm3Operations = self.__getSortedPm3Operations()
+        self.__pm3Operations = getSortedPm3Operations()
         self.__operation = self.__pm3Operations.get(self.__operation.getID())
         self.__operationStatus = getOperationStatus(self.__operation, self.__pm3Operations)
         with self.viewModel.transaction() as tx:
@@ -478,7 +450,7 @@ class MainView(ViewImpl):
     def __fillDetails(self, operationModel, operation):
         detailsArray = operationModel.getDetails()
         detailsArray.clear()
-        vehDetails = sorted(tuple(operation.getVehDetails().items()), key=lambda vehDetail: int(vehDetail[0].rsplit(':')[-1]))
+        vehDetails = getVehicleDetails(operation)
         for detailIndex in range(0, len(vehDetails)):
             if detailIndex == 0:
                 minDetailPoints = 0
@@ -634,7 +606,7 @@ class MainView(ViewImpl):
         rewardsModel.invalidate()
 
     def __fillOperationStatusModel(self, mainModel):
-        status, nextOperationID = self.__getDetailedOperationStatus()
+        status, nextOperationID = getDetailedOperationStatus(self.__operation)
         mainModel.status.setStatus(status)
         if nextOperationID:
             nextOperationName = self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.V2_BRANCHES).get(nextOperationID).getUserName()
@@ -659,59 +631,6 @@ class MainView(ViewImpl):
             status = DetailStatus.IN_PROGRESS
             earnedPoints = totalPoints - minDetailPoints
         return (status, earnedPoints)
-
-    def __getDetailedOperationStatus(self):
-        operations = self.__pm3Operations.values()
-        notCurrentOperations = [ operation for operation in operations if operation.getID() != self.__operation.getID() ]
-        isAnotherOperationInProgress = any((operation.isInProgress() for operation in notCurrentOperations))
-        nextNotStartedOperation = getNextNotStartedOperation(self.__operation, notCurrentOperations)
-        unclaimedOperation = firstUnclaimedOperation(self.__operation, operations)
-        state = OperationStatus.AVAILABLE
-        nextOperationID = self.__operation.getID()
-        operationIsFullCompleted = self.__operation.isFullCompleted()
-        operationIsCompleted = self.__operation.isCompleted()
-        operationIsActive = self.__operation.isActive()
-        operationWasStarted = wasOperationActivatedBefore(self.__operation, unclaimedOperation)
-        operationIsPaused = self.__operation.isPaused()
-        operationIsInProgress = self.__operation.isInProgress()
-        isAnotherOperationActive = any((operation.isActive() for operation in notCurrentOperations))
-        selectedQuests = self.__eventsCache.getPersonalMissions().getSelectedQuestsForBranch(self.__operation.getBranch()).values()
-        if all((operation.isFullCompleted() for operation in operations)):
-            state = OperationStatus.CAMPAIGN_FINISHED
-        elif unclaimedOperation is not None and unclaimedOperation.getID() < self.__operation.getID():
-            state = OperationStatus.PRECEDING_OPERATION_NOT_COMPLETED
-            nextOperationID = unclaimedOperation.getID()
-        elif operationIsFullCompleted:
-            nextNotCompletedWithHonor = findFirst(lambda o: o.isCompleted and not o.isFullCompleted(), operations)
-            if nextNotCompletedWithHonor and all([ o.isCompleted() for o in operations ]):
-                state = OperationStatus.NOT_ALL_COMPLETED_WITH_HONOR
-                nextOperationID = nextNotCompletedWithHonor.getID()
-            elif isAnotherOperationInProgress:
-                state = OperationStatus.NOT_ALL_COMPLETED
-                inProgressOperation = findFirst(lambda o: o.isInProgress(), operations)
-                nextOperationID = inProgressOperation.getID()
-            elif nextNotStartedOperation:
-                state = OperationStatus.NOT_ALL_COMPLETED
-                nextOperationID = nextNotStartedOperation.getID()
-        elif not isOperationAvailableByVehicles(self.__operation):
-            state = OperationStatus.REQUIRES_VEHICLE
-        elif self.__eventsCache.getLockedPersonalMissions() and (operationIsPaused or not operationIsActive):
-            state = OperationStatus.VEHICLE_IS_IN_BATTLE
-        elif operationIsCompleted:
-            if operationIsPaused and operationIsActive:
-                state = OperationStatus.PAUSED
-            elif not operationIsActive:
-                state = OperationStatus.COMPLETED
-            elif nextNotStartedOperation:
-                state = OperationStatus.NEXT_OPERATION_AVAILABLE
-                nextOperationID = nextNotStartedOperation.getID()
-            elif operationIsInProgress:
-                state = OperationStatus.ACTIVE
-        elif operationIsPaused or operationWasStarted and (isAnotherOperationActive or not selectedQuests):
-            state = OperationStatus.PAUSED
-        elif operationIsInProgress:
-            state = OperationStatus.ACTIVE
-        return (state, nextOperationID)
 
     def __getCheckedPm3PointsData(self, pmPointsTotal, pmPointsMax):
         lastCheckedData = self.__settingsCore.serverSettings.getPersonalMission3Data().get(PersonalMission3.CHECKED_PM3_POINTS, 0)

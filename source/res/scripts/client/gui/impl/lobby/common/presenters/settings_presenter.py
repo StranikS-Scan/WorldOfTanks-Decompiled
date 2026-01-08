@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/common/presenters/settings_presenter.py
 from __future__ import absolute_import
 from inspect import getmembers
+from past.builtins import long
 import logging
 import typing
 from account_helpers.AccountSettings import AccountSettings
@@ -46,7 +47,7 @@ class SettingsPresenter(ViewComponent[SettingsModel]):
                 valueT = type(value)
                 prop = getter()
                 propT = type(prop)
-                if propT is type(1L):
+                if propT is long:
                     propT = int
                 if valueT is not propT:
                     _logger.error('Setting property "%s" type mismatch %s != %s', key, valueT, propT)

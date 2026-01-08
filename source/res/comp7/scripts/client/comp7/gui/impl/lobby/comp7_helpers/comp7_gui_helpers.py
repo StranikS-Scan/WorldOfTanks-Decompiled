@@ -73,3 +73,33 @@ def _hasParticipantToken(comp7Controller=None, itemsCache=None):
                 return True
 
     return False
+
+
+class ProgressCacherUI(object):
+
+    def __init__(self, uiSection, subsection, default):
+        self.__uiSection = uiSection
+        self.__settings = AccountSettings.getUIFlag(self.__uiSection)
+        self.__progress = self.__settings.setdefault(subsection, default)
+
+    def finalize(self):
+        self.setUiFlag()
+        self.__uiSection = None
+        self.__settings = None
+        self.__progress = None
+        return
+
+    def reset(self, keys):
+        for k in list(self.__progress.keys()):
+            if k not in keys:
+                del self.__progress[k]
+
+    def setUiFlag(self):
+        AccountSettings.setUIFlag(self.__uiSection, self.__settings)
+
+    def setProgress(self, key, progress):
+        self.__progress[key] = progress
+
+    def getDelta(self, key, newProgress):
+        oldProgress = self.__progress.get(key, 0)
+        return newProgress - oldProgress

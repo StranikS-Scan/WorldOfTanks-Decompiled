@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 import operator
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.items_parameters import params
+from gui.shared.items_parameters.module_params import GunParams
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
@@ -138,7 +138,7 @@ class GunComparator(_BaseModuleComparator):
         for _, module in self._items.items():
             if excludes and module in excludes:
                 continue
-            gp = params.GunParams(module.descriptor, self._vehicle.descriptor)
+            gp = GunParams(module.descriptor, self._vehicle.descriptor)
             if gp:
                 paramsDict = gp.getParamsDict()
                 avgDamage = paramsDict.get('avgDamagePerMinute', 0.0)

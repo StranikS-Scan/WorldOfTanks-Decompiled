@@ -598,6 +598,12 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/wgelen/wot/v1/get_player_data'
         return self._request_data(callback, url, method='GET')
 
+    def get_player_progression(self, callback, event_id, leaderboard_id, fields=None):
+        url = '/wgelen/wot/v1/get_player_progression'
+        get_data = {'event_id': event_id,
+         'leaderboard_id': leaderboard_id}
+        return self._request_data(callback, url, get_data, method='GET')
+
     def hof_user_info(self, callback):
         url = '/hof/user/info/'
         return self._request_data(callback, url, method='GET')

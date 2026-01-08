@@ -1,4 +1,5 @@
 <radios.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <ids>
     <_9RM>	0	</_9RM>
     <A-220>	1	</A-220>
@@ -32,6 +33,7 @@
     <A-220B_1_M>	29	</A-220B_1_M>
     <A_220A-DZT>	30	</A_220A-DZT>
     <A_220B_79>	31	</A_220B_79>
+    <A_220B_78>	32	</A_220B_78>
     <A-220B_1_MK>	257	</A-220B_1_MK>
     <A_220_YB>	258	</A_220_YB>
     <A_220A-DZT_CFE_A>	260	</A_220A-DZT_CFE_A>
@@ -472,6 +474,18 @@
       <maxRegenHealth>	125	</maxRegenHealth>
       <repairCost>	4	</repairCost>
     </A_220B_79>
+    <A_220B_78>
+      <userString>	#china_vehicles:A_220B_78	</userString>
+      <tags></tags>
+      <level>	11	</level>
+      <notInShop>	true	</notInShop>
+      <price>	80000	</price>
+      <weight>	100	</weight>
+      <distance>	104	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	125	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+    </A_220B_78>
     <_789T>
       <userString>	#china_vehicles:_789T	</userString>
       <tags></tags>

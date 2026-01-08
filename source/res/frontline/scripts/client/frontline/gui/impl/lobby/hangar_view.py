@@ -8,6 +8,8 @@ from gui.impl.gen.view_models.views.lobby.hangar.hangar_settings_model import Ha
 from gui.impl.gen.view_models.views.lobby.hangar.key_bindings_model import KeyBindingsModel
 from gui.impl.lobby.common.presenters.settings_presenter import SettingsPresenter
 from gui.impl.lobby.hangar.base.sound_constants import HangarSoundStates
+from gui.impl.lobby.hangar.presenters.vehicle_playlists_presenter import VehiclePlaylistsPresenter
+from gui.impl.lobby.hangar.presenters.pet_object_tooltip_presenter import PetObjectTooltipPresenter
 from gui.sounds.epic_sound_constants import EPIC_SOUND
 from helpers.statistics import HANGAR_LOADING_STATE
 from gui.impl.lobby.hangar.base.blur import RandomHangarBlur
@@ -27,13 +29,13 @@ from gui.impl.lobby.hangar.presenters.utils import getMenuItems
 from gui.impl.lobby.common.presenters.vehicles_info_presenter import VehiclesInfoPresenter
 from gui.impl.lobby.hangar.base.vehicles_filter_component import VehiclesFilterComponent
 from frontline.gui.impl.lobby.presenters.frontline_loadout_presenter import FrontlineLoadoutPresenter
+from frontline.gui.impl.lobby.presenters.frontline_vehicle_menu_presenter import FrontlineVehicleMenuPresenter
 from frontline.gui.impl.lobby.presenters.fl_vehicle_inventory_presenter import FLVehicleInventoryPresenter
 from frontline.gui.impl.lobby.presenters.fl_vehicles_statistics_presenter import FLVehiclesStatisticsPresenter
 from gui.impl.lobby.hangar.presenters.crew_presenter import CrewPresenter
 from gui.impl.lobby.hangar.presenters.hangar_vehicle_params_presenter import HangarVehicleParamsPresenter
 from gui.impl.lobby.hangar.presenters.main_menu_presenter import MainMenuPresenter
 from gui.impl.lobby.hangar.presenters.space_interaction_presenter import SpaceInteractionPresenter
-from gui.impl.lobby.hangar.presenters.vehicle_menu_presenter import VehicleMenuPresenter
 from ClientSelectableCameraObject import ClientSelectableCameraObject
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
 from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
@@ -114,14 +116,16 @@ class FrontlineHangar(ViewComponent[RouterModel], IRoutableView):
          hangar.VehicleParams(): HangarVehicleParamsPresenter,
          hangar.VehiclesInventory(): lambda : FLVehicleInventoryPresenter(self.__invVehicleFilter),
          hangar.VehicleFilters(): lambda : VehicleFiltersDataProvider(self.__carouselFilter),
+         hangar.VehiclePlaylists(): VehiclePlaylistsPresenter,
          hangar.MainMenu(): lambda : MainMenuPresenter(getMenuItems()),
-         hangar.VehicleMenu(): VehicleMenuPresenter,
+         hangar.VehicleMenu(): FrontlineVehicleMenuPresenter,
          hangar.SpaceInteraction(): lambda : SpaceInteractionPresenter(HangarSelectableLogic()),
          hangar.Teaser(): TeaserPresenter,
          hangar.HeroTank(): HeroTankPresenter,
          hangar.OptionalDevicesAssistant(): OptionalDevicesAssistantPresenter,
          hangar.Settings(): lambda : SettingsPresenter(HangarSettingsModel, HANGAR_VIEW_SETTINGS),
          hangar.KeyBindings(): lambda : SettingsPresenter(KeyBindingsModel, HANGAR_KEY_BINDINGS, readOnly=True),
+         hangar.PetObjectTooltip(): PetObjectTooltipPresenter,
          frontlineHangar.UserMissions(): FrontlineUserMissionsPresenter,
          frontlineHangar.AlertMessage(): AlertPresenter}
 
@@ -137,6 +141,7 @@ class FrontlineHangar(ViewComponent[RouterModel], IRoutableView):
         super(FrontlineHangar, self)._onShown()
         nextTick(ClientSelectableCameraObject.switchCamera)()
         g_eventBus.handleEvent(events.HangarCustomizationEvent(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.PetSystemEvent(events.PetSystemEvent.MEDAL_ANIMATION_SHOW), scope=EVENT_BUS_SCOPE.LOBBY)
         g_currentPreviewVehicle.selectNoVehicle()
         if g_currentVehicle.isPresent():
             g_currentVehicle.refreshModel()

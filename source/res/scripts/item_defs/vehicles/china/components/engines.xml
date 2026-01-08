@@ -1,4 +1,5 @@
 <engines.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <ids>
     <NORINCO_12150L7>	0	</NORINCO_12150L7>
     <_12150L-3_V-12>	1	</_12150L-3_V-12>
@@ -63,6 +64,7 @@
     <Armstrong_Siddeley_B>	68	</Armstrong_Siddeley_B>
     <HS_110F_M>	69	</HS_110F_M>
     <_5TD_I>	70	</_5TD_I>
+    <_5TD_I_1>	71	</_5TD_I_1>
     <V_2_54SC_QL>	252	</V_2_54SC_QL>
     <V_2_54SC_113>	253	</V_2_54SC_113>
     <_Type_102S_T>	254	</_Type_102S_T>
@@ -1611,8 +1613,8 @@
       <maxRegenHealth>	173	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	240	</rpm_min>
-      <rpm_max>	2480	</rpm_max>
+      <rpm_min>	200	</rpm_min>
+      <rpm_max>	2600	</rpm_max>
     </NORINCO_12150L_70_x2>
     <V_2_54SCM>
       <userString>	#china_vehicles:V_2_54SCM	</userString>
@@ -1761,6 +1763,23 @@
       <rpm_min>	293	</rpm_min>
       <rpm_max>	2320	</rpm_max>
     </_5TD_I>
+    <_5TD_I_1>
+      <userString>	#china_vehicles:_5TD_I_1	</userString>
+      <tags>	diesel	</tags>
+      <level>	11	</level>
+      <price>	150000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	10	</power>
+      <weight>	100	</weight>
+      <maxHealth>	380	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	11	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	226	</rpm_min>
+      <rpm_max>	2520	</rpm_max>
+    </_5TD_I_1>
     <_8V135_YB>
       <userString>	#china_vehicles:_8V135_YB	</userString>
       <tags>	diesel	</tags>

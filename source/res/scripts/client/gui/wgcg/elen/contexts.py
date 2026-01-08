@@ -147,3 +147,25 @@ class EventBoardsGetHangarFlagCtx(EventBoardsRequestCtx):
 
     def getRequestType(self):
         return WebRequestDataType.EVENT_BOARDS_GET_HANGAR_FLAG
+
+
+class EventBoardsGetPlayerProgressionCtx(EventBoardsRequestCtx):
+    __slots__ = ('__eventID', '__leaderboardID')
+
+    def __init__(self, eventID, leaderboardID, needShowErrorNotification=True):
+        super(EventBoardsGetPlayerProgressionCtx, self).__init__()
+        self.__eventID = eventID
+        self.__leaderboardID = leaderboardID
+        self._needShowErrorNotification = needShowErrorNotification
+
+    def getRequestType(self):
+        return WebRequestDataType.EVENT_BOARDS_GET_PLAYER_PROGRESSION
+
+    def getSingulizerKey(self):
+        return (self.getRequestType(), self.__eventID, self.__leaderboardID)
+
+    def getEventID(self):
+        return self.__eventID
+
+    def getLeaderboardID(self):
+        return self.__leaderboardID

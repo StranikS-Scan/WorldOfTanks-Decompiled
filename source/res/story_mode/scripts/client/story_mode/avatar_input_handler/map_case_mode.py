@@ -6,7 +6,7 @@ from BunkerLogicComponent import BunkerLogicComponent
 import CGF
 from AvatarInputHandler import MapCaseMode
 from Math import Vector3
-from constants import VEHICLE_BUNKER_TURRET_TAG
+from story_mode_common.story_mode_constants import VEHICLE_BUNKER_TURRET_TAG
 POSITION_PRECISION = 0.001
 
 def _vectorEqual(first, second):

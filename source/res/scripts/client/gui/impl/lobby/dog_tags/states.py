@@ -94,9 +94,8 @@ class DogTagState(GuiImplViewLobbyState):
 
     def _dogTagConfirm(self, event):
         dogTagsEntered = self.isEntered()
-        confirmationEntered = self.getMachine().isStateEntered(DogTagConfirmState.STATE_ID)
         dogTagSelected = self.selectedEngraving or self.selectedBackground
-        if event.targetStateID == self.STATE_ID or confirmationEntered or not dogTagsEntered or not dogTagSelected:
+        if event.targetStateID == self.STATE_ID or not dogTagsEntered or not dogTagSelected:
             return False
         view = self.getMachine().getRelatedView(self)
         if not view:

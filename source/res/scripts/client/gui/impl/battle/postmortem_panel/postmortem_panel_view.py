@@ -78,10 +78,10 @@ class PostmortemPanelView(ViewImpl, CallbackDelayer):
         super(PostmortemPanelView, self)._finalize()
         self.stopCallback(self.__stopHint)
 
-    def __onPostMortemSwitched(self, _, respawnAvailable):
+    def __onPostMortemSwitched(self, *_):
         self.__startHint()
         if self.sessionProvider.arenaVisitor.getArenaGuiType() in ARENA_GUI_TYPE.EPIC_RANGE:
-            self.viewModel.setHasLivesAvailable(respawnAvailable)
+            self.viewModel.setHasLivesAvailable(False)
 
     def __onKillCamStateChanged(self, state, _):
         if state is DeathCamEvent.State.FINISHED:

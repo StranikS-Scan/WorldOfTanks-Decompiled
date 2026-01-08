@@ -26,6 +26,7 @@ class VIEW_ALIAS(views.VIEW_ALIAS, ConstInjector):
     STORY_MODE_INTRO_VIDEO_WINDOW = 'storyModeIntroVideoWindow'
     STORY_MODE_WEB_VIEW_TRANSPARENT = 'StoryModeWebViewTransparent'
     STORY_MODE_OUTRO_VIDEO_WINDOW = 'storyModeOutroVideoWindow'
+    STORY_MODE_BATTLE_RESULTS = 'storyModeBattleResults'
 
 
 IS_ONBOARDING_SEAMLESS_MISSION_CHANGING_ON = True

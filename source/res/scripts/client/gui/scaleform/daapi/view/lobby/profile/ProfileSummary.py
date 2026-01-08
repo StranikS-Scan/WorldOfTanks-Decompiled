@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileSummary.py
+import typing
 import WWISE
 from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils, getProfileCommonInfo

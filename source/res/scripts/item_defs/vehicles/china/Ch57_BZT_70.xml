@@ -23,6 +23,9 @@
     <camouflageNet>
       <invisibilityBonus>	0.05 0.075	</invisibilityBonus>
     </camouflageNet>
+    <deluxeCamouflageNet>
+      <invisibilityBonus>	0.075	</invisibilityBonus>
+    </deluxeCamouflageNet>
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.03 0.04	</invisibilityBonus>
     </additionalInvisibilityDevice>
@@ -2118,10 +2121,10 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.361 8 0.389 0 0.611 0 0.639 8 1 8	</maxPitch>
+            <maxPitch>	0 8 0.361 8 0.41667 4 0.58333 4 0.639 8 1 8	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.108	</invisibilityFactorAtShot>
-          <reloadTime>	24	</reloadTime>
+          <reloadTime>	21	</reloadTime>
           <aimingTime>	3	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.15	</turretRotation>

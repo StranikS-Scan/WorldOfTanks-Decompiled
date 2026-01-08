@@ -12,7 +12,7 @@ from story_mode.uilogging.story_mode.loggers import EventWelcomeViewLogger
 
 class EventWelcomeView(ViewImpl):
     __slots__ = ('_uiLogger',)
-    layoutID = R.views.story_mode.lobby.EventWelcomeView()
+    layoutID = R.views.story_mode.mono.lobby.event_welcome_view()
 
     def __init__(self, layoutID=None):
         settings = ViewSettings(layoutID or self.layoutID, ViewFlags.VIEW, EventWelcomeViewModel())

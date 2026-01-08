@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/personal_missions_30/rewards_view.py
 from itertools import ifilter
 from typing import TYPE_CHECKING
+import SoundGroups
 from frameworks.wulf import ViewSettings, WindowFlags
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.gen import R
@@ -80,6 +81,7 @@ class RewardsView(ViewImpl):
 
     def _finalize(self):
         self.__onViewClosed()
+        SoundGroups.g_instance.playSound2D('vid_pm_stop')
         super(RewardsView, self)._finalize()
 
     def __onClose(self):

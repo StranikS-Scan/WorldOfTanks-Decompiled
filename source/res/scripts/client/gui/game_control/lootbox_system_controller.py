@@ -81,6 +81,7 @@ class LootBoxSystemController(ILootBoxSystemController, EventsHandler):
         self.__isInited = False
         self.__boxesCount = {}
         self.__boxesInfo = {}
+        self.__events = set()
         self.__statusChangeNotifiers = []
         self.onBoxesAvailabilityChanged = Event.Event(self.__em)
         self.onStatusChanged = Event.Event(self.__em)
@@ -144,6 +145,9 @@ class LootBoxSystemController(ILootBoxSystemController, EventsHandler):
         self.__settings.set(eventName, setting, value)
 
     def onLobbyInited(self, event):
+        if not self.__isInited:
+            AwardsManager.init()
+            self.__events = set(self.eventNames)
         self.__start()
         self.__isInited = True
 
@@ -152,6 +156,7 @@ class LootBoxSystemController(ILootBoxSystemController, EventsHandler):
 
     def onDisconnected(self):
         self.__isInited = False
+        self.__events = set()
         AwardsManager.finalize()
         for event in self.eventNames:
             self.setSetting(event, LOOT_BOXES_SELECTED_BOX, None)
@@ -163,6 +168,7 @@ class LootBoxSystemController(ILootBoxSystemController, EventsHandler):
 
     def fini(self):
         self.__isInited = False
+        self.__events = set()
         self.__stop()
         self.__boxesInfo.clear()
         self.__boxesCount.clear()
@@ -217,7 +223,7 @@ class LootBoxSystemController(ILootBoxSystemController, EventsHandler):
         return self.__lobbyContext.getServerSettings().getLootBoxesTooltipConfig()
 
     def __start(self):
-        AwardsManager.init()
+        self.__updateAwardsManager()
         self.__settings.update()
         self.__startNotifiers()
         registerViewsLoaders()
@@ -239,11 +245,18 @@ class LootBoxSystemController(ILootBoxSystemController, EventsHandler):
         if 'isLootBoxesEnabled' in settings:
             self.onBoxesAvailabilityChanged()
         if any((name in settings for name in (LOOTBOX_SYSTEM_CONFIG, 'lootBoxes_config', 'lootboxes_tooltip_config'))):
+            self.__updateAwardsManager()
             self.__settings.update()
             self.__updateBoxesCount()
             self.__updateBoxesInfo()
             self.onStatusChanged()
             self.__startNotifiers()
+
+    def __updateAwardsManager(self):
+        newEvents = set(self.eventNames)
+        if self.__events != newEvents:
+            AwardsManager.bonusesLayoutUpdate()
+            self.__events = newEvents
 
     def __onNotifyStatusChange(self):
         self.onStatusChanged()

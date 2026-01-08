@@ -97,7 +97,7 @@ class BattleParams(object):
     DAMAGE_RANDOMIZATION_TYPE = 'damageRandomizationType'
     PIERCING_POWER_RANDOMIZATION_TYPE = 'piercingPowerRandomizationType'
     FORCED_RELOAD_TIME = 'forcedReloadTime'
-    AUTO_SHOOT_DISPERSION_PER_SEC = 'autoShootDispersionPerSec'
+    AUTO_SHOOT_DISPERSION_PER_SHOT = 'autoShootDispersionPerShot'
     AUTO_SHOOT_MAX_SHOT_DISPERSION_FACTOR = 'autoShootMaxShotDispersionFactor'
     GUN_MAIN_PREFAB = 'gunMainPrefab'
     AMMO_BAY_HEALTH = 'ammoBayHealth'

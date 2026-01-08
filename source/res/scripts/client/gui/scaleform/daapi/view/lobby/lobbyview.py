@@ -25,7 +25,7 @@ from gui.impl.pub.view_component import ViewComponent
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import EVENT_BUS_SCOPE, events
-from gui.shared.system_factory import registerLifecycleHandledSubViews, collectLifecycleHandledSubViews, collectViewsForMonitoring
+from gui.shared.system_factory import registerLifecycleHandledSubViews, collectLifecycleHandledSubViews, collectViewsForMonitoring, collectDynamicViewsForMonitoring
 from helpers import dependency, i18n, uniprof
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
@@ -49,7 +49,6 @@ registerLifecycleHandledSubViews([VIEW_ALIAS.LOBBY_HANGAR,
  VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS,
  PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS,
  PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_AWARD_VIEW_ALIAS,
- PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_VIEW_ALIAS,
  PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS,
  PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATION_AWARDS_SCREEN_ALIAS,
  VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR,
@@ -67,7 +66,7 @@ class _LobbySubViewsLifecycleHandler(IViewLifecycleHandler):
     __DYNAMIC_VIEWS = (R.views.lobby.dog_tags.AnimatedDogTagsView(),)
 
     def __init__(self):
-        super(_LobbySubViewsLifecycleHandler, self).__init__([ ViewKey(alias) for alias in collectLifecycleHandledSubViews() + collectViewsForMonitoring() ] + [ ViewKeyDynamic(alias) for alias in self.__DYNAMIC_VIEWS ])
+        super(_LobbySubViewsLifecycleHandler, self).__init__([ ViewKey(alias) for alias in collectLifecycleHandledSubViews() + collectViewsForMonitoring() ] + [ ViewKeyDynamic(alias) for alias in list(self.__DYNAMIC_VIEWS) + collectDynamicViewsForMonitoring() ])
         self.__loadingSubViews = set()
         self.__isWaitingVisible = False
 
@@ -130,14 +129,16 @@ class LobbyHeaderInject(LobbyPanelInjector):
     _hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
 
     def _getViewType(self):
-        return self._hangarGuiCtrl.currentGuiProvider.getLobbyHeaderHelper().getHeaderType()
+        controlsHelper = self._hangarGuiCtrl.currentGuiProvider.getLobbyHeaderHelper()
+        return controlsHelper.getHeaderType() if controlsHelper is not None else None
 
 
 class LobbyFooterInject(LobbyPanelInjector):
     _hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
 
     def _getViewType(self):
-        return self._hangarGuiCtrl.currentGuiProvider.getLobbyHeaderHelper().getFooterType()
+        controlsHelper = self._hangarGuiCtrl.currentGuiProvider.getLobbyHeaderHelper()
+        return controlsHelper.getFooterType() if controlsHelper is not None else None
 
 
 class LobbyView(LobbyPageMeta, IWaitingWidget, IGlobalListener):

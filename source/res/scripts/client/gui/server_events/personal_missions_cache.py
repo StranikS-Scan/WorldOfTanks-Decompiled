@@ -5,7 +5,9 @@ import typing
 import operator
 from collections import defaultdict
 import BigWorld
+import Event
 import personal_missions
+from account_helpers.settings_core.settings_constants import PersonalMission3
 from constants import BATTLE_MODE_VEHICLE_TAGS, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from gui.server_events import event_items
 from gui.server_events.event_items import PersonalMission, PMOperation
@@ -85,12 +87,15 @@ class PersonalMissionsCache(object):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     itemsCache = dependency.descriptor(IItemsCache)
     __settingsCache = dependency.descriptor(ISettingsCache)
+    __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         self.__questsData = {k:_PMBranch(PM_BRANCH.TYPE_TO_NAME[k]) for k in PM_BRANCH.ALL}
         self.__clearCaches()
         self.__syncStatus = 0
         self.__vehLevelsRestrictions = defaultdict(lambda : (MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL))
+        self.__eventMgr = Event.EventManager()
+        self.onSwitcherUpdated = Event.Event(self.__eventMgr)
 
     def init(self):
         self.itemsCache.onSyncCompleted += self.__updateVehRequirementsCache
@@ -108,6 +113,7 @@ class PersonalMissionsCache(object):
                 self.__cacheQuestRequirement(branch, quest, invVehicles)
 
     def fini(self):
+        self.__eventMgr.clear()
         self.__settingsCache.onSyncCompleted -= self.__onSettingsCacheSynced
         self.itemsCache.onSyncCompleted -= self.__updateVehRequirementsCache
         self.__clearCaches()
@@ -277,6 +283,13 @@ class PersonalMissionsCache(object):
     def isEnabled(self, branch=None):
         return self.__lobbyContext.getServerSettings().isPersonalMissionsEnabled(branch)
 
+    def isPM3Activated(self):
+        return self.getStartedOperations(PM_BRANCH.V2_BRANCHES) or self.__settingsCore.serverSettings.getLastFullCompletedPM3OperationID()
+
+    def isActiveOperationDisabled(self, branches=PM_BRANCH.V1_BRANCHES):
+        activeOperations = self.getActiveOperations(branches)
+        return bool([ operation for operation in activeOperations if operation.isDisabled() ])
+
     def getDisabledPMOperations(self, branches=PM_BRANCH.V1_BRANCHES):
         disabledOpIds = {}
         for branch in branches:
@@ -291,9 +304,12 @@ class PersonalMissionsCache(object):
             return
         processDisabledFlag(self.getAllOperations(PM_BRANCH.ALL), self.getDisabledPMOperations(PM_BRANCH.ALL))
         processDisabledFlag(self.getAllQuests(PM_BRANCH.ALL), self.__lobbyContext.getServerSettings().getDisabledPersonalMissions())
+        self.onSwitcherUpdated()
 
     def update(self, eventsCache, diff=None):
         hiddenQuests = eventsCache.getHiddenQuests(makeRelations=False)
+        pm3Operations = self.getOperationsForBranch(PM_BRANCH.PERSONAL_MISSION_3)
+        wasPm3OperationsCompleted = {operation.getID():operation.isFullCompleted() for operation in pm3Operations.values()}
         for branch, questsData in self.__questsData.iteritems():
             qp = questsData.questsProgress
             quests = questsData.quests
@@ -334,6 +350,10 @@ class PersonalMissionsCache(object):
                 campaign.updateProgress(hiddenQuests)
 
             eventsCache.onProgressUpdated(branch)
+
+        for operationID, lastOperationStatus in wasPm3OperationsCompleted.items():
+            if self.__questsData.get(PM_BRANCH.PERSONAL_MISSION_3).operations.get(operationID).isFullCompleted() is not lastOperationStatus:
+                self.__settingsCore.serverSettings.setPersonalMission3Data({PersonalMission3.LAST_FULL_COMPLETED_OP: operationID})
 
         self.updateDisabledStateForQuests()
         self.__updateVehRequirementsCache()
@@ -418,10 +438,9 @@ class PersonalMissionsCache(object):
         if self.__settingsCache.waitForSync or self.__syncStatus != _ALL_SYNCED:
             return
         else:
-            settingsCore = dependency.instance(ISettingsCore)
-            storageData = settingsCore.serverSettings.getUIStorage()
+            storageData = self.__settingsCore.serverSettings.getUIStorage()
             if storageData.get(PM_TUTOR_FIELDS.INITIAL_FAL_COUNT) is None:
-                settingsCore.serverSettings.saveInUIStorage({PM_TUTOR_FIELDS.INITIAL_FAL_COUNT: self.getFreeTokensCount(PM_BRANCH.REGULAR)})
+                self.__settingsCore.serverSettings.saveInUIStorage({PM_TUTOR_FIELDS.INITIAL_FAL_COUNT: self.getFreeTokensCount(PM_BRANCH.REGULAR)})
             return
 
     def __updateVehLevelRestrictions(self, quest):

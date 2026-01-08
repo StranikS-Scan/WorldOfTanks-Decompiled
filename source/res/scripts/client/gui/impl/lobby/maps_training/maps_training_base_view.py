@@ -41,9 +41,11 @@ class MapsTrainingBaseView(ViewImpl, LobbyHeaderVisibility):
 
     def _addListeners(self):
         self.viewModel.onMoveSpace += self._onMoveSpace
+        self.viewModel.onMouseOver3dScene += self._onMouseOver3dScene
 
     def _removeListeners(self):
         self.viewModel.onMoveSpace -= self._onMoveSpace
+        self.viewModel.onMouseOver3dScene -= self._onMouseOver3dScene
 
     def _onMoveSpace(self, args=None):
         if args is None:
@@ -55,3 +57,6 @@ class MapsTrainingBaseView(ViewImpl, LobbyHeaderVisibility):
             g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.LOBBY_VIEW_MOUSE_MOVE, ctx=ctx), EVENT_BUS_SCOPE.GLOBAL)
             g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.NOTIFY_SPACE_MOVED, ctx=ctx), EVENT_BUS_SCOPE.GLOBAL)
             return
+
+    def _onMouseOver3dScene(self, args):
+        g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, ctx={'isOver3dScene': bool(args.get('isOver3dScene'))}))

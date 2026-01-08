@@ -260,6 +260,7 @@ class _ComponentsVisibilityManager(object):
     def __init__(self, arenaPeriod, isSelectionConfirmed):
         self.__components = {BATTLE_VIEW_ALIASES.DAMAGE_PANEL: self.__damagePanelPredicate,
          BATTLE_VIEW_ALIASES.WIDGETS_PANEL: self.__widgetsPanelPredicate,
+         BATTLE_VIEW_ALIASES.DECORATIVE_CROSSHAIR_PANEL: self.__decorativeCrosshairPanelPredicate,
          BATTLE_VIEW_ALIASES.BATTLE_DAMAGE_LOG_PANEL: self.__damageLogPredicate,
          BATTLE_VIEW_ALIASES.FRAG_CORRELATION_BAR: self.__fragCorrelationBarPredicate,
          BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL: self.__carouselPredicate,
@@ -344,6 +345,9 @@ class _ComponentsVisibilityManager(object):
         return self.__controllingOwnVehicle()
 
     def __widgetsPanelPredicate(self):
+        return self.__afterPrebattle()
+
+    def __decorativeCrosshairPanelPredicate(self):
         return self.__afterPrebattle()
 
     def __perksPanelPredicate(self):

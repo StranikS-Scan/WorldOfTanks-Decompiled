@@ -21,7 +21,7 @@ from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from story_mode.skeletons.voiceover_controller import IVoiceoverManager
 from story_mode.skeletons.story_mode_controller import IStoryModeController
-from story_mode_common.story_mode_constants import LOGGER_NAME
+from story_mode_common.story_mode_constants import LOGGER_NAME, VEHICLE_BUNKER_TURRET_TAG
 from vehicle_systems.tankStructure import TankNodeNames, TankPartIndexes
 _MARKER_CRITICAL_HIT_STATES = {FEEDBACK_EVENT_ID.VEHICLE_CRITICAL_HIT, FEEDBACK_EVENT_ID.VEHICLE_CRITICAL_HIT_CHASSIS, FEEDBACK_EVENT_ID.VEHICLE_CRITICAL_HIT_CHASSIS_PIERCED}
 _logger = getLogger(LOGGER_NAME)
@@ -172,6 +172,9 @@ class StoryModeVehicleMarkerPlugin(RespawnableVehicleMarkerPlugin, MarkerPluginW
         for marker in self._markers.values():
             if marker.isActive():
                 self._setMarkerMatrix(marker.getMarkerID(), marker.getMatrixProvider())
+
+    def _needsMarker(self, vInfo):
+        return VEHICLE_BUNKER_TURRET_TAG not in vInfo.vehicleType.tags and super(StoryModeVehicleMarkerPlugin, self)._needsMarker(vInfo)
 
 
 class BunkersPlugin(MarkerPluginWithOffsetInZoom):

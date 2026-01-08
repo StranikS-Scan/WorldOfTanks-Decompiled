@@ -1,23 +1,26 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ChargeShotComponent.py
 import typing
-import weakref
 import BigWorld
 from constants import CHARGE_SHOT_FLAGS as FLAGS
 from constants import VEHICLE_SETTING
+from events_handler import eventHandler
 from gui.battle_control.battle_constants import CANT_SHOOT_ERROR
-from gui.battle_control.controllers.consumables.blockers import IShellChangeBlocker, IShotBlocker
-from helpers import dependency
-from skeletons.gui.battle_session import IBattleSessionProvider
+from gui.battle_control.components_states.ammo import DefaultComponentAmmoState
+from gui.shared.utils.decorators import ReprInjector
+from vehicles.components.component_wrappers import ifPlayerVehicle
+from vehicles.components.vehicle_component import VehicleDynamicComponent
+from vehicles.components.vehicle_prefabs import createMechanicPrefabSpawner
+from vehicles.mechanics.common import IMechanicComponent
 from vehicles.mechanics.mechanic_commands import IMechanicCommandsComponent, createMechanicCommandsEvents
-from vehicles.components.vehicle_component import VehicleMechanicPrefabDynamicComponent
 from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
 from vehicles.mechanics.mechanic_states import createMechanicStatesEvents, IMechanicState, IMechanicStatesComponent
-from vehicles.mechanics.mechanic_helpers import getVehicleMechanicParams
-from vehicles.components.component_wrappers import ifPlayerVehicle
+from vehicles.mechanics.mechanic_helpers import getVehicleDescrMechanicParams
 if typing.TYPE_CHECKING:
     from items.components.gun_installation_components import GunInstallationSlot
+    from items.components.shared_components import ChargeShotParams
 
+@ReprInjector.simple('flags', 'level', 'baseTime', 'endTime')
 class ChargeShotState(IMechanicState):
     __slots__ = ('flags', 'level', 'baseTime', 'endTime', 'hasCharging', 'hasShotBlock', 'canStart', 'isGunDestroyed')
 
@@ -40,35 +43,36 @@ class ChargeShotState(IMechanicState):
     def isTransition(self, other):
         return self.level != other.level or self.flags != other.flags
 
-    def __str__(self):
-        timeLeft = self.timeLeft()
-        return 'ChargeShotState(flags={}, level={}, baseTime={}, endTime={}, canStart={}, hasShotBlock={}, timeLeft={}, progress={})'.format(bin(self.flags), self.level, self.baseTime, self.endTime, self.canStart, self.hasShotBlock, timeLeft, self.progress(timeLeft))
 
-    __repr__ = __str__
+class ChargeShotAmmoState(DefaultComponentAmmoState):
+
+    def __init__(self, mechanicState):
+        self.__mechanicState = mechanicState
+
+    def canChangeVehicleSetting(self, code):
+        return not self.__mechanicState.hasCharging and not self.__mechanicState.hasShotBlock if code == VEHICLE_SETTING.CURRENT_SHELLS else super(ChargeShotAmmoState, self).canChangeVehicleSetting(code)
+
+    def canShootValidation(self):
+        return (False, CANT_SHOOT_ERROR.CHARGE_SHOT_BLOCKING) if self.__mechanicState.hasShotBlock else super(ChargeShotAmmoState, self).canShootValidation()
 
 
-class ChargeShotComponent(VehicleMechanicPrefabDynamicComponent, IMechanicCommandsComponent, IMechanicStatesComponent):
-    __defaultState = ChargeShotState(FLAGS.RELOADING)
+@ReprInjector.withParent()
+class ChargeShotComponent(VehicleDynamicComponent, IMechanicComponent, IMechanicCommandsComponent, IMechanicStatesComponent):
+    DEFAULT_MECHANIC_STATE = ChargeShotState(FLAGS.RELOADING)
 
     def __init__(self):
         super(ChargeShotComponent, self).__init__()
-        self.params = None
-        self.__state = self.__defaultState
-        self.__shotBlocker = _ChargeShotShotBlocker()
-        self.__shellChangeBlocker = _ChargeShotShellChangeBlocker()
+        self.__params = None
+        self.__state = self.DEFAULT_MECHANIC_STATE
+        self.__mechanicPrefabSpawner = createMechanicPrefabSpawner(self.entity, self)
         self.__statesEvents = createMechanicStatesEvents(self)
-        self.__commandsEvents = createMechanicCommandsEvents()
+        self.__commandsEvents = createMechanicCommandsEvents(self)
         self._initComponent()
         return
 
-    def onDestroy(self):
-        self.__shotBlocker.destroy()
-        self.__shellChangeBlocker.destroy()
-        self.__statesEvents.destroy()
-        self.__commandsEvents.destroy()
-        if hasattr(self.entity, 'onDiscreteShotDone'):
-            self.entity.onDiscreteShotDone -= self.__onDiscreteShotDone
-        super(ChargeShotComponent, self).onDestroy()
+    @property
+    def vehicleMechanic(self):
+        return VehicleMechanic.CHARGE_SHOT
 
     @property
     def statesEvents(self):
@@ -78,18 +82,36 @@ class ChargeShotComponent(VehicleMechanicPrefabDynamicComponent, IMechanicComman
     def commandsEvents(self):
         return self.__commandsEvents
 
+    def getComponentParams(self):
+        return self.__params
+
     def getMechanicState(self):
         return self.__state
 
-    def set_publicState(self, oldState):
-        if self.privateState is not None:
-            return
-        else:
-            self.__updateAppearance()
-            return
+    def set_privateState(self, _):
+        self._updateComponentAppearance()
+        self._updateComponentAvatar()
 
-    def set_privateState(self, oldState):
-        self.__updateAppearance()
+    def set_publicState(self, _):
+        player = BigWorld.player()
+        if not self.isPlayerVehicle(player):
+            self._updateComponentAppearance()
+
+    def onDestroy(self):
+        self.__statesEvents.destroy()
+        self.__commandsEvents.destroy()
+        super(ChargeShotComponent, self).onDestroy()
+
+    @eventHandler
+    def onCollectAmmoStates(self, ammoStates):
+        ammoStates[self.vehicleMechanic.value] = ChargeShotAmmoState(self.__state)
+
+    @eventHandler
+    def onDiscreteShotDone(self, gunInstallationSlot):
+        if gunInstallationSlot.isMainInstallation():
+            predictedState = ChargeShotState(self.__state.flags & ~FLAGS.CHARGING | FLAGS.RELOADING)
+            self._updateComponentAppearance(predictedState=predictedState)
+            self._updateComponentAvatar()
 
     @ifPlayerVehicle
     def tryActivate(self, player):
@@ -101,100 +123,42 @@ class ChargeShotComponent(VehicleMechanicPrefabDynamicComponent, IMechanicComman
                 state = ChargeShotState(flags, state.level, state.baseTime, state.endTime)
         else:
             self.cell.tryCharge()
-            baseTime = self.params.timePerLevel[0]
+            baseTime = self.__params.timePerLevel[0]
             endTime = BigWorld.serverTime() + baseTime
             state = ChargeShotState(flags | FLAGS.CHARGING, 0, baseTime, endTime)
-        self.__updateAppearance(state)
+        self._updateComponentAppearance(predictedState=state)
+        self._updateComponentAvatar()
 
     def _onAppearanceReady(self):
         super(ChargeShotComponent, self)._onAppearanceReady()
-        self.entity.onDiscreteShotDone += self.__onDiscreteShotDone
+        self.__mechanicPrefabSpawner.loadAppearancePrefab()
         self.__state = self.__getCurrentState()
         self.__statesEvents.processStatePrepared()
 
+    def _onComponentAppearanceUpdate(self, predictedState=None, **kwargs):
+        super(ChargeShotComponent, self)._onComponentAppearanceUpdate(**kwargs)
+        self.__state = predictedState or self.__getCurrentState()
+        self.__statesEvents.updateMechanicState(self.__state)
+
+    def _onComponentAvatarUpdate(self, player):
+        super(ChargeShotComponent, self)._onComponentAvatarUpdate(player)
+        player.updateVehicleAmmoStates()
+
     def _collectComponentParams(self, typeDescriptor):
         super(ChargeShotComponent, self)._collectComponentParams(typeDescriptor)
-        self.params = getVehicleMechanicParams(VehicleMechanic.CHARGE_SHOT, typeDescriptor)
-
-    @ifPlayerVehicle
-    def _onAvatarReady(self, _=None):
-        self.__shotBlocker.init(self.__state.hasShotBlock)
-        self.__shellChangeBlocker.init(self)
+        self.__params = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanic)
 
     def __getCurrentState(self):
         if self.privateState is not None:
             privState = self.privateState
             newState = ChargeShotState(privState.flags, privState.level, 0.0, privState.endTime)
             if newState.hasCharging:
-                newState.baseTime = self.params.timePerLevel[newState.level]
+                newState.baseTime = self.__params.timePerLevel[newState.level]
             elif newState.hasShotBlock:
-                newState.baseTime = self.params.shotBlockTime
+                newState.baseTime = self.__params.shotBlockTime
         elif self.publicState is not None:
             pubState = self.publicState
             newState = ChargeShotState(pubState.flags, pubState.level)
         else:
-            newState = self.__defaultState
+            newState = self.DEFAULT_MECHANIC_STATE
         return newState
-
-    def __updateAppearance(self, newState=None):
-        if not self.isAppearanceReady():
-            return
-        else:
-            if newState is None:
-                newState = self.__getCurrentState()
-            if not self.__state.isTransition(newState):
-                return
-            self.__state = newState
-            self.__shotBlocker.setHasShotBlock(newState.hasShotBlock)
-            self.__statesEvents.updateMechanicState(newState)
-            return
-
-    def __onDiscreteShotDone(self, gunInstallationSlot):
-        if not gunInstallationSlot.isMainInstallation():
-            return
-        self.__updateAppearance(ChargeShotState(self.__state.flags & ~FLAGS.CHARGING | FLAGS.RELOADING))
-
-
-class _ChargeShotShellChangeBlocker(IShellChangeBlocker):
-    session = dependency.descriptor(IBattleSessionProvider)
-    __slots__ = ('__component',)
-
-    def __init__(self):
-        self.__component = None
-        return
-
-    def init(self, component):
-        self.__component = weakref.proxy(component)
-        self.session.shared.ammo.addShellChangeBlocker(self)
-
-    def destroy(self):
-        self.session.shared.ammo.discardShellChangeBlocker(self)
-
-    def isBlocked(self, code):
-        state = self.__component.getMechanicState()
-        res = code == VEHICLE_SETTING.CURRENT_SHELLS and (state.hasCharging or state.hasShotBlock)
-        return res
-
-
-CAN_SHOOT = (True, None)
-CANT_SHOOT = (False, CANT_SHOOT_ERROR.CHARGE_SHOT_BLOCKING)
-
-class _ChargeShotShotBlocker(IShotBlocker):
-    session = dependency.descriptor(IBattleSessionProvider)
-    __slots__ = ('__canShoot',)
-
-    def __init__(self):
-        self.__canShoot = CAN_SHOOT
-
-    def init(self, hasShotBlock):
-        self.setHasShotBlock(hasShotBlock)
-        self.session.shared.ammo.addShotBlocker(self)
-
-    def destroy(self):
-        self.session.shared.ammo.discardShotBlocker(self)
-
-    def setHasShotBlock(self, hasShotBlock):
-        self.__canShoot = CANT_SHOOT if hasShotBlock else CAN_SHOOT
-
-    def canShoot(self):
-        return self.__canShoot

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/doc_loaders/EULAVersionLoader.py
+from __future__ import absolute_import
 import ResMgr
 from helpers import VERSION_FILE_PATH
 from soft_exception import SoftException

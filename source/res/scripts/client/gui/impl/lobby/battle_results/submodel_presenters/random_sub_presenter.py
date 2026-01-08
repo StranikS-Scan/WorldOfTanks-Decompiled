@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/impl/lobby/battle_results/submodel_presenters/random_sub_presenter.py
 import typing
 from gui.battle_results.presenters.battle_results_sub_presenter import BattleResultsSubPresenter
-from gui.battle_results.presenters.packers.progression.progression import ProgressionSubPresenter
 from gui.impl.gen.view_models.views.lobby.battle_results.random.random_battle_results_view_model import RandomBattleResultsViewModel
 from gui.impl.lobby.battle_results.submodel_presenters.battle_info import BattleInfoSubPresenter
 from gui.impl.lobby.battle_results.submodel_presenters.player_satisfaction import PlayerSatisfactionSubPresenter
@@ -23,7 +22,6 @@ class RandomBattleResultsSubPresenter(BattleResultsSubPresenter):
         self.addSubPresenter(BattleInfoSubPresenter(viewModel.battleInfo, parentView))
         self.addSubPresenter(ManageableBonusSubPresenter(viewModel.additionalBonus, parentView))
         self.addSubPresenter(FinancialReportSubPresenter(viewModel.financialReport, parentView))
-        self.addSubPresenter(ProgressionSubPresenter(viewModel.progression, parentView))
         self.addSubPresenter(PlayerSatisfactionSubPresenter(viewModel.playerSatisfaction, parentView))
 
     @classmethod

@@ -126,4 +126,5 @@ VEHICLE_CUSTOMIZATION_FILTER_MAPPING = {FILTER_KEYS.OWN_3D_STYLE: VehicleCustomi
 ATTACHMENT_TYPE_MAPPING = {AttachmentType.UNIVERSAL: CustomizationAttachmentSlots.UNIVERSAL,
  AttachmentType.GUN_MANTLET: CustomizationAttachmentSlots.GUN_MANTLET,
  AttachmentType.TURRET: CustomizationAttachmentSlots.TURRET,
- AttachmentType.GUN: CustomizationAttachmentSlots.GUN}
+ AttachmentType.GUN: CustomizationAttachmentSlots.GUN,
+ AttachmentType.GUN_STATIC: CustomizationAttachmentSlots.GUN}

@@ -5,15 +5,17 @@ import WWISE
 from WeakMethod import WeakMethodProxy
 from frameworks.state_machine import StateFlags
 from frameworks.state_machine.transitions import TransitionType
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.battle_queue.states import BattleQueueContainerState
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.entities.View import ViewKey
+from gui.battle_results.service import PostBattleResultsStateMixin
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.maps_training.maps_training_queue_view import MapsTrainingQueueView
 from gui.impl.lobby.maps_training.maps_training_view import MapsTrainingView
 from gui.impl.lobby.maps_training.sound_constants import MapsTrainingSound
-from gui.lobby_state_machine.states import GuiImplViewLobbyState, SubScopeSubLayerState, LobbyStateFlags, LobbyState, LobbyStateDescription
+from gui.lobby_state_machine.states import GuiImplViewLobbyState, SubScopeSubLayerState, LobbyStateFlags, LobbyState, LobbyStateDescription, TopScopeTopLayerState, ViewLobbyState
 from gui.lobby_state_machine.transitions import HijackTransition
 from helpers import dependency
 from helpers.time_utils import getCurrentTimestamp
@@ -22,6 +24,7 @@ from skeletons.gui.game_control import IMapsTrainingController
 def registerStates(machine):
     machine.addState(MapsTrainingState())
     machine.addState(MapsTrainingQueueState())
+    machine.addState(MapsTrainingBattleResultsState())
 
 
 def registerTransitions(machine):
@@ -31,7 +34,7 @@ def registerTransitions(machine):
 @SubScopeSubLayerState.parentOf
 class MapsTrainingState(GuiImplViewLobbyState):
     STATE_ID = 'mapsTraining'
-    VIEW_KEY = ViewKey(R.views.lobby.maps_training.MapsTrainingPage())
+    VIEW_KEY = ViewKey(R.views.mono.maps_training.maps_training_page())
     __mapsTrainingCtrl = dependency.descriptor(IMapsTrainingController)
 
     def __init__(self, flags=LobbyStateFlags.UNDEFINED):
@@ -92,7 +95,7 @@ class SelectedState(LobbyState):
 @BattleQueueContainerState.parentOf
 class MapsTrainingQueueState(GuiImplViewLobbyState):
     STATE_ID = 'mapsTrainingQueue'
-    VIEW_KEY = ViewKey(R.views.lobby.maps_training.MapsTrainingQueue())
+    VIEW_KEY = ViewKey(R.views.mono.maps_training.maps_training_queue())
 
     def __init__(self, flags=StateFlags.UNDEFINED):
         super(MapsTrainingQueueState, self).__init__(MapsTrainingQueueView, ScopeTemplates.LOBBY_SUB_SCOPE, flags=flags)
@@ -116,3 +119,13 @@ class MapsTrainingQueueState(GuiImplViewLobbyState):
         self.__createTime = None
         super(MapsTrainingQueueState, self)._onExited()
         return
+
+
+@TopScopeTopLayerState.parentOf
+class MapsTrainingBattleResultsState(ViewLobbyState, PostBattleResultsStateMixin):
+    STATE_ID = VIEW_ALIAS.MAPS_TRAINING_BATTLE_RESULTS
+    VIEW_KEY = ViewKey(VIEW_ALIAS.MAPS_TRAINING_BATTLE_RESULTS)
+
+    def registerTransitions(self):
+        machine = self.getMachine()
+        machine.addNavigationTransitionFromParent(self)

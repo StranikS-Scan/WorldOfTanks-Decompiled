@@ -3948,7 +3948,7 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	False	  <name>	achievable	</name>
+        <item>	True	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -3972,7 +3972,7 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	False	  <name>	achievable	</name>
+        <item>	True	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -3999,7 +3999,7 @@
         <item>	1	  <name>	type	</name>
           <type>	int	</type>
         </item>
-        <item>	False	  <name>	achievable	</name>
+        <item>	True	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -4971,7 +4971,7 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -4995,7 +4995,7 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -5022,7 +5022,7 @@
         <item>	1	  <name>	type	</name>
           <type>	int	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -5300,6 +5300,156 @@
         </item>
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	wdr_legend	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	222	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	18	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	type	</name>
+          <type>	int	</type>
+        </item>
+        <item>	green	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	wdr_legend_suffix	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	223	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	19	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	2	  <name>	layout	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	type	</name>
+          <type>	int	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	ny_2026	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	224	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.15	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	23	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	comp7_5_2_master	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	225	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.25	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	comp7_5_2_elite	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	226	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.25	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	comp7_5_2_elite_suffix	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	227	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	19	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	3	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	2	  <name>	layout	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	type	</name>
+          <type>	int	</type>
         </item>
         <item>	True	  <name>	achievable	</name>
           <type>	bool	</type>

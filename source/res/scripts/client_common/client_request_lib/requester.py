@@ -336,6 +336,9 @@ class WGElenAccessor(BaseAccessor):
     def get_player_data(self, callback, fields=None):
         return self._data_source.get_player_data(callback, fields=fields)
 
+    def get_player_progression(self, callback, event_id, leaderboard_id, fields=None):
+        return self._data_source.get_player_progression(callback, event_id, leaderboard_id, fields=fields)
+
 
 class WgrmsAccessor(BaseAccessor):
 

@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Singleton.py
-
+from __future__ import absolute_import, print_function
 
 class Singleton(object):
 
@@ -26,6 +26,6 @@ if __name__ == '__main__':
 
 
     ins1 = MySingleton('instance1')
-    print id(ins1), ins1.instanceName
+    print(id(ins1), ins1.instanceName)
     ins2 = MySingleton('instance2')
-    print id(ins2), ins2.instanceName
+    print(id(ins2), ins2.instanceName)

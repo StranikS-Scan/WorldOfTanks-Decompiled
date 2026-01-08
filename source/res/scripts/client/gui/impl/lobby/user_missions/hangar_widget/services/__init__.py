@@ -31,6 +31,9 @@ class IEventsService(IGlobalListener):
     def getEntries(self):
         raise NotImplementedError
 
+    def getEntryData(self):
+        raise NotImplementedError
+
     def updateEntries(self):
         raise NotImplementedError
 

@@ -11,7 +11,7 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events.personal_missions_navigation import PersonalMissionsNavigation
-from gui.server_events.pm_constants import SOUNDS, PERSONAL_MISSIONS_SOUND_SPACE
+from gui.server_events.pm_constants import SOUNDS, PERSONAL_MISSIONS_SOUND_SPACE, DISABLED_PM_OPERATIONS, DISABLED_PM_MISSIONS, IS_PM2_QUEST_ENABLED, IS_REGULAR_QUEST_ENABLED
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showHangar
 from personal_missions import PM_BRANCH
@@ -24,7 +24,7 @@ class PersonalMissionOperations(LobbySubView, PersonalMissionOperationsMeta, Per
         self.__backAlias = ctx.get('previewAlias', VIEW_ALIAS.LOBBY_HANGAR)
 
     def showInfo(self):
-        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_VIEW_ALIAS)), scope=EVENT_BUS_SCOPE.LOBBY)
+        pass
 
     def onOperationClick(self, branch, operationID):
         self.setBranch(branch)
@@ -105,5 +105,5 @@ class PersonalMissionOperations(LobbySubView, PersonalMissionOperationsMeta, Per
         return PERSONAL_MISSIONS_ALIASES.OPERATION_COMPLETE_STATE if state == PERSONAL_MISSIONS_ALIASES.OPERATION_COMPLETE_FULL_STATE else state
 
     def _onSettingsChanged(self, diff):
-        if 'isRegularQuestEnabled' in diff and not diff['isRegularQuestEnabled'] or 'isPM2QuestEnabled' in diff and not diff['isPM2QuestEnabled'] or 'disabledPMOperations' in diff and diff['disabledPMOperations'] or 'disabledPersonalMissions' in diff and diff['disabledPersonalMissions']:
+        if IS_REGULAR_QUEST_ENABLED in diff and not diff[IS_REGULAR_QUEST_ENABLED] or IS_PM2_QUEST_ENABLED in diff and not diff[IS_PM2_QUEST_ENABLED] or DISABLED_PM_OPERATIONS in diff and diff[DISABLED_PM_OPERATIONS] or DISABLED_PM_MISSIONS in diff and diff[DISABLED_PM_MISSIONS]:
             self.__update()

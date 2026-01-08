@@ -8,7 +8,7 @@ import math_utils
 from helpers.CallbackDelayer import CallbackDelayer
 
 class DebugDrawEntity(BigWorld.Entity):
-    CUBE_MODEL = 'helpers/models/unit_cube.model'
+    BOX_MODEL = 'helpers/models/unit_cube.model'
     SPHERE_MODEL = 'helpers/models/unit_sphere.model'
 
     def __init__(self):
@@ -85,8 +85,8 @@ class DebugDrawEntity(BigWorld.Entity):
                     obj = self.__createSphere(point, (width * 1.25,) * 3)
                     state['models'].append(obj)
 
-            for cube in draw['cubes']:
-                obj = self.__createCube(cube['position'], cube['size'])
+            for box in draw['boxes']:
+                obj = self.__createBox(box['position'], box['rotation'], box['size'])
                 state['models'].append(obj)
 
             for sphere in draw['spheres']:
@@ -108,7 +108,7 @@ class DebugDrawEntity(BigWorld.Entity):
         self.reuse3DTexts[:] = []
 
     def __createDirectedLine(self, pointA, pointB, width):
-        modelName = self.CUBE_MODEL
+        modelName = self.BOX_MODEL
         model, motor = self.__getModel(modelName)
         direction = pointB - pointA
         scale = (width, width, direction.length)
@@ -119,10 +119,10 @@ class DebugDrawEntity(BigWorld.Entity):
         motor.signal = m
         return (modelName, model, motor)
 
-    def __createCube(self, position, size):
-        modelName = self.CUBE_MODEL
+    def __createBox(self, position, rotation, size):
+        modelName = self.BOX_MODEL
         model, motor = self.__getModel(modelName)
-        m = math_utils.createSRTMatrix(size, (0, 0, 0), position)
+        m = math_utils.createSRTMatrix(size, rotation, position)
         m.preMultiply(math_utils.createTranslationMatrix(Vector3(0.0, -0.5, 0.0)))
         motor.signal = m
         return (modelName, model, motor)

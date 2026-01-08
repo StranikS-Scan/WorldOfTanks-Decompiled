@@ -140,18 +140,8 @@ class PveFlagVehicleMarkerComponent(World2DActionMarkerComponent):
             self._vehicleMarkerGUI.invokeMarker(vehicleMarker.getMarkerID(), 'callInsertedSymbolMethod', self._config['symbol'], 'setDistance', getIntegralFormat(distance))
 
 
-class PveBitmapComponent(BaseMinimapMarkerComponent):
+class PveAnimatedFlagMarkerComponent(World2DLocationMarkerComponent):
 
     @property
-    def maskType(self):
-        return ComponentBitMask.MINIMAP_MARKER
-
-    @classmethod
-    def configReader(cls, section):
-        config = super(PveBitmapComponent, cls).configReader(section)
-        config.update({'bitmapName': section.readString('bitmapName', '')})
-        return config
-
-    def _setupMarker(self, gui, **kwargs):
-        super(PveBitmapComponent, self)._setupMarker(gui, **kwargs)
-        gui.invoke(self._componentID, 'setIcon', self._config['bitmapName'])
+    def bcMarkerType(self):
+        return MarkerType.NON_INTERACTIVE

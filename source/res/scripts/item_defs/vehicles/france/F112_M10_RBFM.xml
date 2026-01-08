@@ -9,7 +9,7 @@
   </crew>
   <supplySlots>	1 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	48	</forward>
+    <forward>	50	</forward>
     <backward>	12	</backward>
   </speedLimits>
   <invisibility>
@@ -22,6 +22,9 @@
     <camouflageNet>
       <invisibilityBonus>	0.15 0.175	</invisibilityBonus>
     </camouflageNet>
+    <deluxeCamouflageNet>
+      <invisibilityBonus>	0.175	</invisibilityBonus>
+    </deluxeCamouflageNet>
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.05 0.06	</invisibilityBonus>
     </additionalInvisibilityDevice>
@@ -2843,7 +2846,7 @@
       <engines>
         <General_Motors_6046_Series_71>
           <smplEnginePower>	410	</smplEnginePower>
-          <smplFwMaxSpeed>	48	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </General_Motors_6046_Series_71>
       </engines>
       <chassis>

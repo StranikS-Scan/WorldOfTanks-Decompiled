@@ -3,22 +3,23 @@
 import logging
 import typing
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.common.exchange_dialog_state import ExchangeDialogState
-from gui.impl.lobby.dialogs.contents.exchange_content import ExchangeContentResult, ExchangeContent, ExchangeMoneyInfo
-from gui.shared.utils import decorators
+from gui.impl.gen.view_models.views.lobby.common.buy_and_exchange_bottom_content_type import BuyAndExchangeBottomContentType
 from gui.impl.gen.view_models.views.lobby.common.dialog_with_exchange import DialogWithExchange
-from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogView
+from gui.impl.gen.view_models.views.lobby.common.exchange_dialog_state import ExchangeDialogState
 from gui.impl.lobby.dialogs.auxiliary.buy_and_exchange_state_machine import BuyAndExchangeStateEnum, BuyAndExchangeStateMachine, BuyAndExchangeEventEnum
+from gui.impl.lobby.dialogs.contents.exchange_content import ExchangeContentResult, ExchangeContent, ExchangeMoneyInfo
+from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogView
 from gui.shared.gui_items.fitting_item import canBuyWithGoldExchange
 from gui.shared.money import Currency
-from gui.impl.gen.view_models.views.lobby.common.buy_and_exchange_bottom_content_type import BuyAndExchangeBottomContentType
+from gui.shared.utils import decorators
+from py2to3 import patched_typing
 if typing.TYPE_CHECKING:
     from frameworks.wulf import ViewSettings
     from gui.shared.money import Money
 TViewModel = typing.TypeVar('TViewModel', bound=DialogWithExchange)
 _logger = logging.getLogger(__name__)
 
-class BuyAndExchange(FullScreenDialogView, typing.Generic[TViewModel]):
+class BuyAndExchange(FullScreenDialogView, patched_typing.Generic[TViewModel]):
     __slots__ = ('_exchangeContent', '__stateMachine', '__price')
 
     def __init__(self, settings, price, startState=None):

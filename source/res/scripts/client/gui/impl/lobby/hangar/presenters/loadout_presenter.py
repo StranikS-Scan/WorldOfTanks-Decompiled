@@ -134,6 +134,10 @@ class LoadoutPresenter(ViewComponent[AmmunitionPanelModel]):
          hangar.Shells(): lambda : ShellsPresenter(self._vehInteractingItem),
          hangar.Consumables(): lambda : ConsumablesPresenter(self._vehInteractingItem)}
 
+    @property
+    def _getGroupControllerCls(self):
+        return HangarAmmunitionGroupsController
+
     def _getEvents(self):
         model = self.getViewModel()
         return super(LoadoutPresenter, self)._getEvents() + ((g_currentVehicle.onChanged, self.__onVehicleChanged),
@@ -190,7 +194,11 @@ class LoadoutPresenter(ViewComponent[AmmunitionPanelModel]):
                 self.__ammunitionGroupsController.updateGroupSectionModel(sectionName, panelModel.getGroups())
             else:
                 self.__ammunitionGroupsController.updateGroupsModels(panelModel.getGroups())
-            panelModel.setVehicleId(str(g_currentVehicle.intCD) if g_currentVehicle.isPresent() else '')
+            if g_currentVehicle.isPresent():
+                panelModel.setVehicleId(str(g_currentVehicle.intCD))
+                panelModel.setHasVehSkillTree(g_currentVehicle.item.postProgression.isVehSkillTree())
+            else:
+                panelModel.setVehicleId('')
             panelModel.setIsDisabled(not self.__canChangeVehicle() or self.__isAmmunitionPanelDisabled())
             if self.__currentSlotIndex is not None:
                 panelModel.setSelectedSlot(self.__currentSlotIndex)
@@ -285,7 +293,7 @@ class LoadoutPresenter(ViewComponent[AmmunitionPanelModel]):
         if self.__ammunitionGroupsController:
             self.__ammunitionGroupsController.updateVehicle(self.__getVehicle())
         else:
-            self.__ammunitionGroupsController = HangarAmmunitionGroupsController(self.__getVehicle())
+            self.__ammunitionGroupsController = self._getGroupControllerCls(self.__getVehicle())
         self.__updateModel(recreate, sectionName)
 
     @staticmethod

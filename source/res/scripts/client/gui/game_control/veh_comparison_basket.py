@@ -131,7 +131,7 @@ class _VehCmpCache(FileLocalCache):
     VERSION = 5
 
     def __init__(self, databaseID, vehiclesIterator):
-        super(_VehCmpCache, self).__init__('veh_cmp_cache', ('basket_state', databaseID), async=True)
+        super(_VehCmpCache, self).__init__('veh_cmp_cache', ('basket_state', databaseID), isAsync=True)
         self.__vehiclesIterator = vehiclesIterator
         self.__cache = None
         return

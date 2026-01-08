@@ -4,14 +4,13 @@ import itertools
 import typing
 from gui.Scaleform.daapi.view.meta.CarouselEventEntryMeta import CarouselEventEntryMeta
 from gui.impl.gen import R
-from gui.impl.lobby.lootbox_system.base.entry_point import LootBoxSystemEntryPoint
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.base.listener import IPrbListener
 from gui.shared.system_factory import collectCarouselEventEntryPoints
 if typing.TYPE_CHECKING:
     from typing import Dict, Type
     from skeletons.gui.hangar import ICarouselEventEntry
-_VIEWS = {R.views.lobby.lootbox_system.EntryPointView(): LootBoxSystemEntryPoint}
+_VIEWS = {}
 
 class CarouselEventEntryHolder(CarouselEventEntryMeta, IPrbListener):
 

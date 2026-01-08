@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/finders.py
 import re
+from gui.server_events.pm_constants import IS_PM3_QUEST_ENABLED, IS_PM2_QUEST_ENABLED, IS_REGULAR_QUEST_ENABLED
 from helpers import dependency
 from personal_missions import PM_BRANCH
 from shared_utils import findFirst, first
@@ -37,9 +38,9 @@ BRANCH_TO_OPERATION_IDS = {PM_BRANCH.REGULAR: (1, 2, 3, 4),
 PM_CAMPAIGNS_IDS = {PM_BRANCH.REGULAR: 1,
  PM_BRANCH.PERSONAL_MISSION_2: 2,
  PM_BRANCH.PERSONAL_MISSION_3: 3}
-PM_SWITCHER_CAMPAIGN = {'isRegularQuestEnabled': PM_BRANCH.REGULAR,
- 'isPM2QuestEnabled': PM_BRANCH.PERSONAL_MISSION_2,
- 'isPM3QuestEnabled': PM_BRANCH.PERSONAL_MISSION_3}
+PM_SWITCHER_CAMPAIGN = {IS_REGULAR_QUEST_ENABLED: PM_BRANCH.REGULAR,
+ IS_PM2_QUEST_ENABLED: PM_BRANCH.PERSONAL_MISSION_2,
+ IS_PM3_QUEST_ENABLED: PM_BRANCH.PERSONAL_MISSION_3}
 OPERATION_ID_TO_BRANCH = {operationsId:branch for branch in BRANCH_TO_OPERATION_IDS.iterkeys() for operationsId in BRANCH_TO_OPERATION_IDS[branch]}
 CHAMPION_BADGE_AT_OPERATION_ID = {operationIds[-1]:CHAMPION_BADGES_BY_BRANCH[branch] for branch, operationIds in BRANCH_TO_OPERATION_IDS.iteritems() if CHAMPION_BADGES_BY_BRANCH.get(branch)}
 

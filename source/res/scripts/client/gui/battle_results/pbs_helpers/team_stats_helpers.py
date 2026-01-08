@@ -15,6 +15,10 @@ def hasStunEfficiency(summarizeInfo, _):
     return summarizeInfo.stunNum > 0
 
 
+def hasArtilleryStrike(summarizeInfo, _):
+    return summarizeInfo.artilleryFortEquipDamageDealt > 0
+
+
 def getStatsParamValue(summarizeInfo, fields, _):
     return (getattr(summarizeInfo, field) for field in fields)
 

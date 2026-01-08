@@ -92,6 +92,9 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
             self._activateCampaign(self.getBranch(), self.getOperationID())
         return
 
+    def switchToAnotherOperation(self, operationId, chainId):
+        self.__navigateTo(operationId, chainId)
+
     @decorators.adisp_process('updating')
     def _selectInitialMissions(self, campaignToActive, operationToActive):
         initialQuest = first(self.__eventsCache.getPersonalMissions().getActualQuests(campaignToActive, operationToActive))

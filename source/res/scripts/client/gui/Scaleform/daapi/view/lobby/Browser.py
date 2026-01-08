@@ -37,6 +37,7 @@ class Browser(BrowserMeta):
         self.__isLoaded = True
         self.__httpStatusCode = None
         self.__webCommandHandler = None
+        self.__backUrl = None
         self.showContentUnderLoading = True
         self.onError = Event()
         return
@@ -44,6 +45,10 @@ class Browser(BrowserMeta):
     @property
     def browser(self):
         return self.__browser
+
+    @property
+    def backUrl(self):
+        return self.__backUrl
 
     def init(self, browserID, webHandlersMap=None, alias=''):
         if self.__browserID == browserID:
@@ -63,6 +68,9 @@ class Browser(BrowserMeta):
 
     def onWindowClose(self):
         self.destroy()
+
+    def setBackUrl(self, url):
+        self.__backUrl = url
 
     def browserAction(self, action):
         if self.__browser is not None:
@@ -132,6 +140,7 @@ class Browser(BrowserMeta):
             SCALEFORM.resetScaleformWebRender(self.__browser.id)
         self.__browserCtrl.delBrowser(self.__browserID)
         self.__browser = None
+        self.__backUrl = None
         self.app.cursorMgr.setCursorForced(CursorManager.ARROW)
         super(Browser, self)._dispose()
         return

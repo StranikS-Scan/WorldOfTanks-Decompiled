@@ -112,6 +112,7 @@ def showCustomBlurSingleDialog(wrappedViewClass, layoutID, parent=None, gui=None
         dialog = FullScreenDialogWindowWrapper(wrappedViewClass(*args, **kwargs), parent, doBlur=False)
     if dialog is not None:
         result = yield wg_await(showSimpleWithResultData(dialog))
+        raise AsyncReturn(SingleDialogResult(busy=False, result=result))
     raise AsyncReturn(SingleDialogResult(busy=True, result=result))
     return
 

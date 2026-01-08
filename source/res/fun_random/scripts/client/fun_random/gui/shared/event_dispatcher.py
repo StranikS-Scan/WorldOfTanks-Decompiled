@@ -24,13 +24,8 @@ def showFunRandomTierList(parent=None):
     FunRandomTierListState.goTo(parent=parent)
 
 
-@dependency.replace_none_kwargs(uiLoader=IGuiLoader)
-def showFunRandomBattleResults(arenaUniqueID, subModeImpl, uiLoader=None):
+def showFunRandomBattleResults(arenaUniqueID, subModeImpl):
     from fun_random.gui.impl.lobby.feature.states import FunPostBattleResultsState
-    from fun_random.gui.impl.lobby.feature.fun_random_battle_results_view import FunRandomBattleResultsView
-    views = uiLoader.windowsManager.findViews(lambda v: isinstance(v, FunRandomBattleResultsView))
-    if views and all((view.arenaUniqueID == arenaUniqueID for view in views)):
-        return
     FunPostBattleResultsState.goTo(arenaUniqueID=arenaUniqueID, subModeImpl=subModeImpl)
 
 

@@ -115,13 +115,13 @@
     <modifiers>
       <add>
         <name>	descrAttrs/hull/maxHealth	</name>
-        <value>	100	</value>
+        <value>	50	</value>
       </add>
     </modifiers>
     <kpi>
       <add>
         <name>	vehicleStrength	</name>
-        <value>	100	</value>
+        <value>	50	</value>
       </add>
     </kpi>
   </f135_node9>
@@ -151,17 +151,17 @@
     <modifiers>
       <mul>
         <name>	descrAttrs/chassis/shotDispersionFactors	</name>
-        <value>	0.9	</value>
+        <value>	0.95	</value>
       </mul>
     </modifiers>
     <kpi>
       <mul>
         <name>	vehicleGunShotDispersionChassisMovement	</name>
-        <value>	0.9	</value>
+        <value>	0.95	</value>
       </mul>
       <mul>
         <name>	vehicleGunShotDispersionChassisRotation	</name>
-        <value>	0.9	</value>
+        <value>	0.95	</value>
       </mul>
     </kpi>
   </f135_node11>
@@ -173,13 +173,13 @@
     <modifiers>
       <add>
         <name>	descrAttrs/engine/maxSpeedBack	</name>
-        <value>	2	</value>
+        <value>	1	</value>
       </add>
     </modifiers>
     <kpi>
       <add>
         <name>	vehicleBackwardMaxSpeed	</name>
-        <value>	2	</value>
+        <value>	1	</value>
       </add>
     </kpi>
   </f135_node13>

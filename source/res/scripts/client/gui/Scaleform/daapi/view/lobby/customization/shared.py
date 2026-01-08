@@ -941,3 +941,16 @@ def getAvailableSlots(slotType, vehicleDescr=None):
         availableSlots.extend((C11nId(areaId, slotType, region) for region in getAvailableRegions(areaId, slotType, vehicleDescr)))
 
     return availableSlots
+
+
+def removeUncommonItems(outfit):
+    for slotType in GUI_ITEM_TYPE.CUSTOMIZATIONS:
+        if slotType in GUI_ITEM_TYPE.COMMON_C11NS:
+            continue
+        for partIdx in Area.ALL:
+            multiSlot = outfit.getContainer(partIdx).slotFor(slotType)
+            if multiSlot:
+                for idx in range(multiSlot.capacity()):
+                    slotData = multiSlot.getSlotData(idx)
+                    if not slotData.isEmpty():
+                        multiSlot.remove(idx)

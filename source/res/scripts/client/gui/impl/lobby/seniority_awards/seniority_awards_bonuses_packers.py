@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/seniority_awards/seniority_awards_bonuses_packers.py
+from __future__ import absolute_import
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.common.missions.bonuses.icon_bonus_model import IconBonusModel

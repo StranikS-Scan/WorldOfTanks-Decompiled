@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: resource_well/scripts/client/resource_well/gui/impl/lobby/feature/resource_well_browser_view.py
+from __future__ import absolute_import
 from gui.Scaleform.daapi.view.lobby.shared.web_view import WebView
 from gui.sounds.filters import switchHangarFilteredFilter
 

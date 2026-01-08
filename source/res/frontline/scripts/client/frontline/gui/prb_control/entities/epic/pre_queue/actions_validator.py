@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/prb_control/entities/epic/pre_queue/actions_validator.py
 from CurrentVehicle import g_currentVehicle
+from frontline.gui.frontline_helpers import isAnnouncedCycleState
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import isVehLevelUnlockableInBattle
 from gui.prb_control.entities.base.actions_validator import BaseActionsValidator, ActionsValidatorComposite
 from gui.prb_control.entities.base.pre_queue.actions_validator import PreQueueActionsValidator
@@ -38,6 +39,8 @@ class EpicActionsValidator(PreQueueActionsValidator):
         result = super(EpicActionsValidator, self)._validate()
         if not (self.__epicController.isEnabled() and self.__epicController.isInPrimeTime()):
             result = ValidationResult(False, PREBATTLE_RESTRICTION.UNDEFINED)
+        if isAnnouncedCycleState():
+            result = ValidationResult(False, PRE_QUEUE_RESTRICTION.MODE_IS_IN_PREANNOUNCE)
         if result and result.restriction in (PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED, PREBATTLE_RESTRICTION.CREW_NOT_FULL):
             epicValidationResult = self.__epicVehicleValidator.canPlayerDoAction()
             if epicValidationResult and not epicValidationResult.isValid:

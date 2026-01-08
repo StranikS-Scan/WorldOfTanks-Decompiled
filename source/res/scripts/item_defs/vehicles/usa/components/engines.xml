@@ -1,4 +1,5 @@
 <engines.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <ids>
     <Ford_GAC>	0	</Ford_GAC>
     <Continental_W-670>	1	</Continental_W-670>
@@ -152,6 +153,13 @@
     <Continental_AVDS_1790_2_SPHT>	176	</Continental_AVDS_1790_2_SPHT>
     <Chrysler_A57_multibank_A>	177	</Chrysler_A57_multibank_A>
     <Continental_AOSI_1195_5_Y_VI_RC>	178	</Continental_AOSI_1195_5_Y_VI_RC>
+    <Continental_AV_1790_8>	179	</Continental_AV_1790_8>
+    <Caterpillar_LVMS_1050_VHOTF>	180	</Caterpillar_LVMS_1050_VHOTF>
+    <Curtiss_Wright_RC2_350_T_C>	182	</Curtiss_Wright_RC2_350_T_C>
+    <Continental_AV_1790_5BX>	183	</Continental_AV_1790_5BX>
+    <Caterpillar_LVMS_1050_VHO>	184	</Caterpillar_LVMS_1050_VHO>
+    <Caterpillar_LVMS_1050_EHO>	185	</Caterpillar_LVMS_1050_EHO>
+    <Curtiss_Wright_RC2_350>	186	</Curtiss_Wright_RC2_350>
     <Continental_W_670_M41>	2000	</Continental_W_670_M41>
     <Twin_Cadillac_Series_44T4_M41>	2001	</Twin_Cadillac_Series_44T4_M41>
     <Continental_AOS_895_3_M44>	2002	</Continental_AOS_895_3_M44>
@@ -1834,6 +1842,24 @@
       <rpm_min>	429	</rpm_min>
       <rpm_max>	2817	</rpm_max>
     </Continental_AV-1790-5B_E2>
+    <Continental_AV_1790_5BX>
+      <userString>	#usa_vehicles:Continental_AV_1790_5BX	</userString>
+      <shortUserString>	#usa_vehicles:Continental_AV_1790_5BX_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	90000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	960	</power>
+      <weight>	1136	</weight>
+      <maxHealth>	310	</maxHealth>
+      <maxRegenHealth>	155	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	471	</rpm_min>
+      <rpm_max>	2089	</rpm_max>
+    </Continental_AV_1790_5BX>
     <Continental_AV_1790_7C>
       <userString>	#usa_vehicles:Continental_AV_1790_7C	</userString>
       <shortUserString>	#usa_vehicles:Continental_AV_1790_7C_short	</shortUserString>
@@ -2675,6 +2701,38 @@
       <rpm_min>	578	</rpm_min>
       <rpm_max>	2477	</rpm_max>
     </Continental_AOSI_1195_5_Y_VI_A>
+    <Curtiss_Wright_RC2_350>
+      <userString>	#usa_vehicles:Curtiss_Wright_RC2_350	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	40000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	670	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	120	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	605	</rpm_min>
+      <rpm_max>	2416	</rpm_max>
+    </Curtiss_Wright_RC2_350>
+    <Curtiss_Wright_RC2_350_T_C>
+      <userString>	#usa_vehicles:Curtiss_Wright_RC2_350_T_C	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	60000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	710	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	275	</maxHealth>
+      <maxRegenHealth>	138	</maxRegenHealth>
+      <repairCost>	8.0	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	551	</rpm_min>
+      <rpm_max>	2539	</rpm_max>
+    </Curtiss_Wright_RC2_350_T_C>
     <Continental_AOSI_1195_5_Y_VI_B>
       <userString>	#usa_vehicles:Continental_AOSI_1195_5_Y_VI_B	</userString>
       <shortUserString>	#usa_vehicles:Continental_AOSI_1195_5_Y_VI_B_short	</shortUserString>
@@ -2816,6 +2874,23 @@
       <rpm_min>	471	</rpm_min>
       <rpm_max>	2089	</rpm_max>
     </Continental_AVDS_1790_2D>
+    <Continental_AV_1790_8>
+      <userString>	#usa_vehicles:Continental_AV_1790_8	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	120000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1000	</power>
+      <weight>	1200	</weight>
+      <maxHealth>	345	</maxHealth>
+      <maxRegenHealth>	173	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	460	</rpm_min>
+      <rpm_max>	2125	</rpm_max>
+    </Continental_AV_1790_8>
     <Continental_AVDS_1790_8BR>
       <userString>	#usa_vehicles:Continental_AVDS_1790_8BR	</userString>
       <tags>	diesel	</tags>
@@ -3407,6 +3482,57 @@
       <rpm_min>	245	</rpm_min>
       <rpm_max>	2464	</rpm_max>
     </Continental_AVCR_1100_2>
+    <Caterpillar_LVMS_1050_VHO>
+      <userString>	#usa_vehicles:Caterpillar_LVMS_1050_VHO	</userString>
+      <shortUserString>	#usa_vehicles:Caterpillar_LVMS_1050_VHO_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	60000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	850	</power>
+      <weight>	1125	</weight>
+      <maxHealth>	275	</maxHealth>
+      <maxRegenHealth>	138	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	362	</rpm_min>
+      <rpm_max>	2972	</rpm_max>
+    </Caterpillar_LVMS_1050_VHO>
+    <Caterpillar_LVMS_1050_EHO>
+      <userString>	#usa_vehicles:Caterpillar_LVMS_1050_EHO	</userString>
+      <shortUserString>	#usa_vehicles:Caterpillar_LVMS_1050_EHO_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	90000	</price>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	900	</power>
+      <weight>	1125	</weight>
+      <maxHealth>	310	</maxHealth>
+      <maxRegenHealth>	155	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	488	</rpm_min>
+      <rpm_max>	2035	</rpm_max>
+    </Caterpillar_LVMS_1050_EHO>
+    <Caterpillar_LVMS_1050_VHOTF>
+      <userString>	#usa_vehicles:Caterpillar_LVMS_1050_VHOTF	</userString>
+      <tags>	diesel	</tags>
+      <level>	11	</level>
+      <price>	150000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	10	</power>
+      <weight>	100	</weight>
+      <maxHealth>	380	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	11	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	272	</rpm_min>
+      <rpm_max>	2384	</rpm_max>
+    </Caterpillar_LVMS_1050_VHOTF>
     <GM_12V71T>
       <userString>	#usa_vehicles:GM_12V71T	</userString>
       <tags>	diesel	</tags>

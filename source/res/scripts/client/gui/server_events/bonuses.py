@@ -1507,7 +1507,7 @@ class GoodiesBonus(SimpleBonus):
 
     def getList(self):
         result = []
-        for booster, count in sorted(self.getBoosters().iteritems(), key=lambda (booster, count): booster.boosterType):
+        for booster, count in sorted(self.getBoosters().iteritems(), key=lambda it: it[0].boosterType):
             if booster is not None:
                 result.append({'value': backport.getIntegralFormat(count),
                  'tooltip': TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO,

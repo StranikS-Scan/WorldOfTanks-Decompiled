@@ -19,7 +19,7 @@ from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.items_parameters import RELATIVE_PARAMS, params_helper
 from gui.shared.items_parameters.comparator import PARAM_STATE
 from gui.shared.items_parameters.param_name_helper import getVehicleParameterText
-from gui.shared.items_parameters.params import HIDDEN_PARAM_DEFAULTS
+from gui.shared.items_parameters.params_constants import HIDDEN_PARAM_DEFAULTS
 from gui.shared.items_parameters.params_helper import hasSituationalEffect
 from gui.shared.tooltips.contexts import HangarParamContext
 from helpers import dependency
@@ -489,7 +489,7 @@ class VehicleSkillPreviewParamsPresenter(CurrentVehicleParamsPresenter):
 class EasyTankEquipParamsPresenter(_VehicleParamsPresenterBase):
 
     def __init__(self, vehicle, changedVehicle):
-        super(EasyTankEquipParamsPresenter, self).__init__()
+        super(EasyTankEquipParamsPresenter, self).__init__(layoutID=R.aliases.common.none(), applyFormatting=False)
         self._vehicle = vehicle
         self._changedVehicle = changedVehicle
 

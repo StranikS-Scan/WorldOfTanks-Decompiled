@@ -54,6 +54,7 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 _ItemInfo = namedtuple('itemInfo', ['state', 'counter', 'handler'])
 _ItemStateWithReason = namedtuple('itemStateWithReason', ['state', 'reason'])
+NOT_FULL_QS_AMMO_MULTILIER = 0.8
 
 def _handleFunctionCallForCurrentVehicle(func):
     func(g_currentVehicle.item.intCD)
@@ -91,7 +92,7 @@ class VehicleMenuPresenter(ViewComponent[VehicleMenuModel], IPrbListener):
          VehicleMenuModel.QUICK_TRAINING: _ItemInfo(self.__getQuickTrainingState, self.__getCrewBooksCount, showQuickTraining),
          VehicleMenuModel.CREW_OUT: _ItemInfo(self.__getCrewOutState, 0, self.__handleCrewOut),
          VehicleMenuModel.CREW_BACK: _ItemInfo(self.__getCrewBackState, 0, self.__handleCrewBack),
-         VehicleMenuModel.EASY_EQUIP: _ItemInfo(self.__getEasyEquipState, 0, showEasyTankEquipScreen),
+         VehicleMenuModel.EASY_EQUIP: _ItemInfo(self._getEasyEquipState, 0, showEasyTankEquipScreen),
          VehicleMenuModel.NATION_CHANGE: _ItemInfo(self.__getNationChangeState, 0, partial(_handleFunctionCallForCurrentVehicle, showChangeVehicleNationDialog)),
          VehicleMenuModel.ARMOR_INSPECTOR: _ItemInfo(self.__getArmorState, 0, partial(_handleFunctionCallForCurrentVehicle, showVehicleHubArmor)),
          VehicleMenuModel.FIELD_MODIFICATION: _ItemInfo(self.__getProgressionState, 0, partial(_handleFunctionCallForCurrentVehicle, showVehPostProgressionView)),
@@ -112,7 +113,8 @@ class VehicleMenuPresenter(ViewComponent[VehicleMenuModel], IPrbListener):
          (self.__platoonCtrl.onMembersUpdate, self.__onPlatoonMembersUpdate),
          (self.__cmpBasket.onChange, self.__onCmpBasketChange),
          (self.__cmpBasket.onSwitchChange, self.__onVehCmpBasketStateChanged),
-         (self._cameraController.onEnabledChange, self.__onCameraEnabledChage))
+         (self._cameraController.onEnabledChange, self.__onCameraEnabledChage),
+         (self.__lobbyContext.getServerSettings().onServerSettingsChange, self.__onServerSettingChanged))
 
     def _getListeners(self):
         return ((events.PrebattleEvent.SWITCHED, self.__onPrbEntitySwitched, EVENT_BUS_SCOPE.LOBBY),)
@@ -143,6 +145,18 @@ class VehicleMenuPresenter(ViewComponent[VehicleMenuModel], IPrbListener):
         self.__isVehicleChanging = False
         self.__updateModel()
 
+    def _getEasyEquipState(self):
+        if not self.__easyTankEquipCtrl.config.enabled:
+            return VehicleMenuModel.UNAVAILABLE
+        if not g_currentVehicle.isPresent() or self.__isVehicleUnavailable() or g_currentVehicle.item.isOnlyForEventBattles or g_currentVehicle.isUnsuitableToQueue():
+            return VehicleMenuModel.DISABLED
+        if g_currentVehicle.isPresent() and isAvailableForVehicle(g_currentVehicle.item):
+            isHighlight = not g_currentVehicle.item.isCrewFull or not self.__isAmmoNotFull() or not g_currentVehicle.item.consumables.installed.getItems()
+            if isHighlight:
+                return VehicleMenuModel.WARNING
+            return VehicleMenuModel.ENABLED
+        return VehicleMenuModel.DISABLED
+
     def __onPlatoonMembersUpdate(self, *_):
         self.__updateModel()
 
@@ -161,6 +175,10 @@ class VehicleMenuPresenter(ViewComponent[VehicleMenuModel], IPrbListener):
 
     def __onSettingsChange(self):
         self.__updateMenuItemModel(VehicleMenuModel.EASY_EQUIP)
+
+    def __onServerSettingChanged(self, diff):
+        if 'isCustomizationEnabled' in diff:
+            self.__updateMenuItemModel(VehicleMenuModel.CUSTOMIZATION)
 
     def __updateModel(self):
         self.__hasInventoryTankman = bool(self.__itemsCache.items.getInventoryTankmen(limit=1))
@@ -226,6 +244,11 @@ class VehicleMenuPresenter(ViewComponent[VehicleMenuModel], IPrbListener):
 
     def __getCrewBooksCount(self):
         return crewBooksViewedCache().newCrewBooksAmount if g_currentVehicle is not None else 0
+
+    @staticmethod
+    def __isAmmoNotFull():
+        vehicle = g_currentVehicle.item
+        return sum((itemData[1] for itemData in vehicle.shells.installed.getStorage if itemData)) >= vehicle.ammoMaxSize * NOT_FULL_QS_AMMO_MULTILIER or vehicle.isOnlyForBattleRoyaleBattles
 
     def __getAvailableModulesForResearchCount(self):
         if g_currentVehicle is not None:
@@ -334,7 +357,7 @@ class VehicleMenuPresenter(ViewComponent[VehicleMenuModel], IPrbListener):
 
     def __isAllSkillsLearned(self):
         crew = g_currentVehicle.item.crew
-        return False if not crew else all((getTmanNewSkillCount(tankman, withFree=True)[1].intSkillLvl == 100 for _, tankman in crew))
+        return False if not crew else all((getTmanNewSkillCount(tankman, withFree=True)[1].intSkillLvl == 100 for _, tankman in crew if tankman is not None))
 
     def __getCompareState(self):
         cmpBasket = self.__cmpBasket
@@ -363,19 +386,6 @@ class VehicleMenuPresenter(ViewComponent[VehicleMenuModel], IPrbListener):
             return _ItemStateWithReason(VehicleMenuModel.UNAVAILABLE, VehicleMenuModel.BATTLE_NEEDED)
         else:
             return VehicleMenuModel.ENABLED if g_currentVehicle.item.isAutoReturn else VehicleMenuModel.DISABLED
-
-    def __getEasyEquipState(self):
-        if not self.__easyTankEquipCtrl.config.enabled:
-            return VehicleMenuModel.UNAVAILABLE
-        if not g_currentVehicle.isPresent() or self.__isVehicleUnavailable() or g_currentVehicle.item.isOnlyForEventBattles or g_currentVehicle.isUnsuitableToQueue():
-            return VehicleMenuModel.DISABLED
-        if g_currentVehicle.isPresent() and isAvailableForVehicle(g_currentVehicle.item):
-            isAmmoNotFull = g_currentVehicle.item.isAmmoFull
-            isHighlight = not g_currentVehicle.item.isCrewFull or not isAmmoNotFull or not g_currentVehicle.item.consumables.installed.getItems()
-            if isHighlight:
-                return VehicleMenuModel.WARNING
-            return VehicleMenuModel.ENABLED
-        return VehicleMenuModel.DISABLED
 
     def __getNationChangeState(self):
         if g_currentVehicle.isPresent() and g_currentVehicle.item.isNationChangeAvailable:

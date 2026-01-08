@@ -1,31 +1,38 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/vehicle_mechanics/panels_common.py
+from __future__ import absolute_import
 import typing
 from itertools import chain
 import BattleReplay
+from events_containers.common.containers import ContainersListener
+from events_handler import eventHandler
 from gui.battle_control.battle_constants import CROSSHAIR_VIEW_ID
-from gui.battle_control.controllers.vehicle_passenger import VehiclePassengerInfoWatcher
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
+from gui.veh_mechanics.battle.updaters.mechanics.tracked_mechanics_updater import IVehicleTrackedMechanicsView, VehicleTrackedMechanicsUpdater
+from gui.veh_mechanics.battle.updaters.updaters_common import ViewUpdatersCollection
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
-from vehicles.mechanics.mechanic_info import getVehicleMechanics
 if typing.TYPE_CHECKING:
-    from items.vehicles import VehicleDescr
     from vehicles.mechanics.mechanic_constants import VehicleMechanic
-    from Vehicle import Vehicle
 
-def getMechanicsUIComponents(vehicleDescriptor, componentsMap):
-    return chain((componentsMap[mechanic] for mechanic in getVehicleMechanics(vehicleDescriptor) if mechanic in componentsMap))
+def getMechanicsUIComponents(vehicleMechanics, componentsMap):
+    return chain((componentsMap[mechanic] for mechanic in vehicleMechanics if mechanic in componentsMap))
 
 
-class VehicleMechanicsPanel(BaseDAAPIComponent, VehiclePassengerInfoWatcher):
+class VehicleMechanicsPanel(BaseDAAPIComponent, ContainersListener, IVehicleTrackedMechanicsView):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     _VEHICLE_MECHANIC_UI_COMPONENTS_MAP = {}
 
     def __init__(self):
         super(VehicleMechanicsPanel, self).__init__()
+        self.__updatersCollection = ViewUpdatersCollection()
         self.__crosshairViewID = CROSSHAIR_VIEW_ID.UNDEFINED
         self.__isAllowedByContext = True
+
+    @eventHandler
+    def onTrackedMechanicsUpdate(self, mechanics):
+        for mechanicComponent in getMechanicsUIComponents(mechanics, self._VEHICLE_MECHANIC_UI_COMPONENTS_MAP):
+            self._addMechanicUIComponent(mechanicComponent)
 
     def _populate(self):
         super(VehicleMechanicsPanel, self)._populate()
@@ -41,12 +48,12 @@ class VehicleMechanicsPanel(BaseDAAPIComponent, VehiclePassengerInfoWatcher):
             crosshairCtrl.onCrosshairPositionChanged += self.__onCrosshairScaledPositionChanged
             crosshairCtrl.onCrosshairScaleChanged += self.__onCrosshairScaledPositionChanged
             self.__onCrosshairScaledPositionChanged()
-        self.startVehiclePassengerLateListening(self._onVehicleControlling)
+        self.__updatersCollection.initialize([VehicleTrackedMechanicsUpdater(self)])
         self.__updateVisibility()
         return
 
     def _dispose(self):
-        self.stopVehiclePassengerListening(self._onVehicleControlling)
+        self.__updatersCollection.finalize()
         crosshairCtrl = self.__sessionProvider.shared.crosshair
         if crosshairCtrl is not None:
             crosshairCtrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
@@ -57,6 +64,10 @@ class VehicleMechanicsPanel(BaseDAAPIComponent, VehiclePassengerInfoWatcher):
             prebattleSetup.onBattleStarted -= self.__onBattleStarted
         super(VehicleMechanicsPanel, self)._dispose()
         return
+
+    def _destroy(self):
+        self.__updatersCollection.destroy()
+        super(VehicleMechanicsPanel, self)._destroy()
 
     def _setIsReplay(self, isReplay):
         raise NotImplementedError
@@ -72,13 +83,6 @@ class VehicleMechanicsPanel(BaseDAAPIComponent, VehiclePassengerInfoWatcher):
 
     def _addMechanicUIComponent(self, mechanicComponent):
         raise NotImplementedError
-
-    def _onVehicleControlling(self, vehicle):
-        componentsMap = self._VEHICLE_MECHANIC_UI_COMPONENTS_MAP if vehicle is not None else {}
-        for mechanicComponent in getMechanicsUIComponents(vehicle.typeDescriptor, componentsMap):
-            self._addMechanicUIComponent(mechanicComponent)
-
-        return
 
     def __onBattleStarted(self):
         self.__updateContextAvailability()
@@ -101,4 +105,5 @@ class VehicleMechanicsPanel(BaseDAAPIComponent, VehiclePassengerInfoWatcher):
         self._setCrosshairViewID(viewID)
 
     def __updateVisibility(self):
-        self._setIsVisible(self.__isAllowedByContext and self.__crosshairViewID not in (CROSSHAIR_VIEW_ID.UNDEFINED, CROSSHAIR_VIEW_ID.POSTMORTEM))
+        isValidCrosshairID = self.__crosshairViewID not in (CROSSHAIR_VIEW_ID.UNDEFINED, CROSSHAIR_VIEW_ID.POSTMORTEM)
+        self._setIsVisible(isValidCrosshairID and self.__isAllowedByContext)

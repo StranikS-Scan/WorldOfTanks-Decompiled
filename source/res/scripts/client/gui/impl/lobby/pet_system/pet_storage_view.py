@@ -133,6 +133,7 @@ class PetStorageView(ViewComponent):
                 tx.setIsPetSelected(currentPetId == activePetId)
                 tx.setHasUniqueName(itemClass.getIsDefaultNameLocked(currentPetId))
                 tx.setVisibilityState(MODEL_STATE_MAPPING.get(self.__petController.getStateBehavior()))
+                tx.setIsUnsuitableMode(not self.__petController.checkBonusCapsForPetBonus())
             self.__tryToShowEvent()
 
     def __getSynergyState(self, petID):

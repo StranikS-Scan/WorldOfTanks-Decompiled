@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/shared_utils/avatar_helpers/VehicleTelemetry.py
+from __future__ import absolute_import, print_function
 import cPickle
 import zlib
 import math
@@ -121,7 +122,7 @@ class VehicleTelemetry(object):
         for snapshot in snapshots:
             time = snapshot[namesMap['time']] - self.refTime
             if time < 0:
-                print 'Nt:', snapshot[namesMap['time']], self.refTime
+                print('Nt:', snapshot[namesMap['time']], self.refTime)
             dist = snapshot[namesMap['path']] - self.refDist
             velocity = snapshot[namesMap['vel']]
             acceleration = snapshot[namesMap['acc']]

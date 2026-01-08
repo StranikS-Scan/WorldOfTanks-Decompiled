@@ -39,12 +39,12 @@ class Comp7Config(settingsBlock('Comp7Config', ('isEnabled', 'isShopEnabled', 'i
         return data
 
 
-class Comp7RanksConfig(settingsBlock('Comp7RanksConfig', ('ranks', 'ranksOrder', 'eliteRankPercent', 'divisionsByRank', 'divisions', 'rankInactivityNotificationThreshold'))):
+class Comp7RanksConfig(settingsBlock('Comp7RanksConfig', ('ranks', 'ranksOrder', 'eliteRankPercent', 'divisionsByRank', 'divisions', 'rankInactivityNotificationThreshold', 'businessDayStartHour'))):
     __slots__ = ()
 
     @classmethod
     def defaults(cls):
-        return dict(ranks={}, ranksOrder=(), eliteRankPercent=0, divisionsByRank={}, divisions=(), rankInactivityNotificationThreshold=0)
+        return dict(ranks={}, ranksOrder=(), eliteRankPercent=0, divisionsByRank={}, divisions=(), rankInactivityNotificationThreshold=0, businessDayStartHour=0)
 
     @classmethod
     def _preprocessData(cls, data):

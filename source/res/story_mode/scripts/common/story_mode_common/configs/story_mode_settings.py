@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/common/story_mode_common/configs/story_mode_settings.py
 import typing
-from base_schema_manager import GameParamsSchema
+from game_params_common.base_manager import GameParamsSchema
 from dict2model import models, fields, validate, schemas
+from game_params_common.scope import GameParamsScopeFlags
 if typing.TYPE_CHECKING:
     import datetime
 
@@ -14,14 +15,11 @@ class EntryPointSettingsModel(models.Model):
         self.eventStartAt = eventStartAt
         self.eventEndAt = eventEndAt
 
-    def __repr__(self):
-        return '<EntryPointSettingsModel(eventStartAt={}, eventEndAt={})>'.format(self.eventStartAt, self.eventEndAt)
-
 
 class SettingsModel(models.Model):
-    __slots__ = ('enabled', 'waitTimeQueue', 'hideGameLoadingTimeout', 'joinToQueueFromLogin', 'afk', 'entryPoint', 'modeSelectorCardColumn', 'modeSelectorCardPriority', 'newbieBannerEnabled', 'newbieAdvertisingEnabled', 'parallaxEnabled')
+    __slots__ = ('enabled', 'waitTimeQueue', 'hideGameLoadingTimeout', 'joinToQueueFromLogin', 'afk', 'entryPoint', 'modeSelectorCardColumn', 'modeSelectorCardPriority', 'newbieBannerEnabled', 'newbieAdvertisingEnabled', 'parallaxEnabled', 'eventName')
 
-    def __init__(self, enabled, waitTimeQueue, hideGameLoadingTimeout, joinToQueueFromLogin, afk, entryPoint, modeSelectorCardColumn, modeSelectorCardPriority, newbieBannerEnabled, newbieAdvertisingEnabled, parallaxEnabled):
+    def __init__(self, enabled, waitTimeQueue, hideGameLoadingTimeout, joinToQueueFromLogin, afk, entryPoint, modeSelectorCardColumn, modeSelectorCardPriority, newbieBannerEnabled, newbieAdvertisingEnabled, parallaxEnabled, eventName):
         super(SettingsModel, self).__init__()
         self.enabled = enabled
         self.waitTimeQueue = waitTimeQueue
@@ -34,9 +32,7 @@ class SettingsModel(models.Model):
         self.newbieBannerEnabled = newbieBannerEnabled
         self.newbieAdvertisingEnabled = newbieAdvertisingEnabled
         self.parallaxEnabled = parallaxEnabled
-
-    def __repr__(self):
-        return '<SettingsModel(enabled={}, waitTimeQueue={}, hideGameLoadingTimeout={}, joinToQueueFromLogin={}, afk={}, entryPoint={}, modeSelectorCardColumn={}, modeSelectorCardPriority={}, newbieBannerEnabled={}>, newbieAdvertisingEnabled={}, parallaxEnabled={}'.format(self.enabled, self.waitTimeQueue, self.hideGameLoadingTimeout, self.joinToQueueFromLogin, self.afk, self.entryPoint, self.modeSelectorCardColumn, self.modeSelectorCardPriority, self.newbieBannerEnabled, self.newbieAdvertisingEnabled, self.parallaxEnabled)
+        self.eventName = eventName
 
 
 class AfkModel(models.Model):
@@ -47,9 +43,6 @@ class AfkModel(models.Model):
         self.maxPlayerInactiveTime = maxPlayerInactiveTime
         self.arenaWaitPlayerTime = arenaWaitPlayerTime
 
-    def __repr__(self):
-        return '<AfkModel(maxPlayerInactiveTime={}, arenaWaitPlayerTime={})>'.format(self.maxPlayerInactiveTime, self.arenaWaitPlayerTime)
-
 
 class AfkModesModel(models.Model):
     __slots__ = ('onboarding', 'regular')
@@ -59,24 +52,22 @@ class AfkModesModel(models.Model):
         self.onboarding = onboarding
         self.regular = regular
 
-    def __repr__(self):
-        return '<AfkModesModel(onboarding={}, regular={})>'.format(self.onboarding, self.regular)
-
 
 _bannerSettingsSchema = schemas.Schema(fields={'eventStartAt': fields.DateTime(),
  'eventEndAt': fields.DateTime()}, modelClass=EntryPointSettingsModel)
-afkSchema = schemas.Schema(fields={'maxPlayerInactiveTime': fields.Integer(public=False, required=True, deserializedValidators=validate.Range(minValue=1)),
- 'arenaWaitPlayerTime': fields.Integer(public=False, required=True, deserializedValidators=validate.Range(minValue=1))}, modelClass=AfkModel, checkUnknown=True)
-afkModesSchema = schemas.Schema(fields={'onboarding': fields.Nested(schema=afkSchema, required=True, public=False),
- 'regular': fields.Nested(schema=afkSchema, required=True, public=False)}, modelClass=AfkModesModel, checkUnknown=True)
+afkSchema = schemas.Schema(fields={'maxPlayerInactiveTime': fields.Integer(required=True, deserializedValidators=validate.Range(minValue=1)),
+ 'arenaWaitPlayerTime': fields.Integer(required=True, deserializedValidators=validate.Range(minValue=1))}, modelClass=AfkModel, checkUnknown=True)
+afkModesSchema = schemas.Schema(fields={'onboarding': fields.Nested(schema=afkSchema, required=True),
+ 'regular': fields.Nested(schema=afkSchema, required=True)}, modelClass=AfkModesModel, checkUnknown=True)
 settingsSchema = GameParamsSchema[SettingsModel](gameParamsKey='story_mode_settings', fields={'enabled': fields.Boolean(required=True),
  'waitTimeQueue': fields.Integer(required=True, deserializedValidators=validate.Range(minValue=1)),
  'hideGameLoadingTimeout': fields.Integer(required=True, deserializedValidators=validate.Range(minValue=1)),
- 'joinToQueueFromLogin': fields.Boolean(required=True, public=False),
+ 'joinToQueueFromLogin': fields.Boolean(required=True, filterParams=GameParamsScopeFlags.BASE),
  'modeSelectorCardColumn': fields.Integer(required=True, deserializedValidators=validate.Range(minValue=1, maxValue=3)),
  'modeSelectorCardPriority': fields.Integer(required=True),
- 'afk': fields.Nested(schema=afkModesSchema, required=True, public=False),
+ 'afk': fields.Nested(schema=afkModesSchema, required=True, filterParams=GameParamsScopeFlags.BASE),
  'entryPoint': fields.Nested(schema=_bannerSettingsSchema),
  'newbieBannerEnabled': fields.Boolean(required=True),
  'newbieAdvertisingEnabled': fields.Boolean(required=True),
- 'parallaxEnabled': fields.Boolean(required=True)}, modelClass=SettingsModel, checkUnknown=True)
+ 'parallaxEnabled': fields.Boolean(required=True),
+ 'eventName': fields.NonEmptyString(required=True)}, modelClass=SettingsModel, checkUnknown=True, usedInReplay=True)

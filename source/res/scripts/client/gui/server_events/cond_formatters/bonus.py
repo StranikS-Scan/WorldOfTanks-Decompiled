@@ -106,7 +106,7 @@ class _CumulativableFormatter(MissionFormatter, CumulativableFormatter):
             formatterData = GROUP_BY_FORMATTERS_DATA.get(groupByValue)
             if formatterData:
                 formatter, rendererLinkage = formatterData
-                items = sorted(condition.getProgressPerGroup().iteritems(), key=lambda (_, progress): progress[0], reverse=True)
+                items = sorted(condition.getProgressPerGroup().iteritems(), key=lambda it: it[1][0], reverse=True)
                 for groupByKey, (current, total, _, _) in items:
                     result.append(formatter(groupByKey, current, total))
 

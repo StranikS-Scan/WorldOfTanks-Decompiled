@@ -35,6 +35,26 @@ class ILobbyHeaderControlsHelper(object):
         raise NotImplementedError
 
 
+class EmptyLobbyHeaderFooterHelper(ILobbyHeaderControlsHelper):
+    __slots__ = ()
+
+    @classmethod
+    def getFightControlTooltipData(cls, prbValidation, isInSquad, isFightBtnDisabled, isNavigationEnabled):
+        return ('', False)
+
+    @classmethod
+    def getSquadControlTooltipData(cls, prbValidation, isInSquad):
+        return (R.invalid(), R.invalid(), {})
+
+    @classmethod
+    def getHeaderType(cls):
+        return LobbyHeader
+
+    @classmethod
+    def getFooterType(cls):
+        return LobbyFooter
+
+
 class DefaultLobbyHeaderHelper(ILobbyHeaderControlsHelper):
     __slots__ = ()
     _IN_SQUAD_TOOLTIP_KEY = 'inSquad'

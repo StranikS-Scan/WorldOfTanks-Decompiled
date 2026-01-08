@@ -24,7 +24,7 @@ class ObsceneLanguageDictionary(object):
 
 
 class BasicOLDictionary(ObsceneLanguageDictionary):
-    __nonAlphaNumPattern = re.compile(u'[^a-zA-Z]', re.M | re.S | re.U | re.I)
+    __nonAlphaNumPattern = re.compile('[^a-zA-Z]', re.M | re.S | re.U | re.I)
     __equivalents = {}
     __badWordPatterns = []
 

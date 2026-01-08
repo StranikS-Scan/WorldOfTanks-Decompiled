@@ -302,7 +302,7 @@ UnitFullData = namedtuple('UnitStats', ('unit', 'flags', 'stats', 'playerInfo', 
 UnitFullData.__new__.__defaults__ = (None,
  UnitFlags(0),
  UnitStats(),
- PlayerUnitInfo(-1L, 0, None),
+ PlayerUnitInfo(-1, 0, None),
  SlotInfo(-1, SlotState()))
 
 @ReprInjector.simple(('_minLevel', 'minLevel'), ('_maxLevel', 'maxLevel'), ('_maxSlots', 'maxSlots'), ('_maxClosedSlots', 'maxClosedSlots'), ('_maxEmptySlots', 'maxEmptySlots'), ('_minTotalLevel', 'minTotalLevel'), ('_maxTotalLevel', 'maxTotalLevel'), ('_maxLegionariesCount', 'maxLegionariesCount'))

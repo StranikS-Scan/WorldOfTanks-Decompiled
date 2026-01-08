@@ -8,6 +8,7 @@ from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getHofTabCounter, isH
 from gui.Scaleform.daapi.view.meta.ProfileMeta import ProfileMeta
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PROFILE_CONSTANTS import PROFILE_CONSTANTS
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.collection.account_settings import getCollectionsTabCounter
 from gui.limited_ui.lui_rules_storage import LUI_RULES
@@ -59,8 +60,10 @@ class ProfilePage(LobbySubView, ProfileMeta):
             self.__updateTabCounters()
 
     def onCloseProfile(self):
-        from gui.shared.event_dispatcher import showHangar
-        showHangar()
+        lsm = getLobbyStateMachine()
+        state = lsm.getStateFromView(self)
+        if state:
+            state.goBack()
 
     def updateSubView(self, ctx):
         selectedAlias = ctx.get('selectedAlias')

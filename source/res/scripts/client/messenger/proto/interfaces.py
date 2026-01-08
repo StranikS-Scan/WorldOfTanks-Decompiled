@@ -60,7 +60,7 @@ class IProtoLimits(object):
 
 class IBattleCommandFactory(object):
 
-    def createByName(self, name):
+    def createByName(self, name, args=None):
         return None
 
     def createByNameTarget(self, name, targetID):

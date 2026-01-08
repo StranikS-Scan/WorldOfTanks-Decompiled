@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/VehicleStickers.py
 import imghdr
 import logging
+import typing
 import weakref
 from collections import namedtuple
 import math
@@ -13,6 +14,7 @@ import GpuDecals
 import math_utils
 import items
 from cgf_script.managers_registrator import autoregister, onAddedQuery, onRemovedQuery
+from cgf_modules import game_events
 from debug_utils import LOG_ERROR, LOG_WARNING
 from constants import IS_EDITOR
 from helpers import dependency
@@ -193,8 +195,8 @@ class ModelStickers(object):
     def unbindReceiver(self):
         self.__stickerModel.resetReceiverId()
 
-    def addDamageSticker(self, stickerID, segStart, segEnd):
-        return 0 if self.__model is None else self.__stickerModel.addDamageSticker(stickerID, segStart, segEnd)
+    def addDamageSticker(self, stickerID, data):
+        return 0 if self.__model is None else self.__stickerModel.addDamageSticker(stickerID, data.segStart, data.segEnd)
 
     def delDamageSticker(self, handle):
         if self.__model is not None:
@@ -232,13 +234,36 @@ class ComponentStickers(object):
         self.alpha = alpha
 
 
+DamageStickerData = typing.NamedTuple('DamageStickerData', (('componentIdx', int),
+ ('segStart', Math.Vector3),
+ ('segEnd', Math.Vector3),
+ ('isParametrized', bool),
+ ('caliber', float),
+ ('hitType', int),
+ ('shellType', int)))
+
+def resizeSegment(segStart, segEnd, segLength):
+    segment = segEnd - segStart
+    segLen = segment.lengthSquared if not segLength else segLength
+    if segLen != 0:
+        segStart -= 0.25 * segment / math.sqrt(segLen)
+    return (segStart, segEnd)
+
+
+def damageStickerData(componentIdx, segStart, segEnd):
+    return DamageStickerData(componentIdx, segStart, segEnd, False, 0.0, 0, 0)
+
+
+def parametrizedDamageStickerData(componentIdx, segStart, segEnd, caliber, hitType, shellType):
+    return DamageStickerData(componentIdx, segStart, segEnd, True, caliber, hitType, shellType)
+
+
 class DamageSticker(object):
 
-    def __init__(self, stickerID, rayStart, rayEnd, handle):
-        self.rayStart = rayStart
-        self.rayEnd = rayEnd
+    def __init__(self, stickerID, handle, data):
         self.stickerID = stickerID
         self.handle = handle
+        self.data = data
 
 
 class StickerPack(object):
@@ -706,6 +731,8 @@ class VehicleStickers(object):
         else:
             self.__stickerPacks = self._createDebugStickerPacks(vehicleDesc, outfit, insigniaRank)
         self.__childPartDamageStickers = {}
+        self.__parametrizedDamageStickers = {}
+        self.__pendingParametrizedDamageStickers = {}
         self.__stickers = {}
         for componentName, emblemSlots in componentSlots:
             if componentName == Insignia.Types.SINGLE:
@@ -747,13 +774,13 @@ class VehicleStickers(object):
                         componentStickers.stickers.delDamageSticker(damageSticker.handle)
                         damageSticker.handle = None
                         LOG_WARNING('Adding %s damage sticker to occupied slot' % componentName)
-                    damageSticker.handle = componentStickers.stickers.addDamageSticker(damageSticker.stickerID, damageSticker.rayStart, damageSticker.rayEnd)
+                    damageSticker.handle = componentStickers.stickers.addDamageSticker(damageSticker.stickerID, damageSticker.data)
 
         if showDamageStickers and collisionComponent is not None:
             for code, sticker in self.__childPartDamageStickers.items():
                 if sticker.handle is not None:
                     CGF.removeGameObject(sticker.handle)
-                sticker.handle = self.__addDamageStickerGO(code, sticker.stickerID, sticker.rayStart, sticker.rayEnd, collisionComponent)
+                sticker.handle = self.__addDamageStickerGO(code, sticker.stickerID, sticker.data, collisionComponent)
 
         gunPartIdx = DetachedTurretPartIndexes.GUN if isDetachedTurret else TankPartIndexes.GUN
         gunGeometry = compoundModel.getPartGeometryLink(gunPartIdx)
@@ -797,23 +824,22 @@ class VehicleStickers(object):
             if componentStickers.stickers.partIdx == partIdx and not componentStickers.stickers.partIdxOverriden:
                 componentStickers.stickers.unbindReceiver()
 
-    def addDamageSticker(self, code, componentIdx, stickerID, segStart, segEnd, collisionComponent, segLength=None):
-        segment = segEnd - segStart
-        segLen = segment.lengthSquared if not segLength else segLength
-        if segLen != 0:
-            segStart -= 0.25 * segment / math.sqrt(segLen)
-        if componentIdx > collisionComponent.maxStaticPartIndex:
-            self.__addChildPartDamageSticker(code, stickerID, segStart, segEnd, collisionComponent)
+    def addDamageSticker(self, code, stickerID, data, collisionComponent, isCompositionReady, isActive):
+        if data.isParametrized:
+            self.__addParametrizedDamageSticker(code, stickerID, data, collisionComponent, isCompositionReady, isActive)
+            return
+        elif data.componentIdx > collisionComponent.maxStaticPartIndex:
+            self.__addChildPartDamageSticker(code, stickerID, data, collisionComponent)
             return
         else:
-            componentName = TankPartIndexes.getName(componentIdx)
+            componentName = TankPartIndexes.getName(data.componentIdx)
             if not componentName:
                 return
             componentStickers = self.__stickers.get(componentName)
             if componentStickers is None or code in componentStickers.damageStickers:
                 return
-            handle = componentStickers.stickers.addDamageSticker(stickerID, segStart, segEnd)
-            componentStickers.damageStickers[code] = DamageSticker(stickerID, segStart, segEnd, handle)
+            handle = componentStickers.stickers.addDamageSticker(stickerID, data)
+            componentStickers.damageStickers[code] = DamageSticker(stickerID, handle, data)
             return
 
     def delDamageSticker(self, code):
@@ -827,6 +853,9 @@ class VehicleStickers(object):
         childPartSticker = self.__childPartDamageStickers.pop(code, None)
         if childPartSticker is not None:
             CGF.removeGameObject(childPartSticker.handle)
+        handle = self.__parametrizedDamageStickers.pop(code, None)
+        if handle is not None:
+            self.__delParametrizedDamageSticker(handle)
         return
 
     @classmethod
@@ -931,36 +960,89 @@ class VehicleStickers(object):
             toPartRoot.preMultiply(compoundModel.node(TankNodeNames.GUN_INCLINATION))
         return (gunNode, toPartRoot)
 
-    def __addChildPartDamageSticker(self, code, stickerID, segStart, segEnd, collisionComponent):
+    def __addChildPartDamageSticker(self, code, stickerID, data, collisionComponent):
         sticker = self.__childPartDamageStickers.get(code)
         if sticker is not None and sticker.handle is not None:
             return
         else:
-            go = self.__addDamageStickerGO(code, stickerID, segStart, segEnd, collisionComponent)
+            go = self.__addDamageStickerGO(code, stickerID, data, collisionComponent)
             if go is not None:
-                self.__childPartDamageStickers[code] = DamageSticker(stickerID, segStart, segEnd, go)
+                self.__childPartDamageStickers[code] = DamageSticker(stickerID, go, data)
             return
 
     @staticmethod
-    def __addDamageStickerGO(code, stickerID, segStart, segEnd, collisionComponent):
-        networkID = DamageFromShotDecoder.getNetworkIDFromEncodedHitPoint(code)
-        childPartGO = cgf_network.getGameObjectByNetworkID(collisionComponent.spaceID, networkID)
-        if not childPartGO.isValid():
-            _logger.info('[DamageSticker] Cannot find game object for network ID %s', networkID)
-            return None
+    def __addDamageStickerGO(code, stickerID, data, collisionComponent):
+        childPartGO = VehicleStickers.__getDamageStickerGoByNetworkId(code, collisionComponent.spaceID)
+        if childPartGO is None:
+            _logger.info('[DamageSticker] Cannot find game object by network ID')
+            return
         else:
             childStickerGO = CGF.GameObject(childPartGO.spaceID)
             childStickerGO.createComponent(GenericComponents.HierarchyComponent, childPartGO)
             childStickerGO.createComponent(GenericComponents.TransformComponent, Math.Matrix())
-            childStickerGO.createComponent(GenericComponents.DynamicDamageSticker, stickerID, segStart, segEnd, True)
+            childStickerGO.createComponent(GenericComponents.DynamicDamageSticker, stickerID, data.segStart, data.segEnd, True)
             childStickerGO.activate()
             return childStickerGO
+
+    @staticmethod
+    def __getDamageStickerGoByNetworkId(code, spaceID):
+        networkID = DamageFromShotDecoder.getNetworkIDFromEncodedHitPoint(code)
+        childPartGO = cgf_network.getGameObjectByNetworkID(spaceID, networkID)
+        return childPartGO if childPartGO.isValid() else None
+
+    def __getSlotGoByComponentIdx(self, componentIdx):
+        componentName = TankPartIndexes.getName(componentIdx)
+        componentName = TankPartNames.getActualNodeNameByPartName(componentName)
+        if not componentName:
+            _logger.error('Unable find componentName by id: %i', componentIdx)
+            return None
+        else:
+            return GenericComponents.findSlot(self.__go, componentName)
+
+    def __addParametrizedDamageSticker(self, code, stickerID, data, collisionComponent, isCompositionReady, isActive=False):
+        if code in self.__parametrizedDamageStickers:
+            return
+        elif not isCompositionReady or not collisionComponent.isAttachmentActive(data.componentIdx):
+            self.__pendingParametrizedDamageStickers[code] = DamageSticker(stickerID, None, data)
+            return
+        else:
+            targetGo = None
+            if data.componentIdx != TankPartIndexes.GUN:
+                targetGo = VehicleStickers.__getDamageStickerGoByNetworkId(code, collisionComponent.spaceID)
+            if targetGo is None or not targetGo.isValid():
+                if data.componentIdx < 0:
+                    return
+                targetGo = self.__getSlotGoByComponentIdx(data.componentIdx)
+            if targetGo is None or not targetGo.isValid():
+                _logger.error('Unable to find parametrized damage sticker target game object')
+                return
+            collisionResult = DamageFromShotDecoder.collideHitPoint(data.componentIdx, data.segStart, data.segEnd, collisionComponent)
+            if collisionResult is None:
+                _logger.warning('Unable to add parametrized damage sticker. Collision result is None.')
+                return
+            uid = hash(code)
+            hitPoint, hitDir, normal = collisionResult
+            CGF.postEvent(collisionComponent.spaceID, game_events.AddDamageStickerEvent(uid, targetGo, hitPoint, hitDir, normal, game_events.GunShellInfo(data.caliber, data.shellType), data.hitType, isActive, stickerID))
+            _logger.debug('Parametrized damage sticker add with uid: %i', uid)
+            self.__parametrizedDamageStickers[code] = uid
+            return
+
+    def __delParametrizedDamageSticker(self, uid):
+        CGF.postEvent(self.__go.spaceID, game_events.RemoveDamageStickerEvent(uid))
+
+    def processPendingDamageStickers(self, collisionComponent, isCompositionReady):
+        if not isCompositionReady or not self.__pendingParametrizedDamageStickers:
+            return
+        pending = self.__pendingParametrizedDamageStickers
+        self.__pendingParametrizedDamageStickers = {}
+        for code, sticker in pending.items():
+            self.__addParametrizedDamageSticker(code, sticker.stickerID, sticker.data, collisionComponent, isCompositionReady, False)
 
 
 @autoregister(presentInAllWorlds=True, domain=CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor)
 class VehicleStickersManager(CGF.ComponentManager):
 
-    @onAddedQuery(CGF.GameObject, GenericComponents.SlotMarkerComponent, GpuDecals.GpuDecalsReceiverComponent)
+    @onAddedQuery(CGF.GameObject, GenericComponents.SlotMarkerComponent, GpuDecals.GpuDecalsReceiverComponent, tickGroup='PostTick')
     def onReceiverAdded(self, gameObject, slotMarker, receiver):
         appearance = vehicle_composition.findParentVehicleAppearance(gameObject)
         if appearance is not None:
@@ -969,7 +1051,7 @@ class VehicleStickersManager(CGF.ComponentManager):
                 appearance.vehicleStickers.bindReceiver(partIdx, receiver.blockIdx)
         return
 
-    @onRemovedQuery(CGF.GameObject, GenericComponents.SlotMarkerComponent, GpuDecals.GpuDecalsReceiverComponent)
+    @onRemovedQuery(CGF.GameObject, GenericComponents.SlotMarkerComponent, GpuDecals.GpuDecalsReceiverComponent, tickGroup='PostTick')
     def onReceiverRemoved(self, gameObject, slotMarker, receiver):
         appearance = vehicle_composition.findParentVehicleAppearance(gameObject)
         if appearance is not None:

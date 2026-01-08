@@ -20,6 +20,7 @@ from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY, ItemPrice
 from gui.shared.image_helper import getTextureLinkByID
 from gui.shared.money import Money
 from gui.shared.utils.functions import getImageResourceFromPath
+from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.vehicle_stats_helper import getStatTrackersVehicleStats
 from helpers import dependency
 from items import makeIntCompactDescrByID, vehicles
@@ -37,6 +38,7 @@ from vehicle_outfit.containers import emptyComponent
 from vehicle_outfit.outfit import Area
 if typing.TYPE_CHECKING:
     from typing import Dict, List, Optional, Set, Tuple
+    from gui.server_events.event_items import Quest
     from items.components.c11n_components import ProgressForCustomization
     from items.components.c11n_constants import ModificationType
     from items.customizations import CustomizationOutfit
@@ -1271,6 +1273,10 @@ class Style(Customization):
 
     def isItemInstallable(self, item):
         return self.descriptor.isItemInstallable(item.descriptor)
+
+    def isInstallableOnVehicle(self, vehicle, criteria=REQ_CRITERIA.INVENTORY):
+        from gui.Scaleform.daapi.view.lobby.customization.shared import vehicleHasSlot
+        return criteria(vehicle) and self.mayInstall(vehicle) and vehicle.isCustomizationEnabled() and vehicleHasSlot(GUI_ITEM_TYPE.STYLE, vehicle)
 
     def isEditedForVehicle(self, vehicleIntCD):
         c11nCtx = self._service.getCtx()

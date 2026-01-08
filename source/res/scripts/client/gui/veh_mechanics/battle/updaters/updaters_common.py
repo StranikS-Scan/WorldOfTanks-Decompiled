@@ -1,15 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/veh_mechanics/battle/updaters/updaters_common.py
+from __future__ import absolute_import
 import typing
 import weakref
-from events_handler import eventHandler
-from gui.battle_control.controllers.vehicle_passenger import VehiclePassengerInfoWatcher
-from vehicles.components.component_events import IComponentListener, ComponentListener
-from vehicles.components.component_life_cycle import IComponentLifeCycleListenerLogic
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
-from vehicles.mechanics.mechanic_helpers import getVehicleMechanic
-if typing.TYPE_CHECKING:
-    from Vehicle import Vehicle
+from events_containers.common.containers import ClientEventsContainer
 
 class IViewUpdater(object):
 
@@ -19,8 +13,31 @@ class IViewUpdater(object):
     def finalize(self):
         pass
 
+    def destroy(self):
+        pass
 
-class ViewUpdater(IViewUpdater):
+
+class ViewUpdatersCollection(object):
+
+    def __init__(self):
+        self.__updaters = []
+
+    def initialize(self, updaters):
+        self.__updaters = updaters
+        for updater in self.__updaters:
+            updater.initialize()
+
+    def finalize(self):
+        for updater in self.__updaters:
+            updater.finalize()
+
+    def destroy(self):
+        updaters, self.__updaters = self.__updaters, []
+        for updater in updaters:
+            updater.destroy()
+
+
+class ViewUpdater(ClientEventsContainer, IViewUpdater):
 
     def __init__(self, view):
         super(ViewUpdater, self).__init__()
@@ -30,58 +47,7 @@ class ViewUpdater(IViewUpdater):
     def view(self):
         return self.__view
 
-    def finalize(self):
+    def destroy(self):
         self.__view = None
-        return
-
-
-class VehicleMechanicUpdater(ViewUpdater, ComponentListener, VehiclePassengerInfoWatcher, IComponentLifeCycleListenerLogic):
-
-    def __init__(self, vehicleMechanic, view):
-        super(VehicleMechanicUpdater, self).__init__(view)
-        self.__vehicleMechanic = vehicleMechanic
-        self.__mechanicComponent = None
-        return
-
-    @property
-    def mechanicComponent(self):
-        return self.__mechanicComponent
-
-    def initialize(self):
-        super(VehicleMechanicUpdater, self).initialize()
-        self.startVehiclePassengerLateListening(self._onVehiclePassengerUpdate)
-
-    def finalize(self):
-        self.__releaseVehicleMechanicComponent()
-        self.stopVehiclePassengerListening(self._onVehiclePassengerUpdate)
-        super(VehicleMechanicUpdater, self).finalize()
-
-    @eventHandler
-    def onComponentDestroyed(self):
-        self.__mechanicComponent = None
-        super(VehicleMechanicUpdater, self).onComponentDestroyed()
-        return
-
-    def _onVehiclePassengerUpdate(self, vehicle):
-        mechanicComponent = getVehicleMechanic(self.__vehicleMechanic, vehicle)
-        if mechanicComponent is not self.__mechanicComponent:
-            self.__releaseVehicleMechanicComponent()
-            self.__catchVehicleMechanicComponent(mechanicComponent)
-
-    def _subscribeToMechanicComponent(self, mechanicComponent):
-        self.subscribeTo(mechanicComponent.lifeCycleEvents)
-
-    def _unsubscribeFromMechanicComponent(self, mechanicComponent):
-        self.unsubscribeFrom(mechanicComponent.lifeCycleEvents)
-
-    def __catchVehicleMechanicComponent(self, mechanicComponent):
-        if mechanicComponent is not None:
-            self.__mechanicComponent = mechanicComponent
-            self._subscribeToMechanicComponent(mechanicComponent)
-        return
-
-    def __releaseVehicleMechanicComponent(self):
-        if self.__mechanicComponent is not None:
-            self._unsubscribeFromMechanicComponent(self.__mechanicComponent)
-            self.__mechanicComponent = None
+        super(ViewUpdater, self).destroy()
         return

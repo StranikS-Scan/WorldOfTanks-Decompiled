@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: resource_well/scripts/client/resource_well/gui/impl/lobby/feature/tooltips/max_progress_tooltip.py
+from __future__ import absolute_import
 from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.pub import ViewImpl
@@ -9,7 +10,7 @@ class MaxProgressTooltip(ViewImpl):
     __slots__ = ()
 
     def __init__(self, *args, **kwargs):
-        settings = ViewSettings(R.views.resource_well.lobby.feature.tooltips.MaxProgressTooltip())
+        settings = ViewSettings(R.views.resource_well.mono.lobby.tooltips.max_progress_tooltip())
         settings.model = MaxProgressTooltipModel()
         settings.args = args
         settings.kwargs = kwargs

@@ -16,6 +16,7 @@ from gui.Scaleform.daapi.view.battle.shared.minimap.settings import CONTAINER_NA
 from gui.battle_control import avatar_getter, minimap_utils
 from gui.impl import backport
 from gui.impl.gen import R
+from story_mode_common.story_mode_constants import VEHICLE_BUNKER_TURRET_TAG
 _MINIMAP_DIMENSIONS = 10
 _ANIMATION_SPG = 'enemySPG'
 _ANIMATION_ENEMY = 'firstEnemy'
@@ -37,6 +38,9 @@ class StoryModeArenaVehiclesPlugin(ArenaVehiclesPlugin):
 
     def __init__(self, parent):
         super(StoryModeArenaVehiclesPlugin, self).__init__(parent=parent, clazz=StoryModeVehicleEntry)
+
+    def _skipMarker(self, vInfo, vProxy=None):
+        return VEHICLE_BUNKER_TURRET_TAG in vInfo.vehicleType.tags or super(StoryModeArenaVehiclesPlugin, self)._skipMarker(vInfo, vProxy)
 
 
 class BunkersPlugin(SimplePlugin):

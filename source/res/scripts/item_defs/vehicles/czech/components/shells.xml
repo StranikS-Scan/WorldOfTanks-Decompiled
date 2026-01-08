@@ -3033,6 +3033,63 @@
       </damage>
     </armorSpalls>
   </_122mm_Narazovy_vz_48_A>
+  <_107mm_Vz_63N_OPG>
+    <id>	137	</id>
+    <userString>	#czech_vehicles:_107mm_Vz_63N_OPG	</userString>
+    <icon>	ap	</icon>
+    <price>	781	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	107	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	350	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_107mm_Vz_63N_OPG>
+  <_107mm_Vz_63_prupalny>
+    <id>	138	</id>
+    <userString>	#czech_vehicles:_107mm_Vz_63_prupalny	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	107	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	350	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_107mm_Vz_63_prupalny>
+  <_107mm_Narazovy_vz_63>
+    <id>	139	</id>
+    <userString>	#czech_vehicles:_107mm_Narazovy_vz_63	</userString>
+    <icon>	he_modern	</icon>
+    <price>	428	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	107	</caliber>
+    <explosionRadius>	1.98	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	430	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.98	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	215	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_107mm_Narazovy_vz_63>
   <_122mm_Prurazny_vz_52>
     <id>	88	</id>
     <userString>	#czech_vehicles:_122mm_Prurazny_vz_52	</userString>

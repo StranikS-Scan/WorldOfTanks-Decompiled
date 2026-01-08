@@ -275,7 +275,7 @@ class FileLocalCache(object):
     __internal = {}
     __slots__ = ('_io', '_ioEnabled', 'onRead')
 
-    def __init__(self, space, tags, io=None, async=False):
+    def __init__(self, space, tags, io=None, isAsync=False):
         super(FileLocalCache, self).__init__()
         filePath = self._buildLocalCachePath(space, tags)
         self._ioEnabled = True
@@ -283,7 +283,7 @@ class FileLocalCache(object):
             self._io = _FileIO(filePath, io)
         else:
             self._io = _FileIO(filePath, PickleIO())
-        if async:
+        if isAsync:
             self._io = _AsyncIO(filePath, redirect=self._io)
             self._io.onRead += self._onRead
         self.onRead = Event.Event()

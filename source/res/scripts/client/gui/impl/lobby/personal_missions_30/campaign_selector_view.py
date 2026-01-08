@@ -13,10 +13,11 @@ from gui.impl.gen.view_models.views.lobby.personal_missions_30.campaign_selector
 from gui.impl.gen.view_models.views.lobby.personal_missions_30.operation_model import OperationState
 from gui.impl.gen.view_models.views.lobby.personal_missions_30.select_operation_model import SelectOperationModel
 from gui.impl.lobby.personal_missions_30.personal_mission_constants import PERSONAL_MISSIONS_CAMPAIGN_SELECTOR_SPACE, IntroKeys
-from gui.impl.lobby.personal_missions_30.views_helpers import getOperationStatus, getSortedPm3Operations, isIntroShown
+from gui.impl.lobby.personal_missions_30.views_helpers import getOperationStatus, getSortedPm3Operations, isIntroShown, isPMCampaignsStarted
 from gui.impl.pub import ViewImpl, WindowImpl
 from gui.server_events.events_dispatcher import showPersonalMissionOperationsPage
 from gui.server_events.finders import getBranchByOperationId, BRANCH_TO_OPERATION_IDS
+from gui.server_events.pm_constants import DISABLED_PM_OPERATIONS, IS_PM2_QUEST_ENABLED, IS_PM3_QUEST_ENABLED
 from gui.shared.event_dispatcher import showPersonalMissionMainWindow, showPM30IntroWindow
 from helpers import dependency
 from personal_missions import PM_BRANCH
@@ -73,7 +74,7 @@ class CampaignSelectorView(ViewImpl):
 
     def __onServerSettingsChanged(self, diff=None):
         diff = diff or {}
-        switchers = ['disabledPMOperations', 'isPM2QuestEnabled', 'isPM3QuestEnabled']
+        switchers = [DISABLED_PM_OPERATIONS, IS_PM2_QUEST_ENABLED, IS_PM3_QUEST_ENABLED]
         if not self._personalMissions.isEnabled():
             self.__onClose()
         elif any((switcher in diff for switcher in switchers)):
@@ -123,18 +124,24 @@ class CampaignSelectorView(ViewImpl):
         if not res.success:
             Waiting.hide(waitingId)
             return
-        needToProcessPM3Operation = campaignsState == CampaignSelectorViewState.THIRD.value and not self._personalMissions.getSelectedQuestsForBranch(campaignToActive).values()
-        if needToProcessPM3Operation:
-            unclaimedOperation = findFirst(lambda o: not o.isAwardAchieved(), self._operations.values())
-            unclaimedOperationID = unclaimedOperation.getID() if unclaimedOperation else BRANCH_TO_OPERATION_IDS[PM_BRANCH.PERSONAL_MISSION_3][0]
-            introKey = IntroKeys.OPERATION_INTRO_VIEW.value % unclaimedOperationID
-            isFirstTimeEntrance = self._isFirstTimeEntrance
-            isFirstOperationEntrance = True
-            if isFirstTimeEntrance and isIntroShown(introKey):
-                isFirstOperationEntrance = False
-            res = yield processPM3Operation(PM_BRANCH.PERSONAL_MISSION_3, unclaimedOperationID, isFirstTimeEntrance=isFirstOperationEntrance)
+        needToProcessPM3Operation = campaignsState == CampaignSelectorViewState.THIRD.value and not isPMCampaignsStarted(PM_BRANCH.V2_BRANCHES)
+        lastUncompletedOperation = self._getLastUncompletedOperation()
+        needToProcessUncompletedOp = lastUncompletedOperation and campaignsState == CampaignSelectorViewState.THIRD.value
+        if needToProcessPM3Operation or needToProcessUncompletedOp:
+            if needToProcessPM3Operation:
+                operationToProcess = findFirst(lambda o: not o.isAwardAchieved(), self._operations.values())
+                operationToProcessID = operationToProcess.getID() if operationToProcess else BRANCH_TO_OPERATION_IDS[PM_BRANCH.PERSONAL_MISSION_3][0]
+                introKey = IntroKeys.OPERATION_INTRO_VIEW.value % operationToProcessID
+                isFirstTimeEntrance = self._isFirstTimeEntrance
+                isFirstOperationEntrance = True
+                if isFirstTimeEntrance and isIntroShown(introKey):
+                    isFirstOperationEntrance = False
+            else:
+                operationToProcessID = lastUncompletedOperation.getID()
+                isFirstOperationEntrance = isFirstTimeEntrance = False
+            res = yield processPM3Operation(PM_BRANCH.PERSONAL_MISSION_3, operationToProcessID, isFirstTimeEntrance=isFirstOperationEntrance)
             if res.success and isFirstTimeEntrance and self.viewStatus == ViewStatus.LOADED:
-                showPersonalMissionMainWindow(unclaimedOperationID)
+                showPersonalMissionMainWindow(operationToProcessID)
         Waiting.hide(waitingId)
 
     def _fillModel(self):
@@ -204,6 +211,13 @@ class CampaignSelectorView(ViewImpl):
         else:
             activeSeason = CampaignSelectorViewState.THIRD
         return activeSeason
+
+    def _getLastUncompletedOperation(self):
+        pm3OpsCount = len(self._operations)
+        completedWithHonorsOps = len([ op for op in self._operations.values() if op.isFullCompleted() ])
+        notCompletedWithHonorsOps = [ op for op in self._operations.values() if op.isCompleted() and not op.isFullCompleted() ]
+        isOnePM3OpNotCompletedWithHonor = pm3OpsCount - completedWithHonorsOps == 1 and notCompletedWithHonorsOps
+        return notCompletedWithHonorsOps[0] if isOnePM3OpNotCompletedWithHonor else None
 
     def _isLockedByVeh(self, activeCampaigns):
         for campaign in activeCampaigns:

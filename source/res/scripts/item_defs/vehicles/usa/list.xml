@@ -1,5 +1,4 @@
 <list.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <A21_T14>
     <id>	0	</id>
     <userString>	#usa_vehicles:T14	</userString>
@@ -917,6 +916,15 @@
     <tags>	mediumTank HD improvedVentilation_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
   </A161_ARMT>
+  <A190_Ares_85>
+    <id>	141	</id>
+    <userString>	#usa_vehicles:A190_Ares_85	</userString>
+    <description>	#usa_vehicles:A190_Ares_85_desc	</description>
+    <shortUserString>	#usa_vehicles:A190_Ares_85_short	</shortUserString>
+    <price>	3600000	</price>
+    <tags>	mediumTank role_MT_support HD improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user autocannon	</tags>
+    <level>	9	</level>
+  </A190_Ares_85>
   <A183_XM69_Hacker>
     <id>	140	</id>
     <userString>	#usa_vehicles:A183_XM69_Hacker	</userString>
@@ -1218,7 +1226,6 @@
     </price>
     <tags>	mediumTank HD disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
-    <notInShop>	true	</notInShop>
   </A44_M4A2E4>
   <A45_M6A2E1>
     <id>	205	</id>
@@ -1757,6 +1764,15 @@
     <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals secret testTank	</tags>
     <level>	9	</level>
   </A178_SPHT>
+  <A189_Ares_90>
+    <id>	86	</id>
+    <userString>	#usa_vehicles:A189_Ares_90	</userString>
+    <shortUserString>	#usa_vehicles:A189_Ares_90_short	</shortUserString>
+    <description>	#usa_vehicles:A189_Ares_90_descr	</description>
+    <price>	6100000	</price>
+    <tags>	mediumTank role_MT_support HD mediumTank3 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals autocannon	</tags>
+    <level>	10	</level>
+  </A189_Ares_90>
   <A144_M_VI_Y_CFE_R>
     <id>	266	</id>
     <userString>	#usa_vehicles:A144_M_VI_Y_CFE_R	</userString>
@@ -1935,6 +1951,38 @@
     <tags>	lightTank role_LT_universal HD scout improvedVentilation_class3_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user special secret testTank	</tags>
     <level>	9	</level>
   </A175_LTC_II>
+  <A187_Ares_75>
+    <id>	90	</id>
+    <userString>	#usa_vehicles:A187_Ares_75	</userString>
+    <shortUserString>	#usa_vehicles:A187_Ares_75_short	</shortUserString>
+    <description>	#usa_vehicles:A187_Ares_75_desc	</description>
+    <price>	2600000	</price>
+    <tags>	mediumTank role_MT_support improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user HD autocannon	</tags>
+    <level>	8	</level>
+  </A187_Ares_75>
+  <A188_Ares_MTB>
+    <id>	273	</id>
+    <userString>	#usa_vehicles:A188_Ares_MTB	</userString>
+    <shortUserString>	#usa_vehicles:A188_Ares_MTB_short	</shortUserString>
+    <description>	#usa_vehicles:A188_Ares_MTB_desc	</description>
+    <shortDescriptionSpecial>	#usa_vehicles:A188_Ares_MTB_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A188_Ares_MTB_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_support HD improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals autocannon secret testTank	</tags>
+    <level>	9	</level>
+  </A188_Ares_MTB>
+  <A191_Ares_90_C>
+    <id>	87	</id>
+    <userString>	#usa_vehicles:A191_Ares_90_C	</userString>
+    <shortUserString>	#usa_vehicles:A191_Ares_90_C_short	</shortUserString>
+    <description>	#usa_vehicles:A191_Ares_90_C_desc	</description>
+    <longDescriptionSpecial>	#usa_vehicles:A191_Ares_90_C_long_special	</longDescriptionSpecial>
+    <price>	7400000	</price>
+    <tags>	mediumTank role_MT_support HD mediumTank3 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals autocannon	</tags>
+    <level>	11	</level>
+  </A191_Ares_90_C>
   <A182_T803>
     <id>	270	</id>
     <userString>	#usa_vehicles:A182_T803	</userString>

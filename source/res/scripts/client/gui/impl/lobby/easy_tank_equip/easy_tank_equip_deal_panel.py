@@ -91,9 +91,7 @@ class EasyTankEquipBottomContent(SubModelPresenter):
 
     def update(self):
         presets = self.__getSelectedPresets()
-        presetsAreNotEmpty = True if presets else False
-        self.getViewModel().setCanCancel(presetsAreNotEmpty)
-        self.getViewModel().setCanAccept(presetsAreNotEmpty)
+        self.getViewModel().setCanAccept(True if presets else False)
         EasyTankEquipDealPanel.updateDealPanelPrice(None, presets, self.getViewModel())
         return
 

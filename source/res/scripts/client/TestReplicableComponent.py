@@ -3,22 +3,14 @@
 import CGF
 import GenericComponents
 import GameplayDebug
-from Event import Event
-from cgf_script.managers_registrator import onAddedQuery, onProcessQuery
+from cgf_client_common.entity_dyn_components import ReplicableDynamicScriptComponent
 from cgf_demo.test_replicable import TestReplicableComponentDescriptor
+from cgf_script.managers_registrator import onAddedQuery, onProcessQuery
 from cgf_script.component_meta_class import registerReplicableComponent
-from constants import IS_EDITOR
-if IS_EDITOR:
-
-    class DynamicScriptComponent(object):
-        pass
-
-
-else:
-    from BigWorld import DynamicScriptComponent
+from Event import Event
 
 @registerReplicableComponent
-class TestReplicableComponent(DynamicScriptComponent, TestReplicableComponentDescriptor):
+class TestReplicableComponent(ReplicableDynamicScriptComponent, TestReplicableComponentDescriptor):
 
     def __init__(self):
         super(TestReplicableComponent, self).__init__()

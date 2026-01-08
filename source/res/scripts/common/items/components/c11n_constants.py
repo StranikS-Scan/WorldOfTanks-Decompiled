@@ -454,14 +454,19 @@ class AttachmentType(object):
     TURRET = 'turret'
     GUN_MANTLET = 'gunMantlet'
     GUN = 'gun'
+    GUN_STATIC = 'gunStatic'
     GUN_RIGHT = 'gunRight'
     GUN_LEFT = 'gunLeft'
-    GUN_SLOTS = (GUN, GUN_RIGHT, GUN_LEFT)
+    GUN_SLOTS = (GUN,
+     GUN_STATIC,
+     GUN_RIGHT,
+     GUN_LEFT)
     ALL = (UNKNOWN,
      UNIVERSAL,
      TURRET,
      GUN_MANTLET,
      GUN,
+     GUN_STATIC,
      GUN_RIGHT,
      GUN_LEFT)
 

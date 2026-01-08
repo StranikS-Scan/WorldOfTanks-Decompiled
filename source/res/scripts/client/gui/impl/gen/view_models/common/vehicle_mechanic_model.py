@@ -4,6 +4,7 @@ from enum import Enum
 from frameworks.wulf import ViewModel
 
 class MechanicsEnum(Enum):
+    UNKNOWN = 'unknown'
     MAGAZINE_GUN = 'magazineGun'
     AUTO_LOADER_GUN = 'autoLoaderGun'
     AUTO_LOADER_GUN_BOOST = 'autoLoaderGunBoost'
@@ -34,12 +35,22 @@ class MechanicsEnum(Enum):
     OVERHEAT_STACKS = 'overheatStacks'
     STANCE_DANCE = 'stanceDance'
     STATIONARY_RELOAD = 'stationaryReload'
+    OVERHEAT_GUN = 'overheatGun'
+    HEATING_ZONES_GUN = 'heatingZonesGun'
+    STAGED_JET_BOOSTERS = 'stagedJetBoosters'
+
+
+class MechanicsRank(Enum):
+    UNDEFINED = 'undefined'
+    SILVER = 'silver'
+    GOLD = 'gold'
 
 
 class VehicleMechanicModel(ViewModel):
     __slots__ = ()
+    MIN_SPECIAL_PRIORITY = 1
 
-    def __init__(self, properties=3, commands=0):
+    def __init__(self, properties=4, commands=0):
         super(VehicleMechanicModel, self).__init__(properties=properties, commands=commands)
 
     def getName(self):
@@ -48,20 +59,27 @@ class VehicleMechanicModel(ViewModel):
     def setName(self, value):
         self._setString(0, value.value)
 
-    def getIsSpecial(self):
-        return self._getBool(1)
+    def getPriority(self):
+        return self._getNumber(1)
 
-    def setIsSpecial(self, value):
-        self._setBool(1, value)
+    def setPriority(self, value):
+        self._setNumber(1, value)
+
+    def getRank(self):
+        return MechanicsRank(self._getString(2))
+
+    def setRank(self, value):
+        self._setString(2, value.value)
 
     def getHasVideo(self):
-        return self._getBool(2)
+        return self._getBool(3)
 
     def setHasVideo(self, value):
-        self._setBool(2, value)
+        self._setBool(3, value)
 
     def _initialize(self):
         super(VehicleMechanicModel, self)._initialize()
         self._addStringProperty('name')
-        self._addBoolProperty('isSpecial', False)
+        self._addNumberProperty('priority', 0)
+        self._addStringProperty('rank', MechanicsRank.UNDEFINED.value)
         self._addBoolProperty('hasVideo', False)

@@ -25,7 +25,6 @@ from gui.server_events.events_helpers import isC11nQuest
 from gui.shared import event_bus_handlers, events, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared import event_dispatcher
 from gui.shared.event_dispatcher import showProgressiveRewardWindow, showShop, showDailyExpPageView
-from gui.shared.events import ViewEventType
 from gui.sounds.ambients import BattleResultsEnv
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
@@ -158,7 +157,6 @@ class BattleResultsWindow(BattleResultsMeta, IGlobalListener):
         super(BattleResultsWindow, self)._populate()
         g_eventBus.addListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__onPremiumXpBonusChanged)
         g_eventBus.addListener(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, self.__onBattleResultWindowShowQuest)
-        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self.__loadViewHandler, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.addCallbacks({'account._additionalXPCache': self.__updateVO,
          'inventory.1': self.__updateVO,
          'inventory.8': self.__updateVO,
@@ -168,22 +166,22 @@ class BattleResultsWindow(BattleResultsMeta, IGlobalListener):
         self.startGlobalListening()
         if self.__battleResults.areResultsPosted(self.__arenaUniqueID):
             self.__setBattleResults()
+            g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.BATTLE_RESULTS_PROCESSED), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _dispose(self):
         g_eventBus.removeListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__onPremiumXpBonusChanged)
         g_eventBus.removeListener(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, self.__onBattleResultWindowShowQuest)
-        g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self.__loadViewHandler, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__gameSession.onPremiumTypeChanged -= self.__onPremiumStateChanged
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
         self.stopGlobalListening()
         super(BattleResultsWindow, self)._dispose()
 
-    def __loadViewHandler(self, event):
-        if event.alias == VIEW_ALIAS.BATTLE_QUEUE:
-            self.as_setIsInBattleQueueS(True)
-        elif event.alias in (VIEW_ALIAS.LOBBY_HANGAR, VIEW_ALIAS.LEGACY_LOBBY_HANGAR):
-            self.as_setIsInBattleQueueS(False)
+    def onEnqueued(self, queueType, *args):
+        self.as_setIsInBattleQueueS(True)
+
+    def onDequeued(self, queueType, *args):
+        self.as_setIsInBattleQueueS(False)
 
     @adisp_process
     def __requestClanEmblem(self, textureID, clanDBID):

@@ -193,7 +193,7 @@ class ProjectileMover(object):
             if prefabEffIndex != INVALID_EFFECT_INDEX:
                 shellType = proj['shellType']
                 caliber = proj['caliber']
-                CGF.postEvent(BigWorld.player().spaceID, game_events.SceneHitEvent(position, caliber, shellType, speed, velocityDir, prefabEffIndex, effectTypeStr, matKind))
+                CGF.postEvent(BigWorld.player().spaceID, game_events.SceneHitEvent(position, game_events.GunShellInfo(caliber, shellType), speed, velocityDir, prefabEffIndex, effectTypeStr, matKind))
             return
 
     def __killProjectile(self, shotID, position, impactVelDir, velocity, deathType, explode):

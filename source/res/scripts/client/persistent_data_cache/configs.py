@@ -3,6 +3,7 @@
 import typing
 from dict2model import models, schemas, fields
 from section2dict import parse
+from constants import IS_DEVELOPMENT
 if typing.TYPE_CHECKING:
     from ResMgr import DataSection
 PDC_SETTINGS_KEY = 'persistent_data_cache'
@@ -24,11 +25,14 @@ pdcSettingsSchema = schemas.Schema[PDCSettingsModel](fields={'enabled': fields.B
  'devEnabled': fields.Boolean(required=False, default=False),
  'useThread': fields.Boolean(required=False, default=True)}, checkUnknown=True, modelClass=PDCSettingsModel)
 
-def createPDCSettings(scriptsConfig, engineConfig):
+def createPDCSettings(scriptsConfig, engineConfig, userPreferences):
+    raw = {}
     if scriptsConfig.has_key(PDC_SETTINGS_KEY):
         raw = parse(scriptsConfig[PDC_SETTINGS_KEY])
     elif engineConfig.has_key(PDC_SETTINGS_KEY):
         raw = parse(engineConfig[PDC_SETTINGS_KEY])
-    else:
-        raw = {}
+    elif IS_DEVELOPMENT:
+        from gui.development.dev_settings import USER_PREF_KEY_DEVELOPMENT
+        if userPreferences.has_key(USER_PREF_KEY_DEVELOPMENT) and userPreferences[USER_PREF_KEY_DEVELOPMENT].has_key(PDC_SETTINGS_KEY):
+            raw = parse(userPreferences[USER_PREF_KEY_DEVELOPMENT][PDC_SETTINGS_KEY])
     return pdcSettingsSchema.deserialize(raw)

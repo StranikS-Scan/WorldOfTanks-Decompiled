@@ -2295,6 +2295,158 @@
       </mul>
     </kpi>
   </role_MT_support_pair_5_2>
+  <role_MT_support_temperatureGun_pair_1_1>
+    <id>	7001	</id>
+    <imgName>	reinforcedInteriorModules	</imgName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/engineReduceFineFactor	</name>
+        <value>	0.5	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/gun/shotDispersionFactors/whileGunDamaged	</name>
+        <value>	0.5	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/onStillRotationSpeedFactor	</name>
+        <value>	0.96	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/onMoveRotationSpeedFactor	</name>
+        <value>	0.96	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/turretRotationSpeed	</name>
+        <value>	0.96	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehPenaltyForDamagedEngine	</name>
+        <value>	0.5	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionWhileGunDamaged	</name>
+        <value>	0.5	</value>
+      </mul>
+      <mul>
+        <name>	vehicleAllGroundRotationSpeed	</name>
+        <value>	0.96	</value>
+      </mul>
+      <mul>
+        <name>	vehicleTurretOrCuttingRotationSpeed	</name>
+        <value>	0.96	</value>
+      </mul>
+    </kpi>
+  </role_MT_support_temperatureGun_pair_1_1>
+  <role_MT_support_temperatureGun_pair_1_2>
+    <id>	7002	</id>
+    <imgName>	betterFriction	</imgName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/onStillRotationSpeedFactor	</name>
+        <value>	1.04	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/onMoveRotationSpeedFactor	</name>
+        <value>	1.04	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/turretRotationSpeed	</name>
+        <value>	1.04	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/engineReduceFineFactor	</name>
+        <value>	1.5	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/gun/shotDispersionFactors/whileGunDamaged	</name>
+        <value>	1.5	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleAllGroundRotationSpeed	</name>
+        <value>	1.04	</value>
+      </mul>
+      <mul>
+        <name>	vehicleTurretOrCuttingRotationSpeed	</name>
+        <value>	1.04	</value>
+      </mul>
+      <mul>
+        <name>	vehPenaltyForDamagedEngine	</name>
+        <value>	1.5	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionWhileGunDamaged	</name>
+        <value>	1.5	</value>
+      </mul>
+    </kpi>
+  </role_MT_support_temperatureGun_pair_1_2>
+  <role_MT_support_temperatureGun_pair_4_1>
+    <id>	7003	</id>
+    <imgName>	improvedGunBreech	</imgName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/temperatureGun/coolingPerSec	</name>
+        <value>	1.05	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/gunAimingTimeFactor	</name>
+        <value>	1.05	</value>
+      </mul>
+      <mul>
+        <name>	descrAttrs/autoShoot/shotDispersionPerShot	</name>
+        <value>	1.15	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	coolingPerSec	</name>
+        <value>	1.05	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunAimSpeed	</name>
+        <value>	0.95	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionAfterShot	</name>
+        <value>	1.15	</value>
+      </mul>
+    </kpi>
+  </role_MT_support_temperatureGun_pair_4_1>
+  <role_MT_support_temperatureGun_pair_4_2>
+    <id>	7004	</id>
+    <imgName>	improvedAimingHandling	</imgName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/gunAimingTimeFactor	</name>
+        <value>	0.95	</value>
+      </mul>
+      <mul>
+        <name>	descrAttrs/autoShoot/shotDispersionPerShot	</name>
+        <value>	0.85	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/temperatureGun/coolingPerSec	</name>
+        <value>	0.95	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunAimSpeed	</name>
+        <value>	1.05	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionAfterShot	</name>
+        <value>	0.85	</value>
+      </mul>
+      <mul>
+        <name>	coolingPerSec	</name>
+        <value>	0.95	</value>
+      </mul>
+    </kpi>
+  </role_MT_support_temperatureGun_pair_4_2>
   <role_ATSPG_pair_1_1>
     <id>	3011	</id>
     <imgName>	improvedChassisDurability	</imgName>

@@ -193,24 +193,16 @@
       <module>	client.cgf_components.on_shot_components	</module>
       <module>	client.cgf_components.on_death_components	</module>
       <module>	client.cgf_components.shot_color_transmission_component	</module>
-      <module>	client.cgf_components.bunkers	</module>
-      <module>	client.cgf_components.auto_shoot_gun_components	</module>
       <module>	client.cgf_components.gun_audition_component	</module>
       <module>	client.cgf_components.rtpc_component_manager	</module>
-      <module>	client.cgf_components.twin_gun_components	</module>
-      <module>	client.cgf_components.gun_components	</module>
       <module>	client.cgf_components.on_player_in_zone_manager	</module>
-      <module>	client.cgf_components.vehicle_mechanics_components	</module>
-      <module>	client.cgf_components.power_mode_components	</module>
-      <module>	client.cgf_components.rechargeable_nitro_components	</module>
-      <module>	client.cgf_components.accuracy_stacks_manager	</module>
-      <module>	client.cgf_components.target_designator_manager	</module>
       <module>	client.cgf_components.vehicle_health_observer_manager	</module>
+      <module>	client.cgf_components.temperature_gun_rtpc_component	</module>
+      <module>	client.cgf_components.audition_component_2d	</module>
       <module>	common.cgf_components_common.state_components	</module>
       <module>	common.cgf_components_common.vehicle_components	</module>
       <module>	common.cgf_components_common.material_component	</module>
       <module>	common.cgf_components_common.managers.state_managers	</module>
-      <module>	common.cgf_components_common.bunkers	</module>
       <module>	cell.ai.cgf_ai.dynamic_event	</module>
       <module>	cell.cgf_cell.damage.shot_damage	</module>
       <module>	cell.cgf_cell.shooting_obstacle	</module>
@@ -227,18 +219,29 @@
       <module>	client.cgf_components.pm30_hangar_components	</module>
       <module>	client.cgf_components.pbs_components	</module>
       <module>	client.cgf_components.color_blind_component	</module>
-      <module>	cell.cgf_cell.bunkers	</module>
       <module>	client.HealthComponent	</module>
       <module>	client.DeathComponent	</module>
       <module>	client.SequenceNetworkSync	</module>
       <module>	client.ShotsReceiver	</module>
+      <module>	client.StagedJetBoostersController	</module>
       <module>	client.gui.pet_system.cgf_components.pet_place_component	</module>
       <module>	client.gui.pet_system.cgf_components.storage_state_component	</module>
       <module>	cell.cgf_cell.cgf_replication_hash	</module>
       <module>	client.cgf_components.armor_inspector_component	</module>
-      <module>	cell.cgf_cell.vehicle_mechanics.stationary_reload_sequence_params	</module>
       <module>	common.cgf_components_common.vehicle_mechanics.stationary_reload_sequence_params_component	</module>
       <module>	cell.cgf_cell.vehicle_health_observer_manager	</module>
+      <module>	client.cgf_components.mechanic_components.cyclic_rocket.nozzle_controller	</module>
+      <module>	client.cgf_components.mechanic_components.cyclic_rocket.staged_jet_boosters	</module>
+      <module>	client.cgf_components.mechanic_components.cyclic_rocket.accelerator_status_tracker	</module>
+      <module>	client.cgf_components.vehicle_mechanics_components	</module>
+      <module>	client.cgf_components.power_mode_components	</module>
+      <module>	client.cgf_components.rechargeable_nitro_components	</module>
+      <module>	client.cgf_components.accuracy_stacks_manager	</module>
+      <module>	client.cgf_components.target_designator_manager	</module>
+      <module>	cell.cgf_cell.vehicle_mechanics.stationary_reload_sequence_params	</module>
+      <module>	cell.cgf_cell.vehicle_mechanics.phased_mechanic_component	</module>
+      <module>	cell.cgf_cell.vehicle_mechanics.staged_boosters_stats_collector	</module>
+      <module>	cell.cgf_cell.vehicle_mechanics.custom_rotation_point	</module>
     </script>
     <testScript>
       <module>	client.cgf_demo_client.test_client_component	</module>
@@ -311,6 +314,8 @@
       <path>	content/CGFPrefabs/Vehicle/mechanic_effects/battle_fury.prefab	</path>
       <path>	content/CGFPrefabs/Vehicle/mechanic_effects/support_weapon_vfx.prefab	</path>
       <path>	content/CGFPrefabs/Vehicle/mechanic_effects/stationary_reload_vfx.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/mechanic_effects/overheat_gun_vfx.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/mechanic_effects/heatzones_gun_vfx.prefab	</path>
       <path>	content/CGFPrefabs/Vehicle/mechanic_effects/uk/GB152_AT_FV230_Breaker_power_mode_vfx.prefab	</path>
       <path>	content/CGFPrefabs/Vehicle/mechanic_effects/france/F135_stationary_reload.prefab	</path>
       <path>	content/CGFPrefabs/Vehicle/mechanic_effects/sweden/S36_Strv_107_12_pillbox_mode_vfx.prefab	</path>
@@ -320,6 +325,9 @@
       <path>	content/CGFPrefabs/Vehicle/mechanic_effects/germany/G189_overheat_stacks.prefab	</path>
       <path>	content/CGFPrefabs/Vehicle/mechanic_effects/poland/Pl37_CS_67_Szakal_stance_dance.prefab	</path>
       <path>	content/CGFPrefabs/Vehicle/mechanic_effects/ussr/R230_charge_shot.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/mechanic_effects/china/Ch70_PTZ_78_staged_boosters/Ch70_PTZ_78_staged_boosters.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/mechanic_effects/china/Ch70_PTZ_78_staged_boosters/Ch70_PTZ_78_staged_boosters_client_left.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/mechanic_effects/china/Ch70_PTZ_78_staged_boosters/Ch70_PTZ_78_staged_boosters_client_right.prefab	</path>
       <path>	content/CGFPrefabs/Vehicle/guns/czech/gun_30_mm_protiletadlovy_dvojkanon_vz_53.prefab	</path>
       <path>	content/CGFPrefabs/Vehicle/guns/czech/gun_37_mm_automaticky_dvojkanon.prefab	</path>
       <path>	content/CGFPrefabs/Vehicle/guns/czech/gun_50_mm_protiletadlovy_dvojkanon_ZK_500.prefab	</path>
@@ -335,15 +343,40 @@
       <path>	content/CGFPrefabs/Vehicle/guns/uk/gun_02_Twin_105_mm_Gun_T8_MBC.prefab	</path>
       <path>	content/CGFPrefabs/Vehicle/guns/uk/gun_03_Twin_32pdr_Gun_MBC_Mk2.prefab	</path>
       <path>	content/CGFPrefabs/Vehicle/guns/uk/gun_04_Twin_105_mm_Gun_T8_MBC.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/uk/gun_Twin_110_mm_Gun_MBC.prefab	</path>
       <path>	content/CGFPrefabs/Vehicle/guns/uk/gun_Twin_20pdr_Gun_MBC.prefab	</path>
       <path>	content/CGFPrefabs/Vehicle/guns/uk/gun_Twin_120_mm_Gun_L1_MBC.prefab	</path>
       <path>	content/CGFPrefabs/Vehicle/guns/uk/gun_Twin_4_5_in_Gun_MBC.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/usa/gun_90mm_Ares_2000.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/usa/gun_75mm_Ares_ADMAG.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/usa/gun_75mm_Ares_Super.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/usa/gun_85mm_Ares_HVAC.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/usa/gun_85mm_Ares_MC_AAAC.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/usa/gun_90mm_Ares_LC_AAAC.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/japan/gun_137_2mm_TK_DK.prefab	</path>
       <path>	content/CGFPrefabs/Vehicle/guns/germany/gun_8_cm_8H62_2.prefab	</path>
       <path>	particles/Tank/customization/Cz17_Vz_55_NY2025_3Dst/Cz17_Vz_55_NY2025_3Dst.prefab	</path>
       <path>	particles/Tank/customization/Cz17_Vz_55_NY2025_3Dst/Cz17_Vz_55_NY2025_3Dst_Gun_01.prefab	</path>
       <path>	particles/Tank/customization/Cz17_Vz_55_NY2025_3Dst/Cz17_Vz_55_NY2025_3Dst_Gun_02.prefab	</path>
       <path>	content/CGFPrefabs/Frontline/fullDestruction.prefab	</path>
       <path>	content/HangarPrefabs/PetSystem/PetSystem_dog.prefab	</path>
+      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/czech/gun_30_mm_protiletadlovy_dvojkanon_vz_53.prefab	</path>
+      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/czech/gun_37_mm_automaticky_dvojkanon.prefab	</path>
+      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/czech/gun_50_mm_protiletadlovy_dvojkanon_ZK_500S.prefab	</path>
+      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/czech/gun_57_mm_automaticky_dvojkanon_535T.prefab	</path>
+      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/germany/gun_8_cm_8H62_2.prefab	</path>
+      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/japan/gun_137_2mm_TK_DK.prefab	</path>
+      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/uk/gun_01_Twin_20pdr_Gun_MBC_MkII.prefab	</path>
+      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/uk/gun_02_Twin_32pdr_Gun_MBC.prefab	</path>
+      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/uk/gun_03_Twin_20pdr_Gun_MBC_MkII.prefab	</path>
+      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/uk/gun_04_Twin_32pdr_Gun_MBC.prefab	</path>
+      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/uk/gunTwin_105_mm_Gun_L7_MBC.prefab	</path>
+      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/uk/gunTwin_120_mm_Gun_L1_MBC.prefab	</path>
+      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/uk/gunTwin_4_5_in_Gun_MBC.prefab	</path>
+      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/usa/gun_75mm_Ares_ADMAG.prefab	</path>
+      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/usa/gun_75mm_Ares_MC_AAAC.prefab	</path>
+      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/usa/gun_90mm_Ares_2000.prefab	</path>
+      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/usa/gun_90mm_Ares_LC_AAAC.prefab	</path>
     </prefabs>
   </cgf>
 </resources.xml>

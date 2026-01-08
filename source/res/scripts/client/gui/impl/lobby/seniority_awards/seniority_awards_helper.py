@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/seniority_awards/seniority_awards_helper.py
+from __future__ import absolute_import
 import logging
 import BigWorld
 from account_helpers.settings_core.settings_constants import SeniorityAwardsStorageKeys

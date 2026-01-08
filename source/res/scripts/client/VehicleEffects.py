@@ -8,11 +8,12 @@ from Math import Vector3, Vector4, Matrix
 from constants import VEHICLE_HIT_EFFECT
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_DEBUG_DEV
 from items import vehicles
-from helpers_common import decodeSegment, getComponentIndexFromEncodedSegment
+from helpers_common import decodeSegment, getComponentIndexFromEncodedSegment, HitParamsEncoder
 from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames
 if typing.TYPE_CHECKING:
     from Entity import PyFixedDictDataInstance
     from BigWorld import CollisionComponent
+    from VehicleStickers import DamageStickerData
     from typing import Optional, Union, TypeVar, List, Tuple
     TYPE_VEH_HIT_POINT = TypeVar('TYPE_VEH_HIT_POINT', bound=PyFixedDictDataInstance)
 DUMMY_NODE_PREFIX = 'DM'
@@ -20,14 +21,7 @@ MAX_FALLBACK_CHECK_DISTANCE = 10000.0
 HitEffectMapping = namedtuple('HitEffectMapping', ('componentName', 'hitTester'))
 
 class DamageFromShotDecoder(object):
-    ShotPoint = namedtuple('ShotPoint', ('componentName', 'componentIdx', 'matrix', 'hitEffectCode', 'hitEffectGroup', 'isDynCollision'))
-    _HIT_EFFECT_CODE_TO_EFFECT_GROUP = {VEHICLE_HIT_EFFECT.INTERMEDIATE_RICOCHET: 'armorBasicRicochet',
-     VEHICLE_HIT_EFFECT.FINAL_RICOCHET: 'armorRicochet',
-     VEHICLE_HIT_EFFECT.ARMOR_NOT_PIERCED: 'armorResisted',
-     VEHICLE_HIT_EFFECT.ARMOR_PIERCED_NO_DAMAGE: 'armorResisted',
-     VEHICLE_HIT_EFFECT.ARMOR_PIERCED: 'armorHit',
-     VEHICLE_HIT_EFFECT.CRITICAL_HIT: 'armorCriticalHit',
-     VEHICLE_HIT_EFFECT.ARMOR_PIERCED_DEVICE_DAMAGED: 'armorCriticalHit'}
+    ShotPoint = namedtuple('ShotPoint', ('componentName', 'componentIdx', 'matrix', 'hitEffectCode', 'hitEffectGroup', 'isDynCollision', 'hitType', 'shellType', 'caliber', 'normal'))
     _PRIMARY_COLLISION_INDEX = 0
     _ENCODED_SEGMENT_BITS = 64
 
@@ -52,54 +46,67 @@ class DamageFromShotDecoder(object):
         return code >> cls._ENCODED_SEGMENT_BITS
 
     @classmethod
+    def collideHitPoint(cls, compIdx, startPoint, endPoint, collisionComponent):
+        distance, pos, normal, _ = collisionComponent.collideLocal(compIdx, startPoint, endPoint)
+        if distance < 0.0:
+            bbox = collisionComponent.getBoundingBox(compIdx)
+            width, height, depth = (bbox[1] - bbox[0]) / 256.0
+            directions = [Vector3(0.0, -height, 0.0),
+             Vector3(0.0, height, 0.0),
+             Vector3(-width, 0.0, 0.0),
+             Vector3(width, 0.0, 0.0),
+             Vector3(0.0, 0.0, -depth),
+             Vector3(0.0, 0.0, depth)]
+            for direction in directions:
+                distance, pos, normal, _ = collisionComponent.collideLocal(compIdx, startPoint + direction, endPoint + direction)
+                if distance >= 0.0:
+                    break
+
+        if distance < 0.0:
+            distance, pos, normal, _ = collisionComponent.collideLocalPoint(compIdx, startPoint, MAX_FALLBACK_CHECK_DISTANCE)
+            if distance > 0.0:
+                hitRay = endPoint - startPoint
+                endPoint = pos
+                startPoint = endPoint - hitRay
+        if distance < 0.0:
+            LOG_DEBUG_DEV('No hit collision found')
+            return
+        else:
+            minDist = distance
+            hitDir = endPoint - startPoint
+            hitDir.normalise()
+            hitPoint = startPoint + hitDir * minDist
+            isDynCollision = compIdx > collisionComponent.maxStaticPartIndex
+            if isDynCollision:
+                parentCompIdx = collisionComponent.getParentPartIndex(compIdx)
+                if parentCompIdx is not None:
+                    childTransform = collisionComponent.getPartTransform(compIdx)
+                    invParentTransform = collisionComponent.getPartTransform(parentCompIdx)
+                    invParentTransform.invertOrthonormal()
+                    hitPoint = invParentTransform.applyPoint(childTransform.applyPoint(hitPoint))
+                    hitDir = invParentTransform.applyVector(childTransform.applyVector(hitDir))
+            return (hitPoint, hitDir, normal)
+
+    @classmethod
     def parseHitPoints(cls, hitPoints, collisionComponent):
         resultPoints = []
         for hitPoint in hitPoints:
             parsedHitPoint = DamageFromShotDecoder.parseHitPoint(hitPoint, collisionComponent)
             if parsedHitPoint is None:
                 continue
-            compIdx, hitEffectCode, startPoint, endPoint = parsedHitPoint
+            compIdx, hitEffectCode, startPoint, endPoint, hitType, shellType, caliber = parsedHitPoint
             if startPoint == endPoint:
                 continue
-            hitTestRes = collisionComponent.collideLocal(compIdx, startPoint, endPoint)
-            bbox = collisionComponent.getBoundingBox(compIdx)
-            if not hitTestRes or hitTestRes < 0.0:
-                width, height, depth = (bbox[1] - bbox[0]) / 256.0
-                directions = [Vector3(0.0, -height, 0.0),
-                 Vector3(0.0, height, 0.0),
-                 Vector3(-width, 0.0, 0.0),
-                 Vector3(width, 0.0, 0.0),
-                 Vector3(0.0, 0.0, -depth),
-                 Vector3(0.0, 0.0, depth)]
-                for direction in directions:
-                    hitTestRes = collisionComponent.collideLocal(compIdx, startPoint + direction, endPoint + direction)
-                    if hitTestRes >= 0.0:
-                        break
-
-            if hitTestRes is None or hitTestRes < 0.0:
-                newPoint = collisionComponent.collideLocalPoint(compIdx, startPoint, MAX_FALLBACK_CHECK_DISTANCE)
-                if newPoint.length > 0.0:
-                    hitRay = endPoint - startPoint
-                    hitTestRes = hitRay.length
-                    endPoint = newPoint
-                    startPoint = endPoint - hitRay
-            if hitTestRes is None or hitTestRes < 0.0:
+            collisionResult = DamageFromShotDecoder.collideHitPoint(compIdx, startPoint, endPoint, collisionComponent)
+            if collisionResult is None:
                 continue
-            minDist = hitTestRes
-            hitDir = endPoint - startPoint
-            hitDir.normalise()
-            hitPoint = startPoint + hitDir * minDist
+            hitPoint, hitDir, normal = collisionResult
             componentName = cls.getPartName(compIdx, collisionComponent)
             isDynCollision = compIdx > collisionComponent.maxStaticPartIndex
             if isDynCollision:
                 parentCompIdx = collisionComponent.getParentPartIndex(compIdx)
                 if parentCompIdx is not None:
                     componentName = cls.getPartName(parentCompIdx, collisionComponent)
-                    childTransform = collisionComponent.getPartTransform(compIdx)
-                    invParentTransform = collisionComponent.getPartTransform(parentCompIdx)
-                    invParentTransform.invertOrthonormal()
-                    hitPoint = invParentTransform.applyPoint(childTransform.applyPoint(hitPoint))
-                    hitDir = invParentTransform.applyVector(childTransform.applyVector(hitDir))
             if not componentName:
                 componentName = TankPartNames.CHASSIS
             rot = Matrix()
@@ -107,8 +114,8 @@ class DamageFromShotDecoder(object):
             matrix = Matrix()
             matrix.setTranslate(hitPoint)
             matrix.preMultiply(rot)
-            effectGroup = cls._HIT_EFFECT_CODE_TO_EFFECT_GROUP[hitEffectCode]
-            resultPoints.append(DamageFromShotDecoder.ShotPoint(componentName, compIdx, matrix, hitEffectCode, effectGroup, isDynCollision))
+            effectGroup = VEHICLE_HIT_EFFECT.getEffectGroup(hitEffectCode)
+            resultPoints.append(DamageFromShotDecoder.ShotPoint(componentName, compIdx, matrix, hitEffectCode, effectGroup, isDynCollision, hitType, shellType, caliber, normal))
 
         return resultPoints
 
@@ -116,6 +123,7 @@ class DamageFromShotDecoder(object):
     def parseHitPoint(cls, hitPoint, collisionComponent):
         networkID = hitPoint['networkID']
         segment = hitPoint['segment']
+        params = hitPoint['params']
         if networkID == cgf_network.C_INVALID_NETWORK_OBJECT_ID:
             compIndex = cls.convertComponentIndex(getComponentIndexFromEncodedSegment(segment), collisionComponent)
         else:
@@ -127,10 +135,14 @@ class DamageFromShotDecoder(object):
             return
         else:
             _, data, start, end = decodeSegment(segment, collisionComponent.getBoundingBox(compIndex))
+            hitType, shellType, caliber = HitParamsEncoder.decode(params)
             return (compIndex,
              data,
              start,
-             end)
+             end,
+             hitType,
+             shellType,
+             caliber)
 
     @classmethod
     def getPartIndexByNetworkID(cls, spaceID, networkID):
@@ -144,6 +156,21 @@ class DamageFromShotDecoder(object):
                 return linker.collisionPartIndexes[cls._PRIMARY_COLLISION_INDEX]
             LOG_DEBUG_DEV("[DamageFromShotDecoder] Can't find collision for networkID {}".format(networkID))
             return None
+
+    @classmethod
+    def parseDamageStickerHitPoint(cls, hitPoint, collisions, segLength=None):
+        from VehicleStickers import damageStickerData, parametrizedDamageStickerData, resizeSegment
+        parsedHitPoint = DamageFromShotDecoder.parseHitPoint(hitPoint, collisions)
+        if parsedHitPoint is None:
+            return
+        else:
+            componentIdx, stickerID, segStart, segEnd, hitType, shellType, caliber = parsedHitPoint
+            segStart, segEnd = resizeSegment(segStart, segEnd, segLength)
+            if hitPoint['params'] != HitParamsEncoder.INVALID_HIT_PARAMS:
+                data = parametrizedDamageStickerData(componentIdx, segStart, segEnd, caliber, hitType, shellType)
+            else:
+                data = damageStickerData(componentIdx, segStart, segEnd)
+            return (stickerID, data)
 
 
 class RepaintParams(object):

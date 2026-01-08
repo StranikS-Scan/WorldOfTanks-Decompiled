@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/debug_utils.py
+from __future__ import absolute_import, print_function
 import sys
 import re
 import inspect
@@ -330,26 +331,26 @@ def disabled_if(checker, msg=''):
 def dump_garbage(source=False):
     import inspect
     import gc
-    print '\nCollecting GARBAGE:'
+    print('\nCollecting GARBAGE:')
     gc.collect()
-    print '\nCollecting GARBAGE:'
+    print('\nCollecting GARBAGE:')
     gc.collect()
-    print '\nGARBAGE OBJECTS:'
+    print('\nGARBAGE OBJECTS:')
     for x in gc.garbage:
         try:
             s = str(x)
             if len(s) > 80:
                 s = '%s...' % s[:80]
-            print '::', s
-            print '        type:', type(x)
-            print '   referrers:', len(gc.get_referrers(x))
-            print '    is class:', inspect.isclass(type(x))
-            print '      module:', inspect.getmodule(x)
+            print('::', s)
+            print('        type:', type(x))
+            print('   referrers:', len(gc.get_referrers(x)))
+            print('    is class:', inspect.isclass(type(x)))
+            print('      module:', inspect.getmodule(x))
             if source:
                 lines, line_num = inspect.getsourcelines(type(x))
-                print '    line num:', line_num
+                print('    line num:', line_num)
                 for l in lines:
-                    print '        line:', l.rstrip('\n')
+                    print('        line:', l.rstrip('\n'))
 
         except:
             pass

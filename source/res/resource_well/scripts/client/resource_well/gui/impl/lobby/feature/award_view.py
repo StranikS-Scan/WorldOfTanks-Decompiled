@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: resource_well/scripts/client/resource_well/gui/impl/lobby/feature/award_view.py
+from __future__ import absolute_import
 from frameworks.wulf import ViewSettings, WindowFlags
 from gui.impl import backport
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
@@ -11,7 +12,7 @@ from helpers import dependency
 from resource_well.gui.impl.gen.view_models.views.lobby.award_view_model import AwardViewModel
 from resource_well.gui.impl.lobby.feature.sounds import RESOURCE_WELL_SOUND_SPACE
 from resource_well.gui.impl.lobby.feature.tooltips.serial_number_tooltip import SerialNumberTooltip
-from resource_well.gui.shared.event_dispatcher import showResourceWellProgressionWindow
+from resource_well.gui.shared.event_dispatcher import showMainWindow
 from skeletons.gui.resource_well import IResourceWellController
 
 class AwardView(ViewImpl):
@@ -19,7 +20,7 @@ class AwardView(ViewImpl):
     __resourceWell = dependency.descriptor(IResourceWellController)
 
     def __init__(self, rewardID, *args, **kwargs):
-        settings = ViewSettings(R.views.resource_well.lobby.feature.AwardView(), model=AwardViewModel(), args=args, kwargs=kwargs)
+        settings = ViewSettings(R.views.resource_well.mono.lobby.award_view(), model=AwardViewModel(), args=args, kwargs=kwargs)
         super(AwardView, self).__init__(settings)
         self.__vehicle = self.__resourceWell.getRewardVehicle(rewardID)
         self.__rewardConfig = self.__resourceWell.config.getRewardConfig(rewardID)
@@ -29,7 +30,7 @@ class AwardView(ViewImpl):
         return super(AwardView, self).getViewModel()
 
     def createToolTipContent(self, event, contentID):
-        return SerialNumberTooltip() if contentID == R.views.resource_well.lobby.feature.tooltips.SerialNumberTooltip() else super(AwardView, self).createToolTipContent(event, contentID)
+        return SerialNumberTooltip() if contentID == R.views.resource_well.mono.lobby.tooltips.serial_number_tooltip() else super(AwardView, self).createToolTipContent(event, contentID)
 
     def _onLoading(self, serialNumber, *args, **kwargs):
         super(AwardView, self)._onLoading(*args, **kwargs)
@@ -52,7 +53,7 @@ class AwardView(ViewImpl):
     def __close(self):
         self.destroyWindow()
         if self.__resourceWell.isActive():
-            showResourceWellProgressionWindow()
+            showMainWindow()
         else:
             showHangar()
 

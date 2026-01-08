@@ -4,7 +4,7 @@ import typing
 import enum
 import logging
 import Math
-from cgf_modules.variable_components import VariableStorageComponent
+from cgf_modules.variable_components import VariableStorageComponent, modifyVariable
 from constants import VEHICLE_CLASSES, VEHICLE_CLASS_INDICES
 from vehicle_systems.tankStructure import TankPartIndexes
 if typing.TYPE_CHECKING:
@@ -13,6 +13,7 @@ if typing.TYPE_CHECKING:
     from common_tank_appearance import CommonTankAppearance
     from gui.hangar_vehicle_appearance import HangarVehicleAppearance
     from items.vehicles import VehicleDescriptor
+    from items.vehicle_items import Gun, Shell
     from cgf_modules.variable_components import VariableType
     TAppearance = typing.Union[HangarVehicleAppearance, CommonTankAppearance, None]
 _logger = logging.getLogger(__name__)
@@ -26,6 +27,7 @@ class VehicleGunVars(enum.Enum):
     MUZZLE_BRAKE = 'vehicle/gun/muzzleBrake'
     GUN_LENGTH = 'vehicle/gun/gunLength'
     GUN_CALIBER = 'vehicle/gun/caliber'
+    TIME_BETWEEN_SHOTS = 'vehicle/gun/timeBetweenShots'
 
 
 def createForRoot(vehicle):
@@ -34,8 +36,8 @@ def createForRoot(vehicle):
     vehDescr = vehicle.typeDescriptor
     vehType = set(VEHICLE_CLASSES).intersection(vehDescr.type.tags).pop()
     vehTypeIdx = VEHICLE_CLASS_INDICES[vehType]
-    varStorage.setVarVal(VehicleRootVars.TYPE.value, vehTypeIdx)
-    varStorage.setVarVal(VehicleRootVars.MAX_HEALTH.value, vehicle.maxHealth)
+    modifyVariable(vehicle.entityGameObject, varStorage, VehicleRootVars.TYPE.value, vehTypeIdx)
+    modifyVariable(vehicle.entityGameObject, varStorage, VehicleRootVars.MAX_HEALTH.value, vehicle.maxHealth)
 
 
 def createForGun(appearance, gunGO):
@@ -45,9 +47,11 @@ def createForGun(appearance, gunGO):
     gunDescr = appearance.typeDescriptor.gun
     gunBB = Math.Matrix(appearance.compoundModel.getBoundsForPart(TankPartIndexes.GUN))
     gunLength = gunBB.applyVector(Math.Vector3(0.0, 0.0, 1.0)).length
-    storageComponent.setVarVal(VehicleGunVars.MUZZLE_BRAKE.value, gunDescr.muzzleBrake.value)
-    storageComponent.setVarVal(VehicleGunVars.GUN_LENGTH.value, gunLength)
-    storageComponent.setVarVal(VehicleGunVars.GUN_CALIBER.value, shellDescr.caliber)
+    modifyVariable(gunGO, storageComponent, VehicleGunVars.MUZZLE_BRAKE.value, gunDescr.muzzleBrake.value)
+    modifyVariable(gunGO, storageComponent, VehicleGunVars.GUN_LENGTH.value, gunLength)
+    modifyVariable(gunGO, storageComponent, VehicleGunVars.GUN_CALIBER.value, shellDescr.caliber)
+    timeBetweenShots = gunDescr.clip[1] if 'clip' in gunDescr.tags else gunDescr.reloadTime
+    modifyVariable(gunGO, storageComponent, VehicleGunVars.TIME_BETWEEN_SHOTS.value, timeBetweenShots)
 
 
 def update(go, varName, value):
@@ -55,4 +59,4 @@ def update(go, varName, value):
     if not varStorage:
         _logger.error("Can't find variable storage for: %s", go.name)
         return
-    varStorage.setVarVal(varName, value)
+    modifyVariable(go, varStorage, varName, value)

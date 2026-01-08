@@ -18,6 +18,7 @@ from gui.impl.lobby.stronghold_event.stronghold_event_banner import StrongholdEv
 from gui.impl.lobby.stronghold_event.stronghold_event_helpers import isStrongholdEventBannerAvailable
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_container import EventBannersContainer
 from gui.impl.lobby.user_missions.hangar_widget.services import IEventsService
+from gui.integrated_auction.auction_event_banner import IntegratedAuctionEventBanner, isAuctionEventBannerAvailable
 from gui.shared.system_factory import registerBannerEntryPointValidator, collectBannerEntryPointValidator
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 from helpers import dependency
@@ -30,11 +31,13 @@ from gui.impl.lobby.user_missions.hangar_widget.services.service_events import S
 _HANGAR_ENTRY_POINTS = 'hangarEntryPoints'
 _SECONDS_BEFORE_UPDATE = 2
 EventBannersContainer().registerEventBanner(StrongholdEventBanner)
+EventBannersContainer().registerEventBanner(IntegratedAuctionEventBanner)
 registerBannerEntryPointValidator(HANGAR_ALIASES.CRAFT_MACHINE_ENTRY_POINT, getCraftMachineEntryPointIsActive)
 registerBannerEntryPointValidator(RANKEDBATTLES_ALIASES.ENTRY_POINT, isRankedEntryPointAvailable)
 registerBannerEntryPointValidator(HANGAR_ALIASES.MAPBOX_ENTRY_POINT, isMapboxEntryPointAvailable)
 registerBannerEntryPointValidator(HANGAR_ALIASES.MARATHON_ENTRY_POINT, isMarathonEntryPointAvailable)
 registerBannerEntryPointValidator(StrongholdEventBanner.NAME, isStrongholdEventBannerAvailable)
+registerBannerEntryPointValidator(IntegratedAuctionEventBanner.NAME, isAuctionEventBannerAvailable)
 _logger = logging.getLogger(__name__)
 
 class _EntryPointData(object):
@@ -119,6 +122,9 @@ class EventsService(IEventsService, Notifiable, ServiceEvents):
     def getEntries(self):
         return self.__visibleEntries
 
+    def getEntryData(self, id):
+        return self.__entries.get(id)
+
     def updateEntries(self):
         self.__updateEntries()
 
@@ -148,7 +154,7 @@ class EventsService(IEventsService, Notifiable, ServiceEvents):
         self.stopServiceEvents()
 
     def _isQueueEnabled(self):
-        enabledQueues = (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.WINBACK)
+        enabledQueues = (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.WINBACK, QUEUE_TYPE.COMP7)
         return any((self.__isQueueSelected(queueType) for queueType in enabledQueues))
 
     def __isQueueSelected(self, queueType):

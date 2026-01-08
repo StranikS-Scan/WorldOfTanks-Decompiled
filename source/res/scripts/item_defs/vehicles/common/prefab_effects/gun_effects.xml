@@ -1,5 +1,10 @@
 <gun_effects.xml>
-  <shot_large_custom_pixie>
-    <prefab>	content/EffectPrefabs/simple_shot.prefab	</prefab>
-  </shot_large_custom_pixie>
+  <shot_custom>
+    <explosion>
+      <prefab>	content/EffectPrefabs/simple_shot.prefab	</prefab>
+    </explosion>
+    <groundwave>
+      <prefab>	content/EffectPrefabs/groundwave.prefab	</prefab>
+    </groundwave>
+  </shot_custom>
 </gun_effects.xml>

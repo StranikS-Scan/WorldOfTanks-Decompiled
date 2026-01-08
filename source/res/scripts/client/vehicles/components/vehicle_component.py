@@ -1,27 +1,32 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicles/components/vehicle_component.py
+from __future__ import absolute_import
 import logging
 import typing
 import BigWorld
-import CGF
+from cgf_client_common.entity_dyn_components import ReplicableDynamicScriptComponent
+from events_containers.common.containers import ContainersListener
+from events_containers.components.life_cycle import createComponentLifeCycleEvents, ILifeCycleComponent
+from events_handler import eventHandler, EventsQuery
 from PlayerEvents import g_playerEvents
-from vehicles.components.component_life_cycle import createComponentLifeCycleEvents, ILifeCycleComponent
+from shared_utils import skipInEditor
 from vehicles.components.component_wrappers import ifPlayerVehicle
-from vehicle_systems.model_assembler import loadAppearancePrefab
+from vehicles.entities.vehicle_events import IVehicleEventsListenerLogic
 if typing.TYPE_CHECKING:
     from Avatar import PlayerAvatar
-    from items.vehicles import VehicleDescriptor
+    from events_containers.components.life_cycle import IComponentLifeCycleEvents
     from Vehicle import Vehicle
-    from vehicles.components.component_life_cycle.life_cycle_interfaces import IComponentLifeCycleEvents
 _logger = logging.getLogger(__name__)
 
-class VehicleDynamicComponent(BigWorld.DynamicScriptComponent, ILifeCycleComponent):
+class VehicleDynamicComponent(ReplicableDynamicScriptComponent, ILifeCycleComponent, EventsQuery, ContainersListener, IVehicleEventsListenerLogic):
+    EVENTS_PROPERTY_NAME = 'events'
 
+    @skipInEditor
     def __init__(self):
         super(VehicleDynamicComponent, self).__init__()
+        self.__appearanceInited = self.__componentDestroyed = False
         self.__lifeCycleEvents = createComponentLifeCycleEvents(self)
-        self.__componentDestroyed = False
-        self.__appearanceInited = False
+        self.lateSubscribeTo(self._getEvents(self.entity))
 
     @property
     def lifeCycleEvents(self):
@@ -42,7 +47,7 @@ class VehicleDynamicComponent(BigWorld.DynamicScriptComponent, ILifeCycleCompone
     def onDestroy(self):
         if self.__componentDestroyed:
             return
-        self.entity.onAppearanceReady -= self.__onAppearanceReady
+        self._unsubscribeFromEvents(self._getEvents(self.entity))
         self.__appearanceInited = False
         g_playerEvents.onAvatarReady -= self.__onAvatarReady
         self.__componentDestroyed = True
@@ -51,10 +56,19 @@ class VehicleDynamicComponent(BigWorld.DynamicScriptComponent, ILifeCycleCompone
     def onLeaveWorld(self):
         self.onDestroy()
 
-    def onSiegeStateUpdated(self, typeDescriptor):
+    @eventHandler
+    def onAppearanceReady(self):
+        if self.__appearanceInited:
+            return
+        self._onAppearanceReady()
+        self._onComponentAppearanceUpdate()
+        self.__appearanceInited = True
+
+    @eventHandler
+    def onSiegeStateUpdated(self, newState, timeToNextMode):
         if not self.__appearanceInited:
             return
-        self._collectComponentParams(typeDescriptor)
+        self._collectComponentParams(self.entity.typeDescriptor)
         self.__lifeCycleEvents.processParamsCollected()
         self._updateComponentAvatar()
 
@@ -66,26 +80,25 @@ class VehicleDynamicComponent(BigWorld.DynamicScriptComponent, ILifeCycleCompone
         self._collectComponentParams(self.entity.typeDescriptor)
         self.__lifeCycleEvents.processParamsCollected()
 
-    def _onComponentAvatarUpdate(self, player):
+    def _onAvatarReady(self, player):
         pass
 
-    def _onComponentAppearanceUpdate(self):
+    def _onComponentAppearanceUpdate(self, **kwargs):
+        pass
+
+    def _onComponentAvatarUpdate(self, player):
         pass
 
     def _collectComponentParams(self, typeDescriptor):
         pass
 
     @ifPlayerVehicle
-    def _onAvatarReady(self, player=None):
-        pass
-
-    @ifPlayerVehicle
     def _updateComponentAvatar(self, player=None):
         self._onComponentAvatarUpdate(player)
 
-    def _updateComponentAppearance(self):
+    def _updateComponentAppearance(self, **kwargs):
         if self.__appearanceInited and self.__isAppearanceReady():
-            self._onComponentAppearanceUpdate()
+            self._onComponentAppearanceUpdate(**kwargs)
 
     def __initComponentAvatar(self):
         if self.__isAvatarReady():
@@ -95,9 +108,7 @@ class VehicleDynamicComponent(BigWorld.DynamicScriptComponent, ILifeCycleCompone
 
     def __initComponentAppearance(self):
         if self.__isAppearanceReady():
-            self.__onAppearanceReady()
-        else:
-            self.entity.onAppearanceReady += self.__onAppearanceReady
+            self.onAppearanceReady()
 
     def __isAvatarReady(self, player=None):
         player = player or BigWorld.player()
@@ -114,84 +125,7 @@ class VehicleDynamicComponent(BigWorld.DynamicScriptComponent, ILifeCycleCompone
             appearance = self.entity.appearance
             return appearance is not None and appearance.isConstructed and not appearance.isDestroyed
 
-    def __onAvatarReady(self):
-        self._onAvatarReady()
-        self._updateComponentAvatar()
-
-    def __onAppearanceReady(self):
-        if self.__appearanceInited:
-            return
-        self._onAppearanceReady()
-        self._onComponentAppearanceUpdate()
-        self.__appearanceInited = True
-
-
-class VehiclePrefabDynamicComponent(VehicleDynamicComponent):
-    _DEFAULT_OUTFIT = 'default'
-
-    def __init__(self):
-        super(VehiclePrefabDynamicComponent, self).__init__()
-        self.__componentPrefab = ''
-        self._prefabRoot = None
-        return
-
-    def isPrefabRoot(self, gameObject):
-        return self._prefabRoot is not None and self._prefabRoot.id == gameObject.id
-
-    def onDestroy(self):
-        self.__componentPrefab = ''
-        if self._prefabRoot is not None:
-            _logger.debug('[VehiclePrefabDynamicComponent] removeGameObject (onDestroy) for %s', self.entity.id)
-            CGF.removeGameObject(self._prefabRoot)
-            self._prefabRoot = None
-        super(VehiclePrefabDynamicComponent, self).onDestroy()
-        return
-
-    def _getComponentPrefab(self, typeDescriptor, skin):
-        raise NotImplementedError
-
-    def _onAppearanceReady(self):
-        super(VehiclePrefabDynamicComponent, self)._onAppearanceReady()
-        loadAppearancePrefab(self.__componentPrefab, self.entity.appearance, self.__onComponentPrefabLoaded)
-        _logger.debug('[VehiclePrefabDynamicComponent] loadAppearancePrefab for %s', self.entity.id)
-
-    def _collectComponentParams(self, typeDescriptor):
-        super(VehiclePrefabDynamicComponent, self)._collectComponentParams(typeDescriptor)
-        skin = self.entity.appearance.modelsSetParams.skin or self._DEFAULT_OUTFIT
-        self.__componentPrefab = self._getComponentPrefab(typeDescriptor, skin)
-
-    def __onComponentPrefabLoaded(self, root):
-        if not root.isValid:
-            _logger.error('[VehiclePrefabDynamicComponent] failed to load prefab: %s', self.__componentPrefab)
-            return
-        if self.isComponentDestroyed():
-            _logger.debug('[VehiclePrefabDynamicComponent] removeGameObject (onLoaded) for %s', self.entity.id)
-            CGF.removeGameObject(root)
-            return
-        self._prefabRoot = root
-
-
-class VehiclePrefabSetsDynamicComponent(VehiclePrefabDynamicComponent):
-    _PREFABS_SET_KEY = ''
-
-    def _getComponentPrefab(self, typeDescriptor, skin):
-        prefabs = self._getComponentPrefabsSets(typeDescriptor)
-        skin = skin if skin in prefabs else self._DEFAULT_OUTFIT
-        return prefabs[skin][self._PREFABS_SET_KEY][0]
-
-    def _getComponentPrefabsSets(self, typeDescriptor):
-        raise NotImplementedError
-
-
-class VehicleMechanicPrefabDynamicComponent(VehiclePrefabSetsDynamicComponent):
-    _PREFABS_SET_KEY = 'mechanicEffects'
-
-    def _getComponentPrefabsSets(self, typeDescriptor):
-        return typeDescriptor.type.prefabs
-
-
-class VehicleGunPrefabDynamicComponent(VehiclePrefabSetsDynamicComponent):
-    _PREFABS_SET_KEY = 'main'
-
-    def _getComponentPrefabsSets(self, typeDescriptor):
-        return typeDescriptor.gun.prefabs
+    @ifPlayerVehicle
+    def __onAvatarReady(self, player=None):
+        self._onAvatarReady(player)
+        self._onComponentAvatarUpdate(player)

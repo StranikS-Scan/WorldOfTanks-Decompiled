@@ -2,7 +2,10 @@
 # Embedded file name: scripts/common/items/descr_modify_attrs_allowed.py
 IS_NUMBER = False
 IS_ARRAY = True
-DESCR_MODIFY_ATTRS_ALLOWED = {'hull/maxHealth',
+DESCR_MODIFY_ATTRS_ALLOWED = {'autoShoot/aimingDelay',
+ 'autoShoot/maxShotDispersion',
+ 'autoShoot/shotDispersionPerShot',
+ 'hull/maxHealth',
  'hullAimingParamsPitch/wheelsCorrectionSpeed',
  'chassis/rotationSpeedDegrees',
  'chassis/shotDispersionFactors',
@@ -39,8 +42,9 @@ DESCR_MODIFY_ATTRS_ALLOWED = {'hull/maxHealth',
  'gunShotDispersionFactors/whileGunDamaged',
  'gunShotDispersionFactors/turretRotation',
  'twinGun/twinGunReloadTime'}
-DESCR_MODIFY_ATTRS_TYPE = {'autoShoot/maxShotDispersion': IS_NUMBER,
- 'autoShoot/shotDispersionPerSec': IS_NUMBER,
+DESCR_MODIFY_ATTRS_TYPE = {'autoShoot/aimingDelay': IS_NUMBER,
+ 'autoShoot/maxShotDispersion': IS_NUMBER,
+ 'autoShoot/shotDispersionPerShot': IS_NUMBER,
  'chassis/armorHomogenization': IS_NUMBER,
  'chassis/brakeForce': IS_NUMBER,
  'chassis/bulkHealthFactor': IS_NUMBER,

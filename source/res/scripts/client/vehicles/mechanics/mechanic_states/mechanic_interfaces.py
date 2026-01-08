@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicles/mechanics/mechanic_states/mechanic_interfaces.py
-from vehicles.components.component_events import IComponentEvents, IComponentListener
+from __future__ import absolute_import
+from events_containers.common.containers import IClientEventsContainer, IClientEventsContainerListener
 
 class IMechanicState(object):
 
@@ -24,9 +25,6 @@ class IMechanicStatesEventsLogic(object):
     onStateTransition = None
     onStateTick = None
 
-    def lateSubscribe(self, listener):
-        raise NotImplementedError
-
     def processStatePrepared(self):
         raise NotImplementedError
 
@@ -34,7 +32,7 @@ class IMechanicStatesEventsLogic(object):
         raise NotImplementedError
 
 
-class IMechanicStatesEvents(IComponentEvents, IMechanicStatesEventsLogic):
+class IMechanicStatesEvents(IClientEventsContainer, IMechanicStatesEventsLogic):
     pass
 
 
@@ -53,5 +51,5 @@ class IMechanicStatesListenerLogic(object):
         pass
 
 
-class IMechanicStatesListener(IComponentListener, IMechanicStatesListenerLogic):
+class IMechanicStatesListener(IClientEventsContainerListener, IMechanicStatesListenerLogic):
     pass

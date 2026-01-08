@@ -4,6 +4,7 @@ import logging
 import weakref
 from abc import ABCMeta, abstractmethod
 from collections import namedtuple
+from future.utils import viewvalues
 import typing
 import BigWorld
 from constants import WIN_XP_FACTOR_MODE, ARENA_BONUS_TYPE
@@ -488,11 +489,7 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats, IShopRequester):
         return personalVehicleDiscountPrice
 
     def bestGoody(self, goodies):
-        if goodies:
-            _, goody = sorted(goodies.iteritems(), key=lambda (_, goody): goody.resource[1])[-1]
-            return goody
-        else:
-            return None
+        return sorted(viewvalues(goodies), key=lambda goody: goody.resource[1])[-1] if goodies else None
 
     def customRoleSlotChangeCost(self, vehType, isRaw=False):
         cost = getPostProgressionPrice(CUSTOM_ROLE_SLOT_CHANGE_PRICE, vehType, self._data)

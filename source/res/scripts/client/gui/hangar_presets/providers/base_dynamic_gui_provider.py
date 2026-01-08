@@ -5,6 +5,7 @@ from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from battle_modifiers_common import BattleModifiers, BattleParams, getGlobalModifiers
 from constants import ARENA_BONUS_TYPE, IS_DEVELOPMENT
 from gui.hangar_presets.obsolete.hangar_presets_getters import IPresetsGetter, EmptyPresetsGetter
+from gui.Scaleform.daapi.view.lobby.header.helpers.controls_helpers import EmptyLobbyHeaderFooterHelper
 if typing.TYPE_CHECKING:
     from gui.prb_control.entities.base.entity import BasePrbEntity
     from gui.impl.lobby.missions.missions_helpers import IMissionsGuiHelper
@@ -51,7 +52,7 @@ class EmptyHangarDynamicGuiProvider(IHangarDynamicGuiProvider):
 
     @classmethod
     def getDefaultLobbyHeaderHelper(cls):
-        return None
+        return EmptyLobbyHeaderFooterHelper
 
     @classmethod
     def getDefaultMissionsHelper(cls):

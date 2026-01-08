@@ -49,6 +49,10 @@ class Comp7Controller(IComp7Controller):
         return None
 
     @property
+    def progression(self):
+        return None
+
+    @property
     def activityPoints(self):
         pass
 

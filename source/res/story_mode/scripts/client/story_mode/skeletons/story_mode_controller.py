@@ -143,6 +143,9 @@ class IStoryModeController(IGameController):
     def isNewNeededForNewbies(self):
         raise NotImplementedError
 
+    def isMissionLocked(self, mission):
+        raise NotImplementedError
+
     def setNewForNewbiesSeen(self):
         raise NotImplementedError
 

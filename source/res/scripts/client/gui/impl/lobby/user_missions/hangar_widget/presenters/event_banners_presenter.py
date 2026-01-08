@@ -84,9 +84,12 @@ class EventBannersPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewCompon
         if self.__pendingToAppear:
             self.queueUpdate()
 
+    def _getEventEntries(self):
+        return self.__eventsService.getEntries() + self.__campaignService.getEntries()
+
     def _rawUpdate(self):
         super(EventBannersPresenter, self)._rawUpdate()
-        eventEntries = self.__eventsService.getEntries() + self.__campaignService.getEntries()
+        eventEntries = self._getEventEntries()
         with self.viewModel.transaction() as vm:
             eps = vm.getBanners()
             epNames0 = {ep.getName() for ep in eps}

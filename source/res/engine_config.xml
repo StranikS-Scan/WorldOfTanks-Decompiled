@@ -1,7 +1,7 @@
 <engine_config.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -951,12 +951,15 @@
   </webBrowser>
   <gameface>
     <taskSystem>
-      <maxThreads>	2	</maxThreads>
+      <maxThreads>	4	</maxThreads>
       <minThreads>	2	</minThreads>
-      <cpuCoresThreshold>	5	</cpuCoresThreshold>
+      <cpuCoresThreshold>	1	</cpuCoresThreshold>
     </taskSystem>
   </gameface>
   <visualScript>
     <debuggerPort>	1454	</debuggerPort>
   </visualScript>
+  <visibilityTunnel>
+    <enabled>	true	</enabled>
+  </visibilityTunnel>
 </engine_config.xml>

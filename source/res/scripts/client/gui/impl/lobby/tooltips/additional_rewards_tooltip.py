@@ -36,3 +36,22 @@ class AdditionalRewardsTooltip(ViewImpl):
     @classmethod
     def _getHeaderCount(cls):
         pass
+
+
+class AdditionalBattlePassRewardsTooltip(ViewImpl):
+
+    def __init__(self, *args, **kwargs):
+        settings = ViewSettings(R.views.lobby.tooltips.AdditionalBattlePassRewardsTooltip())
+        settings.model = AdditionalRewardsTooltipModel()
+        settings.args = args
+        settings.kwargs = kwargs
+        super(AdditionalBattlePassRewardsTooltip, self).__init__(settings)
+
+    @property
+    def viewModel(self):
+        return super(AdditionalBattlePassRewardsTooltip, self).getViewModel()
+
+    def _onLoading(self, packedBonuses, *args, **kwargs):
+        super(AdditionalBattlePassRewardsTooltip, self)._onLoading(*args, **kwargs)
+        with self.viewModel.transaction() as model:
+            fillViewModelsArray(packedBonuses, model.getBonus())

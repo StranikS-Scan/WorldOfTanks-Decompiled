@@ -38,6 +38,10 @@ class ViewComponent(ViewImpl[TViewModel]):
     def isEnabled(self):
         return self.__enabled
 
+    def getChildByPosId(self, posId):
+        uid = self._childrenUidByPosition[posId]
+        return None if uid is None else self._childrenByUid[uid]
+
     def setEnabled(self, value):
         if self.__enabled == value:
             return

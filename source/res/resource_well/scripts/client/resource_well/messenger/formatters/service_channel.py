@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: resource_well/scripts/client/resource_well/messenger/formatters/service_channel.py
+from __future__ import absolute_import
 from adisp import adisp_async, adisp_process
 from gui.impl import backport
 from gui.impl.gen import R
@@ -78,6 +79,7 @@ class ResourceWellNoVehiclesFormatter(WaitItemsSyncFormatter):
             isSerial = message.data.get('isSerial')
             rewardID = message.data.get('rewardID')
             soldOutRewardIDs = message.data.get('soldOutRewardIDs', set())
+            hasBalance = message.data.get('hasBalance', False)
             vehicle = self.__resourceWell.getRewardVehicle(rewardID)
             if vehicle is None:
                 callback([MessageData(None, None)])
@@ -94,7 +96,7 @@ class ResourceWellNoVehiclesFormatter(WaitItemsSyncFormatter):
             elif purchaseMode is PurchaseMode.SEQUENTIAL_PRODUCT and isSerial:
                 template = self.__BUTTON_TEMPLATE
                 text = backport.text(self.__R_MESSAGES.noSerialVehicles.text(), vehicle=text_styles.crystal(vehicle.shortUserName))
-            elif self.__resourceWell.getBalance():
+            elif hasBalance:
                 text = backport.text(self.__R_MESSAGES.noVehiclesWithReturn.text())
             else:
                 text = backport.text(self.__R_MESSAGES.noVehicles.text())

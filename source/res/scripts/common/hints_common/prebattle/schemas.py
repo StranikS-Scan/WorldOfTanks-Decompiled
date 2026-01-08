@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/hints_common/prebattle/schemas.py
 import typing
-from base_schema_manager import GameParamsSchema
+from game_params_common.schema import GameParamsSchema
 from constants import ARENA_BONUS_TYPE_IDS
 from dict2model import fields, models, validate
 from dict2model.fields import String

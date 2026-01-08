@@ -2,8 +2,9 @@
 # Embedded file name: story_mode/scripts/common/story_mode_common/helpers.py
 import typing
 from external_strings_utils import strtobool
-from story_mode_common.configs.story_mode_missions import MissionModel
 from story_mode_common.story_mode_constants import LONG_INT_HALF_SHIFT, MissionType, DISABLE_REGULAR_OPERATIONS
+if typing.TYPE_CHECKING:
+    from story_mode_common.configs.story_mode_missions import MissionModel
 
 def isTaskCompleted(progress, missionId, taskId):
     return bool(progress.get(missionId, 0) & taskBitMask(taskId))

@@ -2,8 +2,9 @@
 # Embedded file name: scripts/common/events_handler.py
 from inspect import isfunction, ismethod, getmembers
 from metaclass import Metaclass
-from typing import Callable, Type
 from operator import attrgetter
+from typing import Callable, Type
+from Event import Event
 
 def eventHandler(func):
     func.isEventHandler = True
@@ -45,9 +46,12 @@ def subscribeToEvents(handler, events, raiseException=True):
     if events is not None:
         for name, method in _getEventHandlers(handler):
             event = getattr(events, name) if raiseException else getattr(events, name, None)
-            if event is not None and (not hasattr(method, 'events') or isinstance(events, method.events)):
-                event += method
-                result = True
+            if event is None or not isinstance(event, Event):
+                continue
+            if hasattr(method, 'events') and not isinstance(events, method.events):
+                continue
+            event += method
+            result = True
 
     return result
 
@@ -56,11 +60,13 @@ def unsubscribeFromEvents(handler, events):
     result = False
     if events is not None:
         for name, method in _getEventHandlers(handler):
-            if not hasattr(method, 'events') or isinstance(events, method.events):
-                event = getattr(events, name, None)
-                if event is not None:
-                    event -= method
-                    result = True
+            if hasattr(method, 'events') and not isinstance(events, method.events):
+                continue
+            event = getattr(events, name, None)
+            if event is None or not isinstance(event, Event):
+                continue
+            event -= method
+            result = True
 
     return result
 

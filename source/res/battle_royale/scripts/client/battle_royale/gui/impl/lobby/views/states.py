@@ -5,6 +5,7 @@ from WeakMethod import WeakMethodProxy
 from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
 from frameworks.state_machine import StateFlags
 from gui.Scaleform.genConsts.BATTLEROYALE_ALIASES import BATTLEROYALE_ALIASES
+from gui.battle_results.service import PostBattleResultsStateMixin
 from helpers import dependency
 from battle_royale.gui.shared.event_dispatcher import showInfoPage
 from gui.Scaleform.framework.entities.View import ViewKey
@@ -96,8 +97,8 @@ class BattleRoyaleProgressionState(ViewLobbyState):
 
 
 @BattleRoyaleModeState.parentOf
-class BattleRoyaleBattleResultsState(ViewLobbyState):
-    STATE_ID = 'battleRoyaleBattleResults'
+class BattleRoyaleBattleResultsState(ViewLobbyState, PostBattleResultsStateMixin):
+    STATE_ID = BATTLEROYALE_ALIASES.BR_BATTLE_RESULTS
     VIEW_KEY = ViewKey(BATTLEROYALE_ALIASES.BR_BATTLE_RESULTS)
 
     def __init__(self, flags=StateFlags.UNDEFINED):

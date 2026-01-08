@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: resource_well/scripts/client/resource_well/gui/feature/number_requester.py
+from __future__ import absolute_import
 import json
 import logging
 import typing
-from wg_async import wg_async, wg_await
+from future.builtins import str
 from Event import Event
 from gui.game_control.reactive_comm import Subscription
-from resource_well.gui.feature.resource_well_helpers import getNumberChannelName
 from helpers import dependency
+from resource_well.gui.feature.resource_well_helpers import getNumberChannelName
 from skeletons.gui.game_control import IReactiveCommunicationService
+from wg_async import AsyncSemaphore, wg_async, wg_await, BrokenPromiseError
 _logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
     from typing import Optional
@@ -17,7 +19,7 @@ _NO_VEHICLES_VALUE = 0
 class ResourceWellNumberRequester(object):
     __reactiveCommunication = dependency.descriptor(IReactiveCommunicationService)
 
-    def __init__(self, rewardID):
+    def __init__(self, rewardID, semaphore):
         self.onUpdated = Event()
         self.__rewardID = rewardID
         self.__subscription = None
@@ -25,6 +27,7 @@ class ResourceWellNumberRequester(object):
         self.__givenValues = None
         self.__initialValues = None
         self.__isActive = False
+        self.__semaphore = semaphore
         return
 
     @property
@@ -42,11 +45,13 @@ class ResourceWellNumberRequester(object):
 
     def clear(self):
         self.onUpdated.clear()
+        self.__rewardID = None
         self.__subscription = None
         self.__remainingValues = None
         self.__givenValues = None
         self.__initialValues = None
         self.__isActive = False
+        self.__semaphore = None
         return
 
     def setInitialValues(self, initialValues):
@@ -69,15 +74,19 @@ class ResourceWellNumberRequester(object):
 
     @wg_async
     def __subscribe(self):
-        channelName = self.__getChannelName()
-        _logger.debug('Trying to subscribe channel: <%s>', channelName)
-        if self.__subscription is not None:
-            _logger.debug('Requester is already subscribed to channel: <%s>', channelName)
-            return
-        elif not self.__reactiveCommunication.isChannelSubscriptionAvailable:
-            _logger.error('Channel subscription is unavailable! Please check reactive communication settings')
-            return
-        else:
+        try:
+            yield wg_await(self.__semaphore.acquire())
+            if self.__rewardID is None:
+                _logger.info('Requester can not subscribe to channel after the clearing.')
+                return
+            channelName = self.__getChannelName()
+            _logger.debug('Trying to subscribe channel: <%s>', channelName)
+            if self.__subscription is not None:
+                _logger.debug('Requester is already subscribed to channel: <%s>', channelName)
+                return
+            if not self.__reactiveCommunication.isChannelSubscriptionAvailable:
+                _logger.error('Channel subscription is unavailable! Please check reactive communication settings')
+                return
             self.__subscription = Subscription(channelName)
             status = yield wg_await(self.__reactiveCommunication.subscribeToChannel(self.__subscription))
             _logger.debug('Subscription status for channel <%s>: %s', channelName, status)
@@ -88,7 +97,15 @@ class ResourceWellNumberRequester(object):
                 self.__reactiveCommunication.getLastMessageFromChannel(self.__subscription)
             else:
                 self.__unsubscribe()
+        except BrokenPromiseError:
+            _logger.debug('Async semaphore was destroyed.')
             return
+        except Exception as e:
+            _logger.exception(e)
+
+        if self.__semaphore is not None:
+            self.__semaphore.release()
+        return
 
     def __unsubscribe(self):
         if self.__subscription is not None:
@@ -103,7 +120,7 @@ class ResourceWellNumberRequester(object):
         _logger.debug('Message: %s', message)
         if message:
             message = json.loads(message)
-            message = {str(k):v for k, v in message.iteritems()}
+            message = {str(k):v for k, v in message.items()}
             remainingValues = message.get('remaining_values')
             givenValues = message.get('given_values')
         else:

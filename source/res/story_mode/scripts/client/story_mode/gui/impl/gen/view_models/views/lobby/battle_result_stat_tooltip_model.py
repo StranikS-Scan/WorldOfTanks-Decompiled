@@ -15,7 +15,7 @@ class StatEnum(Enum):
 class BattleResultStatTooltipModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=2, commands=0):
+    def __init__(self, properties=3, commands=0):
         super(BattleResultStatTooltipModel, self).__init__(properties=properties, commands=commands)
 
     def getStat(self):
@@ -34,7 +34,18 @@ class BattleResultStatTooltipModel(ViewModel):
     def getDetailedStatsType():
         return DetailedStatModel
 
+    def getInfoList(self):
+        return self._getArray(2)
+
+    def setInfoList(self, value):
+        self._setArray(2, value)
+
+    @staticmethod
+    def getInfoListType():
+        return unicode
+
     def _initialize(self):
         super(BattleResultStatTooltipModel, self)._initialize()
         self._addStringProperty('stat')
         self._addArrayProperty('detailedStats', Array())
+        self._addArrayProperty('infoList', Array())

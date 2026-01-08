@@ -133,52 +133,6 @@ class PERSONAL_MISSIONS(object):
     USEAWARDSHEETWINDOW_LOCKED = '#personal_missions:useAwardSheetWindow/locked'
     USEAWARDSHEETWINDOW_REGULAR_NOVEHICLE = '#personal_missions:useAwardSheetWindow/regular/noVehicle'
     USEAWARDSHEETWINDOW_PM2_NOVEHICLE = '#personal_missions:useAwardSheetWindow/pm2/noVehicle'
-    PERSONALMISSIONFIRSTENTRYVIEW_TITLE = '#personal_missions:PersonalMissionFirstEntryView/title'
-    PERSONALMISSIONFIRSTENTRYVIEW_VIDEOBTNLABEL = '#personal_missions:PersonalMissionFirstEntryView/videoBtnLabel'
-    PERSONALMISSIONFIRSTENTRYVIEW_VIDEOWINDOWHEADER = '#personal_missions:PersonalMissionFirstEntryView/videoWindowHeader'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_HEADER = '#personal_missions:PersonalMissionFirstEntryView/item0/header'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_DESCR = '#personal_missions:PersonalMissionFirstEntryView/item0/descr'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_INNERDESCR = '#personal_missions:PersonalMissionFirstEntryView/item0/innerDescr'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_WARNING = '#personal_missions:PersonalMissionFirstEntryView/item0/warning'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_BLOCKS_0_TITLE = '#personal_missions:PersonalMissionFirstEntryView/item0/blocks/0/title'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_BLOCKS_0_DESCR = '#personal_missions:PersonalMissionFirstEntryView/item0/blocks/0/descr'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_BLOCKS_1_TITLE = '#personal_missions:PersonalMissionFirstEntryView/item0/blocks/1/title'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_BLOCKS_1_DESCR = '#personal_missions:PersonalMissionFirstEntryView/item0/blocks/1/descr'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_BLOCKS_2_TITLE = '#personal_missions:PersonalMissionFirstEntryView/item0/blocks/2/title'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_BLOCKS_2_DESCR = '#personal_missions:PersonalMissionFirstEntryView/item0/blocks/2/descr'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM1_HEADER = '#personal_missions:PersonalMissionFirstEntryView/item1/header'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM1_DESCR = '#personal_missions:PersonalMissionFirstEntryView/item1/descr'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM1_INNERDESCR = '#personal_missions:PersonalMissionFirstEntryView/item1/innerDescr'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM1_BLOCKS_0_TITLE = '#personal_missions:PersonalMissionFirstEntryView/item1/blocks/0/title'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM1_BLOCKS_0_DESCR = '#personal_missions:PersonalMissionFirstEntryView/item1/blocks/0/descr'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM1_BLOCKS_1_TITLE = '#personal_missions:PersonalMissionFirstEntryView/item1/blocks/1/title'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM1_BLOCKS_1_DESCR = '#personal_missions:PersonalMissionFirstEntryView/item1/blocks/1/descr'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM1_BLOCKS_2_TITLE = '#personal_missions:PersonalMissionFirstEntryView/item1/blocks/2/title'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM1_BLOCKS_2_DESCR = '#personal_missions:PersonalMissionFirstEntryView/item1/blocks/2/descr'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_HEADER = '#personal_missions:PersonalMissionFirstEntryView/item2/header'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_DESCR = '#personal_missions:PersonalMissionFirstEntryView/item2/descr'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_INNERDESCR = '#personal_missions:PersonalMissionFirstEntryView/item2/innerDescr'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_WARNING = '#personal_missions:PersonalMissionFirstEntryView/item2/warning'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_BLOCKS_0_TITLE = '#personal_missions:PersonalMissionFirstEntryView/item2/blocks/0/title'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_BLOCKS_0_DESCR = '#personal_missions:PersonalMissionFirstEntryView/item2/blocks/0/descr'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_BLOCKS_1_TITLE = '#personal_missions:PersonalMissionFirstEntryView/item2/blocks/1/title'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_BLOCKS_1_DESCR = '#personal_missions:PersonalMissionFirstEntryView/item2/blocks/1/descr'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_BLOCKS_2_TITLE = '#personal_missions:PersonalMissionFirstEntryView/item2/blocks/2/title'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_BLOCKS_2_DESCR = '#personal_missions:PersonalMissionFirstEntryView/item2/blocks/2/descr'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_BLOCKS_3_TITLE = '#personal_missions:PersonalMissionFirstEntryView/item2/blocks/3/title'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_BLOCKS_3_DESCR = '#personal_missions:PersonalMissionFirstEntryView/item2/blocks/3/descr'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_HEADER = '#personal_missions:PersonalMissionFirstEntryView/item3/header'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_DESCR = '#personal_missions:PersonalMissionFirstEntryView/item3/descr'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_INNERDESCR = '#personal_missions:PersonalMissionFirstEntryView/item3/innerDescr'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_BLOCKS_0_TITLE = '#personal_missions:PersonalMissionFirstEntryView/item3/blocks/0/title'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_BLOCKS_0_DESCR = '#personal_missions:PersonalMissionFirstEntryView/item3/blocks/0/descr'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_BLOCKS_1_TITLE = '#personal_missions:PersonalMissionFirstEntryView/item3/blocks/1/title'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_BLOCKS_1_DESCR = '#personal_missions:PersonalMissionFirstEntryView/item3/blocks/1/descr'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_BLOCKS_2_TITLE = '#personal_missions:PersonalMissionFirstEntryView/item3/blocks/2/title'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_BLOCKS_2_DESCR = '#personal_missions:PersonalMissionFirstEntryView/item3/blocks/2/descr'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_BLOCKS_3_TITLE = '#personal_missions:PersonalMissionFirstEntryView/item3/blocks/3/title'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_BLOCKS_3_DESCR = '#personal_missions:PersonalMissionFirstEntryView/item3/blocks/3/descr'
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEMS_MORE = '#personal_missions:PersonalMissionFirstEntryView/items/more'
     PERSONALMISSIONFIRSTENTRYVIEW_ACKNOWLEDGEBTN = '#personal_missions:PersonalMissionFirstEntryView/acknowledgeBtn'
     PERSONALMISSIONFIRSTENTRYVIEW_DETAILEDDESCRIPTION_BTNBACK = '#personal_missions:PersonalMissionFirstEntryView/detailedDescription/btnBack'
     PERSONALMISSIONSPLANREGION_MAINAWARD_ENGINE = '#personal_missions:PersonalMissionsPlanRegion/mainAward/engine'
@@ -315,61 +269,6 @@ class PERSONAL_MISSIONS(object):
      BONUS_DESCR_PROGRESS_POSTBATTLE,
      BONUS_DESCR_ATTEMPTS_CARD,
      BONUS_DESCR_ATTEMPTS_POSTBATTLE)
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEMALL_HEADER_ENUM = (PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_HEADER,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM1_HEADER,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_HEADER,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_HEADER)
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEMALL_DESCR_ENUM = (PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_BLOCKS_0_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_BLOCKS_1_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_BLOCKS_2_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM1_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM1_BLOCKS_0_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM1_BLOCKS_1_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM1_BLOCKS_2_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_BLOCKS_0_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_BLOCKS_1_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_BLOCKS_2_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_BLOCKS_3_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_BLOCKS_0_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_BLOCKS_1_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_BLOCKS_2_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_BLOCKS_3_DESCR)
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEMALL_INNERDESCR_ENUM = (PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_INNERDESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM1_INNERDESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_INNERDESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_INNERDESCR)
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEMALL_BLOCKS_ALL_TITLE_ENUM = (PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_BLOCKS_0_TITLE,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_BLOCKS_1_TITLE,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_BLOCKS_2_TITLE,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM1_BLOCKS_0_TITLE,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM1_BLOCKS_1_TITLE,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM1_BLOCKS_2_TITLE,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_BLOCKS_0_TITLE,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_BLOCKS_1_TITLE,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_BLOCKS_2_TITLE,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_BLOCKS_3_TITLE,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_BLOCKS_0_TITLE,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_BLOCKS_1_TITLE,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_BLOCKS_2_TITLE,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_BLOCKS_3_TITLE)
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEMALL_BLOCKS_ALL_DESCR_ENUM = (PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_BLOCKS_0_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_BLOCKS_1_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_BLOCKS_2_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM1_BLOCKS_0_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM1_BLOCKS_1_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM1_BLOCKS_2_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_BLOCKS_0_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_BLOCKS_1_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_BLOCKS_2_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_BLOCKS_3_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_BLOCKS_0_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_BLOCKS_1_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_BLOCKS_2_DESCR,
-     PERSONALMISSIONFIRSTENTRYVIEW_ITEM3_BLOCKS_3_DESCR)
-    PERSONALMISSIONFIRSTENTRYVIEW_ITEMALL_WARNING_ENUM = (PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_WARNING, PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_WARNING)
     USEAWARDSHEETWINDOW_ALL_NOVEHICLE_ENUM = (USEAWARDSHEETWINDOW_REGULAR_NOVEHICLE, USEAWARDSHEETWINDOW_PM2_NOVEHICLE)
 
     @classmethod
@@ -412,60 +311,6 @@ class PERSONAL_MISSIONS(object):
     def getMultiplierDescr(cls, key0, key1):
         outcome = '#personal_missions:bonus/descr/{}/{}'.format(key0, key1)
         if outcome not in cls.BONUS_DESCR_ALL_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def getCardHeader(cls, index):
-        outcome = '#personal_missions:PersonalMissionFirstEntryView/item{}/header'.format(index)
-        if outcome not in cls.PERSONALMISSIONFIRSTENTRYVIEW_ITEMALL_HEADER_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def getCardDescription(cls, index):
-        outcome = '#personal_missions:PersonalMissionFirstEntryView/item{}/descr'.format(index)
-        if outcome not in cls.PERSONALMISSIONFIRSTENTRYVIEW_ITEMALL_DESCR_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def getCardInnerDescription(cls, index):
-        outcome = '#personal_missions:PersonalMissionFirstEntryView/item{}/innerDescr'.format(index)
-        if outcome not in cls.PERSONALMISSIONFIRSTENTRYVIEW_ITEMALL_INNERDESCR_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def getBlockTitle(cls, index, block):
-        outcome = '#personal_missions:PersonalMissionFirstEntryView/item{}/blocks/{}/title'.format(index, block)
-        if outcome not in cls.PERSONALMISSIONFIRSTENTRYVIEW_ITEMALL_BLOCKS_ALL_TITLE_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def getBlockDescription(cls, index, block):
-        outcome = '#personal_missions:PersonalMissionFirstEntryView/item{}/blocks/{}/descr'.format(index, block)
-        if outcome not in cls.PERSONALMISSIONFIRSTENTRYVIEW_ITEMALL_BLOCKS_ALL_DESCR_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def getBlockWarning(cls, index):
-        outcome = '#personal_missions:PersonalMissionFirstEntryView/item{}/warning'.format(index)
-        if outcome not in cls.PERSONALMISSIONFIRSTENTRYVIEW_ITEMALL_WARNING_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

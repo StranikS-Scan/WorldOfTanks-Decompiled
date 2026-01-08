@@ -11,7 +11,7 @@ class WotldaCache(FileLocalCache):
     _CACHE_TYPE = ''
 
     def __init__(self):
-        super(WotldaCache, self).__init__('wotlda_cache', (self._CACHE_TYPE, 'loadouts'), async=True)
+        super(WotldaCache, self).__init__('wotlda_cache', (self._CACHE_TYPE, 'loadouts'), isAsync=True)
         self._filePath = self._buildLocalCachePath('wotlda_cache', (self._CACHE_TYPE, 'loadouts'))
         self._cache = {}
 

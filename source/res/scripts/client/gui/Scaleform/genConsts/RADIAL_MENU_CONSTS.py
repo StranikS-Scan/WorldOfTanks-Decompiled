@@ -14,6 +14,7 @@ class RADIAL_MENU_CONSTS(object):
     PURPLE_STATE = 'purple'
     SOS = 'Sos'
     RELOAD = 'Reload'
+    OVERHEAT = 'Overheat'
     NO = 'No'
     YES = 'Yes'
     HELP_ME_EX = 'Helpmeex'

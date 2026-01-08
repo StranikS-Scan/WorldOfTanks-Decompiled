@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class RankInactivityTooltipModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=1, commands=0):
+    def __init__(self, properties=2, commands=0):
         super(RankInactivityTooltipModel, self).__init__(properties=properties, commands=commands)
 
     def getRankInactivityCount(self):
@@ -14,6 +14,13 @@ class RankInactivityTooltipModel(ViewModel):
     def setRankInactivityCount(self, value):
         self._setNumber(0, value)
 
+    def getRankInactivityPointsCount(self):
+        return self._getNumber(1)
+
+    def setRankInactivityPointsCount(self, value):
+        self._setNumber(1, value)
+
     def _initialize(self):
         super(RankInactivityTooltipModel, self)._initialize()
         self._addNumberProperty('rankInactivityCount', -1)
+        self._addNumberProperty('rankInactivityPointsCount', 0)

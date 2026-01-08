@@ -16,10 +16,11 @@ if typing.TYPE_CHECKING:
 class MissionProgressTooltip(ViewImpl):
     __itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, mission):
+    def __init__(self, mission, isCompleted):
         settings = ViewSettings(layoutID=R.views.mono.personal_missions_30.tooltips.mission_progress_tooltip(), model=MissionProgressTooltipModel())
         super(MissionProgressTooltip, self).__init__(settings)
         self.__mission = mission
+        self.__isCompleted = isCompleted
 
     @property
     def viewModel(self):
@@ -31,6 +32,6 @@ class MissionProgressTooltip(ViewImpl):
             totalMissionsAmount = questConfig.maxProgressValue
             tx.setTotalMissionsAmount(totalMissionsAmount)
             battlesUniqueVehicles = sorted(self.__mission.getConditionsProgress().get('battlesUniqueVehicles', set()))
-            tx.setCompletedMissionsAmount(totalMissionsAmount if self.__mission.isCompleted() else len(battlesUniqueVehicles))
+            tx.setCompletedMissionsAmount(totalMissionsAmount if self.__isCompleted else len(battlesUniqueVehicles))
             vehicleNames = [ self.__itemsCache.items.getItemByCD(vehCD).shortUserName for vehCD in battlesUniqueVehicles ]
             fillStringsArray(vehicleNames, tx.getVehicles())

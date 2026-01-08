@@ -26,13 +26,18 @@ def fillVehicleModel(model, vehicleItem, tags=None):
     model.setTags(','.join(frozenset(tags) & vehicleItem.tags))
 
 
+def fillVehicleMechanicModel(mechanicModel, mechanicItem):
+    mechanicModel.setName(mechanicItem.guiName)
+    mechanicModel.setPriority(mechanicItem.priority)
+    mechanicModel.setRank(mechanicItem.rank)
+    mechanicModel.setHasVideo(mechanicItem.hasVideo)
+
+
 def fillVehicleMechanicsArray(mechanicsArray, vehicleItem):
     mechanics = []
-    for mechanic in vehicleItem.getVehicleMechanicItems():
+    for mechanic in (item for item in vehicleItem.getVehicleMechanicItems() if not item.isHidden):
         mechanicModel = VehicleMechanicModel()
-        mechanicModel.setName(mechanic.guiName)
-        mechanicModel.setIsSpecial(mechanic.isSpecial)
-        mechanicModel.setHasVideo(mechanic.hasVideo)
+        fillVehicleMechanicModel(mechanicModel, mechanic)
         mechanics.append(mechanicModel)
 
     fillViewModelsArray(mechanics, mechanicsArray)

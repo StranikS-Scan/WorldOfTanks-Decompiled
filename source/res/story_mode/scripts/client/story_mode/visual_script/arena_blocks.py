@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/visual_script/arena_blocks.py
-from story_mode_common.story_mode_constants import UNDEFINED_MISSION_ID, MissionsDifficulty
+from story_mode_common.story_mode_constants import MissionId, MissionsDifficulty
 from visual_script import ASPECT
 from visual_script.arena_blocks import ArenaMeta
 from visual_script.block import Block
@@ -17,8 +17,8 @@ class GetStoryModeDifficulty(Block, ArenaMeta):
 
     def _getResult(self):
         difficulty = MissionsDifficulty.UNDEFINED.value
-        missionId = self._arena.getValue().extraData.get('missionId', UNDEFINED_MISSION_ID)
-        if missionId != UNDEFINED_MISSION_ID:
+        missionId = self._arena.getValue().extraData.get('missionId', MissionId.UNDEFINED)
+        if missionId != MissionId.UNDEFINED:
             missionSettings = story_mode_missions.missionsSchema.getModel()
             if missionSettings is not None:
                 mission = missionSettings.getMission(missionId)

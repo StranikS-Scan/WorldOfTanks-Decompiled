@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/commands/mechanic_controls/nitro_control.py
+from __future__ import absolute_import
 import typing
 import logging
 import BigWorld
@@ -7,7 +8,7 @@ import CommandMapping
 from AvatarInputHandler.commands.input_handler_command import InputHandlerCommand
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
-from vehicles.mechanics.mechanic_helpers import getPlayerVehicleMechanic
+from vehicles.mechanics.mechanic_helpers import getPlayerVehicleMechanicComponent
 if typing.TYPE_CHECKING:
     from vehicles.mechanics.mechanic_constants import VehicleMechanic
 _logger = logging.getLogger(__name__)
@@ -22,12 +23,12 @@ class NitroActivationControl(InputHandlerCommand):
         self.__stopTime = BigWorld.time()
 
     def __alternateNitro(self):
-        mechanicComponent = getPlayerVehicleMechanic(self.__mechanic)
+        mechanicComponent = getPlayerVehicleMechanicComponent(self.__mechanic)
         if mechanicComponent:
             mechanicComponent.alternateOnState()
 
     def __cancelNitro(self):
-        mechanicComponent = getPlayerVehicleMechanic(self.__mechanic)
+        mechanicComponent = getPlayerVehicleMechanicComponent(self.__mechanic)
         if mechanicComponent:
             mechanicComponent.tryDeactivate()
 

@@ -6,18 +6,21 @@ from WeakMethod import WeakMethodProxy
 from comp7.gui.Scaleform.genConsts.COMP7_HANGAR_ALIASES import COMP7_HANGAR_ALIASES
 from comp7.gui.impl.gen.view_models.views.lobby.enums import MetaRootViews
 from comp7.gui.impl.lobby.comp7_intro_screen import Comp7IntroScreen
-from comp7.gui.impl.lobby.wci.wci_view import WCIView
 from comp7.gui.impl.lobby.comp7_no_vehicles_screen import Comp7NoVehiclesScreen
 from comp7.gui.impl.lobby.hangar.meta_tab_state import IMetaTabState
 from comp7.gui.impl.lobby.meta_view.meta_root_view import MetaRootView
-from comp7.gui.shared.event_dispatcher import showComp7InfoPage, showComp7WhatsNewScreen, showWciInfoPage
+from comp7.gui.impl.lobby.tournaments.wci_view import WciView
+from comp7.gui.impl.lobby.tournaments.ols_view import OlsView
+from comp7.gui.shared.event_dispatcher import showComp7InfoPage, showComp7WhatsNewScreen, showWciInfoPage, showOlsInfoPage
 from frameworks.state_machine import StateFlags
+from gui.Scaleform.daapi.view.lobby.store.browser.states import ShopState
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.hangar.base.proto_states import generateBasicLoadoutStateClasses, _LoadoutConfirmStatePrototype
-from gui.impl.lobby.hangar.states import HangarState
+from gui.impl.lobby.hangar.easy_tank_equip_state import generateEasyTankEquipStates
+from gui.impl.lobby.hangar.states import HangarState, EasyTankEquipState
 from gui.lobby_state_machine.states import LobbyState, LobbyStateFlags, GuiImplViewLobbyState
 from gui.lobby_state_machine.states import SFViewLobbyState, SubScopeSubLayerState, LobbyStateDescription
 from gui.lobby_state_machine.transitions import HijackTransition
@@ -48,6 +51,7 @@ class Comp7ModeState(LobbyState):
         lsm = self.getMachine()
         lsm.addState(Comp7HangarState(StateFlags.INITIAL))
         lsm.addState(Comp7AllVehiclesState())
+        lsm.addState(Comp7EasyTankEquipState())
         lsm.addState(Comp7LoadoutState())
         lsm.addState(Comp7NoVehiclesState())
         lsm.addState(Comp7IntroState())
@@ -56,17 +60,23 @@ class Comp7ModeState(LobbyState):
         lsm.addState(Comp7StylePreviewState())
         lsm.addState(Comp7VehiclePreviewState())
         lsm.addState(Comp7WCIState())
+        lsm.addState(Comp7OLSState())
 
     def registerTransitions(self):
         lsm = self.getMachine()
         parent = self.getParent()
         comp7Hangar = lsm.getStateByCls(Comp7RootHangarState)
+        comp7EasyTankEquip = lsm.getStateByCls(Comp7EasyTankEquipState)
+        hijackCondition = WeakMethodProxy(self._hijackTransitionCondition)
         parent.addNavigationTransition(comp7Hangar)
-        parent.addTransition(HijackTransition(HangarState, WeakMethodProxy(self._hijackTransitionCondition)), comp7Hangar)
+        parent.addTransition(HijackTransition(HangarState, hijackCondition), comp7Hangar)
+        parent.addTransition(HijackTransition(EasyTankEquipState, hijackCondition), comp7EasyTankEquip)
         for cls in (Comp7AllVehiclesState,
          Comp7NoVehiclesState,
          Comp7IntroState,
-         Comp7PrimeTimeState):
+         Comp7PrimeTimeState,
+         Comp7OLSState,
+         Comp7EasyTankEquipState):
             state = lsm.getStateByCls(cls)
             comp7Hangar.addNavigationTransition(state)
 
@@ -144,19 +154,41 @@ class Comp7IntroState(GuiImplViewLobbyState):
         super(Comp7IntroState, self).__init__(Comp7IntroScreen, ScopeTemplates.LOBBY_SUB_SCOPE)
 
     def getNavigationDescription(self):
-        return LobbyStateDescription(title=backport.text(R.strings.pages.titles.comp7.intro()), infos=metaStateNavigationButtons)
+        return LobbyStateDescription(title=backport.text(R.strings.pages.titles.comp7.intro()))
 
 
 @SubScopeSubLayerState.parentOf
 class Comp7WCIState(GuiImplViewLobbyState):
     STATE_ID = 'wci'
-    VIEW_KEY = ViewKey(R.views.comp7.mono.lobby.wci())
+    VIEW_KEY = ViewKey(R.views.comp7.mono.lobby.tournaments.wci_view())
 
     def __init__(self):
-        super(Comp7WCIState, self).__init__(WCIView, ScopeTemplates.LOBBY_SUB_SCOPE)
+        super(Comp7WCIState, self).__init__(WciView, ScopeTemplates.LOBBY_SUB_SCOPE)
 
     def getNavigationDescription(self):
-        return LobbyStateDescription(title=backport.text(R.strings.pages.titles.comp7.wci()), infos=(LobbyStateDescription.Info(type=LobbyStateDescription.Info.Type.INFO, onMoreInfoRequested=showWciInfoPage, tooltipHeader=backport.text(R.strings.comp7_ext.wci.tooltip.infoPageButton.header())),))
+        return LobbyStateDescription(title=backport.text(R.strings.pages.titles.comp7.tournament()), infos=(LobbyStateDescription.Info(type=LobbyStateDescription.Info.Type.INFO, onMoreInfoRequested=showWciInfoPage, tooltipHeader=backport.text(R.strings.comp7_ext.tournament.tooltip.infoPageButton.header())),))
+
+    def registerTransitions(self):
+        lsm = self.getMachine()
+        state = lsm.getStateByCls(ShopState)
+        self.addNavigationTransition(state, record=True)
+
+
+@Comp7ModeState.parentOf
+class Comp7OLSState(GuiImplViewLobbyState):
+    STATE_ID = 'ols'
+    VIEW_KEY = ViewKey(R.views.comp7.mono.lobby.tournaments.ols_view())
+
+    def __init__(self):
+        super(Comp7OLSState, self).__init__(OlsView, ScopeTemplates.LOBBY_SUB_SCOPE)
+
+    def getNavigationDescription(self):
+        return LobbyStateDescription(title=backport.text(R.strings.pages.titles.comp7.tournament()), infos=(LobbyStateDescription.Info(type=LobbyStateDescription.Info.Type.INFO, onMoreInfoRequested=showOlsInfoPage, tooltipHeader=backport.text(R.strings.comp7_ext.tournament.tooltip.infoPageButton.header())),))
+
+    def registerTransitions(self):
+        lsm = self.getMachine()
+        state = lsm.getStateByCls(ShopState)
+        self.addNavigationTransition(state, record=True)
 
 
 @Comp7ModeState.parentOf
@@ -220,6 +252,11 @@ metaStateNavigationButtons = (LobbyStateDescription.Info(type=LobbyStateDescript
 @Comp7MetaState.parentOf
 class Comp7MetaProgressionState(LobbyState, IMetaTabState):
     STATE_ID = 'progression'
+
+    def registerTransitions(self):
+        lsm = self.getMachine()
+        from gui.Scaleform.daapi.view.lobby.profile.states import ServiceRecordState
+        self.addNavigationTransition(lsm.getStateByCls(ServiceRecordState), record=True)
 
     @property
     def tabId(self):
@@ -396,3 +433,4 @@ class _Comp7LoadoutConfirmStatePrototype(_LoadoutConfirmStatePrototype):
 
 
 Comp7LoadoutState, _, _, Comp7ShellsLoadoutState, Comp7EquipmentLoadoutState, _, _ = generateBasicLoadoutStateClasses(Comp7HangarState, R.invalid, confirmStatePrototypeCls=_Comp7LoadoutConfirmStatePrototype)
+Comp7EasyTankEquipState = generateEasyTankEquipStates(Comp7HangarState)

@@ -6,6 +6,7 @@ from constants import ARENA_BONUS_TYPE
 from gui.impl.gen import R
 from battle_royale.gui.impl.lobby.br_helpers.account_settings import setLastSeenQuestData, getLastSeenQuestData
 from battle_royale.gui.impl.lobby.views.user_missions.hangar_widget.overlap_ctrl import BattleRoyaleOverlapCtrlMixin
+from battle_royale_progression.gui.impl.lobby.views.quests_packer import BRDailyQuestUIDataPacker
 from battle_royale_progression.gui.impl.lobby.views.bonus_packer import getBonusPacker, packQuestBonuses, packMissionItem
 from battle_royale_progression.gui.shared.event_dispatcher import showProgressionView
 from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
@@ -16,7 +17,6 @@ from gui.impl.lobby.user_missions.tooltips.all_quests_done_tooltip import AllQue
 from gui.impl.lobby.missions.missions_helpers import needToUpdateQuestsInModel
 from gui.impl.lobby.user_missions.hangar_widget.tooltip_positioner import TooltipPositionerMixin
 from gui.impl.pub.view_component import ViewComponent
-from gui.shared.missions.packers.events import DailyQuestUIDataPacker
 from helpers import dependency, time_utils
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.game_control import IBattleRoyaleController
@@ -113,7 +113,7 @@ class BattleRoayaleQuestsPresenter(TooltipPositionerMixin, BattleRoyaleOverlapCt
         bonusPacker = getBonusPacker()
         packedBonuses, _ = packQuestBonuses(quest.getBonuses(), bonusPacker)
         fillViewModelsArray(packedBonuses, model.getBonuses())
-        packMissionItem(model, quest, DailyQuestUIDataPacker)
+        packMissionItem(model, quest, BRDailyQuestUIDataPacker)
         lastSeenProgress, isQuestAnimationSeen = getLastSeenQuestData(quest.getID())
         model.setAnimateCompletion(not isQuestAnimationSeen and model.getIsCompleted())
         if not isQuestAnimationSeen:
@@ -173,7 +173,7 @@ class BattleRoayaleQuestsPresenter(TooltipPositionerMixin, BattleRoyaleOverlapCt
         for quest in self.__quests:
             model = WidgetQuestModel()
             questID = quest.getID()
-            isCompleted, lastSeenProgress = packMissionItem(model, quest, DailyQuestUIDataPacker)
+            isCompleted, lastSeenProgress = packMissionItem(model, quest, BRDailyQuestUIDataPacker)
             setLastSeenQuestData(questID, (lastSeenProgress, True))
             _, showCompletedAnimation = getLastSeenQuestData(questID)
             if showCompletedAnimation and not isCompleted:

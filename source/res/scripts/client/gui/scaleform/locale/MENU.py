@@ -579,9 +579,11 @@ class MENU(object):
     TANK_PARAMS_FACEFRONTBOARDINMM = '#menu:tank_params/faceFrontBoardInMM'
     TANK_PARAMS_TURRETARMOR = '#menu:tank_params/turretArmor'
     TANK_PARAMS_RELOADTIME = '#menu:tank_params/reloadTime'
+    TANK_PARAMS_TEMPERATURERELOADTIME = '#menu:tank_params/temperatureReloadTime'
     TANK_PARAMS_CONTINUOUSSHOTSPERMINUTE = '#menu:tank_params/continuousShotsPerMinute'
     TANK_PARAMS_AUTORELOADTIME = '#menu:tank_params/autoReloadTime'
     TANK_PARAMS_RELOADTIMESECS = '#menu:tank_params/reloadTimeSecs'
+    TANK_PARAMS_SHELLLOADINGTIME = '#menu:tank_params/shellLoadingTime'
     TANK_PARAMS_PIERCINGPOWER = '#menu:tank_params/piercingPower'
     TANK_PARAMS_DAMAGE = '#menu:tank_params/damage'
     TANK_PARAMS_AVGDAMAGE = '#menu:tank_params/avgDamage'
@@ -590,6 +592,7 @@ class MENU(object):
     TANK_PARAMS_AVGPIERCINGPOWER = '#menu:tank_params/avgPiercingPower'
     TANK_PARAMS_SHORTENED_AVGPIERCINGPOWER = '#menu:tank_params/shortened/avgPiercingPower'
     TANK_PARAMS_AVGDAMAGEPERMINUTE = '#menu:tank_params/avgDamagePerMinute'
+    TANK_PARAMS_TEMPERATUREAVGDAMAGEPERMINUTE = '#menu:tank_params/temperatureAvgDamagePerMinute'
     TANK_PARAMS_TURRETROTATIONSPEED = '#menu:tank_params/turretRotationSpeed'
     TANK_PARAMS_CIRCULARVISIONRADIUS = '#menu:tank_params/circularVisionRadius'
     TANK_PARAMS_RADIODISTANCE = '#menu:tank_params/radioDistance'
@@ -657,6 +660,11 @@ class MENU(object):
     TANK_PARAMS_VALUES_PARAM11_VALUE3 = '#menu:tank_params/values/param11/value3'
     TANK_PARAMS_EXPLOSIONRADIUS = '#menu:tank_params/explosionRadius'
     TANK_PARAMS_INCREASEHEALTH = '#menu:tank_params/increaseHealth'
+    TANK_PARAMS_COOLINGDELAY = '#menu:tank_params/coolingDelay'
+    TANK_PARAMS_COOLINGTIME = '#menu:tank_params/coolingTime'
+    TANK_PARAMS_HEATINGPERSHOT = '#menu:tank_params/heatingPerShot'
+    TANK_PARAMS_OVERHEATDURATION = '#menu:tank_params/overheatDuration'
+    TANK_PARAMS_TIMETOOVERHEAT = '#menu:tank_params/timeToOverheat'
     TANK_PARAMS_T = '#menu:tank_params/t'
     TANK_PARAMS_P = '#menu:tank_params/p'
     TANK_PARAMS_PT = '#menu:tank_params/pt'
@@ -691,6 +699,13 @@ class MENU(object):
     TANK_PARAMS_NO_BRACKETS_KG = '#menu:tank_params/no_brackets/kg'
     TANK_PARAMS_NO_BRACKETS_S = '#menu:tank_params/no_brackets/s'
     TANK_PARAMS_NO_BRACKETS_MM = '#menu:tank_params/no_brackets/mm'
+    TANK_PARAMS_STAGEDJETBOOSTERSENGINEPOWER = '#menu:tank_params/stagedJetBoostersEnginePower'
+    TANK_PARAMS_STAGEDJETBOOSTERSTOPSPEED = '#menu:tank_params/stagedJetBoostersTopSpeed'
+    TANK_PARAMS_STAGEDJETBOOSTERSSPEEDLIMITS = '#menu:tank_params/stagedJetBoostersSpeedLimits'
+    TANK_PARAMS_STAGEDJETBOOSTERSROTATIONSPEED = '#menu:tank_params/stagedJetBoostersRotationSpeed'
+    TANK_PARAMS_STAGEDJETBOOSTERSCHARGESCOUNT = '#menu:tank_params/stagedJetBoostersChargesCount'
+    TANK_PARAMS_STAGEDJETBOOSTERSCHARGEDURATION = '#menu:tank_params/stagedJetBoostersChargeDuration'
+    TANK_PARAMS_STAGEDJETBOOSTERSCOOLDOWNTIME = '#menu:tank_params/stagedJetBoostersCooldownTime'
     EXTRAPARAMS_HEADER = '#menu:extraParams/header'
     EXTRAPARAMS_MULTIDESC = '#menu:extraParams/multiDesc'
     EXTRAPARAMS_DESC = '#menu:extraParams/desc'
@@ -1198,21 +1213,25 @@ class MENU(object):
     MODULEINFO_TITLE = '#menu:moduleInfo/title'
     MODULEINFO_PARAMETERSLABEL = '#menu:moduleInfo/parametersLabel'
     MODULEINFO_PARAMETERSCLIPGUNLABEL = '#menu:moduleInfo/parametersClipGunLabel'
-    MODULEINFO_CLIPGUNLABEL = '#menu:moduleInfo/clipGunLabel'
-    MODULEINFO_AUTORELOADGUNLABEL = '#menu:moduleInfo/autoReloadGunLabel'
-    MODULEINFO_AUTORELOADGUNLABEL_BOOST = '#menu:moduleInfo/autoReloadGunLabel/boost'
-    MODULEINFO_DUALGUNLABEL = '#menu:moduleInfo/dualGunLabel'
-    MODULEINFO_DUALACCURACYGUNLABEL = '#menu:moduleInfo/dualAccuracyGunLabel'
-    MODULEINFO_DAMAGEMUTABLEGUNLABEL = '#menu:moduleInfo/damageMutableGunLabel'
-    MODULEINFO_AUTOSHOOTGUNLABEL = '#menu:moduleInfo/autoShootGunLabel'
-    MODULEINFO_NONPIERCINGDAMAGELABEL = '#menu:moduleInfo/nonPiercingDamageLabel'
-    MODULEINFO_TRACKWITHINTRACKCHASSISLABEL = '#menu:moduleInfo/trackWithinTrackChassisLabel'
-    MODULEINFO_HYDRAULICCHASSISLABEL = '#menu:moduleInfo/hydraulicChassisLabel'
-    MODULEINFO_HYDRAULICAUTOSIEGECHASSISLABEL = '#menu:moduleInfo/hydraulicAutoSiegeChassisLabel'
-    MODULEINFO_HYDRAULICWHEELEDCHASSISLABEL = '#menu:moduleInfo/hydraulicWheeledChassisLabel'
-    MODULEINFO_PARAMS_SHOTSPEED = '#menu:moduleInfo/params/shotSpeed'
+    MODULEINFO_AUTOLOADERGUN = '#menu:moduleInfo/autoLoaderGun'
+    MODULEINFO_AUTOLOADERGUNBOOST = '#menu:moduleInfo/autoLoaderGunBoost'
+    MODULEINFO_AUTOSHOOTGUN = '#menu:moduleInfo/autoShootGun'
+    MODULEINFO_DAMAGEMUTABLE = '#menu:moduleInfo/damageMutable'
+    MODULEINFO_DUALACCURACY = '#menu:moduleInfo/dualAccuracy'
+    MODULEINFO_DUALGUN = '#menu:moduleInfo/dualGun'
+    MODULEINFO_HEATINGZONESGUN = '#menu:moduleInfo/heatingZonesGun'
+    MODULEINFO_HYDRAULICCHASSIS = '#menu:moduleInfo/hydraulicChassis'
+    MODULEINFO_HYDROAUTOSIEGECHASSIS = '#menu:moduleInfo/hydroAutoSiegeChassis'
+    MODULEINFO_HYDRAULICWHEELEDCHASSIS = '#menu:moduleInfo/hydraulicWheeledChassis'
+    MODULEINFO_MAGAZINEGUN = '#menu:moduleInfo/magazineGun'
+    MODULEINFO_OVERHEATGUN = '#menu:moduleInfo/overheatGun'
+    MODULEINFO_ROCKETACCELERATION = '#menu:moduleInfo/rocketAcceleration'
+    MODULEINFO_STAGEDJETBOOSTERS = '#menu:moduleInfo/stagedJetBoosters'
+    MODULEINFO_TRACKWITHINTRACK = '#menu:moduleInfo/trackWithinTrack'
     MODULEINFO_TURBOSHAFTENGINE = '#menu:moduleInfo/turboshaftEngine'
-    MODULEINFO_ROCKETACCELERATIONENGINE = '#menu:moduleInfo/rocketAccelerationEngine'
+    MODULEINFO_TWINGUN = '#menu:moduleInfo/twinGun'
+    MODULEINFO_NONPIERCINGDAMAGELABEL = '#menu:moduleInfo/nonPiercingDamageLabel'
+    MODULEINFO_PARAMS_SHOTSPEED = '#menu:moduleInfo/params/shotSpeed'
     MODULEINFO_PARAMS_CHASSISREPAIRTIME = '#menu:moduleInfo/params/chassisRepairTime'
     MODULEINFO_PARAMS_CHASSISREPAIRTIMEYOH = '#menu:moduleInfo/params/chassisRepairTimeYoh'
     MODULEINFO_PARAMS_MAXSTEERINGLOCKANGLE = '#menu:moduleInfo/params/maxSteeringLockAngle'
@@ -1244,7 +1263,7 @@ class MENU(object):
     MODULEINFO_PARAMS_RELOADTIME = '#menu:moduleInfo/params/reloadTime'
     MODULEINFO_PARAMS_CONTINUOUSSHOTSPERMINUTE = '#menu:moduleInfo/params/continuousShotsPerMinute'
     MODULEINFO_PARAMS_RELOADTIMESECS = '#menu:moduleInfo/params/reloadTimeSecs'
-    MODULEINFO_TWINGUNLABEL = '#menu:moduleInfo/twinGunLabel'
+    MODULEINFO_PARAMS_SHELLLOADINGTIME = '#menu:moduleInfo/params/shellLoadingTime'
     MODULEINFO_PARAMS_RELOADTIMETWINGUN = '#menu:moduleInfo/params/reloadTimeTwinGun'
     MODULEINFO_PARAMS_RELOADTIMESINGLEGUN = '#menu:moduleInfo/params/reloadTimeSingleGun'
     MODULEINFO_PARAMS_CHARGETIME = '#menu:moduleInfo/params/chargeTime'
@@ -1318,6 +1337,7 @@ class MENU(object):
     VEHICLEINFO_PARAMS_HULLARMOR = '#menu:vehicleInfo/params/hullArmor'
     VEHICLEINFO_PARAMS_TURRETARMOR = '#menu:vehicleInfo/params/turretArmor'
     VEHICLEINFO_PARAMS_RELOADTIME = '#menu:vehicleInfo/params/reloadTime'
+    VEHICLEINFO_PARAMS_TEMPERATURERELOADTIME = '#menu:vehicleInfo/params/temperatureReloadTime'
     VEHICLEINFO_PARAMS_CONTINUOUSSHOTSPERMINUTE = '#menu:vehicleInfo/params/continuousShotsPerMinute'
     VEHICLEINFO_PARAMS_AUTORELOADTIME = '#menu:vehicleInfo/params/autoReloadTime'
     VEHICLEINFO_PARAMS_AUTORELOADTIMEBOOST = '#menu:vehicleInfo/params/autoReloadTimeBoost'
@@ -1335,6 +1355,7 @@ class MENU(object):
     VEHICLEINFO_PARAMS_SHOTDISPERSIONANGLE = '#menu:vehicleInfo/params/shotDispersionAngle'
     VEHICLEINFO_PARAMS_DUALACCURACYCOOLINGDELAY = '#menu:vehicleInfo/params/dualAccuracyCoolingDelay'
     VEHICLEINFO_PARAMS_AVGDAMAGEPERMINUTE = '#menu:vehicleInfo/params/avgDamagePerMinute'
+    VEHICLEINFO_PARAMS_TEMPERATUREAVGDAMAGEPERMINUTE = '#menu:vehicleInfo/params/temperatureAvgDamagePerMinute'
     VEHICLEINFO_PARAMS_ENGINEPOWERPERTON = '#menu:vehicleInfo/params/enginePowerPerTon'
     VEHICLEINFO_PARAMS_CLIPFIRERATE = '#menu:vehicleInfo/params/clipFireRate'
     VEHICLEINFO_PARAMS_AUTOSHOOTCLIPFIRERATE = '#menu:vehicleInfo/params/autoShootClipFireRate'
@@ -2825,9 +2846,11 @@ class MENU(object):
      TANK_PARAMS_FACEFRONTBOARDINMM,
      TANK_PARAMS_TURRETARMOR,
      TANK_PARAMS_RELOADTIME,
+     TANK_PARAMS_TEMPERATURERELOADTIME,
      TANK_PARAMS_CONTINUOUSSHOTSPERMINUTE,
      TANK_PARAMS_AUTORELOADTIME,
      TANK_PARAMS_RELOADTIMESECS,
+     TANK_PARAMS_SHELLLOADINGTIME,
      TANK_PARAMS_PIERCINGPOWER,
      TANK_PARAMS_DAMAGE,
      TANK_PARAMS_AVGDAMAGE,
@@ -2836,6 +2859,7 @@ class MENU(object):
      TANK_PARAMS_AVGPIERCINGPOWER,
      TANK_PARAMS_SHORTENED_AVGPIERCINGPOWER,
      TANK_PARAMS_AVGDAMAGEPERMINUTE,
+     TANK_PARAMS_TEMPERATUREAVGDAMAGEPERMINUTE,
      TANK_PARAMS_TURRETROTATIONSPEED,
      TANK_PARAMS_CIRCULARVISIONRADIUS,
      TANK_PARAMS_RADIODISTANCE,
@@ -2903,6 +2927,11 @@ class MENU(object):
      TANK_PARAMS_VALUES_PARAM11_VALUE3,
      TANK_PARAMS_EXPLOSIONRADIUS,
      TANK_PARAMS_INCREASEHEALTH,
+     TANK_PARAMS_COOLINGDELAY,
+     TANK_PARAMS_COOLINGTIME,
+     TANK_PARAMS_HEATINGPERSHOT,
+     TANK_PARAMS_OVERHEATDURATION,
+     TANK_PARAMS_TIMETOOVERHEAT,
      TANK_PARAMS_T,
      TANK_PARAMS_P,
      TANK_PARAMS_PT,
@@ -2936,7 +2965,14 @@ class MENU(object):
      TANK_PARAMS_CHARGETIME,
      TANK_PARAMS_NO_BRACKETS_KG,
      TANK_PARAMS_NO_BRACKETS_S,
-     TANK_PARAMS_NO_BRACKETS_MM)
+     TANK_PARAMS_NO_BRACKETS_MM,
+     TANK_PARAMS_STAGEDJETBOOSTERSENGINEPOWER,
+     TANK_PARAMS_STAGEDJETBOOSTERSTOPSPEED,
+     TANK_PARAMS_STAGEDJETBOOSTERSSPEEDLIMITS,
+     TANK_PARAMS_STAGEDJETBOOSTERSROTATIONSPEED,
+     TANK_PARAMS_STAGEDJETBOOSTERSCHARGESCOUNT,
+     TANK_PARAMS_STAGEDJETBOOSTERSCHARGEDURATION,
+     TANK_PARAMS_STAGEDJETBOOSTERSCOOLDOWNTIME)
     BROWSER_CUSTOMTITLE_ENUM = (BROWSER_CUSTOMTITLE_FORT_OFFENSIVERESULT, BROWSER_CUSTOMTITLE_FORT_CONGRATULATION)
     LOADING_BATTLETYPES_DESC_ENUM = (LOADING_BATTLETYPES_DESC_0,
      LOADING_BATTLETYPES_DESC_1,

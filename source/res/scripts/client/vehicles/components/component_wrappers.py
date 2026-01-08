@@ -1,10 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicles/components/component_wrappers.py
-import operator
+from __future__ import absolute_import
 import typing
 from functools import wraps
 import BigWorld
-import BattleReplay
 if typing.TYPE_CHECKING:
     from Avatar import PlayerAvatar
 
@@ -40,33 +39,3 @@ def ifObservedVehicle(method):
         return
 
     return wrapper
-
-
-def checkStateStatus(states=(), defReturn=None, abortAction=None):
-
-    def decorator(method):
-
-        @wraps(method)
-        def wrapper(controller, *args, **kwargs):
-            stateStatus = controller.stateStatus
-            if stateStatus is not None and stateStatus.state in states:
-                return method(controller, stateStatus, *args, **kwargs)
-            else:
-                return operator.methodcaller(abortAction)(controller) if abortAction is not None else defReturn
-
-        return wrapper
-
-    return decorator
-
-
-def skipOnRewind(defReturn=None):
-
-    def decorator(method):
-
-        @wraps(method)
-        def wrapper(*args, **kwargs):
-            return method(*args, **kwargs) if not (BattleReplay.isPlaying() and BattleReplay.g_replayCtrl.isTimeWarpInProgress) else defReturn
-
-        return wrapper
-
-    return decorator

@@ -24,6 +24,7 @@ RELOAD_TIME_SECS_PROP_NAME = 'reloadTimeSecs'
 RELOAD_TIME_PROP_NAME = 'reloadTime'
 RELOAD_MAGAZINE_TIME_PROP_NAME = 'reloadMagazineTime'
 SHELL_RELOADING_TIME_PROP_NAME = 'shellReloadingTime'
+SHELL_LOADING_TIME_PROP_NAME = 'shellLoadingTime'
 DISPERSION_RADIUS_PROP_NAME = 'dispersionRadius'
 SHOT_DISPERSION_ANGLE = 'shotDispersionAngle'
 DISPERSION_RADIUS = 'dispertionRadius'
@@ -45,6 +46,8 @@ BURST_FIRE_RATE = 'burstFireRate'
 BURST_TIME_INTERVAL = 'burstTimeInterval'
 BURST_COUNT = 'burstCount'
 BURST_SIZE = 'burstSize'
+TEMPERATURE_RELOAD_TIME = 'temperatureReloadTime'
+TEMPERATURE_AVG_DAMAGE_PER_MINUTE = 'temperatureAvgDamagePerMinute'
 WHEELED_SWITCH_ON_TIME = 'wheeledSwitchOnTime'
 WHEELED_SWITCH_OFF_TIME = 'wheeledSwitchOffTime'
 WHEELED_SWITCH_TIME = 'wheeledSwitchTime'
@@ -93,7 +96,7 @@ ValidationResult = namedtuple('ValidationResult', ['isValid', 'reason'])
 
 def flashObject2Dict(obj):
     if hasattr(obj, 'children'):
-        filtered = itertools.ifilter(lambda (x, y): x not in _FLASH_OBJECT_SYS_ATTRS, obj.children.iteritems())
+        filtered = itertools.ifilter(lambda item: item[0] not in _FLASH_OBJECT_SYS_ATTRS, obj.children.iteritems())
         return dict(((k, flashObject2Dict(v)) for k, v in filtered))
     return obj
 

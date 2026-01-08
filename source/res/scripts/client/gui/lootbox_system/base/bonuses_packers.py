@@ -749,6 +749,40 @@ class LootBoxGoodiesBonusUIPacker(GoodiesBonusUIPacker):
         model.setDescription(description)
         return model
 
+    @classmethod
+    def _getToolTip(cls, bonus):
+        tooltipData = []
+        for booster, _ in sorted(bonus.getBoosters().iteritems(), key=lambda b: b[0].boosterID):
+            tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=None, specialArgs=[booster.boosterID]))
+
+        for demountkit in sorted(bonus.getDemountKits().iterkeys()):
+            tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.AWARD_DEMOUNT_KIT, specialArgs=[demountkit.intCD]))
+
+        for form in sorted(bonus.getRecertificationForms().iterkeys()):
+            tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.EPIC_BATTLE_RECERTIFICATION_FORM_TOOLTIP, specialArgs=[form.intCD]))
+
+        for item in sorted(bonus.getMentoringLicenses().iterkeys()):
+            tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=None, specialArgs=[item.inventoryCount]))
+
+        return tooltipData
+
+    @classmethod
+    def _getContentId(cls, bonus):
+        tooltipData = []
+        for _ in sorted(bonus.getBoosters().iterkeys(), key=lambda b: b.boosterID):
+            tooltipData.append(R.views.lobby.personal_reserves.QuestBoosterTooltip())
+
+        for _ in sorted(bonus.getDemountKits().iterkeys()):
+            tooltipData.append(BACKPORT_TOOLTIP_CONTENT_ID)
+
+        for _ in sorted(bonus.getRecertificationForms().iterkeys()):
+            tooltipData.append(BACKPORT_TOOLTIP_CONTENT_ID)
+
+        for _ in sorted(bonus.getMentoringLicenses().iterkeys()):
+            tooltipData.append(R.views.lobby.crew.tooltips.MentoringLicenseTooltip())
+
+        return tooltipData
+
 
 class LootBoxBlueprintBonusUIPacker(BlueprintBonusUIPacker):
     __eventName = ''

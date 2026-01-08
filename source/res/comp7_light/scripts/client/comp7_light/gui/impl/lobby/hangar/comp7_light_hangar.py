@@ -10,6 +10,7 @@ from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.impl.gen.view_models.views.lobby.hangar.hangar_settings_model import HangarSettingsModel
 from gui.impl.gen.view_models.views.lobby.hangar.key_bindings_model import KeyBindingsModel
 from gui.impl.lobby.common.presenters.settings_presenter import SettingsPresenter
+from gui.impl.lobby.easy_tank_equip.easy_tank_equip_presenter import EasyTankEquipPresenter
 from gui.impl.lobby.hangar.base.account_styles import AccountStyles
 from gui.lobby_state_machine.router import SubstateRouter
 from shared_utils import nextTick
@@ -118,6 +119,7 @@ class Comp7LightHangar(ViewComponent[RouterModel], IRoutableView):
          hangar.OptionalDevicesAssistant(): Comp7LightOptionalDevicesAssistantPresenter,
          hangar.Settings(): lambda : SettingsPresenter(HangarSettingsModel, HANGAR_VIEW_SETTINGS),
          hangar.KeyBindings(): lambda : SettingsPresenter(KeyBindingsModel, HANGAR_KEY_BINDINGS, readOnly=True),
+         hangar.EasyTankEquip(): EasyTankEquipPresenter,
          comp7LightHangar.AlertMessage(): AlertMessagePresenter,
          comp7LightHangar.SeasonModifier(): SeasonModifierPresenter,
          comp7LightHangar.RoleSkillSlot(): Comp7LightRoleSkillSlotPresenter,

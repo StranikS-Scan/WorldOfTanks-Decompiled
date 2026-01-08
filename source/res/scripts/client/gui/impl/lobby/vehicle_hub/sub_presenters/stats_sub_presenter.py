@@ -3,14 +3,16 @@
 from __future__ import absolute_import
 import json
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.impl.gen.view_models.common.vehicle_mechanic_model import VehicleMechanicModel
 from gui.impl.gen.view_models.views.lobby.vehicle_hub.special_vehicle_param_model import SpecialVehicleParamModel
+from gui.impl.gen.view_models.views.lobby.vehicle_hub.views.sub_models.stats_model import StatsModel
+from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleMechanicModel
 from gui.impl.lobby.hangar.sub_views.veh_param_helpers import formatParameterValue
 from gui.impl.lobby.vehicle_hub.sub_presenters.sub_presenter_base import SubPresenterBase
-from gui.impl.gen.view_models.views.lobby.vehicle_hub.views.sub_models.stats_model import StatsModel
 from gui.shared.gui_items import VEHICLE_ATTR_TO_KPI_NAME_MAP, KPI
 from gui.shared.items_parameters.formatters import getMeasureUnitsForParameter
 from gui.shared.items_parameters.comparator import PARAM_STATE
-from shared_utils import findFirst
+from shared_utils import first
 
 class StatsSubPresenter(SubPresenterBase):
 
@@ -21,25 +23,27 @@ class StatsSubPresenter(SubPresenterBase):
     def initialize(self, vhCtx, *args, **kwargs):
         super(StatsSubPresenter, self).initialize(vhCtx, *args, **kwargs)
         currentVehicle = self.currentVehicle
-        specialMechanic = findFirst(lambda mechanic: mechanic.isSpecial, currentVehicle.getVehicleMechanicItems())
-        specialMechanicName = specialMechanic.guiName.value if specialMechanic is not None else ''
-        specialStaticParams = specialMechanic.staticParams if specialMechanic is not None else ()
-        with self.viewModel.transaction() as model:
-            model.setSpecialMechanicName(specialMechanicName)
-            specialParams = model.getSpecialMechanicParams()
-            specialParams.clear()
-            for paramName, data in specialStaticParams:
-                paramState = (PARAM_STATE.NORMAL, None)
-                item = {'id': paramName,
-                 'value': formatParameterValue(paramName, data['value'], False, paramState, allowSmartRound=False),
-                 'measureUnit': getMeasureUnitsForParameter(currentVehicle, paramName),
-                 'template': data['template'],
-                 'name': self.__getKpiName(paramName, data['kpiSign']),
-                 'tooltipID': TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_ADVANCED_PARAMETERS}
-                specialParams.addViewModel(self.__fillModel(SpecialVehicleParamModel(), item))
+        mechanics = sorted((m for m in currentVehicle.getVehicleMechanicItems() if m.priority >= VehicleMechanicModel.MIN_SPECIAL_PRIORITY), key=lambda m: m.priority, reverse=True)
+        specialMechanic = first(mechanics)
+        if specialMechanic is None:
+            return
+        else:
+            with self.viewModel.transaction() as model:
+                fillVehicleMechanicModel(model.specialMechanic, specialMechanic)
+                specialParams = model.getSpecialMechanicParams()
+                specialParams.clear()
+                for paramName, data in specialMechanic.staticParams:
+                    paramState = (PARAM_STATE.NORMAL, None)
+                    item = {'id': paramName,
+                     'value': formatParameterValue(paramName, data['value'], False, paramState, allowSmartRound=False),
+                     'measureUnit': getMeasureUnitsForParameter(currentVehicle, paramName),
+                     'template': data['template'],
+                     'name': self.__getKpiName(paramName, data['kpiSign']),
+                     'tooltipID': TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_ADVANCED_PARAMETERS}
+                    specialParams.addViewModel(self.__fillModel(SpecialVehicleParamModel(), item))
 
-            specialParams.invalidate()
-        return
+                specialParams.invalidate()
+            return
 
     def __getKpiName(self, paramName, kpiSign):
         kpiName = VEHICLE_ATTR_TO_KPI_NAME_MAP.get(paramName, paramName)

@@ -91,7 +91,7 @@ class Comp7CoreEventBanner(BaseEventBanner):
             if seasonState == seasonState.ENDSOON:
                 self._timerValue = int(season.getEndDate() - getCurrentLocalServerTimestamp())
             if self._state == EventBannerState.INACTIVE:
-                self._timerValue = int(self._modeController.getPeriodInfo().primeDelta)
+                self._timerValue = int(self._modeController.getMinNonZeroPrimeDelta())
             savedAppearTime = AccountSettings.getSettings(self._accountSettingsTimestampFlag)
             if savedAppearTime != seasonStartDate:
                 self._playAppearAnim = True

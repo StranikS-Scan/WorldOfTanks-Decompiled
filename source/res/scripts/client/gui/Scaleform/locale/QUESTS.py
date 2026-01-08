@@ -1700,6 +1700,7 @@ class QUESTS(object):
     DAILYQUESTS_POSTBATTLE_GENERICTITLE_HARD = '#quests:dailyQuests/postBattle/genericTitle_hard'
     DAILYQUESTS_POSTBATTLE_GENERICTITLE_BONUS = '#quests:dailyQuests/postBattle/genericTitle_bonus'
     DAILYQUESTS_POSTBATTLE_GENERICTITLE_EPIC = '#quests:dailyQuests/postBattle/genericTitle_epic'
+    DAILYQUESTS_POSTBATTLE_EPIC_DESCRIPTION = '#quests:dailyQuests/postBattle/epic/description'
     DAILYQUESTS_BONUSQUEST_BONUSMISSIONTITLE = '#quests:dailyQuests/bonusQuest/bonusMissionTitle'
     DAILYQUESTS_BONUSQUEST_COUNTDOWN_HRS = '#quests:dailyQuests/bonusQuest/countDown_hrs'
     DAILYQUESTS_BONUSQUEST_COUNTDOWN_MINSEC = '#quests:dailyQuests/bonusQuest/countDown_minSec'

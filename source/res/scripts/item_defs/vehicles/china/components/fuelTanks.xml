@@ -1,4 +1,5 @@
 <fuelTanks.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <ids>
     <Small>	201	</Small>
     <Medium>	202	</Medium>
@@ -61,7 +62,7 @@
     <fuelTank_tier_11>
       <tags></tags>
       <price>	100	</price>
-      <weight>	300	</weight>
+      <weight>	100	</weight>
       <maxHealth>	225	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>

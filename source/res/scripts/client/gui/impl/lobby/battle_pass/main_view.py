@@ -140,6 +140,7 @@ class MainView(ViewComponent[MainViewModel], IRoutableView):
             self.__safeCallOnActivePresenter('updateInitialData', **kwargs)
             if self.__activePresenterID != kwargs['originStateID']:
                 self.__safeCallOnActivePresenter('activate')
+        switchDialogBPSoundFilter(self.__activePresenterID in (_BP.BuyPass(), _BP.BuyLevels()))
         if not self.__battlePass.isHoliday():
             self.__playSwitchSounds(kwargs.get('originStateID'), kwargs.get('chapterID'))
 
@@ -158,7 +159,6 @@ class MainView(ViewComponent[MainViewModel], IRoutableView):
             self.soundManager.playSound(BattlePassSounds.TASKS_ENTER)
 
     def __playSwitchSounds(self, originalPresenterID, previousChapter):
-        switchDialogBPSoundFilter(self.__activePresenterID in (_BP.BuyPass(), _BP.BuyLevels()))
         shallSkipPlaying = self.__activePresenterID not in (_BP.ChapterChoice(), _BP.Progression(), _BP.PostProgression()) or originalPresenterID in (_BP.BuyPass(), _BP.BuyLevels()) and self.__activePresenterID == _BP.Progression()
         if shallSkipPlaying:
             return

@@ -302,7 +302,8 @@ class PostmortemPanel(_SummaryPostmortemPanel):
                 continue
             component = componentConfigAdapter.getComponentById(compId)
             if component.purpose == ComponentPurpose.COUPLED:
-                componentImages.add(layoutComposer.getBottomPlateImage(compId))
+                if component.viewType == ComponentViewType.BACKGROUND:
+                    componentImages.add(layoutComposer.getBottomPlateImage(compId))
                 isEngraving = component.viewType == ComponentViewType.ENGRAVING
                 componentImages.add(layoutComposer.getComponentImage(compId, grade, localized=isEngraving))
             componentImages.add(layoutComposer.getComponentImage(compId, grade))

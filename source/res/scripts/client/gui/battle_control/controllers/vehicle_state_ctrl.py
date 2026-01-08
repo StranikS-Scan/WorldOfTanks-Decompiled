@@ -8,10 +8,11 @@ import Event
 import SoundGroups
 import nations
 from BattleReplay import CallbackDataNames
+from constants import UNKNOWN_VEHICLE_ID
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.battle_control import avatar_getter
 from gui.battle_control.controllers.interfaces import IBattleController
-from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, VEHICLE_WAINING_INTERVAL, VEHICLE_UPDATE_INTERVAL, BATTLE_CTRL_ID, DEVICE_STATE_NORMAL, UNKNOWN_VEHICLE_ID
+from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, VEHICLE_WAINING_INTERVAL, VEHICLE_UPDATE_INTERVAL, BATTLE_CTRL_ID, DEVICE_STATE_NORMAL
 from gui.shared.utils.TimeInterval import TimeInterval
 from shared_utils import first
 

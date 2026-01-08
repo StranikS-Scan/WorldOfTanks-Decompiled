@@ -74,6 +74,10 @@ VIEWS_FOR_MONITORING = 70
 LIFECYCLE_HANDLED_SUB_VIEWS = 71
 BATTLE_BUTTON_MANUAL_CONTROL = 72
 PREBATTLE_CONTROL_MODE = 73
+CLASS_TAG_GETTER = 74
+BATTLE_RESULT_PROGRESS_PRESENTER = 75
+BATTLE_ENTRY = 76
+DYNAMIC_VIEWS_FOR_MONITORING = 77
 
 class _CollectEventsManager(object):
 
@@ -703,6 +707,18 @@ def collectBattleResultStatsCtrl(bonusType):
     return __collectEM.handleEvent((BATTLE_RESULT_STATS_CONTROLLER, bonusType), ctx={}).get('item', None)
 
 
+def registerProgressionPresenter(questCategory, itemClsTuplesList):
+
+    def onCollect(ctx):
+        ctx['questCategory'][questCategory] = itemClsTuplesList
+
+    __collectEM.addListener(BATTLE_RESULT_PROGRESS_PRESENTER, onCollect)
+
+
+def collectProgressionPresenters():
+    return __collectEM.handleEvent(BATTLE_RESULT_PROGRESS_PRESENTER, {'questCategory': {}})['questCategory']
+
+
 def registerSeasonProviderHandler(seasonType, seasonControllerHandler):
 
     def onCollect(ctx):
@@ -1047,6 +1063,22 @@ def registerViewsForMonitoring(viewsForMonitoring):
     __collectEM.addListener(VIEWS_FOR_MONITORING, onCollect)
 
 
+def collectViewsForMonitoring():
+    return __collectEM.handleEvent(VIEWS_FOR_MONITORING, ctx={'viewsForMonitoring': []})['viewsForMonitoring']
+
+
+def registerDynamicViewsForMonitoring(dynamicViewsForMonitoring):
+
+    def onCollect(ctx):
+        ctx['dynamicViewsForMonitoring'].extend(dynamicViewsForMonitoring)
+
+    __collectEM.addListener(DYNAMIC_VIEWS_FOR_MONITORING, onCollect)
+
+
+def collectDynamicViewsForMonitoring():
+    return __collectEM.handleEvent(DYNAMIC_VIEWS_FOR_MONITORING, ctx={'dynamicViewsForMonitoring': []})['dynamicViewsForMonitoring']
+
+
 def registerLifecycleHandledSubViews(subViews):
 
     def onCollect(ctx):
@@ -1057,10 +1089,6 @@ def registerLifecycleHandledSubViews(subViews):
 
 def collectLifecycleHandledSubViews():
     return __collectEM.handleEvent(LIFECYCLE_HANDLED_SUB_VIEWS, {'subViews': []})['subViews']
-
-
-def collectViewsForMonitoring():
-    return __collectEM.handleEvent(VIEWS_FOR_MONITORING, ctx={'viewsForMonitoring': []})['viewsForMonitoring']
 
 
 def registerBattleButtonManualControl(queueType, handler):
@@ -1085,3 +1113,27 @@ def registerPrebattleCtrlMode(bonusType, controlModes):
 
 def collectPrebattleCtrlMode():
     return __collectEM.handleEvent(PREBATTLE_CONTROL_MODE, ctx={'prebattleCtrlMode': {}})['prebattleCtrlMode']
+
+
+def registerDisplayedClassTagGetter(guiType, getterFunc):
+
+    def onCollect(ctx):
+        ctx['classTagGetter'] = getterFunc
+
+    __collectEM.addListener((CLASS_TAG_GETTER, guiType), onCollect)
+
+
+def collectDisplayedClassTagGetter(guiType):
+    return __collectEM.handleEvent((CLASS_TAG_GETTER, guiType), ctx={}).get('classTagGetter')
+
+
+def registerBattleEntry(arenaGuiType, resId):
+
+    def onCollect(ctx):
+        ctx['battleEntryResID'] = resId
+
+    __collectEM.addListener((BATTLE_ENTRY, arenaGuiType), onCollect)
+
+
+def collectBattleEntry(arenaGuiType):
+    return __collectEM.handleEvent((BATTLE_ENTRY, arenaGuiType), ctx={}).get('battleEntryResID', 0)

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/vehicle_mechanics_blocks.py
 import typing
-from constants import CONCENTRATION_MODE_STATE, OVERHEAT_GAIN_STATE, POWER_MODE_STATE, RECHARGEABLE_NITRO_STATE, SECONDARY_GUN_STATE, VEHICLE_SIEGE_STATE, TARGET_DESIGNATOR_STATE, STATIONARY_RELOAD_STATE, GUN_LOCK_REASONS
+from constants import CONCENTRATION_MODE_STATE, OVERHEAT_GAIN_STATE, POWER_MODE_STATE, RECHARGEABLE_NITRO_STATE, SECONDARY_GUN_STATE, VEHICLE_SIEGE_STATE, TARGET_DESIGNATOR_STATE, STATIONARY_RELOAD_STATE, GUN_LOCK_REASONS, OVERHEAT_GUN_STATE, TEMPERATURE_GUN_STATE, HEATING_ZONES_GUN_STATE, PHASED_MECHANIC_STATE, AcceleratorStatus
 from visual_script.misc import ASPECT
 from visual_script.vehicle_blocks import VehicleMeta
 from visual_script.type import VScriptEnum
@@ -90,6 +90,36 @@ class RechargeableNitroStateEnum(VScriptEnum):
         return [ASPECT.CLIENT, ASPECT.SERVER]
 
 
+class PhasedMechanicStateEnum(VScriptEnum):
+
+    @classmethod
+    def slotType(cls):
+        pass
+
+    @classmethod
+    def vs_enum(cls):
+        return PHASED_MECHANIC_STATE
+
+    @classmethod
+    def vs_aspects(cls):
+        return [ASPECT.CLIENT]
+
+
+class AcceleratorStatusEnum(VScriptEnum):
+
+    @classmethod
+    def slotType(cls):
+        pass
+
+    @classmethod
+    def vs_enum(cls):
+        return AcceleratorStatus
+
+    @classmethod
+    def vs_aspects(cls):
+        return [ASPECT.CLIENT]
+
+
 class OverheatGainStateEnum(VScriptEnum):
 
     @classmethod
@@ -144,6 +174,51 @@ class StationaryReloadLockEnum(VScriptEnum):
     @classmethod
     def vs_enum(cls):
         return GUN_LOCK_REASONS
+
+    @classmethod
+    def vs_aspects(cls):
+        return [ASPECT.CLIENT]
+
+
+class OverheatGunEnum(VScriptEnum):
+
+    @classmethod
+    def slotType(cls):
+        pass
+
+    @classmethod
+    def vs_enum(cls):
+        return OVERHEAT_GUN_STATE
+
+    @classmethod
+    def vs_aspects(cls):
+        return [ASPECT.CLIENT]
+
+
+class TemperatureGunEnum(VScriptEnum):
+
+    @classmethod
+    def slotType(cls):
+        pass
+
+    @classmethod
+    def vs_enum(cls):
+        return TEMPERATURE_GUN_STATE
+
+    @classmethod
+    def vs_aspects(cls):
+        return [ASPECT.CLIENT]
+
+
+class HeatingZonesGunEnum(VScriptEnum):
+
+    @classmethod
+    def slotType(cls):
+        pass
+
+    @classmethod
+    def vs_enum(cls):
+        return HEATING_ZONES_GUN_STATE
 
     @classmethod
     def vs_aspects(cls):

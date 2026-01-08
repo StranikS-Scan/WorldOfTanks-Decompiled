@@ -1,15 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PlayerEvents.py
 import Event
+from events_containers.common.containers import ClientEventsContainer
 
-class _PlayerEvents(object):
+class _PlayerEvents(ClientEventsContainer):
 
     def __init__(self):
+        super(_PlayerEvents, self).__init__()
         self.onPlayerEntityChanging = Event.Event()
         self.onPlayerEntityChangeCanceled = Event.Event()
         self.isPlayerEntityChanging = True
         self.onAvatarObserverVehicleChanged = Event.Event()
-        self.onAihControlModeChanged = Event.Event()
+        self.onObservedByEnemy = Event.Event()
         self.onAccountBecomePlayer = Event.Event()
         self.onAccountBecomeNonPlayer = Event.Event()
         self.onAccountShowGUI = Event.Event()
@@ -84,6 +86,7 @@ class _PlayerEvents(object):
         self.onHideBattleHint = Event.SafeEvent()
         self.onEmptyBattleHintsQueue = Event.SafeEvent()
         self.onTracerReceived = Event.Event()
+        self.onVehicleEntityCreated = Event.SafeEvent()
         self.onUILoggingStarted = Event.SafeEvent()
         self.onRenewableSubscriptionStatusChanged = Event.Event()
 

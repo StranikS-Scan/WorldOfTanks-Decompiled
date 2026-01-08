@@ -8,7 +8,7 @@ from gui.impl.pub import ViewImpl
 class DifficultyTooltip(ViewImpl):
 
     def __init__(self, difficulty, isSelected, isLocked=False, isAutoCompleteCondition=False):
-        settings = ViewSettings(R.views.story_mode.lobby.DifficultyTooltip(), model=MissionDifficultyTooltipModel())
+        settings = ViewSettings(R.views.story_mode.mono.lobby.tooltips.difficulty_tooltip(), model=MissionDifficultyTooltipModel())
         super(DifficultyTooltip, self).__init__(settings)
         self._difficulty = difficulty
         self._isAutoCompleteCondition = isAutoCompleteCondition

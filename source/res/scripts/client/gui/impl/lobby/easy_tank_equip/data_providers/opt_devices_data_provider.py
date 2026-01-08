@@ -183,7 +183,14 @@ class OptDevicesDataProvider(BaseDataProvider):
         standardOptDevices = self.__getStandardOptDevices(standardLoadoutDevices)
         upgradedOptDevices = self.__getAdvancedOptDevices(standardLoadoutDevices, standardOptDevices)
         modernizedOptDevices = self.__getAdvancedOptDevices(modernizedLoadoutDevices, standardOptDevices)
-        advancedOptDevices = [ (device1 if self.__getOptDeviceIndex(device1) < self.__getOptDeviceIndex(device2) else device2) for device1, device2 in zip(modernizedOptDevices, upgradedOptDevices) ]
+        advancedOptDevices = []
+        for modernizedOptDevice, upgradedOptDevice in zip(modernizedOptDevices, upgradedOptDevices):
+            if modernizedOptDevice and upgradedOptDevice:
+                advancedOptDevices.append(modernizedOptDevice if self.__getOptDeviceIndex(modernizedOptDevice) < self.__getOptDeviceIndex(upgradedOptDevice) else upgradedOptDevice)
+            advancedDevice = modernizedOptDevice or upgradedOptDevice
+            if advancedDevice:
+                advancedOptDevices.append(advancedDevice)
+
         if self.__isStandardPresetNeeded(standardOptDevices):
             self.__optDevicesPresets[OptDevicesPresetType.STANDARD] = standardOptDevices
             self.__optDevicesForDemount[OptDevicesPresetType.STANDARD] = self.__getOptDevicesForDemount(standardOptDevices)
@@ -233,6 +240,8 @@ class OptDevicesDataProvider(BaseDataProvider):
                     highestPriorityDevice = standardOptDevices[deviceIndex]
             elif indexExistInStandardPreset:
                 highestPriorityDevice = standardOptDevices[deviceIndex]
+            if not highestPriorityDevice:
+                _logger.warning('Device with tag %s is not found for advanced loadout. Vehicle=%d, device position=%d', deviceTag, self.vehicle.intCD, deviceIndex + 1)
             advancedOptDevices.append(highestPriorityDevice)
 
         return advancedOptDevices

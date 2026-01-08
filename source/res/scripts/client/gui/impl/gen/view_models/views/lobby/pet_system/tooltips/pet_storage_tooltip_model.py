@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class PetStorageTooltipModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=8, commands=0):
+    def __init__(self, properties=9, commands=0):
         super(PetStorageTooltipModel, self).__init__(properties=properties, commands=commands)
 
     def getPetNameID(self):
@@ -56,6 +56,12 @@ class PetStorageTooltipModel(ViewModel):
     def setCurrentBattleCount(self, value):
         self._setNumber(7, value)
 
+    def getIsUnsuitableMode(self):
+        return self._getBool(8)
+
+    def setIsUnsuitableMode(self, value):
+        self._setBool(8, value)
+
     def _initialize(self):
         super(PetStorageTooltipModel, self)._initialize()
         self._addNumberProperty('petNameID', 0)
@@ -66,3 +72,4 @@ class PetStorageTooltipModel(ViewModel):
         self._addNumberProperty('bonusValue', 0)
         self._addNumberProperty('totalBattleCount', 0)
         self._addNumberProperty('currentBattleCount', 0)
+        self._addBoolProperty('isUnsuitableMode', False)

@@ -217,9 +217,10 @@ class ShellsBlock(BaseBlock):
     def createBlock(self, viewModel):
         super(ShellsBlock, self).createBlock(viewModel)
         viewModel.setType(self._getSectionName())
-        layoutIndex = self._vehicle.shells.setupLayouts.layoutIndex
-        isWarning = not self._vehicle.shells.setupLayouts.isAmmoFull(layoutIndex, self._vehicle.ammoMinSize)
-        viewModel.setIsWarning(isWarning)
+
+    def updateBlock(self, viewModel):
+        super(ShellsBlock, self).updateBlock(viewModel)
+        viewModel.setIsWarning(self.__isAmmoNotFull())
 
     def _getSectionName(self):
         return TankSetupConstants.SHELLS
@@ -244,6 +245,10 @@ class ShellsBlock(BaseBlock):
         model.setImageName(slotItem.descriptor.iconName)
         model.setCount(slotItem.count)
         model.setIntCD(slotItem.intCD)
+
+    def __isAmmoNotFull(self):
+        layoutIndex = self._vehicle.shells.setupLayouts.layoutIndex
+        return not self._vehicle.shells.setupLayouts.isAmmoFull(layoutIndex, self._vehicle.ammoMinSize)
 
 
 class ConsumablesBlock(BaseBlock):

@@ -10,6 +10,7 @@ from .view_model import ViewModel
 from ..py_object_binder import PyObjectEntity, getProxy, getObject
 from ..py_object_wrappers import PyObjectView, PyObjectViewSettings
 from ..gui_constants import ViewFlags, ViewStatus, ViewEventType, ChildFlags, ShowingStatus
+from py2to3 import patched_typing
 TViewModel = typing.TypeVar('TViewModel', bound=ViewModel)
 _logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
@@ -17,7 +18,7 @@ if typing.TYPE_CHECKING:
     from sound_gui_manager import CommonSoundSpaceSettings
     from gui.sounds.ViewSoundManager import _ViewSoundsManager
 
-class ViewSettings(typing.Generic[TViewModel]):
+class ViewSettings(patched_typing.Generic[TViewModel]):
     __slots__ = ('__proxy', 'args', 'kwargs')
 
     def __init__(self, layoutID, flags=ViewFlags.VIEW, model=None, args=(), kwargs=None):
@@ -66,7 +67,7 @@ class ViewSettings(typing.Generic[TViewModel]):
         return
 
 
-class View(PyObjectEntity, typing.Generic[TViewModel]):
+class View(PyObjectEntity, patched_typing.Generic[TViewModel]):
     __slots__ = ('__viewStatus', '__showingStatus', '__viewModel', '__args', '__kwargs', 'onStatusChanged', 'onShowingStatusChanged', 'onFocusChanged', '__soundExtension', '__isShown', '__isFocused', '__weakref__')
     _COMMON_SOUND_SPACE = None
 

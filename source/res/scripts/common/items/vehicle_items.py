@@ -21,7 +21,7 @@ if TYPE_CHECKING:
     from Vehicular import GeneralWheelsAnimatorConfig
     from items import vehicles
     from items.components.shared_components import CustomizationSlotDescription
-    from items.readers.prefab_effects_readers import EffectDesc
+    from items.readers.prefab_effects_readers import GunEffectDesc
 
 class VEHICLE_ITEM_STATUS(object):
     UNDEFINED = 0
@@ -337,7 +337,7 @@ class Gun(InstallableItem):
         self.isDamageMutable = False
         self.slotPrefabs = component_constants.EMPTY_LIST
         self.objectSlots = component_constants.EMPTY_LIST
-        self.muzzleBrake = component_constants.MuzzleBreakType.NONE
+        self.muzzleBrake = component_constants.MuzzleBrakeType.NONE
         self.secondaryGunID = None
         self.mechanicsParams = None
         self.controllableReload = None
@@ -347,7 +347,7 @@ class Gun(InstallableItem):
 
     @property
     def prefabBased(self):
-        return self.prefabs and self.prefabs.get('default', {}).get('main', ())
+        return bool(self.prefabs and self.prefabs.get('default', {}).get('main', ()))
 
     @property
     def multiGun(self):
@@ -471,7 +471,8 @@ class Shell(BasicItem):
 
     @property
     def prereqEffectIndexes(self):
-        return (self.effectsIndex,) + tuple((item.effectsIndex for item in self.dynamicEffectsIndexes))
+        indexes = (self.effectsIndex,) if self.effectsIndex != component_constants.INVALID_EFFECT_INDEX else tuple()
+        return indexes + tuple((item.effectsIndex for item in self.dynamicEffectsIndexes))
 
 
 _TYPE_ID_TO_CLASS = {ITEM_TYPES.vehicleChassis: Chassis,

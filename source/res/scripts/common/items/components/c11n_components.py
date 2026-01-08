@@ -609,7 +609,7 @@ class Font(object):
         return items.makeIntCompactDescrByID('customizationItem', self.itemType, self.id)
 
 if IS_EDITOR:
-    CUSTOMIZATION_TYPES = {CustomizationType.MODIFICATION: ModificationItem, CustomizationType.PAINT: PaintItem, CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.STAT_TRACKER: StatTrackerItem, CustomizationType.STYLE: StyleItem, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem, CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.DECAL: DecalItem, CustomizationType.FONT: Font}
+    CUSTOMIZATION_TYPES = {CustomizationType.MODIFICATION: ModificationItem, CustomizationType.PAINT: PaintItem, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.STAT_TRACKER: StatTrackerItem, CustomizationType.STYLE: StyleItem, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem, CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.DECAL: DecalItem, CustomizationType.FONT: Font, CustomizationType.ATTACHMENT: AttachmentItem}
     CUSTOMIZATION_CLASSES = {v : k for k, v in CUSTOMIZATION_TYPES.items()}
 class _Filter(object):
     __slots__ = ('include', 'exclude')
@@ -911,34 +911,37 @@ class CustomizationCache(object):
                         if itemType in CustomizationType.STYLE_ONLY_RANGE and components:
                             raise SoftException("Outfit can't contain style-only items: {}".format(components))
                         else:
-                            storage = getattr(self, componentsAttrName)
-                            if usedStyle is not None:
-                                baseOutfit = usedStyle.outfits.get(season)
-                                baseComponents = getattr(baseOutfit, componentsAttrName, []) if baseOutfit else []
-                        for component in components:
-                            componentId = component if isinstance(component, int) else component.id
-                            item = storage.get(componentId, None)
-                            if componentId != EMPTY_ITEM_ID:
-                                if item is None:
-                                    raise SoftException('{} {} not found'.format(typeName, componentId))
-                                else:
-                                    _validateItem(typeName, item, season, tokens, vehType, styleID)
-                                    if item.isProgressive():
-                                        _validateProgression(component, item, progressionStorage, vehType)
-                                    if itemType in CustomizationType.APPLIED_TO_TYPES:
-                                        _validateApplyTo(component, item)
-                                        if itemType == CustomizationType.CAMOUFLAGE:
-                                            _validateCamouflage(component, item)
-                                        elif itemType == CustomizationType.PERSONAL_NUMBER:
-                                            _validatePersonalNumber(component, item)
-                                    elif itemType == CustomizationType.PROJECTION_DECAL:
-                                        _validateProjectionDecal(component, item, vehDescr, usedStyle)
-                                    elif itemType == CustomizationType.ATTACHMENT:
-                                        _validateAttachment(component, item, vehDescr)
-                            if usedStyle is not None:
-                                _validateStyle(componentId, typeName, itemType, component, item, usedStyle, outfit, vehDescr, baseComponents, season)
-                                continue
-                        continue
+                            if season == SeasonType.ALL and itemType not in CustomizationType.COMMON_TYPES:
+                                raise SoftException('Outfit contain non-common items in ALL season: {}'.format(components))
+                            else:
+                                storage = getattr(self, componentsAttrName)
+                                if usedStyle is not None:
+                                    baseOutfit = usedStyle.outfits.get(season)
+                                    baseComponents = getattr(baseOutfit, componentsAttrName, []) if baseOutfit else []
+                            for component in components:
+                                componentId = component if isinstance(component, int) else component.id
+                                item = storage.get(componentId, None)
+                                if componentId != EMPTY_ITEM_ID:
+                                    if item is None:
+                                        raise SoftException('{} {} not found'.format(typeName, componentId))
+                                    else:
+                                        _validateItem(typeName, item, season, tokens, vehType, styleID)
+                                        if item.isProgressive():
+                                            _validateProgression(component, item, progressionStorage, vehType)
+                                        if itemType in CustomizationType.APPLIED_TO_TYPES:
+                                            _validateApplyTo(component, item)
+                                            if itemType == CustomizationType.CAMOUFLAGE:
+                                                _validateCamouflage(component, item)
+                                            elif itemType == CustomizationType.PERSONAL_NUMBER:
+                                                _validatePersonalNumber(component, item)
+                                        elif itemType == CustomizationType.PROJECTION_DECAL:
+                                            _validateProjectionDecal(component, item, vehDescr, usedStyle)
+                                        elif itemType == CustomizationType.ATTACHMENT:
+                                            _validateAttachment(component, item, vehDescr)
+                                if usedStyle is not None:
+                                    _validateStyle(componentId, typeName, itemType, component, item, usedStyle, outfit, vehDescr, baseComponents, season)
+                                    continue
+                            continue
                     else:
                         continue
                 if usedStyle is not None and usedStyle.isEditable:

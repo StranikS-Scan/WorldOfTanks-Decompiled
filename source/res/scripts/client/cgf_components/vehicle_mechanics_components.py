@@ -228,3 +228,30 @@ class StationaryReloadEffects(object):
     soundTurretBrake = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Turret break brake sound', value='gp_abl_podrld_pods_brake')
     soundDelayStart = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Delay start sound', value='gui_abl_podrld_turret_delay_start')
     soundDelayStop = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Delay stop sound', value='gui_abl_podrld_turret_delay_stop')
+
+
+@registerComponent
+class OverheatGunEffects(object):
+    editorTitle = 'Overheat Gun Effects'
+    category = 'OverheatGun'
+    domain = CGF.DomainOption.DomainClient
+    soundHeating = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Gun heating start sound', value='gui_abl_overheat_gun_heating')
+    soundCooling = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Gun colling start sound', value='gui_abl_overheat_gun_cooling')
+    soundIdle = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Gun colling stop sound', value='gui_abl_overheat_gun_cooling_stop')
+    soundUtilityStop = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Utility stop', value='gui_abl_overheat_gun_utility_stop')
+    soundOverheatWarning = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Overheat warning sound', value='gui_abl_overheat_gun_block_on_pre')
+    soundOverheated = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Overheat occurs sound', value='gui_abl_overheat_gun_block_on')
+    soundPreCooled = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Overheat near end sound', value='gui_abl_overheat_gun_block_off_pre')
+    soundCooled = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Overheat ended sound', value='gui_abl_overheat_gun_block_off')
+
+
+@registerComponent
+class HeatingZonesGunEffects(object):
+    editorTitle = 'Heating Zones Gun State Effects'
+    category = 'HeatingZonesGun'
+    domain = CGF.DomainOption.DomainClient
+    soundHeatingOn = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Heating start sound', value='gui_abl_gun_heating_on')
+    soundHeatingOff = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Heating stop sound', value='gui_abl_gun_heating_off')
+    soundHeatingDropMarker = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Heating marker drop sound', value='gui_abl_gun_heating_marker')
+    soundHeatingIdleMarker = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Heating marker idle sound', value='gui_abl_gun_heating_marker_last_aim')
+    soundUtilityStop = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Heating utility stop', value='gui_abl_gun_heating_stop_utility')

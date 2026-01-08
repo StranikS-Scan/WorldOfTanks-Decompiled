@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: resource_well/scripts/client/resource_well/gui/game_control/award_controller_handlers.py
+from __future__ import absolute_import
 import logging
 from chat_shared import SYS_MESSAGE_TYPE
 from gui.game_control.AwardController import ServiceChannelHandler

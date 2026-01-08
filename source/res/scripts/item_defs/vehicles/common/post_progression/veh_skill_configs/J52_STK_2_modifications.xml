@@ -1,0 +1,436 @@
+<J52_STK_2_modifications.xml>
+  <j52_node1>
+    <id>	11901	</id>
+    <imgName>	allShellDamage	</imgName>
+    <locName>	standardShellDamage	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shell0/armorDamage	</name>
+        <value>	10	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	standardShellDamage	</name>
+        <value>	10	</value>
+      </add>
+    </kpi>
+  </j52_node1>
+  <j52_node2>
+    <id>	11902	</id>
+    <imgName>	hitPoints	</imgName>
+    <locName>	hitPoints	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/hull/maxHealth	</name>
+        <value>	50	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleStrength	</name>
+        <value>	50	</value>
+      </add>
+    </kpi>
+  </j52_node2>
+  <j52_node3>
+    <id>	11903	</id>
+    <imgName>	ammoRackHP	</imgName>
+    <locName>	ammoRackHP	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/ammoBayHealthFactor	</name>
+        <value>	1.2	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleAmmoBayStrength	</name>
+        <value>	1.2	</value>
+      </mul>
+    </kpi>
+  </j52_node3>
+  <j52_node4>
+    <id>	11904	</id>
+    <imgName>	enginePower	</imgName>
+    <locName>	enginePower	</locName>
+    <categories>	mobility	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/engine/power	</name>
+        <value>	50	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleEnginePower	</name>
+        <value>	50	</value>
+      </add>
+    </kpi>
+  </j52_node4>
+  <j52_node5>
+    <id>	11905	</id>
+    <imgName>	hullTraverseSpeed	</imgName>
+    <locName>	hullTraverseSpeed	</locName>
+    <categories>	mobility	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/chassis/rotationSpeedDegrees	</name>
+        <value>	2	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleAllGroundRotationSpeed	</name>
+        <value>	2	</value>
+      </add>
+    </kpi>
+  </j52_node5>
+  <j52_node6>
+    <id>	11906	</id>
+    <imgName>	j52_mechanic_1	</imgName>
+    <locName>	j52_mechanic_1	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <add>
+        <name>	miscAttrs/temperatureGun/heatingPerShot	</name>
+        <value>	-5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	-5	</value>
+      </add>
+    </kpi>
+  </j52_node6>
+  <j52_node9>
+    <id>	11909	</id>
+    <imgName>	allShellDamage	</imgName>
+    <locName>	specialShellDamage	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shell1/armorDamage	</name>
+        <value>	10	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	specialShellDamage	</name>
+        <value>	10	</value>
+      </add>
+    </kpi>
+  </j52_node9>
+  <j52_node10>
+    <id>	11910	</id>
+    <imgName>	HEShellPenetration	</imgName>
+    <locName>	HEShellPenetration	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot2/piercingPower	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	HEShellPenetration	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </j52_node10>
+  <j52_node11>
+    <id>	11911	</id>
+    <imgName>	vehicleSpeed	</imgName>
+    <locName>	forwardSpeed	</locName>
+    <categories>	mobility	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/engine/maxSpeedForward	</name>
+        <value>	2	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleForwardMaxSpeed	</name>
+        <value>	2	</value>
+      </add>
+    </kpi>
+  </j52_node11>
+  <j52_node12>
+    <id>	11912	</id>
+    <imgName>	vehicleSpeed	</imgName>
+    <locName>	reverseSpeed	</locName>
+    <categories>	mobility	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/engine/maxSpeedBack	</name>
+        <value>	1	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleBackwardMaxSpeed	</name>
+        <value>	1	</value>
+      </add>
+    </kpi>
+  </j52_node12>
+  <j52_node13>
+    <id>	11913	</id>
+    <imgName>	j52_mechanic_0	</imgName>
+    <locName>	j52_mechanic_0	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <add>
+        <name>	miscAttrs/temperatureGun/coolingDelay	</name>
+        <value>	-0.9	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	-0.9	</value>
+      </add>
+    </kpi>
+  </j52_node13>
+  <j52_node14>
+    <id>	11914	</id>
+    <imgName>	standardShellPenetration	</imgName>
+    <locName>	standardShellPenetration	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot0/piercingPower	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	standardShellPenetration	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </j52_node14>
+  <j52_node15>
+    <id>	11915	</id>
+    <imgName>	additionalShellAmmoCapacity	</imgName>
+    <locName>	additionalShellAmmoCapacity	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gun/maxAmmo	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	additionalShellAmmoCapacity	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </j52_node15>
+  <j52_node16>
+    <id>	11916	</id>
+    <imgName>	shellModuleDamage	</imgName>
+    <locName>	shellModuleDamage	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <mul>
+        <name>	descrAttrs/shell0/deviceDamage	</name>
+        <value>	1.1	</value>
+      </mul>
+      <mul>
+        <name>	descrAttrs/shell1/deviceDamage	</name>
+        <value>	1.1	</value>
+      </mul>
+      <mul>
+        <name>	descrAttrs/shell2/deviceDamage	</name>
+        <value>	1.1	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	shellModuleDamage	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </j52_node16>
+  <j52_node17>
+    <id>	11917	</id>
+    <imgName>	j52_mechanic_1	</imgName>
+    <locName>	j52_mechanic_1	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <add>
+        <name>	miscAttrs/temperatureGun/heatingPerShot	</name>
+        <value>	-5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	-5	</value>
+      </add>
+    </kpi>
+  </j52_node17>
+  <j52_node18>
+    <id>	11918	</id>
+    <imgName>	gunStabilizationFromHullRotation	</imgName>
+    <locName>	gunStabilizationFromHullRotation	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <mul>
+        <name>	descrAttrs/chassis/shotDispersionFactors/1	</name>
+        <value>	0.9	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersionChassisRotation	</name>
+        <value>	0.9	</value>
+      </mul>
+    </kpi>
+  </j52_node18>
+  <j52_node19>
+    <id>	11919	</id>
+    <imgName>	specialShellVelocity	</imgName>
+    <locName>	specialShellVelocity	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot1/speed	</name>
+        <value>	50	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	specialShellVelocity	</name>
+        <value>	50	</value>
+      </add>
+    </kpi>
+  </j52_node19>
+  <j52_node20>
+    <id>	11920	</id>
+    <imgName>	specialShellPenetration	</imgName>
+    <locName>	specialShellPenetration	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot1/piercingPower	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	specialShellPenetration	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </j52_node20>
+  <j52_node21>
+    <id>	11921	</id>
+    <imgName>	gunDepression	</imgName>
+    <locName>	gunDepression	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gunPitchLimits/maxPitchDegrees/0	</name>
+        <value>	1	</value>
+      </add>
+      <add>
+        <name>	descrAttrs/gunPitchLimits/maxPitchDegrees/1	</name>
+        <value>	1	</value>
+      </add>
+      <add>
+        <name>	descrAttrs/gunPitchLimits/maxPitchDegrees/4	</name>
+        <value>	1	</value>
+      </add>
+      <add>
+        <name>	descrAttrs/gunPitchLimits/maxPitchDegrees/5	</name>
+        <value>	1	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	gunDepression	</name>
+        <value>	-1	</value>
+      </add>
+    </kpi>
+  </j52_node21>
+  <j52_node23>
+    <id>	11923	</id>
+    <imgName>	damagedGunDispersion	</imgName>
+    <locName>	damagedGunDispersion	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/gun/shotDispersionFactors/whileGunDamaged	</name>
+        <value>	0.8	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersionWhileGunDamaged	</name>
+        <value>	0.8	</value>
+      </mul>
+    </kpi>
+  </j52_node23>
+  <j52_node24>
+    <id>	11924	</id>
+    <imgName>	j52_mechanic_2	</imgName>
+    <locName>	j52_mechanic_2	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/temperatureGun/coolingPerSec	</name>
+        <value>	1.25	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	value	</name>
+        <value>	1.25	</value>
+      </mul>
+    </kpi>
+  </j52_node24>
+  <j52_node25>
+    <id>	11925	</id>
+    <imgName>	standardShellVelocity	</imgName>
+    <locName>	standardShellVelocity	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot0/speed	</name>
+        <value>	50	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	standardShellVelocity	</name>
+        <value>	50	</value>
+      </add>
+    </kpi>
+  </j52_node25>
+  <j52_node26>
+    <id>	11926	</id>
+    <imgName>	gunStabilizationFromHullMovement	</imgName>
+    <locName>	gunStabilizationFromHullMovement	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <mul>
+        <name>	descrAttrs/chassis/shotDispersionFactors/0	</name>
+        <value>	0.9	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersionChassisMovement	</name>
+        <value>	0.9	</value>
+      </mul>
+    </kpi>
+  </j52_node26>
+</J52_STK_2_modifications.xml>

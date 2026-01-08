@@ -3,7 +3,7 @@
 from functools import partial
 from Event import Event
 from debug_utils import LOG_DEBUG_DEV
-from entity_events import EntityEvents
+from events_container import EventsContainer
 from events_debugger import EventsDebugger
 
 class EventsProviderSourceProxy(object):
@@ -24,10 +24,10 @@ class EventsProviderSourceProxy(object):
         return wrapper
 
 
-class ContainerLifecycleEvents(EntityEvents):
+class ContainerLifecycleEvents(EventsContainer):
 
     def __init__(self):
-        EntityEvents.__init__(self)
+        EventsContainer.__init__(self)
         self.onLoading = self._createEvent()
         self.onLoaded = self._createEvent()
         self.initialize = self._createEvent()
@@ -51,10 +51,10 @@ class ContainerLifecycleEvents(EntityEvents):
         return events
 
 
-class ComponentEventsBase(EntityEvents):
+class ComponentEventsBase(EventsContainer):
 
     def __init__(self):
-        EntityEvents.__init__(self)
+        EventsContainer.__init__(self)
         self.onMouseEnter = self._createEvent()
         self.onMouseLeave = self._createEvent()
         self.logClick = self._createEvent()

@@ -35,8 +35,11 @@ class _RecordedStates(EventsHandler):
         self.removableStateSelectors = []
         return
 
-    def push(self, state):
-        self.__stateWithParamStack.append((state, buildSerializedParamsTopDown(state)))
+    def push(self, state, params=None):
+        if params is None:
+            params = buildSerializedParamsTopDown(state)
+        self.__stateWithParamStack.append((state, params))
+        return
 
     def peek(self):
         return self.__stateWithParamStack[-1] if self.hasEntries() else (None, None)
@@ -46,6 +49,9 @@ class _RecordedStates(EventsHandler):
 
     def hasEntries(self):
         return bool(self.__stateWithParamStack)
+
+    def contains(self, predicate):
+        return any((predicate(state, params) for state, params in self.__stateWithParamStack))
 
     def pushRecordedTransitionSource(self, transition, isTransitioningByBackNavigation):
         sourceState = transition.getSource()

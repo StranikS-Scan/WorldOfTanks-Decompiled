@@ -23,6 +23,9 @@
     <camouflageNet>
       <invisibilityBonus>	0.05 0.075	</invisibilityBonus>
     </camouflageNet>
+    <deluxeCamouflageNet>
+      <invisibilityBonus>	0.075	</invisibilityBonus>
+    </deluxeCamouflageNet>
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.03 0.04	</invisibilityBonus>
     </additionalInvisibilityDevice>
@@ -624,8 +627,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.18	</vehicleMovement>
-        <vehicleRotation>	0.18	</vehicleRotation>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -1656,7 +1659,7 @@
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <reloadTime>	10.3	</reloadTime>
+          <reloadTime>	9.6	</reloadTime>
           <aimingTime>	2	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>

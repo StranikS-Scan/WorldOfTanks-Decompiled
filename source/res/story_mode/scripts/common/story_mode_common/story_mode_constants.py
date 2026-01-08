@@ -15,7 +15,7 @@ SM_CONGRATULATIONS_MESSAGE = 'StoryModeCongratulationsMessage'
 STORY_MODE_BONUS_TYPES = (ARENA_BONUS_TYPE.STORY_MODE_ONBOARDING, ARENA_BONUS_TYPE.STORY_MODE_REGULAR)
 STORY_MODE_GUI_TYPE_BY_BONUS_TYPE = {ARENA_BONUS_TYPE.STORY_MODE_ONBOARDING: ARENA_GUI_TYPE.STORY_MODE_ONBOARDING,
  ARENA_BONUS_TYPE.STORY_MODE_REGULAR: ARENA_GUI_TYPE.STORY_MODE_REGULAR}
-EVENT_NAME = 'story_mode_scc'
+VEHICLE_BUNKER_TURRET_TAG = 'bunkerTurret'
 
 class PRIORITY(enum.IntEnum):
     HIGH = 0
@@ -51,9 +51,6 @@ class AwarenessState(enum.IntEnum):
 
 PROGRESS_PDATA_KEY = 'progress'
 STORY_MODE_PDATA_KEY = 'storyMode'
-UNDEFINED_MISSION_ID = -1
-FIRST_MISSION_ID = 1
-FIRST_MISSION_TASK_ID = 1
 LONG_INT_HALF_SHIFT = 32
 STORY_MODE_AB_FEATURE = 'storyMode'
 DISABLE_REGULAR_OPERATIONS = 'disableRegularOperations'
@@ -67,3 +64,25 @@ DEFAULT_SPAWN_GROUP = 0
 class EQUIPMENT_STAGES(constants.EQUIPMENT_STAGES, ConstInjector):
     ACTIVATING = 101
     DEACTIVATING = 102
+
+
+class MissionLockCondition(str, enum.Enum):
+    BY_MISSION = 'byMission'
+    BATTLES_COUNT = 'battlesCount'
+
+
+class MissionId(enum.IntEnum):
+    UNDEFINED = -1
+    ONE = 1
+    TWO = 2
+    THREE = 3
+    FOUR = 4
+    FIVE = 5
+    SIX = 6
+    SEVEN = 7
+
+
+class TaskId(enum.IntEnum):
+    ONE = 1
+    TWO = 2
+    THREE = 3

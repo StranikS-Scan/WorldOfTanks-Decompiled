@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Weather.py
+from __future__ import absolute_import, print_function
 import random
 import traceback
 from vehicle_systems.stricted_loading import makeCallbackWeak
@@ -75,8 +76,7 @@ class WeatherSystem(object):
         curr = self.fader.value
         if fadingIn:
             if not self.loaded:
-                print "calling fadeIn on a weather system that isn't loaded. please call prepareResources() first",
-                print self.name
+                print("calling fadeIn on a weather system that isn't loaded. please call prepareResources() first", self.name)
                 traceback.print_stack()
                 return
             for sb in self.skyBoxModels:

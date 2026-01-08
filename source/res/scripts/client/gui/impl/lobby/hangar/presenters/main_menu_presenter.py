@@ -11,6 +11,7 @@ from gui.impl.gen.view_models.views.lobby.hangar.main_menu_model import MainMenu
 from gui.impl.lobby.hangar.presenters.utils import fillMenuItems
 from gui.impl.pub.view_component import ViewComponent
 from gui.prb_control.entities.listener import IGlobalListener
+from gui.server_events.pm_constants import IS_PM3_QUEST_ENABLED, IS_PM2_QUEST_ENABLED, IS_REGULAR_QUEST_ENABLED
 from gui.shared.image_helper import getTextureLinkByID
 from gui.shared.view_helpers import ClanEmblemsHelper
 from helpers import dependency
@@ -98,8 +99,8 @@ class MainMenuPresenter(ViewComponent[MainMenuModel], ClanEmblemsHelper, IGlobal
         settingsKeys = [DAILY_QUESTS_CONFIG,
          PremiumConfigs.PREM_QUESTS,
          'strongholdSettings',
-         'isRegularQuestEnabled',
-         'isPM2QuestEnabled',
-         'isPM3QuestEnabled']
+         IS_REGULAR_QUEST_ENABLED,
+         IS_PM2_QUEST_ENABLED,
+         IS_PM3_QUEST_ENABLED]
         if any((key in diff for key in settingsKeys)):
             self.__updateModel()

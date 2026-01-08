@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/commands/mechanic_controls/simple_activation_control.py
+from __future__ import absolute_import
 import typing
 import CommandMapping
 from AvatarInputHandler.commands.input_handler_command import InputHandlerCommand
-from vehicles.mechanics.mechanic_helpers import getPlayerVehicleMechanic
+from vehicles.mechanics.mechanic_helpers import getPlayerVehicleMechanicComponent
 from vehicles.mechanics.mechanic_constants import VehicleMechanic
 
 class SimpleActivationControl(InputHandlerCommand):
@@ -19,7 +20,7 @@ class SimpleActivationControl(InputHandlerCommand):
         if not isDown or not CommandMapping.g_instance.isFired(self.__key, key):
             return False
         else:
-            mechanicComponent = getPlayerVehicleMechanic(self.__mechanic)
+            mechanicComponent = getPlayerVehicleMechanicComponent(self.__mechanic)
             mechanicResult = mechanicComponent.tryActivate() if mechanicComponent is not None else None
             return mechanicResult is None or mechanicResult
 

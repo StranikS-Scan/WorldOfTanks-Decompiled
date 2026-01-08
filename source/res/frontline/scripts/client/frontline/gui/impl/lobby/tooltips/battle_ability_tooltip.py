@@ -4,9 +4,12 @@ from frameworks.wulf import ViewSettings
 from frontline.gui.frontline_helpers import AbilitiesTemplates
 from frontline.gui.impl.gen.view_models.views.lobby.tooltips.battle_ability_tooltip_levels_model import BattleAbilityTooltipLevelsModel
 from frontline.gui.impl.gen.view_models.views.lobby.tooltips.battle_ability_tooltip_param_model import BattleAbilityTooltipParamModel
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.game_control.epic_meta_game_ctrl import EpicMetaGameSkill
+from gui.impl.backport.backport_tooltip import DecoratedTooltipWindow
 from gui.impl.gen import R
 from gui.impl.pub import ViewImpl
+from gui.shared.tooltips import ToolTipBaseData
 from helpers import dependency
 from frontline.gui.impl.gen.view_models.views.lobby.tooltips.battle_ability_tooltip_model import BattleAbilityTooltipModel
 from frontline.gui.frontline_helpers import getSkillParams
@@ -69,3 +72,14 @@ class BattleAbilityTooltipView(ViewImpl):
                         paramslevel.addViewModel(skillParam)
                     if lvl == 1:
                         characteristics.addViewModel(skillParam)
+
+
+class BattleAbilityTooltipData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(BattleAbilityTooltipData, self).__init__(context, TOOLTIPS_CONSTANTS.FRONTLINE_BATTLE_ABILITY)
+
+    @staticmethod
+    def getDisplayableData(intCD, *args, **kwargs):
+        parent = kwargs.get('parent', None)
+        return DecoratedTooltipWindow(BattleAbilityTooltipView(intCD, *args, **kwargs), parent, useDecorator=False)

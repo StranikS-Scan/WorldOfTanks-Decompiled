@@ -4,15 +4,16 @@ import copy
 import functools
 import logging
 import types
-import typing
 from collections import namedtuple
 from itertools import chain
-from shared_utils import findFirst
+import typing
+from shared_utils import makeTupleByDict, updateDict
 import constants
 import post_progression_common
 from BonusCaps import BonusCapsConst
 from Event import Event
 from UnitBase import PREBATTLE_TYPE_TO_UNIT_ASSEMBLER, UNIT_ASSEMBLER_IMPL_TO_CONFIG
+from achievements20.Achievements20GeneralConfig import Achievements20GeneralConfig
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from battle_modifiers_common import BattleModifiers, BattleParams, ModifiersContext
 from battle_pass_common import BATTLE_PASS_CONFIG_NAME, BattlePassConfig
@@ -43,16 +44,14 @@ from prestige_system.prestige_milestones_common import PrestigeMilestonesConfig
 from ranked_common import SwitchState
 from renewable_subscription_common.settings_constants import ADDITIONAL_BONUS_APPLY_COUNT, ADDITIONAL_BONUS_ENABLED, ADDITIONAL_BONUS_SECTION, ENABLE_BADGES, GOLD_RESERVE_GAINS_SECTION
 from schema_manager import getSchemaManager
-from shared_utils import makeTupleByDict, updateDict
 from soft_exception import SoftException
 from telecom_rentals_common import TELECOM_RENTALS_CONFIG
 from trade_in_common.constants_types import CONFIG_NAME as TRADE_IN_CONFIG_NAME
-from achievements20.Achievements20GeneralConfig import Achievements20GeneralConfig
-from helpers.ingame_tournament_helper import IngameTournamentState
+from helpers.ingame_tournament_helper import IngameTournamentType
 if typing.TYPE_CHECKING:
     from typing import Callable, Dict, List, Sequence, Set
     from dict2model.schemas import SchemaModelType
-    from base_schema_manager import GameParamsSchema
+    from game_params_common.schema import GameParamsSchema
 _logger = logging.getLogger(__name__)
 _CLAN_EMBLEMS_SIZE_MAPPING = {16: 'clan_emblems_16',
  32: 'clan_emblems_small',
@@ -681,6 +680,7 @@ class SeniorityAwardsConfig(typing.NamedTuple('SeniorityAwardsConfig', (('enable
  ('reminders', list),
  ('clockOnNotification', int),
  ('showRewardNotification', bool),
+ ('eventPrefix', str),
  ('receivedRewardsToken', str),
  ('claimVehicleRewardTokenPattern', str),
  ('rewardEligibilityToken', str),
@@ -692,7 +692,7 @@ class SeniorityAwardsConfig(typing.NamedTuple('SeniorityAwardsConfig', (('enable
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(enabled=False, active=False, endTime=0, reminders=[], clockOnNotification=0, showRewardNotification=False, receivedRewardsToken='', rewardEligibilityToken='', claimRewardToken='', claimVehicleRewardTokenPattern='', vehicleSelectionTokenPattern='', rewardQuestsPrefix='', categories={}, vehicleSelectionQuestPattern='')
+        defaults = dict(enabled=False, active=False, endTime=0, reminders=[], clockOnNotification=0, showRewardNotification=False, eventPrefix='', receivedRewardsToken='', rewardEligibilityToken='', claimRewardToken='', claimVehicleRewardTokenPattern='', vehicleSelectionTokenPattern='', rewardQuestsPrefix='', categories={}, vehicleSelectionQuestPattern='')
         defaults.update(kwargs)
         return super(SeniorityAwardsConfig, cls).__new__(cls, **defaults)
 
@@ -1342,20 +1342,12 @@ class PetSystemServerSettings(object):
         return PetSynergyConfig(self.__config.get(pet_constants.PetSynergyConsts.CONFIG_NAME, {}))
 
 
-class _IngameTournamentBannerConfig(settingsBlock('_IngameTournamentBannerConfig', ('state', 'startTime', 'endTime'))):
+class _IngameTournamentShowmatchConfig(settingsBlock('_IngameTournamentShowmatchConfig', ('startTime', 'endTime'))):
 
     @classmethod
     def defaults(cls):
-        return {'state': None,
-         'startTime': None,
+        return {'startTime': None,
          'endTime': None}
-
-    @classmethod
-    def _preprocessData(cls, data):
-        state = data.get('state')
-        if state is not None:
-            data['state'] = findFirst(lambda tournamentState: tournamentState.value == state, IngameTournamentState)
-        return data
 
 
 class _IngameTournamentShopConfig(settingsBlock('_IngameTournamentShopConfig', ('realms', 'ingameShopRelativePath', 'shopUrl'))):
@@ -1374,26 +1366,56 @@ class _IngameTournamentShopConfig(settingsBlock('_IngameTournamentShopConfig', (
         return data
 
 
-class _IngameTournamentConfig(settingsBlock('_IngameTournamentConfig', ('isEnabled', 'banners', 'shop'))):
+class _IngameTournamentConfigByTournamentType(settingsBlock('_IngameTournamentConfigByTournamentType', ('isEnabled',
+ 'startTime',
+ 'endTime',
+ 'showmatches',
+ 'shop',
+ 'offerGiftsToken'))):
 
     @classmethod
     def defaults(cls):
         return {'isEnabled': False,
-         'banners': [],
-         'shop': []}
+         'startTime': 0,
+         'endTime': 0,
+         'showmatches': [],
+         'shop': [],
+         'offerGiftsToken': ''}
 
     @classmethod
     def _preprocessData(cls, data):
-        banners = []
-        for bannerConfig in data.get('banners', []):
-            banners.append(makeTupleByDict(_IngameTournamentBannerConfig, bannerConfig))
+        showmatches = []
+        for showmatchConfig in data.get('showmatches', []):
+            showmatches.append(makeTupleByDict(_IngameTournamentShowmatchConfig, showmatchConfig))
 
-        data['banners'] = banners
+        data['showmatches'] = showmatches
         shopConfigs = []
         for shopConfig in data.get('shop', []):
             shopConfigs.append(makeTupleByDict(_IngameTournamentShopConfig, shopConfig))
 
         data['shop'] = shopConfigs
+        return data
+
+
+class _IngameTournamentConfig(settingsBlock('_IngameTournamentConfig', (IngameTournamentType.WCI.value, IngameTournamentType.OLS.value))):
+
+    @classmethod
+    def defaults(cls):
+        res = {}
+        for tournamentType in IngameTournamentType:
+            res[tournamentType.value] = _IngameTournamentConfigByTournamentType.defaults()
+
+        return res
+
+    @classmethod
+    def _preprocessData(cls, data):
+        for tournamentType in IngameTournamentType:
+            tournamentTypeStr = tournamentType.value
+            tournamentTypeData = data.get(tournamentTypeStr)
+            if tournamentTypeData:
+                data[tournamentTypeStr] = makeTupleByDict(_IngameTournamentConfigByTournamentType, tournamentTypeData)
+            data[tournamentTypeStr] = _IngameTournamentConfigByTournamentType.defaults()
+
         return data
 
 

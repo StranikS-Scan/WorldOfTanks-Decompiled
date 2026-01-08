@@ -378,7 +378,10 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
                 self.__ctx.mode.unselectItem()
                 needToKeepSelect = False
             if item is not None and needToKeepSelect:
-                itemDataVO = buildCustomizationItemDataVO(item=item, progressionLevel=self.__ctx.mode.storedProgressionLevel, vehicle=g_currentVehicle.item)
+                progressionLevel = 0
+                if self.__ctx.mode.tabId != CustomizationTabs.ATTACHMENTS:
+                    progressionLevel = self.__ctx.mode.storedProgressionLevel
+                itemDataVO = buildCustomizationItemDataVO(item=item, progressionLevel=progressionLevel, vehicle=g_currentVehicle.item)
                 self.as_reselectS(itemDataVO)
             return
 

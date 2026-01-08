@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_pass/state_machine/state_machine_helpers.py
 import logging
 import typing
-from battle_pass_common import BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_TOKEN_3D_STYLE, BattlePassRewardReason, BattlePassState, getBattlePassPassEntitlementName, getBattlePassShopEntitlementName, isPostProgressionChapter
+from battle_pass_common import BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_TOKEN_3D_STYLE, BattlePassRewardReason, getBattlePassPassEntitlementName, getBattlePassShopEntitlementName, isPostProgressionChapter
 from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift, getStyleInfoForChapter, makeChapterMediaName
 from gui.impl.gen import R
 from gui.impl.pub.notification_commands import EventNotificationCommand, NotificationEvent
@@ -18,10 +18,12 @@ _logger.addHandler(logging.NullHandler())
 
 @dependency.replace_none_kwargs(battlePass=IBattlePassController)
 def isProgressionComplete(_, battlePass=None):
-    isCompleteState = battlePass.getState() == BattlePassState.COMPLETED
-    isAllChosen = battlePass.getNotChosenRewardCount() == 0
-    isAllChaptersBought = battlePass.isAllMainChaptersBought()
-    return isCompleteState and isAllChosen and isAllChaptersBought
+    if battlePass.getMainChapterIDs():
+        isCompleted = all((battlePass.isChapterCompleted(chapter) for chapter in battlePass.getMainChapterIDs()))
+        isAllChosen = battlePass.getNotChosenRewardCount() == 0
+        isAllChaptersBought = battlePass.isAllMainChaptersBought()
+        return isCompleted and isAllChosen and isAllChaptersBought
+    return False
 
 
 def separateRewards(rewards):

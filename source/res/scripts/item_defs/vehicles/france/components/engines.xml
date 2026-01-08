@@ -113,7 +113,11 @@
     <HS_110_2>	131	</HS_110_2>
     <Moteur_E_P_C_version_4>	132	</Moteur_E_P_C_version_4>
     <AMX_APX_E_P_C_Moteur>	133	</AMX_APX_E_P_C_Moteur>
+    <Maybach_HL_230_LA>	134	</Maybach_HL_230_LA>
     <Renault_V4A>	135	</Renault_V4A>
+    <Moteur_EPC_version_S5_Fantome>	136	</Moteur_EPC_version_S5_Fantome>
+    <Continental_AV_1790_8_Terrifiant>	137	</Continental_AV_1790_8_Terrifiant>
+    <MB_838_CaM_500>	139	</MB_838_CaM_500>
     <SOFAM_8_Gxb_105_AM>	2000	</SOFAM_8_Gxb_105_AM>
     <Baudouin_6F_11_SRY_105_AM>	2001	</Baudouin_6F_11_SRY_105_AM>
     <Maybach_HL_230_TRM_P30_L50>	2002	</Maybach_HL_230_TRM_P30_L50>
@@ -821,6 +825,23 @@
       <rpm_min>	293	</rpm_min>
       <rpm_max>	2320	</rpm_max>
     </Moteur_EPC_version_S5>
+    <Moteur_EPC_version_S5_Fantome>
+      <userString>	#france_vehicles:Moteur_EPC_version_S5_Fantome	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	90000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	1000	</power>
+      <weight>	2000	</weight>
+      <maxHealth>	310	</maxHealth>
+      <maxRegenHealth>	155	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	253	</rpm_min>
+      <rpm_max>	2440	</rpm_max>
+    </Moteur_EPC_version_S5_Fantome>
     <Moteur_E_P_C_version_4>
       <userString>	#france_vehicles:Moteur_E_P_C_version_4	</userString>
       <shortUserString>	#france_vehicles:Moteur_E_P_C_version_4_short	</shortUserString>
@@ -2625,6 +2646,57 @@
       <rpm_min>	354	</rpm_min>
       <rpm_max>	2136	</rpm_max>
     </E_9>
+    <Maybach_HL_230_LA>
+      <userString>	#france_vehicles:Maybach_HL_230_LA	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	60000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	770	</power>
+      <weight>	700	</weight>
+      <maxHealth>	275	</maxHealth>
+      <maxRegenHealth>	138	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	470	</rpm_min>
+      <rpm_max>	2725	</rpm_max>
+    </Maybach_HL_230_LA>
+    <Continental_AV_1790_8_Terrifiant>
+      <userString>	#france_vehicles:Continental_AV_1790_8_Terrifiant	</userString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	90000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1050	</power>
+      <weight>	2053	</weight>
+      <maxHealth>	310	</maxHealth>
+      <maxRegenHealth>	155	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	446	</rpm_min>
+      <rpm_max>	2170	</rpm_max>
+    </Continental_AV_1790_8_Terrifiant>
+    <MB_838_CaM_500>
+      <userString>	#france_vehicles:MB_838_CaM_500	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	90000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_mtu_mb_838_PC	</wwsoundPC>
+      <wwsoundNPC>	eng_mtu_mb_838_NPC	</wwsoundNPC>
+      <power>	1020	</power>
+      <weight>	500	</weight>
+      <maxHealth>	310	</maxHealth>
+      <maxRegenHealth>	155	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	200	</rpm_min>
+      <rpm_max>	2600	</rpm_max>
+    </MB_838_CaM_500>
     <Maybach_HL_295_IGR>
       <userString>	#igr_vehicles:Maybach_HL_295_IGR	</userString>
       <tags>	gasoline	</tags>

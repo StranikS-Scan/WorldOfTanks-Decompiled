@@ -1,9 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/impl/lobby/tooltips/battle_ability_alt_tooltip.py
 from frameworks.wulf import ViewSettings
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.game_control.epic_meta_game_ctrl import EpicMetaGameSkill
+from gui.impl.backport.backport_tooltip import DecoratedTooltipWindow
 from gui.impl.gen import R
 from gui.impl.pub import ViewImpl
+from gui.shared.tooltips import ToolTipBaseData
 from gui.shared.tooltips.advanced import MODULE_MOVIES
 from helpers import dependency
 from frontline.gui.impl.gen.view_models.views.lobby.tooltips.battle_ability_alt_tooltip_model import BattleAbilityAltTooltipModel
@@ -43,3 +46,14 @@ class BattleAbilityAltTooltipView(ViewImpl):
                     movieName = MODULE_MOVIES[movieKey]
                 model.setVideoName(movieName)
             return
+
+
+class BattleAbilityAltTooltipData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(BattleAbilityAltTooltipData, self).__init__(context, TOOLTIPS_CONSTANTS.FRONTLINE_BATTLE_ABILITY)
+
+    @staticmethod
+    def getDisplayableData(intCD, *args, **kwargs):
+        parent = kwargs.get('parent', None)
+        return DecoratedTooltipWindow(BattleAbilityAltTooltipView(intCD, *args, **kwargs), parent, useDecorator=False)

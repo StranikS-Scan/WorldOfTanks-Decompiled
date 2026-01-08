@@ -1,12 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/helpers_common.py
 import math
+import typing
+from constants import VEHICLE_HIT_EFFECT
+from items.components import component_constants
 from soft_exception import SoftException
 from battle_modifiers_common import BattleModifiers
 from Math import Vector3
-from debug_utils import LOG_WARNING
-from wg_typing import *
-if TYPE_CHECKING:
+from debug_utils import LOG_WARNING, LOG_ERROR
+from items import vehicles
+if typing.TYPE_CHECKING:
+    from typing import Sequence, Optional, Tuple, List, Union, Dict
+    from items.vehicle_items import Shell
+    from items.readers.prefab_effects_readers import ShotEffectDesc
     from battle_modifiers_common import BATTLE_MODIFIERS_TYPE
     from items.components.gun_components import GunShot
     from items.tankmen import TankmanDescr
@@ -237,3 +243,45 @@ def decodeSegment(segment, bbox):
 
 def reprSlots(self):
     return '%s(%s)' % (self.__class__.__name__, ', '.join(('%s=%s' % (name, getattr(self, name, 'NOT_FOUND')) for name in self.__slots__)))
+
+
+class HitParamsEncoder(object):
+    INVALID_HIT_PARAMS = 255
+
+    @classmethod
+    def encode(cls, hitType, shellType, caliber):
+        return (int(caliber * 10) & 65535) << 8 | (shellType & 15) << 4 | hitType & 15
+
+    @staticmethod
+    def decode(params):
+        return (params & 15, params >> 4 & 15, (params >> 8 & 65535) * 0.1)
+
+    @staticmethod
+    def setHitType(params, hitType):
+        return params & -16 | hitType & 15
+
+    @staticmethod
+    def getHitType(params):
+        return params & 15
+
+
+def setDamageSticker(sticker, effectsIndex, prefabEffIndex, isPierced):
+    cache = vehicles.g_cache
+    if prefabEffIndex != component_constants.INVALID_EFFECT_INDEX:
+        if not isPierced:
+            sticker['params'] = HitParamsEncoder.setHitType(sticker['params'], VEHICLE_HIT_EFFECT.ARMOR_NOT_PIERCED)
+        shotEffect = cache.prefabEffects.shot.effects[prefabEffIndex]
+        effectGroup = VEHICLE_HIT_EFFECT.getEffectGroup(HitParamsEncoder.getHitType(sticker['params']))
+        stickerID = shotEffect.groups[effectGroup].decal
+        if stickerID == component_constants.INVALID_EFFECT_INDEX:
+            return
+        priority = cache.prefabEffects.decals.effects[stickerID].priority
+    else:
+        stickerTypeName = 'armorPierced' if isPierced else 'armorResisted'
+        stickerID = cache.shotEffects[effectsIndex]['targetStickers'][stickerTypeName]
+        if stickerID is None:
+            return
+        priority = cache.damageStickers['descrs'][stickerID]['priority']
+        sticker['params'] = HitParamsEncoder.INVALID_HIT_PARAMS
+    sticker['segment'] = setEncodedSegmentContextData(sticker['segment'], stickerID)
+    return priority

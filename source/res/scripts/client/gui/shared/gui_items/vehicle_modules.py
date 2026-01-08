@@ -2,24 +2,26 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/vehicle_modules.py
 import logging
 import typing
+from itertools import chain
 import nations
-from shared_utils import CONST_CONTAINER, findFirst
 from constants import SHELL_TYPES, SHELL_MECHANICS_TYPE
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.shared.items_parameters import isDualAccuracy
 from gui.shared.items_parameters.params_cache import g_paramsCache
 from gui.shared.utils.functions import replaceHyphenToUnderscore
 from gui.shared.gui_items.fitting_item import FittingItem, ICONS_MASK
-from gui.shared.gui_items.vehicle_mechanic_item import extendMechanics, VEHICLE_MECHANICS_GUI_MAP, GUN_MECHANICS_OVERRIDES, CHASSIS_MECHANICS_OVERRIDES, ENGINE_MECHANICS_OVERRIDES
+from gui.shared.gui_items.vehicle_mechanics.factories import GunMechanicFactory, ChassisMechanicFactory, EngineMechanicFactory
 from gui.shared.utils import GUN_CLIP, GUN_CAN_BE_CLIP, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, GUN_AUTO_SHOOT, GUN_CAN_BE_AUTO_SHOOT, GUN_CAN_BE_TWIN_GUN, GUN_TWIN_GUN
 from gui.shared.money import Currency
 from items import vehicles as veh_core
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from shared_utils import CONST_CONTAINER, findFirst
 if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.vehicle_mechanics.module_mechanic_item import ModuleMechanicItem
     from items.vehicles import VehicleDescr
+    from vehicles.mechanics.mechanic_constants import VehicleMechanic
 MODULE_TYPES_ORDER = ('vehicleGun', 'vehicleTurret', 'vehicleEngine', 'vehicleChassis', 'vehicleRadio', 'vehicleFuelTank')
 MODULE_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(MODULE_TYPES_ORDER)))
 SHELL_TYPES_ORDER = (SHELL_TYPES.ARMOR_PIERCING,
@@ -42,7 +44,7 @@ _logger = logging.getLogger(__name__)
 
 class VehicleModule(FittingItem):
     __slots__ = ('_vehicleModuleDescriptor',)
-    _GUI_SUPPORTED_MECHANICS = set()
+    _MECHANICS_FACTORY = ()
 
     def __init__(self, intCompactDescr, proxy=None, descriptor=None):
         super(VehicleModule, self).__init__(intCompactDescr, proxy)
@@ -73,11 +75,16 @@ class VehicleModule(FittingItem):
         resID = R.images.gui.maps.shop.modules.num(size).dyn(replaceHyphenToUnderscore(self.itemTypeName))()
         return backport.image(resID) if resID != -1 else ''
 
-    def getVehicleMechanics(self, vehDescr):
-        return set()
+    def getMechanics(self, vehDescr, withOverrides=False):
+        return chain.from_iterable((factory.getMechanics(self, vehDescr, withOverrides=withOverrides) for factory in self._MECHANICS_FACTORY))
 
-    def getVehicleMechanicsGuiNames(self, vehDescr):
-        return {VEHICLE_MECHANICS_GUI_MAP[mechanic] for mechanic in self.getVehicleMechanics(vehDescr) if mechanic in self._GUI_SUPPORTED_MECHANICS}
+    def getModuleMechanicItems(self, vehDescr):
+        mechanics = chain.from_iterable((factory.getMechanics(self, vehDescr, withOverrides=True) for factory in self._MECHANICS_FACTORY))
+        return [ self.itemsFactory.createModuleMechanicItem(mechanic, self.itemTypeID) for mechanic in mechanics ]
+
+    def getExtraIconInfo(self, vehDescr=None):
+        status = findFirst(None, (item.getExtraStatuses(self) for item in self.getModuleMechanicItems(vehDescr)))
+        return backport.image(R.images.gui.maps.icons.vehicle_hub.mechanics.x20x20.dyn(status)()) if status is not None else None
 
     def _sortByType(self, other):
         return MODULE_TYPES_ORDER_INDICES[self.itemTypeName] - MODULE_TYPES_ORDER_INDICES[other.itemTypeName]
@@ -85,7 +92,7 @@ class VehicleModule(FittingItem):
 
 class VehicleChassis(VehicleModule):
     __slots__ = ()
-    _GUI_SUPPORTED_MECHANICS = {VehicleMechanic.HYDRAULIC_WHEELED_CHASSIS, VehicleMechanic.HYDRAULIC_CHASSIS, VehicleMechanic.TRACK_WITHIN_TRACK}
+    _MECHANICS_FACTORY = (ChassisMechanicFactory,)
 
     def isInstalled(self, vehicle, slotIdx=None):
         return self.intCD == vehicle.chassis.intCD
@@ -120,14 +127,6 @@ class VehicleChassis(VehicleModule):
     def iconName(self):
         return ModulesIconNames.WHEELED_CHASSIS if self.isWheeledChassis() else ModulesIconNames.CHASSIS
 
-    def getExtraIconInfo(self, vehDescr=None):
-        if self.isHydraulicChassis():
-            if self.isWheeledChassis():
-                return backport.image(R.images.gui.maps.icons.modules.hydraulicWheeledChassisIcon())
-            return backport.image(R.images.gui.maps.icons.modules.hydraulicChassisIcon())
-        else:
-            return backport.image(R.images.gui.maps.icons.modules.trackWithinTrack()) if self.isTrackWithinTrack() else None
-
     def getGUIEmblemID(self):
         return FITTING_TYPES.VEHICLE_WHEELED_CHASSIS if self.isWheeledChassis() else super(VehicleChassis, self).getGUIEmblemID()
 
@@ -138,12 +137,6 @@ class VehicleChassis(VehicleModule):
                 return backport.image(resID)
             return ''
         return super(VehicleChassis, self).getShopIcon(size)
-
-    def getVehicleMechanics(self, vehDescr):
-        mechanics = super(VehicleChassis, self).getVehicleMechanics(vehDescr)
-        mechanicChecks = [(self.isHydraulicWheeledChassis(), VehicleMechanic.HYDRAULIC_WHEELED_CHASSIS), (self.isHydraulicChassis(), VehicleMechanic.HYDRAULIC_CHASSIS), (self.isTrackWithinTrack(), VehicleMechanic.TRACK_WITHIN_TRACK)]
-        extendMechanics(mechanics, {}, mechanicChecks, CHASSIS_MECHANICS_OVERRIDES)
-        return mechanics
 
     def _getShortInfoKey(self):
         return '#menu:descriptions/{}'.format(FITTING_TYPES.VEHICLE_WHEELED_CHASSIS if self.isWheeledChassis() else self.itemTypeName)
@@ -187,15 +180,7 @@ class VehicleTurret(VehicleModule):
 
 class VehicleGun(VehicleModule):
     __slots__ = ('_defaultAmmo', '_maxAmmo')
-    _GUI_SUPPORTED_MECHANICS = {VehicleMechanic.AUTO_SHOOT_GUN,
-     VehicleMechanic.DUAL_GUN,
-     VehicleMechanic.DUAL_ACCURACY,
-     VehicleMechanic.TWIN_GUN,
-     VehicleMechanic.MAGAZINE_GUN,
-     VehicleMechanic.AUTO_LOADER_GUN_BOOST,
-     VehicleMechanic.AUTO_LOADER_GUN,
-     VehicleMechanic.DAMAGE_MUTABLE,
-     VehicleMechanic.STUN}
+    _MECHANICS_FACTORY = (GunMechanicFactory,)
 
     def __init__(self, intCompactDescr, proxy=None, descriptor=None):
         super(VehicleGun, self).__init__(intCompactDescr, proxy, descriptor)
@@ -248,7 +233,7 @@ class VehicleGun(VehicleModule):
         return any((shell.isNonPiercingDamageMechanics for shell in self.defaultAmmo))
 
     def hasDualAccuracy(self, vehicleDescr=None):
-        return vehicleDescr is not None and g_paramsCache.hasDualAccuracy(self.intCD, vehicleDescr.type.compactDescr)
+        return g_paramsCache.hasDualAccuracy(self.intCD, vehicleDescr.type.compactDescr) if vehicleDescr is not None else isDualAccuracy(self.descriptor)
 
     def getInstalledVehicles(self, vehicles):
         result = set()
@@ -277,42 +262,13 @@ class VehicleGun(VehicleModule):
             return backport.text(R.strings.item_types.dualGun.name())
         return backport.text(R.strings.item_types.twinGun.name()) if self.isTwinGun() else userType
 
-    def getExtraIconInfo(self, vehDescr=None):
-        if self.isClipGun(vehDescr):
-            return backport.image(R.images.gui.maps.icons.modules.magazineGunIcon())
-        elif self.isAutoReloadable(vehDescr):
-            descriptor = self.__getDescriptor(vehDescr)
-            if descriptor.autoreloadHasBoost:
-                return backport.image(R.images.gui.maps.icons.modules.autoLoaderGunBoost())
-            return backport.image(R.images.gui.maps.icons.modules.autoLoaderGun())
-        elif self.isAutoShoot(vehDescr):
-            return backport.image(R.images.gui.maps.icons.modules.autoShootGun())
-        elif self.isDualGun(vehDescr):
-            return backport.image(R.images.gui.maps.icons.modules.dualGun())
-        elif self.hasDualAccuracy(vehDescr):
-            return backport.image(R.images.gui.maps.icons.modules.dualAccuracy())
-        elif self.isDamageMutable():
-            return backport.image(R.images.gui.maps.icons.modules.damageMutable())
-        else:
-            return backport.image(R.images.gui.maps.icons.modules.twinGun()) if self.isTwinGun(vehDescr) else None
-
     def getGUIEmblemID(self):
         return FITTING_TYPES.VEHICLE_DUAL_GUN if self.isDualGun() else super(VehicleGun, self).getGUIEmblemID()
 
-    def getVehicleMechanics(self, vehDescr):
-        mechanics = super(VehicleGun, self).getVehicleMechanics(vehDescr)
-        mechanicChecks = [(self.isAutoShoot(vehDescr), VehicleMechanic.AUTO_SHOOT_GUN),
-         (self.isDualGun(vehDescr), VehicleMechanic.DUAL_GUN),
-         (self.hasDualAccuracy(vehDescr), VehicleMechanic.DUAL_ACCURACY),
-         (self.isTwinGun(vehDescr), VehicleMechanic.TWIN_GUN),
-         (self.isClipGun(vehDescr), VehicleMechanic.MAGAZINE_GUN),
-         (self.isAutoReloadableWithBoost(vehDescr), VehicleMechanic.AUTO_LOADER_GUN_BOOST),
-         (self.isAutoReloadable(vehDescr) and not self.isAutoReloadableWithBoost(vehDescr), VehicleMechanic.AUTO_LOADER_GUN),
-         (self.isDamageMutable(), VehicleMechanic.DAMAGE_MUTABLE),
-         (any((shell.descriptor.hasStun for shell in self.defaultAmmo)), VehicleMechanic.STUN)]
-        descriptor = self.__getDescriptor(vehDescr)
-        extendMechanics(mechanics, descriptor.mechanicsParams, mechanicChecks, GUN_MECHANICS_OVERRIDES)
-        return mechanics
+    def getDescriptor(self, vehDescr=None):
+        vehicleGuns = vehDescr.type.getGuns() if vehDescr is not None else ()
+        descriptor = findFirst(lambda gun: gun.compactDescr == self.intCD, vehicleGuns)
+        return descriptor or self.descriptor
 
     def _getMaxAmmo(self):
         return self.descriptor.maxAmmo
@@ -335,15 +291,10 @@ class VehicleGun(VehicleModule):
             return '/'.join((key, 'dualGun'))
         return '/'.join((key, 'twinGun')) if self.isTwinGun(vehicleDescr) else key
 
-    def __getDescriptor(self, vehDescr=None):
-        vehicleGuns = vehDescr.type.getGuns() if vehDescr is not None else ()
-        descriptor = findFirst(lambda gun: gun.compactDescr == self.intCD, vehicleGuns)
-        return descriptor or self.descriptor
-
 
 class VehicleEngine(VehicleModule):
     __slots__ = ()
-    _GUI_SUPPORTED_MECHANICS = {VehicleMechanic.TURBOSHAFT_ENGINE, VehicleMechanic.ROCKET_ACCELERATION}
+    _MECHANICS_FACTORY = (EngineMechanicFactory,)
 
     def isInstalled(self, vehicle, slotIdx=None):
         return self.intCD == vehicle.engine.intCD
@@ -368,11 +319,11 @@ class VehicleEngine(VehicleModule):
         vehicle.descriptor.installComponent(oldModuleId)
         return conflictEqs
 
-    def hasTurboshaftEngine(self):
-        return g_paramsCache.hasTurboshaftEngine(self.intCD)
+    def hasTurboshaftEngine(self, vehDescr=None):
+        return vehDescr.hasTurboshaftEngine if vehDescr is not None else g_paramsCache.hasTurboshaftEngine(self.intCD)
 
-    def hasRocketAcceleration(self):
-        return g_paramsCache.hasRocketAcceleration(self.intCD)
+    def hasRocketAcceleration(self, vehDescr=None):
+        return vehDescr.hasRocketAcceleration if vehDescr is not None else g_paramsCache.hasRocketAcceleration(self.intCD)
 
     def hasRechargeableNitro(self):
         return g_paramsCache.hasRechargeableNitro(self.intCD)
@@ -380,18 +331,6 @@ class VehicleEngine(VehicleModule):
     @property
     def iconName(self):
         return ModulesIconNames.ENGINE
-
-    def getExtraIconInfo(self, vehDescr=None):
-        if self.hasTurboshaftEngine():
-            return RES_ICONS.MAPS_ICONS_MODULES_TURBINEENGINEICON
-        else:
-            return RES_ICONS.MAPS_ICONS_MODULES_ROCKETACCELERATIONICON if self.hasRocketAcceleration() else None
-
-    def getVehicleMechanics(self, vehDescr):
-        mechanics = super(VehicleEngine, self).getVehicleMechanics(vehDescr)
-        mechanicChecks = [(vehDescr.hasTurboshaftEngine, VehicleMechanic.TURBOSHAFT_ENGINE), (vehDescr.hasRocketAcceleration, VehicleMechanic.ROCKET_ACCELERATION)]
-        extendMechanics(mechanics, {}, mechanicChecks, ENGINE_MECHANICS_OVERRIDES)
-        return mechanics
 
 
 class VehicleFuelTank(VehicleModule):

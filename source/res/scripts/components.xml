@@ -11,6 +11,7 @@
     <ArenaFairplayKafkaLoggingComponent></ArenaFairplayKafkaLoggingComponent>
     <AccountFairplayComponent></AccountFairplayComponent>
     <ArenaCommendationsMasterComponent></ArenaCommendationsMasterComponent>
+    <ArenaDynObstaclesComponent></ArenaDynObstaclesComponent>
   </StaticComponents>
   <DynamicComponents>
     <OwnVehicle></OwnVehicle>
@@ -34,6 +35,9 @@
     <TwinGunController></TwinGunController>
     <SecondaryGunComponent></SecondaryGunComponent>
     <RocketAcceleration></RocketAcceleration>
+    <TemperatureGunController></TemperatureGunController>
+    <OverheatGunComponent></OverheatGunComponent>
+    <HeatingZonesGunComponent></HeatingZonesGunComponent>
     <VisualScriptEquipment></VisualScriptEquipment>
     <VisualScriptCache></VisualScriptCache>
     <VisualScriptOverrides></VisualScriptOverrides>
@@ -60,28 +64,14 @@
     <PoiVehicleComponent></PoiVehicleComponent>
     <DynComponentsGroup></DynComponentsGroup>
     <DynComponentsGroupHelper></DynComponentsGroupHelper>
-    <DGAddDynGroupComponent></DGAddDynGroupComponent>
-    <DGRemovableDynGroupComponent></DGRemovableDynGroupComponent>
-    <DGSequencesComponent></DGSequencesComponent>
-    <DGSound2DComponent></DGSound2DComponent>
-    <DGSound3DComponent></DGSound3DComponent>
-    <DGSound3DObjectComponent></DGSound3DObjectComponent>
-    <DGVehicleChargedShotComponent></DGVehicleChargedShotComponent>
-    <DGVehicleShotChargerComponent></DGVehicleShotChargerComponent>
-    <DGVehicleFactorsComponent></DGVehicleFactorsComponent>
-    <DGVehicleGenericRepairComponent></DGVehicleGenericRepairComponent>
-    <DGVehicleRepairComponent></DGVehicleRepairComponent>
-    <DGVehiclePeriodicRepairComponent></DGVehiclePeriodicRepairComponent>
-    <DGVehicleDamageResistsComponent></DGVehicleDamageResistsComponent>
-    <DGVehicleNitroAccelerationComponent></DGVehicleNitroAccelerationComponent>
-    <DGVehicleNitroEffectComponent></DGVehicleNitroEffectComponent>
     <LootableComponent></LootableComponent>
+    <DynObstacleComponent></DynObstacleComponent>
+    <ImpassableZoneComponent></ImpassableZoneComponent>
     <SpamProtectionComponent></SpamProtectionComponent>
     <TestReplicableComponent></TestReplicableComponent>
     <ShotsReceiver></ShotsReceiver>
     <DeathComponent></DeathComponent>
     <HealthComponent></HealthComponent>
-    <BunkerLogicComponent></BunkerLogicComponent>
     <VehicleRespawnComponent></VehicleRespawnComponent>
     <VehicleLivesComponent></VehicleLivesComponent>
     <TeamInfoLivesComponent></TeamInfoLivesComponent>
@@ -121,5 +111,7 @@
     <TargetDesignatorTeamController></TargetDesignatorTeamController>
     <StanceDanceController></StanceDanceController>
     <ChargeableBurstComponent></ChargeableBurstComponent>
+    <DebuffController></DebuffController>
+    <StagedJetBoostersController></StagedJetBoostersController>
   </DynamicComponents>
 </components.xml>

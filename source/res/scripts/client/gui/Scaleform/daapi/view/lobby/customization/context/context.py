@@ -10,7 +10,7 @@ from gui.Scaleform.daapi.view.lobby.customization.context.custom_mode import Cus
 from gui.Scaleform.daapi.view.lobby.customization.context.editable_style_mode import EditableStyleMode
 from gui.Scaleform.daapi.view.lobby.customization.context.styled_diffs_cache import StyleDiffsCache
 from gui.Scaleform.daapi.view.lobby.customization.context.styled_mode import StyledMode
-from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs, resetC11nItemsNovelty, getCommonPurchaseItems, vehicleHasSlot, remove3DStyleIncompatibleCommonItems
+from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs, resetC11nItemsNovelty, getCommonPurchaseItems, vehicleHasSlot, remove3DStyleIncompatibleCommonItems, removeUncommonItems
 from gui.Scaleform.daapi.view.lobby.customization.vehicle_anchors_updater import VehicleAnchorsUpdater
 from gui.customization.constants import CustomizationModes
 from gui.hangar_cameras.c11n_hangar_camera_manager import C11nHangarCameraManager
@@ -337,6 +337,7 @@ class CustomizationContext(object):
 
     def cancelChanges(self):
         self.__commonModifiedOutfit = self.commonOriginalOutfit.copy()
+        removeUncommonItems(self.__commonModifiedOutfit)
         if self.isInStyleMode(CustomizationModes.STYLE_3D) and self.__commonOutfitDiff:
             for slotType in GUI_ITEM_TYPE.COMMON_C11N_COMPATIBLE_WITH_3D_STYLES:
                 for partIdx in Area.ALL:
@@ -370,6 +371,7 @@ class CustomizationContext(object):
         remove3DStyleIncompatibleCommonItems(self.__commonOriginal3DOutfit, self.styleMode.originalStyle if self.isInStyleMode(CustomizationModes.STYLE_3D) else None)
         self.__commonOriginal3DOutfit.invalidate()
         self.__commonModifiedOutfit = outfit.copy()
+        removeUncommonItems(self.__commonModifiedOutfit)
         self.__commonOutfitStyleId = None
         self.__commonOutfitDiff = None
         return

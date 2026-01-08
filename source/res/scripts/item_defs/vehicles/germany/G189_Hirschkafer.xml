@@ -23,6 +23,9 @@
     <camouflageNet>
       <invisibilityBonus>	0.15 0.175	</invisibilityBonus>
     </camouflageNet>
+    <deluxeCamouflageNet>
+      <invisibilityBonus>	0.175	</invisibilityBonus>
+    </deluxeCamouflageNet>
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.05 0.06	</invisibilityBonus>
     </additionalInvisibilityDevice>
@@ -1681,9 +1684,9 @@
           </pitchLimits>
           <turretYawLimits>	-55 55	</turretYawLimits>
           <shotDispersionRadius>	0.28	</shotDispersionRadius>
-          <reloadTime>	13.1	</reloadTime>
+          <reloadTime>	12.9	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.33	</turretRotation>
+            <turretRotation>	0.3	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -1935,7 +1938,7 @@
     <overheatStacks>
       <heatingTime>	14	</heatingTime>
       <coolingTime>	10	</coolingTime>
-      <dmgBonus>	1.364	</dmgBonus>
+      <dmgBonus>	1.25	</dmgBonus>
       <aimBonus>	1.135185	</aimBonus>
       <gainMaxSpd>	10	</gainMaxSpd>
       <delayTimerDuration>	2.0	</delayTimerDuration>

@@ -1155,4 +1155,99 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 5000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	china:Ch48_BZ_75	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1175	</id>
+      <texture>	gui/maps/vehicles/styles/Ch48_BZ_75_HO26_3Dst.png	</texture>
+      <modelsSet>	Ch48_BZ_75_HO26_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/Ch48_BZ_75_HO26_3Dst	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/Ch48_BZ_75_HO26_3Dst_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required c11n3D NY_style	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	167	</id>
+            </item>
+          </attachments>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	china:Ch70_PTZ_78	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1266	</id>
+      <texture>	gui/maps/vehicles/styles/2_0_progression_ch.png	</texture>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/2_0_progression_ch	</userString>
+      <description>	#vehicle_customization:special_style/2_0_progression_ch_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/2_0_progression_ch_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1264	</id>
+              <appliedTo>	16	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	1265	</id>
+              <appliedTo>	4096	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	7	</item>
+          </modifications>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </china.xml>

@@ -8,7 +8,6 @@ class PERSONAL_MISSIONS_ALIASES(object):
     PERSONAL_MISSIONS_OPERATIONS = 'PersonalMissionOperations'
     PERSONAL_MISSIONS_OPERATIONS_PAGE_ALIAS = 'PersonalMissionOperationsPage'
     PERSONAL_MISSIONS2_OPERATIONS_PAGE_ALIAS = 'PersonalMissionSeason2OperationsPage'
-    PERSONAL_MISSION_FIRST_ENTRY_VIEW_ALIAS = 'PersonalMissionFirstEntryView'
     PERSONAL_MISSION_BROWSER_VIEW_ALIAS = 'PersonalMissionsBrowserView'
     PERSONAL_MISSION_FIRST_ENTRY_AWARD_VIEW_ALIAS = 'PersonalMissionFirstEntryAwardView'
     PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS = 'PersonalMissionsAwardsView'

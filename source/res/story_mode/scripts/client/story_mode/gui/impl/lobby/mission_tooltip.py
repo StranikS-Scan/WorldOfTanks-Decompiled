@@ -13,7 +13,7 @@ if typing.TYPE_CHECKING:
 class MissionTooltip(ViewImpl):
 
     def __init__(self, vehicle):
-        settings = ViewSettings(R.views.story_mode.lobby.MissionTooltip(), model=MissionSelectionTooltipModel())
+        settings = ViewSettings(R.views.story_mode.mono.lobby.tooltips.mission_tooltip(), model=MissionSelectionTooltipModel())
         super(MissionTooltip, self).__init__(settings)
         self._vehicle = vehicle
 

@@ -27,6 +27,10 @@ class AwardsManager(object):
         cls.__bonusesLayout.fini()
 
     @classmethod
+    def bonusesLayoutUpdate(cls):
+        cls.__bonusesLayout.updateStorage()
+
+    @classmethod
     def composeBonuses(cls, eventName, rewards, ctx=None):
         bonuses = []
         for reward in rewards:

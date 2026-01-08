@@ -138,6 +138,11 @@ def showEpicBattlesAfterBattleWindow(levelUpInfo, parent=None):
     window.load()
 
 
+def showFrontlinePostBattleResultsWindow(arenaUniqueID):
+    from frontline.gui.impl.lobby.states import FrontlinePostBattleResultsState
+    FrontlinePostBattleResultsState.goTo(arenaUniqueID=arenaUniqueID)
+
+
 def showFrontlineWelcomeWindow():
     from frontline.gui.impl.lobby.views.welcome_view import WelcomeViewWindow
     WelcomeViewWindow().load()
@@ -363,7 +368,8 @@ def showVehicleStats(vehTypeCompDescr, eventOwner=None, **kwargs):
     ctx = {'itemCD': vehTypeCompDescr,
      'eventOwner': eventOwner}
     ctx.update(**kwargs)
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PROFILE), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+    from gui.Scaleform.daapi.view.lobby.profile.states import ServiceRecordState
+    ServiceRecordState.goTo(ctx=ctx)
 
 
 def showHangar():
@@ -945,7 +951,7 @@ def showProgressiveRewardAwardWindow(bonuses, specialRewardType, currentStep, no
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
 def showSeniorityRewardVehiclesWindow(vehicles=None, fromEntryPoint=True, notificationMgr=None):
     from gui.impl.lobby.seniority_awards.seniority_awards_vehicles_view import SeniorityRewardVehiclesWindow
-    viewID = R.views.lobby.seniority_awards.SeniorityVehiclesAwardsView()
+    viewID = R.views.mono.seniority_awards.vehicle_rewards()
     uiLoader = dependency.instance(IGuiLoader)
     if uiLoader.windowsManager.getViewByLayoutID(viewID) is None:
         window = SeniorityRewardVehiclesWindow(viewID, vehicles, fromEntryPoint)
@@ -958,7 +964,7 @@ def showSeniorityRewardVehiclesWindow(vehicles=None, fromEntryPoint=True, notifi
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
 def showSeniorityRewardAwardWindow(data, notificationMgr=None):
     from gui.impl.lobby.seniority_awards.seniority_reward_award_view import SeniorityRewardAwardWindow
-    viewID = R.views.lobby.seniority_awards.SeniorityAwardsView()
+    viewID = R.views.mono.seniority_awards.rewards()
     uiLoader = dependency.instance(IGuiLoader)
     if uiLoader.windowsManager.getViewByLayoutID(viewID) is None:
         window = SeniorityRewardAwardWindow(data, viewID)
@@ -969,13 +975,16 @@ def showSeniorityRewardAwardWindow(data, notificationMgr=None):
 
 
 @dependency.replace_none_kwargs(battlePass=IBattlePassController)
-def showBattlePass(childStateID=R.invalid(), chapterID=0, battlePass=None, **kwargs):
+def showBattlePass(childStateID=R.invalid(), chapterID=0, battlePass=None, directNavigation=False, **kwargs):
     from gui.impl.lobby.battle_pass.common import getActualBattlePassIDs
     from gui.impl.lobby.battle_pass.states import BattlePassState, STATES
     if battlePass.isPaused():
         g_eventBus.handleEvent(events.BattlePassEvent(events.BattlePassEvent.ON_PAUSE))
         return
     childStateID, chapterID = getActualBattlePassIDs(childStateID, chapterID)
+    if directNavigation:
+        STATES[childStateID].goTo(chapterID=chapterID, **kwargs)
+        return
     guiLoader = dependency.instance(IGuiLoader)
     if guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.battle_pass.MainView()):
         bp = R.aliases.battle_pass
@@ -1007,10 +1016,11 @@ def showBattlePassVehicleAwardWindow(data, notificationMgr=None):
     notificationMgr.append(WindowNotificationCommand(window))
 
 
-def showDedicationRewardWindow(bonuses, data, closeCallback=None):
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showDedicationRewardWindow(bonuses, data, closeCallback=None, notificationMgr=None):
     from gui.impl.lobby.dedication.dedication_reward_view import DedicationRewardWindow
     window = DedicationRewardWindow(bonuses, data, closeCallback)
-    window.load()
+    notificationMgr.append(WindowNotificationCommand(window))
 
 
 def showStylePreview(vehCD, style, descr='', backCallback=None, *args, **kwargs):
@@ -1193,14 +1203,14 @@ def _killOldView(layoutID):
     return False
 
 
-def showOfferGiftsWindow(offerID, overrideSuccessCallback=None):
+def showOfferGiftsWindow(offerID, overrideSuccessCallback=None, overrideOnBackCallback=None):
     from gui.impl.lobby.offers.offer_gifts_window import OfferGiftsWindow
     from gui.impl.lobby.offers.offer_banner_window import OfferBannerWindow
     layoutID = R.views.lobby.offers.OfferGiftsWindow()
     _killOldView(layoutID)
     if OfferBannerWindow.isLoaded(offerID):
         OfferBannerWindow.destroyBannerWindow(offerID)
-    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID, OfferGiftsWindow, ScopeTemplates.LOBBY_SUB_SCOPE), offerID=offerID, overrideSuccessCallback=overrideSuccessCallback), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID, OfferGiftsWindow, ScopeTemplates.LOBBY_SUB_SCOPE), offerID=offerID, overrideSuccessCallback=overrideSuccessCallback, overrideOnBackCallback=overrideOnBackCallback), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 @wg_async
@@ -1343,7 +1353,7 @@ def showBattlePassRewardsSelectionWindow(chapterID=0, level=0, onRewardsReceived
 
 
 def showEpicRewardsSelectionWindow(onRewardsReceivedCallback=None, onCloseCallback=None, onLoadedCallback=None, isAutoDestroyWindowsOnReceivedRewards=True, level=0):
-    from gui.impl.lobby.frontline.rewards_selection_view import RewardsSelectionWindow
+    from frontline.gui.impl.lobby.views.rewards_selection_view import RewardsSelectionWindow
     window = RewardsSelectionWindow(onRewardsReceivedCallback, onCloseCallback, onLoadedCallback, isAutoDestroyWindowsOnReceivedRewards, level)
     window.load()
     return window
@@ -1529,15 +1539,8 @@ def showMapsTrainingQueue():
 
 
 def showMapsTrainingResultsWindow(arenaUniqueID, isFromNotifications):
-    from gui.impl.lobby.maps_training.maps_training_result_view import MapsTrainingResultWindow
-    if not isFromNotifications:
-        guiLoader = dependency.instance(IGuiLoader)
-        window = guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.maps_training.MapsTrainingResult())
-        if window is not None:
-            return
-    window = MapsTrainingResultWindow(arenaUniqueID, isFromNotifications)
-    window.load()
-    return
+    from gui.impl.lobby.maps_training.states import MapsTrainingBattleResultsState
+    MapsTrainingBattleResultsState.goTo(arenaUniqueID=arenaUniqueID, isFromNotifications=isFromNotifications)
 
 
 @wg_async
@@ -1957,7 +1960,7 @@ def showExchangeFreeXPWindow(ctx=None, doBlur=True):
 
 
 def showEasyTankEquipScreen(*args, **kwargs):
-    from gui.impl.lobby.easy_tank_equip.states import EasyTankEquipState
+    from gui.impl.lobby.hangar.states import EasyTankEquipState
     EasyTankEquipState.goTo()
 
 
@@ -2062,11 +2065,14 @@ def showPersonalMissionCampaignSelectorWindow():
     CampaignSelectorState.goTo()
 
 
+def showServiceRecordWindow(**kwargs):
+    from gui.Scaleform.daapi.view.lobby.profile.states import ServiceRecordState
+    ServiceRecordState.goTo(**kwargs)
+
+
 def showPersonalMissionMainWindow(operationID, state=None):
-    from gui.Scaleform.lobby_entry import getLobbyStateMachine
-    from gui.impl.lobby.personal_missions_30.state import PersonalMissions3EntryState
-    if not getLobbyStateMachine().isStateEntered(PersonalMissions3EntryState.STATE_ID):
-        PersonalMissions3EntryState.goTo(operationID=operationID, state=state)
+    from gui.impl.lobby.personal_missions_30.state import ProgressionState
+    ProgressionState.goTo(operationID=operationID, state=state)
 
 
 def showPersonalMissionChain(operationID, missionCategory, state=None):
@@ -2128,3 +2134,10 @@ def showPetEventView(ctx):
 def showPetInfoPage():
     url = GUI_SETTINGS.petSystemInfoPage
     showBrowserOverlayView(url, VIEW_ALIAS.WEB_VIEW_TRANSPARENT)
+
+
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showCollector20RewardWindow(dossierRewards, notificationMgr=None):
+    from gui.impl.lobby.collector20_reward.collector20_reward_view import Collector20RewardWindow
+    window = Collector20RewardWindow(dossierRewards)
+    notificationMgr.append(WindowNotificationCommand(window))

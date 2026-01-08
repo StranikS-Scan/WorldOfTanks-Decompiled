@@ -9,13 +9,10 @@ def _iterEventNames(events):
 class EventsDebugger(object):
 
     def __init__(self, events):
-        for eventName in _iterEventNames(events):
+        for eventName in self._iterEventNames(events):
             event = getattr(events, eventName)
             processor = getattr(self, eventName)
             event += processor
-
-    def _shouldHandle(self, eventName):
-        return True
 
     def _getDebugPrefix(self):
         pass
@@ -23,12 +20,11 @@ class EventsDebugger(object):
     def _buildDebugString(self, item):
         return '%s %s' % (self._getDebugPrefix(), item)
 
+    def _iterEventNames(self, events):
+        return (eventName for eventName in _iterEventNames(events) if self._shouldHandle(eventName))
+
+    def _shouldHandle(self, eventName):
+        return True
+
     def __getattr__(self, item):
-        if self._shouldHandle(item):
-            return lambda *args, **kwargs: LOG_DEBUG_DEV(self._buildDebugString(item), *args, **kwargs)
-        else:
-            return _silencedEventDebugSubscription
-
-
-def _silencedEventDebugSubscription(*args, **kwargs):
-    pass
+        return lambda *args, **kwargs: LOG_DEBUG_DEV(self._buildDebugString(item), *args, **kwargs)

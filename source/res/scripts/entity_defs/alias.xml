@@ -1666,6 +1666,9 @@
       <segment>
         <Type>	UINT64	</Type>
       </segment>
+      <params>
+        <Type>	UINT32	</Type>
+      </params>
     </Properties>
   </VEHICLE_HIT_POINT>
   <DYN_ATTACHMENTS_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -2266,9 +2269,13 @@
       <state>
         <Type>	UINT8	</Type>
       </state>
-      <stateActivationTime>
+      <rateMultFactor>
         <Type>	FLOAT32	</Type>
-      </stateActivationTime>
+      </rateMultFactor>
+    </Properties>
+  </AUTO_SHOOT_GUN_STATE_STATUS>
+  <AUTO_SHOOT_GUN_DISPERSION_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
       <dispersionFactor>
         <Type>	FLOAT32	</Type>
       </dispersionFactor>
@@ -2282,7 +2289,29 @@
         <Type>	FLOAT32	</Type>
       </maxShotDispersion>
     </Properties>
-  </AUTO_SHOOT_GUN_STATE_STATUS>
+  </AUTO_SHOOT_GUN_DISPERSION_STATUS>
+  <TEMPERATURE_GUN_STATE_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <state>
+        <Type>	UINT8	</Type>
+      </state>
+      <thermalStateID>
+        <Type>	UINT8	</Type>
+      </thermalStateID>
+      <updateTime>
+        <Type>	FLOAT32	</Type>
+      </updateTime>
+      <directionFactor>
+        <Type>	FLOAT32	</Type>
+      </directionFactor>
+      <currentTemperature>
+        <Type>	FLOAT32	</Type>
+      </currentTemperature>
+      <coolingPerSecFactor>
+        <Type>	FLOAT32	</Type>
+      </coolingPerSecFactor>
+    </Properties>
+  </TEMPERATURE_GUN_STATE_STATUS>
   <POWER_MODE_STATE_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <state>

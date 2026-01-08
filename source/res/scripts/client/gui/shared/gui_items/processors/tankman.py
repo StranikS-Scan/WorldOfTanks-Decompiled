@@ -118,22 +118,33 @@ class TankmanEquip(GroupedRequestProcessor):
 
     def __init__(self, tankmanInvID, vehicleInvID, vehicleSlotIdx, groupID=0, groupSize=1):
         self.__tankmanInvID = tankmanInvID
-        self.__vehicleInvID = vehicleInvID
+        self._vehicleInvID = vehicleInvID
         self.__vehicleSlotIdx = vehicleSlotIdx
         tankman = self.itemsCache.items.getTankman(tankmanInvID)
         vehicle = self.itemsCache.items.getVehicle(vehicleInvID)
-        self.__sysMsgPrefix = 'equip_tankman'
+        self._sysMsgPrefix = 'equip_tankman'
         anotherTankman = dict(vehicle.crew).get(vehicleSlotIdx)
         if tankman is not None and anotherTankman is not None and anotherTankman.invID != tankman.invID:
-            self.__sysMsgPrefix = 'reequip_tankman'
+            self._sysMsgPrefix = 'reequip_tankman'
         super(TankmanEquip, self).__init__(BigWorld.player().inventory.equipTankman, vehicleInvID, vehicleSlotIdx, tankmanInvID, groupID=groupID, groupSize=groupSize, plugins=(plugins.TankmanLockedValidator(tankman), plugins.VehicleCrewLockedValidator(vehicle), plugins.VehicleValidator(vehicle, False, prop={'isLocked': True})))
         return
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError(sysMsgKey='{}/{}'.format(self.__sysMsgPrefix, errStr), defaultSysMsgKey='{}/server_error'.format(self.__sysMsgPrefix), auxData=self._makeErrorData(errStr), type=SM_TYPE.NotEnoughBerthError if errStr == 'not_enough_space' else SM_TYPE.Error)
+        return makeI18nError(sysMsgKey='{}/{}'.format(self._sysMsgPrefix, errStr), defaultSysMsgKey='{}/server_error'.format(self._sysMsgPrefix), auxData=self._makeErrorData(errStr), type=SM_TYPE.NotEnoughBerthError if errStr == 'not_enough_space' else SM_TYPE.Error)
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess(sysMsgKey='{}/success'.format(self.__sysMsgPrefix), vehName=self.itemsCache.items.getVehicle(self.__vehicleInvID).userName, auxData=self._makeSuccessData(ctx))
+        return makeI18nSuccess(sysMsgKey='{}/success'.format(self._sysMsgPrefix), vehName=self.itemsCache.items.getVehicle(self._vehicleInvID).userName, auxData=self._makeSuccessData(ctx))
+
+
+class QuickServiceTankmanEquip(TankmanEquip):
+
+    def _successHandler(self, code, ctx=None):
+        additionalMessages = []
+        for act in ctx:
+            if act.itemCount == 1:
+                additionalMessages.append(makeI18nSuccess(sysMsgKey='{}/success'.format(self._sysMsgPrefix), vehName=self.itemsCache.items.getVehicle(self._vehicleInvID).userName, auxData=self._makeSuccessData(ctx)))
+
+        return makeI18nSuccess(sysMsgKey='{}/success'.format(self._sysMsgPrefix), vehName=self.itemsCache.items.getVehicle(self._vehicleInvID).userName, auxData=additionalMessages[1:])
 
 
 class TankmanRecruitAndEquip(Processor):

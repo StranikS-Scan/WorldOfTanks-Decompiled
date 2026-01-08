@@ -3,7 +3,8 @@
 import logging
 import typing
 from gui.Scaleform.genConsts.MISSIONS_ALIASES import MISSIONS_ALIASES
-from gui.Scaleform.locale.QUESTS import QUESTS
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.impl.gen.view_models.common.missions.conditions.condition_group_model import ConditionGroupModel
 from gui.impl.gen.view_models.common.missions.conditions.preformatted_condition_model import PreformattedConditionModel
 from gui.server_events import formatters
@@ -14,7 +15,6 @@ from gui.server_events.cond_formatters.bonus import BattlesCountFormatter
 from gui.server_events.cond_formatters.bonus import MissionsBonusConditionsFormatter
 from gui.server_events.formatters import PreFormattedCondition
 from gui.shared.formatters.plain_text import PlainTextFormatter
-from helpers import i18n
 from personal_missions_constants import CONDITION_ICON
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
@@ -121,7 +121,8 @@ class UIConditionPacker(object):
         conditionName = condition.getName()
         preFormattedCondition = self._convertConditionIntoPreFormattedCondition(ctx)
         if not preFormattedCondition:
-            _logger.error('Should not be reached: preFormattedConditionTuple was not received.')
+            if not ctx['event'].isGuiDisabled():
+                _logger.error('Should not be reached: preFormattedConditionTuple was not received.')
             return None
         else:
             if len(preFormattedCondition) > 1:
@@ -222,15 +223,19 @@ class PostBattleConditionPacker(UIConditionPacker):
             return None
 
     @classmethod
-    def packDefaultCondition(cls, model):
-        model.getItems().addViewModel(cls.getPlayBattleCondition())
+    def packDefaultCondition(cls, event, model):
+        model.getItems().addViewModel(cls.getPlayBattleCondition(event))
         model.setConditionType(CONDITION_GROUP_AND)
 
     @staticmethod
-    def getPlayBattleCondition(packer=PreFormattedConditionModelPacker):
-        titleArgs = (i18n.makeString(QUESTS.DETAILS_CONDITIONS_PLAYBATTLE_TITLE),)
-        descrArgs = (i18n.makeString(QUESTS.MISSIONDETAILS_CONDITIONS_PLAYBATTLE),)
-        playBattleCondition = formatters.packMissionIconCondition(FormattableField(FORMATTER_IDS.SIMPLE_TITLE, titleArgs), MISSIONS_ALIASES.NONE, FormattableField(FORMATTER_IDS.DESCRIPTION, descrArgs), CONDITION_ICON.BATTLES)
+    def getPlayBattleCondition(event, packer=PreFormattedConditionModelPacker):
+        if event.isGuiDisabled():
+            icon = CONDITION_ICON.FOLDER
+        else:
+            icon = CONDITION_ICON.BATTLES
+        titleArgs = (backport.text(R.strings.quests.details.conditions.playBattle.title()),)
+        descrArgs = (backport.text(R.strings.quests.missionDetails.conditions.playBattle()),)
+        playBattleCondition = formatters.packMissionIconCondition(FormattableField(FORMATTER_IDS.SIMPLE_TITLE, titleArgs), MISSIONS_ALIASES.NONE, FormattableField(FORMATTER_IDS.DESCRIPTION, descrArgs), icon)
         return packer.pack(playBattleCondition, CONDITION_DEFAULT_NAME)
 
 

@@ -70,6 +70,9 @@ class Statistics(IStatisticsPacker):
             paramSettings = cls._getAllParameters().get(detailedParamType)
             if paramSettings is None:
                 raise SoftException('Missing parameter settings for parameter {}'.format(detailedParamType.value))
+            conditionCheckers = paramSettings.conditions
+            if conditionCheckers and not all((func(info, battleResults) for func in conditionCheckers)):
+                continue
             paramModel = SimpleStatsParameterModel()
             cls.__packParameter(paramModel, paramSettings, info, battleResults)
             detailsModel.addViewModel(paramModel)

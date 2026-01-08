@@ -7,18 +7,18 @@ import Event
 from Account import PlayerAccount
 from adisp import adisp_async, adisp_process
 from constants import ARENA_BONUS_TYPE, PREMIUM_TYPE, PlayerSatisfactionRating
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING
+from frameworks.state_machine import BaseStateObserver
 from frameworks.wulf import WindowLayer
 from gui import SystemMessages
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.battle_results import context, emblems, reusable, stored_sorting
 from gui.battle_results.pbs_helpers.common import pushNoBattleResultsDataMessage
 from gui.battle_results.composer import RegularStatsComposer
 from gui.battle_results.random_stats_ctrl import RandomBattleResultStatsCtrl
 from gui.battle_results.settings import PREMIUM_STATE
-from gui.shared import event_dispatcher, events, g_eventBus
+from gui.shared import event_dispatcher, events, g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.gui_items.processors.common import BattleResultsGetter, PremiumBonusApplier
 from gui.shared.gui_items.processors.player_satisfaction_rating import PlayerSatisfactionRatingProcessor
-from gui.shared.lock_overlays import lockNotificationManager
 from gui.shared.system_factory import collectBattleResultStatsCtrl
 from gui.shared.utils import decorators
 from helpers import dependency
@@ -73,6 +73,10 @@ def createStatsCtrl(reusableInfo):
     if statsCtrl is None:
         statsCtrl = RegularStatsComposer
     return statsCtrl(reusableInfo)
+
+
+class PostBattleResultsStateMixin(object):
+    pass
 
 
 class BattleResultsService(IBattleResultsService):
@@ -145,7 +149,7 @@ class BattleResultsService(IBattleResultsService):
         if fetcher is not None:
             fetcher.fetch(callback)
         else:
-            LOG_WARNING('Icon fetcher is not found', ctx)
+            _logger.warning('Icon fetcher is not found %r', ctx)
             if callback is not None:
                 callback(None)
         return
@@ -297,6 +301,8 @@ class BattleResultsService(IBattleResultsService):
 
     def __handleLobbyViewLoaded(self, _):
         self.appLoader.getApp().containerManager.onViewLoaded += self.__onViewLoaded
+        lsm = getLobbyStateMachine()
+        lsm.connect(_PostBattleStatesObserver())
 
     def __onViewLoaded(self, view):
         if view.layer != WindowLayer.SUB_VIEW:
@@ -306,16 +312,20 @@ class BattleResultsService(IBattleResultsService):
             battleCtx = self.sessionProvider.getCtx()
             arenaUniqueID = battleCtx.lastArenaUniqueID
             arenaBonusType = battleCtx.lastArenaBonusType or ARENA_BONUS_TYPE.UNKNOWN
+            notifyProcessed = False
             if arenaUniqueID:
                 try:
-                    lockNotificationManager(True, source=type(self).__name__)
                     self.__showResults(context.RequestResultsContext(arenaUniqueID, arenaBonusType))
-                    lockNotificationManager(False, source=type(self).__name__, releasePostponed=True)
-                except Exception:
-                    LOG_CURRENT_EXCEPTION()
+                except Exception as exc:
+                    _logger.exception(exc)
+                    notifyProcessed = True
 
                 battleCtx.lastArenaUniqueID = None
                 battleCtx.lastArenaBonusType = None
+            else:
+                notifyProcessed = True
+            if notifyProcessed:
+                g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.BATTLE_RESULTS_PROCESSED), scope=EVENT_BUS_SCOPE.LOBBY)
             return
 
     @adisp_async
@@ -389,3 +399,13 @@ class BattleResultsService(IBattleResultsService):
         if callback is not None:
             callback(results)
         return
+
+
+class _PostBattleStatesObserver(BaseStateObserver):
+
+    def isObservingState(self, state):
+        return isinstance(state, PostBattleResultsStateMixin)
+
+    def onEnterState(self, state, event):
+        g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.BATTLE_RESULTS_PROCESSED), scope=EVENT_BUS_SCOPE.LOBBY)
+        _logger.info('Battle results processed in state %s', state)

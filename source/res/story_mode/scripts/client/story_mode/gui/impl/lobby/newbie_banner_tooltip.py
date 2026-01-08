@@ -9,7 +9,7 @@ from story_mode.uilogging.story_mode.loggers import NewbieEntryPointTooltipLogge
 class NewbieBannerTooltip(ViewImpl):
 
     def __init__(self):
-        super(NewbieBannerTooltip, self).__init__(ViewSettings(R.views.story_mode.lobby.NewbieBannerTooltip(), model=ViewModel()))
+        super(NewbieBannerTooltip, self).__init__(ViewSettings(R.views.story_mode.mono.lobby.tooltips.newbie_banner_tooltip(), model=ViewModel()))
         self._uiLogger = NewbieEntryPointTooltipLogger()
         self._uiLogger.start()
 

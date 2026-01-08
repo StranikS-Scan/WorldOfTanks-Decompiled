@@ -35,7 +35,17 @@ class Division(IntEnum):
     E = 5
 
 
+class StatisticsMode(IntEnum):
+    SEASON = 0
+    DAY = 1
+
+
 class SeasonPointState(Enum):
     ACHIEVED = 'achieved'
     POSSIBLE = 'possible'
     NOTACHIEVED = 'notAchieved'
+
+
+class TournamentName(Enum):
+    WCI = 'wci'
+    OLS = 'ols'

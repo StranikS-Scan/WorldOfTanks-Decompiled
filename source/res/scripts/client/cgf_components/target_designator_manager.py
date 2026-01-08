@@ -5,6 +5,7 @@ import CGF
 import SoundGroups
 from cgf_script.managers_registrator import autoregister
 from chat_commands_consts import LocationMarkerSubType
+from constants import DIRECT_DETECTION_TYPE
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from gui.battle_control.controllers.vehicle_passenger import VehiclePassengerInfoWatcher
 from helpers import dependency
@@ -33,6 +34,9 @@ class TargetDesignatorSoundManager(CGF.ComponentManager, VehiclePassengerInfoWat
         if ctrl is not None:
             ctrl.onStaticMarkerAdded += self.__onStaticMarkerAdded
             ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
+        ctrl = self.__sessionProvider.shared.spottingIndicatorsCtrl
+        if ctrl is not None:
+            ctrl.onSpottingIndicatorAction += self.__onSpottingIndicatorAction
         self.startVehiclePassengerLateListening(self.__onVehiclePassengerUpdate, self.__onVehiclePassengerUpdating)
         return
 
@@ -43,6 +47,9 @@ class TargetDesignatorSoundManager(CGF.ComponentManager, VehiclePassengerInfoWat
         if ctrl is not None:
             ctrl.onStaticMarkerAdded -= self.__onStaticMarkerAdded
             ctrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
+        ctrl = self.__sessionProvider.shared.spottingIndicatorsCtrl
+        if ctrl is not None:
+            ctrl.onSpottingIndicatorAction -= self.__onSpottingIndicatorAction
         self.stopVehiclePassengerListening(self.__onVehiclePassengerUpdate, self.__onVehiclePassengerUpdating)
         return
 
@@ -51,25 +58,27 @@ class TargetDesignatorSoundManager(CGF.ComponentManager, VehiclePassengerInfoWat
             self.__play3DSound(self._SOUND3D_UNSPOTTED_VEHICLE_HIT, position)
 
     def __onVehicleFeedbackReceived(self, eventID, vehicleID, value):
-        if eventID == FEEDBACK_EVENT_ID.TARGET_DESIGNATOR_SPOTTED_MARKER:
-            if value.hasUnspottedIndicator:
+        if eventID != FEEDBACK_EVENT_ID.TARGET_DESIGNATOR_SPOTTED_MARKER:
+            return
+        else:
+            marker = value.spottedMarker
+            if marker is not None and vehicleID not in self.__markers:
+                self.__markers.add(vehicleID)
+                targetVehicle = BigWorld.entities.get(vehicleID)
                 if vehicleID == self.__currentVehicle.id:
-                    self.__playGlobalSound(self._SOUND_UNSPOTTED_VEHICLE_HIT_PC)
-            else:
-                marker = value.spottedMarker
-                if marker is not None and vehicleID not in self.__markers:
-                    self.__markers.add(vehicleID)
-                    targetVehicle = BigWorld.entities.get(vehicleID)
-                    if vehicleID == self.__currentVehicle.id:
-                        self.__playGlobalSound(self._SOUND_SPOTTED_VEHICLE_HIT_PC)
-                        self.__setGlobalState(self._STATE_VEHICLE_HIT_PC_GROUP, self._STATE_VEHICLE_HIT_PC_GROUP_ON)
-                    elif self.__isEnemyVehicle(targetVehicle):
-                        self.__play3DSound(self._SOUND3D_SPOTTED_VEHICLE_HIT, targetVehicle.position)
-                elif marker is None and vehicleID in self.__markers:
-                    self.__markers.remove(vehicleID)
-                    if vehicleID == self.__currentVehicle.id:
-                        self.__setGlobalState(self._STATE_VEHICLE_HIT_PC_GROUP, self._STATE_VEHICLE_HIT_PC_GROUP_OFF)
-        return
+                    self.__playGlobalSound(self._SOUND_SPOTTED_VEHICLE_HIT_PC)
+                    self.__setGlobalState(self._STATE_VEHICLE_HIT_PC_GROUP, self._STATE_VEHICLE_HIT_PC_GROUP_ON)
+                elif self.__isEnemyVehicle(targetVehicle):
+                    self.__play3DSound(self._SOUND3D_SPOTTED_VEHICLE_HIT, targetVehicle.position)
+            elif marker is None and vehicleID in self.__markers:
+                self.__markers.remove(vehicleID)
+                if vehicleID == self.__currentVehicle.id:
+                    self.__setGlobalState(self._STATE_VEHICLE_HIT_PC_GROUP, self._STATE_VEHICLE_HIT_PC_GROUP_OFF)
+            return
+
+    def __onSpottingIndicatorAction(self, detectionType, isVisible):
+        if detectionType == DIRECT_DETECTION_TYPE.UNSPOTTED and isVisible:
+            self.__playGlobalSound(self._SOUND_UNSPOTTED_VEHICLE_HIT_PC)
 
     def __onVehiclePassengerUpdating(self, _):
         if self.__currentVehicle is not None and self.__currentVehicle.id in self.__markers:

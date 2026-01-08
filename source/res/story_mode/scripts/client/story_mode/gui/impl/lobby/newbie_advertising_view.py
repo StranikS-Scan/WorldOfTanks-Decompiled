@@ -12,7 +12,7 @@ from story_mode.uilogging.story_mode.loggers import NewbieAdvertisingViewLogger
 
 class NewbieAdvertisingView(ViewImpl):
     __slots__ = ('_uiLogger',)
-    layoutID = R.views.story_mode.lobby.NewbieAdvertisingView()
+    layoutID = R.views.story_mode.mono.lobby.newbie_advertising_view()
 
     def __init__(self, layoutID=None):
         settings = ViewSettings(layoutID or self.layoutID, ViewFlags.VIEW, AdvertisingViewModel())

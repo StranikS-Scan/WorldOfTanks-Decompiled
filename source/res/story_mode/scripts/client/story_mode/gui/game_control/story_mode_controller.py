@@ -48,7 +48,7 @@ from story_mode.skeletons.story_mode_controller import IStoryModeController
 from story_mode_common.configs.story_mode_missions import missionsSchema, MissionsModel, MissionModel
 from story_mode_common.configs.story_mode_settings import settingsSchema, SettingsModel
 from story_mode_common.helpers import isMissionCompleted, isTaskCompleted, isMissionDisabledByABGroup
-from story_mode_common.story_mode_constants import LOGGER_NAME, SM_CONGRATULATIONS_MESSAGE, STORY_MODE_BONUS_TYPES, UNDEFINED_MISSION_ID, STORY_MODE_PDATA_KEY, PROGRESS_PDATA_KEY, MissionType, STORY_MODE_AB_FEATURE, EventMissionSelector
+from story_mode_common.story_mode_constants import LOGGER_NAME, SM_CONGRATULATIONS_MESSAGE, STORY_MODE_BONUS_TYPES, MissionId, STORY_MODE_PDATA_KEY, PROGRESS_PDATA_KEY, MissionType, STORY_MODE_AB_FEATURE, EventMissionSelector
 from uilogging.performance.battle.loggers import BattleMetricsLogger
 if typing.TYPE_CHECKING:
     from messenger.proto.bw.wrappers import ServiceChannelMessage
@@ -75,7 +75,7 @@ class StoryModeController(IStoryModeController, IGlobalListener):
     _settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
-        self.__selectedMissionId = UNDEFINED_MISSION_ID
+        self.__selectedMissionId = MissionId.UNDEFINED
         self.__selectRandomBattle = False
         self.__isOnboarding = False
         self.__needToShowAwardData = None
@@ -131,7 +131,7 @@ class StoryModeController(IStoryModeController, IGlobalListener):
 
     @property
     def newMissionIdForNewbies(self):
-        newMissionId = UNDEFINED_MISSION_ID
+        newMissionId = MissionId.UNDEFINED
         for mission in self.filterMissions(missionType=MissionType.REGULAR):
             if self.isFirstTaskNotCompleted(mission) and mission.missionType == MissionType.REGULAR:
                 newMissionId = mission.missionId
@@ -168,7 +168,7 @@ class StoryModeController(IStoryModeController, IGlobalListener):
     def onDisconnected(self):
         self.stopGlobalListening()
         self.__isQuittingBattle = False
-        self.__selectedMissionId = UNDEFINED_MISSION_ID
+        self.__selectedMissionId = MissionId.UNDEFINED
         self.__selectRandomBattle = True
         self.__isOnboarding = False
         self.__needToShowAwardData = None
@@ -207,19 +207,15 @@ class StoryModeController(IStoryModeController, IGlobalListener):
         return not self.isMissionCompleted(mission.missionId) and any((not self.isMissionTaskCompleted(mission.missionId, task.id) for task in mission.getUnlockedTasks()))
 
     def isFirstTaskNotCompleted(self, mission):
-        battlesCount = self._itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
-        isMissionLocked = battlesCount < mission.unlockBattlesCount
         task = mission.getTask(1)
-        return not isMissionLocked and not task.isLocked() and not self.isMissionTaskCompleted(mission.missionId, task.id)
+        return not self.isMissionLocked(mission) and not task.isLocked() and not self.isMissionTaskCompleted(mission.missionId, task.id)
 
     def isAnyTaskNotCompleted(self, mission):
-        battlesCount = self._itemsCache.items.getAccountDossier().getRandomStats().getBattlesCount()
-        return not mission.isMissionLocked(battlesCount) and any((not self.isMissionTaskCompleted(mission.missionId, task.id) for task in mission.getUnlockedTasks()))
+        return not self.isMissionLocked(mission) and any((not self.isMissionTaskCompleted(mission.missionId, task.id) for task in mission.getUnlockedTasks()))
 
     def isSelectedMissionLocked(self):
-        battlesCount = self._itemsCache.items.getAccountDossier().getRandomStats().getBattlesCount()
         mission = self.missions.getMission(self.__selectedMissionId)
-        return mission is not None and mission.isMissionLocked(battlesCount)
+        return mission is not None and self.isMissionLocked(mission)
 
     def isMissionTaskCompleted(self, missionId, taskId):
         return isTaskCompleted(self.__progress, missionId, taskId)
@@ -244,6 +240,10 @@ class StoryModeController(IStoryModeController, IGlobalListener):
         newMissionIdForNewbies = self.newMissionIdForNewbies
         if newMissionIdForNewbies > getMissionNewSeenId():
             setMissionNewSeenId(newMissionIdForNewbies)
+
+    def isMissionLocked(self, mission):
+        battlesCount = self._itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount() if self._itemsCache.isSynced() else 0
+        return bool(mission.getLockReason(self.__progress, battlesCount))
 
     def getFirstMission(self):
         return self.missions.missions[0]
@@ -368,10 +368,10 @@ class StoryModeController(IStoryModeController, IGlobalListener):
     def onPrbEntitySwitched(self):
         if not self.__selectRandomBattle and self.isEnabled() and self.isInPrb():
             self.__onEnterPrb()
-            if self.__selectedMissionId == UNDEFINED_MISSION_ID:
+            if self.__selectedMissionId == MissionId.UNDEFINED:
                 self.__assignSelectedMission()
         else:
-            self.__selectedMissionId = UNDEFINED_MISSION_ID
+            self.__selectedMissionId = MissionId.UNDEFINED
 
     def onAvatarBecomePlayer(self):
         self.__isQuittingBattle = False
@@ -390,7 +390,7 @@ class StoryModeController(IStoryModeController, IGlobalListener):
     def chooseSelectedMissionId(self, isEvent=False):
         chooser = self.__chooseEventSelectedMissionIds if isEvent else self.__chooseNewbieSelectedMissionIds
         missionId, defaultMissionId = chooser()
-        return missionId if missionId != UNDEFINED_MISSION_ID else defaultMissionId
+        return missionId if missionId != MissionId.UNDEFINED else defaultMissionId
 
     @property
     def _serverSettings(self):
@@ -436,7 +436,7 @@ class StoryModeController(IStoryModeController, IGlobalListener):
         if settingsSchema.gpKey == gpKey:
             self.onSettingsUpdated()
         if missionsSchema.gpKey == gpKey:
-            if self.__selectedMissionId != UNDEFINED_MISSION_ID:
+            if self.__selectedMissionId != MissionId.UNDEFINED:
                 mission = self.missions.getMission(self.__selectedMissionId)
                 if not mission or not mission.enabled:
                     self.__assignSelectedMission()
@@ -543,27 +543,26 @@ class StoryModeController(IStoryModeController, IGlobalListener):
         return self.__syncData.get(PROGRESS_PDATA_KEY, {})
 
     def __chooseSelectedMissionsIds(self, missionType=MissionType.REGULAR, precondition=lambda m: True, condition=lambda m: True):
-        lastEnabled, firstSuitable = UNDEFINED_MISSION_ID, UNDEFINED_MISSION_ID
+        lastEnabled, firstSuitable = MissionId.UNDEFINED, MissionId.UNDEFINED
         for mission in self.filterMissions(missionType=missionType):
             if precondition(mission):
                 if condition(mission):
                     return (mission.missionId, mission.missionId)
-            if lastEnabled == UNDEFINED_MISSION_ID or lastEnabled < mission.missionId:
+            if lastEnabled == MissionId.UNDEFINED or lastEnabled < mission.missionId:
                 lastEnabled = mission.missionId
 
         _logger.debug('[Controller] Missions <%s>, <%s> chosen.', firstSuitable, lastEnabled)
         return (firstSuitable, lastEnabled)
 
     def __chooseLastUnlockedMissionIds(self):
-        lastEnabled, firstSuitable = UNDEFINED_MISSION_ID, UNDEFINED_MISSION_ID
+        lastEnabled, firstSuitable = MissionId.UNDEFINED, MissionId.UNDEFINED
         missionsList = list(self.filterMissions(missionType=MissionType.REGULAR))
         for mission in missionsList[::-1]:
-            battlesCount = self._itemsCache.items.getAccountDossier().getRandomStats().getBattlesCount()
-            if not mission.isMissionLocked(battlesCount):
+            if not self.isMissionLocked(mission):
                 return (mission.missionId, mission.missionId)
-            if firstSuitable == UNDEFINED_MISSION_ID:
+            if firstSuitable == MissionId.UNDEFINED:
                 firstSuitable = mission.missionId
-            if lastEnabled == UNDEFINED_MISSION_ID or lastEnabled < mission.missionId:
+            if lastEnabled == MissionId.UNDEFINED or lastEnabled < mission.missionId:
                 lastEnabled = mission.missionId
 
         _logger.debug('[Controller] Missions <%s>, <%s> chosen.', firstSuitable, lastEnabled)
@@ -572,7 +571,7 @@ class StoryModeController(IStoryModeController, IGlobalListener):
     def __chooseNewbieSelectedMissionIds(self):
         for precondition, condition in ((self.isFirstTaskNotCompleted, lambda m: m.missionType == MissionType.REGULAR), (self.isAnyTaskNotCompleted, lambda m: m.missionType == MissionType.REGULAR), (self.isAnyTaskNotCompleted, lambda m: m.missionType == MissionType.ONBOARDING)):
             firstSuitable, lastEnabled = self.__chooseSelectedMissionsIds(precondition=precondition, condition=condition)
-            if firstSuitable != UNDEFINED_MISSION_ID:
+            if firstSuitable != MissionId.UNDEFINED:
                 return (firstSuitable, lastEnabled)
 
         return self.__chooseLastUnlockedMissionIds()
@@ -596,7 +595,7 @@ class StoryModeController(IStoryModeController, IGlobalListener):
 
     def __getMissionsWithUnlockMission(self):
         firstSuitable, lastEnabled = self.__chooseSelectedMissionsIds(missionType=MissionType.EVENT, precondition=lambda m: not (m.unlockMission > 0 and not self.isMissionCompleted(m.unlockMission)), condition=lambda m: not self.isMissionCompleted(m.missionId))
-        if firstSuitable != UNDEFINED_MISSION_ID:
+        if firstSuitable != MissionId.UNDEFINED:
             mission = self.missions.getMission(firstSuitable)
             hint = OnceOnlyHints.VDAY_DIFFICULTY_HINT
             if mission.unlockMission and self.isMissionCompleted(mission.unlockMission) and not self._settingsCore.serverSettings.getOnceOnlyHintsSetting(hint, default=False):
@@ -605,16 +604,16 @@ class StoryModeController(IStoryModeController, IGlobalListener):
 
     def __assignSelectedMission(self):
         eMissionId, eDefaultMissionId = self.__chooseEventSelectedMissionIds()
-        if eMissionId != UNDEFINED_MISSION_ID:
+        if eMissionId != MissionId.UNDEFINED:
             self.__selectedMissionId = eMissionId
             _logger.debug('[Controller] Mission <%s> automatically selected.', self.__selectedMissionId)
             return
-        if eDefaultMissionId != UNDEFINED_MISSION_ID:
+        if eDefaultMissionId != MissionId.UNDEFINED:
             self.__selectedMissionId = eDefaultMissionId
             _logger.debug('[Controller] Mission <%s> automatically selected.', self.__selectedMissionId)
             return
         missionId, defaultMissionId = self.__chooseNewbieSelectedMissionIds()
-        self.__selectedMissionId = missionId if missionId != UNDEFINED_MISSION_ID else defaultMissionId
+        self.__selectedMissionId = missionId if missionId != MissionId.UNDEFINED else defaultMissionId
         _logger.debug('[Controller] Mission <%s> automatically selected.', self.__selectedMissionId)
 
 

@@ -1,4 +1,5 @@
 <guns.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <ids>
     <_100mm_59>	0	</_100mm_59>
     <_85mm_Tip_62-85TS>	1	</_85mm_Tip_62-85TS>
@@ -80,6 +81,7 @@
     <_152_mm_64_152T_M>	87	</_152_mm_64_152T_M>
     <_122mm_57I>	88	</_122mm_57I>
     <_152_mm_ZPL_75>	89	</_152_mm_ZPL_75>
+    <_152_mm_ZPL_75_1>	92	</_152_mm_ZPL_75_1>
     <_122mm_57I_CFE_A>	93	</_122mm_57I_CFE_A>
     <_130mm_59_130JG_FT_111>	2000	</_130mm_59_130JG_FT_111>
     <_152mm_59_152JG_FT_111>	2001	</_152mm_59_152JG_FT_111>
@@ -6036,6 +6038,64 @@
         </_152mm_Sha_bao_152ZPL>
       </shots>
     </_152_mm_ZPL_75>
+    <_152_mm_ZPL_75_1>
+      <userString>	#china_vehicles:_152_mm_ZPL_75_1	</userString>
+      <tags></tags>
+      <level>	11	</level>
+      <price>	500000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.14	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_huge	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -10 1.0 -10	</minPitch>
+        <maxPitch>	0.0 10 1.0 10	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-12 12	</turretYawLimits>
+      <rotationSpeed>	0.96	</rotationSpeed>
+      <reloadTime>	62.58	</reloadTime>
+      <maxAmmo>	20	</maxAmmo>
+      <aimingTime>	10.43	</aimingTime>
+      <weight>	100	</weight>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	120	</maxRegenHealth>
+      <repairCost>	11	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	1.04	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.06	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_152mm_Chuan_bei_152ZPL_1>
+          <defaultPortion>	0.75	</defaultPortion>
+          <speed>	960	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	100	</piercingPower>
+        </_152mm_Chuan_bei_152ZPL_1>
+        <_152mm_Po_152ZPL_1>
+          <defaultPortion>	0.00	</defaultPortion>
+          <speed>	760	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	100	</piercingPower>
+        </_152mm_Po_152ZPL_1>
+        <_152mm_Sha_bao_152ZPL_1>
+          <defaultPortion>	0.25	</defaultPortion>
+          <speed>	800	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	100	</piercingPower>
+        </_152mm_Sha_bao_152ZPL_1>
+      </shots>
+    </_152_mm_ZPL_75_1>
     <_160mm_56_160_BZS>
       <userString>	#china_vehicles:_160mm_56_160_BZS	</userString>
       <tags></tags>

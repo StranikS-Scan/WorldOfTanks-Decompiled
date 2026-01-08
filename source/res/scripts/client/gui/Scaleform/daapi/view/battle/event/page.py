@@ -119,7 +119,7 @@ class EventBattlePage(ClassicPage):
     def _onBattleLoadingFinish(self):
         self.fireEvent(events.DestroyViewEvent(VIEW_ALIAS.EVENT_LOADING), EVENT_BUS_SCOPE.BATTLE)
         super(EventBattlePage, self)._onBattleLoadingFinish()
-        self._setComponentsVisibility(hidden={BATTLE_VIEW_ALIASES.EVENT_STATS})
+        self._setComponentsVisibility(hidden={BATTLE_VIEW_ALIASES.EVENT_STATS, BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL})
         if BigWorld.player().arena.period != ARENA_PERIOD.BATTLE:
             self._setComponentsVisibility(hidden={BATTLE_VIEW_ALIASES.PLAYERS_PANEL_EVENT})
 

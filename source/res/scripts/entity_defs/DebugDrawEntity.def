@@ -27,7 +27,7 @@
                 </of>
               </Type>
             </lines>
-            <cubes>
+            <boxes>
               <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
                     <position>
                       <Type>	VECTOR3	</Type>
@@ -35,10 +35,13 @@
                     <size>
                       <Type>	VECTOR3	</Type>
                     </size>
+                    <rotation>
+                      <Type>	VECTOR3	</Type>
+                    </rotation>
                   </Properties>
                 </of>
               </Type>
-            </cubes>
+            </boxes>
             <spheres>
               <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
                     <position>

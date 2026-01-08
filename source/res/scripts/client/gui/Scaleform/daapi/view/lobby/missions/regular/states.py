@@ -3,7 +3,9 @@
 from frameworks.state_machine.transitions import TransitionType
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
-from gui.lobby_state_machine.states import SubScopeSubLayerState, ViewLobbyState
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.lobby_state_machine.states import SubScopeSubLayerState, ViewLobbyState, LobbyStateDescription
 from gui.shared.event_dispatcher import showHangar
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
@@ -26,9 +28,14 @@ class MissionsState(ViewLobbyState):
 
     def registerTransitions(self):
         from gui.impl.lobby.vehicle_hub import OverviewState
+        from gui.Scaleform.daapi.view.lobby.store.browser.states import ShopState
         lsm = self.getMachine()
         self.addNavigationTransition(lsm.getStateByCls(OverviewState), record=True)
+        self.addNavigationTransition(lsm.getStateByCls(ShopState), record=True)
         self.addNavigationTransition(self, transitionType=TransitionType.EXTERNAL)
+
+    def getNavigationDescription(self):
+        return LobbyStateDescription(title=backport.text(R.strings.pages.titles.userMissions()))
 
     def serializeParams(self):
         ctx = {}

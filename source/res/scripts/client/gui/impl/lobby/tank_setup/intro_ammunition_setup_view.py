@@ -35,15 +35,10 @@ class _IntroAmmunitionSetupView(InfoView):
 
 @wg_async.wg_async
 def showIntro(introKey, *args, **kwargs):
-    tankSetupToIntroWindowProc = {TankSetupConstants.OPT_DEVICES: getIntroAmmunitionSetupWindowProc,
-     TankSetupConstants.BATTLE_ABILITIES: getIntroBattleAbilitiesSetupWindowProc}
+    tankSetupToIntroWindowProc = {TankSetupConstants.OPT_DEVICES: getIntroAmmunitionSetupWindowProc}
     if introKey in tankSetupToIntroWindowProc:
         yield tankSetupToIntroWindowProc[introKey]().show(*args, **kwargs)
 
 
 def getIntroAmmunitionSetupWindowProc():
     return getInfoWindowProc(R.views.lobby.tanksetup.IntroScreen(), createContentData(_IntroAmmunitionSetupView), UI_STORAGE_KEYS.OPTIONAL_DEVICE_SETUP_INTRO_SHOWN)
-
-
-def getIntroBattleAbilitiesSetupWindowProc():
-    return getInfoWindowProc(R.views.lobby.frontline.IntroScreen(), createContentData(_IntroAmmunitionSetupView), UI_STORAGE_KEYS.EPIC_BATTLE_ABILITIES_INTRO_SHOWN)

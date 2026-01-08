@@ -13,3 +13,7 @@ class LogLevels(object):
 class CommonLogActions(str, Enum):
     CLICK = 'click'
     KEYDOWN = 'keydown'
+
+
+class InputLogActions(str, Enum):
+    TRIGGERED = 'inputTriggered'

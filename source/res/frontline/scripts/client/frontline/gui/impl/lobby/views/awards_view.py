@@ -56,7 +56,7 @@ class AwardsView(ViewImpl):
             return
         locales = R.strings.epic_battle.awards
         with self.viewModel.transaction() as vm:
-            vm.setBackground(R.images.gui.maps.icons.epicBattles.backgrounds.reward_selection())
+            vm.setBackground(R.images.frontline.gui.maps.bg.reward_selection())
             vm.setTitle(locales.subTitle1() if self.__countBonuses(bonuses) > 1 else locales.subTitle2())
             vm.setSubTitle(locales.title())
             vm.setDefaultButtonTitle(locales.acceptButton())

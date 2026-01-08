@@ -2,12 +2,13 @@
 # Embedded file name: story_mode/scripts/client/story_mode/gui/scaleform/daapi/view/battle/damage_log_panel.py
 from gui.impl import backport
 from helpers import dependency
-from gui.Scaleform.daapi.view.battle.shared.damage_log_panel import DamageLogPanel, _LogViewComponent, _DamageActionImgVOBuilder, _LogRecordVOBuilder, _EMPTY_SHELL_VO_BUILDER, _DAMAGE_VALUE_VO_BUILDER, _VehicleVOBuilder, _DamageShellVOBuilder, _ReceivedHitVehicleVOBuilder
+from gui.Scaleform.daapi.view.battle.shared.damage_log_panel import DamageLogPanel, _LogViewComponent, _DamageActionImgVOBuilder, _LogRecordVOBuilder, _EMPTY_SHELL_VO_BUILDER, _DAMAGE_VALUE_VO_BUILDER, _VehicleVOBuilder, _DamageShellVOBuilder, _ReceivedHitVehicleVOBuilder, _CritsShellVOBuilder, _CriticalHitValueVOBuilder, _ActionImgVOBuilder, _AssistActionImgVOBuilder, _ShellVOBuilder
 from gui.battle_control.battle_constants import PERSONAL_EFFICIENCY_TYPE as _ETYPE
 from gui.impl.gen import R
 from gui.Scaleform.genConsts.BATTLEDAMAGELOG_IMAGES import BATTLEDAMAGELOG_IMAGES as _IMAGES
 from PlayerEvents import g_playerEvents
 from skeletons.gui.battle_session import IBattleSessionProvider
+from story_mode_common.story_mode_constants import VEHICLE_BUNKER_TURRET_TAG
 
 class StoryModeExtendedDamageActionVOBuilder(_DamageActionImgVOBuilder):
 
@@ -30,11 +31,23 @@ class StoryModeVehicleVOBuilder(_VehicleVOBuilder):
         if destructibleComponent and destructibleComponent.getDestructibleEntity(info.getArenaVehicleID()):
             vehicleVO.vehicleTypeImg = _IMAGES.WHITE_ICON_BUNKER_16X16
             vehicleVO.vehicleName = backport.text(R.strings.sm_battle.bunker())
+        else:
+            vInfoVO = arenaDP.getVehicleInfo(info.getArenaVehicleID())
+            if VEHICLE_BUNKER_TURRET_TAG in vInfoVO.vehicleType.tags:
+                vehicleVO.vehicleTypeImg = _IMAGES.WHITE_ICON_BUNKER_16X16
+                vehicleVO.vehicleName = backport.text(R.strings.sm_battle.bunker())
         return
 
 
+class StoryModeReceivedHitVehicleVOBuilder(_ReceivedHitVehicleVOBuilder, StoryModeVehicleVOBuilder):
+    pass
+
+
 _STORY_MODE_ETYPE_TO_RECORD_VO_BUILDER = {_ETYPE.DAMAGE: _LogRecordVOBuilder(StoryModeVehicleVOBuilder(), _EMPTY_SHELL_VO_BUILDER, _DAMAGE_VALUE_VO_BUILDER, StoryModeExtendedDamageActionVOBuilder(shotIcon=_IMAGES.DAMAGELOG_DAMAGE_16X16, fireIcon=_IMAGES.DAMAGELOG_FIRE_16X16, ramIcon=_IMAGES.DAMAGELOG_RAM_16X16, wcIcon=_IMAGES.DAMAGELOG_ICON_WORLD_COLLISION, mineFieldIcon=_IMAGES.DAMAGELOG_MINE_FIELD_16X16, spawnBotDmgIcon=_IMAGES.DAMAGELOG_YOUR_SPAWNED_BOT_DMG_16X16, corrodingShotIcon=_IMAGES.DAMAGELOG_CORRODING_SHOT_16X16, fireCircleDmgIcon=_IMAGES.DAMAGELOG_FIRE_CIRCLE_16X16, clingBranderDmgIcon=_IMAGES.DAMAGELOG_CLING_BRANDER_16X16, thunderStrikeIcon=_IMAGES.DAMAGELOG_THUNDER_STRIKE_16X16, airstrikeIcon=_IMAGES.DAMAGELOG_AIRSTRIKE_EQ_16X16, artilleryIcon=_IMAGES.DAMAGELOG_ARTILLERY_EQ_16X16, battleshipIcon=_IMAGES.DAMAGELOG_ARTILLERY_16X16, destroyerIcon=_IMAGES.DAMAGELOG_ARTILLERY_16X16)),
- _ETYPE.RECEIVED_DAMAGE: _LogRecordVOBuilder(_ReceivedHitVehicleVOBuilder(), _DamageShellVOBuilder(), _DAMAGE_VALUE_VO_BUILDER, StoryModeExtendedReceivedDamageActionVOBuilder(shotIcon=_IMAGES.DAMAGELOG_DAMAGE_ENEMY_16X16, fireIcon=_IMAGES.DAMAGELOG_BURN_ENEMY_16X16, ramIcon=_IMAGES.DAMAGELOG_RAM_ENEMY_16X16, wcIcon=_IMAGES.DAMAGELOG_DAMAGE_ENEMY_16X16, mineFieldIcon=_IMAGES.DAMAGELOG_BY_MINE_FIELD_16X16, berserkerIcon=_IMAGES.DAMAGELOG_BERSERKER_16X16, spawnBotDmgIcon=_IMAGES.DAMAGELOG_DMG_BY_SPAWNED_BOT_16X16, smokeDmgIcon=_IMAGES.DAMAGELOG_DMG_BY_SMOKE_16X16, corrodingShotIcon=_IMAGES.DAMAGELOG_CORRODING_SHOT_ENEMY_16X16, fireCircleDmgIcon=_IMAGES.DAMAGELOG_FIRE_CIRCLE_ENEMY_16X16, clingBranderDmgIcon=_IMAGES.DAMAGELOG_CLING_BRANDER_ENEMY_16X16, thunderStrikeIcon=_IMAGES.DAMAGELOG_THUNDER_STRIKE_ENEMY_16X16, airstrikeIcon=_IMAGES.DAMAGELOG_AIRSTRIKE_EQ_ENEMY_16X16, artilleryIcon=_IMAGES.DAMAGELOG_ARTILLERY_EQ_ENEMY_16X16, airstrikeZoneIcon=_IMAGES.DAMAGELOG_AIRSTRIKE_ENEMY_16X16, deathZoneIcon=_IMAGES.DAMAGELOG_ARTILLERY_ENEMY_16X16, battleshipIcon=_IMAGES.DAMAGELOG_ARTILLERY_ENEMY_16X16, destroyerIcon=_IMAGES.DAMAGELOG_ARTILLERY_ENEMY_16X16))}
+ _ETYPE.RECEIVED_DAMAGE: _LogRecordVOBuilder(StoryModeReceivedHitVehicleVOBuilder(), _DamageShellVOBuilder(), _DAMAGE_VALUE_VO_BUILDER, StoryModeExtendedReceivedDamageActionVOBuilder(shotIcon=_IMAGES.DAMAGELOG_DAMAGE_ENEMY_16X16, fireIcon=_IMAGES.DAMAGELOG_BURN_ENEMY_16X16, ramIcon=_IMAGES.DAMAGELOG_RAM_ENEMY_16X16, wcIcon=_IMAGES.DAMAGELOG_DAMAGE_ENEMY_16X16, mineFieldIcon=_IMAGES.DAMAGELOG_BY_MINE_FIELD_16X16, berserkerIcon=_IMAGES.DAMAGELOG_BERSERKER_16X16, spawnBotDmgIcon=_IMAGES.DAMAGELOG_DMG_BY_SPAWNED_BOT_16X16, smokeDmgIcon=_IMAGES.DAMAGELOG_DMG_BY_SMOKE_16X16, corrodingShotIcon=_IMAGES.DAMAGELOG_CORRODING_SHOT_ENEMY_16X16, fireCircleDmgIcon=_IMAGES.DAMAGELOG_FIRE_CIRCLE_ENEMY_16X16, clingBranderDmgIcon=_IMAGES.DAMAGELOG_CLING_BRANDER_ENEMY_16X16, thunderStrikeIcon=_IMAGES.DAMAGELOG_THUNDER_STRIKE_ENEMY_16X16, airstrikeIcon=_IMAGES.DAMAGELOG_AIRSTRIKE_EQ_ENEMY_16X16, artilleryIcon=_IMAGES.DAMAGELOG_ARTILLERY_EQ_ENEMY_16X16, airstrikeZoneIcon=_IMAGES.DAMAGELOG_AIRSTRIKE_ENEMY_16X16, deathZoneIcon=_IMAGES.DAMAGELOG_ARTILLERY_ENEMY_16X16, battleshipIcon=_IMAGES.DAMAGELOG_ARTILLERY_ENEMY_16X16, destroyerIcon=_IMAGES.DAMAGELOG_ARTILLERY_ENEMY_16X16)),
+ _ETYPE.BLOCKED_DAMAGE: _LogRecordVOBuilder(StoryModeVehicleVOBuilder(), _ShellVOBuilder(), _DAMAGE_VALUE_VO_BUILDER, _ActionImgVOBuilder(image=_IMAGES.DAMAGELOG_REFLECT_16X16)),
+ _ETYPE.ASSIST_DAMAGE: _LogRecordVOBuilder(StoryModeVehicleVOBuilder(), _EMPTY_SHELL_VO_BUILDER, _DAMAGE_VALUE_VO_BUILDER, _AssistActionImgVOBuilder()),
+ _ETYPE.RECEIVED_CRITICAL_HITS: _LogRecordVOBuilder(StoryModeReceivedHitVehicleVOBuilder(), _CritsShellVOBuilder(), _CriticalHitValueVOBuilder(), _ActionImgVOBuilder(image=_IMAGES.DAMAGELOG_CRITICAL_ENEMY_16X16))}
 
 class _StoryModeLogViewComponent(_LogViewComponent):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)

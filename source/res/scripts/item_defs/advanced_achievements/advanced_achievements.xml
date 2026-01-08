@@ -74,6 +74,7 @@
         <UI>
           <stringKey>	usa	</stringKey>
           <background>	usa	</background>
+          <order>	126 132 138 144 150 156 162 477 166 375 388	</order>
         </UI>
         <stages>
           <stage>
@@ -82,7 +83,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	126 132 138 144 150 156 162 166 375 388	</requiredAchievementIDs>
+          <requiredAchievementIDs>	126 132 138 144 150 156 162 477 166 375 388	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -952,6 +953,24 @@
         </stages>
         <conditions>
           <requiredAchievementIDs>	49 55 56 57 58 471	</requiredAchievementIDs>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	471	</id>
+        <UI>
+          <stringKey>	G185_Leopard_120_Verbessert	</stringKey>
+          <background>	germany	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	germany:G185_Leopard_120_Verbessert	</vehicle>
         </conditions>
       </achievement>
       <achievement>
@@ -4486,8 +4505,8 @@
       <achievement>
         <id>	251	</id>
         <UI>
-          <stringKey>	branch_china_Ch38_WZ113G_FT	</stringKey>
-          <vehicle>	china:Ch38_WZ113G_FT	</vehicle>
+          <stringKey>	branch_china_Ch70_PTZ_78	</stringKey>
+          <vehicle>	china:Ch70_PTZ_78	</vehicle>
           <background>	china_branch	</background>
           <iconPosition>	bottom	</iconPosition>
         </UI>
@@ -4498,7 +4517,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	252 253 254 255 256	</requiredAchievementIDs>
+          <requiredAchievementIDs>	252 253 254 255 256 478	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -5098,8 +5117,8 @@
       <achievement>
         <id>	285	</id>
         <UI>
-          <stringKey>	branch_japan_J40_Type_71	</stringKey>
-          <vehicle>	japan:J40_Type_71	</vehicle>
+          <stringKey>	branch_japan_J52_STK_2	</stringKey>
+          <vehicle>	japan:J52_STK_2	</vehicle>
           <background>	japan_branch	</background>
           <iconPosition>	bottom	</iconPosition>
         </UI>
@@ -5110,7 +5129,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	286 287 288 289 290	</requiredAchievementIDs>
+          <requiredAchievementIDs>	286 287 288 289 290 479	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -8494,10 +8513,42 @@
         </conditions>
       </achievement>
       <achievement>
-        <id>	471	</id>
+        <id>	472	</id>
+        <deprecated>	true	</deprecated>
         <UI>
-          <stringKey>	G185_Leopard_120_Verbessert	</stringKey>
-          <background>	germany	</background>
+          <stringKey>	GB156_Black_Prince_II	</stringKey>
+          <background>	vehicles	</background>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+          </stage>
+        </stages>
+        <conditions>
+          <vehicle>	uk:GB156_Black_Prince_II	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	473	</id>
+        <deprecated>	true	</deprecated>
+        <UI>
+          <stringKey>	F140_Fantome	</stringKey>
+          <background>	vehicles	</background>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+          </stage>
+        </stages>
+        <conditions>
+          <vehicle>	france:F140_Fantome	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	474	</id>
+        <UI>
+          <stringKey>	A190_Ares_85	</stringKey>
+          <background>	usa	</background>
           <iconPosition>	bottom	</iconPosition>
         </UI>
         <stages>
@@ -8508,7 +8559,132 @@
         </stages>
         <openByUnlock></openByUnlock>
         <conditions>
-          <vehicle>	germany:G185_Leopard_120_Verbessert	</vehicle>
+          <vehicle>	usa:A190_Ares_85	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	475	</id>
+        <UI>
+          <stringKey>	A189_Ares_90	</stringKey>
+          <background>	usa	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	usa:A189_Ares_90	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	476	</id>
+        <UI>
+          <stringKey>	A191_Ares_90_C	</stringKey>
+          <background>	usa	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	usa:A191_Ares_90_C	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	477	</id>
+        <UI>
+          <stringKey>	branch_usa_A191_Ares_90_C	</stringKey>
+          <vehicle>	usa:A191_Ares_90_C	</vehicle>
+          <background>	usa_branch	</background>
+          <iconPosition>	bottom	</iconPosition>
+          <order>	157 158 480 474 475 476	</order>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	50	</points>
+          </stage>
+        </stages>
+        <conditions>
+          <requiredAchievementIDs>	157 158 480 474 475 476	</requiredAchievementIDs>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	478	</id>
+        <UI>
+          <stringKey>	Ch70_PTZ_78	</stringKey>
+          <background>	china	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	china:Ch70_PTZ_78	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	479	</id>
+        <UI>
+          <stringKey>	J52_STK_2	</stringKey>
+          <background>	japan	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	japan:J52_STK_2	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	480	</id>
+        <UI>
+          <stringKey>	A187_Ares_75	</stringKey>
+          <background>	usa	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	usa:A187_Ares_75	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	481	</id>
+        <deprecated>	true	</deprecated>
+        <UI>
+          <stringKey>	J51_Ashigaru	</stringKey>
+          <background>	vehicles	</background>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+          </stage>
+        </stages>
+        <conditions>
+          <vehicle>	japan:J51_Ashigaru	</vehicle>
         </conditions>
       </achievement>
     </vehicleAchievements>

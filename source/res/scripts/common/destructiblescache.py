@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/DestructiblesCache.py
+from __future__ import absolute_import, print_function
 import ResMgr
 import BigWorld
 import Math
@@ -355,7 +356,7 @@ def _readDestructiblesEffects(sec):
                     variants.append(_readEffectsTimeLine(varSec))
 
             except Exception:
-                print Exception, groupName, groupSec, effName
+                print(Exception, groupName, groupSec, effName)
                 LOG_CURRENT_EXCEPTION()
 
             groupEffects[effName] = tuple(variants)

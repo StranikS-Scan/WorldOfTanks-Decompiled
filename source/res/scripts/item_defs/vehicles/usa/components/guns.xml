@@ -1,4 +1,5 @@
 <guns.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <ids>
     <_75mm_Gun_M3_L37>	0	</_75mm_Gun_M3_L37>
     <_20mm_Hispano_Suiza_Birgikt_gun>	1	</_20mm_Hispano_Suiza_Birgikt_gun>
@@ -174,6 +175,13 @@
     <_120mm_Delta_SPHT>	322	</_120mm_Delta_SPHT>
     <OQF_17pdr_Gun_Mk_VIIA>	323	</OQF_17pdr_Gun_Mk_VIIA>
     <_120mm_American_British_Gun_RC>	324	</_120mm_American_British_Gun_RC>
+    <_90mm_Ares_LC_AAAC>	325	</_90mm_Ares_LC_AAAC>
+    <_90mm_Ares_2000>	326	</_90mm_Ares_2000>
+    <_75mm_Ares_ADMAG>	328	</_75mm_Ares_ADMAG>
+    <_85mm_Ares_HVAC>	329	</_85mm_Ares_HVAC>
+    <_75mm_Ares_Super>	330	</_75mm_Ares_Super>
+    <_85mm_Ares_MC_AAAC>	331	</_85mm_Ares_MC_AAAC>
+    <_75mm_Ares_MC_AAAC>	332	</_75mm_Ares_MC_AAAC>
     <_155mm_Howitzer_M1_M41>	2000	</_155mm_Howitzer_M1_M41>
     <_155mm_Gun_M1A1_M12>	2001	</_155mm_Gun_M1A1_M12>
     <_57mm_Gun_M1_M8A1>	2002	</_57mm_Gun_M1_M8A1>
@@ -2864,6 +2872,105 @@
         </_76mm_M42A1>
       </shots>
     </_75mm_AT_Gun_M7_L50>
+    <_75mm_Ares_Super>
+      <userString>	#usa_vehicles:_75mm_Ares_Super	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	100000	</price>
+      <effects>	shot_main	</effects>
+      <reloadEffect>	reload_autoshoot_reloading_50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0 -45 1 -45	</minPitch>
+        <maxPitch>	0 7 1 7	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35	</rotationSpeed>
+      <reloadTime>	5	</reloadTime>
+      <maxAmmo>	400	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	1500	</weight>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.112	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.37	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.11	</turretRotation>
+        <afterShot>	4	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <clip>
+        <count>	400	</count>
+        <rate>	200	</rate>
+      </clip>
+      <autoShoot>
+        <shotDispersionPerShot>	0.5	</shotDispersionPerShot>
+        <maxShotDispersion>	10	</maxShotDispersion>
+        <groupSize>	1	</groupSize>
+        <aimingDelay>	0.3	</aimingDelay>
+      </autoShoot>
+      <mechanics>
+        <temperatureGun>
+          <heatingPerShot>	6	</heatingPerShot>
+          <coolingDelay>	2.0	</coolingDelay>
+          <coolingPerSec>	8	</coolingPerSec>
+          <thermalStateHysteresis>	1	</thermalStateHysteresis>
+          <thermalStates>
+            <state>
+              <maxTemperature>	100	</maxTemperature>
+              <modifiers>
+                <mul>
+                  <name>	dynAttrs/multShotDispersionFactor	</name>
+                  <value>	1.5	</value>
+                </mul>
+              </modifiers>
+            </state>
+            <state>
+              <maxTemperature>	93	</maxTemperature>
+              <modifiers>
+                <mul>
+                  <name>	dynAttrs/multShotDispersionFactor	</name>
+                  <value>	1.25	</value>
+                </mul>
+              </modifiers>
+            </state>
+            <state>
+              <maxTemperature>	50	</maxTemperature>
+              <modifiers></modifiers>
+            </state>
+          </thermalStates>
+        </temperatureGun>
+        <overheatGun>
+          <coolingPerSecFactor>	0.5	</coolingPerSecFactor>
+          <tempOverheatOnThreshold>	100	</tempOverheatOnThreshold>
+          <tempOverheatOffThreshold>	0	</tempOverheatOffThreshold>
+          <tempOverheatWarnThreshold>	94	</tempOverheatWarnThreshold>
+        </overheatGun>
+      </mechanics>
+      <shots>
+        <_75mm_AAAC_I_Super>
+          <defaultPortion>	0.875	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	195 185	</piercingPower>
+        </_75mm_AAAC_I_Super>
+        <_75mm_AAAC_II_Super>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1300	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	212 200	</piercingPower>
+        </_75mm_AAAC_II_Super>
+        <_75mm_DARPA_HE_Super>
+          <defaultPortion>	0.125	</defaultPortion>
+          <speed>	800	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	10 10	</piercingPower>
+        </_75mm_DARPA_HE_Super>
+      </shots>
+    </_75mm_Ares_Super>
     <_3_inch_AT_Gun_M7_M10>
       <userString>	#usa_vehicles:_3_inch_AT_Gun_M7_M10	</userString>
       <tags></tags>
@@ -5130,6 +5237,205 @@
         </_6pdr_APCR_MK_1T>
       </shots>
     </QF_6_pounder_Mk_IIIA>
+    <_85mm_Ares_HVAC>
+      <userString>	#usa_vehicles:_85mm_Ares_HVAC	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	200000	</price>
+      <notInShop>	true	</notInShop>
+      <effects>	shot_main	</effects>
+      <reloadEffect>	reload_autoshoot_reloading_85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0 -45 1 -45	</minPitch>
+        <maxPitch>	0 7 1 7	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	30.625	</rotationSpeed>
+      <reloadTime>	6	</reloadTime>
+      <maxAmmo>	300	</maxAmmo>
+      <aimingTime>	2.2	</aimingTime>
+      <weight>	1500	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <invisibilityFactorAtShot>	0.112	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.36	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.1	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <clip>
+        <count>	300	</count>
+        <rate>	200	</rate>
+      </clip>
+      <autoShoot>
+        <shotDispersionPerShot>	0.5	</shotDispersionPerShot>
+        <maxShotDispersion>	10	</maxShotDispersion>
+        <groupSize>	1	</groupSize>
+        <aimingDelay>	0.3	</aimingDelay>
+      </autoShoot>
+      <mechanics>
+        <temperatureGun>
+          <heatingPerShot>	9	</heatingPerShot>
+          <coolingDelay>	1.0	</coolingDelay>
+          <coolingPerSec>	10	</coolingPerSec>
+          <thermalStateHysteresis>	1	</thermalStateHysteresis>
+          <thermalStates>
+            <state>
+              <maxTemperature>	100	</maxTemperature>
+              <modifiers>
+                <mul>
+                  <name>	dynAttrs/multShotDispersionFactor	</name>
+                  <value>	1.5	</value>
+                </mul>
+              </modifiers>
+            </state>
+            <state>
+              <maxTemperature>	90	</maxTemperature>
+              <modifiers>
+                <mul>
+                  <name>	dynAttrs/multShotDispersionFactor	</name>
+                  <value>	1.25	</value>
+                </mul>
+              </modifiers>
+            </state>
+            <state>
+              <maxTemperature>	50	</maxTemperature>
+              <modifiers></modifiers>
+            </state>
+          </thermalStates>
+        </temperatureGun>
+        <overheatGun>
+          <coolingPerSecFactor>	0.5	</coolingPerSecFactor>
+          <tempOverheatOnThreshold>	100	</tempOverheatOnThreshold>
+          <tempOverheatOffThreshold>	0	</tempOverheatOffThreshold>
+          <tempOverheatWarnThreshold>	91	</tempOverheatWarnThreshold>
+        </overheatGun>
+      </mechanics>
+      <shots>
+        <_85mm_AAAC_I_FS>
+          <defaultPortion>	0.84	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	215 202	</piercingPower>
+        </_85mm_AAAC_I_FS>
+        <_85mm_AAAC_II_FS>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1300	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	233 220	</piercingPower>
+        </_85mm_AAAC_II_FS>
+        <_85mm_DARPA_HE_FS>
+          <defaultPortion>	0.16	</defaultPortion>
+          <speed>	800	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	10 10	</piercingPower>
+        </_85mm_DARPA_HE_FS>
+      </shots>
+    </_85mm_Ares_HVAC>
+    <_85mm_Ares_MC_AAAC>
+      <userString>	#usa_vehicles:_85mm_Ares_MC_AAAC	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	200000	</price>
+      <effects>	shot_main	</effects>
+      <reloadEffect>	reload_autoshoot_reloading_85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0 -45 1 -45	</minPitch>
+        <maxPitch>	0 7 1 7	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	30.625	</rotationSpeed>
+      <reloadTime>	6	</reloadTime>
+      <maxAmmo>	300	</maxAmmo>
+      <aimingTime>	2.1	</aimingTime>
+      <weight>	1500	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <invisibilityFactorAtShot>	0.112	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.36	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.1	</turretRotation>
+        <afterShot>	0.7	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <clip>
+        <count>	300	</count>
+        <rate>	200	</rate>
+      </clip>
+      <autoShoot>
+        <shotDispersionPerShot>	0.5	</shotDispersionPerShot>
+        <maxShotDispersion>	10	</maxShotDispersion>
+        <groupSize>	1	</groupSize>
+        <aimingDelay>	0.3	</aimingDelay>
+      </autoShoot>
+      <mechanics>
+        <temperatureGun>
+          <heatingPerShot>	8	</heatingPerShot>
+          <coolingDelay>	1.5	</coolingDelay>
+          <coolingPerSec>	9	</coolingPerSec>
+          <thermalStateHysteresis>	1	</thermalStateHysteresis>
+          <thermalStates>
+            <state>
+              <maxTemperature>	100	</maxTemperature>
+              <modifiers>
+                <mul>
+                  <name>	dynAttrs/multShotDispersionFactor	</name>
+                  <value>	1.5	</value>
+                </mul>
+              </modifiers>
+            </state>
+            <state>
+              <maxTemperature>	91	</maxTemperature>
+              <modifiers>
+                <mul>
+                  <name>	dynAttrs/multShotDispersionFactor	</name>
+                  <value>	1.25	</value>
+                </mul>
+              </modifiers>
+            </state>
+            <state>
+              <maxTemperature>	50	</maxTemperature>
+              <modifiers></modifiers>
+            </state>
+          </thermalStates>
+        </temperatureGun>
+        <overheatGun>
+          <coolingPerSecFactor>	0.5	</coolingPerSecFactor>
+          <tempOverheatOnThreshold>	100	</tempOverheatOnThreshold>
+          <tempOverheatOffThreshold>	0	</tempOverheatOffThreshold>
+          <tempOverheatWarnThreshold>	92	</tempOverheatWarnThreshold>
+        </overheatGun>
+      </mechanics>
+      <shots>
+        <_85mm_AAAC_I>
+          <defaultPortion>	0.84	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	210 200	</piercingPower>
+        </_85mm_AAAC_I>
+        <_85mm_AAAC_II>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1300	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	227 215	</piercingPower>
+        </_85mm_AAAC_II>
+        <_85mm_DARPA_HE>
+          <defaultPortion>	0.16	</defaultPortion>
+          <speed>	800	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	10 10	</piercingPower>
+        </_85mm_DARPA_HE>
+      </shots>
+    </_85mm_Ares_MC_AAAC>
     <_88mm_Kw_K_43>
       <userString>	#usa_vehicles:_88mm_Kw_K_43	</userString>
       <tags></tags>
@@ -7141,6 +7447,106 @@
         </_90mm_HE_T340E14H_LTC>
       </shots>
     </_90mm_Gun_T208_rifled_LTC>
+    <_90mm_Ares_LC_AAAC>
+      <userString>	#usa_vehicles:_90mm_Ares_LC_AAAC	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	300000	</price>
+      <notInShop>	true	</notInShop>
+      <effects>	shot_main	</effects>
+      <reloadEffect>	reload_autoshoot_reloading_85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0 -45 1 -45	</minPitch>
+        <maxPitch>	0 9 0.4 9 0.43 7 0.57 7 0.6 9 1 9	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	30.625	</rotationSpeed>
+      <reloadTime>	8	</reloadTime>
+      <maxAmmo>	250	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	1700	</weight>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	110	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.119	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.36	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <clip>
+        <count>	250	</count>
+        <rate>	200	</rate>
+      </clip>
+      <autoShoot>
+        <shotDispersionPerShot>	0.45	</shotDispersionPerShot>
+        <maxShotDispersion>	10	</maxShotDispersion>
+        <groupSize>	1	</groupSize>
+        <aimingDelay>	0.3	</aimingDelay>
+      </autoShoot>
+      <mechanics>
+        <temperatureGun>
+          <heatingPerShot>	11	</heatingPerShot>
+          <coolingDelay>	1.5	</coolingDelay>
+          <coolingPerSec>	10	</coolingPerSec>
+          <thermalStateHysteresis>	1	</thermalStateHysteresis>
+          <thermalStates>
+            <state>
+              <maxTemperature>	100	</maxTemperature>
+              <modifiers>
+                <mul>
+                  <name>	dynAttrs/multShotDispersionFactor	</name>
+                  <value>	1.5	</value>
+                </mul>
+              </modifiers>
+            </state>
+            <state>
+              <maxTemperature>	88	</maxTemperature>
+              <modifiers>
+                <mul>
+                  <name>	dynAttrs/multShotDispersionFactor	</name>
+                  <value>	1.25	</value>
+                </mul>
+              </modifiers>
+            </state>
+            <state>
+              <maxTemperature>	50	</maxTemperature>
+              <modifiers></modifiers>
+            </state>
+          </thermalStates>
+        </temperatureGun>
+        <overheatGun>
+          <coolingPerSecFactor>	0.5	</coolingPerSecFactor>
+          <tempOverheatOnThreshold>	100	</tempOverheatOnThreshold>
+          <tempOverheatOffThreshold>	0	</tempOverheatOffThreshold>
+          <tempOverheatWarnThreshold>	89	</tempOverheatWarnThreshold>
+        </overheatGun>
+      </mechanics>
+      <shots>
+        <_90mm_AAAC_I>
+          <defaultPortion>	0.8	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	220 210	</piercingPower>
+        </_90mm_AAAC_I>
+        <_90mm_AAAC_II>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1300	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	238 226	</piercingPower>
+        </_90mm_AAAC_II>
+        <_90mm_DARPA_HE>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	800	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	10 10	</piercingPower>
+        </_90mm_DARPA_HE>
+      </shots>
+    </_90mm_Ares_LC_AAAC>
     <_94mm_British_dualgun>
       <userString>	#usa_vehicles:_94mm_British_dualgun	</userString>
       <tags></tags>
@@ -8675,6 +9081,204 @@
         </_105mm_HE_M11A2E8>
       </shots>
     </_105mm_Gun_T8>
+    <_75mm_Ares_ADMAG>
+      <userString>	#usa_vehicles:_75mm_Ares_ADMAG	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	100000	</price>
+      <effects>	shot_main	</effects>
+      <reloadEffect>	reload_autoshoot_reloading_50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0 -45 1 -45	</minPitch>
+        <maxPitch>	0 7 1 7	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35	</rotationSpeed>
+      <reloadTime>	5	</reloadTime>
+      <maxAmmo>	350	</maxAmmo>
+      <aimingTime>	2.2	</aimingTime>
+      <weight>	1500	</weight>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.123	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.37	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.11	</turretRotation>
+        <afterShot>	4	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <clip>
+        <count>	350	</count>
+        <rate>	200	</rate>
+      </clip>
+      <autoShoot>
+        <shotDispersionPerShot>	0.6	</shotDispersionPerShot>
+        <maxShotDispersion>	10	</maxShotDispersion>
+        <groupSize>	1	</groupSize>
+        <aimingDelay>	0.3	</aimingDelay>
+      </autoShoot>
+      <mechanics>
+        <temperatureGun>
+          <heatingPerShot>	6	</heatingPerShot>
+          <coolingDelay>	2.0	</coolingDelay>
+          <coolingPerSec>	8	</coolingPerSec>
+          <thermalStateHysteresis>	1	</thermalStateHysteresis>
+          <thermalStates>
+            <state>
+              <maxTemperature>	100	</maxTemperature>
+              <modifiers>
+                <mul>
+                  <name>	dynAttrs/multShotDispersionFactor	</name>
+                  <value>	1.5	</value>
+                </mul>
+              </modifiers>
+            </state>
+            <state>
+              <maxTemperature>	93	</maxTemperature>
+              <modifiers>
+                <mul>
+                  <name>	dynAttrs/multShotDispersionFactor	</name>
+                  <value>	1.25	</value>
+                </mul>
+              </modifiers>
+            </state>
+            <state>
+              <maxTemperature>	50	</maxTemperature>
+              <modifiers></modifiers>
+            </state>
+          </thermalStates>
+        </temperatureGun>
+        <overheatGun>
+          <coolingPerSecFactor>	0.5	</coolingPerSecFactor>
+          <tempOverheatOnThreshold>	100	</tempOverheatOnThreshold>
+          <tempOverheatOffThreshold>	0	</tempOverheatOffThreshold>
+          <tempOverheatWarnThreshold>	94	</tempOverheatWarnThreshold>
+        </overheatGun>
+      </mechanics>
+      <shots>
+        <_75mm_AAAC_I_FS>
+          <defaultPortion>	0.86	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	195 185	</piercingPower>
+        </_75mm_AAAC_I_FS>
+        <_75mm_AAAC_II_FS>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1300	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	212 200	</piercingPower>
+        </_75mm_AAAC_II_FS>
+        <_75mm_DARPA_HE_FS>
+          <defaultPortion>	0.14	</defaultPortion>
+          <speed>	800	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	10 10	</piercingPower>
+        </_75mm_DARPA_HE_FS>
+      </shots>
+    </_75mm_Ares_ADMAG>
+    <_75mm_Ares_MC_AAAC>
+      <userString>	#usa_vehicles:_75mm_Ares_MC_AAAC	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	80000	</price>
+      <effects>	shot_main	</effects>
+      <reloadEffect>	reload_autoshoot_reloading_50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0 -45 1 -45	</minPitch>
+        <maxPitch>	0 10 1 10	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35	</rotationSpeed>
+      <reloadTime>	6	</reloadTime>
+      <maxAmmo>	350	</maxAmmo>
+      <aimingTime>	1.8	</aimingTime>
+      <weight>	1500	</weight>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	80	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.38	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.1	</turretRotation>
+        <afterShot>	4	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <clip>
+        <count>	350	</count>
+        <rate>	200	</rate>
+      </clip>
+      <autoShoot>
+        <shotDispersionPerShot>	0.6	</shotDispersionPerShot>
+        <maxShotDispersion>	10	</maxShotDispersion>
+        <groupSize>	1	</groupSize>
+        <aimingDelay>	0.3	</aimingDelay>
+      </autoShoot>
+      <mechanics>
+        <temperatureGun>
+          <heatingPerShot>	6	</heatingPerShot>
+          <coolingDelay>	2.0	</coolingDelay>
+          <coolingPerSec>	7	</coolingPerSec>
+          <thermalStateHysteresis>	1	</thermalStateHysteresis>
+          <thermalStates>
+            <state>
+              <maxTemperature>	100	</maxTemperature>
+              <modifiers>
+                <mul>
+                  <name>	dynAttrs/multShotDispersionFactor	</name>
+                  <value>	1.5	</value>
+                </mul>
+              </modifiers>
+            </state>
+            <state>
+              <maxTemperature>	93	</maxTemperature>
+              <modifiers>
+                <mul>
+                  <name>	dynAttrs/multShotDispersionFactor	</name>
+                  <value>	1.25	</value>
+                </mul>
+              </modifiers>
+            </state>
+            <state>
+              <maxTemperature>	50	</maxTemperature>
+              <modifiers></modifiers>
+            </state>
+          </thermalStates>
+        </temperatureGun>
+        <overheatGun>
+          <coolingPerSecFactor>	0.5	</coolingPerSecFactor>
+          <tempOverheatOnThreshold>	100	</tempOverheatOnThreshold>
+          <tempOverheatOffThreshold>	0	</tempOverheatOffThreshold>
+          <tempOverheatWarnThreshold>	94	</tempOverheatWarnThreshold>
+        </overheatGun>
+      </mechanics>
+      <shots>
+        <_75mm_AAAC_I>
+          <defaultPortion>	0.86	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	185 175	</piercingPower>
+        </_75mm_AAAC_I>
+        <_75mm_AAAC_II>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1300	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	202 190	</piercingPower>
+        </_75mm_AAAC_II>
+        <_75mm_DARPA_HE>
+          <defaultPortion>	0.14	</defaultPortion>
+          <speed>	800	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	10 10	</piercingPower>
+        </_75mm_DARPA_HE>
+      </shots>
+    </_75mm_Ares_MC_AAAC>
     <_105mm_Gun_M68>
       <userString>	#usa_vehicles:_105mm_Gun_M68	</userString>
       <tags></tags>
@@ -9434,6 +10038,106 @@
         </_110mm_EXP_S_HEP>
       </shots>
     </_110mm_EXP_S>
+    <_90mm_Ares_2000>
+      <userString>	#usa_vehicles:_90mm_Ares_2000	</userString>
+      <tags></tags>
+      <level>	11	</level>
+      <price>	500000	</price>
+      <notInShop>	true	</notInShop>
+      <effects>	shot_main_mb	</effects>
+      <reloadEffect>	reload_autoshoot_reloading_85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0 -10 1 -10	</minPitch>
+        <maxPitch>	0 10 0.39722 10 0.39725 10 0.5 10 0.60275 10 0.60278 10 1 10	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	0.96	</rotationSpeed>
+      <reloadTime>	62.58	</reloadTime>
+      <maxAmmo>	250	</maxAmmo>
+      <aimingTime>	10.43	</aimingTime>
+      <weight>	100	</weight>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	120	</maxRegenHealth>
+      <repairCost>	11	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	1.04	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.067	</turretRotation>
+        <afterShot>	4	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <clip>
+        <count>	250	</count>
+        <rate>	1	</rate>
+      </clip>
+      <autoShoot>
+        <shotDispersionPerShot>	0.44	</shotDispersionPerShot>
+        <maxShotDispersion>	10	</maxShotDispersion>
+        <groupSize>	1	</groupSize>
+        <aimingDelay>	0.3	</aimingDelay>
+      </autoShoot>
+      <mechanics>
+        <temperatureGun>
+          <heatingPerShot>	0.01	</heatingPerShot>
+          <coolingDelay>	1000	</coolingDelay>
+          <coolingPerSec>	1000	</coolingPerSec>
+          <thermalStateHysteresis>	1	</thermalStateHysteresis>
+          <thermalStates>
+            <state>
+              <maxTemperature>	100	</maxTemperature>
+              <modifiers>
+                <mul>
+                  <name>	dynAttrs/multShotDispersionFactor	</name>
+                  <value>	1	</value>
+                </mul>
+              </modifiers>
+            </state>
+            <state>
+              <maxTemperature>	88	</maxTemperature>
+              <modifiers>
+                <mul>
+                  <name>	dynAttrs/multShotDispersionFactor	</name>
+                  <value>	1	</value>
+                </mul>
+              </modifiers>
+            </state>
+            <state>
+              <maxTemperature>	50	</maxTemperature>
+              <modifiers></modifiers>
+            </state>
+          </thermalStates>
+        </temperatureGun>
+        <overheatGun>
+          <coolingPerSecFactor>	100	</coolingPerSecFactor>
+          <tempOverheatOnThreshold>	100	</tempOverheatOnThreshold>
+          <tempOverheatOffThreshold>	0	</tempOverheatOffThreshold>
+          <tempOverheatWarnThreshold>	89	</tempOverheatWarnThreshold>
+        </overheatGun>
+      </mechanics>
+      <shots>
+        <_90mm_Charlie_3>
+          <defaultPortion>	0.8	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	100	</piercingPower>
+        </_90mm_Charlie_3>
+        <_90mm_Delta_6>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1300	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	100	</piercingPower>
+        </_90mm_Delta_6>
+        <_90mm_Bravo_1>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	850	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	100	</piercingPower>
+        </_90mm_Bravo_1>
+      </shots>
+    </_90mm_Ares_2000>
     <_114mm_Gun_M73>
       <userString>	#usa_vehicles:_114mm_Gun_M73	</userString>
       <tags></tags>

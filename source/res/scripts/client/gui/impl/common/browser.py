@@ -26,7 +26,7 @@ class BrowserSettings(ViewSettings):
 TViewModel = typing.TypeVar('TViewModel', bound=BrowserModel)
 
 class Browser(ViewImpl[TViewModel]):
-    __slots__ = ('__url', '__browserId', '__browser', '__webCommandHandler', '__webHandlersMap', 'onBrowserObtained', '__eventManager')
+    __slots__ = ('__url', '__browserId', '__browser', '__webCommandHandler', '__webHandlersMap', 'onBrowserObtained', '__eventManager', '__backUrl')
     __browserCtrl = dependency.descriptor(IBrowserController)
 
     def __init__(self, url='', settings=None, webHandlersMap=None, preload=False, *args, **kwargs):
@@ -36,6 +36,7 @@ class Browser(ViewImpl[TViewModel]):
         self.__webHandlersMap = webHandlersMap
         self.__browser = None
         self.__webCommandHandler = None
+        self.__backUrl = None
         self.__eventManager = Event.EventManager()
         self.onBrowserObtained = Event.Event(self.__eventManager)
         self.getViewModel().setBrowserState(BrowserState.INITIALIZATION)
@@ -52,6 +53,13 @@ class Browser(ViewImpl[TViewModel]):
     @property
     def url(self):
         return self.__url
+
+    @property
+    def backUrl(self):
+        return self.__backUrl
+
+    def setBackUrl(self, url):
+        self.__backUrl = url
 
     def setWaitingMessage(self, message):
         self.getViewModel().setWaitingMessage(message)
@@ -82,7 +90,9 @@ class Browser(ViewImpl[TViewModel]):
         if self.__browserId:
             self.__browserCtrl.delBrowser(self.__browserId)
         self.__eventManager.clear()
+        self.__backUrl = None
         super(Browser, self)._finalize()
+        return
 
     @adisp_process
     def __loadBrowser(self):

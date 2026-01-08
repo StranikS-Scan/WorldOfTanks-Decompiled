@@ -45,7 +45,7 @@ class VehicleAbilityBaseComponent(BigWorld.DynamicScriptComponent):
 
     def _subscribeOnEvents(self):
         self._es.subscribeToEvent(self._guiSessionProvider.onUpdateObservedVehicleData, self._onUpdateObservedVehicleData)
-        self._es.subscribeToEvent(self.entity.onAppearanceReady, self._onAppearanceReady)
+        self._es.subscribeToEvent(self.entity.events.onAppearanceReady, self._onAppearanceReady)
         if self._avatar is not None and self._avatar.inputHandler is not None:
             self._es.subscribeToEvent(self._avatar.inputHandler.onCameraChanged, self.__onCameraChanged)
             self._es.subscribeToEvent(self._avatar.onSwitchingViewPoint, self.__onSwitchingViewPoint)

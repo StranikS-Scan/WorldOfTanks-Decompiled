@@ -22,15 +22,16 @@
       <SMDistractionAbilityArenaInfoComponent></SMDistractionAbilityArenaInfoComponent>
       <SMDetectionDelayObserverComponent></SMDetectionDelayObserverComponent>
       <SMDetectionDelayObservableComponent></SMDetectionDelayObservableComponent>
-      <SMAbilitiesTrackerComponent></SMAbilitiesTrackerComponent>
-      <SMAbilitiesRechargeComponent></SMAbilitiesRechargeComponent>
-      <SMAbilitiesInterruptComponent></SMAbilitiesInterruptComponent>
-      <SMInterruptibleShotComponent></SMInterruptibleShotComponent>
-      <SMInterruptibleGroupsComponent></SMInterruptibleGroupsComponent>
-      <SMDisableShotSNComponent></SMDisableShotSNComponent>
-      <SMArtilleryStrikeChannelComponent></SMArtilleryStrikeChannelComponent>
       <SMVehicleRespawnComponent></SMVehicleRespawnComponent>
-      <SMVehicleRocketAccelerationEffectComponent></SMVehicleRocketAccelerationEffectComponent>
+      <SMAbilitiesTrackerComponent></SMAbilitiesTrackerComponent>
+      <SMAbilitiesInterruptComponent></SMAbilitiesInterruptComponent>
+      <SMAbilitiesRechargeComponent></SMAbilitiesRechargeComponent>
+      <SMArtilleryStrikeChannelComponent></SMArtilleryStrikeChannelComponent>
+      <SMRemovableDynGroupComponent></SMRemovableDynGroupComponent>
+      <SMSequencesComponent></SMSequencesComponent>
+      <SMSound3DComponent></SMSound3DComponent>
+      <SMSound3DObjectComponent></SMSound3DObjectComponent>
+      <BunkerLogicComponent></BunkerLogicComponent>
     </DynamicComponents>
   </Components>
   <Entities>
@@ -42,4 +43,11 @@
     </ClientServerEntities>
   </Entities>
   <ExternalComponents></ExternalComponents>
+  <cgf>
+    <script>
+      <module>	client.story_mode.cgf_components.bunkers	</module>
+      <module>	common.story_mode_common.cgf_components_common.bunkers	</module>
+      <module>	cell.story_mode_cell.cgf_components.bunkers	</module>
+    </script>
+  </cgf>
 </extension.xml>

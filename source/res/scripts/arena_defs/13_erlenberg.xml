@@ -4,8 +4,8 @@
   <geometry>	spaces/13_erlenberg	</geometry>
   <estimatedLoad>	0.3	</estimatedLoad>
   <boundingBox>
-    <bottomLeft>	-500.0 -500.0	</bottomLeft>
-    <upperRight>	500.0 500.0	</upperRight>
+    <bottomLeft>	-500.000000 -500.000000	</bottomLeft>
+    <upperRight>	500.000000 500.000000	</upperRight>
   </boundingBox>
   <roundLength>	900	</roundLength>
   <minimap>	spaces/13_erlenberg/mmap.dds	</minimap>
@@ -58,6 +58,57 @@
         <team2></team2>
       </teamBasePositions>
     </assault>
+    <comp7>
+      <boundingBox>
+        <bottomLeft>	-500.0 -450.0	</bottomLeft>
+        <upperRight>	400.0 450.0	</upperRight>
+      </boundingBox>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	-262.485504 -35.308128	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	245.045364 -36.793262	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	-98.900764 -7.796147	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	208.044693 202.609329	</position>
+          <type>	2	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <teamSpawnPoints>
+        <team1>
+          <position>	35.362679 -378.439667	</position>
+        </team1>
+        <team2>
+          <position>	-218.086548 328.710449	</position>
+        </team2>
+      </teamSpawnPoints>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <minimap>	spaces/13_erlenberg/mmap_comp7.dds	</minimap>
+      <controlPoint>	41.606552 -38.755634	</controlPoint>
+    </comp7>
   </gameplayTypes>
   <mapActivities></mapActivities>
 </13_erlenberg.xml>

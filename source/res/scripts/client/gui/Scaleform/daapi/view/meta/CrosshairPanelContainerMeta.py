@@ -172,9 +172,6 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
     def as_blinkReloadTimeS(self, blinkType):
         return self.flashObject.as_blinkReloadTime(blinkType) if self._isDAAPIInited() else None
 
-    def as_setDualAccActiveS(self, value):
-        return self.flashObject.as_setDualAccActive(value) if self._isDAAPIInited() else None
-
     def as_setAimDamageStageS(self, value):
         return self.flashObject.as_setAimDamageStage(value) if self._isDAAPIInited() else None
 
@@ -204,3 +201,9 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
 
     def as_setChargeableBurstModeS(self, value):
         return self.flashObject.as_setChargeableBurstMode(value) if self._isDAAPIInited() else None
+
+    def as_setSecondaryGunMarkerActiveS(self, value):
+        return self.flashObject.as_setSecondaryGunMarkerActive(value) if self._isDAAPIInited() else None
+
+    def as_setDispersionCircleThicknessS(self, isBold):
+        return self.flashObject.as_setDispersionCircleThickness(isBold) if self._isDAAPIInited() else None

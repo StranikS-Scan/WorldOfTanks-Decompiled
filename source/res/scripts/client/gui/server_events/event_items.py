@@ -582,6 +582,9 @@ class DailyEpicTokenQuest(TokenQuest):
     def getUserName(self):
         return backport.text(R.strings.quests.dailyQuests.postBattle.genericTitle_epic())
 
+    def getDescription(self):
+        return backport.text(R.strings.quests.dailyQuests.postBattle.epic.description())
+
 
 class WeeklyQuest(Quest):
 
@@ -849,7 +852,7 @@ class PMOperation(object):
         return firstQuest.getQuestClassifier() if firstQuest is not None else None
 
     def getChainByClassifierAttr(self, classifier):
-        return findFirst(lambda (chainID, chain): self.getChainClassifier(chainID).classificationAttr == classifier, self.getQuests().iteritems(), (None, None))
+        return findFirst(lambda it: self.getChainClassifier(it[0]).classificationAttr == classifier, self.getQuests().iteritems(), (None, None))
 
     def getIterationChain(self):
         if self.__branch == PM_BRANCH.REGULAR:
@@ -971,8 +974,8 @@ class PMOperation(object):
     def isInProgress(self):
         return self.isActive() or not self.isCompleted() and (bool(self.getCompletedQuests()) or bool(self.getTotalPmPointsCount())) if self.__branch == PM_BRANCH.PERSONAL_MISSION_3 else self.isActive()
 
-    def isFullCompleted(self, isRewardReceived=None):
-        return self.__isAwardAchieved and len(self.getCompletedQuests(isRewardReceived)) == self.getQuestsCount() if self.__branch == PM_BRANCH.PERSONAL_MISSION_3 else len(self.getFullCompletedQuests(isRewardReceived)) == self.getQuestsCount()
+    def isFullCompleted(self, isQuestRewardReceived=None, isFinalRewardReceived=True):
+        return (self.__isAwardAchieved or not isFinalRewardReceived) and len(self.getCompletedQuests(isQuestRewardReceived)) == self.getQuestsCount() if self.__branch == PM_BRANCH.PERSONAL_MISSION_3 else len(self.getFullCompletedQuests(isQuestRewardReceived)) == self.getQuestsCount()
 
     def isAwardAchieved(self):
         return self.__isAwardAchieved
@@ -1311,9 +1314,9 @@ class PersonalMission(ServerEventAbstract):
             for conditionKey, configData in self.__conditionsConfig.iteritems():
                 currentConditionState = missionState.get(conditionKey)
                 isInOrGroup = configData['description'].isInOrGroup
-                if currentConditionState and currentConditionState in QUEST_PROGRESS_STATE.COMPLETED_STATES:
+                if currentConditionState in QUEST_PROGRESS_STATE.COMPLETED_STATES:
                     completedConditions += 1
-                if currentConditionState and currentConditionState == QUEST_PROGRESS_STATE.FAILED:
+                if currentConditionState == QUEST_PROGRESS_STATE.FAILED and not isInOrGroup:
                     return False
 
             if completedConditions >= len(self.__conditionsConfig) or isInOrGroup and completedConditions:
@@ -1322,7 +1325,7 @@ class PersonalMission(ServerEventAbstract):
 
     def hasAdditionalConditions(self):
         for _, configData in self.__conditionsConfig.iteritems():
-            if not configData['config']['isMain']:
+            if not configData['config'].get('isMain', False):
                 return True
 
         return False
@@ -1403,10 +1406,8 @@ class PersonalMission(ServerEventAbstract):
 
     def updateProgress(self, questsProgress):
         self.__pqProgress = questsProgress.getPersonalMissionProgress(self.__pmType, self._id)
-        if self.getQuestBranch() == PM_BRANCH.PERSONAL_MISSION_3:
-            self.__conditionsProgress = questsProgress.getConditionsProgress(self.__pmType.id, 'pm3_progress')
-        else:
-            self.__conditionsProgress = questsProgress.getConditionsProgress(self.__pmType.generalQuestID)
+        progressName = 'pm3_progress' if self.getQuestBranch() == PM_BRANCH.PERSONAL_MISSION_3 else 'pm2_progress'
+        self.__conditionsProgress = questsProgress.getConditionsProgress(self.__pmType.generalQuestID, progressName)
 
     def updatePqStateInBattle(self, pqState):
         if self.__pqProgress:

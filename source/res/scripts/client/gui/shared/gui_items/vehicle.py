@@ -33,7 +33,8 @@ from gui.shared.gui_items.fitting_item import FittingItem, RentalInfoProvider
 from gui.shared.gui_items.gui_item import HasStrCD
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ItemPrices, ITEM_PRICE_EMPTY
 from gui.shared.gui_items.vehicle_equipment import VehicleEquipment, SUPPORT_EXT_DATA_FEATURES
-from gui.shared.gui_items.vehicle_mechanic_item import extendMechanics, VehicleMechanicItem, VEHICLE_MECHANICS_OVERRIDES
+from gui.shared.gui_items.vehicle_mechanics.factories.vehicle_mechanis import VehicleMechanicFactory
+from gui.shared.gui_items.vehicle_mechanics.vehicle_mechanic_item import VehicleMechanicItem
 from gui.shared.money import MONEY_UNDEFINED, Currency, Money
 from gui.shared.utils import makeSearchableString
 from gui.shared.utils.functions import replaceHyphenToUnderscore
@@ -53,7 +54,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicle_outfit.outfit import Area, REGIONS_BY_SLOT_TYPE, ANCHOR_TYPE_TO_SLOT_TYPE_MAP
 from constants import NEW_PERK_SYSTEM as NPS
 from dossiers2.custom.cache import getCache as getDossiersCache
@@ -538,14 +538,17 @@ class Vehicle(FittingItem):
 
         return (None, None)
 
-    def getVehicleMechanicItems(self):
-        mechanics = set()
+    def getMechanics(self, withOverrides=False):
         vehDescr = self.descriptor
         vehicleType = vehDescr.type
         modules = chain.from_iterable(((factory(descr.compactDescr, descriptor=descr) for descr in descriptors) for descriptors, factory in ((vehicleType.getGuns(), self.itemsFactory.createVehicleGun), (vehicleType.chassis, self.itemsFactory.createVehicleChassis), (vehDescr.type.engines, self.itemsFactory.createVehicleEngine))))
-        mechanics.update(chain.from_iterable((module.getVehicleMechanics(vehDescr) for module in modules)))
-        mechanicChecks = [(vehDescr.hasSiegeMode and not vehDescr.hasAutoSiegeMode, VehicleMechanic.SIEGE_MODE)]
-        extendMechanics(mechanics, vehicleType.mechanicsParams, mechanicChecks, VEHICLE_MECHANICS_OVERRIDES)
+        mechanics = set()
+        mechanics.update(chain.from_iterable((module.getMechanics(vehDescr, withOverrides) for module in modules)))
+        mechanics.update(VehicleMechanicFactory.getMechanics(self, vehDescr, mechanics, withOverrides))
+        return mechanics
+
+    def getVehicleMechanicItems(self):
+        mechanics = self.getMechanics(withOverrides=True)
         return [ self.itemsFactory.createVehicleMechanicItem(mechanic, self.intCD) for mechanic in mechanics ]
 
     def _calcSellPrice(self, proxy):
@@ -1922,6 +1925,9 @@ class Vehicle(FittingItem):
                     return True
 
         return False
+
+    def hasStyle(self, styleId, season=SeasonType.EVENT):
+        return season in self._outfitComponents and self._outfitComponents[season].styleId == styleId
 
     def getBuiltInEquipmentIDs(self):
         return vehicles.getBuiltinEqsForVehicle(self._descriptor.type)

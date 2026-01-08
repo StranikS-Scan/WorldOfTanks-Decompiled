@@ -17,7 +17,8 @@ import gui.shared.gui_items.badge as badges
 from gui.shared.gui_items.loot_box import LootBox
 from gui.shared.gui_items.crew_skin import CrewSkin
 from gui.shared.gui_items.crew_book import CrewBook
-from gui.shared.gui_items.vehicle_mechanic_item import VehicleMechanicItem
+from gui.shared.gui_items.vehicle_mechanics.module_mechanic_item import ModuleMechanicItem, GunMechanicItem, ChassisMechanicItem, EngineMechanicItem
+from gui.shared.gui_items.vehicle_mechanics.vehicle_mechanic_item import VehicleMechanicItem
 from gui.veh_post_progression.models.progression import PostProgressionItem
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 if typing.TYPE_CHECKING:
@@ -162,6 +163,17 @@ class GuiItemFactory(IGuiItemsFactory):
             vehType = vehicles.g_cache.vehicle(vehNationID, vehID)
         return PostProgressionItem(state, vehType)
 
+    def createModuleMechanicItem(self, mechanic, moduleType):
+        if moduleType == GUI_ITEM_TYPE.GUN:
+            cls = GunMechanicItem
+        elif moduleType == GUI_ITEM_TYPE.ENGINE:
+            cls = EngineMechanicItem
+        elif moduleType == GUI_ITEM_TYPE.CHASSIS:
+            cls = ChassisMechanicItem
+        else:
+            cls = ModuleMechanicItem
+        return cls(mechanic)
+
     def createVehicleMechanicItem(self, mechanic, vehIntCD):
         return VehicleMechanicItem(mechanic, vehIntCD)
 
@@ -199,4 +211,5 @@ _ITEM_TYPES_MAPPING = {_NONE_GUI_ITEM_TYPE: lambda *args, **kwargs: None,
  GUI_ITEM_TYPE.CREW_SKINS: GuiItemFactory.createCrewSkin,
  GUI_ITEM_TYPE.CREW_BOOKS: GuiItemFactory.createCrewBook,
  GUI_ITEM_TYPE.VEH_POST_PROGRESSION: GuiItemFactory.createVehPostProgression,
- GUI_ITEM_TYPE.VEHICLE_MECHANIC: GuiItemFactory.createVehicleMechanicItem}
+ GUI_ITEM_TYPE.VEHICLE_MECHANIC: GuiItemFactory.createVehicleMechanicItem,
+ GUI_ITEM_TYPE.MODULE_MECHANIC: GuiItemFactory.createModuleMechanicItem}

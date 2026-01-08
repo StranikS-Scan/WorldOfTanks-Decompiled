@@ -7,6 +7,7 @@ from abc import ABCMeta, abstractmethod
 from collections import OrderedDict, deque
 from copy import deepcopy
 from functools import partial
+from future.utils import iteritems
 from itertools import chain, ifilter
 import BigWorld
 import typing
@@ -23,13 +24,14 @@ import wg_async
 from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings, RANKED_CURRENT_AWARDS_BUBBLE_YEAR_REACHED, RANKED_YEAR_POSITION, SPEAKERS_DEVICE
 from account_helpers.settings_core.settings_constants import SOUND, OnceOnlyHints
-from achievements20.cache import ALLOWED_ACHIEVEMENT_TYPES
+from achievements20.cache import ALLOWED_ACHIEVEMENT_TYPES as ADVANCED_ACHIEVEMENT_TYPES
 from battle_pass_common import BattlePassRewardReason, get3DStyleProgressToken, isPostProgressionChapter
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from chat_shared import SYS_MESSAGE_TYPE
 from collector_vehicle import CollectorVehicleConsts
 from constants import DOSSIER_TYPE, EVENT_TYPE, INVOICE_ASSET, PREMIUM_TYPE, ARENA_BONUS_TYPE, PENALTY_TYPES
+from dossiers2.custom.collector20 import COLLECTOR20_MEDAL_ID, COLLECTOR20_BADGE_IDS
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import BADGES_BLOCK
 from dossiers2.ui.layouts import PERSONAL_MISSIONS_GROUP
@@ -65,12 +67,12 @@ from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX
 from gui.server_events import awards, events_dispatcher as quests_events, recruit_helper
 from gui.server_events.bonuses import getServiceBonuses, getMergedBonusesFromDicts, GoodiesBonus, VehiclesBonus
-from gui.server_events.events_dispatcher import showCurrencyReserveAwardWindow, showLootboxesAward, showPiggyBankRewardWindow, showSubscriptionAwardWindow, showBanWindow, showPenaltyWindow, showWarningWindow
+from gui.server_events.events_dispatcher import showCurrencyReserveAwardWindow, showPiggyBankRewardWindow, showSubscriptionAwardWindow, showBanWindow, showPenaltyWindow, showWarningWindow
 from gui.server_events.events_helpers import isACEmailConfirmationQuest, isDailyQuest, getIdxFromQuestID, isPM30OperationFinishedQuest, isPM30MilestoneQuest
 from gui.server_events.finders import CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID, PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, PM3_PERSONAL_MISSION_HONOR_POSTFIX, PM3_CAMPAIGN_FINISHED_QUEST, BRANCH_TO_OPERATION_IDS
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.account_settings_helper import AccountSettingsHelper
-from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePass, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showSeniorityRewardAwardWindow, showSteamEmailConfirmRewardsView, showSeniorityRewardVehiclesWindow, showCustomizationRarityAwardScreen, showPM30RewardsWindow
+from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePass, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showSeniorityRewardAwardWindow, showSteamEmailConfirmRewardsView, showSeniorityRewardVehiclesWindow, showCustomizationRarityAwardScreen, showPM30RewardsWindow, showCollector20RewardWindow
 from gui.shared.events import CustomizationEvent, PersonalMissionsEvent
 from gui.shared.formatters.time_formatters import getTillTimeByResource
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
@@ -534,7 +536,7 @@ class SeniorityAwardsWindowHandler(ServiceChannelHandler):
 
     def fini(self):
         self.__completedQuests = None
-        self.eventsCache.onSyncCompleted -= self.__onEventCacheSyncCompleted
+        self.seniorityAwardCtrl.onQuestsReceived -= self.__onQuestsReceived
         self.seniorityAwardCtrl.onUpdated -= self.__onSAConfigReady
         super(SeniorityAwardsWindowHandler, self).fini()
         return
@@ -572,13 +574,13 @@ class SeniorityAwardsWindowHandler(ServiceChannelHandler):
 
     def __update(self):
         if self.__questsData:
-            allQuests = self.eventsCache.getAllQuests()
+            allQuests = self.seniorityAwardCtrl.completedSeniorityAwardsQuests
             detailedRewards = self.__questsData.get('detailedRewards', {})
             rewards = list((detailedRewards.get(qID, {}) for qID in self.__completedQuests if self.isShowCongrats(allQuests.get(qID))))
             if rewards:
                 self.__mergedRewards = getMergedBonusesFromDicts(rewards)
                 return True
-            self.eventsCache.onSyncCompleted += self.__onEventCacheSyncCompleted
+            self.seniorityAwardCtrl.onQuestsReceived += self.__onQuestsReceived
         return False
 
     def __onSAConfigReady(self):
@@ -587,54 +589,11 @@ class SeniorityAwardsWindowHandler(ServiceChannelHandler):
             self.handle(None)
         return
 
-    def __onEventCacheSyncCompleted(self, *_):
-        self.eventsCache.onSyncCompleted -= self.__onEventCacheSyncCompleted
-        allQuests = self.eventsCache.getAllQuests()
+    def __onQuestsReceived(self):
+        self.seniorityAwardCtrl.onQuestsReceived -= self.__onQuestsReceived
+        allQuests = self.seniorityAwardCtrl.completedSeniorityAwardsQuests
         if self.__completedQuests and all((qID in allQuests for qID in self.__completedQuests)):
             self.handle(None)
-        return
-
-
-class LootBoxByInvoiceHandler(ServiceChannelHandler):
-    itemsCache = dependency.descriptor(IItemsCache)
-    appLoader = dependency.descriptor(IAppLoader)
-
-    def __init__(self, awardCtrl):
-        super(LootBoxByInvoiceHandler, self).__init__(SYS_MESSAGE_TYPE.invoiceReceived.index(), awardCtrl)
-
-    def _showAward(self, ctx):
-        invoiceData = ctx[1].data
-        lootBoxes = {}
-        if invoiceData.get('assetType', None) == INVOICE_ASSET.DATA and 'data' in invoiceData and 'tokens' in invoiceData['data']:
-            tokensDict = invoiceData['data']['tokens']
-            boxes = self.itemsCache.items.tokens.getLootBoxes()
-            for tokenName, tokenData in tokensDict.iteritems():
-                count = tokenData.get('count', 0)
-                if count > 0 and tokenName in boxes:
-                    lootbox = boxes[tokenName]
-                    lootboxType = lootbox.getType()
-                    if lootboxType not in lootBoxes:
-                        lootBoxes[lootboxType] = {'count': count,
-                         'userName': lootbox.getUserName(),
-                         'isFree': lootbox.isFree()}
-                    else:
-                        lootBoxes[lootboxType]['count'] += count
-
-        if lootBoxes:
-            self._showWindow(lootBoxes)
-        return
-
-    @classmethod
-    def _showWindow(cls, lootBoxes):
-        for lootBoxType, lootBoxInfo in lootBoxes.iteritems():
-            lootboxesCount = lootBoxInfo.get('count', 0)
-            app = cls.appLoader.getApp()
-            view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_HANGAR))
-            if view is None:
-                view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LEGACY_LOBBY_HANGAR))
-            if view is not None:
-                showLootboxesAward(lootboxId=lootBoxType, lootboxCount=lootboxesCount, isFree=lootBoxInfo['isFree'])
-
         return
 
 
@@ -1461,8 +1420,9 @@ class VehicleCollectorAchievementHandler(ServiceChannelHandler):
         achievements = message.data.get(_POPUP_RECORDS, {})
         if not achievements:
             return
+        excludedAchievementTypes = ADVANCED_ACHIEVEMENT_TYPES | {'playerBadges'}
         for achievementType, medalName in achievements:
-            if achievementType in ALLOWED_ACHIEVEMENT_TYPES or not medalName.startswith(self._PATTERN):
+            if achievementType in excludedAchievementTypes or not medalName.startswith(self._PATTERN):
                 continue
             if len(medalName) == len(self._PATTERN):
                 self.__isCollectionAssembled = True
@@ -2133,6 +2093,56 @@ class PersonalMission3VehicleDetailHandler(MultiTypeServiceChannelHandler):
             return quest
 
 
+class Collector20RewardHandler(ServiceChannelHandler):
+    __guiLoader = dependency.descriptor(IGuiLoader)
+    __limitedUIController = dependency.descriptor(ILimitedUIController)
+    __systemMessages = dependency.descriptor(ISystemMessages)
+    __ALLOWED_RECORDS = (('singleAchievements', COLLECTOR20_MEDAL_ID),) + tuple((('playerBadges', badgeId) for badgeId in COLLECTOR20_BADGE_IDS))
+
+    def __init__(self, awardCtrl):
+        super(Collector20RewardHandler, self).__init__(SYS_MESSAGE_TYPE.achievementReceived.index(), awardCtrl)
+        self.__awards = {}
+
+    def fini(self):
+        self.__clear()
+        super(Collector20RewardHandler, self).fini()
+
+    def _needToShowAward(self, ctx):
+        isNeedToShow = super(Collector20RewardHandler, self)._needToShowAward(ctx)
+        if isNeedToShow:
+            self.__setAwards(ctx)
+            return bool(self.__awards)
+        return False
+
+    def _showAward(self, ctx):
+        self.__systemMessages.proto.serviceChannel.pushClientMessage('', SCH_CLIENT_MSG_TYPE.COLLECTOR20_REWARD_RECEIVED, auxData=self.__awards)
+        if self.__limitedUIController.isRuleCompleted(LUI_RULES.AdvancedAchievements):
+            if self.__isBuyVehicleViewLoaded():
+                g_eventBus.addListener(events.CloseWindowEvent.BUY_VEHICLE_VIEW_CLOSED, self.__showCollector20RewardWindow)
+            else:
+                self.__showCollector20RewardWindow()
+        else:
+            self.__clear()
+
+    def __clear(self):
+        self.__awards = {}
+        g_eventBus.removeListener(events.CloseWindowEvent.BUY_VEHICLE_VIEW_CLOSED, self.__showCollector20RewardWindow)
+
+    def __isBuyVehicleViewLoaded(self):
+        return self.__guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.hangar.BuyVehicleView()) is not None
+
+    def __setAwards(self, ctx):
+        _, message = ctx
+        achievements = message.data.get(_POPUP_RECORDS, {})
+        for key, value in iteritems(achievements):
+            if key in self.__ALLOWED_RECORDS:
+                self.__awards[key] = {'value': value}
+
+    def __showCollector20RewardWindow(self, *_):
+        showCollector20RewardWindow(self.__awards)
+        self.__clear()
+
+
 registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  PunishWindowHandler,
  TokenQuestsWindowHandler,
@@ -2153,7 +2163,6 @@ registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  RecruitHandler,
  SoundDeviceHandler,
  EliteWindowHandler,
- LootBoxByInvoiceHandler,
  ProgressiveRewardHandler,
  PiggyBankOpenHandler,
  SeniorityAwardsWindowHandler,
@@ -2177,4 +2186,5 @@ registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  PrestigeMilestonesAwardWindowHandler,
  EmailConfirmationQuestHandler,
  ClanSupplyPurchaseHandler,
- CustomizationRewardHandler))
+ CustomizationRewardHandler,
+ Collector20RewardHandler))

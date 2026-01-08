@@ -38,6 +38,7 @@ class BLOCK_MODE(object):
     UNIQUE = 32
     DEV = 64
     HIDE_FROM_LIB = 256
+    DEPRECATED = 512
     CAN_BE_CONST_EXPR = 2048
 
 

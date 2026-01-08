@@ -385,7 +385,6 @@
     <price>	5000	  <crystal></crystal>
     </price>
     <tags>	rotationMechanism deluxe	</tags>
-    <notInShop>	true	</notInShop>
     <incompatibleTags>
       <installed>	rotationMechanism	</installed>
     </incompatibleTags>
@@ -514,6 +513,81 @@
     <tooltipSection>	equipment	</tooltipSection>
     <archetype>	additionalInvisibilityDevice	</archetype>
   </deluxeAdditionalInvisibilityDevice>
+  <deluxeStereoscope>
+    <id>	122	</id>
+    <userString>	#artefacts:deluxeStereoscope/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:deluxeStereoscope/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:deluxeStereoscope/long_special	</longDescriptionSpecial>
+    <icon>	stereoscope	</icon>
+    <price>	5000	  <crystal></crystal>
+    </price>
+    <tags>	stereoscope deluxe reconnaissance	</tags>
+    <notInShop>	true	</notInShop>
+    <incompatibleTags>
+      <installed>	stereoscope	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <exclude>
+        <vehicle>
+          <mandatoryTags>	wheeledVehicle lightTank	</mandatoryTags>
+        </vehicle>
+      </exclude>
+    </vehicleFilter>
+    <script>	Stereoscope	  <weight>	50	</weight>
+      <activateWhenStillSec>	1.5	</activateWhenStillSec>
+      <circularVisionRadius>	1.275	</circularVisionRadius>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleStillCircularVisionRadiusDeluxe	</name>
+        <value>	1.275	</value>
+      </mul>
+    </kpi>
+    <tooltipSection>	equipment	</tooltipSection>
+    <archetype>	stereoscope	</archetype>
+  </deluxeStereoscope>
+  <deluxeCamouflageNet>
+    <id>	123	</id>
+    <userString>	#artefacts:deluxeCamouflageNet/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:deluxeCamouflageNet/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:deluxeCamouflageNet/long_special	</longDescriptionSpecial>
+    <icon>	camouflageNet	</icon>
+    <price>	4000	  <crystal></crystal>
+    </price>
+    <tags>	camouflageNet camouflage deluxe	</tags>
+    <notInShop>	true	</notInShop>
+    <incompatibleTags>
+      <installed>	camouflageNet	</installed>
+    </incompatibleTags>
+    <script>	CamouflageNet	  <weight>	50	</weight>
+      <activateWhenStillSec>	1.5	</activateWhenStillSec>
+      <overridableFactors>
+        <invisibilityBonus>	0.175	</invisibilityBonus>
+      </overridableFactors>
+    </script>
+    <kpi>
+      <aggregateMul>
+        <name>	vehicleStillCamouflageGroupDeluxe	</name>
+        <mul>
+          <name>	vehicleStillCamouflageDeluxe	</name>
+          <value>	1.175	</value>
+          <vehicleTypes>	AT-SPG	</vehicleTypes>
+        </mul>
+        <mul>
+          <name>	vehicleStillCamouflageDeluxe	</name>
+          <value>	1.125	</value>
+          <vehicleTypes>	lightTank mediumTank	</vehicleTypes>
+        </mul>
+        <mul>
+          <name>	vehicleStillCamouflageDeluxe	</name>
+          <value>	1.075	</value>
+          <vehicleTypes>	heavyTank SPG	</vehicleTypes>
+        </mul>
+      </aggregateMul>
+    </kpi>
+    <tooltipSection>	equipment	</tooltipSection>
+    <archetype>	camouflageNet	</archetype>
+  </deluxeCamouflageNet>
   <trophyBasicAimDrives>
     <id>	50	</id>
     <userString>	#artefacts:trophyBasicAimDrives/name	</userString>

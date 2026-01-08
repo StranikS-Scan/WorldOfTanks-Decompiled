@@ -33,6 +33,8 @@ from VehicleEffects import DamageFromShotDecoder
 from common_tank_appearance import CommonTankAppearance
 import CGF
 import GenericComponents
+if typing.TYPE_CHECKING:
+    from VehicleStickers import DamageStickerData
 _ROOT_NODE_NAME = 'V'
 _GUN_RECOIL_NODE_NAME = 'G'
 _PERIODIC_TIME_ENGINE = 0.1
@@ -450,9 +452,9 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             self.vehicleStickers.delDamageSticker(code)
         return
 
-    def addDamageSticker(self, code, componentIdx, stickerID, segStart, segEnd, segLength=None):
+    def addDamageSticker(self, code, stickerID, data, isActive=False):
         if self.vehicleStickers is not None:
-            self.vehicleStickers.addDamageSticker(code, componentIdx, stickerID, segStart, segEnd, self.collisions, segLength)
+            self.vehicleStickers.addDamageSticker(code, stickerID, data, self.collisions, self.isCompositionReady, isActive)
         return
 
     def receiveShotImpulse(self, direction, impulse):
@@ -603,6 +605,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             dynSlots = None
             if self.typeDescriptor.type.isWheeledVehicle:
                 dynSlots = self.typeDescriptor.chassis.generalWheelsAnimatorConfig.getNonTrackWheelNodeNames()
+            self.setCompositionReady(False)
             removeComposition(self.gameObject)
             createVehicleComposition(gameObject=self.gameObject, vehicleGameObject=self._entityGameObject, prefabMap=prefabMap, followNodes=True, extraSlots=extraSlots, dynSlotNodes=dynSlots)
             self.onModelChanged()

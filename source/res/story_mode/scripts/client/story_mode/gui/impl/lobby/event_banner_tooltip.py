@@ -11,7 +11,7 @@ from story_mode.gui.impl.gen.view_models.views.lobby.event_banner_tooltip_model 
 class EventBannerTooltip(ViewImpl):
 
     def __init__(self):
-        super(EventBannerTooltip, self).__init__(ViewSettings(R.views.story_mode.lobby.EventBannerTooltip(), model=EventBannerTooltipModel()))
+        super(EventBannerTooltip, self).__init__(ViewSettings(R.views.story_mode.mono.lobby.tooltips.event_banner_tooltip(), model=EventBannerTooltipModel()))
         self._uiLogger = EventEntryPointTooltipLogger()
         self._uiLogger.start()
 

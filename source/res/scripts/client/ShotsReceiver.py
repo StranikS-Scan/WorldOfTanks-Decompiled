@@ -1,31 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ShotsReceiver.py
+import logging
+from functools import partial
 import BigWorld
 import CGF
 import GenericComponents
 import Math
-import logging
-from Event import Event
+from cgf_client_common.entity_dyn_components import ReplicableDynamicScriptComponent
 from cgf_components_common.material_component import MaterialComponent
-from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery, autoregister
-from material_kinds import EFFECT_MATERIAL_INDEXES_BY_IDS, EFFECT_MATERIAL_INDEXES_BY_NAMES
-from functools import partial
-from constants import IS_EDITOR
 from cgf_components.on_shot_components import EffectOnShotComponent, SoundOnShotComponent
 from cgf_script.component_meta_class import registerReplicableComponent
+from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery, autoregister
+from Event import Event
+from material_kinds import EFFECT_MATERIAL_INDEXES_BY_IDS, EFFECT_MATERIAL_INDEXES_BY_NAMES
 _logger = logging.getLogger(__name__)
 _DIR_UP = Math.Vector3(0.0, 1.0, 0.0)
-if IS_EDITOR:
-
-    class DynamicScriptComponent(object):
-        pass
-
-
-else:
-    from BigWorld import DynamicScriptComponent
 
 @registerReplicableComponent
-class ShotsReceiver(DynamicScriptComponent):
+class ShotsReceiver(ReplicableDynamicScriptComponent):
 
     def __init__(self):
         super(ShotsReceiver, self).__init__()

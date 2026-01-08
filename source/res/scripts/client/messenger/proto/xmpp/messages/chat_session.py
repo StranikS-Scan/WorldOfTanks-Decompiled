@@ -285,7 +285,7 @@ class ChatSessionsProvider(ChatProvider):
     def sendNonFriendMessagesRestrictedNotification(self):
         SystemMessages.pushI18nMessage(self.__getNonFriendPrivateMessagesForbiddenText(), type=SystemMessages.SM_TYPE.Error)
 
-    def __addSession(self, session, contactDBID=0L, byAction=False):
+    def __addSession(self, session, contactDBID=0, byAction=False):
         jid = session.getID()
         presence = PRESENCE.UNAVAILABLE
         if contactDBID:

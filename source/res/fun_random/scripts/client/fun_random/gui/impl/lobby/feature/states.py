@@ -8,6 +8,7 @@ from fun_random_common.fun_constants import FunSubModeImpl
 from fun_random.gui.battle_results.fun_battle_results_sub_presenter import FunBattleResultsSubPresenter
 from fun_random.gui.feature.util.fun_mixins import FunSubModesWatcher, FunAssetPacksMixin
 from fun_random.gui.impl.lobby.feature.fun_random_tier_list_view import FunRandomTierListView
+from gui.battle_results.service import PostBattleResultsStateMixin
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.lobby_state_machine.states import GuiImplViewLobbyState, SubScopeSubLayerState, SubScopeTopLayerState, LobbyStateDescription, ViewLobbyState, LobbyStateFlags
@@ -65,7 +66,7 @@ class FunRandomTierListState(GuiImplViewLobbyState):
 
 
 @SubScopeSubLayerState.parentOf
-class FunPostBattleResultsState(ViewLobbyState):
+class FunPostBattleResultsState(ViewLobbyState, PostBattleResultsStateMixin):
     STATE_ID = FUNRANDOM_ALIASES.FUN_POST_BATTLE_RESULTS
     VIEW_KEY = ViewKey(FUNRANDOM_ALIASES.FUN_POST_BATTLE_RESULTS)
     __layoutIDsAndSubPresenters = {FunSubModeImpl.DEFAULT: (FunBattleResultsSubPresenter, R.views.fun_random.mono.lobby.battle_results())}

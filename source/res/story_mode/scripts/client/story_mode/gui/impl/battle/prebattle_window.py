@@ -42,7 +42,7 @@ def _hideCursor():
 
 class PrebattleView(BaseWaitQueueView, IArenaLoadController):
     __slots__ = ('missionId', '_uiLogger', '_missionLoreSettings')
-    LAYOUT_ID = R.views.story_mode.battle.PrebattleWindow()
+    LAYOUT_ID = R.views.story_mode.mono.battle.prebattle_window()
     _storyModeCtrl = dependency.descriptor(IStoryModeController)
     _sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
@@ -123,7 +123,7 @@ class PrebattleView(BaseWaitQueueView, IArenaLoadController):
         avatar_getter.setForcedGuiControlMode(True, enableAiming=False, cursorVisible=False)
         return
 
-    @UseStoryModeFading(waitForLayoutReady=R.views.story_mode.common.OnboardingQueueView())
+    @UseStoryModeFading(waitForLayoutReady=R.views.story_mode.mono.lobby.onboarding_queue_view())
     def _onWaitQueueTimeout(self):
         super(PrebattleView, self)._onWaitQueueTimeout()
         showQueueWindow(isSkipButtonVisible=True)
@@ -138,4 +138,4 @@ class PrebattleWindow(DestroyWindowOnDisconnectMixin, WindowImpl):
 
 def getOpenedPrebattleView():
     uiLoader = dependency.instance(IGuiLoader)
-    return None if not uiLoader or not uiLoader.windowsManager else uiLoader.windowsManager.getViewByLayoutID(R.views.story_mode.battle.PrebattleWindow())
+    return None if not uiLoader or not uiLoader.windowsManager else uiLoader.windowsManager.getViewByLayoutID(R.views.story_mode.mono.battle.prebattle_window())

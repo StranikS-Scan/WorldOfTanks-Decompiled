@@ -12,10 +12,9 @@ import SoundGroups
 from account_helpers.settings_core.settings_constants import GRAPHICS, AIM, GAME, SPGAim
 from AvatarInputHandler import gun_marker_ctrl
 from AvatarInputHandler.spg_marker_helpers.spg_marker_helpers import SPGShotResultEnum
-from DualAccuracy import getVehicleDualAccuracy
+from events_containers.common.containers import ContainersListener
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
-from TwinGunController import getVehicleTwinGunController
 from aih_constants import CTRL_MODE_NAME
 from constants import IS_DEVELOPMENT, VEHICLE_SIEGE_STATE as _SIEGE_STATE, DUALGUN_CHARGER_STATUS, SERVER_TICK_LENGTH, STATIONARY_RELOAD_STATE, VEHICLE_MISC_STATUS
 from events_handler import eventHandler
@@ -41,35 +40,36 @@ from gui.impl.gen import R
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from gui.shared.utils.TimeInterval import TimeInterval
-from gui.shared.utils.plugins import IPlugin
-from gui.veh_mechanics.battle.updaters.mechanic_passenger_view_updater import IMechanicPassengerView, VehicleMechanicPassengerUpdater
-from gui.veh_mechanics.battle.updaters.mechanic_states_view_updater import VehicleMechanicStatesUpdater
+from gui.shared.utils.plugins import IPlugin, PluginsCollection
+from gui.veh_mechanics.battle.updaters.mechanics.dual_accuracy_updater import IDualAccuracyView, DualAccuracyUpdater
+from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import IMechanicPassengerView, VehicleMechanicPassengerUpdater
+from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
+from gui.veh_mechanics.battle.updaters.mechanics.tracked_mechanics_updater import IVehicleTrackedMechanicsView, VehicleTrackedMechanicsUpdater
+from gui.veh_mechanics.battle.updaters.mechanics.twin_gun_updater import ITwinGunView, TwinGunUpdater
 from gui.veh_mechanics.battle.updaters.shooting_updaters import IShootingReactionsView, ShootingReactionsUpdater
+from gui.veh_mechanics.battle.updaters.updaters_common import ViewUpdatersCollection
 from helpers import dependency
 from helpers.time_utils import MS_IN_SECOND
 from helpers_common import computeDamageAtDist
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
-from vehicles.components.component_events import ComponentListener
 from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
-from vehicles.mechanics.mechanic_info import hasVehicleMechanic
 if typing.TYPE_CHECKING:
     from AccuracyStacksController import AccuracyStacksState
-    from ChargeShotComponent import ChargeShotState
     from BattleFuryController import BattleFuryState
-    from StanceDanceController import StanceDanceState
-    from DualAccuracy import DualAccuracy
+    from ChargeShotComponent import ChargeShotState
+    from ChargeableBurstComponent import ChargeableBurstModeState
     from gui.battle_control.controllers.consumables.ammo_ctrl import ReloadingTimeSnapshot
     from gui.veh_mechanics.battle.updaters.updaters_common import IViewUpdater
     from items.components.gun_installation_components import GunInstallationSlot
-    from StationaryReloadController import StationaryReloadState
-    from TwinGunController import TwinGunController
-    from ChargeableBurstComponent import ChargeableBurstModeState
-    from PillboxSiegeComponent import PillboxSiegeModeState
-    from Vehicle import Vehicle
     from items.vehicles import VehicleDescr
+    from PillboxSiegeComponent import PillboxSiegeModeState
+    from StanceDanceController import StanceDanceState
+    from StationaryReloadController import StationaryReloadModeState
+    from vehicles.mechanics.gun_mechanics.temperature.heating_zones_gun import IHeatingZonesGunMechanicState
 _logger = logging.getLogger(__name__)
 _SETTINGS_KEY_TO_VIEW_ID = {AIM.ARCADE: CROSSHAIR_VIEW_ID.ARCADE,
  AIM.SNIPER: CROSSHAIR_VIEW_ID.SNIPER}
@@ -93,22 +93,13 @@ def createPlugins():
      'shotDone': ShotDonePlugin,
      'speedometerWheeledTech': SpeedometerWheeledTech,
      'siegePlugin': SiegeModePlugin,
-     'reticlePillboxPlugin': ReticlePillboxPlugin,
      'dualgun': DualGunPlugin,
      'artyCamDist': ArtyCameraDistancePlugin,
      'spgShotResultIndicator': SPGShotResultIndicatorPlugin,
-     'dualAccuracyMechanics': DualAccuracyGunPlugin,
      'mutableDamage': MutableDamagePlugin,
      'aimDamage': AimDamagePlugin,
      'cameraTransition': CameraTransitionPlugin,
-     'twinGun': TwinGunPlugin,
-     'battleFury': BattleFuryPlugin,
-     'accuracyStacks': AccuracyStacksPlugin,
-     'overheat': OverheatStacksPlugin,
-     'chargeShot': ChargePlugin,
-     'stanceDance': StanceDancePlugin,
-     'chargeableBurstPlugin': ChargeableBurstPlugin,
-     'stationaryReloading': StationaryReloadingPlugin}
+     'vehicleMechanics': VehicleMechanicsPlugin}
     return resultPlugins
 
 
@@ -147,22 +138,19 @@ def _makeSettingsVO(settingGetter):
 
 
 def _createAmmoSettings(gunSettings):
-    clip = gunSettings.clip
-    burst = gunSettings.burst.size
-    if clip.size > 1:
-        state = _CassetteSettings(clip, burst, gunSettings)
-    else:
-        state = _AmmoSettings(clip, burst, gunSettings)
-    return state
+    ammoSettingsCls = _CassetteSettings if gunSettings.isRegularClip else _AmmoSettings
+    return ammoSettingsCls(gunSettings)
 
 
 class _AmmoSettings(object):
 
-    def __init__(self, clip, burst, gunSettings):
+    def __init__(self, gunSettings):
         super(_AmmoSettings, self).__init__()
-        self._clip = clip
-        self._burst = burst
         self.__gunSettings = gunSettings
+
+    @property
+    def isUnlimitedClip(self):
+        return self.__gunSettings.isUnlimitedClip
 
     @property
     def hasAutoReload(self):
@@ -186,16 +174,18 @@ class _AmmoSettings(object):
             return CLIP_RELOADING_TYPES.AUTO_LOADER_CLIP
         if self.hasExtraShot:
             return CLIP_RELOADING_TYPES.EXTRA_SHOT_CLIP
-        return CLIP_RELOADING_TYPES.CONTROLLABLE_RELOAD if self.hasControllableReload else CLIP_RELOADING_TYPES.CASSETTE_CLIP
-
-    def getClipCapacity(self):
-        return self._clip.size
-
-    def getClipInterval(self):
-        return self._clip.interval
+        if self.hasControllableReload:
+            return CLIP_RELOADING_TYPES.CONTROLLABLE_RELOAD
+        return CLIP_RELOADING_TYPES.UNLIMITED_CLIP if self.isUnlimitedClip else CLIP_RELOADING_TYPES.CASSETTE_CLIP
 
     def getBurstSize(self):
-        return self._burst
+        return self.__gunSettings.burst.size
+
+    def getClipCapacity(self):
+        return self.__gunSettings.clip.size
+
+    def getClipInterval(self):
+        return self.__gunSettings.getClipInterval()
 
     def getState(self, quantity, quantityInClip):
         pass
@@ -205,9 +195,10 @@ class _CassetteSettings(_AmmoSettings):
 
     def getState(self, quantity, quantityInClip):
         state = super(_CassetteSettings, self).getState(quantity, quantityInClip)
-        if self._burst > 1:
-            total = math.ceil(self.getClipCapacity() / float(self._burst))
-            current = math.ceil(quantityInClip / float(self._burst))
+        burstSize = self.getBurstSize()
+        if burstSize > 1:
+            total = math.ceil(self.getClipCapacity() / float(burstSize))
+            current = math.ceil(quantityInClip / float(burstSize))
         else:
             total = self.getClipCapacity()
             current = quantityInClip
@@ -230,30 +221,26 @@ class CrosshairPlugin(IPlugin):
 
 
 class CrosshairUpdatersPlugin(CrosshairPlugin):
-    __slots__ = ('__updaters',)
+    __slots__ = ('__updatersCollection',)
 
     def __init__(self, parentObj):
         super(CrosshairUpdatersPlugin, self).__init__(parentObj)
-        self.__updaters = []
+        self.__updatersCollection = ViewUpdatersCollection()
 
     def start(self):
-        self.__updaters = self._getViewUpdaters()
-        self._initializeUpdaters()
+        super(CrosshairUpdatersPlugin, self).start()
+        self.__updatersCollection.initialize(self._getViewUpdaters())
 
     def stop(self):
-        self._finalizeUpdaters()
-        del self.__updaters[:]
+        self.__updatersCollection.finalize()
+        super(CrosshairUpdatersPlugin, self).stop()
+
+    def fini(self):
+        self.__updatersCollection.destroy()
+        super(CrosshairUpdatersPlugin, self).fini()
 
     def _getViewUpdaters(self):
         return []
-
-    def _initializeUpdaters(self):
-        for updater in self.__updaters:
-            updater.initialize()
-
-    def _finalizeUpdaters(self):
-        for updater in self.__updaters:
-            updater.finalize()
 
 
 class CorePlugin(CrosshairPlugin):
@@ -615,14 +602,14 @@ class AmmoPlugin(CrosshairPlugin):
         self.__setReloadingState(reloadingState)
         if self.__guiSettings.hasAutoReload or self.__guiSettings.hasControllableReload:
             autoReloadingState = ctrl.getPartiallyReloadingClipState()
-            stationaryState = ctrl.getStationaryState()
+            stationaryState = ctrl.getStationaryReloadState()
             baseValue = autoReloadingState.getBaseValue()
             if quantityInClip == SHELL_QUANTITY_UNKNOWN:
                 baseValue = ctrl.getShellChangeTime()
             self.__reloadAnimator.setClipAutoLoading(autoReloadingState.getActualValue(), round(baseValue, 1), isCritical=self.__isGunAutoReloadTimerCritical(), isTimerOn=self.__isGunAutoReloadTimerOn(stationaryState, autoReloadingState))
             if stationaryState is not None:
-                self.parentObj.as_setIsInControllableReloadS(stationaryState.state != STATIONARY_RELOAD_STATE.IDLE)
-                if stationaryState.state == STATIONARY_RELOAD_STATE.IDLE and ctrl.hasPreselectedShell():
+                self.parentObj.as_setIsInControllableReloadS(stationaryState != STATIONARY_RELOAD_STATE.IDLE)
+                if stationaryState == STATIONARY_RELOAD_STATE.IDLE and ctrl.hasPreselectedShell():
                     predictedState = ctrl.getPredictedState()
                     if predictedState is not None:
                         self.__setReloadingState(predictedState)
@@ -718,7 +705,7 @@ class AmmoPlugin(CrosshairPlugin):
             self.__reloadAnimator.showAutoLoadingBoost(AUTOLOADERBOOSTVIEWSTATES.WAITING_TO_START, 0.0)
 
     def __isGunAutoReloadTimerOn(self, stationaryState, timeState):
-        return self.__guiSettings.hasAutoReload or stationaryState and stationaryState.state == STATIONARY_RELOAD_STATE.RELOADING and timeState.getActualValue() > 0.0
+        return self.__guiSettings.hasAutoReload or stationaryState == STATIONARY_RELOAD_STATE.RELOADING and timeState.getActualValue() > 0.0
 
     def __isGunAutoReloadTimerCritical(self):
         vStateCtrl = self.sessionProvider.shared.vehicleState
@@ -1185,7 +1172,7 @@ class SiegeModePlugin(CrosshairPlugin):
         return NET_TYPE_OVERRIDE.DISABLED if vTypeDescr.hasTurboshaftEngine else NET_TYPE_OVERRIDE.SIEGE_MODE
 
     def __getNetSeparatorOverride(self, vehicleDescr):
-        if hasVehicleMechanic(vehicleDescr, VehicleMechanic.CHARGEABLE_BURST):
+        if hasVehicleDescrMechanic(vehicleDescr, VehicleMechanic.CHARGEABLE_BURST):
             return CROSSHAIR_CONSTANTS.NET_SEPARATOR_TYPE_SHORT
         gun = vehicleDescr.gun
         if 'autoreload' in gun.tags:
@@ -1196,7 +1183,7 @@ class SiegeModePlugin(CrosshairPlugin):
         ctrl = self.sessionProvider.shared.vehicleState
         vTypeDescr = vehicle.typeDescriptor
         if ctrl.isInPostmortem:
-            if not hasVehicleMechanic(vTypeDescr, VehicleMechanic.PILLBOX_SIEGE_MODE):
+            if not hasVehicleDescrMechanic(vTypeDescr, VehicleMechanic.PILLBOX_SIEGE_MODE):
                 self._parentObj.as_setNetSeparatorVisibleS(True)
                 self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.DISABLED)
                 setNetSeparatorType = self.__getNetSeparatorOverride(vTypeDescr)
@@ -1229,7 +1216,7 @@ class SiegeModePlugin(CrosshairPlugin):
             return
         else:
             vTypeDescr = vehicle.typeDescriptor
-            if hasVehicleMechanic(vTypeDescr, VehicleMechanic.PILLBOX_SIEGE_MODE):
+            if hasVehicleDescrMechanic(vTypeDescr, VehicleMechanic.PILLBOX_SIEGE_MODE):
                 return
             self._parentObj.as_setNetSeparatorTypeS(self.__getNetSeparatorOverride(vTypeDescr))
             if self.__hasStaticNetOverride(vTypeDescr):
@@ -1980,91 +1967,40 @@ class CameraTransitionPlugin(CrosshairPlugin):
         self._playSound2D(self._TRANSITION_SOUNDS.get(event.ctx.get('ctrlModeName')))
 
 
-class VehicleMechanicPlugin(CrosshairPlugin):
-    __slots__ = ('__vehicleMechanicCtrl',)
-
-    def __init__(self, parentObj):
-        super(VehicleMechanicPlugin, self).__init__(parentObj)
-        self.__vehicleMechanicCtrl = None
-        return
-
-    @property
-    def hasVehicleMechanic(self):
-        return self.vehicleMechanicCtrl is not None
-
-    @property
-    def vehicleMechanicCtrl(self):
-        return self.__vehicleMechanicCtrl
-
-    def start(self):
-        vStateCtrl = self.sessionProvider.shared.vehicleState
-        if vStateCtrl is not None:
-            vStateCtrl.onVehicleControlling += self.__onVehicleControlling
-            vehicle = vStateCtrl.getControllingVehicle()
-            self.__onVehicleControlling(vehicle)
-        return
+class VehicleMechanicCrosshairPlugin(CrosshairUpdatersPlugin, ContainersListener):
 
     def stop(self):
-        vStateCtrl = self.sessionProvider.shared.vehicleState
-        if vStateCtrl is not None:
-            vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
-        self.__releaseVehicleMechanicCtrl()
-        return
+        self._clearParentState()
+        super(VehicleMechanicCrosshairPlugin, self).stop()
 
-    def _getVehicleMechanicCtrl(self, vehicle):
-        raise NotImplementedError
-
-    def _onVehicleMechanicUpdate(self):
-        raise NotImplementedError
-
-    def _subscribeVehicleMechanicCtrl(self, vehicleMechanicCtrl):
-        raise NotImplementedError
-
-    def _unsubscribeVehicleMechanicCtrl(self, vehicleMechanicCtrl):
-        raise NotImplementedError
-
-    def __onVehicleControlling(self, vehicle):
-        self.__releaseVehicleMechanicCtrl()
-        self.__catchVehicleMechanicCtrl(self._getVehicleMechanicCtrl(vehicle))
-        self._onVehicleMechanicUpdate()
-
-    def __catchVehicleMechanicCtrl(self, vehicleMechanicCtrl):
-        if vehicleMechanicCtrl:
-            self.__vehicleMechanicCtrl = vehicleMechanicCtrl
-            self._subscribeVehicleMechanicCtrl(vehicleMechanicCtrl)
-
-    def __releaseVehicleMechanicCtrl(self):
-        if self.__vehicleMechanicCtrl:
-            self._unsubscribeVehicleMechanicCtrl(self.__vehicleMechanicCtrl)
-            self.__vehicleMechanicCtrl = None
-        return
+    def _clearParentState(self):
+        pass
 
 
-class DualAccuracyGunPlugin(VehicleMechanicPlugin):
-    __slots__ = ()
+class DualAccuracyGunPlugin(VehicleMechanicCrosshairPlugin, IDualAccuracyView):
 
-    def _getVehicleMechanicCtrl(self, vehicle):
-        return getVehicleDualAccuracy(vehicle)
+    def setDualAccuracyState(self, isActive):
+        self.parentObj.as_setSecondaryGunMarkerActiveS(not isActive)
+        self.parentObj.as_setDispersionCircleThicknessS(not isActive)
 
-    def _onVehicleMechanicUpdate(self, *_):
-        isVisible = self.hasVehicleMechanic and not self.vehicleMechanicCtrl.isActive()
-        self.parentObj.as_setDualAccActiveS(isVisible)
+    def _clearParentState(self):
+        self.parentObj.as_setDispersionCircleThicknessS(False)
+        self.parentObj.as_setSecondaryGunMarkerActiveS(False)
 
-    def _subscribeVehicleMechanicCtrl(self, vehicleMechanicCtrl):
-        vehicleMechanicCtrl.onSetDualAccState += self._onVehicleMechanicUpdate
-
-    def _unsubscribeVehicleMechanicCtrl(self, vehicleMechanicCtrl):
-        if hasattr(vehicleMechanicCtrl, 'onSetDualAccState'):
-            vehicleMechanicCtrl.onSetDualAccState -= self._onVehicleMechanicUpdate
+    def _getViewUpdaters(self):
+        return [DualAccuracyUpdater(self)]
 
 
-class TwinGunPlugin(VehicleMechanicPlugin):
-    __slots__ = ('__targetID',)
+class TwinGunPlugin(VehicleMechanicCrosshairPlugin, ITwinGunView):
     _UNDEFINED_TARGET_ID = -1
 
     def __init__(self, parentObj):
         super(TwinGunPlugin, self).__init__(parentObj)
         self.__targetID = self._UNDEFINED_TARGET_ID
+
+    def setDoubleBarrelMode(self, isActive):
+        self.__updateTwinGunMarkerState()
+        self.parentObj.as_setTwinGunMarkerActiveS(isActive)
 
     def start(self):
         self.__targetID = avatar_getter.getTargetID(self._UNDEFINED_TARGET_ID)
@@ -2088,12 +2024,19 @@ class TwinGunPlugin(VehicleMechanicPlugin):
         super(TwinGunPlugin, self).stop()
         return
 
-    def _isAliveEnemyInFocus(self):
+    def _clearParentState(self):
+        self.parentObj.as_setTwinGunMarkerStateS(DUAL_GUN_MARKER_STATE.VISIBLE)
+        self.parentObj.as_setTwinGunMarkerActiveS(False)
+
+    def _getViewUpdaters(self):
+        return [TwinGunUpdater(self)]
+
+    def __isAliveEnemyInFocus(self):
         targetEntity = BigWorld.entity(self.__targetID) if self.__targetID != self._UNDEFINED_TARGET_ID else None
         return targetEntity is not None and targetEntity.isAlive() and not targetEntity.isPlayerTeam
 
-    def _getTwinGunMarkerState(self, collisions):
-        if len(collisions) != 2 or not self._isAliveEnemyInFocus():
+    def __getTwinGunMarkerState(self, collisions):
+        if len(collisions) != 2 or not self.__isAliveEnemyInFocus():
             return DUAL_GUN_MARKER_STATE.VISIBLE
         hasLeft, hasRight = collisions
         if hasLeft and hasRight:
@@ -2106,20 +2049,6 @@ class TwinGunPlugin(VehicleMechanicPlugin):
             markerState = DUAL_GUN_MARKER_STATE.DIMMED
         return markerState
 
-    def _getVehicleMechanicCtrl(self, vehicle):
-        return getVehicleTwinGunController(vehicle)
-
-    def _onVehicleMechanicUpdate(self, *_):
-        self.__updateTwinGunMarkerState()
-        isVisible = self.hasVehicleMechanic and self.vehicleMechanicCtrl.isDoubleBarrelMode()
-        self.parentObj.as_setTwinGunMarkerActiveS(isVisible)
-
-    def _subscribeVehicleMechanicCtrl(self, vehicleMechanicCtrl):
-        vehicleMechanicCtrl.shootingEvents.onActiveGunsUpdate += self._onVehicleMechanicUpdate
-
-    def _unsubscribeVehicleMechanicCtrl(self, vehicleMechanicCtrl):
-        vehicleMechanicCtrl.shootingEvents.onActiveGunsUpdate -= self._onVehicleMechanicUpdate
-
     def __onMultiGunCollisionsUpdated(self, collisions):
         self.__updateTwinGunMarkerState(collisions=collisions)
 
@@ -2129,23 +2058,21 @@ class TwinGunPlugin(VehicleMechanicPlugin):
             self.__updateTwinGunMarkerState()
 
     def __updateTwinGunMarkerState(self, collisions=None):
-        if not self.hasVehicleMechanic:
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl is None and collisions is None:
             return
         else:
-            crosshairCtrl = self.sessionProvider.shared.crosshair
-            if crosshairCtrl is None and collisions is None:
-                return
             collisions = collisions if collisions is not None else crosshairCtrl.getMultiGunCollisions()
-            self.parentObj.as_setTwinGunMarkerStateS(self._getTwinGunMarkerState(collisions))
+            self.parentObj.as_setTwinGunMarkerStateS(self.__getTwinGunMarkerState(collisions))
             return
 
 
-class BattleFuryPlugin(CrosshairUpdatersPlugin, ComponentListener, IMechanicStatesListenerLogic, IMechanicPassengerView):
+class BattleFuryPlugin(VehicleMechanicCrosshairPlugin, IMechanicStatesListenerLogic):
 
-    def __init__(self, *args):
-        super(BattleFuryPlugin, self).__init__(*args)
-        self.__level = 0
+    def __init__(self, parentObj):
+        super(BattleFuryPlugin, self).__init__(parentObj)
         self.__isActive = False
+        self.__level = 0
 
     @eventHandler
     def onStatePrepared(self, state):
@@ -2160,14 +2087,12 @@ class BattleFuryPlugin(CrosshairUpdatersPlugin, ComponentListener, IMechanicStat
     def onStateTick(self, state):
         self.__update(state)
 
-    def setVisible(self, isVisible):
-        if self.parentObj:
-            isActive = self.__level > 0
-            self.parentObj.as_setReloadBoostBorderS(isVisible, isVisible and isActive)
-            self.parentObj.as_setReloadBoostS(isVisible)
+    def _clearParentState(self):
+        self.parentObj.as_setReloadBoostBorderS(False, False)
+        self.parentObj.as_setReloadBoostS(False)
 
     def _getViewUpdaters(self):
-        return [VehicleMechanicPassengerUpdater(VehicleMechanic.BATTLE_FURY, self), VehicleMechanicStatesUpdater(VehicleMechanic.BATTLE_FURY, self)]
+        return [VehicleMechanicStatesUpdater(VehicleMechanic.BATTLE_FURY, self)]
 
     def __update(self, state):
         if state.level != self.__level:
@@ -2181,15 +2106,14 @@ class BattleFuryPlugin(CrosshairUpdatersPlugin, ComponentListener, IMechanicStat
                 self.parentObj.as_setReloadBoostS(isActive)
 
 
-class StanceDancePlugin(CrosshairUpdatersPlugin, ComponentListener, IMechanicStatesListenerLogic, IMechanicPassengerView):
+class StanceDancePlugin(VehicleMechanicCrosshairPlugin, IMechanicStatesListenerLogic):
 
-    def __init__(self, *args):
-        super(StanceDancePlugin, self).__init__(*args)
+    def __init__(self, parentObj):
+        super(StanceDancePlugin, self).__init__(parentObj)
         self.__isBoosted = False
 
     @eventHandler
     def onStatePrepared(self, state):
-        self.parentObj.as_setReloadBoostBorderS(False, False)
         self.__update(state)
 
     @eventHandler
@@ -2200,11 +2124,11 @@ class StanceDancePlugin(CrosshairUpdatersPlugin, ComponentListener, IMechanicSta
     def onStateTick(self, state):
         self.__update(state)
 
-    def setVisible(self, isVisible):
-        pass
+    def _clearParentState(self):
+        self.parentObj.as_setReloadBoostS(False)
 
     def _getViewUpdaters(self):
-        return [VehicleMechanicPassengerUpdater(VehicleMechanic.STANCE_DANCE, self), VehicleMechanicStatesUpdater(VehicleMechanic.STANCE_DANCE, self)]
+        return [VehicleMechanicStatesUpdater(VehicleMechanic.STANCE_DANCE, self)]
 
     def __update(self, state):
         if self.__isBoosted != state.isActiveFightState:
@@ -2212,22 +2136,22 @@ class StanceDancePlugin(CrosshairUpdatersPlugin, ComponentListener, IMechanicSta
             self.parentObj.as_setReloadBoostS(self.__isBoosted)
 
 
-class AccuracyStacksPlugin(CrosshairUpdatersPlugin, ComponentListener, IMechanicStatesListenerLogic, IMechanicPassengerView):
+class AccuracyStacksPlugin(VehicleMechanicCrosshairPlugin, IMechanicStatesListenerLogic):
 
-    def __init__(self, *args):
-        super(AccuracyStacksPlugin, self).__init__(*args)
+    def __init__(self, parentObj):
+        super(AccuracyStacksPlugin, self).__init__(parentObj)
         self.__level = 0
 
     @eventHandler
     def onStatePrepared(self, state):
         self.__update(state)
 
-    def setVisible(self, isVisible):
-        pass
-
     @eventHandler
     def onStateTransition(self, oldState, newState):
         self.__update(newState)
+
+    def _clearParentState(self):
+        self.parentObj.as_setAccuracyStacksProgressS(0)
 
     def _getViewUpdaters(self):
         return [VehicleMechanicStatesUpdater(VehicleMechanic.ACCURACY_STACKS, self)]
@@ -2238,19 +2162,22 @@ class AccuracyStacksPlugin(CrosshairUpdatersPlugin, ComponentListener, IMechanic
             self.parentObj.as_setAccuracyStacksProgressS(self.__level)
 
 
-class OverheatStacksPlugin(CrosshairUpdatersPlugin, ComponentListener, IMechanicStatesListenerLogic, IMechanicPassengerView):
+class OverheatStacksPlugin(VehicleMechanicCrosshairPlugin, IMechanicPassengerView, IMechanicStatesListenerLogic):
 
-    def setVisible(self, isVisible):
-        self.parentObj.as_setOverheatVisibleS(isVisible)
+    def setVisibleForPassenger(self, visibleForPassenger):
+        self.parentObj.as_setOverheatVisibleS(visibleForPassenger)
+
+    def _clearParentState(self):
+        self.parentObj.as_setOverheatVisibleS(False)
 
     def _getViewUpdaters(self):
         return [VehicleMechanicPassengerUpdater(VehicleMechanic.OVERHEAT_STACKS, self)]
 
 
-class ChargePlugin(CrosshairUpdatersPlugin, ComponentListener, IMechanicStatesListenerLogic, IMechanicPassengerView):
+class ChargePlugin(VehicleMechanicCrosshairPlugin, IMechanicStatesListenerLogic):
 
-    def __init__(self, *args):
-        super(ChargePlugin, self).__init__(*args)
+    def __init__(self, parentObj):
+        super(ChargePlugin, self).__init__(parentObj)
         self.__progress = 0
         self.__level = 0
         self.__isCharging = False
@@ -2260,9 +2187,6 @@ class ChargePlugin(CrosshairUpdatersPlugin, ComponentListener, IMechanicStatesLi
     def onStatePrepared(self, state):
         self.__update(state)
 
-    def setVisible(self, isVisible):
-        pass
-
     @eventHandler
     def onStateTransition(self, oldState, newState):
         self.__update(newState)
@@ -2270,6 +2194,10 @@ class ChargePlugin(CrosshairUpdatersPlugin, ComponentListener, IMechanicStatesLi
     @eventHandler
     def onStateTick(self, state):
         self.__update(state)
+
+    def _clearParentState(self):
+        self.parentObj.as_setChargeGunActiveS(False)
+        self.parentObj.as_setChargeGunStateS(0, 0, False)
 
     def _getViewUpdaters(self):
         return [VehicleMechanicStatesUpdater(VehicleMechanic.CHARGE_SHOT, self)]
@@ -2283,62 +2211,54 @@ class ChargePlugin(CrosshairUpdatersPlugin, ComponentListener, IMechanicStatesLi
             self.__level = state.level
             self.__isShootBlock = state.hasShotBlock
             self.parentObj.as_setChargeGunStateS(self.__progress, self.__level, self.__isShootBlock)
-            self.parentObj.as_setAccuracyStacksProgressS(self.__level)
 
 
-class ReticlePillboxPlugin(CrosshairUpdatersPlugin, ComponentListener, IMechanicStatesListenerLogic, IMechanicPassengerView):
-    __slots__ = ('__state', '__isVisible')
+class ReticlePillboxPlugin(VehicleMechanicCrosshairPlugin, IMechanicPassengerView, IMechanicStatesListenerLogic):
 
     def __init__(self, parentObj):
         super(ReticlePillboxPlugin, self).__init__(parentObj)
+        self.__isVisibleForPassenger = False
         self.__state = _SIEGE_STATE.DISABLED
-        self.__isVisible = True
 
-    def setVisible(self, visible):
-        if self.__isVisible == visible:
-            return
-        self.__isVisible = visible
+    def setVisibleForPassenger(self, visibleForPassenger):
+        self.__isVisibleForPassenger = visibleForPassenger
         self.__updateView()
 
     @eventHandler
     def onStatePrepared(self, state):
-        self.__onVehicleMechanicStateUpdate(state)
+        self.__invalidateState(state)
 
     @eventHandler
     def onStateTransition(self, _, newState):
-        self.__onVehicleMechanicStateUpdate(newState)
+        self.__invalidateState(newState)
 
     def _getViewUpdaters(self):
         return [VehicleMechanicPassengerUpdater(VehicleMechanic.PILLBOX_SIEGE_MODE, self), VehicleMechanicStatesUpdater(VehicleMechanic.PILLBOX_SIEGE_MODE, self)]
 
-    def __onVehicleMechanicStateUpdate(self, status):
-        if self.__state == status.state:
-            return
+    def __invalidateState(self, status):
         self.__state = status.state
         self.__updateView()
 
     def __updateView(self):
-        if not self.__isVisible:
-            return
-        netType = self.__getPillboxSiegeNetType(self.__state)
-        visibleMask = self.__getNetVisibleMask()
-        self._parentObj.as_setNetTypeS(netType)
-        self._parentObj.as_setNetVisibleS(visibleMask)
+        self._parentObj.as_setNetTypeS(self.__getPillboxSiegeNetType())
+        self._parentObj.as_setNetVisibleS(self.__getNetVisibleMask())
         self._parentObj.as_setNetSeparatorVisibleS(self.__state == _SIEGE_STATE.DISABLED)
 
-    def __getPillboxSiegeNetType(self, state):
-        return NET_TYPE_OVERRIDE.PILLBOX_MODE if state in (_SIEGE_STATE.ENABLED, _SIEGE_STATE.PILLBOX_ENABLED) else NET_TYPE_OVERRIDE.DISABLED
+    def __getPillboxSiegeNetType(self):
+        if not self.__isVisibleForPassenger:
+            return NET_TYPE_OVERRIDE.DISABLED
+        return NET_TYPE_OVERRIDE.PILLBOX_MODE if self.__state in (_SIEGE_STATE.ENABLED, _SIEGE_STATE.PILLBOX_ENABLED) else NET_TYPE_OVERRIDE.DISABLED
 
     def __getNetVisibleMask(self):
         return CROSSHAIR_CONSTANTS.VISIBLE_NET if self._isHideAmmo() else CROSSHAIR_CONSTANTS.VISIBLE_ALL
 
 
-class ChargeableBurstPlugin(CrosshairUpdatersPlugin, ComponentListener, IMechanicStatesListenerLogic):
+class ChargeableBurstPlugin(VehicleMechanicCrosshairPlugin, IMechanicStatesListenerLogic):
 
-    def __init__(self, *args):
-        super(ChargeableBurstPlugin, self).__init__(*args)
-        self.__charges = 0
+    def __init__(self, parentObj):
+        super(ChargeableBurstPlugin, self).__init__(parentObj)
         self.__isBurstMode = False
+        self.__charges = 0
 
     def start(self):
         super(ChargeableBurstPlugin, self).start()
@@ -2360,7 +2280,7 @@ class ChargeableBurstPlugin(CrosshairUpdatersPlugin, ComponentListener, IMechani
 
     @eventHandler
     def onStatePrepared(self, state):
-        self.__charges = state.charges
+        self.__invalidateState(state)
 
     @eventHandler
     def onStateObservation(self, state):
@@ -2370,9 +2290,10 @@ class ChargeableBurstPlugin(CrosshairUpdatersPlugin, ComponentListener, IMechani
 
     @eventHandler
     def onStateTransition(self, prevState, newState):
-        if self.__isBurstMode != newState.isBurstActive:
-            self.__isBurstMode = newState.isBurstActive
-            self.__invalidateChargeableBurstMode()
+        self.__invalidateState(newState)
+
+    def _clearParentState(self):
+        self.parentObj.as_setChargeableBurstModeS(False)
 
     def _getViewUpdaters(self):
         return [VehicleMechanicStatesUpdater(VehicleMechanic.CHARGEABLE_BURST, self)]
@@ -2386,24 +2307,93 @@ class ChargeableBurstPlugin(CrosshairUpdatersPlugin, ComponentListener, IMechani
     def __onCurrentShellReset(self):
         self.__invalidateChargeableBurstMode()
 
-    def __getCurrentShellsLeft(self):
-        ammoCtrl = self.sessionProvider.shared.ammo
-        quantity, _ = ammoCtrl.getCurrentShells()
-        return quantity
+    def __invalidateState(self, state):
+        self.__charges = state.charges
+        self.__isBurstMode = state.isBurstActive
+        self.__invalidateChargeableBurstMode()
 
     def __invalidateChargeableBurstMode(self):
-        quantity = self.__getCurrentShellsLeft()
+        quantity, _ = self.sessionProvider.shared.ammo.getCurrentShells()
         self.parentObj.as_setChargeableBurstModeS(self.__isBurstMode and quantity)
 
 
-class StationaryReloadingPlugin(CrosshairUpdatersPlugin, ComponentListener, IMechanicStatesListenerLogic):
+class StationaryReloadingPlugin(VehicleMechanicCrosshairPlugin, IMechanicStatesListenerLogic):
 
     @eventHandler
     def onStateObservation(self, state):
         self.__update(state)
+
+    def _clearParentState(self):
+        self.parentObj.as_setIsInControllableReloadS(False)
 
     def _getViewUpdaters(self):
         return [VehicleMechanicStatesUpdater(VehicleMechanic.STATIONARY_RELOAD, self)]
 
     def __update(self, state):
         self.parentObj.as_setIsInControllableReloadS(state.state != STATIONARY_RELOAD_STATE.IDLE)
+
+
+class TemperatureHeatingZonesPlugin(VehicleMechanicCrosshairPlugin, IMechanicStatesListenerLogic):
+
+    @eventHandler
+    def onStatePrepared(self, state):
+        self.__invalidateState(state)
+
+    @eventHandler
+    def onStateTransition(self, _, newState):
+        self.__invalidateState(newState)
+
+    def _clearParentState(self):
+        self.parentObj.as_setDispersionCircleThicknessS(isBold=False)
+
+    def _getViewUpdaters(self):
+        return [VehicleMechanicStatesUpdater(VehicleMechanic.HEATING_ZONES_GUN, self)]
+
+    def __invalidateState(self, state):
+        self.parentObj.as_setDispersionCircleThicknessS(isBold=state.isComfortZone)
+
+
+class VehicleMechanicsPlugin(PluginsCollection, IVehicleTrackedMechanicsView):
+    _VEHICLE_MECHANIC_PLUGINS_MAP = {VehicleMechanic.DUAL_ACCURACY: DualAccuracyGunPlugin,
+     VehicleMechanic.TWIN_GUN: TwinGunPlugin,
+     VehicleMechanic.BATTLE_FURY: BattleFuryPlugin,
+     VehicleMechanic.STANCE_DANCE: StanceDancePlugin,
+     VehicleMechanic.ACCURACY_STACKS: AccuracyStacksPlugin,
+     VehicleMechanic.OVERHEAT_STACKS: OverheatStacksPlugin,
+     VehicleMechanic.CHARGE_SHOT: ChargePlugin,
+     VehicleMechanic.PILLBOX_SIEGE_MODE: ReticlePillboxPlugin,
+     VehicleMechanic.CHARGEABLE_BURST: ChargeableBurstPlugin,
+     VehicleMechanic.STATIONARY_RELOAD: StationaryReloadingPlugin,
+     VehicleMechanic.HEATING_ZONES_GUN: TemperatureHeatingZonesPlugin}
+
+    def __init__(self, parentObj):
+        super(VehicleMechanicsPlugin, self).__init__(parentObj)
+        self.__updatersCollection = ViewUpdatersCollection()
+        self.__trackedMechanics = set()
+
+    def start(self):
+        super(VehicleMechanicsPlugin, self).start()
+        self.__updatersCollection.initialize([VehicleTrackedMechanicsUpdater(self)])
+
+    def stop(self):
+        self.__updatersCollection.finalize()
+        self.__removeTrackedMechanics(self.__trackedMechanics)
+        self.__trackedMechanics.clear()
+        super(VehicleMechanicsPlugin, self).stop()
+
+    def fini(self):
+        self.__updatersCollection.destroy()
+        super(VehicleMechanicsPlugin, self).fini()
+
+    @eventHandler
+    def onTrackedMechanicsUpdate(self, mechanics):
+        newMechanics = set(mechanics)
+        self.__removeTrackedMechanics(self.__trackedMechanics - newMechanics)
+        self.__addTrackedMechanics(newMechanics - self.__trackedMechanics)
+        self.__trackedMechanics = newMechanics
+
+    def __addTrackedMechanics(self, mechanics):
+        self.addPlugins({mechanic.value:self._VEHICLE_MECHANIC_PLUGINS_MAP[mechanic] for mechanic in mechanics if mechanic in self._VEHICLE_MECHANIC_PLUGINS_MAP}, autoStart=True)
+
+    def __removeTrackedMechanics(self, mechanics):
+        self.removePlugins(*[ mechanic.value for mechanic in mechanics ])

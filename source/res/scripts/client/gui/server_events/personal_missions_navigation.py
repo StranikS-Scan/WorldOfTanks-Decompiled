@@ -3,7 +3,7 @@
 from operator import methodcaller
 import WWISE
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
-from gui.server_events.pm_constants import SOUNDS
+from gui.server_events.pm_constants import SOUNDS, IS_PM2_QUEST_ENABLED, DISABLED_PM_OPERATIONS, IS_REGULAR_QUEST_ENABLED
 from helpers import dependency
 from personal_missions import PM_BRANCH
 from skeletons.gui.lobby_context import ILobbyContext
@@ -83,9 +83,9 @@ class PersonalMissionsNavigation(EventSystemEntity):
 
     def _onSettingsChanged(self, diff):
         disabledOp = False
-        if 'disabledPMOperations' in diff and diff['disabledPMOperations']:
-            disabledOp = self.getOperationID() in diff['disabledPMOperations'].keys()
-        if 'isRegularQuestEnabled' in diff and not diff['isRegularQuestEnabled'] or 'isPM2QuestEnabled' in diff and not diff['isPM2QuestEnabled'] or disabledOp:
+        if DISABLED_PM_OPERATIONS in diff and diff[DISABLED_PM_OPERATIONS]:
+            disabledOp = self.getOperationID() in diff[DISABLED_PM_OPERATIONS].keys()
+        if IS_REGULAR_QUEST_ENABLED in diff and not diff[IS_REGULAR_QUEST_ENABLED] or IS_PM2_QUEST_ENABLED in diff and not diff[IS_PM2_QUEST_ENABLED] or disabledOp:
             from gui.shared.event_dispatcher import showHangar
             showHangar()
 

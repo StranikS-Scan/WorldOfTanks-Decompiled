@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/premacc/premacc_helpers.py
 import logging
-import WWISE
 from helpers import time_utils
 _logger = logging.getLogger(__name__)
 
@@ -45,22 +44,3 @@ def getOpenTimeHelper(config, data):
 
 def getDeltaTimeHelper(config, data):
     return time_utils.getTimeDeltaFromNow(getOpenTimeHelper(config, data))
-
-
-class SoundViewMixin(object):
-    PREM_VIEW_STATE_TEMPL = 'STATE_hangar_filtered'
-    PREM_VIEW_STATE_ENTER = '{}_on'.format(PREM_VIEW_STATE_TEMPL)
-    PREM_VIEW_STATE_EXIT = '{}_off'.format(PREM_VIEW_STATE_TEMPL)
-    __globSoundEntryCount = 0
-
-    @classmethod
-    def _addSoundEvent(cls):
-        WWISE.WW_setState(cls.PREM_VIEW_STATE_TEMPL, cls.PREM_VIEW_STATE_ENTER)
-        SoundViewMixin.__globSoundEntryCount += 1
-
-    @classmethod
-    def _removeSoundEvent(cls):
-        if SoundViewMixin.__globSoundEntryCount > 0:
-            SoundViewMixin.__globSoundEntryCount -= 1
-        if SoundViewMixin.__globSoundEntryCount == 0:
-            WWISE.WW_setState(cls.PREM_VIEW_STATE_TEMPL, cls.PREM_VIEW_STATE_EXIT)

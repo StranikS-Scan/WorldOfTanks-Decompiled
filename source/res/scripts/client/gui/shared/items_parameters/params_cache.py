@@ -6,10 +6,11 @@ import sys
 from collections import namedtuple
 from functools import partial
 import typing
+from future.utils import iteritems, itervalues
 import nations
 import persistent_data_cache_common as pdc
 from constants import BonusTypes
-from gui.shared.items_parameters import calcGunParams, calcShellParams, getEquipmentParameters, isAutoReloadGun, isAutoShootGun, isDualGun, isDualAccuracy, isTwinGun
+from gui.shared.items_parameters import calcGunParams, calcShellParams, getEquipmentParameters, isAutoReloadGun, isAutoShootGun, isDualGun, isDualAccuracy, isTwinGun, isUnlimitedClipGun
 from gui.shared.items_parameters import xml_reader
 from gui.shared.utils.decorators import debugTime
 from items import vehicles, ITEM_TYPES, EQUIPMENT_TYPES
@@ -61,7 +62,7 @@ def isTrackWithinTrackChassis(vChassis):
     return vChassis.isTrackWithinTrack
 
 
-class PrecachedGun(namedtuple('PrecachedGun', ('clipVehicles', 'autoReloadVehicles', 'autoShootVehicles', 'dualGunVehicles', 'twinGunVehicles', 'dualAccuracyVehicles', 'params', 'turretsByVehicles'))):
+class PrecachedGun(namedtuple('PrecachedGun', ('clipVehicles', 'autoReloadVehicles', 'autoShootVehicles', 'unlimitedAutoShootVehicles', 'dualGunVehicles', 'twinGunVehicles', 'dualAccuracyVehicles', 'params', 'turretsByVehicles'))):
 
     @property
     def clipVehiclesNames(self):
@@ -142,12 +143,12 @@ class VehicleDescrsCache(object):
 
     def load(self):
         vehilesList = vehicles.g_list.getList
-        for nationID in nations.INDICES.itervalues():
-            self._local[nationID] = [ vehicles.VehicleDescr(typeID=(nationID, cd)) for cd in vehilesList(nationID).iterkeys() ]
+        for nationID in itervalues(nations.INDICES):
+            self._local[nationID] = [ vehicles.VehicleDescr(typeID=(nationID, cd)) for cd in vehilesList(nationID) ]
 
     def generator(self, nationID=None):
         if nationID is None:
-            nationIDs = nations.INDICES.values()
+            nationIDs = itervalues(nations.INDICES)
         else:
             nationIDs = (nationID,)
         for nextID in nationIDs:
@@ -185,7 +186,7 @@ def _readCache(vehiclesCache):
 
 def _precacheEquipments(data):
     data.cache.setdefault(nations.NONE_INDEX, {})[ITEM_TYPES.equipment] = {}
-    for eqpDescr in vehicles.g_cache.equipments().itervalues():
+    for eqpDescr in itervalues(vehicles.g_cache.equipments()):
         equipmentNations = set()
         for vDescr in data.vehiclesCache.generator():
             if not eqpDescr.checkCompatibilityWithVehicle(vDescr)[0]:
@@ -198,7 +199,7 @@ def _precacheEquipments(data):
 
 def _precacheOptionalDevices(data):
     data.cache.setdefault(nations.NONE_INDEX, {})[ITEM_TYPES.optionalDevice] = {}
-    for deviceDescr in vehicles.g_cache.optionalDevices().itervalues():
+    for deviceDescr in itervalues(vehicles.g_cache.optionalDevices()):
         wmin, wmax = sys.maxint, -1
         deviceNations = set()
         for vDescr in data.vehiclesCache.generator():
@@ -217,14 +218,15 @@ def _precacheGuns(data):
     descriptors = []
     curVehicleTurretsCDs = []
     getter = vehicles.g_cache.guns
-    for nationIdx in nations.INDICES.itervalues():
+    for nationIdx in itervalues(nations.INDICES):
         data.cache.setdefault(nationIdx, {})[ITEM_TYPES.vehicleGun] = {}
-        for g in getter(nationIdx).itervalues():
+        for g in itervalues(getter(nationIdx)):
             del descriptors[:]
             turretsIntCDs = {}
             clipVehiclesList = set()
             autoReloadVehsList = set()
             autoShootVehsList = set()
+            unlimAutoShootVehsList = set()
             dualGunVehsList = set()
             dualAccuracyVehsList = set()
             twinGunVehsList = set()
@@ -244,6 +246,8 @@ def _precacheGuns(data):
                                     autoReloadVehsList.add(vehCD)
                                 if isAutoShootGun(gun):
                                     autoShootVehsList.add(vehCD)
+                                    if isUnlimitedClipGun(gun):
+                                        unlimAutoShootVehsList.add(vehCD)
                                 if isDualGun(gun):
                                     dualGunVehsList.add(vehCD)
                                 if isDualAccuracy(gun):
@@ -254,7 +258,7 @@ def _precacheGuns(data):
                 if curVehicleTurretsCDs:
                     turretsIntCDs[vDescr.type.compactDescr] = tuple(curVehicleTurretsCDs)
 
-            data.cache[nationIdx][ITEM_TYPES.vehicleGun][g.compactDescr] = PrecachedGun(clipVehicles=clipVehiclesList if clipVehiclesList else None, autoReloadVehicles=frozenset(autoReloadVehsList) if autoReloadVehsList else None, autoShootVehicles=frozenset(autoShootVehsList) if autoShootVehsList else None, dualGunVehicles=frozenset(dualGunVehsList) if dualGunVehsList else None, dualAccuracyVehicles=frozenset(dualAccuracyVehsList) if dualAccuracyVehsList else None, twinGunVehicles=frozenset(twinGunVehsList) if twinGunVehsList else None, params=calcGunParams(g, descriptors), turretsByVehicles=turretsIntCDs)
+            data.cache[nationIdx][ITEM_TYPES.vehicleGun][g.compactDescr] = PrecachedGun(clipVehicles=clipVehiclesList if clipVehiclesList else None, autoReloadVehicles=frozenset(autoReloadVehsList) if autoReloadVehsList else None, autoShootVehicles=frozenset(autoShootVehsList) if autoShootVehsList else None, unlimitedAutoShootVehicles=frozenset(unlimAutoShootVehsList) if unlimAutoShootVehsList else None, dualGunVehicles=frozenset(dualGunVehsList) if dualGunVehsList else None, dualAccuracyVehicles=frozenset(dualAccuracyVehsList) if dualAccuracyVehsList else None, twinGunVehicles=frozenset(twinGunVehsList) if twinGunVehsList else None, params=calcGunParams(g, descriptors), turretsByVehicles=turretsIntCDs)
 
     return
 
@@ -264,12 +268,12 @@ def _precacheShells(data):
     gunsCDs = []
     gunsGetter = vehicles.g_cache.guns
     shellsGetter = vehicles.g_cache.shells
-    for nationIdx in nations.INDICES.values():
+    for nationIdx in itervalues(nations.INDICES):
         data.cache.setdefault(nationIdx, {})[ITEM_TYPES.shell] = {}
-        for sDescr in shellsGetter(nationIdx).itervalues():
+        for sDescr in itervalues(shellsGetter(nationIdx)):
             del descriptors[:]
             del gunsCDs[:]
-            for gDescr in gunsGetter(nationIdx).itervalues():
+            for gDescr in itervalues(gunsGetter(nationIdx)):
                 for shot in gDescr.shots:
                     if shot.shell.id[1] == sDescr.id[1]:
                         if gDescr.compactDescr not in gunsCDs:
@@ -283,7 +287,7 @@ def _precacheChassis(data):
     getter = vehicles.g_cache.chassis
     chassisItemType = ITEM_TYPES.vehicleChassis
     processedItems = set()
-    for nationIdx in nations.INDICES.itervalues():
+    for nationIdx in itervalues(nations.INDICES):
         data.cache.setdefault(nationIdx, {})[chassisItemType] = {}
         cachedChassisByNation = data.cache[nationIdx][chassisItemType]
         for vDescr in data.vehiclesCache.generator(nationIdx):
@@ -295,7 +299,7 @@ def _precacheChassis(data):
                     chassisPhysics = vDescr.type.xphysics['chassis'][vChs.name]
                     data.wheeledChassisParams[chassisCD] = chassisPhysics['axleSteeringLockAngles']
 
-        for chs in getter(nationIdx).itervalues():
+        for chs in itervalues(getter(nationIdx)):
             if chs.compactDescr not in processedItems:
                 cachedChassisByNation[chs.compactDescr] = _PrecachedChassisTypes.DEFAULT
 
@@ -304,7 +308,7 @@ def _precacheEngines(data):
     getter = vehicles.g_cache.engines
     engineItemType = ITEM_TYPES.vehicleEngine
     processedItems = set()
-    for nationIdx in nations.INDICES.itervalues():
+    for nationIdx in itervalues(nations.INDICES):
         data.cache.setdefault(nationIdx, {})[engineItemType] = {}
         cachedEngineByNation = data.cache[nationIdx][engineItemType]
         for vDescr in data.vehiclesCache.generator(nationIdx):
@@ -318,7 +322,7 @@ def _precacheEngines(data):
                     cachedEngineByNation[engineCD] = _PrecachedEngineTypes.DEFAULT
                 processedItems.add(engineCD)
 
-        for eng in getter(nationIdx).itervalues():
+        for eng in itervalues(getter(nationIdx)):
             if eng.compactDescr not in processedItems:
                 cachedEngineByNation[eng.compactDescr] = _PrecachedEngineTypes.DEFAULT
 
@@ -327,13 +331,13 @@ def _getVehiclesWithoutCamouflage(data):
     deniedVehicles = {}
     allowedVehicles = set()
     customization = vehicles.g_cache.customization
-    for nationID in nations.INDICES.itervalues():
+    for nationID in itervalues(nations.INDICES):
         deniedVehicles.clear()
         allowedVehicles.clear()
         restrictedCamouflages = 0
         camouflages = customization(nationID)['camouflages']
         totalCount = len(camouflages)
-        for camouflage in camouflages.itervalues():
+        for camouflage in itervalues(camouflages):
             currentAllowed = camouflage.get('allow', ())
             for vehCD in camouflage.get('deny', ()):
                 deniedVehicles[vehCD] = deniedVehicles.get(vehCD, 0) + 1
@@ -342,7 +346,7 @@ def _getVehiclesWithoutCamouflage(data):
             if currentAllowed:
                 restrictedCamouflages += 1
 
-        for vehCD, count in deniedVehicles.iteritems():
+        for vehCD, count in iteritems(deniedVehicles):
             if vehCD not in allowedVehicles and count + restrictedCamouflages >= totalCount:
                 data.noCamouflageVehicles.append(vehCD)
 
@@ -409,7 +413,7 @@ class _ParamsCache(object):
         itemTypeIdx, nationIdx, _ = vehicles.parseIntCompactDescr(typeCompactDescr)
         getter = vehicles.g_cache.vehicle
         result = []
-        for itemID in vehicles.g_list.getList(nationIdx).iterkeys():
+        for itemID in vehicles.g_list.getList(nationIdx):
             vehicleType = getter(nationIdx, itemID)
             components = _getVehicleSuitablesByType(vehicleType, itemTypeIdx)
             filtered = [ item for item in components if item.compactDescr == typeCompactDescr ]
@@ -433,10 +437,10 @@ class _ParamsCache(object):
                 for subAction in action.modifications:
                     compatibles.append((subAction.getTechName(), BonusTypes.PAIR_MODIFICATION))
 
-        for baseMod in itertools.chain(receivedBaseMod.itervalues(), lockedBaseMod.itervalues()):
+        for baseMod in itertools.chain(itervalues(receivedBaseMod), itervalues(lockedBaseMod)):
             compatibles.append((baseMod, BonusTypes.BASE_MODIFICATION))
 
-        for item in itertools.chain(vehicles.g_cache.equipments().itervalues(), vehicles.g_cache.optionalDevices().itervalues()):
+        for item in itertools.chain(itervalues(vehicles.g_cache.equipments()), itervalues(vehicles.g_cache.optionalDevices())):
             if item.checkCompatibilityWithVehicle(vehicle.descriptor)[0]:
                 itemTypeName = item.itemTypeName
                 if itemTypeName == 'equipment':

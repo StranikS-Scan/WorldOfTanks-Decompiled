@@ -3,11 +3,12 @@
 import typing
 if typing.TYPE_CHECKING:
     from typing import Optional
+    from gui.shared.gui_items.dossier import AccountDossier
+    from gui.shared.gui_items.vehicle_mechanics.module_mechanic_item import ModuleMechanicItem
+    from gui.shared.gui_items.vehicle_mechanics.vehicle_mechanic_item import VehicleMechanicItem
     from gui.veh_post_progression.models.progression import PostProgressionItem
     from items.vehicles import VehicleType
     from post_progression_common import VehicleState
-    from gui.shared.gui_items.dossier import AccountDossier
-    from gui.shared.gui_items.vehicle_mechanic_item import VehicleMechanicItem
     from dossiers2.common.DossierDescr import DossierDescr
     from vehicles.mechanics.mechanic_constants import VehicleMechanic
 
@@ -80,6 +81,9 @@ class IGuiItemsFactory(object):
         raise NotImplementedError
 
     def createVehPostProgression(self, vehIntCD, state, vehType):
+        raise NotImplementedError
+
+    def createModuleMechanicItem(self, mechanic, moduleType):
         raise NotImplementedError
 
     def createVehicleMechanicItem(self, mechanic, vehIntCD):

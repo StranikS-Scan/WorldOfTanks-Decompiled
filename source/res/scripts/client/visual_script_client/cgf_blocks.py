@@ -4,7 +4,7 @@ import logging
 import typing
 import weakref
 import BigWorld
-from constants import IS_VS_EDITOR, ROCKET_ACCELERATION_STATE
+from constants import IS_VS_EDITOR, ROCKET_ACCELERATION_STATE, UNKNOWN_VEHICLE_ID
 from debug_utils import LOG_WARNING
 from visual_script.block import Block
 from visual_script.slot_types import SLOT_TYPE
@@ -12,7 +12,7 @@ from visual_script.misc import ASPECT, errorVScript
 from visual_script.dependency import dependencyImporter
 from visual_script.contexts.cgf_context import GameObjectWrapper
 from visual_script.cgf_blocks import CGFMeta
-Vehicle, CGF, tankStructure, RAC, SimulatedVehicle, cgf_helpers, battle_constants = dependencyImporter('Vehicle', 'CGF', 'vehicle_systems.tankStructure', 'cgf_components.rocket_acceleration_component', 'SimulatedVehicle', 'cgf_common.cgf_helpers', 'gui.battle_control.battle_constants')
+Vehicle, CGF, tankStructure, RAC, SimulatedVehicle, cgf_helpers = dependencyImporter('Vehicle', 'CGF', 'vehicle_systems.tankStructure', 'cgf_components.rocket_acceleration_component', 'SimulatedVehicle', 'cgf_common.cgf_helpers')
 if not IS_VS_EDITOR:
     from gui.battle_control.controllers.vehicle_passenger import hasVehiclePassengerCtrl, VehiclePassengerInfoWatcher
 else:
@@ -177,7 +177,7 @@ class RocketAcceleratorSettings(Block, CGFClientMeta):
 
 def _extractRACComponent(gameObjectLink):
     go = gameObjectLink.getValue()
-    if not go.isValid:
+    if not go.isValid():
         return (None, None, 'Input game object is not valid')
     else:
         provider = go.findComponentByType(RAC.RocketAccelerationController)
@@ -188,7 +188,7 @@ class OnVehiclePassengerInfo(Block, CGFClientMeta, VehiclePassengerInfoWatcher):
 
     def __init__(self, *args, **kwargs):
         super(OnVehiclePassengerInfo, self).__init__(*args, **kwargs)
-        self._vehicleID = battle_constants.UNKNOWN_VEHICLE_ID
+        self._vehicleID = UNKNOWN_VEHICLE_ID
         self._subscribe = self._makeEventInputSlot('subscribe', self.__subscribe)
         self._unsubscribe = self._makeEventInputSlot('unsubscribe', self.__unsubscribe)
         self._object = self._makeDataInputSlot('vehicleObject', SLOT_TYPE.GAME_OBJECT)
@@ -217,7 +217,7 @@ class OnVehiclePassengerInfo(Block, CGFClientMeta, VehiclePassengerInfoWatcher):
         self._subscribeOut.call()
 
     def __unsubscribe(self):
-        self._vehicleID = battle_constants.UNKNOWN_VEHICLE_ID
+        self._vehicleID = UNKNOWN_VEHICLE_ID
         self.stopVehiclePassengerListening(self.__onVehiclePassengerUpdate, self.__onVehiclePassengerUpdating)
         self._unsubscribeOut.call()
 

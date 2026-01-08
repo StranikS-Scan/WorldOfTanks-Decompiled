@@ -8,3 +8,5 @@ _ModelClassType = typing.TypeVar('_ModelClassType', bound=typing.Type[Model])
 SchemaModelClassesType = typing.Union[_ModelClassType, typing.Type[typing.Dict]]
 ValidatorType = typing.Union[Validator, typing.Callable[[typing.Any], typing.Any]]
 ValidatorsType = typing.Optional[typing.Union[ValidatorType, typing.List[ValidatorType]]]
+TFilterParams = typing.Optional[typing.Any]
+TFilter = typing.Callable[[TFilterParams], bool]

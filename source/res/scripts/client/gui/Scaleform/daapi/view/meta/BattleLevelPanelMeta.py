@@ -7,8 +7,8 @@ class BattleLevelPanelMeta(BaseDAAPIComponent):
     def onPlaySound(self, soundType):
         self._printOverrideError('onPlaySound')
 
-    def as_setLevelS(self, currentLevel, nextLevel, experience):
-        return self.flashObject.as_setLevel(currentLevel, nextLevel, experience) if self._isDAAPIInited() else None
+    def as_setLevelS(self, currentLevel, nextLevel, currentExperience, targetExperience):
+        return self.flashObject.as_setLevel(currentLevel, nextLevel, currentExperience, targetExperience) if self._isDAAPIInited() else None
 
     def as_setExperienceS(self, currentExperience, targetExperience, expDiff, percent, playSound):
         return self.flashObject.as_setExperience(currentExperience, targetExperience, expDiff, percent, playSound) if self._isDAAPIInited() else None

@@ -542,6 +542,19 @@ class Inventory(object):
             self.__account._doCmdStr(AccountCommands.CMD_OBTAIN_VEHICLE, name, proxy)
             return
 
+    def addCustomizationItem(self, custType, itemID, amount=1, vehTypeCD=0, callback=None):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            self.__account._doCmdInt3Str(AccountCommands.CMD_ADD_CUSTOMIZATION_ITEM, itemID, amount, vehTypeCD, custType, proxy)
+            return
+
     def addGoodie(self, goodieID, amount, callback=None):
         self.__account._doCmdInt2(AccountCommands.CMD_ADD_GOODIE, goodieID, amount, callback)
 

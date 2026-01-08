@@ -133,7 +133,7 @@ class StorageLocalCache(FileLocalCache):
     __slots__ = ('_cache',)
 
     def __init__(self, tags):
-        super(StorageLocalCache, self).__init__(_MESSENGER_CACHE_DIR, tags, io=CryptIO(PickleIO()), async=True)
+        super(StorageLocalCache, self).__init__(_MESSENGER_CACHE_DIR, tags, io=CryptIO(PickleIO()), isAsync=True)
         self._cache = {}
 
     def clear(self):

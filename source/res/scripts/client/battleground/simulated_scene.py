@@ -366,7 +366,7 @@ class SimulatedScene(object):
             if playerVehicle.isStarted:
                 self.__onSimulatedSceneEnded()
             else:
-                playerVehicle.onAppearanceReady += self.__onSimulatedSceneEnded
+                playerVehicle.events.onAppearanceReady += self.__onSimulatedSceneEnded
 
     def __pauseSequences(self, isPaused):
         if self.__deathSceneObject is None:
@@ -402,7 +402,7 @@ class SimulatedScene(object):
         avatar = BigWorld.player()
         playerVehicle = BigWorld.entities.get(avatar.playerVehicleID)
         if playerVehicle:
-            playerVehicle.onAppearanceReady -= self.__onSimulatedSceneEnded
+            playerVehicle.events.onAppearanceReady -= self.__onSimulatedSceneEnded
         self.onSimulatedSceneHasEnded()
 
     def __isAttackerSPG(self):

@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/pub/view_impl.py
 import logging
-import typing
 import json
+import typing
 from frameworks.wulf import View, ViewEvent, ViewModel, Window, WindowLayer, WindowStatus
 from helpers import dependency
 from helpers.events_handler import EventsHandler
+from py2to3 import patched_typing
 from skeletons.gui.impl import IGuiLoader
 from soft_exception import SoftException
 from ..gen.resources import R
@@ -19,7 +20,7 @@ _BACKPORT_POPOVER_DIRECTION_OVERRIDE = {1: 3,
  3: 0,
  0: 1}
 
-class ViewImpl(View, EventsHandler, typing.Generic[TViewModel]):
+class ViewImpl(View, EventsHandler, patched_typing.Generic[TViewModel]):
     __slots__ = ()
     gui = dependency.descriptor(IGuiLoader)
 

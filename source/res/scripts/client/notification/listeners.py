@@ -9,7 +9,6 @@ from abc import ABCMeta
 from collections import defaultdict
 from functools import partial
 from typing import TYPE_CHECKING
-import WWISE
 from account_helpers.AccountSettings import INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN, IS_BATTLE_PASS_START_NOTIFICATION_SEEN, LOOT_BOXES_WAS_FINISHED, LOOT_BOXES_WAS_STARTED, PROGRESSIVE_REWARD_VISITED, RECRUITS_NOTIFICATIONS, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, VEH_SKILL_TREE_POPUP_SHOWN, VEH_SKILL_TREE_RECORDED_NOFITICATION_NODE, BattleMatters
 from account_helpers.settings_core.settings_constants import SeniorityAwardsStorageKeys
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -19,6 +18,7 @@ from gui.Scaleform.framework.entities.View import ViewKey
 from gui.impl.lobby.gf_notifications import GFNotificationTemplates
 from gui.impl.lobby.gf_notifications.cache import getCache
 from gui.impl.lobby.vehicle_hub.sub_presenters.veh_skill_tree.utils import getCheapestAvailablePerk
+from gui.server_events.pm_constants import IS_PM3_QUEST_ENABLED, DISABLED_PM_OPERATIONS, DISABLED_PM_MISSIONS, IS_PM2_QUEST_ENABLED, IS_REGULAR_QUEST_ENABLED
 from helpers.events_handler import EventsHandler
 from helpers.time_utils import getTimestampByStrDate
 from PlayerEvents import g_playerEvents
@@ -1520,13 +1520,12 @@ class VehiclePostProgressionUnlockListener(_NotificationListener):
 
 
 class SeniorityAwardsTokenListener(BaseReminderListener):
-    __slots__ = ('__uiCoinsNotificationLogger',)
     __itemsCache = dependency.descriptor(IItemsCache)
     __seniorityAwardCtrl = dependency.descriptor(ISeniorityAwardsController)
     __TYPE = NOTIFICATION_TYPE.SENIORITY_AWARDS_TOKENS
     __ENTITY_ID = 0
     __DAYS_BETWEEN_NOTIFICATIONS = 30
-    __TEMPLATE = 'seniorityAwardsTokens'
+    __TEMPLATE = GFNotificationTemplates.SENIORITY_AWARD_TOKENS_NOTIFICATION
 
     def __init__(self):
         super(SeniorityAwardsTokenListener, self).__init__(self.__TYPE, self.__ENTITY_ID)
@@ -1550,18 +1549,15 @@ class SeniorityAwardsTokenListener(BaseReminderListener):
         count = self.__seniorityAwardCtrl.getSACoin()
         isClockOn = timestamp - self.__seniorityAwardCtrl.clockOnNotification > 0
         timeLeft = self.__seniorityAwardCtrl.timeLeft
-        if isClockOn and timeLeft > 0:
-            rTimeLeft = R.strings.seniority_awards.notifications.tokens.timer()
-            timeLeftStr = time_formatters.getTillTimeByResource(timeLeft, R.strings.seniority_awards.notifications.tokens.timeLeft, removeLeadingZeros=True)
-            finishTime = text_styles.tutorial(backport.text(rTimeLeft, timeLeft=timeLeftStr))
-        else:
-            finishTime = ''
-        data = {'count': str(count),
-         'finishTime': finishTime}
-        return NotificationData(self._getNotificationId(), data, priority, None)
+        if not isClockOn or timeLeft <= 0:
+            timeLeft = 0
+        gfDataID = str(uuid.uuid4())
+        getCache().setPayload(gfDataID, {'count': str(count),
+         'timeLeft': timeLeft})
+        return NotificationData(self._getNotificationId(), {'gfDataID': gfDataID}, priority, None)
 
     def _createDecorator(self, data):
-        return SeniorityAwardsDecorator(data.entityID, self._getNotificationType(), data.savedData, self._model(), self.__TEMPLATE, data.priorityLevel)
+        return SeniorityAwardsDecorator(data.entityID, notificationType=self._getNotificationType(), savedData=data.savedData, model=self._model(), template=self.__TEMPLATE, priority=data.priorityLevel)
 
     def __onBalanceUpdate(self, *_):
         self.__tryNotify()
@@ -1590,8 +1586,6 @@ class SeniorityAwardsTokenListener(BaseReminderListener):
                 priority = NotificationPriorityLevel.LOW
                 parentScreen = SeniorityAwardsLogSpaces.NOTIFICATION_CENTER
             if self._notify(priority=priority):
-                if priority != NotificationPriorityLevel.LOW:
-                    WWISE.WW_eventGlobal(backport.sound(R.sounds.wdr_hangar_notification()))
                 self.__updateLastShownTimestamp()
                 self.__uiCoinsNotificationLogger.handleDisplayedAction(parentScreen)
             return
@@ -1602,20 +1596,19 @@ class SeniorityAwardsTokenListener(BaseReminderListener):
         AccountSettings.setNotifications(SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, currentTimestamp)
 
 
-class SeniorityAwardsQuestListener(_NotificationListener):
-    __slots__ = ('__uiRewardNotificationLogger',)
+class SeniorityAwardsManualClaimListener(_NotificationListener):
     __TYPE = NOTIFICATION_TYPE.SENIORITY_AWARDS_QUEST
-    __TEMPLATE = 'seniorityAwardsQuest22'
+    __TEMPLATE = GFNotificationTemplates.SENIORITY_AWARD_MANUAL_CLAIM_NOTIFICATION
     __ENTITY_ID = 0
     __seniorityAwardCtrl = dependency.descriptor(ISeniorityAwardsController)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def __init__(self):
-        super(SeniorityAwardsQuestListener, self).__init__()
+        super(SeniorityAwardsManualClaimListener, self).__init__()
         self.__uiRewardNotificationLogger = RewardNotificationLogger()
 
     def start(self, model):
-        result = super(SeniorityAwardsQuestListener, self).start(model)
+        result = super(SeniorityAwardsManualClaimListener, self).start(model)
         self.__seniorityAwardCtrl.onUpdated += self.__tryNotify
         self.__limitedUIController.startObserve(LUI_RULES.WDRNewbieReward, self.__NotifyHandler)
         self.__tryNotify()
@@ -1624,7 +1617,7 @@ class SeniorityAwardsQuestListener(_NotificationListener):
     def stop(self):
         self.__seniorityAwardCtrl.onUpdated -= self.__tryNotify
         self.__limitedUIController.stopObserve(LUI_RULES.WDRNewbieReward, self.__NotifyHandler)
-        super(SeniorityAwardsQuestListener, self).stop()
+        super(SeniorityAwardsManualClaimListener, self).stop()
 
     def __NotifyHandler(self, *_):
         self.__tryNotify()
@@ -1633,26 +1626,23 @@ class SeniorityAwardsQuestListener(_NotificationListener):
         model = self._model()
         if not model:
             return
-        else:
-            if self.__seniorityAwardCtrl.isNeedToShowRewardNotification:
-                limitedUIRuleCompleted = self.__limitedUIController.isRuleCompleted(LUI_RULES.WDRNewbieReward)
-                showRewardNotification = self.__seniorityAwardCtrl.showRewardHangarNotification
-                isHangarNotification = showRewardNotification and limitedUIRuleCompleted
-                priority = NotificationPriorityLevel.MEDIUM if isHangarNotification else NotificationPriorityLevel.LOW
-                prevNotification = model.getNotification(self.__TYPE, self.__ENTITY_ID)
-                if prevNotification:
-                    if prevNotification.getPriorityLevel() == priority:
-                        return
-                    model.removeNotification(self.__TYPE, self.__ENTITY_ID)
-                model.addNotification(SeniorityAwardsDecorator(self.__ENTITY_ID, self.__TYPE, None, model, self.__TEMPLATE, priority, useCounterOnce=False, isNotify=self.__seniorityAwardCtrl.isNeedToShowNotificationBullet))
-                parentScreen = SeniorityAwardsLogSpaces.NOTIFICATION_CENTER
-                if priority != NotificationPriorityLevel.LOW:
-                    parentScreen = SeniorityAwardsLogSpaces.HANGAR
-                    WWISE.WW_eventGlobal(backport.sound(R.sounds.wdr_hangar_notification()))
-                self.__uiRewardNotificationLogger.handleDisplayedAction(parentScreen, limitedUIRuleCompleted, self.__seniorityAwardCtrl.isNeedToShowNotificationBullet)
-            else:
+        if self.__seniorityAwardCtrl.isNeedToShowRewardNotification:
+            limitedUIRuleCompleted = self.__limitedUIController.isRuleCompleted(LUI_RULES.WDRNewbieReward)
+            showRewardNotification = self.__seniorityAwardCtrl.showRewardHangarNotification
+            isHangarNotification = showRewardNotification and limitedUIRuleCompleted
+            priority = NotificationPriorityLevel.MEDIUM if isHangarNotification else NotificationPriorityLevel.LOW
+            prevNotification = model.getNotification(self.__TYPE, self.__ENTITY_ID)
+            if prevNotification:
+                if prevNotification.getPriorityLevel() == priority:
+                    return
                 model.removeNotification(self.__TYPE, self.__ENTITY_ID)
-            return
+            model.addNotification(SeniorityAwardsDecorator(self.__ENTITY_ID, self.__TYPE, {'gfDataID': str(uuid.uuid4())}, model, self.__TEMPLATE, priority, useCounterOnce=False, isNotify=self.__seniorityAwardCtrl.isNeedToShowNotificationBullet))
+            parentScreen = SeniorityAwardsLogSpaces.NOTIFICATION_CENTER
+            if priority != NotificationPriorityLevel.LOW:
+                parentScreen = SeniorityAwardsLogSpaces.HANGAR
+            self.__uiRewardNotificationLogger.handleDisplayedAction(parentScreen, limitedUIRuleCompleted, self.__seniorityAwardCtrl.isNeedToShowNotificationBullet)
+        else:
+            model.removeNotification(self.__TYPE, self.__ENTITY_ID)
 
 
 class SeniorityAwardsStateListener(_NotificationListener):
@@ -1690,12 +1680,11 @@ class SeniorityAwardsStateListener(_NotificationListener):
 
 
 class SeniorityAwardsVehicleSelectionListener(BaseReminderListener):
-    __slots__ = ('__uiVehicleSelectionNotificationLogger',)
     __seniorityAwardCtrl = dependency.descriptor(ISeniorityAwardsController)
     __TYPE = NOTIFICATION_TYPE.SENIORITY_AWARDS_VEHICLE_SELECTION
     __ENTITY_ID = 0
     __PRIORITY = NotificationPriorityLevel.LOW
-    __TEMPLATE = 'seniorityAwardsVehicleSelection'
+    __TEMPLATE = GFNotificationTemplates.SENIORITY_AWARD_VEHICLE_SELECTION_NOTIFICATION
 
     def __init__(self):
         super(SeniorityAwardsVehicleSelectionListener, self).__init__(self.__TYPE, self.__ENTITY_ID)
@@ -1717,11 +1706,12 @@ class SeniorityAwardsVehicleSelectionListener(BaseReminderListener):
     def _createNotificationData(self, priority, **ctx):
         vehiclesCanSelect = self.__seniorityAwardCtrl.getVehiclesForSelectionCount
         allVehiclesForSelection = len(self.__seniorityAwardCtrl.getAvailableVehicleSelectionRewards())
-        data = {'count': str(min(vehiclesCanSelect, allVehiclesForSelection))}
-        return NotificationData(self._getNotificationId(), data, priority, None)
+        gfDataID = str(uuid.uuid4())
+        getCache().setPayload(gfDataID, {'count': str(min(vehiclesCanSelect, allVehiclesForSelection))})
+        return NotificationData(entityID=self._getNotificationId(), savedData={'gfDataID': gfDataID}, priorityLevel=priority, entity=None)
 
     def _createDecorator(self, data):
-        return SeniorityAwardsDecorator(data.entityID, self._getNotificationType(), data.savedData, self._model(), self.__TEMPLATE, data.priorityLevel)
+        return SeniorityAwardsDecorator(data.entityID, notificationType=self._getNotificationType(), savedData=data.savedData, model=self._model(), template=self.__TEMPLATE, priority=data.priorityLevel)
 
     def __onUpdated(self):
         self.__tryNotify()
@@ -2324,13 +2314,13 @@ class PM3NotificationListener(_NotificationListener):
         self.__currentDisabledMissions = set(self.__lobbyContext.getServerSettings().getDisabledPersonalMissions())
 
     def __onServerSettingsChange(self, diff):
-        if 'isPM3QuestEnabled' in diff and 'isPM2QuestEnabled' in diff and 'isRegularQuestEnabled' in diff:
+        if IS_PM3_QUEST_ENABLED in diff and IS_PM2_QUEST_ENABLED in diff and IS_REGULAR_QUEST_ENABLED in diff:
             self.__allCampaignsSwitcherNotify(diff)
         else:
             self.__campaignSwitcherNotify(diff)
-        if diff.get('disabledPMOperations') is not None:
+        if diff.get(DISABLED_PM_OPERATIONS) is not None:
             self.__operationSwitcherNotify(diff)
-        if diff.get('disabledPersonalMissions') is not None:
+        if diff.get(DISABLED_PM_MISSIONS) is not None:
             self.__missionSwitcherNotify(diff)
         return
 
@@ -2339,9 +2329,9 @@ class PM3NotificationListener(_NotificationListener):
         SystemMessages.pushMessage(text=text, type=messageType, priority=priority, messageData={'title': title})
 
     def __allCampaignsSwitcherNotify(self, diff):
-        if all((diff['isPM3QuestEnabled'], diff['isPM2QuestEnabled'], diff['isRegularQuestEnabled'])):
+        if all((diff[IS_PM3_QUEST_ENABLED], diff[IS_PM2_QUEST_ENABLED], diff[IS_REGULAR_QUEST_ENABLED])):
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.PERSONALMISSION_SWITCHERNOTIFICATION_ALLCAMPAIGNSON, type=SystemMessages.SM_TYPE.Information, priority=NotificationPriorityLevel.HIGH)
-        if not any((diff['isPM3QuestEnabled'], diff['isPM2QuestEnabled'], diff['isRegularQuestEnabled'])):
+        if not any((diff[IS_PM3_QUEST_ENABLED], diff[IS_PM2_QUEST_ENABLED], diff[IS_REGULAR_QUEST_ENABLED])):
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.PERSONALMISSION_SWITCHERNOTIFICATION_ALLCAMPAIGNSOFF, type=SystemMessages.SM_TYPE.ErrorSimple, priority=NotificationPriorityLevel.HIGH)
 
     def __campaignSwitcherNotify(self, diff):
@@ -2385,7 +2375,7 @@ class PM3NotificationListener(_NotificationListener):
         return
 
     def __missionSwitcherNotify(self, diff):
-        newDisabledMissions = set(diff.get('disabledPersonalMissions', {}))
+        newDisabledMissions = set(diff.get(DISABLED_PM_MISSIONS, {}))
         newDisabledMissionsToNotify = newDisabledMissions - self.__currentDisabledMissions
         newEnabledMissions = self.__currentDisabledMissions - newDisabledMissions
         allMissions = self.__eventsCache.getPersonalMissions().getAllQuests(PM_BRANCH.ALL)
@@ -2507,7 +2497,7 @@ registerNotificationsListeners((ServiceChannelListener,
  BattlePassSwitchChapterReminder,
  IntegratedAuctionListener,
  SeniorityAwardsStateListener,
- SeniorityAwardsQuestListener,
+ SeniorityAwardsManualClaimListener,
  SeniorityAwardsTokenListener,
  CollectionsListener,
  WinbackSelectableRewardReminder,

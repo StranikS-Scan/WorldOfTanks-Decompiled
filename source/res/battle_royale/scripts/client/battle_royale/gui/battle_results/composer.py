@@ -24,7 +24,7 @@ class BattleRoyaleStatsComposer(IBattleResultStatsCtrl):
         return self._block.getVO()
 
     def onResultsPosted(self, arenaUniqueID):
-        event_dispatcher.showBattleRoyaleResultsView({'arenaUniqueID': arenaUniqueID})
+        event_dispatcher.showBattleRoyaleResults({'arenaUniqueID': arenaUniqueID})
 
     @staticmethod
     def onShowResults(arenaUniqueID):

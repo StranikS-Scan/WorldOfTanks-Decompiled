@@ -11,7 +11,7 @@ from Event import EventManager
 from PlayerEvents import g_playerEvents
 from comp7.gui.comp7_constants import FUNCTIONAL_FLAG
 from comp7.gui.entitlements_cache import EntitlementsCache, CacheStatus
-from comp7.gui.event_boards.event_boards_items import Comp7LeaderBoard
+from comp7.gui.event_boards.event_boards_items import Comp7LeaderBoard, Comp7PlayerProgression
 from comp7.gui.impl.lobby.comp7_helpers.comp7_gui_helpers import isSeasonStatisticsShouldBeShown
 from comp7.gui.impl.lobby.comp7_helpers.comp7_shared import getRankById
 from comp7.gui.shared import event_dispatcher as comp7_events
@@ -70,6 +70,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.__equipmentCacheOverrides = {}
         self.__entitlementsCache = EntitlementsCache()
         self.__leaderboardDataProvider = _LeaderboardDataProvider()
+        self.__progressionDataProvider = _ProgressionDataProvider()
         self.__isHangarLoadedAfterLogin = False
         self.__eventsManager = em = EventManager()
         self.onStatusUpdated = Event.Event(em)
@@ -131,6 +132,10 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
     @property
     def leaderboard(self):
         return self.__leaderboardDataProvider
+
+    @property
+    def progression(self):
+        return self.__progressionDataProvider
 
     @property
     def battleModifiers(self):
@@ -789,3 +794,33 @@ class _LeaderboardDataProvider(object):
         endPage = (offset + limit - 1) // pageSize
         endRecord = startRecord + limit - 1
         return ((startPage, endPage), (startRecord, endRecord))
+
+
+class _ProgressionDataProvider(object):
+    __eventsController = dependency.descriptor(IEventBoardController)
+    __comp7Controller = dependency.descriptor(IComp7Controller)
+    __EVENT_ID = 'comp7'
+    __LEADERBOARD_ID = 0
+
+    def __init__(self):
+        self.__playerProgression = None
+        self.onDataFetched = Event.Event()
+        self.__lastUpdatedTimestamp = 0.0
+        return
+
+    @property
+    def playerProgression(self):
+        return self.__playerProgression
+
+    @property
+    def lastUpdatedTimestamp(self):
+        return self.__lastUpdatedTimestamp
+
+    def requestUpdate(self):
+        self._fetchProgression()
+
+    @adisp.adisp_process
+    def _fetchProgression(self):
+        self.__playerProgression = yield self.__eventsController.getPlayerProgression(self.__EVENT_ID, self.__LEADERBOARD_ID, progressionClass=Comp7PlayerProgression, showNotification=False)
+        self.__lastUpdatedTimestamp = time.time()
+        self.onDataFetched()

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/doc_loaders/badges_loader.py
+from __future__ import absolute_import
 from typing import TYPE_CHECKING
 import resource_helper
 from constants import ITEM_DEFS_PATH

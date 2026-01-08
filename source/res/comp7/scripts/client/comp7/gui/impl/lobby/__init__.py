@@ -13,7 +13,8 @@ def registerComp7Lobby():
     from comp7.gui.Scaleform.daapi.view.lobby.rally.action_button_state_vo import unitRestrictionsGetter
     from comp7.gui.game_control.award_controller import Comp7QuestRewardHandler, Comp7InvoiceRewardHandler, Comp7PunishWindowHandler
     from comp7.gui.hangar_presets.comp7_dynamic_gui_provider import getComp7BattleModifiers
-    from comp7.gui.impl.lobby.user_missions.hangar_widget.event_banners.comp7_tournament_banner import Comp7TournamentBanner
+    from comp7.gui.impl.lobby.user_missions.hangar_widget.event_banners.comp7_wci_entry_point import Comp7WCIEntryPoint
+    from comp7.gui.impl.lobby.user_missions.hangar_widget.event_banners.comp7_ols_entry_point import Comp7OLSEntryPoint
     from comp7.notification.actions_handlers import Comp7OpenPunishmentWindowHandler
     from comp7.notification.listeners import Comp7OfferTokenListener
     from comp7.web.web_client_api import Comp7WebApi, Comp7OpenWindowWebApi
@@ -66,7 +67,8 @@ def registerComp7Lobby():
      'comp7_4_yearly_gold',
      'comp7_4_yearly_champion',
      'comp7_4_yearly_legend'})
-    EventBannersContainer().registerEventBanner(Comp7TournamentBanner)
+    EventBannersContainer().registerEventBanner(Comp7WCIEntryPoint)
+    EventBannersContainer().registerEventBanner(Comp7OLSEntryPoint)
 
 
 def _fightButtonTooltipGetter(pValidation):

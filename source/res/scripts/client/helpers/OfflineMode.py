@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/OfflineMode.py
+from __future__ import absolute_import, print_function
 import math
 import logging
 import sys
@@ -9,7 +10,7 @@ import Keys
 import Math
 import ResMgr
 import WWISE
-import game_mode_emulator
+from helpers import game_mode_emulator
 _logger = logging.getLogger(__name__)
 g_offlineModeEnabled = False
 g_offlineModeSpaceLoaded = False
@@ -136,7 +137,7 @@ def _offlineLoadCheck():
 
 def launch(spaceName):
     global g_offlineModeEnabled
-    print 'Entering offline space', spaceName
+    print('Entering offline space', spaceName)
     BigWorld.clearAllSpaces()
     BigWorld.worldDrawEnabled(False)
     _displayGUI(spaceName)

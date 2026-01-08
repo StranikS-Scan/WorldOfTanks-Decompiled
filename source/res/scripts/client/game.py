@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/game.py
+from __future__ import absolute_import, print_function
 import cPickle
 import functools
 import locale
@@ -400,7 +401,7 @@ def requestQuit():
 
 
 def addChatMsg(*msg):
-    print 'Message:', msg
+    print('Message:', msg)
 
 
 def expandMacros(line):

@@ -1,15 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/hints_common/battle/manager.py
-import typing
 import logging
+import typing
 from dict2model import exceptions
-from hints_common.common.manager import BaseHintsModelsManager
 from hints_common.battle.schemas.base import HMCType, CommonHintSchema
+from hints_common.common.manager import BaseHintsModelsManager
+from py2to3 import patched_typing
 _logger = logging.getLogger(__name__)
 _g_manager = None
 DEFAULT_XML = 'scripts/item_defs/hints/battle_hints.xml'
 
-class CommonBattleHintsModelsManager(BaseHintsModelsManager, typing.Generic[HMCType]):
+class CommonBattleHintsModelsManager(BaseHintsModelsManager, patched_typing.Generic[HMCType]):
     __slots__ = ('_hints', '_hintsBySchemas')
 
     def __init__(self, schemaTag, defaultSchema):

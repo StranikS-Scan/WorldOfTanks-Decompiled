@@ -35,10 +35,10 @@ class BattleAbilitySlotModel(BaseSlotModel):
         self._setNumber(24, value)
 
     def getRank(self):
-        return self._getString(25)
+        return self._getNumber(25)
 
     def setRank(self, value):
-        self._setString(25, value)
+        self._setNumber(25, value)
 
     def getDescription(self):
         return self._getString(26)
@@ -78,7 +78,7 @@ class BattleAbilitySlotModel(BaseSlotModel):
         self._addNumberProperty('cost', 0)
         self._addNumberProperty('targetSlotId', 0)
         self._addNumberProperty('skillId', 0)
-        self._addStringProperty('rank', '')
+        self._addNumberProperty('rank', 0)
         self._addStringProperty('description', '')
         self._addStringProperty('category', '')
         self._addArrayProperty('ranks', Array())

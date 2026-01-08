@@ -2486,4 +2486,92 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB109_GSOR_1008_CFE_J	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1218	</id>
+      <texture>	gui/maps/vehicles/styles/GB109_GSOR_1008_KS_3Dst.png	</texture>
+      <modelsSet>	GB109_GSOR_1008_KS_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/GB109_GSOR_1008_KS_3Dst	</userString>
+      <description>	#vehicle_customization:special_style/GB109_GSOR_1008_KS_3Dst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/GB109_GSOR_1008_KS_3Dst_desc/long	</longDescriptionSpecial>
+      <tags>	c11n3D lockedOnVehicle	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	112	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB86_Centurion_Action_X_CFE_A	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1220	</id>
+      <texture>	gui/maps/vehicles/styles/GB86_Centurion_Action_X_KS_3Dst.png	</texture>
+      <modelsSet>	GB86_Centurion_Action_X_KS_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/GB86_Centurion_Action_X_KS_3Dst	</userString>
+      <description>	#vehicle_customization:special_style/GB86_Centurion_Action_X_KS_3Dst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/GB86_Centurion_Action_X_KS_3Dst_desc/long	</longDescriptionSpecial>
+      <tags>	lockedOnVehicle c11n3D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	110	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <attachments>
+            <item>
+              <slotId>	18001	</slotId>
+              <id>	168	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </uk.xml>

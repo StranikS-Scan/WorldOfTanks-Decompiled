@@ -165,7 +165,7 @@ class PrimeTime(object):
         periods = self.getPeriodsBetween(forTime, cycleEnd)
         if periods:
             periodsIter = iter(periods)
-            currentPeriod = findFirst(lambda (pS, pE): pS <= forTime < pE, periodsIter)
+            currentPeriod = findFirst(lambda p: p[0] <= forTime < p[1], periodsIter)
             if currentPeriod is not None:
                 _, currentPeriodEnd = currentPeriod
                 return (True, currentPeriodEnd - forTime)

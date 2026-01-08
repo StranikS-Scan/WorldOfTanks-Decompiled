@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/fitting_item.py
 from collections import namedtuple
+import typing
 import BigWorld
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui import GUI_SETTINGS

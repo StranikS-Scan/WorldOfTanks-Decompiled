@@ -10,7 +10,7 @@ from maps_training_common.maps_training_constants import SCENARIO_INDEXES
 class ScenarioTooltip(ViewImpl):
 
     def __init__(self, vehicleType, team, mapId, targets, vehicleName, isComplete, rewards):
-        settings = ViewSettings(R.views.lobby.maps_training.ScenarioTooltip(), model=MapsTrainingScenarioTooltipModel())
+        settings = ViewSettings(R.views.mono.maps_training.scenario_tooltip(), model=MapsTrainingScenarioTooltipModel())
         super(ScenarioTooltip, self).__init__(settings)
         self._vehicleType = vehicleType
         self._team = team

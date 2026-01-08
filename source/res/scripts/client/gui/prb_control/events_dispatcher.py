@@ -441,9 +441,9 @@ class EventDispatcher(object):
     def __getTooltipPrbData(self, tooltipId, label=''):
         return TOOLTIP_PRB_DATA(tooltipId=tooltipId, label=label)._asdict()
 
-    def __invalidatePrbEntity(self, loadedAlias):
-        hangarViewAliases = (VIEW_ALIAS.LOBBY_HANGAR, VIEW_ALIAS.LEGACY_LOBBY_HANGAR)
-        if loadedAlias in hangarViewAliases and self.__prbDispatcher is not None:
+    def __invalidatePrbEntity(self, _):
+        from gui.lobby_state_machine.states import isInHangarState
+        if isInHangarState() and self.__prbDispatcher is not None:
             entity = self.__prbDispatcher.getEntity()
             if entity:
                 entity.invalidate()

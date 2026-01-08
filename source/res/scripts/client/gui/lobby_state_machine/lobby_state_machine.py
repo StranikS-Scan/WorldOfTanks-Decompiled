@@ -229,7 +229,7 @@ class LobbyStateMachine(StateMachine, EventsHandler):
         self.__recordedStates.removableStateSelectors.extend(self.__removableStateSelectors)
         self.__stateClosingObserver = _StateClosingObserver(self)
         self.connect(self.__stateClosingObserver)
-        self.__viewKillingObserver = _ViewKillingObserver(self)
+        self.__viewKillingObserver = _ViewKillingObserver(self, self.__recordedStates)
         self.connect(self.__viewKillingObserver)
         self._subscribe()
         if doValidate:
@@ -317,9 +317,9 @@ class LobbyStateMachine(StateMachine, EventsHandler):
         relevantTransition = self.__findRelevantTransition(transitions)
         isTransitioningByBackNavigation = isinstance(event, _BackNavigationGeneratedNavigationEvent)
         if isinstance(relevantTransition, GuardTransition) and isTransitioningByBackNavigation:
-            self.__recordedStates.push(self.getStateByID(event.targetStateID))
+            self.__recordedStates.push(self.getStateByID(event.targetStateID), event.params)
         self.__recordedStates.pushRecordedTransitionSource(relevantTransition, isTransitioningByBackNavigation)
-        super(LobbyStateMachine, self)._process(transitions, event)
+        super(LobbyStateMachine, self)._process([relevantTransition], event)
         targetState = relevantTransition.getTargets()[0]
         self.__recordedStates.clearCycles(self, targetState, self.__currentlyProcessedEvent.params)
         if self.__navigationQueue:
@@ -371,9 +371,7 @@ class LobbyStateMachine(StateMachine, EventsHandler):
             return first(recordTransitions)
         if len(recordTransitions) > 1:
             raise TransitionError('Multiple record transitions are not allowed.')
-        target = first(filteredTransitions).getTargets()[0]
-        if any((target not in t.getTargets() for t in filteredTransitions)):
-            raise TransitionError('Event {} caused multiple transitions with different targets'.format(self.__currentlyProcessedEvent))
+        filteredTransitions.sort(key=lambda t: t.getPriority(), reverse=True)
         crossSubtreeTransitions = [ t for t in filteredTransitions if not any((self.findOwningSubtree(t.getSource()) is self.findOwningSubtree(target) for target in t.getTargets())) ]
         return first(crossSubtreeTransitions) if crossSubtreeTransitions else first(filteredTransitions)
 

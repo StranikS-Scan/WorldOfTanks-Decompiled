@@ -5,6 +5,9 @@ from datetime import datetime
 import typing
 from constants import Configs
 from gui.impl.gen.view_models.views.lobby.tooltips.additional_rewards_tooltip_model import AdditionalRewardsTooltipModel
+from gui.impl.lobby.missions.missions_helpers import markQuestProgressAsViewed
+from gui.server_events.conditions import _Cumulativable
+from gui.server_events.settings import visitEventsGUI
 from helpers import dependency, time_utils
 from gui import SystemMessages
 from gui.impl.gen import R
@@ -23,6 +26,7 @@ from gui.shared.utils import decorators
 from gui.shared.utils.scheduled_notifications import AcyclicNotifier
 from gui.impl.backport import BackportTooltipWindow, TooltipData
 from gui.impl.gen.view_models.views.lobby.user_missions.hub.tabs.basic_missions.weekly_missions_model import WeeklyMissionsModel
+from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import Union
     from frameworks.wulf.view.view_event import ViewEvent
@@ -31,6 +35,7 @@ class WeeklyMissions(ViewComponent[WeeklyMissionsModel]):
     LAYOUT_ID = R.aliases.user_missions.hub.basicMissions.WeeklyMissions()
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(WeeklyMissions, self).__init__(model=WeeklyMissionsModel)
@@ -84,6 +89,7 @@ class WeeklyMissions(ViewComponent[WeeklyMissionsModel]):
     def _onLoading(self, *_, **__):
         super(WeeklyMissions, self)._onLoading()
         self._updateModel()
+        self._markQuestsAsVisited()
 
     def _finalize(self):
         self.__weeklyQuests.clear()
@@ -113,6 +119,11 @@ class WeeklyMissions(ViewComponent[WeeklyMissionsModel]):
         data = self._tooltipData.get(missionId, {})
         return data.get(tooltipId)
 
+    def _markQuestsAsVisited(self):
+        seenQuests = self.eventsCache.getWeeklyQuests().values()
+        markQuestProgressAsViewed(seenQuests)
+        visitEventsGUI(seenQuests)
+
     def __fillWeeklyMissions(self, viewModel, questData):
         missionModelList = viewModel.getMissionsList()
         self._tooltipData.clear()
@@ -137,8 +148,8 @@ class WeeklyMissions(ViewComponent[WeeklyMissionsModel]):
         packer = WeeklyQuestUIDataPacker(weeklyQuest)
         weeklyQuestModel = packer.pack()
         cm = findFirstConditionModel(weeklyQuestModel.bonusCondition)
-        currentValue = cm.getCurrent()
-        previous = currentValue - cm.getEarned()
+        currentValue, earned = self.__getProgressFromQuest(weeklyQuest, cm)
+        previous = currentValue - earned
         wmm.setCurrentProgress(currentValue)
         wmm.setTotalProgress(cm.getTotal())
         wmm.setPreviousProgress(previous)
@@ -147,6 +158,17 @@ class WeeklyMissions(ViewComponent[WeeklyMissionsModel]):
         wmm.setTimeToNextReroll(self.__getCountdown(weeklyQuest.getID()))
         weeklyQuestModel.unbind()
         return wmm
+
+    def __getProgressFromQuest(self, quest, conditionModel):
+        conditions = quest.bonusCond.getConditions()
+        if conditions and len(conditions.items) == 1:
+            item = conditions.items[0]
+            if isinstance(item, _Cumulativable):
+                currentProgress, total, earned, isCompleted = item.getProgressPerGroup(prevProgData=self.eventsCache.questsProgress.getLastViewedProgress(quest.getID())).get(None, [])
+                if not isCompleted:
+                    return (currentProgress, earned)
+                return (total, earned)
+        return (conditionModel.getCurrent(), conditionModel.getEarned())
 
     def __getQuestData(self, weeklyQuests):
         questData = {}
@@ -209,6 +231,7 @@ class WeeklyMissions(ViewComponent[WeeklyMissionsModel]):
 
     def __onSyncCompleted(self, *_):
         self._updateModel()
+        self._markQuestsAsVisited()
 
     @decorators.adisp_process('dailyQuests/waitReroll')
     @args2params(str)
@@ -218,7 +241,7 @@ class WeeklyMissions(ViewComponent[WeeklyMissionsModel]):
             return
         quest = quests[questId]
         result = yield weekly_quests.WeeklyQuestReroll(quest).request()
-        if result.success:
+        if result.success and self.viewModel.proxy:
             with self.viewModel.transaction() as tx:
                 self._setRerollInProgress(tx, questId)
         if result.userMsg:

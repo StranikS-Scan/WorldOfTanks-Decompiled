@@ -12,7 +12,6 @@ if TYPE_CHECKING:
     from typing import Optional, Set
 PM3_CAMPAIGN_ID = 3
 MAX_DETAIL_ID = 15
-CAMERA_IMMEDIATE_TRANSITION_DURATION = 0.0
 MAX_DAILY_QUESTS_PM_POINTS = 25
 MAX_NEWBIE_DAILY_QUESTS_PM_POINTS = 15
 MISSIONS_ROLES_TO_CATEGORIES = {'Assault': MissionCategory.ASSAULT,
@@ -41,6 +40,7 @@ class CameraNameTemplates(str, Enum):
     STAGE = 'operation_{}_stage_{}'
     TOP = 'operation_{}_camera_top_{}'
     FREE = 'operation_{}_camera_free'
+    FREE_FAR = 'operation_{}_camera_free_far'
 
 
 class TopCameras(int, Enum):

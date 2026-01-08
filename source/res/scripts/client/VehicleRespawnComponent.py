@@ -19,8 +19,8 @@ class VehicleRespawnComponent(DynamicScriptComponent):
 
     def onDestroy(self):
         super(VehicleRespawnComponent, self).onDestroy()
-        if hasattr(self.entity, 'onAppearanceReady'):
-            self.entity.onAppearanceReady -= self._onVehicleAppeared
+        if hasattr(self.entity, 'events'):
+            self.entity.events.onAppearanceReady -= self._onVehicleAppeared
 
     def chooseSpawnGroup(self, groupName):
         self.cell.chooseSpawnGroup(groupName)
@@ -50,7 +50,7 @@ class VehicleRespawnComponent(DynamicScriptComponent):
             return
 
     def _respawnVehicle(self):
-        self.entity.onAppearanceReady += self._onVehicleAppeared
+        self.entity.events.onAppearanceReady += self._onVehicleAppeared
         avatar = BigWorld.player()
         avatar.startResurrecting(self.entity.id)
         avatar.redrawVehicleOnRespawn(self.entity.id, self.entity.publicInfo.compDescr, self.entity.publicInfo.outfit)
@@ -70,7 +70,7 @@ class VehicleRespawnComponent(DynamicScriptComponent):
             ownVehicle.initialUpdate(force=True)
             avatar.updateVehicleSetting(self.entity.id, VEHICLE_SETTING.CURRENT_SHELLS, self.entity.ownVehicle.currentShell)
             avatar.updateVehicleSetting(self.entity.id, VEHICLE_SETTING.NEXT_SHELLS, self.entity.ownVehicle.nextShell)
-            self.entity.onAppearanceReady -= self._onVehicleAppeared
+            self.entity.events.onAppearanceReady -= self._onVehicleAppeared
             return
 
     def _explodeVehicleBeforeRespawn(self):

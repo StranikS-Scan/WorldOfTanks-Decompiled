@@ -7,7 +7,7 @@ from frameworks.wulf import Window
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.server_events.events_dispatcher import ifPrbNavigationEnabled
 from helpers import dependency
-from skeletons.gui.game_control import IComp7Controller
+from skeletons.gui.game_control import IComp7Controller, IIngameTournamentController
 from skeletons.gui.game_control import IHangarSpaceSwitchController
 from skeletons.gui.impl import INotificationWindowController
 if typing.TYPE_CHECKING:
@@ -51,6 +51,11 @@ def showComp7IntroScreen():
 def showComp7WCIScreen():
     from comp7.gui.impl.lobby.hangar.states import Comp7WCIState
     Comp7WCIState.goTo()
+
+
+def showComp7OLSScreen():
+    from comp7.gui.impl.lobby.hangar.states import Comp7OLSState
+    Comp7OLSState.goTo()
 
 
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
@@ -175,14 +180,23 @@ def showComp7InfoPage():
     showBrowserOverlayView(url, VIEW_ALIAS.WEB_VIEW_TRANSPARENT, hiddenLayers=(WindowLayer.MARKER, WindowLayer.VIEW, WindowLayer.WINDOW))
 
 
-def showWciInfoPage():
+def showTournamentInfoPage(infoPageKey):
     from frameworks.wulf import WindowLayer
     from gui import GUI_SETTINGS
     from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
     from gui.shared.event_dispatcher import showBrowserOverlayView
-    from comp7.gui.comp7_constants import INFO_PAGE_WCI
-    url = GUI_SETTINGS.lookup(INFO_PAGE_WCI)
+    url = GUI_SETTINGS.lookup(infoPageKey)
     showBrowserOverlayView(url, VIEW_ALIAS.WEB_VIEW_TRANSPARENT, hiddenLayers=(WindowLayer.MARKER, WindowLayer.VIEW, WindowLayer.WINDOW))
+
+
+def showWciInfoPage():
+    from comp7.gui.comp7_constants import INFO_PAGE_WCI
+    showTournamentInfoPage(INFO_PAGE_WCI)
+
+
+def showOlsInfoPage():
+    from comp7.gui.comp7_constants import INFO_PAGE_OLS
+    showTournamentInfoPage(INFO_PAGE_OLS)
 
 
 def showComp7StylePreview(vehCD, style, **kwargs):
@@ -201,3 +215,20 @@ def showComp7VehiclePreview(vehCD, **kwargs):
      'showCloseButton': False})
     params = {'ctx': kwargs}
     Comp7VehiclePreviewState.goTo(**params)
+
+
+@dependency.replace_none_kwargs(ingameTournamentController=IIngameTournamentController)
+def showOlsOfferGiftsWindow(ingameTournamentController=None):
+    from helpers.ingame_tournament_helper import IngameTournamentType
+    ingameTournamentController.openOfferGifts(IngameTournamentType.OLS, overrideOnBackCallback=showComp7OLSScreen)
+
+
+def showComp7SeasonVehiclesStatisticsView(closeCallback=None, vehicleCD=None):
+    from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+    from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
+    from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
+    from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PROFILE), ctx={'selectedAlias': VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE,
+     'closeCallback': closeCallback,
+     'battlesType': PROFILE_DROPDOWN_KEYS.COMP7,
+     'vehicleCD': vehicleCD}), scope=EVENT_BUS_SCOPE.LOBBY)

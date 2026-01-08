@@ -36,6 +36,13 @@ class SMPolygonalZoneMinimapMarkerComponent(PolygonalZoneMinimapMarkerComponent)
         return (xc, yc)
 
 
+class PolygonalZoneFullScreenMapMarkerComponent(SMPolygonalZoneMinimapMarkerComponent):
+
+    @property
+    def maskType(self):
+        return ComponentBitMask.FULLSCREEN_MAP_MARKER
+
+
 class LootMarkerComponent(World2DLocationMarkerComponent):
 
     def __init__(self, config, matrixProduct, entity=None, targetID=INVALID_TARGET_ID, isVisible=True):
@@ -133,6 +140,13 @@ class LootMinimapComponent(BaseMinimapMarkerComponent):
         gui.invoke(self._componentID, 'animate')
 
 
+class LootFullScreenMapComponent(LootMinimapComponent):
+
+    @property
+    def maskType(self):
+        return ComponentBitMask.FULLSCREEN_MAP_MARKER
+
+
 class AbilityMinimapComponent(BaseMinimapMarkerComponent):
 
     @property
@@ -142,6 +156,13 @@ class AbilityMinimapComponent(BaseMinimapMarkerComponent):
     def _setupMarker(self, gui, **kwargs):
         super(AbilityMinimapComponent, self)._setupMarker(gui, **kwargs)
         gui.invoke(self._componentID, 'animate')
+
+
+class AbilityFullScreenMapComponent(AbilityMinimapComponent):
+
+    @property
+    def maskType(self):
+        return ComponentBitMask.FULLSCREEN_MAP_MARKER
 
 
 class AbilityReconMinimapComponent(AbilityMinimapComponent):
@@ -204,3 +225,27 @@ class AbilityLocationMarkerComponent(World2DLocationMarkerComponent):
     @property
     def bcMarkerType(self):
         return MarkerType.NON_INTERACTIVE
+
+
+class SMBitmapComponent(BaseMinimapMarkerComponent):
+
+    @property
+    def maskType(self):
+        return ComponentBitMask.MINIMAP_MARKER
+
+    @classmethod
+    def configReader(cls, section):
+        config = super(SMBitmapComponent, cls).configReader(section)
+        config.update({'bitmapName': section.readString('bitmapName', '')})
+        return config
+
+    def _setupMarker(self, gui, **kwargs):
+        super(SMBitmapComponent, self)._setupMarker(gui, **kwargs)
+        gui.invoke(self._componentID, 'setIcon', self._config['bitmapName'])
+
+
+class SMFullScreenMapBitmapComponent(SMBitmapComponent):
+
+    @property
+    def maskType(self):
+        return ComponentBitMask.FULLSCREEN_MAP_MARKER

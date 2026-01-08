@@ -366,14 +366,14 @@ class MemberEntity(ChatEntity, MemberEvents):
 class ClanInfo(object):
     __slots__ = ('dbID', 'abbrev', 'role')
 
-    def __init__(self, dbID=0L, abbrev='', role=0):
+    def __init__(self, dbID=0, abbrev='', role=0):
         super(ClanInfo, self).__init__()
         self.dbID = dbID
         self.abbrev = abbrev
         self.role = role
 
     def clear(self):
-        self.dbID = 0L
+        self.dbID = 0
         self.abbrev = ''
         self.role = 0
 

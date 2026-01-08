@@ -50,19 +50,21 @@ class CarouselVehicleTooltipView(ViewComponent[CarouselVehicleTooltipModel]):
     def _onLoading(self, *args, **kwargs):
         super(CarouselVehicleTooltipView, self)._onLoading(*args, **kwargs)
         vehicle = self._itemsCache.items.getVehicle(self._inventoryId)
-        if not vehicle:
+        if vehicle is None:
             _logger.error('No vehicle for with inventoryId %s for displaying a tooltip', self._inventoryId)
             return
-        vState, vStateLevel = vehicle.getState()
-        with self.viewModel.transaction() as model:
-            model.setStatus(vState)
-            model.setStateLevel(vStateLevel)
-            model.setBpEntityValid(self._getIsBpEntityValid())
-            setCrewSlots(model.statistics.getSlots(), vehicle)
-            self.__setStatistics(model.statistics, vehicle)
-            self.__setEarnings(model.earnings, vehicle)
-            self.__setServiceRecords(model.serviceRecords, vehicle)
-            fillVehicleMechanicsArray(model.getMechanics(), vehicle)
+        else:
+            vState, vStateLevel = vehicle.getState()
+            with self.viewModel.transaction() as model:
+                model.setStatus(vState)
+                model.setStateLevel(vStateLevel)
+                model.setBpEntityValid(self._getIsBpEntityValid())
+                setCrewSlots(model.statistics.getSlots(), vehicle)
+                self.__setStatistics(model.statistics, vehicle)
+                self.__setEarnings(model.earnings, vehicle)
+                self.__setServiceRecords(model.serviceRecords, vehicle)
+                fillVehicleMechanicsArray(model.getMechanics(), vehicle)
+            return
 
     def _getDailyXPFactor(self, vehicle):
         return vehicle.dailyXPFactor

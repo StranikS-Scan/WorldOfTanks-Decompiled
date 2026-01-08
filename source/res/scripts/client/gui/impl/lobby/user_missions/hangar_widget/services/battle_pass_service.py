@@ -1,15 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hangar_widget/services/battle_pass_service.py
 from gui.impl.lobby.user_missions.hangar_widget.services import IBattlePassService
+from gui.impl.lobby.user_missions.hangar_widget.services.service_events import ServiceEvents
 from gui.prb_control.dispatcher import g_prbLoader
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
-from skeletons.gui.resource_well import IResourceWellController
-from gui.impl.lobby.user_missions.hangar_widget.services.service_events import ServiceEvents
 
 class BattlePassService(IBattlePassService, ServiceEvents):
     __battlePassController = dependency.descriptor(IBattlePassController)
-    __resourceWell = dependency.descriptor(IResourceWellController)
 
     def __init__(self):
         super(BattlePassService, self).__init__()
@@ -27,13 +25,11 @@ class BattlePassService(IBattlePassService, ServiceEvents):
         self.startGlobalListening()
         self.__battlePassController.onBattlePassSettingsChange += self._onBattlePassEvent
         self.__battlePassController.onSeasonStateChanged += self._onBattlePassEvent
-        self.__resourceWell.onEventUpdated += self._onBattlePassEvent
 
     def stopListening(self):
         self.stopGlobalListening()
         self.__battlePassController.onBattlePassSettingsChange -= self._onBattlePassEvent
         self.__battlePassController.onSeasonStateChanged -= self._onBattlePassEvent
-        self.__resourceWell.onEventUpdated -= self._onBattlePassEvent
 
     def finalize(self):
         self.stopListening()

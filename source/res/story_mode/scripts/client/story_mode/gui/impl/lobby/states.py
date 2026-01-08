@@ -5,16 +5,19 @@ from frameworks.state_machine import StateFlags
 from frameworks.state_machine.transitions import TransitionType
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.entities.View import ViewKey
+from gui.battle_results.service import PostBattleResultsStateMixin
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.lobby_state_machine.states import GuiImplViewLobbyState, SubScopeSubLayerState, LobbyStateFlags, LobbyStateDescription
+from gui.lobby_state_machine.states import GuiImplViewLobbyState, SubScopeSubLayerState, LobbyStateFlags, LobbyStateDescription, TopScopeTopLayerState, ViewLobbyState
 from gui.lobby_state_machine.transitions import HijackTransition
 from helpers import dependency
 from story_mode.gui.impl.lobby.mission_selection_view import MissionSelectionView
+from story_mode.gui.story_mode_gui_constants import VIEW_ALIAS
 from story_mode.skeletons.story_mode_controller import IStoryModeController
 
 def registerStates(machine):
     machine.addState(StoryModeState())
+    machine.addState(StoryModeBattleResultsState())
 
 
 def registerTransitions(machine):
@@ -34,6 +37,16 @@ class StoryModeState(GuiImplViewLobbyState):
 
     def getNavigationDescription(self):
         return LobbyStateDescription(title=backport.text(R.strings.sm_lobby.headerButtons.battle.types.story_mode()))
+
+
+@TopScopeTopLayerState.parentOf
+class StoryModeBattleResultsState(ViewLobbyState, PostBattleResultsStateMixin):
+    STATE_ID = VIEW_ALIAS.STORY_MODE_BATTLE_RESULTS
+    VIEW_KEY = ViewKey(VIEW_ALIAS.STORY_MODE_BATTLE_RESULTS)
+
+    def registerTransitions(self):
+        machine = self.getMachine()
+        machine.addNavigationTransitionFromParent(self)
 
 
 @dependency.replace_none_kwargs(storyModeCtrl=IStoryModeController)

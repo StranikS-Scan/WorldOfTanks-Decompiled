@@ -1,4 +1,5 @@
 <shells.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <icons>
     <ap>	ARMOR_PIERCING.png 0 0	</ap>
     <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
@@ -1547,6 +1548,74 @@
     <ricochetAngle>	85	</ricochetAngle>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_75mm_HEAT_M66>
+  <_75mm_AAAC_I_Super>
+    <id>	335	</id>
+    <userString>	#usa_vehicles:_75mm_AAAC_I_Super	</userString>
+    <icon>	ap	</icon>
+    <price>	108	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing1	</effects>
+    <damage>
+      <armor>	60	</armor>
+      <devices>	24	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+    <enableTraceRicochet>	false	</enableTraceRicochet>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_75mm_AAAC_I_Super>
+  <_75mm_AAAC_II_Super>
+    <id>	336	</id>
+    <userString>	#usa_vehicles:_75mm_AAAC_II_Super	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR1	</effects>
+    <damage>
+      <armor>	60	</armor>
+      <devices>	24	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+    <enableTraceRicochet>	false	</enableTraceRicochet>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_75mm_AAAC_II_Super>
+  <_75mm_DARPA_HE_Super>
+    <id>	337	</id>
+    <userString>	#usa_vehicles:_75mm_DARPA_HE_Super	</userString>
+    <icon>	he_zero_splash	</icon>
+    <price>	216	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	75	</caliber>
+    <explosionRadius>	0	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive1	</effects>
+    <damage>
+      <armor>	120	</armor>
+      <devices>	24	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	120	</armor>
+        <devices>	24	</devices>
+      </damage>
+    </armorSpalls>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_75mm_DARPA_HE_Super>
   <_76mm_M62>
     <id>	104	</id>
     <userString>	#usa_vehicles:_76mm_M62	</userString>
@@ -3366,6 +3435,142 @@
       </damage>
     </armorSpalls>
   </_90mm_HE_M71_18>
+  <_85mm_AAAC_I_FS>
+    <id>	332	</id>
+    <userString>	#usa_vehicles:_85mm_AAAC_I_FS	</userString>
+    <icon>	ap	</icon>
+    <price>	159	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	85	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing1	</effects>
+    <damage>
+      <armor>	80	</armor>
+      <devices>	32	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+    <enableTraceRicochet>	false	</enableTraceRicochet>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_85mm_AAAC_I_FS>
+  <_85mm_AAAC_II_FS>
+    <id>	333	</id>
+    <userString>	#usa_vehicles:_85mm_AAAC_II_FS	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	1200	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	85	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR1	</effects>
+    <damage>
+      <armor>	80	</armor>
+      <devices>	32	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+    <enableTraceRicochet>	false	</enableTraceRicochet>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_85mm_AAAC_II_FS>
+  <_85mm_DARPA_HE_FS>
+    <id>	334	</id>
+    <userString>	#usa_vehicles:_85mm_DARPA_HE_FS	</userString>
+    <icon>	he_zero_splash	</icon>
+    <price>	318	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	85	</caliber>
+    <explosionRadius>	0	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive1	</effects>
+    <damage>
+      <armor>	160	</armor>
+      <devices>	32	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	160	</armor>
+        <devices>	32	</devices>
+      </damage>
+    </armorSpalls>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_85mm_DARPA_HE_FS>
+  <_85mm_AAAC_I>
+    <id>	338	</id>
+    <userString>	#usa_vehicles:_85mm_AAAC_I	</userString>
+    <icon>	ap	</icon>
+    <price>	155	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	85	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing1	</effects>
+    <damage>
+      <armor>	80	</armor>
+      <devices>	32	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+    <enableTraceRicochet>	false	</enableTraceRicochet>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_85mm_AAAC_I>
+  <_85mm_AAAC_II>
+    <id>	339	</id>
+    <userString>	#usa_vehicles:_85mm_AAAC_II	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	1200	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	85	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR1	</effects>
+    <damage>
+      <armor>	80	</armor>
+      <devices>	32	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+    <enableTraceRicochet>	false	</enableTraceRicochet>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_85mm_AAAC_II>
+  <_85mm_DARPA_HE>
+    <id>	340	</id>
+    <userString>	#usa_vehicles:_85mm_DARPA_HE	</userString>
+    <icon>	he_zero_splash	</icon>
+    <price>	310	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	85	</caliber>
+    <explosionRadius>	0	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive1	</effects>
+    <damage>
+      <armor>	160	</armor>
+      <devices>	32	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	160	</armor>
+        <devices>	32	</devices>
+      </damage>
+    </armorSpalls>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_85mm_DARPA_HE>
   <_88mm_Pzgr_39_43>
     <id>	153	</id>
     <userString>	#usa_vehicles:_88mm_Pzgr_39_43	</userString>
@@ -4768,6 +4973,278 @@
       </damage>
     </armorSpalls>
   </_90mm_HE_T340E14H_LTC>
+  <_75mm_AAAC_I_FS>
+    <id>	312	</id>
+    <userString>	#usa_vehicles:_75mm_AAAC_I_FS	</userString>
+    <icon>	ap	</icon>
+    <price>	99	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing1	</effects>
+    <damage>
+      <armor>	60	</armor>
+      <devices>	24	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+    <enableTraceRicochet>	false	</enableTraceRicochet>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_75mm_AAAC_I_FS>
+  <_75mm_AAAC_II_FS>
+    <id>	313	</id>
+    <userString>	#usa_vehicles:_75mm_AAAC_II_FS	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR1	</effects>
+    <damage>
+      <armor>	60	</armor>
+      <devices>	24	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+    <enableTraceRicochet>	false	</enableTraceRicochet>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_75mm_AAAC_II_FS>
+  <_75mm_DARPA_HE_FS>
+    <id>	314	</id>
+    <userString>	#usa_vehicles:_75mm_DARPA_HE_FS	</userString>
+    <icon>	he_zero_splash	</icon>
+    <price>	198	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	75	</caliber>
+    <explosionRadius>	0	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive1	</effects>
+    <damage>
+      <armor>	120	</armor>
+      <devices>	24	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	120	</armor>
+        <devices>	24	</devices>
+      </damage>
+    </armorSpalls>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_75mm_DARPA_HE_FS>
+  <_75mm_AAAC_I>
+    <id>	341	</id>
+    <userString>	#usa_vehicles:_75mm_AAAC_I	</userString>
+    <icon>	ap	</icon>
+    <price>	94	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing1	</effects>
+    <damage>
+      <armor>	60	</armor>
+      <devices>	24	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+    <enableTraceRicochet>	false	</enableTraceRicochet>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_75mm_AAAC_I>
+  <_75mm_AAAC_II>
+    <id>	342	</id>
+    <userString>	#usa_vehicles:_75mm_AAAC_II	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR1	</effects>
+    <damage>
+      <armor>	60	</armor>
+      <devices>	24	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+    <enableTraceRicochet>	false	</enableTraceRicochet>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_75mm_AAAC_II>
+  <_75mm_DARPA_HE>
+    <id>	343	</id>
+    <userString>	#usa_vehicles:_75mm_DARPA_HE	</userString>
+    <icon>	he_zero_splash	</icon>
+    <price>	188	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	75	</caliber>
+    <explosionRadius>	0	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive1	</effects>
+    <damage>
+      <armor>	120	</armor>
+      <devices>	24	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	120	</armor>
+        <devices>	24	</devices>
+      </damage>
+    </armorSpalls>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_75mm_DARPA_HE>
+  <_90mm_AAAC_I>
+    <id>	303	</id>
+    <userString>	#usa_vehicles:_90mm_AAAC_I	</userString>
+    <icon>	ap	</icon>
+    <price>	253	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing1	</effects>
+    <damage>
+      <armor>	115	</armor>
+      <devices>	46	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+    <enableTraceRicochet>	false	</enableTraceRicochet>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_90mm_AAAC_I>
+  <_90mm_AAAC_II>
+    <id>	304	</id>
+    <userString>	#usa_vehicles:_90mm_AAAC_II	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	1600	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR1	</effects>
+    <damage>
+      <armor>	115	</armor>
+      <devices>	46	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+    <enableTraceRicochet>	false	</enableTraceRicochet>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_90mm_AAAC_II>
+  <_90mm_DARPA_HE>
+    <id>	305	</id>
+    <userString>	#usa_vehicles:_90mm_DARPA_HE	</userString>
+    <icon>	he_zero_splash	</icon>
+    <price>	506	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	90	</caliber>
+    <explosionRadius>	0	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive1	</effects>
+    <damage>
+      <armor>	220	</armor>
+      <devices>	46	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	220	</armor>
+        <devices>	46	</devices>
+      </damage>
+    </armorSpalls>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_90mm_DARPA_HE>
+  <_90mm_Charlie_3>
+    <id>	306	</id>
+    <userString>	#usa_vehicles:_90mm_Charlie_3	</userString>
+    <icon>	ap	</icon>
+    <price>	299	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing1	</effects>
+    <damage>
+      <armor>	100	</armor>
+      <devices>	46	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+    <enableTraceRicochet>	false	</enableTraceRicochet>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_90mm_Charlie_3>
+  <_90mm_Delta_6>
+    <id>	307	</id>
+    <userString>	#usa_vehicles:_90mm_Delta_6	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	1800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR1	</effects>
+    <damage>
+      <armor>	100	</armor>
+      <devices>	46	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+    <enableTraceRicochet>	false	</enableTraceRicochet>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_90mm_Delta_6>
+  <_90mm_Bravo_1>
+    <id>	308	</id>
+    <userString>	#usa_vehicles:_90mm_Bravo_1	</userString>
+    <icon>	he_zero_splash	</icon>
+    <price>	598	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	90	</caliber>
+    <explosionRadius>	0	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive1	</effects>
+    <damage>
+      <armor>	100	</armor>
+      <devices>	46	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	50	</armor>
+        <devices>	46	</devices>
+      </damage>
+    </armorSpalls>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_90mm_Bravo_1>
   <_94mm_AP_MkI>
     <id>	167	</id>
     <userString>	#usa_vehicles:_94mm_AP_MkI	</userString>

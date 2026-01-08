@@ -9,7 +9,6 @@ from debug_utils import LOG_ERROR
 from frameworks.wulf import WindowLayer
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework.managers.loaders import g_viewOverrider
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.locale.INVITES import INVITES
 from gui.clans.formatters import ClanAppActionHtmlTextFormatter, ClanMultiNotificationsHtmlTextFormatter, ClanSingleNotificationHtmlTextFormatter
@@ -19,6 +18,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.formatters.invites import getPrbInviteHtmlFormatter
+from gui.server_events.pm_constants import IS_PM3_QUEST_ENABLED
 from gui.server_events.recruit_helper import getNewRecruitsCounter
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.events import HangarSpacesSwitcherEvent, ViewEventType
@@ -295,14 +295,12 @@ class LockButtonMessageDecorator(MessageDecorator):
         g_eventBus.addListener(ViewEventType.LOAD_VIEW, self._viewLoaded, EVENT_BUS_SCOPE.LOBBY)
         g_playerEvents.onEnqueued += self._onEqueued
         g_playerEvents.onDequeued += self._onDequeued
-        g_viewOverrider.onViewOverriden += self._onViewOverriden
 
     def clear(self):
         super(LockButtonMessageDecorator, self).clear()
         g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self._viewLoaded, EVENT_BUS_SCOPE.LOBBY)
         g_playerEvents.onEnqueued -= self._onEqueued
         g_playerEvents.onDequeued -= self._onDequeued
-        g_viewOverrider.onViewOverriden -= self._onViewOverriden
 
     def update(self, formatted):
         _NotificationDecorator.update(self, formatted)
@@ -331,15 +329,9 @@ class LockButtonMessageDecorator(MessageDecorator):
         if event.alias in self._getLockAliases():
             self._updateButtonsState(lock=True)
         else:
-            hangarAliases = (VIEW_ALIAS.LOBBY_HANGAR, VIEW_ALIAS.LEGACY_LOBBY_HANGAR)
-            isHangarAlias = event.alias in hangarAliases
-            overriddenHangarAlias = any((g_viewOverrider.isViewOverriden(alias) for alias in hangarAliases))
-            if isHangarAlias or overriddenHangarAlias:
-                self._updateButtons(event)
-
-    def _onViewOverriden(self, alias, *_):
-        if alias in (VIEW_ALIAS.LOBBY_HANGAR, VIEW_ALIAS.LEGACY_LOBBY_HANGAR):
-            self._updateButtons(None)
+            from gui.lobby_state_machine.states import isInHangarState
+            if isInHangarState():
+                self._updateButtons(None)
         return
 
     def _updateButtonsState(self, lock=False):
@@ -1485,7 +1477,7 @@ class PersonalMission3QuestDecorator(LockButtonMessageDecorator):
         return NOTIFICATION_BUTTON_STATE.HIDDEN if not quest or not quest.isCompleted() else super(PersonalMission3QuestDecorator, self)._getBtnState(lock)
 
     def __onServerSettingsChange(self, diff):
-        if 'isPM3QuestEnabled' not in diff:
+        if IS_PM3_QUEST_ENABLED not in diff:
             return
         else:
             if self._model is not None:

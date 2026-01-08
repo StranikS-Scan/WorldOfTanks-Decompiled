@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/maps_training/maps_training_result_view.py
 import ArenaType
 import BigWorld
-from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
+from frameworks.wulf import ViewSettings, WindowFlags
 from gui.Scaleform.Waiting import Waiting
 from gui.impl import backport
 from gui.impl.gen import R
@@ -19,18 +19,18 @@ from maps_training_common.maps_training_constants import SCENARIO_INDEXES
 from skeletons.gui.shared.utils import IHangarSpace
 _SECONDS_IN_MINUTE = 60
 
-class MapsTrainingResult(ViewImpl):
+class MapsTrainingResultView(ViewImpl):
     __slots__ = ('__arenaUniqueID', '__isFromNotifications', '__tooltipData')
     battleResults = dependency.descriptor(IBattleResultsService)
     mapsTrainingController = dependency.descriptor(IMapsTrainingController)
     hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self, *args, **kwargs):
-        settings = ViewSettings(R.views.lobby.maps_training.MapsTrainingResult())
+        settings = ViewSettings(R.views.mono.maps_training.maps_training_result())
         settings.model = MapsTrainingResultModel()
         settings.args = args
         settings.kwargs = kwargs
-        super(MapsTrainingResult, self).__init__(settings)
+        super(MapsTrainingResultView, self).__init__(settings)
         self.__arenaUniqueID = kwargs.get('arenaUniqueID', None)
         self.__isFromNotifications = kwargs.get('isFromNotifications', False)
         self.__tooltipData = {}
@@ -38,12 +38,12 @@ class MapsTrainingResult(ViewImpl):
 
     @property
     def viewModel(self):
-        return super(MapsTrainingResult, self).getViewModel()
+        return super(MapsTrainingResultView, self).getViewModel()
 
     def createToolTip(self, event):
         tooltipId = event.getArgument('tooltipId', '')
         if not tooltipId:
-            return super(MapsTrainingResult, self).createToolTip(event)
+            return super(MapsTrainingResultView, self).createToolTip(event)
         window = backport.BackportTooltipWindow(self.__tooltipData.get(tooltipId), self.getParentWindow())
         window.load()
         return window
@@ -57,19 +57,19 @@ class MapsTrainingResult(ViewImpl):
                 Waiting.show('stats')
                 self.battleResults.onResultPosted += self.__handleBattleResultsPosted
 
-        super(MapsTrainingResult, self)._onLoading(*args, **kwargs)
+        super(MapsTrainingResultView, self)._onLoading(*args, **kwargs)
         switchHangarOverlaySoundFilter(on=True)
         self.mapsTrainingController.requestInitialDataFromServer(_setResults)
 
     def _initialize(self, *args, **kwargs):
-        super(MapsTrainingResult, self)._initialize(*args, **kwargs)
+        super(MapsTrainingResultView, self)._initialize(*args, **kwargs)
         self.viewModel.setHangarReady(self.hangarSpace.spaceInited)
         self.__addListeners()
 
     def _finalize(self):
         self.__removeListeners()
         switchHangarOverlaySoundFilter(on=False)
-        super(MapsTrainingResult, self)._finalize()
+        super(MapsTrainingResultView, self)._finalize()
 
     def __handleBattleResultsPosted(self, reusableInfo, _, __):
         if self.__arenaUniqueID == reusableInfo.arenaUniqueID:
@@ -170,5 +170,5 @@ class MapsTrainingResult(ViewImpl):
 
 class MapsTrainingResultWindow(WindowImpl):
 
-    def __init__(self, arenaUniqueID, isFromNotifications):
-        super(MapsTrainingResultWindow, self).__init__(wndFlags=WindowFlags.WINDOW_FULLSCREEN | WindowFlags.WINDOW, content=MapsTrainingResult(arenaUniqueID=arenaUniqueID, isFromNotifications=isFromNotifications), layer=WindowLayer.TOP_WINDOW)
+    def __init__(self, layer, **kwargs):
+        super(MapsTrainingResultWindow, self).__init__(wndFlags=WindowFlags.WINDOW_FULLSCREEN | WindowFlags.WINDOW, layer=layer, content=MapsTrainingResultView(**kwargs))

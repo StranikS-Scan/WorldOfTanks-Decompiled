@@ -23,6 +23,9 @@
     <camouflageNet>
       <invisibilityBonus>	0.1 0.125	</invisibilityBonus>
     </camouflageNet>
+    <deluxeCamouflageNet>
+      <invisibilityBonus>	0.125	</invisibilityBonus>
+    </deluxeCamouflageNet>
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
     </additionalInvisibilityDevice>
@@ -2082,7 +2085,7 @@
           <maxAmmo>	82	</maxAmmo>
           <reloadTime>	4	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.11	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2100,7 +2103,7 @@
             <gun>	20	</gun>
           </armor>
           <shotDispersionRadius>	0.32	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <effects>	shot_medium	</effects>
           <reloadEffect>	reload50_75	</reloadEffect>

@@ -11,6 +11,7 @@ class MECHANICS_WIDGET_CONST(object):
     IDLE = 'idle'
     PRIME = 'prime'
     TRANSITION = 'transition'
+    EMPTY = 'empty'
     MECHANICS_WIDGET_STATE = [PREPARING,
      ACTIVE,
      PASSIVE_ACTIVE,
@@ -18,4 +19,5 @@ class MECHANICS_WIDGET_CONST(object):
      DISABLE,
      IDLE,
      PRIME,
-     TRANSITION]
+     TRANSITION,
+     EMPTY]

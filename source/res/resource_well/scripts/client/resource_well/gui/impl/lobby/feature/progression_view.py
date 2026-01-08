@@ -1,18 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: resource_well/scripts/client/resource_well/gui/impl/lobby/feature/progression_view.py
+from __future__ import absolute_import
 import typing
+from future.builtins import round
 from adisp import adisp_process
-from frameworks.wulf import ViewFlags, ViewSettings
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.top_panel_tabs import PERSONAL_NUMBER_STYLE_TABS
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.vehicle_preview.top_panel.top_panel_tabs_model import TabID
 from gui.impl.gui_decorators import args2params
-from gui.impl.pub import ViewImpl
+from gui.impl.pub import ViewImpl, WindowImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
-from gui.shared.event_dispatcher import showHangar, showBrowserOverlayView
+from gui.shared.event_dispatcher import showHangar
 from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from helpers import dependency, time_utils
 from resource_well.gui.feature.constants import PurchaseMode
@@ -22,9 +24,8 @@ from resource_well.gui.impl.gen.view_models.views.lobby.progression_view_model i
 from resource_well.gui.impl.gen.view_models.views.lobby.reward_model import RewardModel, RewardState
 from resource_well.gui.impl.lobby.feature.sounds import RESOURCE_WELL_SOUND_SPACE
 from resource_well.gui.impl.lobby.feature.tooltips.progress_tooltip import ProgressTooltip
-from resource_well.gui.impl.lobby.feature.tooltips.refund_resources_tooltip import RefundResourcesTooltip
 from resource_well.gui.impl.lobby.feature.tooltips.serial_number_tooltip import SerialNumberTooltip
-from resource_well.gui.shared.event_dispatcher import showResourceWellVehiclePreview, showResourceWellProgressionWindow, showResourcesLoadingWindow
+from resource_well.gui.shared.event_dispatcher import showResourceWellVehiclePreview, showMainWindow, showResourcesLoadingWindow
 from skeletons.gui.resource_well import IResourceWellController
 if typing.TYPE_CHECKING:
     from resource_well.helpers.server_settings import RewardConfig
@@ -35,9 +36,8 @@ class ProgressionView(ViewImpl):
     _COMMON_SOUND_SPACE = RESOURCE_WELL_SOUND_SPACE
     __resourceWell = dependency.descriptor(IResourceWellController)
 
-    def __init__(self, layoutID, backCallback):
-        settings = ViewSettings(R.views.resource_well.lobby.feature.ProgressionView(), model=ProgressionViewModel(), flags=ViewFlags.LOBBY_SUB_VIEW)
-        self.__backCallback = backCallback
+    def __init__(self, layoutID=R.views.resource_well.mono.lobby.progression_view()):
+        settings = ViewSettings(layoutID, model=ProgressionViewModel(), flags=ViewFlags.LOBBY_SUB_VIEW)
         super(ProgressionView, self).__init__(settings)
         self.__notifier = None
         self.__selectedRewardId = ''
@@ -48,11 +48,9 @@ class ProgressionView(ViewImpl):
         return super(ProgressionView, self).getViewModel()
 
     def createToolTipContent(self, event, contentID):
-        if contentID == R.views.resource_well.lobby.feature.tooltips.SerialNumberTooltip():
+        if contentID == R.views.resource_well.mono.lobby.tooltips.serial_number_tooltip():
             return SerialNumberTooltip(parentLayout=self.layoutID)
-        if contentID == R.views.resource_well.lobby.feature.tooltips.RefundResourcesTooltip():
-            return RefundResourcesTooltip()
-        return ProgressTooltip(progress=self.viewModel.getProgression()) if contentID == R.views.resource_well.lobby.feature.tooltips.ProgressTooltip() else super(ProgressionView, self).createToolTipContent(event, contentID)
+        return ProgressTooltip(progress=self.viewModel.getProgression()) if contentID == R.views.resource_well.mono.lobby.tooltips.progress_tooltip() else super(ProgressionView, self).createToolTipContent(event, contentID)
 
     def _onLoading(self, *args, **kwargs):
         super(ProgressionView, self)._onLoading(*args, **kwargs)
@@ -70,13 +68,11 @@ class ProgressionView(ViewImpl):
         return
 
     def _getEvents(self):
-        return ((self.viewModel.onAboutClick, self.__showEventInfo),
-         (self.viewModel.onPreview, self.__showPreview),
+        return ((self.viewModel.onPreview, self.__showPreview),
          (self.viewModel.onHangarShow, self.__showHangar),
          (self.viewModel.onRewardSelected, self.__selectReward),
          (self.viewModel.onResourcesContribute, self.__contributeResources),
          (self.viewModel.onResourcesReturn, self.__onResourcesReturn),
-         (self.viewModel.onClose, self.__close),
          (self.__resourceWell.onNumberRequesterUpdated, self.__onNumberRequesterUpdated),
          (self.__resourceWell.onEventUpdated, self.__onEventUpdated),
          (self.__resourceWell.onSettingsChanged, self.__onSettingsChanged))
@@ -116,7 +112,7 @@ class ProgressionView(ViewImpl):
         if currentRewardID:
             currentPoints = self.__resourceWell.getCurrentPoints()
             maxPoints = self.__resourceWell.config.getRewardConfig(currentRewardID).points
-            model.setProgression(_FULL_PROGRESS * currentPoints / (maxPoints or _FULL_PROGRESS))
+            model.setProgression(_FULL_PROGRESS * currentPoints // (maxPoints or _FULL_PROGRESS))
 
     def __fillRewards(self, rewards):
         rewards.clear()
@@ -160,15 +156,8 @@ class ProgressionView(ViewImpl):
             return ProgressionState.NOVEHICLES
         return ProgressionState.ACTIVE if self.__resourceWell.getCurrentPoints() else ProgressionState.NOPROGRESS
 
-    def __close(self):
-        if callable(self.__backCallback):
-            self.__backCallback()
-        else:
-            showHangar()
-
     def __showHangar(self):
         showHangar()
-        self.destroyWindow()
 
     @args2params(str)
     def __showPreview(self, rewardId):
@@ -184,12 +173,12 @@ class ProgressionView(ViewImpl):
         else:
             style = previewStyle
             topPanelData = None
-        showResourceWellVehiclePreview(vehicle.intCD, rewardId, style, previewStyle, self.__previewCallback, topPanelData)
+        showResourceWellVehiclePreview(vehicle.intCD, rewardId, style, previewStyle, topPanelData)
         return
 
     @args2params(str)
     def __contributeResources(self, rewardId):
-        showResourcesLoadingWindow(rewardId)
+        showResourcesLoadingWindow(rewardId, stopRequesterInDestroy=False)
 
     @args2params(str)
     def __selectReward(self, rewardId):
@@ -204,20 +193,19 @@ class ProgressionView(ViewImpl):
         self.__extractResources(rewardId)
 
     def __previewCallback(self):
-        showResourceWellProgressionWindow(backCallback=self.__backCallback)
+        showMainWindow()
 
     @adisp_process
     def __extractResources(self, rewardID):
+        self.viewModel.setShowBlur(True)
         result = yield ResourceWellTakeBackProcessor(rewardID=rewardID).request()
+        self.viewModel.setShowBlur(False)
         if result.success:
             self.__fillSelectReward(rewardID)
 
-    def __showEventInfo(self):
-        showBrowserOverlayView(self.__resourceWell.config.infoPageUrl, VIEW_ALIAS.RESOURCE_WELL_BROWSER_VIEW)
-
     def __onEventUpdated(self):
         if not self.__resourceWell.isActive():
-            showHangar()
+            self.__goBack()
             return
         with self.viewModel.transaction() as model:
             self.__updateEventTime(model=model)
@@ -226,9 +214,13 @@ class ProgressionView(ViewImpl):
 
     def __onSettingsChanged(self):
         if not self.__resourceWell.isActive():
-            self.__close()
+            self.__goBack()
             return
         self.__updateModel()
+
+    def __goBack(self):
+        lsm = getLobbyStateMachine()
+        lsm.getStateFromView(self).goBack()
 
     def __getReminderTimeLeft(self):
         return max(0, self.__resourceWell.config.remindTime - time_utils.getServerUTCTime())
@@ -237,3 +229,9 @@ class ProgressionView(ViewImpl):
         with self.viewModel.transaction() as model:
             self.__fillProgression(model=model)
             self.__fillRewards(model.getRewards())
+
+
+class ProgressionWindow(WindowImpl):
+
+    def __init__(self, layer, *args, **kwargs):
+        super(ProgressionWindow, self).__init__(content=ProgressionView(), wndFlags=WindowFlags.WINDOW, layer=layer)

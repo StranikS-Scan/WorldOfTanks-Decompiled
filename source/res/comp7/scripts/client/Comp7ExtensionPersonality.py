@@ -205,6 +205,11 @@ class ClientComp7BattleMode(Comp7BattleMode):
         return [COMP7_HANGAR_ALIASES.COMP7_LOBBY_HANGAR]
 
     @property
+    def _client_dynamicViewsForMonitoring(self):
+        from gui.impl.gen import R
+        return [R.views.comp7.mono.lobby.tournaments.ols_view(), R.views.comp7.mono.lobby.tournaments.wci_view()]
+
+    @property
     def _client_prebattleCtrlMode(self):
         from AvatarInputHandler import _CTRL_MODE
         return (_CTRL_MODE.VEHICLES_SELECTION, _CTRL_MODE.POSTMORTEM)
@@ -249,11 +254,17 @@ class ClientComp7BattleMode(Comp7BattleMode):
             prb_utils.addArenaDescrs(guiType, self._client_arenaDescrClass, self._personality)
             addViewBattlePageAliasByArenaGUIType(guiType, self._CLIENT_BATTLE_PAGE, self._personality)
 
-    def registerTournamentEntryPointValidator(self):
+    def registerWCITournamentEntryPointValidator(self):
         from gui.prb_control import prb_utils
         from comp7.gui.Scaleform.genConsts.COMP7_HANGAR_ALIASES import COMP7_HANGAR_ALIASES
-        from comp7.gui.impl.lobby.user_missions.hangar_widget.event_banners.comp7_tournament_banner import Comp7TournamentBanner
-        prb_utils.addBannerEntryPointValidatorMethod(COMP7_HANGAR_ALIASES.COMP7_TOURNAMENT_ENTRY_POINT, Comp7TournamentBanner.isTournamentEntryPointAvailable, self._personality)
+        from comp7.gui.impl.lobby.user_missions.hangar_widget.event_banners.comp7_wci_entry_point import Comp7WCIEntryPoint
+        prb_utils.addBannerEntryPointValidatorMethod(COMP7_HANGAR_ALIASES.COMP7_WCI_ENTRY_POINT, Comp7WCIEntryPoint.isTournamentEntryPointAvailable, self._personality)
+
+    def registerOLSTournamentEntryPointValidator(self):
+        from gui.prb_control import prb_utils
+        from comp7.gui.Scaleform.genConsts.COMP7_HANGAR_ALIASES import COMP7_HANGAR_ALIASES
+        from comp7.gui.impl.lobby.user_missions.hangar_widget.event_banners.comp7_ols_entry_point import Comp7OLSEntryPoint
+        prb_utils.addBannerEntryPointValidatorMethod(COMP7_HANGAR_ALIASES.COMP7_OLS_ENTRY_POINT, Comp7OLSEntryPoint.isTournamentEntryPointAvailable, self._personality)
 
     def registerTrainingRoomHandler(self):
         from comp7_common.comp7_constants import ARENA_GUI_TYPE
@@ -282,11 +293,13 @@ def preInit():
     battleMode.registerClientSelector()
     battleMode.registerClientHangarPresets()
     battleMode.registerBannerEntryPointValidatorMethod()
-    battleMode.registerTournamentEntryPointValidator()
+    battleMode.registerWCITournamentEntryPointValidator()
+    battleMode.registerOLSTournamentEntryPointValidator()
     battleMode.registerHangarEventBanner()
     battleMode.registerProviderBattleQueue()
     battleMode.registerClientBonusTokens()
     battleMode.registerClientViewsForMonitoring()
+    battleMode.registerClientDynamicViewsForMonitoring()
     battleMode.registerSquadTypes()
     battleMode.registerClientPlatoon()
     battleMode.registerClientSquadSelector()

@@ -5,14 +5,14 @@ from gui.impl.gen.view_models.views.lobby.common.vehicle_model import VehicleMod
 class PopularLoadoutsTooltipModel(VehicleModel):
     __slots__ = ()
 
-    def __init__(self, properties=11, commands=0):
+    def __init__(self, properties=12, commands=0):
         super(PopularLoadoutsTooltipModel, self).__init__(properties=properties, commands=commands)
 
     def getOptionalDevicesResultType(self):
-        return self._getNumber(10)
+        return self._getNumber(11)
 
     def setOptionalDevicesResultType(self, value):
-        self._setNumber(10, value)
+        self._setNumber(11, value)
 
     def _initialize(self):
         super(PopularLoadoutsTooltipModel, self)._initialize()

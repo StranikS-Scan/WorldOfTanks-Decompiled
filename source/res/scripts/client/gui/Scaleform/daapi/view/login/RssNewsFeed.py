@@ -9,7 +9,6 @@ from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.view.meta.RssNewsFeedMeta import RssNewsFeedMeta
 from gui.game_control.links import URLMacros
 from helpers import dependency
-from shared_utils import findFirst
 from skeletons.gui.game_control import IExternalLinksController, IBrowserController
 _logger = logging.getLogger(__name__)
 
@@ -105,7 +104,7 @@ class RssNewsFeed(RssNewsFeedMeta):
             try:
                 section = ResMgr.DataSection()
                 section.createSectionFromString(description)
-                _, section = findFirst(lambda (name, _): name == 'div', section.items())
+                section = next((s for name, s in section.items() if name == 'div'))
                 description = section.asWideString
                 if len(description) > self.DESCRIPTION_MAX_LENGTH:
                     description = description[:self.DESCRIPTION_CUT_LENGTH] + self.DESCRIPTION_TAIL

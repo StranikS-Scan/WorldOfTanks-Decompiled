@@ -25,11 +25,11 @@ class BattleAbilitiesSetupModel(BaseLoadoutModel):
     def setIsTypeSelected(self, value):
         self._setBool(2, value)
 
-    def getIsCycleFinished(self):
-        return self._getBool(3)
+    def getModeState(self):
+        return self._getString(3)
 
-    def setIsCycleFinished(self, value):
-        self._setBool(3, value)
+    def setModeState(self, value):
+        self._setString(3, value)
 
     def getVehicleType(self):
         return self._getString(4)
@@ -83,7 +83,7 @@ class BattleAbilitiesSetupModel(BaseLoadoutModel):
         super(BattleAbilitiesSetupModel, self)._initialize()
         self._addViewModelProperty('details', BattleAbilityDetails())
         self._addBoolProperty('isTypeSelected', False)
-        self._addBoolProperty('isCycleFinished', False)
+        self._addStringProperty('modeState', '')
         self._addStringProperty('vehicleType', '')
         self._addNumberProperty('pointsAmount', 0)
         self._addNumberProperty('totalPurchasePrice', 0)

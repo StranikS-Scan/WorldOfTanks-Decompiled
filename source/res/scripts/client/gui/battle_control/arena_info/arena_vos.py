@@ -18,12 +18,10 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS, VEHICLE_CLASS_NAME
-from gui.shared.system_factory import registerGameModeArenaInfoKeys, collectGameModeArenaInfoKeys
+from gui.shared.system_factory import registerGameModeArenaInfoKeys, collectGameModeArenaInfoKeys, collectDisplayedClassTagGetter
 from helpers import dependency, i18n
 from skeletons.gui.server_events import IEventsCache
-from items.components.shared_components import ImprovedRammingParams
-from vehicles.mechanics.mechanic_info import getVehicleMechanics
-from vehicles.mechanics.mechanic_info import hasVehicleMechanic
+from vehicles.mechanics.mechanic_helpers import getVehicleDescrMechanics, getVehicleDescrMechanicParams
 from vehicles.mechanics.mechanic_constants import VehicleMechanic
 _INVALIDATE_OP = settings.INVALIDATE_OP
 _VEHICLE_STATUS = settings.VEHICLE_STATUS
@@ -253,8 +251,8 @@ class VehicleTypeInfoVO(object):
             self.isTwinGunVehicle = vehicleDescr.isTwinGunVehicle
             self.hasDualAccuracy = vehicleDescr.hasDualAccuracy
             self.isAutoShootGunVehicle = vehicleDescr.isAutoShootGunVehicle
+            self.vehicleMechanics = frozenset(getVehicleDescrMechanics(vehicleDescr))
             self.chassisType = vehicleDescr.chassis.chassisType
-            self.vehicleMechanics = getVehicleMechanics(vehicleDescr)
             self.shortName = vehicleType.shortUserString
             self.name = Vehicle.getUserName(vehicleType=vehicleType, textPrefix=True)
             self.shortNameWithPrefix = Vehicle.getShortUserName(vehicleType=vehicleType, textPrefix=True)
@@ -267,8 +265,9 @@ class VehicleTypeInfoVO(object):
             self.iconName = settings.makeVehicleIconName(vName)
             self.iconPath = settings.makeContourIconSFPath(vName)
             self.role = vehicleType.role
-            if hasVehicleMechanic(vehicleDescr, VehicleMechanic.IMPROVED_RAMMING):
-                self.improvedRammingAnimationDamage = vehicleDescr.mechanicsParams[ImprovedRammingParams.MECHANICS_NAME].damageValueToShowAnimation
+            if VehicleMechanic.IMPROVED_RAMMING in self.vehicleMechanics:
+                improvedRammingParams = getVehicleDescrMechanicParams(vehicleDescr, VehicleMechanic.IMPROVED_RAMMING)
+                self.improvedRammingAnimationDamage = improvedRammingParams.damageValueToShowAnimation
         else:
             vehicleName = i18n.makeString(settings.UNKNOWN_VEHICLE_NAME)
             self.tags = frozenset()
@@ -283,8 +282,8 @@ class VehicleTypeInfoVO(object):
             self.isTwinGunVehicle = False
             self.hasDualAccuracy = False
             self.isAutoShootGunVehicle = False
+            self.vehicleMechanics = frozenset()
             self.chassisType = 0
-            self.vehicleMechanics = []
             self.name = vehicleName
             self.guiName = vehicleName
             self.shortNameWithPrefix = vehicleName
@@ -292,7 +291,6 @@ class VehicleTypeInfoVO(object):
             self.level = settings.UNKNOWN_VEHICLE_LEVEL
             self.iconName = settings.UNKNOWN_CONTOUR_ICON_NAME
             self.iconPath = settings.UNKNOWN_CONTOUR_ICON_SF_PATH
-            self.shortNameWithPrefix = vehicleName
             self.maxHealth = None
             self.isOnlyForBattleRoyaleBattles = False
             self.role = ROLE_TYPE.NOT_DEFINED
@@ -306,7 +304,7 @@ class VehicleTypeInfoVO(object):
 
 
 class VehicleArenaInfoVO(object):
-    __slots__ = ('vehicleID', 'team', 'player', 'playerStatus', 'vehicleType', 'vehicleStatus', 'prebattleID', 'events', 'squadIndex', 'invitationDeliveryStatus', 'ranked', 'gameModeSpecific', 'overriddenBadge', 'badges', '__prefixBadge', '__suffixBadge', 'dogTag', 'prestigeLevel', 'prestigeGradeMarkID', 'teamPanelMode', 'botDisplayStatus', 'dogTagModel')
+    __slots__ = ('vehicleID', 'team', 'player', 'playerStatus', 'vehicleType', 'vehicleStatus', 'prebattleID', 'events', 'squadIndex', 'invitationDeliveryStatus', 'ranked', 'gameModeSpecific', 'classTagGetter', 'overriddenBadge', 'badges', '__prefixBadge', '__suffixBadge', 'dogTag', 'prestigeLevel', 'prestigeGradeMarkID', 'teamPanelMode', 'botDisplayStatus', 'dogTagModel')
 
     def __init__(self, vehicleID, team=0, isAlive=None, isAvatarReady=None, isTeamKiller=None, prebattleID=None, events=None, forbidInBattleInvitations=False, ranked=None, badges=None, overriddenBadge=None, prestigeLevel=None, prestigeGradeMarkID=None, teamPanelMode=TEAM_PANEL_MODE.SHOW.value, botDisplayStatus=BOT_DISPLAY_STATUS.REGULAR, **kwargs):
         super(VehicleArenaInfoVO, self).__init__()
@@ -324,6 +322,7 @@ class VehicleArenaInfoVO(object):
         arena = avatar_getter.getArena()
         guiType = None if not arena else arena.guiType
         self.gameModeSpecific = GameModeDataVO(guiType, True)
+        self.classTagGetter = collectDisplayedClassTagGetter(guiType)
         self.overriddenBadge = overriddenBadge
         self.badges = badges or ((), ())
         self.__prefixBadge, self.__suffixBadge = getSelectedByLayout(self.badges[0])
@@ -550,8 +549,12 @@ class VehicleArenaInfoVO(object):
             return name
 
     def getDisplayedClassTag(self):
-        defaultClassTag = self.vehicleType.getClassName()
-        return self._applyBotDisplayStatus(defaultClassTag) if self.player.isBot else defaultClassTag
+        classTag = self.vehicleType.getClassName()
+        if self.player.isBot:
+            classTag = self._applyBotDisplayStatus(classTag)
+        if self.classTagGetter is not None:
+            classTag = self.classTagGetter(self.vehicleType, classTag)
+        return classTag
 
     def getImprovedRammingAnimationDamage(self):
         return self.vehicleType.improvedRammingAnimationDamage

@@ -3,24 +3,24 @@
 import typing
 import logging
 from functools import partial
-from GenericComponents import findSlot
-from vehicle_systems.stricted_loading import makeCallbackWeak
+import AnimationSequence
 import BigWorld
 import Math
 import material_kinds
-import AnimationSequence
-from debug_utils import LOG_CODEPOINT_WARNING, LOG_CURRENT_EXCEPTION
+from GenericComponents import findSlot
+from constants import IS_EDITOR, CollisionFlags, DEFAULT_GUN_INSTALLATION_INDEX, IS_UE_EDITOR
 from cgf_events import shot_event
+from debug_utils import LOG_CODEPOINT_WARNING, LOG_CURRENT_EXCEPTION
 from gui.impl import backport
 from gui.impl.gen import R
-from items import vehicles
-from items.components.component_constants import MAIN_TRACK_PAIR_IDX
 from helpers import i18n
 from helpers.EffectsList import EffectsListPlayer
 from helpers.EntityExtra import EntityExtra
 from helpers.laser_sight_matrix_provider import LaserSightMatrixProvider
-from vehicle_systems.shooting_helpers import processVehicleDiscreteShots
-from constants import IS_EDITOR, CollisionFlags, DEFAULT_GUN_INSTALLATION_INDEX, IS_UE_EDITOR
+from items import vehicles
+from items.components.component_constants import MAIN_TRACK_PAIR_IDX
+from vehicle_systems.shooting_helpers import processVehicleSingleShot, processVehicleMultiShot
+from vehicle_systems.stricted_loading import makeCallbackWeak
 from vehicle_systems.vehicle_composition import VehicleSlots
 _logger = logging.getLogger(__name__)
 
@@ -78,7 +78,7 @@ class ShowShooting(EntityExtra):
             if not vehicle.isAlive():
                 self.stop(data)
                 return
-            processVehicleDiscreteShots(vehicle, data['_gunInstallationSlot'])
+            processVehicleSingleShot(vehicle, data['_gunInstallationSlot'])
             self.__postVehicleShotEvent(vehicle, data['_shellType'])
             burstCount, burstInterval = data['_burst']
             gunModel = data['_gunModel']
@@ -117,11 +117,14 @@ class ShowShooting(EntityExtra):
         return
 
     def __postVehicleShotEvent(self, vehicle, shellType):
+        if not vehicle.appearance.isCompositionReady:
+            _logger.debug('Composition is not ready to post VehicleShotEvent')
+            return
         gunGo = findSlot(vehicle.entityGameObject, VehicleSlots.GUN.value)
         if IS_UE_EDITOR and not gunGo.isValid():
             gunGo = findSlot(vehicle.appearance.gameObject, VehicleSlots.GUN.value)
         if gunGo.isValid():
-            shot_event.postVehicleShotEvent(vehicle.entityGameObject, gunGo, vehicle.typeDescriptor.gun, 0, shellType)
+            shot_event.postVehicleShotEvent(vehicle.entityGameObject, gunGo, 0, shellType)
         else:
             _logger.error('Unable to post VehicleShotEvent: gunGo was not found')
 
@@ -208,16 +211,19 @@ class ShowShootingMultiGun(ShowShooting):
             if not vehicle.isAlive():
                 self.stop(data)
                 return
-            processVehicleDiscreteShots(vehicle, data['_gunInstallationSlot'])
             burstSize, burstCount, burstInterval = data['_burst']
-            burstNumber = burstSize - burstCount
+            gunIndexes = data['_gunSequence'][burstSize - burstCount]
+            if len(gunIndexes) > 1:
+                processVehicleMultiShot(vehicle, data['_gunInstallationSlot'], gunIndexes)
+            else:
+                processVehicleSingleShot(vehicle, data['_gunInstallationSlot'], gunIndexes[0])
             if burstCount == 1:
-                self.__doGunEffect(data, burstNumber, True)
+                self.__doGunEffect(data, gunIndexes, True)
                 withShot = 1
             else:
                 data['_burst'] = (burstSize, burstCount - 1, burstInterval)
                 data['_timerID'] = BigWorld.callback(burstInterval, partial(self.__doShot, data))
-                self.__doGunEffect(data, burstNumber, False)
+                self.__doGunEffect(data, gunIndexes, False)
                 withShot = 2
             self.__doRecoil(data)
             if not IS_EDITOR:
@@ -230,12 +236,12 @@ class ShowShootingMultiGun(ShowShooting):
 
         return
 
-    def __doGunEffect(self, data, burstNumber, isLastEffect):
+    def __doGunEffect(self, data, gunIndexes, isLastEffect):
         for gunIndex, effPlayer in data['_effectsListPlayers'].items():
             effPlayer.stop()
 
         gunModel = data['_gunModel']
-        for gunIndex in data['_gunSequence'][burstNumber]:
+        for gunIndex in gunIndexes:
             effPlayer = data['_effectsListPlayers'][gunIndex]
             if isLastEffect:
                 effPlayer.play(gunModel, None, partial(self.stop, data))

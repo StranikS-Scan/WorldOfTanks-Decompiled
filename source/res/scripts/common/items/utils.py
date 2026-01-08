@@ -175,7 +175,7 @@ def getDualGunReloadTime(vehicleDescr, factors):
         return (0.0,)
 
 
-def geTwinGunReloadTime(vehicleDescr, factors):
+def getTwinGunReloadTime(vehicleDescr, factors):
     if 'twinGun' in vehicleDescr.gun.tags:
         factor = vehicleDescr.miscAttrs['gunReloadTimeFactor'] * max(factors['gun/reloadTime'], 0.0)
         oneGunReloadTime = vehicleDescr.gun.reloadTime * factor
@@ -264,24 +264,6 @@ if IS_CLIENT:
                     result[factor] = originalFactor - changedFactor
 
         return result
-
-
-    def getClientShotDispersion(vehicleDescr, shotDispersionFactor):
-        gun = vehicleDescr.gun
-        values = []
-        multShotDispersionFactor = vehicleDescr.miscAttrs['multShotDispersionFactor'] * shotDispersionFactor
-        if 'dualAccuracy' in gun.tags:
-            values.append(gun.dualAccuracy.afterShotDispersionAngle * multShotDispersionFactor)
-        values.append(gun.shotDispersionAngle * multShotDispersionFactor)
-        if 'twinGun' in gun.tags:
-            siegeVehDescr = vehicleDescr.siegeVehicleDescr
-            multShotDispersionSiegeFactor = siegeVehDescr.miscAttrs['multShotDispersionFactor'] * shotDispersionFactor
-            values.append(siegeVehDescr.gun.shotDispersionAngle * multShotDispersionSiegeFactor)
-        return tuple(values)
-
-
-    def getClientCoolingDelay(vehicleDescr, factors):
-        return float(vehicleDescr.gun.dualAccuracy.coolingDelay) * factors['dualAccuracyCoolingDelay']
 
 
     def getClientInvisibility(vehicleDescr, vehicle, camouflageFactor, factors):

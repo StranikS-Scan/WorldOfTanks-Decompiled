@@ -198,6 +198,17 @@ class SeasonProvider(ISeasonProvider):
                 periodType = PERIOD_TO_STANDALONE.get(periodType, periodType)
             return self._PERIOD_INFO_CLASS(now, periodType, PeriodInfo.leftSeasonBorder(currSeason), PeriodInfo.rightSeasonBorder(currSeason), PeriodInfo.leftCycleBorder(currCycle), PeriodInfo.rightCycleBorder(currCycle), primeDelta)
 
+    def getMinNonZeroPrimeDelta(self, now=None):
+        if now is None:
+            now = self.__getNow()
+        _min = float('+inf')
+        for host in self.__connectionMgr.availableHosts:
+            delta = self.getPeriodInfo(now, host.peripheryID).primeDelta
+            if delta and delta < _min:
+                _min = delta
+
+        return _min if _min != float('+inf') else 0
+
     def getPreviousSeason(self, now=None):
         seasonsPassed = self.getSeasonsPassed(now)
         if seasonsPassed:

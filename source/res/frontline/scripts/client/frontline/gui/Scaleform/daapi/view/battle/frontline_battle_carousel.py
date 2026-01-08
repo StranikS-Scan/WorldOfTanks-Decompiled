@@ -16,18 +16,22 @@ from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider imp
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.prb_control.settings import VEHICLE_LEVELS
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES
+from gui.impl.gen import R
+from gui.impl import backport
 from helpers import dependency
 import nations
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.Scaleform.daapi.view.battle.shared.respawn import respawn_utils
 from gui.shared.gui_items import ItemsCollection
-from skeletons.gui.game_control import IEpicBattleMetaGameController
+from skeletons.gui.game_control import IEpicBattleMetaGameController, IVehiclePlaylistsController
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 _logger = logging.getLogger(__name__)
 _CAROUSEL_FILTERS = (FILTER_KEYS.FAVORITE, FILTER_KEYS.PREMIUM)
+DEFAULT_VEHICLE_PLAY_LIST = ''
 
 class BattleCarouselFilter(CarouselFilter):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
+    __vehiclePlaylistsCtrl = dependency.descriptor(IVehiclePlaylistsController)
 
     def __init__(self):
         super(BattleCarouselFilter, self).__init__()
@@ -55,6 +59,7 @@ def getEpicVehicleDataVO(vehicle):
 
 class BattleCarouselDataProvider(CarouselDataProvider):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    __vehPlaylistsCtrl = dependency.descriptor(IVehiclePlaylistsController)
 
     def __init__(self, carouselFilter, itemsCache):
         super(BattleCarouselDataProvider, self).__init__(carouselFilter, itemsCache)
@@ -63,6 +68,7 @@ class BattleCarouselDataProvider(CarouselDataProvider):
         self.__availableLevels = []
         self.__indexToScroll = -1
         self.__currentVehicle = None
+        self.__vehPlaylistsCtrl.initPlayLists()
         return
 
     def hasRentedVehicles(self):
@@ -123,6 +129,27 @@ class BattleCarouselDataProvider(CarouselDataProvider):
             self._filterByIndices()
         return
 
+    def getVehiclePlayList(self):
+        avaliableVehicles = [ vehicle.intCD for vehicle in self._vehicles ]
+        stabPlayListData = {'lists': [{'id': '',
+                    'label': backport.text(R.strings.pages.titles.allVehicles()),
+                    'warning': False,
+                    'display': '',
+                    'total': ''}]}
+        selectedList = self.__vehPlaylistsCtrl.getSelectedID()
+        for index, (pId, pStrData) in enumerate(self.__vehPlaylistsCtrl.iterPlaylists()):
+            playList = self.__vehPlaylistsCtrl.simplePlayListParser(pStrData)
+            if playList is not None:
+                stabPlayListData['lists'].append({'id': pId,
+                 'label': playList.title,
+                 'warning': set(playList.list).isdisjoint(avaliableVehicles),
+                 'display': str(sum((1 for item in playList.list if item in avaliableVehicles))),
+                 'total': str(len(playList.list))})
+            if selectedList == pId:
+                stabPlayListData['selectedListIndex'] = index + 1
+
+        return stabPlayListData
+
     def getVisibleVehiclesIntCDs(self, vehLevelsToScroll):
         filters = self._filter.getFilters()
         switchedLevels = []
@@ -132,7 +159,14 @@ class BattleCarouselDataProvider(CarouselDataProvider):
                 self._filter.switch(levelStr, False)
                 switchedLevels.append(levelStr)
 
-        visibleVehiclesIntCDs = [ vehicle.intCD for vehicle in self._getCurrentVehicles() ]
+        listID = self.__vehPlaylistsCtrl.getSelectedID()
+        vehPlayList = self.__vehPlaylistsCtrl.simplePlayListParser(self.__vehPlaylistsCtrl.getPlaylistDataByID(listID)).list if listID else []
+        visibleVehiclesIntCDs = []
+        for vehicle in self._getCurrentVehicles():
+            vehicleIntCD = vehicle.intCD
+            if not vehPlayList or vehicleIntCD in vehPlayList:
+                visibleVehiclesIntCDs.append(vehicleIntCD)
+
         for levelStr in switchedLevels:
             self._filter.switch(levelStr, False)
 
@@ -283,6 +317,7 @@ class VehicleData(object):
 class BattleTankCarousel(BattleTankCarouselMeta):
     _DISABLED_FILTERS = ['bonus']
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    __vehiclePlaylistsCtrl = dependency.descriptor(IVehiclePlaylistsController)
 
     def __init__(self):
         super(BattleTankCarousel, self).__init__()
@@ -293,6 +328,10 @@ class BattleTankCarousel(BattleTankCarouselMeta):
 
     def sortVehicles(self, _):
         self._carouselDP.applyFilter()
+
+    def resetPlaylistAndFilters(self):
+        self.__vehiclePlaylistsCtrl.setSelectedID(DEFAULT_VEHICLE_PLAY_LIST)
+        self.resetFilters()
 
     def setFilter(self, idx):
         self.filter.switch(self._usedFilters[idx])
@@ -308,6 +347,9 @@ class BattleTankCarousel(BattleTankCarouselMeta):
         else:
             vehicle = self._carouselDP.getSelectedVehicle()
             return None if not hasattr(vehicle, 'intCD') else vehicle
+
+    def getVehiclePlayList(self):
+        return self._carouselDP.getVehiclePlayList()
 
     def selectVehicleByID(self, vehicleID):
         self._carouselDP.selectVehicleByID(vehicleID)

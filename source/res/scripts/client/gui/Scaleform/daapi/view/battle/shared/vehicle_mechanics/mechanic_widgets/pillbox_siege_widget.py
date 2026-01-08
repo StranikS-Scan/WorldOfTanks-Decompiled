@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/vehicle_mechanics/mechanic_widgets/pillbox_siege_widget.py
+from __future__ import absolute_import
 from collections import namedtuple
 import BigWorld
 import typing
 import CommandMapping
 from PillboxSiegeComponent import PillboxSiegeComponent
 from constants import VEHICLE_SIEGE_STATE as PILLBOX_STATES, VEHICLE_MISC_STATUS
+from events_containers.common.containers import ContainersListener
 from events_handler import eventHandler
 from helpers import dependency
 from gui.battle_control.battle_constants import DEVICE_STATE_CRITICAL, DEVICE_STATE_DESTROYED, VEHICLE_DEVICE_IN_COMPLEX_ITEM
@@ -13,23 +15,22 @@ from gui.Scaleform.daapi.view.battle.shared.vehicle_mechanics.mechanic_widgets.v
 from gui.Scaleform.daapi.view.meta.PillboxSiegeWidgetMeta import PillboxSiegeWidgetMeta
 from gui.Scaleform.genConsts.PILLBOX_SIEGE_WIDGET_CONST import PILLBOX_SIEGE_WIDGET_CONST
 from gui.veh_mechanics.battle.updaters.hotkey_updaters import HotKeysViewUpdater
-from gui.veh_mechanics.battle.updaters.mechanic_commands_view_updater import MechanicsCommandsUpdater
-from gui.veh_mechanics.battle.updaters.mechanic_passenger_view_updater import VehicleMechanicPassengerUpdater
-from gui.veh_mechanics.battle.updaters.mechanic_states_view_updater import VehicleMechanicStatesUpdater
+from gui.veh_mechanics.battle.updaters.mechanics.mechanic_commands_updater import VehicleMechanicCommandsUpdater
+from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import VehicleMechanicPassengerUpdater
+from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
 from gui.veh_mechanics.battle.updaters.vehicle_device_view_updater import IVehicleDeviceStatusView, VehicleDeviceStatusUpdater
 from gui.veh_mechanics.battle.updaters.vehicle_misc_status_view_updater import VehicleMiscStatusUpdater, IVehicleMiscStatusView, MISC_STATUS_LEVEL_CRITICAL, MISC_STATUS_LEVEL_WARNING
 from skeletons.gui.battle_session import IBattleSessionProvider
 from vehicles.mechanics.mechanic_commands import IMechanicCommandsListenerLogic
 from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
-from vehicles.components.component_events import ComponentListener
 if typing.TYPE_CHECKING:
     from PillboxSiegeComponent import PillboxSiegeModeState
     from gui.veh_mechanics.battle.updaters.updaters_common import IViewUpdater
     from gui.veh_mechanics.battle.updaters.vehicle_misc_status_view_updater import _ObservableMiscStatuses
 _HotKeyInfo = namedtuple('_HotKeyInfo', ['affectOn', 'duration'])
 
-class PillboxSiegeMechanicWidget(PillboxSiegeWidgetMeta, ComponentListener, IMechanicStatesListenerLogic, IMechanicCommandsListenerLogic, IVehicleMiscStatusView, IVehicleDeviceStatusView):
+class PillboxSiegeMechanicWidget(PillboxSiegeWidgetMeta, ContainersListener, IMechanicStatesListenerLogic, IMechanicCommandsListenerLogic, IVehicleMiscStatusView, IVehicleDeviceStatusView):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     _PILLBOX_SIEGE_UI_STATES = {(PILLBOX_STATES.DISABLED, PILLBOX_STATES.DISABLED): PILLBOX_SIEGE_WIDGET_CONST.IDLE,
      (PILLBOX_STATES.ENABLED, PILLBOX_STATES.ENABLED): PILLBOX_SIEGE_WIDGET_CONST.SIEDGE,
@@ -97,8 +98,8 @@ class PillboxSiegeMechanicWidget(PillboxSiegeWidgetMeta, ComponentListener, IMec
          VehicleMechanicStatesUpdater(VehicleMechanic.PILLBOX_SIEGE_MODE, self),
          VehicleMiscStatusUpdater(self._VEHICLE_MISC_OBSERVE, self),
          VehicleDeviceStatusUpdater(self._VEHICLE_DEVICES_OBSERVE, self),
-         MechanicsCommandsUpdater(VehicleMechanic.PILLBOX_SIEGE_MODE, self),
-         HotKeysViewUpdater(self._HOT_KEY_MAP.keys(), self)]
+         VehicleMechanicCommandsUpdater(VehicleMechanic.PILLBOX_SIEGE_MODE, self),
+         HotKeysViewUpdater(list(self._HOT_KEY_MAP.keys()), self)]
 
     def __getDisplayState(self, state):
         key = (state.state, state.nextState)

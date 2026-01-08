@@ -567,7 +567,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             self._setMarkerBoundEnabled(vehicleMarker.getMarkerID(), False)
 
     def __addMarkerToPool(self, vehicleID, vInfo, vProxy=None):
-        if not self.__needsMarker(vInfo):
+        if not self._needsMarker(vInfo):
             return
         else:
             if vProxy is not None:
@@ -594,6 +594,9 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
     def _getCullDistanceForVehicle(self, vInfo):
         return _VEHICLE_MARKER_CULL_DISTANCE
 
+    def _needsMarker(self, vInfo):
+        return vInfo.isAlive() or not (isSpawnedBot(vInfo.vehicleType.tags) or isHunterBot(vInfo.vehicleType.tags))
+
     def __hide(self, handle, vehicleID):
         if handle in self._markerTimers:
             timers = self._markerTimers.get(handle, {})
@@ -616,10 +619,6 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         if marker.setSpeaking(speaking):
             self._invokeMarker(marker.getMarkerID(), 'setSpeaking', speaking)
 
-    @staticmethod
-    def __needsMarker(vInfo):
-        return (vInfo.isAlive() or not (isSpawnedBot(vInfo.vehicleType.tags) or isHunterBot(vInfo.vehicleType.tags))) and constants.VEHICLE_BUNKER_TURRET_TAG not in vInfo.vehicleType.tags
-
     def __setEntityName(self, vInfo, arenaDP):
         vehicleID = vInfo.vehicleID
         if vehicleID not in self._markers:
@@ -632,7 +631,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         return BigWorld.player().observedVehicleID == vehicleID and BigWorld.player().isObserverFPV
 
     def __onVehicleMarkerAdded(self, vProxy, vInfo, guiProps):
-        if not self.__needsMarker(vInfo):
+        if not self._needsMarker(vInfo):
             return
         else:
             vehicleID = vInfo.vehicleID

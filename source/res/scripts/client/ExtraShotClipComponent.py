@@ -1,24 +1,42 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ExtraShotClipComponent.py
-import typing
-import BigWorld
 from constants import ExtraShotClipStates
+from events_handler import eventHandler
+from gui.battle_control.components_states.ammo import DefaultComponentAmmoState, AmmoShootPossibility
+from gui.shared.utils.decorators import ReprInjector
+from vehicles.components.vehicle_component import VehicleDynamicComponent
+from vehicles.mechanics.gun_mechanics.common import IGunMechanicComponent
 from vehicles.mechanics.mechanic_constants import VehicleMechanic
-from vehicles.mechanics.mechanic_helpers import getVehicleMechanic
-if typing.TYPE_CHECKING:
-    from Vehicle import Vehicle
 
-def getVehicleExtraShotController(vehicle):
-    return getVehicleMechanic(VehicleMechanic.EXTRA_SHOT_CLIP, vehicle)
+class ExtraShotAmmoState(DefaultComponentAmmoState):
 
+    def __init__(self, reloadState):
+        super(ExtraShotAmmoState, self).__init__()
+        self.__reloadState = reloadState
 
-class ExtraShotState(typing.NamedTuple('ExtraShotState', (('reloadState', int),))):
+    @property
+    def extraReloadState(self):
+        return self.__reloadState
 
     def isReloadAfterShot(self, timeLeft, baseTime):
-        return self.reloadState & ExtraShotClipStates.FULL_RELOAD_WITH_EXTRA_TIME if self.reloadState & ExtraShotClipStates.EXTRA_FULL_RELOAD else timeLeft == baseTime
+        return self.__reloadState & ExtraShotClipStates.FULL_RELOAD_WITH_EXTRA_TIME if self.__reloadState & ExtraShotClipStates.EXTRA_FULL_RELOAD else timeLeft == baseTime
+
+    def getShootPossibility(self, currentShells):
+        isShootPossible = currentShells[1] == 1 and self.__reloadState == ExtraShotClipStates.EXTRA_FULL_RELOAD
+        return AmmoShootPossibility.ALLOWED if isShootPossible else AmmoShootPossibility.NOT_DEFINED
 
 
-class ExtraShotClipComponent(BigWorld.DynamicScriptComponent):
+@ReprInjector.withParent()
+class ExtraShotClipComponent(VehicleDynamicComponent, IGunMechanicComponent):
 
-    def getMechanicState(self):
-        return ExtraShotState(self.reloadState)
+    def __init__(self):
+        super(ExtraShotClipComponent, self).__init__()
+        self._initComponent()
+
+    @property
+    def vehicleMechanic(self):
+        return VehicleMechanic.EXTRA_SHOT_CLIP
+
+    @eventHandler
+    def onCollectAmmoStates(self, ammoStates):
+        ammoStates[self.vehicleMechanic.value] = ExtraShotAmmoState(self.reloadState)

@@ -83,13 +83,13 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         g_currentVehicle.onChanged += self.__onVehicleChanged
         g_clientUpdateManager.addMoneyCallback(self.__setBottomPanelBillData)
         self.__setFooterInitData()
-        self.__setBottomPanelBillData()
         self.__updatePopoverBtn()
         self.__updateHelpMessage()
         self.__c11nSettings = AccountSettings.getSettings(CUSTOMIZATION_SECTION)
         self.__serverSettings = self.settingsCore.serverSettings
         self.__stageSwitcherVisibility = False
         BigWorld.callback(0.0, lambda : self.__onTabChanged(self.__ctx.mode.tabId))
+        BigWorld.callback(0.0, self.__setBottomPanelBillData)
 
     def _dispose(self):
         g_clientUpdateManager.removeObjectCallbacks(self)

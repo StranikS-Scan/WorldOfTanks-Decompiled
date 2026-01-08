@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/system_events.py
-from entity_events import EntityEvents
+from events_container import EventsContainer
 
-class SystemEvents(EntityEvents):
+class SystemEvents(EventsContainer):
 
     def __init__(self):
         super(SystemEvents, self).__init__()

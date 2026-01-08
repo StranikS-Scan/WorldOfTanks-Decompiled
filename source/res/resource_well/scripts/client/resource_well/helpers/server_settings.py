@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: resource_well/scripts/client/resource_well/helpers/server_settings.py
+from __future__ import absolute_import
 import logging
 from collections import namedtuple
+from future.builtins import str
+from future.utils import iteritems
 from typing import Tuple, List
 from shared_utils import makeTupleByDict
 _logger = logging.getLogger(__name__)
@@ -22,8 +25,8 @@ class RewardConfig(namedtuple('RewardConfig', ('bonus', 'limit', 'isSerial', 'se
     @classmethod
     def __packResourceConfigs(cls, data):
         resources = {}
-        for resourceType, resourceConfig in data['resources'].iteritems():
-            resources[resourceType] = {name:_ResourceConfig(name=name, rate=resourceData.get('rate'), limit=resourceData.get('limit')) for name, resourceData in resourceConfig.iteritems()}
+        for resourceType, resourceConfig in iteritems(data['resources']):
+            resources[resourceType] = {name:_ResourceConfig(name=name, rate=resourceData.get('rate'), limit=resourceData.get('limit')) for name, resourceData in iteritems(resourceConfig)}
 
         data['resources'] = resources
 
@@ -56,13 +59,13 @@ class ResourceWellConfig(namedtuple('_ResourceWellConfig', ('isEnabled', 'season
 
     def replace(self, data):
         allowedFields = self._fields
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        dataToUpdate = dict(((k, v) for k, v in iteritems(data) if k in allowedFields))
         self.__packRewardsConfigs(dataToUpdate)
         return self._replace(**dataToUpdate)
 
     def getRewardConfig(self, rewardID):
         if rewardID not in self.rewards:
-            _logger.error('Invalid rewardID - %s. Available IDs: %s', rewardID, str(self.rewards.keys()))
+            _logger.error('Invalid rewardID - %s. Available IDs: %s', rewardID, str(list(self.rewards)))
             return RewardConfig()
         return self.rewards[rewardID]
 
@@ -71,10 +74,10 @@ class ResourceWellConfig(namedtuple('_ResourceWellConfig', ('isEnabled', 'season
         return reward.availableAfter
 
     def getSortedRewardsByOrder(self):
-        return sorted(self.rewards.items(), key=lambda item: item[1].order)
+        return sorted(iteritems(self.rewards), key=lambda item: item[1].order)
 
     @classmethod
     def __packRewardsConfigs(cls, data):
         if 'rewards' not in data:
             return
-        data['rewards'] = {rewardID:makeTupleByDict(RewardConfig, reward) for rewardID, reward in data['rewards'].iteritems()}
+        data['rewards'] = {rewardID:makeTupleByDict(RewardConfig, reward) for rewardID, reward in iteritems(data['rewards'])}

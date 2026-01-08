@@ -91,6 +91,12 @@ class PMCache(potapov_quests.PQCache):
     def branchByMissionID(self, potapovQuestID):
         return self.branchByPotapovQuestID(potapovQuestID)
 
+    def getPersonalMissionNameByID(self, missionID):
+        return self.getPotapovQuestNameByQuestID(missionID)
+
+    def getPersonalMissionIDByName(self, missionName):
+        return self.getPotapovQuestIDByName(missionName)
+
 
 class PMStorage(potapov_quests.PQStorage):
     pass

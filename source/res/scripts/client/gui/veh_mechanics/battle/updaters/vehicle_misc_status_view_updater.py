@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/veh_mechanics/battle/updaters/vehicle_misc_status_view_updater.py
+from __future__ import absolute_import
 import typing
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, DestroyTimerViewState
 from gui.veh_mechanics.battle.updaters.updaters_common import ViewUpdater

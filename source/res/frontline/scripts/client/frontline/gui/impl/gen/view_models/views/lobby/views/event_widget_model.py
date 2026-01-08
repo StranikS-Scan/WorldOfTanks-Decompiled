@@ -50,11 +50,11 @@ class EventWidgetModel(ViewModel):
     def setIsCurrentCycleActive(self, value):
         self._setBool(6, value)
 
-    def getIsCycleStateFinished(self):
-        return self._getBool(7)
+    def getModeState(self):
+        return self._getString(7)
 
-    def setIsCycleStateFinished(self, value):
-        self._setBool(7, value)
+    def setModeState(self, value):
+        self._setString(7, value)
 
     def getRentalVehicleLevel(self):
         return self._getString(8)
@@ -89,7 +89,7 @@ class EventWidgetModel(ViewModel):
         self._addNumberProperty('lastSeenRewardsHash', 0)
         self._addBoolProperty('isRentHighlighted', False)
         self._addBoolProperty('isCurrentCycleActive', False)
-        self._addBoolProperty('isCycleStateFinished', False)
+        self._addStringProperty('modeState', '')
         self._addStringProperty('rentalVehicleLevel', '')
         self._addNumberProperty('combatReservesPoints', 0)
         self._addBoolProperty('isMaxLevel', False)

@@ -121,6 +121,8 @@
     <Rolls_Royce_CV_12TCA>	146	</Rolls_Royce_CV_12TCA>
     <Rolls_Royce_Griffon_214t>	148	</Rolls_Royce_Griffon_214t>
     <Rolls_Royce_V12>	149	</Rolls_Royce_V12>
+    <Rolls_Royce_Meteor_with_twin_turbo_supercharges_CFE_A>	151	</Rolls_Royce_Meteor_with_twin_turbo_supercharges_CFE_A>
+    <Rolls_Royce_Meteor_MkIV_B12_CFE_J>	152	</Rolls_Royce_Meteor_MkIV_B12_CFE_J>
     <AEC_A190_Bishop>	2000	</AEC_A190_Bishop>
     <GMC_6004_6_71A_Bishop>	2001	</GMC_6004_6_71A_Bishop>
     <Nuffield_Liberty_Mk_III_CSP>	2002	</Nuffield_Liberty_Mk_III_CSP>
@@ -175,6 +177,7 @@
     <Rolls_Royce_Griffon_7x7>	502	</Rolls_Royce_Griffon_7x7>
     <Rolls_Royce_Meteor_with_twin_turbo_supercharges_7x7>	503	</Rolls_Royce_Meteor_with_twin_turbo_supercharges_7x7>
     <LandRover_Meteorite_V8_7x7>	504	</LandRover_Meteorite_V8_7x7>
+    <Rolls_Royce_Griffon_SC_7x7>	505	</Rolls_Royce_Griffon_SC_7x7>
     <Rolls_Royse_Meteor_MkIVC_IGR>	60001	</Rolls_Royse_Meteor_MkIVC_IGR>
     <Rolls_Royse_Meteor_M120_IGR>	60002	</Rolls_Royse_Meteor_M120_IGR>
     <Rolls_Royse_Meteor_MkIV_IGR>	60003	</Rolls_Royse_Meteor_MkIV_IGR>
@@ -893,6 +896,23 @@
       <rpm_min>	645	</rpm_min>
       <rpm_max>	2323	</rpm_max>
     </Rolls_Royce_Meteor_MkIV_B12>
+    <Rolls_Royce_Meteor_MkIV_B12_CFE_J>
+      <userString>	#gb_vehicles:Rolls_Royce_Meteor_MkIV_B12_CFE_J	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	30000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	640	</power>
+      <weight>	500	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	645	</rpm_min>
+      <rpm_max>	2323	</rpm_max>
+    </Rolls_Royce_Meteor_MkIV_B12_CFE_J>
     <Cadillac_75_x_3>
       <userString>	#gb_vehicles:Cadillac_75_x_3	</userString>
       <tags>	gasoline	</tags>
@@ -2010,6 +2030,22 @@
       <rpm_min>	426	</rpm_min>
       <rpm_max>	2233	</rpm_max>
     </Rolls_Royce_Griffon_SC>
+    <Rolls_Royce_Griffon_SC_7x7>
+      <userString>	#gb_vehicles:Rolls_Royce_Griffon_SC_7x7	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1120	</power>
+      <weight>	952	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	426	</rpm_min>
+      <rpm_max>	2233	</rpm_max>
+    </Rolls_Royce_Griffon_SC_7x7>
     <Rolls_Royce_Griffon_214>
       <userString>	#gb_vehicles:Rolls_Royce_Griffon_214	</userString>
       <tags>	gasoline	</tags>
@@ -2575,6 +2611,23 @@
       <rpm_min>	449	</rpm_min>
       <rpm_max>	2161	</rpm_max>
     </Rolls_Royce_Meteor_with_twin_turbo_supercharges>
+    <Rolls_Royce_Meteor_with_twin_turbo_supercharges_CFE_A>
+      <userString>	#gb_vehicles:Rolls_Royce_Meteor_with_twin_turbo_supercharges_CFE_A	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	65000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1040	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	449	</rpm_min>
+      <rpm_max>	2161	</rpm_max>
+    </Rolls_Royce_Meteor_with_twin_turbo_supercharges_CFE_A>
     <Rolls_Royce_Meteor_with_twin_turbo_supercharges_7x7>
       <userString>	#gb_vehicles:Rolls_Royce_Meteor_with_twin_turbo_supercharges	</userString>
       <tags>	gasoline	</tags>

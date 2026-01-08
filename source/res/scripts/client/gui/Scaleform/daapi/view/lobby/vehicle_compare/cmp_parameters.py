@@ -17,12 +17,12 @@ from gui.shared.items_parameters.comparator import rateParameterState, PARAM_STA
 from gui.shared.items_parameters.formatters import FORMAT_SETTINGS, clipFireRatePreprocessor, shotDispersionAnglePreprocessor
 from gui.shared.items_parameters.params import VehicleParams
 from gui.shared.items_parameters.params_helper import VehParamsBaseGenerator, isValidEmptyValue, updateCrewBonus
-from gui.shared.utils import SHOT_DISPERSION_ANGLE, AUTO_SHOOT_CLIP_FIRE_RATE
+from gui.shared.utils import SHOT_DISPERSION_ANGLE, AUTO_SHOOT_CLIP_FIRE_RATE, TEMPERATURE_RELOAD_TIME, TEMPERATURE_AVG_DAMAGE_PER_MINUTE
 from helpers import dependency
 from post_progression_common import VehicleState
 from skeletons.gui.game_control import IVehicleComparisonBasket
 from items import tankmen
-CMP_HIDDEN_PARAMETERS = frozenset([AUTO_SHOOT_CLIP_FIRE_RATE])
+CMP_HIDDEN_PARAMETERS = frozenset([AUTO_SHOOT_CLIP_FIRE_RATE, TEMPERATURE_RELOAD_TIME, TEMPERATURE_AVG_DAMAGE_PER_MINUTE])
 _HEADER_PARAM_COLOR_SCHEME = (text_styles.middleTitle, text_styles.middleBonusTitle, text_styles.middleTitle)
 _HEADER_PARAM_NO_COLOR_SCHEME = (text_styles.middleTitle, text_styles.middleTitle, text_styles.middleTitle)
 _PARAM_COLOR_SCHEME = (text_styles.main, text_styles.bonusAppliedText, text_styles.main)
@@ -147,6 +147,14 @@ class _CmpVehicleParams(VehicleParams):
     @property
     def clipFireRate(self):
         return super(_CmpVehicleParams, self).clipFireRate or self.autoShootClipFireRate
+
+    @property
+    def reloadTime(self):
+        return super(_CmpVehicleParams, self).reloadTime or self.temperatureReloadTime
+
+    @property
+    def avgDamagePerMinute(self):
+        return super(_CmpVehicleParams, self).avgDamagePerMinute or self.temperatureAvgDamagePerMinute
 
 
 class _VehCompareParametersData(object):

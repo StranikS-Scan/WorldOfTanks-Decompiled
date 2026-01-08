@@ -8,7 +8,7 @@ from skeletons.gui.game_control import IEpicBattleMetaGameController
 from frontline.gui.impl.gen.view_models.views.lobby.tooltips.banner_tooltip_model import BannerTooltipModel
 from gui.shared.formatters.ranges import toRangeString, toRomanRangeString
 from gui.shared.utils import isRomanNumberForbidden
-from frontline.gui.frontline_helpers import geFrontlineState
+from frontline.gui.frontline_helpers import getFrontlineState
 from frontline.gui.impl.gen.view_models.views.lobby.views.frontline_const import FrontlineState
 from frontline.constants.common import STATES_MAP
 from account_helpers.AccountSettings import AccountSettings, FRONTLINE_BANNER_INTRO_CLICK_TIMESTAMP
@@ -29,7 +29,7 @@ class BannerTooltipView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(BannerTooltipView, self)._onLoading(*args, **kwargs)
-        frontlineState, eventEndDate, _ = geFrontlineState(withPrimeTime=True)
+        frontlineState, eventEndDate, _ = getFrontlineState(withPrimeTime=True)
         if frontlineState == FrontlineState.FROZEN:
             eventStartDate = time_utils.getCurrentLocalServerTimestamp()
         else:

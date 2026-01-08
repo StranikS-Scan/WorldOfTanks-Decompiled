@@ -3,6 +3,7 @@
 from __future__ import absolute_import
 from account_helpers.settings_core import settings_constants
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
+from future.builtins import round
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.vehicle_hub.views.sub_models.armor_layer_model import ArmorLayerModel
 from gui.impl.gen.view_models.views.lobby.vehicle_hub.views.sub_models.armor_tooltip_model import ArmorTooltipModel
@@ -43,8 +44,8 @@ class ArmorTooltipView(ViewImpl):
             for material in stackedMaterials:
                 layer = ArmorLayerModel()
                 layer.setLayerName(material.partName)
-                layer.setNominalArmor(material.nominalArmor)
-                layer.setResultArmor(material.resArmor)
+                layer.setNominalArmor(round(material.nominalArmor))
+                layer.setResultArmor(round(material.resArmor))
                 layer.setImpactAngle(material.viewAngle)
                 layer.setColor(material.color)
                 layer.setCount(material.count)

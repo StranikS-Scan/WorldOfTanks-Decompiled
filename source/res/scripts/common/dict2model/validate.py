@@ -4,7 +4,7 @@ from __future__ import absolute_import
 import typing
 import re
 from soft_exception import SoftException
-from dict2model.exceptions import ValidationError, ValidationErrorMessage
+from dict2model.exceptions import ValidationError, ValidationErrorMessage, CumulativeIterableValidationError
 if typing.TYPE_CHECKING:
     from dict2model.types import ValidatorType, ValidatorsType
 
@@ -41,7 +41,7 @@ def runValidators(validations, toValidate):
 class Validator(object):
     __slots__ = ()
 
-    def __call__(self, incoming):
+    def __call__(self, incoming, *args, **kwargs):
         pass
 
     def __repr__(self):
@@ -61,7 +61,7 @@ class Range(Validator):
         self._min = minValue
         self._max = maxValue
 
-    def __call__(self, incoming):
+    def __call__(self, incoming, *args, **kwargs):
         if self._min is not None and incoming < self._min:
             message = self._messageMin if self._max is None else self._messageAll
             raise ValidationError(self._formatError(message))
@@ -91,7 +91,7 @@ class Length(Range):
         self._equal = equalValue
         return
 
-    def __call__(self, incoming):
+    def __call__(self, incoming, *args, **kwargs):
         length = len(incoming)
         if self._equal is not None:
             if length != self._equal:
@@ -150,7 +150,7 @@ class URL(Validator):
         self.relative = relative
         self.requireTld = requireTld
 
-    def __call__(self, incoming):
+    def __call__(self, incoming, *args, **kwargs):
         if not incoming:
             raise ValidationError(self._message)
         if '://' in incoming:
@@ -173,7 +173,7 @@ class NoneOf(Validator):
         self._choices = choices
         self._choicesText = ', '.join((str(each) for each in self._choices))
 
-    def __call__(self, incoming):
+    def __call__(self, incoming, *args, **kwargs):
         try:
             if incoming in self._choices:
                 raise ValidationError(self._message.format(value=incoming, values=self._choicesText))
@@ -188,7 +188,7 @@ class OneOf(NoneOf):
     _message = 'Value: {value} must be one of: {values}.'
     __slots__ = ()
 
-    def __call__(self, incoming):
+    def __call__(self, incoming, *args, **kwargs):
         try:
             if incoming not in self._choices:
                 raise ValidationError(self._message.format(value=incoming, values=self._choicesText))
@@ -203,10 +203,113 @@ class Regexp(Validator):
     def __init__(self, regex, flags=0):
         self._regex = re.compile(regex, flags) if isinstance(regex, str) else regex
 
-    def __call__(self, incoming):
+    def __call__(self, incoming, *args, **kwargs):
         if self._regex.match(incoming) is None:
             raise ValidationError(self._message.format(value=incoming, pattern=self._regex.pattern))
         return
 
     def _reprArgs(self):
         return 'regex={}'.format(self._regex.pattern)
+
+
+class IterableValidator(Validator):
+    __slots__ = ()
+
+    def __call__(self, incoming, storage, isLastIteration, *args, **kwargs):
+        pass
+
+    def createStorage(self):
+        return {}
+
+
+class _IterableAttrValidator(IterableValidator):
+    __slots__ = ('_attrName',)
+
+    def __init__(self, attrName=None):
+        self._attrName = attrName
+
+    def getValue(self, incoming):
+        if self._attrName is not None and not hasattr(incoming, self._attrName):
+            raise ValidationError('Incoming {} does not have attribute {}'.format(incoming, self._attrName))
+        return incoming if self._attrName is None else getattr(incoming, self._attrName)
+
+
+class IterableOfUnique(_IterableAttrValidator):
+    __slots__ = ()
+
+    def __call__(self, incoming, storage, *args, **kwargs):
+        value = self.getValue(incoming)
+        if value not in storage:
+            storage.add(value)
+        else:
+            raise ValidationError('Value {} of {} is duplicate.'.format(value, self._attrName))
+
+    def createStorage(self):
+        return set()
+
+
+class IterableOfSequential(_IterableAttrValidator):
+    __slots__ = ('_firstValue',)
+
+    def __init__(self, attrName=None, firstValue=1):
+        super(IterableOfSequential, self).__init__(attrName)
+        self._firstValue = firstValue
+
+    def __call__(self, incoming, storage, *args, **kwargs):
+        value = self.getValue(incoming)
+        isMismatch = value != storage[0]
+        storage[0] += 1
+        if isMismatch:
+            raise ValidationError('Value {}  of {} is out of order'.format(value, self._attrName))
+
+    def createStorage(self):
+        return [self._firstValue]
+
+
+class IterableAnyTrue(_IterableAttrValidator):
+    __slots__ = ()
+
+    def __call__(self, incoming, storage, lastIteration, *args, **kwargs):
+        value = self.getValue(incoming)
+        storage[0] |= value
+        if lastIteration and not storage[0]:
+            raise CumulativeIterableValidationError('At least one of {} must be True.'.format(self._attrName))
+
+    def createStorage(self):
+        return [False]
+
+
+class ValidateIterable(Validator):
+    __slots__ = ('_validators', '_storageCreator')
+
+    def __init__(self, validators, storageCreator=dict):
+        self._validators = validators
+        self._storageCreator = storageCreator
+
+    def __call__(self, incoming, *args, **kwargs):
+        storages = {}
+        errors = None
+        lastIndex = len(incoming) - 1
+        for index, elem in enumerate(incoming):
+            lastIteration = index == lastIndex
+            for validator in self._validators:
+                try:
+                    validatorId = id(validator)
+                    if validatorId in storages:
+                        storage = storages[validatorId]
+                    else:
+                        if isinstance(validator, IterableValidator):
+                            storage = validator.createStorage()
+                        else:
+                            storage = self._storageCreator()
+                        storages[validatorId] = storage
+                    validator(elem, storage, lastIteration)
+                except CumulativeIterableValidationError as ve:
+                    errors = errors + ve.error if errors else ve.error
+                except ValidationError as ve:
+                    error = ValidationErrorMessage(ve.error.data, title='Elem[{}]'.format(index))
+                    errors = errors + error if errors else error
+
+        if errors is not None:
+            raise ValidationError(errors)
+        return

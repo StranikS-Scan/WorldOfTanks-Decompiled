@@ -12,7 +12,6 @@ from AvatarInputHandler.AimingSystems import disableShotPointCache
 from AvatarInputHandler.commands.armor_flashlight_control import ArmorFlashlightControl
 from AvatarInputHandler.vehicles_selection_mode import VehiclesSelectionControlMode
 from AvatarInputHandler.commands.fl_random_reserves import FLRandomReserves
-from PlayerEvents import g_playerEvents
 from aih_constants import MAP_CASE_MODES
 from helpers.CallbackDelayer import CallbackDelayer
 import BattleReplay
@@ -61,7 +60,7 @@ from player_notifications.siege_mode.notifier import SiegeModeNotifier
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from cgf_obsolete_script.script_game_object import ScriptGameObject, ComponentDescriptor
-from vehicles.mechanics.mechanic_info import hasVehicleMechanic
+from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic
 from vehicles.mechanics.mechanic_constants import VehicleMechanic
 INPUT_HANDLER_CFG = 'gui/avatar_input_handler.xml'
 _logger = logging.getLogger(__name__)
@@ -284,7 +283,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             if typeDescr.hasSiegeMode:
                 self.siegeModeNotifier = SiegeModeNotifier()
                 self.siegeModeNotifier.construct(vehicle)
-                if not hasVehicleMechanic(typeDescr, VehicleMechanic.PILLBOX_SIEGE_MODE):
+                if not hasVehicleDescrMechanic(typeDescr, VehicleMechanic.PILLBOX_SIEGE_MODE):
                     self.siegeModeControl = SiegeModeControl(self.siegeModeNotifier)
                     self.__commands.append(self.siegeModeControl)
             if typeDescr.isDualgunVehicle and not self.dualGunControl:
@@ -676,7 +675,6 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                 player.entityGameObject.removeComponentByType(GenericComponents.ControlModeStatus)
                 player.entityGameObject.createComponent(GenericComponents.ControlModeStatus, _CTRL_MODES.index(self.__ctrlModeName))
             BigWorld.setEdgeDrawerRenderMode(1 if eMode in aih_constants.MAP_CASE_MODES else 0)
-            g_playerEvents.onAihControlModeChanged(oldEmode=prevCtrlModeName, newEmode=eMode, validPlayer=player, attachedVeh=vehicle)
             return
 
     def onObserverControlModeChanged(self, eMode):

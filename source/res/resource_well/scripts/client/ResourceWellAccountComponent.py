@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: resource_well/scripts/client/ResourceWellAccountComponent.py
+from __future__ import absolute_import
 import json
 import typing
 from resource_well_common.resource_well_account_commands import CMD_RESOURCE_WELL_PUT, CMD_RESOURCE_WELL_TAKE

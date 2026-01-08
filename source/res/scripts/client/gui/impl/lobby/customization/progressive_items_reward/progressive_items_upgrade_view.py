@@ -6,9 +6,9 @@ from CurrentVehicle import g_currentVehicle
 from adisp import adisp_process
 from frameworks.wulf import ViewSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.shared import getItemInstalledCount
 from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.customization.shared import isVehicleCanBeCustomized
 from gui.impl import backport
 from gui.impl.gen import R
@@ -17,8 +17,6 @@ from gui.impl.lobby.customization.shared import goToC11nStyledMode
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
-from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import ViewEventType
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.common import OutfitApplier
 from gui.shared.image_helper import getTextureLinkByID
@@ -93,20 +91,25 @@ class ProgressiveItemsUpgradeView(ViewImpl):
     def __addListeners(self):
         self.viewModel.onOkClick += self.__onOkClick
         self.viewModel.onSecondaryClick += self.__onShowC11nClick
-        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self.__loadViewHandler, EVENT_BUS_SCOPE.LOBBY)
+        lsm = getLobbyStateMachine()
+        lsm.onVisibleRouteChanged -= self.__onVisibleRouteChanged
         g_clientUpdateManager.addCallbacks({'inventory': self._updateButtons})
         g_clientUpdateManager.addCallbacks({'cache.vehsLock': self._updateButtons})
 
     def __removeListeners(self):
         self.viewModel.onOkClick -= self.__onOkClick
         self.viewModel.onSecondaryClick -= self.__onShowC11nClick
-        g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self.__loadViewHandler, EVENT_BUS_SCOPE.LOBBY)
+        lsm = getLobbyStateMachine()
+        lsm.onVisibleRouteChanged -= self.__onVisibleRouteChanged
         g_clientUpdateManager.removeObjectCallbacks(self)
 
-    def __loadViewHandler(self, event):
-        if event.alias in (VIEW_ALIAS.LOBBY_HANGAR, VIEW_ALIAS.LEGACY_LOBBY_HANGAR):
+    def __onVisibleRouteChanged(self, routeInfo):
+        from gui.lobby_state_machine.states import isInHangarState
+        from gui.Scaleform.daapi.view.lobby.vehicle_preview.states import HeroTankPreviewState
+        from gui.Scaleform.daapi.view.lobby.battle_queue.states import CommonBattleQueueState
+        if isInHangarState():
             self._updateButtons()
-        elif event.alias in (VIEW_ALIAS.HERO_VEHICLE_PREVIEW, VIEW_ALIAS.BATTLE_QUEUE):
+        elif isinstance(routeInfo.state, (HeroTankPreviewState, CommonBattleQueueState)):
             self.__updateButtons(lock=True)
 
     def __setVehicleInfo(self, model):

@@ -1,9 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/DestructibleEntity.py
+import logging
+import typing
 import BigWorld
 import destructible_entities
 import Math
-from debug_utils import LOG_ERROR
+import CGF
+import GenericComponents
 from DestructibleStickers import DestructibleStickers
 from Vehicle import SegmentCollisionResultExt
 from VehicleEffects import DamageFromShotDecoder
@@ -12,8 +15,10 @@ from constants import VEHICLE_HIT_EFFECT
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _FET
 from vehicle_systems.tankStructure import ColliderTypes
 from cgf_obsolete_script.script_game_object import ComponentDescriptor, ScriptGameObject
+from shared_utils import nextTick
 import helpers
 COLLISION_SEGMENT_LENGTH = 2
+_logger = logging.getLogger(__name__)
 
 class PART_PROPERTIES(object):
     HIGHLIGHTABLE = 0
@@ -32,6 +37,7 @@ class DestructibleEntity(BigWorld.Entity):
         return self.team == BigWorld.player().team
 
     def __init__(self):
+        BigWorld.Entity.__init__(self)
         self.publicInfo = {'team': self.team}
         self.__stateTriggers = {'alive': self.isAlive,
          'destroyed': self.isDestroyed}
@@ -68,15 +74,18 @@ class DestructibleEntity(BigWorld.Entity):
         self.__setPickingEnabled(self.isActive)
         for stateResource in self.__stateResources.itervalues():
             stateResource.onResourcesLoaded(prereqs)
+            stateResource.setParent(self.entityGameObject)
 
         self.__checkStateTriggers()
         self.__prevDamageStickerCodes = frozenset()
+        self.__setDamageStickersDelayed(False)
 
     def onLeaveWorld(self):
         if self.__activeStateResource is not None:
             self.__activeStateResource.deactivate()
             self.__activeStateResource = None
         for stateResource in self.__stateResources.itervalues():
+            stateResource.setParent(None)
             stateResource.destroy()
 
         self.__stateResources.clear()
@@ -130,28 +139,39 @@ class DestructibleEntity(BigWorld.Entity):
         return
 
     def set_damageStickers(self, prev=None):
+        self.__setDamageStickers(True)
+
+    def __setDamageStickers(self, isActive):
         if not self.isAlive():
             return
         else:
             prev = self.__prevDamageStickerCodes
             stickerMap = {DamageFromShotDecoder.encodeHitPoint(hitPoint):hitPoint for hitPoint in self.damageStickers}
-            curr = frozenset(stickerMap.keys())
+            curr = set(stickerMap.keys())
             for code in prev.difference(curr):
                 for damageStickers in self.__activeStateResource.damageStickers.itervalues():
                     damageStickers.delDamageSticker(code)
 
+            collisionComponent = self.__activeStateResource.collisionComponent
             for code in curr.difference(prev):
-                parsedHitPoint = DamageFromShotDecoder.parseHitPoint(stickerMap[code], self.__activeStateResource.collisionComponent)
+                parsedHitPoint = DamageFromShotDecoder.parseDamageStickerHitPoint(stickerMap[code], collisionComponent)
                 if parsedHitPoint is None:
+                    curr.discard(code)
+                stickerID, data = parsedHitPoint
+                if data.componentIdx not in self.__activeStateResource.damageStickers:
+                    _logger.error('component is not available for damage sticker: %d', data.componentIdx)
                     continue
-                hitCompIndx, stickerID, segStart, segEnd = parsedHitPoint
-                if hitCompIndx not in self.__activeStateResource.damageStickers:
-                    LOG_ERROR('component is not available for damage sticker: ', hitCompIndx)
-                    continue
-                segStart, segEnd = self.__activeStateResource.reduceSegmentLength(hitCompIndx, segStart, segEnd)
-                self.__activeStateResource.damageStickers[hitCompIndx].addDamageSticker(code, stickerID, segStart, segEnd)
+                segStart, segEnd = self.__activeStateResource.reduceSegmentLength(data.componentIdx, data.segStart, data.segEnd)
+                data._replace(segStart=segStart, segEnd=segEnd)
+                stickers = self.__activeStateResource.damageStickers[data.componentIdx]
+                stickers.addDamageSticker(code, stickerID, data, collisionComponent, isActive)
 
+            self.__prevDamageStickerCodes = frozenset(curr)
             return
+
+    @nextTick
+    def __setDamageStickersDelayed(self, isActive):
+        self.__setDamageStickers(isActive)
 
     def collideSegmentExt(self, startPoint, endPoint):
         if self.__activeStateResource is not None:
@@ -228,6 +248,7 @@ class DestructibleEntityState(ScriptGameObject):
         self.__active = False
         self.__visualModel = None
         self.__damageStickers = dict()
+        self.__gameObjects = dict()
         self.__effectsPlayer = None
         self.__trigger = trigger
         return
@@ -236,7 +257,7 @@ class DestructibleEntityState(ScriptGameObject):
         return self.__trigger() and not self.__active
 
     def reduceSegmentLength(self, hitCompIndx, segStart, segEnd):
-        hitDist = self.collisionComponent.collideLocal(hitCompIndx, segStart, segEnd)
+        hitDist, _, _, _ = self.collisionComponent.collideLocal(hitCompIndx, segStart, segEnd)
         if hitDist is None:
             return (segStart, segEnd)
         else:
@@ -268,12 +289,27 @@ class DestructibleEntityState(ScriptGameObject):
             self.__visualModel = prereqs[assemblerName]
             for componentIdx, component in enumerate(self.__stateProperties.components.itervalues()):
                 self.__visualModel.setPartProperties(componentIdx, int(component.destructible) << PART_PROPERTIES.HIGHLIGHTABLE | PART_PROPERTIES.HIGHLIGHTBYVISUAL)
-                link = self.__visualModel.getPartGeometryLink(componentIdx)
-                self.__damageStickers[componentIdx] = DestructibleStickers(self.spaceID, link, self.__visualModel.node('root'))
+                fashion = BigWorld.WGVehicleFashion()
+                self.__visualModel.setupPartFashion(componentIdx, fashion)
+                self.__gameObjects[componentIdx] = go = CGF.GameObject(self.spaceID)
+                go.createComponent(GenericComponents.TransformComponent, Math.Matrix())
+                go.createComponent(GenericComponents.HierarchyComponent, self.gameObject)
+                go.createComponent(GenericComponents.DynamicModelComponent, self.__visualModel)
+                go.createComponent(GenericComponents.FashionComponent, fashion, componentIdx)
+                self.__damageStickers[componentIdx] = DestructibleStickers(self.spaceID, self.__visualModel, componentIdx, go)
 
             nodeName = next((comp.guiNode for comp in self.__stateProperties.components.itervalues() if comp.guiNode is not None), None)
             if nodeName is not None:
                 self.__guiNode = self.__visualModel.node(nodeName)
+        return
+
+    def setParent(self, parent):
+        if parent is not None:
+            self.createComponent(GenericComponents.TransformComponent, Math.Matrix())
+            self.createComponent(GenericComponents.HierarchyComponent, parent)
+        else:
+            self.removeComponentByType(GenericComponents.HierarchyComponent)
+            self.removeComponentByType(GenericComponents.TransformComponent)
         return
 
     def activate(self, matrix):
@@ -299,11 +335,14 @@ class DestructibleEntityState(ScriptGameObject):
     def destroy(self):
         super(DestructibleEntityState, self).destroy()
         self.__effectsPlayer = None
-        if self.__damageStickers is not None:
-            for damageSticker in self.__damageStickers.itervalues():
-                damageSticker.destroy()
+        for damageSticker in self.__damageStickers.itervalues():
+            damageSticker.destroy()
 
-        self.__damageStickers = None
+        self.__damageStickers = dict()
+        for go in self.__gameObjects.itervalues():
+            go.deactivate()
+
+        self.__gameObjects = dict()
         self.__visualModel = None
         self.__guiNode = None
         self.__stateProperties = None

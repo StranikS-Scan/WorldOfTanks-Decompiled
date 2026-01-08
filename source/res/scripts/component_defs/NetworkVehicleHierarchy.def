@@ -1,5 +1,9 @@
 <NetworkVehicleHierarchy.def>
   <Properties>
+    <vehTypeCD>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehTypeCD>
     <hierarchyInfo>
       <Type>	ARRAY	  <of>	VEHICLE_HIERARCHY_INFO	</of>
       </Type>

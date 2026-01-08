@@ -302,6 +302,14 @@ class Stats(object):
         self.__account._doCmdInt2Str(AccountCommands.CMD_ADD_TOKENS, tokenCount, limit, token, proxy)
         return
 
+    def addLootboxes(self, lootboxID, count=1, limit=0, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+        else:
+            proxy = None
+        self.__account._doCmdInt2Str(AccountCommands.CMD_ADD_TOKENS, count, limit, 'lootBox:' + str(lootboxID), proxy)
+        return
+
     def drawTokens(self, token, callback=None):
         if callback is not None:
             proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
@@ -392,7 +400,7 @@ class Stats(object):
             self.__account._doCmdIntArr(AccountCommands.CMD_DRAW_FREE_AWARD_LISTS, [count, season], proxy)
             return
 
-    def addBattlePassPoints(self, vehTypeCD, points, callback=None):
+    def addBattlePassPoints(self, points, vehTypeCD=0, callback=None):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER)

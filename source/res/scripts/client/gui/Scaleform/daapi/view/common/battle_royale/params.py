@@ -10,10 +10,11 @@ from gui.doc_loaders.battle_royale_settings_loader import getTreeModuleSettings,
 from gui.impl.backport.backport_system_locale import getNiceNumberFormat
 from gui.shared.formatters import text_styles
 from gui.shared.items_parameters import formatters as params_formatters
-from gui.shared.items_parameters import params as base_params
+from gui.shared.items_parameters import module_params
+from gui.shared.items_parameters import params_helper
 from gui.shared.items_parameters.comparator import ItemsComparator, PARAM_STATE, getParamExtendedData
 from gui.shared.items_parameters.formatters import FORMAT_SETTINGS, MEASURE_UNITS
-from gui.shared.items_parameters import params_helper
+from gui.shared.items_parameters.params import VehicleParams
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import i18n, dependency
 from items import ITEM_TYPES
@@ -31,7 +32,7 @@ _PARAMS_GROUPS = (_ROYALE_GUN_PARAMS + params_helper.RELATIVE_POWER_PARAMS,
  params_helper.RELATIVE_CAMOUFLAGE_PARAMS,
  ROYALE_VISIBILITY_PARAMS + params_helper.RELATIVE_VISIBILITY_PARAMS)
 
-class _RadioParams(base_params.RadioParams):
+class _RadioParams(module_params.RadioParams):
 
     @property
     def radarRadius(self):
@@ -42,14 +43,14 @@ class _RadioParams(base_params.RadioParams):
         return self._itemDescr.radarCooldown
 
 
-class _TurretParams(base_params.TurretParams):
+class _TurretParams(module_params.TurretParams):
 
     @property
     def maxHealth(self):
         return self._itemDescr.maxHealth
 
 
-class _ChassisParams(base_params.ChassisParams):
+class _ChassisParams(module_params.ChassisParams):
 
     @property
     def maxHullHealth(self):
@@ -82,7 +83,7 @@ class _ChassisParams(base_params.ChassisParams):
         return None
 
 
-class _VehicleParams(base_params.VehicleParams):
+class _BattleRoyaleVehicleParams(VehicleParams):
 
     @property
     def chassisModuleRotationSpeed(self):
@@ -128,10 +129,10 @@ class _BRItemsComparator(ItemsComparator):
 
 
 _ITEM_TYPE_HANDLERS = {ITEM_TYPES.vehicleRadio: _RadioParams,
- ITEM_TYPES.vehicleEngine: base_params.EngineParams,
+ ITEM_TYPES.vehicleEngine: module_params.EngineParams,
  ITEM_TYPES.vehicleChassis: _ChassisParams,
  ITEM_TYPES.vehicleTurret: _TurretParams,
- ITEM_TYPES.vehicleGun: base_params.GunParams}
+ ITEM_TYPES.vehicleGun: module_params.GunParams}
 
 def _updateSeparator(separator):
     space = ' '
@@ -291,7 +292,7 @@ def getModuleParameters(module, vehicle, currentModule=None):
 
 
 def getVehicleParameters(vehicle):
-    vehicleParams = _VehicleParams(vehicle).getParamsDict() if GUI_SETTINGS.technicalInfo else {}
+    vehicleParams = _BattleRoyaleVehicleParams(vehicle).getParamsDict() if GUI_SETTINGS.technicalInfo else {}
     params = []
     paramsList = getTreeVehicleParams()
     for paramGroup in _PARAMS_GROUPS:

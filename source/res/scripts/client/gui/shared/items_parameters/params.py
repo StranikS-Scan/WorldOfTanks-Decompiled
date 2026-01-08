@@ -1,64 +1,44 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/params.py
-import collections
 import copy
-import inspect
 import math
 import operator
-from collections import namedtuple, defaultdict
+from collections import namedtuple, Sequence, Iterable
 from itertools import izip_longest
 from math import ceil, floor
-import BigWorld
 import typing
+from future.utils import iteritems, itervalues
+import BigWorld
 from constants import SHELL_TYPES, BonusTypes, IS_DEVELOPMENT
 from debug_utils import LOG_DEBUG
-from gui import GUI_SETTINGS
-from gui.shared.formatters import text_styles
 from gui.shared.gui_items import KPI
 from gui.shared.gui_items.Tankman import isSkillLearnt, crewMemberRealSkillLevel
-from gui.shared.items_parameters import calcGunParams, calcShellParams, getShotsPerMinute, getGunDescriptors, isAutoReloadGun, isDualGun, isDualAccuracy, isTwinGun, getMechanicsReloadDelay
-from gui.shared.items_parameters import functions, getShellDescriptors, getOptionalDeviceWeight, NO_DATA
+from gui.shared.items_parameters import calcShellParams, getShotsPerMinute, isAutoReloadGun, isDualGun, isTwinGun, isUnlimitedClipGun, isTemperatureGun, isOverheatedUnlimitedGun, getMechanicsReloadDelay, getShellDescriptors, getOptionalDeviceWeight, NO_DATA
+from gui.shared.items_parameters.params_constants import ONE_HUNDRED_PERCENTS, AUTOCANNON_SHOT_DISTANCE, MIN_VISION_RADIUS, MAX_VISION_RADIUS, PIERCING_DISTANCES, MIN_RELATIVE_VALUE, EXTRAS_CAMOUFLAGE, MAX_DAMAGED_MODULES_DETECTION_PERK_VAL, MAX_ART_NOTIFICATION_DELAY_PERK_VAL, METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR, HIDDEN_PARAM_DEFAULTS
+from gui.shared.items_parameters.base_params import CompatibleParams, ParameterBase, ParamsDictProxy, WeightedParam
 from gui.shared.items_parameters.comparator import rateParameterState, PARAM_STATE
-from gui.shared.items_parameters.functions import getBasicShell, getRocketAccelerationKpiFactors
+from gui.shared.items_parameters import functions
+from gui.shared.items_parameters.functions import getClientShotDispersion, getClientCoolingDelay, getTurboshaftEnginePower, getMaxSteeringLockAngle, isStunParamVisible, getRocketAccelerationEnginePower, getRocketAccelerationKpiFactors, getBasicShell
 from gui.shared.items_parameters.params_cache import g_paramsCache
-from gui.shared.utils import DAMAGE_PROP_NAME, PIERCING_POWER_PROP_NAME, AIMING_TIME_PROP_NAME, STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME, AUTO_RELOAD_PROP_NAME, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, GUN_AUTO_SHOOT, GUN_CAN_BE_AUTO_SHOOT, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, RELOAD_TIME_SECS_PROP_NAME, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_SWITCH_TIME, TURBOSHAFT_SWITCH_ON_TIME, TURBOSHAFT_SWITCH_OFF_TIME, CHASSIS_REPAIR_TIME, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, DUAL_ACCURACY_COOLING_DELAY, DUAL_ACCURACY_AFTER_SHOT_DISPERSION_ANGLE, BURST_FIRE_RATE, MAX_MUTABLE_DAMAGE_PROP_NAME, MIN_MUTABLE_DAMAGE_PROP_NAME, AUTO_SHOOT_CLIP_FIRE_RATE, TWIN_GUN_SWITCH_FIRE_MODE_TIME, TWIN_GUN_TOP_SPEED, GUN_CAN_BE_TWIN_GUN, GUN_TWIN_GUN
-from gui.shared.utils import DISPERSION_RADIUS_PROP_NAME, SHELLS_PROP_NAME, SHELLS_COUNT_PROP_NAME
-from gui.shared.utils import RELOAD_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME
-from helpers import time_utils, dependency
-from items import getTypeOfCompactDescr, getTypeInfoByIndex, ITEM_TYPES, vehicles, tankmen
+from gui.shared.utils import AUTO_SHOOT_CLIP_FIRE_RATE, AUTO_RELOAD_PROP_NAME, BURST_FIRE_RATE, CHASSIS_REPAIR_TIME, DAMAGE_PROP_NAME, DUAL_ACCURACY_COOLING_DELAY, DUAL_GUN_CHARGE_TIME, MAX_STEERING_LOCK_ANGLE, PIERCING_POWER_PROP_NAME, RELOAD_TIME_PROP_NAME, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_SWITCH_TIME, TURBOSHAFT_SWITCH_ON_TIME, TURBOSHAFT_SWITCH_OFF_TIME, TWIN_GUN_SWITCH_FIRE_MODE_TIME, TWIN_GUN_TOP_SPEED, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, SHELL_LOADING_TIME_PROP_NAME, TEMPERATURE_RELOAD_TIME, TEMPERATURE_AVG_DAMAGE_PER_MINUTE
+from helpers import time_utils
+from items import getTypeInfoByIndex, ITEM_TYPES, vehicles, tankmen
 from items import utils as items_utils
 from items.components import component_constants
+from items.params_utils import getHeatedAimingTime, getTemperatureRateOfFire
 from post_progression_common import ACTION_TYPES
 from shared_utils import findFirst, first
-from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 from helpers_common import computePiercingPowerAtDist, computeDamageAtDist
-from vehicles.mechanics.mechanic_info import hasVehicleMechanic
+from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic
 from vehicles.mechanics.mechanic_constants import VehicleMechanic
 if typing.TYPE_CHECKING:
-    from items.vehicles import VehicleDescriptor, CompositeVehicleDescriptor, VehicleDescr
+    from items.vehicles import VehicleDescriptor, VehicleDescr
     from gui.shared.gui_items.Vehicle import Vehicle
 _DO_TTC_LOG = False and IS_DEVELOPMENT
-MAX_VISION_RADIUS = 500
-MIN_VISION_RADIUS = 150
-PIERCING_DISTANCES = (50, 500)
-ONE_HUNDRED_PERCENTS = 100
-MIN_RELATIVE_VALUE = 1
-EXTRAS_CAMOUFLAGE = 'camouflageExtras'
-MAX_DAMAGED_MODULES_DETECTION_PERK_VAL = -4
-MAX_ART_NOTIFICATION_DELAY_PERK_VAL = -2
 _Weight = namedtuple('_Weight', 'current, max')
 _Invisibility = namedtuple('_Invisibility', 'current, atShot')
 _PenaltyInfo = namedtuple('_PenaltyInfo', 'roleName, value, vehicleIsNotNative')
-MODULES = {ITEM_TYPES.vehicleRadio: lambda vehicleDescr: vehicleDescr.radio,
- ITEM_TYPES.vehicleEngine: lambda vehicleDescr: vehicleDescr.engine,
- ITEM_TYPES.vehicleChassis: lambda vehicleDescr: vehicleDescr.chassis,
- ITEM_TYPES.vehicleTurret: lambda vehicleDescr: vehicleDescr.turret,
- ITEM_TYPES.vehicleGun: lambda vehicleDescr: vehicleDescr.gun}
-HIDDEN_PARAM_DEFAULTS = {KPI.Name.ART_NOTIFICATION_DELAY_FACTOR: 2.1,
- KPI.Name.DAMAGED_MODULES_DETECTION_TIME: 4.5}
-METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR = 3.6
 _FACTOR_TO_SKILL_PENALTY_MAP = {'turret/rotationSpeed': ('turretRotationSpeed', 'relativePower'),
  'circularVisionRadius': ('circularVisionRadius', 'relativeVisibility'),
  'radio/distance': ('radioDistance', 'relativeVisibility'),
@@ -68,7 +48,8 @@ _FACTOR_TO_SKILL_PENALTY_MAP = {'turret/rotationSpeed': ('turretRotationSpeed', 
                     'reloadTimeSecs',
                     'clipFireRate',
                     AUTO_SHOOT_CLIP_FIRE_RATE,
-                    'autoReloadTime'),
+                    'autoReloadTime',
+                    SHELL_LOADING_TIME_PROP_NAME),
  'gun/aimingTime': ('aimingTime',),
  'vehicle/rotationSpeed': ('chassisRotationSpeed', 'relativeMobility'),
  'chassis/terrainResistance': ('chassisRotationSpeed', 'relativeMobility'),
@@ -79,7 +60,6 @@ _SHELL_KINDS = (SHELL_TYPES.HOLLOW_CHARGE,
  SHELL_TYPES.ARMOR_PIERCING,
  SHELL_TYPES.ARMOR_PIERCING_HE,
  SHELL_TYPES.ARMOR_PIERCING_CR)
-_AUTOCANNON_SHOT_DISTANCE = 400
 
 def _processExtraBonuses(vehicle):
     result = []
@@ -90,201 +70,18 @@ def _processExtraBonuses(vehicle):
 
 
 def _universalSum(a, b):
-    return map(operator.add, a, b) if isinstance(a, collections.Sequence) else a + b
-
-
-def _getInstalledModuleVehicle(vehicleDescr, itemDescr):
-    curVehicle = None
-    if vehicleDescr:
-        compDescrType = getTypeOfCompactDescr(itemDescr.compactDescr)
-        module = MODULES[compDescrType](vehicleDescr)
-        if module.id[1] == itemDescr.id[1]:
-            curVehicle = vehicleDescr.type.userString
-    return curVehicle
+    return map(operator.add, a, b) if isinstance(a, Sequence) else a + b
 
 
 def _average(listOfNumbers):
     return sum(listOfNumbers) / len(listOfNumbers)
 
 
-def _isStunParamVisible(shellDict):
-    lobbyContext = dependency.instance(ILobbyContext)
-    return shellDict.hasStun and lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
-
-
 def _timesToSecs(timesPerMinutes):
     return time_utils.ONE_MINUTE / timesPerMinutes
 
 
-def _getMaxSteeringLockAngle(axleSteeringLockAngles):
-    return max(map(abs, axleSteeringLockAngles)) if axleSteeringLockAngles else None
-
-
-def _turboshaftEnginePower(vehicleDescr, engineName):
-    return vehicleDescr.siegeVehicleDescr.physics['enginePower'] if vehicleDescr.hasTurboshaftEngine else None
-
-
-def _rocketAccelerationEnginePower(vehicleDescr, value):
-    return value * getRocketAccelerationKpiFactors(vehicleDescr).getCoeff(KPI.Name.VEHICLE_ENGINE_POWER) if vehicleDescr.hasRocketAcceleration else None
-
-
-class _ParameterBase(object):
-
-    def __init__(self, itemDescr, vehicleDescr=None):
-        self._itemDescr = itemDescr
-        self._vehicleDescr = vehicleDescr
-        self.__preCachedInfo = None
-        self.__rawParams = None
-        return
-
-    def getParamsDict(self):
-        return _ParamsDictProxy(self)
-
-    def getAllDataDict(self):
-        params = self.getParamsDict() if GUI_SETTINGS.technicalInfo else {}
-        return {'parameters': params,
-         'compatible': self._getCompatible()}
-
-    def _getPrecachedInfo(self):
-        if self.__preCachedInfo is None:
-            self.__preCachedInfo = g_paramsCache.getPrecachedParameters(self._itemDescr.compactDescr)
-        return self.__preCachedInfo
-
-    def _getRawParams(self):
-        if self.__rawParams is None:
-            self.__rawParams = self._extractRawParams()
-        return self.__rawParams
-
-    def _extractRawParams(self):
-        return self._getPrecachedInfo().params
-
-    def _getCompatible(self):
-        return tuple()
-
-
-class CompatibleParams(_ParameterBase):
-
-    @property
-    def compatibles(self):
-        return g_paramsCache.getComponentVehiclesNames(self._itemDescr.compactDescr)
-
-    def _getCompatible(self):
-        curVehicle = _getInstalledModuleVehicle(self._vehicleDescr, self._itemDescr)
-        return (('vehicles', _formatCompatibles(curVehicle, self.compatibles)),)
-
-
-class WeightedParam(CompatibleParams):
-
-    @property
-    def weight(self):
-        return self._itemDescr.weight
-
-
-class RadioParams(WeightedParam):
-
-    @property
-    def radioDistance(self):
-        return int(self._itemDescr.distance)
-
-
-class EngineParams(WeightedParam):
-
-    @property
-    def enginePower(self):
-        return int(round(self._itemDescr.power / component_constants.HP_TO_WATTS, 0))
-
-    @property
-    def turboshaftEnginePower(self):
-        power = _turboshaftEnginePower(self._vehicleDescr, self._itemDescr.name)
-        return power and int(round(power / component_constants.HP_TO_WATTS))
-
-    @property
-    def rocketAccelerationEnginePower(self):
-        return _rocketAccelerationEnginePower(self._vehicleDescr, self.enginePower)
-
-    @property
-    def fireStartingChance(self):
-        return int(round(self._itemDescr.fireStartingChance * ONE_HUNDRED_PERCENTS))
-
-    @property
-    def forwardMaxSpeed(self):
-        return self._vehicleDescr.type.xphysics['engines'][self._itemDescr.name]['smplFwMaxSpeed']
-
-
-class ChassisParams(WeightedParam):
-    itemsCache = dependency.descriptor(IItemsCache)
-
-    @property
-    def rotationSpeed(self):
-        return int(round(math.degrees(self._itemDescr.rotationSpeed))) if not self.isWheeled or self.isWheeledOnSpotRotation else None
-
-    @property
-    def maxSteeringLockAngle(self):
-        return _getMaxSteeringLockAngle(g_paramsCache.getWheeledChassisAxleLockAngles(self._itemDescr.compactDescr)) if self.isWheeled else None
-
-    @property
-    def chassisRepairTime(self):
-        chassis = self._itemDescr
-        repairTimes = []
-        if chassis.trackPairs:
-            for track in chassis.trackPairs:
-                repairTimes.append(track.healthParams.repairTime)
-
-            repairTimes.reverse()
-        else:
-            repairTimes.append(chassis.repairTime)
-        return [ repairTime / 0.57 for repairTime in repairTimes ]
-
-    @property
-    def isHydraulic(self):
-        return self._getPrecachedInfo().isHydraulic
-
-    @property
-    def isWheeled(self):
-        return self._getPrecachedInfo().isWheeled
-
-    @property
-    def isTrackWithinTrack(self):
-        return self._getPrecachedInfo().isTrackWithinTrack
-
-    @property
-    def hasAutoSiege(self):
-        return self._getPrecachedInfo().hasAutoSiege
-
-    @property
-    def isWheeledOnSpotRotation(self):
-        return self._getPrecachedInfo().isWheeledOnSpotRotation
-
-
-class TurretParams(WeightedParam):
-
-    @property
-    def armor(self):
-        return tuple((round(armor) for armor in self._itemDescr.primaryArmor))
-
-    @property
-    def rotationSpeed(self):
-        return int(round(math.degrees(self._itemDescr.rotationSpeed)))
-
-    @property
-    def circularVisionRadius(self):
-        return self._itemDescr.circularVisionRadius
-
-    @property
-    def gunCompatibles(self):
-        return [ gun.i18n.userString for gun in self._itemDescr.guns ]
-
-    def _getCompatible(self):
-        if self._vehicleDescr is not None:
-            curGun = self._vehicleDescr.gun.i18n.userString
-        else:
-            curGun = None
-        compatibleVehicles = list(super(TurretParams, self)._getCompatible())
-        compatibleVehicles.append(('guns', _formatCompatibles(curGun, self.gunCompatibles)))
-        return tuple(compatibleVehicles)
-
-
-class VehicleParams(_ParameterBase):
+class VehicleParams(ParameterBase):
 
     def __init__(self, vehicle, situationalBonuses=None):
         super(VehicleParams, self).__init__(self._getVehicleDescriptor(vehicle))
@@ -321,7 +118,7 @@ class VehicleParams(_ParameterBase):
 
     @property
     def turboshaftEnginePower(self):
-        power = _turboshaftEnginePower(self._itemDescr, self._itemDescr.engine.name)
+        power = getTurboshaftEnginePower(self._itemDescr, self._itemDescr.engine.name)
         if power:
             skillName = 'driver_motorExpert'
             argName = 'enginePower'
@@ -352,7 +149,7 @@ class VehicleParams(_ParameterBase):
 
     @property
     def rocketAccelerationEnginePower(self):
-        return _rocketAccelerationEnginePower(self._itemDescr, self.enginePower)
+        return getRocketAccelerationEnginePower(self._itemDescr, self.enginePower)
 
     @property
     def rocketAccelerationSpeedLimits(self):
@@ -380,7 +177,7 @@ class VehicleParams(_ParameterBase):
 
     @property
     def dualAccuracyCoolingDelay(self):
-        return items_utils.getClientCoolingDelay(self._itemDescr, self.__factors) if self._itemDescr.hasDualAccuracy else None
+        return getClientCoolingDelay(self._itemDescr, self.__factors) if self._itemDescr.hasDualAccuracy else None
 
     @property
     def chassisRotationSpeed(self):
@@ -400,7 +197,7 @@ class VehicleParams(_ParameterBase):
 
     @property
     def maxSteeringLockAngle(self):
-        return _getMaxSteeringLockAngle(self.__getChassisPhysics().get('axleSteeringLockAngles')) if self._itemDescr.isWheeledVehicle else None
+        return getMaxSteeringLockAngle(self.__getChassisPhysics().get('axleSteeringLockAngles')) if self._itemDescr.isWheeledVehicle else None
 
     @property
     def wheelRiseSpeed(self):
@@ -452,13 +249,17 @@ class VehicleParams(_ParameterBase):
     def avgDamagePerMinute(self):
         if _DO_TTC_LOG:
             LOG_DEBUG('TTC of avgDamagePerMinute:')
-        return round(max(self.__calcReloadTime()) * self.avgDamage)
+        return None if isOverheatedUnlimitedGun(self._itemDescr.gun) else round(max(self.__calcReloadTime()) * self.avgDamage)
 
     @property
     def avgDamagePerMinuteSituational(self):
         if _DO_TTC_LOG:
             LOG_DEBUG('TTC of avgDamagePerMinuteSituational:')
-        return round(max(self.__calcReloadTime(isSituational=True)) * self.avgDamage)
+        return None if isOverheatedUnlimitedGun(self._itemDescr.gun) else round(max(self.__calcReloadTime(isSituational=True)) * self.avgDamage)
+
+    @property
+    def temperatureAvgDamagePerMinute(self):
+        return round(self.temperatureReloadTime * self.avgDamage) if isOverheatedUnlimitedGun(self._itemDescr.gun) else None
 
     @property
     def avgPiercingPower(self):
@@ -495,13 +296,25 @@ class VehicleParams(_ParameterBase):
     def reloadTime(self):
         if _DO_TTC_LOG:
             LOG_DEBUG('TTC of reloadTime:')
-        return None if self.__hasAutoReload() or self.__hasDualGun() or self.__hasTwinGun() else min(self.__calcReloadTime())
+        return None if self.__hasAutoReload() or self.__hasDualGun() or self.__hasTwinGun() or isOverheatedUnlimitedGun(self._itemDescr.gun) else min(self.__calcReloadTime())
 
     @property
     def reloadTimeSituational(self):
         if _DO_TTC_LOG:
             LOG_DEBUG('TTC of reloadTimeSituational:')
-        return None if self.__hasAutoReload() or self.__hasDualGun() or self.__hasTwinGun() else min(self.__calcReloadTime(isSituational=True))
+        return None if self.__hasAutoReload() or self.__hasDualGun() or self.__hasTwinGun() or isOverheatedUnlimitedGun(self._itemDescr.gun) else min(self.__calcReloadTime(isSituational=True))
+
+    @property
+    def temperatureReloadTime(self):
+        return getTemperatureRateOfFire(self._itemDescr) if isOverheatedUnlimitedGun(self._itemDescr.gun) else None
+
+    @property
+    def shellLoadingTime(self):
+        return self.__calcClipFireRate()[0] if self.__hasUnlimitedClipGun() else None
+
+    @property
+    def shellLoadingTimeSituational(self):
+        return self.__calcClipFireRateSituational()[0] if self.__hasUnlimitedClipGun() else None
 
     @property
     def continuousShotsPerMinute(self):
@@ -561,6 +374,8 @@ class VehicleParams(_ParameterBase):
             siegeAimingTimeVal *= gunnerQuickAimingFactor
             if aimingTimeVal != siegeAimingTimeVal:
                 return (aimingTimeVal, siegeAimingTimeVal)
+        elif isTemperatureGun(self._itemDescr):
+            return (getHeatedAimingTime(aimingTimeVal, self._itemDescr), aimingTimeVal)
         return (aimingTimeVal,)
 
     @property
@@ -579,28 +394,7 @@ class VehicleParams(_ParameterBase):
             siegeAimingTimeVal = self.__calcParamWithSkillFactorAmp(baseSiegeAimingTimeVal, (gunnerQuickAimingFactor, commanderCoordinationReloadFactor))
             if aimingTimeVal != siegeAimingTimeVal:
                 return (aimingTimeVal, siegeAimingTimeVal)
-        return (aimingTimeVal,)
-
-    def __shotDispersionAngle(self, isSituational=False):
-        shotDispersions = items_utils.getClientShotDispersion(self._itemDescr, self.__factors['shotDispersion'][0])
-        baseShotDispersions = (round(shotDispersion * 100, 4) for shotDispersion in shotDispersions)
-        focusFactorValue = 1
-        skillName = 'gunner_armorer'
-        argName = 'shotDispersionAngle'
-        armorerFactorValue = self.__getFactorValueFromSkill(skillName, argName)
-        if isSituational:
-            skillName = 'gunner_focus'
-            focusFactorValue = self.__getFactorValueFromSkill(skillName, argName)
-        resShotDispersion = []
-        for baseShotDispersion in baseShotDispersions:
-            shotDispersion = self.__calcParamWithSkillFactorAmp(baseShotDispersion, (armorerFactorValue, focusFactorValue))
-            resShotDispersion.append(shotDispersion)
-
-        if _DO_TTC_LOG:
-            for shotDispersion in resShotDispersion:
-                LOG_DEBUG('TTC of shotDispersionAngle: baseShotDispersion:%f * gunner_armorerFactor:%f * gunner_focusFactor:%f' % (shotDispersion, armorerFactorValue, focusFactorValue))
-
-        return resShotDispersion
+        return (getHeatedAimingTime(aimingTimeVal, self._itemDescr), aimingTimeVal) if isTemperatureGun(self._itemDescr) else (aimingTimeVal,)
 
     @property
     def shotDispersionAngle(self):
@@ -675,7 +469,8 @@ class VehicleParams(_ParameterBase):
         gunCorrection = self.__adjustmentCoefficient('guns').get(self._itemDescr.gun.name, {})
         gunCorrection = gunCorrection.get('caliberCorrection', 1)
         shotDispersionAngle = max(self.shotDispersionAngle[-1], 0.001)
-        value = round(self.avgDamagePerMinute * penetration / shotDispersionAngle * (coeffs['rotationIntercept'] + coeffs['rotationSlope'] * rotationSpeed) * turretCoefficient * coeffs['normalization'] * self.__adjustmentCoefficient('power') * spgCorrection * gunCorrection * heCorrection)
+        avgDamagePerMinute = self.avgDamagePerMinute or self.temperatureAvgDamagePerMinute
+        value = round(avgDamagePerMinute * penetration / shotDispersionAngle * (coeffs['rotationIntercept'] + coeffs['rotationSlope'] * rotationSpeed) * turretCoefficient * coeffs['normalization'] * self.__adjustmentCoefficient('power') * spgCorrection * gunCorrection * heCorrection)
         return max(value, MIN_RELATIVE_VALUE)
 
     @property
@@ -773,15 +568,17 @@ class VehicleParams(_ParameterBase):
 
     @property
     def clipFireRate(self):
-        return self.__calcClipFireRate() if not self._itemDescr.isAutoShootGunVehicle else None
+        itemDescr = self._itemDescr
+        return None if itemDescr.isAutoShootGunVehicle else self.__calcClipFireRate()
 
     @property
     def clipFireRateSituational(self):
-        return self.__calcClipFireRateSituational() if not self._itemDescr.isAutoShootGunVehicle else None
+        return None if self._itemDescr.isAutoShootGunVehicle else self.__calcClipFireRateSituational()
 
     @property
     def autoShootClipFireRate(self):
-        if self._itemDescr.isAutoShootGunVehicle:
+        itemDescr = self._itemDescr
+        if itemDescr.isAutoShootGunVehicle and not self.__hasUnlimitedClipGun():
             clipFireRate = self.__calcClipFireRate()
             return (clipFireRate[0], clipFireRate[2])
         else:
@@ -789,7 +586,7 @@ class VehicleParams(_ParameterBase):
 
     @property
     def autoShootClipFireRateSituational(self):
-        if self._itemDescr.isAutoShootGunVehicle:
+        if self._itemDescr.isAutoShootGunVehicle and not self.__hasUnlimitedClipGun():
             clipFireRateSituational = self.__calcClipFireRateSituational()
             return (clipFireRateSituational[0], clipFireRateSituational[2])
         else:
@@ -797,7 +594,7 @@ class VehicleParams(_ParameterBase):
 
     @property
     def burstFireRate(self):
-        if self.__hasBurst() and not hasVehicleMechanic(self.__vehicle.descriptor, VehicleMechanic.CHARGEABLE_BURST):
+        if self.__hasBurst() and not self.__hasVehicleMechanic(VehicleMechanic.CHARGEABLE_BURST):
             gun = self._itemDescr.gun
             burstCountLeft, burstInterval, _ = gun.burst
             return (burstInterval, gun.clip[0] / burstCountLeft, burstCountLeft)
@@ -995,9 +792,11 @@ class VehicleParams(_ParameterBase):
          DUAL_ACCURACY_COOLING_DELAY,
          AUTO_SHOOT_CLIP_FIRE_RATE,
          TWIN_GUN_TOP_SPEED,
-         TWIN_GUN_SWITCH_FIRE_MODE_TIME)
+         TWIN_GUN_SWITCH_FIRE_MODE_TIME,
+         TEMPERATURE_RELOAD_TIME,
+         TEMPERATURE_AVG_DAMAGE_PER_MINUTE)
         stunConditionParams = ('stunMaxDuration', 'stunMinDuration')
-        result = _ParamsDictProxy(self, preload, conditions=((conditionalParams, lambda v: v is not None), (stunConditionParams, lambda s: _isStunParamVisible(self._itemDescr.shot.shell))))
+        result = ParamsDictProxy(self, preload, conditions=((conditionalParams, lambda v: v is not None), (stunConditionParams, lambda s: isStunParamVisible(self._itemDescr.shot.shell))))
         return result
 
     def getAllDataDict(self):
@@ -1040,7 +839,7 @@ class VehicleParams(_ParameterBase):
         for _, tankman in vehicle.crew:
             if tankman is None:
                 continue
-            for bonusSkills in tankman.bonusSkills.itervalues():
+            for bonusSkills in itervalues(tankman.bonusSkills):
                 for bonusSkill in bonusSkills:
                     if bonusSkill and bonusSkill.isSkillActive:
                         result.append((bonusSkill.name, 'skill'))
@@ -1063,8 +862,8 @@ class VehicleParams(_ParameterBase):
         crewFactors = items_utils.getCrewAffectedFactors(vehicle.descriptor, crew)
         result = {}
         currParams = self.getParamsDict(True)
-        for slotId, factors in crewFactors.iteritems():
-            for factor, factorValue in factors.iteritems():
+        for slotId, factors in iteritems(crewFactors):
+            for factor, factorValue in iteritems(factors):
                 if factor in _FACTOR_TO_SKILL_PENALTY_MAP:
                     oldFactor = copy.copy(self.__factors[factor])
                     self.__factors[factor] = _universalSum(oldFactor, factorValue)
@@ -1076,7 +875,7 @@ class VehicleParams(_ParameterBase):
                             if newValue is None:
                                 continue
                             state = rateParameterState(paramName, currParams[paramName], newValue)
-                            if isinstance(currParams[paramName], collections.Iterable):
+                            if isinstance(currParams[paramName], Iterable):
                                 states, deltas = zip(*state)
                                 if findFirst(lambda v: v == PARAM_STATE.WORSE, states):
                                     paramPenalties[slotId] = deltas
@@ -1087,10 +886,10 @@ class VehicleParams(_ParameterBase):
                     self.__factors[factor] = oldFactor
 
         roles = vehicle.descriptor.type.crewRoles
-        for paramName, penalties in result.items():
-            result[paramName] = [ _PenaltyInfo(roles[slotId][0], value, slotId in otherVehicleSlots) for slotId, value in penalties.iteritems() ]
+        for paramName, penalties in iteritems(result):
+            result[paramName] = [ _PenaltyInfo(roles[slotId][0], value, slotId in otherVehicleSlots) for slotId, value in iteritems(penalties) ]
 
-        return {k:v for k, v in result.iteritems() if v}
+        return {k:v for k, v in iteritems(result) if v}
 
     def _getVehicleDescriptor(self, vehicle):
         return vehicle.descriptor
@@ -1132,6 +931,27 @@ class VehicleParams(_ParameterBase):
              repairChassisKpi))
         return chassisRepairTime / repairFactor / repairKpi / repairChassisKpi
 
+    def __shotDispersionAngle(self, isSituational=False):
+        shotDispersions = getClientShotDispersion(self._itemDescr, self.__factors['shotDispersion'][0])
+        baseShotDispersions = (round(shotDispersion * 100, 4) for shotDispersion in shotDispersions)
+        focusFactorValue = 1
+        skillName = 'gunner_armorer'
+        argName = 'shotDispersionAngle'
+        armorerFactorValue = self.__getFactorValueFromSkill(skillName, argName)
+        if isSituational:
+            skillName = 'gunner_focus'
+            focusFactorValue = self.__getFactorValueFromSkill(skillName, argName)
+        resShotDispersion = []
+        for baseShotDispersion in baseShotDispersions:
+            shotDispersion = self.__calcParamWithSkillFactorAmp(baseShotDispersion, (armorerFactorValue, focusFactorValue))
+            resShotDispersion.append(shotDispersion)
+
+        if _DO_TTC_LOG:
+            for shotDispersion in resShotDispersion:
+                LOG_DEBUG('TTC of shotDispersionAngle: baseShotDispersion:%f * gunner_armorerFactor:%f * gunner_focusFactor:%f' % (shotDispersion, armorerFactorValue, focusFactorValue))
+
+        return resShotDispersion
+
     def __speedLimits(self, itemDescr, miscAttrs=None):
         correction = []
         limits = itemDescr.physics['speedLimits']
@@ -1164,6 +984,9 @@ class VehicleParams(_ParameterBase):
         vDescr = self._itemDescr
         return len(vDescr.hull.fakeTurrets['lobby']) != len(vDescr.turrets)
 
+    def __hasVehicleMechanic(self, vehicleMechanic):
+        return hasVehicleDescrMechanic(self.__vehicle.descriptor, vehicleMechanic)
+
     def __hasHydraulicSiegeMode(self):
         return self._itemDescr.hasHydraulicChassis and self._itemDescr.hasSiegeMode
 
@@ -1178,6 +1001,21 @@ class VehicleParams(_ParameterBase):
 
     def __hasBurst(self):
         return self._itemDescr.hasBurst
+
+    def __hasClipGun(self):
+        return self._itemDescr.gun.clip[0] != 1
+
+    def __hasUnlimitedClipGun(self):
+        return isUnlimitedClipGun(self._itemDescr.gun)
+
+    def __hasAutoReload(self):
+        return isAutoReloadGun(self._itemDescr.gun)
+
+    def __hasDualGun(self):
+        return isDualGun(self._itemDescr.gun)
+
+    def __hasTwinGun(self):
+        return isTwinGun(self._itemDescr.gun)
 
     def __getRealSpeedLimit(self):
         enginePower = self._itemDescr.miscAttrs['enginePowerFactor'] * self.__getEnginePhysics()['smplEnginePower']
@@ -1221,18 +1059,6 @@ class VehicleParams(_ParameterBase):
         siegeMode = self._itemDescr.type.siegeModeParams
         return siegeMode['switchOnTime'] if siegeMode else None
 
-    def __hasClipGun(self):
-        return self._itemDescr.gun.clip[0] != 1
-
-    def __hasAutoReload(self):
-        return isAutoReloadGun(self._itemDescr.gun)
-
-    def __hasDualGun(self):
-        return isDualGun(self._itemDescr.gun)
-
-    def __hasTwinGun(self):
-        return isTwinGun(self._itemDescr.gun)
-
     def __calcReloadTime(self, isSituational=False):
         loaderMeleeReloadFactor = 1
         loaderDesperadoReloadFactor = 1
@@ -1256,7 +1082,9 @@ class VehicleParams(_ParameterBase):
         if self.__hasDualGun():
             return getParams(items_utils.getDualGunReloadTime)
         if self.__hasTwinGun():
-            return getParams(items_utils.geTwinGunReloadTime)
+            return getParams(items_utils.getTwinGunReloadTime)
+        if isOverheatedUnlimitedGun(self._itemDescr.gun):
+            return (self.__calcParamWithSkillFactorAmp(getTemperatureRateOfFire(self._itemDescr), (loaderMeleeReloadFactor, loaderDesperadoReloadFactor)),)
         baseReloadTime = items_utils.getReloadTime(self._itemDescr, self.__factors)
         if _DO_TTC_LOG:
             LOG_DEBUG('baseReloadTime:%f * loader_meleeFactor:%f * loader_desperadoFactor:%f' % (baseReloadTime, loaderMeleeReloadFactor, loaderDesperadoReloadFactor))
@@ -1340,199 +1168,6 @@ class VehicleParams(_ParameterBase):
                     result = baseValue - (baseValue - _kpi.value) * realSkillLevel / tankmen.MAX_SKILL_LEVEL
 
         return result
-
-
-class GunParams(WeightedParam):
-
-    @property
-    def caliber(self):
-        return self._itemDescr.shots[0].shell.caliber
-
-    @property
-    def shellsCount(self):
-        return self._getRawParams()[SHELLS_COUNT_PROP_NAME]
-
-    @property
-    def shellReloadingTime(self):
-        return self._getRawParams()[SHELL_RELOADING_TIME_PROP_NAME]
-
-    @property
-    def reloadMagazineTime(self):
-        return self._getRawParams()[RELOAD_MAGAZINE_TIME_PROP_NAME]
-
-    @property
-    def reloadTime(self):
-        return None if self.getReloadingType() in (GUN_CAN_BE_AUTO_RELOAD,
-         GUN_AUTO_RELOAD,
-         GUN_CAN_BE_DUAL_GUN,
-         GUN_DUAL_GUN,
-         GUN_CAN_BE_TWIN_GUN,
-         GUN_TWIN_GUN) else self._getRawParams()[RELOAD_TIME_PROP_NAME]
-
-    @property
-    def reloadTimeSecs(self):
-        return self._getRawParams()[RELOAD_TIME_SECS_PROP_NAME]
-
-    @property
-    def reloadTimeSingleGun(self):
-        gun = self.__getVehicleGun()
-        return gun.reloadTime if isTwinGun(gun) else None
-
-    @property
-    def reloadTimeTwinGun(self):
-        gun = self.__getVehicleGun()
-        return gun.twinGun.twinGunReloadTime if isTwinGun(gun) else None
-
-    @property
-    def chargeTime(self):
-        return self._getRawParams()[DUAL_GUN_CHARGE_TIME]
-
-    @property
-    def rateTime(self):
-        return self._getRawParams()[DUAL_GUN_RATE_TIME]
-
-    @property
-    def avgPiercingPower(self):
-        return self._getRawParams()[PIERCING_POWER_PROP_NAME]
-
-    @property
-    def avgDamageList(self):
-        return self._getRawParams()[DAMAGE_PROP_NAME]
-
-    @property
-    def maxAvgMutableDamageList(self):
-        return self._getRawParams()[MAX_MUTABLE_DAMAGE_PROP_NAME]
-
-    @property
-    def minAvgMutableDamageList(self):
-        return self._getRawParams()[MIN_MUTABLE_DAMAGE_PROP_NAME]
-
-    @property
-    def dispertionRadius(self):
-        disp = self._getRawParams()[DISPERSION_RADIUS_PROP_NAME][0]
-        gun = self.__getVehicleGun()
-        if isDualAccuracy(gun):
-            return (math.tan(gun.dualAccuracy.afterShotDispersionAngle) * 100, disp)
-        else:
-            return (disp, math.tan(self._vehicleDescr.siegeVehicleDescr.gun.shotDispersionAngle) * 100) if isTwinGun(gun) else (None, disp)
-
-    @property
-    def aimingTime(self):
-        gun = self.__getVehicleGun()
-        return (self._getRawParams()[AIMING_TIME_PROP_NAME][1], self._vehicleDescr.siegeVehicleDescr.gun.aimingTime) if isTwinGun(gun) else self._getRawParams()[AIMING_TIME_PROP_NAME]
-
-    @property
-    def compatibles(self):
-        allVehiclesNames = set(g_paramsCache.getComponentVehiclesNames(self._itemDescr.compactDescr))
-        clipVehiclesNames = set(self._getPrecachedInfo().clipVehiclesNames)
-        return allVehiclesNames.difference(clipVehiclesNames)
-
-    @property
-    def clipVehiclesCompatibles(self):
-        return set(self._getPrecachedInfo().clipVehiclesNames)
-
-    @property
-    def shellsCompatibles(self):
-        return self._getRawParams().get(SHELLS_PROP_NAME, tuple())
-
-    @property
-    def maxShotDistance(self):
-        return self._itemDescr.shots[0].maxDistance
-
-    @property
-    def clipVehiclesCD(self):
-        return self._getPrecachedInfo().clipVehicles
-
-    @property
-    def continuousShotsPerMinute(self):
-        return tuple((round(60.0 / t) for t in self.shellReloadingTime)) if self.getReloadingType() in (GUN_AUTO_SHOOT, GUN_CAN_BE_AUTO_SHOOT) else None
-
-    @property
-    def continuousDamagePerSecond(self):
-        return tuple((round(self.avgDamageList[0] / t) for t in self.shellReloadingTime)) if self.getReloadingType() in (GUN_AUTO_SHOOT, GUN_CAN_BE_AUTO_SHOOT) else None
-
-    @property
-    def avgDamagePerMinute(self):
-        return round(self.reloadTime[0] * self.avgDamageList[0])
-
-    @property
-    def stunMaxDurationList(self):
-        res = self._getRawParams().get(STUN_DURATION_PROP_NAME)
-        return res if res else None
-
-    @property
-    def burstTimeInterval(self):
-        burstData = self._getRawParams()[BURST_FIRE_RATE]
-        return burstData[0] if burstData else None
-
-    @property
-    def burstCount(self):
-        burstSize = self.burstSize
-        return self.shellsCount[0] / burstSize if burstSize else None
-
-    @property
-    def burstSize(self):
-        burstData = self._getRawParams()[BURST_FIRE_RATE]
-        return burstData[1] if burstData else None
-
-    @property
-    def stunMinDurationList(self):
-        res = self._getRawParams().get(GUARANTEED_STUN_DURATION_PROP_NAME)
-        return res if res else None
-
-    @property
-    def autoReloadTime(self):
-        return tuple(reversed(self._getRawParams().get(AUTO_RELOAD_PROP_NAME)))
-
-    @property
-    def dualAccuracyAfterShotDispersionAngle(self):
-        res = self._getRawParams().get(DUAL_ACCURACY_AFTER_SHOT_DISPERSION_ANGLE)
-        return res if res else None
-
-    @property
-    def dualAccuracyCoolingDelay(self):
-        gun = self.__getVehicleGun()
-        return gun.dualAccuracy.coolingDelay if isDualAccuracy(gun) else None
-
-    def getParamsDict(self):
-        stunConditionParams = (STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME)
-        stunItem = self._itemDescr.shots[0].shell
-        result = _ParamsDictProxy(self, conditions=((['maxShotDistance'], lambda v: v == _AUTOCANNON_SHOT_DISTANCE), (stunConditionParams, lambda s: _isStunParamVisible(stunItem))))
-        return result
-
-    def getReloadingType(self, vehicleCD=None):
-        if vehicleCD is None and self._vehicleDescr is not None:
-            vehicleCD = self._vehicleDescr.type.compactDescr
-        return self._getPrecachedInfo().getReloadingType(vehicleCD)
-
-    def _extractRawParams(self):
-        if self._vehicleDescr is not None:
-            descriptors = getGunDescriptors(self._itemDescr, self._vehicleDescr)
-            params = calcGunParams(self._itemDescr, descriptors)
-        else:
-            params = self._getPrecachedInfo().params
-        return params
-
-    def _getCompatible(self):
-        vehiclesNamesList = self.compatibles
-        clipVehicleNamesList = self.clipVehiclesCompatibles
-        curVehicle = _getInstalledModuleVehicle(self._vehicleDescr, self._itemDescr)
-        result = []
-        if clipVehicleNamesList:
-            if vehiclesNamesList:
-                result.append(('uniChargedVehicles', _formatCompatibles(curVehicle, vehiclesNamesList)))
-            result.append(('clipVehicles', _formatCompatibles(curVehicle, clipVehicleNamesList)))
-        else:
-            result.append(('vehicles', _formatCompatibles(curVehicle, vehiclesNamesList)))
-        result.append(('shells', ', '.join(self.shellsCompatibles)))
-        return tuple(result)
-
-    def __getVehicleGun(self):
-        if self._vehicleDescr is not None:
-            guns = getGunDescriptors(self._itemDescr, self._vehicleDescr)
-            return next((obj for obj in guns if obj.compactDescr == self._itemDescr.compactDescr), None)
-        else:
-            return
 
 
 class ShellParams(CompatibleParams):
@@ -1640,7 +1275,7 @@ class ShellParams(CompatibleParams):
 
     def getParamsDict(self):
         stunConditionParams = ('stunMaxDuration', 'stunMinDuration')
-        result = _ParamsDictProxy(self, conditions=((['maxShotDistance'], lambda v: v == _AUTOCANNON_SHOT_DISTANCE), (stunConditionParams, lambda s: _isStunParamVisible(self._itemDescr))))
+        result = ParamsDictProxy(self, conditions=((['maxShotDistance'], lambda v: v == AUTOCANNON_SHOT_DISTANCE), (stunConditionParams, lambda s: isStunParamVisible(self._itemDescr))))
         return result
 
     def _extractRawParams(self):
@@ -1673,7 +1308,7 @@ class OptionalDeviceParams(WeightedParam):
         return tuple()
 
 
-class EquipmentParams(_ParameterBase):
+class EquipmentParams(ParameterBase):
 
     @property
     def equipmentType(self):
@@ -1687,106 +1322,3 @@ class EquipmentParams(_ParameterBase):
         params = {'nations': self.nations}
         params.update(self._getPrecachedInfo().params)
         return params
-
-
-class _ParamsDictProxy(object):
-    __slots__ = ('__paramsCalculator', '__cachedParams', '__allAreLoaded', '__conditions', '__filteredByConditions', '__popped')
-
-    def __init__(self, calculator, preload=False, conditions=None):
-        super(_ParamsDictProxy, self).__init__()
-        self.__paramsCalculator = calculator
-        self.__cachedParams = {}
-        self.__allAreLoaded = False
-        self.__conditions = defaultdict(list)
-        self.__filteredByConditions = set()
-        self.__popped = set()
-        if conditions is not None:
-            for keys, condition in conditions:
-                for key in keys:
-                    self.__conditions[key].append(condition)
-
-        if preload:
-            self.__loadAllValues()
-        return
-
-    def pop(self, item, default=None):
-        self.__loadAllValues()
-        if item in self:
-            value = self[item]
-            self.__popped.add(item)
-            del self.__cachedParams[item]
-        else:
-            value = default
-        return value
-
-    def get(self, k, default=None):
-        try:
-            return self[k]
-        except KeyError:
-            return default
-
-    def keys(self):
-        return list(self.__iter__())
-
-    def values(self):
-        self.__loadAllValues()
-        return self.__cachedParams.values()
-
-    def items(self):
-        self.__loadAllValues()
-        return self.__cachedParams.items()
-
-    def iteritems(self):
-        self.__loadAllValues()
-        return self.__cachedParams.iteritems()
-
-    def __getitem__(self, item):
-        if item not in self.__cachedParams:
-            if item not in self.__filteredByConditions and item not in self.__popped and hasattr(self.__paramsCalculator, item):
-                value = getattr(self.__paramsCalculator, item)
-                if inspect.ismethod(value) or not self.__checkConditions(item, value):
-                    self.__filteredByConditions.add(item)
-                    raise KeyError(item)
-                self.__cachedParams[item] = value
-            else:
-                raise KeyError(item)
-        return self.__cachedParams[item]
-
-    def __iter__(self):
-        self.__loadAllValues()
-        for k in self.__cachedParams.iterkeys():
-            if k not in self.__popped:
-                yield k
-
-    def __len__(self):
-        self.__loadAllValues()
-        return len(self.__cachedParams)
-
-    def __contains__(self, item):
-        try:
-            _ = self[item]
-            return True
-        except KeyError:
-            return False
-
-    def __loadAllValues(self):
-        if not self.__allAreLoaded:
-            for k, _ in inspect.getmembers(self.__paramsCalculator.__class__, lambda o: isinstance(o, property)):
-                value = getattr(self.__paramsCalculator, k)
-                if self.__checkConditions(k, value):
-                    self.__cachedParams[k] = value
-
-            self.__allAreLoaded = True
-
-    def __checkConditions(self, key, value):
-        if key in self.__conditions:
-            for func in self.__conditions[key]:
-                if not func(value):
-                    self.__filteredByConditions.add(key)
-                    return False
-
-        return True
-
-
-def _formatCompatibles(name, collection):
-    return ', '.join([ (text_styles.neutral(c) if c == name else text_styles.main(c)) for c in collection ])

@@ -13,7 +13,7 @@ XMPPChannelData = namedtuple('XMPPChannelData', ('name',))
 class ChatMessage(object):
     __slots__ = ('uuid', 'accountDBID', 'accountName', 'body', 'state', 'sentAt', 'requestID', 'isFinalInHistory', 'accountAffiliation', 'accountRole')
 
-    def __init__(self, dbID=0L, name='', body='', sentAt=0, affiliation='none', role='none'):
+    def __init__(self, dbID=0, name='', body='', sentAt=0, affiliation='none', role='none'):
         super(ChatMessage, self).__init__()
         self.uuid = ''
         self.accountDBID = dbID

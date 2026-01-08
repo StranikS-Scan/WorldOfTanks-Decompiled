@@ -1,12 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/seniority_awards_controller.py
-from enum import Enum
+import logging
 import re
-from typing import Dict, Iterable, Optional, TYPE_CHECKING
+from enum import Enum
+from typing import TYPE_CHECKING
 import BigWorld
 import Event
-import logging
-from BWUtil import AsyncReturn
 from constants import Configs
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -15,15 +14,15 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.notifications import NotificationPriorityLevel
 from helpers import dependency, time_utils
+from helpers.server_settings import SeniorityAwardsConfig
 from skeletons.gui.game_control import ISeniorityAwardsController, IHangarLoadingController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
-from helpers.server_settings import SeniorityAwardsConfig
-from wg_async import wg_async, wg_await, TimeoutError, AsyncEvent, AsyncScope, BrokenPromiseError
 if TYPE_CHECKING:
     from gui.server_events.event_items import Quest
+    from typing import Dict, Iterable, Optional
 REG_EXP_QUEST_YEAR_TIER = ':([Y, y]\\d+):'
 REG_EXP_QUEST_TEST_GROUP = ':([A,a,B,b][T,t])'
 WDR_CURRENCY = 'wdrcoin'
@@ -31,7 +30,6 @@ CLAIM_REWARD_TIMEOUT = 20
 SELECT_REWARD_TIMEOUT = 20
 NEWBIE_REWARD_BATTLES_COUNT = 15
 NEWBIE_BULLET_BATTLES_COUNT = 4
-SENIORITY_AWARDS_PREFIX = 'wdr24:'
 
 class VehicleSelectionState(Enum):
     RECIEVED = 0
@@ -58,10 +56,8 @@ class SeniorityAwardsController(ISeniorityAwardsController):
         self.__em = Event.EventManager()
         self.onUpdated = Event.Event(self.__em)
         self.onVehicleSelectionChanged = Event.Event(self.__em)
+        self.onQuestsReceived = Event.Event(self.__em)
         self.__claimTimeoutId = None
-        self.__scope = AsyncScope()
-        self.__vehicleSelectionQuestCompletedEvent = AsyncEvent(scope=self.__scope)
-        self.__vehicleSelectionQuestId = ''
         self.__years = -1
         self.__yearTier = None
         self.__rewardCategory = None
@@ -144,6 +140,10 @@ class SeniorityAwardsController(ISeniorityAwardsController):
         return self.config.categories
 
     @property
+    def maxCategory(self):
+        return 'ctg{}'.format(len(self.config.categories))
+
+    @property
     def showRewardHangarNotification(self):
         return False
 
@@ -217,13 +217,13 @@ class SeniorityAwardsController(ISeniorityAwardsController):
     @property
     def testGroup(self):
         if self.__testGroup is None:
-            self.__testGroup = self.getSeniorityLevel(self.completedSeniorityAwardsQuests.keys(), REG_EXP_QUEST_TEST_GROUP)
+            self.__testGroup = self.getSeniorityLevel(list(self.completedSeniorityAwardsQuests.keys()), REG_EXP_QUEST_TEST_GROUP)
         return self.__testGroup
 
     @property
     def yearTier(self):
         if self.__yearTier is None:
-            self.__yearTier = self.getSeniorityLevel(self.completedSeniorityAwardsQuests.keys(), REG_EXP_QUEST_YEAR_TIER)
+            self.__yearTier = self.getSeniorityLevel(list(self.completedSeniorityAwardsQuests.keys()), REG_EXP_QUEST_YEAR_TIER)
         return self.__yearTier
 
     def isVehicleSelectionQuestCompleted(self, vehicleRewardId):
@@ -249,29 +249,6 @@ class SeniorityAwardsController(ISeniorityAwardsController):
     def getAvailableVehicleSelectionRewards(self):
         return {key:value for key, value in self.getVehicleSelectionRewards().items() if self.__itemsCache.items.inventory.getItemData(value.intCD) is None}
 
-    @wg_async
-    def selectVehicleReward(self, vehicleRewardId):
-        if self.isVehicleSelectionAvailable:
-            self.__vehicleSelectionQuestId = vehicleRewardId
-            token = self.claimVehicleRewardTokenPattern.format(id=vehicleRewardId)
-            BigWorld.player().requestSingleToken(token)
-            try:
-                try:
-                    yield wg_await(self.__vehicleSelectionQuestCompletedEvent.wait(), timeout=SELECT_REWARD_TIMEOUT)
-                    result = VehicleSelectionState.RECIEVED
-                except TimeoutError:
-                    result = VehicleSelectionState.SELECTION_FAILED
-                except BrokenPromiseError:
-                    _logger.debug('%s has been destroyed before %s completed', self, self.vehicleSelectionQuestPattern.format(id=self.__vehicleSelectionQuestId))
-                    result = VehicleSelectionState.SELECTION_FAILED
-
-            finally:
-                self.__vehicleSelectionQuestId = ''
-
-        else:
-            result = VehicleSelectionState.HAS_CLIENT_TOKENS
-        raise AsyncReturn(result)
-
     def getVehicleSelectionQuestReward(self, vehicleRewardId):
         return self.getVehicleSelectionRewards()[vehicleRewardId] if self.isVehicleSelectionQuestCompleted(vehicleRewardId) else None
 
@@ -295,8 +272,8 @@ class SeniorityAwardsController(ISeniorityAwardsController):
 
         return seniorityLvl
 
-    def onLobbyInited(self, event):
-        super(SeniorityAwardsController, self).onLobbyInited(event)
+    def onAccountBecomePlayer(self):
+        super(SeniorityAwardsController, self).onAccountBecomePlayer()
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onSettingsChanged
         self.__itemsCache.onSyncCompleted += self.__onItemsCacheUpdated
         g_clientUpdateManager.addCallbacks({'tokens': self.__onTokensUpdate})
@@ -313,7 +290,6 @@ class SeniorityAwardsController(ISeniorityAwardsController):
     def fini(self):
         self.__em.clear()
         self.__clear()
-        self.__scope.destroy()
         super(SeniorityAwardsController, self).fini()
 
     def onDisconnected(self):
@@ -330,10 +306,8 @@ class SeniorityAwardsController(ISeniorityAwardsController):
     def __clear(self):
         self.__removeListeners()
         self.__cancelClaimTimeout()
-        self.__vehicleSelectionQuestId = ''
         self.__endTimestamp = None
         self.__clockOnNotification = None
-        self.__vehicleSelectionQuestCompletedEvent.clear()
         self.__clearCachedValues()
         return
 
@@ -389,15 +363,13 @@ class SeniorityAwardsController(ISeniorityAwardsController):
     def __update(self):
         self.onUpdated()
 
-    @staticmethod
-    def __filterFunc(quest):
+    def __filterFunc(self, quest):
         qId = quest.getID()
-        return qId.startswith(SENIORITY_AWARDS_PREFIX)
+        return qId.startswith(self.config.eventPrefix)
 
     def __onEventsCacheSynced(self, *_, **__):
         self.__clearCachedValues()
-        if self.__vehicleSelectionQuestId and not self.__vehicleSelectionQuestCompletedEvent.is_set() and self.isVehicleSelectionQuestCompleted(self.__vehicleSelectionQuestId):
-            self.__vehicleSelectionQuestCompletedEvent.set()
+        self.onQuestsReceived()
 
     def __hasClientTokens(self):
         pattern = self.claimVehicleRewardTokenPattern.format(id='')

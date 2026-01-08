@@ -215,7 +215,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
         iconName = icon.split('.png')[0]
         shellIconPath = backport.image(R_AMMO_ICON.dyn(iconName)())
         noShellIconPath = backport.image(R_AMMO_ICON.dyn(NO_AMMO_ICON.format(iconName))())
-        self.as_addShellSlotS(idx, bwKey, sfKeyCode, quantity, gunSettings.clip.size, shellIconPath, noShellIconPath, tooltipText, isInfinite)
+        self.as_addShellSlotS(idx, bwKey, sfKeyCode, quantity, gunSettings.lowCurrentAmmo, shellIconPath, noShellIconPath, tooltipText, isInfinite)
 
     def _updateEquipmentSlotTooltipText(self, idx, item):
         toolTip = self._buildEquipmentSlotTooltipText(item)

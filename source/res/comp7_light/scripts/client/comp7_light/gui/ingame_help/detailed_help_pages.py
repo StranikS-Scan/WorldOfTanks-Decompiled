@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/ingame_help/detailed_help_pages.py
+from __future__ import absolute_import
 from gui.impl.gen import R
 from comp7_core.gui.ingame_help.detailed_help_pages import Comp7CorePagesBuilder
 from comp7_light_constants import ARENA_GUI_TYPE

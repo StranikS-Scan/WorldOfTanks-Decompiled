@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/impl/lobby/vehicle_hub/sub_presenters/modules_sub_presenter.py
 from __future__ import absolute_import
 import typing
-from collections import namedtuple
 from CurrentVehicle import g_currentPreviewVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import BECOME_ELITE_VEHICLES_WATCHED
@@ -13,6 +12,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.impl.backport import createTooltipData
 from gui.impl.gui_decorators import args2params
+from gui.impl.lobby.hangar.presenters.utils import GUINode
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.lobby.tooltips.veh_post_progression_entry_point_tooltip import VehPostProgressionEntryPointTooltip
 from gui.impl.lobby.vehicle_hub.sub_presenters.sub_presenter_base import SubPresenterBase
@@ -35,7 +35,7 @@ from helpers import dependency
 if typing.TYPE_CHECKING:
     from typing import Optional
 
-class _ModulesTreeViewDumper(dumpers.ResearchItemsObjDumper):
+class ModulesTreeViewDumper(dumpers.ResearchItemsObjDumper):
     _itemsCache = dependency.descriptor(IItemsCache)
 
     def _getItemData(self, node, rootItem):
@@ -46,12 +46,12 @@ class _ModulesTreeViewDumper(dumpers.ResearchItemsObjDumper):
         nodeUnlockProps = node.getUnlockProps()
         nodeState = node.getState()
         if node.isVehicle():
-            vClass = self._vClassInfo.getInfoByTags(node.getTags())
             mechanics = set()
+            vClass = self._vClassInfo.getInfoByTags(node.getTags())
             imageName = item.name
         else:
             vClass = {'name': node.getTypeName()}
-            mechanics = item.getVehicleMechanicsGuiNames(rootItem.descriptor)
+            mechanics = {m.guiName for m in item.getModuleMechanicItems(rootItem.descriptor) if not m.isHidden}
             imageName = item.iconName
         return {'id': itemId,
          'image': imageName,
@@ -76,8 +76,6 @@ class _ModulesTreeViewDumper(dumpers.ResearchItemsObjDumper):
          'mechanics': mechanics,
          'displayInfo': node.getDisplayInfo()}
 
-
-_GUINode = namedtuple('_GUINode', ('id', 'state', 'unlockProps'))
 
 class ModulesSubPresenter(SubPresenterBase):
     _c11nService = dependency.descriptor(ICustomizationService)
@@ -108,7 +106,7 @@ class ModulesSubPresenter(SubPresenterBase):
     def setVehicleHubCtx(self, vhCtx):
         super(ModulesSubPresenter, self).setVehicleHubCtx(vhCtx)
         if not self._data:
-            self._data = ResearchItemsData(_ModulesTreeViewDumper())
+            self._data = ResearchItemsData(ModulesTreeViewDumper())
         self._data.setRootCD(self.vehicleHubCtx.intCD)
         self._data.load()
         self.redraw()
@@ -133,7 +131,7 @@ class ModulesSubPresenter(SubPresenterBase):
             if not nodeCD:
                 return None
             thisNode = self._data.getNodeByItemCD(nodeCD)
-            guiNode = _GUINode(nodeCD, thisNode.getState(), thisNode.getUnlockProps())
+            guiNode = GUINode(nodeCD, thisNode.getState(), thisNode.getUnlockProps())
             return createTooltipData(isSpecial=True, specialAlias=tooltipId, specialArgs=(guiNode, self.vehicleHubCtx.intCD))
         elif tooltipId == TOOLTIPS_CONSTANTS.TECHTREE_VEHICLE:
             vehCD = int(event.getArgument('vehCD', 0))
@@ -141,7 +139,7 @@ class ModulesSubPresenter(SubPresenterBase):
                 return None
             topLevel = event.getArgument('topLevel', False)
             thisNode = self._data.getTopLevelByItemCD(vehCD) if topLevel else self._data.getNodeByItemCD(vehCD)
-            guiNode = _GUINode(vehCD, thisNode.getState(), thisNode.getUnlockProps())
+            guiNode = GUINode(vehCD, thisNode.getState(), thisNode.getUnlockProps())
             return createTooltipData(isSpecial=True, specialAlias=tooltipId, specialArgs=(guiNode, self.vehicleHubCtx.intCD))
         else:
             return None

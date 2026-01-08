@@ -93,7 +93,7 @@ class SteamCompletionController(ISteamCompletionController):
             return
         if status.typeIs(StatusTypes.ADD_NEEDED) and not self.isAddEmailOverlayShown:
             showSteamAddEmailOverlay()
-            lockNotificationManager(lock=False, releasePostponed=True, fireReleased=False)
+            lockNotificationManager(lock=False, releasePostponed=True)
         elif status.typeIs(StatusTypes.ADDED) and self.isConfirmEmailOverlayAllowed:
             showSteamConfirmEmailOverlay(email=status.email)
         lockNotificationManager(lock=False, releasePostponed=True)

@@ -2,19 +2,45 @@
 # Embedded file name: scripts/client/ChargeableBurstComponent.py
 import typing
 from collections import namedtuple
+from events_handler import eventHandler
+from gui.battle_control.components_states.ammo import DefaultComponentAmmoState
+from gui.shared.utils.decorators import ReprInjector
 from vehicles.components.vehicle_component import VehicleDynamicComponent
-from items.components.shared_components import ChargeableBurstParams
+from vehicles.mechanics.gun_mechanics.common import IGunMechanicComponent
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from vehicles.mechanics.mechanic_helpers import getVehicleDescrMechanicParams
 from vehicles.mechanics.mechanic_states import IMechanicState, IMechanicStatesComponent, createMechanicStatesEvents, IMechanicStatesEvents
-if typing.TYPE_CHECKING:
-    from items.vehicles import VehicleDescriptor
 
+class ChargeableBurstAmmoState(DefaultComponentAmmoState):
+
+    def __init__(self, isBurstActive, shots, burstCount):
+        super(ChargeableBurstAmmoState, self).__init__()
+        self.__isBurstActive = isBurstActive
+        self.__burstCount = burstCount
+        self.__shots = shots
+
+    @property
+    def isBurstActive(self):
+        return self.__isBurstActive
+
+    @property
+    def burstCount(self):
+        return self.__burstCount
+
+    @property
+    def shots(self):
+        return self.__shots
+
+
+@ReprInjector.simple('isBurstActive', 'charges', 'shots')
 class ChargeableBurstModeState(namedtuple('ChargeableBurstModeState', ('isBurstActive', 'charges', 'shots', 'penetrationCount', 'burstCount')), IMechanicState):
 
     def isTransition(self, other):
         return self.isBurstActive != other.isBurstActive
 
 
-class ChargeableBurstComponent(VehicleDynamicComponent, IMechanicStatesComponent):
+@ReprInjector.withParent()
+class ChargeableBurstComponent(VehicleDynamicComponent, IGunMechanicComponent, IMechanicStatesComponent):
 
     def __init__(self):
         super(ChargeableBurstComponent, self).__init__()
@@ -24,29 +50,18 @@ class ChargeableBurstComponent(VehicleDynamicComponent, IMechanicStatesComponent
         self._initComponent()
 
     @property
+    def vehicleMechanic(self):
+        return VehicleMechanic.CHARGEABLE_BURST
+
+    @property
     def statesEvents(self):
         return self.__statesEvents
 
+    def getComponentParams(self):
+        return (self.__penetrationCount, self.__burstCount)
+
     def getMechanicState(self):
         return ChargeableBurstModeState(self.isBurstActive, self.charges, self.shots, self.__penetrationCount, self.__burstCount)
-
-    def onDestroy(self):
-        self.__statesEvents.destroy()
-        super(ChargeableBurstComponent, self).onDestroy()
-
-    def _onAppearanceReady(self):
-        typeDescriptor = self.entity.typeDescriptor
-        mechanicParams = typeDescriptor.mechanicsParams[ChargeableBurstParams.MECHANICS_NAME]
-        self.__penetrationCount = mechanicParams.penetrationCount
-        self.__burstCount, _, _ = typeDescriptor.gun.burst
-        self.__statesEvents.processStatePrepared()
-        super(ChargeableBurstComponent, self)._onAppearanceReady()
-
-    def _onComponentAppearanceUpdate(self):
-        mechanicState = self.getMechanicState()
-        self.__statesEvents.updateMechanicState(mechanicState)
-        ammoCtrl = self.entity.guiSessionProvider.shared.ammo
-        ammoCtrl.setChargeableBurstState(mechanicState)
 
     def set_charges(self, prev):
         self._updateComponentAppearance()
@@ -56,3 +71,31 @@ class ChargeableBurstComponent(VehicleDynamicComponent, IMechanicStatesComponent
 
     def set_isBurstActive(self, prev):
         self._updateComponentAppearance()
+        self._updateComponentAvatar()
+
+    def onDestroy(self):
+        self.__statesEvents.destroy()
+        super(ChargeableBurstComponent, self).onDestroy()
+
+    @eventHandler
+    def onCollectAmmoStates(self, ammoStates):
+        ammoStates[self.vehicleMechanic.value] = ChargeableBurstAmmoState(self.isBurstActive, self.shots, self.__burstCount)
+
+    def _onAppearanceReady(self):
+        super(ChargeableBurstComponent, self)._onAppearanceReady()
+        self.__statesEvents.processStatePrepared()
+
+    def _onComponentAppearanceUpdate(self, **kwargs):
+        super(ChargeableBurstComponent, self)._onComponentAppearanceUpdate(**kwargs)
+        mechanicState = self.getMechanicState()
+        self.__statesEvents.updateMechanicState(mechanicState)
+
+    def _onComponentAvatarUpdate(self, player):
+        super(ChargeableBurstComponent, self)._onComponentAvatarUpdate(player)
+        player.updateVehicleAmmoStates()
+
+    def _collectComponentParams(self, typeDescriptor):
+        super(ChargeableBurstComponent, self)._collectComponentParams(typeDescriptor)
+        mechanicParams = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanic)
+        self.__penetrationCount = mechanicParams.penetrationCount
+        self.__burstCount, _, _ = typeDescriptor.gun.burst

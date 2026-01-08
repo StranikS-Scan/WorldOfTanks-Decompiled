@@ -3,6 +3,7 @@
 import copy
 from itertools import chain
 import typing
+from future.utils import itervalues
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_WARNING
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
@@ -12,9 +13,10 @@ from gui.shared.items_parameters.bonus_helper import CREW_MASTERY_BONUSES, isSit
 from gui.shared.items_parameters.comparator import CONDITIONAL_BONUSES
 from gui.shared.items_parameters.comparator import VehiclesComparator, ItemsComparator, PARAM_STATE
 from gui.shared.items_parameters.functions import getBasicShell
-from gui.shared.items_parameters.params import HIDDEN_PARAM_DEFAULTS
+from gui.shared.items_parameters.params_constants import HIDDEN_PARAM_DEFAULTS
+from gui.shared.items_parameters import module_params
 from gui.shared.items_parameters.params_cache import g_paramsCache
-from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, TURBOSHAFT_SPEED_MODE_SPEED, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, SHOT_DISPERSION_ANGLE, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_SWITCH_TIME, CHASSIS_REPAIR_TIME, CONTINUOUS_SHOTS_PER_MINUTE, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, DUAL_ACCURACY_COOLING_DELAY, BURST_FIRE_RATE, AUTO_SHOOT_CLIP_FIRE_RATE, AVG_DAMAGE_PER_SECOND, TWIN_GUN_SWITCH_FIRE_MODE_TIME, TWIN_GUN_TOP_SPEED
+from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, TURBOSHAFT_SPEED_MODE_SPEED, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, SHOT_DISPERSION_ANGLE, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_SWITCH_TIME, CHASSIS_REPAIR_TIME, CONTINUOUS_SHOTS_PER_MINUTE, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, DUAL_ACCURACY_COOLING_DELAY, BURST_FIRE_RATE, AUTO_SHOOT_CLIP_FIRE_RATE, AVG_DAMAGE_PER_SECOND, TWIN_GUN_SWITCH_FIRE_MODE_TIME, TWIN_GUN_TOP_SPEED, SHELL_LOADING_TIME_PROP_NAME, TEMPERATURE_RELOAD_TIME, TEMPERATURE_AVG_DAMAGE_PER_MINUTE
 from helpers import dependency
 from items import vehicles, ITEM_TYPES
 from shared_utils import findFirst, first
@@ -25,12 +27,14 @@ RELATIVE_POWER_PARAMS = ('avgDamage',
  'stunMinDuration',
  'stunMaxDuration',
  'reloadTime',
+ TEMPERATURE_RELOAD_TIME,
  CONTINUOUS_SHOTS_PER_MINUTE,
  AUTO_RELOAD_PROP_NAME,
  'reloadTimeSecs',
  TWIN_GUN_SWITCH_FIRE_MODE_TIME,
  'clipFireRate',
  AUTO_SHOOT_CLIP_FIRE_RATE,
+ SHELL_LOADING_TIME_PROP_NAME,
  BURST_FIRE_RATE,
  'turboshaftBurstFireRate',
  DUAL_GUN_CHARGE_TIME,
@@ -41,7 +45,8 @@ RELATIVE_POWER_PARAMS = ('avgDamage',
  'aimingTime',
  SHOT_DISPERSION_ANGLE,
  DUAL_ACCURACY_COOLING_DELAY,
- 'avgDamagePerMinute')
+ 'avgDamagePerMinute',
+ TEMPERATURE_AVG_DAMAGE_PER_MINUTE)
 RELATIVE_ARMOR_PARAMS = ('maxHealth',
  'hullArmor',
  'turretArmor',
@@ -120,11 +125,11 @@ EXTRA_PARAMS_GROUP = {'relativePower': EXTRA_POWER_PARAMS,
  'relativeMobility': EXTRA_MOBILITY_PARAMS,
  'relativeCamouflage': EXTRA_CAMOUFLAGE_PARAMS,
  'relativeVisibility': EXTRA_VISIBILITY_PARAMS}
-_ITEM_TYPE_HANDLERS = {ITEM_TYPES.vehicleRadio: params.RadioParams,
- ITEM_TYPES.vehicleEngine: params.EngineParams,
- ITEM_TYPES.vehicleChassis: params.ChassisParams,
- ITEM_TYPES.vehicleTurret: params.TurretParams,
- ITEM_TYPES.vehicleGun: params.GunParams,
+_ITEM_TYPE_HANDLERS = {ITEM_TYPES.vehicleRadio: module_params.RadioParams,
+ ITEM_TYPES.vehicleEngine: module_params.EngineParams,
+ ITEM_TYPES.vehicleChassis: module_params.ChassisParams,
+ ITEM_TYPES.vehicleTurret: module_params.TurretParams,
+ ITEM_TYPES.vehicleGun: module_params.GunParams,
  ITEM_TYPES.shell: params.ShellParams,
  ITEM_TYPES.equipment: params.EquipmentParams,
  ITEM_TYPES.optionalDevice: params.OptionalDeviceParams,
@@ -280,7 +285,7 @@ def getSituationalParams(skillNames):
         if skillName in CREW_MASTERY_BONUSES:
             situationalParams.append('situationalCrewLevelIncrease')
         skill = tankmen.getSkillsConfig().getSkill(skillName)
-        for param in skill.params.values():
+        for param in itervalues(skill.params):
             if param.situational:
                 situationalParams.append(param.name)
 
@@ -403,7 +408,7 @@ def shellOnVehicleComparator(shell, vehicle):
     vDescriptor = vehicle.descriptor
     oldIdx = vDescriptor.activeGunShotIndex
     vehicleParams = params.VehicleParams(vehicle).getParamsDict()
-    idx, _ = findFirst(lambda (i, s): s.shell.compactDescr == shell.intCD, enumerate(vDescriptor.gun.shots), (0, None))
+    idx, _ = findFirst(lambda it: it[1].shell.compactDescr == shell.intCD, enumerate(vDescriptor.gun.shots), (0, None))
     vDescriptor.activeGunShotIndex = idx
     newParams = params.VehicleParams(vehicle).getParamsDict(preload=True)
     vDescriptor.activeGunShotIndex = oldIdx
@@ -537,7 +542,7 @@ class VehParamsBaseGenerator(object):
             return True
         conditionalBonus = CONDITIONAL_BONUSES.get(extraParamName)
         if conditionalBonus:
-            boosterName = next(((key[0] if key else None) for key in conditionalBonus.keys()))
+            boosterName = next(((key[0] if key else None) for key in conditionalBonus))
             for item in installedBoosters:
                 if vehicle and item and item.name == boosterName:
                     return not item.isAffectsOnVehicle(vehicle)

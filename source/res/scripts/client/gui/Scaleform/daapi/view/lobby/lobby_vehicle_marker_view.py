@@ -5,8 +5,6 @@ from collections import defaultdict
 import GUI
 import Math
 from gui.Scaleform.daapi.view.meta.LobbyVehicleMarkerViewMeta import LobbyVehicleMarkerViewMeta
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework.entities.sf_window import SFWindow
 from gui.shared.gui_items.Vehicle import getVehicleClassTag
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
@@ -106,8 +104,8 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
     def _canShowMarkers(self):
         windowsManager = self.guiLoader.windowsManager
         windows = windowsManager.findWindows(lambda w: w.layer in self.__LAYERS_WITHOUT_MARKERS)
-        hangarIsExist = len(windowsManager.findWindows(lambda w: isinstance(w, SFWindow) and w.loadParams.viewKey.alias == VIEW_ALIAS.LEGACY_LOBBY_HANGAR)) > 0
-        return len(windows) == 1 and hangarIsExist
+        from gui.lobby_state_machine.states import isInHangarState
+        return len(windows) == 1 and isInHangarState()
 
     @staticmethod
     def __getVehicleInfo(vehicle):

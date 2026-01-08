@@ -16,6 +16,7 @@ from gui.impl.gen.view_models.views.lobby.common.router_model import RouterModel
 from gui.impl.gen.view_models.views.lobby.hangar.hangar_settings_model import HangarSettingsModel
 from gui.impl.gen.view_models.views.lobby.hangar.key_bindings_model import KeyBindingsModel
 from gui.impl.lobby.common.presenters.settings_presenter import SettingsPresenter
+from gui.impl.lobby.easy_tank_equip.easy_tank_equip_presenter import EasyTankEquipPresenter
 from gui.impl.lobby.hangar.base.account_styles import AccountStyles
 from gui.impl.lobby.hangar.base.blur import RandomHangarBlur
 from gui.impl.lobby.hangar.base.vehicles_filter_component import VehiclesFilterComponent
@@ -110,6 +111,7 @@ class RandomHangar(ViewComponent[RouterModel], IRoutableView):
          hangar.OptionalDevicesAssistant(): OptionalDevicesAssistantPresenter,
          hangar.VehiclePlaylists(): VehiclePlaylistsPresenter,
          hangar.UserMissions(): UserMissionsPresenter,
+         hangar.EasyTankEquip(): EasyTankEquipPresenter,
          hangar.PetObjectTooltip(): PetObjectTooltipPresenter,
          hangar.Settings(): lambda : SettingsPresenter(HangarSettingsModel, HANGAR_VIEW_SETTINGS),
          hangar.KeyBindings(): lambda : SettingsPresenter(KeyBindingsModel, HANGAR_KEY_BINDINGS, readOnly=True)}

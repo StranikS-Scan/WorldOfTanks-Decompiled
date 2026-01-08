@@ -1,20 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/vehicle_mechanics/mechanic_widgets/power_mode_widget.py
+from __future__ import absolute_import
 import typing
 from constants import POWER_MODE_STATE
+from events_containers.common.containers import ContainersListener
 from events_handler import eventHandler
 from gui.Scaleform.daapi.view.meta.PowerWidgetMeta import PowerWidgetMeta
 from gui.Scaleform.genConsts.MECHANICS_WIDGET_CONST import MECHANICS_WIDGET_CONST
-from gui.veh_mechanics.battle.updaters.mechanic_passenger_view_updater import VehicleMechanicPassengerUpdater
-from gui.veh_mechanics.battle.updaters.mechanic_states_view_updater import VehicleMechanicStatesUpdater
-from vehicles.components.component_events import ComponentListener
+from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import VehicleMechanicPassengerUpdater
+from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
 from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 if typing.TYPE_CHECKING:
     from PowerModeController import PowerModeState
     from gui.veh_mechanics.battle.updaters.updaters_common import IViewUpdater
 
-class PowerModeMechanicWidget(PowerWidgetMeta, ComponentListener, IMechanicStatesListenerLogic):
+class PowerModeMechanicWidget(PowerWidgetMeta, ContainersListener, IMechanicStatesListenerLogic):
     _POWER_MODE_UI_STATES = {POWER_MODE_STATE.NOT_ACTIVE: MECHANICS_WIDGET_CONST.PREPARING,
      POWER_MODE_STATE.PREPARING: MECHANICS_WIDGET_CONST.PREPARING,
      POWER_MODE_STATE.ACTIVE: MECHANICS_WIDGET_CONST.ACTIVE,

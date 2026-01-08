@@ -28,7 +28,7 @@ class TeamStatisticsSubPresenter(BattleResultsSubPresenter):
             databaseID = int(event.getArgument('databaseID', default=-1))
             if databaseID == self.__connectionMgr.databaseID:
                 return
-            vehicleCD = event.getArgument('vehicleCD')
+            vehicleCD = event.getArgument('vehicleCD', 0)
             contextMenuData = createContextMenuData(CONTEXT_MENU_HANDLER_TYPE.BATTLE_RESULTS_USER, self.__getContextMenuArgs(databaseID, vehicleCD))
             if contextMenuData is not None:
                 window = BackportContextMenuWindow(contextMenuData, self.getParentWindow())

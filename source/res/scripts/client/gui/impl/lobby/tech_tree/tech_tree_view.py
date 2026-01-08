@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tech_tree/tech_tree_view.py
 import json
-from collections import namedtuple
 from logging import getLogger
 import typing
 import Event
@@ -29,6 +28,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.tech_tree.tech_tree_view_model import TechTreeViewModel, NationEnum
 from gui.impl.gui_decorators import args2params
 from gui.impl.pub import ViewImpl, WindowImpl
+from gui.impl.lobby.hangar.presenters.utils import GUINode
 from gui.lobby_state_machine.routable_view import IRoutableView
 from gui.lobby_state_machine.router import SubstateRouter
 from gui.shared import event_dispatcher as shared_events
@@ -48,7 +48,6 @@ if typing.TYPE_CHECKING:
     from gui.shared.events import NavigationEvent
 _logger = getLogger(__name__)
 _VEHICLE_URL_FILTER_PARAM = 1
-_GUINode = namedtuple('_GUINode', ('id', 'state', 'unlockProps'))
 
 class _NationTreeViewDumper(dumpers._BaseDumper):
 
@@ -207,7 +206,7 @@ class TechTreeView(ViewImpl, IRoutableView):
                 if not vehCD:
                     return
                 thisNode = self.__nationTreeData.getNodeByItemCD(vehCD)
-                guiNode = _GUINode(vehCD, thisNode.getState(), thisNode.getUnlockProps())
+                guiNode = GUINode(vehCD, thisNode.getState(), thisNode.getUnlockProps())
                 parentNodeCD = first(g_techTreeDP.getTopLevel(vehCD))
                 if not parentNodeCD:
                     rootItem = self.__nationTreeData.getRootItem()

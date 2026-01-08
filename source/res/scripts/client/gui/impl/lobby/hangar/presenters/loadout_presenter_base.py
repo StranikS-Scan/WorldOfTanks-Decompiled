@@ -267,10 +267,12 @@ class LoadoutPresenterBase(ViewComponent[TViewModel], ITankSetupCMHandler):
     def __onCacheResync(self, reason, diff):
         if reason not in (CACHE_SYNC_REASON.INVENTORY_RESYNC, CACHE_SYNC_REASON.CLIENT_UPDATE):
             return
-        if diff.get(self._guiItemType, {}):
-            self._provider.updateDataProviderItems()
-            self._updateModel()
-            self._updateDealPanel()
+        else:
+            if self._provider is not None and diff.get(self._guiItemType, {}):
+                self._provider.updateDataProviderItems()
+                self._updateModel()
+                self._updateDealPanel()
+            return
 
     def __onApply(self, callback, skipDialog=False):
         self._interactor.confirm(callback, skipDialog=skipDialog)
@@ -310,12 +312,15 @@ class LoadoutPresenterBase(ViewComponent[TViewModel], ITankSetupCMHandler):
         self._getDealPanel().updateAutoRenewalState(self._interactor, self.getViewModel().dealPanel)
 
     def __onUpdateFromItem(self, item):
-        self._updateInteractor(item)
+        if self._interactor is not None:
+            self._updateInteractor(item)
+        return
 
     def __onResetItem(self):
-        if self._vehInteractingItem.getItem() is None or self._provider is None:
+        if self._vehInteractingItem.getItem() is not None and self._provider is None:
             self._createProvider(self._vehInteractingItem)
-        self._interactor.setItem(self._vehInteractingItem)
+        if self._interactor is not None:
+            self._interactor.setItem(self._vehInteractingItem)
         return
 
     def __onSpecializationSelect(self):

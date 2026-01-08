@@ -2,7 +2,11 @@
 # Embedded file name: scripts/client/BattleFuryController.py
 import BigWorld
 import typing
-from vehicles.components.vehicle_component import VehicleMechanicPrefabDynamicComponent
+from gui.shared.utils.decorators import ReprInjector
+from vehicles.components.vehicle_component import VehicleDynamicComponent
+from vehicles.components.vehicle_prefabs import createMechanicPrefabSpawner
+from vehicles.mechanics.common import IMechanicComponent
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_states import createMechanicStatesEvents, IMechanicStatesComponent, IMechanicState
 if typing.TYPE_CHECKING:
     from vehicles.mechanics.mechanic_states import IMechanicStatesEvents
@@ -29,12 +33,18 @@ class BattleFuryState(typing.NamedTuple('BattleFuryState', (('level', int),
         return self.level != other.level
 
 
-class BattleFuryController(VehicleMechanicPrefabDynamicComponent, IMechanicStatesComponent):
+@ReprInjector.withParent()
+class BattleFuryController(VehicleDynamicComponent, IMechanicComponent, IMechanicStatesComponent):
 
     def __init__(self):
         super(BattleFuryController, self).__init__()
+        self.__mechanicPrefabSpawner = createMechanicPrefabSpawner(self.entity, self)
         self.__statesEvents = createMechanicStatesEvents(self)
         self._initComponent()
+
+    @property
+    def vehicleMechanic(self):
+        return VehicleMechanic.BATTLE_FURY
 
     @property
     def statesEvents(self):
@@ -52,7 +62,9 @@ class BattleFuryController(VehicleMechanicPrefabDynamicComponent, IMechanicState
 
     def _onAppearanceReady(self):
         super(BattleFuryController, self)._onAppearanceReady()
+        self.__mechanicPrefabSpawner.loadAppearancePrefab()
         self.__statesEvents.processStatePrepared()
 
-    def _onComponentAppearanceUpdate(self):
+    def _onComponentAppearanceUpdate(self, **kwargs):
+        super(BattleFuryController, self)._onComponentAppearanceUpdate(**kwargs)
         self.__statesEvents.updateMechanicState(self.getMechanicState())

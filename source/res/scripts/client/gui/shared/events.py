@@ -311,6 +311,7 @@ class LobbySimpleEvent(HasCtxEvent):
     WAITING_HIDDEN = 'waitingHidden'
     BATTLE_RESULTS_POSTED = 'battleResultsPosted'
     BATTLE_RESULTS_SHOW_QUEST = 'battleResultsWindowShowQuest'
+    BATTLE_RESULTS_PROCESSED = 'battleResultsProcessed'
     CHANGE_SOUND_ENVIRONMENT = 'changeSoundEnvironment'
     VEHICLE_PREVIEW_HIDDEN = 'vehiclePreviewHidden'
 

@@ -11,7 +11,7 @@ from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import DialogsInterface, SystemMessages, makeHtmlString
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs
-from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getIntegratedAuctionUrl, getPlayerSeniorityAwardsUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getIntegratedAuctionUrl
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
@@ -42,7 +42,7 @@ from gui.wgnc import g_wgncProvider
 from helpers import dependency
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
-from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE, NOTIFICATION_STATE
+from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE
 from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.customization import ICustomizationService
@@ -53,8 +53,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.web import IWebController
 from soft_exception import SoftException
-from uilogging.seniority_awards.constants import SeniorityAwardsLogSpaces
-from uilogging.seniority_awards.loggers import VehicleSelectionNotificationLogger, CoinsNotificationLogger, RewardNotificationLogger
+from uilogging.seniority_awards.loggers import VehicleSelectionNotificationLogger
 from uilogging.advanced_achievement.logger import AdvancedAchievementLogger
 from uilogging.advanced_achievement.logging_constants import AdvancedAchievementButtons, AdvancedAchievementViewKey
 from web.web_client_api import webApiCollection
@@ -1157,27 +1156,6 @@ class _OpenPersonalReservesHandler(NavigationDisabledActionHandler):
         shared_events.showBoostersActivation()
 
 
-class _SeniorityAwardsTokensHandler(NavigationDisabledActionHandler):
-    __slots__ = ('__uiCoinsNotificationLogger',)
-
-    def __init__(self):
-        super(_SeniorityAwardsTokensHandler, self).__init__()
-        self.__uiCoinsNotificationLogger = CoinsNotificationLogger()
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.SENIORITY_AWARDS_TOKENS
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def doAction(self, model, entityID, action):
-        displaySpace = SeniorityAwardsLogSpaces.HANGAR if model.getDisplayState() == NOTIFICATION_STATE.POPUPS else SeniorityAwardsLogSpaces.NOTIFICATION_CENTER
-        self.__uiCoinsNotificationLogger.handleClickAction(displaySpace)
-        showShop(getPlayerSeniorityAwardsUrl())
-
-
 class _OpenSeniorityAwardsVehicleSelection(NavigationDisabledActionHandler):
     __slots__ = ('__uiVehicleSelectionNotificationLogger',)
     __seniorityAwardCtrl = dependency.descriptor(ISeniorityAwardsController)
@@ -1198,35 +1176,6 @@ class _OpenSeniorityAwardsVehicleSelection(NavigationDisabledActionHandler):
         self.__uiVehicleSelectionNotificationLogger.handleClickAction()
         if self.__seniorityAwardCtrl.isVehicleSelectionAvailable:
             showSeniorityRewardVehiclesWindow()
-
-
-class _OpenSeniorityAwardsPersonalVehicleSelection(_OpenSeniorityAwardsVehicleSelection):
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.SENIORITY_AWARDS_VEHICLE_SELECTION
-
-
-class _OpenSeniorityAwards(NavigationDisabledActionHandler):
-    __seniorityAwardCtrl = dependency.descriptor(ISeniorityAwardsController)
-    __slots__ = ('__uiRewardNotificationLogger',)
-
-    def __init__(self):
-        super(_OpenSeniorityAwards, self).__init__()
-        self.__uiRewardNotificationLogger = RewardNotificationLogger()
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.SENIORITY_AWARDS_QUEST
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def doAction(self, model, entityID, action):
-        displaySpace = SeniorityAwardsLogSpaces.HANGAR if model.getDisplayState() == NOTIFICATION_STATE.POPUPS else SeniorityAwardsLogSpaces.NOTIFICATION_CENTER
-        self.__uiRewardNotificationLogger.handleClickAction(displaySpace)
-        self.__seniorityAwardCtrl.claimReward()
 
 
 class _OpenWinbackSelectableRewardView(NavigationDisabledActionHandler):
@@ -1582,8 +1531,6 @@ _AVAILABLE_HANDLERS = [ShowBattleResultsHandler,
  _OpenIntegratedAuctionStart,
  _OpenIntegratedAuctionFinish,
  _OpenPersonalReservesHandler,
- _SeniorityAwardsTokensHandler,
- _OpenSeniorityAwards,
  _OpenMissingEventsHandler,
  _OpenCollectionHandler,
  _OpenCollectionEntryHandler,
@@ -1597,7 +1544,6 @@ _AVAILABLE_HANDLERS = [ShowBattleResultsHandler,
  _OpenPrestigeVehicleStats,
  _OpenPrestigeOnboardingWindow,
  _OpenSeniorityAwardsVehicleSelection,
- _OpenSeniorityAwardsPersonalVehicleSelection,
  _OpenPunishmentWindowHandler,
  _OpenXpExchangeWindow,
  _OpenGoldExchangeWindow,

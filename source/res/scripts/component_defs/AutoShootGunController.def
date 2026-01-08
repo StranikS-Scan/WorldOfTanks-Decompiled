@@ -12,6 +12,11 @@
       <Type>	AUTO_SHOOT_GUN_STATE_STATUS	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </stateStatus>
+    <dispersionStatus>
+      <Type>	AUTO_SHOOT_GUN_DISPERSION_STATUS	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </dispersionStatus>
   </Properties>
   <ClientMethods>
     <onDiscreteShot></onDiscreteShot>

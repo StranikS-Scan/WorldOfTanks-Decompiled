@@ -2,9 +2,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/events_helpers.py
 import operator
 from collections import defaultdict, namedtuple
-from copy import deepcopy
-from typing import TYPE_CHECKING, NamedTuple
+from typing import TYPE_CHECKING
 from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import getC11n2dProgressionLinkBtnParams
+from gui.Scaleform.daapi.view.lobby.server_events.token_converter_helper import getBonusDataFromOneOfBonuses, convertTokensInBonusData
 from gui.shared.gui_items import GUI_ITEM_TYPE
 import constants
 from battle_pass_common import BattlePassConsts, BATTLE_PASS_RANDOM_QUEST_ID_PREFIX, NON_CHAPTER_ID, isPostProgressionChapter, getPostProgressionLevel
@@ -29,7 +29,6 @@ from gui.shared.formatters import icons, text_styles
 from helpers import dependency, i18n, int2roman, time_utils
 from helpers.i18n import makeString as _ms
 from nations import ALLIANCE_TO_NATIONS
-from optional_bonuses import TrackVisitor
 from personal_missions import PM_BRANCH
 from quest_xml_source import MAX_BONUS_LIMIT
 from shared_utils import first
@@ -44,20 +43,7 @@ if TYPE_CHECKING:
 FINISH_TIME_LEFT_TO_SHOW = time_utils.ONE_DAY
 START_TIME_LIMIT = 5 * time_utils.ONE_DAY
 _AWARDS_PER_PAGE = 3
-_ChapterProgress = namedtuple('_ChapterProgress', ('previousPoints',
- 'currentPoints',
- 'previousLevel',
- 'currentLevel',
- 'currentLevelPoints',
- 'maxLevelPoints'))
-
-class TokenConvertionData(NamedTuple('TokenConvertionData', [('tokenTo', str), ('limit', int), ('rate', float)])):
-
-    def __new__(cls, **kwargs):
-        defaults = dict(tokenTo='', limit=0, rate=1.0)
-        defaults.update({k:kwargs[k] for k in defaults.viewkeys() & kwargs.viewkeys()})
-        return super(TokenConvertionData, cls).__new__(cls, **defaults)
-
+_ChapterProgress = namedtuple('_ChapterProgress', ('previousPoints', 'currentPoints', 'previousLevel', 'currentLevel', 'currentLevelPoints', 'maxLevelPoints'))
 
 class BattlePassProgress(object):
     __battlePassController = dependency.descriptor(IBattlePassController)
@@ -145,6 +131,9 @@ class BattlePassProgress(object):
 
     def getLevelAwards(self, chapterID, level):
         return self.__battlePassController.getSingleAward(chapterID, level, self.__getRewardType(chapterID))
+
+    def getLevelAwardsByType(self, chapterID, level, rewardType):
+        return self.__battlePassController.getSingleAward(chapterID, level, rewardType)
 
     def hasProgress(self, chapterID):
         return self.isLevelReached(chapterID) or self.getPointsDiff(chapterID) > 0
@@ -337,69 +326,11 @@ class QuestPostBattleInfo(EventPostBattleInfo, QuestInfoModel):
                 msg = i18n.makeString(key, count=bonusLimit)
             return (MISSIONS_STATES.NONE, msg)
 
-    def _getBonusDataFromOneOfBonuses(self, pCur=None):
-        bonusData = self.event.getRawBonuses()
-        trackResult = {}
-        if pCur is not None:
-            pCurInnerDict = pCur.itervalues().next()
-            bonusTracks = pCurInnerDict.get('bonusTracks', [])
-            if bonusTracks:
-                trackReplay = TrackVisitor(bonusTracks[-1], 1, None)
-                trackReplay.walkBonuses(bonusData, trackResult)
-        return trackResult
-
-    def _convertTokensInBonusData(self, bonusData, questTokensConvertion, questTokensCount):
-        bonusData = deepcopy(bonusData or self.event.getRawBonuses())
-        tokens = bonusData.get('tokens', {})
-        if not tokens:
-            return bonusData
-        tokensForConvertion = set(tokens).intersection(questTokensConvertion.keys())
-        for token in tokensForConvertion:
-            usedConverters = []
-            tokenConvertionData = questTokensConvertion[token]
-            for index, convertionData in enumerate(tokenConvertionData):
-                wasUsed = self._convertTokens(token, tokens, convertionData)
-                if wasUsed:
-                    usedConverters.append(index)
-                break
-
-            questTokensConvertion[token] = [ convertionData for index, convertionData in enumerate(tokenConvertionData) if index not in usedConverters ]
-            if not questTokensConvertion[token]:
-                questTokensConvertion.pop(token)
-
-        for token in set(tokens).difference(questTokensCount.keys()):
-            tokens.pop(token)
-
-        return bonusData
-
-    def _convertTokens(self, token, bonusTokens, convertionData):
-        convertion = TokenConvertionData(**convertionData)
-        wasUsed = False
-        if not convertion.tokenTo or token not in bonusTokens:
-            return wasUsed
-        tokenBonusData = bonusTokens[token]
-        count = tokenBonusData['count']
-        if convertion.limit:
-            convertCount = min(convertion.limit, count)
-            if convertion.limit <= count:
-                wasUsed = True
-            else:
-                convertionData['limit'] -= count
-        else:
-            convertCount = count
-        if convertCount == count:
-            bonusTokens.pop(token)
-        else:
-            tokenBonusData['count'] -= convertCount
-        newCount = bonusTokens.get(convertion.tokenTo, {}).get('count', 0) + int(round(convertCount * convertion.rate))
-        bonusTokens.setdefault(convertion.tokenTo, deepcopy(tokenBonusData))['count'] = newCount
-        return wasUsed
-
     def _getBonuses(self, svrEvents, pCur=None, bonuses=None, **kwargs):
         questTokensConvertion = kwargs.get('questTokensConvertion', {})
         questTokensCount = kwargs.get('questTokensCount', {})
-        bonusData = self._getBonusDataFromOneOfBonuses(pCur)
-        bonusData = self._convertTokensInBonusData(bonusData=bonusData, questTokensConvertion=questTokensConvertion, questTokensCount=questTokensCount)
+        bonusData = getBonusDataFromOneOfBonuses(self.event, pCur)
+        bonusData = convertTokensInBonusData(event=self.event, bonusData=bonusData, questTokensConvertion=questTokensConvertion, questTokensCount=questTokensCount)
         bonuses = self._filterBonuses(bonuses or self.event.getBonuses(bonusData=bonusData))
         result = OldStyleBonusesFormatter(self.event).getFormattedBonuses(bonuses)
         if result:

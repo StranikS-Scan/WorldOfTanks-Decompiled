@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/lobby/hangar/presenters/fun_random_mode_state_presenter.py
 from __future__ import absolute_import
-from fun_random.gui.feature.util.fun_mixins import FunSubModesWatcher
+from fun_random.gui.feature.util.fun_mixins import FunSubModesWatcher, FunAssetPacksMixin
 from fun_random.gui.feature.util.fun_wrappers import hasDesiredSubMode
 from fun_random.gui.impl.gen.view_models.views.lobby.common.fun_random_mode_state_model import FunRandomModeStateModel
 from gui.impl.pub.view_component import ViewComponent
 
-class FunRandomModeStatePresenter(ViewComponent[FunRandomModeStateModel], FunSubModesWatcher):
+class FunRandomModeStatePresenter(ViewComponent[FunRandomModeStateModel], FunAssetPacksMixin, FunSubModesWatcher):
 
     def __init__(self):
         super(FunRandomModeStatePresenter, self).__init__(model=FunRandomModeStateModel)
@@ -32,5 +32,5 @@ class FunRandomModeStatePresenter(ViewComponent[FunRandomModeStateModel], FunSub
     @hasDesiredSubMode()
     def __invalidateAll(self, *_):
         with self.viewModel.transaction() as model:
-            model.setAssetsPointer(self.getDesiredSubMode().getAssetsPointer())
+            model.setAssetsPointer(self.getModeAssetsPointer())
             model.setHasSuitableVehicles(self.getDesiredSubMode().hasSuitableVehicles())

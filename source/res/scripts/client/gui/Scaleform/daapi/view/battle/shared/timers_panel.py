@@ -32,7 +32,7 @@ from math_utils import almostEqual
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from vehicles.mechanics.mechanic_constants import VehicleMechanic
-from vehicles.mechanics.mechanic_info import hasVehicleMechanic
+from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic
 if typing.TYPE_CHECKING:
     from typing import List
     from TargetDesignatorTargetController import TargetDesignatorTargetController
@@ -709,7 +709,7 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             return
 
     def __hasOverlappingMechanic(self, vTypeDescr):
-        return vTypeDescr.isDualgunVehicle or isAutoReloadGun(vTypeDescr.gun) or hasVehicleMechanic(vTypeDescr, VehicleMechanic.CHARGEABLE_BURST)
+        return vTypeDescr.isDualgunVehicle or isAutoReloadGun(vTypeDescr.gun) or hasVehicleDescrMechanic(vTypeDescr, VehicleMechanic.CHARGEABLE_BURST)
 
     def _onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.SWITCHING:

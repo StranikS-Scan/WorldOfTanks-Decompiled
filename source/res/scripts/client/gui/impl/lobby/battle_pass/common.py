@@ -19,9 +19,11 @@ def getActualBattlePassIDs(layoutID=R.invalid(), chapterID=0, battlePass=None):
             return (R.aliases.battle_pass.BuyPassConfirm(), chapterID)
         if battlePass.isCompleted():
             return (R.aliases.battle_pass.HolidayFinal(), chapterID)
+    if not isIntroVideoShown() or not isIntroShown():
+        return (R.aliases.battle_pass.Intro(), chapterID)
     if layoutID:
         return (layoutID, chapterID if battlePass.isChapterExists(chapterID) else battlePass.getCurrentChapterID())
-    if not isIntroVideoShown() or not isExtraVideoShown() or not isIntroShown():
+    if not isExtraVideoShown():
         return (R.aliases.battle_pass.Intro(), chapterID)
     if battlePass.isPostProgressionActive():
         if battlePass.hasExtra() and not isUmgExtraChapterSeen():

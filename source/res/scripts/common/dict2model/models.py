@@ -18,5 +18,4 @@ class Model(object):
         pass
 
     def __repr__(self):
-        _reprArgs = self._reprArgs()
-        return '<{}({})>'.format(self.__class__.__name__, _reprArgs) if _reprArgs else super(Model, self).__repr__()
+        return '<{}({})>'.format(self.__class__.__name__, self._reprArgs() or str(self.toDict()))

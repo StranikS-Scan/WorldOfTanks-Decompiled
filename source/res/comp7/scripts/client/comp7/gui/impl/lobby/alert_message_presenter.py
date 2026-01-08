@@ -4,6 +4,7 @@ from __future__ import absolute_import
 from comp7.gui.impl.gen.view_models.views.lobby.alert_message_model import AlertMessageModel, State
 from comp7.gui.shared import event_dispatcher as comp7_events
 from frameworks.wulf.view.array import fillIntsArray
+from gui.impl import backport
 from gui.impl.pub.view_component import ViewComponent
 from gui.periodic_battles.models import PeriodType
 from helpers import dependency
@@ -72,5 +73,5 @@ class AlertMessagePresenter(ViewComponent[AlertMessageModel]):
             model.setBanTimeleftInSeconds(int(round(self.__comp7Controller.banDuration)))
             fillIntsArray(self.__comp7Controller.getModeSettings().levels, model.getLevels())
             if preannouncedSeason is not None:
-                model.setStartEventTimestamp(preannouncedSeason.getStartDate())
+                model.setStartEventDateTime(backport.getShortDateTimeFormat(preannouncedSeason.getStartDate()))
         return

@@ -87,6 +87,7 @@ _MARKERS_TYPE_TO_SUBTYPE_MAP = {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSu
                                    LocationMarkerSubType.NAVIGATION_POINT_SUBTYPE: RADIAL_MENU_CONSTS.TARGET_STATE_DEFAULT,
                                    INVALID_MARKER_SUBTYPE: RADIAL_MENU_CONSTS.TARGET_STATE_DEFAULT},
  MarkerType.INVALID_MARKER_TYPE: {INVALID_MARKER_SUBTYPE: RADIAL_MENU_CONSTS.TARGET_STATE_EMPTY}}
+_MESSAGE_TO_RELOAD_MAP = {BATTLE_CHAT_COMMAND_NAMES.OVERHEATEDGUN: Shortcut(title=INGAME_HELP.RADIALMENU_OVERHEATED_GUN, action=BATTLE_CHAT_COMMAND_NAMES.RELOADINGGUN, icon=RADIAL_MENU_CONSTS.OVERHEAT, groups=RADIAL_MENU_CONSTS.ALL_TARGET_STATES, bState=RADIAL_MENU_CONSTS.NORMAL_BUTTON_STATE, indexInGroup=RADIAL_MENU_CONSTS.ELEMENT_INDEX_THIRD)}
 _CAN_CANCEL_REPLY_SHORTCUT = Shortcut(title=INGAME_HELP.RADIALMENU_CANCEL_REPLY, action=BATTLE_CHAT_COMMAND_NAMES.CANCEL_REPLY, icon=RADIAL_MENU_CONSTS.NO, groups=RADIAL_MENU_CONSTS.ALL_TARGET_STATES, bState=RADIAL_MENU_CONSTS.NORMAL_BUTTON_STATE, indexInGroup=RADIAL_MENU_CONSTS.ELEMENT_INDEX_FIRST)
 _CONFIRM_SHORTCUT = Shortcut(title=INGAME_HELP.RADIALMENU_POSITIVE, action=BATTLE_CHAT_COMMAND_NAMES.REPLY, icon=RADIAL_MENU_CONSTS.YES, groups=RADIAL_MENU_CONSTS.ALL_TARGET_STATES, bState=RADIAL_MENU_CONSTS.NORMAL_BUTTON_STATE, indexInGroup=RADIAL_MENU_CONSTS.ELEMENT_INDEX_FIRST)
 _THANKS_SHORTCUT = Shortcut(title=INGAME_HELP.RADIALMENU_THANKS, action=BATTLE_CHAT_COMMAND_NAMES.THANKS, icon=RADIAL_MENU_CONSTS.THANK_YOU, groups=RADIAL_MENU_CONSTS.ALL_TARGET_STATES, bState=RADIAL_MENU_CONSTS.NORMAL_BUTTON_STATE, indexInGroup=RADIAL_MENU_CONSTS.ELEMENT_INDEX_FIRST)
@@ -200,6 +201,7 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
             else:
                 targetID, targetMarkerType, crosshairType, replyState, replyToAction = chatCommands.getAimedAtTargetData()
             menuState = self.__getRadialMenuState(targetID, targetMarkerType, crosshairType, replyState, replyToAction)
+            staticShortcutsDiff = self.__generateStaticDiffDict(menuState)
             replyStateDiff = self.__generateDiffStateDict(menuState, replyState, replyToAction, targetID)
             ctrl = self.sessionProvider.shared.crosshair
             if ctrl is not None:
@@ -210,7 +212,7 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
             if self.app is not None:
                 self.app.registerGuiKeyHandler(self)
             self.__setVisibility(True)
-            self._showInternal(menuState, replyStateDiff, position)
+            self._showInternal(menuState, staticShortcutsDiff, replyStateDiff, position)
             if RadialMenu.__isMarkerEmptyLocationOrOutOfBorder(self.__crosshairData.targetMarkerType, self.__crosshairData.targetMarkerSubtype):
                 self.delayCallback(self._REFRESH_TIME_IN_SECONDS, self.__checkForValidLocationMarkerLoop)
             if RadialMenu.__isCanRespondToAlly(self.__crosshairData.targetMarkerType, self.__crosshairData.targetMarkerSubtype, self.__crosshairData.replyState):
@@ -265,9 +267,9 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
                     self.upperShortcutSets[group] = list()
                 self.upperShortcutSets[group].append(s)
 
-    def _showInternal(self, radialState, diff, position):
+    def _showInternal(self, radialState, staticDiff, replyDiff, position):
         cursorX, cursorY = GUI.mcursor().position
-        self.as_showS(cursorX, cursorY, radialState, diff, position)
+        self.as_showS(cursorX, cursorY, radialState, staticDiff, replyDiff, position)
 
     def _getCanCancelReplyShortcut(self):
         return _CAN_CANCEL_REPLY_SHORTCUT
@@ -337,6 +339,17 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
             self.app.soundManager.playEffectSound(soundName)
         return
 
+    def __generateStaticDiffDict(self, menuState):
+        staticDiffList = []
+        ammo = self.sessionProvider.shared.ammo
+        if ammo is None:
+            return staticDiffList
+        else:
+            customMsg = ammo.getSpecialReloadMessage()
+            if customMsg is not None and customMsg[0] is not None:
+                self.__populateBottomRowData(staticDiffList, menuState, customMsg[0])
+            return staticDiffList
+
     def __generateDiffStateDict(self, targetState, replyState, replyAction, targetID):
         resultingDiffList = []
         if targetState not in self.upperShortcutSets and targetState != RADIAL_MENU_CONSTS.TARGET_STATE_ALLY or targetState not in self.bottomShortcutSets or self.__stateData is None:
@@ -349,6 +362,13 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
                     self.__populateWithNonAllyData(replyState, resultingDiffList, targetState)
                 self.__handleSpgView(resultingDiffList, targetState)
             return resultingDiffList
+
+    def __populateBottomRowData(self, resultingDiffList, menuState, message):
+        for shortcut in self.bottomShortcutSets[menuState]:
+            buttonData = defaultdict()
+            shortcut = self.__adjustReloadRadialButton(shortcut, message)
+            RadialMenu.__copyShortcutData(buttonData=buttonData, shortcut=shortcut)
+            resultingDiffList.append(buttonData)
 
     def __populateWithNonAllyData(self, replyState, resultingDiffList, targetState):
         for shortcut in self.upperShortcutSets[targetState]:
@@ -401,6 +421,9 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
         else:
             defaultShortcut = shortcut
         return defaultShortcut
+
+    def __adjustReloadRadialButton(self, shortcut, message):
+        return _MESSAGE_TO_RELOAD_MAP.get(message, shortcut) if shortcut.action == BATTLE_CHAT_COMMAND_NAMES.RELOADINGGUN else shortcut
 
     def __handleSpgView(self, resultingDiffList, targetState):
         if self.sessionProvider.getArenaDP().getVehicleInfo().isSPG() and avatar_getter.getInputHandler().ctrlModeName in (CTRL_MODE_NAME.STRATEGIC, CTRL_MODE_NAME.ARTY, CTRL_MODE_NAME.MAP_CASE) and targetState in (RADIAL_MENU_CONSTS.TARGET_STATE_SPG_DEFAULT, RADIAL_MENU_CONSTS.TARGET_STATE_SPG_ENEMY) and not resultingDiffList:

@@ -151,3 +151,6 @@ class IPetSystemController(IGameController):
 
     def getUnlockedAndPromoPets(self):
         raise NotImplementedError
+
+    def checkBonusCapsForPetBonus(self):
+        raise NotImplementedError

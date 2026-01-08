@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/bonus_helper.py
+import typing
+from future.utils import itervalues
 from constants import BonusTypes
 from gui.shared.gui_items import GUI_ITEM_TYPE, KPI, VEHICLE_ATTR_TO_KPI_NAME_MAP
 from gui.shared.items_parameters.comparator import CONDITIONAL_BONUSES, getParamExtendedData
 from gui.shared.items_parameters.params import VehicleParams
-from gui.shared.items_parameters.params import EXTRAS_CAMOUFLAGE
+from gui.shared.items_parameters.params_constants import EXTRAS_CAMOUFLAGE
 from helpers import dependency
 from items import vehicles
 from items.components.c11n_components import SeasonType
@@ -28,7 +30,14 @@ def isSituationalBonus(bonusName, bonusType='', paramName=''):
     return paramName in _PARTIALLY_SITUATIONAL_BONUSES[bonusName] if bonusName in _PARTIALLY_SITUATIONAL_BONUSES else bonusName in _SITUATIONAL_BONUSES
 
 
-_SITUATIONAL_BONUSES = ('camouflageNet', 'stereoscope', 'removedRpmLimiter', 'radioman_expert', 'radioman_sideBySide', 'commander_emergency')
+_SITUATIONAL_BONUSES = {'camouflageNet',
+ 'stereoscope',
+ 'removedRpmLimiter',
+ 'radioman_expert',
+ 'radioman_sideBySide',
+ 'commander_emergency',
+ 'deluxeStereoscope',
+ 'deluxeCamouflageNet'}
 CREW_MASTERY_BONUSES = ('radioman_expert', 'radioman_sideBySide', 'commander_emergency')
 _PARTIALLY_SITUATIONAL_BONUSES = {'enemyShotPredictorBattleBooster': KPI.Name.ART_NOTIFICATION_DELAY_FACTOR,
  'rancorousBattleBooster': KPI.Name.DAMAGED_MODULES_DETECTION_TIME}
@@ -105,8 +114,14 @@ _VEHICLE_MODIFIERS = {BonusTypes.SKILL: _removeSkillModifier,
  BonusTypes.BATTLE_BOOSTER: _removeBattleBoosterModifier,
  BonusTypes.PAIR_MODIFICATION: _removePostProgressionModification,
  BonusTypes.BASE_MODIFICATION: _removePostProgressionBaseModifications}
-_NOT_STACK_BONUSES = {'circularVisionRadius': (('stereoscope_tier1', BonusTypes.OPTIONAL_DEVICE), ('stereoscope_tier2', BonusTypes.OPTIONAL_DEVICE), ('stereoscope_tier3', BonusTypes.OPTIONAL_DEVICE)),
- 'invisibilityStillFactor': (('camouflageNet_tier2', BonusTypes.OPTIONAL_DEVICE), ('camouflageNet_tier3', BonusTypes.OPTIONAL_DEVICE), ('camouflageBattleBooster', BonusTypes.BATTLE_BOOSTER)),
+_NOT_STACK_BONUSES = {'circularVisionRadius': (('stereoscope_tier1', BonusTypes.OPTIONAL_DEVICE),
+                          ('stereoscope_tier2', BonusTypes.OPTIONAL_DEVICE),
+                          ('stereoscope_tier3', BonusTypes.OPTIONAL_DEVICE),
+                          ('deluxeStereoscope', BonusTypes.OPTIONAL_DEVICE)),
+ 'invisibilityStillFactor': (('camouflageNet_tier2', BonusTypes.OPTIONAL_DEVICE),
+                             ('camouflageNet_tier3', BonusTypes.OPTIONAL_DEVICE),
+                             ('deluxeCamouflageNet', BonusTypes.OPTIONAL_DEVICE),
+                             ('camouflageBattleBooster', BonusTypes.BATTLE_BOOSTER)),
  'chassisRotationSpeed': (('virtuosoBattleBooster', BonusTypes.BATTLE_BOOSTER),),
  'invisibilityMovingFactor': (('camouflageBattleBooster', BonusTypes.BATTLE_BOOSTER),),
  'turboshaftInvisibilityMovingFactor': (('camouflageBattleBooster', BonusTypes.BATTLE_BOOSTER),),
@@ -203,7 +218,7 @@ class BonusExtractor(object):
         for _, tankman in vehicle.crew:
             if tankman is None:
                 continue
-            for bonusSkills in tankman.bonusSkills.itervalues():
+            for bonusSkills in itervalues(tankman.bonusSkills):
                 for bonusSkill in reversed(bonusSkills):
                     if bonusSkill and bonusSkill.isSkillActive:
                         orderedSkillList.append(bonusSkill.name)

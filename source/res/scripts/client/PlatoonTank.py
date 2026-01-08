@@ -131,9 +131,9 @@ class PlatoonTank(ClientSelectableCameraVehicle):
         def debugDisplayTankModel(self, tankTypeName):
             if tankTypeName:
                 vDescriptor = vehicles.VehicleDescr(typeName=tankTypeName)
-                tankInfo = PlatoonTankInfo(True, vDescriptor.makeCompactDescr(), '', SeasonType.SUMMER, 0, 0, vDescriptor.type.userString)
+                tankInfo = PlatoonTankInfo(True, vDescriptor.makeCompactDescr(), '', SeasonType.SUMMER, 0, 0, vDescriptor.type.userString, 0)
             else:
-                tankInfo = PlatoonTankInfo(True, '', '', SeasonType.SUMMER, 0, 0, '')
+                tankInfo = PlatoonTankInfo(True, '', '', SeasonType.SUMMER, 0, 0, '', 0)
             self._updatePlatoonTank({self.slotIndex: tankInfo})
 
     def _createAppearance(self):

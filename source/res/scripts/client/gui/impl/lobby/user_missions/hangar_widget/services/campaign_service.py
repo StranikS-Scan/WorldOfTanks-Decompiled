@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hangar_widget/services/campaign_service.py
 import logging
 from typing import List
-from account_helpers.settings_core.settings_constants import PersonalMission3
 from shared_utils import first
 from personal_missions import PM_BRANCH
 from PlayerEvents import g_playerEvents
@@ -15,7 +14,6 @@ from gui.impl.lobby.personal_missions_30.views_helpers import isOperationAvailab
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.pm3_event_banner import PM3EventBannerTeaser, PM3EventBannerOperation1, PM3EventBannerOperation2, PM3EventBannerOperation3
 from gui.impl.lobby.personal_missions_30.personal_mission_constants import OperationIDs
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_container import EventBannersContainer
-from gui.impl.lobby.personal_missions_30.views_helpers import markBannerAnimationShown
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IHangarGuiController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -93,7 +91,6 @@ class CampaignService(ICampaignService):
                 self.__tryToUpdateVisibleEntry(None if entry.isExpiredDate() else entry)
         else:
             self.__tryToUpdateVisibleEntry(None)
-            markBannerAnimationShown(PersonalMission3.PM_BANNER_ANIMATION_KEY, reset=True)
         return
 
     def __isBannerVisible(self):
@@ -104,7 +101,8 @@ class CampaignService(ICampaignService):
             serverSettings = self.__lobbyContext.getServerSettings()
             if not serverSettings.isPersonalMissionsEnabled(PM_BRANCH.PERSONAL_MISSION_3):
                 return False
-            if not self.__hangarGuiCtrl.currentGuiProvider.getMissionsHelper().isPM3MissionsSupported():
+            helper = self.__hangarGuiCtrl.currentGuiProvider.getMissionsHelper()
+            if helper is None or not helper.isPM3MissionsSupported():
                 return False
             operationsPM3 = getSortedPm3Operations()
             pm3ActiveOperations = self.__getActiveOperationsForPM3()

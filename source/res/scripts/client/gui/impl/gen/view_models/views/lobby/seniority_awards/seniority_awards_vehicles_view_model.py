@@ -13,7 +13,7 @@ class ViewState(Enum):
 class SeniorityAwardsVehiclesViewModel(ViewModel):
     __slots__ = ('onMoreRewards', 'onGoToHangar', 'onClose', 'onSelectVehicleReward')
 
-    def __init__(self, properties=5, commands=4):
+    def __init__(self, properties=6, commands=4):
         super(SeniorityAwardsVehiclesViewModel, self).__init__(properties=properties, commands=commands)
 
     def getCategory(self):
@@ -22,37 +22,44 @@ class SeniorityAwardsVehiclesViewModel(ViewModel):
     def setCategory(self, value):
         self._setString(0, value)
 
+    def getMaxCategory(self):
+        return self._getString(1)
+
+    def setMaxCategory(self, value):
+        self._setString(1, value)
+
     def getFromEntryPoint(self):
-        return self._getBool(1)
+        return self._getBool(2)
 
     def setFromEntryPoint(self, value):
-        self._setBool(1, value)
+        self._setBool(2, value)
 
     def getVehicles(self):
-        return self._getArray(2)
+        return self._getArray(3)
 
     def setVehicles(self, value):
-        self._setArray(2, value)
+        self._setArray(3, value)
 
     @staticmethod
     def getVehiclesType():
         return SeniorityAwardsVehicleModel
 
     def getViewState(self):
-        return ViewState(self._getString(3))
+        return ViewState(self._getString(4))
 
     def setViewState(self, value):
-        self._setString(3, value.value)
+        self._setString(4, value.value)
 
     def getAvailableRewardsCount(self):
-        return self._getNumber(4)
+        return self._getNumber(5)
 
     def setAvailableRewardsCount(self, value):
-        self._setNumber(4, value)
+        self._setNumber(5, value)
 
     def _initialize(self):
         super(SeniorityAwardsVehiclesViewModel, self)._initialize()
         self._addStringProperty('category', '')
+        self._addStringProperty('maxCategory', '')
         self._addBoolProperty('fromEntryPoint', False)
         self._addArrayProperty('vehicles', Array())
         self._addStringProperty('viewState', ViewState.VIEW_REWARD.value)

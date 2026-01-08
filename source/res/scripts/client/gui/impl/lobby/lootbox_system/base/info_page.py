@@ -8,12 +8,11 @@ from gui.impl.pub.view_component import ViewComponent
 from gui.impl.gen.view_models.views.lobby.lootbox_system.box_model import BoxModel
 from gui.impl.gen.view_models.views.lobby.lootbox_system.info_page_model import InfoPageModel
 from gui.impl.gen.view_models.views.lobby.lootbox_system.slot_model import SlotModel
-from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.pub import WindowImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.lootbox_system.base.bonuses_packers import packBonusModelAndTooltipData
 from gui.lootbox_system.base.common import ViewID, Views
-from gui.lootbox_system.base.decorators import createTooltipContentDecorator
+from gui.lootbox_system.base.decorators import createBackportTooltipDecorator, createTooltipContentDecorator
 from gui.lootbox_system.base.sound import playInfopageEnterSound, playInfopageExitSound
 from gui.lootbox_system.base.utils import getInfoPageSettings, isCountryForShowingExternalLootList, isShopVisible, openExternalLootList
 from gui.lootbox_system.base.views_loaders import showItemPreview

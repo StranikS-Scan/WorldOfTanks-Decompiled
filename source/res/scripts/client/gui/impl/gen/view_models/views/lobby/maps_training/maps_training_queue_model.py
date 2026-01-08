@@ -4,12 +4,12 @@ from frameworks.wulf import ViewModel
 from gui.impl.gen import R
 
 class MapsTrainingQueueModel(ViewModel):
-    __slots__ = ('onQuit', 'onMenu', 'onShowPrevTip', 'onShowNextTip', 'onMoveSpace')
+    __slots__ = ('onQuit', 'onMenu', 'onShowPrevTip', 'onShowNextTip', 'onMoveSpace', 'onMouseOver3dScene')
     DELAY_DEFAULT = ''
     DELAY_NORMAL = 'normal'
     DELAY_LONG = 'long'
 
-    def __init__(self, properties=4, commands=5):
+    def __init__(self, properties=4, commands=6):
         super(MapsTrainingQueueModel, self).__init__(properties=properties, commands=commands)
 
     def getTime(self):
@@ -47,3 +47,4 @@ class MapsTrainingQueueModel(ViewModel):
         self.onShowPrevTip = self._addCommand('onShowPrevTip')
         self.onShowNextTip = self._addCommand('onShowNextTip')
         self.onMoveSpace = self._addCommand('onMoveSpace')
+        self.onMouseOver3dScene = self._addCommand('onMouseOver3dScene')

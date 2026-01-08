@@ -15,14 +15,14 @@ from story_mode.avatar_input_handler.control_modes import OnboardingArcadeContro
 from story_mode.configs import sm_client_settings
 from story_mode.gui import story_mode_gui_constants
 from story_mode.gui.app_loader import observers
+from story_mode.gui.battle_control.arena_info.arena_vos import getDisplayedClassTag
 from story_mode.gui.battle_control.controllers import equipments_items, equipment_ctrl
 from story_mode.gui.battle_control.controllers.repository import OnboardingRepository, StoryModeRepository, StoryModeSharedRepository
 from story_mode.gui.game_control.story_mode_controller import eventEntryPointValidator, newbieEntryPointValidator
 from story_mode.gui.game_control.story_mode_fading_controller import StoryModeFadingController
 from story_mode.gui.impl.lobby.story_mode_event_banner import StoryModeNewbieBanner, StoryModeEventBanner
-from story_mode.gui.scaleform.genConsts.STORY_MODE_BATTLE_VIEW_ALIASES import STORY_MODE_BATTLE_VIEW_ALIASES
 from story_mode.skeletons.story_mode_fading_controller import IStoryModeFadingController
-from story_mode_common import story_mode_constants, battle_mode, injectConsts
+from story_mode_common import story_mode_constants, battle_mode
 from story_mode_common.configs.story_mode_battle_mgr_quotums import quotumsSchema
 from story_mode_common.configs.story_mode_missions import missionsSchema
 from story_mode_common.configs.story_mode_settings import settingsSchema
@@ -119,6 +119,10 @@ class ClientStoryModeBattleMode(battle_mode.StoryModeBattleMode):
     def _client_hangarEventBannerType(self):
         return StoryModeNewbieBanner
 
+    @property
+    def _client_displayedClassTagGetter(self):
+        return getDisplayedClassTag
+
 
 class ClientOnboardingBattleMode(ClientStoryModeBattleMode):
     _ARENA_BONUS_TYPE = ARENA_BONUS_TYPE.STORY_MODE_ONBOARDING
@@ -154,14 +158,13 @@ class ClientEventBattleMode(ClientStoryModeBattleMode):
 def preInit():
     LOG_DEBUG('preInit personality:', __name__)
     schemaManager = getSchemaManager()
-    schemaManager.registerClientServerSchema(settingsSchema)
-    schemaManager.registerClientServerSchema(quotumsSchema)
-    schemaManager.registerClientServerSchema(missionsSchema)
-    injectConsts(__name__)
+    schemaManager.registerSchema(settingsSchema)
+    schemaManager.registerSchema(quotumsSchema)
+    schemaManager.registerSchema(missionsSchema)
     initGuiTypes(story_mode_gui_constants, __name__)
     initScaleformGuiTypes(story_mode_gui_constants, __name__)
     sm_client_settings.initialize()
-    battle_hints_overlap_controller.addSettings(ARENA_BONUS_TYPE.STORY_MODE_ONBOARDING, HintScope.STORY_MODE.value, {STORY_MODE_BATTLE_VIEW_ALIASES.STORY_MODE_TIMER})
+    battle_hints_overlap_controller.addSettings(ARENA_BONUS_TYPE.STORY_MODE_ONBOARDING, HintScope.STORY_MODE.value, set())
     equipment_ctrl.register()
     equipments_items.register()
     battleMode = ClientStoryModeBattleMode(__name__)
@@ -180,6 +183,7 @@ def preInit():
     battleMode.registerBannerEntryPointValidatorMethod()
     battleMode.registerControlModes()
     battleMode.registerHangarEventBanner()
+    battleMode.registerDisplayedClassTagGetter()
     onboardingBattleMode = ClientOnboardingBattleMode(__name__)
     onboardingBattleMode.registerGuiType()
     onboardingBattleMode.registerScaleformRequiredLibraries()

@@ -31,6 +31,7 @@ def registerForGeneral():
     import pve_battle_hud_blocks
     import battle_hints_blocks
     import vehicle_mechanics_blocks
+    import platoon_blocks
     import pet_system_blocks
     g_blockRegistrar.regBlocksFromModule(event_platform_blocks)
     g_blockRegistrar.regBlocksFromModule(arena_blocks)
@@ -47,6 +48,7 @@ def registerForGeneral():
     g_blockRegistrar.regBlocksFromModule(camera_blocks)
     g_blockRegistrar.regBlocksFromModule(pve_battle_hud_blocks)
     g_blockRegistrar.regBlocksFromModule(vehicle_mechanics_blocks)
+    g_blockRegistrar.regBlocksFromModule(platoon_blocks)
     g_blockRegistrar.regType(player_blocks.PlayerControlMode)
     g_blockRegistrar.regType(vehicle_blocks.OverturnWarningLevelEnum)
     g_blockRegistrar.regType(vehicle_blocks.DrownWarningLevelEnum)

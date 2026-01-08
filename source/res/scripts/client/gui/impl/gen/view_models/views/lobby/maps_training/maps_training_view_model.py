@@ -8,9 +8,9 @@ from gui.impl.gen.view_models.views.lobby.maps_training.maps_training_selected_m
 from gui.impl.gen.view_models.views.lobby.maps_training.maps_training_vehicle_marker_model import MapsTrainingVehicleMarkerModel
 
 class MapsTrainingViewModel(ViewModel):
-    __slots__ = ('onBack', 'onSelect', 'onScenarioSelect', 'onFilteringChange', 'onBlurRectUpdated', 'onMoveSpace', 'onInfoClicked', 'onClose', 'onNavigate')
+    __slots__ = ('onBack', 'onSelect', 'onScenarioSelect', 'onFilteringChange', 'onBlurRectUpdated', 'onMoveSpace', 'onMouseOver3dScene', 'onInfoClicked', 'onClose', 'onNavigate')
 
-    def __init__(self, properties=11, commands=9):
+    def __init__(self, properties=11, commands=10):
         super(MapsTrainingViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -114,6 +114,7 @@ class MapsTrainingViewModel(ViewModel):
         self.onFilteringChange = self._addCommand('onFilteringChange')
         self.onBlurRectUpdated = self._addCommand('onBlurRectUpdated')
         self.onMoveSpace = self._addCommand('onMoveSpace')
+        self.onMouseOver3dScene = self._addCommand('onMouseOver3dScene')
         self.onInfoClicked = self._addCommand('onInfoClicked')
         self.onClose = self._addCommand('onClose')
         self.onNavigate = self._addCommand('onNavigate')

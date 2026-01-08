@@ -10,7 +10,7 @@ class IPlugin(object):
 
     def __init__(self, parentObj):
         super(IPlugin, self).__init__()
-        self._parentObj = parentObj
+        self._parentObj = weakref.proxy(parentObj)
 
     def init(self, *args):
         pass
@@ -40,22 +40,26 @@ class IPlugin(object):
 
 
 class PluginsCollection(IPlugin):
-    __slots__ = ('__plugins',)
+    __slots__ = ('__parentObjRef', '__plugins')
 
     def __init__(self, parentObj):
-        super(PluginsCollection, self).__init__(weakref.proxy(parentObj))
+        super(PluginsCollection, self).__init__(parentObj)
+        self.__parentObjRef = weakref.ref(parentObj)
         self.__plugins = {}
 
     def __iter__(self):
         return iter(self.__plugins)
 
-    def addPlugins(self, plugins):
+    def addPlugins(self, plugins, autoStart=False):
         for pluginName, pluginClass in plugins.iteritems():
             if pluginName in self.__plugins:
                 LOG_ERROR('Plugin with this name was already added: ', pluginName, pluginClass)
                 continue
-            pluginObj = pluginClass(self._parentObj)
+            pluginObj = pluginClass(self.__parentObjRef())
             self.__plugins[pluginName] = pluginObj
+            if autoStart:
+                pluginObj.init()
+                pluginObj.start()
 
     def removePlugins(self, *names):
         for name in names:
@@ -75,7 +79,9 @@ class PluginsCollection(IPlugin):
     def fini(self):
         self._invoke('fini')
         self.__plugins.clear()
+        self.__parentObjRef = None
         super(PluginsCollection, self).fini()
+        return
 
     def start(self):
         self._invoke('start')

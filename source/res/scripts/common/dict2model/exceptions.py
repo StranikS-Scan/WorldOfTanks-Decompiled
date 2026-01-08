@@ -54,6 +54,10 @@ class ValidationError(SoftException):
         super(ValidationError, self).__init__(self.error)
 
 
+class CumulativeIterableValidationError(ValidationError):
+    pass
+
+
 class AccessToFieldDeniedError(SoftException):
 
     def __init__(self, message):

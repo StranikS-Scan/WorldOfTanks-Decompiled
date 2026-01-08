@@ -50,9 +50,9 @@ class BattleResultView(ViewImpl):
     _fadeManager = dependency.descriptor(IStoryModeFadingController)
     _battlePass = dependency.descriptor(IBattlePassController)
 
-    def __init__(self, arenaUniqueId):
-        super(BattleResultView, self).__init__(settings=ViewSettings(layoutID=R.views.story_mode.lobby.BattleResultView(), model=BattleResultViewModel()))
-        self.__arenaUniqueId = arenaUniqueId
+    def __init__(self, *args, **kwargs):
+        super(BattleResultView, self).__init__(settings=ViewSettings(layoutID=R.views.story_mode.mono.lobby.battle_result_view(), model=BattleResultViewModel()))
+        self.__arenaUniqueId = kwargs.get('arenaUniqueId')
         self.__idGen = SequenceIDGenerator()
         self._uiLogger = PostBattleWindowLogger()
         self.__bonusCache = {}
@@ -93,10 +93,10 @@ class BattleResultView(ViewImpl):
         return super(BattleResultView, self).createToolTip(event)
 
     def createToolTipContent(self, event, contentID):
-        if contentID == R.views.story_mode.lobby.BattleResultStatTooltip():
+        if contentID == R.views.story_mode.mono.lobby.tooltips.battle_result_stat_tooltip():
             stat = event.getArgument('stat', '')
             enumStat = StatEnum(stat)
-            return BattleResultStatTooltip(enumStat, self.__getDetailedStatsForStatTooltip(enumStat))
+            return BattleResultStatTooltip(enumStat, self.__getDetailedStatsForStatTooltip(enumStat), self.__getInfoListFotStatTooltip(enumStat))
         return super(BattleResultView, self).createToolTipContent(event, contentID)
 
     def __getDetailedStatsForStatTooltip(self, stat):
@@ -111,6 +111,20 @@ class BattleResultView(ViewImpl):
             if stat == StatEnum.ARMOR_USE:
                 return [(vehicle['damageBlockedByArmor'], backport.text(battleResultStat.armorUse.blocked()))]
         return []
+
+    def __getInfoListFotStatTooltip(self, stat):
+        if stat == StatEnum.MISSIONS:
+            return []
+        infoListLocale = R.strings.sm_lobby.tooltips.battleResultStat.dyn(stat.value).info.list
+        listItems = []
+        listItemNumber = 1
+        listItemLocaleAccessor = infoListLocale.num(listItemNumber)
+        while listItemLocaleAccessor.isValid():
+            listItems.append(backport.text(listItemLocaleAccessor()))
+            listItemNumber += 1
+            listItemLocaleAccessor = infoListLocale.num(listItemNumber)
+
+        return listItems
 
     def __fillViewModel(self):
         battleResults = self._battleResultsService.getResultsVO(self.__arenaUniqueId)
@@ -182,8 +196,8 @@ class BattleResultView(ViewImpl):
             yield self._fadeManager.hide(WindowLayer.OVERLAY)
 
 
-class BattleResultWindow(DestroyWindowOnDisconnectMixin, WindowImpl):
+class BattleResultsWindow(DestroyWindowOnDisconnectMixin, WindowImpl):
     __slots__ = ()
 
-    def __init__(self, arenaUniqueId):
-        super(BattleResultWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, layer=WindowLayer.TOP_WINDOW, content=BattleResultView(arenaUniqueId))
+    def __init__(self, layer, **kwargs):
+        super(BattleResultsWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, layer=layer, content=BattleResultView(**kwargs))

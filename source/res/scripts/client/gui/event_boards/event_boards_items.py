@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/event_boards/event_boards_items.py
 import itertools
+import logging
+import typing
 from collections import defaultdict
 import BigWorld
 from gui import GUI_NATIONS
@@ -13,6 +15,9 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
 from helpers import time_utils
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+if typing.TYPE_CHECKING:
+    from typing import Optional
+_logger = logging.getLogger(__name__)
 
 class CALCULATION_METHODS(CONST_CONTAINER):
     MAX = 'max'
@@ -1272,6 +1277,24 @@ class LeaderBoard(object):
                         return False
 
         return True
+
+
+class IPlayerProgression(object):
+
+    @classmethod
+    def fromRawData(cls, rawData, eventID, leaderboardID):
+        if not cls._isDataStructureValid(rawData):
+            _logger.warning('PlayerProgression error: data structure invalid')
+            return None
+        else:
+            return cls(rawData, eventID, leaderboardID)
+
+    def __init__(self, rawData, eventID, leaderboardID):
+        pass
+
+    @classmethod
+    def _isDataStructureValid(cls, data):
+        raise NotImplementedError
 
 
 class InfoItem(object):

@@ -370,7 +370,7 @@ class Comp7OfferBonusUIPacker(BaseBonusUIPacker):
     @classmethod
     def _getToolTip(cls, bonus):
         if cls._selectableRewardManager.getGiftCount(bonus) > 0:
-            return [ createTooltipData(isSpecial=True, specialAlias=COMP7_TOOLTIPS.COMP7_SELECTABLE_REWARD, specialArgs=(offerToken,)) for offerToken in bonus.getValue().iterkeys() ]
+            return [ createTooltipData(isSpecial=True, specialAlias=COMP7_TOOLTIPS.COMP7_SELECTABLE_REWARD, specialArgs=(offerToken,)) for offerToken in sorted(bonus.getValue().iterkeys(), key=_getOfferRewardTokensSortKey(_OFFER_REWARDS_ORDER)) ]
         return []
 
 

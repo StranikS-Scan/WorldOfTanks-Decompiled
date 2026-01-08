@@ -182,6 +182,15 @@
     <type>	StationaryReloadReload	</type>
     <barrel_reload>	reload_automat_reloading_85_107	</barrel_reload>
   </stationary_reloading_85_107>
+  <reload_autoshoot_reloading_85_107>
+    <type>	SimpleReload	</type>
+    <duration>	1920.0	</duration>
+    <sound>	gun_rld_auto_shoot_85_107	</sound>
+    <intuition_overrides>
+      <duration>	1620.0	</duration>
+      <sound>	gun_rld_intuition_auto_shoot_85_107	</sound>
+    </intuition_overrides>
+  </reload_autoshoot_reloading_85_107>
   <reload115_152>
     <type>	SimpleReload	</type>
     <duration>	2150.0	</duration>

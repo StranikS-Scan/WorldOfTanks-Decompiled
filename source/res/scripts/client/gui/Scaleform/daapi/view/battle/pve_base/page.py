@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/pve_base/page.py
 import typing
 import BattleReplay
+import BigWorld
 from aih_constants import CTRL_MODE_NAME
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.battle.classic import ClassicPage
@@ -11,6 +12,7 @@ from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.events import ViewEventType
 from pve_battle_hud import WidgetType
+from VehicleRespawnComponent import VehicleRespawnComponent
 if typing.TYPE_CHECKING:
     from gui.battle_control.controllers.vse_hud_settings_ctrl.settings.minimap import MinimapClientModel
     from gui.battle_control.controllers.vse_hud_settings_ctrl.settings.chat import ChatModel
@@ -68,9 +70,11 @@ class PveBaseBattlePage(ClassicPage):
     def _populate(self):
         super(PveBaseBattlePage, self)._populate()
         g_eventBus.addListener(ViewEventType.LOAD_VIEW, self._loadViewHandler, EVENT_BUS_SCOPE.BATTLE)
+        VehicleRespawnComponent.onVehicleRespawned += self._onVehicleRespawned
 
     def _dispose(self):
         g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self._loadViewHandler, EVENT_BUS_SCOPE.BATTLE)
+        VehicleRespawnComponent.onVehicleRespawned -= self._onVehicleRespawned
         super(PveBaseBattlePage, self)._dispose()
 
     def _startBattleSession(self):
@@ -179,6 +183,11 @@ class PveBaseBattlePage(ClassicPage):
     def _onRespawnBaseMoving(self):
         super(PveBaseBattlePage, self)._onRespawnBaseMoving()
         self._setComponentsVisibility(visible=_POSTMORTEM_HIDDEN_COMPONENTS, hidden={BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL})
+
+    def _onVehicleRespawned(self, vehicle):
+        if vehicle.id == BigWorld.player().playerVehicleID:
+            if self.__canToggleFullMap and self.__isFullMapVisible:
+                self._toggleFullMap(False)
 
     def _canShowPostmortemTips(self):
         return super(PveBaseBattlePage, self)._canShowPostmortemTips() or BattleReplay.g_replayCtrl.isPlaying

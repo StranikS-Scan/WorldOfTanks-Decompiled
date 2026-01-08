@@ -43,5 +43,5 @@ class _LoadoutConfirmStateProto(_LoadoutConfirmStatePrototype):
     STATE_ID = 'funRandomLoadoutConfirmLeave'
 
 
-FunRandomHangarState, _, _ = generateBasicHangarStateClasses(SubScopeSubLayerState, R.invalid, hangarPrototypeCls=_HangarStateProto)
+FunRandomHangarState, _, _, _ = generateBasicHangarStateClasses(SubScopeSubLayerState, R.invalid, hangarPrototypeCls=_HangarStateProto)
 FunRandomLoadoutState, _, _, FunRandomShellsLoadoutState, _, _, _ = generateBasicLoadoutStateClasses(FunRandomHangarState, R.invalid, confirmStatePrototypeCls=_LoadoutConfirmStateProto)

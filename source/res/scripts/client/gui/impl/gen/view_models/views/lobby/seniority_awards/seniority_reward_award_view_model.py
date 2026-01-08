@@ -13,7 +13,7 @@ class ShopOnOpenState(Enum):
 class SeniorityRewardAwardViewModel(ViewModel):
     __slots__ = ('onOpenBtnClick', 'onShopBtnClick')
 
-    def __init__(self, properties=4, commands=2):
+    def __init__(self, properties=5, commands=2):
         super(SeniorityRewardAwardViewModel, self).__init__(properties=properties, commands=commands)
 
     def getCategory(self):
@@ -22,31 +22,38 @@ class SeniorityRewardAwardViewModel(ViewModel):
     def setCategory(self, value):
         self._setString(0, value)
 
+    def getMaxCategory(self):
+        return self._getString(1)
+
+    def setMaxCategory(self, value):
+        self._setString(1, value)
+
     def getBonuses(self):
-        return self._getArray(1)
+        return self._getArray(2)
 
     def setBonuses(self, value):
-        self._setArray(1, value)
+        self._setArray(2, value)
 
     @staticmethod
     def getBonusesType():
         return BonusModel
 
     def getSpecialCurrencyCount(self):
-        return self._getNumber(2)
+        return self._getNumber(3)
 
     def setSpecialCurrencyCount(self, value):
-        self._setNumber(2, value)
+        self._setNumber(3, value)
 
     def getShopOnOpenState(self):
-        return ShopOnOpenState(self._getString(3))
+        return ShopOnOpenState(self._getString(4))
 
     def setShopOnOpenState(self, value):
-        self._setString(3, value.value)
+        self._setString(4, value.value)
 
     def _initialize(self):
         super(SeniorityRewardAwardViewModel, self)._initialize()
         self._addStringProperty('category', '')
+        self._addStringProperty('maxCategory', '')
         self._addArrayProperty('bonuses', Array())
         self._addNumberProperty('specialCurrencyCount', -1)
         self._addStringProperty('shopOnOpenState', ShopOnOpenState.NOT_AVAILABLE.value)

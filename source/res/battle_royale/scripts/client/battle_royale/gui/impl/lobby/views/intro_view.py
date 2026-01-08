@@ -3,6 +3,7 @@
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsBattleRoyale
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.common.intro_slide_model import IntroSlideModel
@@ -11,8 +12,6 @@ from gui.impl.pub.lobby_window import LobbyWindow
 from gui.prb_control.entities.listener import IGlobalListener
 from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController, IHangarSpaceSwitchController
-from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import ViewEventType
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.intro_view_model import IntroViewModel
 
 class IntroView(ViewImpl, IGlobalListener):
@@ -38,24 +37,31 @@ class IntroView(ViewImpl, IGlobalListener):
         super(IntroView, self)._onLoading(*args, **kwargs)
         self.viewModel.onClose += self.__onClose
         self.viewModel.onVideo += self.__onVideo
-        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self.__handleLoadView, scope=EVENT_BUS_SCOPE.LOBBY)
         if currentHangarIsBattleRoyale():
             self.__onSpaceUpdated()
         else:
             self.__spaceSwitchController.onSpaceUpdated += self.__onSpaceUpdated
+        lsm = getLobbyStateMachine()
+        if lsm is not None:
+            lsm.onVisibleRouteChanged += self.__onVisibleRouteChanged
         self.startGlobalListening()
         self.__updateViewModel()
+        return
 
     def _finalize(self):
         self.viewModel.onClose -= self.__onClose
         self.viewModel.onVideo -= self.__onVideo
         self.__spaceSwitchController.onSpaceUpdated -= self.__onSpaceUpdated
-        g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self.__handleLoadView, scope=EVENT_BUS_SCOPE.LOBBY)
         self.stopGlobalListening()
+        lsm = getLobbyStateMachine()
+        if lsm is not None:
+            lsm.onVisibleRouteChanged -= self.__onVisibleRouteChanged
         super(IntroView, self)._finalize()
+        return
 
-    def __handleLoadView(self, event):
-        if event.alias in (VIEW_ALIAS.LOBBY_HANGAR, VIEW_ALIAS.LEGACY_LOBBY_HANGAR):
+    def __onVisibleRouteChanged(self, routeInfo):
+        from gui.lobby_state_machine.states import isHangarState
+        if isHangarState(routeInfo.state):
             self.__onClose()
 
     def __onClose(self):

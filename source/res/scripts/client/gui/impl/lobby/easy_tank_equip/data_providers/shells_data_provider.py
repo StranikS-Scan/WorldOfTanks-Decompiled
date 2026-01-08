@@ -9,7 +9,7 @@ from gui.easy_tank_equip.easy_tank_equip_helpers import getEasyTankEquipSetting,
 from gui.impl.gen.view_models.views.lobby.easy_tank_equip.shells_preset_model import ShellsPresetType
 from gui.impl.lobby.easy_tank_equip.data_providers.base_data_provider import BaseDataProvider, PresetInfo, SlotInfo
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_ZERO
-from gui.shared.items_parameters import isTwinGun, isAutoReloadGun
+from gui.shared.items_parameters import getShellsLoadSize
 from helpers import dependency
 from skeletons.gui.game_control import IEasyTankEquipController
 if TYPE_CHECKING:
@@ -138,21 +138,11 @@ class ShellsDataProvider(BaseDataProvider):
         shellsMap = {shell.intCD:shell for shell in shells}
         return [ shellsMap[sampleShell.intCD] for sampleShell in sampleShells ]
 
-    @staticmethod
-    def __getClipSize(gun):
-        if isAutoReloadGun(gun):
-            clipSize = 1
-        elif isTwinGun(gun):
-            clipSize = 2
-        else:
-            clipSize = gun.clip[0]
-        return clipSize
-
     def __setShellsPresets(self):
         self.__shellsPresets.clear()
         vehicle = g_currentVehicle.item
         gunDefaultAmmo = vehicle.gun.defaultAmmo
-        clipSize = self.__getClipSize(vehicle.descriptor.gun)
+        clipSize = getShellsLoadSize(vehicle.descriptor.gun)
         defaultShells = self.__sortPresetByAnother(gunDefaultAmmo, self.__installedShells)
         self.__shellsPresets[ShellsPresetType.STANDARD] = defaultShells
         advancedShells = self.__getAdvancedShells(gunDefaultAmmo, clipSize)

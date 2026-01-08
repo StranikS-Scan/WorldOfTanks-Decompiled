@@ -1,22 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/SequenceNetworkSync.py
-import CGF
 import logging
 import BigWorld
+import CGF
+from constants import HAS_DEV_RESOURCES
+from cgf_client_common.entity_dyn_components import ReplicableDynamicScriptComponent
 from cgf_components.sequence_components import SequencePauseComponent, SequenceSnapshotComponent
 from cgf_script.managers_registrator import onAddedQuery, autoregister, onProcessQuery, onRemovedQuery
-from GenericComponents import Sequence
-from constants import HAS_DEV_RESOURCES, IS_EDITOR
 from cgf_script.component_meta_class import registerReplicableComponent, ComponentProperty, CGFMetaTypes
+from GenericComponents import Sequence
 _logger = logging.getLogger(__name__)
-if IS_EDITOR:
-
-    class DynamicScriptComponent(object):
-        pass
-
-
-else:
-    from BigWorld import DynamicScriptComponent
 _STATE_STOPPED = Sequence.State.Stopped
 _STATE_PAUSED = Sequence.State.Paused
 _STATE_RUNNING = Sequence.State.Running
@@ -25,7 +18,7 @@ _INT_STATE_PAUSED = int(_STATE_PAUSED)
 _INT_STATE_RUNNING = int(_STATE_RUNNING)
 
 @registerReplicableComponent
-class SequenceNetworkSync(DynamicScriptComponent):
+class SequenceNetworkSync(ReplicableDynamicScriptComponent):
     timeCorrection = ComponentProperty(type=CGFMetaTypes.FLOAT, editorName='Time Correction', value=0.3)
 
     def __init__(self):

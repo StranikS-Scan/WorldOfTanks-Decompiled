@@ -71,7 +71,7 @@ class BaseUnitEntity(BasePrbEntity):
         return unit_items.UnitRosterSettings()
 
     def getPlayerInfo(self, dbID=None, unitMgrID=None):
-        return unit_items.PlayerUnitInfo(-1L, 0, None)
+        return unit_items.PlayerUnitInfo(-1, 0, None)
 
     def getReadyStates(self, unitMgrID=None):
         return []
@@ -281,7 +281,7 @@ class _UnitEntity(BaseUnitEntity, ListenersCollection):
             vehicle = None
             profile = None
             if not state.isFree and slotIdx in members:
-                dbID = members[slotIdx].get('accountDBID', -1L)
+                dbID = members[slotIdx].get('accountDBID', -1)
                 if dbID in players:
                     player = self._buildPlayerInfo(unitMgrID, unit, dbID, slotIdx=slotIdx, data=players[dbID])
                 if dbID in vehicles and vehicles[dbID]:

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/techtree_dp.py
 import operator
+import typing
 from collections import defaultdict, namedtuple
 import ResMgr
 import nations

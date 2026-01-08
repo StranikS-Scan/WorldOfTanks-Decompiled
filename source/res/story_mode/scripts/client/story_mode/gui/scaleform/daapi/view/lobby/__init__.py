@@ -5,6 +5,7 @@ from gui.Scaleform.framework import ScopeTemplates, ViewSettings, getSwfExtensio
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE
+from story_mode.gui.impl.lobby.battle_result_view import BattleResultsWindow
 from story_mode.gui.impl.lobby.web_view import StoryModeWebViewTransparent
 from story_mode.gui.story_mode_gui_constants import VIEW_ALIAS
 
@@ -14,7 +15,7 @@ def getContextMenuHandlers():
 
 def getViewSettings():
     from story_mode.gui.scaleform.daapi.view.lobby.outro_video import OutroVideo
-    return (ViewSettings(VIEW_ALIAS.STORY_MODE_WEB_VIEW_TRANSPARENT, StoryModeWebViewTransparent, 'browserScreen.swf', WindowLayer.FULLSCREEN_WINDOW, VIEW_ALIAS.STORY_MODE_WEB_VIEW_TRANSPARENT, ScopeTemplates.LOBBY_SUB_SCOPE), ViewSettings(VIEW_ALIAS.STORY_MODE_OUTRO_VIDEO_WINDOW, OutroVideo, getSwfExtensionUrl('story_mode', 'IntroVideo.swf'), WindowLayer.TOP_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE))
+    return (ViewSettings(VIEW_ALIAS.STORY_MODE_WEB_VIEW_TRANSPARENT, StoryModeWebViewTransparent, 'browserScreen.swf', WindowLayer.FULLSCREEN_WINDOW, VIEW_ALIAS.STORY_MODE_WEB_VIEW_TRANSPARENT, ScopeTemplates.LOBBY_SUB_SCOPE), ViewSettings(VIEW_ALIAS.STORY_MODE_OUTRO_VIDEO_WINDOW, OutroVideo, getSwfExtensionUrl('story_mode', 'IntroVideo.swf'), WindowLayer.TOP_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE), ViewSettings(VIEW_ALIAS.STORY_MODE_BATTLE_RESULTS, BattleResultsWindow, '', WindowLayer.TOP_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():
@@ -24,5 +25,5 @@ def getBusinessHandlers():
 class StoryModePackageBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
-        listeners = ((VIEW_ALIAS.STORY_MODE_WEB_VIEW_TRANSPARENT, self.loadViewByCtxEvent), (VIEW_ALIAS.STORY_MODE_OUTRO_VIDEO_WINDOW, self.loadViewByCtxEvent))
+        listeners = ((VIEW_ALIAS.STORY_MODE_WEB_VIEW_TRANSPARENT, self.loadViewByCtxEvent), (VIEW_ALIAS.STORY_MODE_OUTRO_VIDEO_WINDOW, self.loadViewByCtxEvent), (VIEW_ALIAS.STORY_MODE_BATTLE_RESULTS, self.loadView))
         super(StoryModePackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)

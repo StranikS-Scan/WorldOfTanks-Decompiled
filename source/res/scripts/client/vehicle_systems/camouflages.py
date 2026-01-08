@@ -86,13 +86,14 @@ ProjectionDecalGenericParams.__new__.__defaults__ = (Math.Vector4(0.0),
 ModelAnimatorParams = namedtuple('ModelAnimatorParams', ('transform', 'attachNode', 'animatorName'))
 ModelAnimatorParams.__new__.__defaults__ = (math_utils.createIdentityMatrix(), '', '')
 LoadedModelAnimator = namedtuple('LoadedModelAnimator', ('animator', 'node', 'attachmentPartNode'))
-AttachmentParams = namedtuple('AttachmentParams', ('scale', 'rotation', 'attachNode', 'modelName', 'sequenceId', 'attachmentLogic', 'hidden', 'partNodeAlias', 'slotName', 'slotId', 'isHanger'))
+AttachmentParams = namedtuple('AttachmentParams', ('scale', 'rotation', 'attachNode', 'modelName', 'sequenceId', 'attachmentLogic', 'hidden', 'enableVisTunnel', 'partNodeAlias', 'slotName', 'slotId', 'isHanger'))
 AttachmentParams.__new__.__defaults__ = (Math.Vector3(),
  Math.Vector3(),
  '',
  '',
  None,
  '',
+ None,
  None,
  None,
  '',
@@ -663,10 +664,10 @@ def __getAttachmentPath(item, isDestroyed, isHangar, applyType):
     return item.leftModelName if applyType == AttachmentType.GUN_LEFT else item.modelName
 
 
-def __getAttachmentGunSlotData(outfit, vehicleDescr, slotType, applyType):
+def __getAttachmentGunSlotData(outfit, vehicleDescr, slotType):
     gunSlotId = None
     for vehicleSlot in vehicleDescr.gun.slotsAnchors:
-        if vehicleSlot.type == slotType and vehicleSlot.applyType == AttachmentType.GUN:
+        if vehicleSlot.type == slotType and vehicleSlot.applyType in AttachmentType.GUN_SLOTS and not vehicleSlot.hiddenForUser:
             gunSlotId = vehicleSlot.slotId
             break
 
@@ -682,8 +683,8 @@ def __getAttachmentGunSlotData(outfit, vehicleDescr, slotType, applyType):
 def getAttachments(outfit, vehicleDescr, isDestroyed=False, isHangar=False):
 
     def getAttachmentParams(slotParams, slotData, idx):
-        if slotParams.applyType in AttachmentType.GUN_SLOTS:
-            slotData = __getAttachmentGunSlotData(outfit, vehicleDescr, slotParams.type, slotParams.applyType)
+        if slotParams.applyType in AttachmentType.GUN_SLOTS and slotParams.hiddenForUser:
+            slotData = __getAttachmentGunSlotData(outfit, vehicleDescr, slotParams.type)
         if slotData.isEmpty():
             return None
         else:
@@ -691,20 +692,22 @@ def getAttachments(outfit, vehicleDescr, isDestroyed=False, isHangar=False):
             scale = getAttachmentSlotScale(slotParams.applyType, AttachmentSize.ALL[item.scaleFactorId], AttachmentSize.ALL[getattr(slotData.component, 'scaleFactorId', 0)])
             isRotated = getattr(slotData.component, 'isRotated', False)
             modelName = __getAttachmentPath(item, isDestroyed, isHangar, slotParams.applyType)
-            return None if not modelName else AttachmentParams(rotation=Math.Vector3(math.pi if isRotated else 0, 0, 0), scale=scale, attachNode=slotParams.attachNode, modelName=modelName, sequenceId=item.sequenceId, attachmentLogic=item.attachmentLogic, hidden=item.isHiddenInUI(), partNodeAlias='attachment' + str(idx) if item.attachmentLogic in AttachmentLogic.FLAGS else None, slotName=str(slotParams.slotId), slotId=slotParams.slotId, isHanger=False)
+            return None if not modelName else AttachmentParams(rotation=Math.Vector3(math.pi if isRotated else 0, 0, 0), scale=scale, attachNode=slotParams.attachNode, modelName=modelName, sequenceId=item.sequenceId, attachmentLogic=item.attachmentLogic, hidden=item.isHiddenInUI(), enableVisTunnel=slotParams.enableVisTunnel, partNodeAlias='attachment' + str(idx) if item.attachmentLogic in AttachmentLogic.FLAGS else None, slotName=str(slotParams.slotId), slotId=slotParams.slotId, isHanger=False)
 
     def getHangerParams(slotParams, slotData, idx):
         if slotParams.hangerId == 0:
-            return None
+            return
         else:
-            item = getItemByCompactDescr(slotData.intCD)
+            item = None
+            if not slotData.isEmpty():
+                item = getItemByCompactDescr(slotData.intCD)
             if not IS_EDITOR and (slotData.isEmpty() or not __getAttachmentPath(item, isDestroyed, isHangar, slotParams.applyType)):
-                return None
+                return
             if IS_EDITOR and not slotParams.edDisplayHanger:
-                return None
+                return
             hanger = getHangerFromId(slotParams.hangerId)
             modelName = hanger.get('crashModelName') or hanger.get('modelName') if isDestroyed else hanger.get('modelName')
-            return AttachmentParams(rotation=c11n_constants.DEFAULT_ROTATION, scale=c11n_constants.DEFAULT_SCALE, attachNode=slotParams.attachNode, modelName=modelName, sequenceId=0, attachmentLogic='prefab', hidden=item.isHiddenInUI(), partNodeAlias=None, slotName=str(slotParams.slotId) + HANGER_POSTFIX, slotId=slotParams.slotId, isHanger=True)
+            return AttachmentParams(rotation=Math.Vector3(*c11n_constants.DEFAULT_ROTATION), scale=Math.Vector3(*c11n_constants.DEFAULT_SCALE), attachNode=slotParams.attachNode, modelName=modelName, sequenceId=0, attachmentLogic='prefab', hidden=item.isHiddenInUI() if item else False, enableVisTunnel=slotParams.enableVisTunnel, partNodeAlias=None, slotName=str(slotParams.slotId) + HANGER_POSTFIX, slotId=slotParams.slotId, isHanger=True)
 
     result = []
     for itemType in GUI_ITEM_TYPE.ATTACHMENT_TYPES:

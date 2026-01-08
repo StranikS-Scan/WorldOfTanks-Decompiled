@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/frontline_helpers.py
+from typing import List
 import BigWorld
 from collections import defaultdict
 from itertools import chain
@@ -7,6 +8,7 @@ import CommandMapping
 import typing
 from frontline.gui.impl.gen.view_models.views.lobby.views.frontline_const import FrontlineState
 from frontline_common.frontline_constants import RESERVES_MODIFIER_NAMES
+from constants import FINISH_REASON
 from gui.Scaleform.daapi.view.common.keybord_helpers import getHotKeysInfo
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import createEpicParam
 from gui.impl import backport
@@ -17,7 +19,7 @@ from items import vehicles
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 
 @dependency.replace_none_kwargs(epicController=IEpicBattleMetaGameController)
-def geFrontlineState(withPrimeTime=False, epicController=None):
+def getFrontlineState(withPrimeTime=False, epicController=None):
     now = time_utils.getCurrentLocalServerTimestamp()
     startDate, endDate = epicController.getSeasonTimeRange()
     if now > endDate:
@@ -35,7 +37,7 @@ def geFrontlineState(withPrimeTime=False, epicController=None):
 
 
 def getStatesUnavailableForHangar():
-    return [FrontlineState.FINISHED, FrontlineState.ANNOUNCE]
+    return [FrontlineState.FINISHED]
 
 
 def getReserveIconPath(icon):
@@ -52,7 +54,7 @@ def getHotKeyInfoListByIndex(index):
 
 
 def isHangarAvailable():
-    frontlineState, _, _ = geFrontlineState()
+    frontlineState, _, _ = getFrontlineState()
     return frontlineState not in getStatesUnavailableForHangar()
 
 
@@ -193,6 +195,23 @@ def becomeNonPlayerState():
     return result
 
 
-def isFinishedCycleState():
-    frontlineState, _, _ = geFrontlineState()
+def isFinishedCycleState(frontlineState=None):
+    if not frontlineState:
+        frontlineState, _, _ = getFrontlineState()
     return frontlineState == FrontlineState.FINISHED
+
+
+def isAnnouncedCycleState(frontlineState=None):
+    if not frontlineState:
+        frontlineState, _, _ = getFrontlineState()
+    return frontlineState == FrontlineState.ANNOUNCE
+
+
+def makeNewEpicBattleFinishResultLabel(finishReason, teamResult):
+    from gui.battle_results.settings import PLAYER_TEAM_RESULT
+    frontlineBattleFinishReason = {FINISH_REASON.TIMEOUT: (FINISH_REASON.DESTROYED_OBJECTS, PLAYER_TEAM_RESULT.DEFEAT),
+     FINISH_REASON.DESTROYED_OBJECTS: (FINISH_REASON.DESTROYED_OBJECTS, PLAYER_TEAM_RESULT.WIN)}
+    frontlineBattleSpecificFinishReason = {FINISH_REASON.EXTERMINATION, FINISH_REASON.TIMEOUT, FINISH_REASON.DESTROYED_OBJECTS}
+    resFinishReason, resTeamResult = frontlineBattleFinishReason.get(finishReason, (finishReason, teamResult))
+    reasonKey = 'c_{}{}'.format(resFinishReason, resTeamResult) if resFinishReason in frontlineBattleSpecificFinishReason else 'c_{}'.format(resFinishReason)
+    return backport.text(R.strings.fl_post_battle_results.battleInfo.finishReason.dyn(reasonKey)())

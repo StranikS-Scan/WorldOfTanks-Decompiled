@@ -225,6 +225,19 @@
     <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals	</tags>
     <level>	10	</level>
   </GB86_Centurion_Action_X>
+  <GB86_Centurion_Action_X_CFE_A>
+    <id>	101	</id>
+    <userString>	#gb_vehicles:GB86_Centurion_Action_X_CFE_A	</userString>
+    <description>	#gb_vehicles:GB86_Centurion_Action_X_CFE_A_descr	</description>
+    <shortUserString>	#gb_vehicles:GB86_Centurion_Action_X_CFE_A_short	</shortUserString>
+    <shortDescriptionSpecial>	#gb_vehicles:GB86_Centurion_Action_X_CFE_A_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB86_Centurion_Action_X_CFE_A_long_special	</longDescriptionSpecial>
+    <price>	22500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals lockOutfit restoreWithStyle special	</tags>
+    <level>	10	</level>
+  </GB86_Centurion_Action_X_CFE_A>
   <GB86_Centurion_Action_X_7x7>
     <id>	86	</id>
     <userString>	#gb_vehicles:GB86_Centurion_Action_X_7x7	</userString>
@@ -514,6 +527,18 @@
     <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
     <level>	10	</level>
   </GB91_Super_Conqueror>
+  <GB91_Super_Conqueror_7x7>
+    <id>	99	</id>
+    <userString>	#gb_vehicles:GB91_Super_Conqueror_7x7	</userString>
+    <description>	#gb_vehicles:GB91_Super_Conqueror_7x7_descr	</description>
+    <shortUserString>	#gb_vehicles:GB91_Super_Conqueror_7x7_short	</shortUserString>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals private secret cannot_be_sold comp7 special	</tags>
+    <level>	10	</level>
+  </GB91_Super_Conqueror_7x7>
   <GB92_FV217>
     <id>	62	</id>
     <userString>	#gb_vehicles:GB92_FV217	</userString>
@@ -1356,10 +1381,10 @@
     <shortUserString>	#gb_vehicles:GB137_Cromwell_Applique_short	</shortUserString>
     <shortDescriptionSpecial>	#gb_vehicles:GB137_Cromwell_Applique_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#gb_vehicles:GB137_Cromwell_Applique_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
+    <price>	1500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
+    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
   </GB137_Cromwell_Applique>
   <GB146_Gabler_s_Destroyer>
@@ -1453,6 +1478,19 @@
     <tags>	heavyTank role_HT_assault HD improvedVentilation_class2_user siegeMode dualgun charger aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user special	</tags>
     <level>	7	</level>
   </GB156_Black_Prince_II>
+  <GB109_GSOR_1008_CFE_J>
+    <id>	102	</id>
+    <userString>	#gb_vehicles:GB109_GSOR_1008_CFE_J	</userString>
+    <description>	#gb_vehicles:GB109_GSOR_1008_CFE_J_descr	</description>
+    <shortUserString>	#gb_vehicles:GB109_GSOR_1008_CFE_J_short	</shortUserString>
+    <shortDescriptionSpecial>	#gb_vehicles:GB109_GSOR_1008_CFE_J_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB109_GSOR_1008_CFE_J_long_special	</longDescriptionSpecial>
+    <price>	8000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_support mediumAT-SPG AT-SPG2 improvedVentilation_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user HD lockOutfit restoreWithStyle	</tags>
+    <level>	8	</level>
+  </GB109_GSOR_1008_CFE_J>
   <GB147_FV4025_Contriver>
     <id>	93	</id>
     <userString>	#gb_vehicles:GB147_FV4025_Contriver	</userString>

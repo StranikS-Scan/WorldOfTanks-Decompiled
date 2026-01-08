@@ -106,7 +106,6 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
     OPTIONAL_DEVICE_SETUP_INTRO_SHOWN = 'optional_device_setup_intro_shown'
     TURBOSHAFT_HIGHLIGHTS_COUNTER = 'turboshaft_highlights_count'
     ROCKET_ACCELERATION_HIGHLIGHTS_COUNTER = 'rocket_acceleration_highlights_count'
-    EPIC_BATTLE_ABILITIES_INTRO_SHOWN = 'epic_battle_abilities_intro_shown'
     POST_PROGRESSION_INTRO_SHOWN = 'post_progression_intro_shown'
     VEH_PREVIEW_POST_PROGRESSION_BULLET_SHOWN = 'veh_preview_post_progression_bullet_shown'
     ACHIEVEMENT_EDIT_VIEW_VISITED = 'achievement_edit_view_visited'
@@ -678,8 +677,7 @@ class ServerSettingsManager(object):
                                        BATTLE_EVENTS.CREW_PERKS: 19}, offsets={}),
      SETTINGS_SECTIONS.BATTLE_BORDER_MAP: Section(masks={}, offsets={BATTLE_BORDER_MAP.MODE_SHOW_BORDER: Offset(0, 3),
                                            BATTLE_BORDER_MAP.TYPE_BORDER: Offset(2, 3 << 2)}),
-     SETTINGS_SECTIONS.UI_STORAGE: Section(masks={PM_TUTOR_FIELDS.GREETING_SCREEN_SHOWN: 0,
-                                    PM_TUTOR_FIELDS.FIRST_ENTRY_AWARDS_SHOWN: 1,
+     SETTINGS_SECTIONS.UI_STORAGE: Section(masks={PM_TUTOR_FIELDS.FIRST_ENTRY_AWARDS_SHOWN: 1,
                                     PM_TUTOR_FIELDS.ONE_FAL_SHOWN: 7,
                                     PM_TUTOR_FIELDS.MULTIPLE_FAL_SHOWN: 8,
                                     UI_STORAGE_KEYS.DISABLE_ANIMATED_TOOLTIP: 13,
@@ -688,7 +686,6 @@ class ServerSettingsManager(object):
                                     PM_TUTOR_FIELDS.PM2_MULTIPLE_FAL_SHOWN: 16,
                                     UI_STORAGE_KEYS.REFERRAL_BUTTON_CIRCLES_SHOWN: 17,
                                     UI_STORAGE_KEYS.OPTIONAL_DEVICE_SETUP_INTRO_SHOWN: 27,
-                                    UI_STORAGE_KEYS.EPIC_BATTLE_ABILITIES_INTRO_SHOWN: 28,
                                     UI_STORAGE_KEYS.POST_PROGRESSION_INTRO_SHOWN: 29,
                                     UI_STORAGE_KEYS.VEH_PREVIEW_POST_PROGRESSION_BULLET_SHOWN: 30,
                                     UI_STORAGE_KEYS.LIMITED_UI_ALL_NOVICE_RULES_COMPLETED: 31}, offsets={PM_TUTOR_FIELDS.INITIAL_FAL_COUNT: Offset(2, 124),
@@ -904,7 +901,8 @@ class ServerSettingsManager(object):
                                             PersonalMission3.INTRO_OP_9: 2,
                                             PersonalMission3.INTRO_OP_10: 3,
                                             PersonalMission3.PM_BANNER_ANIMATION_KEY: 25}, offsets={PersonalMission3.PART_NO: Offset(4, 15 << 4),
-                                            PersonalMission3.CHECKED_PM3_POINTS: Offset(8, 65535 << 8)})}
+                                            PersonalMission3.CHECKED_PM3_POINTS: Offset(8, 65535 << 8),
+                                            PersonalMission3.LAST_FULL_COMPLETED_OP: Offset(26, 31 << 26)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -1109,6 +1107,9 @@ class ServerSettingsManager(object):
 
     def getPM3InstalledVehDetails(self):
         return self.getSectionSettings(SETTINGS_SECTIONS.PERSONAL_MISSION_3, PersonalMission3.PART_NO, 0)
+
+    def getLastFullCompletedPM3OperationID(self):
+        return self.getSectionSettings(SETTINGS_SECTIONS.PERSONAL_MISSION_3, PersonalMission3.LAST_FULL_COMPLETED_OP, 0)
 
     def setPM3VehDetailInstalled(self, vehDetailNumber=0):
         if not self.settingsCache.isSynced():

@@ -44,15 +44,15 @@ class KillCamVisualEffectComponentManager(CGF.ComponentManager):
     @onAddedQuery(CGF.GameObject, ImpactZoneComponent)
     def onDecalComponentAdded(self, go, decalComponent):
         for segment in decalComponent.segments:
-            x = DamageFromShotDecoder.parseHitPoint(segment, decalComponent.vehicleAppearance.collisions)
-            if x is None:
+            parsedData = DamageFromShotDecoder.parseDamageStickerHitPoint(segment, decalComponent.vehicleAppearance.collisions, segLength=0.5)
+            if parsedData is None:
                 continue
-            x = list(x)
-            x[1] = vehicles.g_cache.damageStickers['ids'][decalComponent.modelName]
-            if x[0] == TankPartIndexes.CHASSIS:
+            stickerID, data = parsedData
+            stickerID = vehicles.g_cache.damageStickers['ids'][decalComponent.modelName]
+            if data.componentIdx == TankPartIndexes.CHASSIS:
                 go.removeComponent(ImpactZoneComponent)
                 return
-            decalComponent.vehicleAppearance.addDamageSticker(segment, x[0], x[1], x[2], x[3], 0.5)
+            decalComponent.vehicleAppearance.addDamageSticker(segment, stickerID, data)
 
         return
 

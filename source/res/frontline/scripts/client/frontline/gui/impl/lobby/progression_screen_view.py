@@ -4,7 +4,7 @@ import SoundGroups
 from frameworks.wulf import ViewFlags, ViewSettings
 from frontline.frontline_account_settings import getReceivedRewardTokens, setReceivedRewardTokens
 from frontline.gui.frontline_bonus_packers import packBonusModelAndTooltipData
-from frontline.gui.frontline_helpers import geFrontlineState
+from frontline.gui.frontline_helpers import getFrontlineState
 from frontline.gui.impl.gen.view_models.views.lobby.views.progression_screen.progression_screen_model import ProgressionScreenModel
 from frontline.gui.impl.gen.view_models.views.lobby.views.progression_screen.tiers_section_model import TiersSectionModel
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
@@ -31,7 +31,7 @@ class ProgressionScreenView(ViewImpl, LobbyHeaderVisibility, IGlobalListener):
         self.__tooltipItems = {}
         self.__rewardsSelectionWindow = None
         self.__hasNewRewards = False
-        self.__gameModeStatus, _, _ = geFrontlineState()
+        self.__gameModeStatus, _, _ = getFrontlineState()
         super(ProgressionScreenView, self).__init__(settings)
         return
 
@@ -89,7 +89,7 @@ class ProgressionScreenView(ViewImpl, LobbyHeaderVisibility, IGlobalListener):
             self._fillTiersSection(vm)
 
     def _updateFrontlineState(self, vm):
-        state, _, secondsToState = geFrontlineState()
+        state, _, secondsToState = getFrontlineState()
         vm.setCountdownSeconds(secondsToState)
         vm.setFrontlineState(state.value)
         isNotAnnounce = state != EventBannerState.ANNOUNCE
@@ -147,7 +147,7 @@ class ProgressionScreenView(ViewImpl, LobbyHeaderVisibility, IGlobalListener):
             self._fillModel()
 
     def __onGameModeStatusChange(self):
-        state, _, _ = geFrontlineState()
+        state, _, _ = getFrontlineState()
         if self.__gameModeStatus != state:
             self.__gameModeStatus = state
             with self.viewModel.transaction() as tx:

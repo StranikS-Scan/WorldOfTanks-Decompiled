@@ -2036,4 +2036,52 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 5000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F114_Projet_4_1	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1164	</id>
+      <texture>	gui/maps/vehicles/styles/F114_Projet_4_1_HO26_3Dst.png	</texture>
+      <userString>	#vehicle_customization:special_style/F114_Projet_4_1_HO26_3Dst	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/F114_Projet_4_1_HO26_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	F114_Projet_4_1_HO26_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <tags>	progression_required c11n3D NY_style	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18003	</slotId>
+              <id>	159	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </france.xml>

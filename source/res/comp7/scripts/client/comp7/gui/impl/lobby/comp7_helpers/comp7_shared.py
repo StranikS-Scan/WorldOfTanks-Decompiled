@@ -52,6 +52,13 @@ def getPlayerDivisionByRankAndIndex(rank, divisionIdx, comp7Controller=None):
     return division
 
 
+@dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
+def getPlayerDivisionByDvsnID(dvsnId, comp7Controller=None):
+    ranksConfig = comp7Controller.getRanksConfig()
+    division = findFirst(lambda d: d.dvsnID == dvsnId, ranksConfig.divisions)
+    return division
+
+
 def getPlayerDivision():
     rating = getRating()
     return getPlayerDivisionByRating(rating)

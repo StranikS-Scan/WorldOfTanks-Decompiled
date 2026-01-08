@@ -5,8 +5,12 @@ from collections import namedtuple
 import BigWorld
 from constants import POWER_MODE_STATE
 from gui.battle_control.battle_constants import VEHICLE_UPDATE_INTERVAL
+from gui.shared.utils.decorators import ReprInjector
 from math_utils import clamp01
-from vehicles.components.vehicle_component import VehicleMechanicPrefabDynamicComponent
+from vehicles.components.vehicle_component import VehicleDynamicComponent
+from vehicles.components.vehicle_prefabs import createMechanicPrefabSpawner
+from vehicles.mechanics.common import IMechanicComponent
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_states import IMechanicState, IMechanicStatesComponent, createMechanicStatesEvents
 if typing.TYPE_CHECKING:
     from vehicles.mechanics.mechanic_states import IMechanicStatesEvents
@@ -36,14 +40,20 @@ class PowerModeState(namedtuple('PowerModeState', ('state', 'directionChangeTime
         return self.state != other.state
 
 
-class PowerModeController(VehicleMechanicPrefabDynamicComponent, IMechanicStatesComponent):
+@ReprInjector.withParent()
+class PowerModeController(VehicleDynamicComponent, IMechanicComponent, IMechanicStatesComponent):
     DEFAULT_MODE_STATE = PowerModeState(POWER_MODE_STATE.NOT_ACTIVE, 0.0, 0.0, 0.0)
 
     def __init__(self):
         super(PowerModeController, self).__init__()
         self.__mechanicState = self.DEFAULT_MODE_STATE
+        self.__mechanicPrefabSpawner = createMechanicPrefabSpawner(self.entity, self)
         self.__statesEvents = createMechanicStatesEvents(self, VEHICLE_UPDATE_INTERVAL)
         self._initComponent()
+
+    @property
+    def vehicleMechanic(self):
+        return VehicleMechanic.POWER_MODE
 
     @property
     def statesEvents(self):
@@ -65,9 +75,11 @@ class PowerModeController(VehicleMechanicPrefabDynamicComponent, IMechanicStates
     def _onAppearanceReady(self):
         super(PowerModeController, self)._onAppearanceReady()
         self.__updateMechanicState()
+        self.__mechanicPrefabSpawner.loadAppearancePrefab()
         self.__statesEvents.processStatePrepared()
 
-    def _onComponentAppearanceUpdate(self):
+    def _onComponentAppearanceUpdate(self, **kwargs):
+        super(PowerModeController, self)._onComponentAppearanceUpdate(**kwargs)
         self.__updateMechanicState()
         self.__statesEvents.updateMechanicState(self.getMechanicState())
 

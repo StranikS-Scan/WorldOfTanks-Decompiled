@@ -56,6 +56,17 @@ def getProgressionPostBattleInfo(itemIntCD, vehicleIntCD, progressionData, items
         return info
 
 
+def getProgressiveCustomizationProgress(reusable):
+    items = []
+    for vehicleIntCD, c11nProgression in reusable.personal.getC11nProgress().iteritems():
+        for intCD, progressionData in sorted(c11nProgression.iteritems(), key=lambda it: -it[1].get('level', 0)):
+            info = getProgressionPostBattleInfo(intCD, vehicleIntCD, progressionData)
+            if info is not None:
+                items.append(info)
+
+    return items
+
+
 C11nProgressionLinkBtnParams = namedtuple('C11nProgressionLinkBtnParams', ('isLinkEnabled', 'linkBtnTooltip'))
 
 def getC11nProgressionLinkBtnParams(vehicle):

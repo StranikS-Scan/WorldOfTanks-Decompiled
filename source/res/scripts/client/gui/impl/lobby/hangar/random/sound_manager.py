@@ -2,9 +2,11 @@
 # Embedded file name: scripts/client/gui/impl/lobby/hangar/random/sound_manager.py
 from __future__ import absolute_import
 from gui.impl.lobby.hangar.base.sound_constants import HangarSoundStates
+from gui.sounds.filters import States, StatesGroup
 from sound_gui_manager import CommonSoundSpaceSettings
 SOUND_ALL_VEHICLES_ENTERED = 'gui_space_enter'
 SOUND_ALL_VEHICLES_EXITED = 'gui_space_exit'
 RANDOM_HANGAR_SOUND_SPACE = CommonSoundSpaceSettings(name='hangar', entranceStates={HangarSoundStates.PLACE.value: HangarSoundStates.PLACE_GARAGE.value}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
 ALL_VEHICLES_SOUND_SPACE = CommonSoundSpaceSettings(name='allVehicles', entranceStates={HangarSoundStates.SPACE.value: HangarSoundStates.ALL_VEHICLES_ON.value}, exitStates={HangarSoundStates.SPACE.value: HangarSoundStates.ALL_VEHICLES_OFF.value}, enterEvent=(), exitEvent=(), persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True)
 PLAY_LISTS_SOUND_SPACE = CommonSoundSpaceSettings(name='playlists', entranceStates={HangarSoundStates.SPACE.value: HangarSoundStates.ALL_VEHICLES_ON.value}, exitStates={HangarSoundStates.SPACE.value: HangarSoundStates.ALL_VEHICLES_OFF.value}, enterEvent=(), exitEvent=(), persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True)
+EASY_TANK_EQUIP_SOUND_SPACE = CommonSoundSpaceSettings(name='easy_tank_equip', entranceStates={StatesGroup.OVERLAY_HANGAR_GENERAL: States.OVERLAY_HANGAR_GENERAL_ON}, exitStates={StatesGroup.OVERLAY_HANGAR_GENERAL: States.OVERLAY_HANGAR_GENERAL_OFF}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='', parentSpace='')

@@ -3849,7 +3849,7 @@
       </value>
     </achievement>
     <achievement>
-      <name>	singleAchievements:14YearsOfService	</name>
+      <name>	singleAchievements:15YearsOfService	</name>
       <type>	dict	</type>
       <value>
         <item>	single	  <name>	type	</name>
@@ -3864,7 +3864,7 @@
       </value>
     </achievement>
     <achievement>
-      <name>	singleAchievements:13YearsOfService	</name>
+      <name>	singleAchievements:14YearsOfService	</name>
       <type>	dict	</type>
       <value>
         <item>	single	  <name>	type	</name>
@@ -3879,7 +3879,7 @@
       </value>
     </achievement>
     <achievement>
-      <name>	singleAchievements:12YearsOfService	</name>
+      <name>	singleAchievements:13YearsOfService	</name>
       <type>	dict	</type>
       <value>
         <item>	single	  <name>	type	</name>
@@ -3894,7 +3894,7 @@
       </value>
     </achievement>
     <achievement>
-      <name>	singleAchievements:11YearsOfService	</name>
+      <name>	singleAchievements:12YearsOfService	</name>
       <type>	dict	</type>
       <value>
         <item>	single	  <name>	type	</name>
@@ -3909,7 +3909,7 @@
       </value>
     </achievement>
     <achievement>
-      <name>	singleAchievements:10YearsOfService	</name>
+      <name>	singleAchievements:11YearsOfService	</name>
       <type>	dict	</type>
       <value>
         <item>	single	  <name>	type	</name>
@@ -3924,7 +3924,7 @@
       </value>
     </achievement>
     <achievement>
-      <name>	singleAchievements:09YearsOfService	</name>
+      <name>	singleAchievements:10YearsOfService	</name>
       <type>	dict	</type>
       <value>
         <item>	single	  <name>	type	</name>
@@ -3939,7 +3939,7 @@
       </value>
     </achievement>
     <achievement>
-      <name>	singleAchievements:08YearsOfService	</name>
+      <name>	singleAchievements:09YearsOfService	</name>
       <type>	dict	</type>
       <value>
         <item>	single	  <name>	type	</name>
@@ -3954,7 +3954,7 @@
       </value>
     </achievement>
     <achievement>
-      <name>	singleAchievements:07YearsOfService	</name>
+      <name>	singleAchievements:08YearsOfService	</name>
       <type>	dict	</type>
       <value>
         <item>	single	  <name>	type	</name>
@@ -3969,7 +3969,7 @@
       </value>
     </achievement>
     <achievement>
-      <name>	singleAchievements:06YearsOfService	</name>
+      <name>	singleAchievements:07YearsOfService	</name>
       <type>	dict	</type>
       <value>
         <item>	single	  <name>	type	</name>
@@ -3984,7 +3984,7 @@
       </value>
     </achievement>
     <achievement>
-      <name>	singleAchievements:05YearsOfService	</name>
+      <name>	singleAchievements:06YearsOfService	</name>
       <type>	dict	</type>
       <value>
         <item>	single	  <name>	type	</name>
@@ -3999,7 +3999,7 @@
       </value>
     </achievement>
     <achievement>
-      <name>	singleAchievements:04YearsOfService	</name>
+      <name>	singleAchievements:05YearsOfService	</name>
       <type>	dict	</type>
       <value>
         <item>	single	  <name>	type	</name>
@@ -4014,7 +4014,7 @@
       </value>
     </achievement>
     <achievement>
-      <name>	singleAchievements:03YearsOfService	</name>
+      <name>	singleAchievements:04YearsOfService	</name>
       <type>	dict	</type>
       <value>
         <item>	single	  <name>	type	</name>
@@ -4029,7 +4029,7 @@
       </value>
     </achievement>
     <achievement>
-      <name>	singleAchievements:02YearsOfService	</name>
+      <name>	singleAchievements:03YearsOfService	</name>
       <type>	dict	</type>
       <value>
         <item>	single	  <name>	type	</name>
@@ -4044,7 +4044,7 @@
       </value>
     </achievement>
     <achievement>
-      <name>	singleAchievements:01YearsOfService	</name>
+      <name>	singleAchievements:02YearsOfService	</name>
       <type>	dict	</type>
       <value>
         <item>	single	  <name>	type	</name>
@@ -4052,6 +4052,21 @@
         <item>	action	  <name>	section	</name>
         </item>
         <item>	14.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	all	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:01YearsOfService	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	15.0	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	all	  <name>	mode	</name>
@@ -7790,6 +7805,51 @@
           <type>	float	</type>
         </item>
         <item>	all	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:NY26_AtmsphrLevel	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1444.2	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:NY26_CelebChallenge	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1444.3	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:grinch_medal_2026	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1480.1	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
         </item>
       </value>
     </achievement>

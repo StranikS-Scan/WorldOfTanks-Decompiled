@@ -28,7 +28,8 @@ from gui.shared.system_factory import collectReplayModeTag
 from helpers import EffectsList, isPlayerAvatar, isPlayerAccount, getFullClientVersion
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
-from constants import ARENA_PERIOD, ARENA_BONUS_TYPE, INBATTLE_CONFIGS, NULL_ENTITY_ID
+from constants import ARENA_PERIOD, ARENA_BONUS_TYPE, NULL_ENTITY_ID
+from constants_utils import getUsedInReplaysConfigKeys
 from helpers import dependency
 from gui.app_loader import settings
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -1194,7 +1195,7 @@ class BattleReplay(object):
         else:
             player = BigWorld.player()
             serverSettings = player.serverSettings
-            for cfgName in INBATTLE_CONFIGS:
+            for cfgName in getUsedInReplaysConfigKeys():
                 self.__serverSettings[cfgName] = serverSettings[cfgName]
 
             if player.databaseID is None:
@@ -1217,12 +1218,13 @@ class BattleReplay(object):
     def __timeWarp(self, time):
         if not self.isPlaying or not self.__enableTimeWarp:
             return
-        g_replayEvents.onTimeWarpStart()
+        isRewind = time < self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_CURRENT_TIME)
+        g_replayEvents.callOnTimeWarpStart(isRewind)
         if self.__isFinished:
             self.setPlaybackSpeedIdx(self.__savedPlaybackSpeedIdx)
         self.__isFinished = False
         self.__warpTime = time
-        self.__rewind = time < self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_CURRENT_TIME)
+        self.__rewind = isRewind
         AreaDestructibles.g_destructiblesManager.onBeforeReplayTimeWarp(self.__rewind)
         self.__updateGunOnTimeWarp = True
         EffectsList.EffectsListPlayer.clear()
@@ -1327,7 +1329,7 @@ class BattleReplay(object):
         if self.__ctrlModeBeforeRewind in (CTRL_MODE_NAME.VIDEO,):
             BigWorld.player().inputHandler.onControlModeChanged(self.__ctrlModeBeforeRewind, prevModeName=CTRL_MODE_NAME.ARCADE, camMatrix=self.__cameraMatrixBeforeRewind)
         self.__ctrlModeBeforeRewind = None
-        g_replayEvents.onTimeWarpFinish()
+        g_replayEvents.callOnTimeWarpFinish()
         return
 
     def __isAllowedSavedCamera(self):

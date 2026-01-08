@@ -52,6 +52,10 @@ class Comp7RanksConfig(object):
         self._config = config
 
     @cached_property
+    def businessDayStartHour(self):
+        return self._config.get('businessDayStartHour', 0)
+
+    @cached_property
     def divisions(self):
         divisions = self._config.get('divisions', ())
         return tuple((Comp7Division(serialIdx, divisionInfo) for serialIdx, divisionInfo in enumerate(divisions)))

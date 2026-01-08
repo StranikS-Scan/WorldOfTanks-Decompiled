@@ -5,7 +5,7 @@ import BattleReplay
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE as _BET
 from account_helpers.settings_core.options import DamageLogDetailsSetting as _VIEW_MODE, DamageLogEventPositionsSetting as _EVENT_POSITIONS, DamageLogEventTypesSetting as _DISPLAYED_EVENT_TYPES
 from account_helpers.settings_core.settings_constants import DAMAGE_LOG, GRAPHICS
-from constants import BATTLE_LOG_SHELL_TYPES, BOT_DISPLAY_CLASS_NAMES, VEHICLE_BUNKER_TURRET_TAG, ARENA_BONUS_TYPE
+from constants import BATTLE_LOG_SHELL_TYPES, BOT_DISPLAY_CLASS_NAMES, ARENA_BONUS_TYPE
 from gui.Scaleform.daapi.view.meta.BattleDamageLogPanelMeta import BattleDamageLogPanelMeta
 from gui.Scaleform.genConsts.BATTLEDAMAGELOG_IMAGES import BATTLEDAMAGELOG_IMAGES as _IMAGES
 from gui.Scaleform.genConsts.DAMAGE_LOG_SHELL_BG_TYPES import DAMAGE_LOG_SHELL_BG_TYPES
@@ -130,10 +130,7 @@ class _VehicleVOBuilder(_IVOBuilder):
 
     def _populateVO(self, vehicleVO, info, arenaDP):
         vInfoVO = arenaDP.getVehicleInfo(info.getArenaVehicleID())
-        if VEHICLE_BUNKER_TURRET_TAG in vInfoVO.vehicleType.tags:
-            vehicleVO.vehicleTypeImg = _IMAGES.WHITE_ICON_BUNKER_16X16
-        else:
-            vehicleVO.vehicleTypeImg = _VEHICLE_CLASS_TAGS_ICONS.get(vInfoVO.getDisplayedClassTag(), '')
+        vehicleVO.vehicleTypeImg = _VEHICLE_CLASS_TAGS_ICONS.get(vInfoVO.getDisplayedClassTag(), '')
         vehicleVO.vehicleName = vInfoVO.getDisplayedName()
 
 

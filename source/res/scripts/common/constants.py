@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/constants.py
+import typing
 from enum import IntEnum
 import enum
 import calendar
@@ -9,9 +10,10 @@ from time import time as timestamp
 from collections import namedtuple
 from itertools import izip, chain
 from Math import Vector3, Vector2
-from wg_typing import *
 from realm import CURRENT_REALM
 from functools import reduce
+if typing.TYPE_CHECKING:
+    from typing import Sequence, Union
 try:
     import BigWorld
 except ImportError:
@@ -969,6 +971,7 @@ class Configs(enum.Enum):
     SYSTEM_CHANNELS = 'system_channels'
     REFERRAL_PROGRAM_CONFIG = 'referral_program_config'
     FAIRPLAY_CONFIG = 'fairplay_config'
+    ARENA_DYN_OBSTACLES_CONFIG = 'arena_dyn_obstacles_config'
     POSTMORTEM_SETTINGS_CONFIG = 'postmortem_settings_config'
     LIVE_OPS_EVENTS_CONFIG = 'live_ops_events_config'
     ADVANCED_ACHIEVEMENTS_CONFIG = 'advanced_achievements_config'
@@ -989,9 +992,7 @@ INBATTLE_CONFIGS = ['spgRedesignFeatures',
  'ranked_config',
  'battle_royale_config',
  'epic_config',
- 'vehicle_post_progression_config',
- Configs.PLAYER_SATISFACTION_CONFIG.value,
- Configs.COMMENDATIONS_CONFIG.value]
+ 'vehicle_post_progression_config']
 
 class RESTRICTION_TYPE:
     NONE = 0
@@ -1442,6 +1443,18 @@ class VEHICLE_HIT_EFFECT:
      ARMOR_PIERCED,
      CRITICAL_HIT,
      ARMOR_PIERCED_DEVICE_DAMAGED)
+    INVALID = 15
+    _GROUP_MAPPING = {INTERMEDIATE_RICOCHET: 'armorBasicRicochet',
+     FINAL_RICOCHET: 'armorRicochet',
+     ARMOR_NOT_PIERCED: 'armorResisted',
+     ARMOR_PIERCED_NO_DAMAGE: 'armorResisted',
+     ARMOR_PIERCED: 'armorHit',
+     CRITICAL_HIT: 'armorCriticalHit',
+     ARMOR_PIERCED_DEVICE_DAMAGED: 'armorCriticalHit'}
+
+    @classmethod
+    def getEffectGroup(cls, hitEffect):
+        return cls._GROUP_MAPPING[hitEffect]
 
 
 class VEHICLE_HIT_FLAGS(BIN_FLAGS):
@@ -1597,6 +1610,17 @@ class EVENT_TYPE:
     QUEST_WITHOUT_DYNAMIC_UPDATE = (POTAPOV_QUEST, NT_QUEST)
     QUEST_USE_FOR_C11N_PROGRESS = (TOKEN_QUEST, BATTLE_QUEST)
     MISC_DATA_RANGE = (BATTLE_QUEST, TOKEN_QUEST)
+
+
+class BATTLE_PROGRESS_CATEGORY:
+    DAILY_QUESTS = 0
+    WEEKLY_QUESTS = 1
+    BATTLE_MATTERS = 2
+    BATTLE_PASS = 3
+    PERSONAL_MISSONS_3 = 4
+    PRESTIGE = 5
+    RESEARCH_NEW_MODULES_AND_VEHICLES = 6
+    COMMON_QUESTS = 7
 
 
 class QUEST_DATA_IDX:
@@ -3336,6 +3360,9 @@ class DUAL_GUN:
         COUNT = 4
 
 
+UNKNOWN_VEHICLE_ID = 0
+UNKNOWN_GUN_INDEX = -1
+DEFAULT_GUN_INDEX = 0
 DUPLET_GUN_INDEXES = [DUAL_GUN.ACTIVE_GUN.LEFT, DUAL_GUN.ACTIVE_GUN.RIGHT]
 DUPLET_GUN_INDEXES_TUPLE = tuple(DUPLET_GUN_INDEXES)
 UNKNOWN_GUN_INSTALLATION_INDEX = -1
@@ -3840,7 +3867,6 @@ class WoTPlusDailyAttendance(object):
 VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG = 'noCrewTransferPenalty'
 VEHICLE_PREMIUM_TAG = 'premium'
 VEHICLE_WOT_PLUS_TAG = 'wotPlus'
-VEHICLE_BUNKER_TURRET_TAG = 'bunkerTurret'
 VEHICLE_SECRET_TAG = 'secret'
 
 class InitialVehsAdditionStrategy(object):
@@ -3971,6 +3997,7 @@ class DIRECT_DETECTION_TYPE:
     FORCED = 2
     STEALTH_RADAR = 3
     SPECIAL_RECON = 4
+    UNSPOTTED = 5
 
 
 class PlayerSatisfactionRatingInterface(IntEnum):
@@ -4102,6 +4129,39 @@ class CONCENTRATION_MODE_STATE:
          cls.IDLE: 'idle',
          cls.DEPLOYING: 'deploying',
          cls.DISABLED: 'disabled'}.get(value)
+
+
+class TEMPERATURE_MECHANIC_STATE(object):
+    IDLE = 0
+    HEATING = 1
+    COOLING = 2
+
+
+class TEMPERATURE_GUN_STATE(TEMPERATURE_MECHANIC_STATE):
+    COOLING_DELAY = 3
+    COOLING_STATES = (TEMPERATURE_MECHANIC_STATE.COOLING, COOLING_DELAY)
+    STATIC_STATES = (TEMPERATURE_MECHANIC_STATE.IDLE, COOLING_DELAY)
+
+
+class OVERHEAT_GUN_STATE(object):
+    IDLE = 0
+    WARNING = 1
+    OVERHEATING = 2
+
+
+class HEATING_ZONES_GUN_STATE(object):
+    __slots__ = ('IDLE', 'LOW', 'MEDIUM', 'HIGH')
+    IDLE = 0
+    LOW = 1
+    MEDIUM = 2
+    HIGH = 3
+
+    @classmethod
+    def toString(cls, value):
+        return {cls.IDLE: 'idle',
+         cls.LOW: 'low',
+         cls.MEDIUM: 'medium',
+         cls.HIGH: 'high'}.get(value, value)
 
 
 class POWER_MODE_STATE:
@@ -4254,6 +4314,67 @@ class TARGET_DESIGNATOR_STATE:
     ACTIVE = 1
     COOLDOWN = 2
     PRE_BATTLE = 3
+
+
+VEHICLE_MIN_ABS_INITIAL_SPEED_IN_KM_PER_HOUR = 1
+VEHICLE_MIN_ABS_INITIAL_SPEED_IN_METERS_PER_SECOND = 0.1
+
+class DEBUFFS_TYPES:
+    OVERTURN = 0
+    STUN = 1
+    AMMOBAY = 2
+    FIRE = 3
+    GUNNER1 = 4
+    GUNNER2 = 5
+    LOADER1 = 6
+    LOADER2 = 7
+    RADIOMAN1 = 8
+    RADIOMAN2 = 9
+    COMMANDER = 10
+    DRIVER = 11
+    _NAME_TO_IDX = {'overturn': OVERTURN,
+     'stun': STUN,
+     'ammoBay': AMMOBAY,
+     'fire': FIRE,
+     'gunner1': GUNNER1,
+     'gunner2': GUNNER2,
+     'loader1': LOADER1,
+     'loader2': LOADER2,
+     'radioman1': RADIOMAN1,
+     'radioman2': RADIOMAN2,
+     'commander': COMMANDER,
+     'driver': DRIVER}
+
+    @classmethod
+    def getIdx(cls, name):
+        return cls._NAME_TO_IDX.get(name)
+
+
+class PHASED_MECHANIC_STATE:
+    NOT_RUNNING = 0
+    DEPLOYING = 1
+    PREPARING = 2
+    READY = 3
+    ACTIVE = 4
+    DISABLED = 5
+    EMPTY = 6
+
+    @classmethod
+    def toString(cls, value):
+        return {cls.NOT_RUNNING: 'not running',
+         cls.DEPLOYING: 'deploying',
+         cls.PREPARING: 'preparing',
+         cls.READY: 'ready',
+         cls.ACTIVE: 'active',
+         cls.DISABLED: 'disabled',
+         cls.EMPTY: 'empty'}.get(value)
+
+
+class AcceleratorStatus(enum.IntEnum):
+    NONE = 0
+    LEFT = 1
+    RIGHT = 2
+    BOTH = LEFT | RIGHT
 
 
 VEHICLE_MIN_ABS_INITIAL_SPEED = 0.1

@@ -12,6 +12,8 @@ from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from dossiers2.ui.achievements import MARK_ON_GUN_RECORD, MARK_OF_MASTERY_RECORD, MARK_OF_MASTERY, MARK_ON_GUN, ACHIEVEMENT_TYPE
 from gui.impl.gen.view_models.views.lobby.battle_results.postbattle_achievement_model import PostbattleAchievementModel
+from helpers import dependency
+from skeletons.gui.battle_results import IBattleResultsService
 if typing.TYPE_CHECKING:
     from gui.battle_results.reusable import _ReusableInfo
     from gui.battle_results.reusable.players import PlayerInfo
@@ -19,6 +21,12 @@ if typing.TYPE_CHECKING:
     from gui.battle_results.stats_ctrl import BattleResults
     from gui.shared.gui_items.dossier.achievements.abstract import RegularAchievement
 _PlayerNames = namedtuple('PlayerNames', ('displayedName', 'hiddenName', 'isFakeNameVisible'))
+
+@dependency.replace_none_kwargs(battleResults=IBattleResultsService)
+def getBattleResults(arenaUniqueID, battleResults=None):
+    statsController = battleResults.getStatsCtrl(arenaUniqueID)
+    return None if not statsController else statsController.getResults()
+
 
 def isPersonalBattleResult(summarizeInfo, battleResult):
     return battleResult.reusable.getPlayerInfo().dbID == summarizeInfo.player.dbID

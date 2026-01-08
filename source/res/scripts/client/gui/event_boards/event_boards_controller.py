@@ -11,13 +11,13 @@ from gui import SystemMessages
 from gui.Scaleform.genConsts.MISSIONS_CONSTANTS import MISSIONS_CONSTANTS
 from gui.Scaleform.locale.EVENT_BOARDS import EVENT_BOARDS
 from gui.SystemMessages import SM_TYPE
-from gui.event_boards.event_boards_items import EventBoardsSettings, HangarFlagData, LeaderBoard, MyInfoInLeaderBoard, SET_DATA_STATUS_CODE, EVENT_STATE, PLAYER_STATE_REASON as _psr
+from gui.event_boards.event_boards_items import EventBoardsSettings, HangarFlagData, LeaderBoard, IPlayerProgression, MyInfoInLeaderBoard, SET_DATA_STATUS_CODE, EVENT_STATE, PLAYER_STATE_REASON as _psr
 from gui.event_boards.listener import IEventBoardsListener
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared.utils.requesters.abstract import Response
 from gui.wgcg import IWebController
-from gui.wgcg.elen.contexts import EventBoardsGetEventDataCtx, EventBoardsGetPlayerDataCtx, EventBoardsJoinEventCtx, EventBoardsLeaveEventCtx, EventBoardsGetMyEventTopCtx, EventBoardsGetMyLeaderboardPositionCtx, EventBoardsGetLeaderboardCtx, EventBoardsGetHangarFlagCtx
+from gui.wgcg.elen.contexts import EventBoardsGetEventDataCtx, EventBoardsGetPlayerDataCtx, EventBoardsJoinEventCtx, EventBoardsLeaveEventCtx, EventBoardsGetMyEventTopCtx, EventBoardsGetMyLeaderboardPositionCtx, EventBoardsGetLeaderboardCtx, EventBoardsGetHangarFlagCtx, EventBoardsGetPlayerProgressionCtx
 from gui.wgcg.settings import WebRequestDataType as _crdt
 from helpers import dependency
 from helpers.i18n import makeString as _ms
@@ -27,6 +27,7 @@ from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 SUCCESS_STATUSES = (200, 201, 304)
 if typing.TYPE_CHECKING:
+    from typing import Any, Callable, Type
     from gui.event_boards.event_boards_items import EventSettings
 
 class EventBoardsController(IEventBoardController, IEventBoardsListener, IGlobalListener):
@@ -195,6 +196,18 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener, IGlobal
                     callback(leaderboardData)
                     return
             callback(None)
+            return
+
+    @adisp_async
+    @adisp_process
+    def getPlayerProgression(self, eventID, leaderboardID, progressionClass, callback=None, showNotification=True):
+        playerProgressionResponse = yield self.sendRequest(EventBoardsGetPlayerProgressionCtx(eventID, leaderboardID, showNotification))
+        if playerProgressionResponse is None:
+            callback(None)
+            return
+        else:
+            playerProgressionData = progressionClass.fromRawData(playerProgressionResponse.getData(), eventID, leaderboardID)
+            callback(playerProgressionData)
             return
 
     def __checkStartedFinishedEvents(self, isTabVisited):

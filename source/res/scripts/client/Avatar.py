@@ -37,15 +37,12 @@ from AvatarInputHandler import cameras, keys_handlers
 from AvatarInputHandler.RespawnDeathMode import RespawnDeathMode
 from AvatarInputHandler.control_modes import ArcadeControlMode, VideoCameraControlMode, PostMortemControlMode, DeathFreeCamMode
 from AvatarInputHandler.kill_cam_modes import KillCamMode, LookAtKillerMode
-from AutoShootGunController import getPlayerVehicleAutoShootGunController
 from BattleReplay import CallbackDataNames
 from ChatManager import chatManager
 from ClientChat import ClientChat
-from ExtraShotClipComponent import getVehicleExtraShotController
 from Flock import DebugLine
 from OfflineMapCreator import g_offlineMapCreator
 from PlayerEvents import g_playerEvents
-from StationaryReloadController import getVehicleStationaryReloadController
 from TriggersManager import TRIGGER_TYPE
 from account_helpers import BattleResultsCache, ClientInvitations
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as _CAPS
@@ -70,7 +67,6 @@ from constants import DUAL_GUN, DUALGUN_CHARGER_STATUS, DUALGUN_CHARGER_ACTION_T
 from constants import TARGET_LOST_FLAGS
 from constants import VEHICLE_MISC_STATUS, VEHICLE_HIT_FLAGS, VEHICLE_SIEGE_STATE
 from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG_DEV, LOG_CODEPOINT_WARNING, LOG_NOTE
-from DualAccuracy import getPlayerVehicleDualAccuracy
 from gui import GUI_CTRL_MODE_FLAG, IngameSoundNotifications, SystemMessages
 from gui.app_loader import settings as app_settings
 from gui.battle_control import BattleSessionSetup
@@ -101,7 +97,8 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.helpers.statistics import IStatisticsCollector
 from soft_exception import SoftException
 from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT_MIN, STREAM_ID_AVATAR_BATTLE_RESULS
-from TwinGunController import getVehicleTwinGunController
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from vehicles.mechanics.mechanic_helpers import getPlayerVehicleMechanicComponent
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from messenger import MessengerEntry
 from battle_modifiers_common import BattleModifiers, BattleParams
@@ -125,6 +122,10 @@ _SHOT_WAITING_MIN_TIMEOUT = 0.12
 _MAX_SPEED_MULTIPLIER = 1.5
 _MAX_ROTATION_SPEED_MULTIPLIER = 1.5
 _SPEEDOMETER_CORRECTION_DELTA = 0.25
+_DEFAULT_AIMING_INFO = [0.0,
+ 0.0,
+ 0.0,
+ 0.0]
 
 class MOVEMENT_FLAGS(object):
     FORWARD = 1
@@ -270,6 +271,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__gunDamagedShootSound = None
         if BattleReplay.g_replayCtrl.isPlaying:
             BattleReplay.g_replayCtrl.setDataCallback(CallbackDataNames.GUN_DAMAGE_SOUND, self.__gunDamagedSound)
+        self.__aimingInfo = _DEFAULT_AIMING_INFO[:]
+        self.__latestAimingInfo = _DEFAULT_AIMING_INFO[:]
         self.__aimingBooster = None
         self.__canMakeDualShot = False
         self.__magneticAutoAimTags = self.lobbyContext.getServerSettings().getMagneticAutoAimConfig().get('enableForTags', set())
@@ -346,10 +349,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.__isRespawnAvailable = False
             self.__ownVehicleStabMProv = Math.WGAdaptiveMatrixProvider()
             self.__ownVehicleStabMProv.setStaticTransform(Math.Matrix())
-            self.__aimingInfo = [0.0,
-             0.0,
-             0.0,
-             0.0]
+            self.__aimingInfo = _DEFAULT_AIMING_INFO[:]
+            self.__latestAimingInfo = _DEFAULT_AIMING_INFO[:]
             self.__dispersionInfo = [1.0,
              0.0,
              0.0,
@@ -1302,26 +1303,21 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             return
         else:
             vehicle = BigWorld.entity(vehicleID)
-            twinGun = getVehicleTwinGunController(vehicle)
-            shotsAmount = twinGun.getShotsCount() if twinGun is not None else -1
-            extraShot = getVehicleExtraShotController(vehicle)
-            extraShotState = extraShot.getMechanicState() if extraShot is not None else None
-            extraShotReloadState = extraShotState.reloadState if extraShotState is not None else 0
-            stationaryReload = getVehicleStationaryReloadController(vehicle)
-            stationaryReloadState = stationaryReload.getMechanicState() if stationaryReload is not None else None
+            ammoStates = vehicle.events.collectAmmoStates()
+            extraShotState = ammoStates.get(VehicleMechanic.EXTRA_SHOT_CLIP.value)
             if timeLeft == baseTime if extraShotState is None else extraShotState.isReloadAfterShot(timeLeft, baseTime):
                 self.__gunReloadCommandWaitEndTime = 0.0
             ammoCtrl = self.guiSessionProvider.shared.ammo
-            timeLeft, baseTime, shotsAmount = ammoCtrl.preprocessGunReloadTime(timeLeft, baseTime, shotsAmount, extraShotReloadState, stationaryReloadState)
-            mechanicState = stationaryReloadState if stationaryReloadState is not None else extraShotReloadState
-            ammoCtrl.setGunReloadTime(timeLeft, baseTime, shotsAmount=shotsAmount, clipTime=clipTime, mechanicState=mechanicState)
+            ammoCtrl.setServerGunReloadTime(timeLeft, baseTime, ammoStates, clipTime=clipTime)
+            timeBetweenShots = clipTime or ammoCtrl.getGunReloadingState().getBaseValue()
+            vehicle.updateTimeBetweenShots(timeBetweenShots)
             return
 
     def updateVehicleClipReloadTime(self, vehicleID, timeLeft, baseTime, firstTime, stunned, isBoostApplicable, clipTime=None):
         self.guiSessionProvider.shared.ammo.setClipReloadTime(timeLeft, baseTime, firstTime, stunned, isBoostApplicable, clipTime=clipTime)
 
-    def updateStationaryReloadingState(self, stationaryState):
-        self.guiSessionProvider.shared.ammo.setStationaryReloadingState(stationaryState)
+    def updateVehicleAmmoStates(self):
+        self.guiSessionProvider.shared.ammo.updateAmmoStates()
 
     def updateDualGunState(self, vehicleID, activeGun, gunStates, cooldownTimes):
         vehicle = BigWorld.entity(vehicleID)
@@ -1346,7 +1342,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.guiSessionProvider.shared.ammo.clear(leave=False)
         self.guiSessionProvider.shared.equipments.clear(leave=False)
         self.guiSessionProvider.shared.optionalDevices.reset()
-        self.guiSessionProvider.shared.ammo.setGunSettings(vehicleDescriptor)
+        self.guiSessionProvider.shared.ammo.setGunSettings(vehicleID, vehicleDescriptor)
         self.guiSessionProvider.shared.equipments.notifyPlayerVehicleSet(vehicleID)
         self.__aimingBooster = None
         return
@@ -1513,12 +1509,15 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if entityId != self.playerVehicleID and entityId != self.observedVehicleID:
             return
         dispersionInfo = self.__dispersionInfo
+        prevAimingTime = dispersionInfo[5]
         dispersionInfo[0] = shotDispMultiplierFactor
         dispersionInfo[1] = gunShotDispersionFactorsTurretRotation
         dispersionInfo[2] = chassisShotDispersionFactorsMovement
         dispersionInfo[3] = chassisShotDispersionFactorsRotation
         dispersionInfo[4] = gunShotDispersionFactorsAfterShot
         dispersionInfo[5] = aimingTime
+        if aimingTime != prevAimingTime:
+            self.__aimingInfo = self.__latestAimingInfo[:]
         if self.gunRotator:
             self.gunRotator.update(turretYaw, gunPitch, maxTurretRotationSpeed, maxGunRotationSpeed)
             self.getOwnVehicleShotDispersionAngle(self.gunRotator.turretRotationSpeed)
@@ -1784,8 +1783,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def onObservedByEnemy(self, vehicleID, detectionType):
         if not self.__updateVehicleStatus(vehicleID):
             return
-        self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.OBSERVED_BY_ENEMY, {'isObserved': True,
-         'detectionType': detectionType})
+        g_playerEvents.onObservedByEnemy(detectionType, True)
         TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.SIXTH_SENSE)
 
     def battleEventsSummary(self, summary):
@@ -2060,8 +2058,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 return
             commonVerify, error = self.__verifyShooting(isRepeat)
             if not commonVerify:
-                if not isRepeat:
-                    self.guiSessionProvider.shared.ammo.onShotBlocked(error)
                 return
             if self.__gunReloadCommandWaitEndTime > BigWorld.time():
                 return
@@ -2365,21 +2361,21 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         vehicleRotationFactor *= vehicleRotationFactor
         turretRotationFactor = turretRotationSpeed * gunShotDispersionFactorsTurretRotation
         turretRotationFactor *= turretRotationFactor
-        if withShot == 0:
+        autoShootGunCtrl = getPlayerVehicleMechanicComponent(VehicleMechanic.AUTO_SHOOT_GUN)
+        if autoShootGunCtrl is not None:
+            shotFactor = autoShootGunCtrl.getDispersionState().getCurrentDispersionFactor()
+        elif withShot == 0:
             shotFactor = 0.0
         elif withShot == 1:
             shotFactor = gunShotDispersionFactorsAfterShot
         else:
             shotFactor = descr.gun.shotDispersionFactors['afterShotInBurst']
-        autoShootGunCtrl = getPlayerVehicleAutoShootGunController()
-        if autoShootGunCtrl is not None:
-            shotFactor = autoShootGunCtrl.getCurrentDispersionFactor()
         shotFactor *= shotFactor
         additiveSqrFactor = vehicleMovementFactor + vehicleRotationFactor + turretRotationFactor + shotFactor
         additiveSqrFactor *= self.__getAdditiveShotDispersionFactor(descr) ** 2
         idealFactor = multFactor * math.sqrt(1.0 + additiveSqrFactor)
         idealDualAccFactor = idealFactor
-        dualAccuracy = getPlayerVehicleDualAccuracy()
+        dualAccuracy = getPlayerVehicleMechanicComponent(VehicleMechanic.DUAL_ACCURACY)
         if dualAccuracy is not None:
             idealFactor *= dualAccuracy.getCurrentDualAccuracyFactor()
             idealDualAccFactor *= dualAccuracy.getDualAccuracyFactor()
@@ -2396,6 +2392,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             dualAccFactor = idealDualAccFactor
             self.__aimingInfo[2] = currTime
             self.__aimingInfo[3] = dualAccFactor
+        self.__latestAimingInfo = [currTime,
+         aimingFactor,
+         currTime,
+         dualAccFactor]
         shotDispersionAngle = descr.gun.shotDispersionAngle
         return [shotDispersionAngle * aimingFactor,
          shotDispersionAngle * idealFactor,
@@ -2499,7 +2499,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
      'crew_destroyed': 'cantShootCrewInactive',
      'no_ammo': 'cantShootNoAmmo',
      'gun_reload': 'cantShootGunReloading',
-     'gun_locked': 'cantShootGunLocked'}
+     'gun_locked': 'cantShootGunLocked',
+     'gun_overheated': 'cantShootGunOverheated'}
 
     def __createFakeCameraMatrix(self):
         BigWorld.camera(BigWorld.FreeCamera())

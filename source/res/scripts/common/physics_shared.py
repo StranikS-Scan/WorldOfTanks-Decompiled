@@ -5,7 +5,7 @@ import Math
 import math
 import collections
 from items import vehicles
-from items.components.component_constants import KMH_TO_MS
+from items.components.component_constants import KMH_TO_MS, ZERO_VECTOR3
 from items.vehicles import VEHICLE_PHYSICS_TYPE, VehicleDescriptor, VehicleDescrType
 from constants import IS_CLIENT, IS_EDITOR, SERVER_TICK_LENGTH
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR
@@ -161,6 +161,7 @@ def getDefaultChassisXPhysicsCfg():
      'gimletPushOnMoveFinal': 1.0,
      'gimletVelScaleMin': 1.0,
      'gimletVelScaleMax': 1.0,
+     'gimletCOMOffset': ZERO_VECTOR3,
      'pushRotOnSpotFixedPeriod': 1.0,
      'pushRotOnMoveFixedPeriod': 1.0,
      'pushRotOnSpotGrowPeriod': 1.0,
@@ -182,7 +183,8 @@ def getDefaultChassisXPhysicsCfg():
      'brokenTrackLosses': {'enginePowerLoss': (0.0,),
                            'fwMaxSpeedLoss': (0.0,),
                            'bkMaxSpeedLoss': (0.0,),
-                           'rotationSpeedLoss': (0.0,)}}
+                           'rotationSpeedLoss': (0.0,)},
+     'railCOMOffset': ZERO_VECTOR3}
 
 
 def getDeafultVehicleModelXPhysicsCfg():
@@ -614,10 +616,12 @@ def configurePhysicsMode(cfg, typeDesc, gravityFactor):
     cfg['gimletPushOnMoveFinal'] = cfg['chassis']['gimletPushOnMoveFinal']
     cfg['gimletVelScaleMin'] = cfg['chassis']['gimletVelScaleMin']
     cfg['gimletVelScaleMax'] = cfg['chassis']['gimletVelScaleMax']
+    cfg['gimletCOMOffset'] = cfg['chassis']['gimletCOMOffset']
     cfg['pushRotOnSpotFixedPeriod'] = cfg['chassis']['pushRotOnSpotFixedPeriod']
     cfg['pushRotOnMoveFixedPeriod'] = cfg['chassis']['pushRotOnMoveFixedPeriod']
     cfg['pushRotOnSpotGrowPeriod'] = cfg['chassis']['pushRotOnSpotGrowPeriod']
     cfg['pushRotOnMoveGrowPeriod'] = cfg['chassis']['pushRotOnMoveGrowPeriod']
+    cfg['railCOMOffset'] = cfg['chassis']['railCOMOffset']
     cfg['smplFwMaxSpeed'] = cfg['engine']['smplFwMaxSpeed']
     cfg['smplBkMaxSpeed'] = cfg['engine']['smplBkMaxSpeed']
     cfg['powerFactor'] = cfg['engine']['powerFactor']
@@ -662,10 +666,12 @@ def configurePhysicsMode(cfg, typeDesc, gravityFactor):
     cfg['gimlet']['gimletPushOnMoveFinal'] = cfg['gimletPushOnMoveFinal']
     cfg['gimlet']['gimletVelScaleMin'] = cfg['gimletVelScaleMin']
     cfg['gimlet']['gimletVelScaleMax'] = cfg['gimletVelScaleMax']
+    cfg['gimlet']['gimletCOMOffset'] = cfg['gimletCOMOffset']
     cfg['gimlet']['pushRotOnSpotFixedPeriod'] = cfg['pushRotOnSpotFixedPeriod']
     cfg['gimlet']['pushRotOnMoveFixedPeriod'] = cfg['pushRotOnMoveFixedPeriod']
     cfg['gimlet']['pushRotOnSpotGrowPeriod'] = cfg['pushRotOnSpotGrowPeriod']
     cfg['gimlet']['pushRotOnMoveGrowPeriod'] = cfg['pushRotOnMoveGrowPeriod']
+    cfg['rail']['railCOMOffset'] = cfg['railCOMOffset']
     cfg['engine']['rotationByLockChoker'] = cfg['chassis']['rotationByLockChoker']
     del cfg['chassis']['rotationByLockChoker']
     cfg['engine']['engVelMax'] = cfg['smplFwMaxSpeed'] / cfg['chassis']['wheelRadius'] / cfg['engine']['smplEngJoinRatio']

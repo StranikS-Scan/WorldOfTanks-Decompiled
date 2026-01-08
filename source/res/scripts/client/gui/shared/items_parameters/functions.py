@@ -3,14 +3,21 @@
 from collections import defaultdict
 from operator import itemgetter
 import typing
+from future.utils import iteritems, itervalues
 import BigWorld
+from gui.shared.formatters import text_styles
 from gui.shared.gui_items import KPI
 from gui.shared.gui_items.Tankman import crewMemberRealSkillLevel
-from items import utils, tankmen
+from gui.shared.items_parameters import isTemperatureGun
+from gui.shared.items_parameters.params_constants import MODULES
+from helpers import dependency
+from items import utils, tankmen, getTypeOfCompactDescr
 from items.vehicles import vehicleAttributeFactors
+from items.params_utils import getHeatedShotDispersion
+from skeletons.gui.lobby_context import ILobbyContext
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
-    from items.vehicles import VehicleDescriptor
+    from items.vehicles import VehicleDescriptor, CompositeVehicleDescriptor
 
 class _KpiDict(object):
 
@@ -51,7 +58,7 @@ class _KpiDict(object):
         return KPI(kpiName, (1.0 if kpiType == KPI.Type.MUL else 0.0) + self.__dict[kpiName], kpiType)
 
     def getKpiIterator(self):
-        for kpiName, kpiValue in self.__dict.iteritems():
+        for kpiName, kpiValue in iteritems(self.__dict):
             kpiType = self.__typeDict[kpiName]
             yield KPI(kpiName, (1.0 if kpiType == KPI.Type.MUL else 0.0) + kpiValue, kpiType)
 
@@ -115,7 +122,7 @@ def kpiFromCrewSkills(vehicle):
                 if level != tankmen.NO_SKILL:
                     skills[skill.name] = level
 
-        for bonusSkills in tankman.bonusSkills.itervalues():
+        for bonusSkills in itervalues(tankman.bonusSkills):
             for bonusSkill in bonusSkills:
                 if bonusSkill and bonusSkill.name != 'any' and bonusSkill.level != tankmen.NO_SKILL and bonusSkill.isSkillActive:
                     level = crewMemberRealSkillLevel(vehicle, bonusSkill.name)
@@ -129,7 +136,7 @@ def kpiFromCrewSkills(vehicle):
 
     kpi = []
     skillsConfig = tankmen.getSkillsConfig()
-    for skillName, level in skills.items():
+    for skillName, level in iteritems(skills):
         skillKpi = skillsConfig.getSkill(skillName).kpi
         for _kpi in skillKpi:
             baseValue = 1.0 if _kpi.type == KPI.Type.MUL else 0.0
@@ -137,15 +144,6 @@ def kpiFromCrewSkills(vehicle):
             kpi.append(KPI(_kpi.name, value, kpiType=_kpi.type, specValue=_kpi.specValue, vehicleTypes=_kpi.vehicleTypes))
 
     return kpi
-
-
-def getRocketAccelerationKpiFactors(vehDescr):
-    rocketKPI = _KpiDict()
-    if vehDescr.hasRocketAcceleration:
-        for kpi in vehDescr.type.rocketAccelerationParams.kpi:
-            rocketKPI.addKPI(kpi.name, kpi.value, kpi.type)
-
-    return rocketKPI
 
 
 def getVehicleFactors(vehicle, situationalBonuses=None, isModifySkillProcessors=False):
@@ -176,7 +174,7 @@ def calculateAdditionalCrewLevelIncrease(vehicle, situationalBonuses):
                     skillLevelIncrease = getattr(tankmen.getSkillsConfig().getSkill(skill.name), 'crewLevelIncrease', 0.0)
                     resultCrewLevelIncrease += skillLevelIncrease / tankmen.MAX_SKILL_LEVEL * skill.level
 
-            for bonusSkills in tankman.bonusSkills.itervalues():
+            for bonusSkills in itervalues(tankman.bonusSkills):
                 for bonusSkill in bonusSkills:
                     if bonusSkill and bonusSkill.isSkillActive:
                         skillLevelIncrease = getattr(tankmen.getSkillsConfig().getSkill(bonusSkill.name), 'crewLevelIncrease', 0.0)
@@ -222,5 +220,66 @@ def createFakeTankmanDescr(role, vehicleType, roleLevel=100):
     return tankmen.generateCompactDescr(passport, vehicleTypeID, role, roleLevel)
 
 
+def formatCompatibles(name, collection):
+    return ', '.join([ (text_styles.neutral(c) if c == name else text_styles.main(c)) for c in collection ])
+
+
+def getInstalledModuleVehicle(vehicleDescr, itemDescr):
+    curVehicle = None
+    if vehicleDescr:
+        compDescrType = getTypeOfCompactDescr(itemDescr.compactDescr)
+        module = MODULES[compDescrType](vehicleDescr)
+        if module.id[1] == itemDescr.id[1]:
+            curVehicle = vehicleDescr.type.userString
+    return curVehicle
+
+
+def isStunParamVisible(shellDict):
+    lobbyContext = dependency.instance(ILobbyContext)
+    return shellDict.hasStun and lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
+
+
 def getBasicShell(vehDescr):
     return vehDescr.gun.shots[0].shell
+
+
+def getClientShotDispersion(vehicleDescr, shotDispersionFactor):
+    gun = vehicleDescr.gun
+    values = []
+    multShotDispersionFactor = vehicleDescr.miscAttrs['multShotDispersionFactor'] * shotDispersionFactor
+    shotDispersionAngle = gun.shotDispersionAngle
+    if 'dualAccuracy' in gun.tags:
+        values.append(gun.dualAccuracy.afterShotDispersionAngle * multShotDispersionFactor)
+    elif isTemperatureGun(vehicleDescr):
+        values.append(getHeatedShotDispersion(shotDispersionAngle, vehicleDescr) * multShotDispersionFactor)
+    values.append(shotDispersionAngle * multShotDispersionFactor)
+    if 'twinGun' in gun.tags:
+        siegeVehDescr = vehicleDescr.siegeVehicleDescr
+        multShotDispersionSiegeFactor = siegeVehDescr.miscAttrs['multShotDispersionFactor'] * shotDispersionFactor
+        values.append(siegeVehDescr.gun.shotDispersionAngle * multShotDispersionSiegeFactor)
+    return tuple(values)
+
+
+def getClientCoolingDelay(vehicleDescr, factors):
+    return float(vehicleDescr.gun.dualAccuracy.coolingDelay) * factors['dualAccuracyCoolingDelay']
+
+
+def getMaxSteeringLockAngle(axleSteeringLockAngles):
+    return max(map(abs, axleSteeringLockAngles)) if axleSteeringLockAngles else None
+
+
+def getRocketAccelerationEnginePower(vehicleDescr, value):
+    return value * getRocketAccelerationKpiFactors(vehicleDescr).getCoeff(KPI.Name.VEHICLE_ENGINE_POWER) if vehicleDescr.hasRocketAcceleration else None
+
+
+def getRocketAccelerationKpiFactors(vehDescr):
+    rocketKPI = _KpiDict()
+    if vehDescr.hasRocketAcceleration:
+        for kpi in vehDescr.type.rocketAccelerationParams.kpi:
+            rocketKPI.addKPI(kpi.name, kpi.value, kpi.type)
+
+    return rocketKPI
+
+
+def getTurboshaftEnginePower(vehicleDescr, _):
+    return vehicleDescr.siegeVehicleDescr.physics['enginePower'] if vehicleDescr.hasTurboshaftEngine else None

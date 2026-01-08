@@ -31,7 +31,6 @@ def getViewSettings():
     from story_mode.gui.scaleform.daapi.view.battle.damage_log_panel import StoryModeDamageLogPanel
     from story_mode.gui.scaleform.daapi.view.battle.fullmap import StoryModeFullMapComponent
     from story_mode.gui.scaleform.daapi.view.battle.game_messages_panel import StoreModeGameMessagesPanel
-    from story_mode.gui.scaleform.daapi.view.battle.goal_timer import StoryModeTimer
     from story_mode.gui.scaleform.daapi.view.battle.ingame_help import StoryModeIngameHelpWindow
     from story_mode.gui.scaleform.daapi.view.battle.ingame_menu import StoryModeIngameMenu
     from story_mode.gui.scaleform.daapi.view.battle.intro_video import IntroVideo
@@ -80,7 +79,6 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.PENETRATION_PANEL, StoryModePenetrationPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(STORY_MODE_BATTLE_VIEW_ALIASES.SUBTITLES, BattleSubtitles, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.TIMERS_PANEL, StoryModelTimersPanel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(STORY_MODE_BATTLE_VIEW_ALIASES.STORY_MODE_TIMER, StoryModeTimer, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL, StoreModeGameMessagesPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.MINIMAP, StoryModeMinimapComponent, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.RIBBONS_PANEL, StoryModeRibbonsPanel, ScopeTemplates.DEFAULT_SCOPE),

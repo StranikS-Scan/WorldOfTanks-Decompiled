@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/visual_script_client/vehicle_mechanics_blocks.py
+import logging
 import BigWorld
 import typing
 from constants import OVERHEAT_GAIN_STATE, TARGET_DESIGNATOR_STATE
@@ -7,13 +8,14 @@ from events_handler import eventHandler
 from vehicles.mechanics.mechanic_commands import IMechanicCommandsListenerLogic
 from vehicles.mechanics.mechanic_constants import VehicleMechanic, VEHICLE_MECHANIC_USED_COMMANDS
 from visual_script.block import Block
+from visual_script.dependency import dependencyImporter
 from visual_script.misc import ASPECT
 from visual_script.slot_types import SLOT_TYPE
-from visual_script.vehicle_mechanics_blocks import ConcentrationModeStateEnum, PowerModeStateEnum, SecondaryGunStateEnum, VehicleSiegeStateEnum, OverheatGainStateEnum, RechargeableNitroStateEnum, TargetDesignatorStateEnum, StationaryReloadEnum, StationaryReloadLockEnum
+from visual_script.vehicle_mechanics_blocks import ConcentrationModeStateEnum, PowerModeStateEnum, SecondaryGunStateEnum, VehicleSiegeStateEnum, OverheatGainStateEnum, RechargeableNitroStateEnum, TargetDesignatorStateEnum, StationaryReloadEnum, StationaryReloadLockEnum, OverheatGunEnum, TemperatureGunEnum, HeatingZonesGunEnum, PhasedMechanicStateEnum, AcceleratorStatusEnum
 from visual_script_client.vehicle_mechanics_common import VehicleSelectableMechanicEventsBlock, VehicleMechanicStateEventsBlock, VehicleMechanicLifeCycleEventsBlock
+cgf_helpers = dependencyImporter('cgf_common.cgf_helpers')
 if typing.TYPE_CHECKING:
     from typing import Any, List
-    from _weakref import ReferenceType
     from AccuracyStacksController import AccuracyStacksState
     from BattleFuryController import BattleFuryState
     from ConcentrationModeComponent import ConcentrationModeState
@@ -24,9 +26,37 @@ if typing.TYPE_CHECKING:
     from OverheatStacksController import OverheatStacksState
     from StanceDanceController import StanceDanceState
     from RechargeableNitroController import RechargeableNitroState
-    from ChargeShotComponent import ChargeShotState, ChargeShotComponent
+    from ChargeShotComponent import ChargeShotState
+    from items.components.shared_components import ChargeShotParams
     from TargetDesignatorController import TargetDesignatorState
-    from StationaryReloadController import StationaryReloadState
+    from StagedJetBoostersController import StagedJetBoostersState
+    from StationaryReloadController import StationaryReloadModeState
+    from vehicles.mechanics.gun_mechanics.temperature.overheat_gun import IOverheatGunMechanicState, IOverheatGunComponentParams
+    from TemperatureGunController import TemperatureGunMechanicState
+    from vehicles.mechanics.gun_mechanics.temperature.heating_zones_gun import IHeatingZonesGunMechanicState
+_logger = logging.getLogger(__name__)
+
+class ServerTime(Block):
+
+    def __init__(self, *args, **kwargs):
+        super(ServerTime, self).__init__(*args, **kwargs)
+        self._currentTimestamp = self._makeDataOutputSlot('currentTimestamp', SLOT_TYPE.FLOAT, self._execValue)
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
+
+    @classmethod
+    def blockIcon(cls):
+        pass
+
+    @classmethod
+    def blockCategory(cls):
+        pass
+
+    def _execValue(self):
+        self._currentTimestamp.setValue(BigWorld.serverTime())
+
 
 class OnVehicleMechanicCommand(VehicleSelectableMechanicEventsBlock, IMechanicCommandsListenerLogic):
     _EVENTS_NAME = 'commands'
@@ -36,20 +66,20 @@ class OnVehicleMechanicCommand(VehicleSelectableMechanicEventsBlock, IMechanicCo
         self._commands = {command:self._makeEventOutputSlot(command.value) for command in VEHICLE_MECHANIC_USED_COMMANDS[self._vehicleMechanic]}
 
     @eventHandler
+    def onMechanicComponentCatching(self, component):
+        self.subscribeTo(component.commandsEvents)
+
+    @eventHandler
+    def onMechanicComponentReleasing(self, component):
+        self.unsubscribeFrom(component.commandsEvents)
+
+    @eventHandler
     def onMechanicCommand(self, command):
         self._commands[command].call()
 
     @classmethod
     def _getInitParamMechanics(cls):
         return sorted((mechanic.value for mechanic in VEHICLE_MECHANIC_USED_COMMANDS))
-
-    def _subscribeToMechanicComponent(self, mechanicComponent):
-        super(OnVehicleMechanicCommand, self)._subscribeToMechanicComponent(mechanicComponent)
-        self.subscribeTo(mechanicComponent.commandsEvents)
-
-    def _unsubscribeFromMechanicComponent(self, mechanicComponent):
-        self.unsubscribeFrom(mechanicComponent.commandsEvents)
-        super(OnVehicleMechanicCommand, self)._unsubscribeFromMechanicComponent(mechanicComponent)
 
 
 class OnConcentrationModeState(VehicleMechanicStateEventsBlock):
@@ -362,12 +392,11 @@ class OnStanceDanceState(VehicleMechanicStateEventsBlock):
         self._prevIsSwitchingState.setValue(state.isSwitchingState)
 
 
-class OnChargeShotState(VehicleMechanicStateEventsBlock, VehicleMechanicLifeCycleEventsBlock):
+class OnChargeShotState(VehicleMechanicStateEventsBlock):
 
     def __init__(self, *args, **kwargs):
         super(OnChargeShotState, self).__init__(*args, **kwargs)
         self._level = self._makeDataOutputSlot('level', SLOT_TYPE.INT, None)
-        self._maxLevel = self._makeDataOutputSlot('maxLevel', SLOT_TYPE.INT, None)
         self._isCharging = self._makeDataOutputSlot('isCharging', SLOT_TYPE.BOOL, None)
         self._isShotBlock = self._makeDataOutputSlot('isShotBlock', SLOT_TYPE.BOOL, None)
         self._canStart = self._makeDataOutputSlot('canStart', SLOT_TYPE.BOOL, None)
@@ -377,7 +406,6 @@ class OnChargeShotState(VehicleMechanicStateEventsBlock, VehicleMechanicLifeCycl
         self._prevIsShotBlock = self._makeDataOutputSlot('prevIsShotBlock', SLOT_TYPE.BOOL, None)
         self._prevIsGunDestroyed = self._makeDataOutputSlot('prevIsGunDestroyed', SLOT_TYPE.BOOL, None)
         self._level.setValue(0)
-        self._maxLevel.setValue(0)
         self._isCharging.setValue(False)
         self._isShotBlock.setValue(False)
         self._canStart.setValue(False)
@@ -396,12 +424,6 @@ class OnChargeShotState(VehicleMechanicStateEventsBlock, VehicleMechanicLifeCycl
     def _onStateObservation(self, state):
         self.__updateStateParams(state)
 
-    def _onComponentParamsCollected(self, component):
-        params = component.params
-        if params is not None:
-            self._maxLevel.setValue(params.maxLevel)
-        return
-
     def _onStateTransition(self, prevState, newState):
         self._prevLevel.setValue(prevState.level)
         self._prevIsCharging.setValue(prevState.hasCharging)
@@ -415,6 +437,23 @@ class OnChargeShotState(VehicleMechanicStateEventsBlock, VehicleMechanicLifeCycl
         self._isShotBlock.setValue(currentState.hasShotBlock)
         self._canStart.setValue(currentState.canStart)
         self._isGunDestroyed.setValue(currentState.isGunDestroyed)
+
+
+class OnChargeShotParams(VehicleMechanicLifeCycleEventsBlock):
+
+    def __init__(self, *args, **kwargs):
+        super(OnChargeShotParams, self).__init__(*args, **kwargs)
+        self._maxLevel = self._makeDataOutputSlot('maxLevel', SLOT_TYPE.INT, None)
+        self._maxLevel.setValue(0)
+        return
+
+    @classmethod
+    def _getVehicleMechanic(cls, initParams):
+        return VehicleMechanic.CHARGE_SHOT
+
+    @eventHandler
+    def _onComponentParamsCollected(self, component):
+        self._maxLevel.setValue(component.maxLevel)
 
 
 class OnTargetDesignatorState(VehicleMechanicStateEventsBlock):
@@ -448,28 +487,6 @@ class OnTargetDesignatorState(VehicleMechanicStateEventsBlock):
         self._endTime.setValue(state.endTime)
 
 
-class ServerTime(Block):
-
-    def __init__(self, *args, **kwargs):
-        super(ServerTime, self).__init__(*args, **kwargs)
-        self._currentTimestamp = self._makeDataOutputSlot('currentTimestamp', SLOT_TYPE.FLOAT, self._execValue)
-
-    @classmethod
-    def blockAspects(cls):
-        return [ASPECT.CLIENT]
-
-    @classmethod
-    def blockIcon(cls):
-        pass
-
-    @classmethod
-    def blockCategory(cls):
-        pass
-
-    def _execValue(self):
-        self._currentTimestamp.setValue(BigWorld.serverTime())
-
-
 class OnStationaryReloadState(VehicleMechanicStateEventsBlock):
 
     def __init__(self, *args, **kwargs):
@@ -493,3 +510,134 @@ class OnStationaryReloadState(VehicleMechanicStateEventsBlock):
     def _onStateTransition(self, prevState, newState):
         self._state.setValue(newState.state)
         self._lockState.setValue(newState.gunLockMask)
+
+
+class GetTemperatureTimeLeft(Block):
+
+    def __init__(self, *args, **kwargs):
+        super(GetTemperatureTimeLeft, self).__init__(*args, **kwargs)
+        self._in = self._makeEventInputSlot('in', self._execute)
+        self._out = self._makeEventOutputSlot('out')
+        self._object = self._makeDataInputSlot('gameObjectLink', SLOT_TYPE.GAME_OBJECT)
+        self._targetTemp = self._makeDataInputSlot('targetTemperature', SLOT_TYPE.FLOAT)
+        self._cooldownTime = self._makeDataOutputSlot('cooldownTime', SLOT_TYPE.FLOAT, None)
+        return
+
+    def _execute(self):
+        vehicleGameObject = self._object.getValue()
+        if vehicleGameObject is not None:
+            vehicle = cgf_helpers.getVehicleEntityByVehicleGameObject(vehicleGameObject)
+            controller = vehicle.getVehicleMechanicComponent(VehicleMechanic.TEMPERATURE_GUN)
+            if controller is not None:
+                targetTemp = self._targetTemp.getValue()
+                cdTime = controller.getMechanicState().getCoolingTime(targetTemp)
+                self._cooldownTime.setValue(cdTime)
+            else:
+                _logger.debug('Could not find temperature gun controller')
+                self._cooldownTime.setValue(-1.0)
+        else:
+            _logger.debug('Vehicle game object is None')
+            self._cooldownTime.setValue(-1.0)
+        self._out.call()
+        return
+
+
+class OnTemperatureGunState(VehicleMechanicStateEventsBlock):
+
+    def __init__(self, *args, **kwargs):
+        super(OnTemperatureGunState, self).__init__(*args, **kwargs)
+        self._state = self._makeDataOutputSlot('state', TemperatureGunEnum.slotType(), None)
+        return
+
+    @classmethod
+    def _getVehicleMechanic(cls, initParams):
+        return VehicleMechanic.TEMPERATURE_GUN
+
+    def _onStatePrepared(self, state):
+        self._state.setValue(state.state)
+
+    def _onStateTransition(self, prevState, newState):
+        self._state.setValue(newState.state)
+
+
+class OnOverheatGunState(VehicleMechanicStateEventsBlock):
+
+    def __init__(self, *args, **kwargs):
+        super(OnOverheatGunState, self).__init__(*args, **kwargs)
+        self._state = self._makeDataOutputSlot('state', OverheatGunEnum.slotType(), None)
+        self._prevState = self._makeDataOutputSlot('prevState', OverheatGunEnum.slotType(), None)
+        return
+
+    @classmethod
+    def _getVehicleMechanic(cls, initParams):
+        return VehicleMechanic.OVERHEAT_GUN
+
+    def _onStatePrepared(self, state):
+        self._state.setValue(state.overheatState)
+        self._prevState.setValue(state.overheatState)
+
+    def _onStateTransition(self, prevState, newState):
+        self._state.setValue(newState.overheatState)
+        self._prevState.setValue(prevState.overheatState)
+
+
+class OnOverheatGunParams(VehicleMechanicLifeCycleEventsBlock):
+
+    def __init__(self, *args, **kwargs):
+        super(OnOverheatGunParams, self).__init__(*args, **kwargs)
+        self._overheatOffThreshold = self._makeDataOutputSlot('overheatOffThreshold', SLOT_TYPE.FLOAT, None)
+        return
+
+    @classmethod
+    def _getVehicleMechanic(cls, initParams):
+        return VehicleMechanic.OVERHEAT_GUN
+
+    @eventHandler
+    def _onComponentParamsCollected(self, component):
+        self._overheatOffThreshold.setValue(component.overheatOffThreshold)
+
+
+class OnHeatingZonesGunState(VehicleMechanicStateEventsBlock):
+
+    def __init__(self, *args, **kwargs):
+        super(OnHeatingZonesGunState, self).__init__(*args, **kwargs)
+        self._state = self._makeDataOutputSlot('state', HeatingZonesGunEnum.slotType(), None)
+        return
+
+    @classmethod
+    def _getVehicleMechanic(cls, initParams):
+        return VehicleMechanic.HEATING_ZONES_GUN
+
+    def _onStatePrepared(self, state):
+        self._state.setValue(state.heatingZoneState)
+
+    def _onStateTransition(self, prevState, newState):
+        self._state.setValue(newState.heatingZoneState)
+
+
+class OnStagedJetBoostersState(VehicleMechanicStateEventsBlock):
+
+    def __init__(self, *args, **kwargs):
+        super(OnStagedJetBoostersState, self).__init__(*args, **kwargs)
+        self._state = self._makeDataOutputSlot('state', PhasedMechanicStateEnum.slotType(), None)
+        self._acceleratorStatus = self._makeDataOutputSlot('acceleratorStatus', AcceleratorStatusEnum.slotType(), None)
+        self._duration = self._makeDataOutputSlot('duration', SLOT_TYPE.FLOAT, None)
+        return
+
+    @classmethod
+    def _getVehicleMechanic(cls, initParams):
+        return VehicleMechanic.STAGED_JET_BOOSTERS
+
+    def _onStatePrepared(self, state):
+        self.__forwardStateToVSE(state)
+
+    def _onStateTransition(self, prevState, newState):
+        self.__forwardStateToVSE(newState)
+
+    def _onStateObservation(self, state):
+        self.__forwardStateToVSE(state)
+
+    def __forwardStateToVSE(self, state):
+        self._state.setValue(state.state)
+        self._duration.setValue(state.timeLeft)
+        self._acceleratorStatus.setValue(state.acceleratorStatus)

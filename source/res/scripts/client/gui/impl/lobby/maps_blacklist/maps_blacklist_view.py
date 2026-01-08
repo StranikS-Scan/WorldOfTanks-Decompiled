@@ -18,7 +18,7 @@ from gui.impl.gen.view_models.views.lobby.premacc.maps_blacklist_slot_model impo
 from gui.impl.gen.view_models.views.lobby.premacc.maps_blacklist_view_model import MapsBlacklistViewModel
 from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.maps_blacklist.maps_blacklist_confirm_view import MapsBlacklistDialog
-from gui.impl.lobby.premacc.premacc_helpers import SoundViewMixin
+from gui.impl.lobby.maps_blacklist.sound_constants import BLACKLIST_SOUND_SETTINGS
 from gui.impl.pub import ViewImpl
 from gui.shared.event_dispatcher import showShop
 from gui.shared.formatters import time_formatters
@@ -103,11 +103,11 @@ def buildSlotsModels(lobbyContext=None, itemsCache=None, wotPlusController=None)
     return disabledMaps
 
 
-class MapsBlacklistView(ViewImpl, SoundViewMixin):
+class MapsBlacklistView(ViewImpl):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __gameSession = dependency.descriptor(IGameSessionController)
     __wotPlusCtrl = dependency.descriptor(IWotPlusController)
-    __slots__ = ('__availableMaps', '__notifier')
+    _COMMON_SOUND_SPACE = BLACKLIST_SOUND_SETTINGS
 
     def __init__(self, layoutID, wsFlags=ViewFlags.LOBBY_TOP_SUB_VIEW, viewModelClazz=MapsBlacklistViewModel, exitEvent=None):
         settings = ViewSettings(layoutID)
@@ -136,14 +136,12 @@ class MapsBlacklistView(ViewImpl, SoundViewMixin):
 
     def _initialize(self, exitEvent):
         super(MapsBlacklistView, self)._initialize(exitEvent)
-        self._addSoundEvent()
         self.__notifier.addNotificator(AcyclicNotifier(lambda : time_utils.ONE_MINUTE, self.__update))
         Waiting.hide('loadPage')
 
     def _finalize(self):
         self.__availableMaps = []
         self.__notifier.clearNotification()
-        self._removeSoundEvent()
         Waiting.hide('loadPage')
         super(MapsBlacklistView, self)._finalize()
 

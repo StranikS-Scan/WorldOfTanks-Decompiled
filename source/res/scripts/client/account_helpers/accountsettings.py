@@ -196,6 +196,7 @@ TRAJECTORY_VIEW_HINT_SECTION = 'trajectoryViewHint'
 TURBO_SHAFT_ENGINE_MODE_HINT_SECTION = 'turboShaftEngineModeHint'
 ROCKET_ACCELERATION_MODE_HINT_SECTION = 'rocketAccelerationModeHint'
 RECHARGEABLE_NITRO_MODE_HINT_SECTION = 'rechargeableNitroModeHint'
+STAGED_JET_BOOSTERS_MODE_HINT_SECTION = 'stagedJetBoostersModeHint'
 TARGET_DESIGNATOR_MODE_HINT_SECTION = 'targetDesignatorModeHint'
 DYN_SQUAD_HINT_SECTION = 'dynSquadHint'
 PILLBOX_HINT_SECTION = 'pillboxModeHint'
@@ -260,12 +261,11 @@ BECOME_ELITE_VEHICLES_WATCHED = 'becomeEliteWatched'
 VPP_ENTRY_POINT_LAST_SEEN_STEP = 'vehiclePostProgressionLastSeenStep'
 CLAN_PREBATTLE_SORTING_KEY = 'ClanPrebattleSortingKey'
 SHOW_DEMO_ACC_REGISTRATION = 'showDemoAccRegistration'
-RESOURCE_WELL_START_SHOWN = 'resourceWellStartShown'
-RESOURCE_WELL_END_SHOWN = 'resourceWellEndShown'
-RESOURCE_WELL_NOTIFICATIONS = 'resourceWellNotifications'
 MAPBOX_SURVEYS = 'mapbox_surveys'
 CLAN_NEWS_SEEN = 'clanNewsSeen'
 INTEGRATED_AUCTION_NOTIFICATIONS = 'integratedAuctionNotifications'
+INTEGRATED_AUCTION_FIRST_APPEARANCE_TIMESTAMP = 'integratedAuctionBannerFirstAppearanceTimestamp'
+INTEGRATED_AUCTION_INTRO_CLICK_TIMESTAMP = 'integratedAuctionBannerIntroClickTimestamp'
 MINIMAP_SIZE = 'minimapSize'
 COMP7_UI_SECTION = 'comp7'
 COMP7_WEEKLY_QUESTS_PAGE_TOKENS_COUNT = 'comp7WeeklyQuestsPageTokensCount'
@@ -275,12 +275,16 @@ COMP7_WEEKLY_WIDGET_SHOWN_QUEST = 'comp7WeeklyWidgetShownQuest'
 COMP7_LAST_SEASON_WHERE_STATISTICS_SHOWN = 'comp7LastSeasonWhereStatisticsShown'
 COMP7_UMG_PROGRESSION_POINTS_SEEN = 'comp7UMGProgressionPointsSeen'
 COMP7_UMG_ENTRY_POINT_SEEN = 'comp7UmgEntryPointSeen'
+COMP7_PROGRESSION_PAGE_C11N_PROGRESS = 'comp7ProgressionPageC11nProgress'
 COMP7_LIGHT_UI_SECTION = 'comp7Light'
 COMP7_LIGHT_LAST_SEASON = 'comp7LightLastSeason'
 COMP7_LIGHT_PROGRESSION_POINTS_SEEN = 'comp7LightProgressionPointsSeen'
 COMP7_LIGHT_UMG_PROGRESSION_POINTS_SEEN = 'comp7LightUMGProgressionPointsSeen'
 COMP7_LIGHT_UMG_SEEN_QUESTS = 'comp7LightUmgSeenQuests'
 COMP7_LIGHT_UMG_ENTRY_POINT_SEEN = 'comp7LightUmgEntryPointSeen'
+INGAME_TOURNAMENT_SECTION = 'ingameTournament'
+INGAME_TOURNAMENT_WCI_INTRO_SEEN = 'WCIIntroSeen'
+INGAME_TOURNAMENT_OLS_INTRO_SEEN = 'OLSIntroSeen'
 FUN_RANDOM_NOTIFICATIONS = 'funRandomNotifications'
 FUN_RANDOM_NOTIFICATIONS_FROZEN = 'funRandomNotificationsFrozen'
 FUN_RANDOM_NOTIFICATIONS_PROGRESSIONS = 'funRandomNotificationsProgressions'
@@ -386,6 +390,15 @@ class AdventCalendar(object):
 
 class StrongholdEvent(object):
     SETTINGS = 'strongholdEventSettings'
+    IS_BANNER_FIRST_APPEARANCE_SEEN = 'isBannerFirstAppearanceSeen'
+    FIRST_BANNER_ENTERING_MADE = 'firstBannerEnteringMade'
+
+
+class ResourceWell(object):
+    SETTINGS = 'resourceWellSettings'
+    START_SHOWN = 'resourceWellStartShown'
+    END_SHOWN = 'resourceWellEndShown'
+    NOTIFICATIONS = 'resourceWellNotifications'
     IS_BANNER_FIRST_APPEARANCE_SEEN = 'isBannerFirstAppearanceSeen'
     FIRST_BANNER_ENTERING_MADE = 'firstBannerEnteringMade'
 
@@ -1307,6 +1320,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 RECHARGEABLE_NITRO_MODE_HINT_SECTION: {HINTS_LEFT: 3,
                                                        LAST_DISPLAY_DAY: 0,
                                                        NUM_BATTLES: 0},
+                STAGED_JET_BOOSTERS_MODE_HINT_SECTION: {HINTS_LEFT: 3,
+                                                        LAST_DISPLAY_DAY: 0,
+                                                        NUM_BATTLES: 0},
                 TARGET_DESIGNATOR_MODE_HINT_SECTION: {HINTS_LEFT: 3,
                                                       LAST_DISPLAY_DAY: 0,
                                                       NUM_BATTLES: 0},
@@ -1358,6 +1374,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 MODE_SELECTOR_BATTLE_PASS_SHOWN: {},
                 RANKED_LAST_CYCLE_ID: None,
                 EPIC_LAST_CYCLE_ID: None,
+                INTEGRATED_AUCTION_FIRST_APPEARANCE_TIMESTAMP: 0,
+                INTEGRATED_AUCTION_INTRO_CLICK_TIMESTAMP: 0,
                 FRONTLINE_BANNER_FIRST_APPEARANCE_TIMESTAMP: 0,
                 FRONTLINE_BANNER_INTRO_CLICK_TIMESTAMP: 0,
                 COMP7_BANNER_FIRST_APPEARANCE_TIMESTAMP: 0,
@@ -1421,6 +1439,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           AdventCalendar.LAST_HIGHLIGHTED_DOOR: -1,
                                           AdventCalendar.FIRST_ENTRY_NOTIFICATION_SHOWING_DAY: -1,
                                           AdventCalendar.LAST_DAY_POPUP_SEEN: 0},
+                ResourceWell.SETTINGS: {ResourceWell.FIRST_BANNER_ENTERING_MADE: set(),
+                                        ResourceWell.IS_BANNER_FIRST_APPEARANCE_SEEN: set()},
                 PERSONAL_MISSION_3: {PersonalMission3.INTRO: False,
                                      PersonalMission3.INTRO_OP_8: False,
                                      PersonalMission3.INTRO_OP_9: False,
@@ -1439,16 +1459,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                      PetSystem.SEEN_PROMO_PET_IDS: set()},
                 HANGAR_VIEW_SETTINGS: {'allVehicles': {'crewEnabled': True,
                                                        'ttcEnabled': True}},
-                HANGAR_KEY_BINDINGS: {'vehicleMenu': {'retrainCrew': Keys.KEY_E,
-                                                      'quickTraining': Keys.KEY_T,
-                                                      'returnCrew': Keys.KEY_W,
-                                                      'aboutVehicle': Keys.KEY_V,
-                                                      'upgrades': Keys.KEY_F,
-                                                      'compare': Keys.KEY_C,
-                                                      'research': Keys.KEY_R,
-                                                      'armor': Keys.KEY_A,
-                                                      'quickService': Keys.KEY_Q,
-                                                      'customization': Keys.KEY_Z}}},
+                HANGAR_KEY_BINDINGS: {'vehicleMenu': {}}},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
@@ -1484,8 +1495,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                      FUN_RANDOM_NOTIFICATIONS: {FUN_RANDOM_NOTIFICATIONS_FROZEN: set(),
                                                 FUN_RANDOM_NOTIFICATIONS_PROGRESSIONS: set(),
                                                 FUN_RANDOM_NOTIFICATIONS_SUB_MODES: set()},
-                     RESOURCE_WELL_NOTIFICATIONS: {RESOURCE_WELL_START_SHOWN: set(),
-                                                   RESOURCE_WELL_END_SHOWN: set()},
+                     ResourceWell.NOTIFICATIONS: {ResourceWell.START_SHOWN: set(),
+                                                  ResourceWell.END_SHOWN: set()},
                      COLLECTIONS_NOTIFICATIONS: {COLLECTION_START_SEEN: [],
                                                  COLLECTION_RENEW_SEEN: {},
                                                  COLLECTIONS_UPDATED_ENTRY_SEEN: False},
@@ -1597,12 +1608,15 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                    COMP7_WEEKLY_WIDGET_SHOWN_QUEST: {},
                                    COMP7_LAST_SEASON_WHERE_STATISTICS_SHOWN: None,
                                    COMP7_UMG_PROGRESSION_POINTS_SEEN: 0,
-                                   COMP7_UMG_ENTRY_POINT_SEEN: False},
+                                   COMP7_UMG_ENTRY_POINT_SEEN: False,
+                                   COMP7_PROGRESSION_PAGE_C11N_PROGRESS: {}},
                 COMP7_LIGHT_UI_SECTION: {COMP7_LIGHT_LAST_SEASON: None,
                                          COMP7_LIGHT_PROGRESSION_POINTS_SEEN: 0,
                                          COMP7_LIGHT_UMG_PROGRESSION_POINTS_SEEN: 0,
                                          COMP7_LIGHT_UMG_SEEN_QUESTS: {},
                                          COMP7_LIGHT_UMG_ENTRY_POINT_SEEN: False},
+                INGAME_TOURNAMENT_SECTION: {INGAME_TOURNAMENT_WCI_INTRO_SEEN: False,
+                                            INGAME_TOURNAMENT_OLS_INTRO_SEEN: False},
                 BR_UI_SECTION: {BR_PROGRESSION_SEEN_QUESTS: {},
                                 BR_PROGRESSION_POINTS_SEEN: 0},
                 COLLECTIONS_SECTION: {COLLECTION_SHOWN_NEW_REWARDS: {},
@@ -1679,7 +1693,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 97
+    version = 100
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -2247,7 +2261,7 @@ class AccountSettings(object):
 
             if currVersion < 57:
                 for key, section in _filterAccountSection(ads):
-                    obsoleteKeys = (RESOURCE_WELL_START_SHOWN, RESOURCE_WELL_END_SHOWN)
+                    obsoleteKeys = (ResourceWell.START_SHOWN, ResourceWell.END_SHOWN)
                     settings = AccountSettings._readSection(section, KEY_NOTIFICATIONS)
                     for sectionName in obsoleteKeys:
                         if sectionName in settings.keys():
@@ -2557,10 +2571,37 @@ class AccountSettings(object):
 
             if currVersion < 97:
                 for key, section in _filterAccountSection(ads):
+                    uiSettings = AccountSettings._readSection(section, KEY_UI_FLAGS)
+                    ingameTournamentFlags = {INGAME_TOURNAMENT_WCI_INTRO_SEEN: False,
+                     INGAME_TOURNAMENT_OLS_INTRO_SEEN: False}
+                    uiSettings.write(INGAME_TOURNAMENT_SECTION, _pack(ingameTournamentFlags))
+
+            if currVersion < 97:
+                for key, section in _filterAccountSection(ads):
                     accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
                     obsoleteKey = 'lowQualitySound'
                     if obsoleteKey in accSettings.keys():
                         accSettings.deleteSection(obsoleteKey)
+
+            if currVersion < 98:
+                pass
+            if currVersion < 99:
+                pass
+            if currVersion < 100:
+                for key, section in _filterAccountSection(ads):
+                    notifications = AccountSettings._readSection(section, KEY_NOTIFICATIONS)
+                    notifications.deleteSection('story_mode_vday')
+                    notifications.deleteSection('story_mode_scc')
+
+                for _, section in _filterAccountSection(ads):
+                    keyUIFlagsSettings = AccountSettings._readSection(section, KEY_UI_FLAGS)
+                    if keyUIFlagsSettings.has_key('grinch_progression_keys'):
+                        keyUIFlagsSettings.deleteSection('grinch_progression_keys')
+                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    if accSettings.has_key('grinch_keys'):
+                        accSettings.deleteSection('grinch_keys')
+                    if accSettings.has_key('grinch_progression_key'):
+                        accSettings.deleteSection('grinch_progression_key')
 
             ads.writeInt('version', AccountSettings.version)
         return
@@ -2708,8 +2749,8 @@ class AccountSettings(object):
         return AccountSettings._getValue(name, KEY_NOTIFICATIONS, default=default)
 
     @staticmethod
-    def setNotifications(name, value):
-        AccountSettings._setValue(name, value, KEY_NOTIFICATIONS)
+    def setNotifications(name, value, force=False):
+        AccountSettings._setValue(name, value, KEY_NOTIFICATIONS, force=force)
 
     @staticmethod
     def getSessionSettings(name):

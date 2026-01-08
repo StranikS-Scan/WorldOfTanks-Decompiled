@@ -2,9 +2,10 @@
 # Embedded file name: scripts/client/gui/impl/common/base_sub_model_view.py
 import typing
 from frameworks.wulf import ViewModel
+from py2to3 import patched_typing
 TViewModel = typing.TypeVar('TViewModel', bound=ViewModel)
 
-class BaseSubModelView(typing.Generic[TViewModel], object):
+class BaseSubModelView(patched_typing.Generic[TViewModel], object):
     __slots__ = ('_viewModel', '_isLoaded')
 
     def __init__(self, viewModel):

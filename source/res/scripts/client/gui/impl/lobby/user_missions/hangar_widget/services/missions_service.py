@@ -18,7 +18,8 @@ class MissionsService(IMissionsService, ServiceEvents):
         self._onMissionsChangedEvent()
 
     def isVisible(self):
-        return umgConfigSchema.getModel().enableAllDaily and self.__hangarGuiCtrl.currentGuiProvider.getMissionsHelper().isDailyMissionsSupported()
+        helper = self.__hangarGuiCtrl.currentGuiProvider.getMissionsHelper()
+        return umgConfigSchema.getModel().enableAllDaily and helper is not None and helper.isDailyMissionsSupported()
 
     def startListening(self):
         self.startGlobalListening()

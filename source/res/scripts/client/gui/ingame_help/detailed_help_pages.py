@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/ingame_help/detailed_help_pages.py
+from __future__ import absolute_import
 import logging
 import typing
+from itertools import chain
 import CommandMapping
 from constants import ARENA_GUI_TYPE, ARENA_BONUS_TYPE, ROLE_TYPE, ACTION_TYPE_TO_LABEL, ROLE_TYPE_TO_LABEL
 from gui import makeHtmlString
@@ -17,7 +19,7 @@ from nations import NAMES as NATIONS_NAMES
 from shared_utils import findFirst
 from soft_exception import SoftException
 from vehicles.mechanics.mechanic_constants import VehicleMechanic
-from vehicles.mechanics.mechanic_info import getVehicleMechanics, hasVehicleMechanic
+from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic, getVehicleMechanicsComponents
 if typing.TYPE_CHECKING:
     from skeletons.gui.battle_session import IClientArenaVisitor
     from Vehicle import Vehicle
@@ -297,7 +299,7 @@ class PillboxSiegePagesBuilder(DetailedHelpPagesBuilder):
 
     @classmethod
     def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
-        ctx['hasPillboxMode'] = hasVehicleMechanic(vehicle.typeDescriptor, VehicleMechanic.PILLBOX_SIEGE_MODE)
+        ctx['hasPillboxMode'] = hasVehicleDescrMechanic(vehicle.typeDescriptor, VehicleMechanic.PILLBOX_SIEGE_MODE)
 
 
 class RoleTypePagesBuilder(DetailedHelpPagesBuilder):
@@ -383,7 +385,9 @@ class MechanicsPagesBuilder(DetailedHelpPagesBuilder):
      VehicleMechanic.CHARGE_SHOT.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, None),
      VehicleMechanic.STANCE_DANCE.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, CommandMapping.CMD_CM_SPECIAL_ABILITY),
      VehicleMechanic.TARGET_DESIGNATOR.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, None),
-     VehicleMechanic.STATIONARY_RELOAD.value: (CommandMapping.CMD_RELOAD_PARTIAL_CLIP, None)}
+     VehicleMechanic.STATIONARY_RELOAD.value: (CommandMapping.CMD_RELOAD_PARTIAL_CLIP, None),
+     VehicleMechanic.STAGED_JET_BOOSTERS.value: (CommandMapping.CMD_CM_SPECIAL_ABILITY, None)}
+    _VEHICLE_MECHANIC_PRIORITIES = (((VehicleMechanic.AUTO_SHOOT_GUN, VehicleMechanic.OVERHEAT_GUN), (VehicleMechanic.AUTO_SHOOT_GUN,)),)
 
     @classmethod
     def priority(cls):
@@ -394,8 +398,11 @@ class MechanicsPagesBuilder(DetailedHelpPagesBuilder):
         pages = []
         headerTitle = buildTitle(ctx)
         mechanics = ctx.get('vehicleMechanics')
-        for mechanic in mechanics:
-            mechanicValue = mechanic.value
+        orderedMechanics = list(filter(None, (findFirst(mechanics.issuperset, mechanicKeys) for mechanicKeys in cls._VEHICLE_MECHANIC_PRIORITIES)))
+        orderedMechanicsValues = [ '_'.join((mechanic.value for mechanic in key)) for key in orderedMechanics ]
+        unorderedMechanics = mechanics.difference(chain.from_iterable(orderedMechanics))
+        unorderedMechanicsValues = [ mechanic.value for mechanic in unorderedMechanics ]
+        for mechanicValue in orderedMechanicsValues + unorderedMechanicsValues:
             iconsRoot = R.images.gui.maps.icons.battleHelp.mechanics.dyn(mechanicValue)
             localsRoot = R.strings.ingame_help.detailsHelp.mechanics.dyn(mechanicValue)
             keys = cls._VEHICLE_MECHANIC_KEYS.get(mechanicValue, (None, None))
@@ -407,7 +414,7 @@ class MechanicsPagesBuilder(DetailedHelpPagesBuilder):
 
     @classmethod
     def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
-        ctx['vehicleMechanics'] = getVehicleMechanics(vehicle.typeDescriptor)
+        ctx['vehicleMechanics'] = set(getVehicleMechanicsComponents(vehicle))
         ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or bool(ctx['vehicleMechanics'])
 
 

@@ -5,6 +5,7 @@ import WWISE
 from CurrentVehicle import g_currentVehicle
 from frameworks.wulf import ViewSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.customization.shared import isVehicleCanBeCustomized
 from gui.impl import backport
 from gui.impl.gen.view_models.views.lobby.customization.style_unlocked_view.style_unlocked_view_model import StyleUnlockedViewModel
@@ -14,10 +15,7 @@ from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.impl.gen import R
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS
-from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import ViewEventType
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency, int2roman
 from items.components.c11n_constants import UNBOUND_VEH_KEY
@@ -69,7 +67,8 @@ class StyleUnlockedView(ViewImpl):
         self.viewModel.onOkClick += self.__onOkClick
         self.viewModel.onSecondaryClick += self.__onShowC11nClick
         self.viewModel.onAnimationSound += self.__onAnimationSound
-        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self.__loadViewHandler, EVENT_BUS_SCOPE.LOBBY)
+        lsm = getLobbyStateMachine()
+        lsm.onVisibleRouteChanged += self.__onVisibleRouteChanged
         g_clientUpdateManager.addCallbacks({'inventory': self._updateC11nButton})
         g_clientUpdateManager.addCallbacks({'cache.vehsLock': self._updateC11nButton})
 
@@ -77,7 +76,8 @@ class StyleUnlockedView(ViewImpl):
         self.viewModel.onOkClick -= self.__onOkClick
         self.viewModel.onSecondaryClick -= self.__onShowC11nClick
         self.viewModel.onAnimationSound -= self.__onAnimationSound
-        g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self.__loadViewHandler, EVENT_BUS_SCOPE.LOBBY)
+        lsm = getLobbyStateMachine()
+        lsm.onVisibleRouteChanged -= self.__onVisibleRouteChanged
         g_clientUpdateManager.removeObjectCallbacks(self)
 
     def __setVehicleInfo(self, model):
@@ -85,10 +85,13 @@ class StyleUnlockedView(ViewImpl):
         model.setTankTypeIcon(self.__vehicle.typeBigIconResource())
         model.setTankLevel(int2roman(self.__vehicle.level))
 
-    def __loadViewHandler(self, event):
-        if event.alias in (VIEW_ALIAS.LOBBY_HANGAR, VIEW_ALIAS.LEGACY_LOBBY_HANGAR):
+    def __onVisibleRouteChanged(self, routeInfo):
+        from gui.lobby_state_machine.states import isHangarState
+        from gui.Scaleform.daapi.view.lobby.vehicle_preview.states import HeroTankPreviewState
+        from gui.Scaleform.daapi.view.lobby.battle_queue.states import CommonBattleQueueState
+        if isHangarState(routeInfo.state):
             self._updateC11nButton()
-        elif event.alias in (VIEW_ALIAS.HERO_VEHICLE_PREVIEW, VIEW_ALIAS.BATTLE_QUEUE):
+        elif isinstance(routeInfo.state, (HeroTankPreviewState, CommonBattleQueueState)):
             self.__updateC11nButton(lock=True)
 
     @replaceNoneKwargsModel

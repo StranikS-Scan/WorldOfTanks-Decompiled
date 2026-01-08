@@ -1,0 +1,418 @@
+<Ch70_PTZ_78_modifications.xml>
+  <ch70_node1>
+    <id>	12101	</id>
+    <imgName>	standardShellPenetration	</imgName>
+    <locName>	standardShellPenetration	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot0/piercingPower	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	standardShellPenetration	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </ch70_node1>
+  <ch70_node2>
+    <id>	12102	</id>
+    <imgName>	enginePenalty	</imgName>
+    <locName>	enginePenalty	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/engineReduceFineFactor	</name>
+        <value>	0.8	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehPenaltyForDamagedEngine	</name>
+        <value>	0.8	</value>
+      </mul>
+    </kpi>
+  </ch70_node2>
+  <ch70_node3>
+    <id>	12103	</id>
+    <imgName>	ammoRackPenalty	</imgName>
+    <locName>	ammoRackPenalty	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/ammoBayReduceFineFactor	</name>
+        <value>	0.8	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehPenaltyForDamagedAmmorack	</name>
+        <value>	0.8	</value>
+      </mul>
+    </kpi>
+  </ch70_node3>
+  <ch70_node4>
+    <id>	12104	</id>
+    <imgName>	gunDispersion	</imgName>
+    <locName>	gunDispersion	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gun/shotDispersionRadius	</name>
+        <value>	-0.01	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleGunShotFullDispersion	</name>
+        <value>	-0.01	</value>
+      </add>
+    </kpi>
+  </ch70_node4>
+  <ch70_node5>
+    <id>	12105	</id>
+    <imgName>	additionalShellAmmoCapacity	</imgName>
+    <locName>	additionalShellAmmoCapacity	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gun/maxAmmo	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	additionalShellAmmoCapacity	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </ch70_node5>
+  <ch70_node6>
+    <id>	12106	</id>
+    <imgName>	gunElevation	</imgName>
+    <locName>	gunElevation	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gunPitchLimits/minPitchDegrees	</name>
+        <value>	-1	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	gunElevation	</name>
+        <value>	1	</value>
+      </add>
+    </kpi>
+  </ch70_node6>
+  <ch70_node8>
+    <id>	12108	</id>
+    <imgName>	ch70_mechanic_0	</imgName>
+    <locName>	ch70_mechanic_0	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <mul>
+        <name>	dynAttrs/engine/power	</name>
+        <value>	1.1	</value>
+        <filter>	stagedJetBoosters	</filter>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	value	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </ch70_node8>
+  <ch70_node9>
+    <id>	12109	</id>
+    <imgName>	ch70_mechanic_1	</imgName>
+    <locName>	ch70_mechanic_1	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <add>
+        <name>	miscAttrs/stagedJetBoosters/reloadTime	</name>
+        <value>	-3	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	-3	</value>
+      </add>
+    </kpi>
+  </ch70_node9>
+  <ch70_node10>
+    <id>	12110	</id>
+    <imgName>	engineFireChance	</imgName>
+    <locName>	engineFireChance	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	descrAttrs/engine/fireStartingChance	</name>
+        <value>	0.85	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleFireChance	</name>
+        <value>	0.85	</value>
+      </mul>
+    </kpi>
+  </ch70_node10>
+  <ch70_node11>
+    <id>	12111	</id>
+    <imgName>	chassisHP	</imgName>
+    <locName>	chassisHP	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/chassisHealthFactor	</name>
+        <value>	1.2	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleChassisStrength	</name>
+        <value>	1.2	</value>
+      </mul>
+    </kpi>
+  </ch70_node11>
+  <ch70_node12>
+    <id>	12112	</id>
+    <imgName>	specialShellPenetration	</imgName>
+    <locName>	specialShellPenetration	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot1/piercingPower	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	specialShellPenetration	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </ch70_node12>
+  <ch70_node13>
+    <id>	12113	</id>
+    <imgName>	hitPoints	</imgName>
+    <locName>	hitPoints	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/hull/maxHealth	</name>
+        <value>	50	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleStrength	</name>
+        <value>	50	</value>
+      </add>
+    </kpi>
+  </ch70_node13>
+  <ch70_node15>
+    <id>	12115	</id>
+    <imgName>	aimingTime	</imgName>
+    <locName>	aimingTime	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gun/aimingTime	</name>
+        <value>	-0.1	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleGunAimSpeed	</name>
+        <value>	-0.1	</value>
+      </add>
+    </kpi>
+  </ch70_node15>
+  <ch70_node16>
+    <id>	12116	</id>
+    <imgName>	basicShellDamage	</imgName>
+    <locName>	basicShellDamage	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shell0/armorDamage	</name>
+        <value>	10	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	basicShellDamage	</name>
+        <value>	10	</value>
+      </add>
+    </kpi>
+  </ch70_node16>
+  <ch70_node17>
+    <id>	12117	</id>
+    <imgName>	gunDepression	</imgName>
+    <locName>	gunDepression	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gunPitchLimits/maxPitchDegrees	</name>
+        <value>	1	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	gunDepression	</name>
+        <value>	-1	</value>
+      </add>
+    </kpi>
+  </ch70_node17>
+  <ch70_node18>
+    <id>	12118	</id>
+    <imgName>	ch70_mechanic_2	</imgName>
+    <locName>	ch70_mechanic_2	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <mul>
+        <name>	dynAttrs/engine/power	</name>
+        <value>	1.1	</value>
+        <filter>	stagedJetBoosters	</filter>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	value	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </ch70_node18>
+  <ch70_node19>
+    <id>	12119	</id>
+    <imgName>	gunTraverse	</imgName>
+    <locName>	gunTraverse	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gun/turretYawLimitsDegrees	</name>
+        <value>	1	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	gunTraverse	</name>
+        <value>	1	</value>
+      </add>
+    </kpi>
+  </ch70_node19>
+  <ch70_node20>
+    <id>	12120	</id>
+    <imgName>	specialShellDamage	</imgName>
+    <locName>	specialShellDamage	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shell1/armorDamage	</name>
+        <value>	10	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	specialShellDamage	</name>
+        <value>	10	</value>
+      </add>
+    </kpi>
+  </ch70_node20>
+  <ch70_node22>
+    <id>	12122	</id>
+    <imgName>	standardShellVelocity	</imgName>
+    <locName>	standardShellVelocity	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot0/speed	</name>
+        <value>	40	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	standardShellVelocity	</name>
+        <value>	40	</value>
+      </add>
+    </kpi>
+  </ch70_node22>
+  <ch70_node23>
+    <id>	12123	</id>
+    <imgName>	damagedGunDispersion	</imgName>
+    <locName>	damagedGunDispersion	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/gun/shotDispersionFactors/whileGunDamaged	</name>
+        <value>	0.8	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersionWhileGunDamaged	</name>
+        <value>	0.8	</value>
+      </mul>
+    </kpi>
+  </ch70_node23>
+  <ch70_node24>
+    <id>	12124	</id>
+    <imgName>	specialShellVelocity	</imgName>
+    <locName>	specialShellVelocity	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot1/speed	</name>
+        <value>	40	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	specialShellVelocity	</name>
+        <value>	40	</value>
+      </add>
+    </kpi>
+  </ch70_node24>
+  <ch70_node25>
+    <id>	12125	</id>
+    <imgName>	hitPoints	</imgName>
+    <locName>	hitPoints	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/hull/maxHealth	</name>
+        <value>	50	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleStrength	</name>
+        <value>	50	</value>
+      </add>
+    </kpi>
+  </ch70_node25>
+  <ch70_node26>
+    <id>	12126	</id>
+    <imgName>	ch70_mechanic_3	</imgName>
+    <locName>	ch70_mechanic_3	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <add>
+        <name>	miscAttrs/stagedJetBoosters/reuseCount	</name>
+        <value>	2	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	2	</value>
+      </add>
+    </kpi>
+  </ch70_node26>
+</Ch70_PTZ_78_modifications.xml>

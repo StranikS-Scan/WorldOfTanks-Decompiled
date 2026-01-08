@@ -91,7 +91,8 @@ class BuyPassPresenter(ViewComponent[BattlePassBuyViewModel]):
 
     def _onLoading(self, *args, **kwargs):
         super(BuyPassPresenter, self)._onLoading(*args, **kwargs)
-        self.__packages = generatePackages(battlePass=self.__battlePass)
+        if not self.__battlePass.isHoliday():
+            self.__packages = generatePackages(battlePass=self.__battlePass)
         self.__setGeneralFields()
         self.__setPackages()
         if g_BPBuyViewStates.chapterID != WINDOW_IS_NOT_OPENED:

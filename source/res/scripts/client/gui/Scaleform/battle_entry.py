@@ -4,7 +4,7 @@ import weakref
 import BigWorld
 from frameworks.wulf import WindowLayer
 from gui import DEPTH_OF_Battle
-from gui.shared.system_factory import collectBattleTooltipsBuilders
+from gui.shared.system_factory import collectBattleEntry, collectBattleTooltipsBuilders
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
 from gui.Scaleform.flash_wrapper import InputKeyMode
 from gui.Scaleform.framework.managers.TutorialManager import ScaleformTutorialManager
@@ -59,7 +59,7 @@ class TopWindowContainer(PopUpContainer):
 class BattleEntry(AppEntry):
 
     def __init__(self, appNS, ctrlModeFlags, arenaGuiType):
-        super(BattleEntry, self).__init__(R.entries.battle(), appNS, ctrlModeFlags, daapiBridge=DAAPIRootBridge(initCallback='registerBattleTest'))
+        super(BattleEntry, self).__init__(collectBattleEntry(arenaGuiType) or R.entries.default.battle(), appNS, ctrlModeFlags, daapiBridge=DAAPIRootBridge(initCallback='registerBattleTest'))
         self._arenaGuiType = arenaGuiType
         self.__input = None
         return

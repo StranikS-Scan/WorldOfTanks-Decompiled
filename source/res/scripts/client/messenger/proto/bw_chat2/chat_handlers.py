@@ -443,8 +443,8 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
         self.battleCommunications.onChanged -= self.__onBattleCommunicationSettingsChanged
         super(BattleChatCommandHandler, self).unregisterHandlers()
 
-    def createByName(self, name):
-        return self.__factory.createByName(name)
+    def createByName(self, name, args=None):
+        return self.__factory.createByName(name, args)
 
     def createSPGAimTargetCommand(self, targetID, reloadTime):
         return self.__factory.createSPGAimTargetCommand(targetID, reloadTime)

@@ -32,8 +32,8 @@ from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
 SOUND_NAME = 'comp_7_whatsnew_appear'
-RENT_VEHICLES_CDS = [67841, 38161, 24145]
-NEW_VEHICLES_CDS = [65569, 9297]
+RENT_VEHICLES_CDS = [25425, 68097, 56417]
+NEW_VEHICLES_CDS = [60977]
 
 class WhatsNewView(ViewImpl, IGlobalListener):
     __slots__ = ()

@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 import typing
 from frontline.constants.common import BATTLE_ABILITY_GROUP_INDEX
-from frontline.gui.frontline_helpers import AbilitiesTemplates
+from frontline.gui.frontline_helpers import AbilitiesTemplates, getFrontlineState
 from frontline.gui.frontline_helpers import getSkillParams
 from frontline.gui.impl.gen.view_models.views.lobby.components.loadout.battle_abilities_setup_model import BattleAbilitiesSetupModel
 from frontline.gui.impl.gen.view_models.views.lobby.components.loadout.battle_ability_details import BattleAbilityDetails
@@ -30,7 +30,6 @@ from helpers import dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.shared import IItemsCache
 from wg_async import wg_async, await_callback
-from frontline.gui.frontline_helpers import isFinishedCycleState
 if typing.TYPE_CHECKING:
     from gui.impl.lobby.tank_setup.interactors.base import InteractingItem
 TEMPLATES = AbilitiesTemplates(R.strings.fl_battle_abilities_setup.infoPanel.param.valueTemplate)
@@ -49,6 +48,7 @@ class FrontlineAbilityPresenter(LoadoutPresenterBase[BattleAbilitiesSetupModel])
         self._itemDetailsLevelMap = {}
         self._totalPurchasePrice = 0
         self._selectedSlotId = 0
+        self.__gameModeStatus, _, _ = getFrontlineState()
         self.__epicSkills = self.__epicController.getEpicSkills()
         self.__slotSelectionObserver = slotSelectionObserver
 
@@ -89,6 +89,7 @@ class FrontlineAbilityPresenter(LoadoutPresenterBase[BattleAbilitiesSetupModel])
     def _getEvents(self):
         return super(FrontlineAbilityPresenter, self)._getEvents() + ((self.__epicController.onUpdated, self.__onEpicUpdated),
          (self.__epicController.onBattleAbilitiesUpdated, self.__onBattleAbilitiesUpdated),
+         (self.__epicController.onGameModeStatusTick, self.__onGameModeStatusChange),
          (self.getViewModel().onApplyToTypeChanged, self.__onApplyToTypeChanged),
          (self.getViewModel().onCurrentAbilityLevelChanged, self.__onCurrentAbilityLevelChanged),
          (g_currentVehicle.onChanged, self.__onChangedVehicle),
@@ -113,8 +114,8 @@ class FrontlineAbilityPresenter(LoadoutPresenterBase[BattleAbilitiesSetupModel])
         with self.getViewModel().transaction() as vm:
             dataProvider.fillArray(vm.getSlots(), BaseVehSectionContext(self._currentSlotIndex))
             vehicle = g_currentVehicle.item
+            vm.setModeState(self.__gameModeStatus.value)
             vm.setVehicleType(vehicle.type)
-            vm.setIsCycleFinished(isFinishedCycleState())
             vm.setIsTypeSelected(False)
             vm.setPointsAmount(self.__epicController.getSkillPoints())
             vm.setTotalPurchasePrice(self._totalPurchasePrice)
@@ -230,3 +231,9 @@ class FrontlineAbilityPresenter(LoadoutPresenterBase[BattleAbilitiesSetupModel])
 
     def __getCurrentLayoutItem(self, slotId):
         return self._interactor.getCurrentLayout()[slotId]
+
+    def __onGameModeStatusChange(self):
+        state, _, _ = getFrontlineState()
+        if self.__gameModeStatus != state:
+            self.__gameModeStatus = state
+            self._update()

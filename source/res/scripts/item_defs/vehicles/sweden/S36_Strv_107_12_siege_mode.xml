@@ -22,6 +22,9 @@
     <camouflageNet>
       <invisibilityBonus>	0.15 0.175	</invisibilityBonus>
     </camouflageNet>
+    <deluxeCamouflageNet>
+      <invisibilityBonus>	0.175	</invisibilityBonus>
+    </deluxeCamouflageNet>
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.05 0.06	</invisibilityBonus>
     </additionalInvisibilityDevice>
@@ -1651,10 +1654,10 @@
   </physics>
   <mechanics>
     <pillboxSiegeMode>
-      <switchDriveToPillboxTime>	8.0	</switchDriveToPillboxTime>
-      <switchSiegeToPillboxTime>	6.0	</switchSiegeToPillboxTime>
-      <switchPillboxToSiegeTime>	4	</switchPillboxToSiegeTime>
-      <switchPillboxToDriveTime>	5	</switchPillboxToDriveTime>
+      <switchDriveToPillboxTime>	5.0	</switchDriveToPillboxTime>
+      <switchSiegeToPillboxTime>	3.0	</switchSiegeToPillboxTime>
+      <switchPillboxToSiegeTime>	3	</switchPillboxToSiegeTime>
+      <switchPillboxToDriveTime>	4	</switchPillboxToDriveTime>
       <modifiers>
         <mul>
           <name>	dynAttrs/vehicle/maxSpeed/forward	</name>
@@ -1674,11 +1677,11 @@
         </mul>
         <mul>
           <name>	dynAttrs/gun/reloadTime	</name>
-          <value>	0.95	</value>
+          <value>	0.925	</value>
         </mul>
         <mul>
           <name>	dynAttrs/multShotDispersionFactor	</name>
-          <value>	0.9	</value>
+          <value>	0.85	</value>
         </mul>
       </modifiers>
     </pillboxSiegeMode>

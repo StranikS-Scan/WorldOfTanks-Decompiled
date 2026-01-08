@@ -57,3 +57,41 @@ def memoized_method(method=None, isClassCache=False, external=None, key=None):
             return result
 
         return wrapper
+
+
+_ZERO_REVISION = 0
+_REVISIONS_LOOP = 10
+
+class _Nonlocal(object):
+
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+
+
+def last_cached_method(key=None):
+
+    def decorator(method):
+        nonLocal = _Nonlocal(revision=_ZERO_REVISION)
+        nonLocal.revision = _ZERO_REVISION
+
+        @wraps(method)
+        def wrapper(this, *args):
+            cache = getattr(this, '__cache__', None)
+            if cache is None or cache['__revision__'] != nonLocal.revision:
+                cache = this.__cache__ = {'__revision__': nonLocal.revision}
+            currentKey = key(*args) if callable(key) else args
+            storedKey, storedResult = cache.get(method.__name__, (NotMemoized, None))
+            if currentKey == storedKey:
+                return storedResult
+            else:
+                lastResult = method(this, *args)
+                cache[method.__name__] = (currentKey, lastResult)
+                return lastResult
+
+        def reset():
+            nonLocal.revision = (nonLocal.revision + 1) % _REVISIONS_LOOP
+
+        wrapper.reset = reset
+        return wrapper
+
+    return decorator

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/wg_async.py
+from future.utils import raise_
 import sys
 import time
 import weakref
@@ -370,7 +371,7 @@ class _Promise(object):
                     self.__future.set_result(_BrokenPromiseResult())
         elif not self.__future_set and self.__exc_info is not None:
             try:
-                raise self.__exc_info[0], self.__exc_info[1], self.__exc_info[2]
+                raise_(self.__exc_info[0], self.__exc_info[1], self.__exc_info[2])
             except:
                 LOG_CURRENT_EXCEPTION()
 
@@ -438,7 +439,7 @@ class _FulfilledPromiseResult(object):
     def get(self):
         exc_info = self.__exc_info
         if exc_info is not None:
-            raise exc_info[0], exc_info[1], exc_info[2]
+            raise_(exc_info[0], exc_info[1], exc_info[2])
         return self.__value
 
 

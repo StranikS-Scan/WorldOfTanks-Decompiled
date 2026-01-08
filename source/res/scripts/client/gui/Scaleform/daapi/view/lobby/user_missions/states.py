@@ -37,12 +37,19 @@ class UserMissionsState(SFViewLobbyState, EventsHandler):
         super(UserMissionsState, self).__init__(flags=flags)
         self.__cachedParams = {}
 
+    @classmethod
+    def goTo(cls, tab=None, subTab=None, eventID=None, groupID=None, marathonPrefix=None, anchor=None, showMissionDetails=None, questId=None):
+        super(UserMissionsState, cls).goTo(tab=tab, subTab=subTab, eventID=eventID, groupID=groupID, marathonPrefix=marathonPrefix, anchor=anchor, showMissionDetails=showMissionDetails, questId=questId)
+
     def registerStates(self):
-        self.addChildState(_BasicMissionTab(StateFlags.INITIAL))
+        self.addChildState(_EntryState(StateFlags.INITIAL))
+        self.addChildState(_BasicMissionTab())
         self.addChildState(_CommonMissionTab())
 
     def registerTransitions(self):
         self.addNavigationTransition(self, TransitionType.EXTERNAL)
+        for state in self.getChildrenStates():
+            self.addNavigationTransition(state)
 
     def serializeParams(self):
         return self.__cachedParams
@@ -54,7 +61,10 @@ class UserMissionsState(SFViewLobbyState, EventsHandler):
         super(UserMissionsState, self)._onEntered(event)
         self._subscribe()
         self.__cachedParams = event.params
-        g_eventBus.handleEvent(UserMissionsEvent(UserMissionsEvent.TRANSITION_TO_MISSION, tabID=event.params.get('tab'), questId=event.params.get('questId'), showMissionDetails=event.params.get('showMissionDetails'), eventID=event.params.get('eventID'), groupID=event.params.get('groupID')), EVENT_BUS_SCOPE.LOBBY)
+        targetTab = event.params.get('tab')
+        childState = first(self.getChildren(lambda n: isinstance(n, MISSION_TABS) and n.TAB_ID == targetTab))
+        if childState:
+            childState.goTo(**self.__cachedParams)
 
     def _onExited(self):
         super(UserMissionsState, self)._onExited()
@@ -66,9 +76,15 @@ class UserMissionsState(SFViewLobbyState, EventsHandler):
 
     def __onTabChanged(self, event):
         self.__cachedParams['tab'] = event.tabID
-        childState = first(self.getChildren(lambda n: isinstance(n, MISSION_TABS) and n.TAB_ID == event.tabID))
+        targetTab = event.tabID
+        childState = first(self.getChildren(lambda n: isinstance(n, MISSION_TABS) and n.TAB_ID == targetTab))
         if childState:
-            childState.goTo()
+            childState.goTo(**self.__cachedParams)
+
+
+@UserMissionsState.parentOf
+class _EntryState(LobbyState):
+    STATE_ID = 'entry'
 
 
 @UserMissionsState.parentOf
@@ -78,9 +94,10 @@ class _BasicMissionTab(LobbyState):
     LOBBY_STATE_DESCR = LobbyStateDescription(title=backport.text(R.strings.pages.titles.userMissions()), infos=(LobbyStateDescription.Info(tooltipHeader=backport.text(R.strings.user_missions.tooltip.hub.info_button.header()), tooltipBody=backport.text(R.strings.user_missions.tooltip.hub.info_button.body()), onMoreInfoRequested=_onMoreInfoRequested),))
 
     def registerTransitions(self):
+        from gui.Scaleform.daapi.view.lobby.store.browser.states import ShopState
         lsm = self.getMachine()
-        commonTab = lsm.getStateByCls(_CommonMissionTab)
-        self.addNavigationTransition(commonTab)
+        self.addNavigationTransition(lsm.getStateByCls(_CommonMissionTab))
+        self.addNavigationTransition(lsm.getStateByCls(ShopState), record=True)
 
     def getNavigationDescription(self):
         return self.LOBBY_STATE_DESCR
@@ -92,13 +109,27 @@ class _CommonMissionTab(LobbyState):
     TAB_ID = TabId.COMMON
     LOBBY_STATE_DESCR = LobbyStateDescription(title=backport.text(R.strings.pages.titles.userMissions()))
 
+    def __init__(self, flags=StateFlags.UNDEFINED):
+        super(_CommonMissionTab, self).__init__(flags=flags)
+        self.__cachedParams = {}
+
     def getNavigationDescription(self):
         return self.LOBBY_STATE_DESCR
 
     def registerTransitions(self):
+        from gui.Scaleform.daapi.view.lobby.store.browser.states import ShopState
         lsm = self.getMachine()
-        basicTab = lsm.getStateByCls(_BasicMissionTab)
-        self.addNavigationTransition(basicTab)
+        self.addNavigationTransition(lsm.getStateByCls(_BasicMissionTab))
+        self.addNavigationTransition(lsm.getStateByCls(ShopState), record=True)
+
+    def _onEntered(self, event):
+        super(_CommonMissionTab, self)._onEntered(event)
+        self.__cachedParams = event.params
+        g_eventBus.handleEvent(UserMissionsEvent(UserMissionsEvent.TRANSITION_TO_MISSION, tabID=event.params.get('tab'), questId=event.params.get('questId'), showMissionDetails=event.params.get('showMissionDetails'), eventID=event.params.get('eventID'), groupID=event.params.get('groupID')), EVENT_BUS_SCOPE.LOBBY)
+
+    def _onExited(self):
+        super(_CommonMissionTab, self)._onExited()
+        self.__cachedParams = {}
 
 
 MISSION_TABS = (_BasicMissionTab, _CommonMissionTab)

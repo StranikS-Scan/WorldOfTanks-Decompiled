@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/helpers.py
+import time
 import typing
 from constants import INVOICE_EMITTER
 from achievements20.cache import getCache as getAchievementsCache
 from debug_utils import LOG_SENTRY
 from dossiers2.custom.records import RECORDS, RECORD_INDICES, RECORD_DB_IDS, DB_ID_TO_RECORD
 from dossiers2.custom.cache import getCache
+from dossiers2.custom.collector20 import getCollector20Config, COLLECTOR20_MEDAL_ID, COLLECTOR20_BADGE_IDS
 from nations import ALL_NATIONS_INDEX
 from optional_bonuses import BONUS_MERGERS
 
@@ -66,6 +68,10 @@ def getAllCollectorVehicles(nationID=ALL_NATIONS_INDEX):
     return collectorVehicles
 
 
+def getCollector20Requirements(inventoryVehicles):
+    return getCollector20Config() - inventoryVehicles
+
+
 def getRecordMaxValue(block, record):
     recordPacking = RECORDS[RECORD_INDICES[block, record]]
     return 1 if recordPacking[2] == 'b' or recordPacking[2] == 'bs' else recordPacking[4]
@@ -96,6 +102,22 @@ def updateVehicleCollector(dossierDescr, inventoryVehicles, nationID):
             if not dossierDescr['achievements'][record]:
                 dossierDescr['achievements'][record] = True
                 dossierDescr.addPopUp('achievements', record, True)
+
+
+def updateVehicleCollector20(dossierDescr, inventoryVehicles):
+    if COLLECTOR20_MEDAL_ID in dossierDescr['singleAchievements']:
+        return
+    reqs = getCollector20Requirements(inventoryVehicles)
+    if reqs:
+        return
+    dossierDescr['singleAchievements'][COLLECTOR20_MEDAL_ID] = 1
+    dossierDescr.addPopUp('singleAchievements', COLLECTOR20_MEDAL_ID, 1)
+    for badgeID in COLLECTOR20_BADGE_IDS:
+        if badgeID in dossierDescr['playerBadges']:
+            continue
+        value = int(time.time())
+        dossierDescr['playerBadges'][badgeID] = value
+        dossierDescr.addPopUp('playerBadges', badgeID, value)
 
 
 def updateVehicleBoughtListAchievements(dossierDescr, vehDescr):

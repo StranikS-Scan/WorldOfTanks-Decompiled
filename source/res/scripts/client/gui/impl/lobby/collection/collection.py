@@ -4,7 +4,6 @@ import logging
 import typing
 from frameworks.wulf import WindowFlags
 from gui.Scaleform.Waiting import Waiting
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.profile.sound_constants import ACHIEVEMENTS_SOUND_SPACE
 from gui.collection.account_settings import getShownNewItemsCount, isItemNew, isRewardNew, isTutorialCompleted, setCollectionRenewSeen, setCollectionTutorialCompleted, setItemShown, setRewardShown, setShownNewItemsCount
 from gui.collection.collections_helpers import composeBonuses, getItemResKey, setHangarState
@@ -227,7 +226,7 @@ class CollectionView(ViewComponent):
 
     @replaceNoneKwargsModel
     def __fillRewardsInfo(self, model=None):
-        rewardItems = sorted(self.__collection.rewards.items(), key=lambda (reqCount, _): reqCount)
+        rewardItems = sorted(self.__collection.rewards.items(), key=lambda it: it[0])
         rewardInfoModels = model.getRewardsInfo()
         rewardInfoModels.clear()
         self.__rewardTooltips.clear()
@@ -311,8 +310,9 @@ class CollectionView(ViewComponent):
             _logger.warning('Resource: %s not found', '/'.join((group, sub, name)))
         return path
 
-    def __onHeaderMenuClick(self, event):
-        if event.ctx.get('alias') in (VIEW_ALIAS.LOBBY_HANGAR, VIEW_ALIAS.LEGACY_LOBBY_HANGAR):
+    def __onHeaderMenuClick(self, _):
+        from gui.lobby_state_machine.states import isInHangarState
+        if isInHangarState():
             setHangarState()
         self.destroyWindow()
 

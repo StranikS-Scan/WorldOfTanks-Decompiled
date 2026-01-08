@@ -7,6 +7,7 @@ import typing
 import constants
 from debug_utils import LOG_WARNING
 from gui import SystemMessages
+from gui.impl.lobby.personal_missions_30.personal_mission_constants import MAX_DETAIL_ID
 from gui.ranked_battles.ranked_helpers import isRankedQuestID
 from gui.Scaleform.daapi.view.lobby.missions import cards_formatters
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import CurtailingAwardsComposer, AwardsWindowComposer, DetailedCardAwardComposer, PersonalMissionsAwardComposer
@@ -42,6 +43,7 @@ from helpers.i18n import makeString as _ms
 from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME, PERSONAL_MISSION_REGULAR_MIN_LEVEL
 from quest_xml_source import MAX_BONUS_LIMIT
 from shared_utils import first
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IEpicBattleMetaGameController
@@ -1457,3 +1459,10 @@ def processPM3Operation(branch, operation, isFirstTimeEntrance=False, callback=N
     if callback is not None:
         callback(result)
     return
+
+
+@dependency.replace_none_kwargs(settings=ISettingsCore)
+def getCurrentOperationLastInstalledDetail(operation, settings=None):
+    if operation.isCompleted():
+        return MAX_DETAIL_ID
+    return 0 if not operation.isStarted() else settings.serverSettings.getPM3InstalledVehDetails()

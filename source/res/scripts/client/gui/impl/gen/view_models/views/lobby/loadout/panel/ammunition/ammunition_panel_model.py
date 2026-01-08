@@ -7,7 +7,7 @@ class AmmunitionPanelModel(ViewModel):
     __slots__ = ('onChangeSetupIndex', 'onOpenSlotSpecDialog')
     NO_SLOT_SELECTED = -1
 
-    def __init__(self, properties=5, commands=2):
+    def __init__(self, properties=6, commands=2):
         super(AmmunitionPanelModel, self).__init__(properties=properties, commands=commands)
 
     def getGroups(self):
@@ -44,6 +44,12 @@ class AmmunitionPanelModel(ViewModel):
     def setVehicleId(self, value):
         self._setString(4, value)
 
+    def getHasVehSkillTree(self):
+        return self._getBool(5)
+
+    def setHasVehSkillTree(self, value):
+        self._setBool(5, value)
+
     def _initialize(self):
         super(AmmunitionPanelModel, self)._initialize()
         self._addArrayProperty('groups', Array())
@@ -51,5 +57,6 @@ class AmmunitionPanelModel(ViewModel):
         self._addNumberProperty('selectedSlot', -1)
         self._addStringProperty('selectedSection', '')
         self._addStringProperty('vehicleId', '')
+        self._addBoolProperty('hasVehSkillTree', False)
         self.onChangeSetupIndex = self._addCommand('onChangeSetupIndex')
         self.onOpenSlotSpecDialog = self._addCommand('onOpenSlotSpecDialog')

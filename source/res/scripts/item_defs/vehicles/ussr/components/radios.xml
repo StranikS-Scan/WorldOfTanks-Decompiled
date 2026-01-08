@@ -62,6 +62,9 @@
     <R_123B>	234	</R_123B>
     <R_123C>	235	</R_123C>
     <R_123KR>	236	</R_123KR>
+    <RTY_RCEHb_CFE_T>	238	</RTY_RCEHb_CFE_T>
+    <RTY_RCEHb_A>	240	</RTY_RCEHb_A>
+    <R_123_1476>	241	</R_123_1476>
     <_10RK_IGR>	60001	</_10RK_IGR>
     <_12RT_IGR>	60002	</_12RT_IGR>
     <R113_IGR>	60003	</R113_IGR>
@@ -74,6 +77,7 @@
     <_10RK-26_7x7>	502	</_10RK-26_7x7>
     <R113M_7x7>	503	</R113M_7x7>
     <_10RK-26_c_7x7>	504	</_10RK-26_c_7x7>
+    <R113M_c_7x7>	505	</R113M_c_7x7>
     <Development_Radio>	65000	</Development_Radio>
     <_9RM_MapsTraining_Dummy_LT_1>	12	</_9RM_MapsTraining_Dummy_LT_1>
     <_12LL_MapsTraining_Dummy_SPG_1>	33	</_12LL_MapsTraining_Dummy_SPG_1>
@@ -506,6 +510,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </R113M_7x7>
+    <R113M_c_7x7>
+      <userString>	#ussr_vehicles:R113M_c_7x7	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52200	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R113M_c_7x7>
     <R113A>
       <userString>	#ussr_vehicles:R113A	</userString>
       <tags></tags>
@@ -648,6 +664,18 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </R123>
+    <R_123_1476>
+      <userString>	#ussr_vehicles:R_123_1476	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <notInShop>	true	</notInShop>
+      <price>	40000	</price>
+      <weight>	100	</weight>
+      <distance>	670	</distance>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R_123_1476>
     <R_123KR>
       <userString>	#ussr_vehicles:R_123KR	</userString>
       <tags></tags>
@@ -756,6 +784,30 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </RTY_RCEHb>
+    <RTY_RCEHb_CFE_T>
+      <userString>	#ussr_vehicles:RTY_RCEHb_CFE_T	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	51600	</price>
+      <weight>	80	</weight>
+      <distance>	850	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </RTY_RCEHb_CFE_T>
+    <RTY_RCEHb_A>
+      <userString>	#ussr_vehicles:RTY_RCEHb_A	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <notInShop>	true	</notInShop>
+      <price>	40000	</price>
+      <weight>	100	</weight>
+      <distance>	670	</distance>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </RTY_RCEHb_A>
     <_9RU>
       <userString>	#ussr_vehicles:_9RU	</userString>
       <tags></tags>

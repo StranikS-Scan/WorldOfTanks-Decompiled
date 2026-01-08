@@ -1,8 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/marathon/marathon_event_controller.py
 import Event
-from frameworks.wulf import WindowLayer
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.marathon.marathon_event import MarathonEvent
 from gui.marathon.marathon_resource_manager import MarathonResourceManager
 from gui.app_loader.decorators import sf_lobby
@@ -122,13 +120,12 @@ class MarathonEventsController(IMarathonEventsController, Notifiable):
             for marathon in self.__marathons:
                 marathon.showRewardScreen()
 
-    def __onViewLoaded(self, pyView, _):
+    def __onViewLoaded(self, *args):
+        from gui.lobby_state_machine.states import isInHangarState
         if self.__isLobbyInited:
-            if pyView.alias in (VIEW_ALIAS.LOBBY_HANGAR, VIEW_ALIAS.LEGACY_LOBBY_HANGAR):
-                self.__isInHangar = True
+            self.__isInHangar = isInHangarState()
+            if self.__isInHangar:
                 self.__tryShowRewardScreen()
-            elif pyView.layer == WindowLayer.SUB_VIEW:
-                self.__isInHangar = False
 
     def __onSyncCompleted(self, *args):
         self.__checkEvents()

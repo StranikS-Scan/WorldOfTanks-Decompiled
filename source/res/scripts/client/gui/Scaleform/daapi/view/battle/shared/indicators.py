@@ -5,8 +5,6 @@ import BigWorld
 import GUI
 import SCALEFORM
 import SoundGroups
-from Event import Event
-from ReplayEvents import g_replayEvents
 from account_helpers.settings_core.settings_constants import SOUND, DAMAGE_INDICATOR, GRAPHICS
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, DIRECT_DETECTION_TYPE
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV, LOG_WARNING
@@ -18,27 +16,27 @@ from gui.Scaleform.flash_wrapper import Flash, InputKeyMode
 from gui.Scaleform.genConsts.DAMAGEINDICATOR import DAMAGEINDICATOR
 from gui.Scaleform.genConsts.SIEGE_MODE_CONSTS import SIEGE_MODE_CONSTS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
-from gui.battle_control.avatar_getter import getVehicleIDAttached
 from gui.battle_control.battle_constants import DEVICE_STATES_RANGE, DEVICE_STATE_NORMAL, DEVICE_STATE_CRITICAL, VEHICLE_DEVICE_IN_COMPLEX_ITEM, DEVICE_STATE_DESTROYED
 from gui.battle_control.battle_constants import HIT_INDICATOR_MAX_ON_SCREEN
 from gui.battle_control.battle_constants import PREDICTION_INDICATOR_MAX_ON_SCREEN
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CROSSHAIR_VIEW_ID
 from gui.battle_control.controllers.hit_direction_ctrl import IHitIndicator, HitType
+from gui.battle_control.controllers.spotting_indicators_ctrl import ISpottingIndicator, bindSpottingIndicator, unbindSpottingIndicator
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.crits_mask_parser import critsParserGenerator
 from helpers import dependency
 from helpers import i18n
+from helpers.time_utils import MS_IN_SECOND
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
 from gui.battle_control import avatar_getter
 from vehicles.mechanics.mechanic_constants import VehicleMechanic
-from vehicles.mechanics.mechanic_info import hasVehicleMechanic
+from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic
 if typing.TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor
-    from TargetDesignatorTargetController import TargetDesignatorTargetController
 _DIRECT_INDICATOR_SWF = 'battleDirectionIndicatorApp.swf'
 _DIRECT_INDICATOR_COMPONENT = 'WGDirectionIndicatorFlash'
 _DIRECT_INDICATOR_MC_NAME = '_root.directionalIndicatorMc'
@@ -437,93 +435,57 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
         self.component.useInvertCameraView = viewID in _VIEWS_WITH_INV_CAMERA_ORIENTATION
 
 
-class SixthSenseIndicator(SixthSenseMeta):
-    sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    onSixthSensePreShow = Event()
+class SixthSenseIndicator(SixthSenseMeta, ISpottingIndicator):
 
     def __init__(self):
         super(SixthSenseIndicator, self).__init__()
-        self.__callbackID = None
-        self.__enabled = True
-        self.__sound = SixthSenseSound()
-        self.__hasIndicator = False
-        return
+        self._sound = SixthSenseSound()
 
-    @property
-    def enabled(self):
-        return self.__enabled
-
-    @enabled.setter
-    def enabled(self, enabled):
-        self.__enabled = enabled
-
-    def as_showS(self):
-        self.__hasIndicator = True
-        super(SixthSenseIndicator, self).as_showS()
-
-    def as_hideS(self, force):
-        if not self.__hasIndicator:
-            return
-        self.__hasIndicator = False
-        super(SixthSenseIndicator, self).as_hideS(force)
-
-    def show(self):
-        self.onSixthSensePreShow()
-        self.as_showS()
-
-    def hide(self):
-        self.as_hideS(False)
+    def getIndicatorTogglesByType(self):
+        toggle = self._sixthSenseToggle
+        duration = GUI_SETTINGS.sixthSenseDuration / float(MS_IN_SECOND)
+        enabled = self._isSixthSenseEnabled
+        return [(DIRECT_DETECTION_TYPE.RAYTRACE,
+          toggle,
+          duration,
+          enabled),
+         (DIRECT_DETECTION_TYPE.RECON,
+          toggle,
+          duration,
+          enabled),
+         (DIRECT_DETECTION_TYPE.FORCED,
+          toggle,
+          duration,
+          enabled),
+         (DIRECT_DETECTION_TYPE.STEALTH_RADAR,
+          toggle,
+          duration,
+          enabled)]
 
     def _populate(self):
         super(SixthSenseIndicator, self)._populate()
-        self.__sound.init()
-        ctrl = self.sessionProvider.shared.vehicleState
-        if ctrl is not None:
-            ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
-        return
+        self._sound.init()
+        bindSpottingIndicator(self)
 
     def _dispose(self):
-        self._cancelCallback()
-        if self.sessionProvider.isReplayPlaying and self._getPyReloading():
-            self.as_hideS(True)
-        ctrl = self.sessionProvider.shared.vehicleState
-        if ctrl is not None:
-            ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
-        self.__sound.fini()
-        self.__sound = None
+        unbindSpottingIndicator(self)
+        self._sound.fini()
+        self._sound = None
         super(SixthSenseIndicator, self)._dispose()
         return
 
-    def _show(self):
-        if not self.__enabled or g_replayEvents.isTimeWarp:
-            return
-        self.__sound.play()
-        self.show()
-        self.__callbackID = BigWorld.callback(GUI_SETTINGS.sixthSenseDuration / 1000.0, self._hide)
-
-    def _hide(self):
-        self.__callbackID = None
-        if not self.__enabled:
-            return
+    def _sixthSenseToggle(self, isVisible, force):
+        if isVisible:
+            self._sound.play()
+            self.as_showS()
         else:
-            self.as_hideS(False)
-            return
+            self.as_hideS(force)
 
-    def _cancelCallback(self):
-        if self.__callbackID is not None:
-            BigWorld.cancelCallback(self.__callbackID)
-            self.__callbackID = None
-        return
+    def _isSixthSenseEnabled(self):
+        return False
 
-    def __onVehicleStateUpdated(self, state, value):
-        if state == VEHICLE_VIEW_STATE.OBSERVED_BY_ENEMY:
-            if value.get('detectionType') != DIRECT_DETECTION_TYPE.SPECIAL_RECON:
-                if value.get('isObserved', False):
-                    self._cancelCallback()
-                    self._show()
-                else:
-                    self._cancelCallback()
-                    self._hide()
+    _sixthSenseToggle = typing.cast(ISpottingIndicator.ToggleType, _sixthSenseToggle)
+    _isSixthSenseEnabled = typing.cast(ISpottingIndicator.EnabledType, _isSixthSenseEnabled)
 
 
 class SixthSenseSound(object):
@@ -575,64 +537,33 @@ class SixthSenseSound(object):
         return
 
 
-class TargetDesignatorUnspottedIndicator(SixthSenseMeta):
-    session = dependency.descriptor(IBattleSessionProvider)
+class TargetDesignatorUnspottedIndicator(SixthSenseMeta, ISpottingIndicator):
 
-    def __init__(self):
-        super(TargetDesignatorUnspottedIndicator, self).__init__()
-        self.enabled = True
-        self.__hasIndicator = False
+    def getIndicatorTogglesByType(self):
+        return [(DIRECT_DETECTION_TYPE.UNSPOTTED,
+          self.__toggle,
+          0.0,
+          self.__isEnabled)]
 
     def _populate(self):
         super(TargetDesignatorUnspottedIndicator, self)._populate()
-        ctrl = self.session.shared.vehicleState
-        if ctrl is not None:
-            ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
-            ctrl.onVehicleControlling += self.__onVehicleControlling
-        SixthSenseIndicator.onSixthSensePreShow += self.__onSixthSensePreShow
-        return
+        bindSpottingIndicator(self)
 
     def _dispose(self):
-        if self.session.isReplayPlaying and self._getPyReloading():
-            self.__asHideS(True)
-        ctrl = self.session.shared.vehicleState
-        if ctrl is not None:
-            ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
-            ctrl.onVehicleControlling -= self.__onVehicleControlling
-        SixthSenseIndicator.onSixthSensePreShow -= self.__onSixthSensePreShow
+        unbindSpottingIndicator(self)
         super(TargetDesignatorUnspottedIndicator, self)._dispose()
-        return
 
-    def __onVehicleStateUpdated(self, state, ctrl):
-        if state != VEHICLE_VIEW_STATE.TARGET_DESIGNATOR or not self.enabled:
-            return
-        if g_replayEvents.isTimeWarp:
-            return
-        if ctrl.hasUnspottedIndicator and ctrl.entity.id == getVehicleIDAttached():
-            if not self.__hasIndicator:
-                self.__hasIndicator = True
-                self.as_showS()
+    def __toggle(self, isVisible, force):
+        if isVisible:
+            self.as_showS()
         else:
-            self.__asHideS(False)
-
-    def __onSixthSensePreShow(self):
-        if self.enabled:
-            self.__asHideS(True)
-
-    def __onVehicleControlling(self, vehicle):
-        ctrl = self.session.shared.vehicleState
-        state = VEHICLE_VIEW_STATE.TARGET_DESIGNATOR
-        value = ctrl.getStateValue(state)
-        if value is None:
-            return
-        else:
-            self.__onVehicleStateUpdated(state, value)
-            return
-
-    def __asHideS(self, force=False):
-        if self.__hasIndicator:
-            self.__hasIndicator = False
             self.as_hideS(force)
+
+    def __isEnabled(self):
+        return True
+
+    __toggle = typing.cast(ISpottingIndicator.ToggleType, __toggle)
+    __isEnabled = typing.cast(ISpottingIndicator.EnabledType, __isEnabled)
 
 
 class SiegeModeIndicator(SiegeModeIndicatorMeta):
@@ -694,7 +625,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         return
 
     def __hasSiegeMode(self, vTypeDesc):
-        return (vTypeDesc.hasTurboshaftEngine or vTypeDesc.isTwinGunVehicle or vTypeDesc.hasHydraulicChassis or vTypeDesc.hasAutoSiegeMode) and not hasVehicleMechanic(vTypeDesc, VehicleMechanic.PILLBOX_SIEGE_MODE)
+        return (vTypeDesc.hasTurboshaftEngine or vTypeDesc.isTwinGunVehicle or vTypeDesc.hasHydraulicChassis or vTypeDesc.hasAutoSiegeMode) and not hasVehicleDescrMechanic(vTypeDesc, VehicleMechanic.PILLBOX_SIEGE_MODE)
 
     def __updateIndicatorView(self, isSmooth=False):
         if self._siegeState not in self._switchTimeTable:

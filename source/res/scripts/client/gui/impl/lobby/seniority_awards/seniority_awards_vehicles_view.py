@@ -1,37 +1,49 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/seniority_awards/seniority_awards_vehicles_view.py
+from __future__ import absolute_import
 import logging
 import typing
+import BigWorld
+from BWUtil import AsyncReturn
 from constants import ROLE_TYPE
+from frameworks.wulf import ViewSettings, WindowLayer
 from gui.Scaleform.Waiting import Waiting
-from gui.game_control.seniority_awards_controller import VehicleSelectionState, VehiclesForSelectionState
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.game_control.seniority_awards_controller import VehicleSelectionState, VehiclesForSelectionState, SELECT_REWARD_TIMEOUT
 from gui.impl import backport
+from gui.impl.auxiliary.rewards_helper import getRewardTooltipContent, getSeniorityAwardsVehicles
+from gui.impl.backport import createTooltipData
+from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.seniority_awards.seniority_awards_tooltip_constants import SeniorityAwardsTooltipConstants
 from gui.impl.gen.view_models.views.lobby.seniority_awards.seniority_awards_vehicle_model import SeniorityAwardsVehicleModel
 from gui.impl.gen.view_models.views.lobby.seniority_awards.seniority_awards_vehicles_view_model import SeniorityAwardsVehiclesViewModel, ViewState
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
+from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.lobby.platoon.platoon_helpers import removeNationFromTechName
 from gui.impl.lobby.seniority_awards.seniority_awards_helper import getVehicleCD, showVehicleSelectionTimeoutError, showVehicleSelectionMultipleTokensError, getRewardCategoryForUI
+from gui.impl.lobby.seniority_awards.seniority_awards_sounds import SENIORITY_REWARD_SOUND_SPACE
 from gui.impl.lobby.seniority_awards.tooltip.seniority_awards_tooltip import SeniorityAwardsTooltip
 from gui.impl.lobby.tooltips.vehicle_role_descr_view import VehicleRolesTooltipView
-from gui.shared import event_dispatcher
-from helpers import dependency
-from frameworks.wulf import ViewSettings, WindowLayer
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.impl.auxiliary.rewards_helper import getRewardTooltipContent, getSeniorityAwardsVehicles
-from gui.impl.backport import BackportTooltipWindow, createTooltipData
-from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.seniority_awards.seniority_awards_tooltip_constants import SeniorityAwardsTooltipConstants
-from gui.impl.lobby.seniority_awards.seniority_awards_sounds import SENIORITY_REWARD_SOUND_SPACE
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
+from gui.shared import event_dispatcher
 from gui.shared.gui_items.Vehicle import Vehicle
+from helpers import dependency
 from skeletons.gui.game_control import ISeniorityAwardsController
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from uilogging.seniority_awards.loggers import VehicleSelectionErrorNotificationsLogger
-from wg_async import wg_async, wg_await
+from wg_async import wg_async, wg_await, BrokenPromiseError, AsyncScope, AsyncEvent, TimeoutError
 _logger = logging.getLogger(__name__)
-_SENIORITY_VEHICLES_ORDER = ('uk:GB146_Gabler_s_Destroyer', 'germany:G170_PzKpfwIV_Ausf_F2', 'ussr:R197_KV_1S_MZ', 'germany:G158_VK2801_105_SPXXI', 'usa:A134_M24E2_SuperChaffee', 'usa:A130_Super_Hellcat', 'ussr:R160_T_50_2')
+_SENIORITY_VEHICLES_ORDER = ('uk:GB156_Black_Prince_II',
+ 'uk:GB146_Gabler_s_Destroyer',
+ 'germany:G170_PzKpfwIV_Ausf_F2',
+ 'ussr:R197_KV_1S_MZ',
+ 'germany:G158_VK2801_105_SPXXI',
+ 'usa:A134_M24E2_SuperChaffee',
+ 'usa:A130_Super_Hellcat',
+ 'ussr:R160_T_50_2')
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def _vehiclesSortOrder(vehicleCD, itemsCache=None):
@@ -44,36 +56,56 @@ def _sortVehiclesDict(vehDictItem):
 
 
 class SeniorityRewardVehiclesView(ViewImpl):
-    __slots__ = ('__vehicles', '__selectedVehicleId', '__state')
     _COMMON_SOUND_SPACE = SENIORITY_REWARD_SOUND_SPACE
     __itemsCache = dependency.descriptor(IItemsCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __seniorityAwardsCtrl = dependency.descriptor(ISeniorityAwardsController)
+    __eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, contentResId, *args, **kwargs):
-        settings = ViewSettings(contentResId)
-        settings.model = SeniorityAwardsVehiclesViewModel()
-        settings.args = args
-        settings.kwargs = kwargs
+        settings = ViewSettings(layoutID=contentResId, model=SeniorityAwardsVehiclesViewModel(), args=args, kwargs=kwargs)
         super(SeniorityRewardVehiclesView, self).__init__(settings)
         self.__vehicles = []
         self.__selectedVehicleId = ''
         self.__state = None
+        self.__scope = AsyncScope()
+        self.__vehicleSelectionQuestCompletedEvent = AsyncEvent(scope=self.__scope)
+        self.__vehicleSelectionQuestId = ''
         return
 
     @property
     def viewModel(self):
         return self.getViewModel()
 
-    def createToolTip(self, event):
-        if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
-            tooltipData = self.__getBackportTooltipData(event)
-            window = BackportTooltipWindow(tooltipData, self.getParentWindow()) if tooltipData is not None else None
-            if window is not None:
-                window.load()
-            return window
+    @wg_async
+    def __selectVehicleReward(self, vehicleRewardId):
+        if self.__seniorityAwardsCtrl.isVehicleSelectionAvailable:
+            self.__vehicleSelectionQuestId = vehicleRewardId
+            token = self.__seniorityAwardsCtrl.claimVehicleRewardTokenPattern.format(id=vehicleRewardId)
+            BigWorld.player().requestSingleToken(token)
+            try:
+                try:
+                    yield wg_await(self.__vehicleSelectionQuestCompletedEvent.wait(), timeout=SELECT_REWARD_TIMEOUT)
+                    result = VehicleSelectionState.RECIEVED
+                except TimeoutError:
+                    result = VehicleSelectionState.SELECTION_FAILED
+                except BrokenPromiseError:
+                    _logger.debug('%s has been destroyed before %s completed', self, self.__seniorityAwardsCtrl.vehicleSelectionQuestPattern.format(id=self.__vehicleSelectionQuestId))
+                    result = VehicleSelectionState.SELECTION_FAILED
+
+            finally:
+                self.__vehicleSelectionQuestId = ''
+
         else:
-            return super(SeniorityRewardVehiclesView, self).createToolTip(event)
+            result = VehicleSelectionState.HAS_CLIENT_TOKENS
+        raise AsyncReturn(result)
+
+    @createBackportTooltipDecorator()
+    def createToolTip(self, event):
+        return super(SeniorityRewardVehiclesView, self).createToolTip(event)
+
+    def getTooltipData(self, event):
+        return self.__getBackportTooltipData(event)
 
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.lobby.ranked.tooltips.RankedBattlesRolesTooltipView():
@@ -81,10 +113,7 @@ class SeniorityRewardVehiclesView(ViewImpl):
             if vehicleCD:
                 return VehicleRolesTooltipView(vehicleCD)
             _logger.warning('Parameter vehicleCD is missing')
-        if contentID == R.views.lobby.seniority_awards.SeniorityAwardsTooltip():
-            return SeniorityAwardsTooltip(str(self.viewModel.getCategory()), self.__seniorityAwardsCtrl.yearsInGame)
-        tooltipData = self.__getBackportTooltipData(event)
-        return getRewardTooltipContent(event, tooltipData)
+        return SeniorityAwardsTooltip(str(self.viewModel.getCategory()), self.viewModel.getMaxCategory(), self.__seniorityAwardsCtrl.yearsInGame) if contentID == R.views.mono.seniority_awards.tooltips.seniority_tooltip() else getRewardTooltipContent(event, self.__getBackportTooltipData(event))
 
     def _onLoading(self, vehicles, fromEntryPoint, *args, **kwargs):
         super(SeniorityRewardVehiclesView, self)._onLoading(*args, **kwargs)
@@ -94,6 +123,7 @@ class SeniorityRewardVehiclesView(ViewImpl):
         with self.viewModel.transaction() as vm:
             category = getRewardCategoryForUI()
             vm.setCategory(category.lower())
+            vm.setMaxCategory(self.__seniorityAwardsCtrl.maxCategory)
             vm.setFromEntryPoint(fromEntryPoint)
             if self.__seniorityAwardsCtrl.isVehicleSelectionAvailable:
                 self.__state = ViewState.SELECTION
@@ -111,12 +141,19 @@ class SeniorityRewardVehiclesView(ViewImpl):
          (self.viewModel.onClose, self.__handleOnClose),
          (self.viewModel.onSelectVehicleReward, self.__handleOnSelectVehicleReward),
          (self.__seniorityAwardsCtrl.onUpdated, self.__onSettingsChange),
-         (self.__seniorityAwardsCtrl.onVehicleSelectionChanged, self.__onVehicleSelectionChanged))
+         (self.__seniorityAwardsCtrl.onVehicleSelectionChanged, self.__onVehicleSelectionChanged),
+         (self.__seniorityAwardsCtrl.onQuestsReceived, self.__onQuestsReceived))
 
     def _finalize(self):
         self.__vehicles = []
         self.__selectedVehicleId = ''
+        self.__vehicleSelectionQuestCompletedEvent.clear()
+        self.__scope.destroy()
         super(SeniorityRewardVehiclesView, self)._finalize()
+
+    def __onQuestsReceived(self, *_, **__):
+        if self.__vehicleSelectionQuestId and not self.__vehicleSelectionQuestCompletedEvent.is_set() and self.__seniorityAwardsCtrl.isVehicleSelectionQuestCompleted(self.__vehicleSelectionQuestId):
+            self.__vehicleSelectionQuestCompletedEvent.set()
 
     def __setRewards(self, viewModel):
         vehiclesList = viewModel.getVehicles()
@@ -125,6 +162,7 @@ class SeniorityRewardVehiclesView(ViewImpl):
             vehicleItem = self.__itemsCache.items.getItemByCD(vehicleCD)
             vehicleModel = SeniorityAwardsVehicleModel()
             fillVehicleModel(vehicleModel, vehicleItem)
+            vehicleModel.setRole(vehicleItem.role)
             vehiclesList.addViewModel(vehicleModel)
 
         vehiclesList.invalidate()
@@ -141,6 +179,7 @@ class SeniorityRewardVehiclesView(ViewImpl):
             vehName = removeNationFromTechName(vehicle.name)
             vehicleModel.setDescription(backport.text(R.strings.seniority_awards.vehicle.dyn(vehName)()))
             vehicleModel.setVehicleId(vehicleId)
+            vehicleModel.setRole(vehicle.role)
             vehiclesList.addViewModel(vehicleModel)
 
         vehiclesList.invalidate()
@@ -193,7 +232,7 @@ class SeniorityRewardVehiclesView(ViewImpl):
                 self.destroyWindow()
                 return
             self.__showWaiting()
-            result = yield wg_await(self.__seniorityAwardsCtrl.selectVehicleReward(self.__selectedVehicleId))
+            result = yield wg_await(self.__selectVehicleReward(self.__selectedVehicleId))
             if result == VehicleSelectionState.RECIEVED:
                 self.__state = ViewState.VIEW_REWARD_AFTER_SELECTION
                 vehicle = self.__seniorityAwardsCtrl.getVehicleSelectionQuestReward(self.__selectedVehicleId)

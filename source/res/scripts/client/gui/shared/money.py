@@ -179,11 +179,14 @@ class Money(object):
         return True
 
     def __eq__(self, other):
-        for c in self.ALL:
-            if self.get(c) != other.get(c):
-                return False
+        if other is None:
+            return False
+        else:
+            for c in self.ALL:
+                if self.get(c) != other.get(c):
+                    return False
 
-        return True
+            return True
 
     def __ne__(self, other):
         for c in self.ALL:

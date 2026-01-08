@@ -100,14 +100,8 @@ ALLOWED_DYNAMIC_ATTRS = {'additiveShotDispersionFactor',
  'vehicle/fwMaxSpeedBonus',
  'multShotDispersionFactor',
  'gun/shotDispersionFactors/afterShot',
- 'hull_aiming/pitch/wheelsCorrectionSpeedFactor',
- 'improvedRammingDamageBonus/basicFactor',
- 'improvedRammingDamageBonus/changeFactor',
- 'improvedRammingTrackDamageBonus/basicFactor',
- 'improvedRammingTrackDamageBonus/changeFactor',
- 'improvedRammingDamageReductionBonus/basicFactor',
- 'improvedRammingDamageReductionBonus/changeFactor'}
-AUTOSHOOT_DYNAMIC_ATTRS = {'rate/multiplier', 'shotDispersionPerSecFactor', 'maxShotDispersionFactor'}
+ 'hull_aiming/pitch/wheelsCorrectionSpeedFactor'}
+AUTOSHOOT_DYNAMIC_ATTRS = {'shotIntervalMultFactor', 'shotDispersionPerShotFactor', 'maxShotDispersionFactor'}
 
 class DescrModifyAttrsCheker(object):
 

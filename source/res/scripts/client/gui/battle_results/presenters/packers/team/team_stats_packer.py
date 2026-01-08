@@ -45,7 +45,9 @@ class TeamStats(IBattleResultsPacker):
         cls._PLAYER_INFO_PACKER.packModel(playerModel, battleResults, summarizeInfo)
         Statistics.packModel(playerModel.getDetailedStatistics(), summarizeInfo, battleResults)
         cls._packEfficiency(playerModel.efficiencyValues, summarizeInfo)
-        fillVehicleModel(playerModel.vehicle, summarizeInfo.vehicle, _VehicleTags)
+        if summarizeInfo.vehicle is not None:
+            fillVehicleModel(playerModel.vehicle, summarizeInfo.vehicle, _VehicleTags)
+        return
 
     @classmethod
     def _getAlternativeSortingParams(cls, reusable):

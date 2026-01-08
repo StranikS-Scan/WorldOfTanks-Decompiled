@@ -42,7 +42,7 @@ class NetworkVehicleHierarchy(DynamicScriptComponent):
     def __create(self):
         ready = True
         typeDescriptor = self.entity.typeDescriptor
-        if typeDescriptor is None:
+        if typeDescriptor is None or typeDescriptor.type.compactDescr != self.vehTypeCD:
             ready = False
         appearance = self.entity.appearance
         if appearance is None or not appearance.isConstructed or appearance.isDestroyed:

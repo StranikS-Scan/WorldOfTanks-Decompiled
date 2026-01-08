@@ -17,7 +17,6 @@ _LOBBY_TOOLTIPS_BUILDERS_PATHS = [('gui.Scaleform.daapi.view.tooltips.achievemen
  ('gui.Scaleform.daapi.view.tooltips.customization_builders', _TOOLTIPS.CUSTOMIZATION_SET),
  ('gui.Scaleform.daapi.view.tooltips.cybersport_builders', _TOOLTIPS.CYBER_SPORT_SET),
  ('gui.Scaleform.daapi.view.tooltips.elen_builders', _TOOLTIPS.ELEN_SET),
- ('gui.Scaleform.daapi.view.tooltips.epic_battle_builders', _TOOLTIPS.EPIC_BATTLE_SET),
  ('gui.Scaleform.daapi.view.tooltips.fortifications_builder', _TOOLTIPS.FORT_SORTIE_SET),
  ('gui.Scaleform.daapi.view.tooltips.personal_missions_builders', _TOOLTIPS.PERSONAL_MISSION_SET),
  ('gui.Scaleform.daapi.view.tooltips.quests_builders', _TOOLTIPS.QUESTS_SET),
@@ -33,7 +32,6 @@ _LOBBY_TOOLTIPS_BUILDERS_PATHS = [('gui.Scaleform.daapi.view.tooltips.achievemen
  ('gui.Scaleform.daapi.view.tooltips.vehicle_items_builders', _TOOLTIPS.VEHICLES_ITEMS_SET),
  ('gui.Scaleform.daapi.view.tooltips.wgm_currency_builders', _TOOLTIPS.WGM_CURRENCY_SET),
  ('gui.Scaleform.daapi.view.tooltips.marathon_builders', _TOOLTIPS.MARATHON_SET),
- ('gui.Scaleform.daapi.view.tooltips.frontline_builders', _TOOLTIPS.FRONTLINE_SET),
  ('gui.Scaleform.daapi.view.tooltips.session_stats_builders', _TOOLTIPS.SESSION_STATS_SET),
  ('gui.Scaleform.daapi.view.tooltips.trade_in_builders', _TOOLTIPS.TRADE_IN_SET),
  ('gui.Scaleform.daapi.view.tooltips.crew_bundle_builders', _TOOLTIPS.CREW_BUNDLE_SET),
@@ -46,7 +44,7 @@ _LOBBY_TOOLTIPS_BUILDERS_PATHS = [('gui.Scaleform.daapi.view.tooltips.achievemen
  ('gui.Scaleform.daapi.view.tooltips.referral_program_builder', _TOOLTIPS.REFERRAL_PROGRAM_SET),
  ('gui.Scaleform.daapi.view.tooltips.wot_plus_builders', _TOOLTIPS.WOT_PLUS_SET)]
 _LOBBY_DEBUG_TOOLTIPS_BUILDERS_PATHS = (('gui.development.ui.tooltips.development_builders', _TOOLTIPS.DEVELOPMENT_SET),)
-_BATTLE_TOOLTIPS_BUILDERS_PATHS = (('gui.Scaleform.daapi.view.tooltips.settings_builders', _TOOLTIPS.SETTINGS_SET), ('gui.Scaleform.daapi.view.tooltips.battle_opt_devices_builder', _TOOLTIPS.BATTLE_BLOCK_TOOLTIPS), ('gui.Scaleform.daapi.view.tooltips.epic_in_battle_builders', _TOOLTIPS.EPIC_IN_BATTE_SET))
+_BATTLE_TOOLTIPS_BUILDERS_PATHS = (('gui.Scaleform.daapi.view.tooltips.settings_builders', _TOOLTIPS.SETTINGS_SET), ('gui.Scaleform.daapi.view.tooltips.battle_opt_devices_builder', _TOOLTIPS.BATTLE_BLOCK_TOOLTIPS))
 ADVANCED_COMPLEX_TOOLTIPS = {'#tooltips:hangar/ammo_panel/device/empty': 'equipment',
  '#tooltips:hangar/ammo_panel/equipment/empty': 'service',
  '#tooltips:equipment/empty': 'service',

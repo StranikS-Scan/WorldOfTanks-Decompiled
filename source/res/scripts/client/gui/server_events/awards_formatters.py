@@ -1886,12 +1886,3 @@ class CurrenciesBonusFormatter(SimpleBonusFormatter):
     def _getImages(cls, bonus):
         return {AWARDS_SIZES.SMALL: bonus.getIconBySize(AWARDS_SIZES.SMALL),
          AWARDS_SIZES.BIG: bonus.getIconBySize(AWARDS_SIZES.BIG)}
-
-
-class EpicSelectTokenFormatter(SimpleBonusFormatter):
-
-    @classmethod
-    def _getImages(cls, bonus):
-        result = {AWARDS_SIZES.SMALL: backport.image(R.images.gui.maps.icons.epicBattles.awards.c_48x48.abilityToken()),
-         AWARDS_SIZES.BIG: backport.image(R.images.gui.maps.icons.epicBattles.awards.c_80x80.abilityToken())}
-        return result

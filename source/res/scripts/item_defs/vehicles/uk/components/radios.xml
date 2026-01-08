@@ -49,9 +49,12 @@
     <SR_C42_B>	63	</SR_C42_B>
     <C42_214t>	65	</C42_214t>
     <WS_No_19_Mk_III>	66	</WS_No_19_Mk_III>
+    <C45_CFE_A>	68	</C45_CFE_A>
+    <A41_CFE_J>	69	</A41_CFE_J>
     <C42_FL>	501	</C42_FL>
     <C45_7x7>	502	</C45_7x7>
     <C13B42_7x7>	503	</C13B42_7x7>
+    <C45_c_7x7>	504	</C45_c_7x7>
     <C42_IGR>	60001	</C42_IGR>
     <N19Mk3_IGR>	60002	</N19Mk3_IGR>
     <N22_IGR>	60003	</N22_IGR>
@@ -205,6 +208,18 @@
       <maxRegenHealth>	96	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </A41>
+    <A41_CFE_J>
+      <userString>	#gb_vehicles:A41_CFE_J	</userString>
+      <tags></tags>
+      <notInShop>	true	</notInShop>
+      <level>	9	</level>
+      <price>	29400	</price>
+      <weight>	40	</weight>
+      <distance>	570	</distance>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	96	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </A41_CFE_J>
     <WS_No_A41_GSOR>
       <userString>	#gb_vehicles:WS_No_A41_GSOR	</userString>
       <tags></tags>
@@ -558,6 +573,18 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </C45>
+    <C45_CFE_A>
+      <userString>	#gb_vehicles:C45_CFE_A	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	45600	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </C45_CFE_A>
     <C45A>
       <userString>	#gb_vehicles:C45A	</userString>
       <tags></tags>
@@ -630,6 +657,18 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </C45_7x7>
+    <C45_c_7x7>
+      <userString>	#gb_vehicles:C45_c_7x7	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	45600	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </C45_c_7x7>
     <C45A_Gonsalo>
       <userString>	#gb_vehicles:C45A_Gonsalo	</userString>
       <tags></tags>

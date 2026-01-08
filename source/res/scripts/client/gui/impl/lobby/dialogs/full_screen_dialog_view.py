@@ -3,26 +3,27 @@
 import logging
 import typing
 from PlayerEvents import g_playerEvents
-from wg_async import AsyncScope, AsyncEvent, wg_await, wg_async, BrokenPromiseError, AsyncReturn
 from frameworks.wulf import WindowLayer
 from gui.impl import backport
+from gui.impl.auxiliary.tooltips.simple_tooltip import createSimpleTooltip
 from gui.impl.backport.backport_tooltip import BackportTooltipWindow, createTooltipData
 from gui.impl.dialogs.dialog_template_utils import getCurrencyTooltipAlias
 from gui.impl.dialogs.sub_views.top_right.money_balance import NO_WGM_TOOLTIP_DATA
 from gui.impl.gen import R
 from gui.impl.gen.view_models.common.format_resource_string_arg_model import FormatResourceStringArgModel
-from gui.impl.gen.view_models.windows.full_screen_dialog_window_model import FullScreenDialogWindowModel
 from gui.impl.gen.view_models.views.dialogs.sub_views.currency_view_model import CurrencyType
+from gui.impl.gen.view_models.windows.full_screen_dialog_window_model import FullScreenDialogWindowModel
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.dialog_window import DialogResult, DialogButtons, DialogFlags
 from gui.impl.pub.lobby_window import LobbyWindow
-from gui.impl.auxiliary.tooltips.simple_tooltip import createSimpleTooltip
 from gui.shared.money import Currency
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
 from messenger.proto.events import g_messengerEvents
+from py2to3 import patched_typing
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
+from wg_async import AsyncScope, AsyncEvent, wg_await, wg_async, BrokenPromiseError, AsyncReturn
 if typing.TYPE_CHECKING:
     from frameworks import wulf
 TViewModel = typing.TypeVar('TViewModel', bound=FullScreenDialogWindowModel)
@@ -62,7 +63,7 @@ class FullScreenDialogBaseView(ViewImpl):
         self._setResult(result)
 
 
-class FullScreenDialogView(FullScreenDialogBaseView, typing.Generic[TViewModel]):
+class FullScreenDialogView(FullScreenDialogBaseView, patched_typing.Generic[TViewModel]):
     __slots__ = ('_stats',)
     _itemsCache = dependency.descriptor(IItemsCache)
 

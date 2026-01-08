@@ -26,6 +26,7 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import RequestState
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockStats
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.SystemMessages import pushMessagesFromResult
 from gui.goodies.demount_kit import getDemountKitForOptDevice
 from gui.impl import backport
 from gui.impl.common.personal_reserves.personal_reserves_shared_constants import PREMIUM_BOOSTER_IDS, BUY_AND_ACTIVATE_TIMEOUT
@@ -51,7 +52,7 @@ from gui.shared.gui_items.processors.module import ModuleSeller
 from gui.shared.gui_items.processors.module import ModuleUpgradeProcessor
 from gui.shared.gui_items.processors.module import MultipleModulesSeller
 from gui.shared.gui_items.processors.module import getInstallerProcessor
-from gui.shared.gui_items.processors.tankman import TankmanFreeToOwnXpConvertor, TankmanRetraining, TankmanUnload, TankmanEquip, TankmanChangePassport, TankmanDismiss, TankmanRestore, TankmanChangeRole, TankmenJunkConverter, TankmanAddSkills, ResetAllTankmenSkills, TransferTankmanXP, TankmanRecruitAndEquip
+from gui.shared.gui_items.processors.tankman import TankmanFreeToOwnXpConvertor, TankmanRetraining, TankmanUnload, TankmanEquip, TankmanChangePassport, TankmanDismiss, TankmanRestore, TankmanChangeRole, TankmenJunkConverter, TankmanAddSkills, ResetAllTankmenSkills, TransferTankmanXP, TankmanRecruitAndEquip, QuickServiceTankmanEquip
 from gui.shared.gui_items.processors.veh_post_progression import ChangeVehicleSetupEquipments, DiscardPairsProcessor, PurchasePairProcessor, PurchaseStepsProcessor, SetEquipmentSlotTypeProcessor, SwitchPrebattleAmmoPanelAvailability, PurchaseVehSkillTreeStepsProcessor
 from gui.shared.gui_items.processors.vehicle import OptDevicesInstaller, BuyAndInstallConsumablesProcessor, AutoFillVehicleLayoutProcessor, BuyAndInstallBattleBoostersProcessor, BuyAndInstallShellsProcessor, VehicleRepairer, InstallBattleAbilitiesProcessor
 from gui.shared.gui_items.processors.vehicle import VehicleSlotBuyer
@@ -901,7 +902,7 @@ class BuyAndActivateBooster(ActivateBoosterAction):
         g_playerEvents.onClientUpdated += self.__checkBoosterCount
         try:
             try:
-                clientUpdated = yield future_async.await(self.__asyncEvent.wait(), timeout=BUY_AND_ACTIVATE_TIMEOUT)
+                clientUpdated = yield future_async.wg_await(self.__asyncEvent.wait(), timeout=BUY_AND_ACTIVATE_TIMEOUT)
             except future_async.TimeoutError:
                 _logger.warning('TimeoutError: while waiting for client update after buying booster. Timeout period %d', BUY_AND_ACTIVATE_TIMEOUT)
                 clientUpdated = False
@@ -1078,14 +1079,25 @@ class TankmanEquipAction(GroupedItemAction):
 
     def __init__(self, tankmanInvID, vehicleInvID, vehicleSlotIdx, groupID=0, groupSize=1):
         super(TankmanEquipAction, self).__init__(groupID, groupSize)
-        self.__tankmanInvID = tankmanInvID
-        self.__vehicleInvID = vehicleInvID
-        self.__vehicleSlotIdx = vehicleSlotIdx
+        self._tankmanInvID = tankmanInvID
+        self._vehicleInvID = vehicleInvID
+        self._vehicleSlotIdx = vehicleSlotIdx
 
     @decorators.adisp_process('updating')
     def doAction(self):
-        result = yield TankmanEquip(self.__tankmanInvID, self.__vehicleInvID, self.__vehicleSlotIdx, self._groupID, self._groupSize).request()
+        result = yield TankmanEquip(self._tankmanInvID, self._vehicleInvID, self._vehicleSlotIdx, self._groupID, self._groupSize).request()
         self._pushGroupedMessages(result)
+
+
+class QuickServiceTankmanEquipAction(TankmanEquipAction):
+
+    @decorators.adisp_process('updating')
+    def doAction(self):
+        result = yield QuickServiceTankmanEquip(self._tankmanInvID, self._vehicleInvID, self._vehicleSlotIdx, self._groupID, self._groupSize).request()
+        if result.success:
+            pushMessagesFromResult(result)
+        else:
+            self._pushGroupedMessages(result)
 
 
 class TankmanDismissAction(CachedItemAction):
@@ -1555,10 +1567,8 @@ class PurchaseVehSkillTreeSteps(AsyncGUIItemAction):
         shortage = self.__getXPShortage()
         if shortage > 0:
             isOk, result, _ = yield future_async.wg_await(shared_events.showExchangeXPDialogWindow)(self.__formatValue(shortage))
-            confirm = isOk and self.__getXPShortage() <= 0
-            if confirm and result.userMsg:
-                self._showResult(result)
-            callback(confirm)
+            self._showResult(result)
+            callback(isOk and self.__getXPShortage() <= 0)
         else:
             callback(True)
 

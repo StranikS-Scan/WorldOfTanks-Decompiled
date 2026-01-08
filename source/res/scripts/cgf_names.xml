@@ -5,6 +5,10 @@
     <name>	vehicle/gun/gunLength	</name>
     <name>	vehicle/gun/shellType	</name>
     <name>	vehicle/gun/muzzleBrake	</name>
+    <name>	vehicle/gun/timeBetweenShots	</name>
+    <name>	vehicle/gun/temperature	</name>
+    <name>	vehicle/gun/intervalBetweenShots	</name>
+    <name>	vehicle/gun/shotsPerSecond	</name>
     <name>	hit/projectile/caliber	</name>
     <name>	hit/projectile/speed	</name>
     <name>	hit/projectile/shellType	</name>
@@ -14,7 +18,19 @@
     <name>	hit/armorPlacement	</name>
     <name>	hit/matKind	</name>
     <name>	hit/obstacleType	</name>
+    <name>	groundwave/distanceToTerrain	</name>
+    <name>	groundwave/terrainMatKind	</name>
+    <name>	damageSticker/isActive	</name>
+    <name>	damageSticker/rotation	</name>
+    <name>	damageSticker/angled	</name>
     <name>	aux/energy	</name>
     <name>	aux/energyCoef	</name>
+    <name>	aux/emissionSize	</name>
+    <name>	aux/hitCaliberRatio	</name>
+    <name>	aux/hitSpeedShellRatio	</name>
+    <name>	aux/hitSmokeScale	</name>
+    <name>	aux/hitSparksEmissionRateScale	</name>
+    <name>	aux/hitSparksStartSpeedScale	</name>
+    <name>	system/particleQuality	</name>
   </variables>
 </cgf_names.xml>

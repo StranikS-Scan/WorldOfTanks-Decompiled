@@ -6,7 +6,7 @@ from constants import ARENA_BONUS_TYPE, DEATH_REASON_ALIVE
 from gui.battle_control.battle_constants import WinStatus
 from gui.battle_results.components import base
 from gui.battle_results.components.personal import PersonalVehiclesBlock
-from gui.battle_results.components.progress import isQuestCompleted
+from gui.battle_results.progress.progress_helpers import isQuestCompleted
 from gui.battle_results.reusable import sort_keys
 from gui.impl import backport
 from gui.impl.gen import R

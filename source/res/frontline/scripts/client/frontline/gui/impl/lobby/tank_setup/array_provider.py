@@ -2,7 +2,6 @@
 # Embedded file name: frontline/scripts/client/frontline/gui/impl/lobby/tank_setup/array_provider.py
 import typing
 from WeakMixin import WeakMixin, Tapped
-from constants import PLAYER_RANK
 from epic_constants import CATEGORIES_ORDER
 from frontline.gui.impl.gen.view_models.views.lobby.components.loadout.battle_ability_slot_model import BattleAbilitySlotModel
 from gui.impl.lobby.tank_setup.array_providers.base import VehicleBaseArrayProvider, BaseVehSectionContext
@@ -60,7 +59,7 @@ class BattleAbilityProvider(VehicleBaseArrayProvider):
         for item in items:
             skill = epicSkills[item.innationID]
             category = skill.category
-            abilities.append(BattleAbilityMixin.fromBattleAbility(item, isActivated=skill.isActivated, price=skill.price, category=category, rank=self._getRankIconName(category), skillData=skill))
+            abilities.append(BattleAbilityMixin.fromBattleAbility(item, isActivated=skill.isActivated, price=skill.price, category=category, rank=self._getCategoryRank(category), skillData=skill))
 
         return abilities
 
@@ -74,7 +73,7 @@ class BattleAbilityProvider(VehicleBaseArrayProvider):
     def updateSlot(self, model, item, ctx):
         super(BattleAbilityProvider, self).updateSlot(model, item, ctx)
         self._fillStatus(model, item, ctx.slotID)
-        model.setRank(self._getRankIconName(item.category))
+        model.setRank(self._getCategoryRank(item.category))
         if not self.__epicMetaGameCtrl.isCurVehicleSuitable():
             model.setInstalledSlotId(NONE_ID)
 
@@ -92,8 +91,7 @@ class BattleAbilityProvider(VehicleBaseArrayProvider):
     def _getItemTypeID(cls):
         return (GUI_ITEM_TYPE.BATTLE_ABILITY,)
 
-    def _getRankIconName(self, category):
-        rankIconName = ''
+    def _getCategoryRank(self, category):
         componentSystem = self.__sessionProvider.arenaVisitor.getComponentSystem()
         playerDataComp = getattr(componentSystem, 'playerDataComponent', None)
         currentRank = None
@@ -103,5 +101,4 @@ class BattleAbilityProvider(VehicleBaseArrayProvider):
         slotRank = searchRankForSlot(CATEGORIES_ORDER.index(category), unlockSlotOrder)
         if slotRank and (currentRank is None or currentRank < slotRank):
             slotRank += 1
-            rankIconName = PLAYER_RANK.NAMES[slotRank]
-        return rankIconName
+        return slotRank

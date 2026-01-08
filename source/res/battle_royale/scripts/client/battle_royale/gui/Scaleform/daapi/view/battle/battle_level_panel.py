@@ -41,11 +41,11 @@ class BattleLevelPanel(BattleLevelPanelMeta, IProgressionListener):
         else:
             self.as_setAnimationS(animationState)
             if not animationState and not arenaLevel.isMaxLvlAchieved:
-                expText = '{currentXP} / {targetXP}'.format(currentXP=arenaLevel.xp, targetXP=arenaLevel.targetXP)
-                self.as_setLevelS(int2roman(arenaLevel.level), int2roman(arenaLevel.level + 1), expText)
+                expText = ' / {targetXP}'.format(targetXP=arenaLevel.targetXP)
+                self.as_setLevelS(int2roman(arenaLevel.level), int2roman(arenaLevel.level + 1), arenaLevel.xp, expText)
         if arenaLevel.xp == 0 and arenaLevel.level == 1:
             expText = ' / {targetXP}'.format(targetXP=arenaLevel.targetXP)
-            self.as_setLevelS(int2roman(arenaLevel.level), int2roman(arenaLevel.level + 1), expText)
+            self.as_setLevelS(int2roman(arenaLevel.level), int2roman(arenaLevel.level + 1), 0, expText)
             self.as_setExperienceS(0, expText, 0, 0, False)
             return
         if arenaLevel.levelIsChanged:
@@ -63,9 +63,8 @@ class BattleLevelPanel(BattleLevelPanelMeta, IProgressionListener):
             self.__maxLevelAchieved = True
             return
         if arenaLevel.levelIsChanged or self.__firstShow:
-            expText = '{baseXP} / {targetXP}'.format(baseXP=arenaLevel.baseXP, targetXP=arenaLevel.targetXP)
-            self.as_setLevelS(int2roman(arenaLevel.level), int2roman(arenaLevel.level + 1), expText)
             expText = ' / {targetXP}'.format(targetXP=arenaLevel.targetXP)
+            self.as_setLevelS(int2roman(arenaLevel.level), int2roman(arenaLevel.level + 1), arenaLevel.baseXP, expText)
             self.as_setExperienceS(arenaLevel.xp, expText, arenaLevel.diffAfterLevel, arenaLevel.percent, playSound)
 
     def onPlaySound(self, soundType):

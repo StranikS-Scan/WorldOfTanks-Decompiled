@@ -17,13 +17,13 @@ from AvatarInputHandler.control_modes import IControlMode, ArcadeControlMode, Sn
 from Vehicle import Vehicle
 from account_helpers.settings_core import settings_constants
 from aih_constants import CTRL_MODE_NAME
-from constants import AIMING_MODE, VEHICLE_BUNKER_TURRET_TAG
+from constants import AIMING_MODE
 from helpers import dependency
 from items import vehicles
 from skeletons.gui.battle_session import IBattleSessionProvider
 from story_mode.gui.app_loader import observers
 from story_mode.skeletons.story_mode_controller import IStoryModeController
-from story_mode_common.story_mode_constants import RECON_ABILITY, EQUIPMENT_STAGES as STAGES
+from story_mode_common.story_mode_constants import RECON_ABILITY, EQUIPMENT_STAGES as STAGES, VEHICLE_BUNKER_TURRET_TAG
 if typing.TYPE_CHECKING:
     from ResMgr import DataSection
     from story_mode_common.items.sm_artefacts import BaseAbilityEquipment

@@ -47,7 +47,6 @@ class IGuiLoader(object):
 
 
 class INotificationWindowController(IGameController):
-    __slots__ = ('onPostponedQueueUpdated',)
     if typing.TYPE_CHECKING:
         onPostponedQueueUpdated = None
 

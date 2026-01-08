@@ -1,19 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/vehicle_mechanics/decorative_crosshairs/accuracy_crosshair.py
+from __future__ import absolute_import
 import typing
+from events_containers.common.containers import ContainersListener
 from events_handler import eventHandler
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.Scaleform.daapi.view.meta.AccuracyStackDecorativeCrosshairMeta import AccuracyStackDecorativeCrosshairMeta
-from gui.veh_mechanics.battle.updaters.mechanic_passenger_view_updater import VehicleMechanicPassengerUpdater
-from gui.veh_mechanics.battle.updaters.mechanic_states_view_updater import VehicleMechanicStatesUpdater
+from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import VehicleMechanicPassengerUpdater
+from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
 from gui.veh_mechanics.battle.updaters.vehicle_state_updater import VehicleStateUpdater
-from vehicles.components.component_events import ComponentListener
 from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 if typing.TYPE_CHECKING:
     from AccuracyStacksController import AccuracyStacksState
 
-class AccuracyDecorativeCrosshair(AccuracyStackDecorativeCrosshairMeta, ComponentListener, IMechanicStatesListenerLogic):
+class AccuracyDecorativeCrosshair(AccuracyStackDecorativeCrosshairMeta, ContainersListener, IMechanicStatesListenerLogic):
 
     def __init__(self):
         super(AccuracyDecorativeCrosshair, self).__init__()

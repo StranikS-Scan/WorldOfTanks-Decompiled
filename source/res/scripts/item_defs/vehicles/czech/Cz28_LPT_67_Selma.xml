@@ -22,6 +22,9 @@
     <camouflageNet>
       <invisibilityBonus>	0.1 0.125	</invisibilityBonus>
     </camouflageNet>
+    <deluxeCamouflageNet>
+      <invisibilityBonus>	0.125	</invisibilityBonus>
+    </deluxeCamouflageNet>
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
     </additionalInvisibilityDevice>
@@ -2396,7 +2399,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <autoShoot>
-            <shotDispersionPerSec>	1.25	</shotDispersionPerSec>
+            <shotDispersionPerShot>	0.04545455	</shotDispersionPerShot>
             <maxShotDispersion>	10	</maxShotDispersion>
             <groupSize>	1	</groupSize>
           </autoShoot>
@@ -2943,7 +2946,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <autoShoot>
-            <shotDispersionPerSec>	1.25	</shotDispersionPerSec>
+            <shotDispersionPerShot>	0.04545455	</shotDispersionPerShot>
             <maxShotDispersion>	10	</maxShotDispersion>
             <groupSize>	1	</groupSize>
           </autoShoot>
@@ -3054,7 +3057,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <autoShoot>
-            <shotDispersionPerSec>	1.25	</shotDispersionPerSec>
+            <shotDispersionPerShot>	0.0625	</shotDispersionPerShot>
             <maxShotDispersion>	10	</maxShotDispersion>
             <groupSize>	1	</groupSize>
           </autoShoot>

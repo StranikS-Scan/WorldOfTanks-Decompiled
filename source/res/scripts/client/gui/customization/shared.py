@@ -29,6 +29,9 @@ from helpers import dependency
 from items import vehicles
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.customization.c11n_items import Customization
+    from gui.shared.utils.requesters import InventoryRequester
+    from items.basic_item import BasicItem
+    from items.vehicles import VehicleDescriptor
 _logger = logging.getLogger(__name__)
 C11nId = namedtuple('C11nId', ('areaId', 'slotType', 'regionIdx'))
 C11nId.__new__.__defaults__ = (-1, -1, -1)

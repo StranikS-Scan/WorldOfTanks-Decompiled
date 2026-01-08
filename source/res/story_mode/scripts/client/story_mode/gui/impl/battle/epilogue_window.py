@@ -22,7 +22,7 @@ if typing.TYPE_CHECKING:
 
 class EpilogueView(ViewImpl):
     __slots__ = ('_uiLogger',)
-    LAYOUT_ID = R.views.story_mode.battle.EpilogueWindow()
+    LAYOUT_ID = R.views.story_mode.mono.battle.epilogue_window()
     _storyModeCtrl = dependency.descriptor(IStoryModeController)
     _appLoader = dependency.instance(IAppLoader)
 

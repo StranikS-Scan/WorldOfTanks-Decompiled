@@ -12,7 +12,8 @@ from gui.impl import backport
 from gui.impl.backport import BackportTooltipWindow, createTooltipData
 from gui.impl.gen import R
 from gui.impl.lobby.common.tooltips.extended_text_tooltip import ExtendedTextTooltip
-from gui.impl.lobby.hangar.presenters.utils import navigateTo, fillMenuSharedItems
+from gui.impl.lobby.hangar.presenters.utils import navigateTo, getSharedMenuItems
+from gui.impl.lobby.hangar.presenters.main_menu_presenter import MainMenuPresenter
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.server_events.bonuses import getNonQuestBonuses
 from gui.shared.event_dispatcher import showBrowserOverlayView
@@ -37,7 +38,7 @@ from story_mode.skeletons.story_mode_controller import IStoryModeController
 from story_mode.uilogging.story_mode.consts import LogButtons
 from story_mode.uilogging.story_mode.loggers import SelectMissionWindow
 from story_mode_common.helpers import isTaskCompleted
-from story_mode_common.story_mode_constants import UNDEFINED_MISSION_ID, LOGGER_NAME
+from story_mode_common.story_mode_constants import MissionId, LOGGER_NAME
 if typing.TYPE_CHECKING:
     from story_mode_common.configs.story_mode_missions import MissionModel as ConfigMissionModel
     from gui.shared.gui_items import Vehicle
@@ -47,7 +48,7 @@ PATH_TO_CONFIGS = 'story_mode/gui/parallax/configs.json'
 PARALLAX_DEFAULT_SCALE = 1
 
 class MissionSelectionView(BasePrbView):
-    LAYOUT_ID = R.views.story_mode.lobby.MissionSelectionView()
+    LAYOUT_ID = R.views.story_mode.mono.lobby.mission_selection_view()
     MODEL_CLASS = MissionSelectionViewModel
     _COMMON_SOUND_SPACE = STORY_MODE_SOUND_SPACE
     _MAX_BONUSES_IN_VIEW = 5
@@ -61,9 +62,9 @@ class MissionSelectionView(BasePrbView):
         self._animationCounter = 0
         self._isBackgroundLoaded = False
         self._uiLogger = SelectMissionWindow()
-        self.__isAnimationPlayedAfterWindowMap = {R.views.story_mode.lobby.BattleResultView(): False,
-         R.views.story_mode.lobby.EventWelcomeView(): False,
-         R.views.story_mode.common.CongratulationsWindow(): False}
+        self.__isAnimationPlayedAfterWindowMap = {R.views.story_mode.mono.lobby.battle_result_view(): False,
+         R.views.story_mode.mono.lobby.event_welcome_view(): False,
+         R.views.story_mode.mono.lobby.congratulations_window(): False}
         self.__idGen = SequenceIDGenerator()
         self.__bonusCache = {}
         self._isParallaxEnabled = self._storyModeCtrl.settings.parallaxEnabled
@@ -71,7 +72,7 @@ class MissionSelectionView(BasePrbView):
 
     def createToolTipContent(self, event, contentID):
         selectedMissionId = self._storyModeCtrl.selectedMissionId
-        if contentID == R.views.story_mode.lobby.MissionTooltip():
+        if contentID == R.views.story_mode.mono.lobby.tooltips.mission_tooltip():
             mission = self._storyModeCtrl.missions.getMission(selectedMissionId)
             if mission is None:
                 _logger.error('Mission ID=%s not exists', selectedMissionId)
@@ -79,12 +80,12 @@ class MissionSelectionView(BasePrbView):
             vehTypeCD = vehicles.makeVehicleTypeCompDescrByName(mission.vehicle.name)
             vehicle = self._itemsCache.items.getItemByCD(vehTypeCD)
             return MissionTooltip(vehicle)
-        elif contentID == R.views.story_mode.lobby.DifficultyTooltip():
+        elif contentID == R.views.story_mode.mono.lobby.tooltips.difficulty_tooltip():
             isLocked = False
             missionId = event.getArgument('missionId')
             mission = self._storyModeCtrl.missions.getMission(missionId)
-            if mission is not None and mission.unlockMission:
-                isLocked = not self._storyModeCtrl.isMissionCompleted(mission.unlockMission)
+            if mission is not None:
+                isLocked = self._storyModeCtrl.isMissionLocked(mission)
             isAutoCompleteCondition = False
             for task in mission.tasks:
                 for completeTask in task.autoCompleteTasks:
@@ -112,14 +113,14 @@ class MissionSelectionView(BasePrbView):
 
     def _onLoading(self, *args, **kwargs):
         super(MissionSelectionView, self)._onLoading(*args, **kwargs)
+        self._setComponents()
         with self.getViewModel().transaction() as model:
-            fillMenuSharedItems(model)
             self.__updateSelectedMission(model)
 
     def _onLoaded(self, *args, **kwargs):
         super(MissionSelectionView, self)._onLoaded(*args, **kwargs)
         viewModel = self.getViewModel()
-        self._uiLogger.logOpen(viewModel.selectedMission.getMissionId() if viewModel else UNDEFINED_MISSION_ID)
+        self._uiLogger.logOpen(viewModel.selectedMission.getMissionId() if viewModel else MissionId.UNDEFINED)
 
     def _initialize(self):
         super(MissionSelectionView, self)._initialize()
@@ -147,6 +148,9 @@ class MissionSelectionView(BasePrbView):
          (self._storyModeCtrl.onMissionsConfigUpdated, self.__onMissionsDataUpdated),
          (self._storyModeCtrl.onSettingsUpdated, self.__onSettingsUpdated),
          (g_playerEvents.onDossiersResync, self.__onDossiersResync))
+
+    def _setComponents(self):
+        self.setChildView(resourceID=R.aliases.hangar.shared.MainMenu(), view=MainMenuPresenter(getSharedMenuItems()))
 
     def _onBackgroundLoaded(self):
         sendViewLoadedEvent(self.LAYOUT_ID)
@@ -185,7 +189,7 @@ class MissionSelectionView(BasePrbView):
         newTab = int(args['id'])
         isEvent = newTab == TabsEnum.EVENT
         missionId = self._storyModeCtrl.chooseSelectedMissionId(isEvent=isEvent)
-        if missionId == UNDEFINED_MISSION_ID:
+        if missionId == MissionId.UNDEFINED:
             _logger.error('[Missions view] Tab(event=%s) can not be selected. No suitable missions in tab.', isEvent)
             return
         self.__selectMission(missionId, True)
@@ -201,14 +205,14 @@ class MissionSelectionView(BasePrbView):
         model = self.getViewModel()
         self._isParallaxEnabled = self._storyModeCtrl.settings.parallaxEnabled
         missionId = self._storyModeCtrl.selectedMissionId
-        if missionId == UNDEFINED_MISSION_ID:
+        if missionId == MissionId.UNDEFINED:
             return False
         missionConfig = self._storyModeCtrl.missions.getMission(missionId)
         self.__readParallaxConfig(missionConfig.missionId, model, self._isParallaxEnabled)
 
     def __updateSelectedMission(self, model, updateMissions=True):
         missionId = self._storyModeCtrl.selectedMissionId
-        if missionId == UNDEFINED_MISSION_ID:
+        if missionId == MissionId.UNDEFINED:
             return False
         prevMissionId = model.selectedMission.getMissionId()
         missionConfig = self._storyModeCtrl.missions.getMission(missionId)
@@ -238,11 +242,13 @@ class MissionSelectionView(BasePrbView):
                 selectedMissionModel.setIsCountdownVisible(True)
                 selectedMissionModel.setSecondsCountdown(_totalSeconds(missionConfig.disabledTimer.endAt))
         battlesCount = self._itemsCache.items.getAccountDossier().getRandomStats().getBattlesCount()
-        if missionConfig.isMissionLocked(battlesCount):
+        battlesToUnlock = missionConfig.getBattlesToUnlock(battlesCount)
+        if battlesToUnlock is not None:
             selectedMissionModel.setLocked(True)
-            selectedMissionModel.setBattlesToUnlock(missionConfig.unlockBattlesCount - battlesCount)
+            selectedMissionModel.setBattlesToUnlock(battlesToUnlock)
         self.__updateTasks(model, missionConfig)
         self.__readParallaxConfig(missionConfig.missionId, model, self._isParallaxEnabled)
+        return
 
     def __updateMissionsModels(self, model, currentTab):
         missionsModel = model.getMissions()
@@ -261,11 +267,7 @@ class MissionSelectionView(BasePrbView):
             missionModel.setIsCompleted(self._storyModeCtrl.isMissionCompleted(mission.missionId))
             missionModel.setMissionId(mission.missionId)
             missionModel.setDifficulty(mission.difficulty)
-            battlesCount = self._itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
-            if mission.isMissionLocked(battlesCount):
-                missionModel.setLocked(True)
-            if mission.unlockMission and not self._storyModeCtrl.isMissionCompleted(mission.unlockMission):
-                missionModel.setLocked(True)
+            missionModel.setLocked(self._storyModeCtrl.isMissionLocked(mission))
             missionsModel.addViewModel(missionModel)
 
         missionsModel.invalidate()
@@ -306,7 +308,7 @@ class MissionSelectionView(BasePrbView):
     def __openAbout(self):
         self._uiLogger.logClick(LogButtons.ABOUT, state=str(self._storyModeCtrl.selectedMissionId))
         infoPageKey = self._storyModeCtrl.storyModeInfoPageKey
-        if self._storyModeCtrl.selectedMissionId is not UNDEFINED_MISSION_ID:
+        if self._storyModeCtrl.selectedMissionId is not MissionId.UNDEFINED:
             selectedMission = self._storyModeCtrl.missions.getMission(self._storyModeCtrl.selectedMissionId)
             if not selectedMission.isEvent:
                 infoPageKey = INFO_PAGE_STORY_MODE

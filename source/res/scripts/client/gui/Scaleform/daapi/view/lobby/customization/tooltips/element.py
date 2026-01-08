@@ -31,7 +31,7 @@ from shared_utils import first
 from helpers import dependency, int2roman, time_utils
 from helpers.i18n import makeString as _ms
 from items.components.c11n_constants import ProjectionDecalFormTags, SeasonType, ItemTags, CustomizationDisplayType, Rarity
-from items.vehicles import CamouflageBonus
+from items.vehicles import g_cache
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.server_events import IEventsCache
@@ -544,7 +544,7 @@ class ElementTooltip(BlocksTooltipData):
 
     def _packAppliedBlock(self):
         if self.__ctx is not None and self.__ctx.modeId in CustomizationModes.BASE_STYLES:
-            if self._item.itemTypeID != GUI_ITEM_TYPE.STYLE:
+            if self._item.itemTypeID not in (GUI_ITEM_TYPE.STYLE, GUI_ITEM_TYPE.ATTACHMENT):
                 return
         if self._item.isStyleOnly:
             return
@@ -891,7 +891,8 @@ class ElementAwardTooltip(ElementTooltip):
             bonusDescription = VEHICLE_CUSTOMIZATION.ELEMENTAWARDTOOLTIP_DESCRIPTION_STYLE
         elif self._item.itemTypeName == 'camouflage':
             bonusDescription = VEHICLE_CUSTOMIZATION.ELEMENTAWARDTOOLTIP_DESCRIPTION_CAMOUFLAGE
-        bonusPercent = '{min:.0f}-{max:.0f}%'.format(min=CamouflageBonus.MIN * 100, max=CamouflageBonus.MAX * 100)
+        minBonus, maxBonus = g_cache.getCamouflageBonusDelta()
+        bonusPercent = '{min:.0f}-{max:.0f}%'.format(min=minBonus * 100, max=maxBonus * 100)
         blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(text_styles.main(bonusDescription)), icon=bonusPercent, isTextIcon=True, padding=formatters.packPadding(right=20)))
         return formatters.packBuildUpBlockData(blocks, gap=-6, padding=formatters.packPadding(bottom=-5), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
 

@@ -197,42 +197,6 @@ class AsyncReturn(StopIteration):
         self.value = value
 
 
-def async(func):
-
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        gen = func(*args, **kwargs)
-        promise = BigWorld.Promise()
-
-        def stepGen(result):
-            result.then(handleResult)
-
-        def handle(func, *args):
-            try:
-                stepGen(func(*args))
-            except AsyncReturn as r:
-                promise.set_value(r.value)
-            except StopIteration:
-                promise.set_value(None)
-            except BaseException:
-                promise.set_exception(*sys.exc_info())
-
-            return
-
-        def handleResult(result):
-            try:
-                result = result.get()
-            except BaseException:
-                handle(gen.throw, *sys.exc_info())
-            else:
-                handle(gen.send, result)
-
-        handle(gen.send, None)
-        return promise.get_future()
-
-    return wrapper
-
-
 def if_only_component(*components):
 
     def _real_decorator(func):

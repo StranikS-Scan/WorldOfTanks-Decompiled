@@ -52,5 +52,5 @@ class LegacyHangarState(SFViewLobbyState, IPrbListener):
         return any((bool(prbFlags & flag) for flag in self.__LEGACY_HANGAR_MODE_FLAGS))
 
 
-HangarState, DefaultHangarState, AllVehiclesState = generateBasicHangarStateClasses(SubScopeSubLayerState, R.invalid)
+HangarState, DefaultHangarState, AllVehiclesState, EasyTankEquipState = generateBasicHangarStateClasses(SubScopeSubLayerState, R.invalid)
 LoadoutState, LoadoutConfirmState, LoadoutSectionState, ShellsLoadoutState, EquipmentLoadoutState, InstructionsLoadoutState, ConsumablesLoadoutState = generateBasicLoadoutStateClasses(HangarState, R.invalid)

@@ -46,10 +46,10 @@ class BaseLegacyEntity(BasePrbEntity):
         return dict.fromkeys(PREBATTLE_ROSTER.ALL, [])
 
     def getPlayerInfo(self, pID=None, rosterKey=None):
-        return prb_items.PlayerPrbInfo(-1L)
+        return prb_items.PlayerPrbInfo(-1)
 
     def getPlayerInfoByDbID(self, dbID):
-        return prb_items.PlayerPrbInfo(-1L)
+        return prb_items.PlayerPrbInfo(-1)
 
     def getPlayerTeam(self, pID=None):
         pass
@@ -363,7 +363,7 @@ class LegacyEntity(_LegacyEntity):
                 if roster in rosters and pID in rosters[roster].keys():
                     return prb_items.PlayerPrbInfo(pID, entity=self, roster=roster, **rosters[roster][pID])
 
-        return prb_items.PlayerPrbInfo(-1L)
+        return prb_items.PlayerPrbInfo(-1)
 
     def getPlayerInfoByDbID(self, dbID):
         rosters = prb_getters.getPrebattleRosters()
@@ -374,7 +374,7 @@ class LegacyEntity(_LegacyEntity):
                     if data['dbID'] == dbID:
                         return prb_items.PlayerPrbInfo(pID, entity=self, roster=roster, **rosters[roster][pID])
 
-        return prb_items.PlayerPrbInfo(-1L)
+        return prb_items.PlayerPrbInfo(-1)
 
     def getPlayerTeam(self, pID=None):
         team = 0

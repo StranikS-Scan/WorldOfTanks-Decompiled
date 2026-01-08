@@ -5,21 +5,15 @@ from frameworks.wulf import WindowLayer
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.missions.personal.personal_missions_first_entry_award_view import PersonalMissionFirstEntryAwardView
-from gui.Scaleform.daapi.view.lobby.missions.personal.personal_missions_first_entry_view import PersonalMissionFirstEntryView
 from gui.Scaleform.daapi.view.lobby.missions.personal.tank_girls_popover import TankgirlsPopover
 from gui.Scaleform.framework import ViewSettings, ScopeTemplates, GroupedViewSettings, ComponentSettings
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.app_loader import settings as app_settings
-from gui.server_events.pm_constants import PM_TUTOR_FIELDS
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showPersonalMissionCampaignSelectorWindow
 from gui.shared.events import LoadViewEvent
-from helpers import dependency
-from shared_utils import findFirst
-from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.server_events import IEventsCache
 
 def getContextMenuHandlers():
     pass
@@ -40,7 +34,6 @@ def getViewSettings():
      ViewSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATION_AWARDS_SCREEN_ALIAS, PersonalMissionsOperationAwardsScreen, 'personalMissionAwardsScreen.swf', WindowLayer.FULLSCREEN_WINDOW, PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATION_AWARDS_SCREEN_ALIAS, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),
      ComponentSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_MAP_VIEW_ALIAS, PersonalMissionsMapView, ScopeTemplates.VIEW_SCOPE),
      ViewSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS, PersonalMissionsAwardsView, 'personalMissionsAwardsView.swf', WindowLayer.SUB_VIEW, PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_VIEW_ALIAS, PersonalMissionFirstEntryView, 'personalMissionFirstEntryView.swf', WindowLayer.SUB_VIEW, PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_VIEW_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_PERSONAL_MISSION_DETAILS, PersonalMissionDetailsContainerView, 'personalMissionDetails.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.LOBBY_PERSONAL_MISSION_DETAILS, ScopeTemplates.LOBBY_SUB_SCOPE, True),
      ViewSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_AWARD_VIEW_ALIAS, PersonalMissionFirstEntryAwardView, 'personalMissionFirstEntryAwardView.swf', WindowLayer.SUB_VIEW, PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_AWARD_VIEW_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE),
      GroupedViewSettings(PERSONAL_MISSIONS_ALIASES.FREE_SHEET_POPOVER, FreeSheetPopover, 'freeSheetPopoverView.swf', WindowLayer.WINDOW, PERSONAL_MISSIONS_ALIASES.FREE_SHEET_POPOVER, PERSONAL_MISSIONS_ALIASES.FREE_SHEET_POPOVER, ScopeTemplates.LOBBY_SUB_SCOPE),
@@ -64,7 +57,6 @@ class PersonalMissionsPackageBusinessHandler(PackageBusinessHandler):
          (PERSONAL_MISSIONS_ALIASES.FREE_SHEET_POPOVER, self.loadViewByCtxEvent),
          (PERSONAL_MISSIONS_ALIASES.TANK_GIRLS_POPOVER, self.loadViewByCtxEvent),
          (PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS, self.loadAwardsView),
-         (PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_VIEW_ALIAS, self.loadViewByCtxEvent),
          (PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_AWARD_VIEW_ALIAS, self.loadViewByCtxEvent),
          (PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_QUEST_AWARD_SCREEN_ALIAS, self.loadViewByCtxEvent),
          (PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATION_AWARDS_SCREEN_ALIAS, self.loadViewByCtxEvent),

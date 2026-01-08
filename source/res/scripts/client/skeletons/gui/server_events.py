@@ -65,6 +65,9 @@ class IEventsCache(object):
     def getQuests(self, filterFunc=None):
         raise NotImplementedError
 
+    def getUngroupedBasicQuestByID(self, qID):
+        raise NotImplementedError
+
     def getMotiveQuests(self, filterFunc=None):
         raise NotImplementedError
 

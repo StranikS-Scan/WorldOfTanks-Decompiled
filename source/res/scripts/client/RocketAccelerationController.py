@@ -5,17 +5,21 @@ import typing
 from functools import partial
 import BigWorld
 import CGF
-from Event import Event
 from constants import ROCKET_ACCELERATION_STATE
+from Event import Event
+from events_containers.components.life_cycle import createComponentLifeCycleEvents, ILifeCycleComponent
+from gui.shared.utils.decorators import ReprInjector
 from wotdecorators import noexcept
-from vehicles.components.component_life_cycle import createComponentLifeCycleEvents, ILifeCycleComponent
+from vehicles.mechanics.common import IMechanicComponent
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicle_systems.model_assembler import loadAppearancePrefab
 if typing.TYPE_CHECKING:
-    from vehicles.components.component_life_cycle.life_cycle_interfaces import IComponentLifeCycleEvents
+    from events_containers.components.life_cycle import IComponentLifeCycleEvents
 _logger = logging.getLogger(__name__)
 _DEFAULT_OUTFIT = 'default'
 
-class RocketAccelerationController(BigWorld.DynamicScriptComponent, ILifeCycleComponent):
+@ReprInjector.withParent()
+class RocketAccelerationController(BigWorld.DynamicScriptComponent, ILifeCycleComponent, IMechanicComponent):
 
     def __init__(self):
         super(RocketAccelerationController, self).__init__()
@@ -25,6 +29,10 @@ class RocketAccelerationController(BigWorld.DynamicScriptComponent, ILifeCycleCo
         self.__onTryActivate = Event()
         self.__initAppearance()
         return
+
+    @property
+    def vehicleMechanic(self):
+        return VehicleMechanic.ROCKET_ACCELERATION
 
     @property
     def lifeCycleEvents(self):
@@ -79,7 +87,7 @@ class RocketAccelerationController(BigWorld.DynamicScriptComponent, ILifeCycleCo
             self.__lifeCycleEvents.destroy()
             self.__onStateChanged.clear()
             self.__onTryActivate.clear()
-            self.entity.onAppearanceReady -= self.__tryUpdatePrefab
+            self.entity.events.onAppearanceReady -= self.__tryUpdatePrefab
             if self.__prefabGameObject is not None:
                 CGF.removeGameObject(self.__prefabGameObject)
                 self.__prefabGameObject = None
@@ -87,7 +95,7 @@ class RocketAccelerationController(BigWorld.DynamicScriptComponent, ILifeCycleCo
 
     def __initAppearance(self):
         if not self.__tryUpdatePrefab():
-            self.entity.onAppearanceReady += self.__tryUpdatePrefab
+            self.entity.events.onAppearanceReady += self.__tryUpdatePrefab
 
     def __onLoaded(self, path, root):
         if not root.isValid:

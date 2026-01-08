@@ -506,9 +506,11 @@ class OnVehicleCollided(Block, VehicleMeta):
             BigWorld.player().inputHandler.OnVehicleCollided -= self._onVehicleCollided
 
     def _onVehicleCollided(self, vehicleId, velocity):
-        self._vehicle.setValue(weakref.proxy(BigWorld.entity(vehicleId)))
-        self._velocity.setValue(velocity)
-        self._out.call()
+        vehicle = BigWorld.entity(vehicleId)
+        if vehicle:
+            self._vehicle.setValue(weakref.proxy(vehicle))
+            self._velocity.setValue(velocity)
+            self._out.call()
 
     @classmethod
     def blockAspects(cls):
@@ -535,9 +537,11 @@ class OnVehicleShaked(Block, VehicleMeta):
             BigWorld.player().inputHandler.OnVehicleShaked -= self._onVehicleShaked
 
     def _onVehicleShaked(self, vehicleId, shakeReason):
-        self._vehicle.setValue(weakref.proxy(BigWorld.entity(vehicleId)))
-        self._shakeReason.setValue(shakeReason)
-        self._out.call()
+        vehicle = BigWorld.entity(vehicleId)
+        if vehicle:
+            self._vehicle.setValue(weakref.proxy(vehicle))
+            self._shakeReason.setValue(shakeReason)
+            self._out.call()
 
     @classmethod
     def blockAspects(cls):
@@ -599,7 +603,7 @@ class OnDiscreteShotDone(Block, VehicleMeta):
             errorVScript(self, 'vehicle not found')
             return
         else:
-            vehicle.onDiscreteShotDone += self.__onDiscreteShotDone
+            vehicle.events.onDiscreteShotDone += self.__onDiscreteShotDone
             return
 
     def __unsubscribe(self):
@@ -607,7 +611,7 @@ class OnDiscreteShotDone(Block, VehicleMeta):
         if vehicle is None:
             return
         else:
-            vehicle.onDiscreteShotDone -= self.__onDiscreteShotDone
+            vehicle.events.onDiscreteShotDone -= self.__onDiscreteShotDone
             return
 
     def __onDiscreteShotDone(self, gunInstallationSlot):

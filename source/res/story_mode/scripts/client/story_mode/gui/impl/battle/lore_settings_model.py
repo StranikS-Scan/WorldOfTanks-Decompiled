@@ -4,6 +4,7 @@ import ResMgr
 import section2dict
 import typing
 from dict2model import models, schemas, fields, validate
+from game_params_common.scope import GameParamsScopeFlags
 from story_mode_common.configs.sounds_schema import soundSchema
 if typing.TYPE_CHECKING:
     from story_mode_common.configs.sounds_schema import SoundModel
@@ -45,7 +46,7 @@ missionLoreSchema = schemas.Schema(fields={'id': fields.Integer(required=True, s
 epilogueLoreSchema = schemas.Schema(fields={'music': fields.Nested(schema=soundSchema, required=True),
  'vo': fields.String(required=True)}, modelClass=EpilogueLoreModel, checkUnknown=True)
 loreSchema = schemas.Schema(fields={'mission': fields.UniCapList(fieldOrSchema=missionLoreSchema, required=True, deserializedValidators=validate.Length(minValue=1)),
- 'epilogue': fields.Nested(schema=epilogueLoreSchema, required=True, public=False)}, modelClass=LoreSettingsModel, checkUnknown=True)
+ 'epilogue': fields.Nested(schema=epilogueLoreSchema, required=True, filterParams=GameParamsScopeFlags.BASE)}, modelClass=LoreSettingsModel, checkUnknown=True)
 __loreSchema = None
 
 def getLoreSettings():

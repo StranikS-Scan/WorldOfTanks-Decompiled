@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/impl/lobby/comp7_light_event_banner.py
+import weakref
 from gui.impl import backport
 from gui.impl.gen import R
 from account_helpers.AccountSettings import COMP7_LIGHT_BANNER_FIRST_APPEARANCE_TIMESTAMP
@@ -54,4 +55,4 @@ class Comp7LightEventBanner(Comp7CoreEventBanner):
 
     def createToolTipContent(self, event):
         super(Comp7LightEventBanner, self).createToolTipContent(event)
-        return Comp7LightEntryPointTooltip()
+        return Comp7LightEntryPointTooltip(eventBanner=weakref.proxy(self))

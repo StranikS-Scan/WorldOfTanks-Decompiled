@@ -8,20 +8,18 @@ from PlayerEvents import g_playerEvents
 from frameworks.wulf import WindowStatus, WindowLayer
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.shared import g_eventBus, EVENT_BUS_SCOPE
+from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import LobbySimpleEvent
 from helpers import dependency
-from skeletons.gameplay import IGameplayLogic
+from helpers.events_handler import EventsHandler
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Window
     from gui.impl.pub.notification_commands import NotificationCommand
 _logger = logging.getLogger(__name__)
 
-class NotificationWindowController(INotificationWindowController, IGlobalListener):
-    __slots__ = ('__accountID', '__activeQueue', '__postponedQueue', '__currentWindow', '__callbackID', '__isWaitingShown', '__processAfterWaiting', '__isLobbyLoaded', '__locks', '__isExecuting')
+class NotificationWindowController(INotificationWindowController, IGlobalListener, EventsHandler):
     __gui = dependency.descriptor(IGuiLoader)
-    __gameplay = dependency.descriptor(IGameplayLogic)
 
     def __init__(self):
         super(NotificationWindowController, self).__init__()
@@ -47,25 +45,13 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         return len(self.__activeQueue)
 
     def init(self):
-        self.__gui.windowsManager.onWindowStatusChanged += self.__onWindowStatusChanged
-        g_eventBus.addListener(LobbySimpleEvent.WAITING_SHOWN, self.__showWaiting, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(LobbySimpleEvent.WAITING_HIDDEN, self.__hideWaiting, EVENT_BUS_SCOPE.LOBBY)
-        g_playerEvents.onAccountShowGUI += self.__onAccountShowGUI
+        self._subscribe()
 
     def fini(self):
+        self._unsubscribe()
         self.stopGlobalListening()
         self.clear()
-        self.__gui.windowsManager.onWindowStatusChanged -= self.__onWindowStatusChanged
-        g_eventBus.removeListener(LobbySimpleEvent.WAITING_SHOWN, self.__showWaiting, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(LobbySimpleEvent.WAITING_HIDDEN, self.__hideWaiting, EVENT_BUS_SCOPE.LOBBY)
         self.onPostponedQueueUpdated.clear()
-        g_playerEvents.onAccountShowGUI -= self.__onAccountShowGUI
-
-    def __onAccountShowGUI(self, ctx):
-        dbID = ctx['databaseID']
-        if self.__accountID != dbID:
-            self.__accountID = dbID
-            self.clear()
 
     def onLobbyInited(self, event):
         self.startGlobalListening()
@@ -79,6 +65,8 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         self.__isLobbyLoaded = False
         self.stopGlobalListening()
         self.__updateEnabled()
+        if not self.hasLock(__name__):
+            self.lock(__name__)
 
     def onDisconnected(self):
         self.__isLobbyLoaded = False
@@ -123,14 +111,13 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         self.__activeQueue.append(command)
         self.__tryProcess()
 
-    def releasePostponed(self, fireReleased=True):
+    def releasePostponed(self):
         _logger.debug('Releasing the postponed queue.')
         if self.isEnabled():
             self.__activeQueue.extend(self.__postponedQueue)
             del self.__postponedQueue[:]
-            if fireReleased:
-                self.__destroyCurrentWindow()
-                self.__processNext()
+            self.__destroyCurrentWindow()
+            self.__processNext()
             self.__notifyWithPostponedQueueCount()
         else:
             _logger.info('Notifications queue is currently disabled.')
@@ -138,6 +125,9 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
     def postponeActive(self):
         _logger.debug('Postpone the active queue.')
         self.__clearCallback()
+        if self.__locks:
+            _logger.info('Attempting to postpone active queue while locked.')
+            return
         if not self.__activeQueue:
             return
         self.__postponedQueue.extend(self.__activeQueue)
@@ -165,6 +155,24 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
 
     def hasLock(self, key):
         return key in self.__locks
+
+    def _getListeners(self):
+        return ((LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY), (LobbySimpleEvent.WAITING_HIDDEN, self.__onWaitingHidden, EVENT_BUS_SCOPE.LOBBY), (LobbySimpleEvent.BATTLE_RESULTS_PROCESSED, self.__onBattleResultsProcessed, EVENT_BUS_SCOPE.LOBBY))
+
+    def _getEvents(self):
+        return ((g_playerEvents.onAccountShowGUI, self.__onAccountShowGUI), (self.__gui.windowsManager.onWindowStatusChanged, self.__onWindowStatusChanged))
+
+    def __onAccountShowGUI(self, ctx):
+        dbID = ctx['databaseID']
+        if self.__accountID != dbID:
+            self.__accountID = dbID
+            self.clear()
+        if not self.hasLock(__name__):
+            self.lock(__name__)
+
+    def __onBattleResultsProcessed(self, _):
+        if self.hasLock(__name__):
+            self.unlock(__name__)
 
     @staticmethod
     def __discardNonPersistentCommands(queue):
@@ -236,11 +244,11 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         if command in self.__postponedQueue:
             self.__postponedQueue.remove(command)
 
-    def __showWaiting(self, _):
+    def __onWaitingShown(self, _):
         self.__isWaitingShown = True
         self.__clearCallback()
 
-    def __hideWaiting(self, _):
+    def __onWaitingHidden(self, _):
         self.__isWaitingShown = False
         if self.__processAfterWaiting:
             self.__processNext()

@@ -50,6 +50,7 @@ class BattlePassController(IBattlePassController, EventsHandler):
         self.__oldPoints = 0
         self.__oldLevel = 0
         self.__currentMode = None
+        self.__chaptersAmount = None
         self.__isInited = False
         self.__specialTankmen = {}
         self.__voicedTankmenGroupNames = set()
@@ -87,6 +88,7 @@ class BattlePassController(IBattlePassController, EventsHandler):
         self.__rewardLogic.start()
         self.onBattlePassSettingsChange(self.__getConfig().mode, self.__currentMode)
         self.__currentMode = self.__getConfig().mode
+        self.__chaptersAmount = len(self.__getConfig().chapters)
         self.__updateSettingsStorage()
         if not self.__isInited:
             self.__updateChapterToTankmenScreen()
@@ -748,6 +750,10 @@ class BattlePassController(IBattlePassController, EventsHandler):
         self.__seasonChangeNotifier.startNotification()
         chapters = config.get('season', {}).get('chapters', {})
         if any((self.isExtraChapter(chapterID) for chapterID in chapters)):
+            if self.__chaptersAmount < len(chapters) and self.getState() == BattlePassState.COMPLETED:
+                self.__chaptersAmount = len(chapters)
+                self.__rewardLogic.stop()
+                self.__rewardLogic.start()
             self.__extraChapterNotifier.stopNotification()
             self.__extraChapterNotifier = SimpleNotifier(self.__getTimeToExtraChapterExpired, self.__onNotifyExtraChapterExpired)
             self.__extraChapterNotifier.startNotification()

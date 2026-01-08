@@ -171,3 +171,4 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.petAdded.index(), _sc.PetSystemPetAddedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.petSynergyUp.index(), _sc.PetSystemSynergyLevelUpFormatter())
     registerMessengerServerFormatter(_SM_TYPE.petSynergyMax.index(), _sc.PetSystemSynergyMaxLevelFormatter())
+    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.COLLECTOR20_REWARD_RECEIVED, _sc.Collector20RewardReceivedFormatter())

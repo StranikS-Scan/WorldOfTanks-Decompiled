@@ -19,12 +19,12 @@ from gui.shared.items_parameters.params_helper import SimplifiedBarVO
 from gui.shared.money import MONEY_UNDEFINED, Currency
 from gui.shared.tooltips import getComplexStatusWULF, getUnlockPrice, TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS, makeRemovalPriceBlock
-from gui.shared.utils import GUN_CLIP, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, AIMING_TIME_PROP_NAME, RELOAD_TIME_PROP_NAME, GUN_AUTO_RELOAD, AUTO_RELOAD_PROP_NAME, DISPERSION_RADIUS, RELOAD_TIME_SECS_PROP_NAME, DUAL_GUN_RATE_TIME, DUAL_GUN_CHARGE_TIME, BURST_FIRE_RATE, BURST_TIME_INTERVAL, BURST_COUNT, BURST_SIZE, GUN_DUAL_GUN, GUN_CAN_BE_CLIP, GUN_CAN_BE_AUTO_RELOAD, GUN_CAN_BE_DUAL_GUN, GUN_CAN_BE_AUTO_SHOOT, GUN_AUTO_SHOOT, TURBOSHAFT_ENGINE_POWER, ROCKET_ACCELERATION_ENGINE_POWER, DUAL_ACCURACY_COOLING_DELAY, CONTINUOUS_SHOTS_PER_MINUTE, CONTINUOUS_DAMAGE_PER_SECOND, GUN_CAN_BE_TWIN_GUN, GUN_TWIN_GUN, TWIN_GUN_RELOAD_ONE_GUN_TIME, TWIN_GUN_RELOAD_TWO_GUN_TIME
+from gui.shared.utils import GUN_CLIP, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, AIMING_TIME_PROP_NAME, RELOAD_TIME_PROP_NAME, GUN_AUTO_RELOAD, AUTO_RELOAD_PROP_NAME, DISPERSION_RADIUS, RELOAD_TIME_SECS_PROP_NAME, DUAL_GUN_RATE_TIME, DUAL_GUN_CHARGE_TIME, BURST_FIRE_RATE, BURST_TIME_INTERVAL, BURST_COUNT, BURST_SIZE, GUN_DUAL_GUN, GUN_CAN_BE_CLIP, GUN_CAN_BE_AUTO_RELOAD, GUN_CAN_BE_DUAL_GUN, GUN_CAN_BE_AUTO_SHOOT, GUN_AUTO_SHOOT, TURBOSHAFT_ENGINE_POWER, ROCKET_ACCELERATION_ENGINE_POWER, DUAL_ACCURACY_COOLING_DELAY, CONTINUOUS_SHOTS_PER_MINUTE, CONTINUOUS_DAMAGE_PER_SECOND, GUN_CAN_BE_TWIN_GUN, GUN_TWIN_GUN, TWIN_GUN_RELOAD_ONE_GUN_TIME, TWIN_GUN_RELOAD_TWO_GUN_TIME, SHELL_LOADING_TIME_PROP_NAME
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items.components.supply_slot_categories import SlotCategories
-from shared_utils import first, CONST_CONTAINER
+from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IWotPlusController, ILoadoutController
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
@@ -40,40 +40,6 @@ _EMPTY_TOOLTIP_WIDTH = 350
 _AUTOCANNON_SHOT_DISTANCE = 400
 _OPT_DEVICE_SPEC_ALPHA = 0.5
 _OPT_DEVICE_SELECTED_SPEC_ALPHA = 1
-_STR_EXTRA_PATH = R.strings.menu.moduleInfo
-_IMG_EXTRA_PATH = R.images.gui.maps.icons.modules
-
-class _ModuleExtraStatuses(CONST_CONTAINER):
-    AUTOLOADER_GUN = 'autoreloadGun'
-    AUTOLOADER_WITH_BOOST_GUN = 'autoReloadWithBoostGun'
-    AUTO_SHOOT_GUN = 'autoShootGun'
-    CLIP_GUN = 'clipGun'
-    DUAL_GUN = 'dualGun'
-    DUAL_ACCURACY_GUN = 'dualAccuracyGun'
-    DAMAGE_MUTABLE_GUN = 'mutableDamageGun'
-    TWIN_GUN = 'twinGun'
-    TURBOSHAFT_ENGINE = 'turboshaftEngine'
-    ROCKET_ACCELERATION_ENGINE = 'rocketAccelerationEngine'
-    HYDRO_CHASSIS = 'hydroChassis'
-    HYDRO_AUTO_SIEGE_CHASSIS = 'hydroAutoSiegeChassis'
-    HYDRO_WHEELED_CHASSIS = 'hydroWheeledChassis'
-    TRACK_WITHIN_TRACK_CHASSIS = 'trackWithinTrackChassis'
-
-
-_MODULE_EXTRA_STATUS_RESOURCES = {_ModuleExtraStatuses.AUTOLOADER_GUN: (_STR_EXTRA_PATH.autoReloadGunLabel, _IMG_EXTRA_PATH.autoLoaderGun),
- _ModuleExtraStatuses.AUTOLOADER_WITH_BOOST_GUN: (_STR_EXTRA_PATH.autoReloadGunLabel.boost, _IMG_EXTRA_PATH.autoLoaderGunBoost),
- _ModuleExtraStatuses.CLIP_GUN: (_STR_EXTRA_PATH.clipGunLabel, _IMG_EXTRA_PATH.magazineGunIcon),
- _ModuleExtraStatuses.DUAL_GUN: (_STR_EXTRA_PATH.dualGunLabel, _IMG_EXTRA_PATH.dualGun),
- _ModuleExtraStatuses.DUAL_ACCURACY_GUN: (_STR_EXTRA_PATH.dualAccuracyGunLabel, _IMG_EXTRA_PATH.dualAccuracy),
- _ModuleExtraStatuses.DAMAGE_MUTABLE_GUN: (_STR_EXTRA_PATH.damageMutableGunLabel, _IMG_EXTRA_PATH.damageMutable),
- _ModuleExtraStatuses.AUTO_SHOOT_GUN: (_STR_EXTRA_PATH.autoShootGunLabel, _IMG_EXTRA_PATH.autoShootGun),
- _ModuleExtraStatuses.TWIN_GUN: (_STR_EXTRA_PATH.twinGunLabel, _IMG_EXTRA_PATH.twinGun),
- _ModuleExtraStatuses.TURBOSHAFT_ENGINE: (_STR_EXTRA_PATH.turboshaftEngine, _IMG_EXTRA_PATH.turbineEngineIcon),
- _ModuleExtraStatuses.ROCKET_ACCELERATION_ENGINE: (_STR_EXTRA_PATH.rocketAccelerationEngine, _IMG_EXTRA_PATH.rocketAccelerationIcon),
- _ModuleExtraStatuses.HYDRO_CHASSIS: (_STR_EXTRA_PATH.hydraulicChassisLabel, _IMG_EXTRA_PATH.hydraulicChassisIcon),
- _ModuleExtraStatuses.HYDRO_AUTO_SIEGE_CHASSIS: (_STR_EXTRA_PATH.hydraulicAutoSiegeChassisLabel, _IMG_EXTRA_PATH.hydraulicChassisIcon),
- _ModuleExtraStatuses.HYDRO_WHEELED_CHASSIS: (_STR_EXTRA_PATH.hydraulicWheeledChassisLabel, _IMG_EXTRA_PATH.hydraulicWheeledChassisIcon),
- _ModuleExtraStatuses.TRACK_WITHIN_TRACK_CHASSIS: (_STR_EXTRA_PATH.trackWithinTrackChassisLabel, _IMG_EXTRA_PATH.trackWithinTrack)}
 
 class ModuleBlockTooltipData(BlocksTooltipData):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -246,6 +212,7 @@ class ModuleTooltipBlockConstructor(object):
                                    'avgPiercingPower',
                                    SHELLS_COUNT_PROP_NAME,
                                    RELOAD_MAGAZINE_TIME_PROP_NAME,
+                                   SHELL_LOADING_TIME_PROP_NAME,
                                    CONTINUOUS_SHOTS_PER_MINUTE,
                                    'avgDamagePerMinute',
                                    'stunMinDurationList',
@@ -713,71 +680,15 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
 
     @classmethod
     def __getExtraStatusBlock(cls, module, vDescr):
-        statuses = None
-        if module.itemTypeID == GUI_ITEM_TYPE.GUN:
-            statuses = cls.__getGunExtraStatusTitle(module, vDescr)
-        elif module.itemTypeID == GUI_ITEM_TYPE.CHASSIS:
-            statuses = cls.__getChassisExtraStatusTitle(module)
-        elif module.itemTypeID == GUI_ITEM_TYPE.ENGINE:
-            statuses = cls.__getEngineExtraStatus(module)
-        if statuses is None:
+        statuses = [ (R.strings.menu.moduleInfo.dyn(status), R.images.gui.maps.icons.vehicle_hub.mechanics.x20x20.dyn(status)) for status in filter(None, (item.getExtraStatuses(module) for item in module.getModuleMechanicItems(vDescr))) ]
+        if not statuses:
             return
         else:
             blocks = []
             for status in statuses:
-                statusResources = _MODULE_EXTRA_STATUS_RESOURCES.get(status)
-                if statusResources is None:
-                    continue
-                blocks.append(formatters.packImageTextBlockData(title=text_styles.neutral(backport.text(statusResources[0]())), desc='', img=backport.image(statusResources[1]()), imgPadding=formatters.packPadding(top=3, right=20), padding=formatters.packPadding(left=90, bottom=5), ignoreImageSize=True))
+                blocks.append(formatters.packImageTextBlockData(title=text_styles.neutral(backport.text(status[0]())), desc='', img=backport.image(status[1]()), imgPadding=formatters.packPadding(top=1, right=20), padding=formatters.packPadding(left=90, bottom=5), ignoreImageSize=True))
 
             return formatters.packBuildUpBlockData(blocks, padding=formatters.packPadding(top=3, bottom=11)) if blocks else None
-
-    @classmethod
-    def __getGunExtraStatusTitle(cls, module, vDescr):
-        result = []
-        if module.isClipGun(vDescr):
-            result.append(_ModuleExtraStatuses.CLIP_GUN)
-        elif module.isAutoReloadable(vDescr):
-            hasBoost = False
-            for gun in vDescr.type.getGuns():
-                if gun.compactDescr == module.intCD:
-                    hasBoost = gun.autoreloadHasBoost
-
-            result.append(_ModuleExtraStatuses.AUTOLOADER_WITH_BOOST_GUN if hasBoost else _ModuleExtraStatuses.AUTOLOADER_GUN)
-        elif module.isAutoShoot(vDescr):
-            result.append(_ModuleExtraStatuses.AUTO_SHOOT_GUN)
-        elif module.isDualGun(vDescr):
-            result.append(_ModuleExtraStatuses.DUAL_GUN)
-        elif module.isTwinGun(vDescr):
-            result.append(_ModuleExtraStatuses.TWIN_GUN)
-        if module.hasDualAccuracy(vDescr):
-            result.append(_ModuleExtraStatuses.DUAL_ACCURACY_GUN)
-        if module.isDamageMutable():
-            result.append(_ModuleExtraStatuses.DAMAGE_MUTABLE_GUN)
-        return result
-
-    @classmethod
-    def __getEngineExtraStatus(cls, module):
-        result = []
-        if module.hasTurboshaftEngine():
-            result.append(_ModuleExtraStatuses.TURBOSHAFT_ENGINE)
-        elif module.hasRocketAcceleration():
-            result.append(_ModuleExtraStatuses.ROCKET_ACCELERATION_ENGINE)
-        return result
-
-    @classmethod
-    def __getChassisExtraStatusTitle(cls, module):
-        result = []
-        if module.isHydraulicChassis():
-            if module.isWheeledChassis():
-                result.append(_ModuleExtraStatuses.HYDRO_WHEELED_CHASSIS)
-            elif module.hasAutoSiege():
-                result.append(_ModuleExtraStatuses.HYDRO_AUTO_SIEGE_CHASSIS)
-            else:
-                result.append(_ModuleExtraStatuses.HYDRO_CHASSIS)
-        elif module.isTrackWithinTrack():
-            result.append(_ModuleExtraStatuses.TRACK_WITHIN_TRACK_CHASSIS)
-        return result
 
 
 class ModuleReplaceBlockConstructor(ModuleTooltipBlockConstructor):

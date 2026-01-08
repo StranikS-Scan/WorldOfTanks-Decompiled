@@ -5,7 +5,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.dedication.dedication_reward_view_model import DedicationRewardViewModel
 from gui.impl.pub import ViewImpl
-from gui.impl.pub.lobby_window import LobbyWindow
+from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.server_events.bonuses import getNonQuestBonuses
 from gui.shared.missions.packers.bonus import packMissionsBonusModelAndTooltipData, getDefaultBonusPacker
 from gui.sounds.filters import switchHangarOverlaySoundFilter
@@ -76,7 +76,7 @@ class DedicationRewardView(ViewImpl):
             packMissionsBonusModelAndTooltipData(rewards, getDefaultBonusPacker(), tx.getMainRewards(), tooltipData=self.__tooltipItems)
 
 
-class DedicationRewardWindow(LobbyWindow):
+class DedicationRewardWindow(LobbyNotificationWindow):
     __slots__ = ()
 
     def __init__(self, bonuses, data, closeCallback):

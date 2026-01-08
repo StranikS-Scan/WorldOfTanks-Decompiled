@@ -1265,6 +1265,10 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_PRESTIGEMILESTONE_ERROR = '#messenger:serviceChannelMessages/prestigeMilestone/error'
     SERVICECHANNELMESSAGES_PRESTIGEMILESTONE_TITLE = '#messenger:serviceChannelMessages/prestigeMilestone/title'
     SERVICECHANNELMESSAGES_PRESTIGEMILESTONE_TEXT = '#messenger:serviceChannelMessages/prestigeMilestone/text'
+    SERVICECHANNELMESSAGES_COLLECTOR20_TITLE = '#messenger:serviceChannelMessages/collector20/title'
+    SERVICECHANNELMESSAGES_COLLECTOR20_MEDAL = '#messenger:serviceChannelMessages/collector20/medal'
+    SERVICECHANNELMESSAGES_COLLECTOR20_BADGE = '#messenger:serviceChannelMessages/collector20/badge'
+    SERVICECHANNELMESSAGES_COLLECTOR20_STRIPE = '#messenger:serviceChannelMessages/collector20/stripe'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_TRY_LATER,
      CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,

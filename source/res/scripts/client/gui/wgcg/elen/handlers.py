@@ -13,7 +13,8 @@ class ElenRequestHandlers(RequestHandlers):
          WebRequestDataType.EVENT_BOARDS_GET_MY_EVENT_TOP: self.__getMyEventTop,
          WebRequestDataType.EVENT_BOARDS_GET_MY_LEADERBOARD_POSITION: self.__getMyLeaderboardPosition,
          WebRequestDataType.EVENT_BOARDS_GET_LEADERBOARD: self.__getLeaderboard,
-         WebRequestDataType.EVENT_BOARDS_GET_HANGAR_FLAG: self.__getHangarFlag}
+         WebRequestDataType.EVENT_BOARDS_GET_HANGAR_FLAG: self.__getHangarFlag,
+         WebRequestDataType.EVENT_BOARDS_GET_PLAYER_PROGRESSION: self.__getPlayerProgression}
         return handlers
 
     def __getEventsData(self, ctx, callback):
@@ -39,3 +40,6 @@ class ElenRequestHandlers(RequestHandlers):
 
     def __getHangarFlag(self, ctx, callback):
         self._requester.doRequestEx(ctx, callback, ('wgelen', 'get_hangar_flag'))
+
+    def __getPlayerProgression(self, ctx, callback):
+        self._requester.doRequestEx(ctx, callback, ('wgelen', 'get_player_progression'), ctx.getEventID(), ctx.getLeaderboardID())

@@ -111,6 +111,8 @@ class VehicleModifier(object):
             turret.surveyingDeviceHealth.healthBurnPerSec = modifiers(BattleParams.SURVEYING_DEVICE_HEALTH, turret.surveyingDeviceHealth.healthBurnPerSec)
         if modifiers.haveDomain(ModifierDomain.GUN_COMPONENTS):
             turret.guns = tuple((cls.__modifyGun(gun, modifiers) for gun in turret.guns))
+            if turret.secondaryGuns:
+                turret.secondaryGuns = tuple((cls.__modifyGun(gun, modifiers) for gun in turret.secondaryGuns))
         return turret
 
     @classmethod
@@ -151,19 +153,19 @@ class VehicleModifier(object):
                     gun.effects = [ modifiers(BattleParams.GUN_EFFECTS, effects) for effects in gun.effects ]
                 else:
                     gun.effects = modifiers(BattleParams.GUN_EFFECTS, gun.effects)
-                if gun.prefabs:
-                    gunPrefabs = copy.deepcopy(gun.prefabs)
-                    for outfit, prefabs in gunPrefabs.iteritems():
-                        modifiers.modificationCtx['outfit'] = outfit
-                        prefabs['main'] = tuple((modifiers(BattleParams.GUN_MAIN_PREFAB, p) for p in prefabs['main']))
+            if gun.prefabs:
+                gunPrefabs = copy.deepcopy(gun.prefabs)
+                for outfit, prefabs in gunPrefabs.iteritems():
+                    modifiers.modificationCtx['outfit'] = outfit
+                    prefabs['main'] = tuple((modifiers(BattleParams.GUN_MAIN_PREFAB, p) for p in prefabs['main']))
 
-                    gun.prefabs = gunPrefabs
-                    modifiers.modificationCtx.pop('outfit', None)
+                gun.prefabs = gunPrefabs
+                modifiers.modificationCtx.pop('outfit', None)
             gun.invisibilityFactorAtShot = modifiers(BattleParams.INVISIBILITY_FACTOR_AT_SHOT, gun.invisibilityFactorAtShot)
             if gun.forcedReloadTime != ZERO_FLOAT:
                 gun.forcedReloadTime = modifiers(BattleParams.FORCED_RELOAD_TIME, gun.forcedReloadTime)
             if gun.autoShoot != DEFAULT_GUN_AUTOSHOOT:
-                gun.autoShoot = gun.autoShoot._replace(shotDispersionPerSec=modifiers(BattleParams.AUTO_SHOOT_DISPERSION_PER_SEC, gun.autoShoot.shotDispersionPerSec), maxShotDispersion=modifiers(BattleParams.AUTO_SHOOT_MAX_SHOT_DISPERSION_FACTOR, gun.autoShoot.maxShotDispersion))
+                gun.autoShoot = gun.autoShoot._replace(shotDispersionPerShot=modifiers(BattleParams.AUTO_SHOOT_DISPERSION_PER_SHOT, gun.autoShoot.shotDispersionPerShot), maxShotDispersion=modifiers(BattleParams.AUTO_SHOOT_MAX_SHOT_DISPERSION_FACTOR, gun.autoShoot.maxShotDispersion))
             gun.healthParams = copy.copy(gun.healthParams)
             gun.healthParams.maxHealth = modifiers(BattleParams.GUN_HEALTH, gun.healthParams.maxHealth)
             gun.healthParams.maxRegenHealth = modifiers(BattleParams.GUN_HEALTH, gun.healthParams.maxRegenHealth)

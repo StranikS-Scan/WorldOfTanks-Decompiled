@@ -237,9 +237,9 @@ class BlueprintsConversionView(FullScreenDialogView):
     def __getInitialNationalUsageCounts(self):
         options = self.__blueprints.getNationalRequiredOptions(self.__vehicle.intCD, self.__vehicle.level)
         if self.__fragmentsCount == 1:
-            priorityOrder = sorted(self.__allyFragmentsBalance.items(), key=lambda (nId, balance): (nId != nations.INDICES[self.__vehicle.nationName], nId))
+            priorityOrder = sorted(self.__allyFragmentsBalance.items(), key=lambda it: (it[0] != nations.INDICES[self.__vehicle.nationName], it[0]))
         else:
-            priorityOrder = sorted(self.__allyFragmentsBalance.items(), key=lambda (nId, balance): (nId != nations.INDICES[self.__vehicle.nationName], -balance, nId))
+            priorityOrder = sorted(self.__allyFragmentsBalance.items(), key=lambda it: (it[0] != nations.INDICES[self.__vehicle.nationName], -it[1], it[0]))
         totalCount = 0
         nationUsedDict = defaultdict(lambda : 0)
         for nId, balance in priorityOrder:

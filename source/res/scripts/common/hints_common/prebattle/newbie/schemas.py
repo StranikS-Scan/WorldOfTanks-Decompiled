@@ -5,7 +5,7 @@ import typing
 from dict2model.exceptions import ValidationErrorMessage, ValidationError
 from hints_common.prebattle.newbie.consts import BATTLES_TYPES, HINT_TYPE_PREFIX
 from hints_common.prebattle.schemas import BaseHintModel, BaseHintSchema
-from base_schema_manager import GameParamsSchema
+from game_params_common.schema import GameParamsSchema
 from dict2model import models, fields, validate
 
 class NewbieHintModel(BaseHintModel):

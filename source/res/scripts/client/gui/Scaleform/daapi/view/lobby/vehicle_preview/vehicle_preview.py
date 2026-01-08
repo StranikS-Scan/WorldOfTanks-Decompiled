@@ -250,7 +250,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self._hangarSpace.onSpaceRefresh -= self.closeView
         self._hangarSpace.unlockVehicleSelectable(self)
         self.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.handleSelectedEntityUpdated)
-        isMapsTrainingViewOpened = self.__guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.maps_training.MapsTrainingPage()) is not None
+        isMapsTrainingViewOpened = self.__guiLoader.windowsManager.getViewByLayoutID(R.views.mono.maps_training.maps_training_page()) is not None
         g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.VEHICLE_PREVIEW_HIDDEN), scope=EVENT_BUS_SCOPE.LOBBY)
         if self._backAlias == VIEW_ALIAS.VEHICLE_PREVIEW:
             g_currentVehicle.refreshModel()

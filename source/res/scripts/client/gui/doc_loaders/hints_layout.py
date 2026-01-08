@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/doc_loaders/hints_layout.py
+from __future__ import absolute_import
 import resource_helper
 from gui.shared.formatters import text_styles
 

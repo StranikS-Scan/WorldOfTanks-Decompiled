@@ -225,6 +225,9 @@ class PERSONAL_MISSIONS_30(object):
     CAMPAIGNSELECTOR_STATUS_TOOLTIP_THIRD = '#personal_missions_30:campaignSelector/status/tooltip/third'
     CAMPAIGNSELECTOR_STATUS_TOOLTIP_FIRSTTWO = '#personal_missions_30:campaignSelector/status/tooltip/firstTwo'
     CAMPAIGNSELECTOR_OPERATION_TOOLTIP_LOCKED = '#personal_missions_30:campaignSelector/operation/tooltip/locked'
+    PLUGIN_POST_BATTLE_CONDITION = '#personal_missions_30:plugin/post_battle/condition'
+    PLUGIN_POST_BATTLE_OPENBUTTON = '#personal_missions_30:plugin/post_battle/openButton'
+    PLUGIN_POST_BATTLE_QUESTSSEPARATOR = '#personal_missions_30:plugin/post_battle/questsSeparator'
     MAIN_CHAIN_ALL_NAME_ENUM = (MAIN_CHAIN_ASSAULT_NAME, MAIN_CHAIN_SNIPER_NAME, MAIN_CHAIN_SUPPORT_NAME)
 
     @classmethod

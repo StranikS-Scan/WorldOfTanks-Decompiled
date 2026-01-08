@@ -48,7 +48,7 @@ def init(scriptsConfig, engineConfig, userPreferences, gameLoadingStep):
         if forceCreating:
             BigWorld.quitWithExitCode(ExitCode.FAILED)
         return
-    settings = configs.createPDCSettings(scriptsConfig, engineConfig)
+    settings = configs.createPDCSettings(scriptsConfig, engineConfig, userPreferences)
     if not forceCreating:
         if not settings.enabled or constants.IS_DEVELOPMENT and not settings.devEnabled:
             _logger.info('Disabled in config.')

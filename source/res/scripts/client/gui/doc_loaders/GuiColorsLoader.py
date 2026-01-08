@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/doc_loaders/GuiColorsLoader.py
+from __future__ import absolute_import
+from future.utils import listitems
 import Math
 import ResMgr
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION
@@ -158,10 +160,10 @@ class _GuiColorsLoader(object):
         return
 
     def items(self):
-        return self.__colors.items()
+        return listitems(self.__colors)
 
     def schemasNames(self):
-        return self.__colors.keys()
+        return list(self.__colors.keys())
 
     def getColorScheme(self, schemeName):
         return self.__colors.get(schemeName)

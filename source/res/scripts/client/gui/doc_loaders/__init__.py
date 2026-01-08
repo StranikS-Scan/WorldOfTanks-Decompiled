@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/doc_loaders/__init__.py
+from __future__ import absolute_import
 from items import _xml
 
 def readDict(xmlCtx, section, subsectionName, converter=lambda v: v.asString):

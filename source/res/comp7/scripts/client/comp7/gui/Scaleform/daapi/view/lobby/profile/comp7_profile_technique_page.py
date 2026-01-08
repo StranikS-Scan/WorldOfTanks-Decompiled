@@ -16,6 +16,13 @@ class Comp7ProfileTechniquePage(ProfileTechniquePage):
         super(Comp7ProfileTechniquePage, self).__init__(*args)
         self._battleTypeHandlers.update(getBattleHandlers())
         self._seasonsManagers.update(getComp7SeasonManagers())
+        data = self._selectedData
+        if data is not None and data.get('battlesType') == PROFILE_DROPDOWN_KEYS.COMP7:
+            self.requestDossier(PROFILE_DROPDOWN_KEYS.COMP7)
+            vehicleCD = data.get('vehicleCD')
+            if vehicleCD is not None:
+                self.requestData(vehicleCD)
+        return
 
     @classmethod
     def _makeBattleTypesDropDown(cls, accountDossier, forVehiclesPage=False):

@@ -1,18 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/vehicle_mechanics/mechanic_widgets/support_weapon_widget.py
+from __future__ import absolute_import
 import typing
 import CommandMapping
-from backports.functools_lru_cache import lru_cache
+from cache import last_cached_method
 from constants import SECONDARY_GUN_STATE, UNKNOWN_GUN_INSTALLATION_INDEX
+from events_containers.common.containers import ContainersListener
 from events_handler import eventHandler
 from gui.Scaleform.daapi.view.battle.shared.vehicle_mechanics.mechanic_widgets.vehicle_mechanic_widget import HotKeyData
 from gui.Scaleform.daapi.view.meta.SupportWeaponWidgetMeta import SupportWeaponWidgetMeta
 from gui.Scaleform.genConsts.MECHANICS_WIDGET_CONST import MECHANICS_WIDGET_CONST
 from gui.veh_mechanics.battle.updaters.hotkey_updaters import HotKeysViewUpdater
-from gui.veh_mechanics.battle.updaters.mechanic_passenger_view_updater import VehicleMechanicPassengerUpdater
-from gui.veh_mechanics.battle.updaters.mechanic_states_view_updater import VehicleMechanicStatesUpdater
+from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import VehicleMechanicPassengerUpdater
+from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
 from gui.veh_mechanics.battle.updaters.shooting_updaters import IShootingReactionsView, ShootingReactionsUpdater
-from vehicles.components.component_events import ComponentListener
 from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 if typing.TYPE_CHECKING:
@@ -20,7 +21,7 @@ if typing.TYPE_CHECKING:
     from items.components.gun_installation_components import GunInstallationSlot
     from SupportWeaponComponent import SupportWeaponState
 
-class SupportWeaponMechanicWidget(SupportWeaponWidgetMeta, ComponentListener, IMechanicStatesListenerLogic, IShootingReactionsView):
+class SupportWeaponMechanicWidget(SupportWeaponWidgetMeta, ContainersListener, IMechanicStatesListenerLogic, IShootingReactionsView):
     _SUPPORT_WEAPON_UI_STATES = {SECONDARY_GUN_STATE.IDLE: MECHANICS_WIDGET_CONST.IDLE,
      SECONDARY_GUN_STATE.READY: MECHANICS_WIDGET_CONST.READY,
      SECONDARY_GUN_STATE.ACTIVE: MECHANICS_WIDGET_CONST.ACTIVE,
@@ -62,7 +63,7 @@ class SupportWeaponMechanicWidget(SupportWeaponWidgetMeta, ComponentListener, IM
     def _getViewUpdaters(self):
         return [VehicleMechanicPassengerUpdater(VehicleMechanic.SUPPORT_WEAPON, self),
          VehicleMechanicStatesUpdater(VehicleMechanic.SUPPORT_WEAPON, self),
-         HotKeysViewUpdater(self._HOT_KEY_MAP.keys(), self),
+         HotKeysViewUpdater(list(self._HOT_KEY_MAP.keys()), self),
          ShootingReactionsUpdater(self)]
 
     def __getDisplayState(self, state):
@@ -70,11 +71,11 @@ class SupportWeaponMechanicWidget(SupportWeaponWidgetMeta, ComponentListener, IM
 
     def __invalidateAll(self, state, isInstantly=False):
         uiState = self.__getDisplayState(state)
-        self.__invalidateProgress.cache_clear()
+        self.__invalidateProgress.reset()
         self.__invalidateProgress(uiState, state.progress, state.timeLeft)
         self.as_setStateS(uiState, isInstantly)
 
-    @lru_cache(maxsize=None)
+    @last_cached_method()
     def __invalidateProgress(self, uiState, progress, timeLeft):
         if uiState in self.__progressUpdaters:
             self.__progressUpdaters[uiState](progress)

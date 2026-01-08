@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 CLAN_LOCK = 1
 GUI_ITEM_TYPE_NAMES = tuple(ITEM_TYPE_NAMES) + tuple(['reserved'] * (16 - len(ITEM_TYPE_NAMES)))
-GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster', 'badge', 'battleAbility', 'lootBox', 'demountKit', 'vehPostProgression', 'recertificationForm', 'mentoringLicense', 'paint', 'camouflage', 'modification', 'outfit', 'style', 'decal', 'emblem', 'inscription', 'projectionDecal', 'insignia', 'personalNumber', 'sequence', 'attachment', 'statTracker', 'vehicleMechanic')
+GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster', 'badge', 'battleAbility', 'lootBox', 'demountKit', 'vehPostProgression', 'recertificationForm', 'mentoringLicense', 'paint', 'camouflage', 'modification', 'outfit', 'style', 'decal', 'emblem', 'inscription', 'projectionDecal', 'insignia', 'personalNumber', 'sequence', 'attachment', 'statTracker', 'vehicleMechanic', 'moduleMechanic')
 GUI_ITEM_TYPE_INDICES = dict(((n, idx) for idx, n in enumerate(GUI_ITEM_TYPE_NAMES)))
 
 class GUI_ITEM_TYPE(CONST_CONTAINER):
@@ -32,6 +32,7 @@ class GUI_ITEM_TYPE(CONST_CONTAINER):
     SHELL = GUI_ITEM_TYPE_INDICES['shell']
     EQUIPMENT = GUI_ITEM_TYPE_INDICES['equipment']
     BATTLE_ABILITY = GUI_ITEM_TYPE_INDICES['battleAbility']
+    MODULE_MECHANIC = GUI_ITEM_TYPE_INDICES['moduleMechanic']
     VEHICLE_MECHANIC = GUI_ITEM_TYPE_INDICES['vehicleMechanic']
     CUSTOMIZATION = GUI_ITEM_TYPE_INDICES['customizationItem']
     CREW_SKINS = GUI_ITEM_TYPE_INDICES['crewSkin']
@@ -300,8 +301,10 @@ class KPI(object):
         VEHICLE_TURRET_ROTATION_SPEED = 'vehicleTurretRotationSpeed'
         VEHICLE_CIRCULAR_VISION_RADIUS = 'vehicleCircularVisionRadius'
         VEHICLE_STILL_CIRCULAR_VISION_RADIUS = 'vehicleStillCircularVisionRadius'
+        VEHICLE_STILL_CIRCULAR_VISION_RADIUS_DELUXE = 'vehicleStillCircularVisionRadiusDeluxe'
         VEHICLE_CAMOUFLAGE = 'vehicleCamouflage'
         VEHICLE_STILL_CAMOUFLAGE = 'vehicleStillCamouflage'
+        VEHICLE_STILL_CAMOUFLAGE_DELUXE = 'vehicleStillCamouflageDeluxe'
         VEHICLE_FIRE_CHANCE = 'vehicleFireChance'
         VEHICLE_GUN_RELOAD_TIME = 'vehicleGunReloadTime'
         VEHICLE_GUN_AIM_SPEED = 'vehicleGunAimSpeed'
@@ -363,7 +366,10 @@ class KPI(object):
         ADDITIONAL_SHELL_AMMO_CAPACITY = 'additionalShellAmmoCapacity'
         NON_HE_SHELL_DAMAGE = 'nonHEShellDamage'
         HE_SHELL_DAMAGE = 'HEShellDamage'
+        STANDARD_SHELL_DAMAGE = 'standardShellDamage'
+        SPECIAL_SHELL_DAMAGE = 'specialShellDamage'
         ALL_SHELL_DAMAGE = 'allShellDamage'
+        BASIC_SHELL_DAMAGE = 'basicShellDamage'
         HE_SHELL_PENETRATION = 'HEShellPenetration'
         GUN_DEPRESSION = 'gunDepression'
         GUN_TRAVERSE = 'gunTraverse'
@@ -377,8 +383,10 @@ class KPI(object):
         SHELL_VELOCITY = 'shellVelocity'
         ALL_SHELLS_VELOCITY = 'allShellsVelocity'
         SHELL_MODULE_DAMAGE = 'shellModuleDamage'
+        COOLING_PER_SEC = 'coolingPerSec'
         VEHICLE_CAMOUFLAGE_GROUP = 'vehicleCamouflageGroup'
         VEHICLE_STILL_CAMOUFLAGE_GROUP = 'vehicleStillCamouflageGroup'
+        VEHICLE_STILL_CAMOUFLAGE_GROUP_DELUXE = 'vehicleStillCamouflageGroupDeluxe'
         CREW_LEVEL = 'crewLevel'
         CREW_HIT_CHANCE = 'crewHitChance'
         CREW_STUN_DURATION = 'crewStunDuration'

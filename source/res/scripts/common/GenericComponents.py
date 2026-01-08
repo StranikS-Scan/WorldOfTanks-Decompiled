@@ -25,3 +25,7 @@ class HealthGradationComponent:
         if health < maxHealth * self.__redHealth / 100:
             return EHealthGradation.RED_ZONE
         return EHealthGradation.YELLOW_ZONE if health < maxHealth * self.__yellowHealth / 100 else EHealthGradation.GREEN_ZONE
+
+
+class CyclicActivatorComponent(object):
+    pass

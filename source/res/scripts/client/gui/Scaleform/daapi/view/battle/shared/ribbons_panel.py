@@ -7,7 +7,6 @@ from gui.Scaleform.daapi.view.battle.shared.ribbons_aggregator import DAMAGE_SOU
 from gui.Scaleform.daapi.view.meta.RibbonsPanelMeta import RibbonsPanelMeta
 from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES as _BET
 from gui.battle_control import avatar_getter
-from constants import VEHICLE_BUNKER_TURRET_TAG
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE
 from gui.battle_control.battle_constants import BonusRibbonLabel as _BRL, VEHICLE_VIEW_STATE_ID_TO_WEATHER_ZONE_NAME
@@ -82,8 +81,6 @@ def _getVehicleData(arenaDP, vehArenaID):
     vehicleName = vInfo.getDisplayedName()
     if isBattleRoyale(vTypeInfoVO.tags) and isSpawnedBot(vTypeInfoVO.tags):
         vehicleClassTag = ''
-    if VEHICLE_BUNKER_TURRET_TAG in vTypeInfoVO.tags:
-        vehicleClassTag = VEHICLE_BUNKER_TURRET_TAG
     return (vehicleName, vehicleClassTag)
 
 

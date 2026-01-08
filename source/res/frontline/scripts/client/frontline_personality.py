@@ -4,7 +4,7 @@ from account_helpers.AccountSettings import AccountSettings, KEY_SETTINGS
 from constants import ARENA_GUI_TYPE, PREBATTLE_TYPE, QUEUE_TYPE, ARENA_BONUS_TYPE, HAS_DEV_RESOURCES
 from constants_utils import AbstractBattleMode
 from frontline.gui import gui_constants
-from frontline.gui.Scaleform import registerFLTooltipsBuilders
+from frontline.gui.Scaleform import registerFLScaleform
 from frontline.gui.Scaleform.daapi.view.lobby.hangar.hangar_quest_flags import registerQuestFlags
 from frontline.gui.battle_control.controllers.consumables import registerFLEquipmentController
 from frontline.gui.battle_control.controllers.equipment_items import registerFLEquipmentsItems
@@ -99,7 +99,7 @@ def preInit():
     trainingBattleMode = ClientFrontlineTrainingBattleMode(__name__)
     trainingBattleMode.registerScaleformRequiredLibraries()
     registerFLBattleRepositories()
-    registerFLTooltipsBuilders()
+    registerFLScaleform()
     registerQuestFlags()
     extendIntroByType()
     registerFLEquipmentController()

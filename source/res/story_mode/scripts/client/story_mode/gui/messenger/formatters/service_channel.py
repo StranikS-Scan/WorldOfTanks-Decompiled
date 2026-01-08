@@ -13,7 +13,7 @@ from messenger.formatters import TimeFormatter
 from messenger.formatters.service_channel import BattleResultsFormatter, ServiceChannelFormatter
 from messenger.formatters.service_channel_helpers import MessageData
 from skeletons.gui.shared import IItemsCache
-from story_mode_common.story_mode_constants import FIRST_MISSION_ID
+from story_mode_common.story_mode_constants import MissionId
 from story_mode.gui.shared.utils import getRewardList, getTasksCount
 from story_mode.skeletons.story_mode_controller import IStoryModeController
 from skeletons.gui.customization import ICustomizationService
@@ -38,7 +38,7 @@ class StoryModeResultsFormatter(BattleResultsFormatter):
             callback(messages)
 
     def _prepareFormatData(self, message):
-        missionId = message.data.get('missionId', FIRST_MISSION_ID)
+        missionId = message.data.get('missionId', MissionId.ONE)
         isOnboarding = self._storyModeCtrl.missions.isOnboarding(missionId)
         if isOnboarding:
             self._battleResultKeys = {SCENARIO_RESULT.LOSE: 'storyModeOnboardingBattleDefeatResult',

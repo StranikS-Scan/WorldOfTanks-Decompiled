@@ -1121,6 +1121,10 @@ def getWeeklyMissionsMapping():
     return mapping
 
 
+def getPersonalMissionsBonusPacker():
+    return BonusUIPacker(getDefaultBonusPackersMap())
+
+
 def packMissionsBonusModelAndTooltipData(bonuses, packer, model, tooltipData=None, sort=None):
     bonusIndexTotal = 0
     if tooltipData is not None:

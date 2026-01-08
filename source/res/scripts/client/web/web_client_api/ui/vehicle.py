@@ -445,7 +445,8 @@ class VehiclePreviewWebApiMixin(object):
     __c11n = dependency.descriptor(ICustomizationService)
 
     @w2c(_VehiclePreviewSchema, 'vehicle_preview')
-    def openVehiclePreview(self, cmd):
+    def openVehiclePreview(self, cmd, ctx):
+        self.__setBackUrl(cmd, ctx)
         if cmd.hidden_blocks is not None:
             showPreviewFunc = partial(event_dispatcher.showConfigurableShopVehiclePreview, hiddenBlocks=cmd.hidden_blocks, itemPack=_parseItemsPack(cmd.items))
         else:
@@ -472,11 +473,12 @@ class VehiclePreviewWebApiMixin(object):
             _pushInvalidPreviewMessage()
 
     @w2c(_VehiclePackPreviewSchema, 'vehicle_pack_preview')
-    def openVehiclePackPreview(self, cmd):
+    def openVehiclePackPreview(self, cmd, ctx):
         items = _parseItemsPack(cmd.items)
         price, oldPrice = _parseBuyPrice(cmd.buy_price)
         vehiclesIDs = self.__getVehiclesIDs(items)
         if vehiclesIDs:
+            self.__setBackUrl(cmd, ctx)
             localEndTime = None
             if cmd.end_date:
                 localEndTime = self.__getLocalEndTime(cmd.end_date)
@@ -486,11 +488,13 @@ class VehiclePreviewWebApiMixin(object):
         return
 
     @w2c(_VehicleStylePreviewSchema, 'vehicle_style_preview')
-    def openVehicleStylePreview(self, cmd):
+    def openVehicleStylePreview(self, cmd, ctx):
+        self.__setBackUrl(cmd, ctx)
         return self._openVehicleStylePreview(cmd)
 
     @w2c(_ShowcaseVehicleStylePreviewSchema, 'showcase_vehicle_style_preview')
-    def openShowcaseVehicleStylePreview(self, cmd):
+    def openShowcaseVehicleStylePreview(self, cmd, ctx):
+        self.__setBackUrl(cmd, ctx)
         return self._openVehicleStylePreview(cmd, event_dispatcher.showShowcaseStyleBuyingPreview, originalPrice=cmd.original_price, discountPercent=cmd.discount_percent, endTime=self.__getLocalEndTime(cmd.end_date) if cmd.end_date else None, obtainingMethod=cmd.obtaining_method)
 
     @w2c(_VehicleMarathonStylePreviewSchema, 'marathon_vehicle_style_preview')
@@ -553,7 +557,8 @@ class VehiclePreviewWebApiMixin(object):
         return self._openVehicleStylePreview(cmd, previewMethod, obtainingMethod=obtainingMethod)
 
     @w2c(_VehicleStylePreviewWithTabsSchema, 'vehicle_style_preview_with_tabs')
-    def openVehicleStylePreviewWithTabs(self, cmd):
+    def openVehicleStylePreviewWithTabs(self, cmd, ctx):
+        self.__setBackUrl(cmd, ctx)
         styleInfo = self.__c11n.getItemByID(GUI_ITEM_TYPE.STYLE, cmd.style_id)
         descrLabelResPath = R.strings.vehicle_preview.header.backBtn.descrLabel
         ClientSelectableCameraObject.switchCamera()
@@ -567,6 +572,11 @@ class VehiclePreviewWebApiMixin(object):
             return self.__showStylePreview(cmd.vehicle_cd, cmd, showStyleFunc, **additionalStyleFuncKwargs)
         styledVehicleCD = self.__getStyledVehicleCD(cmd.style_id)
         return False if not styledVehicleCD else self.__showStylePreview(styledVehicleCD, cmd, showStyleFunc, **additionalStyleFuncKwargs)
+
+    @staticmethod
+    def __setBackUrl(cmd, ctx):
+        view = ctx.get('browser_view')
+        view.setBackUrl(cmd.back_url)
 
     @staticmethod
     def __getLocalEndTime(date):

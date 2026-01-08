@@ -6,8 +6,8 @@ if typing.TYPE_CHECKING:
     from typing import Any, Callable, Dict, Iterable, Iterator, List, Optional, Set, Tuple, Union, Sequence, Generator
     from collections_common import Collection, CollectionItem
     from comp7.helpers.comp7_server_settings import Comp7RewardsConfig, Comp7Config
+    from comp7.gui.game_control.comp7_controller import _LeaderboardDataProvider, _ProgressionDataProvider
     from Event import Event
-    from wg_async import _Future
     from gui.collection.resources.cdn.cache import CollectionsCdnCacheMgr
     from fun_random.gui.feature.models.common import FunSubModesStatus
     from fun_random.gui.feature.models.notifications import FunNotification
@@ -61,6 +61,10 @@ if typing.TYPE_CHECKING:
     from renewable_subscription_common.optional_devices_usage_config import VehicleLoadout
     from gui.game_control.wotlda.loadout_model import BaseOptDeviceLoadoutModel
     from gui.shared.view_helpers.blur_manager import ImmediateSceneBlurConfig, SceneBlurConfig, UILayerBlurConfig
+    from gui.game_control.vehicle_playlists_controller import VehiclePlaylist
+    from helpers.ingame_tournament_helper import IngameTournamentState, IngameTournamentType
+    from helpers.server_settings import _IngameTournamentShowmatchConfig
+    from gui.game_control.ingame_tournament_controller import _IngameTournamentData
     BattlePassBonusOpts = Optional[TokensBonus, BattlePassSelectTokensBonus]
 
 class IGameController(object):
@@ -2519,6 +2523,7 @@ class IGiftSystemController(IGameController):
 class ISeniorityAwardsController(IGameController):
     onUpdated = None
     onVehicleSelectionChanged = None
+    onQuestsReceived = None
 
     @property
     def config(self):
@@ -2574,6 +2579,10 @@ class ISeniorityAwardsController(IGameController):
 
     @property
     def categories(self):
+        raise NotImplementedError
+
+    @property
+    def maxCategory(self):
         raise NotImplementedError
 
     @property
@@ -2635,9 +2644,6 @@ class ISeniorityAwardsController(IGameController):
         raise NotImplementedError
 
     def getAvailableVehicleSelectionRewards(self):
-        raise NotImplementedError
-
-    def selectVehicleReward(self, vehicleRewardId):
         raise NotImplementedError
 
     def getVehicleSelectionQuestReward(self, vehicleRewardId):
@@ -2888,6 +2894,10 @@ class IComp7Controller(IGameController, ISeasonProvider):
 
     @property
     def leaderboard(self):
+        raise NotImplementedError
+
+    @property
+    def progression(self):
         raise NotImplementedError
 
     @property
@@ -3838,6 +3848,12 @@ class IVehiclePlaylistsController(IGameController):
     def iterPlaylists(self):
         raise NotImplementedError
 
+    def initPlayLists(self):
+        raise NotImplementedError
+
+    def simplePlayListParser(self, pStrData):
+        raise NotImplementedError
+
 
 class IBlurController(IGameController):
 
@@ -3877,20 +3893,38 @@ class ICrewController(IGameController):
 
 
 class IIngameTournamentController(IGameController):
-    onTournamentBannerUpdated = None
+    onTournamentEntryPointUpdated = None
     onTournamentWGCGDataUpdated = None
 
-    def isTournamentBannerAvailable(self):
+    def isTournamentAvailable(self, tournamentType):
         raise NotImplementedError()
 
-    def getActiveBannerData(self):
+    def getTournamentState(self, tournamentType):
         raise NotImplementedError()
 
-    def getTournamentDates(self):
+    def getCurrentShowmatch(self, tournamentType):
+        raise NotImplementedError()
+
+    def getNextShowmatch(self, tournamentType):
+        raise NotImplementedError()
+
+    def getTournamentShowmatchPeriod(self, tournamentType):
+        raise NotImplementedError()
+
+    def getIsIntroSeen(self, tournamentType):
+        raise NotImplementedError()
+
+    def setIsIntroSeen(self, tournamentType):
         raise NotImplementedError()
 
     def requestTournamentWGCGData(self):
         raise NotImplementedError()
 
-    def openShop(self):
+    def openShop(self, tournamentType):
+        raise NotImplementedError()
+
+    def getOfferGiftsToken(self, tournamentType):
+        raise NotImplementedError()
+
+    def openOfferGifts(self, tournamentType, overrideOnBackCallback):
         raise NotImplementedError()

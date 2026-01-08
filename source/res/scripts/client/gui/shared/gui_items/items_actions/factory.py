@@ -26,6 +26,7 @@ RETRAIN_TANKMAN = 'retrainTankman'
 CHANGE_ROLE_TANKMAN = 'changeRoleTankman'
 UNLOAD_TANKMAN = 'unloadTankman'
 EQUIP_TANKMAN = 'equipTankman'
+QUICK_SERVICE_EQUIP_TANKMAN = 'quickServiceEquipTankman'
 BUY_AND_EQUIP_TANKMAN = 'buyAndEquipTankman'
 CHANGE_TANKMAN_PASSPORT = 'changeTankmanPassport'
 DISMISS_TANKMAN = 'dismissTankman'
@@ -72,6 +73,7 @@ _ACTION_MAP = {SELL_ITEM: actions.SellItemAction,
  CHANGE_ROLE_TANKMAN: actions.TankmanChangeRoleAction,
  UNLOAD_TANKMAN: actions.TankmanUnloadAction,
  EQUIP_TANKMAN: actions.TankmanEquipAction,
+ QUICK_SERVICE_EQUIP_TANKMAN: actions.QuickServiceTankmanEquipAction,
  BUY_AND_EQUIP_TANKMAN: actions.TankmanBuyAndEquipAction,
  CHANGE_TANKMAN_PASSPORT: actions.TankmanChangePassportAction,
  DISMISS_TANKMAN: actions.TankmanDismissAction,

@@ -7,11 +7,10 @@ import BigWorld
 from Event import Event, EventManager
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from adisp import adisp_process, adisp_async
-from frameworks.wulf import WindowLayer
 from gui import GUI_SETTINGS
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.app_loader import sf_lobby
 from gui.game_control import gc_constants
@@ -107,6 +106,7 @@ class PromoController(IPromoController):
         return
 
     def onLobbyInited(self, event):
+        from gui.lobby_state_machine.states import isInHangarState
         if not isPlayerAccount():
             return
         g_eventBus.addListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
@@ -118,7 +118,9 @@ class PromoController(IPromoController):
         self.__notificationsCtrl.onEventNotificationsChanged += self.__onEventNotification
         if not isPopupsWindowsOpenDisabled():
             self.__processPromo(self.__notificationsCtrl.getEventsNotifications())
-        self.app.loaderManager.onViewLoaded += self.__onViewLoaded
+        lsm = getLobbyStateMachine()
+        lsm.onVisibleRouteChanged += self.__onVisibleRouteChanged
+        self.__isInHangar = isInHangarState()
 
     @property
     def checkIntervalInBattles(self):
@@ -262,8 +264,9 @@ class PromoController(IPromoController):
             self.__hasPendingTeaser = True
 
     def __stop(self):
-        if self.app and self.app.loaderManager:
-            self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
+        lsm = getLobbyStateMachine()
+        if lsm is not None:
+            lsm.onVisibleRouteChanged -= self.__onVisibleRouteChanged
         self.__isLobbyInited = False
         self.__isInHangar = False
         self.__isPromoOpen = False
@@ -356,13 +359,14 @@ class PromoController(IPromoController):
          'spa_id': BigWorld.player().databaseID}
         callback(url_formatters.addParamsToUrlQuery(url, params))
 
-    def __onViewLoaded(self, pyView, _):
+    def __onVisibleRouteChanged(self, routeInfo):
+        from gui.lobby_state_machine.states import isHangarState
         if self.__isLobbyInited:
-            if pyView.alias in (VIEW_ALIAS.LOBBY_HANGAR, VIEW_ALIAS.LEGACY_LOBBY_HANGAR):
+            if isHangarState(routeInfo.state):
                 self.__isInHangar = True
                 if self.__hasPendingTeaser:
                     self.__tryToShowTeaser()
-            elif pyView.layer == WindowLayer.SUB_VIEW:
+            else:
                 self.__isInHangar = False
 
     def __addSteamParams(self, url):

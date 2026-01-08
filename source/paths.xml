@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/2.1.0.0</Path>
-    <Path mask="*.wotmod" mode="recursive" root="res">./mods/2.1.0.0</Path>
+    <Path cacheSubdirs="true">./res_mods/2.1.1.0 Common Test</Path>
+    <Path mask="*.wotmod" mode="recursive" root="res">./mods/2.1.1.0 Common Test</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part3.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
@@ -16,14 +16,20 @@
       <Package type="sandbox,sd,hd">./res/packages/shaders.pkg</Package>
       <Package type="sd,hd">./res/packages/01_karelia.pkg</Package>
       <Package type="hd">./res/packages/01_karelia_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/01_karelia_fp.pkg</Package>
+      <Package type="hd">./res/packages/01_karelia_fp_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/02_malinovka.pkg</Package>
       <Package type="hd">./res/packages/02_malinovka_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/02_malinovka_fp.pkg</Package>
+      <Package type="hd">./res/packages/02_malinovka_fp_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/03_campania_big.pkg</Package>
       <Package type="hd">./res/packages/03_campania_big_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/04_himmelsdorf.pkg</Package>
       <Package type="hd">./res/packages/04_himmelsdorf_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/05_prohorovka.pkg</Package>
       <Package type="hd">./res/packages/05_prohorovka_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/05_prohorovka_fp.pkg</Package>
+      <Package type="hd">./res/packages/05_prohorovka_fp_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/06_ensk.pkg</Package>
       <Package type="hd">./res/packages/06_ensk_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/06_ensk_big.pkg</Package>
@@ -133,9 +139,6 @@
       <Package type="hd">./res/packages/h33_comp7_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/hangar_v4.pkg</Package>
       <Package type="hd">./res/packages/hangar_v4_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/hangar_v4_advent.pkg</Package>
-      <Package type="hd">./res/packages/hangar_v4_advent_hd.pkg</Package>
-      <Package type="sandbox,sd,hd">./res/packages/advent_calendar.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part2.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part3.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part1.pkg</Package>

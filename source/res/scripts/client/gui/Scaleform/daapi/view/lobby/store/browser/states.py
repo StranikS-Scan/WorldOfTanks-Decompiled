@@ -27,6 +27,11 @@ class ShopState(SFViewLobbyState):
         self.__cachedParams = {}
 
     def serializeParams(self):
+        view = self.getMachine().getRelatedView(self)
+        url = view.getBackUrl()
+        if url:
+            ctx = self.__cachedParams.get('ctx', {})
+            ctx.update(url=url)
         return self.__cachedParams
 
     def registerTransitions(self):

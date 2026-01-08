@@ -1136,8 +1136,8 @@ class Customization(_Requirement):
 class _Cumulativable(_Condition):
     __metaclass__ = ABCMeta
 
-    def getProgressPerGroup(self, curProgData=None, prevProgData=None):
-        return self._parseProgress(curProgData, prevProgData)
+    def getProgressPerGroup(self, curProgData=None, prevProgData=None, isCurrentProgress=False):
+        return self._parseProgress(curProgData, prevProgData, isCurrentProgress)
 
     def getUserString(self):
         pass
@@ -1154,25 +1154,32 @@ class _Cumulativable(_Condition):
     def getKey(self):
         pass
 
-    def _parseProgress(self, curProgData, prevProgData):
+    def _parseProgress(self, curProgData, prevProgData, isCurrentProgress):
         result = {}
         bonus = self.getBonusData()
-        curProgData = bonus.getProgress() if curProgData is None else curProgData
-        prevProgData = {} if prevProgData is None else prevProgData
         if bonus is None:
             return result
         else:
+            curProgData = bonus.getProgress() if curProgData is None else curProgData
+            prevProgData = {} if prevProgData is None else prevProgData
             key = self.getKey()
             groupBy = bonus.getGroupByValue()
             total = self.getTotalValue()
             if groupBy is None:
                 curProg = curProgData.get(None, {})
                 prevProg = prevProgData.get(None, {})
-                diff = self.__getProgDiff(curProg, prevProg)
-                result[None] = (min(curProg.get(key, 0), total),
-                 total,
-                 diff,
-                 self.__isProgressCompleted(curProg))
+                if isCurrentProgress:
+                    diff, current = self.__getCurrentBattleProgDiff(curProg, prevProg)
+                    result[None] = (current,
+                     total,
+                     diff,
+                     self.__isProgressCompleted(curProg))
+                else:
+                    diff = self.__getProgDiff(curProg, prevProg)
+                    result[None] = (min(curProg.get(key, 0), total),
+                     total,
+                     diff,
+                     self.__isProgressCompleted(curProg))
             else:
                 for gByKey, progress in curProgData.iteritems():
                     diff = self.__getProgDiff(progress, prevProgData.get(gByKey, {}))
@@ -1182,6 +1189,22 @@ class _Cumulativable(_Condition):
                      self.__isProgressCompleted(progress))
 
             return result
+
+    def __getCurrentBattleProgDiff(self, curProg, prevProg):
+        key = self.getKey()
+        total = self.getTotalValue()
+        current = min(curProg.get(key, 0), total)
+        curBonusCount = curProg.get('bonusCount', 0)
+        prevBonusCount = prevProg.get('bonusCount', 0) if prevProg else 0
+        if curBonusCount > prevBonusCount:
+            if self.__isProgressCompleted(curProg):
+                diff = total - min(prevProg.get(key, 0), total)
+                return (diff, total)
+            if current == 0:
+                diff = total - min(prevProg.get(key, 0), total)
+                return (diff, prevProg.get(key, 0) + diff)
+            return (current, current)
+        return (current - min(prevProg.get(key, 0), total), current)
 
     def __getProgDiff(self, curProg, prevProg):
         key = self.getKey()

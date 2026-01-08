@@ -36,8 +36,12 @@ def createOptDeviceInBattle(deviceID, status):
 
 
 class DevicesSound(object):
-    __eventsMap = {'camouflageNet': ('camo_net_start', 'camo_net_stop'),
-     'stereoscope': ('stereo_trumpet_start', 'stereo_trumpet_stop')}
+    __camoNetEvents = ('camo_net_start', 'camo_net_stop')
+    __stereoEvents = ('stereo_trumpet_start', 'stereo_trumpet_stop')
+    __eventsMap = {'camouflageNet': __camoNetEvents,
+     'deluxeCamouflageNet': __camoNetEvents,
+     'stereoscope': __stereoEvents,
+     'deluxeStereoscope': __stereoEvents}
     __resurrectionEventsMap = {'ammoBay': 'cons_wet_ammo',
      'fuelTank': 'cons_co2',
      'engine': 'cons_cyclone_filter'}

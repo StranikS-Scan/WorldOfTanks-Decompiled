@@ -220,7 +220,7 @@ class DailyMissionsBlockPresenter(BaseMissionsBlockPresenter[DailyMissionsBlockM
             return
         quest = quests[questId]
         result = yield daily_quests.DailyQuestReroll(quest).request()
-        if result.success:
+        if result.success and self.viewModel.proxy:
             with self.viewModel.transaction() as tx:
                 self._updateCountdownUntilNextReroll(tx)
         if result.userMsg:

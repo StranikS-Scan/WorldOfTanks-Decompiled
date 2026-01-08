@@ -15,3 +15,6 @@ class CalloutPanelMeta(BaseDAAPIComponent):
 
     def as_setHideDataS(self, wasAnswered, answeredAction):
         return self.flashObject.as_setHideData(wasAnswered, answeredAction) if self._isDAAPIInited() else None
+
+    def as_setCrosshairTypeS(self, viewID):
+        return self.flashObject.as_setCrosshairType(viewID) if self._isDAAPIInited() else None

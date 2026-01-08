@@ -30,6 +30,10 @@ class BonusesLayout(object):
     def fini(self):
         self.__storage.clear()
 
+    def updateStorage(self):
+        self.__storage.clear()
+        self.__loadLayout()
+
     def getPriority(self, eventName, bonus=None):
         return int(self.__getParameter(eventName, BonusesLayoutAttrs.PRIORITY, _LEAST_PRIORITY, bonus))
 

@@ -166,13 +166,13 @@
         <priority>	1	</priority>
         <rank>	gold	</rank>
         <params>
-          <param>	1000	  <name>	coolingTime	</name>
+          <param>	33.3	  <name>	coolingTime	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	1000	  <name>	coolingDelay	</name>
+          <param>	0.1	  <name>	coolingDelay	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	100%	  <name>	heatingPerShot	</name>
+          <param>	50%	  <name>	heatingPerShot	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
         </params>
@@ -382,16 +382,13 @@
         <priority>	1	</priority>
         <rank>	silver	</rank>
         <params>
-          <param>	6	  <name>	timeToOverheat	</name>
+          <param>	4.8	  <name>	timeToOverheat	</name>
           </param>
-          <param>	27	  <name>	overheatDuration	</name>
-            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          <param>	23.8	  <name>	overheatDuration	</name>
           </param>
-          <param>	13.5	  <name>	coolingTime	</name>
-            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          <param>	11.9	  <name>	coolingTime	</name>
           </param>
           <param>	2	  <name>	coolingDelay	</name>
-            <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
           <param>	6%	  <name>	heatingPerShot	</name>
           </param>
@@ -406,18 +403,17 @@
         <priority>	1	</priority>
         <rank>	silver	</rank>
         <params>
-          <param>	6	  <name>	timeToOverheat	</name>
+          <param>	4.8	  <name>	timeToOverheat	</name>
           </param>
-          <param>	27	  <name>	overheatDuration	</name>
+          <param>	19	  <name>	overheatDuration	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	13.5	  <name>	coolingTime	</name>
+          <param>	9.5	  <name>	coolingTime	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	2	  <name>	coolingDelay	</name>
-            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          <param>	1	  <name>	coolingDelay	</name>
           </param>
-          <param>	7%	  <name>	heatingPerShot	</name>
+          <param>	9%	  <name>	heatingPerShot	</name>
           </param>
         </params>
       </overheatGun>
@@ -430,18 +426,17 @@
         <priority>	1	</priority>
         <rank>	silver	</rank>
         <params>
-          <param>	6	  <name>	timeToOverheat	</name>
+          <param>	2.7	  <name>	timeToOverheat	</name>
           </param>
-          <param>	16	  <name>	overheatDuration	</name>
+          <param>	19	  <name>	overheatDuration	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	8	  <name>	coolingTime	</name>
+          <param>	9.5	  <name>	coolingTime	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	2	  <name>	coolingDelay	</name>
-            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          <param>	1.5	  <name>	coolingDelay	</name>
           </param>
-          <param>	12%	  <name>	heatingPerShot	</name>
+          <param>	11%	  <name>	heatingPerShot	</name>
           </param>
         </params>
         <priority>	common	</priority>
@@ -455,18 +450,17 @@
         <priority>	1	</priority>
         <rank>	silver	</rank>
         <params>
-          <param>	6	  <name>	timeToOverheat	</name>
+          <param>	3.6	  <name>	timeToOverheat	</name>
           </param>
-          <param>	27	  <name>	overheatDuration	</name>
+          <param>	21.2	  <name>	overheatDuration	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	13.5	  <name>	coolingTime	</name>
+          <param>	10.6	  <name>	coolingTime	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	2	  <name>	coolingDelay	</name>
-            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          <param>	1.5	  <name>	coolingDelay	</name>
           </param>
-          <param>	12%	  <name>	heatingPerShot	</name>
+          <param>	8%	  <name>	heatingPerShot	</name>
           </param>
         </params>
         <priority>	common	</priority>
@@ -480,18 +474,18 @@
         <priority>	1	</priority>
         <rank>	gold	</rank>
         <params>
-          <param>	1	  <name>	timeToOverheat	</name>
+          <param>	2.7	  <name>	timeToOverheat	</name>
           </param>
-          <param>	1000	  <name>	overheatDuration	</name>
+          <param>	16.7	  <name>	overheatDuration	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	1000	  <name>	coolingTime	</name>
+          <param>	8.3	  <name>	coolingTime	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	1000	  <name>	coolingDelay	</name>
+          <param>	1	  <name>	coolingDelay	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	100%	  <name>	heatingPerShot	</name>
+          <param>	11%	  <name>	heatingPerShot	</name>
           </param>
         </params>
       </overheatGun>
@@ -543,21 +537,21 @@
         <priority>	1	</priority>
         <rank>	gold	</rank>
         <params>
-          <param>	1%	  <name>	stagedJetBoostersEnginePower	</name>
+          <param>	130%	  <name>	stagedJetBoostersEnginePower	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	1%	  <name>	stagedJetBoostersTopSpeed	</name>
+          <param>	112.5%	  <name>	stagedJetBoostersTopSpeed	</name>
           </param>
-          <param>	1%	  <name>	stagedJetBoostersSpeedLimits	</name>
+          <param>	100%	  <name>	stagedJetBoostersSpeedLimits	</name>
           </param>
-          <param>	1%	  <name>	stagedJetBoostersRotationSpeed	</name>
+          <param>	130%	  <name>	stagedJetBoostersRotationSpeed	</name>
           </param>
-          <param>	1000	  <name>	stagedJetBoostersChargesCount	</name>
+          <param>	10	  <name>	stagedJetBoostersChargesCount	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	1000	  <name>	stagedJetBoostersChargeDuration	</name>
+          <param>	10	  <name>	stagedJetBoostersChargeDuration	</name>
           </param>
-          <param>	1000	  <name>	stagedJetBoostersCooldownTime	</name>
+          <param>	12	  <name>	stagedJetBoostersCooldownTime	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
         </params>

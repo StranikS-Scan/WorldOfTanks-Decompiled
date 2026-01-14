@@ -396,7 +396,7 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'BattlePassCommonPr_18'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'BattlePassCommonPr_18extra_1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'BattlePassCommonPr_18extra_2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
- (_AB.SINGLE, 'BPReserveAchievement_8'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'BattlePassCommonPr_NY26'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'BPReserveAchievement_9'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'BPReserveAchievement_10'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.TOTAL, 'collectorVehicle'): _NationAchieveFactory.get(_as.nation_specific.VehicleCollectorAchievement),

@@ -1,5 +1,4 @@
 <radios.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <ids>
     <SCR_508_1>	0	</SCR_508_1>
     <SCR_210>	1	</SCR_210>
@@ -66,6 +65,7 @@
     <AN_VRC_12_8>	106	</AN_VRC_12_8>
     <AN_VRC_12_9B>	107	</AN_VRC_12_9B>
     <AN_VRC_12_9>	108	</AN_VRC_12_9>
+    <AN_ARC_27_RC_C>	105	</AN_ARC_27_RC_C>
     <AN-ARC-27_IGR>	60001	</AN-ARC-27_IGR>
     <SCR_619_IGR>	60002	</SCR_619_IGR>
     <SCR_528A1_IGR>	60003	</SCR_528A1_IGR>
@@ -585,6 +585,18 @@
       <maxRegenHealth>	105	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </AN_ARC_27_RC>
+    <AN_ARC_27_RC_C>
+      <userString>	#usa_vehicles:AN_ARC_27_RC_C	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	40000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	120	</weight>
+      <distance>	670	</distance>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </AN_ARC_27_RC_C>
     <AN-ARC-27M>
       <userString>	#usa_vehicles:AN-ARC-27M	</userString>
       <tags></tags>
@@ -675,8 +687,8 @@
       <level>	11	</level>
       <price>	80000	</price>
       <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	104	</distance>
+      <weight>	45	</weight>
+      <distance>	800	</distance>
       <maxHealth>	250	</maxHealth>
       <maxRegenHealth>	125	</maxRegenHealth>
       <repairCost>	4	</repairCost>

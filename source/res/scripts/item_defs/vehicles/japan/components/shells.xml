@@ -1,5 +1,4 @@
 <shells.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <icons>
     <ap>	ARMOR_PIERCING.png 0 0	</ap>
     <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
@@ -4218,7 +4217,7 @@
     <isTracer>	true	</isTracer>
     <effects>	largeArmorPiercing	</effects>
     <damage>
-      <armor>	100	</armor>
+      <armor>	470	</armor>
       <devices>	168	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
@@ -4235,7 +4234,7 @@
     <isTracer>	true	</isTracer>
     <effects>	largeAPCR	</effects>
     <damage>
-      <armor>	100	</armor>
+      <armor>	470	</armor>
       <devices>	168	</devices>
     </damage>
     <normalizationAngle>	2	</normalizationAngle>
@@ -4253,14 +4252,14 @@
     <isTracer>	true	</isTracer>
     <effects>	largeHighExplosive	</effects>
     <damage>
-      <armor>	100	</armor>
+      <armor>	620	</armor>
       <devices>	168	</devices>
     </damage>
     <armorSpalls>
       <impactRadius>	3.06	</impactRadius>
       <coneAngle>	90	</coneAngle>
       <damage>
-        <armor>	50	</armor>
+        <armor>	310	</armor>
         <devices>	85	</devices>
       </damage>
     </armorSpalls>

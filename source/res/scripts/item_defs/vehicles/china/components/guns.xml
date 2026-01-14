@@ -1,5 +1,4 @@
 <guns.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <ids>
     <_100mm_59>	0	</_100mm_59>
     <_85mm_Tip_62-85TS>	1	</_85mm_Tip_62-85TS>
@@ -6053,20 +6052,20 @@
       <effects>	shot_huge	</effects>
       <reloadEffect>	reload115_152	</reloadEffect>
       <pitchLimits>
-        <minPitch>	0.0 -10 1.0 -10	</minPitch>
-        <maxPitch>	0.0 10 1.0 10	</maxPitch>
+        <minPitch>	0 -15 1 -15	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
       </pitchLimits>
       <turretYawLimits>	-12 12	</turretYawLimits>
-      <rotationSpeed>	0.96	</rotationSpeed>
-      <reloadTime>	62.58	</reloadTime>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	17	</reloadTime>
       <maxAmmo>	20	</maxAmmo>
-      <aimingTime>	10.43	</aimingTime>
-      <weight>	100	</weight>
+      <aimingTime>	2.4	</aimingTime>
+      <weight>	4100	</weight>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
       <repairCost>	11	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	1.04	</shotDispersionRadius>
+      <invisibilityFactorAtShot>	0.135	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.36	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.06	</turretRotation>
         <afterShot>	4.0	</afterShot>
@@ -6078,21 +6077,21 @@
           <speed>	960	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	100	</piercingPower>
+          <piercingPower>	295 285	</piercingPower>
         </_152mm_Chuan_bei_152ZPL_1>
         <_152mm_Po_152ZPL_1>
           <defaultPortion>	0.00	</defaultPortion>
           <speed>	760	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	100	</piercingPower>
+          <piercingPower>	395 395	</piercingPower>
         </_152mm_Po_152ZPL_1>
         <_152mm_Sha_bao_152ZPL_1>
           <defaultPortion>	0.25	</defaultPortion>
           <speed>	800	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	100	</piercingPower>
+          <piercingPower>	90 90	</piercingPower>
         </_152mm_Sha_bao_152ZPL_1>
       </shots>
     </_152_mm_ZPL_75_1>

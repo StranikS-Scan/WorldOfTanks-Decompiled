@@ -10,14 +10,14 @@
   <postProgressionTree>	Ch70_PTZ_78	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	10	</forward>
-    <backward>	10	</backward>
+    <forward>	40	</forward>
+    <backward>	16	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.01	</moving>
-    <still>	0.01	</still>
-    <camouflageBonus>	0.0	</camouflageBonus>
-    <firePenalty>	0.1	</firePenalty>
+    <moving>	0.168	</moving>
+    <still>	0.28	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <firePenalty>	0.42	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -47,42 +47,42 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	10	</armor_1>
-      <armor_2>	10	</armor_2>
-      <armor_3>	10	</armor_3>
-      <armor_4>	10	</armor_4>
-      <armor_5>	10	</armor_5>
-      <armor_6>	10	</armor_6>
-      <armor_7>	10	</armor_7>
-      <armor_9>	10	</armor_9>
-      <armor_10>	10	</armor_10>
-      <armor_11>	10	</armor_11>
-      <armor_12>	10	</armor_12>
-      <armor_13>	10	</armor_13>
-      <armor_14>	10	</armor_14>
-      <armor_15>	10	  <tags>	gunMask	</tags>
+      <armor_1>	150	</armor_1>
+      <armor_2>	130	</armor_2>
+      <armor_3>	120	</armor_3>
+      <armor_4>	60	</armor_4>
+      <armor_5>	30	</armor_5>
+      <armor_6>	25	</armor_6>
+      <armor_7>	130	</armor_7>
+      <armor_9>	230	</armor_9>
+      <armor_10>	115	</armor_10>
+      <armor_11>	80	</armor_11>
+      <armor_12>	80	</armor_12>
+      <armor_13>	105	</armor_13>
+      <armor_14>	200	</armor_14>
+      <armor_15>	340	  <tags>	gunMask	</tags>
       </armor_15>
-      <armor_16>	10	</armor_16>
-      <armor_17>	10	</armor_17>
-      <armor_18>	10	</armor_18>
-      <armor_19>	10	</armor_19>
-      <armor_20>	10	</armor_20>
-      <armor_21>	10	</armor_21>
-      <armor_22>	10	</armor_22>
-      <armor_23>	10	</armor_23>
-      <armor_24>	10	</armor_24>
-      <armor_25>	10	</armor_25>
-      <armor_26>	10	</armor_26>
-      <armor_27>	10	</armor_27>
-      <armor_28>	10	</armor_28>
-      <armor_29>	10	</armor_29>
-      <armor_30>	10	</armor_30>
-      <armor_31>	10	</armor_31>
-      <armor_32>	10	</armor_32>
+      <armor_16>	100	</armor_16>
+      <armor_17>	90	</armor_17>
+      <armor_18>	60	</armor_18>
+      <armor_19>	160	</armor_19>
+      <armor_20>	100	</armor_20>
+      <armor_21>	80	</armor_21>
+      <armor_22>	220	</armor_22>
+      <armor_23>	150	</armor_23>
+      <armor_24>	90	</armor_24>
+      <armor_25>	70	</armor_25>
+      <armor_26>	115	</armor_26>
+      <armor_27>	80	</armor_27>
+      <armor_28>	185	</armor_28>
+      <armor_29>	130	</armor_29>
+      <armor_30>	110	</armor_30>
+      <armor_31>	55	</armor_31>
+      <armor_32>	160	</armor_32>
     </armor>
     <primaryArmor>	armor_2 armor_12 armor_4	</primaryArmor>
-    <weight>	9400	</weight>
-    <maxHealth>	10	</maxHealth>
+    <weight>	49360	</weight>
+    <maxHealth>	1760	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	270	</maxHealth>
       <maxRegenHealth>	203	</maxRegenHealth>
@@ -1033,14 +1033,14 @@
       <price>	100000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <leftTrack>	10	</leftTrack>
-        <rightTrack>	10	</rightTrack>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
       </armor>
-      <weight>	100	</weight>
+      <weight>	15000	</weight>
       <terrainResistance>	1.1 1.3 2	</terrainResistance>
       <brakeForce>	70000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	10	</rotationSpeed>
+      <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.17	</vehicleMovement>
         <vehicleRotation>	0.17	</vehicleRotation>
@@ -1851,7 +1851,7 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
-      <repairTime>	0.649999976	</repairTime>
+      <repairTime>	6.66666651	</repairTime>
     </Chassis_1_Ch70_PTZ_78>
   </chassis>
   <turrets0>
@@ -1866,14 +1866,14 @@
       </armor>
       <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
       <weight>	100	</weight>
-      <maxHealth>	10	</maxHealth>
-      <rotationSpeed>	0.96	</rotationSpeed>
+      <maxHealth>	440	</maxHealth>
+      <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	200	</maxHealth>
         <maxRegenHealth>	100	</maxRegenHealth>
         <repairCost>	11	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	100	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	130	</maxHealth>
         <maxRegenHealth>	65	</maxRegenHealth>
@@ -1882,22 +1882,22 @@
       <guns>
         <_152_mm_ZPL_75_1>	shared	  <maxAmmo>	35	</maxAmmo>
           <armor>
-            <gun>	10	</gun>
+            <gun>	60	</gun>
           </armor>
-          <turretYawLimits>	-10 10	</turretYawLimits>
+          <turretYawLimits>	-12 12	</turretYawLimits>
           <pitchLimits>
-            <minPitch>	0 -10 1 -10	</minPitch>
-            <maxPitch>	0 10 1 10	</maxPitch>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
-          <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-          <reloadTime>	62.58	</reloadTime>
-          <aimingTime>	10.43	</aimingTime>
+          <invisibilityFactorAtShot>	0.135	</invisibilityFactorAtShot>
+          <reloadTime>	17	</reloadTime>
+          <aimingTime>	2.4	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.06	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <shotDispersionRadius>	1.04	</shotDispersionRadius>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <models>
             <undamaged>	vehicles/chinese/Ch70_PTZ_78/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch70_PTZ_78/crash/lod0/Gun_01.model	</destroyed>
@@ -1992,8 +1992,8 @@
     <detailed>
       <engines>
         <_5TD_I_1>
-          <smplEnginePower>	10	</smplEnginePower>
-          <smplFwMaxSpeed>	10	</smplFwMaxSpeed>
+          <smplEnginePower>	1100	</smplEnginePower>
+          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </_5TD_I_1>
       </engines>
       <chassis>
@@ -2014,33 +2014,27 @@
       </chassis>
     </detailed>
   </physics>
-  <clientAdjustmentFactors>
-    <guns>
-      <_152_mm_ZPL_75_1>
-        <delta>	1.5	</delta>
-      </_152_mm_ZPL_75_1>
-    </guns>
-  </clientAdjustmentFactors>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
   <mechanics>
     <stagedJetBoosters>
-      <deployTime>	1000	</deployTime>
-      <reloadTime>	1000	</reloadTime>
-      <reuseCount>	1000	</reuseCount>
-      <duration>	1000	</duration>
+      <deployTime>	5	</deployTime>
+      <reloadTime>	15	</reloadTime>
+      <reuseCount>	8	</reuseCount>
+      <duration>	10	</duration>
       <impulse>
-        <magnitude>	0	</magnitude>
+        <magnitude>	50	</magnitude>
         <applyPoint>	-0.062 -1.743 -2.12	</applyPoint>
-        <duration>	1000	</duration>
+        <duration>	0.3	</duration>
       </impulse>
-      <impulseSpeedLimits>	-1.0 1.0	</impulseSpeedLimits>
+      <impulseSpeedLimits>	-20.0 20.0	</impulseSpeedLimits>
       <customRotationPoints>
         <minSpeedPoints>
-          <speed>	1	</speed>
+          <speed>	10	</speed>
           <leftPoint>	-1.2 0 2.2	</leftPoint>
           <rightPoint>	1.2 0 2.2	</rightPoint>
         </minSpeedPoints>
         <maxSpeedPoints>
-          <speed>	1000	</speed>
+          <speed>	40	</speed>
           <leftPoint>	0 0 0	</leftPoint>
           <rightPoint>	0 0 0	</rightPoint>
         </maxSpeedPoints>
@@ -2049,15 +2043,15 @@
       <modifiers>
         <mul>
           <name>	dynAttrs/engine/power	</name>
-          <value>	1	</value>
+          <value>	1.1	</value>
         </mul>
         <mul>
           <name>	dynAttrs/vehicle/rotationSpeed	</name>
-          <value>	1	</value>
+          <value>	1.3	</value>
         </mul>
         <mul>
           <name>	dynAttrs/vehicle/maxSpeed/forward	</name>
-          <value>	1	</value>
+          <value>	1.125	</value>
         </mul>
       </modifiers>
     </stagedJetBoosters>

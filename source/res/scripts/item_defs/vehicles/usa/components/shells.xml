@@ -1,5 +1,4 @@
 <shells.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <icons>
     <ap>	ARMOR_PIERCING.png 0 0	</ap>
     <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
@@ -5187,7 +5186,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainArmorPiercing1	</effects>
     <damage>
-      <armor>	100	</armor>
+      <armor>	115	</armor>
       <devices>	46	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
@@ -5208,7 +5207,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainAPCR1	</effects>
     <damage>
-      <armor>	100	</armor>
+      <armor>	115	</armor>
       <devices>	46	</devices>
     </damage>
     <normalizationAngle>	2	</normalizationAngle>
@@ -5230,14 +5229,14 @@
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive1	</effects>
     <damage>
-      <armor>	100	</armor>
+      <armor>	220	</armor>
       <devices>	46	</devices>
     </damage>
     <armorSpalls>
       <impactRadius>	0	</impactRadius>
       <coneAngle>	90	</coneAngle>
       <damage>
-        <armor>	50	</armor>
+        <armor>	220	</armor>
         <devices>	46	</devices>
       </damage>
     </armorSpalls>
@@ -7338,6 +7337,30 @@
       </damage>
     </armorSpalls>
   </_120mm_HE_T15E3_M_VI_Y_RC>
+  <_120mm_HE_T15E3_M_VI_Y_RC_C>
+    <id>	311	</id>
+    <userString>	#usa_vehicles:_120mm_HE_T15E3_M_VI_Y_RC_C	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1173	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	120	</caliber>
+    <explosionRadius>	2.42	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	530	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.42	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	265	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_120mm_HE_T15E3_M_VI_Y_RC_C>
   <_120mm_HE_T15E3_T57>
     <id>	2093	</id>
     <userString>	#usa_vehicles:_120mm_HE_T15E3_T57	</userString>
@@ -7710,6 +7733,22 @@
     <normalizationAngle>	2	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_120mm_APCR_M361_M_VI_Y_RC>
+  <_120mm_APCR_M361_M_VI_Y_RC_C>
+    <id>	309	</id>
+    <userString>	#usa_vehicles:_120mm_APCR_M361_M_VI_Y_RC_C	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1047	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_120mm_APCR_M361_M_VI_Y_RC_C>
   <_120mm_AP_M358_T57>
     <id>	2091	</id>
     <userString>	#usa_vehicles:_120mm_AP_M358_T57	</userString>
@@ -7825,6 +7864,23 @@
     <ricochetAngle>	85	</ricochetAngle>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_120mm_HEAT_M469_M_VI_Y_RC>
+  <_120mm_HEAT_M469_M_VI_Y_RC_C>
+    <id>	310	</id>
+    <userString>	#usa_vehicles:_120mm_HEAT_M469_M_VI_Y_RC_C	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	5600	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_120mm_HEAT_M469_M_VI_Y_RC_C>
   <_120mm_HEAT_M469_T57>
     <id>	2092	</id>
     <userString>	#usa_vehicles:_120mm_HEAT_M469_T57	</userString>

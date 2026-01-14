@@ -1,5 +1,4 @@
 <guns.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <ids>
     <_75mm_Type5_1>	0	</_75mm_Type5_1>
     <_13.2mm_Type93>	1	</_13.2mm_Type93>
@@ -4963,20 +4962,20 @@
       <notInShop>	true	</notInShop>
       <reloadEffect>	reload115_152	</reloadEffect>
       <pitchLimits>
-        <minPitch>	0.0 -5 1.0 -5	</minPitch>
-        <maxPitch>	0.0 5 1.0 5	</maxPitch>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 9.0 1.0 9.0	</maxPitch>
       </pitchLimits>
       <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	0.96	</rotationSpeed>
-      <reloadTime>	60	</reloadTime>
+      <rotationSpeed>	23.625	</rotationSpeed>
+      <reloadTime>	9.7	</reloadTime>
       <maxAmmo>	55	</maxAmmo>
-      <aimingTime>	10.43	</aimingTime>
-      <weight>	100	</weight>
+      <aimingTime>	2.0	</aimingTime>
+      <weight>	4200	</weight>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
       <repairCost>	11	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	1.04	</shotDispersionRadius>
+      <invisibilityFactorAtShot>	0.162	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.22	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.1	</turretRotation>
         <afterShot>	4.0	</afterShot>
@@ -4984,9 +4983,9 @@
       </shotDispersionFactors>
       <mechanics>
         <temperatureGun>
-          <heatingPerShot>	100	</heatingPerShot>
-          <coolingDelay>	1000	</coolingDelay>
-          <coolingPerSec>	1000	</coolingPerSec>
+          <heatingPerShot>	60	</heatingPerShot>
+          <coolingDelay>	1	</coolingDelay>
+          <coolingPerSec>	2.5	</coolingPerSec>
           <thermalStateHysteresis>	1	</thermalStateHysteresis>
           <thermalStates>
             <state>
@@ -4995,7 +4994,7 @@
               <modifiers>
                 <mul>
                   <name>	dynAttrs/multShotDispersionFactor	</name>
-                  <value>	1	</value>
+                  <value>	2.136	</value>
                 </mul>
               </modifiers>
             </state>
@@ -5004,7 +5003,7 @@
               <modifiers>
                 <mul>
                   <name>	dynAttrs/multShotDispersionFactor	</name>
-                  <value>	1	</value>
+                  <value>	1.909	</value>
                 </mul>
               </modifiers>
             </state>
@@ -5013,7 +5012,7 @@
               <modifiers>
                 <mul>
                   <name>	dynAttrs/multShotDispersionFactor	</name>
-                  <value>	1	</value>
+                  <value>	1.682	</value>
                 </mul>
               </modifiers>
             </state>
@@ -5022,7 +5021,7 @@
               <modifiers>
                 <mul>
                   <name>	dynAttrs/multShotDispersionFactor	</name>
-                  <value>	1	</value>
+                  <value>	1.455	</value>
                 </mul>
               </modifiers>
             </state>
@@ -5031,7 +5030,7 @@
               <modifiers>
                 <mul>
                   <name>	dynAttrs/multShotDispersionFactor	</name>
-                  <value>	1	</value>
+                  <value>	1.227	</value>
                 </mul>
               </modifiers>
             </state>
@@ -5047,21 +5046,21 @@
           <speed>	1050	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	100	</piercingPower>
+          <piercingPower>	265 245	</piercingPower>
         </_137_2mm_AP_TK_DK>
         <_137_2mm_APDS_TK_DK>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	1380	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	100	</piercingPower>
+          <piercingPower>	325 305	</piercingPower>
         </_137_2mm_APDS_TK_DK>
         <_137_2mm_HE_TK_DK>
           <defaultPortion>	0.20	</defaultPortion>
           <speed>	1100	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	100	</piercingPower>
+          <piercingPower>	64 64	</piercingPower>
         </_137_2mm_HE_TK_DK>
       </shots>
     </_137_2mm_TK_DK>

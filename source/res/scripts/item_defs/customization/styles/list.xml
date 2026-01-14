@@ -31320,6 +31320,104 @@
         </outfit>
       </outfits>
     </style>
+    <style>
+      <id>	1276	</id>
+      <texture>	gui/maps/vehicles/styles/bp2025_holiday_4.png	</texture>
+      <userString>	#vehicle_customization:special_style/bp2025_holiday_4	</userString>
+      <description>	#vehicle_customization:special_style/bp2025_holiday_4_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/bp2025_holiday_4_desc/long	</longDescriptionSpecial>
+      <tags>	c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <camouflages>
+            <item>
+              <id>	1091	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	636	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	1277	</id>
+      <texture>	gui/maps/vehicles/styles/bp2025_holiday_5.png	</texture>
+      <userString>	#vehicle_customization:special_style/bp2025_holiday_5	</userString>
+      <description>	#vehicle_customization:special_style/bp2025_holiday_5_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/bp2025_holiday_5_desc/long	</longDescriptionSpecial>
+      <tags>	c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <camouflages>
+            <item>
+              <id>	1092	</id>
+              <appliedTo>	16	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	1093	</id>
+              <appliedTo>	4352	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	637	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <projection_decals>
+            <item>
+              <id>	1330	</id>
+              <tags>	formfactor_rect1x2 cover	</tags>
+            </item>
+            <item>
+              <id>	1337	</id>
+              <tags>	formfactor_square safe left	</tags>
+              <scaleFactorId>	2	</scaleFactorId>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	1278	</id>
+      <texture>	gui/maps/vehicles/styles/bp2025_holiday_6.png	</texture>
+      <userString>	#vehicle_customization:special_style/bp2025_holiday_6	</userString>
+      <description>	#vehicle_customization:special_style/bp2025_holiday_6_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/bp2025_holiday_6_desc/long	</longDescriptionSpecial>
+      <tags>	c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <camouflages>
+            <item>
+              <id>	1094	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	638	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+    </style>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
@@ -43960,9 +44058,10 @@
     <style>
       <id>	1163	</id>
       <maxNumber>	1	</maxNumber>
-      <texture>	gui/maps/vehicles/styles/empty.png	</texture>
+      <texture>	gui/maps/vehicles/styles/G42_Maus_SFV_3Dst.png	</texture>
+      <modelsSet>	G42_Maus_SFV_3Dst	</modelsSet>
       <userString>	#vehicle_customization:special_style/G42_Maus_SFV_3Dst	</userString>
-      <tags>	c11n2D	</tags>
+      <tags>	progression_required c11n3D	</tags>
       <outfits>
         <outfit>
           <season>	all	</season>
@@ -43974,8 +44073,23 @@
               <palette>	0	</palette>
             </item>
           </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	158	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
+            </item>
+          </attachments>
         </outfit>
       </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
     </style>
   </itemGroup>
   <itemGroup>
@@ -52822,6 +52936,53 @@
           </include>
         </projection_decal>
       </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A144_M_VI_Y_CFE_RC	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1269	</id>
+      <texture>	gui/maps/vehicles/styles/A144_M_VI_Y_CFE_R_3Dst.png	</texture>
+      <modelsSet>	A144_M_VI_Y_CFE_R_3Dst	</modelsSet>
+      <userString>	#vehicle_customization:special_style/A144_M_VI_Y_CFE_R_3Dst	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/A144_M_VI_Y_CFE_R_3Dst_desc/long	</longDescriptionSpecial>
+      <maxNumber>	1	</maxNumber>
+      <tags>	c11n3D lockedOnVehicle	</tags>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	113	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	172	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
     </style>
   </itemGroup>
   <itemGroup>

@@ -914,12 +914,15 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             isPermanent = self.__isDestroyImmediately
             state = BATTLE_MINIMAP_CONSTS.STATE_DEAD_PERMANENT
             if not isPermanent:
-                state = BATTLE_MINIMAP_CONSTS.STATE_DEFAULT
-                self.__setDestroyCallback(vehicleID)
+                state, isActive = self._getDestroyNotPermanentParams(vehicleID)
+                self.__setDestroyCallback(vehicleID, isActive)
             self._move(entry.getID(), _C_NAME.DEAD_VEHICLES)
             self._invoke(entry.getID(), 'setDead', state)
         else:
             self.__setActive(entry, False)
+
+    def _getDestroyNotPermanentParams(self, vehicleID):
+        return (BATTLE_MINIMAP_CONSTS.STATE_DEFAULT, False)
 
     def __setAlive(self, vehicleID, entry):
         self.__clearDestroyCallback(vehicleID)
@@ -1037,14 +1040,14 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             BigWorld.cancelCallback(callbackID)
         return
 
-    def __setDestroyCallback(self, vehicleID):
+    def __setDestroyCallback(self, vehicleID, isActive):
         self.__clearDestroyCallback(vehicleID)
-        self.__destroyCallbacksIDs[vehicleID] = BigWorld.callback(self.__destroyDuration, partial(self.__handleDestroyCallback, vehicleID))
+        self.__destroyCallbacksIDs[vehicleID] = BigWorld.callback(self.__destroyDuration, partial(self.__handleDestroyCallback, vehicleID, isActive))
 
-    def __handleDestroyCallback(self, vehicleID):
+    def __handleDestroyCallback(self, vehicleID, isActive):
         self.__destroyCallbacksIDs[vehicleID] = None
         if vehicleID in self._entries:
-            self.__setActive(self._entries[vehicleID], False)
+            self.__setActive(self._entries[vehicleID], isActive)
         return
 
     def __clearAoIToFarCallback(self, vehicleID):

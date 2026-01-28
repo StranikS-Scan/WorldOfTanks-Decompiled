@@ -50,6 +50,7 @@ class EPIC_SOUND(object):
     BF_EB_GENERAL = 'eb_general'
     BF_EB_RANK_UP = {'show': 'eb_rank_up_show',
      'hide': 'eb_rank_up_hide'}
+    PROMOTION_RECEIVED = 'eb_promotion'
     BF_EB_RETREAT_SUCCESSFUL = 'eb_retreat_successful'
     BF_EB_ZONE_CONTESTED_ATK = {'A': 'eb_zone_contested_ATK_A',
      'B': 'eb_zone_contested_ATK_B',
@@ -125,7 +126,8 @@ class EPIC_SOUND(object):
      GAME_MESSAGES_CONSTS.RANK_UP: BF_EB_RANK_UP,
      GAME_MESSAGES_CONSTS.SUPPLY_UNLOCKED: BF_EB_SUPPLY_UNLOCKED,
      GAME_MESSAGES_CONSTS.SUPPLY_ACTIVE_POSITIVE: BF_EB_SUPPLY_ACTIVE_POSITIVE,
-     GAME_MESSAGES_CONSTS.SUPPLY_ACTIVE: BF_EB_SUPPLY_ACTIVE}
+     GAME_MESSAGES_CONSTS.SUPPLY_ACTIVE: BF_EB_SUPPLY_ACTIVE,
+     GAME_MESSAGES_CONSTS.PROMOTION_RECEIVED: PROMOTION_RECEIVED}
     EB_UI_REPPAIR_POINT_COMPLETED = 'eb_ui_repair_point'
     EB_UI_REPPAIR_POINT_PROGRESS = 'eb_ui_repair_point_progress'
     EB_UI_REPPAIR_POINT_PROGRESS_STOP = 'eb_ui_repair_point_progress_stop'

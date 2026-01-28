@@ -76,4 +76,26 @@
       </item>
     </usages>
   </itemGroup>
+  <itemGroup>
+    <name>	r251_t_55_sp_01	</name>
+    <userString>	#vehicle_customization:repaint/color_group_05	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <paint>
+      <id>	31465	</id>
+      <userString>	#vehicle_customization:r251_t_55_sp_01_paint/name	</userString>
+      <description>	#vehicle_customization:r251_t_55_sp_01_paint/description	</description>
+      <color>	153 19 26 255	</color>
+      <gloss>	0.3	</gloss>
+      <metallic>	0.1	</metallic>
+      <tags>	hiddenInUI	</tags>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <vehicleFilter>
+        <include>
+          <vehicles>	ussr:R251_T_55_SP_01	</vehicles>
+        </include>
+      </vehicleFilter>
+      <texture>	gui/maps/vehicles/repaints/custom_color_DEV.png	</texture>
+    </paint>
+  </itemGroup>
 </ussr.xml>

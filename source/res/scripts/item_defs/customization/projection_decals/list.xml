@@ -11825,6 +11825,50 @@
     </projection_decal>
   </itemGroup>
   <itemGroup>
+    <name>	r251_t_55_sp_01	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <projection_decal>
+      <id>	31446	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/r251_t_55_sp_01_decal_01.dds	</texture>
+      <userString>	#vehicle_customization:r251_t_55_sp_01_projection_decal/name	</userString>
+      <description>	#vehicle_customization:r251_t_55_sp_01_projection_decal/description	</description>
+      <tags>	hiddenInUI direction_left_to_right formfactor_square	</tags>
+      <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+      <vehicleFilter>
+        <include>
+          <vehicles>	ussr:R251_T_55_SP_01	</vehicles>
+        </include>
+      </vehicleFilter>
+    </projection_decal>
+    <projection_decal>
+      <id>	31439	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/r251_t_55_sp_01_decal_02.dds	</texture>
+      <userString>	#vehicle_customization:r251_t_55_sp_01_projection_decal_02/name	</userString>
+      <description>	#vehicle_customization:r251_t_55_sp_01_projection_decal_02/description	</description>
+      <tags>	hiddenInUI direction_left_to_right formfactor_square	</tags>
+      <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+      <vehicleFilter>
+        <include></include>
+      </vehicleFilter>
+    </projection_decal>
+    <projection_decal>
+      <id>	31440	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/r251_t_55_sp_01_decal_03.dds	</texture>
+      <userString>	#vehicle_customization:r251_t_55_sp_01_projection_decal_03/name	</userString>
+      <description>	#vehicle_customization:r251_t_55_sp_01_projection_decal_03/description	</description>
+      <scaleFactorId>	2	</scaleFactorId>
+      <tags>	hiddenInUI direction_left_to_right formfactor_square	</tags>
+      <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+      <vehicleFilter>
+        <include>
+          <vehicles>	ussr:R251_T_55_SP_01	</vehicles>
+        </include>
+      </vehicleFilter>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:projection_decals/animals	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>

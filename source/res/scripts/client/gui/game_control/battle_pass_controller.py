@@ -600,13 +600,15 @@ class BattlePassController(IBattlePassController, EventsHandler):
         textID = getPointsInfoStringID(gameMode)
         return PointsDifference(bonus, top, textID)
 
+    def isFactorCapsFlow(self):
+        return self.__getConfig().capsFlow == BattlePassCapsFlow.FACTOR.value
+
     def getVehicleProgression(self, intCD):
         points, shift = self.__itemsCache.items.battlePass.getVehiclePoints(intCD)
-        cap = None
-        if self.__getConfig().capsFlow == BattlePassCapsFlow.WEEK.value:
-            cap = self.__getConfig().vehWeekCapByShift(shift)
-        elif self.__getConfig().capsFlow == BattlePassCapsFlow.FACTOR.value:
+        if self.isFactorCapsFlow():
             cap = self.__getConfig().vehFactorCapByShift(shift)
+        else:
+            cap = self.__getConfig().vehWeekCapByShift(shift)
         return (points, cap)
 
     def getMinVehLevelToEarnPoints(self):

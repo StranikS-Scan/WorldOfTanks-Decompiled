@@ -778,7 +778,7 @@ class VehicleStickers(object):
                 if not gSlot.compatibleModels:
                     compatibleGunSlots.append(gSlot)
 
-        if vehicleDesc.isDualgunVehicle and compatibleGunSlots:
+        if (vehicleDesc.isDualgunVehicle or vehicleDesc.isMultiGunVehicle) and compatibleGunSlots:
             slotsCount = len(compatibleGunSlots)
             if slotsCount >= 2:
                 midIndex = slotsCount / 2

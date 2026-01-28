@@ -1529,12 +1529,14 @@
           </shotDispersionFactors>
           <clip>
             <count>	2	</count>
-            <rate>	60	</rate>
+            <rate>	12	</rate>
           </clip>
-          <burst>
-            <count>	2	</count>
-            <rate>	17.14285714285714	</rate>
-          </burst>
+          <autoreload>
+            <reloadTime>	35 45	</reloadTime>
+            <boostFraction>	0.5	</boostFraction>
+            <boostStartTime>	0	</boostStartTime>
+            <boostResidueTime>	2	</boostResidueTime>
+          </autoreload>
           <turretYawLimits>	-12 12	</turretYawLimits>
           <customizationSlots>
             <slot>

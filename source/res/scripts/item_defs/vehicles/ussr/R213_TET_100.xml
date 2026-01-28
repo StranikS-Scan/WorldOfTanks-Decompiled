@@ -45,20 +45,21 @@
     <armor>
       <armor_1>	250	</armor_1>
       <armor_2>	200	</armor_2>
-      <armor_3>	180	</armor_3>
+      <armor_3>	150	</armor_3>
       <armor_4>	200	</armor_4>
       <armor_5>	50	</armor_5>
-      <armor_6>	200	</armor_6>
-      <armor_7>	250	</armor_7>
+      <armor_6>	230	</armor_6>
+      <armor_7>	300	</armor_7>
       <armor_8>	0	</armor_8>
       <armor_9>	40	</armor_9>
       <armor_10>	40	</armor_10>
       <armor_11>	250	</armor_11>
-      <armor_12>	200	</armor_12>
-      <armor_13>	200	</armor_13>
+      <armor_12>	150	</armor_12>
+      <armor_13>	250	</armor_13>
       <armor_14>	200	</armor_14>
       <armor_15>	70	</armor_15>
-      <armor_17>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+      <armor_16>	300	</armor_16>
+      <armor_17>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_17>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
@@ -1869,7 +1870,7 @@
       <armor>
         <armor_1>	280	</armor_1>
         <armor_2>	280	</armor_2>
-        <armor_3>	200	</armor_3>
+        <armor_3>	220	</armor_3>
         <armor_4>	200	</armor_4>
         <armor_5>	60	</armor_5>
         <armor_6>	180	</armor_6>
@@ -1878,7 +1879,7 @@
         <armor_9>	230	</armor_9>
         <armor_10>	40	</armor_10>
         <armor_11>	180	</armor_11>
-        <armor_12>	150	</armor_12>
+        <armor_12>	250	</armor_12>
         <armor_13>	260	</armor_13>
         <armor_14>	280	</armor_14>
         <armor_15>	280	</armor_15>
@@ -1910,15 +1911,15 @@
         <_130mm_S_26BM>	shared	  <maxAmmo>	56	</maxAmmo>
           <unlocks></unlocks>
           <armor>
-            <armor_1>	280	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	300	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	280	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	300	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	280	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_5>	300	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
             <armor_6>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
@@ -1930,16 +1931,16 @@
             <minPitch>	0 -30 1 -30	</minPitch>
             <maxPitch>	0 8 0.42 8 0.44 5 0.56 5 0.58 8 1 8	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	12	</reloadTime>
           <clip>
             <count>	2	</count>
             <rate>	15	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	12 18	</reloadTime>
+            <reloadTime>	12 16	</reloadTime>
           </autoreload>
-          <aimingTime>	2.9	</aimingTime>
+          <aimingTime>	2.5	</aimingTime>
           <invisibilityFactorAtShot>	0.162	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.10	</turretRotation>

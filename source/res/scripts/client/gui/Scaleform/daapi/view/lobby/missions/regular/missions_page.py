@@ -8,7 +8,6 @@ from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import MISSIONS_PAGE
 from adisp import adisp_async as adispasync, adisp_process
-from gui.impl.lobby.daily.unseen_quests_component import getAvailableDailyQuests
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.marathon.collective_goal_marathon import COLLECTIVE_GOAL_MARATHON_PREFIX
 from th_async import th_async, th_await
@@ -440,29 +439,6 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                 vehicle = g_currentVehicle.item
                 vehName = vehicle.shortUserName if vehicle else ''
                 tab['label'] = tabData.label % {'vehName': vehName}
-            if alias in (QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS,
-             QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS,
-             QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS,
-             QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS,
-             QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS):
-                newEventsCount = 0
-                if alias == QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS:
-                    suitableEvents = getAvailableDailyQuests(self.eventsCache)
-                elif alias == QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS:
-                    suitableEvents = tuple()
-                    newEventsCount = self.__mapboxCtrl.getUnseenItemsCount()
-                elif self.currentTab is not None and self.__currentTabAlias == alias:
-                    suitableEvents = self.__getSuitableEvents(self.currentTab)
-                else:
-                    if alias == QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS:
-                        from gui.Scaleform.daapi.view.lobby.missions.regular.missions_views import MissionsCategoriesView
-                        advisableQuests = self.eventsCache.getAdvisableQuests(MissionsCategoriesView.getViewQuestFilter())
-                        advisableQuests.update({q.getID():q for q in self.__getSuitableEvents(self.getComponent(alias))})
-                    else:
-                        advisableQuests = self.eventsCache.getAdvisableQuests()
-                    advisableEvents = self.__builders[alias].getBlocksAdvisableEvents(advisableQuests)
-                    suitableEvents = {q.getID() for q in advisableEvents}
-                tab['value'] = self.__unseenEventsManager.getUnseenEventsCount(suitableEvents) + newEventsCount
             return (headerTab, tab)
 
     def __battleMattersTabIsEnabled(self):

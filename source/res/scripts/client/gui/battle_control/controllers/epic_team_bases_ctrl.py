@@ -70,7 +70,8 @@ class EpicBattleTeamsBasesController(BattleTeamsBasesController):
                 viewCmp.updateTeamBasePoints(clientID, points, rate, timeLeft, invadersCnt, extraInvader)
 
     def __invalidateTeamBasePoints(self, baseID, points, timeLeft, invadersCnt, capturingStopped):
-        self.__currentBaseID = baseID if points > 0 else None
+        hasInvaders = invadersCnt > 0 or baseID in self.__extraInvadersSet
+        self.__currentBaseID = baseID if hasInvaders else None
         super(EpicBattleTeamsBasesController, self).invalidateTeamBasePoints(self.__currentBaseTeam, baseID, points, timeLeft, invadersCnt, capturingStopped)
         if points == 0 and invadersCnt == 0:
             self._removeBarEntry(self.__currentBaseTeam)

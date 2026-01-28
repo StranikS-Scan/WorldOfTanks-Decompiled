@@ -246,6 +246,13 @@ class EpicArenaVehiclesPlugin(ArenaVehiclesPlugin):
     def _getSpottedSoundName(self, entry):
         return EPIC_SOUND.EB_AIRSHIP_SPOTTED if entry.getClassTag() == Supply.SUPPLY_ID_TO_TAG[Supply.AIRSHIP] else super(EpicArenaVehiclesPlugin, self)._getSpottedSoundName(entry)
 
+    def _getDestroyNotPermanentParams(self, vehicleID):
+        vInfo = self.sessionProvider.getArenaDP().getVehicleInfo(vehicleID)
+        return (BATTLE_MINIMAP_CONSTS.STATE_DEAD_VISIBLE, True) if Supply.isSupply(vInfo.vehicleType.tags) else super(EpicArenaVehiclesPlugin, self)._getDestroyNotPermanentParams(vehicleID)
+
+    def _setInAoI(self, entry, isInAoI):
+        super(EpicArenaVehiclesPlugin, self)._setInAoI(entry, self._useVehicleAoIMarker(entry) or isInAoI)
+
 
 class RespawningPersonalEntriesPlugin(PersonalEntriesPlugin):
     __slots__ = ('__lastCtrlMode',)

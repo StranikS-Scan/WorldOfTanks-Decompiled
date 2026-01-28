@@ -1584,21 +1584,23 @@
             <gun>	25	</gun>
           </armor>
           <shotDispersionRadius>	0.70	</shotDispersionRadius>
-          <reloadTime>	32	</reloadTime>
+          <reloadTime>	35	</reloadTime>
           <aimingTime>	5.0	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.20	</turretRotation>
+            <turretRotation>	0.30	</turretRotation>
             <afterShot>	1.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <clip>
             <count>	2	</count>
-            <rate>	60	</rate>
+            <rate>	12	</rate>
           </clip>
-          <burst>
-            <count>	2	</count>
-            <rate>	17.14285714285714	</rate>
-          </burst>
+          <autoreload>
+            <reloadTime>	35 45	</reloadTime>
+            <boostFraction>	0.5	</boostFraction>
+            <boostStartTime>	0	</boostStartTime>
+            <boostResidueTime>	2	</boostResidueTime>
+          </autoreload>
           <turretYawLimits>	-12 12	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -35 1 -35	</minPitch>
@@ -1977,7 +1979,7 @@
             </master>
           </drivenJoints>
           <edgeByVisualModel>	false	</edgeByVisualModel>
-          <effects>	shot_largeext	</effects>
+          <effects>	shot_huge_mb	</effects>
           <camouflage>
             <density>	98.36174 98.009239	</density>
             <aoTextureSize>	1024 512	</aoTextureSize>

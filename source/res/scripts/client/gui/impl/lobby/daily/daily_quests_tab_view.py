@@ -8,7 +8,6 @@ from gui.impl.gen.view_models.views.lobby.daily.daily_quest_premium_tab_view_mod
 from gui.impl.gen.view_models.views.lobby.daily.daily_quest_regular_tab_view_model import DailyQuestRegularTabViewModel
 from gui.impl.lobby.daily import DailyTabs
 from gui.impl.lobby.daily.daily_helpers import isRegularQuestsStateChanged
-from gui.impl.lobby.daily.daily_quest_view_constants import QUESTS_TABS_IN_LEVEL
 from gui.impl.pub import ViewImpl
 from gui.server_events.events_helpers import dailyQuestsSortFunc, isPremiumQuestsEnable, isPremiumPlusAccount, isDailyRegularQuestsEnabled
 from gui.shared.missions.packers.events import getEventUIDataPacker
@@ -77,7 +76,7 @@ class DailyQuestTabView(ViewImpl):
         return ((self.eventsCache.onSyncCompleted, self._onSyncCompleted), (self.lobbyContext.getServerSettings().onServerSettingsChange, self._onServerSettingsChanged), (self.__unseenEventsManager.onSeenEvents, self.__onSeenEvents))
 
     def _updateUnseenCount(self, model):
-        model.setUnseenCount(self.__unseenEventsManager.getUnseenEventsCount(self.eventsCache.getDailyQuests(filterLevels=QUESTS_TABS_IN_LEVEL[self.TAB_CONST]).keys()))
+        model.setUnseenCount(0)
 
     def __onSeenEvents(self, *_):
         self._updateUnseenCount(self.viewModel)

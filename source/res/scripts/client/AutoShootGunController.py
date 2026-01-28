@@ -246,7 +246,8 @@ class AutoShootGunController(BigWorld.DynamicScriptComponent):
         self.__updateAutoShootingAvatar()
 
     def __onAppearanceReady(self):
-        if self.__appearanceInited:
+        forceReload = self.entity.respawnCompactDescr is not None
+        if forceReload or self.__appearanceInited:
             return
         else:
             params = self.entity.typeDescriptor.gun

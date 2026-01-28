@@ -1309,8 +1309,8 @@
             </armor_7>
             <gun>	60	</gun>
           </armor>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <reloadTime>	18	</reloadTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	20	</reloadTime>
           <aimingTime>	2.7	</aimingTime>
           <invisibilityFactorAtShot>	0.15	</invisibilityFactorAtShot>
           <pitchLimits>
@@ -1322,6 +1322,10 @@
             <afterShot>	6.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <dualAccuracy>
+            <afterShotDispersionRadius>	0.46	</afterShotDispersionRadius>
+            <coolingDelay>	25	</coolingDelay>
+          </dualAccuracy>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>

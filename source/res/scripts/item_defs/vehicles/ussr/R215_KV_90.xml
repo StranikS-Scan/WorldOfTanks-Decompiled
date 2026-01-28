@@ -43,17 +43,17 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	250	</armor_1>
-      <armor_2>	250	</armor_2>
+      <armor_1>	260	</armor_1>
+      <armor_2>	220	</armor_2>
       <armor_3>	150	</armor_3>
       <armor_4>	140	</armor_4>
-      <armor_5>	40	</armor_5>
+      <armor_5>	50	</armor_5>
       <armor_6>	50	</armor_6>
-      <armor_7>	150	</armor_7>
+      <armor_7>	200	</armor_7>
       <armor_8>	0	</armor_8>
       <armor_9>	140	</armor_9>
-      <armor_10>	250	</armor_10>
-      <armor_11>	80	</armor_11>
+      <armor_10>	260	</armor_10>
+      <armor_11>	120	</armor_11>
       <armor_12>	40	</armor_12>
       <armor_13>	50	</armor_13>
       <armor_14>	140	</armor_14>
@@ -3020,20 +3020,20 @@
       <price>	50000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	280	</armor_1>
+        <armor_1>	300	</armor_1>
         <armor_2>	220	</armor_2>
         <armor_3>	200	</armor_3>
         <armor_4>	200	</armor_4>
-        <armor_5>	40	</armor_5>
+        <armor_5>	55	</armor_5>
         <armor_6>	40	</armor_6>
         <armor_7>	200	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	40	</armor_9>
-        <armor_10>	140	</armor_10>
-        <armor_11>	110	</armor_11>
+        <armor_10>	200	</armor_10>
+        <armor_11>	180	</armor_11>
         <armor_12>	90	</armor_12>
-        <armor_13>	140	</armor_13>
-        <armor_14>	110	</armor_14>
+        <armor_13>	180	</armor_13>
+        <armor_14>	140	</armor_14>
         <armor_15>	90	</armor_15>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
@@ -3072,13 +3072,13 @@
             </armor_4>
             <gun>	50	</gun>
           </armor>
-          <reloadTime>	12.6	</reloadTime>
+          <reloadTime>	12	</reloadTime>
           <clip>
-            <count>	3	</count>
+            <count>	2	</count>
             <rate>	15	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	14.8 13.4 12	</reloadTime>
+            <reloadTime>	12 16	</reloadTime>
           </autoreload>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <shotDispersionFactors>
@@ -3170,9 +3170,9 @@
             <rate>	15	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	15.5 13.7	</reloadTime>
+            <reloadTime>	13.7 17.5	</reloadTime>
           </autoreload>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.10	</turretRotation>
             <afterShot>	3.0	</afterShot>

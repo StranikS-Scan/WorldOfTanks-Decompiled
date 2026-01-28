@@ -281,7 +281,7 @@
       <cooldownSeconds>	90	</cooldownSeconds>
       <reuseCount>	3	</reuseCount>
       <duration>	25	</duration>
-      <penaltyReloadTime>	7	</penaltyReloadTime>
+      <penaltyReloadTime>	4	</penaltyReloadTime>
       <additiveFactors></additiveFactors>
       <multiplicativeFactors>
         <gun-reloadTime>	0.4	</gun-reloadTime>
@@ -295,7 +295,7 @@
       </mul>
       <add>
         <name>	vehicleGunReloadPenalty	</name>
-        <value>	7	</value>
+        <value>	4	</value>
       </add>
       <mul>
         <name>	vehicleGunShotDispersionAfterShot	</name>
@@ -325,8 +325,8 @@
       <duration>	25	</duration>
       <cooldownAfterRamKill>	0.5	</cooldownAfterRamKill>
       <additiveFactors>
-        <vehicle-fwMaxSpeedBonus>	10	</vehicle-fwMaxSpeedBonus>
-        <vehicle-bkMaxSpeedBonus>	10	</vehicle-bkMaxSpeedBonus>
+        <vehicle-fwMaxSpeedBonus>	12	</vehicle-fwMaxSpeedBonus>
+        <vehicle-bkMaxSpeedBonus>	12	</vehicle-bkMaxSpeedBonus>
       </additiveFactors>
       <multiplicativeFactors>
         <ramming>	1.5	</ramming>
@@ -370,7 +370,7 @@
       </mul>
       <add>
         <name>	speedLimitsBonus	</name>
-        <value>	10	</value>
+        <value>	12	</value>
       </add>
     </kpi>
   </tank_ram>

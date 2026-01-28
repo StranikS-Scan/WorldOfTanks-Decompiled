@@ -64,16 +64,18 @@ class EpicMissionsPanel(EpicMissionsPanelMeta, CallbackDelayer):
         self.as_setMissionDescriptionValueS('')
 
     def __onPlayerMissionUpdated(self, mission, additionalDescription=None):
-        newMission = mission.generateData()
-        if self.__currentMission != newMission:
-            self.__currentMission = newMission
-            self.as_setPrimaryMissionS(newMission)
+        self.__updatePrimaryMission(mission.generateData())
         if additionalDescription is not None:
             self.as_setMissionDescriptionValueS(additionalDescription)
         return
 
     def __onPlayerMissionReset(self):
-        self.as_setPrimaryMissionS(PlayerMission().generateData())
+        self.__updatePrimaryMission(PlayerMission().generateData())
+
+    def __updatePrimaryMission(self, newMission):
+        if self.__currentMission != newMission:
+            self.__currentMission = newMission
+            self.as_setPrimaryMissionS(newMission)
 
     def __onPlayerMissionTimerSet(self, timeStamp):
         if timeStamp > 0:

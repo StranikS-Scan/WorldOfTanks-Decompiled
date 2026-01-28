@@ -898,8 +898,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	50	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.15	</vehicleMovement>
-        <vehicleRotation>	0.15	</vehicleRotation>
+        <vehicleMovement>	0.13	</vehicleMovement>
+        <vehicleRotation>	0.13	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
@@ -1760,17 +1760,20 @@
             <maxPitch>	0.00000 7.00 0.38889 7.00 0.41667 5.00 0.58333 5.00 0.61111 7.00 1.00000 7.00	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	21	</reloadTime>
+          <reloadTime>	9	</reloadTime>
           <clip>
             <count>	2	</count>
             <rate>	20	</rate>
           </clip>
+          <autoreload>
+            <reloadTime>	9.9 14.7	</reloadTime>
+          </autoreload>
           <shotDispersionFactors>
             <turretRotation>	0.13	</turretRotation>
             <afterShot>	2.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.8	</aimingTime>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/german/G105_T-55_NVA_DDR/normal/lod0/Gun_01.model	</undamaged>
@@ -1782,7 +1785,7 @@
             <collisionModelClient>	vehicles/german/G105_T-55_NVA_DDR/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_mainext	</effects>
-          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
+          <reloadEffect>	autoloader_reload85_107	</reloadEffect>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>

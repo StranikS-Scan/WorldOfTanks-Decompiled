@@ -577,7 +577,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.hangarSpace.onSpaceDestroy += self.__onHangarSpaceDestroy
         self.eventsCache.onSyncCompleted += self.__onEventsCacheResync
         self.eventsCache.onProgressUpdated += self.__onEventsCacheResync
-        self.eventsCache.onEventsVisited += self.__onEventsVisited
         self.eventsCache.onProfileVisited += self.__onProfileVisited
         self.eventsCache.onPersonalQuestsVisited += self.__onMissionsVisited
         self.itemsCache.onSyncCompleted += self.__onItemsCacheResync
@@ -610,7 +609,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self._wotPlusCtrl.onStateUpdate += self.__updateWotPlusAttrs
         AccountSettings.onSettingsChanging += self.__updateWotPlusAttrs
         self.lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingsChange
-        self.__unseenEventsManager.onSeenEvents += self.__onSeenEvent
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.BubbleTooltipEvent.SHOW, self.__showBubbleTooltip, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -674,7 +672,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.removeListener(events.BubbleTooltipEvent.SHOW, self.__showBubbleTooltip, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.CloseWindowEvent.GOLD_FISH_CLOSED, self.__onGoldFishWindowClosed, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(HEADER_BUTTONS_COUNTERS_CHANGED_EVENT, self.__onCounterChanged, scope=EVENT_BUS_SCOPE.DEFAULT)
-        self.__unseenEventsManager.onSeenEvents -= self.__onSeenEvent
         self.anonymizerController.onStateChanged -= self.__updateAnonymizedState
         self.gameSession.onPremiumNotify -= self.__onPremiumTimeChanged
         self.gameSession.onPremiumTypeChanged -= self._onPremiumTypeChanged
@@ -687,7 +684,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.hangarSpace.onSpaceDestroy -= self.__onHangarSpaceDestroy
         self.eventsCache.onSyncCompleted -= self.__onEventsCacheResync
         self.eventsCache.onProgressUpdated -= self.__onEventsCacheResync
-        self.eventsCache.onEventsVisited -= self.__onEventsVisited
         self.eventsCache.onProfileVisited -= self.__onProfileVisited
         self.eventsCache.onPersonalQuestsVisited -= self.__onMissionsVisited
         self.itemsCache.onSyncCompleted -= self.__onItemsCacheResync
@@ -1319,7 +1315,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__updateStrongholdCounter()
         self.__updateShopTabCounter()
         self.__updateStorageTabCounter()
-        self.__onEventsVisited()
+        self.__hideCounter(self.TABS.MISSIONS)
         self.__updateMissionsTabCounter()
         self.__updateRecruitsTabCounter(self.TABS.BARRACKS)
 
@@ -1413,7 +1409,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self._updatePrebattleControls()
 
     def __updateRoyale(self, *_):
-        self.__onEventsVisited()
         self._updatePrebattleControls()
 
     def __updateMapsTraining(self, *_):

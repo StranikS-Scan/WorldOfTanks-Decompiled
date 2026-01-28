@@ -71,11 +71,13 @@ class _GunMarkersFactory(object):
     def _createMarker(self, componentClass, viewId, markerType, dataProvider, name, isActive=False):
         marker = self._findMarker(name)
         if marker is not None:
-            marker.setDataProvider(markerType, dataProvider)
-            return marker
-        else:
-            linkage = _GUN_MARKER_LINKAGES[name]
-            return componentClass(markerType, viewId, name, linkage, dataProvider, isActive)
+            if marker.getViewID() != viewId:
+                marker.destroy()
+            else:
+                marker.setDataProvider(markerType, dataProvider)
+                return marker
+        linkage = _GUN_MARKER_LINKAGES[name]
+        return componentClass(markerType, viewId, name, linkage, dataProvider, isActive)
 
     def _getMarkerDataProvider(self, markerType):
         if markerType is GUN_MARKER_TYPE.SERVER:

@@ -24,6 +24,7 @@ class GAME_MESSAGES_CONSTS(object):
     OBJECTIVE_UNDER_ATTACK_POSITIVE = 'objectiveUnderAttackPositive'
     OBJECTIVE_UNDER_ATTACK = 'objectiveUnderAttack'
     GENERAL_RANK_REACHED = 'generalRankReached'
+    PROMOTION_RECEIVED = 'promotionReceived'
     UNLOCK_TANK_LEVEL = 'unlockTankLevel'
     SUPPLY_UNLOCKED = 'supplyUnlocked'
     SUPPLY_ACTIVE = 'supplyActive'

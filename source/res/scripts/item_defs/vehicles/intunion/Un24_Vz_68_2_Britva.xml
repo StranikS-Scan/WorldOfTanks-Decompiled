@@ -949,13 +949,31 @@
                   <row0>	2.050119 0.000000 0.000000	</row0>
                   <row1>	0.000000 1.336831 0.000000	</row1>
                   <row2>	0.000000 0.000000 6.472500	</row2>
-                  <row3>	0.000000 0.966873 -0.165910	</row3>
+                  <row3>	-0.075331 1.063966 -0.307706	</row3>
                 </boxCollider>
                 <boxCollider>
                   <row0>	3.030119 0.000000 0.000000	</row0>
                   <row1>	0.000000 0.300000 0.000000	</row1>
                   <row2>	0.000000 0.000000 6.430122	</row2>
-                  <row3>	0.000000 1.317138 0.003836	</row3>
+                  <row3>	-0.180515 1.312252 0.003835	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.500000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.500000	</row2>
+                  <row3>	-1.771251 0.940516 0.067264	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.700000 -0.000004 -0.000004	</row0>
+                  <row1>	0.000001 0.393728 -0.308186	</row1>
+                  <row2>	0.000003 0.184911 0.236237	</row2>
+                  <row3>	-1.377304 1.086953 3.284664	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.700000 0.000001 0.000006	</row0>
+                  <row1>	-0.000003 0.405002 0.293213	</row1>
+                  <row2>	-0.000002 -0.175928 0.243001	</row2>
+                  <row3>	-1.377260 1.086873 -3.094848	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1007,16 +1025,34 @@
               </wheelGroups>
               <hullCollider>
                 <boxCollider>
-                  <row0>	2.050119 0.000000 0.000000	</row0>
-                  <row1>	0.000000 1.336831 0.000000	</row1>
+                  <row0>	2.050120 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.336830 0.000000	</row1>
                   <row2>	0.000000 0.000000 6.472500	</row2>
-                  <row3>	0.000000 0.966873 -0.165910	</row3>
+                  <row3>	0.075000 1.063970 -0.307706	</row3>
                 </boxCollider>
                 <boxCollider>
-                  <row0>	3.030119 0.000000 0.000000	</row0>
+                  <row0>	3.030120 0.000000 0.000000	</row0>
                   <row1>	0.000000 0.300000 0.000000	</row1>
-                  <row2>	0.000000 0.000000 6.430122	</row2>
-                  <row3>	0.000000 1.317138 0.003836	</row3>
+                  <row2>	0.000000 0.000000 6.430120	</row2>
+                  <row3>	0.181000 1.312250 0.003835	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.500000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.500000	</row2>
+                  <row3>	1.771000 0.940516 0.067263	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.700000 -0.000004 -0.000004	</row0>
+                  <row1>	0.000001 0.393729 -0.308185	</row1>
+                  <row2>	0.000003 0.184911 0.236237	</row2>
+                  <row3>	1.377000 1.086950 3.284660	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.700000 0.000001 0.000006	</row0>
+                  <row1>	-0.000003 0.405002 0.293213	</row1>
+                  <row2>	-0.000002 -0.175928 0.243001	</row2>
+                  <row3>	1.377000 1.086870 -3.094850	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1140,7 +1176,7 @@
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
-      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.911354 0.000000	</hullPosition>
       <customizationSlots>
         <slot>
@@ -2196,7 +2232,7 @@
           </customization>
           <edgeByVisualModel>	false	</edgeByVisualModel>
           <effects>	shot_autoshoot_medium	</effects>
-          <shotOffset>	0 0.101 0	</shotOffset>
+          <shotOffset>	-0.000001 -0.010758 0	</shotOffset>
           <models>
             <undamaged>	vehicles/intunion/Un24_Vz_68_2_Britva/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/intunion/Un24_Vz_68_2_Britva/crash/lod0/Gun_01.model	</destroyed>
@@ -2229,14 +2265,14 @@
         <gun>
           <gunNode>	G_L	</gunNode>
           <gunFire>	HP_gunFire_L	</gunFire>
-          <position>	-0.22 0.328 1.451	</position>
-          <shotOffset>	-0.159906 0.667417 -1.325155	</shotOffset>
+          <position>	-0.116857 0.287748 1.451	</position>
+          <shotOffset>	-0.00626 -0.00028 -1.325155	</shotOffset>
         </gun>
         <gun>
           <gunNode>	G_R	</gunNode>
           <gunFire>	HP_gunFire_R	</gunFire>
-          <position>	0.22 0.327733 1.451391	</position>
-          <shotOffset>	-0.159906 0.667417 -1.325155	</shotOffset>
+          <position>	0.121888 0.284967 1.451391	</position>
+          <shotOffset>	-0.001422 0.001016 -1.325155	</shotOffset>
         </gun>
       </multiGun>
       <customizationSlots>

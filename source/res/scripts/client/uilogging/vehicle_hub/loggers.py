@@ -27,27 +27,11 @@ class ArmorTabLogger(MetricsLogger):
     def logClose(self):
         self.log(action=LogActions.CLOSE, item=Tabs.ARMOR_TAB, itemState=self._vehicleCD, partnerID=self._partnerID)
 
-    def logVideoClick(self):
-        self.log(action=LogActions.CLICK, item=LogItems.VIDEO, parentScreen=Tabs.ARMOR_TAB, itemState=self._vehicleCD, partnerID=self._partnerID)
-
     def tooltipOpened(self):
         self.startAction(LogActions.TOOLTIP_ACTION)
 
     def armorTooltipClosed(self):
         self._tooltipClosed(LogItems.ARMOR_TOOLTIP)
-
-    def legendTooltipClosed(self, event):
-        tooltipId = event.get('id', None)
-        if tooltipId is not None:
-            self._tooltipClosed(tooltipId)
-        return
-
-    def legendStateChanged(self, event):
-        state = event.get('state', None)
-        if state is not None:
-            action = LogActions.EXPAND if state else LogActions.COLLAPSE
-            self.logOnce(action=action, item=LogItems.LEGEND, parentScreen=Tabs.ARMOR_TAB, itemState=self._vehicleCD, partnerID=self._partnerID)
-        return
 
     def _tooltipClosed(self, item):
         self.stopAction(action=LogActions.TOOLTIP_ACTION, item=item, parentScreen=Tabs.ARMOR_TAB, itemState=self._vehicleCD, partnerID=self._partnerID, timeLimit=TIME_LIMIT)

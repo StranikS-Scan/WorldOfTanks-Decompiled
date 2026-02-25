@@ -3,7 +3,6 @@
 from logging import getLogger
 from adisp import adisp_process
 from gui.impl.pub import ViewImpl
-from gui.impl.lobby.common.view_mixins import LobbyHeaderVisibility
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
@@ -14,7 +13,7 @@ from frameworks.wulf import ViewSettings, ViewFlags
 from story_mode_common.story_mode_constants import LOGGER_NAME
 _logger = getLogger(LOGGER_NAME)
 
-class BasePrbView(ViewImpl, LobbyHeaderVisibility):
+class BasePrbView(ViewImpl):
     LAYOUT_ID = None
     MODEL_CLASS = None
     _storyModeCtrl = dependency.descriptor(IStoryModeController)
@@ -22,14 +21,6 @@ class BasePrbView(ViewImpl, LobbyHeaderVisibility):
 
     def __init__(self, *_, **__):
         super(BasePrbView, self).__init__(settings=ViewSettings(layoutID=self.LAYOUT_ID, model=self.MODEL_CLASS(), flags=ViewFlags.LOBBY_SUB_VIEW))
-
-    def _onLoading(self, *args, **kwargs):
-        super(BasePrbView, self)._onLoading(*args, **kwargs)
-        self.suspendLobbyHeader(self.uniqueID)
-
-    def _finalize(self):
-        self.resumeLobbyHeader(self.uniqueID)
-        super(BasePrbView, self)._finalize()
 
     @adisp_process
     def _quit(self):

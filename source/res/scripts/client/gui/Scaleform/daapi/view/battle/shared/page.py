@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/page.py
+from __future__ import absolute_import
 import logging
 import typing
 from account_helpers.settings_core.settings_constants import SPGAim
@@ -347,7 +348,7 @@ class SharedPage(BattlePageMeta):
         self._isDestroyTimerShown = False
 
     def _changeCtrlMode(self, ctrlMode):
-        if ctrlMode == ctrlMode == aih_constants.CTRL_MODE_NAME.VIDEO:
+        if ctrlMode == aih_constants.CTRL_MODE_NAME.VIDEO:
             self._setComponentsVisibility(hidden={_ALIASES.DAMAGE_PANEL})
         else:
             self._setComponentsVisibility(visible={_ALIASES.DAMAGE_PANEL})

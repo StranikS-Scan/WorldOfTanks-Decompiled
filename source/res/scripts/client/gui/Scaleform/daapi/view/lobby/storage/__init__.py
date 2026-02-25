@@ -39,6 +39,7 @@ from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDL
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.app_loader import settings as app_settings
+from gui.impl.lobby.offers.offer_gifts_window import OfferGiftsWindow
 from gui.shared import EVENT_BUS_SCOPE
 
 def getContextMenuHandlers():
@@ -62,6 +63,7 @@ def getContextMenuHandlers():
 def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.storage.storage_view import StorageView
     return (ViewSettings(VIEW_ALIAS.LOBBY_STORAGE, StorageView, 'storageView.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.LOBBY_STORAGE, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(VIEW_ALIAS.OFFER_GIFT_VIEW, OfferGiftsWindow, '', WindowLayer.SUB_VIEW, VIEW_ALIAS.OFFER_GIFT_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ComponentSettings(STORAGE_CONSTANTS.FOR_SELL_VIEW, StorageCategoryForSellView, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(STORAGE_CONSTANTS.IN_HANGAR_VIEW, StorageCategoryInHangarView, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(STORAGE_CONSTANTS.IN_HANGAR_ALL_VEHICLES_TAB, AllVehiclesTabView, ScopeTemplates.DEFAULT_SCOPE),
@@ -122,5 +124,6 @@ class StoragePackageBusinessHandler(PackageBusinessHandler):
         listeners = ((VIEW_ALIAS.LOBBY_STORAGE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.STORAGE_VEHICLES_FILTER_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.STORAGE_BLUEPRINTS_FILTER_POPOVER, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.STORAGE_VEHICLE_SELECTOR_POPOVER, self.loadViewByCtxEvent))
+         (VIEW_ALIAS.STORAGE_VEHICLE_SELECTOR_POPOVER, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.OFFER_GIFT_VIEW, self.loadView))
         super(StoragePackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)

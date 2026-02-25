@@ -1325,6 +1325,7 @@ class QUESTS(object):
     BONUSNAME_BATTLEPASSPOINTS_PREVIEW = '#quests:bonusName/battlePassPoints/preview'
     BONUSNAME_PERSONAL_MISSIONS_POINTS_PREVIEW = '#quests:bonusName/personal_missions_points/preview'
     BONUSNAME_BRCOIN = '#quests:bonusName/brcoin'
+    BONUSNAME_STPCOIN = '#quests:bonusName/stpcoin'
     BONUSNAME_GOLD_BANK = '#quests:bonusName/gold_bank'
     BONUSNAME_IDLE_CREW_XP = '#quests:bonusName/idle_crew_xp'
     BONUSNAME_EXCLUDED_MAP = '#quests:bonusName/excluded_map'
@@ -1332,6 +1333,9 @@ class QUESTS(object):
     BONUSNAME_FREE_EQUIPMENT_DEMOUNTING = '#quests:bonusName/free_equipment_demounting'
     BONUSNAME_EXCLUSIVE_VEHICLE = '#quests:bonusName/exclusive_vehicle'
     BONUSNAME_ATTENDANCE_REWARD = '#quests:bonusName/attendance_reward'
+    BONUSNAME_PRO_BOOST = '#quests:bonusName/pro_boost'
+    BONUSNAME_SERVICE_RECORD_CUSTOMIZATION = '#quests:bonusName/service_record_customization'
+    BONUSNAME_BATTLE_PASS_PLUS = '#quests:bonusName/battle_pass_plus'
     BONUSNAME_TOURCOIN = '#quests:bonusName/tourcoin'
     BONUSNAME_INDUSTRIALRESOURCE = '#quests:bonusName/industrialResource'
     BONUSNAME_BPTALER = '#quests:bonusName/bptaler'
@@ -1343,8 +1347,6 @@ class QUESTS(object):
     ACTION_FULL_CALENDAR = '#quests:action/full/calendar'
     ACTION_HERO_FULL_CALENDAR = '#quests:action/hero/full/calendar'
     ACTION_BUTTON_CALENDAR = '#quests:action/button/calendar'
-    ACTION_SHORT_CALENDAR = '#quests:action/short/calendar'
-    ACTION_SUBHEADER_CALENDAR = '#quests:action/subheader/calendar'
     ACTION_AUTO_EXCHANGERATE = '#quests:action/auto/exchangeRate'
     ACTION_FULL_EXCHANGERATE = '#quests:action/full/exchangeRate'
     ACTION_HERO_FULL_EXCHANGERATE = '#quests:action/hero/full/exchangeRate'
@@ -1637,10 +1639,6 @@ class QUESTS(object):
     METRICS_TITLE_LEFT = '#quests:metrics/title/left'
     METRICS_TITLE_TRIESLEFT = '#quests:metrics/title/triesLeft'
     METRICS_TITLE_TARGETS = '#quests:metrics/title/targets'
-    BATTLECONDITION_STATE_COMPLETED = '#quests:battleCondition/state/completed'
-    BATTLECONDITION_STATE_COMPLETED_PERFECTLY = '#quests:battleCondition/state/completed_perfectly'
-    BATTLECONDITION_STATE_IN_PROGRESS = '#quests:battleCondition/state/in_progress'
-    BATTLECONDITION_STATE_FAILED = '#quests:battleCondition/state/failed'
     BATTLECONDITION_TASK_STATUS_DONE = '#quests:battleCondition/task/status/done'
     BATTLECONDITION_TASK_STATUS_FAILED = '#quests:battleCondition/task/status/failed'
     BATTLEPROGRESS_LIMITEDBYTIME = '#quests:battleProgress/limitedByTime'
@@ -1669,30 +1667,7 @@ class QUESTS(object):
     PREMIUMQUESTS_DETAILEDQUESTS_REQUIREMENTS_TOKEN = '#quests:premiumQuests/detailedQuests/requirements/token'
     PREMIUMQUESTS_CONDITION_DMGTOP_5 = '#quests:premiumQuests/condition/dmgTop_5'
     PREMIUMQUESTS_CONDITION_WIN_WINLONG = '#quests:premiumQuests/condition/win/winLong'
-    DAILYQUESTS_HEADER_DEFAULT = '#quests:dailyQuests/header/default'
     PREMIUMQUESTS_HEADER_DEFAULT = '#quests:premiumQuests/header/default'
-    DAILYQUESTS_HEADER_WINBACK = '#quests:dailyQuests/header/winback'
-    PREMIUMQUESTS_HEADER_WINBACK = '#quests:premiumQuests/header/winback'
-    DAILYQUESTS_TAB_LABEL = '#quests:dailyQuests/tab/label'
-    PREMIUMQUESTS_TAB_LABEL = '#quests:premiumQuests/tab/label'
-    DAILYQUESTS_BODY_REROLL = '#quests:dailyQuests/body/reroll'
-    DAILYQUESTS_MISSIONSWITCH_TOOLTIP_HEADER = '#quests:dailyQuests/missionSwitch/tooltip/header'
-    DAILYQUESTS_MISSIONSWITCH_TOOLTIP_BODY_AVAILABLE = '#quests:dailyQuests/missionSwitch/tooltip/body/available'
-    DAILYQUESTS_MISSIONSWITCH_TOOLTIP_BODY_DESC_HRS = '#quests:dailyQuests/missionSwitch/tooltip/body/desc_hrs'
-    DAILYQUESTS_MISSIONSWITCH_TOOLTIP_BODY_DESC_HRS_MIN = '#quests:dailyQuests/missionSwitch/tooltip/body/desc_hrs_min'
-    DAILYQUESTS_MISSIONSWITCH_TOOLTIP_BODY_DESC_MIN_ONLY = '#quests:dailyQuests/missionSwitch/tooltip/body/desc_min_only'
-    DAILYQUESTS_MISSIONSWITCH_TOOLTIP_BODY_DESC = '#quests:dailyQuests/missionSwitch/tooltip/body/desc'
-    PREMIUMQUESTS_TOOLTIPS_LOCKED_HEADER = '#quests:premiumQuests/tooltips/locked/header'
-    PREMIUMQUESTS_TOOLTIPS_LOCKED_BODY = '#quests:premiumQuests/tooltips/locked/body'
-    PREMIUMQUESTS_NOTPREMIUMACCOUNT_TITLE = '#quests:premiumQuests/notPremiumAccount/title'
-    PREMIUMQUESTS_NOTPREMIUMACCOUNT_PARAGRAPH = '#quests:premiumQuests/notPremiumAccount/paragraph'
-    PREMIUMQUESTS_NOTPREMIUMACCOUNT_BUTTON = '#quests:premiumQuests/notPremiumAccount/button'
-    PREMIUMQUESTS_COUNTDOWN_TITLE = '#quests:premiumQuests/countDown/title'
-    PREMIUMQUESTS_COUNTDOWN_REMAININGTEXT = '#quests:premiumQuests/countDown/remainingText'
-    DAILYQUESTS_COUNTDOWN_TITLE = '#quests:dailyQuests/countDown/title'
-    DAILYQUESTS_COUNTDOWN_REMAININGTEXT = '#quests:dailyQuests/countDown/remainingText'
-    DAILYQUESTS_FOOTER_TITLE = '#quests:dailyQuests/footer/title'
-    DAILYQUESTS_FOOTER_PARAGRAPH = '#quests:dailyQuests/footer/paragraph'
     DAILYQUESTS_BONUS_TOOLTIPTITLE = '#quests:dailyQuests/bonus/tooltipTitle'
     DAILYQUESTS_BONUS_TOOLTIPDESCRIPTION = '#quests:dailyQuests/bonus/tooltipDescription'
     DAILYQUESTS_POSTBATTLE_GENERICTITLE_EASY = '#quests:dailyQuests/postBattle/genericTitle_easy'
@@ -1701,61 +1676,13 @@ class QUESTS(object):
     DAILYQUESTS_POSTBATTLE_GENERICTITLE_BONUS = '#quests:dailyQuests/postBattle/genericTitle_bonus'
     DAILYQUESTS_POSTBATTLE_GENERICTITLE_EPIC = '#quests:dailyQuests/postBattle/genericTitle_epic'
     DAILYQUESTS_POSTBATTLE_EPIC_DESCRIPTION = '#quests:dailyQuests/postBattle/epic/description'
-    DAILYQUESTS_BONUSQUEST_BONUSMISSIONTITLE = '#quests:dailyQuests/bonusQuest/bonusMissionTitle'
-    DAILYQUESTS_BONUSQUEST_COUNTDOWN_HRS = '#quests:dailyQuests/bonusQuest/countDown_hrs'
-    DAILYQUESTS_BONUSQUEST_COUNTDOWN_MINSEC = '#quests:dailyQuests/bonusQuest/countDown_minSec'
     PREMIUMQUESTS_POSTBATTLE_GENERICTITLE_EASY = '#quests:premiumQuests/postBattle/genericTitle_easy'
     PREMIUMQUESTS_POSTBATTLE_GENERICTITLE_MEDIUM = '#quests:premiumQuests/postBattle/genericTitle_medium'
     PREMIUMQUESTS_POSTBATTLE_GENERICTITLE_HARD = '#quests:premiumQuests/postBattle/genericTitle_hard'
     GENERAL_COUNTDOWN_TEXT_TIMER_HRS = '#quests:general/countdown/text/timer_hrs'
-    GENERAL_COUNTDOWN_TEXT_TIMER_HRS_ONLY = '#quests:general/countdown/text/timer_hrs_only'
-    GENERAL_COUNTDOWN_TEXT_TIMER_MIN_ONLY = '#quests:general/countdown/text/timer_min_only'
-    GENERAL_COUNTDOWN_TEXT_TIMER_MIN = '#quests:general/countdown/text/timer_min'
-    GENERAL_COUNTDOWN_TEXT_TIMER_SEC = '#quests:general/countdown/text/timer_sec'
-    GENERAL_COUNTDOWN_TIMER_HRS = '#quests:general/countdown/timer_hrs'
-    GENERAL_COUNTDOWN_TIMER_HRS_ONLY = '#quests:general/countdown/timer_hrs_only'
-    GENERAL_COUNTDOWN_TIMER_MIN_ONLY = '#quests:general/countdown/timer_min_only'
     GENERAL_COUNTDOWN_TIMER_MIN = '#quests:general/countdown/timer_min'
-    GENERAL_COUNTDOWN_TIMER_SEC = '#quests:general/countdown/timer_sec'
-    DAILYQUESTS_POSTBATTLE_GENERICAMPERSAND = '#quests:dailyQuests/postBattle/genericAmpersand'
     DAILYQUESTS_POSTBATTLE_CONDITIONTYPEAND = '#quests:dailyQuests/postBattle/conditionTypeAnd'
     DAILYQUESTS_POSTBATTLE_CONDITIONTYPEOR = '#quests:dailyQuests/postBattle/conditionTypeOr'
-    DAILYQUESTS_TAKEREWARDSBUTTON_TEXT = '#quests:dailyQuests/takeRewardsButton/text'
-    DAILYQUESTS_TAKEREWARDSBUTTON_COUNTDOWN = '#quests:dailyQuests/takeRewardsButton/countdown'
-    DAILYQUESTS_TAKEREWARDSBUTTON_TOOLTIP = '#quests:dailyQuests/takeRewardsButton/tooltip'
-    DAILYQUESTS_TAKEREWARDSBUTTON_TOOLTIPDISABLE = '#quests:dailyQuests/takeRewardsButton/tooltipDisable'
-    INFOPAGE_HEADER_DEFAULT = '#quests:infoPage/header/default'
-    INFOPAGE_HEADER_WINBACK = '#quests:infoPage/header/winback'
-    INFOPAGE_INFOBUTTON_DEFAULT = '#quests:infoPage/infoButton/default'
-    INFOPAGE_INFOBUTTON_WINBACK = '#quests:infoPage/infoButton/winback'
-    INFOPAGE_INFOBUTTON_BACK_TITLE = '#quests:infoPage/infoButton/back/title'
-    INFOPAGE_INFOBUTTON_BACK_GOTO = '#quests:infoPage/infoButton/back/goto'
-    INFOPAGE_INFOBUTTONTOOLTIP_BODY = '#quests:infoPage/infoButtonTooltip/body'
-    INFOPAGE_INFOBUTTONTOOLTIP_HEADER_DEFAULT = '#quests:infoPage/infoButtonTooltip/header/default'
-    INFOPAGE_INFOBUTTONTOOLTIP_HEADER_WINBACK = '#quests:infoPage/infoButtonTooltip/header/winback'
-    INFOPAGE_DAILYMISSIONTITLE = '#quests:infoPage/dailyMissionTitle'
-    INFOPAGE_PREMIUMMISSIONSTITLE = '#quests:infoPage/premiumMissionsTitle'
-    INFOPAGE_DAILYMISSIONS_DEFAULT = '#quests:infoPage/dailyMissions/default'
-    INFOPAGE_DAILYMISSIONS_BATTLEPASSDAILYMISSIONS_DEFAULT = '#quests:infoPage/dailyMissions/battlePassDailyMissions/default'
-    INFOPAGE_DAILYMISSIONS_WINBACK = '#quests:infoPage/dailyMissions/winback'
-    INFOPAGE_DAILYMISSIONS_BATTLEPASSDAILYMISSIONS_WINBACK = '#quests:infoPage/dailyMissions/battlePassDailyMissions/winback'
-    INFOPAGE_PREMIUMMISSIONS_DEFAULT = '#quests:infoPage/premiumMissions/default'
-    INFOPAGE_PREMIUMMISSIONS_WINBACK = '#quests:infoPage/premiumMissions/winback'
-    INFOPAGE_PREMIUMMISSIONS_WINBACK_COMP7ACTIVE = '#quests:infoPage/premiumMissions/winback_comp7Active'
-    INFOPAGE_CONDITIONSTITLE = '#quests:infoPage/conditionsTitle'
-    INFOPAGE_CONDITIONS_DEFAULT = '#quests:infoPage/conditions/default'
-    INFOPAGE_CONDITIONS_WINBACK = '#quests:infoPage/conditions/winback'
-    INFOPAGE_CONDITIONS_WINBACK_COMP7ACTIVE = '#quests:infoPage/conditions/winback_comp7Active'
-    INFOPAGE_BONUSMISSIONTITLE = '#quests:infoPage/bonusMissionTitle'
-    INFOPAGE_BONUSMISSION_DEFAULT = '#quests:infoPage/bonusMission/default'
-    INFOPAGE_BONUSMISSION_WINBACK = '#quests:infoPage/bonusMission/winback'
-    INFOPAGE_EPICREWARDSTITLE = '#quests:infoPage/epicRewardsTitle'
-    INFOPAGE_EPICREWARDS_DEFAULT = '#quests:infoPage/epicRewards/default'
-    INFOPAGE_EPICREWARDS_WINBACK = '#quests:infoPage/epicRewards/winback'
-    INFOPAGE_MISSIONSWITCHTITLE = '#quests:infoPage/missionSwitchTitle'
-    INFOPAGE_MISSIONSWITCH_HRS = '#quests:infoPage/missionSwitch_hrs'
-    INFOPAGE_MISSIONSWITCH_MIN = '#quests:infoPage/missionSwitch_min'
-    INFOPAGE_MISSIONSWITCH_WINBACK = '#quests:infoPage/missionSwitch/winback'
     DAILYQUESTS_CONDITION_DODAMAGE = '#quests:dailyQuests/condition/doDamage'
     DAILYQUESTS_CONDITION_EARNEXP = '#quests:dailyQuests/condition/earnExp'
     DAILYQUESTS_CONDITION_DESTROYMODULE_FEW = '#quests:dailyQuests/condition/destroyModule_few'
@@ -1896,6 +1823,7 @@ class QUESTS(object):
      BONUSNAME_BATTLEPASSPOINTS_PREVIEW,
      BONUSNAME_PERSONAL_MISSIONS_POINTS_PREVIEW,
      BONUSNAME_BRCOIN,
+     BONUSNAME_STPCOIN,
      BONUSNAME_GOLD_BANK,
      BONUSNAME_IDLE_CREW_XP,
      BONUSNAME_EXCLUDED_MAP,
@@ -1903,6 +1831,9 @@ class QUESTS(object):
      BONUSNAME_FREE_EQUIPMENT_DEMOUNTING,
      BONUSNAME_EXCLUSIVE_VEHICLE,
      BONUSNAME_ATTENDANCE_REWARD,
+     BONUSNAME_PRO_BOOST,
+     BONUSNAME_SERVICE_RECORD_CUSTOMIZATION,
+     BONUSNAME_BATTLE_PASS_PLUS,
      BONUSNAME_TOURCOIN,
      BONUSNAME_INDUSTRIALRESOURCE,
      BONUSNAME_BPTALER,
@@ -1914,8 +1845,6 @@ class QUESTS(object):
      ACTION_FULL_CALENDAR,
      ACTION_HERO_FULL_CALENDAR,
      ACTION_BUTTON_CALENDAR,
-     ACTION_SHORT_CALENDAR,
-     ACTION_SUBHEADER_CALENDAR,
      ACTION_AUTO_EXCHANGERATE,
      ACTION_FULL_EXCHANGERATE,
      ACTION_HERO_FULL_EXCHANGERATE,

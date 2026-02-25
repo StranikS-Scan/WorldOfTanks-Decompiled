@@ -104,13 +104,13 @@ class BattleAvailabilityController(Notifiable):
         return (self._battlesAvailable, self._currServerAvailable)
 
     def getForbiddenHours(self):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def isServerAvailable(self):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def _onChanged(self, diff=None):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def _getPeriodsInfo(self):
         return (self.__currentPeriod, self.__periods[:] if self.__periods else None)

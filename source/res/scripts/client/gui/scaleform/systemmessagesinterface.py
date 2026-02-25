@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/SystemMessagesInterface.py
+from __future__ import absolute_import
 import time
 import account_helpers
 from MemoryCriticalController import g_critMemHandler
@@ -59,10 +60,9 @@ class SystemMessagesInterface(ISystemMessages):
     def pushI18nMessage(self, key, *args, **kwargs):
         text = i18n.makeString(key, *args, **kwargs)
         msgType = kwargs.get('type', SM_TYPE.Information)
-        msgPriority = kwargs.get('priority', None)
-        messageData = kwargs.get('messageData', None)
+        msgPriority = kwargs.get('priority')
+        messageData = kwargs.get('messageData')
         self.pushMessage(text, msgType, msgPriority, messageData)
-        return
 
     def __onAccountShowGUI(self, ctx):
         self.__checkPremiumAccountExpiry()

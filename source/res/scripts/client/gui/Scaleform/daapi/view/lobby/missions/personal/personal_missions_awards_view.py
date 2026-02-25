@@ -4,8 +4,8 @@ from gui import makeHtmlString, SystemMessages
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import MainOperationAwardComposer, AddOperationAwardComposer
 from gui.Scaleform.daapi.view.meta.PersonalMissionsAwardsViewMeta import PersonalMissionsAwardsViewMeta
-from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -45,13 +45,17 @@ class PersonalMissionsAwardsView(LobbySubView, PersonalMissionsAwardsViewMeta, P
         if vehicle.isInInventory:
             event_dispatcher.selectVehicleInHangar(vehicle.intCD)
         else:
-            event_dispatcher.showVehiclePreview(vehicle.intCD, previewAlias=PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS)
+            event_dispatcher.showVehicleHubOverview(vehicle.intCD)
 
     def refresh(self):
         self.as_setDataS(self.__getAwardsVO())
 
     def closeView(self):
-        showPersonalMissionOperationsPage(self.getBranch(), self.getOperationID())
+        state = getLobbyStateMachine().getStateFromView(self)
+        if state:
+            state.goBack()
+        else:
+            showPersonalMissionOperationsPage(self.getBranch(), self.getOperationID())
 
     def changeOperation(self, operationID):
         if operationID == -1:
@@ -97,8 +101,6 @@ class PersonalMissionsAwardsView(LobbySubView, PersonalMissionsAwardsViewMeta, P
         vo = {'vehicleAward': self.__getVehicleAwardVO(),
          'additionalAwards': self.__getAdditionalAwards(),
          'mainAwards': self.__getMainAwards(),
-         'backBtnLabel': PERSONAL_MISSIONS.HEADER_BACKBTN_LABEL,
-         'backBtnDescrLabel': PERSONAL_MISSIONS.HEADER_BACKBTN_DESCRLABEL_OPERATION,
          'bgIconSource': bgIconSource}
         return vo
 

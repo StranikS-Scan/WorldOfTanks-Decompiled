@@ -9,6 +9,7 @@ if typing.TYPE_CHECKING:
     from gui.veh_post_progression.models.progression import PostProgressionItem
     from items.vehicles import VehicleType
     from post_progression_common import VehicleState
+    from gui.shared.gui_items.vehicle_modules import VehicleGun
     from dossiers2.common.DossierDescr import DossierDescr
     from vehicles.mechanics.mechanic_constants import VehicleMechanic
 
@@ -56,7 +57,7 @@ class IGuiItemsFactory(object):
     def createVehicle(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None, extData=None, invData=None):
         raise NotImplementedError
 
-    def createTankman(self, strCompactDescr, inventoryID=-1, vehicle=None, dismissedAt=None, proxy=None, vehicleSlotIdx=-1):
+    def createTankman(self, strCompactDescr, inventoryID=-1, vehicle=None, dismissedAt=None, proxy=None, vehicleSlotIdx=-1, bonusSkillsLevels=None):
         raise NotImplementedError
 
     def createTankmanDossier(self, tmanDescr, tankmanDossierDescr, extDossier, playerDBID=None, currentVehicleItem=None):

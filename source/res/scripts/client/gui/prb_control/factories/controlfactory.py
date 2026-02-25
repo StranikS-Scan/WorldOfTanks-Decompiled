@@ -10,22 +10,22 @@ class ControlFactory(object):
         LOG_DEBUG('ControlFactory is deleted', self)
 
     def createEntry(self, ctx):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def createEntryByAction(self, action):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def createEntity(self, ctx):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def createPlayerInfo(self, entity):
         return PlayerDecorator()
 
     def createStateEntity(self, entity):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def createLeaveCtx(self, flags=FUNCTIONAL_FLAG.UNDEFINED, entityType=0):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     @classmethod
     def _createEntryByAction(cls, action, available):

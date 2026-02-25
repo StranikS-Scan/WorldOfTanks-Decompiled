@@ -159,8 +159,5 @@ _ITEM_STATES = {CONDITION_STATE.SELECTED: _isItemSelected,
  CONDITION_STATE.HAS_OPTIONAL_DEVICES: _vehicleHasOptionalDevices}
 
 def getItemStateGetter(state):
-    if state in _ITEM_STATES:
-        getter = _ITEM_STATES[state]
-    else:
-        getter = None
+    getter = _ITEM_STATES.get(state)
     return getter

@@ -1,0 +1,18 @@
+<VehicleBRStPatrickComponent.def>
+  <DetailLevel>	MY_VEHICLE	</DetailLevel>
+  <Properties>
+    <coinsCount>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </coinsCount>
+    <teammateCoinsCount>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </teammateCoinsCount>
+    <isDailyBonusAvailable>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isDailyBonusAvailable>
+  </Properties>
+  <DefaultKeyName>	vehicleBRStPatrickComponent	</DefaultKeyName>
+</VehicleBRStPatrickComponent.def>

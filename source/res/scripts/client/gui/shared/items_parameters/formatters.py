@@ -193,6 +193,9 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'designatorCooldownS': MENU.TANK_PARAMS_S,
  'designatorMarkDurationS': MENU.TANK_PARAMS_S,
  'designatorMarkedEnemiesAdditionalDamage': MENU.TANK_PARAMS_FACTOR,
+ 'piercingHEShellsDistributionUpperBound': MENU.TANK_PARAMS_PERCENT,
+ 'suspensionDamageReduction': MENU.TANK_PARAMS_PERCENT,
+ 'hpRecover': MENU.TANK_PARAMS_PERCENT,
  'coolingDelay': MENU.TANK_PARAMS_S,
  'heatingPerShot': MENU.TANK_PARAMS_FACTOR,
  'coolingTime': MENU.TANK_PARAMS_S,
@@ -554,13 +557,16 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  TWIN_GUN_SWITCH_FIRE_MODE_TIME: _niceListFormat,
  TWIN_GUN_TOP_SPEED: _niceListFormat,
  TWIN_GUN_RELOAD_ONE_GUN_TIME: _niceFormat,
- TWIN_GUN_RELOAD_TWO_GUN_TIME: _niceFormat}
+ TWIN_GUN_RELOAD_TWO_GUN_TIME: _niceFormat,
+ 'piercingHEShellsDistributionUpperBound': _niceFormat,
+ 'suspensionDamageReduction': _percentFormat,
+ 'hpRecover': _percentFormat}
 
 def _deltaWrapper(fn):
 
     def wrapped(paramValue):
         formattedValue = fn(paramValue)
-        if formattedValue == '0':
+        if formattedValue == '0' or formattedValue == '-0':
             return _EQUAL_TO_ZERO_LITERAL
         return '+%s' % formattedValue if isinstance(paramValue, (int, float)) and paramValue > 0 else formattedValue
 
@@ -597,7 +603,7 @@ SMART_ROUND_PARAMS = {'damage',
 _STATES_INDEX_IN_COLOR_MAP = {PARAM_STATE.WORSE: 0,
  PARAM_STATE.NORMAL: 1,
  PARAM_STATE.BETTER: 2,
- PARAM_STATE.SITUATIONAL: 1}
+ PARAM_STATE.SITUATIONAL: 2}
 
 def colorize(paramStr, state, colorScheme):
     if isinstance(state, (tuple, list)):

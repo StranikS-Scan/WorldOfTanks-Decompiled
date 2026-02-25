@@ -3,9 +3,11 @@
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getSteelHunterProductsUrl
 from gui.shared.event_dispatcher import showShop
 from helpers import dependency
+from gui.impl.gen import R
 from gui.impl.pub.view_component import ViewComponent
 from skeletons.gui.game_control import IBattleRoyaleController
 from skeletons.gui.shared import IItemsCache
+from battle_royale.gui.impl.lobby.tooltips.shop_button_tooltip_view import ShopButtonTooltipView
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.widget.event_shop_model import EventShopModel
 
 class BattleRoyaleEventShopPresenter(ViewComponent[EventShopModel]):
@@ -21,6 +23,9 @@ class BattleRoyaleEventShopPresenter(ViewComponent[EventShopModel]):
          (self.__battleRoyaleController.onPrimeTimeStatusUpdated, self.__update),
          (self.getViewModel().openShop, self.__onOpenShop))
 
+    def createToolTipContent(self, event, contentID):
+        return ShopButtonTooltipView() if contentID == R.views.battle_royale.mono.lobby.tooltips.shop_button() else super(BattleRoyaleEventShopPresenter, self).createToolTipContent(event, contentID)
+
     def _getCallbacks(self):
         return super(BattleRoyaleEventShopPresenter, self)._getCallbacks() + (('cache.mayConsumeWalletResources', self.__update),)
 
@@ -30,7 +35,10 @@ class BattleRoyaleEventShopPresenter(ViewComponent[EventShopModel]):
 
     def __update(self, *_):
         with self.getViewModel().transaction() as model:
-            balance = self.__battleRoyaleController.getBRCoinBalance(0)
+            if self.__battleRoyaleController.isStPatrick():
+                balance = self.__battleRoyaleController.getSTPCoinBalance()
+            else:
+                balance = self.__battleRoyaleController.getBRCoinBalance()
             model.setBalance(balance)
             model.setIsWGMoneyAvailable(self.__itemsCache.items.stats.mayConsumeWalletResources)
 

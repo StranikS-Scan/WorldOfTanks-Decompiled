@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/hangar/random/random_hangar.py
 from __future__ import absolute_import
 import typing
+from functools import partial
 from ClientSelectableCameraObject import ClientSelectableCameraObject
 from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
 from PlayerEvents import g_playerEvents
@@ -26,6 +27,7 @@ from gui.impl.lobby.hangar.presenters.hero_tank_presenter import HeroTankPresent
 from gui.impl.lobby.hangar.presenters.loadout_presenter import LoadoutPresenter
 from gui.impl.lobby.hangar.presenters.lootbox_entry_point_presenter import LootboxEntryPointPresenter
 from gui.impl.lobby.hangar.presenters.main_menu_presenter import MainMenuPresenter
+from gui.impl.lobby.common.presenters.manage_vehicle_playlists_presenter import ManageableVehiclePlaylistsPresenter
 from gui.impl.lobby.hangar.presenters.optional_devices_assistant_presenter import OptionalDevicesAssistantPresenter
 from gui.impl.lobby.hangar.presenters.pet_object_tooltip_presenter import PetObjectTooltipPresenter
 from gui.impl.lobby.hangar.presenters.space_interaction_presenter import SpaceInteractionPresenter
@@ -113,8 +115,9 @@ class RandomHangar(ViewComponent[RouterModel], IRoutableView):
          hangar.UserMissions(): UserMissionsPresenter,
          hangar.EasyTankEquip(): EasyTankEquipPresenter,
          hangar.PetObjectTooltip(): PetObjectTooltipPresenter,
-         hangar.Settings(): lambda : SettingsPresenter(HangarSettingsModel, HANGAR_VIEW_SETTINGS),
-         hangar.KeyBindings(): lambda : SettingsPresenter(KeyBindingsModel, HANGAR_KEY_BINDINGS, readOnly=True)}
+         hangar.Settings(): partial(SettingsPresenter, HangarSettingsModel, HANGAR_VIEW_SETTINGS),
+         hangar.KeyBindings(): partial(SettingsPresenter, KeyBindingsModel, HANGAR_KEY_BINDINGS, readOnly=True),
+         hangar.ManageableVehiclePlaylists(): ManageableVehiclePlaylistsPresenter}
 
     def _subscribe(self):
         super(RandomHangar, self)._subscribe()

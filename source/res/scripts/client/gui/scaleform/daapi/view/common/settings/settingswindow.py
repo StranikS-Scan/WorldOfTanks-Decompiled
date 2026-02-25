@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/settings/SettingsWindow.py
+from __future__ import absolute_import
+from future.utils import viewitems
 import Sound
 import functools
 import BattleReplay
@@ -102,7 +104,7 @@ class SettingsWindow(SettingsWindowMeta):
     def __getSettings(self):
         settings = self.__getSettingsParam()
         return {key:{'keys': value.keys(),
-         'values': value.values()} for key, value in settings.iteritems()}
+         'values': value.values()} for key, value in viewitems(settings)}
 
     def __commitSettings(self, settings=None, restartApproved=False, isCloseWnd=False):
         if settings is None:
@@ -288,10 +290,10 @@ class SettingsWindow(SettingsWindowMeta):
             return False
         return True
 
-    def startVOIPTest(self, isStart):
-        LOG_DEBUG('Vivox test: %s' % str(isStart))
+    def startVOIPTest(self, isVoiceTestStarted):
+        LOG_DEBUG('Vivox test: %s' % str(isVoiceTestStarted))
         rh = VOIP.getVOIPManager()
-        if isStart:
+        if isVoiceTestStarted:
             rh.enterTestChannel()
         else:
             rh.leaveTestChannel()
@@ -371,7 +373,7 @@ class SettingsWindow(SettingsWindowMeta):
     def __isGraphicsPresetApplied(self, settings):
         allsettings = BigWorld.getGraphicsPresetPropertyNames()
         isGraphicsQualitySettings = False
-        for settingKey in settings.iterkeys():
+        for settingKey in settings:
             if settingKey in allsettings:
                 isGraphicsQualitySettings = True
                 break

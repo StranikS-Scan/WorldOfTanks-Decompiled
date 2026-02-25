@@ -452,7 +452,7 @@ class Shop(object):
             self.__account._doCmdInt3(AccountCommands.CMD_APPLY_ADDITIONAL_XP, self.__getCacheRevision(), arenaUniqueID, vehTypeCompDescr, proxy)
             return
 
-    def buyBattlePass(self, seasonID, chapterID, priceID, callback):
+    def buyBattlePass(self, seasonID, chapterID, callback):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER, {})
@@ -462,7 +462,7 @@ class Shop(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(requestID, resultID, errorStr)
             else:
                 proxy = None
-            self.__account._doCmdInt3Str(AccountCommands.CMD_BUY_BATTLE_PASS, self.__getCacheRevision(), seasonID, chapterID, priceID, proxy)
+            self.__account._doCmdInt3(AccountCommands.CMD_BUY_BATTLE_PASS, self.__getCacheRevision(), seasonID, chapterID, proxy)
             return
 
     def buyBattlePassLevels(self, seasonID, chapterID, levels, callback):
@@ -478,7 +478,7 @@ class Shop(object):
             self.__account._doCmdInt4(AccountCommands.CMD_BUY_BATTLE_PASS_LEVELS, self.__getCacheRevision(), seasonID, chapterID, levels, proxy)
             return
 
-    def buyBattlePassWithLevels(self, seasonID, chapterID, priceID, callback):
+    def buyBattlePassWithLevels(self, seasonID, chapterID, callback):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER, {})
@@ -488,7 +488,7 @@ class Shop(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(requestID, resultID, errorStr)
             else:
                 proxy = None
-            self.__account._doCmdInt3Str(AccountCommands.CMD_BUY_BATTLE_PASS_WITH_LEVELS, self.__getCacheRevision(), seasonID, chapterID, priceID, proxy)
+            self.__account._doCmdInt3(AccountCommands.CMD_BUY_BATTLE_PASS_WITH_LEVELS, self.__getCacheRevision(), seasonID, chapterID, proxy)
             return
 
     def __onSyncResponse(self, syncID, resultID, ext=None):

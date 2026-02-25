@@ -4,7 +4,7 @@ import typing
 from CurrentVehicle import g_currentVehicle
 from account_helpers.AccountSettings import AccountSettings, OptionalDevicesAssistant
 from constants import QUEUE_TYPE
-from gui.game_control.wot_plus_opt_device_assist import OptionalDevicesAssistantCtrl
+from gui.game_control.wot_plus.wot_plus_opt_device_assist import OptionalDevicesAssistantCtrl
 from gui.game_control.wotlda.constants import OptDeviceAssistType
 from gui.impl.common.base_sub_model_view import BaseSubModelView
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.optional_devices_assistant_item import OptionalDevicesAssistantItem as ODAItem

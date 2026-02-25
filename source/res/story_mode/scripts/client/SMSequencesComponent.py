@@ -45,7 +45,7 @@ class SMEffectComponentCommon(DynamicScriptComponent):
 
     @property
     def _componentConfigs(self):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def _onAvatarReady(self):
         super(SMEffectComponentCommon, self)._onAvatarReady()
@@ -56,7 +56,7 @@ class SMEffectComponentCommon(DynamicScriptComponent):
         self._updateEffectsStatus()
 
     def _activateEffects(self):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def _deactivateEffects(self):
         pass
@@ -91,7 +91,7 @@ class SMEffectComponentCommon(DynamicScriptComponent):
         self._updateEffectsStatus()
 
     def _onSniperModeChanged(self, isEnabled):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def __checkSniperModeAvailable(self):
         for config in self._componentConfigs:

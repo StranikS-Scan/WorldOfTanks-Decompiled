@@ -6,6 +6,8 @@ from items import _xml
 from items.components import component_constants
 from items.components import gun_components
 from items.components.component_constants import ZERO_FLOAT
+from items.components.shell_components import Stun
+from items.stun import g_cfg as stunConfig
 from items.readers import shared_readers
 from constants import IS_EDITOR, IS_UE_EDITOR, IS_CLIENT, IS_WEB
 from math_common import ceilTo
@@ -52,3 +54,42 @@ def readShot(xmlCtx, section, nationID, projectileSpeedFactor, cache):
         from helpers_common import computeShotMaxDistance
         shot.maxDistance = computeShotMaxDistance(shot)
     return shot
+
+
+def readStunParams(section, xmlCtx=None, useDefaults=False):
+    if not section.readBool('hasStun', False):
+        return {}
+    stunParams = {}
+    if section.has_key('stunRadius'):
+        stunParams['stunRadius'] = _xml.readPositiveFloat(xmlCtx, section, 'stunRadius')
+    if section.has_key('stunDuration'):
+        stunParams['stunDuration'] = _xml.readPositiveFloat(xmlCtx, section, 'stunDuration')
+    elif useDefaults:
+        stunParams['stunDuration'] = stunConfig.get('baseStunDuration', 30)
+    if section.has_key('stunFactor'):
+        stunFactor = _xml.readPositiveFloat(xmlCtx, section, 'stunFactor')
+        if stunFactor > 1:
+            _xml.raiseWrongXml(xmlCtx, 'stunFactor', 'stun factor cannot exceed 1')
+        stunParams['stunFactor'] = stunFactor
+    elif useDefaults:
+        stunParams['stunFactor'] = 1.0
+    if section.has_key('guaranteedStunDuration'):
+        stunParams['guaranteedStunDuration'] = _xml.readFraction(xmlCtx, section, 'guaranteedStunDuration')
+    elif useDefaults:
+        stunParams['guaranteedStunDuration'] = stunConfig['guaranteedStunDuration']
+    if section.has_key('damageDurationCoeff'):
+        stunParams['damageDurationCoeff'] = _xml.readFraction(xmlCtx, section, 'damageDurationCoeff')
+    elif useDefaults:
+        stunParams['damageDurationCoeff'] = stunConfig['damageDurationCoeff']
+    if section.has_key('guaranteedStunEffect'):
+        stunParams['guaranteedStunEffect'] = _xml.readFraction(xmlCtx, section, 'guaranteedStunEffect')
+    elif useDefaults:
+        stunParams['guaranteedStunEffect'] = stunConfig['guaranteedStunEffect']
+    if section.has_key('damageEffectCoeff'):
+        stunParams['damageEffectCoeff'] = _xml.readFraction(xmlCtx, section, 'damageEffectCoeff')
+    elif useDefaults:
+        stunParams['damageEffectCoeff'] = stunConfig['damageEffectCoeff']
+    for key in stunParams.iterkeys():
+        pass
+
+    return stunParams

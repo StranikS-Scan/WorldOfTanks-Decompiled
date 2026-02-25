@@ -1,9 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/lobby/tooltips/battle_royale_tooltip_quest_helper.py
-from gui.shared.tooltips import formatters
-from gui.shared.formatters import text_styles, icons
-from gui.server_events.awards_formatters import AWARDS_SIZES, getEpicViewAwardPacker
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.server_events.awards_formatters import AWARDS_SIZES, AwardsPacker, getEpicSetFormattersMap, SimpleBonusFormatter, CurrenciesBonusFormatter, TokenBonusFormatter
+from gui.shared.formatters import text_styles, icons
+from gui.shared.money import Currency
+from gui.shared.tooltips import formatters
 
 def getQuestTooltipBlock(quest):
     return formatters.packBuildUpBlockData([_packQuestInfo(quest), _packQuestRewards(quest)])
@@ -22,8 +25,54 @@ def _packQuestInfo(quest):
     return formatters.packTitleDescBlock(title=name, desc=text_styles.main(quest.getDescription()), padding=selfPadding, descPadding=descPadding)
 
 
+def _getBattleRoyaleAwardPacker():
+    return AwardsPacker(_getBattleRoyaleFormattersMap())
+
+
+def _getBattleRoyaleFormattersMap():
+    mapping = getEpicSetFormattersMap()
+    simpleFormatter = _BattleRoyaleSimpleFormatter()
+    mapping.update({Currency.CRYSTAL: simpleFormatter,
+     Currency.CREDITS: simpleFormatter,
+     'currencies': _BattleRoyaleCurrenciesFormatter(),
+     'battleToken': _BattleRoyaleTokenFormatter()})
+    return mapping
+
+
+class _BattleRoyaleSimpleFormatter(SimpleBonusFormatter):
+
+    @classmethod
+    def _getImages(cls, bonus):
+        result = super(_BattleRoyaleSimpleFormatter, cls)._getImages(bonus)
+        imageRes = R.images.battle_royale.gui.maps.icons.battleResults.battle_reward.rewards.dyn(bonus.getName())
+        if imageRes.exists():
+            result[AWARDS_SIZES.SMALL] = backport.image(imageRes())
+        return result
+
+
+class _BattleRoyaleCurrenciesFormatter(CurrenciesBonusFormatter):
+
+    @classmethod
+    def _getImages(cls, bonus):
+        result = super(_BattleRoyaleCurrenciesFormatter, cls)._getImages(bonus)
+        imageRes = R.images.battle_royale.gui.maps.icons.battleResults.battle_reward.rewards.dyn(bonus.getCode())
+        if imageRes.exists():
+            result[AWARDS_SIZES.SMALL] = backport.image(imageRes())
+        return result
+
+
+class _BattleRoyaleTokenFormatter(TokenBonusFormatter):
+
+    def _formatBRComplexToken(self, complexToken, token, bonus):
+        result = super(_BattleRoyaleTokenFormatter, self)._formatBRComplexToken(complexToken, token, bonus)
+        imageRes = R.images.battle_royale.gui.maps.icons.battleResults.battle_reward.rewards.brProgressionToken
+        if imageRes.exists():
+            result.images[AWARDS_SIZES.SMALL] = backport.image(imageRes())
+        return result
+
+
 def _packQuestRewards(quest):
-    packer = getEpicViewAwardPacker()
+    packer = _getBattleRoyaleAwardPacker()
     return formatters.packBuildUpBlockData([ _packQuestReward(bonus) for bonus in packer.format(quest.getBonuses()) ], layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, padding=formatters.packPadding(left=20, right=20), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER)
 
 

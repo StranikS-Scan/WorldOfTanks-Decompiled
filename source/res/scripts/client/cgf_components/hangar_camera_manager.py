@@ -15,6 +15,7 @@ from math_common import isAlmostEqual
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared.utils import IHangarSpace
 from GenericComponents import TransformComponent
+from vehicle_systems.components.vehicle_to_camera_alignment_components import VehicleToCameraAlignmentComponent
 from cgf_script.managers_registrator import tickGroup, onAddedQuery, Rule, registerRule, registerManager
 from CameraComponents import CameraComponent, ActiveCameraComponent, CameraFlightComponent, OrbitComponent, DofComponent, IdleComponent, ParallaxComponent, FovComponent, ShiftComponent
 from constants import IS_CLIENT
@@ -90,6 +91,7 @@ class HangarCameraManager(CGF.ComponentManager):
     _hangarSpace = dependency.descriptor(IHangarSpace)
     _activeCameraQuery = CGF.QueryConfig(CGF.GameObject, ActiveCameraComponent)
     _cameraQuery = CGF.QueryConfig(CGF.GameObject, CameraComponent)
+    _vehicleToCameraAlignmentQuery = CGF.QueryConfig(CGF.GameObject, CameraComponent, VehicleToCameraAlignmentComponent)
 
     def __init__(self, *args):
         super(HangarCameraManager, self).__init__(*args)
@@ -102,6 +104,7 @@ class HangarCameraManager(CGF.ComponentManager):
         self.__cameraFlyby = None
         self.__mouseMoveParams = _MouseMoveParams()
         self.__flightParams = _FlightParams()
+        self.__vehicleToCameraCompIsActive = False
         self.__minDist = None
         self.__prevHorizontalFov = None
         self.__currentHorizontalFov = None
@@ -210,6 +213,11 @@ class HangarCameraManager(CGF.ComponentManager):
     def activateCamera(self, name):
         gameObject = None
         prevCameraName = None
+        self.__vehicleToCameraCompIsActive = False
+        for go, cameraComponent, _ in self._vehicleToCameraAlignmentQuery:
+            if cameraComponent.name == name:
+                self.__vehicleToCameraCompIsActive = True
+
         for go, cameraComponent in self._cameraQuery:
             if go.findComponentByType(ActiveCameraComponent) is not None:
                 prevCameraName = cameraComponent.name
@@ -313,6 +321,11 @@ class HangarCameraManager(CGF.ComponentManager):
         pivotMaxDist = self.__cam.pivotMaxDist
         cameraYaw = sourceMatrix.yaw
         cameraPitch = sourceMatrix.pitch
+        if self.__vehicleToCameraCompIsActive:
+            from vehicle_systems.components.vehicle_to_camera_alignment_components import VehicleToCameraAlignmentManager
+            vehicleToCameraAlignmentManager = CGF.getManager(self._hangarSpace.spaceID, VehicleToCameraAlignmentManager)
+            if vehicleToCameraAlignmentManager and vehicleToCameraAlignmentManager.getTargetPosition():
+                targetPos = vehicleToCameraAlignmentManager.getTargetPosition()
         if targetPos is not None:
             targetMatrix.setTranslate(targetPos)
         if yaw is not None:
@@ -402,7 +415,8 @@ class HangarCameraManager(CGF.ComponentManager):
                 pivotPos = self.__mouseMoveParams.shiftPivotDistances * prc
             else:
                 pivotPos = Math.Vector3(0.0, 0.0, 0.0)
-            self.__cam.pivotPosition = pivotPos + self.__mouseMoveParams.shiftPivotLows
+            if not self.__vehicleToCameraCompIsActive:
+                self.__cam.pivotPosition = pivotPos + self.__mouseMoveParams.shiftPivotLows
             self.__cam.pivotMaxDist = dist
 
     def __calculateDynamicFov(self):
@@ -438,7 +452,8 @@ class HangarCameraManager(CGF.ComponentManager):
             distConstraints = orbitComponent.distLimits
             self.__mouseMoveParams = _MouseMoveParams(cameraComponent.rotationSensitivity, cameraComponent.zoomSensitivity, yawConstraints, pitchConstraints, distConstraints)
             self.__yawCameraFilter = HangarCameraYawFilter(yawConstraints[0], orbitComponent.yawLimits.y - orbitComponent.yawLimits.x, cameraComponent.rotationSensitivity)
-            self.__setCameraShift(gameObject.findComponentByType(ShiftComponent))
+            if not self.__vehicleToCameraCompIsActive:
+                self.__setCameraShift(gameObject.findComponentByType(ShiftComponent))
             if resetTransform:
                 targetPos = parentTransformComponent.worldTransform.translation
                 yaw = self.__normaliseAngle(orbitComponent.currentYaw + worldYaw + math.pi)
@@ -452,6 +467,11 @@ class HangarCameraManager(CGF.ComponentManager):
                 distance = math_utils.clamp(distConstraints[0], distConstraints[1], self.__cam.pivotMaxDist)
             targetMatrix = Math.Matrix()
             targetMatrix.setTranslate(targetPos)
+            if self.__vehicleToCameraCompIsActive:
+                from vehicle_systems.components.vehicle_to_camera_alignment_components import VehicleToCameraAlignmentManager
+                vehicleToCameraAlignmentManager = CGF.getManager(self._hangarSpace.spaceID, VehicleToCameraAlignmentManager)
+                if vehicleToCameraAlignmentManager and vehicleToCameraAlignmentManager.getTargetPosition():
+                    targetMatrix.setTranslate(vehicleToCameraAlignmentManager.getTargetPosition())
             self.__cam.target = targetMatrix
             sourceMatrix = Math.Matrix()
             sourceMatrix.setRotateYPR(Math.Vector3(yaw, pitch, 0.0))

@@ -147,14 +147,14 @@ class ClanRatingsData(_ClanRatingsData, FieldsCheckerMixin):
     def getWinsRatioAvg(self):
         if self.battles_count_avg > 0:
             return self.wins_ratio_avg
-        raise ZeroDivisionError()
+        raise ZeroDivisionError
 
     @fmtZeroDivisionValue()
     @fmtUnavailableValue(fields=('xp_avg', 'battles_count_avg'))
     def getBattlesPerformanceAvg(self):
         if self.battles_count_avg > 0:
             return self.xp_avg
-        raise ZeroDivisionError()
+        raise ZeroDivisionError
 
     @fmtUnavailableValue(fields=('gm_elo_rating_10_rank',))
     def getGlobalMapEloRatingRank10(self):
@@ -582,14 +582,14 @@ class AccountClanRatingsData(_AccountClanRatingsData, FieldsCheckerMixin):
     def getBattleXpAvg(self):
         if self.battles_count > 0:
             return self.battle_avg_xp
-        raise ZeroDivisionError()
+        raise ZeroDivisionError
 
     @fmtZeroDivisionValue()
     @fmtUnavailableValue(fields=('battle_avg_performance', 'battles_count'))
     def getBattlesPerformanceAvg(self):
         if self.battles_count > 0:
             return toPercents(self.battle_avg_performance)
-        raise ZeroDivisionError()
+        raise ZeroDivisionError
 
     @fmtUnavailableValue(fields=('xp_amount',))
     def getXp(self):

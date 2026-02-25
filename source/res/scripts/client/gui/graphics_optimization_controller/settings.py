@@ -8,7 +8,6 @@ from gui.graphics_optimization_controller.utils import OptimizationSetting
 from gui.impl.gen import R
 OPTIMIZED_VIEWS_SETTINGS = {VIEW_ALIAS.LOBBY_HEADER: OptimizationSetting(),
  VIEW_ALIAS.LOBBY_TECHTREE: OptimizationSetting(),
- VIEW_ALIAS.LOBBY_RESEARCH: OptimizationSetting(),
  VIEW_ALIAS.VEH_POST_PROGRESSION: OptimizationSetting(),
  VIEW_ALIAS.VEH_POST_PROGRESSION_CMP: OptimizationSetting(),
  VIEW_ALIAS.WIKI_VIEW: OptimizationSetting(),

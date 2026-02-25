@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/crosshair/gm_components.py
+from __future__ import absolute_import
 import logging
 from collections import namedtuple
+from future.utils import viewitems, viewvalues
 import GUI
 from gui.Scaleform.daapi.view.battle.shared.crosshair import settings
 from gui.Scaleform.flash_wrapper import InputKeyMode
@@ -139,7 +141,7 @@ class GunMarkerComponent(IGunMarkerComponent):
     def _clearDataProvider(self):
         self._view.clearDataProvider()
 
-    def _createView(self, movie):
+    def _createView(self, container):
         raise NotImplementedError
 
 
@@ -208,7 +210,7 @@ class GunMarkersComponents(object):
             return False
 
     def setScale(self, scale):
-        for component in self.__components.itervalues():
+        for component in viewvalues(self.__components):
             component.setScale(scale)
 
     def clear(self):
@@ -218,7 +220,7 @@ class GunMarkersComponents(object):
 
     def switch(self, viewID):
         seq = []
-        for name, component in self.__components.iteritems():
+        for name, component in viewitems(self.__components):
             receivedID = component.getViewID()
             if receivedID != CROSSHAIR_VIEW_ID.UNDEFINED:
                 isActive = receivedID == viewID
@@ -243,7 +245,7 @@ class GunMarkersComponents(object):
         return self.__components[name] if name in self.__components else None
 
     def getComponentByType(self, markerType, isActive=True):
-        for component in self.__components.itervalues():
+        for component in viewvalues(self.__components):
             if component.getMarkerType() == markerType:
                 if isActive:
                     if component.isActive():
@@ -254,4 +256,4 @@ class GunMarkersComponents(object):
         return None
 
     def getViewSettings(self):
-        return [ c.getViewSettings() for c in self.__components.itervalues() ]
+        return [ c.getViewSettings() for c in viewvalues(self.__components) ]

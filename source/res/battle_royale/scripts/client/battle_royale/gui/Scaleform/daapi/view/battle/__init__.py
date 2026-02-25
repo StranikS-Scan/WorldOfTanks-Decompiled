@@ -13,13 +13,16 @@ from gui.Scaleform.genConsts.BATTLE_CONTEXT_MENU_HANDLER_TYPE import BATTLE_CONT
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.app_loader import settings as app_settings
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from helpers import dependency
+from skeletons.gui.game_control import IBattleRoyaleController
 
 def getContextMenuHandlers():
     from gui.Scaleform.daapi.view.battle.classic import player_menu_handler
     return ((BATTLE_CONTEXT_MENU_HANDLER_TYPE.PLAYERS_PANEL, player_menu_handler.PlayerMenuHandler),)
 
 
-def getViewSettings():
+@dependency.replace_none_kwargs(battleRoyaleController=IBattleRoyaleController)
+def getViewSettings(battleRoyaleController=None):
     from gui.Scaleform.daapi.view.battle.classic import stats_exchange
     from battle_royale.gui.Scaleform.daapi.view.battle.minimap.component import BattleRoyaleMinimapComponent
     from battle_royale.gui.Scaleform.daapi.view.battle.consumables_panel import BattleRoyaleConsumablesPanel
@@ -46,7 +49,9 @@ def getViewSettings():
     from battle_royale.gui.Scaleform.daapi.view.battle.timers_panel import TimersPanelPanel
     from battle_royale.gui.Scaleform.daapi.view.battle.winner_congrats import BattleRoyaleWinnerCongrats
     from battle_royale.gui.Scaleform.daapi.view.battle.shared.messages.player_messages import SHPlayerMessages
-    return (ViewSettings(VIEW_ALIAS.BATTLE_ROYALE_PAGE, BattleRoyalePage, 'battleRoyalePage.swf', WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE),
+    from battle_royale.gui.Scaleform.daapi.view.battle.shamrock_controller import BRShamrockController
+    from gui.Scaleform.framework.entities.abstract.BaseDAAPIComponentMeta import BaseDAAPIComponentMeta
+    viewSettings = (ViewSettings(VIEW_ALIAS.BATTLE_ROYALE_PAGE, BattleRoyalePage, 'battleRoyalePage.swf', WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_LOADING, battle_loading.BattleLoading, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_STATISTIC_DATA_CONTROLLER, stats_exchange.ClassicStatisticsDataController, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.FULL_STATS, FullStatsComponent, ScopeTemplates.DEFAULT_SCOPE),
@@ -77,7 +82,11 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL, BattleRoyalePostmortemPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PREBATTLE_TIMER, battle_timers.PreBattleTimer, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PLAYER_MESSAGES, SHPlayerMessages, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_ROYALE_WINNER_CONGRATS, BattleRoyaleWinnerCongrats, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_ROYALE_WINNER_CONGRATS, BattleRoyaleWinnerCongrats, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.BR_SHAMROCK_CONTROLLER, BRShamrockController, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.BR_SHAMROCK_SIDEBAR, BaseDAAPIComponentMeta, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.BR_SHAMROCK_COLLECT, BaseDAAPIComponentMeta, ScopeTemplates.DEFAULT_SCOPE))
+    return viewSettings
 
 
 def getBusinessHandlers():

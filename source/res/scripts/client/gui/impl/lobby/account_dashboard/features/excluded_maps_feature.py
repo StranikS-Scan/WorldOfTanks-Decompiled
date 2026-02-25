@@ -3,14 +3,18 @@
 import logging
 import typing
 import ArenaType
-from constants import PremiumConfigs, PREMIUM_TYPE, EMPTY_GEOMETRY_ID, RENEWABLE_SUBSCRIPTION_CONFIG
+from PlayerEvents import g_playerEvents
+from constants import PremiumConfigs, PREMIUM_TYPE, EMPTY_GEOMETRY_ID
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.game_control.wot_plus.utils import getExcludedMapsPromoData
 from gui.impl.gen.view_models.views.lobby.account_dashboard.map_model import MapModel, SlotStateEnum
 from gui.impl.lobby.account_dashboard.features.base import FeatureItem
 from gui.impl.lobby.maps_blacklist.maps_blacklist_view import buildSlotsMap
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.shared.event_dispatcher import showMapsBlacklistView
 from helpers import dependency, time_utils
+from renewable_subscription_common.schema import renewableSubscriptionsConfigSchema
+from renewable_subscription_common.settings_constants import RS_TIER
 from skeletons.gui.game_control import IGameSessionController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -34,6 +38,7 @@ class ExcludedMapsFeature(FeatureItem):
         self.__gameSession.onPremiumNotify += self.__onPremiumNotify
         self.__wotPlus.onDataChanged += self.__onWotPlusChanged
         g_clientUpdateManager.addCallbacks({'preferredMaps': self.__onPreferredMapsChanged})
+        g_playerEvents.onConfigModelUpdated += self._onConfigModelUpdated
 
     def finalize(self):
         self._viewModel.excludedMaps.onClick -= self.__onClick
@@ -41,13 +46,18 @@ class ExcludedMapsFeature(FeatureItem):
         self.__gameSession.onPremiumNotify -= self.__onPremiumNotify
         self.__wotPlus.onDataChanged -= self.__onWotPlusChanged
         g_clientUpdateManager.removeObjectCallbacks(self)
+        g_playerEvents.onConfigModelUpdated -= self._onConfigModelUpdated
         super(ExcludedMapsFeature, self).finalize()
 
     def _fillModel(self, model):
         self.__update(model=model)
 
     def __onServerSettingsChanged(self, diff):
-        if PremiumConfigs.IS_PREFERRED_MAPS_ENABLED in diff or PremiumConfigs.PREFERRED_MAPS in diff or RENEWABLE_SUBSCRIPTION_CONFIG in diff:
+        if PremiumConfigs.IS_PREFERRED_MAPS_ENABLED in diff or PremiumConfigs.PREFERRED_MAPS in diff:
+            self.__update()
+
+    def _onConfigModelUpdated(self, gpKey):
+        if renewableSubscriptionsConfigSchema.gpKey == gpKey:
             self.__update()
 
     def __onPreferredMapsChanged(self, _):
@@ -57,7 +67,7 @@ class ExcludedMapsFeature(FeatureItem):
         self.__update()
 
     def __onWotPlusChanged(self, data):
-        if 'isEnabled' in data:
+        if RS_TIER in data:
             self.__update()
 
     @replaceNoneKwargsModel
@@ -74,13 +84,12 @@ class ExcludedMapsFeature(FeatureItem):
         slotCooldown = mapsConfig['slotCooldown']
         defaultSlots = mapsConfig['defaultSlots']
         premiumSlots = mapsConfig['premiumSlots']
-        wotPlusSlots = mapsConfig['wotPlusSlots'] if serverSettings.isWotPlusExcludedMapEnabled() else 0
+        isWotPlusAcc, wotPlusSlots = getExcludedMapsPromoData()
         totalSlots = defaultSlots + premiumSlots + wotPlusSlots
         slotsMap = buildSlotsMap()
         maps = [ (mapId, selectedTime) for mapId, selectedTime in self.__itemsCache.items.stats.getMapsBlackList() if mapId > 0 ]
         mapsLen = len(maps)
         isPremiumAcc = self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
-        isWotPlusAcc = self.__wotPlus.isEnabled()
         availableSlots = defaultSlots
         if isPremiumAcc:
             availableSlots += premiumSlots

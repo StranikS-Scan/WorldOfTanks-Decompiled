@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/battle/death_cam/death_cam_hud_view.py
+from __future__ import absolute_import
 import logging
 from gui.impl.battle.death_cam.death_cam_ui_view import DeathCamUIView
 from gui.impl.battle.death_cam.marker_view import DeathCamMarkerView

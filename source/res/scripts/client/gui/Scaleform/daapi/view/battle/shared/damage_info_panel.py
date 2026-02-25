@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/damage_info_panel.py
+from __future__ import absolute_import
 import operator
+from future.utils import viewitems
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from gui.Scaleform.daapi.view.meta.DamageInfoPanelMeta import DamageInfoPanelMeta
 from gui.Scaleform.genConsts.DAMAGE_INFO_PANEL_CONSTS import DAMAGE_INFO_PANEL_CONSTS
@@ -103,7 +105,7 @@ def _yohIterator(fetcher):
             damagedDevices[mainTrack] = 'destroyed' if isMainDestroyed else 'damaged'
         damagedDevices.pop(mainTrack, None)
 
-    for deviceName, state in damagedDevices.iteritems():
+    for deviceName, state in viewitems(damagedDevices):
         value = _deviceDataConverter(deviceName, state)
         if value is not None:
             yield value
@@ -222,7 +224,7 @@ class DamageInfoPanel(DamageInfoPanelMeta):
             LOG_ERROR('Method to hide device is not found', deviceID)
 
         isHit = self.__vehicleID != vehicleID
-        for deviceID, stateID in toUpdate.iteritems():
+        for deviceID, stateID in viewitems(toUpdate):
             if deviceID in _DEVICE_UPDATE_METHODS:
                 method = _DEVICE_UPDATE_METHODS[deviceID]
                 LOG_DEBUG('Updates state of device', method, stateID, isHit)

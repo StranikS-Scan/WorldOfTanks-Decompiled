@@ -353,6 +353,10 @@ class Gun(InstallableItem):
     def multiGun(self):
         return self.multiGunState.multiGun if self.multiGunState is not None else None
 
+    @property
+    def hasClip(self):
+        return 'clip' in self.tags
+
 
 @add_shallow_copy('variantName')
 class Hull(BasicItem):

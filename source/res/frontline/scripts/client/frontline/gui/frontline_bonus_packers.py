@@ -5,10 +5,10 @@ from epic_constants import FRONTLINE_BONUSES_ORDER, EPIC_SKILL_TOKEN_NAME, EPIC_
 from frontline.gui.bonus import FrontlineSkillBonus
 from frontline.gui.impl.gen.view_models.views.lobby.views.frontline_reward_model import FrontlineRewardModel, ClaimState
 from gui.impl.backport import createTooltipData, TooltipData
-from gui.shared.missions.packers.bonus import getDefaultBonusPackersMap, SimpleBonusUIPacker, BonusUIPacker, GoodiesBonusUIPacker, CrewBookBonusUIPacker, BattlePassPointsBonusPacker
+from gui.shared.missions.packers.bonus import getDefaultBonusPackersMap, SimpleBonusUIPacker, BonusUIPacker, GoodiesBonusUIPacker, CrewBookBonusUIPacker, BattlePassPointsBonusPacker, CustomizationBonusUIPacker
 from gui.shared.money import Currency
 if typing.TYPE_CHECKING:
-    from gui.server_events.bonuses import SimpleBonus, EpicSelectTokensBonus, GoodiesBonus
+    from gui.server_events.bonuses import SimpleBonus, EpicSelectTokensBonus, GoodiesBonus, CustomizationsBonus
 
 def getFrontlineBonusPacker():
     mapping = getDefaultBonusPackersMap()
@@ -17,7 +17,8 @@ def getFrontlineBonusPacker():
      'goodies': FrontlineGoodiesBonusPacker(),
      'crewBooks': FrontlineCrewBookBonusPacker(),
      Currency.CRYSTAL: FrontlineCrystalBonusPacker(),
-     EPIC_SKILL_TOKEN_NAME: FrontlineAbilityTokenPacker()})
+     EPIC_SKILL_TOKEN_NAME: FrontlineAbilityTokenPacker(),
+     'customizations': FrontlineCustomizationBonusPacker()})
     return BonusUIPacker(mapping)
 
 
@@ -157,4 +158,19 @@ class FrontlineAbilityTokenPacker(SimpleBonusUIPacker):
         model.setValue(str(value) if value > 1 else '')
         model.setType(bonus.getName())
         model.setClaimState(ClaimState.STATIC)
+        return model
+
+
+class FrontlineCustomizationBonusPacker(CustomizationBonusUIPacker):
+
+    @classmethod
+    def _getBonusModel(cls):
+        return FrontlineRewardModel()
+
+    @classmethod
+    def _packSingleBonus(cls, bonus, item, label):
+        model = super(FrontlineCustomizationBonusPacker, cls)._packSingleBonus(bonus, item, label)
+        bonusItem = bonus.getC11nItem(item)
+        if bonusItem.itemTypeName == 'attachment':
+            model.setOverlayType(bonusItem.rarity)
         return model

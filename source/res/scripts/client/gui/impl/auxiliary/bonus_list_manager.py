@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/auxiliary/bonus_list_manager.py
+from __future__ import absolute_import
 from gui.impl.auxiliary.rewards_helper import getRewardRendererModelPresenter
 from gui.impl.backport import createTooltipData, BackportTooltipWindow, TooltipData
 from gui.impl.gen import R

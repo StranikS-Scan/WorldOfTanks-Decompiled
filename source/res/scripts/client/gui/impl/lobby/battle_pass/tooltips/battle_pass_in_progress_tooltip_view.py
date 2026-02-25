@@ -3,11 +3,13 @@
 from collections import OrderedDict
 from battle_pass_common import BattlePassConsts, isPostProgressionChapter
 import constants
+from constants import ARENA_BONUS_TYPE
 from frameworks.wulf import ViewSettings, Array
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view_model import BattlePassInProgressTooltipViewModel, ChapterType
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.reward_points_by_place_model import RewardPointsByPlaceModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.reward_points_model import RewardPointsModel
+from gui.impl.lobby.battle_pass.battle_pass_wot_plus import getWotPlusPerBattlePoints, getWotPlusBattlePassTier, isValidWotPlusTier, getMergedWotPlusPointsList, extractMinValueFromRange
 from gui.impl.pub import ViewImpl
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData
 from gui.battle_pass.battle_pass_helpers import getChapterType, isSeasonEndingSoon, getFormattedTimeLeft, getSupportedCurrentArenaBonusType
@@ -24,7 +26,7 @@ class BattlePassInProgressTooltipView(ViewImpl):
     __slots__ = ('__battleType',)
 
     def __init__(self, battleType=None, *args, **kwargs):
-        settings = ViewSettings(R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView())
+        settings = ViewSettings(R.views.mono.battle_pass.tooltips.in_progress())
         settings.model = BattlePassInProgressTooltipViewModel()
         settings.args = args
         settings.kwargs = kwargs
@@ -43,8 +45,10 @@ class BattlePassInProgressTooltipView(ViewImpl):
         else:
             battleType = self.__battleType or prbDispatcher.getEntity().getQueueType()
             with self.getViewModel().transaction() as model:
+                availableBPTier = getWotPlusBattlePassTier()
+                model.setIsWotPlusShown(isValidWotPlusTier(availableBPTier))
                 if self.__battleRoyaleController.isBattleRoyaleMode():
-                    self.__updateBattleRoyalePoints(model)
+                    self.__updateBattleRoyalePoints(model, availableBPTier)
                 else:
                     items = model.rewardPoints.getItems()
                     arenaBonusType = getSupportedCurrentArenaBonusType(battleType)
@@ -53,6 +57,9 @@ class BattlePassInProgressTooltipView(ViewImpl):
                         item.setTopCount(points.label)
                         item.setPointsWin(points.winPoint)
                         item.setPointsLose(points.losePoint)
+                        wpWinsPoints, wpLossPoints = getWotPlusPerBattlePoints(points.label, availableBPTier, bonusType=arenaBonusType)
+                        item.setExternalPointsWin(wpWinsPoints)
+                        item.setExternalPointsLose(wpLossPoints)
                         items.addViewModel(item)
 
                 curLevel = self.__battlePass.getCurrentLevel()
@@ -89,25 +96,27 @@ class BattlePassInProgressTooltipView(ViewImpl):
         bonuses = self.__battlePass.getSingleAward(chapterID, level + 1, bonusType)
         packBonusModelAndTooltipData(bonuses, rewardsList)
 
-    def __updateBattleRoyalePoints(self, model):
+    def __updateBattleRoyalePoints(self, model, availableBPTier):
         battleRoyaleRewardPoints = model.battleRoyaleRewardPoints
-        soloPoints = self.__getBattleRoyalePoints(constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO)
+        wpWinMergedPointsSolo = getMergedWotPlusPointsList(availableBPTier, ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO)
+        wpWinMergedPointsSquad = getMergedWotPlusPointsList(availableBPTier, ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD)
+        soloPoints = self.__getBattleRoyalePoints(constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, wpWinMergedPointsSolo)
         battleRoyaleRewardPoints.setSoloMode(self.__createBattleRoyalePointsBlock(soloPoints))
-        squadPoints = self.__getBattleRoyalePoints(constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD)
+        squadPoints = self.__getBattleRoyalePoints(constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD, wpWinMergedPointsSquad)
         battleRoyaleRewardPoints.setSquadMode(self.__createBattleRoyalePointsBlock(squadPoints))
 
     def __createBattleRoyalePointsBlock(self, pointsByMode):
         resultArr = Array()
-        for value in pointsByMode:
+        for place, points, extPoints in pointsByMode:
             pointsModel = RewardPointsByPlaceModel()
-            place, points = value[0], value[1]
             pointsModel.setPlace(place)
             pointsModel.setPoints(points)
+            pointsModel.setExternalPoints(extPoints)
             resultArr.addViewModel(pointsModel)
 
         return resultArr
 
-    def __getBattleRoyalePoints(self, gameMode):
+    def __getBattleRoyalePoints(self, gameMode, externapPoints):
         config = self.__lobbyContext.getServerSettings().getBattlePassConfig()
         win = config.bonusPointsList(vehTypeCompDescr=None, isWinner=True, gameMode=gameMode)
         lose = config.bonusPointsList(vehTypeCompDescr=None, isWinner=False, gameMode=gameMode)
@@ -122,7 +131,8 @@ class BattlePassInProgressTooltipView(ViewImpl):
         points = []
         for key, value in placesDict.items():
             if key > 0:
-                strValue = str(value[0]) if value[0] == value[1] else '{}-{}'.format(str(value[0]), str(value[1]))
-                points.append([strValue, key])
+                placeNum = value[0]
+                strValue = str(placeNum) if placeNum == value[1] else '{}-{}'.format(str(placeNum), str(value[1]))
+                points.append([strValue, key, extractMinValueFromRange(value[0] - 1, value[0], externapPoints)])
 
         return points

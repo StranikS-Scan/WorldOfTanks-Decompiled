@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/stats_exchange/stats_ctrl.py
+from __future__ import absolute_import
+from future.utils import viewitems
 import BigWorld
 from account_helpers.settings_core.settings_constants import GAME
 from account_helpers.settings_core.settings_constants import GRAPHICS
@@ -178,8 +180,8 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         if data:
             self.as_updateVehiclesInfoS(data)
 
-    def invalidateVehicleStatus(self, flags, vo, arenaDP):
-        if vo is None:
+    def invalidateVehicleStatus(self, flags, vInfoVO, arenaDP):
+        if vInfoVO is None:
             return
         else:
             arenaTeamSwitched = False
@@ -189,13 +191,13 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
                     if self.__avatarTeam is not None:
                         arenaDP.switchCurrentTeam(self.__avatarTeam)
                     arenaTeamSwitched = True
-            isEnemy = self.__isEnemyTeam(arenaDP, vo.team)
+            isEnemy = self.__isEnemyTeam(arenaDP, vInfoVO.team)
             exchange = self._exchangeBroker.getVehicleStatusExchange(isEnemy)
-            exchange.addVehicleInfo(vo)
+            exchange.addVehicleInfo(vInfoVO)
             if flags & INVALIDATE_OP.SORTING > 0:
                 exchange.addSortIDs(arenaDP)
-            if not vo.isObserver():
-                self._statsCollector.addVehicleStatusUpdate(vo)
+            if not vInfoVO.isObserver():
+                self._statsCollector.addVehicleStatusUpdate(vInfoVO)
             exchange.addTotalStats(self._statsCollector.getTotalStats(self._arenaVisitor, self.sessionProvider))
             data = exchange.get()
             if data:
@@ -227,8 +229,8 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             self.as_updateVehiclesStatsS(data)
 
     def updateTriggeredChatCommands(self, chatCommands, arenaDP):
-        data = list()
-        for vehicleID, state in chatCommands.iteritems():
+        data = []
+        for vehicleID, state in viewitems(chatCommands):
             chatCommandName, _ = state
             entry = {'chatCommandName': str(chatCommandName),
              'vehicleID': int(vehicleID)}
@@ -243,11 +245,11 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
          'chatCommandDurationMS': durationMS}
         self.as_updatePriorityChatCommandS(data)
 
-    def invalidatePlayerStatus(self, flags, vo, arenaDP):
-        isEnemy, overrides = self.__getTeamOverrides(vo, arenaDP)
+    def invalidatePlayerStatus(self, flags, vInfoVO, arenaDP):
+        isEnemy, overrides = self.__getTeamOverrides(vInfoVO, arenaDP)
         exchange = self._exchangeBroker.getPlayerStatusExchange(isEnemy)
-        exchange.setVehicleID(vo.vehicleID)
-        exchange.setStatus(overrides.getPlayerStatus(vo))
+        exchange.setVehicleID(vInfoVO.vehicleID)
+        exchange.setStatus(overrides.getPlayerStatus(vInfoVO))
         data = exchange.get()
         if data:
             self.as_updatePlayerStatusS(data)

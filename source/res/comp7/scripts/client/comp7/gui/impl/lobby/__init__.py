@@ -27,6 +27,7 @@ def registerComp7Lobby():
     from gui.hangar_presets.providers.spec_battle_dynamic_gui_providers import SpecBattleGuiSettings, SpecBattleHangarDynamicGuiProvider
     from gui.Scaleform.daapi.view.lobby.header.helpers.controls_helpers import DefaultLobbyHeaderHelper
     from gui.impl.lobby.missions.missions_helpers import DefaultMissionsGuiHelper
+    from gui.impl.lobby.hangar.presenters.vehicle_menu_entries.vehicle_menu_helper import DefaultHangarVehicleMenuHelper
     from gui.Scaleform.daapi.view.lobby.store.browser.web_handlers import _SHOP_HANDLERS
     from gui.Scaleform.daapi.view.lobby.rally.action_button_state_vo import _EXT_INVALID_UNIT_MESSAGE_GETTERS
     from gui.Scaleform.daapi.view.lobby.trainings.TrainingSettingsWindow import CONFIG_KEYS_FOR_UPDATE
@@ -47,7 +48,7 @@ def registerComp7Lobby():
     registerQuestFlag(QuestFlagTypes.COMP7, Comp7QuestsFlag)
     tournamentGuiType = ARENA_GUI_TYPE.TOURNAMENT_COMP7
     SpecBattlePresetsGetter.GUI_TYPE_TO_QUEST_FLAGS[tournamentGuiType] = Comp7TournamentQuestFlagsGetter
-    SpecBattleHangarDynamicGuiProvider.GUI_TYPE_TO_SPEC_SETTINGS[tournamentGuiType] = SpecBattleGuiSettings(ARENA_BONUS_TYPE.TOURNAMENT_COMP7, getComp7BattleModifiers, DefaultLobbyHeaderHelper, DefaultMissionsGuiHelper)
+    SpecBattleHangarDynamicGuiProvider.GUI_TYPE_TO_SPEC_SETTINGS[tournamentGuiType] = SpecBattleGuiSettings(ARENA_BONUS_TYPE.TOURNAMENT_COMP7, getComp7BattleModifiers, DefaultLobbyHeaderHelper, DefaultMissionsGuiHelper, DefaultHangarVehicleMenuHelper)
     registerFightButtonTooltipGetter(_fightButtonTooltipGetter)
     _EXT_INVALID_UNIT_MESSAGE_GETTERS.append(unitRestrictionsGetter)
     _AVAILABLE_HANDLERS.remove(_OpenPunishmentWindowHandler)

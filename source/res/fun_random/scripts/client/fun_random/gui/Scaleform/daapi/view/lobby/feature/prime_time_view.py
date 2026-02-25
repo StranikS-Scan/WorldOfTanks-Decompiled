@@ -16,7 +16,7 @@ class FunRandomServerPresenter(ServerListItemPresenter):
     _RES_ROOT = R.strings.fun_random.primeTimes.serverTooltip
     _connectionMgr = dependency.descriptor(IConnectionManager)
 
-    def __cmp__(self, other):
+    def _compare(self, other):
         peripheryID = self._connectionMgr.peripheryID
         result = cmp(self.getPeripheryID() == peripheryID, other.getPeripheryID() == peripheryID)
         return result if result else self.orderID - other.orderID

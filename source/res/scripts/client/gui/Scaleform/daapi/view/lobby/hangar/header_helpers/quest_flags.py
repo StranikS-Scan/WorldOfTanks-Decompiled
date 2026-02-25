@@ -95,7 +95,7 @@ class MapboxQuestsFlag(BaseQuestFlag):
                 if completed < total:
                     label = makeString(MENU.hangarHeaderMapboxProgressionLabel(LabelState.ACTIVE), total=completed)
                 else:
-                    label = icons.makeImageTag(RES_ICONS.MAPS_ICONS_MISSIONS_ICONS_CHECK_GREEN_XS)
+                    label = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_CONFIRMICON_1)
                 progressionIcon = backport.image(R.images.gui.maps.icons.quests.headerFlagIcons.mapbox())
                 flag = backport.image(R.images.gui.maps.icons.library.hangarFlag.flag_green())
             else:

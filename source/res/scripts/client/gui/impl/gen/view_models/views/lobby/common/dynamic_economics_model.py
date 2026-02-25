@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class DynamicEconomicsModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=2, commands=0):
+    def __init__(self, properties=3, commands=0):
         super(DynamicEconomicsModel, self).__init__(properties=properties, commands=commands)
 
     def getIsCrystalEarnEnabled(self):
@@ -20,7 +20,14 @@ class DynamicEconomicsModel(ViewModel):
     def setIsDailyMultipliedXpEnabled(self, value):
         self._setBool(1, value)
 
+    def getIsInfiniteAmmo(self):
+        return self._getBool(2)
+
+    def setIsInfiniteAmmo(self, value):
+        self._setBool(2, value)
+
     def _initialize(self):
         super(DynamicEconomicsModel, self)._initialize()
         self._addBoolProperty('isCrystalEarnEnabled', True)
         self._addBoolProperty('isDailyMultipliedXpEnabled', True)
+        self._addBoolProperty('isInfiniteAmmo', False)

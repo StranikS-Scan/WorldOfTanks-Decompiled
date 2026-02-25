@@ -169,10 +169,7 @@ class HangarModuleAdvanced(BaseAdvancedTooltip):
             descrKey = CHASSIS_TRACK_WITHIN_TRACK
         elif isEquipment and item.isStimulator:
             descrKey = 'ration'
-        if movieKey not in MODULE_MOVIES:
-            movieModule = None
-        else:
-            movieModule = MODULE_MOVIES[movieKey]
+        movieModule = MODULE_MOVIES.get(movieKey)
         return self._packAdvancedBlocks(movieModule, header, descrKey)
 
 
@@ -231,6 +228,7 @@ SKILL_MOVIES = {'repair': 'skillRepairs',
  'naturalCover': 'skillConcealment',
  'fireFighting': 'skillFirefighting',
  'brotherhood': 'skillBrothersInArms',
+ 'armorPatching': 'skillArmorPatching',
  'commander_tutor': 'skillCommanderTutor',
  'commander_eagleEye': 'skillEagleEye',
  'commander_universalist': 'skillJackOfAllTrades',
@@ -239,12 +237,16 @@ SKILL_MOVIES = {'repair': 'skillRepairs',
  'commander_enemyShotPredictor': 'skillCommanderEnemyShotPredictor',
  'commander_practical': 'skillCommanderPractical',
  'commander_emergency': 'skillCommanderEmergency',
+ 'commander_holdLine': 'skillHoldLine',
+ 'commander_staySharp': 'skillStaySharp',
  'gunner_rancorous': 'skillDesignatedTarget',
  'gunner_armorer': 'skillGunnerArmorer',
  'gunner_sniper': 'skillSniper',
  'gunner_smoothTurret': 'skillSnapShot',
  'gunner_focus': 'skillGunnerFocus',
  'gunner_quickAiming': 'skillGunnerQuickAiming',
+ 'gunner_pointBlast': 'skillPointBlast',
+ 'gunner_loneWolf': 'skillGunnerLoneWolf',
  'driver_rammingMaster': 'skillDriverRammingMaster',
  'driver_badRoadsKing': 'skillOffRoadDriving',
  'driver_tidyPerson': 'skillPreventativeMaintenance',
@@ -252,18 +254,24 @@ SKILL_MOVIES = {'repair': 'skillRepairs',
  'driver_smoothDriving': 'skillSmoothRide',
  'driver_motorExpert': 'skillDriverMotorExpert',
  'driver_reliablePlacement': 'skillDriverReliablePlacement',
+ 'driver_suspensionRepair': 'skillSuspensionRepair',
+ 'driver_bulletproof': 'skillBulletproof',
  'radioman_finder': 'skillSituationalAwareness',
  'radioman_expert': 'skillRadiomanExpert',
  'radioman_sideBySide': 'skillRadiomanSideBySide',
  'radioman_interference': 'skillRadiomanInterference',
  'radioman_signalInterception': 'skillRadiomanSignalInterception',
+ 'radioman_battleTempered': 'skillBattleTempered',
+ 'radioman_threatSearch': 'skillThreatSearch',
  'loader_desperado': 'skillAdrenalineRush',
  'loader_pedant': 'skillSafeStowage',
  'loader_intuition': 'skillIntuition',
  'loader_ambushMaster': 'skillAmbushMaster',
  'loader_ammunitionImprove': 'skillLoaderAmmunitionImprove',
  'loader_melee': 'skillLoaderMelee',
- 'loader_perfectCharge': 'skillLoaderPerfectCharge'}
+ 'loader_magMastery': 'skillMagMastery',
+ 'loader_perfectCharge': 'skillLoaderPerfectCharge',
+ 'loader_secondChance': 'skillSecondChance'}
 MODULE_MOVIES = {'largeRepairkit': 'consumablesRepairKitBig',
  'smallRepairkit': 'consumablesRepairKitSmall',
  'largeMedkit': 'consumablesFirstAidBig',

@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/pub/window_impl.py
+from __future__ import absolute_import
 import logging
 import typing
 from frameworks.wulf import PositionAnchor, WindowLayer
 from frameworks.wulf import Window, WindowSettings
-from frameworks.wulf import WindowsArea
 from gui.impl.gen import R
 from gui.impl.gen.view_models.windows.window_model import WindowModel
 from helpers import dependency
 from skeletons.gui.impl import IGuiLoader
+if typing.TYPE_CHECKING:
+    from frameworks.wulf import WindowsArea
 _logger = logging.getLogger(__name__)
 
 class WindowImpl(Window):

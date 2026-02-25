@@ -9,6 +9,7 @@ from adisp import adisp_process
 from CurrentVehicle import g_currentVehicle
 from fun_random.gui.feature.util.fun_helpers import getVehicleComparisonKey
 from fun_random.gui.fun_gui_constants import PREBATTLE_ACTION_NAME
+from fun_random.gui.shared.gui_items.vehicle import isOnlyFunRandomVehicle
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IPrbListener
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
@@ -38,7 +39,7 @@ class FunHiddenVehicles(IFunRandomController.IFunHiddenVehicles, IPrbListener):
 
     def updateCurrentVehicle(self, desiredSubMode):
         vehicle = self.__itemsCache.items.getVehicle(AccountSettings.getFavorites(CURRENT_VEHICLE))
-        isModeHiddenVehicle = vehicle is not None and vehicle.isOnlyForFunRandomBattles and vehicle.isModeHidden
+        isModeHiddenVehicle = vehicle is not None and isOnlyFunRandomVehicle(vehicle) and vehicle.isModeHidden
         isInFunRandom = desiredSubMode is not None
         if not isInFunRandom and isModeHiddenVehicle:
             AccountSettings.setFavorites(CURRENT_VEHICLE, 0)

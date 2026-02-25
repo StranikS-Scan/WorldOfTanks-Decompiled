@@ -136,7 +136,7 @@ class ExchangeFreeXPView(BaseExchangeWindow):
     def __addVehicleAdditionalInfo(model, vehicle):
         postProgressionStatus = vehicle.postProgression.isAvailable(vehicle)
         model.setIsFieldModernizationAvailable(postProgressionStatus.result)
-        model.setIsFieldModernizationComplited(PostProgressionCompletion.FULL == vehicle.postProgression.getCompletion())
+        model.setIsFieldModernizationComplited(vehicle.postProgression.getCompletion() == PostProgressionCompletion.FULL)
         model.setLevelOfFieldModernization(getLevelOfFieldModification(vehicle))
 
     @replaceNoneKwargsModel

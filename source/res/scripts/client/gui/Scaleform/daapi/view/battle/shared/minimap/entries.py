@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/minimap/entries.py
+from __future__ import absolute_import
 import BigWorld
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings
 from gui.battle_control.battle_constants import VEHICLE_LOCATION

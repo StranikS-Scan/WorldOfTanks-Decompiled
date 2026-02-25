@@ -1,14 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/vehicle_carousel/carousel_environment.py
-from constants import Configs, IS_KOREA, RENEWABLE_SUBSCRIPTION_CONFIG
+from __future__ import absolute_import
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core import settings_constants
-from gui.filters.carousel_filter import CarouselFilter
+from constants import Configs, IS_KOREA
 from gui.Scaleform import getButtonsAssetPath
 from gui.Scaleform.daapi.view.common.filter_contexts import FilterSetupContext
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider import CarouselDataProvider
 from gui.Scaleform.daapi.view.meta.CarouselEnvironmentMeta import CarouselEnvironmentMeta
+from gui.filters.carousel_filter import CarouselFilter
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared.formatters import text_styles
@@ -17,6 +18,7 @@ from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency, i18n
+from renewable_subscription_common.schema import renewableSubscriptionsConfigSchema
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IRentalsController, IIGRController, IClanLockController, IEpicBattleMetaGameController, IRankedBattlesController
@@ -59,7 +61,7 @@ class ICarouselEnvironment(object):
         return False
 
     def getCustomParams(self):
-        return dict()
+        return {}
 
     def updateHotFilters(self):
         pass
@@ -197,6 +199,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         self.lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingChanged
         g_playerEvents.onVehicleBecomeElite += self.__onVehicleBecomeElite
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
+        g_playerEvents.onConfigModelUpdated += self._onConfigModelUpdated
         self.startGlobalListening()
         self.applyFilter()
         self.updateAvailability()
@@ -214,6 +217,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         self.settingsCore.onSettingsChanged -= self._onCarouselSettingsChange
         g_playerEvents.onVehicleBecomeElite -= self.__onVehicleBecomeElite
         g_prbCtrlEvents.onVehicleClientStateChanged -= self.__onVehicleClientStateChanged
+        g_playerEvents.onConfigModelUpdated -= self._onConfigModelUpdated
         self.stopGlobalListening()
         self._currentVehicle = None
         self._carouselDP.fini()
@@ -238,9 +242,12 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
             self._carouselDP.updateVehicles()
 
     def _onServerSettingChanged(self, diff, skipVehicles=False):
-        if not skipVehicles and (Configs.CRYSTAL_REWARDS_CONFIG in diff or RENEWABLE_SUBSCRIPTION_CONFIG in diff):
+        if not skipVehicles and Configs.CRYSTAL_REWARDS_CONFIG in diff:
             self.updateVehicles()
-        if RENEWABLE_SUBSCRIPTION_CONFIG in diff:
+
+    def _onConfigModelUpdated(self, gpKey):
+        if renewableSubscriptionsConfigSchema.gpKey == gpKey:
+            self.updateVehicles()
             self.updateAvailability()
 
     def _callPopoverCallback(self):

@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class ArmorLayerModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=0):
+    def __init__(self, properties=7, commands=0):
         super(ArmorLayerModel, self).__init__(properties=properties, commands=commands)
 
     def getLayerName(self):
@@ -27,10 +27,10 @@ class ArmorLayerModel(ViewModel):
         self._setNumber(2, value)
 
     def getResultArmor(self):
-        return self._getNumber(3)
+        return self._getReal(3)
 
     def setResultArmor(self, value):
-        self._setNumber(3, value)
+        self._setReal(3, value)
 
     def getColor(self):
         return self._getString(4)
@@ -44,11 +44,18 @@ class ArmorLayerModel(ViewModel):
     def setCount(self, value):
         self._setNumber(5, value)
 
+    def getReductionFactor(self):
+        return self._getNumber(6)
+
+    def setReductionFactor(self, value):
+        self._setNumber(6, value)
+
     def _initialize(self):
         super(ArmorLayerModel, self)._initialize()
         self._addStringProperty('layerName', '')
         self._addNumberProperty('nominalArmor', 0)
         self._addNumberProperty('impactAngle', 0)
-        self._addNumberProperty('resultArmor', 0)
+        self._addRealProperty('resultArmor', 0.0)
         self._addStringProperty('color', '')
         self._addNumberProperty('count', 0)
+        self._addNumberProperty('reductionFactor', 0)

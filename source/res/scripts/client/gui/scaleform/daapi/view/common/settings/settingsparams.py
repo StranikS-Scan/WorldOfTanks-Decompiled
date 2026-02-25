@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/settings/SettingsParams.py
+from __future__ import absolute_import
 from itertools import chain
 import BigWorld
 from account_helpers.settings_core import settings_constants, options
@@ -36,9 +37,11 @@ class SettingsParams(object):
         return self.settingsCore.packSettings(settings_constants.MARKERS.ALL())
 
     def getFeedbackSettings(self):
+        battleEventsSettings = self.getBattleEventsSettings()
+        battleEventsSettings.update(self.getSituationalPerksSettings())
         return {settings_constants.FEEDBACK.DAMAGE_LOG: self.getDamageLogSettings(),
          settings_constants.FEEDBACK.DAMAGE_INDICATOR: self.getDamageIndicatorSettings(),
-         settings_constants.FEEDBACK.BATTLE_EVENTS: self.getBattleEventsSettings(),
+         settings_constants.FEEDBACK.BATTLE_EVENTS: battleEventsSettings,
          settings_constants.FEEDBACK.BATTLE_BORDER_MAP: self.getBattleBorderMapSettings(),
          settings_constants.FEEDBACK.QUESTS_PROGRESS: self.getQuestsProgressAndScorePanelSettings()}
 
@@ -58,6 +61,9 @@ class SettingsParams(object):
         settings = self.settingsCore.packSettings(settings_constants.QUESTS_PROGRESS.ALL() + settings_constants.ScorePanelStorageKeys.ALL())
         settings['allowQuestProgress'] = self.lobbyContext.getServerSettings().isPMBattleProgressEnabled()
         return settings
+
+    def getSituationalPerksSettings(self):
+        return self.settingsCore.packSettings(settings_constants.SITUATIONAL_PERKS.ALL())
 
     def getAimSettings(self):
         settings = {settings_constants.AIM.SPG: self.settingsCore.packSettings(settings_constants.SPGAim.ALL())}

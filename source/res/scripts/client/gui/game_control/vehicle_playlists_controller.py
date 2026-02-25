@@ -3,6 +3,7 @@
 import json
 import logging
 import os
+import uuid
 import typing
 import Event
 from PlayerEvents import g_playerEvents
@@ -65,7 +66,7 @@ class _VehiclePlaylistsCache(FileLocalCache):
         if len(data) != 3:
             _logger.warning('Expected len of cached data is 3, but received %d', len(data))
             return
-        if self.__VERSION == data[0]:
+        if data[0] == self.__VERSION:
             self.selectedID = data[1]
             self.data = data[2] or {}
             return
@@ -136,6 +137,9 @@ class VehiclePlaylistsController(IVehiclePlaylistsController):
     @property
     def isEnabled(self):
         return self.__isEnabled
+
+    def generateId(self):
+        return uuid.uuid4().hex
 
     def getSelectedID(self):
         return '' if not self.isEnabled else self.__cache.selectedID

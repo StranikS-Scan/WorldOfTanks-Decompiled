@@ -13,13 +13,13 @@ def getContextMenuHandlers():
 
 
 def getViewSettings():
-    from resource_well.gui.impl.lobby.feature.resource_well_browser_view import ResourceWellBrowserView
+    from gui.Scaleform.daapi.view.lobby.shared.web_view import WebView
     from resource_well.gui.Scaleform.daapi.view.lobby.vehicle_preview.resource_well_preview import ResourceWellVehiclePreview
     from resource_well.gui.Scaleform.daapi.view.lobby.vehicle_preview.info.vehicle_preview_bottom_panel import VehiclePreviewBottomPanel
     from resource_well.gui.impl.lobby.feature.progression_view import ProgressionWindow
     from resource_well.gui.impl.lobby.feature.completed_progression_view import CompletedProgressionWindow
     return (ViewSettings(VIEW_ALIAS.RESOURCE_WELL_VEHICLE_PREVIEW, ResourceWellVehiclePreview, 'vehiclePreview.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.RESOURCE_WELL_VEHICLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(VIEW_ALIAS.RESOURCE_WELL_BROWSER_VIEW, ResourceWellBrowserView, 'browserScreen.swf', WindowLayer.TOP_WINDOW, VIEW_ALIAS.RESOURCE_WELL_BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(VIEW_ALIAS.RESOURCE_WELL_BROWSER_VIEW, WebView, 'browserScreen.swf', WindowLayer.TOP_WINDOW, VIEW_ALIAS.RESOURCE_WELL_BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ComponentSettings(VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_WELL_PY_ALIAS, VehiclePreviewBottomPanel, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.RESOURCE_WELL_PROGRESSION, ProgressionWindow, '', WindowLayer.SUB_VIEW, VIEW_ALIAS.RESOURCE_WELL_PROGRESSION, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.RESOURCE_WELL_COMPLETED_PROGRESSION, CompletedProgressionWindow, '', WindowLayer.SUB_VIEW, VIEW_ALIAS.RESOURCE_WELL_COMPLETED_PROGRESSION, ScopeTemplates.LOBBY_SUB_SCOPE))

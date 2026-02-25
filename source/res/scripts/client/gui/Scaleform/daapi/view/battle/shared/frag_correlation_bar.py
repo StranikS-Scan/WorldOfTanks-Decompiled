@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/frag_correlation_bar.py
+from __future__ import absolute_import, division
 from collections import namedtuple
 import typing
 from account_helpers.settings_core.settings_constants import ScorePanelStorageKeys, GAME

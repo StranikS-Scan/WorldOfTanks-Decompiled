@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_modifiers/scripts/common/battle_modifiers_ext/constants_ext.py
+from __future__ import absolute_import
 import typing
 from collections import OrderedDict
-from future.utils import viewitems
+from future.utils import viewitems, viewvalues, iteritems
 from constants import IS_DEVELOPMENT, SHELL_TYPES, BATTLE_LOG_SHELL_TYPES
 if typing.TYPE_CHECKING:
     from items.vehicle_items import Shell
@@ -23,14 +24,19 @@ class DataType(object):
     FLOAT = 1
     STRING = 2
     DICT = 3
-    HASHABLE_TYPES = (INT, FLOAT, STRING)
+    HASHABLE_DICT = 4
+    HASHABLE_TYPES = (INT,
+     FLOAT,
+     STRING,
+     HASHABLE_DICT)
     ID_TO_NAME = {INT: 'int',
      FLOAT: 'float',
      STRING: 'string',
-     DICT: 'dict'}
-    NAME_TO_ID = dict(((v, k) for k, v in ID_TO_NAME.iteritems()))
-    ALL = set(NAME_TO_ID.itervalues())
-    NAMES = set(ID_TO_NAME.itervalues())
+     DICT: 'dict',
+     HASHABLE_DICT: 'hashable_dict'}
+    NAME_TO_ID = {v:k for k, v in viewitems(ID_TO_NAME)}
+    ALL = set(viewvalues(NAME_TO_ID))
+    NAMES = set(viewvalues(ID_TO_NAME))
 
 
 class UseType(object):
@@ -42,9 +48,9 @@ class UseType(object):
     ID_TO_NAME = {VAL: 'val',
      MUL: 'mul',
      ADD: 'add'}
-    NAME_TO_ID = dict(((v, k) for k, v in ID_TO_NAME.iteritems()))
-    ALL = set(NAME_TO_ID.itervalues())
-    NAMES = set(ID_TO_NAME.itervalues())
+    NAME_TO_ID = {v:k for k, v in viewitems(ID_TO_NAME)}
+    ALL = set(viewvalues(NAME_TO_ID))
+    NAMES = set(viewvalues(ID_TO_NAME))
     ALL_WITH_UNDEFINED = ALL | {UNDEFINED}
     NON_DIMENSIONAL_TYPES = ALL_WITH_UNDEFINED - DIMENSIONAL_TYPES
 
@@ -84,9 +90,9 @@ class PhysicalType(object):
      PROBABILITY: 'probability',
      DEVIATION: 'deviation',
      LOGIC: 'logic'}
-    NAME_TO_ID = dict(((v, k) for k, v in ID_TO_NAME.iteritems()))
-    ALL = set(NAME_TO_ID.itervalues())
-    NAMES = set(ID_TO_NAME.itervalues())
+    NAME_TO_ID = {v:k for k, v in viewitems(ID_TO_NAME)}
+    ALL = set(viewvalues(NAME_TO_ID))
+    NAMES = set(viewvalues(ID_TO_NAME))
 
 
 class ModifierDomain(object):
@@ -129,9 +135,9 @@ class ModifierDomain(object):
      CONSTANTS: 'constants',
      VSE: 'vse',
      FAKE: 'fake'}
-    NAME_TO_ID = dict(((v, k) for k, v in ID_TO_NAME.items()))
-    ALL = set(NAME_TO_ID.itervalues())
-    NAMES = set(ID_TO_NAME.itervalues())
+    NAME_TO_ID = {v:k for k, v in viewitems(ID_TO_NAME)}
+    ALL = set(viewvalues(NAME_TO_ID))
+    NAMES = set(viewvalues(ID_TO_NAME))
 
 
 class ClientDomain(object):
@@ -146,7 +152,7 @@ class ClientDomain(object):
     SUSTAINING = 'sustaining'
     VISIBILITY = 'visibility'
     VITALITY = 'vitality'
-    ALL = None
+    ALL = set()
 
 
 ClientDomain.ALL = set((v for k, v in viewitems(ClientDomain.__dict__) if not k.startswith('_') and k not in ('UNDEFINED', 'ALL')))
@@ -160,9 +166,9 @@ class GameplayImpact(object):
      POSITIVE: 'positive',
      NEGATIVE: 'negative',
      HIDDEN: 'hidden'}
-    NAME_TO_ID = dict(((v, k) for k, v in ID_TO_NAME.items()))
-    ALL = set(NAME_TO_ID.itervalues())
-    NAMES = set(ID_TO_NAME.itervalues())
+    NAME_TO_ID = {v:k for k, v in viewitems(ID_TO_NAME)}
+    ALL = set(viewvalues(NAME_TO_ID))
+    NAMES = set(viewvalues(ID_TO_NAME))
 
 
 class ModifierRestriction(object):
@@ -173,9 +179,9 @@ class ModifierRestriction(object):
     ID_TO_NAME = {MIN: 'min',
      MAX: 'max',
      USE_TYPES: 'useTypes'}
-    NAME_TO_ID = dict(((v, k) for k, v in ID_TO_NAME.items()))
-    ALL = set(NAME_TO_ID.itervalues())
-    NAMES = set(ID_TO_NAME.itervalues())
+    NAME_TO_ID = {v:k for k, v in viewitems(ID_TO_NAME)}
+    ALL = set(viewvalues(NAME_TO_ID))
+    NAMES = set(viewvalues(ID_TO_NAME))
 
 
 class NodeType(object):
@@ -198,7 +204,7 @@ class Caliber(object):
 
     @classmethod
     def get(cls, targetCaliber):
-        for name, caliber in cls.NAME_TO_CALIBER.iteritems():
+        for name, caliber in iteritems(cls.NAME_TO_CALIBER):
             if targetCaliber >= caliber:
                 return name
 
@@ -246,10 +252,14 @@ class ModifiersWithRemapping(object):
     GUN_MAIN_PREFAB = 'gunMainPrefab'
     SHOT_EFFECTS = 'shotEffects'
     SOUND_NOTIFICATIONS = 'soundNotifications'
+    EXHAUST_EFFECTS = 'exhaustEffects'
+    ROOT_PREFABS_MECHANIC_EFFECTS = 'rootPrefabsMechanicEffects'
     ALL = {GUN_EFFECTS,
      GUN_MAIN_PREFAB,
      SHOT_EFFECTS,
-     SOUND_NOTIFICATIONS}
+     SOUND_NOTIFICATIONS,
+     EXHAUST_EFFECTS,
+     ROOT_PREFABS_MECHANIC_EFFECTS}
 
 
 class RemappingConditionNames(object):
@@ -273,5 +283,5 @@ class RemappingConditionNames(object):
 
 class RemappingNames(object):
     TEST = 'test'
-    FEP_NEW_YEAR = 'fep_new_year'
-    ALL = set((FEP_NEW_YEAR,) + ((TEST,) if IS_DEVELOPMENT else ()))
+    FEP_FALL_TANKS = 'fep_fall_tanks'
+    ALL = set((FEP_FALL_TANKS,) + ((TEST,) if IS_DEVELOPMENT else ()))

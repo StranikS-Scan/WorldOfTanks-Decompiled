@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/shared/tooltips/__init__.py
 from __future__ import absolute_import
-from shared_utils import CONST_CONTAINER
+from gui.shared import tooltips
 
-class TooltipType(CONST_CONTAINER):
+class TOOLTIP_TYPE(tooltips.TOOLTIP_TYPE):
     FUN_RANDOM = 'funRandom'

@@ -1,9 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/client/comp7_core/gui/impl/lobby/tooltips/entry_point_tooltip.py
-from comp7_core.gui.impl.lobby.comp7_core_helpers.comp7_core_shared import getModeSeasonState
+import logging
 from comp7_core.gui.impl.lobby.comp7_core_helpers.comp7_core_model_helpers import setSeasonInfo
+from frameworks.wulf.view.array import fillIntsArray
+from gui.impl.gen.view_models.views.lobby.user_missions.constants.event_banner_state import EventBannerState
 from gui.impl.pub import ViewImpl
 from helpers.time_utils import getServerUTCTime
+_logger = logging.getLogger(__name__)
 
 class Comp7CoreEntryPointTooltip(ViewImpl):
 
@@ -41,17 +44,24 @@ class Comp7CoreEntryPointTooltip(ViewImpl):
         self._updateState()
 
     def _updateState(self):
-        with self.viewModel.transaction() as tx:
-            season = self._modeController.getCurrentSeason() or self._modeController.getNextSeason() or self._modeController.getPreviousSeason()
-            setSeasonInfo(tx.season, self._modeController, self._seasonStateClazz, self._seasonNameClazz, season)
+        seasonStateClazz = self._seasonStateClazz
+        bannerState = self._banner.bannerState
+        if bannerState == EventBannerState.ANNOUNCE:
+            seasonState = seasonStateClazz.NOTSTARTED
+        elif bannerState in (EventBannerState.INTRO, EventBannerState.IN_PROGRESS):
+            seasonState = seasonStateClazz.ACTIVE
+        elif bannerState == EventBannerState.INACTIVE:
+            seasonState = seasonStateClazz.DISABLED
+        else:
+            _logger.error('Unhandled bannerState = %s', bannerState)
+            seasonState = seasonStateClazz.DISABLED
+        ctrl = self._modeController
+        season = ctrl.getCurrentSeason() or ctrl.getNextSeason() or ctrl.getPreviousSeason()
+        with self.getViewModel().transaction() as tx:
+            setSeasonInfo(tx.season, ctrl, seasonStateClazz, self._seasonNameClazz, season)
             tx.setTimeLeftUntilPrimeTime(self._banner.timerValue)
-            tx.season.setState(getModeSeasonState(self._modeController, self._seasonStateClazz))
-            levelsArr = tx.getVehicleLevels()
-            levelsArr.clear()
-            for level in self._modeController.getModeSettings().levels:
-                levelsArr.addNumber(level)
-
-            levelsArr.invalidate()
+            tx.season.setState(seasonState)
+            fillIntsArray(ctrl.getModeSettings().levels, tx.getVehicleLevels())
 
     def __onPollServerTime(self):
         with self.viewModel.transaction() as tx:

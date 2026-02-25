@@ -98,7 +98,7 @@ class _InspireSoundPlayer(VehicleStateSoundPlayer, CallbackDelayer):
         CallbackDelayer.destroy(self)
 
     def _onVehicleStateUpdated(self, state, value):
-        if not state == VEHICLE_VIEW_STATE.INSPIRE:
+        if state != VEHICLE_VIEW_STATE.INSPIRE:
             return
         else:
             isSource = value['isSourceVehicle']
@@ -150,7 +150,7 @@ class _AOEZoneSoundPlayer(VehicleStateSoundPlayer, CallbackDelayer):
         CallbackDelayer.destroy(self)
 
     def _onVehicleStateUpdated(self, state, value):
-        if not state == VEHICLE_VIEW_STATE.AOE_ZONE:
+        if state != VEHICLE_VIEW_STATE.AOE_ZONE:
             return
         else:
             zoneData = self.__findLongest(value)

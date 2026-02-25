@@ -5,7 +5,7 @@ from frameworks.state_machine import StateFlags
 from frameworks.state_machine.transitions import TransitionType
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.lobby_state_machine.states import SFViewLobbyState, SubScopeSubLayerState, LobbyStateDescription
+from gui.lobby_state_machine.states import SFViewLobbyState, SubScopeSubLayerState, LobbyStateDescription, UntrackedState, LobbyStateFlags
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 
@@ -46,6 +46,7 @@ class ShopState(SFViewLobbyState):
         from gui.Scaleform.daapi.view.lobby.vehicle_preview.states import StyleProgressionPreviewState
         from gui.Scaleform.daapi.view.lobby.vehicle_preview.states import StyleBuyingPreviewState
         from gui.Scaleform.daapi.view.lobby.vehicle_preview.states import ShowcaseStyleBuyingPreviewState
+        from gui.impl.lobby.battle_pass.states import BattlePassState
         from gui.impl.lobby.lootbox_system.states import LootBoxMainState
         from gui.impl.lobby.lootbox_system.states import LootBoxInfoState
         from gui.impl.lobby.vehicle_hub.states import OverviewState
@@ -63,9 +64,16 @@ class ShopState(SFViewLobbyState):
         self.addNavigationTransition(lsm.getStateByCls(StyleProgressionPreviewState), record=True)
         self.addNavigationTransition(lsm.getStateByCls(StyleBuyingPreviewState), record=True)
         self.addNavigationTransition(lsm.getStateByCls(ShowcaseStyleBuyingPreviewState), record=True)
+        self.addNavigationTransition(lsm.getStateByCls(BattlePassState), record=True)
         self.addNavigationTransition(lsm.getStateByCls(LootBoxMainState), record=True)
         self.addNavigationTransition(lsm.getStateByCls(LootBoxInfoState), record=True)
         self.addNavigationTransition(lsm.getStateByCls(OverviewState), record=True)
+        myDescendants = set(self.getRecursiveChildrenStates())
+        for state in self.getParent().getRecursiveChildrenStates():
+            if state in myDescendants or state == self or isinstance(state, UntrackedState):
+                continue
+            if not state.getChildrenStates() and not state.getFlags() & LobbyStateFlags.HANGAR:
+                state.addNavigationTransition(self, record=True)
 
     def getNavigationDescription(self):
         return LobbyStateDescription(title=backport.text(R.strings.pages.titles.browser.shop()))

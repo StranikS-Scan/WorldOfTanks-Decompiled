@@ -14,11 +14,6 @@ from skeletons.gui.web import IWebController
 from skeletons.gui.lobby_context import ILobbyContext
 _logger = logging.getLogger(__name__)
 
-@dependency.replace_none_kwargs(craftMachineController=ICraftmachineController)
-def getCraftMachineEntryPointIsActive(craftMachineController=None):
-    return craftMachineController.isCraftMachineEntryPointAvailable()
-
-
 class CraftmachineController(ICraftmachineController):
     __webController = dependency.descriptor(IWebController)
     __lobbyCtx = dependency.descriptor(ILobbyContext)
@@ -88,7 +83,3 @@ class CraftmachineController(ICraftmachineController):
     def __hasSuitableVehicles(self):
         criteria = self.__filterEnabledVehiclesCriteria(REQ_CRITERIA.INVENTORY)
         return len(self.__itemsCache.items.getVehicles(criteria)) > 0
-
-    def isCraftMachineEntryPointAvailable(self):
-        vehicleIsAvailable = self.__hasSuitableVehicles() or self.__suitableVehicleIsAvailable()
-        return vehicleIsAvailable

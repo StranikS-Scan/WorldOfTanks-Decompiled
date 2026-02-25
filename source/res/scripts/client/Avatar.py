@@ -97,6 +97,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.helpers.statistics import IStatisticsCollector
 from soft_exception import SoftException
 from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT_MIN, STREAM_ID_AVATAR_BATTLE_RESULS
+from vehicles.entities import ShotParams
 from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_helpers import getPlayerVehicleMechanicComponent
 from vehicle_systems.stricted_loading import makeCallbackWeak
@@ -450,9 +451,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         if self.playerVehicleID == v.id:
                             g_playerEvents.onAvatarVehicleLeaveWorld()
                         v.stopVisual()
-                    except:
+                    except Exception:
                         LOG_CURRENT_EXCEPTION()
-                        raise VehicleDeinitFailureException()
+                        raise VehicleDeinitFailureException
 
                 elif v.isHidden:
                     v.stopGUIVisual()
@@ -669,7 +670,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         self.__lastTimeOfKeyDown = 0
                     if key == self.__lastKeyDown and time - self.__lastTimeOfKeyDown < 0.35:
                         self.__numSimilarKeyDowns = self.__numSimilarKeyDowns + 1
-                        isDoublePress = True if self.__numSimilarKeyDowns == 2 else False
+                        isDoublePress = self.__numSimilarKeyDowns == 2
                     else:
                         self.__numSimilarKeyDowns = 1
                     self.__lastKeyDown = key
@@ -1151,9 +1152,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     g_playerEvents.onAvatarVehicleLeaveWorld()
                 self.__vehicles.remove(vehicle)
                 vehicle.stopVisual()
-            except:
+            except Exception:
                 LOG_CURRENT_EXCEPTION()
-                raise VehicleDeinitFailureException()
+                raise VehicleDeinitFailureException
 
             vehicle.model = None
             return
@@ -2068,21 +2069,23 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             if self.__isOwnVehicleSwitchingSiegeMode():
                 return
             self.cell.vehicle_shoot()
-            shotArgs = (0, False, 0)
-            predictShooting = True
+            avatarParams = self.makeDefaultAvatarShotParams()
             vehicle = BigWorld.entity(self.playerVehicleID)
             if vehicle is not None and vehicle.isStarted:
-                shotKindIdx = 0
-                typeDescriptor = vehicle.typeDescriptor
-                if typeDescriptor is not None:
-                    predictShooting = not typeDescriptor.isTwinGunVehicle
-                    shotKindIdx = typeDescriptor.shot.shell.kindIdx
-                shotArgs = (vehicle.dualGunIndex or 0, False, shotKindIdx)
+                shotParamsList = [avatarParams]
+                vehicle.events.onCollectShotParams(shotParamsList)
+                avatarParams.predictShooting = all((param.predictShooting for param in shotParamsList))
             if error != CANT_SHOOT_ERROR.EMPTY_CLIP:
-                self.__startWaitingForShot(predictShooting, shotArgs=shotArgs)
+                self.__startWaitingForShot(avatarParams)
             TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.PLAYER_DISCRETE_SHOOT)
             self.dropStopUntilFireMode()
             return
+
+    def makeDefaultAvatarShotParams(self, sourceID='Avatar', gunIndexDelayed=0, shellKindIdx=0, predictShooting=True):
+        vehicle = BigWorld.entity(self.playerVehicleID)
+        if vehicle is not None and vehicle.typeDescriptor is not None:
+            shellKindIdx = vehicle.typeDescriptor.shot.shell.kindIdx
+        return ShotParams(sourceID, gunIndexDelayed, shellKindIdx, predictShooting)
 
     def shootDualGun(self, chargeActionType, isPrepared=False, isRepeat=False):
         keyDown = chargeActionType != DUALGUN_CHARGER_ACTION_TYPE.CANCEL
@@ -2666,8 +2669,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.guiSessionProvider.shared.messages.showVehicleError(msgName, args)
 
     def startWaitingForShot(self, shootingCooldown, predictShooting=True):
-        shotKindIdx = self.__activeShellKindIdx()
-        self.__startWaitingForShot(predictShooting, shotArgs=(0, False, shotKindIdx))
+        self.__startWaitingForShot(self.makeDefaultAvatarShotParams(predictShooting=predictShooting))
         self.__gunReloadCommandWaitEndTime = BigWorld.time() + shootingCooldown
 
     def __showDamageIconAndPlaySound(self, damageCode, extra, vehicleID, ignoreMessages=False):
@@ -2819,14 +2821,14 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             ammoCtrl.postBattle()
         self.__prevArenaPeriod = period
 
-    def __startWaitingForShot(self, predictShooting=True, shotArgs=None):
+    def __startWaitingForShot(self, shotParams):
         if self.__shotWaitingTimerID is not None:
             BigWorld.cancelCallback(self.__shotWaitingTimerID)
             self.__shotWaitingTimerID = None
         timeout = BigWorld.LatencyInfo().value[3] * 0.5
         timeout = clamp(_SHOT_WAITING_MIN_TIMEOUT, _SHOT_WAITING_MAX_TIMEOUT, timeout)
-        if predictShooting:
-            self.__shotWaitingTimerID = BigWorld.callback(timeout, partial(self.__showTimedOutShooting, shotArgs))
+        if shotParams.predictShooting:
+            self.__shotWaitingTimerID = BigWorld.callback(timeout, partial(self.__showTimedOutShooting, shotParams))
             self.__gunReloadCommandWaitEndTime = BigWorld.time() + 2.0
         else:
             self.__shotWaitingTimerID = BigWorld.callback(timeout, self.__clearTimedOutShooting)
@@ -2843,8 +2845,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def __onTimedOutCharge(self):
         self.__chargeWaitingTimerID = None
         if self.__canMakeDualShot:
-            shotKindIdx = self.__activeShellKindIdx()
-            self.__startWaitingForShot(shotArgs=(0, True, shotKindIdx))
+            self.__startWaitingForShot(self.makeDefaultAvatarShotParams(gunIndexDelayed=-1))
         return
 
     def __cancelWaitingForCharge(self):
@@ -2853,13 +2854,12 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.__chargeWaitingTimerID = None
         return
 
-    def __showTimedOutShooting(self, shotArgs):
+    def __showTimedOutShooting(self, shotParams):
         self.__clearTimedOutShooting()
         try:
             vehicle = BigWorld.entity(self.playerVehicleID)
             if vehicle is not None and vehicle.isStarted:
                 return self.__isOwnBarrelUnderWater() and None
-            gunIndexDelayed, isDual, shellTypeIdx = shotArgs or (0, False, 0)
             gunDescr = vehicle.typeDescriptor.gun
             burstCount = vehicle.getGunBurstParams(gunDescr)[0]
             ammo = self.guiSessionProvider.shared.ammo
@@ -2870,7 +2870,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 if gunDescr.clip[0] > 1:
                     if burstCount > shotsInClip > 0:
                         burstCount = shotsInClip
-                vehicle.showShooting(burstCount, -1 if isDual else gunIndexDelayed, shellTypeIdx, True)
+                vehicle.showShooting(burstCount, shotParams.gunIndexDelayed, shotParams.shellKindIdx, True)
         except Exception:
             LOG_CURRENT_EXCEPTION()
 
@@ -3219,10 +3219,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
     def hotReloadCGF(self):
         self.base.setDevelopmentFeature(0, 'hot_reload', 0, '')
-
-    def __activeShellKindIdx(self):
-        vehicle = BigWorld.entity(self.playerVehicleID)
-        return vehicle.typeDescriptor.shot.shell.kindIdx if vehicle is not None and vehicle.typeDescriptor is not None else 0
 
 
 def preload(alist):

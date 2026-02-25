@@ -248,6 +248,7 @@ class PERSONAL_MISSIONS(object):
     NAVIGATION_BACKBUTTON_DASHBOARD = '#personal_missions:navigation/backButton/dashboard'
     NAVIGATION_BACKBUTTON_ASSEMBLING = '#personal_missions:navigation/backButton/assembling'
     NAVIGATION_BACKBUTTON_MISSIONS = '#personal_missions:navigation/backButton/missions'
+    NAVIGATION_BACKBUTTON_REWARDS = '#personal_missions:navigation/backButton/rewards'
     SIDEBAR_VEHICLES_ENUM = (SIDEBAR_VEHICLES_LIGHTTANK,
      SIDEBAR_VEHICLES_MEDIUMTANK,
      SIDEBAR_VEHICLES_HEAVYTANK,

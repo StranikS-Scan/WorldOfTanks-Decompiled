@@ -45,7 +45,7 @@ OPERATION_ID_TO_BRANCH = {operationsId:branch for branch in BRANCH_TO_OPERATION_
 CHAMPION_BADGE_AT_OPERATION_ID = {operationIds[-1]:CHAMPION_BADGES_BY_BRANCH[branch] for branch, operationIds in BRANCH_TO_OPERATION_IDS.iteritems() if CHAMPION_BADGES_BY_BRANCH.get(branch)}
 
 def getBranchByOperationId(operationId):
-    return OPERATION_ID_TO_BRANCH.get(operationId, None)
+    return OPERATION_ID_TO_BRANCH.get(operationId)
 
 
 def isPM3Milestone(questID):

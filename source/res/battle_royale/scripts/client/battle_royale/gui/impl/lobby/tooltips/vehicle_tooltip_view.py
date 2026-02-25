@@ -9,10 +9,15 @@ from gui.impl.pub import ViewImpl
 from gui.shared.tooltips.vehicle import StatusBlockConstructor
 from gui.shared.tooltips.contexts import InventoryContext
 from gui.Scaleform.daapi.view.common.battle_royale import br_helpers
+from battle_royale.gui.impl.lobby.br_helpers.utils import setEventInfo
+from helpers import dependency
+from skeletons.gui.game_control import IBattleRoyaleController
+from battle_royale.gui.impl.gen.view_models.views.lobby.enums import CoinType
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
 
 class VehicleTooltipView(ViewImpl):
+    __brController = dependency.descriptor(IBattleRoyaleController)
 
     def __init__(self, intCD):
         settings = ViewSettings(R.views.battle_royale.mono.lobby.tooltips.vehicle())
@@ -43,10 +48,17 @@ class VehicleTooltipView(ViewImpl):
         model.setDamage(params.damage)
 
     def __fillModel(self, model):
+        setEventInfo(model.eventInfo)
         model.setVehicleName(self.__vehicle.userName)
         model.setVehicleNation(self.__vehicle.nationName)
         model.setVehicleType(self.__vehicle.type)
         self.__fillStatus(self.__vehicle, model)
+        modeSettings = self.__brController.getModeSettings()
+        model.dailyBonus.setHasDailyBonus(self.__brController.hasDailyBonus(self.__vehicle))
+        model.dailyBonus.setDailyBonusFactor(modeSettings.dailyBonus.get('bonusFactor', 0))
+        model.dailyBonus.setSoloTopPlaces(modeSettings.dailyBonus.get('soloTopPlaces', 0))
+        model.dailyBonus.setSquadTopPlaces(modeSettings.dailyBonus.get('squadTopPlaces', 0))
+        model.dailyBonus.setCoinType(CoinType.STPCOIN)
 
     def __fillStatus(self, vehicle, model):
         statusConfig = self.__context.getStatusConfiguration(vehicle)

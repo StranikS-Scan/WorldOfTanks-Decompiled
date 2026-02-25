@@ -48,7 +48,7 @@ from messenger.m_constants import PROTO_TYPE
 from messenger.m_constants import USER_TAG
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
-from skeletons.gui.game_control import IPlatoonController
+from skeletons.gui.game_control import IBattleRoyaleController, IPlatoonController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -662,8 +662,9 @@ class EpicMembersView(SquadMembersView):
         model.noBonusPlaceholder.setIcon(R.images.gui.maps.icons.battleTypes.c_64x64.epicbattle())
 
 
-class BattleRoyalMembersView(SquadMembersView):
+class BattleRoyaleMembersView(SquadMembersView):
     _prebattleType = PrebattleTypes.BATTLEROYAL
+    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
 
     def _addSubviews(self):
         self._addSubviewToLayout(ChatSubview())
@@ -680,6 +681,16 @@ class BattleRoyalMembersView(SquadMembersView):
     def _getWTRStatus(self):
         return False
 
+    def _setHeaderBg(self, fileName, model):
+        if self.__battleRoyaleController.isStPatrick():
+            fileNameRes = R.images.battle_royale.gui.maps.st_patrick.icons.platoon.dyn(fileName)
+        else:
+            fileNameRes = R.images.battle_royale.gui.maps.icons.platoon.dyn(fileName)
+        if fileNameRes.exists():
+            model.header.setBackgroundImage(backport.image(fileNameRes()))
+        else:
+            super(BattleRoyaleMembersView, self)._setHeaderBg(fileName, model)
+
     @staticmethod
     def __sortCurrentUser(slot):
         accID = BigWorld.player().id
@@ -687,7 +698,7 @@ class BattleRoyalMembersView(SquadMembersView):
         return accID != player.get('accID')
 
     def _getPlatoonSlotsData(self):
-        slots = super(BattleRoyalMembersView, self)._getPlatoonSlotsData()
+        slots = super(BattleRoyaleMembersView, self)._getPlatoonSlotsData()
         slots.sort(key=self.__sortCurrentUser)
         return slots
 

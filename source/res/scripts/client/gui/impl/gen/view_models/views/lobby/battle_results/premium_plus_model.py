@@ -5,20 +5,20 @@ from gui.impl.gen.view_models.views.lobby.battle_results.additional_bonus_model 
 class PremiumPlusModel(AdditionalBonusModel):
     __slots__ = ('onNextBonusTimeUpdate',)
 
-    def __init__(self, properties=17, commands=4):
+    def __init__(self, properties=18, commands=4):
         super(PremiumPlusModel, self).__init__(properties=properties, commands=commands)
 
     def getIsUndefinedLeftBonusCount(self):
-        return self._getBool(15)
+        return self._getBool(16)
 
     def setIsUndefinedLeftBonusCount(self, value):
-        self._setBool(15, value)
+        self._setBool(16, value)
 
     def getNextBonusTime(self):
-        return self._getReal(16)
+        return self._getReal(17)
 
     def setNextBonusTime(self, value):
-        self._setReal(16, value)
+        self._setReal(17, value)
 
     def _initialize(self):
         super(PremiumPlusModel, self)._initialize()

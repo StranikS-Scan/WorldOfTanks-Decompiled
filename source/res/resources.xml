@@ -219,6 +219,7 @@
       <module>	client.cgf_components.pm30_hangar_components	</module>
       <module>	client.cgf_components.pbs_components	</module>
       <module>	client.cgf_components.color_blind_component	</module>
+      <module>	client.cgf_components.vehicle_as_polyline_target_rule	</module>
       <module>	client.HealthComponent	</module>
       <module>	client.DeathComponent	</module>
       <module>	client.SequenceNetworkSync	</module>
@@ -230,6 +231,7 @@
       <module>	client.cgf_components.armor_inspector_component	</module>
       <module>	common.cgf_components_common.vehicle_mechanics.stationary_reload_sequence_params_component	</module>
       <module>	cell.cgf_cell.vehicle_health_observer_manager	</module>
+      <module>	client.gui.game_control.wot_plus.cgf_components.pro_boost_effect_manager	</module>
       <module>	client.cgf_components.mechanic_components.cyclic_rocket.nozzle_controller	</module>
       <module>	client.cgf_components.mechanic_components.cyclic_rocket.staged_jet_boosters	</module>
       <module>	client.cgf_components.mechanic_components.cyclic_rocket.accelerator_status_tracker	</module>
@@ -328,55 +330,18 @@
       <path>	content/CGFPrefabs/Vehicle/mechanic_effects/china/Ch70_PTZ_78_staged_boosters/Ch70_PTZ_78_staged_boosters.prefab	</path>
       <path>	content/CGFPrefabs/Vehicle/mechanic_effects/china/Ch70_PTZ_78_staged_boosters/Ch70_PTZ_78_staged_boosters_client_left.prefab	</path>
       <path>	content/CGFPrefabs/Vehicle/mechanic_effects/china/Ch70_PTZ_78_staged_boosters/Ch70_PTZ_78_staged_boosters_client_right.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/czech/gun_30_mm_protiletadlovy_dvojkanon_vz_53.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/czech/gun_37_mm_automaticky_dvojkanon.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/czech/gun_50_mm_protiletadlovy_dvojkanon_ZK_500.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/czech/gun_50_mm_protiletadlovy_dvojkanon_ZK_500S.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/czech/gun_57_mm_automaticky_dvojkanon_535S.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/czech/gun_57_mm_automaticky_dvojkanon_535T.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/uk/gun_Twin_105_mm_Gun_L7_MBC.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/uk/gun_01_Twin_20pdr_Gun_MBC_MkII.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/uk/gun_02_Twin_32pdr_Gun_MBC.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/uk/gun_03_Twin_20pdr_Gun_MBC_MkII.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/uk/gun_04_Twin_32pdr_Gun_MBC.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/uk/gun_01_Twin_32pdr_Gun_MBC_Mk2.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/uk/gun_02_Twin_105_mm_Gun_T8_MBC.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/uk/gun_03_Twin_32pdr_Gun_MBC_Mk2.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/uk/gun_04_Twin_105_mm_Gun_T8_MBC.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/uk/gun_Twin_110_mm_Gun_MBC.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/uk/gun_Twin_20pdr_Gun_MBC.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/uk/gun_Twin_120_mm_Gun_L1_MBC.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/uk/gun_Twin_4_5_in_Gun_MBC.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/usa/gun_90mm_Ares_2000.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/usa/gun_75mm_Ares_ADMAG.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/usa/gun_75mm_Ares_Super.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/usa/gun_85mm_Ares_HVAC.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/usa/gun_85mm_Ares_MC_AAAC.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/usa/gun_90mm_Ares_LC_AAAC.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/japan/gun_137_2mm_TK_DK.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/germany/gun_8_cm_8H62_2.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/czech	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/germany	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/japan	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/uk	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/usa	</path>
       <path>	particles/Tank/customization/Cz17_Vz_55_NY2025_3Dst/Cz17_Vz_55_NY2025_3Dst.prefab	</path>
       <path>	particles/Tank/customization/Cz17_Vz_55_NY2025_3Dst/Cz17_Vz_55_NY2025_3Dst_Gun_01.prefab	</path>
       <path>	particles/Tank/customization/Cz17_Vz_55_NY2025_3Dst/Cz17_Vz_55_NY2025_3Dst_Gun_02.prefab	</path>
       <path>	content/CGFPrefabs/Frontline/fullDestruction.prefab	</path>
       <path>	content/HangarPrefabs/PetSystem/PetSystem_dog.prefab	</path>
-      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/czech/gun_30_mm_protiletadlovy_dvojkanon_vz_53.prefab	</path>
-      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/czech/gun_37_mm_automaticky_dvojkanon.prefab	</path>
-      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/czech/gun_50_mm_protiletadlovy_dvojkanon_ZK_500S.prefab	</path>
-      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/czech/gun_57_mm_automaticky_dvojkanon_535T.prefab	</path>
-      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/germany/gun_8_cm_8H62_2.prefab	</path>
-      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/japan/gun_137_2mm_TK_DK.prefab	</path>
-      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/uk/gun_01_Twin_20pdr_Gun_MBC_MkII.prefab	</path>
-      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/uk/gun_02_Twin_32pdr_Gun_MBC.prefab	</path>
-      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/uk/gun_03_Twin_20pdr_Gun_MBC_MkII.prefab	</path>
-      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/uk/gun_04_Twin_32pdr_Gun_MBC.prefab	</path>
-      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/uk/gunTwin_105_mm_Gun_L7_MBC.prefab	</path>
-      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/uk/gunTwin_120_mm_Gun_L1_MBC.prefab	</path>
-      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/uk/gunTwin_4_5_in_Gun_MBC.prefab	</path>
-      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/usa/gun_75mm_Ares_ADMAG.prefab	</path>
-      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/usa/gun_75mm_Ares_MC_AAAC.prefab	</path>
-      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/usa/gun_90mm_Ares_2000.prefab	</path>
-      <path>	fun_random/content/CGFPrefabs/Vehicle/fep_ny_guns/usa/gun_90mm_Ares_LC_AAAC.prefab	</path>
+      <path>	content/CGFPrefabs/Lobby/proboost_activation.prefab	</path>
+      <path>	content/CGFPrefabs/Lobby/proboost_deactivation.prefab	</path>
     </prefabs>
   </cgf>
 </resources.xml>

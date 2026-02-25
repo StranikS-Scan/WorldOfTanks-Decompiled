@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prime_time_view_base.py
+from __future__ import absolute_import
 import time
 import typing
+from functools import total_ordering
 import constants
 from adisp import adisp_process
 from gui import GUI_SETTINGS
@@ -33,6 +35,7 @@ def makeServerString(serverInfo, isServerNameShort=False, customTextId=None):
     return backport.text(textId(), server=server)
 
 
+@total_ordering
 class ServerListItemPresenter(object):
     _RES_ROOT = None
 
@@ -53,6 +56,18 @@ class ServerListItemPresenter(object):
         self.__invalidatePrimeTimeStatus()
         self.invalidatePingData()
         return
+
+    def __eq__(self, other):
+        return self._compare(other) == 0
+
+    def __ne__(self, other):
+        return not self == other
+
+    def __lt__(self, other):
+        return self._compare(other) < 0
+
+    def __hash__(self):
+        return id(self)
 
     @classmethod
     def deltaFormatter(cls, delta):
@@ -116,6 +131,9 @@ class ServerListItemPresenter(object):
          'specialAlias': None,
          'isSpecial': None}
 
+    def _compare(self, other):
+        return self.orderID - other.orderID
+
     def _getIsAvailable(self):
         self.__invalidatePrimeTimeStatus()
         return self.__isAvailable
@@ -130,9 +148,6 @@ class ServerListItemPresenter(object):
             primeTimeData = self.__periodsController.getPrimeTimeStatus(peripheryID=self.__peripheryID)
             self.__primeTimeStatus, self.__timeLeft, self.__isAvailable = primeTimeData
             self.__invalidationTime = currTime
-
-    def __cmp__(self, other):
-        return self.orderID - other.orderID
 
 
 class StubPresenterClass(ServerListItemPresenter):

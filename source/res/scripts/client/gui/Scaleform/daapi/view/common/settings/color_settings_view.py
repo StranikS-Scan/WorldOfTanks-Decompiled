@@ -1,5 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/settings/color_settings_view.py
+from __future__ import absolute_import
+from future.utils import viewitems
+from past.utils import old_div
 import BigWorld
 from debug_utils import LOG_DEBUG
 import GUI
@@ -44,8 +47,8 @@ class ColorSettingsView(LayerVisibilityMixin, ColorSettingsViewMeta):
         self.__blur = None
         return
 
-    def setViewWidth(self, width):
-        self.__componentWidth = width
+    def setViewWidth(self, value):
+        self.__componentWidth = value
         if self.__isColorPreviewFilterActive:
             self.__showColorPreviewFilter()
 
@@ -205,8 +208,8 @@ class ColorSettingsView(LayerVisibilityMixin, ColorSettingsViewMeta):
 
     def __showColorPreviewFilter(self):
         width, _ = GUI.screenResolution()[:2]
-        witdthPrc = self.__componentWidth / width
-        delimiterPrc = witdthPrc + (1 - witdthPrc) / 2
+        witdthPrc = old_div(self.__componentWidth, width)
+        delimiterPrc = witdthPrc + old_div(1 - witdthPrc, 2)
         BigWorld.setColorBCSSetup(1, delimiterPrc)
         self.__isColorPreviewFilterActive = True
 
@@ -235,7 +238,7 @@ class ColorSettingsView(LayerVisibilityMixin, ColorSettingsViewMeta):
         return settings
 
     def __previewSettings(self, settings):
-        for settingName, value in settings.iteritems():
+        for settingName, value in viewitems(settings):
             self.settingsCore.applySetting(settingName, value)
 
     def __onExternalBackgroundAlphaChange(self, event):

@@ -25,7 +25,7 @@ from objects_hierarchy import ExtraSlotsMapItem
 from objects_hierarchy import PrefabsMapItem
 from vehicle_systems import model_assembler
 from vehicle_systems import camouflages
-from vehicle_systems.vehicle_composition import getExtraSlotMap, getObjectSlots, createVehicleComposition, VehicleSlots
+from vehicle_systems.vehicle_composition import getExtraSlotMap, getObjectSlots, VehicleSlots, createVehicleComposition, removeComposition
 from vehicle_systems.vehicle_damage_state import VehicleDamageState
 from vehicle_systems.tankStructure import VehiclePartsTuple, ModelsSetParams, TankPartNames, ColliderTypes, TankPartIndexes, TankNodeNames, CgfTankNodes, TankSoundObjectsIndexes
 from vehicle_systems.components.CrashedTracks import CrashedTrackController
@@ -384,6 +384,7 @@ class CommonTankAppearance(ScriptGameObject):
             go.destroy()
 
         self.wheelsGameObject.destroy()
+        removeComposition(self.gameObject)
         super(CommonTankAppearance, self).destroy()
         self.__typeDesc = None
         if self.boundEffects is not None:
@@ -539,7 +540,7 @@ class CommonTankAppearance(ScriptGameObject):
             turretTopY = desc.chassis.hullPosition[1] + desc.hull.turretPositions[0][1] + turretBB[1][1]
             gunTopY = desc.chassis.hullPosition[1] + desc.hull.turretPositions[0][1] + desc.turret.gunPosition[1] + gunBB[1][1]
             gunLength = math.fabs(gunBB[1][2] - gunBB[0][2])
-            height = max(hullTopY, max(turretTopY, gunTopY))
+            height = max(hullTopY, turretTopY, gunTopY)
         return (height, gunLength)
 
     def onWaterSplash(self, waterHitPoint, isHeavySplash):
@@ -927,7 +928,7 @@ class CommonTankAppearance(ScriptGameObject):
     def _onCameraChanged(self, cameraName, currentVehicleId=None):
         if self.id != BigWorld.player().playerVehicleID:
             return
-        isEnabled = not cameraName == 'sniper'
+        isEnabled = cameraName != 'sniper'
         for modelAnimator in self.__modelAnimators:
             modelAnimator.animator.setEnabled(isEnabled)
 

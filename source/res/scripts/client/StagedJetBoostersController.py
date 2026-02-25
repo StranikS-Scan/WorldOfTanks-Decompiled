@@ -67,7 +67,7 @@ class StagedJetBoostersController(VehicleDynamicComponent, StagedJetBoostersCont
         self.__currentState = StagedJetBoostersState(PHASED_MECHANIC_STATE.NOT_RUNNING, 0.0, 0.0, 0, AcceleratorStatus.NONE, None)
         self.__commandsEvents = createMechanicCommandsEvents(self)
         self.__statesEvents = createMechanicStatesEvents(self)
-        self.__mechanicInputLogger = createMechanicInputLogger(self, CMD_CM_SPECIAL_ABILITY, CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
+        self.__mechanicInputLogger = None
         self.__inputAction = None
         self._initComponent()
         return
@@ -113,6 +113,14 @@ class StagedJetBoostersController(VehicleDynamicComponent, StagedJetBoostersCont
             self.__inputAction = None
             return
 
+    @ifPlayerVehicle
+    def createInputLogger(self, _):
+        if self.__mechanicInputLogger is not None:
+            self.__mechanicInputLogger.destroy()
+        self.__mechanicInputLogger = createMechanicInputLogger(self, CMD_CM_SPECIAL_ABILITY, CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
+        self.__mechanicInputLogger.start()
+        return
+
     def getMechanicLogState(self):
         return {'state': self.__currentState.state,
          'time_left': self.__currentState.timeLeft,
@@ -137,11 +145,8 @@ class StagedJetBoostersController(VehicleDynamicComponent, StagedJetBoostersCont
 
     def _onAppearanceReady(self):
         super(StagedJetBoostersController, self)._onAppearanceReady()
+        self.__updateMechanicState()
         self.__statesEvents.processStatePrepared()
-
-    def _onAvatarReady(self, player):
-        super(StagedJetBoostersController, self)._onAvatarReady(player)
-        self.__mechanicInputLogger.start()
 
     def _collectComponentParams(self, typeDescriptor):
         super(StagedJetBoostersController, self)._collectComponentParams(typeDescriptor)
@@ -149,6 +154,8 @@ class StagedJetBoostersController(VehicleDynamicComponent, StagedJetBoostersCont
 
     def _onComponentAppearanceUpdate(self, **kwargs):
         super(StagedJetBoostersController, self)._onComponentAppearanceUpdate(**kwargs)
-        if self.stateStatus:
-            self.__currentState = StagedJetBoostersState.fromComponentStatus(self.stateStatus, self.acceleratorStatus, self.__params)
+        self.__updateMechanicState()
         self.__statesEvents.updateMechanicState(self.__currentState)
+
+    def __updateMechanicState(self):
+        self.__currentState = StagedJetBoostersState.fromComponentStatus(self.stateStatus, self.acceleratorStatus, self.__params) if self.stateStatus else self.__currentState

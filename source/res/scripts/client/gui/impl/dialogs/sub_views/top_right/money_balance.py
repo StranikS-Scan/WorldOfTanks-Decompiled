@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/dialogs/sub_views/top_right/money_balance.py
+from __future__ import absolute_import
 from functools import partial
 import typing
 from frameworks.wulf import ViewSettings

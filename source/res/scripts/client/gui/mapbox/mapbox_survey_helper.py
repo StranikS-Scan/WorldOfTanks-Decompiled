@@ -293,10 +293,9 @@ class AlternativeQuestion(IQuestion):
     __slots__ = ('__questionId', '_alternatives', '__isSynchronizedAnswers')
 
     def __init__(self, *args, **kwargs):
-        self.__questionId = kwargs.get('questionId', None)
+        self.__questionId = kwargs.get('questionId')
         self._alternatives = kwargs.get('alternatives', [])
         self.__isSynchronizedAnswers = kwargs.get('isSynchronizedAnswers', False)
-        return
 
     def getAlternative(self, questionId):
         return findFirst(lambda q: q.getQuestionId() == questionId, self._alternatives)

@@ -35,9 +35,9 @@ class BattlePassRewardLogic(object):
         self.__machine.stop()
         self.__startAfterTurningOnMachine = False
 
-    def startRewardFlow(self, rewards, data, packageRewards):
+    def startRewardFlow(self, rewards, data, packageRewards, starterPack):
         defaultRewards, chapterStyle = separateRewards(rewards)
-        self.__machine.saveRewards(data, defaultRewards, chapterStyle, packageRewards)
+        self.__machine.saveRewards(data, defaultRewards, chapterStyle, packageRewards, starterPack)
         if not self.__machine.isRunning():
             self.__startAfterTurningOnMachine = True
         else:

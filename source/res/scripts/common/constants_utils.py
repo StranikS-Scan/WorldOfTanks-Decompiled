@@ -231,7 +231,7 @@ def addBattleResultsConfig(arenaBonusType, config):
     else:
         from battle_results import battle_results_constants
         module = config.__name__
-        battle_results_constants.PATH_TO_CONFIG.update({arenaBonusType: module})
+        battle_results_constants.PATH_TO_CONFIG.setdefault(arenaBonusType, []).append(module)
         return
 
 
@@ -290,6 +290,7 @@ class AbstractBattleMode(object):
     _SM_TYPES = []
     _CLIENT_SM_TYPES = []
     _FAIRPLAY_VEHICLE_BATTLE_STATS_COMPONENT = None
+    _CLIENT_SETTINGS_VIEW_ALIAS = None
 
     def __init__(self, personality):
         self._personality = personality
@@ -361,6 +362,10 @@ class AbstractBattleMode(object):
     @property
     def _client_platoonLayouts(self):
         return None
+
+    @property
+    def _client_readyVehicleCheckers(self):
+        return []
 
     @property
     def _client_gameControllers(self):
@@ -563,6 +568,10 @@ class AbstractBattleMode(object):
     def _client_prebattleCtrlMode(self):
         return None
 
+    @property
+    def _client_modeHiddenVehiclesCriteria(self):
+        return None
+
     def registerHangarEventBanner(self):
         if IS_CLIENT:
             if self._client_hangarEventBannerType is not None:
@@ -665,6 +674,9 @@ class AbstractBattleMode(object):
         prb_utils.addBattleSelectorSquadItem(self._CLIENT_PRB_ACTION_NAME_SQUAD, self._client_selectorSquadItemsCreator, self._personality)
         prb_utils.addPrbClientCombinedIds(self._PREBATTLE_TYPE, PREBATTLE_TYPE.UNIT, self._personality)
         self.registerClientSquadFinder()
+        if self._client_readyVehicleCheckers:
+            from gui.shared.system_factory import registerReadyVehicleChekers
+            registerReadyVehicleChekers(self._QUEUE_TYPE, self._client_readyVehicleCheckers)
 
     def registerClientSquadFinder(self):
         from gui.prb_control import prb_utils
@@ -706,6 +718,13 @@ class AbstractBattleMode(object):
 
     def registerVehicleTags(self):
         addVehicleTags(self._UNIT_MGR_FLAGS, self._REQUIRED_VEHICLE_TAGS, self._FORBIDDEN_VEHICLE_TAGS, self._NEW_VEHICLES_TAGS, self._personality)
+
+    def registerClientVehicleTags(self, extConstants):
+        extConstants.VEHICLE_TAGS.inject(self._personality)
+        if self._client_modeHiddenVehiclesCriteria is not None:
+            from gui.shared.system_factory import registerModeHiddenVehiclesCriteria
+            registerModeHiddenVehiclesCriteria(self._ARENA_BONUS_TYPE, self._client_modeHiddenVehiclesCriteria)
+        return
 
     def registerClientSeasonType(self, extConstants):
         extConstants.GameSeasonType.inject(self._personality)
@@ -893,7 +912,11 @@ class AbstractBattleMode(object):
             registerHangarDynamicGuiProvider(self._QUEUE_TYPE, self._client_hangarDynamicGuiProvider)
 
     def registerNonReplayMode(self):
-        ARENA_BONUS_TYPE.REPLAY_DISABLE_RANGE.append(self._ARENA_BONUS_TYPE)
+        ARENA_GUI_TYPE.REPLAY_DISABLE_RANGE.append(self._ARENA_GUI_TYPE)
+
+    def registerDevReplayMode(self):
+        if not constants.IS_DEVELOPMENT:
+            self.registerNonReplayMode()
 
     def registerControlModes(self):
         from AvatarInputHandler import OVERWRITE_CTRLS_DESC_MAP, addEmptyIfNotExits
@@ -911,7 +934,7 @@ class AbstractBattleMode(object):
         registerGuiItemsCacheInvalidators(self._client_guiItemsCacheInvalidators)
 
     def registerPrbTypeForWotPlusAssistant(self, loadoutType):
-        from gui.game_control.wot_plus_assistant import registerAllowedPrebattleType
+        from gui.game_control.wot_plus.wot_plus_assistant import registerAllowedPrebattleType
         registerAllowedPrebattleType(self._PREBATTLE_TYPE, loadoutType)
 
     def registerPrebattleCtrlMode(self):
@@ -921,3 +944,7 @@ class AbstractBattleMode(object):
     def registerDisplayedClassTagGetter(self):
         from gui.shared.system_factory import registerDisplayedClassTagGetter
         registerDisplayedClassTagGetter(self._ARENA_GUI_TYPE, self._client_displayedClassTagGetter)
+
+    def registerSettingsWindow(self):
+        from gui.Scaleform.daapi.view.lobby.lobby_constants import registerSettingsWindow
+        registerSettingsWindow(self._PREBATTLE_TYPE, self._CLIENT_SETTINGS_VIEW_ALIAS)

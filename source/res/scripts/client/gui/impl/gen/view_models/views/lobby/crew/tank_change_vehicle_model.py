@@ -5,38 +5,38 @@ from gui.impl.gen.view_models.views.lobby.common.vehicle_model import VehicleMod
 class TankChangeVehicleModel(VehicleModel):
     __slots__ = ()
 
-    def __init__(self, properties=16, commands=0):
+    def __init__(self, properties=15, commands=0):
         super(TankChangeVehicleModel, self).__init__(properties=properties, commands=commands)
 
     def getIsInInventory(self):
-        return self._getBool(11)
+        return self._getBool(10)
 
     def setIsInInventory(self, value):
-        self._setBool(11, value)
+        self._setBool(10, value)
 
     def getIsElite(self):
-        return self._getBool(12)
+        return self._getBool(11)
 
     def setIsElite(self, value):
-        self._setBool(12, value)
+        self._setBool(11, value)
 
     def getIsSelected(self):
-        return self._getBool(13)
+        return self._getBool(12)
 
     def setIsSelected(self, value):
-        self._setBool(13, value)
+        self._setBool(12, value)
 
     def getIsTrainingAvailable(self):
-        return self._getBool(14)
+        return self._getBool(13)
 
     def setIsTrainingAvailable(self, value):
-        self._setBool(14, value)
+        self._setBool(13, value)
 
     def getIsWotPlusVehicle(self):
-        return self._getBool(15)
+        return self._getBool(14)
 
     def setIsWotPlusVehicle(self, value):
-        self._setBool(15, value)
+        self._setBool(14, value)
 
     def _initialize(self):
         super(TankChangeVehicleModel, self)._initialize()

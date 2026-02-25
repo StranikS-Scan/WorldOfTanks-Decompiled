@@ -81,5 +81,5 @@ class BattleAbilityTooltipData(ToolTipBaseData):
 
     @staticmethod
     def getDisplayableData(intCD, *args, **kwargs):
-        parent = kwargs.get('parent', None)
+        parent = kwargs.get('parent')
         return DecoratedTooltipWindow(BattleAbilityTooltipView(intCD, *args, **kwargs), parent, useDecorator=False)

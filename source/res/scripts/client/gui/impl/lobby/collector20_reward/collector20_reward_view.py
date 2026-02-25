@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/collector20_reward/collector20_reward_view.py
+from __future__ import absolute_import
 from constants import DOSSIER_TYPE
 from frameworks.wulf import ViewSettings, WindowFlags
 from gui.impl.gen import R

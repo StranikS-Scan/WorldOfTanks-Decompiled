@@ -67,12 +67,6 @@ class BaseAccessor(object):
         self._data_source = data_source
 
 
-class AdventCalendarAccessor(BaseAccessor):
-
-    def advent_calendar_fetch_hero_tank_info(self, callback):
-        return self._data_source.advent_calendar_fetch_hero_tank_info(callback)
-
-
 class CrafmachineAccessor(BaseAccessor):
 
     def craftmachine_modules_info(self, callback):
@@ -458,7 +452,6 @@ class Requester(object):
     available_data_sources = {'stagings': StagingDataAccessor,
      'fake': FakeDataAccessor,
      'gateway': GatewayDataAccessor}
-    advent_calendar = RequestDescriptor(AdventCalendarAccessor)
     global_map = RequestDescriptor(GmAccessor)
     ratings = RequestDescriptor(RatingAccessor)
     strongholds = RequestDescriptor(StrongholdsAccessor)

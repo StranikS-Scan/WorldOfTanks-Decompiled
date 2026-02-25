@@ -31,9 +31,10 @@ class SchemaManager(BaseSchemaManager[ClientSchemaInfo]):
             schema = schemaInfo.schema
             if schema.gpKey in serverSettings:
                 rawConfig = serverSettings[schema.gpKey]
-                self._models[schema.gpKey] = schema.deserialize(rawConfig, filter_=clientFilter, skipValidation=schemaInfo.skipValidation)
-                from PlayerEvents import g_playerEvents
-                g_playerEvents.onConfigModelUpdated(schema.gpKey)
+                if rawConfig:
+                    self._models[schema.gpKey] = schema.deserialize(rawConfig, filter_=clientFilter, skipValidation=schemaInfo.skipValidation)
+                    from PlayerEvents import g_playerEvents
+                    g_playerEvents.onConfigModelUpdated(schema.gpKey)
 
     def update(self, serverSettingsDiff):
         for schemaInfo in self.getSchemasInfo():

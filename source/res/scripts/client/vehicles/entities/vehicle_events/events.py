@@ -18,6 +18,7 @@ class VehicleEvents(ClientEventsContainer, IVehicleEventsLogic):
         self.onSiegeStateUpdated = self._createEvent()
         self.onVehicleDestroyed = self._createEvent()
         self.onCollectAmmoStates = self._createEvent()
+        self.onCollectShotParams = self._createEvent()
         self.onDynamicComponentCreated = self._createEvent()
         self.onDynamicComponentDestroyed = self._createEvent()
         self.onDiscreteShotDone = self._createEvent()
@@ -40,7 +41,7 @@ class VehicleEvents(ClientEventsContainer, IVehicleEventsLogic):
 
 
 class VehicleEventsDebugger(ClientEventsContainerDebugger):
-    IGNORED_EVENTS = ClientEventsContainerDebugger.IGNORED_EVENTS + ('onAppearanceReady', 'onCollectAmmoStates', 'onDiscreteShotDone', 'onShowDamageFromShot', 'onVehicleHealthChanged')
+    IGNORED_EVENTS = ClientEventsContainerDebugger.IGNORED_EVENTS + ('onAppearanceReady', 'onCollectAmmoStates', 'onCollectShotParams', 'onDiscreteShotDone', 'onShowDamageFromShot', 'onVehicleHealthChanged')
 
     def __init__(self, events, vehicleID):
         super(VehicleEventsDebugger, self).__init__(events)

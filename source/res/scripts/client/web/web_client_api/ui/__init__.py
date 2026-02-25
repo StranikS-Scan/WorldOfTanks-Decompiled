@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/__init__.py
 from web.web_client_api import w2capi, w2c, W2CSchema
+from web.web_client_api.battle_pass import BattlePassWebApiMixin
 from web.web_client_api.seniority_awards import OpenSeniorityAwardsWebApi
 from web.web_client_api.ui import hangar
 from web.web_client_api.ui.badges import BadgesWebApiMixin
@@ -12,7 +13,6 @@ from web.web_client_api.ui.browser import CloseBrowserWindowWebApiMixin
 from web.web_client_api.ui.browser import OpenBrowserOverlayWebApiMixin, OpenBuyGoldWebApiMixin
 from web.web_client_api.ui.browser import OpenBrowserWindowWebApiMixin
 from web.web_client_api.ui.browser import OpenExternalBrowserWebApiMixin
-from web.web_client_api.ui.calendar import OpenCalendarWindowWebApiMixin
 from web.web_client_api.ui.chat import ChatWebApiMixin
 from web.web_client_api.ui.clan import ClanWindowWebApiMixin
 from web.web_client_api.ui.dialogs import DialogsWebApiMixin
@@ -40,7 +40,7 @@ from web.web_client_api.ui.vehicle import VehicleSellWebApiMixin
 from web.web_client_api.ui.waiting import WaitingWebApiMixin
 
 @w2capi(name='open_window', key='window_id')
-class OpenWindowWebApi(OpenBrowserWindowWebApiMixin, ClanWindowWebApiMixin, ProfileWindowWebApiMixin, OpenExternalBrowserWebApiMixin, VehicleSellWebApiMixin, hangar.HangarWindowsWebApiMixin, BoostersWindowWebApiMixin, ManualPageWebApiMixin, ChatWebApiMixin, SquadWebApiMixin, OpenBrowserOverlayWebApiMixin, PremiumViewsWebApiMixin, OpenCalendarWindowWebApiMixin, OpenBuyGoldWebApiMixin, OpenTankmanWebApiMixin, DialogsWebApiMixin, OpenRankedPagesMixin, OpenSeniorityAwardsWebApi):
+class OpenWindowWebApi(OpenBrowserWindowWebApiMixin, ClanWindowWebApiMixin, ProfileWindowWebApiMixin, OpenExternalBrowserWebApiMixin, VehicleSellWebApiMixin, hangar.HangarWindowsWebApiMixin, BoostersWindowWebApiMixin, ManualPageWebApiMixin, ChatWebApiMixin, SquadWebApiMixin, OpenBrowserOverlayWebApiMixin, PremiumViewsWebApiMixin, OpenBuyGoldWebApiMixin, OpenTankmanWebApiMixin, DialogsWebApiMixin, OpenRankedPagesMixin, OpenSeniorityAwardsWebApi):
     pass
 
 
@@ -55,7 +55,7 @@ class CloseViewWebApi(CloseBrowserViewWebApiMixin):
 
 
 @w2capi(name='open_tab', key='tab_id')
-class OpenTabWebApi(hangar.HangarTabWebApiMixin, ProfileTabWebApiMixin, VehiclePreviewWebApiMixin, TechTreeTabWebApiMixin, VehicleComparisonBasketWebApiMixin, MissionsWebApiMixin, BarracksWebApiMixin, ShopWebApiMixin, StorageWebApiMixin, StrongholdsWebApiMixin, PersonalMissionsWebApiMixin, BadgesWebApiMixin, OpenFrontLinePagesMixin, ReferralProgramPagesMixin, OpenMapsTrainingMixin, OpenBattleRoyaleHangarMixin):
+class OpenTabWebApi(hangar.HangarTabWebApiMixin, ProfileTabWebApiMixin, VehiclePreviewWebApiMixin, TechTreeTabWebApiMixin, VehicleComparisonBasketWebApiMixin, MissionsWebApiMixin, BarracksWebApiMixin, ShopWebApiMixin, StorageWebApiMixin, StrongholdsWebApiMixin, PersonalMissionsWebApiMixin, BadgesWebApiMixin, OpenFrontLinePagesMixin, ReferralProgramPagesMixin, OpenMapsTrainingMixin, OpenBattleRoyaleHangarMixin, BattlePassWebApiMixin):
 
     @classmethod
     def addTabIdCallback(cls, tabId, callback):

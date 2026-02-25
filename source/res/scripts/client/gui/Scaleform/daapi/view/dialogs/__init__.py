@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/__init__.py
+from __future__ import absolute_import
 import BigWorld
 from constants import ACCOUNT_KICK_REASONS, IS_CHINA
 from gui import makeHtmlString

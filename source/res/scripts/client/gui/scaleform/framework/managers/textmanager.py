@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/managers/TextManager.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from debug_utils import LOG_ERROR
 from gui.Scaleform.framework.entities.abstract.TextManagerMeta import TextManagerMeta
 from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES as _TMS
@@ -9,7 +11,7 @@ class TextManager(TextManagerMeta):
 
     def __init__(self):
         super(TextManager, self).__init__()
-        self.__styles = text_styles.getRawStyles([ v for k, v in _TMS.__dict__.iteritems() if not k.startswith('_') ])
+        self.__styles = text_styles.getRawStyles([ v for k, v in viewitems(_TMS.__dict__) if not k.startswith('_') ])
 
     def getTextStyle(self, style):
         if style in self.__styles:

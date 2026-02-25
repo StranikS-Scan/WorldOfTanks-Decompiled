@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/managers/GameInputMgr.py
+from __future__ import absolute_import
 import typing
 import Keys
 import CommandMapping
@@ -29,7 +30,7 @@ class GameInputMgr(GameInputManagerMeta):
     def handleGlobalKeyEvent(self, keyCode, eventType):
         LOG_DEBUG('GameInputMgr.handleGlobalKeyEvent', keyCode, eventType)
         if keyCode == self.__voiceChatKey:
-            self.bwProto.voipController.setMicrophoneMute(True if eventType == _KEY_UP else False)
+            self.bwProto.voipController.setMicrophoneMute(eventType == _KEY_UP)
         if keyCode == _KEY_ESCAPE:
             self.onEscape()
 

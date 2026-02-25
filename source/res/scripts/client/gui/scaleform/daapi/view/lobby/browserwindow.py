@@ -1,16 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/BrowserWindow.py
+from __future__ import absolute_import
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.BrowserWindowMeta import BrowserWindowMeta
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared import event_bus_handlers, events, EVENT_BUS_SCOPE
+from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.game_control import IBrowserController
 
 class BrowserWindow(BrowserWindowMeta):
-    __metaclass__ = event_bus_handlers.EventBusListener
     browserCtrl = dependency.descriptor(IBrowserController)
 
     def __init__(self, ctx=None):
@@ -46,8 +46,12 @@ class BrowserWindow(BrowserWindowMeta):
         self.as_setSizeS(*self.__size)
         if self.__showWaiting:
             self.as_showWaitingS(backport.msgid(R.strings.waiting.loadContent()), {})
+        self.addListener(events.HideWindowEvent.HIDE_BROWSER_WINDOW, self.__handleBrowserClose, scope=EVENT_BUS_SCOPE.LOBBY)
 
-    @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_BROWSER_WINDOW, EVENT_BUS_SCOPE.LOBBY)
+    def _dispose(self):
+        self.removeListener(events.HideWindowEvent.HIDE_BROWSER_WINDOW, self.__handleBrowserClose, scope=EVENT_BUS_SCOPE.LOBBY)
+        super(BrowserWindow, self)._dispose()
+
     def __handleBrowserClose(self, event):
         if event.ctx.get('browserID') == self.__browserID:
             self.destroy()

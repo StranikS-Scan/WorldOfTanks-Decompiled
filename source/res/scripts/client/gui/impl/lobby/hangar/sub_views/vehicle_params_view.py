@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/hangar/sub_views/vehicle_params_view.py
 from __future__ import absolute_import, division
 import json
+import typing
 from future.utils import iteritems
 from account_helpers import AccountSettings
 from gui import GUI_SETTINGS
@@ -26,6 +27,8 @@ from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IIGRController
 from skeletons.gui.shared import IItemsCache
+if typing.TYPE_CHECKING:
+    from typing import List
 _HIGHLIGHT_TYPE_STATE_MAP = {PARAM_STATE.BETTER: HighlightType.INCREASE,
  PARAM_STATE.WORSE: HighlightType.DECREASE,
  PARAM_STATE.SITUATIONAL: HighlightType.SITUATIONAL}
@@ -468,16 +471,16 @@ class VehicleSkillPreviewParamsPresenter(CurrentVehicleParamsPresenter):
 
     def __init__(self):
         super(VehicleSkillPreviewParamsPresenter, self).__init__()
-        self.__skillName = ''
-        self.__highlightedSkills = ''
+        self.__skillNames = []
+        self.__highlightedSkills = []
 
-    def updateForSkill(self, skillName, highlightedSkills=None):
-        self.__skillName = skillName
+    def updateForSkill(self, skillNames, highlightedSkills=None):
+        self.__skillNames = skillNames
         self.__highlightedSkills = highlightedSkills
         self.updateModel()
 
     def _getComparator(self):
-        return params_helper.skillOnSimilarCrewComparator(self._getVehicle(), self.__skillName, self.__highlightedSkills)
+        return params_helper.skillOnSimilarCrewComparator(self._getVehicle(), self.__skillNames, self.__highlightedSkills)
 
     def _isExtraParamEnabled(self):
         return True

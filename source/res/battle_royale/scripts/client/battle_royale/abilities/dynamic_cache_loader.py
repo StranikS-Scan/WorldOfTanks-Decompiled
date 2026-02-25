@@ -25,7 +25,7 @@ else:
 _logger = logging.getLogger(__name__)
 
 def _getTrapOrRepairPointDescr(equipmentID):
-    print vehicles.g_cache.equipments()
+    _logger.info(vehicles.g_cache.equipments())
     return vehicles.g_cache.equipments()[equipmentID].influenceZone
 
 

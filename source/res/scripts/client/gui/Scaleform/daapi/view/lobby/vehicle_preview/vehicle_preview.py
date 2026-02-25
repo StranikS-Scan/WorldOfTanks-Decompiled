@@ -33,7 +33,6 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.battle_results.states import PostBattleResultsEntryState
 from gui.impl.lobby.hangar.buy_vehicle_view import BuyVehicleWindow
-from gui.impl.lobby.common.view_mixins import HeaderMenuVisibilityState, LobbyHeaderVisibilityAction, LobbyHeaderState
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared import EVENT_BUS_SCOPE, event_bus_handlers, event_dispatcher, events, g_eventBus
 from gui.shared.formatters import getRoleTextWithIcon, text_styles
@@ -65,13 +64,11 @@ _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LEGACY_LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
  VIEW_ALIAS.LOBBY_STORAGE: 'storage',
- VIEW_ALIAS.LOBBY_RESEARCH: 'researchTree',
  VIEW_ALIAS.LOBBY_TECHTREE: 'researchTree',
  VIEW_ALIAS.VEHICLE_COMPARE: 'vehicleCompare',
  VIEW_ALIAS.REFERRAL_PROGRAM_WINDOW: 'referralProgram',
  VIEW_ALIAS.EPIC_BATTLE_PAGE: 'frontline',
  VIEW_ALIAS.RANKED_BATTLE_PAGE: 'ranked',
- VIEW_ALIAS.ADVENT_CALENDAR: 'adventCalendar',
  VIEW_ALIAS.VEH_POST_PROGRESSION: 'vehPostProgression',
  PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS: 'personalAwards',
  VIEW_ALIAS.RENTAL_VEHICLE_PREVIEW: None,
@@ -112,9 +109,8 @@ def _updatePostProgressionParameters():
         return
 
 
-@dependency.replace_none_kwargs(settingsCore=ISettingsCore)
-def _isPostProgressionBulletVisible(settingsCore=None):
-    return g_currentPreviewVehicle.isPostProgressionExists() and not settingsCore.serverSettings.getUIStorage().get(UI_STORAGE_KEYS.VEH_PREVIEW_POST_PROGRESSION_BULLET_SHOWN)
+def _isPostProgressionBulletVisible(settingsCore):
+    return g_currentPreviewVehicle.isPostProgressionExists() and not g_currentPreviewVehicle.item.postProgression.isVehSkillTree() and not settingsCore.serverSettings.getUIStorage().get(UI_STORAGE_KEYS.VEH_PREVIEW_POST_PROGRESSION_BULLET_SHOWN)
 
 
 def _getModulesTabIdx():
@@ -138,7 +134,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self._itemsPack = ctx.get('itemsPack')
         if self._backAlias == VIEW_ALIAS.LOBBY_STORE or self._itemsPack is not None:
             self._COMMON_SOUND_SPACE = SHOP_PREVIEW_SOUND_SPACE
-        elif self._backAlias in (VIEW_ALIAS.LOBBY_TECHTREE, VIEW_ALIAS.LOBBY_RESEARCH):
+        elif self._backAlias in (VIEW_ALIAS.LOBBY_TECHTREE,):
             self._COMMON_SOUND_SPACE = RESEARCH_PREVIEW_SOUND_SPACE
         elif self._backAlias in (VIEW_ALIAS.RANKED_BATTLE_PAGE, VIEW_ALIAS.VEH_POST_PROGRESSION):
             self._COMMON_SOUND_SPACE = VEHICLE_PREVIEW_SOUND_SPACE
@@ -151,7 +147,6 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self._previousBackAlias = ctx.get('previousBackAlias')
         self._previewBackCb = ctx.get('previewBackCb')
         self.__isHeroTank = ctx.get('isHeroTank', False)
-        self.__isHiddenMenu = ctx.get('isHiddenMenu', False)
         self.__customizationCD = (ctx.get('vehParams') or {}).get('styleCD')
         self.__offers = ctx.get('offers')
         self._price = ctx.get('price', MONEY_UNDEFINED)
@@ -231,8 +226,6 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         for event, callback in self.__subscriptions:
             event += callback
 
-        if self.__isHiddenMenu:
-            self._updateTopMenu(HeaderMenuVisibilityState.NOTHING, LobbyHeaderVisibilityAction.ENTER)
         return
 
     def _dispose(self):
@@ -264,8 +257,6 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             g_currentPreviewVehicle.resetAppearance()
             if self.__isHeroTank:
                 g_currentPreviewVehicle.selectHeroTank(False)
-        if self.__isHiddenMenu:
-            self._updateTopMenu(HeaderMenuVisibilityState.ALL, LobbyHeaderVisibilityAction.EXIT)
         g_eventBus.removeListener(OFFER_CHANGED_EVENT, self.__onOfferChanged)
         g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self.__onViewLoaded, scope=EVENT_BUS_SCOPE.LOBBY)
         for event, callback in self.__subscriptions:
@@ -317,9 +308,6 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
 
     def _createSelectableLogic(self):
         return PreviewSelectableLogic()
-
-    def _updateTopMenu(self, state, action):
-        g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': LobbyHeaderState(self.alias, state, action)}), EVENT_BUS_SCOPE.LOBBY)
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         if alias == VEHPREVIEW_CONSTANTS.TOP_PANEL_TABS_PY_ALIAS:
@@ -514,9 +502,9 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.__currentOffer = event.ctx.get('offer')
 
     def __updateModuleBullet(self):
-        self.as_setBulletVisibilityS(_getModulesTabIdx(), _isPostProgressionBulletVisible())
+        self.as_setBulletVisibilityS(_getModulesTabIdx(), _isPostProgressionBulletVisible(self.__settingsCore))
 
     def _resetPostProgressionBullet(self):
-        if _isPostProgressionBulletVisible(settingsCore=self.__settingsCore):
+        if _isPostProgressionBulletVisible(self.__settingsCore):
             self.__settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.VEH_PREVIEW_POST_PROGRESSION_BULLET_SHOWN: True})
             self.__updateModuleBullet()

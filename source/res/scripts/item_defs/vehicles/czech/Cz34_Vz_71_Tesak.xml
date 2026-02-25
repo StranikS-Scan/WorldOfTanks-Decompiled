@@ -73,6 +73,13 @@
       <undamaged>	vehicles/czech/Cz34_Vz_71_Tesak/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/czech/Cz34_Vz_71_Tesak/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/czech/Cz34_Vz_71_Tesak/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <Cz34_Vz_71_Tesak_BPXIX_3Dst>
+          <undamaged>	vehicles/czech/Cz34_Vz_71_Tesak/_skins/Cz34_Vz_71_Tesak_BPXIX_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/czech/Cz34_Vz_71_Tesak/_skins/Cz34_Vz_71_Tesak_BPXIX_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/czech/Cz34_Vz_71_Tesak/_skins/Cz34_Vz_71_Tesak_BPXIX_3Dst/crash/lod0/Hull.model	</exploded>
+        </Cz34_Vz_71_Tesak_BPXIX_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -99,6 +106,16 @@
         <rayEnd>	0.294598 0.071795 2.190317	</rayEnd>
         <rayUp>	-0.047048 0.30406 -0.95149	</rayUp>
         <size>	0.3	</size>
+        <isUVProportional>	false	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10001	</slotId>
+        <rayStart>	0.663573 0.122166 2.75144	</rayStart>
+        <rayEnd>	0.67486 -0.06788 2.690156	</rayEnd>
+        <rayUp>	-0.047036 0.304034 -0.951499	</rayUp>
+        <compatibleModels>	Cz34_Vz_71_Tesak_BPXIX_3Dst	</compatibleModels>
+        <size>	0.27	</size>
         <isUVProportional>	false	</isUVProportional>
       </slot>
       <slot>
@@ -1035,6 +1052,47 @@
         <showOn>	16	</showOn>
         <clipAngle>	0.843381	</clipAngle>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15086	</slotId>
+        <position>	-0.774548 1.362772 1.435825	</position>
+        <rotation>	0.324545 -0.001763 -2.993204	</rotation>
+        <scale>	0.466481 0.255104 0.466483	</scale>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Cz34_Vz_71_Tesak_BPXIX_3Dst	</compatibleModels>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.843382	</clipAngle>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15087	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Cz34_Vz_71_Tesak_BPXIX_3Dst	</compatibleModels>
+        <position>	-1.73735 0.886309 2.071776	</position>
+        <rotation>	1.452104 1.576986 0.002761	</rotation>
+        <scale>	0.382795 0.22982 0.382796	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.843382	</clipAngle>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15088	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Cz34_Vz_71_Tesak_BPXIX_3Dst	</compatibleModels>
+        <position>	1.737 0.886309 2.07178	</position>
+        <rotation>	1.452114 -1.576905 -0.002793	</rotation>
+        <scale>	0.382795 0.229819 0.382796	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.843382	</clipAngle>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <hiddenForUser>	true	</hiddenForUser>
+        <scale>	1 1 1	</scale>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1076,6 +1134,13 @@
         <undamaged>	vehicles/czech/Cz34_Vz_71_Tesak/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/czech/Cz34_Vz_71_Tesak/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/czech/Cz34_Vz_71_Tesak/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <Cz34_Vz_71_Tesak_BPXIX_3Dst>
+            <undamaged>	vehicles/czech/Cz34_Vz_71_Tesak/_skins/Cz34_Vz_71_Tesak_BPXIX_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz34_Vz_71_Tesak/_skins/Cz34_Vz_71_Tesak_BPXIX_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/czech/Cz34_Vz_71_Tesak/_skins/Cz34_Vz_71_Tesak_BPXIX_3Dst/crash/lod0/Chassis.model	</exploded>
+          </Cz34_Vz_71_Tesak_BPXIX_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1089,7 +1154,7 @@
           <trackPairIdx>	0	</trackPairIdx>
           <leftMaterial>	track_mat_L_skinned	</leftMaterial>
           <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-          <textureScale>	-1.1	</textureScale>
+          <textureScale>	-2.4	</textureScale>
           <trackDebris>
             <isLeft>	true	</isLeft>
             <destructionEffect></destructionEffect>
@@ -1171,6 +1236,45 @@
                   <row1>	0.000000 -0.159122 0.254323	</row1>
                   <row2>	0.000000 -0.374771 -0.234482	</row2>
                   <row3>	-1.312950 1.087463 -3.082884	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	Cz34_Vz_71_Tesak_BPXIX_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	2.212130 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.236000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.038000	</row2>
+                  <row3>	0.000000 0.800000 -0.195597	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.748000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.224336	</row2>
+                  <row3>	0.051000 1.308000 0.021000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.283000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.179913 0.240065	</row1>
+                  <row2>	0.000000 -0.353760 0.265121	</row2>
+                  <row3>	0.000000 1.153771 3.286738	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.315639 0.000000 0.000000	</row0>
+                  <row1>	0.000000 -0.006609 0.299927	</row1>
+                  <row2>	0.000000 -0.441973 -0.009739	</row2>
+                  <row3>	0.000000 1.005167 3.466354	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.756000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.473000	</row2>
+                  <row3>	-1.799296 0.792000 0.043719	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.321000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 -0.159122 0.254323	</row1>
+                  <row2>	0.000000 -0.374771 -0.234482	</row2>
+                  <row3>	0.000000 1.087463 -3.082884	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1258,6 +1362,45 @@
                   <row3>	1.353514 1.087460 -3.082880	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	Cz34_Vz_71_Tesak_BPXIX_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	2.212130 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.236000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.038000	</row2>
+                  <row3>	0.000000 0.800000 -0.195597	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.748000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.224340	</row2>
+                  <row3>	0.051000 1.308000 0.021000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.283000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.179913 0.240065	</row1>
+                  <row2>	0.000000 -0.353760 0.265121	</row2>
+                  <row3>	0.000000 1.153770 3.286740	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.315640 0.000000 0.000000	</row0>
+                  <row1>	0.000000 -0.006609 0.299927	</row1>
+                  <row2>	0.000000 -0.441973 -0.009739	</row2>
+                  <row3>	0.000000 1.005170 3.466350	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.324000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.756000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.473000	</row2>
+                  <row3>	1.818000 1.033311 0.043719	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.321000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 -0.159122 0.254323	</row1>
+                  <row2>	0.000000 -0.374771 -0.234482	</row2>
+                  <row3>	0.000000 1.087460 -3.082880	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
         </trackPair>
@@ -1343,7 +1486,7 @@
         <slot>
           <slotType>	paint	</slotType>
           <slotId>	21000	</slotId>
-          <anchorPosition>	-1.586573 0.42800 0.053801	</anchorPosition>
+          <anchorPosition>	-1.586573 0.428 0.053801	</anchorPosition>
           <anchorDirection>	-0.945614 0.3239 0.030048	</anchorDirection>
         </slot>
         <slot>
@@ -2392,6 +2535,19 @@
               <anchorShift>	0.586913	</anchorShift>
             </slot>
             <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45012	</slotId>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	Cz34_Vz_71_Tesak_BPXIX_3Dst	</compatibleModels>
+              <position>	0.000016 2.31475 -1.589264	</position>
+              <rotation>	3.141593 0 0	</rotation>
+              <scale>	0.601146 0.119817 0.601148	</scale>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.843382	</clipAngle>
+              <verticalMirror>	true	</verticalMirror>
+              <anchorShift>	0.05	</anchorShift>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	-0.13 0.1 2.5	</rayStart>
@@ -2411,6 +2567,26 @@
               <size>	0.5	</size>
               <isUVProportional>	false	</isUVProportional>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49002	</slotId>
+              <compatibleModels>	Cz34_Vz_71_Tesak_BPXIX_3Dst	</compatibleModels>
+              <rayStart>	-0.13 0.1 2.9	</rayStart>
+              <rayEnd>	-0.13 0.1 3.32	</rayEnd>
+              <rayUp>	0.06 0 0	</rayUp>
+              <size>	0.42	</size>
+              <isUVProportional>	false	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49003	</slotId>
+              <compatibleModels>	Cz34_Vz_71_Tesak_BPXIX_3Dst	</compatibleModels>
+              <rayStart>	0.19 0.1 2.9	</rayStart>
+              <rayEnd>	0.19 0.1 3.32	</rayEnd>
+              <rayUp>	0.06 0 0	</rayUp>
+              <size>	0.42	</size>
+              <isUVProportional>	false	</isUVProportional>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -2422,6 +2598,13 @@
             <undamaged>	vehicles/czech/Cz34_Vz_71_Tesak/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/czech/Cz34_Vz_71_Tesak/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/czech/Cz34_Vz_71_Tesak/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <Cz34_Vz_71_Tesak_BPXIX_3Dst>
+                <undamaged>	vehicles/czech/Cz34_Vz_71_Tesak/_skins/Cz34_Vz_71_Tesak_BPXIX_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/czech/Cz34_Vz_71_Tesak/_skins/Cz34_Vz_71_Tesak_BPXIX_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/czech/Cz34_Vz_71_Tesak/_skins/Cz34_Vz_71_Tesak_BPXIX_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </Cz34_Vz_71_Tesak_BPXIX_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/czech/Cz34_Vz_71_Tesak/collision/Gun_01.model	</collisionModelServer>
@@ -2438,6 +2621,13 @@
         <undamaged>	vehicles/czech/Cz34_Vz_71_Tesak/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/czech/Cz34_Vz_71_Tesak/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/czech/Cz34_Vz_71_Tesak/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <Cz34_Vz_71_Tesak_BPXIX_3Dst>
+            <undamaged>	vehicles/czech/Cz34_Vz_71_Tesak/_skins/Cz34_Vz_71_Tesak_BPXIX_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz34_Vz_71_Tesak/_skins/Cz34_Vz_71_Tesak_BPXIX_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/czech/Cz34_Vz_71_Tesak/_skins/Cz34_Vz_71_Tesak_BPXIX_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </Cz34_Vz_71_Tesak_BPXIX_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/czech/Cz34_Vz_71_Tesak/collision/Turret_01.model	</collisionModelServer>
@@ -2563,6 +2753,30 @@
           <scale>	0.648583 0.415529 0.648586	</scale>
           <showOn>	256	</showOn>
           <clipAngle>	1.37313	</clipAngle>
+          <anchorShift>	-0.033893	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35007	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Cz34_Vz_71_Tesak_BPXIX_3Dst	</compatibleModels>
+          <position>	-0.559577 1.86077 -0.653601	</position>
+          <rotation>	1.428426 -0.000089 3.141508	</rotation>
+          <scale>	0.304819 0.130192 0.304819	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.236081	</clipAngle>
+          <anchorShift>	-0.033893	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35008	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Cz34_Vz_71_Tesak_BPXIX_3Dst	</compatibleModels>
+          <position>	0.56 1.86077 -0.653601	</position>
+          <rotation>	1.428427 -0.000089 3.141508	</rotation>
+          <scale>	0.304819 0.130192 0.304819	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.236081	</clipAngle>
           <anchorShift>	-0.033893	</anchorShift>
         </slot>
       </customizationSlots>

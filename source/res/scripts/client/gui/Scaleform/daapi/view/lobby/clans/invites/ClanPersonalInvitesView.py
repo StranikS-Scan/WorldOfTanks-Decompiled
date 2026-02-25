@@ -140,7 +140,7 @@ class ClanPersonalInvitesView(ClanPersonalInvitesViewMeta, ClanListener):
         self.as_setSelectAllCheckboxStateS(self.dataProvider.areAllSelected(), hasInvites)
 
     def _updateDeclineSelectedText(self, count):
-        self.as_setDeclineAllSelectedInvitesStateS(_ms(CLANS.CLANPERSONALINVITESWINDOW_DECLINESELECTED, count=count), False if count == 0 or self._paginator.isInProgress() else True)
+        self.as_setDeclineAllSelectedInvitesStateS(_ms(CLANS.CLANPERSONALINVITESWINDOW_DECLINESELECTED, count=count), not (count == 0 or self._paginator.isInProgress()))
 
     def _getSecondSortFields(self):
         pass

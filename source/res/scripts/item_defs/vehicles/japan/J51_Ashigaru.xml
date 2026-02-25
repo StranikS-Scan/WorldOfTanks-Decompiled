@@ -84,6 +84,13 @@
       <undamaged>	vehicles/japan/J51_Ashigaru/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/japan/J51_Ashigaru/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/japan/J51_Ashigaru/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <J51_Ashigaru_RW10_3Dst>
+          <undamaged>	vehicles/japan/J51_Ashigaru/_skins/J51_Ashigaru_RW10_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/japan/J51_Ashigaru/_skins/J51_Ashigaru_RW10_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/japan/J51_Ashigaru/_skins/J51_Ashigaru_RW10_3Dst/crash/lod0/Hull.model	</exploded>
+        </J51_Ashigaru_RW10_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -111,6 +118,17 @@
         <rayUp>	0.000052 0.201433 -0.979502	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
+      </slot>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10001	</slotId>
+        <rayStart>	-0.523592 0.574613 1.326112	</rayStart>
+        <rayEnd>	-0.523584 0.18281 1.245538	</rayEnd>
+        <rayUp>	0.000052 0.201432 -0.979503	</rayUp>
+        <compatibleModels>	J51_Ashigaru_RW10_3Dst	</compatibleModels>
+        <size>	0.38	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isUVProportional>	false	</isUVProportional>
       </slot>
       <slot>
         <slotType>	paint	</slotType>
@@ -603,6 +621,22 @@
         <applyType>	universal	</applyType>
         <size>	medium	</size>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <scale>	1 1 1	</scale>
+        <hiddenForUser>	true	</hiddenForUser>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18004	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <scale>	1 1 1	</scale>
+        <hiddenForUser>	true	</hiddenForUser>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -644,6 +678,13 @@
         <undamaged>	vehicles/japan/J51_Ashigaru/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/japan/J51_Ashigaru/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/japan/J51_Ashigaru/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <J51_Ashigaru_RW10_3Dst>
+            <undamaged>	vehicles/japan/J51_Ashigaru/_skins/J51_Ashigaru_RW10_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/japan/J51_Ashigaru/_skins/J51_Ashigaru_RW10_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/japan/J51_Ashigaru/_skins/J51_Ashigaru_RW10_3Dst/crash/lod0/Chassis.model	</exploded>
+          </J51_Ashigaru_RW10_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1076,6 +1117,13 @@
             <undamaged>	vehicles/japan/J51_Ashigaru/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/japan/J51_Ashigaru/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/japan/J51_Ashigaru/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <J51_Ashigaru_RW10_3Dst>
+                <undamaged>	vehicles/japan/J51_Ashigaru/_skins/J51_Ashigaru_RW10_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/japan/J51_Ashigaru/_skins/J51_Ashigaru_RW10_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/japan/J51_Ashigaru/_skins/J51_Ashigaru_RW10_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </J51_Ashigaru_RW10_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/japan/J51_Ashigaru/collision/Gun_02.model	</collisionModelServer>
@@ -1112,6 +1160,16 @@
               <applyToFabric>	false	</applyToFabric>
               <size>	0.63	</size>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <compatibleModels>	J51_Ashigaru_RW10_3Dst	</compatibleModels>
+              <rayStart>	0 0.03 2.245	</rayStart>
+              <rayEnd>	0 0.03 2.705	</rayEnd>
+              <rayUp>	0.16 0 0	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <size>	0.46	</size>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -1130,6 +1188,13 @@
         <undamaged>	vehicles/japan/J51_Ashigaru/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/japan/J51_Ashigaru/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/japan/J51_Ashigaru/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <J51_Ashigaru_RW10_3Dst>
+            <undamaged>	vehicles/japan/J51_Ashigaru/_skins/J51_Ashigaru_RW10_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/japan/J51_Ashigaru/_skins/J51_Ashigaru_RW10_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/japan/J51_Ashigaru/_skins/J51_Ashigaru_RW10_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </J51_Ashigaru_RW10_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/japan/J51_Ashigaru/collision/Turret_01.model	</collisionModelServer>

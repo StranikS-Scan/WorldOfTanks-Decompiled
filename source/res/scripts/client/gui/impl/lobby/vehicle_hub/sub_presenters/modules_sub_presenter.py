@@ -234,6 +234,9 @@ class ModulesSubPresenter(SubPresenterBase):
     def invalidateVehPostProgression(self):
         self.redraw()
 
+    def clearSelectedNation(self):
+        pass
+
     def _subscribe(self):
         super(ModulesSubPresenter, self)._subscribe()
         self.__listener = TTListenerDecorator()

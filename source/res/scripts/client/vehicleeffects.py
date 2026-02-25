@@ -8,12 +8,11 @@ from Math import Vector3, Vector4, Matrix
 from constants import VEHICLE_HIT_EFFECT
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_DEBUG_DEV
 from items import vehicles
-from helpers_common import decodeSegment, getComponentIndexFromEncodedSegment, HitParamsEncoder
+from helpers_common import decodeSegment, getComponentIndexFromEncodedSegment, HitParamsEncoder, decodeStickerIdData
 from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames
 if typing.TYPE_CHECKING:
     from Entity import PyFixedDictDataInstance
     from BigWorld import CollisionComponent
-    from VehicleStickers import DamageStickerData
     from typing import Optional, Union, TypeVar, List, Tuple
     TYPE_VEH_HIT_POINT = TypeVar('TYPE_VEH_HIT_POINT', bound=PyFixedDictDataInstance)
 DUMMY_NODE_PREFIX = 'DM'
@@ -159,17 +158,15 @@ class DamageFromShotDecoder(object):
 
     @classmethod
     def parseDamageStickerHitPoint(cls, hitPoint, collisions, segLength=None):
-        from VehicleStickers import damageStickerData, parametrizedDamageStickerData, resizeSegment
+        from VehicleStickers import DamageStickerData, resizeSegment
         parsedHitPoint = DamageFromShotDecoder.parseHitPoint(hitPoint, collisions)
         if parsedHitPoint is None:
             return
         else:
-            componentIdx, stickerID, segStart, segEnd, hitType, shellType, caliber = parsedHitPoint
+            componentIdx, data, segStart, segEnd, hitType, shellType, caliber = parsedHitPoint
             segStart, segEnd = resizeSegment(segStart, segEnd, segLength)
-            if hitPoint['params'] != HitParamsEncoder.INVALID_HIT_PARAMS:
-                data = parametrizedDamageStickerData(componentIdx, segStart, segEnd, caliber, hitType, shellType)
-            else:
-                data = damageStickerData(componentIdx, segStart, segEnd)
+            stickerID, isParametrized = decodeStickerIdData(data)
+            data = DamageStickerData(componentIdx, segStart, segEnd, isParametrized, caliber, hitType, shellType)
             return (stickerID, data)
 
 

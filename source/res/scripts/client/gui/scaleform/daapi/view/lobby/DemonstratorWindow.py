@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/DemonstratorWindow.py
+from __future__ import absolute_import, division
 import logging
-from itertools import ifilter
+from future.utils import lfilter, viewitems
 from operator import itemgetter
+from past.utils import old_div
 import ArenaType
 from CurrentVehicle import g_currentVehicle
 from account_helpers import gameplay_ctx, isDemonstratorExpert
@@ -182,7 +184,7 @@ class DemonstratorWindow(DemonstratorWindowMeta, IGlobalListener):
     def __setMapsList(self):
         self.__mapSelected = 0
         self.__mapListDP.buildList(self.__vehicleSelected.level, self.__availableGameplayTypes[self.__gameplaySelected][0])
-        self.__availableMapsLength = len(list(ifilter(itemgetter('enabled'), self.__mapListDP.collection)))
+        self.__availableMapsLength = len(lfilter(itemgetter('enabled'), self.__mapListDP.collection))
         self.__setSpawnsList()
         self.__setLevelsList()
 
@@ -269,7 +271,7 @@ class ArenasCache(object):
     def __init__(self):
         self.__cache = []
         self.__playerTeam = 1
-        for arenaTypeID, arenaType in ArenaType.g_cache.iteritems():
+        for arenaTypeID, arenaType in viewitems(ArenaType.g_cache):
             if arenaType.explicitRequestOnly or not gameplay_ctx.isCreationEnabled(arenaType.gameplayName, False):
                 continue
             iconRes = R.images.gui.maps.icons.map.num(arenaType.geometryName)
@@ -294,7 +296,7 @@ class ArenasCache(object):
         offset = (upperRight + bottomLeft) * 0.5
 
         def _normalizePoint(posX, posY):
-            return ((posX - offset.x) / mapWidthScale, (posY - offset.y) / mapHeightScale)
+            return (old_div(posX - offset.x, mapWidthScale), old_div(posY - offset.y, mapHeightScale))
 
         for team, teamSpawnPoints in enumerate(arenaType.teamSpawnPoints, 1):
             for spawn, spawnPoint in enumerate(teamSpawnPoints, 1):

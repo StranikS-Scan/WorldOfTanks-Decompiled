@@ -231,13 +231,13 @@ class Stats(object):
             self.__account.shop.waitForSync(partial(self.__berths_onShopSynced, countPacksBerths, callback))
             return
 
-    def setMapsBlackList(self, selectedMaps, callback=None):
+    def setMapsBlackList(self, toAddMapID=0, toRemoveMapID=0, callback=None):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER, 0)
             return
         else:
-            self.__account._doCmdIntArr(AccountCommands.CMD_SET_MAPS_BLACK_LIST, selectedMaps, None if callback is None else (lambda reqID, resID, errorStr, ext={}: callback(resID, errorStr, ext)))
+            self.__account._doCmdInt2(AccountCommands.CMD_UPDATE_MAPS_BLACK_LIST, toAddMapID, toRemoveMapID, None if callback is None else (lambda reqID, resID, errorStr, ext={}: callback(resID, errorStr, ext)))
             return
 
     def setMoney(self, credit, gold=0, freeXP=0, crystal=0, eventCoin=0, bpcoin=0, equipCoin=0, callback=None):

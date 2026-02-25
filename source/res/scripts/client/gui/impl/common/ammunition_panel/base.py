@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/common/ammunition_panel/base.py
+from __future__ import absolute_import
 import logging
 from gui.impl.common.ammunition_panel.ammunition_groups_controller import GROUPS_MAP
 from gui.impl.common.base_sub_model_view import BaseSubModelView

@@ -23,7 +23,6 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
-from gui.game_control import CalendarInvokeOrigin
 from gui.game_control.links import URLMacros
 from gui.game_control.wallet import WalletController
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
@@ -46,7 +45,7 @@ from helpers.i18n import makeString as _ms
 from items_kit_helper import BOX_TYPE, OFFER_CHANGED_EVENT, getActiveOffer, lookupItem, mayObtainForMoney, mayObtainWithMoneyExchange, showItemTooltip
 from shared_utils import findFirst
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import ICalendarController, IExternalLinksController, IHeroTankController, IMarathonEventsController, IRestoreController, ITradeInController, IVehicleComparisonBasket
+from skeletons.gui.game_control import IExternalLinksController, IHeroTankController, IMarathonEventsController, IRestoreController, ITradeInController, IVehicleComparisonBasket
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -108,7 +107,6 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
     _heroTanks = dependency.descriptor(IHeroTankController)
     _lobbyContext = dependency.descriptor(ILobbyContext)
     _marathonsCtrl = dependency.descriptor(IMarathonEventsController)
-    __calendarController = dependency.descriptor(ICalendarController)
     __linksCtrl = dependency.descriptor(IExternalLinksController)
 
     def __init__(self, skipConfirm=False):
@@ -394,7 +392,7 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
                  'buyButtonIconAlign': 'right'})
             if self.__isHeroTank:
                 heroTankUrl = self._heroTanks.getCurrentShopUrl() or self._heroTanks.getCurrentRelatedURL()
-                if heroTankUrl or self._heroTanks.isAdventHero():
+                if heroTankUrl:
                     buyingPanelData.update({'isBuyingAvailable': True,
                      'itemPrice': None})
             self.as_setBuyDataS(buyingPanelData)
@@ -680,9 +678,6 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
 
     @adisp_process
     def __purchaseHeroTank(self):
-        if self._heroTanks.isAdventHero():
-            self.__calendarController.showWindow(invokedFrom=CalendarInvokeOrigin.HANGAR)
-            return
         shopUrl = self._heroTanks.getCurrentShopUrl()
         if shopUrl:
             event_dispatcher.showShop(shopUrl)
@@ -697,7 +692,7 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
         if self._marathonEvent and not self._marathonEvent.hasIgbLink():
             url = yield self._marathonEvent.getMarathonVehicleUrl()
         elif self.__isHeroTank:
-            if not self._heroTanks.isAdventHero() and not self._heroTanks.getCurrentShopUrl():
+            if not self._heroTanks.getCurrentShopUrl():
                 url = self._heroTanks.getCurrentRelatedURL()
         callback(self.__linksCtrl.externalAllowed(url) if url else False)
 
@@ -729,8 +724,6 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
             buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.restore())
         elif priceType == ActualPrice.RENT_PRICE:
             buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.rent())
-        elif self.__isHeroTank and self._heroTanks.isAdventHero():
-            buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.showAdventCalendar())
         else:
             buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.buy())
         return buttonLabel

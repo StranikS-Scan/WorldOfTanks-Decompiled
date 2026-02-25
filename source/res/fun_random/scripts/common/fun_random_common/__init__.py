@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/common/fun_random_common/__init__.py
+from __future__ import absolute_import
 import constants
-from constants_utils import addArenaGuiTypesFromExtension, initSquadCommonTypes
+from constants_utils import addArenaGuiTypesFromExtension, initSquadCommonTypes, addArenaBonusTypesFromExtension
 from fun_random_common import fun_constants
 
 def injectConsts(personality):
     addArenaGuiTypesFromExtension(fun_constants.ARENA_GUI_TYPE, personality)
+    addArenaBonusTypesFromExtension(fun_constants.ARENA_BONUS_TYPE, personality)
     constants.INBATTLE_CONFIGS.append(fun_constants.FUN_GAME_PARAMS_KEY)
 
 

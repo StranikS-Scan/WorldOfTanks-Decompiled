@@ -221,9 +221,9 @@ class Window(PyObjectEntity):
         self.proxy.setDecorator(getProxy(decorator))
         self.__attachToDecorator()
 
-    def setContent(self, content):
+    def setContent(self, view):
         self.__detachFromContent()
-        self.proxy.setContent(getProxy(content))
+        self.proxy.setContent(getProxy(view))
         self.__attachToContent()
 
     def setParent(self, parent):

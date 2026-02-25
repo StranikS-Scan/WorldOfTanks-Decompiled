@@ -2,8 +2,9 @@
 # Embedded file name: scripts/client/gui/ingame_help/detailed_help_pages.py
 from __future__ import absolute_import
 import logging
-import typing
 from itertools import chain
+import typing
+from shared_utils import findFirst
 import CommandMapping
 from constants import ARENA_GUI_TYPE, ARENA_BONUS_TYPE, ROLE_TYPE, ACTION_TYPE_TO_LABEL, ROLE_TYPE_TO_LABEL
 from gui import makeHtmlString
@@ -14,9 +15,10 @@ from gui.shared.formatters import text_styles
 from gui.shared.system_factory import registerIngameHelpPagesBuilders, collectIngameHelpPagesBuilders
 from gui.shared.utils.functions import replaceHyphenToUnderscore
 from gui.shared.utils.key_mapping import getReadableKey, getVirtualKey
+from helpers import dependency
 from items.vehicles import getRolesActions
 from nations import NAMES as NATIONS_NAMES
-from shared_utils import findFirst
+from skeletons.gui.game_control import IBattleRoyaleController
 from soft_exception import SoftException
 from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic, getVehicleMechanicsComponents
@@ -59,11 +61,18 @@ def buildTitle(ctx):
 
 def buildPagesData(ctx):
     detailedList = []
+    detailedListOfExclusives = []
     builders = collectIngameHelpPagesBuilders()
     for builder in sorted(builders, key=lambda item: item.priority(), reverse=True):
-        if builder.hasPagesForCtx(ctx):
-            detailedList.extend(builder.buildPages(ctx))
+        if builder.isSuitableForCtx(ctx):
+            pages = builder.buildPages(ctx)
+            if builder.isExclusive():
+                detailedListOfExclusives.extend(pages)
+            else:
+                detailedList.extend(pages)
 
+    if detailedListOfExclusives:
+        detailedList = detailedListOfExclusives
     selectedIdx = 0
     currentHintCtx = ctx.get('currentHintCtx')
     hintContexts = [ pageData.pop('hintCtx') for pageData in detailedList ]
@@ -78,7 +87,11 @@ class DetailedHelpPagesBuilder(object):
     _SUITABLE_CTX_KEYS = ()
 
     @classmethod
-    def hasPagesForCtx(cls, ctx):
+    def isExclusive(cls):
+        return False
+
+    @classmethod
+    def isSuitableForCtx(cls, ctx):
         return all((ctx.get(key, False) for key in cls._SUITABLE_CTX_KEYS))
 
     @classmethod
@@ -92,7 +105,7 @@ class DetailedHelpPagesBuilder(object):
     @classmethod
     def collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
         cls._collectHelpCtx(ctx, arenaVisitor, vehicle)
-        return cls.hasPagesForCtx(ctx)
+        return cls.isSuitableForCtx(ctx)
 
     @classmethod
     def _buildKey(cls, virtualKey, keyName, isLong=False):
@@ -225,6 +238,7 @@ class DualGunPagesBuilder(DetailedHelpPagesBuilder):
 
 class BattleRoyalePagesBuilder(DetailedHelpPagesBuilder):
     _SUITABLE_CTX_KEYS = ('isBattleRoyale', 'mapGeometryName')
+    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
 
     @classmethod
     def priority(cls):
@@ -236,15 +250,23 @@ class BattleRoyalePagesBuilder(DetailedHelpPagesBuilder):
         headerTitle = backport.text(R.strings.ingame_help.detailsHelp.default.title())
         mapGeometryName = ctx['mapGeometryName']
         mapResourceName = 'c_' + replaceHyphenToUnderscore(mapGeometryName)
-        imagePath = R.images.gui.maps.icons.battleHelp.battleRoyale.dyn(mapResourceName)
+        imagePath = R.images.battle_royale.gui.maps.icons.battleHelp.dyn(mapResourceName)
         if not imagePath.isValid():
             raise SoftException('No icons found for map {}'.format(mapGeometryName))
-        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.radar.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.radar.description())), [], backport.image(imagePath.br_radar()), hintCtx=HelpHintContext.BATTLE_ROYALE)
-        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.zone.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.zone.description())), [], backport.image(imagePath.br_zone()), hintCtx=HelpHintContext.BATTLE_ROYALE)
-        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.sectorVision.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.sectorVision.description())), [], backport.image(imagePath.br_sector()), hintCtx=HelpHintContext.BATTLE_ROYALE)
-        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.airDrop.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.airDrop.description())), [], backport.image(imagePath.br_airdrop()), hintCtx=HelpHintContext.BATTLE_ROYALE)
-        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.upgrade.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.upgrade.description())), [], backport.image(imagePath.br_tree()), hintCtx=HelpHintContext.BATTLE_ROYALE)
-        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.uniqueAbilities.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.uniqueAbilities.description())), [], backport.image(imagePath.br_unique_abilities()), hintCtx=HelpHintContext.BATTLE_ROYALE)
+        detailedHelpPath = R.strings.ingame_help.detailsHelp.battleRoyale
+        patrickImagePath = R.images.battle_royale.gui.maps.st_patrick.icons.battleHelp
+        addPage(pages, headerTitle, backport.text(detailedHelpPath.radar.title()), text_styles.mainBig(backport.text(detailedHelpPath.radar.description())), [], backport.image(imagePath.br_radar()), hintCtx=HelpHintContext.BATTLE_ROYALE)
+        addPage(pages, headerTitle, backport.text(detailedHelpPath.zone.title()), text_styles.mainBig(backport.text(detailedHelpPath.zone.description())), [], backport.image(imagePath.br_zone()), hintCtx=HelpHintContext.BATTLE_ROYALE)
+        addPage(pages, headerTitle, backport.text(detailedHelpPath.sectorVision.title()), text_styles.mainBig(backport.text(detailedHelpPath.sectorVision.description())), [], backport.image(imagePath.br_sector()), hintCtx=HelpHintContext.BATTLE_ROYALE)
+        if cls.__battleRoyaleController.isStPatrick():
+            addPage(pages, headerTitle, backport.text(detailedHelpPath.airDrop.title()), text_styles.mainBig(backport.text(detailedHelpPath.airDrop.stPatrick.description())), [], backport.image(patrickImagePath.br_airdrop()), hintCtx=HelpHintContext.BATTLE_ROYALE)
+        else:
+            addPage(pages, headerTitle, backport.text(detailedHelpPath.airDrop.title()), text_styles.mainBig(backport.text(detailedHelpPath.airDrop.description())), [], backport.image(imagePath.br_airdrop()), hintCtx=HelpHintContext.BATTLE_ROYALE)
+        addPage(pages, headerTitle, backport.text(detailedHelpPath.upgrade.title()), text_styles.mainBig(backport.text(detailedHelpPath.upgrade.description())), [], backport.image(imagePath.br_tree()), hintCtx=HelpHintContext.BATTLE_ROYALE)
+        if cls.__battleRoyaleController.isStPatrick():
+            addPage(pages, headerTitle, backport.text(detailedHelpPath.uniqueAbilities.title()), text_styles.mainBig(backport.text(detailedHelpPath.uniqueAbilities.description())), [], backport.image(patrickImagePath.br_unique_abilities()), hintCtx=HelpHintContext.BATTLE_ROYALE)
+        else:
+            addPage(pages, headerTitle, backport.text(detailedHelpPath.uniqueAbilities.title()), text_styles.mainBig(backport.text(detailedHelpPath.uniqueAbilities.description())), [], backport.image(imagePath.br_unique_abilities()), hintCtx=HelpHintContext.BATTLE_ROYALE)
         return pages
 
     @classmethod

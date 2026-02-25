@@ -412,7 +412,7 @@ class PersonalMissionPostBattleInfo(EventPostBattleInfo):
 
     def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, **kwargs):
         info = super(PersonalMissionPostBattleInfo, self).getPostBattleInfo(svrEvents, pCur, pPrev, isProgressReset, isCompleted, **kwargs)
-        progressData = kwargs.get('progressData', None)
+        progressData = kwargs.get('progressData')
         condFormatter = PostBattleConditionsFormatter(self.event, progressData)
         if isCompleted.isMainComplete or isCompleted.isAddComplete:
             failedDescr = ''

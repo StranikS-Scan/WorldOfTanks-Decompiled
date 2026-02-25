@@ -156,7 +156,7 @@ class HangarCarouselDataProvider(CarouselDataProvider):
 
     def _buildFrontSupplyItems(self):
         self._frontSupplyItems = []
-        if self._isTelecomRentalsEnabled() and not self._telecomRentals.getAvailableRentCount() == 0:
+        if self._isTelecomRentalsEnabled() and self._telecomRentals.getAvailableRentCount() != 0:
             text = MENU.TANKCAROUSEL_WOTPLUSSELECTIONAVAILABLE
             if self._telecomRentals.getRentsPending():
                 text = MENU.TANKCAROUSEL_WOTPLUSSELECTIONPENDING

@@ -156,7 +156,7 @@ class _VehCmpCache(FileLocalCache):
 
     def _setCache(self, data):
         if isinstance(data, (tuple, list)) and len(data) == 2:
-            if self.VERSION == data[0]:
+            if data[0] == self.VERSION:
                 self.__cache = data[1]
 
     def clear(self):

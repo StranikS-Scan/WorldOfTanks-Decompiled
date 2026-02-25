@@ -14,6 +14,7 @@ def getContextMenuHandlers():
 
 
 def getViewSettings():
+    from gui.Scaleform.daapi.view.lobby.profile.earning_pop_up_view import EarningPopUpView
     from gui.Scaleform.daapi.view.lobby.profile.ProfileAwards import ProfileAwards
     from gui.Scaleform.daapi.view.lobby.profile.profile_collections_page import ProfileCollectionsPage
     from gui.Scaleform.daapi.view.lobby.profile.ProfilePage import ProfilePage
@@ -42,7 +43,8 @@ def getViewSettings():
      ComponentSettings(VIEW_ALIAS.PROFILE_HOF, ProfileHof, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VIEW_ALIAS.PROFILE_COLLECTIONS_PAGE, ProfileCollectionsPage, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VIEW_ALIAS.PROFILE_PRESTIGE_WIDGET, ProfileTechniquePrestigeInject, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(VIEW_ALIAS.PROFILE_PRESTIGE_EMBLEM_WIDGET, ProfileTechniquePrestigeEmblemInject, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(VIEW_ALIAS.PROFILE_PRESTIGE_EMBLEM_WIDGET, ProfileTechniquePrestigeEmblemInject, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VIEW_ALIAS.ADVANCED_ACHIEVEMENTS_EARNING_VIEW, EarningPopUpView, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

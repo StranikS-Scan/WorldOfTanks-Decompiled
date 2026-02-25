@@ -109,7 +109,7 @@ class ResourceWellListener(_NotificationListener):
 
     def __getTwoVehiclesText(self):
         rewardIDs = list(self.__resourceWell.config.rewards)
-        if not len(rewardIDs) == 2:
+        if len(rewardIDs) != 2:
             _logger.error('At parallel launch must be two vehicles, got %s', rewardIDs)
             return
         else:

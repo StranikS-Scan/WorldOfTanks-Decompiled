@@ -6,7 +6,10 @@
     <priceGroup>	modifications 300g	</priceGroup>
     <vehicleFilter>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF usa:A174_T57_58_Rush_Ep1 poland:Pl15_60TP_Lewandowskiego_CFE_A	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
       </exclude>
     </vehicleFilter>
     <modification>
@@ -48,7 +51,10 @@
     <priceGroup>	modifications 300g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF usa:A174_T57_58_Rush_Ep1 poland:Pl15_60TP_Lewandowskiego_CFE_A	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
       </exclude>
     </vehicleFilter>
     <modification>
@@ -129,6 +135,40 @@
         </effect>
       </effects>
       <userString>	#vehicle_customization:modifications/age_effect_07	</userString>
+      <useNewWear>	true	</useNewWear>
+      <tags>	hiddenInUI	</tags>
+    </modification>
+    <modification>
+      <id>	8	</id>
+      <texture>	gui/maps/vehicles/modifications/effect_new.png	</texture>
+      <effects>
+        <effect>
+          <type>	paint_age	</type>
+          <value>	0.5	</value>
+        </effect>
+        <effect>
+          <type>	paint_fading	</type>
+          <value>	0.15	</value>
+        </effect>
+      </effects>
+      <userString>	#vehicle_customization:modifications/age_effect_08	</userString>
+      <useNewWear>	true	</useNewWear>
+      <tags>	hiddenInUI	</tags>
+    </modification>
+    <modification>
+      <id>	9	</id>
+      <texture>	gui/maps/vehicles/modifications/effect_new.png	</texture>
+      <effects>
+        <effect>
+          <type>	paint_age	</type>
+          <value>	0.55	</value>
+        </effect>
+        <effect>
+          <type>	paint_fading	</type>
+          <value>	0.15	</value>
+        </effect>
+      </effects>
+      <userString>	#vehicle_customization:modifications/age_effect_09	</userString>
       <useNewWear>	true	</useNewWear>
       <tags>	hiddenInUI	</tags>
     </modification>

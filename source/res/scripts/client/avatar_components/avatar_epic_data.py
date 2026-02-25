@@ -200,7 +200,7 @@ class AvatarEpicData(object):
         isAttacker = BigWorld.player().team == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER
         for chatCmd, keyboardCmd in _KB_MAPPING.iteritems():
             if cmdMap.isFired(keyboardCmd, key):
-                if chatCmd in _COMMAND_TO_LANE_MAPPING.keys():
+                if chatCmd in _COMMAND_TO_LANE_MAPPING:
                     lane = _COMMAND_TO_LANE_MAPPING[chatCmd]
                     chatCommandName = chatCmd
                     break

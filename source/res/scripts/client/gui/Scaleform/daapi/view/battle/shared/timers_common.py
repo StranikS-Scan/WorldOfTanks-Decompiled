@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/timers_common.py
+from __future__ import absolute_import
 import BigWorld
 from gui.shared.utils.TimeInterval import TimeInterval
+from math_common import decimal_round
 
 class TimerComponent(object):
     __slots__ = ('_viewObject', '_typeID', '_viewID', '_totalTime', '_startTime', '_finishTime', '_secondInRow')
@@ -114,7 +116,7 @@ class PrecisePythonTimer(PythonTimer):
                 self._setViewSnapshot(timeLeft)
                 self._timeInterval = TimeInterval(self.__interval, self, '_tick')
                 firstShortPeriod = float(self._totalTime) % self.__interval
-                if round(firstShortPeriod, 4) > 0.0:
+                if decimal_round(firstShortPeriod, 4) > 0.0:
                     self.__short1stPeriodCbId = BigWorld.callback(firstShortPeriod, self.__onShort1stPeriodFinished)
                 else:
                     self._timeInterval.restart()

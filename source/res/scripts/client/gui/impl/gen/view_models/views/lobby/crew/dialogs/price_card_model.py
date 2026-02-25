@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/crew/dialogs/price_card_model.py
 from enum import Enum
-from frameworks.wulf import ViewModel
+from frameworks.wulf import Array, ViewModel
 from gui.impl.gen.view_models.views.dialogs.dialog_template_generic_tooltip_view_model import DialogTemplateGenericTooltipViewModel
 from gui.impl.gen.view_models.views.dialogs.sub_views.currency_view_model import CurrencyViewModel
 from gui.impl.gen.view_models.views.lobby.crew.common.dynamic_tooltip_model import DynamicTooltipModel
+from gui.impl.gen.view_models.views.lobby.crew.dialogs.list_price_model import ListPriceModel
 
 class CardType(Enum):
     DEFAULT = 'default'
@@ -21,7 +22,7 @@ class CardState(Enum):
 class PriceCardModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=10, commands=0):
+    def __init__(self, properties=12, commands=0):
         super(PriceCardModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -90,6 +91,22 @@ class PriceCardModel(ViewModel):
     def setKwargs(self, value):
         self._setString(9, value)
 
+    def getSelectedOptionIdx(self):
+        return self._getNumber(10)
+
+    def setSelectedOptionIdx(self, value):
+        self._setNumber(10, value)
+
+    def getPriceList(self):
+        return self._getArray(11)
+
+    def setPriceList(self, value):
+        self._setArray(11, value)
+
+    @staticmethod
+    def getPriceListType():
+        return ListPriceModel
+
     def _initialize(self):
         super(PriceCardModel, self)._initialize()
         self._addViewModelProperty('price', CurrencyViewModel())
@@ -102,3 +119,5 @@ class PriceCardModel(ViewModel):
         self._addStringProperty('cardType')
         self._addStringProperty('description', '')
         self._addStringProperty('kwargs', '')
+        self._addNumberProperty('selectedOptionIdx', -1)
+        self._addArrayProperty('priceList', Array())

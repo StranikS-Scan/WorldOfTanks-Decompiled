@@ -162,7 +162,8 @@ def getClipReloadTime(vehicleDescr, factors):
         elif 'autoShoot' in vehicleDescr.gun.tags:
             return (0.0,)
         else:
-            return (vehicleDescr.gun.reloadTime * factor + factors['gun/extraReloadTime'],)
+            reloadTime = vehicleDescr.gun.reloadTime * factor + factors['gun/extraReloadTime']
+            return (reloadTime,)
     else:
         return (0.0,)
 

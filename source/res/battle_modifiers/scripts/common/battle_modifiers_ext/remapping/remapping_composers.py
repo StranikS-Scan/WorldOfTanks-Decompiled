@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_modifiers/scripts/common/battle_modifiers_ext/remapping/remapping_composers.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from typing import TYPE_CHECKING, Optional, Any, Dict, List, FrozenSet, Type
 from battle_modifiers_ext.constants_ext import ModifiersWithRemapping
 if TYPE_CHECKING:
@@ -49,7 +51,7 @@ class _BaseComposer(IComposer):
             return None
         else:
             itemName = self._getItemName(ctx, oldValue)
-            for sources, target in self._specialRules.iteritems():
+            for sources, target in viewitems(self._specialRules):
                 if itemName in sources:
                     return target
 
@@ -64,7 +66,7 @@ class _DefaultGunEffectsComposer(_BaseComposer):
     @classmethod
     def _getItemName(cls, _, oldValue):
         from items import vehicles
-        for k, v in vehicles.g_cache.gunEffects.iteritems():
+        for k, v in viewitems(vehicles.g_cache.gunEffects):
             if v == oldValue:
                 return k
 
@@ -88,7 +90,7 @@ class _DefaultSoundNotificationsComposer(_BaseComposer):
 
     def getValues(self, oldValue):
         result = oldValue.copy()
-        for sources, target in self._specialRules.iteritems():
+        for sources, target in viewitems(self._specialRules):
             result.update({s:self.__applyRemoveRule(target) for s in sources})
 
         return result
@@ -97,9 +99,22 @@ class _DefaultSoundNotificationsComposer(_BaseComposer):
         return None if value == self._REMOVE_NOTIFICATION else value
 
 
+class _DefaultExhaustEffectsComposer(_BaseComposer):
+
+    @classmethod
+    def _getItemName(cls, _, oldValue):
+        from items import vehicles
+        for k, v in viewitems(vehicles.g_cache.exhaustEffects):
+            if v == oldValue:
+                return k
+
+        return None
+
+
 _DEFAULT_COMPOSERS = {ModifiersWithRemapping.GUN_EFFECTS: _DefaultGunEffectsComposer,
  ModifiersWithRemapping.SHOT_EFFECTS: _DefaultShotEffectsComposer,
- ModifiersWithRemapping.SOUND_NOTIFICATIONS: _DefaultSoundNotificationsComposer}
+ ModifiersWithRemapping.SOUND_NOTIFICATIONS: _DefaultSoundNotificationsComposer,
+ ModifiersWithRemapping.EXHAUST_EFFECTS: _DefaultExhaustEffectsComposer}
 _COMPOSERS_FACTORY = {}
 
 def getComposerClass(remappingName, modifierName):

@@ -13,7 +13,7 @@ class BattlePassGoldMissionTooltipView(ViewImpl):
     __eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, token):
-        settings = ViewSettings(R.views.lobby.battle_pass.tooltips.BattlePassGoldMissionTooltipView())
+        settings = ViewSettings(R.views.mono.battle_pass.tooltips.gold_mission())
         settings.model = BattlePassGoldMissionTooltipViewModel()
         super(BattlePassGoldMissionTooltipView, self).__init__(settings)
         self.__token = token

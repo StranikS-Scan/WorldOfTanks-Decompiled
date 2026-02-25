@@ -57,10 +57,12 @@ class CampaignSelectorState(ViewLobbyState):
     VIEW_KEY = ViewKey(VIEW_ALIAS.CAMPAIGN_SELECTOR)
 
     def registerTransitions(self):
+        from gui.Scaleform.daapi.view.lobby.missions.personal.state import PersonalMissionsPageState
         lsm = self.getMachine()
         self.addNavigationTransition(lsm.getStateByCls(ProgressionState), record=True)
         self.addNavigationTransition(lsm.getStateByCls(AssemblingState), record=True)
         self.addNavigationTransition(lsm.getStateByCls(MissionsState), record=True)
+        self.addNavigationTransition(lsm.getStateByCls(PersonalMissionsPageState), record=True)
 
     def getNavigationDescription(self):
         return LobbyStateDescription(title=backport.text(R.strings.pages.titles.campaign_selector()), infos=(LobbyStateDescription.Info(type=LobbyStateDescription.Info.Type.INFO, onMoreInfoRequested=openInfoPageScreen, tooltipBody=backport.text(R.strings.personal_missions.pages.button.infopage.description())), LobbyStateDescription.Info(type=LobbyStateDescription.Info.Type.VIDEO, onMoreInfoRequested=lambda : showPM30IntroWindow(force=True), tooltipBody=backport.text(R.strings.personal_missions.pages.button.video.description()))))

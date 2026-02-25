@@ -7,10 +7,10 @@ from story_mode_common.story_mode_constants import VEHICLE_BUNKER_TURRET_TAG
 BUNKER_CODE = 'DEATH_FROM_BUNKER'
 SHOT_CODES = ('DEATH_FROM_SHOT', 'DEATH_FROM_DEVICE_EXPLOSION_AT_SHOT')
 BOT_CODE = 'DEATH_FROM_BOT'
-_TIMER_ZERO_VALUE = '00:00'
 
 class StoryModePostmortemPanel(PvePostmortemPanel):
     __slots__ = ()
+    _RESPAWN_TIMER_SOUND_EVENT = RESPAWN_TIMER_SOUND_EVENT
 
     def resetDeathInfo(self):
         super(StoryModePostmortemPanel, self).resetDeathInfo()
@@ -63,7 +63,3 @@ class StoryModePostmortemPanel(PvePostmortemPanel):
          'killerVehicle': killerVehID,
          'device': device}
         self._deathInfoReceived()
-
-    def updateTime(self, value):
-        if value != _TIMER_ZERO_VALUE:
-            SoundGroups.g_instance.playSound2D(RESPAWN_TIMER_SOUND_EVENT)

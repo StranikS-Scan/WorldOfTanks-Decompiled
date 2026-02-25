@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/dialogs/sub_views/icon/item_icon.py
+from __future__ import absolute_import
 import logging
 from gui.impl.gen import R
 from gui.impl.dialogs.sub_views.common import IconSetData

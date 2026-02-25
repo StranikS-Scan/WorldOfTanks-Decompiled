@@ -4,9 +4,9 @@ from frameworks.wulf import Array, ViewModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.chapter_model import ChapterModel
 
 class ChapterChoiceViewModel(ViewModel):
-    __slots__ = ('onPreviewClick', 'onChapterSelect', 'onAboutClick', 'onPointsInfoClick', 'onBuyClick', 'onViewLoaded', 'onClose', 'onShowPostProgression')
+    __slots__ = ('onPreviewClick', 'onChapterSelect', 'onAboutClick', 'onPointsInfoClick', 'onBuyClick', 'onViewLoaded', 'onClose', 'onShowPostProgression', 'showTankmen')
 
-    def __init__(self, properties=5, commands=8):
+    def __init__(self, properties=5, commands=9):
         super(ChapterChoiceViewModel, self).__init__(properties=properties, commands=commands)
 
     def getChapters(self):
@@ -19,17 +19,17 @@ class ChapterChoiceViewModel(ViewModel):
     def getChaptersType():
         return ChapterModel
 
-    def getFreePoints(self):
+    def getSelectedChapter(self):
         return self._getNumber(1)
 
-    def setFreePoints(self, value):
+    def setSelectedChapter(self, value):
         self._setNumber(1, value)
 
-    def getIsSeasonWithAdditionalBackground(self):
-        return self._getBool(2)
+    def getFreePoints(self):
+        return self._getNumber(2)
 
-    def setIsSeasonWithAdditionalBackground(self, value):
-        self._setBool(2, value)
+    def setFreePoints(self, value):
+        self._setNumber(2, value)
 
     def getSeasonNum(self):
         return self._getNumber(3)
@@ -46,8 +46,8 @@ class ChapterChoiceViewModel(ViewModel):
     def _initialize(self):
         super(ChapterChoiceViewModel, self)._initialize()
         self._addArrayProperty('chapters', Array())
+        self._addNumberProperty('selectedChapter', 0)
         self._addNumberProperty('freePoints', 0)
-        self._addBoolProperty('isSeasonWithAdditionalBackground', False)
         self._addNumberProperty('seasonNum', 0)
         self._addBoolProperty('isPostProgressionUnlocked', False)
         self.onPreviewClick = self._addCommand('onPreviewClick')
@@ -58,3 +58,4 @@ class ChapterChoiceViewModel(ViewModel):
         self.onViewLoaded = self._addCommand('onViewLoaded')
         self.onClose = self._addCommand('onClose')
         self.onShowPostProgression = self._addCommand('onShowPostProgression')
+        self.showTankmen = self._addCommand('showTankmen')

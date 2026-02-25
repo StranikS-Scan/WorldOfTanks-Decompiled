@@ -31,13 +31,14 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 
 class CarouselVehicleTooltipView(ViewComponent[CarouselVehicleTooltipModel]):
+    LAYOUT_ID = R.views.mono.hangar.vehicle_tooltip()
     _itemsCache = dependency.descriptor(IItemsCache)
     _battlePass = dependency.descriptor(IBattlePassController)
     _wotPlusCtrl = dependency.descriptor(IWotPlusController)
 
     def __init__(self, inventoryId):
         self._inventoryId = inventoryId
-        super(CarouselVehicleTooltipView, self).__init__(R.views.mono.hangar.vehicle_tooltip(), CarouselVehicleTooltipModel)
+        super(CarouselVehicleTooltipView, self).__init__(self.LAYOUT_ID, CarouselVehicleTooltipModel)
 
     @property
     def viewModel(self):

@@ -1,18 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/full_stats.py
 import BigWorld
+from battle_royale.gui.battle_control.controllers.vehicles_count_ctrl import IVehicleCountListener
+from constants import ARENA_BONUS_TYPE
+from gui.Scaleform.daapi.view.meta.BattleRoyaleFullStatsMeta import BattleRoyaleFullStatsMeta
+from gui.impl import backport
+from gui.impl.gen.resources import R
+from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES_REVERSED
 from gui.shared.utils.functions import getArenaShortName
 from helpers import dependency
-from constants import ARENA_BONUS_TYPE
-from gui.impl.gen.resources import R
-from gui.impl import backport
-from gui.Scaleform.daapi.view.meta.BattleRoyaleFullStatsMeta import BattleRoyaleFullStatsMeta
-from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES_REVERSED
 from skeletons.gui.battle_session import IBattleSessionProvider
-from battle_royale.gui.battle_control.controllers.vehicles_count_ctrl import IVehicleCountListener
+from skeletons.gui.game_control import IBattleRoyaleController
 
 class FullStatsComponent(BattleRoyaleFullStatsMeta, IVehicleCountListener):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
 
     def __init__(self):
         super(FullStatsComponent, self).__init__()
@@ -29,10 +31,10 @@ class FullStatsComponent(BattleRoyaleFullStatsMeta, IVehicleCountListener):
 
     def setVehicles(self, count, vehicles, teams):
         vehiclesByType = []
-        vehiclesSortedByType = sorted(vehicles.items(), key=lambda (classType, _): VEHICLE_TYPES_ORDER_INDICES_REVERSED[classType])
+        vehiclesSortedByType = sorted(vehicles.items(), key=lambda i: VEHICLE_TYPES_ORDER_INDICES_REVERSED[i[0]])
         self.__vehicleTeams = {}
         for classType, data in vehiclesSortedByType:
-            sortedVehicles = sorted(data.items(), key=lambda (_, isDead): isDead)
+            sortedVehicles = sorted(data.items(), key=lambda i: i[1])
             vehiclesByType.append({'classType': classType,
              'platoons': []})
             for vehInfo in sortedVehicles:
@@ -57,6 +59,15 @@ class FullStatsComponent(BattleRoyaleFullStatsMeta, IVehicleCountListener):
         super(FullStatsComponent, self)._populate()
         self.__initPanel()
 
+    def _getBattleTypeIconPath(self, sizeFolder='c_136x136'):
+        arenaDP = self.sessionProvider.getArenaDP()
+        if self.__battleRoyaleController.isStPatrick():
+            resRoot = R.images.battle_royale.gui.maps.st_patrick.icons.battleTypes
+        else:
+            resRoot = R.images.gui.maps.icons.battleTypes
+        iconRes = resRoot.dyn(sizeFolder).dyn(arenaDP.getPersonalDescription().getFrameLabel())
+        return backport.image(iconRes()) if iconRes.exists() else ''
+
     def __initPanel(self):
         arenaDP = self.sessionProvider.getArenaDP()
         self.__initTeamsCount()
@@ -69,6 +80,8 @@ class FullStatsComponent(BattleRoyaleFullStatsMeta, IVehicleCountListener):
         playersCount = len(set(self.__vehicleTeams.keys()))
         data = {'header': {'title': backport.text(R.strings.battle_royale.fullStats.title()),
                     'subTitle': backport.text(R.strings.battle_royale.fullStats.subTitle()),
+                    'battleTypeIconPathBig': self._getBattleTypeIconPath('c_136x136'),
+                    'battleTypeIconPathSmall': self._getBattleTypeIconPath('c_64x64'),
                     'battleType': arenaDP.getPersonalDescription().getFrameLabel(),
                     'description': backport.text(R.strings.battle_royale.fullStats.description())},
          'aliveBlock': self.__getScoreBlock('fullStatsAlive', playersCount, backport.text(R.strings.battle_royale.fullStats.alive()), squads),
@@ -85,12 +98,13 @@ class FullStatsComponent(BattleRoyaleFullStatsMeta, IVehicleCountListener):
 
     def __getMinimapItems(self):
         fullStatsIcons = R.strings.battle_royale.fullStats.icons
-        return [self.__getMinimapItem('tab_corpse_loot', backport.text(fullStatsIcons.corpseLoot.description()), 'add'),
-         self.__getMinimapItem('tab_loot', backport.text(fullStatsIcons.defaultLoot.description()), 'add'),
-         self.__getMinimapItem('tab_improved_loot', backport.text(fullStatsIcons.extendedLoot.description()), 'add'),
-         self.__getMinimapItem('airdrop_loot', backport.text(fullStatsIcons.airDrop.description()), 'add'),
-         self.__getMinimapItem('deathzone_info_warning', backport.text(R.strings.battle_royale.fullStats.deathZone.warning.description())),
-         self.__getMinimapItem('deathzone_info_closed', backport.text(R.strings.battle_royale.fullStats.deathZone.closed.description()))]
+        stPatrickFullStats = R.strings.battle_royale.fullStats.stPatrick.icons
+        if self.__battleRoyaleController.isStPatrick():
+            minimapItems = [self.__getMinimapItem('shamrock_loot', backport.text(stPatrickFullStats.shamrocks.description()), 'add'), self.__getMinimapItem('tab_improved_loot', backport.text(stPatrickFullStats.extendedLoot.description()), 'add'), self.__getMinimapItem('tab_corpse_loot', backport.text(stPatrickFullStats.corpseLoot.description()), 'add')]
+        else:
+            minimapItems = [self.__getMinimapItem('tab_corpse_loot', backport.text(fullStatsIcons.corpseLoot.description()), 'add'), self.__getMinimapItem('tab_loot', backport.text(fullStatsIcons.defaultLoot.description()), 'add'), self.__getMinimapItem('tab_improved_loot', backport.text(fullStatsIcons.extendedLoot.description()), 'add')]
+        minimapItems.extend([self.__getMinimapItem('airdrop_loot', backport.text(fullStatsIcons.airDrop.description()), 'add'), self.__getMinimapItem('deathzone_info_warning', backport.text(R.strings.battle_royale.fullStats.deathZone.warning.description())), self.__getMinimapItem('deathzone_info_closed', backport.text(R.strings.battle_royale.fullStats.deathZone.closed.description()))])
+        return minimapItems
 
     def __getMinimapItem(self, icon, description, blendMode='normal'):
         return {'icon': icon,

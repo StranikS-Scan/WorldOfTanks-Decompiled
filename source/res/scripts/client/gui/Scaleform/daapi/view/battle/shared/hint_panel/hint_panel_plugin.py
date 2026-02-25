@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/hint_panel/hint_panel_plugin.py
+from __future__ import absolute_import
 from collections import namedtuple
 from datetime import datetime
 from helpers import time_utils

@@ -497,9 +497,7 @@ class _PreDefinedHostList(object):
 
     def getDefaultCSISStatus(self):
         from gui import GUI_SETTINGS
-        if not self.__csisUrl:
-            defAvail = HOST_AVAILABILITY.IGNORED
-        elif GUI_SETTINGS.csisRequestRate == REQUEST_RATE.NEVER:
+        if not self.__csisUrl or GUI_SETTINGS.csisRequestRate == REQUEST_RATE.NEVER:
             defAvail = HOST_AVAILABILITY.IGNORED
         elif len(g_preDefinedHosts.hosts()) > 1:
             defAvail = HOST_AVAILABILITY.REQUESTED

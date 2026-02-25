@@ -62,7 +62,7 @@ class UserMissionsState(SFViewLobbyState, EventsHandler):
         self._subscribe()
         self.__cachedParams = event.params
         targetTab = event.params.get('tab')
-        childState = first(self.getChildren(lambda n: isinstance(n, MISSION_TABS) and n.TAB_ID == targetTab))
+        childState = first(self.getChildren(lambda n: isinstance(n, MISSION_TABS) and targetTab == n.TAB_ID))
         if childState:
             childState.goTo(**self.__cachedParams)
 
@@ -77,7 +77,7 @@ class UserMissionsState(SFViewLobbyState, EventsHandler):
     def __onTabChanged(self, event):
         self.__cachedParams['tab'] = event.tabID
         targetTab = event.tabID
-        childState = first(self.getChildren(lambda n: isinstance(n, MISSION_TABS) and n.TAB_ID == targetTab))
+        childState = first(self.getChildren(lambda n: isinstance(n, MISSION_TABS) and targetTab == n.TAB_ID))
         if childState:
             childState.goTo(**self.__cachedParams)
 

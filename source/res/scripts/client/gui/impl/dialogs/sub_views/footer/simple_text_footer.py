@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/dialogs/sub_views/footer/simple_text_footer.py
+from __future__ import absolute_import
 from gui.impl.dialogs.sub_views.common.simple_text import SimpleText
 from gui.impl.gen import R
 

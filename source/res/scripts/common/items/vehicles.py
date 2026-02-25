@@ -41,7 +41,6 @@ from items.readers import json_vehicle_reader
 from items.readers import shared_readers
 from items.readers import sound_readers
 from items.readers import prefab_effects_readers
-from items.stun import g_cfg as stunConfig
 from items.writers import chassis_writers
 from items.writers import gun_writers
 from items.writers import shared_writers
@@ -558,23 +557,25 @@ class VehicleDescriptor(object):
 
     @property
     def hasBurnout(self):
-        if IS_CLIENT or IS_WEB:
-            chassisCfg = self.type.xphysics['chassis'][self.chassis.name]
-        else:
-            chassisCfg = self.type.xphysics['detailed']['chassis'][self.chassis.name]
-        return self.isWheeledVehicle and chassisCfg['burnout'] is not None
+        return self.isWheeledVehicle and self.chassisCfg['burnout'] is not None
 
     @property
     def isWheeledOnSpotRotation(self):
-        if IS_CLIENT or IS_WEB:
-            chassisCfg = self.type.xphysics['chassis'][self.chassis.name]
-        else:
-            chassisCfg = self.type.xphysics['detailed']['chassis'][self.chassis.name]
-        return self.isWheeledVehicle and chassisCfg['isWheeledOnSpotRotation']
+        return self.isWheeledVehicle and self.chassisCfg['isWheeledOnSpotRotation']
 
     @property
     def isTrackWithinTrack(self):
         return self.chassis.isTrackWithinTrack
+
+    @property
+    def rollingFriction(self):
+        grounds = self.chassisCfg['grounds']
+        return (grounds['firm']['rollingFriction'], grounds['medium']['rollingFriction'], grounds['soft']['rollingFriction'])
+
+    @property
+    def chassisCfg(self):
+        physics = self.type.xphysics if IS_CLIENT or IS_WEB else self.type.xphysics['detailed']
+        return physics['chassis'][self.chassis.name]
 
     def __getIsHullAimingAvailable(self):
         hap = self.type.hullAimingParams
@@ -2214,10 +2215,12 @@ class VehicleType(object):
         sharedSections = {}
         nationID = self.id[0]
         nationName = nations.NAMES[nationID]
+        extension = mainXmlPath[0:mainXmlPath.find('scripts/')]
         if useSharedSections:
             for componentId in ITEM_TYPES.values():
                 if componentId in Cache.NATION_ITEM_SOURCE:
-                    compsXmlPath = '{vehcilePath}{nationName}{componentsPath}{componentSource}'.format(vehcilePath=_VEHICLE_TYPE_XML_PATH, nationName=nationName, componentsPath=Cache.NATION_COMPONENTS_SECTION, componentSource=Cache.NATION_ITEM_SOURCE[componentId])
+                    compsXmlPath = '{vehcilePath}{nationName}{componentsPath}{componentSource}'.format(vehcilePath=extension + _VEHICLE_TYPE_XML_PATH, nationName=nationName, componentsPath=Cache.NATION_COMPONENTS_SECTION, componentSource=Cache.NATION_ITEM_SOURCE[componentId])
+                    ResMgr.purge(compsXmlPath, True)
                     section = ResMgr.openSection(compsXmlPath)
                     if section is None:
                         _xml.raiseWrongXml(None, compsXmlPath, "Can't open shared section")
@@ -2652,6 +2655,10 @@ class Cache(object):
 
     def exhaustEffect(self, effectName):
         return self.__customEffects['exhaust'].get(effectName) if 'exhaust' in self.__customEffects else None
+
+    @property
+    def exhaustEffects(self):
+        return self.__customEffects.get('exhaust', {})
 
     def customization20(self, createNew=True):
         if self.__customization20 is None and createNew:
@@ -5510,7 +5517,7 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
     if shell.isTracer:
         shell.isForceTracer = section.readBool('isForceTracer', False)
     if IS_CLIENT or IS_WEB:
-        shell.i18n = shared_components.I18nComponent(section.readString('userString'), section.readString('description'))
+        shell.i18n = shared_components.I18nComponent(userStringKey=section.readString('userString'), descriptionKey=section.readString('description'), shortDescriptionSpecialKey=section.readString('shortDescriptionSpecial'), longDescriptionSpecialKey=section.readString('longDescriptionSpecial'))
         v = _xml.readNonEmptyString(xmlCtx, section, 'icon')
         if icons.get(v) is None:
             _xml.raiseWrongXml(xmlCtx, 'icon', "unknown icon '%s'" % v)
@@ -5581,22 +5588,14 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
     shell.piercingPowerRandomizationType = _xml.readStringWithDefaultValue(xmlCtx, section, 'piercingPowerRandomizationType', RandomizationType.NORMAL)
     hasStun = section.readBool('hasStun', False)
     if hasStun:
-        stun = shell_components.Stun()
-        if section.has_key('stunRadius'):
-            stunRadius = _xml.readPositiveFloat(xmlCtx, section, 'stunRadius')
+        stunParams = gun_readers.readStunParams(section, xmlCtx, True)
+        if stunParams.get('stunRadius') is not None:
+            stun = shell_components.Stun(**stunParams)
         elif kind == 'HIGH_EXPLOSIVE':
-            stunRadius = shellType.explosionRadius
+            stunParams['stunRadius'] = shellType.explosionRadius
+            stun = shell_components.Stun(**stunParams)
         else:
             _xml.raiseWrongXml(xmlCtx, 'stunRadius', 'hasStun = true, but neither explosionRadius nor stunRadius defined')
-        stun.stunRadius = stunRadius
-        stun.stunDuration = _xml.readPositiveFloat(xmlCtx, section, 'stunDuration') if section.has_key('stunDuration') else stunConfig.get('baseStunDuration', 30)
-        stun.stunFactor = _xml.readPositiveFloat(xmlCtx, section, 'stunFactor') if section.has_key('stunFactor') else 1.0
-        if stun.stunFactor > 1:
-            _xml.raiseWrongXml(xmlCtx, 'stunFactor', 'stun factor cannot exceed 1')
-        stun.guaranteedStunDuration = _xml.readFraction(xmlCtx, section, 'guaranteedStunDuration') if section.has_key('guaranteedStunDuration') else stunConfig['guaranteedStunDuration']
-        stun.damageDurationCoeff = _xml.readFraction(xmlCtx, section, 'damageDurationCoeff') if section.has_key('damageDurationCoeff') else stunConfig['damageDurationCoeff']
-        stun.guaranteedStunEffect = _xml.readFraction(xmlCtx, section, 'guaranteedStunEffect') if section.has_key('guaranteedStunEffect') else stunConfig['guaranteedStunEffect']
-        stun.damageEffectCoeff = _xml.readFraction(xmlCtx, section, 'damageEffectCoeff') if section.has_key('damageEffectCoeff') else stunConfig['damageEffectCoeff']
     else:
         stun = None
     shell.stun = stun
@@ -5755,6 +5754,14 @@ def _writeArmor(armor, section, materialData, primaryArmor=None):
             for matKind in primaryArmor:
                 if matKind not in materialData:
                     materialData.append(matKind)
+
+        unknownMatKinds = []
+        for matKind in materialData:
+            if matKind not in material_kinds.NAMES_BY_IDS:
+                LOG_ERROR("ignoring unknown material kind '{}'".format(matKind))
+                unknownMatKinds.append(matKind)
+
+        materialData = [ matKind for matKind in materialData if matKind not in unknownMatKinds ]
 
         def materialSort(left, right):
             leftMatName = material_kinds.NAMES_BY_IDS.get(left)
@@ -6436,6 +6443,8 @@ def _readShotEffects(xmlCtx, section):
         if v is None:
             _xml.raiseWrongXml(xmlCtx, 'targetStickers/armorPierced', 'unknown name of sticker')
     res['targetStickers']['armorPierced'] = v
+    if section.has_key('shotsCount'):
+        res['shotsCount'] = _xml.readNonNegativeInt(xmlCtx, section, 'shotsCount')
     if IS_CLIENT or IS_UE_EDITOR:
         artillery = section.has_key('artillery')
         if artillery and IS_CLIENT:

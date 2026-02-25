@@ -14,10 +14,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.game_control.wotlda.constants import SupportedWotldaLoadoutType
 from gui.override_scaleform_views_manager import g_overrideScaleFormViewsConfig
 from gui.prb_control.prb_utils import initGuiTypes, initRequestType
-_LOBBY_EXT_PACKAGES = ['comp7.gui.Scaleform.daapi.view.lobby.profile',
- 'comp7.gui.Scaleform.daapi.view.lobby.header',
- 'comp7.gui.Scaleform.daapi.view.lobby.missions.regular',
- 'comp7.gui.impl.lobby.hangar']
+_LOBBY_EXT_PACKAGES = ['comp7.gui.Scaleform.daapi.view.lobby.profile', 'comp7.gui.Scaleform.daapi.view.lobby.missions.regular', 'comp7.gui.impl.lobby.hangar']
 _BATTLE_EXT_PACKAGES = ['comp7.gui.Scaleform.daapi.view.battle.shared']
 
 class ClientComp7BattleMode(Comp7BattleMode):

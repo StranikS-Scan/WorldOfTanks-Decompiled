@@ -44,38 +44,38 @@ def createTooltipContentDecorator():
 
         def wrapper(self, event, contentID):
             tooltipData = self.getTooltipData(event)
-            if contentID == R.views.lobby.battle_pass.tooltips.BattlePassGoldMissionTooltipView():
+            if contentID == R.views.mono.battle_pass.tooltips.gold_mission():
                 if tooltipData is None:
                     return
                 return BattlePassGoldMissionTooltipView(*tooltipData.specialArgs)
-            elif contentID == R.views.lobby.battle_pass.tooltips.BattlePassUpgradeStyleTooltipView():
+            elif contentID == R.views.mono.battle_pass.tooltips.upgrade_style():
                 if tooltipData is None:
                     return
                 return BattlePassUpgradeStyleTooltipView(*tooltipData.specialArgs)
-            elif contentID == R.views.lobby.battle_pass.tooltips.BattlePassQuestsChainTooltipView():
+            elif contentID == R.views.mono.battle_pass.tooltips.quest_chain():
                 if tooltipData is None:
                     return
                 return BattlePassQuestsChainTooltipView(*tooltipData.specialArgs)
-            elif contentID == R.views.lobby.battle_pass.tooltips.RandomQuestTooltip():
+            elif contentID == R.views.mono.battle_pass.tooltips.random_quest():
                 if event.hasArgument('tokenID'):
                     return RandomQuestTooltip(event.getArgument('tokenID'))
                 if tooltipData is None:
                     return
                 return RandomQuestTooltip(*tooltipData.specialArgs)
-            elif contentID == R.views.lobby.battle_pass.tooltips.BattlePassCoinTooltipView():
+            elif contentID == R.views.mono.battle_pass.tooltips.bpcoin():
                 return BattlePassCoinTooltipView()
-            elif contentID == R.views.lobby.battle_pass.tooltips.BattlePassPointsView():
+            elif contentID == R.views.mono.battle_pass.tooltips.bp_points():
                 return BattlePassPointsTooltip()
-            elif contentID == R.views.lobby.battle_pass.tooltips.BattlePassLockIconTooltipView():
+            elif contentID == R.views.mono.battle_pass.tooltips.lock_icon():
                 return BattlePassLockIconTooltipView()
             elif contentID == R.views.mono.lootbox.tooltips.box_tooltip():
                 if tooltipData is None:
                     return
                 return BoxTooltip(*tooltipData.specialArgs)
-            elif contentID == R.views.lobby.battle_pass.tooltips.BattlePassTalerTooltip():
+            elif contentID == R.views.mono.battle_pass.tooltips.bptaler():
                 return BattlePassTalerTooltip()
             else:
-                return CrewMemberSkillTooltip(event.getArgument('name'), event.getArgument('isZero'), event.getArgument('hasZeroPerk')) if contentID == R.views.lobby.battle_pass.tooltips.CrewMemberSkillTooltip() else func(self, event, contentID)
+                return CrewMemberSkillTooltip(event.getArgument('name'), event.getArgument('isZero'), event.getArgument('hasZeroPerk')) if contentID == R.views.mono.battle_pass.tooltips.crew_member_skill() else func(self, event, contentID)
 
         return wrapper
 

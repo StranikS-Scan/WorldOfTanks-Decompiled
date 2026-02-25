@@ -70,7 +70,7 @@ class RankedBattlesRewardsView(RankedBattlesRewardsMeta, IResetablePage):
         self.setActiveTab(self._selectedViewID)
 
     def _updateSounds(self):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def _updateYearRewardCounters(self):
         isNeedUpdate = False

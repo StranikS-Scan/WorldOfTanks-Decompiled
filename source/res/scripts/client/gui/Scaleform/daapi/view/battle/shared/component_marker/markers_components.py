@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/component_marker/markers_components.py
+from __future__ import absolute_import, division
 import math
 import weakref
+from past.utils import old_div
 import AnimationSequence
 import BigWorld
 import Math
@@ -48,8 +50,8 @@ class ComponentBitMask(BitmaskHelper):
      FULLSCREEN_MAP_MARKER)
 
 
-COMPONENT_MARKER_TYPE_NAMES = dict([ (k, v) for k, v in ComponentBitMask.__dict__.iteritems() if isinstance(v, int) ])
-COMPONENT_MARKER_TYPE_IDS = dict([ (v, k) for k, v in COMPONENT_MARKER_TYPE_NAMES.iteritems() ])
+COMPONENT_MARKER_TYPE_NAMES = {k:v for k, v in ComponentBitMask.__dict__.items() if isinstance(v, int)}
+COMPONENT_MARKER_TYPE_IDS = {v:k for k, v in COMPONENT_MARKER_TYPE_NAMES.items()}
 
 class _IMarkerComponentBase(object):
     settingsCore = dependency.descriptor(ISettingsCore)
@@ -57,7 +59,7 @@ class _IMarkerComponentBase(object):
 
     def __init__(self, config, matrixProduct, entity=None, targetID=INVALID_TARGET_ID, isVisible=True):
         super(_IMarkerComponentBase, self).__init__()
-        self._componentID = self._idGen.next()
+        self._componentID = self._idGen.nextSequenceID
         self._config = config
         self._matrixProduct = matrixProduct
         self._isVisible = isVisible
@@ -756,7 +758,7 @@ class PolygonalZoneMinimapMarkerComponent(MinimapMarkerComponent):
         udo = BigWorld.userDataObjects.get(guid, None)
         if udo:
             delta = udo.position - self.position
-            polygon = sum(([(p[0] + delta[0]) * xc, (p[1] - delta[2]) * yc] for p in udo.minimapMarkerPolygon), list())
+            polygon = sum(([(p[0] + delta[0]) * xc, (p[1] - delta[2]) * yc] for p in udo.minimapMarkerPolygon), [])
             self._gui().invoke(self._componentID, 'addZoneData', polygon)
         return
 
@@ -766,12 +768,12 @@ class PolygonalZoneMinimapMarkerComponent(MinimapMarkerComponent):
             return
         else:
             xc, yc = self._getSize()
-            self._polygon = sum(([p[0] * xc, p[1] * yc] for p in polygon), list())
+            self._polygon = sum(([p[0] * xc, p[1] * yc] for p in polygon), [])
             for mask in self._entity.masks:
                 udo = BigWorld.userDataObjects.get(mask.udoGuid, None)
                 if udo:
                     delta = udo.position - self.position
-                    self._maskingPolygons.append(sum(([(p[0] + delta[0]) * xc, (p[1] - delta[2]) * yc] for p in udo.minimapMarkerPolygon), list()))
+                    self._maskingPolygons.append(sum(([(p[0] + delta[0]) * xc, (p[1] - delta[2]) * yc] for p in udo.minimapMarkerPolygon), []))
 
             return
 
@@ -791,7 +793,7 @@ class PolygonalZoneMinimapMarkerComponent(MinimapMarkerComponent):
 
     def _getGradientSize(self):
         dimensions = self._entity.clientVisualComp.getDimensions()
-        return max(dimensions.x, dimensions.z) / 2
+        return old_div(max(dimensions.x, dimensions.z), 2)
 
     def __getMarkerProperties(self, isColorBlind):
         props = self._properties['default'] if not isColorBlind else self._properties['colorBlind']

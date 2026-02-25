@@ -8,6 +8,9 @@
       <include>
         <nations>	france	</nations>
       </include>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	3	</id>
@@ -65,6 +68,9 @@
       <include>
         <nations>	france	</nations>
       </include>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	36	</id>
@@ -209,6 +215,9 @@
       <include>
         <nations>	france	</nations>
       </include>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	149	</id>
@@ -387,6 +396,9 @@
       <include>
         <nations>	france	</nations>
       </include>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	30	</id>
@@ -468,6 +480,9 @@
       <include>
         <nations>	france	</nations>
       </include>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	68	</id>
@@ -989,6 +1004,8 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	4	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>
@@ -1504,19 +1521,19 @@
               <id>	843	</id>
               <showOn>	TURRET	</showOn>
               <position>
-                <p0>	-1.27996	</p0>
-                <p1>	2.37547	</p1>
+                <p0>	-1.279960	</p0>
+                <p1>	2.375470	</p1>
                 <p2>	0.133127	</p2>
               </position>
               <rotation>
-                <r0>	1.30254	</r0>
-                <r1>	-1.62194	</r1>
-                <r2>	3.14159	</r2>
+                <r0>	1.302540	</r0>
+                <r1>	-1.621940	</r1>
+                <r2>	3.141590	</r2>
               </rotation>
               <scale>
-                <s0>	0.82874	</s0>
+                <s0>	0.828740	</s0>
                 <s1>	0.911612	</s1>
-                <s2>	0.82874	</s2>
+                <s2>	0.828740	</s2>
               </scale>
             </item>
           </projection_decals>
@@ -1657,6 +1674,8 @@
                 <item>
                   <slotId>	18000	</slotId>
                   <id>	63	</id>
+                  <scaleFactorId>	0	</scaleFactorId>
+                  <rotated>	0	</rotated>
                 </item>
               </attachments>
             </outfit>
@@ -1711,6 +1730,8 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	69	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
           <insignias>
@@ -1796,10 +1817,14 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	89	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
             <item>
               <slotId>	38000	</slotId>
               <id>	90	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>
@@ -1856,6 +1881,9 @@
       <include>
         <nations>	france	</nations>
       </include>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	1104	</id>
@@ -1925,6 +1953,8 @@
             <item>
               <slotId>	18004	</slotId>
               <id>	153	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>

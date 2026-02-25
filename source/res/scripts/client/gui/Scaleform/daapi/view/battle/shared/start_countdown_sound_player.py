@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/start_countdown_sound_player.py
+from __future__ import absolute_import
 import logging
 import WWISE
 from helpers import dependency
@@ -17,7 +18,7 @@ class StartCountdownSoundPlayer(IAbstractPeriodView, IViewComponentsCtrlListener
         super(StartCountdownSoundPlayer, self).__init__()
         self.__soundID = dependency.instance(IBattleSessionProvider).arenaVisitor.type.getCountdownTimerSound()
         if not self.__soundID:
-            _logger.warning('Countdown sound for this game mode is not defined! ' + 'Please define one ' + 'otherwise remove this player from the list in the corresponded page.py')
+            _logger.warning('Countdown sound for this game mode is not defined! Define or remove player from page')
 
     def setCountdown(self, state, timeLeft):
         if state == COUNTDOWN_STATE.START:
@@ -29,7 +30,7 @@ class StartCountdownSoundPlayer(IAbstractPeriodView, IViewComponentsCtrlListener
 
     def __checkNotReplay(self):
         replay = BattleReplay.g_replayCtrl
-        return not replay.playbackSpeed == 0 if replay.isPlaying else True
+        return replay.playbackSpeed != 0 if replay.isPlaying else True
 
     def __playSound(self, timeLeft):
         if self.__soundID:

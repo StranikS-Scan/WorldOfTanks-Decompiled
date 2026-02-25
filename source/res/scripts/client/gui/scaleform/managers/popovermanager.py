@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/managers/PopoverManager.py
+from __future__ import absolute_import
 from debug_utils import LOG_ERROR
 from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.framework.entities.abstract.PopoverManagerMeta import PopoverManagerMeta

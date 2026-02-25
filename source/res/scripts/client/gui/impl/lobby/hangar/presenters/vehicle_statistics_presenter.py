@@ -1,21 +1,24 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/hangar/presenters/vehicle_statistics_presenter.py
 from __future__ import absolute_import
-import typing
 import logging
+import typing
 from future.utils import itervalues, iteritems
+from gui.game_control.wot_plus.utils import ProBoostUtils
 from gui.impl.gen import R
-from gui.impl.lobby.battle_pass.tooltips.vehicle_points_tooltip_view import VehiclePointsTooltipView
 from gui.impl.gen.view_models.views.lobby.hangar.sub_views.vehicle_statistic_model import VehicleStatisticModel
 from gui.impl.gen.view_models.views.lobby.hangar.sub_views.vehicle_statistics_model import VehicleStatisticsModel
+from gui.impl.lobby.battle_pass.tooltips.vehicle_points_tooltip_view import VehiclePointsTooltipView
 from gui.impl.pub.tooltip_window import SimpleTooltipContent
 from gui.impl.pub.view_component import ViewComponent
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prestige.prestige_helpers import mapGradeIDToUI, getCurrentGrade, getVehiclePrestigeMap, DEFAULT_PRESTIGE
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import dependency
+from renewable_subscription_common.settings_constants import PRO_BOOST_PDATA_KEY, PRO_BOOSTED_VEHICLE
+from skeletons.gui.game_control import IPlatoonController, IBattlePassController, IRentalsController, IWotPlusController
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.game_control import IPlatoonController, IBattlePassController, IRentalsController
 if typing.TYPE_CHECKING:
     from gui.impl.lobby.hangar.base.hangar_interfaces import IVehicleFilter, IAccountStyles
     from gui.shared.gui_items.dossier.stats import AccountRandomStatsBlock
@@ -26,6 +29,7 @@ class VehiclesStatisticsPresenter(ViewComponent[VehicleStatisticsModel]):
     __platoonCtrl = dependency.descriptor(IPlatoonController)
     __battlePass = dependency.descriptor(IBattlePassController)
     __rentalsCtrl = dependency.descriptor(IRentalsController)
+    __wotPlusCtrl = dependency.descriptor(IWotPlusController)
 
     def __init__(self, vehiclesComponent, accountStyles):
         super(VehiclesStatisticsPresenter, self).__init__(model=VehicleStatisticsModel)
@@ -47,11 +51,17 @@ class VehiclesStatisticsPresenter(ViewComponent[VehicleStatisticsModel]):
          (self.__platoonCtrl.onMembersUpdate, self.__onPlatoonMembersUpdate),
          (g_prbCtrlEvents.onVehicleClientStateChanged, self.__onVehicleClientStateChanged),
          (self.__rentalsCtrl.onRentChangeNotify, self.__onUpdateVehicles),
-         (self.__battlePass.onVehiclesPointsUpdated, self.__onBPVehiclesPointsUpdated))
+         (self.__battlePass.onVehiclesPointsUpdated, self.__onBPVehiclesPointsUpdated),
+         (self.__wotPlusCtrl.onDataChanged, self.__onWotPlusDataChanged))
 
     def _onLoading(self, *args, **kwargs):
         super(VehiclesStatisticsPresenter, self)._onLoading(*args, **kwargs)
         self.__fillVehicles()
+        g_eventBus.addListener(events.PrebattleEvent.SWITCHED, self.__onPrbSwitch, scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def _finalize(self):
+        g_eventBus.removeListener(events.PrebattleEvent.SWITCHED, self.__onPrbSwitch, scope=EVENT_BUS_SCOPE.LOBBY)
+        super(VehiclesStatisticsPresenter, self)._finalize()
 
     def __onBPVehiclesPointsUpdated(self, updates):
         with self.viewModel.transaction() as model:
@@ -92,11 +102,12 @@ class VehiclesStatisticsPresenter(ViewComponent[VehicleStatisticsModel]):
                 if intCD in self._vehiclesComponent.vehicles:
                     vehicle = self._vehiclesComponent.vehicles[intCD]
                     prestigeLevel, _ = vehiclePrestige.get(vehicle.intCD, DEFAULT_PRESTIGE)
-                    item = self.__convertToStatisticsModel(vehicle, accountRandomStats, prestigeLevel)
+                    isVehicleProBoosted = self.__isVehicleProBoosted(vehicle)
+                    item = self.__convertToStatisticsModel(vehicle, accountRandomStats, prestigeLevel, isVehicleProBoosted)
                     statistics.set(item.getId(), item)
                 statistics.remove(str(intCD))
 
-    def __convertToStatisticsModel(self, vehicle, accountRandomStats, prestigeLevel):
+    def __convertToStatisticsModel(self, vehicle, accountRandomStats, prestigeLevel, isProBoosted):
         vState, vStateLvl = self.__getVehicleStatus(vehicle)
         gradeType, grade = mapGradeIDToUI(getCurrentGrade(prestigeLevel, vehicle.intCD))
         battlesCount = 0
@@ -125,6 +136,7 @@ class VehiclesStatisticsPresenter(ViewComponent[VehicleStatisticsModel]):
         model.setMaxBpScore(bpCap)
         model.setBpProgress(bpProgress)
         model.setOwn3DStyle(vehicle.intCD in self.__accountStyles.vehiclesWith3DStyles and not vehicle.isOutfitLocked)
+        model.setProBoostActive(isProBoosted)
         if vehicle.isEarnCrystals:
             numberOfCrystalEarned = model.getNumberOfCrystalEarned()
             for numberOfCrystals in vehicle.getCrystalsEarnedInfo():
@@ -142,6 +154,14 @@ class VehiclesStatisticsPresenter(ViewComponent[VehicleStatisticsModel]):
             vState = Vehicle.VEHICLE_STATE.NOT_PRESENT
         return (vState, vStateLvl)
 
+    def __onWotPlusDataChanged(self, diff):
+        proBoostData = diff.get(PRO_BOOST_PDATA_KEY, None)
+        if not proBoostData or PRO_BOOSTED_VEHICLE not in proBoostData:
+            return
+        else:
+            self.__updateVehicles(self._vehiclesComponent.vehicles)
+            return
+
     def __updateVehicles(self, vehicles):
         with self.viewModel.transaction() as model:
             accountRandomStats = self.__itemsCache.items.getAccountDossier().getRandomStats()
@@ -149,5 +169,15 @@ class VehiclesStatisticsPresenter(ViewComponent[VehicleStatisticsModel]):
             statistics = model.getStatistics()
             for vehicle in itervalues(vehicles):
                 prestigeLevel, _ = vehiclePrestige.get(vehicle.intCD, DEFAULT_PRESTIGE)
-                item = self.__convertToStatisticsModel(vehicle, accountRandomStats, prestigeLevel)
+                isVehicleProBoosted = self.__isVehicleProBoosted(vehicle)
+                item = self.__convertToStatisticsModel(vehicle, accountRandomStats, prestigeLevel, isVehicleProBoosted)
                 statistics.set(item.getId(), item)
+
+    def __onPrbSwitch(self, _):
+        self.__updateVehicles(self._vehiclesComponent.vehicles)
+
+    def __isVehicleProBoosted(self, vehicle):
+        if not ProBoostUtils.isGameModeCompatibleForProBoost():
+            return False
+        playerBoostedVehicle = self.__wotPlusCtrl.getProBoostedVehicleInvID()
+        return vehicle.invID == playerBoostedVehicle

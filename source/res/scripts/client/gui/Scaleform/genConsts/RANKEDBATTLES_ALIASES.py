@@ -249,5 +249,4 @@ class RANKEDBATTLES_ALIASES(object):
      DIVISIONS_BRONZE,
      DIVISIONS_SILVER,
      DIVISIONS_GOLD]
-    ENTRY_POINT = 'RankedEntryPoint'
     QUALIFICATION_REWARDS_VIEW_ALIAS = 'qualificationRewardsViewAlias'

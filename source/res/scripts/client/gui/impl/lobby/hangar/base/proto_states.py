@@ -24,7 +24,10 @@ from skeletons.gui.game_control import ILoadoutController
 from skeletons.gui.lobby_context import ILobbyContext
 from sound_gui_manager import ViewSoundExtension
 from gui.lobby_state_machine.lobby_state_machine import LobbyStateMachine
+from gui.lobby_state_machine.transitions import ConditionalTransition
 from wg_async import await_callback, wg_async, BrokenPromiseError, wg_await
+if typing.TYPE_CHECKING:
+    from gui.shared.events import NavigationEvent
 _logger = logging.getLogger(__name__)
 
 class _HangarStatePrototype(SFViewLobbyState):
@@ -99,6 +102,10 @@ class _LoadoutConfirmStatePrototype(LobbyState):
     def _onEntered(self, event):
         super(_LoadoutConfirmStatePrototype, self)._onEntered(event)
         interactor = self.__loadoutController.interactor
+        if event.params.get('forcedRollback', False):
+            yield updateInteractor(interactor, False, True)
+            self.__forwardEvent(event)
+            return
         self.__dialog = interactor.showExitConfirmDialog
         if self.__dialog and event.targetStateID != self.getStateID():
             try:
@@ -111,7 +118,7 @@ class _LoadoutConfirmStatePrototype(LobbyState):
                 proceed = confirmed or rollback
                 yield updateInteractor(interactor, confirmed, rollback)
                 if proceed:
-                    self.getMachine().post(event)
+                    self.__forwardEvent(event)
                 else:
                     TopScopeTopLayerState.goTo()
             except BrokenPromiseError:
@@ -121,6 +128,9 @@ class _LoadoutConfirmStatePrototype(LobbyState):
         super(_LoadoutConfirmStatePrototype, self)._onExited()
         self.__dialog = None
         return
+
+    def __forwardEvent(self, event):
+        self.getMachine().post(event)
 
 
 class _LoadoutSectionStatePrototype(LobbyState, EventsHandler):
@@ -139,10 +149,13 @@ class _LoadoutSectionStatePrototype(LobbyState, EventsHandler):
         return ((event, self.__handleRestrictedEvent, EVENT_BUS_SCOPE.LOBBY) for event in self.__RESTRICTED_EVENTS)
 
     def _interactorConfirm(self, event):
-        interactorHasChanged = self.__loadoutController.interactor.hasChanged()
-        if event is None:
-            return interactorHasChanged
+        interactor = self.__loadoutController.interactor
+        if interactor is None:
+            return False
         else:
+            interactorHasChanged = self.__loadoutController.interactor.hasChanged()
+            if event is None:
+                return interactorHasChanged
             targetingSelf = event.targetStateID == self.getStateID()
             return not targetingSelf and interactorHasChanged
 
@@ -192,11 +205,17 @@ class _LoadoutSectionStatePrototype(LobbyState, EventsHandler):
 
 class _ShellsLoadoutStatePrototype(LobbyState):
 
+    def isStateReachable(self, event):
+        return True
+
     def getNavigationDescription(self):
         return LobbyStateDescription(title=backport.text(R.strings.pages.titles.loadout.shells()))
 
 
 class _EquipmentLoadoutStatePrototype(LobbyState):
+
+    def isStateReachable(self, event):
+        return True
 
     def getNavigationDescription(self):
         return LobbyStateDescription(title=backport.text(R.strings.pages.titles.loadout.equipment()))
@@ -204,11 +223,17 @@ class _EquipmentLoadoutStatePrototype(LobbyState):
 
 class _InstructionsLoadoutStatePrototype(LobbyState):
 
+    def isStateReachable(self, event):
+        return True
+
     def getNavigationDescription(self):
         return LobbyStateDescription(title=backport.text(R.strings.pages.titles.loadout.instructions()))
 
 
 class _ConsumablesLoadoutStatePrototype(LobbyState):
+
+    def isStateReachable(self, event):
+        return True
 
     def getNavigationDescription(self):
         return LobbyStateDescription(title=backport.text(R.strings.pages.titles.loadout.consumables()))
@@ -238,9 +263,9 @@ def generateBasicLoadoutStateClasses(parentHangarStateCls, loadoutResource, load
              lsm.getStateByCls(GeneratedConsumablesLoadoutState))
             parent = self.getParent()
             for state in generatedClasses:
-                parent.addNavigationTransition(state)
-                lsm.addNavigationTransitionFromParent(state)
-                state.addNavigationTransition(state, transitionType=TransitionType.EXTERNAL)
+                parent.addTransition(ConditionalTransition(WeakMethodProxy(state.isStateReachable)), state)
+                self.addTransition(ConditionalTransition(WeakMethodProxy(state.isStateReachable)), state)
+                state.addTransition(ConditionalTransition(WeakMethodProxy(state.isStateReachable), transitionType=TransitionType.EXTERNAL), state)
 
             super(GeneratedLoadoutState, self).registerTransitions()
 

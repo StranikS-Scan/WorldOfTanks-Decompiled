@@ -8,8 +8,9 @@ import typing
 from enum import Enum, unique
 from battle_pass_integration import getBattlePassByGameMode
 from constants import ARENA_BONUS_TYPE, MAX_VEHICLE_LEVEL, OFFER_TOKEN_PREFIX
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_CODEPOINT_WARNING
 from items import parseIntCompactDescr, vehicles
+from optional_bonuses import BONUS_MERGERS
 if typing.TYPE_CHECKING:
     from typing import Dict, Generator, Sequence, Tuple, Union, List, Set
 BATTLE_PASS_TOKEN_PREFIX = 'battle_pass:'
@@ -68,8 +69,8 @@ MAX_POST_PROGRESSION_POINTS = 1000000
 MAX_POST_PROGRESSION_LEVEL = 10000
 BATTLE_PASS_TOKEN_LIFETIME = 4320
 HOLIDAY_SEASON_OFFSET = 1000
+STARTER_PACK_LOGGING_PARTNER_ID = 19
 BATTLE_PASS_COST_CURRENCIES = {'gold'}
-BATTLE_PASS_EXTRA_COST_CURRENCIES = {'gold'}
 BP_TANKMEN_ENTITLEMENT_TAG_PREFIX = 'tankmen_bp'
 BP_HOLIDAY_TANKMEN_ENTITLEMENT_TAG_PREFIX = 'tankmen_bph'
 BP_TANKMAN_QUEST_CHAIN_TOKEN_POSTFIX = '_bp_chain'
@@ -119,6 +120,7 @@ class BattlePassRewardReason(object):
      PURCHASE_BATTLE_PASS_LEVELS,
      PURCHASE_BATTLE_PASS_MULTIPLE,
      PURCHASE_BATTLE_PASS_WITH_LEVELS)
+    REASONS_WITH_STARTER_PACK = (PURCHASE_BATTLE_PASS, PURCHASE_BATTLE_PASS_MULTIPLE, PURCHASE_BATTLE_PASS_WITH_LEVELS)
 
 
 class BattlePassState(object):
@@ -306,6 +308,15 @@ def getPostProgressionLevelInCycleForRewards(cycleLength, level):
     return (level - 1) % cycleLength + 1
 
 
+def mergeRewards(storage, rewardsToMerge):
+    for key, value in rewardsToMerge.iteritems():
+        if key in BONUS_MERGERS:
+            BONUS_MERGERS[key](storage, key, value, False, 1, None)
+        LOG_CODEPOINT_WARNING()
+
+    return
+
+
 class BattlePassConfig(object):
     REWARD_IDX = 0
     TAGS_IDX = 1
@@ -417,7 +428,18 @@ class BattlePassConfig(object):
         return self._extraChapterIds
 
     def getBattlePassCost(self, chapterID):
-        return self.chapters.get(chapterID, {}).get('battlePassCost', {'priceA': {'gold': 0}})
+        return self.chapters.get(chapterID, {}).get('battlePassCost', {'gold': 0})
+
+    def getChapterStarterPack(self, chapterID):
+        return self.chapters.get(chapterID, {}).get('starterPack') or {}
+
+    def getAllRegularChaptersStarterPack(self):
+        result = {}
+        for chapterID in self._regularChapterIds:
+            chapterStarterPack = self.chapters[chapterID].get('starterPack') or {}
+            mergeRewards(result, chapterStarterPack)
+
+        return result
 
     def getTankmenScreens(self):
         return self._season.get('tankmenScreens', {})

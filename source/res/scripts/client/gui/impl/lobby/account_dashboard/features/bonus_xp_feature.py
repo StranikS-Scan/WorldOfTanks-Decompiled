@@ -1,12 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/account_dashboard/features/bonus_xp_feature.py
 import typing
-from constants import PremiumConfigs, PREMIUM_TYPE, RENEWABLE_SUBSCRIPTION_CONFIG
+from PlayerEvents import g_playerEvents
+from constants import PremiumConfigs, PREMIUM_TYPE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl.lobby.account_dashboard.features.base import FeatureItem
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.shared.event_dispatcher import showDailyExpPageView
 from helpers import dependency
+from renewable_subscription_common.schema import renewableSubscriptionsConfigSchema
+from renewable_subscription_common.settings_constants import RS_TIER
 from skeletons.gui.game_control import IGameSessionController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -36,6 +39,7 @@ class BonusXPFeature(FeatureItem):
         self.__wotPlusController.onDataChanged += self._onWotPlusChange
         g_clientUpdateManager.addCallbacks({'stats.applyAdditionalXPCount': self.__onUpdate,
          'stats.applyAdditionalWoTPlusXPCount': self.__onUpdate})
+        g_playerEvents.onConfigModelUpdated += self._onConfigModelUpdated
         self._viewModel.bonusXp.onClick += self.__onClick
 
     def __stopListening(self):
@@ -44,16 +48,21 @@ class BonusXPFeature(FeatureItem):
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self._onServerSettingsChange
         self.__wotPlusController.onDataChanged -= self._onWotPlusChange
         g_clientUpdateManager.removeObjectCallbacks(self)
+        g_playerEvents.onConfigModelUpdated -= self._onConfigModelUpdated
 
     def __onUpdate(self, *_):
         self.__updateModel()
 
     def _onServerSettingsChange(self, diff):
-        if PremiumConfigs.DAILY_BONUS in diff or RENEWABLE_SUBSCRIPTION_CONFIG in diff:
+        if PremiumConfigs.DAILY_BONUS in diff:
+            self.__updateModel()
+
+    def _onConfigModelUpdated(self, gpKey):
+        if renewableSubscriptionsConfigSchema.gpKey == gpKey:
             self.__updateModel()
 
     def _onWotPlusChange(self, data):
-        if 'isEnabled' in data:
+        if RS_TIER in data:
             self.__updateModel()
 
     @replaceNoneKwargsModel
@@ -61,12 +70,13 @@ class BonusXPFeature(FeatureItem):
         submodel = model.bonusXp
         serverSettings = self.__lobbyContext.getServerSettings()
         premiumBonusConfig = serverSettings.getAdditionalBonusConfig()
+        wotPlusSettings = self.__wotPlusController.getSettingsStorage()
         isPremiumBonusEnabled = premiumBonusConfig.get('enabled', False)
-        isWotPlusBonusEnabled = serverSettings.isAdditionalWoTPlusEnabled()
+        isWotPlusBonusEnabled = wotPlusSettings.isAdditionalXPBonusEnabled()
         hasPremium = any((self.__itemsCache.items.stats.isActivePremium(premiumType) for premiumType in PREMIUM_TYPE.AFFECTING_TYPES_SET))
-        hasWotPlus = self.__wotPlusController.isEnabled()
+        hasWotPlus = self.__wotPlusController.hasSubscription()
         premiumAdditionalCount = premiumBonusConfig.get('applyCount') if isPremiumBonusEnabled and hasPremium else 0
-        wotPlusAdditionalCount = serverSettings.getAdditionalWoTPlusXPCount() if hasWotPlus and isWotPlusBonusEnabled else 0
+        wotPlusAdditionalCount = wotPlusSettings.getAdditionalXPBonusCount() if hasWotPlus else 0
         submodel.setIsEnabled(isPremiumBonusEnabled or isWotPlusBonusEnabled)
         submodel.setMultiplier(int(premiumBonusConfig.get('bonusFactor')))
         usesLeft = 0

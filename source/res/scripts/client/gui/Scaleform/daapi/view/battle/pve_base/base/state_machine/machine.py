@@ -1,11 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/pve_base/base/state_machine/machine.py
+from __future__ import absolute_import
 import typing
 import BigWorld
-from frameworks.state_machine import StateMachine, StateEvent
+from frameworks.state_machine import StateMachine
 from gui.Scaleform.daapi.view.battle.pve_base.base.state_machine.events import OneSecondEvent, ToStateEvent
 from gui.Scaleform.daapi.view.battle.pve_base.base.state_machine.states import BaseTimerState
 from helpers.CallbackDelayer import CallbackDelayer
+if typing.TYPE_CHECKING:
+    from frameworks.state_machine import StateEvent
 STATE_TICK_INTERVAL = 1
 
 class BaseStateMachine(StateMachine):

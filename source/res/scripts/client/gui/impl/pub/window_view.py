@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/pub/window_view.py
+from __future__ import absolute_import
 from frameworks.wulf import View, ViewFlags, ViewSettings
 from gui.impl.gen.view_models.windows.window_model import WindowModel
 from gui.impl.gen import R

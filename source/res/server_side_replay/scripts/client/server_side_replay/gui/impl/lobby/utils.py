@@ -35,7 +35,7 @@ def buildPopoverTankFilterCriteria(filters):
     criteria |= ~REQ_CRITERIA.VEHICLE.COMP7
     criteria |= ~REQ_CRITERIA.VEHICLE.EPIC_BATTLE
     criteria |= ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING
-    criteria |= ~REQ_CRITERIA.VEHICLE.FUN_RANDOM
+    criteria |= ~REQ_CRITERIA.VEHICLE.MODE_HIDDEN
     criteria |= ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
     for field, value in filters.items():
         if not value:

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/ribbons_panel.py
+from __future__ import absolute_import
 import logging
 from account_helpers.settings_core.settings_constants import BATTLE_EVENTS, GRAPHICS
 from gui.Scaleform.daapi.view.battle.shared import ribbons_aggregator
@@ -259,9 +260,9 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
     def getBattleEventsSettingsToBattleEfficiencyTypes(cls):
         return _BATTLE_EVENTS_SETTINGS_TO_BATTLE_EFFICIENCY_TYPES
 
-    def onShow(self, ribbonID):
+    def onShow(self, ribbonId):
         sound = _SHOW_RIBBON_SOUND_NAME
-        ribbon = self._ribbonsAggregator.getRibbon(ribbonID)
+        ribbon = self._ribbonsAggregator.getRibbon(ribbonId)
         if ribbon and ribbon.isRoleBonus():
             sound = _SHOW_RIBBON_EXP_SOUND_NAME
         self.__playSound(sound)
@@ -269,11 +270,11 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
     def onChange(self):
         self.__playSound(_CHANGE_RIBBON_SOUND_NAME)
 
-    def onHide(self, ribbonID):
-        ribbon = self._ribbonsAggregator.getRibbon(ribbonID)
-        _logger.debug('RIBBON PANEL: onHide: ribbonID=%s, ribbon="%s"', ribbonID, ribbon)
+    def onHide(self, ribbonId):
+        ribbon = self._ribbonsAggregator.getRibbon(ribbonId)
+        _logger.debug('RIBBON PANEL: onHide: ribbonID=%s, ribbon="%s"', ribbonId, ribbon)
         if ribbon is not None:
-            self._ribbonsAggregator.resetRibbonData(ribbonID)
+            self._ribbonsAggregator.resetRibbonData(ribbonId)
             self.__playSound(_HIDE_RIBBON_SOUND_NAME)
         return
 

@@ -370,9 +370,7 @@ class Customization(FittingItem):
 
     def boundInventoryCount(self, vehicleIntCD=None):
         if vehicleIntCD is not None:
-            if vehicleIntCD in self._boundVehicles:
-                return self._boundVehicles[vehicleIntCD]
-            return 0
+            return self._boundVehicles.get(vehicleIntCD, 0)
         else:
             if self.__boundInventoryCount is None:
                 self.__boundInventoryCount = sum(self._boundVehicles.itervalues())
@@ -388,9 +386,7 @@ class Customization(FittingItem):
 
     def installedCount(self, vehicleIntCD=None):
         if vehicleIntCD is not None:
-            if vehicleIntCD in self._installedVehicles:
-                return self._installedVehicles[vehicleIntCD]
-            return 0
+            return self._installedVehicles.get(vehicleIntCD, 0)
         else:
             if self.__installedCount is None:
                 self.__installedCount = sum(self._installedVehicles.itervalues())

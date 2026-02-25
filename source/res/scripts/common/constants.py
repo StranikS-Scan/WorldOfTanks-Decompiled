@@ -3,6 +3,7 @@
 import typing
 from enum import IntEnum
 import enum
+from future.utils import iteritems
 import calendar
 import time
 from math import cos, radians
@@ -109,6 +110,7 @@ IS_SHOW_SERVER_STATS = not IS_CHINA
 LEAKS_DETECTOR_MAX_EXECUTION_TIME = 2.0
 IS_IGR_ENABLED = IS_KOREA or IS_CHINA
 SERVER_TICK_LENGTH = 0.1
+HALF_SERVER_TICK = SERVER_TICK_LENGTH * 0.5
 NULL_ENTITY_ID = 0
 SHELL_TRAJECTORY_EPSILON_CLIENT = 0.03
 SHELL_TRAJECTORY_EPSILON_SERVER = 0.1
@@ -263,6 +265,8 @@ class ARENA_GUI_TYPE:
      EPIC_RANDOM,
      EPIC_BATTLE,
      MAPBOX)
+    NON_DESERTION_ARENAS = (TRAINING, MAPS_TRAINING, EPIC_RANDOM_TRAINING)
+    REPLAY_DISABLE_RANGE = []
 
 
 class ARENA_GUI_TYPE_LABEL:
@@ -320,7 +324,6 @@ class ARENA_BONUS_TYPE:
     RTS = 39
     RTS_1x1 = 40
     RTS_BOOTCAMP = 41
-    FUN_RANDOM = 42
     COMP7 = 43
     WINBACK = 44
     RANDOM_NP2 = 46
@@ -362,7 +365,6 @@ class ARENA_BONUS_TYPE:
      RTS,
      RTS_1x1,
      RTS_BOOTCAMP,
-     FUN_RANDOM,
      COMP7,
      WINBACK,
      TOURNAMENT_COMP7,
@@ -394,7 +396,6 @@ class ARENA_BONUS_TYPE:
      TOURNAMENT_REGULAR,
      TOURNAMENT_EVENT,
      TOURNAMENT_COMP7)
-    REPLAY_DISABLE_RANGE = []
 
 
 ARENA_BONUS_TYPE_NAMES = dict([ (k, v) for k, v in ARENA_BONUS_TYPE.__dict__.iteritems() if isinstance(v, int) ])
@@ -415,6 +416,7 @@ class ARENA_BONUS_MASK:
     @classmethod
     def reInit(cls):
         cls.TYPE_BITS = dict(((name, 2 ** id) for id, name in enumerate(ARENA_BONUS_TYPE.RANGE[1:])))
+        cls.ANY = sum((1 << index for index in xrange(len(cls.TYPE_BITS))))
 
 
 class ARENA_PERIOD:
@@ -889,8 +891,12 @@ class PREMIUM_ENTITLEMENTS:
     ALL_TYPES = (BASIC, PLUS, VIP)
 
 
-SUBSCRIPTION_ENTITLEMENT = 'premium_subs'
-WOT_PLUS_SUBSCRIPTION_PRODUCT = 'subscription'
+class RENEWABLE_SUBSCRIPTION_ENTITLEMENTS(object):
+    CORE = 'premium_subs'
+    PRO = 'premium_pro_subs'
+    ALL_TYPES = (CORE, PRO)
+
+
 PRIME_GAMING_SUBSCRIPTION_PRODUCT = 'prime_subscription'
 ENTITLEMENT_TO_PREM_TYPE = {PREMIUM_ENTITLEMENTS.BASIC: PREMIUM_TYPE.BASIC,
  PREMIUM_ENTITLEMENTS.PLUS: PREMIUM_TYPE.PLUS,
@@ -929,7 +935,6 @@ class PremiumConfigs(object):
 BASE_PREM_FACTOR = 1.0
 DAILY_QUESTS_CONFIG = 'daily_quests_config'
 DOG_TAGS_CONFIG = 'dog_tags_config'
-RENEWABLE_SUBSCRIPTION_CONFIG = 'renewable_subscription_config'
 OPTIONAL_DEVICES_USAGE_CONFIG = 'optional_devices_usage_config'
 PLAYER_SUBSCRIPTIONS_CONFIG = 'player_subscriptions_config'
 IS_LOOT_BOXES_ENABLED = 'isLootBoxesEnabled'
@@ -985,6 +990,7 @@ class Configs(enum.Enum):
     WTR_CONFIG = 'wtr_config'
     WEEKLY_QUESTS_CONFIG = 'weekly_quests_config'
     WEEKLY_QUESTS_CONFIGS = 'weekly_quests_configs'
+    RENEWABLE_SUBSCRIPTION_CONFIG = 'renewable_subscription_config'
     INGAME_TOURNAMENT_CONFIG = 'ingame_tournament_config'
 
 
@@ -1484,6 +1490,7 @@ class VEHICLE_HIT_FLAGS(BIN_FLAGS):
     ATTACK_IS_RICOCHET_PROJECTILE = 8388608
     ATTACK_IS_COMPRESSION = 16777216
     MATERIAL_WITH_POSITIVE_DF_NOT_PIERCED_WITH_DAMAGE_BY_PROJECTILE = 33554432
+    HAS_DESTRUCTIBLE_TARGET = 67108864
     IS_ANY_DAMAGE_MASK = MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_PROJECTILE | MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_EXPLOSION | DEVICE_PIERCED_BY_PROJECTILE | DEVICE_PIERCED_BY_EXPLOSION | MATERIAL_WITH_POSITIVE_DF_NOT_PIERCED_WITH_DAMAGE_BY_PROJECTILE
     IS_ANY_PIERCING_MASK = MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_PROJECTILE | MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_EXPLOSION | DEVICE_PIERCED_BY_PROJECTILE | DEVICE_PIERCED_BY_EXPLOSION | ARMOR_WITH_ZERO_DF_PIERCED_BY_PROJECTILE | ARMOR_WITH_ZERO_DF_PIERCED_BY_EXPLOSION
     IS_ANY_IMPACT_MASK = IS_ANY_DAMAGE_MASK | IS_ANY_PIERCING_MASK
@@ -1774,6 +1781,7 @@ class QUEUE_TYPE:
     COMP7_LIGHT = 33
     STORY_MODE = 100
     FALLOUT = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
+    FUN_RANDOM_RANGE = (FUN_RANDOM,)
     ALL = (RANDOMS,
      COMPANIES,
      VOLUNTEERS,
@@ -2063,7 +2071,6 @@ class REQUEST_COOLDOWN:
     BUY_BATTLE_PASS_LEVELS = 1.0
     ABILITIES = 1.0
     CREW_BOOKS = 0.5
-    CUSTOMIZATION_NOVELTY = 0.5
     REPAIR_VEHICLE = 0.5
     RECEIVE_OFFER_GIFT = 1.0
     RECEIVE_OFFER_GIFT_MULTIPLE = 1.0
@@ -2099,6 +2106,10 @@ class REQUEST_COOLDOWN:
     CMD_PET_SYSTEM_SELECT_PET_NAME = 1.0
     CMD_PET_SYSTEM_SELECT_ACTIVE_PET_BONUS = 0.5
     CMD_PET_SYSTEM_ADD_SYNERGY = 1.0
+
+
+class REQUEST_RATE_LIMIT:
+    RESET_NOVELTY_MARKERS = (4, 2.0)
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -2472,7 +2483,8 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.PERSONAL_MISSION_3: 'prsonal mission 3 settings',
  125: 'Competitive7x7 Light carousel filter 1',
  126: 'Competitive7x7 Light carousel filter 2',
- 127: 'Competitive7x7 Light carousel filter 3'}
+ 127: 'Competitive7x7 Light carousel filter 3',
+ 128: 'Situational perks'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -3030,7 +3042,6 @@ class TARGET_LOST_FLAGS:
 
 
 GIFT_TANKMAN_TOKEN_NAME = 'WOTD-95479_gift_tankman'
-JUNK_CREW_CONVERSION_TOKEN = 'junk_crew_conversion_token'
 GRACE_PERIOD_RESET_PERK = 'grace_period_reset_perk'
 ENABLE_FREE_PREMIUM_CREW = False
 GAMEPLAY_NAMES_WITH_DISABLED_QUESTS = ('bootcamp',)
@@ -3661,8 +3672,8 @@ class DeviceRepairMode(enum.IntEnum):
 
 
 class LoadoutParams(object):
-    groupIndex = 'groupIndex'
-    sectionIndex = 'sectionIndex'
+    groupId = 'groupId'
+    sectionName = 'sectionName'
     slotIndex = 'slotIndex'
 
 
@@ -3748,7 +3759,8 @@ class POSTMORTEM_MODIFIERS(object):
 
 
 DEFAULT_POSTMORTEM_SETTINGS = {'deathfreecam': False,
- 'killcam': False}
+ 'killcam': False,
+ 'lookAtKiller': False}
 
 class KILL_CAM_STATUS_CODE(enum.IntEnum):
     SUCCESS = 0
@@ -3856,6 +3868,9 @@ class WoTPlusBonusType(object):
     BADGES = 'badges'
     ADDITIONAL_BONUSES = 'additional_bonuses'
     OPTIONAL_DEVICES_ASSISTANT = 'optional_devices_assistant'
+    PRO_BOOST = 'pro_boost'
+    SERVICE_RECORD_CUSTOMIZATION = 'service_record_customization'
+    BATTLE_PASS_PLUS = 'battle_pass_plus'
 
 
 class WoTPlusDailyAttendance(object):
@@ -3932,11 +3947,6 @@ class RandomizationType(object):
 
 class RANDOM_FLAGS:
     IS_MAPS_IN_DEVELOPMENT_ENABLED = 2
-
-
-class JUNK_TANKMAN_NOVELTY:
-    HEADER = 1
-    WIDGET = 2
 
 
 class PENALTY_TYPES(enum.Enum):
@@ -4378,3 +4388,4 @@ class AcceleratorStatus(enum.IntEnum):
 
 
 VEHICLE_MIN_ABS_INITIAL_SPEED = 0.1
+SHOT_PREDICTION_BUFFER = 0.3

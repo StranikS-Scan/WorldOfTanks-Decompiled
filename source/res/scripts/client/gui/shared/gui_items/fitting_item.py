@@ -98,7 +98,7 @@ class RentalInfoProvider(_RentalInfoProvider):
                             return SeasonRentInfo(seasonType, rentID, duration, currentSeason.getCycleEndDate())
                         now = time_utils.getCurrentLocalServerTimestamp()
                         nextCycle = currentSeason.getNextCycleInfo(now) or currentSeason.getNextByTimeCycle(now)
-                        if nextCycle and nextCycle.ID == rentID:
+                        if nextCycle and rentID == nextCycle.ID:
                             return SeasonRentInfo(seasonType, rentID, duration, nextCycle.endDate)
 
         return

@@ -3,11 +3,13 @@
 from CurrentVehicle import g_currentVehicle
 from constants import LoadoutParams
 from frontline.frontline_account_settings import isRentBannerClicked, setRentBannerClicked
+from frontline.gui.impl.gen.view_models.views.lobby.views.frontline_const import FrontlineConst
 from frontline.gui.impl.gen.view_models.views.lobby.views.event_widget_model import EventWidgetModel
 from frontline.gui.impl.lobby.states import ProgressionScreenState, FrontlineBattleAbilitiesLoadoutState
 from frontline.gui.impl.lobby.tooltips.banner_tooltip import BannerTooltipView
 from frontline.gui.impl.lobby.user_missions.hangar_widget.overlap_ctrl import FLOverlapCtrlMixin
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getRentVehicleUrl
+from gui.impl.gen.view_models.views.lobby.tank_setup.common.ammunition_panel_constants import AmmunitionPanelConstants
 from gui.impl.lobby.user_missions.hangar_widget.tooltip_positioner import TooltipPositionerMixin
 from gui.impl.pub.view_component import ViewComponent
 from gui.shared.event_dispatcher import showShop, showEpicRewardsSelectionWindow
@@ -38,11 +40,11 @@ class _LastEntryState(object):
 
 
 class BattleAbilitiesLoadoutParams(object):
-    loadoutGroupIndex = 0
-    loadoutSectionIndex = 2
+    loadoutGroupId = AmmunitionPanelConstants.NO_GROUP
+    loadoutSectionName = FrontlineConst.BATTLE_ABILITIES
     loadoutSlotIndex = 0
-    parameters = {LoadoutParams.groupIndex: loadoutGroupIndex,
-     LoadoutParams.sectionIndex: loadoutSectionIndex,
+    parameters = {LoadoutParams.groupId: loadoutGroupId,
+     LoadoutParams.sectionName: loadoutSectionName,
      LoadoutParams.slotIndex: loadoutSlotIndex}
 
 

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/servers_data_provider.py
+from __future__ import absolute_import
 import logging
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.impl import backport
@@ -160,7 +161,7 @@ class ServersDataProvider(SortableDAAPIDataProvider):
         csisStatus = item['csisStatus']
         if pingStatus == PING_STATUSES.REQUESTED:
             return _INDICATOR_STATUSES.WAITING
-        if csisStatus == HOST_AVAILABILITY.RECOMMENDED or csisStatus == HOST_AVAILABILITY.UNKNOWN:
+        if csisStatus in (HOST_AVAILABILITY.RECOMMENDED, HOST_AVAILABILITY.UNKNOWN):
             return self.__checkPingForValidStatus(pingStatus)
         if csisStatus in (HOST_AVAILABILITY.NOT_AVAILABLE, HOST_AVAILABILITY.NOT_RECOMMENDED):
             return _INDICATOR_STATUSES.IGNORED

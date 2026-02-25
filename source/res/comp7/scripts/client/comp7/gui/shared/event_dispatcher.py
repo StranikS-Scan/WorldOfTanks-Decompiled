@@ -4,6 +4,7 @@ import logging
 import typing
 from comp7.gui.impl.gen.view_models.views.lobby.enums import MetaRootViews
 from frameworks.wulf import Window
+from gui.Scaleform.daapi.view.lobby.vehicle_preview.configurable_vehicle_preview import OptionalBlocks
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.server_events.events_dispatcher import ifPrbNavigationEnabled
 from helpers import dependency
@@ -212,7 +213,8 @@ def showComp7VehiclePreview(vehCD, **kwargs):
     from comp7.gui.impl.lobby.hangar.states import Comp7VehiclePreviewState
     kwargs.update({'itemCD': vehCD,
      'showBackButton': False,
-     'showCloseButton': False})
+     'showCloseButton': False,
+     'hiddenBlocks': (OptionalBlocks.ALL,)})
     params = {'ctx': kwargs}
     Comp7VehiclePreviewState.goTo(**params)
 

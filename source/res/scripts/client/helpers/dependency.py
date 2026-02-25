@@ -5,6 +5,7 @@ import inspect
 import logging
 import typing
 from ids_generators import SequenceIDGenerator
+from py2to3.utils import getargspec
 from soft_exception import SoftException
 InterfaceType = typing.TypeVar('InterfaceType')
 _logger = logging.getLogger(__name__)
@@ -60,7 +61,7 @@ class replace_none_kwargs(object):
             self.__services[name] = class_
 
     def __call__(self, func):
-        spec = inspect.getargspec(func)
+        spec = getargspec(func)
         for name, _ in self.__services.iteritems():
             if name not in spec.args:
                 raise DependencyError('Argument {} is not found in {}'.format(name, func))
@@ -68,10 +69,7 @@ class replace_none_kwargs(object):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             for serviceName, clazz in self.__services.iteritems():
-                if serviceName not in kwargs:
-                    actual = None
-                else:
-                    actual = kwargs[serviceName]
+                actual = kwargs.get(serviceName)
                 if actual is None:
                     kwargs[serviceName] = instance(clazz)
 

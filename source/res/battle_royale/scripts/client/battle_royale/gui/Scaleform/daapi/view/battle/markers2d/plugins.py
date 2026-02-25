@@ -59,9 +59,9 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
         self.__cache = {}
         return
 
-    def invalidateVehicleStatus(self, flags, vInfo, arenaDP):
-        if not vInfo.isAlive() and (isSpawnedBot(vInfo.vehicleType.tags) or isHunterBot(vInfo.vehicleType.tags)):
-            self._hideVehicleMarker(vInfo.vehicleID)
+    def invalidateVehicleStatus(self, flags, vInfoVO, arenaDP):
+        if not vInfoVO.isAlive() and (isSpawnedBot(vInfoVO.vehicleType.tags) or isHunterBot(vInfoVO.vehicleType.tags)):
+            self._hideVehicleMarker(vInfoVO.vehicleID)
 
     def _hideVehicleMarker(self, vehicleID):
         if vehicleID in self.__markersStatesExtended:

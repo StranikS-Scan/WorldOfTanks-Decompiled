@@ -26,7 +26,7 @@ class FAQWindow(FAQWindowMeta):
         if item.question and item.answer:
             batch = [formatHtml('firstFAQItem', ctx=item._asdict())]
         for item in self.__list.getIterator(offset=1):
-            if FAQ_BATCH_SIZE > len(batch):
+            if len(batch) < FAQ_BATCH_SIZE:
                 self.as_appendTextS(''.join(batch))
                 batch = []
             batch.append(formatHtml('nextFAQItem', ctx=item._asdict()))

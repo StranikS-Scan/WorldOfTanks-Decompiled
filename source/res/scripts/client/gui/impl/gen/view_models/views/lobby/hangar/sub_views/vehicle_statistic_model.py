@@ -12,7 +12,7 @@ class VehicleStatisticModel(ViewModel):
     MAXIMUM = 'prestige'
     UNDEFINED = 'undefined'
 
-    def __init__(self, properties=21, commands=0):
+    def __init__(self, properties=22, commands=0):
         super(VehicleStatisticModel, self).__init__(properties=properties, commands=commands)
 
     def getId(self):
@@ -111,39 +111,45 @@ class VehicleStatisticModel(ViewModel):
     def setFromWotPlus(self, value):
         self._setBool(15, value)
 
-    def getBpSpecial(self):
+    def getProBoostActive(self):
         return self._getBool(16)
 
-    def setBpSpecial(self, value):
+    def setProBoostActive(self, value):
         self._setBool(16, value)
 
+    def getBpSpecial(self):
+        return self._getBool(17)
+
+    def setBpSpecial(self, value):
+        self._setBool(17, value)
+
     def getMaxBpScore(self):
-        return self._getNumber(17)
-
-    def setMaxBpScore(self, value):
-        self._setNumber(17, value)
-
-    def getBpProgress(self):
         return self._getNumber(18)
 
-    def setBpProgress(self, value):
+    def setMaxBpScore(self, value):
         self._setNumber(18, value)
 
+    def getBpProgress(self):
+        return self._getNumber(19)
+
+    def setBpProgress(self, value):
+        self._setNumber(19, value)
+
     def getNumberOfCrystalEarned(self):
-        return self._getArray(19)
+        return self._getArray(20)
 
     def setNumberOfCrystalEarned(self, value):
-        self._setArray(19, value)
+        self._setArray(20, value)
 
     @staticmethod
     def getNumberOfCrystalEarnedType():
         return int
 
     def getOwn3DStyle(self):
-        return self._getBool(20)
+        return self._getBool(21)
 
     def setOwn3DStyle(self, value):
-        self._setBool(20, value)
+        self._setBool(21, value)
 
     def _initialize(self):
         super(VehicleStatisticModel, self)._initialize()
@@ -163,6 +169,7 @@ class VehicleStatisticModel(ViewModel):
         self._addNumberProperty('prestigeGrade', -1)
         self._addStringProperty('prestigeType', '')
         self._addBoolProperty('fromWotPlus', False)
+        self._addBoolProperty('proBoostActive', False)
         self._addBoolProperty('bpSpecial', False)
         self._addNumberProperty('maxBpScore', -1)
         self._addNumberProperty('bpProgress', -1)

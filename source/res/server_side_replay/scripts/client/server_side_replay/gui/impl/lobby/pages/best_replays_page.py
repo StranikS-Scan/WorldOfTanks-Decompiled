@@ -195,7 +195,7 @@ class BestReplaysPage(PageSubModelPresenter):
         try:
             vehicle = self.__itemsCache.items.getItemByCD(replayInfo.vehicle_cd)
             fillVehicleModel(replayModel.vehicleInfo, vehicle)
-        except:
+        except Exception:
             vehicle = self.__itemsCache.items.getItemByCD(13377)
             fillVehicleModel(replayModel.vehicleInfo, vehicle)
             replayModel.vehicleInfo.setName('UnknownVeihlce{}'.format(replayInfo.vehicle_cd))

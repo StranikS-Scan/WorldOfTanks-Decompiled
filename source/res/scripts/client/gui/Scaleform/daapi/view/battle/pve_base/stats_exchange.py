@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/pve_base/stats_exchange.py
+from __future__ import absolute_import
 import typing
+from past.builtins import cmp
 from TeamInfoLivesComponent import TeamInfoLivesComponent
 from constants import BOT_DISPLAY_STATUS
 from gui.Scaleform.daapi.view.battle.classic.stats_exchange import ClassicStatisticsDataController, DynamicVehicleStatsComponent

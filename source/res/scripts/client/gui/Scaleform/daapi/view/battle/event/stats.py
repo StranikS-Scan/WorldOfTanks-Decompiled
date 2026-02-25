@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/event/stats.py
+from __future__ import absolute_import
 from PlayerEvents import g_playerEvents
 from constants import ARENA_PERIOD
 from gui.Scaleform.daapi.view.meta.EventStatsMeta import EventStatsMeta
@@ -16,7 +17,7 @@ class EventStats(EventStatsMeta, IArenaVehiclesController):
         super(EventStats, self).__init__()
         self._title = None
         self._desc = None
-        self._points = dict()
+        self._points = {}
         self.__arenaDP = self.sessionProvider.getArenaDP()
         return
 

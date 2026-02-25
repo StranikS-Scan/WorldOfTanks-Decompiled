@@ -10,6 +10,7 @@ def injectConsts(personality):
     addPrebattleTypesFromExtension(comp7_constants.PREBATTLE_TYPE, personality)
     constants.INBATTLE_CONFIGS.extend(comp7_constants.COMP7_INBATTLE_CONFIGS)
     PREBATTLE_TYPE.TRAININGS += (comp7_constants.PREBATTLE_TYPE.TRAINING_COMP7,)
+    constants.ARENA_GUI_TYPE.NON_DESERTION_ARENAS += (comp7_constants.ARENA_GUI_TYPE.TRAINING_COMP7,)
 
 
 def injectSquadConsts(personality):

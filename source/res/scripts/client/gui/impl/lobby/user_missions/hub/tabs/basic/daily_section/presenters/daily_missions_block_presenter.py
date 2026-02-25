@@ -119,8 +119,10 @@ class DailyMissionsBlockPresenter(BaseMissionsBlockPresenter[DailyMissionsBlockM
         bmm = vm.bonusMission
         self._tooltipData.pop(bmm.getId(), None)
         if bonusQuestAvailable:
-            bmm.getBonuses().clear()
+            bonuses = bmm.getBonuses()
+            bonuses.clear()
             isCompleted = self._fillMissionModel(bmm, bonusQuest)
+            bonuses.invalidate()
             allMissionsCompleted &= isCompleted
         else:
             allMissionsCompleted = False

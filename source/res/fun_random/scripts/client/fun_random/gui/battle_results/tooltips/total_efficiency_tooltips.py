@@ -53,7 +53,6 @@ _FUN_PARAMETERS_TO_TOOLTIP_MAP = {EfficiencyParamConstants.STUN: FunTotalStunPar
  EfficiencyParamConstants.DROPPED_CAPTURE_POINTS: FunTotalDefencePointsParameter}
 
 class FunEfficiencyTooltipsPacker(EfficiencyTooltipsPacker):
-    __slots__ = ()
     _TOOLTIPS = _FUN_PARAMETERS_TO_TOOLTIP_MAP
 
     @classmethod

@@ -13,7 +13,7 @@ class BattlePassCompletedTooltipView(ViewImpl):
     __slots__ = ()
 
     def __init__(self):
-        settings = ViewSettings(R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView())
+        settings = ViewSettings(R.views.mono.battle_pass.tooltips.completed())
         settings.model = BattlePassCompletedTooltipViewModel()
         super(BattlePassCompletedTooltipView, self).__init__(settings)
 

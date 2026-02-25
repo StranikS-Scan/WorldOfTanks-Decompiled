@@ -6,12 +6,12 @@ from future.utils import viewkeys
 import Event
 from gui.impl.lobby.hangar.base.hangar_interfaces import IVehicleFilter
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from gui.shared.utils.requesters import RequestCriteria
+    from gui.shared.gui_items.Vehicle import Vehicle
 _VEHICLE_UPDATES = (CACHE_SYNC_REASON.SHOP_RESYNC, CACHE_SYNC_REASON.DOSSIER_RESYNC, CACHE_SYNC_REASON.CLIENT_UPDATE)
 
 class VehiclesFilterComponent(IVehicleFilter):

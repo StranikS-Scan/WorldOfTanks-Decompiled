@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/ui_logging_manager.py
+from __future__ import absolute_import
 from gui.Scaleform.framework.entities.abstract.UILoggerManagerMeta import UILoggerManagerMeta
 from gui.shared.utils import flashObject2Dict
 from helpers import dependency

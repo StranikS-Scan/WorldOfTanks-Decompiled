@@ -494,7 +494,7 @@ class AdvancedChatComponent(ClientArenaComponent):
             self.sessionProvider.shared.feedback.onCommandAdded(commandTargetID, markerType)
         updateCmdType = ChatCommandChange.CHAT_CMD_WAS_REPLIED if commandName in AUTOCOMMIT_COMMAND_NAMES else ChatCommandChange.CHAT_CMD_TRIGGERED
         self._chatCommandsUpdated(markerType, commandTargetID, commandID, commandCreatorID, updateCmdType)
-        isTemporarySticky = command and not command.isInSilentMode() and command.isTemporarySticky() and not commandCreatorID == avatar_getter.getPlayerVehicleID()
+        isTemporarySticky = command and not command.isInSilentMode() and command.isTemporarySticky() and commandCreatorID != avatar_getter.getPlayerVehicleID()
         if isTemporarySticky:
             self._temporaryStickyCommands[commandID][commandTargetID] = (commandTargetID, markerType)
         if commandCreatorID == avatar_getter.getPlayerVehicleID() and commandName in AUTOCOMMIT_COMMAND_NAMES or isTemporarySticky:

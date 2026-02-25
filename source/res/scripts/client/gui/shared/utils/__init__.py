@@ -120,7 +120,9 @@ def code2str(code):
         return 'Identical requests cooldown'
     if code == AccountCommands.RES_HIDDEN_DOSSIER:
         return 'Player dossier is hidden'
-    return 'Dossiers are unavailable' if code == AccountCommands.RES_CENTER_DISCONNECTED else 'Unknown error code'
+    if code == AccountCommands.RES_CENTER_DISCONNECTED:
+        return 'Dossiers are unavailable'
+    return 'Identical requests rate limit cooldown' if code == AccountCommands.RES_RATE_LIMIT_COOLDOWN else 'Unknown error code'
 
 
 def isVehicleObserver(vehTypeCompDescr):

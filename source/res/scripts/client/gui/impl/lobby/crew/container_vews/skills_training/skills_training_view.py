@@ -3,7 +3,7 @@
 import typing
 from PlayerEvents import g_playerEvents
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
-from gui.game_control.wot_plus_crew_assist import CrewAssistantCtrl
+from gui.game_control.wot_plus.wot_plus_crew_assist import CrewAssistantCtrl
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.skills_training_view_model import SkillsTrainingViewModel

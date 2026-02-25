@@ -11,7 +11,7 @@ from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from gui.veh_post_progression.models.ext_money import ExtendedMoney
 from helpers import time_utils, dependency
 from nation_change.nation_change_helpers import NationalGroupDataAccumulator
-from skeletons.gui.game_control import IWalletController
+from skeletons.gui.game_control import IWalletController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.utils.requesters import IStatsRequester
 if typing.TYPE_CHECKING:
@@ -22,6 +22,7 @@ _ControllableXPData = namedtuple('_ControllableXPData', ('vehicleID', 'bonusType
 class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     wallet = dependency.descriptor(IWalletController)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    wotPlusController = dependency.descriptor(IWotPlusController)
 
     @property
     def mayConsumeWalletResources(self):
@@ -122,7 +123,7 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
 
     @property
     def applyAdditionalWoTPlusXPCount(self):
-        maxCount = self.lobbyContext.getServerSettings().getAdditionalWoTPlusXPCount()
+        maxCount = self.wotPlusController.getSettingsStorage().getAdditionalXPBonusCount()
         return max(maxCount - self.getCacheValue('applyAdditionalWoTPlusXPCount', maxCount), 0)
 
     @property
@@ -273,15 +274,6 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     @property
     def additionalXPCache(self):
         return self.getCacheValue(_ADDITIONAL_XP_DATA_KEY, {})
-
-    @property
-    def isGoldFishBonusApplied(self):
-        gfKey = SPA_ATTRS.GOLFISH_BONUS_APPLIED
-        result = False
-        spaDict = self.SPA
-        if gfKey in spaDict:
-            result = int(spaDict[gfKey])
-        return result
 
     @property
     def isAnonymousRestricted(self):

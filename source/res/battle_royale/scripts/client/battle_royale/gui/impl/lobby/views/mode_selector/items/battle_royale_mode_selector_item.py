@@ -1,18 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/impl/lobby/views/mode_selector/items/battle_royale_mode_selector_item.py
-from helpers import dependency, time_utils
-from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
+from battle_royale.gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_battle_royale_model import ModeSelectorBattleRoyaleModel
+from battle_royale.gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_battle_royale_widget_model import BattleRoyaleProgressionStatus
+from battle_royale.gui.impl.lobby.br_helpers.utils import setEventInfo
+from battle_royale.skeletons.game_controller import IBRProgressionOnTokensController
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl import backport
 from gui.impl.backport.backport_tooltip import createAndLoadBackportTooltipWindow
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_battle_royale_model import ModeSelectorBattleRoyaleModel
-from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_battle_royale_widget_model import BattleRoyaleProgressionStatus
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_card_types import ModeSelectorCardTypes
 from gui.impl.lobby.mode_selector.items import setBattlePassState
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
 from gui.impl.lobby.mode_selector.items.items_constants import ModeSelectorRewardID
 from gui.shared.formatters import time_formatters
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from helpers import dependency, time_utils
 from skeletons.gui.game_control import IBattleRoyaleController
 
 class BattleRoyaleModeSelectorItem(ModeSelectorLegacyItem):
@@ -65,6 +66,13 @@ class BattleRoyaleModeSelectorItem(ModeSelectorLegacyItem):
     def _isInfoIconVisible(self):
         return True
 
+    def _setModeDescription(self, modeStrings):
+        if self.__battleRoyaleController.isStPatrick():
+            description = modeStrings.dyn('stPatrickDescription')
+        else:
+            description = modeStrings.dyn('description')
+        self.viewModel.setDescription(backport.text(description()) if description.exists() else '')
+
     def __onTimerTick(self):
         self.__onUpdate()
         self.onCardChange()
@@ -95,6 +103,8 @@ class BattleRoyaleModeSelectorItem(ModeSelectorLegacyItem):
                         text = backport.text(R.strings.battle_royale.modeSelector.cycleNotStarted(), date=backport.getShortDateFormat(cycleInfo.startDate))
                     vm.setStatusNotActive(text)
                     vm.setTimeLeft('')
+            vm.setExternalPath(R.views.battle_royale.lobby.BattleRoyaleBattleCard())
+            setEventInfo(vm.eventInfo)
             setBattlePassState(self.viewModel)
         return
 

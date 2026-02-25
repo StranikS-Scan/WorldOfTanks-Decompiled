@@ -13,7 +13,6 @@ from gui.impl.gen.view_models.views.lobby.common.confirmed_item_model import Con
 from helpers import dependency
 from post_progression_common import ACTION_TYPES
 from skeletons.gui.game_control import IWotPlusController
-from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 if typing.TYPE_CHECKING:
@@ -113,7 +112,6 @@ class ConfirmedArtefact(ConfirmedItem):
 class ConfirmedOptDevice(ConfirmedArtefact):
     __itemsCache = dependency.descriptor(IItemsCache)
     __wotPlus = dependency.descriptor(IWotPlusController)
-    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def getRemovalPrice(self):
         return self._item.getRemovalPrice(self.__itemsCache.items)
@@ -122,9 +120,10 @@ class ConfirmedOptDevice(ConfirmedArtefact):
         return not self._item.isRemovable and not self._item.isDeluxe and self._item.canUseDemountKit
 
     def getOptItemDescKey(self):
-        isActive = self.__wotPlus.isEnabled()
-        isFEDEnabled = self.__lobbyContext.getServerSettings().isFreeEquipmentDemountingEnabled()
-        isDeluxeEnabled = self.__lobbyContext.getServerSettings().isFreeDeluxeEquipmentDemountingEnabled()
+        isActive = self.__wotPlus.hasSubscription()
+        settingsModel = self.__wotPlus.getSettingsStorage()
+        isFEDEnabled = settingsModel.isFreeEquipmentDemountingEnabled()
+        isDeluxeEnabled = settingsModel.isFreeDeluxeEquipmentDemountingEnabled()
         isDeluxe = self._item.isDeluxe
         if not isFEDEnabled:
             return super(ConfirmedOptDevice, self).getOptItemDescKey()

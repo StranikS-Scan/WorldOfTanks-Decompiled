@@ -4,9 +4,9 @@ from frameworks.wulf import Array, ViewModel
 from gui.impl.gen.view_models.views.lobby.crew.dialogs.price_card_model import PriceCardModel
 
 class PriceListModel(ViewModel):
-    __slots__ = ('onCardClick',)
+    __slots__ = ('onCardClick', 'onPriceSelect')
 
-    def __init__(self, properties=1, commands=1):
+    def __init__(self, properties=1, commands=2):
         super(PriceListModel, self).__init__(properties=properties, commands=commands)
 
     def getCardsList(self):
@@ -23,3 +23,4 @@ class PriceListModel(ViewModel):
         super(PriceListModel, self)._initialize()
         self._addArrayProperty('cardsList', Array())
         self.onCardClick = self._addCommand('onCardClick')
+        self.onPriceSelect = self._addCommand('onPriceSelect')

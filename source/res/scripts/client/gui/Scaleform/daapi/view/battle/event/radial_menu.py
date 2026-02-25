@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/event/radial_menu.py
+from __future__ import absolute_import
 from collections import namedtuple
 import BigWorld
 from gui.Scaleform.daapi.view.battle.shared.radial_menu import RadialMenu

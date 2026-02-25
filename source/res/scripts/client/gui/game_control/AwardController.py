@@ -2,30 +2,28 @@
 # Embedded file name: scripts/client/gui/game_control/AwardController.py
 import logging
 import types
+import typing
 import weakref
 from abc import ABCMeta, abstractmethod
 from collections import OrderedDict, deque
 from copy import deepcopy
 from functools import partial
-from future.utils import iteritems
 from itertools import chain, ifilter
 import BigWorld
-import typing
+from account_helpers.AccountSettings import AccountSettings, RANKED_CURRENT_AWARDS_BUBBLE_YEAR_REACHED, RANKED_YEAR_POSITION, SPEAKERS_DEVICE
+from account_helpers.settings_core.settings_constants import SOUND, OnceOnlyHints
 from adisp import adisp_process
-from battle_results import ARENA_BONUS_TYPE_TO_SM_TYPE_BATTLE_RESULT
-from gui.impl.lobby.personal_missions_30.personal_mission_constants import REWARDS_VIEW_TYPES
-from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
-from items.components.c11n_constants import Rarity
+from future.utils import iteritems
+from gui.impl.dialogs.dialogs import showRenewableSubscriptionRewardDialog
 from shared_utils import first
 import ArenaType
 import gui.awards.event_dispatcher as award_events
 import personal_missions
 import wg_async
 from PlayerEvents import g_playerEvents
-from account_helpers.AccountSettings import AccountSettings, RANKED_CURRENT_AWARDS_BUBBLE_YEAR_REACHED, RANKED_YEAR_POSITION, SPEAKERS_DEVICE
-from account_helpers.settings_core.settings_constants import SOUND, OnceOnlyHints
 from achievements20.cache import ALLOWED_ACHIEVEMENT_TYPES as ADVANCED_ACHIEVEMENT_TYPES
 from battle_pass_common import BattlePassRewardReason, get3DStyleProgressToken, isPostProgressionChapter
+from battle_results import ARENA_BONUS_TYPE_TO_SM_TYPE_BATTLE_RESULT
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from chat_shared import SYS_MESSAGE_TYPE
@@ -40,7 +38,6 @@ from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_TARGET_TYPE
 from gui import DialogsInterface, SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -49,7 +46,6 @@ from gui.battle_pass.battle_pass_constants import MIN_LEVEL
 from gui.battle_pass.battle_pass_helpers import getStyleInfoForChapter
 from gui.battle_pass.state_machine.state_machine_helpers import packStartEvent, packToken, defaultEventMethod, multipleBattlePassPurchasedEventMethod
 from gui.customization.shared import checkIsFirstProgressionDecalOnVehicle
-from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
 from gui.impl import backport
 from gui.impl.auxiliary.rewards_helper import getProgressiveRewardBonuses, BlueprintBonusTypes
 from gui.impl.gen import R
@@ -58,6 +54,7 @@ from gui.impl.lobby.awards.items_collection_provider import MultipleProductAward
 from gui.impl.lobby.clan_supply.bonus_packers import extractBonuses
 from gui.impl.lobby.clan_supply.clan_supply_helpers import showClanSupplyRewardWindow
 from gui.impl.lobby.mapbox.map_box_awards_view import MapBoxAwardsViewWindow
+from gui.impl.lobby.personal_missions_30.personal_mission_constants import REWARDS_VIEW_TYPES
 from gui.impl.lobby.winback.winback_reward_view import WinbackRewardWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.limited_ui.lui_rules_storage import LUI_RULES
@@ -67,20 +64,22 @@ from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX
 from gui.server_events import awards, events_dispatcher as quests_events, recruit_helper
 from gui.server_events.bonuses import getServiceBonuses, getMergedBonusesFromDicts, GoodiesBonus, VehiclesBonus
-from gui.server_events.events_dispatcher import showCurrencyReserveAwardWindow, showPiggyBankRewardWindow, showSubscriptionAwardWindow, showBanWindow, showPenaltyWindow, showWarningWindow
+from gui.server_events.events_dispatcher import showCurrencyReserveAwardWindow, showPiggyBankRewardWindow, showBanWindow, showPenaltyWindow, showWarningWindow
 from gui.server_events.events_helpers import isACEmailConfirmationQuest, isDailyQuest, getIdxFromQuestID, isPM30OperationFinishedQuest, isPM30MilestoneQuest
 from gui.server_events.finders import CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID, PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, PM3_PERSONAL_MISSION_HONOR_POSTFIX, PM3_CAMPAIGN_FINISHED_QUEST, BRANCH_TO_OPERATION_IDS
-from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
+from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
 from gui.shared.account_settings_helper import AccountSettingsHelper
 from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePass, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showSeniorityRewardAwardWindow, showSteamEmailConfirmRewardsView, showSeniorityRewardVehiclesWindow, showCustomizationRarityAwardScreen, showPM30RewardsWindow, showCollector20RewardWindow
 from gui.shared.events import CustomizationEvent, PersonalMissionsEvent
 from gui.shared.formatters.time_formatters import getTillTimeByResource
+from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.system_factory import registerAwardControllerHandlers, collectAwardControllerHandlers
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.sounds.sound_constants import SPEAKERS_CONFIG
 from helpers import dependency, i18n
 from items import ITEM_TYPE_INDICES, vehicles as vehicles_core
+from items.components.c11n_constants import Rarity
 from items.components.crew_books_constants import CREW_BOOK_DISPLAYED_AWARDS_COUNT
 from messenger.formatters import TimeFormatter
 from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
@@ -624,8 +623,8 @@ class PiggyBankOpenHandler(ServiceChannelHandler):
     @staticmethod
     def _canShowWotPlusWindow(goldEarned):
         wotPlusCtrl = dependency.instance(IWotPlusController)
-        isWotPlusEnabled = wotPlusCtrl.isWotPlusEnabled()
-        hasWotPlusActive = wotPlusCtrl.isEnabled()
+        isWotPlusEnabled = wotPlusCtrl.isWotPlusVisible()
+        hasWotPlusActive = wotPlusCtrl.hasSubscription()
         return isWotPlusEnabled and (hasWotPlusActive or goldEarned)
 
     def __isPremiumEnable(self):
@@ -633,17 +632,24 @@ class PiggyBankOpenHandler(ServiceChannelHandler):
 
 
 class RenewableSubscriptionHandler(ServiceChannelHandler):
+    wotPlusCtrl = dependency.descriptor(IWotPlusController)
 
     def __init__(self, awardCtrl):
-        super(RenewableSubscriptionHandler, self).__init__(SYS_MESSAGE_TYPE.wotPlusUnlocked.index(), awardCtrl)
-        self.__type = SYS_MESSAGE_TYPE.wotPlusUnlocked.index()
+        super(RenewableSubscriptionHandler, self).__init__(None, awardCtrl)
+        self.__types = (SYS_MESSAGE_TYPE.wotPlusUnlocked.index(), SYS_MESSAGE_TYPE.wotPlusUpgrade.index())
+        return
 
     def _needToShowAward(self, ctx):
         _, message = ctx
-        return message is not None and message.type == self.__type and message.data is not None and not message.data
+        return message is not None and message.type in self.__types and message.data is not None and self.wotPlusCtrl.isWotPlusVisible()
 
     def _showAward(self, ctx):
-        showSubscriptionAwardWindow()
+        _, message = ctx
+        unlockedTier = message.data.get('unlockedTier', 1)
+        expirationTime = message.data.get('expiryTime', 0)
+        billingDays = message.data.get('billingDays', 0)
+        messageType = message.type
+        showRenewableSubscriptionRewardDialog(unlockedTier, expirationTime, billingDays, messageType)
 
 
 class MarkByInvoiceHandler(ServiceChannelHandler):
@@ -1219,19 +1225,6 @@ class PersonalMissionOperationUnlockedHandler(BattleQuestsAutoWindowHandler):
         quests_events.showOperationUnlockedAward(quest, context)
 
 
-class GoldFishHandler(AwardHandler):
-
-    def start(self):
-        self.handle()
-
-    def _needToShowAward(self, ctx):
-        return True
-
-    def _showAward(self, ctx):
-        if isGoldFishActionActive() and isTimeToShowGoldFishPromo():
-            g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.GOLD_FISH_WINDOW)), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
 class TelecomHandler(ServiceChannelHandler):
 
     def __init__(self, awardCtrl):
@@ -1472,9 +1465,10 @@ class BattlePassRewardHandler(ServiceChannelHandler):
 
     def _showAward(self, ctx):
         _, message = ctx
-        rewards = message.data.get('reward', {})
-        data = message.data.get('ctx', {})
+        rewards = message.data.get('reward') or {}
+        data = message.data.get('ctx') or {}
         packageRewards = message.data.get('packageReward')
+        starterPack = message.data.get('starterPack') or {}
         eventMethod = defaultEventMethod
         if 'reason' not in data:
             _logger.error('Invalid Battle Pass Reward data received! "reward" key missing!')
@@ -1490,7 +1484,7 @@ class BattlePassRewardHandler(ServiceChannelHandler):
                     return
 
             packageRewards = packageRewards or {}
-            event = packStartEvent(rewards, data, packageRewards, eventMethod, battlePass=self.__battlePass)
+            event = packStartEvent(rewards, data, packageRewards, starterPack, eventMethod, battlePass=self.__battlePass)
             if event is not None:
                 self.__notificationMgr.append(event)
             return
@@ -1559,6 +1553,7 @@ class BattlePassBuyEmptyHandler(ServiceChannelHandler):
         _, message = ctx
         packageRewards = message.data.get('packageReward')
         chapterID = message.data.get('chapter')
+        starterPack = message.data.get('starterPack') or {}
         if chapterID is None:
             _logger.error('chapter can not be None!')
             return
@@ -1573,7 +1568,7 @@ class BattlePassBuyEmptyHandler(ServiceChannelHandler):
              'chapter': chapterID,
              'reason': reason,
              'callback': callback}
-            showBattlePassAwardsWindow([], data, useQueue=True, packageRewards=packageRewards)
+            showBattlePassAwardsWindow([], data, useQueue=True, packageRewards=packageRewards, starterPack=starterPack)
             return
 
     def __onAwardShown(self, chapterID):
@@ -1585,7 +1580,10 @@ class BattlePassBuyEmptyHandler(ServiceChannelHandler):
                     chapterID = self.__battlePass.getCurrentChapterID()
                 else:
                     return
-            showBattlePass(R.aliases.battle_pass.Progression() if self.__battlePass.isChapterExists(chapterID) else None, chapterID)
+            if self.__battlePass.isChapterExists(chapterID):
+                showBattlePass(R.aliases.battle_pass.Progression(), chapterID)
+            else:
+                showBattlePass()
             return
 
     def __isBattlePassOpen(self):
@@ -2155,7 +2153,6 @@ registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  PersonalMission3OperationAwardHandler,
  PersonalMissionOperationUnlockedHandler,
  PersonalMission3VehicleDetailHandler,
- GoldFishHandler,
  TelecomHandler,
  MarkByInvoiceHandler,
  MarkByQuestHandler,

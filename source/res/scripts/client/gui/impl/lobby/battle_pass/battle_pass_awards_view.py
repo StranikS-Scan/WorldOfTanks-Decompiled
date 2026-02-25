@@ -7,13 +7,14 @@ from gui.battle_pass.battle_pass_award import BattlePassAwardsManager
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData, useBigAwardInjection
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
 from gui.battle_pass.battle_pass_helpers import getStyleInfoForChapter
-from gui.battle_pass.sounds import BattlePassSounds, switchDialogBPSoundFilter
+from gui.battle_pass.sounds import BattlePassSounds
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_awards_view_model import BattlePassAwardsViewModel, RewardReason
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.event_dispatcher import showBattlePass
+from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 MAP_REWARD_REASON = {BattlePassRewardReason.PURCHASE_BATTLE_PASS: RewardReason.BUY_BATTLE_PASS,
@@ -35,7 +36,7 @@ class BattlePassAwardsView(ViewImpl):
     __battlePass = dependency.descriptor(IBattlePassController)
 
     def __init__(self, *args, **kwargs):
-        settings = ViewSettings(R.views.lobby.battle_pass.BattlePassAwardsView())
+        settings = ViewSettings(R.views.mono.battle_pass.rewards_screen())
         settings.model = BattlePassAwardsViewModel()
         settings.args = args
         settings.kwargs = kwargs
@@ -66,9 +67,9 @@ class BattlePassAwardsView(ViewImpl):
     def _getEvents(self):
         return ((self.viewModel.onBuyClick, self.__onBuyClick), (self.viewModel.onClose, self.__close), (self.viewModel.onShowPostProgression, self.__showPostProgression))
 
-    def _onLoading(self, bonuses, packageBonuses, data, needNotifyClosing, *args, **kwargs):
+    def _onLoading(self, bonuses, packageBonuses, data, starterPack, needNotifyClosing, *args, **kwargs):
         super(BattlePassAwardsView, self)._onLoading(*args, **kwargs)
-        switchDialogBPSoundFilter()
+        switchHangarOverlaySoundFilter(on=True)
         chapterID = data.get('chapter', 0)
         newLevel = data.get('newLevel', 0) or 0
         reason = data.get('reason', BattlePassRewardReason.DEFAULT)
@@ -83,6 +84,7 @@ class BattlePassAwardsView(ViewImpl):
             _, styleLevel = getStyleInfoForChapter(chapterID)
         else:
             styleLevel = None
+        isStarterPack = bool(starterPack) and reason in BattlePassRewardReason.REASONS_WITH_STARTER_PACK
         with self.viewModel.transaction() as tx:
             tx.setIsFinalReward(isFinalReward)
             tx.setReason(rewardReason)
@@ -93,6 +95,10 @@ class BattlePassAwardsView(ViewImpl):
             tx.setIsBaseStyleLevel(styleLevel == 1)
             tx.setIsExtra(self.__battlePass.isExtraChapter(chapterID))
             tx.setIsPostProgressionUnlocked(self.__battlePass.isPostProgressionActive())
+            tx.setIsStarterPack(isStarterPack)
+            tx.starterPackRewards.clearItems()
+            if isStarterPack:
+                packBonusModelAndTooltipData(BattlePassAwardsManager.composeBonuses([starterPack]), tx.starterPackRewards, self.__tooltipItems)
         if packageBonuses is not None and packageBonuses:
             self.__setPackageRewards(packageBonuses)
         self.__setAwards(bonuses, isFinalReward)
@@ -110,7 +116,7 @@ class BattlePassAwardsView(ViewImpl):
     def _finalize(self):
         super(BattlePassAwardsView, self)._finalize()
         self.__tooltipItems = None
-        switchDialogBPSoundFilter(on=False)
+        switchHangarOverlaySoundFilter(on=False)
         self.__closeCallback = None
         self.__showBuyCallback = None
         if callable(self.__exitCallback):
@@ -184,8 +190,8 @@ class BattlePassAwardsView(ViewImpl):
 class BattlePassAwardWindow(LobbyNotificationWindow):
     __slots__ = ('__params',)
 
-    def __init__(self, bonuses, data, packageRewards=None, needNotifyClosing=True):
-        self.__params = dict(bonuses=bonuses, packageBonuses=packageRewards, data=data, needNotifyClosing=needNotifyClosing)
+    def __init__(self, bonuses, data, packageRewards=None, starterPack=None, needNotifyClosing=True):
+        self.__params = dict(bonuses=bonuses, packageBonuses=packageRewards, data=data, starterPack=starterPack, needNotifyClosing=needNotifyClosing)
         super(BattlePassAwardWindow, self).__init__(wndFlags=WindowFlags.SERVICE_WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=BattlePassAwardsView(**self.__params))
 
     def isParamsEqual(self, *args, **kwargs):

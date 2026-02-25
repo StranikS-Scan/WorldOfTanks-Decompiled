@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/maps_training/minimap.py
+from __future__ import absolute_import, division
+from future.utils import viewitems
 import BigWorld
 from helpers import isPlayerAvatar
 from account_helpers.settings_core.settings_constants import GAME
@@ -158,7 +160,7 @@ class BotAppearNotificationPlugin(common.EntriesPlugin):
 
     def __onLocalKillGoalsUpdated(self, localGoals):
         self.__localGoals = set((vID for vID in localGoals))
-        for targetID, model in self._entries.iteritems():
+        for targetID, model in viewitems(self._entries):
             model.setGoalForPlayer(model.getOwnVehicleID() in self.__localGoals)
             self.__updateVehInfo(targetID, True)
 
@@ -169,7 +171,7 @@ class BotAppearNotificationPlugin(common.EntriesPlugin):
         return
 
     def __onArenaVehicleKilled(self, victimID, attackerID, equipmentID, reason, numVehiclesAffected):
-        for targetID, model in self._entries.iteritems():
+        for targetID, model in viewitems(self._entries):
             if victimID == model.getOwnVehicleID() and targetID not in self.__callbacksIDs:
                 model.setAlive(False)
                 if GUI_SETTINGS.showMinimapDeath and not GUI_SETTINGS.permanentMinimapDeath:
@@ -187,7 +189,7 @@ class BotAppearNotificationPlugin(common.EntriesPlugin):
         self.__switchVehicleVisualState(vehicleID, False)
 
     def __switchVehicleVisualState(self, vehicleID, isVisualStarted):
-        for targetID, model in self._entries.iteritems():
+        for targetID, model in viewitems(self._entries):
             if vehicleID == model.getOwnVehicleID():
                 model.setInAoI(isVisualStarted)
                 self.__setVehicleMatrixAndLocation(model, vehicleID, self._arenaVisitor.getArenaPositions())

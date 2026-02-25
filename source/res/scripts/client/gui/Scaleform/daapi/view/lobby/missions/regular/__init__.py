@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/__init__.py
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.missions.regular.daily_quests_injector_view import DailyQuestsInjectorView
 from gui.Scaleform.daapi.view.lobby.missions.regular.missions_tab_bar import MissionsTabBarComponent
 from gui.Scaleform.framework import ComponentSettings, GroupedViewSettings, ScopeTemplates, ViewSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
@@ -48,7 +47,6 @@ def getViewSettings():
      ComponentSettings(EVENTBOARDS_ALIASES.EVENTBOARDS_DETAILS_BATTLE_ALIAS, EventBoardsBattleOverlay, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(EVENTBOARDS_ALIASES.EVENTBOARDS_DETAILS_AWARDS_ALIAS, EventBoardsAwardsOverlay, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS, MissionsGroupedView, ScopeTemplates.VIEW_SCOPE),
-     ComponentSettings(QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS, DailyQuestsInjectorView, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, MissionsMarathonView, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.LIVE_OPS_WEB_EVENTS_VIEW_PY_ALIAS, LiveOpsWebEventsInjectView, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS, MapboxProgressionsComponent, ScopeTemplates.VIEW_SCOPE),

@@ -189,12 +189,7 @@ class BattlePassController(IBattlePassController, EventsHandler):
         return self.__doesAnyChapterFitCriteria(self.isExtraChapter)
 
     def isRegularProgressionCompleted(self):
-        chapterIDs = []
-        for chapterID in self.__getConfig().getMainChapterIds():
-            if not self.isExtraChapter(chapterID):
-                chapterIDs.append(chapterID)
-
-        return all((self.getChapterState(chID) == ChapterState.COMPLETED for chID in chapterIDs))
+        return all((self.getChapterState(chID) == ChapterState.COMPLETED for chID in self.getRegularChapterIDs()))
 
     def isPostProgressionActive(self):
         return isPostProgressionChapter(self.getCurrentChapterID())
@@ -226,6 +221,9 @@ class BattlePassController(IBattlePassController, EventsHandler):
 
     def getMainChapterIDs(self):
         return [ chapterID for chapterID in self.getChapterIDs() if chapterID in self.__getConfig().getMainChapterIds() ]
+
+    def getRegularChapterIDs(self):
+        return self.__getConfig().getRegularChapterIds()
 
     def isExtraChapter(self, chapterID):
         return self.__getConfig().isExtraChapter(chapterID)
@@ -273,6 +271,10 @@ class BattlePassController(IBattlePassController, EventsHandler):
             self.__tankmenCache.updateWithDelay(self.__getTankmenTagForRequest(), self.__onResponse)
         else:
             self.__tankmenCache.update(self.__getTankmenTagForRequest(), self.__onResponse)
+
+    def getChapterStarterPack(self, chapterID):
+        rewards = self.__getConfig().getChapterStarterPack(chapterID)
+        return BattlePassAwardsManager.composeBonuses([rewards]) if rewards else []
 
     def getSingleAward(self, chapterId, level, awardType=BattlePassConsts.REWARD_FREE, needSort=True):
         reward = {}
@@ -785,7 +787,7 @@ class BattlePassController(IBattlePassController, EventsHandler):
         if isPointsUpdated:
             self.onPointsUpdated()
         if 'vehiclePoints' in data:
-            self.onVehiclesPointsUpdated({intCD:points for intCD, points in iteritems(data['vehiclePoints']) if NON_VEH_CD != intCD})
+            self.onVehiclesPointsUpdated({intCD:points for intCD, points in iteritems(data['vehiclePoints']) if intCD != NON_VEH_CD})
         if newLevel != self.__oldLevel or newLevel == 0 and isPointsUpdated:
             self.onLevelUp()
         self.__oldPoints = newPoints

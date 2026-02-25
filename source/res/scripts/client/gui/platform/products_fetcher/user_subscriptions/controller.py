@@ -12,9 +12,9 @@ from gui.platform.products_fetcher.user_subscriptions.user_subscription import U
 from gui.wgcg.utils.contexts import PlatformGetUserSubscriptionsCtx
 from helpers import dependency
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.platform.product_fetch_controller import IUserSubscriptionsFetchController
 from skeletons.gui.web import IWebController
+from skeletons.gui.game_control import IWotPlusController
 _logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
     from gui.wgcg.web_controller import WebController
@@ -32,7 +32,7 @@ class PlatformGetUserSubscriptionsParams(object):
 class UserSubscriptionsFetchController(IUserSubscriptionsFetchController):
     _webCtrl = dependency.descriptor(IWebController)
     _connectionMgr = dependency.descriptor(IConnectionManager)
-    _lobbyContext = dependency.descriptor(ILobbyContext)
+    _wotPlusCtrl = dependency.descriptor(IWotPlusController)
     platformFetchCtx = PlatformGetUserSubscriptionsCtx
 
     def __init__(self):
@@ -54,8 +54,7 @@ class UserSubscriptionsFetchController(IUserSubscriptionsFetchController):
         self._fetchResult.reset()
         subscriptionParams = PlatformGetUserSubscriptionsParams()
         requestSuccess, subscriptionsData = yield wg_async.await_callback(partial(self._requestSubscriptions, subscriptionParams))()
-        serverSettings = self._lobbyContext.getServerSettings()
-        subscriptionProductCodes = serverSettings.getWotPlusProductCodes()
+        subscriptionProductCodes = self._wotPlusCtrl.getSettingsStorage().getAllProductCodes()
         if requestSuccess and subscriptionsData:
             _logger.debug('Subscriptions request from %s has been successfully processed.', str(subscriptionParams))
             for subscriptionData in subscriptionsData:

@@ -1,11 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/managers/windows_stored_data.py
+from __future__ import absolute_import
 import logging
-from collections import namedtuple, defaultdict
 import functools
-import types
+from collections import namedtuple, defaultdict
+from future.utils import viewitems
+from past.builtins import basestring
 from gui.Scaleform.daapi.view.meta.WindowViewMeta import WindowViewMeta
 from gui.doc_loaders.WindowsStoredDataLoader import WindowsStoredDataLoader
+from math_common import round_py2_style_int
 from messenger.ext.channel_num_gen import isClientIDValid
 from soft_exception import SoftException
 WindowGeometry = namedtuple('WindowGeometry', ('x', 'y', 'width', 'height'))
@@ -45,7 +48,7 @@ def _updateStoredData(targetID, dataType, pyWindow):
         geom = pyWindow.as_getGeometryS()
         if geom:
             x, y, width, height = geom[:4]
-            storedData.setGeometry(WindowGeometry(int(round(x)), int(round(y)), int(round(width)), int(round(height))))
+            storedData.setGeometry(WindowGeometry(round_py2_style_int(x), round_py2_style_int(y), round_py2_style_int(width), round_py2_style_int(height)))
     return storedData
 
 
@@ -143,7 +146,7 @@ class UniqueWindowStoredData(WindowStoredData):
 
     def __init__(self, name, *args):
         super(UniqueWindowStoredData, self).__init__(*args)
-        if type(name) not in types.StringTypes:
+        if not isinstance(name, basestring):
             _logger.warning('Unique name must be string. It is ignored: %r', name)
             name = ''
             self._trusted = False
@@ -319,7 +322,7 @@ class _WindowsStoredDataManager(object):
         else:
             self.__isStarted = False
             records = []
-            for targetID, windowsData in self.__storedData.iteritems():
+            for targetID, windowsData in viewitems(self.__storedData):
                 if not self.__targetMask & targetID and windowsData:
                     _logger.warning('Target is not enabled. Records are ignored to flush: %r, %r', targetID, self.__targetMask)
                     continue

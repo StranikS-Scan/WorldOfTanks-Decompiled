@@ -122,7 +122,7 @@ class PersonalAvatarInfo(object):
 
 
 class PersonalInfo(shared.UnpackedInfo):
-    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '_economicsRecords', '__questsProgress', '__PM2Progress', '__rankInfo', '__isTeamKiller', '__progressiveReward', '__premiumMask', '__isWotPlus', '__isAddXPBonusApplied', '__c11nProgress', '__dogTags', '__goldBankGain', '__xpProgress', '__prestigeResults', '__questTokensCount', '__questTokensConvertion')
+    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '_economicsRecords', '__questsProgress', '__PM2Progress', '__rankInfo', '__isTeamKiller', '__progressiveReward', '__premiumMask', '__isWotPlus', '__wotPlusTier', '__isAddXPBonusApplied', '__c11nProgress', '__dogTags', '__goldBankGain', '__xpProgress', '__prestigeResults', '__questTokensCount', '__questTokensConvertion')
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, bonusType, personal, bonusCapsOverrides=None):
@@ -137,6 +137,7 @@ class PersonalInfo(shared.UnpackedInfo):
         self.__isTeamKiller = False
         self.__premiumMask = 0
         self.__isWotPlus = False
+        self.__wotPlusTier = 0
         self.__isAddXPBonusApplied = False
         self._economicsRecords = EconomicsRecordsChains(bonusType, bonusCapsOverrides)
         self.__lifeTimeInfo = _LifeTimeInfo(False, 0)
@@ -181,6 +182,10 @@ class PersonalInfo(shared.UnpackedInfo):
     @property
     def isWotPlus(self):
         return self.__isWotPlus
+
+    @property
+    def wotPlusTier(self):
+        return self.__wotPlusTier
 
     @property
     def isAddXPBonusApplied(self):
@@ -331,13 +336,14 @@ class PersonalInfo(shared.UnpackedInfo):
             self._economicsRecords.addResults(intCD, data)
             if not self.__isObserver:
                 self.__isObserver = item.isObserver
-            killerID = data['killerID'] if 'killerID' in data else 0
-            lifeTime = data['lifeTime'] if 'lifeTime' in data else 0
+            killerID = data.get('killerID', 0)
+            lifeTime = data.get('lifeTime', 0)
             if killerID and lifeTime:
                 lifeTimes.append(lifeTime)
-            self.__isTeamKiller = data['isTeamKiller'] if 'isTeamKiller' in data else False
+            self.__isTeamKiller = data.get('isTeamKiller', False)
             self.__premiumMask = data.get('premMask', PREMIUM_TYPE.NONE)
             self.__isWotPlus = data.get('isWoTPlus', False)
+            self.__wotPlusTier = data.get('wotPlusTier', 0)
             self.__questsProgress.update(data.get('questsProgress', {}))
             self.__PM2Progress.update(data.get('PM2Progress', {}))
             self.__c11nProgress[intCD] = data.get('c11nProgress', {})

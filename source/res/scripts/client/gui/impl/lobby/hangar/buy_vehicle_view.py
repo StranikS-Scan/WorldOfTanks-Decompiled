@@ -11,7 +11,6 @@ from account_helpers.AccountSettings import EasyTankEquip
 import Settings
 import adisp
 import constants
-from CurrentVehicle import g_currentPreviewVehicle
 from PlayerEvents import g_playerEvents
 from constants import QUEUE_TYPE
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags, ViewEvent
@@ -418,8 +417,6 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
         if self.__previousAlias in _VP_SHOW_PREVIOUS_SCREEN_ON_SUCCESS_ALIASES:
             if self.__returnCallback:
                 returnCallback = self.__returnCallback
-            elif self.__returnAlias == VIEW_ALIAS.LOBBY_RESEARCH and g_currentPreviewVehicle.isPresent():
-                returnCallback = partial(event_dispatcher.showResearchView, g_currentPreviewVehicle.item.intCD)
             elif self.__returnAlias == VIEW_ALIAS.LOBBY_STORE:
                 returnCallback = partial(event_dispatcher.showShop)
             else:

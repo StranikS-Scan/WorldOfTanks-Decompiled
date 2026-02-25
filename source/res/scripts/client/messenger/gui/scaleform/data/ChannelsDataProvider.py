@@ -3,7 +3,7 @@
 import BigWorld
 import Event
 from debug_utils import LOG_ERROR
-from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
+from future.utils import itervalues
 from gui.prb_control.events_dispatcher import TOOLTIP_PRB_DATA
 DEFAULT_FIELDS = {'clientID': 0,
  'label': '',
@@ -17,25 +17,13 @@ DEFAULT_FIELDS = {'clientID': 0,
  'isWindowFocused': False,
  'tooltipData': None}
 
-class ChannelsDataProvider(DAAPIDataProvider):
+class ChannelsDataProvider(object):
 
     def __init__(self):
         super(ChannelsDataProvider, self).__init__()
         self.__data = {}
         self.__list = []
-        self.__isInited = False
         self.onDataUpdated = Event.Event()
-
-    def initGUI(self, flashObj):
-        if not self.__isInited:
-            self.setFlashObject(flashObj, autoPopulate=False)
-            self.create()
-            self.__isInited = True
-
-    def finiGUI(self):
-        if self.__isInited:
-            self.destroy()
-            self.__isInited = False
 
     def clear(self):
         self.__data.clear()
@@ -105,13 +93,8 @@ class ChannelsDataProvider(DAAPIDataProvider):
         return self.__list
 
     def buildList(self):
-        self.__list = sorted(self.__data.itervalues(), key=lambda item: item['order'])
-
-    def emptyItem(self):
-        return DEFAULT_FIELDS
+        self.__list = sorted(itervalues(self.__data), key=lambda item: item['order'])
 
     def refresh(self):
         self.buildList()
         self.onDataUpdated()
-        if self.flashObject:
-            super(ChannelsDataProvider, self).refresh()

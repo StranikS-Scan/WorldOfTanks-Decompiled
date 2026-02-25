@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/hint_panel/component.py
+from __future__ import absolute_import
 from functools import partial
+from future.utils import viewitems
 import BigWorld
 import CommandMapping
 import SoundGroups
@@ -87,7 +89,7 @@ class BattleHintPanel(BattleHintPanelMeta, IAbstractPeriodView):
         return plugins.createPlugins()
 
     def __getActiveHintData(self):
-        return first(sorted(self._hints.iteritems(), key=lambda h: h[1].priority, reverse=False))
+        return first(sorted(viewitems(self._hints), key=lambda h: h[1].priority, reverse=False))
 
     def __invalidateBtnHint(self, isRemoved=False):
         if self.__invalidateCallbackID is not None:

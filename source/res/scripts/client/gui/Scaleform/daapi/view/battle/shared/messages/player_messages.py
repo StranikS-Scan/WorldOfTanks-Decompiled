@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/messages/player_messages.py
+from __future__ import absolute_import
 import logging
 from typing import TYPE_CHECKING
 from constants import EQUIPMENT_STAGES, ARENA_GUI_TYPE

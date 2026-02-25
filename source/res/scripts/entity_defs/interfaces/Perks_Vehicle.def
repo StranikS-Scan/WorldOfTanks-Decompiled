@@ -1,13 +1,7 @@
 <Perks_Vehicle.def>
   <Properties>
     <perkEffects>
-      <Type>	FIXED_DICT	  <Properties>
-          <equipment>
-            <Type>	ARRAY	  <of>	STRING	</of>
-            </Type>
-          </equipment>
-        </Properties>
-      </Type>
+      <Type>	PERK_EFFECTS	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
       <DetailLevel>	MY_VEHICLE	</DetailLevel>
     </perkEffects>

@@ -85,4 +85,4 @@ class GoldExchangeValidator(BaseExchangeValidator):
 
 
 class XpExchangeValidator(BaseExchangeValidator):
-    _minDiscountRate = 2.0
+    _minDiscountRate = 1.04

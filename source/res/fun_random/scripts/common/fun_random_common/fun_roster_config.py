@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/common/fun_random_common/fun_roster_config.py
+from __future__ import absolute_import
 from UnitRoster import BaseUnitRoster, BaseUnitRosterLimits
 from unit_roster_config import RosterSlot11
 

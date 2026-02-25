@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/common/ammunition_panel/ammunition_blocks_controller.py
+from __future__ import absolute_import
 import typing
 from gui.impl.common.ammunition_panel.ammunition_panel_blocks import OptDeviceBlock, ShellsBlock, ConsumablesBlock, BattleBoostersBlock, BattleAbilitiesBlock
 from gui.impl.common.tabs_controller import TabsController, tabUpdateFunc
@@ -39,7 +40,7 @@ class BaseAmmunitionBlocksController(TabsController):
         if self._vehicle is None:
             return []
         else:
-            groupID = kwargs.get('groupID', None)
+            groupID = kwargs.get('groupID')
             return self._sections.get(groupID, [])
 
 

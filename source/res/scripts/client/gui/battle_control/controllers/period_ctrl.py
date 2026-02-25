@@ -45,7 +45,7 @@ class IAbstractPeriodView(IPlayersPanelsSwitcher):
     def hideCountdown(self, state, speed):
         pass
 
-    def updateBattleCtx(self, ctx):
+    def updateBattleCtx(self, battleCtx):
         pass
 
 

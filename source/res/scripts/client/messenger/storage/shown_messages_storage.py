@@ -18,7 +18,7 @@ class ShownMessagesStorage(SimpleCachedStorage):
         super(ShownMessagesStorage, self).clear()
 
     def getMessages(self, channelID):
-        return self.__channelShownMessageIDs[channelID] if channelID in self.__channelShownMessageIDs else []
+        return self.__channelShownMessageIDs.get(channelID, [])
 
     def setMessages(self, channelID, messageIDs):
         self.__channelShownMessageIDs[channelID] = messageIDs

@@ -11,7 +11,7 @@ _logger = logging.getLogger(__name__)
 
 class IBattleNotifierListener(object):
 
-    def resultsNotificationReceived(self, message):
+    def resultsNotificationReceived(self, results):
         pass
 
 

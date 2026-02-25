@@ -1,0 +1,83 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
+# Embedded file name: scripts/client/gui/impl/lobby/hangar/presenters/vehicle_menu_entries/quick_training_entry_sub_presenter.py
+from __future__ import absolute_import
+import json
+from CurrentVehicle import g_currentVehicle
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import CREW_BOOKS_VIEWED
+from gui.impl.auxiliary.crew_books_helper import crewBooksViewedCache
+from gui.impl.gen.view_models.views.lobby.hangar.vehicle_menu_model import VehicleMenuModel
+from gui.impl.lobby.crew.crew_helpers.skill_helpers import getTmanNewSkillCount
+from gui.impl.lobby.hangar.presenters.vehicle_menu_entries import isVehicleUnavailable
+from gui.impl.lobby.hangar.presenters.vehicle_menu_entries.base_menu_entry_sub_presenter import BaseMenuEntrySubPresenter
+from gui.prb_control.entities.base.listener import IPrbListener
+from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showQuickTraining
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.items_cache import CACHE_SYNC_REASON
+from helpers import dependency
+from skeletons.gui.game_control import IPlatoonController
+from skeletons.gui.shared import IItemsCache
+
+class QuickTrainingEntrySubPresenter(BaseMenuEntrySubPresenter, IPrbListener):
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __platoonCtrl = dependency.descriptor(IPlatoonController)
+
+    def __init__(self, name, viewModel, parentView):
+        super(QuickTrainingEntrySubPresenter, self).__init__(name, viewModel, parentView)
+        self.__hasInventoryTankman = False
+
+    def packEntry(self):
+        self.__hasInventoryTankman = bool(self.__itemsCache.items.getInventoryTankmen(limit=1))
+        super(QuickTrainingEntrySubPresenter, self).packEntry()
+        if g_currentVehicle is not None:
+            counter = crewBooksViewedCache().newCrewBooksAmount
+            menuEntries = self.getViewModel().getMenuEntries()
+            entryData = json.loads(menuEntries[self._entryId])
+            entryData['counter'] = counter
+            menuEntries.set(self._entryId, json.dumps(entryData))
+        return
+
+    def onNavigate(self):
+        showQuickTraining()
+
+    def _getEvents(self):
+        return ((self.__itemsCache.onSyncCompleted, self.__onSyncCompleted),
+         (AccountSettings.onSettingsChanging, self.__onAccountSettingsChanging),
+         (self.__platoonCtrl.onMembersUpdate, self.__onPlatoonMembersUpdate),
+         (self._cameraController.onEnabledChange, self.__onCameraEnabledChange))
+
+    def _getListeners(self):
+        return ((events.PrebattleEvent.SWITCHED, self.__onPrbEntitySwitched, EVENT_BUS_SCOPE.LOBBY),)
+
+    def _getState(self):
+        if not self.__hasInventoryTankman:
+            return VehicleMenuModel.DISABLED
+        if not g_currentVehicle.isPresent():
+            return VehicleMenuModel.DISABLED
+        if not g_currentVehicle.hasCrew() or isVehicleUnavailable():
+            return VehicleMenuModel.DISABLED
+        return VehicleMenuModel.WARNING if crewBooksViewedCache().haveNewCrewBooks() and not self.__isAllSkillsLearned() else VehicleMenuModel.ENABLED
+
+    def __isAllSkillsLearned(self):
+        crew = g_currentVehicle.item.crew
+        return False if not crew else all((getTmanNewSkillCount(tankman, withFree=True)[1].intSkillLvl == 100 for _, tankman in crew if tankman is not None))
+
+    def __onSyncCompleted(self, reason, diff):
+        if reason != CACHE_SYNC_REASON.CLIENT_UPDATE:
+            return
+        if diff.get(GUI_ITEM_TYPE.CREW_BOOKS, {}):
+            self.packEntry()
+
+    def __onAccountSettingsChanging(self, key, _):
+        if key == CREW_BOOKS_VIEWED:
+            self.packEntry()
+
+    def __onPlatoonMembersUpdate(self, *_):
+        self.packEntry()
+
+    def __onPrbEntitySwitched(self, _):
+        self.packEntry()
+
+    def __onCameraEnabledChange(self, _):
+        self.packEntry()

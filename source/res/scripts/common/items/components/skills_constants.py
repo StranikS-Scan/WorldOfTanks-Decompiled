@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/skills_constants.py
 from collections import OrderedDict
-SKILL_NAMES = ('reserved', 'commander', 'radioman', 'driver', 'gunner', 'loader', 'repair', 'fireFighting', 'camouflage', 'brotherhood', 'any', 'reserved', 'reserved', 'reserved', 'reserved', 'reserved', 'commander_tutor', 'commander_eagleEye', 'commander_sixthSense', 'commander_expert', 'commander_universalist', 'commander_enemyShotPredictor', 'commander_practical', 'commander_emergency', 'commander_coordination', 'reserved', 'reserved', 'reserved', 'driver_virtuoso', 'driver_smoothDriving', 'driver_badRoadsKing', 'driver_rammingMaster', 'driver_tidyPerson', 'driver_motorExpert', 'driver_reliablePlacement', 'reserved', 'reserved', 'gunner_gunsmith', 'gunner_sniper', 'gunner_smoothTurret', 'gunner_rancorous', 'gunner_focus', 'gunner_quickAiming', 'gunner_armorer', 'reserved', 'reserved', 'loader_pedant', 'loader_desperado', 'loader_intuition', 'loader_perfectCharge', 'loader_ammunitionImprove', 'loader_melee', 'reserved', 'radioman_inventor', 'radioman_finder', 'radioman_retransmitter', 'reserved', 'radioman_interference', 'radioman_signalInterception', 'radioman_sideBySide', 'radioman_expert')
+SKILL_NAMES = ('reserved', 'commander', 'radioman', 'driver', 'gunner', 'loader', 'repair', 'fireFighting', 'camouflage', 'brotherhood', 'any', 'armorPatching', 'reserved', 'reserved', 'reserved', 'reserved', 'commander_tutor', 'commander_eagleEye', 'commander_sixthSense', 'commander_expert', 'commander_universalist', 'commander_enemyShotPredictor', 'commander_practical', 'commander_emergency', 'commander_coordination', 'commander_holdLine', 'commander_staySharp', 'reserved', 'driver_virtuoso', 'driver_smoothDriving', 'driver_badRoadsKing', 'driver_rammingMaster', 'driver_tidyPerson', 'driver_motorExpert', 'driver_reliablePlacement', 'driver_suspensionRepair', 'driver_bulletproof', 'gunner_gunsmith', 'gunner_sniper', 'gunner_smoothTurret', 'gunner_rancorous', 'gunner_focus', 'gunner_quickAiming', 'gunner_armorer', 'gunner_pointBlast', 'gunner_loneWolf', 'loader_pedant', 'loader_desperado', 'loader_intuition', 'loader_perfectCharge', 'loader_ammunitionImprove', 'loader_melee', 'loader_magMastery', 'radioman_inventor', 'radioman_finder', 'radioman_retransmitter', 'radioman_lastEffort', 'radioman_interference', 'radioman_signalInterception', 'radioman_sideBySide', 'radioman_expert', 'radioman_battleTempered', 'radioman_threatSearch', 'loader_secondChance')
 
 class ROLE_NAMES(object):
     COMMANDER = 'commander'
@@ -24,11 +24,11 @@ ROLE_LIMITS = {ROLE_NAMES.COMMANDER: 1,
 COMMON_SKILLS_ORDERED = ('brotherhood', 'repair', 'camouflage')
 COMMON_SKILLS = frozenset(COMMON_SKILLS_ORDERED)
 ROLES_AND_COMMON_SKILLS = ROLES | COMMON_SKILLS
-COMMANDER_SKILLS = ('commander_eagleEye', 'commander_emergency', 'commander_tutor', 'commander_coordination', 'commander_enemyShotPredictor', 'commander_practical', 'commander_sixthSense')
-GUNNER_SKILLS = ('gunner_smoothTurret', 'gunner_sniper', 'gunner_rancorous', 'gunner_focus', 'gunner_quickAiming', 'gunner_armorer')
-DRIVER_SKILLS = ('driver_virtuoso', 'driver_smoothDriving', 'driver_badRoadsKing', 'driver_reliablePlacement', 'driver_rammingMaster', 'driver_motorExpert')
-RADIOMAN_SKILLS = ('radioman_finder', 'radioman_sideBySide', 'radioman_interference', 'radioman_signalInterception', 'radioman_expert', 'fireFighting')
-LOADER_SKILLS = ('loader_desperado', 'loader_pedant', 'loader_intuition', 'loader_perfectCharge', 'loader_melee', 'loader_ammunitionImprove')
+COMMANDER_SKILLS = ('commander_eagleEye', 'commander_emergency', 'commander_tutor', 'commander_coordination', 'commander_enemyShotPredictor', 'commander_practical', 'commander_sixthSense', 'commander_holdLine', 'commander_staySharp')
+GUNNER_SKILLS = ('gunner_smoothTurret', 'gunner_sniper', 'gunner_rancorous', 'gunner_focus', 'gunner_quickAiming', 'gunner_armorer', 'gunner_pointBlast', 'gunner_loneWolf')
+DRIVER_SKILLS = ('driver_virtuoso', 'driver_smoothDriving', 'driver_badRoadsKing', 'driver_reliablePlacement', 'driver_rammingMaster', 'driver_motorExpert', 'driver_suspensionRepair', 'driver_bulletproof')
+RADIOMAN_SKILLS = ('radioman_finder', 'radioman_sideBySide', 'radioman_interference', 'radioman_signalInterception', 'radioman_expert', 'fireFighting', 'radioman_battleTempered', 'radioman_threatSearch')
+LOADER_SKILLS = ('loader_desperado', 'loader_pedant', 'loader_intuition', 'loader_perfectCharge', 'loader_melee', 'loader_ammunitionImprove', 'loader_secondChance', 'loader_magMastery')
 COMMON_ROLE = 'common'
 SKILLS_BY_ROLES_ORDERED = {ROLE_NAMES.COMMANDER: COMMON_SKILLS_ORDERED + COMMANDER_SKILLS,
  ROLE_NAMES.GUNNER: COMMON_SKILLS_ORDERED + GUNNER_SKILLS,

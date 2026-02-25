@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/maps_training/prebattle_timer.py
+from __future__ import absolute_import
 import BigWorld
 from gui.Scaleform.daapi.view.meta.MapsTrainingPrebattleTimerMeta import MapsTrainingPrebattleTimerMeta
 from gui.impl import backport

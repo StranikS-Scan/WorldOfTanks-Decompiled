@@ -32,6 +32,8 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	25	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
           <insignias>
@@ -55,6 +57,9 @@
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
       </exclude>
     </vehicleFilter>
     <style>

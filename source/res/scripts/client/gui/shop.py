@@ -52,7 +52,6 @@ class Source(object):
 class Origin(object):
     STORAGE = 'storage'
     HERO_TANK = 'hero_tank'
-    ADVENT_CALENDAR = 'advent_calendar'
     BATTLE_BOOSTERS = 'battle_boosters'
     CONSUMABLES = 'consumables'
     WITHOUT_NAME = 'without_name'

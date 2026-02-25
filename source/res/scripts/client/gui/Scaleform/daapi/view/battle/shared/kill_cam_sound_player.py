@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/kill_cam_sound_player.py
+from __future__ import absolute_import, division
 import WWISE
 import BigWorld
 from AvatarInputHandler.DynamicCameras.kill_cam_camera import CallbackPauseManager
@@ -8,6 +9,7 @@ from gui.battle_control.controllers.kill_cam_ctrl import KillCamInfoMarkerType, 
 from gui.battle_control.view_components import IViewComponentsCtrlListener
 from gui.shared.events import DeathCamEvent
 from helpers import dependency
+from math_common import decimal_round
 from skeletons.gui.battle_session import IBattleSessionProvider
 _TRAJECTORY_PROGRESS_DELAY = 0.1
 
@@ -81,7 +83,7 @@ class KillCamSoundPlayer(CallbackPauseManager, IViewComponentsCtrlListener):
             self.__playSoundNotification(_DeathCamSound.DC_TRAJECTORY_RAY)
 
     def __trajectoryProgress(self, configMovementDuration):
-        durationPercentage = round(self.__transitionDuration * 100.0 / configMovementDuration, 1)
+        durationPercentage = decimal_round(self.__transitionDuration * 100.0 / configMovementDuration, 1)
         WWISE.WW_setRTCPGlobal(_DeathCamSound.DC_WW_RTPC_ext_dc_trajectory_progress, durationPercentage)
         self.__transitionDuration += _TRAJECTORY_PROGRESS_DELAY
         if durationPercentage >= 100.0:

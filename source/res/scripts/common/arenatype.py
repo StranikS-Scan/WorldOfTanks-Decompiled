@@ -17,7 +17,7 @@ from debug_utils import LOG_CURRENT_EXCEPTION
 from items import _xml
 from items.vehicles import CAMOUFLAGE_KINDS
 from persistent_data_cache_common.serializers import WGPickleSerializer
-from realm_utils import ResMgr
+from extension_utils import ResMgr
 from soft_exception import SoftException
 from visual_script.misc import ASPECT, VisualScriptTag, readVisualScriptSection as _readVisualScriptSection
 if IS_CLIENT:
@@ -89,7 +89,7 @@ def _readCache(isFullCache):
     geometriesSet = set()
     for key, value in rootSection.items():
         isDevelopmentArena = value.readBool('isDevelopment')
-        if value.readBool('isHangar'):
+        if value.readBool('isHangar') or key != 'map':
             continue
         geometryID = value.readInt('id')
         if geometryID in geometriesSet:

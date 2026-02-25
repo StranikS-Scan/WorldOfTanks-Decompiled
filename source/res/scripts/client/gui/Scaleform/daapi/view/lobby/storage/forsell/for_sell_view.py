@@ -70,7 +70,7 @@ class _StorageForSellCache(FileLocalCache):
 
     def _setCache(self, data):
         if isinstance(data, (tuple, list)) and len(data) == 2:
-            if VERSION == data[0]:
+            if data[0] == VERSION:
                 self.__cache = data[1]
         return data
 

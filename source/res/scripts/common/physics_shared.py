@@ -7,7 +7,7 @@ import collections
 from items import vehicles
 from items.components.component_constants import KMH_TO_MS, ZERO_VECTOR3
 from items.vehicles import VEHICLE_PHYSICS_TYPE, VehicleDescriptor, VehicleDescrType
-from constants import IS_CLIENT, IS_EDITOR, SERVER_TICK_LENGTH
+from constants import IS_CLIENT, IS_EDITOR, SERVER_TICK_LENGTH, SHOT_PREDICTION_BUFFER, HALF_SERVER_TICK
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR
 import copy
 from gun_rotation_shared import encodeRestrictedValueToUint, decodeRestrictedValueFromUint
@@ -907,7 +907,7 @@ def __buildConfigurations(configuration):
 
 
 def getShootTimeCorrection(roundTripTime):
-    return min(0.3, roundTripTime + SERVER_TICK_LENGTH * 0.5)
+    return min(SHOT_PREDICTION_BUFFER, roundTripTime + HALF_SERVER_TICK)
 
 
 _DEFAULT_FAKE_GEARBOX_SETTINGS = {'fwdgears': {'switchSpeed': (2, 5, 15),

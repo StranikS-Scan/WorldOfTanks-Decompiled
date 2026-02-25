@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/damage_panel.py
+from __future__ import absolute_import
 import logging
 import math
 import typing
 import weakref
+from future.utils import listitems, viewvalues
 import BattleReplay
 import BigWorld
 import GUI
@@ -100,12 +102,12 @@ class _PythonTimer(PythonTimer, _IStatusAnimPlayer):
         self._animated = False
         self.__hideAnimated = False
 
-    def showStatus(self, totalTime, animated, startTimer=True):
-        super(_PythonTimer, self).showStatus(totalTime, animated)
+    def showStatus(self, time, animated, startTimer=True):
+        super(_PythonTimer, self).showStatus(time, animated)
         self._animated = animated
-        self._totalTime = totalTime
+        self._totalTime = time
         self._startTime = BigWorld.serverTime()
-        self._finishTime = self._startTime + totalTime if totalTime else 0
+        self._finishTime = self._startTime + time if time else 0
         if startTimer:
             self.show()
         else:
@@ -229,7 +231,7 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener, IArenaVehiclesContr
         return
 
     def hideStatusImmediate(self):
-        for player in self._statusAnimPlayers.itervalues():
+        for player in viewvalues(self._statusAnimPlayers):
             player.hideStatus(False)
 
     def updateVehicleParams(self, vehicle, _):
@@ -453,7 +455,7 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener, IArenaVehiclesContr
             self.__stunSourcesData.pop(stunID)
 
     def __getStunDuration(self):
-        stunFinishTime = max(self.__stunSourcesData.itervalues()) if self.__stunSourcesData else 0
+        stunFinishTime = max(viewvalues(self.__stunSourcesData)) if self.__stunSourcesData else 0
         return max(stunFinishTime - BigWorld.serverTime(), 0)
 
     def __changeVehicleSetting(self, tag, entityName):
@@ -515,7 +517,7 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener, IArenaVehiclesContr
             return
         else:
             ctrl.onVehicleStateUpdated += self._onVehicleStateUpdated
-            for stateID in _STATE_HANDLERS.iterkeys():
+            for stateID in _STATE_HANDLERS:
                 value = ctrl.getStateValue(stateID)
                 if value is not None:
                     if stateID == VEHICLE_VIEW_STATE.DEVICES:
@@ -576,10 +578,9 @@ class ConcurrentStatusManager(object):
     def _updateBuffAnimation(self):
         self._exposedStatusEndTime, self._exposedStatus = (0, None)
         currTime = BigWorld.serverTime()
-        for buffName in self._currentStatuses.keys():
-            endTime = self._currentStatuses[buffName]
+        for buffName, endTime in listitems(self._currentStatuses):
             if currTime > endTime:
-                del self._currentStatuses[buffName]
+                self._currentStatuses.pop(buffName)
             if endTime > self._exposedStatusEndTime:
                 self._exposedStatus = buffName
                 self._exposedStatusEndTime = endTime

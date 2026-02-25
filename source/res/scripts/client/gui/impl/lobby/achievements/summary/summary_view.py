@@ -1,24 +1,31 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/achievements/summary/summary_view.py
+import logging
 import typing
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import ACHIEVEMENTS_VISITED
 from achievements20.WTRStageChecker import WTRStageChecker
+from adisp import adisp_process
 from constants import AchievementsLayoutStates, Configs
+from dog_tags_common.components_config import componentConfigAdapter
 from dog_tags_common.config.common import ComponentViewType
+from dog_tags_common.player_dog_tag import PlayerDogTag
 from dossiers2.ui.achievements import ACHIEVEMENT_SECTION
 from frameworks.wulf.view.submodel_presenter import SubModelPresenter
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.achievements.achievements_helper import fillAchievementModel, convertDbIdsToAchievements
-from dog_tags_common.player_dog_tag import PlayerDogTag
 from gui.clans.clan_cache import ClanInfo
 from gui.clans.formatters import getClanRoleString
 from gui.dog_tag_composer import DogTagComposerClient
+from gui.game_control.wot_plus.service_record_customization import getValidatedServiceRecordRibbon, getValidatedServiceRecordBackground, ServiceRecordProcessor, getServiceRecordRibbonOptions, getServiceRecordBackgroundOptions
 from gui.impl import backport
 from gui.impl.backport import TooltipData
+from gui.impl.dialogs.dialogs import showServiceRecordCustomizationConfirmDialog
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.achievements.achievements_constants import KPITypes
+from gui.impl.gen.view_models.views.lobby.achievements.views.summary.background_model import BackgroundModel
+from gui.impl.gen.view_models.views.lobby.achievements.views.summary.ribbon_model import RibbonModel
 from gui.impl.gen.view_models.views.lobby.achievements.views.summary.statistic_item_model import StatisticItemModel
 from gui.impl.gen.view_models.views.lobby.achievements.views.summary.summary_view_model import SummaryViewModel, EditState
 from gui.impl.lobby.achievements.profile_utils import getProfileCommonInfo, formatPercent, getFormattedValue, getNormalizedValue, isSummaryEnabled, isWTREnabled, getRating, isEditingEnabled, isLayoutEnabled, getMasteryStatistic
@@ -31,18 +38,20 @@ from gui.impl.lobby.achievements.tooltips.wtr_main_tooltip import WTRMainTooltip
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.lobby.dog_tags.animated_dog_tag_grade_tooltip import AnimatedDogTagGradeTooltip
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
+from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showAchievementEditView, showClanProfileWindow
 from gui.shared.gui_items.dossier import dumpDossier
 from gui.shared.gui_items.dossier.achievements.abstract import isRareAchievement
 from gui.shared.view_helpers.emblems import getClanEmblemURL, EmblemSize
 from helpers import dependency, server_settings
 from skeletons.gui.game_control import IAchievements20Controller
+from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from gui.shared import events, EVENT_BUS_SCOPE
-from dog_tags_common.components_config import componentConfigAdapter
+from wg_async import wg_async, wg_await
 if typing.TYPE_CHECKING:
-    from typing import Dict
+    from typing import Dict, Tuple, List, Any, Generator
+_logger = logging.getLogger(__name__)
 _STATISTIC_LIST_ORDER = (KPITypes.DAMAGE,
  KPITypes.EXPERIENCE,
  KPITypes.BATTLES,
@@ -55,6 +64,7 @@ class SummaryView(SubModelPresenter):
     __itemsCache = dependency.descriptor(IItemsCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __achvmntCtrl = dependency.descriptor(IAchievements20Controller)
+    __wotPlusCtrl = dependency.descriptor(IWotPlusController)
 
     def __init__(self, summaryModel, parentView, userId):
         self.__dossier = None
@@ -122,8 +132,14 @@ class SummaryView(SubModelPresenter):
     def _getEvents(self):
         return ((self.viewModel.onAchievementsSettings, self.__onAchievementsSettings),
          (self.viewModel.otherPlayerInfo.onOpenProfile, self.__openClanStatistic),
+         (self.viewModel.onCustomizationConfirmed, self.__onCustomizationConfirmed),
+         (self.viewModel.onCustomizationDiscard, self.__onCustomizationDiscard),
+         (self.viewModel.onSetBackgroundDraft, self.__onSetBackgroundDraft),
+         (self.viewModel.onSetRibbonDraft, self.__onSetRibbonDraft),
+         (self.viewModel.onSetIsInCustomizationMode, self.__onSetIsInCustomizationMode),
          (self.__lobbyContext.getServerSettings().onServerSettingsChange, self.__onServerSettingsChanged),
-         (g_playerEvents.onDossiersResync, self.__dossierResyncHandler))
+         (g_playerEvents.onDossiersResync, self.__dossierResyncHandler),
+         (g_playerEvents.onRenewableSubscriptionStatusChanged, self.__onRenewableSubscriptionStatusChanged))
 
     def _getListeners(self):
         return ((events.Achievements20Event.LAYOUT_CHANGED, self.__onAchievementLayoutChanged, EVENT_BUS_SCOPE.LOBBY), (events.Achievements20Event.CLOSE_EDIT_VIEW, self.__onEditViewClose, EVENT_BUS_SCOPE.LOBBY))
@@ -136,6 +152,8 @@ class SummaryView(SubModelPresenter):
             self.__updateSignificantAchievements()
             self.__getPrevStates()
             self.__updateRating()
+            self.__updateCustomizationsVisuals()
+            self.__updateCustomizationsOptions()
             if self.__isOtherPlayer:
                 self.__updateClanInfo()
 
@@ -373,3 +391,143 @@ class SummaryView(SubModelPresenter):
     @property
     def __isOtherPlayer(self):
         return self.__userId is not None
+
+    def __getBackgroundAsset(self, backgroundName):
+        asset = R.images.gui.maps.icons.achievements.summary.backgrounds.dyn(backgroundName)
+        if not asset.isValid():
+            _logger.error('[SummaryView] getServiceRecordBackground asset does not exist')
+            return 0
+        return asset()
+
+    def __getRibbonAsset(self, ribbonName):
+        asset = R.images.gui.maps.icons.achievements.summary.ribbons.dyn(ribbonName)
+        if not asset.isValid():
+            _logger.error('[SummaryView] getServiceRecordRibbon asset does not exist')
+            return 0
+        return asset()
+
+    def __getServiceRecordBackgroundOptions(self):
+        options = []
+        for index, name in getServiceRecordBackgroundOptions():
+            image = R.images.gui.maps.icons.achievements.summary.backgrounds.dyn(name)
+            if not image.isValid():
+                _logger.error('[SummaryView] getServiceRecordBackgroundOptions image does not exist')
+                continue
+            label = R.strings.achievements_page.summary.achievements.customization.backgrounds.dyn(name)
+            if not label.isValid():
+                _logger.error('[SummaryView] getServiceRecordBackgroundOptions label does not exist')
+                continue
+            options.append((index, image(), label()))
+
+        return options
+
+    def __getServiceRecordRibbonOptions(self):
+        options = []
+        for index, name in getServiceRecordRibbonOptions():
+            image = R.images.gui.maps.icons.achievements.summary.ribbons.dyn(name)
+            if not image.isValid():
+                _logger.error('[SummaryView] getServiceRecordRibbonOptions image does not exist')
+                continue
+            ribbonIcon = '{}_icon'.format(name)
+            icon = R.images.gui.maps.icons.achievements.summary.ribbons.dyn(ribbonIcon)
+            if not icon.isValid():
+                _logger.error('[SummaryView] getServiceRecordRibbonOptions icon does not exist')
+                continue
+            options.append((index, image(), icon()))
+
+        return options
+
+    def __updateCustomizationsOptions(self):
+        with self.viewModel.transaction() as model:
+            isCustomizationEnabled = self.__wotPlusCtrl.getSettingsStorage().isServiceRecordCustomizationAvailable()
+            if not isCustomizationEnabled:
+                return
+            bgOptionsData = self.__getServiceRecordBackgroundOptions()
+            bgOptions = model.getBackgroundOptions()
+            bgOptions.clear()
+            bgOptions.reserve(len(bgOptionsData))
+            for index, image, label in bgOptionsData:
+                bgModel = BackgroundModel()
+                bgModel.setSlug(str(index))
+                bgModel.setImage(image)
+                bgModel.setLabel(label)
+                bgOptions.addViewModel(bgModel)
+
+            bgOptions.invalidate()
+            ribbonImage = self.__getServiceRecordRibbonOptions()
+            ribbonOptions = model.getRibbonOptions()
+            ribbonOptions.clear()
+            ribbonOptions.reserve(len(ribbonImage))
+            for index, image, icon in ribbonImage:
+                ribbonModel = RibbonModel()
+                ribbonModel.setSlug(str(index))
+                ribbonModel.setImage(image)
+                ribbonModel.setIcon(icon)
+                ribbonOptions.addViewModel(ribbonModel)
+
+            ribbonOptions.invalidate()
+
+    def __updateCustomizationsVisuals(self):
+        with self.viewModel.transaction() as model:
+            isCustomizationEnabled = self.__wotPlusCtrl.getSettingsStorage().isServiceRecordCustomizationAvailable()
+            isButtonEnabled = not self.__isOtherPlayer and isCustomizationEnabled
+            if not isCustomizationEnabled and model.getIsInCustomizationMode():
+                model.setIsInCustomizationMode(False)
+            model.setIsCustomizationButtonVisible(isButtonEnabled)
+            model.setIsCustomizationButtonEnabled(isButtonEnabled)
+            if self.__isOtherPlayer:
+                customizationData = self.__itemsCache.items.getServiceRecordCustomization(self.__userId)
+                backgroundIndex, backgroundName = getValidatedServiceRecordBackground(customizationData.get('background', 0))
+                ribbonIndex, ribbonName = getValidatedServiceRecordRibbon(customizationData.get('ribbon', 0))
+            else:
+                backgroundIndex, backgroundName = self.__wotPlusCtrl.getServiceRecordBackground()
+                ribbonIndex, ribbonName = self.__wotPlusCtrl.getServiceRecordRibbon()
+            model.background.setSlug(str(backgroundIndex))
+            model.background.setImage(self.__getBackgroundAsset(backgroundName))
+            model.ribbon.setSlug(str(ribbonIndex))
+            model.ribbon.setImage(self.__getRibbonAsset(ribbonName))
+
+    def __onSetBackgroundDraft(self, ctx):
+        with self.viewModel.transaction() as model:
+            slug = int(ctx.get('backgroundDraftSlug'))
+            bgOptionsData = self.__getServiceRecordBackgroundOptions()
+            for index, image, label in bgOptionsData:
+                if slug == index:
+                    model.backgroundDraft.setSlug(str(index))
+                    model.backgroundDraft.setImage(image)
+                    model.backgroundDraft.setLabel(label)
+                    break
+
+    def __onSetRibbonDraft(self, ctx):
+        with self.viewModel.transaction() as model:
+            slug = int(ctx.get('ribbonDraftSlug'))
+            ribbonImages = self.__getServiceRecordRibbonOptions()
+            for index, image, icon in ribbonImages:
+                if slug == index:
+                    model.ribbonDraft.setSlug(str(index))
+                    model.ribbonDraft.setImage(image)
+                    model.ribbonDraft.setIcon(icon)
+                    break
+
+    def __onSetIsInCustomizationMode(self, ctx):
+        with self.viewModel.transaction() as model:
+            model.setIsInCustomizationMode(ctx.get('isInCustomizationMode'))
+
+    @adisp_process
+    def __onCustomizationConfirmed(self, ctx):
+        yield ServiceRecordProcessor(int(ctx.get('backgroundSlug')), int(ctx.get('ribbonSlug'))).request()
+        self.__onSetIsInCustomizationMode({'isInCustomizationMode': False})
+
+    @wg_async
+    def __onCustomizationDiscard(self, ctx):
+        result = yield wg_await(showServiceRecordCustomizationConfirmDialog())
+        if result is None or result.busy or not result.result:
+            self.__onSetIsInCustomizationMode({'isInCustomizationMode': False})
+            return
+        else:
+            self.__onCustomizationConfirmed(ctx)
+            return
+
+    def __onRenewableSubscriptionStatusChanged(self):
+        self.__updateCustomizationsOptions()
+        self.__updateCustomizationsVisuals()

@@ -357,7 +357,7 @@ class CustomFilesCache(object):
             remoteFile = self.__db[key] if self.__db is not None and key in self.__db else None
             _LOG_EXECUTING_TIME(startTime, '__onReadLocalFile')
             crc, f, ver = remoteFile[2:5]
-            if crc != binascii.crc32(f) or _CACHE_VERSION != ver:
+            if crc != binascii.crc32(f) or ver != _CACHE_VERSION:
                 LOG_DEBUG('Old file was found.', url)
                 raise SoftException('Invalid data.')
         except Exception:

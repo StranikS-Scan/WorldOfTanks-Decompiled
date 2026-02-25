@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/stronghold/timers_panel.py
+from __future__ import absolute_import
 import logging
 import BigWorld
 from gui.Scaleform.daapi.view.battle.shared.timers_panel import TimersPanel

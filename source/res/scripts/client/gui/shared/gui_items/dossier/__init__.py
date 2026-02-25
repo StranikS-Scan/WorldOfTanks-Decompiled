@@ -134,7 +134,6 @@ class AccountDossier(_Dossier, stats.AccountDossierStats):
 
 
 class TankmanDossier(_Dossier, stats.TankmanDossierStats):
-    _lobbyContext = dependency.descriptor(ILobbyContext)
     _wotPlusCtrl = dependency.descriptor(IWotPlusController)
     PREMIUM_TANK_DEFAULT_CREW_XP_FACTOR = 1.5
 
@@ -186,8 +185,8 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
              'isRowSeparator': True,
              'isPremium': self.__currentVehicleIsPremium,
              'stats': [self.__packStat('nextSkillXPLeft', tankman.getNextLevelXpCost(), imageType=imageType, image=image, isSecondActive=self.__currentVehicleIsPremium), self.__packStat('nextSkillBattlesLeft', self.__getNextSkillBattlesLeft(tankman), usePremiumXpFactor=True, isSecondActive=self.__currentVehicleIsPremium)]}
-            showPassiveCrewXpInfo = self._wotPlusCtrl.isEnabled() and self.lobbyContext.getServerSettings().isRenewableSubPassiveCrewXPEnabled()
-            if showPassiveCrewXpInfo:
+            settingsModel = self._wotPlusCtrl.getSettingsStorage()
+            if settingsModel.isPassiveCrewXPAvailable():
                 statsBlock = studyingBlock.get('stats', [])
                 statsBlock.append(self.__packWotPlus(tankman))
             return studyingBlock
@@ -237,7 +236,8 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
             result = validator.validateCrewSlot(tankman.strCD)
             tankManIsEligible = not result.isEmpty and result.tManValidRes.isValid
             tankHasPassiveXp = self._wotPlusCtrl.hasVehicleCrewIdleXP(tankman.vehicleInvID)
-        xpPerMinute = self._lobbyContext.getServerSettings().getRenewableSubCrewXPPerMinute()
+        settingsModel = self._wotPlusCtrl.getSettingsStorage()
+        xpPerMinute = settingsModel.getCrewXPPerMinute()
         xpPerSecond = float(xpPerMinute) / _SECONDS_IN_MINUTE
         secUntilNextLevel = tankman.getNextLevelXpCost() / xpPerSecond
         timeStr = time_utils.getTillTimeString(secUntilNextLevel, MENU.TIME_TIMEVALUE, removeLeadingZeros=True) if tankManIsEligible and secUntilNextLevel else '--'

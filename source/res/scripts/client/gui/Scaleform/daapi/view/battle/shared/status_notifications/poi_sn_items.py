@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/status_notifications/poi_sn_items.py
+from __future__ import absolute_import
 import logging
 import typing
 from gui.Scaleform.daapi.view.battle.shared.status_notifications.components import StatusNotificationsGroup
@@ -42,7 +43,7 @@ class PointOfInterestSN(TimerSN):
         raise NotImplementedError
 
     def _getTimeParams(self, value):
-        return (0, 0) if value.status.endTime == INVALID_TIMESTAMP or value.status.startTime == INVALID_TIMESTAMP else (value.status.endTime - value.status.startTime, value.status.endTime)
+        return (0, 0) if INVALID_TIMESTAMP in (value.status.endTime, value.status.startTime) else (value.status.endTime - value.status.startTime, value.status.endTime)
 
     def _update(self, value=None):
         if value is None:

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_modifiers/scripts/common/battle_modifiers_ext/modification_cache/vehicle_modifications.py
+from __future__ import absolute_import, division
 import copy
+from future.utils import viewitems, viewvalues
 from battle_modifiers_common import ModifiersContext
 from battle_modifiers_common.battle_modifiers import BattleParams
 from battle_modifiers_ext.constants_ext import USE_VEHICLE_CACHE, MAX_VEHICLE_CACHE_LAYER_COUNT, DEBUG_MODIFIERS, ModifierDomain
@@ -9,7 +11,8 @@ from constants import IS_CELLAPP, IS_CLIENT, SHELL_TYPES, SHELL_MECHANICS_TYPE, 
 from math import tan, atan, cos, acos
 from items.components.chassis_components import TrackPair
 from items.components.component_constants import DEFAULT_GUN_CLIP, DEFAULT_GUN_BURST, DEFAULT_GUN_AUTORELOAD, DEFAULT_GUN_DUALGUN, KMH_TO_MS, MS_TO_KMH, DEFAULT_GUN_AUTOSHOOT, DynamicShotEffect, ZERO_FLOAT, DEFAULT_GUN_TWINGUN
-from typing import TYPE_CHECKING, Optional, Type, Dict, Tuple
+from items.components.shell_components import createShellType
+from typing import TYPE_CHECKING, Optional, Type, Dict, Tuple, List
 from Math import Vector2
 from debug_utils import LOG_DEBUG
 if TYPE_CHECKING:
@@ -43,6 +46,15 @@ class VehicleModifier(object):
             damageByStaticsChances = vehType.damageByStaticsChances
             vehType.damageByStaticsChances = {'tankman': modifiers(BattleParams.ENV_TANKMAN_DAMAGE_CHANCE, damageByStaticsChances['tankman']),
              'module': modifiers(BattleParams.ENV_MODULE_DAMAGE_CHANCE, damageByStaticsChances['module'])}
+            if IS_CLIENT:
+                vehType.effects = cls.__modifyVehicleEffects(vehType.effects, modifiers)
+                rootPrefabs = vehType.prefabs
+                if rootPrefabs:
+                    prefabsCopy = copy.deepcopy(rootPrefabs)
+                    for d in viewvalues(prefabsCopy):
+                        d['mechanicEffects'] = tuple((modifiers(BattleParams.ROOT_PREFABS_MECHANIC_EFFECTS, p) for p in d['mechanicEffects']))
+
+                    vehType.prefabs = prefabsCopy
         if modifiers.haveDomain(ModifierDomain.CHASSIS):
             vehType.chassis = tuple((cls.__modifyChassis(chassis, modifiers) for chassis in vehType.chassis))
         if modifiers.haveDomain(ModifierDomain.TURRET_COMPONENTS):
@@ -71,7 +83,7 @@ class VehicleModifier(object):
         if chassis.healthParams.hysteresisHealth is not None:
             chassis.healthParams.hysteresisHealth = modifiers(BattleParams.CHASSIS_HEALTH, chassis.healthParams.hysteresisHealth)
         chassis.healthParams.healthRegenPerSec = modifiers(BattleParams.CHASSIS_HEALTH, chassis.healthParams.healthRegenPerSec)
-        modifiedTrackPairs = list()
+        modifiedTrackPairs = []
         for trPair in chassis.trackPairs:
             trackHealthParams = copy.copy(trPair.healthParams)
             trackHealthParams.maxHealth = modifiers(BattleParams.CHASSIS_HEALTH, trPair.healthParams.maxHealth)
@@ -155,7 +167,7 @@ class VehicleModifier(object):
                     gun.effects = modifiers(BattleParams.GUN_EFFECTS, gun.effects)
             if gun.prefabs:
                 gunPrefabs = copy.deepcopy(gun.prefabs)
-                for outfit, prefabs in gunPrefabs.iteritems():
+                for outfit, prefabs in viewitems(gunPrefabs):
                     modifiers.modificationCtx['outfit'] = outfit
                     prefabs['main'] = tuple((modifiers(BattleParams.GUN_MAIN_PREFAB, p) for p in prefabs['main']))
 
@@ -173,11 +185,11 @@ class VehicleModifier(object):
                 gun.healthParams.hysteresisHealth = modifiers(BattleParams.GUN_HEALTH, gun.healthParams.hysteresisHealth)
             gun.healthParams.healthRegenPerSec = modifiers(BattleParams.GUN_HEALTH, gun.healthParams.healthRegenPerSec)
         if modifiers.haveDomain(ModifierDomain.SHOT_COMPONENTS):
-            gun.shots = tuple((cls.__modifyShot(shot, modifiers) for shot in gun.shots))
+            gun.shots = tuple((cls.__modifyShot(gun, shot, modifiers) for shot in gun.shots))
         return gun
 
     @classmethod
-    def __modifyShot(cls, shot, modifiers):
+    def __modifyShot(cls, gun, shot, modifiers):
         if DEBUG_MODIFIERS:
             LOG_DEBUG("[BattleModifiers][Debug] Modify shell '{}'".format(shot.shell.name))
         modifiers.modificationCtx['shell'] = shot.shell
@@ -193,13 +205,13 @@ class VehicleModifier(object):
             piercingPower = shot.piercingPower
             shot.piercingPower = Vector2(modifiers(BattleParams.PIERCING_POWER_FIRST, piercingPower[0]), modifiers(BattleParams.PIERCING_POWER_LAST, piercingPower[1]))
         if modifiers.haveDomain(ModifierDomain.SHELL_COMPONENTS):
-            shot.shell = cls.__modifyShell(shot.shell, modifiers)
+            shot.shell = cls.__modifyShell(gun, shot.shell, modifiers)
         from helpers_common import computeShotMaxDistance
         shot.maxDistance = computeShotMaxDistance(shot, modifiers)
         return shot
 
     @classmethod
-    def __modifyShell(cls, shell, modifiers):
+    def __modifyShell(cls, gun, shell, modifiers):
         shell = copy.copy(shell)
         if modifiers.haveDomain(ModifierDomain.SHELL):
             shell.damageRandomization = modifiers(BattleParams.DAMAGE_RANDOMIZATION, shell.damageRandomization)
@@ -209,23 +221,29 @@ class VehicleModifier(object):
             shell.armorDamage = (modifiers(BattleParams.ARMOR_DAMAGE_FIRST, shell.armorDamage[0]), modifiers(BattleParams.ARMOR_DAMAGE_LAST, shell.armorDamage[1]))
             shell.isDamageMutable = shell.armorDamage[0] != shell.armorDamage[1]
             shell.deviceDamage = (modifiers(BattleParams.DEVICE_DAMAGE_FIRST, shell.deviceDamage[0]), modifiers(BattleParams.DEVICE_DAMAGE_LAST, shell.deviceDamage[1]))
+            from items import vehicles
             effectsIndex = shell.effectsIndex
-            modifiers.modificationCtx['shotsCount'] = 1 if shell.dynamicEffectsIndexes else 0
+            modifiers.modificationCtx['shotsCount'] = vehicles.g_cache.shotEffects[effectsIndex].get('shotsCount', 0)
             shell.effectsIndex = modifiers(BattleParams.SHOT_EFFECTS, effectsIndex)
             newDynamicEffectsIndexes = []
-            dynamicEffectsIndexes = shell.dynamicEffectsIndexes
-            for dynamicEffect in dynamicEffectsIndexes:
+            for dynamicEffect in shell.dynamicEffectsIndexes:
                 modifiers.modificationCtx['shotsCount'] = dynamicEffect.minShotsCount
                 newDynamicEffectsIndexes.append(DynamicShotEffect(effectsIndex=modifiers(BattleParams.SHOT_EFFECTS, dynamicEffect.effectsIndex), minShotsCount=dynamicEffect.minShotsCount, maxShotsCount=dynamicEffect.maxShotsCount))
 
             shell.dynamicEffectsIndexes = tuple(newDynamicEffectsIndexes)
             modifiers.modificationCtx.pop('shotsCount')
+            if BattleParams.SHELL_STUN in modifiers:
+                shell.stun = modifiers(BattleParams.SHELL_STUN, shell.stun)
         if modifiers.haveDomain(ModifierDomain.SHELL_TYPE):
-            shell.type = cls.__modifyShellType(shell.type, modifiers)
+            if BattleParams.CHANGE_SHELL_TYPE in modifiers:
+                shellType = createShellType(modifiers(BattleParams.CHANGE_SHELL_TYPE, None))
+            else:
+                shellType = shell.type
+            shell.type = cls.__modifyShellType(gun, shell, shellType, modifiers)
         return shell
 
     @classmethod
-    def __modifyShellType(cls, shellType, modifiers):
+    def __modifyShellType(cls, gun, shell, shellType, modifiers):
         shellType = copy.copy(shellType)
         isArmorPiercing = shellType.name.startswith('ARMOR_PIERCING')
         isHollowCharge = shellType.name == SHELL_TYPES.HOLLOW_CHARGE
@@ -236,6 +254,8 @@ class VehicleModifier(object):
         if BattleParams.RICOCHET_ANGLE in modifiers and (isArmorPiercing or isHollowCharge):
             initAngle = acos(shellType.ricochetAngleCos)
             shellType.ricochetAngleCos = cos(modifiers(BattleParams.RICOCHET_ANGLE, initAngle))
+        if isHE and 'autoShoot' not in gun.tags and BattleParams.CALIBER_TO_EXPLOSION_RADIUS in modifiers:
+            shellType.explosionRadius = modifiers(BattleParams.CALIBER_TO_EXPLOSION_RADIUS, shell.caliber)
         if isModernHE and shellType.armorSpalls.isActive:
             armorSpalls = copy.copy(shellType.armorSpalls)
             armorSpalls.radius = modifiers(BattleParams.ARMOR_SPALLS_IMPACT_RADIUS, armorSpalls.radius)
@@ -286,10 +306,7 @@ class VehicleModifier(object):
         hull.ammoBayHealth.healthRegenPerSec = modifiers(BattleParams.AMMO_BAY_HEALTH, hull.ammoBayHealth.healthRegenPerSec)
         hull.ammoBayHealth.healthBurnPerSec = modifiers(BattleParams.AMMO_BAY_HEALTH, hull.ammoBayHealth.healthBurnPerSec)
         if IS_CLIENT:
-            for descr in hull.customEffects:
-                for tag, value in descr.descriptors.items():
-                    descr.descriptors[tag] = modifiers(BattleParams.EXHAUST_EFFECT, value)
-
+            hull.customEffects = cls.__modifyHullCustomEffects(hull.customEffects, modifiers)
         return hull
 
     @classmethod
@@ -317,19 +334,19 @@ class VehicleModifier(object):
         physics = copy.deepcopy(physics)
         detailed = physics['detailed']
         detailed['gravityFactor'] = modifiers(BattleParams.GRAVITY_FACTOR, detailed['gravityFactor'])
-        for engine in detailed['engines'].itervalues():
+        for engine in viewvalues(detailed['engines']):
             engine['smplEnginePower'] = modifiers(BattleParams.ENGINE_POWER, engine['smplEnginePower'])
             engine['smplFwMaxSpeed'] = modifiers(BattleParams.FW_MAX_SPEED, engine['smplFwMaxSpeed'])
             engine['smplBkMaxSpeed'] = modifiers(BattleParams.BK_MAX_SPEED, engine['smplBkMaxSpeed'])
 
-        for chassis in detailed['chassis'].itervalues():
+        for chassis in viewvalues(detailed['chassis']):
             speedOnSpot = modifiers(BattleParams.ROTATION_SPEED_ON_STILL, chassis['gimletGoalWOnSpot'])
             chassis['gimletGoalWOnSpot'] = speedOnSpot
             chassis['wPushedRot'] = speedOnSpot
             speedOnMove = modifiers(BattleParams.ROTATION_SPEED_ON_MOVE, chassis['gimletGoalWOnMove'])
             chassis['gimletGoalWOnMove'] = speedOnMove
             chassis['wPushedDiag'] = speedOnMove
-            for ground in chassis['grounds'].itervalues():
+            for ground in viewvalues(chassis['grounds']):
                 ground['fwdFriction'] = modifiers(BattleParams.FWD_FRICTION, ground['fwdFriction'])
                 ground['sideFriction'] = modifiers(BattleParams.SIDE_FRICTION, ground['sideFriction'])
                 ground['dirtReleaseRate'] = modifiers(BattleParams.DIRT_RELEASE_RATE, ground['dirtReleaseRate'])
@@ -340,12 +357,32 @@ class VehicleModifier(object):
     @classmethod
     def __modifyPhysicsClient(cls, physics, modifiers):
         physics = copy.deepcopy(physics)
-        for engine in physics['engines'].itervalues():
+        for engine in viewvalues(physics['engines']):
             engine['smplEnginePower'] = modifiers(BattleParams.ENGINE_POWER, engine['smplEnginePower'])
-            msSpeed = modifiers(BattleParams.FW_MAX_SPEED, engine['smplFwMaxSpeed'] * KMH_TO_MS)
-            engine['smplFwMaxSpeed'] = msSpeed * MS_TO_KMH
+            engine['smplFwMaxSpeed'] = modifiers(BattleParams.FW_MAX_SPEED, engine['smplFwMaxSpeed'] * KMH_TO_MS) * MS_TO_KMH
+            engine['smplBkMaxSpeed'] = modifiers(BattleParams.BK_MAX_SPEED, engine['smplBkMaxSpeed'] * KMH_TO_MS) * MS_TO_KMH
 
         return physics
+
+    @classmethod
+    def __modifyHullCustomEffects(cls, customEffects, modifiers):
+        if DEBUG_MODIFIERS:
+            LOG_DEBUG('[BattleModifiers][Debug] Modify hull custom effects')
+        customEffects = tuple((copy.copy(descr) for descr in customEffects))
+        for descr in customEffects:
+            descr.descriptors = {tag:modifiers(BattleParams.EXHAUST_EFFECTS, value) for tag, value in descr.descriptors.items()}
+
+        return customEffects
+
+    @classmethod
+    def __modifyVehicleEffects(cls, vehEffects, modifiers):
+        if DEBUG_MODIFIERS:
+            LOG_DEBUG('[BattleModifiers][Debug] Modify vehicle effects')
+        effects = copy.copy(vehEffects)
+        for param, efType in ((BattleParams.DESTRUCTION_EFFECT, 'destruction'), (BattleParams.FULL_DESTRUCTION_EFFECT, 'fullDestruction')):
+            effects[efType] = modifiers(param, effects[efType])
+
+        return effects
 
 
 class VehicleModificationCache(ModificationCache):

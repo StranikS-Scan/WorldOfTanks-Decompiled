@@ -1,11 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_pass/battle_pass_package.py
-from collections import OrderedDict
 import typing
 from battle_pass_common import BattlePassConsts
 from gui.battle_pass.battle_pass_award import BattlePassAwardsManager
 from gui.battle_pass.battle_pass_constants import MIN_LEVEL
-from gui.battle_pass.battle_pass_helpers import getCompoundPriceDefaultID
 from gui.shared.money import Money
 from helpers import dependency
 from helpers.dependency import replace_none_kwargs
@@ -13,7 +11,6 @@ from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from typing import Dict
     from gui.battle_pass.battle_pass_constants import ChapterState
     from gui.server_events.bonuses import SimpleBonus
 
@@ -22,7 +19,7 @@ class BattlePassPackage(object):
     __eventsCache = dependency.descriptor(IEventsCache)
     __itemsCache = dependency.descriptor(IItemsCache)
     __battlePass = dependency.descriptor(IBattlePassController)
-    __TOP_PRIORITY_REWARDS_COUNT = 8
+    __TOP_PRIORITY_REWARDS_COUNT = 6
 
     def __init__(self, chapterID):
         self.__seasonID = self.__battlePass.getSeasonID()
@@ -30,15 +27,10 @@ class BattlePassPackage(object):
         self.__buyWithRemainingLevels = False
 
     def getPrice(self):
-        return self.__getPriceBP(self.getCompoundPrice())
-
-    def getCompoundPrice(self):
-        compoundPrice = self.__battlePass.getBattlePassCost(self.__chapterID)
-        priceDefaultID = getCompoundPriceDefaultID(compoundPrice)
-        compoundPrice = Money(**compoundPrice[priceDefaultID])
+        compoundPrice = Money(**self.__battlePass.getBattlePassCost(self.__chapterID))
         if self.__buyWithRemainingLevels:
             compoundPrice += self.__getUnreachedLevelsPrice()
-        return {priceDefaultID: compoundPrice.toDict()}
+        return self.__getPriceBP(compoundPrice.toDict())
 
     def getLevelsCount(self):
         pass
@@ -124,7 +116,7 @@ class BattlePassPackage(object):
         return self.__battlePass.getMaxLevelInChapter(self.__chapterID)
 
     def __getPriceBP(self, battlePassCost):
-        return next(next(battlePassCost.itervalues()).itervalues()) if self.hasBattlePass() else 0
+        return next(battlePassCost.itervalues()) if self.hasBattlePass() else 0
 
     def __getUnreachedLevelsPrice(self):
         levelsCount = self._getMaxLevel() - self.getCurrentLevel()
@@ -171,9 +163,6 @@ class PackageAnyLevels(BattlePassPackage):
         levelCost = self.__itemsCache.items.shop.getBattlePassLevelCost()
         return self.__getLevelsPrice(levelCost)
 
-    def getCompoundPrice(self):
-        return {}
-
     def getNowAwards(self):
         curLevel = self.getCurrentLevel()
         toLevel = curLevel + self.getLevelsCount()
@@ -203,5 +192,5 @@ class PackageAnyLevels(BattlePassPackage):
 
 
 @replace_none_kwargs(battlePass=IBattlePassController)
-def generatePackages(battlePass=None):
-    return OrderedDict(sorted(((chapterID, BattlePassPackage(chapterID)) for chapterID in battlePass.getMainChapterIDs())))
+def generatePackage(chapterID, battlePass=None):
+    return BattlePassPackage(chapterID)

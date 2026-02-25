@@ -2,6 +2,7 @@
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/lobby/hangar/presenters/fun_random_vehicle_inventory_presenter.py
 from __future__ import absolute_import
 from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunSubModesWatcher
+from fun_random.gui.feature.util.fun_wrappers import hasDesiredSubMode
 from gui.impl.gen import R
 from gui.impl.lobby.hangar.presenters.vehicle_inventory_presenter import VehicleInventoryPresenter
 from gui.impl.lobby.tooltips.carousel_vehicle_tooltip import getUnsuitable2queueTooltip
@@ -18,3 +19,7 @@ class FunRandomVehicleInventoryPresenter(VehicleInventoryPresenter, FunAssetPack
                     resPath = R.strings.fun_random.funRandomCarousel.lockedTooltip
                     return getUnsuitable2queueTooltip(self.getParentWindow(), event, validationResult, resPath, modeName=self.getModeUserName())
         return super(FunRandomVehicleInventoryPresenter, self).createToolTip(event)
+
+    @hasDesiredSubMode()
+    def _autoSelectVehicle(self):
+        self._funRandomCtrl.hiddenVehicles.updateCurrentVehicle(self.getDesiredSubMode())

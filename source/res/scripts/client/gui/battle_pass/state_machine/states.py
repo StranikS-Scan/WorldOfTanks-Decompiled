@@ -8,7 +8,6 @@ from gui.battle_pass.battle_pass_helpers import asBPVideoName, getStyleForChapte
 from gui.battle_pass.state_machine import lockNotificationManager
 from gui.battle_pass.state_machine.state_machine_helpers import isProgressionComplete, packToken, processRewardsToChoose
 from gui.impl.gen import R
-from gui.impl.lobby.battle_pass.battle_pass_buy_view import WINDOW_IS_NOT_OPENED, g_BPBuyViewStates
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.event_dispatcher import showBattlePass, showBattlePassAwardsWindow, showBattlePassRewardsSelectionWindow
 from gui.shared.events import LobbySimpleEvent
@@ -73,8 +72,6 @@ class LobbyState(State):
     def _onEntered(self, event):
         lockNotificationManager(False, notificationManager=self.__notificationManager)
         self.__battlePass.onRewardSelectChange()
-        if g_BPBuyViewStates.chapterID != WINDOW_IS_NOT_OPENED:
-            showBattlePass(R.aliases.battle_pass.BuyPass())
 
     def _onExited(self):
         lockNotificationManager(True, notificationManager=self.__notificationManager)
@@ -104,7 +101,7 @@ class ChoiceItemState(State):
     def _onEntered(self, event):
         machine = self.getMachine()
         if machine is not None:
-            _, data, _ = machine.getRewardsData()
+            _, data, _, _ = machine.getRewardsData()
             if machine.hasRewardToChoose():
 
                 def onCloseCallback():
@@ -153,7 +150,7 @@ class VideoState(State):
                 mediaName = makeProgressionStyleMediaName(chapter, level)
                 showBPFullscreenVideo(asBPVideoName(mediaName), mediaName, partial(machine.post, StateEvent()))
             else:
-                _, data, _ = machine.getRewardsData()
+                _, data, _, _ = machine.getRewardsData()
                 chapterID = data.get('chapter')
                 if self.__battlePass.isExtraChapter(chapterID) or self.__battlePass.isHoliday():
                     mediaName = makeChapterMediaName(chapterID)
@@ -198,7 +195,7 @@ class RewardStyleState(State):
             chapterID = machine.getChosenStyleChapter()
             _, level = getStyleInfoForChapter(chapterID)
             style = getStyleForChapter(chapterID)
-            additionalRewards, _, _ = machine.getRewardsData()
+            additionalRewards, _, _, _ = machine.getRewardsData()
             needNotifyClosing = not additionalRewards
             if style is not None and style.getProgressionLevel() == style.getMaxProgressionLevel():
                 machine.post(StateEvent())
@@ -229,7 +226,7 @@ class RewardAnyState(State):
         if machine is None:
             return
         else:
-            rewards, data, packageRewards = machine.getRewardsData()
+            rewards, data, packageRewards, starterPack = machine.getRewardsData()
             if rewards is None and packageRewards is None:
                 machine.clearSelf()
                 machine.post(StateEvent())
@@ -238,7 +235,7 @@ class RewardAnyState(State):
                 data = {'reason': BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS}
             data['callback'] = partial(self.__onAwardClose, data.get('chapter'), data.get('newLevel'), data.get('reason'))
             data['exitCallback'] = partial(self.__onAwardExit, data.get('chapter'), data.get('newLevel'))
-            data['showBuyCallback'] = self.__onShowBuy
+            data['showBuyCallback'] = partial(self.__onShowBuy, data.get('chapter'))
             chapter = machine.getChosenStyleChapter()
             if chapter is not None:
                 _, level = getStyleInfoForChapter(chapter)
@@ -249,7 +246,7 @@ class RewardAnyState(State):
                 machine.clearSelf()
                 machine.post(StateEvent())
                 return
-            showBattlePassAwardsWindow(rewards, data, packageRewards=packageRewards)
+            showBattlePassAwardsWindow(rewards, data, packageRewards=packageRewards, starterPack=starterPack)
             return
 
     def _onExited(self):
@@ -288,11 +285,11 @@ class RewardAnyState(State):
                 machine.clearSelf()
         return
 
-    def __onShowBuy(self):
+    def __onShowBuy(self, chapterID):
         self.__needShowBuy = True
         machine = self.getMachine()
         if machine is not None:
             machine.clearSelf()
             machine.post(StateEvent())
-        showBattlePass(R.aliases.battle_pass.BuyPass())
+        showBattlePass(R.aliases.battle_pass.BuyPass(), chapterID)
         return

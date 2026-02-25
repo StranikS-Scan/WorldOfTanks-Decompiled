@@ -7,7 +7,6 @@ from crew_sounds import CREW_SOUND_SPACE, CREW_SOUND_OVERLAY_SPACE
 from frameworks.wulf import WindowLayer
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.common.base_crew_view_model import BaseCrewViewModel
-from gui.impl.lobby.common.view_mixins import LobbyHeaderVisibility
 from gui.impl.pub import ViewImpl
 from gui.lobby_state_machine.states import isHangarState
 from gui.prb_control.entities.listener import IGlobalListener
@@ -30,7 +29,7 @@ class BaseCrewSubView(BaseCrewSoundView):
     _COMMON_SOUND_SPACE = CREW_SOUND_OVERLAY_SPACE
 
 
-class BaseCrewWidgetView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListener):
+class BaseCrewWidgetView(BaseCrewSoundView, IGlobalListener):
     __slots__ = ('_isHangar', '_crewWidget', '_currentViewID', '_previousViewID')
 
     def __init__(self, settings, **kwargs):
@@ -95,7 +94,6 @@ class BaseCrewWidgetView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListen
 
     def _finalize(self):
         super(BaseCrewWidgetView, self)._finalize()
-        self.resumeLobbyHeader(self.uniqueID)
         self._crewWidget = None
         return
 
@@ -114,21 +112,16 @@ class BaseCrewWidgetView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListen
         tankmanInvID = kwargs.get('tankmanInvID', NO_TANKMAN)
         vehicleInvID = kwargs.get('vehicleInvID', NO_VEHICLE_ID)
         slotIdx = kwargs.get('slotIdx', NO_SLOT)
-        previousViewID = kwargs.get('previousViewID', None)
+        previousViewID = kwargs.get('previousViewID')
         self._crewWidget = crewWidgetClass(tankmanInvID, vehicleInvID, slotIdx, self._currentViewID, previousViewID, self._isCrewWidgetButtonBarVisible())
         if slotIdx == NO_SLOT:
             slotIdx, _, __ = self._crewWidget.getWidgetData()
         self.setChildView(crewWidgetLayoutDynAccessor, self._crewWidget)
         self._crewWidget.updateSlotIdx(slotIdx)
-        return
 
     def _getCrewWidgetBaseData(self):
         from gui.impl.lobby.crew.widget.crew_widget import CrewWidget
         return (CrewWidget, CrewWidget.LAYOUT_DYN_ACCESSOR())
-
-    def _onLoaded(self, *args, **kwargs):
-        self.suspendLobbyHeader(self.uniqueID)
-        super(BaseCrewWidgetView, self)._onLoaded(*args, **kwargs)
 
     def _getEvents(self):
         eventsTuple = super(BaseCrewWidgetView, self)._getEvents()
@@ -163,6 +156,8 @@ class BaseCrewWidgetView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListen
                 return (tankman.invID, index)
 
         _, __, tankman = self._crewWidget.getWidgetData()
+        if not crew and tankmanID != NO_TANKMAN and tankman and not tankman.isDismissed:
+            return (tankmanID, 0)
         if crew or tankmanID == NO_TANKMAN or tankman and tankman.isDismissed:
             slotIDX = NO_SLOT
         return (tankmanID, slotIDX)

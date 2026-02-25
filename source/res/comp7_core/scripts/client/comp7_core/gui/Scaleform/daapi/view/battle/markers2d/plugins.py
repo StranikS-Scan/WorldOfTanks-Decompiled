@@ -87,10 +87,10 @@ class Comp7VehicleMarkerPlugin(VehicleMarkerPlugin):
         super(Comp7VehicleMarkerPlugin, self).stop()
         return
 
-    def invalidateVehicleStatus(self, flags, vInfo, arenaDP):
-        marker = self._markers.get(vInfo.vehicleID)
+    def invalidateVehicleStatus(self, flags, vInfoVO, arenaDP):
+        marker = self._markers.get(vInfoVO.vehicleID)
         if marker is not None:
-            self.__setIsPlayerLoaded(marker, vInfo)
+            self.__setIsPlayerLoaded(marker, vInfoVO)
         return
 
     def updateVehiclesInfo(self, updated, arenaDP):

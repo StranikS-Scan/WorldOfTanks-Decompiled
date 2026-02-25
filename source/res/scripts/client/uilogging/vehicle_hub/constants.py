@@ -12,9 +12,7 @@ class Tabs(str, Enum):
 
 
 class LogItems(str, Enum):
-    VIDEO = 'video_button'
     ARMOR_TOOLTIP = 'armor_tooltip'
-    LEGEND = 'legend'
 
 
 class LogActions(str, Enum):

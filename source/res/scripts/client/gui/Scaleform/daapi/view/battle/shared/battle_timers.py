@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/battle_timers.py
+from __future__ import absolute_import
 import logging
 import SoundGroups
 import CommandMapping
@@ -33,7 +34,7 @@ class PreBattleTimer(PrebattleTimerMeta):
     def __init__(self):
         self.__isPMBattleProgressEnabled = False
         self.__isRankedBattle = False
-        self.__sounds = dict()
+        self.__sounds = {}
         super(PreBattleTimer, self).__init__()
 
     def _populate(self):
@@ -107,7 +108,7 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
         self.__endingSoonTime = self.arenaVisitor.type.getBattleEndingSoonTime()
         self.__isDeathScreenShown = False
         self.__endWarningIsEnabled = self.__checkEndWarningStatus()
-        self.__sounds = dict()
+        self.__sounds = {}
 
     def destroy(self):
         for sound in self.__sounds.values():

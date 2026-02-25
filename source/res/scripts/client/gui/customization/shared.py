@@ -497,7 +497,7 @@ class _ClassicGroupWrapper(object):
 
 
 def getGroupHelper(item):
-    return _QuestGroupWrapper(item) if not item.itemTypeID == GUI_ITEM_TYPE.STYLE and item.isQuestsProgression else _ClassicGroupWrapper(item)
+    return _QuestGroupWrapper(item) if item.itemTypeID != GUI_ITEM_TYPE.STYLE and item.isQuestsProgression else _ClassicGroupWrapper(item)
 
 
 class VehicleC11nFilterHintChecker(object):

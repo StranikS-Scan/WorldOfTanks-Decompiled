@@ -133,8 +133,8 @@ class _VehParamsValuesGenerator(VehParamsBaseGenerator):
         data['text'] = formatters.formatParameter(param.name, param.value, param.state, self.__headerScheme, FORMAT_SETTINGS, False)
         return data
 
-    def _makeAdvancedParamVO(self, param, parent, highlight):
-        data = super(_VehParamsValuesGenerator, self)._makeAdvancedParamVO(param, parent, highlight)
+    def _makeAdvancedParamVO(self, param, parentID, highlight):
+        data = super(_VehParamsValuesGenerator, self)._makeAdvancedParamVO(param, parentID, highlight)
         if param.value or isValidEmptyValue(param.name, param.value):
             data['text'] = formatters.formatParameter(param.name, param.value, param.state, self.__bodyScheme, _CMP_FORMAT_SETTINGS, False)
         else:

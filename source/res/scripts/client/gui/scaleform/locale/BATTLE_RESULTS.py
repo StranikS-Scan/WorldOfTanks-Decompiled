@@ -353,6 +353,7 @@ class BATTLE_RESULTS(object):
     DETAILS_CALCULATIONS_BASE = '#battle_results:details/calculations/base'
     DETAILS_CALCULATIONS_WOTPLUS = '#battle_results:details/calculations/wotPlus'
     DETAILS_CALCULATIONS_WOTPLUSBONUS = '#battle_results:details/calculations/wotPlusBonus'
+    DETAILS_CALCULATIONS_WOTPLUSPROBOOST = '#battle_results:details/calculations/wotPlusProBoost'
     DETAILS_CALCULATIONS_XPRECORD = '#battle_results:details/calculations/xpRecord'
     DETAILS_CALCULATIONS_XPRECORDSIMPLE = '#battle_results:details/calculations/xpRecordSimple'
     DETAILS_CALCULATIONS_MAXIMUM = '#battle_results:details/calculations/maximum'
@@ -529,6 +530,7 @@ class BATTLE_RESULTS(object):
      DETAILS_CALCULATIONS_BASE,
      DETAILS_CALCULATIONS_WOTPLUS,
      DETAILS_CALCULATIONS_WOTPLUSBONUS,
+     DETAILS_CALCULATIONS_WOTPLUSPROBOOST,
      DETAILS_CALCULATIONS_XPRECORD,
      DETAILS_CALCULATIONS_XPRECORDSIMPLE,
      DETAILS_CALCULATIONS_MAXIMUM,

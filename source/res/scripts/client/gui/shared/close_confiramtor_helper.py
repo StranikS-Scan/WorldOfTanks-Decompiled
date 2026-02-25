@@ -34,7 +34,6 @@ class CloseConfirmatorsHelper(object):
          VIEW_ALIAS.LOBBY_STORE,
          VIEW_ALIAS.LOBBY_PROFILE,
          VIEW_ALIAS.LOBBY_MISSIONS,
-         VIEW_ALIAS.LOBBY_RESEARCH,
          VIEW_ALIAS.WIKI_VIEW,
          VIEW_ALIAS.BROWSER_VIEW,
          VIEW_ALIAS.VEHICLE_PREVIEW,

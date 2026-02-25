@@ -17,7 +17,6 @@ from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_model impo
 from gui.impl.gen.view_models.views.lobby.mode_selector.tooltips.mode_selector_tooltips_constants import ModeSelectorTooltipsConstants
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view import BattlePassCompletedTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view import BattlePassInProgressTooltipView
-from gui.impl.lobby.common.view_mixins import LobbyHeaderVisibility
 from gui.impl.lobby.mode_selector.items import saveBattlePassStateForItems
 from gui.impl.lobby.mode_selector.mode_selector_data_provider import ModeSelectorDataProvider
 from gui.impl.lobby.mode_selector.sound_constants import MODE_SELECTOR_SOUND_SPACE
@@ -62,7 +61,7 @@ def _getTooltipByContentIdMap():
 
 registerModeSelectorTooltips(_SIMPLE_TOOLTIP_IDS, _getTooltipByContentIdMap())
 
-class ModeSelectorView(ViewImpl, LobbyHeaderVisibility):
+class ModeSelectorView(ViewImpl):
     _COMMON_SOUND_SPACE = MODE_SELECTOR_SOUND_SPACE
     __appLoader = dependency.descriptor(IAppLoader)
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -167,7 +166,6 @@ class ModeSelectorView(ViewImpl, LobbyHeaderVisibility):
         self.__updateViewModel(self.viewModel)
         self.__blur = CachedBlur(enabled=True, ownLayer=WindowLayer.MARKER)
         g_eventBus.handleEvent(events.GameEvent(events.GameEvent.HIDE_LOBBY_SUB_CONTAINER_ITEMS), scope=EVENT_BUS_SCOPE.GLOBAL)
-        self.suspendLobbyHeader(self.uniqueID)
         app = self.__appLoader.getApp()
         self.__savedBackgroundAlpha = app.getBackgroundAlpha()
         app.setBackgroundAlpha(_BACKGROUND_ALPHA, False)
@@ -201,7 +199,6 @@ class ModeSelectorView(ViewImpl, LobbyHeaderVisibility):
         self.__dataProvider.dispose()
         self.__tooltipConstants = None
         self.__subSelectorCallback = None
-        self.resumeLobbyHeader(self.uniqueID)
         g_eventBus.handleEvent(FullscreenModeSelectorEvent(FullscreenModeSelectorEvent.NAME, ctx={'showing': False}))
         g_eventBus.handleEvent(events.GameEvent(events.GameEvent.REVEAL_LOBBY_SUB_CONTAINER_ITEMS), scope=EVENT_BUS_SCOPE.GLOBAL)
         self.__restoreGraphics()

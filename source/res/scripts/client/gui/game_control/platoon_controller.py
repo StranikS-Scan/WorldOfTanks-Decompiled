@@ -53,6 +53,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.formatters.ranges import toRomanRangeString
+from gui.shared.system_factory import collectReadyVehicleChekers
 from gui.impl.lobby.platoon.platoon_helpers import convertTierFilterToList
 from gui.prb_control.settings import REQUEST_TYPE
 from cgf_components.hangar_camera_manager import HangarCameraManager
@@ -311,8 +312,16 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.__waitingReadyAccept = True
         if notReady:
             changeStatePossible = yield self.__lobbyContext.isHeaderNavigationPossible()
-        if changeStatePossible and notReady and not self.prbEntity.isCommander() and not skipAmmocheck:
-            changeStatePossible = yield functions.checkAmmoLevel((g_currentVehicle.item,))
+        if changeStatePossible and notReady and not self.prbEntity.isCommander():
+            if not skipAmmocheck:
+                changeStatePossible = yield functions.checkAmmoLevel((g_currentVehicle.item,))
+            if changeStatePossible:
+                vehicleReadyCheckers = collectReadyVehicleChekers(prbEntity.getQueueType())
+                for vehicleReadyChecker in vehicleReadyCheckers:
+                    changeStatePossible = yield vehicleReadyChecker(g_currentVehicle.item)
+                    if not changeStatePossible:
+                        break
+
         if changeStatePossible:
             if self.prbEntity is prbEntity:
                 self.prbEntity.togglePlayerReadyAction(True)
@@ -433,11 +442,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
 
     def hasFreeSlot(self):
         unitMgr = prb_getters.getClientUnitMgr()
-        if unitMgr and unitMgr.unit:
-            if unitMgr.unit.getFreeSlots():
-                return True
-            return False
-        return False
+        return bool(unitMgr.unit.getFreeSlots()) if unitMgr and unitMgr.unit else False
 
     def getMaxSlotCount(self):
         unitMgr = prb_getters.getClientUnitMgr()

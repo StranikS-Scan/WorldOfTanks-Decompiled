@@ -633,7 +633,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
 
     def enable(self, **args):
         SoundGroups.g_instance.changePlayMode(2)
-        arcadeState = args.get('arcadeState', None)
+        arcadeState = args.get('arcadeState')
         overridePreferredPosition = self.guiSessionProvider.shared.equipments.consumePreferredPosition()
         if arcadeState is None and any((cls == type(overridePreferredPosition) for cls in (Vector3, tuple))):
             targetPos = overridePreferredPosition
@@ -650,7 +650,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
         replayCtrl = BattleReplay.g_replayCtrl
         if not replayCtrl.isPlaying:
             self.delayCallback(0.0, self.__tick)
-        equipmentID = args.get('equipmentID', None)
+        equipmentID = args.get('equipmentID')
         if equipmentID is None:
             self.__activeSelector = _DefaultStrikeSelector(Vector3(0, 0, 0), None)
         else:
@@ -732,7 +732,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
             replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isPlaying and replayCtrl.isControllingCamera:
                 return True
-            self.__cam.update(dx, dy, dz, False if dx == dy == dz == 0.0 else True, False, True)
+            self.__cam.update(dx, dy, dz, not dx == dy == dz == 0.0, False, True)
             return True
         else:
             if cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key):

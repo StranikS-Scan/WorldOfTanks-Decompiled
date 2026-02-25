@@ -1,13 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/markers2d/vehicle_plugins.py
+from __future__ import absolute_import
+import typing
 from collections import defaultdict, namedtuple
 from functools import partial
-import typing
+from future.utils import viewitems, viewvalues
 import BattleReplay
 import BigWorld
 import Math
 import constants
-import settings
 from AvatarInputHandler import AvatarInputHandler
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core.settings_constants import GAME
@@ -16,6 +17,7 @@ from arena_components.advanced_chat_component import _DEFAULT_ACTIVE_COMMAND_TIM
 from chat_commands_consts import INVALID_MARKER_SUBTYPE, MarkerType, DefaultMarkerSubType, INVALID_MARKER_ID
 from gui.Scaleform.daapi.view.battle.shared.markers2d import markers
 from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import MarkerPlugin, ChatCommunicationComponent, MAX_DISTANCE_TEMP_STICKY
+from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
 from gui.Scaleform.daapi.view.battle.shared.markers2d.timer import MarkerTimer
 from gui.Scaleform.genConsts.BATTLE_MARKER_STATES import BATTLE_MARKER_STATES
 from gui.battle_control import avatar_getter
@@ -164,20 +166,20 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
 
         return
 
-    def addVehicleInfo(self, vInfo, arenaDP):
-        if vInfo.isObserver():
+    def addVehicleInfo(self, vo, arenaDP):
+        if vo.isObserver():
             return
         else:
-            vehicleID = vInfo.vehicleID
+            vehicleID = vo.vehicleID
             if vehicleID in self._markers:
                 return
             ctx = self.sessionProvider.getCtx()
             feedback = self.sessionProvider.shared.feedback
-            marker = self.__addMarkerToPool(vehicleID, vInfo=vInfo, vProxy=feedback.getVehicleProxy(vehicleID))
+            marker = self.__addMarkerToPool(vehicleID, vInfo=vo, vProxy=feedback.getVehicleProxy(vehicleID))
             if marker is None:
                 return
-            self._setVehicleInfo(marker, vInfo, ctx.getPlayerGuiProps(vehicleID, vInfo.team), ctx.getPlayerFullNameParts(vehicleID))
-            self._setMarkerInitialState(marker, vInfo=vInfo)
+            self._setVehicleInfo(marker, vo, ctx.getPlayerGuiProps(vehicleID, vo.team), ctx.getPlayerFullNameParts(vehicleID))
+            self._setMarkerInitialState(marker, vInfo=vo)
             return
 
     def updateVehiclesInfo(self, updated, arenaDP):
@@ -190,15 +192,15 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             marker = self._markers[vehicleID]
             self._setVehicleInfo(marker, vInfo, getProps(vehicleID, vInfo.team), getParts(vehicleID))
 
-    def invalidatePlayerStatus(self, flags, vInfo, arenaDP):
-        self.__setEntityName(vInfo, arenaDP)
+    def invalidatePlayerStatus(self, flags, vInfoVO, arenaDP):
+        self.__setEntityName(vInfoVO, arenaDP)
 
     def getMarkerType(self, markerID=INVALID_MARKER_ID):
         return MarkerType.VEHICLE_MARKER_TYPE
 
     def getTargetIDFromMarkerID(self, markerID):
-        for vehicleID in self._markers:
-            if self._markers[vehicleID].getMarkerID() == markerID:
+        for vehicleID, marker in viewitems(self._markers):
+            if marker.getMarkerID() == markerID:
                 return vehicleID
 
         return INVALID_MARKER_ID
@@ -307,7 +309,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             self.updateTargetDesignatorSpottedMarkerTimer(vehicleID, handle, value)
 
     def _onChatCommandTargetUpdate(self, _, chatCommandStates):
-        for vehicleID, state in chatCommandStates.iteritems():
+        for vehicleID, state in viewitems(chatCommandStates):
             vehMarker, chatCommandFlags = state
             if vehicleID in self._markers and chatCommandFlags & TARGET_CHAT_CMD_FLAG == 0:
                 self._invokeMarker(self._markers[vehicleID].getMarkerID(), 'changeObjectiveActionMarker', vehMarker)
@@ -461,7 +463,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         return False
 
     def __canUpdateStatus(self, handle):
-        return any((marker.getMarkerID() == handle for marker in self._markers.itervalues()))
+        return any((marker.getMarkerID() == handle for marker in viewvalues(self._markers)))
 
     def _getHitStateVO(self, eventID, vehicleID):
         spamCtrl = self.sessionProvider.shared.battleSpamCtrl

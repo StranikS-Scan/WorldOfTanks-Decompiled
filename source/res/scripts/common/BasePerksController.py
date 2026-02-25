@@ -12,6 +12,7 @@ from wg_async import wg_async, wg_await
 from perks.PerksLoadStrategy import LoadType
 if TYPE_CHECKING:
     from constants import PerkData
+    from VSPlanEvents import VSPlanEventPerkData
 _DO_DEBUG_LOG = False
 PERK_SHOT_DISPERSION_FACTOR = 'perkShotDispersion'
 PERK_SHOT_DISPERSION_WHILE_GUN_DAMAGED_MOD = 'perkShotDispersionWhileGunDamagedMod'
@@ -68,7 +69,8 @@ class BasePerksController(object):
      'explosiveDamageResistanceFactor',
      'trackRammingDamageFactor',
      'turretRotatorCritPenaltyReduce',
-     'antifragmentationLiningFactor'}
+     'antifragmentationLiningFactor',
+     'suspensionRepairFactor'}
     _additiveDynamicFactors = {'criticalHitChanceBoost',
      'damageDistributionLowerBound',
      'piercingDistributionLowerBound',
@@ -82,7 +84,9 @@ class BasePerksController(object):
      'damageChanceToInnerModules',
      'decreaseOwnSpottingTime',
      'rancorousTimeDelay',
-     'sixthSenseDelayDecrease'}
+     'sixthSenseDelayDecrease',
+     'suspensionDamageReductionPercent',
+     'HEShellsPiercingFactorBefore50m'}
     _scopeContextMap = {}
 
     def __init__(self, owner, scopedPerks):
@@ -158,8 +162,8 @@ class BasePerksController(object):
 
         return self._scopedPerksToFactors[scopeID].pop(perkID, set())
 
-    def triggerVSPlanEvent(self, event):
-        self._planHolder.triggerVSPlanEvent(event)
+    def triggerVSPlanEvent(self, event, eventData=None):
+        self._planHolder.triggerVSPlanEvent(event, eventData=eventData)
 
     def collectDynamicFactor(self, factorName):
         if factorName not in self.dynamicFactorCollectors:

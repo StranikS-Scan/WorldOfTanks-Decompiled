@@ -117,7 +117,7 @@ class FrontlineRespawnsController(BaseRespawnsController):
                 elif isVehicleBlocked:
                     reasonText = backport.text(R.strings.epic_battle.deploymentMap.spgLimitReached())
                 if not isEnoughPlace or isVehicleBlocked:
-                    LOG_DEBUG('lane %d is blocked for %d ', lane, selectedVehicleID, isVehicleBlocked, 0 if lane not in vehicleLimits else vehicleLimits[lane])
+                    LOG_DEBUG('lane %d is blocked for %d ', lane, selectedVehicleID, isVehicleBlocked, vehicleLimits.get(lane, 0))
                 for viewCmp in self._viewComponents:
                     viewCmp.setLaneState(lane, isAvailableForPlayer, reasonText)
 

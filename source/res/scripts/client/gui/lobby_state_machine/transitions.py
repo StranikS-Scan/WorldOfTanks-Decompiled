@@ -22,11 +22,17 @@ class NavigationTransition(BaseTransition):
         return 1 if self.record else 0
 
 
-class GuardTransition(NavigationTransition):
+class ConditionalTransition(NavigationTransition):
 
     def __init__(self, condition, transitionType=TransitionType.INTERNAL, record=False):
-        super(GuardTransition, self).__init__(transitionType, record)
+        super(ConditionalTransition, self).__init__(transitionType, record)
         self.condition = condition
+
+    def execute(self, event):
+        return super(ConditionalTransition, self).execute(event) and self.condition(event)
+
+
+class GuardTransition(ConditionalTransition):
 
     def getPriority(self):
         return sys.maxsize - 1

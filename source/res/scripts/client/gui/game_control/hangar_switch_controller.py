@@ -239,17 +239,17 @@ class HangarSpaceSwitchController(IHangarSpaceSwitchController, IGlobalListener)
                         if 'hangar' in data:
                             self._defaultHangarSpaceConfig.discardSpaceIdOverride(isPremium)
                             self._defaultHangarSpaceConfig.discardVisibilityMaskOverride(isPremium)
-                            if DEFAULT_HANGAR_SCENE == self.currentSceneName:
+                            if self.currentSceneName == DEFAULT_HANGAR_SCENE:
                                 currentSceneChanged = True
                             continue
                         if 'visibilityMask' in data:
                             self._defaultHangarSpaceConfig.discardVisibilityMaskOverride(isPremium)
-                            if DEFAULT_HANGAR_SCENE == self.currentSceneName:
+                            if self.currentSceneName == DEFAULT_HANGAR_SCENE:
                                 currentSceneMaskChanged = True
                     except Exception:
                         self._defaultHangarSpaceConfig.discardSpaceIdOverride(isPremium)
                         self._defaultHangarSpaceConfig.discardVisibilityMaskOverride(isPremium)
-                        if DEFAULT_HANGAR_SCENE == self.currentSceneName:
+                        if self.currentSceneName == DEFAULT_HANGAR_SCENE:
                             currentSceneChanged = True
 
             for notification in diff['added']:

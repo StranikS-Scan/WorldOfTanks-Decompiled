@@ -5,11 +5,12 @@ from collections import OrderedDict
 import SoundGroups
 from arena_bonus_type_caps import ARENA_BONUS_TYPE
 from battle_royale.gui.impl.lobby.tooltips.reward_currency_tooltip_view import RewardCurrencyTooltipView
-from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
+from battle_royale.skeletons.game_controller import IBRProgressionOnTokensController
 from frameworks.wulf import WindowFlags
 from gui.impl import backport
 from gui.impl.backport import BackportTooltipWindow, createTooltipData
 from gui.impl.gen import R
+from battle_royale.gui.impl.lobby.br_helpers.utils import setEventInfo
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.battle_result_view.battle_result_view_model import BattleResultViewModel
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.battle_result_view.tooltip_constants_model import TooltipConstantsModel
 from gui.impl.gen.view_models.views.battle_royale.battle_results.personal.stat_item_model import StatItemModel
@@ -46,11 +47,12 @@ if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.battle_royale.battle_results.player_battle_type_status_model import PlayerBattleTypeStatusModel
     from battle_royale.gui.impl.gen.view_models.views.lobby.views.battle_result_view.leaderboard_model import LeaderboardModel
 _THE_BEST_PLACE = 1
-_BR_POINTS_ICON = R.images.gui.maps.icons.battleRoyale.battleResult.leaderboard.br_selector_16()
+_BR_POINTS_ICON = R.images.battle_royale.gui.maps.icons.battleResults.leaderboard.br_selector_16()
 _BATTLE_REWARD_TYPES = [BattleRewardItemModel.XP,
  BattleRewardItemModel.CREDITS,
  BattleRewardItemModel.BATTLE_PASS_POINTS,
  BattleRewardItemModel.CRYSTALS,
+ BattleRewardItemModel.ST_PATRICK_COIN,
  BattleRewardItemModel.BATTLE_ROYALE_COIN,
  BattleRewardItemModel.BR_PROGRESSION_TOKEN]
 _HIDDEN_BONUSES_WITH_ZERO_VALUES = frozenset([BattleRewardItemModel.CRYSTALS, BattleRewardItemModel.BATTLE_PASS_POINTS])
@@ -74,7 +76,7 @@ class BattleRoyaleBattleResultsView(ViewComponent[BattleResultViewModel], IPrbLi
     __sound_env__ = BattleResultsEnv
 
     def __init__(self, *args, **kwargs):
-        super(BattleRoyaleBattleResultsView, self).__init__(R.views.battle_royale.lobby.views.BattleResultView(), BattleResultViewModel)
+        super(BattleRoyaleBattleResultsView, self).__init__(R.views.battle_royale.mono.lobby.battle_results(), BattleResultViewModel)
         self.__arenaUniqueID = kwargs.get('arenaUniqueID')
         if self.__arenaUniqueID is None:
             raise SoftException('There is not arenaUniqueID in battleResults context')
@@ -102,9 +104,9 @@ class BattleRoyaleBattleResultsView(ViewComponent[BattleResultViewModel], IPrbLi
         return self.__arenaUniqueID
 
     def createToolTipContent(self, event, contentID):
-        if contentID == R.views.battle_royale.lobby.tooltips.RewardCurrencyTooltipView():
+        if contentID == R.views.battle_royale.mono.lobby.tooltips.reward_currency_tooltip():
             currencyType = event.getArgument('currencyType')
-            return RewardCurrencyTooltipView(currencyType)
+            return RewardCurrencyTooltipView(currencyType, self.__arenaUniqueID)
         return super(BattleRoyaleBattleResultsView, self).createToolTipContent(event, contentID)
 
     def createToolTip(self, event):
@@ -139,7 +141,6 @@ class BattleRoyaleBattleResultsView(ViewComponent[BattleResultViewModel], IPrbLi
 
     def _initialize(self, *args, **kwargs):
         super(BattleRoyaleBattleResultsView, self)._initialize(*args, **kwargs)
-        BREvents.playSound(BREvents.BATTLE_SUMMARY_SHOW)
         event_dispatcher.hideSquadWindow()
 
     def _finalize(self):
@@ -172,6 +173,7 @@ class BattleRoyaleBattleResultsView(ViewComponent[BattleResultViewModel], IPrbLi
 
     def __update(self):
         with self.viewModel.transaction() as model:
+            setEventInfo(model.eventInfo)
             self.__setPlayerBattleTypeStatus(model.playerBattleTypeStatus)
             self.__setPersonalResult(model.personalResults)
             self.__setLeaderboard(model.leaderboardLobbyModel)
@@ -378,12 +380,18 @@ class BattleRoyaleBattleResultsView(ViewComponent[BattleResultViewModel], IPrbLi
                 earned[BattleRewardItemModel.BR_PROGRESSION_TOKEN] = progressionTokensEarned
         sortedEarned = OrderedDict(sorted(earned.iteritems(), key=lambda x: _BATTLE_REWARD_TYPES.index(x[0])))
         financialList = []
+        if self.__brController.isStPatrick():
+            additionalHiddenZeroBonuses = (BattleRewardItemModel.BATTLE_ROYALE_COIN,)
+        else:
+            additionalHiddenZeroBonuses = (BattleRewardItemModel.ST_PATRICK_COIN,)
         for bonusType, value in sortedEarned.iteritems():
-            if value > 0 or bonusType not in _HIDDEN_BONUSES_WITH_ZERO_VALUES:
-                statModel = BattleRewardItemModel()
-                statModel.setType(bonusType)
-                statModel.setValue(value)
-                financialList.append(statModel)
+            if bonusType in _HIDDEN_BONUSES_WITH_ZERO_VALUES or bonusType in additionalHiddenZeroBonuses:
+                if value == 0:
+                    continue
+            statModel = BattleRewardItemModel()
+            statModel.setType(bonusType)
+            statModel.setValue(value)
+            financialList.append(statModel)
 
         return financialList
 

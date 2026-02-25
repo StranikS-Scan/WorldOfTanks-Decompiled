@@ -25,7 +25,7 @@ if typing.TYPE_CHECKING:
 class CrewPerksTooltip(ViewImpl):
     _itemsCache = dependency.descriptor(IItemsCache)
     _itemsFactory = dependency.descriptor(IGuiItemsFactory)
-    __slots__ = ('_skillName', '_tankman', '_tankmanVehicle', '_skill', '_skillLevel', '_skillBooster', '_showAdditionalInfo', '_isTmanTrainedVeh', '_isFakeSkill', '_isFakeSkillLvl', '_isCmpSkill', '_skillLevelWithoutEff', '_isBonus', '_isIrrelevant', '_isUntrained')
+    __slots__ = ('_skillName', '_tankman', '_tankmanVehicle', '_skill', '_skillLevel', '_skillBooster', '_showAdditionalInfo', '_isTmanTrainedVeh', '_isFakeSkill', '_isFakeSkillLvl', '_isCmpSkill', '_skillLevelWithoutEff', '_isBonus', '_isIrrelevant', '_isUntrained', '_isAdvancedTooltipEnable', '_customSkillType')
 
     def __init__(self, skillName, skillRole, tankmanId, skillLevel=None, showAdditionalInfo=True, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.crew.tooltips.CrewPerksTooltip(), args=args, kwargs=kwargs)
@@ -33,7 +33,9 @@ class CrewPerksTooltip(ViewImpl):
         crewCustomName = kwargs.get('crewCustomName', '')
         self._skillName = skillName
         self._showAdditionalInfo = showAdditionalInfo
-        self._isBonus = kwargs.get('isBonus', None)
+        self._isAdvancedTooltipEnable = kwargs.get('isAdvancedTooltipEnable', True)
+        self._customSkillType = kwargs.get('customSkillType')
+        self._isBonus = kwargs.get('isBonus')
         self._tankman = self._getTankman(tankmanId, **kwargs)
         self._tankmanVehicle = self._getVehicle(**kwargs)
         self._isTmanTrainedVeh = not self._tankmanVehicle or self._tankman.descriptor.isOwnVehicleOrPremium(self._tankmanVehicle.descriptor.type)
@@ -50,7 +52,6 @@ class CrewPerksTooltip(ViewImpl):
         self.__initSkillData(skillLevel)
         self._skillLevelWithoutEff = self._skillLevelWithoutEff or self._skillLevel
         super(CrewPerksTooltip, self).__init__(settings)
-        return
 
     @property
     def viewModel(self):
@@ -61,14 +62,14 @@ class CrewPerksTooltip(ViewImpl):
         self._fillModel()
 
     def _getTankman(self, tankmanId, **kwargs):
-        tankman = kwargs.get('tankman', None)
+        tankman = kwargs.get('tankman')
         if tankman is not None:
             return tankman
         else:
             return self._itemsCache.items.getTankman(int(tankmanId)) if tankmanId else None
 
     def _getVehicle(self, **kwargs):
-        vehicle = kwargs.get('vehicle', None)
+        vehicle = kwargs.get('vehicle')
         if vehicle is not None:
             return vehicle
         elif self._tankman is None:
@@ -133,12 +134,12 @@ class CrewPerksTooltip(ViewImpl):
             vm.setUserName(self._skill.userName)
             vm.setLevel(self._skillLevelWithoutEff)
             vm.setRealLevel(self._skillLevel)
-            vm.setSkillType(self._skill.typeName)
+            vm.setSkillType(self._customSkillType if self._customSkillType is not None else self._skill.typeName)
             isGroupSkill = self._isGroupSkill()
             vm.setIsGroupSkill(isGroupSkill)
             vm.setIsAnyMemberWithLowEfficiency(self._isGroupSkillHasLowEff() if isGroupSkill else False)
             vm.setIsAnyMemberUntrained(self._isGroupSkillHasUntrained() if isGroupSkill else False)
-            vm.setIsAdvancedTooltipEnable(bool(SKILL_MOVIES.get(self._skill.name, None)))
+            vm.setIsAdvancedTooltipEnable(self._isAdvancedTooltipEnable and bool(SKILL_MOVIES.get(self._skill.name, None)))
             isZeroPerk, isIrrelevant = (self._tankman and self._skill.name in self._tankman.freeSkillsNames, self._isIrrelevant) if self._showAdditionalInfo else (False, False)
             vm.setIsZero(isZeroPerk)
             vm.setIsIrrelevant(isIrrelevant)

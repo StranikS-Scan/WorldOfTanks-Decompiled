@@ -68,7 +68,7 @@ def getAccountStatusToBRPS(hadPremiumPlus, isBonusAppliedAlready, hasXpInBonusCa
             state = BRPS.PREMIUM_INFO
     else:
         isPremiumPlusBonusEnabled = lobbyContext.getServerSettings().getAdditionalBonusConfig().get('enabled', False)
-        hasWotPlus = wotPlusController.isEnabled()
+        hasWotPlus = wotPlusController.hasSubscription()
         bonusesAvailable = hasPremiumPlus and isPremiumPlusBonusEnabled and premiumPlusBonusesLeft > 0 or hasWotPlus and isWotPlusBonusEnabled and wotPlusBonusesLeft > 0
         hasBasicPremium = itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.BASIC)
         states = ACCOUNT_STATUS_TO_BRPS[hasBasicPremium, hasPremiumPlus, hasWotPlus]
@@ -98,16 +98,14 @@ def isAddXpBonusStatusAcceptable(status, _, __):
     return status in _ADDITIONAL_BONUS_AVAILABLE_STATUSES
 
 
-@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
-def isGoldPiggyBankAvailaible(reusable, lobbyContext=None):
-    arenaTypes = lobbyContext.getServerSettings().getArenaTypesWithGoldReserve(reusable.common.battleModifiers)
-    return reusable.common.arenaBonusType in arenaTypes
+@dependency.replace_none_kwargs(wotPlusCtrl=IWotPlusController)
+def isGoldPiggyBankAvailaible(reusable, wotPlusCtrl=None):
+    return wotPlusCtrl.getSettingsStorage().getGoldReserveGain(reusable.common.arenaBonusType, reusable.common.battleModifiers) is not None
 
 
-@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
-def isWotPlusBonusEnabledInConfig(lobbyContext=None):
-    serverSettings = lobbyContext.getServerSettings()
-    return serverSettings.getAdditionalWoTPlusXPCount() > 0 and serverSettings.isAdditionalWoTPlusEnabled()
+@dependency.replace_none_kwargs(wotPlusCtrl=IWotPlusController)
+def isWotPlusBonusEnabledInConfig(wotPlusCtrl=None):
+    return wotPlusCtrl.getSettingsStorage().getAdditionalXPBonusCount() > 0
 
 
 @dependency.replace_none_kwargs(battleResults=IBattleResultsService)

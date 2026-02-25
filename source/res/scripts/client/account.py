@@ -656,7 +656,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def requestPlayerInfo(self, databaseID, callback):
         if events.isPlayerEntityChanging:
             return
-        proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, ext.get('databaseID', 0), ext.get('dossier', ''), ext.get('clanDBID', 0), ext.get('clanInfo', None), ext.get('globalRating', 0), ext.get('eSportSeasons', {}), ext.get('ranked', {}), ext.get('dogTag', {}), ext.get('battleRoyaleStats', {}), ext.get('wtr', None), ext.get('layout', None), ext.get('layoutState', None))
+        proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, ext.get('databaseID', 0), ext.get('dossier', ''), ext.get('clanDBID', 0), ext.get('clanInfo', None), ext.get('globalRating', 0), ext.get('eSportSeasons', {}), ext.get('ranked', {}), ext.get('dogTag', {}), ext.get('battleRoyaleStats', {}), ext.get('wtr', None), ext.get('layout', None), ext.get('layoutState', None), ext.get('serviceRecordCustomization', {}))
         self._doCmdInt3(AccountCommands.CMD_REQ_PLAYER_INFO, databaseID, 0, 0, proxy)
 
     def requestAccountDossier(self, accountID, callback):
@@ -1098,6 +1098,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         arenaUniqueIDsStrList = [ str(arenaUniqueID) for arenaUniqueID in arenaUniqueIDs ]
         self._doCmdStrArr(AccountCommands.CMD_REGISTER_BATTLES_WITH_PLAYER_SATISFACTION_MGR, arenaUniqueIDsStrList, None)
         return
+
+    def setServiceRecordCustomizations(self, ribbon, background, callback=None):
+        self._doCmdInt2(AccountCommands.CMD_WOT_PLUS_SET_SERVICE_RECORD_CUSTOMIZATIONS, background, ribbon, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 
     def _doCmdNoArgs(self, cmd, callback):
         return self.__doCmd('doCmdNoArgs', cmd, callback)

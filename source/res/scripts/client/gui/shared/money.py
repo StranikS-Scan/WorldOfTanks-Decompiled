@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/money.py
 from collections import namedtuple
+from typing import TYPE_CHECKING
 from skeletons.gui.game_control import IExchangeRatesWithDiscountsProvider
 from helpers import dependency
-from typing import TYPE_CHECKING
 from shared_utils import CONST_CONTAINER
 from soft_exception import SoftException
 if TYPE_CHECKING:
@@ -20,6 +20,7 @@ class Currency(CONST_CONTAINER):
     EVENT_COIN = 'eventCoin'
     BPCOIN = 'bpcoin'
     BRCOIN = 'brcoin'
+    STPCOIN = 'stpcoin'
     FREE_XP = 'freeXP'
     EQUIP_COIN = 'equipCoin'
     TOUR_COIN = 'tourcoin'
@@ -366,6 +367,9 @@ class Money(object):
     def iteritems(self, byWeight=False):
         for c in self.__getCurrenciesIterator(byWeight=byWeight):
             yield (c, self._values.get(c))
+
+    def items(self):
+        return list(self.iteritems())
 
     def apply(self, formatter):
         return self.__convert(lambda c, v, o: formatter(v), None)

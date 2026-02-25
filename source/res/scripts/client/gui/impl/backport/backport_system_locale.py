@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/backport/backport_system_locale.py
+from __future__ import absolute_import
 from frameworks import wulf
 
 def getIntegralFormat(value):
@@ -11,11 +12,11 @@ def getGoldFormat(value):
 
 
 def getFractionalFormat(value):
-    return wulf.getRealFormat(value, wulf.RealFormatType.FRACTIONAL)
+    return wulf.getRealFormat(value, wulf.RealFormatType.FRACTIONAL, 2)
 
 
 def getNiceNumberFormat(value):
-    return wulf.getRealFormat(value, wulf.RealFormatType.WO_ZERO_DIGITS)
+    return wulf.getRealFormat(value, wulf.RealFormatType.WO_ZERO_DIGITS, 2)
 
 
 def getShortTimeFormat(value):

@@ -92,7 +92,7 @@ class Comp7OfferTokenListener(BaseReminderListener, Notifiable):
         actualSeason = self.__comp7Controller.getActualSeasonNumber()
         lastShownSeason = AccountSettings.getNotifications(COMP7_LAST_SEASON_WITH_SEEN_REWARD)
         hasSeenTokenRewardsViewWithOffer = actualSeason == lastShownSeason
-        hasSeenYearlyRewardsViewWithOffer = COMP7_MASKOT_ID == AccountSettings.getNotifications(COMP7_LAST_MASKOT_WITH_SEEN_REWARD)
+        hasSeenYearlyRewardsViewWithOffer = AccountSettings.getNotifications(COMP7_LAST_MASKOT_WITH_SEEN_REWARD) == COMP7_MASKOT_ID
         if not hasSeenTokenRewardsViewWithOffer and not hasSeenYearlyRewardsViewWithOffer:
             return
         if self.__isNotificationBlockedByView:

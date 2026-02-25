@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/auxiliary/selected_filters.py
+from __future__ import absolute_import
 import operator
 from collections import OrderedDict, namedtuple
 from gui.impl.gen.view_models.views.lobby.tank_setup.common.filters_model import FiltersModel

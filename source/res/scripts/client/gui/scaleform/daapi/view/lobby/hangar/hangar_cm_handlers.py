@@ -14,11 +14,12 @@ from gui.prb_control import prbDispatcherProperty
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showShop, showTelecomRentalPage
+from gui.shared.events import HangarVehicleEvent
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.gui_items.processors.vehicle import VehicleFavoriteProcessor
 from helpers import dependency
 from items import UNDEFINED_ITEM_CD
-from skeletons.gui.game_control import IVehicleComparisonBasket, IEpicBattleMetaGameController, ITradeInController
+from skeletons.gui.game_control import IVehicleComparisonBasket, IEpicBattleMetaGameController, ITradeInController, IVehiclePlaylistsController, IHangarGuiController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from account_helpers import AccountSettings
@@ -59,6 +60,8 @@ class VEHICLE(object):
     GO_TO_COLLECTION = 'goToCollection'
     TELECOM_RENT = 'telecomRent'
     VEH_SKILL_TREE = 'vehSkillTree'
+    MANAGE_PLAYLISTS = 'managePlaylists'
+    CREATE_PLAYLIST = 'createPlaylist'
 
 
 class TechnicalMaintenanceCMHandler(AbstractContextMenuHandler, EventSystemEntity):
@@ -131,6 +134,9 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
     _epicController = dependency.descriptor(IEpicBattleMetaGameController)
     _tradeInController = dependency.descriptor(ITradeInController)
     _lobbyContext = dependency.descriptor(ILobbyContext)
+    __hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
+    __vehiclePlaylistsCtrl = dependency.descriptor(IVehiclePlaylistsController)
+    _wotPlusController = dependency.descriptor(IWotPlusController)
 
     def __init__(self, cmProxy, ctx=None):
         super(VehicleContextMenuHandler, self).__init__(cmProxy, ctx, {VEHICLE.EXCHANGE: 'showVehicleExchange',
@@ -146,7 +152,9 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
          VEHICLE.NATION_CHANGE: 'changeVehicleNation',
          VEHICLE.GO_TO_COLLECTION: 'goToCollection',
          VEHICLE.TELECOM_RENT: 'showTelecomRent',
-         VEHICLE.VEH_SKILL_TREE: 'showVehSkillTree'})
+         VEHICLE.VEH_SKILL_TREE: 'showVehSkillTree',
+         VEHICLE.MANAGE_PLAYLISTS: 'showManagePlaylists',
+         VEHICLE.CREATE_PLAYLIST: 'showManagePlaylists'})
 
     @prbDispatcherProperty
     def prbDispatcher(self):
@@ -177,6 +185,9 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
     def showVehSkillTree(self):
         vehicle = self.itemsCache.items.getVehicle(self.getVehInvID())
         shared_events.showVehicleHubVehSkillTree(vehicle.intCD)
+
+    def showManagePlaylists(self):
+        self.fireEvent(HangarVehicleEvent(HangarVehicleEvent.ON_CONTEXT_MENU_CLICKED, ctx={'vehicleIntCD': self.getVehCD()}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def showVehicleExchange(self):
         oldSellVeh = self._tradeInController.getSelectedVehicleToSell()
@@ -254,9 +265,9 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                      'isNew': isNew}))
                 if vehicle.isRented:
                     canSell = vehicle.canSell and vehicle.rentalIsOver
-                    if vehicle.isWotPlus and not self._lobbyContext.getServerSettings().isWoTPlusExclusiveVehicleEnabled():
-                        canSell = False
-                    if not vehicle.isPremiumIGR and not vehicle.isWotPlus:
+                    if vehicle.isWotPlus:
+                        canSell = not self._wotPlusController.getSettingsStorage().isExclusiveVehicleEnabled()
+                    elif not vehicle.isPremiumIGR:
                         items = self.itemsCache.items
                         enabled = vehicle.mayObtainWithMoneyExchange(items.stats.money, proxy=items.shop)
                         label = MENU.CONTEXTMENU_RESTORE if vehicle.isRestoreAvailable() else MENU.CONTEXTMENU_BUY
@@ -270,6 +281,12 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                     options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.REMOVE), {'enabled': canSell}))
                 else:
                     options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.SELL), {'enabled': vehicle.canSell and not isEventVehicle}))
+                helper = self.__hangarGuiCtrl.currentGuiProvider.getVehiclePlaylistsHelper()
+                if self.__vehiclePlaylistsCtrl.isEnabled and helper is not None and helper.isPlaylistsSupported():
+                    if any(self.__vehiclePlaylistsCtrl.iterPlaylists()):
+                        options.append(self._makeItem(VEHICLE.MANAGE_PLAYLISTS, MENU.contextmenu(VEHICLE.MANAGE_PLAYLISTS), {'enabled': True}))
+                    else:
+                        options.append(self._makeItem(VEHICLE.CREATE_PLAYLIST, MENU.contextmenu(VEHICLE.CREATE_PLAYLIST), {'enabled': True}))
                 if vehicle.isFavorite:
                     options.append(self._makeItem(VEHICLE.UNCHECK, MENU.contextmenu(VEHICLE.UNCHECK)))
                 else:

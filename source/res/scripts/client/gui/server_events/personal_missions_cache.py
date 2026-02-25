@@ -7,7 +7,6 @@ from collections import defaultdict
 import BigWorld
 import Event
 import personal_missions
-from account_helpers.settings_core.settings_constants import PersonalMission3
 from constants import BATTLE_MODE_VEHICLE_TAGS, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from gui.server_events import event_items
 from gui.server_events.event_items import PersonalMission, PMOperation
@@ -308,8 +307,6 @@ class PersonalMissionsCache(object):
 
     def update(self, eventsCache, diff=None):
         hiddenQuests = eventsCache.getHiddenQuests(makeRelations=False)
-        pm3Operations = self.getOperationsForBranch(PM_BRANCH.PERSONAL_MISSION_3)
-        wasPm3OperationsCompleted = {operation.getID():operation.isFullCompleted() for operation in pm3Operations.values()}
         for branch, questsData in self.__questsData.iteritems():
             qp = questsData.questsProgress
             quests = questsData.quests
@@ -350,10 +347,6 @@ class PersonalMissionsCache(object):
                 campaign.updateProgress(hiddenQuests)
 
             eventsCache.onProgressUpdated(branch)
-
-        for operationID, lastOperationStatus in wasPm3OperationsCompleted.items():
-            if self.__questsData.get(PM_BRANCH.PERSONAL_MISSION_3).operations.get(operationID).isFullCompleted() is not lastOperationStatus:
-                self.__settingsCore.serverSettings.setPersonalMission3Data({PersonalMission3.LAST_FULL_COMPLETED_OP: operationID})
 
         self.updateDisabledStateForQuests()
         self.__updateVehRequirementsCache()

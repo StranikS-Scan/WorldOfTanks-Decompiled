@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/pub/fullscreen_manager.py
+from __future__ import absolute_import
 import logging
 import weakref
 import typing
@@ -15,10 +16,7 @@ from gui.Scaleform.framework.entities.sf_window import SFWindow
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Window
 _logger = logging.getLogger(__name__)
-_LOW_PRIORITY_WINDOWS = (VIEW_ALIAS.AWARD_WINDOW,
- VIEW_ALIAS.AWARD_WINDOW_MODAL,
- VIEW_ALIAS.ADVENT_CALENDAR,
- VIEW_ALIAS.MISSION_AWARD_WINDOW)
+_LOW_PRIORITY_WINDOWS = (VIEW_ALIAS.AWARD_WINDOW, VIEW_ALIAS.AWARD_WINDOW_MODAL, VIEW_ALIAS.MISSION_AWARD_WINDOW)
 registerLowPriorityWulfWindows([R.views.lobby.offers.OfferBannerWindow()])
 
 class FullscreenManager(IFullscreenManager):

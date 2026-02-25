@@ -1,9 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/pub/notification_commands.py
+from __future__ import absolute_import
 import typing
 from frameworks.wulf import WindowStatus
 from gui.Scaleform.framework.entities.sf_window import SFWindow
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
+if typing.TYPE_CHECKING:
+    from typing import Any
 
 class NotificationEvent(object):
     __slots__ = ('_args', '_kwargs', '_method')
@@ -22,6 +25,7 @@ class NotificationEvent(object):
 
 class NotificationCommand(object):
     __slots__ = ()
+    __hash__ = None
     isPersistent = True
 
     def __eq__(self, other):
@@ -42,6 +46,7 @@ class NotificationCommand(object):
 
 class WindowNotificationCommand(NotificationCommand):
     __slots__ = ('__window',)
+    __hash__ = None
 
     def __init__(self, window):
         super(WindowNotificationCommand, self).__init__()
@@ -65,6 +70,7 @@ class WindowNotificationCommand(NotificationCommand):
 
 class EventNotificationCommand(NotificationCommand):
     __slots__ = ('__event',)
+    __hash__ = None
 
     def __init__(self, event):
         super(EventNotificationCommand, self).__init__()

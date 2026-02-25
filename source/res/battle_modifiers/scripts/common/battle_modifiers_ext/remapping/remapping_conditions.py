@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_modifiers/scripts/common/battle_modifiers_ext/remapping/remapping_conditions.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from typing import Dict, FrozenSet, TYPE_CHECKING
 from battle_modifiers_ext.constants_ext import GunCaliber, ShellCaliber, ShellKind, RemappingConditionNames
 from nations import NAMES
@@ -29,7 +31,7 @@ class _BaseCondition(IRemappingCondition):
         currentParam = self._getParam(ctx)
         if not self._remapping:
             return currentParam
-        for sources, target in self._remapping.iteritems():
+        for sources, target in viewitems(self._remapping):
             if currentParam in sources:
                 return target
 

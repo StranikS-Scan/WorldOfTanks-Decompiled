@@ -13,14 +13,14 @@ from gui.impl.gen.view_models.views.lobby.vehicle_hub.views.sub_models.stats_mod
 from gui.impl.gen.view_models.views.lobby.vehicle_hub.views.sub_models.veh_skill_tree_model import VehSkillTreeModel
 
 class VehicleHubViewModel(ViewModel):
-    __slots__ = ('onMoveSpace', 'onMouseOver3dScene')
+    __slots__ = ('onMoveSpace', 'onMouseOver3dScene', 'onResize')
     OVERVIEW = 'overview'
     MODULES = 'modules'
     VEH_SKILL_TREE = 'vehSkillTree'
     STATS = 'stats'
     ARMOR = 'armor'
 
-    def __init__(self, properties=10, commands=2):
+    def __init__(self, properties=10, commands=3):
         super(VehicleHubViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -119,3 +119,4 @@ class VehicleHubViewModel(ViewModel):
         self._addArrayProperty('menuItems', Array())
         self.onMoveSpace = self._addCommand('onMoveSpace')
         self.onMouseOver3dScene = self._addCommand('onMouseOver3dScene')
+        self.onResize = self._addCommand('onResize')

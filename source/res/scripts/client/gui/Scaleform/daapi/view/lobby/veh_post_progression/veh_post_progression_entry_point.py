@@ -4,7 +4,6 @@ from __future__ import absolute_import
 import typing
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import BECOME_ELITE_VEHICLES_WATCHED
-from gui.Scaleform.daapi.view.meta.ResearchMeta import ResearchMeta
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.genConsts.POSTPROGRESSION_CONSTS import POSTPROGRESSION_CONSTS
 from gui.impl import backport

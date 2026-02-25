@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/map_zones/minimap.py
+from __future__ import absolute_import
 import logging
+from future.utils import viewitems, viewvalues
 from constants import MinimapLayerType
 from gui.Scaleform.daapi.view.battle.shared.map_zones.mixins import MapZonesListener
 from gui.Scaleform.daapi.view.battle.shared.minimap import common, settings
@@ -19,22 +21,22 @@ class MapZonesEntriesPlugin(common.EntriesPlugin, MapZonesListener):
 
     def start(self):
         super(MapZonesEntriesPlugin, self).start()
-        for layerId, (path, layerType) in self.__mmLayers.iteritems():
+        for layerId, (path, layerType) in viewitems(self.__mmLayers):
             self.parentObj.as_setScenarioEventS(layerId, self.parentObj.getImagePath(path), _layerTypesMapping[layerType])
 
         mapZones = self.sessionProvider.shared.mapZones
         if mapZones:
-            for zoneMarker, matrix in mapZones.getZoneMarkers().itervalues():
+            for zoneMarker, matrix in viewvalues(mapZones.getZoneMarkers()):
                 if zoneMarker.isVisibleOnMinimap:
                     self.__addMarkerToZone(zoneMarker, matrix)
 
-            for transformedZone in mapZones.getTransformedZones().itervalues():
+            for transformedZone in viewvalues(mapZones.getTransformedZones()):
                 self.__addTransromedZone(transformedZone)
 
         self.startListen()
 
     def stop(self):
-        for layerId in self.__mmLayers.iterkeys():
+        for layerId in self.__mmLayers:
             self.parentObj.as_clearScenarioEventS(layerId)
 
         self.stopListen()

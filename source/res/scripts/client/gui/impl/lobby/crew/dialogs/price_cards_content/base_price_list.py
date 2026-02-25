@@ -36,8 +36,10 @@ class BasePriceList(ViewImpl):
 
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.dialogs.common.DialogTemplateGenericTooltip():
-            index = int(event.getArgument('index'))
-            itemPrice, _, _ = self._getPriceData(index)
+            cardIndex = int(event.getArgument('index'))
+            optionIndex = int(event.getArgument('optionIndex'))
+            priceIndex = optionIndex if optionIndex >= 0 else cardIndex
+            itemPrice, _, _ = self._getPriceData(priceIndex)
             if not itemPrice:
                 return
             if itemPrice.isActionPrice():
@@ -118,7 +120,7 @@ class BasePriceList(ViewImpl):
         return self._priceData[index] if index is not None and len(self._priceData) >= index + 1 else (None, None, None)
 
     def _getEvents(self):
-        return ((self.viewModel.onCardClick, self._onCardClick), (self._itemsCache.onSyncCompleted, self._onCacheResync))
+        return ((self.viewModel.onCardClick, self._onCardClick), (self.viewModel.onPriceSelect, self._onPriceSelect), (self._itemsCache.onSyncCompleted, self._onCacheResync))
 
     def _getCallbacks(self):
         return (('stats.gold', self._onGoldUpdate),
@@ -161,6 +163,9 @@ class BasePriceList(ViewImpl):
     def _onCardClick(self, args):
         with self.viewModel.transaction() as vm:
             self._selectCard(vm, int(args.get('index', 0)))
+
+    def _onPriceSelect(self, args):
+        pass
 
     def __getMaxTmanSkillEfficiencyForEachOperation(self, cost, tankman, isRoleChanging, isOperationDisable, isMassRetrain):
         changingRoleSE = cost['skillsEfficiencyWithRoleChange'] if isRoleChanging and cost['skillsEfficiencyWithRoleChange'] > 0 and not isOperationDisable else cost['skillsEfficiency']

@@ -59,21 +59,25 @@ class MechanicInputLogger(ContainersListener, IComponentLifeCycleListenerLogic):
 
             return
 
-    @eventHandler
-    def onComponentDestroyed(self, component):
+    def destroy(self):
         self._mechanicComponent = None
         self._uiLogger = None
         player = BigWorld.player()
         inputSingleton = CGF.findSingleton(player.spaceID, InputSingleton) if player is not None else None
-        for actionName, action in self.__actions:
-            action.unbindEventReaction(TriggerEvent.Triggered)
-            if inputSingleton is not None:
-                inputSingleton.removeAction(actionName)
+        if self.__actions is not None:
+            for actionName, action in self.__actions:
+                action.unbindEventReaction(TriggerEvent.Triggered)
+                if inputSingleton is not None:
+                    inputSingleton.removeAction(actionName)
 
         self.__actions = None
         self.__vehCD = None
         self.__arenaUniqueID = None
         return
+
+    @eventHandler
+    def onComponentDestroyed(self, component):
+        self.destroy()
 
     @noexcept
     def log(self, triggeredAction):

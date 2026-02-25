@@ -86,7 +86,7 @@ class CommendationsMessagesController(IBattleController):
         BattleReplay.g_replayCtrl.onCommandReceived -= self._onCommandReceived
 
     def _canHandleCommand(self, cmd):
-        if not cmd.getCommandType() == MESSENGER_COMMAND_TYPE.BATTLE:
+        if cmd.getCommandType() != MESSENGER_COMMAND_TYPE.BATTLE:
             return False
         battleCommand = _ACTIONS.battleChatCommandFromActionID(cmd.getID())
         isCommendationCommand = battleCommand.name == BATTLE_CHAT_COMMAND_NAMES.COMMENDATION if battleCommand else False

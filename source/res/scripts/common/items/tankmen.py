@@ -22,7 +22,7 @@ from items.readers.crewBooks_readers import readCrewBooksCacheFromXML
 from items.readers.crewSkins_readers import readCrewSkinsCacheFromXML
 from items.tankman_flags import TankmanFlags
 from soft_exception import SoftException
-from vehicles import EXTENDED_VEHICLE_TYPE_ID_FLAG, VEHICLE_CLASS_TAGS
+from vehicles import EXTENDED_VEHICLE_TYPE_ID_FLAG, VEHICLE_CLASS_TAGS, VehicleDescr
 from struct_helpers import unpackByte, packByte
 if TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor, VehicleType
@@ -421,7 +421,7 @@ class TankmanDescr(object):
         return getSkillsMask(self._skills + sum(self.__rolesBonusSkills.itervalues(), []))
 
     def getActiveSkillsMask(self, tmanIndx, vehDescrType=None):
-        return getSkillsMask(self.getActiveSkills() + sum(self.getActiveBonusSkills(tmanIndx, vehDescrType).itervalues(), []))
+        return str(getSkillsMask(self.getActiveSkills() + sum(self.getActiveBonusSkills(tmanIndx, vehDescrType).itervalues(), [])))
 
     def getActiveBonusSkills(self, tmanIndx, vehDescrType=None):
         vehicleDescrType = vehDescrType or vehicles.g_cache.vehicle(self.nationID, self.vehicleTypeID)
@@ -1186,6 +1186,12 @@ def makeTmanDescrByTmanData(tmanData):
             raise SoftException('iconID is not in valid group')
     else:
         iconID = random.choice(group.iconsList)
+    if fnGroupID != lnGroupID and fnGroupID != iGroupID and lnGroupID != iGroupID:
+        raise SoftException('Do not create tankmen with all three groups different because "def findGroupsByIDs" won\'t be able to clearly tell which group tankman belongs to. "Also see "def _readNationConfigSection" - it creates unordered dictionary of groups. On production exist some tankmen, which have 2 IDs from one group and 1 ID from other group. But please don\'t make any more of them.')
+    groupID = findBestGroupByGroupIDs(fnGroupID, lnGroupID, iGroupID)
+    group = groups[groupID]
+    if role not in group.roles:
+        raise SoftException('Tankman, with nation = "{}"; isPremium = "{}" and groupID = {}, can\'t have role "{}". Available roles = {}'.format(nations.NAMES[nationID], isPremium, groupID, role, group.rolesList))
     passport = (nationID,
      isPremium,
      isFemale,
@@ -1305,6 +1311,12 @@ def findGroupsByIDs(groups, isFemale, firstNameID, secondNameID, iconID):
 
     found.sort(key=lambda item: item[1], reverse=True)
     return found
+
+
+def findBestGroupByGroupIDs(firstNameGroupID, lastNameGroupID, iconGroupID):
+    if firstNameGroupID == lastNameGroupID or firstNameGroupID == iconGroupID:
+        return firstNameGroupID
+    return lastNameGroupID if lastNameGroupID == iconGroupID else iconGroupID
 
 
 def getGroupTags(nationID, isPremium, isFemale, firstNameID, secondNameID, iconID):
@@ -1529,7 +1541,7 @@ def validateCrewToLearnCrewBook(crew, vehTypeCompDescr):
     if None in crew:
         resultMsg += 'Vehicle has not full crew; '
         resultMask = resultMask | crew_books_constants.CREW_BOOK_PROPERTIES_MASKS.FULL_CREW
-    _, _, vehicleID = vehicles.parseIntCompactDescr(vehTypeCompDescr)
+    _, nationID, vehicleID = vehicles.parseIntCompactDescr(vehTypeCompDescr)
     for slotID, tmanDescr in enumerate(crew):
         if tmanDescr is None:
             if not resultMask & crew_books_constants.CREW_BOOK_PROPERTIES_MASKS.FULL_CREW:
@@ -1541,7 +1553,8 @@ def validateCrewToLearnCrewBook(crew, vehTypeCompDescr):
                 resultMsg += 'One of crew members has not enough level of specialization; '
             resultMask = resultMask | crew_books_constants.CREW_BOOK_PROPERTIES_MASKS.ROLE_LEVEL
             crewLists[crew_books_constants.CREW_BOOK_PROPERTIES_MASKS.ROLE_LEVEL].append(slotID)
-        if vehicleID != tmanDescr.vehicleTypeID:
+        vehicleType = vehicles.g_cache.vehicle(nationID, vehicleID)
+        if not tmanDescr.isOwnVehicleOrPremium(vehicleType):
             if not resultMask & crew_books_constants.CREW_BOOK_PROPERTIES_MASKS.SPECIALIZATION:
                 resultMsg += 'One of crew members has specialization not compatible with current vehicle;'
             resultMask = resultMask | crew_books_constants.CREW_BOOK_PROPERTIES_MASKS.SPECIALIZATION

@@ -21,6 +21,8 @@ from gui.Scaleform.daapi.view.battle.shared import crosshair, drone_music_player
 from gui.Scaleform.daapi.view.battle.shared.page import ComponentsConfig
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, VEHICLE_VIEW_STATE
+from helpers import dependency
+from skeletons.gui.game_control import IBattleRoyaleController
 from battle_royale.gui.battle_control.controllers.spawn_ctrl import ISpawnListener
 from battle_royale.gui.br_effect_player import BRUpgradeEffectPlayer
 from battle_royale.gui.game_control.br_battle_messages import ProgressionMessagesPlayer
@@ -107,6 +109,7 @@ _BATTLE_ROYALE_CFG = _BattleRoyaleComponentsConfig()
 
 class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
     __PANELS_FOR_SHOW_HIDE = [BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, BATTLE_VIEW_ALIASES.BATTLE_LEVEL_PANEL]
+    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
 
     def __init__(self, components=None, **kwargs):
         if components is None:
@@ -264,6 +267,10 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         if spawnCtrl and self not in spawnCtrl.viewComponents:
             spawnCtrl.addRuntimeView(self)
             self._battleSessionES.addCallbackOnUnsubscribe(lambda : spawnCtrl.removeRuntimeView(self))
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl is not None:
+            self._battleSessionES.subscribeToEvent(crosshairCtrl.onCrosshairViewChanged, self.__onCrosshairViewChanged)
+            self.__onCrosshairViewChanged(crosshairCtrl.getViewID())
         if avatar_getter.isObserverSeesAll():
             self._battleSessionES.subscribeToEvent(avatar_getter.getInputHandler().onCameraChanged, self.__onCameraChanged)
         return
@@ -278,6 +285,9 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
                 self._setComponentsVisibility(hidden=[alias])
         elif alias == BATTLE_VIEW_ALIASES.PLAYERS_PANEL:
             self._setComponentsVisibility(hidden=[alias])
+        if not self.__battleRoyaleController.isStPatrick():
+            if alias in (BATTLE_VIEW_ALIASES.BR_SHAMROCK_SIDEBAR, BATTLE_VIEW_ALIASES.BR_SHAMROCK_COLLECT):
+                self._setComponentsVisibility(hidden=[alias])
 
     def _onBattleLoadingFinish(self):
         arenaPeriod = self.sessionProvider.shared.arenaPeriod.getPeriod()
@@ -329,6 +339,9 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         if self.__panelsIsVisible:
             components.add(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL)
         return components
+
+    def __onCrosshairViewChanged(self, viewID):
+        self.as_setCrosshairModeS(viewID)
 
     def __onCameraChanged(self, ctrlMode, _=None):
         if self.__isFullStatsShown:

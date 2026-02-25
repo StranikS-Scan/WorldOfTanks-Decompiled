@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/shell_components.py
 from constants import SHELL_TYPES, DamageAbsorptionTypeToLabel, SHELL_MECHANICS_TYPE
-from items.components import component_constants
+from items.components.component_constants import DEFAULT_ENABLE_TRACE_RICOCHET, ZERO_FLOAT, ZERO_TUPLE2
 from typing import Set, Optional, Tuple, Union
 
 class ShellType(object):
@@ -20,12 +20,12 @@ class ArmorPiercingType(ShellType):
 
     def __init__(self, name):
         super(ArmorPiercingType, self).__init__(name)
-        self.normalizationAngle = component_constants.ZERO_FLOAT
-        self.ricochetAngleCos = component_constants.ZERO_FLOAT
-        self.enableTraceRicochet = component_constants.DEFAULT_ENABLE_TRACE_RICOCHET
+        self.normalizationAngle = ZERO_FLOAT
+        self.ricochetAngleCos = ZERO_FLOAT
+        self.enableTraceRicochet = DEFAULT_ENABLE_TRACE_RICOCHET
         self.protectFromDirectHits = set()
         self.mechanics = SHELL_MECHANICS_TYPE.LEGACY
-        self.nonPiercingArmorDamage = component_constants.ZERO_FLOAT
+        self.nonPiercingArmorDamage = ZERO_FLOAT
 
     def __repr__(self):
         return 'ArmorPiercingType(normalizationAngle={}, ricochetAngleCos={}, protectFromDirectHits = {})'.format(self.normalizationAngle, self.ricochetAngleCos, self.protectFromDirectHits)
@@ -36,12 +36,12 @@ class HollowChargeType(ShellType):
 
     def __init__(self, name):
         super(HollowChargeType, self).__init__(name)
-        self.piercingPowerLossFactorByDistance = component_constants.ZERO_FLOAT
-        self.ricochetAngleCos = component_constants.ZERO_FLOAT
-        self.enableTraceRicochet = component_constants.DEFAULT_ENABLE_TRACE_RICOCHET
+        self.piercingPowerLossFactorByDistance = ZERO_FLOAT
+        self.ricochetAngleCos = ZERO_FLOAT
+        self.enableTraceRicochet = DEFAULT_ENABLE_TRACE_RICOCHET
         self.protectFromDirectHits = set()
         self.mechanics = SHELL_MECHANICS_TYPE.LEGACY
-        self.nonPiercingArmorDamage = component_constants.ZERO_FLOAT
+        self.nonPiercingArmorDamage = ZERO_FLOAT
 
     def __repr__(self):
         return 'HollowChargeType(piercingPowerLossFactorByDistance={}, ricochetAngleCos={}, protectFromDirectHits={})'.format(self.piercingPowerLossFactorByDistance, self.ricochetAngleCos, self.protectFromDirectHits)
@@ -51,9 +51,9 @@ class HighExplosiveImpactParams(object):
     __slots__ = ('radius', 'armorDamage', 'deviceDamage', 'coneAngleCos', 'piercingSpalls', 'damageAbsorptionType', 'isActive', 'hasSplash')
 
     def __init__(self):
-        self.radius = component_constants.ZERO_FLOAT
-        self.armorDamage = component_constants.ZERO_TUPLE2
-        self.deviceDamage = component_constants.ZERO_TUPLE2
+        self.radius = ZERO_FLOAT
+        self.armorDamage = ZERO_TUPLE2
+        self.deviceDamage = ZERO_TUPLE2
         self.coneAngleCos = None
         self.piercingSpalls = None
         self.damageAbsorptionType = None
@@ -70,11 +70,11 @@ class HighExplosiveType(ShellType):
 
     def __init__(self, name):
         super(HighExplosiveType, self).__init__(name)
-        self.explosionRadius = component_constants.ZERO_FLOAT
-        self.explosionDamageFactor = component_constants.ZERO_FLOAT
-        self.explosionDamageAbsorptionFactor = component_constants.ZERO_FLOAT
-        self.explosionEdgeDamageFactor = component_constants.ZERO_FLOAT
-        self.shellFragmentsDamageAbsorptionFactor = component_constants.ZERO_FLOAT
+        self.explosionRadius = ZERO_FLOAT
+        self.explosionDamageFactor = ZERO_FLOAT
+        self.explosionDamageAbsorptionFactor = ZERO_FLOAT
+        self.explosionEdgeDamageFactor = ZERO_FLOAT
+        self.shellFragmentsDamageAbsorptionFactor = ZERO_FLOAT
         self.mechanics = SHELL_MECHANICS_TYPE.LEGACY
         self.obstaclePenetration = None
         self.shieldPenetration = None
@@ -107,15 +107,15 @@ class SmokeType(ShellType):
 class Stun(object):
     __slots__ = ('stunRadius', 'stunDuration', 'stunFactor', 'guaranteedStunDuration', 'damageDurationCoeff', 'guaranteedStunEffect', 'damageEffectCoeff')
 
-    def __init__(self):
+    def __init__(self, stunRadius=ZERO_FLOAT, stunDuration=ZERO_FLOAT, stunFactor=ZERO_FLOAT, guaranteedStunDuration=ZERO_FLOAT, damageDurationCoeff=ZERO_FLOAT, guaranteedStunEffect=ZERO_FLOAT, damageEffectCoeff=ZERO_FLOAT):
         super(Stun, self).__init__()
-        self.stunRadius = component_constants.ZERO_FLOAT
-        self.stunDuration = component_constants.ZERO_FLOAT
-        self.stunFactor = component_constants.ZERO_FLOAT
-        self.guaranteedStunDuration = component_constants.ZERO_FLOAT
-        self.damageDurationCoeff = component_constants.ZERO_FLOAT
-        self.guaranteedStunEffect = component_constants.ZERO_FLOAT
-        self.damageEffectCoeff = component_constants.ZERO_FLOAT
+        self.stunRadius = stunRadius
+        self.stunDuration = stunDuration
+        self.stunFactor = stunFactor
+        self.guaranteedStunDuration = guaranteedStunDuration
+        self.damageDurationCoeff = damageDurationCoeff
+        self.guaranteedStunEffect = guaranteedStunEffect
+        self.damageEffectCoeff = damageEffectCoeff
 
     def __repr__(self):
         return 'Stun(radius={}, duration={}, guaranteedDuration={}, damageDurationCoeff={} guaranteedSEffect={}, damageEffectCoeff={})'.format(self.stunRadius, self.stunDuration, self.guaranteedStunDuration, self.damageDurationCoeff, self.guaranteedStunEffect, self.damageEffectCoeff)

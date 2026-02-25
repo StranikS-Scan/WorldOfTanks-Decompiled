@@ -41,7 +41,7 @@ class _NotificationVO(object):
             if self.actions:
                 self.actions.validate(self.items)
         except ValidationError as e:
-            LOG_ERROR('Notification is invalid', e.message, self)
+            LOG_ERROR('Notification is invalid', str(e), self)
             result = False
 
         if self.items:
@@ -129,7 +129,7 @@ class _WGNCProvider(object):
         try:
             notID, ttl, actionsHolder, guiItemsHolder, proxyDataHolder = fromString(xmlString)
         except ParseError as e:
-            LOG_ERROR('Can not parse notification', e.message, xmlString)
+            LOG_ERROR('Can not parse notification', str(e), xmlString)
             return
 
         return self.__makeAndShow(notID, ttl, actionsHolder, guiItemsHolder, proxyDataHolder)
@@ -138,7 +138,7 @@ class _WGNCProvider(object):
         try:
             notID, ttl, actionsHolder, guiItemsHolder, proxyDataHolder = fromSection(section)
         except ParseError as e:
-            LOG_ERROR('Can not parse notification', e.message, section.asBinary)
+            LOG_ERROR('Can not parse notification', str(e), section.asBinary)
             return
 
         return self.__makeAndShow(notID, ttl, actionsHolder, guiItemsHolder, proxyDataHolder)

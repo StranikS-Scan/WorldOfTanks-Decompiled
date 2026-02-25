@@ -191,7 +191,7 @@ class SMStrategicMapCaseControlMode(MapCaseControlMode):
     MODE_NAME = CTRL_MODE_NAME.SM_STRATEGIC
 
     def enable(self, **args):
-        equipmentID = args.get('equipmentID', None)
+        equipmentID = args.get('equipmentID')
         if equipmentID is not None:
             equipment = vehicles.g_cache.equipments()[equipmentID]
             self.camera.minApplyRadius = equipment.minApplyRadius
@@ -248,7 +248,7 @@ class SMEntityViewMode(IControlMode):
     def enable(self, **args):
         BigWorld.player().autoAim(None)
         SoundGroups.g_instance.changePlayMode(0)
-        entityId = args.get('entityId', None)
+        entityId = args.get('entityId')
         if entityId is not None:
             self._entityID = entityId
             entity = BigWorld.entities.get(entityId)

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/finish_sound_player.py
+from __future__ import absolute_import
 import SoundGroups
 from constants import ARENA_PERIOD
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView

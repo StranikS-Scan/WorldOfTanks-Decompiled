@@ -4,8 +4,10 @@ from constants import QUEUE_TYPE, ARENA_BONUS_TYPE
 from frontline.gui.impl.lobby.missions.missions_helpers import FrontlineMissionsGuiHelper
 from frontline.gui.Scaleform.daapi.view.lobby.hangar.hangar_quest_flags import EpicQuestFlagsGetter
 from frontline.gui.Scaleform.daapi.view.lobby.header.helpers.controls_helpers import FrontlineLobbyHeaderHelper
+from frontline.gui.impl.lobby.presenters.frontline_vehicle_menu_helper import FrontlineHangarVehicleMenuHelper
 from gui.hangar_presets.obsolete.hangar_presets_getters import DefaultPresetsGetter
 from gui.hangar_presets.providers.default_dynamic_gui_provider import DefaultHangarDynamicGuiProvider
+from gui.impl.lobby.hangar.base.vehicle_playlists_helper import RandomVehiclePlaylistsGuiHelper
 from gui.impl.lobby.tank_setup.frontline.ammunition_setup import FrontlineAmmunitionSetupView
 from helpers import dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController
@@ -27,3 +29,5 @@ class FrontlineHangarDynamicGuiProvider(DefaultHangarDynamicGuiProvider):
     _LOBBY_HEADER_HELPER = FrontlineLobbyHeaderHelper
     _MISSIONS_HELPER = FrontlineMissionsGuiHelper
     _PRESETS_GETTER = FrontlinePresetsGetter
+    _VEHICLE_PLAYLISTS_HELPER = RandomVehiclePlaylistsGuiHelper
+    _VEHICLE_MENU_HELPER = FrontlineHangarVehicleMenuHelper

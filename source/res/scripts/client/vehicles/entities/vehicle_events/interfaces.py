@@ -6,12 +6,14 @@ from events_containers.common.containers import IClientEventsContainer, IClientE
 if typing.TYPE_CHECKING:
     from gui.battle_control.components_states.ammo import IComponentAmmoState
     from items.components.gun_installation_components import GunInstallationSlot
+    from vehicles.entities import ShotParams
 
 class IVehicleEventsLogic(object):
     onAppearanceReady = None
     onSiegeStateUpdated = None
     onVehicleDestroyed = None
     onCollectAmmoStates = None
+    onCollectShotParams = None
     onDynamicComponentCreated = None
     onDynamicComponentDestroyed = None
     onDiscreteShotDone = None
@@ -38,6 +40,9 @@ class IVehicleEventsListenerLogic(object):
         pass
 
     def onCollectAmmoStates(self, ammoStates):
+        pass
+
+    def onCollectShotParams(self, shotParamsList):
         pass
 
     def onDynamicComponentCreated(self, component):

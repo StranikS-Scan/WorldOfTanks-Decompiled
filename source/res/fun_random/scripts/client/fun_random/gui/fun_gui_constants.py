@@ -4,7 +4,9 @@ from __future__ import absolute_import
 from constants_utils import ConstInjector
 from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.prb_control import settings
+from gui.shared.gui_items import Vehicle
 from messenger import m_constants
+from shared_utils import CONST_CONTAINER
 ATTR_NAME = 'FUN_RANDOM'
 PRB_REQ_TYPE_ATTR_NAME = 'CHANGE_FUN_SUB_MODE'
 _LUI_RULE_ENTRY_POINT = 'FunRandomEntryPoint'
@@ -33,6 +35,18 @@ class REQUEST_TYPE(settings.REQUEST_TYPE, ConstInjector):
 class SCH_CLIENT_MSG_TYPE(m_constants.SCH_CLIENT_MSG_TYPE, ConstInjector):
     FUN_RANDOM_NOTIFICATIONS = 100
     FUN_RANDOM_PROGRESSION = 101
+
+
+class VEHICLE_TAGS(Vehicle.VEHICLE_TAGS, ConstInjector):
+    _const_type = str
+    FUN_RANDOM = 'fun_random'
+
+
+class FunRandomTooltipConstants(CONST_CONTAINER):
+    FUN_RANDOM_CALENDAR_DAY = 'funRandomCalendarDay'
+    FUN_RANDOM_MODE_SELECTOR_CALENDAR_DAY = 'funRandomModeSelectorCalendarDay'
+    FUN_RANDOM_REWARDS = 'funRandomRewards'
+    LOBBY_TOOLTIPS_SET = (FUN_RANDOM_CALENDAR_DAY, FUN_RANDOM_MODE_SELECTOR_CALENDAR_DAY, FUN_RANDOM_REWARDS)
 
 
 def initFunRandomLimitedUIIds():

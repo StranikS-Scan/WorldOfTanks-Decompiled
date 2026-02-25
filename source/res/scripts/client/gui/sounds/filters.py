@@ -6,7 +6,6 @@ from shared_utils import CONST_CONTAINER
 
 class StatesGroup(CONST_CONTAINER):
     HANGAR_FILTERED = 'STATE_hangar_filtered'
-    HANGAR_PLACE_BATTLE_PASS = 'STATE_hangar_place_battle_pass'
     OVERLAY_HANGAR_GENERAL = 'STATE_overlay_hangar_general'
     VIDEO_OVERLAY = 'STATE_video_overlay'
     HANGAR_PLACE_TASKS = 'STATE_hangar_place_tasks'
@@ -24,7 +23,6 @@ class States(CONST_CONTAINER):
     VIDEO_OVERLAY_OFF = _OFF_PATTERN.format(StatesGroup.VIDEO_OVERLAY)
     HANGAR_PLACE_TASKS_DAILY = 'STATE_hangar_place_tasks_daily'
     HANGAR_PLACE_TASKS_MISSIONS = 'STATE_hangar_place_tasks_missions'
-    HANGAR_PLACE_TASKS_BATTLE_PASS = 'STATE_hangar_place_tasks_battle_pass'
     HANGAR_PLACE_TASKS_EVENTS = 'STATE_hangar_place_tasks_events'
     HANGAR_PLACE_TASKS_BATTLE_MATTERS = 'STATE_hangar_place_tasks_battle_matters'
 
@@ -141,12 +139,6 @@ class WWISEHangarTasksFilter(_WWISEStateAmbient):
         pass
 
 
-class WWISEHangarTasksBPFilter(WWISEHangarTasksFilter):
-
-    def _getStartState(self):
-        return States.HANGAR_PLACE_TASKS_BATTLE_PASS
-
-
 class WWISEHangarTasksDailyFilter(WWISEHangarTasksFilter):
 
     def _getStartState(self):
@@ -198,11 +190,9 @@ def _selectFilter(wwise):
 
 
 _filters = {SoundFilters.FILTERED_HANGAR: _selectFilter(WWISEFilteredHangarFilter()),
- SoundFilters.BATTLE_PASS_FILTER: _selectFilter(WWISEBattlePassFilter()),
  SoundFilters.HANGAR_OVERLAY: _selectFilter(WWISEHangarOverlayFilter()),
  SoundFilters.HANGAR_PLACE_TASKS_DAILY: _selectFilter(WWISEHangarTasksDailyFilter()),
  SoundFilters.HANGAR_PLACE_TASKS_MISSIONS: _selectFilter(WWISEHangarTasksMissionsFilter()),
- SoundFilters.HANGAR_PLACE_TASKS_BATTLE_PASS: _selectFilter(WWISEHangarTasksBPFilter()),
  SoundFilters.HANGAR_PLACE_TASKS_EVENTS: _selectFilter(WWISEEventPageFilter()),
  SoundFilters.HANGAR_PLACE_TASKS_BATTLE_MATTERS: _selectFilter(WWISEBattleMattersFilter())}
 

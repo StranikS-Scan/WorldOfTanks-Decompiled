@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/managers/UtilsManager.py
+from __future__ import absolute_import
 import calendar
 import Keys
 from Keys import KEY_NONE
@@ -61,12 +62,12 @@ class UtilsManager(UtilsManagerMeta):
     def getNationIndices(self):
         return nations.INDICES
 
-    def changeStringCasing(self, s, isUpper, _):
-        return utils.changeStringCasing(str(s).decode('utf-8'), isUpper)
+    def changeStringCasing(self, string, isUpper, _):
+        return utils.changeStringCasing(str(string).decode('utf-8'), isUpper)
 
     @classmethod
-    def getAbsoluteUrl(cls, value):
-        return getAbsoluteUrl(value)
+    def getAbsoluteUrl(cls, relativeUrl):
+        return getAbsoluteUrl(relativeUrl)
 
     @classmethod
     def getHtmlIconText(cls, properties):

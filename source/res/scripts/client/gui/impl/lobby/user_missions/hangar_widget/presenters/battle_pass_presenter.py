@@ -65,9 +65,9 @@ class BattlePassPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewComponen
         return super(BattlePassPresenter, self).getViewModel()
 
     def createToolTipContent(self, event, contentID):
-        if not self.isHoliday and contentID == R.views.lobby.battle_pass.tooltips.BattlePassNoChapterTooltipView():
+        if not self.isHoliday and contentID == R.views.mono.battle_pass.tooltips.no_chapter():
             return BattlePassNoChapterTooltipView()
-        return BattlePassCompletedTooltipView() if contentID == R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView() else BattlePassInProgressTooltipView()
+        return BattlePassCompletedTooltipView() if contentID == R.views.mono.battle_pass.tooltips.completed() else BattlePassInProgressTooltipView()
 
     @property
     def hasDeferModelUpdate(self):

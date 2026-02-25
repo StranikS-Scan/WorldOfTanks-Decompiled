@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/LoginView.py
+from __future__ import absolute_import
 import json
 from collections import defaultdict
 import BigWorld
@@ -20,6 +21,8 @@ from gui.impl.dialogs import dialogs
 from gui.impl.dialogs.builders import ResSimpleDialogBuilder
 from gui.impl.dialogs.dialogs import showSimple
 from gui.impl.gen import R
+from gui.Scaleform.daapi.view.login.login_modes import createLoginMode
+from gui.Scaleform.daapi.view.login.login_modes.base_mode import INVALID_FIELDS
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import OpenLinkEvent, LoginEventEx, ArgsEvent, LoginEvent, LoadViewEvent
@@ -27,8 +30,6 @@ from helpers import getFullClientVersion, dependency, uniprof
 from helpers.i18n import makeString as _ms
 from helpers.statistics import HANGAR_LOADING_STATE
 from helpers.time_utils import makeLocalServerTime
-from login_modes import createLoginMode
-from login_modes.base_mode import INVALID_FIELDS
 from predefined_hosts import AUTO_LOGIN_QUERY_URL, AUTO_LOGIN_QUERY_ENABLED, g_preDefinedHosts
 from shared_utils import CONST_CONTAINER
 from skeletons.connection_mgr import IConnectionManager
@@ -79,8 +80,8 @@ class LoginView(LoginPageMeta):
     def onRegister(self, host):
         self.fireEvent(OpenLinkEvent(OpenLinkEvent.REGISTRATION))
 
-    def onSetRememberPassword(self, rememberUser):
-        self._loginMode.setRememberPassword(rememberUser)
+    def onSetRememberPassword(self, remember):
+        self._loginMode.setRememberPassword(remember)
 
     @wg_async
     def onLogin(self, userName, password, serverName, isSocialToken2Login):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/team_bases_panel.py
+from __future__ import absolute_import
 from constants import ARENA_GUI_TYPE
 from gui.Scaleform.daapi.view.meta.TeamBasesPanelMeta import TeamBasesPanelMeta
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI as I18N_INGAME_GUI
@@ -77,10 +78,9 @@ def _getSettingItem(clientID, ownTeam, arenaTypeID):
     itemSettings = (0, 'green', '%s %s', '%s %s', '%s %s')
     key = baseTeam ^ ownTeam
     if isControlPointExists(arenaTypeID):
-        if key in _SETTINGS_TO_CONTROL_POINT:
-            itemSettings = _SETTINGS_TO_CONTROL_POINT[key]
-    elif key in _SETTINGS_TO_TEAM:
-        itemSettings = _SETTINGS_TO_TEAM[key]
+        itemSettings = _SETTINGS_TO_CONTROL_POINT.get(key, itemSettings)
+    else:
+        itemSettings = _SETTINGS_TO_TEAM.get(key, itemSettings)
     item = _TeamBaseSettingItem(*itemSettings)
     item.setup(arenaTypeID, baseID, baseTeam)
     return item

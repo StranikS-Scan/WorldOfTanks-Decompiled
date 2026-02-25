@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/backport/backport_time_utils.py
+from __future__ import absolute_import
 import time
 from gui.impl.backport import text
 from helpers import time_utils

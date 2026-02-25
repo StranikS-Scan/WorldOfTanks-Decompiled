@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/missions_dialogs_meta.py
+from __future__ import absolute_import
 from gui.Scaleform.daapi.view.dialogs import IDialogMeta
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS

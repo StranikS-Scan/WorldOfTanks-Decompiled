@@ -6,7 +6,7 @@ from enum import Enum
 from constants import PREBATTLE_TYPE, QUEUE_TYPE, BATTLE_MODE_VEHICLE_TAGS, BATTLE_MODE_VEH_TAGS_EXCEPT_EPIC
 from gui.impl.gen import R
 from gui.impl.lobby.platoon.view.platoon_members_view import MembersWindow
-from gui.impl.lobby.platoon.view.platoon_members_view import SquadMembersView, EventMembersView, EpicMembersView, BattleRoyalMembersView, MapboxMembersView
+from gui.impl.lobby.platoon.view.platoon_members_view import SquadMembersView, EventMembersView, EpicMembersView, BattleRoyaleMembersView, MapboxMembersView
 from gui.impl.lobby.platoon.view.platoon_search_view import SearchWindow
 from gui.impl.lobby.platoon.view.platoon_selection_view import SelectionWindow
 from gui.impl.lobby.platoon.view.platoon_welcome_view import WelcomeView
@@ -41,7 +41,7 @@ def buildCurrentLayouts(prbType=DEFAULT_LAYOUTS_KEY):
 PLATOON_VIEW_BY_PRB_TYPE = {PREBATTLE_TYPE.SQUAD: SquadMembersView,
  PREBATTLE_TYPE.EVENT: EventMembersView,
  PREBATTLE_TYPE.EPIC: EpicMembersView,
- PREBATTLE_TYPE.BATTLE_ROYALE: BattleRoyalMembersView,
+ PREBATTLE_TYPE.BATTLE_ROYALE: BattleRoyaleMembersView,
  PREBATTLE_TYPE.MAPBOX: MapboxMembersView}
 QUEUE_TYPE_TO_PREBATTLE_ACTION_NAME = {QUEUE_TYPE.EVENT_BATTLES: PREBATTLE_ACTION_NAME.EVENT_SQUAD,
  QUEUE_TYPE.RANDOMS: PREBATTLE_ACTION_NAME.SQUAD,

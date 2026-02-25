@@ -57,12 +57,21 @@ def warningVScript(owner, msg):
 
 
 def readVisualScriptPlanParams(section, commonParams={}):
+    PARAM_READERS = {'string': lambda val: val.asString,
+     'int': lambda val: val.asInt,
+     'float': lambda val: val.asFloat,
+     'bool': lambda val: val.asBool}
+    DEFAULT_PARAM_READER = PARAM_READERS['string']
     params = dict(commonParams.items())
     if section.has_key('params'):
         for name, subsection in section['params'].items():
+            if subsection.has_key('type'):
+                paramReader = PARAM_READERS.get(subsection['type'].asString, DEFAULT_PARAM_READER)
+            else:
+                paramReader = DEFAULT_PARAM_READER
             if subsection.has_key('item'):
-                params[name] = [ value.asString for idx, value in subsection.items() ]
-            params[name] = subsection.asString
+                params[name] = [ paramReader(value) for idx, value in subsection.items() ]
+            params[name] = paramReader(subsection)
 
     return params
 

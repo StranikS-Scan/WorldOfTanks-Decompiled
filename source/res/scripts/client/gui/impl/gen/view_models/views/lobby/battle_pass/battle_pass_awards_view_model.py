@@ -18,7 +18,7 @@ class RewardReason(Enum):
 class BattlePassAwardsViewModel(CommonViewModel):
     __slots__ = ('onBuyClick', 'onClose', 'onShowPostProgression')
 
-    def __init__(self, properties=16, commands=4):
+    def __init__(self, properties=18, commands=4):
         super(BattlePassAwardsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -45,69 +45,84 @@ class BattlePassAwardsViewModel(CommonViewModel):
     def getPackageRewardsType():
         return RewardItemModel
 
+    @property
+    def starterPackRewards(self):
+        return self._getViewModel(7)
+
+    @staticmethod
+    def getStarterPackRewardsType():
+        return RewardItemModel
+
     def getChapterID(self):
-        return self._getNumber(7)
+        return self._getNumber(8)
 
     def setChapterID(self, value):
-        self._setNumber(7, value)
+        self._setNumber(8, value)
 
     def getReason(self):
-        return RewardReason(self._getString(8))
+        return RewardReason(self._getString(9))
 
     def setReason(self, value):
-        self._setString(8, value.value)
+        self._setString(9, value.value)
 
     def getIsFinalReward(self):
-        return self._getBool(9)
-
-    def setIsFinalReward(self, value):
-        self._setBool(9, value)
-
-    def getIsBaseStyleLevel(self):
         return self._getBool(10)
 
-    def setIsBaseStyleLevel(self, value):
+    def setIsFinalReward(self, value):
         self._setBool(10, value)
 
-    def getIsNeedToShowOffer(self):
+    def getIsBaseStyleLevel(self):
         return self._getBool(11)
 
-    def setIsNeedToShowOffer(self, value):
+    def setIsBaseStyleLevel(self, value):
         self._setBool(11, value)
 
-    def getSeasonStopped(self):
+    def getIsNeedToShowOffer(self):
         return self._getBool(12)
 
-    def setSeasonStopped(self, value):
+    def setIsNeedToShowOffer(self, value):
         self._setBool(12, value)
 
+    def getSeasonStopped(self):
+        return self._getBool(13)
+
+    def setSeasonStopped(self, value):
+        self._setBool(13, value)
+
     def getWideRewardsIDs(self):
-        return self._getArray(13)
+        return self._getArray(14)
 
     def setWideRewardsIDs(self, value):
-        self._setArray(13, value)
+        self._setArray(14, value)
 
     @staticmethod
     def getWideRewardsIDsType():
         return int
 
     def getIsExtra(self):
-        return self._getBool(14)
-
-    def setIsExtra(self, value):
-        self._setBool(14, value)
-
-    def getIsPostProgressionUnlocked(self):
         return self._getBool(15)
 
-    def setIsPostProgressionUnlocked(self, value):
+    def setIsExtra(self, value):
         self._setBool(15, value)
+
+    def getIsPostProgressionUnlocked(self):
+        return self._getBool(16)
+
+    def setIsPostProgressionUnlocked(self, value):
+        self._setBool(16, value)
+
+    def getIsStarterPack(self):
+        return self._getBool(17)
+
+    def setIsStarterPack(self, value):
+        self._setBool(17, value)
 
     def _initialize(self):
         super(BattlePassAwardsViewModel, self)._initialize()
         self._addViewModelProperty('mainRewards', UserListModel())
         self._addViewModelProperty('additionalRewards', UserListModel())
         self._addViewModelProperty('packageRewards', UserListModel())
+        self._addViewModelProperty('starterPackRewards', UserListModel())
         self._addNumberProperty('chapterID', 0)
         self._addStringProperty('reason')
         self._addBoolProperty('isFinalReward', False)
@@ -117,6 +132,7 @@ class BattlePassAwardsViewModel(CommonViewModel):
         self._addArrayProperty('wideRewardsIDs', Array())
         self._addBoolProperty('isExtra', False)
         self._addBoolProperty('isPostProgressionUnlocked', False)
+        self._addBoolProperty('isStarterPack', False)
         self.onBuyClick = self._addCommand('onBuyClick')
         self.onClose = self._addCommand('onClose')
         self.onShowPostProgression = self._addCommand('onShowPostProgression')

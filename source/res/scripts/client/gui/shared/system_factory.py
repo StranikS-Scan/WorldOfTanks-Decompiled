@@ -78,8 +78,12 @@ CLASS_TAG_GETTER = 74
 BATTLE_RESULT_PROGRESS_PRESENTER = 75
 BATTLE_ENTRY = 76
 DYNAMIC_VIEWS_FOR_MONITORING = 77
+VEHICLE_READY_CHECKERS = 78
+POSTBATTLE_SQUAD_FINDER = 79
+POSTMORTEM_INFO_VIEW = 89
+MODE_HIDDEN_VEHICLES_CRITERIA = 81
 
-class _CollectEventsManager(object):
+class CollectEventsManager(object):
 
     def __init__(self):
         self.__handlers = defaultdict(list)
@@ -98,7 +102,7 @@ class _CollectEventsManager(object):
         return self.__handlers
 
 
-__collectEM = _CollectEventsManager()
+__collectEM = CollectEventsManager()
 
 def registerScaleformBattlePackages(guiType, packages):
 
@@ -576,10 +580,6 @@ def registerBannerEntryPointLUIRule(alias, ruleID):
         ctx['ruleID'] = ruleID
 
     __collectEM.addListener((BANNER_ENTRY_POINT_LUI_RULE, alias), onCollect)
-
-
-def collectBannerEntryPointLUIRule(alias):
-    return __collectEM.handleEvent((BANNER_ENTRY_POINT_LUI_RULE, alias), ctx={}).get('ruleID')
 
 
 def registerCarouselEventEntryPoint(viewID, viewClass):
@@ -1137,3 +1137,51 @@ def registerBattleEntry(arenaGuiType, resId):
 
 def collectBattleEntry(arenaGuiType):
     return __collectEM.handleEvent((BATTLE_ENTRY, arenaGuiType), ctx={}).get('battleEntryResID', 0)
+
+
+def registerReadyVehicleChekers(queueType, listCheckerFunc):
+
+    def onCollect(ctx):
+        ctx['listCheckerFunc'] = listCheckerFunc
+
+    __collectEM.addListener((VEHICLE_READY_CHECKERS, queueType), onCollect)
+
+
+def collectReadyVehicleChekers(queueType):
+    return __collectEM.handleEvent((VEHICLE_READY_CHECKERS, queueType), ctx={}).get('listCheckerFunc', [])
+
+
+def registerPostbattleSquadFinder(guiType, squadFinderClass):
+
+    def onCollect(ctx):
+        ctx['pbs_squad_finder_data'] = squadFinderClass
+
+    __collectEM.addListener((POSTBATTLE_SQUAD_FINDER, guiType), onCollect)
+
+
+def collectPostbattleSquadFinder(guiType):
+    return __collectEM.handleEvent((POSTBATTLE_SQUAD_FINDER, guiType), ctx={}).get('pbs_squad_finder_data', None)
+
+
+def registerPostmortemInfoView(guiType, viewCls):
+
+    def onCollect(ctx):
+        ctx['postmortem_info_view'] = viewCls
+
+    __collectEM.addListener((POSTMORTEM_INFO_VIEW, guiType), onCollect)
+
+
+def collectPostmortemInfoView(guiType):
+    return __collectEM.handleEvent((POSTMORTEM_INFO_VIEW, guiType), ctx={}).get('postmortem_info_view', None)
+
+
+def registerModeHiddenVehiclesCriteria(bonusType, criteria):
+
+    def onCollect(ctx):
+        ctx['modeHiddenCriteria'][bonusType] = criteria
+
+    __collectEM.addListener(MODE_HIDDEN_VEHICLES_CRITERIA, onCollect)
+
+
+def collectModeHiddenVehiclesCriteria():
+    return __collectEM.handleEvent(MODE_HIDDEN_VEHICLES_CRITERIA, {'modeHiddenCriteria': {}})['modeHiddenCriteria']

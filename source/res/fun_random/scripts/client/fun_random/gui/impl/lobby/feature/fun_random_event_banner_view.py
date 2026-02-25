@@ -24,7 +24,7 @@ def isFunRandomEntryPointAvailable(funRandomCtrl=None):
     return funRandomCtrl.subModesInfo.isEntryPointAvailable()
 
 
-class FunRandomEventBannerView(BaseEventBanner, FunSubModesWatcher):
+class FunRandomEventBannerView(BaseEventBanner, FunAssetPacksMixin, FunSubModesWatcher):
     NAME = FUNRANDOM_ALIASES.FUN_RANDOM_ENTRY_POINT
     __eventsService = dependency.descriptor(IEventsService)
 
@@ -42,29 +42,27 @@ class FunRandomEventBannerView(BaseEventBanner, FunSubModesWatcher):
 
     @property
     def title(self):
-        return backport.text(FunAssetPacksMixin.getModeLocalsResRoot().capsUserName())
+        return backport.text(self.getModeLocalsResRoot().capsUserName())
 
     @property
     def introDescription(self):
-        return backport.text(FunAssetPacksMixin.getModeLocalsResRoot().entryPoint.intro.description())
+        return backport.text(self.getModeLocalsResRoot().entryPoint.intro.description())
 
     @property
     def inProgressDescription(self):
-        return backport.text(FunAssetPacksMixin.getModeLocalsResRoot().entryPoint.inProgress.description())
+        return backport.text(self.getModeLocalsResRoot().entryPoint.inProgress.description())
 
     @property
     def iconsPath(self):
-        assetsPointer = FunAssetPacksMixin.getModeAssetsPointer()
-        return 'fun_random.gui.maps.icons.feature.asset_packs.modes.{}'.format(assetsPointer)
+        return 'fun_random.gui.maps.icons.feature.asset_packs.modes.{}'.format(self.getModeAssetsPointer())
 
     @property
     def videosPath(self):
-        assetsPointer = FunAssetPacksMixin.getModeAssetsPointer()
-        return 'fun_random.asset_packs.modes.{}'.format(assetsPointer)
+        return 'asset_packs.modes.{}'.format(self.getModeAssetsPointer())
 
     @property
     def borderColor(self):
-        pass
+        return self.getModeAssetsConfiguration().hangarEventBanner.borderColor
 
     @property
     def bannerState(self):

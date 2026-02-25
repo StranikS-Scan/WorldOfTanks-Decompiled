@@ -7,6 +7,7 @@ import typing
 import BigWorld
 from CurrentVehicle import g_currentPreviewVehicle
 from WeakMethod import WeakMethodProxy
+from armor_inspector_common.schemas import armorInspectorConfigSchema
 from frameworks.state_machine import StateFlags
 from frameworks.state_machine.transitions import TransitionType
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -20,7 +21,7 @@ from gui.impl.lobby.vehicle_hub.camera_mover import VehicleHubCameraMover
 from gui.impl.lobby.vehicle_hub.sound_constants import VH_SOUND_SPACE
 from gui.lobby_state_machine.states import SFViewLobbyState, SubScopeSubLayerState, LobbyState, LobbyStateFlags, LobbyStateDescription
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showHangar
+from gui.shared.event_dispatcher import showBrowserOverlayView, showHangar
 from gui.shared.utils.module_upd_available_helper import updateViewedItems
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.subhangar.subhangar_observer import selectItemByTankSize, hangarVehicleAABB
@@ -58,6 +59,7 @@ class _VehicleHubChildState(LobbyState, SubhangarStateGroupConfigProvider):
         from gui.Scaleform.daapi.view.lobby.vehicle_compare.states import VehicleCompareState
         from gui.Scaleform.daapi.view.lobby.profile.states import ServiceRecordState
         from gui.Scaleform.daapi.view.lobby.store.browser.states import ShopState
+        from gui.Scaleform.daapi.view.lobby.missions.personal.state import PersonalMissionsAwardsState
         lsm = self.getMachine()
         self.addNavigationTransition(lsm.getStateByCls(VehicleCompareState), record=True)
         self.addNavigationTransition(lsm.getStateByCls(BlueprintState), record=True)
@@ -65,6 +67,7 @@ class _VehicleHubChildState(LobbyState, SubhangarStateGroupConfigProvider):
         loadingState = lsm.getStateByCls(_LoadingState)
         self.addTransition(loadingState.makeTransition(TransitionType.INTERNAL, True), loadingState)
         self.addNavigationTransition(lsm.getStateByCls(ServiceRecordState), record=True)
+        self.addNavigationTransition(lsm.getStateByCls(PersonalMissionsAwardsState), record=True)
 
     def _onEntered(self, event):
         super(_VehicleHubChildState, self)._onEntered(event)
@@ -341,3 +344,17 @@ class ArmorState(_VehicleHubChildState):
     STATE_ID = VehicleHubViewModel.ARMOR
     TAB_NAME = VehicleHubViewModel.ARMOR
     _SUBHANGAR_GROUPS_BY_TANK_SIZE = (SubhangarStateGroups.VehicleHubArmorSmallTank, SubhangarStateGroups.VehicleHubArmorMediumTank, SubhangarStateGroups.VehicleHubArmorLargeTank)
+
+    def getNavigationDescription(self):
+        infos = []
+        url = armorInspectorConfigSchema.getModel().linkButtonURL
+        if url:
+            infos.append(LobbyStateDescription.Info(tooltipBody=backport.text(R.strings.armor_inspector.videoTooltip()), onMoreInfoRequested=self._showVideo, type=LobbyStateDescription.Info.Type.VIDEO))
+        return LobbyStateDescription(title=backport.text(R.strings.pages.titles.vehicle_hub()), infos=infos)
+
+    @staticmethod
+    def _showVideo():
+        url = armorInspectorConfigSchema.getModel().linkButtonURL
+        if not url:
+            return
+        showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_OVERLAY)

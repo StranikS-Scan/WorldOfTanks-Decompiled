@@ -183,7 +183,6 @@ class DeconstructOptDeviceOnVehicleProvider(ArrayOptDeviceProvider):
 
 class BaseOptDeviceProvider(VehicleBaseArrayProvider):
     _wotPlusController = dependency.descriptor(IWotPlusController)
-    _lobbyContext = dependency.descriptor(ILobbyContext)
     __slots__ = ()
 
     def getItemViewModel(self):
@@ -194,7 +193,7 @@ class BaseOptDeviceProvider(VehicleBaseArrayProvider):
         if item.isModernized:
             model.setDestroyTooltipBodyPath('destroy_modernized')
             return
-        if item.isDeluxe and not self._lobbyContext.getServerSettings().isFreeDeluxeEquipmentDemountingEnabled():
+        if item.isDeluxe and not self._wotPlusController.getSettingsStorage().isFreeDeluxeEquipmentDemountingEnabled():
             model.setDestroyTooltipBodyPath('destroy_without_wotplus_demount')
             return
         model.setDestroyTooltipBodyPath('destroy')

@@ -7,6 +7,7 @@ from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.game_control.wot_plus.utils import hasFreeEquipDemountPromo, hasFreeDeluxeEquipDemountPromo
 from gui.impl import backport
 from gui.impl.backport import backport_r
 from gui.impl.gen import R
@@ -397,7 +398,6 @@ class ModuleHeaderBlockConstructor(ModuleTooltipBlockConstructor):
 
 class PriceBlockConstructor(ModuleTooltipBlockConstructor):
     wotPlusController = dependency.descriptor(IWotPlusController)
-    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, module, configuration, valueWidth, leftPadding, rightPadding):
         super(PriceBlockConstructor, self).__init__(module, configuration, leftPadding, rightPadding)
@@ -500,9 +500,9 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                 removalActionPercent = removalPrice.getActionPrc()
                 defValue = removalPrice.defPrice.getSignValue(removalPriceCurrency)
                 needValue = value - money.getSignValue(removalPriceCurrency)
-                wotPlusStatus = self.wotPlusController.isEnabled()
-                isFreeDeluxeEnabled = self.lobbyContext.getServerSettings().isFreeDeluxeEquipmentDemountingEnabled()
-                isFreeDemountEnabled = self.lobbyContext.getServerSettings().isFreeEquipmentDemountingEnabled()
+                isWotPlusEnabled = self.wotPlusController.isWotPlusVisible()
+                isFreeDeluxeEnabled = hasFreeDeluxeEquipDemountPromo()
+                isFreeDemountEnabled = hasFreeEquipDemountPromo()
                 isFreeToDemount = self.wotPlusController.isFreeToDemount(module)
                 if needValue <= 0 or self.configuration.isStaticInfoOnly or isFreeToDemount:
                     needValue = None
@@ -510,7 +510,7 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                 if module.isModernized:
                     levelText = backport.text(R.strings.tooltips.level.num(module.level)())
                     forcedText = backport.text(R.strings.tooltips.moduleFits.not_removable.dismantling.level.price(), level=levelText)
-                block.append(makeRemovalPriceBlock(value, CURRENCY_SETTINGS.getRemovalSetting(removalPriceCurrency), needValue, defValue if defValue > 0 else None, removalActionPercent, valueWidth=182 if module.isModernized else 180, gap=13 if module.isModernized else 15, leftPadding=self._priceLeftPadding, isDeluxe=module.isDeluxe, canUseDemountKit=module.canUseDemountKit, wotPlusStatus=wotPlusStatus, isFreeToDemount=isFreeToDemount, isFreeDeluxeEnabled=isFreeDeluxeEnabled, isFreeDemountEnabled=isFreeDemountEnabled, forcedText=forcedText))
+                block.append(makeRemovalPriceBlock(value, CURRENCY_SETTINGS.getRemovalSetting(removalPriceCurrency), needValue, defValue if defValue > 0 else None, removalActionPercent, valueWidth=182 if module.isModernized else 180, gap=13 if module.isModernized else 15, leftPadding=self._priceLeftPadding, isDeluxe=module.isDeluxe, canUseDemountKit=module.canUseDemountKit, isWotPlusEnabled=isWotPlusEnabled, isFreeToDemount=isFreeToDemount, isFreeDeluxeEnabled=isFreeDeluxeEnabled, isFreeDemountEnabled=isFreeDemountEnabled, forcedText=forcedText))
                 isModernized = module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and module.isModernized
                 if isModernized:
                     itemPrice = module.getDeconstructPrice(self.itemsCache.items)
@@ -623,15 +623,15 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
             serverSettings = dependency.instance(ISettingsCore).serverSettings
             if module.itemTypeID == GUI_ITEM_TYPE.GUN:
                 reloadingType = module.getReloadingType(vehicle.descriptor if vehicle is not None else None)
-                if reloadingType == GUN_CLIP or reloadingType == GUN_CAN_BE_CLIP:
+                if reloadingType in (GUN_CLIP, GUN_CAN_BE_CLIP):
                     paramsKeyName = self.CLIP_GUN_MODULE_PARAM
-                elif reloadingType == GUN_CAN_BE_AUTO_RELOAD or reloadingType == GUN_AUTO_RELOAD:
+                elif reloadingType in (GUN_CAN_BE_AUTO_RELOAD, GUN_AUTO_RELOAD):
                     highlightPossible = serverSettings.checkAutoReloadHighlights(increase=increaseHighlights)
                     paramsKeyName = self.AUTO_RELOAD_GUN_MODULE_PARAM
-                elif reloadingType == GUN_CAN_BE_AUTO_SHOOT or reloadingType == GUN_AUTO_SHOOT:
+                elif reloadingType in (GUN_CAN_BE_AUTO_SHOOT, GUN_AUTO_SHOOT):
                     highlightPossible = serverSettings.checkAutoShootHighlights(increase=increaseHighlights)
                     paramsKeyName = self.AUTO_SHOOT_GUN_MODULE_PARAM
-                elif reloadingType == GUN_CAN_BE_DUAL_GUN or reloadingType == GUN_DUAL_GUN:
+                elif reloadingType in (GUN_CAN_BE_DUAL_GUN, GUN_DUAL_GUN):
                     highlightPossible = serverSettings.checkDualGunHighlights(increase=increaseHighlights)
                     paramsKeyName = self.DUAL_GUN_MODULE_PARAM
                 elif vehicle is not None and vehicle.descriptor.hasDualAccuracy:
@@ -639,7 +639,7 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                     paramsKeyName = self.DUAL_ACCURACY_MODULE_PARAM
                 elif vehicle is not None and module.isDamageMutable():
                     paramsKeyName = self.MUTABLE_DAMAGE_MODULE_PARAM
-                elif reloadingType == GUN_CAN_BE_TWIN_GUN or reloadingType == GUN_TWIN_GUN:
+                elif reloadingType in (GUN_CAN_BE_TWIN_GUN, GUN_TWIN_GUN):
                     highlightPossible = serverSettings.checkTwinGunHighlights(increase=increaseHighlights)
                     paramsKeyName = self.TWIN_GUN_MODULE_PARAM
             elif paramsKeyName == GUI_ITEM_TYPE.ENGINE:
@@ -662,13 +662,13 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                     paramInfo = comparator.getExtendedData(paramName)
                     fmtValue = params_formatters.colorizedFormatParameter(paramInfo, self.__colorScheme)
                     if fmtValue is not None:
-                        block.append(formatters.packTextParameterBlockData(name=params_formatters.formatModuleParamName(paramName, vDescr), value=fmtValue, valueWidth=self._valueWidth, gap=19, highlight=highlightPossible and paramName in highlightParamsList))
+                        block.append(formatters.packTextParameterBlockData(name=params_formatters.formatModuleParamName(paramName, vDescr), value=fmtValue, valueWidth=self._valueWidth, gap=12, highlight=highlightPossible and paramName in highlightParamsList))
 
             else:
                 formattedModuleParameters = params_formatters.getFormattedParamsList(module.descriptor, moduleParams)
                 for paramName, paramValue in formattedModuleParameters:
                     if paramName in paramsList and paramValue is not None:
-                        block.append(formatters.packTextParameterBlockData(name=params_formatters.formatModuleParamName(paramName), value=paramValue, valueWidth=self._valueWidth, gap=19))
+                        block.append(formatters.packTextParameterBlockData(name=params_formatters.formatModuleParamName(paramName), value=paramValue, valueWidth=self._valueWidth, gap=12))
 
         if block:
             block.insert(0, formatters.packTextBlockData(text_styles.middleTitle(backport.text(R.strings.tooltips.tankCarusel.MainProperty())), padding=formatters.packPadding(bottom=7)))
@@ -686,7 +686,7 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
         else:
             blocks = []
             for status in statuses:
-                blocks.append(formatters.packImageTextBlockData(title=text_styles.neutral(backport.text(status[0]())), desc='', img=backport.image(status[1]()), imgPadding=formatters.packPadding(top=1, right=20), padding=formatters.packPadding(left=90, bottom=5), ignoreImageSize=True))
+                blocks.append(formatters.packImageTextBlockData(title=text_styles.neutral(backport.text(status[0]())), desc='', img=backport.image(status[1]()), imgPadding=formatters.packPadding(top=1, right=10), padding=formatters.packPadding(left=90, bottom=5, right=25), ignoreImageSize=True))
 
             return formatters.packBuildUpBlockData(blocks, padding=formatters.packPadding(top=3, bottom=11)) if blocks else None
 

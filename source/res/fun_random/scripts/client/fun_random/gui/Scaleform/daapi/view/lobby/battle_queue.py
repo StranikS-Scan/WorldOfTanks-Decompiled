@@ -17,6 +17,16 @@ class FunRandomQueueProvider(RandomQueueProvider, FunAssetPacksMixin, FunSubMode
     def processQueueInfo(self, qInfo):
         super(FunRandomQueueProvider, self).processQueueInfo(qInfo or {})
 
+    @hasDesiredSubMode(defReturn=False)
+    def needAdditionalInfo(self):
+        if self._needAdditionalInfo is not None:
+            return self._needAdditionalInfo
+        else:
+            hasBattleQueueWarning = self.getDesiredSubMode().getConfigurationModel().subMode.hasBattleQueueWarning
+            if not hasBattleQueueWarning:
+                self._needAdditionalInfo = False
+            return super(FunRandomQueueProvider, self).needAdditionalInfo()
+
     @hasDesiredSubMode()
     def _doRequestQueueInfo(self, currPlayer):
         super(FunRandomQueueProvider, self)._doRequestQueueInfo(currPlayer)

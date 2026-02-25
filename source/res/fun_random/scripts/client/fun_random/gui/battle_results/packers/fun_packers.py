@@ -1,10 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/battle_results/packers/fun_packers.py
 from __future__ import absolute_import
+import typing
 from fun_random_common.fun_constants import FunEfficiencyParameterCount
 from fun_random.gui.battle_results.pbs_helpers import getTotalTMenXPToShow, getTotalGoldToShow, getEventID, isCreditsShown, isGoldShown, isXpShown, isFreeXpShown, isTmenXpShown, isCrystalShown, isFunAddXpBonusStatusAcceptable
 from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunSubModesWatcher
+from fun_random.gui.impl.gen.view_models.views.lobby.feature.battle_results.fun_battle_type import FunBattleType
 from fun_random.gui.impl.gen.view_models.views.lobby.feature.battle_results.fun_player_model import FunPlayerModel
+from fun_random.gui.impl.gen.view_models.views.lobby.feature.battle_results.fun_stats_efficiency_model import FunStatsEfficiencyModel
+from fun_random.gui.impl.gen.view_models.views.lobby.feature.battle_results.fun_stats_efficiency_param_model import FunStatsEfficiencyParamModel, StatsValueType
 from fun_random.gui.impl.gen.view_models.views.lobby.feature.battle_results.fun_random_reward_item_model import FunRandomRewardItemModel, FunRewardTypes
 from gui.battle_results.pbs_helpers.additional_bonuses import isAdditionalXpBonusAvailable, getLeftAdditionalBonus
 from gui.battle_results.pbs_helpers.economics import getTotalCreditsToShow, getTotalCrystalsToShow, getTotalXPToShow, getTotalFreeXPToShow
@@ -18,8 +22,11 @@ from gui.impl.gen.view_models.views.lobby.battle_results.team_stats_model import
 from gui.impl.gen.view_models.views.lobby.battle_results.team_stats_column_types import TeamStatsColumnTypes
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from helpers import time_utils
+if typing.TYPE_CHECKING:
+    from gui.battle_results.reusable.shared import VehicleSummarizeInfo
 
 class FunRandomBattleInfo(BattleInfo, FunAssetPacksMixin, FunSubModesWatcher):
+    _BATTLE_TYPE = FunBattleType.STANDARD
 
     @classmethod
     def packModel(cls, model, battleResults):
@@ -28,6 +35,7 @@ class FunRandomBattleInfo(BattleInfo, FunAssetPacksMixin, FunSubModesWatcher):
         model.setAssetsPointer(cls.getModeAssetsPointer())
         subMode = cls.getSubMode(getEventID(battleResults.reusable))
         model.setSubModeAssetsPointer(subMode.getAssetsPointer())
+        model.setBattleType(cls._BATTLE_TYPE)
 
 
 class FunRandomPersonalEfficiency(PersonalEfficiency, FunSubModesWatcher):
@@ -43,7 +51,7 @@ class FunRandomPersonalEfficiency(PersonalEfficiency, FunSubModesWatcher):
     @classmethod
     def _getParameterList(cls, vehicle, battleResults):
         subMode = cls.getSubMode(getEventID(battleResults.reusable))
-        allParameters = subMode.getEfficiencyParameters() if subMode is not None else {}
+        allParameters = subMode.getConfigurationModel().subMode.pbsEfficiency if subMode is not None else {}
         params = list(allParameters.get(vehicle.type, ()))
         params = params or super(FunRandomPersonalEfficiency, cls)._getParameterList(vehicle, battleResults)
         return params[:FunEfficiencyParameterCount.MAX]
@@ -52,6 +60,16 @@ class FunRandomPersonalEfficiency(PersonalEfficiency, FunSubModesWatcher):
 class FunRandomTeamStats(TeamStats):
     _PLAYER_MODEL_CLS = FunPlayerModel
     _SORTING_PRIORITIES = ((TeamStatsColumnTypes.XP, SortingOrder.DESC), (TeamStatsColumnTypes.DAMAGE, SortingOrder.DESC), (TeamStatsColumnTypes.PLAYER, SortingOrder.ASC))
+    _STATS_EFFICIENCY = ((TeamStatsColumnTypes.DAMAGE, lambda sInfo: sInfo.damageDealt, StatsValueType.INTEGER), (TeamStatsColumnTypes.FRAG, lambda sInfo: sInfo.kills, StatsValueType.INTEGER), (TeamStatsColumnTypes.XP, lambda sInfo: sInfo.xp, StatsValueType.INTEGER))
+
+    @classmethod
+    def _packEfficiency(cls, efficiencyModel, summarizeInfo):
+        efficiencyParams = efficiencyModel.getParameters()
+        for paramType, extractor, valueType in cls._STATS_EFFICIENCY:
+            paramModel = FunStatsEfficiencyParamModel()
+            paramModel.setValue(extractor(summarizeInfo))
+            paramModel.setParamValueType(valueType)
+            efficiencyParams.set(paramType, paramModel)
 
 
 class FunRandomPersonalRewards(PersonalRewards):

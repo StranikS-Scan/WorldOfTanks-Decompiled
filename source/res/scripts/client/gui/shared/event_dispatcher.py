@@ -1,11 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/event_dispatcher.py
 import logging
-import typing
 from operator import attrgetter
-import Steam
 import adisp
+import typing
 from BWUtil import AsyncReturn
+from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
+from helpers.aop import pointcutable
+from shared_utils import first
+import Steam
 from CurrentVehicle import HeroTankPreviewAppearance
 from advanced_achievements_client.constants import TROPHIES_ACHIEVEMENT_ID
 from constants import GameSeasonType, RentType
@@ -16,6 +19,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID, I18nConfirmDialogMeta, I18nInfoDialogMeta
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import SellModuleMeta
 from gui.Scaleform.daapi.view.lobby.clans.clan_helpers import getClanQuestURL
+from gui.Scaleform.daapi.view.lobby.lobby_constants import getSettingsWindowAlias
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL
 from gui.Scaleform.daapi.view.lobby.shared.states import BrowserLobbyTopState
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyBattlePassUrl, getBuyCollectibleVehiclesUrl, getClientControlledCloseCtx, getShopURL, getTelecomRentVehicleUrl
@@ -33,6 +37,7 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.clans.clan_cache import g_clanCache
 from gui.game_control.links import URLMacros
+from gui.game_control.wot_plus.utils import shouldRedirectToSteamInfoPage
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.dialogs.template_settings.default_dialog_template_settings import DisplayFlags
@@ -44,9 +49,10 @@ from gui.impl.lobby.tank_setup.dialogs.refill_shells import ExitFromShellsConfir
 from gui.impl.pub.lobby_window import LobbyNotificationWindow, LobbyWindow
 from gui.impl.pub.notification_commands import EventNotificationCommand, NotificationEvent, WindowNotificationCommand
 from gui.limited_ui.lui_rules_storage import LUI_RULES
-from gui.prb_control.settings import CTRL_ENTITY_TYPE, PREBATTLE_ACTION_NAME
 from gui.prb_control.entities.base.ctx import PrbAction
+from gui.prb_control.settings import CTRL_ENTITY_TYPE, PREBATTLE_ACTION_NAME
 from gui.shared import events, g_eventBus
+from gui.shared.account_settings_helper import AccountSettingsHelper
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Tankman import NO_SLOT, NO_TANKMAN
@@ -58,11 +64,9 @@ from gui.shared.utils.functions import getUniqueViewName, getViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shop import showBlueprintsExchangeOverlay, showBuyGoldForRentWebOverlay, showBuyProductOverlay
 from helpers import dependency
-from helpers.aop import pointcutable
 from items import ITEM_TYPES, parseIntCompactDescr
 from items import vehicles as vehicles_core
 from nations import NAMES
-from shared_utils import first
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBattlePassController, IBoostersController, IBrowserController, IClanNotificationController, ICollectionsSystemController, IHeroTankController, IMarathonEventsController, IReferralProgramController, ILimitedUIController
 from skeletons.gui.goodies import IGoodiesCache
@@ -274,7 +278,7 @@ def showCongrats(context):
 
 
 def showBlueprintView(vehicleCD):
-    from gui.Scaleform.daapi.view.lobby.techtree.states import BlueprintState
+    from gui.impl.lobby.blueprints.states import BlueprintState
     BlueprintState.goTo(vehicleCD=vehicleCD)
 
 
@@ -348,9 +352,10 @@ def showPlatoonInfoDialog(resources):
     raise AsyncReturn(result)
 
 
-def showResearchView(vehTypeCompDescr):
-    from gui.Scaleform.daapi.view.lobby.techtree.states import ResearchState
-    ResearchState.goTo(rootCD=vehTypeCompDescr)
+def showResearchView(intCD):
+    from gui.impl.lobby.vehicle_hub import VehicleHubCtx, ModulesState
+    ModulesState.goTo(vhCtx=VehicleHubCtx(intCD=intCD, vehicleStrCD=None, style=None, outfit=None))
+    return
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -807,7 +812,8 @@ def requestProfile(databaseID, userName, successCallback):
 
 
 def showSettingsWindow(redefinedKeyMode=False, tabIndex=None, isBattleSettings=False):
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.SETTINGS_WINDOW), ctx={'redefinedKeyMode': redefinedKeyMode,
+    alias = getSettingsWindowAlias()
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias), ctx={'redefinedKeyMode': redefinedKeyMode,
      'tabIndex': tabIndex,
      'isBattleSettings': isBattleSettings}), scope=EVENT_BUS_SCOPE.GLOBAL)
 
@@ -857,7 +863,7 @@ def showExchangeXPDialogWindow(needXP=None, parent=None):
     if guiLoader.windowsManager.getViewByLayoutID(layoutID) is None:
         wrapper = FullScreenDialogWindowWrapper(ExchangeXPWindowDialog(layoutID=layoutID, ctx=ctx), parent=parent, layer=WindowLayer.FULLSCREEN_WINDOW, doBlur=True)
         result = yield wg_await(dialogs.show(wrapper))
-        status = True if result.result in DialogButtons.ACCEPT_BUTTONS else False
+        status = result.result in DialogButtons.ACCEPT_BUTTONS
         raise AsyncReturn(tuple([status] + list(result.data)))
     return
 
@@ -975,7 +981,7 @@ def showSeniorityRewardAwardWindow(data, notificationMgr=None):
 
 
 @dependency.replace_none_kwargs(battlePass=IBattlePassController)
-def showBattlePass(childStateID=R.invalid(), chapterID=0, battlePass=None, directNavigation=False, **kwargs):
+def showBattlePass(childStateID=R.invalid(), chapterID=0, selectedChapter=0, battlePass=None, directNavigation=False, **kwargs):
     from gui.impl.lobby.battle_pass.common import getActualBattlePassIDs
     from gui.impl.lobby.battle_pass.states import BattlePassState, STATES
     if battlePass.isPaused():
@@ -986,21 +992,21 @@ def showBattlePass(childStateID=R.invalid(), chapterID=0, battlePass=None, direc
         STATES[childStateID].goTo(chapterID=chapterID, **kwargs)
         return
     guiLoader = dependency.instance(IGuiLoader)
-    if guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.battle_pass.MainView()):
+    if guiLoader.windowsManager.getViewByLayoutID(R.views.mono.battle_pass.main()):
         bp = R.aliases.battle_pass
         if childStateID in (bp.Progression(), bp.PostProgression()):
-            STATES[bp.ChapterChoice()].goTo(childStateID=childStateID, chapterID=chapterID, **kwargs)
-        STATES[childStateID].goTo(childStateID=childStateID, chapterID=chapterID, **kwargs)
+            STATES[bp.ChapterChoice()].goTo(chapterID=chapterID, **kwargs)
+        STATES[childStateID].goTo(chapterID=chapterID, **kwargs)
     else:
-        BattlePassState.goTo(childStateID=childStateID, chapterID=chapterID, **kwargs)
+        BattlePassState.goTo(childStateID=childStateID, chapterID=chapterID, selectedChapter=selectedChapter, **kwargs)
 
 
 @dependency.replace_none_kwargs(battlePass=IBattlePassController)
-def showBattlePassAwardsWindow(bonuses, data, useQueue=False, needNotifyClosing=True, packageRewards=None, battlePass=None):
+def showBattlePassAwardsWindow(bonuses, data, useQueue=False, needNotifyClosing=True, starterPack=None, packageRewards=None, battlePass=None):
     from gui.impl.lobby.battle_pass.battle_pass_awards_view import BattlePassAwardWindow
     if battlePass.isHoliday():
         data['chapter'] = battlePass.getHolidayChapterID()
-    findAndLoadWindow(useQueue, BattlePassAwardWindow, bonuses, data, packageRewards, needNotifyClosing)
+    findAndLoadWindow(useQueue, BattlePassAwardWindow, bonuses, data, packageRewards, starterPack, needNotifyClosing)
 
 
 def showBattlePassHowToEarnPointsView(chapterID=0):
@@ -1204,13 +1210,13 @@ def _killOldView(layoutID):
 
 
 def showOfferGiftsWindow(offerID, overrideSuccessCallback=None, overrideOnBackCallback=None):
-    from gui.impl.lobby.offers.offer_gifts_window import OfferGiftsWindow
     from gui.impl.lobby.offers.offer_banner_window import OfferBannerWindow
     layoutID = R.views.lobby.offers.OfferGiftsWindow()
     _killOldView(layoutID)
     if OfferBannerWindow.isLoaded(offerID):
         OfferBannerWindow.destroyBannerWindow(offerID)
-    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID, OfferGiftsWindow, ScopeTemplates.LOBBY_SUB_SCOPE), offerID=offerID, overrideSuccessCallback=overrideSuccessCallback, overrideOnBackCallback=overrideOnBackCallback), scope=EVENT_BUS_SCOPE.LOBBY)
+    from gui.Scaleform.daapi.view.lobby.storage.states import OfferGiftsState
+    OfferGiftsState.goTo(offerID=offerID, overrideSuccessCallback=overrideSuccessCallback, overrideOnBackCallback=overrideOnBackCallback)
 
 
 @wg_async
@@ -1376,14 +1382,15 @@ def showFrontlineConfirmDialog(skillsInteractor, vehicleType=''):
 @dependency.replace_none_kwargs(guiLoader=IGuiLoader)
 def showBattlePassActivateChapterConfirmDialog(chapterID, callback, guiLoader=None):
     from gui.impl.dialogs import dialogs
-    from gui.impl.lobby.battle_pass.activate_chapter_confirm_dialog import ActivateChapterConfirmDialog
-    view = guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.battle_pass.MainView())
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(chapterID=chapterID, layoutID=ActivateChapterConfirmDialog.LAYOUT_ID, wrappedViewClass=ActivateChapterConfirmDialog, parent=view.getParentWindow()))
+    from gui.impl.lobby.battle_pass.activate_chapter_confirm_dialog import ChapterConfirm
+    view = guiLoader.windowsManager.getViewByLayoutID(R.views.mono.battle_pass.main())
+    result = yield wg_await(dialogs.showSingleDialogWithResultData(chapterID=chapterID, layoutID=R.views.mono.battle_pass.dialogs.chapter_confirm(), wrappedViewClass=ChapterConfirm, parent=view.getParentWindow()))
     if result.busy:
         callback((False, {}))
     else:
         isOK, data = result.result
-        callback((isOK, data))
+        callback((isOK, data if data is not None else {}))
+    return
 
 
 @dependency.replace_none_kwargs(guiLoader=IGuiLoader)
@@ -1675,7 +1682,7 @@ def showWotPlusInfoPage(source, useCustomSoundSpace=False, includeSubscriptionIn
     from uilogging.wot_plus.loggers import WotPlusInfoPageLogger
     from gui.Scaleform.daapi.view.lobby.wot_plus.states import WotPlusInfoState
     WotPlusInfoPageLogger().logInfoPage(source, includeSubscriptionInfo)
-    url = GUI_SETTINGS.renewableSubscriptionInfoPage
+    url = GUI_SETTINGS.renewableSubscriptionInfoPage if not shouldRedirectToSteamInfoPage() else GUI_SETTINGS.renewableSubscriptionSteamInfoPage
     url = yield URLMacros().parse(url)
     ctx = {'url': url,
      'allowRightClick': False,
@@ -2113,6 +2120,20 @@ def showPM30RewardsWindow(ctx, notificationMgr=None):
     from gui.impl.lobby.personal_missions_30.rewards_view import RewardsViewWindow
     window = RewardsViewWindow(ctx)
     notificationMgr.append(WindowNotificationCommand(window))
+
+
+CREW_WELCOME_SCREEN_BATTLES_COUNT = 100
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def showPEWelcomeScreen(itemsCache=None):
+    from gui.impl.lobby.crew.welcome_screen_view import WelcomeScreenViewWindow
+    if AccountSettingsHelper.isWelcomeScreenShown(GuiSettingsBehavior.CREW_PE_WELCOME_SHOWN):
+        return
+    markAsViewed = lambda : AccountSettingsHelper.welcomeScreenShown(GuiSettingsBehavior.CREW_PE_WELCOME_SHOWN)
+    if itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount() < CREW_WELCOME_SCREEN_BATTLES_COUNT:
+        markAsViewed()
+        return
+    WelcomeScreenViewWindow(onCloseCallback=markAsViewed).load()
 
 
 @dependency.replace_none_kwargs(petController=IPetSystemController)

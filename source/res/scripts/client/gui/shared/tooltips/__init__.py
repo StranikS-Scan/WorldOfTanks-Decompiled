@@ -191,7 +191,7 @@ class ToolTipData(ToolTipBaseData):
 class WulfTooltipData(ToolTipData):
 
     def getDisplayableData(self, *args, **kwargs):
-        parent = kwargs.get('parent', None)
+        parent = kwargs.get('parent')
         return WindowImpl(wndFlags=WindowFlags.SERVICE_WINDOW, content=self.getTooltipContent(*args, **kwargs), parent=parent, areaID=R.areas.specific())
 
     def buildToolTip(self, *args, **kwargs):

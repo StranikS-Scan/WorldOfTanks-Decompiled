@@ -708,7 +708,7 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
         if hasCamouflage != currVehHasCamouflage:
             return True
         currVehBattleBoosters = self.__vehicle.battleBoosters.installed
-        if currVehBattleBoosters.getCapacity() > 0 and not battleBooster == currVehBattleBoosters[0]:
+        if currVehBattleBoosters.getCapacity() > 0 and battleBooster != currVehBattleBoosters[0]:
             return True
         if currVehHasCamouflage:
             targetVehicle = Vehicle(self.__vehicle.descriptor.makeCompactDescr())

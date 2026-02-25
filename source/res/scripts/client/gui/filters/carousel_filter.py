@@ -45,7 +45,7 @@ class _CarouselFilter(object):
         self._clientSections = ()
         self._criteriesGroups = ()
         self._disabledUpdateCriteries = False
-        self.__filterDefaults = None
+        self._filterDefaults = None
         return
 
     @property
@@ -58,9 +58,9 @@ class _CarouselFilter(object):
 
     @property
     def filterDefaults(self):
-        if self.__filterDefaults is None:
-            self.__filterDefaults = AccountSettings.getFilterDefaults(self._serverSections + self._clientSections)
-        return self.__filterDefaults
+        if self._filterDefaults is None:
+            self._filterDefaults = AccountSettings.getFilterDefaults(self._serverSections + self._clientSections)
+        return self._filterDefaults
 
     def setDisabledUpdateCriteries(self, disabled):
         self._disabledUpdateCriteries = disabled
@@ -214,6 +214,15 @@ class SessionCarouselFilter(_CarouselFilter):
         super(SessionCarouselFilter, self).__init__()
         self._clientSections = tuple()
         self._criteriesGroups = (EventCriteriesGroup(), BasicCriteriesGroup())
+
+    @property
+    def filterDefaults(self):
+        if self._filterDefaults is None:
+            self._filterDefaults = dict()
+            for section in self._clientSections:
+                self._filterDefaults.update(AccountSettings.getSessionSettingsDefault(section))
+
+        return self._filterDefaults
 
     def load(self):
         defaultFilters = dict()

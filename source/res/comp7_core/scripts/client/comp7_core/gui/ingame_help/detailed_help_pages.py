@@ -20,7 +20,7 @@ class Comp7CorePagesBuilder(DetailedHelpPagesBuilder):
 
     @classmethod
     def priority(cls):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     @classmethod
     def buildPages(cls, ctx):

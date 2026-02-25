@@ -54,4 +54,4 @@ class BattlePassVehicleAwardWindow(LobbyNotificationWindow):
     __slots__ = ()
 
     def __init__(self, data):
-        super(BattlePassVehicleAwardWindow, self).__init__(content=BattlePassVehicleAwardView(R.views.lobby.battle_pass.BattlePassVehicleAwardView(), data=data))
+        super(BattlePassVehicleAwardWindow, self).__init__(content=BattlePassVehicleAwardView(R.views.mono.battle_pass.vehicle_cap_award(), data=data))

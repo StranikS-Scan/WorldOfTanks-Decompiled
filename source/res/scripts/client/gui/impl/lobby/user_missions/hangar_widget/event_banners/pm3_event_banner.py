@@ -3,8 +3,8 @@
 from account_helpers.settings_core.settings_constants import PersonalMission3
 from gui.impl.gen import R
 from gui.impl import backport
-from gui.impl.gen.view_models.views.lobby.missions.widget.pm3_banner_tooltip_view_model import BannerTypeEnum
 from gui.impl.gen.view_models.views.lobby.user_missions.constants.event_banner_state import EventBannerState
+from gui.impl.gen.view_models.views.lobby.user_missions.tooltips.pm3_banner_tooltip_view_model import BannerTypeEnum
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.base_event_banner import BaseEventBanner
 from gui.impl.lobby.user_missions.tooltips.pm3_banner_tooltip import PM3BannerTooltipView
 from gui.shared.event_dispatcher import showPersonalMissionMainWindow, showPersonalMissionCampaignSelectorWindow

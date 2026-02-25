@@ -3,7 +3,9 @@
 from enum import Enum
 from frameworks.wulf import Array, ViewModel
 from gui.impl.gen.view_models.views.lobby.achievements.achievement_model import AchievementModel
+from gui.impl.gen.view_models.views.lobby.achievements.views.summary.background_model import BackgroundModel
 from gui.impl.gen.view_models.views.lobby.achievements.views.summary.other_player_info_model import OtherPlayerInfoModel
+from gui.impl.gen.view_models.views.lobby.achievements.views.summary.ribbon_model import RibbonModel
 from gui.impl.gen.view_models.views.lobby.achievements.views.summary.statistic_item_model import StatisticItemModel
 
 class EditState(Enum):
@@ -13,9 +15,9 @@ class EditState(Enum):
 
 
 class SummaryViewModel(ViewModel):
-    __slots__ = ('onAchievementsSettings',)
+    __slots__ = ('onAchievementsSettings', 'onCustomizationConfirmed', 'onCustomizationDiscard', 'onSetBackgroundDraft', 'onSetRibbonDraft', 'onSetIsInCustomizationMode')
 
-    def __init__(self, properties=25, commands=1):
+    def __init__(self, properties=35, commands=6):
         super(SummaryViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -26,161 +28,241 @@ class SummaryViewModel(ViewModel):
     def getOtherPlayerInfoType():
         return OtherPlayerInfoModel
 
+    @property
+    def background(self):
+        return self._getViewModel(1)
+
+    @staticmethod
+    def getBackgroundType():
+        return BackgroundModel
+
+    @property
+    def backgroundDraft(self):
+        return self._getViewModel(2)
+
+    @staticmethod
+    def getBackgroundDraftType():
+        return BackgroundModel
+
+    @property
+    def ribbon(self):
+        return self._getViewModel(3)
+
+    @staticmethod
+    def getRibbonType():
+        return RibbonModel
+
+    @property
+    def ribbonDraft(self):
+        return self._getViewModel(4)
+
+    @staticmethod
+    def getRibbonDraftType():
+        return RibbonModel
+
     def getIsSummaryEnabled(self):
-        return self._getBool(1)
+        return self._getBool(5)
 
     def setIsSummaryEnabled(self, value):
-        self._setBool(1, value)
+        self._setBool(5, value)
 
     def getIsWTREnabled(self):
-        return self._getBool(2)
+        return self._getBool(6)
 
     def setIsWTREnabled(self, value):
-        self._setBool(2, value)
+        self._setBool(6, value)
 
     def getIsEditOpened(self):
-        return self._getBool(3)
+        return self._getBool(7)
 
     def setIsEditOpened(self, value):
-        self._setBool(3, value)
+        self._setBool(7, value)
 
     def getIsOtherPlayer(self):
-        return self._getBool(4)
+        return self._getBool(8)
 
     def setIsOtherPlayer(self, value):
-        self._setBool(4, value)
+        self._setBool(8, value)
 
     def getCurrentRatingRank(self):
-        return self._getNumber(5)
-
-    def setCurrentRatingRank(self, value):
-        self._setNumber(5, value)
-
-    def getPrevCurrentRatingRank(self):
-        return self._getNumber(6)
-
-    def setPrevCurrentRatingRank(self, value):
-        self._setNumber(6, value)
-
-    def getCurrentRatingSubRank(self):
-        return self._getNumber(7)
-
-    def setCurrentRatingSubRank(self, value):
-        self._setNumber(7, value)
-
-    def getPrevCurrentRatingSubRank(self):
-        return self._getNumber(8)
-
-    def setPrevCurrentRatingSubRank(self, value):
-        self._setNumber(8, value)
-
-    def getPersonalScore(self):
         return self._getNumber(9)
 
-    def setPersonalScore(self, value):
+    def setCurrentRatingRank(self, value):
         self._setNumber(9, value)
 
-    def getPrevPersonalScore(self):
+    def getPrevCurrentRatingRank(self):
         return self._getNumber(10)
 
-    def setPrevPersonalScore(self, value):
+    def setPrevCurrentRatingRank(self, value):
         self._setNumber(10, value)
 
-    def getRequiredNumberOfBattles(self):
+    def getCurrentRatingSubRank(self):
         return self._getNumber(11)
 
-    def setRequiredNumberOfBattles(self, value):
+    def setCurrentRatingSubRank(self, value):
         self._setNumber(11, value)
 
-    def getBattlesLeftCount(self):
+    def getPrevCurrentRatingSubRank(self):
         return self._getNumber(12)
 
-    def setBattlesLeftCount(self, value):
+    def setPrevCurrentRatingSubRank(self, value):
         self._setNumber(12, value)
 
+    def getPersonalScore(self):
+        return self._getNumber(13)
+
+    def setPersonalScore(self, value):
+        self._setNumber(13, value)
+
+    def getPrevPersonalScore(self):
+        return self._getNumber(14)
+
+    def setPrevPersonalScore(self, value):
+        self._setNumber(14, value)
+
+    def getRequiredNumberOfBattles(self):
+        return self._getNumber(15)
+
+    def setRequiredNumberOfBattles(self, value):
+        self._setNumber(15, value)
+
+    def getBattlesLeftCount(self):
+        return self._getNumber(16)
+
+    def setBattlesLeftCount(self, value):
+        self._setNumber(16, value)
+
     def getStatistic(self):
-        return self._getArray(13)
+        return self._getArray(17)
 
     def setStatistic(self, value):
-        self._setArray(13, value)
+        self._setArray(17, value)
 
     @staticmethod
     def getStatisticType():
         return StatisticItemModel
 
     def getEditState(self):
-        return EditState(self._getString(14))
+        return EditState(self._getString(18))
 
     def setEditState(self, value):
-        self._setString(14, value.value)
+        self._setString(18, value.value)
 
     def getNumberOfUniqueAwards(self):
-        return self._getNumber(15)
-
-    def setNumberOfUniqueAwards(self, value):
-        self._setNumber(15, value)
-
-    def getTotalAwards(self):
-        return self._getNumber(16)
-
-    def setTotalAwards(self, value):
-        self._setNumber(16, value)
-
-    def getCurrentMastery(self):
-        return self._getNumber(17)
-
-    def setCurrentMastery(self, value):
-        self._setNumber(17, value)
-
-    def getTotalMastery(self):
-        return self._getNumber(18)
-
-    def setTotalMastery(self, value):
-        self._setNumber(18, value)
-
-    def getAchievementRibbonLength(self):
         return self._getNumber(19)
 
-    def setAchievementRibbonLength(self, value):
+    def setNumberOfUniqueAwards(self, value):
         self._setNumber(19, value)
 
+    def getTotalAwards(self):
+        return self._getNumber(20)
+
+    def setTotalAwards(self, value):
+        self._setNumber(20, value)
+
+    def getCurrentMastery(self):
+        return self._getNumber(21)
+
+    def setCurrentMastery(self, value):
+        self._setNumber(21, value)
+
+    def getTotalMastery(self):
+        return self._getNumber(22)
+
+    def setTotalMastery(self, value):
+        self._setNumber(22, value)
+
+    def getAchievementRibbonLength(self):
+        return self._getNumber(23)
+
+    def setAchievementRibbonLength(self, value):
+        self._setNumber(23, value)
+
     def getSignificantAchievements(self):
-        return self._getArray(20)
+        return self._getArray(24)
 
     def setSignificantAchievements(self, value):
-        self._setArray(20, value)
+        self._setArray(24, value)
 
     @staticmethod
     def getSignificantAchievementsType():
         return AchievementModel
 
     def getRegistrationDate(self):
-        return self._getString(21)
+        return self._getString(25)
 
     def setRegistrationDate(self, value):
-        self._setString(21, value)
+        self._setString(25, value)
 
     def getLastVisitDate(self):
-        return self._getString(22)
+        return self._getString(26)
 
     def setLastVisitDate(self, value):
-        self._setString(22, value)
+        self._setString(26, value)
 
     def getLastVisitTime(self):
-        return self._getString(23)
+        return self._getString(27)
 
     def setLastVisitTime(self, value):
-        self._setString(23, value)
+        self._setString(27, value)
 
     def getIsSuccessfullyEdited(self):
-        return self._getBool(24)
+        return self._getBool(28)
 
     def setIsSuccessfullyEdited(self, value):
-        self._setBool(24, value)
+        self._setBool(28, value)
+
+    def getIsCustomizationButtonVisible(self):
+        return self._getBool(29)
+
+    def setIsCustomizationButtonVisible(self, value):
+        self._setBool(29, value)
+
+    def getIsCustomizationButtonEnabled(self):
+        return self._getBool(30)
+
+    def setIsCustomizationButtonEnabled(self, value):
+        self._setBool(30, value)
+
+    def getCustomizationButtonTooltip(self):
+        return self._getString(31)
+
+    def setCustomizationButtonTooltip(self, value):
+        self._setString(31, value)
+
+    def getBackgroundOptions(self):
+        return self._getArray(32)
+
+    def setBackgroundOptions(self, value):
+        self._setArray(32, value)
+
+    @staticmethod
+    def getBackgroundOptionsType():
+        return BackgroundModel
+
+    def getRibbonOptions(self):
+        return self._getArray(33)
+
+    def setRibbonOptions(self, value):
+        self._setArray(33, value)
+
+    @staticmethod
+    def getRibbonOptionsType():
+        return RibbonModel
+
+    def getIsInCustomizationMode(self):
+        return self._getBool(34)
+
+    def setIsInCustomizationMode(self, value):
+        self._setBool(34, value)
 
     def _initialize(self):
         super(SummaryViewModel, self)._initialize()
         self._addViewModelProperty('otherPlayerInfo', OtherPlayerInfoModel())
+        self._addViewModelProperty('background', BackgroundModel())
+        self._addViewModelProperty('backgroundDraft', BackgroundModel())
+        self._addViewModelProperty('ribbon', RibbonModel())
+        self._addViewModelProperty('ribbonDraft', RibbonModel())
         self._addBoolProperty('isSummaryEnabled', True)
         self._addBoolProperty('isWTREnabled', True)
         self._addBoolProperty('isEditOpened', False)
@@ -205,4 +287,15 @@ class SummaryViewModel(ViewModel):
         self._addStringProperty('lastVisitDate', '')
         self._addStringProperty('lastVisitTime', '')
         self._addBoolProperty('isSuccessfullyEdited', False)
+        self._addBoolProperty('isCustomizationButtonVisible', False)
+        self._addBoolProperty('isCustomizationButtonEnabled', False)
+        self._addStringProperty('customizationButtonTooltip', '')
+        self._addArrayProperty('backgroundOptions', Array())
+        self._addArrayProperty('ribbonOptions', Array())
+        self._addBoolProperty('isInCustomizationMode', False)
         self.onAchievementsSettings = self._addCommand('onAchievementsSettings')
+        self.onCustomizationConfirmed = self._addCommand('onCustomizationConfirmed')
+        self.onCustomizationDiscard = self._addCommand('onCustomizationDiscard')
+        self.onSetBackgroundDraft = self._addCommand('onSetBackgroundDraft')
+        self.onSetRibbonDraft = self._addCommand('onSetRibbonDraft')
+        self.onSetIsInCustomizationMode = self._addCommand('onSetIsInCustomizationMode')

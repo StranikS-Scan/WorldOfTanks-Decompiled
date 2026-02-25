@@ -26,10 +26,10 @@ _logger = logging.getLogger(__name__)
 class Assembler(object):
 
     def checkSlotMarker(self, slotMarker):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def assemble(self, gameObject, slotMarker):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     @staticmethod
     def _replaceWithNodeDriver(go, appearance):

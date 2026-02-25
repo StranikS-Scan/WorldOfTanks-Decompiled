@@ -316,7 +316,7 @@ class _SlashedValueItem(base.StatsItem):
 class _RedSlashedValueItem(base.StatsItem):
 
     def _convert(self, value, reusable):
-        isEmpty = False if value > 0 else True
+        isEmpty = value <= 0
         converted = str(value)
         return (isEmpty, converted)
 

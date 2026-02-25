@@ -204,6 +204,9 @@ class IItemsRequester(requesters.IRequester):
     def getDogTag(self, databaseID=None):
         raise NotImplementedError
 
+    def getServiceRecordCustomization(self, databaseID=None):
+        raise NotImplementedError
+
     def getBattleRoyaleStats(self, arenaType, databaseID=None, vehicleIntCD=None):
         raise NotImplementedError
 

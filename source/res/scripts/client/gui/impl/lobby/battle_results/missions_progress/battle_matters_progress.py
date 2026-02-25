@@ -90,8 +90,8 @@ class BattleMattersProgressPresenter(ViewComponent[BattleMattersProgressModel], 
             questsModel = model.getBattleMatters()
             questsModel.clear()
             model.setNavigationEnabled(self.__battleMattersController.isEnabled())
-            for event, pCur, pPrev, _, _ in self.__progress:
-                questsModel.addViewModel(self.__createQuestModel(event, pCur, pPrev))
+            for event, pCur, pPrev, _, isCompleted in self.__progress:
+                questsModel.addViewModel(self.__createQuestModel(event, pCur, pPrev, isCompleted))
 
             questsModel.invalidate()
 
@@ -107,11 +107,11 @@ class BattleMattersProgressPresenter(ViewComponent[BattleMattersProgressModel], 
         super(BattleMattersProgressPresenter, self)._finalize()
         return
 
-    def __createQuestModel(self, quest, pCur, pPrev):
+    def __createQuestModel(self, quest, pCur, pPrev, isCompleted):
         questModel = QuestViewModel()
         questModel.setNumber(quest.getOrder())
         questState = State.UNAVAILABLE
-        if quest.isCompleted():
+        if isCompleted:
             questState = State.DONE
         elif quest.isAvailable().isValid:
             questState = State.INPROGRESS

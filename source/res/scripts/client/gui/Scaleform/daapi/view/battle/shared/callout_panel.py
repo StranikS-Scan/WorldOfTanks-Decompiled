@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/callout_panel.py
+from __future__ import absolute_import
 import CommandMapping
 import Event
 from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES
@@ -62,7 +63,7 @@ class CalloutPanel(CalloutPanelMeta):
         if self.__hidingInProgress is True:
             return
         else:
-            cmdName = _CALLOUT_COMMMAND_TO_UI_VISUAL_STATE.get(commandReceived, None)
+            cmdName = _CALLOUT_COMMMAND_TO_UI_VISUAL_STATE.get(commandReceived)
             answered = wasAnswered and cmdName is not None
             self.as_setHideDataS(answered, cmdName)
             return

@@ -27,7 +27,7 @@ class VehicleModel(ViewModel):
     WOT_PLUS_TAG = 'wotPlus'
     COLLECTOR_VEHICLES_TAG = 'collectorVehicle'
 
-    def __init__(self, properties=11, commands=0):
+    def __init__(self, properties=10, commands=0):
         super(VehicleModel, self).__init__(properties=properties, commands=commands)
 
     def getName(self):
@@ -84,17 +84,11 @@ class VehicleModel(ViewModel):
     def setRoleKey(self, value):
         self._setString(8, value)
 
-    def getRole(self):
+    def getVehicleCD(self):
         return self._getNumber(9)
 
-    def setRole(self, value):
-        self._setNumber(9, value)
-
-    def getVehicleCD(self):
-        return self._getNumber(10)
-
     def setVehicleCD(self, value):
-        self._setNumber(10, value)
+        self._setNumber(9, value)
 
     def _initialize(self):
         super(VehicleModel, self)._initialize()
@@ -107,5 +101,4 @@ class VehicleModel(ViewModel):
         self._addStringProperty('tags', '')
         self._addStringProperty('nation', '')
         self._addStringProperty('roleKey', '')
-        self._addNumberProperty('role', 0)
         self._addNumberProperty('vehicleCD', 0)

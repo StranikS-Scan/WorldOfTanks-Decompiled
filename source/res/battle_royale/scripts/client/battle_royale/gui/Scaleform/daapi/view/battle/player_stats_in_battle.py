@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/player_stats_in_battle.py
 import logging
+import BigWorld
 from constants import ARENA_BONUS_TYPE
 from gui.Scaleform.daapi.view.meta.BattleRoyalePlayerStatsMeta import BattleRoyalePlayerStatsMeta
 from gui.Scaleform.locale.BATTLE_ROYALE import BATTLE_ROYALE
@@ -8,10 +9,12 @@ from gui.battle_control import avatar_getter
 from gui.server_events.battle_royale_formatters import IngameBattleRoyaleResultsViewDataFormatter
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.game_control import IBattleRoyaleController
 _logger = logging.getLogger(__name__)
 
 class BattleRoyalePlayerStats(BattleRoyalePlayerStatsMeta):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
 
     def __init__(self):
         super(BattleRoyalePlayerStats, self).__init__()
@@ -46,3 +49,12 @@ class BattleRoyalePlayerStats(BattleRoyalePlayerStatsMeta):
 
     def __onShowDeathScreen(self):
         self.as_setDataS(IngameBattleRoyaleResultsViewDataFormatter(self.__sessionProvider, {}).getSummaryStats())
+        if self.__battleRoyaleController.isStPatrick():
+            self.__setStpCoins()
+
+    def __setStpCoins(self):
+        vehicle = BigWorld.entity(BigWorld.player().playerVehicleID)
+        stPatrickComp = vehicle.dynamicComponents.get('vehicleBRStPatrickComponent')
+        if stPatrickComp:
+            brComponent = self.__sessionProvider.arenaVisitor.getComponentSystem().battleRoyaleComponent
+            self.as_setStpCoinsS(initial=stPatrickComp.totalCoins, factor=brComponent.dailyBonusFactor)

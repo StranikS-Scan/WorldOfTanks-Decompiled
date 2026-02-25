@@ -43,8 +43,8 @@ class StagedJetBoostersMechanicWidget(StagedJetBoostersWidgetMeta, ContainersLis
         self.__invalidateAll(state, isInstantly=True)
 
     @eventHandler
-    def onStateObservation(self, newState):
-        self.__invalidateAll(newState)
+    def onStateObservation(self, state):
+        self.__invalidateAll(state)
 
     @eventHandler
     def onStateTick(self, state):

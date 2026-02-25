@@ -5,6 +5,7 @@ import typing
 import logging
 from ClientSelectableCameraObject import ClientSelectableCameraObject
 from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
+from battle_royale.gui.impl.lobby.views.presenters.battle_royale_event_presenter import BattleRoyaleEventPresenter
 from battle_royale.gui.Scaleform.daapi.view.lobby.hangar.carousel.filter import RoyaleCarouselFilter
 from battle_royale.gui.impl.lobby.views.user_missions.hangar_widget.presenters.user_missions_presenter import BattleRoyaleUserMissionsPresenter
 from battle_royale.gui.impl.lobby.views.presenters.vehicle_filters_presenter import BattleRoyaleVehicleFiltersPresenter
@@ -78,6 +79,7 @@ class BattleRoyaleHangarView(ViewComponent[RouterModel], IRoutableView):
          hangar.HeroTank(): HeroTankPresenter,
          hangar.SpaceInteraction(): lambda : SpaceInteractionPresenter(self.__createSelectableLogic()),
          hangar.LootboxEntryPoint(): LootboxEntryPointPresenter,
+         battleRoyale.Events(): BattleRoyaleEventPresenter,
          battleRoyale.LoadoutPanelContainer(): LoadoutContainerPresenter,
          battleRoyale.VehiclesInventory(): lambda : BattleRoyaleVehiclesInventoryPresenter(self.__vehicleFilter, self.__battleRoyalVehicleCriteria()),
          battleRoyale.VehiclesFilter(): BattleRoyaleVehicleFiltersPresenter,

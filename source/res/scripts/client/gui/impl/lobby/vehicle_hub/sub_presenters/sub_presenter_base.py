@@ -10,6 +10,7 @@ if typing.TYPE_CHECKING:
     from gui.impl.lobby.vehicle_hub.vehicle_hub_main_view import VehicleHubCtx
 
 class SubPresenterBase(SubModelPresenter):
+    __slots__ = ('__vhCtx',)
     _itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, model, parentView):

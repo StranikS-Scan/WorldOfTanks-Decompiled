@@ -152,7 +152,7 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
         buyPrice = item.getBuyPrice()
         buyPriceVO = getItemPricesVO(buyPrice)
         availableForPurchase = item.buyCount > 0
-        if availableForPurchase and not buyPrice == ITEM_PRICE_EMPTY:
+        if availableForPurchase and buyPrice != ITEM_PRICE_EMPTY:
             accountMoney = self.itemsCache.items.stats.money
             availableForPurchase &= buyPrice.price <= accountMoney
         if availableForPurchase and item.isProgressionAutoBound:

@@ -13,6 +13,8 @@ from gui.server_events.events_helpers import EventInfoModel
 from gui.periodic_battles.models import PrimeTime, PeriodType, PeriodInfo, AlertData, PERIOD_TO_STANDALONE, PrimeTimeStatus
 from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY
 from skeletons.connection_mgr import IConnectionManager
+if typing.TYPE_CHECKING:
+    from typing import Optional, Dict
 
 class SeasonProvider(ISeasonProvider):
     _ALERT_DATA_CLASS = AlertData
@@ -58,6 +60,15 @@ class SeasonProvider(ISeasonProvider):
         primeTimes = self.getPrimeTimes()
         currentTime = time_utils.getCurrentLocalServerTimestamp()
         return findFirst(lambda primeTime: primeTime.getNextPeriodStart(currentTime, currentCycleEndTime), primeTimes.values(), default=False)
+
+    def hasPrimeTimesPassedForCurrentCycle(self):
+        _, isCycleActive = self.getCurrentCycleInfo()
+        if not isCycleActive:
+            return False
+        startDate = self.getCurrentSeason().getStartDate()
+        primeTimes = self.getPrimeTimes()
+        currentTime = time_utils.getCurrentLocalServerTimestamp()
+        return findFirst(lambda primeTime: bool(primeTime.getPeriodsBetween(startDate, currentTime, includeEnd=False)), primeTimes.values(), default=False)
 
     def getClosestStateChangeTime(self, now=None):
         now = now or self.__getNow()
@@ -217,10 +228,12 @@ class SeasonProvider(ISeasonProvider):
         else:
             return None
 
-    def getPrimeTimeStatus(self, now=None, peripheryID=None):
+    def getPrimeTimeStatus(self, now=None, peripheryID=None, primeTimes=None):
         if peripheryID is None:
             peripheryID = self.__connectionMgr.peripheryID
-        primeTime = self.getPrimeTimes().get(peripheryID)
+        if primeTimes is None:
+            primeTimes = self.getPrimeTimes()
+        primeTime = primeTimes.get(peripheryID)
         if primeTime is None:
             return (PrimeTimeStatus.NOT_SET, 0, False)
         elif not primeTime.hasAnyPeriods():

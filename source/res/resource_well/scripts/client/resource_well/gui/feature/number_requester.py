@@ -75,7 +75,6 @@ class ResourceWellNumberRequester(object):
     @wg_async
     def __subscribe(self):
         try:
-            yield wg_await(self.__semaphore.acquire())
             if self.__rewardID is None:
                 _logger.info('Requester can not subscribe to channel after the clearing.')
                 return
@@ -87,6 +86,7 @@ class ResourceWellNumberRequester(object):
             if not self.__reactiveCommunication.isChannelSubscriptionAvailable:
                 _logger.error('Channel subscription is unavailable! Please check reactive communication settings')
                 return
+            yield wg_await(self.__semaphore.acquire())
             self.__subscription = Subscription(channelName)
             status = yield wg_await(self.__reactiveCommunication.subscribeToChannel(self.__subscription))
             _logger.debug('Subscription status for channel <%s>: %s', channelName, status)

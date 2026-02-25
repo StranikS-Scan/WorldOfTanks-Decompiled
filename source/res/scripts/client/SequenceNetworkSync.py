@@ -184,7 +184,7 @@ class SequenceNetworkSyncManager(CGF.ComponentManager):
         if syncState == _INT_STATE_STOPPED and sequence.state != _STATE_STOPPED:
             sequence.stop()
             return
-        if syncState == _INT_STATE_RUNNING or syncState == _INT_STATE_PAUSED:
+        if syncState in (_INT_STATE_RUNNING, _INT_STATE_PAUSED):
             SequenceNetworkSyncManager.__updateTime(sync, sequence)
             return
 

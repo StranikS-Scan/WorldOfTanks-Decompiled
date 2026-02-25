@@ -5,6 +5,7 @@ import typing
 from frameworks.wulf import ViewSettings, WindowFlags
 from fun_random.gui.feature.fun_sounds import FUN_BATTLE_RESULTS_SOUND_SPACE
 from fun_random.gui.sounds.ambients import FunRandomBattleResultsEnv
+from fun_random.gui.shared.fun_system_factory import collectBattleResultsSoundEnv
 from gui.impl.pub import ViewImpl, WindowImpl
 from helpers import dependency
 from skeletons.connection_mgr import IConnectionManager
@@ -19,13 +20,12 @@ class FunRandomBattleResultsView(ViewImpl):
     __connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self, layoutID, *args, **kwargs):
-        self.__arenaUniqueID = kwargs.get('arenaUniqueID', None)
+        self.__arenaUniqueID = kwargs.get('arenaUniqueID')
         subPresenterCls = kwargs['subPresenterCls']
         modelClass = subPresenterCls.getViewModelType()
         viewModel = modelClass()
         self.__subPresenter = subPresenterCls(viewModel, self)
         super(FunRandomBattleResultsView, self).__init__(ViewSettings(layoutID, model=viewModel))
-        return
 
     @property
     def arenaUniqueID(self):
@@ -42,6 +42,12 @@ class FunRandomBattleResultsView(ViewImpl):
     def createToolTipContent(self, event, contentID):
         content = self.__subPresenter.createToolTipContent(event, contentID)
         return content if content is not None else super(FunRandomBattleResultsView, self).createToolTipContent(event, contentID)
+
+    def getDynamicSoundEnv(self):
+        statsController = self.__battleResults.getStatsCtrl(self.__arenaUniqueID)
+        battleResults = statsController.getResults()
+        arenaGuiType = battleResults.reusable.common.arenaGuiType
+        return collectBattleResultsSoundEnv(arenaGuiType) or self.__sound_env__
 
     def _initialize(self, *args, **kwargs):
         super(FunRandomBattleResultsView, self)._initialize(*args, **kwargs)

@@ -38,10 +38,7 @@ class ConsoleLogOutput(ILogOutput):
             LOG_ERROR(self.__makeHeader(area, message), *args)
 
     def __makeHeader(self, area, message):
-        if area in CLIENT_LOG_AREA_NAMES:
-            name = CLIENT_LOG_AREA_NAMES[area]
-        else:
-            name = 'N/A'
+        name = CLIENT_LOG_AREA_NAMES.get(area, 'N/A')
         return 'XMPP_PY::{0}. {1}'.format(name, message)
 
 

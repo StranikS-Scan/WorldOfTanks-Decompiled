@@ -114,7 +114,7 @@ class RocketAccelerationController(BigWorld.DynamicScriptComponent, ILifeCycleCo
             if appearance is None or not appearance.isConstructed or appearance.isDestroyed:
                 return False
             modelsSet = appearance.outfit.modelsSet
-            outfit = _DEFAULT_OUTFIT if not modelsSet else modelsSet
+            outfit = modelsSet if modelsSet else _DEFAULT_OUTFIT
             prefabPath = typeDescriptor.type.prefabs[outfit]['mechanicEffects'][0]
             loadAppearancePrefab(prefabPath, appearance, partial(self.__onLoaded, prefabPath))
             return True

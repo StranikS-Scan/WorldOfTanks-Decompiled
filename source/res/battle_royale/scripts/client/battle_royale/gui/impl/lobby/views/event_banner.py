@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/impl/lobby/views/event_banner.py
 from account_helpers.AccountSettings import AccountSettings, BATTLE_ROYALE_BANNER_FIRST_APPEARANCE_TIMESTAMP
-from helpers import dependency
-from helpers.time_utils import getCurrentLocalServerTimestamp
+from battle_royale.gui.constants import BattleRoyaleModeState
+from battle_royale.gui.impl.lobby.tooltips.banner_tooltip_view import BannerTooltipView
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.user_missions.constants.event_banner_state import EventBannerState
@@ -10,15 +10,15 @@ from gui.impl.lobby.user_missions.hangar_widget.event_banners.base_event_banner 
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_container import EventBannersContainer
 from gui.impl.lobby.user_missions.hangar_widget.services import IEventsService
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
-from gui.shared.utils.SelectorBattleTypesUtils import isKnownBattleType
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
+from gui.shared.utils.SelectorBattleTypesUtils import isKnownBattleType
+from helpers import dependency
+from helpers.time_utils import getCurrentLocalServerTimestamp
 from skeletons.gui.game_control import IBattleRoyaleController
-from battle_royale.gui.constants import BattleRoyaleModeState
-from battle_royale.gui.impl.lobby.tooltips.banner_tooltip_view import BannerTooltipView
 
 @dependency.replace_none_kwargs(battleRoyaleController=IBattleRoyaleController)
 def isBattleRoyaleEntryPointAvailable(battleRoyaleController=None):
-    return battleRoyaleController.isActive()
+    return battleRoyaleController.isActive() and not battleRoyaleController.isStPatrick()
 
 
 class BattleRoyaleEventBanner(BaseEventBanner):
@@ -90,15 +90,15 @@ class BattleRoyaleEventBanner(BaseEventBanner):
         if self._isVisible:
             return
         super(BattleRoyaleEventBanner, self).onAppear()
-        self.__battleRoyaleController.onEntryPointUpdated += self.__onUpdate
+        self.__battleRoyaleController.onEntryPointUpdated += self._onUpdate
 
     def onDisappear(self):
         if not self._isVisible:
             return
         super(BattleRoyaleEventBanner, self).onDisappear()
-        self.__battleRoyaleController.onEntryPointUpdated -= self.__onUpdate
+        self.__battleRoyaleController.onEntryPointUpdated -= self._onUpdate
 
-    def __onUpdate(self, *_):
+    def _onUpdate(self, *_):
         if isBattleRoyaleEntryPointAvailable():
             EventBannersContainer().onBannerUpdate(self)
         else:

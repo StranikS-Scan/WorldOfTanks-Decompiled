@@ -6,6 +6,7 @@ from gui.impl.gen.view_models.views.lobby.crew.common.skill.skill_extended_model
 from gui.impl.gen.view_models.views.lobby.crew.tooltips.crew_perks_tooltip_booster_model import CrewPerksTooltipBoosterModel
 
 class PerkType(Enum):
+    EMPTY = ''
     MAIN = 'main'
     SITUATIONAL = 'situational'
     COMMON = 'common'

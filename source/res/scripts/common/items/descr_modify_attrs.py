@@ -6,11 +6,11 @@ from functools import partial
 from math import tan, atan, radians, degrees
 from weakref import proxy
 from typing import TYPE_CHECKING
-from constants import IS_CELLAPP
+from constants import IS_CELLAPP, IS_CLIENT
 from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
 from descr_modify_attrs_allowed import DESCR_MODIFY_ATTRS_ALLOWED, DESCR_MODIFY_ATTRS_TYPE, IS_ARRAY
 from items.attributes_helpers import DESCR_MODIFY_ATTR_PREFIX, MODIFIER_TYPE
-from items.components.component_constants import HP_TO_WATTS, KMH_TO_MS
+from items.components.component_constants import HP_TO_WATTS, KMH_TO_MS, MS_TO_KMH
 if TYPE_CHECKING:
     import items.vehicle_items as vehicle_items
     from items.components.gun_components import GunShot
@@ -122,42 +122,7 @@ class EngineWrapper(ItemWrapper):
         super(EngineWrapper, self).__init__(engine)
         self.vehDescrWrapper = proxy(vehDescrWrapper)
 
-    @property
-    def power(self):
-        return self.item.power / HP_TO_WATTS
-
-    @power.setter
-    def power(self, value):
-        self.item.power = value * HP_TO_WATTS
-        xphysicsEngine = self.vehDescrWrapper.xphysicsEngine
-        if xphysicsEngine:
-            self.vehDescrWrapper.xphysicsEngine.smplEnginePower = value
-
-    @property
-    def maxSpeedForward(self):
-        return self.vehDescrWrapper.type.speedLimits[0] / KMH_TO_MS
-
-    @maxSpeedForward.setter
-    def maxSpeedForward(self, value):
-        value *= KMH_TO_MS
-        self.__setSpeedLimits(0, value)
-        xphysicsEngine = self.vehDescrWrapper.xphysicsEngine
-        if xphysicsEngine:
-            self.vehDescrWrapper.xphysicsEngine.smplFwMaxSpeed = value
-
-    @property
-    def maxSpeedBack(self):
-        return self.vehDescrWrapper.type.speedLimits[1] / KMH_TO_MS
-
-    @maxSpeedBack.setter
-    def maxSpeedBack(self, value):
-        value *= KMH_TO_MS
-        self.__setSpeedLimits(1, value)
-        xphysicsEngine = self.vehDescrWrapper.xphysicsEngine
-        if xphysicsEngine:
-            self.vehDescrWrapper.xphysicsEngine.smplBkMaxSpeed = value
-
-    def __setSpeedLimits(self, index, value):
+    def setSpeedLimits(self, index, value):
         type = self.vehDescrWrapper.type
         if isinstance(type.speedLimits, tuple):
             type.speedLimits = list(type.speedLimits)
@@ -615,6 +580,41 @@ def shotSpeedProcessor(obj, valueName, index, operation, attrName, value, vehDes
     return True
 
 
+def enginePowerProcessor(engine, valueName, index, operation, attrName, value, vehDescrWrapper):
+    applier = APPLIERS[operation]
+    engine.power = applier(engine.power / HP_TO_WATTS, value) * HP_TO_WATTS
+    xphysicsEngine = vehDescrWrapper.xphysicsEngine
+    if xphysicsEngine:
+        xphysicsEngine.smplEnginePower = applier(xphysicsEngine.smplEnginePower, value)
+    return True
+
+
+def maxSpeedForwardProcesser(engine, valueName, index, operation, attrName, value, vehDescrWrapper):
+    applier = APPLIERS[operation]
+    maxSpeedForwardMS = applier(vehDescrWrapper.type.speedLimits[0] * MS_TO_KMH, value) * KMH_TO_MS
+    engine.setSpeedLimits(0, maxSpeedForwardMS)
+    xphysicsEngine = vehDescrWrapper.xphysicsEngine
+    if xphysicsEngine:
+        if IS_CLIENT:
+            xphysicsEngine.smplFwMaxSpeed = applier(xphysicsEngine.smplFwMaxSpeed, value)
+        else:
+            xphysicsEngine.smplFwMaxSpeed = applier(xphysicsEngine.smplFwMaxSpeed * MS_TO_KMH, value) * KMH_TO_MS
+    return True
+
+
+def maxSpeedBackProcesser(engine, valueName, index, operation, attrName, value, vehDescrWrapper):
+    applier = APPLIERS[operation]
+    maxSpeedBackMS = applier(vehDescrWrapper.type.speedLimits[1] * MS_TO_KMH, value) * KMH_TO_MS
+    engine.setSpeedLimits(1, maxSpeedBackMS)
+    xphysicsEngine = vehDescrWrapper.xphysicsEngine
+    if xphysicsEngine:
+        if IS_CLIENT:
+            xphysicsEngine.smplBkMaxSpeed = applier(xphysicsEngine.smplBkMaxSpeed, value)
+        else:
+            xphysicsEngine.smplBkMaxSpeed = applier(xphysicsEngine.smplBkMaxSpeed * MS_TO_KMH, value) * KMH_TO_MS
+    return True
+
+
 customValueProcessors = {'gunPitchLimits/maxPitchDegrees': gunPitchLimitsProcessor,
  'gunPitchLimits/minPitchDegrees': gunPitchLimitsProcessor,
  'gun/turretYawLimitsDegrees': gunTurretYawLimitsDegrees,
@@ -626,7 +626,10 @@ customValueProcessors = {'gunPitchLimits/maxPitchDegrees': gunPitchLimitsProcess
  'shell2/deviceDamage': partial(armorSpallProcessor, 'shellTypeArmorSpalls2'),
  'shot0/speed': shotSpeedProcessor,
  'shot1/speed': shotSpeedProcessor,
- 'shot2/speed': shotSpeedProcessor}
+ 'shot2/speed': shotSpeedProcessor,
+ 'engine/power': enginePowerProcessor,
+ 'engine/maxSpeedForward': maxSpeedForwardProcesser,
+ 'engine/maxSpeedBack': maxSpeedBackProcesser}
 
 def parseValue(attrName):
     attrs = attrName.split('/')

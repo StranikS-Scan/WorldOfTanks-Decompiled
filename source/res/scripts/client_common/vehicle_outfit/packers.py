@@ -14,9 +14,7 @@ def pickPacker(itemTypeID):
         return CamouflagePacker
     if itemTypeID == GUI_ITEM_TYPE.PAINT:
         return PaintPacker
-    if itemTypeID == GUI_ITEM_TYPE.EMBLEM:
-        return DecalPacker
-    if itemTypeID == GUI_ITEM_TYPE.INSCRIPTION:
+    if itemTypeID == GUI_ITEM_TYPE.EMBLEM or itemTypeID == GUI_ITEM_TYPE.INSCRIPTION:
         return DecalPacker
     if itemTypeID == GUI_ITEM_TYPE.MODIFICATION:
         return ModificationPacker

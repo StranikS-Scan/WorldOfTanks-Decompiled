@@ -36,11 +36,11 @@ class FunSubModesInfo(IFunRandomController.IFunSubModesInfo):
     def getEventEndDate(self, now=None, subModesIDs=None):
         now = now or time_utils.getCurrentTimestamp()
         subModes = self.__subModes.getSubModes(subModesIDs)
-        leftSeasons = sorted([ s for s in list(chain.from_iterable([ sm.getAllSeasons() for sm in subModes ])) if s.getEndDate() > now ], key=lambda s: s.getStartDate())
+        leftSeasons = sorted([ s for s in chain.from_iterable([ sm.getAllSeasons() for sm in subModes ]) if s.getEndDate() > now ], key=lambda s: s.getStartDate())
         if not leftSeasons:
             return 0
         minEndTimestamp = leftSeasons[0].getEndDate()
-        return max([ s.getEndDate() for s in leftSeasons if s.getStartDate() <= minEndTimestamp ])
+        return max((s.getEndDate() for s in leftSeasons if s.getStartDate() <= minEndTimestamp))
 
     def getLeftTimeToPrimeTimesEnd(self, now=None, subModes=None):
         now = now or time_utils.getCurrentTimestamp()
@@ -77,7 +77,7 @@ class FunSubModesInfo(IFunRandomController.IFunSubModesInfo):
                 return FunSubModesStatus(state, min(nearestStartTimes) if nearestStartTimes else None, endTime=endTime)
             state = FunSubModesState.AVAILABLE
             periodInfos = tuple((pInfo for pInfo in periodInfos if pInfo.periodType not in _OUTSIDE_PERIODS))
-            latestEndTime = max([ pInfo.seasonBorderRight.timestamp for pInfo in periodInfos ])
+            latestEndTime = max((pInfo.seasonBorderRight.timestamp for pInfo in periodInfos))
             primeDelta = time_utils.getTimeDeltaFromNowInLocal(latestEndTime)
             if all((periodInfo.periodType in _NO_BATTLES_PERIODS for periodInfo in periodInfos)):
                 state = FunSubModesState.NOT_AVAILABLE_END

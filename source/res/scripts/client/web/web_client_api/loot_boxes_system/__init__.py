@@ -63,9 +63,7 @@ class LootBoxSystemWebApi(object):
         box = self.__itemsCache.items.tokens.getLootBoxByID(cmd.id)
         category = box.getCategory()
         eventName = box.getType()
-        if cmd.view_id == ViewsIDs.OVERLAY:
-            Views.load(ViewID.MAIN, subViewID=None, category=category, eventName=eventName)
-        elif cmd.view_id == ViewsIDs.SHOP:
+        if cmd.view_id == ViewsIDs.OVERLAY or cmd.view_id == ViewsIDs.SHOP:
             Views.load(ViewID.MAIN, subViewID=None, category=category, eventName=eventName)
         return
 

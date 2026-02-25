@@ -74,7 +74,6 @@ from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import ICollectionsSystemController, ILootBoxSystemController, IWinbackController, IWotPlusController
 from skeletons.gui.goodies import IGoodiesCache
-from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -85,7 +84,6 @@ if typing.TYPE_CHECKING:
     from account_helpers.offers.offer_bonuses import ItemsOfferBonus
     from gui.goodies.goodie_items import Booster, _PersonalDiscount, DemountKit, RecertificationForm, GoodieType
     from gui.shared.gui_items.customization import C11nStyleProgressData
-    from gui.lobby_context import LobbyContext
     from items.components.crew_skins_components import CrewSkin
     from gui.shared.gui_items.crew_book import CrewBook
 DEFAULT_CREW_LVL = 50
@@ -2262,20 +2260,23 @@ class UniversalCrewbook(SimpleBonus):
 
 
 class WoTPlusBonus(SimpleBonus):
+    _wotPlus = dependency.descriptor(IWotPlusController)
 
     def __init__(self, name):
         super(WoTPlusBonus, self).__init__(name, None)
         return
 
+    def isBetterThan(self, other):
+        return False
+
 
 class GoldBank(WoTPlusBonus):
-    _lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(GoldBank, self).__init__(WoTPlusBonusType.GOLD_BANK)
 
     def getTooltip(self):
-        goldReserveCapacity = self._lobbyContext.getServerSettings().getRenewableSubMaxGoldReserveCapacity()
+        goldReserveCapacity = self._wotPlus.getSettingsStorage().getMaxGoldReserveCapacity()
         headerData, bodyData = getSimpleTooltipData(self._name)
         header = i18n.makeString(headerData)
         body = i18n.makeString(bodyData, goldReserveCapacity=goldReserveCapacity)
@@ -2294,10 +2295,11 @@ class IdleCrewXP(WoTPlusBonus):
         super(IdleCrewXP, self).__init__(WoTPlusBonusType.IDLE_CREW_XP)
 
 
-class ExcludedMap(SimpleBonus):
+class ExcludedMap(WoTPlusBonus):
 
     def __init__(self, mapCount):
-        super(ExcludedMap, self).__init__(WoTPlusBonusType.EXCLUDED_MAP, mapCount)
+        super(ExcludedMap, self).__init__(WoTPlusBonusType.EXCLUDED_MAP)
+        self._value = mapCount
 
     @property
     def isPlural(self):
@@ -2313,6 +2315,10 @@ class ExcludedMap(SimpleBonus):
         header = i18n.makeString(headerData)
         body = i18n.makeString(bodyData, mapCount=self._value)
         return makeTooltip(header, body)
+
+    def isBetterThan(self, other):
+        super(ExcludedMap, self).isBetterThan(other)
+        return self._value > other.getValue()
 
 
 class FreeEquipmentDemounting(WoTPlusBonus):
@@ -2340,16 +2346,9 @@ class WoTPlusExclusiveVehicle(WoTPlusBonus):
 
 
 class WotPlusBattleBonuses(WoTPlusBonus):
-    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(WotPlusBattleBonuses, self).__init__(WoTPlusBonusType.BATTLE_BONUSES)
-
-    def getTooltip(self):
-        awardItem = R.strings.tooltips.awardItem.dyn(self._name)
-        serverSettings = self.__lobbyContext.getServerSettings()
-        earnings = serverSettings.getWotPlusBattleBonusesConfig().get('creditsFactor', 0.0) * 100
-        return makeTooltip(backport.text(awardItem.header()), backport.text(awardItem.body(), earnings=earnings))
 
 
 class WotPlusBadges(WoTPlusBonus):
@@ -2359,21 +2358,39 @@ class WotPlusBadges(WoTPlusBonus):
 
 
 class WotPlusAdditionalBonuses(WoTPlusBonus):
-    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(WotPlusAdditionalBonuses, self).__init__(WoTPlusBonusType.ADDITIONAL_BONUSES)
 
     def getTooltip(self):
         awardItem = R.strings.tooltips.awardItem.dyn(self._name)
-        serverSettings = self.__lobbyContext.getServerSettings()
-        return makeTooltip(backport.text(awardItem.header()), backport.text(awardItem.body(), applications=serverSettings.getAdditionalWoTPlusXPCount()))
+        from gui.game_control.wot_plus.utils import getAdditionalXPPromoData
+        additionalXPBonusCount = getAdditionalXPPromoData()
+        return makeTooltip(backport.text(awardItem.header()), backport.text(awardItem.body(), applications=additionalXPBonusCount))
 
 
 class WotPlusOptionalDevicesAssistant(WoTPlusBonus):
 
     def __init__(self):
         super(WotPlusOptionalDevicesAssistant, self).__init__(WoTPlusBonusType.OPTIONAL_DEVICES_ASSISTANT)
+
+
+class WotPlusProBoostBonus(WoTPlusBonus):
+
+    def __init__(self):
+        super(WotPlusProBoostBonus, self).__init__(WoTPlusBonusType.PRO_BOOST)
+
+
+class WotPlusServiceCustomizationBonus(WoTPlusBonus):
+
+    def __init__(self):
+        super(WotPlusServiceCustomizationBonus, self).__init__(WoTPlusBonusType.SERVICE_RECORD_CUSTOMIZATION)
+
+
+class WotPlusProBattlePass(WoTPlusBonus):
+
+    def __init__(self):
+        super(WotPlusProBattlePass, self).__init__(WoTPlusBonusType.BATTLE_PASS_PLUS)
 
 
 def randomBlueprintBonusFactory(name, value, isCompensation=False, ctx=None):
@@ -3075,7 +3092,10 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  WoTPlusBonusType.BATTLE_BONUSES: WotPlusBattleBonuses,
  WoTPlusBonusType.BADGES: WotPlusBadges,
  WoTPlusBonusType.ADDITIONAL_BONUSES: WotPlusAdditionalBonuses,
- WoTPlusBonusType.OPTIONAL_DEVICES_ASSISTANT: WotPlusOptionalDevicesAssistant}
+ WoTPlusBonusType.OPTIONAL_DEVICES_ASSISTANT: WotPlusOptionalDevicesAssistant,
+ WoTPlusBonusType.PRO_BOOST: WotPlusProBoostBonus,
+ WoTPlusBonusType.SERVICE_RECORD_CUSTOMIZATION: WotPlusServiceCustomizationBonus,
+ WoTPlusBonusType.BATTLE_PASS_PLUS: WotPlusProBattlePass}
 HIDDEN_BONUSES = (MetaBonus,)
 _BONUSES_PRIORITY = ('tokens', 'oneof')
 _BONUSES_ORDER = dict(((n, idx) for idx, n in enumerate(_BONUSES_PRIORITY)))

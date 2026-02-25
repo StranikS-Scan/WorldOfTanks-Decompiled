@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/pve_base/base/state_machine/transitions.py
+from __future__ import absolute_import
 import typing
 import BigWorld
 from frameworks.state_machine import StringEventTransition, ConditionTransition, StateEvent
 from gui.Scaleform.daapi.view.battle.pve_base.base.state_machine.events import OneSecondEvent
+from math_common import round_py2_style
 if typing.TYPE_CHECKING:
     from enum import IntEnum
 DEFAULT_STATE_DURATION = 4
@@ -47,8 +49,8 @@ class BaseTimerCondition(ConditionTransition):
             serverSettings, _ = source.getSettings()
             finishTime = getattr(serverSettings, 'finishTime')
             if finishTime:
-                timeLeft = round(finishTime - event.currentTime)
-                lastTimeLeft = round(finishTime - event.lastTime)
+                timeLeft = round_py2_style(finishTime - event.currentTime)
+                lastTimeLeft = round_py2_style(finishTime - event.lastTime)
                 return timeLeft <= timerValue <= lastTimeLeft
         return False
 

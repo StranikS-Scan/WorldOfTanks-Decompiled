@@ -115,12 +115,12 @@ class ContactsUploader(object):
             action = self.__idToActions[dbID][0] if leftActions is None else leftActions[0]
             name = self.__idToNames[dbID]
             _logger.debug('Contacts Uploader: starting uploading action dbID:%s, name:%s, action:%s', dbID, name, action)
-            if CLIENT_ACTION_ID.REMOVE_FRIEND == action:
+            if action == CLIENT_ACTION_ID.REMOVE_FRIEND:
                 self.proto.contacts.removeFriend(dbID, shadowMode=True)
-            elif CLIENT_ACTION_ID.REMOVE_IGNORED == action:
+            elif action == CLIENT_ACTION_ID.REMOVE_IGNORED:
                 self.proto.contacts.removeIgnored(dbID, shadowMode=True)
-            elif CLIENT_ACTION_ID.ADD_FRIEND == action:
+            elif action == CLIENT_ACTION_ID.ADD_FRIEND:
                 self.proto.contacts.addFriend(dbID, name, shadowMode=True)
-            elif CLIENT_ACTION_ID.ADD_IGNORED == action:
+            elif action == CLIENT_ACTION_ID.ADD_IGNORED:
                 self.proto.contacts.addIgnored(dbID, name, shadowMode=True)
             return

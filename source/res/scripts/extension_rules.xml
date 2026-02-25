@@ -63,6 +63,10 @@
       <type>	merge	</type>
     </rule>
     <rule>
+      <pattern>	gui/gui_colors\.xml$	</pattern>
+      <type>	merge	</type>
+    </rule>
+    <rule>
       <pattern>	gui/gui_settings\.xml$	</pattern>
       <type>	include	</type>
     </rule>
@@ -125,9 +129,18 @@
       <params>	soundMgr/*/*	</params>
     </rule>
     <rule>
+      <pattern>	system/data/particles\.xml$	</pattern>
+      <type>	include	</type>
+      <extensionsFilterType>	enabledOnly	</extensionsFilterType>
+    </rule>
+    <rule>
       <pattern>	scripts/arena_defs/_default_\.xml$	</pattern>
       <type>	includeByPath	</type>
       <params>	extraSoundRemapping	</params>
+    </rule>
+    <rule>
+      <pattern>	.*/arena_defs/.*\.xml$	</pattern>
+      <type>	include	</type>
     </rule>
     <rule>
       <pattern>	scripts/dynamic_objects\.xml$	</pattern>

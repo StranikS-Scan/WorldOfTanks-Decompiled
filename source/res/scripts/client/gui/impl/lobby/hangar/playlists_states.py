@@ -3,6 +3,7 @@
 from __future__ import absolute_import
 import logging
 from copy import deepcopy
+from enum import Enum
 import typing
 from BWUtil import AsyncReturn
 from WeakMethod import WeakMethodProxy
@@ -24,6 +25,11 @@ from wg_async import wg_async, BrokenPromiseError, AsyncEvent
 from gui.shared.events import NavigationEvent
 from gui.Scaleform.daapi.view.lobby.battle_queue.states import CommonBattleQueueState
 _logger = logging.getLogger(__name__)
+
+class PlaylistState(Enum):
+    NEW = 'new'
+    EXISTING = 'existing'
+
 
 def registerStates(machine):
     machine.addState(EditVehiclePlaylistsState())

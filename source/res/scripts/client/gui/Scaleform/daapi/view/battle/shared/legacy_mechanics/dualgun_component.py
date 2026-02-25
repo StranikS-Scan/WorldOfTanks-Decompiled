@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/legacy_mechanics/dualgun_component.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from weakref import proxy
 import BattleReplay
 import BigWorld
@@ -11,12 +13,12 @@ from constants import DUALGUN_CHARGER_STATUS
 from constants import DUAL_GUN
 from constants import VEHICLE_MISC_STATUS
 from debug_utils import LOG_WARNING
-from dualgun_sounds import DualGunSounds
 from items.utils import getFirstReloadTime
 from gui.Scaleform.daapi.view.meta.DualGunPanelMeta import DualGunPanelMeta
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, FEEDBACK_EVENT_ID, DestroyTimerViewState
 from gui.battle_control.controllers.prebattle_setups_ctrl import IPrebattleSetupsListener
+from gui.Scaleform.daapi.view.battle.shared.legacy_mechanics.dualgun_sounds import DualGunSounds
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from helpers import dependency
@@ -184,7 +186,7 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
             player = BigWorld.player()
             if player is not None and player.inputHandler is not None:
                 player.inputHandler.onCameraChanged += self.__onCameraChanged
-        self.as_setChangeGunTweenPropsS(MS_IN_SECOND / 2, MS_IN_SECOND)
+        self.as_setChangeGunTweenPropsS(MS_IN_SECOND // 2, MS_IN_SECOND)
         arenaDP = self.__sessionProvider.getArenaDP()
         if arenaDP is not None:
             vInfo = arenaDP.getVehicleInfo()
@@ -275,15 +277,15 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
         if ctrl is None:
             return
         else:
-            for stateID in self.__deviceStateHandlers.iterkeys():
+            for stateID, handler in viewitems(self.__deviceStateHandlers):
                 value = ctrl.getStateValue(stateID)
                 if value is not None:
                     if stateID == VEHICLE_VIEW_STATE.DEVICES:
                         for v in value:
-                            self.__deviceStateHandlers[stateID](v)
+                            handler(v)
 
                     else:
-                        self.__deviceStateHandlers[stateID](value)
+                        handler(value)
 
             self.as_setReloadingTimeIncreasedS(self.__reloadingState.hasNegativeEffect())
             return
@@ -354,7 +356,7 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
         switchBaseTime = int(baseTime * DualGunConstants.TIME_MULTIPLIER)
         if self.__reloadEventReceived:
             if cooldownTimes[activeGun].leftTime != activeGunReloadingTimeLeft:
-                self.__soundManager.onWeaponChanged(switchLeftTime / MS_IN_SECOND)
+                self.__soundManager.onWeaponChanged(switchLeftTime // MS_IN_SECOND)
             self.__reloadEventReceived = False
         self.as_updateActiveGunS(activeGun, switchLeftTime, switchBaseTime)
         self.__updateDualGunState(states, cooldownTimes)

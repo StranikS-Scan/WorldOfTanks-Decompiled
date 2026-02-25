@@ -101,7 +101,7 @@ def getMaxSkillsEffAndLikeOwnVehTman(tankman, tankmanVehicle, itemsFactory, remo
 def getVehicleWithSkilledTman(skilledTman, tankman, tankmanVehicle, skillName=''):
     newVehicle = copy.copy(tankmanVehicle)
     if skillName in COMMON_SKILLS:
-        newVehicle.crew = newVehicle.getCrewWithSkill(skillName)
+        newVehicle.crew = newVehicle.getCrewWithSkills([skillName])
     else:
         crewItems = list()
         skilledTmanDescr = tankman.descriptor

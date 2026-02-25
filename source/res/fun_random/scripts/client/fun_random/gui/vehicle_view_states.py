@@ -9,7 +9,7 @@ class FunRandomVehicleViewState(SelectedViewState, FunSubModesWatcher):
 
     @classmethod
     def isSuitableVehicle(cls, vehicle):
-        return vehicle.item.isOnlyForFunRandomBattles
+        return cls._funRandomCtrl.isOnlyFunRandomVehicle(vehicle.item)
 
     def setCustomizationVisible(self, customizationVisible):
         self._isCustomizationVisible = customizationVisible

@@ -77,7 +77,7 @@ class NavigationPresenter(ViewComponent[NavigationBarModel], EventsHandler):
 
             else:
                 model.setPageTitle('')
-            allowBackNav = not backNavigationTargetsHangar and routeInfo.backDescription is not None and not self.__lsm.getStateByCls(CommonBattleQueueState).STATE_ID == routeInfo.state.STATE_ID
+            allowBackNav = not backNavigationTargetsHangar and routeInfo.backDescription is not None and self.__lsm.getStateByCls(CommonBattleQueueState).STATE_ID != routeInfo.state.STATE_ID
             model.setBackNavigationAllowed(allowBackNav)
             model.setBackNavigationDescription(routeInfo.backDescription or '')
             infoButtons.invalidate()

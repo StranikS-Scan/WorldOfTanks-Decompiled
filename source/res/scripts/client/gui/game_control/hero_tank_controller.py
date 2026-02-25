@@ -3,32 +3,27 @@
 import logging
 import random
 from collections import namedtuple
-import ResMgr
 import Event
+import ResMgr
 from constants import IS_DEVELOPMENT
-from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
-from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.game_control.calendar_controller import CalendarOfferType
 from helpers import dependency
-from skeletons.gui.game_control import IHeroTankController, ICalendarController
-from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.shared import IItemsCache
-from skeletons.gui.server_events import IEventsCache
 from items import vehicles, tankmen
 from shared_utils import first
+from skeletons.gui.game_control import IHeroTankController
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 _HERO_VEHICLES = 'hero_vehicles'
 _ADD_HERO_STEP_NAME = 'add_HeroVehicle'
-_CALENDAR_ACTION_CHANGED = events.AdventCalendarEvent.HERO_ADVENT_ACTION_STATE_CHANGED
 _HeroTankInfo = namedtuple('_HeroTankInfo', ('url', 'styleID', 'crew', 'name', 'shopUrl'))
 _HeroTankInfo.__new__.__defaults__ = ('', None, None, '', '')
 
 class HeroTankController(IHeroTankController):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
-    calendarController = dependency.descriptor(ICalendarController)
     _eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):
@@ -37,18 +32,15 @@ class HeroTankController(IHeroTankController):
         self.__debugTankCD = None
         self.__isEnabled = False
         self.__currentTankCD = None
-        self.__actionInfo = None
         self.onUpdated = Event.Event()
         self.onInteractive = Event.Event()
         return
 
     def init(self):
         self.itemsCache.onSyncCompleted += self.__updateInventoryVehiclesData
-        g_eventBus.addListener(_CALENDAR_ACTION_CHANGED, self.__updateCalendarActionInfo, EVENT_BUS_SCOPE.LOBBY)
         self.__isEnabled = True
 
     def fini(self):
-        g_eventBus.removeListener(_CALENDAR_ACTION_CHANGED, self.__updateCalendarActionInfo, EVENT_BUS_SCOPE.LOBBY)
         self.itemsCache.onSyncCompleted -= self.__updateInventoryVehiclesData
         self.__isEnabled = False
 
@@ -73,32 +65,18 @@ class HeroTankController(IHeroTankController):
         self.__isEnabled = enabled
         self.onUpdated()
 
-    def hasAdventHero(self):
-        return self.__actionInfo is not None and self.__actionInfo.isEnabled
-
-    def isAdventHero(self):
-        return self.hasAdventHero() and self.__currentTankCD == self.__actionInfo.vehicleCD
-
     def getRandomTankCD(self):
         if IS_DEVELOPMENT and self.__debugTankCD is not None:
             return self.__debugTankCD
         else:
-            adventTankCD, _ = self._getAdventHeroTankData()
-            if adventTankCD:
-                self.__currentTankCD = adventTankCD
-            else:
-                self.__currentTankCD = random.choice(self.__data.keys() or [None]) if self.isEnabled() else None
+            self.__currentTankCD = random.choice(self.__data.keys() or [None]) if self.isEnabled() else None
             return self.__currentTankCD
 
     def getCurrentTankCD(self):
         return self.__currentTankCD
 
     def getCurrentTankStyleId(self):
-        _, adventTankStyleId = self._getAdventHeroTankData()
-        if adventTankStyleId:
-            return adventTankStyleId
-        else:
-            return self.__data[self.__currentTankCD].styleID if self.isEnabled() and self.__currentTankCD in self.__data else None
+        return self.__data[self.__currentTankCD].styleID if self.isEnabled() and self.__currentTankCD in self.__data else None
 
     def getCurrentRelatedURL(self):
         return self.__data[self.__currentTankCD].url if self.isEnabled() and self.__currentTankCD in self.__data else ''
@@ -120,19 +98,6 @@ class HeroTankController(IHeroTankController):
             self.__debugTankCD = debugTankCD
             self.onUpdated()
 
-    def _getAdventHeroTankData(self):
-        if not self.hasAdventHero():
-            return (None, None)
-        else:
-            vehicleCD = self.__actionInfo.vehicleCD or None
-            if not vehicleCD:
-                return (None, None)
-            styleId = self.__actionInfo.styleId or None
-            styleAvailable = styleId and not self.__containsStyle(styleId)
-            vehicleAvailable = not self.__containsVehicle(vehicleCD)
-            offerType = self.__actionInfo.offerType
-            return (vehicleCD, styleId) if offerType == CalendarOfferType.VEHICLE and vehicleAvailable or offerType == CalendarOfferType.STYLE and styleAvailable or offerType == CalendarOfferType.STYLE_BUNDLE and (styleAvailable or vehicleAvailable) else (None, None)
-
     def __fullUpdate(self):
         items = self.itemsCache.items
         getItem = items.getItemByCD
@@ -149,10 +114,6 @@ class HeroTankController(IHeroTankController):
                 self.__fullUpdate()
                 self.__updateSettings()
             return
-
-    def __updateCalendarActionInfo(self, *_):
-        self.__actionInfo = self.calendarController.getHeroAdventActionInfo()
-        self.onUpdated()
 
     def __onServerSettingsChanged(self, diff):
         if _HERO_VEHICLES in diff:
@@ -243,17 +204,3 @@ class HeroTankController(IHeroTankController):
                     crew['tankmen'].append(tmanDict)
 
             return crew
-
-    def __containsVehicle(self, vehicleCD):
-
-        def contains(i):
-            return i.intCD == vehicleCD and (i.inventoryCount > 0 or i.isRestorePossible())
-
-        return any(self.itemsCache.items.getVehicles(REQ_CRITERIA.CUSTOM(contains)))
-
-    def __containsStyle(self, styleId):
-
-        def contains(i):
-            return i.id == styleId and (i.inventoryCount > 0 or i.isRestorePossible())
-
-        return any(self.itemsCache.items.getStyles(REQ_CRITERIA.CUSTOM(contains)))

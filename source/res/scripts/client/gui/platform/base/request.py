@@ -152,7 +152,7 @@ class Request(object):
 
     @adisp.adisp_process
     def _getAccessTokenData(self, callback):
-        force = True if not self.webCtrl.isLoggedOn() else False
+        force = not self.webCtrl.isLoggedOn()
         self._logger.debug('Getting access token with force=%s.', force)
         accessTokenData = yield self.webCtrl.getAccessTokenData(force=force)
         callback(accessTokenData)

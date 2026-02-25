@@ -29,7 +29,6 @@ class ReportGenerator(object):
 
     def startCollectingData(self):
         if self.location is None:
-            logging.error('cannot start collecting data - the location for reports was not provided...')
             return
         elif self.__isCollectingData:
             logging.error('cannot start collecting data - the benchmarking tool is already collecting it...')
@@ -42,7 +41,6 @@ class ReportGenerator(object):
 
     def stopCollectingData(self):
         if self.location is None:
-            logging.error('cannot stop collecting data - the location for reports was not provided...')
             return
         elif not self.__isCollectingData:
             logging.error('cannot stop collecting data - the benchmarking tool is not already collecting it...')
@@ -54,7 +52,6 @@ class ReportGenerator(object):
 
     def generateReport(self):
         if self.__location is None:
-            logging.error('failed to generate a report - location was not provided (None)!')
             return
         elif self.__isCollectingData is None:
             logging.error('failed to generate a report - the data is still being collected! Use stopCollectingData() to complete data collection and enable report generation')

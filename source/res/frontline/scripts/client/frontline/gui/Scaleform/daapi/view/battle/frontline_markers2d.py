@@ -213,7 +213,7 @@ class SectorBasesPlugin(FrontlineMissionsPlugin, ChatCommunicationComponent):
     def getMarkerSubtype(self, targetID):
         if targetID == INVALID_TARGET_ID or targetID not in self._markers:
             return INVALID_MARKER_SUBTYPE
-        return DefaultMarkerSubType.ALLY_MARKER_SUBTYPE if _ALLY_OWNER == self._markers[targetID].getOwningTeam() else DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE
+        return DefaultMarkerSubType.ALLY_MARKER_SUBTYPE if self._markers[targetID].getOwningTeam() == _ALLY_OWNER else DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE
 
     def _onPlayerMissionUpdated(self, mission, _):
         self.__resetBaseHighlight()

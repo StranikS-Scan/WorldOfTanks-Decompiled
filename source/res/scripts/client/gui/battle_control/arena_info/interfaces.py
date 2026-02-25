@@ -91,10 +91,10 @@ class IArenaVehiclesController(IArenaLoadController, IContactsController):
     def updateVehiclesInfo(self, updated, arenaDP):
         pass
 
-    def invalidateVehicleStatus(self, flags, vo, arenaDP):
+    def invalidateVehicleStatus(self, flags, vInfoVO, arenaDP):
         pass
 
-    def invalidatePlayerStatus(self, flags, vo, arenaDP):
+    def invalidatePlayerStatus(self, flags, vInfoVO, arenaDP):
         pass
 
     def invalidateFogOfWarHiddenVehiclesFlag(self, flag):

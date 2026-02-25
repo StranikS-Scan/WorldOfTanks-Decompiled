@@ -7,9 +7,6 @@ class ChannelWindowMeta(AbstractWindowView):
     def showFAQWindow(self):
         self._printOverrideError('showFAQWindow')
 
-    def getClientID(self):
-        self._printOverrideError('getClientID')
-
     def as_setTitleS(self, title):
         return self.flashObject.as_setTitle(title) if self._isDAAPIInited() else None
 

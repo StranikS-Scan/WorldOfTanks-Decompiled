@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/personal_reserves_tab.py
+from __future__ import absolute_import
 import logging
 from gui.Scaleform.daapi.view.meta.PersonalReservesTabMeta import PersonalReservesTabMeta
 from gui.impl.battle.battle_page.full_stats.personal_reserves_tab_view import PersonalReservesTabView

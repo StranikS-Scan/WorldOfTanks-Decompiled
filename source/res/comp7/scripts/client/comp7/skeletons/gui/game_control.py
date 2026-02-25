@@ -36,4 +36,4 @@ class IComp7WeeklyQuestsController(IGameController):
     onWeeklyQuestsUpdated = None
 
     def getQuests(self):
-        raise NotImplementedError()
+        raise NotImplementedError

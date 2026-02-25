@@ -16,6 +16,6 @@ class LeaveBattleView(DialogTemplateView):
 
     def _onLoading(self, *args, **kwargs):
         super(LeaveBattleView, self)._onLoading(*args, **kwargs)
-        buttonStrings = R.strings.battle_royale_progression.leaveBattleView.confirmation
+        buttonStrings = R.strings.battle_royale_extention.leaveBattleView.confirmation
         self.addButton(ConfirmButton(label=buttonStrings.submit()))
         self.addButton(CancelButton(label=buttonStrings.cancel()))

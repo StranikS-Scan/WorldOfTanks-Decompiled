@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/dialogs/dialogs.py
+from __future__ import absolute_import
 import typing
 from BWUtil import AsyncReturn
 from frameworks.wulf import WindowStatus
@@ -13,13 +14,20 @@ from gui.impl.lobby.crew.free_skill_confirmation_dialog import FreeSkillConfirma
 from gui.impl.lobby.dialogs.exchange_with_items import ExchangeToBuyItems, ExchangeToUpgradeDevice
 from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
 from gui.impl.lobby.dialogs.quit_game_dialog import QuitGameDialogWindow
+from gui.impl.lobby.dialogs.wot_plus.base_dialog import BaseDialog
+from gui.impl.lobby.dialogs.wot_plus.pro_boost_confirm_dialog import ProBoostConfirmDialog
+from gui.impl.lobby.dialogs.wot_plus.pro_boost_switch_dialog import ProBoostSwitchDialog
+from gui.impl.lobby.dialogs.wot_plus.service_record_customization_confirm_dialog import ServiceRecordCustomizationConfirmDialog
+from gui.impl.lobby.dialogs.wot_plus.subscription_award_dialog import SubscriptionAwardDialog
 from gui.impl.lobby.tank_setup.upgradable_device.UpgradeDeviceView import UpgradableDeviceUpgradeConfirmView
 from gui.impl.pub.dialog_window import DialogButtons, DialogWindow, SingleDialogResult
 from helpers import dependency
 from skeletons.gui.impl import IGuiLoader
 from wg_async import wg_async, wg_await
 if typing.TYPE_CHECKING:
-    from typing import Any, Optional, Iterable, Union, List
+    from typing import Any, Optional, Union, List
+    from gui.impl.lobby.dialogs.wot_plus.pro_boost_confirm_dialog import _ProBoostConfirmDialogParams
+    from gui.impl.lobby.dialogs.wot_plus.pro_boost_switch_dialog import _ProBoostSwitchDialogParams
 
 @wg_async
 def show(dialog):
@@ -84,8 +92,8 @@ def showExchangeToBuyItemsDialog(itemsCountMap, parent=None):
 
 
 @wg_async
-def showSingleDialog(wrappedViewClass, layoutID, parent=None, *args, **kwargs):
-    dialog = FullScreenDialogWindowWrapper.createIfNotExist(layoutID, wrappedViewClass, parent, *args, **kwargs)
+def showSingleDialog(wrappedViewClass, layoutID, parent=None, **kwargs):
+    dialog = FullScreenDialogWindowWrapper.createIfNotExist(layoutID, wrappedViewClass, parent=parent, **kwargs)
     if dialog is not None:
         result = yield wg_await(showSimple(dialog))
         raise AsyncReturn(SingleDialogResult(busy=False, result=result))
@@ -94,8 +102,8 @@ def showSingleDialog(wrappedViewClass, layoutID, parent=None, *args, **kwargs):
 
 
 @wg_async
-def showSingleDialogWithResultData(wrappedViewClass, layoutID, parent=None, *args, **kwargs):
-    dialog = FullScreenDialogWindowWrapper.createIfNotExist(layoutID, wrappedViewClass, parent, *args, **kwargs)
+def showSingleDialogWithResultData(wrappedViewClass, layoutID, parent=None, **kwargs):
+    dialog = FullScreenDialogWindowWrapper.createIfNotExist(layoutID, wrappedViewClass, parent=parent, **kwargs)
     if dialog is not None:
         result = yield wg_await(showSimpleWithResultData(dialog))
         raise AsyncReturn(SingleDialogResult(busy=False, result=result))
@@ -105,11 +113,11 @@ def showSingleDialogWithResultData(wrappedViewClass, layoutID, parent=None, *arg
 
 @wg_async
 @dependency.replace_none_kwargs(gui=IGuiLoader)
-def showCustomBlurSingleDialog(wrappedViewClass, layoutID, parent=None, gui=None, *args, **kwargs):
+def showCustomBlurSingleDialog(wrappedViewClass, layoutID, parent=None, gui=None, **kwargs):
     result = None
     dialog = gui.windowsManager.getViewByLayoutID(layoutID)
     if dialog is None:
-        dialog = FullScreenDialogWindowWrapper(wrappedViewClass(*args, **kwargs), parent, doBlur=False)
+        dialog = FullScreenDialogWindowWrapper(wrappedViewClass(**kwargs), parent=parent, doBlur=False)
     if dialog is not None:
         result = yield wg_await(showSimpleWithResultData(dialog))
         raise AsyncReturn(SingleDialogResult(busy=False, result=result))
@@ -230,4 +238,38 @@ def showSkillsTrainingConfirmDialog(tankman, skillsRole, skillsList, availableSk
 @wg_async
 def showMentorAssignmentConfirmDialog(sourceTmanId, targetTmanId):
     result = yield wg_await(showSingleDialog(layoutID=MentorAssignmentDialog.LAYOUT_ID, wrappedViewClass=MentorAssignmentDialog, sourceTmanId=sourceTmanId, targetTmanId=targetTmanId))
+    raise AsyncReturn(result)
+
+
+@wg_async
+def showProBoostConfirmDialog(dialogParams):
+    layoutID = ProBoostConfirmDialog.LAYOUT_ID
+    result = yield wg_await(showSingleDialog(layoutID=layoutID, wrappedViewClass=ProBoostConfirmDialog, contentParams=dialogParams))
+    raise AsyncReturn(result)
+
+
+@wg_async
+def showProBoostSwitchDialog(dialogParams):
+    layoutID = ProBoostSwitchDialog.LAYOUT_ID
+    result = yield wg_await(showSingleDialog(layoutID=layoutID, wrappedViewClass=ProBoostSwitchDialog, params=dialogParams))
+    raise AsyncReturn(result)
+
+
+@wg_async
+def showServiceRecordCustomizationConfirmDialog():
+    layoutID = ServiceRecordCustomizationConfirmDialog.LAYOUT_ID
+    result = yield wg_await(showSingleDialog(layoutID=layoutID, wrappedViewClass=ServiceRecordCustomizationConfirmDialog))
+    raise AsyncReturn(result)
+
+
+@wg_async
+def showRenewableSubscriptionRewardDialog(unlockedTier, expirationTime, billingDays, messageType):
+    layoutID = SubscriptionAwardDialog.LAYOUT_ID
+    result = yield wg_await(showSingleDialog(layoutID=layoutID, wrappedViewClass=SubscriptionAwardDialog, unlockedTier=unlockedTier, expirationTime=expirationTime, billingDays=billingDays, messageType=messageType))
+    raise AsyncReturn(result)
+
+
+@wg_async
+def showBaseDialog(layoutID=R.views.mono.dialogs.default_dialog()):
+    result = yield wg_await(showSingleDialog(layoutID=layoutID, wrappedViewClass=BaseDialog, contentParams={'customLayoutID': layoutID}, resourcesParams={}))
     raise AsyncReturn(result)

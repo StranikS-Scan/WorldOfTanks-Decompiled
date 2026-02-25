@@ -6,12 +6,14 @@ from copy import copy
 from itertools import chain
 import typing
 from constants import NEW_PERK_SYSTEM as NPS, SkinInvData
+from enum import Enum
 from gui import GUI_NATIONS_ORDER_INDEX, TANKMEN_ROLES_ORDER_DICT, nationCompareByIndex
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.gui_items import GUI_ITEM_TYPE, ItemsCollection, collectKpi
-from gui.shared.gui_items.tankman_skill import getTankmanSkill, BROTHERHOOD_SKILL_NAME, getSkillStates
+from gui.shared.gui_items.data.skills_training import SKILLS_BY_ROLES_ST
 from gui.shared.gui_items.gui_item import GUIItem, HasStrCD
+from gui.shared.gui_items.tankman_skill import getTankmanSkill, BROTHERHOOD_SKILL_NAME, getSkillStates
 from gui.shared.skill_parameters import SKILLS
 from gui.shared.utils.functions import replaceHyphenToUnderscore
 from gui.shared.utils.role_presenter_helper import getRoleUserName
@@ -27,7 +29,8 @@ from shared_utils import findFirst
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from items.tankmen import TankmanDescr
-    from typing import Sequence, Optional
+    from typing import Sequence, Optional, List
+    from gui.shared.gui_items.tankman_skill import TankmanSkill
     from gui.shared.gui_items.Vehicle import Vehicle
 
 class CrewTypes(object):
@@ -47,6 +50,11 @@ NO_SLOT = -1
 MAX_ROLE_LEVEL = 100
 SKILL_EFFICIENCY_UNTRAINED = -1
 RRLBonuses = namedtuple('RRLBonuses', 'commBonus, brothersBonus, eqsBonus, optDevsBonus, penalty')
+
+class Target(Enum):
+    DEFAULT = 'default'
+    SKILLS_TRAINING = 'skillsTraining'
+
 
 class RealRoleLevel(namedtuple('RealRoleLevel', 'lvl_, bonuses_')):
     __slots__ = ()
@@ -629,16 +637,17 @@ class Tankman(GUIItem):
         skillnames -= set(UNLEARNABLE_SKILLS)
         return skillnames
 
-    def getPossibleSkillsByRole(self):
+    def getPossibleSkillsByRole(self, target=Target.DEFAULT):
         result = OrderedDict()
         for skill in tankmen.COMMON_SKILLS_ORDERED:
             result.setdefault('common', []).append(getTankmanSkill(skill, self.role, tankman=self))
 
         roles = set(self.skillRoles) | set(self.roles())
+        skillsByRoles = SKILLS_BY_ROLES_ST if target == Target.SKILLS_TRAINING else SKILLS_BY_ROLES_ORDERED
 
         def fillSkills(currentRole):
             if currentRole in roles:
-                roleSkills = SKILLS_BY_ROLES_ORDERED.get(currentRole, [])
+                roleSkills = skillsByRoles.get(currentRole, [])
                 for currentSkill in roleSkills:
                     if currentSkill in tankmen.COMMON_SKILLS:
                         continue

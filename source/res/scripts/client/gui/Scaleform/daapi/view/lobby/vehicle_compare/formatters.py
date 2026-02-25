@@ -27,9 +27,9 @@ def getTreeNodeCompareData(vehicle):
      'cmpBasketFull': not comparisonBasket.isReadyToAdd(vehicle)}
 
 
-def resolveStateTooltip(comparisonBasket, vehicle, enabledTooltip, fullTooltip, invalidTooltip=VEH_COMPARE.VEHPREVIEW_COMPAREVEHICLEBTN_TOOLTIPS_CANNOTADDTOCOMPARE, miniclientTooltip=VEH_COMPARE.COMPAREVEHICLEBTN_TOOLTIPS_MINICLIENT):
+def resolveStateTooltip(comparisonBasket, vehicle, enabledTooltip, fullTooltip, invalidTooltip=VEH_COMPARE.VEHPREVIEW_COMPAREVEHICLEBTN_TOOLTIPS_CANNOTADDTOCOMPARE):
     if not comparisonBasket.isAvailable():
-        state, tooltip = False, miniclientTooltip
+        state, tooltip = False, invalidTooltip
     elif comparisonBasket.isFull():
         state, tooltip = False, fullTooltip
     elif not isValidVehicleForComparing(vehicle):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/__init__.py
+from __future__ import absolute_import
 import typing
 from helpers import time_utils
 from skeletons.gui.game_control import IGameStateTracker

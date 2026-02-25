@@ -2,7 +2,6 @@
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/lobby/tooltips/fun_random_battle_results_efficiency_tooltip_view.py
 from __future__ import absolute_import
 from frameworks.wulf import ViewSettings
-from fun_random.gui.battle_results.tooltips.total_efficiency_tooltips import FunEfficiencyTooltipsPacker
 from gui.impl.gen.view_models.views.lobby.battle_results.tooltips.efficiency_tooltip_model import EfficiencyTooltipModel
 from gui.impl.gen import R
 from gui.impl.pub import ViewImpl
@@ -12,11 +11,12 @@ from skeletons.gui.battle_results import IBattleResultsService
 class PersonalEfficiencyParamTooltip(ViewImpl):
     __battleResults = dependency.descriptor(IBattleResultsService)
 
-    def __init__(self, arenaUniqueID, paramType):
+    def __init__(self, arenaUniqueID, paramType, packer):
         settings = ViewSettings(layoutID=R.views.lobby.tooltips.BattleResultsStatsTooltipView(), model=EfficiencyTooltipModel())
         super(PersonalEfficiencyParamTooltip, self).__init__(settings)
         self.__efficiencyParam = paramType
         self.__arenaUniqueID = arenaUniqueID
+        self.__packer = packer
 
     @property
     def arenaUniqueID(self):
@@ -26,7 +26,12 @@ class PersonalEfficiencyParamTooltip(ViewImpl):
         super(PersonalEfficiencyParamTooltip, self)._onLoading(*args, **kwargs)
         self.__invalidateAll()
 
+    def _finalize(self):
+        self.__packer = None
+        super(PersonalEfficiencyParamTooltip, self)._finalize()
+        return
+
     def __invalidateAll(self):
         statsCtrl = self.__battleResults.getStatsCtrl(self.arenaUniqueID)
         with self.getViewModel().transaction() as model:
-            FunEfficiencyTooltipsPacker.packTooltip(model, statsCtrl.getResults(), ctx={'paramType': self.__efficiencyParam})
+            self.__packer.packTooltip(model, statsCtrl.getResults(), ctx={'paramType': self.__efficiencyParam})

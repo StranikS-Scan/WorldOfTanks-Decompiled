@@ -22,28 +22,28 @@ class BattlePassBuyer(object):
 
     @classmethod
     @decorators.adisp_process('buyBattlePass')
-    def buyBP(cls, seasonID, chapterID, priceID, onBuyCallback=None):
+    def buyBP(cls, seasonID, chapterID, onBuyCallback=None):
         if chapterID not in cls.__battlePass.getMainChapterIDs():
             _logger.error('Invalid chapterID: %s!', chapterID)
             return
-        currency, amount = first(cls.__battlePass.getBattlePassCost(chapterID)[priceID].iteritems())
+        currency, amount = first(cls.__battlePass.getBattlePassCost(chapterID).iteritems())
         result = False
         if currency == Currency.GOLD and cls.__itemsCache.items.stats.actualGold < amount:
             showBuyGoldForBattlePass(amount)
         elif currency == Currency.FREE_XP and cls.__itemsCache.items.stats.actualFreeXP < amount:
             showExchangeXPWindow(amount)
         else:
-            result = yield cls.__buyBattlePass(seasonID, chapterID, priceID)
+            result = yield cls.__buyBattlePass(seasonID, chapterID)
         if onBuyCallback:
             onBuyCallback(result)
 
     @classmethod
     @decorators.adisp_process('buyBattlePass')
-    def buyBPWithLevels(cls, seasonID, chapterID, priceID, onBuyCallback=None):
+    def buyBPWithLevels(cls, seasonID, chapterID, onBuyCallback=None):
         if chapterID not in cls.__battlePass.getMainChapterIDs():
             _logger.error('Invalid chapterID: %s!', chapterID)
             return
-        spendMoney = cls.__battlePass.getBattlePassCost(chapterID)[priceID].get(Currency.GOLD)
+        spendMoney = cls.__battlePass.getBattlePassCost(chapterID).get(Currency.GOLD)
         levelCount = cls.__battlePass.getMaxLevelInChapter(chapterID) - cls.__battlePass.getLevelInChapter(chapterID)
         if levelCount > 0:
             spendMoney += cls.__itemsCache.items.shop.getBattlePassLevelCost().get(Currency.GOLD, 0) * levelCount
@@ -51,7 +51,7 @@ class BattlePassBuyer(object):
         if cls.__itemsCache.items.stats.actualGold < spendMoney:
             showBuyGoldForBattlePass(spendMoney)
         else:
-            result = yield cls.__buyBattlePassWithLevels(seasonID, chapterID, priceID)
+            result = yield cls.__buyBattlePassWithLevels(seasonID, chapterID)
         if onBuyCallback:
             onBuyCallback(result)
 
@@ -80,17 +80,11 @@ class BattlePassBuyer(object):
     @classmethod
     @adisp_async
     @adisp_process
-    def __buyBattlePass(cls, seasonID, chapterID, priceID, callback):
-        result = yield BuyBattlePass(seasonID, chapterID, priceID).request()
-        startLevel, _ = cls.__battlePass.getChapterLevelInterval(chapterID)
-        if cls.__battlePass.getLevelInChapter(chapterID) != startLevel - 1:
-            callback(result.success)
-            return
-        else:
-            if result.userMsg is not None:
-                SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType, messageData=result.auxData, priority=result.msgPriority)
-            callback(result.success)
-            return
+    def __buyBattlePass(cls, seasonID, chapterID, callback):
+        result = yield BuyBattlePass(seasonID, chapterID).request()
+        if result.userMsg:
+            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType, priority=result.msgPriority)
+        callback(result.success)
 
     @staticmethod
     @adisp_async
@@ -104,8 +98,8 @@ class BattlePassBuyer(object):
     @classmethod
     @adisp_async
     @adisp_process
-    def __buyBattlePassWithLevels(cls, seasonID, chapterID, priceID, callback):
-        result = yield BuyBattlePassWithLevels(seasonID, chapterID, priceID).request()
+    def __buyBattlePassWithLevels(cls, seasonID, chapterID, callback):
+        result = yield BuyBattlePassWithLevels(seasonID, chapterID).request()
         if result.userMsg:
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType, priority=result.msgPriority)
         callback(result.success)

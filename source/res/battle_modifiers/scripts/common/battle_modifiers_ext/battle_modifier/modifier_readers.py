@@ -1,14 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_modifiers/scripts/common/battle_modifiers_ext/battle_modifier/modifier_readers.py
+from __future__ import absolute_import
+from math import radians, degrees
+import typing
 from battle_modifiers_common.battle_modifiers import BattleParams
+from battle_modifiers_ext.battle_modifier.modifier_helpers import makeUseTypeMethods
 from battle_modifiers_ext.constants_ext import DataType, UseType
 from bonus_caps_overrides import readBonusCapsOverrides
 from constants import DamageAbsorptionLabelToType
 from crystal_rewards_common import readCrystalRewards
 from items.components.component_constants import KMH_TO_MS, MS_TO_KMH
-from modifier_helpers import makeUseTypeMethods
-from math import radians, degrees
-from renewable_subscription_common.config import readGoldReserveGains
+from items.readers import gun_readers
+from post_mortem_common import readPostMortemSection
+from constants import ARENA_BONUS_TYPE_NAMES
+from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from ResMgr import DataSection
 g_cache = {}
 _readInt = lambda dataSection: dataSection.asInt
 _readFloat = lambda dataSection: dataSection.asFloat
@@ -19,7 +26,8 @@ _dataTypeReaders = {DataType.INT: {UseType.VAL: _readInt,
                 UseType.ADD: _readInt},
  DataType.FLOAT: _readFloat,
  DataType.STRING: _readString,
- DataType.DICT: _readDict}
+ DataType.DICT: _readDict,
+ DataType.HASHABLE_DICT: _readDict}
 _readToDegrees = lambda dataSection: degrees(dataSection.asFloat)
 _readToRadians = lambda dataSection: radians(dataSection.asFloat)
 _radiansType = {UseType.VAL: _readToRadians,
@@ -36,6 +44,23 @@ def _readVisualScriptPlan(dataSection):
     from visual_script.misc import readVisualScriptPlan
     return {'aspects': dataSection.readString('aspects', '').split(),
      'plan': readVisualScriptPlan(dataSection['plan'])}
+
+
+def _readGoldReserveGains(section):
+    goldReserveGains = {}
+    for value in section.values():
+        typeName = value.readString('arenaBonusType').strip()
+        arenaType = ARENA_BONUS_TYPE_NAMES.get(typeName, None)
+        if arenaType is None:
+            raise SoftException("Wrong arena type: '{}'".format(typeName.strip()))
+        goldReserveGains[arenaType] = {'win': value.readInt('win'),
+         'loss': value.readInt('loss'),
+         'draw': value.readInt('draw'),
+         'minLevel': value.readInt('minLevel'),
+         'minTop': value.readInt('minTop', -1),
+         'topType': value.readString('topType', 'fareTeamXPPosition').strip()}
+
+    return goldReserveGains
 
 
 _customReaders = {BattleParams.TURRET_ROTATION_SPEED: _radiansType,
@@ -57,7 +82,9 @@ _customReaders = {BattleParams.TURRET_ROTATION_SPEED: _radiansType,
  BattleParams.VSE_MODIFIER: _readVisualScriptPlan,
  BattleParams.BONUS_CAPS_OVERRIDES: readBonusCapsOverrides,
  BattleParams.CRYSTAL_REWARDS: readCrystalRewards,
- BattleParams.GOLD_RESERVE_GAINS: readGoldReserveGains}
+ BattleParams.GOLD_RESERVE_GAINS: _readGoldReserveGains,
+ BattleParams.POSTMORTEM_OVERRIDES: readPostMortemSection,
+ BattleParams.SHELL_STUN: gun_readers.readStunParams}
 
 def registerParamReaders(paramId, dataType):
     global g_cache

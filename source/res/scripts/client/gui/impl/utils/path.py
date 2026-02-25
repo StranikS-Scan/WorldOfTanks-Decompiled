@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/utils/path.py
+from __future__ import absolute_import
 import logging
 import typing
+from past.builtins import basestring
 from constants import GF_RES_PROTOCOL
 from gui.shared.utils.functions import getAbsoluteUrl
 if typing.TYPE_CHECKING:
@@ -9,7 +11,7 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 
 def normalizeGfImagePath(imgPath):
-    if not isinstance(imgPath, (str, unicode)) or not imgPath:
+    if not isinstance(imgPath, basestring) or not imgPath:
         _logger.warning('Wrong image path: %s.', imgPath)
         return None
     else:

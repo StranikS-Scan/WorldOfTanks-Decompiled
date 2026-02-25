@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/maps_training/page.py
+from __future__ import absolute_import
 import WWISE
 from gui.Scaleform.daapi.view.battle.shared.markers2d.manager import KillCamMarkersManager
 from shared_utils import CONST_CONTAINER

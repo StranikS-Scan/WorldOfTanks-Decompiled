@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/SocialLoginView.py
+from __future__ import absolute_import
 import BigWorld
 from gui.login.social_networks import SOCIAL_NETWORKS
-from LoginView import LoginView
-from login_modes.social_mode import SOCIAL_NETWORK_TO_DOMAIN_MAPPING
+from gui.Scaleform.daapi.view.login.LoginView import LoginView
+from gui.Scaleform.daapi.view.login.login_modes.social_mode import SOCIAL_NETWORK_TO_DOMAIN_MAPPING
 
 class SocialLoginView(LoginView):
 

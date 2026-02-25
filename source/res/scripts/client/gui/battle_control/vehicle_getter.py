@@ -131,7 +131,7 @@ class TankmenStatesIterator(object):
             return (role, state)
         else:
             self._states.clear()
-            raise StopIteration()
+            raise StopIteration
             return
 
 
@@ -159,7 +159,7 @@ class VehicleDeviceStatesIterator(object):
             return (name, self._states[name])
         else:
             self._states.clear()
-            raise StopIteration()
+            raise StopIteration
             return None
 
     def clear(self):

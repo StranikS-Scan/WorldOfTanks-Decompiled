@@ -7,13 +7,7 @@ from typing import List
 from PlayerEvents import g_playerEvents
 from config_schemas.umg import umgEventsConfigSchema
 from constants import QUEUE_TYPE
-from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
-from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.clans.clan_cache import g_clanCache
-from gui.game_control.craftmachine_controller import getCraftMachineEntryPointIsActive
-from gui.impl.lobby.mapbox.mapbox_entry_point_view import isMapboxEntryPointAvailable
-from gui.impl.lobby.marathon.marathon_entry_point import isMarathonEntryPointAvailable
-from gui.impl.lobby.ranked.ranked_entry_point import isRankedEntryPointAvailable
 from gui.impl.lobby.stronghold_event.stronghold_event_banner import StrongholdEventBanner
 from gui.impl.lobby.stronghold_event.stronghold_event_helpers import isStrongholdEventBannerAvailable
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_container import EventBannersContainer
@@ -32,10 +26,6 @@ _HANGAR_ENTRY_POINTS = 'hangarEntryPoints'
 _SECONDS_BEFORE_UPDATE = 2
 EventBannersContainer().registerEventBanner(StrongholdEventBanner)
 EventBannersContainer().registerEventBanner(IntegratedAuctionEventBanner)
-registerBannerEntryPointValidator(HANGAR_ALIASES.CRAFT_MACHINE_ENTRY_POINT, getCraftMachineEntryPointIsActive)
-registerBannerEntryPointValidator(RANKEDBATTLES_ALIASES.ENTRY_POINT, isRankedEntryPointAvailable)
-registerBannerEntryPointValidator(HANGAR_ALIASES.MAPBOX_ENTRY_POINT, isMapboxEntryPointAvailable)
-registerBannerEntryPointValidator(HANGAR_ALIASES.MARATHON_ENTRY_POINT, isMarathonEntryPointAvailable)
 registerBannerEntryPointValidator(StrongholdEventBanner.NAME, isStrongholdEventBannerAvailable)
 registerBannerEntryPointValidator(IntegratedAuctionEventBanner.NAME, isAuctionEventBannerAvailable)
 _logger = logging.getLogger(__name__)
@@ -196,7 +186,7 @@ class EventsService(IEventsService, Notifiable, ServiceEvents):
                     if entry.isValidData() and not entry.isExpiredDate():
                         newEntries[entryId] = entry
 
-        if not newEntries == self.__entries:
+        if newEntries != self.__entries:
             self.__entries = newEntries
             self.clearNotification()
             self.addNotificator(SimpleNotifier(self.__getCooldownForUpdate, self.__onUpdateNotify))

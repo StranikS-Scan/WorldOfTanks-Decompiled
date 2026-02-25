@@ -61,6 +61,7 @@ _STEP_TYPE_TO_TOOLTIP = {Type.MAJOR: MajorPerkTooltipView,
  Type.SPECIAL: SpecialPerkTooltipView}
 
 class TreePresenter(SubModelPresenter, IPresenterLocationController):
+    __RESEARCH_RESPONSE_DELAY = 1.0
     __exchangeRates = dependency.descriptor(IExchangeRatesWithDiscountsProvider)
     __itemsCache = dependency.descriptor(IItemsCache)
     __wallet = dependency.descriptor(IWalletController)
@@ -71,6 +72,7 @@ class TreePresenter(SubModelPresenter, IPresenterLocationController):
         self.__selectedNodeIDs = None
         self.__researchedNodeIDs = None
         self.__lastSelectedNodeID = None
+        self.__researchInProgress = False
         self.__uiLogger = SkillTreeUILogger()
         return
 
@@ -83,6 +85,7 @@ class TreePresenter(SubModelPresenter, IPresenterLocationController):
         self.__vehicle = self.__itemsCache.items.getItemByCD(vhCtx.intCD)
         self.__selectedNodeIDs = []
         self.__researchedNodeIDs = []
+        self.__researchInProgress = False
         self._initializeLocation()
         self.__update()
 
@@ -97,6 +100,7 @@ class TreePresenter(SubModelPresenter, IPresenterLocationController):
         self.__selectedNodeIDs = None
         self.__lastSelectedNodeID = None
         self.__uiLogger = None
+        self.__researchInProgress = False
         super(TreePresenter, self).clear()
         return
 
@@ -134,14 +138,16 @@ class TreePresenter(SubModelPresenter, IPresenterLocationController):
          (g_playerEvents.onDisconnected, self.__onDisconnected))
 
     def __onXPStatsChanged(self, *args):
-        self.viewModel.setResearchAvailability(self.__getResearchState())
+        self.__updateResearchAvailability()
 
     @adisp_process
     def __onResearch(self):
-        if not self.__selectedNodeIDs:
+        if not self.__selectedNodeIDs or self.__researchInProgress:
             return
-        action = factory.getAction(factory.PURCHASE_VEH_SKILL_TREE_STEPS, self.__vehicle, self.__selectedNodeIDs)
+        self.__researchInProgress = True
+        action = factory.getAction(factory.PURCHASE_VEH_SKILL_TREE_STEPS, self.__vehicle, self.__selectedNodeIDs, self.__updateResearchAvailability, self.__RESEARCH_RESPONSE_DELAY)
         result = yield factory.asyncDoAction(action)
+        self.__researchInProgress = False
         if result:
             self.__researchedNodeIDs = self.__selectedNodeIDs
             self.__selectedNodeIDs = []
@@ -156,6 +162,8 @@ class TreePresenter(SubModelPresenter, IPresenterLocationController):
                 lockNotificationManager(True, source=VehSkillTreeProgressionState.STATE_ID)
             self.__update()
             self.__researchedNodeIDs = []
+        else:
+            self.__updateResearchAvailability()
 
     @adisp_process
     @args2params(int)
@@ -167,30 +175,34 @@ class TreePresenter(SubModelPresenter, IPresenterLocationController):
             yield self.__showTreeNodeDialog(step.action, nodeID)
             self.__update()
 
-    def __onFinalNodeResearchAnimationFinished(self):
+    @staticmethod
+    def __onFinalNodeResearchAnimationFinished():
         lockNotificationManager(False, source=VehSkillTreeProgressionState.STATE_ID)
 
     @args2params(int)
     def __onSelectNode(self, targetNodeID):
-        self.__selectedNodeIDs = []
-        targetNodeID = deconstructNodeUiId(self.__vehicle.intCD, targetNodeID)
-        if targetNodeID != self.__lastSelectedNodeID:
-            progression = self.__vehicle.postProgression
-            targetStep = progression.getStep(targetNodeID)
-            if Type(targetStep.getType()) == Type.FINAL:
-                for stepID in targetStep.getParentStepIDs():
-                    step = progression.getStep(stepID)
-                    if not step.isReceived():
-                        self.__selectedNodeIDs.append(step.stepID)
-
-                self.__selectedNodeIDs.append(targetNodeID)
-            else:
-                self.__selectedNodeIDs = self.__generatePath(targetStep)
-            self.__lastSelectedNodeID = targetNodeID
+        if self.__researchInProgress:
+            return
         else:
-            self.__lastSelectedNodeID = None
-        self.__update()
-        return
+            self.__selectedNodeIDs = []
+            targetNodeID = deconstructNodeUiId(self.__vehicle.intCD, targetNodeID)
+            if targetNodeID != self.__lastSelectedNodeID:
+                progression = self.__vehicle.postProgression
+                targetStep = progression.getStep(targetNodeID)
+                if Type(targetStep.getType()) == Type.FINAL:
+                    for stepID in targetStep.getParentStepIDs():
+                        step = progression.getStep(stepID)
+                        if not step.isReceived():
+                            self.__selectedNodeIDs.append(step.stepID)
+
+                    self.__selectedNodeIDs.append(targetNodeID)
+                else:
+                    self.__selectedNodeIDs = self.__generatePath(targetStep)
+                self.__lastSelectedNodeID = targetNodeID
+            else:
+                self.__lastSelectedNodeID = None
+            self.__update()
+            return
 
     @adisp_async
     @adisp_process
@@ -226,7 +238,7 @@ class TreePresenter(SubModelPresenter, IPresenterLocationController):
             with self.viewModel.transaction() as vm:
                 self.__fillNodes(vm)
                 self.__fillIntsArray(vm.getResearchedPerks())
-                vm.setResearchAvailability(self.__getResearchState())
+                self.__updateResearchAvailability()
                 vm.setIsProgressionCompleted(self.__isPorgressionCompleted())
                 vm.setIsPrestigeGlareShown(self.__isPrestigeGlareShown())
                 vm.setRootNodeId(rootStep)
@@ -315,6 +327,8 @@ class TreePresenter(SubModelPresenter, IPresenterLocationController):
 
     def __getResearchState(self):
         _, reason = self.__vehicle.postProgressionAvailability()
+        if self.__researchInProgress:
+            return ResearchAvailability.RESEARCH_IN_PROGRESS
         if not self.__wallet.isAvailable:
             return ResearchAvailability.EMERGENCY_MODE_ENABLED
         return ResearchAvailability.NOT_ENOUGH_EXP if reason == PostProgressionAvailability.AVAILABLE and self.__notEnoughXp() else _AVAILABILITY_MAP.get(reason, ResearchAvailability.AVAILABLE)
@@ -335,3 +349,6 @@ class TreePresenter(SubModelPresenter, IPresenterLocationController):
     def __isTreeLocked(self):
         _, reason = self.__vehicle.postProgressionAvailability()
         return reason == PostProgressionAvailability.VEH_NOT_IN_INVENTORY or not self.__vehicle.isUnlocked
+
+    def __updateResearchAvailability(self):
+        self.viewModel.setResearchAvailability(self.__getResearchState())

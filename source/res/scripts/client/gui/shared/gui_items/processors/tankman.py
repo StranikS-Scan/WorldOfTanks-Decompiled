@@ -7,7 +7,6 @@ from gui.SystemMessages import CURRENCY_TO_SM_TYPE, SM_TYPE
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared.event_dispatcher import showConversionAwardsView
 from gui.shared.formatters import formatPrice, formatPriceValue
 from gui.shared.gui_items import Tankman
 from gui.shared.gui_items.Tankman import BaseBookConvertingFormatter, NO_SLOT, getTankmanSkill
@@ -385,7 +384,7 @@ class TankmanChangeRole(GroupedRequestProcessor):
         self.__vehSlotIdx = vehSlotIdx
         tankman = self.itemsCache.items.getTankman(tankmanInvID)
         self.__vehicle = self.itemsCache.items.getItemByCD(self.__vehTypeCompDescr)
-        self.__retrainVehicle = True if tankman.vehicleNativeDescr.type.compactDescr != self.__vehicle.intCD else False
+        self.__retrainVehicle = tankman.vehicleNativeDescr.type.compactDescr != self.__vehicle.intCD
         super(TankmanChangeRole, self).__init__(BigWorld.player().inventory.changeTankmanRole, tankmanInvID, self.__roleIdx, self.__vehTypeCompDescr, groupID=groupID, groupSize=groupSize, plugins=(plugins.TankmanLockedValidator(tankman),
          plugins.VehicleCrewLockedValidator(self.__vehicle),
          plugins.VehicleValidator(self.__vehicle, False),
@@ -398,10 +397,9 @@ class TankmanChangeRole(GroupedRequestProcessor):
 
 class TankmanDropSkills(ItemProcessor):
 
-    def __init__(self, tankman, dropSkillCostIdx, useRecertificationForm):
+    def __init__(self, tankman, dropSkillCostIdx):
         super(TankmanDropSkills, self).__init__(tankman, (plugins.TankmanDropSkillValidator(tankman, True),))
         self.dropSkillCostIdx = dropSkillCostIdx
-        self.useRecertificationForm = useRecertificationForm
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError(sysMsgKey='drop_tankman_skill/{}'.format(errStr), defaultSysMsgKey='drop_tankman_skill/server_error')
@@ -417,7 +415,7 @@ class TankmanDropSkills(ItemProcessor):
 
     def _request(self, callback):
         _logger.debug('Make server request to drop tankman skills: %s, %s', self.item, self.dropSkillCostIdx)
-        BigWorld.player().inventory.dropTankmanSkills(self.item.invID, self.dropSkillCostIdx, self.useRecertificationForm, lambda code: self._response(code, callback))
+        BigWorld.player().inventory.dropTankmanSkills(self.item.invID, self.dropSkillCostIdx, lambda code: self._response(code, callback))
 
     def __getTankmanSysMsgType(self, dropSkillCostIdx):
         if dropSkillCostIdx == 1:
@@ -478,19 +476,14 @@ class TankmanRestore(GroupedRequestProcessor):
         return makeI18nSuccess(sysMsgKey='restore_tankman/success', type=SM_TYPE.Information, auxData=self._makeSuccessData())
 
 
-class TankmenJunkConverter(Processor, BaseBookConvertingFormatter):
+class TankmenJunkConverter(Processor):
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError(sysMsgKey='conversion/error', defaultSysMsgKey='restore_tankman/server_error')
 
     def _successHandler(self, code, ctx=None):
-        if not ctx:
-            return makeI18nSuccess(sysMsgKey='conversion/success', type=SM_TYPE.Information)
-        showConversionAwardsView(conversionResults=ctx)
-        self.setCrewBooks(ctx, self.itemsCache)
-        self.sortCrewBooks(key=lambda item: (item['nation'], -item['type']))
-        text = self.getTextMessage(header=R.strings.system_messages.conversion.header())
-        SystemMessages.pushMessage(text=text, type=SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.LOW, messageData={'header': backport.text(R.strings.system_messages.conversion.title())})
+        count = ctx.get('count', 0) if ctx is not None else 0
+        return makeI18nSuccess(sysMsgKey='conversion/success', type=SM_TYPE.Information, number=count)
 
     def _request(self, callback):
         _logger.debug('Make server request to convert junk tankmen ')

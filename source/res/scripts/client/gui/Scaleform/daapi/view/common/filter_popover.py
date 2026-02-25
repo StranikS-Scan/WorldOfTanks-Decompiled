@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/filter_popover.py
+from __future__ import absolute_import
 import itertools
 import logging
 import typing
+from future.utils import viewvalues
 import constants
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import VEHICLE_CAROUSEL_COUNTERS_SEEN
@@ -64,14 +66,14 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
         customParams['isRanked'] = self._isRanked
         customParams['isComp7'] = self._isComp7
         self._mapping = self._generateMapping((carousel.hasRentedVehicles() or not carousel.filter.isDefault((FILTER_KEYS.RENTED,))), (carousel.hasEventVehicles() or not carousel.filter.isDefault((FILTER_KEYS.EVENT,))), carousel.hasRoles(), carousel.hasCustomization(), **customParams)
-        self.__usedFilters = list(itertools.chain.from_iterable(self._mapping.itervalues()))
+        self.__usedFilters = list(itertools.chain.from_iterable(viewvalues(self._mapping)))
         self._carousel = carousel
         self._carousel.setPopoverCallback(self.__onCarouselSwitched)
         self._update(isInitial=True)
 
     def changeFilter(self, sectionId, itemId):
         if self._carousel is not None and self._carousel.filter is not None:
-            if sectionId == FILTER_POPOVER_SECTION.ROLES or sectionId == FILTER_POPOVER_SECTION.ROLES_WITH_EXTRA:
+            if sectionId in (FILTER_POPOVER_SECTION.ROLES, FILTER_POPOVER_SECTION.ROLES_WITH_EXTRA):
                 filters = self._carousel.filter.getFilters(self.__usedFilters)
                 target = self._mapping[FILTER_POPOVER_SECTION.ROLES][self.__getSelectedVehType(filters)][itemId]
             else:

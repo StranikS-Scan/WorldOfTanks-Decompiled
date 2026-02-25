@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/LobbyMenu.py
+from __future__ import absolute_import
+from future.utils import viewitems
 import BigWorld
 import constants
 from account_helpers.AccountSettings import AccountSettings, LOBBY_MENU_MANUAL_TRIGGER_SHOWN
@@ -15,7 +17,6 @@ from gui import DialogsInterface, GUI_SETTINGS
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.meta.LobbyMenuMeta import LobbyMenuMeta
 from gui.Scaleform.genConsts.MENU_CONSTANTS import MENU_CONSTANTS
-from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl.dialogs import dialogs
 from gui.prb_control import prbEntityProperty
@@ -23,17 +24,13 @@ from gui.shared import event_dispatcher, EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.formatters import text_styles, icons
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.sounds.ambients import LobbySubViewEnv
-from helpers import i18n, getShortClientVersion, dependency, getFullClientVersion
+from helpers import dependency, getFullClientVersion
 from skeletons.gameplay import IGameplayLogic
 from skeletons.gui.game_control import IManualController
 from skeletons.gui.game_control import IPromoController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from tutorial.control.context import GLOBAL_FLAG
-
-def _getVersionMessage():
-    return ('{0} {1}'.format(text_styles.main(i18n.makeString(MENU.PROMO_PATCH_MESSAGE)), text_styles.stats(getShortClientVersion())),)
-
 
 class LobbyMenu(LobbyMenuMeta):
     __sound_env__ = LobbySubViewEnv
@@ -164,7 +161,7 @@ class LobbyMenu(LobbyMenuMeta):
         counts = {'settingsBtn': getCountNewSettings(),
          'postBtn': self.promo.getPromoCount(),
          'manualBtn': self.manualController.getNewContentCount()}
-        for componentID, count in counts.iteritems():
+        for componentID, count in viewitems(counts):
             if count > 0:
                 toShow.append({'componentId': componentID,
                  'count': str(count)})

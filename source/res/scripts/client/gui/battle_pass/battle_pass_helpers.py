@@ -25,7 +25,7 @@ from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import time_formatters
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import Currency
-from gui.shared.event_dispatcher import showBattlePassStyleProgressionPreview, showStylePreview, showVehiclePreviewWithoutBottomPanel
+from gui.shared.event_dispatcher import showBattlePassStyleProgressionPreview, showStylePreview, showVehicleHubOverview
 from helpers import dependency, time_utils
 from helpers.dependency import replace_none_kwargs
 from skeletons.gui.shared import IItemsCache
@@ -33,7 +33,7 @@ from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IBattlePassController
 from web.web_client_api.common import ItemPackEntry, ItemPackType
 if typing.TYPE_CHECKING:
-    from typing import Any, Dict, List, Set
+    from typing import Dict, List
     from gui.impl.wrappers.user_compound_price_model import UserCompoundPriceModel
     from gui.server_events.bonuses import TmanTemplateTokensBonus
 _logger = logging.getLogger(__name__)
@@ -110,34 +110,6 @@ def getExtraVideoURL():
 
 def getIntroSlidesNames():
     return GUI_SETTINGS.battlePassIntroSlides
-
-
-def getSeasonVisualSettings():
-    if 'season' not in GUI_SETTINGS.battlePassVisuals:
-        _logger.warning('"season" section is missing in "battlePassVisuals" settings')
-        return {}
-    return GUI_SETTINGS.battlePassVisuals['season']
-
-
-def isSeasonWithAdditionalBackground():
-    hasAdditionalBackground = getSeasonVisualSettings().get('hasAdditionalBackground')
-    if hasAdditionalBackground is None:
-        _logger.warning('"hasAdditionalBackground" section is missing in "battlePassVisuals->season" settings')
-        return False
-    else:
-        return hasAdditionalBackground
-
-
-def chaptersWithLogoBg():
-    if 'chapter' not in GUI_SETTINGS.battlePassVisuals:
-        _logger.warning('"chapter" section is missing in "battlePassVisuals" settings')
-        return set()
-    else:
-        chaptersInfo = GUI_SETTINGS.battlePassVisuals['chapter'].get('hasChapterLogoInBg')
-        if chaptersInfo is None:
-            _logger.warning('"hasChapterLogoInBg" section is missed in battlePassVisuals->chapter settings')
-            return set()
-        return {int(chapterID) for chapterID, hasLogo in chaptersInfo.iteritems() if hasLogo}
 
 
 @dependency.replace_none_kwargs(battlePass=IBattlePassController)
@@ -233,6 +205,17 @@ def getStyleInfoForChapter(chapter, battlePass=None):
     return (style.intCD, style.getProgressionLevel()) if style is not None else (None, None)
 
 
+@replace_none_kwargs(battlePass=IBattlePassController)
+def getTimeExpirations(chapterID, battlePass=None):
+    if battlePass.isExtraChapter(chapterID):
+        endTimestamp = battlePass.getChapterExpiration(chapterID)
+        timeLeft = battlePass.getChapterRemainingTime(chapterID)
+    else:
+        endTimestamp = battlePass.getSeasonFinishTime()
+        timeLeft = battlePass.getSeasonTimeLeft()
+    return (time_utils.makeLocalServerTime(endTimestamp), timeLeft)
+
+
 @replace_none_kwargs(battlePass=IBattlePassController, c11nService=ICustomizationService)
 def getVehicleInfoForChapter(chapter, battlePass=None, c11nService=None, awardSource=BattlePassConsts.REWARD_PAID):
     rewards = battlePass.getSingleAward(chapter, battlePass.getMaxLevelInChapter(chapter), awardType=awardSource)
@@ -265,7 +248,7 @@ def getTankmanInfo(bonus):
 def getDataByTankman(tankman):
     nation = getRecruitNation(tankman)
     iconName = tankman.getIconByNation(nation)
-    tankmanName = tankman.getFullUserNameByNation(nation)
+    tankmanName = tankman.getFullUserNameByNation(nation).strip()
     freeSkills = tankman.getFreeSkills()
     earnedSkills = tankman.getEarnedSkills(True)
     groupName = tankman.getGroupName()
@@ -379,7 +362,8 @@ def showFinalRewardPreviewBattlePassState(chapterID, bonusID=None, level=None, i
     vehicleCD = getVehicleCDForStyle(styleInfo) if styleInfo is not None else None
     allRewardTypes = getAllFinalRewards(chapterID)
     if FinalReward.PROGRESSIVE_STYLE in allRewardTypes:
-        showBattlePassStyleProgressionPreview(vehicleCD, styleInfo, styleInfo.getDescription(), chapterId=chapterID, styleLevel=int(level or styleInfo.getProgressionLevel() or 1))
+        level = level or styleInfo.getMaxProgressionLevel()
+        showBattlePassStyleProgressionPreview(vehicleCD, styleInfo, styleInfo.getDescription(), chapterId=chapterID, styleLevel=int(level))
         return
     else:
         previewItemPack = (ItemPackEntry(type=ItemPackType.CREW_100, groupID=1),)
@@ -391,7 +375,7 @@ def showFinalRewardPreviewBattlePassState(chapterID, bonusID=None, level=None, i
                  'currentTabID': TabID.STYLE,
                  'style': styleInfo}, itemsPack=previewItemPack)
             else:
-                showVehiclePreviewWithoutBottomPanel(vehicle.intCD, itemsPack=previewItemPack, style=style)
+                showVehicleHubOverview(vehicle.intCD, style=style)
         else:
             showStylePreview(vehicleCD, style=styleInfo, itemsPack=previewItemPack)
         return

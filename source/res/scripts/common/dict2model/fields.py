@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dict2model/fields.py
 from __future__ import absolute_import
-from datetime import datetime
-import Math
 import enum
+import Math
 import typing
+from datetime import datetime
+from future.utils import viewitems
 from dict2model import utils
 from dict2model import validate
 from dict2model.exceptions import ValidationError, ValidationErrorMessage, AccessToFieldDeniedError
@@ -313,6 +314,37 @@ class UniCapList(List):
         if not isinstance(incoming, (list, tuple)):
             incoming = [incoming]
         return super(UniCapList, self)._convert(incoming, skipValidation, converter, **kwargs)
+
+
+class Dict(Field):
+    __slots__ = ('_keyFieldOrSchema', '_valueFieldOrSchema')
+
+    def __init__(self, keyFieldOrSchema, valueFieldOrSchema, required=True, default=dict, filterParams=None, serializedValidators=None, deserializedValidators=None):
+        super(Dict, self).__init__(required=required, default=default, filterParams=filterParams, serializedValidators=serializedValidators, deserializedValidators=deserializedValidators)
+        self._keyFieldOrSchema = keyFieldOrSchema
+        self._valueFieldOrSchema = valueFieldOrSchema
+
+    def _serialize(self, incoming, skipValidation=False, **kwargs):
+        return self._convert(incoming, skipValidation, keyConverter=self._keyFieldOrSchema.serialize, valueConverter=self._valueFieldOrSchema.serialize, **kwargs)
+
+    def _deserialize(self, incoming, skipValidation=False, **kwargs):
+        return self._convert(incoming, skipValidation, keyConverter=self._keyFieldOrSchema.deserialize, valueConverter=self._valueFieldOrSchema.deserialize, **kwargs)
+
+    def _convert(self, incoming, skipValidation, keyConverter, valueConverter, **kwargs):
+        if not skipValidation and not isinstance(incoming, dict):
+            raise ValidationError('Not a dict type.')
+        converted, errors = {}, None
+        kwargs['silent'] = False
+        for key, value in viewitems(incoming):
+            try:
+                converted[keyConverter(key, skipValidation=skipValidation, **kwargs)] = valueConverter(value, skipValidation=skipValidation, **kwargs)
+            except ValidationError as ve:
+                error = ValidationErrorMessage(ve.error.data, title='Dict[{}:{}]'.format(key, value))
+                errors = errors + error if errors else error
+
+        if errors:
+            raise ValidationError(errors)
+        return converted
 
 
 class HexColorCode(String):

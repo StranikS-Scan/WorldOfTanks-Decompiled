@@ -3,6 +3,7 @@
 import typing
 PERKS_XML_FILE = 'perks.xml'
 PERK_BONUS_VALUE_PRECISION = 5
+POINT_BLAST_DISTANCE = 50
 SKIP_SE_PERKS = ('commander_sixthSense',)
 
 class PerkState(object):

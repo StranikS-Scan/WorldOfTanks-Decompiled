@@ -271,9 +271,7 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
 
     def __updateHeader(self):
         self.as_setHeaderDataS({'operations': missions_helper.getOperations(self.getBranch(), self.getOperationID()),
-         'operationTitle': self.__getOperationTitle(),
-         'backBtnLabel': PERSONAL_MISSIONS.HEADER_BACKBTN_LABEL,
-         'backBtnDescrLabel': PERSONAL_MISSIONS.HEADER_BACKBTN_DESCRLABEL_CAMPAIGN})
+         'operationTitle': self.__getOperationTitle()})
 
     def __updateFooter(self):
         pm = self.__PMCache

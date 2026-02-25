@@ -2,7 +2,6 @@
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/lobby/common/lootboxes.py
 from __future__ import absolute_import
 import typing
-from builtins import round
 from future.utils import iteritems, viewvalues
 from constants import LOOTBOX_TOKEN_PREFIX
 from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin
@@ -10,7 +9,6 @@ from fun_random.gui.impl.gen.view_models.views.lobby.common.fun_random_lootbox i
 from gui.impl import backport
 from gui.impl.backport import TooltipData
 from gui.impl.gen import R
-from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
 from gui.impl.gen.view_models.common.missions.bonuses.token_bonus_model import TokenBonusModel
 from gui.impl.lobby.awards.packers import MultiAwardVehiclesBonusUIPacker
 from gui.server_events.awards_formatters import AWARDS_SIZES
@@ -18,9 +16,11 @@ from gui.server_events.bonuses import getNonQuestBonuses, CreditsBonus, GoldBonu
 from gui.shared.missions.packers.bonus import TokenBonusUIPacker
 from gui.shared.money import Money, Currency
 from helpers import dependency
+from math_common import decimal_round
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import TokensBonus
+    from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
 FEP_CATEGORY = 'FEPLootBoxes'
 
 class FunRandomLootBoxTypes(object):
@@ -167,7 +167,7 @@ def packLootboxRewards(lootBoxData, rewardsModel, packer, tooltipData=None):
                         bonusContentIdList = packer.getContentId(bonus)
                     for bonusIndex, item in enumerate(bonusList):
                         item.setIndex(bonusIndex)
-                        probability = 0 if probability == -1 else int(round(probability * 100, 2))
+                        probability = 0 if probability == -1 else int(decimal_round(probability * 100, 2))
                         item.setProbability(probability)
                         if tooltipData is not None:
                             tooltipIdx = str(bonusIndexTotal)

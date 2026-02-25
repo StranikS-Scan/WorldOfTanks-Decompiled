@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class RewardPointsByPlaceModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=2, commands=0):
+    def __init__(self, properties=3, commands=0):
         super(RewardPointsByPlaceModel, self).__init__(properties=properties, commands=commands)
 
     def getPlace(self):
@@ -20,7 +20,14 @@ class RewardPointsByPlaceModel(ViewModel):
     def setPoints(self, value):
         self._setNumber(1, value)
 
+    def getExternalPoints(self):
+        return self._getNumber(2)
+
+    def setExternalPoints(self, value):
+        self._setNumber(2, value)
+
     def _initialize(self):
         super(RewardPointsByPlaceModel, self)._initialize()
         self._addStringProperty('place', '')
         self._addNumberProperty('points', 0)
+        self._addNumberProperty('externalPoints', 0)

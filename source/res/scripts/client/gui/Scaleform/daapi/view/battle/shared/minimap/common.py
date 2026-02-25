@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/minimap/common.py
+from __future__ import absolute_import
 from functools import partial
 import BigWorld
 from aih_constants import CTRL_MODE_NAME
@@ -201,8 +202,8 @@ class IntervalPlugin(EntriesPlugin):
                 self.__callbackIDs[key] = None
                 toKill.append(key)
 
-        for i in range(0, len(toKill)):
-            del self.__callbackIDs[toKill[i]]
+        for key in toKill:
+            del self.__callbackIDs[key]
 
         return
 

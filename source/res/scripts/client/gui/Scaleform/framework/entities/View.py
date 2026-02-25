@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/View.py
+from __future__ import absolute_import
 import logging
 import typing
 import BigWorld
@@ -33,11 +34,17 @@ class ViewKey(_ViewKey):
     def __repr__(self):
         return '{}[alias={}, name={}]'.format(self.__class__.__name__, self.alias, self.name)
 
+    def __hash__(self):
+        return hash((self.alias, self.name))
+
     def __eq__(self, other):
         return self.name == other.name and self.alias == other.alias if isinstance(other, ViewKey) else False
 
 
 class ViewKeyDynamic(ViewKey):
+
+    def __hash__(self):
+        return hash((self.alias, self.name))
 
     def __eq__(self, other):
         return self.alias == other.alias if isinstance(other, ViewKey) else False
@@ -51,7 +58,7 @@ class View(AbstractViewMeta, ViewInterface):
         super(View, self).__init__()
         from gui.Scaleform.framework import ViewSettings
         self.__settings = ViewSettings()
-        self.__uid = _view_id_generator.next()
+        self.__uid = _view_id_generator.nextSequenceID
         self.__key = ViewKey(None, None)
         self.__soundExtension = None
         self.initSoundManager(self._COMMON_SOUND_SPACE)

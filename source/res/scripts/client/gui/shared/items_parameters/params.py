@@ -9,7 +9,7 @@ from math import ceil, floor
 import typing
 from future.utils import iteritems, itervalues
 import BigWorld
-from constants import SHELL_TYPES, BonusTypes, IS_DEVELOPMENT
+from constants import SHELL_TYPES, BonusTypes
 from debug_utils import LOG_DEBUG
 from gui.shared.gui_items import KPI
 from gui.shared.gui_items.Tankman import isSkillLearnt, crewMemberRealSkillLevel
@@ -35,7 +35,7 @@ from vehicles.mechanics.mechanic_constants import VehicleMechanic
 if typing.TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor, VehicleDescr
     from gui.shared.gui_items.Vehicle import Vehicle
-_DO_TTC_LOG = False and IS_DEVELOPMENT
+_DO_TTC_LOG = False
 _Weight = namedtuple('_Weight', 'current, max')
 _Invisibility = namedtuple('_Invisibility', 'current, atShot')
 _PenaltyInfo = namedtuple('_PenaltyInfo', 'roleName, value, vehicleIsNotNative')
@@ -335,21 +335,16 @@ class VehicleParams(ParameterBase):
 
     @property
     def circularVisionRadius(self):
-        baseCircularVisionRadius = items_utils.getCircularVisionRadius(self._itemDescr, self.__factors)
-        skillName = 'radioman_finder'
-        argName = 'vehicleCircularVisionRadius'
-        additionalFactor = self.__getFactorValueFromSkill(skillName, argName)
-        baseCircularVisionRadius *= additionalFactor
-        result = round(baseCircularVisionRadius)
-        if self.__hasUnsupportedSwitchMode():
-            visRadiusSiegeVal = items_utils.getCircularVisionRadius(self._itemDescr.siegeVehicleDescr, self.__factors)
-            return (result, round(visRadiusSiegeVal * additionalFactor))
-        return (result,)
+        return self.__calculateCircularVisionRadius()
+
+    @property
+    def circularVisionRadiusSituational(self):
+        return self.__calculateCircularVisionRadius(isSituational=True)
 
     @property
     def radioDistance(self):
         baseDistance = items_utils.getRadioDistance(self._itemDescr, self.__factors)
-        return int(baseDistance)
+        return baseDistance
 
     @property
     def turretArmor(self):
@@ -386,12 +381,16 @@ class VehicleParams(ParameterBase):
         gunnerQuickAimingFactor = self.__getFactorValueFromSkill(skillName, argName)
         skillName = 'commander_coordination'
         commanderCoordinationReloadFactor = self.__getFactorValueFromSkill(skillName, argName)
+        loneWolfFactor = self.__getFactorValueFromSkill('gunner_loneWolf', argName)
         if _DO_TTC_LOG:
-            LOG_DEBUG('TTC of aimingTimeSituational: baseAimingTimeVal:%f * gunner_quickAimingFactor:%f * commander_coordinationFactor:%f' % (baseAimingTimeVal, gunnerQuickAimingFactor, commanderCoordinationReloadFactor))
-        aimingTimeVal = self.__calcParamWithSkillFactorAmp(baseAimingTimeVal, (gunnerQuickAimingFactor, commanderCoordinationReloadFactor))
+            LOG_DEBUG('TTC of aimingTimeSituational: baseAimingTimeVal:%f * gunner_quickAimingFactor:%f * commander_coordinationFactor:%f * gunner_loneWolfFactor:%f' % (baseAimingTimeVal,
+             gunnerQuickAimingFactor,
+             commanderCoordinationReloadFactor,
+             loneWolfFactor))
+        aimingTimeVal = self.__calcParamWithSkillFactorAmp(baseAimingTimeVal, (gunnerQuickAimingFactor, commanderCoordinationReloadFactor, loneWolfFactor))
         if self._itemDescr.hasTurboshaftEngine or self.__hasTwinGun():
             baseSiegeAimingTimeVal = items_utils.getGunAimingTime(self._itemDescr.siegeVehicleDescr, self.__factors)
-            siegeAimingTimeVal = self.__calcParamWithSkillFactorAmp(baseSiegeAimingTimeVal, (gunnerQuickAimingFactor, commanderCoordinationReloadFactor))
+            siegeAimingTimeVal = self.__calcParamWithSkillFactorAmp(baseSiegeAimingTimeVal, (gunnerQuickAimingFactor, commanderCoordinationReloadFactor, loneWolfFactor))
             if aimingTimeVal != siegeAimingTimeVal:
                 return (aimingTimeVal, siegeAimingTimeVal)
         return (getHeatedAimingTime(aimingTimeVal, self._itemDescr), aimingTimeVal) if isTemperatureGun(self._itemDescr) else (aimingTimeVal,)
@@ -443,10 +442,14 @@ class VehicleParams(ParameterBase):
             skillName = 'loader_desperado'
             argName = 'gunReloadSpeed'
             loaderDesperadoReloadFactor = self.__getFactorValueFromSkill(skillName, argName)
+            skillName = 'loader_secondChance'
+            argName = 'gunReloadSpeed'
+            loaderSecondChanceReloadFactor = self.__getFactorValueFromSkill(skillName, argName)
             baseReloadTimes = tuple(reversed(items_utils.getClipReloadTime(self._itemDescr, self.__factors)))
             reloadTimes = []
+            skillsFactors = (loaderMeleeReloadFactor, loaderDesperadoReloadFactor, loaderSecondChanceReloadFactor)
             for baseReloadTime in baseReloadTimes:
-                reloadTime = self.__calcParamWithSkillFactorAmp(baseReloadTime, (loaderMeleeReloadFactor, loaderDesperadoReloadFactor))
+                reloadTime = self.__calcParamWithSkillFactorAmp(baseReloadTime, skillsFactors)
                 reloadTimes.append(reloadTime)
 
             return tuple(reloadTimes)
@@ -680,15 +683,29 @@ class VehicleParams(ParameterBase):
         repairTime = []
         chassis = self._itemDescr.chassis
         if chassis.trackPairs:
+            if any((track.healthParams.repairTime is None for track in chassis.trackPairs)):
+                return []
             for track in chassis.trackPairs:
-                if track.healthParams.repairTime is None:
-                    repairTime = []
-                    break
                 repairTime.append(self.__calcRealChassisRepairTime(track.healthParams.repairTime))
 
             repairTime.reverse()
         elif chassis.repairTime is not None:
             repairTime.append(self.__calcRealChassisRepairTime(chassis.repairTime))
+        return repairTime
+
+    @property
+    def chassisRepairTimeSituational(self):
+        repairTime = []
+        chassis = self._itemDescr.chassis
+        if chassis.trackPairs:
+            if any((track.healthParams.repairTime is None for track in chassis.trackPairs)):
+                return []
+            for track in chassis.trackPairs:
+                repairTime.append(self.__calcRealChassisRepairTime(track.healthParams.repairTime, True))
+
+            repairTime.reverse()
+        elif chassis.repairTime is not None:
+            repairTime.append(self.__calcRealChassisRepairTime(chassis.repairTime, True))
         return repairTime
 
     @property
@@ -910,7 +927,7 @@ class VehicleParams(ParameterBase):
         upperVal = avgParam + avgParam * upperBoundRandomization
         return (int(ceil(lowerVal)), int(floor(upperVal))) if isNeedToRound else (lowerVal, upperVal)
 
-    def __calcRealChassisRepairTime(self, chassisRepairTime):
+    def __calcRealChassisRepairTime(self, chassisRepairTime, isSituational=False):
         skillName = 'repair'
         argName = 'vehicleRepairSpeed'
         realSkillLevel = crewMemberRealSkillLevel(self.__vehicle, skillName)
@@ -921,6 +938,11 @@ class VehicleParams(ParameterBase):
         vehicleRepairSpeed = self.__kpi.getCoeff('vehicleRepairSpeed')
         repairKpi = 1 + (vehicleRepairSpeed - kpiSkillFactor)
         repairChassisKpi = self.__kpi.getCoeff('vehicleChassisRepairSpeed')
+        driverSuspensionRepairFactor = 1
+        if isSituational:
+            skillName = 'driver_suspensionRepair'
+            argName = 'chassisRepairTime'
+            driverSuspensionRepairFactor = self.__getFactorValueFromSkill(skillName, argName)
         if _DO_TTC_LOG:
             LOG_DEBUG('TTC of ChassisRepairTime: repairKpi:%f = 1 + (vehicleRepairSpeed:%f - kpiSkillFactor:%f)time = chassisRepairTime:%f / repairFactor:%f / repairKpi:%f / repairChassisKpi:%f' % (repairKpi,
              vehicleRepairSpeed,
@@ -929,26 +951,48 @@ class VehicleParams(ParameterBase):
              repairFactor,
              repairKpi,
              repairChassisKpi))
-        return chassisRepairTime / repairFactor / repairKpi / repairChassisKpi
+        return chassisRepairTime / repairFactor / repairKpi / repairChassisKpi / driverSuspensionRepairFactor
+
+    def __calculateCircularVisionRadius(self, isSituational=False):
+        baseCircularVisionRadius = items_utils.getCircularVisionRadius(self._itemDescr, self.__factors)
+        skillName = 'radioman_finder'
+        argName = 'vehicleCircularVisionRadius'
+        finderFactor = self.__getFactorValueFromSkill(skillName, argName)
+        threatSearchFactor = 1
+        if isSituational:
+            skillName = 'radioman_threatSearch'
+            argName = 'circularVisionRadius'
+            threatSearchFactor = self.__getFactorValueFromSkill(skillName, argName)
+        additionalFactor = self.__calcParamWithSkillFactorAmp(1, (finderFactor, threatSearchFactor))
+        result = baseCircularVisionRadius * additionalFactor
+        if self.__hasUnsupportedSwitchMode():
+            visRadiusSiegeVal = items_utils.getCircularVisionRadius(self._itemDescr.siegeVehicleDescr, self.__factors)
+            return (result, visRadiusSiegeVal * additionalFactor)
+        return (result,)
 
     def __shotDispersionAngle(self, isSituational=False):
         shotDispersions = getClientShotDispersion(self._itemDescr, self.__factors['shotDispersion'][0])
         baseShotDispersions = (round(shotDispersion * 100, 4) for shotDispersion in shotDispersions)
         focusFactorValue = 1
+        loneWolfFactor = 1
         skillName = 'gunner_armorer'
         argName = 'shotDispersionAngle'
         armorerFactorValue = self.__getFactorValueFromSkill(skillName, argName)
         if isSituational:
             skillName = 'gunner_focus'
             focusFactorValue = self.__getFactorValueFromSkill(skillName, argName)
+            loneWolfFactor = self.__getFactorValueFromSkill('gunner_loneWolf', argName)
         resShotDispersion = []
         for baseShotDispersion in baseShotDispersions:
-            shotDispersion = self.__calcParamWithSkillFactorAmp(baseShotDispersion, (armorerFactorValue, focusFactorValue))
+            shotDispersion = self.__calcParamWithSkillFactorAmp(baseShotDispersion, (armorerFactorValue, focusFactorValue, loneWolfFactor))
             resShotDispersion.append(shotDispersion)
 
         if _DO_TTC_LOG:
             for shotDispersion in resShotDispersion:
-                LOG_DEBUG('TTC of shotDispersionAngle: baseShotDispersion:%f * gunner_armorerFactor:%f * gunner_focusFactor:%f' % (shotDispersion, armorerFactorValue, focusFactorValue))
+                LOG_DEBUG('TTC of shotDispersionAngle: baseShotDispersion:%f * gunner_armorerFactor:%f * gunner_focusFactor:%f * gunner_loneWolfFactor:%f' % (shotDispersion,
+                 armorerFactorValue,
+                 focusFactorValue,
+                 loneWolfFactor))
 
         return resShotDispersion
 
@@ -1062,6 +1106,7 @@ class VehicleParams(ParameterBase):
     def __calcReloadTime(self, isSituational=False):
         loaderMeleeReloadFactor = 1
         loaderDesperadoReloadFactor = 1
+        loaderSecondChanceReloadFactor = 1
         if isSituational:
             skillName = 'loader_melee'
             argName = 'gunReloadSpeed'
@@ -1069,11 +1114,15 @@ class VehicleParams(ParameterBase):
             skillName = 'loader_desperado'
             argName = 'gunReloadSpeed'
             loaderDesperadoReloadFactor = self.__getFactorValueFromSkill(skillName, argName)
+            skillName = 'loader_secondChance'
+            argName = 'gunReloadSpeed'
+            loaderSecondChanceReloadFactor = self.__getFactorValueFromSkill(skillName, argName)
 
         def getParams(f):
+            skillsFactors = (loaderMeleeReloadFactor, loaderDesperadoReloadFactor, loaderSecondChanceReloadFactor)
             reloadTimes = f(self._itemDescr, self.__factors)
-            reloadTimesMax = self.__calcParamWithSkillFactorAmp(max(reloadTimes), (loaderMeleeReloadFactor, loaderDesperadoReloadFactor))
-            reloadTimesMin = self.__calcParamWithSkillFactorAmp(min(reloadTimes), (loaderMeleeReloadFactor, loaderDesperadoReloadFactor))
+            reloadTimesMax = self.__calcParamWithSkillFactorAmp(max(reloadTimes), skillsFactors)
+            reloadTimesMin = self.__calcParamWithSkillFactorAmp(min(reloadTimes), skillsFactors)
             return (getShotsPerMinute(self._itemDescr.gun, reloadTimesMax, hasAutoReload), getShotsPerMinute(self._itemDescr.gun, reloadTimesMin, hasAutoReload))
 
         hasAutoReload = self.__hasAutoReload()
@@ -1087,18 +1136,32 @@ class VehicleParams(ParameterBase):
             return (self.__calcParamWithSkillFactorAmp(getTemperatureRateOfFire(self._itemDescr), (loaderMeleeReloadFactor, loaderDesperadoReloadFactor)),)
         baseReloadTime = items_utils.getReloadTime(self._itemDescr, self.__factors)
         if _DO_TTC_LOG:
-            LOG_DEBUG('baseReloadTime:%f * loader_meleeFactor:%f * loader_desperadoFactor:%f' % (baseReloadTime, loaderMeleeReloadFactor, loaderDesperadoReloadFactor))
-        reloadTime = self.__calcParamWithSkillFactorAmp(baseReloadTime, (loaderMeleeReloadFactor, loaderDesperadoReloadFactor))
-        reloadTime = reloadTime + self.mechanicsReloadDelay
+            LOG_DEBUG('baseReloadTime:%f *loader_meleeFactor:%f *loader_desperadoFactor:%f *loader_secondChance:%f' % (baseReloadTime,
+             loaderMeleeReloadFactor,
+             loaderDesperadoReloadFactor,
+             loaderSecondChanceReloadFactor))
+        skillsFactors = [loaderMeleeReloadFactor, loaderDesperadoReloadFactor, loaderSecondChanceReloadFactor]
+        if self.__hasClipGun() and not self._itemDescr.isAutoShootGunVehicle:
+            skillName = 'loader_magMastery'
+            argName = 'magazineGunReloadSpeed'
+            loaderMagMasteryReloadFactor = self.__getFactorValueFromSkill(skillName, argName)
+            skillsFactors.append(loaderMagMasteryReloadFactor)
+        reloadTime = self.__calcParamWithSkillFactorAmp(baseReloadTime, tuple(skillsFactors))
+        reloadTime += self.mechanicsReloadDelay
         return (getShotsPerMinute(self._itemDescr.gun, reloadTime, hasAutoReload),)
 
-    def __calcClipFireRate(self):
+    def __calcClipFireRate(self, isFromSituational=False):
         if self.__hasClipGun():
             clipData = self._itemDescr.gun.clip
             if self.__hasAutoReload():
                 reloadTime = sum(items_utils.getClipReloadTime(self._itemDescr, self.__factors))
             else:
                 reloadTime = items_utils.getReloadTime(self._itemDescr, self.__factors) + self.mechanicsReloadDelay
+                if not self._itemDescr.isAutoShootGunVehicle and not isFromSituational:
+                    skillName = 'loader_magMastery'
+                    argName = 'magazineGunReloadSpeed'
+                    loaderMagMasteryReloadFactor = self.__getFactorValueFromSkill(skillName, argName)
+                    reloadTime = self.__calcParamWithSkillFactorAmp(reloadTime, (loaderMagMasteryReloadFactor,))
             return (reloadTime, clipData[1], clipData[0])
         elif self.__hasDualGun():
             reloadTimes = items_utils.getDualGunReloadTime(self._itemDescr, self.__factors)
@@ -1107,7 +1170,7 @@ class VehicleParams(ParameterBase):
             return None
 
     def __calcClipFireRateSituational(self):
-        clipFireRate = self.__calcClipFireRate()
+        clipFireRate = self.__calcClipFireRate(isFromSituational=True)
         if clipFireRate is None:
             return
         else:
@@ -1117,7 +1180,16 @@ class VehicleParams(ParameterBase):
             skillName = 'loader_desperado'
             argName = 'gunReloadSpeed'
             loaderDesperadoReloadFactor = self.__getFactorValueFromSkill(skillName, argName)
-            reloadTime = self.__calcParamWithSkillFactorAmp(clipFireRate[0], (loaderMeleeReloadFactor, loaderDesperadoReloadFactor))
+            skillName = 'loader_secondChance'
+            argName = 'gunReloadSpeed'
+            loaderSecondChanceReloadFactor = self.__getFactorValueFromSkill(skillName, argName)
+            skillsFactors = [loaderMeleeReloadFactor, loaderDesperadoReloadFactor, loaderSecondChanceReloadFactor]
+            if not self._itemDescr.isAutoShootGunVehicle:
+                skillName = 'loader_magMastery'
+                argName = 'magazineGunReloadSpeed'
+                loaderMagMasteryReloadFactor = self.__getFactorValueFromSkill(skillName, argName)
+                skillsFactors.append(loaderMagMasteryReloadFactor)
+            reloadTime = self.__calcParamWithSkillFactorAmp(clipFireRate[0], tuple(skillsFactors))
             return (reloadTime, clipFireRate[1], clipFireRate[2])
 
     def __getChassisPhysics(self):
@@ -1198,7 +1270,7 @@ class ShellParams(CompatibleParams):
 
     @property
     def avgDamagePerSecond(self):
-        return self.avgDamage / self._vehicleDescr.gun.clip[1] if self._vehicleDescr and self._vehicleDescr.isAutoShootGunVehicle else None
+        return round(float(self.avgDamage) / self._vehicleDescr.gun.clip[1]) if self._vehicleDescr and self._vehicleDescr.isAutoShootGunVehicle else None
 
     @property
     def avgPiercingPower(self):

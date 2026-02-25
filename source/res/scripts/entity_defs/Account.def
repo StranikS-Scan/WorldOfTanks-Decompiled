@@ -373,13 +373,10 @@
       <Arg>	UINT8	</Arg>
     </onKickedFromArena>
     <releaseClientForLogin>
-      <Arg>	MAILBOX	</Arg>
       <Arg>	PYTHON	</Arg>
-      <Arg>	UINT64	</Arg>
       <Arg>	PYTHON	</Arg>
       <ReturnValues>
         <Arg>	UINT8	</Arg>
-        <Arg>	UINT64	</Arg>
       </ReturnValues>
     </releaseClientForLogin>
     <keepAliveFor>

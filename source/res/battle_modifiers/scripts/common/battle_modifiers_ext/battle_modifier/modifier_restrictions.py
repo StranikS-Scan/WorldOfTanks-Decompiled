@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_modifiers/scripts/common/battle_modifiers_ext/battle_modifier/modifier_restrictions.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from soft_exception import SoftException
 from battle_modifiers_ext.battle_modifier import modifier_readers
-from battle_modifiers_ext.constants_ext import UseType, ModifierRestriction
+from battle_modifiers_ext.constants_ext import UseType, ModifierRestriction, DataType
 from typing import TYPE_CHECKING, Any, Set, Dict, Type, Optional, Tuple
 if TYPE_CHECKING:
     from battle_modifiers_ext.battle_modifier.modifier_filters import ModificationNode
@@ -21,7 +23,7 @@ class IModifierValidator(object):
             raise SoftException('[BattleModifier] Validation error for param {}: {}'.format(paramId, errorMsg))
 
     def _readConfig(self, config, paramId):
-        return None
+        raise NotImplementedError
 
     def _validate(self, modificationNode):
         raise NotImplementedError
@@ -46,6 +48,25 @@ class UseTypeValidator(IModifierValidator):
 
     def _errorMessage(self, modificationNode):
         return "use type '{}' is not allowed".format(UseType.ID_TO_NAME[modificationNode.useType])
+
+
+class DataTypeValidator(IModifierValidator):
+
+    def __call__(self, modificationNode):
+        if modificationNode.param.dataType == DataType.HASHABLE_DICT:
+            self._validate(modificationNode)
+
+    def _readConfig(self, _, __):
+        return None
+
+    def _validate(self, modificationNode):
+        value = modificationNode.value
+        try:
+            for k, v in viewitems(value):
+                hash(v)
+
+        except (AssertionError, TypeError):
+            raise SoftException("Keys should be strings and all values should be hashable: '{}'".format(value))
 
 
 class IValueValidator(IModifierValidator):

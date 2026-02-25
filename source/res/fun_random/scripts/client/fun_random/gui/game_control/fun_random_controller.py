@@ -6,6 +6,7 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import FUN_RANDOM_LAST_PRESET
 from adisp import adisp_async, adisp_process
 from fun_random_common.fun_constants import FUN_EVENT_ID_KEY, FUN_GAME_PARAMS_KEY, DEFAULT_SETTINGS_KEY
+from fun_random.gui.feature.configs.providers.fun_mode_configuration import FunModeConfigurationProvider
 from fun_random.gui.feature.sub_systems.fun_hidden_vehicles import FunHiddenVehicles
 from fun_random.gui.feature.sub_systems.fun_notifications import FunNotifications
 from fun_random.gui.feature.sub_systems.fun_progressions import FunProgressions
@@ -14,17 +15,19 @@ from fun_random.gui.feature.sub_systems.fun_subscription import FunSubscription
 from fun_random.gui.feature.sub_systems.fun_sub_modes_info import FunSubModesInfo
 from fun_random.gui.feature.util.fun_helpers import notifyCaller
 from fun_random.gui.fun_gui_constants import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, SELECTOR_BATTLE_TYPES
+from fun_random.gui.shared.gui_items.vehicle import isOnlyFunRandomVehicle
 from fun_random.helpers.server_settings import FunRandomConfig
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.shared import events
 from gui.shared.utils.SelectorBattleTypesUtils import setBattleTypeAsUnknown
 from helpers import dependency
 from skeletons.gui.game_control import IFunRandomController
 from skeletons.gui.lobby_context import ILobbyContext
-from gui.impl.gen import R
 if typing.TYPE_CHECKING:
+    from gui.shared import events
+    from gui.shared.gui_items.Vehicle import Vehicle
     from helpers.server_settings import ServerSettings
+    from fun_random.gui.feature.configs.modes.mode import FunModeCompositeConfigurationModel
 
 class FunRandomController(IFunRandomController, IGlobalListener):
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -33,6 +36,7 @@ class FunRandomController(IFunRandomController, IGlobalListener):
         super(FunRandomController, self).__init__()
         self.__serverSettings = None
         self.__funRandomSettings = None
+        self.__configurationProvider = None
         self.__subscription = FunSubscription()
         self.__subModesHolder = FunSubModesHolder(self.__subscription)
         self.__subModesInfo = FunSubModesInfo(self.__subModesHolder)
@@ -67,7 +71,7 @@ class FunRandomController(IFunRandomController, IGlobalListener):
         for subSystemToClear in self.__getSubSystems():
             subSystemToClear.clear()
 
-        self.__serverSettings = self.__funRandomSettings = None
+        self.__serverSettings = self.__funRandomSettings = self.__configurationProvider = None
         return
 
     def onLobbyInited(self, event=None):
@@ -79,6 +83,10 @@ class FunRandomController(IFunRandomController, IGlobalListener):
 
     def onLobbyStarted(self, ctx):
         self.setDesiredSubModeID(ctx.get(FUN_EVENT_ID_KEY, self.__subModesHolder.getDesiredSubModeID()))
+
+    @property
+    def hiddenVehicles(self):
+        return self.__hiddenVehicles
 
     @property
     def notifications(self):
@@ -106,16 +114,14 @@ class FunRandomController(IFunRandomController, IGlobalListener):
     def isFunRandomPrbActive(self):
         return False if self.prbEntity is None else bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.FUN_RANDOM)
 
+    def isOnlyFunRandomVehicle(self, vehicle):
+        return isOnlyFunRandomVehicle(vehicle)
+
     def getAssetsPointer(self):
         return self.__funRandomSettings.assetsPointer
 
-    def getIconsResRoot(self):
-        assetsPointer = self.__funRandomSettings.assetsPointer
-        return R.images.fun_random.gui.maps.icons.feature.asset_packs.modes.dyn(assetsPointer, R.images.fun_random.gui.maps.icons.feature.asset_packs.modes.undefined)
-
-    def getLocalsResRoot(self):
-        assetsPointer = self.__funRandomSettings.assetsPointer
-        return R.strings.fun_random.modes.dyn(assetsPointer, R.strings.fun_random.modes.undefined)
+    def getConfigurationModel(self):
+        return self.__configurationProvider and self.__configurationProvider.getConfigurationModel()
 
     def getSettings(self):
         return self.__funRandomSettings
@@ -149,6 +155,7 @@ class FunRandomController(IFunRandomController, IGlobalListener):
         prevFunSettings = self.__funRandomSettings or FunRandomConfig()
         rawNewFunSettings = serverSettings.getSettings().get(FUN_GAME_PARAMS_KEY, {})
         self.__funRandomSettings = FunRandomConfig(**rawNewFunSettings)
+        self.__configurationProvider = self.__createFunConfigurationProvider(self.__funRandomSettings)
         self.__updateFunRandomSettings(prevFunSettings, self.__funRandomSettings)
         return
 
@@ -156,6 +163,7 @@ class FunRandomController(IFunRandomController, IGlobalListener):
         if FUN_GAME_PARAMS_KEY in diff:
             prevFunSettings = self.__funRandomSettings or FunRandomConfig()
             self.__funRandomSettings = self.__funRandomSettings.replace(diff[FUN_GAME_PARAMS_KEY].copy())
+            self.__configurationProvider = self.__createFunConfigurationProvider(self.__funRandomSettings)
             self.__updateFunRandomSettings(prevFunSettings, self.__funRandomSettings)
 
     def __clearListening(self):
@@ -165,6 +173,9 @@ class FunRandomController(IFunRandomController, IGlobalListener):
         self.__hiddenVehicles.stopVehiclesListening()
         self.__subModesHolder.stopNotification()
         self.stopGlobalListening()
+
+    def __createFunConfigurationProvider(self, settings):
+        return FunModeConfigurationProvider(settings)
 
     @adisp_async
     @adisp_process

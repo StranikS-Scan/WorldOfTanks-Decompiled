@@ -8,7 +8,6 @@ from frontline.gui.bonus import FrontlineSkillBonus
 from frontline.gui.frontline_bonus_packers import packBonusModelAndTooltipData
 from frontline.gui.impl.gen.view_models.views.lobby.views.post_battle_rewards_view_model import PostBattleRewardsViewModel
 from gui.impl.gen import R
-from gui.impl.lobby.common.view_mixins import LobbyHeaderVisibility
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.impl.pub import ViewImpl, WindowImpl
@@ -113,7 +112,7 @@ class _PostBattleRewardsCtx(object):
         return [FrontlineSkillBonus(abilityPts[level - 1])] if abilityPts and abilityPts[level - 1] and level <= len(abilityPts) else []
 
 
-class PostBattleRewardsView(ViewImpl, LobbyHeaderVisibility, IGlobalListener):
+class PostBattleRewardsView(ViewImpl, IGlobalListener):
     _MAX_VISIBLE_AWARDS = 6
     _BONUS_ORDER_PRIORITY = {'battlePassPoints': 1,
      EPIC_SKILL_TOKEN_NAME: 2,

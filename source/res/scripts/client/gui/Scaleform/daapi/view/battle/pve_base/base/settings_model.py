@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/pve_base/base/settings_model.py
+from __future__ import absolute_import
 from enum import IntEnum
 from pve_battle_hud import WidgetType
 

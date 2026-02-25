@@ -15,6 +15,11 @@ from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showPersonalMissionCampaignSelectorWindow
 from gui.shared.events import LoadViewEvent
 
+def getStateMachineRegistrators():
+    from gui.Scaleform.daapi.view.lobby.missions.personal.state import registerStates, registerTransitions
+    return (registerStates, registerTransitions)
+
+
 def getContextMenuHandlers():
     pass
 

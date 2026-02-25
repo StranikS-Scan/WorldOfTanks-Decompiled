@@ -659,11 +659,11 @@ __reserveTooltipMap = {ARTILLERY_STRIKE: TOOLTIPS_CONSTANTS.RESERVE_MODULE,
  INSPIRATION: TOOLTIPS_CONSTANTS.RESERVE_MODULE}
 
 def getReserveNameVO(name):
-    return __typeMapVO.get(name, None)
+    return __typeMapVO.get(name)
 
 
 def geReserveTooltipType(name):
-    return __reserveTooltipMap.get(name, None)
+    return __reserveTooltipMap.get(name)
 
 
 def makeReserveModuleData(mID, moduleType, level, count, isSelected, showExtendedParams, paramsItems):

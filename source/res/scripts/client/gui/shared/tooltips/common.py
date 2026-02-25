@@ -41,7 +41,6 @@ from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view impo
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view import BattlePassInProgressTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_no_chapter_tooltip_view import BattlePassNoChapterTooltipView
 from gui.impl.lobby.battle_pass.tooltips.vehicle_points_tooltip_view import VehiclePointsTooltipView
-from gui.impl.lobby.subscription.wot_plus_tooltip import WotPlusTooltip
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.impl.lobby.tooltips.veh_post_progression_entry_point_tooltip import VehPostProgressionEntryPointTooltip
 from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE
@@ -1087,7 +1086,7 @@ def makePriceBlock(price, currencySetting, neededValue=None, oldPrice=None, perc
     if hasAction:
         oldPriceText = text_styles.concatStylesToSingleLine(icon, settings.textStyle(_int(oldPrice)))
     neededText = getFormattedNeededValue(settings, _int(neededValue)) if neededValue else ''
-    text = text_styles.concatStylesWithSpace(text_styles.main(settings.text if not forcedText else forcedText), neededText)
+    text = text_styles.concatStylesWithSpace(text_styles.main(forcedText if forcedText else settings.text), neededText)
     if hasAction:
         actionText = text_styles.main(makeString(TOOLTIPS.VEHICLE_ACTION_PRC, actionPrc=text_styles.stats(str(percent) + '%'), oldPrice=oldPriceText))
         text = text_styles.concatStylesToMultiLine(text, actionText)
@@ -1105,7 +1104,7 @@ def makePriceBlock(price, currencySetting, neededValue=None, oldPrice=None, perc
         return formatters.packTextParameterWithIconBlockData(name=text, value=valueFormatted, icon=settings.frame, valueWidth=valueWidth, padding=formatters.packPadding(left=-5), nameOffset=iconRightOffset, gap=gap, iconYOffset=settings.iconYOffset)
 
 
-def makeRemovalPriceBlock(price, currencySetting, neededValue=None, oldPrice=None, percent=0, valueWidth=-1, leftPadding=61, forcedText='', isDeluxe=False, gap=15, canUseDemountKit=False, wotPlusStatus=False, isFreeToDemount=False, isFreeDeluxeEnabled=False, isFreeDemountEnabled=False):
+def makeRemovalPriceBlock(price, currencySetting, neededValue=None, oldPrice=None, percent=0, valueWidth=-1, leftPadding=61, forcedText='', isDeluxe=False, gap=15, canUseDemountKit=False, isWotPlusEnabled=False, isFreeToDemount=False, isFreeDeluxeEnabled=False, isFreeDemountEnabled=False):
     _int = backport.getIntegralFormat
     settings = _getCurrencySetting(currencySetting)
     if settings is None:
@@ -1116,14 +1115,14 @@ def makeRemovalPriceBlock(price, currencySetting, neededValue=None, oldPrice=Non
     dkCount = text_styles.demountKitText('1')
     dkIcon = icons.demountKit()
     dkText = text_styles.concatStylesWithSpace(dkCount, dkIcon)
-    wotPlusLabel = text_styles.wotPlusText(backport.text(R.strings.demount_kit.equipmentDemount.wotPlus() if not wotPlusStatus else R.strings.demount_kit.equipmentDemount.optionFree()))
+    wotPlusLabel = text_styles.wotPlusText(backport.text(R.strings.demount_kit.equipmentDemount.wotPlus() if not isWotPlusEnabled else R.strings.demount_kit.equipmentDemount.optionFree()))
     wotPlusIcon = icons.wotPlus()
     wotPlusText = text_styles.concatStylesWithSpace(wotPlusLabel, wotPlusIcon)
-    if wotPlusStatus:
+    if isWotPlusEnabled:
         if isFreeToDemount:
             countFormatted = wotPlusText
     descr = R.strings.demount_kit.equipmentInstall
-    if wotPlusStatus and isFreeToDemount:
+    if isWotPlusEnabled and isFreeToDemount:
         dynAccId = descr.demount()
     elif not canUseDemountKit and not isDeluxe:
         dynAccId = descr.demount()
@@ -1138,7 +1137,7 @@ def makeRemovalPriceBlock(price, currencySetting, neededValue=None, oldPrice=Non
         dynAccId = descr.demountWithKit()
     valueFormatted = backport.text(dynAccId, count=countFormatted, countDK=text_styles.main(dkText), wotPlus=text_styles.main(wotPlusText), divisor=divisorIcon)
     neededText = getFormattedNeededValue(settings, _int(neededValue)) if neededValue else ''
-    text = text_styles.concatStylesWithSpace(text_styles.main(settings.text if not forcedText else forcedText), neededText)
+    text = text_styles.concatStylesWithSpace(text_styles.main(forcedText if forcedText else settings.text), neededText)
     if percent != 0:
         oldPriceText = text_styles.concatStylesToSingleLine(icon, settings.textStyle(_int(oldPrice)))
         actionText = text_styles.main(makeString(TOOLTIPS.VEHICLE_ACTION_PRC, actionPrc=text_styles.stats(str(percent) + '%'), oldPrice=oldPriceText))
@@ -1162,7 +1161,7 @@ def makeCompoundPriceBlock(currencySetting, itemPrice, blockWidth=150, forcedTex
     if settings is None:
         return
     else:
-        blocks = [formatters.packTextBlockData(text_styles.main(settings.text if not forcedText else forcedText)), formatters.packItemPriceBlockData(itemPrice, padding=formatters.packPadding(top=-4))]
+        blocks = [formatters.packTextBlockData(text_styles.main(forcedText if forcedText else settings.text)), formatters.packItemPriceBlockData(itemPrice, padding=formatters.packPadding(top=-4))]
         return formatters.packBuildUpBlockData(blocks, blockWidth=blockWidth, padding=formatters.packPadding(bottom=-8))
 
 
@@ -1308,7 +1307,7 @@ class HeaderMoneyAndXpTooltipData(BlocksTooltipData):
         elif self._btnType == CURRENCIES_CONSTANTS.FREE_XP:
             valueStr = text_styles.expText(backport.getIntegralFormat(self.itemsCache.items.stats.actualFreeXP))
         elif self._btnType == CURRENCIES_CONSTANTS.BRCOIN:
-            brCoin = self.battleRoyaleController.getBRCoinBalance(0)
+            brCoin = self.battleRoyaleController.getBRCoinBalance()
             valueStr = text_styles.bpcoin(backport.getIntegralFormat(brCoin))
         elif self._btnType == CURRENCIES_CONSTANTS.EQUIP_COIN:
             valueStr = text_styles.bpcoin(backport.getIntegralFormat(self.itemsCache.items.stats.equipCoin))
@@ -1559,15 +1558,6 @@ class VehPostProgressionEntryPointTooltipContentWindowData(ToolTipBaseData):
 
     def getDisplayableData(self, intCD, parentScreen, *args, **kwargs):
         return DecoratedTooltipWindow(VehPostProgressionEntryPointTooltip(intCD, parentScreen), useDecorator=False)
-
-
-class WotPlusTooltipContentWindowData(ToolTipBaseData):
-
-    def __init__(self, context):
-        super(WotPlusTooltipContentWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.WOT_PLUS)
-
-    def getDisplayableData(self, perkID, *args, **kwargs):
-        return DecoratedTooltipWindow(WotPlusTooltip(), useDecorator=False)
 
 
 class AdditionalRewardsTooltipContentWindowData(ToolTipBaseData):

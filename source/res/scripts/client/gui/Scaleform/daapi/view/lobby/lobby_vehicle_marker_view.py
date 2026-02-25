@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/lobby_vehicle_marker_view.py
+from __future__ import absolute_import
 import typing
+from future.utils import viewitems
 from collections import defaultdict
 import GUI
 import Math
@@ -152,7 +154,7 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         return
 
     def __destroyAllMarkers(self):
-        for k, marker in self.__markersCache.iteritems():
+        for k, marker in viewitems(self.__markersCache):
             self.as_removeMarkerS(k)
             if marker is not None:
                 marker.markerSetActive(False)

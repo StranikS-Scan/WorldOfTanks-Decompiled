@@ -4,7 +4,7 @@ import typing
 from gui.battle_results.presenters.packers.interfaces import IBattleResultsPacker
 from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD
 from gui.impl.gen.view_models.views.lobby.battle_results.detailed_personal_efficiency_item_model import DetailedPersonalEfficiencyItemModel
-from gui.impl.gen.view_models.views.lobby.battle_results.personal_efficiency_model import PersonalEfficiencyModel
+from gui.impl.gen.view_models.views.lobby.battle_results.personal_efficiency_model import PersonalEfficiencyModel, ValueType
 EFFICIENCY_ITEMS_TO_PROPERTIES = {DetailedPersonalEfficiencyItemModel.KILLED: 'targetKills',
  DetailedPersonalEfficiencyItemModel.SPOTTED: 'spotted',
  DetailedPersonalEfficiencyItemModel.DAMAGE_DEALT: 'damageDealt',
@@ -21,6 +21,7 @@ class PersonalEfficiency(IBattleResultsPacker):
     _PARAMETERS = {}
     _DEFAULT_PARAMS = ()
     _VALUE_EXTRACTORS = {}
+    _VALUE_TYPES = {}
     _EFFICIENCY_ITEM_MODEL_CLS = PersonalEfficiencyModel
 
     @classmethod
@@ -40,6 +41,7 @@ class PersonalEfficiency(IBattleResultsPacker):
         efficiencyParameter.setParamType(parameter)
         valueExtractor = cls._VALUE_EXTRACTORS.get(parameter, getattr)
         efficiencyParameter.setValue(valueExtractor(vehicleInfo, parameter))
+        efficiencyParameter.setValueType(cls._VALUE_TYPES.get(parameter, ValueType.INTEGER))
         return efficiencyParameter
 
     @classmethod

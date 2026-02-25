@@ -24,9 +24,8 @@ class DestroyPairModificationsDialog(DialogTemplateView):
 
     def __init__(self, layoutID=None, uniqueID=None, **kwargs):
         super(DestroyPairModificationsDialog, self).__init__(layoutID, uniqueID, **kwargs)
-        self.__vehicle = kwargs.get('vehicle', None)
+        self.__vehicle = kwargs.get('vehicle')
         self.__stepIDs = kwargs.get('stepIDs', ())
-        return
 
     def _initialize(self, *args, **kwargs):
         super(DestroyPairModificationsDialog, self)._initialize()

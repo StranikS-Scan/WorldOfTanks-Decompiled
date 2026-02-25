@@ -20,6 +20,11 @@ from helpers import dependency
 from skeletons.gui.game_control import IWinbackController
 TABS = OrderedDict([(TabId.BASIC, BasicMissionsTab)])
 
+class DailyTabs(object):
+    QUESTS = 0
+    PREMIUM_MISSIONS = 1
+
+
 class HubView(ViewComponent[HubViewModel]):
     __winbackController = dependency.descriptor(IWinbackController)
 

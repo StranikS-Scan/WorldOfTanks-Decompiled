@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/maps_training/arena_time_notificator.py
+from __future__ import absolute_import
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider

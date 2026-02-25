@@ -10,7 +10,6 @@ from frontline.gui.impl.gen.view_models.views.lobby.views.progression_screen.tie
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.user_missions.constants.event_banner_state import EventBannerState
-from gui.impl.lobby.common.view_mixins import LobbyHeaderVisibility
 from gui.impl.pub import ViewImpl
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared.event_dispatcher import showEpicRewardsSelectionWindow, showFrontlineAwards, showHangar
@@ -19,7 +18,7 @@ from helpers import dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from sound_gui_manager import CommonSoundSpaceSettings
 
-class ProgressionScreenView(ViewImpl, LobbyHeaderVisibility, IGlobalListener):
+class ProgressionScreenView(ViewImpl, IGlobalListener):
     _COMMON_SOUND_SPACE = CommonSoundSpaceSettings(name=EPIC_SOUND.HANGAR, entranceStates={}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent=None, exitEvent=None)
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
     __slots__ = ('__tooltipItems', '__rewardsSelectionWindow')

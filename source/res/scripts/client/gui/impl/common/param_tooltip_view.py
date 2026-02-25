@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/common/param_tooltip_view.py
+from __future__ import absolute_import
 from frameworks.wulf import ViewSettings
 from gui.impl.gen.view_models.views.param_tooltip_model import ParamTooltipModel
 from gui.impl.pub import ViewImpl

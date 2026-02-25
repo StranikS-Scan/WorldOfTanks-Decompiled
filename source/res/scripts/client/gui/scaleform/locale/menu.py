@@ -154,6 +154,7 @@ class MENU(object):
     LOADING_BATTLETYPES_DESC_22 = '#menu:loading/battleTypes/desc/22'
     LOADING_BATTLETYPES_23 = '#menu:loading/battleTypes/23'
     LOADING_BATTLETYPES_DESC_23 = '#menu:loading/battleTypes/desc/23'
+    LOADING_BATTLETYPES_SUBTITLE_23 = '#menu:loading/battleTypes/subTitle/23'
     LOADING_BATTLETYPES_24 = '#menu:loading/battleTypes/24'
     LOADING_BATTLETYPES_DESC_24 = '#menu:loading/battleTypes/desc/24'
     LOADING_BATTLETYPES_25 = '#menu:loading/battleTypes/25'
@@ -696,6 +697,7 @@ class MENU(object):
     TANK_PARAMS_STUNMINDURATION = '#menu:tank_params/stunMinDuration'
     TANK_PARAMS_STUNDURATIONLIST = '#menu:tank_params/stunDurationList'
     TANK_PARAMS_CHARGETIME = '#menu:tank_params/chargeTime'
+    TANK_PARAMS_PENETRATIONLOSS = '#menu:tank_params/penetrationLoss'
     TANK_PARAMS_NO_BRACKETS_KG = '#menu:tank_params/no_brackets/kg'
     TANK_PARAMS_NO_BRACKETS_S = '#menu:tank_params/no_brackets/s'
     TANK_PARAMS_NO_BRACKETS_MM = '#menu:tank_params/no_brackets/mm'
@@ -755,9 +757,12 @@ class MENU(object):
     EXTRAPARAMS_NAME_VEHICLEINVISIBILITYAFTERSHOT = '#menu:extraParams/name/vehicleInvisibilityAfterShot'
     EXTRAPARAMS_NAME_DAMAGEANDPIERCINGDISTRIBUTIONLOWERBOUND = '#menu:extraParams/name/damageAndPiercingDistributionLowerBound'
     EXTRAPARAMS_NAME_DAMAGEANDPIERCINGDISTRIBUTIONUPPERBOUND = '#menu:extraParams/name/damageAndPiercingDistributionUpperBound'
+    EXTRAPARAMS_NAME_PIERCINGHESHELLSDISTRIBUTIONUPPERBOUND = '#menu:extraParams/name/piercingHEShellsDistributionUpperBound'
     EXTRAPARAMS_NAME_ENEMYMODULESCREWCRITCHANCE = '#menu:extraParams/name/enemyModulesCrewCritChance'
     EXTRAPARAMS_NAME_SHELLVELOCITY = '#menu:extraParams/name/shellVelocity'
     EXTRAPARAMS_NAME_COMMANDERLAMPDELAY = '#menu:extraParams/name/commanderLampDelay'
+    EXTRAPARAMS_NAME_SUSPENSIONDAMAGEREDUCTION = '#menu:extraParams/name/suspensionDamageReduction'
+    EXTRAPARAMS_NAME_HPRECOVER = '#menu:extraParams/name/hpRecover'
     DESCRIPTIONS_VEHICLE = '#menu:descriptions/vehicle'
     DESCRIPTIONS_VEHICLEGUN = '#menu:descriptions/vehicleGun'
     DESCRIPTIONS_VEHICLEGUN_AUTOSHOOT = '#menu:descriptions/vehicleGun/autoShoot'
@@ -774,7 +779,6 @@ class MENU(object):
     DESCRIPTIONS_MUTABLEDAMAGESHELL = '#menu:descriptions/mutableDamageShell'
     DESCRIPTIONS_MUTABLEDAMAGESHELLFULL = '#menu:descriptions/mutableDamageShellFull'
     HEADERBUTTONS_BTNLABEL_PREMIUM = '#menu:headerButtons/btnLabel/premium'
-    HEADERBUTTONS_DOLABEL_PREMIUM = '#menu:headerButtons/doLabel/premium'
     HEADERBUTTONS_BTNLABEL_PREMSHOP = '#menu:headerButtons/btnLabel/premShop'
     HEADERBUTTONS_BTNLABEL_GOLD = '#menu:headerButtons/btnLabel/gold'
     HEADERBUTTONS_BTNLABEL_CRYSTAL = '#menu:headerButtons/btnLabel/crystal'
@@ -1199,12 +1203,6 @@ class MENU(object):
     PREMIUM_SUBMITBUY = '#menu:premium/submitBuy'
     PREMIUM_SUBMITCONTINUE = '#menu:premium/submitContinue'
     PREMIUM_CANCEL = '#menu:premium/cancel'
-    GOLDFISH_WINDOWHEADER = '#menu:goldFish/windowHeader'
-    GOLDFISH_HEADER = '#menu:goldFish/header'
-    GOLDFISH_EVENTTITLE = '#menu:goldFish/eventTitle'
-    GOLDFISH_EVENTTEXT = '#menu:goldFish/eventText'
-    GOLDFISH_EVENTLINK = '#menu:goldFish/eventLink'
-    GOLDFISH_BUTTONCLOSE = '#menu:goldFish/buttonClose'
     BLUEPRINTS_CONVERSIONVIEW_TITLE = '#menu:blueprints/conversionView/title'
     BLUEPRINTS_CONVERSIONVIEW_MULTICONVERSION_TITLE = '#menu:blueprints/conversionView/multiConversion/title'
     BLUEPRINTS_CONVERSIONVIEW_MULTICONVERSION_DESCRIPTION = '#menu:blueprints/conversionView/multiConversion/description'
@@ -1299,6 +1297,8 @@ class MENU(object):
     MODULEINFO_PARAMS_PIERCINGDISTANCE_FOOTNOTE = '#menu:moduleInfo/params/piercingDistance/footnote'
     MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE_MAXDISTANCE = '#menu:moduleInfo/params/noPiercingDistance/footnote/maxDistance'
     MODULEINFO_PARAMS_GUARANTEEDDAMAGE_FOOTNOTE = '#menu:moduleInfo/params/guaranteedDamage/footnote'
+    MODULEINFO_PARAMS_PENETRATIONLOSS_FOOTNOTE = '#menu:moduleInfo/params/penetrationLoss/footnote'
+    MODULEINFO_PARAMS_SCREENSARMORMULTIPLIER_FOOTNOTE = '#menu:moduleInfo/params/screensArmorMultiplier/footnote'
     MODULEINFO_PARAMS_STUNMAXDURATION = '#menu:moduleInfo/params/stunMaxDuration'
     MODULEINFO_PARAMS_STUNMINDURATION = '#menu:moduleInfo/params/stunMinDuration'
     MODULEINFO_PARAMS_STUNMAXDURATIONLIST = '#menu:moduleInfo/params/stunMaxDurationList'
@@ -1318,6 +1318,11 @@ class MENU(object):
     MODULEINFO_PARAMS_ENGINEPOWERPERTON = '#menu:moduleInfo/params/enginePowerPerTon'
     MODULEINFO_PARAMS_TURBOSHAFTENGINEPOWER = '#menu:moduleInfo/params/turboshaftEnginePower'
     MODULEINFO_PARAMS_ROCKETACCELERATIONENGINEPOWER = '#menu:moduleInfo/params/rocketAccelerationEnginePower'
+    MODULEINFO_PARAMS_NORMALISATION = '#menu:moduleInfo/params/normalisation'
+    MODULEINFO_PARAMS_RICOCHETANGLE = '#menu:moduleInfo/params/ricochetAngle'
+    MODULEINFO_PARAMS_PENETRATIONLOSS = '#menu:moduleInfo/params/penetrationLoss'
+    MODULEINFO_PARAMS_SCREENSARMORMULTIPLIER = '#menu:moduleInfo/params/screensArmorMultiplier'
+    MODULEINFO_PARAMS_SCREENSARMORMULTIPLIER_VALUE = '#menu:moduleInfo/params/screensArmorMultiplier/value'
     MODULEINFO_COMPATIBLE_TURRETS = '#menu:moduleInfo/compatible/turrets'
     MODULEINFO_COMPATIBLE_SHELLS = '#menu:moduleInfo/compatible/shells'
     MODULEINFO_COMPATIBLE_GUNS = '#menu:moduleInfo/compatible/guns'
@@ -1763,6 +1768,8 @@ class MENU(object):
     CONTEXTMENU_BOTNOACTIONS = '#menu:contextMenu/botNoActions'
     CONTEXTMENU_VEHICLEPOSTPROGRESSION = '#menu:contextMenu/vehiclePostProgression'
     CONTEXTMENU_VEHSKILLTREE = '#menu:contextMenu/vehSkillTree'
+    CONTEXTMENU_MANAGEPLAYLISTS = '#menu:contextMenu/managePlaylists'
+    CONTEXTMENU_CREATEPLAYLIST = '#menu:contextMenu/createPlaylist'
     CONTEXTMENU_COMPARE = '#menu:contextMenu/compare'
     CONTEXTMENU_USERVEHICLECOMPARE = '#menu:contextMenu/userVehicleCompare'
     CONTEXTMENU_PROFILEVEHICLECOMPARE = '#menu:contextMenu/profileVehicleCompare'
@@ -1801,7 +1808,6 @@ class MENU(object):
     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_TECHWIN = '#menu:finalStatistic/commonStats/resultlabel/techWin'
     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_ENDED = '#menu:finalStatistic/commonStats/resultlabel/ended'
     BROWSER_WINDOW_TITLE = '#menu:browser/window/title'
-    ADVENTCALENDAR_WINDOW_TITLE = '#menu:adventCalendar/window/title'
     BROWSER_DATAUNAVAILABLE_HEADER = '#menu:browser/dataUnavailable/header'
     BROWSER_DATAUNAVAILABLE_DESCRIPTION = '#menu:browser/dataUnavailable/description'
     BROWSER_CUSTOMTITLE_FORT_OFFENSIVERESULT = '#menu:browser/customTitle/fort/offensiveResult'
@@ -2080,9 +2086,6 @@ class MENU(object):
     MAPBLACKLIST_TIMELEFTSHORT_HOURS = '#menu:mapBlackList/timeLeftShort/hours'
     MAPBLACKLIST_TIMELEFTSHORT_MIN = '#menu:mapBlackList/timeLeftShort/min'
     MAPBLACKLIST_TIMELEFTSHORT_LESSMIN = '#menu:mapBlackList/timeLeftShort/lessMin'
-    PROMO_PATCH_TITLE = '#menu:promo/patch/title'
-    PROMO_PATCH_MESSAGE = '#menu:promo/patch/message'
-    PROMO_TOARCHIVE = '#menu:promo/toArchive'
     PROMO_TEASERTIMEFORMAT_DAYS = '#menu:promo/teaserTimeFormat/days'
     PROMO_TEASERTIMEFORMAT_HOURS = '#menu:promo/teaserTimeFormat/hours'
     PROMO_TEASERTIMEFORMAT_MIN = '#menu:promo/teaserTimeFormat/min'
@@ -2192,10 +2195,6 @@ class MENU(object):
     FITTINGSELECTPOPOVER_DESCTEXT = '#menu:fittingSelectPopover/descText'
     FITTINGSELECTPOPOVER_DESCTEXT_CRYSTAL = '#menu:fittingSelectPopover/descText/crystal'
     QUOTE = '#menu:quote'
-    TECHTREE_ANNOUNCEMENT = '#menu:techtree/Announcement'
-    TECHTREE_PREMIUMPANEL_TITLE = '#menu:techtree/premiumPanel/title'
-    TECHTREE_PREMIUMPANEL_BTNLABEL = '#menu:techtree/premiumPanel/btnLabel'
-    TECHTREE_PREMIUMPANEL_BTNLABEL_COUNT = '#menu:techtree/premiumPanel/btnLabel/count'
     CST_ITEM_CTX_MENU_BUY = '#menu:cst_item_ctx_menu/buy'
     CST_ITEM_CTX_MENU_EXCHANGE = '#menu:cst_item_ctx_menu/exchange'
     CST_ITEM_CTX_MENU_BUYMORE = '#menu:cst_item_ctx_menu/buyMore'
@@ -2260,17 +2259,6 @@ class MENU(object):
     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_SWEDEN = '#menu:viewHeader/backBtn/descrLabel/techtree/sweden'
     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_POLAND = '#menu:viewHeader/backBtn/descrLabel/techtree/poland'
     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_ITALY = '#menu:viewHeader/backBtn/descrLabel/techtree/italy'
-    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_USSR_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/ussr/blueprints'
-    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_GERMANY_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/germany/blueprints'
-    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_USA_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/usa/blueprints'
-    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_FRANCE_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/france/blueprints'
-    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_UK_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/uk/blueprints'
-    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_CHINA_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/china/blueprints'
-    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_JAPAN_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/japan/blueprints'
-    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_CZECH_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/czech/blueprints'
-    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_SWEDEN_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/sweden/blueprints'
-    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_POLAND_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/poland/blueprints'
-    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_ITALY_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/italy/blueprints'
     INTERNET_PROVIDER_LOCALPARTNER2_NAME = '#menu:internet_provider/LocalPartner2/name'
     INTERNET_PROVIDER_LOCALPARTNER2_TARIFF = '#menu:internet_provider/LocalPartner2/tariff'
     INTERNET_PROVIDER_LOCALPARTNER3_NAME = '#menu:internet_provider/LocalPartner3/name'
@@ -2482,6 +2470,8 @@ class MENU(object):
      CONTEXTMENU_BOTNOACTIONS,
      CONTEXTMENU_VEHICLEPOSTPROGRESSION,
      CONTEXTMENU_VEHSKILLTREE,
+     CONTEXTMENU_MANAGEPLAYLISTS,
+     CONTEXTMENU_CREATEPLAYLIST,
      CONTEXTMENU_COMPARE,
      CONTEXTMENU_USERVEHICLECOMPARE,
      CONTEXTMENU_PROFILEVEHICLECOMPARE,
@@ -2963,6 +2953,7 @@ class MENU(object):
      TANK_PARAMS_STUNMINDURATION,
      TANK_PARAMS_STUNDURATIONLIST,
      TANK_PARAMS_CHARGETIME,
+     TANK_PARAMS_PENETRATIONLOSS,
      TANK_PARAMS_NO_BRACKETS_KG,
      TANK_PARAMS_NO_BRACKETS_S,
      TANK_PARAMS_NO_BRACKETS_MM,
@@ -3050,6 +3041,7 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_22,
      LOADING_BATTLETYPES_23,
      LOADING_BATTLETYPES_DESC_23,
+     LOADING_BATTLETYPES_SUBTITLE_23,
      LOADING_BATTLETYPES_24,
      LOADING_BATTLETYPES_DESC_24,
      LOADING_BATTLETYPES_25,

@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/vehicle_mechanics/mechanic_widgets/charge_shot_widget.py
 from __future__ import absolute_import
 import typing
-from builtins import round
 import CommandMapping
 from events_containers.common.containers import ContainersListener
 from events_containers.components.life_cycle import IComponentLifeCycleListenerLogic
@@ -17,6 +16,7 @@ from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater impo
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
 from gui.veh_mechanics.battle.updaters.current_shell_damage_updater import CurrentShellDamageUpdater
 from gui.veh_mechanics.battle.updaters.shot_blocked_upater import ShotBlockedUpdater
+from math_common import round_py2_style_int
 from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 if typing.TYPE_CHECKING:
@@ -41,9 +41,7 @@ class ChargeShotMechanicWidget(ChargeShotWidgetMeta, ContainersListener, IMechan
         self.__invalidateAll(state, isInstantly=True)
 
     @eventHandler
-    def onStateTransition(self, oldState, newState):
-        if oldState.hasShotBlock != newState.hasShotBlock:
-            self.as_setShootBlockS(newState.hasShotBlock)
+    def onStateTransition(self, _, newState):
         self.__invalidateAll(newState)
 
     @eventHandler
@@ -79,6 +77,7 @@ class ChargeShotMechanicWidget(ChargeShotWidgetMeta, ContainersListener, IMechan
             uiState = MECHANICS_WIDGET_CONST.READY
         else:
             uiState = MECHANICS_WIDGET_CONST.IDLE
+        self.as_setShootBlockS(state.hasShotBlock)
         self.__invalidateProgress(state)
         self.as_setStateS(uiState, isInstantly)
         self.__invalidateExpectedDamage(self.__baseDamage)
@@ -101,8 +100,9 @@ class ChargeShotMechanicWidget(ChargeShotWidgetMeta, ContainersListener, IMechan
         if newBaseDamage is None:
             newBaseDamage = self.__baseDamage
         self.__baseDamage = newBaseDamage
-        factors = self.__damageFactorsPerLevel
-        newExpectedDamage = newBaseDamage if factors is None else round(factors[self.__level] * newBaseDamage)
+        newExpectedDamage = newBaseDamage
+        if self.__damageFactorsPerLevel is not None:
+            newExpectedDamage = round_py2_style_int(self.__damageFactorsPerLevel[self.__level] * newBaseDamage)
         if self.__expectedDamage != newExpectedDamage:
             self.__expectedDamage = newExpectedDamage
             return True

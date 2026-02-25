@@ -68,8 +68,8 @@ class JwtRequestor(object):
 
             def cmdCallback(requestID, resultID, errorStr, ext=None):
                 self.__jwtData = ext or {}
-                for callback in self.__callbacks:
-                    callback(ext)
+                for cb in self.__callbacks:
+                    cb(ext)
 
                 self.__waitAnswer = False
                 self.__callbacks = []

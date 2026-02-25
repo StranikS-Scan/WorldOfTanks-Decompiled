@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/ConfirmModuleMeta.py
+from __future__ import absolute_import
 import math
+from past.utils import old_div
 from gui.Scaleform.daapi.view.dialogs import IDialogMeta
 import Event
 from gui.Scaleform.framework import ScopeTemplates
@@ -120,7 +122,7 @@ class BuyModuleMeta(ConfirmModuleMeta):
         result = 0
         modulePrice = self.getActualPrices(module)
         if modulePrice.get(currency, 0) > 0:
-            result = math.floor(self.__balance.get(currency, 0) / modulePrice.get(currency))
+            result = math.floor(old_div(self.__balance.get(currency, 0), modulePrice.get(currency)))
         return min(result, MAX_ITEMS_FOR_OPERATION)
 
     def destroy(self):

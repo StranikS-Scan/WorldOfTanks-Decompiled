@@ -1278,6 +1278,63 @@
       </damage>
     </armorSpalls>
   </_76mm_HE_M352>
+  <_84mm_Chuan_bei_79>
+    <id>	199	</id>
+    <userString>	#china_vehicles:_84mm_Chuan_bei_79	</userString>
+    <icon>	ap	</icon>
+    <price>	448	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	83.8	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	200	</armor>
+      <devices>	113	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_84mm_Chuan_bei_79>
+  <_84mm_Po_79>
+    <id>	200	</id>
+    <userString>	#china_vehicles:_84mm_Po_79	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4000	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	83.8	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR	</effects>
+    <damage>
+      <armor>	200	</armor>
+      <devices>	113	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_84mm_Po_79>
+  <_84mm_Sha_bao_79>
+    <id>	201	</id>
+    <userString>	#china_vehicles:_84mm_Sha_bao_79	</userString>
+    <icon>	he_modern	</icon>
+    <price>	248	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	83.8	</caliber>
+    <explosionRadius>	1.29	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	113	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.29	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	160	</armor>
+        <devices>	55	</devices>
+      </damage>
+    </armorSpalls>
+  </_84mm_Sha_bao_79>
   <_85mm_CB_367G>
     <id>	66	</id>
     <userString>	#china_vehicles:_85mm_CB_367G	</userString>

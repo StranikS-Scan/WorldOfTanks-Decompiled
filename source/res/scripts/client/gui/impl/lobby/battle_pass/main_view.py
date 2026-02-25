@@ -7,7 +7,7 @@ from frameworks.state_machine import BaseStateObserver, StateEvent, visitor
 from frameworks.wulf import WindowFlags
 from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
-from gui.battle_pass.sounds import BATTLE_PASS_TASKS_SOUND_SPACE, BattlePassSounds, switchDialogBPSoundFilter, HOLIDAY_TASKS_SOUND_SPACE
+from gui.battle_pass.sounds import BATTLE_PASS_TASKS_SOUND_SPACE, switchBattlePassSoundFilter, getBattlePassEnterSound, getBattlePassExitSound, getBattlePassExtraExitSound, getBattlePassExtraEnterSound
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.main_view_model import MainViewModel
 from gui.impl.lobby.battle_pass.battle_pass_buy_levels_view import BuyLevelsPresenter
@@ -22,7 +22,7 @@ from gui.impl.pub.view_component import ViewComponent
 from gui.lobby_state_machine.routable_view import IRoutableView
 from gui.lobby_state_machine.router import SubstateRouter
 from gui.shared.event_dispatcher import showHangar
-from gui.sounds.ambients import BattlePassSoundEnv
+from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
 from shared_utils import safeCall
 from skeletons.gui.game_control import IBattlePassController
@@ -39,8 +39,7 @@ _PRESENTERS = {_BP.Intro(): IntroPresenter,
  _BP.BuyPass(): BuyPassPresenter,
  _BP.BuyLevels(): BuyLevelsPresenter,
  _BP.HolidayFinal(): HolidayFinalPresenter}
-_PARENTS = {_BP.BuyPassConfirm(): _BP.BuyPass(),
- _BP.BuyPassRewards(): _BP.BuyPass(),
+_PARENTS = {_BP.BuyPassRewards(): _BP.BuyPass(),
  _BP.BuyLevelsRewards(): _BP.BuyLevels()}
 _UNTRACKED = frozenset((_BP.IntroVideo(), _BP.ExtraVideo(), _BP.FinalRewardPreview()))
 
@@ -63,21 +62,28 @@ class _BattlePassStatesObserver(BaseStateObserver):
 
 
 class MainView(ViewComponent[MainViewModel], IRoutableView):
-    __sound_env__ = BattlePassSoundEnv
     __battlePass = dependency.descriptor(IBattlePassController)
 
     def __init__(self, *args, **kwargs):
-        super(MainView, self).__init__(R.views.lobby.battle_pass.MainView(), MainViewModel)
+        super(MainView, self).__init__(R.views.mono.battle_pass.main(), MainViewModel)
         self.__lsm = None
         self.__router = None
         self.__statesObserver = _BattlePassStatesObserver()
         self.__activePresenterID = None
         self.__activeChapterID = None
+        self.__selectedChapter = None
         return
 
     @property
     def viewModel(self):
         return super(MainView, self).getViewModel()
+
+    @property
+    def selectedChapter(self):
+        return self.__selectedChapter
+
+    def updateSelectedChapter(self, chapterID):
+        self.__selectedChapter = chapterID
 
     def getRouterModel(self):
         return self.viewModel.router
@@ -133,62 +139,46 @@ class MainView(ViewComponent[MainViewModel], IRoutableView):
         kwargs['originStateID'] = self.__activePresenterID
         kwargs['childStateID'] = presenterID
         self.__activePresenterID = parentPresenterID
-        self.__updateActiveChapterID(**kwargs)
+        self.__selectedChapter = kwargs.get('selectedChapter', 0)
+        previousChapter = self.__activeChapterID
+        if 'chapterID' in kwargs and kwargs['chapterID']:
+            self.__activeChapterID = kwargs['chapterID']
         if self.__activePresenterID not in self._childrenUidByPosition:
             self._registerChild(self.__activePresenterID, _PRESENTERS[self.__activePresenterID](**kwargs))
         else:
             self.__safeCallOnActivePresenter('updateInitialData', **kwargs)
             if self.__activePresenterID != kwargs['originStateID']:
                 self.__safeCallOnActivePresenter('activate')
-        switchDialogBPSoundFilter(self.__activePresenterID in (_BP.BuyPass(), _BP.BuyLevels()))
-        if not self.__battlePass.isHoliday():
-            self.__playSwitchSounds(kwargs.get('originStateID'), kwargs.get('chapterID'))
-
-    def __updateActiveChapterID(self, **kwargs):
-        if 'chapterID' in kwargs and kwargs['chapterID']:
-            self.__activeChapterID = kwargs['chapterID']
+        self.__playSwitchSounds(kwargs.get('originStateID'), previousChapter)
 
     def __safeCallOnActivePresenter(self, methodName, *args, **kwargs):
         return safeCall(getattr(self._childrenByUid[self._childrenUidByPosition[self.__activePresenterID]], methodName, None), *args, **kwargs)
 
     def __playEnterSounds(self):
-        if self.__battlePass.isHoliday():
-            self.soundManager.startSpace(HOLIDAY_TASKS_SOUND_SPACE)
-        else:
-            self.soundManager.startSpace(BATTLE_PASS_TASKS_SOUND_SPACE)
-            self.soundManager.playSound(BattlePassSounds.TASKS_ENTER)
+        self.soundManager.startSpace(BATTLE_PASS_TASKS_SOUND_SPACE)
+        self.soundManager.playSound(getBattlePassEnterSound(battlePass=self.__battlePass))
 
     def __playSwitchSounds(self, originalPresenterID, previousChapter):
-        shallSkipPlaying = self.__activePresenterID not in (_BP.ChapterChoice(), _BP.Progression(), _BP.PostProgression()) or originalPresenterID in (_BP.BuyPass(), _BP.BuyLevels()) and self.__activePresenterID == _BP.Progression()
-        if shallSkipPlaying:
+        switchHangarOverlaySoundFilter(self.__activePresenterID in (_BP.BuyPass(), _BP.BuyLevels()))
+        if self.__battlePass.isHoliday() or self.__activePresenterID not in (_BP.ChapterChoice(), _BP.Progression(), _BP.PostProgression()) or originalPresenterID in (_BP.BuyPass(), _BP.BuyLevels()) and self.__activePresenterID == _BP.Progression():
             return
-        if self.__isExtraChapterProgression():
-            if self.soundManager.isSoundPlaying(BattlePassSounds.TASKS_ENTER):
-                self.soundManager.stopSound(BattlePassSounds.TASKS_ENTER)
-                self.soundManager.playSound(BattlePassSounds.TASKS_EXIT)
-            if not self.soundManager.isSoundPlaying(BattlePassSounds.SPECIAL_TASKS_ENTER):
-                self.soundManager.playSound(BattlePassSounds.SPECIAL_TASKS_ENTER)
-        else:
-            shallPlaySpecial = self.soundManager.isSoundPlaying(BattlePassSounds.SPECIAL_TASKS_ENTER) or bool(self.__activeChapterID) and previousChapter != self.__activeChapterID and self.__battlePass.isExtraChapter(self.__activeChapterID)
-            if shallPlaySpecial:
-                self.soundManager.stopSound(BattlePassSounds.SPECIAL_TASKS_ENTER)
-                self.soundManager.playSound(BattlePassSounds.SPECIAL_TASKS_EXIT)
-            if not self.soundManager.isSoundPlaying(BattlePassSounds.TASKS_ENTER):
-                self.soundManager.playSound(BattlePassSounds.TASKS_ENTER)
+        if self.__isExtraChapterPresenter():
+            extraEnterSound = getBattlePassExtraEnterSound(self.__activeChapterID)
+            self.soundManager.stopSound(extraEnterSound)
+            self.soundManager.playSound(extraEnterSound)
+            switchBattlePassSoundFilter(on=False)
+        elif (previousChapter != self.__activeChapterID or self.__activePresenterID in (_BP.ChapterChoice(), _BP.PostProgression())) and self.__battlePass.isExtraChapter(previousChapter):
+            self.soundManager.playSound(getBattlePassExtraExitSound(previousChapter))
+            switchBattlePassSoundFilter(on=True)
 
     def __playExitSounds(self):
-        if not self.__battlePass.isHoliday():
-            shallPlaySpecial = self.__isExtraChapterProgression() or self.soundManager.isSoundPlaying(BattlePassSounds.SPECIAL_TASKS_ENTER)
-            if shallPlaySpecial:
-                self.soundManager.stopSound(BattlePassSounds.SPECIAL_TASKS_ENTER)
-                self.soundManager.playSound(BattlePassSounds.SPECIAL_TASKS_EXIT)
-            else:
-                self.soundManager.stopSound(BattlePassSounds.TASKS_ENTER)
-                self.soundManager.playSound(BattlePassSounds.TASKS_EXIT)
-        switchDialogBPSoundFilter(False)
+        if self.__isExtraChapterPresenter():
+            self.soundManager.playSound(getBattlePassExtraExitSound(self.__activeChapterID))
+        self.soundManager.playSound(getBattlePassExitSound(battlePass=self.__battlePass))
+        switchHangarOverlaySoundFilter(on=False)
 
-    def __isExtraChapterProgression(self):
-        return self.__activePresenterID == _BP.Progression() and self.__battlePass.isExtraChapter(self.__activeChapterID)
+    def __isExtraChapterPresenter(self):
+        return self.__activePresenterID not in (_BP.ChapterChoice(), _BP.PostProgression()) and self.__battlePass.isExtraChapter(self.__activeChapterID)
 
 
 class BattlePassWindow(WindowImpl):

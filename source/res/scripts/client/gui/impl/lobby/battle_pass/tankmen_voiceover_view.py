@@ -39,7 +39,7 @@ class TankmenVoiceoverView(ViewImpl):
         return super(TankmenVoiceoverView, self).getViewModel()
 
     def createToolTipContent(self, event, contentID):
-        return CrewMemberSkillTooltip(event.getArgument('name'), event.getArgument('isZero'), event.getArgument('hasZeroPerk')) if contentID == R.views.lobby.battle_pass.tooltips.CrewMemberSkillTooltip() else super(TankmenVoiceoverView, self).createToolTipContent(event, contentID)
+        return CrewMemberSkillTooltip(event.getArgument('name'), event.getArgument('isZero'), event.getArgument('hasZeroPerk')) if contentID == R.views.mono.battle_pass.tooltips.crew_member_skill() else super(TankmenVoiceoverView, self).createToolTipContent(event, contentID)
 
     def _onLoading(self, *args, **kwargs):
         super(TankmenVoiceoverView, self)._onLoading(*args, **kwargs)
@@ -191,4 +191,4 @@ class TankmenVoiceoverWindow(LobbyWindow):
     __slots__ = ()
 
     def __init__(self, screenID, ctx=None, parent=None):
-        super(TankmenVoiceoverWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=TankmenVoiceoverView(R.views.lobby.battle_pass.TankmenVoiceoverView(), TankmenVoiceoverViewModel, screenID=screenID, ctx=ctx), parent=parent)
+        super(TankmenVoiceoverWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=TankmenVoiceoverView(R.views.mono.battle_pass.tankmen_screen(), TankmenVoiceoverViewModel, screenID=screenID, ctx=ctx), parent=parent)

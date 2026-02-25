@@ -62,7 +62,7 @@ class AfterburningBattleRoyale(Equipment, CountableConsumableConfigReader, Battl
         try:
             factors['engine/power'] *= self.enginePowerFactor
             factors['vehicle/maxSpeed'] *= self.maxSpeedFactor
-        except:
+        except Exception:
             pass
 
     def _getDescription(self, descr):

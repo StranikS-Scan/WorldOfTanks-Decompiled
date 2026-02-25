@@ -1,17 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/ammunition_panel.py
-from adisp import adisp_process, adisp_async
-from account_helpers.settings_core.settings_constants import OnceOnlyHints
-from constants import ROLE_TYPE
 from CurrentVehicle import g_currentVehicle
-from constants import RENEWABLE_SUBSCRIPTION_CONFIG
+from PlayerEvents import g_playerEvents
+from account_helpers.settings_core.settings_constants import OnceOnlyHints
+from adisp import adisp_process, adisp_async
+from constants import ROLE_TYPE
 from gui import makeHtmlString
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs
 from gui.Scaleform.daapi.view.lobby.customization.shared import getItemTypesAvailableForVehicle
 from gui.Scaleform.daapi.view.meta.AmmunitionPanelMeta import AmmunitionPanelMeta
-from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.impl.lobby.tank_setup.dialogs.main_content.main_contents import NeedRepairMainContent
 from gui.impl.lobby.tank_setup.dialogs.need_repair import NeedRepair
 from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.prb_control.entities.listener import IGlobalListener
@@ -22,12 +23,11 @@ from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.gui_items.items_actions.actions import VehicleRepairAction, BuyAndInstallShells, BuyAndInstallConsumables, VehicleAutoFillLayoutAction
 from gui.shared.gui_items.vehicle_helpers import getRoleMessage
 from helpers import dependency, int2roman
+from renewable_subscription_common.schema import renewableSubscriptionsConfigSchema
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import ILimitedUIController
-from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from gui.impl.lobby.tank_setup.dialogs.main_content.main_contents import NeedRepairMainContent
 from uilogging.customization_3d_objects.logger import CustomizationAmmunitionPanelLogger
 from uilogging.customization_3d_objects.logging_constants import CustomizationButtons, CustomizationViewKeys
 
@@ -36,7 +36,6 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     __itemsCache = dependency.descriptor(IItemsCache)
     __service = dependency.descriptor(ICustomizationService)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
-    __lobbyContext = dependency.descriptor(ILobbyContext)
     __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
@@ -99,12 +98,12 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
         self.startGlobalListening()
         g_clientUpdateManager.addMoneyCallback(self.__moneyUpdateCallback)
         g_clientUpdateManager.addCallbacks({'inventory': self.__inventoryUpdateCallBack})
-        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+        g_playerEvents.onConfigModelUpdated += self._onConfigModelUpdated
 
     def _dispose(self):
         self.stopGlobalListening()
         g_clientUpdateManager.removeObjectCallbacks(self)
-        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
+        g_playerEvents.onConfigModelUpdated -= self._onConfigModelUpdated
         self.__hangarMessage = None
         self.__uiCustomizationLogger = None
         super(AmmunitionPanel, self)._dispose()
@@ -148,8 +147,8 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     def __inventoryUpdateCallBack(self, *args):
         self.update()
 
-    def __onServerSettingChanged(self, diff):
-        if RENEWABLE_SUBSCRIPTION_CONFIG in diff:
+    def _onConfigModelUpdated(self, gpKey):
+        if renewableSubscriptionsConfigSchema.gpKey == gpKey:
             self.update()
 
     def __applyCustomizationNewCounter(self, vehicle):

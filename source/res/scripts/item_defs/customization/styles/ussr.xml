@@ -11,6 +11,9 @@
       <exclude>
         <vehicles>	ussr:R61_Object252_BF	</vehicles>
       </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	9	</id>
@@ -70,6 +73,9 @@
       </include>
       <exclude>
         <vehicles>	ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
       </exclude>
     </vehicleFilter>
     <style>
@@ -217,6 +223,9 @@
       </include>
       <exclude>
         <vehicles>	ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
       </exclude>
     </vehicleFilter>
     <style>
@@ -489,6 +498,9 @@
       <exclude>
         <vehicles>	ussr:R61_Object252_BF	</vehicles>
       </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	238	</id>
@@ -624,6 +636,9 @@
       <exclude>
         <vehicles>	ussr:R61_Object252_BF ussr:R134_Object_252K ussr:R146_STG_Tday	</vehicles>
       </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	24	</id>
@@ -708,6 +723,9 @@
       <exclude>
         <vehicles>	ussr:R61_Object252_BF	</vehicles>
       </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	716	</id>
@@ -760,6 +778,9 @@
       </include>
       <exclude>
         <vehicles>	ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
       </exclude>
     </vehicleFilter>
     <style>
@@ -1365,10 +1386,14 @@
             <item>
               <id>	1	</id>
               <slotId>	38000	</slotId>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
             <item>
               <id>	2	</id>
               <slotId>	38001	</slotId>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>
@@ -2082,6 +2107,8 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	5	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>
@@ -2588,10 +2615,14 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	21	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
             <item>
               <slotId>	18001	</slotId>
               <id>	22	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>
@@ -2609,10 +2640,14 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	21	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
             <item>
               <slotId>	18001	</slotId>
               <id>	22	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>
@@ -2630,10 +2665,14 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	21	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
             <item>
               <slotId>	18001	</slotId>
               <id>	22	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>
@@ -2723,6 +2762,8 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	52	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
           <insignias>
@@ -2781,12 +2822,12 @@
               <rotation>
                 <r0>	0.674642	</r0>
                 <r1>	0.000151	</r1>
-                <r2>	3.13968	</r2>
+                <r2>	3.139680	</r2>
               </rotation>
               <scale>
                 <s0>	0.618503	</s0>
                 <s1>	0.414755	</s1>
-                <s2>	0.61851	</s2>
+                <s2>	0.618510	</s2>
               </scale>
             </item>
           </projection_decals>
@@ -2863,8 +2904,8 @@
               </position>
               <rotation>
                 <r0>	152.800003	</r0>
-                <r1>	0	</r1>
-                <r2>	0	</r2>
+                <r1>	0.000000	</r1>
+                <r2>	0.000000	</r2>
               </rotation>
               <scale>
                 <s0>	0.542928	</s0>
@@ -2947,6 +2988,8 @@
                 <item>
                   <slotId>	18001	</slotId>
                   <id>	71	</id>
+                  <scaleFactorId>	0	</scaleFactorId>
+                  <rotated>	0	</rotated>
                 </item>
               </attachments>
             </outfit>
@@ -3001,10 +3044,14 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	75	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
             <item>
               <slotId>	18001	</slotId>
               <id>	76	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>
@@ -3022,10 +3069,14 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	75	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
             <item>
               <slotId>	18001	</slotId>
               <id>	76	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>
@@ -3043,10 +3094,14 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	75	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
             <item>
               <slotId>	18001	</slotId>
               <id>	76	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>
@@ -3095,6 +3150,8 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	82	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>
@@ -3196,10 +3253,14 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	111	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
             <item>
               <slotId>	38000	</slotId>
               <id>	112	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>

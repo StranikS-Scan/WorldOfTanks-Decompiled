@@ -198,7 +198,7 @@ class VehicleTelemetry(object):
             temp = []
             ind = 0
             for inValue in infoDict['snapshots'][0]:
-                mValue = nDict.get(ind, None)
+                mValue = nDict.get(ind)
                 if mValue is not None:
                     temp.append(mValue)
                 else:

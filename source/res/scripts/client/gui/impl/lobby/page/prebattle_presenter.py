@@ -72,15 +72,12 @@ class PrebattlePresenter(ViewComponent[PrebattleModel], IGlobalListener, Callbac
 
     def onEnqueued(self, *args, **kwargs):
         self.__setVehicleInfo()
-        self._onPrebattleUpdate()
 
     def onDequeued(self, *args, **kwargs):
         self.__battleVehicleInvId = 0
-        self._onPrebattleUpdate()
 
     def onEnqueueError(self, *args, **kwargs):
         self.__arenaCreated = False
-        self._onPrebattleUpdate()
 
     def onArenaJoinFailure(self, *args, **kwargs):
         self.__arenaCreated = False

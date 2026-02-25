@@ -934,7 +934,7 @@ class TankmanAddSkillValidator(SyncValidator):
                 return makeSuccess()
             self.tmanDscr.validateSkill(self.skillName, self.utilizationType)
         except SoftException as e:
-            logging.debug(e.message)
+            logging.debug(str(e))
             return makeError()
 
         return makeSuccess()
@@ -1095,13 +1095,13 @@ class LayoutInstallValidator(SyncValidator):
         return makeError('IMPOSSIBLE_INSTALL') if not all((item.mayInstall(self._vehicle, slotIdx=slotIdx) for slotIdx, item in enumerate(layout) if item != EMPTY_ITEM and item not in self._getInstalled())) else makeSuccess()
 
     def _getLayout(self):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def _getInstalled(self):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def _getItemType(self):
-        raise NotImplementedError()
+        raise NotImplementedError
 
 
 class OptionalDevicesInstallValidator(LayoutInstallValidator):
@@ -1366,7 +1366,7 @@ class ExchangeValidator(SyncValidator):
         super(ExchangeValidator, self).__init__()
 
     def _validate(self):
-        if MAX_DISCOUNT_VALUE < self.__exchangeAmount:
+        if self.__exchangeAmount > MAX_DISCOUNT_VALUE:
             _logger.error('The error when exchanging the %d value is too large', self.__exchangeAmount)
             return makeError('server_error')
         return super(ExchangeValidator, self)._validate()

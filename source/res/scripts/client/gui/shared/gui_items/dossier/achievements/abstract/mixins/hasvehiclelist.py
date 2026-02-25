@@ -23,7 +23,7 @@ class HasVehiclesList(object):
         return cls._LIST_NAME
 
     def _getVehiclesDescrsList(self):
-        raise NotImplemented
+        raise NotImplementedError
 
     def hasVehiclesList(self):
         return True

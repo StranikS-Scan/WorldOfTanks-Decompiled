@@ -67,8 +67,10 @@ BACKWARD_QUALITY_PARAMS = frozenset(['aimingTime',
  KPI.Name.VEHICLE_FALLING_DAMAGE_RESISTANCE,
  KPI.Name.VEHICLE_PENALTY_FOR_DAMAGED_ENGINE,
  KPI.Name.VEHICLE_PENALTY_FOR_DAMAGED_AMMORACK,
- KPI.Name.COMMANDER_LAMP_DELAY])
+ KPI.Name.COMMANDER_LAMP_DELAY,
+ KPI.Name.SUSPENSION_DAMAGE_REDUCTION])
 NEGATIVE_PARAMS = ['switchOnTime', 'switchOffTime']
+ROUND_PARAMS = ['circularVisionRadius', 'radioDistance']
 PARAMS_WITH_IGNORED_EMPTY_VALUES = {'clipFireRate', SHOT_DISPERSION_ANGLE, DISPERSION_RADIUS}
 CREW_LEVEL_INCREASE_AFFECTING_PARAMS = frozenset(['reloadTime',
  'reloadTimeSecs',
@@ -83,7 +85,8 @@ CREW_LEVEL_INCREASE_AFFECTING_PARAMS = frozenset(['reloadTime',
  'chassisRotationSpeed',
  'circularVisionRadius',
  'radioDistance',
- 'dualAccuracyAfterShotDispersionAngle'])
+ 'dualAccuracyAfterShotDispersionAngle',
+ 'autoShootClipFireRate'])
 
 def normalizeShotDispersionValue(value):
     return [None] + value if len(value) == 1 else value
@@ -127,6 +130,15 @@ def getParamExtendedData(paramName, value, otherValue, penalties=None, customQua
     mustHighlight = False
     if highlightedBonuses:
         mustHighlight = any((bnsId in highlightedBonuses for bnsId, _ in bonuses))
+    if paramName in ROUND_PARAMS:
+        if isinstance(value, (tuple, list)):
+            roundedValues = []
+            for val in value:
+                roundedValues.append(float(round(val)))
+
+            value = roundedValues
+        else:
+            value = float(round(value))
     return _ParameterInfo(paramName, value, state, possibleBonuses, inactive, bonuses, penalties, isSituational, mustHighlight)
 
 

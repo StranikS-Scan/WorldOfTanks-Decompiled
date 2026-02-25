@@ -797,7 +797,7 @@ class UnitEntity(_UnitEntity):
             self._clearVehicle(ctx, callback=callback)
 
     def setReserve(self, ctx, callback=None):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def setVehicleList(self, ctx, callback=None):
         if self._isInCoolDown(settings.REQUEST_TYPE.SET_VEHICLE_LIST, coolDown=ctx.getCooldown()):

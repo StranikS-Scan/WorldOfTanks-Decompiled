@@ -207,7 +207,7 @@ class BattleRoyalePersonalEntriesPlugin(CenteredPersonalEntriesPlugin):
 
     def __getDirectionLineEntryID(self):
         cameraIDs = self._getCameraIDs()
-        return cameraIDs[_S_NAME.ARCADE_CAMERA] if _S_NAME.ARCADE_CAMERA in cameraIDs else None
+        return cameraIDs.get(_S_NAME.ARCADE_CAMERA, None)
 
 
 class DeathZonesPlugin(SimplePlugin):

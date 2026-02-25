@@ -1,12 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/pub/simple_dialog_window.py
+from __future__ import absolute_import
 import typing
-from frameworks.wulf import ViewModel, ViewSettings
+from frameworks.wulf import ViewSettings
 from gui.impl.gen.resources import R
 from gui.impl.gen.view_models.constants.dialog_presets import DialogPresets
 from gui.impl.gen.view_models.windows.simple_dialog_window_model import SimpleDialogWindowModel
 from gui.impl.pub.dialog_window import DialogContent, DialogFlags
 from gui.impl.pub.pure_dialog_window import PureDialogWindow
+if typing.TYPE_CHECKING:
+    from frameworks.wulf import ViewModel
 
 class SimpleDialogWindow(PureDialogWindow):
 

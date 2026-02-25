@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/ServerStats.py
+from __future__ import absolute_import
 import logging
 import BigWorld
 import constants
@@ -48,14 +49,14 @@ class ServerStats(ServerStatsMeta, ILegacyListener):
         else:
             self.as_changePeripheryFailedS()
 
-    def startListenCsisUpdate(self, startListen):
+    def startListenCsisUpdate(self, startListenCsis):
         if GUI_SETTINGS.csisRequestRate == REQUEST_RATE.ON_REQUEST:
-            if startListen:
+            if startListenCsis:
                 g_preDefinedHosts.startCSISUpdate()
             else:
                 g_preDefinedHosts.stopCSISUpdate()
                 self._updateServersList()
-        if startListen:
+        if startListenCsis:
             g_preDefinedHosts.requestPing(True)
 
     def _populate(self):

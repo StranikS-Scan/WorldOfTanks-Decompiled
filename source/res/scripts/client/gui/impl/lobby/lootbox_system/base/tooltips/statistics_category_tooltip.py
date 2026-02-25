@@ -17,6 +17,7 @@ from gui.server_events.bonuses import BlueprintsBonusSubtypes, blueprintBonusFac
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES, getItemTypeID
 from helpers import dependency
+from items.components.crew_books_constants import CREW_BOOK_RARITY
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import ILootBoxSystemController
 from skeletons.gui.goodies import IGoodiesCache
@@ -188,10 +189,20 @@ def _packDirectives(rewards, model):
     _packItems(rewards, model, _isDirective)
 
 
-def _packTrainingMaterials(rewards, model):
-    _packGoodies(rewards, model, _isMentoringLicense)
-    _packGoodies(rewards, model, _isRecertificationForm)
-    _packItems(rewards, model, _isCrewBook)
+def _packCrewBooks(rewards, model):
+    _packItems(rewards, model, lambda b: _isCrewBook(b) and b.getBookType() == CREW_BOOK_RARITY.PERSONAL)
+    _packItems(rewards, model, lambda b: _isCrewBook(b) and b.getBookType() == CREW_BOOK_RARITY.UNIVERSAL)
+    _packItems(rewards, model, lambda b: _isCrewBook(b) and b.getBookType() == CREW_BOOK_RARITY.CREW_EPIC)
+
+
+def _packGuides(rewards, model):
+    _packItems(rewards, model, lambda b: _isCrewBook(b) and b.getBookType() == CREW_BOOK_RARITY.UNIVERSAL_GUIDE)
+    _packItems(rewards, model, lambda b: _isCrewBook(b) and b.getBookType() == CREW_BOOK_RARITY.CREW_RARE)
+
+
+def _packBrochures(rewards, model):
+    _packItems(rewards, model, lambda b: _isCrewBook(b) and b.getBookType() == CREW_BOOK_RARITY.UNIVERSAL_BROCHURE)
+    _packItems(rewards, model, lambda b: _isCrewBook(b) and b.getBookType() == CREW_BOOK_RARITY.CREW_COMMON)
 
 
 def _packConsumables(rewards, model):
@@ -260,7 +271,9 @@ _PACK_REWARDS = {Type.VEHICLES: _packVehicles,
  Type.BOUNTYEQUIPMENT: _packBountyEquipment,
  Type.STANDARDEQUIPMENT: _packStandardEquipment,
  Type.DIRECTIVES: _packDirectives,
- Type.TRAININGMATERIALS: _packTrainingMaterials,
+ Type.CREWBOOK: _packCrewBooks,
+ Type.GUIDE: _packGuides,
+ Type.BROCHURE: _packBrochures,
  Type.BLUEPRINTS: _packBlueprints,
  Type.PERSONALRESERVES: _packPersonalReserves,
  Type.CONSUMABLES: _packConsumables,
@@ -365,14 +378,6 @@ def _isEquipment(item):
 
 def _isDemountKit(goodie):
     return isinstance(goodie, DemountKit)
-
-
-def _isRecertificationForm(goodie):
-    return isinstance(goodie, RecertificationForm)
-
-
-def _isMentoringLicense(goodie):
-    return isinstance(goodie, MentoringLicense)
 
 
 def _isPersonalReserves(goodie):

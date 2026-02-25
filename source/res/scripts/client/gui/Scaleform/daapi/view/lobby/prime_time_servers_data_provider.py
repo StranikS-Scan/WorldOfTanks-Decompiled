@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prime_time_servers_data_provider.py
+from __future__ import absolute_import
 from gui.impl.gen import R
 from gui.impl import backport
 from gui.Scaleform.daapi.view.servers_data_provider import ServersDataProvider

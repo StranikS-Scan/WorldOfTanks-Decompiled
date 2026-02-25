@@ -143,20 +143,20 @@ def showPersonalMissionsChain(operationID, chainID, missionCategory=None):
     if personalMissionsPage:
         first(personalMissionsPage).content.switchToAnotherOperation(operationID, chainID)
     else:
-        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS), ctx={'operationID': operationID,
-         'chainID': chainID}), EVENT_BUS_SCOPE.LOBBY)
+        from gui.Scaleform.daapi.view.lobby.missions.personal.state import PersonalMissionsPageState
+        PersonalMissionsPageState.goTo(chainID=chainID, operationID=operationID)
 
 
 def showPersonalMissionOperationsPage(branchID, operationID):
     from personal_missions import PM_BRANCH
+    from gui.Scaleform.daapi.view.lobby.missions.personal.state import PersonalMissionsPageState
     if not canOpenPMPage(branchID, operationID):
         showPersonalMissionsOperationsMap()
         return
     if PM_BRANCH.PERSONAL_MISSION_3 in [branchID, getBranchByOperationId(operationID)]:
         showPersonalMissionMainWindow(operationID)
         return
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS), ctx={'branch': branchID,
-     'operationID': operationID}), EVENT_BUS_SCOPE.LOBBY)
+    PersonalMissionsPageState.goTo(branch=branchID, operationID=operationID)
 
 
 def showPersonalMissionsOperationsMap():
@@ -241,7 +241,8 @@ def showPersonalMissionDetails(missionID):
 
 
 def showPersonalMissionAwards():
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS)), scope=EVENT_BUS_SCOPE.LOBBY)
+    from gui.Scaleform.daapi.view.lobby.missions.personal.state import PersonalMissionsAwardsState
+    PersonalMissionsAwardsState.goTo()
 
 
 def showPersonalMissionStartPage():
@@ -261,7 +262,7 @@ def showProgressiveItemsBrowserView(ctx):
 
 
 def showMission(eventID, eventType=None):
-    from gui.impl.lobby.missions.daily_quests_view import DailyTabs
+    from gui.impl.lobby.user_missions.hub.hub_view import DailyTabs
     showCustomizationQuest(eventID, eventType)
     eventsCache = dependency.instance(IEventsCache)
     quests = eventsCache.getAllQuests()
@@ -424,12 +425,6 @@ def showMetaBonusOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, forced
 def showCurrencyReserveAwardWindow(creditsValue, goldValue, notificationMgr=None):
     from gui.impl.lobby.currency_reserves.reserves_award_view import ReservesAwardWindow
     notificationMgr.append(WindowNotificationCommand(ReservesAwardWindow(creditsValue, goldValue)))
-
-
-@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
-def showSubscriptionAwardWindow(notificationMgr=None):
-    from gui.impl.lobby.subscription.subscription_award_view import SubscriptionAwardWindow
-    notificationMgr.append(WindowNotificationCommand(SubscriptionAwardWindow()))
 
 
 def showSubscriptionScreen():

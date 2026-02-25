@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/auxiliary/rewards_helper.py
+from __future__ import absolute_import
 import logging
-import types
 import typing
 import itertools
 from collections import namedtuple
+from future.builtins import range
+from future.utils import iteritems, itervalues
 from blueprints.BlueprintTypes import BlueprintTypes
 from frameworks.wulf import ViewFlags
 from battle_royale.gui.constants import ROYALE_POSTBATTLE_REWARDS_COUNT
@@ -210,7 +212,7 @@ class CompensationModelPresenter(LootRewardAnimatedModelPresenter):
             tx.setLabelAlign(compensationReason.get('align', _DEFAULT_ALIGN) or _DEFAULT_ALIGN)
             tx.setLabelAlignAfter(self._reward.get('align', _DEFAULT_ALIGN) or _DEFAULT_ALIGN)
             specialArgs = compensationReason.get('specialArgs', None)
-            if specialArgs and isinstance(specialArgs, (types.ListType, types.TupleType)):
+            if specialArgs and isinstance(specialArgs, (list, tuple)):
                 if len(specialArgs) > 1:
                     tx.setCountBefore(specialArgs[1])
         return
@@ -237,7 +239,7 @@ class VehicleCompensationModelPresenter(CompensationModelPresenter):
         super(VehicleCompensationModelPresenter, self)._formatModel(model, ttId, showCongrats)
         compensationReason = self._reward.get('compensationReason', None)
         specialArgs = compensationReason.get('specialArgs', None)
-        if specialArgs and isinstance(specialArgs, (types.ListType, types.TupleType)):
+        if specialArgs and isinstance(specialArgs, (list, tuple)):
             compactDescr = specialArgs[0]
             vehicle = self.itemsCache.items.getItemByCD(compactDescr)
             if vehicle is not None:
@@ -275,7 +277,7 @@ class BlueprintFinalFragmentModelPresenter(LootRewardAnimatedModelPresenter):
     def _setReward(self, reward):
         super(BlueprintFinalFragmentModelPresenter, self)._setReward(reward=reward)
         specialArgs = self._reward.get('specialArgs', None)
-        if specialArgs and isinstance(specialArgs, (types.ListType, types.TupleType)):
+        if specialArgs and isinstance(specialArgs, (list, tuple)):
             compactDescr = specialArgs[0]
             self.__vehicle = self.__itemsCache.items.getItemByCD(compactDescr)
         else:
@@ -317,7 +319,7 @@ class CrewBookModelPresenter(LootRewardDefModelPresenter):
             return True
         else:
             specialArgs = reward.get('specialArgs', None)
-            if not specialArgs or not isinstance(specialArgs, (types.ListType, types.TupleType)):
+            if not specialArgs or not isinstance(specialArgs, (list, tuple)):
                 return False
             compactDescr = specialArgs[0]
             item = cls.__itemsCache.items.getItemByCD(compactDescr)
@@ -337,7 +339,7 @@ class BlueprintFragmentRewardPresenter(LootRewardDefModelPresenter):
         super(BlueprintFragmentRewardPresenter, self)._setReward(reward=reward)
         self._vehicle = None
         specialArgs = self._reward.get('specialArgs', None)
-        if specialArgs and isinstance(specialArgs, (types.ListType, types.TupleType)):
+        if specialArgs and isinstance(specialArgs, (list, tuple)):
             compactDescr = specialArgs[0]
             self._vehicle = self.__itemsCache.items.getItemByCD(compactDescr)
         else:
@@ -378,7 +380,7 @@ class LootVehicleRewardPresenter(LootRewardDefModelPresenter):
         super(LootVehicleRewardPresenter, self)._setReward(reward=reward)
         self._vehicle = None
         specialArgs = self._reward.get('specialArgs', None)
-        if specialArgs and isinstance(specialArgs, (types.ListType, types.TupleType)):
+        if specialArgs and isinstance(specialArgs, (list, tuple)):
             compactDescr = specialArgs[0]
             self._vehicle = self.__itemsCache.items.getItemByCD(compactDescr)
         else:
@@ -460,8 +462,7 @@ def checkAndFillCustomizations(bonus, alwaysVisibleBonuses, bonuses):
 def checkAndFillTokens(bonus, alwaysVisibleBonuses, bonuses):
     hasTman = False
     for tokenBonus in bonus:
-        allTokens = tokenBonus.getTokens()
-        for tID, _ in allTokens.iteritems():
+        for tID in tokenBonus.getTokens():
             if getRecruitInfo(tID):
                 hasTman = True
                 break
@@ -516,7 +517,7 @@ def getRewardsBonuses(rewards, size='big', awardsCount=_DEFAULT_DISPLAYED_AWARDS
     formatter = BonusNameQuestsBonusComposer(awardsCount, getPackRentVehiclesAwardPacker())
     bonuses = []
     if rewards:
-        for bonusType, bonusValue in rewards.iteritems():
+        for bonusType, bonusValue in iteritems(rewards):
             if bonusType == 'vehicles' and isinstance(bonusValue, list):
                 for vehicleData in bonusValue:
                     bonuses.extend(getNonQuestBonuses(bonusType, vehicleData))
@@ -559,7 +560,7 @@ def getRewardTooltipContent(event, storedTooltipData=None, itemsCache=None):
             if storedTooltipData is None:
                 return
             specialArgs = storedTooltipData.specialArgs
-            if not specialArgs or not isinstance(specialArgs, (types.ListType, types.TupleType)):
+            if not specialArgs or not isinstance(specialArgs, (list, tuple)):
                 return
             crewSkin = itemsCache.items.getCrewSkin(specialArgs[0])
             crewSkinCount = specialArgs[1]
@@ -608,7 +609,7 @@ def getSeniorityAwardsBonuses(rewards, excluded=(), sortKey=None):
                 currencies = {name:value['count'] for name, value in rewardValue.items()}
             nonQuestBonuses = getNonQuestBonuses(rewardType, rewardValue)
             for bonus in nonQuestBonuses:
-                bonuses.extend(zip(packer.pack(bonus), packer.getToolTip(bonus)))
+                bonuses.extend(list(zip(packer.pack(bonus), packer.getToolTip(bonus))))
 
     if sortKey:
         bonuses = sorted(bonuses, key=sortKey)
@@ -624,13 +625,13 @@ def getProgressiveRewardBonuses(rewards, size='big', maxAwardCount=_DEFAULT_DISP
     bonuses = []
     alwaysVisibleBonuses = []
     if rewards:
-        for bonusType, bonusValue in rewards.iteritems():
+        for bonusType, bonusValue in iteritems(rewards):
             if bonusType == 'blueprints':
                 bonus = getNonQuestBonuses(bonusType, bonusValue, ctx={'isPacked': packBlueprints})
                 blueprintCongrats = _checkAndFillBlueprints(bonus, alwaysVisibleBonuses, bonuses)
                 if blueprintCongrats:
                     specialRewardType = blueprintCongrats
-            if bonusType == 'premium' or bonusType == 'premium_plus':
+            if bonusType in ('premium', 'premium_plus'):
                 splitDays = splitPremiumDays(bonusValue)
                 for day in splitDays:
                     bonus = getNonQuestBonuses(bonusType, day)
@@ -665,7 +666,7 @@ def getRoyaleBonuses(bonuses, size='big'):
 def getRoyaleBonusesFromDict(rewards, size='big'):
     alwaysVisibleBonuses = []
     commonBonuses = []
-    for bonusType, bonusValue in rewards.iteritems():
+    for bonusType, bonusValue in iteritems(rewards):
         commonBonuses.extend(getNonQuestBonuses(bonusType, bonusValue))
 
     commonBonuses.sort(key=_keySortOrder)
@@ -707,7 +708,7 @@ def getLastCongratsIndex(bonuses, rewardType):
     for index, reward in enumerate(bonuses):
         bonusName = reward.get('bonusName', '')
         if bonusName in _DEF_CONGRATS_VALIDATORS:
-            congratsValidator = _DEF_CONGRATS_VALIDATORS.get(bonusName, None)
+            congratsValidator = _DEF_CONGRATS_VALIDATORS.get(bonusName)
             if congratsValidator is None or congratsValidator(reward, rewardType):
                 lastIndex = index
 
@@ -716,7 +717,7 @@ def getLastCongratsIndex(bonuses, rewardType):
 
 def _getProgressiveSteps(currentStep, probability, maxSteps, hasCompleted=False):
     steps = []
-    for step in xrange(maxSteps):
+    for step in range(maxSteps):
         if step == maxSteps - 1:
             rewardType = prConst.REWARD_TYPE_BIG if hasCompleted else prConst.REWARD_TYPE_BIG_HIDDEN
         else:
@@ -753,7 +754,7 @@ def _getStyleCDByVehCD(vehCD):
         criteria = REQ_CRITERIA.CUSTOMIZATION.FOR_VEHICLE(vehicle) | REQ_CRITERIA.CUSTOMIZATION.HAS_TAGS(STYLES_TAGS)
         styles = items.getItems(GUI_ITEM_TYPE.STYLE, criteria)
         if styles:
-            return first(styles.iterkeys())
+            return first(styles)
     return None
 
 
@@ -807,9 +808,9 @@ def _checkAndFillItems(itemsList, alwaysVisibleBonuses, bonuses):
 
 def _getCompensationMoney(bonuses):
     money = ZERO_MONEY
-    for bonusName, bonusValue in bonuses.iteritems():
+    for bonusName, bonusValue in iteritems(bonuses):
         if bonusName == 'vehicles':
-            vehicles = itertools.chain.from_iterable([ vehBonus.itervalues() for vehBonus in bonusValue ])
+            vehicles = itertools.chain.from_iterable([ itervalues(vehBonus) for vehBonus in bonusValue ])
             for vehData in vehicles:
                 if 'customCompensation' in vehData:
                     money += Money.makeFromMoneyTuple(vehData['customCompensation'])
@@ -825,7 +826,7 @@ def _getVehicleFromReward(reward):
     itemsCache = dependency.instance(IItemsCache)
     vehicle = None
     specialArgs = reward.get('specialArgs', None)
-    if specialArgs and isinstance(specialArgs, (types.ListType, types.TupleType)):
+    if specialArgs and isinstance(specialArgs, (list, tuple)):
         compactDescr = specialArgs[0]
         vehicle = itemsCache.items.getItemByCD(compactDescr)
     else:

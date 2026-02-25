@@ -118,11 +118,11 @@ class PersonalMissionsMapView(PersonalMissionsMapViewMeta, PersonalMissionsNavig
         operationID = self.getOperationID()
         mainAwardTextID = chainID
         if self.getBranch() == PM_BRANCH.REGULAR:
-            if chainID == HT_CHAIN_ID and (operationID == OPERATION_ID_T55A or operationID == OPERATION_ID_OBJECT_260):
+            if chainID == HT_CHAIN_ID and operationID in (OPERATION_ID_T55A, OPERATION_ID_OBJECT_260):
                 mainAwardTextID = MAIN_AWARD_TEXT_ID_HULL
             mainAwardText = _ms(_MAIN_AWARD_TEXT[mainAwardTextID])
         else:
-            if chainID == ALLIANCE_CHAIN_ID and (operationID == OPERATION_ID_CHIMERA or operationID == OPERATION_ID_OBJECT_279):
+            if chainID == ALLIANCE_CHAIN_ID and operationID in (OPERATION_ID_CHIMERA, OPERATION_ID_OBJECT_279):
                 mainAwardTextID = MAIN_AWARD_TEXT_PM2_ID_HULL
             mainAwardText = _ms(_MAIN_AWARD_TEXT_PM2[mainAwardTextID])
         return {'mainAwardText': mainAwardText,

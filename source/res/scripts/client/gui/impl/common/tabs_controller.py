@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/common/tabs_controller.py
+from __future__ import absolute_import
 import inspect
+from future.utils import iterkeys
 from account_helpers.AccountSettings import AccountSettings, OPT_DEVICE_TAB_VISITED
 
 def tabUpdateFunc(tabName):
@@ -62,7 +64,7 @@ class TabsController(object):
         return None
 
     def _getTabs(self, **kwargs):
-        return sorted(self._tabs.iterkeys(), key=self.tabOrderKey)
+        return sorted(iterkeys(self._tabs), key=self.tabOrderKey)
 
     def _createViewModel(self, name):
         raise NotImplementedError

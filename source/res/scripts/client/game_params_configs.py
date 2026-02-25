@@ -12,6 +12,7 @@ import armor_inspector_common.schemas
 import hints_common.prebattle.newbie.schemas
 import hints_common.prebattle.schemas
 import hints_common.battle.schemas.newbie
+import renewable_subscription_common.schema
 from weekly_quests_common.weekly_quests_schema import weeklyQuestsSchema
 if typing.TYPE_CHECKING:
     from schema_manager import SchemaManager
@@ -34,3 +35,4 @@ def _registerSchemas(schemaManager):
     schemaManager.registerSchema(umgConfigSchema)
     schemaManager.registerSchema(weeklyQuestsSchema)
     schemaManager.registerSchema(armor_inspector_common.schemas.armorInspectorConfigSchema)
+    schemaManager.registerSchema(renewable_subscription_common.schema.renewableSubscriptionsConfigSchema)

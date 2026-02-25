@@ -1,0 +1,31 @@
+<ArenaFogOfWarComponent.def>
+  <BaseMethods>
+    <onDiscloseEvent>
+      <Args>
+        <discloseEvent>	DISCLOSE_EVENT	</discloseEvent>
+      </Args>
+    </onDiscloseEvent>
+  </BaseMethods>
+  <CellMethods>
+    <processDiscloseEvent>
+      <Args>
+        <vehID>	INT32	</vehID>
+        <playerName>	BOOL	</playerName>
+        <vehicleType>	BOOL	</vehicleType>
+      </Args>
+    </processDiscloseEvent>
+  </CellMethods>
+  <Properties>
+    <cp>
+      <Type>	PYTHON	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </cp>
+    <bp>
+      <Type>	PYTHON	</Type>
+      <Flags>	BASE	</Flags>
+    </bp>
+  </Properties>
+  <ofEntity>
+    <Arena></Arena>
+  </ofEntity>
+</ArenaFogOfWarComponent.def>

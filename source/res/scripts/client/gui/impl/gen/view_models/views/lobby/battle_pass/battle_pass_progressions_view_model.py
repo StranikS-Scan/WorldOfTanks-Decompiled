@@ -2,13 +2,13 @@
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/battle_pass/battle_pass_progressions_view_model.py
 from enum import Enum
 from frameworks.wulf import Array
-from gui.impl.wrappers.user_compound_price_model import UserCompoundPriceModel
 from gui.impl.wrappers.user_list_model import UserListModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.awards_widget_model import AwardsWidgetModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_widget_3d_style_view_model import BattlePassWidget3DStyleViewModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_widget_final_rewards_view_model import BattlePassWidgetFinalRewardsViewModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.character_widget_view_model import CharacterWidgetViewModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.common_view_model import CommonViewModel
+from gui.impl.gen.view_models.views.lobby.battle_pass.reward_item_model import RewardItemModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.reward_level_model import RewardLevelModel
 
 class ChapterStates(Enum):
@@ -34,7 +34,7 @@ class ChapterType(Enum):
 class BattlePassProgressionsViewModel(CommonViewModel):
     __slots__ = ('onClose', 'onChapterActivate', 'onTakeClick', 'onTakeAllClick', 'onOpenShopClick', 'onAboutClick', 'onPointsInfoClick', 'onFinishedAnimation', 'onLevelsAnimationFinished', 'onStyleBonusPreview', 'onChapterChoice', 'onViewLoaded')
 
-    def __init__(self, properties=40, commands=13):
+    def __init__(self, properties=41, commands=13):
         super(BattlePassProgressionsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -46,8 +46,16 @@ class BattlePassProgressionsViewModel(CommonViewModel):
         return RewardLevelModel
 
     @property
-    def widget3dStyle(self):
+    def starterPackRewards(self):
         return self._getViewModel(5)
+
+    @staticmethod
+    def getStarterPackRewardsType():
+        return RewardItemModel
+
+    @property
+    def widget3dStyle(self):
+        return self._getViewModel(6)
 
     @staticmethod
     def getWidget3dStyleType():
@@ -55,7 +63,7 @@ class BattlePassProgressionsViewModel(CommonViewModel):
 
     @property
     def chapterCharacter(self):
-        return self._getViewModel(6)
+        return self._getViewModel(7)
 
     @staticmethod
     def getChapterCharacterType():
@@ -63,7 +71,7 @@ class BattlePassProgressionsViewModel(CommonViewModel):
 
     @property
     def widgetFinalRewards(self):
-        return self._getViewModel(7)
+        return self._getViewModel(8)
 
     @staticmethod
     def getWidgetFinalRewardsType():
@@ -71,19 +79,11 @@ class BattlePassProgressionsViewModel(CommonViewModel):
 
     @property
     def awardsWidget(self):
-        return self._getViewModel(8)
+        return self._getViewModel(9)
 
     @staticmethod
     def getAwardsWidgetType():
         return AwardsWidgetModel
-
-    @property
-    def price(self):
-        return self._getViewModel(9)
-
-    @staticmethod
-    def getPriceType():
-        return UserCompoundPriceModel
 
     def getChapterID(self):
         return self._getNumber(10)
@@ -273,14 +273,20 @@ class BattlePassProgressionsViewModel(CommonViewModel):
     def setTankmenScreenID(self, value):
         self._setNumber(39, value)
 
+    def getIsStarterPack(self):
+        return self._getBool(40)
+
+    def setIsStarterPack(self, value):
+        self._setBool(40, value)
+
     def _initialize(self):
         super(BattlePassProgressionsViewModel, self)._initialize()
         self._addViewModelProperty('levels', UserListModel())
+        self._addViewModelProperty('starterPackRewards', UserListModel())
         self._addViewModelProperty('widget3dStyle', BattlePassWidget3DStyleViewModel())
         self._addViewModelProperty('chapterCharacter', CharacterWidgetViewModel())
         self._addViewModelProperty('widgetFinalRewards', BattlePassWidgetFinalRewardsViewModel())
         self._addViewModelProperty('awardsWidget', AwardsWidgetModel())
-        self._addViewModelProperty('price', UserCompoundPriceModel())
         self._addNumberProperty('chapterID', 0)
         self._addStringProperty('chapterState')
         self._addArrayProperty('freeFinalRewards', Array())
@@ -311,6 +317,7 @@ class BattlePassProgressionsViewModel(CommonViewModel):
         self._addNumberProperty('timeLeft', 0)
         self._addNumberProperty('seasonNum', 0)
         self._addNumberProperty('tankmenScreenID', 0)
+        self._addBoolProperty('isStarterPack', False)
         self.onClose = self._addCommand('onClose')
         self.onChapterActivate = self._addCommand('onChapterActivate')
         self.onTakeClick = self._addCommand('onTakeClick')

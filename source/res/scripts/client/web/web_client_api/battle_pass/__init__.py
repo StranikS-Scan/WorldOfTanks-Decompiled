@@ -4,7 +4,7 @@ import logging
 from itertools import chain
 from gui.impl.gen import R
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
-from gui.shared.event_dispatcher import showBattlePass, showBattlePassTankmenVoiceover
+from gui.shared.event_dispatcher import showBattlePass, showBattlePassTankmenVoiceover, showShop
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 from web.common import formatBattlePassInfo
@@ -69,3 +69,23 @@ class BattlePassWebApi(W2CSchema):
         for screenID, screenData in self.__battlePass.getTankmenScreens().iteritems():
             if groupName in screenData['tankmen']:
                 return screenID
+
+
+class BattlePassWebApiMixin(object):
+
+    @w2c(W2CSchema, 'battle_pass_common')
+    def openBattlePassMainProgression(self, _):
+        showBattlePass()
+
+    @w2c(W2CSchema, 'battle_pass_buy:')
+    def openBattlePassMainWithBuy(self, _):
+        battlePass = dependency.instance(IBattlePassController)
+        view = R.aliases.battle_pass.ChapterChoice() if not battlePass.isHoliday() else R.aliases.battle_pass.BuyPass()
+        showBattlePass(view)
+
+    @w2c(W2CSchema, 'battle_pass_levels_buy:')
+    def openBattlePassMainWithBuyLevels(self, _):
+        battlePass = dependency.instance(IBattlePassController)
+        currentChapterID = battlePass.getCurrentChapterID()
+        if battlePass.hasActiveChapter() and battlePass.isBought(chapterID=currentChapterID):
+            showBattlePass(R.aliases.battle_pass.BuyLevels(), currentChapterID)

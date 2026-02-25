@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/components/details.py
 import operator
+import typing
 from constants import IGR_TYPE, PREMIUM_TYPE
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as _CAPS
 from gui import makeHtmlString
@@ -25,6 +26,8 @@ from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+if typing.TYPE_CHECKING:
+    from gui.battle_results.reusable.records import RecordsIterator
 
 class _GainResourceInBattleItem(base.StatsItem):
     __slots__ = ('__records', '__method', '__styler')
@@ -210,6 +213,7 @@ class PremiumXPBlock(base.StatsBlock):
 class _EconomicsDetailsBlock(base.StatsBlock):
     __slots__ = ('premiumMask', 'hasAnyPremium', 'isWotPlus', 'canResourceBeFaded', 'igrType', 'penaltyDetails')
     _lobbyContext = dependency.descriptor(ILobbyContext)
+    _wotPlusCtrl = dependency.descriptor(IWotPlusController)
 
     def __init__(self, meta=None, field='', *path):
         super(_EconomicsDetailsBlock, self).__init__(meta, field, *path)
@@ -255,9 +259,13 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         isTotalShown |= self.__addStatsItemIfExists('battlePayments', baseCredits, premiumCredits, False, None, 'orderCreditsFactor100')
         isTotalShown |= self.__addEventsMoney(baseCredits, premiumCredits, goldRecords)
         isTotalShown |= self.__addReferralSystemFactor(baseCredits, premiumCredits)
-        showWotPlusBattleBonuses = self._lobbyContext.getServerSettings().isWotPlusBattleBonusesEnabled()
+        wotPlusSettings = self._wotPlusCtrl.getSettingsStorage()
+        showWotPlusBattleBonuses = wotPlusSettings.isBattleBonusesEnabled()
         if showWotPlusBattleBonuses:
             self.__addWotPlusBattleBonusCredits(baseCredits, premiumCredits, baseCreditsWithWotPlus, premiumCreditsWithWotPlus)
+            isTotalShown = True
+        if self.isWotPlus and wotPlusSettings.isProBoostFeatureEnabled():
+            self.__addWotPlusProboostBonusCredits(baseCredits, premiumCredits)
             isTotalShown = True
         self._addEmptyRow()
         isPenaltyAdded = False
@@ -341,7 +349,7 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
             baseGold = goldGain
         column2 = None
         column4 = None
-        if self._lobbyContext.getServerSettings().isRenewableSubGoldReserveEnabled():
+        if self._wotPlusCtrl.getSettingsStorage().isGoldReserveFeatureEnabled():
             column2 = style.makeGoldLabel(baseGold, canBeFaded=True, isDiff=baseGold > 0)
             column4 = style.makeGoldLabel(premiumGold, canBeFaded=True, isDiff=premiumGold > 0)
         self._addStatsRow('piggyBankInfo', column1=style.makeCreditsLabel(baseCredits, canBeFaded=not self.hasAnyPremium, isDiff=baseCredits > 0), column2=column2, column3=style.makeCreditsLabel(premiumCredits, canBeFaded=self.hasAnyPremium, isDiff=premiumCredits > 0), column4=column4)
@@ -431,6 +439,13 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         htmlKey = 'wotplus_active_label' if self.isWotPlus else 'wotplus_inactive_label'
         self._addStatsRow('wotPlus', column1=baseLabel, column3=premiumLabel, htmlKey=htmlKey)
 
+    def __addWotPlusProboostBonusCredits(self, baseCredits, premiumCredits):
+        wotPlusRecords = ('wotPlusProBoostCredits', 'wotPlusProBoostCreditsFactor100')
+        baseVal = baseCredits.getRecord(*wotPlusRecords)
+        premVal = premiumCredits.getRecord(*wotPlusRecords)
+        if baseVal > 0 or premVal > 0:
+            self._addStatsRow('wotPlusProBoost', column1=style.makeCreditsLabel(baseVal, canBeFaded=not self.hasAnyPremium), column3=style.makeCreditsLabel(premVal, canBeFaded=self.hasAnyPremium), htmlKey='wotplus_active_label')
+
 
 class XPDetailsBlock(_EconomicsDetailsBlock):
     __slots__ = ()
@@ -458,9 +473,11 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
         if showSquadLabels:
             self.__addSquadXPDetails(baseXP, premiumXP)
         self._addAOGASFactor(baseXP)
-        showWotPlusBattleBonuses = self._lobbyContext.getServerSettings().isWotPlusBattleBonusesEnabled()
-        if showWotPlusBattleBonuses:
+        wotPlusSettings = self._wotPlusCtrl.getSettingsStorage()
+        if wotPlusSettings.isBattleBonusesEnabled():
             self.__addWotPlusBattleBonusXPs(result)
+        if self.isWotPlus and wotPlusSettings.isProBoostFeatureEnabled():
+            self.__addWotPlusProboostBonusXPs(baseFreeXP, baseXP, premiumFreeXP, premiumXP)
         if self.getNextComponentIndex() < 7:
             self._addEmptyRow()
         self.__addXPsViolationPenalty()
@@ -486,6 +503,16 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
         premiumFreeXPLabel = style.makeFreeXpLabel(premiumFreeXPValue, canBeFaded=self.hasAnyPremium, forceFade=not self.isWotPlus)
         htmlKey = 'wotplus_active_label' if self.isWotPlus else 'wotplus_inactive_label'
         self._addStatsRow('wotPlus', column1=baseXPLabel, column2=baseFreeXPLabel, column3=premiumXPLabel, column4=premiumFreeXPLabel, htmlKey=htmlKey)
+
+    def __addWotPlusProboostBonusXPs(self, baseFreeXP, baseXP, premiumFreeXP, premiumXP):
+        namesXP = ('wotPlusProBoostXP', 'wotPlusProBoostXPFactor100')
+        namesFreeXP = ('wotPlusProBoostFreeXP', 'wotPlusProBoostFreeXPFactor100')
+        baseXPValue = baseXP.getRecord(*namesXP)
+        baseFreeXPValue = baseFreeXP.getRecord(*namesFreeXP)
+        premiumXPValue = premiumXP.getRecord(*namesXP)
+        premiumFreeXPValue = premiumFreeXP.getRecord(*namesFreeXP)
+        if baseXPValue > 0 or baseFreeXPValue > 0 or premiumXPValue > 0 or premiumFreeXPValue > 0:
+            self._addStatsRow('wotPlusProBoost', column1=style.makeXpLabel(baseXPValue, canBeFaded=not self.hasAnyPremium), column2=style.makeFreeXpLabel(baseFreeXPValue, canBeFaded=not self.hasAnyPremium), column3=style.makeXpLabel(premiumXPValue, canBeFaded=self.hasAnyPremium), column4=style.makeFreeXpLabel(premiumFreeXPValue, canBeFaded=self.hasAnyPremium), htmlKey='wotplus_active_label')
 
     def __addFreeXPsItem(self, label, baseFreeXP, premiumFreeXP, freeXPRecord):
         columns = {'column2': style.makeFreeXpLabel(baseFreeXP.getRecord(freeXPRecord), canBeFaded=not self.hasAnyPremium),
@@ -630,7 +657,7 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
         premiumXPToUse = premiumXP
         baseFreeXPToUse = baseFreeXP
         premiumFreeXPToUse = premiumFreeXP
-        showWotPlusBattleBonuses = self._lobbyContext.getServerSettings().isWotPlusBattleBonusesEnabled()
+        showWotPlusBattleBonuses = self._wotPlusCtrl.getSettingsStorage().isBattleBonusesEnabled()
         if showWotPlusBattleBonuses and not self.isWotPlus:
             if self.hasAnyPremium:
                 baseXPToUse = baseXPWithWotPlus
@@ -830,7 +857,7 @@ class PremiumBonusDetailsBlock(base.StatsBlock):
 
     def __setBonusLeft(self):
         isWotPlusBonusEnabled = isWotPlusBonusEnabledInConfig()
-        hasWotPlus = self.__wotPlusController.isEnabled()
+        hasWotPlus = self.__wotPlusController.hasSubscription()
         hasPremiumPlus = self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
         hasAccessToAdditionalBonus, applyAdditionalXPCount, _ = getLeftAdditionalBonus(hasWotPlus, hasPremiumPlus)
         if hasAccessToAdditionalBonus:

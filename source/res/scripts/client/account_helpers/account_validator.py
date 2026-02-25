@@ -78,7 +78,7 @@ class InventoryVehiclesValidator(AccountValidator):
                 try:
                     yield vehicles.VehicleDescr(vehCompDescr)
                 except Exception as e:
-                    raise ValidateException(e.message, ValidationCodes.VEHICLE_MISMATCH, _packItemData(GUI_ITEM_TYPE.VEHICLE, (invID, vehCompDescr)))
+                    raise ValidateException(str(e), ValidationCodes.VEHICLE_MISMATCH, _packItemData(GUI_ITEM_TYPE.VEHICLE, (invID, vehCompDescr)))
 
         yield wg_async.wg_await(wg_async.distributeLoopOverTicks(createVehicleDescrAsync(), minPerTick=10, maxPerTick=100, logID='createVehicleDescrAsync', tickLength=0.0))
 
@@ -120,7 +120,7 @@ class InventoryOutfitValidator(AccountValidator):
                     try:
                         yield self.itemsFactory.createOutfit(strCompactDescr=outfitCD, vehicleCD=vehicleCD)
                     except Exception as e:
-                        raise ValidateException(e.message, ValidationCodes.OUTFIT_MISMATCH, _packItemData(GUI_ITEM_TYPE.CUSTOMIZATION, (vehIntCD, outfitCD)))
+                        raise ValidateException(str(e), ValidationCodes.OUTFIT_MISMATCH, _packItemData(GUI_ITEM_TYPE.CUSTOMIZATION, (vehIntCD, outfitCD)))
 
             return
 
@@ -143,7 +143,7 @@ class InventoryTankmenValidator(AccountValidator):
                 try:
                     yield tankmen.TankmanDescr(tmanCompDescr)
                 except Exception as e:
-                    raise ValidateException(e.message, ValidationCodes.TANKMEN_MISMATCH, _packItemData(GUI_ITEM_TYPE.TANKMAN, (invID, tmanCompDescr)))
+                    raise ValidateException(str(e), ValidationCodes.TANKMEN_MISMATCH, _packItemData(GUI_ITEM_TYPE.TANKMAN, (invID, tmanCompDescr)))
 
             return
 

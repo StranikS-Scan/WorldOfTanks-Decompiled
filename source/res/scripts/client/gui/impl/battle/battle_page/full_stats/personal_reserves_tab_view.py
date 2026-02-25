@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/battle/battle_page/full_stats/personal_reserves_tab_view.py
+from __future__ import absolute_import
 import logging
 import typing
 import BigWorld

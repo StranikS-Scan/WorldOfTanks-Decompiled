@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/lobby_entry.py
+from __future__ import absolute_import
 from collections import namedtuple
 import typing
 import BigWorld

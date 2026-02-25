@@ -7,16 +7,10 @@ class EVENT(object):
     PUNISHMENTWINDOW_REASON_EVENT_AFK = '#event:punishmentWindow/reason/event_afk'
     BATTLEHINTS_TESTMESSAGE = '#event:battleHints/testMessage'
     BATTLEHINTS_TESTMESSAGEWITHPARAMS = '#event:battleHints/testMessageWithParams'
-    CRAFTMACHINE_TITLE = '#event:craftMachine/title'
-    CRAFTMACHINE_SUBTITLE = '#event:craftMachine/subTitle'
-    CRAFTMACHINE_ENDDATETEXT = '#event:craftMachine/endDateText'
     ALL_ENUM = (PUNISHMENTWINDOW_REASON_EVENT_DESERTER,
      PUNISHMENTWINDOW_REASON_EVENT_AFK,
      BATTLEHINTS_TESTMESSAGE,
-     BATTLEHINTS_TESTMESSAGEWITHPARAMS,
-     CRAFTMACHINE_TITLE,
-     CRAFTMACHINE_SUBTITLE,
-     CRAFTMACHINE_ENDDATETEXT)
+     BATTLEHINTS_TESTMESSAGEWITHPARAMS)
 
     @classmethod
     def all(cls, key0):

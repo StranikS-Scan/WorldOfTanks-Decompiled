@@ -10,6 +10,7 @@ class StagedJetBoostersComponentManager(CGF.ComponentManager):
     @onAddedQuery(StagedJetBoostersController)
     def onAdded(self, ctrl):
         ctrl.attachInput()
+        ctrl.createInputLogger()
 
     @onRemovedQuery(StagedJetBoostersController)
     def onRemoved(self, ctrl):

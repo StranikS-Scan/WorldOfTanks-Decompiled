@@ -12,7 +12,7 @@ class BattlePassNoChapterTooltipView(ViewImpl):
     __slots__ = ()
 
     def __init__(self):
-        settings = ViewSettings(R.views.lobby.battle_pass.tooltips.BattlePassNoChapterTooltipView())
+        settings = ViewSettings(R.views.mono.battle_pass.tooltips.no_chapter())
         settings.model = BattlePassNoChapterTooltipViewModel()
         super(BattlePassNoChapterTooltipView, self).__init__(settings)
 

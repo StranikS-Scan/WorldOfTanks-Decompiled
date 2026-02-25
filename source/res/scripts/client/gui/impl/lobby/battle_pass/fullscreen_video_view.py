@@ -21,7 +21,7 @@ class FullscreenVideoView(ViewImpl):
     __appFactory = dependency.descriptor(IAppLoader)
 
     def __init__(self, *args, **kwargs):
-        settings = ViewSettings(R.views.lobby.battle_pass.FullscreenVideoView())
+        settings = ViewSettings(R.views.mono.battle_pass.full_screen_video())
         settings.model = FullscreenVideoViewModel()
         settings.args = args
         settings.kwargs = kwargs

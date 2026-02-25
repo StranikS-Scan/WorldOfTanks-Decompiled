@@ -6,27 +6,28 @@ import typing
 import BigWorld
 import CGF
 import Math
-from gui import SystemMessages
-from gui.Scaleform.Waiting import Waiting
-from gui.Scaleform.lobby_entry import getLobbyStateMachine
-from gui.impl.lobby.vehicle_hub import OverviewState
-from gui.prb_control import prbDispatcherProperty
 from ClientSelectableCameraObject import ClientSelectableCameraObject
 from CurrentVehicle import g_currentPreviewVehicle
 from WeakMethod import WeakMethodProxy
 from cgf_components.pbs_components import PostBattleManager
 from frameworks.state_machine import StateFlags
 from frameworks.state_machine.transitions import TransitionType
+from gui import SystemMessages
 from gui.ClientHangarSpace import customizationHangarCFG
+from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.trainings.states import TrainingRoomState
 from gui.Scaleform.framework.entities.View import ViewKey
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.battle_results.service import g_pbsFakeData, PostBattleResultsStateMixin
 from gui.battle_results.settings import PLAYER_TEAM_RESULT
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.lobby.vehicle_hub import OverviewState
+from gui.lobby_state_machine.router import SubstateRouter
 from gui.lobby_state_machine.states import SFViewLobbyState, LobbyState, SubScopeSubLayerState, LobbyStateDescription, UntrackedState, LobbyStateFlags
-from gui.Scaleform.daapi.view.lobby.trainings.states import TrainingRoomState
 from gui.lobby_state_machine.transitions import HijackTransition
+from gui.prb_control import prbDispatcherProperty
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.utils.functions import getArenaImage, getViewName
 from gui.subhangar.subhangar_observer import hangarVehicleAABB, selectItemByTankSize
@@ -34,12 +35,12 @@ from gui.subhangar.subhangar_state_groups import SubhangarStateGroupConfigProvid
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from helpers.events_handler import EventsHandler
+from items.components.c11n_constants import SeasonType
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.shared.utils import IHangarSpace
-from items.components.c11n_constants import SeasonType
 _logger = logging.getLogger(__name__)
 _TANK_SIZE_LOWER_BOUNDS = (float('-inf'), 5.0, 8.0)
 _HIDDEN_TANK_LOCATION = Math.Vector3(0, -10000, 0)
@@ -93,9 +94,10 @@ class PostBattleResultsEntryState(LobbyState, SubhangarStateGroupConfigProvider)
         self.addNavigationTransition(lsm.getStateByCls(OverviewState), record=True)
         myDescendants = set(self.getRecursiveChildrenStates())
         for state in self.getParent().getRecursiveChildrenStates():
-            if state in myDescendants or state == self or isinstance(state, UntrackedState):
+            stateFlags = state.getFlags()
+            if state in myDescendants or state == self or stateFlags & LobbyStateFlags.POST_BATTLE_RESULTS or isinstance(state, UntrackedState):
                 continue
-            if not state.getChildrenStates():
+            if not state.getChildrenStates() and not stateFlags & LobbyStateFlags.HANGAR:
                 state.addNavigationTransition(self, record=True)
 
     def registerStates(self):
@@ -240,6 +242,8 @@ class PostBattleResultsState(SFViewLobbyState, SubhangarStateGroupConfigProvider
     def __init__(self, flags=StateFlags.UNDEFINED):
         super(PostBattleResultsState, self).__init__(flags=flags | LobbyStateFlags.POST_BATTLE_RESULTS)
         self.__cachedParams = {}
+        self.__router = None
+        return
 
     def serializeParams(self):
         return self.__cachedParams
@@ -304,6 +308,8 @@ class PostBattleResultsState(SFViewLobbyState, SubhangarStateGroupConfigProvider
     def _onEntered(self, event):
         self.__cachedParams = dict(event.params)
         super(PostBattleResultsState, self)._onEntered(event)
+        self.__router = SubstateRouter(self.getMachine(), self._getView(), self)
+        self.__router.init()
         if self.__cachedParams.get(_TAB_STATE_ID) is not None:
             stateId = self.__cachedParams.pop(_TAB_STATE_ID)
             self.getMachine().getStateByID(stateId).goTo(**self.__cachedParams)
@@ -311,7 +317,10 @@ class PostBattleResultsState(SFViewLobbyState, SubhangarStateGroupConfigProvider
 
     def _onExited(self):
         self.__cachedParams = {}
+        self.__router.fini()
+        self.__router = None
         super(PostBattleResultsState, self)._onExited()
+        return
 
     def _getViewLoadCtx(self, event):
         return {'ctx': event.params}

@@ -718,41 +718,36 @@ class VOIPCaptureDevicesSetting(UserPrefsStringSetting):
         super(VOIPCaptureDevicesSetting, self).__init__(Settings.KEY_VOIP_DEVICE, isPreview)
 
     def _get(self):
+        currentDevice = super(VOIPCaptureDevicesSetting, self)._get()
         vm = VOIP.getVOIPManager()
-        currentDeviceName = super(VOIPCaptureDevicesSetting, self)._get()
-        deviceIdx = self.__getDeviceIdxByName(currentDeviceName)
+        deviceIdx = self.__getDeviceIdx(currentDevice)
         if deviceIdx == -1:
-            deviceIdx = self.__getDeviceIdxByName(vm.getCurrentCaptureDevice())
+            deviceIdx = self.__getDeviceIdx(vm.getCurrentCaptureDevice())
         return deviceIdx
 
     def _getOptions(self):
-        return [ i18n.encodeUtf8(device.decode(sys.getfilesystemencoding())) for device in self._getRawOptions() ]
-
-    def _getRawOptions(self):
-        return VOIP.getVOIPManager().getCaptureDevices()
+        devicesNames = VOIP.getVOIPManager().getCaptureDevicesNames()
+        return [ i18n.encodeUtf8(deviceName.decode(sys.getfilesystemencoding())) for deviceName in devicesNames ]
 
     def _set(self, value):
         vm = VOIP.getVOIPManager()
-        if vm.getCaptureDevices():
-            device = self.__getDeviceNameByIdx(value)
+        devices = vm.getCaptureDevices()
+        if devices:
+            device = self.__getDeviceByIdx(value)
             vm.setCaptureDevice(device)
-            LOG_DEBUG('Selecting new capture device', device)
             super(VOIPCaptureDevicesSetting, self)._set(device)
 
     def _save(self, value):
-        super(VOIPCaptureDevicesSetting, self)._save(self.__getDeviceNameByIdx(value))
+        super(VOIPCaptureDevicesSetting, self)._save(self.__getDeviceByIdx(value))
 
     @classmethod
-    def __getDeviceNameByIdx(cls, idx):
-        vm = VOIP.getVOIPManager()
-        device = vm.getCaptureDevices()[0]
-        if len(vm.getCaptureDevices()) > idx:
-            device = vm.getCaptureDevices()[int(idx)]
-        return device
+    def __getDeviceByIdx(cls, idx):
+        devices = VOIP.getVOIPManager().getCaptureDevices()
+        return devices[int(idx)] if len(devices) > idx else devices[0]
 
-    def __getDeviceIdxByName(self, deviceName):
-        options = self._getRawOptions()
-        return options.index(deviceName) if deviceName in options else -1
+    def __getDeviceIdx(self, device):
+        devices = VOIP.getVOIPManager().getCaptureDevices()
+        return devices.index(device) if device in devices else -1
 
 
 class VOIPSupportSetting(ReadOnlySetting):

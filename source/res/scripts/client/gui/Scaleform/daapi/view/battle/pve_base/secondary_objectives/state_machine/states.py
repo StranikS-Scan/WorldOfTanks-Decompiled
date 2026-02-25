@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/pve_base/secondary_objectives/state_machine/states.py
+from __future__ import absolute_import
 from enum import Enum
 import BigWorld
 from frameworks.state_machine import StateFlags
 from gui.Scaleform.daapi.view.battle.pve_base.base.state_machine.states import BaseState, BaseTimerState
+from math_common import round_py2_style
 from pve_battle_hud import SecondaryObjectiveState
 
 class HideType(Enum):
@@ -24,7 +26,7 @@ class BaseViewTimerState(BaseTimerState):
     def tick(self, currentTime):
         super(BaseViewTimerState, self).tick(currentTime)
         serverSettings, _ = self.getSettings()
-        timeLeft = round(serverSettings.finishTime - currentTime)
+        timeLeft = round_py2_style(serverSettings.finishTime - currentTime)
         self._view.updateTimer(serverSettings.id, timeLeft, self._isWarning)
 
     @property
@@ -57,7 +59,7 @@ class RestoredState(BaseViewTimerState):
     @property
     def _isWarning(self):
         serverSettings, clientSettings = self.getSettings()
-        timeLeft = round(serverSettings.finishTime - BigWorld.serverTime())
+        timeLeft = round_py2_style(serverSettings.finishTime - BigWorld.serverTime())
         return 0 < timeLeft <= clientSettings.countdownTimer
 
     def _showView(self):

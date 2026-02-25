@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/confirm_customization_item_dialog.py
+from __future__ import absolute_import
+from past.utils import old_div
 from debug_utils import LOG_ERROR
 from PlayerEvents import g_playerEvents
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -50,7 +52,7 @@ class ConfirmCustomizationItemDialog(ConfirmItemWindowMeta):
     def proceedSubmit(self, count, currency):
         item = self.meta.getItem()
         stepFactor = self.meta.getStepFactor(item)
-        count = count / stepFactor
+        count = old_div(count, stepFactor)
         self.meta.submit(item, count, currency, self.meta.vehicle)
         self._callHandler(True, item, count, currency)
         self.destroy()

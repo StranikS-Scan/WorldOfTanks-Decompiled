@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/auxiliary/exchanger.py
+from __future__ import absolute_import
 import logging
 import typing
 from adisp import adisp_async, adisp_process
@@ -12,8 +13,7 @@ _logger = logging.getLogger(__name__)
 
 class ExchangeSubmitterBase(object):
 
-    @adisp_async
-    def submit(self, fromItemCount, toItemCount, callback=None):
+    def submit(self, fromItemCount, withConfirm=False, callback=None):
         pass
 
     def getCurrentRate(self):
@@ -35,8 +35,8 @@ class ExchangeCreditsSubmitter(ExchangeSubmitterBase):
 
     @adisp_async
     @adisp_process
-    def submit(self, goldToExchange, withConfirm=True, callback=None):
-        result = yield GoldToCreditsExchanger(goldToExchange, withConfirm=withConfirm).request()
+    def submit(self, fromItemCount, withConfirm=True, callback=None):
+        result = yield GoldToCreditsExchanger(fromItemCount, withConfirm=withConfirm).request()
         if callback is not None:
             callback(result)
         return

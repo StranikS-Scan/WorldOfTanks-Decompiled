@@ -4,19 +4,11 @@ from typing import TYPE_CHECKING
 import skeletons.gui.pet_system
 import constants
 import skeletons.gui.resource_well
-from shared_utils import CONST_CONTAINER
 from gui.graphics_optimization_controller.optimization_controller import GraphicsOptimizationController
 from gui.shared.system_factory import collectGameControllers
 from skeletons.festivity_factory import IFestivityFactory
 if TYPE_CHECKING:
     from helpers.dependency import DependencyManager
-
-class CalendarInvokeOrigin(CONST_CONTAINER):
-    ACTION = 'action'
-    HANGAR = 'hangar'
-    SPLASH = 'first'
-    BANNER = 'banner'
-
 
 def getGameControllersConfig(manager):
     from gui.game_control.AOGAS import AOGASController as _AOGAS
@@ -52,7 +44,6 @@ def getGameControllersConfig(manager):
     from gui.game_control.platoon_controller import PlatoonController as _PlatoonController
     from gui.game_control.epic_meta_game_ctrl import EpicBattleMetaGameController as _EpicMeta
     from gui.game_control.manual_controller import ManualController as _ManualController
-    from gui.game_control.calendar_controller import CalendarController as _Calendar
     from gui.marathon.marathon_event_controller import MarathonEventsController as _MarathonEventsController
     from skeletons.gui import game_control as _interface
     from gui.game_control.referral_program_controller import ReferralProgramController as _ReferralController
@@ -82,7 +73,6 @@ def getGameControllersConfig(manager):
     from gui.game_control.lootbox_system_controller import LootBoxSystemController
     from gui.entitlements.entitlements_controller import EntitlementsController
     from gui.game_control.winback_controller import WinbackController
-    from gui.game_control.daily_quests_intro_presenter import DailyQuestsIntroPresenter
     from gui.game_control.achievements20_controller import Achievements20Controller as _Ach20Ctrl
     from gui.limited_ui.lui_controller import LimitedUIController
     from gui.game_control.collections_controller import CollectionsSystemController
@@ -140,7 +130,6 @@ def getGameControllersConfig(manager):
     _config(_interface.IHeroTankController, _HeroTankController())
     _config(_interface.IPlatoonController, _PlatoonController())
     _config(_interface.IMarathonEventsController, _MarathonEventsController())
-    _config(_interface.ICalendarController, _Calendar())
     _config(_interface.IEpicBattleMetaGameController, _EpicMeta())
     _config(_interface.IManualController, _ManualController())
     _config(_interface.IReferralProgramController, _ReferralController())
@@ -177,7 +166,6 @@ def getGameControllersConfig(manager):
     _config(_interface.IEntitlementsController, EntitlementsController())
     _config(_interface.ICollectionsSystemController, CollectionsSystemController())
     _config(_interface.IWinbackController, WinbackController())
-    _config(_interface.IDailyQuestIntroPresenter, DailyQuestsIntroPresenter())
     _config(_interface.IAchievements20Controller, _Ach20Ctrl())
     _config(_interface.ILimitedUIController, LimitedUIController())
     _config(_interface.IHangarGuiController, HangarGuiController())

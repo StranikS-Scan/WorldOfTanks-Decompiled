@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/damage_log_panel.py
+from __future__ import absolute_import
 from collections import defaultdict
+from future.utils import viewitems
 import BattleReplay
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE as _BET
 from account_helpers.settings_core.options import DamageLogDetailsSetting as _VIEW_MODE, DamageLogEventPositionsSetting as _EVENT_POSITIONS, DamageLogEventTypesSetting as _DISPLAYED_EVENT_TYPES
@@ -585,7 +587,7 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
     def _invalidateTotalDamages(self):
         contentMask = 0
         isDamageSettingEnabled = self.__isDamageSettingEnabled
-        for settingName, bit in _TOTAL_DAMAGE_SETTINGS_TO_CONTENT_MASK.iteritems():
+        for settingName, bit in viewitems(_TOTAL_DAMAGE_SETTINGS_TO_CONTENT_MASK):
             if isDamageSettingEnabled(settingName):
                 contentMask |= bit
 
@@ -633,7 +635,7 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
             return
 
     def _onSettingsChanged(self, diff):
-        for key in _TOTAL_DAMAGE_SETTINGS_TO_CONTENT_MASK.iterkeys():
+        for key in _TOTAL_DAMAGE_SETTINGS_TO_CONTENT_MASK:
             if key in diff:
                 self._invalidateTotalDamages()
 

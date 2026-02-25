@@ -25,13 +25,13 @@ class BuyPairModificationDialog(BuyAndExchange[AmmunitionBuyModel]):
         settings.kwargs = kwargs
         self._buyContent = None
         self._mainContent = None
-        self.__vehicle = kwargs.get('vehicle', None)
+        self.__vehicle = kwargs.get('vehicle')
         self.__toStepID = kwargs.get('stepID', 0)
         self.__price = EXT_MONEY_ZERO
         self.__modID = kwargs.get('modID', 0)
         self.__item = None
         self.__updateData()
-        super(BuyPairModificationDialog, self).__init__(settings, self.__price, kwargs.get('startState', None))
+        super(BuyPairModificationDialog, self).__init__(settings, self.__price, kwargs.get('startState'))
         return
 
     def _onLoading(self, *args, **kwargs):

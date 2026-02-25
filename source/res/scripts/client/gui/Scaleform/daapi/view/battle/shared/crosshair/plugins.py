@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/crosshair/plugins.py
+from __future__ import absolute_import, division
 import logging
 import math
 import typing
 from collections import defaultdict, namedtuple, deque
 from itertools import takewhile
+from future.utils import viewitems
 import BigWorld
 from enum import IntEnum
 import BattleReplay
@@ -51,6 +53,7 @@ from gui.veh_mechanics.battle.updaters.updaters_common import ViewUpdatersCollec
 from helpers import dependency
 from helpers.time_utils import MS_IN_SECOND
 from helpers_common import computeDamageAtDist
+from math_common import decimal_round, round_py2_style_int
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
@@ -73,7 +76,7 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 _SETTINGS_KEY_TO_VIEW_ID = {AIM.ARCADE: CROSSHAIR_VIEW_ID.ARCADE,
  AIM.SNIPER: CROSSHAIR_VIEW_ID.SNIPER}
-_VIEW_ID_TO_SETTINGS_KEY = {v:k for k, v in _SETTINGS_KEY_TO_VIEW_ID.iteritems()}
+_VIEW_ID_TO_SETTINGS_KEY = {v:k for k, v in _SETTINGS_KEY_TO_VIEW_ID.items()}
 _SETTINGS_KEYS = set(_SETTINGS_KEY_TO_VIEW_ID.keys())
 _SETTINGS_VIEWS = set(_SETTINGS_KEY_TO_VIEW_ID.values())
 _DEVICE_ENGINE_NAME = 'engine'
@@ -127,7 +130,7 @@ def _makeSettingsVO(settingGetter):
              'mixingType': settings['mixingType']}
 
     for view in _SETTINGS_VIEWS:
-        commonSettings = data.get(view, None)
+        commonSettings = data.get(view)
         if commonSettings is None:
             commonSettings = {}
             data[view] = commonSettings
@@ -365,7 +368,7 @@ class _PythonShellInGunTicker(_PythonTicker):
     def _setViewSnapshot(self, timeLeft):
         if self._totalTime > 0:
             progress = self._totalTime - timeLeft
-            percent = round(float(progress) / self._totalTime, 2)
+            percent = decimal_round(float(progress) / self._totalTime, 2)
             self._viewObject.as_setAutoloaderReloadasPercentS(percent)
 
     def _stopTick(self):
@@ -392,7 +395,7 @@ class _PythonClipLoadingTicker(_PythonTicker):
 
     def _setViewSnapshot(self, timeLeft):
         if self._totalTime > 0:
-            percent = round(float(timeLeft) / self._totalTime, 2)
+            percent = decimal_round(float(timeLeft) / self._totalTime, 2)
             self._viewObject.as_setAutoloaderPercentS(percent, timeLeft, self.__isCritical, self.__showTimer, self.__isTimerRed)
 
     def _stopTick(self):
@@ -430,7 +433,7 @@ class _PythonReloadTicker(_PythonTicker):
     @staticmethod
     def __getProgressInPercents(timeLeft, totalTime):
         timeGone = totalTime - timeLeft
-        return round(float(timeGone) / totalTime * 100, 2) if totalTime > 0 else 0.0
+        return decimal_round(float(timeGone) / totalTime * 100, 2) if totalTime > 0 else 0.0
 
 
 class _PythonAutoloaderBoostTicker(_PythonTicker):
@@ -442,7 +445,7 @@ class _PythonAutoloaderBoostTicker(_PythonTicker):
     def _setViewSnapshot(self, timeLeft):
         if self._totalTime > 0:
             timeGone = self._totalTime - timeLeft
-            progressInPercents = round(float(timeGone) / self._totalTime * 100, 2)
+            progressInPercents = decimal_round(float(timeGone) / self._totalTime * 100, 2)
             _logger.debug('_PythonAutoloaderBoostTicker::_setViewSnapshot progressInPercents=%s, self._totalTime=%s', progressInPercents, self._totalTime)
             self._viewObject.as_setBoostAsPercentS(progressInPercents, self._totalTime)
 
@@ -483,7 +486,7 @@ class _ASAutoReloadProxy(_ReloadingAnimationsProxy):
         self._panel.as_autoloaderUpdateS(timeLeft, baseTime, isCritical=isCritical, isTimerOn=isTimerOn, isRedText=isRedText)
 
     def setReloading(self, state, isShotAvailable):
-        self._panel.as_setReloadingS(state.getActualValue(), round(state.getBaseValue(), 2), state.getTimePassed(), state.isReloading(), isShotAvailable)
+        self._panel.as_setReloadingS(state.getActualValue(), decimal_round(state.getBaseValue(), 2), state.getTimePassed(), state.isReloading(), isShotAvailable)
 
     def showAutoLoadingBoost(self, timeLeft, stateTotalTime):
         self._panel.as_showBoostS(timeLeft, stateTotalTime)
@@ -518,8 +521,8 @@ class _PythonAutoReloadProxy(_ReloadingAnimationsProxy):
         else:
             self.__reloadTicker.startAnimation(actualTime, state.getBaseValue())
 
-    def showAutoLoadingBoost(self, timeLeft, totalTime):
-        self.__boostTicker.startAnimation(timeLeft, totalTime)
+    def showAutoLoadingBoost(self, timeLeft, stateTotalTime):
+        self.__boostTicker.startAnimation(timeLeft, stateTotalTime)
 
     def hideAutoLoadingBoost(self, showAnimation):
         self.__boostTicker.hideAnimation(showAnimation)
@@ -606,7 +609,7 @@ class AmmoPlugin(CrosshairPlugin):
             baseValue = autoReloadingState.getBaseValue()
             if quantityInClip == SHELL_QUANTITY_UNKNOWN:
                 baseValue = ctrl.getShellChangeTime()
-            self.__reloadAnimator.setClipAutoLoading(autoReloadingState.getActualValue(), round(baseValue, 1), isCritical=self.__isGunAutoReloadTimerCritical(), isTimerOn=self.__isGunAutoReloadTimerOn(stationaryState, autoReloadingState))
+            self.__reloadAnimator.setClipAutoLoading(autoReloadingState.getActualValue(), decimal_round(baseValue, 1), isCritical=self.__isGunAutoReloadTimerCritical(), isTimerOn=self.__isGunAutoReloadTimerOn(stationaryState, autoReloadingState))
             if stationaryState is not None:
                 self.parentObj.as_setIsInControllableReloadS(stationaryState != STATIONARY_RELOAD_STATE.IDLE)
                 if stationaryState == STATIONARY_RELOAD_STATE.IDLE and ctrl.hasPreselectedShell():
@@ -670,8 +673,8 @@ class AmmoPlugin(CrosshairPlugin):
         return
 
     def __onGunAutoReloadTimeSet(self, timeState, stationaryState, stunned):
-        timeLeft = round(min(timeState.getTimeLeft(), timeState.getActualValue()), 1)
-        baseValue = round(timeState.getBaseValue(), 1)
+        timeLeft = decimal_round(min(timeState.getTimeLeft(), timeState.getActualValue()), 1)
+        baseValue = decimal_round(timeState.getBaseValue(), 1)
         if self.__shellsInClip == 0:
             baseValue = self.__reCalcFirstShellAutoReload(baseValue)
         isCritical = stunned or self.__isGunAutoReloadTimerCritical()
@@ -1085,7 +1088,7 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
     def __setEnabled(self, viewID):
         self.__isEnabled = self.__mapping[viewID]
         if self.__isEnabled:
-            for markerType, shotResult in self.__cache.iteritems():
+            for markerType, shotResult in viewitems(self.__cache):
                 self._parentObj.setGunMarkerColor(markerType, self.__colors[shotResult])
 
         else:
@@ -1390,10 +1393,10 @@ class SpeedometerWheeledTech(CrosshairPlugin):
             siegeVehicleDescr = typeDesc.siegeVehicleDescr
         if siegeVehicleDescr is not None:
             siegeEngineCfg = siegeVehicleDescr.type.xphysics['engines'][typeDesc.engine.name]
-            siegeMaxSpd = round(siegeEngineCfg['smplFwMaxSpeed'])
+            siegeMaxSpd = round_py2_style_int(siegeEngineCfg['smplFwMaxSpeed'])
         defaultVehicleCfg = defaultVehicleDescr.type.xphysics['engines'][typeDesc.engine.name]
         normalMaxSpd = defaultVehicleCfg['smplFwMaxSpeed']
-        return (round(normalMaxSpd), siegeMaxSpd)
+        return (round_py2_style_int(normalMaxSpd), siegeMaxSpd)
 
     def __addSpedometer(self, vehicle):
         normalMaxSpd, siegeMaxSpd = self.__getMaxSpeeds(vehicle)
@@ -1679,8 +1682,7 @@ class SPGShotResultIndicatorPlugin(CrosshairPlugin):
         vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
         if self.__isEnabled and vehicle is not None:
             vehicleDescriptor = vehicle.typeDescriptor
-            for intCD in self.__cache:
-                data = self.__cache[intCD]
+            for intCD, data in viewitems(self.__cache):
                 state = self.__getState(vehicleDescriptor, data.shotIdx, intCD, currentShell=currentIntCD)
                 self.__cache[intCD] = SPGShotResultData(data.shotIdx, data.shellTypeName, data.shotResult, int(state))
 
@@ -1728,7 +1730,7 @@ class SPGShotResultIndicatorPlugin(CrosshairPlugin):
             if needIndicatorsUpdate:
                 self.__updateUIIndicators()
             self._parentObj.as_setShotFlyTimesS([ {'shellIntCD': k,
-             'flyTime': v[0] if v[1] else -1.0} for k, v in self.__currentFlyTimes.iteritems() ])
+             'flyTime': v[0] if v[1] else -1.0} for k, v in viewitems(self.__currentFlyTimes) ])
         return
 
     def __updateUIIndicators(self):
@@ -2147,7 +2149,7 @@ class AccuracyStacksPlugin(VehicleMechanicCrosshairPlugin, IMechanicStatesListen
         self.__update(state)
 
     @eventHandler
-    def onStateTransition(self, oldState, newState):
+    def onStateTransition(self, prevState, newState):
         self.__update(newState)
 
     def _clearParentState(self):
@@ -2188,7 +2190,7 @@ class ChargePlugin(VehicleMechanicCrosshairPlugin, IMechanicStatesListenerLogic)
         self.__update(state)
 
     @eventHandler
-    def onStateTransition(self, oldState, newState):
+    def onStateTransition(self, prevState, newState):
         self.__update(newState)
 
     @eventHandler

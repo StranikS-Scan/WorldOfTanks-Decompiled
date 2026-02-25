@@ -5,38 +5,38 @@ from gui.impl.gen.view_models.views.lobby.common.vehicle_model import VehicleMod
 class ExchangeRateVehiclesSelectionModel(VehicleModel):
     __slots__ = ()
 
-    def __init__(self, properties=16, commands=0):
+    def __init__(self, properties=15, commands=0):
         super(ExchangeRateVehiclesSelectionModel, self).__init__(properties=properties, commands=commands)
 
     def getIsFieldModernizationAvailable(self):
-        return self._getBool(11)
+        return self._getBool(10)
 
     def setIsFieldModernizationAvailable(self, value):
-        self._setBool(11, value)
+        self._setBool(10, value)
 
     def getIsFieldModernizationComplited(self):
-        return self._getBool(12)
+        return self._getBool(11)
 
     def setIsFieldModernizationComplited(self, value):
-        self._setBool(12, value)
+        self._setBool(11, value)
 
     def getLevelOfFieldModernization(self):
-        return self._getNumber(13)
+        return self._getNumber(12)
 
     def setLevelOfFieldModernization(self, value):
-        self._setNumber(13, value)
+        self._setNumber(12, value)
 
     def getAmountOfCombatXp(self):
-        return self._getNumber(14)
+        return self._getNumber(13)
 
     def setAmountOfCombatXp(self, value):
-        self._setNumber(14, value)
+        self._setNumber(13, value)
 
     def getNationOrder(self):
-        return self._getNumber(15)
+        return self._getNumber(14)
 
     def setNationOrder(self, value):
-        self._setNumber(15, value)
+        self._setNumber(14, value)
 
     def _initialize(self):
         super(ExchangeRateVehiclesSelectionModel, self)._initialize()

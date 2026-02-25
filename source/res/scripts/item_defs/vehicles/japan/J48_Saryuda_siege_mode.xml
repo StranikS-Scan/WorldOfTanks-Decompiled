@@ -12,7 +12,7 @@
   <postProgressionTree>	role_ATSPG_universal	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	38	</forward>
+    <forward>	36	</forward>
     <backward>	15	</backward>
   </speedLimits>
   <invisibility>
@@ -558,10 +558,10 @@
       <terrainResistance>	1 1.2 2	</terrainResistance>
       <brakeForce>	60000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	30	</rotationSpeed>
+      <rotationSpeed>	25	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.18	</vehicleMovement>
-        <vehicleRotation>	0.18	</vehicleRotation>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -1507,13 +1507,13 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
-          <multiGunEffects>	shot_dualgun_large_mb_L shot_dualgun_large_mb_R	</multiGunEffects>
+          <multiGunEffects>	shot_dualgun_large_L shot_dualgun_large_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	3	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
             <reloadLockTime>	4.0	</reloadLockTime>
             <reloadTimes>	13 13	</reloadTimes>
-            <rateTime>	5	</rateTime>
+            <rateTime>	6	</rateTime>
             <chargeThreshold>	0.5	</chargeThreshold>
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
@@ -2034,8 +2034,8 @@
     <detailed>
       <engines>
         <HA_9_V_SAR>
-          <smplEnginePower>	900	</smplEnginePower>
-          <smplFwMaxSpeed>	38	</smplFwMaxSpeed>
+          <smplEnginePower>	830	</smplEnginePower>
+          <smplFwMaxSpeed>	36	</smplFwMaxSpeed>
         </HA_9_V_SAR>
       </engines>
       <chassis>

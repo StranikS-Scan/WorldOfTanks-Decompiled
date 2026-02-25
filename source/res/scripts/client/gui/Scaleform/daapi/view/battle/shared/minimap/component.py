@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/minimap/component.py
+from __future__ import absolute_import
 import logging
 import weakref
 import GUI
@@ -53,8 +54,8 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
         self.__plugins = None
         return
 
-    def onMinimapClicked(self, x, y, buttonIdx, minimapScaleIndex):
-        self.__plugins.onMinimapClicked(x, y, buttonIdx, minimapScaleIndex)
+    def onMinimapClicked(self, x, y, buttonIdx, mapScaleIndex):
+        self.__plugins.onMinimapClicked(x, y, buttonIdx, mapScaleIndex)
 
     def applyNewSize(self, sizeIndex):
         if self.__plugins is not None:

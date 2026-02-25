@@ -83,7 +83,7 @@ class FunPbsProgressionHelper(_PostbattleProgressionHelper):
         return _PbsProgress(isUnlimitedProgression=False, description=descr, previousStage=previousStageIdx + 1, currentStage=currentStageIdx, maximumStage=progression.state.maximumStageIndex + 1, previousPoints=previousPoints - previousStage.prevRequiredCounter, currentPoints=currentPoints - currentStage.prevRequiredCounter, earnedPoints=earnedPoints, maximumPoints=currentStage.requiredCounter - currentStage.prevRequiredCounter, stageRequiredCounters=requiredCounters, bonuses=self._getBonuses(progression))
 
     def _getBonuses(self, progression):
-        completedStages = sorted([ stage for stage in progression.stages if stage.executorID in self._executors ])
+        completedStages = sorted((stage for stage in progression.stages if stage.executorID in self._executors))
         return [ bonus for stage in completedStages for bonus in stage.bonuses ]
 
     def __getActiveQuests(self, triggers):

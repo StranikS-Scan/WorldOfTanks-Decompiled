@@ -1205,7 +1205,7 @@ class BattleReplay(object):
             return
 
     def __onAvatarBecomePlayer(self):
-        if self.sessionProvider.arenaVisitor.getArenaBonusType() in constants.ARENA_BONUS_TYPE.REPLAY_DISABLE_RANGE:
+        if self.sessionProvider.arenaVisitor.getArenaGuiType() in constants.ARENA_GUI_TYPE.REPLAY_DISABLE_RANGE:
             self.enableAutoRecordingBattles(False, True)
 
     def __onSettingsChanging(self, *_):

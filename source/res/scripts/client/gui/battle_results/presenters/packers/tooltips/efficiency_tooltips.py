@@ -219,7 +219,6 @@ PARAMETERS_TO_TOOLTIP_MAP = {EfficiencyParamConstants.STUN: StunParameter,
  EfficiencyParamConstants.DROPPED_CAPTURE_POINTS: DefencePointsParameter}
 
 class EfficiencyTooltipsPacker(ITooltipPacker):
-    __slots__ = ()
     _TOOLTIPS = PARAMETERS_TO_TOOLTIP_MAP
 
     @classmethod

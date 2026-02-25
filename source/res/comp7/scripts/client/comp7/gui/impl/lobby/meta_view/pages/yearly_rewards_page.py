@@ -184,7 +184,7 @@ class YearlyRewardsPage(PageSubModelPresenter):
     def __showStylePreview(self, styleBonus, cardIndex, vehicleCD=None):
         styleId = styleBonus.getStyleID() if styleBonus else None
         style = self.__c11nService.getItemByID(GUI_ITEM_TYPE.STYLE, styleId)
-        vehicleCD = getStylePreviewVehicle(style, makeVehicleTypeCompDescrByName(_DEFAULT_PREVIEW_VEHICLE)) if not vehicleCD else vehicleCD
+        vehicleCD = vehicleCD if vehicleCD else getStylePreviewVehicle(style, makeVehicleTypeCompDescrByName(_DEFAULT_PREVIEW_VEHICLE))
         params = {'backCallback': partial(showComp7MetaRootTab, self.pageId, index=cardIndex)}
         showComp7StylePreview(vehicleCD, style, **params)
         return

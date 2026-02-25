@@ -3,7 +3,6 @@
 import typing
 from debug_utils import LOG_ERROR
 from frameworks.wulf import WindowLayer
-from gui.Scaleform.daapi.view.meta.ChannelCarouselMeta import ChannelCarouselMeta
 from gui.Scaleform.framework.managers.containers import ExternalCriteria
 from gui.Scaleform.genConsts.MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES import MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES
 from gui.app_loader import sf_lobby
@@ -91,11 +90,9 @@ class ChannelsCarouselHandler(object):
         self.__windowsPositions.clear()
         if self.__channelsDP is not None:
             self.__channelsDP.clear()
-            self.__channelsDP.finiGUI()
             self.__channelsDP = None
         if self.__preBattleChannelsDP is not None:
             self.__preBattleChannelsDP.clear()
-            self.__preBattleChannelsDP.finiGUI()
             self.__preBattleChannelsDP = None
         remove = g_eventBus.removeListener
         remove(ChannelManagementEvent.REQUEST_TO_ADD, self.__handleRequestToAdd, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -104,12 +101,10 @@ class ChannelsCarouselHandler(object):
         remove(ChannelManagementEvent.REQUEST_TO_REMOVE, self.__handleRequestToRemove, scope=EVENT_BUS_SCOPE.LOBBY)
         remove(ChannelManagementEvent.REQUEST_TO_CHANGE, self.__handleRequestToChange, scope=EVENT_BUS_SCOPE.LOBBY)
         remove(ChannelManagementEvent.REQUEST_TO_SHOW, self.__handleRequestToShow, scope=EVENT_BUS_SCOPE.LOBBY)
-        remove(ChannelCarouselEvent.CAROUSEL_DESTROYED, self.__handleCarouselDestroyed, scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
     def start(self):
         add = g_eventBus.addListener
-        add(ChannelCarouselEvent.CAROUSEL_INITED, self.__handleCarouselInited, scope=EVENT_BUS_SCOPE.LOBBY)
         add(ChannelCarouselEvent.OPEN_BUTTON_CLICK, self.__handleOpenButtonClick, scope=EVENT_BUS_SCOPE.LOBBY)
         add(ChannelCarouselEvent.MINIMIZE_ALL_CHANNELS, self.__handlerMinimizeAll, scope=EVENT_BUS_SCOPE.LOBBY)
         add(ChannelCarouselEvent.CLOSE_ALL_EXCEPT_CURRENT, self.__handlerCloseAllExceptCurrent, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -119,7 +114,6 @@ class ChannelsCarouselHandler(object):
 
     def stop(self):
         remove = g_eventBus.removeListener
-        remove(ChannelCarouselEvent.CAROUSEL_INITED, self.__handleCarouselInited, scope=EVENT_BUS_SCOPE.LOBBY)
         remove(ChannelCarouselEvent.OPEN_BUTTON_CLICK, self.__handleOpenButtonClick, scope=EVENT_BUS_SCOPE.LOBBY)
         remove(ChannelCarouselEvent.MINIMIZE_ALL_CHANNELS, self.__handlerMinimizeAll, scope=EVENT_BUS_SCOPE.LOBBY)
         remove(ChannelCarouselEvent.CLOSE_ALL_EXCEPT_CURRENT, self.__handlerCloseAllExceptCurrent, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -186,20 +180,6 @@ class ChannelsCarouselHandler(object):
         self.__showByReqs.clear()
         self.__notifiedMessages.clear()
         return
-
-    def __handleCarouselInited(self, event):
-        carousel = event.target
-        if isinstance(carousel, ChannelCarouselMeta):
-            self.__channelsDP.initGUI(carousel.as_getDataProviderS())
-            self.__preBattleChannelsDP.initGUI(carousel.as_getBattlesDataProviderS())
-            g_eventBus.addListener(ChannelCarouselEvent.CAROUSEL_DESTROYED, self.__handleCarouselDestroyed, scope=EVENT_BUS_SCOPE.LOBBY)
-        else:
-            LOG_ERROR('Channel carousel must be extends ChannelCarouselMeta', carousel)
-
-    def __handleCarouselDestroyed(self, _):
-        self.__channelsDP.finiGUI()
-        self.__preBattleChannelsDP.finiGUI()
-        g_eventBus.removeListener(ChannelCarouselEvent.CAROUSEL_DESTROYED, self.__handleCarouselDestroyed, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __handleRequestToAddPrebattle(self, event):
         self.__adjustAndAddChannel(event, self.__preBattleChannelsDP)

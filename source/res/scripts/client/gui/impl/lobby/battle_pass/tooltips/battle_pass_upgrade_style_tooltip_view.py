@@ -11,7 +11,7 @@ class BattlePassUpgradeStyleTooltipView(ViewImpl):
     __slots__ = ()
 
     def __init__(self, *args, **kwargs):
-        settings = ViewSettings(R.views.lobby.battle_pass.tooltips.BattlePassUpgradeStyleTooltipView())
+        settings = ViewSettings(R.views.mono.battle_pass.tooltips.upgrade_style())
         settings.model = BattlePassUpgradeStyleTooltipViewModel()
         settings.args = args
         settings.kwargs = kwargs

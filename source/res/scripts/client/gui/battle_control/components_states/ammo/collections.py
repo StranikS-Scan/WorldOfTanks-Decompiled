@@ -4,13 +4,13 @@ from __future__ import absolute_import
 import typing
 from future.utils import viewvalues
 from gui.battle_control.components_states.ammo.constants import AmmoShootPossibility
-from gui.battle_control.components_states.ammo.interfaces import IComponentAmmoState
 from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from shared_utils import findFirst
 if typing.TYPE_CHECKING:
     from ChargeableBurstComponent import ChargeableBurstAmmoState
     from StationaryReloadController import StationaryReloadAmmoState
     from TemperatureGunController import TemperatureGunAmmoState
+    from gui.battle_control.components_states.ammo.interfaces import IComponentAmmoState
 
 class AmmoStatesROCollection(object):
 

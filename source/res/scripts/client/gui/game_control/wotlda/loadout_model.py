@@ -4,7 +4,7 @@ from typing import List, Tuple, Union, Any, Optional, TYPE_CHECKING
 from dict2model import models, fields, utils
 from dict2model.schemas import Schema, validate
 from gui.game_control.wotlda.constants import EQUIPMENT_ARCHETYPE_1, EQUIPMENT_ARCHETYPE_2, EQUIPMENT_ARCHETYPE_3, ExpectedArchetypes, OptDeviceAssistType, LOADOUT_USAGE_PERCENTAGE
-from renewable_subscription_common.optional_devices_usage_config import VehicleLoadout
+from renewable_subscription_common.optional_devices_usage_config import VehicleLoadout, EQUIPMENT_NAME_TO_GENERIC_OPTIONAL_DEVICE_MAP
 if TYPE_CHECKING:
     from dict2model.fields import Number
     _OptDevicePreset = Tuple[OptDeviceAssistType, int, List[VehicleLoadout]]
@@ -121,7 +121,19 @@ class VehicleOptDeviceLoadoutsModel(models.Model):
         loadouts = []
         resultVehicleID = self.vehicleId
         for loadout in loadoutModel:
-            vehicleLoadout = VehicleLoadout([loadout.equipmentArchetype1, loadout.equipmentArchetype2, loadout.equipmentArchetype3], loadout.usagePercentage)
+            vehicleLoadouts = []
+            equipment1 = EQUIPMENT_NAME_TO_GENERIC_OPTIONAL_DEVICE_MAP.get(loadout.equipmentArchetype1)
+            equipment2 = EQUIPMENT_NAME_TO_GENERIC_OPTIONAL_DEVICE_MAP.get(loadout.equipmentArchetype2)
+            equipment3 = EQUIPMENT_NAME_TO_GENERIC_OPTIONAL_DEVICE_MAP.get(loadout.equipmentArchetype3)
+            if equipment1:
+                vehicleLoadouts.append(equipment1)
+            if equipment2:
+                vehicleLoadouts.append(equipment2)
+            if equipment3:
+                vehicleLoadouts.append(equipment3)
+            if not vehicleLoadouts:
+                break
+            vehicleLoadout = VehicleLoadout(vehicleLoadouts, loadout.usagePercentage)
             loadouts.append(vehicleLoadout)
             if assistType == OptDeviceAssistType.NODATA:
                 linkedVehicleID = loadout.linkedVehicleID

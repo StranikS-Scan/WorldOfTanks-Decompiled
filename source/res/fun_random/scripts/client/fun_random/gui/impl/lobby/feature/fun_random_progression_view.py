@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/lobby/feature/fun_random_progression_view.py
 from __future__ import absolute_import
+import json
 import BigWorld
 import math_utils
 from account_helpers.AccountSettings import AccountSettings, FUN_RANDOM_PROGRESSION_OPENED, FUN_RANDOM_PROGRESSION, FUN_RANDOM_PROGR_PREV_COUNTER, FUN_RANDOM_INF_PROGR_PREV_COUNTER, FUN_RANDOM_INF_PROGR_PREV_COMPLETE_COUNT
@@ -109,6 +110,7 @@ class FunRandomProgressionView(ViewImpl, FunAssetPacksMixin, FunProgressionWatch
             wasOpened = AccountSettings.getSettings(settingsKey)
             model.setAssetsPointer(self.getModeAssetsPointer())
             model.setIsFirstOpen(not wasOpened)
+            model.setModeViewSettings(json.dumps(self.getModeAssetsConfiguration().progressionView.toDict()))
             modeName = self.getModeUserName()
             packProgressionState(progression, model.state)
             packProgressionStages(progression, model.getStages(), self.__tooltips)

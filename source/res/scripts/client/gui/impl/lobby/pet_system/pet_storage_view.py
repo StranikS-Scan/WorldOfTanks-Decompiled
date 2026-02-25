@@ -195,7 +195,7 @@ class PetStorageView(ViewComponent):
             availableNameIDs = self.__petController.getAvailableNames()
             seenNameIDs = PetUISettings.getSeenPetNameIDs()
             newNameIDs = availableNameIDs - seenNameIDs
-            hasNewNames = True if newNameIDs else False
+            hasNewNames = bool(newNameIDs)
             tx.setHasNewNames(hasNewNames)
             petNames = tx.getPetNames()
             petNames.clear()

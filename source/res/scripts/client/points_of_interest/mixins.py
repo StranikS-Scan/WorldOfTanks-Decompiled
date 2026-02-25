@@ -22,13 +22,13 @@ class PointsOfInterestListener(object):
         spaceID = avatar_getter.getSpaceID()
         return first(CGF.Query(spaceID, PoiVehicleStateComponent)) if spaceID is not None else None
 
-    def onPoiAdded(self, state):
+    def onPoiAdded(self, poiState):
         pass
 
-    def onPoiRemoved(self, state):
+    def onPoiRemoved(self, poiState):
         pass
 
-    def onProcessPoi(self, state):
+    def onProcessPoi(self, poiState):
         pass
 
     def onPoiEntered(self, poiID):

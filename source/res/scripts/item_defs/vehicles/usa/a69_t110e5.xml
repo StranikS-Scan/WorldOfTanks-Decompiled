@@ -91,6 +91,11 @@
           <destroyed>	vehicles/american/A69_T110E5/_skins/A69_T110E5_3DSt_TIR/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/american/A69_T110E5/_skins/A69_T110E5_3DSt_TIR/crash/lod0/Hull.model	</exploded>
         </A69_T110E5_3DSt_TIR>
+        <A69_T110E5_BPXIX_3Dst>
+          <undamaged>	vehicles/american/A69_T110E5/_skins/A69_T110E5_BPXIX_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A69_T110E5/_skins/A69_T110E5_BPXIX_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A69_T110E5/_skins/A69_T110E5_BPXIX_3Dst/crash/lod0/Hull.model	</exploded>
+        </A69_T110E5_BPXIX_3Dst>
       </sets>
     </models>
     <swinging>
@@ -119,6 +124,16 @@
         <rayEnd>	-0.003353 0.003519 2.9699	</rayEnd>
         <rayUp>	0.034392 0.001899 -0.999407	</rayUp>
         <size>	0.271451	</size>
+      </slot>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10001	</slotId>
+        <rayStart>	0.329249 0.349426 2.395197	</rayStart>
+        <rayEnd>	0.327633 0.330018 2.390646	</rayEnd>
+        <rayUp>	-0.256532 0.240875 -0.93604	</rayUp>
+        <compatibleModels>	A69_T110E5_BPXIX_3Dst	</compatibleModels>
+        <size>	0.26	</size>
+        <isUVProportional>	false	</isUVProportional>
       </slot>
       <slot>
         <slotType>	paint	</slotType>
@@ -311,8 +326,8 @@
         <scale>	3.24584 0.499998 3.24586	</scale>
         <showOn>	16	</showOn>
         <clipAngle>	1.37842	</clipAngle>
-        <verticalMirror>	true	</verticalMirror>
         <anchorShift>	-0.052082	</anchorShift>
+        <verticalMirror>	true	</verticalMirror>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -369,8 +384,8 @@
         <scale>	1.77026 1.42324 1.77026	</scale>
         <showOn>	16	</showOn>
         <clipAngle>	0.187617	</clipAngle>
-        <verticalMirror>	true	</verticalMirror>
         <anchorShift>	-0.456132	</anchorShift>
+        <verticalMirror>	true	</verticalMirror>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -415,8 +430,8 @@
         <scale>	1.61169 0.865336 1.61169	</scale>
         <showOn>	16	</showOn>
         <clipAngle>	1.11124	</clipAngle>
-        <verticalMirror>	true	</verticalMirror>
         <anchorShift>	-0.028518	</anchorShift>
+        <verticalMirror>	true	</verticalMirror>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -507,8 +522,8 @@
         <scale>	2.51736 0.883021 2.51737	</scale>
         <showOn>	16	</showOn>
         <clipAngle>	1.42793	</clipAngle>
-        <verticalMirror>	true	</verticalMirror>
         <anchorShift>	-0.308531	</anchorShift>
+        <verticalMirror>	true	</verticalMirror>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -615,13 +630,13 @@
         <slotType>	projectionDecal	</slotType>
         <slotId>	15042	</slotId>
         <tags>	formfactor_square direction_right_to_left	</tags>
-        <compatibleModels>	A69_T110E5_3Dst_BP	</compatibleModels>
         <position>	1.43389 1.46117 2.62716	</position>
         <rotation>	0.12149 -0.008519 3.14055	</rotation>
         <scale>	0.740766 0.1 0.74077	</scale>
         <showOn>	16	</showOn>
         <clipAngle>	1.14068	</clipAngle>
         <anchorShift>	0.046344	</anchorShift>
+        <compatibleModels>	A69_T110E5_3Dst_BP	</compatibleModels>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -666,10 +681,10 @@
         <position>	0.000014 2.60822 0.301941	</position>
         <rotation>	3.14161 1.57079 -0.239233	</rotation>
         <scale>	6.32217 7.14178 7.63154	</scale>
-        <hiddenForUser>	true	</hiddenForUser>
         <showOn>	4368	</showOn>
         <clipAngle>	1.00702	</clipAngle>
         <anchorShift>	-0.0537	</anchorShift>
+        <hiddenForUser>	true	</hiddenForUser>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -686,14 +701,26 @@
       <slot>
         <slotType>	projectionDecal	</slotType>
         <slotId>	15048	</slotId>
-        <tags>	formfactor_square	</tags>
-        <compatibleModels>	A69_T110E5_3DSt_TIR	</compatibleModels>
         <position>	-1.44611 1.60973 1.79639	</position>
         <rotation>	-0.005538 0.000009 3.14158	</rotation>
         <scale>	0.741372 0.596045 0.741371	</scale>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A69_T110E5_3DSt_TIR	</compatibleModels>
         <showOn>	16	</showOn>
         <clipAngle>	1.45764	</clipAngle>
         <anchorShift>	-0.073667	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15049	</slotId>
+        <position>	0.556186 1.446576 2.369314	</position>
+        <rotation>	0.303795 0.041313 2.965611	</rotation>
+        <scale>	0.474673 0.2 0.474674	</scale>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A69_T110E5_BPXIX_3Dst	</compatibleModels>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.35618	</clipAngle>
+        <anchorShift>	0.056822	</anchorShift>
       </slot>
       <slot>
         <slotType>	attachment	</slotType>
@@ -712,6 +739,14 @@
         <scale>	0.999968 0.999969 0.999962	</scale>
         <applyType>	universal	</applyType>
         <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <scale>	1 1 1	</scale>
+        <hiddenForUser>	true	</hiddenForUser>
       </slot>
     </customizationSlots>
     <customization>
@@ -765,6 +800,11 @@
             <destroyed>	vehicles/american/A69_T110E5/_skins/A69_T110E5_3DSt_TIR/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/american/A69_T110E5/_skins/A69_T110E5_3DSt_TIR/crash/lod0/Chassis.model	</exploded>
           </A69_T110E5_3DSt_TIR>
+          <A69_T110E5_BPXIX_3Dst>
+            <undamaged>	vehicles/american/A69_T110E5/_skins/A69_T110E5_BPXIX_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A69_T110E5/_skins/A69_T110E5_BPXIX_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A69_T110E5/_skins/A69_T110E5_BPXIX_3Dst/crash/lod0/Chassis.model	</exploded>
+          </A69_T110E5_BPXIX_3Dst>
         </sets>
       </models>
       <traces>
@@ -856,6 +896,27 @@
                   <row3>	0.000000 1.393833 -3.155337	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	A69_T110E5_BPXIX_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	2.263000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.277219 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.877000	</row2>
+                  <row3>	0.000000 1.057405 0.103000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.734000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.007000	</row2>
+                  <row3>	0.000000 1.603000 -0.253000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.898000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.839000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 4.556000	</row2>
+                  <row3>	0.000000 0.778000 0.104000	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -932,6 +993,27 @@
                   <row1>	0.000000 0.209188 -0.215036	</row1>
                   <row2>	0.000000 0.462849 0.450263	</row2>
                   <row3>	0.000000 1.393833 -3.155337	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	A69_T110E5_BPXIX_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	2.263000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.277220 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.877000	</row2>
+                  <row3>	0.000000 1.057400 0.103000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.734000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.007000	</row2>
+                  <row3>	0.000000 1.603000 -0.253000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.898000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.839000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 4.556000	</row2>
+                  <row3>	0.000000 0.778000 0.104000	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1172,6 +1254,14 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <A69_T110E5_BPXIX_3Dst>
+              <segmentModelLeft>	vehicles/american/A69_T110E5/_skins/A69_T110E5_BPXIX_3Dst/track/segment1_L.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/american/A69_T110E5/_skins/A69_T110E5_BPXIX_3Dst/track/segment1_R.model	</segmentModelRight>
+              <segment2ModelLeft>	vehicles/american/A69_T110E5/_skins/A69_T110E5_BPXIX_3Dst/track/segment2_L.model	</segment2ModelLeft>
+              <segment2ModelRight>	vehicles/american/A69_T110E5/_skins/A69_T110E5_BPXIX_3Dst/track/segment2_R.model	</segment2ModelRight>
+            </A69_T110E5_BPXIX_3Dst>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -1203,8 +1293,13 @@
             <model>	vehicles/american/A69_T110E5/track/segment2.model	</model>
             <length>	0.07322	</length>
           </secSegment>
+          <modelSets>
+            <A69_T110E5_BPXIX_3Dst>
+              <mainSegmentModel>	vehicles/american/A69_T110E5/_skins/A69_T110E5_BPXIX_3Dst/track/segment1_L.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/american/A69_T110E5/_skins/A69_T110E5_BPXIX_3Dst/track/segment2_L.model	</secSegmentModel>
+            </A69_T110E5_BPXIX_3Dst>
+          </modelSets>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.10194	</xStart>
@@ -1261,6 +1356,26 @@
             <wheel>
               <name>	WD_L0	</name>
               <radius>	0.366182	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L1	</name>
+              <radius>	0.169	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L2	</name>
+              <radius>	0.169	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L3	</name>
+              <radius>	0.169	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L4	</name>
+              <radius>	0.169	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L5	</name>
+              <radius>	0.169	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -1486,8 +1601,13 @@
             <model>	vehicles/american/A69_T110E5/track/segment2.model	</model>
             <length>	0.072253	</length>
           </secSegment>
+          <modelSets>
+            <A69_T110E5_BPXIX_3Dst>
+              <mainSegmentModel>	vehicles/american/A69_T110E5/_skins/A69_T110E5_BPXIX_3Dst/track/segment1_R.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/american/A69_T110E5/_skins/A69_T110E5_BPXIX_3Dst/track/segment2_R.model	</secSegmentModel>
+            </A69_T110E5_BPXIX_3Dst>
+          </modelSets>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.10717	</xStart>
@@ -1542,8 +1662,28 @@
               <radius>	0.251514	</radius>
             </wheel>
             <wheel>
+              <name>	WD_R1	</name>
+              <radius>	0.169	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R2	</name>
+              <radius>	0.169	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R3	</name>
+              <radius>	0.169	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R4	</name>
+              <radius>	0.169	</radius>
+            </wheel>
+            <wheel>
               <name>	WD_R0	</name>
               <radius>	0.366236	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R5	</name>
+              <radius>	0.169	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -1857,6 +1997,11 @@
                 <destroyed>	vehicles/american/A69_T110E5/_skins/A69_T110E5_3DSt_TIR/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/american/A69_T110E5/_skins/A69_T110E5_3DSt_TIR/crash/lod0/Gun_01.model	</exploded>
               </A69_T110E5_3DSt_TIR>
+              <A69_T110E5_BPXIX_3Dst>
+                <undamaged>	vehicles/american/A69_T110E5/_skins/A69_T110E5_BPXIX_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A69_T110E5/_skins/A69_T110E5_BPXIX_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A69_T110E5/_skins/A69_T110E5_BPXIX_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </A69_T110E5_BPXIX_3Dst>
             </sets>
           </models>
           <hitTester>
@@ -1890,10 +2035,11 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	-0.000673 -0.009693 2.94631	</rayStart>
-              <rayEnd>	-0.000673 -0.009693 3.64631	</rayEnd>
+              <rayStart>	-0.000673 0.00031 2.94631	</rayStart>
+              <rayEnd>	-0.000673 0.00031 3.64631	</rayEnd>
               <rayUp>	0.124519 0 0	</rayUp>
               <size>	0.7	</size>
+              <applyToFabric>	false	</applyToFabric>
             </slot>
           </customizationSlots>
           <customization>
@@ -1925,6 +2071,11 @@
             <destroyed>	vehicles/american/A69_T110E5/_skins/A69_T110E5_3DSt_TIR/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/american/A69_T110E5/_skins/A69_T110E5_3DSt_TIR/crash/lod0/Turret_01.model	</exploded>
           </A69_T110E5_3DSt_TIR>
+          <A69_T110E5_BPXIX_3Dst>
+            <undamaged>	vehicles/american/A69_T110E5/_skins/A69_T110E5_BPXIX_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A69_T110E5/_skins/A69_T110E5_BPXIX_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A69_T110E5/_skins/A69_T110E5_BPXIX_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </A69_T110E5_BPXIX_3Dst>
         </sets>
       </models>
       <hitTester>
@@ -2594,6 +2745,42 @@
           <showOn>	256	</showOn>
           <clipAngle>	0.172717	</clipAngle>
           <anchorShift>	0.012185	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35054	</slotId>
+          <position>	-0.97512 1.888014 -0.658848	</position>
+          <rotation>	2.000032 1.139014 -0.198276	</rotation>
+          <scale>	0.360554 0.364231 0.360554	</scale>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A69_T110E5_BPXIX_3Dst	</compatibleModels>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.702291	</clipAngle>
+          <anchorShift>	0.13	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35055	</slotId>
+          <position>	0.915365 1.924 0.87694	</position>
+          <rotation>	1.015999 0.978784 3.02143	</rotation>
+          <scale>	0.520981 0.401119 0.520984	</scale>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A69_T110E5_BPXIX_3Dst	</compatibleModels>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.923227	</clipAngle>
+          <anchorShift>	0.057915	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35056	</slotId>
+          <position>	0.191437 2.469236 -1.764577	</position>
+          <rotation>	3.14161 -0.00002 -0.000037	</rotation>
+          <scale>	0.592524 0.112853 0.592524	</scale>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A69_T110E5_BPXIX_3Dst	</compatibleModels>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.37917	</clipAngle>
+          <anchorShift>	0.062127	</anchorShift>
         </slot>
         <slot>
           <slotType>	attachment	</slotType>

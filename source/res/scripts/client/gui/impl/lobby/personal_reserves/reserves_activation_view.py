@@ -22,7 +22,6 @@ from gui.impl.lobby.personal_reserves.personal_reserves_utils import getNearestE
 from gui.impl.lobby.personal_reserves.reserves_constants import PERSONAL_RESERVES_SOUND_SPACE
 from gui.impl.pub import ViewImpl
 from gui.server_events.settings import getPersonalReservesSettings
-from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showStorage, showPersonalReservesIntro
 from gui.shared.event_dispatcher import showShop
 from gui.shared.money import Currency
@@ -161,9 +160,6 @@ class ReservesActivationView(ViewImpl, EventSystemEntity):
                     return BoosterTooltip(boosterId, contexts.BoosterInfoContext())
             return super(ReservesActivationView, self).createToolTipContent(event, contentID)
 
-    def _getListeners(self):
-        return ((events.LobbyHeaderMenuEvent.MENU_CLICK, self.__onHeaderMenuClick, EVENT_BUS_SCOPE.LOBBY),)
-
     def _getCallbacks(self):
         return ((Currency.CREDITS, self.__onCurrencyBalanceChanged), (Currency.GOLD, self.__onCurrencyBalanceChanged))
 
@@ -176,9 +172,6 @@ class ReservesActivationView(ViewImpl, EventSystemEntity):
          (self.viewModel.onNavigateToStore, self.onNavigateToStore),
          (self.viewModel.onNavigateToDepot, self.onNavigateToDepot),
          (self.viewModel.onCardHover, self.onCardHover))
-
-    def __onHeaderMenuClick(self, event):
-        self.destroyWindow()
 
     def __onCurrencyBalanceChanged(self, _):
         self.fillViewModel()

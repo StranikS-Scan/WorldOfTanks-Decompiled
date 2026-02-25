@@ -198,7 +198,7 @@ class KillModeBase(IControlMode, CallbackDelayer):
             return False
         if BattleReplay.g_replayCtrl.isPlaying:
             return True
-        isBattlePeriod = ARENA_PERIOD.BATTLE == periodCtrl.getPeriod()
+        isBattlePeriod = periodCtrl.getPeriod() == ARENA_PERIOD.BATTLE
         isTimeLeft = periodCtrl.getEndTime() - BigWorld.serverTime() > self._skipBattleTimeLeft
         return isBattlePeriod and isTimeLeft
 
@@ -545,7 +545,7 @@ class KillCamMode(KillModeBase):
         self._trajectoryPoints = self._rawSimulationData['trajectoryData']
         self.__unspottedOrigin = self._rawSimulationData['unspottedOrigin']
         projectile = self._rawSimulationData['projectile']
-        shotID = projectile['shotID'] if 'shotID' in projectile else 0
+        shotID = projectile.get('shotID', 0)
         self.__simulatedScene.setPendingShotID(shotID)
         self._postmortemKwargs['bPostmortemDelay'] = False
         self.__fadeAndPrepareKillCamData()

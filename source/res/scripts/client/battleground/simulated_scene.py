@@ -406,7 +406,7 @@ class SimulatedScene(object):
         self.onSimulatedSceneHasEnded()
 
     def __isAttackerSPG(self):
-        return 'vehicleType' in self.__rawSimulationData['attacker'] and VEHICLE_CLASS_NAME.SPG == self.__rawSimulationData['attacker']['vehicleType']
+        return 'vehicleType' in self.__rawSimulationData['attacker'] and self.__rawSimulationData['attacker']['vehicleType'] == VEHICLE_CLASS_NAME.SPG
 
     def __getTurretAndGunLimits(self, simVeh):
         if simVeh.typeDescriptor:

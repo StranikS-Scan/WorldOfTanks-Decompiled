@@ -409,7 +409,7 @@ class BattlePassStyleProgressTokenBonusPacker(_BattlePassFinalBonusPacker):
 
     @classmethod
     def _getContentId(cls, bonus):
-        return [R.views.lobby.battle_pass.tooltips.BattlePassUpgradeStyleTooltipView()]
+        return [R.views.mono.battle_pass.tooltips.upgrade_style()]
 
 
 class ExtendedItemBonusUIPacker(ItemBonusUIPacker):
@@ -480,7 +480,7 @@ class ExtendedCurrenciesBonusUIPacker(BaseBonusUIPacker):
     @classmethod
     def _getContentId(cls, bonus):
         code = bonus.getCode()
-        return [R.views.lobby.battle_pass.tooltips.BattlePassTalerTooltip()] if code == CurrencyBP.TALER.value else super(ExtendedCurrenciesBonusUIPacker, cls)._getContentId(bonus)
+        return [R.views.mono.battle_pass.tooltips.bptaler()] if code == CurrencyBP.TALER.value else super(ExtendedCurrenciesBonusUIPacker, cls)._getContentId(bonus)
 
 
 class CoinBonusPacker(SimpleBonusUIPacker):
@@ -498,7 +498,7 @@ class CoinBonusPacker(SimpleBonusUIPacker):
 
     @classmethod
     def _getContentId(cls, bonus):
-        return [R.views.lobby.battle_pass.tooltips.BattlePassCoinTooltipView()]
+        return [R.views.mono.battle_pass.tooltips.bpcoin()]
 
 
 class QuestChainBonusPacker(SimpleBonusUIPacker):
@@ -517,7 +517,7 @@ class QuestChainBonusPacker(SimpleBonusUIPacker):
 
     @classmethod
     def _getContentId(cls, bonus):
-        return [R.views.lobby.battle_pass.tooltips.BattlePassQuestsChainTooltipView()]
+        return [R.views.mono.battle_pass.tooltips.quest_chain()]
 
     @classmethod
     def _getToolTip(cls, bonus):
@@ -540,7 +540,7 @@ class RandomQuestBonusPacker(SimpleBonusUIPacker):
 
     @classmethod
     def _getContentId(cls, bonus):
-        return [R.views.lobby.battle_pass.tooltips.RandomQuestTooltip()]
+        return [R.views.mono.battle_pass.tooltips.random_quest()]
 
     @classmethod
     def _getToolTip(cls, bonus):

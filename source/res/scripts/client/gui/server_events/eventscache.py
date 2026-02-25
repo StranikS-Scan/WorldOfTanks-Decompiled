@@ -469,22 +469,6 @@ class EventsCache(IEventsCache):
         resultMult = self.__actionsCache[ACTION_SECTION_TYPE.ECONOMICS][ACTION_MODIFIER_TYPE.DISCOUNT].get('%sMultiplier' % name, [])
         return tuple(result + resultMult)
 
-    def getHeroTankAdventCalendarRedirectAction(self):
-        isEnabled = False
-        start, finish = (0, 0)
-
-        def containsHeroToAdvent(a):
-            return any((step.get('name') == 'HeroTankAdventCalendarRedirect' for step in a.getData().get('steps', [])))
-
-        action = first(self.getActions(containsHeroToAdvent).values())
-        if action is not None:
-            start = action.getStartTimeRaw()
-            finish = action.getFinishTimeRaw()
-            isEnabled = any((m.getIsEnabled() for m in action.getModifiers()))
-        return {'isEnabled': isEnabled,
-         'start': start,
-         'finish': finish}
-
     def isBalancedSquadEnabled(self):
         return bool(self.__getUnitRestrictions().get('enabled', False))
 

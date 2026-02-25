@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/status_notifications/sn_items.py
+from __future__ import absolute_import
 import typing
 import BigWorld
 from AvatarInputHandler import AvatarInputHandler
@@ -330,7 +331,7 @@ class DestroyMiscTimerSN(_DestroyTimerSN):
         if self._getSupportedMiscStatus() == value.code:
             if value.needToCloseTimer():
                 self._setVisible(False)
-            elif supportedLevel == self._ANY_SUPPORTED_LEVEL or supportedLevel == level:
+            elif supportedLevel in (self._ANY_SUPPORTED_LEVEL, level):
                 if not value.needToCloseTimer():
                     self._isVisible = True
                     self._updateTimeParams(value.totalTime, 0)
@@ -394,8 +395,8 @@ class UnderFireSN(VehicleStateSN):
     def getViewTypeID(self):
         return BATTLE_NOTIFICATIONS_TIMER_TYPES.UNDER_FIRE
 
-    def _update(self, isUnderFire):
-        self._setVisible(isUnderFire)
+    def _update(self, value):
+        self._setVisible(value)
 
 
 class FireSN(VehicleStateSN):
@@ -410,8 +411,8 @@ class FireSN(VehicleStateSN):
     def getViewTypeID(self):
         return BATTLE_NOTIFICATIONS_TIMER_TYPES.FIRE
 
-    def _update(self, isInFire):
-        self._setVisible(isInFire)
+    def _update(self, value):
+        self._setVisible(value)
 
 
 class StunSN(TimerSN):
@@ -451,14 +452,14 @@ class _SmokeBase(LocalizationProvider, TimerSN):
     def getItemID(self):
         return VEHICLE_VIEW_STATE.SMOKE
 
-    def _update(self, smokesInfo):
-        endTime, equipment = self._getSmokeData(smokesInfo)
+    def _update(self, value):
+        endTime, equipment = self._getSmokeData(value)
         if endTime is None:
             if self._isVisible:
                 self._setVisible(False)
             return
         else:
-            self._updateTimeParams(equipment.expireDelay if smokesInfo['expiring'] else equipment.totalDuration, endTime)
+            self._updateTimeParams(equipment.expireDelay if value['expiring'] else equipment.totalDuration, endTime)
             self._isVisible = True
             self._sendUpdate()
             return

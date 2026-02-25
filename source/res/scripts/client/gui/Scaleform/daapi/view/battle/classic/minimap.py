@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import logging
 import BattleReplay
 import BigWorld
@@ -223,7 +224,7 @@ class TeamsOrControlsPointsPlugin(common.EntriesPlugin):
             self._invoke(self._TeamsOrControlsPointsPlugin__markerIDs[removeID].getID(), BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_DEFAULT)
             return
         else:
-            _logger.error(str(removeID) + ' not found in markerIDs')
+            _logger.error('%s not found in markerIDs', removeID)
             return
 
     def __onTeamChanged(self, teamID):

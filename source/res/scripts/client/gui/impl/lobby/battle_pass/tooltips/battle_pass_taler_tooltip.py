@@ -9,7 +9,7 @@ class BattlePassTalerTooltip(ViewImpl):
     __slots__ = ()
 
     def __init__(self):
-        settings = ViewSettings(R.views.lobby.battle_pass.tooltips.BattlePassTalerTooltip())
+        settings = ViewSettings(R.views.mono.battle_pass.tooltips.bptaler())
         settings.model = BattlePassTalerTooltipViewModel()
         super(BattlePassTalerTooltip, self).__init__(settings)
 

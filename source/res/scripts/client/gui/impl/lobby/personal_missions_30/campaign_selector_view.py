@@ -82,7 +82,7 @@ class CampaignSelectorView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(CampaignSelectorView, self)._onLoading(*args, **kwargs)
-        self._suitableVehicles = True if getSuitableVehicles() else False
+        self._suitableVehicles = bool(getSuitableVehicles())
         self._fillModel()
 
     def _onEventCacheSyncCompleted(self, *_):

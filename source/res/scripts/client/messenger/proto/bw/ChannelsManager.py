@@ -116,7 +116,7 @@ class ChannelsManager(ChatActionsListener):
 
     def createChannel(self, name, password=None):
         channels = self.channelsStorage.getChannelsByCriteria(find_criteria.BWActiveChannelFindCriteria())
-        if USER_ACTIVE_CHANNELS_LIMIT <= len(channels):
+        if len(channels) >= USER_ACTIVE_CHANNELS_LIMIT:
             return ChannelLimitReachedError()
         else:
             if name.startswith('#'):

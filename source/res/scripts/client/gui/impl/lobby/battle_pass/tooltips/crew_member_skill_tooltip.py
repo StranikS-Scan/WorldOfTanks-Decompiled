@@ -9,7 +9,7 @@ class CrewMemberSkillTooltip(ViewImpl):
     __slots__ = ()
 
     def __init__(self, *args, **kwargs):
-        settings = ViewSettings(R.views.lobby.battle_pass.tooltips.CrewMemberSkillTooltip())
+        settings = ViewSettings(R.views.mono.battle_pass.tooltips.crew_member_skill())
         settings.args = args
         settings.kwargs = kwargs
         settings.model = CrewMemberSkillTooltipModel()

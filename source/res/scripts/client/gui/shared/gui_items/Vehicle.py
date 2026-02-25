@@ -3,16 +3,21 @@
 import logging
 import math
 import random
+import typing
 from collections import namedtuple, defaultdict
 from itertools import izip, chain
 from operator import itemgetter
 import BigWorld
-import typing
 from backports.functools_lru_cache import lru_cache
+from shared_utils import findFirst, CONST_CONTAINER
+from vehicle_outfit.outfit import Area, REGIONS_BY_SLOT_TYPE, ANCHOR_TYPE_TO_SLOT_TYPE_MAP
 import constants
 from AccountCommands import LOCK_REASON, VEHICLE_SETTINGS_FLAG, VEHICLE_EXTRA_SETTING_FLAG
 from collector_vehicle import CollectorVehicleConsts
+from constants import NEW_PERK_SYSTEM as NPS
 from constants import WIN_XP_FACTOR_MODE, RentType
+from dossiers2.custom.cache import getCache as getDossiersCache
+from forbidden_vehicles_to_battle_config import getForbiddenForBattleVehicles
 from gui import GUI_SETTINGS
 from gui import makeHtmlString
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
@@ -27,11 +32,11 @@ from gui.shared.economics import calcRentPackages, getActionPrc, calcVehicleRest
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import CLAN_LOCK, GUI_ITEM_TYPE, getItemIconName, GUI_ITEM_ECONOMY_CODE, checkForTags
 from gui.shared.gui_items.Tankman import Tankman, NO_TANKMAN
-from gui.shared.gui_items.tankman_skill import BROTHERHOOD_SKILL_NAME
 from gui.shared.gui_items.customization.slots import ProjectionDecalSlot, BaseCustomizationSlot, EmblemSlot, AttachmentSlot
 from gui.shared.gui_items.fitting_item import FittingItem, RentalInfoProvider
 from gui.shared.gui_items.gui_item import HasStrCD
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ItemPrices, ITEM_PRICE_EMPTY
+from gui.shared.gui_items.tankman_skill import BROTHERHOOD_SKILL_NAME
 from gui.shared.gui_items.vehicle_equipment import VehicleEquipment, SUPPORT_EXT_DATA_FEATURES
 from gui.shared.gui_items.vehicle_mechanics.factories.vehicle_mechanis import VehicleMechanicFactory
 from gui.shared.gui_items.vehicle_mechanics.vehicle_mechanic_item import VehicleMechanicItem
@@ -46,7 +51,6 @@ from items.vehicles import getItemByCompactDescr, getVehicleType
 from nation_change.nation_change_helpers import hasNationGroup, iterVehTypeCDsInNationGroup
 from post_progression_common import TankSetupGroupsId
 from rent_common import parseRentID
-from shared_utils import findFirst, CONST_CONTAINER
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IIGRController, IRentalsController, IVehiclePostProgressionController
 from skeletons.gui.game_control import ITradeInController, IWotPlusController
@@ -54,17 +58,13 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
-from vehicle_outfit.outfit import Area, REGIONS_BY_SLOT_TYPE, ANCHOR_TYPE_TO_SLOT_TYPE_MAP
-from constants import NEW_PERK_SYSTEM as NPS
-from dossiers2.custom.cache import getCache as getDossiersCache
-from forbidden_vehicles_to_battle_config import getForbiddenForBattleVehicles
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsRequester
     from items.customizations import CustomizationOutfit
     from vehicle_outfit.outfit import Outfit
     from gui.veh_post_progression.models.progression import PostProgressionItem, AvailabilityCheckResult
     from post_progression_common import VehicleState
-    from typing import Any, Dict, List, Optional, Tuple
+    from typing import Any, Dict, List, Optional, Tuple, Iterable
 _logger = logging.getLogger(__name__)
 
 class VEHICLE_CLASS_NAME(CONST_CONTAINER):
@@ -170,7 +170,6 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     MAPS_TRAINING = 'maps_training'
     T34_DISCLAIMER = 't34_disclaimer'
     CLAN_WARS_BATTLES = 'clanWarsBattles'
-    FUN_RANDOM = 'fun_random'
     COMP7_BATTLES = 'comp7'
     WOT_PLUS = constants.VEHICLE_WOT_PLUS_TAG
     NO_CREW_TRANSFER_PENALTY_TAG = constants.VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG
@@ -1157,7 +1156,7 @@ class Vehicle(FittingItem):
                 ms = Vehicle.VEHICLE_STATE.DEAL_IS_OVER
             elif self.isWotPlus:
                 ms = Vehicle.VEHICLE_STATE.SUBSCRIPTION_SUSPENDED
-                if not self.lobbyContext.getServerSettings().isWoTPlusExclusiveVehicleEnabled():
+                if not self._wotPlusCtrl.getSettingsStorage().isExclusiveVehicleEnabled():
                     ms = Vehicle.VEHICLE_STATE.WOT_PLUS_EXCLUSIVE_VEHICLE_DISABLED
         elif self.isDisabledInPremIGR:
             ms = Vehicle.VEHICLE_STATE.IN_PREMIUM_IGR_ONLY
@@ -1436,10 +1435,6 @@ class Vehicle(FittingItem):
     @property
     def isOnlyForClanWarsBattles(self):
         return checkForTags(self.tags, VEHICLE_TAGS.CLAN_WARS_BATTLES)
-
-    @property
-    def isOnlyForFunRandomBattles(self):
-        return checkForTags(self.tags, VEHICLE_TAGS.FUN_RANDOM)
 
     @property
     def isOnlyForComp7Battles(self):
@@ -1762,20 +1757,18 @@ class Vehicle(FittingItem):
         skills, skillLevels, bonusSkills, bonusSkillsLevels = self.__getCrewSkills()
         return self.getCrewBySkillLevels(100, skillsByIdxs=skills, skillLevelsByIdxs=skillLevels, activateBrotherhood=True, rolesBonusSkills=bonusSkills, bonusSkillsLevels=bonusSkillsLevels)
 
-    def getCrewWithSkill(self, skillNames):
+    def getCrewWithSkills(self, skillNames):
 
         def _cannotAddSkill(tman, skillName):
             skillAlreadyLearned = tman.skillAlreadyLearned(skillName)
             cannotLearnSkill = skillName not in tman.getPossibleSkills()
             return skillAlreadyLearned and tman.skillsMap[skillName].isSkillActive or cannotLearnSkill
 
-        if skillNames is None:
+        if not skillNames:
             return self.crew
         else:
-            if not isinstance(skillNames, (list, set, tuple)):
-                skillNames = [skillNames]
             skillNames = filter(None, skillNames)
-            crewItems = list()
+            crewItems = []
             for slotIdx, tman in self.crew:
                 if tman is None:
                     crewItems.append((slotIdx, tman))
@@ -1814,39 +1807,47 @@ class Vehicle(FittingItem):
             crewRoles = self.descriptor.type.crewRoles
             return sortCrew(crewItems, crewRoles)
 
-    def getCrewWithoutSkill(self, skillName):
+    def getCrewWithoutSelectedSkills(self, skillNames=None):
+        skillNamesToRemove = set(skillNames or [])
         crewItems = list()
         crewRoles = self.descriptor.type.crewRoles
         for slotIdx, tman in self.crew:
-            if not tman or skillName not in tman.skillsMap:
+            if not tman or not set(tman.skillsMap) & skillNamesToRemove:
                 crewItems.append((slotIdx, tman))
                 continue
             tmanDescr = tman.descriptor
             skills = tmanDescr.skills[:]
-            if skillName in skills and tmanDescr.skillLevel(skillName) < tankmen.MAX_SKILL_LEVEL:
-                lastSkillLevel = tankmen.MAX_SKILL_LEVEL
+            skillsSet = set(skills)
+            for skillName in skillNamesToRemove:
+                if skillName in skillsSet and tmanDescr.skillLevel(skillName) < tankmen.MAX_SKILL_LEVEL:
+                    lastSkillLevel = tankmen.MAX_SKILL_LEVEL
+                    break
             else:
                 lastSkillLevel = tmanDescr.lastSkillLevel
+
+            lastBonusSkillLevel = [ level for level in tman.bonusSlotsLevels if level is not None ].pop()
             rolesBonusSkills = defaultdict(list)
-            bonusSkillsLevels = []
+            maxLevelSkills = []
             for role, bonusSkills in tman.bonusSkills.iteritems():
                 for bonusSkill in bonusSkills:
-                    if bonusSkill and skillName != bonusSkill.name:
+                    if bonusSkill and bonusSkill.name not in skillNamesToRemove:
                         rolesBonusSkills[role].append(bonusSkill.name)
+                        if bonusSkill.level == MAX_SKILL_LEVEL:
+                            maxLevelSkills.append(bonusSkill.name)
 
-            if skillName in skills:
-                skills.remove(skillName)
+            bonusSkillsLevels = [lastBonusSkillLevel] * NPS.MAX_BONUS_SKILLS_PER_ROLE
+            skills = [ s for s in skills if s not in skillNamesToRemove ]
             unskilledTmanCD = tankmen.generateCompactDescr(tmanDescr.getPassport(), tmanDescr.vehicleTypeID, tmanDescr.role, tmanDescr.roleLevel, skills, lastSkillLevel, skillsEfficiencyXP=tmanDescr.skillsEfficiencyXP, rolesBonusSkills=rolesBonusSkills)
             if tmanDescr.freeXP:
                 unskilledTmanDescr = TankmanDescr(compactDescr=unskilledTmanCD)
                 unskilledTmanDescr.addXP(tmanDescr.freeXP, isCheckForEfficiency=False)
                 unskilledTmanCD = unskilledTmanDescr.makeCompactDescr()
-            unskilledTman = self.itemsFactory.createTankman(unskilledTmanCD, vehicle=self, vehicleSlotIdx=tman.vehicleSlotIdx, bonusSkillsLevels=[bonusSkillsLevels])
+            unskilledTman = self.itemsFactory.createTankman(unskilledTmanCD, vehicle=self, vehicleSlotIdx=tman.vehicleSlotIdx, bonusSkillsLevels=[bonusSkillsLevels, maxLevelSkills])
             crewItems.append((slotIdx, unskilledTman))
 
         return sortCrew(crewItems, crewRoles)
 
-    def getCrewWithoutSkills(self):
+    def getCrewWithoutAllSkills(self):
         crewItems = list()
         crewRoles = self.descriptor.type.crewRoles
         for slotIdx, tman in self.crew:
@@ -2256,18 +2257,12 @@ _VEHICLE_STATE_TO_ADD_ICON = {Vehicle.VEHICLE_STATE.RENTABLE: RES_ICONS.MAPS_ICO
  Vehicle.VEHICLE_STATE.RENTABLE_AGAIN: RES_ICONS.MAPS_ICONS_VEHICLESTATES_RENTAGAIN_ICO_BIG}
 
 def getVehicleStateIcon(vState):
-    if vState in _VEHICLE_STATE_TO_ICON:
-        icon = _VEHICLE_STATE_TO_ICON[vState]
-    else:
-        icon = ''
+    icon = _VEHICLE_STATE_TO_ICON.get(vState, '')
     return icon
 
 
 def getVehicleStateAddIcon(vState):
-    if vState in _VEHICLE_STATE_TO_ADD_ICON:
-        icon = _VEHICLE_STATE_TO_ADD_ICON[vState]
-    else:
-        icon = ''
+    icon = _VEHICLE_STATE_TO_ADD_ICON.get(vState, '')
     return icon
 
 

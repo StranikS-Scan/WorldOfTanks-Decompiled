@@ -101,7 +101,9 @@ class PersonalMissionsWindgetPresenter(ViewComponent[PersonalMissionsModel]):
         self.__pm3Operations = getSortedPm3Operations()
         _, previousMissionsProgress = self.__getProgress()
         self.__linkedOperation = self.__currentOperation = self.__getInProgressOperation()
-        if not self.__currentOperation and not self.__isFirstTimeEntrance():
+        status, nextOperationID = getDetailedOperationStatus(self.__currentOperation) if self.__currentOperation else (None, None)
+        nextOperation = self.__personalMissionsCache.getAllOperations(PM_BRANCH.V2_BRANCHES).get(nextOperationID) if nextOperationID else None
+        if (not self.__currentOperation or self.__currentOperation and status == OperationStatus.PAUSED) and not self.__isFirstTimeEntrance():
             currentOperationID = self.__settingsCore.serverSettings.getLastFullCompletedPM3OperationID()
             if not currentOperationID:
                 for operation in reversed(self.__pm3Operations.values()):
@@ -110,8 +112,6 @@ class PersonalMissionsWindgetPresenter(ViewComponent[PersonalMissionsModel]):
                         self.__settingsCore.serverSettings.setPersonalMission3Data({PersonalMission3.LAST_FULL_COMPLETED_OP: currentOperationID})
 
             self.__currentOperation = self.__personalMissionsCache.getAllOperations(PM_BRANCH.V2_BRANCHES).get(currentOperationID)
-        status, nextOperationID = getDetailedOperationStatus(self.__currentOperation) if self.__currentOperation else (None, None)
-        nextOperation = self.__personalMissionsCache.getAllOperations(PM_BRANCH.V2_BRANCHES).get(nextOperationID) if nextOperationID else None
         totalPoints, _ = self.__getTotalPoints()
         _, currentMissionsProgress = self.__getProgress()
         areAllOperationsCompleted = all((op.isCompleted() for op in self.__pm3Operations.values()))
@@ -128,7 +128,7 @@ class PersonalMissionsWindgetPresenter(ViewComponent[PersonalMissionsModel]):
                 tx.setState(State.IN_PROGRESS_FOR_HONORS)
                 tx.setPreviousProgress(previousMissionsProgress)
                 tx.setCurrentProgress(currentMissionsProgress)
-            elif status in (OperationStatus.NOT_ALL_COMPLETED_WITH_HONOR, OperationStatus.NOT_ALL_COMPLETED):
+            elif status in (OperationStatus.NOT_ALL_COMPLETED_WITH_HONOR, OperationStatus.NOT_ALL_COMPLETED) or status == OperationStatus.PAUSED and self.__currentOperation:
                 tx.setAllOperationsCompleted(status == OperationStatus.NOT_ALL_COMPLETED_WITH_HONOR)
                 self.__linkedOperation = nextOperation
                 tx.setState(State.COMPLETED_WITH_HONORS)

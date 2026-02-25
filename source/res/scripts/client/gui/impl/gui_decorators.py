@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gui_decorators.py
+from __future__ import absolute_import
 import functools
 import inspect
 import logging
 from frameworks.wulf import View, ViewStatus
 from helpers.uniprof import regions
+from py2to3.utils import getargspec
 _REGION_FORMAT = 'view.{}.{}'
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
@@ -13,8 +15,9 @@ def args2params(*types):
 
     def _decorator(func):
 
+        @functools.wraps(func)
         def _wrapper(*args):
-            signature = inspect.getargspec(func).args
+            signature = getargspec(func).args
             if 'self' in signature:
                 args, kwargs = (args[0],), args[1]
                 signature.remove('self')
@@ -25,7 +28,7 @@ def args2params(*types):
                     try:
                         kwargs[name] = types[idx](kwargs[name])
                     except (ValueError, TypeError) as e:
-                        _logger.warning('There is an error while converting arg @%s[%s] to %s: %s', name, kwargs[name], str(types[idx]), e.message)
+                        _logger.warning('There is an error while converting arg @%s[%s] to %s: %s', name, kwargs[name], str(types[idx]), str(e))
 
             return func(*args, **kwargs)
 

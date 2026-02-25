@@ -48,6 +48,6 @@ class AchievementsMainViewModel(ViewModel):
         super(AchievementsMainViewModel, self)._initialize()
         self._addViewModelProperty('summaryModel', SummaryViewModel())
         self._addViewModelProperty('achievementsModel', AdvancedAchievementsViewModel())
-        self._addNumberProperty('viewType')
+        self._addNumberProperty('viewType', AchievementsViews.SUMMARY.value)
         self._addBoolProperty('isOtherPlayer', False)
         self.onClose = self._addCommand('onClose')

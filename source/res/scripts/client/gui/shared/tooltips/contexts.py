@@ -100,7 +100,7 @@ class StatusConfiguration(object):
 
 
 class ParamsConfiguration(object):
-    __slots__ = ('vehicle', 'params', 'crew', 'eqs', 'devices', 'dossier', 'dossierType', 'isCurrentUserDossier', 'historicalBattleID', 'checkAchievementExistence', 'simplifiedOnly', 'externalCrewParam', 'vehicleLevel', 'arenaType', 'colorless')
+    __slots__ = ('vehicle', 'params', 'crew', 'eqs', 'devices', 'dossier', 'dossierType', 'isCurrentUserDossier', 'historicalBattleID', 'checkAchievementExistence', 'simplifiedOnly', 'externalCrewParam', 'vehicleLevel', 'arenaType', 'colorless', 'showNormalizationAngle', 'showReboundAngle', 'showBasic', 'showPenetrationLoss', 'showScreensArmorMultiplier')
 
     def __init__(self):
         self.vehicle = None
@@ -118,6 +118,11 @@ class ParamsConfiguration(object):
         self.vehicleLevel = 0
         self.arenaType = ARENA_GUI_TYPE.RANDOM
         self.checkAchievementExistence = True
+        self.showNormalizationAngle = False
+        self.showReboundAngle = False
+        self.showBasic = True
+        self.showPenetrationLoss = False
+        self.showScreensArmorMultiplier = False
         return
 
 
@@ -694,6 +699,30 @@ class HangarContext(ToolTipContext):
         return value
 
 
+class ArmorInspectorContext(HangarContext):
+
+    def buildItem(self, intCD, vehicle):
+        self._vehicle = vehicle
+        return self.itemsCache.items.getItemByCD(intCD)
+
+    def getParamsConfiguration(self, item):
+        value = super(ArmorInspectorContext, self).getParamsConfiguration(item)
+        value.showNormalizationAngle = True
+        value.showReboundAngle = True
+        value.showBasic = False
+        value.showPenetrationLoss = True
+        value.showScreensArmorMultiplier = True
+        value.colorless = True
+        return value
+
+    def getStatsConfiguration(self, item):
+        value = super(ArmorInspectorContext, self).getStatsConfiguration(item)
+        value.buyPrice = False
+        value.inventoryCount = False
+        value.sellPrice = False
+        return value
+
+
 class HangarCardContext(HangarContext):
 
     def getStatusConfiguration(self, item):
@@ -948,6 +977,13 @@ class VehCmpModulesContext(TechTreeContext):
         value.sellPrice = False
         value.unlockPrice = False
         return value
+
+
+class CmpModulesWithVehicleContext(VehCmpModulesContext):
+
+    def buildItem(self, intCD, vehicle):
+        self._vehicle = vehicle
+        return self.itemsCache.items.getItemByCD(intCD)
 
 
 class TechMainContext(HangarContext):

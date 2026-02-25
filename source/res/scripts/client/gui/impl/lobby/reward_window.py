@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/reward_window.py
+from __future__ import absolute_import
 import logging
 from frameworks.wulf import ViewSettings
 from frameworks.wulf.gui_constants import WindowFlags, WindowLayer, ViewFlags

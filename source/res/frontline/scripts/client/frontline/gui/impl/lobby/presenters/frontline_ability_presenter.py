@@ -2,7 +2,6 @@
 # Embedded file name: frontline/scripts/client/frontline/gui/impl/lobby/presenters/frontline_ability_presenter.py
 from __future__ import absolute_import
 import typing
-from frontline.constants.common import BATTLE_ABILITY_GROUP_INDEX
 from frontline.gui.frontline_helpers import AbilitiesTemplates, getFrontlineState
 from frontline.gui.frontline_helpers import getSkillParams
 from frontline.gui.impl.gen.view_models.views.lobby.components.loadout.battle_abilities_setup_model import BattleAbilitiesSetupModel
@@ -21,6 +20,7 @@ from epic_constants import CATEGORIES_ORDER
 from frameworks.wulf import Array
 from gui.game_control.epic_meta_game_ctrl import EpicMetaGameSkill
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.tank_setup.common.ammunition_panel_constants import AmmunitionPanelConstants
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_setup_model import BaseSetupModel
 from gui.impl.lobby.hangar.presenters.loadout_presenter_base import LoadoutPresenterBase, LoadoutEntityProvider
 from gui.impl.lobby.tank_setup.array_providers.base import BaseVehSectionContext
@@ -83,7 +83,7 @@ class FrontlineAbilityPresenter(LoadoutPresenterBase[BattleAbilitiesSetupModel])
 
     def _selectItem(self, slotID, itemCD):
         self._selectedSlotId = slotID
-        self.__slotSelectionObserver.onPanelSlotSelect(self._currentSectionName, BATTLE_ABILITY_GROUP_INDEX, slotID)
+        self.__slotSelectionObserver.onPanelSlotSelect(AmmunitionPanelConstants.NO_GROUP, self._currentSectionName, slotID)
         super(FrontlineAbilityPresenter, self)._selectItem(slotID, int(itemCD))
 
     def _getEvents(self):

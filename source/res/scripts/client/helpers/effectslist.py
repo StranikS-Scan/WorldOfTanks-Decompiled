@@ -1165,6 +1165,7 @@ class _FlashBangEffectDesc(_EffectDesc):
             if self.__fba is not None:
                 self.renderSettings.removeFlashBangAnimation(self.__fba)
                 BigWorld.cancelCallback(self.__clbackId)
+                self.__clbackId = None
             self.__fba = Math.Vector4Animation()
             self.__fba.keyframes = self._keyframes
             if IS_EDITOR:
@@ -1191,6 +1192,7 @@ class _FlashBangEffectDesc(_EffectDesc):
     def delete(self, elem, reason):
         if self.__clbackId is not None:
             BigWorld.cancelCallback(self.__clbackId)
+            self.__clbackId = None
         self.__removeMe()
         return True
 
@@ -1318,6 +1320,7 @@ class _LightEffectDesc(_EffectDesc):
                 callback = elem['callback']
                 if callback is not None:
                     BigWorld.cancelCallback(callback)
+                    elem['callback'] = None
             if elem['light'] is not None:
                 elem['light'].destroyLight()
                 elem['light'] = None
@@ -1395,7 +1398,7 @@ def _createEffectDesc(eType, dataSection):
     if not dataSection.values():
         return
     else:
-        factoryMethod = _effectDescFactory.get(eType, None)
+        factoryMethod = _effectDescFactory.get(eType)
         if factoryMethod is not None:
             return factoryMethod(dataSection)
         raise SoftException('EffectsList factory has no class associated with type %s.' % eType)

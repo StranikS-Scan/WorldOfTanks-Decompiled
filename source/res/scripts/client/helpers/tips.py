@@ -26,6 +26,7 @@ _EPIC_BATTLE_TIPS_PATTERN = '^(epicTip\\d+)'
 _EPIC_RANDOM_TIPS_PATTERN = '^(epicRandom\\d+)'
 _RANKED_BATTLES_TIPS_PATTERN = '^(ranked\\d+)'
 _BATTLE_ROYALE_TIPS_PATTERN = '^(battleRoyale\\d+$)'
+_ST_PATRICK_PATTERN = '^(stPatrick\\d+$)'
 _WINBACK_TIPS_PATTERN = '^(winback\\d+$)'
 _MAPBOX_TIPS_PATTERN = '^(mapbox\\d+)'
 _DEV_MAPS_PATTERN = '^(devMaps\\d+)'
@@ -144,6 +145,7 @@ class _WinbackTipsCriteria(TipsCriteria):
 
 
 class BattleRoyaleTipsCriteria(TipsCriteria):
+    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
 
     def __init__(self, arenaVisitor):
         super(BattleRoyaleTipsCriteria, self).__init__()
@@ -154,16 +156,15 @@ class BattleRoyaleTipsCriteria(TipsCriteria):
         if foundTip is not None:
             foundTip.markWatched()
             tipData = foundTip.getData()
-            geometryName = replaceHyphenToUnderscore(self._arenaVisitor.getArenaType().geometryName)
-            geomertyIconResId = _tryGetTipIconRes('_'.join((foundTip.getTipId(), geometryName)))
-            if geomertyIconResId != R.invalid():
-                tipData = TipData(tipData.status, tipData.body, geomertyIconResId)
+            tipIcon = self.__getTipIcon(foundTip.getTipId())
+            if tipIcon != R.invalid():
+                tipData = TipData(tipData.status, tipData.body, tipIcon)
             return tipData
         else:
             return TipData(R.invalid(), R.invalid(), R.invalid())
 
     def _getTargetList(self):
-        return _battleRoyaleTips
+        return _stPatrickTips if self.__battleRoyaleController.isStPatrick() else _battleRoyaleTips
 
     def _getArenaGuiType(self):
         return ARENA_GUI_TYPE.BATTLE_ROYALE
@@ -181,6 +182,16 @@ class BattleRoyaleTipsCriteria(TipsCriteria):
             return
         AccountSettings.setSettings(ROYALE_SQUAD_TIP_SHOWN_FOR_SEASON, curSeasonID)
         return _buildBattleLoadingTip('battleRoyale6', R.strings.tips.battleRoyale6())
+
+    def __getTipIcon(self, tipId):
+        if self.__battleRoyaleController.isStPatrick():
+            res = R.images.battle_royale.gui.maps.st_patrick.icons.battleLoading.tips.dyn(tipId)
+            if res.exists():
+                return res()
+            tipId = tipId.replace('stPatrick', 'battleRoyale')
+        geometryName = replaceHyphenToUnderscore(self._arenaVisitor.getArenaType().geometryName)
+        geometryTipId = '_'.join((tipId, geometryName))
+        return R.images.battle_royale.gui.maps.icons.battleLoading.tips.dyn(geometryTipId, R.invalid)()
 
 
 class _MapboxTipsCriteria(TipsCriteria):
@@ -259,11 +270,6 @@ def _getRandomTipsCriteria(arenaVisitor):
 def _getTipIconRes(tipID, group):
     res = R.images.gui.maps.icons.battleLoading.tips.dyn(tipID)
     return res() if res.exists() else R.images.gui.maps.icons.battleLoading.groups.dyn(group)()
-
-
-def _tryGetTipIconRes(tipID):
-    res = R.images.gui.maps.icons.battleLoading.tips.dyn(tipID)
-    return res() if res.exists() else R.invalid()
 
 
 class _TipsValidator(object):
@@ -521,6 +527,7 @@ _rankedTips = readTips(_RANKED_BATTLES_TIPS_PATTERN)
 _epicBattleTips = readTips(_EPIC_BATTLE_TIPS_PATTERN)
 _epicRandomTips = readTips(_EPIC_RANDOM_TIPS_PATTERN)
 _battleRoyaleTips = readTips(_BATTLE_ROYALE_TIPS_PATTERN)
+_stPatrickTips = readTips(_ST_PATRICK_PATTERN)
 _winbackTips = readTips(_WINBACK_TIPS_PATTERN)
 _mapboxTips = readTips(_MAPBOX_TIPS_PATTERN)
 _devMapsTips = readTips(_DEV_MAPS_PATTERN)

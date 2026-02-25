@@ -24,11 +24,11 @@ def mappedToResourceId(resourceAccessor):
 
 
 def stateIdToResId(stateId):
-    return _STATE_ID_TO_RESOURCE_ID_MAPPING.get(stateId, None)
+    return _STATE_ID_TO_RESOURCE_ID_MAPPING.get(stateId)
 
 
 def stateIdToResLayout(stateId):
-    resId = _STATE_ID_TO_RESOURCE_ID_MAPPING.get(stateId, None)
+    resId = _STATE_ID_TO_RESOURCE_ID_MAPPING.get(stateId)
     return resId if resId is None else backport.layout(resId)
 
 
@@ -37,4 +37,4 @@ def resIdToStateId(resId):
 
 
 def resLayoutToStateId(resLayout):
-    return _RESOURCE_LAYOUT_TO_STATE_ID_MAPPING.get(resLayout, None)
+    return _RESOURCE_LAYOUT_TO_STATE_ID_MAPPING.get(resLayout)

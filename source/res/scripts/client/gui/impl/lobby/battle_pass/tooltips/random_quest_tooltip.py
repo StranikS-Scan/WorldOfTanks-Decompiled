@@ -16,7 +16,7 @@ class RandomQuestTooltip(ViewImpl):
     __eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, requiredToken):
-        settings = ViewSettings(R.views.lobby.battle_pass.tooltips.RandomQuestTooltip())
+        settings = ViewSettings(R.views.mono.battle_pass.tooltips.random_quest())
         settings.model = RandomQuestTooltipModel()
         super(RandomQuestTooltip, self).__init__(settings)
         self.__quest = first(self.__eventsCache.getQuestsByTokenRequirement(requiredToken))

@@ -71,8 +71,6 @@ class _ArenaVehiclesAwaiter(AsyncEvent):
 class ClientArena(object):
     __onUpdate = {ARENA_UPDATE.SETTINGS: '_ClientArena__onArenaSettingsUpdate',
      ARENA_UPDATE.PERIOD: '_ClientArena__onPeriodInfoUpdate',
-     ARENA_UPDATE.STATISTICS: '_ClientArena__onStatisticsUpdate',
-     ARENA_UPDATE.VEHICLE_STATISTICS: '_ClientArena__onVehicleStatisticsUpdate',
      ARENA_UPDATE.BASE_POINTS: '_ClientArena__onBasePointsUpdate',
      ARENA_UPDATE.BASE_CAPTURED: '_ClientArena__onBaseCaptured',
      ARENA_UPDATE.COMBAT_EQUIPMENT_USED: '_ClientArena__onCombatEquipmentUsed',
@@ -83,7 +81,6 @@ class ClientArena(object):
      ARENA_UPDATE.OWN_VEHICLE_INSIDE_RP: '_ClientArena__onOwnVehicleInsideRP',
      ARENA_UPDATE.OWN_VEHICLE_LOCKED_FOR_RP: '_ClientArena__onOwnVehicleLockedForRP',
      ARENA_UPDATE.VIEW_POINTS: '_ClientArena__onViewPoints',
-     ARENA_UPDATE.FOG_OF_WAR: '_ClientArena__onFogOfWar',
      ARENA_UPDATE.RADAR_INFO_RECEIVED: '_ClientArena__onRadarInfoReceived'}
     DEFAULT_ARENA_WORLD_ID = -1
     VEHICLES_AWAIT_TIMEOUT = 5.0
@@ -279,36 +276,9 @@ class ClientArena(object):
         LOG_DEBUG('[VIEW POINTS] received view points', self.__viewPoints)
         self.onViewPoints(self.__viewPoints)
 
-    def __onFogOfWar(self, argStr):
-        status = cPickle.loads(argStr)
-        self.__isFogOfWarEnabled = bool(status & 1)
-        self.onFogOfWarEnabled(self.__isFogOfWarEnabled)
-        self.__hasFogOfWarHiddenVehicles = bool(status & 2)
-        self.onFogOfWarHiddenVehiclesSet(self.__hasFogOfWarHiddenVehicles)
-
     def __onRadarInfoReceived(self, argStr):
         status = cPickle.loads(argStr)
         self.onRadarInfoReceived(status)
-
-    @wg_async
-    def __onStatisticsUpdate(self, argStr):
-        self.__statistics = {}
-        awaitVehicles = []
-        statList = cPickle.loads(zlib.decompress(argStr))
-        for s in statList:
-            vehicleID, stats = self.__vehicleStatisticsAsDict(s)
-            awaitVehicles.append(vehicleID)
-            self.__statistics[vehicleID] = stats
-
-        yield self.awaitVehiclesAdded(awaitVehicles)
-        self.onNewStatisticsReceived()
-
-    def __onVehicleStatisticsUpdate(self, argStr):
-        vehicleID, stats = self.__vehicleStatisticsAsDict(cPickle.loads(zlib.decompress(argStr)))
-        self.__statistics[vehicleID] = stats
-        if vehicleID not in self.__vehicles:
-            return
-        self.onVehicleStatisticsUpdate(vehicleID)
 
     def __getArenaPlans(self):
         arenaPlans = list(self.arenaType.visualScript[ASPECT.CLIENT])
@@ -364,10 +334,6 @@ class ClientArena(object):
         vehs = self.__vehicles
         self.__vehicleIndexToId = dict(zip(range(len(vehs)), sorted(vehs.keys())))
 
-    def __vehicleStatisticsAsDict(self, stats):
-        return (stats[0], {'frags': stats[1],
-          'tkills': stats[2]})
-
     def runVsePlan(self, planName, params, key='', context=None):
         if self._vsePlans is not None:
             self._vsePlans.startPlan(planName, params, key, context)
@@ -414,6 +380,7 @@ class ClientArena(object):
         for vehInfo in vehInfoList:
             self.addVehInfo(vehInfo, False)
 
+        self.onNewStatisticsReceived()
         self.onNewVehicleListReceived()
 
     def addVehInfo(self, vehInfo, notify=True):
@@ -421,10 +388,29 @@ class ClientArena(object):
         vehID = vehInfo.pop('vehicleID')
         self.__vehicles[vehID] = self.__preprocessVehicleInfo(vehID, vehInfo)
         self.__rebuildIndexToId()
+        self.__statistics[vehID] = {'frags': vehInfo['frags'],
+         'tkills': vehInfo['tkills']}
         if notify:
             self.onVehicleAdded(vehID)
-        if vehID in self.__statistics:
-            self.onVehicleStatisticsUpdate(vehID)
+        self.onVehicleStatisticsUpdate(vehID)
+
+    def updateVehiclesFrags(self, vehicleID, fragsCount):
+        if vehicleID not in self.__statistics:
+            return
+        self.__statistics[vehicleID] = {'frags': fragsCount}
+        self.onVehicleStatisticsUpdate(vehicleID)
+
+    def updateVehiclesTkills(self, vehicleID, tkillsCount):
+        if vehicleID not in self.__statistics:
+            return
+        self.__statistics[vehicleID] = {'tkills': tkillsCount}
+        self.onVehicleStatisticsUpdate(vehicleID)
+
+    def updateFogOfWar(self, fogOfWar):
+        self.__isFogOfWarEnabled = bool(fogOfWar & 1)
+        self.onFogOfWarEnabled(self.__isFogOfWarEnabled)
+        self.__hasFogOfWarHiddenVehicles = bool(fogOfWar & 2)
+        self.onFogOfWarHiddenVehiclesSet(self.__hasFogOfWarHiddenVehicles)
 
     def updateVehicleIsAlive(self, vehID, compDescr, isPlayerVehicle):
         vehInfo = self.__vehicles[vehID]
@@ -542,4 +528,4 @@ class Plane(object):
             return a + ab.scale(t) if 0.0 <= t <= 1.0 else None
 
     def testPoint(self, point):
-        return True if self.n.dot(point) - self.d >= 0.0 else False
+        return self.n.dot(point) - self.d >= 0.0

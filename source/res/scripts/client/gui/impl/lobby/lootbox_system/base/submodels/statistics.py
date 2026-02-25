@@ -2,10 +2,11 @@
 # Embedded file name: scripts/client/gui/impl/lobby/lootbox_system/base/submodels/statistics.py
 import logging
 from typing import TYPE_CHECKING
-from gui.goodies.goodie_items import DemountKit, RecertificationForm
+from gui.goodies.goodie_items import DemountKit, RecertificationForm, MentoringLicense
 from gui.impl.gen.view_models.views.lobby.lootbox_system.submodels.rewards_categories_model import RewardsCategoriesModel, Type
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
+from items.components.crew_books_constants import CREW_BOOK_RARITY
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import ILootBoxSystemController
 from skeletons.gui.goodies import IGoodiesCache
@@ -33,7 +34,11 @@ _REWARD_ORDER = (Type.VEHICLES,
  Type.BOUNTYEQUIPMENT,
  Type.STANDARDEQUIPMENT,
  Type.DIRECTIVES,
- Type.TRAININGMATERIALS,
+ Type.CREWBOOK,
+ Type.GUIDE,
+ Type.BROCHURE,
+ Type.MENTORINGLICENSE,
+ Type.RECERTIFICATIONFORM,
  Type.BLUEPRINTS,
  Type.BATTLEBONUSX5,
  Type.CREWBONUSX3,
@@ -55,8 +60,12 @@ _ITEMS = (Type.DIRECTIVES,
  Type.EXPERIMENTALEQUIPMENT,
  Type.BOUNTYEQUIPMENT,
  Type.CONSUMABLES,
- Type.RATIONS)
-_COMBINED = (Type.STANDARDEQUIPMENT, Type.TRAININGMATERIALS)
+ Type.RATIONS,
+ Type.CREWBOOK,
+ Type.GUIDE,
+ Type.BROCHURE)
+_GOODIES = (Type.PERSONALRESERVES, Type.RECERTIFICATIONFORM, Type.MENTORINGLICENSE)
+_COMBINED = (Type.STANDARDEQUIPMENT,)
 _TOKENS = (Type.LOOTBOX,
  Type.CREWMEMBER,
  Type.BATTLEBONUSX5,
@@ -93,7 +102,7 @@ class Statistics(object):
                 rewardData = rewardsData.get('items')
             elif rewardType in _COMBINED:
                 rewardData = rewardsData
-            elif rewardType == Type.PERSONALRESERVES:
+            elif rewardType in _GOODIES:
                 rewardData = rewardsData.get('goodies')
             elif rewardType == Type.BLUEPRINTS:
                 rewardData = rewardsData.get('blueprints')
@@ -188,8 +197,24 @@ def _countDirectives(rewardData):
     return _countItems(rewardData, _isDirective)
 
 
-def _countTrainingMaterials(rewardData):
-    return _countItems(rewardData.get('items', {}), _isCrewBook) + _countGoodies(rewardData.get('goodies', {}), _isRecertificationForm)
+def _countCrewBooks(rewardData):
+    return _countItems(rewardData, _isCrewBook)
+
+
+def _countGuides(rewardData):
+    return _countItems(rewardData, _isGuide)
+
+
+def _countBrochures(rewardData):
+    return _countItems(rewardData, _isBrochure)
+
+
+def _countRecertificationForm(rewardData):
+    return _countGoodies(rewardData, _isRecertificationForm)
+
+
+def _countMentoringLicense(rewardData):
+    return _countGoodies(rewardData, _isMentoringLicense)
 
 
 def _countBlueprints(rewardData):
@@ -209,7 +234,7 @@ def _countTokens(rewardData, tokenName):
 
 
 def _countPersonalReserves(rewardData):
-    return _countGoodies(rewardData, lambda g: not _isDemountKit(g) and not _isRecertificationForm(g))
+    return _countGoodies(rewardData, lambda g: not isinstance(g, (DemountKit, RecertificationForm, MentoringLicense)))
 
 
 def _countConsumables(rewardData):
@@ -229,7 +254,15 @@ def _isDirective(item):
 
 
 def _isCrewBook(item):
-    return item.itemTypeName == 'crewBook'
+    return item.itemTypeName == 'crewBook' and item.getBookType() in (CREW_BOOK_RARITY.PERSONAL, CREW_BOOK_RARITY.UNIVERSAL, CREW_BOOK_RARITY.CREW_EPIC)
+
+
+def _isGuide(item):
+    return item.itemTypeName == 'crewBook' and item.getBookType() in (CREW_BOOK_RARITY.UNIVERSAL_GUIDE, CREW_BOOK_RARITY.CREW_RARE)
+
+
+def _isBrochure(item):
+    return item.itemTypeName == 'crewBook' and item.getBookType() in (CREW_BOOK_RARITY.UNIVERSAL_BROCHURE, CREW_BOOK_RARITY.CREW_COMMON)
 
 
 def _isEquipment(item):
@@ -242,6 +275,10 @@ def _isDemountKit(goodie):
 
 def _isRecertificationForm(goodie):
     return isinstance(goodie, RecertificationForm)
+
+
+def _isMentoringLicense(goodie):
+    return isinstance(goodie, MentoringLicense)
 
 
 def _makeRewardModel(rewardType, rewardsCount):
@@ -262,11 +299,15 @@ _COUNT_REWARDS = {Type.VEHICLES: _countVehicles,
  Type.BOUNTYEQUIPMENT: _countBountyEquipment,
  Type.STANDARDEQUIPMENT: _countStandardEquipment,
  Type.DIRECTIVES: _countDirectives,
- Type.TRAININGMATERIALS: _countTrainingMaterials,
+ Type.CREWBOOK: _countCrewBooks,
+ Type.GUIDE: _countGuides,
+ Type.BROCHURE: _countBrochures,
  Type.BLUEPRINTS: _countBlueprints,
  Type.BATTLEBONUSX5: _countBattleBonusX5,
  Type.CREWBONUSX3: _countCrewBonusX3,
  Type.PERSONALRESERVES: _countPersonalReserves,
  Type.CONSUMABLES: _countConsumables,
- Type.RATIONS: _countRations}
+ Type.RATIONS: _countRations,
+ Type.MENTORINGLICENSE: _countMentoringLicense,
+ Type.RECERTIFICATIONFORM: _countRecertificationForm}
 _COUNT_REWARDS.update({rewardType:(lambda rewardData: rewardData) for rewardType in _UNCOUNTABLE})

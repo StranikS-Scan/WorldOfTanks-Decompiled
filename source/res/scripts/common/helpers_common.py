@@ -265,6 +265,15 @@ class HitParamsEncoder(object):
         return params & 15
 
 
+def encodeStickerIdData(stickerId, isParametrized):
+    signalBit = 1 if isParametrized else 0
+    return stickerId | signalBit << 7
+
+
+def decodeStickerIdData(data):
+    return (data & 127, bool(data & 128))
+
+
 def setDamageSticker(sticker, effectsIndex, prefabEffIndex, isPierced):
     cache = vehicles.g_cache
     if prefabEffIndex != component_constants.INVALID_EFFECT_INDEX:
@@ -276,12 +285,13 @@ def setDamageSticker(sticker, effectsIndex, prefabEffIndex, isPierced):
         if stickerID == component_constants.INVALID_EFFECT_INDEX:
             return
         priority = cache.prefabEffects.decals.effects[stickerID].priority
+        data = encodeStickerIdData(stickerID, True)
     else:
         stickerTypeName = 'armorPierced' if isPierced else 'armorResisted'
         stickerID = cache.shotEffects[effectsIndex]['targetStickers'][stickerTypeName]
         if stickerID is None:
             return
         priority = cache.damageStickers['descrs'][stickerID]['priority']
-        sticker['params'] = HitParamsEncoder.INVALID_HIT_PARAMS
-    sticker['segment'] = setEncodedSegmentContextData(sticker['segment'], stickerID)
+        data = encodeStickerIdData(stickerID, False)
+    sticker['segment'] = setEncodedSegmentContextData(sticker['segment'], data)
     return priority

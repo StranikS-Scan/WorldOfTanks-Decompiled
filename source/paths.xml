@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/2.1.1.0</Path>
-    <Path mask="*.wotmod" mode="recursive" root="res">./mods/2.1.1.0</Path>
+    <Path cacheSubdirs="true">./res_mods/2.2.0.0 Common Test</Path>
+    <Path mask="*.wotmod" mode="recursive" root="res">./mods/2.2.0.0 Common Test</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part3.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
@@ -16,20 +16,14 @@
       <Package type="sandbox,sd,hd">./res/packages/shaders.pkg</Package>
       <Package type="sd,hd">./res/packages/01_karelia.pkg</Package>
       <Package type="hd">./res/packages/01_karelia_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/01_karelia_fp.pkg</Package>
-      <Package type="hd">./res/packages/01_karelia_fp_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/02_malinovka.pkg</Package>
       <Package type="hd">./res/packages/02_malinovka_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/02_malinovka_fp.pkg</Package>
-      <Package type="hd">./res/packages/02_malinovka_fp_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/03_campania_big.pkg</Package>
       <Package type="hd">./res/packages/03_campania_big_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/04_himmelsdorf.pkg</Package>
       <Package type="hd">./res/packages/04_himmelsdorf_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/05_prohorovka.pkg</Package>
       <Package type="hd">./res/packages/05_prohorovka_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/05_prohorovka_fp.pkg</Package>
-      <Package type="hd">./res/packages/05_prohorovka_fp_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/06_ensk.pkg</Package>
       <Package type="hd">./res/packages/06_ensk_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/06_ensk_big.pkg</Package>
@@ -71,6 +65,12 @@
       <Package type="hd">./res/packages/128_last_frontier_v_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/13_erlenberg.pkg</Package>
       <Package type="hd">./res/packages/13_erlenberg_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/140_fall_tanks.pkg</Package>
+      <Package type="hd">./res/packages/140_fall_tanks_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/141_dash_to_go.pkg</Package>
+      <Package type="hd">./res/packages/141_dash_to_go_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/142_road_to_dash.pkg</Package>
+      <Package type="hd">./res/packages/142_road_to_dash_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/14_siegfried_line.pkg</Package>
       <Package type="hd">./res/packages/14_siegfried_line_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/14_siegfried_line_nom.pkg</Package>
@@ -144,12 +144,12 @@
       <Package type="sandbox,sd,hd">./res/packages/audioww-part1.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/battle_modifiers.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/battle_royale.pkg</Package>
-      <Package type="sandbox,sd,hd">./res/packages/battle_royale_progression.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/comp7.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/comp7_core.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/comp7_light.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/content_exclude.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/event_platform.pkg</Package>
+      <Package type="sandbox,sd,hd">./res/packages/fall_tanks.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/frontline.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/fun_random.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/gui-part4.pkg</Package>

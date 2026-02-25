@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/battle_entry.py
+from __future__ import absolute_import
 import weakref
 import BigWorld
 from frameworks.wulf import WindowLayer

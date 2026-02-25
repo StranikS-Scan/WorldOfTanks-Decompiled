@@ -8,7 +8,7 @@
     <longDescriptionSpecial>	#artefacts:handExtinguishers/long_special	</longDescriptionSpecial>
     <icon>	handExtinguishers	</icon>
     <price>	3000	</price>
-    <tags>	extinguisher	</tags>
+    <tags>	extinguisher perk_affected	</tags>
     <script>	Extinguisher	  <cooldownSeconds>	90	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
     </script>
@@ -23,7 +23,7 @@
     <icon>	autoExtinguishers	</icon>
     <price>	20000	</price>
     <improved>	true	</improved>
-    <tags>	extinguisher premium_equipment	</tags>
+    <tags>	extinguisher premium_equipment perk_affected	</tags>
     <script>	Extinguisher	  <fireStartingChanceFactor>	0.9	</fireStartingChanceFactor>
       <autoactivate>	true	</autoactivate>
       <cooldownSeconds>	60	</cooldownSeconds>
@@ -45,7 +45,7 @@
     <longDescriptionSpecial>	#artefacts:smallMedkit/long_special	</longDescriptionSpecial>
     <icon>	smallMedkit	</icon>
     <price>	3000	</price>
-    <tags>	medkit	</tags>
+    <tags>	medkit perk_affected	</tags>
     <script>	Repairkit	  <bonusValue>	0	</bonusValue>
       <stunResistanceEffect>	0.0	</stunResistanceEffect>
       <stunResistanceDuration>	0.0	</stunResistanceDuration>
@@ -63,7 +63,7 @@
     <icon>	largeMedkit	</icon>
     <price>	20000	</price>
     <improved>	true	</improved>
-    <tags>	medkit premium_equipment	</tags>
+    <tags>	medkit premium_equipment perk_affected	</tags>
     <script>	Repairkit	  <bonusValue>	0.30	</bonusValue>
       <stunResistanceEffect>	0.0	</stunResistanceEffect>
       <stunResistanceDuration>	0.05	</stunResistanceDuration>
@@ -90,7 +90,7 @@
     <longDescriptionSpecial>	#artefacts:smallRepairkit/long_special	</longDescriptionSpecial>
     <icon>	smallRepairkit	</icon>
     <price>	3000	</price>
-    <tags>	repairkit	</tags>
+    <tags>	repairkit perk_affected	</tags>
     <script>	Repairkit	  <bonusValue>	0	</bonusValue>
       <cooldownSeconds>	90	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
@@ -106,7 +106,7 @@
     <icon>	largeRepairkit	</icon>
     <price>	20000	</price>
     <improved>	true	</improved>
-    <tags>	repairkit premium_equipment	</tags>
+    <tags>	repairkit premium_equipment perk_affected	</tags>
     <vehicleFilter>
       <exclude>
         <vehicle>
@@ -7765,7 +7765,7 @@
     <icon>	largeRepairkit	</icon>
     <price>	0	</price>
     <improved>	true	</improved>
-    <tags>	repairkit premium_equipment builtin notForSale	</tags>
+    <tags>	repairkit premium_equipment builtin notForSale perk_affected	</tags>
     <vehicleFilter>
       <include>
         <vehicle>

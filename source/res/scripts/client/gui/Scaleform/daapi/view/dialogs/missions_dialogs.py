@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/missions_dialogs.py
+from __future__ import absolute_import
 from gui.Scaleform.daapi.view.meta.UseAwardSheetWindowMeta import UseAwardSheetWindowMeta
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events.pm_constants import SOUNDS

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/required_libraries_config.py
+from __future__ import absolute_import
 from soft_exception import SoftException
 LOBBY_REQUIRED_LIBRARIES = ['windows.swf',
  'animations.swf',

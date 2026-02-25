@@ -325,13 +325,12 @@ class SimpleReload(_GunReload):
         if gEffectsDisabled():
             return
         else:
+            time = max(shellReloadTime - self._desc.duration, 0.0)
             if self._sound is None:
                 self._sound = SoundGroups.g_instance.getSound2D(self._desc.soundEvent)
-            else:
-                self._sound.stop()
-            time = shellReloadTime - self._desc.duration
-            if time < 0.0:
-                time = 0.0
+            if not reloadStart and self._sound.isPlaying and time == 0.0:
+                return
+            self._sound.stop()
             self._checkAndPlayGunRammerEffect(shellReloadTime)
             self.delayCallback(time, self.__playSound)
             return

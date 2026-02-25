@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/login_modes/wgc_mode.py
+from __future__ import absolute_import
 import WGC
 from constants import IS_CHINA
+from gui.Scaleform.daapi.view.login.login_modes.base_wgc_mode import BaseWgcMode
 from gui.Scaleform.locale.MENU import MENU
 from gui.impl import backport
 from gui.impl.gen import R
 from helpers.i18n import makeString as _ms
-from base_wgc_mode import BaseWgcMode
 from predefined_hosts import g_preDefinedHosts
 
 class WgcMode(BaseWgcMode):

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/optimization_manager.py
+from __future__ import absolute_import
 import logging
+from future.utils import itervalues, iteritems
 from frameworks.wulf import WindowStatus
 from frameworks.wulf.gui_constants import ShowingStatus
 from gui.graphics_optimization_controller.utils import rescaleRectBounds
@@ -35,7 +37,7 @@ class GraphicsOptimizationManager(object):
         self.__windowsManager.onWindowShowingStatusChanged -= self.__onWindowShowingStatusChanged
         self.__windowsManager = None
         self.__scale = DEFAULT_APPLICATION_SCALE
-        for optimizationID in self.__gfWindowsOptimizationIDs.itervalues():
+        for optimizationID in itervalues(self.__gfWindowsOptimizationIDs):
             self.__optimizationController.unregisterOptimizationArea(optimizationID)
 
         self.__gfWindowsOptimizationIDs.clear()
@@ -54,7 +56,7 @@ class GraphicsOptimizationManager(object):
         scale = event.ctx.get('scale')
         if scale is not None:
             self.__scale = scale
-            for uniqueID, optimizationID in self.__gfWindowsOptimizationIDs.iteritems():
+            for uniqueID, optimizationID in iteritems(self.__gfWindowsOptimizationIDs):
                 window = self.__windowsManager.getWindow(uniqueID)
                 if window and window.content and window.windowStatus not in (WindowStatus.DESTROYING, WindowStatus.DESTROYED):
                     self.__optimizationController.updateOptimizationArea(optimizationID, *rescaleRectBounds(self.__scale, *(window.globalPosition + window.size)))
@@ -100,7 +102,7 @@ class GraphicsOptimizationManager(object):
         window.onSizeChanged -= self.__onWindowSizeChanged
 
     def __invalidateRectangles(self):
-        for uniqueID, optimizationID in self.__gfWindowsOptimizationIDs.copy().iteritems():
+        for uniqueID, optimizationID in iteritems(self.__gfWindowsOptimizationIDs.copy()):
             window = self.__windowsManager.getWindow(uniqueID)
             if window and window.content:
                 if self.__isOptimizationAvailable(window.content.layoutID) and self.__isOptimizationEnabled(window.content.layoutID):

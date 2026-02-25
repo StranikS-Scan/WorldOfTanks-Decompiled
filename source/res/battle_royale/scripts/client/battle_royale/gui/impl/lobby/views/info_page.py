@@ -7,6 +7,7 @@ from gui.impl.gen import R
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.info_page_model import InfoPageModel
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.game_mode_model import GameModeModel
 from battle_royale.gui.impl.lobby.br_helpers.respawn_ability import RespawnAbility
+from battle_royale.gui.impl.lobby.br_helpers.utils import setEventInfo
 from gui.impl.gen.view_models.views.lobby.battle_pass.game_mode_rows_model import GameModeRowsModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.game_mode_cell_model import GameModeCellModel
 from gui.impl import backport
@@ -45,6 +46,7 @@ class InfoPage(ViewImpl):
             self.__fillPlatoonTooltipData(tx)
             tx.setIsModeSelector(self._isModeSelector)
             fillProgressionPointsTableModel(tx.modesSH, self.__battleRoyaleCtrl.getProgressionPointsTableData(), _rBattleRoyale)
+            setEventInfo(tx.eventInfo)
             if self.__battlePassCtrl.isEnabled() and self.__battlePassCtrl.isVisible():
                 tx.getModesBP().addViewModel(self.__createBattlePassTable())
 

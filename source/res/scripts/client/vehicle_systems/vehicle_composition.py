@@ -42,6 +42,7 @@ class VehicleSlots(enum.Enum):
 
 
 def removeComposition(gameObject):
+    Compound.onClientCompositionAboutToBeRemoved(gameObject)
     gameObject.removeComponent(Compound.CompoundBasedComposerComponent)
 
 

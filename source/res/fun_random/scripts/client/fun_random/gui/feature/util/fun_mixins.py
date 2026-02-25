@@ -16,6 +16,7 @@ from helpers import dependency
 from shared_utils import first
 from skeletons.gui.game_control import IFunRandomController
 if typing.TYPE_CHECKING:
+    from fun_random.gui.feature.configs.modes.assets_pack import FunModeAssetsPackConfigurationModel
     from fun_random.gui.feature.models.common import FunSubModesStatus
     from fun_random.gui.feature.models.progressions import FunProgression
     from fun_random.gui.feature.sub_modes.base_sub_mode import IFunSubMode
@@ -26,16 +27,20 @@ class FunAssetPacksMixin(object):
     _funRandomCtrl = dependency.descriptor(IFunRandomController)
 
     @classmethod
+    def getModeAssetsConfiguration(cls):
+        return cls._funRandomCtrl.getConfigurationModel().mode.assetsPack
+
+    @classmethod
     def getModeAssetsPointer(cls):
-        return cls._funRandomCtrl.getAssetsPointer()
+        return cls.getModeAssetsConfiguration().assetsPointer
 
     @classmethod
     def getModeIconsResRoot(cls):
-        return cls._funRandomCtrl.getIconsResRoot()
+        return cls.getModeAssetsConfiguration().getIconsResRoot()
 
     @classmethod
     def getModeLocalsResRoot(cls):
-        return cls._funRandomCtrl.getLocalsResRoot()
+        return cls.getModeAssetsConfiguration().getLocalsResRoot()
 
     @classmethod
     def getModeNameKwargs(cls):

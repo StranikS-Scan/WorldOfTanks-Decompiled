@@ -15,6 +15,7 @@ from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.battle_control.controllers.sound_ctrls.common import SoundPlayersBattleController, VehicleStateSoundPlayer, SoundPlayer
 from helpers import dependency
+from helpers_common import reprSlots
 from helpers.CallbackDelayer import CallbackDelayer
 from points_of_interest_shared import PoiStatus, ENEMY_VEHICLE_ID, PoiBlockReasons
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -170,6 +171,8 @@ class _EquipmentZoneSoundPlayer(VehicleStateSoundPlayer):
         return
 
     def _onVehicleStateUpdated(self, state, value):
+        if state == VEHICLE_VIEW_STATE.DESTROYED:
+            self.__clearActiveEquipment()
         if state in self.__EQUIPMENT_ZONE_ENTER and self.__stateIsActive(value) and self.__checkSource(value):
             _play2d(self.__EQUIPMENT_ZONE_ENTER[state])
             self.__vehicleStates.add(state)
@@ -177,11 +180,20 @@ class _EquipmentZoneSoundPlayer(VehicleStateSoundPlayer):
             _play2d(self.__EQUIPMENT_ZONE_EXIT[state])
             self.__vehicleStates.discard(state)
 
+    def _onSwitchViewPoint(self):
+        self.__clearActiveEquipment()
+
     def __stateIsActive(self, value):
         return value.duration > 0.0 if isinstance(value, StunInfo) else not value.get('finishing')
 
     def __checkSource(self, value):
         return True if isinstance(value, StunInfo) else not value.get('isSourceVehicle')
+
+    def __clearActiveEquipment(self):
+        for state in self.__vehicleStates:
+            _play2d(self.__EQUIPMENT_ZONE_EXIT[state])
+
+        self.__vehicleStates.clear()
 
 
 class _RoleSkillSoundPlayer(SoundPlayer):
@@ -208,12 +220,15 @@ class _RoleSkillSoundPlayer(SoundPlayer):
 
 
 class _ArtilleryAreaParams(object):
+    __slots__ = ('position', 'radius', 'endTime', 'threatsCurrentVehicle')
 
     def __init__(self, position, radius, endTime):
         self.position = position
         self.radius = radius
         self.endTime = endTime
         self.threatsCurrentVehicle = False
+
+    __repr__ = reprSlots
 
 
 class _ArtillerySoundPlayer(SoundPlayer):

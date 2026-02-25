@@ -21,7 +21,7 @@ _CURRENCY_TOOLTIPS = {CurrencyType.GOLD: TOOLTIPS_CONSTANTS.GOLD_INFO_SIMPLE,
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def getCurrencyValueFromType(currencyType, itemsCache=None):
-    currencyValuePath = _TYPE_TO_VALUE_PATH.get(currencyType, None)
+    currencyValuePath = _TYPE_TO_VALUE_PATH.get(currencyType)
     if currencyValuePath is not None:
         value = getattr(itemsCache.items.stats, currencyValuePath)
         return value

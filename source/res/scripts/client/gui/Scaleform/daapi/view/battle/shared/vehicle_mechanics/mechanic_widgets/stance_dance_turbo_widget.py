@@ -68,7 +68,7 @@ class StanceDanceTurboMechanicWidget(StanceDanceTurboWidgetMeta, ContainersListe
         self.__invalidateAll(state)
 
     @eventHandler
-    def onStateTransition(self, oldState, newState):
+    def onStateTransition(self, _, newState):
         self.__invalidateAll(newState)
 
     @eventHandler

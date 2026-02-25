@@ -5,15 +5,17 @@ import typing
 from dict2model import models
 
 class ColorListModel(models.Model):
-    __slots__ = ('normalArmor', 'spacedArmor')
+    __slots__ = ('normalArmor', 'spacedArmor', 'ricochet', 'noDamage')
 
-    def __init__(self, normalArmor, spacedArmor):
+    def __init__(self, normalArmor, spacedArmor, ricochet, noDamage):
         super(ColorListModel, self).__init__()
         self.normalArmor = normalArmor
         self.spacedArmor = spacedArmor
+        self.ricochet = ricochet
+        self.noDamage = noDamage
 
     def __repr__(self):
-        return '<ColorListModel(normalArmor={}, spacedArmor={})>'.format(self.normalArmor, self.spacedArmor)
+        return '<ColorListModel(normalArmor={}, spacedArmor={}, ricochet={}, no_damage={})>'.format(self.normalArmor, self.spacedArmor, self.ricochet, self.noDamage)
 
 
 class ArmorScaleModel(models.Model):
@@ -29,16 +31,17 @@ class ArmorScaleModel(models.Model):
 
 
 class TierModel(models.Model):
-    __slots__ = ('number', 'normalArmor', 'spacedArmor')
+    __slots__ = ('number', 'normalArmor', 'spacedArmor', 'defaultVehicle')
 
-    def __init__(self, number, normalArmor, spacedArmor):
+    def __init__(self, number, normalArmor, spacedArmor, defaultVehicle):
         super(TierModel, self).__init__()
         self.number = number
         self.normalArmor = normalArmor
         self.spacedArmor = spacedArmor
+        self.defaultVehicle = defaultVehicle
 
     def __repr__(self):
-        return '<TierModel(number={}, normalArmor={}, spacedArmor={})>'.format(self.number, self.normalArmor, self.spacedArmor)
+        return '<TierModel(number={}, normalArmor={}, spacedArmor={}, defaultVehicle={})>'.format(self.number, self.normalArmor, self.spacedArmor, self.defaultVehicle)
 
 
 class TierListModel(models.Model):

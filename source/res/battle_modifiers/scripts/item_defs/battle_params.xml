@@ -658,6 +658,16 @@
     <dataType>	string	</dataType>
     <domain>	gun	</domain>
   </gunEffects>
+  <destructionEffect>
+    <scope>	client	</scope>
+    <dataType>	string	</dataType>
+    <domain>	vehicle	</domain>
+  </destructionEffect>
+  <fullDestructionEffect>
+    <scope>	client	</scope>
+    <dataType>	string	</dataType>
+    <domain>	vehicle	</domain>
+  </fullDestructionEffect>
   <chassisDecals>
     <scope>	client	</scope>
     <dataType>	string	</dataType>
@@ -668,11 +678,11 @@
     <dataType>	string	</dataType>
     <domain>	engine	</domain>
   </engineSounds>
-  <exhaustEffect>
+  <exhaustEffects>
     <scope>	client	</scope>
     <dataType>	string	</dataType>
     <domain>	hull	</domain>
-  </exhaustEffect>
+  </exhaustEffects>
   <armorSpallsArmorDamageFirst>
     <scope>	base cell client	</scope>
     <dataType>	float	</dataType>
@@ -727,6 +737,19 @@
     <dataType>	string	</dataType>
     <domain>	shellType	</domain>
   </armorSpallsDamageAbsorption>
+  <changeShellType>
+    <scope>	client cell	</scope>
+    <dataType>	string	</dataType>
+    <domain>	shellType	</domain>
+  </changeShellType>
+  <caliberToExplosionRadius>
+    <scope>	client cell	</scope>
+    <dataType>	float	</dataType>
+    <domain>	shellType	</domain>
+    <restrictions>
+      <min>	0.01	</min>
+    </restrictions>
+  </caliberToExplosionRadius>
   <modeCreditsFactor>
     <scope>	cell	</scope>
     <dataType>	float	</dataType>
@@ -840,6 +863,10 @@
     <scope>	base postBattle	</scope>
     <dataType>	dict	</dataType>
   </goldReserveGains>
+  <postMortemOverrides>
+    <scope>	base	</scope>
+    <dataType>	dict	</dataType>
+  </postMortemOverrides>
   <damageRandomizationType>
     <scope>	base cell client	</scope>
     <dataType>	string	</dataType>
@@ -850,6 +877,14 @@
     <dataType>	string	</dataType>
     <domain>	shell	</domain>
   </piercingPowerRandomizationType>
+  <shellStun>
+    <scope>	cell client	</scope>
+    <dataType>	hashable_dict	</dataType>
+    <domain>	shell	</domain>
+    <restrictions>
+      <useTypes>	val	</useTypes>
+    </restrictions>
+  </shellStun>
   <forcedReloadTime>
     <scope>	base cell client	</scope>
     <dataType>	float	</dataType>
@@ -879,6 +914,11 @@
     <dataType>	string	</dataType>
     <domain>	gun	</domain>
   </gunMainPrefab>
+  <rootPrefabsMechanicEffects>
+    <scope>	client	</scope>
+    <dataType>	string	</dataType>
+    <domain>	vehType	</domain>
+  </rootPrefabsMechanicEffects>
   <visionMaxRadius>
     <scope>	cell client hangar	</scope>
     <dataType>	float	</dataType>

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/pub/standard_window.py
+from __future__ import absolute_import
 from frameworks.wulf import WindowFlags
 from gui.impl.pub.window_impl import WindowImpl
 from gui.impl.pub.window_view import WindowView

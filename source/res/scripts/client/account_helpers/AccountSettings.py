@@ -5,6 +5,7 @@ import cPickle as pickle
 import copy
 import logging
 import typing
+from collections import namedtuple
 from copy import deepcopy
 import BigWorld
 import CommandMapping
@@ -15,7 +16,7 @@ import WWISE
 import constants
 import nations
 from account_helpers import gameplay_ctx
-from account_helpers.settings_core.settings_constants import AIM, BATTLE_EVENTS, CONTOUR, GAME, SOUND, ArmorFlashlight, BattleCommStorageKeys, GuiSettingsBehavior, PersonalMission3, ScorePanelStorageKeys, SPGAim
+from account_helpers.settings_core.settings_constants import AIM, BATTLE_EVENTS, CONTOUR, GAME, SOUND, ArmorFlashlight, BattleCommStorageKeys, GuiSettingsBehavior, PersonalMission3, ScorePanelStorageKeys, SPGAim, SITUATIONAL_PERKS, ArmorInspector
 from aih_constants import CTRL_MODE_NAME
 from constants import MAX_VEHICLE_LEVEL, VEHICLE_CLASSES
 from debug_utils import LOG_CURRENT_EXCEPTION
@@ -62,6 +63,7 @@ STORAGE_VEHICLES_CAROUSEL_FILTER_1 = 'STORAGE_CAROUSEL_FILTER_1'
 STORAGE_BLUEPRINTS_CAROUSEL_FILTER = 'STORAGE_BLUEPRINTS_CAROUSEL_FILTER'
 BATTLEPASS_CAROUSEL_FILTER_1 = 'BATTLEPASS_CAROUSEL_FILTER_1'
 BATTLEPASS_CAROUSEL_FILTER_CLIENT_1 = 'BATTLEPASS_CAROUSEL_FILTER_CLIENT_1'
+SELECT_VEHICLES_CAROUSEL_FILTER_1 = 'SELECT_VEHICLES_CAROUSEL_FILTER_1'
 ROYALE_CAROUSEL_FILTER_1 = 'ROYALE_CAROUSEL_FILTER_1'
 ROYALE_CAROUSEL_FILTER_2 = 'ROYALE_CAROUSEL_FILTER_2'
 ROYALE_CAROUSEL_FILTER_CLIENT_1 = 'ROYALE_CAROUSEL_FILTER_CLIENT_1'
@@ -101,10 +103,8 @@ IGR_PROMO = 'IGR_PROMO'
 PROMO = 'PROMO'
 CONTACTS = 'CONTACTS'
 FALLOUT_VEHICLES = 'FALLOUT_VEHICLES'
-GOLD_FISH_LAST_SHOW_TIME = 'goldFishWindowShowCooldown'
 BOOSTERS_FILTER = 'boostersFilter'
 LAST_PROMO_PATCH_VERSION = 'lastPromoPatchVersion'
-LAST_CALENDAR_SHOW_TIMESTAMP = 'lastCalendarShowTimestamp'
 LAST_STORAGE_VISITED_TIMESTAMP = 'lastStorageVisitedTimestamp'
 LAST_RESTORE_NOTIFICATION = 'lastRestoreNotification'
 PREVIEW_INFO_PANEL_IDX = 'previewInfoPanelIdx'
@@ -143,6 +143,8 @@ COMP7_BOND_EQUIPMENT_REMINDER_SHOWN_TIMESTAMP = 'comp7BondEquipmentReminderShown
 COMP7_LAST_SEASON_WITH_SEEN_REWARD = 'comp7LastSeasonWithSeenReward'
 COMP7_LAST_MASKOT_WITH_SEEN_REWARD = 'comp7LastMaskotWithSeenReward'
 VEHICLE_CAROUSEL_COUNTERS_SEEN = 'vehicleCarouselCountersSeen'
+SELECT_VEHICLES_PLAYLIST = 'selectVehiclesPlaylist'
+SELECT_VEHICLES_IS_ALL_VEHICLES = 'selectVehiclesIsAllVehicles'
 STORE_TAB = 'store_tab'
 STATS_REGULAR_SORTING = 'statsSorting'
 STATS_SORTIE_SORTING = 'statsSortingSortie'
@@ -415,6 +417,7 @@ class PetSystem(object):
     SEEN_PROMO_PET_IDS = 'petSystemSeenPromoPetIDs'
 
 
+AttackerVehicleConfiguration = namedtuple('AttackerVehicleConfiguration', ['compactDescr', 'gunCompactDescr', 'activeGunShotIndex'])
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 MODE_SELECTOR_BATTLE_PASS_SHOWN = 'modeSelectorBattlePassShown'
 RANKED_LAST_CYCLE_ID = 'rankedLastCycleID'
@@ -930,17 +933,13 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                     'birthdayCalendarIntroShowed': False,
                                     GuiSettingsBehavior.COMP7_YEARLY_ANIMATION_SEEN: False,
                                     GuiSettingsBehavior.CLAN_SUPPLY_INTRO_SHOWN: False,
-                                    GuiSettingsBehavior.CREW_NPS_WELCOME_SHOWN: False,
-                                    GuiSettingsBehavior.CREW_NPS_INTRO_SHOWN: False,
-                                    GuiSettingsBehavior.CREW_MENTORING_LICENSE_AWARDS_SHOWN: False,
-                                    GuiSettingsBehavior.CREW_5075_WELCOME_SHOWN: False,
-                                    GuiSettingsBehavior.CREW_22_WELCOME_SHOWN: False},
+                                    GuiSettingsBehavior.CREW_PE_WELCOME_SHOWN: False,
+                                    GuiSettingsBehavior.CREW_MENTORING_LICENSE_AWARDS_SHOWN: False},
                EULA_VERSION: {'version': 0},
                FORT_MEMBER_TUTORIAL: {'wasShown': False},
                IGR_PROMO: {'wasShown': False},
                CONTACTS: {'showOfflineUsers': True,
                           'showOthersCategory': True},
-               GOLD_FISH_LAST_SHOW_TIME: 0,
                BOOSTERS_FILTER: 0,
                'cs_intro_view_vehicle': {'nation': -1,
                                          'vehicleType': 'none',
@@ -1168,7 +1167,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                            'isBadgesEnabled': False,
                            'isAdditionalXPEnabled': False,
                            'isOptionalDevicesAssistantEnabled': False,
-                           'isCrewAssistantEnabled': False},
+                           'isCrewAssistantEnabled': False,
+                           'isServiceRecordCustomizationEnabled': False,
+                           'isProBoostEnabled': False,
+                           'isBattlePassEnabled': False},
                 TELECOM_RENTALS: {'isTelecomRentalsEnabled': True,
                                   'isTelecomRentalsBlocked': True},
                 COMMENDATIONS: {'isMessagesEnable': True,
@@ -1194,7 +1196,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'PveTriggerShown': False,
                 'isEpicPerformanceWarningClicked': False,
                 LAST_PROMO_PATCH_VERSION: '',
-                LAST_CALENDAR_SHOW_TIMESTAMP: '',
                 LAST_RESTORE_NOTIFICATION: None,
                 'dynamicRange': 0,
                 'soundDevice': 0,
@@ -1245,7 +1246,26 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                                                        'progressViewType': True,
                                                                                        'progressViewConditions': True},
                                                             'feedbackDamageIndicator': {'damageIndicatorAllies': True},
-                                                            'feedbackBattleEvents': {BATTLE_EVENTS.CREW_PERKS: True}},
+                                                            'feedbackBattleEvents': {BATTLE_EVENTS.CREW_PERKS: True,
+                                                                                     SITUATIONAL_PERKS.ARMOR_PATCHING: True,
+                                                                                     SITUATIONAL_PERKS.COMMANDER_EAGLE_EYE: True,
+                                                                                     SITUATIONAL_PERKS.COMMANDER_EMERGENCY: True,
+                                                                                     SITUATIONAL_PERKS.COMMANDER_TUTOR: True,
+                                                                                     SITUATIONAL_PERKS.COMMANDER_COORDINATION: True,
+                                                                                     SITUATIONAL_PERKS.COMMANDER_HOLD_LINE: True,
+                                                                                     SITUATIONAL_PERKS.COMMANDER_STAY_SHARP: True,
+                                                                                     SITUATIONAL_PERKS.GUNNER_FOCUS: True,
+                                                                                     SITUATIONAL_PERKS.GUNNER_LONE_WOLF: True,
+                                                                                     SITUATIONAL_PERKS.DRIVER_MOTOR_EXPERT: True,
+                                                                                     SITUATIONAL_PERKS.DRIVER_SUSPENSION_REPAIR: True,
+                                                                                     SITUATIONAL_PERKS.DRIVER_BULLETPROOF: True,
+                                                                                     SITUATIONAL_PERKS.LOADER_DESPERADO: True,
+                                                                                     SITUATIONAL_PERKS.LOADER_INTUITION: True,
+                                                                                     SITUATIONAL_PERKS.LOADER_MELEE: True,
+                                                                                     SITUATIONAL_PERKS.LOADER_SECOND_CHANCE: True,
+                                                                                     SITUATIONAL_PERKS.RADIOMAN_SIDE_BY_SIDE: True,
+                                                                                     SITUATIONAL_PERKS.RADIOMAN_EXPERT: True,
+                                                                                     SITUATIONAL_PERKS.RADIOMAN_THREAT_SEARCH: True}},
                                        'ControlsSettings': {'highlightLocation': True,
                                                             'showQuestProgress': True,
                                                             'chargeFire': True,
@@ -1459,7 +1479,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                      PetSystem.SEEN_PROMO_PET_IDS: set()},
                 HANGAR_VIEW_SETTINGS: {'allVehicles': {'crewEnabled': True,
                                                        'ttcEnabled': True}},
-                HANGAR_KEY_BINDINGS: {'vehicleMenu': {}}},
+                HANGAR_KEY_BINDINGS: {'vehicleMenu': {}},
+                ArmorInspector.SETTINGS: {ArmorInspector.SELECTED_MODE: 'nominal'}},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
@@ -1601,7 +1622,41 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                         ACTIVE_TEST_PARTICIPATION_CONFIRMED: False,
                         IS_SHOP_VISITED: False,
                         LAST_SHOP_ACTION_COUNTER_MODIFICATION: None,
-                        OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES: set()},
+                        OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES: set(),
+                        SELECT_VEHICLES_CAROUSEL_FILTER_1: {'ussr': False,
+                                                            'germany': False,
+                                                            'usa': False,
+                                                            'china': False,
+                                                            'france': False,
+                                                            'uk': False,
+                                                            'japan': False,
+                                                            'czech': False,
+                                                            'sweden': False,
+                                                            'poland': False,
+                                                            'italy': False,
+                                                            'lightTank': False,
+                                                            'mediumTank': False,
+                                                            'heavyTank': False,
+                                                            'SPG': False,
+                                                            'AT-SPG': False,
+                                                            'level_1': False,
+                                                            'level_2': False,
+                                                            'level_3': False,
+                                                            'level_4': False,
+                                                            'level_5': False,
+                                                            'level_6': False,
+                                                            'level_7': False,
+                                                            'level_8': False,
+                                                            'level_9': False,
+                                                            'level_10': False,
+                                                            'level_11': False,
+                                                            'premium': False,
+                                                            'elite': False,
+                                                            'favorite': False,
+                                                            'searchNameVehicle': ''},
+                        SELECT_VEHICLES_PLAYLIST: '',
+                        SELECT_VEHICLES_IS_ALL_VEHICLES: True,
+                        ArmorInspector.SESSION_ATTACKING_VEHICLES: {}},
  KEY_UI_FLAGS: {COMP7_UI_SECTION: {COMP7_WEEKLY_QUESTS_PAGE_TOKENS_COUNT: 0,
                                    COMP7_SHOP_SEEN_PRODUCTS: set(),
                                    COMP7_LAST_SEASON: None,
@@ -2000,7 +2055,7 @@ class AccountSettings(object):
                         panelSettings = _unpack(settingsSection['players_panel'].asString)
                         if 'state' in panelSettings:
                             presentMode = panelSettings['state']
-                            if presentMode in legacyToNewMode.keys():
+                            if presentMode in legacyToNewMode:
                                 panelSettings['state'] = legacyToNewMode[presentMode]
                                 settingsSection.write('players_panel', _pack(panelSettings))
 

@@ -9,9 +9,10 @@ from skeletons.gui.game_control import IBattlePassController
 
 class BattlePassLockIconTooltipView(ViewImpl):
     __battlePass = dependency.descriptor(IBattlePassController)
+    __slots__ = ()
 
     def __init__(self):
-        settings = ViewSettings(R.views.lobby.battle_pass.tooltips.BattlePassLockIconTooltipView())
+        settings = ViewSettings(R.views.mono.battle_pass.tooltips.lock_icon())
         settings.model = BattlePassLockIconTooltipViewModel()
         super(BattlePassLockIconTooltipView, self).__init__(settings)
 
@@ -21,4 +22,5 @@ class BattlePassLockIconTooltipView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(BattlePassLockIconTooltipView, self)._onLoading(*args, **kwargs)
-        self.viewModel.setIsHoliday(self.__battlePass.isHoliday())
+        with self.getViewModel().transaction() as model:
+            model.setIsHoliday(self.__battlePass.isHoliday())

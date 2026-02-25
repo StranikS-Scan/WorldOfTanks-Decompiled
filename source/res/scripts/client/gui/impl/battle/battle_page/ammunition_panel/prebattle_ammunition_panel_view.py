@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/battle/battle_page/ammunition_panel/prebattle_ammunition_panel_view.py
+from __future__ import absolute_import
 from typing import TYPE_CHECKING
 import CommandMapping
 from Event import Event, EventManager

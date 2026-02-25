@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/WaitingView.py
+from __future__ import absolute_import
 import Keys
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui import InputHandler
@@ -26,8 +27,8 @@ class WaitingView(WaitingViewMeta, IWaitingWidget):
         super(WaitingView, self).destroy()
         return
 
-    def setCallback(self, value=None):
-        self.__callback = value
+    def setCallback(self, callback=None):
+        self.__callback = callback
 
     def cancelCallback(self):
         self.__callback = None

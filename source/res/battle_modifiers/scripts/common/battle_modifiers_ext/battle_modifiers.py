@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_modifiers/scripts/common/battle_modifiers_ext/battle_modifiers.py
+from __future__ import absolute_import
+from future.utils import listvalues, lfilter, iteritems, viewvalues, itervalues
 from extension_utils import ResMgr
 from battle_modifiers_common import battle_modifiers
 from battle_modifiers_common.battle_modifiers import BattleParams, ModifierScope
@@ -8,7 +10,7 @@ from battle_modifiers_ext.battle_params import BaseBattleParam, BattleParam, Fak
 from battle_modifiers_ext.battle_modifier import modifier_readers, modifier_appliers
 from battle_modifiers_ext.battle_modifier.modifier_filters import ModificationTree
 from battle_modifiers_ext.battle_modifier.modifier_helpers import Serializable
-from battle_modifiers_ext.constants_ext import BATTLE_MODIFIERS_DIR, BATTLE_MODIFIERS_XML, ERROR_TEMPLATE, FAKE_PARAM_NAME, UseType, GameplayImpact, ModifierDomain, ModifierRestriction, NodeType
+from battle_modifiers_ext.constants_ext import BATTLE_MODIFIERS_DIR, BATTLE_MODIFIERS_XML, FAKE_PARAM_NAME, UseType, GameplayImpact, ModifierDomain, ModifierRestriction, NodeType
 from battle_modifiers_ext.modification_cache import vehicle_modifications, constants_modifications
 from typing import TYPE_CHECKING, Optional, Any, Tuple, Union, List
 from soft_exception import SoftException
@@ -180,9 +182,6 @@ class FakeBattleModifier(ModifierBase):
             if useTypeName not in UseType.NAMES:
                 raise SoftException("[BattleModifiers] Unknown use type '{}'".format(useTypeName))
             useType = UseType.NAME_TO_ID[useTypeName]
-        clientData = self.param.clientData
-        if useType not in clientData.useTypes:
-            raise SoftException(ERROR_TEMPLATE.format('[Fake modifier] You should define physical type to unlock dimensional use types', clientData.resName))
         return useType
 
     def __readRestrictions(self, config):
@@ -198,6 +197,8 @@ class FakeBattleModifier(ModifierBase):
                 minValue = restrictionSection[minLabel].asFloat
             if restrictionSection.has_key(maxLabel):
                 maxValue = restrictionSection[maxLabel].asFloat
+            if minValue is not None and maxValue is not None and minValue > maxValue:
+                raise SoftException('[BattleParams] Incorrect limits: min - {}, max - {}'.format(minValue, maxValue))
             return (minValue, maxValue)
 
 
@@ -249,19 +250,21 @@ class BattleModifiers(Serializable, battle_modifiers.BattleModifiers):
         return self.__modifiers[paramId](value, ctx) if paramId in self.__modifiers else value
 
     def __iter__(self):
-        return self.__modifiers.iteritems()
+        return iter(iteritems(self.__modifiers))
 
     def __getitem__(self, paramId):
         return self.__modifiers[paramId]
 
     def __len__(self):
-        return len(self.__modifiers.items())
+        return len(self.__modifiers)
 
     def __contains__(self, paramId):
         return paramId in self.__modifiers
 
-    def __nonzero__(self):
+    def __bool__(self):
         return self.__domain
+
+    __nonzero__ = __bool__
 
     def __hash__(self):
         return self.id()
@@ -270,7 +273,7 @@ class BattleModifiers(Serializable, battle_modifiers.BattleModifiers):
         return self.id() == other.id()
 
     def __repr__(self):
-        return 'BattleModifiers({})'.format(self.__modifiers.values())
+        return 'BattleModifiers({})'.format(listvalues(self.__modifiers))
 
     @staticmethod
     def retrieveDescr(descr, scope=ModifierScope.FULL):
@@ -299,7 +302,7 @@ class BattleModifiers(Serializable, battle_modifiers.BattleModifiers):
         return self.__modifiers.get(paramId)
 
     def descr(self, scope=ModifierScope.FULL):
-        return tuple((modifier.descr() for modifier in self.__modifiers.itervalues() if modifier.param.scope & scope))
+        return tuple((modifier.descr() for modifier in itervalues(self.__modifiers) if modifier.param.scope & scope))
 
     def domain(self):
         return self.__domain
@@ -325,7 +328,7 @@ class BattleModifiers(Serializable, battle_modifiers.BattleModifiers):
         return constants_modifications.g_cache.get(self)
 
     def getVsePlansByAspect(self, aspect):
-        return filter(None, [ m(aspect) for m in self.__modifiers.itervalues() if m.param.domain & ModifierDomain.VSE ])
+        return lfilter(None, [ m(aspect) for m in itervalues(self.__modifiers) if m.param.domain & ModifierDomain.VSE ])
 
     def _initFromConfig(self, config, *_):
         modifiers = self.__modifiers
@@ -392,7 +395,7 @@ class BattleModifiers(Serializable, battle_modifiers.BattleModifiers):
         self.__domain = domain
 
     def __makeId(self):
-        ids = [ modifier.id() for modifier in self.__modifiers.itervalues() if modifier.hasUniqueID() ]
+        ids = [ modifier.id() for modifier in viewvalues(self.__modifiers) if modifier.hasUniqueID() ]
         return hash(tuple(sorted(ids)))
 
 

@@ -5,6 +5,7 @@ from frameworks.wulf import ViewModel
 
 class SubscriptionTypeEnum(Enum):
     WOTSUBSCRIPTION = 'WotSubscription'
+    WOTPROSUBSCRIPTION = 'WotProSubscription'
     EXTERNALSUBSCRIPTION = 'ExternalSubscription'
 
 

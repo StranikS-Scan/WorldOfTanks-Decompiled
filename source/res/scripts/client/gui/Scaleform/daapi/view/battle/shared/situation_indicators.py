@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/situation_indicators.py
+from __future__ import absolute_import
+from future.utils import viewitems
 import BigWorld
 import WWISE
 from gui.Scaleform.daapi.view.meta.SituationIndicatorsMeta import SituationIndicatorsMeta
@@ -48,7 +50,7 @@ class SituationIndicators(SituationIndicatorsMeta):
         self.as_setPerksS(perksData)
 
     def updatePerks(self, changedPerks, prevPerks):
-        for perkID, perkData in changedPerks.iteritems():
+        for perkID, perkData in viewitems(changedPerks):
             lifeTime = self._getLifeTime(perkData)
             state = perkData['state']
             skillName = tankmen.getSkillsConfig().vsePerkToSkill.get(perkID)

@@ -1,93 +1,86 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/battle_pass/battle_pass_buy_view_model.py
 from frameworks.wulf import Array, ViewModel
-from gui.impl.wrappers.user_list_model import UserListModel
-from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_buy_confirm_view_model import BattlePassBuyConfirmViewModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_buy_rewards_view_model import BattlePassBuyRewardsViewModel
-from gui.impl.gen.view_models.views.lobby.battle_pass.package_item import PackageItem
+from gui.impl.gen.view_models.views.lobby.battle_pass.buy_chapter_model import BuyChapterModel
+from gui.impl.gen.view_models.views.lobby.battle_pass.buy_package_view_model import BuyPackageViewModel
 
 class BattlePassBuyViewModel(ViewModel):
-    __slots__ = ('onShopOfferClick',)
+    __slots__ = ('onShopOfferClick', 'onCloseClick', 'onBuyClick', 'onShowRewardsClick', 'onChangePurchaseWithLevels')
     BUY_STATE = 'buyState'
-    CONFIRM_STATE = 'confirmState'
     REWARDS_STATE = 'rewardsState'
 
-    def __init__(self, properties=9, commands=1):
+    def __init__(self, properties=8, commands=5):
         super(BattlePassBuyViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
-    def packages(self):
+    def package(self):
         return self._getViewModel(0)
 
     @staticmethod
-    def getPackagesType():
-        return PackageItem
-
-    @property
-    def confirm(self):
-        return self._getViewModel(1)
-
-    @staticmethod
-    def getConfirmType():
-        return BattlePassBuyConfirmViewModel
+    def getPackageType():
+        return BuyPackageViewModel
 
     @property
     def rewards(self):
-        return self._getViewModel(2)
+        return self._getViewModel(1)
 
     @staticmethod
     def getRewardsType():
         return BattlePassBuyRewardsViewModel
 
     def getState(self):
-        return self._getString(3)
+        return self._getString(2)
 
     def setState(self, value):
-        self._setString(3, value)
+        self._setString(2, value)
 
     def getIsWalletAvailable(self):
-        return self._getBool(4)
+        return self._getBool(3)
 
     def setIsWalletAvailable(self, value):
-        self._setBool(4, value)
+        self._setBool(3, value)
 
     def getIsShopOfferAvailable(self):
-        return self._getBool(5)
+        return self._getBool(4)
 
     def setIsShopOfferAvailable(self, value):
-        self._setBool(5, value)
+        self._setBool(4, value)
 
     def getShopOfferDiscount(self):
-        return self._getNumber(6)
+        return self._getNumber(5)
 
     def setShopOfferDiscount(self, value):
-        self._setNumber(6, value)
+        self._setNumber(5, value)
 
-    def getIsSeasonWithAdditionalBackground(self):
-        return self._getBool(7)
+    def getIsLogoBg(self):
+        return self._getBool(6)
 
-    def setIsSeasonWithAdditionalBackground(self, value):
-        self._setBool(7, value)
+    def setIsLogoBg(self, value):
+        self._setBool(6, value)
 
-    def getChaptersWithLogoBg(self):
-        return self._getArray(8)
+    def getRegularChapters(self):
+        return self._getArray(7)
 
-    def setChaptersWithLogoBg(self, value):
-        self._setArray(8, value)
+    def setRegularChapters(self, value):
+        self._setArray(7, value)
 
     @staticmethod
-    def getChaptersWithLogoBgType():
-        return int
+    def getRegularChaptersType():
+        return BuyChapterModel
 
     def _initialize(self):
         super(BattlePassBuyViewModel, self)._initialize()
-        self._addViewModelProperty('packages', UserListModel())
-        self._addViewModelProperty('confirm', BattlePassBuyConfirmViewModel())
+        self._addViewModelProperty('package', BuyPackageViewModel())
         self._addViewModelProperty('rewards', BattlePassBuyRewardsViewModel())
         self._addStringProperty('state', 'buyState')
         self._addBoolProperty('isWalletAvailable', False)
         self._addBoolProperty('isShopOfferAvailable', False)
         self._addNumberProperty('shopOfferDiscount', 0)
-        self._addBoolProperty('isSeasonWithAdditionalBackground', False)
-        self._addArrayProperty('chaptersWithLogoBg', Array())
+        self._addBoolProperty('isLogoBg', False)
+        self._addArrayProperty('regularChapters', Array())
         self.onShopOfferClick = self._addCommand('onShopOfferClick')
+        self.onCloseClick = self._addCommand('onCloseClick')
+        self.onBuyClick = self._addCommand('onBuyClick')
+        self.onShowRewardsClick = self._addCommand('onShowRewardsClick')
+        self.onChangePurchaseWithLevels = self._addCommand('onChangePurchaseWithLevels')

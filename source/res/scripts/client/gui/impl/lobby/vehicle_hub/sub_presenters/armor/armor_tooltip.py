@@ -1,42 +1,30 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/vehicle_hub/sub_presenters/armor/armor_tooltip.py
 from __future__ import absolute_import
-from account_helpers.settings_core import settings_constants
+import typing
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from future.builtins import round
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.vehicle_hub.views.sub_models.armor_layer_model import ArmorLayerModel
 from gui.impl.gen.view_models.views.lobby.vehicle_hub.views.sub_models.armor_tooltip_model import ArmorTooltipModel
+from gui.impl.lobby.vehicle_hub.sub_presenters.armor.penetration_utils import calculatePenetrationInfo
 from gui.impl.lobby.vehicle_hub.sub_presenters.armor.utils import getMaterialsAtCursor, stackMaterials
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.window_impl import WindowImpl
-from helpers import dependency
-from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.shared.utils import IHangarSpace
+from items.components.component_constants import MODERN_HE_PIERCING_POWER_REDUCTION_FACTOR_FOR_SHIELDS
+if typing.TYPE_CHECKING:
+    from gui.impl.lobby.vehicle_hub.sub_presenters.armor.penetration_utils import ShellParams
+_DEFAULT_REDUCTION_FACTOR = 1
 
 class ArmorTooltipView(ViewImpl):
     __slots__ = ('_vehicleEntity',)
-    _hangarSpace = dependency.descriptor(IHangarSpace)
-    _settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, vehicleEntity):
-        settings = ViewSettings(R.views.mono.vehicle_hub.tooltips.armor_tooltip(), model=ArmorTooltipModel())
-        super(ArmorTooltipView, self).__init__(settings)
+        super(ArmorTooltipView, self).__init__(ViewSettings(R.views.mono.vehicle_hub.tooltips.armor_tooltip(), model=ArmorTooltipModel()))
         self._vehicleEntity = vehicleEntity
 
-    def _getEvents(self):
-        return ((self._settingsCore.onSettingsChanged, self._onSettingsChanged),)
-
-    def _onLoading(self, *args, **kwargs):
-        super(ArmorTooltipView, self)._onLoading(*args, **kwargs)
-        self.update()
-
-    def _onSettingsChanged(self, diff):
-        if settings_constants.GRAPHICS.COLOR_BLIND in diff:
-            self.update()
-
-    def update(self):
-        materials = getMaterialsAtCursor(self._vehicleEntity, self._hangarSpace.spaceID)
+    def update(self, currentMode, shellParams, collisions):
+        materials = getMaterialsAtCursor(self._vehicleEntity, collisions, shellParams)
         with self.getViewModel().transaction() as model:
             armorLayers = model.getArmorLayers()
             armorLayers.clear()
@@ -45,13 +33,24 @@ class ArmorTooltipView(ViewImpl):
                 layer = ArmorLayerModel()
                 layer.setLayerName(material.partName)
                 layer.setNominalArmor(round(material.nominalArmor))
-                layer.setResultArmor(round(material.resArmor))
+                layer.setResultArmor(material.resArmor)
                 layer.setImpactAngle(material.viewAngle)
                 layer.setColor(material.color)
                 layer.setCount(material.count)
+                if shellParams is not None and shellParams.useHEShell and material.isSpacedArmor:
+                    layer.setReductionFactor(int(MODERN_HE_PIERCING_POWER_REDUCTION_FACTOR_FOR_SHIELDS))
+                else:
+                    layer.setReductionFactor(_DEFAULT_REDUCTION_FACTOR)
                 armorLayers.addViewModel(layer)
 
             armorLayers.invalidate()
+            model.setSelectedMode(currentMode)
+            penetrationInfo = calculatePenetrationInfo(shellParams, collisions)
+            if penetrationInfo is not None:
+                model.setDccColor(penetrationInfo.color)
+                model.setDccType(penetrationInfo.resultType.value)
+                model.setDccValue(penetrationInfo.chance)
+        return
 
 
 class ArmorTooltipWindow(WindowImpl):
@@ -60,5 +59,5 @@ class ArmorTooltipWindow(WindowImpl):
     def __init__(self, vehicleEntity, parent=None):
         super(ArmorTooltipWindow, self).__init__(content=ArmorTooltipView(vehicleEntity), wndFlags=WindowFlags.TOOLTIP, parent=parent, layer=WindowLayer.TOOLTIP, areaID=R.areas.specific())
 
-    def update(self):
-        self.content.update()
+    def update(self, currentMode, shellParams, collisions):
+        self.content.update(currentMode, shellParams, collisions)

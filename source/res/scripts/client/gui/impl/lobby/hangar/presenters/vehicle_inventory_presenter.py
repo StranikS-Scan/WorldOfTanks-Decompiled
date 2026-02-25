@@ -10,7 +10,6 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.hangar.sub_views.vehicles_inventory_model import VehiclesInventoryModel
 from gui.impl.lobby.tooltips.carousel_vehicle_tooltip import CarouselVehicleTooltipView
 from gui.impl.pub.view_component import ViewComponent
-from gui.prb_control import prbEntityProperty
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.battle_pass.battle_pass_helpers import getSupportedCurrentArenaBonusType
 from gui.shared import event_dispatcher
@@ -77,9 +76,8 @@ class VehicleInventoryPresenter(ViewComponent[VehiclesInventoryModel], IGlobalLi
         callbacksTuple = super(VehicleInventoryPresenter, self)._getCallbacks()
         return callbacksTuple + (('tokens', self.__onTokensUpdated),)
 
-    @prbEntityProperty
-    def __prbEntity(self):
-        return None
+    def _autoSelectVehicle(self):
+        g_currentVehicle.selectVehicle()
 
     def __onVehicleChanged(self):
         self.__updateSelectedModel()
@@ -134,11 +132,14 @@ class VehicleInventoryPresenter(ViewComponent[VehiclesInventoryModel], IGlobalLi
             model.setSlotPriceCurrency(slotPriceCurrency)
             model.setFreeSlotsCount(emptySlotsCount)
             model.setHasDiscont(slotPrice != defaultSlotPrice)
+            self.__invalidateSelectedVehicle()
             self.__updateSelectedModel()
 
-    def __updateSelectedModel(self):
+    def __invalidateSelectedVehicle(self):
         if not g_currentVehicle.isPresent():
-            g_currentVehicle.selectVehicle()
+            self._autoSelectVehicle()
+
+    def __updateSelectedModel(self):
         if g_currentVehicle.isPresent() and g_currentVehicle.intCD in self._itemsCache.items.getVehicles(self.__vehiclesFilter.criteria):
             with self.viewModel as model:
                 model.setCurrentVehicleInventoryId(g_currentVehicle.invID)

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/SpaceVisibilityFlags.py
 from constants import ARENA_GAMEPLAY_IDS, HANGAR_VISIBILITY_TAGS
-import ResMgr
+from extension_utils import ResMgr
 from soft_exception import SoftException
 from debug_utils import LOG_WARNING
 
@@ -25,6 +25,7 @@ class SpaceVisibilityFlags(object):
 
     def __init__(self, geometryName):
         settingsPath = SpaceVisibilityFlags.__formSettingPath(geometryName)
+        settingsPath = ResMgr.findFirstPathOccurrence(settingsPath)
         settingsSection = _openSection(settingsPath)
         flagsSection = None
         self.types = ARENA_GAMEPLAY_IDS

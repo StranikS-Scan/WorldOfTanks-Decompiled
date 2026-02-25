@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/pub/__init__.py
+from __future__ import absolute_import
 from gui.impl.pub.gui_impl_constants import ContextMenuID
 from gui.impl.pub.context_menu_window import ContextMenuContent, ContextMenuWindow
 from gui.impl.pub.pop_over_window import PopOverWindow

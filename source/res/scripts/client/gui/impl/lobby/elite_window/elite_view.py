@@ -67,7 +67,7 @@ class EliteView(ViewImpl):
     def __onGoToProgression(self):
 
         def predicate(window):
-            return window.content is not None and getattr(window.content, 'alias', None) == VIEW_ALIAS.LOBBY_RESEARCH
+            return window.content is not None and hasattr(window.content, 'goToPostProgression')
 
         window = first(self.__guiLoader.windowsManager.findWindows(predicate))
         if window is not None:

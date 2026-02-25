@@ -443,7 +443,7 @@ class ArcadeControlMode(_GunControlMode):
     def enable(self, **args):
         super(ArcadeControlMode, self).enable(**args)
         SoundGroups.g_instance.changePlayMode(0)
-        self._cam.enable(args.get('preferredPos'), args.get('closesDist', False), turretYaw=args.get('turretYaw', None), gunPitch=args.get('gunPitch', None), initialVehicleMatrix=args.get('initialVehicleMatrix', None), arcadeState=args.get('arcadeState', None), camTransitionParams=args.get('camTransitionParams', {}))
+        self._cam.enable(args.get('preferredPos'), args.get('closesDist', False), turretYaw=args.get('turretYaw'), gunPitch=args.get('gunPitch'), initialVehicleMatrix=args.get('initialVehicleMatrix'), arcadeState=args.get('arcadeState'), camTransitionParams=args.get('camTransitionParams', {}))
         player = BigWorld.player()
         if player.isObserver() and not player.observerSeesAll():
             player.updateObservedVehicleData()
@@ -514,7 +514,7 @@ class ArcadeControlMode(_GunControlMode):
                     dz = 1.0
                 if cmdMap.isActive(CommandMapping.CMD_CM_DECREASE_ZOOM):
                     dz = -1.0
-                self._cam.update(dx, dy, dz, True, True, False if dx == dy == dz == 0.0 else True)
+                self._cam.update(dx, dy, dz, True, True, not dx == dy == dz == 0.0)
                 return True
             if cmdMap.isFired(CommandMapping.CMD_CM_ALTERNATE_MODE, key) and isDown:
                 ownVehicle = BigWorld.entity(BigWorld.player().playerVehicleID)
@@ -563,7 +563,6 @@ class ArcadeControlMode(_GunControlMode):
         if ownVehicle is not None and ownVehicle.isStarted and avatar_getter.isVehicleBarrelUnderWater() or BigWorld.player().isGunLocked or BigWorld.player().isObserver():
             return
         elif self._aih.isSPG and not bByScroll:
-            self._cam.update(0, 0, 0, False, False)
             equipmentID = None
             if BattleReplay.isPlaying():
                 mode = BattleReplay.g_replayCtrl.getControlMode()
@@ -586,10 +585,11 @@ class ArcadeControlMode(_GunControlMode):
                         hitPoint, _ = getShotTargetInfo(vehicle, pos, BigWorld.player().gunRotator)
                         if vehicle.position.distTo(hitPoint) < vehicle.position.distTo(pos):
                             pos = hitPoint
-            self._aih.onControlModeChanged(mode, preferredPos=pos, aimingMode=self._aimingMode, saveDist=True, equipmentID=equipmentID)
+            if self._aih.isToControlModeSwitchEnabled(mode):
+                self._cam.update(0, 0, 0, False, False)
+                self._aih.onControlModeChanged(mode, preferredPos=pos, aimingMode=self._aimingMode, saveDist=True, equipmentID=equipmentID)
             return
         elif not self._aih.isSPG:
-            self._cam.update(0, 0, 0, False, False)
             if BattleReplay.isPlaying() and BigWorld.player().isGunLocked:
                 mode = BattleReplay.g_replayCtrl.getControlMode()
                 desiredShotPoint = BattleReplay.g_replayCtrl.getGunMarkerPos()
@@ -603,7 +603,9 @@ class ArcadeControlMode(_GunControlMode):
                     mode = CTRL_MODE_NAME.SNIPER
                 equipmentID = None
                 desiredShotPoint = self.camera.aimingSystem.getDesiredShotPoint()
-            self._aih.onControlModeChanged(mode, preferredPos=desiredShotPoint, aimingMode=self._aimingMode, saveZoom=not bByScroll, equipmentID=equipmentID)
+            if self._aih.isToControlModeSwitchEnabled(mode):
+                self._cam.update(0, 0, 0, False, False)
+                self._aih.onControlModeChanged(mode, preferredPos=desiredShotPoint, aimingMode=self._aimingMode, saveZoom=not bByScroll, equipmentID=equipmentID)
             return
         else:
             return
@@ -724,7 +726,7 @@ class _TrajectoryControlMode(_GunControlMode):
                     dz = 1.0
                 if cmdMap.isActive(CommandMapping.CMD_CM_DECREASE_ZOOM):
                     dz = -1.0
-                self._cam.update(dx, dy, dz, False if dx == dy == dz == 0.0 else True)
+                self._cam.update(dx, dy, dz, not dx == dy == dz == 0.0)
                 return True
             if cmdMap.isFired(CommandMapping.CMD_CM_TRAJECTORY_VIEW, key) and isDown:
                 if self.__switchToNextControlMode(switchToPos=self._cam.getCurrentCamDist(), switchToPlace=SwitchToPlaces.TO_NEAR_POS):
@@ -770,7 +772,7 @@ class _TrajectoryControlMode(_GunControlMode):
         self._cam.isAimOffsetEnabled = True
 
     def __switchToNextControlMode(self, switchToPos=None, switchToPlace=None):
-        if GUI_SETTINGS.spgAlternativeAimingCameraEnabled:
+        if GUI_SETTINGS.spgAlternativeAimingCameraEnabled and self._aih.isToControlModeSwitchEnabled(self._nextControlMode):
             soundName = self._SWITCH_SOUND.get(self._nextControlMode)
             if soundName:
                 SoundGroups.g_instance.playSound2D(soundName)
@@ -1066,7 +1068,7 @@ class SniperControlMode(_GunControlMode):
             replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isPlaying and replayCtrl.isControllingCamera:
                 return True
-            self._cam.update(dx, dy, dz, False if dx == dy == 0.0 else True)
+            self._cam.update(dx, dy, dz, not dx == dy == 0.0)
             return True
         else:
             return False
@@ -1327,22 +1329,22 @@ class PostMortemControlMode(IControlMode, CallbackDelayer):
             if playerVehicle:
                 playerPostmortemViewPointDefined = playerVehicle.isPostmortemViewPointDefined
             self.__isObserverMode = 'observer' in player.vehicleTypeDescriptor.type.tags
-            newVehicleID = args.get('newVehicleID', None)
+            newVehicleID = args.get('newVehicleID')
             specCtrl = self.guiSessionProvider.shared.spectator
             if specCtrl is not None:
                 specCtrl.spectatorViewModeChanged(SPECTATOR_MODE.FOLLOW)
             self.__curVehicleID = self.__getInitialVehicleID(newVehicleID)
             shouldSwitchToAlly = bool(args.get('immediateSwitchToAllyVehicle', False))
             camDuration = args.get('transitionDuration', -1)
-            camMatrix = args.get('camMatrix', None)
+            camMatrix = args.get('camMatrix')
             hasDuration = self.__hasCameraTransitionDuration()
             keepRotation = args.get('prevModeName', '') == CTRL_MODE_NAME.DEATH_FREE_CAM
             camTransitionParams = {'cameraTransitionDuration': camDuration if hasDuration and not shouldSwitchToAlly else 0,
              'camMatrix': camMatrix,
              'keepRotation': keepRotation or args.get('keepCameraSettings', False),
              'newVehicleID': newVehicleID,
-             'pivotSettings': args.get('pivotSettings', None),
-             'distanceFromFocus': args.get('distanceFromFocus', None)}
+             'pivotSettings': args.get('pivotSettings'),
+             'distanceFromFocus': args.get('distanceFromFocus')}
             if self.__isObserverMode and player.vehicle is None and not player.isObserverFPV:
                 player.consistentMatrices.notifyPreBind(player)
             self.__cam.enable(None, False, args.get('postmortemParams'), None, None, camTransitionParams)
@@ -1463,7 +1465,7 @@ class PostMortemControlMode(IControlMode, CallbackDelayer):
                 dz = 1.0
             if cmdMap.isActive(CommandMapping.CMD_CM_DECREASE_ZOOM):
                 dz = -1.0
-            self.__cam.update(dx, dy, dz, True, True, False if dx == dy == dz == 0.0 else True)
+            self.__cam.update(dx, dy, dz, True, True, not dx == dy == dz == 0.0)
             return True
         return False
 
@@ -1972,7 +1974,7 @@ class DeathFreeCamMode(VideoCameraControlMode, CallbackDelayer):
             ctrl.onRespawnInfoUpdated += self.__onRespawnInfoUpdated
             if ctrl.respawnInfo is not None:
                 self.__onRespawnInfoUpdated(ctrl.respawnInfo)
-        curVehicleID = args.get('curVehicleID', None)
+        curVehicleID = args.get('curVehicleID')
         if curVehicleID != -1:
             self.__curVehicleID = curVehicleID
             self.delayCallback(args.get('transitionDuration', 0), self.guiSessionProvider.shared.feedback.showVehicleMarker, curVehicleID)

@@ -47,11 +47,10 @@ class RunCtx(object):
         self.bonusCompleted = kwargs.get('bonusCompleted', 0)
         self.battlesCount = kwargs.get('battlesCount', 0)
         self.newbieBattlesCount = kwargs.get('newbieBattlesCount', 0)
-        self.initialChapter = kwargs.get('initialChapter', None)
+        self.initialChapter = kwargs.get('initialChapter')
         self.globalFlags = kwargs.get('globalFlags', {})
         self.canResolveChapterOnStart = kwargs.get('canResolveChapterOnStart', True)
         self.byRequest = kwargs.get('byRequest', False)
-        return
 
     def __repr__(self):
         return 'RunCtx(databaseID={}, restart={}, first={}, battle={}, bonuses={}, battles={}, newbie={}, chapter={}, flags={} cache={})'.format(self.databaseID, self.restart, self.isFirstStart, self.isAfterBattle, self.bonusCompleted, self.battlesCount, self.newbieBattlesCount, self.initialChapter, self.globalFlags, self.cache)

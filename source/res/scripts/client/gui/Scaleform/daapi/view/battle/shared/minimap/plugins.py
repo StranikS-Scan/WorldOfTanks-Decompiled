@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/minimap/plugins.py
+from __future__ import absolute_import, division
 import logging
 import math
 from collections import defaultdict
 from functools import partial
+from future.utils import viewitems, viewvalues
 from enum import Enum
 import BattleReplay
 import BigWorld
@@ -306,7 +308,7 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
         else:
             matrix = matrix_factory.makeDefaultCameraMatrix()
         enableCameraEntry = self._enableCameraEntryInCtrlMode(self._ctrlMode)
-        for entryID in self.__cameraIDs.itervalues():
+        for entryID in viewvalues(self.__cameraIDs):
             if activateID == entryID and enableCameraEntry:
                 self._setMatrix(entryID, matrix)
                 if self.__cameraID != entryID:
@@ -697,16 +699,16 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
 
         return
 
-    def addVehicleInfo(self, vInfo, arenaDP):
-        if self._skipMarker(vInfo):
+    def addVehicleInfo(self, vo, arenaDP):
+        if self._skipMarker(vo):
             return
         else:
-            vehicleID = vInfo.vehicleID
+            vehicleID = vo.vehicleID
             if vehicleID in self._entries:
                 return
             model = self.__addEntryToPool(vehicleID, positions=self._arenaVisitor.getArenaPositions())
             if model is not None:
-                self._setVehicleInfo(vehicleID, model, vInfo, arenaDP.getPlayerGuiProps(vehicleID, vInfo.team), isSpotted=False)
+                self._setVehicleInfo(vehicleID, model, vo, arenaDP.getPlayerGuiProps(vehicleID, vo.team), isSpotted=False)
                 if model.isActive():
                     self._setInAoI(model, True)
                 self._notifyVehicleAdded(vehicleID)
@@ -730,20 +732,20 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
                     self._onVehicleHealthChanged(vehicleID, currHealth, maxHealth)
                 self._setVehicleInfo(vehicleID, entry, vInfo, arenaDP.getPlayerGuiProps(vehicleID, vInfo.team))
 
-    def invalidateVehicleStatus(self, flags, vInfo, arenaDP):
-        if vInfo.isObserver():
+    def invalidateVehicleStatus(self, flags, vInfoVO, arenaDP):
+        if vInfoVO.isObserver():
             return
-        vehicleID = vInfo.vehicleID
-        if vehicleID in self._entries and not vInfo.isAlive():
+        vehicleID = vInfoVO.vehicleID
+        if vehicleID in self._entries and not vInfoVO.isAlive():
             self.__setDestroyed(vehicleID, self._entries[vehicleID])
 
-    def invalidatePlayerStatus(self, flags, vInfo, arenaDP):
-        if not vInfo.isAlive() or vInfo.isObserver():
+    def invalidatePlayerStatus(self, flags, vInfoVO, arenaDP):
+        if not vInfoVO.isAlive() or vInfoVO.isObserver():
             return
-        vehicleID = vInfo.vehicleID
+        vehicleID = vInfoVO.vehicleID
         if vehicleID in self._entries:
             entry = self._entries[vehicleID]
-            guiLabel = arenaDP.getPlayerGuiProps(vehicleID, vInfo.team).name()
+            guiLabel = self._getGuiPropsName(arenaDP.getPlayerGuiProps(vehicleID, vInfoVO.team))
             self.__setGUILabel(entry, guiLabel)
 
     def getVehiclePosition(self, vehicleID):
@@ -798,6 +800,12 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
     def _getDisplayedName(self, vInfo):
         return vInfo.getDisplayedName()
 
+    def _getGuiPropsName(self, guiProps):
+        return guiProps.name()
+
+    def _getSymbolName(self):
+        return _S_NAME.VEHICLE
+
     def _convertSettingToFeatures(self, value, previous, settingsType):
         return settings.convertSettingToFeatures(value, previous, settingsType)
 
@@ -807,13 +815,13 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
 
     def _setVehicleInfo(self, vehicleID, entry, vInfo, guiProps, isSpotted=False):
         classTag = vInfo.vehicleType.classTag
-        name = self._getDisplayedName(vInfo)
         if classTag is not None:
-            entry.setVehicleInfo(not guiProps.isFriend, guiProps.name(), classTag, vInfo.isAlive())
+            guiPropsName = self._getGuiPropsName(guiProps)
+            entry.setVehicleInfo(not guiProps.isFriend, guiPropsName, classTag, vInfo.isAlive())
             animation = self.__getSpottedAnimation(entry, isSpotted)
             if animation:
                 self.__playSpottedSound(entry)
-            self._invoke(entry.getID(), 'setVehicleInfo', vehicleID, self._getDisplayedVehicleClassTag(vInfo), name, guiProps.name(), animation)
+            self._invoke(entry.getID(), 'setVehicleInfo', vehicleID, self._getDisplayedVehicleClassTag(vInfo), self._getDisplayedName(vInfo), guiPropsName, animation)
         return
 
     def _onVehicleHealthChanged(self, vehicleID, currH, maxH):
@@ -838,7 +846,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         else:
             matrix, location = matrix_factory.getVehicleMPAndLocation(vehicleID, positions or {})
         active = location != VEHICLE_LOCATION.UNDEFINED
-        model = self._addEntryEx(vehicleID, _S_NAME.VEHICLE, _C_NAME.ALIVE_VEHICLES, matrix=matrix, active=active)
+        model = self._addEntryEx(vehicleID, self._getSymbolName(), _C_NAME.ALIVE_VEHICLES, matrix=matrix, active=active)
         if model is not None:
             model.setLocation(location)
         return model
@@ -916,7 +924,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         self._setInAoI(entry, False)
         self.__setLocationAndMatrix(entry, VEHICLE_LOCATION.UNDEFINED, matrix)
         vehicleToHideID = None
-        for vehicleID, savedEntry in self._entries.iteritems():
+        for vehicleID, savedEntry in viewitems(self._entries):
             if savedEntry.getID() == entry.getID():
                 vehicleToHideID = vehicleID
                 break
@@ -939,7 +947,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
 
     def __showFeatures(self, flag):
         self._parentObj.as_showVehiclesNameS(flag)
-        for entry in self._entries.itervalues():
+        for entry in viewvalues(self._entries):
             if entry.wasSpotted() and entry.isAlive():
                 self.__setActive(entry, flag)
 
@@ -947,14 +955,14 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         if showHp == self.__canShowVehicleHp:
             return
         self.__canShowVehicleHp = showHp
-        for key, entry in self._entries.iteritems():
+        for key, entry in viewitems(self._entries):
             if not entry.isActive():
                 continue
             self.__showVehicleHp(key, entry.getID())
 
     def __getSpottedAnimation(self, entry, isSpotted):
         if not self.__isObserver and isSpotted and not self._isInFreeCamMode():
-            animation = entry.getSpottedAnimation(self._entries.itervalues())
+            animation = entry.getSpottedAnimation(viewvalues(self._entries))
         else:
             animation = ''
         return animation
@@ -1040,7 +1048,8 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         if eventID == FEEDBACK_EVENT_ID.MINIMAP_SHOW_MARKER and entityID != self.__playerVehicleID:
             if entityID in self._entries:
                 entry = self._entries[entityID]
-                if (self.__isObserver or not avatar_getter.isVehicleAlive()) and avatar_getter.getVehicleIDAttached() == entityID:
+                isObserverOrDead = self.__isObserver or not avatar_getter.isVehicleAlive()
+                if isObserverOrDead and avatar_getter.getVehicleIDAttached() == entityID:
                     return
                 marker, _ = entry.isInAoI() and value
                 self._invoke(entry.getID(), 'setAnimation', marker)
@@ -1064,7 +1073,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             self.__showFeatures(isDown)
         if _FEATURES.isChanged(self.__flagHpMinimap):
             self.__showMinimapHP(isDown)
-        for entry in self._entries.itervalues():
+        for entry in viewvalues(self._entries):
             if not entry.isActive():
                 continue
             self._invoke(entry.getID(), 'showExtendedInfo', isDown)
@@ -1098,7 +1107,7 @@ class EquipmentsPlugin(common.IntervalPlugin):
         if not equipment.showMinimapMarker():
             return
         else:
-            uniqueID = self.__generator.next()
+            uniqueID = self.__generator.nextSequenceID
             arenaDP = self.sessionProvider.getArenaDP()
             isAllyTeam = team is None or arenaDP is None or arenaDP.isAllyTeam(team)
             marker = equipment.getMarker() if isAllyTeam else equipment.getEnemyMarker()
@@ -1145,10 +1154,10 @@ class AreaStaticMarkerPlugin(common.EntriesPlugin):
 
     def applyNewSize(self, sizeIndex):
         self._curScale = self.__calculateMarkerScale(sizeIndex)
-        for entryID in self._entries:
-            matrix = self._entries[entryID].getMatrix()
+        for entry in viewvalues(self._entries):
+            matrix = entry.getMatrix()
             matrix = minimap_utils.makePositionAndScaleMatrix(matrix.applyToOrigin(), (self._curScale, 1.0, self._curScale))
-            self._setMatrix(self._entries[entryID].getID(), matrix)
+            self._setMatrix(entry.getID(), matrix)
 
     def __calculateMarkerScale(self, minimapSizeIndex):
         p = float(minimapSizeIndex - _MINIMAP_MIN_SCALE_INDEX) / float(_MINIMAP_MAX_SCALE_INDEX - _MINIMAP_MIN_SCALE_INDEX)
@@ -1156,9 +1165,8 @@ class AreaStaticMarkerPlugin(common.EntriesPlugin):
 
     def __checkMarkers(self):
         _logger.debug('minimap __checkMarkers')
-        for key in g_locationPointManager.markedAreas:
+        for locationPoint in viewvalues(g_locationPointManager.markedAreas):
             _logger.debug('minimap marker created')
-            locationPoint = g_locationPointManager.markedAreas[key]
             self.__addStaticMarker(locationPoint.targetID, locationPoint.creatorID, locationPoint.position, locationPoint.markerSubType, locationPoint.markerText, locationPoint.replyCount, False)
 
     def __addStaticMarker(self, areaID, creatorID, position, locationMarkerSubtype, markerText='', numberOfReplies=0, isTargetForPlayer=False):
@@ -1218,14 +1226,14 @@ class SimpleMinimapPingPlugin(common.IntervalPlugin):
         super(SimpleMinimapPingPlugin, self).stop()
         self._mouseKeyEventHandler.clear()
 
-    def onMinimapClicked(self, x, y, buttonIdx, mapScaleIndex):
+    def onMinimapClicked(self, x, y, buttonIdx, minimapScaleIndex):
         if buttonIdx in self._mouseKeyEventHandler:
-            self._mouseKeyEventHandler[buttonIdx](x, y, mapScaleIndex)
+            self._mouseKeyEventHandler[buttonIdx](x, y, minimapScaleIndex)
 
     def _getClickPosition(self, x, y):
         raise NotImplementedError('must be implemented')
 
-    def _processCommandByPosition(self, commands, locationCommand, position, mapScaleIndex):
+    def _processCommandByPosition(self, commands, locationCommand, position, minimapScaleIndex):
         raise NotImplementedError('must be implemented')
 
     def _setupKeyBindingEvents(self, isSPGAndStrategicView):
@@ -1298,21 +1306,21 @@ class MinimapPingPlugin(SimpleMinimapPingPlugin):
         self.__isHintPanelEnabled = False
         self.parentObj.as_disableHintPanelS()
 
-    def updateControlMode(self, crtlMode, vehicleID):
-        super(MinimapPingPlugin, self).updateControlMode(crtlMode, vehicleID)
-        isSPGAndStrategicView = True if crtlMode in (aih_constants.CTRL_MODE_NAME.STRATEGIC, aih_constants.CTRL_MODE_NAME.ARTY, aih_constants.CTRL_MODE_NAME.MAP_CASE) else False
+    def updateControlMode(self, mode, vehicleID):
+        super(MinimapPingPlugin, self).updateControlMode(mode, vehicleID)
+        isSPGAndStrategicView = mode in (aih_constants.CTRL_MODE_NAME.STRATEGIC, aih_constants.CTRL_MODE_NAME.ARTY, aih_constants.CTRL_MODE_NAME.MAP_CASE)
         if self.__isHintPanelEnabled:
             self.parentObj.as_updateHintPanelDataS(isSPGAndStrategicView, self.sessionProvider.getArenaDP().getVehicleInfo().isSPG())
         self._setupKeyBindingEvents(isSPGAndStrategicView and self.sessionProvider.getArenaDP().getVehicleInfo().isSPG())
 
-    def onMinimapClicked(self, x, y, buttonIdx, mapScaleIndex):
+    def onMinimapClicked(self, x, y, buttonIdx, minimapScaleIndex):
         if buttonIdx in self._mouseKeyEventHandler:
-            self._mouseKeyEventHandler[buttonIdx](x, y, mapScaleIndex)
+            self._mouseKeyEventHandler[buttonIdx](x, y, minimapScaleIndex)
 
     def _getClickPosition(self, x, y):
         raise NotImplementedError('must be implemented')
 
-    def _processCommandByPosition(self, commands, locationCommand, position, mapScaleIndex):
+    def _processCommandByPosition(self, commands, locationCommand, position, minimapScaleIndex):
         raise NotImplementedError('must be implemented')
 
     def _getIdByBaseNumber(self, team, number):
@@ -1466,7 +1474,7 @@ class _DotEnemySPGImpl(_BaseEnemySPGImpl):
 
     def getIdAndPosition(self, position):
         matrix = minimap_utils.makePositionMatrix(position)
-        uniqueID = self.__generator.next()
+        uniqueID = self.__generator.nextSequenceID
         return (uniqueID, matrix)
 
 

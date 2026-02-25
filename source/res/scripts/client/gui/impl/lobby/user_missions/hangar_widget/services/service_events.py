@@ -6,10 +6,10 @@ from gui.shared import g_eventBus, events
 class ServiceEvents(object):
 
     def stopListening(self):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def startListening(self):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def startServiceEvents(self):
         g_eventBus.addListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__onLobbyInited)

@@ -13,7 +13,7 @@ class LeaderboardRewardTooltipView(ViewImpl):
     __slots__ = ()
 
     def __init__(self):
-        settings = ViewSettings(R.views.battle_royale.lobby.tooltips.LeaderboardRewardTooltipView())
+        settings = ViewSettings(R.views.battle_royale.mono.lobby.tooltips.leaderboard_reward_tooltip_view())
         settings.model = LeaderboardRewardTooltipModel()
         super(LeaderboardRewardTooltipView, self).__init__(settings)
 

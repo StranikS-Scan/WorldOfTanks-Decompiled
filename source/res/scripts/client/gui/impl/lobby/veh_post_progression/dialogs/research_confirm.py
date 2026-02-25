@@ -30,7 +30,7 @@ class PostProgressionResearchConfirm(FullScreenDialogView[ResearchStepsDialog]):
         settings.kwargs = kwargs
         super(PostProgressionResearchConfirm, self).__init__(settings)
         self._buyContent = self._mainContent = None
-        self.__vehicle = kwargs.get('vehicle', None)
+        self.__vehicle = kwargs.get('vehicle')
         self.__stepIDs = kwargs.get('stepIDs', ())
         self.__price = self.__steps = self.__xpBalance = self.__postProgression = None
         return

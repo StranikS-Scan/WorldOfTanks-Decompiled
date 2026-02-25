@@ -3,6 +3,7 @@
 from enum import IntEnum
 from frameworks.wulf import ViewModel
 from battle_royale.gui.impl.gen.view_models.views.lobby.tooltips.leaderboard_reward_tooltip_model import LeaderboardRewardTooltipModel
+from battle_royale.gui.impl.gen.view_models.views.lobby.views.battle_royale_event_model import BattleRoyaleEventModel
 
 class ProgressionStatus(IntEnum):
     DISABLED = 0
@@ -12,7 +13,7 @@ class ProgressionStatus(IntEnum):
 class ProgressionModel(ViewModel):
     __slots__ = ('showProgression', 'onProgressionAnimationCompleted')
 
-    def __init__(self, properties=12, commands=2):
+    def __init__(self, properties=13, commands=2):
         super(ProgressionModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -23,75 +24,84 @@ class ProgressionModel(ViewModel):
     def getLeaderBoardType():
         return LeaderboardRewardTooltipModel
 
+    @property
+    def eventInfo(self):
+        return self._getViewModel(1)
+
+    @staticmethod
+    def getEventInfoType():
+        return BattleRoyaleEventModel
+
     def getStatus(self):
-        return ProgressionStatus(self._getNumber(1))
+        return ProgressionStatus(self._getNumber(2))
 
     def setStatus(self, value):
-        self._setNumber(1, value.value)
+        self._setNumber(2, value.value)
 
     def getStage(self):
-        return self._getNumber(2)
-
-    def setStage(self, value):
-        self._setNumber(2, value)
-
-    def getPrevStage(self):
         return self._getNumber(3)
 
-    def setPrevStage(self, value):
+    def setStage(self, value):
         self._setNumber(3, value)
 
-    def getCurPoints(self):
+    def getPrevStage(self):
         return self._getNumber(4)
 
-    def setCurPoints(self, value):
+    def setPrevStage(self, value):
         self._setNumber(4, value)
 
-    def getPrevPoints(self):
+    def getCurPoints(self):
         return self._getNumber(5)
 
-    def setPrevPoints(self, value):
+    def setCurPoints(self, value):
         self._setNumber(5, value)
 
-    def getStageProgress(self):
+    def getPrevPoints(self):
         return self._getNumber(6)
 
-    def setStageProgress(self, value):
+    def setPrevPoints(self, value):
         self._setNumber(6, value)
 
-    def getPrevStageProgress(self):
+    def getStageProgress(self):
         return self._getNumber(7)
 
-    def setPrevStageProgress(self, value):
+    def setStageProgress(self, value):
         self._setNumber(7, value)
 
-    def getStagePoints(self):
+    def getPrevStageProgress(self):
         return self._getNumber(8)
 
-    def setStagePoints(self, value):
+    def setPrevStageProgress(self, value):
         self._setNumber(8, value)
 
-    def getPrevStagePoints(self):
+    def getStagePoints(self):
         return self._getNumber(9)
 
-    def setPrevStagePoints(self, value):
+    def setStagePoints(self, value):
         self._setNumber(9, value)
 
+    def getPrevStagePoints(self):
+        return self._getNumber(10)
+
+    def setPrevStagePoints(self, value):
+        self._setNumber(10, value)
+
     def getIsCompleted(self):
-        return self._getBool(10)
+        return self._getBool(11)
 
     def setIsCompleted(self, value):
-        self._setBool(10, value)
+        self._setBool(11, value)
 
     def getTimeTillEnd(self):
-        return self._getNumber(11)
+        return self._getNumber(12)
 
     def setTimeTillEnd(self, value):
-        self._setNumber(11, value)
+        self._setNumber(12, value)
 
     def _initialize(self):
         super(ProgressionModel, self)._initialize()
         self._addViewModelProperty('leaderBoard', LeaderboardRewardTooltipModel())
+        self._addViewModelProperty('eventInfo', BattleRoyaleEventModel())
         self._addNumberProperty('status', ProgressionStatus.DISABLED.value)
         self._addNumberProperty('stage', 0)
         self._addNumberProperty('prevStage', 0)

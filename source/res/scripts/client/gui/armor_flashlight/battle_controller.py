@@ -13,13 +13,14 @@ from Vehicle import Vehicle
 from account_helpers.settings_core.settings_constants import ArmorFlashlight, GRAPHICS, POST_PROCESSING_QUALITY
 from aih_constants import CTRL_MODE_NAME, GUN_MARKER_FLAG, GUN_MARKER_TYPE
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
-from constants import SHELL_TYPES, SHELL_TYPES_INDICES
+from constants import SHELL_TYPES_INDICES
 from gui.armor_flashlight.config import getConfig, isFeatureEnabled
 from gui.armor_flashlight.interfaces import IArmorFlashlightBattleController
 from gui.armor_flashlight.utils import getAllMatInfos
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.interfaces import IArenaLoadController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, CROSSHAIR_VIEW_ID
+from gui.shared.utils.functions import getShellImpactParams
 from helpers import dependency, isPlayerAvatar
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -181,25 +182,10 @@ class ArmorFlashlightBattleController(IArenaLoadController, IArmorFlashlightBatt
         vehAttrs = self.sessionProvider.shared.feedback.getVehicleAttrs()
         piercingMultiplier = vehAttrs.get(GUN_PIERCING, 1)
         fullPiercingPower = computePiercingPowerAtDist(ppDesc, distance, maxDist, piercingMultiplier)
-        shieldPenetration = False
-        shellTypeMaxDamage = 0
-        if shell.kind == SHELL_TYPES.HOLLOW_CHARGE:
-            ricochetAngleCos = shell.type.ricochetAngleCos
-            normalizationAngle = 0.0
-        elif shell.kind == SHELL_TYPES.HIGH_EXPLOSIVE:
-            ricochetAngleCos = 0.0
-            normalizationAngle = 0.0
-            if shell.type.shieldPenetration is not None:
-                shieldPenetration = shell.type.shieldPenetration
-            if shell.type.maxDamage is not None:
-                shellTypeMaxDamage = shell.type.maxDamage
-        else:
-            ricochetAngleCos = shell.type.ricochetAngleCos
-            normalizationAngle = shell.type.normalizationAngle
+        ricochetAngleCos, normalizationAngle, shieldPenetration, shellTypeMaxDamage = getShellImpactParams(shell.type)
         isServerMarker = self.gunMarkersFlags & GUN_MARKER_FLAG.SERVER_MODE_ENABLED
         markerProvider = self.serverMarkerDataProvider if isServerMarker else self.clientMarkerDataProvider
         self._armorFlashlightSingleton.setShotParams(shell.piercingPowerRandomization, vDesc.shot.maxDistance, shell.caliber, SHELL_TYPES_INDICES[shell.kind], ricochetAngleCos, normalizationAngle, self.zoomFactor, distance, markerProvider.positionMatrixProvider, shotPos, direction, fullPiercingPower, extraAlphaFactor, gunAimingCircleSize, shieldPenetration, shellTypeMaxDamage)
-        return
 
     def _stopFlashlight(self):
         if self._targetTankID is not None:

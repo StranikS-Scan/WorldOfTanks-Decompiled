@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/login_modes/steam_mode.py
+from __future__ import absolute_import
 import WGC
 from gui import DialogsInterface
-from base_wgc_mode import BaseWgcMode
+from gui.Scaleform.daapi.view.login.login_modes.base_wgc_mode import BaseWgcMode
 from helpers import dependency
 from skeletons.gameplay import IGameplayLogic
 

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/pve_base/base/pve_hud_widget.py
+from __future__ import absolute_import
 import typing
+from future.utils import viewitems
 import SoundGroups
 from PlayerEvents import g_playerEvents
 from PveHudWidgetsStateComponent import PveHudWidgetHasCtxEvent
@@ -261,7 +263,7 @@ class SeveralItemsPveHudWidget(BasePveHudWidget):
         return
 
     def _getActiveItems(self):
-        return {key for key, machine in self._stateMachines.iteritems() if machine.isRunning()}
+        return {key for key, machine in viewitems(self._stateMachines) if machine.isRunning()}
 
     def _onAfterBattlePeriod(self):
         for machine in self._stateMachines.values():

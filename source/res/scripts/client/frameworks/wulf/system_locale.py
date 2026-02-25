@@ -19,8 +19,8 @@ class SystemLocale(PyObjectEntity):
     def getNumberFormat(self, value, formatType=NumberFormatType.INTEGRAL):
         return self.proxy.getNumberFormat(int(value), formatType)
 
-    def getRealFormat(self, value, formatType=RealFormatType.FRACTIONAL):
-        return self.proxy.getRealFormat(value, formatType)
+    def getRealFormat(self, value, formatType=RealFormatType.FRACTIONAL, fractionLen=2):
+        return self.proxy.getRealFormat(value, formatType, fractionLen)
 
     def getTimeFormat(self, value, formatType=TimeFormatType.SHORT_FORMAT):
         return self.proxy.getTimeFormat(value, formatType)

@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/user_cm_handlers.py
+from __future__ import absolute_import
+from past.builtins import long
 import math
 from Event import Event
 from adisp import adisp_process
@@ -47,6 +49,7 @@ class _EXTENDED_OPT_IDS(object):
 
 
 _CM_ICONS = {USER.END_REFERRAL_COMPANY: 'endReferralCompany'}
+_CM_TEXT_COLOR_GOLD = 13347959
 
 def showUserInfo(cm):
 
@@ -294,23 +297,24 @@ class BaseUserCMHandler(AbstractContextMenuCollectEventsHandler, EventSystemEnti
                 state = self.prbDispatcher.getFunctionalState()
                 isRandomSquadAction = state.isInPreQueue(queueType=QUEUE_TYPE.EPIC) or state.isInPreQueue(queueType=QUEUE_TYPE.FUN_RANDOM)
                 isEnabled = isEnabled and (isRandomSquadAction or not self.__winbackController.isModeAvailable())
-                options.append(self._makeItem(USER.CREATE_SQUAD, MENU.contextmenu(USER.CREATE_SQUAD), optInitData={'enabled': canCreate and isEnabled}))
+                options.append(self._makeItem(USER.CREATE_SQUAD, MENU.contextmenu(USER.CREATE_SQUAD), optInitData={'enabled': canCreate and isEnabled,
+                 'textColor': _CM_TEXT_COLOR_GOLD}))
             if self.__eventBattlesCtrl.isEnabled() and not self.isSquadAlreadyCreated(PREBATTLE_TYPE.EVENT):
                 options.append(self._makeItem(USER.CREATE_EVENT_SQUAD, MENU.contextmenu(USER.CREATE_EVENT_SQUAD), optInitData={'enabled': canCreate,
-                 'textColor': 13347959}))
+                 'textColor': _CM_TEXT_COLOR_GOLD}))
             if self.__battleRoyale.isEnabled() and not self.isSquadAlreadyCreated(PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT) and not self.isSquadAlreadyCreated(PREBATTLE_TYPE.BATTLE_ROYALE):
                 primeTimeStatus, _, _ = self.__battleRoyale.getPrimeTimeStatus()
                 options.append(self._makeItem(USER.CREATE_BATTLE_ROYALE_SQUAD, MENU.contextmenu(USER.CREATE_BATTLE_ROYALE_SQUAD), optInitData={'enabled': canCreate and primeTimeStatus == PrimeTimeStatus.AVAILABLE,
-                 'textColor': 13347959}))
+                 'textColor': _CM_TEXT_COLOR_GOLD}))
             if self.__mapboxCtrl.isEnabled() and not self.isSquadAlreadyCreated(PREBATTLE_TYPE.MAPBOX):
                 isOptionEnabled = canCreate and self.__mapboxCtrl.isActive() and self.__mapboxCtrl.isInPrimeTime()
                 options.append(self._makeItem(USER.CREATE_MAPBOX_SQUAD, backport.text(R.strings.menu.contextMenu.createMapboxSquad()), optInitData={'enabled': isOptionEnabled,
-                 'textColor': 13347959}))
+                 'textColor': _CM_TEXT_COLOR_GOLD}))
         return options
 
     def _addPrebattleInfo(self, options, userCMInfo):
         if not userCMInfo.isIgnored and self.canInvite():
-            options.append(self._makeItem(USER.INVITE, MENU.contextmenu(USER.INVITE)))
+            options.append(self._makeItem(USER.INVITE, MENU.contextmenu(USER.INVITE), optInitData={'textColor': _CM_TEXT_COLOR_GOLD}))
         return options
 
     def _addRemoveFriendInfo(self, options, userCMInfo):

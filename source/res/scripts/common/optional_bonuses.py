@@ -6,7 +6,6 @@ import time
 import typing
 from itertools import izip
 from account_shared import getCustomizationItem
-from battle_pass_common import NON_VEH_CD
 from constants import LOOTBOX_TOKEN_PREFIX
 from dog_tags_common.components_config import componentConfigAdapter
 from soft_exception import SoftException
@@ -152,7 +151,7 @@ def __mergeCurrencies(total, key, value, isLeaf=False, count=1, *args):
     totalCurrency = total.setdefault(key, {})
     for currencyCode, currencyData in value.iteritems():
         total = totalCurrency.setdefault(currencyCode, {'count': 0})
-        total['count'] += count * currencyData.get('count', 1)
+        total['count'] = total.get('count', 0) + count * currencyData.get('count', 1)
 
 
 def __mergeDossier(total, key, value, isLeaf=False, count=1, *args):
@@ -205,6 +204,7 @@ def __mergeDogTag(total, key, value, isLeaf=False, count=1, *args):
 
 
 def __mergeBattlePassPoints(total, key, value, isLeaf=False, count=1, *args):
+    NON_VEH_CD = 0
     defaultBattlePassPoints = {'vehicles': {NON_VEH_CD: 0}}
     seasonID = value.get('seasonID')
     chapterID = value.get('chapterID')

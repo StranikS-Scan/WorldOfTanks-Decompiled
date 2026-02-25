@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/messages/fading_messages.py
+from __future__ import absolute_import
 import operator
 from soft_exception import SoftException
 from account_helpers.settings_core.settings_constants import GRAPHICS

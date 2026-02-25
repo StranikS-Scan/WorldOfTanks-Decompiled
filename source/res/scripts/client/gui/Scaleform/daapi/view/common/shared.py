@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/shared.py
+from __future__ import absolute_import
 import typing
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import VEHICLE_CAROUSEL_COUNTERS_SEEN

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/battle/postmortem_panel/postmortem_panel_view.py
+from __future__ import absolute_import
 import logging
 import typing
 import BigWorld
@@ -33,7 +34,7 @@ SELECTION_ORDER = (PlayerSatisfactionRating.NONE,
  PlayerSatisfactionRating.WORSE,
  PlayerSatisfactionRating.USUAL,
  PlayerSatisfactionRating.BETTER)
-_COMMON_TO_MODEL_ENUM_MAP = {v:k for k, v in _MODEL_TO_COMMON_ENUM_MAP.iteritems()}
+_COMMON_TO_MODEL_ENUM_MAP = {v:k for k, v in _MODEL_TO_COMMON_ENUM_MAP.items()}
 
 class PostmortemPanelView(ViewImpl, CallbackDelayer):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)

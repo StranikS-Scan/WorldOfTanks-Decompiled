@@ -7,6 +7,7 @@ from helpers import dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 
 class FLHangarAmmunitionGroupsController(HangarAmmunitionGroupsController):
+    __slots__ = ()
     __epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
 
     def _getGroups(self):

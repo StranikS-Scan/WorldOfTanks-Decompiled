@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/LoginQueue.py
+from __future__ import absolute_import
 from gui.Scaleform.daapi.view.meta.LoginQueueWindowMeta import LoginQueueWindowMeta
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import LoginEvent, LoginEventEx, ArgsEvent

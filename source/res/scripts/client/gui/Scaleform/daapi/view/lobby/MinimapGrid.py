@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/MinimapGrid.py
+from __future__ import absolute_import
 import weakref
 from gui.Scaleform.daapi.view.meta.MinimapGridMeta import MinimapGridMeta
 from helpers import dependency
@@ -22,8 +23,8 @@ class MinimapGrid(MinimapGridMeta):
     def removeController(self):
         self._controller = lambda : None
 
-    def setActive(self, active):
-        self.as_clickEnabledS(active)
+    def setActive(self, isActive):
+        self.as_clickEnabledS(isActive)
 
     def setClick(self, x, y):
         controller = self._controller()

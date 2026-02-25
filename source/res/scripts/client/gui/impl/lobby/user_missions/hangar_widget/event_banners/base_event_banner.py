@@ -9,6 +9,7 @@ class BaseEventBanner(object):
     NAME = ''
 
     def __init__(self):
+        super(BaseEventBanner, self).__init__()
         self._isVisible = False
 
     @property

@@ -2,14 +2,16 @@
 # Embedded file name: scripts/common/PerkPlanHolder.py
 from collections import defaultdict
 from constants import IS_CELLAPP, IS_BASEAPP
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING, List, Optional, Union
 from wg_async import wg_async, wg_await, distributeLoopOverTicks, AsyncEvent
 from perks.PerksLoadStrategy import getLoadStarategy, LoadType, LoadState
 from perks.vse_plan import VsePlan
 if IS_CELLAPP or IS_BASEAPP:
     from server_constants import VEHICLE_STATUS
 if TYPE_CHECKING:
+    from collections import namedtuple
     from Vehicle import Vehicle
+    from VSPlanEvents import VSPlanEventPerkData
 
 class PCPlanHolder(object):
 
@@ -68,28 +70,39 @@ class PCPlanHolder(object):
 
         yield wg_await(distributeLoopOverTicks(asyncLoop(), maxPerTick=1, logID='stop'))
 
-    def triggerVSPlanEvent(self, event):
+    def triggerVSPlanEvent(self, event, eventData=None):
         if not self._isReadyForEvent.is_set():
             if self._loader and self._loader.state in LoadState.STATUS_LOADED:
-                self._delayedEvents.append(event)
+                self._delayedEvents.append((eventData, event))
             return
-        if not self._contextEventsScheme:
+        elif not self._contextEventsScheme:
             return
-        if IS_CELLAPP or IS_BASEAPP:
-            serverActiveStatuses = (VEHICLE_STATUS.FIGHTING, VEHICLE_STATUS.BEFORE_ARENA)
-            if self._owner.status not in serverActiveStatuses:
-                return
-        if isinstance(event, str):
-            eventName = event
-        elif isinstance(event, tuple) and hasattr(event, '_fields'):
-            eventName = event.__class__.__name__
         else:
+            if IS_CELLAPP or IS_BASEAPP:
+                serverActiveStatuses = (VEHICLE_STATUS.FIGHTING, VEHICLE_STATUS.BEFORE_ARENA)
+                if self._owner.status not in serverActiveStatuses:
+                    return
+            if isinstance(event, str):
+                eventName = event
+            elif isinstance(event, tuple) and hasattr(event, '_fields'):
+                eventName = event.__class__.__name__
+            else:
+                return
+            plans = []
+            if eventName in self._contextEventsScheme:
+                plans = self._contextEventsScheme[eventName]
+            perkID = eventData.perkID if eventData else None
+            if perkID is None:
+                for plan in plans:
+                    plan.triggerVSPlanEvent(event)
+
+            else:
+                for plan in plans:
+                    if plan.perkId == perkID:
+                        plan.triggerVSPlanEvent(event)
+                        break
+
             return
-        plans = []
-        if eventName in self._contextEventsScheme:
-            plans = self._contextEventsScheme[eventName]
-        for plan in plans:
-            plan.triggerVSPlanEvent(event)
 
     def reload(self, scopedPerks):
         self._forceClean()
@@ -161,8 +174,8 @@ class PCPlanHolder(object):
         return
 
     def _sendDelayedEvents(self):
-        for event in self._delayedEvents:
-            self.triggerVSPlanEvent(event)
+        for data, event in self._delayedEvents:
+            self.triggerVSPlanEvent(event, eventData=data)
 
         del self._delayedEvents[:]
 

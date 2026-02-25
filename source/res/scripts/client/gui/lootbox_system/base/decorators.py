@@ -4,7 +4,11 @@ from typing import TYPE_CHECKING
 from gui.impl import backport
 from constants import IS_DEVELOPMENT
 from frameworks.wulf import ViewSettings
+from goodies.goodie_constants import GOODIE_VARIETY
 from gui import SystemMessages
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.goodies import IGoodiesCache
+from gui.impl.backport.backport_tooltip import createBackportTooltipContent
 from gui.impl.auxiliary.tooltips.compensation_tooltip import VehicleCompensationTooltipContent
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.loot_box_compensation_tooltip_types import LootBoxCompensationTooltipTypes
@@ -17,6 +21,7 @@ from gui.impl.lobby.lootbox_system.base.tooltips.guaranteed_reward_info_tooltip 
 from gui.impl.lobby.lootbox_system.base.tooltips.random_national_bonus_tooltip_view import RandomNationalBonusTooltipView
 from gui.impl.lobby.lootbox_system.base.tooltips.statistics_category_tooltip import StatisticsCategoryTooltipView
 from gui.impl.lobby.personal_reserves.quest_booster_tooltip import QuestBoosterTooltip
+from helpers import dependency
 if TYPE_CHECKING:
     from typing import Optional
     from gui.impl.backport import TooltipData
@@ -54,12 +59,20 @@ def createTooltipContentDecorator():
     def decorator(func):
 
         def wrapper(self, event, contentID):
-            if contentID == R.views.mono.lootbox.tooltips.guaranteed_reward_info():
+            goodiesCache = dependency.instance(IGoodiesCache)
+            statisticBonusesCategory = event.getArgument('bonusesCategory')
+            if statisticBonusesCategory == GOODIE_VARIETY.RECERTIFICATION_FORM_NAME and contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
+                form = goodiesCache.getRecertificationForm(currency='credits')
+                return createBackportTooltipContent(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.EPIC_BATTLE_RECERTIFICATION_FORM_TOOLTIP, specialArgs=[form.intCD])
+            elif contentID == R.views.lobby.crew.tooltips.MentoringLicenseTooltip():
+                license = goodiesCache.getMentoringLicense(currency='gold')
+                return MentoringLicenseTooltip(license.inventoryCount)
+            elif contentID == R.views.mono.lootbox.tooltips.guaranteed_reward_info():
                 return GuaranteedRewardInfoTooltip(event.getArgument('category'), event.getArgument('eventName'))
             elif contentID == R.views.mono.lootbox.tooltips.box_tooltip():
                 return BoxTooltip(event.getArgument('boxCategory'), event.getArgument('eventName'))
             elif contentID == R.views.mono.lootbox.tooltips.statistics_category():
-                return StatisticsCategoryTooltipView(event.getArgument('bonusesCategory'), event.getArgument('eventName'))
+                return StatisticsCategoryTooltipView(statisticBonusesCategory, event.getArgument('eventName'))
             elif contentID == R.views.lobby.battle_pass.tooltips.BattlePassCoinTooltipView():
                 return BattlePassCoinTooltipView()
             elif contentID == R.views.lobby.battle_pass.tooltips.BattlePassTalerTooltip():
@@ -83,8 +96,6 @@ def createTooltipContentDecorator():
                 if tooltipData is None:
                     return
                 return BoxCompensationTooltip(*tooltipData.specialArgs)
-            elif contentID == R.views.lobby.crew.tooltips.MentoringLicenseTooltip():
-                return MentoringLicenseTooltip(*tooltipData.specialArgs)
             else:
                 return QuestBoosterTooltip(*tooltipData.specialArgs) if contentID == R.views.lobby.personal_reserves.QuestBoosterTooltip() else func(self, event, contentID)
 

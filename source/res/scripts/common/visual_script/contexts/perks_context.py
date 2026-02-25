@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/contexts/perks_context.py
 import weakref
-from VSPlanEvents import OnVehicleEquipmentActivated, OnInnerDeviceWasCrit, OnVehicleTotalDamageDealtIncrease, OnVehicleAssistIncrease, OnVehicleInRange, OnVehicleShotDamagedEnemyVehicle, OnVehicleRadioDistanceChange, OnWitnessEnemyDamaged, OnTankmanStatusChanged
+from VSPlanEvents import OnVehicleEquipmentActivated, OnInnerDeviceWasCrit, OnVehicleTotalDamageDealtIncrease, OnVehicleAssistIncrease, OnVehicleInRange, OnVehicleShotDamagedEnemyVehicle, OnVehicleRadioDistanceChange, OnWitnessEnemyDamaged, OnTankmanStatusChanged, OnVehicleBlockDamage
 from items.components.perks_constants import PerkState
 from visual_script.slot_types import SLOT_TYPE
 from visual_script.context import VScriptContext, vse_get_property, vse_func_call, vse_forward_event, vse_context_effect_forward_event
@@ -29,24 +29,27 @@ class PerkContext(VScriptContext):
     OnVehicleFireStarted = vse_forward_event('OnVehicleFireStarted', (), display_name='OnVehicleFireStarted', description='On vehicle fire started')
     OnVehicleFireStopped = vse_forward_event('OnVehicleFireStopped', (), display_name='OnVehicleFireStopped', description='On vehicle fire stopped')
     OnVehicleEquipmentSwap = vse_forward_event('OnVehicleEquipmentSwap', (), display_name='OnVehicleEquipmentSwap', description='On vehicle equipment swap')
-    OnVehicleBlockDamage = vse_forward_event('OnVehicleBlockDamage', (), display_name='OnVehicleBlockDamage', description='On vehicle block damage')
     OnVehicleDamageByEnemy = vse_forward_event('OnVehicleDamageByEnemy', (), display_name='OnVehicleDamageByEnemy', description='On vehicle damage by enemy')
+    onVehicleDamageReceived = vse_forward_event('onVehicleDamageReceived', (), display_name='onVehicleDamageReceived', description='On vehicle damage received')
     OnVehicleChangeHealth = vse_forward_event('OnVehicleChangeHealth', (), display_name='OnVehicleChangeHealth', description='On vehicle change health')
     OnVehicleDeviceWasCrit = vse_forward_event('OnVehicleDeviceWasCrit', (), display_name='OnVehicleDeviceWasCrit', description='On vehicle device was crit')
     OnVehicleTankmanWasCrit = vse_forward_event('OnVehicleTankmanWasCrit', (), display_name='OnVehicleTankmanWasCrit', description='On vehicle tankman was crit')
     OnVehicleTankmanHealed = vse_forward_event('OnVehicleTankmanHealed', (), display_name='OnVehicleTankmanHealed', description='On vehicle tankman healed')
     OnVehicleDeviceHealed = vse_forward_event('OnVehicleDeviceHealed', (), display_name='OnVehicleDeviceHealed', description='On vehicle device healed')
     OnVehicleGunReloadFinished = vse_forward_event('OnVehicleGunReloadFinished', (), display_name='OnVehicleGunReloadFinished', description='On vehicle gun reload finished')
+    OnVehicleClipReload = vse_forward_event('OnVehicleClipReload', (), display_name='OnVehicleClipReload', description='On vehicle clip reload finished')
     OnEnemyDetected = vse_forward_event('OnEnemyDetected', (), display_name='OnEnemyDetected', description='On enemy detected')
     OnVehicleSixthSenseActivate = vse_forward_event('OnVehicleSixthSenseActivate', (), display_name='OnVehicleSixthSenseActivate', description='On vehicle sixth sense activate')
     OnVehicleChangeShellsByClient = vse_forward_event('OnVehicleChangeShellsByClient', (), display_name='OnVehicleChangeShellsByClient', description='On vehicle change shells by client')
     OnVehicleOnTargetKilled = vse_forward_event('OnVehicleOnTargetKilled', (), display_name='OnVehicleOnTargetKilled', description='On vehicle on target killed')
     OnVehicleOnTargetCrit = vse_forward_event('OnVehicleOnTargetCrit', (), display_name='OnVehicleOnTargetCrit', description='On vehicle on target crit')
     OnArenaOnBattleStart = vse_forward_event('OnArenaOnBattleStart', (), display_name='OnArenaOnBattleStart', description='On battle start')
+    OnNoDamageShot = vse_forward_event('OnNoDamageShot', (), display_name='OnNoDamageShot', description='the shot did no damage')
     OnInnerDeviceWasCrit = vse_forward_event(OnInnerDeviceWasCrit.__name__, zip(OnInnerDeviceWasCrit._fields, (SLOT_TYPE.INT,)), display_name='OnInnerDeviceWasCrit', description='On inner device was crit')
     OnVehicleEquipmentActivated = vse_forward_event(OnVehicleEquipmentActivated.__name__, zip(OnVehicleEquipmentActivated._fields, (SLOT_TYPE.INT, SLOT_TYPE.STR)), display_name='OnEquipmentActivated', description='On equipment activated')
     OnVehicleTotalDamageDealtIncrease = vse_forward_event(OnVehicleTotalDamageDealtIncrease.__name__, zip(OnVehicleTotalDamageDealtIncrease._fields, (SLOT_TYPE.INT,)), display_name='OnVehicleTotalDamageDealtIncrease', description='On vehicle total damage dealt increase')
     OnVehicleAssistIncrease = vse_forward_event(OnVehicleAssistIncrease.__name__, zip(OnVehicleAssistIncrease._fields, (SLOT_TYPE.INT,)), display_name='OnVehicleAssistIncrease', description='On vehicle assist increase')
+    OnVehicleBlockDamage = vse_forward_event(OnVehicleBlockDamage.__name__, zip(OnVehicleBlockDamage._fields, (SLOT_TYPE.INT,)), display_name='OnVehicleBlockDamage', description='On vehicle_block_damage')
     OnVehicleInRange = vse_forward_event(OnVehicleInRange.__name__, zip(OnVehicleInRange._fields, (SLOT_TYPE.INT, SLOT_TYPE.STR, SLOT_TYPE.BOOL)), display_name='OnVehicleInRange', description='On vehicle in range')
     OnVehicleShotDamagedEnemyVehicle = vse_forward_event(OnVehicleShotDamagedEnemyVehicle.__name__, zip(OnVehicleShotDamagedEnemyVehicle._fields, (SLOT_TYPE.INT,)), display_name='OnVehicleShotDamagedEnemyVehicle', description='On vehicle shot damaged enemy vehicle')
     OnWitnessEnemyDamaged = vse_forward_event(OnWitnessEnemyDamaged.__name__, zip(OnWitnessEnemyDamaged._fields, (SLOT_TYPE.INT,)), display_name='OnWitnessEnemyDamaged', description='Vehicle has been damage in our vision')
@@ -80,6 +83,10 @@ class PerkContext(VScriptContext):
     @vse_get_property(SLOT_TYPE.VEHICLE, display_name='Vehicle', description='Vehicle entity', display_group='Perk')
     def getVehicle(self):
         return self._aspectImpl.vehicle
+
+    @vse_get_property(SLOT_TYPE.ARENA, display_name='Arena', description='Arena entity', display_group='Perk')
+    def getArena(self):
+        return self._aspectImpl.arena
 
     @vse_get_property(SLOT_TYPE.INT, display_name='PerkID', description='Perk ID', display_group='Perk/Support')
     def getPerkID(self):

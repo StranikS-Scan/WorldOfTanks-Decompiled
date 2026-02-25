@@ -36,3 +36,15 @@ def getParentGameObjectByComponent(gameObject, componentType):
     hierarchy = CGF.HierarchyManager(gameObject.spaceID)
     findResult = hierarchy.findComponentInParent(gameObject, componentType)
     return findResult[0] if findResult is not None else None
+
+
+def tryActivateGameObject(gameObject):
+    if not gameObject or not gameObject.isValid():
+        return
+    gameObject.activate()
+
+
+def tryDeactivateGameObject(gameObject):
+    if not gameObject or not gameObject.isValid():
+        return
+    gameObject.deactivate()

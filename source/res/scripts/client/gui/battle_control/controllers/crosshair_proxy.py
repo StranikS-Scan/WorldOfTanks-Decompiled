@@ -33,10 +33,7 @@ _STRATEGIC_CAMERA_TO_ID = {_STRATEGIC_CAMERA.AERIAL: STRATEGIC_CAMERA_ID.AERIAL,
  _STRATEGIC_CAMERA.TRAJECTORY: STRATEGIC_CAMERA_ID.TRAJECTORY}
 
 def getCrosshairViewIDByCtrlMode(ctrlMode):
-    if ctrlMode in _CTRL_MODE_TO_VIEW_ID:
-        viewID = _CTRL_MODE_TO_VIEW_ID[ctrlMode]
-    else:
-        viewID = CROSSHAIR_VIEW_ID.UNDEFINED
+    viewID = _CTRL_MODE_TO_VIEW_ID.get(ctrlMode, CROSSHAIR_VIEW_ID.UNDEFINED)
     return viewID
 
 
@@ -244,10 +241,7 @@ class CrosshairDataProxy(IBattleController):
         self.onSPGShotsIndicatorStateChanged(value)
 
     def __onStrategicCameraChanged(self, camera):
-        if camera in _STRATEGIC_CAMERA_TO_ID:
-            cameraID = _STRATEGIC_CAMERA_TO_ID[camera]
-        else:
-            cameraID = STRATEGIC_CAMERA_ID.UNDEFINED
+        cameraID = _STRATEGIC_CAMERA_TO_ID.get(camera, STRATEGIC_CAMERA_ID.UNDEFINED)
         if self.__strategicCameraID != cameraID:
             self.__strategicCameraID = cameraID
             self.onStrategicCameraChanged(cameraID)

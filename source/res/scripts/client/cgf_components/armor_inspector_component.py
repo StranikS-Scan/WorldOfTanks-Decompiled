@@ -2,8 +2,6 @@
 # Embedded file name: scripts/client/cgf_components/armor_inspector_component.py
 import typing
 import logging
-from functools import partial
-import BigWorld
 import CGF
 import armor_inspector
 from account_helpers.settings_core.settings_constants import GRAPHICS
@@ -16,7 +14,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from cgf_common.cgf_helpers import getParentComponentByGameObject
 if typing.TYPE_CHECKING:
     from gui.impl.lobby.vehicle_hub.sub_presenters.armor.config.models import TierModel
-    MatInfo = typing.Tuple[int, float, float]
+    MatInfo = typing.Tuple[int, float, float, int]
 _logger = logging.getLogger(__name__)
 
 @registerComponent
@@ -26,6 +24,8 @@ class ArmorInspectorComponent(object):
     def __init__(self):
         super(ArmorInspectorComponent, self).__init__()
         self.vehicleID = None
+        self.fadeOnRemove = False
+        self.showProbability = False
         return
 
 
@@ -33,9 +33,9 @@ class ArmorInspectorComponent(object):
 class ArmorInspectorManager(CGF.ComponentManager):
     _settingsCore = dependency.descriptor(ISettingsCore)
 
-    def __init__(self, *args):
-        super(ArmorInspectorManager, self).__init__(*args)
-        self._timers = {}
+    def __init__(self):
+        super(ArmorInspectorManager, self).__init__()
+        self._appearanceListeners = {}
 
     def activate(self):
         self._settingsCore.onSettingsChanged += self._clientColorSettingsChanged
@@ -43,10 +43,9 @@ class ArmorInspectorManager(CGF.ComponentManager):
 
     def deactivate(self):
         self._settingsCore.onSettingsChanged -= self._clientColorSettingsChanged
-        self._stopTimer()
 
-    @onAddedQuery(CGF.GameObject, ArmorInspectorComponent, BigWorld.CollisionComponent)
-    def onAdded(self, gameObject, armorInspector, collision):
+    @onAddedQuery(CGF.GameObject, ArmorInspectorComponent)
+    def onAdded(self, gameObject, armorInspector):
         from HangarVehicle import HangarVehicle
         from gui.impl.lobby.vehicle_hub.sub_presenters.armor.config import getConfig
         from gui.impl.lobby.vehicle_hub.sub_presenters.armor.utils import getAllMatInfos
@@ -56,49 +55,60 @@ class ArmorInspectorManager(CGF.ComponentManager):
             return
         else:
             armorInspector.vehicleID = vehicle.id
-            typeDescriptor = vehicle.typeDescriptor
-            materials = getAllMatInfos(typeDescriptor)
-            tierModel = getConfig().tierList.getTierModel(typeDescriptor.level)
+            materials = getAllMatInfos(vehicle)
+            tierModel = getConfig().tierList.getTierModel(vehicle.typeDescriptor.level)
             _logger.debug('Showing Armor inspector for entityID: %s', vehicle.id)
-            self._stopTimer(vehicle.id)
-            timerID = BigWorld.callback(0.5, partial(self._show, vehicle.id, collision, materials, tierModel))
-            self._timers[vehicle.id] = timerID
+            self._show(vehicle.id, gameObject, materials, tierModel, armorInspector.showProbability, True)
+            self._registerAttachmentsUpdates(armorInspector, gameObject, tierModel)
             return
 
-    def _show(self, tankID, collision, materials, tierModel):
-        armor_inspector.show(self.spaceID, tankID, collision, materials, (tierModel.normalArmor.min, tierModel.normalArmor.max), (tierModel.spacedArmor.min, tierModel.spacedArmor.max))
-        self._stopTimer(tankID)
+    def _show(self, tankID, gameObject, materials, tierModel, showProbability, withFade):
+        armor_inspector.show(self.spaceID, tankID, gameObject, materials, (tierModel.normalArmor.min, tierModel.normalArmor.max), (tierModel.spacedArmor.min, tierModel.spacedArmor.max), showProbability, withFade)
 
-    @onRemovedQuery(ArmorInspectorComponent)
-    def onRemoved(self, component):
+    @onRemovedQuery(CGF.GameObject, ArmorInspectorComponent)
+    def onRemoved(self, gameObject, component):
         if component.vehicleID is None:
             return
         else:
             _logger.debug('Hiding Armor inspector for entityID: %s', component.vehicleID)
-            armor_inspector.hide(self.spaceID, component.vehicleID)
-            self._stopTimer(component.vehicleID)
+            self._unregisterAttachmentsUpdates(component)
+            armor_inspector.hide(self.spaceID, component.vehicleID, component.fadeOnRemove)
             return
-
-    def _stopTimer(self, vehicleID=None):
-        if vehicleID is None:
-            for tid in self._timers.values():
-                BigWorld.cancelCallback(tid)
-
-            self._timers.clear()
-        else:
-            tid = self._timers.get(vehicleID)
-            if tid is not None:
-                BigWorld.cancelCallback(tid)
-                del self._timers[vehicleID]
-        return
 
     def _setSettings(self):
         from gui.impl.lobby.vehicle_hub.sub_presenters.armor.config import getConfig
         isColorBlind = self._settingsCore.getSetting(GRAPHICS.COLOR_BLIND)
         configModel = getConfig()
         aiR = R.images.gui.maps.icons.armor_inspector
-        armor_inspector.setSettings(self.spaceID, configModel.blendingAlpha, backport.image(aiR.main_armor_cb() if isColorBlind else aiR.main_armor()), backport.image(aiR.spaced_armor_cb() if isColorBlind else aiR.spaced_armor()))
+        actualColorList = configModel.getActualColorList(isColorBlind)
+        armor_inspector.setSettings(self.spaceID, configModel.blendingAlpha, backport.image(aiR.main_armor_cb() if isColorBlind else aiR.main_armor()), backport.image(aiR.spaced_armor_cb() if isColorBlind else aiR.spaced_armor()), backport.image(aiR.penetration_chance_cdf_cb() if isColorBlind else aiR.penetration_chance_cdf()), actualColorList.ricochet, actualColorList.noDamage)
 
     def _clientColorSettingsChanged(self, diff):
         if GRAPHICS.COLOR_BLIND in diff:
             self._setSettings()
+
+    def _registerAttachmentsUpdates(self, armorInspector, gameObject, tierModel):
+        from HangarVehicle import HangarVehicle
+        from gui.impl.lobby.vehicle_hub.sub_presenters.armor.utils import getAllMatInfos
+        vehicle = getParentComponentByGameObject(gameObject, HangarVehicle)
+        if vehicle is None:
+            return
+        else:
+
+            def _onAttachmentsUpdated():
+                materials = getAllMatInfos(vehicle)
+                self._show(vehicle.id, gameObject, materials, tierModel, armorInspector.showProbability, False)
+
+            appearance = vehicle.appearance
+            appearance.onAttachmentsUpdated += _onAttachmentsUpdated
+            self._appearanceListeners[armorInspector] = (appearance, _onAttachmentsUpdated)
+            return
+
+    def _unregisterAttachmentsUpdates(self, armorInspector):
+        listener = self._appearanceListeners.pop(armorInspector, None)
+        if listener is None:
+            return
+        else:
+            appearance, callback = listener
+            appearance.onAttachmentsUpdated -= callback
+            return

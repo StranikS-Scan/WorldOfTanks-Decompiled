@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic_random/stats_exchange.py
+from __future__ import absolute_import
 from gui.Scaleform.daapi.view.battle.classic.stats_exchange import ClassicStatisticsDataController, DynamicVehicleStatsComponent
 from gui.Scaleform.daapi.view.battle.shared.stats_exchange import createExchangeBroker
 from gui.Scaleform.daapi.view.battle.shared.stats_exchange import broker

@@ -11,13 +11,14 @@ _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 
 class BattlePassStateMachine(StateMachine):
-    __slots__ = ('__rewards', '__data', '__rewardsToChoose', '__packageRewards', '__chapterStyle', '__manualFlow')
+    __slots__ = ('__rewards', '__data', '__rewardsToChoose', '__packageRewards', '__starterPack', '__chapterStyle', '__manualFlow')
 
     def __init__(self):
         super(BattlePassStateMachine, self).__init__()
         self.__rewards = None
         self.__data = None
         self.__rewardsToChoose = []
+        self.__starterPack = {}
         self.__packageRewards = None
         self.__chapterStyle = None
         self.__manualFlow = False
@@ -73,18 +74,22 @@ class BattlePassStateMachine(StateMachine):
     def hasActiveFlow(self):
         return not self.isStateEntered(states.BattlePassRewardStateID.LOBBY)
 
-    def saveRewards(self, data, defaultRewards=None, chapterStyle=None, packageRewards=None, rewardsToChoose=None):
+    def saveRewards(self, data, defaultRewards=None, chapterStyle=None, packageRewards=None, starterPack=None, rewardsToChoose=None):
         self.__data = data
         self.__rewards = defaultRewards
         self.__packageRewards = packageRewards
         self.__chapterStyle = chapterStyle
         self.__rewardsToChoose = rewardsToChoose or []
+        self.__starterPack = starterPack or {}
 
     def setManualFlow(self):
         self.__manualFlow = True
 
     def getRewardsData(self):
-        return (self.__rewards, self.__data, self.__packageRewards)
+        return (self.__rewards,
+         self.__data,
+         self.__packageRewards,
+         self.__starterPack)
 
     def extendRewards(self, rewards):
         if not self.__rewards:
@@ -128,6 +133,7 @@ class BattlePassStateMachine(StateMachine):
     def clearSelf(self):
         self.__rewards = None
         self.__packageRewards = None
+        self.__starterPack = None
         self.__data = None
         self.__rewardsToChoose = []
         self.__chapterStyle = None

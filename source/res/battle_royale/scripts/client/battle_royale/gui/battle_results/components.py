@@ -21,6 +21,7 @@ from ValueReplay import ValueReplay, ValueReplayConnector
 from battle_results import g_config as battleResultsConfig
 from gui.battle_results.reusable import records
 from skeletons.gui.shared import IItemsCache
+from gui.shared.money import Currency
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 _THE_BEST_RANK = 1
@@ -112,6 +113,20 @@ class BattleRoyaleIsPremiumBlock(base.StatsItem):
         return reusable.isPostBattlePremium or reusable.isPostBattlePremiumPlus
 
 
+class BattleRoyaleDailyBonusFactorBlock(base.StatsBlock):
+    __slots__ = ('dailyBonusFactor',)
+
+    def __init__(self, meta=None, field='', *path):
+        super(BattleRoyaleDailyBonusFactorBlock, self).__init__(meta, field, *path)
+        self.dailyBonusFactor = 0
+
+    def setRecord(self, result, reusable):
+        vehicleCD = [ key for key in result['personal'].keys() if isinstance(key, (int, long, float)) ][0]
+        info = result['personal'][vehicleCD]
+        stpCoinInfo = info['currencies'].get(Currency.STPCOIN, {})
+        self.dailyBonusFactor = stpCoinInfo.get('dailyBonusFactor', 0)
+
+
 class BattleRoyaleVehicleStatusBlock(base.StatsBlock):
     __itemsCache = dependency.descriptor(IItemsCache)
     __slots__ = ('killer', 'vehicleState', 'isSelfDestroyer')
@@ -161,8 +176,16 @@ class _BRCoinReplayRecords(records.ReplayRecords):
         self._addRecord(ValueReplay.FACTOR, 'appliedPremiumFactor100', results['appliedPremiumFactor100'], 0)
 
 
+class _STPCoinReplayRecords(records.ReplayRecords):
+    __slots__ = ()
+
+    def __init__(self, replay, results):
+        super(_STPCoinReplayRecords, self).__init__(replay, 'count')
+        self._addRecord(ValueReplay.FACTOR, 'dailyBonusFactor', results['dailyBonusFactor'], 0)
+
+
 class BattleRoyaleFinancialBlock(base.StatsBlock):
-    __slots__ = ('credits', 'xp', 'crystal', 'brcoin')
+    __slots__ = ('credits', 'xp', 'crystal', 'brcoin', 'stpcoin')
     __eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, meta=None, field='', *path):
@@ -171,6 +194,7 @@ class BattleRoyaleFinancialBlock(base.StatsBlock):
         self.xp = 0
         self.crystal = 0
         self.brcoin = 0
+        self.stpcoin = 0
 
     def setRecord(self, result, reusable):
         avatarInfo = result['personal']['avatar']
@@ -178,13 +202,14 @@ class BattleRoyaleFinancialBlock(base.StatsBlock):
         self.xp = avatarInfo['xp']
         self.crystal = avatarInfo['crystal']
         self.brcoin = self._getBrCoins(result, reusable, isPremium=False)
+        self.stpcoin = self._getStpCoins(result, reusable)
 
     def _getBrCoins(self, result, reusable, isPremium):
-        questBonus = self.__getBrCoinsQuestBonus(reusable.personal.getQuestsProgress())
+        questBonus = self.__getCoinsQuestBonus(reusable.personal.getQuestsProgress(), Currency.BRCOIN)
         vehicleCD = [ key for key in result['personal'].keys() if isinstance(key, (int, long, float)) ][0]
         info = result['personal'][vehicleCD]
         for code, data in info['currencies'].iteritems():
-            if code == 'brcoin':
+            if code == Currency.BRCOIN and data:
                 meta = battleResultsConfig['allResults'].meta('currencies').meta('brcoin')
                 replayConnector = ValueReplayConnector(data, meta)
                 replay = ValueReplay(replayConnector, recordName='count', replay=data['replay'])
@@ -196,7 +221,20 @@ class BattleRoyaleFinancialBlock(base.StatsBlock):
 
         return questBonus
 
-    def __getBrCoinsQuestBonus(self, questProgress):
+    def _getStpCoins(self, result, reusable):
+        questBonus = self.__getCoinsQuestBonus(reusable.personal.getQuestsProgress(), Currency.STPCOIN)
+        vehicleCD = [ key for key in result['personal'].keys() if isinstance(key, (int, long, float)) ][0]
+        info = result['personal'][vehicleCD]
+        for code, data in info['currencies'].iteritems():
+            if code == Currency.STPCOIN and data:
+                meta = battleResultsConfig['allResults'].meta('currencies').meta(code)
+                replayConnector = ValueReplayConnector(data, meta)
+                replay = ValueReplay(replayConnector, recordName='count', replay=data['replay'])
+                return _STPCoinReplayRecords(replay, data).getRecord('count') + questBonus
+
+        return questBonus
+
+    def __getCoinsQuestBonus(self, questProgress, currencyCode):
         questBonus = 0
         allQuests = self.__eventsCache.getAllQuests()
         for qID, qProgress in questProgress.iteritems():
@@ -205,7 +243,7 @@ class BattleRoyaleFinancialBlock(base.StatsBlock):
                 if quest is None:
                     continue
                 for bonus in quest.getBonuses('currencies'):
-                    if bonus.getCode() == 'brcoin':
+                    if bonus.getCode() == currencyCode:
                         questBonus += bonus.getCount()
 
         return questBonus
@@ -227,11 +265,12 @@ class BattleRoyaleFinancialPremBlock(BattleRoyaleFinancialBlock):
             self.xp = premiumXP.getRecord('xpToShow')
 
         self.brcoin = self._getBrCoins(result, reusable, isPremium=True)
+        self.stpcoin = self._getStpCoins(result, reusable)
 
 
 class BattleRoyaleStatsItemBlock(base.StatsBlock):
     __slots__ = ('type', 'value', 'maxValue', 'wreathImage')
-    _ICON_PATH = R.images.gui.maps.icons.battleRoyale.battleResult.stat_list
+    _ICON_PATH = R.images.battle_royale.gui.maps.icons.battleResults.stat_list
     _DEFAULT_ICON = _ICON_PATH.wreath_transparent
 
     def __init__(self, itemType, meta=None, field='', *path):

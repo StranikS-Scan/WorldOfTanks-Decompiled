@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/tab_screen.py
+from __future__ import absolute_import
 import logging
+from future.utils import viewvalues
 import BattleReplay
 import BigWorld
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
@@ -144,7 +146,7 @@ class TabScreenComponent(TabScreenMeta):
         isProgressTrackingEnabled = progressViewType == QuestsProgressViewType.TYPE_STANDARD
         trackingData = []
         personalMissions = self.__eventsCache.getPersonalMissions()
-        for quest in sorted(questProgress.getInProgressQuests().itervalues(), key=lambda q: q.getQuestBranch()):
+        for quest in sorted(viewvalues(questProgress.getInProgressQuests()), key=lambda q: q.getQuestBranch()):
             isSelected = quest == selectedQuest
             operation = personalMissions.getOperationsForBranch(quest.getQuestBranch())[quest.getOperationID()]
             trackingData.append({'eyeBtnVisible': isProgressTrackingEnabled and isSelected,

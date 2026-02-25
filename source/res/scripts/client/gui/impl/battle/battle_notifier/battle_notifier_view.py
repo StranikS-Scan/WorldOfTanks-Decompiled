@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/battle/battle_notifier/battle_notifier_view.py
+from __future__ import absolute_import
 import logging
 from collections import deque
 import ArenaType
@@ -118,7 +119,7 @@ def _collectResults(message):
         _logger.warning('[BattleNotifier] no "bonusType" item found in battle results. Cannot parse results.')
         return
     else:
-        formatter = _formatters.get(arenaBonusType, None)
+        formatter = _formatters.get(arenaBonusType)
         if formatter is None:
             _logger.debug('[BattleNotifier] The arena bonus type, %s, is not yet supported. Chat message: %s', arenaBonusType, message)
             return

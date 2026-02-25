@@ -244,18 +244,10 @@ DamageStickerData = typing.NamedTuple('DamageStickerData', (('componentIdx', int
 
 def resizeSegment(segStart, segEnd, segLength):
     segment = segEnd - segStart
-    segLen = segment.lengthSquared if not segLength else segLength
+    segLen = segLength if segLength else segment.lengthSquared
     if segLen != 0:
         segStart -= 0.25 * segment / math.sqrt(segLen)
     return (segStart, segEnd)
-
-
-def damageStickerData(componentIdx, segStart, segEnd):
-    return DamageStickerData(componentIdx, segStart, segEnd, False, 0.0, 0, 0)
-
-
-def parametrizedDamageStickerData(componentIdx, segStart, segEnd, caliber, hitType, shellType):
-    return DamageStickerData(componentIdx, segStart, segEnd, True, caliber, hitType, shellType)
 
 
 class DamageSticker(object):

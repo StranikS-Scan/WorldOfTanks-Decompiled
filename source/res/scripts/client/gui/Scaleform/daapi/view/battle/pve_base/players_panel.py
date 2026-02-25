@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/pve_base/players_panel.py
+from __future__ import absolute_import
 from constants import ARENA_PERIOD
 from gui.Scaleform.daapi.view.meta.PvePlayersPanelMeta import PvePlayersPanelMeta
 from gui.battle_control.controllers.vse_hud_settings_ctrl.settings.respawn_hud import RespawnHUDClientModel

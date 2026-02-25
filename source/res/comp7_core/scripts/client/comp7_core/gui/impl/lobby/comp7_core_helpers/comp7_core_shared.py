@@ -67,20 +67,28 @@ def getProgressionYearState(modeController, yearStateClazz):
         return yearStateClazz.OFFSEASON if periodInfo.periodType == PeriodType.BETWEEN_SEASONS or periodInfo.periodType == PeriodType.AFTER_CYCLE and hasNextSeason or periodInfo.periodType == PeriodType.BEFORE_CYCLE and hasPrevSeason else yearStateClazz.ACTIVE
 
 
+INACTIVE_PRIME_TIMES = {PrimeTimeStatus.NOT_AVAILABLE, PrimeTimeStatus.NOT_SET}
+
 def getEventBannerState(modeController, seasonStateClazz, selectorBattleType):
     if not modeController.isAvailable():
         return EventBannerState.INACTIVE
-    seasonState = getCurrentSeasonState(modeController, seasonStateClazz)
-    if seasonState == seasonStateClazz.NOTSTARTED:
-        return EventBannerState.ANNOUNCE
-    elif seasonState == seasonStateClazz.DISABLED:
-        return EventBannerState.INACTIVE
-    elif seasonState == seasonStateClazz.END:
-        if modeController.getCurrentSeason(includePreannounced=True) is not None:
-            return EventBannerState.ANNOUNCE
-        return EventBannerState.INACTIVE
-    primeTimeStatus, _, _ = modeController.getPrimeTimeStatus()
-    if primeTimeStatus in (PrimeTimeStatus.NOT_AVAILABLE, PrimeTimeStatus.NOT_SET):
-        return EventBannerState.INACTIVE
     else:
+        seasonState = getCurrentSeasonState(modeController, seasonStateClazz)
+        if seasonState == seasonStateClazz.NOTSTARTED:
+            return EventBannerState.ANNOUNCE
+        if seasonState == seasonStateClazz.DISABLED:
+            return EventBannerState.INACTIVE
+        if seasonState == seasonStateClazz.END:
+            if modeController.getCurrentSeason(includePreannounced=True) is not None:
+                return EventBannerState.ANNOUNCE
+            return EventBannerState.INACTIVE
+        primeTimes = modeController.getPrimeTimes()
+        getPrimeTimeStatus = modeController.getPrimeTimeStatus
+        for peripheryID in primeTimes:
+            primeTimeStatus = getPrimeTimeStatus(peripheryID=peripheryID, primeTimes=primeTimes)[0]
+            if primeTimeStatus not in INACTIVE_PRIME_TIMES:
+                break
+        else:
+            return EventBannerState.INACTIVE
+
         return EventBannerState.IN_PROGRESS if isKnownBattleType(selectorBattleType) else EventBannerState.INTRO

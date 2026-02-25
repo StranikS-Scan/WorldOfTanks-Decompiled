@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/pve_base/pve_player_lives.py
+from __future__ import absolute_import
 from gui.Scaleform.daapi.view.meta.PvePlayerLivesMeta import PvePlayerLivesMeta
 from gui.battle_control import avatar_getter
 from TeamInfoLivesComponent import TeamInfoLivesComponent

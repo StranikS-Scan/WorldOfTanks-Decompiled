@@ -8,7 +8,7 @@ from gui.impl.backport import BackportTooltipWindow
 from gui.impl.backport.backport_tooltip import TooltipData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.winback.winback_reward_view_model import RewardName, RewardWindowType, WinbackRewardViewModel
-from gui.impl.lobby.missions.daily_quests_view import DailyTabs
+from gui.impl.lobby.user_missions.hub.hub_view import DailyTabs
 from gui.impl.lobby.winback.sounds import SOUNDS
 from gui.impl.lobby.winback.tooltips.selectable_reward_tooltip import SelectableRewardTooltip
 from gui.impl.lobby.winback.winback_bonus_packer import getWinbackBonusPacker, getWinbackBonuses

@@ -2,6 +2,7 @@
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/impl/lobby/tooltips/banner_tooltip_view.py
 from battle_royale.gui.constants import BattleRoyalePerfProblems, BattleRoyaleModeState
 from battle_royale.gui.impl.gen.view_models.views.lobby.tooltips.banner_tooltip_view_model import BannerTooltipViewModel, PerformanceRisk
+from battle_royale.gui.impl.lobby.br_helpers.utils import setEventInfo
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.impl.gen import R
 from gui.impl.pub import ViewImpl
@@ -37,3 +38,4 @@ class BannerTooltipView(ViewImpl):
             else:
                 timerValue = self.__battleController.getTimeLeftTillCycleEnd()
             tx.setTime(timerValue)
+            setEventInfo(tx.eventInfo)

@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/vehicle_mechanics/decorative_crosshairs/overheat_crosshair.py
 from __future__ import absolute_import
 import typing
-from builtins import round
 import BattleReplay
 from ReplayEvents import g_replayEvents
 from constants import OVERHEAT_GAIN_STATE
@@ -12,6 +11,7 @@ from events_handler import eventHandler
 from gui.Scaleform.daapi.view.meta.OverheatDecorativeCrosshairMeta import OverheatDecorativeCrosshairMeta
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import VehicleMechanicPassengerUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
+from math_common import round_py2_style_int
 from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 if typing.TYPE_CHECKING:
@@ -99,7 +99,7 @@ class OverheatDecorativeCrosshair(OverheatDecorativeCrosshairMeta, ContainersLis
         if newBaseDamage is None:
             newBaseDamage = self.__baseDamage
         self.__baseDamage = newBaseDamage
-        maxDamage = round(newBaseDamage * (1.0 + self.__dmgLevelBonus * self.__maxLevel))
+        maxDamage = round_py2_style_int(newBaseDamage * (1.0 + self.__dmgLevelBonus * self.__maxLevel))
         self.as_setDamageDataS(self.__baseDamage, maxDamage)
         return
 

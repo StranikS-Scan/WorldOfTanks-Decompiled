@@ -144,10 +144,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
             args.append(json.dumps(post_data))
         self.url_fetcher(url, self._preprocess_callback(callback, converters=converters), *args)
 
-    def advent_calendar_fetch_hero_tank_info(self, callback):
-        url = '/advc/herotank/'
-        return self._request_data(callback, url)
-
     def craftmachine_modules_info(self, callback):
         url = '/craft/client_settings/'
         return self._request_data(callback, url)

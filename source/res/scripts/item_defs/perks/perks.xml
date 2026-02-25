@@ -2,6 +2,15 @@
   <xmlns:xsi>	http://www.w3.org/2001/XMLSchema-instance	</xmlns:xsi>
   <xsi:noNamespaceSchemaLocation>	../../development/xml_schema/items/perks.xsd	</xsi:noNamespaceSchemaLocation>
   <perk>
+    <id>	4	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	hpRecover	</argId>
+        <value>	0.0005	</value>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
     <id>	102	</id>
     <defaultBlockSettings>
       <arg>
@@ -51,6 +60,24 @@
       <arg>
         <argId>	equipmentPreparationTime	</argId>
         <value>	-0.0015	</value>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	107	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	crewLevelIncrease	</argId>
+        <value>	0.05	</value>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	108	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	crewLevelIncrease	</argId>
+        <value>	0.05	</value>
       </arg>
     </defaultBlockSettings>
   </perk>
@@ -121,6 +148,28 @@
     </defaultBlockSettings>
   </perk>
   <perk>
+    <id>	207	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	HEshellPenetrationFactor	</argId>
+        <value>	0.0005	</value>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	208	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	vehicleGunAimSpeed	</argId>
+        <value>	-0.0005	</value>
+      </arg>
+      <arg>
+        <argId>	aimingDispersion	</argId>
+        <value>	-0.0005	</value>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
     <id>	301	</id>
     <defaultBlockSettings>
       <arg>
@@ -155,8 +204,12 @@
         <value>	0.0015	</value>
       </arg>
       <arg>
-        <argId>	vehicleFallingDamageResistance	</argId>
-        <value>	0.0030	</value>
+        <argId>	suspensionDamageReduction	</argId>
+        <value>	0.0015	</value>
+      </arg>
+      <arg>
+        <argId>	engineFireStartingChance	</argId>
+        <value>	-0.0015	</value>
       </arg>
     </defaultBlockSettings>
   </perk>
@@ -191,6 +244,24 @@
       <arg>
         <argId>	engineReduceFineFactor	</argId>
         <value>	-0.002	</value>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	307	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	suspensionRepairFactor	</argId>
+        <value>	0.0015	</value>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	308	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	crewLevelIncrease	</argId>
+        <value>	0.05	</value>
       </arg>
     </defaultBlockSettings>
   </perk>
@@ -267,6 +338,24 @@
     </defaultBlockSettings>
   </perk>
   <perk>
+    <id>	407	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	gunReloadSpeed	</argId>
+        <value>	-0.00025	</value>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	408	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	gunReloadSpeed	</argId>
+        <value>	-0.00025	</value>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
     <id>	501	</id>
     <defaultBlockSettings>
       <arg>
@@ -317,6 +406,24 @@
       <arg>
         <argId>	fireExtinguishingRate	</argId>
         <value>	0.0043	</value>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	507	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	stunResistanceEffectFactor	</argId>
+        <value>	0.00075	</value>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	508	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	vehicleCircularVisionRadius	</argId>
+        <value>	0.0002	</value>
       </arg>
     </defaultBlockSettings>
   </perk>

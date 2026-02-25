@@ -2,11 +2,13 @@
 # Embedded file name: scripts/common/exchange/personal_discounts_parser.py
 import logging
 import re
+from decimal import Decimal
 from backports.functools_lru_cache import lru_cache
 import typing
 from exchange.personal_discounts_constants import EXCHANGE_RATE_GOLD_NAME, ExchangeRateCoefficientType, ExchangeDiscountInfo, ExchangeDiscountType, ExchangeRateShowFormat, ExchangeRateDiscountToken, EXCHANGE_RATE_FREE_XP_NAME, DIGITAL_TEMPLATE
 from exchange.personal_discounts_helper import isExchangeRateDiscountAvailable
 from exchange.personal_discounts_validator import isDiscountValuesCorrect
+from math_common import decimal_round
 if typing.TYPE_CHECKING:
     from typing import Tuple, Dict, Union, List, Optional, Any
 _logger = logging.getLogger(__name__)
@@ -84,6 +86,8 @@ def _parseToken(tokenName):
          ExchangeRateDiscountToken.RATE_VALUE.value]
         for param in params:
             value = matches.group(param)
+            if param == ExchangeRateDiscountToken.RATE_VALUE.value and value:
+                value = value.replace('_', '.')
             placeholder_values[param] = value
 
         return placeholder_values
@@ -92,7 +96,7 @@ def _parseToken(tokenName):
 def _calculateDiscountRate(parsedToken, defaultGoldRateValue, defaultResourceRateValue):
     rateType = parsedToken.get(ExchangeRateDiscountToken.RATE_TYPE.value, '')
     newExchangeCourse = float(parsedToken.get(ExchangeRateDiscountToken.RATE_VALUE.value, 0))
-    newRate = int(defaultResourceRateValue + newExchangeCourse if rateType == ExchangeRateCoefficientType.AMOUNT.value else defaultResourceRateValue * newExchangeCourse)
+    newRate = decimal_round(defaultResourceRateValue + newExchangeCourse if rateType == ExchangeRateCoefficientType.AMOUNT.value else defaultResourceRateValue * newExchangeCourse)
     parsedToken['goldRateValue'] = defaultGoldRateValue
     parsedToken['resourceRateValue'] = newRate
 

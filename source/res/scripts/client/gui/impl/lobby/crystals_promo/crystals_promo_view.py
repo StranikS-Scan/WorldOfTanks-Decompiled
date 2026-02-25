@@ -8,7 +8,6 @@ from gui.impl.backport.backport_system_locale import getIntegralFormat
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crystals_promo.condition_model import ConditionModel
 from gui.impl.gen.view_models.views.lobby.crystals_promo.crystals_promo_view_model import CrystalsPromoViewModel
-from gui.impl.lobby.common.view_mixins import LobbyHeaderVisibility
 from gui.impl.pub import ViewImpl
 from gui.shop import showIngameShop, Origin
 from gui.sounds.filters import switchHangarOverlaySoundFilter
@@ -21,7 +20,7 @@ _DEFAULT_EQUIPMENT_PRICE = 3000
 _DEFAULT_INSTRUCTION_PRICE = 6
 _DEFAULT_LEVEL = 10
 
-class CrystalsPromoView(ViewImpl, LobbyHeaderVisibility):
+class CrystalsPromoView(ViewImpl):
     __slots__ = ('__destroyViewObject', '__shopUrlsMap')
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __appLoader = dependency.descriptor(IAppLoader)
@@ -57,15 +56,10 @@ class CrystalsPromoView(ViewImpl, LobbyHeaderVisibility):
             model.setIsChina(IS_CHINA)
             self.__updateCondition(model)
 
-    def _onLoaded(self, *args, **kwargs):
-        super(CrystalsPromoView, self)._onLoaded(*args, **kwargs)
-        self.suspendLobbyHeader(self.uniqueID)
-
     def _finalize(self):
         switchHangarOverlaySoundFilter(on=False)
         self.viewModel.goToShop -= self.__goToShopHandler
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
-        self.resumeLobbyHeader(self.uniqueID)
         super(CrystalsPromoView, self)._finalize()
 
     def __updateCondition(self, model):

@@ -47,7 +47,7 @@ class ReservesAwardView(ViewImpl):
 
     def _onLoading(self, creditsEarned, goldEarned):
         showCreditWarning = self._isPiggyBankEnabled() and not self._isPremiumPlusActive() and creditsEarned
-        showGoldWarning = self._isGoldReserveEnabled() and not self._wotPlusCtrl.isEnabled() and goldEarned
+        showGoldWarning = self._isGoldReserveEnabled() and not self._wotPlusCtrl.hasSubscription() and goldEarned
         self.viewModel.setCreditAmount(creditsEarned)
         self.viewModel.setGoldAmount(goldEarned)
         self.viewModel.setShowCreditWarning(showCreditWarning)
@@ -60,7 +60,7 @@ class ReservesAwardView(ViewImpl):
         return self._lobbyContext.getServerSettings().getPiggyBankConfig().get('enabled', False)
 
     def _isGoldReserveEnabled(self):
-        return self._lobbyContext.getServerSettings().isRenewableSubGoldReserveEnabled()
+        return self._wotPlusCtrl.getSettingsStorage().isGoldReserveFeatureEnabled()
 
     def _onPremiumAccountExtend(self):
         self._wotPlusUILogger.logClickEvent(ReservesKeys.CREDITS_INFO)

@@ -31,7 +31,6 @@ from vehicle_outfit.containers import emptyComponent
 if typing.TYPE_CHECKING:
     from gui.hangar_vehicle_appearance import AnchorParams
     from gui.customization.shared import PurchaseItem
-    from gui.shared.gui_items.customization.c11n_items import Customization
     from gui.shared.gui_items.Vehicle import Vehicle
     from items.customizations import SerializableComponent, AttachmentComponent
     from gui.Scaleform.daapi.view.lobby.customization.context.context import CustomizationContext

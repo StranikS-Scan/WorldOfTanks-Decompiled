@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/common/ammunition_panel/ammunition_panel_blocks.py
+from __future__ import absolute_import
 import typing
 from account_helpers.settings_core.options import KeyboardSetting
 from constants import PLAYER_RANK
@@ -121,7 +122,7 @@ class BaseBlock(object):
 
     def __updateSlotKeyName(self, model, idx):
         keySettings = self._getKeySettings()
-        if idx < len(keySettings):
+        if idx < len(keySettings) and keySettings[idx]:
             model.setKeyName(KeyboardSetting(keySettings[idx]).getKeyName())
 
 

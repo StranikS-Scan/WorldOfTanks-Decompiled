@@ -1550,15 +1550,17 @@ class PurchaseVehSkillTreeSteps(AsyncGUIItemAction):
     __itemsCache = dependency.descriptor(IItemsCache)
     __exchangeRatesProvider = dependency.descriptor(IExchangeRatesWithDiscountsProvider)
 
-    def __init__(self, vehicle, stepIDs):
+    def __init__(self, vehicle, stepIDs, responseDelayedCallback, delay):
         super(PurchaseVehSkillTreeSteps, self).__init__()
         self.__vehicle = vehicle
         self.__stepIDs = stepIDs
+        self.__responseDelayedCallback = responseDelayedCallback
+        self.__delay = delay
 
     @adisp_async
     @decorators.adisp_process()
     def _action(self, callback):
-        result = yield PurchaseVehSkillTreeStepsProcessor(self.__vehicle, self.__stepIDs).request()
+        result = yield PurchaseVehSkillTreeStepsProcessor(self.__vehicle, self.__stepIDs, self.__responseDelayedCallback, self.__delay).request()
         callback(result)
 
     @adisp_async

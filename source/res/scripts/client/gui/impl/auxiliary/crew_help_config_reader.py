@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/auxiliary/crew_help_config_reader.py
+from __future__ import absolute_import
 import resource_helper
 from functools import reduce
 from operator import attrgetter

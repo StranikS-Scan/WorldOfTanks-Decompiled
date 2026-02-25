@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/wrappers/user_drop_down_menu_model.py
+from __future__ import absolute_import
 import logging
 from gui.impl.gen.view_models.ui_kit.drop_down_menu_item_model import DropDownMenuItemModel
 from gui.impl.wrappers.user_list_model import UserListModel

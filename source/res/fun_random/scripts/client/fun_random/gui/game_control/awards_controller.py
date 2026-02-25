@@ -28,9 +28,7 @@ class FunProgressionQuestsHandler(ServiceChannelHandler, FunProgressionWatcher):
         self.__systemMessages.proto.serviceChannel.pushClientMessage(_getMessage(ctx), self._CLIENT_MSG_TYPE)
 
     def _needToShowAward(self, ctx):
-        if super(FunProgressionQuestsHandler, self)._needToShowAward(ctx):
-            return bool([ qID for qID in _getMessage(ctx).data.get('completedQuestIDs', set()) if self._funRandomCtrl.progressions.isProgressionExecutor(qID) ])
-        return False
+        return any((self._funRandomCtrl.progressions.isProgressionExecutor(qID) for qID in _getMessage(ctx).data.get('completedQuestIDs', set()))) if super(FunProgressionQuestsHandler, self)._needToShowAward(ctx) else False
 
 
 class FunRandomLootBoxAutoOpenHandler(ServiceChannelHandler, FunProgressionWatcher):

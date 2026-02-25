@@ -9,7 +9,7 @@ from fun_random.gui.impl.gen.view_models.views.lobby.common.fun_random_progressi
 class FunRandomProgressionViewModel(ViewModel):
     __slots__ = ('onClose', 'onShowInfo', 'onOpenTierList')
 
-    def __init__(self, properties=7, commands=3):
+    def __init__(self, properties=8, commands=3):
         super(FunRandomProgressionViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -66,6 +66,12 @@ class FunRandomProgressionViewModel(ViewModel):
     def setIsFirstOpen(self, value):
         self._setBool(6, value)
 
+    def getModeViewSettings(self):
+        return self._getString(7)
+
+    def setModeViewSettings(self, value):
+        self._setString(7, value)
+
     def _initialize(self):
         super(FunRandomProgressionViewModel, self)._initialize()
         self._addViewModelProperty('state', FunRandomProgressionState())
@@ -75,6 +81,7 @@ class FunRandomProgressionViewModel(ViewModel):
         self._addArrayProperty('stages', Array())
         self._addStringProperty('assetsPointer', 'undefined')
         self._addBoolProperty('isFirstOpen', False)
+        self._addStringProperty('modeViewSettings', '{}')
         self.onClose = self._addCommand('onClose')
         self.onShowInfo = self._addCommand('onShowInfo')
         self.onOpenTierList = self._addCommand('onOpenTierList')

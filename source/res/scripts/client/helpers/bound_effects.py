@@ -27,7 +27,7 @@ class StaticSceneBoundEffects(object):
         model = helpers.newFakeModel()
         model.position = position
         BigWorld.player().addModel(model)
-        direction = args.get('dir', None)
+        direction = args.get('dir')
         if direction is not None:
             model.rotate(direction.yaw, (0.0, 1.0, 0.0))
         self.__incrementalEffectID += 1

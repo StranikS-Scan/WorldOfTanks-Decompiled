@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/dialogs/sub_views/content/select_option_content.py
+from __future__ import absolute_import
 import typing
 from Event import Event
 from frameworks.wulf import ViewSettings
@@ -247,11 +248,11 @@ class MapOption(SelectOptionBasePresenter):
         if iconRes.isValid():
             self.viewModel.setIcon(iconRes())
         else:
-            raise SoftException('Icon is not found for map %s', mapId)
+            raise SoftException('Icon is not found for map {}'.format(mapId))
 
     def _updateText(self, mapId):
         nameRes = R.strings.arenas.num(mapId)
         if nameRes.isValid():
             self.viewModel.setText(backport.text(nameRes.name()))
         else:
-            raise SoftException('Name is not found for map %s', mapId)
+            raise SoftException('Name is not found for map {}'.format(mapId))

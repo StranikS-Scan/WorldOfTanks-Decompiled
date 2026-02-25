@@ -13,12 +13,11 @@ from frameworks.state_machine.visitor import isDescendantOf, getLCA
 from frameworks.wulf import WindowStatus
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.ScopeTemplates import SimpleScope
-from gui.Scaleform.framework.entities.View import ViewKey, View
+from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.framework.entities.wulf_adapter import WulfPackageLayoutAdapter
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams, GuiImplViewLoadParams
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.impl.pub import ViewImpl
 from gui.lobby_state_machine.events import _NonViewClosingBackNavigationEvent, _BackNavigationEvent
 from gui.lobby_state_machine.transitions import GuardTransition, NavigationTransition, _StopTransition
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
@@ -27,6 +26,8 @@ from helpers import dependency
 from skeletons.gui.impl import IGuiLoader
 if typing.TYPE_CHECKING:
     from gui.lobby_state_machine.lobby_state_machine import LobbyStateMachine
+    from gui.Scaleform.framework.entities.View import ViewKey
+    from gui.impl.pub import ViewImpl
 _logger = logging.getLogger(__name__)
 UNTRACKED_STATE_ID_ENDING = 'untracked'
 EMPTY_STATE_ID_ENDING = 'empty'

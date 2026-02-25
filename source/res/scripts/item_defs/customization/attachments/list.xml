@@ -756,6 +756,13 @@
       <attachmentLogic>	prefab	</attachmentLogic>
     </attachment>
     <attachment>
+      <id>	166	</id>
+      <name>	Cz34_Vz_71_Tesak_BPXIX_3Dst	</name>
+      <modelName>	particles/Tank/customization/Cz34_Vz_71_Tesak_BPXIX_3Dst/Cz34_Vz_71_Tesak_BPXIX_3Dst.prefab	</modelName>
+      <hangarModelName></hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
       <id>	167	</id>
       <name>	Ch48_BZ_75_HO26_3Dst	</name>
       <modelName>	particles/Tank/customization/Ch48_BZ_75_HO26_3Dst/Ch48_BZ_75_HO26_3Dst.prefab	</modelName>
@@ -770,10 +777,36 @@
       <attachmentLogic>	prefab	</attachmentLogic>
     </attachment>
     <attachment>
+      <id>	169	</id>
+      <name>	J51_Ashigaru_RW10_3Dst_Lamp	</name>
+      <modelName>	vehicles/japan/J51_Ashigaru/_skins/J51_Ashigaru_RW10_3Dst/lamp_switcher.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
+      <id>	170	</id>
+      <name>	J51_Ashigaru_RW10_3Dst_GunNum	</name>
+      <modelName>	vehicles/japan/J51_Ashigaru/_skins/J51_Ashigaru_RW10_3Dst/gun_number_switcher.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
       <id>	172	</id>
       <name>	A144_M_VI_Y_CFE_R_3Dst	</name>
       <modelName>	particles/Tank/customization/A144_M_VI_Y_CFE_R_3Dst/A144_M_VI_Y_CFE_R_3Dst.prefab	</modelName>
       <hangarModelName>	particles/Tank/customization/A144_M_VI_Y_CFE_R_3Dst/A144_M_VI_Y_CFE_R_3Dst_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
+      <id>	173	</id>
+      <name>	G121_Grille_15_L63_BPXIX_3Dst	</name>
+      <modelName>	particles/Tank/customization/G121_Grille_15_L63_BPXIX_3Dst/G121_Grille_15_L63_BPXIX_3Dst.prefab	</modelName>
+      <hangarModelName></hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
+      <id>	174	</id>
+      <name>	A69_T110E5_BPXIX_3Dst	</name>
+      <modelName>	particles/Tank/customization/A69_T110E5_BPXIX_3Dst/A69_T110E5_BPXIX_3Dst.prefab	</modelName>
+      <hangarModelName></hangarModelName>
       <attachmentLogic>	prefab	</attachmentLogic>
     </attachment>
   </itemGroup>
@@ -2531,6 +2564,143 @@
       <rarity>	rare	</rarity>
       <priceGroup>	attachments 650g notInShop	</priceGroup>
       <userString>	#vehicle_customization:attachment/benedicts_gadgets/Cus_149_CS_TuringMachine	</userString>
+    </attachment>
+  </itemGroup>
+  <itemGroup>
+    <name>	celestial_flame	</name>
+    <userString>	#vehicle_customization:attachment/celestial_flame	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <attachment>
+      <id>	1150	</id>
+      <name>	Cus_170_Lunar_Horse	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_170_Lunar_Horse/Cus_170_Lunar_Horse.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_170_Lunar_Horse/Cus_170_Lunar_Horse_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	gunMantlet	</applyType>
+      <size>	medium	</size>
+      <rarity>	epic	</rarity>
+      <priceGroup>	attachments 1000g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/celestial_flame/Cus_170_Lunar_Horse	</userString>
+      <tags>	battleEffect	</tags>
+    </attachment>
+    <attachment>
+      <id>	1151	</id>
+      <name>	Cus_171_Lunar_Fireworks	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_171_Lunar_Fireworks/Cus_171_Lunar_Fireworks.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_171_Lunar_Fireworks/Cus_171_Lunar_Fireworks_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	turret	</applyType>
+      <size>	medium	</size>
+      <rarity>	legendary	</rarity>
+      <priceGroup>	attachments 2150g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/celestial_flame/Cus_171_Lunar_Fireworks	</userString>
+      <description>	#vehicle_customization:attachment/celestial_flame/Cus_171_Lunar_Fireworks/description	</description>
+      <tags>	battleEffect	</tags>
+    </attachment>
+    <attachment>
+      <id>	1152	</id>
+      <name>	Cus_172_Lunar_Drums	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_172_Lunar_Drums/Cus_172_Lunar_Drums.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_172_Lunar_Drums/Cus_172_Lunar_Drums.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/celestial_flame/Cus_172_Lunar_Drums	</userString>
+    </attachment>
+    <attachment>
+      <id>	1153	</id>
+      <name>	Cus_173_Lunar_Dragon	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_173_Lunar_Dragon/Cus_173_Lunar_Dragon.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_173_Lunar_Dragon/Cus_173_Lunar_Dragon.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/celestial_flame/Cus_173_Lunar_Dragon	</userString>
+    </attachment>
+    <attachment>
+      <id>	1154	</id>
+      <name>	Cus_174_Lunar_Tree	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_174_Lunar_Tree/Cus_174_Lunar_Tree.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_174_Lunar_Tree/Cus_174_Lunar_Tree.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/celestial_flame/Cus_174_Lunar_Tree	</userString>
+    </attachment>
+  </itemGroup>
+  <itemGroup>
+    <name>	Tank Lads	</name>
+    <userString>	#vehicle_customization:attachment/tank_lads	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <attachment>
+      <id>	1160	</id>
+      <name>	Cus_185_SP_Spotlighter	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_185_SP_Spotlighter/Cus_185_SP_Spotlighter.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_185_SP_Spotlighter/Cus_185_SP_Spotlighter.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	gunMantlet	</applyType>
+      <size>	medium	</size>
+      <rarity>	epic	</rarity>
+      <priceGroup>	attachments 1000g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/tank_lads/Cus_185_SP_Spotlighter	</userString>
+    </attachment>
+    <attachment>
+      <id>	1161	</id>
+      <name>	Cus_186_SP_MachineGunner	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_186_SP_MachineGunner/Cus_186_SP_MachineGunner.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_186_SP_MachineGunner/Cus_186_SP_MachineGunner.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	turret	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/tank_lads/Cus_186_SP_MachineGunner	</userString>
+    </attachment>
+    <attachment>
+      <id>	1162	</id>
+      <name>	Cus_187_SP_Firefighters	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_187_SP_Firefighters/Cus_187_SP_Firefighters.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_187_SP_Firefighters/Cus_187_SP_Firefighters.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/tank_lads/Cus_187_SP_Firefighters	</userString>
+    </attachment>
+    <attachment>
+      <id>	1163	</id>
+      <name>	Cus_188_SP_Welders	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_188_SP_Welders/Cus_188_SP_Welders.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_188_SP_Welders/Cus_188_SP_Welders_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	legendary	</rarity>
+      <priceGroup>	attachments 2150g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/tank_lads/Cus_188_SP_Welders	</userString>
+      <description>	#vehicle_customization:attachment/tank_lads/Cus_188_SP_Welders/description	</description>
+      <tags>	battleEffect	</tags>
+    </attachment>
+    <attachment>
+      <id>	1164	</id>
+      <name>	Cus_189_SP_Engineer	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_189_SP_Engineer/Cus_189_SP_Engineer.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_189_SP_Engineer/Cus_189_SP_Engineer.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/tank_lads/Cus_189_SP_Engineer	</userString>
     </attachment>
   </itemGroup>
   <itemGroup>

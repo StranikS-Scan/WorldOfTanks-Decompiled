@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/base_stats.py
+from __future__ import absolute_import
 from gui.Scaleform.daapi.view.meta.StatsBaseMeta import StatsBaseMeta
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency

@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_modifiers/scripts/common/battle_modifiers_ext/remappings_cache.py
+from __future__ import absolute_import
 from typing import Any, Dict, TYPE_CHECKING, Optional
 from battle_modifiers_ext.constants_ext import REMAPPING_XML_PATH, RemappingNames
-from remapping.remapping_readers import ERR_TEMPLATE, readComposers, readConditions
+from battle_modifiers_ext.remapping.remapping_readers import ERR_TEMPLATE, readComposers, readConditions
 from extension_utils import ResMgr
 from ResMgr import DataSection
 from soft_exception import SoftException

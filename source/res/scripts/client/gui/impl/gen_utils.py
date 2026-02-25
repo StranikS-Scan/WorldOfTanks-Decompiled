@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen_utils.py
-from typing import Optional, Generator, Iterator
+from __future__ import absolute_import
+from typing import Optional, Tuple, Iterator
 INVALID_RES_ID = -1
 
 class DynAccessor(object):
@@ -12,8 +13,10 @@ class DynAccessor(object):
     def __call__(self):
         return self.__resId
 
-    def __nonzero__(self):
+    def __bool__(self):
         return self.__resId >= 0
+
+    __nonzero__ = __bool__
 
     def dyn(self, attr, default=None):
         return getattr(self, attr, default or _g_invalid)
@@ -22,16 +25,20 @@ class DynAccessor(object):
         return getattr(self, 'c_{}'.format(attr), default or _g_invalid)
 
     def keys(self):
-        return (attr for attr in dir(self) if attr not in dir(DynAccessor) and not attr.startswith('_'))
+        for attr in dir(self):
+            if attr not in dir(DynAccessor) and not attr.startswith('_'):
+                yield attr
 
     def values(self):
-        return (getattr(self, attr) for attr in self.keys())
+        for attr in self.keys():
+            yield getattr(self, attr)
 
     def items(self):
-        return ((attr, getattr(self, attr)) for attr in self.keys())
+        for attr in self.keys():
+            yield (attr, getattr(self, attr))
 
     def length(self):
-        return len(tuple(self.keys()))
+        return sum((1 for _ in self.keys()))
 
     def exists(self):
         return self.__resId > 0

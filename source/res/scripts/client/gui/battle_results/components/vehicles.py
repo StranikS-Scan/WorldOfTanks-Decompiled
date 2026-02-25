@@ -695,7 +695,7 @@ class RankedResultsTeamPartDataStatsBlock(base.StatsBlock):
         return self.capacity
 
     def isTopList(self):
-        return not self.icon == ''
+        return self.icon != ''
 
 
 class RankedResultsListItemStatsBlock(base.StatsBlock):

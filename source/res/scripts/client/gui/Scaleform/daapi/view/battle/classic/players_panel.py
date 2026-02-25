@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/players_panel.py
+from __future__ import absolute_import
 from account_helpers.settings_core.options import VehicleHPInPlayersPanelSetting
 from account_helpers.settings_core.settings_constants import GAME
 from debug_utils import LOG_ERROR
@@ -63,9 +64,9 @@ class PlayersPanel(IBattleFieldListener, PlayersPanelMeta, IAbstractPeriodView):
             isAlly = arenaDP.isAllyTeam(vInfo.team)
         self.as_setPlayerHPS(isAlly, vehicleID, normalizeHealthPercent(newHealth, maxHealth))
 
-    def tryToSetPanelModeByMouse(self, mode):
-        if mode != self._mode and PlayerPanelStateSetting.write(mode):
-            self.__setMode(mode)
+    def tryToSetPanelModeByMouse(self, panelMode):
+        if panelMode != self._mode and PlayerPanelStateSetting.write(panelMode):
+            self.__setMode(panelMode)
 
     def switchToOtherPlayer(self, vehicleID):
         aih = avatar_getter.getInputHandler()

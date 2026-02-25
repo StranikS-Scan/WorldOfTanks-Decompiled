@@ -26,7 +26,7 @@ class ConversionAwardsView(BaseCrewSubView):
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.lobby.crew.tooltips.ConversionTooltip():
             tooltipId = event.getArgument('tooltipId')
-            books = self.__tooltipData[tooltipId] if tooltipId in self.__tooltipData else []
+            books = self.__tooltipData.get(tooltipId, [])
             return ConversionTooltip(books, title=R.strings.tooltips.conversion.received.header(), description=R.strings.tooltips.conversion.received.body())
         return super(ConversionAwardsView, self).createToolTipContent(event, contentID)
 

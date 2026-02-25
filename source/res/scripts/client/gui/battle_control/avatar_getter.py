@@ -460,7 +460,7 @@ def isObserverBothTeams(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
     try:
-        result = avatar.isObserverBothTeams
+        result = bool(avatar.isObserverBothTeams)
     except AttributeError as error:
         _logger.exception('Attribute "isObserverBothTeams" not found, exception %s', error.message)
         result = False

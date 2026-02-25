@@ -394,13 +394,13 @@ class Inventory(object):
             self.__account._doCmdInt2(AccountCommands.CMD_EARN_ALL_SKILLS, vehInvID, 0, proxy)
             return
 
-    def dropTankmanSkills(self, tmanInvID, dropSkillsCostIdx, useRecertificationForm, callback):
+    def dropTankmanSkills(self, tmanInvID, dropSkillsCostIdx, callback):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER)
             return
         else:
-            self.__account.shop.waitForSync(partial(self.__dropSkillsTmanOnShopSynced, tmanInvID, dropSkillsCostIdx, useRecertificationForm, callback))
+            self.__account.shop.waitForSync(partial(self.__dropSkillsTmanOnShopSynced, tmanInvID, dropSkillsCostIdx, callback))
             return
 
     def respecTankman(self, tmanInvID, vehicleIntCD, tmanCostTypeIdx, groupID, groupSize, callback):
@@ -706,14 +706,14 @@ class Inventory(object):
             self.__account._doCmdIntArr(AccountCommands.CMD_SELL_VEHICLE, arr, proxy)
             return
 
-    def __dropSkillsTmanOnShopSynced(self, tmanInvID, dropSkillsCostIdx, useRecertificationForm, callback, resultID, shopRev):
+    def __dropSkillsTmanOnShopSynced(self, tmanInvID, dropSkillsCostIdx, callback, resultID, shopRev):
         if resultID < 0:
             if callback is not None:
                 callback(resultID)
             return
         else:
             proxy = self.getCallbackProxy(callback)
-            self.__account._doCmdInt4(AccountCommands.CMD_TMAN_DROP_SKILLS, shopRev, tmanInvID, dropSkillsCostIdx, useRecertificationForm, proxy)
+            self.__account._doCmdInt3(AccountCommands.CMD_TMAN_DROP_SKILLS, shopRev, tmanInvID, dropSkillsCostIdx, proxy)
             return
 
     def __respecTmanOnShopSynced(self, tmanInvID, vehicleIntCD, tmanCostTypeIdx, groupID, groupSize, callback, resultID, shopRev):

@@ -31,6 +31,7 @@ class XpDetailsPacker(DetailedCurrencyPacker):
      xp_records.SQUAD_PENALTY_XP,
      common_records.AOGAS_FACTOR,
      xp_records.WOT_PLUS_BONUS_XP,
+     xp_records.WOT_PLUS_PRO_BOOST_BONUS_XP,
      common_records.DESERTER_VIOLATION,
      common_records.SUICIDE_VIOLATION,
      common_records.AFK_VIOLATION)
@@ -54,6 +55,7 @@ class FreeXpDetailsPacker(DetailedCurrencyPacker):
      free_xp_records.PREMIUM_VEHICLE_FREE_XP,
      common_records.AOGAS_FACTOR,
      free_xp_records.WOT_PLUS_BONUS_FREE_XP,
+     free_xp_records.WOT_PLUS_PRO_BOOST_BONUS_FREE_XP,
      common_records.DESERTER_VIOLATION,
      common_records.SUICIDE_VIOLATION,
      common_records.AFK_VIOLATION)
@@ -75,6 +77,7 @@ class CreditsStatisticsPacker(DetailedCurrencyPacker):
      credits_records.EVENT_PAYMENTS_CREDITS,
      credits_records.REFERRAL_BONUS_CREDITS,
      credits_records.WOT_PLUS_BONUS_CREDITS,
+     credits_records.WOT_PLUS_PRO_BOOST_BONUS_CREDITS,
      common_records.DESERTER_VIOLATION,
      common_records.SUICIDE_VIOLATION,
      common_records.AFK_VIOLATION,

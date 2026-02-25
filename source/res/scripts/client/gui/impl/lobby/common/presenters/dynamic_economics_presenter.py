@@ -46,6 +46,7 @@ class DynamicEconomicsPresenter(ViewComponent[DynamicEconomicsModel], IGlobalLis
             dynamicEconomics = self.__hangarGuiCtrl.dynamicEconomics
             model.setIsCrystalEarnEnabled(dynamicEconomics.checkCurrentCrystalRewards(default=True))
             model.setIsDailyMultipliedXpEnabled(dynamicEconomics.checkCurrentBonusCaps(_CAPS.DAILY_MULTIPLIED_XP, default=True))
+            model.setIsInfiniteAmmo(dynamicEconomics.checkCurrentBonusCaps(_CAPS.INFINITE_AMMO, default=False))
 
     @server_settings.serverSettingsChangeListener(BonusCapsConst.CONFIG_NAME, Configs.CRYSTAL_REWARDS_CONFIG.value)
     def __onServerSettingsChanged(self, diff):

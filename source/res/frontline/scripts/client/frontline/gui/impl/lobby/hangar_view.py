@@ -29,12 +29,13 @@ from gui.impl.lobby.hangar.presenters.utils import getMenuItems
 from gui.impl.lobby.common.presenters.vehicles_info_presenter import VehiclesInfoPresenter
 from gui.impl.lobby.hangar.base.vehicles_filter_component import VehiclesFilterComponent
 from frontline.gui.impl.lobby.presenters.frontline_loadout_presenter import FrontlineLoadoutPresenter
-from frontline.gui.impl.lobby.presenters.frontline_vehicle_menu_presenter import FrontlineVehicleMenuPresenter
+from gui.impl.lobby.hangar.presenters.vehicle_menu_presenter import VehicleMenuPresenter
 from frontline.gui.impl.lobby.presenters.fl_vehicle_inventory_presenter import FLVehicleInventoryPresenter
 from frontline.gui.impl.lobby.presenters.fl_vehicles_statistics_presenter import FLVehiclesStatisticsPresenter
 from gui.impl.lobby.hangar.presenters.crew_presenter import CrewPresenter
 from gui.impl.lobby.hangar.presenters.hangar_vehicle_params_presenter import HangarVehicleParamsPresenter
 from gui.impl.lobby.hangar.presenters.main_menu_presenter import MainMenuPresenter
+from gui.impl.lobby.common.presenters.manage_vehicle_playlists_presenter import ManageableVehiclePlaylistsPresenter
 from gui.impl.lobby.hangar.presenters.space_interaction_presenter import SpaceInteractionPresenter
 from ClientSelectableCameraObject import ClientSelectableCameraObject
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
@@ -118,7 +119,7 @@ class FrontlineHangar(ViewComponent[RouterModel], IRoutableView):
          hangar.VehicleFilters(): lambda : VehicleFiltersDataProvider(self.__carouselFilter),
          hangar.VehiclePlaylists(): VehiclePlaylistsPresenter,
          hangar.MainMenu(): lambda : MainMenuPresenter(getMenuItems()),
-         hangar.VehicleMenu(): FrontlineVehicleMenuPresenter,
+         hangar.VehicleMenu(): VehicleMenuPresenter,
          hangar.SpaceInteraction(): lambda : SpaceInteractionPresenter(HangarSelectableLogic()),
          hangar.Teaser(): TeaserPresenter,
          hangar.HeroTank(): HeroTankPresenter,
@@ -126,6 +127,7 @@ class FrontlineHangar(ViewComponent[RouterModel], IRoutableView):
          hangar.Settings(): lambda : SettingsPresenter(HangarSettingsModel, HANGAR_VIEW_SETTINGS),
          hangar.KeyBindings(): lambda : SettingsPresenter(KeyBindingsModel, HANGAR_KEY_BINDINGS, readOnly=True),
          hangar.PetObjectTooltip(): PetObjectTooltipPresenter,
+         hangar.ManageableVehiclePlaylists(): ManageableVehiclePlaylistsPresenter,
          frontlineHangar.UserMissions(): FrontlineUserMissionsPresenter,
          frontlineHangar.AlertMessage(): AlertPresenter}
 

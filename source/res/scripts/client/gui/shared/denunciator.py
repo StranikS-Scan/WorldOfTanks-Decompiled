@@ -61,13 +61,13 @@ class Denunciator(object):
         return self.isAppealsEnabled() and not self.playerCtx.hasDenunciationFor(violatorID, topicID, arenaUniqueID)
 
     def getDenunciationsLeft(self):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def _getViolatorKind(self, player, violatorID):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def _makeNotification(self, message):
-        raise NotImplementedError()
+        raise NotImplementedError
 
 
 class LobbyDenunciator(Denunciator):

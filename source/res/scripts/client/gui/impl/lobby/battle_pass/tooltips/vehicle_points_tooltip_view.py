@@ -5,6 +5,7 @@ from gui.battle_pass.battle_pass_helpers import getSupportedCurrentArenaBonusTyp
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.reward_points_model import RewardPointsModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.vehicle_points_tooltip_view_model import VehiclePointsTooltipViewModel
+from gui.impl.lobby.battle_pass.battle_pass_wot_plus import getWotPlusPerBattlePoints, isValidWotPlusTier, getWotPlusBattlePassTier
 from gui.impl.pub import ViewImpl
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.formatters.invites import getPreQueueName
@@ -18,7 +19,7 @@ class VehiclePointsTooltipView(ViewImpl):
     __slots__ = ()
 
     def __init__(self, *args, **kwargs):
-        settings = ViewSettings(R.views.lobby.battle_pass.tooltips.VehiclePointsTooltipView())
+        settings = ViewSettings(R.views.mono.battle_pass.tooltips.vehicle_bp_points())
         settings.model = VehiclePointsTooltipViewModel()
         settings.args = args
         settings.kwargs = kwargs
@@ -37,6 +38,7 @@ class VehiclePointsTooltipView(ViewImpl):
             gameMode = getSupportedCurrentArenaBonusType()
             commonPerBattlePoints = {points.label:(points.winPoint, points.losePoint) for points in self.__battlePassController.getPerBattlePoints(gameMode=gameMode)}
             items = model.rewardPoints.getItems()
+            availableBPTier = getWotPlusBattlePassTier()
             for points in self.__battlePassController.getPerBattlePoints(vehCompDesc=intCD, gameMode=gameMode):
                 isHighlighted = True
                 if points.label in commonPerBattlePoints:
@@ -46,6 +48,9 @@ class VehiclePointsTooltipView(ViewImpl):
                 item.setTopCount(points.label)
                 item.setPointsWin(points.winPoint)
                 item.setPointsLose(points.losePoint)
+                wpWinsPoints, wpLossPoints = getWotPlusPerBattlePoints(points.label, availableBPTier, bonusType=gameMode, vehTypeCompDescr=intCD)
+                item.setExternalPointsWin(wpWinsPoints)
+                item.setExternalPointsLose(wpLossPoints)
                 item.setIsSpecial(isHighlighted)
                 items.addViewModel(item)
 
@@ -57,6 +62,7 @@ class VehiclePointsTooltipView(ViewImpl):
             model.setPointsTotal(limitPoints)
             model.setPointsReward(pointsReward)
             model.setIsElite(vehicle.isFullyElite)
+            model.setIsWotPlusShown(isValidWotPlusTier(availableBPTier))
             dispatcher = g_prbLoader.getDispatcher()
             if dispatcher:
                 queueType = dispatcher.getEntity().getQueueType()

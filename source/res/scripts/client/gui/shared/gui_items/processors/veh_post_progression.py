@@ -9,10 +9,11 @@ from gui.shared.formatters import text_styles
 from gui.shared.gui_items.processors import Processor, plugins, makeSuccess
 from gui.SystemMessages import pushMessage, SM_TYPE
 from gui.veh_post_progression.messages import makeModificationErrorMsg, makeDiscardPairsMsg, makeBuyPairMsg, makePurchaseStepsMsg, makeChangeSlotCategoryMsg, makeSetSlotCategoryMsg, makePurchasePerksMsg
+from gui.veh_post_progression.models.ext_money import EXT_MONEY_ZERO, getFullXPFromXPPrice
 from gui.veh_post_progression.sounds import playSound
 from gui.veh_post_progression.sounds import Sounds
+from helpers.CallbackDelayer import CallbackDelayer
 from post_progression_common import ACTION_TYPES, FEATURE_BY_GROUP_ID
-from gui.veh_post_progression.models.ext_money import EXT_MONEY_ZERO, getFullXPFromXPPrice
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items import Vehicle
 
@@ -180,14 +181,22 @@ class SetEquipmentSlotTypeProcessor(PostProgressionProcessor):
 
 class PurchaseVehSkillTreeStepsProcessor(PostProgressionProcessor):
 
-    def __init__(self, vehicle, stepIDs):
+    def __init__(self, vehicle, stepIDs, responseDelayedCallback, delay):
         super(PurchaseVehSkillTreeStepsProcessor, self).__init__(vehicle)
         self.__stepIDs = stepIDs
         self.__price = self.__getPrice(self._getVehicle())
+        self.__responseDelayedCallback = responseDelayedCallback
+        self.__delay = delay
         self.addPlugins([plugins.PostProgressionStepsValidator(vehicle, stepIDs, {ACTION_TYPES.FEATURE, ACTION_TYPES.MODIFICATION, ACTION_TYPES.PAIR_MODIFICATION}), plugins.PostProgressionPurchaseStepsValidator(vehicle, stepIDs), plugins.AsyncDialogConfirmator(showResearchConfirmDialog, self.__getResearchedPerksText(), self.__price.xp, self.__price.freeXP, isEnabled=self.__price.isXPCompound())])
+        self.__cbDelayer = CallbackDelayer()
 
     def _request(self, callback):
+        self.__cbDelayer.delayCallback(self.__delay, self.__responseDelayedCallback)
         BigWorld.player().inventory.purchasePostProgressionSteps(self._vehicleCD, self.__stepIDs, lambda code, ext: self._response(code, callback, ctx=ext))
+
+    def _response(self, code, callback, errStr='', ctx=None):
+        self.__cbDelayer.destroy()
+        super(PurchaseVehSkillTreeStepsProcessor, self)._response(code, callback, errStr, ctx)
 
     def _successHandler(self, code, ctx=None):
         return makePurchasePerksMsg(self._getVehicle(), ctx, self.__price)

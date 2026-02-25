@@ -162,7 +162,6 @@ class SeniorityRewardVehiclesView(ViewImpl):
             vehicleItem = self.__itemsCache.items.getItemByCD(vehicleCD)
             vehicleModel = SeniorityAwardsVehicleModel()
             fillVehicleModel(vehicleModel, vehicleItem)
-            vehicleModel.setRole(vehicleItem.role)
             vehiclesList.addViewModel(vehicleModel)
 
         vehiclesList.invalidate()
@@ -179,7 +178,6 @@ class SeniorityRewardVehiclesView(ViewImpl):
             vehName = removeNationFromTechName(vehicle.name)
             vehicleModel.setDescription(backport.text(R.strings.seniority_awards.vehicle.dyn(vehName)()))
             vehicleModel.setVehicleId(vehicleId)
-            vehicleModel.setRole(vehicle.role)
             vehiclesList.addViewModel(vehicleModel)
 
         vehiclesList.invalidate()

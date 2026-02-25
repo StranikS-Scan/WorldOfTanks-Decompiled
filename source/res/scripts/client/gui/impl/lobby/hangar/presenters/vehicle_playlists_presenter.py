@@ -5,7 +5,7 @@ import logging
 from BWUtil import AsyncReturn
 from gui.impl.gen.view_models.views.lobby.hangar.sub_views.vehicle_playlists_model import VehiclePlaylistsModel
 from gui.impl.lobby.hangar.dialogs.vehicle_playlists import showTypeParamPlaylistDialog
-from gui.impl.lobby.hangar.playlists_states import EditVehiclePlaylistsState
+from gui.impl.lobby.hangar.playlists_states import EditVehiclePlaylistsState, PlaylistState
 from gui.impl.pub.view_component import ViewComponent
 from helpers import dependency
 from skeletons.gui.game_control import IVehiclePlaylistsController
@@ -29,6 +29,12 @@ class VehiclePlaylistsPresenter(ViewComponent[VehiclePlaylistsModel]):
     def _finalize(self):
         self.__closeDialog()
         super(VehiclePlaylistsPresenter, self)._finalize()
+
+    def _getSelectedID(self):
+        return self.__vehiclePlaylistsCtrl.getSelectedID()
+
+    def _setSelectedID(self, plID):
+        return self.__vehiclePlaylistsCtrl.setSelectedID(plID)
 
     def _getEvents(self):
         vm = self.getViewModel()
@@ -54,7 +60,7 @@ class VehiclePlaylistsPresenter(ViewComponent[VehiclePlaylistsModel]):
 
     def __refillModel(self):
         with self.getViewModel().transaction() as vm:
-            vm.setSelectedID(self.__vehiclePlaylistsCtrl.getSelectedID())
+            vm.setSelectedID(self._getSelectedID())
             vm.setEnabled(self.__vehiclePlaylistsCtrl.isEnabled)
             vm.setDirtyEdit(self.__vehiclePlaylistsCtrl.isModifiedPlaylistChanged)
             storage = vm.getStorage()
@@ -63,7 +69,7 @@ class VehiclePlaylistsPresenter(ViewComponent[VehiclePlaylistsModel]):
                 storage.set(pId, pStrData)
 
     def __onCreatePlaylist(self, ctx):
-        self.__performPlaylistCreation(playlistID=ctx.get('id'), playlistData=ctx.get('data'))
+        self.__performPlaylistCreation(playlistID=ctx.get('id'), playlistData=ctx.get('data'), skipRedirect=ctx.get('skipRedirect'))
 
     def __onModifyPlaylist(self, ctx):
         plStrID = ctx.get('id', '')
@@ -85,7 +91,7 @@ class VehiclePlaylistsPresenter(ViewComponent[VehiclePlaylistsModel]):
 
     def __onSelectPlaylist(self, ctx):
         plID = ctx.get('id', '')
-        if self.__vehiclePlaylistsCtrl.setSelectedID(plID):
+        if self._setSelectedID(plID):
             vm = self.getViewModel()
             vm.setSelectedID(plID)
 
@@ -143,7 +149,7 @@ class VehiclePlaylistsPresenter(ViewComponent[VehiclePlaylistsModel]):
             if result is None:
                 return
             if 'action' in result and result['action'] == 'import':
-                self.__performPlaylistCreation(playlistID=result.get('id'), playlistData=result.get('data'))
+                self.__performPlaylistCreation(playlistID=None, playlistData=result.get('data'))
         except BrokenPromiseError:
             _logger.debug('Import dialog %r cancelled.', dialogType)
 
@@ -176,7 +182,8 @@ class VehiclePlaylistsPresenter(ViewComponent[VehiclePlaylistsModel]):
                 storage = vm.getStorage()
                 del storage[playlistID]
 
-    def __performPlaylistCreation(self, playlistID, playlistData):
+    def __performPlaylistCreation(self, playlistID, playlistData, skipRedirect=False):
+        playlistID = playlistID or self.__vehiclePlaylistsCtrl.generateId()
         if self.__vehiclePlaylistsCtrl.createPlaylist(plStrID=playlistID, playlistData=playlistData):
             if self.__vehiclePlaylistsCtrl.updateModifiedPlaylist(plStrID=playlistID, playlistData=playlistData):
                 with self.getViewModel().transaction() as vm:
@@ -186,7 +193,8 @@ class VehiclePlaylistsPresenter(ViewComponent[VehiclePlaylistsModel]):
                     vm.setDirtyEdit(isModifyingListChanged)
                     storage = vm.getStorage()
                     storage.set(playlistID, playlistData)
-                EditVehiclePlaylistsState.goTo(id=playlistID, new=True)
+                if not skipRedirect:
+                    EditVehiclePlaylistsState.goTo(id=playlistID, playlistState=PlaylistState.NEW.value)
 
     def __onModifiedPlaylistDiscarded(self, playlistStrID, playlistData):
         with self.getViewModel().transaction() as vm:

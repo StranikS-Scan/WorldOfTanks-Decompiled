@@ -27,7 +27,9 @@ class RemoteCameraSender(InputHandlerCommand):
             if vehicle is None:
                 return
             ctrl = self.__aih.ctrl
-            aimingSystem = ctrl.camera.aimingSystem
+            aimingSystem = getattr(ctrl.camera, 'aimingSystem', None)
+            if aimingSystem is None:
+                return
             if isinstance(ctrl, ArcadeControlMode) and isinstance(aimingSystem, ArcadeAimingSystem) or isinstance(ctrl, SniperControlMode) and isinstance(aimingSystem, SniperAimingSystem) or isinstance(ctrl, ArtyControlMode) and isinstance(aimingSystem, ArtyAimingSystem) or isinstance(ctrl, DualGunControlMode) and isinstance(aimingSystem, DualGunAimingSystem) or isinstance(ctrl, TwinGunControlMode) and isinstance(aimingSystem, TwinGunAimingSystem) or isinstance(ctrl, StrategicControlMode) and isinstance(aimingSystem, StrategicAimingSystem) or isinstance(ctrl, MapCaseControlModeBase) and isinstance(aimingSystem, (ArcadeAimingSystem, StrategicAimingSystem)):
                 ctrlModeName = self.__aih.ctrlModeName
                 shotPoint = aimingSystem.getShotPoint()

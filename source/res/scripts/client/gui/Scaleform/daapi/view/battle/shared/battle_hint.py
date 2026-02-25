@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/battle_hint.py
+from __future__ import absolute_import
 import logging
 import typing
 from gui.battle_control.controllers.battle_hints.component import BattleHintComponent

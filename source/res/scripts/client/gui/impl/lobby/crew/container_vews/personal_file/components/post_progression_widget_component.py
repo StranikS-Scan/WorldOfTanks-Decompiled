@@ -38,7 +38,8 @@ class PostProgressionWidgetComponent(ComponentBase):
         crewBook = first(self._itemsCache.items.getItems(GUI_ITEM_TYPE.CREW_BOOKS, REQ_CRITERIA.CREW_ITEM.ID(rewardBookId)).values())
         postProgressionXP = self._itemsCache.items.stats.postProgressionXP
         _, postProgressionXP = divmod(postProgressionXP, crewBook.getXP()) if postProgressionXP > 0 else (0, 0)
-        vm.setIcon(R.images.gui.maps.icons.crewBooks.books.big.dyn(crewBook.getBookType(), None)())
+        if crewBook:
+            vm.setIcon(R.images.gui.maps.icons.crewBooks.books.big.dyn(crewBook.getBookType(), None)())
         vm.setProgressCurrent(postProgressionXP)
         vm.setProgressMax(crewBooksViewedCache().xppToConvert())
         vm.setHasWarning(not self.parent.context.tankman.isMaxSkillEfficiency)

@@ -30,7 +30,7 @@ def makeI18nError(sysMsgKey='', defaultSysMsgKey='', auxData=None, *args, **kwar
     localKey = '#system_messages:{}'.format(sysMsgKey)
     if localKey not in SYSTEM_MESSAGES.ALL_ENUM and defaultSysMsgKey:
         localKey = '#system_messages:{}'.format(defaultSysMsgKey)
-    return makeError(i18n.makeString(localKey, *args, **kwargs), kwargs.get('type', SM_TYPE.Error), auxData, msgPriority=kwargs.get('msgPriority', None))
+    return makeError(i18n.makeString(localKey, *args, **kwargs), kwargs.get('type', SM_TYPE.Error), auxData, msgPriority=kwargs.get('msgPriority'))
 
 
 class GroupedServerResponse(namedtuple('GroupedServerResponse', ['itemID', 'itemCount'])):

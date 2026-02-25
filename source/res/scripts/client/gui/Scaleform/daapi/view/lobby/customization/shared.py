@@ -9,7 +9,6 @@ import Math
 import nations
 from AccountCommands import isCodeValid
 from CurrentVehicle import g_currentVehicle
-from constants import REQUEST_COOLDOWN
 from gui import GUI_NATIONS_ORDER_INDICES
 from gui.Scaleform import getNationsFilterAssetPath
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -26,7 +25,6 @@ from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.money import Money
 from gui.shared.utils import code2str
 from helpers import dependency, int2roman
-from helpers.func_utils import CallParams, cooldownCallerDecorator
 from helpers.i18n import makeString as _ms
 from items import parseIntCompactDescr
 from items.components.c11n_components import getItemSlotType
@@ -686,13 +684,6 @@ def getUnsuitableDependentData(outfit, selCamoItemID, styleDependencies, service
     return result
 
 
-def __resetC11nItemsNoveltyParamsMerger(merged, callParams):
-    items = callParams.kwargs.get('items', [])
-    items.extend(merged.kwargs.get('items', []))
-    return CallParams(kwargs={'items': items})
-
-
-@cooldownCallerDecorator(cooldown=REQUEST_COOLDOWN.CUSTOMIZATION_NOVELTY + 0.1, paramsMerger=__resetC11nItemsNoveltyParamsMerger)
 def resetC11nItemsNovelty(items):
 
     def _callback(resultID):

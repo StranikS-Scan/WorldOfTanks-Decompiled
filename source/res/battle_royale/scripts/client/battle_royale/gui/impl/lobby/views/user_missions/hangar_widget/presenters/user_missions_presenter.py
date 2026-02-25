@@ -5,7 +5,7 @@ from battle_royale.gui.impl.lobby.views.user_missions.hangar_widget.overlap_ctrl
 from battle_royale.gui.impl.lobby.views.user_missions.hangar_widget.presenters.event_shop_presenter import BattleRoyaleEventShopPresenter
 from battle_royale.gui.impl.lobby.views.user_missions.hangar_widget.presenters.progression_presenter import BattleRoyaleProgressionPresenter
 from battle_royale.gui.impl.lobby.views.user_missions.hangar_widget.presenters.quests_presenter import BattleRoayaleQuestsPresenter
-from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
+from battle_royale.skeletons.game_controller import IBRProgressionOnTokensController
 from gui.impl.lobby.user_missions.hangar_widget.presenters.battle_pass_presenter import BattlePassPresenter
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.hangar.user_missions_widget_model import UserMissionsWidgetModel

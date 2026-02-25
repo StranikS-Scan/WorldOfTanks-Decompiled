@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/vehicle_hub/vehicle_hub_main_view.py
 from __future__ import absolute_import
+import BigWorld
 import typing
+from functools import partial
 from collections import namedtuple, OrderedDict
 from future.utils import itervalues
 from CurrentVehicle import g_currentPreviewVehicle
@@ -154,10 +156,10 @@ class VehicleHubMainView(ViewComponent, IRoutableView):
             self.__updateComparisonInfo()
             self.__updateMenuItems()
 
-    def _initChildren(self):
+    def _getChildComponents(self):
         vehicleHub = R.aliases.vehicle_hub.default
-        self._registerChild(vehicleHub.VehicleParams(), VehicleHubCharacteristicsPresenter(self.__vhCtx.intCD))
-        self._registerChild(vehicleHub.Wallet(), VehicleHubWalletPresenter())
+        return {vehicleHub.VehicleParams(): partial(VehicleHubCharacteristicsPresenter, self.__vhCtx.intCD),
+         vehicleHub.Wallet(): VehicleHubWalletPresenter}
 
     def _getEvents(self):
         eventsTuple = super(VehicleHubMainView, self)._getEvents()
@@ -165,6 +167,7 @@ class VehicleHubMainView(ViewComponent, IRoutableView):
          (self.__rentals.onRentChangeNotify, self.__onRentChange),
          (self.viewModel.onMoveSpace, self.__onMoveSpace),
          (self.viewModel.onMouseOver3dScene, self.__onMouseOver3dScene),
+         (self.viewModel.onResize, self.__onResize),
          (self.viewModel.comparisonModel.onAddToComparison, self.__onAddToComparison),
          (self.__comparisonBasket.onChange, self.__onVehCompareBasketChanged),
          (self.__comparisonBasket.onSwitchChange, self.__updateComparisonInfo),
@@ -346,6 +349,22 @@ class VehicleHubMainView(ViewComponent, IRoutableView):
     @staticmethod
     def __onMouseOver3dScene(args):
         g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, ctx={'isOver3dScene': bool(args.get('isOver3dScene'))}))
+
+    @staticmethod
+    def __onResize(args):
+        if args is None:
+            return
+        else:
+            screenWidth, screenHeight = BigWorld.windowSize()
+            xmin = float(args.get('xmin', 0))
+            ymin = float(args.get('ymin', 0))
+            xmax = float(args.get('xmax', screenWidth))
+            ymax = float(args.get('ymax', screenHeight))
+            g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.ON_RESIZE, ctx={'xmin': xmin,
+             'ymin': ymin,
+             'xmax': xmax,
+             'ymax': ymax}))
+            return
 
     @property
     def __disabledTabs(self):

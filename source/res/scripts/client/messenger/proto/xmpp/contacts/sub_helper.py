@@ -87,9 +87,7 @@ class InboundSubscriptionsBatch(object):
                 sub = contact.getSubscription()
                 if itemType in XMPP_ITEM_TYPE.ROSTER_ITEMS and sub[0] == _SUB.ON:
                     isProcessed = self._approve(jid, contact)
-                elif ignoreSubRq:
-                    isProcessed = self._cancel(jid, contact)
-                elif itemType in XMPP_ITEM_TYPE.PERSISTENT_BLOCKING_LIST:
+                elif ignoreSubRq or itemType in XMPP_ITEM_TYPE.PERSISTENT_BLOCKING_LIST:
                     isProcessed = self._cancel(jid, contact)
                 elif itemType in XMPP_ITEM_TYPE.SUB_PENDING_ITEMS:
                     isProcessed = self._ignore(contact)

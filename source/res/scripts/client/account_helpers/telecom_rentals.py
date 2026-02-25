@@ -49,18 +49,15 @@ class TelecomRentals(object):
         self._account._doCmdInt(AccountCommands.CMD_TELECOM_RENTALS_VEHICLE_RENT_AMOUNT, amount, self._onCmdResponseReceived)
 
     def hasPartnership(self):
-        subscritionToken = self._tokens.getToken(PARTNERSHIP_TOKEN_NAME)
-        return bool(subscritionToken)
+        return bool(self._tokens.getToken(PARTNERSHIP_TOKEN_NAME))
 
     def isBlocked(self):
-        subscritionToken = self._tokens.getToken(PARTNERSHIP_BLOCKED_TOKEN_NAME)
-        return bool(subscritionToken)
+        return bool(self._tokens.getToken(PARTNERSHIP_BLOCKED_TOKEN_NAME))
 
     def isActive(self):
         serverSettings = self._lobbyContext.getServerSettings()
         isRentalEnabled = serverSettings.isTelecomRentalsEnabled()
-        subscritionToken = self.hasPartnership()
-        return True if subscritionToken and isRentalEnabled else False
+        return self.hasPartnership() and isRentalEnabled
 
     def getRosterExpirationTime(self):
         rosterToken = self._tokens.getToken(ROSTER_EXPIRATION_TOKEN_NAME)

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/auxiliary/collections_helper.py
+from __future__ import absolute_import
 import typing
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import IS_BATTLE_PASS_COLLECTION_SEEN
@@ -76,7 +77,7 @@ class TmanTemplateBonusPacker(BaseBonusUIPacker):
     @classmethod
     def _pack(cls, bonus):
         result = []
-        for tokenID in bonus.getTokens().iterkeys():
+        for tokenID in bonus.getTokens():
             if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
                 packed = cls.__packTmanTemplateToken(tokenID, bonus)
                 if packed is not None:
@@ -87,7 +88,7 @@ class TmanTemplateBonusPacker(BaseBonusUIPacker):
     @classmethod
     def _getToolTip(cls, bonus):
         tooltipData = []
-        for tokenID in bonus.getTokens().iterkeys():
+        for tokenID in bonus.getTokens():
             if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
                 tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED, specialArgs=[tokenID]))
 
@@ -95,7 +96,7 @@ class TmanTemplateBonusPacker(BaseBonusUIPacker):
 
     @classmethod
     def _getContentId(cls, bonus):
-        return [ BACKPORT_TOOLTIP_CONTENT_ID for tokenID in bonus.getTokens().iterkeys() if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX) ]
+        return [ BACKPORT_TOOLTIP_CONTENT_ID for tokenID in bonus.getTokens() if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX) ]
 
     @classmethod
     def __packTmanTemplateToken(cls, tokenID, bonus):

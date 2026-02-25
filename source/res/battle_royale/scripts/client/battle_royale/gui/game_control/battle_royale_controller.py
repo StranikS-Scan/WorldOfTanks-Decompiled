@@ -7,17 +7,22 @@ from functools import partial
 from itertools import groupby
 import BigWorld
 import typing
+from adisp import adisp_process
+from shared_utils import first, makeTupleByDict, nextTick
+import BattleReplay
 import Event
 import season_common
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import ROYALE_VEHICLE, CURRENT_VEHICLE, ROYALE_INTRO_VIDEO_SHOWN_FOR_SEASON
-from adisp import adisp_process
 from battle_royale.gui.constants import AmmoTypes, BattleRoyalePerfProblems, BattleRoyaleSubMode, BattleRoyaleModeState
+from battle_royale.gui.constants import BR_COIN
+from battle_royale.gui.constants import STP_COIN
+from battle_royale.gui.constants import SUB_MODE_ID_KEY
 from battle_royale.gui.game_control.br_vo_controller import BRVoiceOverController
 from battle_royale.gui.royale_models import BattleRoyaleSeason
 from battle_royale.gui.shared.event_dispatcher import showInfoPage
-from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
+from battle_royale.skeletons.game_controller import IBRProgressionOnTokensController
 from constants import QUEUE_TYPE, Configs, PREBATTLE_TYPE, ARENA_BONUS_TYPE, BATTLE_ROYALE_SCENE
 from gui import GUI_NATIONS_ORDER_INDEX
 from gui import GUI_SETTINGS
@@ -39,17 +44,16 @@ from gui.shared.event_dispatcher import getParentWindow, showBrowserOverlayView
 from gui.shared.events import ProfilePageEvent, ProfileStatisticEvent, ProfileTechniqueEvent
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS, VEHICLE_TYPES_ORDER_INDICES
 from gui.shared.items_parameters.params import ShellParams
+from gui.shared.money import DynamicMoney
 from gui.shared.utils import SelectorBattleTypesUtils
 from gui.shared.utils.graphics import getGraphicsEngineValue
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier, PeriodicNotifier, TimerNotifier
 from helpers import dependency, time_utils
+from helpers.server_settings import BattleRoyaleConfig
 from helpers.statistics import HARDWARE_SCORE_PARAMS
 from items import vehicles
 from items.battle_royale import isBattleRoyale
-from battle_royale.gui.constants import SUB_MODE_ID_KEY
-from shared_utils import first
-from shared_utils import nextTick
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IEventsNotificationsController, IHangarSpaceSwitchController, IBattleRoyaleController, IBattleRoyaleTournamentController
 from skeletons.gui.impl import IGuiLoader
@@ -58,10 +62,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from stats_params import BATTLE_ROYALE_STATS_ENABLED
-from gui.shared.money import DynamicMoney
-from battle_royale.gui.constants import BR_COIN
 if typing.TYPE_CHECKING:
-    from helpers.server_settings import BattleRoyaleConfig
     from gui.shared.gui_items.tankman_skill import TankmanSkill
 _logger = logging.getLogger(__name__)
 BattleRoyaleProgressionPoints = namedtuple('BattleRoyaleProgressionPoints', ['lastInRange', 'points'])
@@ -181,8 +182,22 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         g_eventBus.addListener(events.HangarVehicleEvent.SELECT_VEHICLE_IN_HANGAR, self.__onSelectVehicleInHangar, scope=EVENT_BUS_SCOPE.LOBBY)
         nextTick(self.__eventAvailabilityUpdate)()
 
-    def getBRCoinBalance(self, default=None):
-        return self.__balance.get(BR_COIN, default) if self.__balance is not None else default
+    def getBRCoinBalance(self):
+        return self.__balance.get(BR_COIN, 0) if self.__balance is not None else 0
+
+    def getSTPCoinBalance(self):
+        return self.__balance.get(STP_COIN, 0) if self.__balance is not None else 0
+
+    def hasDailyBonus(self, vehicle):
+        return vehicle.compactDescr not in self.__itemsCache.items.battleRoyale.dailyBonusUsedVehicles if self.isStPatrick() else False
+
+    def getStpCoinsPerPlace(self, place):
+        if self.isStPatrick():
+            coinAward = self.getModeSettings().coinAward
+            bonusType = BigWorld.player().arenaBonusType
+            for placeInBattle, coins in coinAward.get(bonusType, []):
+                if place == placeInBattle:
+                    return coins
 
     def __initBalanceCurrencies(self):
         self.__updateBalanceCurrencies()
@@ -192,12 +207,17 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.__balance = self.__itemsCache.items.stats.getDynamicMoney()
 
     def __updateDynamicCurrencies(self, currencies):
-        if BR_COIN not in currencies:
-            return False
-        brCoin = currencies.get(BR_COIN, 0)
-        if self.getBRCoinBalance(0) != brCoin:
-            self.__updateBalanceCurrencies()
-        self.onBalanceUpdated()
+        brCoin = currencies.get(BR_COIN, None)
+        if brCoin is not None:
+            if self.getBRCoinBalance() != brCoin:
+                self.__updateBalanceCurrencies()
+            self.onBalanceUpdated()
+        stpCoin = currencies.get(STP_COIN, None)
+        if stpCoin is not None:
+            if self.getSTPCoinBalance() != stpCoin:
+                self.__updateBalanceCurrencies()
+            self.onBalanceUpdated()
+        return
 
     def __onEventNotification(self, added, removed=()):
         for evNotification in removed:
@@ -249,10 +269,16 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.__selectRoyaleBattle(extData=extData, **kwargs)
 
     def getModeSettings(self):
+        if BattleReplay.isPlaying() and not BattleReplay.isServerSideReplay():
+            settings = BattleReplay.g_replayCtrl.arenaInfo['serverSettings']
+            return makeTupleByDict(BattleRoyaleConfig, settings[Configs.BATTLE_ROYALE_CONFIG.value])
         return self.__lobbyContext.getServerSettings().battleRoyale
 
     def isEnabled(self):
         return self.getModeSettings().isEnabled
+
+    def isStPatrick(self):
+        return self.getModeSettings().isStPatrick
 
     def getEndTime(self):
         return self.getCurrentSeason().getCycleEndDate()

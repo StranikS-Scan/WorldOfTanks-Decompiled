@@ -174,6 +174,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         g_currentVehicle.onChanged += self.__onVehicleChanged
         self.customizationGameObjects = []
         self.onDecalsUpdated = Event.Event()
+        self.onAttachmentsUpdated = Event.Event()
         self.__isCompositionReady = False
         return
 
@@ -193,9 +194,11 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__isVehicleDestroyed = False
         self.__vEntity.model = None
         self.onDecalsUpdated.clear()
+        self.onAttachmentsUpdated.clear()
         self.reset()
         if self.collisions:
             BigWorld.removeCameraCollider(self.collisions.getColliderID())
+            self.collisions.setOnAttachmentsUpdated(None)
             self.collisions = None
         return
 
@@ -272,7 +275,7 @@ class HangarVehicleAppearance(ScriptGameObject):
             turretTopY = desc.chassis.hullPosition[1] + desc.hull.turretPositions[0][1] + turretBB[1][1]
             gunTopY = desc.chassis.hullPosition[1] + desc.hull.turretPositions[0][1] + desc.turret.gunPosition[1] + gunBB[1][1]
             gunLength = math.fabs(gunBB[1][2] - gunBB[0][2])
-            height = max(hullTopY, max(turretTopY, gunTopY))
+            height = max(hullTopY, turretTopY, gunTopY)
         return (height, gunLength)
 
     def computeVehicleLength(self):
@@ -447,7 +450,19 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.__applyAttachmentsVisibility()
             self.__fireResourcesLoadedEvent()
             if succesLoaded:
-                self.__doFinalSetup(buildInd)
+
+                def _onAttachmentsReady():
+
+                    def _deferred():
+                        if self.collisions is not None:
+                            self.collisions.setOnAttachmentsReady(None)
+                            self.__doFinalSetup(buildInd)
+                        return
+
+                    nextTick(_deferred)()
+
+                self.collisions.setOnAttachmentsReady(_onAttachmentsReady)
+                self.collisions.setOnAttachmentsUpdated(self.__handleAttachmentsUpdated)
             super(HangarVehicleAppearance, self).activate()
             return
 
@@ -698,6 +713,9 @@ class HangarVehicleAppearance(ScriptGameObject):
 
             return True
 
+    def __handleAttachmentsUpdated(self):
+        nextTick(self.onAttachmentsUpdated)()
+
     def getAnchorParams(self, slotId, areaId, regionIdx):
         if self.__anchorsParams is None:
             self.__initAnchorsParams()
@@ -782,17 +800,26 @@ class HangarVehicleAppearance(ScriptGameObject):
             return
 
     def rotateGunToDefault(self):
+        return self.rotateGunForAngle(self._getGunPitch())
+
+    def rotateGunForAngle(self, gunPitchAngle):
         if self.compoundModel is None:
             return False
         else:
             localGunMatrix = self.__getGunNode().local
             currentGunPitch = localGunMatrix.pitch
-            gunPitchAngle = self._getGunPitch()
             if abs(currentGunPitch - gunPitchAngle) < 0.0001:
                 return False
             gunPitchMatrix = math_utils.createRotationMatrix((0.0, gunPitchAngle, 0.0))
             self.__setGunMatrix(gunPitchMatrix)
             return True
+
+    def getGunPitch(self):
+        if self.compoundModel is None:
+            return 0.0
+        else:
+            localGunMatrix = self.__getGunNode().local
+            return localGunMatrix.pitch
 
     def getVehicleCentralPoint(self):
         hullAABB = self.collisions.getExtendedBoundingBox(TankPartIndexes.HULL)

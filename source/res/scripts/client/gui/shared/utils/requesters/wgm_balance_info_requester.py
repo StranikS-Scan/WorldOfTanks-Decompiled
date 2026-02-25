@@ -82,7 +82,7 @@ class WGMBalanceInfoRequester(object):
             for item in ext:
                 if self.__checkFields(item):
                     currencyCode = item[_TOKEN_CURRENCY_CODE]
-                    if currencyCode == _TOKEN_GOLD or currencyCode == _TOKEN_CREDITS:
+                    if currencyCode in (_TOKEN_GOLD, _TOKEN_CREDITS):
                         amount = item[_TOKEN_AMOUNT]
                         isPaid = item[_TOKEN_CLASS][_TOKEN_IS_PAID]
                         action = _ACTION_PURCHASED if isPaid else _ACTION_EARNED

@@ -11,6 +11,9 @@
       <exclude>
         <vehicles>	germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF	</vehicles>
       </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	4	</id>
@@ -70,6 +73,9 @@
       </include>
       <exclude>
         <vehicles>	germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
       </exclude>
     </vehicleFilter>
     <style>
@@ -218,6 +224,9 @@
       <exclude>
         <vehicles>	germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF	</vehicles>
       </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	150	</id>
@@ -357,6 +366,9 @@
       </include>
       <exclude>
         <vehicles>	germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
       </exclude>
     </vehicleFilter>
     <style>
@@ -751,6 +763,9 @@
       </include>
       <exclude>
         <vehicles>	germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
       </exclude>
     </vehicleFilter>
     <style>
@@ -1550,6 +1565,8 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	18	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>
@@ -2029,6 +2046,8 @@
                 <item>
                   <id>	55	</id>
                   <slotId>	18000	</slotId>
+                  <scaleFactorId>	0	</scaleFactorId>
+                  <rotated>	0	</rotated>
                 </item>
               </attachments>
             </outfit>
@@ -2130,10 +2149,14 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	66	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
             <item>
               <slotId>	18001	</slotId>
               <id>	67	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>
@@ -2151,10 +2174,14 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	66	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
             <item>
               <slotId>	18001	</slotId>
               <id>	67	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>
@@ -2172,10 +2199,14 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	66	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
             <item>
               <slotId>	18001	</slotId>
               <id>	68	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>
@@ -2316,6 +2347,8 @@
                 <item>
                   <slotId>	18000	</slotId>
                   <id>	72	</id>
+                  <scaleFactorId>	0	</scaleFactorId>
+                  <rotated>	0	</rotated>
                 </item>
               </attachments>
             </outfit>
@@ -2370,6 +2403,8 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	74	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
           <insignias>
@@ -2482,6 +2517,8 @@
             <item>
               <slotId>	18001	</slotId>
               <id>	110	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>
@@ -2520,10 +2557,14 @@
             <item>
               <id>	116	</id>
               <slotId>	38001	</slotId>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
             <item>
               <id>	115	</id>
               <slotId>	18000	</slotId>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>
@@ -2564,6 +2605,8 @@
             <item>
               <id>	132	</id>
               <slotId>	18000	</slotId>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>
@@ -2795,6 +2838,8 @@
             <item>
               <id>	154	</id>
               <slotId>	18000	</slotId>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>
@@ -3177,6 +3222,54 @@
               <palette>	0	</palette>
             </item>
           </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G121_Grille_15_L63	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1242	</id>
+      <maxNumber>	1	</maxNumber>
+      <texture>	gui/maps/vehicles/styles/G121_Grille_15_L63_BPXIX_3Dst.png	</texture>
+      <modelsSet>	G121_Grille_15_L63_BPXIX_3Dst	</modelsSet>
+      <userString>	#vehicle_customization:special_style/G121_Grille_15_L63_BPXIX_3Dst	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/G121_Grille_15_L63_BPXIX_3Dst_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required c11n3D	</tags>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	173	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
+            </item>
+          </attachments>
         </outfit>
       </outfits>
       <itemFilters>

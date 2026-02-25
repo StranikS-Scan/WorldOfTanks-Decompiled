@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/AwardWindow.py
+from __future__ import absolute_import
 from gui.Scaleform.daapi.view.meta.MissionAwardWindowMeta import MissionAwardWindowMeta
 from gui.Scaleform.daapi.view.meta.AwardWindowMeta import AwardWindowMeta
 from gui.server_events.pm_constants import PERSONAL_MISSIONS_SILENT_SOUND_SPACE

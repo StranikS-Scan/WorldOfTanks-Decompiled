@@ -9,12 +9,11 @@ from gui.SystemMessages import SM_TYPE
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared import event_dispatcher
-from gui.shared.formatters import getBWFormatter, text_styles
-from gui.shared.gui_items.processors import Processor, makeSuccess, plugins, makeError
+from gui.shared.formatters import text_styles
+from gui.shared.gui_items.processors import Processor, plugins, makeError
 from gui.shared.gui_items.processors.plugins import MessageConfirmator, SyncValidator
 from gui.shared.notifications import NotificationPriorityLevel
 from helpers import dependency
-from messenger import g_settings
 from skeletons.gui.game_control import IBattlePassController
 _logger = logging.getLogger(__name__)
 
@@ -85,36 +84,17 @@ class BattlePassActivateChapterProcessor(Processor):
 class BuyBattlePass(Processor):
     __battlePass = dependency.descriptor(IBattlePassController)
 
-    def __init__(self, seasonID, chapterID, priceID):
+    def __init__(self, seasonID, chapterID):
         super(BuyBattlePass, self).__init__()
         self.__seasonID = seasonID
         self.__chapterID = chapterID
-        self.__priceID = priceID
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeError(backport.text(R.strings.system_messages.battlePass_buy.server_error()), msgPriority=NotificationPriorityLevel.HIGH)
 
-    def _successHandler(self, code, ctx=None):
-        chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(self.__chapterID)())
-        if self.__battlePass.isHoliday():
-            description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassHReward.buyWithoutRewards.text())
-        else:
-            description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyWithoutRewards.text(), chapter=text_styles.credits(chapterName))
-        return makeSuccess(msgType=SM_TYPE.BattlePassBuy, userMsg='', auxData={'header': backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.buyBP()),
-         'description': description,
-         'additionalText': self.__makePriceString()})
-
-    def __makePriceString(self):
-        return self.__makeCurrencyString(*next(self.__battlePass.getBattlePassCost(self.__chapterID)[self.__priceID].iteritems()))
-
-    @staticmethod
-    def __makeCurrencyString(currency, amount):
-        return g_settings.htmlTemplates.format('battlePassCurrency', {'currency': backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buy.dyn(currency)()),
-         'amount': getBWFormatter(currency)(amount)}) if amount else ''
-
     def _request(self, callback):
         _logger.debug('Make server request to buy battle pass %d for chapter %d', self.__seasonID, self.__chapterID)
-        BigWorld.player().shop.buyBattlePass(self.__seasonID, self.__chapterID, self.__priceID, lambda resID, code, errStr: self._response(code, callback, errStr))
+        BigWorld.player().shop.buyBattlePass(self.__seasonID, self.__chapterID, lambda resID, code, errStr: self._response(code, callback, errStr))
 
 
 class BuyBattlePassLevels(Processor):
@@ -136,15 +116,14 @@ class BuyBattlePassLevels(Processor):
 class BuyBattlePassWithLevels(Processor):
     __battlePass = dependency.descriptor(IBattlePassController)
 
-    def __init__(self, seasonID, chapterID, priceID):
+    def __init__(self, seasonID, chapterID):
         super(BuyBattlePassWithLevels, self).__init__()
         self.__seasonID = seasonID
         self.__chapterID = chapterID
-        self.__priceID = priceID
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeError(backport.text(R.strings.system_messages.battlePass_buy.server_error()), msgPriority=NotificationPriorityLevel.HIGH)
 
     def _request(self, callback):
         _logger.debug('Make server request to buy battle pass with levels %d for chapter %d', self.__seasonID, self.__chapterID)
-        BigWorld.player().shop.buyBattlePassWithLevels(self.__seasonID, self.__chapterID, self.__priceID, lambda resID, code, errStr: self._response(code, callback, errStr))
+        BigWorld.player().shop.buyBattlePassWithLevels(self.__seasonID, self.__chapterID, lambda resID, code, errStr: self._response(code, callback, errStr))

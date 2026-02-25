@@ -26,7 +26,7 @@ class RewardsSelectionView(SelectableRewardBase):
         self.__level = int(level)
         self.__onRewardsReceivedCallback = onRewardsReceivedCallback
         self.__onCloseCallback = onCloseCallback
-        super(RewardsSelectionView, self).__init__(R.views.lobby.battle_pass.RewardsSelectionView(), self._helper.getAvailableSelectableBonuses(partial(_isValidReward, self.__chapterID, self.__level)), RewardsSelectionViewModel)
+        super(RewardsSelectionView, self).__init__(R.views.mono.battle_pass.rewards_selection(), self._helper.getAvailableSelectableBonuses(partial(_isValidReward, self.__chapterID, self.__level)), RewardsSelectionViewModel)
 
     def _getReceivedRewards(self, rewardName):
         pass

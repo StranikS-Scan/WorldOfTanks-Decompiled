@@ -11,7 +11,7 @@ from gui.impl.gen.view_models.views.lobby.battle_results.progression.daily_quest
 from gui.impl.lobby.battle_results.missions_progress.rewards_helper import packBonusesWithActualTokensConvertion
 from gui.impl.lobby.battle_results.missions_progress.progression_presenter_interface import IProgressionCategoryPresenter
 from gui.impl.lobby.common.tooltips.extended_text_tooltip import ExtendedTextTooltip
-from gui.impl.lobby.missions.daily_quests_view import DailyTabs
+from gui.impl.lobby.user_missions.hub.hub_view import DailyTabs
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.server_events import conditions
 from gui.impl.pub.view_component import ViewComponent

@@ -109,6 +109,9 @@ class Comp7Controller(IComp7Controller):
     def hasPrimeTimesLeftForCurrentCycle(self):
         return False
 
+    def hasPrimeTimesPassedForCurrentCycle(self):
+        return False
+
     def getClosestStateChangeTime(self, now=None):
         pass
 

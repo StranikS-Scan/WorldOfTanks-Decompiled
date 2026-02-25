@@ -77,7 +77,6 @@ _SHORTEN_TOOLTIP_CASES = ('shopVehicle',)
 
 class VehicleInfoTooltipData(BlocksTooltipData):
     __itemsCache = dependency.descriptor(IItemsCache)
-    __wotPlusController = dependency.descriptor(IWotPlusController)
     _LEFT_PADDING = 20
     _RIGHT_PADDING = 20
 

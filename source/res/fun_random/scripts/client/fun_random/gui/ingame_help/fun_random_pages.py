@@ -14,6 +14,10 @@ class FunRandomHelpPagesBuilder(DetailedHelpPagesBuilder, FunSubModesWatcher):
     _SUITABLE_CTX_KEYS = ('isFunRandom',)
 
     @classmethod
+    def isExclusive(cls):
+        return cls.getBattleSubMode().getConfigurationModel().subMode.isExclusiveHelpPages
+
+    @classmethod
     def priority(cls):
         return HelpPagePriority.FUN_RANDOM
 
@@ -22,14 +26,14 @@ class FunRandomHelpPagesBuilder(DetailedHelpPagesBuilder, FunSubModesWatcher):
     def buildPages(cls, _):
         pages = []
         battleSubMode = cls.getBattleSubMode()
-        iconsRoot = battleSubMode.getIconsResRoot()
+        iconsRoot = battleSubMode.getIconsResRoot().battle_help
         localsRoot = battleSubMode.getLocalsResRoot()
         commonTitle = backport.text(localsRoot.detailsHelpTitle())
         for pageID, pageRes in sorted(localsRoot.detailsHelp.items()):
-            addPage(pages, commonTitle, backport.text(pageRes.title()), text_styles.mainBig(backport.text(pageRes.description())), [], backport.image(iconsRoot.battle_help.dyn(pageID)()), hintCtx=HelpHintContext.FUN_RANDOM)
+            addPage(pages, commonTitle, backport.text(pageRes.title()), text_styles.mainBig(backport.text(pageRes.description())), [], backport.image(iconsRoot.dyn(pageID)()), hintCtx=HelpHintContext.FUN_RANDOM)
 
         return pages
 
     @classmethod
     def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
-        ctx['isFunRandom'] = arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.FUN_RANDOM
+        ctx['isFunRandom'] = arenaVisitor.getArenaGuiType() in ARENA_GUI_TYPE.FUN_RANDOM_RANGE

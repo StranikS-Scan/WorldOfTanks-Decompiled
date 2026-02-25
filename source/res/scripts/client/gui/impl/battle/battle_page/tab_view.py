@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/battle/battle_page/tab_view.py
+from __future__ import absolute_import
 from contextlib import contextmanager
 import logging
 import typing
+from future.utils import iteritems
 import BigWorld
 import VOIP
 from PlayerEvents import g_playerEvents
@@ -45,7 +47,7 @@ from commendations_common import CommendationHelpers
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from messenger.proto.entities import ChatEntity
-    from typing import Optional, Tuple, Set, Callable
+    from typing import Optional, Tuple, Set, Callable, List, Dict
     import ClientArena
     from gui.battle_control.arena_info.arena_vos import VehicleArenaStatsVO
     from gui.battle_control.arena_info.arena_dp import ArenaDataProvider
@@ -54,7 +56,6 @@ if typing.TYPE_CHECKING:
     from messenger.storage.UsersStorage import UsersStorage
     from messenger.storage.PlayerCtxStorage import PlayerCtxStorage
     from gui.prb_control.invites import InvitesManager
-    from typing import List, Tuple, Dict
     from gui.goodies.booster_state_provider import BoosterStateProvider
     from gui.game_control.platoon_controller import PlatoonController
     from gui.battle_control.battle_session import BattleSessionProvider
@@ -257,7 +258,7 @@ class TabView(ViewImpl):
         self.__playerIndexes.clear()
         allies = []
         enemies = []
-        for vehicleId, vehicleInfo in self._visitor.getArenaVehicles().iteritems():
+        for vehicleId, vehicleInfo in iteritems(self._visitor.getArenaVehicles()):
             self._updateSquadFinder(vehicleId, vehicleInfo)
             player = self._fillPlayerModel(vehicleId, vehicleInfo)
             if player is None:
@@ -340,7 +341,7 @@ class TabView(ViewImpl):
         return
 
     def _resortPlayerList(self, playerModelArray, playersToAdd=None):
-        playerModelList = [ battlePlayer for battlePlayer in playerModelArray ]
+        playerModelList = list(playerModelArray)
         if playersToAdd is not None:
             playerModelList.extend(playersToAdd)
         self._fillPlayerListModel(playerModelArray, sorted(playerModelList, key=_playerCompositionKey))
@@ -562,7 +563,7 @@ class TabView(ViewImpl):
         arenaDP = self.sessionProvider.getArenaDP()
         vehicleInfo = arenaDP.getVehicleInfo(vehicleId)
         voipMgr = VOIP.getVOIPManager()
-        if not vehicleId == avatar_getter.getPlayerVehicleID():
+        if vehicleId != avatar_getter.getPlayerVehicleID():
             return False
         if not vehicleInfo.isSquadMan():
             return False

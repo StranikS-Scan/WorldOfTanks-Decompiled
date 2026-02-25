@@ -38,7 +38,7 @@ class _LootBoxBaseState(SFViewLobbyState):
 
     def getNavigationDescription(self):
         eventName = self.__cachedParams.get('ctx', {}).get('eventName')
-        return LobbyStateDescription(title=backport.text(getTextResource('preview/backLabel'.split('/'), eventName)()))
+        return LobbyStateDescription(title=backport.text(getTextResource(['preview', 'backLabel'], eventName)()))
 
     def registerTransitions(self):
         from gui.Scaleform.daapi.view.lobby.store.browser.states import ShopState

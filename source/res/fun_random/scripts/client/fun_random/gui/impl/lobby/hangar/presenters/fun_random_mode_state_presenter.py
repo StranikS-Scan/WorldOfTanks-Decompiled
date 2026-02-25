@@ -33,4 +33,5 @@ class FunRandomModeStatePresenter(ViewComponent[FunRandomModeStateModel], FunAss
     def __invalidateAll(self, *_):
         with self.viewModel.transaction() as model:
             model.setAssetsPointer(self.getModeAssetsPointer())
+            model.setSubModeAssetsPointer(self.getDesiredSubMode().getAssetsPointer())
             model.setHasSuitableVehicles(self.getDesiredSubMode().hasSuitableVehicles())

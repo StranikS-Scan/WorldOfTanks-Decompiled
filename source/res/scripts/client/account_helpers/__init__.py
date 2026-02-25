@@ -3,10 +3,9 @@
 import datetime
 import BigWorld
 from constants import ACCOUNT_ATTR
-from account_helpers.AccountSettings import AccountSettings, GOLD_FISH_LAST_SHOW_TIME
+from account_helpers.AccountSettings import AccountSettings
 from shared_utils.account_helpers import BattleResultsCache
 from shared_utils.account_helpers import ClientInvitations
-from helpers.time_utils import getCurrentTimestamp
 
 def __checkAccountAttr(attrs, attrID):
     return attrs is not None and attrs & attrID != 0

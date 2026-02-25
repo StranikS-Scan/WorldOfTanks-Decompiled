@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/pve_base/__init__.py
+from __future__ import absolute_import
 import typing
+from future.utils import listitems, listvalues
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.view.battle.shared.page import BattlePageBusinessHandler
 from gui.Scaleform.framework import GroupedViewSettings, ViewSettings, ScopeTemplates, ComponentSettings
@@ -18,7 +20,7 @@ class OverridableViewSettingsMapping(object):
         self._settingsMap = {s.alias:s for s in settings}
 
     def getSettings(self):
-        return self._settingsMap.values()
+        return listvalues(self._settingsMap)
 
     def extend(self, settings=None):
         if not settings:
@@ -31,7 +33,7 @@ class OverridableContextMenuHandlers(object):
     __slots__ = ('_handlers',)
 
     def __init__(self, handlers=None):
-        self._handlers = {key:handler for key, handler in handlers} if handlers else {}
+        self._handlers = dict(handlers) if handlers else {}
 
     def extend(self, handlers=None):
         if not handlers:
@@ -40,7 +42,7 @@ class OverridableContextMenuHandlers(object):
             self._handlers[key] = handler
 
     def getHandlers(self):
-        return self._handlers.items()
+        return listitems(self._handlers)
 
 
 def getDefaultViewSettings(battlePageAlias, battlePageClass, swfUrl='pveBaseBattlePage.swf'):

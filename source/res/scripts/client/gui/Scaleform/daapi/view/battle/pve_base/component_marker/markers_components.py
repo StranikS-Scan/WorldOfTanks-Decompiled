@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/pve_base/component_marker/markers_components.py
+from __future__ import absolute_import
 import ResMgr
 from chat_commands_consts import MarkerType
 from gui.Scaleform.daapi.view.battle.shared.component_marker.markers_components import BaseMinimapMarkerComponent, World2DActionMarkerComponent, ComponentBitMask, World2DLocationMarkerComponent

@@ -9,6 +9,7 @@ from CurrentVehicle import g_currentVehicle
 from Event import EventManager, Event
 from constants import EVENT_TYPE, PREMIUM_TYPE
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
+from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import sortQuestsByProgressionPointBonus
 from gui.Scaleform.daapi.view.lobby.event_boards.event_helpers import EventInfo, EventHeader
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import MarathonAwardComposer
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData
@@ -418,6 +419,8 @@ class _GroupedEventsBlockInfo(_CollapsableEventsBlockInfo):
     def buildEventsBlockData(self, srvEvents, filterFunc):
         self._suitableEvents = self.findEvents(srvEvents)
         self._events = filter(filterFunc, self._suitableEvents) if self._filterEnable else self._suitableEvents
+        if self.getEventsBlockID() == BATTLE_ROYALE_GROUPS_ID:
+            self._events = sortQuestsByProgressionPointBonus(self._events)
         return None if not self._suitableEvents else _EventsBlockData(len(self._events), len(self._suitableEvents), self._getVO())
 
     def clear(self):

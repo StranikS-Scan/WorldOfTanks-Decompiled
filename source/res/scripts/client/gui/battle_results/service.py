@@ -22,6 +22,7 @@ from gui.shared.gui_items.processors.player_satisfaction_rating import PlayerSat
 from gui.shared.system_factory import collectBattleResultStatsCtrl
 from gui.shared.utils import decorators
 from helpers import dependency
+from renewable_subscription_common.schema import renewableSubscriptionsConfigSchema
 from skeletons.gui.app_loader import IAppLoader
 from helpers.func_utils import isDeveloperFunc
 from skeletons.gui.battle_matters import IBattleMattersController
@@ -219,8 +220,7 @@ class BattleResultsService(IBattleResultsService):
 
     def isAddXPBonusEnabled(self, arenaUniqueID):
         arenaInfo = self.__getAdditionalXPBattles().get(arenaUniqueID)
-        isWotPlusEnabled = self.lobbyContext.getServerSettings().isRenewableSubEnabled()
-        return arenaInfo is not None and (bool(PREMIUM_TYPE.activePremium(arenaInfo.premMask) & PREMIUM_TYPE.PLUS) or self.itemsCache.items.stats.isPremium or self.wotPlusController.isEnabled() and isWotPlusEnabled)
+        return arenaInfo is not None and (bool(PREMIUM_TYPE.activePremium(arenaInfo.premMask) & PREMIUM_TYPE.PLUS) or self.itemsCache.items.stats.isPremium or self.wotPlusController.hasSubscription() and renewableSubscriptionsConfigSchema.getModel().enabled)
 
     def getAdditionalXPValue(self, arenaUniqueID):
         arenaInfo = self.__getAdditionalXPBattles().get(arenaUniqueID)

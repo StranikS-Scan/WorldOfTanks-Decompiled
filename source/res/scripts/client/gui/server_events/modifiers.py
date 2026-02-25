@@ -1212,35 +1212,6 @@ class ReferralModifier(ActionModifier):
         super(ReferralModifier, self).__init__('referralDisabled', params, modType=ACTION_MODIFIER_TYPE.AVAILABILITY)
 
 
-class CalendarModifier(ActionModifier):
-
-    def __init__(self, name, params):
-        super(CalendarModifier, self).__init__('calendar', params, modType=ACTION_MODIFIER_TYPE.AVAILABILITY)
-
-    def getDuration(self):
-        strDuration = self._params.get('duration')
-        return int(strDuration) if strDuration else None
-
-
-class CalendarSplashModifier(ActionModifier):
-
-    def __init__(self, name, params):
-        super(CalendarSplashModifier, self).__init__('calendarSplash', params, modType=ACTION_MODIFIER_TYPE.AVAILABILITY)
-
-    def getDuration(self):
-        strDuration = self._params.get('duration')
-        return int(strDuration) if strDuration else None
-
-
-class HeroTankAdventCalendarRedirectModifier(ActionModifier):
-
-    def __init__(self, _, params):
-        super(HeroTankAdventCalendarRedirectModifier, self).__init__('heroTankAdventCalendarRedirect', params, modType=ACTION_MODIFIER_TYPE.AVAILABILITY)
-
-    def getIsEnabled(self):
-        return self._params.get('enabled', '').lower() in ('1', 'yes', 'true')
-
-
 class TradeInModifier(ActionModifier):
 
     def __init__(self, name, params):
@@ -1296,9 +1267,6 @@ _MODIFIERS = (('mul_EconomicsParams', EconomicsMul),
  ('set_MarathonInProgress', MarathonEventModifier),
  ('set_MarathonFinished', MarathonEventModifier),
  ('ReferralProgramDisabled', ReferralModifier),
- ('AdventCalendarEnabled', CalendarModifier),
- ('AdventCalendarForced', CalendarSplashModifier),
- ('HeroTankAdventCalendarRedirect', HeroTankAdventCalendarRedirectModifier),
  ('LobbyHeaderTabCounterModification', LobbyHeaderTabCounterModifier))
 _MODIFIERS_DICT = dict(_MODIFIERS)
 _MODIFIERS_ORDER = dict(((n, idx) for idx, (n, _) in enumerate(_MODIFIERS)))

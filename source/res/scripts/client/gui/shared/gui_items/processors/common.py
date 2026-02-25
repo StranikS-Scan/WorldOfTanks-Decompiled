@@ -101,7 +101,7 @@ class GoldToCreditsExchanger(Processor):
 
     def _successHandler(self, code, ctx=None):
         rate = self.__exchangeRatesProvider.goldToCredits
-        isUnlimDiscount = True if rate.unlimitedDiscountInfo is not None and rate.unlimitedDiscountInfo.isPersonal else False
+        isUnlimDiscount = rate.unlimitedDiscountInfo is not None and rate.unlimitedDiscountInfo.isPersonal
         return createSystemExchangeNotification(discounts=self.discounts, goldAmount=self.gold, defaultRate=rate.defaultRate, baseRate=self.baseRate, isPersonalUnlimRate=isUnlimDiscount, exchangeType=rate.getExchangeRateName)
 
     def _request(self, callback):
@@ -130,7 +130,7 @@ class FreeXPExchanger(Processor):
 
     def _successHandler(self, code, ctx=None):
         rate = self.__exchangeRatesProvider.freeXpTranslation
-        isUnlimDiscount = True if rate.unlimitedDiscountInfo is not None and rate.unlimitedDiscountInfo.isPersonal else False
+        isUnlimDiscount = rate.unlimitedDiscountInfo is not None and rate.unlimitedDiscountInfo.isPersonal
         return createSystemExchangeNotification(discounts=self.discounts, goldAmount=self.gold, defaultRate=rate.defaultRate, baseRate=self.baseRate, isPersonalUnlimRate=isUnlimDiscount, exchangeType=rate.getExchangeRateName)
 
     def _request(self, callback):
@@ -302,13 +302,12 @@ class ConvertBlueprintFragmentProcessor(Processor):
 
 
 class _MapsBlackListSelector(Processor):
+    _SKIPPED_MAP_ID_LOWER_BOUND = EMPTY_GEOMETRY_ID
 
-    def __init__(self, selectedMaps=None):
+    def __init__(self, toAddMapID=_SKIPPED_MAP_ID_LOWER_BOUND, toRemoveMapID=_SKIPPED_MAP_ID_LOWER_BOUND):
         super(_MapsBlackListSelector, self).__init__()
-        if selectedMaps is None:
-            selectedMaps = ()
-        self.__selectedMaps = selectedMaps
-        return
+        self.__toAddMapID = toAddMapID
+        self.__toRemoveMapId = toRemoveMapID
 
     def _getMessagePrefix(self):
         pass
@@ -318,9 +317,9 @@ class _MapsBlackListSelector(Processor):
 
     def _successHandler(self, code, ctx=None):
         itemsCache = dependency.instance(IItemsCache)
-        wotPLusController = dependency.instance(IWotPlusController)
+        wotPlusController = dependency.instance(IWotPlusController)
         isPremiumActive = itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
-        isWotPlusActive = wotPLusController.isEnabled()
+        isWotPlusActive = wotPlusController.hasSubscription()
         if not isPremiumActive and not isWotPlusActive:
             return makeI18nSuccess(sysMsgKey='{}/success/noSubscriptions'.format(self._getMessagePrefix()))
         if isPremiumActive and not isWotPlusActive:
@@ -328,49 +327,29 @@ class _MapsBlackListSelector(Processor):
         return makeI18nSuccess(sysMsgKey='{}/success/wotPlus'.format(self._getMessagePrefix())) if not isPremiumActive and isWotPlusActive else makeI18nSuccess(sysMsgKey='{}/success'.format(self._getMessagePrefix()))
 
     def _request(self, callback):
-        _logger.debug('Make server request to select black maps %r', self.__selectedMaps)
-        BigWorld.player().stats.setMapsBlackList(self.__selectedMaps, lambda code, errStr, ext: self._response(code, callback, ctx=ext, errStr=errStr))
-
-    def _getLayout(self):
-        return [ mapID for mapID, _ in self.itemsCache.items.stats.getMapsBlackList() ]
+        if self.__toAddMapID <= self._SKIPPED_MAP_ID_LOWER_BOUND and self.__toRemoveMapId <= self._SKIPPED_MAP_ID_LOWER_BOUND:
+            _logger.warning('Invalid blacklist maps. To addID=%d, toRemoveID=%d', self.__toAddMapID, self.__toRemoveMapId)
+            return
+        _logger.debug('Make server request to update blacklist maps. To addID=%d, toRemoveID=%d', self.__toAddMapID, self.__toRemoveMapId)
+        BigWorld.player().stats.setMapsBlackList(self.__toAddMapID, self.__toRemoveMapId, lambda code, errStr, ext: self._response(code, callback, ctx=ext, errStr=errStr))
 
 
 class MapsBlackListSetter(_MapsBlackListSelector):
 
     def __init__(self, selectedMapID):
-        layout = self._getLayout()
-        wasInserted = False
-        for idx, mapID in enumerate(layout):
-            if mapID == EMPTY_GEOMETRY_ID:
-                layout[idx] = selectedMapID
-                wasInserted = True
-                break
-
-        if not wasInserted:
-            layout.append(selectedMapID)
-        super(MapsBlackListSetter, self).__init__(layout)
+        super(MapsBlackListSetter, self).__init__(toAddMapID=selectedMapID)
 
 
 class MapsBlackListRemover(_MapsBlackListSelector):
 
     def __init__(self, removeMapID):
-        layout = self._getLayout()
-        if removeMapID in layout:
-            layout[layout.index(removeMapID)] = EMPTY_GEOMETRY_ID
-        else:
-            _logger.error('Cannot remove mapID %d from layout %r', removeMapID, layout)
-        super(MapsBlackListRemover, self).__init__(layout)
+        super(MapsBlackListRemover, self).__init__(toRemoveMapID=removeMapID)
 
 
 class MapsBlackListChanger(_MapsBlackListSelector):
 
     def __init__(self, srcMapID, destMapID):
-        layout = self._getLayout()
-        if srcMapID in layout:
-            layout[layout.index(srcMapID)] = destMapID
-        else:
-            _logger.error('Cannot change srcMapID %d from layout %r', srcMapID, layout)
-        super(MapsBlackListChanger, self).__init__(layout)
+        super(MapsBlackListChanger, self).__init__(destMapID, srcMapID)
 
 
 class PremiumBonusApplier(Processor):

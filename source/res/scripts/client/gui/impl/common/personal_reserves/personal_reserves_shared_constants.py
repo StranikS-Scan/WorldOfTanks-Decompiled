@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/common/personal_reserves/personal_reserves_shared_constants.py
+from __future__ import absolute_import
 from constants import FORT_ORDER_TYPE
 from goodies.goodie_constants import PR2BoosterIDs, GOODIE_RESOURCE_TYPE, MAX_ACTIVE_PERSONAL_BOOSTERS, MAX_ACTIVE_EVENT_BOOSTERS, GOODIE_STATE, BoosterCategory
 from gui.impl.gen.view_models.common.personal_reserves.booster_model import ReserveType, ReserveState

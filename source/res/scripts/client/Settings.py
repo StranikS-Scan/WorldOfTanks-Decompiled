@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Settings.py
+import typing
 import BigWorld
+if typing.TYPE_CHECKING:
+    from ResMgr import DataSection
 g_instance = None
 KEY_UPDATE_URL = 'updateUrl'
 KEY_CONTROL_MODE = 'controlMode'
@@ -29,6 +32,7 @@ POPUPS_WINDOWS_DISABLED = 'popupsWindowsDisabled'
 KEY_MAPS_TRAINING_PREFERENCES = 'mapsTraining'
 QUICK_TRANING_TIPS = 'quickTrainingTips'
 KEY_BUY_VEHICLE_VIEW_PREFERENCES = 'buyVehicleView'
+DROP_SKILLS = 'dropSkills'
 
 class Settings(object):
 

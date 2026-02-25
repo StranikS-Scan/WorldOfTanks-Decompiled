@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/legacy_mechanics/dualgun_sounds.py
+from __future__ import absolute_import
 import WWISE
 import math_utils
 import BigWorld

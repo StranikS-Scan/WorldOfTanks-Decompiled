@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle_results_window.py
+from __future__ import absolute_import
 import logging
 from functools import partial
 import BigWorld
@@ -22,7 +23,7 @@ from gui.prestige.prestige_helpers import showPrestigeVehicleStats
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events import events_dispatcher as quests_events
 from gui.server_events.events_helpers import isC11nQuest
-from gui.shared import event_bus_handlers, events, EVENT_BUS_SCOPE, g_eventBus
+from gui.shared import events, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared import event_dispatcher
 from gui.shared.event_dispatcher import showProgressiveRewardWindow, showShop, showDailyExpPageView
 from gui.sounds.ambients import BattleResultsEnv
@@ -52,7 +53,6 @@ class BattleResultsWindow(BattleResultsMeta, IGlobalListener):
     __appLoader = dependency.descriptor(IAppLoader)
     __itemsCache = dependency.descriptor(IItemsCache)
     __sound_env__ = BattleResultsEnv
-    __metaclass__ = event_bus_handlers.EventBusListener
 
     def __init__(self, ctx):
         super(BattleResultsWindow, self).__init__()
@@ -71,9 +71,9 @@ class BattleResultsWindow(BattleResultsMeta, IGlobalListener):
         self.destroy()
 
     @adisp_process
-    def showEventsWindow(self, eID, eventType):
+    def showEventsWindow(self, questID, eventType):
         if self.__canNavigate():
-            if eventType == constants.EVENT_TYPE.C11N_PROGRESSION or isC11nQuest(eID):
+            if eventType == constants.EVENT_TYPE.C11N_PROGRESSION or isC11nQuest(questID):
                 app = self.__appLoader.getApp()
                 view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_CUSTOMIZATION))
                 if view is None:
@@ -81,7 +81,7 @@ class BattleResultsWindow(BattleResultsMeta, IGlobalListener):
                     if not lobbyHeaderNavigationPossible:
                         return
                 if eventType == constants.EVENT_TYPE.C11N_PROGRESSION:
-                    _, vehicleIntCD = parseEventID(eID)
+                    _, vehicleIntCD = parseEventID(questID)
                     vehicle = self.__itemsCache.items.getVehicleCopyByCD(vehicleIntCD)
                     if not vehicle.isCustomizationEnabled():
                         _logger.warning('Trying to open customization from PBS for incompatible vehicle.')
@@ -91,7 +91,7 @@ class BattleResultsWindow(BattleResultsMeta, IGlobalListener):
                 lobbyHeaderNavigationPossible = yield self.__lobbyContext.isHeaderNavigationPossible()
                 if not lobbyHeaderNavigationPossible:
                     return
-            quests_events.showMission(eID, eventType)
+            quests_events.showMission(questID, eventType)
             self.destroy()
         return
 
@@ -107,18 +107,18 @@ class BattleResultsWindow(BattleResultsMeta, IGlobalListener):
     def onResultsSharingBtnPress(self):
         raise NotImplementedError('This feature is not longer supported')
 
-    def showUnlockWindow(self, itemID, unlockType):
+    def showUnlockWindow(self, itemId, unlockType):
         if not self.__canNavigate():
             return
         if unlockType in (PROGRESS_ACTION.RESEARCH_UNLOCK_TYPE, PROGRESS_ACTION.PURCHASE_UNLOCK_TYPE):
-            event_dispatcher.showResearchView(itemID)
+            event_dispatcher.showResearchView(itemId)
         elif unlockType in (PROGRESS_ACTION.NEW_SKILL_UNLOCK_TYPE, PROGRESS_ACTION.NEW_FREE_SKILL_UNLOCK_TYPE):
-            event_dispatcher.showPersonalCase(itemID)
+            event_dispatcher.showPersonalCase(itemId)
         self.onWindowClose()
 
-    def showDogTagWindow(self, itemID):
+    def showDogTagWindow(self, componentId):
         if self.__canNavigate():
-            event_dispatcher.showDogTags(itemID, False)
+            event_dispatcher.showDogTags(componentId, False)
             self.destroy()
 
     def showVehicleStats(self, vehCD):
@@ -155,8 +155,10 @@ class BattleResultsWindow(BattleResultsMeta, IGlobalListener):
 
     def _populate(self):
         super(BattleResultsWindow, self)._populate()
-        g_eventBus.addListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__onPremiumXpBonusChanged)
-        g_eventBus.addListener(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, self.__onBattleResultWindowShowQuest)
+        self.addListener(events.LobbySimpleEvent.BATTLE_RESULTS_POSTED, self.__handleBattleResultsPosted, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.HideWindowEvent.HIDE_BATTLE_RESULT_WINDOW, self.__handleBattleResultsClose, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__onPremiumXpBonusChanged)
+        self.addListener(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, self.__onBattleResultWindowShowQuest)
         g_clientUpdateManager.addCallbacks({'account._additionalXPCache': self.__updateVO,
          'inventory.1': self.__updateVO,
          'inventory.8': self.__updateVO,
@@ -169,8 +171,10 @@ class BattleResultsWindow(BattleResultsMeta, IGlobalListener):
             g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.BATTLE_RESULTS_PROCESSED), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _dispose(self):
-        g_eventBus.removeListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__onPremiumXpBonusChanged)
-        g_eventBus.removeListener(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, self.__onBattleResultWindowShowQuest)
+        self.removeListener(events.LobbySimpleEvent.BATTLE_RESULTS_POSTED, self.__handleBattleResultsPosted, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.HideWindowEvent.HIDE_BATTLE_RESULT_WINDOW, self.__handleBattleResultsClose, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__onPremiumXpBonusChanged)
+        self.removeListener(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, self.__onBattleResultWindowShowQuest)
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__gameSession.onPremiumTypeChanged -= self.__onPremiumStateChanged
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
@@ -195,7 +199,6 @@ class BattleResultsWindow(BattleResultsMeta, IGlobalListener):
             self.as_setDataS(battleResultsVO)
             self.__dataSet = True
 
-    @event_bus_handlers.eventBusHandler(events.LobbySimpleEvent.BATTLE_RESULTS_POSTED, EVENT_BUS_SCOPE.LOBBY)
     def __handleBattleResultsPosted(self, event):
         ctx = event.ctx
         if 'arenaUniqueID' not in ctx:
@@ -205,7 +208,6 @@ class BattleResultsWindow(BattleResultsMeta, IGlobalListener):
         if self.__arenaUniqueID == ctx['arenaUniqueID']:
             self.__setBattleResults()
 
-    @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_BATTLE_RESULT_WINDOW, EVENT_BUS_SCOPE.LOBBY)
     def __handleBattleResultsClose(self, _):
         self.destroy()
 

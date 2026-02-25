@@ -31,10 +31,9 @@ class MapsTrainingResultView(ViewImpl):
         settings.args = args
         settings.kwargs = kwargs
         super(MapsTrainingResultView, self).__init__(settings)
-        self.__arenaUniqueID = kwargs.get('arenaUniqueID', None)
+        self.__arenaUniqueID = kwargs.get('arenaUniqueID')
         self.__isFromNotifications = kwargs.get('isFromNotifications', False)
         self.__tooltipData = {}
-        return
 
     @property
     def viewModel(self):

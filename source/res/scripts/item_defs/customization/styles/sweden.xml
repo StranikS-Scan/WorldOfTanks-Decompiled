@@ -8,6 +8,9 @@
       <include>
         <nations>	sweden	</nations>
       </include>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	6	</id>
@@ -65,6 +68,9 @@
       <include>
         <nations>	sweden	</nations>
       </include>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	39	</id>
@@ -209,6 +215,9 @@
       <include>
         <nations>	sweden	</nations>
       </include>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	153	</id>
@@ -307,6 +316,9 @@
       <include>
         <nations>	sweden	</nations>
       </include>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	42	</id>
@@ -428,6 +440,9 @@
       <include>
         <nations>	sweden	</nations>
       </include>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	69	</id>
@@ -731,6 +746,8 @@
             <item>
               <id>	17	</id>
               <slotId>	18000	</slotId>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>
@@ -875,6 +892,8 @@
             <item>
               <id>	50	</id>
               <slotId>	18000	</slotId>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
           <camouflages>
@@ -929,8 +948,8 @@
               <showOn>	TURRET	</showOn>
               <position>
                 <p0>	0.821933	</p0>
-                <p1>	2.173	</p1>
-                <p2>	-0.075	</p2>
+                <p1>	2.173000	</p1>
+                <p2>	-0.075000	</p2>
               </position>
               <rotation>
                 <r0>	1.769938	</r0>
@@ -1043,6 +1062,8 @@
                 <item>
                   <id>	56	</id>
                   <slotId>	18001	</slotId>
+                  <scaleFactorId>	0	</scaleFactorId>
+                  <rotated>	0	</rotated>
                 </item>
               </attachments>
             </outfit>

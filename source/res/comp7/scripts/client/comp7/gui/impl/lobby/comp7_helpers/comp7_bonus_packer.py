@@ -276,7 +276,7 @@ class Comp7TankmenBonusUIPacker(BaseBonusUIPacker):
 
     @classmethod
     def _packSingleBonus(cls, bonus):
-        cd = bonus['tmanCompDescr'] if 'tmanCompDescr' in bonus else bonus
+        cd = bonus.get('tmanCompDescr', bonus)
         tankmanData = tankmen.TankmanDescr(cd)
         model = Comp7BonusModel()
         model.setName('tankman')
@@ -288,7 +288,7 @@ class Comp7TankmenBonusUIPacker(BaseBonusUIPacker):
     def _getToolTip(cls, bonus):
         tooltipData = []
         for tankmanData in bonus.getValue():
-            cd = tankmanData['tmanCompDescr'] if 'tmanCompDescr' in tankmanData else tankmanData
+            cd = tankmanData.get('tmanCompDescr', tankmanData)
             tankman = tankmen.TankmanDescr(cd)
             tooltipData.append(createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.SPECIAL_TANKMAN, specialArgs=(tankman, cls.__getTankmanGroupName(tankman))))
 

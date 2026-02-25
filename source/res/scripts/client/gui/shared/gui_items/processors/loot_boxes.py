@@ -80,7 +80,7 @@ class LootBoxSystemOpenProcessor(LootBoxOpenProcessor):
     __lootBoxes = dependency.descriptor(ILootBoxSystemController)
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        pathParts = 'serviceChannelMessages/server_error'.split('/')
+        pathParts = ['serviceChannelMessages', 'server_error']
         eventName = self._getLootBox().getType()
         header = backport.text(getTextResource(pathParts, eventName)())
         if errStr not in ('DISABLED', 'COOLDOWN'):
@@ -93,9 +93,9 @@ class LootBoxSystemOpenProcessor(LootBoxOpenProcessor):
     def _successHandler(self, code, ctx=None):
         eventName = self._getLootBox().getType()
         if self._getCount() > 1:
-            header = backport.text(getTextResource('serviceChannelMessages/multipleOpen'.split('/'), eventName)())
+            header = backport.text(getTextResource(['serviceChannelMessages', 'multipleOpen'], eventName)())
         else:
-            header = backport.text(getTextResource('serviceChannelMessages/open'.split('/'), eventName)(), boxName=self._getLootBox().getUserName())
+            header = backport.text(getTextResource(['serviceChannelMessages', 'open'], eventName)(), boxName=self._getLootBox().getUserName())
         rewardsList = ctx.get('bonus', [])
         for rewards in rewardsList:
             preformatRewardsInfo(rewards)
@@ -133,7 +133,7 @@ class ResetLootBoxSystemStatisticsProcessor(Processor):
 
     def __buildConfirmator(self):
         eventName = self.itemsCache.items.tokens.getLootBoxByID(self.__boxIDs[0]).getType()
-        descriptionPath = 'confirmResetLootBoxStatistics/description'.split('/')
+        descriptionPath = ['confirmResetLootBoxStatistics', 'description']
         builder = ConfirmCancelDialogBuilder()
         builder.setLayer(WindowLayer.OVERLAY)
         builder.setDimmerAlpha(0.8)

@@ -6,8 +6,10 @@ from collections import namedtuple
 from itertools import chain
 from gui.Scaleform.daapi.view.meta.BaseVehicleMechanicsWidgetMeta import BaseVehicleMechanicsWidgetMeta
 from gui.shared.utils.key_mapping import getScaleformKey
-from gui.veh_mechanics.battle.updaters.hotkey_updaters import IHotKeysView, HotKeyCommand
+from gui.veh_mechanics.battle.updaters.hotkey_updaters import IHotKeysView
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import IMechanicPassengerView
+if typing.TYPE_CHECKING:
+    from gui.veh_mechanics.battle.updaters.hotkey_updaters import HotKeyCommand
 HotKeyData = namedtuple('HotKeyData', ['command', 'isLong'])
 
 class VehicleMechanicWidget(BaseVehicleMechanicsWidgetMeta, IHotKeysView, IMechanicPassengerView):

@@ -1,64 +1,51 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/activate_chapter_confirm_dialog.py
-from frameworks.wulf import ViewFlags, ViewSettings
+from frameworks.wulf import ViewSettings
 from gui.battle_pass.sounds import ACTIVATE_CHAPTER_SOUND_SPACE
-from gui.impl.dialogs.dialog_template import DialogTemplateView
-from gui.impl.dialogs.dialog_template_button import CancelButton, ConfirmButton
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.dialogs.default_dialog_place_holders import DefaultDialogPlaceHolders
 from gui.impl.gen.view_models.views.lobby.battle_pass.chapter_confirm_view_model import ChapterConfirmViewModel
-from gui.impl.pub import ViewImpl
+from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogBaseView
+from gui.impl.pub.dialog_window import DialogButtons
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
+from skeletons.gui.shared import IItemsCache
 _CONFIRM_RES = R.strings.battle_pass.chapterChoice.confirmation
 _CHAPTER_RES = R.strings.battle_pass.chapter
 
-class ChapterConfirm(ViewImpl):
-    __slots__ = ('__prevChapterID', '__nextChapterID')
+class ChapterConfirm(FullScreenDialogBaseView):
+    __slots__ = ('__chapterID',)
+    __itemsCache = dependency.descriptor(IItemsCache)
     __battlePass = dependency.descriptor(IBattlePassController)
     _COMMON_SOUND_SPACE = ACTIVATE_CHAPTER_SOUND_SPACE
 
-    def __init__(self, prevChapterID, nextChapterID):
-        settings = ViewSettings(R.views.lobby.battle_pass.dialogs.ChapterConfirm())
-        settings.flags = ViewFlags.VIEW
-        settings.model = ChapterConfirmViewModel()
+    def __init__(self, chapterID=None, *args, **kwargs):
+        settings = ViewSettings(layoutID=R.views.mono.battle_pass.dialogs.chapter_confirm(), model=ChapterConfirmViewModel())
+        settings.args = args
+        settings.kwargs = kwargs
+        self.__chapterID = chapterID
         super(ChapterConfirm, self).__init__(settings)
-        self.__prevChapterID = prevChapterID
-        self.__nextChapterID = nextChapterID
 
     @property
     def viewModel(self):
         return super(ChapterConfirm, self).getViewModel()
 
     def _onLoading(self, *args, **kwargs):
-        super(ChapterConfirm, self)._onLoading()
+        super(ChapterConfirm, self)._onLoading(self, *args, **kwargs)
         with self.viewModel.transaction() as model:
-            model.setPrevChapter(self.__prevChapterID)
-            model.setNextChapter(self.__nextChapterID)
-            model.setIsSwitchFromPostProgressionToExtraChapter(self.__battlePass.isPostProgressionActive() and self.__battlePass.isExtraChapter(self.__nextChapterID))
-
-
-class ActivateChapterConfirmDialog(DialogTemplateView):
-    __battlePassController = dependency.descriptor(IBattlePassController)
-
-    def __init__(self, chapterID=None):
-        super(ActivateChapterConfirmDialog, self).__init__()
-        self.__nextChapterID = chapterID
-
-    def _onLoading(self, *args, **kwargs):
-        prevChapterID = self.__battlePassController.getCurrentChapterID()
-        self.setSubView(DefaultDialogPlaceHolders.CONTENT, ChapterConfirm(prevChapterID, self.__nextChapterID))
-        self.addButton(ConfirmButton(_CONFIRM_RES.button.submit() if prevChapterID == 0 else _CONFIRM_RES.button.switch()))
-        self.addButton(CancelButton(_CONFIRM_RES.button.cancel()))
-        super(ActivateChapterConfirmDialog, self)._onLoading(*args, **kwargs)
-
-    def _getAdditionalData(self):
-        return {}
+            model.setPrevChapter(self.__battlePass.getCurrentChapterID())
+            model.setNextChapter(self.__chapterID)
+            model.setIsSwitchFromPostProgressionToExtraChapter(self.__battlePass.isPostProgressionActive() and self.__battlePass.isExtraChapter(self.__chapterID))
 
     def _getEvents(self):
-        return ((self.__battlePassController.onSeasonStateChanged, self.__onSeasonStateChanged),)
+        events = super(ChapterConfirm, self)._getEvents()
+        return events + ((self.viewModel.onAccept, self._onAccept), (self.viewModel.onCancel, self._onCancel), (self.__battlePass.onSeasonStateChanged, self.__onSeasonStateChanged))
+
+    def _onAccept(self):
+        self._setResult(DialogButtons.SUBMIT)
+
+    def _onCancel(self):
+        self._setResult(DialogButtons.CANCEL)
 
     def __onSeasonStateChanged(self):
-        if not self.__battlePassController.isActive():
+        if not self.__battlePass.isActive():
             self.destroyWindow()
-            self._closeClickHandler()

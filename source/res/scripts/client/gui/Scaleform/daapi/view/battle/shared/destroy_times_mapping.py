@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/destroy_times_mapping.py
+from __future__ import absolute_import
+from future.utils import listvalues, viewitems
 import SoundGroups
 from constants import VEHICLE_MISC_STATUS, DEATH_ZONES
 from debug_utils import LOG_ERROR
@@ -59,10 +61,10 @@ class FrontendMapping(object):
             return None
 
     def getDestroyTimersTypesIDs(self):
-        return self.__miscStatuses.values()
+        return listvalues(self.__miscStatuses)
 
     def getDeathZoneTimersTypesIDs(self):
-        return self.__deathZonesCodes.values()
+        return listvalues(self.__deathZonesCodes)
 
     def getSoundByDeathZone(self, code, level):
         sound = None
@@ -74,7 +76,7 @@ class FrontendMapping(object):
     @staticmethod
     def __loadDeathZoneSounds(soundsIDs):
         sounds = {}
-        for key, soundID in soundsIDs.iteritems():
+        for key, soundID in viewitems(soundsIDs):
             sounds[key] = SoundGroups.g_instance.getSound2D(soundID)
 
         return sounds

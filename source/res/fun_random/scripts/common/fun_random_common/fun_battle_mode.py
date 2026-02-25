@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/common/fun_random_common/fun_battle_mode.py
-from battle_results import fun_random
-from constants import PREBATTLE_TYPE, ARENA_BONUS_TYPE, QUEUE_TYPE
+from __future__ import absolute_import
+from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from constants_utils import AbstractBattleMode
-from fun_random_common.fun_constants import ARENA_GUI_TYPE, UNIT_MGR_FLAGS, ROSTER_TYPE, INVITATION_TYPE
+from fun_random_common.battle_results import fun_random
+from fun_random_common.fun_constants import ARENA_GUI_TYPE, UNIT_MGR_FLAGS, ROSTER_TYPE, INVITATION_TYPE, ARENA_BONUS_TYPE
 
 class FunRandomBattleMode(AbstractBattleMode):
     _PREBATTLE_TYPE = PREBATTLE_TYPE.FUN_RANDOM
@@ -15,6 +16,8 @@ class FunRandomBattleMode(AbstractBattleMode):
     _UNIT_MGR_FLAGS = UNIT_MGR_FLAGS.FUN_RANDOM
     _ROSTER_TYPE = ROSTER_TYPE.FUN_RANDOM_ROSTER
     _BATTLE_RESULTS_CONFIG = fun_random
+    _SM_TYPE_BATTLE_RESULT = 'funRandomBattleResults'
+    _SM_TYPES = [_SM_TYPE_BATTLE_RESULT]
 
     @property
     def _rosterClass(self):

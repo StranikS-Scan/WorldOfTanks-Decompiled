@@ -52,13 +52,13 @@
       <battle>	0	</battle>
     </fakeTurrets>
     <armor>
-      <armor_1>	170	</armor_1>
+      <armor_1>	145	</armor_1>
       <armor_2>	150	</armor_2>
       <armor_3>	50	</armor_3>
       <armor_4>	30	</armor_4>
       <armor_5>	30	</armor_5>
       <armor_6>	25	</armor_6>
-      <armor_7>	100	</armor_7>
+      <armor_7>	75	</armor_7>
       <armor_8>	0	</armor_8>
       <armor_9>	240	</armor_9>
       <armor_10>	240	</armor_10>
@@ -71,11 +71,21 @@
       <armor_17>	140	</armor_17>
       <armor_18>	115	</armor_18>
       <armor_19>	50	</armor_19>
+      <armor_20>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+      </armor_20>
       <armor_21>	30	</armor_21>
       <armor_22>	75	</armor_22>
       <armor_23>	60	</armor_23>
       <armor_24>	40	</armor_24>
+      <armor_25>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+      </armor_25>
+      <armor_26>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+      </armor_26>
+      <armor_27>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+      </armor_27>
       <armor_28>	50	</armor_28>
+      <armor_29>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+      </armor_29>
       <armor_30>	130	</armor_30>
       <armor_31>	25	</armor_31>
       <armor_32>	60	</armor_32>
@@ -1604,12 +1614,12 @@
           <reloadTime>	40	</reloadTime>
           <clip>
             <count>	4	</count>
-            <rate>	24	</rate>
+            <rate>	20	</rate>
           </clip>
           <aimingTime>	2.6	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
+            <turretRotation>	0.14	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -1746,6 +1756,7 @@
         </customizableVehicleAreas>
       </customization>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <physicsShape>	1 0 1 0 0.809 -0.109 0.49 0 0.58 0.5 0.221 0.5 0.2 0 0	</physicsShape>
       <camouflage>
         <density>	104.292862 98.852814	</density>
         <aoTextureSize>	256 512	</aoTextureSize>

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/battle/prebattle/prebattle_hints_confirm.py
+from __future__ import absolute_import
 from helpers import dependency
 from skeletons.gui.prebattle_hints.newbie_controller import INewbiePrebattleHintsController
 from wg_async import wg_async, wg_await

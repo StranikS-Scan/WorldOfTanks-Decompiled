@@ -9,7 +9,10 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
       </exclude>
     </vehicleFilter>
     <style>
@@ -69,7 +72,10 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
       </exclude>
     </vehicleFilter>
     <style>
@@ -216,7 +222,10 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
       </exclude>
     </vehicleFilter>
     <style>
@@ -326,7 +335,10 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
       </exclude>
     </vehicleFilter>
     <style>
@@ -410,7 +422,10 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
       </exclude>
     </vehicleFilter>
     <style>
@@ -554,7 +569,10 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
       </exclude>
     </vehicleFilter>
     <style>
@@ -638,7 +656,10 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
       </exclude>
     </vehicleFilter>
     <style>
@@ -696,7 +717,10 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
       </exclude>
     </vehicleFilter>
     <style>
@@ -748,7 +772,10 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
       </exclude>
     </vehicleFilter>
     <style>
@@ -1547,6 +1574,8 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	3	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>
@@ -1895,6 +1924,8 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	20	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
           <decals>
@@ -2172,8 +2203,8 @@
               <showOn>	TURRET	</showOn>
               <position>
                 <p0>	-0.887566	</p0>
-                <p1>	1.88178	</p1>
-                <p2>	1.00246	</p2>
+                <p1>	1.881780	</p1>
+                <p2>	1.002460	</p2>
               </position>
               <rotation>
                 <r0>	1.588597	</r0>
@@ -2361,6 +2392,8 @@
                 <item>
                   <slotId>	18000	</slotId>
                   <id>	64	</id>
+                  <scaleFactorId>	0	</scaleFactorId>
+                  <rotated>	0	</rotated>
                 </item>
               </attachments>
             </outfit>
@@ -2440,6 +2473,8 @@
                 <item>
                   <slotId>	18000	</slotId>
                   <id>	65	</id>
+                  <scaleFactorId>	0	</scaleFactorId>
+                  <rotated>	0	</rotated>
                 </item>
               </attachments>
             </outfit>
@@ -2527,6 +2562,8 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	70	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
           <insignias>
@@ -2572,6 +2609,8 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	87	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
           <insignias>
@@ -2617,6 +2656,8 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	88	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
           <insignias>
@@ -2662,6 +2703,8 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	91	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>
@@ -2701,6 +2744,8 @@
             <item>
               <id>	124	</id>
               <slotId>	18000	</slotId>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>
@@ -2747,6 +2792,8 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	133	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
         </outfit>
@@ -2786,6 +2833,8 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	117	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
           <insignias>
@@ -2820,6 +2869,8 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	118	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
           <insignias>
@@ -2854,6 +2905,8 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	119	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
           <insignias>
@@ -2888,6 +2941,8 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	120	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
             </item>
           </attachments>
           <insignias>
@@ -2954,7 +3009,7 @@
     <priceGroup>	styles 3000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <vehicles>	usa:A1034_M24_Chaffee_StoryModeStealth usa:A34_M24_Chaffee_CFE_V	</vehicles>
+        <vehicles>	usa:A34_M24_Chaffee_CFE_V usa:A1034_M24_Chaffee_StoryModeStealth	</vehicles>
       </include>
     </vehicleFilter>
     <style>
@@ -3452,6 +3507,54 @@
           </attachments>
         </outfit>
       </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A69_T110E5	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1281	</id>
+      <texture>	gui/maps/vehicles/styles/A69_T110E5_BPXIX_3Dst.png	</texture>
+      <modelsSet>	A69_T110E5_BPXIX_3Dst	</modelsSet>
+      <userString>	#vehicle_customization:special_style/A69_T110E5_BPXIX_3Dst	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/A69_T110E5_BPXIX_3Dst_desc/long	</longDescriptionSpecial>
+      <maxNumber>	1	</maxNumber>
+      <tags>	progression_required c11n3D	</tags>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18002	</slotId>
+              <id>	174	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
     </style>
   </itemGroup>
 </usa.xml>

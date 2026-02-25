@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/quest_progress_top_view.py
+from __future__ import absolute_import
 from account_helpers.settings_core.options import QuestsProgressViewType, QuestsProgressDisplayType
 from account_helpers.settings_core.settings_constants import QUESTS_PROGRESS
 from gui.Scaleform.daapi.view.meta.QuestProgressTopViewMeta import QuestProgressTopViewMeta

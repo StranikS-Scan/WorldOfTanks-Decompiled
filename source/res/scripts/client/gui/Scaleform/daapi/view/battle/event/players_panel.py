@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/event/players_panel.py
+from __future__ import absolute_import
 import BigWorld
 from constants import ARENA_PERIOD
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
@@ -18,7 +19,7 @@ class EventPlayersPanel(EventPlayersPanelMeta, IArenaVehiclesController):
 
     def __init__(self):
         super(EventPlayersPanel, self).__init__()
-        self._points = dict()
+        self._points = {}
         self.__arenaDP = self.sessionProvider.getArenaDP()
 
     def invalidateVehiclesInfo(self, _):
@@ -27,8 +28,8 @@ class EventPlayersPanel(EventPlayersPanelMeta, IArenaVehiclesController):
     def invalidateArenaInfo(self):
         self.invalidateVehiclesInfo(self.sessionProvider.getArenaDP())
 
-    def addVehicleInfo(self, vInfo, _):
-        self.__updateTeammate(vInfo, vInfo.vehicleType.maxHealth)
+    def addVehicleInfo(self, vo, _):
+        self.__updateTeammate(vo, vo.vehicleType.maxHealth)
 
     def updateVehiclesInfo(self, updated, arenaDP):
         for _, vInfo in updated:

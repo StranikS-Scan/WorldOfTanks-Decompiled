@@ -1,18 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/battle_pass_buy_view.py
 import logging
-import SoundGroups
-from PlayerEvents import g_playerEvents
-from frameworks.wulf import Array
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData
 from gui.battle_pass.battle_pass_buyer import BattlePassBuyer
 from gui.battle_pass.battle_pass_constants import ChapterState
-from gui.battle_pass.battle_pass_helpers import chaptersWithLogoBg, fillBattlePassCompoundPrice, getChapterType, getCompoundPriceDefaultID, isSeasonWithAdditionalBackground
-from gui.battle_pass.battle_pass_package import generatePackages
-from gui.battle_pass.sounds import BattlePassSounds
+from gui.battle_pass.battle_pass_package import generatePackage
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_buy_view_model import BattlePassBuyViewModel
-from gui.impl.gen.view_models.views.lobby.battle_pass.package_item import ChapterStates, ChapterType, PackageItem, PackageType
+from gui.impl.gen.view_models.views.lobby.battle_pass.buy_chapter_model import BuyChapterModel
+from gui.impl.gen.view_models.views.lobby.battle_pass.package_item import ChapterStates, PackageType
 from gui.impl.pub.view_component import ViewComponent
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.shared import EVENT_BUS_SCOPE
@@ -21,27 +17,10 @@ from gui.shared.events import BattlePassEvent
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController, IWalletController
 _logger = logging.getLogger(__name__)
-WINDOW_IS_NOT_OPENED = -1
 _CHAPTER_STATES = {ChapterState.ACTIVE: ChapterStates.ACTIVE,
  ChapterState.COMPLETED: ChapterStates.COMPLETED,
  ChapterState.PAUSED: ChapterStates.PAUSED,
  ChapterState.NOT_STARTED: ChapterStates.NOTSTARTED}
-
-class BattlePassBuyViewStates(object):
-
-    def __init__(self):
-        self.chapterID = WINDOW_IS_NOT_OPENED
-        g_playerEvents.onDisconnected += self.reset
-        g_playerEvents.onAccountBecomePlayer += self.reset
-
-    def reset(self):
-        self.chapterID = WINDOW_IS_NOT_OPENED
-
-    def getPackageID(self):
-        return self.chapterID
-
-
-g_BPBuyViewStates = BattlePassBuyViewStates()
 
 class BuyPassPresenter(ViewComponent[BattlePassBuyViewModel]):
     __battlePass = dependency.descriptor(IBattlePassController)
@@ -49,12 +28,11 @@ class BuyPassPresenter(ViewComponent[BattlePassBuyViewModel]):
 
     def __init__(self, *args, **kwargs):
         super(BuyPassPresenter, self).__init__(R.aliases.battle_pass.BuyPass(), BattlePassBuyViewModel)
-        self.__packages = {}
+        self.__packageID = kwargs['chapterID']
         self.__selectedPackage = None
+        self.__childStateID = kwargs.get('childStateID')
         self.__tooltipItems = {}
         self.__tooltipWindow = None
-        self.__packageID = self.__battlePass.getHolidayChapterID() if self.__battlePass.isHoliday() else None
-        self.updateInitialData(**kwargs)
         return
 
     @property
@@ -66,16 +44,13 @@ class BuyPassPresenter(ViewComponent[BattlePassBuyViewModel]):
         return None if tooltipId is None else self.__tooltipItems.get(tooltipId)
 
     def updateInitialData(self, **kwargs):
-        if 'packageID' in kwargs:
-            self.__packageID = kwargs['packageID']
-        childStateID = kwargs.get('childStateID')
-        if childStateID == R.aliases.battle_pass.BuyPassConfirm():
-            self.__choosePackage(self.__packageID)
-            self.__showConfirm()
-        elif childStateID == R.aliases.battle_pass.BuyPassRewards():
-            if self.__battlePass.isHoliday():
-                self.__choosePackage(self.__packageID)
-                self.__setConfirmModel()
+        if 'chapterID' in kwargs:
+            chapter = kwargs['chapterID']
+            if self.__packageID != chapter:
+                self.__packageID = chapter
+                self.__selectedPackage = generatePackage(self.__packageID)
+        self.__childStateID = kwargs.get('childStateID')
+        if self.__childStateID == R.aliases.battle_pass.BuyPassRewards():
             self.__showRewards()
         else:
             self.__showBuy()
@@ -85,53 +60,49 @@ class BuyPassPresenter(ViewComponent[BattlePassBuyViewModel]):
 
     def deactivate(self):
         self._unsubscribe()
+        self.__selectedPackage.resetWithLevels()
+        self.viewModel.rewards.prevTopPriorityRewards.clearItems()
+        self.__clearTooltips()
 
     def onExtraChapterExpired(self):
+        if self.__battlePass.isExtraChapter(self.__packageID):
+            showBattlePass()
+            return
         self.__update()
 
     def _onLoading(self, *args, **kwargs):
         super(BuyPassPresenter, self)._onLoading(*args, **kwargs)
-        if not self.__battlePass.isHoliday():
-            self.__packages = generatePackages(battlePass=self.__battlePass)
-        self.__setGeneralFields()
-        self.__setPackages()
-        if g_BPBuyViewStates.chapterID != WINDOW_IS_NOT_OPENED:
-            self.__choosePackage(g_BPBuyViewStates.getPackageID())
-            self.__showConfirm()
-        g_BPBuyViewStates.reset()
+        self.__selectedPackage = generatePackage(self.__packageID, battlePass=self.__battlePass)
+        if self.__childStateID == R.aliases.battle_pass.BuyPassRewards():
+            self.viewModel.setState(self.viewModel.REWARDS_STATE)
+        with self.viewModel.transaction() as model:
+            self.__setGeneralFields(model=model)
+            self.__setSelectedPackage(model=model)
+            self.__setRegularChapters(model=model)
 
     def _finalize(self):
         self.__selectedPackage = None
         self.__tooltipItems = None
-        self.__packages = None
         self.__tooltipWindow = None
         super(BuyPassPresenter, self)._finalize()
         return
 
     def _getEvents(self):
         return ((self.viewModel.onShopOfferClick, self.__onShopOfferClick),
-         (self.viewModel.confirm.onShowRewardsClick, self.__showRewards),
-         (self.viewModel.confirm.onBuyClick, self.__onBuyBattlePassClick),
-         (self.viewModel.confirm.onChangePurchaseWithLevels, self.__changeWithLevels),
+         (self.viewModel.onShowRewardsClick, self.__showRewards),
+         (self.viewModel.onBuyClick, self.__onBuyBattlePassClick),
+         (self.viewModel.onChangePurchaseWithLevels, self.__changeWithLevels),
          (self.__battlePass.onLevelUp, self.__onLevelUp),
          (self.__wallet.onWalletStatusChanged, self.__onWalletChanged),
          (self.__battlePass.onBattlePassSettingsChange, self.__onBattlePassSettingsChanged),
-         (self.__battlePass.onSeasonStateChanged, self.__onBattlePassSettingsChanged),
-         (self.__battlePass.onChapterChanged, self.__onChapterChanged))
+         (self.__battlePass.onSeasonStateChanged, self.__onBattlePassSettingsChanged))
 
     def _getListeners(self):
         return ((BattlePassEvent.BUYING_THINGS, self.__onBuying, EVENT_BUS_SCOPE.LOBBY), (BattlePassEvent.ON_FINISH_BATTLE_PASS_PURCHASE, self.__onFinishPurchase, EVENT_BUS_SCOPE.LOBBY))
 
-    def __setGeneralFields(self):
-        with self.viewModel.transaction() as tx:
-            tx.setIsWalletAvailable(self.__wallet.isAvailable)
-            tx.setIsSeasonWithAdditionalBackground(isSeasonWithAdditionalBackground())
-            tx.setIsShopOfferAvailable(self.__isShopOfferAvailable())
-            chapterIDs = Array()
-            for chapterID in chaptersWithLogoBg():
-                chapterIDs.addNumber(chapterID)
-
-            tx.setChaptersWithLogoBg(chapterIDs)
+    @replaceNoneKwargsModel
+    def __setGeneralFields(self, model=None):
+        model.setIsWalletAvailable(self.__wallet.isAvailable)
 
     def __clearTooltips(self):
         self.__tooltipItems.clear()
@@ -140,22 +111,14 @@ class BuyPassPresenter(ViewComponent[BattlePassBuyViewModel]):
             self.__tooltipWindow = None
         return
 
-    def __showConfirm(self):
-        if self.__selectedPackage is not None and self.viewModel.getState() != self.viewModel.REWARDS_STATE:
-            self.__selectedPackage.resetWithLevels()
-        self.__setConfirmModel()
-        self.viewModel.setState(self.viewModel.CONFIRM_STATE)
-        SoundGroups.g_instance.playSound2D(BattlePassSounds.CONFIRM_BUY)
-        return
-
     def __showRewards(self):
         self.viewModel.setState(self.viewModel.REWARDS_STATE)
+        self.__updateDetailRewards()
 
     def __showBuy(self):
-        self.__selectedPackage = None
         self.__clearTooltips()
         self.viewModel.setState(self.viewModel.BUY_STATE)
-        return
+        self.__setSelectedPackage()
 
     def __onBuying(self, _):
         self.__battlePass.onLevelUp += self.__onLevelUp
@@ -167,36 +130,24 @@ class BuyPassPresenter(ViewComponent[BattlePassBuyViewModel]):
         self.viewModel.setIsWalletAvailable(self.__wallet.isAvailable)
 
     def __updateState(self):
-        if self.viewModel.getState() == self.viewModel.CONFIRM_STATE:
-            self.__setConfirmModel()
-        elif self.viewModel.getState() == self.viewModel.BUY_STATE and not self.__battlePass.isHoliday():
-            self.__setPackages()
-        elif self.viewModel.getState() == self.viewModel.REWARDS_STATE:
+        if self.viewModel.getState() == self.viewModel.REWARDS_STATE:
             self.__updateDetailRewards()
         else:
-            self.__setPackages()
-
-    def __choosePackage(self, packageID):
-        self.__packageID = int(packageID)
-        self.__update()
-        self.__selectedPackage = self.__packages[self.__packageID]
-        self.__setPrevConfirmState()
+            self.__setSelectedPackage()
 
     @replaceNoneKwargsModel
-    def __setConfirmModel(self, model=None):
-        if self.__selectedPackage is None:
-            return
-        else:
-            self.__clearTooltips()
-            model.confirm.setPrice(self.__selectedPackage.getPrice())
-            model.confirm.setChapterID(self.__selectedPackage.getChapterID())
-            model.confirm.setIsActive(self.__selectedPackage.getChapterState() in (ChapterState.ACTIVE, ChapterState.COMPLETED))
-            model.confirm.setCompoundPriceDefaultID(getCompoundPriceDefaultID(self.__selectedPackage.getCompoundPrice()))
-            model.confirm.setIsPurchaseWithLevels(self.__selectedPackage.isWithLevels())
-            model.confirm.setRemainingLevelsCount(self.__selectedPackage.getRemainingLevelsCount())
-            fillBattlePassCompoundPrice(model.confirm.compoundPrice, self.__selectedPackage.getCompoundPrice())
-            self.__updateDetailRewards(model=model)
-            return
+    def __setSelectedPackage(self, model=None):
+        model.setIsShopOfferAvailable(self.__isShopOfferAvailable())
+        self.__clearTooltips()
+        model.package.setPrice(self.__selectedPackage.getPrice())
+        model.package.setChapterID(self.__selectedPackage.getChapterID())
+        model.package.setIsActive(self.__selectedPackage.getChapterState() in (ChapterState.ACTIVE, ChapterState.COMPLETED))
+        model.package.setIsPurchaseWithLevels(self.__selectedPackage.isWithLevels())
+        model.package.setRemainingLevelsCount(self.__selectedPackage.getRemainingLevelsCount())
+        model.package.starterPackRewards.clearItems()
+        packBonusModelAndTooltipData(self.__battlePass.getChapterStarterPack(self.__packageID), model.package.starterPackRewards, self.__tooltipItems)
+        model.package.starterPackRewards.invalidate()
+        self.__updateDetailRewards(model=model)
 
     @replaceNoneKwargsModel
     def __updateDetailRewards(self, model=None):
@@ -211,84 +162,68 @@ class BuyPassPresenter(ViewComponent[BattlePassBuyViewModel]):
             tx.setChapterID(chapterID)
             tx.setPackageState(PackageType.BATTLEPASS)
             tx.setIsPurchaseWithLevels(self.__selectedPackage.isWithLevels())
-        packBonusModelAndTooltipData(self.__selectedPackage.getNowAwards(), model.rewards.nowRewards, self.__tooltipItems)
-        packBonusModelAndTooltipData(self.__selectedPackage.getFutureAwards(), model.rewards.futureRewards, self.__tooltipItems)
-        packBonusModelAndTooltipData(self.__selectedPackage.getTopPriorityAwards(), model.rewards.topPriorityRewards, self.__tooltipItems)
+            packBonusModelAndTooltipData(self.__selectedPackage.getNowAwards(), tx.nowRewards, self.__tooltipItems)
+            packBonusModelAndTooltipData(self.__selectedPackage.getFutureAwards(), tx.futureRewards, self.__tooltipItems)
+            packBonusModelAndTooltipData(self.__selectedPackage.getTopPriorityAwards(), tx.topPriorityRewards, self.__tooltipItems)
+            tx.nowRewards.invalidate()
+            tx.futureRewards.invalidate()
+            tx.topPriorityRewards.invalidate()
 
-    def __onBuyBattlePassClick(self, ctx):
+    def __onBuyBattlePassClick(self, *_):
         if self.__selectedPackage is not None:
             self.__battlePass.onLevelUp -= self.__onLevelUp
             buyMethod = BattlePassBuyer.buyBP if not self.__selectedPackage.isWithLevels() else BattlePassBuyer.buyBPWithLevels
-            buyMethod(self.__selectedPackage.getSeasonID(), self.__selectedPackage.getChapterID(), ctx.get('priceID'), self.__onBuyBPCallback)
+            buyMethod(self.__selectedPackage.getSeasonID(), self.__selectedPackage.getChapterID(), self.__onBuyBPCallback)
         return
 
     def __onBuyBPCallback(self, result):
         if not result:
             self.__battlePass.onLevelUp += self.__onLevelUp
-        else:
-            self.__setPackages()
-            self.__setGeneralFields()
 
     def __isShopOfferAvailable(self):
-        return not any((package.isBought() and not package.isExtra() and not package.isHoliday() for package in self.__packages.itervalues()))
+        return not self.__battlePass.isHoliday() and not self.__battlePass.isExtraChapter(self.__selectedPackage.getChapterID()) and not any((self.__battlePass.isBought(chapter) for chapter in self.__battlePass.getRegularChapterIDs()))
 
     def __onShopOfferClick(self):
         showBuyBattlePassOverlay()
 
-    @replaceNoneKwargsModel
-    def __setPackages(self, model=None):
-        model.packages.clearItems()
-        for packageID, package in self.__packages.iteritems():
-            if not package.isVisible():
-                continue
-            item = PackageItem()
-            item.setPackageID(packageID)
-            item.setPrice(package.getPrice())
-            item.setIsBought(package.isBought())
-            item.setType(PackageType.BATTLEPASS)
-            item.setIsLocked(package.isLocked())
-            item.setChapterID(package.getChapterID())
-            item.setChapterType(ChapterType(getChapterType(package.getChapterID())))
-            item.setChapterState(_CHAPTER_STATES.get(package.getChapterState()))
-            item.setCurrentLevel(package.getCurrentLevel() + 1)
-            item.setExpireTime(self.__battlePass.getChapterRemainingTime(package.getChapterID()))
-            fillBattlePassCompoundPrice(item.compoundPrice, package.getCompoundPrice())
-            model.packages.addViewModel(item)
-
-        model.packages.invalidate()
-
     def __onBattlePassSettingsChanged(self, *_):
         self.__update()
 
-    def __onChapterChanged(self):
-        self.__update(forceUpdatePackages=True)
-
-    def __update(self, forceUpdatePackages=False):
+    def __update(self):
         ctrl = self.__battlePass
-        if forceUpdatePackages or len(ctrl.getMainChapterIDs()) != self.viewModel.packages.getItemsLength():
-            self.__packages = generatePackages(battlePass=ctrl)
-            self.__setPackages()
         isValidState = not self.__packageID or ctrl.isChapterExists(self.__packageID) and (not ctrl.isExtraChapter(self.__packageID) or ctrl.getChapterRemainingTime(self.__packageID) > 0)
         allBought = ctrl.isAllMainChaptersBought()
         if not isValidState or allBought:
             showBattlePass(R.aliases.battle_pass.ChapterChoice())
             return
+        self.__selectedPackage = generatePackage(self.__packageID, battlePass=ctrl)
         self.__updateState()
 
     @replaceNoneKwargsModel
     def __changeWithLevels(self, model=None):
-        if model.getState() == self.viewModel.CONFIRM_STATE:
-            self.__setPrevConfirmState()
-            self.__selectedPackage.changeWithLevels()
-            self.__setConfirmModel()
+        self.__setPrevBuyState()
+        self.__selectedPackage.changeWithLevels()
+        self.__setSelectedPackage()
 
     @replaceNoneKwargsModel
-    def __setPrevConfirmState(self, model=None):
+    def __setPrevBuyState(self, model=None):
         if self.__selectedPackage is not None:
-            model.confirm.setPrevPrice(self.__selectedPackage.getPrice())
+            model.package.setPrevPrice(self.__selectedPackage.getPrice())
             model.rewards.prevTopPriorityRewards.clearItems()
             packBonusModelAndTooltipData(self.__selectedPackage.getTopPriorityAwards(), model.rewards.prevTopPriorityRewards, self.__tooltipItems)
         return
 
     def __onFinishPurchase(self, _):
-        showBattlePass(R.aliases.battle_pass.Progression())
+        showBattlePass(R.aliases.battle_pass.Progression(), self.__packageID)
+
+    @replaceNoneKwargsModel
+    def __setRegularChapters(self, model=None):
+        chapters = model.getRegularChapters()
+        chapters.clear()
+        for chapterID in self.__battlePass.getRegularChapterIDs():
+            chapterModel = BuyChapterModel()
+            chapterModel.setChapterID(chapterID)
+            chapterModel.setHasStarterPack(bool(self.__battlePass.getChapterStarterPack(chapterID)))
+            chapters.addViewModel(chapterModel)
+
+        chapters.invalidate()

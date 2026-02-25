@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/full_stats.py
+from __future__ import absolute_import
+from future.utils import viewvalues
 import BattleReplay
 from ReplayEvents import g_replayEvents
 from account_helpers import AccountSettings
@@ -99,7 +101,7 @@ class FullStatsComponent(ClassicFullStatsMeta):
         isProgressTrackingEnabled = progressViewType == QuestsProgressViewType.TYPE_STANDARD
         trackingData = []
         personalMissions = self.__eventsCache.getPersonalMissions()
-        for quest in sorted(questProgress.getInProgressQuests().itervalues(), key=lambda q: q.getQuestBranch()):
+        for quest in sorted(viewvalues(questProgress.getInProgressQuests()), key=lambda q: q.getQuestBranch()):
             isSelected = quest == selectedQuest
             operation = personalMissions.getOperationsForBranch(quest.getQuestBranch())[quest.getOperationID()]
             trackingData.append({'eyeBtnVisible': isProgressTrackingEnabled and isSelected,

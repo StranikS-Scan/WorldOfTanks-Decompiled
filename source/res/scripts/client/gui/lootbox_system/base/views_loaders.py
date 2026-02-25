@@ -54,7 +54,7 @@ def showItemPreview(itemType, itemID, styleID, customization=None, itemsCache=No
     if itemType == 'vehicles':
         vehicle = itemsCache.items.getItemByCD(itemID)
         if vehicle.isInInventory:
-            window = findActiveWindow(R.views.mono.lootbox.main())
+            window = findActiveWindow(R.views.mono.lootbox.main()) or findActiveWindow(R.views.mono.lootbox.info_page())
             if window is not None:
                 window.destroyWindow()
             selectVehicleInHangar(itemID, loadHangar=True)

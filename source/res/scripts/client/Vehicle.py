@@ -351,8 +351,6 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             try:
                 vehicle.onLeaveWorld()
                 vehicle.onEnterWorld()
-                if 'networkVehicleHierarchy' in vehicle.dynamicComponents:
-                    vehicle.networkVehicleHierarchy.onRespawn()
             finally:
                 vehicle.isLeavingWorldForRespawn = False
 

@@ -6,7 +6,7 @@ from helpers import dependency
 from shared_utils import first
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as _CAPS
 from gui.battle_results.pbs_helpers.additional_bonuses import isGoldPiggyBankAvailaible
-from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.game_control import IWotPlusController
 if typing.TYPE_CHECKING:
     from gui.battle_results.reusable import _ReusableInfo
     from gui.battle_results.stats_ctrl import BattleResults
@@ -123,9 +123,9 @@ def isFreeXpAvailable(battleResults):
     return ('isAvailable', isAvailable)
 
 
-@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
-def isWotPlusBonusEnabled(_, lobbyContext=None):
-    isWotPlusBattleBonusesEnabled = lobbyContext.getServerSettings().isWotPlusBattleBonusesEnabled()
+@dependency.replace_none_kwargs(wotPlusCtrl=IWotPlusController)
+def isWotPlusBonusEnabled(_, wotPlusCtrl=None):
+    isWotPlusBattleBonusesEnabled = wotPlusCtrl.getSettingsStorage().isBattleBonusesEnabled()
     return ('isEnabled', isWotPlusBattleBonusesEnabled)
 
 

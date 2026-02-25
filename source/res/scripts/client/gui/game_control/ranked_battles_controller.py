@@ -936,7 +936,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         if rankIdx >= 0:
             stepsCount = stepsToProgress[rankIdx]
             bonusStepsCount = bonusSteps[rankIdx] if bonusSteps else None
-        isCurrent = True if rankID == currentProgress[0] else False
+        isCurrent = rankID == currentProgress[0]
         shieldStatus = self.__getDynamicShieldStatus(rankID, isCurrent, shield, lastShield)
         quests = self.getQuestsForRank(rankID)
         quests = quests.values() if quests is not None else None

@@ -15,8 +15,10 @@ from gui.shared.money import Currency
 from helpers.i18n import makeString
 from ids_generators import SequenceIDGenerator
 from items import ITEM_TYPE_INDICES, vehicles as vehs_core
+from items.components.shell_components import ShellType, HollowChargeType, HighExplosiveType
 from post_progression_common import TankSetupGroupsId
 if typing.TYPE_CHECKING:
+    from typing import Tuple
     from gui.impl.gen_utils import DynAccessor
 
 def rnd_choice(*args):
@@ -280,3 +282,35 @@ def getImageResourceFromPath(path):
 def capitalizeText(text):
     t = text.decode()
     return t[0].upper() + t[1:]
+
+
+def getShellImpactParams(shellType):
+    shieldPenetration = False
+    shellTypeMaxDamage = 0
+    if isinstance(shellType, HollowChargeType):
+        ricochetAngleCos = shellType.ricochetAngleCos
+        normalizationAngle = 0.0
+    elif isinstance(shellType, HighExplosiveType):
+        ricochetAngleCos = 0.0
+        normalizationAngle = 0.0
+        if shellType.shieldPenetration is not None:
+            shieldPenetration = shellType.shieldPenetration
+        if shellType.maxDamage is not None:
+            shellTypeMaxDamage = shellType.maxDamage
+    else:
+        ricochetAngleCos = shellType.ricochetAngleCos
+        normalizationAngle = shellType.normalizationAngle
+    return (ricochetAngleCos,
+     normalizationAngle,
+     shieldPenetration,
+     shellTypeMaxDamage)
+
+
+def deepMergeDicts(destination, source):
+    for key in source:
+        if key in destination and isinstance(destination[key], dict) and isinstance(source[key], dict):
+            if not source[key]:
+                destination[key] = {}
+            else:
+                deepMergeDicts(destination[key], source[key])
+        destination[key] = source[key]

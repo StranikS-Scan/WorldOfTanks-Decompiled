@@ -312,7 +312,6 @@ class REQ_CRITERIA(object):
         BATTLE_ROYALE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForBattleRoyaleBattles))
         MAPS_TRAINING = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForMapsTrainingBattles))
         CLAN_WARS = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForClanWarsBattles))
-        FUN_RANDOM = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForFunRandomBattles))
         COMP7 = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForComp7Battles))
         MODE_HIDDEN = RequestCriteria(PredicateCondition(lambda item: item.isModeHidden))
         HAS_XP_FACTOR = RequestCriteria(PredicateCondition(lambda item: item.dailyXPFactor != -1))
@@ -329,6 +328,7 @@ class REQ_CRITERIA(object):
         DISCOUNT_RENT_OR_BUY = RequestCriteria(PredicateCondition(lambda item: (item.buyPrices.itemPrice.isActionPrice() or item.getRentPackageActionPrc() != 0) and not item.isRestoreAvailable()))
         HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: item.tags.issuperset(tags))))
         HAS_ANY_TAG = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: bool(item.tags & tags))))
+        HAS_NO_TAG = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: not bool(item.tags & tags))))
         FOR_ITEM = staticmethod(lambda style: RequestCriteria(PredicateCondition(style.mayInstall)))
         HAS_ROLE = staticmethod(lambda roleName: RequestCriteria(PredicateCondition(lambda item: roleName in {roles[0] for roles in item.descriptor.type.crewRoles})))
         HAS_ROLES = staticmethod(lambda tankmanRoles: RequestCriteria(PredicateCondition(lambda item: any((roles[0] in tankmanRoles for roles in item.descriptor.type.crewRoles)))))
@@ -459,7 +459,8 @@ class ItemsRequester(IItemsRequester):
      'battleRoyaleStats',
      'wtr',
      'layout',
-     'layoutState'])
+     'layoutState',
+     'serviceRecordCustomization'])
 
     def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, battlePassRequester=None, giftSystemRequester=None, gameRestrictionsRequester=None, achievements20Requester=None, petSystemRequester=None):
         self.__inventory = inventory
@@ -639,12 +640,13 @@ class ItemsRequester(IItemsRequester):
         seasons = yield dr.getRated7x7Seasons()
         ranked = yield dr.getRankedInfo()
         dogTag = yield dr.getDogTag()
+        serviceRecordCustomization = yield dr.getServiceRecordCustomization()
         battleRoyaleStats = yield dr.getBattleRoyaleStats()
         wtr = yield dr.getWTR()
         layout = yield dr.getLayout()
         layoutState = yield dr.getLayoutState()
         container = self.__itemsCache[GUI_ITEM_TYPE.ACCOUNT_DOSSIER]
-        container[databaseID] = self._AccountItem(userAccDossier, clanInfo, seasons, ranked, dogTag, battleRoyaleStats, wtr, layout, layoutState)
+        container[databaseID] = self._AccountItem(userAccDossier, clanInfo, seasons, ranked, dogTag, battleRoyaleStats, wtr, layout, layoutState, serviceRecordCustomization)
         callback((userAccDossier, clanInfo, dr.isHidden))
 
     def unloadUserDossier(self, databaseID):
@@ -1111,6 +1113,17 @@ class ItemsRequester(IItemsRequester):
             return
         else:
             return dogTag
+
+    def getServiceRecordCustomization(self, databaseID=None):
+        if databaseID is None:
+            return {}
+        container = self.__itemsCache[GUI_ITEM_TYPE.ACCOUNT_DOSSIER]
+        serviceRecordCustomization = container.get(int(databaseID)).serviceRecordCustomization
+        if serviceRecordCustomization is None:
+            LOG_WARNING('Trying to get empty user serviceRecordCustomization', databaseID)
+            return {}
+        else:
+            return serviceRecordCustomization
 
     def getWTR(self, databaseID=None):
         if databaseID is None:

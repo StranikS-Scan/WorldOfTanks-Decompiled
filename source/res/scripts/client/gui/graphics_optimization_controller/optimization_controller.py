@@ -31,6 +31,7 @@ class GraphicsOptimizationController(IGraphicsOptimizationController):
 
     def init(self):
         self.__config.update(collectOptimizedViews())
+        self.__settingsNames = getSettingsNames(self.__config)
         g_eventBus.addListener(events.GameEvent.GUI_VISIBILITY, self.__handleGuiVisibility, scope=EVENT_BUS_SCOPE.BATTLE)
         self.__settingsCore.onSettingsChanged += self.__onSettingsChanged
 
@@ -49,6 +50,7 @@ class GraphicsOptimizationController(IGraphicsOptimizationController):
 
     def updateConfig(self, config):
         self.__config.update(config)
+        self.__settingsNames = getSettingsNames(self.__config)
 
     def registerOptimizationArea(self, x, y, width, height):
         if width < 0 or height < 0:

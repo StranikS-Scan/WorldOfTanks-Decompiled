@@ -2,10 +2,10 @@
 # Embedded file name: scripts/client/gui/platform/products_fetcher/subscriptions/subscription_descriptors.py
 from typing import TYPE_CHECKING
 from gui.impl.gen.view_models.views.lobby.player_subscriptions.subscription_model import SubscriptionTypeEnum
-from gui.impl.gen.view_models.views.lobby.player_subscriptions.wot_subscription_model import WotSubscriptionStateEnum
+from gui.impl.gen.view_models.views.lobby.player_subscriptions.wot_subscription_model import WotSubscriptionStateEnum, WotTierEnum
 from gui.platform.products_fetcher.product_descriptor import ProductDescriptor
 from helpers import dependency
-from renewable_subscription_common.settings_constants import WotPlusState
+from renewable_subscription_common.settings_constants import WotPlusState, WotPlusTier
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -13,7 +13,7 @@ from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
 if TYPE_CHECKING:
     from gui.server_events.event_items import Quest
-__all__ = ('SubscriptionDescriptor', 'PrimeGamingDescriptor', 'WotPlusDescriptor')
+__all__ = ('SubscriptionDescriptor', 'PrimeGamingDescriptor', 'WotPlusDescriptor', 'WotPlusProDescriptor')
 
 class SubscriptionDescriptor(ProductDescriptor):
     _lobbyContext = dependency.descriptor(ILobbyContext)
@@ -127,6 +127,11 @@ class WotPlusDescriptor(SubscriptionDescriptor):
     _WOT_PLUS_COMMON_STATE_TO_UI = {WotPlusState.INACTIVE: WotSubscriptionStateEnum.INACTIVE,
      WotPlusState.ACTIVE: WotSubscriptionStateEnum.ACTIVE,
      WotPlusState.CANCELLED: WotSubscriptionStateEnum.CANCELLED}
+    _WOT_PLUS_TIER_TO_UI = {WotPlusTier.NONE: WotTierEnum.NONE,
+     WotPlusTier.CORE: WotTierEnum.CORE,
+     WotPlusTier.PRO: WotTierEnum.PRO}
+    _SUBSCRIPTION_TYPE_TO_TIER = {SubscriptionTypeEnum.WOTSUBSCRIPTION: WotPlusTier.CORE,
+     SubscriptionTypeEnum.WOTPROSUBSCRIPTION: WotPlusTier.PRO}
 
     @property
     def type(self):
@@ -138,4 +143,19 @@ class WotPlusDescriptor(SubscriptionDescriptor):
 
     @property
     def state(self):
-        return WotPlusDescriptor._WOT_PLUS_COMMON_STATE_TO_UI[self._wotPlusCtrl.getState()]
+        return WotPlusDescriptor._WOT_PLUS_COMMON_STATE_TO_UI[self._wotPlusCtrl.getState()] if self._wotPlusCtrl.getTier() == self.tier else WotSubscriptionStateEnum.INACTIVE
+
+    @property
+    def tier(self):
+        return WotPlusDescriptor._SUBSCRIPTION_TYPE_TO_TIER[self.type]
+
+    @property
+    def tierForUi(self):
+        return WotPlusDescriptor._WOT_PLUS_TIER_TO_UI[self.tier]
+
+
+class WotPlusProDescriptor(WotPlusDescriptor):
+
+    @property
+    def type(self):
+        return SubscriptionTypeEnum.WOTPROSUBSCRIPTION

@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/LegalInfoWindow.py
+from __future__ import absolute_import
+from builtins import open
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.view.meta.LegalInfoWindowMeta import LegalInfoWindowMeta
 from debug_utils import LOG_ERROR
@@ -34,7 +36,7 @@ class LegalInfoWindow(LegalInfoWindowMeta):
         info = ''
         LICENSES_PATH = 'licenses.txt'
         try:
-            f = open(LICENSES_PATH, 'r')
+            f = open(LICENSES_PATH, mode='r', encoding='utf-8')
         except IOError:
             LOG_ERROR('cannot open %s' % LICENSES_PATH)
         else:

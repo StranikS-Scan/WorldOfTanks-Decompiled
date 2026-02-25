@@ -284,7 +284,7 @@ class MusicController(object):
             arena = BigWorld.player().arena
             period = arena.period
             if not g_replayCtrl.isTimeWarpInProgress or period == ARENA_PERIOD.BATTLE:
-                stateValue = _ARENA_PERIOD_STATE.get(period, None)
+                stateValue = _ARENA_PERIOD_STATE.get(period)
                 if stateValue is not None:
                     WWISE.WW_setState(_ARENA_PERIOD_STATE_NAME, stateValue)
             if period == ARENA_PERIOD.PREBATTLE or period == ARENA_PERIOD.BATTLE:

@@ -15,8 +15,6 @@ from gui.prb_control.invites import AutoInvitesNotifier
 from gui.prb_control.items import prb_items, SelectResult
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME, FUNCTIONAL_FLAG
 from gui.prb_control.settings import REQUEST_TYPE, PREBATTLE_ROSTER, PREBATTLE_ACTION_NAME
-from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import ChannelCarouselEvent
 from helpers import dependency
 from helpers import i18n
 from skeletons.gui.lobby_context import ILobbyContext
@@ -84,7 +82,6 @@ class BattleSessionEntity(LegacyEntity):
         result = super(BattleSessionEntity, self).init(clientPrb=clientPrb, ctx=ctx)
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_WINDOW)
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_PAGE)
-        g_eventBus.addListener(ChannelCarouselEvent.CAROUSEL_INITED, self.__handleCarouselInited, scope=EVENT_BUS_SCOPE.LOBBY)
         return result
 
     def isGUIProcessed(self):
@@ -98,7 +95,6 @@ class BattleSessionEntity(LegacyEntity):
                 g_eventDispatcher.removeSpecBattleFromCarousel(prbType)
         else:
             g_eventDispatcher.removeSpecBattleFromCarousel(prbType, closeWindow=False)
-        g_eventBus.removeListener(ChannelCarouselEvent.CAROUSEL_INITED, self.__handleCarouselInited, scope=EVENT_BUS_SCOPE.LOBBY)
         return result
 
     def getQueueType(self):
@@ -166,6 +162,3 @@ class BattleSessionEntity(LegacyEntity):
     @vehicleAmmoCheck
     def _setPlayerReady(self, ctx, callback=None):
         super(BattleSessionEntity, self)._setPlayerReady(ctx, callback)
-
-    def __handleCarouselInited(self, _):
-        g_eventDispatcher.addSpecBattleToCarousel(self.getEntityType())

@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/impl/lobby/tooltips/progression_quest_tooltip.py
-from battle_royale_progression.gui.impl.lobby.views.bonus_packer import getBonusPacker, packMissionItem, packQuestBonuses
+from battle_royale.gui.impl.lobby.views.bonus_packer import getBonusPacker, packMissionItem, packQuestBonuses
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.user_missions.widget.widget_quest_model import WidgetQuestModel
 from gui.impl.lobby.user_missions.tooltips.quest_tooltip import BaseQuestTooltip

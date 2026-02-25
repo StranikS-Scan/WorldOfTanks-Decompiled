@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/maps_training/markers2d.py
+from __future__ import absolute_import
+from future.utils import viewvalues
 from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from gui.battle_control import avatar_getter
 from gui.Scaleform.daapi.view.battle.shared.markers2d import plugins, vehicle_plugins, MarkersManager
@@ -32,7 +34,7 @@ class _MapsTrainingVehicleMarkerPlugin(vehicle_plugins.VehicleMarkerPlugin):
 
     def __onLocalKillGoalsUpdated(self, localGoals):
         self.__localGoals = set((vehID for vehID in localGoals))
-        for marker in self._markers.itervalues():
+        for marker in viewvalues(self._markers):
             self.__updateGoal(marker)
 
     def __updateGoal(self, marker):

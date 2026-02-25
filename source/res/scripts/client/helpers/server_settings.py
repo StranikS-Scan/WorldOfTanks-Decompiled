@@ -19,7 +19,7 @@ from battle_modifiers_common import BattleModifiers, BattleParams, ModifiersCont
 from battle_pass_common import BATTLE_PASS_CONFIG_NAME, BattlePassConfig
 from collections_common import CollectionsConfig
 from collector_vehicle import CollectorVehicleConsts
-from constants import BATTLE_NOTIFIER_CONFIG, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, MAGNETIC_AUTO_AIM_CONFIG, MISC_GUI_SETTINGS, OPTIONAL_DEVICES_USAGE_CONFIG, PLAYER_SUBSCRIPTIONS_CONFIG, RENEWABLE_SUBSCRIPTION_CONFIG, TOURNAMENT_CONFIG, ClansConfig, Configs, PremiumConfigs
+from constants import BATTLE_NOTIFIER_CONFIG, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, MAGNETIC_AUTO_AIM_CONFIG, MISC_GUI_SETTINGS, OPTIONAL_DEVICES_USAGE_CONFIG, PLAYER_SUBSCRIPTIONS_CONFIG, TOURNAMENT_CONFIG, ClansConfig, Configs, PremiumConfigs
 from debug_utils import LOG_DEBUG, LOG_NOTE
 from gifts.gifts_common import ClientReqStrategy, GiftEventID, GiftEventState
 from gui import GUI_SETTINGS, SystemMessages
@@ -42,14 +42,13 @@ from post_progression_common import FEATURE_BY_GROUP_ID, ROLESLOT_FEATURE
 from prestige_system.prestige_common import PrestigeConfig
 from prestige_system.prestige_milestones_common import PrestigeMilestonesConfig
 from ranked_common import SwitchState
-from renewable_subscription_common.settings_constants import ADDITIONAL_BONUS_APPLY_COUNT, ADDITIONAL_BONUS_ENABLED, ADDITIONAL_BONUS_SECTION, ENABLE_BADGES, GOLD_RESERVE_GAINS_SECTION
 from schema_manager import getSchemaManager
 from soft_exception import SoftException
 from telecom_rentals_common import TELECOM_RENTALS_CONFIG
 from trade_in_common.constants_types import CONFIG_NAME as TRADE_IN_CONFIG_NAME
 from helpers.ingame_tournament_helper import IngameTournamentType
 if typing.TYPE_CHECKING:
-    from typing import Callable, Dict, List, Sequence, Set
+    from typing import Callable, Dict, List, Sequence
     from dict2model.schemas import SchemaModelType
     from game_params_common.schema import GameParamsSchema
 _logger = logging.getLogger(__name__)
@@ -573,6 +572,7 @@ class _SquadPremiumBonus(namedtuple('_SquadPremiumBonus', ('isEnabled', 'ownCred
 
 
 class BattleRoyaleConfig(namedtuple('BattleRoyaleConfig', ('isEnabled',
+ 'isStPatrick',
  'peripheryIDs',
  'unburnableTitles',
  'eventProgression',
@@ -589,12 +589,15 @@ class BattleRoyaleConfig(namedtuple('BattleRoyaleConfig', ('isEnabled',
  'url',
  'respawns',
  'progressionTokenAward',
- 'tournamentsWidget'))):
+ 'tournamentsWidget',
+ 'coinAward',
+ 'dailyBonus'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, peripheryIDs={}, eventProgression={}, unburnableTitles=(), primeTimes={}, seasons={}, cycleTimes={}, maps=(), battleXP={}, coneVisibility={}, loot={}, defaultAmmo={}, vehiclesSlotsConfig={}, economics={}, url='', respawns={}, progressionTokenAward={}, tournamentsWidget={})
+        defaults = dict(isEnabled=False, isStPatrick=False, peripheryIDs={}, eventProgression={}, unburnableTitles=(), primeTimes={}, seasons={}, cycleTimes={}, maps=(), battleXP={}, coneVisibility={}, loot={}, defaultAmmo={}, vehiclesSlotsConfig={}, economics={}, url='', respawns={}, progressionTokenAward={}, tournamentsWidget={}, coinAward={}, dailyBonus={})
         defaults.update(kwargs)
+        cls.__packStpCoinAwardConfig(defaults)
         return super(BattleRoyaleConfig, cls).__new__(cls, **defaults)
 
     def asDict(self):
@@ -608,6 +611,10 @@ class BattleRoyaleConfig(namedtuple('BattleRoyaleConfig', ('isEnabled',
     @classmethod
     def defaults(cls):
         return cls()
+
+    @classmethod
+    def __packStpCoinAwardConfig(cls, data):
+        data['coinAward'] = {int(bonusType):value for bonusType, value in data['coinAward'].iteritems()}
 
 
 class _TelecomConfig(object):
@@ -715,20 +722,6 @@ class EasyTankEquipConfig(typing.NamedTuple('EasyTankEquipConfig', (('enabled', 
 
     def asDict(self):
         return self._asdict()
-
-    def replace(self, data):
-        allowedFields = self._fields
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
-        return self._replace(**dataToUpdate)
-
-
-class _AdventCalendarConfig(namedtuple('_AdventCalendarConfig', ('calendarURL', 'popupIntervalInHours'))):
-    __slots__ = ()
-
-    def __new__(cls, **kwargs):
-        defaults = dict(calendarURL='', popupIntervalInHours=24)
-        defaults.update(kwargs)
-        return super(_AdventCalendarConfig, cls).__new__(cls, **defaults)
 
     def replace(self, data):
         allowedFields = self._fields
@@ -1441,7 +1434,6 @@ class ServerSettings(object):
         self.__bwShop = _BwShop()
         self.__rankedBattlesSettings = RankedBattlesConfig.defaults()
         self.__epicMetaGameSettings = _EpicMetaGameConfig()
-        self.__adventCalendar = _AdventCalendarConfig()
         self.__epicGameSettings = EpicGameConfig()
         self.__unitAssemblerConfig = _UnitAssemblerConfig.defaults()
         self.__telecomConfig = _TelecomConfig.defaults()
@@ -1835,10 +1827,6 @@ class ServerSettings(object):
         return self.__rankedBattlesSettings
 
     @property
-    def adventCalendar(self):
-        return self.__adventCalendar
-
-    @property
     def exchangeRates(self):
         return self.__exchangeRatesConfig
 
@@ -1984,9 +1972,6 @@ class ServerSettings(object):
     def elenUpdateInterval(self):
         return self.__getGlobalSetting('elenSettings', {}).get('elenUpdateInterval', 60)
 
-    def isGoldFishEnabled(self):
-        return self.__getGlobalSetting('isGoldFishEnabled', False)
-
     def isStorageEnabled(self):
         return self.__bwShop.isStorageEnabled
 
@@ -2089,76 +2074,8 @@ class ServerSettings(object):
     def isDogTagsBattleMarkerEnabled(self):
         return self.isDogTagEnabled() and self.__getGlobalSetting(DOG_TAGS_CONFIG, {}).get('enableDogTagsBattleMarker', True)
 
-    def isRenewableSubEnabled(self):
-        return self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enabled', False)
-
-    def isWotPlusEnabledForSteam(self):
-        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enabledForSteam', False)
-
-    def isRenewableSubGoldReserveEnabled(self):
-        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enableGoldReserve', False)
-
-    def isRenewableSubPassiveCrewXPEnabled(self):
-        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enablePassiveCrewXP', False)
-
-    def isWotPlusExcludedMapEnabled(self):
-        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enableExcludedMap', False)
-
-    def isWoTPlusExclusiveVehicleEnabled(self):
-        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enableWoTPlusExclusiveVehicle', False)
-
-    def isFreeEquipmentDemountingEnabled(self):
-        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enableFreeEquipmentDemounting', False)
-
-    def isOptionalDevicesAssistantEnabled(self):
-        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enableOptionalDevicesAssistant', False)
-
-    def isCrewAssistantEnabled(self):
-        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enableCrewAssistant', False)
-
-    def isFreeDeluxeEquipmentDemountingEnabled(self):
-        return self.isFreeEquipmentDemountingEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enableFreeDeluxeEquipmentDemounting', False)
-
-    def isDailyAttendancesEnabled(self):
-        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enableDailyAttendances', False)
-
-    def isWotPlusBattleBonusesEnabled(self):
-        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('battleBonuses', {}).get('enabled', False)
-
-    def getWotPlusBattleBonusesConfig(self):
-        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('battleBonuses', {})
-
-    def isBadgesEnabled(self):
-        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get(ENABLE_BADGES, False)
-
-    def getWotPlusExclusiveVehicleInfo(self):
-        return self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('exclusiveVehicle', {})
-
-    def getDailyAttendanceQuestPrefix(self):
-        return self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('dailyAttendanceQuestPrefix', '')
-
-    def getRenewableSubCrewXPPerMinute(self):
-        return self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('crewXPPerMinute', 0)
-
-    def getRenewableSubMaxGoldReserveCapacity(self):
-        return self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('maxGoldReserveCapacity', 0)
-
-    def getArenaTypesWithGoldReserve(self, battleModifiers=None):
-        battleModifiers = battleModifiers or BattleModifiers()
-        goldConfig = self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get(GOLD_RESERVE_GAINS_SECTION, {})
-        return battleModifiers(BattleParams.GOLD_RESERVE_GAINS, goldConfig).keys()
-
-    def getWotPlusProductCodes(self):
-        return self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('subscriptionProductCode', set())
-
-    def isAdditionalWoTPlusEnabled(self):
-        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get(ADDITIONAL_BONUS_SECTION, {}).get(ADDITIONAL_BONUS_ENABLED, False)
-
-    def getAdditionalWoTPlusXPCount(self):
-        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get(ADDITIONAL_BONUS_SECTION, {}).get(ADDITIONAL_BONUS_APPLY_COUNT, 0) or 0
-
     def getOptionalDevicesUsageConfig(self):
-        return self.isRenewableSubEnabled() and self.__getGlobalSetting(OPTIONAL_DEVICES_USAGE_CONFIG, {})
+        return self.__getGlobalSetting(OPTIONAL_DEVICES_USAGE_CONFIG, {})
 
     def isTelecomRentalsEnabled(self):
         return self.__getGlobalSetting(TELECOM_RENTALS_CONFIG, {}).get('enabled', True)

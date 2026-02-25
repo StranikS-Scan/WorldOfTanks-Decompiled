@@ -7,6 +7,13 @@
   <VEH_TYPE_CD>	UINT32	</VEH_TYPE_CD>
   <ARENA_UNIQUE_ID>	UINT64	</ARENA_UNIQUE_ID>
   <NETWORK_ID>	UINT32	</NETWORK_ID>
+  <PERK_EFFECTS>	FIXED_DICT	  <Properties>
+      <equipment>
+        <Type>	ARRAY	  <of>	STRING	</of>
+        </Type>
+      </equipment>
+    </Properties>
+  </PERK_EFFECTS>
   <SERVER_STATISTICS>	FIXED_DICT	  <Properties>
       <clusterCCU>
         <Type>	UINT32	</Type>
@@ -2670,6 +2677,15 @@
       <stFrags>
         <Type>	UINT32	</Type>
       </stFrags>
+      <frags>
+        <Type>	INT16	</Type>
+      </frags>
+      <tkills>
+        <Type>	INT16	</Type>
+      </tkills>
+      <fogOfWar>
+        <Type>	UINT8	</Type>
+      </fogOfWar>
       <__generation>
         <Type>	UINT32	</Type>
       </__generation>
@@ -2988,6 +3004,16 @@
   </COMMENDATIONS_BATTLE_STATISTICS>
   <COMMENDATIONS_BATTLE_STATISTICS_LIST>	ARRAY	  <of>	COMMENDATIONS_BATTLE_STATISTICS	</of>
   </COMMENDATIONS_BATTLE_STATISTICS_LIST>
+  <FALL_TANKS_EVACUATION_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+      <baseTime>
+        <Type>	FLOAT32	</Type>
+      </baseTime>
+    </Properties>
+  </FALL_TANKS_EVACUATION_INFO>
   <GAME_OBJECT_STATE_INFO>	FIXED_DICT	  <Properties>
       <prefabPath>
         <Type>	STRING	</Type>

@@ -23,7 +23,7 @@ def getViewSettings():
     from battle_royale.gui.impl.lobby.views.battle_result_view.battle_result_view import BattleRoyaleBattleResultsWindow
     from battle_royale.gui.impl.lobby.views.battle_royale_hangar_view import BattleRoyaleHangarWindow
     from battle_royale.gui.impl.lobby.views.pre_battle import BattleRoyalePreBattleWindow
-    from battle_royale_progression.gui.impl.lobby.views.progression_main_view import BattleRoyaleProgressionWindow
+    from battle_royale.gui.impl.lobby.views.progression_main_view import BattleRoyaleProgressionWindow
     return (ViewSettings(BATTLEROYALE_ALIASES.BR_HANGAR_VIEW, BattleRoyaleHangarWindow, '', WindowLayer.SUB_VIEW, BATTLEROYALE_ALIASES.BR_HANGAR_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(BATTLEROYALE_ALIASES.BR_TOURNAMENT_BATTLE_QUEUE, BattleRoyalePreBattleWindow, '', WindowLayer.SUB_VIEW, BATTLEROYALE_ALIASES.BR_TOURNAMENT_BATTLE_QUEUE, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(BATTLEROYALE_ALIASES.BR_PROGRESSION, BattleRoyaleProgressionWindow, '', WindowLayer.SUB_VIEW, BATTLEROYALE_ALIASES.BR_PROGRESSION, ScopeTemplates.LOBBY_SUB_SCOPE),

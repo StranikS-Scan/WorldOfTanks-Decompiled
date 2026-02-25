@@ -44,7 +44,7 @@ def openBoxes(eventName, category, count, processResult=None, lootBoxes=None):
         else:
             _logger.error('Failed to open loot box')
     else:
-        pathParts = 'serviceChannelMessages/server_error'.split('/')
+        pathParts = ['serviceChannelMessages', 'server_error']
         SystemMessages.pushMessage(text=backport.text(getTextResource(pathParts + ['DISABLED'], eventName)()), type=SystemMessages.SM_TYPE.ErrorHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(getTextResource(pathParts, eventName)())})
         g_eventBus.handleEvent(events.LootBoxSystemEvent(events.LootBoxSystemEvent.OPENING_ERROR), scope=EVENT_BUS_SCOPE.LOBBY)
     return

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/pub/dialog_window.py
+from __future__ import absolute_import
 import logging
 from collections import namedtuple
 from wg_async import wg_async, wg_await, AsyncEvent, AsyncReturn, AsyncScope, BrokenPromiseError

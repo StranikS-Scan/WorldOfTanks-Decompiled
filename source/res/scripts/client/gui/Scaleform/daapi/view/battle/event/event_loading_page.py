@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/event/event_loading_page.py
+from __future__ import absolute_import
 from PlayerEvents import g_playerEvents
 from gui.Scaleform.daapi.view.meta.EventLoadingMeta import EventLoadingMeta
 from gui.battle_control.arena_info.interfaces import IArenaLoadController

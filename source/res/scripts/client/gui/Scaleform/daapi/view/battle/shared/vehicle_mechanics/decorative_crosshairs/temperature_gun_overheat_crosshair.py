@@ -21,12 +21,12 @@ _MECHANIC_STATE_DECOR_MAP = {OVERHEAT_GUN_STATE.IDLE: DECORATIVE_CROSSHAIR_CONST
 class TemperatureGunOverheatDecorativeCrosshair(TemperatureGunOverheatDecorativeCrosshairMeta, ContainersListener, IMechanicStatesListenerLogic):
 
     @eventHandler
-    def onStatePrepared(self, overheatState):
-        self.__invalidateState(overheatState.overheatState, isInstantly=True)
+    def onStatePrepared(self, state):
+        self.__invalidateState(state.overheatState, isInstantly=True)
 
     @eventHandler
-    def onStateTransition(self, _, overheatState):
-        self.__invalidateState(overheatState.overheatState)
+    def onStateTransition(self, _, newState):
+        self.__invalidateState(newState.overheatState)
 
     def _getViewUpdaters(self):
         return [VehicleMechanicStatesUpdater(VehicleMechanic.OVERHEAT_GUN, self), VehicleMechanicPassengerUpdater(VehicleMechanic.OVERHEAT_GUN, self)]

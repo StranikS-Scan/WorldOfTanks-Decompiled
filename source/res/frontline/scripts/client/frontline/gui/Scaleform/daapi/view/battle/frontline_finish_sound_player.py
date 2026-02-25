@@ -44,11 +44,11 @@ class FrontlineFinishSoundPlayer(FinishSoundPlayer, IViewComponentsCtrlListener)
         if self.__notificationDelayCB is not None:
             self.__notificationDelayCB = None
         playerTeam = avatar_getter.getPlayerTeam()
-        notification = _FRONTLINE_SOUND_NOTIFICATIONS.get(reason, None)
+        notification = _FRONTLINE_SOUND_NOTIFICATIONS.get(reason)
         if notification is None:
             return
         else:
-            victory = True if winnerTeam == playerTeam else False
+            victory = winnerTeam == playerTeam
             notification = notification.get(victory, None)
             soundNotifications = avatar_getter.getSoundNotifications()
             if soundNotifications and hasattr(soundNotifications, 'play'):
@@ -65,7 +65,7 @@ class FrontlineFinishSoundPlayer(FinishSoundPlayer, IViewComponentsCtrlListener)
         self.__notificationDelayCB = BigWorld.callback(delay, partial(self._playSoundNotification, winnerTeam, reason))
         if reason == FINISH_REASON.TIMEOUT or self.__timeIsOver:
             self._playRoundFinished(EPIC_TIME_WWEVENTS.EB_TIME_OVER)
-        self.__soundID = _FRONTLINE_SOUND_EVENTS.get(reason, None)
+        self.__soundID = _FRONTLINE_SOUND_EVENTS.get(reason)
         if self.__soundID is not None:
             self._playSound(self.__soundID)
         return

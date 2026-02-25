@@ -1,47 +1,53 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/wot_plus_controller.py
 import logging
+from time import time
 import typing
+from BWUtil import AsyncReturn
 from enum import Enum
+from helpers.CallbackDelayer import CallbackDelayer
+from helpers.time_utils import ONE_MINUTE, ONE_DAY
+from shared_utils import findFirst
+from shared_utils.account_helpers.diff_utils import synchronizeDicts
 import AccountCommands
 import BigWorld
 import constants
-from BWUtil import AsyncReturn
+from CurrentVehicle import g_currentVehicle
 from Event import Event
 from PlayerEvents import g_playerEvents
-from constants import RENEWABLE_SUBSCRIPTION_CONFIG
+from constants import RENEWABLE_SUBSCRIPTION_ENTITLEMENTS
+from debug_utils import LOG_ERROR_DEV
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import CurtailingAwardsComposer
-from gui.game_control.wot_plus_assistant import WotPlusAssistant
+from gui.game_control.wot_plus.service_record_customization import getValidatedServiceRecordRibbon, getValidatedServiceRecordBackground
+from gui.game_control.wot_plus.wot_plus_assistant import WotPlusAssistant
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.page.header.wot_plus_subscription_model import WotPlusPeriodicityEnum
 from gui.platform.products_fetcher.user_subscriptions.controller import SubscriptionStatus
 from gui.platform.products_fetcher.user_subscriptions.user_subscription import UserSubscription, SUBSCRIPTION_CANCEL_STATUSES, SubscriptionRequestPlatform
 from gui.server_events import settings
 from gui.server_events.awards_formatters import AWARDS_SIZES
-from gui.server_events.bonuses import GoldBank, IdleCrewXP, ExcludedMap, FreeEquipmentDemounting, WoTPlusExclusiveVehicle, AttendanceReward, SimpleBonus, WotPlusBattleBonuses, WotPlusBadges, WotPlusAdditionalBonuses, WotPlusOptionalDevicesAssistant
+from gui.server_events.bonuses import SimpleBonus
 from gui.shared.gui_items.artefacts import OptionalDevice
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
-from helpers.CallbackDelayer import CallbackDelayer
-from helpers.time_utils import ONE_MINUTE
 from items.vehicles import getItemByCompactDescr
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from piggy_bank_common.settings_constants import PIGGY_BANK_PDATA_KEY
-from renewable_subscription_common.settings_constants import IDLE_CREW_XP_PDATA_KEY, SUBSCRIPTION_DURATION_LENGTH, IDLE_CREW_VEH_INV_ID, RS_EXPIRATION_TIME, WotPlusState
-from shared_utils.account_helpers.diff_utils import synchronizeDicts
+from renewable_subscription_common.schema import renewableSubscriptionsConfigSchema
+from renewable_subscription_common.settings_constants import IDLE_CREW_XP_PDATA_KEY, SUBSCRIPTION_DURATION_LENGTH, IDLE_CREW_VEH_INV_ID, RS_EXPIRATION_TIME, WotPlusState, RS_TIER, PRO_BOOST_PDATA_KEY, WotPlusTier, RS_SR_BACKGROUND, RS_SR_RIBBON, PRO_BOOST_ACTIVATION_TIME, PRO_BOOSTED_VEHICLE
+from renewable_subscription_common.settings_helpers import SubscriptionSettingsStorage
 from skeletons.gui.game_control import IWotPlusController, ISteamCompletionController
-from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.platform.product_fetch_controller import IUserSubscriptionsFetchController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.system_messages import ISystemMessages
 from wg_async import wg_async, wg_await
 from wotdecorators import condition
 if typing.TYPE_CHECKING:
-    from typing import Dict, Optional, Callable, Any, List, Tuple
+    from typing import Dict, Optional, Callable, Any, List, Tuple, Generator
     from gui.shared.gui_items import ItemsCollection
     from gui.game_control.account_completion import SteamCompletionController
-    from gui.server_events.bonuses import WoTPlusBonus
     from items.vehicles import VehicleType
     from gui.platform.products_fetcher.user_subscriptions.controller import UserSubscriptionsFetchController
     from gui.platform.products_fetcher.user_subscriptions.fetch_result import UserSubscriptionFetchResult
@@ -49,7 +55,6 @@ if typing.TYPE_CHECKING:
     from renewable_subscription_common.optional_devices_usage_config import VehicleLoadout
     from Account import Account
 _logger = logging.getLogger(__name__)
-_SECONDS_IN_DAY = 86400
 
 class NotificationTypeTemplate(Enum):
     PASSIVE_XP = ('PassiveXpEnabledMessage', 'PassiveXpDisabledMessage')
@@ -62,6 +67,9 @@ class NotificationTypeTemplate(Enum):
     ADDITIONAL_XP = ('AdditionalXpEnabledMessage', 'AdditionalXpDisabledMessage')
     OPTIONAL_DEVICES_ASSISTANT = ('OptionalDevicesAssistantEnabledMessage', 'OptionalDevicesAssistantDisabledMessage')
     CREW_ASSISTANT = ('CrewAssistantEnabledMessage', 'CrewAssistantDisabledMessage')
+    SERVICE_RECORD = ('ServiceRecordCustomizationEnabledMessage', 'ServiceRecordCustomizationDisabledMessage')
+    PRO_BOOST = ('WotPlusProBoostEnabledMessage', 'WotPlusProBoostDisabledMessage')
+    BATTLE_PASS = ('WotPlusBattlePassEnabledMessage', 'WotPlusBattlePassDisabledMessage')
 
     @property
     def getEnable(self):
@@ -72,8 +80,28 @@ class NotificationTypeTemplate(Enum):
         return self.value[1]
 
 
-class WotPlusController(IWotPlusController, CallbackDelayer):
-    _lobbyContext = dependency.descriptor(ILobbyContext)
+class _ProBoostMixin(object):
+    ifAccount = condition('_account')
+
+    def __init__(self):
+        super(_ProBoostMixin, self).__init__()
+        self._delay = CallbackDelayer()
+        self.onProBoostCooldownIsFinished = Event()
+
+    def startProBoostTimer(self, remainingTime):
+        self._delay.delayCallback(remainingTime, self._callOnCooldownIsFinishedEvent)
+
+    def stopProBoostTimer(self):
+        self._delay.stopCallback(self._callOnCooldownIsFinishedEvent)
+
+    def isProBoostTimerRunning(self):
+        return self._delay.hasDelayedCallback(self._callOnCooldownIsFinishedEvent)
+
+    def _callOnCooldownIsFinishedEvent(self):
+        self.onProBoostCooldownIsFinished()
+
+
+class WotPlusController(IWotPlusController, _ProBoostMixin, CallbackDelayer):
     _steamCompletionCtrl = dependency.descriptor(ISteamCompletionController)
     _itemsCache = dependency.descriptor(IItemsCache)
     _systemMessages = dependency.descriptor(ISystemMessages)
@@ -85,8 +113,8 @@ class WotPlusController(IWotPlusController, CallbackDelayer):
         super(WotPlusController, self).__init__()
         self._cache = {}
         self._account = None
-        self._message = None
         self._state = WotPlusState.INACTIVE
+        self._billingPeriod = None
         self._hasSteamSubscription = False
         self._assistant = WotPlusAssistant()
         self.onDataChanged = Event()
@@ -105,24 +133,42 @@ class WotPlusController(IWotPlusController, CallbackDelayer):
         self._assistant.destroy()
         g_playerEvents.onClientUpdated -= self._onClientUpdate
         g_playerEvents.onRenewableSubscriptionStatusChanged -= self._onRenewableSubscriptionStatusChanged
+        self.stopProBoostTimer()
 
     def onLobbyStarted(self, _):
-        self._lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingsChange
+        g_playerEvents.onConfigModelUpdated += self._onConfigModelUpdated
         self.processSwitchNotifications()
+        self._invalidateProBoost()
 
     def onAccountBecomePlayer(self):
         self._account = BigWorld.player()
 
     def onAccountBecomeNonPlayer(self):
-        self._lobbyContext.getServerSettings().onServerSettingsChange -= self._onServerSettingsChange
+        g_playerEvents.onConfigModelUpdated -= self._onConfigModelUpdated
         self._account = None
         self._cancelScheduledInvalidation()
+        self.stopProBoostTimer()
         return
+
+    def _invalidateProBoost(self):
+        if PRO_BOOST_PDATA_KEY not in self._cache:
+            return
+        storage = self.getSettingsStorage()
+        if not storage.isProBoostFeatureEnabled() or not storage.isProBoostFeatureAvailable():
+            self.stopProBoostTimer()
+            return
+        proBoostActivationTime = self.getProBoostActivationTime()
+        proBoostCooldown = storage.getProBoostCooldown()
+        remainingTime = proBoostActivationTime + proBoostCooldown - int(time())
+        if remainingTime <= 0:
+            self.stopProBoostTimer()
+            return
+        self.startProBoostTimer(remainingTime)
 
     def onDisconnected(self):
         self._invalidationInProgress = False
         self._assistant.clear()
-        self._lobbyContext.getServerSettings().onServerSettingsChange -= self._onServerSettingsChange
+        g_playerEvents.onConfigModelUpdated -= self._onConfigModelUpdated
         self._cache.clear()
 
     def selectIdleCrewXPVehicle(self, vehicleInvID, successCallback=None, errorCallback=None):
@@ -144,19 +190,58 @@ class WotPlusController(IWotPlusController, CallbackDelayer):
         self._account._doCmdInt(AccountCommands.CMD_IDLE_CREW_XP_SELECT_VEHICLE, vehicleInvID, callback=_onIdleCrewXPVehicleSelected)
         return
 
-    def isEnabled(self):
-        return self._cache.get('isEnabled', False)
+    def activateProBoostOnVehicle(self, vehicleInvID=-1, successCallback=None, errorCallback=None):
+
+        def _onProBoostVehicleSelected(_, requestID, errorStr, errorMsg=None):
+            if AccountCommands.isCodeValid(requestID):
+                _logger.debug('[WotPlusController] _onProBoostVehicleSelected SUCCESS')
+                if successCallback:
+                    successCallback()
+                return
+            _logger.warning((errorStr, errorMsg))
+            if errorCallback:
+                errorCallback()
+
+        subscriptionStorage = self.getSettingsStorage()
+        if not subscriptionStorage.isProBoostFeatureEnabled() or not subscriptionStorage.isProBoostFeatureAvailable():
+            return
+        else:
+            vehicle = self._itemsCache.items.getVehicle(vehicleInvID)
+            if not vehicle.isInInventory:
+                return
+            vehicleCD = vehicle.intCD
+            if not self.canBeProBoosted(vehicleCD):
+                return
+            if self.isProBoostTimerRunning():
+                return
+            self._account._doCmdInt(AccountCommands.CMD_WOT_PLUS_ACTIVATE_PRO_BOOST, vehicleInvID, callback=_onProBoostVehicleSelected)
+            return
+
+    def hasSubscription(self):
+        return self.getTier() != WotPlusTier.NONE
+
+    def getTier(self):
+        return self._cache.get(RS_TIER, WotPlusTier.NONE)
+
+    def getBillingPeriod(self):
+        return self._billingPeriod
+
+    def getProBoostedVehicleInvID(self):
+        return self._cache.get(PRO_BOOST_PDATA_KEY, {}).get(PRO_BOOSTED_VEHICLE, 0)
+
+    def getProBoostActivationTime(self):
+        return self._cache.get(PRO_BOOST_PDATA_KEY, {}).get(PRO_BOOST_ACTIVATION_TIME, 0)
 
     def isFreeToDemount(self, device):
-        gs = self._lobbyContext.getServerSettings()
-        if not gs.isFreeEquipmentDemountingEnabled():
+        settingsStorage = self.getSettingsStorage()
+        if not settingsStorage.isFreeEquipmentDemountingAvailable():
             return False
-        if device.isDeluxe and not gs.isFreeDeluxeEquipmentDemountingEnabled():
+        if device.isDeluxe and not settingsStorage.isFreeDeluxeEquipmentDemountingEnabled():
             return False
         if device.isModernized:
             if device.level > 1:
                 return False
-        return self.isEnabled()
+        return self.hasSubscription()
 
     def getState(self):
         return self._state
@@ -192,77 +277,82 @@ class WotPlusController(IWotPlusController, CallbackDelayer):
         return self._itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.WOT_PLUS_VEHICLE)
 
     def getActiveExclusiveVehicle(self):
-        vehicleInfo = self._lobbyContext.getServerSettings().getWotPlusExclusiveVehicleInfo()
+        vehicleInfo = self.getSettingsStorage().getExclusiveVehicle()
         return getItemByCompactDescr(vehicleInfo['vehTypeCompDescr']) if vehicleInfo else None
 
     def getActiveExclusiveVehicleName(self):
         vehicle = self.getActiveExclusiveVehicle()
         return vehicle.userString if vehicle is not None else ''
 
-    def getEnabledBonuses(self):
-        serverSettings = self._lobbyContext.getServerSettings()
-        mapsConfig = serverSettings.getPreferredMapsConfig()
-        enabledBonuses = []
-        if serverSettings.isOptionalDevicesAssistantEnabled() or serverSettings.isCrewAssistantEnabled():
-            enabledBonuses.append(WotPlusOptionalDevicesAssistant())
-        if serverSettings.isRenewableSubGoldReserveEnabled():
-            enabledBonuses.append(GoldBank())
-        if serverSettings.isRenewableSubPassiveCrewXPEnabled():
-            enabledBonuses.append(IdleCrewXP())
-        if serverSettings.isDailyAttendancesEnabled():
-            enabledBonuses.append(AttendanceReward())
-        if serverSettings.isWotPlusBattleBonusesEnabled():
-            enabledBonuses.append(WotPlusBattleBonuses())
-        if serverSettings.isAdditionalWoTPlusEnabled():
-            enabledBonuses.append(WotPlusAdditionalBonuses())
-        if serverSettings.isWoTPlusExclusiveVehicleEnabled():
-            enabledBonuses.append(WoTPlusExclusiveVehicle())
-        if serverSettings.isWotPlusExcludedMapEnabled():
-            enabledBonuses.append(ExcludedMap(mapsConfig['wotPlusSlots']))
-        if serverSettings.isFreeEquipmentDemountingEnabled():
-            enabledBonuses.append(FreeEquipmentDemounting())
-        if serverSettings.isBadgesEnabled():
-            enabledBonuses.append(WotPlusBadges())
-        return enabledBonuses
-
     def hasOptDeviceAssistLoadout(self, vehicle):
-        return self._assistant.optDeviceAssistant.vehicleHasLoadout(vehicle) if self.isEnabled() else False
+        return self._assistant.optDeviceAssistant.vehicleHasLoadout(vehicle) if self.hasSubscription() else False
 
     def getOptDeviceAssistPresets(self, vehicle):
-        return self._assistant.optDeviceAssistant.getPopularOptDevicesPresets(vehicle) if self.isEnabled() else tuple()
+        return self._assistant.optDeviceAssistant.getPopularOptDevicesPresets(vehicle) if self.hasSubscription() else tuple()
 
     def getMostPopularOptDevicesLoadout(self, vehicle):
         return self._assistant.optDeviceAssistant.getMostPopularLoadout(vehicle)
 
     def isCrewAssistEnabled(self):
-        return self.isEnabled() and self._assistant.crewAssistant.isEnabled()
+        return self.hasSubscription() and self._assistant.crewAssistant.isEnabled()
 
     def hasCrewAssistOrderSets(self, vehIntCD, tankmanRole):
-        return self._assistant.crewAssistant.hasOrderSets(vehIntCD, tankmanRole) if self.isEnabled() else (False, False)
+        return self._assistant.crewAssistant.hasOrderSets(vehIntCD, tankmanRole) if self.hasSubscription() else (False, False)
 
     def getCrewAssistOrderSets(self, vehicle, tankmanRole):
-        return self._assistant.crewAssistant.getOrderSets(vehicle, tankmanRole) if self.isEnabled() else {}
+        return self._assistant.crewAssistant.getOrderSets(vehicle, tankmanRole) if self.hasSubscription() else {}
 
     def validateCrewAssistOrderSets(self, orderSets):
         return self._assistant.crewAssistant.validateOrderSets(orderSets)
 
+    def getServiceRecordBackground(self):
+        if self.getSettingsStorage().isServiceRecordCustomizationAvailable():
+            index = self._cache.get(RS_SR_BACKGROUND, 0)
+        else:
+            index = 0
+        return getValidatedServiceRecordBackground(index)
+
+    def getServiceRecordRibbon(self):
+        if self.getSettingsStorage().isServiceRecordCustomizationAvailable():
+            index = self._cache.get(RS_SR_RIBBON, 0)
+        else:
+            index = 0
+        return getValidatedServiceRecordRibbon(index)
+
     @ifAccount
-    def toggleWotPlusDev(self):
-        self._account._doCmdInt(AccountCommands.CMD_TOGGLE_RENEWABLE_SUB_DEV, 0, self._onCmdResponseReceived)
+    def toggleWotPlusDev(self, tier=WotPlusTier.CORE):
+        availableTiers = (WotPlusTier.CORE, WotPlusTier.PRO)
+        if tier not in availableTiers and not self.hasSubscription():
+            LOG_ERROR_DEV('The selected tier is not supported. The supported tiers are ', availableTiers)
+            return
+        self._account._doCmdInt(AccountCommands.CMD_TOGGLE_RENEWABLE_SUB_DEV, tier, self._onCmdResponseReceived)
 
     @ifAccount
     def giveAttendanceRewardDev(self):
         self._account._doCmdInt(AccountCommands.CMD_GIVE_ATTENDANCE_REWARD_DEV, 0, self._onCmdResponseReceived)
 
+    @ifAccount
+    def activateProBoostOnCurrentVehicleDev(self):
+        self._account._doCmdInt(AccountCommands.CMD_WOT_PLUS_ACTIVATE_PRO_BOOST_DEV, g_currentVehicle.invID, self._onCmdResponseReceived)
+
+    @ifAccount
+    def refreshProBoostCooldownDev(self):
+        self._account._doCmdNoArgs(AccountCommands.CMD_WOT_PLUS_REFRESH_PRO_BOOST_COOLDOWN_DEV, self._onCmdResponseReceived)
+        self.stopProBoostTimer()
+
     def setWotPlusStateDev(self, state):
         self._state = WotPlusState(state)
         self._userSubscriptionsFetchController.reset()
-        self.onEnabledStatusChanged(self.isEnabled())
+        self.onEnabledStatusChanged(self.hasSubscription())
         self.onDataChanged(self._cache)
 
     @ifAccount
-    def activateWotPlusDev(self, expirySecondsInFuture=_SECONDS_IN_DAY):
-        self._account._doCmdInt(AccountCommands.CMD_ACTIVATE_RENEWABLE_SUB_DEV, expirySecondsInFuture, self._onCmdResponseReceived)
+    def simulateWGMoneyBalanceUpdate(self):
+        self._account._doCmdNoArgs(AccountCommands.CMD_WOT_PLUS_SIMULATE_WG_MONEY_UPDATE, self._onCmdResponseReceived)
+
+    @ifAccount
+    def activateWotPlusDev(self, expirySecondsInFuture=ONE_DAY, entitlementName=RENEWABLE_SUBSCRIPTION_ENTITLEMENTS.CORE):
+        self._account._doCmdIntStr(AccountCommands.CMD_ACTIVATE_RENEWABLE_SUB_DEV, expirySecondsInFuture, entitlementName, self._onCmdResponseReceived)
 
     def simulateNewGameDay(self):
         self._account._doCmdInt(AccountCommands.CMD_WOT_PLUS_NEW_GAME_DAY, 0, self._onCmdResponseReceived)
@@ -275,16 +365,14 @@ class WotPlusController(IWotPlusController, CallbackDelayer):
     def smashPiggyBankDev(self):
         self._account._doCmdInt(AccountCommands.CMD_SMASH_PIGGY_BANK_DEV, 6, self._onCmdResponseReceived)
 
-    def isWotPlusEnabled(self):
-        isWotPlusEnabled = self._lobbyContext.getServerSettings().isRenewableSubEnabled()
-        if not isWotPlusEnabled:
+    def isWotPlusVisible(self):
+        settingsStorage = self.getSettingsStorage()
+        if not settingsStorage.isRenewableSubscriptionEnabled():
             return False
-        playerHasActiveWotPlus = self.isEnabled()
+        playerHasActiveWotPlus = self.hasSubscription()
         if playerHasActiveWotPlus:
             return True
-        isWotPlusEnabledForSteam = self._lobbyContext.getServerSettings().isWotPlusEnabledForSteam()
-        isSteamAccount = self._steamCompletionCtrl.isSteamAccount
-        return False if not isWotPlusEnabledForSteam and isSteamAccount else True
+        return settingsStorage.isEnabledForSteam() if self._steamCompletionCtrl.isSteamAccount else True
 
     def onDailyAttendanceUpdate(self):
         with settings.wotPlusSettings() as dt:
@@ -292,29 +380,32 @@ class WotPlusController(IWotPlusController, CallbackDelayer):
         self.onAttendanceUpdated()
 
     def isDailyAttendanceQuest(self, questID):
-        dailyAttendancePrefix = self._lobbyContext.getServerSettings().getDailyAttendanceQuestPrefix()
-        return questID.startswith(dailyAttendancePrefix)
+        dailyAttendancePrefix = self.getSettingsStorage().getDailyAttendanceQuestPrefix()
+        return False if dailyAttendancePrefix is None else questID.startswith(dailyAttendancePrefix)
 
     def getFormattedDailyAttendanceBonuses(self, bonuses):
         composer = CurtailingAwardsComposer(displayedAwardsCount=constants.WoTPlusDailyAttendance.MAXIMUM_DISPLAYED_REWARDS)
         return composer.getFormattedBonuses(bonuses, AWARDS_SIZES.BIG)
 
     def processSwitchNotifications(self):
-        serverSettings = self._lobbyContext.getServerSettings()
-        isWotPlusEnabled = self.isWotPlusEnabled()
-        isGoldReserveEnabled = serverSettings.isRenewableSubGoldReserveEnabled()
-        isPassiveXpEnabled = serverSettings.isRenewableSubPassiveCrewXPEnabled()
-        isFreeDemountingEnabled = serverSettings.isFreeEquipmentDemountingEnabled()
-        isExcludedMapEnabled = serverSettings.isWotPlusExcludedMapEnabled()
-        isDailyAttendancesEnabled = serverSettings.isDailyAttendancesEnabled()
-        isBattleBonusesEnabled = serverSettings.isWotPlusBattleBonusesEnabled()
-        isBadgesEnabled = serverSettings.isBadgesEnabled()
-        isAdditionalXPEnabled = serverSettings.isAdditionalWoTPlusEnabled()
-        isOptionalDevicesAssistantEnabled = serverSettings.isOptionalDevicesAssistantEnabled()
-        isCrewAssistantEnabled = serverSettings.isCrewAssistantEnabled()
+        isWotPlusEnabled = self.isWotPlusVisible()
+        settingsModel = self.getSettingsStorage()
+        isGoldReserveEnabled = settingsModel.isGoldReserveFeatureEnabled()
+        isPassiveXpEnabled = settingsModel.isPassiveCrewXPEnabled()
+        isFreeDemountingEnabled = settingsModel.isFreeEquipmentDemountingEnabled()
+        isExcludedMapEnabled = settingsModel.isExcludedMapFeatureEnabled()
+        isDailyAttendancesEnabled = settingsModel.isDailyAttendanceFeatureEnabled()
+        isBattleBonusesEnabled = settingsModel.isBattleBonusesEnabled()
+        isBadgesEnabled = settingsModel.isBadgesEnabled()
+        isAdditionalXPEnabled = settingsModel.isAdditionalXPBonusEnabled()
+        isOptionalDevicesAssistantEnabled = settingsModel.isOptionalDevicesAssistantEnabled()
+        isCrewAssistantEnabled = settingsModel.isCrewAssistantEnabled()
+        isServiceRecordCustomizationEnabled = settingsModel.isServiceRecordCustomizationEnabled()
+        isProBoostEnabled = settingsModel.isProBoostFeatureEnabled()
+        isBattlePassEnabled = settingsModel.isBattlePassFeatureEnabled()
         with settings.wotPlusSettings() as dt:
             dt.setWotPlusEnabledState(isWotPlusEnabled)
-            hasSubscription = self.isEnabled()
+            hasSubscription = self.hasSubscription()
             if not isWotPlusEnabled and not hasSubscription:
                 return
             if hasSubscription and not dt.isFirstTime:
@@ -331,6 +422,9 @@ class WotPlusController(IWotPlusController, CallbackDelayer):
                     self._notifyClient(dt.isAdditionalXPEnabled, isAdditionalXPEnabled, NotificationTypeTemplate.ADDITIONAL_XP)
                     self._notifyClient(dt.isOptionalDevicesAssistantEnabled, isOptionalDevicesAssistantEnabled, NotificationTypeTemplate.OPTIONAL_DEVICES_ASSISTANT)
                     self._notifyClient(dt.isCrewAssistantEnabled, isCrewAssistantEnabled, NotificationTypeTemplate.CREW_ASSISTANT)
+                    self._notifyClient(dt.isServiceRecordCustomizationEnabled, isServiceRecordCustomizationEnabled, NotificationTypeTemplate.SERVICE_RECORD)
+                    self._notifyClient(dt.isProBoostEnabled, isProBoostEnabled, NotificationTypeTemplate.PRO_BOOST)
+                    self._notifyClient(dt.isBattlePassEnabled, isBattlePassEnabled, NotificationTypeTemplate.BATTLE_PASS)
             dt.setIsFirstTime(not hasSubscription)
             dt.setGoldReserveEnabledState(isGoldReserveEnabled)
             dt.setPassiveXpState(isPassiveXpEnabled)
@@ -342,6 +436,9 @@ class WotPlusController(IWotPlusController, CallbackDelayer):
             dt.setAdditionalXPEnabled(isAdditionalXPEnabled)
             dt.setOptionalDevicesAssistantEnabled(isOptionalDevicesAssistantEnabled)
             dt.setCrewAssistantEnabled(isCrewAssistantEnabled)
+            dt.setServiceRecordCustomizationEnabled(isServiceRecordCustomizationEnabled)
+            dt.setProBoostEnabled(isProBoostEnabled)
+            dt.setBattlePassEnabled(isBattlePassEnabled)
 
     def _notifyClient(self, lastSeenStatus, currentStatus, notifications):
         if lastSeenStatus != currentStatus:
@@ -355,18 +452,21 @@ class WotPlusController(IWotPlusController, CallbackDelayer):
             return
         else:
             self._invalidationInProgress = True
-            self._state = WotPlusState.ACTIVE if self.isEnabled() else WotPlusState.INACTIVE
+            self._state = WotPlusState.ACTIVE if self.hasSubscription() else WotPlusState.INACTIVE
             self._hasSteamSubscription = False
             if constants.IS_CHINA or constants.IS_CT:
                 _logger.warning('Subscriptions are not available for the current realm: %s', constants.CURRENT_REALM)
                 return
-            if not self.isEnabled():
+            if not self.hasSubscription():
                 return
             fetchResult = yield wg_await(self._userSubscriptionsFetchController.getSubscriptions(clearCache))
             userSubscriptions = fetchResult.products
             if not fetchResult.isProductsReady:
                 return
             activeSubscriptions = [ subscription for subscription in userSubscriptions if subscription.status == SubscriptionStatus.ACTIVE ]
+            subWithBilling = findFirst(lambda subscription: subscription.billingPeriod, activeSubscriptions)
+            if subWithBilling is not None:
+                self._billingPeriod = subWithBilling.billingPeriod
             if not activeSubscriptions:
                 hasCancelled = any((subscription.status in SUBSCRIPTION_CANCEL_STATUSES for subscription in userSubscriptions))
                 if hasCancelled:
@@ -378,59 +478,77 @@ class WotPlusController(IWotPlusController, CallbackDelayer):
     def shouldRedirectToSteam(self):
         return self._steamCompletionCtrl.isSteamAccount if not self._userSubscriptionsFetchController._fetchResult.isProductsReady else self.hasSteamSubscription()
 
+    def getSettingsStorage(self):
+        return SubscriptionSettingsStorage(tierID=self._cache.get(RS_TIER, WotPlusTier.NONE))
+
+    def canBeProBoosted(self, vehicleCD):
+        if vehicleCD is None:
+            return False
+        else:
+            subscriptionStorage = self.getSettingsStorage()
+            return subscriptionStorage.isVehicleProBoostCompatible(vehicleCD) and not subscriptionStorage.hasVehicleProBoostExcludedTags(vehicleCD)
+
     def _onClientUpdate(self, diff, _):
         itemDiff = {}
         if IDLE_CREW_XP_PDATA_KEY in diff:
             itemDiff[IDLE_CREW_XP_PDATA_KEY] = diff[IDLE_CREW_XP_PDATA_KEY]
         if PIGGY_BANK_PDATA_KEY in diff:
             itemDiff[PIGGY_BANK_PDATA_KEY] = diff[PIGGY_BANK_PDATA_KEY]
+        if PRO_BOOST_PDATA_KEY in diff:
+            itemDiff[PRO_BOOST_PDATA_KEY] = diff[PRO_BOOST_PDATA_KEY]
         if itemDiff:
             synchronizeDicts(itemDiff, self._cache)
             self.onDataChanged(itemDiff)
-
-    def _onServerSettingsChange(self, diff):
-        if RENEWABLE_SUBSCRIPTION_CONFIG in diff:
-            self.processSwitchNotifications()
 
     def _onCmdResponseReceived(self, resultID, requestID, errorStr, errorMsg=None):
         if not AccountCommands.isCodeValid(requestID):
             _logger.error('Received invalid response: resultId: %s, requestId: %s, error: %s, message: %s', resultID, requestID, errorStr, errorMsg)
 
     def _onRenewableSubscriptionStatusChanged(self):
-        previousState = self.isEnabled()
+        previousState = self.hasSubscription()
         synchronizeDicts(self._account.renewableSubscription, self._cache)
         _logger.debug('Renewable subscription state updated, cache is synchronized = %s', self._cache)
-        currentState = self.isEnabled()
+        currentState = self.hasSubscription()
         stateChanged = previousState != currentState
         _logger.debug('Renewable subscription state is changed, prev = %s, current = %s', previousState, currentState)
         self._invalidateSubscriptionState(stateChanged)
 
     def _scheduleInvalidation(self):
         _logger.debug('Scheduling subscription invalidation for %s seconds', self._SUBSCRIPTION_INVALIDATE_TIMEOUT)
-        self.delayCallback(self._SUBSCRIPTION_INVALIDATE_TIMEOUT, self._invalidateSubscriptionState)
+        self.delayCallback(self._SUBSCRIPTION_INVALIDATE_TIMEOUT, self._invalidateCallback)
 
     def _cancelScheduledInvalidation(self):
         _logger.debug('Canceling scheduled subscription invalidation')
-        self.stopCallback(self._invalidateSubscriptionState)
+        self.stopCallback(self._invalidateCallback)
 
+    @wg_async
     def _invalidateSubscriptionState(self, stateChanged=False):
         _logger.debug('Invalidating subscription')
         if self._invalidationInProgress:
             return
         try:
-            self._resolveSubscriptionAndSteamState(clearCache=True)
+            yield wg_await(self._resolveSubscriptionAndSteamState(clearCache=True))
         finally:
             self._invalidationInProgress = False
 
         self.onDataChanged(self._cache)
         if stateChanged:
             self._refreshAssistance()
-            self.onEnabledStatusChanged(self.isEnabled())
+            self._invalidateProBoost()
+            self.onEnabledStatusChanged(self.hasSubscription())
         self._scheduleInvalidation()
 
+    def _invalidateCallback(self):
+        self._invalidateSubscriptionState()
+
     def _refreshAssistance(self):
-        if self.isEnabled():
+        if self.hasSubscription():
             self._assistant.start()
             self._assistant.subscriptionValidated()
         else:
             self._assistant.clearWithCacheDelete()
+
+    def _onConfigModelUpdated(self, gpKey):
+        if renewableSubscriptionsConfigSchema.gpKey == gpKey:
+            self._invalidateProBoost()
+            self.processSwitchNotifications()

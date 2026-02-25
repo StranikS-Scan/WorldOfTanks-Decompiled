@@ -194,7 +194,7 @@ class AssemblingManager(object):
         if not cameraManager:
             _logger.warning('[PM3.0] CameraManager is not found')
             return
-        return not cameraManager.getCurrentCameraName() == CameraNameTemplates.FREE_FAR.format(self.__operationID)
+        return cameraManager.getCurrentCameraName() != CameraNameTemplates.FREE_FAR.format(self.__operationID)
 
     def __activateVehicleGO(self):
         if self.__vehicleGO:

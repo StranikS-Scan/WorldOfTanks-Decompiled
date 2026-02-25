@@ -1,12 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/tooltips/battle_pass_points_view.py
 import logging
+from constants import ARENA_BONUS_TYPE
 from frameworks.wulf import ViewSettings
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.battle_pass_points_view_model import BattlePassPointsViewModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.reward_points_model import RewardPointsModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.vehicle_item_model import VehicleItemModel
+from gui.impl.lobby.battle_pass.battle_pass_wot_plus import getWotPlusPerBattlePoints, getWotPlusBattlePassTier, isValidWotPlusTier
 from gui.impl.pub import ViewImpl
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
@@ -19,7 +21,7 @@ class BattlePassPointsTooltip(ViewImpl):
     __battlePassController = dependency.descriptor(IBattlePassController)
 
     def __init__(self):
-        settings = ViewSettings(R.views.lobby.battle_pass.tooltips.BattlePassPointsView())
+        settings = ViewSettings(R.views.mono.battle_pass.tooltips.bp_points())
         settings.model = BattlePassPointsViewModel()
         super(BattlePassPointsTooltip, self).__init__(settings)
 
@@ -36,12 +38,17 @@ class BattlePassPointsTooltip(ViewImpl):
         model.rewardPoints.clearItems()
         model.vehiclesList.clearItems()
         specialVehicles = self.__battlePassController.getSpecialVehicles()
+        availableBPTier = getWotPlusBattlePassTier()
+        model.setIsWotPlusShown(isValidWotPlusTier(availableBPTier))
         rewardPoints = model.rewardPoints.getItems()
         for points in self.__battlePassController.getPerBattlePoints():
             item = RewardPointsModel()
             item.setTopCount(points.label)
             item.setPointsWin(points.winPoint)
             item.setPointsLose(points.losePoint)
+            wpWinsPoints, wpLossPoints = getWotPlusPerBattlePoints(points.label, availableBPTier, bonusType=ARENA_BONUS_TYPE.REGULAR)
+            item.setExternalPointsWin(wpWinsPoints)
+            item.setExternalPointsLose(wpLossPoints)
             rewardPoints.addViewModel(item)
 
         vehiclesList = model.vehiclesList.getItems()

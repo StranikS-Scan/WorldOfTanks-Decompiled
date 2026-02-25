@@ -31,12 +31,13 @@ class ToggleButtonSettings(object):
     def pack(self, model, state=None):
         model.setId(self.id)
         model.setIcon(self.icon)
-        model.setIsSelected(True if state and self.id in state else False)
+        model.setIsSelected(state is not None and self.id in state)
         model.setCounter(self.counter)
         model.tooltip.setBody(self.tooltipBody)
         model.tooltip.setHeader(self.tooltipHeader)
         model.tooltip.setContentId(self.tooltipContentId)
         model.tooltip.setTargetId(self.tooltipTargetId)
+        return
 
 
 class FilterGroupSettings(object):

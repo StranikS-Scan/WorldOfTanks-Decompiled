@@ -1,16 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/player_subscriptions/player_subscriptions_view.py
+from __future__ import absolute_import
 import logging
 import typing
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui import GUI_SETTINGS
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getWotPlusShopUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getWotPlusShopUrl, getWotPlusProShopUrl
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.player_subscriptions.external_subscription_model import ExternalSubscriptionModel
 from gui.impl.gen.view_models.views.lobby.player_subscriptions.player_subscriptions_model import PlayerSubscriptionsModel
 from gui.impl.gen.view_models.views.lobby.player_subscriptions.subscription_model import SubscriptionTypeEnum
+from gui.impl.gen.view_models.views.lobby.player_subscriptions.wot_subscription_model import WotPlusPeriodicityEnum
 from gui.impl.gen.view_models.views.lobby.player_subscriptions.wot_subscription_model import WotSubscriptionModel
 from gui.impl.pub import ViewImpl
 from gui.platform.base.statuses.constants import StatusTypes
@@ -18,6 +20,7 @@ from gui.platform.products_fetcher.fetch_result import FetchResult
 from gui.platform.products_fetcher.subscriptions.subscription_descriptors import WotPlusDescriptor
 from gui.shared.event_dispatcher import showOfferGiftsWindow, showBrowserOverlayView, showShop, showWotPlusInfoPage, showWotPlusProductPage, showWotPlusSteamSubscriptionManagementPage
 from helpers import dependency
+from renewable_subscription_common.settings_constants import RS_TIER, WotPlusTier
 from skeletons.gui.game_control import IExternalLinksController, ISteamCompletionController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.platform.product_fetch_controller import ISubscriptionProductsFetchController
@@ -27,43 +30,72 @@ from uilogging.wot_plus.logging_constants import WotPlusInfoPageSource, Subscrip
 from wg_async import wg_await, wg_async
 _logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
-    from typing import Optional, Dict, Any, List
+    from typing import Optional, Dict, Any, List, Union
+    from gui.game_control.wot_plus_controller import WotPlusController
     from gui.platform.products_fetcher.subscriptions.subscription_descriptors import SubscriptionDescriptor
     from gui.platform.wgnp.steam_account.statuses import SteamAccEmailStatus
-    from gui.impl.gen.view_models.views.lobby.player_subscriptions.subscription_model import SubscriptionModel
     from gui.platform.products_fetcher import SubscriptionProductsFetchController
+    from gui.impl.gen.view_models.views.lobby.player_subscriptions.subscription_model import SubscriptionModel
+    from gui.platform.products_fetcher.subscriptions.subscription_descriptors import WotPlusProDescriptor
 
-def __makeWotPlusSubscriptionModel(subscriptionDescr):
-    subscriptionModel = WotSubscriptionModel()
-    subscriptionModel.setSubscriptionType(subscriptionDescr.type)
-    subscriptionModel.setId(subscriptionDescr.productID)
-    subscriptionModel.setName(subscriptionDescr.name)
-    subscriptionModel.setDescription(subscriptionDescr.description)
-    subscriptionModel.setImageUriLarge(subscriptionDescr.largeImageURL)
-    subscriptionModel.setImageUriMedium(subscriptionDescr.mediumImageURL)
-    subscriptionModel.setImageUriSmall(subscriptionDescr.smallImageURL)
-    subscriptionModel.setRefreshTime(subscriptionDescr.expirationTime)
-    subscriptionModel.setWotSubscriptionState(subscriptionDescr.state)
-    return subscriptionModel
+class BaseSubscriptionModelFactory(object):
 
+    def type(self):
+        raise NotImplementedError
 
-def __makeExternalSubscriptionModel(subscriptionDescr):
-    subscriptionModel = ExternalSubscriptionModel()
-    subscriptionModel.setSubscriptionType(subscriptionDescr.type)
-    subscriptionModel.setId(subscriptionDescr.productID)
-    subscriptionModel.setName(subscriptionDescr.name)
-    subscriptionModel.setDescription(subscriptionDescr.description)
-    subscriptionModel.setImageUriLarge(subscriptionDescr.largeImageURL)
-    subscriptionModel.setImageUriMedium(subscriptionDescr.mediumImageURL)
-    subscriptionModel.setImageUriSmall(subscriptionDescr.smallImageURL)
-    subscriptionModel.setHas3rdPartyRewardsToClaim(not subscriptionDescr.isRewardsClaimed())
-    subscriptionModel.setHasDepotRewardsToClaim(subscriptionDescr.hasDepotRewards())
-    subscriptionModel.setRefreshTime(subscriptionDescr.expirationTime)
-    return subscriptionModel
+    def fill(self, subscriptionDescr):
+        model = self.type()()
+        model.setSubscriptionType(subscriptionDescr.type)
+        model.setId(subscriptionDescr.productID)
+        model.setName(subscriptionDescr.name)
+        model.setDescription(subscriptionDescr.description)
+        model.setImageUriLarge(subscriptionDescr.largeImageURL)
+        model.setImageUriMedium(subscriptionDescr.mediumImageURL)
+        model.setImageUriSmall(subscriptionDescr.smallImageURL)
+        model.setRefreshTime(subscriptionDescr.expirationTime)
+        return model
 
 
-_SUBSCRIPTION_TYPE_FACTORIES = {SubscriptionTypeEnum.EXTERNALSUBSCRIPTION: __makeExternalSubscriptionModel,
- SubscriptionTypeEnum.WOTSUBSCRIPTION: __makeWotPlusSubscriptionModel}
+class ExternalSubscriptionModelFactory(BaseSubscriptionModelFactory):
+
+    def type(self):
+        return ExternalSubscriptionModel
+
+    def fill(self, subscriptionDescr):
+        model = super(ExternalSubscriptionModelFactory, self).fill(subscriptionDescr)
+        model.setHas3rdPartyRewardsToClaim(not subscriptionDescr.isRewardsClaimed())
+        model.setHasDepotRewardsToClaim(subscriptionDescr.hasDepotRewards())
+        return model
+
+
+class WotPlusCoreSubscriptionModelFactory(BaseSubscriptionModelFactory):
+
+    def type(self):
+        return WotSubscriptionModel
+
+    def fill(self, subscriptionDescr):
+        model = super(WotPlusCoreSubscriptionModelFactory, self).fill(subscriptionDescr)
+        model.setWotSubscriptionState(subscriptionDescr.state)
+        model.setWotTier(subscriptionDescr.tierForUi)
+        return model
+
+
+class WotPlusProSubscriptionModelFactory(WotPlusCoreSubscriptionModelFactory):
+    _wotPlusCtrl = dependency.descriptor(IWotPlusController)
+
+    def fill(self, subscriptionDescr):
+        model = super(WotPlusProSubscriptionModelFactory, self).fill(subscriptionDescr)
+        model.setSubscriptionPeriodicity(self._wotPlusCtrl.getBillingPeriod() or WotPlusPeriodicityEnum.P6MONTHS)
+        return model
+
+
+def _isWotPlus(subscriptionType):
+    return subscriptionType in (SubscriptionTypeEnum.WOTSUBSCRIPTION, SubscriptionTypeEnum.WOTPROSUBSCRIPTION)
+
+
+_SUBSCRIPTION_TYPE_FACTORIES = {SubscriptionTypeEnum.EXTERNALSUBSCRIPTION: ExternalSubscriptionModelFactory(),
+ SubscriptionTypeEnum.WOTSUBSCRIPTION: WotPlusCoreSubscriptionModelFactory(),
+ SubscriptionTypeEnum.WOTPROSUBSCRIPTION: WotPlusProSubscriptionModelFactory()}
 
 class PlayerSubscriptionsView(ViewImpl):
     _subscriptionProductsFetchController = dependency.descriptor(ISubscriptionProductsFetchController)
@@ -129,7 +161,7 @@ class PlayerSubscriptionsView(ViewImpl):
          (self._lobbyContext.getServerSettings().onServerSettingsChange, self.__onServerSettingsChange))
 
     def __onWotPlusStatusChanged(self, args):
-        if 'isEnabled' in args:
+        if RS_TIER in args:
             self.__fetchExternalSubs()
 
     def __updateViewModel(self):
@@ -147,9 +179,9 @@ class PlayerSubscriptionsView(ViewImpl):
                 subscriptions.reserve(len(self.__subscriptionsFetchResult.products))
                 products = self.__getSortedProducts(self.__subscriptionsFetchResult.products)
                 for subscriptionDescr in products:
-                    if self.isSubscriptionAvailable(subscriptionDescr):
+                    if not self.isSubscriptionProductAvailable(subscriptionDescr):
                         continue
-                    subsModel = _SUBSCRIPTION_TYPE_FACTORIES[subscriptionDescr.type](subscriptionDescr)
+                    subsModel = _SUBSCRIPTION_TYPE_FACTORIES[subscriptionDescr.type].fill(subscriptionDescr)
                     subscriptions.addViewModel(subsModel)
                     self.__subscriptions[subscriptionDescr.productID] = subscriptionDescr.type
 
@@ -166,7 +198,7 @@ class PlayerSubscriptionsView(ViewImpl):
 
     def __onCardClick(self, args):
         id_ = args['subscriptionId']
-        if self.__subscriptions[id_] == SubscriptionTypeEnum.WOTSUBSCRIPTION:
+        if _isWotPlus(self.__subscriptions[id_]):
             showWotPlusInfoPage(WotPlusInfoPageSource.SUBSCRIPTION_PAGE, includeSubscriptionInfo=True)
             return
         if self.__subscriptions[id_] == SubscriptionTypeEnum.EXTERNALSUBSCRIPTION:
@@ -175,28 +207,41 @@ class PlayerSubscriptionsView(ViewImpl):
 
     def __onButtonClick(self, args):
         id_ = args['subscriptionId']
-        if self.__subscriptions[id_] == SubscriptionTypeEnum.WOTSUBSCRIPTION:
+        if _isWotPlus(self.__subscriptions[id_]):
             self._wotPlusUILogger.logClickEvent(SubscriptionPageKeys.CTA_BUTTON)
-            if self._wotPlusCtrl.isEnabled():
+            if self._wotPlusCtrl.hasSubscription():
                 if self._wotPlusCtrl.shouldRedirectToSteam():
                     showWotPlusSteamSubscriptionManagementPage()
-                else:
+                    return
+                if self.__subscriptions[id_] == SubscriptionTypeEnum.WOTSUBSCRIPTION or self._wotPlusCtrl.getTier() == WotPlusTier.PRO:
                     showWotPlusProductPage()
+                else:
+                    showShop(getWotPlusProShopUrl())
             else:
-                showShop(getWotPlusShopUrl())
+                if self.__subscriptions[id_] == SubscriptionTypeEnum.WOTSUBSCRIPTION:
+                    url = getWotPlusShopUrl()
+                else:
+                    url = getWotPlusProShopUrl()
+                showShop(url)
             return
-        subcriptionDescriptor = self.__subscriptionsFetchResult.getProductByID(id_)
-        if not subcriptionDescriptor:
+        subscriptionDescriptor = self.__subscriptionsFetchResult.getProductByID(id_)
+        if not subscriptionDescriptor:
             _logger.warning('Subscription descriptor with id=%s was not found', id_)
             return
-        if not subcriptionDescriptor.isRewardsClaimed():
-            self._externalBrowser.open(subcriptionDescriptor.claimURL)
-        elif subcriptionDescriptor.hasDepotRewards():
-            showOfferGiftsWindow(subcriptionDescriptor.getOfferID())
+        if not subscriptionDescriptor.isRewardsClaimed():
+            self._externalBrowser.open(subscriptionDescriptor.claimURL)
+        elif subscriptionDescriptor.hasDepotRewards():
+            showOfferGiftsWindow(subscriptionDescriptor.getOfferID())
 
     def __onServerSettingsChange(self, *args, **kwargs):
         if not self._lobbyContext.getServerSettings().isPlayerSubscriptionsEnabled():
             self.destroyWindow()
 
-    def isSubscriptionAvailable(self, subscription):
-        return subscription.type == SubscriptionTypeEnum.WOTSUBSCRIPTION and not self._wotPlusCtrl.isWotPlusEnabled()
+    def isSubscriptionProductAvailable(self, subscription):
+        if not _isWotPlus(subscription.type):
+            return True
+        if self._wotPlusCtrl.hasSubscription() and self._wotPlusCtrl.getTier() == subscription.tier:
+            return True
+        if not self._wotPlusCtrl.isWotPlusVisible():
+            return False
+        return self._wotPlusCtrl.getSettingsStorage().isProductEnabledForSteam(subscription.tier) if self._steamCompletionCtrl.isSteamAccount is True else True

@@ -15,7 +15,7 @@ class BattlePassQuestsChainTooltipView(ViewImpl):
     __eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, token):
-        settings = ViewSettings(R.views.lobby.battle_pass.tooltips.BattlePassQuestsChainTooltipView())
+        settings = ViewSettings(R.views.mono.battle_pass.tooltips.quest_chain())
         settings.model = BattlePassQuestsChainTooltipViewModel()
         super(BattlePassQuestsChainTooltipView, self).__init__(settings)
         self.__token = token

@@ -22,7 +22,6 @@ _RATING_TO_CHOICE_MAP = {RatingEnum.NONE: PlayerSatisfactionStates.NONE,
 _CHOICE_TO_RATING_MAP = {choice:rating for rating, choice in _RATING_TO_CHOICE_MAP.iteritems()}
 
 class PlayerSatisfactionSubPresenter(BattleResultsSubPresenter):
-    __slots__ = ()
     __battleResults = dependency.descriptor(IBattleResultsService)
 
     @property

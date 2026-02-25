@@ -35,6 +35,7 @@ class PetsConsts(object):
     PET_NAMES_UNLOCKED = 'unlockedNamesIDs'
     PET_SYNERGY_GROUP_ID = 'synergyGroupID'
     PET_PRICE = 'price'
+    PET_NOT_IN_SHOP = 'notInShop'
     STOCK_NAMES = 'stockNames'
 
 

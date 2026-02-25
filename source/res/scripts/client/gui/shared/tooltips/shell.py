@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/shell.py
-from constants import DAMAGE_INTERPOLATION_DIST_LAST, DAMAGE_INTERPOLATION_DIST_FIRST
+import math
+from constants import DAMAGE_INTERPOLATION_DIST_LAST, DAMAGE_INTERPOLATION_DIST_FIRST, SHELL_MECHANICS_TYPE
 from debug_utils import LOG_ERROR
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.impl import backport
@@ -12,8 +13,10 @@ from gui.shared.tooltips import formatters
 from gui.shared.tooltips import TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
 from gui.shared.tooltips.module import ModuleTooltipBlockConstructor
+from gui.shared.utils.functions import getShellImpactParams
 from helpers import dependency
 from helpers.i18n import makeString as _ms
+from items.components.component_constants import MODERN_HE_PIERCING_POWER_REDUCTION_FACTOR_FOR_SHIELDS
 from skeletons.gui.shared import IItemsCache
 _TOOLTIP_MIN_WIDTH = 380
 _TOOLTIP_MAX_WIDTH = 420
@@ -62,7 +65,7 @@ class ShellBlockToolTipData(BlocksTooltipData):
             compatibleBlocks.append(formatters.packTextBlockData(text=text_styles.stats(backport.text(R.strings.menu.moduleInfo.additionalInfo()))))
             if compatibleBlocks:
                 items.append(formatters.packBuildUpBlockData(compatibleBlocks, padding=formatters.packPadding(left=leftPadding, bottom=8)))
-        if params.get('isBasic'):
+        if params.get('isBasic') and paramsConfig.showBasic:
             boldText = text_styles.stats(backport.text(R.strings.tooltips.shell.basic.description.bold()))
             items.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.standard(backport.text(R.strings.tooltips.shell.basic.description(), bold=boldText)), padding=lrPaddings)], padding=formatters.packPadding(right=rightPadding)))
         return items
@@ -136,7 +139,7 @@ class PriceBlockConstructor(ShellTooltipBlockConstructor):
             if sellPrice and shell.sellPrices:
                 block.append(makePriceBlock(shell.sellPrices.itemPrice.price.credits, CURRENCY_SETTINGS.SELL_PRICE, oldPrice=shell.sellPrices.itemPrice.defPrice.credits, percent=shell.sellPrices.itemPrice.getActionPrc(), valueWidth=self._valueWidth))
             inventoryCount = shell.inventoryCount
-            if inventoryCount:
+            if inventoryCount and configuration.inventoryCount:
                 block.append(formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(backport.text(R.strings.tooltips.vehicle.inventoryCount())), value=text_styles.stats(inventoryCount), icon=backport.image(R.images.gui.maps.icons.library.storage_icon()), padding=formatters.packPadding(left=66), titlePadding=formatters.packPadding(left=16), iconPadding=formatters.packPadding(top=-2, left=-2)))
             hasAction = shell.buyPrices.itemPrice.isActionPrice() or shell.sellPrices.itemPrice.isActionPrice()
             return (block, notEnoughMoney or hasAction)
@@ -168,6 +171,9 @@ class CommonStatsBlockConstructor(ShellTooltipBlockConstructor):
             formattedParameters = params_formatters.getFormattedParamsList(shell.descriptor, self._params)
             showDistanceAsterisk = False
             footNotes = []
+            isModernHE = shell.descriptor.type.mechanics == SHELL_MECHANICS_TYPE.MODERN
+            if self.configuration.showScreensArmorMultiplier and isModernHE:
+                footNotes.append(backport.text(R.strings.menu.moduleInfo.params.guaranteedDamage.footnote()))
             for paramName, paramValue in formattedParameters:
                 if paramName == ModuleTooltipBlockConstructor.CALIBER:
                     continue
@@ -201,10 +207,24 @@ class CommonStatsBlockConstructor(ShellTooltipBlockConstructor):
                             footNotes.append(asterisks + backport.text(R.strings.menu.moduleInfo.params.noPiercingDistance.footnote()))
                     block.append(self._packParameterBlock(backport.text(R.strings.menu.moduleInfo.params.dyn(paramName)()), paramValue, paramUnits))
 
-            notePadding = formatters.packPadding(top=8)
+            shellType = shell.descriptor.type
+            ricochetAngleCos, normalizationAngle, _, _ = getShellImpactParams(shellType)
+            if self.configuration.showNormalizationAngle and normalizationAngle:
+                block.append(self._packParameterBlock(backport.text(R.strings.menu.moduleInfo.params.normalisation()), int(math.degrees(normalizationAngle)), backport.text(R.strings.menu.tank_params.grads())))
+            if self.configuration.showReboundAngle and ricochetAngleCos:
+                block.append(self._packParameterBlock(backport.text(R.strings.menu.moduleInfo.params.ricochetAngle()), int(math.degrees(math.acos(ricochetAngleCos))), backport.text(R.strings.menu.tank_params.grads())))
+            if self.configuration.showPenetrationLoss and hasattr(shellType, 'piercingPowerLossFactorByDistance'):
+                asterisks = _ASTERISK * 2
+                block.append(self._packParameterBlock(backport.text(R.strings.menu.moduleInfo.params.penetrationLoss()), int(shellType.piercingPowerLossFactorByDistance * 10), backport.text(R.strings.menu.tank_params.penetrationLoss()) + asterisks))
+                footNotes.append(asterisks + backport.text(R.strings.menu.moduleInfo.params.penetrationLoss.footnote()))
+            if self.configuration.showScreensArmorMultiplier and isModernHE:
+                asterisks = _ASTERISK * 2
+                block.append(self._packParameterBlock(backport.text(R.strings.menu.moduleInfo.params.screensArmorMultiplier()), backport.text(R.strings.menu.moduleInfo.params.screensArmorMultiplier.value(), multiplier=int(MODERN_HE_PIERCING_POWER_REDUCTION_FACTOR_FOR_SHIELDS)), asterisks))
+                footNotes.append(asterisks + backport.text(R.strings.menu.moduleInfo.params.screensArmorMultiplier.footnote()))
+            notePadding = formatters.packPadding(top=8, right=12)
             for title in footNotes:
                 block.append(formatters.packTitleDescBlock(title=text_styles.standard(title), padding=notePadding))
-                notePadding = formatters.packPadding(top=0)
+                notePadding = formatters.packPadding(top=-4, right=12)
 
         return block
 

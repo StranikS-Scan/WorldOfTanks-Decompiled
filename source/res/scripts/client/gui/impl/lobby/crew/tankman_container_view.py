@@ -47,7 +47,7 @@ class TankmanContainerView(BaseCrewView):
         settings = ViewSettings(layoutID, flags=ViewFlags.LOBBY_TOP_SUB_VIEW, model=TankmanContainerViewModel(), kwargs=kwargs)
         super(TankmanContainerView, self).__init__(settings)
         tankmanInvID = kwargs.get('tankmanInvID', NO_TANKMAN)
-        currentViewID = kwargs.get('currentViewID', None)
+        currentViewID = kwargs.get('currentViewID')
         self._activeTab = currentViewID if currentViewID in TabsId.ALL else TabsId.DEFAULT
         self._tankmanInvID = tankmanInvID
         self.vehicleID = self.itemsCache.items.getTankman(tankmanInvID).vehicleInvID
@@ -139,7 +139,7 @@ class TankmanContainerView(BaseCrewView):
 
     def widgetAutoSelectSlot(self, **kwargs):
         _, vehicle, __ = self.crewWidget.getWidgetData()
-        if not any((True for tankman in vehicle.crew if tankman[1])):
+        if vehicle and not any((True for tankman in vehicle.crew if tankman[1])):
             slotIDX = kwargs.get('slotIDX', NO_SLOT)
             self._onEmptySlotClick(NO_TANKMAN, slotIDX)
         else:

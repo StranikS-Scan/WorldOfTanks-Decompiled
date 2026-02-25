@@ -3,13 +3,13 @@
 from __future__ import absolute_import
 from future.utils import viewvalues
 from fun_random.gui.feature.util.fun_mixins import FunSubModesWatcher
-from fun_random.gui.shared.tooltips import TooltipType
+from fun_random.gui.shared.tooltips import TOOLTIP_TYPE
 from gui.impl.gen import R
 from gui.shared.tooltips.periodic.calendar_day import PeriodicCalendarDayTooltip
 from helpers.time_utils import ONE_DAY
 
 class FunRandomCalendarDayTooltip(PeriodicCalendarDayTooltip, FunSubModesWatcher):
-    _TOOLTIP_TYPE = TooltipType.FUN_RANDOM
+    _TOOLTIP_TYPE = TOOLTIP_TYPE.FUN_RANDOM
     _RES_ROOT = R.strings.fun_random.calendarDay
 
     def _getController(self, *_):

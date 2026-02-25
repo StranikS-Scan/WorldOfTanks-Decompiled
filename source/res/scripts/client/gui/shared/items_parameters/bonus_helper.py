@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/bonus_helper.py
+import copy
 import typing
 from future.utils import itervalues
 from constants import BonusTypes
 from gui.shared.gui_items import GUI_ITEM_TYPE, KPI, VEHICLE_ATTR_TO_KPI_NAME_MAP
+from gui.shared.items_parameters import isAutoReloadGun, isAutoShootGun
 from gui.shared.items_parameters.comparator import CONDITIONAL_BONUSES, getParamExtendedData
 from gui.shared.items_parameters.params import VehicleParams
 from gui.shared.items_parameters.params_constants import EXTRAS_CAMOUFLAGE
@@ -13,6 +15,9 @@ from items.components.c11n_components import SeasonType
 from post_progression_common import ACTION_TYPES
 from shared_utils import findFirst
 from skeletons.gui.shared import IItemsCache
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.Vehicle import Vehicle
+    from items.vehicle_items import Gun
 
 def isSituationalBonus(bonusName, bonusType='', paramName=''):
     from items import tankmen
@@ -30,17 +35,28 @@ def isSituationalBonus(bonusName, bonusType='', paramName=''):
     return paramName in _PARTIALLY_SITUATIONAL_BONUSES[bonusName] if bonusName in _PARTIALLY_SITUATIONAL_BONUSES else bonusName in _SITUATIONAL_BONUSES
 
 
-_SITUATIONAL_BONUSES = {'camouflageNet',
- 'stereoscope',
- 'removedRpmLimiter',
- 'radioman_expert',
- 'radioman_sideBySide',
- 'commander_emergency',
- 'deluxeStereoscope',
- 'deluxeCamouflageNet'}
-CREW_MASTERY_BONUSES = ('radioman_expert', 'radioman_sideBySide', 'commander_emergency')
+def isAppropriateVehicle(bonusName, vehicle):
+    validator = _VEHICLE_RESTRICTION_BONUSES.get(bonusName)
+    return validator is None or validator(vehicle)
+
+
+_SITUATIONAL_BONUSES = ('camouflageNet', 'stereoscope', 'removedRpmLimiter', 'radioman_expert', 'radioman_sideBySide', 'commander_emergency', 'driver_bulletproof', 'commander_holdLine', 'commander_staySharp', 'gunner_pointBlast', 'radioman_threatSearch', 'armorPatching')
+CREW_MASTERY_BONUSES = ('radioman_expert', 'radioman_sideBySide', 'commander_emergency', 'driver_bulletproof', 'commander_holdLine', 'commander_staySharp', 'deluxeStereoscope', 'deluxeCamouflageNet')
 _PARTIALLY_SITUATIONAL_BONUSES = {'enemyShotPredictorBattleBooster': KPI.Name.ART_NOTIFICATION_DELAY_FACTOR,
  'rancorousBattleBooster': KPI.Name.DAMAGED_MODULES_DETECTION_TIME}
+
+def _loaderMagMasteryValidator(vehicle):
+    vehicleGunDesc = vehicle.gun.descriptor
+    return vehicleGunDesc.hasClip and not isAutoShootGun(vehicleGunDesc) and not isAutoReloadGun(vehicleGunDesc)
+
+
+def _loaderSecondChanceValidator(vehicle):
+    vehicleGunDesc = vehicle.gun.descriptor
+    return not vehicleGunDesc.hasClip or isAutoReloadGun(vehicleGunDesc)
+
+
+_VEHICLE_RESTRICTION_BONUSES = {'loader_magMastery': _loaderMagMasteryValidator,
+ 'loader_secondChance': _loaderSecondChanceValidator}
 
 def _removeCamouflageModifier(vehicle, bonusID):
     if bonusID == EXTRAS_CAMOUFLAGE:
@@ -54,7 +70,7 @@ def _removeCamouflageModifier(vehicle, bonusID):
 
 
 def _removeSkillModifier(vehicle, skillName):
-    vehicle.crew = vehicle.getCrewWithoutSkill(skillName)
+    vehicle.crew = vehicle.getCrewWithoutSelectedSkills(skillNames=[skillName])
     return vehicle
 
 
@@ -174,6 +190,7 @@ class BonusExtractor(object):
         self.__vehicle.setOutfits(vehicle)
         self.__paramName = paramName
         self.__bonuses = _BonusSorter(self.__paramName).sort(bonuses)
+        self.__situationalBonuses = [ bonusID for bonusID, bonusGroup in self.__bonuses if isSituationalBonus(bonusID, bonusGroup, paramName) ]
         self.__removeCamouflage = False
 
     def getBonusInfo(self):
@@ -189,18 +206,29 @@ class BonusExtractor(object):
         if isSituational:
             paramName += 'Situational'
             situationalBonuses.append(bonusID)
-        valueWithBonus = self.__extractParamValue(paramName, situationalBonuses)
-        self.__vehicle = _VEHICLE_MODIFIERS[bonusGroup](self.__vehicle, bonusID)
+        vehicleWithoutSituationalBonuses = self._removeNonTargetSituationalBonuses(bonusID, bonusGroup)
+        valueWithBonus = self.__extractParamValue(vehicleWithoutSituationalBonuses, paramName, situationalBonuses)
+        vehicleWithoutSituationalBonuses = _VEHICLE_MODIFIERS[bonusGroup](vehicleWithoutSituationalBonuses, bonusID)
         if bonusGroup == BonusTypes.EXTRA and bonusID == EXTRAS_CAMOUFLAGE:
             self.__removeCamouflage = True
-        valueWithoutBonus = self.__extractParamValue(paramName, situationalBonuses)
-        return getParamExtendedData(self.__paramName, valueWithBonus, valueWithoutBonus)
+        valueWithoutBonus = self.__extractParamValue(vehicleWithoutSituationalBonuses, paramName, situationalBonuses)
+        self.__vehicle = _VEHICLE_MODIFIERS[bonusGroup](self.__vehicle, bonusID)
+        return getParamExtendedData(self.__paramName, valueWithBonus, valueWithoutBonus, isSituational=isSituational)
+
+    def _removeNonTargetSituationalBonuses(self, targetBonusID, bonusGroup):
+        if bonusGroup != BonusTypes.SKILL:
+            return self.__vehicle
+        situationalBonusesToRemove = [ bonus for bonus in self.__situationalBonuses if bonus != targetBonusID ]
+        vehicleWithoutSitBonuses = copy.copy(self.__vehicle)
+        if situationalBonusesToRemove:
+            vehicleWithoutSitBonuses.crew = vehicleWithoutSitBonuses.getCrewWithoutSelectedSkills(skillNames=situationalBonusesToRemove)
+        return vehicleWithoutSitBonuses
 
     def _getCopyVehicle(self, vehicle):
         return self.itemsCache.items.getVehicleCopy(vehicle)
 
-    def __extractParamValue(self, paramName, situationalBonuses=None):
-        return getattr(_CustomizedVehicleParams(self.__vehicle, self.__removeCamouflage, situationalBonuses), paramName)
+    def __extractParamValue(self, vehicle, paramName, situationalBonuses=None):
+        return getattr(_CustomizedVehicleParams(vehicle, self.__removeCamouflage, situationalBonuses), paramName)
 
     @staticmethod
     def __reorderDevices(devices):

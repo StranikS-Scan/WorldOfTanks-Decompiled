@@ -98,7 +98,7 @@ def getWinbackQuestsData(sortedQuests, dailyQuestTokensCount):
     questsData = OrderedDict()
     for questNumber, quest in sortedQuests.iteritems():
         bonusesData = None
-        received = True if dailyQuestTokensCount >= questNumber else False
+        received = dailyQuestTokensCount >= questNumber
         questsData[questNumber] = {}
         selectableBonus = findFirst(lambda b: b.getName() == SELECTABLE_BONUS_NAME, quest.getBonuses())
         if selectableBonus is not None:

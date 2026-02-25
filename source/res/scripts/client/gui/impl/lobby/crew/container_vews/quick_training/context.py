@@ -360,7 +360,7 @@ class QuickTrainingViewContext(TankmanContext):
                 self._autoselector.validateTankman(tankman.invID, idx, isMaxSkillXp, isUntrained, hasMaxSkillsEfficiency)
             self._hasCrewMaxedTman = self._hasCrewMaxedTman or isFullTrained
             self._isAllCrewMaxTrained = self._isAllCrewMaxTrained and isFullTrained
-            self._hasCrewUntrainedTman = self._hasCrewUntrainedTman or isUntrained or tankman.isInPremiumTank
+            self._hasCrewUntrainedTman = self._hasCrewUntrainedTman or isUntrained
             self._hasCrewLowTrainedTman = self._hasCrewLowTrainedTman or not hasMaxSkillsEfficiency
 
         if alreadyMaxedTmenCount > 1:

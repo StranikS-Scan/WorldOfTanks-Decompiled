@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/LobbyView.py
+from __future__ import absolute_import
 import logging
 import typing
 import constants
@@ -21,7 +22,6 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.impl.pub.view_component import ViewComponent
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import EVENT_BUS_SCOPE, events
@@ -33,6 +33,8 @@ from skeletons.gui.app_loader import IWaitingWidget
 from skeletons.gui.game_control import IIGRController, IMapsTrainingController, IWalletController, IHangarGuiController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+if typing.TYPE_CHECKING:
+    from gui.impl.pub.view_component import ViewComponent
 _logger = logging.getLogger(__name__)
 registerLifecycleHandledSubViews([VIEW_ALIAS.LOBBY_HANGAR,
  VIEW_ALIAS.LEGACY_LOBBY_HANGAR,
@@ -52,7 +54,6 @@ registerLifecycleHandledSubViews([VIEW_ALIAS.LOBBY_HANGAR,
  PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS,
  PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATION_AWARDS_SCREEN_ALIAS,
  VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR,
- VIEW_ALIAS.LOBBY_RESEARCH,
  VIEW_ALIAS.LOBBY_TECHTREE,
  VIEW_ALIAS.BATTLE_QUEUE,
  VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE,
@@ -168,8 +169,8 @@ class LobbyView(LobbyPageMeta, IWaitingWidget, IGlobalListener):
     def bwProto(self):
         return None
 
-    def showWaiting(self, message, softStart=False, showBg=True):
-        self.as_showWaitingS(backport.text(message))
+    def showWaiting(self, messageID, softStart=False, showBg=True):
+        self.as_showWaitingS(backport.text(messageID))
 
     def hideWaiting(self):
         self.as_hideWaitingS()

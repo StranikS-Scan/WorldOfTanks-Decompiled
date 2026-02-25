@@ -9,7 +9,7 @@ from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.shared.gui_items import GUI_ITEM_TYPE, KPI
 from gui.shared.items_parameters import params, RELATIVE_PARAMS, MAX_RELATIVE_VALUE
-from gui.shared.items_parameters.bonus_helper import CREW_MASTERY_BONUSES, isSituationalBonus
+from gui.shared.items_parameters.bonus_helper import CREW_MASTERY_BONUSES, isSituationalBonus, isAppropriateVehicle
 from gui.shared.items_parameters.comparator import CONDITIONAL_BONUSES
 from gui.shared.items_parameters.comparator import VehiclesComparator, ItemsComparator, PARAM_STATE
 from gui.shared.items_parameters.functions import getBasicShell
@@ -21,6 +21,9 @@ from helpers import dependency
 from items import vehicles, ITEM_TYPES
 from shared_utils import findFirst, first
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+if typing.TYPE_CHECKING:
+    from typing import Optional, List, Set, Tuple
+    from gui.shared.gui_items.Vehicle import Vehicle
 RELATIVE_POWER_PARAMS = ('avgDamage',
  AVG_DAMAGE_PER_SECOND,
  'avgPiercingPower',
@@ -88,7 +91,8 @@ EXTRA_POWER_PARAMS = (KPI.Name.VEHICLE_GUN_SHOT_DISPERSION,
  KPI.Name.DAMAGE_AND_PIERCING_DISTRIBUTION_UPPER_BOUND,
  KPI.Name.ENEMY_MODULES_CREW_CRIT_CHANCE,
  KPI.Name.VEHICLE_DAMAGE_ENEMIES_BY_RAMMING,
- KPI.Name.SHELL_VELOCITY)
+ KPI.Name.SHELL_VELOCITY,
+ KPI.Name.PIERCING_HE_SHELLS_DISTRIBUTION_UPPER_BOUND)
 EXTRA_ARMOR_PARAMS = (KPI.Name.CREW_HIT_CHANCE,
  KPI.Name.CREW_REPEATED_STUN_DURATION,
  KPI.Name.CREW_STUN_DURATION,
@@ -108,7 +112,9 @@ EXTRA_ARMOR_PARAMS = (KPI.Name.CREW_HIT_CHANCE,
  KPI.Name.VEHICLE_HE_SHELL_DAMAGE_RESISTANCE,
  KPI.Name.VEHICLE_FALLING_DAMAGE_RESISTANCE,
  KPI.Name.VEHICLE_PENALTY_FOR_DAMAGED_ENGINE,
- KPI.Name.VEHICLE_PENALTY_FOR_DAMAGED_AMMORACK)
+ KPI.Name.VEHICLE_PENALTY_FOR_DAMAGED_AMMORACK,
+ KPI.Name.SUSPENSION_DAMAGE_REDUCTION,
+ KPI.Name.HP_RECOVER)
 EXTRA_MOBILITY_PARAMS = (KPI.Name.VEHICLE_SPEED_GAIN,
  KPI.Name.MEDIUM_GROUND_FACTOR,
  KPI.Name.SOFT_GROUND_FACTOR,
@@ -244,12 +250,13 @@ def skillOnSimilarCrewComparator(vehicle, skillNames=None, highlightedSkills=Non
     situationalBonuses = []
     highlightedSkills = highlightedSkills or []
     skillNames = skillNames or []
+    skillNames = [ sn for sn in skillNames if isAppropriateVehicle(sn, vehicle) ]
     if any((skillName in CREW_MASTERY_BONUSES for skillName in skillNames)):
         situationalBonuses = list(CREW_MASTERY_BONUSES)
     if highlightedSkills:
         for highlightedSkill in highlightedSkills:
             if isSituationalBonus(highlightedSkill):
-                vehicleWithIdealCrew.crew = vehicleWithIdealCrew.getCrewWithoutSkill(highlightedSkill)
+                vehicleWithIdealCrew.crew = vehicleWithIdealCrew.getCrewWithoutSelectedSkills(skillNames=[highlightedSkill])
 
     vehicleParamsObject = params.VehicleParams(vehicleWithIdealCrew, situationalBonuses)
     vehicleParams = vehicleParamsObject.getParamsDict()
@@ -257,7 +264,7 @@ def skillOnSimilarCrewComparator(vehicle, skillNames=None, highlightedSkills=Non
     penalties = vehicleParamsObject.getPenalties(vehicleWithIdealCrew)
     compatibleArtefacts = g_paramsCache.getCompatibleArtefacts(vehicleWithIdealCrew)
     newVehicle = copy.copy(vehicle)
-    newVehicle.crew = newVehicle.getCrewWithSkill(skillNames)
+    newVehicle.crew = newVehicle.getCrewWithSkills(skillNames)
     updateCrewBonus(newVehicle)
     newVehicleParams = params.VehicleParams(newVehicle, situationalBonuses).getParamsDict()
     situationalParams, situationalKPI = getSituationalParams(skillNames)
@@ -346,6 +353,7 @@ def previewVehiclesComparator(comparableVehicle, vehicle, withSituational=False)
         return
     else:
         skillNames = getSkillsDiff(comparableVehicle, vehicle) if withSituational else []
+        skillNames = [ sn for sn in skillNames if isAppropriateVehicle(sn, vehicle) ]
         situationalBonuses = []
         for skillName in skillNames:
             if skillName in CREW_MASTERY_BONUSES:
@@ -361,9 +369,9 @@ def previewNoSkillsVehiclesComparator(comparableVehicle, vehicle):
         return
     else:
         vehicleCopy = copy.copy(vehicle)
-        vehicleCopy.crew = vehicle.getCrewWithoutSkills()
+        vehicleCopy.crew = vehicle.getCrewWithoutAllSkills()
         comparableVehicleCopy = copy.copy(comparableVehicle)
-        comparableVehicleCopy.crew = comparableVehicle.getCrewWithoutSkills()
+        comparableVehicleCopy.crew = comparableVehicle.getCrewWithoutAllSkills()
         return VehiclesComparator(params.VehicleParams(comparableVehicleCopy).getParamsDict(), params.VehicleParams(vehicleCopy).getParamsDict(), suitableArtefacts=g_paramsCache.getCompatibleArtefacts(comparableVehicleCopy), bonuses=params.VehicleParams(comparableVehicleCopy).getBonuses(comparableVehicleCopy, False))
 
 

@@ -73,6 +73,7 @@ class VehicleCompareConfiguratorState(ViewLobbyState):
 
     def _onEntered(self, event):
         super(VehicleCompareConfiguratorState, self)._onEntered(event)
+        self.__cachedParams = event.params
         if not self.comparisonBasket.isAvailable():
             showHangar()
 

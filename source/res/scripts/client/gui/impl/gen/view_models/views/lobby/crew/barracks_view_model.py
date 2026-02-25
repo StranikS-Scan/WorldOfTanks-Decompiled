@@ -5,9 +5,9 @@ from gui.impl.gen.view_models.views.lobby.crew.common.range_model import RangeMo
 from gui.impl.gen.view_models.views.lobby.crew.tankman_model import TankmanModel
 
 class BarracksViewModel(ViewModel):
-    __slots__ = ('onResetFilters', 'onBuyBerth', 'onTankmanSelected', 'onTankmanRecruit', 'onTankmanDismiss', 'onPlayTankmanVoiceover', 'onTankmanRestore', 'onLoadCards', 'showHangar', 'onNewTankmanHovered')
+    __slots__ = ('onResetFilters', 'onRetireUndertrained', 'onBuyBerth', 'onTankmanSelected', 'onTankmanRecruit', 'onTankmanDismiss', 'onPlayTankmanVoiceover', 'onTankmanRestore', 'onLoadCards', 'showHangar', 'onNewTankmanHovered')
 
-    def __init__(self, properties=7, commands=10):
+    def __init__(self, properties=9, commands=11):
         super(BarracksViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -58,6 +58,18 @@ class BarracksViewModel(ViewModel):
     def setHasFilters(self, value):
         self._setBool(6, value)
 
+    def getHasUndertrainedCrewMembers(self):
+        return self._getBool(7)
+
+    def setHasUndertrainedCrewMembers(self, value):
+        self._setBool(7, value)
+
+    def getIsCleanButtonEnabled(self):
+        return self._getBool(8)
+
+    def setIsCleanButtonEnabled(self, value):
+        self._setBool(8, value)
+
     def _initialize(self):
         super(BarracksViewModel, self)._initialize()
         self._addViewModelProperty('berthsAmount', RangeModel())
@@ -67,7 +79,10 @@ class BarracksViewModel(ViewModel):
         self._addBoolProperty('isBerthsOnSale', False)
         self._addBoolProperty('isBannerVisible', False)
         self._addBoolProperty('hasFilters', False)
+        self._addBoolProperty('hasUndertrainedCrewMembers', False)
+        self._addBoolProperty('isCleanButtonEnabled', False)
         self.onResetFilters = self._addCommand('onResetFilters')
+        self.onRetireUndertrained = self._addCommand('onRetireUndertrained')
         self.onBuyBerth = self._addCommand('onBuyBerth')
         self.onTankmanSelected = self._addCommand('onTankmanSelected')
         self.onTankmanRecruit = self._addCommand('onTankmanRecruit')

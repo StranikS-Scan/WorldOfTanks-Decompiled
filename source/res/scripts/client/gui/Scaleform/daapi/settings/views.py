@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/settings/views.py
+from __future__ import absolute_import
 import logging
 from constants import ARENA_GUI_TYPE
 from gui.Scaleform.framework import COMMON_VIEW_ALIAS
@@ -10,7 +11,6 @@ _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 
 class VIEW_ALIAS(COMMON_VIEW_ALIAS):
-    GOLD_FISH_WINDOW = 'goldFishWindow'
     EULA = 'EULA'
     EULA_FULL = 'EULAFull'
     LOGIN_QUEUE = 'loginQueue'
@@ -79,19 +79,14 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     TELECOM_RENTAL_VIEW = 'telecomRentalView'
     AMMUNITION_SETUP_VIEW = 'ammunitionSetupView'
     LOBBY_TECHTREE = 'techtree'
-    LOBBY_RESEARCH = 'research'
     EXIT_FROM_RESEARCH = 'exitFromResearch'
     LOBBY_BARRACKS = 'barracks'
     LOBBY_CUSTOMIZATION = 'customization'
     LOBBY_MENU = 'lobbyMenu'
     BROWSER = 'browser'
     LOBBY_VEHICLE_MARKER_VIEW = 'lobbyVehicleMarkerView'
-    SYSTEM_MESSAGES = 'systemMessages'
-    MESSENGER_BAR = 'messengerBar'
+    NOTIFICATION_VIEWER = 'systemMessages'
     RECRUIT_PARAMS = 'recruitParams'
-    NOTIFICATION_LIST_BUTTON = 'notificationListButton'
-    CONTACTS_LIST_BUTTON = 'contactsListButton'
-    VEHICLE_COMPARE_CART_BUTTON = 'vehicleCompareCartButton'
     TEST_WINDOW = 'testWindow'
     PROFILE_WINDOW = 'profileWindow'
     VEHICLE_BUY_WINDOW = 'vehicleBuyWindow'
@@ -126,6 +121,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     MARATHON_VEHICLE_PREVIEW = 'marathonVehiclePreview'
     CONFIGURABLE_VEHICLE_PREVIEW = 'configurableVehiclePreview'
     OFFER_GIFT_VEHICLE_PREVIEW = 'offerGiftVehiclePreview'
+    OFFER_GIFT_VIEW = 'OfferGiftsView'
     RESOURCE_WELL_VEHICLE_PREVIEW = 'resourceWellVehiclePreview'
     VEHICLE_COMPARE = 'vehicleCompare'
     VEHICLE_COMPARE_MAIN_CONFIGURATOR = 'vehicleCompareConfigurator'
@@ -143,11 +139,9 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     SYSTEM_MESSAGE_DIALOG = 'systemMessageDialog'
     NOTIFICATIONS_LIST = 'notificationsList'
     CREW_OPERATIONS_POPOVER = 'crewOperationsPopOver'
-    BATTLE_TYPE_SELECT_POPOVER = 'battleTypeSelectPopover'
     SQUAD_TYPE_SELECT_POPOVER = 'squadTypeSelectPopover'
     TRADEIN_POPOVER = 'TradeInPopover'
     ACOUSTIC_POPOVER = 'acousticPopover'
-    ADVENT_CALENDAR = 'adventCalendar'
     AWARD_WINDOW = 'awardWindow'
     AWARD_WINDOW_MODAL = 'awardWindowModal'
     FITTING_SELECT_POPOVER = 'fittingSelectPopover'
@@ -171,7 +165,6 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     SWITCH_MODE_PANEL = 'switchModePanel'
     TICKER = 'ticker'
     CALENDAR = 'calendar'
-    CHANNEL_CAROUSEL = 'channelCarousel'
     G_E_INSPECT_WINDOW = 'GEInspectWindow'
     FREE_X_P_INFO_WINDOW = 'FreeXPInfoWindow'
     RSS_NEWS_FEED = 'rssNewsFeed'
@@ -182,9 +175,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     QUESTS_SEASON_AWARDS_WINDOW = 'QuestsSeasonAwardsWindow'
     CHECK_BOX_DIALOG = 'CheckBoxDialog'
     REPORT_BUG = 'reportBug'
-    SQUAD_PROMO_WINDOW = 'squadPromoWindow'
     BOOSTERS_PANEL = 'boostersPanel'
-    MINI_CLIENT_LINKED = 'linkedMiniClientComponent'
     SWITCH_PERIPHERY_WINDOW = 'switchPeripheryWindow'
     SWITCH_PERIPHERY_WINDOW_MODAL = 'switchPeripheryWindowModal'
     CUSTOMIZATION_FILTER_POPOVER = 'CustomizationFilterPopover'

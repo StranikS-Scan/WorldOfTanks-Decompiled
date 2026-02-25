@@ -14,7 +14,6 @@ DETAILED_PARAMETERS_TO_TOOLTIP_MAP = {DetailedPersonalEfficiencyItemModel.SPOTTE
  BaseCaptureInfoModel.DROPPED_CAPTURE_POINTS: DefencePointsParameter}
 
 class BattleEfficiencyTooltipsPacker(EfficiencyTooltipsPacker):
-    __slots__ = ()
     _TOOLTIPS = DETAILED_PARAMETERS_TO_TOOLTIP_MAP
 
     @staticmethod

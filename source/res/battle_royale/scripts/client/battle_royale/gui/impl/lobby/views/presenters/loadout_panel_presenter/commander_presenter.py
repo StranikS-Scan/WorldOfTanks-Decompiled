@@ -8,6 +8,7 @@ from items.tankmen import ROLES_BY_SKILLS
 from shared_utils import first
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBattleRoyaleController
+from battle_royale.gui.impl.lobby.br_helpers.utils import setEventInfo
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.commander_view_model import CommanderViewModel, CommanderPerkModel
 
 class CommanderPresenter(ViewComponent[CommanderViewModel]):
@@ -67,6 +68,7 @@ class CommanderPresenter(ViewComponent[CommanderViewModel]):
                 perkList.addViewModel(perkModel)
 
             perkList.invalidate()
+            setEventInfo(model.eventInfo)
 
     def __getCommanderID(self):
         if not self.__vehicle:

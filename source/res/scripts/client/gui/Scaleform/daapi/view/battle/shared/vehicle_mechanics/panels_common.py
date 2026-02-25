@@ -81,7 +81,7 @@ class VehicleMechanicsPanel(BaseDAAPIComponent, ContainersListener, IVehicleTrac
     def _setCrosshairViewID(self, viewID):
         raise NotImplementedError
 
-    def _addMechanicUIComponent(self, mechanicComponent):
+    def _addMechanicUIComponent(self, mechanicComponents):
         raise NotImplementedError
 
     def __onBattleStarted(self):

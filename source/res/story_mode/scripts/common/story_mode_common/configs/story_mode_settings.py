@@ -36,6 +36,6 @@ afkSchema = schemas.Schema(fields={'maxPlayerInactiveTime': fields.Integer(publi
 settingsSchema = GameParamsSchema(gameParamsKey='story_mode_settings', fields={'enabled': fields.Boolean(required=True),
  'waitTimeQueue': fields.Integer(required=True, serializedValidators=validate.Range(minValue=1), deserializedValidators=validate.Range(minValue=1)),
  'hideGameLoadingTimeout': fields.Integer(required=True, serializedValidators=validate.Range(minValue=1), deserializedValidators=validate.Range(minValue=1)),
- 'joinToQueueFromLogin': fields.Boolean(required=True, public=False),
+ 'joinToQueueFromLogin': fields.Boolean(required=True),
  'quotums': fields.List(fieldOrSchema=fields.Integer(serializedValidators=validate.Range(minValue=1), deserializedValidators=validate.Range(minValue=1)), required=True, serializedValidators=validate.Length(minValue=3), deserializedValidators=validate.Length(minValue=3)),
  'afk': fields.Nested(schema=afkSchema, required=True, public=False)}, modelClass=SettingsModel, checkUnknown=True)

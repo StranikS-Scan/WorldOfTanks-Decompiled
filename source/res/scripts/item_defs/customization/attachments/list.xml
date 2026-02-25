@@ -673,6 +673,14 @@
       <hangarModelName>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_3dst_Sand/Pl29_NC_Wz_70T_3dst_Sand_anim_hangar.prefab	</hangarModelName>
     </attachment>
     <attachment>
+      <id>	31061	</id>
+      <name>	S42_Kanonvagn_fm_49	</name>
+      <modelName>	vehicles/sweden/S42_Kanonvagn_fm_49/S42_Kanonvagn_fm_49_anim.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+      <hangarModelName>	vehicles/sweden/S42_Kanonvagn_fm_49/S42_Kanonvagn_fm_49_hangar.prefab	</hangarModelName>
+    </attachment>
+    <attachment>
       <id>	31062	</id>
       <name>	Ch22_113_3Dst	</name>
       <modelName>	vehicles/chinese/Ch22_113/_skin/113_3Dst_02/Ch22_113_3Dst_02_anim.prefab	</modelName>
@@ -874,7 +882,7 @@
       <hangarModelName>	vehicles/czech/Cz39_SD_122_49_Sekera/Sleeve_hangar.prefab	</hangarModelName>
       <initialVisibility>	true	</initialVisibility>
       <name>	Cz39_SD_122_49_Sekera	</name>
-      <texture>	gui/maps/vehicles/styles/czech.png	</texture>
+      <texture></texture>
     </attachment>
     <attachment>
       <id>	31091	</id>
@@ -920,6 +928,14 @@
       <modelName>	vehicles/british/GB140_Champion/Ability.prefab	</modelName>
       <attachmentLogic>	prefab	</attachmentLogic>
       <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31097	</id>
+      <name>	Un14_T54D_3Dst_Stellar	</name>
+      <modelName>	vehicles/intunion/Un14_T54D/_skins/T54D_3Dst_Stellar/T54D_3Dst_Stellar_anim.prefab	</modelName>
+      <hangarModelName>	vehicles/intunion/Un14_T54D/_skins/T54D_3Dst_Stellar/T54D_3Dst_Stellar_anim_hangar.prefab	</hangarModelName>
+      <initialVisibility>	true	</initialVisibility>
+      <attachmentLogic>	prefab	</attachmentLogic>
     </attachment>
     <attachment>
       <id>	31098	</id>
@@ -1001,6 +1017,14 @@
       <hangarModelName>	vehicles/british/GB143_Captain/_skins/GB143_Captain_3Dst_01/GB143_Captain_3Dst_01_hangar.prefab	</hangarModelName>
     </attachment>
     <attachment>
+      <id>	31112	</id>
+      <name>	S37_AKV_151	</name>
+      <modelName>	vehicles/sweden/S37_AKV_151/S37_AKV_151_anim.prefab	</modelName>
+      <hangarModelName>	vehicles/sweden/S37_AKV_151/S37_AKV_151_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
       <id>	31109	</id>
       <name>	G193_Aufgabe_57_sleeveEjection	</name>
       <modelName>	vehicles/german/G193_Aufgabe_57/SleeveEjection.prefab	</modelName>
@@ -1022,6 +1046,45 @@
       <modelName>	vehicles/russian/R00_Baloon/Propeller.prefab	</modelName>
       <hangarModelName>	vehicles/russian/R00_Baloon/Propeller.prefab	</hangarModelName>
       <attachmentLogic>	flagPart	</attachmentLogic>
+    </attachment>
+    <attachment>
+      <id>	31110	</id>
+      <name>	R239_ST_Molot_02_3Dst_01	</name>
+      <modelName>	vehicles/russian/R239_ST_Molot/_skins/R239_ST_Molot_02_3Dst_01/SleeveEjection.prefab	</modelName>
+      <hangarModelName>	vehicles/russian/R239_ST_Molot/_skins/R239_ST_Molot_02_3Dst_01/SleeveEjection_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31111	</id>
+      <name>	Ch38_WZ113G_FT_3Dst_Hyperion_prebattle	</name>
+      <modelName>	vehicles/chinese/Ch38_WZ113G_FT/_skins/Ch38_WZ113G_FT_3Dst_Hyperion/Ch38_WZ113G_FT_3Dst_Hyperion_prebattle.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+      <hangarModelName>	vehicles/chinese/Ch38_WZ113G_FT/_skins/Ch38_WZ113G_FT_3Dst_Hyperion/Ch38_WZ113G_FT_3Dst_Hyperion_hangar.prefab	</hangarModelName>
+    </attachment>
+    <attachment>
+      <id>	31113	</id>
+      <name>	R169_ST_II_3Dst_Oberon	</name>
+      <modelName>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst_Oberon/R169_ST_II_3Dst_Oberon_prefabs.prefab	</modelName>
+      <hangarModelName>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst_Oberon/R169_ST_II_3Dst_Oberon_prefabs_hangar.prefab	</hangarModelName>
+      <initialVisibility>	true	</initialVisibility>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
+      <id>	31115	</id>
+      <name>	Cz00_COSM_Pepelac_02_Exhaust_boost	</name>
+      <modelName>	vehicles/czech/Cz00_COSM_Pepelac_02/Exhaust_boost.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31116	</id>
+      <name>	Sleeve	</name>
+      <modelName>	vehicles/french/F137_Tornade/SleeveEjection.prefab	</modelName>
+      <hangarModelName>	vehicles/french/F137_Tornade/SleeveEjection_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
     </attachment>
   </itemGroup>
   <itemGroup>

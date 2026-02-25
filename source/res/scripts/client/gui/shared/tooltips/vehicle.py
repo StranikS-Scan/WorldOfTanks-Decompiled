@@ -210,9 +210,9 @@ class VehicleInfoTooltipData(BlocksTooltipData):
                 items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_DAILYXPFACTOR), value=dailyXPText, icon=ICON_TEXT_FRAMES.DOUBLE_XP_FACTOR, iconYOffset=2, valueWidth=valueWidth + 1, gap=0, padding=formatters.packPadding(left=0, top=-2, bottom=5)))
         if statsConfig.showDebutBoxes and self.__debutBoxController.isEnabled() and Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE not in self.item.getState() and self.__debutBoxController.isQuestsAvailableOnVehicle(self.item) and not vehicle.isWotPlus:
             items.append(formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(backport.text(R.strings.tooltips.vehicle.debut_box_available())), icon=backport.image(R.images.gui.maps.icons.library.debut_boxes_16x16()), padding=formatters.packPadding(left=79, top=-2, bottom=5), iconPadding=formatters.packPadding(top=2), titlePadding=formatters.packPadding(left=3)))
-        if vehicle.isResetParagons:
-            progressPoints = self.__paragonsController.getVehicleProgressPoints(vehicle.intCD)
-            items.append(formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(backport.text(R.strings.tooltips.researchPage.vehicle.paragons.resetVehicle.progressPoints.text(), points=text_styles.stats(progressPoints))), icon=backport.image(R.images.gui.maps.icons.library.paragonsProgressPoints_16x16()), padding=formatters.packPadding(left=79, top=-2, bottom=5), iconPadding=formatters.packPadding(top=2), titlePadding=formatters.packPadding(left=3)))
+        paragonsBlock = self.__getParagonsBlock(vehicle)
+        if paragonsBlock:
+            items.append(paragonsBlock)
         if vehicle.isEarnCrystals and statsConfig.showEarnCrystals:
             current, limit = vehicle.getCrystalsEarnedInfo()
             icon = backport.image(R.images.gui.maps.icons.library.crystal_23x22())
@@ -234,6 +234,12 @@ class VehicleInfoTooltipData(BlocksTooltipData):
                 timeKey, formattedTime = getTimeLeftInfo(vehicle.restoreInfo.getRestoreTimeLeft(), None)
                 items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(''.join(('#tooltips:vehicle/restoreLeft/', timeKey))), value=text_styles.stats(formattedTime), icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=0, bottom=-10)))
         return
+
+    def __getParagonsBlock(self, vehicle):
+        if vehicle.isResetParagons:
+            progressPoints = self.__paragonsController.getVehicleProgressPoints(vehicle.intCD)
+            return formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(backport.text(R.strings.tooltips.researchPage.vehicle.paragons.resetVehicle.progressPoints.text(), points=text_styles.stats(progressPoints))), icon=backport.image(R.images.gui.maps.icons.library.paragonsProgressPoints_16x16()), padding=formatters.packPadding(left=79, top=-2, bottom=5), iconPadding=formatters.packPadding(top=2), titlePadding=formatters.packPadding(left=3))
+        return formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(backport.text(R.strings.tooltips.researchPage.vehicle.paragons.resetVehicle.unlockPoints.text(), points=text_styles.stats(self.__paragonsController.getVehicleFirstUnlockPoints(vehicle)))), icon=backport.image(R.images.gui.maps.icons.library.paragonsProgressPoints_16x16()), padding=formatters.packPadding(left=79, top=-2, bottom=5), iconPadding=formatters.packPadding(top=2), titlePadding=formatters.packPadding(left=3)) if self.__paragonsController.getVehicleFirstUnlockPoints(vehicle) else None
 
     def __getStatTrackBlock(self, vehicle):
         frags = getVehicleStatTrackFrags(vehicle.intCD)

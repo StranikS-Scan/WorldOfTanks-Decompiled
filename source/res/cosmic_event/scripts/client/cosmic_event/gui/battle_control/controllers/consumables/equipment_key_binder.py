@@ -106,7 +106,9 @@ class EquipmentKeyBinder(object):
     def _rebindKeys(self):
         equipmentCtrl = self._sessionProvider.shared.equipments
         self._keyBindings.clear()
-        for equipmentCD, _ in equipmentCtrl.getOrderedEquipmentsLayout():
+        equipments = equipmentCtrl.getOrderedEquipmentsLayout()
+        sortedEquipments = sorted(equipments, key=lambda x: equipmentCtrl.getAbilityIndex(x[0]))
+        for equipmentCD, _ in sortedEquipments:
             if equipmentCD in self._keyBindings.values():
                 continue
             self._createKeyBinding(equipmentCD)

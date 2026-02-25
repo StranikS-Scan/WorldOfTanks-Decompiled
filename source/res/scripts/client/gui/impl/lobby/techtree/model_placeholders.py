@@ -14,8 +14,8 @@ from gui.impl.wrappers.user_compound_price_model import BuyPriceModelBuilder
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.game_control import IEarlyAccessController, IParagonsController
+from gui.shared.ext_money import ExtendedMoney
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
-from gui.veh_post_progression.models.ext_money import ExtendedMoney
 from gui.techtree.selected_nation import SelectedNation
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Array
@@ -266,14 +266,23 @@ def _getEarlyAccessDataForButton(eaCtrl=None):
     return (affectedVehicles, buttonState)
 
 
-@dependency.replace_none_kwargs(paragonsCtrl=IParagonsController)
-def _getParagonsDataForButton(resetBranchID=0, paragonsCtrl=None):
+@dependency.replace_none_kwargs(paragonsCtrl=IParagonsController, itemsCache=IItemsCache)
+def _getParagonsDataForButton(resetBranchID=0, paragonsCtrl=None, itemsCache=None):
     affectedVehicles = []
-    buttonState = None
-    if paragonsCtrl is not None:
+    buttonState = State.DISABLED
+    if paragonsCtrl is None:
+        return (affectedVehicles, buttonState)
+    else:
         affectedVehicles = paragonsCtrl.getBranchResetVehicles(resetBranchID)
-        buttonState = State.ENABLED if not paragonsCtrl.isPaused and resetBranchID in paragonsCtrl.branches.availableToResetBranchIds else State.DISABLED
-    return (affectedVehicles, buttonState)
+        if paragonsCtrl.isPaused:
+            return (affectedVehicles, buttonState)
+        if resetBranchID in paragonsCtrl.branches.availableToResetBranchIds:
+            buttonState = State.ENABLED
+        elif paragonsCtrl.isBranchReset(resetBranchID):
+            buttonState = State.DROPPED_BRANCH
+        elif paragonsCtrl.isFirstUnlockBranchAvailable(resetBranchID, includeParagonsAvailable=False):
+            buttonState = State.FIRST_BRANCH_RESET
+        return (affectedVehicles, buttonState)
 
 
 def _getNodeRowByVehCD(vehCD, nodesArray):

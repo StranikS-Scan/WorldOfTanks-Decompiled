@@ -332,7 +332,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         displayString = text_styles.main('{} / {}'.format(countStyle(str(self._carouselDP.itemCount)), str(self._carouselDP.totalItemCount)))
         self.__ctx.carouselItemsCounts = (self._carouselDP.itemCount, self._carouselDP.totalItemCount)
         shouldShow = self._carouselDP.hasAppliedFilter()
-        if self.__c11nFilterSettings.get(CustomizationFilter.DISPLAY_GROUP):
+        if self.__c11nFilterSettings.get(CustomizationFilter.DISPLAY_GROUP) or self.__ctx.modeId == CustomizationModes.EDITABLE_STYLE:
             bookmarks = self._carouselDP.getBookmarskData()
             arrows = self._carouselDP.getArrowsData()
             showSeparators = self._carouselDP.getShowSeparatorsData()

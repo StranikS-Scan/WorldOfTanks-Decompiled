@@ -11,7 +11,7 @@ from gui.impl.gen.view_models.views.lobby.crew.tooltips.vehicle_params_category 
 from gui.impl.gen.view_models.views.lobby.crew.tooltips.vehicle_params_note import VehicleParamsNote, NoteThemeEnum
 from gui.impl.gen.view_models.views.lobby.crew.tooltips.vehicle_params_item import VehicleParamsItem, ValueStyleEnum
 from gui.impl.pub import ViewImpl
-from gui.shared.gui_items import KPI
+from gui.shared.gui_items import KPI, getKpiAbilityFormatter
 from gui.impl import backport
 from gui.shared.items_parameters.param_name_helper import getVehicleParameterText
 from gui.shared.items_parameters import formatters as param_formatter
@@ -250,7 +250,7 @@ class BaseVehicleAdvancedParamsTooltipView(BaseVehicleParamsTooltipView):
         model.setIsAdvanced(self._supportAdvanced)
         if isExtraParam:
             title = self.__getKpiTitle()
-            desc = backport.text(R.strings.menu.extraParams.name.dyn(self._paramName, R.strings.menu.extraParams.desc)())
+            desc = self.__getKpiDescr()
         else:
             titleParamName = param_formatter.getTitleParamName(vehicle, self._paramName)
             measureParamName = param_formatter.getMeasureParamName(vehicle, self._paramName)
@@ -311,6 +311,24 @@ class BaseVehicleAdvancedParamsTooltipView(BaseVehicleParamsTooltipView):
     def __getKpiTitle(self):
         customTitlePath = R.strings.tank_setup.kpi.title.dyn(self._paramName)
         return backport.text(customTitlePath()) if customTitlePath else backport.text(R.strings.menu.extraParams.header(), paramName=backport.text(getVehicleParameterText(self._paramName, isPositive=True)))
+
+    def __getKpiDescr(self):
+        descr = backport.text(R.strings.menu.extraParams.name.dyn(self._paramName, R.strings.menu.extraParams.desc)())
+        overridedDescr = None
+        if self.vehicle and self.vehicle.isTankWithAbility:
+            overridedDescr = self.__getOverridedDescrForAbility(descr)
+        return overridedDescr or descr
+
+    def __getOverridedDescrForAbility(self, defaultDescr):
+        abilityID = self.vehicle.descriptor.type.ability
+        abilityEquipment = vehicles.g_cache.getEquipmentByID(abilityID)
+        customDescPath = R.strings.menu.custom.dyn(abilityEquipment.name)
+        if not customDescPath:
+            return None
+        else:
+            customDescPath = customDescPath.extraParams.name.dyn(self._paramName)
+            textFormatter = getKpiAbilityFormatter(abilityEquipment)
+            return backport.text(customDescPath(), **textFormatter(abilityEquipment, defaultDescr)) if customDescPath and textFormatter else None
 
 
 class FrontlineAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):

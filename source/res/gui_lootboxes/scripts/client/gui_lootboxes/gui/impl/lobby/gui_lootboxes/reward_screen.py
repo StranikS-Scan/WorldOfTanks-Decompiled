@@ -12,7 +12,7 @@ from gui_lootboxes.gui.impl.lobby.gui_lootboxes.sound import LOOT_BOXES_OVERLAY_
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.compensation_tooltip import LootBoxesCompensationTooltip
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_key_tooltip import LootboxKeyTooltip
-from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import LootboxTooltip
+from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import LootboxTooltip, ExtendedLootboxTooltip
 from constants import LOOTBOX_TOKEN_PREFIX, LOOTBOX_KEY_PREFIX
 from frameworks.wulf import WindowFlags, WindowLayer, ViewSettings
 from gui.impl.gen import R
@@ -85,6 +85,8 @@ class LootBoxesRewardScreen(ViewImpl):
         if contentID == R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.LootboxTooltip() and tooltipData:
             lootBoxID = tooltipData.get('lootBoxID')
             lootBox = self.__itemsCache.items.tokens.getLootBoxByID(int(lootBoxID))
+            if lootBox.isExtendedTooltip():
+                return ExtendedLootboxTooltip(lootBox)
             return LootboxTooltip(lootBox)
         if contentID == R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.LootboxKeyTooltip() and tooltipData:
             lootBoxKeyID = tooltipData.get('lootBoxKeyID')

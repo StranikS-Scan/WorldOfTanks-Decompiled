@@ -3,6 +3,7 @@
 import typing
 from fun_random.gui.feature.fun_constants import PROGRESSION_COUNTER_TEMPLATE
 from gui.shared.utils.decorators import ReprInjector
+from gui.server_events.bonuses import splitBonuses
 from helpers import time_utils
 from shared_utils import findFirst
 if typing.TYPE_CHECKING:
@@ -54,15 +55,20 @@ class FunProgressionCondition(object):
 @ReprInjector.simple(('requiredCounter', 'requiredCounter'), ('bonuses', 'bonuses'))
 class FunProgressionStage(object):
 
-    def __init__(self, pConfig, index, executor):
+    def __init__(self, pConfig, index, executor, priorityCtrl):
         self.__requiredCounter = pConfig.executors[index]
         self.__prevRequiredCounter = pConfig.executors[index - 1] if index else 0
         self.__bonuses = executor.getBonuses()
+        self.__bonusesByPriority = self.__createPriorityBonuses(priorityCtrl)
         self.__stageIndex = index
 
     @property
     def bonuses(self):
         return self.__bonuses
+
+    @property
+    def bonusesByPriority(self):
+        return self.__bonusesByPriority
 
     @property
     def prevRequiredCounter(self):
@@ -75,6 +81,11 @@ class FunProgressionStage(object):
     @property
     def stageIndex(self):
         return self.__stageIndex
+
+    def __createPriorityBonuses(self, priorityCtrl):
+        bonuses = splitBonuses(self.__bonuses)
+        bonuses.sort(key=priorityCtrl.getPriority)
+        return bonuses
 
 
 @ReprInjector.simple(('isCompleted', 'isCompleted'), ('isLastProgression', 'isLastProgression'), ('currentStageIndex', 'currentStageIndex'), ('maximumStageIndex', 'maximumStageIndex'))
@@ -114,10 +125,10 @@ class FunProgressionState(object):
 @ReprInjector.simple(('condition', 'condition'), ('state', 'state'), ('stages', 'stages'))
 class FunProgression(object):
 
-    def __init__(self, pConfig, isFirst, isLast, counter, trigger, executors):
+    def __init__(self, pConfig, isFirst, isLast, counter, trigger, executors, bonusesPriorityCtrl):
         self.__condition = FunProgressionCondition(pConfig, counter, trigger)
         self.__pConfig = pConfig
-        self.__stages = tuple((FunProgressionStage(pConfig, idx, exe) for idx, exe in enumerate(executors)))
+        self.__stages = tuple((FunProgressionStage(pConfig, idx, exe, bonusesPriorityCtrl) for idx, exe in enumerate(executors)))
         self.__state = FunProgressionState(pConfig, isFirst, isLast, self.__condition, self.__stages)
 
     @property

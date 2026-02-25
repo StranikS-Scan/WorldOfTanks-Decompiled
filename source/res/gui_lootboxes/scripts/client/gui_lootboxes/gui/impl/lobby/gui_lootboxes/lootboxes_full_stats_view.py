@@ -20,6 +20,7 @@ from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.lootboxes_
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes import RegisteredTooltips
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.sound import LOOT_BOXES_OVERLAY_SOUND_SPACE
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.deadline_tooltip import DeadlineTooltip
+from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import ExtendedLootboxTooltip, LootboxTooltip
 from gui_lootboxes.gui.shared.event_dispatcher import backToFullStatisticView
 from gui_lootboxes.gui.shared.gui_helpers import getLootBoxViewModel, fillStatisticModel
 from gui_lootboxes.skeletons.statistic_lootbox_controller import IStatisticLootBoxController
@@ -54,6 +55,13 @@ class LootBoxesFullStatsView(ViewImpl):
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.DeadlineTooltip():
             return DeadlineTooltip()
+        if contentID == R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.LootboxTooltip():
+            tooltipData = self.getTooltipData(event)
+            lootBoxID = tooltipData.get('lootBoxID')
+            lootBox = self.__itemsCache.items.tokens.getLootBoxByID(int(lootBoxID))
+            if lootBox.isExtendedTooltip():
+                return ExtendedLootboxTooltip(lootBox)
+            return LootboxTooltip(lootBox)
         if contentID in RegisteredTooltips.REGISTERED_SIMPLE_TOOLTIPS:
             view = RegisteredTooltips.REGISTERED_SIMPLE_TOOLTIPS.get(contentID)
             return view()
@@ -115,6 +123,7 @@ class LootBoxesFullStatsView(ViewImpl):
         rewardsList = model.getAllRewards()
         rewardsList.clear()
         rewards = []
+        self.__tooltipData = {}
         for statType, statValue in self.__statistic.items():
             rewards.extend(getNonQuestBonuses(statType, statValue))
 

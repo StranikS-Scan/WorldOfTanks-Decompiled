@@ -239,7 +239,7 @@ class BrBattleResultsViewInLobby(ViewImpl):
             if currentLevelPoints == 0:
                 currentLevelPoints = battlePassData['pointsTotal']
         availableChapter = first(self.__battlePassController.getChapterIDs())
-        chapterID = availableChapter if self.__battlePassController.isSingleChapter() else self.chapterID
+        chapterID = availableChapter if self.__battlePassController.isSingleChapter() else chapterID
         battlePassModel.setChapterState(chapterState)
         battlePassModel.setChapterID(chapterID or 0)
         state = BattlePassProgress.BP_STATE_DISABLED

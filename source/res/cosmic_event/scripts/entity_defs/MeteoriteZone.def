@@ -1,0 +1,15 @@
+<MeteoriteZone.def>
+  <AppealRadius>	3000	</AppealRadius>
+  <Properties>
+    <isActive>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isActive>
+    <vehiclesInZone>
+      <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehiclesInZone>
+  </Properties>
+  <shouldBackup>	false	</shouldBackup>
+</MeteoriteZone.def>

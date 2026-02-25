@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/paragons_helpers.py
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.paragons.paragons_constants import ParagonsSystemMessages
 from messenger import MessengerEntry
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
@@ -33,8 +35,9 @@ def pushParagonsBranchResetErrorNotification():
     _pushParagonsClientMessage(ParagonsSystemMessages.BRANCH_RESET_ERROR)
 
 
-def pushParagonsBattleRewardMessage(coins):
-    _pushParagonsClientMessage(ParagonsSystemMessages.BATTLE_REWARD, parameters={'coins': coins})
+def pushParagonsBattleRewardMessage(coins, sourceID):
+    _pushParagonsClientMessage(ParagonsSystemMessages.BATTLE_REWARD, parameters={'coins': coins,
+     'source': backport.text(R.strings.paragons.notifications.source.dyn(sourceID)())})
 
 
 def pushParagonsLevelRewardMessage(chapter, level, coins, showSelector, rewards):

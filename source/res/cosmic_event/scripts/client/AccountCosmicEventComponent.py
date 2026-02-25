@@ -5,7 +5,7 @@ from helpers import dependency
 from BaseAccountExtensionComponent import BaseAccountExtensionComponent
 from PlayerEvents import g_playerEvents as events
 from cosmic_event_common.cosmic_constants import QUEUE_TYPE
-from cosmic_event.skeletons.battle_controller import ICosmicEventBattleController
+from skeletons.gui.game_control import ICosmicEventBattleController
 
 class AccountCosmicEventComponent(BaseAccountExtensionComponent):
     _QUEUE_TYPE = QUEUE_TYPE.COSMIC_EVENT

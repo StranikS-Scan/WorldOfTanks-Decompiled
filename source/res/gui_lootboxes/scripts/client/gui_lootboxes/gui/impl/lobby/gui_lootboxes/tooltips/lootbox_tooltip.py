@@ -50,9 +50,10 @@ class LootboxTooltip(ViewImpl):
 
 
 class _ExtendedLootboxSlot(object):
-    __slots__ = ('__bonuses', '__probability')
+    __slots__ = ('__id', '__bonuses', '__probability')
 
-    def __init__(self, probability, bonuses, bonusesSortTags):
+    def __init__(self, idx, probability, bonuses, bonusesSortTags):
+        self.__id = idx
         self.__bonuses = _getSortedBonuses(bonuses, bonusesSortTags)
         self.__probability = probability
 
@@ -66,6 +67,9 @@ class _ExtendedLootboxSlot(object):
 
     def getProbability(self):
         return self.__probability
+
+    def getId(self):
+        return self.__id
 
 
 class ExtendedLootboxTooltip(ViewImpl):
@@ -112,10 +116,10 @@ class ExtendedLootboxTooltip(ViewImpl):
             if self.__isVehicleBonuses(bonuses):
                 self.__fillSpecialVehicleSlot(bonuses, bonusesSortTags, slotProbability)
                 continue
-            lbSlot = _ExtendedLootboxSlot(probability=slotProbability, bonuses=bonuses, bonusesSortTags=bonusesSortTags)
+            lbSlot = _ExtendedLootboxSlot(idx=idx, probability=slotProbability, bonuses=bonuses, bonusesSortTags=bonusesSortTags)
             lbSlots.append(lbSlot)
 
-        lbSlots = sorted(lbSlots, key=lambda x: -x.getProbability())
+        lbSlots = sorted(lbSlots, key=lambda x: x.getId())
         for idx, slot in enumerate(lbSlots, self._START_INDEX_FOR_DEFAULT_BONUSES):
             slotViewModel = slot.getFilledSlotModel()
             resource = R.strings.gui_lootboxes.lootBox.slot.description()

@@ -21,6 +21,7 @@ class ReloadEffectsType(object):
     AUTO_RELOAD = 'AutoReload'
     DUALGUN_RELOAD = 'DualGunReload'
     AUTO_SHOOT_CHANGE_SHELL_RELOAD = 'AutoShootChangeShellReload'
+    AUTO_SHOOT_RELOAD = 'AutoShootGunReload'
     DUALGUN_AUTORELOAD = 'DualGunAutoReload'
     DUALGUN_BARREL = 'DualGunBarrelReload'
 
@@ -219,6 +220,27 @@ class _AutoShootChangeShellGunReloadDescr(_SimpleReloadDesc):
         decr = copy(self)
         decr.duration = self._intuitionOverrides.get('duration', self.duration)
         decr.soundEvent = self._intuitionOverrides.get('sound', self.soundEvent)
+        return decr.create()
+
+
+class _AutoShootGunReloadDescr(_SimpleReloadDesc):
+    __slots__ = ('clipReloadStart', 'clipReloadEnd', 'ammoLow', 'caliber', 'lastShell')
+
+    def __init__(self, dataSection, eType):
+        super(_AutoShootGunReloadDescr, self).__init__(dataSection, eType)
+        self.clipReloadStart = dataSection.readString('clipReloadStart', '')
+        self.clipReloadEnd = dataSection.readString('clipReloadEnd', '')
+        self.ammoLow = dataSection.readString('ammoLow', '')
+        self.lastShell = dataSection.readString('lastShell', '')
+        self.caliber = dataSection.readString('caliber', '')
+
+    def create(self):
+        return AutoShootReload(self)
+
+    def createIntuitionReload(self):
+        decr = copy(self)
+        decr.duration = self._intuitionOverrides.get('duration', self.duration)
+        decr.clipReloadEnd = self._intuitionOverrides.get('sound', self.clipReloadEnd)
         return decr.create()
 
 
@@ -634,8 +656,9 @@ class DualGunReload(_GunReload):
             SoundGroups.g_instance.setSwitch(_CALIBER_RELOAD_SOUND_SWITCH, self._desc.caliber)
             self.stopCallback(self.__onReloadStart)
             timeToStart = shellReloadTime - self._desc.runTimeDelta
-            if self.__sound is None:
-                self.__sound = SoundGroups.g_instance.getSound2D(self._desc.soundEvent)
+            if self.__sound is not None:
+                self.__sound.stop()
+            self.__sound = SoundGroups.g_instance.getSound2D(self._desc.soundEvent)
             if timeToStart > 0:
                 self.delayCallback(timeToStart, self.__onReloadStart, BigWorld.time() + timeToStart)
             if ammoLow and self._desc.ammoLowSound:
@@ -808,6 +831,59 @@ class AutoShootChangeShellReload(_GunReload):
             return
 
 
+class AutoShootReload(_GunReload):
+
+    def __init__(self, effectDesc):
+        super(AutoShootReload, self).__init__(effectDesc)
+        self._finishSound = None
+        self._startSound = None
+        return
+
+    def __del__(self):
+        self.stop()
+        CallbackDelayer.destroy(self)
+
+    def start(self, shellReloadTime, alert, shellCount, reloadShellCount, shellID, reloadStart, clipCapacity):
+        if gEffectsDisabled():
+            return
+        SoundGroups.g_instance.setSwitch('SWITCH_ext_rld_autoshoot_caliber', self._desc.caliber)
+        self._startSound = self._startSound or SoundGroups.g_instance.getSound2D(self._desc.clipReloadStart)
+        self._finishSound = self._finishSound or SoundGroups.g_instance.getSound2D(self._desc.clipReloadEnd)
+        if reloadStart:
+            self.__playSoundObject(self._startSound)
+            if alert and self._desc.ammoLow:
+                playByName(self._desc.ammoLow)
+        self.delayCallback(max(0.0, shellReloadTime - self._desc.duration), self.__playSoundObject, self._finishSound)
+
+    def stop(self):
+        self.__cleanSounds()
+        self.stopCallback(self.__playSoundObject)
+        self._stopGunRammerEffect()
+
+    def reloadEnd(self):
+        self.stopCallback(self.__playSoundObject)
+
+    def __cleanSounds(self):
+        if self._startSound is not None:
+            self._startSound.stop()
+            self._startSound = None
+        if self._finishSound is not None:
+            self._finishSound.stop()
+            self._finishSound = None
+        return
+
+    @staticmethod
+    def __playSoundObject(sound):
+        if sound is None:
+            return
+        else:
+            sound.stop()
+            if _isReplayWarping():
+                return
+            sound.play()
+            return
+
+
 class ReloadEffectStrategy(object):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     __slots__ = ('__gunReloadEffect', '__intuitionReloadEffect', '__currentReloadEffect', '__reloadInProgress')
@@ -909,5 +985,6 @@ RELOAD_EFFECTS_DESCR_MAP = {ReloadEffectsType.SIMPLE_RELOAD: _SimpleReloadDesc,
  ReloadEffectsType.AUTO_RELOAD: _AutoReloadDesc,
  ReloadEffectsType.DUALGUN_RELOAD: _DualGunReloadDesc,
  ReloadEffectsType.AUTO_SHOOT_CHANGE_SHELL_RELOAD: _AutoShootChangeShellGunReloadDescr,
+ ReloadEffectsType.AUTO_SHOOT_RELOAD: _AutoShootGunReloadDescr,
  ReloadEffectsType.DUALGUN_AUTORELOAD: _DualGunAutoReloadDesc,
  ReloadEffectsType.DUALGUN_BARREL: _DualGunBarrelReloadDesc}

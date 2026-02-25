@@ -4,7 +4,7 @@ import typing
 from PlayerEvents import g_playerEvents
 from cosmic_event.gui.Scaleform.daapi.view.lobby.cosmic_battle_queue import CosmicEventQueueProvider
 from cosmic_event.gui.impl.gen.view_models.views.lobby.queue_view.queue_view_model import QueueViewModel
-from cosmic_event.skeletons.battle_controller import ICosmicEventBattleController
+from skeletons.gui.game_control import ICosmicEventBattleController
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from gui.impl.pub import ViewImpl

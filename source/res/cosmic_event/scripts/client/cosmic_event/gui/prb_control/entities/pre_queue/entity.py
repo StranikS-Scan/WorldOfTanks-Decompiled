@@ -3,12 +3,6 @@
 import BigWorld
 import typing
 from adisp import adisp_process
-from cosmic_event.gui.prb_control.entities.pre_queue.actions_validator import CosmicEventBattleActionsValidator
-from cosmic_event.gui.prb_control.entities.pre_queue.ctx import CosmicEventBattleQueueCtx
-from cosmic_event.gui.prb_control.entities.pre_queue.scheduler import CosmicEventBattleScheduler
-from cosmic_event.gui.prb_control.prb_config import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
-from cosmic_event.skeletons.battle_controller import ICosmicEventBattleController
-from cosmic_event_common.cosmic_constants import QUEUE_TYPE
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages
 from gui.impl import backport
@@ -21,9 +15,16 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import REQUEST_TYPE
 from gui.prb_control.storages import storage_getter, RECENT_PRB_STORAGE
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from helpers import dependency
+from skeletons.gui.game_control import ICosmicEventBattleController
 from skeletons.gui.impl import IGuiLoader
 from soft_exception import SoftException
+from cosmic_event_common.cosmic_constants import QUEUE_TYPE
+from cosmic_event.gui.prb_control.entities.pre_queue.actions_validator import CosmicEventBattleActionsValidator
+from cosmic_event.gui.prb_control.entities.pre_queue.ctx import CosmicEventBattleQueueCtx
+from cosmic_event.gui.prb_control.entities.pre_queue.scheduler import CosmicEventBattleScheduler
+from cosmic_event.gui.prb_control.prb_config import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
 if typing.TYPE_CHECKING:
     from gui.prb_control.storages.local_storage import LocalStorage
     from typing import Optional
@@ -83,6 +84,14 @@ class CosmicEventBattleEntity(PreQueueEntity):
     def needsCheckVehicleForBattle(self):
         return False
 
+    def onEnqueued(self, queueType, *args):
+        super(CosmicEventBattleEntity, self).onEnqueued(queueType, *args)
+        g_eventBus.handleEvent(events.ReferralViewEvent(events.ReferralViewEvent.TOGGLE_BUTTON, ctx={'isEnabled': False}), EVENT_BUS_SCOPE.LOBBY)
+
+    def onDequeued(self, queueType, *args):
+        g_eventBus.handleEvent(events.ReferralViewEvent(events.ReferralViewEvent.TOGGLE_BUTTON, ctx={'isEnabled': True}), EVENT_BUS_SCOPE.LOBBY)
+        super(CosmicEventBattleEntity, self).onDequeued(queueType, *args)
+
     def _loadHangar(self):
         if self.__cosmicEventBattleCtrl.isEnabled:
             self.__cosmicEventBattleCtrl.openEventLobby()
@@ -90,8 +99,9 @@ class CosmicEventBattleEntity(PreQueueEntity):
             g_eventDispatcher.loadHangar()
 
     def _doQueue(self, ctx):
-        BigWorld.player().AccountCosmicEventComponent.enqueue(ctx.getVehicleInventoryID())
-        LOG_DEBUG('Sends request on queuing to the cosmic event battles', ctx)
+        if not self.__cosmicEventBattleCtrl.isClosing():
+            BigWorld.player().AccountCosmicEventComponent.enqueue(ctx.getVehicleInventoryID())
+            LOG_DEBUG('Sends request on queuing to the cosmic event battles', ctx)
 
     def _doDequeue(self, ctx):
         BigWorld.player().AccountCosmicEventComponent.dequeue()

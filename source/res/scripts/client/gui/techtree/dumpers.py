@@ -113,10 +113,13 @@ class ResearchItemsObjDumper(ResearchBaseDumper):
 
     def _getItemData(self, node, rootItem):
         data = super(ResearchItemsObjDumper, self)._getItemData(node, rootItem)
+        paragonsPoints = node.getParagonsPoints()
         data.update({'state': node.getState(),
          'earnedXP': node.getEarnedXP(),
          'unlockProps': node.getUnlockTuple(),
-         'buyPrice': node.getBuyPrices()})
+         'buyPrice': node.getBuyPrices(),
+         'paragonsPoints': '+{}'.format(paragonsPoints) if paragonsPoints else '',
+         'paragonsType': node.getParagonsType()})
         if NODE_STATE.isEarlyAccess(node.getState()):
             data.update(_getEarlyAccessVehicleData(node))
         return data

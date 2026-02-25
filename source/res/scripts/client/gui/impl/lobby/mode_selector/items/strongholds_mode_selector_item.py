@@ -11,6 +11,7 @@ from gui.impl.lobby.mode_selector.items import setBattlePassState
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
 from gui.impl.lobby.stronghold.stronghold_helpers import CLAN_SEASON_PROGRESS_PREFIX, getClanSeasonProgressLevel
 from PlayerEvents import g_playerEvents
+from gui.limited_ui.lui_rules_storage import LuiRules
 if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_stronghold_widget_model import ModeSelectorStrongholdWidgetModel
 
@@ -22,6 +23,9 @@ class StrongholdsModeSelectorItem(ModeSelectorLegacyItem):
     @property
     def viewModel(self):
         return super(StrongholdsModeSelectorItem, self).viewModel
+
+    def getLimitedUIRule(self):
+        return LuiRules.STRONGHOLD_CONTENT
 
     def _onInitializing(self):
         super(StrongholdsModeSelectorItem, self)._onInitializing()
@@ -47,7 +51,7 @@ class StrongholdsModeSelectorItem(ModeSelectorLegacyItem):
         with self.viewModel.widget.transaction() as vm:
             vm.setCurrentStage(getClanSeasonProgressLevel())
             vm.setIsInClan(g_clanCache.isInClan)
-            vm.setIsActive(g_clanCache.strongholdEventProvider.isRunning())
+            vm.setIsActive(g_clanCache.strongholdEventProvider.isSeasonRunning())
 
     def __onTokensUpdate(self, diff, _):
         tokens = diff.get('tokens', {})

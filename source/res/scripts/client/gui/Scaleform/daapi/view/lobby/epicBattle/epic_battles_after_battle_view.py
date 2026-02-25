@@ -5,7 +5,7 @@ import SoundGroups
 from constants import EPIC_ABILITY_PTS_NAME
 from epic_constants import EPIC_SELECT_BONUS_NAME
 from gui.Scaleform.daapi.view.lobby.epicBattle.after_battle_reward_view_helpers import getProgressionIconVODict
-from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import EpicCurtailingAwardsComposer
+from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import EpicAfterBattleAwardsComposer
 from gui.Scaleform.daapi.view.meta.EpicBattlesAfterBattleViewMeta import EpicBattlesAfterBattleViewMeta
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl import backport
@@ -34,7 +34,7 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
      EPIC_SELECT_BONUS_NAME: 6,
      'crewBooks': 7}
     _MIDDLE_PRIORITY = 50
-    _awardsFormatter = EpicCurtailingAwardsComposer(_MAX_VISIBLE_AWARDS, getEpicBattleViewAwardPacker())
+    _awardsFormatter = EpicAfterBattleAwardsComposer(_MAX_VISIBLE_AWARDS, getEpicBattleViewAwardPacker())
     __eventsCache = dependency.descriptor(IEventsCache)
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
     __battlePass = dependency.descriptor(IBattlePassController)
@@ -155,10 +155,12 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         bonuses = sorted(mergeBonuses(otherBonuses) + tokenBonuses, key=lambda item: self._BONUS_ORDER_PRIORITY.get(item.getName(), self._MIDDLE_PRIORITY))
         tooltipToBonusNameMapping = {}
         awardsVO = self.__markAnimationBonuses(self._awardsFormatter.getFormattedBonuses(bonuses, size=AWARDS_SIZES.BIG))
-        for idx, bonus in enumerate(bonuses):
-            awardTooltip = awardsVO[idx].get('tooltip')
+        awardsList = []
+        for bonus, bonusName in awardsVO:
+            awardsList.append(bonus)
+            awardTooltip = bonus.get('tooltip')
             if awardTooltip is not None:
-                tooltipToBonusNameMapping[str(awardTooltip)] = bonus.getName()
+                tooltipToBonusNameMapping[str(awardTooltip)] = bonusName
 
         self.__uiEpicBattleLogger.initialize(EpicBattleLogKeys.AFTER_BATTLE_VIEW.value, skipAdditionalInfoTooltips=(TOOLTIPS_CONSTANTS.EPIC_BATTLE_RECERTIFICATION_FORM_TOOLTIP,), overrideTooltipsId=tooltipToBonusNameMapping)
         fameBarVisible = True
@@ -170,7 +172,7 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
             else:
                 self.__maxLvlReached = True
         lvlReachedText = toUpper(backport.text(R.strings.epic_battle.epic_battles_after_battle.Level_Up_Title(), level=pMetaLevel))
-        data = {'awards': awardsVO,
+        data = {'awards': awardsList,
          'progress': self.__getProgress(pMetaLevel, pFamePts, prevPMetaLevel, prevPFamePts, maxMetaLevel, boosterFLXP),
          'barText': '+' + str(min(originalFlXP, famePointsReceived)),
          'barBoostText': '+' + str(boosterFLXP),
@@ -211,7 +213,7 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
 
     @staticmethod
     def __markAnimationBonuses(bonuses):
-        for bonus in bonuses:
+        for bonus, _ in bonuses:
             if bonus['specialAlias'] == TOOLTIPS_CONSTANTS.EPIC_BATTLE_INSTRUCTION_TOOLTIP:
                 bonus['hasAnimation'] = True
 

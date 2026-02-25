@@ -8,6 +8,7 @@ from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.impl import backport
 from gui.shared.gui_items.gui_item_economics import ActualPrice
 from gui.impl.gen import R
+from gui.shared.ext_money import ExtendedCurrency
 from gui.shared.formatters import icons
 from gui.shared.formatters import text_styles
 from gui.shared.formatters import time_formatters
@@ -62,7 +63,7 @@ def formatActionPrices(oldPrice, newPrice, isBuying, checkGold=False):
 
 def formatPrice(price, reverse=False, currency=Currency.CREDITS, useIcon=False, useStyle=False, ignoreZeros=False, justValue=False):
     outPrice = []
-    currencies = [ c for c in Currency.ALL if price.get(c) is not None ]
+    currencies = [ c for c in ExtendedCurrency.ALL if price.get(c) is not None ]
     if not currencies:
         currencies = [currency]
     for c in currencies:

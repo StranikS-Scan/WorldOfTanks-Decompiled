@@ -158,6 +158,7 @@ class ARENAS(object):
     C_60_ASIA_MIAO_NAME = '#arenas:60_asia_miao/name'
     C_60_ASIA_MIAO_DESCRIPTION = '#arenas:60_asia_miao/description'
     C_251_BR_BATTLE_CITY3_NAME = '#arenas:251_br_battle_city3/name'
+    C_251_BR_BATTLE_CITY3_DESCRIPTION = '#arenas:251_br_battle_city3/description'
     C_127_JAPORT_NAME = '#arenas:127_japort/name'
     C_127_JAPORT_DESCRIPTION = '#arenas:127_japort/description'
     C_252_BR_BATTLE_CITY4_NAME = '#arenas:252_br_battle_city4/name'
@@ -170,8 +171,6 @@ class ARENAS(object):
     C_14_SIEGFRIED_LINE_NOM_DESCRIPTION = '#arenas:14_siegfried_line_nom/description'
     C_121_LOST_PARADISE_V_NAME = '#arenas:121_lost_paradise_v/name'
     C_121_LOST_PARADISE_V_DESCRIPTION = '#arenas:121_lost_paradise_v/description'
-    C_280_COSMIC_NAME = '#arenas:280_cosmic/name'
-    C_280_COSMIC_DESCRIPTION = '#arenas:280_cosmic/description'
     TYPE_WINBACK_NAME = '#arenas:type/winback/name'
     TYPE_WINBACK_DESCRIPTION = '#arenas:type/winback/description'
     C_210_BF_EPIC_DESERT_NAME = '#arenas:210_bf_epic_desert/name'
@@ -180,6 +179,12 @@ class ARENAS(object):
     C_500_STALINGRAD_DESCRIPTION = '#arenas:500_stalingrad/description'
     C_502_KAMCHATKA_NAME = '#arenas:502_kamchatka/name'
     C_502_KAMCHATKA_DESCRIPTION = '#arenas:502_kamchatka/description'
+    C_503_KALININGRAD_NAME = '#arenas:503_kaliningrad/name'
+    C_503_KALININGRAD_DESCRIPTION = '#arenas:503_kaliningrad/description'
+    C_505_CAUCASUS_NAME = '#arenas:505_caucasus/name'
+    C_505_CAUCASUS_DESCRIPTION = '#arenas:505_caucasus/description'
+    C_506_BATTLE_FOR_MOSCOW_NAME = '#arenas:506_battle_for_moscow/name'
+    C_506_BATTLE_FOR_MOSCOW_DESCRIPTION = '#arenas:506_battle_for_moscow/description'
     TYPE_MAPS_TRAINING_NAME = '#arenas:type/maps_training/name'
     TYPE_MAPS_TRAINING_DESCRIPTION = '#arenas:type/maps_training/description'
     C_1003_CGF_TEST_NAME = '#arenas:1003_cgf_test/name'
@@ -194,13 +199,11 @@ class ARENAS(object):
     H00_ARMORY_YARD_DESCRIPTION = '#arenas:h00_armory_yard/description'
     QA_CONTENT_01_NAME = '#arenas:qa_content_01/name'
     QA_CONTENT_01_DESCRIPTION = '#arenas:qa_content_01/description'
-    C_503_KALININGRAD_NAME = '#arenas:503_kaliningrad/name'
-    C_503_KALININGRAD_DESCRIPTION = '#arenas:503_kaliningrad/description'
     H08_MT_HANGAR_NAME = '#arenas:h08_mt_hangar/name'
     H08_MT_HANGAR_DESCRIPTION = '#arenas:h08_mt_hangar/description'
-    C_505_CAUCASUS_NAME = '#arenas:505_caucasus/name'
-    C_505_CAUCASUS_DESCRIPTION = '#arenas:505_caucasus/description'
     MODIFIED = '#arenas:modified'
+    C_280_COSMIC_2026_NAME = '#arenas:280_cosmic_2026/name'
+    C_280_COSMIC_2026_DESCRIPTION = '#arenas:280_cosmic_2026/description'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -356,6 +359,7 @@ class ARENAS(object):
      C_60_ASIA_MIAO_NAME,
      C_60_ASIA_MIAO_DESCRIPTION,
      C_251_BR_BATTLE_CITY3_NAME,
+     C_251_BR_BATTLE_CITY3_DESCRIPTION,
      C_127_JAPORT_NAME,
      C_127_JAPORT_DESCRIPTION,
      C_252_BR_BATTLE_CITY4_NAME,
@@ -368,8 +372,6 @@ class ARENAS(object):
      C_14_SIEGFRIED_LINE_NOM_DESCRIPTION,
      C_121_LOST_PARADISE_V_NAME,
      C_121_LOST_PARADISE_V_DESCRIPTION,
-     C_280_COSMIC_NAME,
-     C_280_COSMIC_DESCRIPTION,
      TYPE_WINBACK_NAME,
      TYPE_WINBACK_DESCRIPTION,
      C_210_BF_EPIC_DESERT_NAME,
@@ -378,6 +380,12 @@ class ARENAS(object):
      C_500_STALINGRAD_DESCRIPTION,
      C_502_KAMCHATKA_NAME,
      C_502_KAMCHATKA_DESCRIPTION,
+     C_503_KALININGRAD_NAME,
+     C_503_KALININGRAD_DESCRIPTION,
+     C_505_CAUCASUS_NAME,
+     C_505_CAUCASUS_DESCRIPTION,
+     C_506_BATTLE_FOR_MOSCOW_NAME,
+     C_506_BATTLE_FOR_MOSCOW_DESCRIPTION,
      TYPE_MAPS_TRAINING_NAME,
      TYPE_MAPS_TRAINING_DESCRIPTION,
      C_1003_CGF_TEST_NAME,
@@ -392,13 +400,11 @@ class ARENAS(object):
      H00_ARMORY_YARD_DESCRIPTION,
      QA_CONTENT_01_NAME,
      QA_CONTENT_01_DESCRIPTION,
-     C_503_KALININGRAD_NAME,
-     C_503_KALININGRAD_DESCRIPTION,
      H08_MT_HANGAR_NAME,
      H08_MT_HANGAR_DESCRIPTION,
-     C_505_CAUCASUS_NAME,
-     C_505_CAUCASUS_DESCRIPTION,
-     MODIFIED)
+     MODIFIED,
+     C_280_COSMIC_2026_NAME,
+     C_280_COSMIC_2026_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

@@ -1,0 +1,668 @@
+<Cz00_COSM_Gravizapa_02.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <crew>
+    <commander>	gunner
+			radioman
+			loader
+			driver	</commander>
+  </crew>
+  <supplySlots>	8 8 8	</supplySlots>
+  <speedLimits>
+    <forward>	90	</forward>
+    <backward>	40	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.01	</moving>
+    <still>	0.01	</still>
+    <camouflageBonus>	0.0	</camouflageBonus>
+    <camouflageNetBonus>	0.0	</camouflageNetBonus>
+    <firePenalty>	1.0	</firePenalty>
+  </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.1 0.125	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.06	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.09	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
+  </optDevsOverrides>
+  <repairCost>	0	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.2	</priceFactor>
+    <density>	0.898957 0.898957	</density>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	100	</armor_1>
+    </armor>
+    <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
+    <weight>	3000	</weight>
+    <maxHealth>	9000	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	30000	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	0.0	</repairCost>
+    </ammoBayHealth>
+    <prefab>	content/CGFPrefabs/cosmic_event/cosmic_vehicle_emissive.prefab	</prefab>
+    <models>
+      <undamaged>	vehicles/czech/Cz00_COSM_Gravizapa_02/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/czech/Cz00_COSM_Gravizapa_02/normal/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/czech/Cz00_COSM_Gravizapa_02/normal/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.34 38.0 0.36 1.0 0.05 0.34	</pitchParams>
+      <rollParams>	1.0 0.34 38.0 0.36 1.0 0.06 0.40	</rollParams>
+      <sensitivityToImpulse>	0.8	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	cosmic_rpm	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.000913 1.123586 -0.563179	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/czech/Cz00_COSM_Gravizapa_02/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/czech/Cz00_COSM_Gravizapa_02/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <customizationSlots>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	11000	</slotId>
+        <anchorPosition>	-0.000000 0.637465 1.30037	</anchorPosition>
+        <anchorDirection>	0.000000 0.440173 0.897913	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	12000	</slotId>
+        <anchorPosition>	-0.000000 0.637465 1.30037	</anchorPosition>
+        <anchorDirection>	0.000000 0.440173 0.897913	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0.000000 0.000000 0.000000	</position>
+        <rotation>	0.000000 0.000000 0.000000	</rotation>
+      </slot>
+    </customizationSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <hangarShadowTexture>	vehicles/czech/Cz00_COSM_Gravizapa_02/COSM_Gravizapa_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <density>	102.441505 104.100945	</density>
+      <aoTextureSize>	512 256	</aoTextureSize>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_Cz00_COSM_Gravizapa_02>
+      <userString>	#czech_vehicles:Chassis_Cz00_COSM_Gravizapa_02	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_2>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+        </armor_2>
+      </armor>
+      <weight>	6000	</weight>
+      <terrainResistance>	1 1 1	</terrainResistance>
+      <brakeForce>	35000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	35	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0	</vehicleMovement>
+        <vehicleRotation>	0	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	1.0	</bulkHealthFactor>
+      <maxHealth>	30000	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	0.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/czech/Cz00_COSM_Gravizapa_02/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/czech/Cz00_COSM_Gravizapa_02/normal/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/czech/Cz00_COSM_Gravizapa_02/normal/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <size>	0.5 0.9	</size>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_02	</textureSet>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <trackPair>
+          <trackPairIdx>	0	</trackPairIdx>
+          <leftMaterial>	[[CHASSIS_LEFT_TRACK_MATERIAL]]	</leftMaterial>
+          <rightMaterial>	[[CHASSIS_RIGHT_TRACK_MATERIAL]]	</rightMaterial>
+          <textureScale>	-1.1	</textureScale>
+        </trackPair>
+      </tracks>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.670100 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.342020 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.155970	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <index>	4	</index>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <nonTrack>	true	</nonTrack>
+          <isLeading>	false	</isLeading>
+          <steeringProcessor>	false	</steeringProcessor>
+          <scrollProcessor>
+            <connectedToEngine>	true	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.505692	</radius>
+            <width>	0.276355	</width>
+            <pivotXOffset>	0.053904	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.25	</maxYShift>
+            <explodedRadius>	0.476	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/czech/Cz00_COSM_Gravizapa_02/collision/Wheel_L_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/czech/Cz00_COSM_Gravizapa_02/collision_client/Wheel_L_01.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	-1.323 0.697 1.672	</wheelPos>
+        </wheel>
+        <wheel>
+          <index>	2	</index>
+          <isLeft>	true	</isLeft>
+          <name>	W_L0	</name>
+          <nonTrack>	true	</nonTrack>
+          <scrollProcessor>
+            <connectedToEngine>	true	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.505692	</radius>
+            <width>	0.276355	</width>
+            <pivotXOffset>	0.005110	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <hitTester>
+            <collisionModelServer>	vehicles/czech/Cz00_COSM_Gravizapa_02/collision/Wheel_L_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/czech/Cz00_COSM_Gravizapa_02/collision_client/Wheel_L_01.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	-1.323 0.697 -0.519	</wheelPos>
+        </wheel>
+        <wheel>
+          <index>	0	</index>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L1	</name>
+          <nonTrack>	true	</nonTrack>
+          <isLeading>	true	</isLeading>
+          <steeringProcessor>	false	</steeringProcessor>
+          <scrollProcessor>
+            <connectedToEngine>	true	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.505692	</radius>
+            <width>	0.276355	</width>
+            <pivotXOffset>	0.005111	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.25	</maxYShift>
+            <explodedRadius>	0.476	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/czech/Cz00_COSM_Gravizapa_02/collision/Wheel_L_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/czech/Cz00_COSM_Gravizapa_02/collision_client/Wheel_L_01.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	-1.323 0.697 -2.109	</wheelPos>
+        </wheel>
+        <wheel>
+          <index>	5	</index>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <nonTrack>	true	</nonTrack>
+          <isLeading>	false	</isLeading>
+          <steeringProcessor>	false	</steeringProcessor>
+          <scrollProcessor>
+            <connectedToEngine>	true	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.505692	</radius>
+            <width>	0.276356	</width>
+            <pivotXOffset>	-0.053904	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.25	</maxYShift>
+            <explodedRadius>	0.476	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/czech/Cz00_COSM_Gravizapa_02/collision/Wheel_R_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/czech/Cz00_COSM_Gravizapa_02/collision_client/Wheel_R_01.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	1.323 0.697 1.672	</wheelPos>
+        </wheel>
+        <wheel>
+          <index>	3	</index>
+          <isLeft>	false	</isLeft>
+          <name>	W_R0	</name>
+          <nonTrack>	true	</nonTrack>
+          <scrollProcessor>
+            <connectedToEngine>	true	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.505692	</radius>
+            <width>	0.276356	</width>
+            <pivotXOffset>	-0.005110	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <hitTester>
+            <collisionModelServer>	vehicles/czech/Cz00_COSM_Gravizapa_02/collision/Wheel_R_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/czech/Cz00_COSM_Gravizapa_02/collision_client/Wheel_R_01.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	1.323 0.697 -0.519	</wheelPos>
+        </wheel>
+        <wheel>
+          <index>	1	</index>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R1	</name>
+          <nonTrack>	true	</nonTrack>
+          <isLeading>	true	</isLeading>
+          <steeringProcessor>	false	</steeringProcessor>
+          <scrollProcessor>
+            <connectedToEngine>	true	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.505692	</radius>
+            <width>	0.276356	</width>
+            <pivotXOffset>	-0.005111	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.25	</maxYShift>
+            <explodedRadius>	0.476	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/czech/Cz00_COSM_Gravizapa_02/collision/Wheel_R_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/czech/Cz00_COSM_Gravizapa_02/collision_client/Wheel_R_01.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	1.323 0.697 -2.109	</wheelPos>
+        </wheel>
+        <generalWheels>	true	</generalWheels>
+        <globalDeflationShaderParams>
+          <wheelRadius>	0.61	</wheelRadius>
+          <rimRadius>	0.35	</rimRadius>
+          <sideShift>	0.2	</sideShift>
+          <peakShift>	0.95	</peakShift>
+        </globalDeflationShaderParams>
+        <traces>
+          <wheelTrace>
+            <name>	WD_L0	</name>
+          </wheelTrace>
+          <wheelTrace>
+            <name>	WD_L1	</name>
+          </wheelTrace>
+          <wheelTrace>
+            <name>	WD_R0	</name>
+          </wheelTrace>
+          <wheelTrace>
+            <name>	WD_R1	</name>
+          </wheelTrace>
+        </traces>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	wheels_suspension_pc	</wwsoundPC>
+      <wwsoundNPC>	wheels_suspension_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.307960 0.000000	</hullPosition>
+      <hitTester>
+        <trackPairIdx>	0	</trackPairIdx>
+        <collisionModelServer>	vehicles/czech/Cz00_COSM_Gravizapa_02/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/czech/Cz00_COSM_Gravizapa_02/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.26948 1.67244	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	1	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	1	</startIndex>
+          <count>	1	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	2	</startIndex>
+          <count>	1	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.2	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	1	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	1	</startIndex>
+          <count>	1	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	2	</startIndex>
+          <count>	1	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.2	</maxOffset>
+        </group>
+      </groundNodes>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	21000	</slotId>
+          <anchorPosition>	-1.75665 0.67825 -0.209015	</anchorPosition>
+          <anchorDirection>	-0.927185 0.35799 -0.110321	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	29000	</slotId>
+          <anchorPosition>	-0.0485571 2.93741 -0.820402	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <trackThickness>	-0.010	</trackThickness>
+      <camouflage>
+        <density>	102.441505 104.100945	</density>
+        <aoTextureSize>	512 256	</aoTextureSize>
+      </camouflage>
+      <repairTime>	0.100000001	</repairTime>
+    </Chassis_Cz00_COSM_Gravizapa_02>
+  </chassis>
+  <turrets0>
+    <Turret_1_Cz00_COSM_Gravizapa_02>
+      <userString>	#czech_vehicles:Turret_1_Cz00_COSM_Gravizapa_02	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	100	</armor_1>
+      </armor>
+      <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
+      <weight>	1000	</weight>
+      <maxHealth>	1000	</maxHealth>
+      <rotationSpeed>	500	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	30000	</maxHealth>
+        <maxRegenHealth>	100	</maxRegenHealth>
+        <repairCost>	0.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	1000	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	30000	</maxHealth>
+        <maxRegenHealth>	100	</maxRegenHealth>
+        <repairCost>	0.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_150mm_COSM_02>	shared	  <maxAmmo>	5000	</maxAmmo>
+          <armor>
+            <armor_1>	100	</armor_1>
+            <gun>	100	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0.00000 -13.00 1.00000 -13.00	</minPitch>
+            <maxPitch>	0.00000 15.00 1.00000 15.00	</maxPitch>
+          </pitchLimits>
+          <reloadTime>	10	</reloadTime>
+          <aimingTime>	0.01	</aimingTime>
+          <invisibilityFactorAtShot>	1	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.1	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0	</turretRotation>
+            <afterShot>	0.01	</afterShot>
+            <whileGunDamaged>	1	</whileGunDamaged>
+          </shotDispersionFactors>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	-0.00786655 0.0835571 0.63327	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0.000000 0.39336 0.393359	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	-0.00786655 0.0835571 0.63327	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <models>
+            <undamaged>	vehicles/czech/Cz00_COSM_Gravizapa_02/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz00_COSM_Gravizapa_02/normal/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/czech/Cz00_COSM_Gravizapa_02/normal/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/czech/Cz00_COSM_Gravizapa_02/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/czech/Cz00_COSM_Gravizapa_02/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_Gravizapa	</effects>
+          <shotOffset>	-0.002438 0.215604 -0.000003	</shotOffset>
+          <camouflage>
+            <density>	120.415985 120.355171	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
+          </camouflage>
+        </_150mm_COSM_02>
+      </guns>
+      <models>
+        <undamaged>	vehicles/czech/Cz00_COSM_Gravizapa_02/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/czech/Cz00_COSM_Gravizapa_02/normal/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/czech/Cz00_COSM_Gravizapa_02/normal/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/czech/Cz00_COSM_Gravizapa_02/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/czech/Cz00_COSM_Gravizapa_02/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.003848 0.206340 -0.025739	</gunPosition>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	31000	</slotId>
+          <anchorPosition>	0.000000 0.0842838 -0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	32000	</slotId>
+          <anchorPosition>	0.000000 0.0842838 -0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.500 0.000	</physicsShape>
+      <camouflage>
+        <density>	102.441505 104.100945	</density>
+        <aoTextureSize>	512 256	</aoTextureSize>
+      </camouflage>
+    </Turret_1_Cz00_COSM_Gravizapa_02>
+  </turrets0>
+  <engines>
+    <GravEngine_02>	shared	</GravEngine_02>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <GravRadio_02>	shared	</GravRadio_02>
+  </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <GravEngine_02>
+          <smplEnginePower>	2114.562	</smplEnginePower>
+          <smplFwMaxSpeed>	95	</smplFwMaxSpeed>
+        </GravEngine_02>
+      </engines>
+      <chassis>
+        <Chassis_Cz00_COSM_Gravizapa_02>
+          <isWheeledOnSpotRotation>	True	</isWheeledOnSpotRotation>
+          <axleCount>	3	</axleCount>
+          <axleSteeringAngles>	0 0 0	</axleSteeringAngles>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.1	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.1	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.1	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_Cz00_COSM_Gravizapa_02>
+      </chassis>
+    </detailed>
+  </physics>
+  <extras>
+    <wheel_Health>	wheelHealths : WheelHealths	  <sounds>
+        <destroyed></destroyed>
+        <critical></critical>
+        <functional></functional>
+      </sounds>
+      <deviceUserString>	#ingame_gui:devices/wheel	</deviceUserString>
+    </wheel_Health>
+  </extras>
+  <deviceExtras>
+    <devices>
+      <wheel_Health>	track	  <multiple></multiple>
+      </wheel_Health>
+    </devices>
+    <tankmen></tankmen>
+  </deviceExtras>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
+  <useHullZSize>	True	</useHullZSize>
+  <useHullZOffset>	True	</useHullZOffset>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	cosm_medium	</damagedStateGroup>
+    <groundCollisionLight>	groundCollisionWheeledLight	</groundCollisionLight>
+    <groundCollisionHeavy>	groundCollisionWheeledHeavy	</groundCollisionHeavy>
+    <sandCollisionLight>	sandCosmCollisionWheeledLight	</sandCollisionLight>
+    <sandCollisionHeavy>	sandCosmCollisionWheeledHeavy	</sandCollisionHeavy>
+    <snowCollisionLight>	snowCollisionWheeledLight	</snowCollisionLight>
+    <snowCollisionHeavy>	snowCollisionWheeledHeavy	</snowCollisionHeavy>
+    <stoneCollisionLight>	stoneCollisionWheeledLight	</stoneCollisionLight>
+    <stoneCollisionHeavy>	stoneCollisionWheeledHeavy	</stoneCollisionHeavy>
+    <woodCollisionLight>	woodCollisionWheeledLight	</woodCollisionLight>
+    <woodCollisionHeavy>	woodCollisionWheeledHeavy	</woodCollisionHeavy>
+    <metalCollisionLight>	metalCollisionWheeledLight	</metalCollisionLight>
+    <metalCollisionHeavy>	metalCollisionWheeledHeavy	</metalCollisionHeavy>
+    <waterCollisionLight>	waterCollisionWheeledLight	</waterCollisionLight>
+    <waterCollisionHeavy>	waterCollisionWheeledHeavy	</waterCollisionHeavy>
+  </effects>
+  <emblems>
+    <default>	15501	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	1	</alpha>
+  </emblems>
+</Cz00_COSM_Gravizapa_02.xml>

@@ -260,7 +260,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
      TABS.MISSIONS: LuiRules.LOBBY_HEADER_COUNTERS_MISSIONS,
      TABS.PROFILE: LuiRules.LOBBY_HEADER_COUNTERS_PROFILE,
      TABS.PERSONAL_MISSIONS: LuiRules.LOBBY_HEADER_COUNTERS_PM_OPERATIONS,
-     TABS.STORAGE: LuiRules.LOBBY_HEADER_COUNTERS_STORAGE}
+     TABS.STORAGE: LuiRules.LOBBY_HEADER_COUNTERS_STORAGE,
+     TABS.TOURNAMENTS: LuiRules.TOURNAMENTS_CONTENT}
     anonymizerController = dependency.descriptor(IAnonymizerController)
     badgesController = dependency.descriptor(IBadgesController)
     boosters = dependency.descriptor(IBoostersController)
@@ -579,6 +580,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.eventsCache.onProgressUpdated += self.__onEventsCacheResync
         self.eventsCache.onProfileVisited += self.__onProfileVisited
         self.eventsCache.onPersonalQuestsVisited += self.__onMissionsVisited
+        self.eventsCache.onTournamentsVisited += self.__onTournamentsVisited
         self.itemsCache.onSyncCompleted += self.__onItemsCacheResync
         self.battleMattersController.onStateChanged += self.__onBattleMattersStateChanged
         self.rankedController.onUpdated += self.__updateRanked
@@ -660,6 +662,10 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
         self.__limitedUIController.startObserve(LuiRules.PR_HANGAR_BUTTON, self.__updatePersonalReservesVisibility)
         self.__limitedUIController.startObserve(LuiRules.SUBSCRIPTION_STATE, self.__updateWotPlusAttrs)
+        self.__limitedUIController.startObserve(LuiRules.PERSONAL_MISSIONS_CONTENT, self._updateHangarMenuData)
+        self.__limitedUIController.startObserve(LuiRules.TOURNAMENTS_CONTENT, self._updateHangarMenuData)
+        self.__limitedUIController.startObserve(LuiRules.VERSUS_AI_CONTENT, self._updatePrebattleControls)
+        self.__limitedUIController.startObserve(LuiRules.STRONGHOLD_CONTENT, self._updatePrebattleControls)
 
     def __updatePersonalReservesVisibility(self, *_):
         self._populateButtons()
@@ -686,6 +692,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.eventsCache.onProgressUpdated -= self.__onEventsCacheResync
         self.eventsCache.onProfileVisited -= self.__onProfileVisited
         self.eventsCache.onPersonalQuestsVisited -= self.__onMissionsVisited
+        self.eventsCache.onTournamentsVisited -= self.__onTournamentsVisited
         self.itemsCache.onSyncCompleted -= self.__onItemsCacheResync
         self.battleMattersController.onStateChanged -= self.__onBattleMattersStateChanged
         self.rankedController.onUpdated -= self.__updateRanked
@@ -739,6 +746,10 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         g_prbCtrlEvents.onVehicleClientStateChanged -= self.__onVehicleClientStateChanged
         self.__limitedUIController.stopObserve(LuiRules.PR_HANGAR_BUTTON, self.__updatePersonalReservesVisibility)
         self.__limitedUIController.stopObserve(LuiRules.SUBSCRIPTION_STATE, self.__updateWotPlusAttrs)
+        self.__limitedUIController.stopObserve(LuiRules.PERSONAL_MISSIONS_CONTENT, self._updateHangarMenuData)
+        self.__limitedUIController.stopObserve(LuiRules.TOURNAMENTS_CONTENT, self._updateHangarMenuData)
+        self.__limitedUIController.stopObserve(LuiRules.VERSUS_AI_CONTENT, self._updatePrebattleControls)
+        self.__limitedUIController.stopObserve(LuiRules.STRONGHOLD_CONTENT, self._updatePrebattleControls)
 
     def _addWGNPListeners(self):
         self.wgnpSteamAccCtrl.statusEvents.subscribe(StatusTypes.CONFIRMED, self.__onEmailConfirmed)
@@ -1143,10 +1154,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         brAvailable = isBrCycle and self.__battleRoyaleController.isEnabled()
         isEpicBattleAvailabe = self.epicController.isEnabled() and self.epicController.isCurrentCycleActive()
         isEventBattlesAvailable = self.__eventBattlesController.isEnabled()
-        from cosmic_event.skeletons.battle_controller import ICosmicEventBattleController
-        isCosmicEvtAvailable = dependency.instance(ICosmicEventBattleController).isEnabled
         mapboxAvailable = self.__mapboxCtrl.isActive() and self.__mapboxCtrl.isInPrimeTime()
-        return not self.bootcampController.isInBootcamp() and (self.rankedController.isAvailable() or self.__funRandomCtrl.subModesInfo.isAvailable() or isEpicBattleAvailabe or brAvailable or mapboxAvailable or isEventBattlesAvailable or isCosmicEvtAvailable)
+        return not self.bootcampController.isInBootcamp() and (self.rankedController.isAvailable() or self.__funRandomCtrl.subModesInfo.isAvailable() or isEpicBattleAvailabe or brAvailable or mapboxAvailable or isEventBattlesAvailable or self.__isCosmicEvtAvailable)
 
     @property
     def hasUiEffects(self):
@@ -1184,7 +1193,11 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             isLegacyTraining = state.isInLegacy(PREBATTLE_TYPE.TRAINING)
             isComp7 = state.isInPreQueue(constants.QUEUE_TYPE.COMP7) or state.isInUnit(constants.PREBATTLE_TYPE.COMP7)
             isVersusAI = state.isInPreQueue(constants.QUEUE_TYPE.VERSUS_AI) or state.isInUnit(constants.PREBATTLE_TYPE.VERSUS_AI)
-            isCosmic = state.isInPreQueue(constants.QUEUE_TYPE.COSMIC_EVENT) or state.isInUnit(constants.PREBATTLE_TYPE.COSMIC_EVENT)
+
+            def isCosmic():
+                return False if not self.__isCosmicEvtAvailable else state.isInPreQueue(constants.QUEUE_TYPE.COSMIC_EVENT) or state.isInUnit(constants.PREBATTLE_TYPE.COSMIC_EVENT)
+
+            isCosmic = isCosmic()
             if self.__isHeaderButtonPresent(LobbyHeader.BUTTONS.SQUAD):
                 extendedSquadInfoVo = self.platoonCtrl.buildExtendedSquadInfoVo()
                 if isSquadEnabled:
@@ -1316,8 +1329,11 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__updateShopTabCounter()
         self.__updateStorageTabCounter()
         self.__hideCounter(self.TABS.MISSIONS)
-        self.__updateMissionsTabCounter()
         self.__updateRecruitsTabCounter(self.TABS.BARRACKS)
+        if self.lobbyContext.getServerSettings().isPersonalMissionsEnabled():
+            self.__updateNewLobbyTabCounter(self.TABS.PERSONAL_MISSIONS)
+        if isTournamentEnabled():
+            self.__updateNewLobbyTabCounter(self.TABS.TOURNAMENTS)
 
     def _onPremiumTypeChanged(self, _):
         self.__unseenEventsManager.cleanUpPremium()
@@ -1388,12 +1404,32 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__updateProfileTabCounter()
 
     def __onMissionsVisited(self):
-        alias = self.TABS.PERSONAL_MISSIONS
+        self.__resetNewLobbyTabCounters(self.TABS.PERSONAL_MISSIONS)
+
+    def __onTournamentsVisited(self):
+        self.__resetNewLobbyTabCounters(self.TABS.TOURNAMENTS)
+
+    def __updateNewLobbyTabCounter(self, alias):
+        ruleID = self._TAB_ALIAS_TO_RULE_ID.get(alias)
+        if ruleID is not None and not self.__limitedUIController.isRuleCompleted(ruleID):
+            return
+        else:
+            counters = AccountSettings.getCounters(NEW_LOBBY_TAB_COUNTER)
+            if alias not in counters:
+                counters[alias] = True
+                AccountSettings.setCounters(NEW_LOBBY_TAB_COUNTER, counters)
+            if counters[alias]:
+                self.__setCounter(alias, 1)
+            else:
+                self.__hideCounter(alias)
+            return
+
+    def __resetNewLobbyTabCounters(self, alias):
         counters = AccountSettings.getCounters(NEW_LOBBY_TAB_COUNTER)
         if alias in counters and counters[alias]:
             counters[alias] = False
             AccountSettings.setCounters(NEW_LOBBY_TAB_COUNTER, counters)
-        self.__updateMissionsTabCounter()
+        self.__updateNewLobbyTabCounter(alias)
 
     def __onIGRChanged(self, *_):
         self._updatePrebattleControls()
@@ -1445,15 +1481,38 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def _getTournamentsSelectorData(self):
         result = None
         if isTournamentEnabled():
+            isWulfTooltip = False
+            tooltipArgs = None
+            luiRule = LuiRules.TOURNAMENTS_CONTENT
+            if self.__limitedUIController.isRuleCompleted(luiRule):
+                tooltip = TOOLTIPS.HEADER_BUTTONS_TOURNAMENTS
+                enabled = True
+            else:
+                tooltip = TOOLTIPS_CONSTANTS.LIMITED_UI_UNLOCK_INFO_TOOLTIP
+                isWulfTooltip = True
+                tooltipArgs = [luiRule.value]
+                enabled = False
             result = {'label': MENU.HEADERBUTTONS_TOURNAMENT,
              'value': VIEW_ALIAS.LOBBY_TOURNAMENTS,
-             'tooltip': TOOLTIPS.HEADER_BUTTONS_TOURNAMENTS}
+             'tooltip': tooltip,
+             'enabled': enabled,
+             'isWulfTooltip': isWulfTooltip,
+             'tooltipArgs': tooltipArgs}
         return result
 
     def _getPersonalMissionSelectorTabData(self):
+        isWulfTooltip = False
+        tooltipArgs = None
         if self.lobbyContext.getServerSettings().isPersonalMissionsEnabled():
-            tooltip = TOOLTIPS.HEADER_BUTTONS_PERSONALMISSIONS
-            enabled = True
+            luiRule = LuiRules.PERSONAL_MISSIONS_CONTENT
+            if self.__limitedUIController.isRuleCompleted(luiRule):
+                tooltip = TOOLTIPS.HEADER_BUTTONS_PERSONALMISSIONS
+                enabled = True
+            else:
+                tooltip = TOOLTIPS_CONSTANTS.LIMITED_UI_UNLOCK_INFO_TOOLTIP
+                isWulfTooltip = True
+                tooltipArgs = [luiRule.value]
+                enabled = False
         else:
             tooltip = TOOLTIPS.HEADER_BUTTONS_PERSONALMISSIONSDISABLED
             enabled = False
@@ -1461,7 +1520,9 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
          'value': self.TABS.PERSONAL_MISSIONS,
          'tooltip': tooltip,
          'enabled': enabled,
-         'subValues': [self.TABS.PERSONAL_MISSIONS_PAGE]}
+         'subValues': [self.TABS.PERSONAL_MISSIONS_PAGE],
+         'isWulfTooltip': isWulfTooltip,
+         'tooltipArgs': tooltipArgs}
 
     def _getHangarMenuItemDataProvider(self):
         tabDataProvider = [{'label': MENU.HEADERBUTTONS_HANGAR,
@@ -1505,7 +1566,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             tabDataProvider[:] = filter(lambda item: item['value'] in override, tabDataProvider)
         return tabDataProvider
 
-    def _updateHangarMenuData(self):
+    def _updateHangarMenuData(self, *_):
         self.as_setHangarMenuDataS(self._getHangarMenuItemDataProvider())
         self._updateTabCounters()
         highlightImage = ''
@@ -1599,18 +1660,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                 self.__hideCounter(self.TABS.PROFILE)
         else:
             self.__hideCounter(self.TABS.PROFILE)
-
-    def __updateMissionsTabCounter(self):
-        counters = AccountSettings.getCounters(NEW_LOBBY_TAB_COUNTER)
-        alias = self.TABS.PERSONAL_MISSIONS
-        if alias not in counters:
-            counters[alias] = True
-            AccountSettings.setCounters(NEW_LOBBY_TAB_COUNTER, counters)
-        isShowPMCounters = self.__limitedUIController.isRuleCompleted(LuiRules.LOBBY_HEADER_COUNTERS_PM_OPERATIONS)
-        if counters[alias] and isShowPMCounters:
-            self.__setCounter(alias, 1)
-        else:
-            self.__hideCounter(alias)
 
     def __updateRecruitsTabCounter(self, alias):
         counter = recruit_helper.getNewRecruitsCounter()
@@ -1778,6 +1827,12 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
 
     def __onHangarStatusChanged(self, event):
         self.__updateUiEffectsState(not event.ctx.get('isVisible', False))
+
+    @property
+    def __isCosmicEvtAvailable(self):
+        from skeletons.gui.game_control import ICosmicEventBattleController
+        cosmicCtrl = dependency.getInstanceIfHas(ICosmicEventBattleController)
+        return cosmicCtrl.isEnabled if cosmicCtrl else False
 
 
 class _BoosterInfoPresenter(object):

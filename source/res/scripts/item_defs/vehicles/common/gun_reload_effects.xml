@@ -63,6 +63,32 @@
     <sound>	heavy_flamer_spray_changed	</sound>
     <startSound>	heavy_flamer_spray_change_start	</startSound>
   </reload20_45_flameHeavyAutoshoot>
+  <reload_autoshoot_reloading_20_49>
+    <type>	AutoShootGunReload	</type>
+    <duration>	1400.0	</duration>
+    <clipReloadStart>	gun_rld_autoshoot_ribbon_end	</clipReloadStart>
+    <clipReloadEnd>	gun_rld_autoshoot_stop	</clipReloadEnd>
+    <ammoLow>	gun_rld_autoshoot_no_enough_shells	</ammoLow>
+    <lastShell>	gun_rld_autoshoot_reloading_short_lastshell	</lastShell>
+    <caliber>	SWITCH_ext_rld_autoshoot_caliber_20_49mm	</caliber>
+    <intuition_overrides>
+      <duration>	600.0	</duration>
+      <sound>	gun_rld_intuition_autoshoot_stop	</sound>
+    </intuition_overrides>
+  </reload_autoshoot_reloading_20_49>
+  <reload_autoshoot_reloading_50_84>
+    <type>	AutoShootGunReload	</type>
+    <duration>	1400.0	</duration>
+    <clipReloadStart>	gun_rld_autoshoot_ribbon_end	</clipReloadStart>
+    <clipReloadEnd>	gun_rld_autoshoot_stop	</clipReloadEnd>
+    <ammoLow>	gun_rld_autoshoot_no_enough_shells	</ammoLow>
+    <lastShell>	gun_rld_autoshoot_reloading_short_lastshell	</lastShell>
+    <caliber>	SWITCH_ext_rld_autoshoot_caliber_50_84mm	</caliber>
+    <intuition_overrides>
+      <duration>	600.0	</duration>
+      <sound>	gun_rld_intuition_autoshoot_stop	</sound>
+    </intuition_overrides>
+  </reload_autoshoot_reloading_50_84>
   <reload_automat_reloading_20_45>
     <type>	BarrelReload	</type>
     <duration>	4450	</duration>
@@ -349,5 +375,31 @@
       <loopShellLastDt>	0.5	</loopShellLastDt>
     </intuition_overrides>
   </reload_automat_reloading_155_170>
-  <reload_Gravizapa></reload_Gravizapa>
+  <autoloader_reload155_170>
+    <type>	AutoReload	</type>
+    <duration>	1100.0	</duration>
+    <sound>	gun_rld_autoloader_short_oneshell	</sound>
+    <reloadStart>	gun_rld_autoloader_long_start	</reloadStart>
+    <autoLoaderFull>	gun_rld_autoloader_full_complete	</autoLoaderFull>
+    <lastShellAlert>	gun_rld_autoloader_short_lastshell	</lastShellAlert>
+    <clipShellLoad>	gun_rld_autoloader_long_oneshell	</clipShellLoad>
+    <clipShellLoadDuration>	700.0	</clipShellLoadDuration>
+    <ammoLow>	gun_rld_autoloader_no_enough_shells	</ammoLow>
+    <almostComplete>	gun_rld_autoloader_full_almost_complete	</almostComplete>
+    <shotFail>	gun_rld_autoloader_shot_fail	</shotFail>
+    <almostCompleteDuration>	6000.0	</almostCompleteDuration>
+    <caliber>	SWITCH_ext_rld_autoloader_caliber_155_170mm	</caliber>
+    <intuition_overrides>
+      <reloadStart>	gun_rld_intuition_autoloader_long_start	</reloadStart>
+    </intuition_overrides>
+  </autoloader_reload155_170>
+  <reload_Gravizapa>
+    <type>	SimpleReload	</type>
+    <duration>	950.0	</duration>
+    <sound>	ev_cosmic_reload	</sound>
+    <intuition_overrides>
+      <duration>	1000.0	</duration>
+      <sound>	gun_rld_intuition_12_25mm	</sound>
+    </intuition_overrides>
+  </reload_Gravizapa>
 </gun_reload_effects.xml>

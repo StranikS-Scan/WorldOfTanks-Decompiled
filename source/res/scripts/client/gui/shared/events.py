@@ -364,6 +364,10 @@ class LobbyHeaderMenuEvent(LobbySimpleEvent):
     MENU_CLICK = 'headerMenuClick'
 
 
+class ReferralViewEvent(HasCtxEvent):
+    TOGGLE_BUTTON = 'toggleButton'
+
+
 class CloseWindowEvent(SharedEvent):
     EULA_CLOSED = 'EULAClosed'
     GOLD_FISH_CLOSED = 'GoldFishClosed'

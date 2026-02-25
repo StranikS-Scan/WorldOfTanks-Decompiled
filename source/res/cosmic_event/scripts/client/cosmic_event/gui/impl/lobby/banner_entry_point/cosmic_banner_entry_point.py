@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: cosmic_event/scripts/client/cosmic_event/gui/impl/lobby/banner_entry_point/cosmic_banner_entry_point.py
 from cosmic_event.gui.impl.gen.view_models.views.lobby.banner_entry_point.cosmic_banner_entry_point_model import CosmicBannerEntryPointModel, State
-from cosmic_event.skeletons.battle_controller import ICosmicEventBattleController
+from skeletons.gui.game_control import ICosmicEventBattleController
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.impl.gen import R
 from gui.impl.pub import ViewImpl

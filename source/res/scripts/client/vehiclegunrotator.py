@@ -582,13 +582,9 @@ class VehicleGunRotator(object):
         return self._avatar.playerVehicleID
 
     def __getGunMarkerPosition(self, shotPos, shotVec, dispersionAngles):
-        shotDescr = self._avatar.getVehicleDescriptor().shot
-        velocity = shotVec.scale(shotDescr.speed)
-        acceleration = Math.Vector3(0.0, -shotDescr.gravity, 0.0)
-        testVehicleID = self.getAttachedVehicleID()
-        collisionStrategy = AimingSystems.CollisionStrategy.COLLIDE_DYNAMIC_AND_STATIC
-        minBounds, maxBounds = BigWorld.player().arena.getSpaceBB()
-        endPos, direction, collData, usedMaxDistance = AimingSystems.getCappedShotTargetInfos(shotPos, velocity, acceleration, shotDescr, testVehicleID, minBounds, maxBounds, collisionStrategy)
+        descr = self._avatar.getVehicleDescriptor()
+        shotDescr = descr.shot
+        endPos, direction, collData, usedMaxDistance = self.__getCappedShotTargetInfos(shotDescr, shotPos, shotVec)
         distance = (endPos - shotPos).length
         usedMaxDistance = usedMaxDistance or distance > shotDescr.maxDistance
         if usedMaxDistance:
@@ -600,6 +596,10 @@ class VehicleGunRotator(object):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying and replayCtrl.isClientReady:
             diameter, dualAccDiameter, endPos, direction = replayCtrl.getGunMarkerParams(endPos, direction)
+        if descr.isMultiGunVehicle and descr.isAutoShootGunVehicle:
+            distanceBetweenGuns = descr.turret.distanceBetweenMultiGuns
+            diameter += distanceBetweenGuns
+            idealDiameter += distanceBetweenGuns
         return (endPos,
          direction,
          diameter,
@@ -623,17 +623,20 @@ class VehicleGunRotator(object):
     def __getTargetedEnemyForGun(self, gunShotPosition, excludeTeam):
         shotPos, shotVec = self.__getShotPosition(self.__turretYaw, self.__gunPitch, gunShotPosition)
         shotDescr = self._avatar.getVehicleDescriptor().shot
-        velocity = shotVec.scale(shotDescr.speed)
-        acceleration = Math.Vector3(0.0, -shotDescr.gravity, 0.0)
-        testVehicleID = self.getAttachedVehicleID()
-        collisionStrategy = AimingSystems.CollisionStrategy.COLLIDE_DYNAMIC_AND_STATIC
-        minBounds, maxBounds = BigWorld.player().arena.getSpaceBB()
-        _, _, collision, _ = AimingSystems.getCappedShotTargetInfos(shotPos, velocity, acceleration, shotDescr, testVehicleID, minBounds, maxBounds, collisionStrategy)
+        _, _, collision, _ = self.__getCappedShotTargetInfos(shotDescr, shotPos, shotVec)
         if collision is not None:
             entity = collision.entity
             if entity is not None and entity.publicInfo and entity.publicInfo['team'] is not excludeTeam and entity.health > 0:
                 return entity
         return
+
+    def __getCappedShotTargetInfos(self, shotDescr, shotPos, shotVec):
+        velocity = shotVec.scale(shotDescr.speed)
+        acceleration = Math.Vector3(0.0, -shotDescr.gravity, 0.0)
+        testVehicleID = self.getAttachedVehicleID()
+        collisionStrategy = AimingSystems.CollisionStrategy.COLLIDE_DYNAMIC_AND_STATIC
+        minBounds, maxBounds = BigWorld.player().arena.getSpaceBB()
+        return AimingSystems.getCappedShotTargetInfos(shotPos, velocity, acceleration, shotDescr, testVehicleID, minBounds, maxBounds, collisionStrategy)
 
     def __updateTurretMatrix(self, yaw, time):
         if not self.__isStarted:

@@ -130,7 +130,7 @@ class BattlePassAwardsView(ViewImpl):
     def __setAwards(self, bonuses, isFinalReward):
         rewards = BattlePassAwardsManager.composeBonuses(bonuses, withSort=False)
         rewards = BattlePassAwardsManager.uniteTokenBonuses(BattlePassAwardsManager.preprocessDogTags(rewards))
-        rewards.sort(key=BattlePassAwardsManager.getPriority, reverse=True)
+        rewards = BattlePassAwardsManager.sortBonuses(rewards)
         if not rewards:
             return
         mainRewards = self.__setMainRewards(rewards, isFinalReward=isFinalReward)

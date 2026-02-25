@@ -60,6 +60,23 @@ class StrongholdEventProvider(IBaseProvider):
         else:
             return settings.getVisibleStartDate() < time_utils.getServerUTCTime() < settings.getVisibleEndDate()
 
+    def isSeasonRunning(self):
+        settings = self.getSettings()
+        if settings is None:
+            return False
+        else:
+            seasonStartDate = settings.event_config.get('visible_start_date', 0)
+            seasonEndDate = settings.event_config.get('visible_end_date', 0)
+            return seasonStartDate < time_utils.getServerUTCTime() < seasonEndDate
+
+    def isSeasonEnding(self):
+        settings = self.getSettings()
+        if settings is None:
+            return False
+        else:
+            eventEndDate = settings.event_config.get('event_end_date', 0)
+            return eventEndDate < time_utils.getServerUTCTime()
+
     def __getData(self, dataName):
         data = self.__data[dataName]
         if not data.isSynced:

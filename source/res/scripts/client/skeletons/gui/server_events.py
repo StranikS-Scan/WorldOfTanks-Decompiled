@@ -13,6 +13,7 @@ class IEventsCache(object):
     onEventsVisited = None
     onProfileVisited = None
     onPersonalQuestsVisited = None
+    onTournamentsVisited = None
 
     def init(self):
         raise NotImplementedError

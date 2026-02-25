@@ -13,11 +13,11 @@ class ResetState(IntEnum):
 
 class ResetBranchViewModel(ViewModel):
     __slots__ = ('onClose', 'onConfirm', 'onInstallVehicleConfiguration')
-    VEH_CONFIG_KEY = 'configuration'
-    VAL_CURRENT = 'current'
-    VAL_STOCK = 'stock'
+    VEHICLE_CONFIGURATION_KEY = 'configuration'
+    CURRENT_VALUE_KEY = 'current'
+    STOCK_VALUE_KEY = 'stock'
 
-    def __init__(self, properties=7, commands=3):
+    def __init__(self, properties=9, commands=3):
         super(ResetBranchViewModel, self).__init__(properties=properties, commands=commands)
 
     def getResetState(self):
@@ -66,6 +66,18 @@ class ResetBranchViewModel(ViewModel):
     def setTotalCredits(self, value):
         self._setNumber(6, value)
 
+    def getCompleteBonusCoins(self):
+        return self._getNumber(7)
+
+    def setCompleteBonusCoins(self, value):
+        self._setNumber(7, value)
+
+    def getCoinsForBranchReset(self):
+        return self._getNumber(8)
+
+    def setCoinsForBranchReset(self, value):
+        self._setNumber(8, value)
+
     def _initialize(self):
         super(ResetBranchViewModel, self)._initialize()
         self._addNumberProperty('resetState', ResetState.INITIAL.value)
@@ -75,6 +87,8 @@ class ResetBranchViewModel(ViewModel):
         self._addNumberProperty('maxResetBranchesCount', 0)
         self._addArrayProperty('resetVehicles', Array())
         self._addNumberProperty('totalCredits', 0)
+        self._addNumberProperty('completeBonusCoins', 0)
+        self._addNumberProperty('coinsForBranchReset', 0)
         self.onClose = self._addCommand('onClose')
         self.onConfirm = self._addCommand('onConfirm')
         self.onInstallVehicleConfiguration = self._addCommand('onInstallVehicleConfiguration')

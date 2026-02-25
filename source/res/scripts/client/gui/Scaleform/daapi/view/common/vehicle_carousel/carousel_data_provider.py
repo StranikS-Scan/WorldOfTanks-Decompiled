@@ -23,6 +23,7 @@ from helpers.i18n import makeString as ms
 from skeletons.gui.game_control import IBattleRoyaleController, IBootcampController, IDebutBoxesController, IEarlyAccessController, IParagonsController, IComp7Controller
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsCache
+_VEHICLE_MAX_RESEARCH_LEVEL = 10
 
 def sortedIndices(seq, getter, reverse=False):
     return sorted(range(len(seq)), key=lambda idx: getter(seq[idx]), reverse=reverse)
@@ -156,8 +157,13 @@ def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl, earlyAccessCtrl, para
      'extraImage': extraImage}
     if earlyAccessCtrl.isEnabled():
         data.update({'isEarlyAccess': vehicle.intCD in earlyAccessCtrl.getPostProgressionVehicles() and earlyAccessCtrl.isPostProgressionQueueSelected()})
-    if vehicle.isResetParagons and paragonsCtrl.getVehicleProgressPoints(vehicle.intCD) > 0:
-        data.update({'paragonsImgSource': getButtonsAssetPath('paragons_points')})
+    if paragonsCtrl.isEnabled and not paragonsCtrl.isPaused:
+        if vehicle.isResetParagons and paragonsCtrl.getVehicleProgressPoints(vehicle.intCD) > 0:
+            data.update({'paragonsImgSource': getButtonsAssetPath('paragons_points'),
+             'paragonsPointsTooltip': TOOLTIPS_CONSTANTS.PARAGONS_CAROUSEL_POINTS_BEFORE_WIN})
+        elif paragonsCtrl.paragons.isVehicleWasReset(vehicle.intCD) and vehicle.level < _VEHICLE_MAX_RESEARCH_LEVEL and not paragonsCtrl.isNextResetVehUnlocked(vehicle.intCD):
+            data.update({'paragonsImgSource': getButtonsAssetPath('paragons_points_blue'),
+             'paragonsPointsTooltip': TOOLTIPS_CONSTANTS.PARAGONS_CAROUSEL_POINTS_BEFORE_UNLOCK_VEH})
     return data
 
 

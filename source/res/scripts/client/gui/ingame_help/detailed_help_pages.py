@@ -43,6 +43,7 @@ class HelpPagePriority(object):
     AUTOSHOOT_FLAMETHROWER = 11
     THERMAL_VISION = 11
     DISTANCE_DAMAGE_SHELL = 11
+    AUTOSHOOT_GUN = 11
     DUAL_GUN_WITH_AUTORELOAD_CLIP = 12
     DUAL_GUN_WITH_CLIP = 12
 
@@ -620,6 +621,26 @@ class DualgunWithClip(DetailedHelpPagesBuilder):
         return
 
 
+class AutoshootTankPagesBuilder(DetailedHelpPagesBuilder):
+    _SUITABLE_CTX_KEYS = ('isAutoShoot',)
+
+    @classmethod
+    def priority(cls):
+        return HelpPagePriority.AUTOSHOOT_GUN
+
+    @classmethod
+    def buildPages(cls, ctx):
+        pages = []
+        addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.autoShoot.headerTitle()), backport.text(R.strings.ingame_help.detailsHelp.autoShoot.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.autoShoot.description())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.autoShootHelp.autoshoot_tank()), hintCtx=HelpHintContext.MECHANICS)
+        return pages
+
+    @classmethod
+    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        ctx['isAutoShoot'] = isAutoShoot = vehicle is not None and vehicle.typeDescriptor.isAutoShootGunVehicle and not vehicle.typeDescriptor.isAutoShootFlamethrower
+        ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or isAutoShoot
+        return
+
+
 registerIngameHelpPagesBuilders((SiegeModePagesBuilder,
  BurnOutPagesBuilder,
  WheeledPagesBuilder,
@@ -641,4 +662,5 @@ registerIngameHelpPagesBuilders((SiegeModePagesBuilder,
  ThermalVisionPagesBuilder,
  DualgunWithAutoreloadClip,
  DualgunWithClip,
- DistanceDamagePagesBuilder))
+ DistanceDamagePagesBuilder,
+ AutoshootTankPagesBuilder))

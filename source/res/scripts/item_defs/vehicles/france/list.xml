@@ -1157,7 +1157,7 @@
     <price>	11000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG role_ATSPG_support HD mediumAT-SPG improvedVentilation_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
+    <tags>	AT-SPG role_ATSPG_support HD mediumAT-SPG improvedVentilation_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret	</tags>
     <level>	8	</level>
   </F131_Coutelas>
   <F134_ARL_Projet_F>
@@ -1170,7 +1170,7 @@
     <price>	50000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_assault HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals special secret testTank excludeCollisionObstacles lockOutfit	</tags>
+    <tags>	heavyTank role_HT_assault HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals special secret	</tags>
     <level>	11	</level>
   </F134_ARL_Projet_F>
   <F133_Projet_57>
@@ -1253,6 +1253,32 @@
     <tags>	mediumTank role_MT_support HD mediumTank2 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user lockOutfit restoreWithStyle	</tags>
     <level>	8	</level>
   </F116_Bat_Chatillon_Bourrasque_02>
+  <F10_AMX_50B_ISP>
+    <id>	37001	</id>
+    <userString>	#france_vehicles:AMX_50_68t_ISP	</userString>
+    <shortUserString>	#france_vehicles:AMX_50_68t_ISP_short	</shortUserString>
+    <description>	#france_vehicles:AMX_50_68t_ISP_descr	</description>
+    <shortDescriptionSpecial>	#france_vehicles:AMX_50_68t_ISP_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#france_vehicles:AMX_50_68t_ISP_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_support HD heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals private special secret lockCrew lockCrewSkills lockOutfit cannot_be_sold testTank fun_random	</tags>
+    <level>	10	</level>
+  </F10_AMX_50B_ISP>
+  <F18_Bat_Chatillon25t_ISP>
+    <id>	37002	</id>
+    <userString>	#france_vehicles:Bat_Chatillon25t_ISP	</userString>
+    <shortUserString>	#france_vehicles:Bat_Chatillon25t_ISP_short	</shortUserString>
+    <description>	#france_vehicles:Bat_Chatillon25t_ISP_descr	</description>
+    <shortDescriptionSpecial>	#france_vehicles:Bat_Chatillon25t_ISP_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#france_vehicles:Bat_Chatillon25t_ISP_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_support HD mediumTank2 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals private special secret lockCrew lockCrewSkills lockOutfit cannot_be_sold testTank fun_random	</tags>
+    <level>	10	</level>
+  </F18_Bat_Chatillon25t_ISP>
   <F135_Schneider_120_AC_Gendarme_02>
     <id>	31013	</id>
     <userString>	#france_vehicles:F135_Schneider_120_AC_Gendarme_02	</userString>
@@ -1276,7 +1302,7 @@
     <price>	17500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank role_LT_universal HD scout improvedVentilation_class3_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user special secret testTank lockOutfit	</tags>
+    <tags>	lightTank role_LT_universal HD scout builtinRepairkit_user improvedVentilation_class3_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user special secret	</tags>
     <level>	9	</level>
   </F123_ERAC_105_Proto>
   <F110_Lynx_6x6_FL>
@@ -1293,4 +1319,17 @@
     <tags>	lightTank role_LT_wheeled private epic_battles HD wheeledVehicle magneticAutoAim speedometer siegeMode scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_light_user	</tags>
     <level>	8	</level>
   </F110_Lynx_6x6_FL>
+  <F137_Tornade>
+    <id>	31016	</id>
+    <userString>	#france_vehicles:F137_Tornade	</userString>
+    <description>	#france_vehicles:F137_Tornade_descr	</description>
+    <shortUserString>	#france_vehicles:F137_Tornade_short	</shortUserString>
+    <shortDescriptionSpecial>	#france_vehicles:F137_Tornade_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#france_vehicles:F137_Tornade_long_special	</longDescriptionSpecial>
+    <price>	25000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_support HD special mediumAT-SPG AT-SPG2 improvedVentilation_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals secret testTank	</tags>
+    <level>	10	</level>
+  </F137_Tornade>
 </list.xml>

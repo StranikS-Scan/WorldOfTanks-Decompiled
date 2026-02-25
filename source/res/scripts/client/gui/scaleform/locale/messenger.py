@@ -1240,6 +1240,15 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_PLAYSTREAKFREEZES_BODY = '#messenger:serviceChannelMessages/playStreakFreezes/body'
     SERVICECHANNELMESSAGES_PLAYSTREAKFREEZESINPROGRESS_BODY = '#messenger:serviceChannelMessages/playStreakFreezesInProgress/body'
     SERVICECHANNELMESSAGES_PLAYSTREAKFREEZESEND_BODY = '#messenger:serviceChannelMessages/playStreakFreezesEnd/body'
+    SERVICECHANNELMESSAGES_LIMITEDUICONTENTUNLOCKED_TITLE = '#messenger:serviceChannelMessages/limitedUIContentUnlocked/title'
+    SERVICECHANNELMESSAGES_LIMITEDUICONTENTUNLOCKED_BATTLEMODES = '#messenger:serviceChannelMessages/limitedUIContentUnlocked/battleModes'
+    SERVICECHANNELMESSAGES_LIMITEDUICONTENTUNLOCKED_BATTLEMODE = '#messenger:serviceChannelMessages/limitedUIContentUnlocked/battleMode'
+    SERVICECHANNELMESSAGES_LIMITEDUICONTENTUNLOCKED_CONTENTS = '#messenger:serviceChannelMessages/limitedUIContentUnlocked/contents'
+    SERVICECHANNELMESSAGES_LIMITEDUICONTENTUNLOCKED_CONTENT = '#messenger:serviceChannelMessages/limitedUIContentUnlocked/content'
+    SERVICECHANNELMESSAGES_LIMITEDUICONTENTUNLOCKED_PERSONALMISSIONS = '#messenger:serviceChannelMessages/limitedUIContentUnlocked/personalMissions'
+    SERVICECHANNELMESSAGES_LIMITEDUICONTENTUNLOCKED_TOURNAMENTS = '#messenger:serviceChannelMessages/limitedUIContentUnlocked/tournaments'
+    SERVICECHANNELMESSAGES_LIMITEDUICONTENTUNLOCKED_VERSUSAI = '#messenger:serviceChannelMessages/limitedUIContentUnlocked/versusAI'
+    SERVICECHANNELMESSAGES_LIMITEDUICONTENTUNLOCKED_STRONGHOLD = '#messenger:serviceChannelMessages/limitedUIContentUnlocked/stronghold'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_TRY_LATER,
      CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,

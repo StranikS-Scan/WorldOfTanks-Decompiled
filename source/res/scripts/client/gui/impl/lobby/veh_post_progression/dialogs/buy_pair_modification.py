@@ -10,7 +10,7 @@ from gui.impl.lobby.dialogs.buy_and_exchange import BuyAndExchange
 from gui.impl.lobby.dialogs.contents.multiple_items_content import MultipleItemsContent
 from gui.impl.lobby.tank_setup.dialogs.bottom_content.bottom_contents import PriceBottomContent
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.veh_post_progression.models.ext_money import EXT_MONEY_ZERO
+from gui.shared.ext_money import EXT_MONEY_ZERO
 from post_progression_common import ACTION_TYPES
 _logger = logging.getLogger(__name__)
 ACTION_TYPE_TO_FITTING_TYPE = {ACTION_TYPES.MODIFICATION: FittingTypes.POST_PROGRESSION_MODIFICATION,

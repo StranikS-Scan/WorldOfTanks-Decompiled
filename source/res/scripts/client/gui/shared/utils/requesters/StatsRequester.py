@@ -7,9 +7,9 @@ import BigWorld
 from constants import CURRENT_GAME_ID
 from account_helpers.premium_info import PremiumInfo
 from adisp import adisp_async
+from gui.shared.ext_money import ExtendedMoney
 from gui.shared.money import Money, Currency, DynamicMoney
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
-from gui.veh_post_progression.models.ext_money import ExtendedMoney
 from helpers import time_utils, dependency
 from constants import SPA_ATTRS, MIN_VEHICLE_LEVEL
 from skeletons.gui.game_control import IWalletController
@@ -64,6 +64,10 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     @property
     def money(self):
         return Money(credits=self.credits, gold=self.gold, crystal=self.crystal, eventCoin=self.eventCoin, bpcoin=self.bpcoin, equipCoin=self.equipCoin)
+
+    @property
+    def extMoney(self):
+        return ExtendedMoney(freeXP=self.freeXP, credits=self.credits, gold=self.gold, crystal=self.crystal, eventCoin=self.eventCoin, bpcoin=self.bpcoin, equipCoin=self.equipCoin)
 
     @property
     def actualCredits(self):

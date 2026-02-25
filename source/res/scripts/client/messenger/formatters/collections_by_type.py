@@ -280,3 +280,4 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.paragonsCoinsGranted.index(), _sc.ParagonsCoinsGrantedFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.GF_SM_TYPE, _sc.GFSMFormatter())
     registerMessengerServerFormatter(_SM_TYPE.playStreakRewards.index(), _sc.PlayStreakRewardsFormatter())
+    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.LIMITED_UI_CONTENT_UNLOCKED, _sc.LimitedUIContentUnlockedFormatter())

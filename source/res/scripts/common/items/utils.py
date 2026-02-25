@@ -265,7 +265,10 @@ if IS_CLIENT:
         values = []
         if 'dualAccuracy' in gun.tags:
             values.append(gun.dualAccuracy.afterShotDispersionAngle)
-        values.append(gun.shotDispersionAngle)
+        shotDispersionAngle = gun.shotDispersionAngle
+        if vehicleDescr.isMultiGunVehicle and vehicleDescr.isAutoShootGunVehicle:
+            shotDispersionAngle += vehicleDescr.turret.distanceBetweenMultiGuns / 200.0
+        values.append(shotDispersionAngle)
         return (value * vehicleDescr.miscAttrs['multShotDispersionFactor'] * shotDispersionFactor for value in values)
 
 

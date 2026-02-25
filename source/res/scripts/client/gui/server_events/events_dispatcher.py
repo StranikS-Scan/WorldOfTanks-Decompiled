@@ -273,7 +273,11 @@ def showMission(eventID, eventType=None):
             showMissionsBattlePass()
             return
         elif eventID == PARAGONS_POST_BATTLE_FAKE_QUEST_ID:
-            showParagonsNavigationView()
+            from skeletons.gui.game_control import IParagonsController
+            from gui.impl.gen.view_models.views.lobby.paragons.navigation_view_model import TabId
+            chapterID = dependency.instance(IParagonsController).chapterID
+            tabId = TabId.PROGRESS if chapterID else TabId.CHAPTERS
+            showParagonsNavigationView(tabId=tabId)
             return
         if quest is None or quest.isHidden():
             prefix = events_helpers.getMarathonPrefix(eventID)

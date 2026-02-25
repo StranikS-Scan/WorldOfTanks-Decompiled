@@ -524,6 +524,9 @@ class MetaBonus(SimpleBonus):
         else:
             NotImplementedError('Action "%s" handler is not implemented', action)
 
+    def getWrappedLootBoxesBonusList(self):
+        return []
+
     @adisp_process
     def __handleBrowseAction(self, params):
         from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getClientControlledCloseCtx
@@ -912,7 +915,7 @@ class LootBoxTokensBonus(TokensBonus):
     def _getWrappedBonusList(self):
         return [{'id': self.__getLootBoxTokenID(),
           'type': ItemPackType.CUSTOM_LOOTBOX,
-          'value': 1,
+          'value': self.getCount(),
           'icon': {AWARDS_SIZES.SMALL: self.getIconBySize(AWARDS_SIZES.SMALL),
                    AWARDS_SIZES.BIG: self.getIconBySize(AWARDS_SIZES.BIG)}}]
 

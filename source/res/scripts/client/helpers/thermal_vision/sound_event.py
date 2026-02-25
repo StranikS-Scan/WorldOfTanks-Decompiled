@@ -10,22 +10,32 @@ class SoundEvent(CallbackDelayer):
         self.startSound = startSound
         self.stopSound = stopSound
         self.active = False
+        self.__startSound = None
+        return
 
     def play(self, delay=0):
         self.stopCallback(self._triggerSound)
         if delay > 0:
             self.delayCallback(delay, self._triggerSound)
             return
-        SoundGroups.g_instance.playSound2D(self.startSound)
-        self.active = True
+        self._playStartSound()
 
-    def stop(self):
+    def stop(self, playStopSound=True):
         self.stopCallback(self._triggerSound)
-        if self.active and self.stopSound is not None:
+        if playStopSound and self.active and self.stopSound is not None:
             SoundGroups.g_instance.playSound2D(self.stopSound)
+        elif self.__startSound and self.__startSound.isPlaying:
+            self.__startSound.stop()
+        self.__startSound = None
         self.active = False
         return
 
+    def _playStartSound(self):
+        self.__startSound = SoundGroups.g_instance.getSound2D(self.startSound)
+        if self.__startSound is not None:
+            self.__startSound.play()
+            self.active = True
+        return
+
     def _triggerSound(self):
-        SoundGroups.g_instance.playSound2D(self.startSound)
-        self.active = True
+        self._playStartSound()

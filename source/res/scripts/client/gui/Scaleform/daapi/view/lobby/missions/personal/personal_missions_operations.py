@@ -30,6 +30,7 @@ from gui.sounds.voice_over_phrase_player import VoiceOverHandler
 
 class PersonalMissionOperations(LobbySubView, PersonalMissionOperationsMeta, PersonalMissionsNavigation):
     _COMMON_SOUND_SPACE = PERSONAL_MISSIONS_3_SOUND_SPACE
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, ctx):
         super(PersonalMissionOperations, self).__init__(ctx)
@@ -76,6 +77,7 @@ class PersonalMissionOperations(LobbySubView, PersonalMissionOperationsMeta, Per
         self.__graphicOptimization.init()
         tabIdx = self.__getTabIndexByBranch()
         self.as_setSelectedTabS(tabIdx)
+        self.eventsCache.onPersonalQuestsVisited()
 
     def _dispose(self):
         self.__voiceHandler.destroyPlayer()
@@ -94,7 +96,6 @@ class PMOldOperations(PMOldOperationsMeta, PersonalMissionsNavigation):
 
     def _populate(self):
         super(PMOldOperations, self)._populate()
-        self.eventsCache.onPersonalQuestsVisited()
         self.eventsCache.onSyncCompleted += self.__onQuestsUpdated
         self.eventsCache.onProgressUpdated += self.__onQuestsUpdated
         self.__setTitle()

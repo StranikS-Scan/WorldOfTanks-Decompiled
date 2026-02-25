@@ -2,8 +2,8 @@
 # Embedded file name: scripts/common/arena_achievements.py
 from dossiers2.custom.records import RECORD_DB_IDS
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
-ACHIEVEMENTS = ('warrior', 'invader', 'sniper', 'sniper2', 'mainGun', 'defender', 'steelwall', 'supporter', 'scout', 'evileye', 'medalUshakov', 'medalOrlik', 'medalOskin', 'medalKrysov', 'medalBurda', 'medalBillotte', 'medalKolobanov', 'medalFadin', 'medalRadleyWalters', 'medalLafayettePool', 'medalKhazov', 'medalNikolas', 'medalPascucci', 'medalDumitru', 'medalBrunoPietro', 'medalLyubushkin', 'heroesOfRassenay', 'medalDeLanglade', 'medalTrubin', 'raider', 'kamikaze', 'huntsman', 'bombardier', 'luckyDevil', 'ironMan', 'sturdy', 'alaric', 'lumberjack', 'medalBrothersInArms', 'medalCrucialContribution', 'armoredFist', 'kingOfTheHill', 'willToWinSpirit', 'shoulderToShoulder', 'aloneInTheField', 'fallenFlags', 'effectiveSupport', 'falloutDieHard', 'stormLord', 'winnerLaurels', 'predator', 'unreachable', 'champion', 'bannerman', 'markIProtector', 'markIBaseProtector', 'markIBomberman', 'markIRepairer', 'occupyingForce', 'ironShield', 'generalOfTheArmy', 'supremeGun', 'smallArmy', 'frontlineMedal', 'se12019Medal', 'bootcampMedal', 'se2020Medal', 'hw2019Medal', 'hw2019Medal1', 'hw2019Medal2', 'hw2019Medal3', 'hb24Medal', 'hb25MedalOffence', 'hb25MedalDefence')
-ACHIEVEMENTS_WITH_REWARD = set([ RECORD_DB_IDS['achievements', name] for name in ('warrior', 'invader', 'sniper', 'sniper2', 'mainGun', 'defender', 'steelwall', 'supporter', 'scout', 'evileye', 'heroesOfRassenay', 'medalFadin', 'medalNikolas', 'medalPascucci', 'medalKhazov', 'medalRadleyWalters', 'medalKrysov', 'medalDumitru', 'medalDeLanglade', 'medalOrlik', 'medalOskin', 'medalLafayettePool', 'medalBurda', 'medalTrubin', 'medalBrothersInArms', 'medalCrucialContribution', 'huntsman', 'medalStark', 'medalGore') ] + [ RECORD_DB_IDS['falloutAchievements', name] for name in ('shoulderToShoulder', 'falloutDieHard', 'champion', 'bannerman') ])
+ACHIEVEMENTS = ('warrior', 'invader', 'sniper', 'sniper2', 'mainGun', 'defender', 'steelwall', 'supporter', 'scout', 'evileye', 'medalUshakov', 'medalOrlik', 'medalOskin', 'medalKrysov', 'medalBurda', 'medalBillotte', 'medalKolobanov', 'medalFadin', 'medalRadleyWalters', 'medalLafayettePool', 'medalKhazov', 'medalNikolas', 'medalSlyunyayev', 'medalDumitru', 'medalFokin', 'medalLyubushkin', 'heroesOfRassenay', 'medalDeLanglade', 'medalTrubin', 'medalFomin', 'medalKrockenberger', 'medalGavryushov', 'raider', 'kamikaze', 'huntsman', 'bombardier', 'luckyDevil', 'ironMan', 'sturdy', 'alaric', 'lumberjack', 'medalBrothersInArms', 'medalCrucialContribution', 'armoredFist', 'kingOfTheHill', 'willToWinSpirit', 'shoulderToShoulder', 'aloneInTheField', 'fallenFlags', 'effectiveSupport', 'falloutDieHard', 'stormLord', 'winnerLaurels', 'predator', 'unreachable', 'champion', 'bannerman', 'markIProtector', 'markIBaseProtector', 'markIBomberman', 'markIRepairer', 'occupyingForce', 'ironShield', 'generalOfTheArmy', 'supremeGun', 'smallArmy', 'frontlineMedal', 'se12019Medal', 'bootcampMedal', 'se2020Medal', 'hw2019Medal', 'hw2019Medal1', 'hw2019Medal2', 'hw2019Medal3', 'hb24Medal', 'hb25MedalOffence', 'hb25MedalDefence')
+ACHIEVEMENTS_WITH_REWARD = set([ RECORD_DB_IDS['achievements', name] for name in ('warrior', 'invader', 'sniper', 'sniper2', 'mainGun', 'defender', 'steelwall', 'supporter', 'scout', 'evileye', 'heroesOfRassenay', 'medalFadin', 'medalNikolas', 'medalSlyunyayev', 'medalKhazov', 'medalRadleyWalters', 'medalKrysov', 'medalDumitru', 'medalDeLanglade', 'medalOrlik', 'medalOskin', 'medalLafayettePool', 'medalBurda', 'medalTrubin', 'medalFomin', 'medalKrockenberger', 'medalGavryushov', 'medalBrothersInArms', 'medalCrucialContribution', 'huntsman', 'medalStark', 'medalGore') ] + [ RECORD_DB_IDS['falloutAchievements', name] for name in ('shoulderToShoulder', 'falloutDieHard', 'champion', 'bannerman') ])
 INBATTLE_SERIES = ('sniper', 'killing', 'piercing')
 INBATTLE_SERIES_INDICES = dict(((x[1], x[0]) for x in enumerate(INBATTLE_SERIES)))
 _BILLOTTE_CMN_CNDS = {'hpPercentage': 20,
@@ -48,8 +48,8 @@ ACHIEVEMENT_CONDITIONS = {'warrior': {'minFrags': 6,
                   'maxKills': 255},
  'medalKrysov': {'minVictimLevelDelta': 2,
                  'minKills': 2},
- 'medalPascucci': {'minKills': 2,
-                   'maxKills': 2},
+ 'medalSlyunyayev': {'minKills': 2,
+                     'maxKills': 2},
  'medalDumitru': {'minKills': 3,
                   'maxKills': 255},
  'medalBurda': {'minVictimLevelDelta': 1,
@@ -58,9 +58,9 @@ ACHIEVEMENT_CONDITIONS = {'warrior': {'minFrags': 6,
  'medalBillotte': {'cmn_cnds': _BILLOTTE_CMN_CNDS,
                    'minKills': 2,
                    'maxKills': 2},
- 'medalBrunoPietro': {'cmn_cnds': _BILLOTTE_CMN_CNDS,
-                      'minKills': 3,
-                      'maxKills': 4},
+ 'medalFokin': {'cmn_cnds': _BILLOTTE_CMN_CNDS,
+                'minKills': 3,
+                'maxKills': 4},
  'medalLyubushkin': {'cmn_cnds': _BILLOTTE_CMN_CNDS,
                      'minKills': 5,
                      'maxKills': 255},
@@ -71,6 +71,9 @@ ACHIEVEMENT_CONDITIONS = {'warrior': {'minFrags': 6,
  'medalTrubin': {'minKills': 2,
                  'maxKills': 255,
                  'minVictimLevelDelta': 1},
+ 'medalKrockenberger': {'minKills': 3,
+                        'minDistance': 300.0},
+ 'medalGavryushov': {'minKills': 2},
  'kamikaze': {'levelDelta': 1},
  'huntsman': {'minKills': 3},
  'bombardier': {'minKills': 2},

@@ -21,8 +21,10 @@
     <R113>	31018	</R113>
     <AN_VRC_12M>	31019	</AN_VRC_12M>
     <R_123>	31020	</R_123>
+    <R_113_44>	31021	</R_113_44>
     <R_113_68>	31023	</R_113_68>
     <R_123_T>	35001	</R_123_T>
+    <R_113_44_T>	35002	</R_113_44_T>
     <Development_Radio>	65000	</Development_Radio>
   </ids>
   <shared>
@@ -276,6 +278,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </R_123>
+    <R_113_44>
+      <userString>	#intunion_vehicles:R_113_44	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	36000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	42	</weight>
+      <distance>	650	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R_113_44>
     <R_123_T>
       <userString>	#intunion_vehicles:R_123_T	</userString>
       <tags></tags>
@@ -288,6 +302,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </R_123_T>
+    <R_113_44_T>
+      <userString>	#intunion_vehicles:R_113_44_T	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	36000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	42	</weight>
+      <distance>	650	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R_113_44_T>
     <Development_Radio>
       <userString>	Development Radio	</userString>
       <tags></tags>

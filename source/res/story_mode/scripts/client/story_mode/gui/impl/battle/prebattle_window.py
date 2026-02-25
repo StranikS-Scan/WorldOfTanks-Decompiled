@@ -7,6 +7,7 @@ import BattleReplay
 import BigWorld
 import SoundGroups
 from frameworks.wulf import ViewSettings, WindowFlags
+from gui.Scaleform.daapi.view.battle.shared.premature_leave import showResDialogWindow
 from gui.app_loader import app_getter
 from gui.battle_control.arena_info.interfaces import IArenaLoadController
 from gui.game_loading import loading
@@ -25,6 +26,7 @@ from story_mode.skeletons.story_mode_controller import IStoryModeController
 from story_mode.uilogging.story_mode.consts import LogWindows, LogButtons
 from story_mode.uilogging.story_mode.loggers import MissionWindowLogger
 from story_mode_common.story_mode_constants import LOGGER_NAME
+from th_async import th_async, th_await
 if typing.TYPE_CHECKING:
     from gui.Scaleform.framework.application import AppEntry
 _logger = getLogger(LOGGER_NAME)
@@ -58,6 +60,7 @@ class PrebattleView(BaseWaitQueueView, IArenaLoadController):
             sendViewLoadedEvent(self.LAYOUT_ID)
             self._gotoBattleHandler()
         else:
+            BigWorld.setReducedFpsMode(False)
             self.viewModel.setIsLoading(False)
             self._uiLogger.logButtonShown(LogButtons.BATTLE)
 
@@ -71,6 +74,7 @@ class PrebattleView(BaseWaitQueueView, IArenaLoadController):
     def _onLoading(self, *args, **kwargs):
         super(PrebattleView, self)._onLoading(*args, **kwargs)
         self.viewModel.setMissionNumber(self.missionId)
+        self.viewModel.setShowSkipButton(self._storyModeCtrl.canSkipOnboarding)
         self.viewModel.setIsLoading(True)
         self._sessionProvider.addArenaCtrl(self)
         if not BattleReplay.isPlaying() and not BigWorld.checkUnattended():
@@ -92,7 +96,16 @@ class PrebattleView(BaseWaitQueueView, IArenaLoadController):
         super(PrebattleView, self)._finalize()
 
     def _getEvents(self):
-        return ((self.viewModel.onGotoBattle, self._gotoBattleHandler), (self.viewModel.onLoaded, partial(sendViewLoadedEvent, self.LAYOUT_ID)))
+        return ((self.viewModel.onGotoBattle, self._gotoBattleHandler), (self.viewModel.onLoaded, partial(sendViewLoadedEvent, self.LAYOUT_ID)), (self.viewModel.onSkip, self._skipStoryMode))
+
+    @th_async
+    def _skipStoryMode(self):
+        window = showResDialogWindow(title=R.strings.sm_battle.confirmExit.title(), confirm=R.strings.sm_battle.confirmExit.exit(), cancel=R.strings.sm_battle.confirmExit.stay(), blur=True)
+        result = yield th_await(window)
+        if not result:
+            return
+        self._storyModeCtrl.skipOnboarding()
+        self.viewModel.setIsLoading(True)
 
     @UseStoryModeFading(hide=False)
     def _gotoBattleHandler(self):

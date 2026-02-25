@@ -3,16 +3,23 @@
 import copy
 from enum import Enum
 import logging
+import th_async
 import typing
 import Event
 import adisp
+from BWUtil import AsyncReturn
 from gui.impl.lobby.paragons.paragons_helpers.entitlements_helpers import ParagonsEntitlementsContext
 from gui.clientgw.shop import contexts as shop_contexts
 from gui.clientgw.web_controller import WebController
+from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.shared.gui_items.processors.paragons import MarkSelectedRewardsProcessor
 from helpers import dependency
-from paragons_common import PARAGONS_STOREFRONT_SHOP
+from paragons_common import PARAGONS_STOREFRONT_SHOP, PARAGONS_ENTITLEMENT_TO_NUMBER_CODES, FRIEND_ENT_CODES, getSelectedRewardTokenTemplate
+from shared_utils import findFirst
 from skeletons.gui.game_control import IParagonsRewardsShopController
 from skeletons.gui.web import IWebController
+from skeletons.gui.shared import IItemsCache
+from paragons_common import PARAGONS_SELECTED_REWARD_TOKEN_PREFIX
 _logger = logging.getLogger(__name__)
 
 class ProductsStates(Enum):
@@ -28,6 +35,7 @@ class RequestStates(Enum):
 
 class ParagonsRewardsShopController(IParagonsRewardsShopController):
     __webCtrl = dependency.descriptor(IWebController)
+    __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(ParagonsRewardsShopController, self).__init__()
@@ -35,8 +43,15 @@ class ParagonsRewardsShopController(IParagonsRewardsShopController):
         self.__products = {}
         self.__productsState = ProductsStates.EMPTY
         self.__requestState = RequestStates.INIT
+        self.__asyncScope = th_async.AsyncScope()
+        self.__asyncEvent = th_async.AsyncEvent(scope=self.__asyncScope)
         self.__callbacks = []
+        self.__selectedTokenIsWaited = False
         self.onSelectableRewardReceived = Event.Event()
+
+    def fini(self):
+        g_clientUpdateManager.removeObjectCallbacks(self)
+        self.__asyncScope.destroy()
 
     @property
     def entitlements(self):
@@ -65,13 +80,69 @@ class ParagonsRewardsShopController(IParagonsRewardsShopController):
             _logger.info('Prefetch done: products state: %s', self.__productsState.name)
         callback((self.__productsState, self.__products))
 
-    @adisp.adisp_async
     @adisp.adisp_process
     def buyProduct(self, productCode, callback=lambda x: x):
         res = yield self.__buyProduct(productCode)
         callback(res)
 
+    def findSelectedRewardToken(self, entCode):
+        for friendCode in FRIEND_ENT_CODES.get(entCode, (entCode,)):
+            tokenTemplate = getSelectedRewardTokenTemplate(friendCode)
+            token = findFirst(lambda t: t.startswith(tokenTemplate), self.__itemsCache.items.tokens.getTokens(), None)
+            if token:
+                return token
+
+        return
+
+    def tryMarkSelectedReward(self, chapterID, levelID, entitlementID):
+        if not self.entitlements.isCached():
+            return
+        elif self.entitlements.getEntitlementsByID(entitlementID) > 0:
+            return
+        elif self.__selectedTokenIsWaited:
+            return
+        else:
+            entCode = PARAGONS_ENTITLEMENT_TO_NUMBER_CODES.get(entitlementID)
+            selectedRewardToken = self.findSelectedRewardToken(entCode)
+            if selectedRewardToken is not None:
+                _logger.info('[Paragons]: tryMarkSelectedReward %s %s %s %s', chapterID, levelID, entitlementID, selectedRewardToken)
+                self.__markReward(chapterID, levelID, entitlementID, selectedRewardToken)
+            return
+
+    @adisp.adisp_process
+    def __markReward(self, chapterID, levelID, entitlementID, tokenId):
+        res = yield MarkSelectedRewardsProcessor(chapterID, levelID, entitlementID, tokenId).request()
+        if not res.success:
+            _logger.error('[Paragons]: markReward failed %s', res)
+        _logger.info('[Paragons]: rewardMarked %s', res)
+
+    @th_async.th_async
+    def buyProductAndMarkReward(self, productCode, chapterID, levelID, entitlementID):
+        self.__asyncEvent.clear()
+        self.__selectedTokenIsWaited = True
+        try:
+            res = yield th_async.await_callback(self.buyProduct)(productCode)
+            isSuccess, _ = res
+            if isSuccess:
+                if not self.__asyncEvent.is_set():
+
+                    def _markReward(diff):
+                        tokenID = findFirst(lambda t: t.startswith(PARAGONS_SELECTED_REWARD_TOKEN_PREFIX), diff)
+                        if tokenID is not None and diff[tokenID] > 0:
+                            self.__markReward(chapterID, levelID, entitlementID, tokenID)
+                            self.__asyncEvent.set()
+                        return
+
+                    g_clientUpdateManager.addCallback('tokens', _markReward)
+                    yield th_async.th_await(self.__asyncEvent.wait(), timeout=10)
+                    g_clientUpdateManager.removeCallback('tokens', _markReward)
+        finally:
+            self.__selectedTokenIsWaited = False
+
+        raise AsyncReturn(res)
+
     def onAccountBecomePlayer(self):
+        self.__selectedTokenIsWaited = False
         self.entitlements.init()
 
     def onAccountBecomeNonPlayer(self):
@@ -81,9 +152,14 @@ class ParagonsRewardsShopController(IParagonsRewardsShopController):
         self.__products = {}
         self.__productsState = ProductsStates.EMPTY
         self.__releaseCallbacks(False)
+        self.__selectedTokenIsWaited = False
 
     def selectableRewardReceived(self, data):
         self.onSelectableRewardReceived(data)
+
+    def isValidProduct(self, product, entitlementID):
+        currency = product.get('price', {}).get('currency')
+        return entitlementID == currency
 
     @adisp.adisp_async
     @adisp.adisp_process
@@ -148,6 +224,7 @@ class ParagonsRewardsShopController(IParagonsRewardsShopController):
         price = {'currency': data['price']['currency'],
          'amount': data['price']['value']}
         parsedData['price'] = price
+        parsedData['tags'] = data['tags']
         for item in data['entitlements']:
             if item['type'].startswith('vehicle/'):
                 parsedData['vehicleCD'] = int(item['cd'])

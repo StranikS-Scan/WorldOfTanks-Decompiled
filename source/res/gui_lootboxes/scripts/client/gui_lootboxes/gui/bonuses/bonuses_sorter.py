@@ -96,7 +96,8 @@ BONUS_TAG_HANDLER_MAP = {Currency.CREDITS: lambda b: BonusesSortTags.CURRENCY,
  'tmanToken': _getTankmenTokenTag,
  'battleToken': _getTokensTag,
  'freeXP': lambda b: BonusesSortTags.CURRENCY,
- 'entitlements': lambda b: BonusesSortTags.CURRENCY}
+ 'entitlements': lambda b: BonusesSortTags.CURRENCY,
+ 'lootBoxToken': lambda b: BonusesSortTags.CUSTOM_LOOTBOX}
 
 def getVehBonusSortKey(bonus):
     vehicle, vehInfo = first(bonus.getVehicles())

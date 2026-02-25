@@ -935,6 +935,7 @@ class ARTEFACTS(object):
     CONCENTRATION_NAME = '#artefacts:concentration/name'
     CONCENTRATION_DESCR = '#artefacts:concentration/descr'
     ABILITY_DESCR_USAGE = '#artefacts:ability/descr/usage'
+    CUSTOM_SHOT_PASSION_ABILITY_DESCR_USAGE = '#artefacts:custom/shot_passion/ability/descr/usage'
     RECOIL_RECUPERATOR_NAME = '#artefacts:recoil_recuperator/name'
     RECOIL_RECUPERATOR_DESCR = '#artefacts:recoil_recuperator/descr'
     COOLANT_TANK_NAME = '#artefacts:coolant_tank/name'

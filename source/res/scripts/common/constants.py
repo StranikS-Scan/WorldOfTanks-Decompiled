@@ -1017,6 +1017,7 @@ class Configs(enum.Enum):
     SETTINGS_LOGGING_CONFIG = 'settings_logging_config'
     RANDOM_MATCHMAKER_CONFIG = 'random_matchmaker_config'
     WGSH_MODIFIER_CONFIG = 'wgsh_modifiers_config'
+    NEWBIE_START_PAGE_CONFIG = 'newbie_start_page_config'
 
 
 INBATTLE_CONFIGS = ['spgRedesignFeatures',
@@ -3803,3 +3804,17 @@ class FRONTLINE_PROGRESSION:
     BORDERS_Z = 4
     BORDERS_X = 4
     DIRECTION = AXIS_ALIGNED_DIRECTION.PLUS_Z
+
+
+class CoolantTankAbilityState(enum.IntEnum):
+    ACTIVE = 0
+    DEACTIVATED = 1
+    GUN_RELOAD_FINISHED = 2
+
+
+class InitialExperienceChoice(enum.IntEnum):
+    UNSPECIFIED = 0
+    NEWBIE = 1
+    INEXPERIENCED = 2
+    EXPERIENCED = 3
+    SKIPPED = 4

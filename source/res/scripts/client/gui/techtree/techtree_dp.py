@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/techtree/techtree_dp.py
+import typing
 import operator
 from collections import defaultdict, namedtuple
 from copy import copy

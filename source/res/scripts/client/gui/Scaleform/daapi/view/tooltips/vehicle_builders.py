@@ -19,7 +19,7 @@ def getTooltipBuilders():
      DefaultFormatBuilder(TOOLTIPS_CONSTANTS.TRADE_IN, TOOLTIPS_CONSTANTS.COMPLEX_UI, vehicle.VehicleTradeInTooltipData(contexts.HangarContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.TRADE_IN_PRICE, TOOLTIPS_CONSTANTS.TRADE_IN_PRICE, vehicle.VehicleTradeInPriceTooltipData(contexts.HangarContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.HISTORICAL_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.VehicleInfoTooltipData(contexts.HangarContext())),
-     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BASE_VEHICLE_PARAMETERS, None, vehicle.BaseVehicleAdvancedParametersTooltipData(contexts.BaseHangarParamContext())),
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BASE_VEHICLE_PARAMETERS, None, vehicle.BaseVehicleAdvancedParametersTooltipData(contexts.HangarParamContext())),
      AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_CMP_PARAMETERS, None, vehicle.BaseVehicleAdvancedParametersTooltipData(contexts.CmpParamContext()), advanced.VehicleParametersAdvanced(contexts.CmpParamContext()), condition=vehicle.BaseVehicleParametersTooltipData.readyForAdvanced),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_AVG_PARAMETERS, None, vehicle.VehicleAvgParameterTooltipData(contexts.HangarParamContext())),
      AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_ADVANCED_PARAMETERS, None, vehicle.VehicleAdvancedParametersTooltipData(contexts.HangarParamContext()), advanced.VehicleParametersAdvanced(contexts.HangarParamContext()), condition=vehicle.BaseVehicleParametersTooltipData.readyForAdvanced),

@@ -87,10 +87,14 @@
     <_10RT_26_278>	31058	</_10RT_26_278>
     <R_113_M>	31059	</R_113_M>
     <_10RZ>	31060	</_10RZ>
+    <_9RS_100>	31063	</_9RS_100>
     <R113_55>	31064	</R113_55>
     <_10RK_F>	31061	</_10RK_F>
     <_10RT-26E_90>	31062	</_10RT-26E_90>
     <R123_M>	31068	</R123_M>
+    <_10RT_26V>	31066	</_10RT_26V>
+    <_12RT_02>	31069	</_12RT_02>
+    <_12RT_701>	31070	</_12RT_701>
     <_10R_U18_T>	31018	</_10R_U18_T>
     <R113M_279_T>	35003	</R113M_279_T>
     <_10RT-26M>	220	</_10RT-26M>
@@ -128,6 +132,8 @@
     <_9RM_MapsTraining_Player_MT_2>	38	</_9RM_MapsTraining_Player_MT_2>
     <_10RK_MapsTraining_Dummy_HT_2>	39	</_10RK_MapsTraining_Dummy_HT_2>
     <_9RM_O_NewOnBoarding>	10012	</_9RM_O_NewOnBoarding>
+    <R113M_ISP>	37000	</R113M_ISP>
+    <_10RK-26_ISP>	37001	</_10RK-26_ISP>
     <Baloon_Radio>	40010	</Baloon_Radio>
   </ids>
   <shared>
@@ -536,6 +542,30 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </_12RT>
+    <_12RT_02>
+      <userString>	#ussr_vehicles:_12RT_02	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	50000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	110	</weight>
+      <distance>	700	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </_12RT_02>
+    <_12RT_701>
+      <userString>	#ussr_vehicles:_12RT_701	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	33600	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	110	</weight>
+      <distance>	625	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </_12RT_701>
     <_12RT_FL>
       <userString>	#ussr_vehicles:_12RT	</userString>
       <tags></tags>
@@ -619,6 +649,18 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </_10RK-26>
+    <_10RK-26_ISP>
+      <userString>	#ussr_vehicles:_10RK-26_ISP	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	51600	</price>
+      <weight>	160	</weight>
+      <distance>	720	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </_10RK-26_ISP>
     <_10RK-26_bob>
       <userString>	#ussr_vehicles:_10RK-26	</userString>
       <tags></tags>
@@ -882,6 +924,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </R113M>
+    <R113M_ISP>
+      <userString>	#ussr_vehicles:R113M_ISP	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52200	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R113M_ISP>
     <R113M_bob>
       <userString>	#ussr_vehicles:R113M	</userString>
       <tags></tags>
@@ -1072,6 +1126,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	4	</repairCost>
     </_10RT_26E>
+    <_10RT_26V>
+      <userString>	#ussr_vehicles:_10RT_26V	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	56500	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	35	</weight>
+      <distance>	760	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+    </_10RT_26V>
     <_10RT_26>
       <userString>	#ussr_vehicles:_10RT_26	</userString>
       <tags></tags>
@@ -1276,6 +1342,18 @@
       <maxRegenHealth>	84	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </_9RU>
+    <_9RS_100>
+      <userString>	#ussr_vehicles:_9RS_100	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <notInShop>	true	</notInShop>
+      <price>	25000	</price>
+      <weight>	30	</weight>
+      <distance>	600	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </_9RS_100>
     <FuG_7_SU>
       <userString>	#ussr_vehicles:FuG_7_SU	</userString>
       <tags></tags>

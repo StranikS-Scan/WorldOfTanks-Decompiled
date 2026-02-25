@@ -93,6 +93,9 @@ class ModeSelectorItem(object):
 
         return factory
 
+    def getLimitedUIRule(self):
+        return None
+
     def handleClick(self):
         pass
 
@@ -124,6 +127,7 @@ class ModeSelectorItem(object):
     def _onInitializing(self):
         self.viewModel.setIsDisabled(self._isDisabled())
         self.viewModel.setIsNew(self._isNewLabelVisible())
+        self.viewModel.setIsLocked(self._isLocked())
         self.viewModel.setIsInfoIconVisible(self._isInfoIconVisible())
         self.viewModel.setModeName(self.modeName)
         self.viewModel.setType(self._CARD_VISUAL_TYPE)
@@ -134,7 +138,7 @@ class ModeSelectorItem(object):
     def _isNewLabelVisible(self):
         isInBootcamp = self._bootcamp.isInBootcamp()
         isNewbie = not self.__limitedUIController.isRuleCompleted(LuiRules.MODE_SELECTOR_WIDGET_BTN_HINT)
-        return self._getIsNew() and not isInBootcamp and not isNewbie
+        return self._getIsNew() and not isInBootcamp and not isNewbie and not self._isLocked()
 
     def _isDisabled(self):
         return self._getIsDisabled() or self._bootcamp.isInBootcamp()
@@ -156,6 +160,10 @@ class ModeSelectorItem(object):
 
     def _urlProcessing(self, url):
         return url
+
+    def _isLocked(self):
+        limitedUIRule = self.getLimitedUIRule()
+        return not self.__limitedUIController.isRuleCompleted(limitedUIRule) if limitedUIRule else False
 
 
 class ModeSelectorNormalCardItem(ModeSelectorItem):

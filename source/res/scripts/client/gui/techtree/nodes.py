@@ -9,7 +9,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.money import MONEY_UNDEFINED
 from helpers.time_utils import getCurrentTimestamp
 from helpers import i18n, dependency
-from skeletons.gui.game_control import ITradeInController
+from skeletons.gui.game_control import ITradeInController, IParagonsController
 from skeletons.gui.server_events import IEventsCache
 
 class BaseNode(object):
@@ -174,11 +174,20 @@ class ExposedNode(object):
     def hasItemNationGroup(self):
         raise NotImplementedError
 
+    def getParagonsPoints(self):
+        raise NotImplementedError
+
+    def getParagonsType(self):
+        raise NotImplementedError
+
 
 class RealNode(ExposedNode):
     __slots__ = ('__item',)
+    _PARAGONS_RESEARCH_POINTS_TYPE = 'research'
+    _PARAGONS_WIN_POINTS_TYPE = 'win'
     __eventsCache = dependency.descriptor(IEventsCache)
     __tradeIn = dependency.descriptor(ITradeInController)
+    __paragonsCtrl = dependency.descriptor(IParagonsController)
 
     def __init__(self, nodeCD, item, earnedXP, state, displayInfo, unlockProps=None, bpfProps=None, price=None, extendedState=None):
         super(RealNode, self).__init__(nodeCD, earnedXP, state, displayInfo, unlockProps=unlockProps, bpfProps=bpfProps, price=price, extendedState=extendedState)
@@ -287,6 +296,20 @@ class RealNode(ExposedNode):
     def hasItemNationGroup(self):
         return self.__item.hasNationGroup
 
+    def getParagonsPoints(self):
+        if not self.isVehicle():
+            return 0
+        if self.__paragonsCtrl.isVehicleFirstUnlockPointsAvailable(self.__item):
+            return self.__paragonsCtrl.getVehicleFirstUnlockPoints(self.__item)
+        return self.__paragonsCtrl.getVehicleProgressPoints(self.__item.compactDescr) if self.__paragonsCtrl.isVehicleReset(self.__item.compactDescr) else 0
+
+    def getParagonsType(self):
+        if not self.isVehicle():
+            return ''
+        if self.__paragonsCtrl.isVehicleFirstUnlockPointsAvailable(self.__item):
+            return self._PARAGONS_RESEARCH_POINTS_TYPE
+        return self._PARAGONS_WIN_POINTS_TYPE if self.__paragonsCtrl.isVehicleReset(self.__item.compactDescr) else ''
+
 
 class AnnouncementNode(ExposedNode):
     __slots__ = ('__announcementInfo',)
@@ -366,3 +389,9 @@ class AnnouncementNode(ExposedNode):
 
     def hasItemNationGroup(self):
         return False
+
+    def getParagonsPoints(self):
+        pass
+
+    def getParagonsType(self):
+        pass

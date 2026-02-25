@@ -157,7 +157,7 @@ class TmanTemplateBonusPacker(_BattlePassFinalBonusPacker):
             tankManFullName = recruitInfo.getFullUserName()
             model.setUserName(tankManFullName)
             model.setLabel(tankManFullName)
-            model.setBigIcon('_'.join([bonusImageName, recruitInfo.getGroupName()]))
+            model.setBigIcon(recruitInfo.getGroupName())
             model.setIsCollectionEntity(cls._isCollectionItem(recruitInfo.getGroupName()))
             cls._addAdditionalData(recruitInfo, model)
             cls._injectAwardID(model, recruitInfo.getGroupName())

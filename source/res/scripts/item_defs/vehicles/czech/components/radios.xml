@@ -23,8 +23,9 @@
     <Radiostanice_RM_31T_TBT>	31008	</Radiostanice_RM_31T_TBT>
     <Radiostanice_R_113_S>	31009	</Radiostanice_R_113_S>
     <Radiostanice_R_113_SK>	31013	</Radiostanice_R_113_SK>
-    <GravRadio>	40000	</GravRadio>
-    <PepelacRadio>	40001	</PepelacRadio>
+    <GravRadio_02>	40003	</GravRadio_02>
+    <PepelacRadio_02>	40002	</PepelacRadio_02>
+    <Radiostanice_RM_31T_A_ISP>	37000	</Radiostanice_RM_31T_A_ISP>
     <Development_Radio>	65000	</Development_Radio>
   </ids>
   <shared>
@@ -177,6 +178,18 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </Radiostanice_RM_31T_A>
+    <Radiostanice_RM_31T_A_ISP>
+      <userString>	#czech_vehicles:Radiostanice_RM_31T_A_ISP	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	57500	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	62	</weight>
+      <distance>	850	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </Radiostanice_RM_31T_A_ISP>
     <Radiostanice_RM_31T_K>
       <userString>	#czech_vehicles:Radiostanice_RM_31T_K	</userString>
       <tags></tags>
@@ -296,8 +309,8 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	4	</repairCost>
     </_10RT_26>
-    <GravRadio>
-      <userString>	#czech_vehicles:GravRadio	</userString>
+    <GravRadio_02>
+      <userString>	#czech_vehicles:GravRadio_02	</userString>
       <tags></tags>
       <notInShop>	true	</notInShop>
       <level>	1	</level>
@@ -307,9 +320,9 @@
       <maxHealth>	30000	</maxHealth>
       <maxRegenHealth>	100	</maxRegenHealth>
       <repairCost>	0	</repairCost>
-    </GravRadio>
-    <PepelacRadio>
-      <userString>	#czech_vehicles:PepelacRadio	</userString>
+    </GravRadio_02>
+    <PepelacRadio_02>
+      <userString>	#czech_vehicles:PepelacRadio_02	</userString>
       <tags></tags>
       <notInShop>	true	</notInShop>
       <level>	1	</level>
@@ -319,7 +332,7 @@
       <maxHealth>	30000	</maxHealth>
       <maxRegenHealth>	100	</maxRegenHealth>
       <repairCost>	0	</repairCost>
-    </PepelacRadio>
+    </PepelacRadio_02>
     <Development_Radio>
       <userString>	Development Radio	</userString>
       <tags></tags>

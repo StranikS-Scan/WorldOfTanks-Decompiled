@@ -7,7 +7,7 @@ import BigWorld
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import getUserName
 from gui.shared.gui_items.processors import Processor, makeError, makeSuccess
-from gui.shared.gui_items.processors.plugins import ParagonsResetBranchValidator, ParagonsSetChapterValidator, ParagonsSetChapterLevelValidator, ParagonsValidateSelectedRewardEntCode, ParagonsValidateSelectedRewardInOrder
+from gui.shared.gui_items.processors.paragons_plugins import ParagonsResetBranchValidator, ParagonsChapterValidator, ParagonsChapterLevelValidator, ParagonsValidateSelectedRewardEntCode, ParagonsValidateSelectedRewardInOrder, ParagonsChangeChapterValidator, ParagonsValidateSelectedRewardToken
 from gui.shared.utils.decorators import adisp_process
 from helpers import dependency
 from items.components.c11n_constants import ItemTags
@@ -120,7 +120,7 @@ class ParagonsSetChapterProcessor(Processor):
     __paragonsController = dependency.descriptor(IParagonsController)
 
     def __init__(self, chapterID):
-        super(ParagonsSetChapterProcessor, self).__init__(plugins=[ParagonsSetChapterValidator(chapterID)])
+        super(ParagonsSetChapterProcessor, self).__init__(plugins=[ParagonsChapterValidator(chapterID), ParagonsChangeChapterValidator(chapterID)])
         self.__chapterID = chapterID
 
     def _successHandler(self, code, ctx=None):
@@ -137,25 +137,27 @@ class ParagonsSetChapterProcessor(Processor):
 
 
 class MarkSelectedRewardsProcessor(Processor):
-    __slots__ = ('__chapterID', '__levelID', '__entCode')
+    __slots__ = ('__chapterID', '__levelID', '__entCode', '__tokenID')
 
-    def __init__(self, chapterID, levelID, entitlementID):
-        super(MarkSelectedRewardsProcessor, self).__init__(plugins=[ParagonsSetChapterValidator(chapterID),
-         ParagonsSetChapterLevelValidator(chapterID, levelID),
-         ParagonsValidateSelectedRewardEntCode(entitlementID),
-         ParagonsValidateSelectedRewardInOrder(chapterID, levelID, entitlementID)])
+    def __init__(self, chapterID, levelID, entitlementID, tokenID):
         self.__chapterID = chapterID
         self.__levelID = levelID
         self.__entCode = PARAGONS_ENTITLEMENT_TO_NUMBER_CODES.get(entitlementID)
+        self.__tokenID = tokenID
+        super(MarkSelectedRewardsProcessor, self).__init__(plugins=[ParagonsChapterValidator(chapterID),
+         ParagonsChapterLevelValidator(chapterID, levelID),
+         ParagonsValidateSelectedRewardEntCode(entitlementID),
+         ParagonsValidateSelectedRewardToken(tokenID),
+         ParagonsValidateSelectedRewardInOrder(chapterID, levelID, self.__entCode, tokenID)])
 
     def _request(self, callback):
-        BigWorld.player().paragons.markSelectedRewards(self.__chapterID, self.__levelID, self.__entCode, partial(self.__setCallback, callback))
+        BigWorld.player().paragons.markSelectedRewards(self.__chapterID, self.__levelID, self.__entCode, int(self.__tokenID.split(':')[-1]), partial(self.__setCallback, callback))
 
     def __setCallback(self, callback, _, resultID, errorStr, ctx=None):
         return self._response(resultID, callback, errorStr, ctx)
 
 
 @adisp_process()
-def selectMark(chapterID, levelID, entCode):
-    res = yield MarkSelectedRewardsProcessor(chapterID, levelID, entCode).request()
+def selectMark(chapterID, levelID, entCode, tokenID):
+    res = yield MarkSelectedRewardsProcessor(chapterID, levelID, entCode, tokenID).request()
     _logger.info(res)

@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: cosmic_event/scripts/common/cosmic_event_common/items/artefacts.py
 import importlib
+from items.components import component_constants
+from items import _xml
+from items.artefacts import Equipment
 artefacts = importlib.import_module('items.artefacts')
 
 class CosmicEventGravityFieldEquipment(artefacts.VisualScriptEquipment, object):
@@ -167,3 +170,35 @@ class CosmicEventStunShotEquipment(artefacts.VisualScriptEquipment, object):
         self.shellID = section.readInt('shellID')
         self.shotSpeed = section.readInt('shotSpeed')
         self._exportSlotsToVSE()
+
+
+class CosmicEventMineEquipment(Equipment, artefacts.ArcadeEquipmentConfigReader):
+    __slots__ = ('duration', 'areaLength', 'areaWidth', 'areaVisual', 'areaColor', 'restrictedAreaColor')
+
+    def __init__(self):
+        super(CosmicEventMineEquipment, self).__init__()
+        self.duration = component_constants.ZERO_INT
+        self.initArcadeInformation()
+        self.areaLength = component_constants.ZERO_INT
+        self.areaWidth = component_constants.ZERO_INT
+        self.areaVisual = None
+        self.areaColor = None
+        self.restrictedAreaColor = None
+        return
+
+    def _readConfig(self, xmlCtx, section):
+        super(CosmicEventMineEquipment, self)._readConfig(xmlCtx, section)
+        self.readArcadeInformation(xmlCtx, section)
+        self.areaLength = _xml.readPositiveFloat(xmlCtx, section, 'areaLength')
+        self.areaWidth = _xml.readPositiveFloat(xmlCtx, section, 'areaWidth')
+        self.areaVisual = _xml.readStringOrNone(xmlCtx, section, 'areaVisual')
+        self.areaColor = _xml.readIntOrNone(xmlCtx, section, 'areaColor')
+        self.restrictedAreaColor = _xml.readIntOrNone(xmlCtx, section, 'restrictedAreaColor')
+
+
+class CosmicEventTeleportEquipment(artefacts.Equipment, object):
+    __slots__ = ('lifeTime',)
+
+    def _readConfig(self, xmlCtx, section):
+        super(CosmicEventTeleportEquipment, self)._readConfig(xmlCtx, section)
+        self.lifeTime = section.readFloat('lifeTime')

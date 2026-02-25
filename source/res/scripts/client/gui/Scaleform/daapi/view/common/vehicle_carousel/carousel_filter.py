@@ -12,7 +12,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.gui_items.Vehicle import VEHICLE_ROLES_LABELS, VEHICLE_CLASS_NAME
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IDebutBoxesController, IEarlyAccessController, IParagonsController
+from skeletons.gui.game_control import IDebutBoxesController, IEarlyAccessController, IParagonsController, IFunRandomController
 
 class FILTER_KEYS(object):
     ELITE = 'elite'
@@ -242,6 +242,7 @@ class BasicCriteriesGroup(CriteriesGroup):
     __debutBoxesController = dependency.descriptor(IDebutBoxesController)
     __paragonsController = dependency.descriptor(IParagonsController)
     _earlyAccessController = dependency.descriptor(IEarlyAccessController)
+    _funRandomController = dependency.descriptor(IFunRandomController)
 
     @staticmethod
     def isApplicableFor(vehicle):
@@ -262,6 +263,7 @@ class BasicCriteriesGroup(CriteriesGroup):
         self._setDebutBoxesCriteria(filters)
         self._setParagonsCriteria(filters)
         self._setEarlyAccessCriteria(filters)
+        self._setFunRandomCriteria()
 
     def _setNationsCriteria(self, filters):
         selectedVehiclesIds = []
@@ -340,7 +342,9 @@ class BasicCriteriesGroup(CriteriesGroup):
 
     @classmethod
     def _paragonsCriteria(cls, vehicle):
-        return vehicle.isResetParagons and cls.__paragonsController.getVehicleProgressPoints(vehicle.intCD) > 0
+        controller = cls.__paragonsController
+        intCD = vehicle.intCD
+        return vehicle.isResetParagons and controller.getVehicleProgressPoints(intCD) > 0 or controller.paragons.isVehicleWasReset(intCD) and not controller.isNextResetVehUnlocked(intCD)
 
     def _setEarlyAccessCriteria(self, filters):
         if filters.get(FILTER_KEYS.EARLY_ACCESS):
@@ -351,6 +355,14 @@ class BasicCriteriesGroup(CriteriesGroup):
         allVehicles = set(cls._earlyAccessController.getAffectedVehicles().keys())
         allVehicles |= cls._earlyAccessController.getPostProgressionVehicles()
         return vehicle.intCD in allVehicles
+
+    def _setFunRandomCriteria(self):
+        if self._funRandomController.isEnabled and not self._funRandomController.isFunRandomPrbActive():
+            self._criteria |= ~REQ_CRITERIA.CUSTOM(self.__onlyFunRandomCriteria)
+
+    @classmethod
+    def __onlyFunRandomCriteria(cls, vehicle):
+        return vehicle.isOnlyForFunRandomBattles
 
 
 class RoleCriteriesGroup(BasicCriteriesGroup):

@@ -615,7 +615,7 @@ class OnVehicleAutoShootStateChange(Block, VehicleMeta):
             self._vehicle.onAutoShootStateChange += self.__onAutoShootStateChange
 
     def onFinishScript(self):
-        if self._vehicle:
+        if self._vehicle and not self._vehicle.isDestroyed:
             self._vehicle.onAutoShootStateChange -= self.__onAutoShootStateChange
 
     def __onAutoShootStateChange(self, autoShootState):

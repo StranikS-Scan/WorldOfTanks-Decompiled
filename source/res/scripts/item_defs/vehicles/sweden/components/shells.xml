@@ -1133,6 +1133,59 @@
       </damage>
     </armorSpalls>
   </_105mm_slsgr_m_61A>
+  <_105mm_slpprj_m_61_ISP>
+    <id>	37003	</id>
+    <userString>	#sweden_vehicles:_105mm_slpprj_m_61_ISP	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1160	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_slpprj_m_61_ISP>
+  <_105mm_slpprj_m_66_ISP>
+    <id>	37004	</id>
+    <userString>	#sweden_vehicles:_105mm_slpprj_m_66_ISP	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	330	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_slpprj_m_66_ISP>
+  <_105mm_slsgr_m_61A_ISP>
+    <id>	37005	</id>
+    <userString>	#sweden_vehicles:_105mm_slsgr_m_61A_ISP	</userString>
+    <icon>	he_modern	</icon>
+    <price>	810	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	240	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_slsgr_m_61A_ISP>
   <_105mm_slpprj_m_61B>
     <id>	80	</id>
     <userString>	#sweden_vehicles:_105mm_slpprj_m_61B	</userString>
@@ -1402,10 +1455,10 @@
     <id>	31013	</id>
     <userString>	#sweden_vehicles:_105mm_slsgr_M_34	</userString>
     <icon>	he_spg	</icon>
-    <price>	128	</price>
+    <price>	400	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	105	</caliber>
-    <explosionRadius>	2	</explosionRadius>
+    <explosionRadius>	5	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mainSH	</effects>
     <damage>
@@ -1420,14 +1473,14 @@
     <id>	31024	</id>
     <userString>	#sweden_vehicles:_105mm_slpgr_M49	</userString>
     <icon>	ap	</icon>
-    <price>	120	</price>
+    <price>	470	</price>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	105	</caliber>
     <isTracer>	true	</isTracer>
     <effects>	mainSA	</effects>
     <damage>
       <armor>	400	</armor>
-      <devices>	150	</devices>
+      <devices>	105	</devices>
     </damage>
   </_105mm_slpgr_M49>
   <_120mm_slpprj_m_51>
@@ -1665,10 +1718,10 @@
     <id>	31012	</id>
     <userString>	#sweden_vehicles:_149mm_Spranggranat_M39_40_Z	</userString>
     <icon>	he_spg	</icon>
-    <price>	900	</price>
+    <price>	755	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	149.1	</caliber>
-    <explosionRadius>	6	</explosionRadius>
+    <explosionRadius>	7	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	largeSH	</effects>
     <damage>
@@ -1683,16 +1736,48 @@
     <id>	31022	</id>
     <userString>	#sweden_vehicles:_149mm_Stalgranat_M39_40	</userString>
     <icon>	ap	</icon>
-    <price>	120	</price>
+    <price>	610	</price>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	149.1	</caliber>
     <isTracer>	true	</isTracer>
     <effects>	largeSA	</effects>
     <damage>
       <armor>	440	</armor>
-      <devices>	150	</devices>
+      <devices>	105	</devices>
     </damage>
   </_149mm_Stalgranat_M39_40>
+  <_152mm_sprgr_M39_1>
+    <id>	31016	</id>
+    <userString>	#sweden_vehicles:_152mm_sprgr_M39_1	</userString>
+    <icon>	he_spg	</icon>
+    <price>	825	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	152	</caliber>
+    <explosionRadius>	7	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeSF	</effects>
+    <damage>
+      <armor>	800	</armor>
+      <devices>	105	</devices>
+    </damage>
+    <deviceDamagePossibility>
+      <protectFromIndirectHits>	internal tankmen	</protectFromIndirectHits>
+    </deviceDamagePossibility>
+  </_152mm_sprgr_M39_1>
+  <_152mm_stlgr_M39_1>
+    <id>	31017	</id>
+    <userString>	#sweden_vehicles:_152mm_stlgr_M39_1	</userString>
+    <icon>	ap	</icon>
+    <price>	800	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	152	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeSA	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	105	</devices>
+    </damage>
+  </_152mm_stlgr_M39_1>
   <_149mm_Spranggranat_M39_40_Z_T>
     <id>	35005	</id>
     <userString>	#sweden_vehicles:_149mm_Spranggranat_M39_40_Z_T	</userString>
@@ -1700,7 +1785,7 @@
     <price>	900	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	149.1	</caliber>
-    <explosionRadius>	6	</explosionRadius>
+    <explosionRadius>	7	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	largeSH	</effects>
     <damage>
@@ -1722,17 +1807,17 @@
     <effects>	largeSA	</effects>
     <damage>
       <armor>	440	</armor>
-      <devices>	150	</devices>
+      <devices>	105	</devices>
     </damage>
   </_149mm_Stalgranat_M39_40_T>
   <_152mm_sprgr_M39>
     <id>	31010	</id>
     <userString>	#sweden_vehicles:_152mm_sprgr_M39	</userString>
     <icon>	he_spg	</icon>
-    <price>	1330	</price>
+    <price>	1060	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	152	</caliber>
-    <explosionRadius>	4	</explosionRadius>
+    <explosionRadius>	7	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	largeSF	</effects>
     <damage>
@@ -1747,7 +1832,7 @@
     <id>	31011	</id>
     <userString>	#sweden_vehicles:_152mm_stlgr_M39	</userString>
     <icon>	ap	</icon>
-    <price>	1255	</price>
+    <price>	1000	</price>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	152	</caliber>
     <isTracer>	true	</isTracer>
@@ -1764,7 +1849,7 @@
     <price>	1330	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	152	</caliber>
-    <explosionRadius>	4	</explosionRadius>
+    <explosionRadius>	7	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	largeSF	</effects>
     <damage>
@@ -1793,22 +1878,25 @@
     <id>	31007	</id>
     <userString>	#sweden_vehicles:_155mm_slsgr_M66	</userString>
     <icon>	he_spg	</icon>
-    <price>	1330	</price>
+    <price>	1545	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	155	</caliber>
-    <explosionRadius>	6	</explosionRadius>
+    <explosionRadius>	8	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	hugeSF	</effects>
     <damage>
-      <armor>	920	</armor>
+      <armor>	1050	</armor>
       <devices>	105	</devices>
     </damage>
+    <deviceDamagePossibility>
+      <protectFromIndirectHits>	internal tankmen	</protectFromIndirectHits>
+    </deviceDamagePossibility>
   </_155mm_slsgr_M66>
   <_155mm_slpgr_M112>
     <id>	31008	</id>
     <userString>	#sweden_vehicles:_155mm_slpgr_M112	</userString>
     <icon>	ap	</icon>
-    <price>	1255	</price>
+    <price>	1750	</price>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	155	</caliber>
     <isTracer>	true	</isTracer>
@@ -1818,6 +1906,38 @@
       <devices>	105	</devices>
     </damage>
   </_155mm_slpgr_M112>
+  <_155mm_slsgr_M60_50>
+    <id>	31018	</id>
+    <userString>	#sweden_vehicles:_155mm_slsgr_M60_50	</userString>
+    <icon>	he_spg	</icon>
+    <price>	1425	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	155	</caliber>
+    <explosionRadius>	8	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeSF	</effects>
+    <damage>
+      <armor>	1050	</armor>
+      <devices>	105	</devices>
+    </damage>
+    <deviceDamagePossibility>
+      <protectFromIndirectHits>	internal tankmen	</protectFromIndirectHits>
+    </deviceDamagePossibility>
+  </_155mm_slsgr_M60_50>
+  <_155mm_slpgr_M112_50>
+    <id>	31020	</id>
+    <userString>	#sweden_vehicles:_155mm_slpgr_M112_50	</userString>
+    <icon>	ap	</icon>
+    <price>	1540	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	155	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeSA	</effects>
+    <damage>
+      <armor>	530	</armor>
+      <devices>	105	</devices>
+    </damage>
+  </_155mm_slpgr_M112_50>
   <_155mm_slsgr_M66_T>
     <id>	35001	</id>
     <userString>	#sweden_vehicles:_155mm_slsgr_M66_T	</userString>
@@ -1825,13 +1945,16 @@
     <price>	1330	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	155	</caliber>
-    <explosionRadius>	6	</explosionRadius>
+    <explosionRadius>	8	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	hugeSF	</effects>
     <damage>
-      <armor>	920	</armor>
+      <armor>	1050	</armor>
       <devices>	105	</devices>
     </damage>
+    <deviceDamagePossibility>
+      <protectFromIndirectHits>	internal tankmen	</protectFromIndirectHits>
+    </deviceDamagePossibility>
   </_155mm_slsgr_M66_T>
   <_155mm_slpgr_M112_T>
     <id>	35002	</id>

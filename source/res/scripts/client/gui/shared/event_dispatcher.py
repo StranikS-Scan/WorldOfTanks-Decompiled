@@ -50,6 +50,7 @@ from gui.resource_well.resource import Resource
 from gui.resource_well.resource_well_helpers import isResourceWellRewardVehicle
 from gui.shared import events, g_eventBus
 from gui.clans.clan_cache import g_clanCache
+from gui.shared.economics import getAllPossibleXP
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Tankman import NO_TANKMAN
@@ -243,7 +244,22 @@ def mayObtainWithMoneyExchange(itemPrice, itemsCache=None):
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def mayObtainForMoney(itemPrice, itemsCache=None):
-    return itemPrice <= itemsCache.items.stats.money
+    return itemPrice <= itemsCache.items.stats.extMoney
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def mayObtainForXP(itemPrice, itemsCache=None):
+    return itemPrice.freeXP <= getAllPossibleXP() + itemsCache.items.stats.freeXP if itemPrice.freeXP else False
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def getNeedFreeXP(freeXP, itemsCache=None):
+    rate, _ = itemsCache.items.shop.freeXPConversion
+    enoughFreeXP = itemsCache.items.stats.freeXP - freeXP
+    if enoughFreeXP >= 0:
+        return 0
+    needXP = (int(freeXP - itemsCache.items.stats.freeXP) + rate - 1) // rate * rate
+    return needXP
 
 
 def _getModuleInfoViewName(itemCD, vehicleDescr=None):

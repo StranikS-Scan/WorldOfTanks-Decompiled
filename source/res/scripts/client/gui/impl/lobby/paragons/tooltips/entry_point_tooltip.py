@@ -24,9 +24,11 @@ class EntryPointTooltip(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(EntryPointTooltip, self)._onLoading()
         currentState = self.__getParagonsState()
+        vehiclesCount = min(self.__paragonsController.minUnlockedNecessaryLevelVehiclesCount, self.__paragonsController.unlockedNecessaryLevelVehiclesCount)
         with self.viewModel.transaction() as tx:
             tx.setProgressState(currentState)
             tx.setPoints(self.__paragonsController.progress)
+            tx.setVehicleCount(vehiclesCount)
             tx.setVehicleToReset(self.__paragonsController.minUnlockedNecessaryLevelVehiclesCount)
             tx.setIsFirstEntry(self.__isFirstEntry(currentState))
             self.__fillChapterModel(tx.currentChapter, currentState)
@@ -40,10 +42,12 @@ class EntryPointTooltip(ViewImpl):
         isNotEnoughNecessaryVehicles = ctrl.unlockedNecessaryLevelVehiclesCount < ctrl.minUnlockedNecessaryLevelVehiclesCount
         if isPaused:
             return ProgressState.PAUSED
-        elif chosenChapter is None and isAnyChapterAvailable:
-            return ProgressState.CHAPTERNOTCHOSEN
         elif isAllChaptersComplete:
             return ProgressState.ALLCHAPTERSCOMPLETED
+        elif chosenChapter is None and not ctrl.wasBranchResetEverAvailable:
+            return ProgressState.NOTAVAILABLE
+        elif chosenChapter is None and isAnyChapterAvailable:
+            return ProgressState.CHAPTERNOTCHOSEN
         elif not ctrl.branches.resetBranchesCount:
             return ProgressState.NORESETTEDBRANCHES
         else:
@@ -53,5 +57,6 @@ class EntryPointTooltip(ViewImpl):
         return currentState == ProgressState.CHAPTERNOTCHOSEN and not any((self.__paragonsController.isChapterComplete(chapterID) for chapterID in self.__paragonsController.availableChapterIDs))
 
     def __fillChapterModel(self, chapterModel, currentState):
-        if currentState not in (ProgressState.CHAPTERNOTCHOSEN, ProgressState.PAUSED, ProgressState.ALLCHAPTERSCOMPLETED):
+        if self.__paragonsController.chapterID is not None and currentState not in (ProgressState.CHAPTERNOTCHOSEN, ProgressState.PAUSED, ProgressState.ALLCHAPTERSCOMPLETED):
             fillChapterModel(chapterModel, self.__paragonsController.chapterID)
+        return

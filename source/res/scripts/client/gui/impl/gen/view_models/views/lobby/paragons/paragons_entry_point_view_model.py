@@ -7,6 +7,7 @@ from gui.impl.gen.view_models.views.lobby.paragons.common.chapter_model import C
 class ProgressState(Enum):
     ACTIVE = 'active'
     CHAPTERNOTCHOSEN = 'chapterNotChosen'
+    NOTAVAILABLE = 'notAvailable'
     ALLCHAPTERSCOMPLETED = 'allChaptersCompleted'
     PAUSED = 'paused'
 
@@ -14,7 +15,7 @@ class ProgressState(Enum):
 class ParagonsEntryPointViewModel(ViewModel):
     __slots__ = ('onEntryPointClick',)
 
-    def __init__(self, properties=4, commands=1):
+    def __init__(self, properties=5, commands=1):
         super(ParagonsEntryPointViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -43,10 +44,17 @@ class ParagonsEntryPointViewModel(ViewModel):
     def setProgressState(self, value):
         self._setString(3, value.value)
 
+    def getFreePoints(self):
+        return self._getNumber(4)
+
+    def setFreePoints(self, value):
+        self._setNumber(4, value)
+
     def _initialize(self):
         super(ParagonsEntryPointViewModel, self)._initialize()
         self._addViewModelProperty('currentChapter', ChapterModel())
         self._addBoolProperty('isAnySelectableReward', False)
         self._addBoolProperty('isAnySelectableRewardInInventory', False)
         self._addStringProperty('progressState', ProgressState.ACTIVE.value)
+        self._addNumberProperty('freePoints', 0)
         self.onEntryPointClick = self._addCommand('onEntryPointClick')

@@ -6,10 +6,11 @@ import weakref
 import BigWorld
 import CGF
 import Math
+from ReloadEffect import playByName
 from auto_shoot_guns.auto_shoot_guns_common import AutoShootGunState
 from constants import SERVER_TICK_LENGTH
-from gui.battle_control.controllers.auto_shoot_guns.auto_shoot_helpers import getGunSoundObject
 from gui.battle_control.controllers.auto_shoot_guns.auto_shoot_wrappers import checkStateStatus
+from gui.battle_control.controllers.sound_ctrls.common import getGunSoundObject
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from PlayerEvents import g_playerEvents
@@ -23,6 +24,7 @@ if typing.TYPE_CHECKING:
     from Vehicular import GunRecoilAnimator
 _logger = logging.getLogger(__name__)
 _RTPC_SHELLS_REMAIN = 'RTPC_ext_autoguns_medium_counter'
+_RTPC_RATE = 'RTPC_ext_autoguns_medium_rate'
 
 def getPlayerVehicleAutoShootGunController():
     vehicle = BigWorld.player().getVehicleAttached()
@@ -148,15 +150,19 @@ class AutoShootGunShootingAnimator(CallbackDelayer, EventsHandler):
         for recoilAnimator in self.__recoilAnimators:
             recoilAnimator.shotsPerSec = rate
 
-    def __onShellsUpdated(self, intCD, quantity, *args):
+    def __onShellsUpdated(self, intCD, quantity, quantityInClip, *args):
         vehicle = self.__vehicle
         if not vehicle.isPlayerVehicle:
             return
         if vehicle.typeDescriptor.isClipGun:
             shellsPercent = self.__sessionProvider.shared.ammo.getClipPercentLeft()
         else:
-            shellsPercent = float(quantity) / self.__loadedShells[intCD]
+            shells = self.__loadedShells.get(intCD, 0)
+            shellsPercent = float(quantity) / shells if shells else 0.0
         getGunSoundObject(vehicle).setRTPC(_RTPC_SHELLS_REMAIN, shellsPercent * 100)
+        reloadEffect = vehicle.typeDescriptor.gun.reloadEffect
+        if quantityInClip == 1 and hasattr(reloadEffect, 'lastShell'):
+            playByName(vehicle.typeDescriptor.gun.reloadEffect.lastShell)
 
     def __onShellsAdded(self, intCD, _, quantity, *args):
         self.__loadedShells[intCD] = quantity
@@ -307,3 +313,5 @@ class AutoShootGunController(BigWorld.DynamicScriptComponent):
 
     def __updateAutoShootingAppearance(self):
         self.__shootingAnimator.updateAutoShootingStatus(self.stateStatus, self.__gunIndex)
+        if self.__defaultShootRate != 0:
+            getGunSoundObject(self.entity).setRTPC(_RTPC_RATE, 1000.0 / self.__defaultShootRate)

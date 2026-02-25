@@ -10,6 +10,28 @@ from gui.battle_control.controllers.interfaces import IBattleController
 from helpers import dependency, isPlayerAvatar
 from skeletons.gui.battle_session import IBattleSessionProvider
 from shared_utils import nextTick
+from vehicle_systems.tankStructure import TankSoundObjectsIndexes
+
+class SoundObjectStub(object):
+
+    def play(self, *_, **__):
+        pass
+
+    def setRTPC(self, *_, **__):
+        pass
+
+
+SOUND_OBJECT_STUB = SoundObjectStub()
+
+def getGunSoundObject(vehicle):
+    if vehicle.appearance is not None and vehicle.appearance.engineAudition is not None:
+        soundObject = vehicle.appearance.engineAudition.getSoundObject(TankSoundObjectsIndexes.GUN)
+        if soundObject is not None:
+            return soundObject
+        return SOUND_OBJECT_STUB
+    else:
+        return SOUND_OBJECT_STUB
+
 
 class SoundPlayersController(object):
 

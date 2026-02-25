@@ -3,13 +3,13 @@
 import itertools
 import logging
 from collections import defaultdict
-from copy import copy
 import BigWorld
 import typing
 from adisp import adisp_process
 from Event import Event
 from constants import Configs, MAX_VEHICLE_LEVEL
 from gui import SystemMessages
+from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl.lobby.paragons.paragons_helpers.paragons_helpers import addParagonsUnlockIDToShow, setParagonsResetBranchToShow
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -21,8 +21,8 @@ from PlayerEvents import g_playerEvents as events
 from helpers import dependency, server_settings
 from paragons_helpers import pushParagonsBranchResetedNotification, pushParagonsBranchResetErrorNotification
 from helpers.server_settings import ParagonsConfig
-from items import vehicles
-from paragons_common import VehicleResetUnavailabilityReasons, ParagonsEntitlements, getParagonsEntitlement, PARAGONS_PDATA_KEY, PARAGONS_UNLOCKS_PDATA_KEY, PARAGONS_COINS_TOKEN, PARAGONS_SELECTED_REWARD_TOKEN_PREFIX, TOKEN_PREFIX_TO_ENT_CODE, PARAGONS_SELECTED_REWARDS_ORDER_PDATA_KEY, PARAGONS_CHAPTER_PROGRESS_PDATA_KEY
+from items import vehicles, getTypeOfCompactDescr
+from paragons_common import VehicleResetUnavailabilityReasons, PARAGONS_PDATA_KEY, PARAGONS_UNLOCKS_PDATA_KEY, PARAGONS_COINS_TOKEN, PARAGONS_SELECTED_REWARD_TOKEN_PREFIX, PARAGONS_CHAPTER_PROGRESS_PDATA_KEY, getParagonChapterToken, PARAGONS_ENTITLEMENT_TO_NUMBER_CODES, PARAGONS_SELECTED_REWARDS_PDATA_KEY
 from skeletons.gui.game_control import IParagonsController, ILimitedUIController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -32,6 +32,7 @@ if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
     from helpers.server_settings import ServerSettings
     T_PROCESSOR_CALLBACK = Callable[[bool], None]
+    T_PROCESSOR_CHAPTER_CALLBACK = Callable[[bool, int], None]
 _logger = logging.getLogger(__name__)
 
 class ParagonsController(IParagonsController):
@@ -52,13 +53,12 @@ class ParagonsController(IParagonsController):
         self.onSelectedRewardMarked = Event()
         self.onSelectedRewardTokenReceived = Event()
         self.__serverSettings = None
-        self.__isAvailable = None
         self.__availabilityBeforeSync = False
         self.__lockedItems = None
         self.__maxLevelVehiclesCds = None
         self.__isPaused = False
+        self.__isEnabled = False
         self.__paragonsUnlocksIsEnabled = {}
-        self.__selectedRewardReceivedTokens = None
         self.__completedChapterIDs = None
         self.__branchesController = _ParagonsBranchesController()
         return
@@ -95,21 +95,24 @@ class ParagonsController(IParagonsController):
         return self.config.isPaused
 
     @property
-    def isAvailable(self):
-        if not self.__itemsCache.isSynced():
-            return False
-        else:
-            if self.__isAvailable is None:
-                self.__isAvailable = self.unlockedNecessaryLevelVehiclesCount >= self.minUnlockedNecessaryLevelVehiclesCount and self.branches.resetBranchesCount < self.branches.maxResetBranchesCount
-            return self.__isAvailable
+    def isInactive(self):
+        return not self.config.isEnabled or self.config.isPaused
 
     @property
-    def wasEverAvailable(self):
-        return self.paragons.resetBranchesIds or self.isAvailable
+    def isBranchResetAvailable(self):
+        return self.branches.isBranchResetAvailable
+
+    @property
+    def wasBranchResetEverAvailable(self):
+        return bool(self.paragons.resetBranchesIds) or self.isBranchResetAvailable
 
     @property
     def isLimitedUiRuleCompleted(self):
         return self.__limitedUiController.isRuleCompleted(LuiRules.PARAGONS_ENTRY_POINT)
+
+    @property
+    def isLimitedUiParagonsButtonsRuleCompleted(self):
+        return self.__limitedUiController.isRuleCompleted(LuiRules.PARAGONS_BUTTONS)
 
     @property
     def isLimitedUiParagonsTreeBranchesRuleCompleted(self):
@@ -118,10 +121,6 @@ class ParagonsController(IParagonsController):
     @property
     def isLimitedUiParagonsNotificationRuleCompleted(self):
         return self.__limitedUiController.isRuleCompleted(LuiRules.PARAGONS_NOTIFICATION)
-
-    @property
-    def isEnabledAndAvailable(self):
-        return self.isEnabled and self.isAvailable
 
     @property
     def chapterID(self):
@@ -135,9 +134,12 @@ class ParagonsController(IParagonsController):
     def isAnyChapterAvailable(self):
         return bool(self.chapterID is None and not all((self.isChapterComplete(chapterID) for chapterID in self.availableChapters)))
 
+    def isPreviewChapter(self, chapterID):
+        return chapterID != self.chapterID
+
     @property
     def progress(self):
-        return self.__itemsCache.items.tokens.getTokenCount(PARAGONS_COINS_TOKEN)
+        return self.getProgressPoints(self.chapterID)
 
     @property
     def level(self):
@@ -191,55 +193,29 @@ class ParagonsController(IParagonsController):
             self.__completedChapterIDs = [ chapterID for chapterID in sorted(self.availableChapters) if self.isChapterComplete(chapterID) ]
         return self.__completedChapterIDs
 
+    def clearCache(self):
+        self.__invalidatePropertiesCache()
+
     def getFirstChapterWithAvailableRewards(self):
         if self.paragons.chapter is not None:
             return self.paragons.chapter
         else:
-            return self.completedChapterIDs[-1] if self.completedChapterIDs and not self.isAllSelectablesClaimed() else None
+            for chapterID in reversed(self.completedChapterIDs):
+                if not self.isAllSelectablesClaimed(chapterID):
+                    return chapterID
 
-    def isAllSelectablesClaimed(self):
-        possibleSelectedRewards = 0
-        selectedRewardsRecevied = sum((len(self.getSelectedRewardsReceivedTokens(getParagonsEntitlement(entID))) for entID in ParagonsEntitlements.all()))
-        for chapterID in self.completedChapterIDs:
-            for entID in ParagonsEntitlements.all():
-                possibleSelectedRewards += self.getSelectedRewardCountInChapter(chapterID, getParagonsEntitlement(entID))
+            return
 
+    def isAllSelectablesClaimed(self, chapterID):
+        selectedRewardsRecevied = sum((1 for cID, _, _ in self.paragons.storage.selectedRewards if cID == chapterID))
+        possibleSelectedRewards = sum((1 for cID, _, _ in self.config.defaultSelectedRewardOrder if cID == chapterID))
         return selectedRewardsRecevied >= possibleSelectedRewards
 
-    def getSelectedRewardCountInChapter(self, chapterID, entCode):
-        return sum((1 for reward in self.config.defaultSelectedRewardOrder.get(entCode, []) if reward[0] == chapterID))
+    def getProgressPoints(self, chapterID):
+        return self.__itemsCache.items.tokens.getTokenCount(getParagonChapterToken(chapterID))
 
-    def getSelectedRewardPositionInOrder(self, chapterID, levelID, entCode):
-        order = self.paragons.getSelectedRewardsOrderByEntitlementID(entCode)
-        defOrder = self.config.defaultSelectedRewardOrder.get(entCode, [])
-        resOrder = copy(order)
-        for data in defOrder:
-            if data not in resOrder:
-                resOrder[data] = len(resOrder)
-
-        return resOrder.get((chapterID, levelID))
-
-    def getSelectedRewardTokenID(self, chapterID, levelID, entCode):
-        positionInOrder = self.getSelectedRewardPositionInOrder(chapterID, levelID, entCode)
-        if positionInOrder is not None:
-            tokens = self.getSelectedRewardsReceivedTokens(entCode)
-            if len(tokens) > positionInOrder:
-                return tokens[positionInOrder]
-        return
-
-    def getSelectedRewardsReceivedTokens(self, entCode):
-        if self.__selectedRewardReceivedTokens is None:
-            self.__selectedRewardReceivedTokens = {}
-            for t in self.__itemsCache.items.tokens.getTokens():
-                if t.startswith(PARAGONS_SELECTED_REWARD_TOKEN_PREFIX):
-                    for prefix, eC in TOKEN_PREFIX_TO_ENT_CODE.iteritems():
-                        if t.startswith(prefix):
-                            self.__selectedRewardReceivedTokens.setdefault(eC, []).append(t)
-
-            for value in self.__selectedRewardReceivedTokens.values():
-                value.sort(key=self.__itemsCache.items.tokens.getTokenExpiryTime)
-
-        return self.__selectedRewardReceivedTokens.get(entCode, [])
+    def getSelectedRewardBonusCD(self, chapterID, levelID, entitlementID):
+        return self.paragons.getSelectedReward(chapterID, levelID, PARAGONS_ENTITLEMENT_TO_NUMBER_CODES[entitlementID])
 
     def onAccountBecomePlayer(self):
         self.__onServerSettingsChanged(self.__lobbyContext.getServerSettings())
@@ -247,6 +223,7 @@ class ParagonsController(IParagonsController):
         if self.isEnabled:
             self.__addListeners()
         self.__isPaused = self.isPaused
+        self.__isEnabled = self.isEnabled
         self.__paragonsUnlocksIsEnabled = {paragonsUnlockID:self.config.isParagonsUnlockEnabled(paragonsUnlockID) for paragonsUnlockID in self.config.paragonsUnlocks.iterkeys()}
 
     def onAccountBecomeNonPlayer(self):
@@ -271,8 +248,20 @@ class ParagonsController(IParagonsController):
             chosenChapter = self.paragons.chapter
             return False if chosenChapter is None or chosenChapter in announcementChapters else self.level == max(self.config.getChapterLevelIDs(chosenChapter))
 
+    def isChapterPaused(self, chapterID=None):
+        return chapterID is not None and self.__itemsCache.items.tokens.isTokenAvailable(getParagonChapterToken(chapterID)) and chapterID != self.chapterID and not self.isChapterComplete(chapterID)
+
     def isVehicleReset(self, compDescr):
         return self.isEnabled and self.paragons.isVehicleReset(compDescr)
+
+    def isNextResetVehUnlocked(self, compDescr):
+        if not self.isEnabled:
+            return
+        for _, _, nextLevelCD, _ in self.__itemsCache.items.getItemByCD(compDescr).getUnlocksDescrs():
+            if getTypeOfCompactDescr(nextLevelCD) == GUI_ITEM_TYPE.VEHICLE and self.__itemsCache.items.getItemByCD(nextLevelCD).isUnlocked and self.paragons.isVehicleWasReset(nextLevelCD):
+                return True
+
+        return False
 
     def isItemLocked(self, itemDescr):
         return itemDescr in self.lockedItems
@@ -284,6 +273,16 @@ class ParagonsController(IParagonsController):
     def getVehicleProgressPoints(self, compDescr):
         resetVehicleConfig = self.config.getResetVehicleConfig(compDescr)
         return resetVehicleConfig.progressPointsAmount if resetVehicleConfig else 0
+
+    def isVehicleFirstUnlockPointsAvailable(self, vehicle, includeParagonsAvailable=True):
+        isAvailable = self.wasBranchResetEverAvailable if includeParagonsAvailable else True
+        return isAvailable and not vehicle.isUnlocked and not self.paragons.isVehicleWasReset(vehicle.compactDescr)
+
+    def getVehicleFirstUnlockPoints(self, vehicle, includeParagonsAvailable=True):
+        if not self.isVehicleFirstUnlockPointsAvailable(vehicle, includeParagonsAvailable):
+            return 0
+        resetVehicleConfig = self.config.getResetVehicleConfig(vehicle.compactDescr)
+        return resetVehicleConfig.firstUnlockPoints if resetVehicleConfig else 0
 
     def getVehicleProgressPointsMultiplier(self, compDescr):
         branchIds = vehicles.g_cache.paragonsBranchesToReset.getResetBranchIdsByVehicleCd(compDescr)
@@ -301,6 +300,17 @@ class ParagonsController(IParagonsController):
         vehiclesCDs = vehicles.g_cache.paragonsBranchesToReset.getResetBranchById(branchID).resetVehicles
         return tuple((self.__itemsCache.items.getItemByCD(intCD) for intCD in vehiclesCDs))
 
+    def getLockedResetVehicles(self, branchID):
+        return sorted((item for item in self.getBranchResetVehicles(branchID) if not item.isUnlocked), key=lambda x: x.level)
+
+    def isFirstUnlockBranchAvailable(self, branchID, includeParagonsAvailable=True):
+        lockedResetVehicles = self.getLockedResetVehicles(branchID)
+        for vehicle in lockedResetVehicles:
+            if self.isVehicleFirstUnlockPointsAvailable(vehicle, includeParagonsAvailable):
+                return True
+
+        return False
+
     def getMaxLevelVehicles(self):
         if self.__maxLevelVehiclesCds is None:
             criteria = REQ_CRITERIA.VEHICLE.LEVEL(MAX_VEHICLE_LEVEL)
@@ -310,12 +320,27 @@ class ParagonsController(IParagonsController):
     def getHiddenUIItems(self):
         return set(itertools.chain.from_iterable((self.config.getParagonsUnlockVehicles(paragonsUnlockID) for paragonsUnlockID in self.config.paragonsUnlocks if not self.config.isParagonsUnlockEnabled(paragonsUnlockID) and paragonsUnlockID not in self.paragons.storage.paragonsUnlockIDs)))
 
+    def getCompleteBonusCoinsForBranch(self, branchID):
+        limit = self.config.getBranchCompleteBonusLimit()
+        bonusCoins = self.config.getBranchCompleteBonus()
+        if limit and bonusCoins:
+            branchState = self.paragons.storage.getBranchStateById(branchID)
+            if branchState.bonusCount < limit:
+                return bonusCoins
+            return 0
+
+    def getCoinsForBranchReset(self):
+        return self.config.getCoinsForBranchReset()
+
+    def isBranchReset(self, branchID):
+        return self.paragons.storage.getBranchStateById(branchID).isReset
+
     @adisp_process
     def setChapter(self, chapterID, callback=None):
         result = yield ParagonsSetChapterProcessor(chapterID).request()
         SystemMessages.pushMessagesFromResult(result)
         if callback is not None:
-            callback(result.success)
+            callback(result.success, chapterID)
         return
 
     def __addListeners(self):
@@ -323,6 +348,7 @@ class ParagonsController(IParagonsController):
         paragons.onParagonsStateChanged += self.__onParagonsStateChange
         paragons.onLevelIncreased += self.__onLevelIncreased
         events.onClientUpdated += self.__onClientUpdate
+        g_clientUpdateManager.addCallback('tokens', self.__onTokensUpdate)
         self.__itemsCache.onSyncStarted += self.__onItemsSyncStarted
         self.__itemsCache.onSyncCompleted += self.__onItemsSyncCompleted
 
@@ -331,6 +357,7 @@ class ParagonsController(IParagonsController):
         paragons.onParagonsStateChanged -= self.__onParagonsStateChange
         paragons.onLevelIncreased -= self.__onLevelIncreased
         events.onClientUpdated -= self.__onClientUpdate
+        g_clientUpdateManager.removeObjectCallbacks(self, True)
         self.__itemsCache.onSyncStarted -= self.__onItemsSyncStarted
         self.__itemsCache.onSyncCompleted -= self.__onItemsSyncCompleted
 
@@ -355,20 +382,18 @@ class ParagonsController(IParagonsController):
 
     def __onItemsSyncStarted(self, syncReason):
         if syncReason in (CACHE_SYNC_REASON.STATS_RESYNC, CACHE_SYNC_REASON.CLIENT_UPDATE):
-            self.__availabilityBeforeSync = self.isAvailable
+            self.__availabilityBeforeSync = self.isBranchResetAvailable
             self.branches.onItemsSyncStarted()
 
     def __onItemsSyncCompleted(self, syncReason, syncedItems):
         if GUI_ITEM_TYPE.VEHICLE in syncedItems.keys() or syncReason == CACHE_SYNC_REASON.STATS_RESYNC:
             self.__invalidatePropertiesCache()
-            if self.isAvailable != self.__availabilityBeforeSync:
+            if self.isBranchResetAvailable != self.__availabilityBeforeSync:
                 self.__availabilityChanged()
             self.branches.onItemsSyncCompleted()
 
     def __invalidatePropertiesCache(self):
-        self.__isAvailable = None
         self.__lockedItems = None
-        self.__selectedRewardReceivedTokens = None
         self.__maxLevelVehiclesCds = None
         self.__completedChapterIDs = None
         self.branches.invalidateCache()
@@ -377,7 +402,9 @@ class ParagonsController(IParagonsController):
     def __checkFeatureStateChanged(self):
         if self.__isPaused != self.isPaused:
             self.__isPaused = self.isPaused
-            self.onFeatureStateChanged(self.__isPaused)
+        if self.__isEnabled != self.isEnabled:
+            self.__isEnabled = self.isEnabled
+        self.onFeatureStateChanged(self.__isPaused, self.__isEnabled)
 
     def __checkParagonsUnlocksStateChanged(self):
         newParagonsUnlocksStates = {paragonsUnlockID:self.config.isParagonsUnlockEnabled(paragonsUnlockID) for paragonsUnlockID in self.config.paragonsUnlocks.iterkeys()}
@@ -414,14 +441,13 @@ class ParagonsController(IParagonsController):
             self.__processParagonsUnlocksUpdate(diff.get(PARAGONS_PDATA_KEY), isFullSync)
             self.__processSelectedRewardsOrder(diff.get(PARAGONS_PDATA_KEY))
             self.__processChaptersProgress(diff.get(PARAGONS_PDATA_KEY))
-        if 'tokens' in diff:
-            if PARAGONS_COINS_TOKEN in diff['tokens']:
-                self.onProgressPointsChanged()
-            needEmitSelectedReward = (self.onSelectedRewardTokenReceived or self.__selectedRewardReceivedTokens is not None) and (isFullSync or any((t.startswith(PARAGONS_SELECTED_REWARD_TOKEN_PREFIX) for t in diff['tokens'])))
-            if needEmitSelectedReward:
-                self.__selectedRewardReceivedTokens = None
-                self.onSelectedRewardTokenReceived(diff)
-        return
+
+    def __onTokensUpdate(self, diff):
+        if PARAGONS_COINS_TOKEN in diff or getParagonChapterToken(self.chapterID) in diff:
+            self.onProgressPointsChanged()
+        needEmitSelectedReward = self.onSelectedRewardTokenReceived and any((t.startswith(PARAGONS_SELECTED_REWARD_TOKEN_PREFIX) for t in diff))
+        if needEmitSelectedReward:
+            self.onSelectedRewardTokenReceived(diff)
 
     def __processParagonsUnlocksUpdate(self, paragonsDiff, isFullSync):
         for paragonsDiffKey, paragonsDiffValue in paragonsDiff.iteritems():
@@ -431,10 +457,10 @@ class ParagonsController(IParagonsController):
                 self.__onParagonsUnlocksChanged(paragonsDiffValue, isGranted=False, isFullSync=isFullSync)
 
     def __processSelectedRewardsOrder(self, diff):
-        if PARAGONS_SELECTED_REWARDS_ORDER_PDATA_KEY in diff:
-            for _, orderID in diff[PARAGONS_SELECTED_REWARDS_ORDER_PDATA_KEY].iteritems():
-                for keyData, order in orderID.iteritems():
-                    self.onSelectedRewardMarked(keyData[0], keyData[1], order)
+        if PARAGONS_SELECTED_REWARDS_PDATA_KEY in diff:
+            for data, bonusCD in diff[PARAGONS_SELECTED_REWARDS_PDATA_KEY].iteritems():
+                chapterID, levelID, _ = data
+                self.onSelectedRewardMarked(chapterID, levelID, bonusCD)
 
     def __processChaptersProgress(self, diff):
         if PARAGONS_CHAPTER_PROGRESS_PDATA_KEY in diff:
@@ -468,12 +494,12 @@ class _ParagonsBranchesController(object):
         return
 
     @property
-    def isBranchesResetAvailable(self):
+    def isBranchResetAvailable(self):
         if not self.__itemsCache.isSynced():
             return False
         else:
             if self.__isBranchResetAvailable is None:
-                self.__isBranchResetAvailable = self.__ctrl.isAvailable and self.__ctrl.isEnabled
+                self.__isBranchResetAvailable = self.__ctrl.isEnabled and self.__ctrl.unlockedNecessaryLevelVehiclesCount >= self.__ctrl.minUnlockedNecessaryLevelVehiclesCount and self.resetBranchesCount < self.maxResetBranchesCount
             return self.__isBranchResetAvailable
 
     @property
@@ -491,7 +517,7 @@ class _ParagonsBranchesController(object):
     @property
     def resettableBranchIds(self):
         if self.__resettableBranchIds is None:
-            if not self.__ctrl.isEnabledAndAvailable:
+            if not self.__ctrl.isEnabled or not self.isBranchResetAvailable:
                 return set()
             self.__resettableBranchIds = set()
             self.__resettableBranchIds.update(self.__ctrl.paragons.resetBranchesIds)
@@ -525,7 +551,7 @@ class _ParagonsBranchesController(object):
         return (not bool(result), {reason:tuple(resetVehicles) for reason, resetVehicles in result.iteritems()})
 
     def checkFeatureConditions(self, branchID, vehicle, result):
-        conditions = {VehicleResetUnavailabilityReasons.UNAVAILABLE: not self.isBranchesResetAvailable,
+        conditions = {VehicleResetUnavailabilityReasons.UNAVAILABLE: not self.__ctrl.isEnabled or not self.isBranchResetAvailable,
          VehicleResetUnavailabilityReasons.ALREADY_RESET: self.isBranchReset(branchID)}
         self.__groupVehiclesByReason(conditions, vehicle, result)
 

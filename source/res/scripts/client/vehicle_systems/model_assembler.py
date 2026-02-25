@@ -233,8 +233,6 @@ def createSuspension(appearance, vehicleDescriptor, lodStateLink):
         if lodSettings is None:
             lodSettings = shared_components.LodSettings(vehicleDescriptor.chassis.chassisLodDistance, DEFAULT_MAX_LOD_PRIORITY)
         suspension.setLodSettings(lodSettings)
-        if 'excludeCollisionObstacles' not in vehicleDescriptor.type.tags:
-            suspension.setCollisionObstaclesCollector(collisionObstaclesCollector)
         collisionObstaclesCollector.setActivePostmortem(groundNodesConfig.activePostmortem)
         tessellationCollisionSensor.setActivePostmortem(groundNodesConfig.activePostmortem)
         return suspension

@@ -424,9 +424,13 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             if targetImpulse > 0.0:
                 self.appearance.receiveShotImpulse(firstHitDir, targetImpulse)
             player = BigWorld.player()
-            player.inputHandler.onVehicleShaken(self, compMatrix.translation, firstHitDir, effectsDescr['caliber'], effectsDescr['shellType'], ShakeReason.HIT if hasDamageHit else ShakeReason.HIT_NO_DAMAGE)
-            showFriendlyFlashBang = False
             sessionProvider = self.guiSessionProvider
+            vInfo = sessionProvider.getArenaDP().getVehicleInfo(attackerID)
+            shakeReason = ShakeReason.HIT if hasDamageHit else ShakeReason.HIT_NO_DAMAGE
+            if vInfo and vInfo.vehicleType.isAutoShootGunVehicle:
+                shakeReason = ShakeReason.AUT0SHOOT_HIT if hasDamageHit else ShakeReason.AUT0SHOOT_HIT_NO_DAMAGE
+            player.inputHandler.onVehicleShaken(self, compMatrix.translation, firstHitDir, effectsDescr['caliber'], effectsDescr['shellType'], shakeReason)
+            showFriendlyFlashBang = False
             isAlly = sessionProvider.getArenaDP().isAlly(attackerID)
             if isAlly:
                 isFriendlyFireMode = sessionProvider.arenaVisitor.bonus.isFriendlyFireMode()
@@ -440,7 +444,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
 
                 def hitLoadCallback(go):
                     if self.isAlive():
-                        go.createComponent(ShotDamageComponent, firstHitPoint.componentName, compoundModel)
+                        go.createComponent(ShotDamageComponent, firstHitPoint.componentName, compoundModel, self.appearance.collisions)
                     else:
                         CGF.removeGameObject(go)
 

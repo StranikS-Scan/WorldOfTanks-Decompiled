@@ -3,19 +3,23 @@
 import BigWorld
 import Event
 import logging
+from AvatarInputHandler import MapCaseMode
 from enum import Enum
 from typing import TYPE_CHECKING
-from cgf_mechanics import CosmicEffectComponentManager
 from constants import EQUIPMENT_STAGES
-from cosmic_event.cosmic_control_mode import BlackHoleArcadeMapCaseControlMode
-from cosmic_event_common.cosmic_constants import COSMIC_EVENT_ROCKET_BOOSTER, COSMIC_EVENT_RAPIDSHELLING, COSMIC_EVENT_BLACKHOLE, COSMIC_EVENT_OVERCHARGE, COSMIC_EVENT_SHIELD, COSMIC_EVENT_POWER_SHOT, COSMIC_EVENT_WAVE, COSMIC_EVENT_STUN_SHOT
-from cosmic_sound import CosmicBattleSounds
-from gui.battle_control.controllers.consumables.equipment_ctrl import _VisualScriptItem, _ReplayItem, EquipmentsController, InCooldownError, NotReadyError, EquipmentSound
+from helpers import dependency
+from gui.battle_control import avatar_getter
+from gui.battle_control.controllers.consumables.equipment_ctrl import _VisualScriptItem, _ReplayItem, _BaseAbilityItem, EquipmentsController, InCooldownError, NotReadyError, EquipmentSound, _OrderItem
 from gui.shared.system_factory import registerEquipmentItem
 from items import vehicles, EQUIPMENT_TYPES
+from skeletons.gui.game_control import ICosmicEventBattleController
+from cosmic_event.cosmic_constants import COSMIC_VEHICLES_ROVER_ENUM
+from cosmic_event_client_cgf.managers import CosmicEffectComponentManager
+from cosmic_event_common.cosmic_constants import COSMIC_EVENT_ROCKET_BOOSTER, COSMIC_EVENT_RAPIDSHELLING, COSMIC_EVENT_BLACKHOLE, COSMIC_EVENT_OVERCHARGE, COSMIC_EVENT_SHIELD, COSMIC_EVENT_POWER_SHOT, COSMIC_EVENT_WAVE, COSMIC_EVENT_STUN_SHOT, COSMIC_EVENT_MINE, COSMIC_EVENT_TELEPORT, LOOT_TO_EQUIPMENT
+from cosmic_sound import CosmicBattleSounds
 _logger = logging.getLogger(__name__)
 if TYPE_CHECKING:
-    from typing import Optional
+    from typing import Optional, Union
     from Avatar import PlayerAvatar
 _PREV_STAGE_FOR_SOUND = (EQUIPMENT_STAGES.DEPLOYING,
  EQUIPMENT_STAGES.COOLDOWN,
@@ -27,51 +31,59 @@ class ExtraEquipmentTags(Enum):
     TARGETING = 'targeting'
 
 
-class _CosmicBaseItem(_VisualScriptItem):
-    extraTags = ()
+def _CosmicBaseItem(baseClass):
 
-    def __init__(self, *args):
-        super(_CosmicBaseItem, self).__init__(*args)
-        self._isPlayingSoundNow = False
+    class _CosmicBaseItemImpl(baseClass):
+        extraTags = ()
 
-    def canActivate(self, entityName=None, avatar=None):
-        curTime = BigWorld.serverTime()
-        if curTime >= BigWorld.player().arena.periodEndTime:
-            return (False, None)
-        else:
-            canBeActivated, error = super(_CosmicBaseItem, self).canActivate(entityName, avatar)
-            if not canBeActivated:
-                if isinstance(error, (InCooldownError, NotReadyError)):
-                    CosmicBattleSounds.Abilities.playNotReady()
-            return (canBeActivated, error)
+        def __init__(self, *args):
+            super(_CosmicBaseItemImpl, self).__init__(*args)
+            self._isPlayingSoundNow = False
 
-    def _soundUpdate(self, prevQuantity, quantity):
-        if prevQuantity > quantity and self._stage != self._prevStage:
-            if self._stage != EQUIPMENT_STAGES.NOT_RUNNING:
-                EquipmentSound.playSound(self._descriptor.compactDescr)
-        if self.isReady and self._serverPrevStage in _PREV_STAGE_FOR_SOUND:
-            EquipmentSound.playReady(self)
+        def canActivate(self, entityName=None, avatar=None):
+            curTime = BigWorld.serverTime()
+            if curTime >= BigWorld.player().arena.periodEndTime:
+                return (False, None)
+            else:
+                canBeActivated, error = super(_CosmicBaseItemImpl, self).canActivate(entityName, avatar)
+                if not canBeActivated:
+                    if isinstance(error, (InCooldownError, NotReadyError)):
+                        CosmicBattleSounds.Abilities.playNotReady()
+                return (canBeActivated, error)
 
-    def activate(self, entityName=None, avatar=None):
-        super(_CosmicBaseItem, self).activate(entityName, avatar)
-        CosmicBattleSounds.Abilities.playActivated()
+        def _soundUpdate(self, prevQuantity, quantity):
+            if prevQuantity > quantity and self._stage != self._prevStage:
+                if self._stage != EQUIPMENT_STAGES.NOT_RUNNING:
+                    EquipmentSound.playSound(self._descriptor.compactDescr)
+            if self.isReady and self._serverPrevStage in _PREV_STAGE_FOR_SOUND:
+                EquipmentSound.playReady(self)
 
-    def onElapsed(self):
-        pass
+        def activate(self, entityName=None, avatar=None):
+            super(_CosmicBaseItemImpl, self).activate(entityName, avatar)
+            CosmicBattleSounds.Abilities.playActivated()
 
-    def getTags(self):
-        return self.extraTags + tuple(super(_CosmicBaseItem, self).getTags())
+        def onElapsed(self):
+            pass
 
-    def clear(self):
-        if self._isPlayingSoundNow:
-            self._stopSounds()
-        super(_CosmicBaseItem, self).clear()
+        def getTags(self):
+            return self.extraTags + tuple(super(_CosmicBaseItemImpl, self).getTags())
 
-    def _stopSounds(self):
-        self._isPlayingSoundNow = False
+        def clear(self):
+            if self._isPlayingSoundNow:
+                self._stopSounds()
+            super(_CosmicBaseItemImpl, self).clear()
+
+        def _stopSounds(self):
+            self._isPlayingSoundNow = False
+
+    return _CosmicBaseItemImpl
 
 
-class _CosmicEventGravityFieldItem(_CosmicBaseItem):
+class _CosmicBaseVisualScriptItem(_CosmicBaseItem(_VisualScriptItem)):
+    pass
+
+
+class _CosmicEventGravityFieldItem(_CosmicBaseVisualScriptItem):
     pass
 
 
@@ -79,7 +91,7 @@ class _ReplayCosmicEventGravityFieldItem(_ReplayItem, _CosmicEventGravityFieldIt
     pass
 
 
-class _CosmicEventRocketBoosterItem(_CosmicBaseItem):
+class _CosmicEventRocketBoosterItem(_CosmicBaseVisualScriptItem):
 
     def activate(self, entityName=None, avatar=None):
         super(_CosmicEventRocketBoosterItem, self).activate(entityName, avatar)
@@ -90,7 +102,7 @@ class _ReplayCosmicEventRocketBoosterItem(_ReplayItem, _CosmicEventRocketBooster
     pass
 
 
-class _CosmicEventShieldItem(_CosmicBaseItem):
+class _CosmicEventShieldItem(_CosmicBaseVisualScriptItem):
     pass
 
 
@@ -98,18 +110,25 @@ class _ReplayCosmicEventShieldItem(_ReplayItem, _CosmicEventShieldItem):
     pass
 
 
-class _CosmicEventBlackHoleItem(_CosmicBaseItem):
+class _CosmicEventBlackHoleItem(_CosmicBaseVisualScriptItem):
     extraTags = (ExtraEquipmentTags.TARGETING,)
 
+    def _soundUpdate(self, prevQuantity, quantity):
+        super(_CosmicEventBlackHoleItem, self)._soundUpdate(prevQuantity, quantity)
+        if self._stage == EQUIPMENT_STAGES.READY and self._serverPrevStage == EQUIPMENT_STAGES.PREPARING:
+            CosmicBattleSounds.Abilities.handleInstalledAbility(False)
+        elif self._stage == EQUIPMENT_STAGES.ACTIVE and self._serverPrevStage == EQUIPMENT_STAGES.PREPARING:
+            CosmicBattleSounds.Abilities.handleInstalledAbility(True)
+
     def _getAimingControlMode(self):
-        return BlackHoleArcadeMapCaseControlMode
+        return MapCaseMode.ArcadeMapCaseControlMode
 
 
 class _ReplayCosmicEventBlackHoleItem(_ReplayItem, _CosmicEventBlackHoleItem):
     pass
 
 
-class _CosmicEventHookShotItem(_CosmicBaseItem):
+class _CosmicEventHookShotItem(_CosmicBaseVisualScriptItem):
     _GUN_GLOW_RGB = (0.0, 0.1, 1)
     _EFFECT_SWITCH_OFF_STAGES = (EQUIPMENT_STAGES.COOLDOWN, EQUIPMENT_STAGES.SHARED_COOLDOWN, EQUIPMENT_STAGES.EXHAUSTED)
 
@@ -133,7 +152,7 @@ class _ReplayCosmicEventHookShotItem(_ReplayItem, _CosmicEventHookShotItem):
     pass
 
 
-class _CosmicEventPowerShotItem(_CosmicBaseItem):
+class _CosmicEventPowerShotItem(_CosmicBaseVisualScriptItem):
     _GUN_GLOW_RGB = (0.12, 0.0, 0.8)
     _EFFECT_SWITCH_OFF_STAGES = (EQUIPMENT_STAGES.COOLDOWN, EQUIPMENT_STAGES.SHARED_COOLDOWN, EQUIPMENT_STAGES.EXHAUSTED)
 
@@ -157,7 +176,7 @@ class _ReplayCosmicEventPowerShotItem(_ReplayItem, _CosmicEventPowerShotItem):
     pass
 
 
-class _CosmicEventWaveItem(_CosmicBaseItem):
+class _CosmicEventWaveItem(_CosmicBaseVisualScriptItem):
     pass
 
 
@@ -165,7 +184,7 @@ class _ReplayCosmicEventWaveItem(_ReplayItem, _CosmicEventWaveItem):
     pass
 
 
-class _CosmicEventStunShotItem(_CosmicBaseItem):
+class _CosmicEventStunShotItem(_CosmicBaseVisualScriptItem):
     _GUN_GLOW_RGB = (0, 1, 0)
     _EFFECT_SWITCH_OFF_STAGES = (EQUIPMENT_STAGES.COOLDOWN, EQUIPMENT_STAGES.SHARED_COOLDOWN, EQUIPMENT_STAGES.EXHAUSTED)
 
@@ -189,6 +208,41 @@ class _ReplayCosmicEventStunShotItem(_ReplayItem, _CosmicEventStunShotItem):
     pass
 
 
+class _CosmicEventMineItem(_CosmicBaseItem(_OrderItem)):
+    extraTags = (ExtraEquipmentTags.TARGETING,)
+
+    def _soundUpdate(self, prevQuantity, quantity):
+        super(_CosmicEventMineItem, self)._soundUpdate(prevQuantity, quantity)
+        if self._stage == EQUIPMENT_STAGES.READY and self._serverPrevStage == EQUIPMENT_STAGES.PREPARING:
+            CosmicBattleSounds.Abilities.handleInstalledAbility(False)
+        elif self._stage == EQUIPMENT_STAGES.COOLDOWN and self._serverPrevStage == EQUIPMENT_STAGES.PREPARING:
+            CosmicBattleSounds.Abilities.handleInstalledAbility(True)
+
+    def getAimingControlMode(self):
+        return MapCaseMode.ArcadeMapCaseControlMode
+
+
+class _ReplayCosmicEventMineItem(_ReplayItem, _CosmicEventMineItem):
+    pass
+
+
+class _CosmicTeleportItem(_CosmicBaseItem(_BaseAbilityItem)):
+
+    def onElapsed(self):
+        pass
+
+    def canActivate(self, entityName=None, avatar=None):
+        curTime = BigWorld.serverTime()
+        if curTime >= BigWorld.player().arena.periodEndTime:
+            return (False, None)
+        else:
+            return (False, None) if self._stage not in (EQUIPMENT_STAGES.READY, EQUIPMENT_STAGES.ACTIVE) else (True, None)
+
+
+class _ReplayCosmicTeleportItem(_ReplayItem, _CosmicTeleportItem):
+    pass
+
+
 def registerCosmicEventEquipmentsItems():
     registerEquipmentItem(COSMIC_EVENT_OVERCHARGE, _CosmicEventGravityFieldItem, _ReplayCosmicEventGravityFieldItem)
     registerEquipmentItem(COSMIC_EVENT_ROCKET_BOOSTER, _CosmicEventRocketBoosterItem, _ReplayCosmicEventRocketBoosterItem)
@@ -198,20 +252,34 @@ def registerCosmicEventEquipmentsItems():
     registerEquipmentItem(COSMIC_EVENT_SHIELD, _CosmicEventShieldItem, _ReplayCosmicEventShieldItem)
     registerEquipmentItem(COSMIC_EVENT_WAVE, _CosmicEventWaveItem, _ReplayCosmicEventWaveItem)
     registerEquipmentItem(COSMIC_EVENT_STUN_SHOT, _CosmicEventStunShotItem, _ReplayCosmicEventStunShotItem)
+    registerEquipmentItem(COSMIC_EVENT_MINE, _CosmicEventMineItem, _ReplayItem)
+    registerEquipmentItem(COSMIC_EVENT_TELEPORT, _CosmicTeleportItem, _ReplayCosmicTeleportItem)
 
+
+if TYPE_CHECKING:
+    _CosmicItemType = Union[_CosmicBaseVisualScriptItem, _CosmicEventMineItem]
 
 class CosmicEquipmentsController(EquipmentsController):
+    cosmicController = dependency.descriptor(ICosmicEventBattleController)
 
     def __init__(self, setup):
         super(CosmicEquipmentsController, self).__init__(setup)
         self.onEquipmentRemoved = Event.Event(self._eManager)
 
-    def getOrdinal(self, intCD):
-        if intCD not in self._order:
-            _logger.warning('Equipment %d, cannot be found in equipment controller. Equipment order %s', intCD, self.getOrderedEquipmentsLayout())
+    def getAbilityIndex(self, intCD):
+        descriptor = vehicles.getItemByCompactDescr(intCD)
+        abilityName = descriptor.name
+        eventVehicles = self.cosmicController.getModeSettings().eventVehicles
+        selectedVehicleName = avatar_getter.getVehicleTypeDescriptor().name
+        selectedVehicleId = COSMIC_VEHICLES_ROVER_ENUM[selectedVehicleName]
+        vehicleData = eventVehicles.get(selectedVehicleId, {})
+        vehicleAbilities = vehicleData.get('abilities', [])
+        if not vehicleAbilities:
             return None
+        elif abilityName in vehicleAbilities:
+            return vehicleAbilities.index(abilityName)
         else:
-            return self._order.index(intCD)
+            return len(vehicleAbilities) if abilityName in LOOT_TO_EQUIPMENT.values() else None
 
     def setEquipment(self, intCD, quantity, stage, timeRemaining, totalTime):
         _logger.debug('Equipment added: intCD=%d, quantity=%d, stage=%s, timeRemaining=%d, totalTime=%d', intCD, quantity, stage, timeRemaining, totalTime)
@@ -232,7 +300,7 @@ class CosmicEquipmentsController(EquipmentsController):
             else:
                 item.update(quantity, stage, timeRemaining, totalTime)
                 self.onEquipmentUpdated(intCD, item)
-        elif stage == EQUIPMENT_STAGES.READY:
+        elif stage in (EQUIPMENT_STAGES.READY, EQUIPMENT_STAGES.PREPARING, EQUIPMENT_STAGES.ACTIVE):
             descriptor = vehicles.getItemByCompactDescr(intCD)
             if descriptor.equipmentType in (EQUIPMENT_TYPES.regular, EQUIPMENT_TYPES.battleAbilities):
                 item = self.createItem(descriptor, quantity, stage, timeRemaining, totalTime)
@@ -240,6 +308,8 @@ class CosmicEquipmentsController(EquipmentsController):
                 self._order.append(intCD)
                 item.updateMapCase()
                 self.onEquipmentAdded(intCD, item)
+        else:
+            _logger.debug('Equipment can not be added: intCD=%d, its stage=%s and is neither READY nor PREPARING nor ACTIVE', intCD, stage)
         if item:
             item.setServerPrevStage(None)
         return

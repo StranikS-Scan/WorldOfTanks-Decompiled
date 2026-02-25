@@ -16,11 +16,11 @@ from gui.impl.lobby.veh_post_progression.tooltips.pair_modification_tooltip_view
 from gui.impl.lobby.veh_post_progression.tooltips.level_tooltip_view import CfgProgressionLevelTooltipView
 from gui.impl.lobby.veh_post_progression.tooltips.role_slot_tooltip_view import RoleSlotTooltipView
 from gui.impl.lobby.veh_post_progression.tooltips.setup_tooltip_view import SetupTooltipView
+from gui.shared.ext_money import ExtendedMoney, ExtendedCurrency, EXT_MONEY_UNDEFINED
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.items_actions import factory
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.veh_post_progression.helpers import storeLastSeenStep
-from gui.veh_post_progression.models.ext_money import ExtendedMoney, ExtendedCurrency, EXT_MONEY_UNDEFINED
 from gui.veh_post_progression.models.progression import PostProgressionAvailability, PostProgressionCompletion
 from gui.veh_post_progression.models.progression_step import PostProgressionStepState
 from gui.veh_post_progression.models.purchase import PurchaseCheckResult, PurchaseProvider

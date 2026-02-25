@@ -82,6 +82,7 @@ class LootBoxesShortStatsSubview(ViewImpl):
     @replaceNoneKwargsModel
     def updateStatisticModel(self, lootbox, model=None):
         model.setIsLoading(True)
+        self.__tooltipData = {}
         self.__lootbox = lootbox
         if lootbox is not None:
             self.__fillCurrentRewardsModel(model)

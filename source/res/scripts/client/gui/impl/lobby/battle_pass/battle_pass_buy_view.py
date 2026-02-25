@@ -157,6 +157,7 @@ class BattlePassBuyView(ViewImpl):
             if self.__destroyAfterCallback is True:
                 self.destroyWindow()
         else:
+            showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
             self.destroyWindow()
         return
 

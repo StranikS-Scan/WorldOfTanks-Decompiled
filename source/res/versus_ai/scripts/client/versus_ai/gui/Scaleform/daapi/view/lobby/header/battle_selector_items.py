@@ -39,6 +39,7 @@ class _VersusAIItem(SelectorItem):
         self._isVisible = self.__versusAIController.isEnabled()
         self._isDisabled = state.hasLockedState
         self._isSelected = state.isQueueSelected(QUEUE_TYPE.VERSUS_AI)
+        self._isNew = self._isNew and not self.__versusAIController.isLocked()
 
     @adisp_process
     def _doSelect(self, dispatcher):
@@ -66,3 +67,4 @@ class _VersusAISquadItem(SpecialSquadItem):
         super(_VersusAISquadItem, self)._update(state)
         self._isSelected = state.isQueueSelected(QUEUE_TYPE.VERSUS_AI)
         self._isVisible = self.__versusAIController.isEnabled() and state.isInPreQueue(queueType=QUEUE_TYPE.VERSUS_AI)
+        self._isNew = self._isNew and not self.__versusAIController.isLocked()

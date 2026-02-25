@@ -12,7 +12,9 @@ MEDAL_ALIASES = {'medalHalonen': 'medalKrysov',
  'medalTamadaYoshio': 'medalTrubin',
  'medalTarczay': 'medalLyubushkin',
  'medalKnispel': 'medalGudz',
- 'medalWittmann': 'medalUshakov'}
+ 'medalWittmann': 'medalUshakov',
+ 'medalBrunoPietro': 'medalFokin',
+ 'medalPascucci': 'medalSlyunyayev'}
 A15X15_STATS_DEPENDENCIES = {}
 
 def _set_A15X15_STATS_DEPENDENCIES():

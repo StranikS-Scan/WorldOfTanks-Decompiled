@@ -66,6 +66,7 @@ from gui.server_events.finders import CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared import event_dispatcher
 from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showResourceWellAwardWindow, showSeniorityRewardAwardWindow, showBlankGiftWindow, showCollectionAwardsWindow, showParagonsRewardsWindow, showDailyEpicQuestRewardWindow, showPromoCodeRewardScreen
+from gui.impl.lobby.paragons.paragons_window_events import showVideoRewardView
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.system_factory import registerAwardControllerHandlers, collectAwardControllerHandlers
@@ -80,7 +81,7 @@ from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from messenger.proto.events import g_messengerEvents
 from nations import NAMES
 from personal_missions_constants import PM3_PREFIX_NAME, PM3_FINAL_REWARD_VIEW_ID
-from paragons_common import getParagonsEntitlement, ParagonsEntitlements, PARAGONS_SELECTED_REWARD_TOKEN_PREFIX
+from paragons_common import PARAGONS_SELECTED_REWARD_TOKEN_PREFIX, getAllParagonsEntitlements
 from renewable_subscription_common.settings_constants import WotPlusState
 from shared_utils import first, findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -1302,7 +1303,6 @@ class ProgressiveRewardHandler(ServiceChannelHandler):
 
 class ParagonsLevelRewardsReceivedHandler(ServiceChannelHandler):
     __selectableRewardsCtrl = dependency.descriptor(IParagonsRewardsShopController)
-    __token = getParagonsEntitlement(ParagonsEntitlements.V_11.value)
 
     def __init__(self, awardCtrl):
         super(ParagonsLevelRewardsReceivedHandler, self).__init__(SYS_MESSAGE_TYPE.paragonsLevelRewardsReceived.index(), awardCtrl)
@@ -1311,14 +1311,17 @@ class ParagonsLevelRewardsReceivedHandler(ServiceChannelHandler):
         _, message = ctx
         rewardInfo = message.data.get('levelRewardsInfo', None)
         chapterID = message.data.get('chapterID', 1)
-        coins = 0
+        entitlements = {}
         for _, info in rewardInfo.iteritems():
             if info.get('entitlements'):
-                coins += info.get('entitlements').get(self.__token, {}).get('count', 0)
+                for entitlement in getAllParagonsEntitlements():
+                    count = info.get('entitlements').get(entitlement, {}).get('count', 0)
+                    if count > 0:
+                        entitlements.update({entitlement: count + entitlements.get(entitlement, 0)})
 
-        if coins > 0 and chapterID > 0:
+        if chapterID > 0 and entitlements:
             self.__selectableRewardsCtrl.entitlements.update()
-            self.__selectableRewardsCtrl.entitlements.storeGranted(self.__token, coins)
+            self.__selectableRewardsCtrl.entitlements.storeGranted(entitlements)
         for chapterLevel, levelRewards in sorted(rewardInfo.items()):
             showParagonsRewardsWindow(levelRewards, chapterID, chapterLevel)
 
@@ -1339,7 +1342,12 @@ class ParagonsSelectableRewardReceivedHandler(ServiceChannelHandler):
             tokensDict = invoiceData.get('tokens', {})
             if any((token.startswith(PARAGONS_SELECTED_REWARD_TOKEN_PREFIX) for token in tokensDict)):
                 self.__selectableRewardsCtrl.selectableRewardReceived(invoiceData)
-                showParagonsRewardsWindow(invoiceData, isVehicleSelected=True, addToQueue=False)
+                vehicle = first(invoiceData.get('vehicles', []))
+                if vehicle is not None:
+                    showVideoRewardView(first(vehicle.keys()), None, lambda : showParagonsRewardsWindow(invoiceData, isVehicleSelected=True, addToQueue=False))
+                else:
+                    showParagonsRewardsWindow(invoiceData, addToQueue=False)
+        return
 
 
 class ProgressiveItemsRewardHandler(ServiceChannelHandler):

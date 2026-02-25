@@ -103,11 +103,8 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
     def as_addAbilityEquipmentSlotS(self, idx, keyCode, sfKeyCode, quantity, timeRemaining, reloadingTime, iconPath, tooltipText, animation):
         return self.flashObject.as_addAbilityEquipmentSlot(idx, keyCode, sfKeyCode, quantity, timeRemaining, reloadingTime, iconPath, tooltipText, animation) if self._isDAAPIInited() else None
 
-    def as_showAbilityModifierS(self, value, immediately=False):
-        return self.flashObject.as_showAbilityModifier(value, immediately) if self._isDAAPIInited() else None
-
-    def as_hideAbilityModifierS(self, immediately=False):
-        return self.flashObject.as_hideAbilityModifier(immediately) if self._isDAAPIInited() else None
+    def as_setAbilityModifierS(self, value, immediately=False):
+        return self.flashObject.as_setAbilityModifier(value, immediately) if self._isDAAPIInited() else None
 
     def as_addRoleSkillSlotS(self, idx, keyCode, sfKeyCode, quantity, timeRemaining, reloadingTime, iconPath, tooltipText, animation):
         return self.flashObject.as_addRoleSkillSlot(idx, keyCode, sfKeyCode, quantity, timeRemaining, reloadingTime, iconPath, tooltipText, animation) if self._isDAAPIInited() else None

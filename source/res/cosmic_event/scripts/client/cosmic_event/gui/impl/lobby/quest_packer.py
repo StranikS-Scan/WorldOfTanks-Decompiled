@@ -4,9 +4,11 @@ import logging
 import typing
 from constants import LOOTBOX_TOKEN_PREFIX
 from cosmic_event.cosmic_constants import PROGRESSION_TOKEN
+from cosmic_event.gui.impl.lobby import cosmicPackBonusModelAndTooltipData
 from cosmic_event.skeletons.progression_controller import ICosmicEventProgressionController
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.backport import createTooltipData
 from gui.impl.gen.view_models.common.missions.bonuses.token_bonus_model import TokenBonusModel
 from gui.server_events.formatters import parseComplexToken
 from gui.shared.missions.packers.bonus import BonusUIPacker, TokenBonusUIPacker, getDefaultBonusPackersMap, BACKPORT_TOOLTIP_CONTENT_ID, getLocalizedBonusName, CustomizationBonusUIPacker
@@ -36,6 +38,11 @@ class CosmicTokenBonusUIPacker(TokenBonusUIPacker):
         tooltips.update({PROGRESSION_TOKEN: cls.__getCosmicToolTip,
          LOOTBOX_TOKEN_PREFIX: cls.__getLootTooltip})
         return tooltips
+
+    @classmethod
+    def getToolTip(cls, bonus):
+        tooltip = super(CosmicTokenBonusUIPacker, cls)._getToolTip(bonus)
+        return [createTooltipData(tooltip[0])]
 
     @classmethod
     def _getTokenBonusPackers(cls):
@@ -105,6 +112,23 @@ class DailyCosmicQuestUIDataPacker(DailyQuestUIDataPacker):
         packer = getCosmicBonusPacker()
         self._tooltipData = {}
         packQuestBonusModelAndTooltipData(packer, model.getBonuses(), self._event, tooltipData=self._tooltipData)
+
+
+class PostBattleDailyCosmicQuestUIDataPacker(DailyQuestUIDataPacker):
+
+    def __init__(self, initialTooltipIndex, quest):
+        super(PostBattleDailyCosmicQuestUIDataPacker, self).__init__(quest)
+        self.__tooltipIndex = initialTooltipIndex
+
+    def _packBonuses(self, model):
+        questsBonusList = model.getBonuses()
+        bonuses = self._event.getBonuses()
+        packer = getCosmicBonusPacker()
+        cosmicPackBonusModelAndTooltipData(bonuses=bonuses, bonusModelsList=questsBonusList, tooltipData=self._tooltipData, packer=packer, startIndex=0, tooltipIndex=self.__tooltipIndex)
+
+    @property
+    def tooltipData(self):
+        return self._tooltipData
 
 
 class CosmicTmanTemplateBonusPacker(TmanTemplateBonusPacker):

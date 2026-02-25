@@ -97,7 +97,9 @@ class ShellBlockToolTipData(BlocksTooltipData):
             boldText = text_styles.neutral(_ms(TOOLTIPS.SHELL_BASIC_DESCRIPTION_BOLD, shot=shot))
             items.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.standard(_ms(TOOLTIPS.SHELL_BASIC_DESCRIPTION, bold=boldText, shot=shot)), padding=lrPaddings)], padding=formatters.packPadding(right=rightPadding)))
         if shots is not None:
-            vDescr.gun.shots = shots
+            for original, modified in zip(shots, vDescr.gun.shots):
+                modified.piercingPower = Vector2(original.piercingPower[0], original.piercingPower[1])
+
         return items
 
 

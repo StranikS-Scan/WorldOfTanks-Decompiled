@@ -7,8 +7,10 @@ from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from gui.Scaleform.daapi.view.meta.TabbedFullStatsMeta import TabbedFullStatsMeta
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.limited_ui.lui_rules_storage import LuiRules
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.game_control import ILimitedUIController
 _logger = logging.getLogger(__name__)
 
 class TabsAliases(Enum):
@@ -64,6 +66,7 @@ class TabbedFullStatsComponent(TabbedFullStatsMeta):
 
 class _TabsBuilder(object):
     __lobbyContext = dependency.descriptor(ILobbyContext)
+    __limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def __init__(self):
         self.__tabs = []
@@ -73,7 +76,7 @@ class _TabsBuilder(object):
          'alias': TabsAliases.STATS})
 
     def addPersonalQuestsTab(self):
-        if self.__lobbyContext.getServerSettings().isPersonalMissionsEnabled():
+        if self.__isPersonalQuestsAvailable():
             self.__tabs.append({'label': backport.text(R.strings.ingame_gui.statistics.tab.quests.header()),
              'alias': TabsAliases.QUESTS_PROGRESS})
 
@@ -87,3 +90,6 @@ class _TabsBuilder(object):
 
     def __isBoosterProcessingAvailable(self):
         return self.__lobbyContext.getServerSettings().personalReservesConfig.isReservesInBattleActivationEnabled and ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arena.bonusType, ARENA_BONUS_TYPE_CAPS.BOOSTERS)
+
+    def __isPersonalQuestsAvailable(self):
+        return self.__lobbyContext.getServerSettings().isPersonalMissionsEnabled() and self.__limitedUIController.isRuleCompleted(LuiRules.PERSONAL_MISSIONS_CONTENT)

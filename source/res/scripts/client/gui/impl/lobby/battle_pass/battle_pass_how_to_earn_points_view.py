@@ -75,7 +75,6 @@ class BattlePassHowToEarnPointsView(ViewImpl):
     def __createBattleRoyalGameModel(self):
         viewModel = self.__createViewHeader(ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO)
         self.__createBattleRoyalTable(ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, viewModel)
-        self.__createLimitCard(viewModel)
         return viewModel
 
     @staticmethod
@@ -184,25 +183,26 @@ class BattlePassHowToEarnPointsView(ViewImpl):
         elif gameType == ARENA_BONUS_TYPE.COMP7:
             self.__createComp7CardsModel(gameType, viewModel)
         elif gameType == ARENA_BONUS_TYPE.SORTIE_2:
-            self.__createFortBattlesCardsModel(viewModel)
+            self.__createFortBattlesCardsModel(viewModel, ARENA_BONUS_TYPE.SORTIE_2)
         elif gameType == ARENA_BONUS_TYPE.FORT_BATTLE_2:
-            self.__createFortBattlesCardsModel(viewModel)
+            self.__createFortBattlesCardsModel(viewModel, ARENA_BONUS_TYPE.FORT_BATTLE_2)
         elif gameType == ARENA_BONUS_TYPE.VERSUS_AI:
             self.__createVersusAiCardsModel(viewModel)
 
-    def __createFortBattlesCardsModel(self, viewModel):
+    def __createFortBattlesCardsModel(self, viewModel, gameType):
         self.__createLimitCard(viewModel)
+        self.__createDailyCard(gameType, viewModel)
 
     def __createRankedCardsModel(self, viewModel, gameType):
-        self.__createSpecialVehCard(viewModel, gameType)
         self.__createLimitCard(viewModel)
         self.__createDailyCard(gameType, viewModel)
 
     def __createEpicBattleCardsModel(self, viewModel):
-        self.__createEpicBattlePointsCard(viewModel)
+        self.__createLimitCard(viewModel)
 
     def __createComp7CardsModel(self, gameType, viewModel):
         self.__createSpecialVehCard(viewModel, gameType)
+        self.__createLimitCard(viewModel)
         self.__createDailyCard(gameType, viewModel, PointsCardType.COMP7)
 
     def __createRandomCardsModel(self, gameType, viewModel):
@@ -211,6 +211,7 @@ class BattlePassHowToEarnPointsView(ViewImpl):
         self.__createDailyCard(gameType, viewModel)
 
     def __createVersusAiCardsModel(self, viewModel):
+        self.__createSpecialVehCard(viewModel, ARENA_BONUS_TYPE.VERSUS_AI)
         self.__createLimitCard(viewModel)
 
     def __createDefaultCardsModel(self, gameType, viewModel):

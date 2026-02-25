@@ -1680,7 +1680,8 @@ class ModeSelectorConfig(namedtuple('ModeSelectorConfig', 'columnSettings')):
 class _ParagonsDefaultResetVehicleConfig(namedtuple('_ParagonsDefaultResetVehicleConfig', ('level',
  'resetBonusBlueprintsCount',
  'progressPointsAmount',
- 'progressPointsMultiplier'))):
+ 'progressPointsMultiplier',
+ 'firstUnlockPoints'))):
     pass
 
 
@@ -1688,7 +1689,8 @@ class _ParagonsResetVehicleConfig(namedtuple('_ParagonsResetVehicleConfig', ('co
  'resetBranchId',
  'resetBonusBlueprintsCount',
  'progressPointsAmount',
- 'progressPointsMultiplier'))):
+ 'progressPointsMultiplier',
+ 'firstUnlockPoints'))):
     pass
 
 
@@ -1708,7 +1710,7 @@ class _ParagonsResetBranchConfig(object):
     @property
     def resetVehicles(self):
         if self.__resetVehicles is None:
-            self.__resetVehicles = {vehicleCd:_ParagonsResetVehicleConfig(compactDescr=vehicleCd, resetBranchId=self.id, resetBonusBlueprintsCount=vehicleConfig[0], progressPointsAmount=vehicleConfig[1], progressPointsMultiplier=vehicleConfig[2]) for vehicleCd, vehicleConfig in self.__data.items()}
+            self.__resetVehicles = {vehicleCd:_ParagonsResetVehicleConfig(compactDescr=vehicleCd, resetBranchId=self.id, resetBonusBlueprintsCount=vehicleConfig[0], progressPointsAmount=vehicleConfig[1], progressPointsMultiplier=vehicleConfig[2], firstUnlockPoints=vehicleConfig[3]) for vehicleCd, vehicleConfig in self.__data.items()}
         return self.__resetVehicles
 
     def getVehicleToResetConfig(self, vehicleCd):
@@ -1771,11 +1773,11 @@ class ParagonsConfig(object):
     @property
     def defaultSelectedRewardOrder(self):
         if self.__defaultSelectedRewardOrder is None:
-            self.__defaultSelectedRewardOrder = {}
+            self.__defaultSelectedRewardOrder = []
             for chapterID in sorted(self.rewards.keys()):
                 for levelID in sorted(self.getChapterLevelIDs(chapterID)):
                     for entCode in self.getRewardsByChapterAndLevel(chapterID, levelID).get('entitlements', {}).keys():
-                        self.__defaultSelectedRewardOrder.setdefault(entCode, []).append((chapterID, levelID))
+                        self.__defaultSelectedRewardOrder.append((chapterID, levelID, entCode))
 
         return self.__defaultSelectedRewardOrder
 
@@ -1825,6 +1827,15 @@ class ParagonsConfig(object):
 
     def getResetVehicleConfig(self, vehicleCd):
         return self.resetVehicles.get(vehicleCd)
+
+    def getBranchCompleteBonus(self):
+        return self.__data.get('branchCompleteBonus', {}).get('paragonsCoins', 0)
+
+    def getCoinsForBranchReset(self):
+        return self.__data['paragonsCoinsForReset']
+
+    def getBranchCompleteBonusLimit(self):
+        return self.__data.get('branchCompleteBonus', {}).get('limit', 0)
 
     def replace(self, data):
         self.__data = data
@@ -1933,6 +1944,27 @@ class _SettingsLoggingConfig(namedtuple('_SettingsLoggingConfig', ('isEnabled', 
         return cls()
 
 
+class _NewbieStartPageConfig(namedtuple('NewbieStartPageConfig', ('isEnabled',))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False)
+        defaults.update(kwargs)
+        return super(_NewbieStartPageConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -1999,6 +2031,7 @@ class ServerSettings(object):
         self.__lootBoxStatisticsConfig = _LootBoxStatisticsConfig.defaults()
         self.__battleContextHintsConfig = _BattleContextHintsConfig.defaults()
         self.__settingsLoggingConfig = _SettingsLoggingConfig()
+        self.__newbieStartPageConfig = _NewbieStartPageConfig()
         self.__schemaManager = getSchemaManager()
         self.set(serverSettings)
 
@@ -2122,7 +2155,7 @@ class ServerSettings(object):
             LOG_DEBUG(Configs.COMP7_CONFIG.value, self.__serverSettings[Configs.COMP7_CONFIG.value])
             self.__comp7Config = makeTupleByDict(Comp7Config, self.__serverSettings[Configs.COMP7_CONFIG.value])
         else:
-            self.__comp7Config = Comp7Config.defaults()
+            self.__comp7Config = Comp7Config()
         if Configs.COMP7_RANKS_CONFIG.value in self.__serverSettings:
             LOG_DEBUG(Configs.COMP7_RANKS_CONFIG.value, self.__serverSettings[Configs.COMP7_RANKS_CONFIG.value])
             self.__comp7RanksConfig = makeTupleByDict(Comp7RanksConfig, self.__serverSettings[Configs.COMP7_RANKS_CONFIG.value])
@@ -2197,6 +2230,8 @@ class ServerSettings(object):
             self.__lootBoxStatisticsConfig = makeTupleByDict(_LootBoxStatisticsConfig, self.__serverSettings[Configs.LOOTBOX_STATISTICS_CONFIG.value])
         if Configs.SETTINGS_LOGGING_CONFIG.value in self.__serverSettings:
             self.__settingsLoggingConfig = makeTupleByDict(_SettingsLoggingConfig, self.__serverSettings[Configs.SETTINGS_LOGGING_CONFIG.value])
+        if Configs.NEWBIE_START_PAGE_CONFIG.value in self.__serverSettings:
+            self.__newbieStartPageConfig = makeTupleByDict(_NewbieStartPageConfig, self.__serverSettings[Configs.NEWBIE_START_PAGE_CONFIG.value])
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -2584,6 +2619,10 @@ class ServerSettings(object):
     @property
     def settingsLoggingConfig(self):
         return self.__settingsLoggingConfig
+
+    @property
+    def newbieStartPageConfig(self):
+        return self.__newbieStartPageConfig
 
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled

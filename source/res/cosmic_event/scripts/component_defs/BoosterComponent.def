@@ -1,0 +1,18 @@
+<BoosterComponent.def>
+  <Properties>
+    <isActive>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isActive>
+    <boosterApplyTime>
+      <Type>	FLOAT	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </boosterApplyTime>
+    <type>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </type>
+  </Properties>
+  <CellMethods></CellMethods>
+  <DefaultKeyName>	boosterComponent	</DefaultKeyName>
+</BoosterComponent.def>

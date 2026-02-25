@@ -73,6 +73,13 @@
       <undamaged>	vehicles/intunion/Un14_T54D/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/intunion/Un14_T54D/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/intunion/Un14_T54D/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <T54D_3Dst_Stellar>
+          <undamaged>	vehicles/intunion/Un14_T54D/_skins/T54D_3Dst_Stellar/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/intunion/Un14_T54D/_skins/T54D_3Dst_Stellar/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/intunion/Un14_T54D/_skins/T54D_3Dst_Stellar/crash/lod0/Hull.model	</exploded>
+        </T54D_3Dst_Stellar>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -95,9 +102,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	1.09691 0.432995 2.609544	</rayStart>
-        <rayEnd>	1.09691 0.23303 2.613278	</rayEnd>
-        <rayUp>	0.000001 -0.018673 -0.999826	</rayUp>
+        <rayStart>	1.174168 0.396699 2.627907	</rayStart>
+        <rayEnd>	1.174168 0.199333 2.595561	</rayEnd>
+        <rayUp>	0.000002 0.161731 -0.986835	</rayUp>
         <size>	0.32	</size>
         <isUVProportional>	false	</isUVProportional>
       </slot>
@@ -670,6 +677,12 @@
         <hiddenForUser>	true	</hiddenForUser>
         <showOn>	16	</showOn>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -711,6 +724,13 @@
         <undamaged>	vehicles/intunion/Un14_T54D/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/intunion/Un14_T54D/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/intunion/Un14_T54D/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <T54D_3Dst_Stellar>
+            <undamaged>	vehicles/intunion/Un14_T54D/_skins/T54D_3Dst_Stellar/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/intunion/Un14_T54D/_skins/T54D_3Dst_Stellar/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/intunion/Un14_T54D/_skins/T54D_3Dst_Stellar/crash/lod0/Chassis.model	</exploded>
+          </T54D_3Dst_Stellar>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -730,7 +750,7 @@
           <trackPairIdx>	0	</trackPairIdx>
           <leftMaterial>	track_mat_L_skinned	</leftMaterial>
           <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-          <textureScale>	1.6	</textureScale>
+          <textureScale>	-1.6	</textureScale>
           <trackDebris>
             <isLeft>	true	</isLeft>
             <destructionEffect></destructionEffect>
@@ -795,6 +815,39 @@
                   <row1>	0.000000 0.650000 0.000000	</row1>
                   <row2>	0.000000 0.000000 4.800000	</row2>
                   <row3>	-1.839449 1.105784 0.345319	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	T54D_3Dst_Stellar	</modelsSet>
+                <boxCollider>
+                  <row0>	3.596084 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.425983 0.000000	</row1>
+                  <row2>	0.000000 0.000000 4.854896	</row2>
+                  <row3>	0.000000 1.319433 -0.256211	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.596080 0.000000 0.000001	</row0>
+                  <row1>	0.000000 0.419123 0.076142	</row1>
+                  <row2>	0.000000 -0.118075 0.649942	</row2>
+                  <row3>	0.000000 1.269549 2.484826	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.596080 0.000000 0.000003	</row0>
+                  <row1>	0.000000 0.260385 0.337137	</row1>
+                  <row2>	0.000000 -0.522805 0.403784	</row2>
+                  <row3>	0.000000 0.944622 3.094563	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.596080 -0.000001 0.000002	</row0>
+                  <row1>	0.000000 0.265018 -0.333507	</row1>
+                  <row2>	0.000000 0.517176 0.410969	</row2>
+                  <row3>	0.000005 1.007515 -3.043765	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.393429 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.000000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.344997	</row2>
+                  <row3>	-1.875559 1.056307 -0.112522	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -863,6 +916,39 @@
                   <row1>	0.000000 0.650000 0.000000	</row1>
                   <row2>	0.000000 0.000000 4.800000	</row2>
                   <row3>	1.836242 1.106863 0.467077	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	T54D_3Dst_Stellar	</modelsSet>
+                <boxCollider>
+                  <row0>	3.596080 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.425983 0.000000	</row1>
+                  <row2>	0.000000 0.000000 4.854900	</row2>
+                  <row3>	0.000000 1.319430 -0.256211	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.596080 0.000000 0.000001	</row0>
+                  <row1>	0.000000 0.419123 0.076142	</row1>
+                  <row2>	0.000000 -0.118075 0.649942	</row2>
+                  <row3>	0.000000 1.269550 2.484830	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.596080 0.000000 0.000003	</row0>
+                  <row1>	0.000000 0.260385 0.337137	</row1>
+                  <row2>	0.000000 -0.522805 0.403784	</row2>
+                  <row3>	0.000000 0.944622 3.094560	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.596080 -0.000001 0.000002	</row0>
+                  <row1>	0.000000 0.265018 -0.333507	</row1>
+                  <row2>	0.000000 0.517176 0.410969	</row2>
+                  <row3>	0.000005 1.007520 -3.043760	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.393429 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.000000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.345000	</row2>
+                  <row3>	1.876000 1.056310 -0.112522	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1746,6 +1832,13 @@
             <undamaged>	vehicles/intunion/Un14_T54D/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/intunion/Un14_T54D/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/intunion/Un14_T54D/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <T54D_3Dst_Stellar>
+                <undamaged>	vehicles/intunion/Un14_T54D/_skins/T54D_3Dst_Stellar/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/intunion/Un14_T54D/_skins/T54D_3Dst_Stellar/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/intunion/Un14_T54D/_skins/T54D_3Dst_Stellar/crash/lod0/Gun_02.model	</exploded>
+              </T54D_3Dst_Stellar>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/intunion/Un14_T54D/collision/Gun_02.model	</collisionModelServer>
@@ -1811,6 +1904,13 @@
         <undamaged>	vehicles/intunion/Un14_T54D/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/intunion/Un14_T54D/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/intunion/Un14_T54D/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <T54D_3Dst_Stellar>
+            <undamaged>	vehicles/intunion/Un14_T54D/_skins/T54D_3Dst_Stellar/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/intunion/Un14_T54D/_skins/T54D_3Dst_Stellar/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/intunion/Un14_T54D/_skins/T54D_3Dst_Stellar/crash/lod0/Turret_01.model	</exploded>
+          </T54D_3Dst_Stellar>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/intunion/Un14_T54D/collision/Turret_01.model	</collisionModelServer>
@@ -2331,6 +2431,26 @@
           <showOn>	256	</showOn>
           <clipAngle>	1.339017	</clipAngle>
           <verticalMirror>	true	</verticalMirror>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35048	</slotId>
+          <tags></tags>
+          <compatibleModels>	T54D_3Dst_Stellar	</compatibleModels>
+          <position>	-1.106338 1.696605 0.925331	</position>
+          <rotation>	1.084228 -1.041451 3.128291	</rotation>
+          <scale>	0.799998 0.799999 0.8	</scale>
+          <showOn>	256	</showOn>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35049	</slotId>
+          <tags></tags>
+          <compatibleModels>	T54D_3Dst_Stellar	</compatibleModels>
+          <position>	1.110798 1.690459 0.937244	</position>
+          <rotation>	1.08367 1.046654 3.129327	</rotation>
+          <scale>	0.799999 0.8 0.8	</scale>
+          <showOn>	256	</showOn>
         </slot>
       </customizationSlots>
       <customization>

@@ -45,8 +45,9 @@
     <Skoda_16_AH_145_S>	31009	</Skoda_16_AH_145_S>
     <V_12_7>	31013	</V_12_7>
     <Development_Engine>	65000	</Development_Engine>
-    <GravEngine>	40000	</GravEngine>
-    <PepelacEngine>	40001	</PepelacEngine>
+    <GravEngine_02>	40003	</GravEngine_02>
+    <PepelacEngine_02>	40002	</PepelacEngine_02>
+    <Praga_AXK_ISP>	37000	</Praga_AXK_ISP>
   </ids>
   <shared>
     <Hanomag_WD_50PS>
@@ -654,6 +655,23 @@
       <rpm_min>	400	</rpm_min>
       <rpm_max>	2100	</rpm_max>
     </Praga_AXK>
+    <Praga_AXK_ISP>
+      <userString>	#czech_vehicles:Praga_AXK_ISP	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	110000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
+      <power>	1000	</power>
+      <weight>	1700	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	2100	</rpm_max>
+    </Praga_AXK_ISP>
     <Praga_AXK_X16>
       <userString>	#czech_vehicles:Praga_AXK_X16	</userString>
       <tags>	diesel	</tags>
@@ -773,8 +791,8 @@
       <rpm_min>	309	</rpm_min>
       <rpm_max>	2271	</rpm_max>
     </V_12_F>
-    <GravEngine>
-      <userString>	#czech_vehicles:GravEngine	</userString>
+    <GravEngine_02>
+      <userString>	#czech_vehicles:GravEngine_02	</userString>
       <tags>	diesel	</tags>
       <level>	1	</level>
       <price>	0	</price>
@@ -789,9 +807,9 @@
       <fireStartingChance>	0.0	</fireStartingChance>
       <rpm_min>	300	</rpm_min>
       <rpm_max>	2300	</rpm_max>
-    </GravEngine>
-    <PepelacEngine>
-      <userString>	#czech_vehicles:PepelacEngine	</userString>
+    </GravEngine_02>
+    <PepelacEngine_02>
+      <userString>	#czech_vehicles:PepelacEngine_02	</userString>
       <tags>	diesel	</tags>
       <level>	1	</level>
       <price>	0	</price>
@@ -806,7 +824,7 @@
       <fireStartingChance>	0.0	</fireStartingChance>
       <rpm_min>	300	</rpm_min>
       <rpm_max>	2300	</rpm_max>
-    </PepelacEngine>
+    </PepelacEngine_02>
     <Development_Engine>
       <userString>	Development Engine	</userString>
       <tags>	diesel	</tags>

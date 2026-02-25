@@ -4,8 +4,8 @@ import typing
 from collections import namedtuple
 from enum import Enum, unique
 from AccountCommands import LOCK_REASON
+from gui.shared.ext_money import ExtendedMoney
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
-from gui.veh_post_progression.models.ext_money import ExtendedMoney
 from gui.veh_post_progression.models.iterators import OrderedStepsIterator, UnorederdStepsIterator
 from gui.veh_post_progression.models.progression_step import PostProgressionStepItem
 from helpers import dependency

@@ -12,6 +12,8 @@ class ButtonType(Enum):
 class State(Enum):
     ENABLED = 'enabled'
     DISABLED = 'disabled'
+    FIRST_BRANCH_RESET = 'firstBranchReset'
+    DROPPED_BRANCH = 'droppedBranch'
 
 
 class TechTreeButtons(ViewModel):

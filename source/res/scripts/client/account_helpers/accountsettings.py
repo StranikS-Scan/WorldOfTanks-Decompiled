@@ -1751,7 +1751,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 75
+    version = 77
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -2477,6 +2477,17 @@ class AccountSettings(object):
                         lootBoxesSettings[LOOT_BOXES_STATS_HINT_STATE] = 0
                         lootBoxesSettings[LOOT_BOXES_STATS_NO_BOX_HINT_STATE] = 0
                         accSettings.write(GUI_LOOT_BOXES, _pack(lootBoxesSettings))
+
+            if currVersion < 77:
+                if currVersion > 0:
+                    from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import LobbyHeader
+                    for key, section in _filterAccountSection(ads):
+                        accSettings = AccountSettings._readSection(section, KEY_COUNTERS)
+                        counters = {}
+                        if NEW_LOBBY_TAB_COUNTER in accSettings.keys():
+                            counters = _unpack(accSettings[NEW_LOBBY_TAB_COUNTER].asString)
+                        counters[LobbyHeader.TABS.TOURNAMENTS] = False
+                        accSettings.write(NEW_LOBBY_TAB_COUNTER, _pack(counters))
 
             ads.writeInt('version', AccountSettings.version)
         return

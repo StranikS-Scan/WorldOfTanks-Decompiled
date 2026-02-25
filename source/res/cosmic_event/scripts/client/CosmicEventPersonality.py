@@ -74,7 +74,7 @@ class ClientCosmicEventBattleMode(cosmic_constants.CosmicEventBattleMode):
 
     @property
     def _client_gameControllers(self):
-        from cosmic_event.skeletons.battle_controller import ICosmicEventBattleController
+        from skeletons.gui.game_control import ICosmicEventBattleController
         from cosmic_event.gui.game_control.battle_controller import CosmicEventBattleController
         from cosmic_event.skeletons.progression_controller import ICosmicEventProgressionController
         from cosmic_event.gui.game_control.progression_controller import CosmicProgressionController
@@ -151,8 +151,7 @@ def preInit():
     registerAwardControllerHandler(CosmicProgressionTokenQuestsHandler)
     registerAwardControllerHandler(CosmicDailyQuestsHandler)
     registerHandler(CosmicUniqueRewardHandler)
-    from cosmic_event_common.cosmic_constants import registerLootTypes, registerDailyQuestsDecorations
-    registerLootTypes(__name__)
+    from cosmic_event_common.cosmic_constants import registerDailyQuestsDecorations
     registerDailyQuestsDecorations(__name__)
     from gui.shared.system_factory import registerDynObjCache
     registerDynObjCache(ARENA_GUI_TYPE.COSMIC_EVENT, CosmicEventDynObjects)
@@ -160,15 +159,14 @@ def preInit():
     equipment_ctrl.registerCosmicEventEquipmentsItems()
     from AvatarInputHandler import OVERWRITE_CTRLS_DESC_MAP
     from aih_constants import CTRL_MODE_NAME
-    from cosmic_event.cosmic_control_mode import CosmicControlMode, BlackHoleArcadeMapCaseControlMode
-    OVERWRITE_CTRLS_DESC_MAP[cosmic_constants.ARENA_BONUS_TYPE.COSMIC_EVENT] = {CTRL_MODE_NAME.ARCADE: (CosmicControlMode, 'cosmicMode', 0),
-     CTRL_MODE_NAME.MAP_CASE_ARCADE: (BlackHoleArcadeMapCaseControlMode, 'cosmicMode', 0)}
+    from cosmic_event.cosmic_control_mode import CosmicControlMode
+    OVERWRITE_CTRLS_DESC_MAP[cosmic_constants.ARENA_BONUS_TYPE.COSMIC_EVENT] = {CTRL_MODE_NAME.ARCADE: (CosmicControlMode, 'cosmicMode', 0)}
 
 
 def init():
     LOG_DEBUG('init', __name__)
     g_overrideScaleFormViewsConfig.initExtensionLobbyPackages(__name__, ['cosmic_event.gui.Scaleform.daapi.view.lobby'])
-    g_overrideScaleFormViewsConfig.initExtensionBattlePackages(__name__, ['cosmic_event.gui.Scaleform.daapi.view.battle.cosmic'], cosmic_constants.ARENA_GUI_TYPE.COSMIC_EVENT)
+    g_overrideScaleFormViewsConfig.initExtensionBattlePackages(__name__, ['cosmic_event.gui.Scaleform.daapi.view.battle.cosmic', 'cosmic_event.gui.Scaleform.daapi.view.battle.shared'], cosmic_constants.ARENA_GUI_TYPE.COSMIC_EVENT)
     AccountSettings.overrideDefaultSettings(KEY_SETTINGS, ACCOUNT_DEFAULT_SETTINGS)
 
 

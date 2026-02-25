@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class ModeSelectorCardModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=10, commands=0):
+    def __init__(self, properties=11, commands=0):
         super(ModeSelectorCardModel, self).__init__(properties=properties, commands=commands)
 
     def getIndex(self):
@@ -68,6 +68,12 @@ class ModeSelectorCardModel(ViewModel):
     def setModeName(self, value):
         self._setString(9, value)
 
+    def getIsLocked(self):
+        return self._getBool(10)
+
+    def setIsLocked(self, value):
+        self._setBool(10, value)
+
     def _initialize(self):
         super(ModeSelectorCardModel, self)._initialize()
         self._addNumberProperty('index', 0)
@@ -80,3 +86,4 @@ class ModeSelectorCardModel(ViewModel):
         self._addNumberProperty('priority', 0)
         self._addNumberProperty('column', -1)
         self._addStringProperty('modeName', '')
+        self._addBoolProperty('isLocked', False)

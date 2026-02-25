@@ -6,27 +6,33 @@ import enum
 import typing
 from future.utils import itervalues
 from Event import EventManager, Event
+from ab_feature_test_token_based_shared import getFeatures
 from account_helpers import AccountSettings
 from constants import Configs
+from gui.clans.clan_helpers import isStrongholdsEnabled
 from gui.SystemMessages import SM_TYPE as _SM_TYPE
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.limited_ui.lui_rules_storage import RulesStorageMaker
+from gui.limited_ui.lui_rules_storage import RulesStorageMaker, LuiRules
 from gui.limited_ui.lui_tokens_storage import getTokensInfo
+from gui.limited_ui.lui_representations_storage import getRepresentations
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.notifications import NotificationPriorityLevel
+from gui.tournament.tournament_helpers import isTournamentEnabled
 from helpers import dependency
+from helpers.CallbackDelayer import CallbackDelayer
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from skeletons.account_helpers.settings_core import ISettingsCore, ISettingsCache
-from skeletons.gui.game_control import ILimitedUIController, IBootcampController, IBattleRoyaleController
+from skeletons.gui.game_control import ILimitedUIController, IBootcampController, IBattleRoyaleController, IVersusAIController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.system_messages import ISystemMessages
 if typing.TYPE_CHECKING:
     from typing import Callable, Dict, Optional, Tuple, List, Set, Union
     from helpers.server_settings import _LimitedUIConfig
-    from gui.limited_ui.lui_rules_storage import _LimitedUIRules, _LimitedUIRule, LuiRules
+    from gui.limited_ui.lui_rules_storage import _LimitedUIRules, _LimitedUIRule
     from gui.limited_ui.lui_tokens_storage import LimitedUICondition, LimitedUITokenInfo
+    from gui.limited_ui.lui_representations_storage import LimitedUIConditionRepresentation
 _logger = logging.getLogger(__name__)
 
 class CallHandlerReason(enum.Enum):
@@ -34,6 +40,7 @@ class CallHandlerReason(enum.Enum):
     SETTINGS_CHANGED = 'settingsChanged'
     COMPLETE_RULE = 'completeRule'
     COMPLETE_CONDITION = 'completeCondition'
+    CONDITION_REPRESENTATION_CHANGED = 'conditionRepresentationChanged'
 
 
 _ACC_SETTINGS_SWITCHER_FLAG = 'luiSwitcherState'
@@ -90,6 +97,56 @@ class _LimitedUIConditionsService(object):
         self.onConditionValueUpdated(tokenID)
 
 
+class _LimitedUIConditionsRepresentationService(object):
+
+    def __init__(self):
+        self.__representationsDict = {}
+        self.__conditionRepresentations = {}
+        self.onConditionRepresentationChanged = Event()
+        self.__fillRepresentationsDict(getRepresentations())
+
+    def destroy(self):
+        self.__representationsDict.clear()
+        self.__conditionRepresentations.clear()
+
+    def updateConditionRepresentations(self, rules):
+        self.__conditionRepresentations.clear()
+        for ruleID in rules.getRulesIDs():
+            if ruleID not in self.__conditionRepresentations.keys():
+                self.__conditionRepresentations[ruleID] = self.__makeRepresentation(rules.getExpressionElements(ruleID))
+                self.onConditionRepresentationChanged(ruleID)
+
+    def getConditionRepresentation(self, ruleID):
+        return self.__conditionRepresentations.get(ruleID, [])
+
+    def __fillRepresentationsDict(self, refRepresentations):
+        for representation in refRepresentations:
+            self.__representationsDict.setdefault(representation.condition, representation)
+
+    def __makeRepresentation(self, expressionElements):
+        conditionGroups = []
+        currentConditions = []
+        currentConditionText = ''
+        for element in expressionElements:
+            if not currentConditionText:
+                if element == 'or':
+                    if currentConditions:
+                        conditionGroups.append(currentConditions)
+                        currentConditions = []
+                    continue
+                elif element == 'and':
+                    continue
+            currentConditionText += element
+            representation = self.__representationsDict.get(currentConditionText)
+            if representation:
+                currentConditions.append(representation)
+                currentConditionText = ''
+
+        if currentConditions:
+            conditionGroups.append(currentConditions)
+        return conditionGroups
+
+
 class LimitedUIController(ILimitedUIController):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
@@ -98,18 +155,25 @@ class LimitedUIController(ILimitedUIController):
     __systemMessages = dependency.descriptor(ISystemMessages)
     __itemsCache = dependency.descriptor(IItemsCache)
     __settingsCache = dependency.descriptor(ISettingsCache)
+    __versusAIController = dependency.descriptor(IVersusAIController)
     _SERVER_SETTINGS_BLOCK_BITS = 32
+    _SEND_CONTENT_UNLOCKED_MESSAGE_TIMEOUT = 3
+    _AB_TEST_TOKEN_FEATURE = 'limited_ui'
+    _AB_TEST_TOKEN_DISABLE_ACTION = 'disabled'
 
     def __init__(self):
         super(LimitedUIController, self).__init__()
         self.__luiConfig = None
         self.__luiService = None
+        self.__luiRepresentationService = None
         self.__rules = None
         self.__observers = defaultdict(list)
         self.__skippedObserves = defaultdict(list)
         self.__postponedCompleteRules = None
         self.__serverSettings = None
         self.__isEnabled = False
+        self.__postponedContentUnlockedMessageRules = None
+        self.__sendContentUnlockedMessageDelayer = CallbackDelayer()
         self.__em = EventManager()
         self.onStateChanged = Event(self.__em)
         self.onConfigChanged = Event(self.__em)
@@ -151,11 +215,14 @@ class LimitedUIController(ILimitedUIController):
 
     @property
     def isUserSettingsMayShow(self):
-        return self.isEnabled and not self.isOnlyUISpamOff and not self.isFullCompleted
+        return False
 
     @property
     def isFullCompleted(self):
         return all((self.__isRuleCompleted(ruleID) or self.__checkCondition(ruleID) for ruleID in self.__rules.getRulesIDs()))
+
+    def getRuleConditionRepresentation(self, ruleID):
+        return self.__luiRepresentationService.getConditionRepresentation(ruleID)
 
     def isRuleCompleted(self, ruleID):
         return not self.isEnabled or self.__checkRule(ruleID)
@@ -194,7 +261,9 @@ class LimitedUIController(ILimitedUIController):
         if self.isInited:
             return
         self.__postponedCompleteRules = set()
+        self.__postponedContentUnlockedMessageRules = set()
         self.__luiService = _LimitedUIConditionsService()
+        self.__luiRepresentationService = _LimitedUIConditionsRepresentationService()
         self.__subscribe()
 
     def __clear(self):
@@ -209,9 +278,13 @@ class LimitedUIController(ILimitedUIController):
                 self.__rules = None
             self.__luiService.destroy()
             self.__luiService = None
+            self.__luiRepresentationService.destroy()
+            self.__luiRepresentationService = None
             self.__isEnabled = False
             self.__serverSettings = None
             self.__postponedCompleteRules = None
+            self.__sendContentUnlockedMessageDelayer.destroy()
+            self.__postponedContentUnlockedMessageRules = None
             self.__luiConfig = None
             return
 
@@ -219,12 +292,14 @@ class LimitedUIController(ILimitedUIController):
         self.__onServerSettingsChanged(self.__lobbyContext.getServerSettings())
         self.__lobbyContext.onServerSettingsChanged += self.__onServerSettingsChanged
         self.__luiService.onConditionValueUpdated += self.__onConditionUpdated
+        self.__luiRepresentationService.onConditionRepresentationChanged += self.__onConditionRepresentationUpdated
         self.__itemsCache.onSyncCompleted += self.__onSyncCompleted
         self.__settingsCache.onSyncCompleted += self.__onSettingsCacheSyncCompleted
 
     def __unsubscribe(self):
         self.__lobbyContext.onServerSettingsChanged -= self.__onServerSettingsChanged
         self.__luiService.onConditionValueUpdated -= self.__onConditionUpdated
+        self.__luiRepresentationService.onConditionRepresentationChanged -= self.__onConditionRepresentationUpdated
         self.__itemsCache.onSyncCompleted -= self.__onSyncCompleted
         self.__settingsCache.onSyncCompleted -= self.__onSettingsCacheSyncCompleted
         if self.__serverSettings is not None:
@@ -243,12 +318,18 @@ class LimitedUIController(ILimitedUIController):
         if not diff or 'limitedUi' in diff:
             self.__tryNotifyStateChanged()
             self.onVersionUpdated()
+            self.__updateStatus()
 
     def __onSettingsCacheSyncCompleted(self):
         self.__storePostponed()
 
+    def __isEnabledByAbTest(self):
+        tokenNames = self.__itemsCache.items.tokens.getTokens().keys()
+        abTestFeatures = getFeatures(tokenNames)
+        return abTestFeatures.get(self._AB_TEST_TOKEN_FEATURE, '') != self._AB_TEST_TOKEN_DISABLE_ACTION
+
     def __updateStatus(self):
-        isEnableState = self.__luiConfig.enabled and self.__luiConfig.hasRules() and not self.__bootcampController.isInBootcamp()
+        isEnableState = self.__luiConfig.enabled and self.__luiConfig.hasRules() and not self.__bootcampController.isInBootcamp() and self.__isEnabledByAbTest()
         changeState = self.__isEnabled != isEnableState
         if changeState:
             self.__isEnabled = isEnableState
@@ -268,6 +349,7 @@ class LimitedUIController(ILimitedUIController):
     def __updateConfig(self):
         self.__luiConfig = self.__serverSettings.limitedUIConfig
         self.__buildRules()
+        self.__updateConditionsRepresentations()
         if not self.__updateStatus():
             self.__notifyObservers(CallHandlerReason.SETTINGS_CHANGED)
         self.__tryNotifyStateChanged()
@@ -277,6 +359,9 @@ class LimitedUIController(ILimitedUIController):
         if self.__rules:
             self.__rules.clear()
         self.__rules = RulesStorageMaker.makeStorage(self.__luiConfig.rules)
+
+    def __updateConditionsRepresentations(self):
+        self.__luiRepresentationService.updateConditionRepresentations(self.__rules)
 
     def __updateObservers(self):
         if self.isEnabled:
@@ -292,9 +377,15 @@ class LimitedUIController(ILimitedUIController):
     def __onConditionUpdated(self, tokenID):
         notifyRules = [ ruleID for ruleID in self.__observers if tokenID in self.__rules.getTokens(ruleID) ]
         for ruleID in notifyRules:
-            if not self.__isRuleCompleted(ruleID) and self.__checkRule(ruleID):
+            if self.__isRuleFirstlyCompleted(ruleID):
                 for handler in self.__observers[ruleID]:
                     handler(ruleID, CallHandlerReason.COMPLETE_CONDITION)
+
+    def __onConditionRepresentationUpdated(self, ruleID):
+        if ruleID not in self.__observers:
+            return
+        for handler in self.__observers[ruleID]:
+            handler(ruleID, CallHandlerReason.CONDITION_REPRESENTATION_CHANGED)
 
     def __storeSkippedObservers(self):
         for ruleID, handlers in self.__observers.items():
@@ -345,6 +436,9 @@ class LimitedUIController(ILimitedUIController):
     def __isRuleCompleted(self, ruleID):
         return self.__readSettings(ruleID)
 
+    def __isRuleFirstlyCompleted(self, ruleID):
+        return not self.__isRuleCompleted(ruleID) and self.__checkRule(ruleID)
+
     def __completeRule(self, ruleID):
         if not self.__storeSettings(ruleID):
             self.__postponedCompleteRules.add(ruleID)
@@ -392,6 +486,10 @@ class LimitedUIController(ILimitedUIController):
              None,
              None]
             self.__systemMessages.proto.serviceChannel.pushClientMessage('', SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE, auxData=auxData)
+        if self.__needToSendContentUnlockedMessage(ruleID):
+            self.__postponedContentUnlockedMessageRules.add(ruleID)
+            if not self.__sendContentUnlockedMessageDelayer.hasDelayedCallback(self.__sendContentUnlockedMessage):
+                self.__sendContentUnlockedMessageDelayer.delayCallback(self._SEND_CONTENT_UNLOCKED_MESSAGE_TIMEOUT, self.__sendContentUnlockedMessage)
         return
 
     def __tryNotifyStateChanged(self):
@@ -417,3 +515,18 @@ class LimitedUIController(ILimitedUIController):
             textID = R.strings.system_messages.limitedUI.switchOff()
             msgType = _SM_TYPE.ErrorSimple
         self.__systemMessages.pushMessage(backport.text(textID), msgType)
+
+    def __sendContentUnlockedMessage(self):
+        if not self.__postponedContentUnlockedMessageRules:
+            return
+        self.__systemMessages.proto.serviceChannel.pushClientMessage({'rules': self.__postponedContentUnlockedMessageRules}, SCH_CLIENT_MSG_TYPE.LIMITED_UI_CONTENT_UNLOCKED)
+        self.__postponedContentUnlockedMessageRules.clear()
+
+    def __needToSendContentUnlockedMessage(self, ruleID):
+        if ruleID == LuiRules.PERSONAL_MISSIONS_CONTENT:
+            return self.__lobbyContext.getServerSettings().isPersonalMissionsEnabled()
+        if ruleID == LuiRules.TOURNAMENTS_CONTENT:
+            return isTournamentEnabled()
+        if ruleID == LuiRules.VERSUS_AI_CONTENT:
+            return self.__versusAIController and self.__versusAIController.isEnabled()
+        return isStrongholdsEnabled() if ruleID == LuiRules.STRONGHOLD_CONTENT else False

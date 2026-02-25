@@ -9,6 +9,7 @@ from PlayerEvents import g_playerEvents
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS, UI_STORAGE_KEYS
 from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL, BATTLE_MODE_VEHICLE_TAGS
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.clans.clan_cache import g_clanCache
 from gui.impl.lobby.loot_box.loot_box_helper import hasInfiniteLootBoxes
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
@@ -17,8 +18,9 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from items import getTypeOfCompactDescr
 from personal_missions import PM_BRANCH
+from shared_utils import CONST_CONTAINER
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IBattlePassController
+from skeletons.gui.game_control import IBattlePassController, IParagonsController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -292,18 +294,59 @@ class _LootboxesAvailability(LimitedUICondition):
             self._update()
 
 
-_VEHICLE_LEVEL_TOKENS = tuple((tokenInfo for tokenInfo in chain.from_iterable(((LimitedUITokenInfo('minVehicleLevel_{}'.format(vehLevel), _MinVehicleLevel, (vehLevel,)), LimitedUITokenInfo('minNonPremiumVehicleLevel_{}'.format(vehLevel), _MinNonPremiumVehicleLevel, (vehLevel,)), LimitedUITokenInfo('minUnlockedVehicleLevel_{}'.format(vehLevel), _MinUnlockedVehicleLevel, (vehLevel,))) for vehLevel in range(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL + 1)))))
-_REGISTER_TOKENS = (LimitedUITokenInfo('permanentTrue', _PermanentTrue, None),
- LimitedUITokenInfo('permanentFalse', _PermanentFalse, None),
- LimitedUITokenInfo('battlesCount', _BattleCountCondition, None),
- LimitedUITokenInfo('bmCompletedQuests', _BattleMattersCompletedQuests, None),
- LimitedUITokenInfo('dailyMissionsCompleted', _DailyMissionsCompletedCount, None),
- LimitedUITokenInfo('battlePassPoints', _BattlePassPoints, None),
- LimitedUITokenInfo('pmHasActiveMission', _PersonalMissionsActive, None),
- LimitedUITokenInfo('hasBlueprint', _BluePrintsAvailability, None),
- LimitedUITokenInfo('hasPersonalReserve', _PersonalReservesAvailability, None),
- LimitedUITokenInfo('wereRealMoneyExpenses', _WereRealMoneyExpenses, None),
- LimitedUITokenInfo('hadLootboxes', _LootboxesAvailability, None)) + _VEHICLE_LEVEL_TOKENS
+class _IsInClan(LimitedUICondition):
+    __slots__ = ()
+
+    def _getValue(self):
+        return g_clanCache.isInClan
+
+    def _getCallbacks(self):
+        return (('stats.clanInfo', self._update),)
+
+
+class LimitedUITokenID(CONST_CONTAINER):
+    MIN_VEHICLE_LEVEL = 'minVehicleLevel_{}'
+    MIN_NON_PREMIUM_VEHICLE_LEVEL = 'minNonPremiumVehicleLevel_{}'
+    MIN_UNLOCKED_VEHICLE_LEVEL = 'minUnlockedVehicleLevel_{}'
+    PERMANENT_TRUE = 'permanentTrue'
+    PERMANENT_FALSE = 'permanentFalse'
+    BATTLES_COUNT = 'battlesCount'
+    BATTLE_MATTER_COMPLETED_QUESTS = 'bmCompletedQuests'
+    DAILY_MISSIONS_COMPLETED = 'dailyMissionsCompleted'
+    BATTLE_PASS_POINTS = 'battlePassPoints'
+    PERSONAL_MISSIONS_HAS_ACTIVE_MISSIONS = 'pmHasActiveMission'
+    HAS_BLUEPRINT = 'hasBlueprint'
+    HAS_PERSONAL_RESERVE = 'hasPersonalReserve'
+    WERE_REAL_MONEY_EXPENSES = 'wereRealMoneyExpenses'
+    HAD_LOOTBOXES = 'hadLootboxes'
+    IS_IN_CLAN = 'isInClan'
+
+
+class _BranchResetAvailable(LimitedUICondition):
+    __slots__ = ()
+    __paragonsController = dependency.descriptor(IParagonsController)
+
+    def _getValue(self):
+        return self.__paragonsController.isBranchResetAvailable
+
+    def _getEvents(self):
+        return ((self.__paragonsController.onAvailabilityChanged, self._update),)
+
+
+_VEHICLE_LEVEL_TOKENS = tuple((tokenInfo for tokenInfo in chain.from_iterable(((LimitedUITokenInfo(LimitedUITokenID.MIN_VEHICLE_LEVEL.format(vehLevel), _MinVehicleLevel, (vehLevel,)), LimitedUITokenInfo(LimitedUITokenID.MIN_NON_PREMIUM_VEHICLE_LEVEL.format(vehLevel), _MinNonPremiumVehicleLevel, (vehLevel,)), LimitedUITokenInfo(LimitedUITokenID.MIN_UNLOCKED_VEHICLE_LEVEL.format(vehLevel), _MinUnlockedVehicleLevel, (vehLevel,))) for vehLevel in range(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL + 1)))))
+_REGISTER_TOKENS = (LimitedUITokenInfo(LimitedUITokenID.PERMANENT_TRUE, _PermanentTrue, None),
+ LimitedUITokenInfo(LimitedUITokenID.PERMANENT_FALSE, _PermanentFalse, None),
+ LimitedUITokenInfo(LimitedUITokenID.BATTLES_COUNT, _BattleCountCondition, None),
+ LimitedUITokenInfo(LimitedUITokenID.BATTLE_MATTER_COMPLETED_QUESTS, _BattleMattersCompletedQuests, None),
+ LimitedUITokenInfo(LimitedUITokenID.DAILY_MISSIONS_COMPLETED, _DailyMissionsCompletedCount, None),
+ LimitedUITokenInfo(LimitedUITokenID.BATTLE_PASS_POINTS, _BattlePassPoints, None),
+ LimitedUITokenInfo(LimitedUITokenID.PERSONAL_MISSIONS_HAS_ACTIVE_MISSIONS, _PersonalMissionsActive, None),
+ LimitedUITokenInfo(LimitedUITokenID.HAS_BLUEPRINT, _BluePrintsAvailability, None),
+ LimitedUITokenInfo(LimitedUITokenID.HAS_PERSONAL_RESERVE, _PersonalReservesAvailability, None),
+ LimitedUITokenInfo(LimitedUITokenID.WERE_REAL_MONEY_EXPENSES, _WereRealMoneyExpenses, None),
+ LimitedUITokenInfo(LimitedUITokenID.HAD_LOOTBOXES, _LootboxesAvailability, None),
+ LimitedUITokenInfo(LimitedUITokenID.IS_IN_CLAN, _IsInClan, None),
+ LimitedUITokenInfo('branchResetAvailable', _BranchResetAvailable, None)) + _VEHICLE_LEVEL_TOKENS
 registerLimitedUITokens(_REGISTER_TOKENS)
 
 def getTokensInfo():

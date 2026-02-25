@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from gui.shared.formatters import text_styles
 from cosmic_constants import EVENT_STATES
 from cosmic_event.cosmic_constants import PROGRESSION_TOKEN
-from cosmic_event.skeletons.battle_controller import ICosmicEventBattleController
+from skeletons.gui.game_control import ICosmicEventBattleController
 from cosmic_event.skeletons.progression_controller import ICosmicEventProgressionController
 from cosmic_event_common.cosmic_event_common import checkIfViolator
 from gui.impl import backport
@@ -117,7 +117,7 @@ class CosmicAchievementsMessageFormatter(SyncTokenQuestsSubFormatter):
             for bonus in quest.getBonuses():
                 for achievement in bonus.getAchievements():
                     text = backport.text(R.strings.cosmic_messenger.serviceChannelMessages.cosmicAchievement(), achievement=achievement.getUserName())
-                    achievementStrList.append('{0}\n'.format(text_styles.titleFont(text)))
+                    achievementStrList.append('{0}\n'.format(text_styles.expTitle(text)))
 
         if not achievementStrList:
             return []

@@ -130,7 +130,7 @@
     <price>	17500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals secret testTank lockOutfit	</tags>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals secret lockOutfit	</tags>
     <level>	9	</level>
   </Un12_Merkava_M48>
   <Un24_Vz_68_2_Britva>
@@ -169,6 +169,19 @@
     <tags>	mediumTank role_MT_support HD improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals secret testTank lockOutfit	</tags>
     <level>	10	</level>
   </Un1017_RDT_62_T>
+  <Un1015_SBM_44_T>
+    <id>	35002	</id>
+    <userString>	#intunion_vehicles:Un1015_SBM_44_T	</userString>
+    <description>	#intunion_vehicles:Un1015_SBM_44_T_descr	</description>
+    <shortUserString>	#intunion_vehicles:Un1015_SBM_44_T_short	</shortUserString>
+    <shortDescriptionSpecial>	#intunion_vehicles:Un1015_SBM_44_T_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#intunion_vehicles:Un1015_SBM_44_T_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_support HD improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user special secret testTank lockOutfit	</tags>
+    <level>	8	</level>
+  </Un1015_SBM_44_T>
   <Un04_Vickers_MBT_EXP_FL>
     <id>	31019	</id>
     <userString>	#intunion_vehicles:Un04_Vickers_MBT_EXP_FL	</userString>
@@ -183,4 +196,14 @@
     <tags>	mediumTank role_MT_universal private epic_battles HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </Un04_Vickers_MBT_EXP_FL>
+  <Un15_SBM_44>
+    <id>	31016	</id>
+    <userString>	#intunion_vehicles:Un15_SBM_44	</userString>
+    <description>	#intunion_vehicles:Un15_SBM_44_descr	</description>
+    <shortUserString>	#intunion_vehicles:Un15_SBM_44_short	</shortUserString>
+    <price>	2500000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_support HD improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user private secret	</tags>
+    <level>	8	</level>
+  </Un15_SBM_44>
 </list.xml>

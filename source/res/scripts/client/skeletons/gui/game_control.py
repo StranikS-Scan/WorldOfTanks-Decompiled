@@ -28,6 +28,7 @@ if typing.TYPE_CHECKING:
     from gui.gift_system.hubs.base.hub_core import IGiftEventHub
     from gui.hangar_presets.hangar_gui_config import HangarGuiPreset
     from gui.limited_ui.lui_rules_storage import LuiRules
+    from gui.limited_ui.lui_representations_storage import LimitedUIConditionRepresentation
     from gui.mapbox.mapbox_survey_manager import MapboxSurveyManager
     from gui.periodic_battles.models import AlertData, PeriodInfo, PrimeTime
     from gui.prb_control.items import ValidationResult
@@ -3126,6 +3127,9 @@ class IFunRandomController(IGameController):
     def setDesiredSubModeID(self, subModeID, trustedSource=False):
         raise NotImplementedError
 
+    def getCurrentFunType(self, eventID=None):
+        raise NotImplementedError
+
     def selectFunRandomBattle(self, desiredSubModeID, callback=None):
         raise NotImplementedError
 
@@ -3809,6 +3813,9 @@ class ILimitedUIController(IGameController):
     def isFullCompleted(self):
         raise NotImplementedError
 
+    def getRuleConditionRepresentation(self, ruleID):
+        raise NotImplementedError
+
     def isRuleCompleted(self, ruleID):
         raise NotImplementedError
 
@@ -4051,6 +4058,9 @@ class IVersusAIController(IGameController):
     def shouldBeDefaultMode(self):
         raise NotImplementedError
 
+    def isLocked(self):
+        raise NotImplementedError
+
 
 class ILobbyCdnController(IGameController):
     onSynced = None
@@ -4196,19 +4206,19 @@ class IParagonsController(IGameController, IEntitlementsConsumer):
         raise NotImplementedError
 
     @property
-    def isAvailable(self):
+    def isInactive(self):
         raise NotImplementedError
 
     @property
-    def wasEverAvailable(self):
+    def isBranchResetAvailable(self):
+        raise NotImplementedError
+
+    @property
+    def wasBranchResetEverAvailable(self):
         raise NotImplementedError
 
     @property
     def isLimitedUiRuleCompleted(self):
-        raise NotImplementedError
-
-    @property
-    def isEnabledAndAvailable(self):
         raise NotImplementedError
 
     @property
@@ -4221,6 +4231,9 @@ class IParagonsController(IGameController, IEntitlementsConsumer):
 
     @property
     def isAnyChapterAvailable(self):
+        raise NotImplementedError
+
+    def isPreviewChapter(self, chapterID):
         raise NotImplementedError
 
     @property
@@ -4267,29 +4280,32 @@ class IParagonsController(IGameController, IEntitlementsConsumer):
     def completedChapterIDs(self):
         return NotImplementedError
 
+    def clearCache(self):
+        raise NotImplementedError
+
     def getFirstChapterWithAvailableRewards(self):
         return NotImplementedError
 
-    def isAllSelectablesClaimed(self):
+    def isAllSelectablesClaimed(self, chapterID):
         return NotImplementedError
 
-    def getSelectedRewardCountInChapter(self, chapterID, entCode):
+    def getProgressPoints(self, chapterID):
         return NotImplementedError
 
-    def getSelectedRewardPositionInOrder(self, chapterID, levelID, entCode):
-        return NotImplementedError
-
-    def getSelectedRewardTokenID(self, chapterID, levelID, entCode):
-        return NotImplementedError
-
-    def getSelectedRewardsReceivedTokens(self, entCode):
+    def getSelectedRewardBonusCD(self, chapterID, levelID, entCode):
         return NotImplementedError
 
     def isVehicleReset(self, compDescr):
         raise NotImplementedError
 
+    def isNextResetVehUnlocked(self, compDescr):
+        raise NotImplementedError
+
     def isChapterComplete(self, chapterID=None):
         return NotImplementedError
+
+    def isChapterPaused(self, chapterID=None):
+        raise NotImplementedError
 
     def isItemLocked(self, compDescr):
         raise NotImplementedError
@@ -4301,6 +4317,18 @@ class IParagonsController(IGameController, IEntitlementsConsumer):
         raise NotImplementedError
 
     def getVehicleProgressPoints(self, compDescr):
+        raise NotImplementedError
+
+    def isVehicleFirstUnlockPointsAvailable(self, vehicle, includeParagonsAvailable=True):
+        raise NotImplementedError
+
+    def getVehicleFirstUnlockPoints(self, vehicle, includeParagonsAvailable=True):
+        raise NotImplementedError
+
+    def getLockedResetVehicles(self, branchID):
+        raise NotImplementedError
+
+    def isFirstUnlockBranchAvailable(self, branchID, includeParagonsAvailable=True):
         raise NotImplementedError
 
     def getVehicleProgressPointsMultiplier(self, compDescr):
@@ -4316,6 +4344,12 @@ class IParagonsController(IGameController, IEntitlementsConsumer):
         raise NotImplementedError
 
     def getHiddenUIItems(self):
+        raise NotImplementedError
+
+    def getCompleteBonusCoinsForBranch(self, branchID):
+        raise NotImplementedError
+
+    def getCoinsForBranchReset(self):
         raise NotImplementedError
 
 
@@ -4336,6 +4370,93 @@ class IParagonsRewardsShopController(IGameController):
         raise NotImplementedError
 
     def selectableRewardReceived(self, data):
+        raise NotImplementedError
+
+    def isValidProduct(self, product, entitlementID):
+        raise NotImplementedError
+
+
+class ICosmicEventBattleController(IGameController, ISeasonProvider):
+    onPrimeTimeStatusUpdated = None
+    onCosmicConfigChanged = None
+    onStatusTick = None
+    onLobbyRouteChange = None
+    onVehicleSelected = None
+
+    @property
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def getEventVehicle(self):
+        raise NotImplementedError
+
+    def getEventVehiclesIntCD(self):
+        raise NotImplementedError
+
+    def isAvailable(self):
+        raise NotImplementedError
+
+    def isBattleAvailable(self):
+        raise NotImplementedError
+
+    def isFrozen(self):
+        raise NotImplementedError
+
+    def switchPrb(self):
+        raise NotImplementedError
+
+    def onPrbEnter(self):
+        raise NotImplementedError
+
+    def onPrbLeave(self):
+        raise NotImplementedError
+
+    def getModeSettings(self):
+        raise NotImplementedError
+
+    def openQueueView(self):
+        raise NotImplementedError
+
+    def openEventLobby(self):
+        raise NotImplementedError
+
+    def getTokenProgressionID(self):
+        raise NotImplementedError
+
+    def getProgressionQuestPrefix(self):
+        raise NotImplementedError
+
+    def getVehicleRentQuestID(self):
+        raise NotImplementedError
+
+    def getProgressionFinishedToken(self):
+        raise NotImplementedError
+
+    def setClosingState(self):
+        raise NotImplementedError
+
+    def isClosing(self):
+        raise NotImplementedError
+
+    def isCosmicMode(self):
+        raise NotImplementedError
+
+    def getLobbyRoute(self):
+        raise NotImplementedError
+
+    def setLobbyRoute(self, route, notify=False):
+        raise NotImplementedError
+
+    def isVehicleRentQuest(self, questID):
+        raise NotImplementedError
+
+    def closeRewardScreen(self):
+        raise NotImplementedError
+
+    def closePostBattleScreen(self):
+        raise NotImplementedError
+
+    def getResourceIconForSelectedVehicle(self):
         raise NotImplementedError
 
 
@@ -4466,4 +4587,22 @@ class IEpicBattleController(IGameController):
         raise NotImplementedError
 
     def getSectorName(self, sectorID):
+        raise NotImplementedError
+
+
+class INewbieEntryPointController(IGameController):
+
+    def setExperienceLevel(self, expLevel):
+        raise NotImplementedError
+
+    def isStoryModeEnabled(self):
+        raise NotImplementedError
+
+    def isNewbieStartPageEnabled(self):
+        raise NotImplementedError
+
+    def goToStoryModeQueue(self, guiCtx):
+        raise NotImplementedError
+
+    def goToHangar(self, guiCtx):
         raise NotImplementedError

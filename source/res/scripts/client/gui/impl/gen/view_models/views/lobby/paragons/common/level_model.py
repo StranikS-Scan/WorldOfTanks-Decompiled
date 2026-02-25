@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.common.missions.bonuses.icon_bonus_model import Ic
 class LevelModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=5, commands=0):
+    def __init__(self, properties=4, commands=0):
         super(LevelModel, self).__init__(properties=properties, commands=commands)
 
     def getNumber(self):
@@ -28,24 +28,14 @@ class LevelModel(ViewModel):
     def setIsCompleted(self, value):
         self._setBool(2, value)
 
-    def getMainRewards(self):
+    def getRewards(self):
         return self._getArray(3)
 
-    def setMainRewards(self, value):
+    def setRewards(self, value):
         self._setArray(3, value)
 
     @staticmethod
-    def getMainRewardsType():
-        return IconBonusModel
-
-    def getEqualRewards(self):
-        return self._getArray(4)
-
-    def setEqualRewards(self, value):
-        self._setArray(4, value)
-
-    @staticmethod
-    def getEqualRewardsType():
+    def getRewardsType():
         return IconBonusModel
 
     def _initialize(self):
@@ -53,5 +43,4 @@ class LevelModel(ViewModel):
         self._addNumberProperty('number', 1)
         self._addNumberProperty('maxPoints', 0)
         self._addBoolProperty('isCompleted', False)
-        self._addArrayProperty('mainRewards', Array())
-        self._addArrayProperty('equalRewards', Array())
+        self._addArrayProperty('rewards', Array())

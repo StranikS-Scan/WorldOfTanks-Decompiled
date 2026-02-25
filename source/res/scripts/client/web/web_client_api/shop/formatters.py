@@ -482,6 +482,7 @@ def makeCustomizationFormatter():
      Field('type', lambda i: i.itemTypeName),
      Field('priceGroup', lambda i: i.priceGroup),
      Field('installedCount', lambda i: i.installedCount()),
+     Field('inventoryCount', lambda i: i.inventoryCount),
      buyPriceField,
      sellPriceField]
     return Formatter(fields)

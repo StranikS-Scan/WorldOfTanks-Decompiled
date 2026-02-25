@@ -1,0 +1,28 @@
+<CosmicVehicleResearchableLootComponent.def>
+  <Properties>
+    <isActive>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isActive>
+    <lifeTimeRemained>
+      <Type>	INT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </lifeTimeRemained>
+    <lootObtainedFromID>
+      <Type>	OBJECT_ID	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </lootObtainedFromID>
+    <lootTransferTime>
+      <Type>	INT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </lootTransferTime>
+    <researchDoneTime>
+      <Type>	INT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </researchDoneTime>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	researchableLootComponent	</DefaultKeyName>
+</CosmicVehicleResearchableLootComponent.def>

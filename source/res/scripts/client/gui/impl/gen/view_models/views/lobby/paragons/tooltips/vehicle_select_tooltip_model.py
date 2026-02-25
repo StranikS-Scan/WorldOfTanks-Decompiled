@@ -19,10 +19,10 @@ class VehicleSelectTooltipModel(ViewModel):
     def getRewardType():
         return IconBonusModel
 
-    def getIsReceived(self):
+    def getIsAchieved(self):
         return self._getBool(1)
 
-    def setIsReceived(self, value):
+    def setIsAchieved(self, value):
         self._setBool(1, value)
 
     def getVehicles(self):
@@ -38,5 +38,5 @@ class VehicleSelectTooltipModel(ViewModel):
     def _initialize(self):
         super(VehicleSelectTooltipModel, self)._initialize()
         self._addViewModelProperty('reward', IconBonusModel())
-        self._addBoolProperty('isReceived', False)
+        self._addBoolProperty('isAchieved', False)
         self._addArrayProperty('vehicles', Array())

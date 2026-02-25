@@ -2,7 +2,7 @@
 # Embedded file name: cosmic_event/scripts/client/cosmic_event/gui/impl/lobby/rewards_view/rewards_view.py
 import typing
 import logging
-from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import LootboxTooltip
+from cosmic_event.gui.impl.lobby.tooltips.cosmic_lootbox_tooltip_extended import CosmicExtendedLootboxTooltip
 from cosmic_event.gui.game_control.progression_controller import CosmicProgressionController
 from cosmic_event.gui.impl.gen.view_models.views.lobby.rewards_view.rewards_view_model import RewardsViewModel
 from cosmic_event.gui.impl.lobby.quest_packer import getCosmicBonusPacker
@@ -72,8 +72,9 @@ class BonusesView(ViewImpl):
             tooltipId = event.getArgument('tooltipId')
             lootBoxIdStr = self._tooltips.get(tooltipId)
             if lootBoxIdStr:
-                lootBox = self.__itemsCache.items.tokens.getLootBoxByID(int(lootBoxIdStr))
-                return LootboxTooltip(lootBox)
+                lootBox = self.__itemsCache.items.tokens.getLootBoxByID(lootBoxIdStr.get('lootBoxID'))
+                if lootBox and lootBox.isExtendedTooltip():
+                    return CosmicExtendedLootboxTooltip(lootBox)
         return super(BonusesView, self).createToolTipContent(event=event, contentID=contentID)
 
 
@@ -116,7 +117,7 @@ class RewardsView(BonusesView):
             model.setProgressionStage(progressionStage)
         else:
             model.setDisplayRewardsCount(False)
-            subTitle = R.strings.cosmicEvent.rewardsView.conditionsFulfilledTitle()
+            subTitle = R.strings.cosmicEvent.rewardsView.rewardsReceived.title() if len(model.getRewards()) > 1 else R.strings.cosmicEvent.rewardsView.conditionsFulfilledTitle()
             title = R.strings.cosmicEvent.rewardsView.rewardsReceived.title()
             infoText = R.strings.cosmicEvent.rewardsView.rewardsReceived.text()
             if len(quests) == 1:

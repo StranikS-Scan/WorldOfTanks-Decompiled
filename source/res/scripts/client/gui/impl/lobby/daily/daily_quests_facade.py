@@ -1,22 +1,27 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/daily/daily_quests_facade.py
 from frameworks.wulf import Array
+from constants import ARENA_BONUS_TYPE
 from gui.impl.gen import R
 from gui.impl.lobby.daily import DailyTabs
 from gui.impl.lobby.daily.daily_quests_subview import DailyQuestsSubview
 from gui.impl.lobby.daily.daily_quests_tab_view import DailyQuestTabView, DailyQuestPremTabView
 from gui.impl.lobby.daily.tooltips.mode_selector_tooltip import ModeSelectorTooltip
 from gui.server_events.events_helpers import isDailyRegularQuestsEnabled
+from skeletons.gui.game_control import IFunRandomController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from helpers import dependency
 DAILY_LAYOUT_ID = R.views.lobby.daily.DailyQuestsRegularView()
 DAILY_TAB_REGULAR_LAYOUT_ID = R.views.lobby.daily.DailyQuestRegularTabView()
 DAILY_TAB_PREMIUM_LAYOUT_ID = R.views.lobby.daily.DailyQuestPremiumTabView()
+FEP_MAPPER = {0: 420,
+ 1: 421}
 
 class DailyQuestsFacade(object):
     eventsCache = dependency.descriptor(IEventsCache)
     itemsCache = dependency.descriptor(IItemsCache)
+    __funRandomController = dependency.descriptor(IFunRandomController)
     __slots__ = ('__dailySubView', '__tabs', '__tabsToSubview', '__battleTypes')
 
     def __init__(self, parentView, *args, **kwargs):
@@ -51,6 +56,10 @@ class DailyQuestsFacade(object):
         else:
             quests = self.eventsCache.getDailyPremiumQuests().values()
         bonusTypes = quests[0].preBattleCond.getConditions().find('bonusTypes').getValue() if quests else []
+        if ARENA_BONUS_TYPE.FUN_RANDOM in bonusTypes:
+            oldIDx = bonusTypes.index(ARENA_BONUS_TYPE.FUN_RANDOM)
+            bonusTypes.pop(oldIDx)
+            bonusTypes.insert(oldIDx, FEP_MAPPER.get(self.__funRandomController.getCurrentFunType()))
         for bonusType in bonusTypes:
             battleModes.addString(str(bonusType))
 

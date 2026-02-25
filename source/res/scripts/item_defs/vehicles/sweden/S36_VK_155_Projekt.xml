@@ -41,6 +41,10 @@
     <density>	1.003252 1.003252	</density>
   </camouflage>
   <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle></battle>
+    </fakeTurrets>
     <armor>
       <armor_1>	15	</armor_1>
       <armor_2>	15	</armor_2>
@@ -1583,24 +1587,25 @@
             </armor_19>
             <gun>	25	</gun>
           </armor>
-          <shotDispersionRadius>	0.70	</shotDispersionRadius>
-          <reloadTime>	35	</reloadTime>
+          <shotDispersionRadius>	0.65	</shotDispersionRadius>
+          <reloadTime>	30	</reloadTime>
           <aimingTime>	5.0	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.30	</turretRotation>
-            <afterShot>	1.0	</afterShot>
+            <afterShot>	2.75	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <clip>
-            <count>	2	</count>
-            <rate>	12	</rate>
+            <count>	3	</count>
+            <rate>	60	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	35 45	</reloadTime>
-            <boostFraction>	0.5	</boostFraction>
-            <boostStartTime>	0	</boostStartTime>
-            <boostResidueTime>	2	</boostResidueTime>
+            <reloadTime>	20 25 30	</reloadTime>
           </autoreload>
+          <burst>
+            <count>	3	</count>
+            <rate>	60	</rate>
+          </burst>
           <turretYawLimits>	-12 12	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -35 1 -35	</minPitch>
@@ -2282,9 +2287,4 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	1.0	</alpha>
   </emblems>
-  <prefabAttachments>
-    <newAttachment0>
-      <attachmentId>	31080	</attachmentId>
-    </newAttachment0>
-  </prefabAttachments>
 </S36_VK_155_Projekt.xml>

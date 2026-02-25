@@ -7,6 +7,7 @@ class Ability(Enum):
     NONE = 'none'
     SHELL = 'shell'
     ACCELERATION = 'acceleration'
+    TELEPORT = 'teleport'
     SHIELD = 'shield'
     BLACK_HOLE = 'black_hole'
     OVERCHARGE = 'overcharge'
@@ -14,12 +15,13 @@ class Ability(Enum):
     POWER_SHOT = 'power_shot'
     WAVE = 'wave'
     STUN_SHOT = 'stun_shot'
+    REPULSION_MINE = 'repulsion_mine'
 
 
 class AbilityModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=0):
+    def __init__(self, properties=7, commands=0):
         super(AbilityModel, self).__init__(properties=properties, commands=commands)
 
     def getAbility(self):
@@ -46,17 +48,23 @@ class AbilityModel(ViewModel):
     def setIsActive(self, value):
         self._setBool(3, value)
 
-    def getIsEnabled(self):
+    def getIsTargeting(self):
         return self._getBool(4)
 
-    def setIsEnabled(self, value):
+    def setIsTargeting(self, value):
         self._setBool(4, value)
 
+    def getIsEnabled(self):
+        return self._getBool(5)
+
+    def setIsEnabled(self, value):
+        self._setBool(5, value)
+
     def getKeyBind(self):
-        return self._getString(5)
+        return self._getString(6)
 
     def setKeyBind(self, value):
-        self._setString(5, value)
+        self._setString(6, value)
 
     def _initialize(self):
         super(AbilityModel, self)._initialize()
@@ -64,5 +72,6 @@ class AbilityModel(ViewModel):
         self._addRealProperty('reloadTimeLeft', 0.0)
         self._addRealProperty('reloadTime', 0.0)
         self._addBoolProperty('isActive', False)
+        self._addBoolProperty('isTargeting', False)
         self._addBoolProperty('isEnabled', True)
         self._addStringProperty('keyBind', '')

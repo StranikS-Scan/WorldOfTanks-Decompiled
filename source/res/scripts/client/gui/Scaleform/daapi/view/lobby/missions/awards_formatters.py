@@ -35,14 +35,7 @@ class CurtailingAwardsComposer(QuestsBonusComposer):
         return self._displayedRewardsCount != DISPLAY_ALL_AWARDS
 
     def _packBonuses(self, preformattedBonuses, size):
-        bonusCount = len(preformattedBonuses)
-        mergedBonuses = []
-        if self._isMergeAllow() and bonusCount > self._displayedRewardsCount:
-            sliceIdx = self._displayedRewardsCount - 1
-            displayBonuses = preformattedBonuses[:sliceIdx]
-            mergedBonuses = preformattedBonuses[sliceIdx:]
-        else:
-            displayBonuses = preformattedBonuses
+        displayBonuses, mergedBonuses = self._getDisplayAndMergedBonuses(preformattedBonuses)
         result = []
         for b in displayBonuses:
             result.append(self._packBonus(b, size))
@@ -50,6 +43,12 @@ class CurtailingAwardsComposer(QuestsBonusComposer):
         if mergedBonuses:
             result.append(self._packMergedBonuses(mergedBonuses, size))
         return result
+
+    def _getDisplayAndMergedBonuses(self, preformattedBonuses):
+        if self._isMergeAllow() and len(preformattedBonuses) > self._displayedRewardsCount:
+            sliceIdx = self._displayedRewardsCount - 1
+            return (preformattedBonuses[:sliceIdx], preformattedBonuses[sliceIdx:])
+        return (preformattedBonuses, [])
 
     def _packBonus(self, bonus, size=AWARDS_SIZES.SMALL):
         compensationReason = None
@@ -489,6 +488,16 @@ class EpicCurtailingAwardsComposer(CurtailingAwardsComposer):
     @classmethod
     def _getShortBonusesData(cls, preformattedBonuses, size=AWARDS_SIZES.SMALL):
         return [ formatShortData(bonus, size) for bonus in preformattedBonuses ]
+
+
+class EpicAfterBattleAwardsComposer(EpicCurtailingAwardsComposer):
+
+    def _packBonuses(self, preformattedBonuses, size):
+        displayBonuses, mergedBonuses = self._getDisplayAndMergedBonuses(preformattedBonuses)
+        result = [ (self._packBonus(b, size), b.bonusName) for b in displayBonuses ]
+        if mergedBonuses:
+            result.append((self._packMergedBonuses(mergedBonuses, size), None))
+        return result
 
 
 class RoyaleCurtailingAwardsComposer(CurtailingAwardsComposer):

@@ -2,9 +2,9 @@
 # Embedded file name: scripts/client/gui/veh_post_progression/models/purchase.py
 from collections import namedtuple
 from account_helpers import isLongDisconnectedFromCenter
-from gui.veh_post_progression.models.ext_money import ExtendedMoney
-from gui.veh_post_progression.models.ext_money import ExtendedCurrency as _ExtCurrency
-from gui.veh_post_progression.models.ext_money import ExtendedGuiItemEconomyCode as _ExtEconomyCode
+from gui.shared.ext_money import ExtendedMoney
+from gui.shared.ext_money import ExtendedCurrency as _ExtCurrency
+from gui.shared.ext_money import ExtendedGuiItemEconomyCode as _ExtEconomyCode
 from helpers import dependency
 from skeletons.gui.game_control import IWalletController
 

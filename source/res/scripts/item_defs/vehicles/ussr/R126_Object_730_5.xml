@@ -1708,7 +1708,7 @@
         <maxRegenHealth>	85	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	360	</circularVisionRadius>
+      <circularVisionRadius>	380	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
@@ -1736,14 +1736,14 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 5 0.383333 5 0.402778 3.5 0.533333 3.5 0.538889 5 1 5	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <shotDispersionRadius>	0.32	</shotDispersionRadius>
           <reloadTime>	16.2	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
+            <turretRotation>	0.10	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.6	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <models>
             <undamaged>	vehicles/russian/R126_Object_730_5/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R126_Object_730_5/crash/lod0/Gun_01.model	</destroyed>

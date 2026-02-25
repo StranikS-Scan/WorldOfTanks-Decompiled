@@ -2518,6 +2518,7 @@ class PersonalMissionsListener(_NotificationListener):
     __SWITCH_KEY_PM3 = 'isPM3QuestEnabled'
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __eventsCache = dependency.descriptor(IEventsCache)
+    __limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def __init__(self):
         super(PersonalMissionsListener, self).__init__()
@@ -2545,12 +2546,14 @@ class PersonalMissionsListener(_NotificationListener):
         self.__hintsStorage.setValue(GLOBAL_FLAG.IS_PM3_ENABLED, isPM3Enabled, showImmediately=True)
 
     def __onSettingsChanged(self, diff):
+        isPMContentAvailable = self.__limitedUIController.isRuleCompleted(LuiRules.PERSONAL_MISSIONS_CONTENT)
         for switchKey in (self.__SWITCH_KEY_PM1, self.__SWITCH_KEY_PM2, self.__SWITCH_KEY_PM3):
             if switchKey in diff:
-                self.__pushCampaignMessage(switchKey, diff[switchKey])
+                if isPMContentAvailable:
+                    self.__pushCampaignMessage(switchKey, diff[switchKey])
                 self.__hintsStorage.setValue(GLOBAL_FLAG.IS_PM3_ENABLED, diff[switchKey], showImmediately=True)
 
-        if 'disabledPMOperations' in diff:
+        if 'disabledPMOperations' in diff and isPMContentAvailable:
             disabledOPs = set(diff['disabledPMOperations'].keys())
             oldDisabledOPs = set(self.__disabledPMOperations.keys())
             newDisabledOPs = disabledOPs - oldDisabledOPs
@@ -2679,10 +2682,14 @@ class ParagonsListener(_NotificationListener):
         self.__onNewStageAvailable(diff)
 
     def __onProjectDisabledOrPaused(self, _):
-        if not self.__isParagonsInvisible and AccountSettings.getParagons(Paragons.PROJECT_IS_DISABLED_NOTIFICATION_WAS_SHOWN):
+        if not self.__paragonsController.isLimitedUiParagonsNotificationRuleCompleted:
+            return
+        projectIsDisabledWasShown = AccountSettings.getParagons(Paragons.PROJECT_IS_DISABLED_NOTIFICATION_WAS_SHOWN)
+        paragonsAreAvailable = self.__isEnabled and not self.__isPaused
+        if paragonsAreAvailable and projectIsDisabledWasShown:
             AccountSettings.setParagons(Paragons.PROJECT_IS_DISABLED_NOTIFICATION_WAS_SHOWN, False)
             return
-        if self.__isParagonsInvisible and not AccountSettings.getParagons(Paragons.PROJECT_IS_DISABLED_NOTIFICATION_WAS_SHOWN):
+        if not paragonsAreAvailable and not projectIsDisabledWasShown:
             pushParagonsDisableMessage()
             AccountSettings.setParagons(Paragons.PROJECT_IS_DISABLED_NOTIFICATION_WAS_SHOWN, True)
             return

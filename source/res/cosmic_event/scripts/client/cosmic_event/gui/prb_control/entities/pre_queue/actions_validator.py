@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: cosmic_event/scripts/client/cosmic_event/gui/prb_control/entities/pre_queue/actions_validator.py
 from typing import TYPE_CHECKING
-from cosmic_event.skeletons.battle_controller import ICosmicEventBattleController
+from skeletons.gui.game_control import ICosmicEventBattleController
 from gui.prb_control.entities.base.pre_queue.actions_validator import PreQueueActionsValidator
 from gui.prb_control.items import ValidationResult
 from gui.prb_control.entities.base.actions_validator import BaseActionsValidator, ActionsValidatorComposite

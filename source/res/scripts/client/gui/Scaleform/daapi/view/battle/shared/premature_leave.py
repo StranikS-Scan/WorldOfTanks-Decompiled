@@ -15,11 +15,11 @@ def closeDialogWindow():
 
 
 @th_async
-def showDialogWindow(title, confirm=None, cancel=None, description=None, icon=None):
+def showDialogWindow(title, confirm=None, cancel=None, description=None, icon=None, blur=False):
     from gui.impl.dialogs import dialogs
     from gui.impl.dialogs.gf_builders import ConfirmCancelDialogBuilder
     builder = ConfirmCancelDialogBuilder(uniqueID=_PREMATURE_LEAVE_DIALOG_ID)
-    builder.setBlur(False)
+    builder.setBlur(blur)
     builder.setDimmerAlpha(_DIMMER_ALPHA)
     builder.setTitle(title)
     builder.setCancelButtonLabel(cancel or R.strings.dialogs.quitBattle.cancel())
@@ -34,8 +34,8 @@ def showDialogWindow(title, confirm=None, cancel=None, description=None, icon=No
 
 
 @th_async
-def showResDialogWindow(title, confirm=None, cancel=None, description=None, icon=None):
-    result = yield th_await(showDialogWindow(title, confirm=confirm, cancel=cancel, description=description, icon=icon))
+def showResDialogWindow(title, confirm=None, cancel=None, description=None, icon=None, blur=False):
+    result = yield th_await(showDialogWindow(title, confirm=confirm, cancel=cancel, description=description, icon=icon, blur=blur))
     raise AsyncReturn(result == DialogButtons.SUBMIT)
 
 

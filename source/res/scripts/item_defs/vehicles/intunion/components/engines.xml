@@ -26,7 +26,10 @@
     <Continental_AVDS_1790_6AM>	31023	</Continental_AVDS_1790_6AM>
     <_5TD>	31030	</_5TD>
     <V_55>	31025	</V_55>
+    <V_2_34>	31026	</V_2_34>
+    <V_44>	31027	</V_44>
     <V_55_T>	35001	</V_55_T>
+    <V_44_T>	35002	</V_44_T>
     <Development_Engine>	65000	</Development_Engine>
   </ids>
   <shared>
@@ -461,6 +464,38 @@
       <rpm_min>	249	</rpm_min>
       <rpm_max>	2452	</rpm_max>
     </V_55>
+    <V_2_34>
+      <userString>	#intunion_vehicles:V_2_34	</userString>
+      <tags>	diesel	</tags>
+      <level>	7	</level>
+      <price>	35000	</price>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <power>	520	</power>
+      <weight>	750	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	379	</rpm_min>
+      <rpm_max>	2141	</rpm_max>
+    </V_2_34>
+    <V_44>
+      <userString>	#intunion_vehicles:V_44	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	50000	</price>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <power>	570	</power>
+      <weight>	895	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	329	</rpm_min>
+      <rpm_max>	2241	</rpm_max>
+    </V_44>
     <V_55_T>
       <userString>	#intunion_vehicles:V_55_T	</userString>
       <tags>	diesel	</tags>
@@ -478,6 +513,23 @@
       <rpm_min>	249	</rpm_min>
       <rpm_max>	2452	</rpm_max>
     </V_55_T>
+    <V_44_T>
+      <userString>	#intunion_vehicles:V_44_T	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	50000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <power>	570	</power>
+      <weight>	895	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	329	</rpm_min>
+      <rpm_max>	2241	</rpm_max>
+    </V_44_T>
     <Development_Engine>
       <userString>	Development Engine	</userString>
       <tags>	diesel	</tags>

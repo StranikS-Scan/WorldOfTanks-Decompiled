@@ -38,10 +38,10 @@ class PlayerRecordModel(ViewModel):
     def setVehicle(self, value):
         self._setNumber(3, value.value)
 
-    def getRevenge(self):
+    def getLootResearching(self):
         return self._getBool(4)
 
-    def setRevenge(self, value):
+    def setLootResearching(self, value):
         self._setBool(4, value)
 
     def _initialize(self):
@@ -50,4 +50,4 @@ class PlayerRecordModel(ViewModel):
         self._addStringProperty('clanAbbrev', '')
         self._addNumberProperty('score', 0)
         self._addNumberProperty('vehicle', RoverEnum.OLD.value)
-        self._addBoolProperty('revenge', False)
+        self._addBoolProperty('lootResearching', False)

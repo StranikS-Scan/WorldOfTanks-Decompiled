@@ -11,12 +11,13 @@ class ProgressState(Enum):
     CHAPTERNOTCHOSEN = 'chapterNotChosen'
     ALLCHAPTERSCOMPLETED = 'allChaptersCompleted'
     PAUSED = 'paused'
+    NOTAVAILABLE = 'notAvailable'
 
 
 class EntryPointTooltipModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=5, commands=0):
+    def __init__(self, properties=6, commands=0):
         super(EntryPointTooltipModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -45,11 +46,17 @@ class EntryPointTooltipModel(ViewModel):
     def setVehicleToReset(self, value):
         self._setNumber(3, value)
 
+    def getVehicleCount(self):
+        return self._getNumber(4)
+
+    def setVehicleCount(self, value):
+        self._setNumber(4, value)
+
     def getProgressState(self):
-        return ProgressState(self._getString(4))
+        return ProgressState(self._getString(5))
 
     def setProgressState(self, value):
-        self._setString(4, value.value)
+        self._setString(5, value.value)
 
     def _initialize(self):
         super(EntryPointTooltipModel, self)._initialize()
@@ -57,4 +64,5 @@ class EntryPointTooltipModel(ViewModel):
         self._addBoolProperty('isFirstEntry', False)
         self._addNumberProperty('points', 0)
         self._addNumberProperty('vehicleToReset', 0)
+        self._addNumberProperty('vehicleCount', 0)
         self._addStringProperty('progressState', ProgressState.ACTIVE.value)

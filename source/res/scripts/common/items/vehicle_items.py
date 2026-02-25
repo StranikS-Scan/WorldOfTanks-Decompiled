@@ -262,7 +262,7 @@ class Radio(InstallableItem):
 @add_shallow_copy()
 class Turret(InstallableItem):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('gunPosition', 'gunJointPitch', 'rotationSpeed', 'turretRotatorHealth', 'surveyingDeviceHealth', 'invisibilityFactor', 'primaryArmor', 'ceilless', 'showEmblemsOnGun', 'guns', 'turretRotatorSoundManual', 'turretRotatorSoundGear', 'AODecals', 'turretDetachmentEffects', 'physicsShape', 'circularVisionRadius', 'customizableVehicleAreas', 'multiGun', 'prefabs', 'multiGunState', 'thermalVision')
+    __slots__ = ('gunPosition', 'gunJointPitch', 'rotationSpeed', 'turretRotatorHealth', 'surveyingDeviceHealth', 'invisibilityFactor', 'primaryArmor', 'ceilless', 'showEmblemsOnGun', 'guns', 'turretRotatorSoundManual', 'turretRotatorSoundGear', 'AODecals', 'turretDetachmentEffects', 'physicsShape', 'circularVisionRadius', 'customizableVehicleAreas', 'multiGun', 'prefabs', 'multiGunState', 'thermalVision', 'distanceBetweenMultiGuns')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Turret, self).__init__(typeID, componentID, componentName, compactDescr, level)
@@ -275,6 +275,7 @@ class Turret(InstallableItem):
         self.guns = None
         self.circularVisionRadius = None
         self.multiGun = None
+        self.distanceBetweenMultiGuns = component_constants.ZERO_FLOAT
         self.primaryArmor = component_constants.EMPTY_TUPLE
         self.physicsShape = None
         self.ceilless = False

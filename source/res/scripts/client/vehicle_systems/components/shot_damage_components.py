@@ -11,9 +11,10 @@ from vehicle_systems.tankStructure import TankPartNames
 
 class ShotDamageComponent(object):
 
-    def __init__(self, partName, compound):
+    def __init__(self, partName, compound, collisionComponent):
         self.partName = partName
         self.compound = compound
+        self.collisionComponent = collisionComponent
 
 
 @registerComponent
@@ -39,7 +40,8 @@ class DamageStickerManager(CGF.ComponentManager):
         if shotDamage.partName == TankPartNames.CHASSIS:
             return
         damageSticker.stickerModel = BigWorld.StickerModel(self.spaceID)
-        geometryLink = shotDamage.compound.getPartGeometryLink(TankPartNames.getIdx(shotDamage.partName))
+        idx = TankPartNames.getIdx(shotDamage.partName)
+        geometryLink = shotDamage.compound.getPartGeometryLink(idx)
         m = Math.Matrix()
         m.setIdentity()
         stickerModel = damageSticker.stickerModel
@@ -50,7 +52,7 @@ class DamageStickerManager(CGF.ComponentManager):
         stickerId = vehicles.g_cache.damageStickers['ids'][damageSticker.damageSticker]
         segStart = transform.transform.applyPoint(Math.Vector3(0, 0, -damageSticker.offset))
         segEnd = transform.transform.applyPoint(Math.Vector3(0, 0, damageSticker.offset))
-        stickerModel.addDamageSticker(stickerId, segStart, segEnd, True)
+        stickerModel.addDamageSticker(stickerId, segStart, segEnd, idx, shotDamage.collisionComponent, True)
         stickerModel.setupFadeout(damageSticker.fadeoutTime)
 
     @onRemovedQuery(ShotDamageComponent, DamageStickerComponent)

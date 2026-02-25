@@ -51,7 +51,10 @@
     <TRVP_13_P>	31008	</TRVP_13_P>
     <SCR_508F>	31009	</SCR_508F>
     <SCR_528A_02>	31010	</SCR_528A_02>
+    <SCR_619_ISP>	37000	</SCR_619_ISP>
+    <SCR_528_ISP>	37002	</SCR_528_ISP>
     <AN_VRC_18>	31011	</AN_VRC_18>
+    <SCR_528F_137>	31012	</SCR_528F_137>
     <Development_Radio>	65000	</Development_Radio>
     <SCR_528_F_SH>	43	</SCR_528_F_SH>
     <TRVP_13_SH>	44	</TRVP_13_SH>
@@ -83,6 +86,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </SCR_528>
+    <SCR_528_ISP>
+      <userString>	#france_vehicles:SCR_528_ISP	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </SCR_528_ISP>
     <SCR_528_7x7>
       <userString>	#france_vehicles:SCR_528	</userString>
       <tags></tags>
@@ -107,6 +122,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </SCR_528F>
+    <SCR_528F_137>
+      <userString>	#france_vehicles:SCR_528F_137	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </SCR_528F_137>
     <SCR_528_FL>
       <userString>	#france_vehicles:SCR_528	</userString>
       <tags></tags>
@@ -397,6 +424,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </SCR_619>
+    <SCR_619_ISP>
+      <userString>	#france_vehicles:SCR_619_ISP	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	54000	</price>
+      <weight>	80	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </SCR_619_ISP>
     <SCR_619_bob>
       <userString>	#france_vehicles:SCR_619	</userString>
       <tags></tags>

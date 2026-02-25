@@ -1867,6 +1867,59 @@
       </damage>
     </armorSpalls>
   </_100mm_UOF-412_D>
+  <_100mm_BR_412>
+    <id>	31174	</id>
+    <userString>	#ussr_vehicles:_100mm_BR_412	</userString>
+    <icon>	ap	</icon>
+    <price>	425	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	250	</armor>
+      <devices>	135	</devices>
+    </damage>
+  </_100mm_BR_412>
+  <_100mm_BR_412P>
+    <id>	31175	</id>
+    <userString>	#ussr_vehicles:_100mm_BR_412P	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	250	</armor>
+      <devices>	135	</devices>
+    </damage>
+  </_100mm_BR_412P>
+  <_100mm_OF412>
+    <id>	13176	</id>
+    <userString>	#ussr_vehicles:_100mm_OF412	</userString>
+    <icon>	he_modern	</icon>
+    <price>	325	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	100	</caliber>
+    <explosionRadius>	1.76	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	330	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.76	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	165	</armor>
+        <devices>	70	</devices>
+      </damage>
+    </armorSpalls>
+  </_100mm_OF412>
   <_100mm_UBR_412_02>
     <id>	31135	</id>
     <userString>	#ussr_vehicles:_100mm_UBR-412_02	</userString>
@@ -2432,6 +2485,60 @@
       </damage>
     </armorSpalls>
   </_100mm_3UOF10_fallout>
+  <_100mm_UBR-412PB_ISP>
+    <id>	37006	</id>
+    <userString>	#ussr_vehicles:_100mm_UBR-412PB_ISP	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1100	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	135	</devices>
+    </damage>
+  </_100mm_UBR-412PB_ISP>
+  <_100mm_3UBK4M_ISP>
+    <id>	37007	</id>
+    <userString>	#ussr_vehicles:_100mm_3UBK4M_ISP	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	270	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_100mm_3UBK4M_ISP>
+  <_100mm_3UOF10_ISP>
+    <id>	37008	</id>
+    <userString>	#ussr_vehicles:_100mm_3UOF10_ISP	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1170	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	100	</caliber>
+    <explosionRadius>	1.76	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.76	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	210	</armor>
+        <devices>	70	</devices>
+      </damage>
+    </armorSpalls>
+  </_100mm_3UOF10_ISP>
   <_100mm_3UBK4>
     <id>	99	</id>
     <userString>	#ussr_vehicles:_100mm_3UBK4	</userString>
@@ -2945,6 +3052,60 @@
       </damage>
     </armorSpalls>
   </_100mm_OF_412>
+  <_100mm_Vasiliev_ZBM8>
+    <id>	31180	</id>
+    <userString>	#ussr_vehicles:_100mm_Vasiliev_ZBM8	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1150	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	135	</devices>
+    </damage>
+  </_100mm_Vasiliev_ZBM8>
+  <_100mm_Vasiliev_ZBK5>
+    <id>	31181	</id>
+    <userString>	#ussr_vehicles:_100mm_Vasiliev_ZBK5	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_100mm_Vasiliev_ZBK5>
+  <_100mm_OF_412V>
+    <id>	31182	</id>
+    <userString>	#ussr_vehicles:_100mm_OF_412V	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1020	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	100	</caliber>
+    <explosionRadius>	1.76	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.76	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	220	</armor>
+        <devices>	70	</devices>
+      </damage>
+    </armorSpalls>
+  </_100mm_OF_412V>
   <_100mm_BR-412D_55>
     <id>	31177	</id>
     <userString>	#ussr_vehicles:_100mm_BR-412D_55	</userString>
@@ -2999,6 +3160,59 @@
       </damage>
     </armorSpalls>
   </_100mm_UOF-412_55>
+  <_100mm_BR_412D_701>
+    <id>	31189	</id>
+    <userString>	#ussr_vehicles:_100mm_BR_412D_701	</userString>
+    <icon>	ap	</icon>
+    <price>	600	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	250	</armor>
+      <devices>	135	</devices>
+    </damage>
+  </_100mm_BR_412D_701>
+  <_100mm_ZBM8_701>
+    <id>	31190	</id>
+    <userString>	#ussr_vehicles:_100mm_ZBM8_701	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4000	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	250	</armor>
+      <devices>	135	</devices>
+    </damage>
+  </_100mm_ZBM8_701>
+  <_100mm_OF_412_701>
+    <id>	31191	</id>
+    <userString>	#ussr_vehicles:_100mm_OF_412_701	</userString>
+    <icon>	he_modern	</icon>
+    <price>	390	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	100	</caliber>
+    <explosionRadius>	1.76	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	330	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.76	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	165	</armor>
+        <devices>	70	</devices>
+      </damage>
+    </armorSpalls>
+  </_100mm_OF_412_701>
   <_107mm_UBR-420>
     <id>	45	</id>
     <userString>	#ussr_vehicles:_107mm_UBR-420	</userString>
@@ -4676,6 +4890,60 @@
       </damage>
     </armorSpalls>
   </_122mm_UOF_472U>
+  <_122mm_BR_472U_ISP>
+    <id>	37018	</id>
+    <userString>	#ussr_vehicles:_122mm_BR_472U_ISP	</userString>
+    <icon>	ap	</icon>
+    <price>	1080	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_122mm_BR_472U_ISP>
+  <_122mm_BK_9U_ISP>
+    <id>	37019	</id>
+    <userString>	#ussr_vehicles:_122mm_BK_9U_ISP	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	5200	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	370	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_122mm_BK_9U_ISP>
+  <_122mm_UOF_472U_ISP>
+    <id>	37020	</id>
+    <userString>	#ussr_vehicles:_122mm_UOF_472U_ISP	</userString>
+    <icon>	he_modern	</icon>
+    <price>	870	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	122	</caliber>
+    <explosionRadius>	2.49	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	530	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.49	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	265	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_122mm_UOF_472U_ISP>
   <_122mm_53-VBR-471B>
     <id>	241	</id>
     <userString>	#ussr_vehicles:_122mm_53-VBR-471B	</userString>
@@ -4782,6 +5050,59 @@
       </damage>
     </armorSpalls>
   </_122mm_UOF-471M-DG>
+  <_122mm_UBR-471M-DG_02>
+    <id>	31186	</id>
+    <userString>	#ussr_vehicles:_122mm_UBR-471M-DG_02	</userString>
+    <icon>	ap	</icon>
+    <price>	1070	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_122mm_UBR-471M-DG_02>
+  <_122mm_UBR-471PM-DG_02>
+    <id>	31187	</id>
+    <userString>	#ussr_vehicles:_122mm_UBR-471PM-DG_02	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_122mm_UBR-471PM-DG_02>
+  <_122mm_UOF-471M-DG_02>
+    <id>	31188	</id>
+    <userString>	#ussr_vehicles:_122mm_UOF-471M-DG_02	</userString>
+    <icon>	he_modern	</icon>
+    <price>	790	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	122	</caliber>
+    <explosionRadius>	2.49	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	530	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.49	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	265	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_122mm_UOF-471M-DG_02>
   <_122mm_BR-471D-DG>
     <id>	250	</id>
     <userString>	#ussr_vehicles:_122mm_BR-471D-DG	</userString>
@@ -6080,6 +6401,60 @@
       </damage>
     </armorSpalls>
   </_130mm_53_VOF_482V>
+  <_130mm_53_VBR_482_ISP>
+    <id>	37009	</id>
+    <userString>	#ussr_vehicles:_130mm_53_VBR_482_ISP	</userString>
+    <icon>	ap	</icon>
+    <price>	1250	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	130	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	490	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_130mm_53_VBR_482_ISP>
+  <_130mm_3VBK_ISP>
+    <id>	37010	</id>
+    <userString>	#ussr_vehicles:_130mm_3VBK_ISP	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	5200	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	130	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	180	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_130mm_3VBK_ISP>
+  <_130mm_53_VOF_482V_ISP>
+    <id>	37011	</id>
+    <userString>	#ussr_vehicles:_130mm_53_VOF_482V_ISP	</userString>
+    <icon>	he_modern	</icon>
+    <price>	990	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	130	</caliber>
+    <explosionRadius>	2.78	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	640	</armor>
+      <devices>	180	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.78	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	320	</armor>
+        <devices>	90	</devices>
+      </damage>
+    </armorSpalls>
+  </_130mm_53_VOF_482V_ISP>
   <_130mm_53_BR_482>
     <id>	340	</id>
     <userString>	#ussr_vehicles:_130mm_53_BR_482	</userString>
@@ -6872,6 +7247,60 @@
       </damage>
     </armorSpalls>
   </_152mm_53-OF-551M>
+  <_152mm_UBR551M_ISP>
+    <id>	37015	</id>
+    <userString>	#ussr_vehicles:_152mm_UBR551M_ISP	</userString>
+    <icon>	ap	</icon>
+    <price>	1650	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	152	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	750	</armor>
+      <devices>	203	</devices>
+    </damage>
+  </_152mm_UBR551M_ISP>
+  <_152mm_UBK551M_ISP>
+    <id>	37016	</id>
+    <userString>	#ussr_vehicles:_152mm_UBK551M_ISP	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	6800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	152	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	640	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_152mm_UBK551M_ISP>
+  <_152mm_53-OF-551M_ISP>
+    <id>	37017	</id>
+    <userString>	#ussr_vehicles:_152mm_53-OF-551M_ISP	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1120	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	152	</caliber>
+    <explosionRadius>	3.66	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	1100	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	3.66	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	550	</armor>
+        <devices>	100	</devices>
+      </damage>
+    </armorSpalls>
+  </_152mm_53-OF-551M_ISP>
   <_152mm_UBR551M_BB>
     <id>	221	</id>
     <userString>	#ussr_vehicles:_152mm_UBR551M_BB	</userString>
@@ -6980,6 +7409,60 @@
       </damage>
     </armorSpalls>
   </_152mm_53-OF-551M_OF_02_G>
+  <_152mm_UBR551M_BB_ISP>
+    <id>	37012	</id>
+    <userString>	#ussr_vehicles:_152mm_UBR551M_BB_ISP	</userString>
+    <icon>	ap	</icon>
+    <price>	1650	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	152	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	650	</armor>
+      <devices>	203	</devices>
+    </damage>
+  </_152mm_UBR551M_BB_ISP>
+  <_152mm_UBK551M_K_ISP>
+    <id>	37013	</id>
+    <userString>	#ussr_vehicles:_152mm_UBK551M_K_ISP	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	6800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	152	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	550	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_152mm_UBK551M_K_ISP>
+  <_152mm_53-OF-551M_OF_ISP>
+    <id>	37014	</id>
+    <userString>	#ussr_vehicles:_152mm_53-OF-551M_OF_ISP	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1120	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	152	</caliber>
+    <explosionRadius>	3.66	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	840	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	3.66	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	420	</armor>
+        <devices>	100	</devices>
+      </damage>
+    </armorSpalls>
+  </_152mm_53-OF-551M_OF_ISP>
   <_152mm_UBR551M_fallout>
     <id>	148	</id>
     <userString>	#ussr_vehicles:_152mm_UBR551M_fallout	</userString>

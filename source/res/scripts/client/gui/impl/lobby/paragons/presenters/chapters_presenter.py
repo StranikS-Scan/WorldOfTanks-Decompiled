@@ -3,9 +3,7 @@
 import typing
 from frameworks.wulf.view.submodel_presenter import SubModelPresenter
 import logging
-from gui.impl.gen.view_models.views.lobby.paragons.navigation_view_model import TabId
 from gui.impl.lobby.paragons.paragons_helpers.paragons_model_helpers import fillChapterModels
-from gui.impl.lobby.paragons.paragons_window_events import showChapterRewardsView
 from helpers import dependency
 from skeletons.gui.game_control import IParagonsController
 _logger = logging.getLogger(__name__)
@@ -47,19 +45,15 @@ class ChaptersPresenter(SubModelPresenter):
         return None if tooltipId is None else self.__tooltipData.get(tooltipId)
 
     def _getEvents(self):
-        return ((self.viewModel.onSelectChapter, self.__onSelectChapter),
-         (self.viewModel.onToChapterRewards, self.__onToChapterRewards),
-         (self.__paragonsController.onSettingsChanged, self.__onServerSettingsChanged),
-         (self.__paragonsController.onProgressPointsChanged, self.__updateChapters))
+        return ((self.viewModel.onSelectChapter, self.__onSelectChapter), (self.__paragonsController.onSettingsChanged, self.__onServerSettingsChanged), (self.__paragonsController.onProgressPointsChanged, self.__updateChapters))
 
     def __onSelectChapter(self, event):
         chapterId = int(event.get('id', 0))
         self.__paragonsController.setChapter(chapterId, self.__selectChapterCallback)
 
-    def __selectChapterCallback(self, isSuccess):
+    def __selectChapterCallback(self, isSuccess, _):
         if isSuccess:
             self.__updateChapters()
-            self.parentViewModel.onTabChange({'tabId': TabId.PROGRESS})
 
     def __updateChapters(self):
         with self.parentViewModel.progression.transaction() as tx:
@@ -67,7 +61,3 @@ class ChaptersPresenter(SubModelPresenter):
 
     def __onServerSettingsChanged(self, _):
         self.__updateChapters()
-
-    def __onToChapterRewards(self, event):
-        chapterId = int(event.get('id', 0))
-        showChapterRewardsView(chapterId, self.getParentWindow())

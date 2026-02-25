@@ -8,11 +8,8 @@ class CosmicBattleLoading(CosmicBattleLoadingMeta):
 
     def _populate(self):
         super(CosmicBattleLoading, self)._populate()
-        self.as_setTipsS([backport.text(R.strings.cosmicEvent.battle.loadingScreen.tip1()),
-         backport.text(R.strings.cosmicEvent.battle.loadingScreen.tip2()),
-         backport.text(R.strings.cosmicEvent.battle.loadingScreen.tip3()),
-         backport.text(R.strings.cosmicEvent.battle.loadingScreen.tip4()),
-         backport.text(R.strings.cosmicEvent.battle.loadingScreen.tip5())])
+        self.as_setTipTitleS(backport.text(R.strings.cosmicEvent.battle.loadingScreen.title()))
+        self.as_setTipsS([backport.text(R.strings.cosmicEvent.battle.loadingScreen.tip1()), backport.text(R.strings.cosmicEvent.battle.loadingScreen.tip2()), backport.text(R.strings.cosmicEvent.battle.loadingScreen.tip3())])
 
     def invalidateArenaInfo(self):
         pass

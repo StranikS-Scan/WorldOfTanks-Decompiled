@@ -62,6 +62,7 @@ class StoryModeController(IStoryModeController, IGlobalListener):
         self.__selectedMissionId = UNDEFINED_MISSION_ID
         self.__selectRandomBattle = False
         self.__isOnboarding = False
+        self.__canSkipOnboarding = False
         self.__needToShowAward = False
         self.__lobbyViewOverrideData = None
         self.__syncData = {}
@@ -74,6 +75,10 @@ class StoryModeController(IStoryModeController, IGlobalListener):
     @property
     def isOnboarding(self):
         return self.__isOnboarding
+
+    @property
+    def canSkipOnboarding(self):
+        return self.__canSkipOnboarding
 
     @property
     def isQuittingBattle(self):
@@ -114,7 +119,6 @@ class StoryModeController(IStoryModeController, IGlobalListener):
     def init(self):
         g_playerEvents.onPrbDispatcherCreated += self.__onPrbDispatcherCreated
         g_messengerEvents.serviceChannel.onChatMessageReceived += self.__handleChatMessage
-        g_playerEvents.onAccountShowGUISkipped += self.__onAccountShowGUISkipped
         g_playerEvents.onClientUpdated += self.__onClientUpdated
         g_playerEvents.onAvatarBecomeNonPlayer += self.__onAvatarBecomeNonPlayer
         g_playerEvents.onConfigModelUpdated += self.__configModelUpdateHandler
@@ -124,7 +128,6 @@ class StoryModeController(IStoryModeController, IGlobalListener):
     def fini(self):
         g_playerEvents.onPrbDispatcherCreated -= self.__onPrbDispatcherCreated
         g_messengerEvents.serviceChannel.onChatMessageReceived -= self.__handleChatMessage
-        g_playerEvents.onAccountShowGUISkipped -= self.__onAccountShowGUISkipped
         g_playerEvents.onClientUpdated -= self.__onClientUpdated
         g_playerEvents.onAvatarBecomeNonPlayer -= self.__onAvatarBecomeNonPlayer
         g_playerEvents.onConfigModelUpdated -= self.__configModelUpdateHandler
@@ -145,6 +148,9 @@ class StoryModeController(IStoryModeController, IGlobalListener):
 
     def isEnabled(self):
         return self.settings.enabled
+
+    def joinToQueueFromLogin(self):
+        return self.settings.joinToQueueFromLogin
 
     def isMissionCompleted(self, missionId):
         return missionId in self.__syncData.get(PROGRESS_PDATA_KEY, ())
@@ -191,6 +197,7 @@ class StoryModeController(IStoryModeController, IGlobalListener):
             self.__isQuittingBattle = True
             self.__isOnboarding = False
             self.__selectRandomBattle = True
+            self.__canSkipOnboarding = False
             self.stopOnboardingMusic()
             WWISE.deactivateRemapping(SOUND_REMAPPING)
             BigWorld.player().battleQueueType = QUEUE_TYPE.UNKNOWN
@@ -267,9 +274,10 @@ class StoryModeController(IStoryModeController, IGlobalListener):
     def __onPrbDispatcherCreated(self):
         self.startGlobalListening()
 
-    def __onAccountShowGUISkipped(self, ctx):
+    def onAccountShowGUISkipped(self, ctx):
         isStoryModeQueue = ctx.get('inQueue', QUEUE_TYPE.UNKNOWN) == QUEUE_TYPE.STORY_MODE
         skippedShowGUI = ctx.get('skipShowGUI', False)
+        self.__canSkipOnboarding = ctx.get('canSkipOnboarding', False)
         if not (isStoryModeQueue and skippedShowGUI):
             return
         else:

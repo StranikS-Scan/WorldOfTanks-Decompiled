@@ -12,7 +12,6 @@ from gui.impl.gen.view_models.views.lobby.daily.widget_quest_model import Widget
 class LobbyRouteEnum(Enum):
     MAIN = 'main'
     ARTEFACT = 'artefact'
-    RULES = 'rules'
     PICKUPS = 'pickups'
 
 
@@ -24,7 +23,7 @@ class RoverEnum(IntEnum):
 class CosmicLobbyViewModel(ViewModel):
     __slots__ = ('onLobbyRouteChange', 'onClose', 'onAboutEvent', 'onShopClicked', 'onVehicleChange')
 
-    def __init__(self, properties=19, commands=5):
+    def __init__(self, properties=20, commands=5):
         super(CosmicLobbyViewModel, self).__init__(properties=properties, commands=commands)
 
     def getFadeOut(self):
@@ -161,6 +160,12 @@ class CosmicLobbyViewModel(ViewModel):
     def getRoversType():
         return RoversModel
 
+    def getQuestTimer(self):
+        return self._getNumber(19)
+
+    def setQuestTimer(self, value):
+        self._setNumber(19, value)
+
     def _initialize(self):
         super(CosmicLobbyViewModel, self)._initialize()
         self._addBoolProperty('fadeOut', False)
@@ -182,6 +187,7 @@ class CosmicLobbyViewModel(ViewModel):
         self._addArrayProperty('missions', Array())
         self._addArrayProperty('progression', Array())
         self._addArrayProperty('rovers', Array())
+        self._addNumberProperty('questTimer', 0)
         self.onLobbyRouteChange = self._addCommand('onLobbyRouteChange')
         self.onClose = self._addCommand('onClose')
         self.onAboutEvent = self._addCommand('onAboutEvent')

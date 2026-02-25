@@ -21,6 +21,7 @@ from gui.clans.clan_helpers import isStrongholdsEnabled
 from gui.game_control.epic_meta_game_ctrl import EPIC_PERF_GROUP
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.periodic_battles.models import PrimeTimeStatus
 from gui.prb_control import prbEntityProperty
 from gui.prb_control.dispatcher import g_prbLoader
@@ -33,7 +34,7 @@ from gui.shared.formatters import text_styles, icons
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from gui.shared.utils.functions import makeTooltip
 from helpers import time_utils, dependency, int2roman
-from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IBattleRoyaleTournamentController, IMapboxController, IMapsTrainingController, IEpicBattleMetaGameController, IEventBattlesController, IComp7Controller, IBootcampController
+from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IBattleRoyaleTournamentController, IMapboxController, IMapsTrainingController, IEpicBattleMetaGameController, IEventBattlesController, IComp7Controller, IBootcampController, ILimitedUIController
 from skeletons.gui.lobby_context import ILobbyContext
 if typing.TYPE_CHECKING:
     from skeletons.gui.game_control import ISeasonProvider
@@ -280,6 +281,7 @@ class _CommandItem(_SelectorItem):
 
 
 class _StrongholdsItem(_SelectorItem):
+    __limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def isRandomBattle(self):
         return True
@@ -293,6 +295,7 @@ class _StrongholdsItem(_SelectorItem):
             self._isDisabled = state.hasLockedState
         else:
             self._isDisabled = True
+        self._isNew = self._isNew and self.__limitedUIController.isRuleCompleted(LuiRules.STRONGHOLD_CONTENT)
 
 
 class _SpecBattleItem(_SelectorItem):

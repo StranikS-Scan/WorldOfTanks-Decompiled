@@ -11,7 +11,7 @@ if typing.TYPE_CHECKING:
 class AboutPresenter(SubModelPresenter):
     __slots__ = SubModelPresenter.__slots__ + ('__tooltipData',)
 
-    def __init__(self, viewModel, parentView):
+    def __init__(self, parentView, viewModel=None):
         super(AboutPresenter, self).__init__(viewModel, parentView)
         self.__viewModel = viewModel
         self.__tooltipData = {}

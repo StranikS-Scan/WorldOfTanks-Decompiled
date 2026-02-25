@@ -3,7 +3,7 @@
 import typing
 from battle_pass_common import BATTLE_PASS_SELECT_BONUS_NAME
 from gui.server_events.bonuses import getNonQuestBonuses, mergeBonuses, splitBonuses
-from gui.battle_pass.bonuses_layout_controller import BonusesLayoutController
+from gui.shared.bonuses_layout_controller import BonusesLayoutController
 from shared_utils import findFirst
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import BattlePassSelectTokensBonus
@@ -17,7 +17,8 @@ def awardsFactory(items, ctx=None):
 
 
 class BattlePassAwardsManager(object):
-    __bonusesLayoutController = BonusesLayoutController()
+    _PRIORITY_CONFIG_FILE = 'gui/battle_pass_bonuses_layout.xml'
+    __bonusesLayoutController = BonusesLayoutController(_PRIORITY_CONFIG_FILE)
 
     @classmethod
     def init(cls):

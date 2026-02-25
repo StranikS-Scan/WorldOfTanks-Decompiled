@@ -12,7 +12,7 @@ from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getVehicleCDF
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBattlePassCoinProductsUrl, getBattlePassPointsProductsUrl
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.battle_pass.battle_pass_constants import ChapterState
-from gui.battle_pass.battle_pass_helpers import chaptersIDsComparator, getInfoPageURL, getStyleForChapter, TANKMAN_BONUS_NAME, getTankmanInfo, getDataByTankman
+from gui.battle_pass.battle_pass_helpers import chaptersIDsComparator, getInfoPageURL, getStyleForChapter, TANKMAN_BONUS_NAME, getTankmanInfo, getDataByTankman, getIsBpCoinShopEntryPointActive, getIsBpPointsShopEntryPointActive
 from gui.collection.collections_helpers import getCollectionRes, loadBattlePassFromCollections
 from gui.impl import backport
 from gui.impl.auxiliary.collections_helper import fillCollectionModel
@@ -25,7 +25,6 @@ from gui.impl.pub import ViewImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.server_events.events_dispatcher import showMissionsBattlePass
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.battle_pass.battle_pass_helpers import getIsBpPointsShopEntryPointActive
 from gui.shared.event_dispatcher import hideVehiclePreview, showBattlePassBuyWindow, showBattlePassHowToEarnPointsView, showBrowserOverlayView, showHangar, showShop, showStylePreview, showStyleProgressionPreview, showCollectionWindow, showVehiclePreviewWithoutBottomPanel
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController
@@ -116,6 +115,8 @@ class ChapterChoiceView(ViewImpl):
             self.__updateFreePoints(model=model)
             model.setIsBattlePassCompleted(self.__battlePass.isCompleted())
             model.setIsSingleChapter(self.__battlePass.isSingleChapter())
+            model.setIsBpCoinShopEntryPointActive(getIsBpCoinShopEntryPointActive())
+            model.setIsBpPointsShopEntryPointActive(getIsBpPointsShopEntryPointActive())
 
     def __updateChapters(self, chapters):
         chapters.clear()

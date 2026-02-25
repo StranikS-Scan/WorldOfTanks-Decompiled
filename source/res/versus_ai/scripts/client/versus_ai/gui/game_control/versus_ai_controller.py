@@ -16,12 +16,15 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.game_control import IVersusAIController, IWinbackController
 from versus_ai.gui.versus_ai_gui_constants import NOOB_MIN_BATTLES_COUNT, FUNCTIONAL_FLAG
+from gui.limited_ui.lui_rules_storage import LuiRules
+from skeletons.gui.game_control import ILimitedUIController
 if typing.TYPE_CHECKING:
     from helpers.server_settings import VersusAIConfig
 
 class VersusAIController(IVersusAIController, IGlobalListener):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __itemsCache = dependency.descriptor(IItemsCache)
+    __limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def __init__(self):
         super(VersusAIController, self).__init__()
@@ -78,6 +81,9 @@ class VersusAIController(IVersusAIController, IGlobalListener):
             AccountSettings.setSettings(HAS_LEFT_VERSUS_AI, True)
             return False
         return self.__canBeDefaultModeForNoob()
+
+    def isLocked(self):
+        return not self.__limitedUIController.isRuleCompleted(LuiRules.VERSUS_AI_CONTENT)
 
     def __shouldSwitchModeToRandomForNoob(self):
         return self.isEnabled() and not self.__shouldBeDefaultModeIfWinbacker() and not AccountSettings.getSettings(HAS_LEFT_VERSUS_AI) and self.__itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount() >= NOOB_MIN_BATTLES_COUNT

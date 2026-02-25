@@ -360,7 +360,10 @@ def packMissionBonusTypeElements(bonusTypes, width=32, height=32, vSpace=-11):
     elements = []
     for bonusType in uniqueTypes:
         kwargs = collectModeNameKwargsByBonusType(bonusType) or {}
-        label = i18n.makeString(('#menu:bonusType/%d' % bonusType), **kwargs)
+        if ARENA_BONUS_TYPE.FUN_RANDOM == bonusType and kwargs.get('modeName'):
+            label = kwargs.get('modeName')
+        else:
+            label = i18n.makeString(('#menu:bonusType/%d' % bonusType), **kwargs)
         icon = gui_icons.makeImageTag(collectPrebattleConditionIcon(bonusType) or RES_ICONS.getPrebattleConditionIcon(bonusType), width=width, height=height, vSpace=vSpace)
         elements.append(_IconData(icon, label))
 

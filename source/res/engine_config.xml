@@ -1,7 +1,8 @@
 <engine_config.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <personality>	game	</personality>
   <appTitle>	Мир танков	</appTitle>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -274,9 +275,6 @@
         <bank>
           <name>	inbattle_communication_pc.bnk	</name>
         </bank>
-        <bank>
-          <name>	vo_context_hints.bnk	</name>
-        </bank>
       </voice_soundbanks>
       <SFX_soundbanks_loadonce>
         <bank>
@@ -391,6 +389,9 @@
           <name>	music_interactive_part_15.pck	</name>
         </bank>
         <bank>
+          <name>	music_interactive_part_16.pck	</name>
+        </bank>
+        <bank>
           <name>	wheel_vehicle_GUI.pck	</name>
         </bank>
         <bank>
@@ -407,6 +408,9 @@
         </bank>
         <bank>
           <name>	field_modernization.bnk	</name>
+        </bank>
+        <bank>
+          <name>	vo_context_hints.bnk	</name>
         </bank>
       </SFX_soundbanks_loadonce>
       <SFX_soundbanks_hangar>
@@ -617,6 +621,15 @@
         <bank>
           <name>	silver_hunt.bnk	</name>
         </bank>
+        <bank>
+          <name>	style_3D_Ch38_WZ113G_FT_3Dst_Hyperion.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_Un14_T54D_3Dst_Stellar.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_R169_ST_II_3Dst_Oberon.bnk	</name>
+        </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
         <bank>
@@ -803,6 +816,15 @@
         </bank>
         <bank>
           <name>	style_3D_GB143_Captain_3Dst_01.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_Ch38_WZ113G_FT_3Dst_Hyperion.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_Un14_T54D_3Dst_Stellar.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_R169_ST_II_3Dst_Oberon.bnk	</name>
         </bank>
       </SFX_soundbanks_arena>
       <SFX_soundbanks_editor>

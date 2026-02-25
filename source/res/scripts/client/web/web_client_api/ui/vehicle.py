@@ -19,6 +19,7 @@ from gui.customization.constants import CustomizationModes
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.server_events.events_dispatcher import showMissionsMarathon
+from gui.shared.ext_money import ExtendedMoney
 from gui.shared import event_dispatcher
 from gui.shared.event_dispatcher import showHangar, showMarathonRewardScreen, showStyleBuyingPreview, showStylePreview, showStyleProgressionPreview
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -265,7 +266,7 @@ def _getOfferCrew(offer):
 def _parseBuyPrice(buyPrice):
     buyPrice = buyPrice.copy()
     discount = buyPrice.pop('discount', None)
-    return (Money(**buyPrice), MONEY_UNDEFINED) if discount is None else (Money(**discount), Money(**buyPrice))
+    return (ExtendedMoney(**buyPrice), MONEY_UNDEFINED) if discount is None else (ExtendedMoney(**discount), ExtendedMoney(**buyPrice))
 
 
 class _VehicleSchema(W2CSchema):
@@ -276,7 +277,7 @@ def _buyPriceValidator(value, *_):
     value = value.copy()
     _validatePrice(value)
     value.pop('discount', None)
-    return Money(**value).isDefined()
+    return ExtendedMoney(**value).isDefined()
 
 
 def _validatePrice(tData, errorStr=''):

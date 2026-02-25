@@ -21,9 +21,9 @@ TMAN_ACHIEVEMENTS_BLOCK_LAYOUT = ['warrior',
  'medalKolobanov',
  'medalFadin',
  'medalRadleyWalters',
- 'medalBrunoPietro',
+ 'medalFokin',
  'medalLyubushkin',
- 'medalPascucci',
+ 'medalSlyunyayev',
  'medalDumitru',
  'medalKhazov',
  'medalNikolas',
@@ -33,7 +33,10 @@ TMAN_ACHIEVEMENTS_BLOCK_LAYOUT = ['warrior',
  'medalTrubin',
  'huntsman',
  'sniper2',
- 'mainGun']
+ 'mainGun',
+ 'medalFomin',
+ 'medalKrockenberger',
+ 'medalGavryushov']
 _tankmanAchievementsBlockBuilder = StaticSizeBlockBuilder('achievements', TMAN_ACHIEVEMENTS_BLOCK_LAYOUT, {}, [], aliases=MEDAL_ALIASES)
 tmanDossierLayout = (_tmanTotalBlockBuilder, _tankmanAchievementsBlockBuilder)
 TANKMAN_DOSSIER_BLOCKS = {b.name:b for b in tmanDossierLayout}

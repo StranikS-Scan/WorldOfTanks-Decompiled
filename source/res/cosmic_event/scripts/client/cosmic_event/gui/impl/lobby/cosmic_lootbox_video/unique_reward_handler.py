@@ -9,7 +9,7 @@ from gui_lootboxes.gui.impl.lobby.gui_lootboxes.unique_rewards_view import BaseU
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 from gui.impl.lobby.video.video_view import VideoViewWindow
-from cosmic_constants import COSMIC_LOOTBOX_CATEGORY_25
+from cosmic_constants import COSMIC_LOOTBOX_CATEGORY
 from cosmic_event.gui.sound_control.sound_control import VideoRewardsSoundControl
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Window
@@ -21,7 +21,7 @@ def getUniqueCosmicRewardsData(resultData, itemsCache=None):
     usedLimits = resultData.get('extData', {}).get('usedLimits', None)
     for idx, rewards in enumerate(resultData.get('bonus', [])):
         openedLootbox = getOpenedLootBoxFromRewards(rewards, itemsCache=itemsCache)
-        if openedLootbox is not None and openedLootbox.getCategory() in COSMIC_LOOTBOX_CATEGORY_25:
+        if openedLootbox is not None and openedLootbox.getCategory().startswith(COSMIC_LOOTBOX_CATEGORY):
             isGuaranteed = isGuaranteedReward(openedLootbox.getGuaranteedFrequencyName(), None if usedLimits is None else usedLimits[idx])
             processVehicles(rewardsData, rewards.get('vehicles', []), isGuaranteed, openedLootbox, rewardsCategory=REWARDS_DATA_CATEGORY)
 

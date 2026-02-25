@@ -49,7 +49,7 @@ class ThermalVisionController(BigWorld.DynamicScriptComponent):
         self.__settingsCore.onSettingsChanged -= self.__onSettingsChanged
         getInputHandler().onCameraChanged -= self.__onCameraChanged
         self.__stopObservation()
-        self.__stopAllSounds()
+        self.__stopAllSounds(silent=True)
         self.__hideActiveStateUI()
         self.__setSectorState(THERMAL_VISION_STATE.DISABLED)
         BigWorld.PyrometerSector.setParams(0, 0, 0)
@@ -101,7 +101,7 @@ class ThermalVisionController(BigWorld.DynamicScriptComponent):
         self.__hideActiveStateUI()
 
     def __onActiveReceived(self):
-        self.__stopAllSounds()
+        self.__stopAllSounds(silent=True)
         SOUND_SWITCH_ACTIVATION.enable()
         SOUND_EVENT_ACTIVATION.play()
         self.__toggleShader(True)
@@ -166,7 +166,7 @@ class ThermalVisionController(BigWorld.DynamicScriptComponent):
             params = self.params
             self.__indicatorProxy.setParams(params)
             self.__indicatorProxy.setState(self.stateStatus)
-            self.__stopAllSounds()
+            self.__stopAllSounds(silent=True)
             self.__updateSectorSettings()
             self.__setSectorState(THERMAL_VISION_STATE.IDLE)
             BigWorld.PyrometerSector.setParams(params.distance, params.hSectorAngle, params.vSectorAngle)
@@ -196,8 +196,8 @@ class ThermalVisionController(BigWorld.DynamicScriptComponent):
         for entityId in list(self.__observedEntityIds):
             self.__hideEntityObserveMarker(entityId)
 
-    def __stopAllSounds(self):
-        SOUND_EVENT_ACTIVATION.stop()
+    def __stopAllSounds(self, silent=False):
+        SOUND_EVENT_ACTIVATION.stop(playStopSound=not silent)
         SOUND_EVENT_RELOADING.stop()
         SOUND_SWITCH_ACTIVATION.disable()
         if self.stateStatus is not None and self.state != THERMAL_VISION_STATE.ACTIVE:

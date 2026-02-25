@@ -11,7 +11,7 @@ from gui.impl import auxiliary
 from gui.server_events import formatters
 from gui.server_events.awards_formatters import AWARDS_SIZES, AwardsPacker, QuestsBonusComposer, getPostBattleAwardsPacker
 from gui.server_events.bonuses import BlueprintsBonusSubtypes, formatBlueprint
-from gui.battle_pass.battle_pass_bonuses_helper import BonusesHelper
+from gui.shared.bonuses_layout_helper import BonusesHelper
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.crew_skin import localizedFullName as localizeSkinName
 from gui.shared.money import Currency

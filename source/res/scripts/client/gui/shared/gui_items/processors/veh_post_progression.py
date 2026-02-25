@@ -11,7 +11,7 @@ from gui.veh_post_progression.messages import makeModificationErrorMsg, makeDisc
 from gui.veh_post_progression.sounds import playSound
 from gui.veh_post_progression.sounds import Sounds
 from post_progression_common import ACTION_TYPES, FEATURE_BY_GROUP_ID
-from gui.veh_post_progression.models.ext_money import EXT_MONEY_ZERO, getFullXPFromXPPrice
+from gui.shared.ext_money import EXT_MONEY_ZERO, getFullXPFromXPPrice
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items import Vehicle
 

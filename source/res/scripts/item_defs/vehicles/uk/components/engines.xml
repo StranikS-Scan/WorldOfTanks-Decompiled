@@ -120,6 +120,9 @@
     <Rolls_Royce_Griffon_FL>	501	</Rolls_Royce_Griffon_FL>
     <Rolls_Royce_Griffon_7x7>	502	</Rolls_Royce_Griffon_7x7>
     <Rolls_Royse_FB_60_FL>	503	</Rolls_Royse_FB_60_FL>
+    <Rolls_Royce_Griffon_ISP>	37000	</Rolls_Royce_Griffon_ISP>
+    <LandRover_Meteorite_V8_ISP>	37001	</LandRover_Meteorite_V8_ISP>
+    <Rolls_Royce_Meteor_with_twin_turbo_supercharges_ISP>	37002	</Rolls_Royce_Meteor_with_twin_turbo_supercharges_ISP>
     <Rolls_Royse_Meteor_MkIVC_IGR>	60001	</Rolls_Royse_Meteor_MkIVC_IGR>
     <Rolls_Royse_Meteor_M120_IGR>	60002	</Rolls_Royse_Meteor_M120_IGR>
     <Rolls_Royse_Meteor_MkIV_IGR>	60003	</Rolls_Royse_Meteor_MkIV_IGR>
@@ -1214,6 +1217,23 @@
       <rpm_min>	485	</rpm_min>
       <rpm_max>	2047	</rpm_max>
     </Rolls_Royce_Griffon>
+    <Rolls_Royce_Griffon_ISP>
+      <userString>	#gb_vehicles:Rolls_Royce_Griffon_ISP	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	950	</power>
+      <weight>	952	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	485	</rpm_min>
+      <rpm_max>	2047	</rpm_max>
+    </Rolls_Royce_Griffon_ISP>
     <Rolls_Royce_Griffon_FL>
       <userString>	#gb_vehicles:Rolls_Royce_Griffon	</userString>
       <tags>	gasoline	</tags>
@@ -1563,6 +1583,24 @@
       <rpm_min>	400	</rpm_min>
       <rpm_max>	3200	</rpm_max>
     </LandRover_Meteorite_V8>
+    <LandRover_Meteorite_V8_ISP>
+      <userString>	#gb_vehicles:LandRover_Meteorite_V8_ISP	</userString>
+      <shortUserString>	#gb_vehicles:LandRover_Meteorite_V8_ISP_short	</shortUserString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	110000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Skoda_Prague_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Skoda_Prague_npc	</wwsoundNPC>
+      <power>	680	</power>
+      <weight>	700	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </LandRover_Meteorite_V8_ISP>
     <LandRover_Meteorite_V8_bob>
       <userString>	#gb_vehicles:LandRover_Meteorite_V8	</userString>
       <shortUserString>	#gb_vehicles:LandRover_Meteorite_V8_short	</shortUserString>
@@ -1648,6 +1686,23 @@
       <rpm_min>	458	</rpm_min>
       <rpm_max>	2131	</rpm_max>
     </Rolls_Royce_Meteor_with_twin_turbo_supercharges>
+    <Rolls_Royce_Meteor_with_twin_turbo_supercharges_ISP>
+      <userString>	#gb_vehicles:Rolls_Royce_Meteor_with_twin_turbo_supercharges_ISP	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	65000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1040	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	458	</rpm_min>
+      <rpm_max>	2131	</rpm_max>
+    </Rolls_Royce_Meteor_with_twin_turbo_supercharges_ISP>
     <Rolls_Royce_Meteor_with_twin_turbo_supercharges_7x7>
       <userString>	#gb_vehicles:Rolls_Royce_Meteor_with_twin_turbo_supercharges	</userString>
       <tags>	gasoline	</tags>
@@ -1857,7 +1912,7 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
       <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
-      <power>	1000	</power>
+      <power>	900	</power>
       <weight>	998	</weight>
       <maxHealth>	285	</maxHealth>
       <maxRegenHealth>	142	</maxRegenHealth>

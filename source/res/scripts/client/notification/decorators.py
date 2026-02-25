@@ -16,14 +16,14 @@ from gui.clans.settings import CLAN_APPLICATION_STATES, CLAN_INVITE_STATES
 from gui.customization.shared import isVehicleCanBeCustomized
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.prb_control import prbInvitesProperty
+from gui.prb_control import prbInvitesProperty, prbEntityProperty
 from gui.prb_control.formatters.invites import getPrbInviteHtmlFormatter
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.events import HangarSpacesSwitcherEvent, ViewEventType
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.notifications import NotificationGroup, NotificationGuiSettings, NotificationPriorityLevel
 from gui.shared.utils.functions import makeTooltip
-from gui.paragons.paragons_constants import ParagonsSystemMessages
+from gui.paragons.paragons_constants import MESSAGE_ICONS
 from gui.notify_center.settings import NOTIFY_CENTER_DEFAULT_ICON, NOTIFY_CENTER_POP_UP_BUTTON_WIDTH
 from helpers import dependency, time_utils
 from items import makeIntCompactDescrByID
@@ -273,6 +273,7 @@ class LockButtonMessageDecorator(MessageDecorator):
         g_playerEvents.onEnqueued += self._onEqueued
         g_playerEvents.onDequeued += self._onDequeued
         g_viewOverrider.onViewOverriden += self._onViewOverriden
+        self._updateButtonsState(self.prbEntity and self.prbEntity.isInQueue())
 
     def clear(self):
         super(LockButtonMessageDecorator, self).clear()
@@ -283,6 +284,10 @@ class LockButtonMessageDecorator(MessageDecorator):
 
     def update(self, formatted):
         _NotificationDecorator.update(self, formatted)
+
+    @prbEntityProperty
+    def prbEntity(self):
+        pass
 
     def _onEqueued(self, _):
         self._updateButtonsState(lock=True)
@@ -1537,12 +1542,12 @@ class ParagonsAchievementDecorator(MessageDecorator):
 
     def _make(self, formatted=None, settings=None):
         self._settings = NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.HIGH)
-        if settings.messageType == ParagonsSystemMessages.FIRST_MAIN_REWARD_ACHIEVED:
-            pathToIcon = backport.image(R.images.gui.maps.icons.paragons.messenger.notification_icon_first11())
-        if settings.messageType == ParagonsSystemMessages.FIRST_CHAPTER_COMPLETED:
-            pathToIcon = backport.image(R.images.gui.maps.icons.paragons.messenger.notification_icon_first_chapter())
-        formatted['icon'] = pathToIcon
+        iconGetter = MESSAGE_ICONS.get(settings.messageType)
+        if iconGetter is not None:
+            pathToIcon = backport.image(iconGetter())
+            formatted['icon'] = pathToIcon
         self._vo = {'typeID': self.getType(),
          'entityID': self.getID(),
          'message': formatted,
          'notify': self.isNotify()}
+        return

@@ -20,9 +20,11 @@ class ParagonsEntryPoint(object):
     def __init__(self, view):
         self.__viewRef = weakref.ref(view)
         self.__paragonsStateToTabId = {ProgressState.CHAPTERNOTCHOSEN: TabId.CHAPTERS,
-         ProgressState.ALLCHAPTERSCOMPLETED: TabId.PROGRESS,
+         ProgressState.ALLCHAPTERSCOMPLETED: TabId.CHAPTERS,
          ProgressState.ACTIVE: TabId.PROGRESS,
-         ProgressState.PAUSED: TabId.PROGRESS}
+         ProgressState.PAUSED: None,
+         ProgressState.NOTAVAILABLE: TabId.CHAPTERS}
+        return
 
     @property
     def viewModel(self):
@@ -39,12 +41,16 @@ class ParagonsEntryPoint(object):
     def update(self, isNeedUpdateLevels=True):
         if not self.__paragonsController.isEnabled:
             return
-        paragonsState = self.__getParagonsState()
-        with self.viewModel.transaction() as tx:
-            tx.setProgressState(paragonsState)
-            tx.setIsAnySelectableReward(self.__isAnySelectableReward())
-            tx.setIsAnySelectableRewardInInventory(self.__isAnySelectableRewardInInventory())
-            self.__fillChapterModel(tx.currentChapter, paragonsState, isNeedUpdateLevels)
+        else:
+            paragonsState = self.__getParagonsState()
+            chosenChapterID = self.__paragonsController.chapterID
+            with self.viewModel.transaction() as tx:
+                tx.setProgressState(paragonsState)
+                tx.setIsAnySelectableReward(self.__isAnySelectableReward())
+                tx.setIsAnySelectableRewardInInventory(self.__isAnySelectableRewardInInventory())
+                tx.setFreePoints(self.__paragonsController.progress if chosenChapterID is None else 0)
+                self.__fillChapterModel(tx.currentChapter, paragonsState, isNeedUpdateLevels)
+            return
 
     def __getParagonsState(self):
         ctrl = self.__paragonsController
@@ -54,13 +60,16 @@ class ParagonsEntryPoint(object):
         isAnyChapterAvailable = ctrl.isAnyChapterAvailable
         if isPaused:
             return ProgressState.PAUSED
-        elif chosenChapter is None and isAnyChapterAvailable:
-            return ProgressState.CHAPTERNOTCHOSEN
+        elif isAllChaptersComplete:
+            return ProgressState.ALLCHAPTERSCOMPLETED
+        elif chosenChapter is None and not ctrl.wasBranchResetEverAvailable:
+            return ProgressState.NOTAVAILABLE
         else:
-            return ProgressState.ALLCHAPTERSCOMPLETED if isAllChaptersComplete else ProgressState.ACTIVE
+            return ProgressState.CHAPTERNOTCHOSEN if chosenChapter is None and isAnyChapterAvailable else ProgressState.ACTIVE
 
     def __isAnySelectableReward(self):
-        entID = getParagonsEntitlement(ParagonsEntitlements.V_11.value)
+        chapterID = self.__paragonsController.chapterID
+        entID = getParagonsEntitlement(ParagonsEntitlements.all()[chapterID - 1 if chapterID else 0])
         entitlements = self.__selectableRewardsController.entitlements
         return bool(entitlements.getEntitlementsByID(entID))
 

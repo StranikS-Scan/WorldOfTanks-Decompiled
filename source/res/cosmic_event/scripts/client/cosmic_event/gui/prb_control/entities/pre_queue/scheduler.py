@@ -7,7 +7,7 @@ from gui.prb_control.entities.base.scheduler import BaseScheduler
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.periodic_battles.models import PrimeTimeStatus
 from helpers import dependency
-from cosmic_event.skeletons.battle_controller import ICosmicEventBattleController
+from skeletons.gui.game_control import ICosmicEventBattleController
 from skeletons.gui.shared import IItemsCache
 
 class CosmicEventBattleScheduler(BaseScheduler):

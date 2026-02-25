@@ -13,10 +13,10 @@ class ScoreEvents(enum.IntEnum):
     ASSIST = 7
     FIRST_BLOOD = 8
     KILL_STREAK = 9
-    PICKUP_MASTER = 10
-    REVENGE = 11
-    BOOST_ME = 12
-    MAX_KILL_SERIES = 13
+    MAX_KILL_SERIES = 10
+    LOOT_RESEARCHING = 11
+    LOOT_RESEARCHING_DONE = 12
+    LOOT_RESEARCHABLE_PICK_UP = 13
 
 
 @enum.unique
@@ -35,6 +35,7 @@ class Abilities(enum.IntEnum):
     SNIPER_SHOT = 3
     POWER_SHOT = 4
     STUN_SHOT = 5
+    TELEPORT = 6
 
 
 @enum.unique

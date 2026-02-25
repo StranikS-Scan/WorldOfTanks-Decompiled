@@ -30,4 +30,5 @@ HINTS = {AnnouncementTypeEnum.RESPAWN.value: Goal(type=AnnouncementTypeEnum.RESP
  AnnouncementTypeEnum.PREPARETOSCAN.value: Goal(type=AnnouncementTypeEnum.PREPARETOSCAN, sound=None, endSound=(CosmicBattleSounds.Announcements.FINISHED,)),
  AnnouncementTypeEnum.PREPARETOSCANFINAL.value: Goal(type=AnnouncementTypeEnum.PREPARETOSCANFINAL, sound=None, endSound=(CosmicBattleSounds.Announcements.FINISHED,)),
  AnnouncementTypeEnum.FINALSCANAVAILABLE.value: Goal(type=AnnouncementTypeEnum.FINALSCANAVAILABLE, sound=None, endSound=(CosmicBattleSounds.Announcements.FINISHED,)),
- AnnouncementTypeEnum.SCANNING.value: Goal(type=AnnouncementTypeEnum.SCANNING, sound=None, endSound=(CosmicBattleSounds.Announcements.FINISHED,))}
+ AnnouncementTypeEnum.SCANNING.value: Goal(type=AnnouncementTypeEnum.SCANNING, sound=None, endSound=(CosmicBattleSounds.Announcements.FINISHED,)),
+ AnnouncementTypeEnum.PREPARETOLOOTPICKUP.value: Goal(type=AnnouncementTypeEnum.PREPARETOLOOTPICKUP, sound=None, endSound=(CosmicBattleSounds.Announcements.FINISHED,))}

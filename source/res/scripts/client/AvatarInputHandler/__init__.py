@@ -109,12 +109,18 @@ class DynamicCameraSettings(object):
 
     def __init__(self, dataSec):
         self.__dynamic = {'caliberImpulses': [],
-         'massSensitivity': []}
+         'massSensitivity': [],
+         'autoShootImpulsesCoeffs': []}
         caliberSettings = dataSec['caliberImpulses']
         if caliberSettings is not None:
             self.__dynamic['caliberImpulses'] = self.__readRange(caliberSettings)
         else:
             LOG_ERROR('<caliberImpulses> dataSection is not found!')
+        autoShootImpulsesCoeffs = dataSec['autoShootImpulsesCoeffs']
+        if autoShootImpulsesCoeffs is not None:
+            self.__dynamic['autoShootImpulsesCoeffs'] = self.__readRange(autoShootImpulsesCoeffs)
+        else:
+            LOG_ERROR('<autoShootImpulsesCoeffs> dataSection is not found!')
         sensitivitySettings = dataSec['massSensitivity']
         if sensitivitySettings is not None:
             self.__dynamic['massSensitivity'] = self.__readRange(sensitivitySettings)
@@ -135,6 +141,15 @@ class DynamicCameraSettings(object):
             impulseMagnitude = magnitude
 
         return impulseMagnitude
+
+    def getAutoShootGunImpulseCoeff(self, caliber):
+        impulseCoeff = 0.0
+        for minCaliber, coeff in self.__dynamic['autoShootImpulsesCoeffs']:
+            if caliber < minCaliber:
+                break
+            impulseCoeff = coeff
+
+        return impulseCoeff
 
     def getSensitivityToImpulse(self, vehicleMass):
         sensitivity = 0.0
@@ -747,8 +762,14 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                     impulseReason = cameras.ImpulseReason.OTHER_SHOT
                     isDistant = True
             elif vehicle is avatarVehicle:
-                if shakeReason == _ShakeReason.HIT or shakeReason == _ShakeReason.HIT_NO_DAMAGE:
-                    impulseValue *= 1.0 if shakeReason == _ShakeReason.HIT else self.__dynamicCameraSettings.settings['zeroDamageHitSensitivity']
+                if shakeReason in (_ShakeReason.HIT,
+                 _ShakeReason.HIT_NO_DAMAGE,
+                 _ShakeReason.AUT0SHOOT_HIT,
+                 _ShakeReason.AUT0SHOOT_HIT_NO_DAMAGE):
+                    zeroDamageHitSensitivity = self.__dynamicCameraSettings.settings['zeroDamageHitSensitivity']
+                    impulseValue *= 1.0 if shakeReason in (_ShakeReason.HIT, _ShakeReason.AUT0SHOOT_HIT) else zeroDamageHitSensitivity
+                    if shakeReason in (_ShakeReason.AUT0SHOOT_HIT, _ShakeReason.AUT0SHOOT_HIT_NO_DAMAGE):
+                        impulseValue *= self.__dynamicCameraSettings.getAutoShootGunImpulseCoeff(caliber)
                     impulseReason = cameras.ImpulseReason.ME_HIT
                     isDistant = False
                 else:

@@ -862,7 +862,7 @@ class ParagonsProgressBlock(base.StatsBlock):
     @classmethod
     def __getParagonsExtraCoinsInfo(cls, points):
         pointsInfo = {'description': backport.text(_PARAGONS_POST_BATTLE_RES.extraCoins()),
-         'progressDiff': '{} {}'.format(points, icons.makeImageTag(backport.image(R.images.gui.maps.icons.paragons.paragon_20x20()))),
+         'progressDiff': '{} {}'.format(points, icons.makeImageTag(backport.image(R.images.gui.maps.icons.paragons.paragon_small()))),
          'progressDiffTooltip': backport.text(_PARAGONS_POST_BATTLE_RES.tooltip.coins()),
          'currentProgrVal': points,
          'progrBarType': formatters.PROGRESS_BAR_TYPE.NONE}

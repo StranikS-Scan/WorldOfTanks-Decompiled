@@ -33,13 +33,14 @@ class ArtifactScanningComponent(DynamicScriptComponent):
 
             self._prefabs = None
         from cosmic_event.gui.shared.events import ArtifactScanningEvent
-        self._sendEvent(ArtifactScanningEvent.ARTIFACT_DESTROYED, None)
+        self._sendEvent(ArtifactScanningEvent.ARTIFACT_DESTROYED, {'id': self.entity.id})
         super(ArtifactScanningComponent, self).onDestroy()
         return
 
     def set_vehiclesInZone(self, *args, **kwargs):
         from cosmic_event.gui.shared.events import ArtifactScanningEvent
-        self._sendEvent(ArtifactScanningEvent.VEHICLES_IN_ZONE_CHANGED, {'vehicles': self.vehiclesInZone})
+        self._sendEvent(ArtifactScanningEvent.VEHICLES_IN_ZONE_CHANGED, {'vehicles': self.vehiclesInZone,
+         'id': self.entity.id})
 
     def set_stage(self, *args, **kwargs):
         from cosmic_event.gui.shared.events import ArtifactScanningEvent
@@ -54,13 +55,15 @@ class ArtifactScanningComponent(DynamicScriptComponent):
         self._prefabs.append(prefab)
 
     def _getStartScanningCtx(self):
-        return {'vehicles': self.vehiclesInZone,
+        return {'id': self.entity.id,
+         'vehicles': self.vehiclesInZone,
          'endLifeTime': self.endLifeTime,
          'duration': self.duration,
          'isLastOne': bool(self.isLastOne)}
 
     def _getCreatedCtx(self):
-        return {'position': self.entity.position}
+        return {'id': self.entity.id,
+         'position': self.entity.position}
 
     @staticmethod
     def _sendEvent(event, ctx):

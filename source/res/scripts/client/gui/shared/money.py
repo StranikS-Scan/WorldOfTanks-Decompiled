@@ -40,7 +40,8 @@ class Currency(CONST_CONTAINER):
      CRYSTAL: 'crystal',
      EVENT_COIN: 'event_coin',
      BPCOIN: 'bpcoin',
-     EQUIP_COIN: 'equipCoin'}
+     EQUIP_COIN: 'equipCoin',
+     FREE_XP: 'free_xp'}
     _CURRENCY_INTERNAL_MAP = {external:internal for internal, external in _CURRENCY_EXTERNAL_MAP.iteritems()}
 
     @classmethod

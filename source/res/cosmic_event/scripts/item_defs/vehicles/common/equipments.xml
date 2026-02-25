@@ -7,7 +7,7 @@
     <notInShop>	True	</notInShop>
     <tags>	notForSale public stopOutsideBattle	</tags>
     <type>	battleAbilities	</type>
-    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <soundNotification>	ev_cosmic_ability_ready	</soundNotification>
     <script>	cosmic_event_common.items.artefacts.CosmicEventGravityFieldEquipment	  <visualScript>
         <client>
           <plan>	cosmic_event_abilities/gravity_field_client	</plan>
@@ -35,7 +35,7 @@
     <notInShop>	True	</notInShop>
     <tags>	notForSale public stopOutsideBattle	</tags>
     <type>	battleAbilities	</type>
-    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <soundNotification>	ev_cosmic_ability_ready	</soundNotification>
     <script>	cosmic_event_common.items.artefacts.CosmicEventRocketBoosterEquipment	  <visualScript>
         <client>
           <plan>	cosmic_event_abilities/rocket_booster_client	</plan>
@@ -58,7 +58,7 @@
     <notInShop>	True	</notInShop>
     <tags>	notForSale stopOutsideBattle	</tags>
     <type>	battleAbilities	</type>
-    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <soundNotification>	ev_cosmic_ability_ready	</soundNotification>
     <script>	cosmic_event_common.items.artefacts.CosmicEventBlackHoleEquipment	  <clientSelector>	cosmic_event.cosmic_control_mode._CosmicArenaBoundStrikeSelector	</clientSelector>
       <visualScript>
         <client>
@@ -98,7 +98,7 @@
     <notInShop>	True	</notInShop>
     <tags>	notForSale public stopOutsideBattle	</tags>
     <type>	battleAbilities	</type>
-    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <soundNotification>	ev_cosmic_ability_ready	</soundNotification>
     <script>	cosmic_event_common.items.artefacts.CosmicEventHookShotEquipment	  <visualScript>
         <client>
           <plan>	cosmic_event_abilities/hook_shot_client	</plan>
@@ -124,7 +124,7 @@
     <notInShop>	True	</notInShop>
     <tags>	notForSale public stopOutsideBattle	</tags>
     <type>	battleAbilities	</type>
-    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <soundNotification>	ev_cosmic_ability_ready	</soundNotification>
     <script>	cosmic_event_common.items.artefacts.CosmicEventShieldEquipment	  <visualScript>
         <client>
           <plan>	cosmic_event_abilities/shield_client	</plan>
@@ -149,7 +149,7 @@
     <notInShop>	True	</notInShop>
     <tags>	notForSale public stopOutsideBattle	</tags>
     <type>	battleAbilities	</type>
-    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <soundNotification>	ev_cosmic_ability_ready	</soundNotification>
     <script>	cosmic_event_common.items.artefacts.CosmicEventPowerShotEquipment	  <visualScript>
         <client>
           <plan>	cosmic_event_abilities/power_shot_client	</plan>
@@ -173,7 +173,7 @@
     <notInShop>	True	</notInShop>
     <tags>	notForSale public stopOutsideBattle	</tags>
     <type>	battleAbilities	</type>
-    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <soundNotification>	ev_cosmic_ability_ready	</soundNotification>
     <script>	cosmic_event_common.items.artefacts.CosmicEventWaveEquipment	  <visualScript>
         <client>
           <plan>	cosmic_event_abilities/wave_client	</plan>
@@ -201,7 +201,7 @@
     <notInShop>	True	</notInShop>
     <tags>	notForSale public stopOutsideBattle	</tags>
     <type>	battleAbilities	</type>
-    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <soundNotification>	ev_cosmic_ability_ready	</soundNotification>
     <script>	cosmic_event_common.items.artefacts.CosmicEventStunShotEquipment	  <visualScript>
         <server>
           <plan>	cosmic_event_abilities/stun_shot_server	</plan>
@@ -226,4 +226,41 @@
       </gunReloadTimeMultiplier>
     </script>
   </cosmic_event_stun_shot>
+  <cosmic_event_mine>
+    <id>	9612	</id>
+    <userString>	#artefacts:repulsion_mine/name	</userString>
+    <description>	#artefacts:repulsion_mine/descr	</description>
+    <icon>	cosmic_event_mine 0 0	</icon>
+    <price>	0	</price>
+    <tags>	notForSale abilityEquipment	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	ev_cosmic_ability_ready	</soundNotification>
+    <usagePrefab>	content/CGFPrefabs/cosmic_event/cosmic_event_repulsion_mine.prefab	</usagePrefab>
+    <script>	cosmic_event_common.items.artefacts.CosmicEventMineEquipment	  <clientSelector>	cosmic_event.cosmic_control_mode._CosmicArenaMineSelector	</clientSelector>
+      <cooldownSeconds>	30	</cooldownSeconds>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	50	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <areaLength>	20	</areaLength>
+      <areaWidth>	20	</areaWidth>
+      <areaVisual>	content/Interface/TargetPoint/circle_dot_cross.visual	</areaVisual>
+      <areaColor>	0xFF00FF00	</areaColor>
+      <restrictedAreaColor>	0xFF00FF00	</restrictedAreaColor>
+    </script>
+  </cosmic_event_mine>
+  <cosmic_event_teleport>
+    <id>	9613	</id>
+    <userString>	#artefacts:teleport/name	</userString>
+    <description>	#artefacts:teleport/descr	</description>
+    <icon>	cosmic_event_teleport 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	ev_cosmic_ability_ready	</soundNotification>
+    <script>	cosmic_event_common.items.artefacts.CosmicEventTeleportEquipment	  <lifeTime>	15	</lifeTime>
+    </script>
+  </cosmic_event_teleport>
 </equipments.xml>

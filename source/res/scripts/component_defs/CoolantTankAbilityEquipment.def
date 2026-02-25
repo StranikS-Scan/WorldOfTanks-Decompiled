@@ -1,7 +1,15 @@
 <CoolantTankAbilityEquipment.def>
   <Parent>	AbilityEquipment	</Parent>
+  <Properties>
+    <currentClientState>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </currentClientState>
+  </Properties>
   <ClientMethods>
     <updateCurrentPenaltyReloadTime>
+      <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
       <DetailLevel>	MY_VEHICLE	</DetailLevel>

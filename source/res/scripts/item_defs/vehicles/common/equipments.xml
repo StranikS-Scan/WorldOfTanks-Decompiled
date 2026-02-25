@@ -7444,7 +7444,7 @@
       <smokeOpacity>	10.	</smokeOpacity>
       <attrFactorMods>
         <circularVisionRadius>
-          <value>	-0.95	</value>
+          <value>	-0.9	</value>
           <ignoreAllies>	True	</ignoreAllies>
         </circularVisionRadius>
         <crewRolesFactor>
@@ -7527,7 +7527,7 @@
         <triggerHeight>	5	</triggerHeight>
         <triggerDepth>	1	</triggerDepth>
         <influenceType>	2	</influenceType>
-        <lifetime>	25	</lifetime>
+        <lifetime>	15	</lifetime>
         <damage>	0	</damage>
         <shellCompactDescr>	97818	</shellCompactDescr>
         <destroyMyMinesOverlappingAlliedMines>	True	</destroyMyMinesOverlappingAlliedMines>
@@ -8596,9 +8596,9 @@
       </duration>
       <radius>	30	  <exports>	vse tooltip	</exports>
       </radius>
-      <heal>	20 40 60	  <exports>	vse	</exports>
+      <heal>	60 120 180	  <exports>	vse	</exports>
       </heal>
-      <secondaryHealDebuff>	25	  <exports>	vse tooltip	</exports>
+      <secondaryHealDebuff>	75	  <exports>	vse tooltip	</exports>
       </secondaryHealDebuff>
       <tickInterval>	1.0	  <exports>	vse	</exports>
       </tickInterval>
@@ -8647,9 +8647,9 @@
       </cooldownSeconds>
       <duration>	10	  <exports>	vse tooltip	</exports>
       </duration>
-      <heal>	10 15 20	  <exports>	vse	</exports>
+      <heal>	7 11 15	  <exports>	vse	</exports>
       </heal>
-      <gunReloadTimeBuff>	4	  <exports>	vse tooltip	</exports>
+      <gunReloadTimeBuff>	5	  <exports>	vse tooltip	</exports>
       </gunReloadTimeBuff>
       <tickInterval>	1.0	  <exports>	vse	</exports>
       </tickInterval>
@@ -8673,11 +8673,11 @@
       </cooldownSeconds>
       <duration>	15	  <exports>	vse tooltip	</exports>
       </duration>
-      <aimingTimeBuff>	0.5 0.35 0.15	  <exports>	vse	</exports>
+      <aimingTimeBuff>	0.8 0.7 0.6	  <exports>	vse	</exports>
       </aimingTimeBuff>
-      <shotDispersionFactors>	0.5 0.35 0.25	  <exports>	vse	</exports>
+      <shotDispersionFactors>	0.7 0.6 0.5	  <exports>	vse	</exports>
       </shotDispersionFactors>
-      <clipReloadTimeBoost>	0.65 0.8 1.15	  <exports>	vse tooltip	</exports>
+      <clipReloadTimeBoost>	0.5 0.7 0.9	  <exports>	vse tooltip	</exports>
       </clipReloadTimeBoost>
     </script>
   </comp7_concentration>
@@ -8744,13 +8744,13 @@
           <plan>	comp7Abilities/redline_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	20	  <exports>	vse	</exports>
+      <cooldownSeconds>	30	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <delay>	3	  <exports>	vse tooltip	</exports>
+      <delay>	4	  <exports>	vse tooltip	</exports>
       </delay>
       <radius>	8 10 12	  <exports>	vse tooltip	</exports>
       </radius>
-      <damage>	100 250 500	  <exports>	vse tooltip	</exports>
+      <damage>	150 250 450	  <exports>	vse tooltip	</exports>
       </damage>
       <stunDuration>	3 5 7	  <exports>	vse tooltip	</exports>
       </stunDuration>
@@ -8924,7 +8924,7 @@
       </visualScript>
       <cooldownSeconds>	8	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <duration>	10 15 25	  <exports>	vse tooltip	</exports>
+      <duration>	5 10 15	  <exports>	vse tooltip	</exports>
       </duration>
       <delay>	1	  <exports>	vse tooltip	</exports>
       </delay>

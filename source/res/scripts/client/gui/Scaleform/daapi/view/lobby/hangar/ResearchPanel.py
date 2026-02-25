@@ -14,10 +14,10 @@ from gui.Scaleform.daapi.view.meta.ResearchPanelMeta import ResearchPanelMeta
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.shared import event_dispatcher as shared_events
+from gui.shared.ext_money import ExtendedMoney
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.time_formatters import getTimeLeftStr
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
-from gui.veh_post_progression.models.ext_money import ExtendedMoney
 from helpers import i18n, dependency
 from nation_change.nation_change_helpers import iterVehiclesWithNationGroupInOrder
 from skeletons.gui.game_control import IVehicleComparisonBasket, IIGRController

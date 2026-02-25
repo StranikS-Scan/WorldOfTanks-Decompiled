@@ -11,6 +11,7 @@ from account_helpers.settings_core.settings_constants import GRAPHICS
 from constants import EQUIPMENT_STAGES, SHELL_TYPES
 from gui.battle_control.battle_context_hints.common import HintId
 from gui.battle_control.controllers.consumables.ammo_ctrl import IAmmoListener
+from gui.shared.gui_items import getKpiAbilityFormatter
 from gui.shared.items_parameters.formatters import formatParameter
 from gui.shared.utils import DISTANCE_DAMAGE_PROP_NAME, DAMAGE_PROP_NAME, SHOT_SPEED_ACCELERATED_PROP_NAME
 from gui.shared.utils import PIERCING_POWER_PROP_NAME
@@ -438,10 +439,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
             toolTip = self.__makeShellTooltip(descriptor, gunSettings, shellCD, 1 + value)
             self.as_updateTooltipS(idx=self._cds.index(shellCD), tooltipStr=toolTip)
 
-        if value == 0:
-            self.as_hideAbilityModifierS(False)
-        else:
-            self.as_showAbilityModifierS(int(round(value * 100)), False)
+        self.as_setAbilityModifierS(int(round(value * 100)), False)
 
     def __onShowGlowForSlot(self, intCD):
         if intCD not in self._cds:
@@ -1032,13 +1030,24 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
     def __isAbilityEquipment(item):
         return 'visualScriptAbilityEquipment' in item.getTags() or 'abilityEquipment' in item.getTags()
 
-    @staticmethod
-    def __buildAbilityEquipmentTooltip(ability):
+    @classmethod
+    def __buildAbilityEquipmentTooltip(cls, ability):
         description = ability.description
         usageStr = backport.text(R.strings.artefacts.ability.descr.usage(), reuseCount=ability.reuseCount, duration=ability.duration, cooldown=ability.cooldownSeconds)
+        customUsageRes = R.strings.artefacts.custom.dyn(ability.name)
+        if customUsageRes:
+            usageStr = cls.__buildCustomEquipmentDescr(ability, usageStr)
         description = '\n\n'.join((description, usageStr))
         toolTip = TOOLTIP_FORMAT.format(ability.userString, description)
         return toolTip
+
+    @classmethod
+    def __buildCustomEquipmentDescr(cls, ability, usageStr):
+        customUsageRes = R.strings.artefacts.custom.dyn(ability.name).ability.descr.usage()
+        textFormatter = getKpiAbilityFormatter(ability)
+        if customUsageRes and textFormatter:
+            usageStr = backport.text(customUsageRes, **textFormatter(ability, usageStr))
+        return usageStr
 
     @staticmethod
     def __getBattleHintID(equipmentTag, deviceName, deviceState):

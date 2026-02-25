@@ -5,39 +5,34 @@ import typing
 from cosmic_event.gui.impl.gen.view_models.views.lobby.cosmic_lobby_view.scoring_model import ScoringModel, ScoringTypeEnum
 from cosmic_event.gui.impl.gen.view_models.views.lobby.post_battle_view.cosmic_daily_missions import CosmicDailyMissions
 from cosmic_event.gui.impl.gen.view_models.views.lobby.post_battle_view.cosmic_post_battle_view_model import CosmicPostBattleViewModel
-from cosmic_event.gui.impl.lobby.quest_helpers import fillDailyQuestModel, getDailyQuestModelFromQuest
-from cosmic_event.skeletons.battle_controller import ICosmicEventBattleController
-from cosmic_event.skeletons.progression_controller import ICosmicEventProgressionController
 from cosmic_sound import CosmicHangarSounds
+from cosmic_event.cosmic_constants import COSMIC_VEHICLES_ROVER_ENUM
+from cosmic_event.skeletons.progression_controller import ICosmicEventProgressionController
+from cosmic_event.gui.shared.scores import SCORE_EVENTS_TO_MODEL_ENUM, sortEvents, sortEventsByName
+from cosmic_event.gui.impl.lobby.quest_helpers import fillDailyQuestModel
+from cosmic_event.gui.impl.lobby.quest_packer import PostBattleDailyCosmicQuestUIDataPacker
+from cosmic_event.gui.impl.lobby.tooltips.cosmic_lootbox_tooltip_extended import CosmicExtendedLootboxTooltip
+from cosmic_event.gui.impl.gen.view_models.views.lobby.post_battle_view.player_entry import PlayerEntry
+from skeletons.gui.shared import IItemsCache
+from skeletons.gui.game_control import ICosmicEventBattleController
+from skeletons.gui.battle_results import IBattleResultsService
 from frameworks.wulf import ViewFlags, ViewSettings, Array
 from gui.impl.gen import R
 from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
 from gui.impl.lobby.common.view_mixins import LobbyHeaderVisibility
+from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
+from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import LootboxTooltip
+from gui.shared.gui_items.Vehicle import Vehicle
 from gui.impl.pub import ViewImpl
 from helpers import dependency
-from skeletons.gui.battle_results import IBattleResultsService
-from cosmic_event.gui.impl.gen.view_models.views.lobby.post_battle_view.player_entry import PlayerEntry
-from cosmic_event.cosmic_constants import COSMIC_VEHICLES_ROVER_ENUM
-from gui.shared.gui_items.Vehicle import Vehicle
+from debug_utils import LOG_ERROR
 if typing.TYPE_CHECKING:
-    from typing import Sequence, Dict, Tuple, Callable, Optional, Any
+    from typing import Sequence, List, Dict, Tuple, Callable, Optional, Any
     from Event import Event
     from gui.battle_results.reusable import _ReusableInfo
     from gui.server_events.event_items import Quest
     from gui.server_events.conditions import Cumulativable
 _logger = logging.getLogger(__name__)
-_scoringToKey = [(ScoringTypeEnum.SHOT, 'cosmicScore/SHOT'),
- (ScoringTypeEnum.RAM, 'cosmicScore/RAMMING'),
- (ScoringTypeEnum.BOOSTME, 'cosmicScore/BOOST_ME'),
- (ScoringTypeEnum.KILL, 'cosmicScore/KILL'),
- (ScoringTypeEnum.ASSIST, 'cosmicScore/ASSIST'),
- (ScoringTypeEnum.SCAN, 'cosmicScore/ARTIFACT_SCAN'),
- (ScoringTypeEnum.PICKUP, 'cosmicScore/PICKUP'),
- (ScoringTypeEnum.ABILITYHIT, 'cosmicScore/ABILITY_HIT'),
- (ScoringTypeEnum.PICKUPMASTER, 'cosmicScore/PICKUP_MASTER'),
- (ScoringTypeEnum.REVENGE, 'cosmicScore/REVENGE'),
- (ScoringTypeEnum.KILLSTREAK, 'cosmicScore/KILL_STREAK'),
- (ScoringTypeEnum.FIRSTBLOOD, 'cosmicScore/FIRST_BLOOD')]
 _rewardKeys = ['index',
  'name',
  'value',
@@ -53,16 +48,30 @@ def _createScoringInfo(scoringType, points):
     return score
 
 
-def _fillScoreList(playerScore, vehicleData):
+def createScoreEventCollection(vehicleData, isDeserter):
+    scoreEvents = []
+    for eName, eValue in SCORE_EVENTS_TO_MODEL_ENUM.iteritems():
+        scores = vehicleData['cosmicScore/' + eName.name]
+        scoreEvents.append((eValue, scores))
+
+    if not isDeserter:
+        sortEvents(scoreEvents)
+    else:
+        sortEventsByName(scoreEvents)
+    return scoreEvents
+
+
+def _fillScoreList(playerScore, scoreEvents):
     playerScore.clear()
-    playerScore.reserve(len(_scoringToKey))
-    for scoringType, battleResultsKey in _scoringToKey:
-        playerScore.addViewModel(_createScoringInfo(scoringType, vehicleData[battleResultsKey]))
+    playerScore.reserve(len(ScoringTypeEnum))
+    for scoring in scoreEvents:
+        playerScore.addViewModel(_createScoringInfo(scoring[0], scoring[1]))
 
 
 class CosmicPostBattleView(ViewImpl, LobbyHeaderVisibility):
-    __slots__ = ('_battleResultsData',)
+    __slots__ = ('_battleResultsData', '__tooltipData')
     __battleResults = dependency.descriptor(IBattleResultsService)
+    __itemsCache = dependency.descriptor(IItemsCache)
     __battleController = dependency.descriptor(ICosmicEventBattleController)
     __progressionController = dependency.descriptor(ICosmicEventProgressionController)
 
@@ -73,6 +82,7 @@ class CosmicPostBattleView(ViewImpl, LobbyHeaderVisibility):
         super(CosmicPostBattleView, self).__init__(settings, *args, **kwargs)
         arenaUniqueID = kwargs.get('ctx', {}).get('arenaUniqueID')
         self._battleResultsData = self.__battleResults.getResultsVO(arenaUniqueID)
+        self.__tooltipData = {}
 
     @property
     def viewModel(self):
@@ -106,6 +116,29 @@ class CosmicPostBattleView(ViewImpl, LobbyHeaderVisibility):
         eventListeners = [(self.viewModel.onClose, self._onClose)]
         return eventListeners
 
+    def getTooltipData(self, event):
+        tooltipId = event.getArgument('tooltipId')
+        if tooltipId is None:
+            return
+        else:
+            data = self.__tooltipData.get(tooltipId)
+            return data
+
+    @createBackportTooltipDecorator()
+    def createToolTip(self, event):
+        return super(CosmicPostBattleView, self).createToolTip(event)
+
+    def createToolTipContent(self, event, contentID):
+        if contentID == R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.LootboxTooltip():
+            tooltipData = self.getTooltipData(event)
+            lootBoxID = tooltipData.get('lootBoxID')
+            lootBox = self.__itemsCache.items.tokens.getLootBoxByID(int(lootBoxID))
+            if lootBox.isExtendedTooltip():
+                return CosmicExtendedLootboxTooltip(lootBox)
+            return LootboxTooltip(lootBox)
+        LOG_ERROR('Can not create a tooltip. Unsupported contentID {}'.format(contentID))
+        return super(CosmicPostBattleView, self).createToolTipContent(event, contentID)
+
     def _onLoading(self, *args, **kwargs):
         super(CosmicPostBattleView, self)._onLoading(*args, **kwargs)
         CosmicHangarSounds.playCosmicBattleResultsEnter()
@@ -129,8 +162,8 @@ class CosmicPostBattleView(ViewImpl, LobbyHeaderVisibility):
     def _setMainScores(self, model):
         personalData = self._getPersonalData()
         model.setTotalPoints(personalData['cosmicTotalScore'])
+        model.setLootResearch(personalData['cosmicScore/LOOT_RESEARCHING'])
         model.setKillAmount(personalData['kills'])
-        model.setPickupAmount(personalData['cosmicBattleEvent/PICKUP'])
         model.setKillStreak(personalData['cosmicBattleEvent/MAX_KILL_SERIES'])
 
     def _setBattleOverTimestamp(self, model):
@@ -145,17 +178,18 @@ class CosmicPostBattleView(ViewImpl, LobbyHeaderVisibility):
         players = model.getPlayersList()
         players.clear()
         players.reserve(len(vehicles))
-        vehicles = sorted(vehicles, key=lambda x: (not avatars.getAvatarInfo(x['accountDBID']).hasPenalties(), x['cosmicTotalScore']), reverse=True)
+        vehicles = sorted(vehicles, key=lambda x: (avatars.getAvatarInfo(x['accountDBID']).hasPenalties(), -x['cosmicTotalScore'], self._getReusableData().players.getPlayerInfo(x['accountDBID']).realName.lower()))
         for place, vehicleData in enumerate(vehicles, start=1):
             playerEntry = PlayerEntry()
             curVehicleAccountId = vehicleData['accountDBID']
             isDeserter = avatars.getAvatarInfo(curVehicleAccountId).hasPenalties()
-            self._fillPlayerEntry(playerEntry, vehicleData, place, isDeserter)
+            scoreEvents = createScoreEventCollection(vehicleData, isDeserter)
+            self._fillPlayerEntry(playerEntry, scoreEvents, vehicleData, place, isDeserter)
             players.addViewModel(playerEntry)
             if currentAccountDBID == curVehicleAccountId:
-                self._fillPlayerEntry(model.currentPlayerEntry, vehicleData, place, isDeserter)
+                self._fillPlayerEntry(model.currentPlayerEntry, scoreEvents, vehicleData, place, isDeserter)
 
-    def _fillPlayerEntry(self, playerEntry, vehicleData, place, isDeserter):
+    def _fillPlayerEntry(self, playerEntry, scoreEvents, vehicleData, place, isDeserter):
         name = self._getReusableData().players.getPlayerInfo(vehicleData['accountDBID']).realName
         clan = self._getReusableData().players.getPlayerInfo(vehicleData['accountDBID']).clanAbbrev
         playerEntry.setPlayerName(name)
@@ -166,7 +200,7 @@ class CosmicPostBattleView(ViewImpl, LobbyHeaderVisibility):
         vehicleEnum = COSMIC_VEHICLES_ROVER_ENUM.get(vehicle.typeDescr.name, COSMIC_VEHICLES_ROVER_ENUM['default'])
         playerEntry.setVehicle(vehicleEnum.value)
         playerScores = playerEntry.getPlayersScore()
-        _fillScoreList(playerScores, vehicleData)
+        _fillScoreList(playerScores, scoreEvents)
         playerEntry.setPlace(place)
         return playerEntry
 
@@ -181,21 +215,28 @@ class CosmicPostBattleView(ViewImpl, LobbyHeaderVisibility):
         missionsModel = model.getDailyQuests()
         missionsModel.clear()
         missionsModel.reserve(len(quests))
+        initialTooltipIndex = 0
+        self.__tooltipData = {}
         for quest in quests:
+            questUIPacker = PostBattleDailyCosmicQuestUIDataPacker(initialTooltipIndex, quest)
+            fullQuestModel = questUIPacker.pack()
+            questsBonusList = fullQuestModel.getBonuses()
             dailyQuestModel = CosmicDailyMissions()
-            fullQuestModel = getDailyQuestModelFromQuest(quest)
-            fillDailyQuestModel(dailyQuestModel, fullQuestModel)
-            self._setQuestProgress(dailyQuestModel, quest)
-            bonusesData = fullQuestModel.getBonuses()
             rewards = dailyQuestModel.getRewards()
             rewards.clear()
-            rewards.reserve(len(bonusesData))
-            for bonus in bonusesData:
+            rewards.reserve(len(questsBonusList))
+            for bonus in questsBonusList:
                 rewards.addViewModel(bonus)
 
+            self.__tooltipData.update(questUIPacker.tooltipData)
+            initialTooltipIndex += len(questUIPacker.tooltipData)
+            fillDailyQuestModel(dailyQuestModel, fullQuestModel)
+            self._setQuestProgress(dailyQuestModel, quest)
             self.__progressionController.setQuestProgressAsViewed(quest)
             missionsModel.addViewModel(dailyQuestModel)
             fullQuestModel.unbind()
+
+        missionsModel.invalidate()
 
     def _setQuestProgress(self, dailyQuestModel, quest):
         questsProgress = self._getPersonalData().get('questsProgress', {})

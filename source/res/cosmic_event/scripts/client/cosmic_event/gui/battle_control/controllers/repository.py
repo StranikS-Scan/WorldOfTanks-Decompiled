@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: cosmic_event/scripts/client/cosmic_event/gui/battle_control/controllers/repository.py
-from cosmic_event.gui.battle_control.controllers.consumables.equipment_ctrl import CosmicEquipmentsController
-from cosmic_event.gui.battle_control.controllers.consumables.equipment_key_binder import EquipmentKeyBinder
-from cosmic_event.gui.battle_control.controllers.cosmic_hints_ctrl import CosmicBattleHintsController
-from cosmic_event.gui.battle_control.controllers.ingame_help_ctrl import CosmicIngameHelpController
 from gui.battle_control.controllers import arena_load_ctrl, consumables, feedback_adaptor, msgs_ctrl, period_ctrl, vehicle_state_ctrl, view_points_ctrl, anonymizer_fakes_ctrl, prebattle_setups_ctrl, debug_ctrl
 from gui.battle_control.controllers.appearance_cache_ctrls.default_appearance_cache_ctrl import DefaultAppearanceCacheController
 from gui.battle_control.controllers.repositories import SharedControllersRepository, _ControllersRepositoryByBonuses
+from cosmic_event.gui.battle_control.controllers.consumables.equipment_ctrl import CosmicEquipmentsController
+from cosmic_event.gui.battle_control.controllers.consumables.equipment_key_binder import EquipmentKeyBinder
+from cosmic_event.gui.battle_control.controllers.cosmic_battle_effects_ctrl import BattleEffectsCtrl
+from cosmic_event.gui.battle_control.controllers.cosmic_hints_ctrl import CosmicBattleHintsController
+from cosmic_event.gui.battle_control.controllers.ingame_help_ctrl import CosmicIngameHelpController
 
 class CosmicSharedControllersRepository(SharedControllersRepository):
     __slots__ = ()
@@ -44,4 +45,5 @@ class CosmicDynamicControllersRepository(_ControllersRepositoryByBonuses):
         repository.addViewController(debug_ctrl.DebugController(), setup)
         repository.addArenaController(DefaultAppearanceCacheController(setup), setup)
         repository.addViewController(CosmicBattleHintsController(), setup)
+        repository.addController(BattleEffectsCtrl())
         return repository

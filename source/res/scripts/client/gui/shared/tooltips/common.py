@@ -5,6 +5,7 @@ import logging
 import math
 from collections import namedtuple, defaultdict
 from gui.impl.lobby.debut_boxes.tooltips.debut_boxes_badge_tooltip_view import DebutBoxesBadgeTooltipView
+from gui.impl.lobby.paragons.tooltips.carousel_points_tooltip import ParagonsCarouselPointsTooltip
 from gui.impl.lobby.personal_reserves.tooltips.personal_reserves_tooltip_view import PersonalReservesTooltipView
 from gui.impl.lobby.techtree.tooltips.paragons_locked_tooltip import ParagonsLockedTooltip
 from gui.impl.pub import ToolTipWindow
@@ -41,6 +42,7 @@ from gui.impl.lobby.battle_pass.tooltips.vehicle_points_tooltip_view import Vehi
 from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent
 from gui.impl.lobby.subscription.wot_plus_tooltip import WotPlusTooltip
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
+from gui.impl.lobby.tooltips.limited_ui_unlock_info_tooltip import LimitedUiUnlockInfoTooltip
 from gui.impl.lobby.tooltips.veh_post_progression_entry_point_tooltip import VehPostProgressionEntryPointTooltip
 from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE
 from gui.server_events.events_helpers import missionsSortFunc
@@ -1619,3 +1621,29 @@ class ParagonsLockedTooltipData(ToolTipBaseData):
 
     def getDisplayableData(self, vehicleCD, *args, **kwargs):
         return DecoratedTooltipWindow(ParagonsLockedTooltip(vehicleCD), useDecorator=False)
+
+
+class LimitedUIUnlockInfoTooltipContent(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(LimitedUIUnlockInfoTooltipContent, self).__init__(context, TOOLTIPS_CONSTANTS.LIMITED_UI_UNLOCK_INFO_TOOLTIP)
+
+    def getDisplayableData(self, ruleID, *args, **kwargs):
+        from gui.limited_ui.lui_rules_storage import LuiRules
+        content = LimitedUiUnlockInfoTooltip(LuiRules(ruleID))
+        window = ToolTipWindow(None, content, content.getParentWindow())
+        return window
+
+
+class ParagonsCarouselPoints(ToolTipBaseData):
+
+    def __init__(self, context, isNeedWin=True):
+        self.isNeedWin = isNeedWin
+        if self.isNeedWin:
+            tooltip = TOOLTIPS_CONSTANTS.PARAGONS_CAROUSEL_POINTS_BEFORE_WIN
+        else:
+            tooltip = TOOLTIPS_CONSTANTS.PARAGONS_CAROUSEL_POINTS_BEFORE_UNLOCK_VEH
+        super(ParagonsCarouselPoints, self).__init__(context, tooltip)
+
+    def getDisplayableData(self, vehicleCD, *args, **kwargs):
+        return DecoratedTooltipWindow(ParagonsCarouselPointsTooltip(self.isNeedWin, vehicleCD), useDecorator=False)

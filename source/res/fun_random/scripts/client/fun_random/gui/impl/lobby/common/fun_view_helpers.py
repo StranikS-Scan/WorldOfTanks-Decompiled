@@ -53,7 +53,7 @@ def defineProgressionStatus(progression):
 def packAdditionalRewards(progression, stageIndex, showCount):
     result, packer = [], getFunRandomBonusPacker()
     stage = findFirst(lambda s: s.stageIndex == stageIndex, progression.stages)
-    bonuses = stage.bonuses if stage is not None else []
+    bonuses = stage.bonusesByPriority if stage is not None else []
     for bonus in (b for b in bonuses if b.isShowInGUI()):
         result.extend(packer.pack(bonus))
 
@@ -106,5 +106,5 @@ def _packProgressionStage(progression, stage, stageModel, tooltips=None):
 
 def _packStageRewards(stage, rewardsModel, tooltips=None):
     rewardsModel.clear()
-    packBonusModelAndTooltipData(stage.bonuses, rewardsModel, tooltipData=tooltips, packer=getFunRandomBonusPacker())
+    packBonusModelAndTooltipData(stage.bonusesByPriority, rewardsModel, tooltipData=tooltips, packer=getFunRandomBonusPacker())
     rewardsModel.invalidate()

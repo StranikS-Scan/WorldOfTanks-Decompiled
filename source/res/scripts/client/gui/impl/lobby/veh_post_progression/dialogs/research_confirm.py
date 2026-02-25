@@ -11,9 +11,9 @@ from gui.impl.gen.view_models.views.lobby.post_progression.dialogs.short_modific
 from gui.impl.gen.view_models.views.lobby.post_progression.dialogs.short_step_model import ShortStepModel
 from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogView
 from gui.impl.wrappers.user_compound_price_model import BuyPriceModelBuilder
+from gui.shared.ext_money import EXT_MONEY_ZERO, getFullXPFromXPPrice, ExtendedCurrency
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_parameters.functions import aggregateKpi
-from gui.veh_post_progression.models.ext_money import EXT_MONEY_ZERO, getFullXPFromXPPrice, ExtendedCurrency
 from gui.veh_post_progression.models.purchase import PurchaseProvider
 from post_progression_common import ACTION_TYPES
 _logger = logging.getLogger(__name__)

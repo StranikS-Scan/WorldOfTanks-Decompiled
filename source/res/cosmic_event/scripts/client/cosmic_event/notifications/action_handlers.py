@@ -2,7 +2,7 @@
 # Embedded file name: cosmic_event/scripts/client/cosmic_event/notifications/action_handlers.py
 import logging
 from cosmic_event.gui.impl.gen.view_models.views.lobby.cosmic_lobby_view.cosmic_lobby_view_model import LobbyRouteEnum
-from cosmic_event.skeletons.battle_controller import ICosmicEventBattleController
+from skeletons.gui.game_control import ICosmicEventBattleController
 from helpers import dependency
 from notification.actions_handlers import NavigationDisabledActionHandler
 from notification.settings import NOTIFICATION_TYPE

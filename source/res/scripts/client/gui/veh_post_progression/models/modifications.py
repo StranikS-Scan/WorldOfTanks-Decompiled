@@ -4,7 +4,7 @@ import typing
 from enum import Enum, unique
 from gui.impl.gen import R
 from gui.impl.gen_utils import DynAccessor
-from gui.veh_post_progression.models.ext_money import ExtendedMoney, ExtendedGuiItemEconomyCode, EXT_MONEY_UNDEFINED, EXT_MONEY_ZERO_CREDITS
+from gui.shared.ext_money import ExtendedMoney, ExtendedGuiItemEconomyCode, EXT_MONEY_UNDEFINED, EXT_MONEY_ZERO_CREDITS
 from gui.veh_post_progression.models.purchase import PurchaseProvider, PurchaseCheckResult, VALID_CHECK_RESULT
 from gui.shared.gui_items import collectKpi, KPI, GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from helpers import dependency

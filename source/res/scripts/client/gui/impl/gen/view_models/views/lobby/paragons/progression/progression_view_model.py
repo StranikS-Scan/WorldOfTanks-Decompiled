@@ -30,7 +30,7 @@ class ProgressionViewModel(ViewModel):
     def _initialize(self):
         super(ProgressionViewModel, self)._initialize()
         self._addArrayProperty('stages', Array())
-        self._addNumberProperty('currentStage', 1)
+        self._addNumberProperty('currentStage', 0)
         self.onPreviewVehicle = self._addCommand('onPreviewVehicle')
         self.onCompareVehicle = self._addCommand('onCompareVehicle')
         self.onSelectVehicle = self._addCommand('onSelectVehicle')

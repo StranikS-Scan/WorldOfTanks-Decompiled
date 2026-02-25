@@ -3,6 +3,7 @@
 import WWISE
 from typing import TYPE_CHECKING
 from debug_utils import LOG_ERROR
+from sound_gui_manager import CommonSoundSpaceSettings
 
 def play2DSoundEvent(name):
     import SoundGroups
@@ -21,6 +22,10 @@ def playVoiceover(eventName):
         soundNotifications.play(eventName)
     else:
         LOG_ERROR('[COSMIC] Error on playing voiceover event {}'.format(eventName))
+
+
+def setCutSceneSoundGlobalEvent(state):
+    WWISE.WW_eventGlobal(state)
 
 
 if TYPE_CHECKING:
@@ -45,18 +50,23 @@ class CosmicHangarSounds(object):
 
     class CosmicProgression(object):
         COSMIC_RTPC_PROGRESSION = 'RTPC_ext_cosmic_lobby_progress'
-        _COSMIC_PROGRESSION_STAGES = ('ev_cosmic_vo_lobby_progression_0_1', 'ev_cosmic_vo_lobby_progression_1_2', 'ev_cosmic_vo_lobby_progression_2_3', 'ev_cosmic_vo_lobby_progression_3_4', 'ev_cosmic_vo_lobby_progression_4_5', 'ev_cosmic_vo_lobby_progression_5_6', 'ev_cosmic_vo_lobby_progression_6_7', 'ev_cosmic_vo_lobby_progression_7_8', 'ev_cosmic_vo_lobby_progression_8_9', 'ev_cosmic_vo_lobby_progression_9_10', 'ev_cosmic_vo_lobby_progression_completed')
-        _COSMIC_PROGRESSION_AMBIENT_START = 'ev_cosmic_hangar_object_drone'
-        _COSMIC_PROGRESSION_AMBIENT_STOP = 'ev_cosmic_hangar_object_drone_stop'
+        _COSMIC_LOBBY_FIRST_ENTER = 'ev_cosmic_vo_lobby_first_enter'
+        _COSMIC_PROGRESSION_RULE_TO_SOUND = ((lambda stage: 0 <= stage < 3, 'ev_cosmic_vo_lobby_progression_0_3'),
+         (lambda stage: 3 <= stage <= 6, 'ev_cosmic_vo_lobby_progression_3_7'),
+         (lambda stage: 7 <= stage < 10, 'ev_cosmic_vo_lobby_progression_7_10'),
+         (lambda stage: stage == 10, 'ev_cosmic_vo_lobby_progression_completed'))
+        _COSMIC_PROGRESSION_AMBIENT_START = 'ev_cosmic_hangar_progress_enter'
+        _COSMIC_PROGRESSION_AMBIENT_STOP = 'ev_cosmic_hangar_progress_exit'
 
         @classmethod
         def getSoundObject(cls, currentStage):
             import SoundGroups
-            if not 0 <= currentStage < len(cls._COSMIC_PROGRESSION_STAGES):
-                LOG_ERROR('[COSMIC_SOUND] Incorrect stage of cosmic progression when getting sound object')
-                return
-            else:
-                return SoundGroups.g_instance.getSound2D(cls._COSMIC_PROGRESSION_STAGES[currentStage])
+            for isRuleMatched, sound in cls._COSMIC_PROGRESSION_RULE_TO_SOUND:
+                if isRuleMatched(currentStage):
+                    return SoundGroups.g_instance.getSound2D(sound)
+
+            LOG_ERROR('[COSMIC_SOUND]: unable to find sound object for {} progression stage'.format(currentStage))
+            return
 
         @classmethod
         def playAmbient(cls):
@@ -66,13 +76,21 @@ class CosmicHangarSounds(object):
         def stopAmbient(cls):
             play2DSoundEvent(cls._COSMIC_PROGRESSION_AMBIENT_STOP)
 
+        @classmethod
+        def getProgressionFirstEnterSound(cls):
+            import SoundGroups
+            return SoundGroups.g_instance.getSound2D(cls._COSMIC_LOBBY_FIRST_ENTER)
+
 
 class CosmicBattleSounds(object):
     START_BATTLE = 'ev_cosmic_vo_gameplay_start_battle'
-    ENEMY_KILLED_VOICE = 'ev_cosmic_vo_gameplay_enemy_destroyed'
-    FIRST_BLOOD = 'ev_cosmic_vo_gameplay_first_blood'
-    REVENGE = 'ev_cosmic_vo_gameplay_enemy_destroyed_revenge'
-    PLAYER_RESPAWN = 'ev_cosmic_vo_gameplay_respawn'
+    KILL = 'ev_cosmic_vo_gameplay_enemy_destroyed'
+    CORAL_LOSE_PC = 'ev_cosmic_coral_ray_out_PC'
+    CORAL_LOSE_NPC = 'ev_cosmic_coral_ray_out_NPC'
+    CORAL_RESEARCH_DONE_PC = 'ev_cosmic_coral_scanning_end_PC'
+    CORAL_RESEARCH_DONE_NPC = 'ev_cosmic_coral_ray_out_NPC'
+    CORAL_SPAWNED_STATE_TRIGGER = 'ev_cosmic_music_object_active'
+    CORAL_DISAPPEARED_STATE_TRIGGER = 'ev_cosmic_music_object_inactive'
     _SCORE_NOTIFICATION = 'ev_cosmic_score_notification'
     _SPECIAL_HINT = 'ev_cosmic_special_hint'
     _KILL_STREAK_NOTIFICATION = {2: 'ev_cosmic_x2_kill_hint',
@@ -89,7 +107,7 @@ class CosmicBattleSounds(object):
     _DRON_DISAPPEAR_3D = 'ev_cosmic_ability_drone_disappear'
     _BOARD_JUMP_3D = 'ev_cosmic_booster_jump'
     _GEYSER_SPLASH_3D = 'ev_cosmic_geyser_big'
-    _CHEERUP_VOICE_FOR_SECOND_PHASE = ('ev_cosmic_vo_gameplay_cheerup2_high_place',)
+    _CORALL_TIMER_RTPC_EVENT = 'RTPC_ext_cosmic_corall_timer'
     _AFTER_BATTLE_RESULTS_VOICES = ('ev_cosmic_vo_gameplay_finish_battle_first_place', 'ev_cosmic_vo_gameplay_finish_battle_other_place')
 
     class ScanningZone(object):
@@ -99,22 +117,16 @@ class CosmicBattleSounds(object):
         _ACTIVE_STATE_VAL = 'STATE_ev_cosmic_object_active_on'
         _INACTIVE_STATE_VAL = 'STATE_ev_cosmic_object_active_off'
         _FINAL_CYCLE = 'ev_cosmic_coda'
-        _SCANNING_ZONE_ACTIVE = 'ev_cosmic_music_object_active'
-        _SCANNING_ZONE_INACTIVE = 'ev_cosmic_music_object_inactive'
 
         @classmethod
         def setActive(cls, isLast):
             WWISE.WW_setState(cls._STATE_GROUP, cls._ACTIVE_STATE_VAL)
             if isLast:
                 play2DSoundEvent(cls._FINAL_CYCLE)
-            else:
-                play2DSoundEvent(cls._SCANNING_ZONE_ACTIVE)
 
         @classmethod
         def setInactive(cls, isLast):
             cls.switchInactiveState()
-            if not isLast:
-                play2DSoundEvent(cls._SCANNING_ZONE_INACTIVE)
 
         @classmethod
         def switchInactiveState(cls):
@@ -141,8 +153,8 @@ class CosmicBattleSounds(object):
         _BOOSTER_ACTIVATED = 'ev_cosmic_ability_booster'
         _HOOK_SHOT_ACTIVATED = 'ev_cosmic_ability_overcharge_shot_start'
         _HOOK_SHOT_ELAPSED = 'ev_cosmic_ability_overcharge_shot_stop'
-        _BLACK_HOLE_ACTIVATED = 'ev_cosmic_ability_supernova_charge'
-        _BLACK_HOLE_CANCELED = 'ev_cosmic_ability_supernova_cancel'
+        _INSTALLED_ABILITY_ACTIVATED = 'ev_cosmic_ability_aim_charge'
+        _INSTALLED_ABILITY_CANCELED = 'ev_cosmic_ability_aim_cancel'
         _RESPAWN_PROTECTION_ACTIVATED = 'ev_cosmic_ability_respawn_protection_start'
         _RESPAWN_PROTECTION_ELAPSED = 'ev_cosmic_ability_respawn_protection_stop'
         _POWER_SHOT_ACTIVATED = 'ev_cosmic_ability_superShot_start'
@@ -171,11 +183,11 @@ class CosmicBattleSounds(object):
             play2DSoundEvent(cls._HOOK_SHOT_ELAPSED)
 
         @classmethod
-        def blackHoleActivated(cls, reset):
-            if reset:
-                play2DSoundEvent(cls._BLACK_HOLE_CANCELED)
+        def handleInstalledAbility(cls, isActive):
+            if isActive:
+                play2DSoundEvent(cls._INSTALLED_ABILITY_ACTIVATED)
             else:
-                play2DSoundEvent(cls._BLACK_HOLE_ACTIVATED)
+                play2DSoundEvent(cls._INSTALLED_ABILITY_CANCELED)
 
         @classmethod
         def playRespawnProtectionActivated(cls):
@@ -200,6 +212,10 @@ class CosmicBattleSounds(object):
         @classmethod
         def playStunShotElapsed(cls):
             play2DSoundEvent(cls._STUN_SHOT_ELAPSED)
+
+    @classmethod
+    def setTimerSound(cls, time):
+        WWISE.WW_setRTPCBus(cls._CORALL_TIMER_RTPC_EVENT, time)
 
     @classmethod
     def playScoreNotification(cls):
@@ -234,15 +250,6 @@ class CosmicBattleSounds(object):
         play2DSoundEvent(cls._AFTERBATTLE_PERIOD_MUSIC)
 
     @classmethod
-    def playCheerupVoiceForSecondPhase(cls, playerPositionInRankedTable):
-        cls.__playCheerupVoice(playerPositionInRankedTable, cls._CHEERUP_VOICE_FOR_SECOND_PHASE)
-
-    @classmethod
-    def __playCheerupVoice(cls, playerPositionInRankedTable, cheerupVoices):
-        if 1 <= playerPositionInRankedTable <= 3:
-            playVoiceover(cheerupVoices[0])
-
-    @classmethod
     def playAfterBattleResultVoice(cls, playerPositionInRankedTable):
         if playerPositionInRankedTable == 1:
             playVoiceover(cls._AFTER_BATTLE_RESULTS_VOICES[0])
@@ -254,12 +261,12 @@ class CosmicBattleSounds(object):
         play3DSoundEvent(cls._RAMMING, point)
 
     @classmethod
-    def playDronAppear(cls, point):
-        play3DSoundEvent(cls._DRON_APPEAR_3D, point)
-
-    @classmethod
     def playDronDisappear(cls, point):
         play3DSoundEvent(cls._DRON_DISAPPEAR_3D, point)
+
+    @classmethod
+    def playDronAppear(cls, point):
+        play3DSoundEvent(cls._DRON_APPEAR_3D, point)
 
     @classmethod
     def playBoardJump(cls, point):
@@ -268,3 +275,19 @@ class CosmicBattleSounds(object):
     @classmethod
     def playGeyserSplash(cls, point):
         play3DSoundEvent(cls._GEYSER_SPLASH_3D, point)
+
+
+class IntroVideoSound(object):
+    START = 'ev_cosmic_intro_video_start'
+    PAUSE = 'ev_cosmic_intro_video_pause'
+    RESUME = 'ev_cosmic_intro_video_resume'
+    STOP = 'ev_cosmic_intro_video_stop'
+
+
+class CosmicVideoState(object):
+    STATE_GROUP = 'STATE_video_overlay'
+    OFF = 'STATE_video_overlay_off'
+    ON = 'STATE_video_overlay_on'
+
+
+COSMIC_VIDEO_VIEW_SOUND_SPACE = CommonSoundSpaceSettings(name='COSMIC_VIDEO_VIEW', entranceStates={CosmicVideoState.STATE_GROUP: CosmicVideoState.ON}, exitStates={CosmicVideoState.STATE_GROUP: CosmicVideoState.OFF}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')

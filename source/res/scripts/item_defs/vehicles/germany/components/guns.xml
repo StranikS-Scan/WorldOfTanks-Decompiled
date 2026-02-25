@@ -176,6 +176,11 @@
     <_150mm_KwK44_L38_02>	31011	</_150mm_KwK44_L38_02>
     <_170mm_StuK_L53>	31012	</_170mm_StuK_L53>
     <_88mm_KwK_43_L71_Dual>	31014	</_88mm_KwK_43_L71_Dual>
+    <_105mm_KwK_L52>	31015	</_105mm_KwK_L52>
+    <_105mm_BK_L7A3_L51_ISP>	37000	</_105mm_BK_L7A3_L51_ISP>
+    <_150mm_Pak_L63_ISP>	37001	</_150mm_Pak_L63_ISP>
+    <_105mm_KwK45_L52_ausf_K_ISP>	37004	</_105mm_KwK45_L52_ausf_K_ISP>
+    <_128mm_KwK44_L55_ISP>	37005	</_128mm_KwK44_L55_ISP>
     <_100mm_Typ_D-10T2S_T>	35001	</_100mm_Typ_D-10T2S_T>
     <_120mm_Rh_E1>	31013	</_120mm_Rh_E1>
     <_88mm_KwK_43_L71A_IGR>	60001	</_88mm_KwK_43_L71A_IGR>
@@ -6359,6 +6364,65 @@
         </_105mm_Sprg.18K>
       </shots>
     </_105mm_KwK45_L52_ausf_K>
+    <_105mm_KwK45_L52_ausf_K_ISP>
+      <userString>	#germany_vehicles:_105mm_KwK45_L52_ausf_K_ISP	</userString>
+      <shortUserString>	#germany_vehicles:_105mm_KwK45_L52_ausf_K_ISP_short	</shortUserString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	225600	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.38	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.65	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	21.875	</rotationSpeed>
+      <reloadTime>	9.79428571428572	</reloadTime>
+      <maxAmmo>	42	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	3000	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.32	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.07	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_Pzgr.40K_ISP>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1500	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	270 260	</piercingPower>
+        </_105mm_Pzgr.40K_ISP>
+        <_105mmGr_39H1A_K_ISP>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1200	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	330 330	</piercingPower>
+        </_105mmGr_39H1A_K_ISP>
+        <_105mm_Sprg.18K_ISP>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	1200	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	60 60	</piercingPower>
+        </_105mm_Sprg.18K_ISP>
+      </shots>
+    </_105mm_KwK45_L52_ausf_K_ISP>
     <_105mm_KwK45_L52_ausf_K_7x7>
       <userString>	#germany_vehicles:_105mm_KwK45_L52_ausf_K	</userString>
       <shortUserString>	#germany_vehicles:_105mm_KwK45_L52_ausf_K_short	</shortUserString>
@@ -6418,6 +6482,64 @@
         </_105mm_Sprg.18K>
       </shots>
     </_105mm_KwK45_L52_ausf_K_7x7>
+    <_105mm_KwK_L52>
+      <userString>	#germany_vehicles:_105mm_KwK_L52	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	225600	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.38	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.65	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	21.875	</rotationSpeed>
+      <reloadTime>	9.79428571428572	</reloadTime>
+      <maxAmmo>	42	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	3000	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.32	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.07	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_Pzgr_rot>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	1082	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	260 240	</piercingPower>
+        </_105mm_Pzgr_rot>
+        <_105mm_Gr_39_rot_H1>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	935	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	330 330	</piercingPower>
+        </_105mm_Gr_39_rot_H1>
+        <_105mm_Gr_19>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	935	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	53 53	</piercingPower>
+        </_105mm_Gr_19>
+      </shots>
+    </_105mm_KwK_L52>
     <_105mm_L7A1>
       <userString>	#germany_vehicles:_105mm_L7A1	</userString>
       <tags></tags>
@@ -6533,6 +6655,64 @@
         </_105mm_HE_DM11>
       </shots>
     </_105mm_BK_L7A3_L51>
+    <_105mm_BK_L7A3_L51_ISP>
+      <userString>	#germany_vehicles:_105mm_BK_L7A3_L51_ISP	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	290000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	72	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	1282	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.422857142857143	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_AP_DM13_ISP>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	1480	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	278 269	</piercingPower>
+        </_105mm_AP_DM13_ISP>
+        <_105mm_APCR_DM23_ISP>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1613	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	323 315	</piercingPower>
+        </_105mm_APCR_DM23_ISP>
+        <_105mm_HE_DM11_ISP>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	1173	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	105 105	</piercingPower>
+        </_105mm_HE_DM11_ISP>
+      </shots>
+    </_105mm_BK_L7A3_L51_ISP>
     <_105mm_BK_L7>
       <userString>	#germany_vehicles:_105mm_BK_L7	</userString>
       <tags></tags>
@@ -7383,7 +7563,7 @@
           <speed>	1150	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	264 245	</piercingPower>
+          <piercingPower>	257 231	</piercingPower>
         </_120mm_Pzgr57>
         <_120mm_HlGr57>
           <defaultPortion>	0.0	</defaultPortion>
@@ -7805,6 +7985,64 @@
         </_128mm_SprG18>
       </shots>
     </_128mm_KwK44_L55>
+    <_128mm_KwK44_L55_ISP>
+      <userString>	#germany_vehicles:_128mm_KwK44_L55_ISP	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	310000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.56	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.46	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_largeext	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	14.77714285714290	</reloadTime>
+      <maxAmmo>	62	</maxAmmo>
+      <aimingTime>	2.85714285714286	</aimingTime>
+      <weight>	3480	</weight>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	110	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.377142857142857	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_128mm_PzGr39_ISP>
+          <defaultPortion>	0.85	</defaultPortion>
+          <speed>	920	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	246 241	</piercingPower>
+        </_128mm_PzGr39_ISP>
+        <_128mm_PzGr40_ISP>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1150	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	315 300	</piercingPower>
+        </_128mm_PzGr40_ISP>
+        <_128mm_SprG18_ISP>
+          <defaultPortion>	0.15	</defaultPortion>
+          <speed>	920	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	65 65	</piercingPower>
+        </_128mm_SprG18_ISP>
+      </shots>
+    </_128mm_KwK44_L55_ISP>
     <_128mm_KwK_L55_TM>
       <userString>	#germany_vehicles:_128mm_KwK_L55_TM	</userString>
       <tags></tags>
@@ -9442,6 +9680,64 @@
         </_150mm_Sprgr>
       </shots>
     </_150mm_Pak_L63>
+    <_150mm_Pak_L63_ISP>
+      <userString>	#germany_vehicles:_150mm_Pak_L63_ISP	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	340000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.56	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_huge	</effects>
+      <reloadEffect>	reload155_170	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	4.04	</reloadTime>
+      <maxAmmo>	30	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	6300	</weight>
+      <maxHealth>	230	</maxHealth>
+      <maxRegenHealth>	115	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.12	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_150mm_Pzgr_ISP>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	1200	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	279 270	</piercingPower>
+        </_150mm_Pzgr_ISP>
+        <_150mm_Gr_HL_ISP>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	334 334	</piercingPower>
+        </_150mm_Gr_HL_ISP>
+        <_150mm_Sprgr_ISP>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	75 75	</piercingPower>
+        </_150mm_Sprgr_ISP>
+      </shots>
+    </_150mm_Pak_L63_ISP>
     <_170mm_K72_Sf_>
       <userString>	#germany_vehicles:_170mm_K72_Sf_	</userString>
       <tags></tags>

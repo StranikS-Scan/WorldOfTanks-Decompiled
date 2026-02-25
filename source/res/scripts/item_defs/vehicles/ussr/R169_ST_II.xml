@@ -85,6 +85,11 @@
           <destroyed>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3DSt_TIR/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3DSt_TIR/crash/lod0/Hull.model	</exploded>
         </R169_ST_II_3DSt_TIR>
+        <R169_ST_II_3Dst_Oberon>
+          <undamaged>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst_Oberon/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst_Oberon/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst_Oberon/crash/lod0/Hull.model	</exploded>
+        </R169_ST_II_3Dst_Oberon>
       </sets>
     </models>
     <swinging>
@@ -831,6 +836,24 @@
         <clipAngle>	0.813157	</clipAngle>
         <anchorShift>	0.094613	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15062	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R169_ST_II_3Dst_Oberon	</compatibleModels>
+        <position>	0 1.01359 2.66417	</position>
+        <rotation>	0.510203 0.000005 3.14158	</rotation>
+        <scale>	0.391691 0.178997 0.391692	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.675998	</clipAngle>
+        <anchorShift>	0.086971	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -887,6 +910,11 @@
             <destroyed>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3DSt_TIR/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3DSt_TIR/crash/lod0/Chassis.model	</exploded>
           </R169_ST_II_3DSt_TIR>
+          <R169_ST_II_3Dst_Oberon>
+            <undamaged>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst_Oberon/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst_Oberon/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst_Oberon/crash/lod0/Chassis.model	</exploded>
+          </R169_ST_II_3Dst_Oberon>
         </sets>
       </models>
       <traces>
@@ -1023,6 +1051,45 @@
                   <row3>	0.000000 1.302257 3.000921	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	R169_ST_II_3Dst_Oberon	</modelsSet>
+                <boxCollider>
+                  <row0>	1.655640 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.129740 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.136001	</row2>
+                  <row3>	0.000000 0.952564 -0.178000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.682348 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.003518	</row2>
+                  <row3>	-1.709354 1.100818 -0.110003	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.848707 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.450261 -0.324567	</row1>
+                  <row2>	0.000000 0.397283 0.551137	</row2>
+                  <row3>	-1.230513 1.147999 -3.529904	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.976421 0.000000 0.000000	</row0>
+                  <row1>	0.000000 -0.371074 -0.292311	</row1>
+                  <row2>	0.000000 0.619422 -0.786326	</row2>
+                  <row3>	-1.309247 1.223653 3.149582	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.834869 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.422335 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.136000	</row2>
+                  <row3>	-1.194882 1.303414 -0.178000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.976421 0.000000 0.000000	</row0>
+                  <row1>	0.000000 -0.468407 -0.061131	</row1>
+                  <row2>	0.000001 0.274722 -2.105027	</row2>
+                  <row3>	-1.309250 1.193637 3.161101	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -1144,6 +1211,45 @@
                   <row1>	0.000000 0.417630 0.220743	</row1>
                   <row2>	0.000000 -0.380435 0.719756	</row2>
                   <row3>	0.000000 1.302257 3.000921	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	R169_ST_II_3Dst_Oberon	</modelsSet>
+                <boxCollider>
+                  <row0>	1.655640 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.129740 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.136000	</row2>
+                  <row3>	0.000000 0.952564 -0.178000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.682348 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.003520	</row2>
+                  <row3>	1.709000 1.100820 -0.110003	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.848707 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.450261 -0.324567	</row1>
+                  <row2>	0.000000 0.397283 0.551137	</row2>
+                  <row3>	1.231000 1.148000 -3.529900	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.976421 0.000000 0.000000	</row0>
+                  <row1>	0.000000 -0.371074 -0.292311	</row1>
+                  <row2>	0.000000 0.619422 -0.786326	</row2>
+                  <row3>	1.309000 1.223650 3.149580	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.834869 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.422335 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.136000	</row2>
+                  <row3>	1.195000 1.303410 -0.178000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.976421 0.000000 0.000001	</row0>
+                  <row1>	0.000000 -0.468407 -0.061131	</row1>
+                  <row2>	0.000001 0.274722 -2.105030	</row2>
+                  <row3>	1.309000 1.193640 3.161100	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1541,6 +1647,12 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <R169_ST_II_3Dst_Oberon>
+              <segmentModelLeft>	vehicles/russian/R169_ST_II/track/segment_01.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/russian/R169_ST_II/track/segment_01.model	</segmentModelRight>
+            </R169_ST_II_3Dst_Oberon>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -2105,6 +2217,11 @@
                 <destroyed>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3DSt_TIR/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3DSt_TIR/crash/lod0/Gun_01.model	</exploded>
               </R169_ST_II_3DSt_TIR>
+              <R169_ST_II_3Dst_Oberon>
+                <undamaged>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst_Oberon/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst_Oberon/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst_Oberon/crash/lod0/Gun_01.model	</exploded>
+              </R169_ST_II_3Dst_Oberon>
             </sets>
           </models>
           <hitTester>
@@ -2184,6 +2301,11 @@
             <destroyed>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3DSt_TIR/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3DSt_TIR/crash/lod0/Turret_01.model	</exploded>
           </R169_ST_II_3DSt_TIR>
+          <R169_ST_II_3Dst_Oberon>
+            <undamaged>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst_Oberon/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst_Oberon/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst_Oberon/crash/lod0/Turret_01.model	</exploded>
+          </R169_ST_II_3Dst_Oberon>
         </sets>
       </models>
       <hitTester>
@@ -3108,6 +3230,17 @@
           <showOn>	256	</showOn>
           <clipAngle>	1.11033	</clipAngle>
           <anchorShift>	0.055131	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35075	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R169_ST_II_3Dst_Oberon	</compatibleModels>
+          <position>	-1.260669 2.04479 0.671471	</position>
+          <rotation>	1.071855 -1.544543 3.138226	</rotation>
+          <scale>	0.61826 0.440856 0.618262	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.11033	</clipAngle>
         </slot>
       </customizationSlots>
       <customization>

@@ -24,7 +24,7 @@ class StrongholdMainWidgetTooltip(ViewImpl):
     def _onLoading(self, model=None):
         super(StrongholdMainWidgetTooltip, self)._onLoading()
         model.setProgressionLevel(getClanSeasonProgressLevel())
-        isRunning = g_clanCache.strongholdEventProvider.isRunning()
+        isRunning = g_clanCache.strongholdEventProvider.isSeasonRunning()
         if not isRunning:
             model.setIsEventActive(False)
             return
@@ -34,10 +34,15 @@ class StrongholdMainWidgetTooltip(ViewImpl):
                 model.setIsDataAvailable(False)
                 return
             model.setSprintType(eventSettings.getSprintType())
-            model.setSprintNumber(str(eventSettings.getSprintNumber()))
+            sprintNumber = eventSettings.getSprintNumber()
+            if sprintNumber:
+                model.setSprintNumber(sprintNumber)
             model.setSprintStartDate(str(eventSettings.getVisibleStartDate()))
             model.setSprintEndDate(str(eventSettings.getVisibleEndDate()))
             model.setIsInClan(g_clanCache.isInClan)
             model.setIsDataAvailable(True)
-            model.setIsEventActive(True)
+            if g_clanCache.strongholdEventProvider.isSeasonEnding():
+                model.setIsEventActive(False)
+            else:
+                model.setIsEventActive(True)
             return

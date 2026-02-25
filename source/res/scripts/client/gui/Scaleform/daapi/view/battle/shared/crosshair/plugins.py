@@ -63,6 +63,7 @@ _DEVICE_ENGINE_NAME = 'engine'
 _DEVICE_REPAIRED = 'repaired'
 _LISTENING_SETTINGS = {SPGAim.SPG_SCALE_WIDGET, GRAPHICS.COLOR_BLIND}
 _TARGET_UPDATE_INTERVAL = 0.2
+_EXTENDED_RENDER_PIPELINE = 0
 _DUAL_GUN_MARKER_STATES_MAP = {CHARGE_MARKER_STATE.VISIBLE: DUAL_GUN_MARKER_STATE.VISIBLE,
  CHARGE_MARKER_STATE.LEFT_ACTIVE: DUAL_GUN_MARKER_STATE.LEFT_PART_ACTIVE,
  CHARGE_MARKER_STATE.RIGHT_ACTIVE: DUAL_GUN_MARKER_STATE.RIGHT_PART_ACTIVE,
@@ -91,6 +92,7 @@ def createPlugins():
      'dualAccuracyMechanics': DualAccuracyGunPlugin,
      'temperatureMechanics': TemperatureGunPlugin,
      'shotDistance': ShotDistancePlugin,
+     'equipments': EquipmentsPlugin,
      DistanceFactorGunPlugin.__name__: DistanceFactorGunPlugin}
     return resultPlugins
 
@@ -555,8 +557,11 @@ class AmmoPlugin(CrosshairPlugin):
             self._parentObj.as_setNetVisibleS(CROSSHAIR_CONSTANTS.VISIBLE_NET)
         self._parentObj.as_setShellChangeTimeS(*ctrl.updateShellChangeTime())
 
-    def __onPenaltyReloadTimeUpdated(self, value):
-        self._parentObj.as_setCoolantAbilityReloadingPenaltyS(value)
+    def __onPenaltyReloadTimeUpdated(self, baseValue, value, addPenalty):
+        if addPenalty > 0:
+            self._parentObj.as_addCoolantAbilityReloadingPenaltyS(addPenalty)
+        else:
+            self._parentObj.as_setCoolantAbilityReloadingPenaltyS(baseValue, value)
 
     def __setReloadingState(self, state):
         self.__reloadAnimator.setReloading(state)
@@ -2055,3 +2060,27 @@ class ShotDistancePlugin(_DistancePlugin):
             self.__startTrack(vehicleID)
         else:
             self.__stopTrack()
+
+
+class EquipmentsPlugin(CrosshairPlugin):
+
+    def start(self):
+        super(EquipmentsPlugin, self).start()
+        equipCtrl = self.sessionProvider.shared.equipments
+        if equipCtrl is None:
+            raise SoftException('Equipment controller is None')
+        equipCtrl.onUpdateDamageModifier += self.__onDamageModifierUpdated
+        return
+
+    def stop(self):
+        super(EquipmentsPlugin, self).stop()
+        equipCtrl = self.sessionProvider.shared.equipments
+        if equipCtrl is not None:
+            equipCtrl.onUpdateDamageModifier -= self.__onDamageModifierUpdated
+        return
+
+    def __onDamageModifierUpdated(self, compactDescr, currentDamageModifier):
+        self.parentObj.as_setAbilityModifierS(int(round(currentDamageModifier * 100)), not self.__isExtendedAnim())
+
+    def __isExtendedAnim(self):
+        return self.settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE) == _EXTENDED_RENDER_PIPELINE

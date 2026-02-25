@@ -4,11 +4,11 @@ import typing
 if typing.TYPE_CHECKING:
     from typing import Dict, Generator, List, NamedTuple, Optional, Sequence, Set, Tuple, Union
     from collections import OrderedDict
+    from gui.shared.ext_money import ExtendedMoney
     from gui.shared.gui_items.dossier.achievements.abstract import RegularAchievement
     from gui.shared.gui_items.gui_item_economics import ItemPrice
     from gui.shared.money import Money, DynamicMoney
     from gui.shared.utils.requesters import InventoryRequester
-    from gui.veh_post_progression.models.ext_money import ExtendedMoney
     from post_progression_common import VehicleState
     from items.vehicles import VehicleType
 
@@ -171,6 +171,10 @@ class IStatsRequester(IRequester):
 
     @property
     def money(self):
+        raise NotImplementedError
+
+    @property
+    def extMoney(self):
         raise NotImplementedError
 
     @property

@@ -3,7 +3,7 @@
 from collections import namedtuple
 import enum
 import typing
-from expressions import parseExpression
+from lui_expression_parser import parseExpression
 from ids_generators import SequenceIDGenerator
 if typing.TYPE_CHECKING:
     from typing import Optional, Dict, Set, List, Tuple
@@ -58,18 +58,23 @@ class LuiRules(enum.Enum):
     PARAGONS_ENTRY_POINT = 'ParagonsEntryPoint'
     PARAGONS_TREE_BRANCHES = 'ParagonsTreeBranches'
     PARAGONS_NOTIFICATION = 'ParagonsNotification'
+    PARAGONS_BUTTONS = 'ParagonsButtons'
     NEW_CAMPAIGN_HINT = 'NewCampaignHint'
     TEASER = 'Teaser'
     C7N_BUBBLE = 'CustomizationBubble'
     COMMON_CHAT = 'CommonChat'
     CHANNELS = 'Channels'
+    PERSONAL_MISSIONS_CONTENT = 'PersonalMissionsContent'
+    TOURNAMENTS_CONTENT = 'TournamentsContent'
+    VERSUS_AI_CONTENT = 'VersusAIContent'
+    STRONGHOLD_CONTENT = 'StrongholdContent'
 
 
-class _LimitedUIRule(namedtuple('_LimitedUIRule', ('idx', 'expression', 'tokens', 'message'))):
+class _LimitedUIRule(namedtuple('_LimitedUIRule', ('idx', 'expression', 'expressionElements', 'tokens', 'message'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(idx=0, expression=None, tokens=set(), message=None)
+        defaults = dict(idx=0, expression=None, expressionElements=[], tokens=set(), message=None)
         dataToUpdate = {k:v for k, v in kwargs.iteritems() if k in cls._fields}
         defaults.update(dataToUpdate)
         return super(_LimitedUIRule, cls).__new__(cls, **defaults)
@@ -93,6 +98,9 @@ class _LimitedUIRules(object):
     def getTokens(self, ruleID):
         return self.getRule(ruleID).tokens if self.hasRule(ruleID) else set()
 
+    def getExpressionElements(self, ruleID):
+        return self.getRule(ruleID).expressionElements if self.hasRule(ruleID) else []
+
     def getSysMessage(self, ruleID):
         return self.getRule(ruleID).message if self.hasRule(ruleID) else None
 
@@ -107,10 +115,11 @@ class RulesStorageMaker(object):
         data = dict()
         idGen = SequenceIDGenerator(lowBound=-1)
         for ruleID, expressionStr, message in rulesData:
-            expression, tokens = parseExpression(expressionStr)
+            expression, tokens, expressionElements = parseExpression(expressionStr)
             data[ruleID] = {'idx': idGen.next(),
              'expressionStr': expressionStr,
              'expression': expression,
+             'expressionElements': expressionElements,
              'tokens': tokens,
              'message': message}
 
@@ -133,8 +142,9 @@ class RulesStorageMaker(object):
                 dependencyExpression = cls.__normalizeRuleItem(data, rulesIDs, dependsItem)
                 expressionStr = expressionStr.replace(dependency, '({})'.format(dependencyExpression))
 
-            expression, tokens = parseExpression(expressionStr)
+            expression, tokens, expressionElements = parseExpression(expressionStr)
             item['expressionStr'] = expressionStr
             item['expression'] = expression
+            item['expressionElements'] = expressionElements
             item['tokens'] = tokens
         return expressionStr

@@ -11,9 +11,10 @@ from gui.Scaleform.daapi.view.meta.VehiclePreviewBottomPanelShowcaseStyleBuyingM
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.SystemMessages import SM_TYPE, pushI18nMessage
-from gui.shared.event_dispatcher import mayObtainForMoney, mayObtainWithMoneyExchange
+from gui.shared.event_dispatcher import mayObtainForMoney, mayObtainForXP, mayObtainWithMoneyExchange, showExchangeXPWindow, getNeedFreeXP
+from gui.shared.ext_money import ExtendedMoney, ExtendedCurrency
 from gui.shared.formatters import formatPrice
-from gui.shared.money import Currency, Money
+from gui.shared.money import Currency
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.scheduled_notifications import PeriodicNotifier
 from gui.shop import showBuyGoldForBundle, showBuyProductOverlay
@@ -85,8 +86,8 @@ class VehiclePreviewBottomPanelShowcaseStyleBuying(VehiclePreviewBottomPanelShow
         return
 
     def __prepareVO(self):
-        priceMoney = Money(**self.__price)
-        originalPriceMoney = Money(**self.__originalPrice)
+        priceMoney = ExtendedMoney(**self.__price)
+        originalPriceMoney = ExtendedMoney(**self.__originalPrice)
         price = priceMoney.get(priceMoney.getCurrency()) or 0
         originalPrice = originalPriceMoney.get(originalPriceMoney.getCurrency()) or 0
         return {'originalPrice': originalPrice if originalPrice > price else 0,
@@ -94,6 +95,7 @@ class VehiclePreviewBottomPanelShowcaseStyleBuying(VehiclePreviewBottomPanelShow
          'discountPercent': int(self.__discountPercent),
          'timeRemainingStr': '' if self.__endTime == 0 else self.__getTimeLeftStr(),
          'isBought': False,
+         'isMoneyEnough': self.__mayObtain(priceMoney),
          'priceType': priceMoney.getCurrency(),
          'isNoVehicle': not self.__haveSuitableVehicles,
          'actionBtnEnabled': self.__mayObtain(priceMoney),
@@ -113,12 +115,12 @@ class VehiclePreviewBottomPanelShowcaseStyleBuying(VehiclePreviewBottomPanelShow
 
     @staticmethod
     def __mayObtain(priceMoney):
-        return priceMoney.getCurrency() == Currency.GOLD or mayObtainForMoney(priceMoney) or mayObtainWithMoneyExchange(priceMoney)
+        return priceMoney.getCurrency() == Currency.GOLD or priceMoney.getCurrency() == ExtendedCurrency.FREE_XP and mayObtainForXP(priceMoney) or mayObtainForMoney(priceMoney) or mayObtainWithMoneyExchange(priceMoney)
 
     @adisp_process
     def __onBuy(self):
         productName = self.__style.userName
-        money = Money(**self.__price)
+        money = ExtendedMoney(**self.__price)
         if not self.__mayObtain(money):
             pushI18nMessage(key=SYSTEM_MESSAGES.CUSTOMIZATION_CURRENCY_NOT_ENOUGH, type=SM_TYPE.Error)
             return
@@ -127,6 +129,9 @@ class VehiclePreviewBottomPanelShowcaseStyleBuying(VehiclePreviewBottomPanelShow
             if isOk:
                 self.__onBuy()
                 return
+            return
+        if not mayObtainForMoney(money) and mayObtainForXP(money):
+            showExchangeXPWindow(needXP=getNeedFreeXP(money.freeXP))
             return
         priceStr = formatPrice(money, reverse=True, useIcon=True)
         requestConfirmed = yield _buyRequestConfirmation(productName, priceStr)

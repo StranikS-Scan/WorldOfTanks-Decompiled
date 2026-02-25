@@ -1,18 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: cosmic_event/scripts/client/cosmic_event/cosmic_control_mode.py
+import BigWorld
 import Math
-import Keys
-import CommandMapping
-from AvatarInputHandler.DynamicCameras import ArcadeCamera
-from aih_constants import CTRL_MODE_NAME
-from AvatarInputHandler.MapCaseMode import _ArenaBoundsAreaStrikeSelector, MapCaseControlModeBase
+from AvatarInputHandler.MapCaseMode import _ArenaBoundsAreaStrikeSelector
 from AvatarInputHandler.control_modes import ArcadeControlMode
 from AvatarInputHandler import AimingSystems
 from cosmic_camera import CosmicCamera
-from cosmic_sound import CosmicBattleSounds
+from cosmic_event_common.cosmic_constants import MINE_ENTITY_NAME
 TOP_TERRAIN_HEIGHT = 65
 BOT_Y = 0
-MIN_Y_HEIGHT = 28.0
 
 def rescanPosition(position):
     top = Math.Vector3(position.x, TOP_TERRAIN_HEIGHT, position.z)
@@ -20,7 +16,6 @@ def rescanPosition(position):
     terrainPos = AimingSystems.__collideStaticOnly(top, bot)
     if terrainPos is not None:
         pos = terrainPos[0]
-        pos.y = max(MIN_Y_HEIGHT, pos.y)
         return pos
     else:
         return
@@ -34,34 +29,43 @@ class _CosmicArenaBoundStrikeSelector(_ArenaBoundsAreaStrikeSelector):
         self.area.setMaxHeight(TOP_TERRAIN_HEIGHT)
 
     def processSelection(self, position, reset=False):
-        CosmicBattleSounds.Abilities.blackHoleActivated(reset)
         position = rescanPosition(position)
         return super(_CosmicArenaBoundStrikeSelector, self).processSelection(position, reset) if position is not None else False
+
+
+class _CosmicArenaMineSelector(_CosmicArenaBoundStrikeSelector):
+
+    def __init__(self, position, equipment):
+        super(_CosmicArenaMineSelector, self).__init__(position, equipment)
+        self.__checkIntersectMines()
+
+    def processSelection(self, position, reset=False):
+        if not reset:
+            if self.isIntersectMine():
+                return False
+        return super(_CosmicArenaMineSelector, self).processSelection(position, reset)
+
+    def tick(self):
+        super(_CosmicArenaMineSelector, self).tick()
+        self.__checkIntersectMines()
+
+    def isIntersectMine(self):
+        allMines = [ e for e in BigWorld.entities.values() if e.__class__.__name__ == MINE_ENTITY_NAME and not e.isDetonated ]
+        return any(self.__minesIntersected(allMines))
+
+    def __minesIntersected(self, mines):
+        for m in mines:
+            if self.area.pointInside(m.position):
+                yield m
+
+    def __checkIntersectMines(self):
+        if self.isIntersectMine():
+            self.area.setColor(self.equipment.restrictedAreaColor)
+        else:
+            self.area.setColor()
 
 
 class CosmicControlMode(ArcadeControlMode):
 
     def _setupCamera(self, dataSection):
         self._cam = CosmicCamera(dataSection['camera'], defaultOffset=self._defaultOffset)
-
-
-class BlackHoleArcadeMapCaseControlMode(MapCaseControlModeBase):
-    MODE_NAME = CTRL_MODE_NAME.MAP_CASE_ARCADE
-
-    def _createCamera(self, config, offset=Math.Vector2(0, 0)):
-        return ArcadeCamera.ArcadeCamera(config, offset)
-
-    def _initCamera(self):
-        self.camera.create()
-
-    def _getCameraDesiredShotPoint(self):
-        return self.camera.aimingSystem.getDesiredShotPoint()
-
-    def _getPreferedPositionOnQuit(self):
-        return self.camera.aimingSystem.getThirdPersonShotPoint()
-
-    def handleKeyEvent(self, isDown, key, mods, event=None):
-        isDeactivateButtonPressed = key == Keys.KEY_ESCAPE or CommandMapping.g_instance.isFired(CommandMapping.CMD_AMMO_CHOICE_3, key)
-        super(BlackHoleArcadeMapCaseControlMode, self).handleKeyEvent(isDown, key, mods, event)
-        if isDeactivateButtonPressed and mods != Keys.MODIFIER_CTRL and isDown:
-            CosmicBattleSounds.Abilities.blackHoleActivated(True)

@@ -8,9 +8,12 @@ from gui.impl.gen.view_models.views.lobby.paragons.navigation_view_model import 
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.impl.lobby.paragons.paragons_window_events import showParagonsNavigationView
+from helpers import dependency
+from skeletons.gui.game_control import IParagonsController
 
 class IntroView(ViewImpl):
     __slots__ = ('__onCloseCallback',)
+    __paragonsController = dependency.descriptor(IParagonsController)
 
     def __init__(self, onCloseCallback=None):
         settings = ViewSettings(R.views.lobby.paragons.IntroView())
@@ -28,7 +31,11 @@ class IntroView(ViewImpl):
         AccountSettings.setParagons(Paragons.INTRO_SEEN, True)
 
     def _getEvents(self):
-        return ((self.viewModel.onClose, self.__onCloseView), (self.viewModel.onGoToFeature, self.__onGoToFeature))
+        return ((self.viewModel.onClose, self.__onCloseView), (self.viewModel.onGoToFeature, self.__onGoToFeature), (self.__paragonsController.onFeatureStateChanged, self.__onFeatureStateChanged))
+
+    def __onFeatureStateChanged(self, isPaused, isEnabled):
+        if not isEnabled or isPaused:
+            self.__onCloseView()
 
     def __onCloseView(self):
         self.destroyWindow()

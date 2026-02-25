@@ -1039,6 +1039,7 @@ class INGAME_GUI(object):
     PREBATTLEMARKER_PREBATTLEMARKER_49 = '#ingame_gui:prebattlemarker/prebattlemarker_49'
     PREBATTLEMARKER_PREBATTLEMARKER_50 = '#ingame_gui:prebattlemarker/prebattlemarker_50'
     PREBATTLEMARKER_PREBATTLEMARKER_51 = '#ingame_gui:prebattlemarker/prebattlemarker_51'
+    PREBATTLEMARKER_PREBATTLEMARKER_52 = '#ingame_gui:prebattlemarker/prebattlemarker_52'
     OPTDEVICERESURRECTION_ENGINE = '#ingame_gui:optDeviceResurrection/engine'
     OPTDEVICERESURRECTION_FUELTANK = '#ingame_gui:optDeviceResurrection/fuelTank'
     OPTDEVICERESURRECTION_AMMOBAY = '#ingame_gui:optDeviceResurrection/ammoBay'

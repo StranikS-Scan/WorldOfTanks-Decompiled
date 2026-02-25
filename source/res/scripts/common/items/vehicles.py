@@ -4382,7 +4382,7 @@ def _readTurret(xmlCtx, section, item, unlocksDescrs=None, _=None):
     item.gunJointPitch = radians(_xml.readFloat(xmlCtx, section, 'gunJointPitch', 0.0))
     item.customizableVehicleAreas = _readCustomizableAreas(xmlCtx, section, 'customization')
     if section.has_key('multiGun'):
-        item.multiGun = _readMultiGun(xmlCtx, section, 'multiGun')
+        item.multiGun, item.distanceBetweenMultiGuns = _readMultiGun(xmlCtx, section, 'multiGun')
     if section.has_key('multiGunState'):
         item.multiGunState = _readMultiGunState(xmlCtx, section['multiGunState'], item.multiGun)
         item.tags = item.tags.union(('multiGun',))
@@ -4519,7 +4519,7 @@ def _readMultiGun(xmlCtx, section, subsection):
             multiGun.append(MultiGunInstance(gunNode, gunFire, gunPosition, gunShotOffset, gunShotPosition))
         multiGun.append(MultiGunInstance(gunPosition, gunShotOffset, gunShotPosition))
 
-    return multiGun
+    return (multiGun, (multiGun[0].shotPosition - multiGun[-1].shotPosition).length)
 
 
 def _readMultiGunState(xmlCtx, section, multiGun):

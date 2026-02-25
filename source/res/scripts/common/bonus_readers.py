@@ -748,7 +748,7 @@ def _readEntitlementSection(section, checkLimit, readOp=False):
         raise SoftException('Invalid count of entitlement id %s with amount %d when limit is %d.' % (entID, entitlement['count'], INVOICE_LIMITS.ENTITLEMENTS_MAX))
     if section.has_key('expires'):
         entitlement['expires'] = expires = {}
-        __readBonus_expires(id, expires, section)
+        __readBonus_expires(entID, expires, section)
     return (entID, entitlement)
 
 

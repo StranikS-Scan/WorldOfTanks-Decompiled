@@ -191,6 +191,7 @@ class _StatsListener(_Listener):
     def _onUnlocksUpdate(self, unlocks):
         self._page.invalidateUnlocks(unlocks)
         self._page.invalidateTechTreeButtons()
+        self._page.invalidateParagonsEntryPoint(isNeedUpdateLevels=True)
 
     def __onServerSettingsChanged(self, diff):
         if self.__lobbyContext.getServerSettings().isShopDataChangedInDiff(diff, 'isEnabled'):
@@ -250,6 +251,7 @@ class _ItemsCacheListener(_Listener):
             if vehLocks:
                 self._page.invalidateVehLocks(vehLocks)
                 self._page.invalidateTechTreeButtons()
+                self._page.invalidateParagonsEntryPoint(isNeedUpdateLevels=True)
 
     def __items_onSyncCompleted(self, reason, invalidated):
         self.__invalidated = set()
@@ -364,6 +366,7 @@ class _EarlyAccessListener(_Listener):
     def __onUpdated(self):
         self._page.invalidateEarlyAccess()
         self._page.invalidateTechTreeButtons()
+        self._page.invalidateParagonsEntryPoint(isNeedUpdateLevels=True)
 
 
 class _ParagonsListener(_Listener):

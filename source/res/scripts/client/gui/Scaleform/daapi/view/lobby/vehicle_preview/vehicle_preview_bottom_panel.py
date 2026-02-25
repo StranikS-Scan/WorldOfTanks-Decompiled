@@ -30,7 +30,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.referral_program import showGetVehiclePage
 from gui.shared import event_dispatcher, events, g_eventBus
-from gui.shared.event_dispatcher import showVehicleRentDialog
+from gui.shared.event_dispatcher import showVehicleRentDialog, mayObtainForMoney, mayObtainWithMoneyExchange, mayObtainForXP, showExchangeXPWindow, getNeedFreeXP
 from gui.shared.events import HasCtxEvent
 from gui.shared.formatters import chooseItemPriceVO, formatPrice, getItemPricesVO, getItemUnlockPricesVO, icons, text_styles, time_formatters
 from gui.shared.gui_items.gui_item_economics import ActualPrice, ITEM_PRICE_EMPTY, ItemPrice, getPriceTypeAndValue
@@ -42,7 +42,7 @@ from gui.shared.utils.functions import makeTooltip
 from gui.shop import canBuyGoldForVehicleThroughWeb, showBuyGoldForBundle, showBuyProductOverlay
 from helpers import dependency, int2roman, time_utils
 from helpers.i18n import makeString as _ms
-from items_kit_helper import BOX_TYPE, OFFER_CHANGED_EVENT, getActiveOffer, lookupItem, mayObtainForMoney, mayObtainWithMoneyExchange, showItemTooltip
+from items_kit_helper import BOX_TYPE, OFFER_CHANGED_EVENT, getActiveOffer, lookupItem, showItemTooltip
 from shared_utils import findFirst
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import ICalendarController, IExternalLinksController, IHeroTankController, IMarathonEventsController, IRestoreController, ITradeInController, IVehicleComparisonBasket
@@ -427,7 +427,7 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
 
     def __checkBtnEnableByPrice(self, price):
         currency = price.getCurrency()
-        return currency == Currency.GOLD or mayObtainForMoney(price) or mayObtainWithMoneyExchange(price)
+        return currency == Currency.GOLD or mayObtainForMoney(price) or mayObtainWithMoneyExchange(price) or currency == Currency.FREE_XP and mayObtainForXP(price)
 
     def __getBtnDataPack(self):
         buyButtonTooltip = ''
@@ -493,7 +493,7 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
         return self.__price
 
     def __getBtnDataUnlockedVehicle(self, vehicle):
-        money = self._itemsCache.items.stats.money
+        money = self._itemsCache.items.stats.extMoney
         money = self._tradeIn.addTradeInPriceIfNeeded(vehicle, money)
         buyButtonTooltip = ''
         actionTooltip = getActionPriceData(vehicle)
@@ -646,6 +646,9 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
                 if isOk:
                     self.__purchasePackage()
                     return
+                return
+            if not mayObtainForMoney(price) and mayObtainForXP(price):
+                showExchangeXPWindow(needXP=getNeedFreeXP(price.freeXP))
                 return
             loggerEnabled = self.__bundlePreviewMetricsLogger and self.__isStoreWindow()
             if loggerEnabled:

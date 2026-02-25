@@ -10,6 +10,3 @@ class ArenaInfoScoreSystemComponent(BigWorld.DynamicScriptComponent):
 
     def set_totalScore(self, prev):
         self.onArenaScoreUpdated(self.totalScore)
-
-    def set_revenges(self, prev):
-        self.onArenaScoreUpdated(self.totalScore)

@@ -105,10 +105,10 @@ class StrongholdEntryPointView(ViewImpl):
             primeTimeEnd = clanInfo.getPrimeTimeEnd()
             hasPrimeTime = primeTimeStart is not None and primeTimeStart != DUMMY_UNAVAILABLE_DATA
             if not hasPrimeTime:
-                return (State.PRIMETIMENOTCHOSEN,
-                 eventSettings.getVisibleStartDate(),
+                return (State.STARTED,
+                 eventStart,
                  eventEnd,
-                 time_utils.ONE_HOUR)
+                 eventEnd - timeNow)
             primeStartDayStart, _ = time_utils.getDayTimeBoundsForLocal(primeTimeStart)
             primeEndDayStart, _ = time_utils.getDayTimeBoundsForLocal(primeTimeEnd)
             todayStart, todayEnd = time_utils.getDayTimeBoundsForLocal()

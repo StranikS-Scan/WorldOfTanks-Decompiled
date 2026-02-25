@@ -16,11 +16,14 @@ from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 import logging
 from gui.server_events.bonuses import getNonQuestBonuses
 from gui.shared.event_dispatcher import showHangar
+from helpers import dependency
+from skeletons.gui.game_control import IParagonsController
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 
 class ParagonsRewardsView(ViewImpl):
     __slots__ = ('__tooltipData', '__chapterLevel', '__rewards', '__isVehicleSelected', '__chapterID')
+    __paragonsController = dependency.descriptor(IParagonsController)
 
     def __init__(self, layoutID, rewards, chapter=None, level=None, isVehicleSelected=False):
         settings = ViewSettings(layoutID)
@@ -39,7 +42,7 @@ class ParagonsRewardsView(ViewImpl):
 
     def createToolTipContent(self, event, contentID):
         if event.contentID == R.views.lobby.paragons.tooltips.VehicleSelectTooltip():
-            return VehicleSelectTooltip(layoutID=R.views.lobby.paragons.tooltips.VehicleSelectTooltip())
+            return VehicleSelectTooltip(layoutID=R.views.lobby.paragons.tooltips.VehicleSelectTooltip(), level=self.__chapterLevel, chapterID=self.__chapterID, entitlementID=event.getArgument('entitlementID'))
         if contentID == R.views.lobby.paragons.tooltips.BranchSelectTooltip():
             tooltipData = self.getTooltipData(event)
             return BranchSelectTooltip(layoutID=R.views.lobby.paragons.tooltips.BranchSelectTooltip(), paragonsUnlockID=tooltipData.specialArgs[0])
@@ -54,7 +57,10 @@ class ParagonsRewardsView(ViewImpl):
         return super(ParagonsRewardsView, self).getViewModel()
 
     def _getEvents(self):
-        return ((self.viewModel.onClose, self.__onClose), (self.viewModel.onShowVehicleInHangar, self.__onShowVehicleInHangar), (self.viewModel.onSelectVehicleAsReward, self.__onSelectVehicleAsReward))
+        return ((self.viewModel.onClose, self.__onClose),
+         (self.viewModel.onShowVehicleInHangar, self.__onShowVehicleInHangar),
+         (self.viewModel.onSelectVehicleAsReward, self.__onSelectVehicleAsReward),
+         (self.__paragonsController.onFeatureStateChanged, self.__onFeatureStateChanged))
 
     def _onLoading(self, *args, **kwargs):
         super(ParagonsRewardsView, self)._onLoading(*args, **kwargs)
@@ -94,6 +100,10 @@ class ParagonsRewardsView(ViewImpl):
     def __onSelectVehicleAsReward(self, entCode):
         showParagonsSelectRewardsWindow(chapterID=self.__chapterID, levelID=self.__chapterLevel, entitlementID=entCode)
         self.destroyWindow()
+
+    def __onFeatureStateChanged(self, isPaused, isEnabled):
+        if not isEnabled or isPaused:
+            self.destroyWindow()
 
 
 class ParagonsRewardsViewWindow(LobbyNotificationWindow):

@@ -669,6 +669,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
 
     def __updateWidget(self):
         alias = self.__getWidgetAlias()
+        self.__updateBattlePassSmallWidget()
         if not self.__activeWidgets.update(ActiveWidgets.CENTER, alias):
             return
         self.as_addEntryPointS(alias)
@@ -676,7 +677,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             self.__updateVisibilityPersonalMission(True)
         elif alias == HANGAR_ALIASES.BATTLE_ROYALE_TOURNAMENT:
             self.__updateVisibilityPersonalMission(False)
-        self.__updateBattlePassSmallWidget()
 
     def __getWidgetAlias(self):
         for alias, widgetGetter in self.__widgets.iteritems():

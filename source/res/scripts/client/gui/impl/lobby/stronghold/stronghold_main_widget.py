@@ -64,7 +64,7 @@ class StrongholdMainWidget(ViewImpl):
     def __fillModel(self, model=None):
         model.setProgressionLevel(getClanSeasonProgressLevel())
         model.setIsInClan(g_clanCache.isInClan)
-        model.setIsActive(g_clanCache.strongholdEventProvider.isRunning())
+        model.setIsActive(g_clanCache.strongholdEventProvider.isSeasonRunning())
 
     def __onTokensUpdate(self, diff, _):
         tokens = diff.get('tokens', {})

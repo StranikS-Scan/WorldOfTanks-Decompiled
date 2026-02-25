@@ -47,8 +47,9 @@
     <_130mm_vz_57>	31008	</_130mm_vz_57>
     <_100mm_S_3>	31009	</_100mm_S_3>
     <_122mm_D_25_SK>	31014	</_122mm_D_25_SK>
-    <_150mm_COSM>	40000	</_150mm_COSM>
-    <_150mm_Pepelac>	40001	</_150mm_Pepelac>
+    <_150mm_COSM_02>	40003	</_150mm_COSM_02>
+    <_150mm_Pepelac_02>	40002	</_150mm_Pepelac_02>
+    <_100mm_AK1_ISP>	37000	</_100mm_AK1_ISP>
   </ids>
   <shared>
     <_37mm_Pechotni_delo_Skoda_L_27>
@@ -1597,6 +1598,64 @@
         </_100mm_Narazovy_vz_50>
       </shots>
     </_100mm_AK1>
+    <_100mm_AK1_ISP>
+      <userString>	#czech_vehicles:_100mm_AK1_ISP	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	275000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.44	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.22	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_mainext_mb	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	33	</rotationSpeed>
+      <reloadTime>	4.04	</reloadTime>
+      <maxAmmo>	50	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	2600	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_100mm_Prurazny_vz_50_ISP>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	1400	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	248 225	</piercingPower>
+        </_100mm_Prurazny_vz_50_ISP>
+        <_100mm_Prupalny_vz_50_ISP>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	310 310	</piercingPower>
+        </_100mm_Prupalny_vz_50_ISP>
+        <_100mm_Narazovy_vz_50_ISP>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	50 50	</piercingPower>
+        </_100mm_Narazovy_vz_50_ISP>
+      </shots>
+    </_100mm_AK1_ISP>
     <_100mm_AK1_FL>
       <userString>	#czech_vehicles:_100mm_AK1	</userString>
       <tags></tags>
@@ -2690,8 +2749,8 @@
         </_130mm_Narazovy_vz_53>
       </shots>
     </_130mm_vz_52_dualgun>
-    <_150mm_COSM>
-      <userString>	#czech_vehicles:_150mm_COSM	</userString>
+    <_150mm_COSM_02>
+      <userString>	#czech_vehicles:_150mm_COSM_02	</userString>
       <tags></tags>
       <level>	1	</level>
       <price>	0	</price>
@@ -2732,17 +2791,17 @@
         <whileGunDamaged>	1	</whileGunDamaged>
       </shotDispersionFactors>
       <shots>
-        <_150mm_PlasmaBall>
+        <_150mm_PlasmaBall_02>
           <defaultPortion>	1.0	</defaultPortion>
-          <speed>	240	</speed>
+          <speed>	360	</speed>
           <gravity>	0.0	</gravity>
           <maxDistance>	1000	</maxDistance>
           <piercingPower>	1 1	</piercingPower>
-        </_150mm_PlasmaBall>
+        </_150mm_PlasmaBall_02>
       </shots>
-    </_150mm_COSM>
-    <_150mm_Pepelac>
-      <userString>	#czech_vehicles:_150mm_Pepelac	</userString>
+    </_150mm_COSM_02>
+    <_150mm_Pepelac_02>
+      <userString>	#czech_vehicles:_150mm_Pepelac_02	</userString>
       <tags></tags>
       <level>	1	</level>
       <price>	0	</price>
@@ -2778,15 +2837,15 @@
         <whileGunDamaged>	1	</whileGunDamaged>
       </shotDispersionFactors>
       <shots>
-        <_150mm_PepelacShell>
+        <_150mm_Pepelac_02Shell>
           <defaultPortion>	1.0	</defaultPortion>
-          <speed>	360	</speed>
+          <speed>	480	</speed>
           <gravity>	0.0	</gravity>
           <maxDistance>	1000	</maxDistance>
           <piercingPower>	1 1	</piercingPower>
-        </_150mm_PepelacShell>
+        </_150mm_Pepelac_02Shell>
       </shots>
-    </_150mm_Pepelac>
+    </_150mm_Pepelac_02>
     <_152mm_AT>
       <userString>	#czech_vehicles:_152mm_AT	</userString>
       <tags></tags>

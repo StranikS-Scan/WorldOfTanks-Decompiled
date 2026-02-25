@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/veh_post_progression/models/progression_step.py
 import typing
 from enum import Enum, unique
-from gui.veh_post_progression.models.ext_money import ExtendedMoney, ExtendedGuiItemEconomyCode
+from gui.shared.ext_money import ExtendedMoney, ExtendedGuiItemEconomyCode
 from gui.veh_post_progression.models.modifications import getActionModel
 from gui.veh_post_progression.models.purchase import PurchaseProvider, PurchaseCheckResult, VALID_CHECK_RESULT
 from items.components.post_progression_components import TreeStep

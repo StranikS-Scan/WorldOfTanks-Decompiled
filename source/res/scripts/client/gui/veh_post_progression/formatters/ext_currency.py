@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/veh_post_progression/formatters/ext_currency.py
 from gui.impl import backport
+from gui.shared.ext_money import ExtendedCurrency
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.currency import getBWFormatter, getStyle
-from gui.veh_post_progression.models.ext_money import ExtendedCurrency
 _EXTENDED_CURRENCY_TO_BW_FORMATTER = {ExtendedCurrency.VEH_XP: backport.getIntegralFormat,
  ExtendedCurrency.XP: backport.getIntegralFormat,
  ExtendedCurrency.FREE_XP: backport.getIntegralFormat}

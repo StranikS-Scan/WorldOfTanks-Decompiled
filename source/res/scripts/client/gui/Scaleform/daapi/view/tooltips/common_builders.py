@@ -54,7 +54,10 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.DOG_TAGS_INFO, TOOLTIPS_CONSTANTS.DOG_TAGS_INFO_UI, DogTagInfoTooltip(contexts.DogTagInfoContext())),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEH_POST_PROGRESSION_ENTRY_POINT, None, common.VehPostProgressionEntryPointTooltipContentWindowData(contexts.ToolTipContext(None))),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.ADDITIONAL_REWARDS, None, common.AdditionalRewardsTooltipContentWindowData(contexts.ToolTipContext(None))),
-     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.PARAGONS_VEH_BRANCH_LOCKED, None, ParagonsLockedTooltipData(contexts.ToolTipContext(None))))
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.PARAGONS_VEH_BRANCH_LOCKED, None, ParagonsLockedTooltipData(contexts.ToolTipContext(None))),
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.LIMITED_UI_UNLOCK_INFO_TOOLTIP, None, common.LimitedUIUnlockInfoTooltipContent(contexts.ToolTipContext(None))),
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.PARAGONS_CAROUSEL_POINTS_BEFORE_WIN, None, common.ParagonsCarouselPoints(contexts.ToolTipContext(None), isNeedWin=True)),
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.PARAGONS_CAROUSEL_POINTS_BEFORE_UNLOCK_VEH, None, common.ParagonsCarouselPoints(contexts.ToolTipContext(None), isNeedWin=False)))
 
 
 class HeaderMoneyAndXpBuilder(DataBuilder):

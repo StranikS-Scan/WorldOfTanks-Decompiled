@@ -4,8 +4,10 @@ import typing
 from frameworks.wulf import Array
 from gui.impl.gen.view_models.common.price_item_model import PriceItemModel
 from gui.impl.gen.view_models.views.lobby.common.vehicle_model import VehicleModel
-from gui.impl.gen.view_models.views.lobby.paragons.common.chapter_model import ChapterModel, StatusList
+from gui.impl.gen.view_models.views.lobby.paragons.common.chapter_model import ChapterModel
+from gui.impl.gen.view_models.views.lobby.paragons.common.chapter_status_model import StatusList
 from gui.impl.gen.view_models.views.lobby.paragons.common.level_model import LevelModel
+from gui.impl.gen.view_models.views.lobby.paragons.tooltips.paragons_tooltip_vehicles_model import ParagonsTooltipVehiclesModel
 from gui.server_events.bonuses import getNonQuestBonuses
 from gui.shared.gui_items.vehicle_helpers import removeNationFromTechName
 from gui.shared.gui_items.Vehicle import Vehicle
@@ -16,8 +18,8 @@ from gui.impl.lobby.common.view_helpers import packBonusModelAndTooltipData
 from gui.server_events.bonuses import SimpleBonus
 from gui.impl.lobby.paragons.paragons_helpers.paragons_helpers import getMaxChapterLevelPoints
 from helpers import dependency
-from paragons_common import getAllParagonsEntitlements, PARAGONS_SELECTED_VEHICLE_TOKEN_PREFIX, SELECTED_REWARD_TOKEN_PREFIX_TO_BONUS_TYPE
-from skeletons.gui.game_control import IParagonsController
+from paragons_common import getVehicleParagonsEntitlements
+from skeletons.gui.game_control import IParagonsController, IParagonsRewardsShopController
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import Iterable, Dict, Tuple, List, Optional
@@ -26,9 +28,13 @@ _CURRENCIES = (Currency.CRYSTAL,
  Currency.GOLD,
  Currency.CREDITS,
  Currency.FREE_XP)
-_MAIN_REWARD_NAMES = ('vehicles', 'paragonsUnlocks', 'entitlements', 'vehicleSelector')
 _SKIP_BONUSES_NAMES = ('customizations', 'dossier')
 _BONUS_SWAP = {'entitlements': 'vehicleSelector'}
+_MAX_LEN_MAIN_BONUSES = 3
+_BONUS_SORT_ORDER = ['paragonsUnlocks',
+ 'vehicles',
+ 'tmanToken',
+ 'styleProgress']
 
 def fillVehicleModel(model, vehicleItem):
     model.setIsPremium(vehicleItem.isPremium or vehicleItem.isElite)
@@ -77,13 +83,15 @@ def fillChapterModels(arrayOfChapterModels, paragonsCtrl=None, tooltipData=None)
 @dependency.replace_none_kwargs(paragonsCtrl=IParagonsController)
 def fillChapterModel(chapterModel, chapterID, isNeedUpdateLevels=True, paragonsCtrl=None, tooltipData=None):
     chapterLevelIDs = paragonsCtrl.config.getChapterLevelIDs(chapterID)
+    isComplete = paragonsCtrl.isChapterComplete(chapterID)
+    points = paragonsCtrl.getProgressPoints(chapterID) if not isComplete else getMaxChapterLevelPoints(paragonsCtrl.config, chapterID, len(chapterLevelIDs))
     with chapterModel.transaction() as tx:
         tx.setId(chapterID)
-        tx.setStatus(getChapterStatus(chapterID))
-        tx.setIsCompleted(paragonsCtrl.isChapterComplete(chapterID))
+        tx.chapterStatus.setStatus(getChapterStatus(chapterID))
+        tx.setIsCompleted(isComplete)
         tx.setChapterLevel(min(paragonsCtrl.paragons.storage.getProgress(chapterID) + 1, len(chapterLevelIDs)))
-        tx.setPoints(paragonsCtrl.progress if chapterID == paragonsCtrl.chapterID else 0)
-        tx.setIsAllRewardsClaimed(paragonsCtrl.isChapterComplete(chapterID) and paragonsCtrl.isAllSelectablesClaimed())
+        tx.setPoints(points)
+        tx.setIsAllRewardsClaimed(paragonsCtrl.isChapterComplete(chapterID) and paragonsCtrl.isAllSelectablesClaimed(chapterID))
         if isNeedUpdateLevels:
             _fillChapterLevelsModel(tx, chapterID, paragonsCtrl, tooltipData=tooltipData)
 
@@ -94,15 +102,15 @@ def getChapterStatus(chapterID, paragonsCtrl=None):
         return StatusList.DEFAULT
     elif chapterID in paragonsCtrl.config.getAnnouncementChapterIDs():
         return StatusList.ANNOUNCEMENT
-    elif paragonsCtrl.isPaused:
+    elif not paragonsCtrl.wasBranchResetEverAvailable:
         return StatusList.DISABLED
+    elif paragonsCtrl.isChapterPaused(chapterID):
+        return StatusList.PAUSED
     chosenChapter = paragonsCtrl.chapterID
     if paragonsCtrl.isChapterComplete(chapterID):
         return StatusList.FINISHED
-    elif chapterID == chosenChapter:
-        return StatusList.ACTIVE
     else:
-        return StatusList.DISABLED if chapterID != chosenChapter and chosenChapter is not None else StatusList.DEFAULT
+        return StatusList.ACTIVE if chapterID == chosenChapter else StatusList.DEFAULT
 
 
 def _fillChapterLevelsModel(chapterModel, chapterID, paragonsCtrl, tooltipData=None):
@@ -130,33 +138,26 @@ def _fillChapterLevelsModel(chapterModel, chapterID, paragonsCtrl, tooltipData=N
 def _fillLevelRewardModels(levelModel, chapterID, levelID, paragonsCtrl, tooltipData=None):
     levelRewards = paragonsCtrl.config.rewards.get(chapterID)['levels'].get(levelID)['bonus']
     levelRewards = _swapIfReceived(chapterID, levelID, levelRewards, paragonsCtrl)
-    mainBonuses, equalBonuses = _splitParagonsBonuses(levelRewards, paragonsCtrl, ctx=_makeContext(chapterID, levelID, paragonsCtrl))
+    rewards = _splitParagonsBonuses(levelRewards, paragonsCtrl, ctx=_makeContext(chapterID, levelID, paragonsCtrl))
     paragonsBonusPacker = getParagonsBonusPacker()
-    packBonusModelAndTooltipData(mainBonuses, levelModel.getMainRewards(), packer=paragonsBonusPacker, tooltipData=tooltipData, startIndex=max((int(key) for key in tooltipData)) + 1 if tooltipData else 0)
-    packBonusModelAndTooltipData(equalBonuses, levelModel.getEqualRewards(), packer=paragonsBonusPacker, tooltipData=tooltipData, startIndex=max((int(key) for key in tooltipData)) + 1 if tooltipData else 0)
+    packBonusModelAndTooltipData(rewards, levelModel.getRewards(), packer=paragonsBonusPacker, tooltipData=tooltipData, startIndex=max((int(key) for key in tooltipData)) + 1 if tooltipData else 0)
 
 
-def _sortBonuses(bonuses, position, maxLength, instance):
-    if len(bonuses) <= position:
-        return
-    for index, item in enumerate(bonuses):
-        if len(bonuses) <= maxLength and item.getName() == instance:
-            bonuses[position], bonuses[index] = bonuses[index], bonuses[position]
+def _sortBonuses(bonus):
+    bonusName = bonus.getName()
+    return _BONUS_SORT_ORDER.index(bonusName) if bonusName in _BONUS_SORT_ORDER else len(_BONUS_SORT_ORDER) + 1
 
 
 def _splitParagonsBonuses(rewards, paragonsCtrl, ctx=None):
     if not rewards:
-        return ([], [])
+        return []
     rewards = _preprocessParagonsRewards(rewards, paragonsCtrl, ctx)
-    mainBonuses = []
-    equalBonuses = []
+    bonuses = []
     for key, value in rewards.iteritems():
-        if key in _MAIN_REWARD_NAMES:
-            mainBonuses.extend(getNonQuestBonuses(key, value, ctx))
-        equalBonuses.extend(getNonQuestBonuses(key, value, ctx))
+        bonuses.extend(getNonQuestBonuses(key, value, ctx))
 
-    _sortBonuses(equalBonuses, 0, 3, 'tmanToken')
-    return (mainBonuses, equalBonuses)
+    bonuses.sort(key=_sortBonuses)
+    return bonuses
 
 
 def _splitParagonsRewards(rewards, paragonsCtrl, ctx=None):
@@ -167,12 +168,13 @@ def _splitParagonsRewards(rewards, paragonsCtrl, ctx=None):
     equalBonuses = []
     mainRewardNames = ('vehicles', 'paragonsUnlocks', 'entitlements', 'vehicleSelector', 'styleProgress', 'tmanToken', 'tokens', 'tman_token')
     for key, value in rewards.iteritems():
-        if key in mainRewardNames and len(mainBonuses) < 3:
+        if key in mainRewardNames and len(mainBonuses) < _MAX_LEN_MAIN_BONUSES:
             mainBonuses.extend(getNonQuestBonuses(key, value, ctx))
         equalBonuses.extend(getNonQuestBonuses(key, value, ctx))
 
-    _sortBonuses(mainBonuses, 0, 3, 'tmanToken')
-    _sortBonuses(mainBonuses, 1, 3, 'vehicles')
+    mainBonuses.sort(key=_sortBonuses)
+    if len(mainBonuses) == _MAX_LEN_MAIN_BONUSES:
+        mainBonuses[0], mainBonuses[1] = mainBonuses[1], mainBonuses[0]
     return (mainBonuses, equalBonuses)
 
 
@@ -220,20 +222,35 @@ def makeRewardModels(bonuses, mainRewards, otherRewards, chapterID=1, levelID=1,
 
 
 def getParagonsBonuses(rewards):
-    bonuses, otherBonuses = _splitParagonsBonuses(rewards, None, ctx=None)
-    return bonuses + otherBonuses
+    bonuses = _splitParagonsBonuses(rewards, None, ctx=None)
+    return bonuses
 
 
-def _swapIfReceived(chapterID, levelID, reward, paragonsCtrl):
+@dependency.replace_none_kwargs(selectableRewardsCtrl=IParagonsRewardsShopController)
+def _swapIfReceived(chapterID, levelID, reward, paragonsCtrl, selectableRewardsCtrl=None):
     if not reward.get('entitlements'):
         return reward
     for code, _ in reward.get('entitlements').iteritems():
-        if code in getAllParagonsEntitlements():
-            received = paragonsCtrl.getSelectedRewardTokenID(chapterID, levelID, code)
-            if received:
-                bonusType, bonusCD = ('', 0)
-                if received.startswith(PARAGONS_SELECTED_VEHICLE_TOKEN_PREFIX):
-                    bonusCD = received.split(':')[-1]
-                    bonusType = SELECTED_REWARD_TOKEN_PREFIX_TO_BONUS_TYPE[PARAGONS_SELECTED_VEHICLE_TOKEN_PREFIX]
-                return {bonusType: {int(bonusCD): {'crewLvl': 100}}}
+        if code in getVehicleParagonsEntitlements():
+            bonusCD = paragonsCtrl.getSelectedRewardBonusCD(chapterID, levelID, code)
+            if bonusCD:
+                return {'vehicles': {bonusCD: {'crewLvl': 100}}}
+            if levelID <= paragonsCtrl.paragons.getProgressByChapterID(chapterID):
+                selectableRewardsCtrl.tryMarkSelectedReward(chapterID, levelID, code)
         return reward
+
+
+@dependency.replace_none_kwargs(paragonsCtrl=IParagonsController)
+def packParagonsTooltipVehicleModel(model, vehicles, paragonsCtrl=None):
+    vehiclesModel = model.getVehicles()
+    for vehicle in vehicles:
+        vehicleModel = ParagonsTooltipVehiclesModel()
+        vehicleModel.setVehicleName(vehicle.userName)
+        vehicleModel.setHasProgressionPoints(vehicle.isResetParagons)
+        vehicleModel.setNeedRepair(vehicle.isBroken)
+        vehicleModel.setIsInBattle(vehicle.isInBattle)
+        vehicleModel.setIsInPlatoonFormation(vehicle.isInUnit)
+        vehicleModel.setNeedResearch(not vehicle.isUnlocked)
+        vehicleModel.setVehicleUnlockPoints(paragonsCtrl.getVehicleFirstUnlockPoints(vehicle, False))
+        vehicleModel.setProgressionPoints(paragonsCtrl.getVehicleProgressPoints(vehicle.intCD))
+        vehiclesModel.addViewModel(vehicleModel)

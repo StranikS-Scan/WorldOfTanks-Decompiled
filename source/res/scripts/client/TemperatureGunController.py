@@ -4,8 +4,8 @@ import typing
 import BigWorld
 from Health import OverheatComponent
 import Event
+from gui.battle_control.controllers.sound_ctrls.common import getGunSoundObject
 from helpers import dependency
-from gui.battle_control.controllers.auto_shoot_guns.auto_shoot_helpers import getGunSoundObject
 from skeletons.gui.battle_session import IBattleSessionProvider
 _RTPC_OVERHEAT = 'RTPC_ext_heavy_flamer_overheat'
 _COOLING_START_SOUND = 'heavy_flamer_cooling_start'

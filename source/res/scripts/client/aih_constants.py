@@ -14,6 +14,8 @@ class ShakeReason(object):
     HIT = 2
     HIT_NO_DAMAGE = 3
     SPLASH = 4
+    AUT0SHOOT_HIT = 5
+    AUT0SHOOT_HIT_NO_DAMAGE = 6
 
 
 class CTRL_MODE_NAME(object):

@@ -1389,6 +1389,10 @@ class TOOLTIPS(object):
     RESEARCHPAGE_EARLYACCESSINFO_TEXT = '#tooltips:researchPage/earlyAccessInfo/text'
     RESEARCHPAGE_VEHICLE_STATUS_LOCKEDBYPARAGONS_TEXT = '#tooltips:researchPage/vehicle/status/lockedByParagons/text'
     RESEARCHPAGE_VEHICLE_PARAGONS_RESETVEHICLE_PROGRESSPOINTS_TEXT = '#tooltips:researchPage/vehicle/paragons/resetVehicle/progressPoints/text'
+    RESEARCHPAGE_VEHICLE_PARAGONS_RESETVEHICLE_UNLOCKPOINTS_TEXT = '#tooltips:researchPage/vehicle/paragons/resetVehicle/unlockPoints/text'
+    TECHTREEPAGE_PARAGONS_HEADER = '#tooltips:techTreePage/paragons/header'
+    TECHTREEPAGE_PARAGONS_FIRSTRESEARCH_BODY = '#tooltips:techTreePage/paragons/firstResearch/body'
+    TECHTREEPAGE_PARAGONS_FIRSTRESEARCH_RESEARCHSTR = '#tooltips:techTreePage/paragons/firstResearch/researchStr'
     PARAGONS_TANKCAROUSEL_CARD_HEADER = '#tooltips:paragons/tankCarousel/card/header'
     PARAGONS_TANKCAROUSEL_CARD_BODY = '#tooltips:paragons/tankCarousel/card/body'
     TECHTREEPAGE_NATIONS_USSR = '#tooltips:techTreePage/nations/ussr'
@@ -4006,6 +4010,45 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_TANKMEN_BP18_5_3_LABEL = '#tooltips:notrecruitedtankman/tankmen_BP18_5_3/label'
     NOTRECRUITEDTANKMAN_TANKMEN_BP18_5_4_DESC = '#tooltips:notrecruitedtankman/tankmen_BP18_5_4/desc'
     NOTRECRUITEDTANKMAN_TANKMEN_BP18_5_4_LABEL = '#tooltips:notrecruitedtankman/tankmen_BP18_5_4/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_S2_1_DESC = '#tooltips:notrecruitedtankman/tankmen_S2_1/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_S2_1_LABEL = '#tooltips:notrecruitedtankman/tankmen_S2_1/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_S2_2_DESC = '#tooltips:notrecruitedtankman/tankmen_S2_2/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_S2_2_LABEL = '#tooltips:notrecruitedtankman/tankmen_S2_2/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_S2_3_DESC = '#tooltips:notrecruitedtankman/tankmen_S2_3/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_S2_3_LABEL = '#tooltips:notrecruitedtankman/tankmen_S2_3/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_S2_4_DESC = '#tooltips:notrecruitedtankman/tankmen_S2_4/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_S2_4_LABEL = '#tooltips:notrecruitedtankman/tankmen_S2_4/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_S2_5_DESC = '#tooltips:notrecruitedtankman/tankmen_S2_5/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_S2_5_LABEL = '#tooltips:notrecruitedtankman/tankmen_S2_5/label'
+    NOTRECRUITEDTANKMAN_COSM26_1_DESC = '#tooltips:notrecruitedtankman/cosm26_1/desc'
+    NOTRECRUITEDTANKMAN_COSM26_1_LABEL = '#tooltips:notrecruitedtankman/cosm26_1/label'
+    NOTRECRUITEDTANKMAN_COSM26_2_DESC = '#tooltips:notrecruitedtankman/cosm26_2/desc'
+    NOTRECRUITEDTANKMAN_COSM26_2_LABEL = '#tooltips:notrecruitedtankman/cosm26_2/label'
+    LIMITED_UI_UNLOCK_INFO_HEADER_TITLE = '#tooltips:limited_ui/unlock_info/header/title'
+    LIMITED_UI_UNLOCK_INFO_HEADER_SUBTITLE_ONE_CONDITION = '#tooltips:limited_ui/unlock_info/header/subtitle/one_condition'
+    LIMITED_UI_UNLOCK_INFO_HEADER_SUBTITLE_FEW_CONDITIONS = '#tooltips:limited_ui/unlock_info/header/subtitle/few_conditions'
+    LIMITED_UI_UNLOCK_INFO_HEADER_SUBTITLE_ONE_OF_CONDITIONS = '#tooltips:limited_ui/unlock_info/header/subtitle/one_of_conditions'
+    LIMITED_UI_UNLOCK_INFO_CONDITION_MINVEHICLELEVEL = '#tooltips:limited_ui/unlock_info/condition/minVehicleLevel'
+    LIMITED_UI_UNLOCK_INFO_CONDITION_ISINCLAN = '#tooltips:limited_ui/unlock_info/condition/isInClan'
+    LIMITED_UI_UNLOCK_INFO_CONDITION_SEPARATOR = '#tooltips:limited_ui/unlock_info/condition/separator'
+    LIMITED_UI_UNLOCK_INFO_FOOTER_PERSONAL_MISSIONS_TITLE = '#tooltips:limited_ui/unlock_info/footer/personal_missions/title'
+    LIMITED_UI_UNLOCK_INFO_FOOTER_PERSONAL_MISSIONS_DESC = '#tooltips:limited_ui/unlock_info/footer/personal_missions/desc'
+    LIMITED_UI_UNLOCK_INFO_FOOTER_TOURNAMENTS_TITLE = '#tooltips:limited_ui/unlock_info/footer/tournaments/title'
+    LIMITED_UI_UNLOCK_INFO_FOOTER_TOURNAMENTS_DESC = '#tooltips:limited_ui/unlock_info/footer/tournaments/desc'
+    LIMITED_UI_UNLOCK_INFO_FOOTER_VERSUS_AI_TITLE = '#tooltips:limited_ui/unlock_info/footer/versus_ai/title'
+    LIMITED_UI_UNLOCK_INFO_FOOTER_VERSUS_AI_DESC = '#tooltips:limited_ui/unlock_info/footer/versus_ai/desc'
+    LIMITED_UI_UNLOCK_INFO_FOOTER_STRONGHOLD_TITLE = '#tooltips:limited_ui/unlock_info/footer/stronghold/title'
+    LIMITED_UI_UNLOCK_INFO_FOOTER_STRONGHOLD_DESC = '#tooltips:limited_ui/unlock_info/footer/stronghold/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP19_1_DESC = '#tooltips:notrecruitedtankman/tankmen_BP19_1/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP19_1_LABEL = '#tooltips:notrecruitedtankman/tankmen_BP19_1/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP19_2_DESC = '#tooltips:notrecruitedtankman/tankmen_BP19_2/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP19_2_LABEL = '#tooltips:notrecruitedtankman/tankmen_BP19_2/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP19_3_DESC = '#tooltips:notrecruitedtankman/tankmen_BP19_3/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP19_3_LABEL = '#tooltips:notrecruitedtankman/tankmen_BP19_3/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP19_4_DESC = '#tooltips:notrecruitedtankman/tankmen_BP19_4/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP19_4_LABEL = '#tooltips:notrecruitedtankman/tankmen_BP19_4/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP19_5_DESC = '#tooltips:notrecruitedtankman/tankmen_BP19_5/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP19_5_LABEL = '#tooltips:notrecruitedtankman/tankmen_BP19_5/label'
     ELEN_SUMMARY_RANK_ENUM = (ELEN_SUMMARY_RANK_1,
      ELEN_SUMMARY_RANK_2,
      ELEN_SUMMARY_RANK_3,
@@ -4889,7 +4932,19 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKMEN_BP18_5_1_LABEL,
      NOTRECRUITEDTANKMAN_TANKMEN_BP18_5_2_LABEL,
      NOTRECRUITEDTANKMAN_TANKMEN_BP18_5_3_LABEL,
-     NOTRECRUITEDTANKMAN_TANKMEN_BP18_5_4_LABEL)
+     NOTRECRUITEDTANKMAN_TANKMEN_BP18_5_4_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_S2_1_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_S2_2_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_S2_3_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_S2_4_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_S2_5_LABEL,
+     NOTRECRUITEDTANKMAN_COSM26_1_LABEL,
+     NOTRECRUITEDTANKMAN_COSM26_2_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP19_1_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP19_2_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP19_3_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP19_4_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP19_5_LABEL)
     NOTRECRUITEDTANKMAN_ALL_DESC_ENUM = (NOTRECRUITEDTANKMAN_BASE_DESC,
      NOTRECRUITEDTANKMAN_BUFFON_DESC,
      NOTRECRUITEDTANKMAN_TANKWOMAN_DESC,
@@ -5172,7 +5227,19 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKMEN_BP18_5_1_DESC,
      NOTRECRUITEDTANKMAN_TANKMEN_BP18_5_2_DESC,
      NOTRECRUITEDTANKMAN_TANKMEN_BP18_5_3_DESC,
-     NOTRECRUITEDTANKMAN_TANKMEN_BP18_5_4_DESC)
+     NOTRECRUITEDTANKMAN_TANKMEN_BP18_5_4_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_S2_1_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_S2_2_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_S2_3_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_S2_4_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_S2_5_DESC,
+     NOTRECRUITEDTANKMAN_COSM26_1_DESC,
+     NOTRECRUITEDTANKMAN_COSM26_2_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP19_1_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP19_2_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP19_3_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP19_4_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP19_5_DESC)
     NOTRECRUITEDTANKMAN_ALL_HOWTOGETINFO_ENUM = (NOTRECRUITEDTANKMAN_TANKMAN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_HOWTOGETINFO,

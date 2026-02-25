@@ -146,6 +146,7 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         self._limitedUIController.startObserve(LuiRules.CHANNELS, self.__updateChannelsBtn)
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.ReferralViewEvent.TOGGLE_BUTTON, self.__onReferralButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.startGlobalListening()
         self.as_setInitDataS({'channelsHtmlIcon': backport.image(R.images.gui.maps.icons.messenger.iconChannels()),
          'isReferralEnabled': self.__isReferralProgramGUIEnabled(),
@@ -165,6 +166,7 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
 
     def _dispose(self):
         self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.ReferralViewEvent.TOGGLE_BUTTON, self.__onReferralButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         self._referralCtrl.onReferralProgramUpdated -= self.__onReferralProgramUpdated
         self._referralCtrl.onReferralProgramDisabled -= self.__onReferralProgramDisabled
@@ -255,3 +257,7 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
     def __updateChannelsBtn(self, *_):
         visible = self._limitedUIController.isRuleCompleted(LuiRules.SESSION_STATS)
         self.as_setChannelButtonVisibleS(visible)
+
+    def __onReferralButtonUpdated(self, event):
+        isEnabled = event.ctx.get('isEnabled', False)
+        self.as_setReferralButtonEnabledS(isEnabled)

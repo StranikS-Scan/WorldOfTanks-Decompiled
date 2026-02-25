@@ -3,11 +3,11 @@
 import logging
 import typing
 import weakref
-from collections import namedtuple
-from math import fabs, ceil
 import BigWorld
 import CommandMapping
 import Event
+from collections import namedtuple
+from math import ceil
 from TemperatureGunController import getPlayerVehicleTemperatureGunController
 from constants import VEHICLE_SETTING, ReloadRestriction, DUAL_GUN
 from gui.battle_control.avatar_getter import getPlayerVehicle
@@ -34,6 +34,7 @@ _TIME_CORRECTION_THRESHOLD = 0.01
 _IGNORED_RELOADING_TIME = 0.15
 _CANT_CHANGE_SHELL_OVERHEAT = 'cantChangeShellGunOverheated'
 _PIERCING_DISTANCES = (50, 500)
+_AUTO_RELOAD_STEP_RESET = 0.1
 _logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.vehicle_modules import Shell
@@ -456,7 +457,7 @@ class _AutoReloadingBoostStateCtrl(object):
 
 
 class AmmoController(MethodsRules, ViewComponentsController):
-    __slots__ = ('__eManager', 'onShellsAdded', 'onShellsUpdated', 'onNextShellChanged', 'onCurrentShellChanged', 'onGunSettingsSet', 'onGunReloadTimeSet', 'onGunAutoReloadTimeSet', 'onGunAutoReloadBoostUpdated', '_autoReloadingBoostState', 'onShellsCleared', '__ammo', '_order', '__currShellCD', '__nextShellCD', '__gunSettings', '_reloadingState', '_autoReloadingState', '__autoShoots', '__weakref__', 'onDebuffStarted', '__quickChangerActive', 'onShellChangeTimeUpdated', '__shellChangeTime', '__quickChangerFactor', '__dualGunShellChangeTime', '__dualGunQuickChangeReady', '__quickChangerInProcess', '__temperatureGunQuickChangeReady', '__penaltyReloadTime')
+    __slots__ = ('__eManager', 'onShellsAdded', 'onShellsUpdated', 'onNextShellChanged', 'onCurrentShellChanged', 'onGunSettingsSet', 'onGunReloadTimeSet', 'onGunAutoReloadTimeSet', 'onGunAutoReloadBoostUpdated', '_autoReloadingBoostState', 'onShellsCleared', '__ammo', '_order', '__currShellCD', '__nextShellCD', '__gunSettings', '_reloadingState', '_autoReloadingState', '__autoShoots', '__weakref__', 'onDebuffStarted', '__quickChangerActive', 'onShellChangeTimeUpdated', '__shellChangeTime', '__quickChangerFactor', '__reloadingPenalty', '__dualGunShellChangeTime', '__dualGunQuickChangeReady', '__quickChangerInProcess', '__temperatureGunQuickChangeReady', '__prevAutoReloadShellsInClip', '__prevAutoReloadTimeLeft')
     __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, reloadingState=None):
@@ -490,11 +491,13 @@ class AmmoController(MethodsRules, ViewComponentsController):
         self.__dualGunShellChangeTime = _DualGunShellChangeTime(0.0, 0.0, 0)
         self.__dualGunState = _DualGunState(DUAL_GUN.GUN_STATE.EMPTY, DUAL_GUN.GUN_STATE.EMPTY)
         self.__quickChangerFactor = 0.0
+        self.__reloadingPenalty = 0.0
         self.__dualGunQuickChangeReady = False
         self.__temperatureGunQuickChangeReady = False
         self.__quickChangerInProcess = False
         self.__debuffOn = False
-        self.__penaltyReloadTime = 0
+        self.__prevAutoReloadShellsInClip = None
+        self.__prevAutoReloadTimeLeft = None
         return
 
     def __repr__(self):
@@ -520,6 +523,8 @@ class AmmoController(MethodsRules, ViewComponentsController):
         self.__gunSettings = _GunSettings.default()
         self._reloadingState.clear()
         self._autoReloadingBoostState.clear()
+        self.__prevAutoReloadShellsInClip = None
+        self.__prevAutoReloadTimeLeft = None
         if leave:
             self.__autoShoots.destroy()
             self._autoReloadingBoostState.destroy()
@@ -576,14 +581,6 @@ class AmmoController(MethodsRules, ViewComponentsController):
             self.__nextShellCD = None
         self.processDelayer('setCurrentShellCD')
         return
-
-    def updatePenaltyReloadTime(self, reloadTimeFactor, penaltyTime, appliedPenaltyReloadTime):
-        penaltyReloadTime = 0.0
-        self.__penaltyReloadTime = appliedPenaltyReloadTime
-        if penaltyTime >= 0:
-            baseTime = (self.getGunReloadingState().getBaseValue() - appliedPenaltyReloadTime) / reloadTimeFactor
-            penaltyReloadTime = round(baseTime + penaltyTime, 2)
-        self.onPenaltyReloadTimeUpdated(penaltyReloadTime)
 
     @MethodsRules.delayable()
     def setGunSettings(self, gun):
@@ -687,19 +684,8 @@ class AmmoController(MethodsRules, ViewComponentsController):
             self.__shellChangeTime = baseTime
         self.__notifyAboutAutoReloadTimeChanges(isSlowed)
         self._autoReloadingBoostState.setReloadingTimeSnapshot(self._autoReloadingState.getSnapshot(), isBoostApplicable, self.__gunSettings)
-        if self.__gunSettings.reloadEffect is not None and self.__currShellCD in self.__ammo:
-            shellCounts = self.__ammo[self.__currShellCD]
-            shellsInClip = shellCounts[1]
-            clipCapacity = self.__gunSettings.clip.size
-            canBeFull = shellCounts[0] >= clipCapacity
-            lastShell = shellsInClip == clipCapacity - 1
-            reloadStart = fabs(timeLeft - baseTime) < 0.001
-            if timeLeft > 0.0 and reloadStart:
-                self.__gunSettings.reloadEffect.onClipLoad(timeLeft, shellsInClip, lastShell, canBeFull)
-            elif self.__gunSettings.clip.size == shellsInClip and not reloadStart:
-                self.__gunSettings.reloadEffect.onFull()
+        self.__processAutoReloadEffect(timeLeft)
         self.updateShellChangeTime()
-        return
 
     def triggerReloadEffect(self, timeLeft, baseTime, reloadType=ReloadType.ANY):
         if timeLeft > 0.0 and self.__gunSettings.reloadEffect is not None and self.__currShellCD in self.__ammo:
@@ -889,11 +875,15 @@ class AmmoController(MethodsRules, ViewComponentsController):
         self.__quickChangerFactor = factor
         self.updateShellChangeTime(forced=True)
 
+    def setReloadingPenalty(self, penalty=0):
+        self.__reloadingPenalty = penalty
+        self.updateShellChangeTime(forced=True)
+
     def getQuickShellChangeTime(self):
 
-        def getRestrictedTime(changeTime, quickChangerFactor, restriction, penalty=0):
+        def getRestrictedTime(changeTime, quickChangerFactor, restriction):
             minValue = 0.1
-            quickChangeTime = (changeTime - penalty) * quickChangerFactor + penalty
+            quickChangeTime = (changeTime - self.__reloadingPenalty) * quickChangerFactor + self.__reloadingPenalty
             if quickChangeTime < restriction:
                 quickChangeTime = min(restrict, changeTime)
             return max(quickChangeTime, minValue)
@@ -903,7 +893,7 @@ class AmmoController(MethodsRules, ViewComponentsController):
         if vehicle is not None:
             restrict = ReloadRestriction.getBy(vehicle.typeDescriptor)
         shellChangeTime = self.__shellChangeTime
-        quickShellChangeTime = getRestrictedTime(shellChangeTime, self.__quickChangerFactor, restrict, self.__penaltyReloadTime)
+        quickShellChangeTime = getRestrictedTime(shellChangeTime, self.__quickChangerFactor, restrict)
         if self.__gunSettings.isDualGun:
             activeIdx = self.__dualGunShellChangeTime.activeIdx
             if activeIdx == 0:
@@ -963,6 +953,29 @@ class AmmoController(MethodsRules, ViewComponentsController):
                 return intCD
 
         return None
+
+    def __processAutoReloadEffect(self, timeLeft):
+        reloadEffect = self.__gunSettings.reloadEffect
+        if reloadEffect is None or self.__currShellCD not in self.__ammo:
+            return
+        else:
+            quantity, shellsInClip = self.__ammo[self.__currShellCD]
+            clipCapacity = self.__gunSettings.clip.size
+            canBeFull = quantity >= clipCapacity
+            lastShell = shellsInClip == clipCapacity - 1
+            prevTL = self.__prevAutoReloadTimeLeft
+            prevClip = self.__prevAutoReloadShellsInClip
+            hasPrev = prevTL is not None
+            timerResetUp = hasPrev and timeLeft - prevTL > _AUTO_RELOAD_STEP_RESET
+            isReloadingStep = timeLeft > 0.0 and shellsInClip >= 0
+            stepStarted = isReloadingStep and timerResetUp
+            if stepStarted:
+                reloadEffect.onClipLoad(timeLeft, shellsInClip, lastShell, canBeFull)
+            elif shellsInClip == clipCapacity and prevClip is not None and prevClip != clipCapacity:
+                reloadEffect.onFull()
+            self.__prevAutoReloadTimeLeft = timeLeft
+            self.__prevAutoReloadShellsInClip = shellsInClip
+            return
 
     def __onCurrentShellChanged(self, intCD):
         self.onCurrentShellChanged(intCD)

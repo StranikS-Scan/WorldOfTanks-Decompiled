@@ -1,0 +1,605 @@
+<Cz00_COSM_Pepelac_02.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <crew>
+    <commander>	gunner
+			radioman
+			loader
+			driver	</commander>
+  </crew>
+  <supplySlots>	8 8 8	</supplySlots>
+  <speedLimits>
+    <forward>	100	</forward>
+    <backward>	40	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.01	</moving>
+    <still>	0.01	</still>
+    <camouflageBonus>	0.0	</camouflageBonus>
+    <camouflageNetBonus>	0.0	</camouflageNetBonus>
+    <firePenalty>	1.0	</firePenalty>
+  </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.1 0.125	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.06	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.09	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
+  </optDevsOverrides>
+  <repairCost>	0	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.2	</priceFactor>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	100	</armor_1>
+    </armor>
+    <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
+    <weight>	3000	</weight>
+    <maxHealth>	9000	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	30000	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	0.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/czech/Cz00_COSM_Pepelac_02/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/czech/Cz00_COSM_Pepelac_02/normal/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/czech/Cz00_COSM_Pepelac_02/normal/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.34 38 0.36 1 0.05 0.34	</pitchParams>
+      <rollParams>	1 0.34 38 0.36 1 0.06 0.4	</rollParams>
+      <sensitivityToImpulse>	0.94	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	cosmic_rpm	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2 HP_Track_Exhaus_3 HP_Track_Exhaus_4 HP_Track_Exhaus_5 HP_Track_Exhaus_6 HP_Track_Exhaus_7 HP_Track_Exhaus_8 HP_Track_Exhaus_9	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.551829 -0.275408	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/czech/Cz00_COSM_Pepelac_02/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/czech/Cz00_COSM_Pepelac_02/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <hangarShadowTexture>	vehicles/czech/Cz00_COSM_Pepelac_02/COSM_Pepelac_02_HangarShadowMap.dds	</hangarShadowTexture>
+    <customizationSlots>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	11000	</slotId>
+        <anchorPosition>	0 0 0	</anchorPosition>
+        <anchorDirection>	0 1 0	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	12000	</slotId>
+        <anchorPosition>	0 0 0	</anchorPosition>
+        <anchorDirection>	0 1 0	</anchorDirection>
+      </slot>
+    </customizationSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+  </hull>
+  <chassis>
+    <Chassis_Cz00_COSM_Pepelac_02>
+      <userString>	#czech_vehicles:Chassis_Cz00_COSM_Pepelac_02	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_2>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+        </armor_2>
+      </armor>
+      <weight>	6000	</weight>
+      <terrainResistance>	1 1 1	</terrainResistance>
+      <brakeForce>	35000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	40	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0	</vehicleMovement>
+        <vehicleRotation>	0	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	1.0	</bulkHealthFactor>
+      <maxHealth>	30000	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	0.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/czech/Cz00_COSM_Pepelac_02/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/czech/Cz00_COSM_Pepelac_02/normal/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/czech/Cz00_COSM_Pepelac_02/normal/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <activePostmortem>	true	</activePostmortem>
+        <tracesParams>
+          <trackPairIdx>	0	</trackPairIdx>
+          <bufferPrefs>	mediumTank	</bufferPrefs>
+          <textureSet>	ussr_02	</textureSet>
+          <size>	0.55 0.65	</size>
+          <offset>	0 0	</offset>
+          <centerOffsetFactor>	1 1	</centerOffsetFactor>
+        </tracesParams>
+      </traces>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.000000 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.342020 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.000000	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <index>	2	</index>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <nonTrack>	true	</nonTrack>
+          <isLeading>	true	</isLeading>
+          <steeringProcessor>	true	</steeringProcessor>
+          <scrollProcessor>
+            <nodeOverride>	WD_L0_SCR	</nodeOverride>
+            <connectedToEngine>	true	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.578063	</radius>
+            <width>	0.272035	</width>
+            <pivotXOffset>	-0.359000	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.25	</maxYShift>
+            <explodedRadius>	0.476	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/czech/Cz00_COSM_Pepelac_02/collision/Wheel_L_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/czech/Cz00_COSM_Pepelac_02/collision_client/Wheel_L_01.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	-0.867 0.683 1.585	</wheelPos>
+        </wheel>
+        <wheel>
+          <index>	0	</index>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L1	</name>
+          <nonTrack>	true	</nonTrack>
+          <isLeading>	true	</isLeading>
+          <steeringProcessor>	true	</steeringProcessor>
+          <scrollProcessor>
+            <nodeOverride>	WD_L1_SCR	</nodeOverride>
+            <connectedToEngine>	true	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.578063	</radius>
+            <width>	0.272035	</width>
+            <pivotXOffset>	-0.359000	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.25	</maxYShift>
+            <explodedRadius>	0.476	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/czech/Cz00_COSM_Pepelac_02/collision/Wheel_L_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/czech/Cz00_COSM_Pepelac_02/collision_client/Wheel_L_01.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	-0.867 0.683 -1.669	</wheelPos>
+        </wheel>
+        <wheel>
+          <index>	3	</index>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <nonTrack>	true	</nonTrack>
+          <isLeading>	true	</isLeading>
+          <steeringProcessor>	true	</steeringProcessor>
+          <scrollProcessor>
+            <nodeOverride>	WD_R0_SCR	</nodeOverride>
+            <connectedToEngine>	true	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.578063	</radius>
+            <width>	0.272622	</width>
+            <pivotXOffset>	0.359000	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.25	</maxYShift>
+            <explodedRadius>	0.476	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/czech/Cz00_COSM_Pepelac_02/collision/Wheel_R_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/czech/Cz00_COSM_Pepelac_02/collision_client/Wheel_R_01.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	0.867 0.683 1.585	</wheelPos>
+        </wheel>
+        <wheel>
+          <index>	1	</index>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R1	</name>
+          <nonTrack>	true	</nonTrack>
+          <isLeading>	true	</isLeading>
+          <steeringProcessor>	true	</steeringProcessor>
+          <scrollProcessor>
+            <nodeOverride>	WD_R1_SCR	</nodeOverride>
+            <connectedToEngine>	true	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.578063	</radius>
+            <width>	0.272622	</width>
+            <pivotXOffset>	0.359000	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.25	</maxYShift>
+            <explodedRadius>	0.476	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/czech/Cz00_COSM_Pepelac_02/collision/Wheel_R_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/czech/Cz00_COSM_Pepelac_02/collision_client/Wheel_R_01.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	0.867 0.683 -1.669	</wheelPos>
+        </wheel>
+        <generalWheels>	true	</generalWheels>
+        <globalDeflationShaderParams>
+          <wheelRadius>	0.61	</wheelRadius>
+          <rimRadius>	0.35	</rimRadius>
+          <sideShift>	0.2	</sideShift>
+          <peakShift>	0.95	</peakShift>
+        </globalDeflationShaderParams>
+        <traces>
+          <wheelTrace>
+            <name>	WD_L0	</name>
+          </wheelTrace>
+          <wheelTrace>
+            <name>	WD_L1	</name>
+          </wheelTrace>
+          <wheelTrace>
+            <name>	WD_R0	</name>
+          </wheelTrace>
+          <wheelTrace>
+            <name>	WD_R1	</name>
+          </wheelTrace>
+        </traces>
+        <activePostmortem>	true	</activePostmortem>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	medium4WheelsMud	</mud>
+      </effects>
+      <wwsoundPC>	wheels_suspension_pc	</wwsoundPC>
+      <wwsoundNPC>	wheels_suspension_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.185583 0.000000	</hullPosition>
+      <hitTester>
+        <trackPairIdx>	0	</trackPairIdx>
+        <collisionModelServer>	vehicles/czech/Cz00_COSM_Pepelac_02/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/czech/Cz00_COSM_Pepelac_02/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.234978 1.778307	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <groundNodes>
+        <node>
+          <name>	Track_L0	</name>
+          <affectedWheelName>	WD_L0	</affectedWheelName>
+          <collisionSamplesCount>	5	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.04	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_L1	</name>
+          <affectedWheelName>	WD_L1	</affectedWheelName>
+          <collisionSamplesCount>	5	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.04	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R0	</name>
+          <affectedWheelName>	WD_R0	</affectedWheelName>
+          <collisionSamplesCount>	5	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.04	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R1	</name>
+          <affectedWheelName>	WD_R1	</affectedWheelName>
+          <collisionSamplesCount>	5	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.04	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+      </groundNodes>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	21000	</slotId>
+          <anchorPosition>	0 0 0	</anchorPosition>
+          <anchorDirection>	0 1 0	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	29000	</slotId>
+          <anchorPosition>	0 0 0	</anchorPosition>
+          <anchorDirection>	0 1 0	</anchorDirection>
+        </slot>
+      </customizationSlots>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <repairTime>	0.100000001	</repairTime>
+    </Chassis_Cz00_COSM_Pepelac_02>
+  </chassis>
+  <turrets0>
+    <Turret_1_Cz00_COSM_Pepelac_02>
+      <userString>	#czech_vehicles:Turret_1_Cz00_COSM_Pepelac_02	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	100	</armor_1>
+      </armor>
+      <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
+      <weight>	1000	</weight>
+      <maxHealth>	1000	</maxHealth>
+      <rotationSpeed>	500	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	30000	</maxHealth>
+        <maxRegenHealth>	100	</maxRegenHealth>
+        <repairCost>	0.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	1000	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	30000	</maxHealth>
+        <maxRegenHealth>	100	</maxRegenHealth>
+        <repairCost>	0.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_150mm_Pepelac_02>	shared	  <maxAmmo>	5000	</maxAmmo>
+          <armor>
+            <armor_1>	100	</armor_1>
+            <gun>	100	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 13 0.42 13 0.47 8 0.53 8 0.58 13 1 13	</maxPitch>
+          </pitchLimits>
+          <reloadTime>	8	</reloadTime>
+          <aimingTime>	0.01	</aimingTime>
+          <invisibilityFactorAtShot>	1	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.1	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0	</turretRotation>
+            <afterShot>	0.01	</afterShot>
+            <whileGunDamaged>	1	</whileGunDamaged>
+          </shotDispersionFactors>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	0 0 0	</anchorPosition>
+              <anchorDirection>	0 1 0	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0 0 0	</anchorPosition>
+              <anchorDirection>	0 1 0	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	0 0 0	</anchorPosition>
+              <anchorDirection>	0 1 0	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <models>
+            <undamaged>	vehicles/czech/Cz00_COSM_Pepelac_02/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz00_COSM_Pepelac_02/normal/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/czech/Cz00_COSM_Pepelac_02/normal/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/czech/Cz00_COSM_Pepelac_02/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/czech/Cz00_COSM_Pepelac_02/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	-20	</row>
+                <row>	0	</row>
+                <row>	5	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	joint1	</node>
+                  <table>
+                    <row>	-13	</row>
+                    <row>	0	</row>
+                    <row>	3.7	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
+          <shotOffset>	0.001183 0.156617 -0.000001	</shotOffset>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
+        </_150mm_Pepelac_02>
+      </guns>
+      <models>
+        <undamaged>	vehicles/czech/Cz00_COSM_Pepelac_02/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/czech/Cz00_COSM_Pepelac_02/normal/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/czech/Cz00_COSM_Pepelac_02/normal/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/czech/Cz00_COSM_Pepelac_02/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/czech/Cz00_COSM_Pepelac_02/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	-0.002278 0.435423 -0.133611	</gunPosition>
+      <physicsShape>	1.001 0 1.001 0 0.533 -0.12 0.586 0.5 0.586 0.5 0.634 0.5 0.634 0.5 0	</physicsShape>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	31000	</slotId>
+          <anchorPosition>	0 0 0	</anchorPosition>
+          <anchorDirection>	0 1 0	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	32000	</slotId>
+          <anchorPosition>	0 0 0	</anchorPosition>
+          <anchorDirection>	0 1 0	</anchorDirection>
+        </slot>
+      </customizationSlots>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+    </Turret_1_Cz00_COSM_Pepelac_02>
+  </turrets0>
+  <engines>
+    <PepelacEngine_02>	shared	</PepelacEngine_02>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <PepelacRadio_02>	shared	</PepelacRadio_02>
+  </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <PepelacEngine_02>
+          <smplEnginePower>	2326.019	</smplEnginePower>
+          <smplFwMaxSpeed>	105	</smplFwMaxSpeed>
+        </PepelacEngine_02>
+      </engines>
+      <chassis>
+        <Chassis_Cz00_COSM_Pepelac_02>
+          <isWheeledOnSpotRotation>	True	</isWheeledOnSpotRotation>
+          <axleCount>	2	</axleCount>
+          <axleSteeringAngles>	0 0	</axleSteeringAngles>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.1	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.1	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.1	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_Cz00_COSM_Pepelac_02>
+      </chassis>
+    </detailed>
+  </physics>
+  <extras>
+    <wheel_Health>	wheelHealths : WheelHealths	  <sounds>
+        <destroyed></destroyed>
+        <critical></critical>
+        <functional></functional>
+      </sounds>
+      <deviceUserString>	#ingame_gui:devices/wheel	</deviceUserString>
+    </wheel_Health>
+  </extras>
+  <deviceExtras>
+    <devices>
+      <wheel_Health>	track	  <multiple></multiple>
+      </wheel_Health>
+    </devices>
+    <tankmen></tankmen>
+  </deviceExtras>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
+  <useHullZSize>	True	</useHullZSize>
+  <useHullZOffset>	True	</useHullZOffset>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	cosm_medium	</damagedStateGroup>
+    <groundCollisionLight>	groundCollisionWheeledLight	</groundCollisionLight>
+    <groundCollisionHeavy>	groundCollisionWheeledHeavy	</groundCollisionHeavy>
+    <sandCollisionLight>	sandCosmCollisionWheeledLight	</sandCollisionLight>
+    <sandCollisionHeavy>	sandCosmCollisionWheeledHeavy	</sandCollisionHeavy>
+    <snowCollisionLight>	snowCollisionWheeledLight	</snowCollisionLight>
+    <snowCollisionHeavy>	snowCollisionWheeledHeavy	</snowCollisionHeavy>
+    <stoneCollisionLight>	stoneCollisionWheeledLight	</stoneCollisionLight>
+    <stoneCollisionHeavy>	stoneCollisionWheeledHeavy	</stoneCollisionHeavy>
+    <woodCollisionLight>	woodCollisionWheeledLight	</woodCollisionLight>
+    <woodCollisionHeavy>	woodCollisionWheeledHeavy	</woodCollisionHeavy>
+    <metalCollisionLight>	metalCollisionWheeledLight	</metalCollisionLight>
+    <metalCollisionHeavy>	metalCollisionWheeledHeavy	</metalCollisionHeavy>
+    <waterCollisionLight>	waterCollisionWheeledLight	</waterCollisionLight>
+    <waterCollisionHeavy>	waterCollisionWheeledHeavy	</waterCollisionHeavy>
+  </effects>
+  <emblems>
+    <default>	15514	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	1.0	</alpha>
+  </emblems>
+  <prefabAttachments>
+    <newAttachment0>
+      <attachmentId>	31115	</attachmentId>
+    </newAttachment0>
+  </prefabAttachments>
+</Cz00_COSM_Pepelac_02.xml>

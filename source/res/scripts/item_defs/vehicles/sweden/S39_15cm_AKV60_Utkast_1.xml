@@ -12,7 +12,7 @@
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
     <forward>	35	</forward>
-    <backward>	8	</backward>
+    <backward>	14	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.012	</moving>
@@ -41,6 +41,10 @@
     <density>	0.935151 0.935151	</density>
   </camouflage>
   <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle></battle>
+    </fakeTurrets>
     <armor>
       <armor_1>	15	</armor_1>
       <armor_2>	15	</armor_2>
@@ -568,9 +572,9 @@
       <userString>	#sweden_vehicles:Chassis_S39_15cm_AKV60_Utkast_1	</userString>
       <tags></tags>
       <level>	7	</level>
-      <price>	20000	</price>
+      <price>	19500	</price>
       <unlocks>
-        <chassis>	Chassis_S39_15cm_AKV60_Utkast_1_2	  <cost>	15000	</cost>
+        <chassis>	Chassis_S39_15cm_AKV60_Utkast_1_2	  <cost>	16000	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -2378,9 +2382,9 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_152mm_Kanon_M37>	shared	  <maxAmmo>	32	</maxAmmo>
+        <_152mm_Kanon_M37>	shared	  <maxAmmo>	36	</maxAmmo>
           <unlocks>
-            <gun>	_152mm_Kanon_FM49_L50	  <cost>	20500	</cost>
+            <gun>	_152mm_Kanon_FM49_L50	  <cost>	21500	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -2409,8 +2413,8 @@
             </armor_19>
             <gun>	25	</gun>
           </armor>
-          <shotDispersionRadius>	0.7	</shotDispersionRadius>
-          <reloadTime>	30	</reloadTime>
+          <shotDispersionRadius>	0.65	</shotDispersionRadius>
+          <reloadTime>	28	</reloadTime>
           <aimingTime>	5	</aimingTime>
           <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
           <pitchLimits>
@@ -2830,7 +2834,11 @@
             <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
         </_152mm_Kanon_M37>
-        <_152mm_Kanon_FM49_L50>	shared	  <maxAmmo>	32	</maxAmmo>
+        <_152mm_Kanon_FM49_L50>	shared	  <maxAmmo>	36	</maxAmmo>
+          <unlocks>
+            <vehicle>	S37_AKV_151	  <cost>	185800	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	16	</armor_1>
             <armor_2>	10	</armor_2>
@@ -2857,8 +2865,8 @@
             </armor_19>
             <gun>	25	</gun>
           </armor>
-          <shotDispersionRadius>	0.65	</shotDispersionRadius>
-          <reloadTime>	36	</reloadTime>
+          <shotDispersionRadius>	0.68	</shotDispersionRadius>
+          <reloadTime>	32	</reloadTime>
           <aimingTime>	5	</aimingTime>
           <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
           <pitchLimits>
@@ -2867,19 +2875,20 @@
           </pitchLimits>
           <shotDispersionFactors>
             <turretRotation>	0.30	</turretRotation>
-            <afterShot>	2.0	</afterShot>
+            <afterShot>	2.75	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <clip>
-            <count>	2	</count>
-            <rate>	12	</rate>
+            <count>	3	</count>
+            <rate>	60	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	35 45	</reloadTime>
-            <boostFraction>	0.5	</boostFraction>
-            <boostStartTime>	0	</boostStartTime>
-            <boostResidueTime>	2	</boostResidueTime>
+            <reloadTime>	22 27 32	</reloadTime>
           </autoreload>
+          <burst>
+            <count>	3	</count>
+            <rate>	60	</rate>
+          </burst>
           <turretYawLimits>	-12 12	</turretYawLimits>
           <customizationSlots>
             <slot>
@@ -3850,7 +3859,7 @@
   </turrets0>
   <engines>
     <Rolls_Royce_K60>	shared	  <unlocks>
-        <engine>	Rolls_Royce_K60_M1	  <cost>	25000	</cost>
+        <engine>	Rolls_Royce_K60_M1	  <cost>	19200	</cost>
         </engine>
       </unlocks>
     </Rolls_Royce_K60>
@@ -3916,9 +3925,4 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	1.0	</alpha>
   </emblems>
-  <prefabAttachments>
-    <newAttachment0>
-      <attachmentId>	31070	</attachmentId>
-    </newAttachment0>
-  </prefabAttachments>
 </S39_15cm_AKV60_Utkast_1.xml>

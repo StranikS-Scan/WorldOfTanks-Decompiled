@@ -31,16 +31,16 @@ class CosmicPostBattleViewModel(ViewModel):
     def setTotalPoints(self, value):
         self._setNumber(2, value)
 
-    def getKillAmount(self):
+    def getLootResearch(self):
         return self._getNumber(3)
 
-    def setKillAmount(self, value):
+    def setLootResearch(self, value):
         self._setNumber(3, value)
 
-    def getPickupAmount(self):
+    def getKillAmount(self):
         return self._getNumber(4)
 
-    def setPickupAmount(self, value):
+    def setKillAmount(self, value):
         self._setNumber(4, value)
 
     def getKillStreak(self):
@@ -80,8 +80,8 @@ class CosmicPostBattleViewModel(ViewModel):
         self._addViewModelProperty('currentPlayerEntry', PlayerEntry())
         self._addNumberProperty('battleOverTimestamp', 0)
         self._addNumberProperty('totalPoints', 0)
+        self._addNumberProperty('lootResearch', 0)
         self._addNumberProperty('killAmount', 0)
-        self._addNumberProperty('pickupAmount', 0)
         self._addNumberProperty('killStreak', 0)
         self._addArrayProperty('playersList', Array())
         self._addArrayProperty('dailyQuests', Array())

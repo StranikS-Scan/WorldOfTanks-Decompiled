@@ -35,6 +35,8 @@ def buildCache():
                 continue
             elif 'event_battles' in vehDescr.tags:
                 continue
+            elif 'secret' in vehDescr.tags:
+                continue
             vehiclesByLevel.setdefault(vehDescr.level, set()).add(vehDescr.compactDescr)
             for tag in ('beast', 'sinai', 'patton'):
                 if tag in vehDescr.tags:

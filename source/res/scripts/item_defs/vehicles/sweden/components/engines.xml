@@ -54,11 +54,16 @@
     <AVS_1195_SH>	1001	</AVS_1195_SH>
     <Meteor_Mark_IV_Mod_271_SH>	1002	</Meteor_Mark_IV_Mod_271_SH>
     <Continental_AV_1790_5B>	31001	</Continental_AV_1790_5B>
+    <_2_st_Scania_Vabis_L_603_fm49>	31008	</_2_st_Scania_Vabis_L_603_fm49>
+    <_2_st_Scania_Vabis_L_607_fm49>	31009	</_2_st_Scania_Vabis_L_607_fm49>
+    <Motoraggregat_9_ISP>	37000	</Motoraggregat_9_ISP>
     <Boeing_502_10>	31003	</Boeing_502_10>
     <Rolls_Royce_K60>	31004	</Rolls_Royce_K60>
     <Rolls_Royce_K60_M1>	31005	</Rolls_Royce_K60_M1>
     <_2_st_Scania_Vabis_L_603_1S>	31006	</_2_st_Scania_Vabis_L_603_1S>
     <Volvo_A8BS>	31007	</Volvo_A8BS>
+    <Continental_AV_1790>	31010	</Continental_AV_1790>
+    <Volvo_SFA_12>	31011	</Volvo_SFA_12>
     <Boeing_502_10_T>	35001	</Boeing_502_10_T>
     <Rolls_Royce_K60_M1_T>	35002	</Rolls_Royce_K60_M1_T>
     <Volvo_A8BS_T>	35003	</Volvo_A8BS_T>
@@ -278,8 +283,8 @@
     <_2_st_Scania_Vabis_L_603_1S>
       <userString>	#sweden_vehicles:_2_st_Scania_Vabis_L_603_1S	</userString>
       <tags>	gasoline	</tags>
-      <level>	4	</level>
-      <price>	10500	</price>
+      <level>	5	</level>
+      <price>	15500	</price>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	324	</power>
@@ -342,15 +347,15 @@
     <Volvo_A8BS>
       <userString>	#sweden_vehicles:Volvo_A8BS	</userString>
       <tags>	gasoline	</tags>
-      <level>	5	</level>
-      <price>	13700	</price>
+      <level>	6	</level>
+      <price>	27700	</price>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	410	</power>
       <weight>	1050	</weight>
-      <maxHealth>	123	</maxHealth>
-      <maxRegenHealth>	58	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
       <rpm_min>	324	</rpm_min>
       <rpm_max>	2761	</rpm_max>
@@ -405,6 +410,40 @@
       <rpm_min>	382	</rpm_min>
       <rpm_max>	2574	</rpm_max>
     </_2_st_Scania_Vabis_607_1>
+    <_2_st_Scania_Vabis_L_603_fm49>
+      <userString>	#sweden_vehicles:_2_st_Scania_Vabis_L_603_fm49	</userString>
+      <shortUserString>	#sweden_vehicles:_2_st_Scania_Vabis_L_603_fm49_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	26000	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	320	</power>
+      <weight>	1200	</weight>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	399	</rpm_min>
+      <rpm_max>	2521	</rpm_max>
+    </_2_st_Scania_Vabis_L_603_fm49>
+    <_2_st_Scania_Vabis_L_607_fm49>
+      <userString>	#sweden_vehicles:_2_st_Scania_Vabis_L_607_fm49	</userString>
+      <shortUserString>	#sweden_vehicles:_2_st_Scania_Vabis_L_607_fm49_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	34400	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	420	</power>
+      <weight>	1200	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	382	</rpm_min>
+      <rpm_max>	2574	</rpm_max>
+    </_2_st_Scania_Vabis_L_607_fm49>
     <Volvo_TD_70_A>
       <userString>	#sweden_vehicles:Volvo_TD_70_A	</userString>
       <tags>	diesel	</tags>
@@ -766,6 +805,23 @@
       <rpm_min>	325	</rpm_min>
       <rpm_max>	2224	</rpm_max>
     </Motoraggregat_9>
+    <Motoraggregat_9_ISP>
+      <userString>	#sweden_vehicles:Motoraggregat_9_ISP	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	110000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_STRV_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_STRV_npc	</wwsoundNPC>
+      <power>	730	</power>
+      <weight>	700	</weight>
+      <maxHealth>	400	</maxHealth>
+      <maxRegenHealth>	200	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.10	</fireStartingChance>
+      <rpm_min>	325	</rpm_min>
+      <rpm_max>	2224	</rpm_max>
+    </Motoraggregat_9_ISP>
     <Meteor_Mark_IVB>
       <userString>	#sweden_vehicles:Meteor_Mark_IVB	</userString>
       <tags>	gasoline	</tags>
@@ -936,7 +992,7 @@
       <userString>	#sweden_vehicles:Rolls_Royce_K60	</userString>
       <tags>	diesel	</tags>
       <level>	8	</level>
-      <price>	40000	</price>
+      <price>	46000	</price>
       <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
       <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
       <power>	490	</power>
@@ -952,7 +1008,7 @@
       <userString>	#sweden_vehicles:Rolls_Royce_K60_M1	</userString>
       <tags>	diesel	</tags>
       <level>	8	</level>
-      <price>	44000	</price>
+      <price>	57300	</price>
       <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
       <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
       <power>	560	</power>
@@ -964,6 +1020,39 @@
       <rpm_min>	339	</rpm_min>
       <rpm_max>	2221	</rpm_max>
     </Rolls_Royce_K60_M1>
+    <Continental_AV_1790>
+      <userString>	#sweden_vehicles:Continental_AV_1790	</userString>
+      <shortUserString>	#sweden_vehicles:Continental_AV_1790_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	85000	</price>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	900	</power>
+      <weight>	787	</weight>
+      <maxHealth>	285	</maxHealth>
+      <maxRegenHealth>	142	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	500	</rpm_min>
+      <rpm_max>	2000	</rpm_max>
+    </Continental_AV_1790>
+    <Volvo_SFA_12>
+      <userString>	#sweden_vehicles:Volvo_SFA_12	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	110000	</price>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1000	</power>
+      <weight>	700	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	470	</rpm_min>
+      <rpm_max>	2094	</rpm_max>
+    </Volvo_SFA_12>
     <Rolls_Royce_K60_M1_T>
       <userString>	#sweden_vehicles:Rolls_Royce_K60_M1_T	</userString>
       <tags>	diesel	</tags>
@@ -985,7 +1074,7 @@
       <userString>	#sweden_vehicles:Boeing_502_10	</userString>
       <tags>	diesel	</tags>
       <level>	10	</level>
-      <price>	100000	</price>
+      <price>	120000	</price>
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
       <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>

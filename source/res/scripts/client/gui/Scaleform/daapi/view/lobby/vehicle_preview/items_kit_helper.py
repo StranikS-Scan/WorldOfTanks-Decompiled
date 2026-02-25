@@ -14,7 +14,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.collection.collections_helpers import getCollectionRes
 from gui.shared.gui_items.Tankman import CrewTypes
-from gui.shared.money import Currency, Money, MONEY_ZERO_GOLD
+from gui.shared.money import Money, MONEY_ZERO_GOLD
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.impl import backport
@@ -801,16 +801,6 @@ def addBuiltInEquipment(packItems, itemsCache, vehicleCD):
         for eqId in vehicle.getBuiltInEquipmentIDs():
             eqItem = ItemPackEntry(type=ItemPackType.ITEM_EQUIPMENT, id=eqId, count=1, groupID=groupID)
             packItems.append(eqItem)
-
-
-@dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def mayObtainWithMoneyExchange(itemPrice, itemsCache=None):
-    return itemPrice <= itemsCache.items.stats.money.exchange(Currency.GOLD, Currency.CREDITS, itemsCache.items.shop.exchangeRate, default=0)
-
-
-@dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def mayObtainForMoney(itemPrice, itemsCache=None):
-    return itemPrice <= itemsCache.items.stats.money
 
 
 @dependency.replace_none_kwargs(service=ICustomizationService)

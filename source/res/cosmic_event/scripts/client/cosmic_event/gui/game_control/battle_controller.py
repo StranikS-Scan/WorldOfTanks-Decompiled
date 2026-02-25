@@ -12,10 +12,10 @@ from cosmic_event.gui.impl.gen.view_models.views.lobby.cosmic_lobby_view.cosmic_
 from cosmic_event.gui.prb_control import prb_config
 from cosmic_event.gui.prb_control.prb_config import FUNCTIONAL_FLAG
 from cosmic_event.settings import CosmicEventConfig
-from cosmic_event.skeletons.battle_controller import ICosmicEventBattleController
+from skeletons.gui.game_control import ICosmicEventBattleController
 from cosmic_event_common.cosmic_constants import COSMIC_EVENT_GAME_PARAMS_KEY, QUEUE_TYPE
 from cosmic_sound import CosmicHangarSounds
-from cosmic_account_settings import isEventStartedNotificationViewed, setEventStartedNotificationViewed
+from cosmic_account_settings import isEventStartedNotificationViewed, setEventStartedNotificationViewed, setCosmicBattlePassShown
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
@@ -69,6 +69,7 @@ class CosmicEventBattleController(ICosmicEventBattleController, Notifiable, Seas
         self.__recentPrbStorage = storage_getter(RECENT_PRB_STORAGE)()
         self.__inCosmicLobby = False
         self.__currentEnableState = False
+        self.__isClosing = False
         return
 
     def init(self):
@@ -155,6 +156,13 @@ class CosmicEventBattleController(ICosmicEventBattleController, Notifiable, Seas
             self.__recentPrbStorage.clear()
         self.lobbyViewRoute = LobbyRouteEnum.MAIN
         getTutorialGlobalStorage().setValue(GLOBAL_FLAG.COSMIC_ACTIVE, False)
+        self.__isClosing = False
+
+    def setClosingState(self):
+        self.__isClosing = True
+
+    def isClosing(self):
+        return self.__isClosing
 
     def isAvailable(self):
         return self.isEnabled and not self.isFrozen() and self.getCurrentSeason() is not None
@@ -359,6 +367,7 @@ class CosmicEventBattleController(ICosmicEventBattleController, Notifiable, Seas
         self.__serverSettings = None
         self.__cosmicEventConfig = None
         self.__currentEnableState = False
+        self.__isClosing = False
         return
 
     def __getTimer(self):
@@ -376,6 +385,7 @@ class CosmicEventBattleController(ICosmicEventBattleController, Notifiable, Seas
     def __timerUpdate(self):
         status, _, isPrimeTime = self.getPrimeTimeStatus()
         if isPrimeTime and self.__isPrimeTime:
+            setCosmicBattlePassShown(False)
             if not isEventStartedNotificationViewed():
                 self.__showStartedNotification()
         elif isPrimeTime is not self.__isPrimeTime:

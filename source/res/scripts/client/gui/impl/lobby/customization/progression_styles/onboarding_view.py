@@ -13,13 +13,15 @@ from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTab
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
 from skeletons.gui.customization import ICustomizationService
+from skeletons.gui.shared import IItemsCache
 
-@dependency.replace_none_kwargs(service=ICustomizationService)
-def _onCustomizationLoadedCallback(styleCD, service=None):
+@dependency.replace_none_kwargs(service=ICustomizationService, itemsCache=IItemsCache)
+def _onCustomizationLoadedCallback(styleCD, service=None, itemsCache=None):
     if not styleCD:
         return
     ctx = service.getCtx()
-    ctx.changeMode(CustomizationModes.STYLED, CustomizationTabs.STYLES_3D)
+    style = itemsCache.items.getItemByCD(styleCD)
+    ctx.changeMode(CustomizationModes.STYLED, CustomizationTabs.STYLES_3D if style.is3D else CustomizationTabs.STYLES_2D)
     ctx.selectItem(styleCD)
 
 

@@ -73,6 +73,10 @@ class StoryModeController(IStoryModeController, IGlobalListener):
         return
 
     @property
+    def wasOnboardingSkipped(self):
+        return self.__wasOnboardingSkipped
+
+    @property
     def isOnboarding(self):
         return self.__isOnboarding
 
@@ -166,7 +170,8 @@ class StoryModeController(IStoryModeController, IGlobalListener):
 
     def skipOnboarding(self):
         _logger.debug('skipOnboarding')
-        self.__wasOnboardingSkipped = True
+        if self.__isOnboarding:
+            self.__wasOnboardingSkipped = True
         self.__isQuittingBattle = True
         if isPlayerAvatar():
             self._sessionProvider.exit()
@@ -246,6 +251,7 @@ class StoryModeController(IStoryModeController, IGlobalListener):
 
     def onAvatarBecomePlayer(self):
         self.__isQuittingBattle = False
+        self.__wasOnboardingSkipped = False
         arenaBonusType = self._sessionProvider.arenaVisitor.getArenaBonusType()
         if arenaBonusType == ARENA_BONUS_TYPE.STORY_MODE:
             self._sessionProvider.getCtx().setPlayerFullNameFormatter(StoryModeNameFormatter())

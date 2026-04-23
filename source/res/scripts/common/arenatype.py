@@ -379,6 +379,7 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
     cfg['teamSpawnPoints'] = __readTeamSpawnPoints(section, maxTeamsInArena)
     cfg['squadTeamNumbers'], cfg['soloTeamNumbers'] = __readTeamNumbers(section, maxTeamsInArena)
     cfg[VisualScriptTag] = _readVisualScript(section)
+    cfg['pythonScript'] = _readPythonScript(section)
     if raiseIfMissing or __hasKey('numPlayerGroups', section, defaultXml):
         cfg['numPlayerGroups'] = _readInt('numPlayerGroups', section, defaultXml, 0)
     if raiseIfMissing or __hasKey('playerGroupLimit', section, defaultXml):
@@ -610,6 +611,13 @@ def _readVisualScript(section):
          ASPECT.SERVER: _readVisualScriptAspect(vseSection, ASPECT.SERVER.lower(), commonParams)}
     return {ASPECT.CLIENT: [],
      ASPECT.SERVER: []}
+
+
+def _readPythonScript(section):
+    if section.has_key('pythonScript'):
+        pythonScriptSection = section['pythonScript']
+        return [ script for script in pythonScriptSection.asString.split(' ') if script ]
+    return []
 
 
 def _readBoundingBox(section):

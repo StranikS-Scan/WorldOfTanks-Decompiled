@@ -43,6 +43,9 @@ class IArmoryYardRerollController(IGameController):
     def getFreeRerollCountdown(self):
         raise NotImplementedError
 
+    def getHideBattleTypes(self):
+        raise NotImplementedError
+
     def isRerollEnabled(self):
         raise NotImplementedError
 

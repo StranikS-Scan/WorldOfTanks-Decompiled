@@ -465,8 +465,8 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
     def createByGlobalMsgName(self, actionID, baseName=''):
         return self.__factory.createByGlobalMsgName(actionID, baseName)
 
-    def create4Reload(self, isCassetteClip, timeLeft, quantity):
-        return self.__factory.create4Reload(isCassetteClip, timeLeft, quantity)
+    def createReloadingCommand(self, isCassetteClip, timeLeft, quantity, hasAutoShoot):
+        return self.__factory.createReloadingCommand(isCassetteClip, timeLeft, quantity, hasAutoShoot)
 
     def createOverheatCantShootCommand(self, timeLeft):
         return self.__factory.createOverheatCantShootCommand(timeLeft)

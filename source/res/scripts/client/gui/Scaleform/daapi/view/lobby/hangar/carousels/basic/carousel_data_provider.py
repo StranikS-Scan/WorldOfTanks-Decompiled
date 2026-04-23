@@ -166,8 +166,8 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         slotPrice = items.shop.getVehicleSlotsPrice(slots)
         defaultSlotPrice = items.shop.defaults.getVehicleSlotsPrice(slots)
         self._emptySlotsCount = inventory.getFreeSlots(slots)
-        criteria = REQ_CRITERIA.IN_CD_LIST(items.recycleBin.getVehiclesIntCDs()) | REQ_CRITERIA.VEHICLE.IS_RESTORE_POSSIBLE
-        self._restorableVehiclesCount = len(items.getVehicles(criteria))
+        restoreVehsCriteria = REQ_CRITERIA.IN_CD_LIST(items.recycleBin.getVehiclesIntCDs()) | REQ_CRITERIA.VEHICLE.IS_RESTORE_POSSIBLE | ~REQ_CRITERIA.INVENTORY ^ REQ_CRITERIA.VEHICLE.TELECOM_RENT
+        self._restorableVehiclesCount = len(items.getVehicles(restoreVehsCriteria))
         if slotPrice != defaultSlotPrice:
             discount = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'slotsPrices', True, slotPrice, defaultSlotPrice)
         else:

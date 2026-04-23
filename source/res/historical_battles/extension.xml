@@ -1,0 +1,76 @@
+<extension.xml>
+  <FeatureName>	historical_battles	</FeatureName>
+  <IsEnabled>	true	</IsEnabled>
+  <Personality>	historical_battles_personality	</Personality>
+  <EditorPersonality>	historical_battles_personality_editor	</EditorPersonality>
+  <Entities>
+    <ServerOnlyEntities>
+      <HBDefenceBattleMgr></HBDefenceBattleMgr>
+      <HBOffenceBattleMgr></HBOffenceBattleMgr>
+      <HBUnitMgr></HBUnitMgr>
+    </ServerOnlyEntities>
+    <ClientServerEntities>
+      <HBHangarTankObject></HBHangarTankObject>
+      <HBAllyVehicle></HBAllyVehicle>
+      <HBHeroTank></HBHeroTank>
+      <HBMainHeroTank></HBMainHeroTank>
+      <HBCustomizableSceneObject></HBCustomizableSceneObject>
+      <HBCameraAnchorObject></HBCameraAnchorObject>
+    </ClientServerEntities>
+  </Entities>
+  <Components>
+    <StaticComponents>
+      <HBArenaBattleResultComponent></HBArenaBattleResultComponent>
+      <HBAccountBattleResultComponent></HBAccountBattleResultComponent>
+      <HBComponent></HBComponent>
+      <HBShopAccountComponent></HBShopAccountComponent>
+      <HBFrontCouponsComponent></HBFrontCouponsComponent>
+      <HBAccountComponent></HBAccountComponent>
+      <HBCoinsComponent></HBCoinsComponent>
+      <HBArenaRespawnComponent></HBArenaRespawnComponent>
+      <HBAvatarRespawnComponent></HBAvatarRespawnComponent>
+      <HBVehicleRespawnComponent></HBVehicleRespawnComponent>
+      <HBArtilleryOnYourselfController></HBArtilleryOnYourselfController>
+      <HBAccountBattleResultCache></HBAccountBattleResultCache>
+      <HBArenaBattleResultsStats></HBArenaBattleResultsStats>
+    </StaticComponents>
+    <DynamicComponents>
+      <HBVehicleDevComponent></HBVehicleDevComponent>
+      <HBDefenceBattleSystemsManager></HBDefenceBattleSystemsManager>
+      <HBOffenceBattleSystemsManager></HBOffenceBattleSystemsManager>
+      <GermanyBattleSystemsManager></GermanyBattleSystemsManager>
+      <ArenaPhasesComponent></ArenaPhasesComponent>
+      <MapImageComponent></MapImageComponent>
+      <VehicleAffectComponent></VehicleAffectComponent>
+      <HBArenaMinefieldComponent></HBArenaMinefieldComponent>
+      <HBVehicleRoleComponent></HBVehicleRoleComponent>
+      <HBVehicleBattleStatsComponent></HBVehicleBattleStatsComponent>
+      <HBVehiclePositionsComponent></HBVehiclePositionsComponent>
+      <HBGoalComponent></HBGoalComponent>
+      <HBTeamInfoStatsComponent></HBTeamInfoStatsComponent>
+      <HBVehicleRoleArenaComponent></HBVehicleRoleArenaComponent>
+      <HBAttackDirectionMarkerComponent></HBAttackDirectionMarkerComponent>
+      <HBBattleFeedbackComponent></HBBattleFeedbackComponent>
+      <HBVehicleNitro></HBVehicleNitro>
+      <HBVehicleAfkController></HBVehicleAfkController>
+      <HBVehicleEffect></HBVehicleEffect>
+      <HBVehicleIncendiaryShotComponent></HBVehicleIncendiaryShotComponent>
+      <HBStunShotComponent></HBStunShotComponent>
+      <HBLastStand></HBLastStand>
+      <HBBerserk></HBBerserk>
+      <HBVehicleAbilitiesManager></HBVehicleAbilitiesManager>
+      <HBArtilleryOnYourself></HBArtilleryOnYourself>
+      <HBTeamInfoComponent></HBTeamInfoComponent>
+      <HBArenaInfoAbilitiesNotifier></HBArenaInfoAbilitiesNotifier>
+    </DynamicComponents>
+  </Components>
+  <cgf>
+    <script>
+      <module>	client.historical_battles_client_cgf.entry_point.component	</module>
+      <module>	client.historical_battles_client_cgf.entry_point.manager	</module>
+      <module>	common.historical_battles_common_cgf.rules.manager_rules	</module>
+      <module>	client.historical_battles_client_cgf.burst_animator.manager	</module>
+      <module>	client.historical_battles_client_cgf.burst_animator.component	</module>
+    </script>
+  </cgf>
+</extension.xml>

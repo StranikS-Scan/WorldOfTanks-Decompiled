@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/deconstruction_device_view.py
 import logging
+import adisp
 from collections import namedtuple
 from copy import deepcopy
 from itertools import chain
-import adisp
 from CurrentVehicle import g_currentVehicle
+from constants import OPT_DEVICES_RESTORE_SETTING
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -22,6 +23,7 @@ from gui.shared.gui_items.items_actions.actions import ItemSellSpec, ItemDeconst
 from gui.shared.money import Currency
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 ItemDeconstructContext = namedtuple('ItemDeconstructContext', ('cart', 'upgradedPair'))
@@ -29,6 +31,7 @@ Cart = namedtuple('Cart', ('onVehicle', 'storage'))
 
 class DeconstructionDeviceView(ViewImpl):
     itemsCache = dependency.descriptor(IItemsCache)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
     __slots__ = ('_upgradedItemPair', '_storageProvider', '_onVehicleProvider', '_cart', '__deconstructedCallback')
 
     def __init__(self, upgradedItemPair=None, onDeconstructedCallback=None):
@@ -67,6 +70,7 @@ class DeconstructionDeviceView(ViewImpl):
         selectableVM.onCloseClick += self._onCloseClick
         selectableVM.onModuleAdd += self._onModuleAdd
         selectableVM.onModuleReduce += self._onModuleReduce
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingsChange
         g_clientUpdateManager.addMoneyCallback(self.__onMoneyUpdated)
 
     def _finalize(self):
@@ -75,6 +79,7 @@ class DeconstructionDeviceView(ViewImpl):
         selectableVM.onCloseClick -= self._onCloseClick
         selectableVM.onModuleAdd -= self._onModuleAdd
         selectableVM.onModuleReduce -= self._onModuleReduce
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self._onServerSettingsChange
         g_clientUpdateManager.removeObjectCallbacks(self)
         self._cart = None
         self._storageProvider = None
@@ -83,11 +88,16 @@ class DeconstructionDeviceView(ViewImpl):
         return
 
     def _updateView(self, fullUpdate=False):
+        self._fillHeader()
         ctx = ItemDeconstructContext(deepcopy(self._cart), self._upgradedItemPair)
         self._updateSlots(ctx, fullUpdate)
         self._updateCounters(ctx)
         self._fillVehicle()
         self._fillUpgradedItem()
+
+    def _fillHeader(self):
+        with self.viewModel.transaction() as tx:
+            tx.setIsOptDeviceRestored(self.__lobbyContext.getServerSettings().isOptionalDeviceRestoreEnabled())
 
     def _fillUpgradedItem(self):
         if self._upgradedItemPair:
@@ -139,6 +149,10 @@ class DeconstructionDeviceView(ViewImpl):
 
     def _updateItemByFilter(self):
         pass
+
+    def _onServerSettingsChange(self, diff):
+        if OPT_DEVICES_RESTORE_SETTING in diff:
+            self._fillHeader()
 
     def __fillModules(self):
         self._updateSlots()

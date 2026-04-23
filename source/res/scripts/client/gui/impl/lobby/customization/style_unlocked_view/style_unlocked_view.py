@@ -15,7 +15,7 @@ from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.impl.gen import R
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS
+from gui.impl.lobby.customization.sound_constants import SOUNDS
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsBattleRoyale
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import ViewEventType

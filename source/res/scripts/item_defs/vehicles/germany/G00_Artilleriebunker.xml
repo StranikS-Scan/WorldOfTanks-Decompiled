@@ -66,7 +66,7 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.111556 0.0000000	</turret>
+      <turret>	0.000000 0.093343 0.0000000	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/german/G00_Artilleriebunker/collision/Hull.model	</collisionModelServer>
@@ -404,6 +404,7 @@
         </customizableVehicleAreas>
       </customization>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <physicsShape>	1.008 0 1.014 0 1 0 0.924 0.209 0.166 0.5 0.396 0.5 0.268 0.571 0	</physicsShape>
     </Turret_1_G00_Artilleriebunker>
   </turrets0>
   <engines>
@@ -444,6 +445,64 @@
   </physics>
   <effects>
     <collision></collision>
+    <destruction>
+      <variant1>
+        <timeline>
+          <death>	0.01	</death>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	20.0	</waitChangeBurnSound>
+          <stopDeath>	36000	</stopDeath>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+              </stage>
+              <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+              </stage>
+              <stage>	0.0	  <color>	0 0 0 0	</color>
+              </stage>
+            </stages>
+          </flashBang>
+          <pixie>
+            <startKey>	death	</startKey>
+            <endKey>	stopDeath	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/front_line_destruction_huge.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	death	</startKey>
+            <wwsoundPC>	eb_expl_destruction_huge	</wwsoundPC>
+            <wwsoundNPC>	eb_expl_destruction_huge	</wwsoundNPC>
+          </sound>
+          <decal>
+            <startKey>	static	</startKey>
+            <groupName>	slow	</groupName>
+            <texName>	explosion_ground_AM	</texName>
+            <bumpTexName>	explosion_ground_NM	</bumpTexName>
+            <smTexName>	explosion_stone_NO_GMM	</smTexName>
+            <size>	12 12	</size>
+            <randomYaw>	true	</randomYaw>
+          </decal>
+          <pixie>
+            <startKey>	static	</startKey>
+            <endKey>	stopDeath	</endKey>
+            <file>	particles/Tank/destruction/smoke_dead_medium_01.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <pixie>
+            <startKey>	flaming	</startKey>
+            <endKey>	waitChangeBurnSound	</endKey>
+            <file>	particles/Tank/destruction/fire_dead_medium_01.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+        </effects>
+      </variant1>
+    </destruction>
     <damagedStateGroup>	small	</damagedStateGroup>
   </effects>
   <emblems>

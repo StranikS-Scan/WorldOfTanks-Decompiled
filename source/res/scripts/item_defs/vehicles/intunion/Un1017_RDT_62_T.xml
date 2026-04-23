@@ -1937,7 +1937,7 @@
           </armor>
           <pitchLimits>
             <minPitch>	0 -30 1 -30	</minPitch>
-            <maxPitch>	0 12 0.36 12 0.42 7 0.58 7 0.64 12 1 12	</maxPitch>
+            <maxPitch>	0 12 0.05 12 0.0556 8 0.1 8 0.117 12 0.36 12 0.42 7 0.58 7 0.64 12 0.85 12 0.92 8 0.944 8 0.95 12 1 12	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.15	</shotDispersionRadius>
           <reloadTime>	10	</reloadTime>
@@ -1950,12 +1950,13 @@
           <aimingTime>	1.0	</aimingTime>
           <clip>
             <count>	24	</count>
-            <rate>	240	</rate>
+            <rate>	260	</rate>
           </clip>
           <autoShoot>
             <shotDispersionPerSec>	1.0	</shotDispersionPerSec>
             <maxShotDispersion>	7	</maxShotDispersion>
-            <rate>	4	</rate>
+            <rate>	4.33	</rate>
+            <rebuildShotDispersionDelay>	1.0	</rebuildShotDispersionDelay>
           </autoShoot>
           <customizationSlots>
             <slot>
@@ -2119,7 +2120,7 @@
             <collisionModelClient>	vehicles/intunion/Un17_RDT_62/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <edgeByVisualModel>	false	</edgeByVisualModel>
-          <effects>	shot_autoshoot_medium	</effects>
+          <effects>	shot_autoshoot_medium_shell_ground	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <shotOffset>	0 0.101 0	</shotOffset>
           <camouflage>

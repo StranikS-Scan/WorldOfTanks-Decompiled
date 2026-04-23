@@ -124,7 +124,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         self._keys = {}
         self._extraKeys = {}
         self.__currentActivatedSlotIdx = -1
-        self.__equipmentsGlowCallbacks = {}
+        self._equipmentsGlowCallbacks = {}
         if self.sessionProvider.isReplayPlaying:
             self.__reloadTicker = _PythonReloadTicker(self)
         else:
@@ -354,7 +354,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
                 self._showEquipmentGlow(idx)
             elif item.becomeReady:
                 self._showEquipmentGlow(idx, glowType)
-            elif idx in self.__equipmentsGlowCallbacks:
+            elif idx in self._equipmentsGlowCallbacks:
                 self.__clearEquipmentGlow(idx)
 
     def _updateActivatedSlot(self, idx, item):
@@ -392,12 +392,12 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
     def _showEquipmentGlow(self, equipmentIndex, glowType=CONSUMABLES_PANEL_SETTINGS.GLOW_ID_ORANGE):
         if BigWorld.player().isObserver():
             return
-        if equipmentIndex in self.__equipmentsGlowCallbacks:
-            BigWorld.cancelCallback(self.__equipmentsGlowCallbacks[equipmentIndex])
-            del self.__equipmentsGlowCallbacks[equipmentIndex]
+        if equipmentIndex in self._equipmentsGlowCallbacks:
+            BigWorld.cancelCallback(self._equipmentsGlowCallbacks[equipmentIndex])
+            del self._equipmentsGlowCallbacks[equipmentIndex]
         else:
             self.as_setGlowS(equipmentIndex, glowID=glowType)
-        self.__equipmentsGlowCallbacks[equipmentIndex] = BigWorld.callback(_EQUIPMENT_GLOW_TIME, partial(self.__hideEquipmentGlowCallback, equipmentIndex))
+        self._equipmentsGlowCallbacks[equipmentIndex] = BigWorld.callback(_EQUIPMENT_GLOW_TIME, partial(self.__hideEquipmentGlowCallback, equipmentIndex))
 
     def _onShellsAdded(self, intCD, descriptor, quantity, _, gunSettings):
         idx = self.__genNextIdx(self.__ammoFullMask, self._AMMO_START_IDX)
@@ -940,17 +940,17 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         return self.__clearEquipmentGlow(equipmentIndex, cancelCallback=False)
 
     def __clearEquipmentGlow(self, equipmentIndex, cancelCallback=True):
-        if equipmentIndex in self.__equipmentsGlowCallbacks:
+        if equipmentIndex in self._equipmentsGlowCallbacks:
             self.as_hideGlowS(equipmentIndex)
             if cancelCallback:
-                BigWorld.cancelCallback(self.__equipmentsGlowCallbacks[equipmentIndex])
-            del self.__equipmentsGlowCallbacks[equipmentIndex]
+                BigWorld.cancelCallback(self._equipmentsGlowCallbacks[equipmentIndex])
+            del self._equipmentsGlowCallbacks[equipmentIndex]
 
     def __clearAllEquipmentGlow(self):
-        for equipmentIndex, callbackID in self.__equipmentsGlowCallbacks.items():
+        for equipmentIndex, callbackID in self._equipmentsGlowCallbacks.items():
             BigWorld.cancelCallback(callbackID)
             self.as_hideGlowS(equipmentIndex)
-            del self.__equipmentsGlowCallbacks[equipmentIndex]
+            del self._equipmentsGlowCallbacks[equipmentIndex]
 
     def __expandEquipmentSlot(self, index, slots):
         self.as_expandEquipmentSlotS(index, slots)

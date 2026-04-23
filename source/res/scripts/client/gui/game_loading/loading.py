@@ -2,10 +2,10 @@
 # Embedded file name: scripts/client/gui/game_loading/loading.py
 import inspect
 import typing
-import WWISE
 import game_loading_bindings
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.game_loading import loggers
+from gui.game_loading.loading_sounds import handleLoadingSoundStartEvent
 from gui.game_loading.preferences import GameLoadingPreferences
 from gui.game_loading.settings import GameLoadingSettings
 from gui.game_loading.state_machine.machine import GameLoadingStateMachine
@@ -18,9 +18,7 @@ _logger = loggers.getLoaderLogger()
 _g_Loader = GameLoadingStateMachine()
 
 def startSound():
-    WWISE.loadLogin()
-    WWISE.WW_eventGlobalSync('ue_01_loginscreen_enter')
-    WWISE.WW_eventGlobal('loginscreen_ambient_start')
+    handleLoadingSoundStartEvent()
 
 
 def getLoader():

@@ -95,8 +95,8 @@ def _readHangarSettings():
     defaultSpace = 'h08_mt_hangar'
     if hangarsXml.has_key('hangar_scene_spaces'):
         switchItems = hangarsXml['hangar_scene_spaces']
-        for item in switchItems.values():
-            if item.readString('name') == constants.DEFAULT_HANGAR_SCENE:
+        for name, item in switchItems.items():
+            if name == constants.DEFAULT_HANGAR_SCENE:
                 defaultSpace = item.readString('space')
                 break
 
@@ -297,6 +297,7 @@ class ClientHangarSpace(object):
         LOG_DEBUG('Hangar successfully destroyed.')
         BigWorld.hangarDestroyed()
         self._vsePlans.reset()
+        MusicControllerWWISE.play(MusicControllerWWISE.MUSIC_EVENT_SOUND_EXIT)
         MusicControllerWWISE.unloadCustomSounds()
         self.__loadingStatus = 0.0
         self.__onLoadedCallback = None

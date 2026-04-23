@@ -60,6 +60,7 @@ from gui.shared.utils.functions import makeTooltip, stripColorTagDescrTags
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID, getVehicleCDForIntelligence, getVehicleCDForNational, makeIntelligenceCD, makeNationalCD
 from helpers import dependency, getLocalizedData, i18n, time_utils
 from helpers.i18n import makeString as _ms
+from historical_battles_common.hb_constants import FRONT_COUPON_TOKEN_PREFIX
 from items import tankmen, vehicles
 from items.components import c11n_components as cc
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
@@ -389,15 +390,23 @@ class BpcoinBonus(IntegralBonus):
 
 
 class EquipCoinBonus(IntegralBonus):
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def getIcon(self):
         return backport.image(R.images.gui.maps.icons.library.equipCoin_1())
 
     def getList(self):
-        res = [{'value': self.formatValue(),
+        return [{'value': self.formatValue(),
           'itemSource': self.getIcon(),
           'tooltip': TOOLTIPS.AWARDITEM_EQUIPCOIN}]
-        return res
+
+    def getTooltip(self):
+        headerKey, _ = getSimpleTooltipData(self._name)
+        header = i18n.makeString(headerKey) if headerKey else None
+        isRestorable = self.__lobbyContext.getServerSettings().isOptionalDeviceRestoreEnabled()
+        baseDesc = R.strings.tooltips
+        body = backport.text(baseDesc.awardItem.equipCoin.body() if isRestorable else baseDesc.header.buttons.equipCoin.description2())
+        return makeTooltip(header or None, body or None)
 
     def hasIconFormat(self):
         return True
@@ -665,6 +674,22 @@ class BattleTokensBonus(TokensBonus):
     def _getUserName(self, styleID):
         webCache = self.eventsCache.prefetcher
         return i18n.makeString(webCache.getTokenInfo(styleID))
+
+
+class HBCouponTokenBonus(BattleTokensBonus):
+
+    def __init__(self, name, value, isCompensation=False, ctx=None):
+        super(HBCouponTokenBonus, self).__init__(name, value, isCompensation, ctx)
+        self._name = 'HBCoupon'
+
+    def formatValue(self):
+        result = []
+        awardTemplate = R.strings.hb_tooltips.quest.award
+        for tokenID, tokenData in self._value.iteritems():
+            userName = backport.text(awardTemplate(), bonusName=tokenID.split('_')[-1], count=tokenData['count'])
+            result.append(userName)
+
+        return ', '.join(result) if result else None
 
 
 class BattlePassTokensBonus(TokensBonus):
@@ -1395,6 +1420,8 @@ def tokensFactory(name, value, isCompensation=False, ctx=None):
             result.append(CollectionTokenBonus(COLLECTION_ITEM_BONUS_NAME, {tID: tValue}, isCompensation, ctx))
         if tID.startswith(VERSUS_AI_PROGRESSION_TOKEN_PREFIX):
             result.append(VersusAIProgressionsTokenBonus(name, {tID: tValue}, isCompensation, ctx))
+        if tID.startswith(FRONT_COUPON_TOKEN_PREFIX):
+            result.append(HBCouponTokenBonus(name, {tID: tValue}, isCompensation, ctx))
         result.append(BattleTokensBonus(name, {tID: tValue}, isCompensation, ctx))
 
     return result

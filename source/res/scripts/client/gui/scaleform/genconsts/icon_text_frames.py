@@ -41,3 +41,4 @@ class ICON_TEXT_FRAMES(object):
     LOCK = 'lock'
     RANKED_POINTS = 'rankedPoints'
     BONUS_BATTLE = 'bonusBattle'
+    DEMOUNT_KIT = 'demountKit'

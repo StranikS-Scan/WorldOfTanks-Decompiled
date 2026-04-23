@@ -71,7 +71,7 @@ class IGuiItemsFactory(object):
     def createCustomization(self, intCompactDescr, proxy=None):
         raise NotImplementedError
 
-    def createOutfit(self, strCompactDescr=None, component=None, vehicleCD=''):
+    def createOutfit(self, strCompactDescr=None, component=None, vehicleCD='', isClanHidden=False, isMarksOnGunHidden=False):
         raise NotImplementedError
 
     def createVehPostProgression(self, vehIntCD, state, vehType):

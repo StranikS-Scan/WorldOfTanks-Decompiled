@@ -22,6 +22,7 @@ class Currency(CONST_CONTAINER):
     EQUIP_COIN = 'equipCoin'
     AYCOIN = 'armory_coin'
     BATTLE_PASS_POINTS = 'battlePassPoints'
+    DEMOUNT_KIT = 'demountKit'
     ALL = (CREDITS,
      GOLD,
      CRYSTAL,
@@ -35,6 +36,11 @@ class Currency(CONST_CONTAINER):
      BPCOIN,
      EQUIP_COIN)
     GUI_ALL = (CRYSTAL, GOLD, CREDITS)
+    DEMOUNT_ORDER = (CREDITS,
+     GOLD,
+     DEMOUNT_KIT,
+     CRYSTAL,
+     EQUIP_COIN)
     _CURRENCY_EXTERNAL_MAP = {CREDITS: 'credits',
      GOLD: 'gold',
      CRYSTAL: 'crystal',

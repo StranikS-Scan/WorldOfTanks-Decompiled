@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/vehicles/dualgun_sounds.py
-import WWISE
+import SoundGroups
 import math_utils
 import BigWorld
 from gui.battle_control.battle_constants import CANT_SHOOT_ERROR
@@ -40,15 +40,16 @@ class ChargeSoundRTPCInterpolator(CallbackDelayer):
         self.__startTime = 0.0
         self.stopCallback(self.__update)
         self.stopCallback(self.disable)
+        if self.enabled:
+            SoundGroups.g_instance.playSound2D(DualGunSoundEvents.CHARGE_PROGRESS_STOP)
         self.enabled = False
-        WWISE.WW_eventGlobal(DualGunSoundEvents.CHARGE_PROGRESS_STOP)
 
     def __update(self):
         currentTime = BigWorld.timeExact()
         elapsedTime = currentTime - self.__startTime
         interpolationCoefficient = math_utils.linearTween(elapsedTime, 1.0, self.__totalInterpolationTime)
         resultValue = int(math_utils.lerp(0, 100, interpolationCoefficient))
-        WWISE.WW_setRTCPGlobal(DualGunSoundEvents.RTPC_CHARGE_PROGRESS, resultValue)
+        SoundGroups.g_instance.setRTCPGlobal(DualGunSoundEvents.RTPC_CHARGE_PROGRESS, resultValue)
         if elapsedTime > self.__totalInterpolationTime:
             self.delayCallback(0.0, self.disable)
             return 10.0
@@ -65,7 +66,7 @@ class DualGunSounds(CallbackDelayer):
 
     def onChargeStarted(self, timeLeft):
         if timeLeft > 0:
-            WWISE.WW_eventGlobal(DualGunSoundEvents.CHARGE_STARTED)
+            SoundGroups.g_instance.playSound2D(DualGunSoundEvents.CHARGE_STARTED)
             self.__interpolator.enable(timeLeft)
             timeToStart = timeLeft - DualGunSoundEvents.CHARGE_SOUND_FX_LENGTH
             if timeToStart > 0:
@@ -73,7 +74,7 @@ class DualGunSounds(CallbackDelayer):
 
     def onChargeCanceled(self):
         if self.__interpolator.enabled:
-            WWISE.WW_eventGlobal(DualGunSoundEvents.CHARGE_CANCEL)
+            SoundGroups.g_instance.playSound2D(DualGunSoundEvents.CHARGE_CANCEL)
             self.__interpolator.disable()
         self.stopCallback(self.__runFXSound)
 
@@ -93,27 +94,27 @@ class DualGunSounds(CallbackDelayer):
 
     @staticmethod
     def onSniperCameraTransition():
-        WWISE.WW_eventGlobal(DualGunSoundEvents.DAULGUN_RELOAD_SNIPER_SWITCH)
+        SoundGroups.g_instance.playSound2D(DualGunSoundEvents.DAULGUN_RELOAD_SNIPER_SWITCH)
 
     @staticmethod
     def onPreChargeStarted():
-        WWISE.WW_eventGlobal(DualGunSoundEvents.CHARGE_PRE)
+        SoundGroups.g_instance.playSound2D(DualGunSoundEvents.CHARGE_PRE)
 
     @staticmethod
     def onChargeReleased(canShoot, error, canMakeDualShoot):
         if not canShoot and error == CANT_SHOOT_ERROR.NO_AMMO:
-            WWISE.WW_eventGlobal(DualGunSoundEvents.NOT_ENOUGH_SHELLS)
+            SoundGroups.g_instance.playSound2D(DualGunSoundEvents.NOT_ENOUGH_SHELLS)
         if not canMakeDualShoot:
-            WWISE.WW_eventGlobal(DualGunSoundEvents.CHARGE_FAILED)
+            SoundGroups.g_instance.playSound2D(DualGunSoundEvents.CHARGE_FAILED)
 
     @staticmethod
     def __runFXSound():
-        WWISE.WW_eventGlobal(DualGunSoundEvents.CHARGE_FX)
+        SoundGroups.g_instance.playSound2D(DualGunSoundEvents.CHARGE_FX)
 
     @staticmethod
     def __runCooldownEndSound():
-        WWISE.WW_eventGlobal(DualGunSoundEvents.COOLDOWN_END)
+        SoundGroups.g_instance.playSound2D(DualGunSoundEvents.COOLDOWN_END)
 
     @staticmethod
     def __runChangeWeaponSound():
-        WWISE.WW_eventGlobal(DualGunSoundEvents.WEAPON_CHANGED)
+        SoundGroups.g_instance.playSound2D(DualGunSoundEvents.WEAPON_CHANGED)

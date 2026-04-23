@@ -14,7 +14,7 @@ from Math import Vector2, Vector3
 from backports.functools_lru_cache import lru_cache
 from collections import namedtuple
 from auto_shoot_guns.auto_shoot_guns_common import AUTOSHOOT_MAX_INTERVAL
-from constants import ACTION_LABEL_TO_TYPE, SHELL_TYPES_LIST, ROLE_LABEL_TO_TYPE, ROLE_TYPE, DamageAbsorptionLabelToType, ROLE_LEVELS, ROLE_TYPE_TO_LABEL, VEHICLE_HEALTH_DECIMALS, CHANCE_TO_HIT_SUFFIX_FACTOR, IGR_TYPE, IS_RENTALS_ENABLED, IS_CELLAPP, IS_BASEAPP, IS_CLIENT, IS_UE_EDITOR, IS_BOT, IS_WEB, IS_PROCESS_REPLAY, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE_STATE, VEHICLE_MODE, VEHICLE_CLASSES, ShootImpulseApplicationPoint, AVAILABLE_STUN_TYPES_NAMES, StunTypes, HAS_EXPLOSION_EFFECT, HAS_EXPLOSION, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
+from constants import ACTION_LABEL_TO_TYPE, SHELL_TYPES_LIST, ROLE_LABEL_TO_TYPE, ROLE_TYPE, DamageAbsorptionLabelToType, ROLE_LEVELS, ROLE_TYPE_TO_LABEL, VEHICLE_HEALTH_DECIMALS, CHANCE_TO_HIT_SUFFIX_FACTOR, IGR_TYPE, IS_RENTALS_ENABLED, IS_CELLAPP, IS_BASEAPP, IS_CLIENT, IS_UE_EDITOR, IS_BOT, IS_WEB, IS_PROCESS_REPLAY, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE_STATE, VEHICLE_MODE, VEHICLE_CLASSES, ShootImpulseApplicationPoint, AVAILABLE_STUN_TYPES_NAMES, StunTypes, HAS_EXPLOSION_EFFECT, HAS_EXPLOSION, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL, INVULNERABLE_EXTRAS
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from functools import partial
 from items import ItemsPrices
@@ -53,6 +53,7 @@ from material_kinds import IDS_BY_NAMES
 from items.customization_slot_tags_validator import getDirectionAndFormFactorTags
 from extension_utils import ResMgr, importClass
 from battle_modifiers_common import BattleParams, BattleModifiers, ModifiersContext
+from constants import ARENA_BONUS_TYPE, ARENA_BONUS_TYPE_NAMES
 if IS_UE_EDITOR:
     from meta_objects.items.vehicle_items_meta.utils import getEffectNameByEffect
     from combined_data_section import CombinedDataSection
@@ -332,6 +333,11 @@ def vehicleAttributeFactors():
      'stunResistanceEffect': 0.0,
      'stunResistanceDuration': 0.0,
      'repeatedStunDurationFactor': 1.0,
+     'vehicle/canBeDamaged': True,
+     'vehicle/canBeRammed': True,
+     'vehicle/antifragmentationLiningFactor': 1.0,
+     'deviceCanBeRepaired/leftTrackHealth': True,
+     'deviceCanBeRepaired/rightTrackHealth': True,
      'healthFactor': 1.0,
      'damageFactor': 1.0,
      'enginePowerFactor': 1.0,
@@ -363,7 +369,9 @@ def vehicleAttributeFactors():
      'engineHealthFactor': 1.0,
      'chassisHealthFactor': 1.0,
      'trackRammingDamageFactor': 1.0,
-     'penaltyReloadTime': 0.0}
+     'penaltyReloadTime': 0.0,
+     'vehicle/canBeAutorepaired': True,
+     'vehicle/canBeDamagedByAoE': True}
     for ten in TANKMAN_EXTRA_NAMES:
         factors[ten + CHANCE_TO_HIT_SUFFIX_FACTOR] = 0.0
 
@@ -1577,6 +1585,8 @@ class VehicleDescriptor(object):
          'radioHealthFactor': 1.0,
          'surveyingDeviceHealthFactor': 1.0,
          'gunHealthFactor': 1.0,
+         'deviceCanBeRepaired/leftTrackHealth': True,
+         'deviceCanBeRepaired/rightTrackHealth': True,
          'demaskMovingFactor': 1.0,
          'centerRotationFwdSpeedFactor': 1.0,
          'deathZones/sensitivityFactor': 1.0,
@@ -5277,9 +5287,10 @@ def _readGunClipAutoShoot(xmlCtx, section):
     shotDispersionPerSec = _xml.readNonNegativeFloat(xmlCtx, section, 'autoShoot/shotDispersionPerSec', 0.0)
     maxShotDispersion = _xml.readNonNegativeFloat(xmlCtx, section, 'autoShoot/maxShotDispersion', 0.0)
     shotInterval = 1.0 / _xml.readPositiveFloat(xmlCtx, section, 'autoShoot/rate', 10)
+    rebuildShotDispersionDelay = _xml.readNonNegativeFloat(xmlCtx, section, 'autoShoot/rebuildShotDispersionDelay', 0.0)
     if shotInterval > AUTOSHOOT_MAX_INTERVAL:
         _xml.raiseWrongXml(xmlCtx, 'autoShoot/rate', "rate can't be lower than {}".format(1.0 / AUTOSHOOT_MAX_INTERVAL))
-    return component_constants.AutoShoot(shotDispersionPerSec=shotDispersionPerSec, maxShotDispersion=maxShotDispersion, shotInterval=shotInterval)
+    return component_constants.AutoShoot(shotDispersionPerSec=shotDispersionPerSec, maxShotDispersion=maxShotDispersion, shotInterval=shotInterval, rebuildShotDispersionDelay=rebuildShotDispersionDelay)
 
 
 def _readSpinGun(xmlCtx, section):
@@ -6508,6 +6519,10 @@ def _readCommonConfig(xmlCtx, section):
         res['extras'], res['extrasDict'] = common_extras.readExtras(xmlCtx, section, 'extras', 'vehicle_extras')
         res['deviceExtraIndexToTypeIndex'], res['tankmanExtraIndexToTypeIndex'] = _readDeviceTypes(xmlCtx, section, 'deviceExtras', res['extrasDict'])
         res['_devices'] = frozenset((res['extras'][idx] for idx in res['deviceExtraIndexToTypeIndex'].iterkeys()))
+    if IS_CELLAPP:
+        res['deviceInvulnerability'] = set()
+        if section.has_key('deviceInvulnerability'):
+            res['deviceInvulnerability'] = readDeviceInvulnerabilities(xmlCtx, section, 'deviceInvulnerability')
     return res
 
 
@@ -6534,6 +6549,38 @@ def _readDeviceTypes(xmlCtx, section, subsectionName, extrasDict):
                 extraInstanceName = template.format(i)
 
     return (resDevices, resTankmen)
+
+
+def readDeviceInvulnerabilities(xmlCtx, section, subsectionName):
+    invContext, invSubsection = _xml.getSubSectionWithContext(xmlCtx, section, subsectionName)
+    processedTypes = set()
+    invConfig = set()
+    for _, configSubsection in invSubsection.items():
+        types = _xml.readTupleOfStrings(invContext, configSubsection, 'arenaTypes')
+        arenaTypes = set()
+        for aType in types:
+            if aType not in ARENA_BONUS_TYPE_NAMES:
+                _xml.raiseWrongXml(invContext, 'arenaTypes', 'Unknown ARENA_BONUS_TYPE {}'.format(aType))
+            arenaTypes.add(getattr(ARENA_BONUS_TYPE, aType))
+
+        if any((aType in processedTypes for aType in arenaTypes)):
+            _xml.raiseWrongXml(invContext, 'arenaTypes', 'ARENA_BONUS_TYPEs ({}) has duplicates in config.'.format(processedTypes & arenaTypes))
+        processedTypes.update(arenaTypes)
+        for key, optionSubsection in configSubsection.items():
+            if not key.startswith('level_') and key != 'arenaTypes':
+                _xml.raiseWrongXml(invContext, 'level', 'Wrong tag specified. Encountered: {}.'.format(key))
+            if not key.startswith('level_'):
+                continue
+            level = int(key.split('_')[1])
+            if not MIN_VEHICLE_LEVEL <= level <= MAX_VEHICLE_LEVEL:
+                _xml.raiseWrongXml(invContext, 'level', 'Wrong level specified. Encountered: {}.'.format(level))
+            for module in _xml.readTupleOfStrings((invContext, key), configSubsection, key):
+                if module not in INVULNERABLE_EXTRAS:
+                    _xml.raiseWrongXml(invContext, 'level', 'Unexpected device. Encountered: {}'.format(module))
+                for arenaType in arenaTypes:
+                    invConfig.add((arenaType, level, module))
+
+    return invConfig
 
 
 def _readMaterials(xmlCtx, section, subsectionName, extrasDict):

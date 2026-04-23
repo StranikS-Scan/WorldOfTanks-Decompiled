@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/item_price.py
-from typing import Tuple, Any, Union
+from math import ceil
+from typing import Tuple, Any, Union, Dict
 from goodies.GoodieResources import Gold, Credits
+from items import ITEM_TYPES, vehicles, artefacts
+from items.artefacts import OPT_DEV_TYPE_TAG
 DEFAULT_ZERO_BERTH = 0
 
 class PRICE_TYPE:
@@ -9,6 +12,13 @@ class PRICE_TYPE:
     PROMO = (1,)
     PERSONAL = (2,)
 
+
+removalCosts = {OPT_DEV_TYPE_TAG.DELUXE: 'paidDeluxeRemovalCost',
+ OPT_DEV_TYPE_TAG.TROPHY_BASIC: 'paidTrophyBasicRemovalCost',
+ OPT_DEV_TYPE_TAG.TROPHY_UPGRADED: 'paidTrophyUpgradedRemovalCost',
+ OPT_DEV_TYPE_TAG.MODERNIZED1: 'paidModernized1RemovalCost',
+ OPT_DEV_TYPE_TAG.MODERNIZED2: 'paidModernized2RemovalCost',
+ OPT_DEV_TYPE_TAG.MODERNIZED3: 'paidModernized3RemovalCost'}
 
 def getItemPrice(item, gameParams, goodies=None, goodieTarget=None):
     priceType = PRICE_TYPE.DEFAULT
@@ -29,6 +39,37 @@ def getItemPrice(item, gameParams, goodies=None, goodieTarget=None):
                 priceType = PRICE_TYPE.PERSONAL
 
     return (defaultPrice, actualPrice, priceType)
+
+
+def getComponentSellPrice(gameParams, compDescr, defaultPrice=False):
+    sellPriceFactor = gameParams['sellPriceFactor']
+    itemTypeID = vehicles.parseIntCompactDescr(compDescr)[0]
+    buyPrice = gameParams['items']['itemPrices'].getPrices(compDescr)
+    if defaultPrice:
+        itemPrices = gameParams['defaults'].get('items', {}).get('itemPrices', {})
+        if itemPrices and compDescr in itemPrices:
+            buyPrice = itemPrices.getPrices(compDescr)
+    if itemTypeID in (ITEM_TYPES.shell, ITEM_TYPES.equipment):
+        exchangeRate = gameParams['economics']['exchangeRateForShellsAndEqs']
+    else:
+        exchangeRate = gameParams['economics']['exchangeRate']
+    price = buyPrice.get('credits', 0) + buyPrice.get('gold', 0) * exchangeRate
+    crystalPrice = buyPrice.get('crystal', 0)
+    if crystalPrice:
+        crystalExchangeRate = gameParams['economics']['crystalExchangeRate']
+        price += crystalExchangeRate * crystalPrice
+    return {'credits': int(ceil(sellPriceFactor * price)),
+     'equipCoin': buyPrice.get('equipCoin', 0)}
+
+
+def getOptionalDeviceRemovalCost(gameParams, optDevCompDescr):
+    device = vehicles.getItemByCompactDescr(optDevCompDescr)
+    if device.removable:
+        return {}
+    for tag in OPT_DEV_TYPE_TAG.ALL.intersection(device.tags):
+        return gameParams['economics'][removalCosts[tag]]
+
+    return gameParams['economics']['paidRemovalCost']
 
 
 def getNextSlotPrice(slots, slotsPrices):

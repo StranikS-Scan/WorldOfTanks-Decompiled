@@ -71,7 +71,7 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
         self._setWidth(297)
 
     def _getQuests(self, vehicle):
-        return sorted(self._questController.getCurrentModeQuestsForVehicle(vehicle, True), key=events_helpers.questsSortFunc)
+        return sorted(self._questController.getCurrentModeQuestsForVehicle(vehicle, notCompleted=True), key=events_helpers.questsSortFunc)
 
     def _packBlocks(self, *args, **kwargs):
         items = super(QuestsPreviewTooltipData, self)._packBlocks()
@@ -233,6 +233,9 @@ class UnavailableQuestTooltipData(BlocksTooltipData):
     def __init__(self, context):
         super(UnavailableQuestTooltipData, self).__init__(context, TOOLTIP_TYPE.QUESTS)
         self._setWidth(298)
+
+    def _getRequirementsOverrides(self, quest):
+        return []
 
     def _packBlocks(self, *args, **kwargs):
         source = self._eventsCache.getQuests()

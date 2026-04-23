@@ -153,8 +153,8 @@ class ITEM_TYPES(object):
     CUSTOMIZATION_PLURAL_MODIFICATION = '#item_types:customization/plural/modification'
     CUSTOMIZATION_PLURAL_OUTFIT = '#item_types:customization/plural/outfit'
     CUSTOMIZATION_PLURAL_STYLE = '#item_types:customization/plural/style'
-    CUSTOMIZATION_PLURAL_STYLE_2D = '#item_types:customization/plural/style/2d'
-    CUSTOMIZATION_PLURAL_STYLE_3D = '#item_types:customization/plural/style/3d'
+    CUSTOMIZATION_PLURAL_STYLE_3D = '#item_types:customization/plural/style_3d'
+    CUSTOMIZATION_PLURAL_STYLE_2D = '#item_types:customization/plural/style_2d'
     CUSTOMIZATION_PLURAL_DECAL = '#item_types:customization/plural/decal'
     CUSTOMIZATION_PLURAL_EMBLEM = '#item_types:customization/plural/emblem'
     CUSTOMIZATION_PLURAL_INSCRIPTION = '#item_types:customization/plural/inscription'
@@ -249,8 +249,8 @@ class ITEM_TYPES(object):
      CUSTOMIZATION_PLURAL_MODIFICATION,
      CUSTOMIZATION_PLURAL_OUTFIT,
      CUSTOMIZATION_PLURAL_STYLE,
-     CUSTOMIZATION_PLURAL_STYLE_2D,
      CUSTOMIZATION_PLURAL_STYLE_3D,
+     CUSTOMIZATION_PLURAL_STYLE_2D,
      CUSTOMIZATION_PLURAL_DECAL,
      CUSTOMIZATION_PLURAL_EMBLEM,
      CUSTOMIZATION_PLURAL_INSCRIPTION,
@@ -261,8 +261,8 @@ class ITEM_TYPES(object):
      CUSTOMIZATION_PLURAL_MODIFICATION,
      CUSTOMIZATION_PLURAL_OUTFIT,
      CUSTOMIZATION_PLURAL_STYLE,
-     CUSTOMIZATION_PLURAL_STYLE_2D,
      CUSTOMIZATION_PLURAL_STYLE_3D,
+     CUSTOMIZATION_PLURAL_STYLE_2D,
      CUSTOMIZATION_PLURAL_DECAL,
      CUSTOMIZATION_PLURAL_EMBLEM,
      CUSTOMIZATION_PLURAL_INSCRIPTION,

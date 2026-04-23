@@ -250,6 +250,10 @@ class FittingItem(GUIItem):
     def restoreInfo(self):
         return self._restoreInfo
 
+    @restoreInfo.setter
+    def restoreInfo(self, value):
+        self._restoreInfo = value
+
     @property
     def fullyConfigured(self):
         return self._fullyConfigured

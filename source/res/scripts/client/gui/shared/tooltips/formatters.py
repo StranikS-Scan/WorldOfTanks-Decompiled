@@ -16,6 +16,8 @@ from gui.shared.utils.functions import makeTooltip, stripColorTagDescrTags
 from helpers import i18n, time_utils
 from gui.impl.gen import R
 from gui.impl import backport
+from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
 TXT_GAP_FOR_BIG_TITLE = 2
 TXT_GAP_FOR_SMALL_TITLE = 3
 RENDERERS_ALIGN_LEFT = 'renderers_left'
@@ -536,38 +538,42 @@ def packMoneyAndXpValueBlock(value, icon, iconYoffset, paddingBottom=15, valueWi
 
 
 def packMoneyAndXpBlocks(tooltipBlocks, btnType, valueBlocks, alternativeData=None, hideActionBlock=False):
-    titleBlocks = list()
     alternativeData = alternativeData or {}
-    titleBlocks.append(packTitleDescBlock(text_styles.highTitle(TOOLTIPS.getHeaderBtnTitle(alternativeData.get('title') or btnType)), None, padding=packPadding(bottom=15)))
+    titleKey = alternativeData.get('title', btnType)
+    btnDescKey = alternativeData.get('btnDesc', btnType)
+    btnClickDescKey = alternativeData.get('btnClickDesc', btnType)
+    btnClickDescAlign = alternativeData.get('btnClickDescAlign', BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER)
+    titleBlocks = [packTitleDescBlock(text_styles.highTitle(TOOLTIPS.getHeaderBtnTitle(titleKey)), None, padding=packPadding(bottom=15))]
     tooltipBlocks.append(packBuildUpBlockData(titleBlocks))
     if valueBlocks is not None:
         tooltipBlocks.append(packBuildUpBlockData(valueBlocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
-    decsBlocks = list()
+    descBlocks = []
     descLinkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE
     if btnType == CURRENCIES_CONSTANTS.CRYSTAL:
         descLinkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILD_BLOCK_VIOLET_BIG_LINKAGE
-        padding = packPadding(bottom=8)
-        decsBlocks.append(packTextBlockData(text_styles.middleTitle(backport.text(R.strings.tooltips.header.buttons.crystal.descriptionTitle())), padding=padding))
-        descVehicle = text_styles.vehicleStatusInfoText(backport.text(R.strings.tooltips.header.buttons.crystal.descriptionVehicle()))
-        decsBlocks.append(packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.header.buttons.crystal.description0(), vehicle=descVehicle)), padding=padding))
-        decsBlocks.append(packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.header.buttons.crystal.description1())), padding=packPadding(bottom=20)))
+        baseDesc = R.strings.tooltips.header.buttons.crystal
+        commonPadding = packPadding(bottom=8)
+        descBlocks.append(packTextBlockData(text_styles.middleTitle(backport.text(baseDesc.descriptionTitle())), padding=commonPadding))
+        descVehicle = text_styles.vehicleStatusInfoText(backport.text(baseDesc.descriptionVehicle()))
+        descBlocks.append(packTextBlockData(text_styles.main(backport.text(baseDesc.description0(), vehicle=descVehicle)), padding=commonPadding))
+        descBlocks.append(packTextBlockData(text_styles.main(backport.text(baseDesc.description1())), padding=packPadding(bottom=20)))
     elif btnType == CURRENCIES_CONSTANTS.EQUIP_COIN:
         descLinkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILD_BLOCK_YELLOW_LIGHT_LINKAGE
-        padding = packPadding(bottom=8)
-        decsBlocks.append(packTextBlockData(text_styles.middleTitle(backport.text(R.strings.tooltips.header.buttons.equipCoin.descriptionTitle())), padding=padding))
-        descEquipCoin = text_styles.vehicleStatusInfoText(backport.text(R.strings.tooltips.header.buttons.equipCoin.descriptionEquipCoin()))
-        decsBlocks.append(packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.header.buttons.equipCoin.description0(), equipCoin=descEquipCoin)), padding=padding))
-        decsBlocks.append(packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.header.buttons.equipCoin.description1()))))
-    elif btnType == CURRENCIES_CONSTANTS.BRCOIN:
-        decsBlocks.append(packTextBlockData(text_styles.main(TOOLTIPS.getHeaderBtnDesc(alternativeData.get('btnDesc') or btnType)), padding=packPadding(bottom=-8)))
+        baseDesc = R.strings.tooltips.header.buttons.equipCoin
+        commonPadding = packPadding(bottom=8)
+        descBlocks.append(packTextBlockData(text_styles.middleTitle(backport.text(baseDesc.descriptionTitle())), padding=commonPadding))
+        descEquipCoin = text_styles.vehicleStatusInfoText(backport.text(baseDesc.descriptionEquipCoin()))
+        descBlocks.append(packTextBlockData(text_styles.main(backport.text(baseDesc.description0(), equipCoin=descEquipCoin)), padding=commonPadding))
+        isRestorable = dependency.instance(ILobbyContext).getServerSettings().isOptionalDeviceRestoreEnabled()
+        descText = baseDesc.description1() if isRestorable else baseDesc.description2()
+        descBlocks.append(packTextBlockData(text_styles.main(backport.text(descText))))
     else:
-        decsBlocks.append(packTextBlockData(text_styles.main(TOOLTIPS.getHeaderBtnDesc(alternativeData.get('btnDesc') or btnType)), padding=packPadding(bottom=15)))
-    tooltipBlocks.append(packBuildUpBlockData(decsBlocks, linkage=descLinkage))
-    if not hideActionBlock:
-        if btnType != CURRENCIES_CONSTANTS.CRYSTAL:
-            actionBlocks = list()
-            actionBlocks.append(packAlignedTextBlockData(text=text_styles.standard(TOOLTIPS.getHeaderBtnClickDesc(alternativeData.get('btnClickDesc') or btnType)), align=alternativeData.get('btnClickDescAlign') or BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
-            tooltipBlocks.append(packBuildUpBlockData(actionBlocks))
+        bottomPadding = -8 if btnType == CURRENCIES_CONSTANTS.BRCOIN else 15
+        descBlocks.append(packTextBlockData(text_styles.main(TOOLTIPS.getHeaderBtnDesc(btnDescKey)), padding=packPadding(bottom=bottomPadding)))
+    tooltipBlocks.append(packBuildUpBlockData(descBlocks, linkage=descLinkage))
+    if not hideActionBlock and btnType != CURRENCIES_CONSTANTS.CRYSTAL:
+        actionBlocks = [packAlignedTextBlockData(text=text_styles.standard(TOOLTIPS.getHeaderBtnClickDesc(btnClickDescKey)), align=btnClickDescAlign)]
+        tooltipBlocks.append(packBuildUpBlockData(actionBlocks))
     return tooltipBlocks
 
 

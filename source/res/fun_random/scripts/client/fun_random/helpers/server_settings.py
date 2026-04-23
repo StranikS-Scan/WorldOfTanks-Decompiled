@@ -109,11 +109,11 @@ class FunMetaProgressionConfig(namedtuple('_FunMetaProgressionConfig', ('isEnabl
         data['progressions'] = tuple((makeTupleByDict(FunProgressionConfig, p) for p in data['progressions']))
 
 
-class FunRandomConfig(namedtuple('_FunRandomConfig', ('isEnabled', 'FEPType', 'subModes', 'metaProgression', 'assetsPointer', 'settingsKey', 'infoPageUrl'))):
+class FunRandomConfig(namedtuple('_FunRandomConfig', ('isEnabled', 'subModes', 'metaProgression', 'assetsPointer', 'settingsKey', 'infoPageUrl'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, FEPType=0, subModes={}, metaProgression={}, assetsPointer=DEFAULT_ASSETS_PACK, settingsKey=DEFAULT_SETTINGS_KEY, infoPageUrl='')
+        defaults = dict(isEnabled=False, subModes={}, metaProgression={}, assetsPointer=DEFAULT_ASSETS_PACK, settingsKey=DEFAULT_SETTINGS_KEY, infoPageUrl='')
         allowedFields = defaults.keys()
         defaults.update(kwargs)
         cls.__packSubModesConfigs(defaults)

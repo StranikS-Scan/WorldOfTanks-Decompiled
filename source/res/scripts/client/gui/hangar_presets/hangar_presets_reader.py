@@ -45,7 +45,7 @@ class DefaultPresetReader(IPresetReader):
             if not section.has_key('name'):
                 raise SoftException(_ERR_TEMPLATE.format('Missing component name', presetName))
             name = section['name'].asString
-            if not section.has_key('name'):
+            if not section.has_key('visible'):
                 raise SoftException(_ERR_TEMPLATE.format('Missing component visibility', presetName))
             isVisible = section['visible'].asBool
             isChangeable = section.readBool('isChangeable')

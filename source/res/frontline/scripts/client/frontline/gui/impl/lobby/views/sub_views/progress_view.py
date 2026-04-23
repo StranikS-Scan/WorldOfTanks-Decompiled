@@ -7,7 +7,7 @@ from frontline.gui.frontline_bonus_packers import packBonusModelAndTooltipData
 from frontline.gui.frontline_helpers import geFrontlineState
 from frontline.gui.impl.gen.view_models.views.lobby.views.frontline_const import FrontlineState
 from frontline.gui.impl.gen.view_models.views.lobby.views.progress_view_model import ProgressViewModel
-from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyVehiclesUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyFeaturedUrl
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
 from gui.impl.gen import R
 from gui.impl.pub import ViewImpl
@@ -88,7 +88,7 @@ class ProgressView(ViewImpl):
 
     def __onShopClick(self):
         self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, item=EpicBattleLogButtons.SHOP.value, parentScreen=EpicBattleLogKeys.PROGRESS_VIEW.value)
-        showShop(getBuyVehiclesUrl())
+        showShop(getBuyFeaturedUrl())
         closeFrontlineContainerWindow()
 
     def __onEventEnded(self):

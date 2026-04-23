@@ -6,6 +6,7 @@ from math import ceil
 from typing import TYPE_CHECKING
 from constants import LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, RESOURCE_TOKEN_PREFIX, LOOTBOX_KEY_PREFIX
 from early_access_common import isEarlyAccessToken
+from epic_constants import EPIC_ARMORY_YARD_TOKEN_NAME
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -29,6 +30,7 @@ from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import time_utils, i18n, dependency
+from historical_battles_common.hb_constants import FRONT_COUPON_TOKEN_PREFIX
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from personal_missions import PM_BRANCH
 from shared_utils import CONST_CONTAINER, findFirst, first
@@ -223,7 +225,8 @@ def getEpicBattleFormattersMap():
      'vehicles': RankedVehiclesBonusFormatter(),
      'epicSelectToken': InstructionEpicBattleBonusFormatter(),
      'goodies': GoodiesEpicBattleBonusFormatter(),
-     'entitlements': EntitlementWulfTooltipFormatter()})
+     'entitlements': EntitlementWulfTooltipFormatter(),
+     'battleToken': EpicBattleTokenBonusFormatter()})
     return mapping
 
 
@@ -764,7 +767,9 @@ class TokenBonusFormatter(SimpleBonusFormatter):
         if tokenID.startswith(BR_PROGRESSION_TOKEN):
             return self._formatBRComplexToken(complexToken, token, bonus)
         else:
-            if complexToken.isDisplayable:
+            if tokenID.startswith(FRONT_COUPON_TOKEN_PREFIX):
+                formatted = self._formatHBCoupon(complexToken, token, bonus)
+            elif complexToken.isDisplayable:
                 formatted = self._formatComplexToken(complexToken, token, bonus)
             elif tokenID.startswith(LOOTBOX_TOKEN_PREFIX):
                 formatted = self._formatLootBoxToken(tokenID, token, bonus)
@@ -783,6 +788,10 @@ class TokenBonusFormatter(SimpleBonusFormatter):
     def _formatBRComplexToken(self, complexToken, token, bonus):
         formatted = self._formatComplexToken(complexToken, token, bonus)
         return formatted._replace(tooltip=self.__getBRProgressionTooltip())
+
+    def _formatHBCoupon(self, complexToken, token, bonus):
+        from historical_battles.gui.server_events.hb_awards_formatter import HBQuestsTokenBonusFormatter
+        return HBQuestsTokenBonusFormatter().formatHBCouponToken(complexToken.styleID, FRONT_COUPON_TOKEN_PREFIX, token, bonus)
 
     def _formatBonusLabel(self, count):
         return formatCountLabel(count)
@@ -1405,6 +1414,11 @@ class InstructionEpicBattleBonusFormatter(SimpleBonusFormatter):
          AWARDS_SIZES.BIG: backport.image(R.images.gui.maps.icons.quests.bonuses.big.dyn(bonusType)())}
         return result
 
+    @classmethod
+    def _getUserName(cls, bonus):
+        bonusType = cls._getType(bonus)
+        return backport.text(R.strings.tooltips.epicBattlesOffer.title.dyn(bonusType)())
+
     def _getGiftsCount(self, bonus):
         bonusOffers = []
         for k in bonus.getValue().iterkeys():
@@ -1441,6 +1455,36 @@ class GoodiesEpicBattleBonusFormatter(SimpleBonusFormatter):
     @classmethod
     def _getImages(cls, _):
         return getRecertificationFormImages()
+
+
+class EpicBattleTokenBonusFormatter(TokenBonusFormatter):
+
+    def _getFormattedBonus(self, tokenID, token, bonus):
+        if tokenID.startswith(EPIC_ARMORY_YARD_TOKEN_NAME):
+            count = self.itemsCache.items.tokens.getTokenCount(tokenID)
+            if token.limit and count < token.limit:
+                formatted = self._formatArmoryYardToken(bonus, token)
+                return formatted
+        return super(EpicBattleTokenBonusFormatter, self)._getFormattedBonus(tokenID, token, bonus)
+
+    def _formatArmoryYardToken(self, bonus, token):
+        return PreformattedBonus(label=self.__getArmoryYardLabel(token), userName=backport.text(R.strings.fl_tooltips.armoryYard.currency.progression_token.title()), labelFormatter=self._getLabelFormatter(bonus), images=self.__getArmoryYardImages(), align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus), compensationReason=self._getCompensationReason(bonus), tooltip=self.__getArmoryYardTooltip())
+
+    @staticmethod
+    def __getArmoryYardLabel(token):
+        return 'x{}'.format(token.count) if token.count > 1 else ''
+
+    @staticmethod
+    def __getArmoryYardImages():
+        return {AWARDS_SIZES.SMALL: backport.image(R.images.frontline.gui.maps.icons.bonuses.armory_yard_s48()),
+         AWARDS_SIZES.BIG: backport.image(R.images.frontline.gui.maps.icons.bonuses.armory_yard_s80())}
+
+    @staticmethod
+    def __getArmoryYardTooltip():
+        armoryYardCurrency = R.strings.fl_tooltips.armoryYard.currency
+        featureName = backport.text(armoryYardCurrency.featureName())
+        armoryYardTooltip = makeTooltip(header=backport.text(armoryYardCurrency.progression_token.title()), body=backport.text(armoryYardCurrency.progression_token.description(), featureName=featureName))
+        return armoryYardTooltip
 
 
 class GoodiesBonusFormatter(SimpleBonusFormatter):

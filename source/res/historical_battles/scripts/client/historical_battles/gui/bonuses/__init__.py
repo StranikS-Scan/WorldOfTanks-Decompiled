@@ -1,0 +1,5 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
+# Embedded file name: historical_battles/scripts/client/historical_battles/gui/bonuses/__init__.py
+from historical_battles.gui.impl.gen.view_models.views.lobby.missions.bonuses import vehicle_discount_bonus_model, vehicle_discount_compensation_bonus_model
+VehicleDiscountBonusModel = vehicle_discount_bonus_model.VehicleDiscountBonusModel
+VehicleDiscountCompensationBonusModel = vehicle_discount_compensation_bonus_model.VehicleDiscountCompensationBonusModel

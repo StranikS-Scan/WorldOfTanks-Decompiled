@@ -209,6 +209,10 @@
       <module>	client.cgf_components.view_camera_sync	</module>
       <module>	client.cgf_components.view_components	</module>
       <module>	client.cgf_components.stat_track_component	</module>
+      <module>	client.events_core_client.events_core_cgf.entry_point.component	</module>
+      <module>	client.events_core_client.events_core_cgf.entry_point.manager	</module>
+      <module>	common.events_core_common.events_core_cgf.vehicle_buffs.components	</module>
+      <module>	cell.events_core_cell.events_core_cgf.vehicle_buffs.managers	</module>
     </script>
     <testScript>
       <module>	client.cgf_demo_client.test_client_component	</module>
@@ -246,6 +250,7 @@
       <path>	particles/Tank/rocket_accelerator/Ch61_DZT_159_Rocket.prefab	</path>
       <path>	particles/Tank/rocket_accelerator/Ch63_STT_617Q_Rocket.prefab	</path>
       <path>	particles/Tank/rocket_accelerator/G189_E100_02_Rocket.prefab	</path>
+      <path>	particles/Tank/rocket_accelerator/Ch76_HSD_1_Rocket.prefab	</path>
       <path>	content/CGFPrefabs/Onboarding/108_bridge_bombing.prefab	</path>
       <path>	content/CGFPrefabs/Onboarding/108_city_firing.prefab	</path>
       <path>	content/CGFPrefabs/Onboarding/108_facades_bombardment.prefab	</path>
@@ -267,6 +272,7 @@
     </prefabs>
     <prefabFolders>
       <path>	content/CGFPrefabs/cosmic_event	</path>
+      <path>	content/CGFPrefabs/May	</path>
     </prefabFolders>
   </cgf>
 </resources.xml>

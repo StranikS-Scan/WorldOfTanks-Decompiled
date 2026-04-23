@@ -1,10 +1,10 @@
 <GB140_Champion.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
-    <commander>	radioman	</commander>
+    <commander></commander>
     <driver></driver>
     <gunner></gunner>
-    <loader></loader>
+    <loader>	radioman	</loader>
   </crew>
   <supplySlots>	5 1 1 6 6 6 7 8 8 8	</supplySlots>
   <postProgressionTree>	role_XI_universal	</postProgressionTree>
@@ -48,7 +48,6 @@
       <armor_4>	51	</armor_4>
       <armor_5>	60	</armor_5>
       <armor_6>	180	</armor_6>
-      <armor_7>	290	</armor_7>
       <armor_8>	0	</armor_8>
       <armor_9>	25	</armor_9>
       <armor_10>	25	</armor_10>
@@ -58,7 +57,6 @@
       <armor_14>	150	</armor_14>
       <armor_15>	120	</armor_15>
       <armor_16>	110	</armor_16>
-      <armor_17>	76	</armor_17>
       <armor_18>	300	</armor_18>
       <armor_19>	290	</armor_19>
       <armor_20>	152	</armor_20>
@@ -848,8 +846,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	44	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.12	</vehicleMovement>
-        <vehicleRotation>	0.12	</vehicleRotation>
+        <vehicleMovement>	0.15	</vehicleMovement>
+        <vehicleRotation>	0.15	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	350	</maxHealth>
@@ -1883,35 +1881,43 @@
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	300	</armor_1>
-        <armor_2>	290	</armor_2>
+        <armor_2>	180	</armor_2>
         <armor_3>	106	</armor_3>
         <armor_4>	76	</armor_4>
         <armor_5>	60	</armor_5>
-        <armor_6>	290	</armor_6>
-        <armor_7>	250	</armor_7>
+        <armor_6>	150	</armor_6>
+        <armor_7>	285	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	32	</armor_9>
+        <armor_9>	270	</armor_9>
         <armor_10>	20	</armor_10>
-        <armor_11>	150	</armor_11>
-        <armor_12>	220	</armor_12>
-        <armor_13>	215	</armor_13>
-        <armor_14>	75	</armor_14>
-        <armor_15>	82	</armor_15>
-        <armor_16>	200	</armor_16>
-        <armor_17>	200	</armor_17>
-        <armor_18>	100	</armor_18>
+        <armor_11>	240	</armor_11>
+        <armor_12>	130	</armor_12>
+        <armor_13>	235	</armor_13>
+        <armor_14>	220	</armor_14>
+        <armor_15>	200	</armor_15>
+        <armor_16>	220	</armor_16>
+        <armor_17>	160	</armor_17>
+        <armor_18>	130	</armor_18>
         <armor_19>	250	</armor_19>
-        <armor_20>	100	</armor_20>
+        <armor_20>	230	</armor_20>
         <armor_21>	100	</armor_21>
-        <armor_22>	100	</armor_22>
+        <armor_22>	150	</armor_22>
         <armor_23>	100	</armor_23>
-        <armor_24>	130	</armor_24>
-        <armor_25>	150	</armor_25>
-        <armor_26>	100	</armor_26>
-        <armor_27>	190	</armor_27>
-        <armor_28>	180	</armor_28>
-        <armor_29>	175	</armor_29>
-        <armor_30>	180	</armor_30>
+        <armor_24>	60	</armor_24>
+        <armor_25>	60	</armor_25>
+        <armor_26>	180	</armor_26>
+        <armor_27>	260	</armor_27>
+        <armor_28>	260	</armor_28>
+        <armor_29>	190	</armor_29>
+        <armor_30>	170	</armor_30>
+        <armor_31>	160	</armor_31>
+        <armor_32>	135	</armor_32>
+        <armor_33>	120	</armor_33>
+        <armor_34>	150	</armor_34>
+        <armor_35>	180	</armor_35>
+        <armor_36>	230	</armor_36>
+        <armor_37>	130	</armor_37>
+        <armor_38>	150	</armor_38>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	20000	</weight>
@@ -1935,15 +1941,16 @@
             <armor_1>	350	</armor_1>
             <armor_2>	150	</armor_2>
             <armor_3>	121	</armor_3>
+            <armor_4>	76	</armor_4>
             <armor_5>	76	</armor_5>
             <armor_6>	76	</armor_6>
             <armor_7>	180	</armor_7>
             <armor_8>	0	</armor_8>
-            <armor_11>	140	</armor_11>
+            <armor_9>	110	</armor_9>
             <gun>	70	</gun>
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	16.5	</reloadTime>
+          <reloadTime>	17.0	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
           <pitchLimits>
@@ -2093,7 +2100,7 @@
             <collisionModelServer>	vehicles/british/GB140_Champion/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB140_Champion/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <effects>	shot_huge	</effects>
+          <effects>	shot_huge_APFSDS	</effects>
           <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <density>	101.982803 103.644943	</density>
@@ -2730,7 +2737,7 @@
         </customizableVehicleAreas>
       </customization>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <physicsShape>	1.103 -0.125 1.24 0 0.62 0.612 0.697 0.866 0.405 0.5 0.5 0.5 0.435 0.22 0.174	</physicsShape>
+      <physicsShape>	1.025 0.056 1.078 0 0.568 0.55 0.569 0.627 0.405 0.5 0.521 0.5 0.323 0 0	</physicsShape>
       <camouflage>
         <density>	101.982803 103.644943	</density>
         <aoTextureSize>	1024 512	</aoTextureSize>

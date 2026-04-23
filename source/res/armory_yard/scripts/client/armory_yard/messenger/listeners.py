@@ -206,7 +206,8 @@ class ArmoryYardListener(_NotificationListener):
         msgType = {Currency.CRYSTAL: SM_TYPE.ArmoryYardRerollTransactionForCrystal,
          Currency.GOLD: SM_TYPE.ArmoryYardRerollTransactionForGold}.get(rerollCurrency, SM_TYPE.ArmoryYardRerollTransactionForFreeReroll)
         SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.task.paymentForReplacement()), type=msgType, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader(),
-         'paymentText': backport.text(payedText(), price=price)})
+         'paymentText': backport.text(payedText()),
+         'price': price})
         return
 
     def __acceptReroll(self, lastConditionID, conditionID):

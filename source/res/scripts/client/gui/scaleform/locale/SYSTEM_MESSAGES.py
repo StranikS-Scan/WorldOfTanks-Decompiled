@@ -208,6 +208,7 @@ class SYSTEM_MESSAGES(object):
     CUSTOMIZATION_PROHIBITED = '#system_messages:customization/prohibited'
     CUSTOMIZATION_INVALIDVEHICLE = '#system_messages:customization/invalidVehicle'
     CUSTOMIZATION_PERSONAL_NUMBER_PROHIBITED = '#system_messages:customization/personal_number_prohibited'
+    CUSTOMIZATION_PERSONAL_NUMBER_PROHIBITED_ALL_SEASONS = '#system_messages:customization/personal_number_prohibited_all_seasons'
     CUSTOMIZATION_SERVER_ERROR = '#system_messages:customization/server_error'
     CUSTOMIZATION_CREDITS_NOT_ENOUGH = '#system_messages:customization/credits_not_enough'
     CUSTOMIZATION_GOLD_NOT_ENOUGH = '#system_messages:customization/gold_not_enough'
@@ -606,6 +607,10 @@ class SYSTEM_MESSAGES(object):
     ARTEFACT_SELL_SUCCESS = '#system_messages:artefact_sell/success'
     ARTEFACT_SELL_INVALID_MODULE = '#system_messages:artefact_sell/invalid_module'
     ARTEFACT_SELL_SERVER_ERROR = '#system_messages:artefact_sell/server_error'
+    OPTDEVICESRESTORE_SWITCH_ON_TITLE = '#system_messages:optDevicesRestore/switch_on/title'
+    OPTDEVICESRESTORE_SWITCH_ON_BODY = '#system_messages:optDevicesRestore/switch_on/body'
+    OPTDEVICESRESTORE_SWITCH_OFF_TITLE = '#system_messages:optDevicesRestore/switch_off/title'
+    OPTDEVICESRESTORE_SWITCH_OFF_BODY = '#system_messages:optDevicesRestore/switch_off/body'
     MODULE_APPLY_SUCCESS = '#system_messages:module_apply/success'
     MODULE_APPLY_SUCCESS_GUN_CHANGE = '#system_messages:module_apply/success_gun_change'
     MODULE_APPLY_SERVER_ERROR = '#system_messages:module_apply/server_error'
@@ -647,6 +652,13 @@ class SYSTEM_MESSAGES(object):
     ARTEFACT_UPGRADE_SUCCESS_ANALOGWASDEMOUNTED = '#system_messages:artefact_upgrade/success/analogWasDemounted'
     ARTEFACT_UPGRADE_SERVER_ERROR = '#system_messages:artefact_upgrade/server_error'
     ARTEFACT_UPGRADE_VEHICLE_NEED_REPAIR = '#system_messages:artefact_upgrade/vehicle_need_repair'
+    ARTEFACT_RESTORE_SUCCESS = '#system_messages:artefact_restore/success'
+    ARTEFACT_RESTORE_SERVER_ERROR = '#system_messages:artefact_restore/server_error'
+    ARTEFACT_RESTORE_CREDITS = '#system_messages:artefact_restore/credits'
+    ARTEFACT_RESTORE_GOLD = '#system_messages:artefact_restore/gold'
+    ARTEFACT_RESTORE_DEMOUNTKIT = '#system_messages:artefact_restore/demountKit'
+    ARTEFACT_RESTORE_CRYSTAL = '#system_messages:artefact_restore/crystal'
+    ARTEFACT_RESTORE_EQUIPCOIN = '#system_messages:artefact_restore/equipCoin'
     LAYOUT_APPLY_SUCCESS_MONEY_SPENT = '#system_messages:layout_apply/success_money_spent'
     LAYOUT_APPLY_ERROR = '#system_messages:layout_apply/error'
     LAYOUT_APPLY_SHELLS_NO_CREDITS = '#system_messages:layout_apply/SHELLS_NO_CREDITS'
@@ -872,6 +884,7 @@ class SYSTEM_MESSAGES(object):
     UNIT_ERRORS_INSUFFICIENT_ROLE = '#system_messages:unit/errors/INSUFFICIENT_ROLE'
     UNIT_ERRORS_NO_UNIT = '#system_messages:unit/errors/NO_UNIT'
     UNIT_ERRORS_JOIN_CTX_LOCK = '#system_messages:unit/errors/JOIN_CTX_LOCK'
+    UNIT_ERRORS_HB_BANNED = '#system_messages:unit/errors/HB_BANNED'
     UNIT_ERRORS_CANT_INVITE = '#system_messages:unit/errors/CANT_INVITE'
     UNIT_ERRORS_NOT_READY = '#system_messages:unit/errors/NOT_READY'
     UNIT_ERRORS_NOT_IN_QUEUE = '#system_messages:unit/errors/NOT_IN_QUEUE'
@@ -1413,6 +1426,7 @@ class SYSTEM_MESSAGES(object):
      UNIT_ERRORS_INSUFFICIENT_ROLE,
      UNIT_ERRORS_NO_UNIT,
      UNIT_ERRORS_JOIN_CTX_LOCK,
+     UNIT_ERRORS_HB_BANNED,
      UNIT_ERRORS_CANT_INVITE,
      UNIT_ERRORS_NOT_READY,
      UNIT_ERRORS_NOT_IN_QUEUE,
@@ -1725,6 +1739,7 @@ class SYSTEM_MESSAGES(object):
      CUSTOMIZATION_PROHIBITED,
      CUSTOMIZATION_INVALIDVEHICLE,
      CUSTOMIZATION_PERSONAL_NUMBER_PROHIBITED,
+     CUSTOMIZATION_PERSONAL_NUMBER_PROHIBITED_ALL_SEASONS,
      CUSTOMIZATION_SERVER_ERROR,
      CUSTOMIZATION_CREDITS_NOT_ENOUGH,
      CUSTOMIZATION_GOLD_NOT_ENOUGH,
@@ -2123,6 +2138,10 @@ class SYSTEM_MESSAGES(object):
      ARTEFACT_SELL_SUCCESS,
      ARTEFACT_SELL_INVALID_MODULE,
      ARTEFACT_SELL_SERVER_ERROR,
+     OPTDEVICESRESTORE_SWITCH_ON_TITLE,
+     OPTDEVICESRESTORE_SWITCH_ON_BODY,
+     OPTDEVICESRESTORE_SWITCH_OFF_TITLE,
+     OPTDEVICESRESTORE_SWITCH_OFF_BODY,
      MODULE_APPLY_SUCCESS,
      MODULE_APPLY_SUCCESS_GUN_CHANGE,
      MODULE_APPLY_SERVER_ERROR,
@@ -2164,6 +2183,13 @@ class SYSTEM_MESSAGES(object):
      ARTEFACT_UPGRADE_SUCCESS_ANALOGWASDEMOUNTED,
      ARTEFACT_UPGRADE_SERVER_ERROR,
      ARTEFACT_UPGRADE_VEHICLE_NEED_REPAIR,
+     ARTEFACT_RESTORE_SUCCESS,
+     ARTEFACT_RESTORE_SERVER_ERROR,
+     ARTEFACT_RESTORE_CREDITS,
+     ARTEFACT_RESTORE_GOLD,
+     ARTEFACT_RESTORE_DEMOUNTKIT,
+     ARTEFACT_RESTORE_CRYSTAL,
+     ARTEFACT_RESTORE_EQUIPCOIN,
      LAYOUT_APPLY_SUCCESS_MONEY_SPENT,
      LAYOUT_APPLY_ERROR,
      LAYOUT_APPLY_SHELLS_NO_CREDITS,
@@ -2389,6 +2415,7 @@ class SYSTEM_MESSAGES(object):
      UNIT_ERRORS_INSUFFICIENT_ROLE,
      UNIT_ERRORS_NO_UNIT,
      UNIT_ERRORS_JOIN_CTX_LOCK,
+     UNIT_ERRORS_HB_BANNED,
      UNIT_ERRORS_CANT_INVITE,
      UNIT_ERRORS_NOT_READY,
      UNIT_ERRORS_NOT_IN_QUEUE,

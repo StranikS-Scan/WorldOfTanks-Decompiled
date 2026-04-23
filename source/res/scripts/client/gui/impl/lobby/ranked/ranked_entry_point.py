@@ -14,6 +14,7 @@ if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.ranked.ranked_season_model import RankedSeasonModel
     from gui.ranked_battles.ranked_models import RankedSeason
 _logger = logging.getLogger(__name__)
+NEXT_DIV_THRESHOLD = 1
 
 @dependency.replace_none_kwargs(rankedController=IRankedBattlesController)
 def isRankedEntryPointAvailable(rankedController=None):
@@ -92,7 +93,7 @@ class RankedEntryPoint(ViewImpl):
                 if self.__rankedController.isFrozen():
                     result = RankedEntryPointModel.STATE_FROZEN
                 else:
-                    result = RankedEntryPointModel.STATE_ACTIVE_SEASON
+                    result = self.__getPlayersSeasonState()
             elif self.__rankedController.getPreviousSeason() is None:
                 result = RankedEntryPointModel.STATE_BEFORE_SEASON
             elif self.__rankedController.getNextSeason():
@@ -100,6 +101,14 @@ class RankedEntryPoint(ViewImpl):
             else:
                 result = RankedEntryPointModel.STATE_WAIT_NEXT_SEASON_WITHOUT_DATE
         return result
+
+    def __getPlayersSeasonState(self):
+        currentDivision = self.__rankedController.getCurrentDivision()
+        if self.__rankedController.isAccountMastered():
+            return RankedEntryPointModel.STATE_PROGRESSION_COMPLETE
+        if currentDivision == self.__rankedController.getDivisions()[-1]:
+            return RankedEntryPointModel.STATE_IN_FINAL_DIVISION
+        return RankedEntryPointModel.STATE_ALMOST_NEXT_DIVISION if currentDivision.lastRank - self.__rankedController.getCurrentRank().rank <= NEXT_DIV_THRESHOLD else RankedEntryPointModel.STATE_NEXT_DIVISION_FAR_AWAY
 
     def __onClick(self):
         self.__rankedController.doActionOnEntryPointClick()

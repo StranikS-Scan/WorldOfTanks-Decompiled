@@ -71,8 +71,12 @@ class VehiclePostProgressionController(IVehiclePostProgressionController):
             return settings.isEnabled and vehicleIsNotForbidden and vehType.postProgressionTree is not None
 
     def isSwitchSetupFeatureEnabled(self):
-        featureDisabled = set(FEATURE_BY_GROUP_ID.values()).isdisjoint(self.__postProgressionSettings.enabledFeatures)
-        return self.isEnabled() and not featureDisabled
+        settings = self.__postProgressionSettings
+        if settings is None:
+            return False
+        else:
+            featureDisabled = set(FEATURE_BY_GROUP_ID.values()).isdisjoint(settings.enabledFeatures)
+            return self.isEnabled() and not featureDisabled
 
     def getSettings(self):
         return self.__postProgressionSettings

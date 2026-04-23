@@ -274,7 +274,7 @@ class DestructibleEntityState(ScriptGameObject):
         for componentIdx, _ in enumerate(self.__stateProperties.components):
             payload.append((componentIdx, self.__visualModel.node('root')))
 
-        self.collisionComponent.connect(self.__entityId, ColliderTypes.VEHICLE_COLLIDER, tuple(payload))
+        self.collisionComponent.connect(self.__entityId, ColliderTypes.AIRCRAFT_COLLIDER, tuple(payload))
         self.__visualModel.matrix = matrix
         self.__playEffect(self.__stateProperties.effect, self.__visualModel)
         self.__active = True

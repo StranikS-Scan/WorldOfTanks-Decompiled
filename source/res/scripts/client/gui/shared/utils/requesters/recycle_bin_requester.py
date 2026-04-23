@@ -66,6 +66,9 @@ class RecycleBinRequester(AbstractSyncDataRequester, IRecycleBinRequester):
     def getTankman(self, invID, maxDuration):
         return self.getTankmen(maxDuration).get(invID)
 
+    def getOptDevices(self):
+        return self.recycleBin.get('optional_devices', {})
+
     @adisp_async
     def _requestCache(self, callback):
         BigWorld.player().recycleBin.getCache(lambda resID, value: self._response(resID, value, callback))

@@ -7,9 +7,9 @@ from gui.impl.gen.view_models.views.lobby.customization.progressive_items_view.i
 from gui.impl.gen.view_models.views.lobby.customization.progressive_items_view.progression_cases_tutorial_model import ProgressionCasesTutorialModel
 
 class ProgressiveItemsViewModel(ViewModel):
-    __slots__ = ('onSelectItem',)
+    __slots__ = ('onSelectItem', 'playSounds')
 
-    def __init__(self, properties=7, commands=1):
+    def __init__(self, properties=7, commands=2):
         super(ProgressiveItemsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -68,3 +68,4 @@ class ProgressiveItemsViewModel(ViewModel):
         self._addBoolProperty('isRendererPipelineDeferred', False)
         self._addNumberProperty('itemToScroll', 0)
         self.onSelectItem = self._addCommand('onSelectItem')
+        self.playSounds = self._addCommand('playSounds')

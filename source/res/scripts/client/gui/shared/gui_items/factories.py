@@ -136,12 +136,12 @@ class GuiItemFactory(IGuiItemsFactory):
             cls = Customization
         return cls(intCompactDescr, proxy)
 
-    def createOutfit(self, strCompactDescr=None, component=None, vehicleCD=''):
+    def createOutfit(self, strCompactDescr=None, component=None, vehicleCD='', isClanHidden=False, isMarksOnGunHidden=False):
         if strCompactDescr is not None and component is not None:
             _logger.error("'strCompactDescr' and 'component' arguments are mutually exclusive!")
             return
         else:
-            return Outfit(strCompactDescr=strCompactDescr, component=component, vehicleCD=vehicleCD)
+            return Outfit(strCompactDescr=strCompactDescr, component=component, vehicleCD=vehicleCD, isClanHidden=isClanHidden, isMarksOnGunHidden=isMarksOnGunHidden)
 
     def createCrewSkin(self, intCompactDescr, proxy=None):
         return CrewSkin(intCompactDescr, proxy)

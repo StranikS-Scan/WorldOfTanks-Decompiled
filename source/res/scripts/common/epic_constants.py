@@ -6,6 +6,7 @@ EPIC_TOKEN_PREFIX = 'epic:'
 EPIC_OFFER_TOKEN_PREFIX = OFFER_TOKEN_PREFIX + EPIC_TOKEN_PREFIX
 EPIC_SELECT_BONUS_NAME = 'epicSelectToken'
 EPIC_SKILL_TOKEN_NAME = 'abilityToken'
+EPIC_ARMORY_YARD_TOKEN_NAME = 'armory_yard'
 LEVELUP_TOKEN_TEMPLATE = 'epicmetagame:levelup:'
 EPIC_OFFER_TYPES = ('brochure', 'battleBooster', 'expequipments')
 EPIC_CHOICE_REWARD_OFFER_TOKENS = tuple((EPIC_OFFER_TOKEN_PREFIX + oType + ':' for oType in EPIC_OFFER_TYPES))
@@ -19,6 +20,7 @@ class EPIC_BATTLE_TEAM_ID(object):
 
 
 FRONTLINE_BONUSES_ORDER = ('battlePassPoints',
+ 'battleToken',
  EPIC_SKILL_TOKEN_NAME,
  'lootBoxToken',
  'crystal',
@@ -43,6 +45,7 @@ class Direction(object):
      CENTER,
      RIGHT,
      TOP)
+    VERTICAL_DIRECTIONS = (LEFT, RIGHT, CENTER)
 
 
 SECTORS = ('A', 'B', 'C', 'D', 'E', 'F')

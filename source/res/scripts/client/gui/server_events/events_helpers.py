@@ -236,8 +236,9 @@ def questsSortFunc(q):
     def getPriority(event):
         return -1 if isPremium(event.getGroupID()) else event.getPriority()
 
+    priority = -getPriority(q)
     return (q.isCompleted(),
-     getPriority(q),
+     priority,
      getPriority(q) == -1,
      q.getID())
 
@@ -567,6 +568,22 @@ def isArmoryYardQuest(eventID, armoryYardCtrl=None):
 @dependency.replace_none_kwargs(earlyAccessCtrl=IEarlyAccessController)
 def isActiveEarlyAccessQuest(eventID, earlyAccessCtrl=None):
     return earlyAccessCtrl.isQuestActive() and (earlyAccessCtrl.isProgressionQuest(eventID) or earlyAccessCtrl.isPostProgressionQuest(eventID))
+
+
+def getPreviousBattleQuest(quest):
+    eventsCache = dependency.instance(IEventsCache)
+    group = eventsCache.getGroups().get(quest.getGroupID())
+    if group is not None:
+        questID = quest.getID()
+        quests = eventsCache.getQuests()
+        groupContent = group.getGroupContent(quests)
+        sortedQuests = sorted(groupContent, key=operator.methodcaller('getPriority'), reverse=True)
+        for idx, quest_ in enumerate(sortedQuests):
+            if quest_.getID() == questID:
+                if idx != 0:
+                    return sortedQuests[idx - 1]
+
+    return
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)

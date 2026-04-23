@@ -7,8 +7,8 @@ from adisp import adisp_process
 from frameworks.wulf import ViewSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.customization.shared import getItemInstalledCount
-from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS
+from gui.impl.lobby.customization.shared import getItemInstalledCount
+from gui.impl.lobby.customization.sound_constants import SOUNDS
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsBattleRoyale
 from gui.customization.shared import isVehicleCanBeCustomized
 from gui.impl import backport

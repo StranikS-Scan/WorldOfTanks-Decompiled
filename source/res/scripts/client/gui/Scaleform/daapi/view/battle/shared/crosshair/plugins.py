@@ -752,9 +752,6 @@ class VehicleStatePlugin(CrosshairPlugin):
         if ctrl is None:
             raise SoftException('Feedback adaptor is not found')
         ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
-        equipmentCtrl = self.sessionProvider.shared.equipments
-        if equipmentCtrl is not None:
-            equipmentCtrl.onShowBlinkReloadTime += self.__onGunReloadBoost
         return
 
     def stop(self):
@@ -766,9 +763,6 @@ class VehicleStatePlugin(CrosshairPlugin):
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
-        equipmentCtrl = self.sessionProvider.shared.equipments
-        if equipmentCtrl is not None:
-            equipmentCtrl.onShowBlinkReloadTime -= self.__onGunReloadBoost
         return
 
     def __setHealth(self, health):

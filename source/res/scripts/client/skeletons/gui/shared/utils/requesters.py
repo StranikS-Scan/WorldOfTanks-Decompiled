@@ -788,6 +788,9 @@ class IRecycleBinRequester(IRequester):
     def getTankman(self, invID, maxDuration):
         raise NotImplementedError
 
+    def getOptDevices(self):
+        raise NotImplementedError
+
 
 class IVehicleRotationRequester(IRequester):
 
@@ -1253,6 +1256,13 @@ class IArmoryYardRequester(IRequester):
 
     @property
     def shopProductLimits(self):
+        raise NotImplementedError
+
+
+class IHistoricalBattlesRequester(IRequester):
+
+    @property
+    def data(self):
         raise NotImplementedError
 
 

@@ -8,7 +8,7 @@ from dict2model import exceptions
 from gui.game_loading import loggers
 from gui.game_loading.resources.cdn.consts import SequenceOrders, SequenceCohorts, MAX_CONFIG_SEQUENCE_SLIDES_COUNT, MAX_CONFIG_SEQUENCES_COUNT
 from gui.game_loading.resources.consts import ImageVfxs
-from gui.game_loading.resources.cdn.models import ConfigSequenceModel, ConfigModel, ConfigSlideModel
+from gui.game_loading.resources.cdn.models import ConfigSequenceModel, ConfigModel, ConfigSlideModel, AdditionalImageModel
 _logger = loggers.getCdnConfigLogger()
 
 def _validateSequenceLifeTime(model):
@@ -27,9 +27,17 @@ def _validateSequencesNames(model):
         raise exceptions.ValidationError('Sequence name duplicates: {}'.format(nameDuplicates))
 
 
+additionalImage = schemas.Schema(fields={'image': fields.Url(required=True, relative=False),
+ 'width': fields.Integer(required=True),
+ 'height': fields.Integer(required=True),
+ 'margins': fields.List(fields.Integer(), required=False, default=(0, 0, 0, 0)),
+ 'paddings': fields.List(fields.Integer(), required=False, default=(0, 0, 0, 0)),
+ 'position': fields.String(required=False, default='BL')}, modelClass=AdditionalImageModel, checkUnknown=True)
 slideSchema = schemas.Schema(fields={'image': fields.Url(required=True, relative=False),
  'vfx': fields.Enum(ImageVfxs, required=False, default=None),
- 'localization': fields.Url(required=False, relative=False, default=None)}, modelClass=ConfigSlideModel, checkUnknown=True)
+ 'localization': fields.Url(required=False, relative=False, default=None),
+ 'additionalImage': fields.Nested(schema=additionalImage, required=False),
+ 'sound': fields.String(required=False, default='')}, modelClass=ConfigSlideModel, checkUnknown=True)
 sequenceSchema = schemas.Schema(fields={'name': fields.String(required=True, serializedValidators=validate.Length(minValue=1), deserializedValidators=validate.Length(minValue=1)),
  'start': fields.DateTime(required=True),
  'finish': fields.DateTime(required=True),

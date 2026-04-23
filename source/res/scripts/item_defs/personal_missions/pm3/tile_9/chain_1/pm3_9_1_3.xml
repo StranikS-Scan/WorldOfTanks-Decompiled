@@ -32,7 +32,7 @@ def onFinishBattle(eventType, eventData, quest, processor):
     brfilter = filter.BattleResultsFilter(eventData)
     targetClasses = questProgress.getProgress(MAIN_PROGRESS_ID_KILLS).getParam('targetClasses')
     kills = len(brfilter.filterDamageTo(result=['killed'], vehType=targetClasses))
-    blockedHits = sum(len(shots) for shots in brfilter.filterDamageFrom(hitBlocked=True).itervalues())
+    blockedHits = brfilter.sumReceivedShots(brfilter.filterDamageFrom(hitBlocked=True))
 
     questProgress.increaseUntilComplete(MAIN_PROGRESS_ID_KILLS, kills)
     questProgress.increaseUntilComplete(MAIN_PROGRESS_ID_BLOCK, blockedHits)

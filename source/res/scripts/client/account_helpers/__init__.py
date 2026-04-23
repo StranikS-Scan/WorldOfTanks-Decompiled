@@ -59,5 +59,6 @@ def isLongDisconnectedFromCenter():
 
 
 def getAccountHelpersConfig(manager):
-    from account_helpers import settings_core
+    from account_helpers import settings_core, settings_repository
     manager.addConfig(settings_core.getSettingsCoreConfig)
+    manager.addConfig(settings_repository.getSettingsRepositoryConfig)

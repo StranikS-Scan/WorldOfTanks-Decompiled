@@ -10,7 +10,7 @@ from constants import EventPhase
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import DialogsInterface, SystemMessages, makeHtmlString
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs
+from gui.impl.lobby.customization.shared import CustomizationTabs
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBattlePassPointsProductsUrl, getIntegratedAuctionUrl, getPlayerSeniorityAwardsUrl, getComp7ProductsUrl, getBlackMarketUrl
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
@@ -32,6 +32,7 @@ from gui.ranked_battles import ranked_helpers
 from gui.server_events.events_dispatcher import showMissionsBattlePass, showMissionsMapboxProgression, showPersonalMission, showBattleMattersMainView
 from gui.shared import EVENT_BUS_SCOPE, actions, event_dispatcher as shared_events, events, g_eventBus
 from gui.shared.event_dispatcher import hideWebBrowserOverlay, showBlueprintsSalePage, showCollectionAwardsWindow, showCollectionWindow, showDelayedReward, showEpicBattlesAfterBattleWindow, showProgressiveRewardWindow, showRankedYearAwardWindow, showResourceWellProgressionWindow, showShop, showSteamConfirmEmailOverlay, showWotPlusIntroView, showBarracks
+from gui.shared.gui_items.Vehicle import NO_VEHICLE_ID
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.system_factory import collectAllNotificationsActionsHandlers, registerNotificationsActionsHandlers
 from gui.shared.utils import decorators
@@ -660,7 +661,7 @@ class ClanRulesHandler(ActionHandler):
 
 
 class OpenCustomizationHandler(ActionHandler):
-    service = dependency.descriptor(ICustomizationService)
+    __service = dependency.descriptor(ICustomizationService)
 
     @classmethod
     def getNotType(cls):
@@ -675,17 +676,17 @@ class OpenCustomizationHandler(ActionHandler):
         notification = model.getNotification(self.getNotType(), entityID)
         savedData = notification.getSavedData()
         vehicleIntCD = savedData.get('vehicleIntCD')
-        vehicle = self.service.getItemByCD(vehicleIntCD)
+        vehicle = self.__service.getItemByCD(vehicleIntCD)
 
         def toCustomizationCallback():
-            ctx = self.service.getCtx()
+            ctx = self.__service.getCtx()
             if savedData.get('toStyle'):
-                ctx.changeMode(CustomizationModes.STYLED, source=CustomizationModeSource.NOTIFICATION)
+                ctx.changeMode(CustomizationModes.STYLED_2D, source=CustomizationModeSource.NOTIFICATION)
             elif savedData.get('toProjectionDecals'):
                 itemCD = savedData.get('itemIntCD', 0)
                 goToEditableStyle = ctx.canEditStyle(itemCD)
                 style = None
-                if ctx.modeId is CustomizationModes.STYLED:
+                if ctx.modeId in CustomizationModes.STYLED:
                     style = ctx.mode.modifiedStyle
                 if goToEditableStyle and style is not None:
                     ctx.editStyle(style.intCD, source=CustomizationModeSource.NOTIFICATION)
@@ -694,8 +695,8 @@ class OpenCustomizationHandler(ActionHandler):
                 ctx.changeTab(tabId=CustomizationTabs.PROJECTION_DECALS, itemCD=itemCD)
             return
 
-        if vehicle.invID != -1:
-            context = self.service.getCtx()
+        if vehicle.invID != NO_VEHICLE_ID:
+            context = self.__service.getCtx()
             if context is not None and g_currentVehicle.isPresent() and g_currentVehicle.item.intCD == vehicleIntCD:
                 toCustomizationCallback()
             else:
@@ -705,7 +706,7 @@ class OpenCustomizationHandler(ActionHandler):
 
 
 class ProlongStyleRent(ActionHandler):
-    service = dependency.descriptor(ICustomizationService)
+    __service = dependency.descriptor(ICustomizationService)
 
     @classmethod
     def getNotType(cls):
@@ -721,15 +722,15 @@ class ProlongStyleRent(ActionHandler):
         savedData = notification.getSavedData()
         vehicleIntCD = savedData.get('vehicleIntCD')
         styleIntCD = savedData.get('styleIntCD')
-        vehicle = self.service.getItemByCD(vehicleIntCD)
-        style = self.service.getItemByCD(styleIntCD)
+        vehicle = self.__service.getItemByCD(vehicleIntCD)
+        style = self.__service.getItemByCD(styleIntCD)
 
         def prolongRentCallback():
-            ctx = self.service.getCtx()
-            ctx.changeMode(CustomizationModes.STYLED)
+            ctx = self.__service.getCtx()
+            ctx.changeMode(CustomizationModes.STYLED_2D)
             ctx.mode.prolongRent(style)
 
-        if vehicle.invID != -1:
+        if vehicle.invID != NO_VEHICLE_ID:
             g_eventBus.handleEvent(events.CustomizationEvent(events.CustomizationEvent.SHOW, ctx={'vehInvID': vehicle.invID,
              'callback': prolongRentCallback}), scope=EVENT_BUS_SCOPE.LOBBY)
 
@@ -1087,7 +1088,7 @@ class _OpenCustomizationStylesSection(NavigationDisabledActionHandler):
 
     @classmethod
     def __onCustomizationLoaded(cls):
-        cls.__customizationService.getCtx().changeMode(CustomizationModes.STYLED, CustomizationTabs.STYLES_3D)
+        cls.__customizationService.getCtx().changeMode(CustomizationModes.STYLED_2D)
 
 
 class _OpenIntegratedAuction(NavigationDisabledActionHandler):

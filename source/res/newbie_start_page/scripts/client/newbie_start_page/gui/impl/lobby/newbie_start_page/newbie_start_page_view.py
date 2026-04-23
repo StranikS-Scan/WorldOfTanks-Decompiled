@@ -53,6 +53,7 @@ class NewbieStartPageView(ViewImpl):
         else:
             self._newbieEntryPointController.goToHangar(self._guiCtx)
             loading.getLoader().playerLoading(True)
+        self.viewModel.onSelect -= self.__onSelect
         BigWorld.callback(2.5, self.destroyWindow)
 
 

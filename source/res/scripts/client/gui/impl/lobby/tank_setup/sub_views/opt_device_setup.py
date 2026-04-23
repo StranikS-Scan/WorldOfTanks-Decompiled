@@ -1,16 +1,26 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/sub_views/opt_device_setup.py
 from functools import partial
+from constants import OPT_DEVICES_RESTORE_SETTING
 from gui.shared.event_dispatcher import showDeconstructionDeviceWindow
+from skeletons.gui.lobby_context import ILobbyContext
 from th_async import th_async, th_await
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_setup_model import BaseSetupModel
 from gui.impl.lobby.tank_setup.configurations.opt_device import OptDeviceTabsController, OptDeviceSelectedFilters, getOptDeviceTabByItem, OptDeviceIntroductionController, OptDeviceTabs
 from gui.impl.lobby.tank_setup.sub_views.base_equipment_setup import BaseEquipmentSetupSubView
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
+from CurrentVehicle import g_currentVehicle
 
 class OptDeviceSetupSubView(BaseEquipmentSetupSubView):
+    __slots__ = ('__introduction',)
     __itemsCache = dependency.descriptor(IItemsCache)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+
+    def __init__(self, viewModel, interactor):
+        super(OptDeviceSetupSubView, self).__init__(viewModel, interactor)
+        self.__introduction = None
+        return
 
     def updateSlots(self, slotID, fullUpdate=True, updateData=True):
         if fullUpdate:
@@ -47,16 +57,20 @@ class OptDeviceSetupSubView(BaseEquipmentSetupSubView):
     def _onGetMoreCurrency(self):
         showDeconstructionDeviceWindow(onDeconstructedCallback=self._onDeconstructed)
 
-    def _onDeconstructed(self, deconstructedItemsOnVehicle, upgradItemPair):
+    def _onDeconstructed(self, deconstructedItemsOnVehicle, upgradeItemPair):
+        currentVehicle = g_currentVehicle.item
+        currentVehicleCD = currentVehicle.invID if currentVehicle is not None else None
         for item in deconstructedItemsOnVehicle:
+            if item.vehicleCD != currentVehicleCD:
+                continue
             slotID = self._interactor.getCurrentLayout().index(item)
             if slotID is not None:
                 self.revertItem(slotID)
 
-        if upgradItemPair:
-            upgradDevice = upgradItemPair[0]
-            upgradedIntCD = upgradDevice.descriptor.upgradeInfo.upgradedCompDescr
-            slotID = self._interactor.getCurrentLayout().index(upgradDevice)
+        if upgradeItemPair:
+            upgradeDevice = upgradeItemPair[0]
+            upgradedIntCD = upgradeDevice.descriptor.upgradeInfo.upgradedCompDescr
+            slotID = self._interactor.getCurrentLayout().index(upgradeDevice)
             if slotID is not None:
                 self._selectItem(slotID, upgradedIntCD)
         return
@@ -77,11 +91,13 @@ class OptDeviceSetupSubView(BaseEquipmentSetupSubView):
         self._addSlotAction(BaseSetupModel.DECONSTRUCT_SLOT_ACTION, partial(self.__onDemountItem, isDestroy=True))
         self._viewModel.onIntroPassed += self._onIntroPassed
         self._viewModel.specialCurrency.onGetMoreCurrency += self._onGetMoreCurrency
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
 
     def _removeListeners(self):
-        super(OptDeviceSetupSubView, self)._removeListeners()
         self._viewModel.onIntroPassed -= self._onIntroPassed
         self._viewModel.specialCurrency.onGetMoreCurrency -= self._onGetMoreCurrency
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
+        super(OptDeviceSetupSubView, self)._removeListeners()
 
     def _setTab(self, tabName):
         if self._currentTabName != tabName:
@@ -99,16 +115,25 @@ class OptDeviceSetupSubView(BaseEquipmentSetupSubView):
 
     def _introductionUpdate(self, tabName, forceUpdateTabs=False):
         hasItems = len(self._provider.getItems()) > 0
-        introduction = OptDeviceIntroductionController.getIntroduction(tabName, hasItems)
-        self._viewModel.setIntroductionType(introduction or '')
-        self._viewModel.setWithIntroduction(introduction is not None)
-        if not introduction or forceUpdateTabs:
+        self.__introduction = OptDeviceIntroductionController.getIntroduction(tabName, hasItems)
+        if self.__introduction and OptDeviceTabs.MODERNIZED == self.__introduction:
+            self._viewModel.setIsOptDeviceRestored(self.__getOptDevicesRestoreState())
+        self._viewModel.setIntroductionType(self.__introduction or '')
+        self._viewModel.setWithIntroduction(self.__introduction is not None)
+        if not self.__introduction or forceUpdateTabs:
             self._updateTabs()
         return
 
     def _onIntroPassed(self):
         OptDeviceIntroductionController.setIntroductionValue(self._viewModel.getIntroductionType())
         self._introductionUpdate(self._currentTabName)
+
+    def __onServerSettingsChange(self, diff):
+        if OptDeviceTabs.MODERNIZED == self.__introduction and OPT_DEVICES_RESTORE_SETTING in diff:
+            self._introductionUpdate(self._currentTabName)
+
+    def __getOptDevicesRestoreState(self):
+        return self.__lobbyContext.getServerSettings().isOptionalDeviceRestoreEnabled()
 
     @th_async
     def __onDemountItem(self, args, isDestroy=False, everywhere=True):

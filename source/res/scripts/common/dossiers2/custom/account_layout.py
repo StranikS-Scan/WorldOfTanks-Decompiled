@@ -962,7 +962,9 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'comp7_5_3',
  'comp7_5_3_champion',
  'comp7_5_3_legend',
- 'Paragons_S2']
+ 'Paragons_S2',
+ 'hb26MedalTanker',
+ 'hb26MedalSPG']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -1246,7 +1248,9 @@ _singleAchievementsPopUps = ['titleSniper',
  'comp7_5_3',
  'comp7_5_3_champion',
  'comp7_5_3_legend',
- 'Paragons_S2']
+ 'Paragons_S2',
+ 'hb26MedalTanker',
+ 'hb26MedalSPG']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, SINGLE_ACHIEVEMENTS_DEPENDENCIES, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',

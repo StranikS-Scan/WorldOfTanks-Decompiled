@@ -13,7 +13,6 @@ from gui.impl.gen import R
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from frontline.gui.impl.lobby.tooltips.unlock_conditions_tooltip import UnlockConditionsTooltip
-from frontline.gui.impl.lobby.tooltips.damage_zones_tooltip import DamageZonesTooltip
 from gui.impl.lobby.crew.tooltips.vehicle_params_tooltip_view import FrontlineAdvancedParamsTooltipView
 from gui.shared.tooltips.contexts import HangarParamContext
 from uilogging.epic_battle.constants import EpicBattleLogKeys, EpicBattleLogTabs, EpicBattleLogActions
@@ -117,9 +116,6 @@ class FrontlineContainerView(ViewImpl):
         if contentId == R.views.frontline.lobby.tooltips.UnlockConditionsTooltip():
             supplyName = event.getArgument('supplyObject', '')
             return UnlockConditionsTooltip(supplyName=supplyName)
-        if contentId == R.views.frontline.lobby.tooltips.DamageZonesTooltip():
-            supplyName = event.getArgument('supplyObject', '')
-            return DamageZonesTooltip(supplyName=supplyName)
 
     def _finalize(self):
         super(FrontlineContainerView, self)._finalize()

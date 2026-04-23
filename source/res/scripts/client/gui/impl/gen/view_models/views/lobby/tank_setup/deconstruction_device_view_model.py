@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.deconstruct_item_model impo
 class DeconstructionDeviceViewModel(ViewModel):
     __slots__ = ('onOkClick', 'onCloseClick', 'onModuleAdd', 'onModuleReduce')
 
-    def __init__(self, properties=7, commands=4):
+    def __init__(self, properties=8, commands=4):
         super(DeconstructionDeviceViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -43,21 +43,27 @@ class DeconstructionDeviceViewModel(ViewModel):
     def setDeviceForUpgradeName(self, value):
         self._setString(4, value)
 
+    def getIsOptDeviceRestored(self):
+        return self._getBool(5)
+
+    def setIsOptDeviceRestored(self, value):
+        self._setBool(5, value)
+
     def getModulesInStorage(self):
-        return self._getArray(5)
+        return self._getArray(6)
 
     def setModulesInStorage(self, value):
-        self._setArray(5, value)
+        self._setArray(6, value)
 
     @staticmethod
     def getModulesInStorageType():
         return DeconstructItemModel
 
     def getModulesOnVehicles(self):
-        return self._getArray(6)
+        return self._getArray(7)
 
     def setModulesOnVehicles(self, value):
-        self._setArray(6, value)
+        self._setArray(7, value)
 
     @staticmethod
     def getModulesOnVehiclesType():
@@ -70,6 +76,7 @@ class DeconstructionDeviceViewModel(ViewModel):
         self._addNumberProperty('equipCoinsForDeconstruction', 0)
         self._addNumberProperty('equipCoinsNeededForUpgrade', 0)
         self._addStringProperty('deviceForUpgradeName', '')
+        self._addBoolProperty('isOptDeviceRestored', False)
         self._addArrayProperty('modulesInStorage', Array())
         self._addArrayProperty('modulesOnVehicles', Array())
         self.onOkClick = self._addCommand('onOkClick')

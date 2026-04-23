@@ -13,7 +13,7 @@ class TabState(IntEnum):
 class LootboxesShortStatsViewModel(ViewModel):
     __slots__ = ('onCloseStat', 'onOpenFullStats', 'onTabSwitch', 'onVehiclePreview')
 
-    def __init__(self, properties=7, commands=4):
+    def __init__(self, properties=8, commands=4):
         super(LootboxesShortStatsViewModel, self).__init__(properties=properties, commands=commands)
 
     def getCurrentTab(self):
@@ -66,6 +66,12 @@ class LootboxesShortStatsViewModel(ViewModel):
     def setHasVisibleLootBoxes(self, value):
         self._setBool(6, value)
 
+    def getIsOptDeviceRestored(self):
+        return self._getBool(7)
+
+    def setIsOptDeviceRestored(self, value):
+        self._setBool(7, value)
+
     def _initialize(self):
         super(LootboxesShortStatsViewModel, self)._initialize()
         self._addNumberProperty('currentTab')
@@ -75,6 +81,7 @@ class LootboxesShortStatsViewModel(ViewModel):
         self._addStringProperty('lootBoxName', '')
         self._addBoolProperty('isShown', False)
         self._addBoolProperty('hasVisibleLootBoxes', False)
+        self._addBoolProperty('isOptDeviceRestored', True)
         self.onCloseStat = self._addCommand('onCloseStat')
         self.onOpenFullStats = self._addCommand('onOpenFullStats')
         self.onTabSwitch = self._addCommand('onTabSwitch')

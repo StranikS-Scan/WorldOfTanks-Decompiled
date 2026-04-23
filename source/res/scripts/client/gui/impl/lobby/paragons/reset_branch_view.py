@@ -4,7 +4,7 @@ import typing
 from collections import defaultdict
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
 from gui.Scaleform.Waiting import Waiting
-from gui.Scaleform.daapi.view.lobby.customization.shared import TYPES_ORDER
+from gui.impl.lobby.customization.shared import TYPES_ORDER
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl import backport
 from gui.impl.gen import R

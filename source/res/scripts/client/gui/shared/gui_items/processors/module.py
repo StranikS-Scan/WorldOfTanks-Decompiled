@@ -16,7 +16,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.gui_items.gui_item_economics import getItemBuyPrice
 from gui.shared.gui_items.processors import ItemProcessor, makeI18nSuccess, makeI18nError, VehicleItemProcessor, plugins, makeSuccess, Processor
-from gui.shared.gui_items.processors.messages.items_processor_messages import OptDevicesDemountProcessorMessage, OptDeviceRemoveProcessorMessage, ItemDestroyProcessorMessage
+from gui.shared.gui_items.processors.messages.items_processor_messages import OptDevicesDemountProcessorMessage, OptDeviceRemoveProcessorMessage, ItemDestroyProcessorMessage, OptDeviceRestoreProcessorMessage
 from gui.shared.gui_items.vehicle_modules import VehicleTurret, VehicleGun
 from gui.shared.money import Currency
 from helpers import dependency
@@ -585,3 +585,41 @@ def getPreviewInstallerProcessor(vehicle, newComponentItem, conflictedEqs=None):
     if newComponentItem.itemTypeID == GUI_ITEM_TYPE.TURRET:
         return PreviewVehicleTurretInstaller(vehicle, newComponentItem, conflictedEqs)
     return PreviewVehicleGunInstaller(vehicle, newComponentItem, conflictedEqs) if newComponentItem.itemTypeID == GUI_ITEM_TYPE.GUN else PreviewVehicleModuleInstaller(vehicle, newComponentItem, conflictedEqs)
+
+
+class OptDeviceRestorer(Processor):
+    _FAILURE_CODE = -3
+    _WAITING = 'restoreItem'
+
+    def __init__(self, device, reason, count, useDemountKit, restorePrice, showWaiting=True, plugs=tuple()):
+        super(OptDeviceRestorer, self).__init__(plugs)
+        self.__device = device
+        self.__reason = reason
+        self.__count = count
+        self.__useDemountKit = useDemountKit
+        self.__restorePrice = restorePrice
+        self.__showWaiting = showWaiting
+
+    def _request(self, callback):
+        player = BigWorld.player()
+        if player is None:
+            self._response(self._FAILURE_CODE, callback)
+            return
+        else:
+            if self.__showWaiting:
+                from gui.Scaleform.Waiting import Waiting
+                Waiting.show(self._WAITING)
+            player.inventory.restoreOptionalDevice(self.__device.intCD, self.__reason, self.__count, self.__useDemountKit, lambda code, ext=None: self._response(code, callback, ctx=ext))
+            return
+
+    def _response(self, code, callback, errStr='', ctx=None):
+        super(OptDeviceRestorer, self)._response(code, callback, errStr=errStr, ctx=ctx)
+        if self.__showWaiting:
+            from gui.Scaleform.Waiting import Waiting
+            Waiting.hide(self._WAITING)
+
+    def _successHandler(self, code, ctx=None):
+        return OptDeviceRestoreProcessorMessage(self.__device, self.__restorePrice, self.__count).makeSuccessMsg()
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return OptDeviceRestoreProcessorMessage().makeErrorMsg()

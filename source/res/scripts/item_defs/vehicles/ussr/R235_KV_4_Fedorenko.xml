@@ -847,7 +847,7 @@
         <camouflage>	HULL	</camouflage>
       </customizableVehicleAreas>
     </customization>
-    <hangarShadowTexture>	vehicles/russian/R235_KV_4_Fedorenko/KV_4_Fedorenko_crash_HangarShadowMap.dds	</hangarShadowTexture>
+    <hangarShadowTexture>	vehicles/russian/R235_KV_4_Fedorenko/KV_4_Fedorenko_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <density>	92.164825 92.185493	</density>
       <aoTextureSize>	1024 1024	</aoTextureSize>
@@ -1055,9 +1055,9 @@
       <AODecals>
         <decal>
           <transform>
-            <row0>	5.800000 0.000000 0.000000	</row0>
-            <row1>	0.000000 3.280023 0.000000	</row1>
-            <row2>	0.000000 0.000000 8.600000	</row2>
+            <row0>	5.815024 0.000000 0.000000	</row0>
+            <row1>	0.000000 3.288521 0.000000	</row1>
+            <row2>	0.000000 0.000000 9.524582	</row2>
             <row3>	0.000000 0.000000 0.000000	</row3>
           </transform>
         </decal>
@@ -1881,7 +1881,7 @@
         <tracesParams>
           <trackPairIdx>	0	</trackPairIdx>
           <bufferPrefs>	largeTank	</bufferPrefs>
-          <textureSet>	ussr_02	</textureSet>
+          <textureSet>	ussr_01	</textureSet>
           <size>	0.8 0.84	</size>
           <offset>	0 0	</offset>
           <centerOffsetFactor>	1.18 0.1	</centerOffsetFactor>
@@ -2045,9 +2045,9 @@
       <AODecals>
         <decal>
           <transform>
-            <row0>	5.800000 0.000000 0.000000	</row0>
-            <row1>	0.000000 3.280023 0.000000	</row1>
-            <row2>	0.000000 0.000000 8.600000	</row2>
+            <row0>	5.815020 0.000000 0.000000	</row0>
+            <row1>	0.000000 3.288520 0.000000	</row1>
+            <row2>	0.000000 0.000000 9.524580	</row2>
             <row3>	0.000000 0.000000 0.000000	</row3>
           </transform>
         </decal>
@@ -2423,7 +2423,7 @@
         <left>
           <trackPairIdx>	0	</trackPairIdx>
           <segmentsCount>	113	</segmentsCount>
-          <segmentsOuterThickness>	0.01	</segmentsOuterThickness>
+          <segmentsOuterThickness>	0.031731	</segmentsOuterThickness>
           <segmentsInnerThickness>	0.001	</segmentsInnerThickness>
           <segmentsPlaneOffset>	-1.615	</segmentsPlaneOffset>
           <mainSegment>
@@ -2438,9 +2438,9 @@
               <bottom>	0.107086	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.155	</back>
+              <back>	0.152	</back>
               <top>	0.15	</top>
-              <front>	0.156	</front>
+              <front>	0.158	</front>
               <bottom>	0.107086	</bottom>
             </forwardMovement>
           </springsLength>
@@ -2629,7 +2629,7 @@
         <right>
           <trackPairIdx>	0	</trackPairIdx>
           <segmentsCount>	113	</segmentsCount>
-          <segmentsOuterThickness>	0.01	</segmentsOuterThickness>
+          <segmentsOuterThickness>	0.031731	</segmentsOuterThickness>
           <segmentsInnerThickness>	0.001	</segmentsInnerThickness>
           <segmentsPlaneOffset>	1.615	</segmentsPlaneOffset>
           <mainSegment>
@@ -2644,9 +2644,9 @@
               <bottom>	0.107086	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.155	</back>
+              <back>	0.152	</back>
               <top>	0.15	</top>
-              <front>	0.156	</front>
+              <front>	0.158	</front>
               <bottom>	0.107086	</bottom>
             </forwardMovement>
           </springsLength>

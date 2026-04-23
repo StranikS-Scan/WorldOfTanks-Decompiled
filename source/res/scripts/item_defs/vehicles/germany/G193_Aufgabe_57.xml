@@ -10,7 +10,7 @@
   <postProgressionTree>	role_HT_support	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	40	</forward>
+    <forward>	45	</forward>
     <backward>	12	</backward>
   </speedLimits>
   <invisibility>
@@ -42,7 +42,7 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	156	</armor_1>
+      <armor_1>	129	</armor_1>
       <armor_2>	132	</armor_2>
       <armor_3>	80	</armor_3>
       <armor_4>	60	</armor_4>
@@ -771,8 +771,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	33	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.22	</vehicleMovement>
-        <vehicleRotation>	0.22	</vehicleRotation>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -1972,7 +1972,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_120mm_Rh_E1>	shared	  <maxAmmo>	39	</maxAmmo>
+        <_120mm_Rh_E1>	shared	  <maxAmmo>	45	</maxAmmo>
           <armor>
             <armor_1>	300	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -1996,14 +1996,14 @@
             <count>	3	</count>
             <rate>	19	</rate>
           </clip>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <reloadTime>	30	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.18	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.4	</aimingTime>
+          <aimingTime>	2.6	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <customizationSlots>
             <slot>
@@ -2426,7 +2426,7 @@
       <engines>
         <MT_881>
           <smplEnginePower>	800	</smplEnginePower>
-          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </MT_881>
       </engines>
       <chassis>
@@ -2452,7 +2452,7 @@
     <damagedStateGroup>	large	</damagedStateGroup>
   </effects>
   <emblems>
-    <default>	15502	</default>
+    <default>	15507	</default>
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	1.0	</alpha>
   </emblems>

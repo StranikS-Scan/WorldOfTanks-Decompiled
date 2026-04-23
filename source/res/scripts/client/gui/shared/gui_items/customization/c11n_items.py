@@ -126,17 +126,6 @@ class SpecialEvents(object):
      WINTER_HUNT: backport.image(R.images.gui.maps.icons.customization.style_info.marathon()),
      KURSK_BATTLE: backport.image(R.images.gui.maps.icons.customization.style_info.marathon()),
      HALLOWEEN: backport.image(R.images.gui.maps.icons.customization.style_info.halloween())}
-    NAMES = {NY: backport.text(R.strings.vehicle_customization.styleInfo.event.ny()),
-     NY18: backport.text(R.strings.vehicle_customization.styleInfo.event.ny18()),
-     NY19: backport.text(R.strings.vehicle_customization.styleInfo.event.ny19()),
-     NY20: backport.text(R.strings.vehicle_customization.styleInfo.event.ny20()),
-     NY21: backport.text(R.strings.vehicle_customization.styleInfo.event.ny21()),
-     NY22: backport.text(R.strings.vehicle_customization.styleInfo.event.ny22()),
-     NY23: backport.text(R.strings.vehicle_customization.styleInfo.event.ny23()),
-     FOOTBALL18: backport.text(R.strings.vehicle_customization.styleInfo.event.football18()),
-     WINTER_HUNT: backport.text(R.strings.vehicle_customization.styleInfo.event.winter_hunt()),
-     KURSK_BATTLE: backport.text(R.strings.vehicle_customization.styleInfo.event.kursk_battle()),
-     HALLOWEEN: backport.text(R.strings.vehicle_customization.styleInfo.event.halloween())}
 
 
 def camoIconTemplate(texture, width, height, colors, background=_CAMO_SWATCH_BACKGROUND, options=ImageOptions.NONE):
@@ -420,10 +409,6 @@ class Customization(FittingItem):
         return SpecialEvents.ICONS.get(self.specialEventTag, '')
 
     @property
-    def specialEventName(self):
-        return SpecialEvents.NAMES.get(self.specialEventTag, '')
-
-    @property
     def isProgressive(self):
         return self.descriptor.progression is not None
 
@@ -471,6 +456,9 @@ class Customization(FittingItem):
 
     def getIconApplied(self, component):
         return self.icon
+
+    def getIconUrlApplied(self, component):
+        return self.iconUrl
 
     def getInstalledVehicles(self, vehicles_=None):
         return set(self._installedVehicles)
@@ -1197,7 +1185,7 @@ class Style(Customization):
         return self.getIconApplied(component=None)
 
     def iconUrlByProgressionLevel(self, _):
-        return self.getIconApplied(component=None)
+        return self.getIconUrlApplied(component=None)
 
     def getAdditionalOutfit(self, level, season, vehicleCD):
         additionalOutfit = self.descriptor.styleProgressions.get(level, {}).get('additionalOutfit', {})

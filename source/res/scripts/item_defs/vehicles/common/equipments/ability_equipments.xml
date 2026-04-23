@@ -278,20 +278,20 @@
           <plan>	abilities/base_ability_controller_client	</plan>
         </client>
       </visualScript>
-      <cooldownSeconds>	90	</cooldownSeconds>
-      <reuseCount>	3	</reuseCount>
+      <cooldownSeconds>	180	</cooldownSeconds>
+      <reuseCount>	2	</reuseCount>
       <duration>	25	</duration>
       <penaltyReloadTime>	4	</penaltyReloadTime>
       <additiveFactors></additiveFactors>
       <multiplicativeFactors>
-        <gun-reloadTime>	0.4	</gun-reloadTime>
+        <gun-reloadTime>	0.50	</gun-reloadTime>
         <gun-shotDispersionFactors-afterShot>	0.5	</gun-shotDispersionFactors-afterShot>
       </multiplicativeFactors>
     </script>
     <kpi>
       <mul>
         <name>	vehicleGunReloadTime	</name>
-        <value>	-60	</value>
+        <value>	-50	</value>
       </mul>
       <add>
         <name>	vehicleGunReloadPenalty	</name>
@@ -320,7 +320,7 @@
           <plan>	abilities/base_ability_controller_client	</plan>
         </client>
       </visualScript>
-      <cooldownSeconds>	90	</cooldownSeconds>
+      <cooldownSeconds>	120	</cooldownSeconds>
       <reuseCount>	4	</reuseCount>
       <duration>	25	</duration>
       <cooldownAfterRamKill>	0.5	</cooldownAfterRamKill>
@@ -335,7 +335,7 @@
         <fuelTankHealthFactor>	1.5	</fuelTankHealthFactor>
         <engineHealthFactor>	1.5	</engineHealthFactor>
         <chassisHealthFactor>	1.5	</chassisHealthFactor>
-        <vehicle-rotationSpeed>	0.33	</vehicle-rotationSpeed>
+        <vehicle-rotationSpeed>	0.44	</vehicle-rotationSpeed>
         <trackRammingDamageFactor>	1.5	</trackRammingDamageFactor>
       </multiplicativeFactors>
     </script>
@@ -393,14 +393,14 @@
           <plan>	abilities/base_ability_controller_client	</plan>
         </client>
       </visualScript>
-      <cooldownSeconds>	90	</cooldownSeconds>
-      <damageFirstIncrease>	0.5	</damageFirstIncrease>
+      <cooldownSeconds>	180	</cooldownSeconds>
+      <damageFirstIncrease>	0.30	</damageFirstIncrease>
       <addDuration>	4	</addDuration>
-      <reuseCount>	3	</reuseCount>
+      <reuseCount>	2	</reuseCount>
       <consumeAmmo>	True	</consumeAmmo>
-      <duration>	15	</duration>
-      <damageIncreasePerShot>	0.15	</damageIncreasePerShot>
-      <maxDamageIncreasePerShot>	0.95	</maxDamageIncreasePerShot>
+      <duration>	20	</duration>
+      <damageIncreasePerShot>	0.05	</damageIncreasePerShot>
+      <maxDamageIncreasePerShot>	0.70	</maxDamageIncreasePerShot>
       <additiveFactors></additiveFactors>
       <multiplicativeFactors>
         <chassis-shotDispersionFactors-movement>	0.8	</chassis-shotDispersionFactors-movement>
@@ -408,7 +408,6 @@
         <gun-shotDispersionFactors-turretRotation>	0.8	</gun-shotDispersionFactors-turretRotation>
         <gun-shotDispersionFactors-afterShot>	0.8	</gun-shotDispersionFactors-afterShot>
         <gun-aimingTime>	0.8	</gun-aimingTime>
-        <gun-reloadTime>	0.8	</gun-reloadTime>
       </multiplicativeFactors>
     </script>
     <kpi>
@@ -418,13 +417,9 @@
       </add>
       <add>
         <name>	vehicleGunDamage	</name>
-        <value>	50	</value>
-        <specValue>	15	</specValue>
+        <value>	30	</value>
+        <specValue>	5	</specValue>
       </add>
-      <mul>
-        <name>	vehicleGunReloadTime	</name>
-        <value>	-20	</value>
-      </mul>
       <mul>
         <name>	vehicleGunAimSpeed	</name>
         <value>	20	</value>

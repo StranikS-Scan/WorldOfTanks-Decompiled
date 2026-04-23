@@ -39,20 +39,33 @@ class StorageCategoryInHangarView(StorageCategoryInHangarViewMeta):
 
     def setActiveTab(self, tabId):
         tabsData = self.__getTabsData()
-        if tabId:
-            for i, tab in enumerate(tabsData):
-                tabsData[i]['selected'] = False
-                if tab.get('id') == tabId:
-                    tabsData[i]['selected'] = True
+        defaultTabId = STORAGE_CONSTANTS.VEHICLES_TAB_ALL
+        selectedId = tabId or defaultTabId
+        defaultTab = None
+        selectedFound = False
+        for tab in tabsData:
+            tab['selected'] = False
+            tabIdValue = tab.get('id')
+            if tabIdValue == defaultTabId:
+                defaultTab = tab
+            if tabIdValue == selectedId:
+                tab['selected'] = True
+                selectedFound = True
 
+        if not selectedFound and defaultTab is not None:
+            defaultTab['selected'] = True
         self.as_setTabsDataS(tabsData)
+        return
 
     def _populate(self):
         super(StorageCategoryInHangarView, self)._populate()
         self.setActiveTab(STORAGE_CONSTANTS.VEHICLES_TAB_ALL)
 
     def __getTabsData(self):
-        return _TABS_DATA + (_RENT_TAB_DATA,) if self.__canShowRentTab() else _TABS_DATA
+        tabs = [ dict(tab) for tab in _TABS_DATA ]
+        if self.__canShowRentTab():
+            tabs.append(dict(_RENT_TAB_DATA))
+        return tabs
 
     def __canShowRentTab(self):
         criteria = REQ_CRITERIA.VEHICLE.RENT

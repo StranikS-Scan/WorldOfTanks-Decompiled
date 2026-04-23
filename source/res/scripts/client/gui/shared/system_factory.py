@@ -55,6 +55,7 @@ CONVERTERS_EXT_DATA_FORMATTERS = 48
 BONUS_MERGERS = 49
 SERVICE_CHANNEL_SUBFORMATTERS = 50
 QUESTS_FROM_EXTENSIONS_SOURCE = 51
+SETTINGS_PROVIDERS_SERIALIZABLES = 52
 
 class _CollectEventsManager(object):
 
@@ -789,3 +790,15 @@ def registerExtensionQuestsSources(sources):
 
 def collectExtensionQuestsSources():
     return __collectEM.handleEvent(QUESTS_FROM_EXTENSIONS_SOURCE, {'sources': []})['sources']
+
+
+def registerExtensionSettingsProvidersSerializable(settingsProvidersSerializable):
+
+    def onCollect(ctx):
+        ctx['settingsProvidersSerializable'].update(settingsProvidersSerializable)
+
+    __collectEM.addListener(SETTINGS_PROVIDERS_SERIALIZABLES, onCollect)
+
+
+def collectExtensionSettingsProvidersSerializable():
+    return __collectEM.handleEvent(SETTINGS_PROVIDERS_SERIALIZABLES, ctx={'settingsProvidersSerializable': {}}).get('settingsProvidersSerializable')

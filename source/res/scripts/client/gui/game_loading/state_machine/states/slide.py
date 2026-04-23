@@ -9,6 +9,8 @@ from gui.game_loading.common import normalizeGfImagePath
 from gui.game_loading.resources.consts import InfoStyles
 from gui.game_loading.state_machine.models import ImageViewSettingsModel
 from gui.game_loading.state_machine.states.base import BaseState, BaseViewResourcesTickingState
+from gui.game_loading.resources.cdn.models import LocalSlideModel
+from gui.game_loading.loading_sounds import handleLoadingSoundChangeEvent, DEFAULT_LOADING_SOUND
 if typing.TYPE_CHECKING:
     from frameworks.state_machine import StateEvent
     from gui.game_loading.resources.models import LocalImageModel
@@ -32,6 +34,17 @@ def _showImage(image, settings):
      'info': settings.info,
      'infoStyle': InfoStyles.DEFAULT.value,
      'hasVignette': settings.hasVignette}
+    if isinstance(image, LocalSlideModel) and image.additionalImage:
+        handleLoadingSoundChangeEvent(image.sound)
+        additionalImage = image.additionalImage
+        data.update({'additionalImage': {'image': normalizeGfImagePath(additionalImage.pathInCache),
+                             'width': additionalImage.width,
+                             'height': additionalImage.height,
+                             'margins': additionalImage.margins,
+                             'paddings': additionalImage.paddings,
+                             'position': additionalImage.position}})
+    else:
+        handleLoadingSoundChangeEvent(DEFAULT_LOADING_SOUND)
     game_loading_bindings.setViewData(data)
     _logger.debug('Image [%s] shown.', image)
 

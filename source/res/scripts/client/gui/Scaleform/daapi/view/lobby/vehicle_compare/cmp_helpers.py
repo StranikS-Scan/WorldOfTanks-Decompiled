@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_helpers.py
 import operator
+import typing
 from frameworks.wulf import WindowLayer
 from helpers import dependency
 from items import tankmen
+from collections import namedtuple
 from shared_utils import first
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_top_modules import TopModulesChecker
@@ -16,6 +18,8 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items import Vehicle
 MODULES_INSTALLING_ORDER = (GUI_ITEM_TYPE.CHASSIS,
  GUI_ITEM_TYPE.TURRET,
  GUI_ITEM_TYPE.GUN,
@@ -142,12 +146,31 @@ def removeVehicleCamouflages(vehicle):
         return
 
 
+VehicleModules = namedtuple('VehicleModules', ['chassis',
+ 'turret',
+ 'gun',
+ 'engine',
+ 'radio'])
+
 def getVehicleModules(vehicle):
-    return (vehicle.chassis,
-     vehicle.turret,
-     vehicle.gun,
-     vehicle.engine,
-     vehicle.radio)
+    return VehicleModules(chassis=vehicle.chassis, turret=vehicle.turret, gun=vehicle.gun, engine=vehicle.engine, radio=vehicle.radio)
+
+
+_VehicleAllModulesBase = namedtuple('VehicleAllModulesBase', ['chassis',
+ 'turrets',
+ 'guns',
+ 'engines',
+ 'radios'])
+
+class VehicleAllModules(_VehicleAllModulesBase):
+
+    @staticmethod
+    def getVehicleAvailableModules(vehicle):
+        typeDescr = vehicle.typeDescr
+        return VehicleAllModules(chassis=typeDescr.chassis, turrets=typeDescr.turrets, guns=typeDescr.getGuns(), engines=typeDescr.engines, radios=typeDescr.radios)
+
+    def getCountAllModules(self):
+        return sum((len(getattr(self, field)) for field in self._fields))
 
 
 def getVehicleTopModules(vehicle):

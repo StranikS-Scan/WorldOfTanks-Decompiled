@@ -15,7 +15,7 @@ class DialogType(Enum):
 class ConfirmActionsWithEquipmentDialogModel(DialogTemplateViewModel):
     __slots__ = ('onDeconstruct', 'onClose')
 
-    def __init__(self, properties=11, commands=4):
+    def __init__(self, properties=12, commands=4):
         super(ConfirmActionsWithEquipmentDialogModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -40,17 +40,23 @@ class ConfirmActionsWithEquipmentDialogModel(DialogTemplateViewModel):
     def setAlertText(self, value):
         self._setString(8, value)
 
+    def getIsOptDeviceRestored(self):
+        return self._getBool(9)
+
+    def setIsOptDeviceRestored(self, value):
+        self._setBool(9, value)
+
     def getDialogType(self):
-        return DialogType(self._getString(9))
+        return DialogType(self._getString(10))
 
     def setDialogType(self, value):
-        self._setString(9, value.value)
+        self._setString(10, value.value)
 
     def getBalance(self):
-        return self._getArray(10)
+        return self._getArray(11)
 
     def setBalance(self, value):
-        self._setArray(10, value)
+        self._setArray(11, value)
 
     @staticmethod
     def getBalanceType():
@@ -61,6 +67,7 @@ class ConfirmActionsWithEquipmentDialogModel(DialogTemplateViewModel):
         self._addViewModelProperty('detailsDevice', DetailsDeviceModel())
         self._addViewModelProperty('detailsPriceBlock', DetailsPriceBlockModel())
         self._addStringProperty('alertText', '')
+        self._addBoolProperty('isOptDeviceRestored', False)
         self._addStringProperty('dialogType')
         self._addArrayProperty('balance', Array())
         self.onDeconstruct = self._addCommand('onDeconstruct')

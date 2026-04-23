@@ -151,15 +151,11 @@ class BattleMattersMainView(ViewImpl):
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.lobby.tooltips.AdditionalRewardsTooltip():
             showCount = int(event.getArgument('showCount'))
-            questIdx = int(event.getArgument(BattleMattersMainViewModel.ARG_QUEST_ID, 1))
-            quest = self.__battleMattersController.getQuestByIdx(questIdx - 1)
-            bonuses = sorted(quest.getBonuses(), cmp=bonusesSort)
-            packer = getBattleMattersBonusPacker()
-            packed = []
-            for bonus in bonuses[showCount:]:
-                packed.extend(packer.pack(bonus))
-
-            return AdditionalRewardsTooltip(packed)
+            questIdx = int(event.getArgument(BattleMattersMainViewModel.ARG_QUEST_ID, 1)) - 1
+            quests = self.getViewModel().getQuests()
+            if questIdx < len(quests):
+                quest = quests[questIdx]
+                return AdditionalRewardsTooltip(quest.getRewards()[showCount:])
         if contentID == R.views.lobby.battle_matters.tooltips.BattleMattersTokenTooltipView():
             rewardToken = event.getArgument(BattleMattersTokenTooltipViewModel.ARG_REWARD_TOKEN)
             return BattleMattersTokenTooltipView(rewardToken)
@@ -284,10 +280,14 @@ class BattleMattersMainView(ViewImpl):
         intermediateQuests = questProgressModel.getIntermediateQuests()
         intermediateQuests.clear()
         for intermediateQuest in quests:
-            intermediateQuests.addViewModel(self.__createQuestProgressModel(intermediateQuest))
+            if self.__needToShowIntermediateQuest(intermediateQuest):
+                intermediateQuests.addViewModel(self.__createQuestProgressModel(intermediateQuest))
 
         intermediateQuests.invalidate()
         self.__settingsCore.serverSettings.setBattleMattersQuestWasShowed(countCompletedQuests)
+
+    def __needToShowIntermediateQuest(self, quest):
+        return quest.isCompleted() if self.__battleMattersController.isFinished() or quest.getOrder() < self.__currentQuestIdx else True
 
     def __createQuestProgressModel(self, quest):
         intermediateQuestModel = IntermediateQuestModel()

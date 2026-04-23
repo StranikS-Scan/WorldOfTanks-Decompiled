@@ -132,6 +132,12 @@ class ArmoryYardRerollController(IArmoryYardRerollController):
         nextFreeRerollTimestamp = self.getNextFreeRerollTimestamp() or 0
         return int(max(nextFreeRerollTimestamp - time_utils.getCurrentLocalServerTimestamp(), 0))
 
+    def getHideBattleTypes(self):
+        if not self.isRerollEnabled():
+            return set()
+        rerollSubsection = self.__armoryYardController.serverSettings.getModeSettings().rerollSubsection
+        return set(rerollSubsection.get('hideBattleTypes'))
+
     def isRerollEnabled(self):
         rerollSubsection = self.__armoryYardController.serverSettings.getModeSettings().rerollSubsection
         isArmoryYardPaused = self.__armoryYardController.isPaused

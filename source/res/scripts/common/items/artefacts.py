@@ -308,6 +308,10 @@ class OptionalDevice(Artefact):
         return self._isModernized
 
     @property
+    def isRestorable(self):
+        return self.isDeluxe or self.isTrophy or self.isModernized
+
+    @property
     def isUpgradable(self):
         return self._isUpgradable
 
@@ -1015,7 +1019,8 @@ class EffectsConfigReader(object):
              'repeatCount': section.readInt('repeatCount', 1),
              'repeatDelay': section.readFloat('repeatDelay'),
              'areaColor': _xml.readIntOrNone(xmlCtx, section, 'areaColor'),
-             'repeatDelayDeviationPercent': 0}
+             'repeatDelayDeviationPercent': 0,
+             'areaAccurateCollision': section.readBool('areaAccurateCollision', True)}
             if section.has_key('repeatDelayDeviationPercent'):
                 effect['repeatDelayDeviationPercent'] = _xml.readInt(xmlCtx, section, 'repeatDelayDeviationPercent', minVal=0, maxVal=100)
             return effect

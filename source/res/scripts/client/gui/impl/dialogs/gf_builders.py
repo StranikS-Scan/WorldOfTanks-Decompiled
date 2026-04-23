@@ -20,6 +20,7 @@ from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindo
 from gui.impl.pub.dialog_window import DialogButtons
 if typing.TYPE_CHECKING:
     from typing import Optional, List, Union
+    String = Union[str, unicode]
 
 class BuilderDialogTemplateView(DialogTemplateView):
     __slots__ = ()
@@ -81,12 +82,13 @@ class BaseDialogBuilder(object):
     def setDescription(self, text):
         self.__description = toString(text)
 
-    def setIcon(self, mainIcon, backgrounds=None, overlays=None, layoutID=None, iconPositionLogic=IconPositionLogicEnum.CENTREDANDTHROUGHCONTENT.value):
+    def setIcon(self, mainIcon, backgrounds=None, overlays=None, layoutID=None, iconPositionLogic=IconPositionLogicEnum.CENTREDANDTHROUGHCONTENT.value, pushingDown=True):
         self.__icon = {'iconResID': mainIcon,
          'backgroundResIDList': backgrounds,
          'overlayResIDList': overlays,
          'layoutID': layoutID,
-         'iconPositionLogic': iconPositionLogic}
+         'iconPositionLogic': iconPositionLogic,
+         'isBottomPushingDown': pushingDown}
 
     def addButton(self, buttonSettings):
         self.__buttons.append(buttonSettings)
@@ -254,12 +256,22 @@ class PassiveXPDialogBuilder(ConfirmCancelDialogBuilder):
 
 
 class WarningDialogBuilder(ConfirmCancelDialogBuilder):
-    __slots__ = ()
+    __slots__ = ('__warningMsg',)
 
     def __init__(self, uniqueID=None):
         super(WarningDialogBuilder, self).__init__(uniqueID)
         rDialogs = R.images.gui.maps.uiKit.dialogs
         self.setIcon(rDialogs.icons.alert(), [rDialogs.highlights.yellow_1()])
+        self.__warningMsg = None
+        return
+
+    def setWarningMsg(self, text):
+        self.__warningMsg = toString(text)
+
+    def _extendTemplate(self, template):
+        super(WarningDialogBuilder, self)._extendTemplate(template)
+        if self.__warningMsg:
+            template.setSubView(DefaultDialogPlaceHolders.CONTENT, TextWithWarning('', self.__warningMsg))
 
 
 class ErrorAlertBuilder(AlertBuilder):

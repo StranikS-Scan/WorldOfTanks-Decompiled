@@ -4,6 +4,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
 from gui.prb_control.entities.training.legacy.requester import TrainingListRequester
+from shared_utils import nextTick
 
 class TrainingsModeSelectorItem(ModeSelectorLegacyItem):
     __slots__ = ('__requester',)
@@ -18,6 +19,11 @@ class TrainingsModeSelectorItem(ModeSelectorLegacyItem):
         self.__requester.stop()
         super(TrainingsModeSelectorItem, self)._onDisposing()
 
+    @nextTick
     def _onListReceived(self, prebattles):
-        count = sum((1 for _ in prebattles))
-        self.viewModel.setStatusActive(backport.text(R.strings.mode_selector.mode.trainingsList.call.c_1(), amount=backport.getIntegralFormat(count)))
+        if self._initialized:
+            count = sum((1 for _ in prebattles))
+            with self.viewModel.transaction() as vm:
+                vm.setStatusActive(backport.text(R.strings.mode_selector.mode.trainingsList.call.c_1(), amount=backport.getIntegralFormat(count)))
+        else:
+            self._onListReceived(prebattles)

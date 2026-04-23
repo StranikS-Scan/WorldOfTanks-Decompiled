@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/dialogs/deconstruct_confirm.py
 from itertools import chain
+from constants import OPT_DEVICES_RESTORE_SETTING
 from gui.impl import backport
 from gui.impl.dialogs.dialog_template import DialogTemplateView
 from gui.impl.dialogs.dialog_template_button import CustomSoundButtonPresenter, getConfirmButton, CancelButton
@@ -17,6 +18,7 @@ from gui.impl.lobby.tank_setup.tooltips.deconstruct_from_vehicle_tooltip import 
 from gui.impl.pub.dialog_window import DialogButtons
 from gui.shared.money import Currency
 from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 _SUBMIT_CLICK_SOUND = 'mod_equipment_disassemble'
 
@@ -147,6 +149,7 @@ class DeconstructConfirm(DialogTemplateView):
     LAYOUT_ID = R.views.lobby.tanksetup.dialogs.ConfirmActionsWithEquipmentDialog()
     VIEW_MODEL = ConfirmActionsWithEquipmentDialogModel
     __itemsCache = dependency.descriptor(IItemsCache)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, itemIntCD, fromVehicle=False):
         super(DeconstructConfirm, self).__init__()
@@ -161,13 +164,7 @@ class DeconstructConfirm(DialogTemplateView):
 
     def _onLoading(self, *args, **kwargs):
         super(DeconstructConfirm, self)._onLoading(*args, **kwargs)
-        if self.__fromVehicle:
-            self.viewModel.setDialogType(LocationDialogType.DECONSTRUCTFROMSLOTS)
-        else:
-            self.viewModel.setDialogType(LocationDialogType.DECONSTRUCTFROMSTORAGE)
-        self.viewModel.setAlertText(backport.text(R.strings.tank_setup.dialogs.confirmActionsWithEquipmentDialog.warning()))
-        initBalance(self.viewModel.getBalance(), (self.__currency,), self.__itemsCache)
-        initItemInfo(self.viewModel, self.__device, self.__currency)
+        self.__fillModel()
         self.__addListeners()
 
     def _finalize(self):
@@ -177,14 +174,23 @@ class DeconstructConfirm(DialogTemplateView):
     def _getAdditionalData(self):
         return self.__curCount
 
+    def __fillModel(self):
+        initBalance(self.viewModel.getBalance(), (self.__currency,), self.__itemsCache)
+        baseAlert = R.strings.tank_setup.dialogs.confirmActionsWithEquipmentDialog
+        alertText = backport.text(baseAlert.warningEnabled() if self.__getOptDevicesRestoreState() else baseAlert.warningDisabled())
+        dialogType = LocationDialogType.DECONSTRUCTFROMSLOTS if self.__fromVehicle else LocationDialogType.DECONSTRUCTFROMSTORAGE
+        initItemInfo(self.viewModel, self.__device, self.__currency, dialogType, alertText)
+
     def __addListeners(self):
         g_clientUpdateManager.addMoneyCallback(self.__onMoneyUpdated)
         self.viewModel.onDeconstruct += self.__onDeconstruct
         self.viewModel.onClose += self.__onClose
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
 
     def __removeListeners(self):
         self.viewModel.onDeconstruct -= self.__onDeconstruct
         self.viewModel.onClose -= self.__onClose
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
         g_clientUpdateManager.removeObjectCallbacks(self)
 
     def __onDeconstruct(self, count):
@@ -196,3 +202,10 @@ class DeconstructConfirm(DialogTemplateView):
 
     def __onMoneyUpdated(self, _):
         initBalance(self.viewModel.getBalance(), (self.__currency,), self.__itemsCache)
+
+    def __onServerSettingsChange(self, diff):
+        if OPT_DEVICES_RESTORE_SETTING in diff:
+            self.__fillModel()
+
+    def __getOptDevicesRestoreState(self):
+        return self.__lobbyContext.getServerSettings().isOptionalDeviceRestoreEnabled()

@@ -6,10 +6,10 @@ import logging
 import time
 import datetime
 import weakref
-from collections import defaultdict
-from functools import partial
 import typing
 import WWISE
+from collections import defaultdict
+from functools import partial
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_MARATHON_STARTED, TRADING_CARAVAN_NOTIFICATIONS, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, REFERRAL_PROGRAM_PGB_FULL, SUBSCRIPTION_LAST_EXPIRATION_NOTIFICATION, BattleMatters, EarlyAccess, Paragons, PREMIUM_QUESTS_NOTIFICATION, CUSTOM_NOTIFICATIONS, BLACK_MARKET_AUCTION_NOTIFICATIONS
@@ -21,7 +21,7 @@ from early_access_common import EARLY_ACCESS_POSTPR_KEY
 from battle_pass_common import FinalReward
 from chat_shared import SYS_MESSAGE_TYPE
 from collector_vehicle import CollectorVehicleConsts
-from constants import ARENA_BONUS_TYPE, AUTO_MAINTENANCE_RESULT, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, MAPS_TRAINING_ENABLED_KEY, PremiumConfigs, SwitchState, DailyQuestsLevels
+from constants import ARENA_BONUS_TYPE, AUTO_MAINTENANCE_RESULT, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, MAPS_TRAINING_ENABLED_KEY, PremiumConfigs, SwitchState, DailyQuestsLevels, OPT_DEVICES_RESTORE_SETTING
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -2779,6 +2779,45 @@ class EpicBattleNotificationListener(_NotificationListener):
         return
 
 
+class OptDevicesRestoreListener(_NotificationListener):
+    __slots__ = ('__currentState',)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+
+    def __init__(self):
+        super(OptDevicesRestoreListener, self).__init__()
+        self.__currentState = None
+        return
+
+    def start(self, model):
+        result = super(OptDevicesRestoreListener, self).start(model)
+        self.__currentState = self.__getOptDevicesRestoreState()
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
+        return result
+
+    def stop(self):
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
+        super(OptDevicesRestoreListener, self).stop()
+
+    def __getOptDevicesRestoreState(self):
+        return self.__lobbyContext.getServerSettings().isOptionalDeviceRestoreEnabled()
+
+    def __onServerSettingsChange(self, diff):
+        if OPT_DEVICES_RESTORE_SETTING in diff:
+            self.__notifyStateChange(self.__getOptDevicesRestoreState())
+
+    def __notifyStateChange(self, state):
+        if self.__currentState == state:
+            return
+        self.__pushMessage(state)
+        self.__currentState = state
+
+    def __pushMessage(self, isEnabled):
+        base = R.strings.system_messages.optDevicesRestore
+        messageRes = base.switch_on if isEnabled else base.switch_off
+        msgType = SystemMessages.SM_TYPE.InformationHeader if isEnabled else SystemMessages.SM_TYPE.ErrorHeader
+        SystemMessages.pushMessage(text=backport.text(messageRes.body()), type=msgType, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(messageRes.title())})
+
+
 class ExtNotificationListener(_NotificationListener):
     pass
 
@@ -2813,7 +2852,8 @@ registerNotificationsListeners((ServiceChannelListener,
  PersonalMissionsListener,
  ParagonsListener,
  DailyBonusQuestListener,
- EpicBattleNotificationListener))
+ EpicBattleNotificationListener,
+ OptDevicesRestoreListener))
 
 class NotificationsListeners(_NotificationListener):
 

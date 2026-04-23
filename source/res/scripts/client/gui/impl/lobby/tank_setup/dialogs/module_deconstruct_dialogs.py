@@ -1,19 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/dialogs/module_deconstruct_dialogs.py
-from adisp import adisp_process
 import logging
+from constants import OPT_DEVICES_RESTORE_SETTING
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl import backport
 from gui.impl.lobby.tank_setup.dialogs.dialog_helpers.balance import initBalance
 from gui.impl.lobby.tank_setup.dialogs.dialog_helpers.model_formatters import initItemInfo
 from helpers import dependency
 from gui.impl.gen import R
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from gui import SystemMessages
 from gui.impl.pub import ViewImpl, WindowImpl
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.shared.gui_items.processors.module import ModuleDeconstruct
+from adisp import adisp_process
 from gui.impl.gen.view_models.views.lobby.tank_setup.dialogs.confirm_actions_with_equipment_dialog_model import ConfirmActionsWithEquipmentDialogModel, DialogType
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import MAX_ITEMS_FOR_OPERATION
@@ -23,6 +25,7 @@ class DeconstructDialogView(ViewImpl):
     __slots__ = ('__device', '__currency')
     LAYOUT_ID = R.views.lobby.tanksetup.dialogs.ConfirmActionsWithEquipmentDialog()
     __itemsCache = dependency.descriptor(IItemsCache)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, itemIntCD):
         settings = ViewSettings(layoutID=self.LAYOUT_ID, model=ConfirmActionsWithEquipmentDialogModel())
@@ -36,24 +39,29 @@ class DeconstructDialogView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(DeconstructDialogView, self)._onLoading(*args, **kwargs)
-        initItemInfo(self.viewModel, self.__device, self.__currency)
-        self.viewModel.setDialogType(DialogType.DECONSTRUCTFROMSTORAGE)
-        initBalance(self.viewModel.getBalance(), (self.__currency,), self.__itemsCache)
-        self.viewModel.setAlertText(backport.text(R.strings.tank_setup.dialogs.confirmActionsWithEquipmentDialog.warning()))
+        self.__fillModel()
         self.__addListeners()
 
     def _finalize(self):
         self.__removeListeners()
         super(DeconstructDialogView, self)._finalize()
 
+    def __fillModel(self):
+        initBalance(self.viewModel.getBalance(), (self.__currency,), self.__itemsCache)
+        baseAlert = R.strings.tank_setup.dialogs.confirmActionsWithEquipmentDialog
+        alertText = backport.text(baseAlert.warningEnabled() if self.__getOptDevicesRestoreState() else baseAlert.warningDisabled())
+        initItemInfo(self.viewModel, self.__device, self.__currency, DialogType.DECONSTRUCTFROMSTORAGE, alertText)
+
     def __addListeners(self):
         g_clientUpdateManager.addMoneyCallback(self.__onMoneyUpdated)
         self.viewModel.onDeconstruct += self.__onDeconstruct
         self.viewModel.onClose += self.__onClose
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
 
     def __removeListeners(self):
         self.viewModel.onDeconstruct -= self.__onDeconstruct
         self.viewModel.onClose -= self.__onClose
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
         g_clientUpdateManager.removeObjectCallbacks(self)
 
     @adisp_process
@@ -71,6 +79,13 @@ class DeconstructDialogView(ViewImpl):
 
     def __onMoneyUpdated(self, _):
         initBalance(self.viewModel.getBalance(), (self.__currency,), self.__itemsCache)
+
+    def __onServerSettingsChange(self, diff):
+        if OPT_DEVICES_RESTORE_SETTING in diff:
+            self.__fillModel()
+
+    def __getOptDevicesRestoreState(self):
+        return self.__lobbyContext.getServerSettings().isOptionalDeviceRestoreEnabled()
 
 
 class DeconstructDialogWindow(WindowImpl):

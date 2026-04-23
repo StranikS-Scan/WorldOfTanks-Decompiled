@@ -3,15 +3,14 @@
 import constants
 import gui
 from PlayerEvents import g_playerEvents
-from frameworks.wulf import WindowLayer, WindowStatus
-from account_helpers.settings_core.settings_constants import GRAPHICS
+from frameworks.wulf import WindowLayer
 from gui import SystemMessages
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview_constants import VEHICLE_PREVIEW_ALIASES
+from gui.Scaleform.daapi.view.lobby.UiEffectsManager import UiEffectsManager
 from gui.Scaleform.daapi.view.meta.LobbyPageMeta import LobbyPageMeta
 from gui.Scaleform.framework.entities.View import View, ViewKey, ViewKeyDynamic
-from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA, VIEW_SEARCH_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
@@ -23,11 +22,10 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
-from gui.shared.events import LoadViewEvent, ViewEventType, LobbySimpleEvent
+from gui.shared.events import LoadViewEvent, ViewEventType
 from helpers import dependency, i18n, uniprof
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
-from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IWaitingWidget
 from skeletons.gui.game_control import IIGRController, IMapsTrainingController, IArmoryYardController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -39,6 +37,7 @@ class _LobbySubViewsLifecycleHandler(IViewLifecycleHandler):
     __SUB_VIEWS = (VIEW_ALIAS.LOBBY_HANGAR,
      VIEW_ALIAS.LOBBY_STORE,
      VIEW_ALIAS.LOBBY_STORAGE,
+     VIEW_ALIAS.STORAGE_RESTORE_DEVICES_VIEW,
      VIEW_ALIAS.LOBBY_PROFILE,
      VIEW_ALIAS.LOBBY_BARRACKS,
      PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY,
@@ -104,14 +103,13 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
     mapsTrainingController = dependency.descriptor(IMapsTrainingController)
     armoryYardController = dependency.descriptor(IArmoryYardController)
     gui = dependency.descriptor(IGuiLoader)
-    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, ctx=None):
         super(LobbyView, self).__init__(ctx)
         self.__currIgrType = constants.IGR_TYPE.NONE
         self.__viewLifecycleWatcher = ViewLifecycleWatcher()
         self._entityEnqueueCancelCallback = None
-        self.__hangarIsVisible = False
+        self._UiEffectsManager = UiEffectsManager()
         return
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
@@ -155,6 +153,8 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         self.addListener(events.GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade, EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.HIDE_LOBBY_SUB_CONTAINER_ITEMS, self.__hideSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.REVEAL_LOBBY_SUB_CONTAINER_ITEMS, self.__revealSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
+        self.addListener(events.LobbyHeaderEvent.TOGGLE_VISIBILITY, self.__onToggleVisibilityHeader, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.LobbyInterfaceEvent.TOGGLE_VISIBILITY, self.__onToggleVisibility, scope=EVENT_BUS_SCOPE.LOBBY)
         g_playerEvents.onEntityCheckOutEnqueued += self._onEntityCheckoutEnqueued
         g_playerEvents.onAccountBecomeNonPlayer += self._onAccountBecomeNonPlayer
         viewLifecycleHandler = _LobbySubViewsLifecycleHandler()
@@ -165,8 +165,7 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         self.lobbyContext.updateBattlesCount(battlesCount, epicBattlesCount)
         self.fireEvent(events.GUICommonEvent(events.GUICommonEvent.LOBBY_VIEW_LOADED))
         self.bwProto.voipController.invalidateMicrophoneMute()
-        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
-        self.__updateUIEffectSettingsChanged()
+        self._UiEffectsManager.populate(app=self.app)
 
     def _invalidate(self, *args, **kwargs):
         g_prbLoader.setEnabled(True)
@@ -186,9 +185,9 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         self.removeListener(events.GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade, EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.HIDE_LOBBY_SUB_CONTAINER_ITEMS, self.__hideSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.REVEAL_LOBBY_SUB_CONTAINER_ITEMS, self.__revealSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
-        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
-        self.gui.windowsManager.onViewStatusChanged -= self.__onViewStatusChanged
-        self.gui.windowsManager.onWindowStatusChanged -= self.__onViewStatusChanged
+        self._UiEffectsManager.dispose()
+        self.removeListener(events.LobbyHeaderEvent.TOGGLE_VISIBILITY, self.__onToggleVisibility, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.LobbyInterfaceEvent.TOGGLE_VISIBILITY, self.__onToggleVisibility, scope=EVENT_BUS_SCOPE.LOBBY)
         View._dispose(self)
         return
 
@@ -235,33 +234,10 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
             SystemMessages.pushMessage(i18n.makeString(SYSTEM_MESSAGES.IGR_CUSTOMIZATION_END, igrIcon=icon), type=SystemMessages.SM_TYPE.Information)
         self.__currIgrType = roomType
 
-    def __onViewStatusChanged(self, _, newStatus):
-        hasUIEffects = self.settingsCore.getSetting(GRAPHICS.UI_EFFECTS)
-        if not hasUIEffects or newStatus not in (WindowStatus.LOADED, WindowStatus.DESTROYED):
-            return
-        self.__updateUIEffectOptimization()
+    def __onToggleVisibilityHeader(self, event):
+        self.as_setHeaderVisibleS(event.ctx.get('visible', False), event.ctx.get('ignoreTopOffset', False))
 
-    def __updateUIEffectOptimization(self):
-        hasHangar = self.app.containerManager.getView(WindowLayer.SUB_VIEW, {POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY_HANGAR}) is not None
-        hasTopSubView = self.app.containerManager.getView(WindowLayer.TOP_SUB_VIEW, {VIEW_SEARCH_CRITERIA.VIEW_IN_LAYER: WindowLayer.TOP_SUB_VIEW}) is not None
-        hangarIsVisible = hasHangar and not hasTopSubView
-        if self.__hangarIsVisible != hangarIsVisible:
-            self.__hangarIsVisible = hangarIsVisible
-            g_eventBus.handleEvent(LobbySimpleEvent(LobbySimpleEvent.HANGAR_STATUS_CHANGED, ctx={'isVisible': hangarIsVisible}), scope=EVENT_BUS_SCOPE.LOBBY)
-        self.app.graphicsOptimizationManager.switchOptimizationEnabled(not self.__hangarIsVisible)
-        return
-
-    def __updateUIEffectSettingsChanged(self):
-        hasUIEffects = self.settingsCore.getSetting(GRAPHICS.UI_EFFECTS)
-        if hasUIEffects:
-            self.gui.windowsManager.onViewStatusChanged += self.__onViewStatusChanged
-            self.gui.windowsManager.onWindowStatusChanged += self.__onViewStatusChanged
-            self.__updateUIEffectOptimization()
-        else:
-            self.gui.windowsManager.onViewStatusChanged -= self.__onViewStatusChanged
-            self.gui.windowsManager.onWindowStatusChanged -= self.__onViewStatusChanged
-            self.app.graphicsOptimizationManager.switchOptimizationEnabled(True)
-
-    def __onSettingsChanged(self, diff):
-        if GRAPHICS.UI_EFFECTS in diff:
-            self.__updateUIEffectSettingsChanged()
+    def __onToggleVisibility(self, event):
+        visible = event.ctx.get('visible', True)
+        messengerBarVisible = event.ctx.get('messengerBarVisible', True)
+        self.as_setInterfaceVisibleS(visible, messengerBarVisible)

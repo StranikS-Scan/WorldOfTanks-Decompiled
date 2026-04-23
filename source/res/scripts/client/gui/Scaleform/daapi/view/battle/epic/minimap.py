@@ -7,9 +7,11 @@ import BigWorld
 import GUI
 import Math
 from account_helpers.settings_core.settings_constants import CONTROLS
+from gui.Scaleform.genConsts.EPIC_CONSTS import EPIC_CONSTS
+from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.shared.utils.key_mapping import getReadableKey
 from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES, MarkerType, ReplyState
-from constants import IS_DEVELOPMENT, SECTOR_STATE
+from constants import IS_DEVELOPMENT, SECTOR_STATE, QUEST_PROGRESS_STATE
 from coordinate_system import AXIS_ALIGNED_DIRECTION as AAD
 from epic_constants import EPIC_BATTLE_TEAM_ID, Direction
 from gui.sounds.epic_sound_constants import EPIC_SOUND
@@ -920,9 +922,36 @@ class OwnDirectionPlugin(SimplePlugin):
                 self._playSound2D(EPIC_SOUND.EB_CHANGE_RESPAWN_DIRECTION)
             self.__lastSelectedDirection = self.__selectedDirection
             if self.__isInPostmortem and not self.__isInRespawnMode:
-                self.parentObj.as_setDirectionS('', '')
+                self.parentObj.as_setDirectionS('', '', '')
             else:
-                self.parentObj.as_setDirectionS(self.__currentDirection, self.__selectedDirection or self.__currentDirection)
+                selectedDirection = self.__selectedDirection or self.__currentDirection
+                warning = self.__getWarningMessage(selectedDirection)
+                self.parentObj.as_setDirectionS(self.__currentDirection, selectedDirection, warning)
+
+    @staticmethod
+    def __isAttacker():
+        return avatar_getter.getPlayerTeam() == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER
+
+    def __getWarningMessage(self, selectedDirection):
+        if self.__currentDirection == Direction.TOP and selectedDirection != EPIC_CONSTS.LANE_TOP:
+            if self.__isCapturedDirection(selectedDirection):
+                return ''
+            return EPIC_BATTLE.DEPLOYMENTMAP_WARNING_3
+        else:
+            if self.__currentDirection in Direction.VERTICAL_DIRECTIONS and selectedDirection == EPIC_CONSTS.LANE_TOP:
+                questProgress = self.epicBattleController.getQuestProgress()
+                questState = questProgress[-1] if questProgress else None
+                if questState == QUEST_PROGRESS_STATE.IN_PROGRESS:
+                    return EPIC_BATTLE.DEPLOYMENTMAP_WARNING_2
+            elif self.__currentDirection in Direction.VERTICAL_DIRECTIONS and selectedDirection in Direction.VERTICAL_DIRECTIONS and selectedDirection != self.__currentDirection:
+                return EPIC_BATTLE.DEPLOYMENTMAP_WARNING_1
+            return ''
+
+    def __isCapturedDirection(self, direction):
+        sectorComponent = self.sessionProvider.arenaVisitor.getComponent('sectorComponent')
+        directions = sectorComponent.getDirections()
+        capturedSectors = [ sectorID for sectorID in directions[direction] if sectorComponent.getSectorById(sectorID).state == SECTOR_STATE.CAPTURED ]
+        return len(capturedSectors) >= 2
 
     def __onRequestPointForRespawn(self, position):
         sectorComponent = self.sessionProvider.arenaVisitor.getComponent('sectorComponent')

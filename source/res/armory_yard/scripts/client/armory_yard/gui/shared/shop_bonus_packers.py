@@ -209,9 +209,10 @@ class CustomizationPacker(ShopBaseUIPacker):
     __customizationImgPath = R.images.armory_yard.gui.maps.icons.shop.customizations.styles
 
     def __init__(self, params):
-        super(CustomizationPacker, self).__init__(1)
         styleParams = params[1][0]
+        styleCount = styleParams['value']
         styleType = styleParams['custType']
+        super(CustomizationPacker, self).__init__(styleCount)
         self.__itemTypeID = GUI_ITEM_TYPE_INDICES.get(styleType) if styleType != 'projection_decal' else GUI_ITEM_TYPE.PROJECTION_DECAL
         self.__item = self.__service.getItemByID(self.__itemTypeID, styleParams['id'])
         if not self.__item:

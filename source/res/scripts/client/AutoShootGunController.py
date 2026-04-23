@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AutoShootGunController.py
+import functools
 import logging
 import typing
 import weakref
@@ -14,6 +15,7 @@ from gui.battle_control.controllers.sound_ctrls.common import getGunSoundObject
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from PlayerEvents import g_playerEvents
+from helpers.EffectsList import EffectsListPlayer
 from helpers.events_handler import EventsHandler
 from skeletons.gui.battle_session import IBattleSessionProvider
 from vehicle_systems.model_assembler import loadAppearancePrefab
@@ -38,7 +40,7 @@ class AutoShootGunShootingAnimator(CallbackDelayer, EventsHandler):
         super(AutoShootGunShootingAnimator, self).__init__()
         self.__vehicle = weakref.proxy(vehicle)
         self.__controller = weakref.proxy(controller)
-        self.__activationSound = self.__deactivationSound = ''
+        self.__activationSound = self.__deactivationSound = self.__switchShellEjection = ''
         self.__burstParticles = dict()
         self.__recoilAnimators = set()
         self.__shotObjects = list()
@@ -49,10 +51,11 @@ class AutoShootGunShootingAnimator(CallbackDelayer, EventsHandler):
         ammo = self.__sessionProvider.shared.ammo
         return ((ammo.onShellsUpdated, self.__onShellsUpdated), (ammo.onShellsAdded, self.__onShellsAdded)) if ammo is not None else super(AutoShootGunShootingAnimator, self)._getEvents()
 
-    def initSoundParams(self, isPlayerVehicle, activationSounds, deactivationSounds):
+    def initSoundParams(self, isPlayerVehicle, activationSounds, deactivationSounds, switchShellEjection):
         soundIndex = 0 if isPlayerVehicle else 1
         self.__activationSound = activationSounds.getEvents()[soundIndex]
         self.__deactivationSound = deactivationSounds.getEvents()[soundIndex]
+        self.__switchShellEjection = switchShellEjection
 
     def destroy(self):
         self.__vehicle = None
@@ -120,7 +123,9 @@ class AutoShootGunShootingAnimator(CallbackDelayer, EventsHandler):
     def __activateBurst(self, gunIndex):
         self.__showBurstStart(gunIndex)
         self.__updateBurst()
-        getGunSoundObject(self.__vehicle).play(self.__activationSound)
+        gunSoundObject = getGunSoundObject(self.__vehicle)
+        gunSoundObject.play(self.__activationSound)
+        gunSoundObject.setSwitch('SWITCH_ext_shell_ejection_autoshoot', self.__switchShellEjection)
 
     def __deactivateBurst(self, burstInProgress):
         getGunSoundObject(self.__vehicle).play(self.__deactivationSound if burstInProgress else '')
@@ -191,9 +196,14 @@ class AutoShootGunController(BigWorld.DynamicScriptComponent):
     def isShooting(self):
         return self.stateStatus is not None and self.stateStatus.state == AutoShootGunState.SHOOT
 
-    @checkStateStatus(states=(AutoShootGunState.SHOOT,), defReturn=0.0)
+    @checkStateStatus(states=(AutoShootGunState.SHOOT, AutoShootGunState.NOT_SHOOT), defReturn=0.0)
     def getShootDispersionFactor(self, stateStatus=None):
-        dt = max(BigWorld.serverTime() - stateStatus.updateTime, 0.0)
+        serverTime = BigWorld.serverTime()
+        if stateStatus.state == AutoShootGunState.NOT_SHOOT:
+            if serverTime > self.__rebuildShotDispersionTime:
+                return 0.0
+            return stateStatus.dispersionFactor
+        dt = max(serverTime - stateStatus.updateTime, 0.0)
         currDispersionFactor = stateStatus.dispersionFactor + dt * stateStatus.shotDispersionPerSec
         return min(currDispersionFactor, stateStatus.maxShotDispersion)
 
@@ -230,6 +240,21 @@ class AutoShootGunController(BigWorld.DynamicScriptComponent):
     def onLeaveWorld(self):
         self.onDestroy()
 
+    def showShooting(self):
+        vehicle = self.entity
+        stages, effects, _ = vehicle.typeDescriptor.gun.effects
+        if not stages:
+            return
+        data = {'entity': vehicle}
+        effListPlayer = EffectsListPlayer(effects, stages, **data)
+        data['effPlayer'] = effListPlayer
+        effListPlayer.play(vehicle.appearance.compoundModel, callbackFunc=functools.partial(self.__stopSound, data))
+
+    def __stopSound(self, data):
+        if data.get('effPlayer') is not None:
+            data['effPlayer'].stop()
+        return
+
     def __isAvatarReady(self):
         player = BigWorld.player()
         return player is not None and player.userSeesWorld()
@@ -252,8 +277,7 @@ class AutoShootGunController(BigWorld.DynamicScriptComponent):
         self.__updateAutoShootingAvatar()
 
     def __onAppearanceReady(self):
-        forceReload = self.entity.respawnCompactDescr is not None
-        if forceReload or self.__appearanceInited:
+        if self.__appearanceInited:
             return
         else:
             params = self.entity.typeDescriptor.gun
@@ -264,7 +288,7 @@ class AutoShootGunController(BigWorld.DynamicScriptComponent):
             if autoShootEffect is not None:
                 autoShootEffectDescr = autoShootEffect.effectsList.descriptors()[0]
                 self.__shootingPrefab = autoShootEffectDescr.effectsPrefab
-                self.__shootingAnimator.initSoundParams(self.entity.isPlayerVehicle, autoShootEffectDescr.activationSound, autoShootEffectDescr.deactivationSound)
+                self.__shootingAnimator.initSoundParams(self.entity.isPlayerVehicle, autoShootEffectDescr.activationSound, autoShootEffectDescr.deactivationSound, autoShootEffectDescr.shellEjectionSwitch)
                 appearance = self.entity.appearance
                 loadAppearancePrefab(self.__shootingPrefab, appearance, self.__onShootingPrefabLoaded)
                 _logger.debug('QFG: loadAppearancePrefab for %s', self.entity.id)
@@ -292,7 +316,7 @@ class AutoShootGunController(BigWorld.DynamicScriptComponent):
             self.__onAvatarReady()
         else:
             g_playerEvents.onAvatarReady += self.__onAvatarReady
-            g_playerEvents.onShowShooterTracer += self.__onShowShooterTracer
+        g_playerEvents.onShowShooterTracer += self.__onShowShooterTracer
 
     def __initAutoShootingAppearance(self):
         forceReloading = self.entity.publicInfo.compDescr != self.entity.typeDescriptor.makeCompactDescr()
@@ -302,9 +326,12 @@ class AutoShootGunController(BigWorld.DynamicScriptComponent):
 
     def __updateAutoShootingAvatar(self):
         player = BigWorld.player()
+        delay = self.entity.typeDescriptor.gun.autoShoot.rebuildShotDispersionDelay
         if not self.__isPlayerVehicle(player):
             return
         else:
+            if self.stateStatus is not None and self.stateStatus.state not in AutoShootGunState.SHOOTING_STATES:
+                self.__rebuildShotDispersionTime = BigWorld.serverTime() + delay
             player.getOwnVehicleShotDispersionAngle(player.gunRotator.turretRotationSpeed)
             autoShootGunCtrl = self.__sessionProvider.shared.autoShootGunCtrl
             if autoShootGunCtrl is not None and self.stateStatus is not None:

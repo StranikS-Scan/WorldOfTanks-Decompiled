@@ -15,7 +15,7 @@ from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.impl.wrappers.user_compound_price_model import PriceModelBuilder
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopRootUrl
-from gui.shared.money import Money, Currency
+from gui.shared.money import Money
 from gui.shop import showIngameShop, Origin
 from helpers import dependency
 from skeletons.gui.game_control import IArmoryYardShopController, IArmoryYardController
@@ -51,19 +51,14 @@ class ArmoryYardShopView(ArmoryYardShopBaseView):
             self.destroyWindow()
             return
         else:
-            goldCost = self.__ayShopCtrl.conversionPrices.get(Currency.GOLD, None)
             self.__onCurrencyUpdate()
-            if goldCost is None:
-                _logger.error('ArmoryYardShop gold coins cost not valid')
-                self.destroyWindow()
-                return
             isIntroViewed = not AccountSettings.getArmoryYard(ArmoryYard.ARMORY_SHOP_INTRO_VIEWED)
             if isIntroViewed:
                 AccountSettings.setArmoryYard(ArmoryYard.ARMORY_SHOP_INTRO_VIEWED, True)
             with self.viewModel.transaction() as vm:
                 vm.setIsIntroVisible(isIntroViewed)
                 vm.setBackButtonState(BackButtonState.ARMORY if self.__ayCtrl.isArmoryVisiting else BackButtonState.INGAMESHOP)
-                PriceModelBuilder.fillPriceModel(vm.tokenPrice, Money.makeFrom(Currency.GOLD, goldCost))
+                PriceModelBuilder.fillPriceModel(vm.tokenPrice, Money.makeMoney(self.__ayShopCtrl.conversionPrices))
                 items = vm.getItems()
                 items.clear()
                 for productId, product in self.__ayShopCtrl.products.iteritems():

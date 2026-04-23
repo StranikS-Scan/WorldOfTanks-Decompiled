@@ -212,7 +212,7 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
                 self._ArcadeCamera__aimingSystem.addVolumeGroup(self._ArcadeCamera__adCfg['volumeGroups'][group_name])
             else:
                 pass
-        self.setCameraDistance(self._cfg['startDist'])
+        self.setCameraDistance(self._baseCfg['optimalStartDist'])
         self._ArcadeCamera__aimingSystem.pitch = self._cfg['startAngle']
         self._ArcadeCamera__aimingSystem.yaw = Math.Matrix(targetMat).yaw
         self._ArcadeCamera__aimingSystem.cursorShouldCheckCollisions(shouldCheckCollisions = False)
@@ -673,8 +673,6 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
             interval = self._ArcadeCamera__overScrollProtectOnMax
             self._ArcadeCamera__overScrollProtector.start(eScrollDirection = EScrollDir.OUT, interval = interval)
         self._ArcadeCamera__aimingSystem.distanceFromFocus = newDist
-        if self._ArcadeCamera__isInArcadeZoomState():
-            self._userCfg['startDist'] = newDist
         heightAboveBase, _ = self.getPivotSettings()
         diff = heightAboveBase - self._cfg['heightAboveBase']
         self._ArcadeCamera__cam.shiftPivotPos(Vector3(0, -diff, 0))
@@ -989,7 +987,6 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
         bcfg['angleRange'] = readVec2(dataSec, 'angleRange', (0, 0), (180, 180), (10, 110))
         distRangeVec = readVec2(dataSec, 'distRange', (1, 1), (100, 100), (2, 20))
         bcfg['distRange'] = MinMax(distRangeVec.x, distRangeVec.y)
-        bcfg['minStartDist'] = readFloat(dataSec, 'minStartDist', bcfg['distRange'][0], bcfg['distRange'][1], bcfg['distRange'][0])
         bcfg['optimalStartDist'] = readFloat(dataSec, 'optimalStartDist', bcfg['distRange'][0], bcfg['distRange'][1], bcfg['distRange'][0])
         bcfg['angleRange'][0] = math.radians(bcfg['angleRange'][0]) - math.pi * 0.5
         bcfg['angleRange'][1] = math.radians(bcfg['angleRange'][1]) - math.pi * 0.5
@@ -1011,9 +1008,6 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
         ucfg['keySensitivity'] = readFloat(dataSec, 'keySensitivity', 0.0, 10.0, 1.0)
         ucfg['sensitivity'] = readFloat(dataSec, 'sensitivity', 0.0, 10.0, 1.0)
         ucfg['scrollSensitivity'] = readFloat(dataSec, 'scrollSensitivity', 0.0, 10.0, 1.0)
-        ucfg['startDist'] = readFloat(dataSec, 'startDist', bcfg['distRange'][0], 500, bcfg['optimalStartDist'])
-        if ucfg['startDist'] < bcfg['minStartDist']:
-            ucfg['startDist'] = bcfg['optimalStartDist']
         ucfg['startAngle'] = readFloat(dataSec, 'startAngle', 5, 180, 60)
         ucfg['startAngle'] = math.radians(ucfg['startAngle']) - math.pi * 0.5
         ucfg['fovMultMinMaxDist'] = MinMax(readFloat(dataSec, 'fovMultMinDist', 0.1, 100, bcfg['fovMultMinMaxDist'].min), readFloat(dataSec, 'fovMultMaxDist', 0.1, 100, bcfg['fovMultMinMaxDist'].max))
@@ -1027,7 +1021,6 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
         cfg['scrollSensitivity'] = bcfg['scrollSensitivity']
         cfg['angleRange'] = bcfg['angleRange']
         cfg['distRange'] = bcfg['distRange']
-        cfg['minStartDist'] = bcfg['minStartDist']
         cfg['focusRadius'] = bcfg['focusRadius']
         cfg['heightAboveBase'] = bcfg['heightAboveBase']
         cfg['overScrollProtectOnMax'] = bcfg['overScrollProtectOnMax']
@@ -1037,7 +1030,6 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
         cfg['keySensitivity'] = cfg['keySensitivity'] * ucfg['keySensitivity']
         cfg['sensitivity'] = cfg['sensitivity'] * ucfg['sensitivity']
         cfg['scrollSensitivity'] = cfg['scrollSensitivity'] * ucfg['scrollSensitivity']
-        cfg['startDist'] = ucfg['startDist']
         cfg['startAngle'] = ucfg['startAngle']
         cfg['fovMultMinMaxDist'] = ucfg['fovMultMinMaxDist']
         cfg['sniperModeByShift'] = ucfg['sniperModeByShift']
@@ -1053,7 +1045,6 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
         ds.writeFloat('arcadeMode/camera/keySensitivity', ucfg['keySensitivity'])
         ds.writeFloat('arcadeMode/camera/sensitivity', ucfg['sensitivity'])
         ds.writeFloat('arcadeMode/camera/scrollSensitivity', ucfg['scrollSensitivity'])
-        ds.writeFloat('arcadeMode/camera/startDist', ucfg['startDist'])
         ds.writeFloat('arcadeMode/camera/fovMultMinDist', ucfg['fovMultMinMaxDist'].min)
         ds.writeFloat('arcadeMode/camera/fovMultMaxDist', ucfg['fovMultMinMaxDist'].max)
         startAngle = math.degrees(ucfg['startAngle'] + math.pi * 0.5)

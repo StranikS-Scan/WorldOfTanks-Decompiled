@@ -60,6 +60,7 @@ class LuiRules(enum.Enum):
     PARAGONS_NOTIFICATION = 'ParagonsNotification'
     PARAGONS_BUTTONS = 'ParagonsButtons'
     NEW_CAMPAIGN_HINT = 'NewCampaignHint'
+    HB_ENTRY_POINT = 'HBEntryPoint'
     TEASER = 'Teaser'
     C7N_BUBBLE = 'CustomizationBubble'
     COMMON_CHAT = 'CommonChat'

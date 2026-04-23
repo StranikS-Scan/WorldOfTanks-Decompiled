@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/component_constants.py
 import collections
+import enum
 from soft_exception import SoftException
 from wrapped_reflection_framework import reflectedNamedTuple
 from Math import Vector3
@@ -8,7 +9,10 @@ Autoreload = collections.namedtuple('Autoreload', ['reloadTime',
  'boostStartTime',
  'boostResidueTime',
  'boostFraction'])
-AutoShoot = collections.namedtuple('AutoShoot', ['shotDispersionPerSec', 'maxShotDispersion', 'shotInterval'])
+AutoShoot = collections.namedtuple('AutoShoot', ['shotDispersionPerSec',
+ 'maxShotDispersion',
+ 'shotInterval',
+ 'rebuildShotDispersionDelay'])
 SpinGun = collections.namedtuple('SpinGun', ['spinUpTimeout',
  'spinDownTimeout',
  'isSpinUpShootingEnable',
@@ -53,7 +57,7 @@ DEFAULT_GUN_BURST = (1, 0.0)
 DEFAULT_GUN_CLIP = (1, 0.0)
 DEFAULT_GUN_DUALGUN = DualGun(chargeTime=4.0, shootImpulse=100.0, reloadLockTime=10.0, reloadTimes=(10, 8), rateTime=5, chargeThreshold=0.5, afterShotDelay=0.5, preChargeIndication=0.25, chargeCancelTime=0.18, resetReloadAfterShot=True, autoloadWithClip=False)
 DEFAULT_GUN_DUAL_ACCURACY = DualAccuracy(afterShotDispersionAngle=1.0, coolingDelay=5.0)
-DEFAULT_GUN_AUTOSHOOT = AutoShoot(shotDispersionPerSec=0.0, maxShotDispersion=0.0, shotInterval=0.0)
+DEFAULT_GUN_AUTOSHOOT = AutoShoot(shotDispersionPerSec=0.0, maxShotDispersion=0.0, shotInterval=0.0, rebuildShotDispersionDelay=0.0)
 DEFAULT_SPIN_GUN = SpinGun(startFactor=0.0, spinUpTimeout=0.0, spinDownTimeout=0.0, isSpinUpShootingEnable=True)
 DEFAULT_FAKE_TURRETS = {'lobby': (),
  'battle': ()}
@@ -84,3 +88,7 @@ DYNAMIC_SHOT_MAX_COUNT = 10000
 ShootImpulse = collections.namedtuple('ShootImpulse', ['magnitude', 'applicationPoint', 'isStillSafe'])
 DEFAULT_STUN_TYPE = 'DEFAULT'
 DEFAULT_SHELL_HIT_EXTRAS_CHANCE_MULTIPLIER = 1.0
+
+class EquipmentCtrlItemKeys(enum.Enum):
+    default = 'gui.battle_control.controllers.consumables.equipment_ctrl._AutoItem'
+    replay = 'gui.battle_control.controllers.consumables.equipment_ctrl._ReplayItem'

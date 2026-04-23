@@ -14,7 +14,6 @@ from predefined_hosts import g_preDefinedHosts, AUTO_LOGIN_QUERY_URL
 from helpers import getClientLanguage, uniprof
 from version_utils import isValidClientVersion
 from skeletons.connection_mgr import IConnectionManager
-from account_helpers.settings_core.settings_logging import logPlayerSettingsOnDisconnect
 _MIN_RECONNECTION_TIMEOUT = 5
 _RECONNECTION_TIMEOUT_INCREMENT = 5
 _MAX_RECONNECTION_TIMEOUT = 20
@@ -305,7 +304,6 @@ class ConnectionManager(IConnectionManager):
             return peripheryID in self.__availableHosts
 
     def disconnect(self):
-        logPlayerSettingsOnDisconnect()
         BigWorld.disconnect()
 
     def setKickedFromServer(self, reason, kickReasonType, expiryTime):

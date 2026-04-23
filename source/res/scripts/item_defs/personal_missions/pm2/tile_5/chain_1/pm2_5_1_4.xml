@@ -84,7 +84,7 @@ def onFinishBattle(eventType, eventData, quest, processor):
     questProgress = quest_progress.BaseQuestProgress(quest.config, processor.getQuestProgress(quest.progressID))
 
     brfilter = filter.BattleResultsFilter(eventData)
-    mainCondition = sum(len(shots) for shots in brfilter.filterDamageFrom(hitBlocked=True).itervalues())
+    mainCondition = brfilter.sumReceivedShots(brfilter.filterDamageFrom(hitBlocked=True))
     addCondition = brfilter.alive()
     if addCondition:
         questProgress.setCompleted(ADD_PROGRESS_ID)

@@ -25,6 +25,7 @@ from items.vehicles import MAX_OPTIONAL_DEVICES_SLOTS, NUM_SHELLS_SLOTS
 from shared_utils import findFirst, first, CONST_CONTAINER
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.lobby_context import ILobbyContext
 from web.web_client_api.common import ItemPackType, ItemPackTypeGroup, ItemPackEntry
 from gui.shared.gui_items import vehicle_adjusters
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -341,7 +342,9 @@ def getItemDescription(rawItem, item):
     elif rawItem.type == ItemPackType.CUSTOM_BPCOIN:
         description = backport.text(R.strings.tooltips.awardItem.bp())
     elif rawItem.type in (ItemPackType.CUSTOM_EQUIP_COIN, ItemPackType.EQUIP_COIN):
-        description = backport.text(R.strings.tooltips.awardItem.equipCoin.body())
+        isRestorable = dependency.instance(ILobbyContext).getServerSettings().isOptionalDeviceRestoreEnabled()
+        baseDesc = R.strings.tooltips
+        description = backport.text(baseDesc.awardItem.equipCoin.body() if isRestorable else baseDesc.header.buttons.equipCoin.description2())
     elif rawItem.type == ItemPackType.CUSTOM_PREMIUM:
         description = backport.text(R.strings.tooltips.awardItem.premium.body())
     elif rawItem.type == ItemPackType.CUSTOM_PREMIUM_PLUS:

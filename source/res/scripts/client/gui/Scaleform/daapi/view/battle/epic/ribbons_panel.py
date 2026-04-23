@@ -6,16 +6,16 @@ from gui.impl import backport
 from gui.impl.gen import R
 from supply_shared import Supply
 
-def _epicEventRibbonFormatter(ribbon, arenaDP, updater):
+def _epicEventRibbonFormatter(ribbon, arenaDP, updater, vehicleDataGetter):
     value = ribbon.getExtraValue()
     leftFieldStr = backport.getIntegralFormat(value) if value else ''
     updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), leftFieldStr=leftFieldStr)
 
 
-def _epicKillRibbonFormatter(ribbon, arenaDP, updater):
+def _epicKillRibbonFormatter(ribbon, arenaDP, updater, vehicleDataGetter):
     vehicleType = arenaDP.getVehicleInfo(ribbon.getVehicleID()).vehicleType
     ribbonType = _BET.SUPPLY_DESTRUCTION if Supply.isSupply(vehicleType.tags) else None
-    killRibbonFormatter(ribbon, arenaDP, updater, ribbonType)
+    killRibbonFormatter(ribbon, arenaDP, updater, vehicleDataGetter, ribbonType)
     return
 
 

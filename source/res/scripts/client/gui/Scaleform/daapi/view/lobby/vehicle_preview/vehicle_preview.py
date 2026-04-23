@@ -13,6 +13,7 @@ from constants import QUEUE_TYPE
 from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.clans.clan_helpers import getStrongholdEventProgressionUrl
 from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
 from gui.Scaleform.daapi.view.lobby.store.browser.sound_constants import SHOP_PREVIEW_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip
@@ -72,7 +73,8 @@ _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW: None,
  VIEW_ALIAS.RESOURCE_WELL_VEHICLE_PREVIEW: 'resourceWell',
  VIEW_ALIAS.SHOP_SALES_VEHICLE_PREVIEW: 'eventProgression',
- VIEW_ALIAS.STAT_TRACK_VEHICLE_PREVIEW: None}
+ VIEW_ALIAS.STAT_TRACK_VEHICLE_PREVIEW: None,
+ VIEW_ALIAS.STRONGHOLD_PROGRESSION: None}
 _TABS_DATA = ({'id': VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE,
   'label': VEHICLE_PREVIEW.INFOPANEL_TAB_BROWSE_NAME,
   'linkage': VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE}, {'id': VEHPREVIEW_CONSTANTS.MODULES_LINKAGE,
@@ -546,6 +548,8 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             showShop()
         elif self._backAlias == WulfPreviewAlias.WULF_TECHTREE:
             event_dispatcher.showVehicleTechTreeView()
+        elif self._backAlias == VIEW_ALIAS.STRONGHOLD_PROGRESSION:
+            event_dispatcher.showStrongholds(getStrongholdEventProgressionUrl())
         else:
             event = g_entitiesFactories.makeLoadEvent(SFViewLoadParams(self._backAlias), {'isBackEvent': True})
             self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)

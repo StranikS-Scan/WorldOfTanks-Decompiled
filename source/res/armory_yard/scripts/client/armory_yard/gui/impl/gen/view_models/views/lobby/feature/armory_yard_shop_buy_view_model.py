@@ -9,7 +9,7 @@ class ArmoryYardShopBuyViewModel(ViewModel):
     __slots__ = ('onBuyProduct', 'onBack', 'onClose', 'onShowVehiclePreview', 'onShowStylePreview')
     MAX_VISIBLE_REWARDS = 4
 
-    def __init__(self, properties=6, commands=5):
+    def __init__(self, properties=8, commands=5):
         super(ArmoryYardShopBuyViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -32,23 +32,35 @@ class ArmoryYardShopBuyViewModel(ViewModel):
     def setGoldConversion(self, value):
         self._setNumber(2, value)
 
-    def getCurrencyAmount(self):
+    def getCrystalConversion(self):
         return self._getNumber(3)
 
-    def setCurrencyAmount(self, value):
+    def setCrystalConversion(self, value):
         self._setNumber(3, value)
 
-    def getGoldAmount(self):
+    def getCurrencyAmount(self):
         return self._getNumber(4)
 
-    def setGoldAmount(self, value):
+    def setCurrencyAmount(self, value):
         self._setNumber(4, value)
 
+    def getGoldAmount(self):
+        return self._getNumber(5)
+
+    def setGoldAmount(self, value):
+        self._setNumber(5, value)
+
+    def getCrystalAmount(self):
+        return self._getNumber(6)
+
+    def setCrystalAmount(self, value):
+        self._setNumber(6, value)
+
     def getRewards(self):
-        return self._getArray(5)
+        return self._getArray(7)
 
     def setRewards(self, value):
-        self._setArray(5, value)
+        self._setArray(7, value)
 
     @staticmethod
     def getRewardsType():
@@ -59,8 +71,10 @@ class ArmoryYardShopBuyViewModel(ViewModel):
         self._addViewModelProperty('item', ArmoryYardShopItem())
         self._addBoolProperty('isWalletAvailable', False)
         self._addNumberProperty('goldConversion', 0)
+        self._addNumberProperty('crystalConversion', 0)
         self._addNumberProperty('currencyAmount', 0)
         self._addNumberProperty('goldAmount', 0)
+        self._addNumberProperty('crystalAmount', 0)
         self._addArrayProperty('rewards', Array())
         self.onBuyProduct = self._addCommand('onBuyProduct')
         self.onBack = self._addCommand('onBack')

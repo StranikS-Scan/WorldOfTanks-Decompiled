@@ -7,7 +7,7 @@ import Event
 from PlayerEvents import g_playerEvents
 from bootcamp.BootCampEvents import g_bootcampEvents
 from frameworks.wulf import WindowStatus, WindowLayer
-from gui.impl.pub.notification_commands import WindowNotificationCommand
+from gui.impl.pub.notification_commands import WindowNotificationCommand, Priority
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import LobbySimpleEvent
@@ -143,8 +143,8 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         self.__clearCallback()
         if not self.__activeQueue:
             return
-        self.__postponedQueue.extend(self.__activeQueue)
-        del self.__activeQueue[:]
+        self.__postponedQueue.extend([ item for item in self.__activeQueue if not self.__highPriorityCommandPredicate(item) ])
+        self.__activeQueue = [ item for item in self.__activeQueue if self.__highPriorityCommandPredicate(item) ]
         self.__notifyWithPostponedQueueCount()
 
     def isEnabled(self):
@@ -256,3 +256,7 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
     @staticmethod
     def __overlappingWindowsPredicate(window):
         return window.windowStatus in (WindowStatus.LOADING, WindowStatus.LOADED) and window.layer in (WindowLayer.OVERLAY, WindowLayer.TOP_WINDOW, WindowLayer.FULLSCREEN_WINDOW)
+
+    @staticmethod
+    def __highPriorityCommandPredicate(command):
+        return command.getPriority() == Priority.HIGH

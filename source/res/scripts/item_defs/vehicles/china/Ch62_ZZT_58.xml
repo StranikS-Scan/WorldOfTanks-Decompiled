@@ -10,7 +10,7 @@
   <postProgressionTree>	role_MT_assault	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	40	</forward>
+    <forward>	50	</forward>
     <backward>	15	</backward>
   </speedLimits>
   <invisibility>
@@ -42,18 +42,18 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	140	</armor_1>
+      <armor_1>	120	</armor_1>
       <armor_2>	100	</armor_2>
       <armor_3>	80	</armor_3>
       <armor_4>	60	</armor_4>
       <armor_5>	35	</armor_5>
-      <armor_6>	140	</armor_6>
+      <armor_6>	120	</armor_6>
       <armor_7>	100	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	20	</armor_9>
+      <armor_9>	35	</armor_9>
       <armor_10>	20	</armor_10>
-      <armor_11>	100	</armor_11>
-      <armor_12>	20	</armor_12>
+      <armor_11>	120	</armor_11>
+      <armor_12>	80	</armor_12>
       <armor_13>	110	</armor_13>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
@@ -738,8 +738,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.14	</vehicleMovement>
-        <vehicleRotation>	0.14	</vehicleRotation>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	210	</maxHealth>
@@ -1757,9 +1757,9 @@
           </armor>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <aimingTime>	2	</aimingTime>
-          <reloadTime>	11.5	</reloadTime>
+          <reloadTime>	11.8	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2371,8 +2371,8 @@
     <detailed>
       <engines>
         <_12150L_7BW_58>
-          <smplEnginePower>	720	</smplEnginePower>
-          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
+          <smplEnginePower>	580	</smplEnginePower>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </_12150L_7BW_58>
       </engines>
       <chassis>

@@ -1487,60 +1487,6 @@
       </damage>
     </armorSpalls>
   </_130mm_HE_Mark_80>
-  <_130mm_AP_Mark_46_ISP>
-    <id>	37000	</id>
-    <userString>	#italy_vehicles:_130mm_AP_Mark_46_ISP	</userString>
-    <icon>	ap	</icon>
-    <price>	1670	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	130	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	largeArmorPiercing	</effects>
-    <damage>
-      <armor>	530	</armor>
-      <devices>	180	</devices>
-    </damage>
-  </_130mm_AP_Mark_46_ISP>
-  <_130mm_HEAT_Mark_71_ISP>
-    <id>	37001	</id>
-    <userString>	#italy_vehicles:_130mm_HEAT_Mark_71_ISP	</userString>
-    <icon>	hc_premium	</icon>
-    <price>	6000	</price>
-    <improved>	true	</improved>
-    <kind>	HOLLOW_CHARGE	</kind>
-    <caliber>	130	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	largeHollowCharge	</effects>
-    <damage>
-      <armor>	450	</armor>
-      <devices>	180	</devices>
-    </damage>
-    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
-  </_130mm_HEAT_Mark_71_ISP>
-  <_130mm_HE_Mark_80_ISP>
-    <id>	37002	</id>
-    <userString>	#italy_vehicles:_130mm_HE_Mark_80_ISP	</userString>
-    <icon>	he_modern	</icon>
-    <price>	1830	</price>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
-    <caliber>	130	</caliber>
-    <explosionRadius>	2.78	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	largeHighExplosive	</effects>
-    <damage>
-      <armor>	700	</armor>
-      <devices>	180	</devices>
-    </damage>
-    <armorSpalls>
-      <impactRadius>	2.78	</impactRadius>
-      <coneAngle>	90	</coneAngle>
-      <damage>
-        <armor>	350	</armor>
-        <devices>	90	</devices>
-      </damage>
-    </armorSpalls>
-  </_130mm_HE_Mark_80_ISP>
   <Development_Shell>
     <id>	65000	</id>
     <userString>	Development_Shell	</userString>

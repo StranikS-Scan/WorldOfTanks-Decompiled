@@ -811,15 +811,11 @@ class ArmoryYardController(IArmoryYardController):
             return
 
     def showShopStylePreview(self, styleID=None, backCallback=None):
-        vehicle = self.getFinalRewardVehicle()
-        if vehicle is None:
-            return
-        else:
-            self.isVehiclePreview = True
-            backCallback = backCallback or self.goToArmoryYardShop
-            showArmoryYardStylePreview(style=self.__c11nService.getItemByID(GUI_ITEM_TYPE.STYLE, styleID) if styleID else None, backCallback=backCallback, backBtnDescrLabel=backport.text(R.strings.armory_shop.shopBuyView.backGoto()))
-            self.cameraManager.goToHangar()
-            return
+        self.isVehiclePreview = True
+        backCallback = backCallback or self.goToArmoryYardShop
+        showArmoryYardStylePreview(style=self.__c11nService.getItemByID(GUI_ITEM_TYPE.STYLE, styleID) if styleID else None, backCallback=backCallback, backBtnDescrLabel=backport.text(R.strings.armory_shop.shopBuyView.backGoto()))
+        self.cameraManager.goToHangar()
+        return
 
 
 class _ArmoryYardSeasonProvider(SeasonProvider):

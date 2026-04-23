@@ -27,12 +27,13 @@ from uilogging.epic_battle.loggers import EpicBattleTooltipLogger
 class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
     _MAX_VISIBLE_AWARDS = 6
     _BONUS_ORDER_PRIORITY = {'battlePassPoints': 1,
-     'abilityPts': 2,
-     'lootBoxToken': 3,
-     'crystal': 4,
-     'goodies': 5,
-     EPIC_SELECT_BONUS_NAME: 6,
-     'crewBooks': 7}
+     'battleToken': 2,
+     'abilityPts': 3,
+     'lootBoxToken': 4,
+     'crystal': 5,
+     'goodies': 6,
+     EPIC_SELECT_BONUS_NAME: 7,
+     'crewBooks': 8}
     _MIDDLE_PRIORITY = 50
     _awardsFormatter = EpicAfterBattleAwardsComposer(_MAX_VISIBLE_AWARDS, getEpicBattleViewAwardPacker())
     __eventsCache = dependency.descriptor(IEventsCache)

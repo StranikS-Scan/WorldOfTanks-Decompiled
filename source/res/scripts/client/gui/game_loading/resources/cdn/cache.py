@@ -9,7 +9,7 @@ from helpers import dependency, isPlayerAccount
 from gui.game_loading import loggers
 from gui.game_loading.resources.cdn import history
 from gui.game_loading.resources.cdn.consts import CDN_CACHE_SYNC_TIMEOUT, DOWNLOAD_SLIDES_MULTIPLAYER, NEWBIES_BATTLES_LIMIT, SequenceOrders, SequenceCohorts
-from gui.game_loading.resources.cdn.models import LocalSlideModel, CdnCacheParamsModel
+from gui.game_loading.resources.cdn.models import LocalSlideModel, CdnCacheParams
 from gui.game_loading.resources.cdn.config import createConfigModel
 from PlayerEvents import g_playerEvents as playerEvents
 from bootcamp.BootCampEvents import g_bootcampEvents as bootcampPlayerEvents
@@ -164,12 +164,12 @@ class GameLoadingCdnCache(BaseExternalCache):
 class GameLoadingCdnCacheMgr(BaseExternalCacheManager):
     _REQUEST_TIMEOUT = CDN_CACHE_SYNC_TIMEOUT
     _DEFAULT_SYNC_TIMEOUT = _REQUEST_TIMEOUT
+    _itemsCache = dependency.descriptor(IItemsCache)
+    _lobbyCtx = dependency.descriptor(ILobbyContext)
 
     def __init__(self, defaults):
         super(GameLoadingCdnCacheMgr, self).__init__()
-        self._itemsCache = None
-        self._lobbyCtx = None
-        self._cacheParams = CdnCacheParamsModel()
+        self._cacheParams = CdnCacheParams()
         self._downloadResult = None
         self._defaults = defaults
         return
@@ -187,9 +187,7 @@ class GameLoadingCdnCacheMgr(BaseExternalCacheManager):
         bootcampPlayerEvents.onBootcampBecomeNonPlayer += self.stopSync
         playerEvents.onAccountShowGUI += self._tryToDownload
         bootcampPlayerEvents.onAccountShowGUI += self._tryToDownload
-        self._itemsCache = dependency.instance(IItemsCache)
         self._itemsCache.onSyncCompleted += self._onItemsCacheUpdated
-        self._lobbyCtx = dependency.instance(ILobbyContext)
         self._lobbyCtx.onServerSettingsChanged += self._onServerSettingsChanged
         self._lobbyCtx.getServerSettings().onServerSettingsChange += self._onServerSettingsUpdated
         _logger.debug('On connected called: items=%s, lobby=%s.', self._itemsCache, self._lobbyCtx)
@@ -202,13 +200,9 @@ class GameLoadingCdnCacheMgr(BaseExternalCacheManager):
         bootcampPlayerEvents.onAccountShowGUI -= self._tryToDownload
         playerEvents.onAccountBecomeNonPlayer -= self.stopSync
         bootcampPlayerEvents.onBootcampBecomeNonPlayer -= self.stopSync
-        if self._itemsCache:
-            self._itemsCache.onSyncCompleted -= self._onItemsCacheUpdated
-        self._itemsCache = None
-        if self._lobbyCtx:
-            self._lobbyCtx.getServerSettings().onServerSettingsChange -= self._onServerSettingsUpdated
-            self._lobbyCtx.onServerSettingsChanged -= self._onServerSettingsChanged
-        self._lobbyCtx = None
+        self._itemsCache.onSyncCompleted -= self._onItemsCacheUpdated
+        self._lobbyCtx.getServerSettings().onServerSettingsChange -= self._onServerSettingsUpdated
+        self._lobbyCtx.onServerSettingsChanged -= self._onServerSettingsChanged
         _logger.debug('On disconnected called.')
         return
 

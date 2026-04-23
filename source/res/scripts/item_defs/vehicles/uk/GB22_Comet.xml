@@ -3883,7 +3883,7 @@
         <maxRegenHealth>	65	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	380	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	90	</maxHealth>
         <maxRegenHealth>	45	</maxRegenHealth>
@@ -4200,14 +4200,14 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 12 0.416667 12 0.427778 6 0.572222 6 0.583333 12 1 12	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <shotDispersionRadius>	0.32	</shotDispersionRadius>
           <reloadTime>	3.9	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB22_Comet/normal/lod0/Gun_07.model	</undamaged>

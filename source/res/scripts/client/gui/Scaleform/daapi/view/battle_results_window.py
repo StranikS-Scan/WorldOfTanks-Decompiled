@@ -10,8 +10,8 @@ from gui import SystemMessages
 from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import parseEventID
-from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS
+from gui.impl.lobby.customization.progression_helpers import parseEventID
+from gui.impl.lobby.customization.sound_constants import SOUNDS
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyPremiumUrl
 from gui.Scaleform.daapi.view.meta.BattleResultsMeta import BattleResultsMeta
 from gui.Scaleform.framework.entities.View import ViewKey

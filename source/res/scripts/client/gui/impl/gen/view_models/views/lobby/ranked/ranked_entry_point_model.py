@@ -11,6 +11,10 @@ class RankedEntryPointModel(ViewModel):
     STATE_WAIT_NEXT_SEASON_DATE = 3
     STATE_WAIT_NEXT_SEASON_WITHOUT_DATE = 4
     STATE_FROZEN = 5
+    STATE_PROGRESSION_COMPLETE = 6
+    STATE_IN_FINAL_DIVISION = 7
+    STATE_ALMOST_NEXT_DIVISION = 8
+    STATE_NEXT_DIVISION_FAR_AWAY = 9
 
     def __init__(self, properties=3, commands=1):
         super(RankedEntryPointModel, self).__init__(properties=properties, commands=commands)

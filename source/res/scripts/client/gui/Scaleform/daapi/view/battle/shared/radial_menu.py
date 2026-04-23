@@ -84,6 +84,7 @@ _MARKERS_TYPE_TO_SUBTYPE_MAP = {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSu
                                    LocationMarkerSubType.SHOOTING_POINT_SUBTYPE: RADIAL_MENU_CONSTS.TARGET_STATE_DEFAULT,
                                    LocationMarkerSubType.VEHICLE_SPOTPOINT_SUBTYPE: RADIAL_MENU_CONSTS.TARGET_STATE_DEFAULT,
                                    LocationMarkerSubType.NAVIGATION_POINT_SUBTYPE: RADIAL_MENU_CONSTS.TARGET_STATE_DEFAULT,
+                                   LocationMarkerSubType.OBJECTIVES_POINT_SUBTYPE: RADIAL_MENU_CONSTS.TARGET_STATE_DEFAULT,
                                    INVALID_MARKER_SUBTYPE: RADIAL_MENU_CONSTS.TARGET_STATE_DEFAULT},
  MarkerType.INVALID_MARKER_TYPE: {INVALID_MARKER_SUBTYPE: RADIAL_MENU_CONSTS.TARGET_STATE_EMPTY}}
 _CAN_CANCEL_REPLY_SHORTCUT = Shortcut(title=INGAME_HELP.RADIALMENU_CANCEL_REPLY, action=BATTLE_CHAT_COMMAND_NAMES.CANCEL_REPLY, icon=RADIAL_MENU_CONSTS.NO, groups=RADIAL_MENU_CONSTS.ALL_TARGET_STATES, bState=RADIAL_MENU_CONSTS.NORMAL_BUTTON_STATE, indexInGroup=RADIAL_MENU_CONSTS.ELEMENT_INDEX_FIRST)
@@ -258,6 +259,21 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
     def _getUpperShortcuts(self):
         return _UPPER_SHORTCUT_SETS
 
+    def _getCanReplyShortcut(self, shortcut, canReplyAction):
+        return Shortcut(title=shortcut.title, action=canReplyAction, icon=shortcut.icon, groups=RADIAL_MENU_CONSTS.ALL_TARGET_STATES, bState=RADIAL_MENU_CONSTS.NORMAL_BUTTON_STATE, indexInGroup=shortcut.indexInGroup)
+
+    def _getAlterCanReplyShortcut(self, shortcut, canReplyAction):
+        buttonState = shortcut.bState
+        if buttonState != RADIAL_MENU_CONSTS.EMPTY_BUTTON_STATE:
+            buttonState = RADIAL_MENU_CONSTS.DISABLED_BUTTON_STATE
+        return Shortcut(title=shortcut.title, action=canReplyAction, icon=shortcut.icon, groups=RADIAL_MENU_CONSTS.ALL_TARGET_STATES, bState=buttonState, indexInGroup=shortcut.indexInGroup)
+
+    def _getCanCancelReplyShortcut(self):
+        return _CAN_CANCEL_REPLY_SHORTCUT
+
+    def _getSubtypeMapByMarkersType(self, targetMarkerType):
+        return _MARKERS_TYPE_TO_SUBTYPE_MAP[targetMarkerType]
+
     def __setVisibility(self, newState):
         if newState == self.__isVisible:
             return
@@ -323,6 +339,10 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
                 defaultShortcut = self.__adjustPrimaryRadialButton(replyState, shortcut, BATTLE_CHAT_COMMAND_NAMES.REPLY)
                 RadialMenu.__copyShortcutData(buttonData=buttonData, shortcut=defaultShortcut)
                 buttonData['key'] = getKeyFromAction(BATTLE_CHAT_COMMAND_NAMES.REPLY)
+            elif shortcut.indexInGroup == RADIAL_MENU_CONSTS.ELEMENT_INDEX_SIXTH and replyState == ReplyState.CAN_REPLY:
+                alterShortcut = self._getAlterCanReplyShortcut(shortcut, shortcut.action)
+                RadialMenu.__copyShortcutData(buttonData=buttonData, shortcut=alterShortcut)
+                buttonData['key'] = getKeyFromAction(alterShortcut.action)
             elif shortcut.bState != RADIAL_MENU_CONSTS.EMPTY_BUTTON_STATE:
                 buttonData['bState'] = RADIAL_MENU_CONSTS.DISABLED_BUTTON_STATE
             if 'key' not in buttonData:

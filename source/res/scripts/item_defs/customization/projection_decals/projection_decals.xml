@@ -2510,6 +2510,30 @@
       <glossTexture>	gui/maps/vehicles/decals/projection_decals/progression/progression_decal_06_GMM_1.dds	</glossTexture>
     </projection_decal>
     <name>	Progression Decals	</name>
+    <projection_decal>
+      <id>	31420	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/progression/progression_decal_07_AM_1.dds	</texture>
+      <userString>	#vehicle_customization:progression_decal_07_AM_1/name	</userString>
+      <description>	#vehicle_customization:progression_decal_07_AM_1/description	</description>
+      <tags>	formfactor_square vehicleBound onlyVerticalMirror	</tags>
+      <glossTexture>	gui/maps/vehicles/decals/projection_decals/progression/progression_decal_07_GMM_1.dds	</glossTexture>
+    </projection_decal>
+    <projection_decal>
+      <id>	31422	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/progression/progression_decal_08_AM_1.dds	</texture>
+      <userString>	#vehicle_customization:progression_decal_08_AM_1/name	</userString>
+      <description>	#vehicle_customization:progression_decal_08_AM_1/description	</description>
+      <glossTexture>	gui/maps/vehicles/decals/projection_decals/progression/progression_decal_08_GMM_1.dds	</glossTexture>
+      <tags>	formfactor_square vehicleBound onlyVerticalMirror	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31421	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/progression/progression_decal_09_AM_1.dds	</texture>
+      <userString>	#vehicle_customization:progression_decal_09_AM_1/name	</userString>
+      <description>	#vehicle_customization:progression_decal_09_AM_1/description	</description>
+      <glossTexture>	gui/maps/vehicles/decals/projection_decals/progression/progression_decal_09_GMM_1.dds	</glossTexture>
+      <tags>	formfactor_square vehicleBound onlyVerticalMirror	</tags>
+    </projection_decal>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:projection_decals/pin_up	</userString>
@@ -11828,29 +11852,25 @@
     <season>	ALL	</season>
     <historical>	1	</historical>
     <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R251_T_55_SP_01	</vehicles>
+      </include>
+    </vehicleFilter>
     <projection_decal>
       <id>	31446	</id>
       <texture>	gui/maps/vehicles/decals/projection_decals/special/r251_t_55_sp_01_decal_01.dds	</texture>
       <userString>	#vehicle_customization:r251_t_55_sp_01_projection_decal/name	</userString>
       <description>	#vehicle_customization:r251_t_55_sp_01_projection_decal/description	</description>
-      <tags>	hiddenInUI direction_left_to_right formfactor_square	</tags>
-      <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
-      <vehicleFilter>
-        <include>
-          <vehicles>	ussr:R251_T_55_SP_01	</vehicles>
-        </include>
-      </vehicleFilter>
+      <tags>	hiddenInUI direction_left_to_right formfactor_square styleOnly	</tags>
     </projection_decal>
     <projection_decal>
       <id>	31439	</id>
       <texture>	gui/maps/vehicles/decals/projection_decals/special/r251_t_55_sp_01_decal_02.dds	</texture>
       <userString>	#vehicle_customization:r251_t_55_sp_01_projection_decal_02/name	</userString>
       <description>	#vehicle_customization:r251_t_55_sp_01_projection_decal_02/description	</description>
-      <tags>	hiddenInUI direction_left_to_right formfactor_square	</tags>
-      <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
-      <vehicleFilter>
-        <include></include>
-      </vehicleFilter>
+      <tags>	hiddenInUI direction_left_to_right formfactor_square styleOnly	</tags>
     </projection_decal>
     <projection_decal>
       <id>	31440	</id>
@@ -11858,13 +11878,7 @@
       <userString>	#vehicle_customization:r251_t_55_sp_01_projection_decal_03/name	</userString>
       <description>	#vehicle_customization:r251_t_55_sp_01_projection_decal_03/description	</description>
       <scaleFactorId>	2	</scaleFactorId>
-      <tags>	hiddenInUI direction_left_to_right formfactor_square	</tags>
-      <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
-      <vehicleFilter>
-        <include>
-          <vehicles>	ussr:R251_T_55_SP_01	</vehicles>
-        </include>
-      </vehicleFilter>
+      <tags>	hiddenInUI direction_left_to_right formfactor_square styleOnly	</tags>
     </projection_decal>
   </itemGroup>
   <itemGroup>
@@ -12217,6 +12231,117 @@
       <userString>	#vehicle_customization:BattlePassS19_Decal_04_141/name	</userString>
       <description>	#vehicle_customization:BattlePassS19_Decal_04_141/description	</description>
       <tags>	disableVerticalMirror direction_right_to_left formfactor_square	</tags>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	AY8_Decal_142	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI styleOnly formfactor_square	</tags>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <projection_decal>
+      <id>	31451	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/AY8_Decal_01_142.dds	</texture>
+      <userString>	#vehicle_customization:AY8_Decal_01_142/name	</userString>
+      <description>	#vehicle_customization:AY8_Decal_01_142/description	</description>
+      <tags>	hiddenInUI styleOnly formfactor_square	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31452	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/AY8_Decal_01_142.dds	</texture>
+      <userString>	#vehicle_customization:AY8_Decal_02_142/name	</userString>
+      <description>	#vehicle_customization:AY8_Decal_02_142/description	</description>
+    </projection_decal>
+    <projection_decal>
+      <id>	31453	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/AY8_Decal_02_142.dds	</texture>
+      <userString>	#vehicle_customization:AY8_Decal_03_142/name	</userString>
+      <description>	#vehicle_customization:AY8_Decal_03_142/description	</description>
+      <tags>	hiddenInUI styleOnly formfactor_rect1x2	</tags>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	9May_Decal_142	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <projection_decal>
+      <id>	31447	</id>
+      <userString>	#vehicle_customization:9May_Decal_142/name	</userString>
+      <description>	#vehicle_customization:9May_Decal_142/description	</description>
+      <tags>	formfactor_square disableVerticalMirror	</tags>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/9May_Decal_142.dds	</texture>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	PvEMay26_Decal_142	</name>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr	</nations>
+      </include>
+      <exclude>
+        <vehicles>	ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <userString>	#vehicle_customization:projection_decals/cool	</userString>
+    <projection_decal>
+      <id>	31449	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/PvEMay26_Decal_01_142.dds	</texture>
+      <userString>	#vehicle_customization:PvEMay26_Decal_01_142/name	</userString>
+      <description>	#vehicle_customization:PvEMay26_Decal_01_142/description	</description>
+      <mirror>	true	</mirror>
+      <scaleFactorId>	2	</scaleFactorId>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31450	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/PvEMay26_Decal_02_142.dds	</texture>
+      <userString>	#vehicle_customization:PvEMay26_Decal_02_142/name	</userString>
+      <description>	#vehicle_customization:PvEMay26_Decal_02_142/description	</description>
+      <tags>	formfactor_rect1x2 disableVerticalMirror direction_right_to_left	</tags>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	A176_OTAC_LK_7605_Decal_142	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	usa	</nations>
+        <levels>	9	</levels>
+        <vehicles>	usa:A176_OTAC_LK_7605	</vehicles>
+      </include>
+    </vehicleFilter>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <projection_decal>
+      <id>	31457	</id>
+      <tags>	disableVerticalMirror direction_left_to_right styleOnly hiddenInUI formfactor_rect1x4	</tags>
+      <userString>	#vehicle_customization:A176_OTAC_LK_7605_Decal_01_142/name	</userString>
+      <description>	#vehicle_customization:A176_OTAC_LK_7605_Decal_01_142/description	</description>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/A176_OTAC_LK_7605_Decal_01_142.dds	</texture>
+    </projection_decal>
+    <projection_decal>
+      <id>	31458	</id>
+      <tags>	disableVerticalMirror styleOnly hiddenInUI direction_left_to_right formfactor_rect1x2	</tags>
+      <userString>	#vehicle_customization:A176_OTAC_LK_7605_Decal_02_142/name	</userString>
+      <description>	#vehicle_customization:A176_OTAC_LK_7605_Decal_02_142/description	</description>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/A176_OTAC_LK_7605_Decal_02_142.dds	</texture>
     </projection_decal>
   </itemGroup>
 </projection_decals.xml>

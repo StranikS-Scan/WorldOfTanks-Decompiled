@@ -70,7 +70,7 @@
       <armor_24>	70	</armor_24>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-    <weight>	45890	</weight>
+    <weight>	34890	</weight>
     <maxHealth>	1690	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	280	</maxHealth>
@@ -1020,8 +1020,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	44	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.14	</vehicleMovement>
-        <vehicleRotation>	0.14	</vehicleRotation>
+        <vehicleMovement>	0.12	</vehicleMovement>
+        <vehicleRotation>	0.12	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	300	</maxHealth>
@@ -1993,9 +1993,9 @@
       </surveyingDeviceHealth>
       <guns>
         <_105mm_KwK_L52>	shared	  <maxAmmo>	60	</maxAmmo>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.0	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.10	</turretRotation>
             <afterShot>	3.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2020,7 +2020,7 @@
             </armor_7>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.32	</shotDispersionRadius>
+          <shotDispersionRadius>	0.33	</shotDispersionRadius>
           <reloadTime>	8.4	</reloadTime>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <customizationSlots>
@@ -2538,7 +2538,7 @@
     <detailed>
       <engines>
         <GT_102>
-          <smplEnginePower>	1200	</smplEnginePower>
+          <smplEnginePower>	1100	</smplEnginePower>
           <smplFwMaxSpeed>	47	</smplFwMaxSpeed>
         </GT_102>
       </engines>
@@ -2546,13 +2546,13 @@
         <Chassis_G194_E_50_GT_Alkett_Prod>
           <grounds>
             <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
+              <rollingFriction>	0.17592	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.09942	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.08412	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

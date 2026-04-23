@@ -11441,6 +11441,141 @@
     </vehicleFilter>
   </itemGroup>
   <itemGroup>
+    <name>	AY8_Paint_142	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <paint>
+      <id>	31483	</id>
+      <color>	79 113 90 255	</color>
+      <gloss>	0.4	</gloss>
+      <metallic>	0.2	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_DEV.png	</texture>
+      <userString>	#vehicle_customization:AY8_Paint_142/name	</userString>
+      <description>	#vehicle_customization:AY8_Paint_142/description	</description>
+    </paint>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <name>	PvEMay26_Paint_142	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31482	</id>
+      <color>	82 59 55 255	</color>
+      <gloss>	0.4	</gloss>
+      <metallic>	0.3	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_DEV.png	</texture>
+      <userString>	#vehicle_customization:PvEMay26_Paint_01_142/name	</userString>
+      <description>	#vehicle_customization:PvEMay26_Paint_01_142/description	</description>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	usa	</nations>
+        <levels>	9	</levels>
+        <vehicles>	usa:A176_OTAC_LK_7605	</vehicles>
+      </include>
+    </vehicleFilter>
+    <paint>
+      <id>	31480	</id>
+      <color>	0 0 0 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.37	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_DEV.png	</texture>
+      <userString>	#vehicle_customization:A176_OTAC_LK_7605_Paint_01_142/name	</userString>
+      <description>	#vehicle_customization:A176_OTAC_LK_7605_Paint_01_142/description	</description>
+    </paint>
+    <paint>
+      <id>	31481	</id>
+      <color>	17 17 20 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.235	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_DEV.png	</texture>
+      <userString>	#vehicle_customization:A176_OTAC_LK_7605_Paint_02_142/name	</userString>
+      <description>	#vehicle_customization:A176_OTAC_LK_7605_Paint_02_142/description	</description>
+    </paint>
+    <name>	A176_OTAC_LK_7605_Paint_142	</name>
+  </itemGroup>
+  <itemGroup>
+    <name>	PvEMay26_Season_Paint_142	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr	</nations>
+      </include>
+      <exclude>
+        <vehicles>	ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31484	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_DEV.png	</texture>
+      <userString>	#vehicle_customization:PvEMay26_Season_Paint_02_142/name	</userString>
+      <description>	#vehicle_customization:PvEMay26_Season_Paint_02_142/description	</description>
+      <color>	61 66 46 255	</color>
+      <gloss>	0.53	</gloss>
+      <metallic>	0.235	</metallic>
+      <season>	summer	</season>
+    </paint>
+    <paint>
+      <id>	31485	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_DEV.png	</texture>
+      <userString>	#vehicle_customization:PvEMay26_Season_Paint_03_142/name	</userString>
+      <description>	#vehicle_customization:PvEMay26_Season_Paint_03_142/description	</description>
+      <color>	140 128 110 255	</color>
+      <gloss>	0.53	</gloss>
+      <metallic>	0.235	</metallic>
+      <season>	desert	</season>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	Pervomay_Paint_142	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <paint>
+      <id>	31487	</id>
+      <color>	52 73 84 255	</color>
+      <gloss>	0.4	</gloss>
+      <metallic>	0.23	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_DEV.png	</texture>
+      <userString>	#vehicle_customization:Pervomay_Paint_142/name	</userString>
+      <description>	#vehicle_customization:Pervomay_Paint_142/description	</description>
+    </paint>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
     <name>	theboys	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
@@ -12507,7 +12642,7 @@
   </itemGroup>
   <itemGroup>
     <name>	r251_t_55_sp_01	</name>
-    <userString>	#vehicle_customization:repaint/color_group_05	</userString>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
     <paint>

@@ -12,7 +12,6 @@ from battle_pass_common import BattlePassConsts
 from constants import EVENT_TYPE, DailyQuestsLevels
 from dog_tags_common.components_config import componentConfigAdapter as cca
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsBattleRoyale
-from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import getC11nProgressionLinkBtnParams, getProgressionPostBattleInfo, parseEventID, getC11n2dProgressionLinkBtnParams
 from gui.Scaleform.daapi.view.lobby.server_events.awards_formatters import BattlePassTextBonusesPacker
 from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import getEventPostBattleInfo, get2dProgressionStylePostBattleInfo, DebutBoxesQuestPostBattleInfo, EarlyAccessQuestPostBattleInfo, getEpicDailyQuestProgressInfo
 from gui.impl.lobby.paragons.paragons_helpers.paragons_helpers import calculateReceivedLevel
@@ -31,6 +30,7 @@ from gui.dog_tag_composer import dogTagComposer
 from gui.impl import backport
 from gui.impl.auxiliary.rewards_helper import getProgressiveRewardVO
 from gui.impl.gen import R
+from gui.impl.lobby.customization.progression_helpers import getC11nProgressionLinkBtnParams, getProgressionPostBattleInfo, parseEventID, getC11n2dProgressionLinkBtnParams
 from gui.impl.lobby.crew.crew_helpers.skill_helpers import getLastSkillSequenceNum
 from gui.server_events import formatters
 from gui.server_events.awards_formatters import QuestsBonusComposer

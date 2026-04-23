@@ -116,10 +116,11 @@ class AYCancelingRerollFormatter(ServiceChannelFormatter):
              Currency.GOLD: ('ArmoryYardRerollTransactionForGoldSysMessage', msgR.refund.priceGold)}.get(currency, ('ArmoryYardRerollTransactionForFreeRerollSysMessage', msgR.refund.freeReroll))
             text = backport.text(msgR.task.cancelReplacement())
             header = backport.text(msgR.title())
-            paymentText = backport.text(refundText(), price=price)
+            paymentText = backport.text(refundText())
             formatter = g_settings.msgTemplates.format(msgType, {'header': header,
              'text': text,
-             'paymentText': paymentText})
+             'paymentText': paymentText,
+             'price': price})
             return [MessageData(formatter, self._getGuiSettings(message, msgType, priorityLevel=NotificationPriorityLevel.MEDIUM))]
 
 

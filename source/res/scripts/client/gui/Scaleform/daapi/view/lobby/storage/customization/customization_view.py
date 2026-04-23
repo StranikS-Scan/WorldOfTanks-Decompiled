@@ -16,7 +16,7 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import createStorageDefVO, customizationPreview, getAvailableForSellCustomizationCount
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import isCustomizationAvailableForSell
-from gui.Scaleform.daapi.view.lobby.customization.shared import getSuitableText, isC11nEnabled
+from gui.impl.lobby.customization.shared import getSuitableText, isC11nEnabled
 from gui.Scaleform.daapi.view.meta.StorageCategoryCustomizationViewMeta import StorageCategoryCustomizationViewMeta
 from gui.shared.formatters import getItemPricesVO
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -129,10 +129,9 @@ class StorageCategoryCustomizationView(StorageCategoryCustomizationViewMeta):
 
     @dependency.replace_none_kwargs(c11nService=ICustomizationService)
     def navigateToCustomization(self, c11nService=None):
+        event_dispatcher.showHangar()
         if isC11nEnabled():
             c11nService.showCustomization()
-        else:
-            event_dispatcher.showHangar()
 
     @adisp_process
     def sellCustomizationItem(self, itemCD, vehicleCD=None):

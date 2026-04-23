@@ -4,7 +4,6 @@ import operator
 import logging
 from collections import defaultdict
 import typing
-from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import getC11n2dProgressionLinkBtnParams
 from gui.shared.gui_items import GUI_ITEM_TYPE
 import constants
 from battle_pass_common import BattlePassConsts, BATTLE_PASS_RANDOM_QUEST_ID_PREFIX
@@ -20,6 +19,7 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.lobby.customization.progression_helpers import getC11n2dProgressionLinkBtnParams
 from gui.server_events import conditions, formatters, settings as quest_settings
 from gui.server_events.events_helpers import EventInfoModel, MISSIONS_STATES, QuestInfoModel, isDailyQuest, getDataByC11nQuest
 from gui.server_events.personal_progress.formatters import PostBattleConditionsFormatter, PM3PostBattleConditionsFormatter

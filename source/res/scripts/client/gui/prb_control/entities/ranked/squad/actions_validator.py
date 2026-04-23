@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/ranked/squad/actions_validator.py
+from typing import List, TYPE_CHECKING
 from constants import BATTLE_MODE_VEH_TAGS_EXCEPT_RANKED
 from gui.prb_control.entities.base.actions_validator import ActionsValidatorComposite
 from gui.prb_control.entities.base.squad.actions_validator import SquadActionsValidator, SquadVehiclesValidator
@@ -10,6 +11,8 @@ from helpers import dependency
 from skeletons.gui.game_control import IPlatoonController, IRankedBattlesController
 from gui.periodic_battles.models import PrimeTimeStatus
 from constants import IS_DEVELOPMENT
+if TYPE_CHECKING:
+    from gui.ranked_battles.ranked_models import Division
 
 class _RankedVehiclesValidator(SquadVehiclesValidator):
     _BATTLE_MODE_VEHICLE_TAGS = BATTLE_MODE_VEH_TAGS_EXCEPT_RANKED
@@ -43,6 +46,7 @@ class _RankedPlayerValidator(UnitPlayerValidator):
             return ValidationResult(False, UNIT_RESTRICTION.DIVISION_RESTRICTION, None) if divisions and divisionRestriction and len(divisions) > 1 else super(_RankedPlayerValidator, self)._validate()
 
     def __getPlayersData(self):
+        allPossibleDivisions = self.__rankedCtrl.getDivisions()
         playersRank = []
         playersDivision = set()
         for slotData in self.__platoonCtrl.getPlatoonSlotsData():
@@ -50,10 +54,15 @@ class _RankedPlayerValidator(UnitPlayerValidator):
             if playerData is None:
                 continue
             rankedEnqueueData = playerData.get('extraData', {}).get('rankedEnqueueData', {})
-            playersRank.append(rankedEnqueueData.get('rank', 0))
-            playersDivision.add(rankedEnqueueData.get('division', 0))
+            rank = rankedEnqueueData.get('rank', 0)
+            playersRank.append(rank)
+            playersDivision.add(self.__getCorrectDivision(rank, allPossibleDivisions))
 
         return (playersRank, playersDivision)
+
+    def __getCorrectDivision(self, rank, allPossibleDivisions):
+        divisions = [ division.getID() for division in allPossibleDivisions if division.firstRank <= rank + 1 ]
+        return max(divisions or (0,))
 
 
 class _RankedSlotValidator(CommanderValidator):

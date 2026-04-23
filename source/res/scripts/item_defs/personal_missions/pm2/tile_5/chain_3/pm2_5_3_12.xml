@@ -80,7 +80,7 @@ def onFinishBattle(eventType, eventData, quest, processor):
     if brfilter.alive():
         questProgress.setCompleted(PROGRESS_ID_ADD)
         questProgress.increaseUntilComplete(PROGRESS_SERIES, 1)
-    mainCondition = sum(len(shots) for shots in brfilter.filterDamageFrom(hitBlocked=True).itervalues())
+    mainCondition = brfilter.sumReceivedShots(brfilter.filterDamageFrom(hitBlocked=True))
     questProgress.increaseUntilComplete(PROGRESS_ID_MAIN, mainCondition)
     if questProgress.isCompleted(PROGRESS_ID_MAIN):
         questProgress.increaseUntilComplete(PROGRESS_ID_MAIN_SERIES, 1)

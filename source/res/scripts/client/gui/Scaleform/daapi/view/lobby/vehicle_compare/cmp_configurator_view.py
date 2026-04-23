@@ -410,10 +410,7 @@ class VehicleCompareConfiguratorView(VehicleCompareConfiguratorViewMeta):
         currentVehicle = self._container.getCurrentVehicle()
         enableCamo = bool(cmp_helpers.getSuitableCamouflage(currentVehicle))
         topModulesFromStock = self._container.isTopModulesFromStock()
-        if currentVehicle.isPremium and not topModulesFromStock:
-            enableTopModules = True
-        else:
-            enableTopModules = not (currentVehicle.isPremium or topModulesFromStock)
+        enableTopModules = self._container.isModulesAvailableFromStock()
         isInInventory = self._container.getBasketVehCmpData().isInInventory()
         if isInInventory:
             self.__currentCrewMonitor = _CurrentCrewMonitor(self._container)
@@ -612,6 +609,12 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
         topModules = self.__getTopModules()
         stockModules = self.__getStockModules()
         return all((bool(item in stockModules) for item in topModules))
+
+    def isModulesAvailableFromStock(self):
+        stockModulesCount = len(self.__getStockModules())
+        avalibleModules = cmp_helpers.VehicleAllModules.getVehicleAvailableModules(self.getCurrentVehicleCopy())
+        avalibleModulesCount = avalibleModules.getCountAllModules()
+        return avalibleModulesCount > stockModulesCount
 
     def isTopModulesSelected(self):
         topModules = self.__getTopModules()

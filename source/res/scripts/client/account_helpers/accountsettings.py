@@ -30,6 +30,7 @@ from helpers import dependency, getClientVersion
 from items.components.crew_books_constants import CREW_BOOK_RARITY
 from skeletons.account_helpers.settings_core import ISettingsCore
 from soft_exception import SoftException
+from uilogging.settings.constants import SettingsLogActions
 _logger = logging.getLogger(__name__)
 KEY_FILTERS = 'filters'
 KEY_SESSION_SETTINGS = 'session_settings'
@@ -159,6 +160,7 @@ ANONYMIZER = GAME.ANONYMIZER
 CUSTOMIZATION_SECTION = 'customization'
 CAROUSEL_ARROWS_HINT_SHOWN_FIELD = 'isCarouselsArrowsHintShown'
 PROJECTION_DECAL_HINT_SHOWN_FIELD = 'isProjectionDecalHintShown'
+APPLY_TO_ALL_SEASONS_ENABLED = 'applyToAllSeasonsEnabled'
 SESSION_STATS_SECTION = 'sessionStats'
 BATTLE_EFFICIENCY_SECTION_EXPANDED_FIELD = 'battleEfficiencySectionExpanded'
 SIEGE_HINT_SECTION = 'siegeModeHint'
@@ -313,6 +315,7 @@ NY_PET_SLOT_VISITED = 'NyPetSlotVisited'
 NY_GREETINGS_SEEN = 'NYGreetingsSeen'
 PREMIUM_QUESTS_NOTIFICATION = 'PremiumPurchased'
 DEFERRED_LOG_PLAYER_SETTINGS_ACTIONS = 'DeferredLogPlayerSettingsActions'
+DYNAMIC_SETTINGS_REPOSITORY = 'dynamicSettingsRepository'
 
 class BattleMatters(object):
     BATTLE_MATTERS_SETTINGS = 'battleMattersSettings'
@@ -411,11 +414,13 @@ class BlackMarket(object):
 
 class CustomizationFilter(object):
     CUSTOMIZATION_FILTER = 'customizationFilter'
+    CAMOUFLAGE_GROUP = 'camouflageGroup'
     PAINTS_GROUP = 'paintsGroup'
     PROJECTION_DECALS_GROUP = 'projectionDecalsGroup'
     EMBLEMS_GROUP = 'emblemsGroup'
     INSCRIPTIONS_GROUP = 'inscriptionsGroup'
     STYLES_2D_GROUP = 'styles2dGroup'
+    STYLES_3D_GROUP = 'styles3dGroup'
     DISPLAY_GROUP = 'displayGroup'
     FORMFACTOR_SQUARE = 'formfactor_square'
     FORMFACTOR_RECT1X2 = 'formfactor_rect1x2'
@@ -426,6 +431,7 @@ class CustomizationFilter(object):
     NON_HISTORIC = 'nonHistoric'
     FANTASTICAL = 'fantastical'
     INVENTORY = 'inventory'
+    SALE = 'sale'
     APPLIED = 'applied'
     FAVORITE = 'favorite'
     ON_ANOTHER_VEH = 'onAnotherVeh'
@@ -1011,11 +1017,13 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'selectedColumnSorting': 'descending'},
                SPEAKERS_DEVICE: 0,
                UNIT_FILTER: {GAME.UNIT_FILTER: 4095},
-               CustomizationFilter.CUSTOMIZATION_FILTER: {CustomizationFilter.PAINTS_GROUP: -1,
+               CustomizationFilter.CUSTOMIZATION_FILTER: {CustomizationFilter.CAMOUFLAGE_GROUP: -1,
+                                                          CustomizationFilter.PAINTS_GROUP: -1,
                                                           CustomizationFilter.PROJECTION_DECALS_GROUP: -1,
                                                           CustomizationFilter.EMBLEMS_GROUP: -1,
                                                           CustomizationFilter.INSCRIPTIONS_GROUP: -1,
                                                           CustomizationFilter.STYLES_2D_GROUP: -1,
+                                                          CustomizationFilter.STYLES_3D_GROUP: -1,
                                                           CustomizationFilter.DISPLAY_GROUP: 0,
                                                           CustomizationFilter.FORMFACTOR_SQUARE: False,
                                                           CustomizationFilter.FORMFACTOR_RECT1X2: False,
@@ -1027,6 +1035,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                           CustomizationFilter.FANTASTICAL: False,
                                                           CustomizationFilter.INVENTORY: False,
                                                           CustomizationFilter.APPLIED: False,
+                                                          CustomizationFilter.SALE: False,
                                                           CustomizationFilter.FAVORITE: False,
                                                           CustomizationFilter.ON_ANOTHER_VEH: False,
                                                           CustomizationFilter.ONLY_PROGRESSION_DECALS: False,
@@ -1489,7 +1498,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                            NY_ACTIVE_WIDGET_TRANSITION_SHOWN: False,
                            NY_PET_SLOT_VISITED: False,
                            NY_GREETINGS_SEEN: False},
-                DEFERRED_LOG_PLAYER_SETTINGS_ACTIONS: set()},
+                DEFERRED_LOG_PLAYER_SETTINGS_ACTIONS: {SettingsLogActions.SETTINGS_INITED}},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
@@ -1716,7 +1725,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
  Epic.EPIC_SETTINGS: {Epic.SUPPLY_AIRSHIP_HINT_VIEWED: False,
                       Epic.SUPPLY_FLAMER_HINT_VIEWED: False,
                       Epic.SUPPLY_PILLBOX_HINT_VIEWED: False,
-                      Epic.SUPPLY_MORTAR_HINT_VIEWED: False}}
+                      Epic.SUPPLY_MORTAR_HINT_VIEWED: False},
+ DYNAMIC_SETTINGS_REPOSITORY: {}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:
@@ -1751,7 +1761,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 77
+    version = 79
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -2489,6 +2499,15 @@ class AccountSettings(object):
                         counters[LobbyHeader.TABS.TOURNAMENTS] = False
                         accSettings.write(NEW_LOBBY_TAB_COUNTER, _pack(counters))
 
+            if currVersion < 78:
+                for key, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    customizationKey = CustomizationFilter.CUSTOMIZATION_FILTER
+                    if customizationKey in accSettings.keys():
+                        accSettings.deleteSection(customizationKey)
+
+            if currVersion < 79:
+                AccountSettings.__addDeferredLogPlayerSettingsInitAction(ads)
             ads.writeInt('version', AccountSettings.version)
         return
 
@@ -2824,3 +2843,11 @@ class AccountSettings(object):
     def __getPlayerName(cls):
         playerName = getattr(BigWorld.player(), 'name', '')
         return Settings.g_instance.userPrefs[Settings.KEY_LOGIN_INFO].readString('user', playerName) if not playerName else playerName
+
+    @staticmethod
+    def __addDeferredLogPlayerSettingsInitAction(accountsSettings):
+        for _, section in _filterAccountSection(accountsSettings):
+            accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
+            actions = deepcopy(AccountSettings.getSettingsDefault(DEFERRED_LOG_PLAYER_SETTINGS_ACTIONS))
+            actions.add(SettingsLogActions.SETTINGS_INITED)
+            accSettings.write(DEFERRED_LOG_PLAYER_SETTINGS_ACTIONS, _pack(actions))

@@ -64,8 +64,8 @@
     <weight>	19770	</weight>
     <maxHealth>	1000	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
     </ammoBayHealth>
     <models>
@@ -1291,7 +1291,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_152mm_XM81_59>	shared	  <maxAmmo>	22	</maxAmmo>
+        <_152mm_XM81_59>	shared	  <maxAmmo>	25	</maxAmmo>
           <armor>
             <armor_1>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -1310,7 +1310,7 @@
             <gun>	60	</gun>
           </armor>
           <shotDispersionRadius>	0.3	</shotDispersionRadius>
-          <reloadTime>	20	</reloadTime>
+          <reloadTime>	21.5	</reloadTime>
           <aimingTime>	2.5	</aimingTime>
           <invisibilityFactorAtShot>	0.15	</invisibilityFactorAtShot>
           <pitchLimits>
@@ -1324,7 +1324,7 @@
           </shotDispersionFactors>
           <dualAccuracy>
             <afterShotDispersionRadius>	0.44	</afterShotDispersionRadius>
-            <coolingDelay>	23	</coolingDelay>
+            <coolingDelay>	25	</coolingDelay>
           </dualAccuracy>
           <customizationSlots>
             <slot>

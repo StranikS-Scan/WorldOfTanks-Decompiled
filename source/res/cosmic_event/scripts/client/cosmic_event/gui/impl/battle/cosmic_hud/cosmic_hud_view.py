@@ -18,8 +18,9 @@ from constants import SERVER_TICK_LENGTH, ARENA_PERIOD, EQUIPMENT_STAGES
 from cosmic_event.gui.impl.gen.view_models.views.lobby.cosmic_lobby_view.scoring_model import ScoringTypeEnum
 from cosmic_event.gui.shared.events import ArtifactScanningEvent, LootEvent, CosmicVehicleEvent
 from cosmic_event.settings import HINTS
-from cosmic_event_common.cosmic_constants import BATTLE_EVENT_TYPE, COSMIC_EVENT_RAPIDSHELLING, COSMIC_EVENT_OVERCHARGE, COSMIC_EVENT_TELEPORT, LOOT_ITEM_ID
+from cosmic_event_common.cosmic_constants import BATTLE_EVENT_TYPE, COSMIC_EVENT_RAPIDSHELLING, COSMIC_EVENT_OVERCHARGE, COSMIC_EVENT_TELEPORT, LOOT_ITEM_ID, LOOT_STATE
 from cosmic_sound import CosmicBattleSounds, playVoiceover
+from debug_utils import LOG_ERROR
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
@@ -35,7 +36,7 @@ from skeletons.gui.battle_session import IBattleSessionProvider, IArenaDataProvi
 from cosmic_event.gui.battle_control.controllers.consumables.equipment_ctrl import ExtraEquipmentTags
 from cosmic_event.gui.impl.battle.cosmic_hud.tooltips.ability_tooltip import AbilityTooltip
 from skeletons.gui.game_control import ICosmicEventBattleController
-from debug_utils import LOG_ERROR
+from PlayerEvents import g_playerEvents
 from cosmic_event.gui.gui_constants import ABILITY_TYPE_BY_EQUIP_NAME
 from cosmic_event.cosmic_constants import COSMIC_VEHICLES_ROVER_ENUM
 from cosmic_event.gui.impl.gen.view_models.views.battle.cosmic_hud.direction_marker_model import DirectionMarkerType
@@ -244,6 +245,7 @@ class CosmicHudView(ViewImpl):
         if feedbackCtrl is not None:
             events.append((feedbackCtrl.onPlayerFeedbackReceived, self._onPlayerFeedbackReceived))
             events.append((feedbackCtrl.onVehicleFeedbackReceived, self.__onVehicleFeedbackReceived))
+        events.append((g_playerEvents.onAvatarReady, self.__onAvatarReady))
         return events
 
     def _updatePlayerListModel(self, totalScore=None):
@@ -768,3 +770,20 @@ class CosmicHudView(ViewImpl):
             abilityModel.setReloadTimeLeft(lifeTime)
             abilityArray.invalidate()
         return
+
+    def __onAvatarReady(self):
+        if self._period != ARENA_PERIOD.BATTLE:
+            return
+        for loot in BigWorld.entities.valuesOfType('CosmicLoot'):
+            if loot.itemID == LOOT_ITEM_ID.COSMIC_CORAL:
+                self.__updateCoralInfoOnReconnect(coralEntity=loot)
+
+    def __updateCoralInfoOnReconnect(self, coralEntity):
+        ctx = {'totalTime': coralEntity.lifeTime,
+         'timeLeft': coralEntity.lifeTimeRemained}
+        if coralEntity.state == LOOT_STATE.SPAWNED:
+            self.__progressBarsManager.createProgressBar(ProgressBarType.CORAL, coralEntity.id, ctx)
+            self.__poiMarkersManager.createMarker(coralEntity.position, DirectionMarkerType.CORAL, coralEntity.id)
+            self.__poiMarkersManager.setMarkerTimer(coralEntity.id, coralEntity.lifeTimeRemained)
+        else:
+            self.__progressBarsManager.createProgressBar(ProgressBarType.CORAL, coralEntity.id, ctx)

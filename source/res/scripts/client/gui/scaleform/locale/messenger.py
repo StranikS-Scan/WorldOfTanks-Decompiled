@@ -966,6 +966,7 @@ class MESSENGER(object):
     CHAT_PARENTCONTROLMESSAGE_TIMELIMIT = '#messenger:chat/parentControlMessage/timeLimit'
     SERVICECHANNELMESSAGES_VEHICLECOLLECTOR_UNLOCKLEVEL_HEADER = '#messenger:serviceChannelMessages/vehicleCollector/unlockLevel/header'
     SERVICECHANNELMESSAGES_VEHICLECOLLECTOR_UNLOCKLEVEL_TEXT = '#messenger:serviceChannelMessages/vehicleCollector/unlockLevel/text'
+    SERVICECHANNELMESSAGES_EPICREWARD_ARMORY_YARD = '#messenger:serviceChannelMessages/epicReward/armory_yard'
     SERVICECHANNELMESSAGES_EPICREWARD_CRYSTAL = '#messenger:serviceChannelMessages/epicReward/crystal'
     SERVICECHANNELMESSAGES_EPICREWARD_BROCHURE_GIFT = '#messenger:serviceChannelMessages/epicReward/brochure_gift'
     SERVICECHANNELMESSAGES_EPICREWARD_BATTLEBOOSTER_GIFT = '#messenger:serviceChannelMessages/epicReward/battleBooster_gift'
@@ -1249,6 +1250,9 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_LIMITEDUICONTENTUNLOCKED_TOURNAMENTS = '#messenger:serviceChannelMessages/limitedUIContentUnlocked/tournaments'
     SERVICECHANNELMESSAGES_LIMITEDUICONTENTUNLOCKED_VERSUSAI = '#messenger:serviceChannelMessages/limitedUIContentUnlocked/versusAI'
     SERVICECHANNELMESSAGES_LIMITEDUICONTENTUNLOCKED_STRONGHOLD = '#messenger:serviceChannelMessages/limitedUIContentUnlocked/stronghold'
+    SERVICECHANNELMESSAGES_TRADINGCARAVANCOINADDED_TITLE = '#messenger:serviceChannelMessages/tradingCaravanCoinAdded/title'
+    SERVICECHANNELMESSAGES_TRADINGCARAVANCOINADDED_BODY = '#messenger:serviceChannelMessages/tradingCaravanCoinAdded/body'
+    SERVICECHANNELMESSAGES_PARAGONS_BODY = '#messenger:serviceChannelMessages/paragons/body'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_TRY_LATER,
      CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,

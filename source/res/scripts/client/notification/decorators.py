@@ -18,6 +18,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control import prbInvitesProperty, prbEntityProperty
 from gui.prb_control.formatters.invites import getPrbInviteHtmlFormatter
+from gui.server_events.events_helpers import getIdxFromQuestID
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.events import HangarSpacesSwitcherEvent, ViewEventType
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -1551,3 +1552,45 @@ class ParagonsAchievementDecorator(MessageDecorator):
          'message': formatted,
          'notify': self.isNotify()}
         return
+
+
+class BattleMattersAwardsDecorator(MessageDecorator):
+    __battleMattersController = dependency.descriptor(IBattleMattersController)
+
+    def __init__(self, entityID, entity=None, settings=None, model=None):
+        self.__questIdx = settings.auxData.get('questIdx') if settings else None
+        super(BattleMattersAwardsDecorator, self).__init__(entityID, entity, settings, model)
+        self.__battleMattersController.onFinish += self.__update
+        return
+
+    def clear(self):
+        self.__battleMattersController.onFinish -= self.__update
+        super(BattleMattersAwardsDecorator, self).clear()
+
+    def _make(self, formatted=None, settings=None):
+        self.__updateEntityButtons()
+        super(BattleMattersAwardsDecorator, self)._make(formatted, settings)
+
+    def __update(self):
+        self.__updateEntityButtons()
+        if self._model is not None:
+            self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
+        return
+
+    def __updateEntityButtons(self):
+        if self._entity is None:
+            return
+        else:
+            buttonsLayout = self._entity.get('buttonsLayout')
+            if not buttonsLayout:
+                return
+            buttonsStates = self._entity.get('buttonsStates')
+            state = self._getButtonState()
+            buttonsStates['submit'] = state
+            return
+
+    def _getButtonState(self):
+        finalQuest = self.__battleMattersController.getFinalQuest()
+        if finalQuest and getIdxFromQuestID(finalQuest.getID()) == self.__questIdx:
+            return NOTIFICATION_BUTTON_STATE.HIDDEN
+        return NOTIFICATION_BUTTON_STATE.DEFAULT if not self.__battleMattersController.isFinished() else NOTIFICATION_BUTTON_STATE.VISIBLE

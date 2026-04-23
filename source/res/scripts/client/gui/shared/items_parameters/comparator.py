@@ -440,6 +440,8 @@ def _getComparableValue(currentValue, comparableList, idx):
     return comparableList[idx] if len(comparableList) > idx else currentValue
 
 
+PARAM_STATE_ROUND_DIGITS = 6
+
 def _getParamStateInfo(paramName, val1, val2, customReverted=False):
     if paramName in NOT_COMPARABLE_PARAMS:
         return (PARAM_STATE.NORMAL, 0)
@@ -451,12 +453,12 @@ def _getParamStateInfo(paramName, val1, val2, customReverted=False):
             hasNoParam = False
             if isinstance(val1, float) and isinstance(val2, float):
                 diff = val1 - val2
-                diff = round(diff, 4)
+                diff = round(diff, PARAM_STATE_ROUND_DIGITS)
             else:
                 if isinstance(val1, float):
-                    val1 = round(val1, 4)
+                    val1 = round(val1, PARAM_STATE_ROUND_DIGITS)
                 if isinstance(val2, float):
-                    val2 = round(val2, 4)
+                    val2 = round(val2, PARAM_STATE_ROUND_DIGITS)
                 diff = val1 - val2
         if paramName in NEGATIVE_PARAMS and hasNoParam:
             if val1 is None and val2 is None:

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/settings_logging.py
+import copy
 import json
 import hashlib
 import logging
@@ -98,7 +99,8 @@ def _addDeferredLogPlayerSettingsAction(action):
 
 
 def _resetDeferredLogPlayerSettingsActions():
-    defaultActions = AccountSettings.getSettingsDefault(DEFERRED_LOG_PLAYER_SETTINGS_ACTIONS)
+    defaultActions = copy.deepcopy(AccountSettings.getSettingsDefault(DEFERRED_LOG_PLAYER_SETTINGS_ACTIONS))
+    defaultActions.clear()
     AccountSettings.setSettings(DEFERRED_LOG_PLAYER_SETTINGS_ACTIONS, defaultActions)
 
 
@@ -111,7 +113,7 @@ def _logPlayerSettings(action):
 
 @noexcept
 @_ifSettingsLoggingEnabled()
-def logPlayerSettingsOnDisconnect():
+def logDeferredPlayerSettings():
     actions = AccountSettings.getSettings(DEFERRED_LOG_PLAYER_SETTINGS_ACTIONS)
     if not actions:
         return

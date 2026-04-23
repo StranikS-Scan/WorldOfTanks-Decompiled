@@ -262,13 +262,15 @@ class _AbstractMarkerVOBuilderFactory(object):
 
 
 class _ExtendedMarkerVOBuilderFactory(_AbstractMarkerVOBuilderFactory):
+    _extendedMarkerClass = _ExtendedMarkerVOBuilder
+    _extendedCriticalMarkerClass = _ExtendedCriticalMarkerVOBuilder
 
     def __init__(self, isIndicatorSizeDynamic):
         super(_ExtendedMarkerVOBuilderFactory, self).__init__()
         self.__isIndicatorSizeDynamic = isIndicatorSizeDynamic
 
     def getVOBuilder(self, markerData):
-        return _ExtendedCriticalMarkerVOBuilder(self.__isIndicatorSizeDynamic) if markerData.markerType == _MARKER_TYPE.CRITICAL_DAMAGE else _ExtendedMarkerVOBuilder(self.__isIndicatorSizeDynamic)
+        return self._extendedCriticalMarkerClass(self.__isIndicatorSizeDynamic) if markerData.markerType == _MARKER_TYPE.CRITICAL_DAMAGE else self._extendedMarkerClass(self.__isIndicatorSizeDynamic)
 
 
 class _StandardMarkerVOBuilderFactory(_AbstractMarkerVOBuilderFactory):
@@ -335,6 +337,7 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
     _DAMAGE_INDICATOR_FRAME_RATE = 24
     _BEGIN_ANIMATION_DURATION = _BEGIN_ANIMATION_FRAMES / float(_DAMAGE_INDICATOR_FRAME_RATE)
     _DAMAGE_INDICATOR_ANIMATION_DURATION = _DAMAGE_INDICATOR_TOTAL_FRAMES / float(_DAMAGE_INDICATOR_FRAME_RATE)
+    _extendedMarkerFactoryClass = _ExtendedMarkerVOBuilderFactory
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
 
@@ -412,7 +415,7 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
     def __setUpVOBuilderFactoryAndUpdateMethod(self, indicatorType):
         if indicatorType == DAMAGE_INDICATOR_TYPE.EXTENDED:
             isIndicatorSizeDynamic = bool(self.settingsCore.getSetting(DAMAGE_INDICATOR.DYNAMIC_INDICATOR))
-            self.__voBuilderFactory = _ExtendedMarkerVOBuilderFactory(isIndicatorSizeDynamic)
+            self.__voBuilderFactory = self._extendedMarkerFactoryClass(isIndicatorSizeDynamic)
             self.__updateMethod = self.as_showExtendedS
         else:
             self.__voBuilderFactory = _StandardMarkerVOBuilderFactory()

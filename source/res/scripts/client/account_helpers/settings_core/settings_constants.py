@@ -397,8 +397,6 @@ class OnceOnlyHints(CONST_CONTAINER):
     BATTLE_MATTERS_FIGHT_BUTTON_HINT = 'BattleMattersFightButtonHint'
     BATTLE_MATTERS_ENTRY_POINT_BUTTON_HINT = 'BattleMattersEntryPointHint'
     SUMMARY_CUSTOMIZATION_BUTTON_HINT = 'SummaryCustomizationButtonHint'
-    REFERRAL_RECRUIT_ENTRY_POINT_HINT = 'ReferralRecruitEntryPointHint'
-    REFERRAL_ENTRY_POINT_HINT = 'ReferralEntryPointHint'
     BATTLE_SELECTOR_BAR_AI_HINT = 'BattleSelectorBarAIHint'
     LOOT_PROBABILITY_HINT = 'LootProbabilityHint'
     PERSONAL_MISSIONS_OPERATION_HINT = 'PersonalMissionsOperationHint'

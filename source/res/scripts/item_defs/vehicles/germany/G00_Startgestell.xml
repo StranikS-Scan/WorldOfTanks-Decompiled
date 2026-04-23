@@ -455,6 +455,64 @@
   </physics>
   <effects>
     <collision></collision>
+    <destruction>
+      <variant1>
+        <timeline>
+          <death>	0.01	</death>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	20.0	</waitChangeBurnSound>
+          <stopDeath>	36000	</stopDeath>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+              </stage>
+              <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+              </stage>
+              <stage>	0.0	  <color>	0 0 0 0	</color>
+              </stage>
+            </stages>
+          </flashBang>
+          <pixie>
+            <startKey>	death	</startKey>
+            <endKey>	stopDeath	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/front_line_destruction_medium.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	death	</startKey>
+            <wwsoundPC>	eb_expl_destruction_medium	</wwsoundPC>
+            <wwsoundNPC>	eb_expl_destruction_medium	</wwsoundNPC>
+          </sound>
+          <decal>
+            <startKey>	static	</startKey>
+            <groupName>	slow	</groupName>
+            <texName>	explosion_ground_AM	</texName>
+            <bumpTexName>	explosion_ground_NM	</bumpTexName>
+            <smTexName>	explosion_stone_NO_GMM	</smTexName>
+            <size>	12 12	</size>
+            <randomYaw>	true	</randomYaw>
+          </decal>
+          <pixie>
+            <startKey>	static	</startKey>
+            <endKey>	stopDeath	</endKey>
+            <file>	particles/Tank/destruction/smoke_dead_medium_01.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <pixie>
+            <startKey>	flaming	</startKey>
+            <endKey>	waitChangeBurnSound	</endKey>
+            <file>	particles/Tank/destruction/fire_dead_medium_01.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+        </effects>
+      </variant1>
+    </destruction>
     <damagedStateGroup>	small	</damagedStateGroup>
   </effects>
   <emblems>

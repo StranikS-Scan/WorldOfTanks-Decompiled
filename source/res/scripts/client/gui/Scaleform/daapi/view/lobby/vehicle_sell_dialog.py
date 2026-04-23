@@ -5,7 +5,7 @@ from account_helpers.AccountSettings import AccountSettings
 from goodies.goodie_constants import GOODIE_VARIETY
 from gui import SystemMessages, makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.Scaleform.daapi.view.lobby.customization.shared import TYPES_ORDER
+from gui.impl.lobby.customization.shared import TYPES_ORDER
 from gui.Scaleform.daapi.view.meta.VehicleSellDialogMeta import VehicleSellDialogMeta
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
@@ -744,12 +744,14 @@ class _OptionalDeviceData(_VSDItemData):
     def setAlertIconTooltip(self, toInventory=True):
         isSubscriptionEnabled = self.__wotPlus.isEnabled()
         isFreeEquipmentDemountingEnabled = self.__lobbyContext.getServerSettings().isFreeEquipmentDemountingEnabled()
+        isOptDeviceRestoreEnabled = self.__lobbyContext.getServerSettings().isOptionalDeviceRestoreEnabled()
         if not toInventory:
             self._flashData['isAlertVisible'] = True
-            if not self._flashData['isModernized']:
-                self._flashData['alertIconDataID'] = '#tooltips:vehicleSellDialog/renderer/alertIconSell'
+            if self._flashData['isModernized']:
+                key = 'alertIconDeconstructEnabled' if isOptDeviceRestoreEnabled else 'alertIconDeconstructDisabled'
             else:
-                self._flashData['alertIconDataID'] = '#tooltips:vehicleSellDialog/renderer/alertIconDeconstruct'
+                key = 'alertIconSellEnabled' if isOptDeviceRestoreEnabled and not self.isRegular else 'alertIconSellDisabled'
+            self._flashData['alertIconDataID'] = '#tooltips:vehicleSellDialog/renderer/{}'.format(key)
         elif self.isRegular and not isSubscriptionEnabled and isFreeEquipmentDemountingEnabled:
             self._flashData['isAlertVisible'] = True
             self._flashData['alertIconDataID'] = '#tooltips:vehicleSellDialog/renderer/alertIconRemove'

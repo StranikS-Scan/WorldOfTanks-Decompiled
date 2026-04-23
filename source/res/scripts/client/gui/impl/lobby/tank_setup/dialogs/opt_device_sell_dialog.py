@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/dialogs/opt_device_sell_dialog.py
-import typing
+from constants import OPT_DEVICES_RESTORE_SETTING
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -14,30 +14,13 @@ from gui.shared.money import Currency
 from gui.shared.utils import decorators
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-if typing.TYPE_CHECKING:
-    from gui.shared.gui_items.artefacts import OptionalDevice
-
-def _initItem(viewModel, device, currency):
-    with viewModel.transaction() as model:
-        equipType = ModuleType.STANDARD
-        if device.isDeluxe:
-            equipType = ModuleType.IMPROVED
-        elif device.isTrophy:
-            equipType = ModuleType.TROPHY
-        model.setModuleType(equipType)
-        model.equipment.setItem(device.getGUIEmblemID())
-        model.equipment.setOverlayType(device.getOverlayType())
-        model.equipment.setName(device.name)
-        model.equipmentPrice.setType(currency)
-        model.equipmentPrice.setAmount(device.inventoryCount)
-        actualPrices = device.sellPrices.itemPrice.price
-        model.equipmentPrice.setPrice(actualPrices.toSignDict().get(currency, 0))
-
 
 class OptDeviceSellDialog(ViewImpl):
-    __itemsCache = dependency.descriptor(IItemsCache)
     __slots__ = ('__device',)
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
     LAYOUT_ID = R.views.lobby.tanksetup.dialogs.Sell()
 
     def __init__(self, itemIntCD):
@@ -52,21 +35,42 @@ class OptDeviceSellDialog(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(OptDeviceSellDialog, self)._onLoading(*args, **kwargs)
         initBalance(self.viewModel.getBalance(), Currency.GUI_ALL, self.__itemsCache)
-        _initItem(self.viewModel, self.__device, self.__device.sellPrices.itemPrice.price.getCurrency(byWeight=True))
+        self.__fillModel()
         self.__addListeners()
 
     def _finalize(self):
         self.__removeListeners()
         super(OptDeviceSellDialog, self)._finalize()
 
+    def __fillModel(self):
+        device = self.__device
+        currency = device.sellPrices.itemPrice.price.getCurrency(byWeight=True)
+        with self.viewModel.transaction() as model:
+            equipType = ModuleType.STANDARD
+            if device.isDeluxe:
+                equipType = ModuleType.IMPROVED
+            elif device.isTrophy:
+                equipType = ModuleType.TROPHY
+            model.setIsOptDeviceRestored(self.__getOptDevicesRestoreState())
+            model.setModuleType(equipType)
+            model.equipment.setItem(device.getGUIEmblemID())
+            model.equipment.setOverlayType(device.getOverlayType())
+            model.equipment.setName(device.name)
+            model.equipmentPrice.setType(currency)
+            model.equipmentPrice.setAmount(device.inventoryCount)
+            actualPrices = device.sellPrices.itemPrice.price
+            model.equipmentPrice.setPrice(actualPrices.toSignDict().get(currency, 0))
+
     def __addListeners(self):
         g_clientUpdateManager.addMoneyCallback(self.__onMoneyUpdated)
         self.viewModel.onSell += self.__onSell
         self.viewModel.onClose += self.__onClose
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
 
     def __removeListeners(self):
         self.viewModel.onSell -= self.__onSell
         self.viewModel.onClose -= self.__onClose
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
         g_clientUpdateManager.removeObjectCallbacks(self)
 
     def __onClose(self, *args, **kwargs):
@@ -74,6 +78,13 @@ class OptDeviceSellDialog(ViewImpl):
 
     def __onMoneyUpdated(self, _):
         initBalance(self.viewModel.getBalance(), Currency.GUI_ALL, self.__itemsCache)
+
+    def __onServerSettingsChange(self, diff):
+        if OPT_DEVICES_RESTORE_SETTING in diff:
+            self.__fillModel()
+
+    def __getOptDevicesRestoreState(self):
+        return self.__lobbyContext.getServerSettings().isOptionalDeviceRestoreEnabled()
 
     @decorators.adisp_process('sellItem')
     def __onSell(self, count):

@@ -281,7 +281,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self._offersBannerController.showBanners()
         self.__updateCarouselEventEntryState()
         self.fireEvent(events.HangarCustomizationEvent(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM), scope=EVENT_BUS_SCOPE.LOBBY)
-        if g_currentVehicle.isPresent():
+        if not self.__isHistoricalBattlesMode() and g_currentVehicle.isPresent():
             g_currentVehicle.refreshModel()
         if self.bootcampController.isInBootcamp():
             self.as_setDQWidgetLayoutS(DAILY_QUESTS_WIDGET_CONSTANTS.WIDGET_LAYOUT_SINGLE)
@@ -778,3 +778,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     def __updateFunRandomModifiersWidget(self):
         subModeId = self.__funRandomCtrl.subModesHolder.getDesiredSubModeID()
         self.as_setFunRandomModifiersVisibleS(self.__funRandomCtrl.isFunRandomModifiersVisibleSBySubModeID(subModeId))
+
+    def __isHistoricalBattlesMode(self):
+        return self.__hangarComponentsCtrl.isComponentAvailable(HANGAR_CONSTS.HB_PANELS)

@@ -8,12 +8,15 @@ from fun_random.gui.Scaleform.daapi.view.lobby.hangar.carousel.carousel_data_pro
 from fun_random.gui.Scaleform.daapi.view.lobby.hangar.carousel.carousel_filter import FunRandomCarouselFilter
 from gui.Scaleform.genConsts.FUNRANDOM_ALIASES import FUNRANDOM_ALIASES
 from gui.Scaleform.daapi.view.lobby.hangar.carousels import BattlePassTankCarousel
+from helpers import dependency
+from skeletons.gui.game_control import IParagonsController
 
 def _removeFilterByName(filters, filterName):
     return tuple((f for f in filters if f != filterName))
 
 
 class FunRandomTankCarousel(BattlePassTankCarousel, FunSubModesWatcher):
+    __paragonsCtrl = dependency.descriptor(IParagonsController)
 
     def __init__(self):
         super(FunRandomTankCarousel, self).__init__()
@@ -21,7 +24,8 @@ class FunRandomTankCarousel(BattlePassTankCarousel, FunSubModesWatcher):
         self._carouselFilterCls = FunRandomCarouselFilter
 
     def getCustomParams(self):
-        return {'isBattlePass': self._battlePassController.isGameModeEnabled(ARENA_BONUS_TYPE.FUN_RANDOM)}
+        return {'isBattlePass': self._battlePassController.isGameModeEnabled(ARENA_BONUS_TYPE.FUN_RANDOM),
+         'paragons': self.__paragonsCtrl.isEnabled}
 
     @classmethod
     def _makeFilterVO(cls, filterID, contexts, filters):

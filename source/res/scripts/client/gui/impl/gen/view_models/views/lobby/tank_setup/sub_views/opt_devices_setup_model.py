@@ -9,7 +9,7 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.special_currency_
 class OptDevicesSetupModel(BaseSetupModel):
     __slots__ = ('onIntroPassed',)
 
-    def __init__(self, properties=11, commands=8):
+    def __init__(self, properties=12, commands=8):
         super(OptDevicesSetupModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -56,6 +56,12 @@ class OptDevicesSetupModel(BaseSetupModel):
     def setIntroductionType(self, value):
         self._setString(10, value)
 
+    def getIsOptDeviceRestored(self):
+        return self._getBool(11)
+
+    def setIsOptDeviceRestored(self, value):
+        self._setBool(11, value)
+
     def _initialize(self):
         super(OptDevicesSetupModel, self)._initialize()
         self._addViewModelProperty('filter', OptDeviceFilterModel())
@@ -64,4 +70,5 @@ class OptDevicesSetupModel(BaseSetupModel):
         self._addArrayProperty('slots', Array())
         self._addBoolProperty('withIntroduction', False)
         self._addStringProperty('introductionType', '')
+        self._addBoolProperty('isOptDeviceRestored', True)
         self.onIntroPassed = self._addCommand('onIntroPassed')

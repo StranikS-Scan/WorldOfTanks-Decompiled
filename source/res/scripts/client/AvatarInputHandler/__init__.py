@@ -59,6 +59,7 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IBootcampController
 from cgf_obsolete_script.script_game_object import ScriptGameObject, ComponentDescriptor
+AUTOSHOOT_SHELL_TYPE = 'AUTOSHOOT'
 INPUT_HANDLER_CFG = 'gui/avatar_input_handler.xml'
 _logger = logging.getLogger(__name__)
 _CTRL_TYPE = aih_constants.CTRL_TYPE
@@ -762,13 +763,10 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                     impulseReason = cameras.ImpulseReason.OTHER_SHOT
                     isDistant = True
             elif vehicle is avatarVehicle:
-                if shakeReason in (_ShakeReason.HIT,
-                 _ShakeReason.HIT_NO_DAMAGE,
-                 _ShakeReason.AUT0SHOOT_HIT,
-                 _ShakeReason.AUT0SHOOT_HIT_NO_DAMAGE):
+                if shakeReason in (_ShakeReason.HIT, _ShakeReason.HIT_NO_DAMAGE):
                     zeroDamageHitSensitivity = self.__dynamicCameraSettings.settings['zeroDamageHitSensitivity']
-                    impulseValue *= 1.0 if shakeReason in (_ShakeReason.HIT, _ShakeReason.AUT0SHOOT_HIT) else zeroDamageHitSensitivity
-                    if shakeReason in (_ShakeReason.AUT0SHOOT_HIT, _ShakeReason.AUT0SHOOT_HIT_NO_DAMAGE):
+                    impulseValue *= 1.0 if shakeReason == _ShakeReason.HIT else zeroDamageHitSensitivity
+                    if shellType == AUTOSHOOT_SHELL_TYPE:
                         impulseValue *= self.__dynamicCameraSettings.getAutoShootGunImpulseCoeff(caliber)
                     impulseReason = cameras.ImpulseReason.ME_HIT
                     isDistant = False

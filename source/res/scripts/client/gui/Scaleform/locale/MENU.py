@@ -569,6 +569,7 @@ class MENU(object):
     TANK_PARAMS_COOLDOWN = '#menu:tank_params/cooldown'
     TANK_PARAMS_PARAM12 = '#menu:tank_params/param12'
     TANK_PARAMS_SHOTDISPERSIONANGLE = '#menu:tank_params/shotDispersionAngle'
+    TANK_PARAMS_SHOTDISPERSIONANGLE_WITHAUTOSHOOT = '#menu:tank_params/shotDispersionAngle/withAutoShoot'
     TANK_PARAMS_AIMINGTIME = '#menu:tank_params/aimingTime'
     TANK_PARAMS_MAXAMMO = '#menu:tank_params/maxAmmo'
     TANK_PARAMS_INVISIBILITYSTILLFACTOR = '#menu:tank_params/invisibilityStillFactor'
@@ -1661,6 +1662,7 @@ class MENU(object):
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_BUTTONS_CLOSE = '#menu:hangar/ammunitionPanel/technicalMaitenance/buttons/close'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_BUTTONS_LABELTOTAL = '#menu:hangar/ammunitionPanel/technicalMaitenance/buttons/labelTotal'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_EQUIPMENTDISABLED = '#menu:hangar/ammunitionPanel/technicalMaitenance/equipmentDisabled'
+    HANGAR_AMMUNITIONPANEL_TROPHYVEHICLE = '#menu:hangar/ammunitionPanel/trophyVehicle'
     FITTINGLISTITEMRENDERER_UNLOAD = '#menu:fittingListItemRenderer/unload'
     FITTINGLISTITEMRENDERER_REPLACE = '#menu:fittingListItemRenderer/replace'
     CUSTOMIZATION_TITLE = '#menu:customization/title'
@@ -1726,6 +1728,7 @@ class MENU(object):
     CONTEXTMENU_CREATECOMP7SQUAD = '#menu:contextMenu/createComp7Squad'
     CONTEXTMENU_CREATERANKEDSQUAD = '#menu:contextMenu/createRankedSquad'
     CONTEXTMENU_CREATEEPICSQUAD = '#menu:contextMenu/createEpicSquad'
+    CONTEXTMENU_CREATEHISTORICALBATTLESQUAD = '#menu:contextMenu/createHistoricalBattleSquad'
     CONTEXTMENU_INVITE = '#menu:contextMenu/invite'
     CONTEXTMENU_APPEAL = '#menu:contextMenu/appeal'
     CONTEXTMENU_INCORRECTBEHAVIOR = '#menu:contextMenu/incorrectBehavior'
@@ -1850,6 +1853,7 @@ class MENU(object):
     BONUSTYPE_32 = '#menu:bonusType/32'
     BONUSTYPE_37 = '#menu:bonusType/37'
     BONUSTYPE_38 = '#menu:bonusType/38'
+    BONUSTYPE_42 = '#menu:bonusType/42'
     BONUSTYPE_43 = '#menu:bonusType/43'
     BONUSTYPE_44 = '#menu:bonusType/44'
     BONUSTYPE_50 = '#menu:bonusType/50'
@@ -2068,6 +2072,7 @@ class MENU(object):
     BOOSTERSWINDOW_TABS_NOTAVAILABLELABEL = '#menu:boostersWindow/tabs/notAvailableLabel'
     BOOSTERSWINDOW_TABS_BUYLABEL = '#menu:boostersWindow/tabs/buyLabel'
     BOOSTERSWINDOW_ACTIVEBOOSTERS = '#menu:boostersWindow/activeBoosters'
+    BOOSTERSWINDOW_BOOSTERSTABLERENDERER_HEADER = '#menu:boostersWindow/boostersTableRenderer/header'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_TIME = '#menu:boostersWindow/boostersTableRenderer/time'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_UNDEFINETIME = '#menu:boostersWindow/boostersTableRenderer/undefineTime'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_QUESTFOROPEN = '#menu:boostersWindow/boostersTableRenderer/questForOpen'
@@ -2383,6 +2388,7 @@ class MENU(object):
     CONTEXTMENU_CREWWIDGETCHANGESPECIALIZATION = '#menu:contextMenu/crewWidgetChangeSpecialization'
     LOADING_BATTLETYPES_300 = '#menu:loading/battleTypes/300'
     LOADING_BATTLETYPES_DESC_300 = '#menu:loading/battleTypes/desc/300'
+    HEADERBUTTON_MUSEUM = '#menu:headerButton/museum'
     CONTEXTMENU_ENUM = (CONTEXTMENU_EXCHANGE,
      CONTEXTMENU_VEHICLEINFO,
      CONTEXTMENU_VEHICLEINFOEX,
@@ -2444,6 +2450,7 @@ class MENU(object):
      CONTEXTMENU_CREATECOMP7SQUAD,
      CONTEXTMENU_CREATERANKEDSQUAD,
      CONTEXTMENU_CREATEEPICSQUAD,
+     CONTEXTMENU_CREATEHISTORICALBATTLESQUAD,
      CONTEXTMENU_INVITE,
      CONTEXTMENU_APPEAL,
      CONTEXTMENU_INCORRECTBEHAVIOR,
@@ -2803,6 +2810,7 @@ class MENU(object):
      TANK_PARAMS_COOLDOWN,
      TANK_PARAMS_PARAM12,
      TANK_PARAMS_SHOTDISPERSIONANGLE,
+     TANK_PARAMS_SHOTDISPERSIONANGLE_WITHAUTOSHOOT,
      TANK_PARAMS_AIMINGTIME,
      TANK_PARAMS_MAXAMMO,
      TANK_PARAMS_INVISIBILITYSTILLFACTOR,

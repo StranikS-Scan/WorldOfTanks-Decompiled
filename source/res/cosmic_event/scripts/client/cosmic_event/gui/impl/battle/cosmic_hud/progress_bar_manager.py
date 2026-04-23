@@ -6,7 +6,6 @@ import logging
 import typing
 from helpers import time_utils
 from shared_utils import safeCancelCallback
-from cosmic_event_common.cosmic_constants import LOOT_ITEM_ID, LOOT_STATE
 from cosmic_event.gui.impl.gen.view_models.views.battle.cosmic_hud.cosmic_progress_bar import CosmicProgressBar, ProgressBarType
 from cosmic_sound import CosmicBattleSounds
 if typing.TYPE_CHECKING:
@@ -23,11 +22,6 @@ class CosmicProgressBarsManager(object):
         self.__updateHandlers = self.__initUpdateHandlers()
         self.__barTimers = {}
         self.__progressBarIdToArrayID = {}
-        for loot in BigWorld.entities.valuesOfType('CosmicLoot'):
-            if loot.itemID == LOOT_ITEM_ID.COSMIC_CORAL and loot.state == LOOT_STATE.SPAWNED:
-                ctx = {'totalTime': loot.lifeTime,
-                 'timeLeft': loot.lifeTimeRemained}
-                self.createProgressBar(ProgressBarType.CORAL, loot.id, ctx)
 
     def stop(self):
         for barID in self.__progressBarIdToArrayID.keys():

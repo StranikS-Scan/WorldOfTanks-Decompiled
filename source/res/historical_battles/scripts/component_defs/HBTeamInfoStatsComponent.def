@@ -1,0 +1,62 @@
+<HBTeamInfoStatsComponent.def>
+  <CellMethods></CellMethods>
+  <ClientMethods></ClientMethods>
+  <Properties>
+    <damage>
+      <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+            <id>
+              <Type>	OBJECT_ID	</Type>
+            </id>
+            <value>
+              <Type>	UINT32	</Type>
+            </value>
+          </Properties>
+        </of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </damage>
+    <blocked>
+      <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+            <id>
+              <Type>	OBJECT_ID	</Type>
+            </id>
+            <value>
+              <Type>	UINT32	</Type>
+            </value>
+          </Properties>
+        </of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </blocked>
+    <assist>
+      <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+            <id>
+              <Type>	OBJECT_ID	</Type>
+            </id>
+            <value>
+              <Type>	UINT32	</Type>
+            </value>
+          </Properties>
+        </of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </assist>
+    <isLeaver>
+      <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+            <id>
+              <Type>	OBJECT_ID	</Type>
+            </id>
+            <value>
+              <Type>	UINT8	</Type>
+            </value>
+          </Properties>
+        </of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isLeaver>
+  </Properties>
+  <ofEntity>
+    <TeamInfo></TeamInfo>
+  </ofEntity>
+  <DefaultKeyName>	hbTeamStatsComponent	</DefaultKeyName>
+</HBTeamInfoStatsComponent.def>

@@ -672,10 +672,11 @@ class BattleMattersAwardsFormatterBase(ServiceChannelFormatter, TokenQuestsSubFo
         return cls.__battleMattersController.isBattleMattersQuestID(questID)
 
     def __buildMessage(self, questID, message):
+        from notification.decorators import BattleMattersAwardsDecorator
         data = message.data or {}
         isWithButton = self._achievesFormatter.isWithSelectableReward(data)
-        rewardToken = first([ k for k in data.get('tokens', {}) if self.__battleMattersController.isDelayedRewardToken(k) ])
         rewards = data.get('detailedRewards', {}).get(questID, {})
+        rewardToken = first([ k for k in rewards.get('tokens', {}) if self.__battleMattersController.isDelayedRewardToken(k) ])
         fmt = self._achievesFormatter.formatQuestAchieves(rewards, asBattleFormatter=False)
         if fmt is not None:
             questIdx = getIdxFromQuestID(questID)
@@ -689,12 +690,18 @@ class BattleMattersAwardsFormatterBase(ServiceChannelFormatter, TokenQuestsSubFo
                 body = backport.text(awardText.body(), questIdx=text_styles.stats(backport.text(awardText.questIdx(), questIdx=str(questIdx))), questName=text_styles.stats(quest.getUserName() if quest else ''))
             templateParams = {'achieves': fmt or '',
              'body': body}
+            decorator = None
+            auxData = None
             if isWithButton:
+                template = self.__MESSAGE_TEMPLATE.format(self.__TOKEN_TYPE)
                 level = self.__battleMattersController.getDelayedRewardVehiclesLevel(rewardToken)
                 footer = backport.text(R.strings.messenger.serviceChannelMessages.battleMatters.awards.footer(), level=int2roman(int(level)))
                 templateParams['footer'] = footer
-            template = self.__MESSAGE_TEMPLATE.format(self.__TOKEN_TYPE if isWithButton else self.__AWARD_TYPE)
-            settings = self._getGuiSettings(message, template)
+            else:
+                template = self.__MESSAGE_TEMPLATE.format(self.__AWARD_TYPE)
+                decorator = BattleMattersAwardsDecorator
+                auxData = {'questIdx': questIdx}
+            settings = self._getGuiSettings(message, template, decorator=decorator, auxData=auxData)
             formatted = g_settings.msgTemplates.format(template, ctx=templateParams, data={'savedData': {'rewardToken': rewardToken}})
             return MessageData(formatted, settings)
         else:

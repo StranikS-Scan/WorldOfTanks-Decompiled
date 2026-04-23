@@ -238,6 +238,9 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
     def _setSnapForClientID(self, clientID, points, rate, timeLeft):
         self.__snap[clientID] = (points, rate, timeLeft)
 
+    def _getTrackedClientIDs(self):
+        return tuple(self.__points)
+
     def _addCapturingTeamBase(self, clientID, playerTeam, points, timeLeft, invadersCnt, capturingStopped):
         for viewCmp in self._viewComponents:
             viewCmp.addCapturingTeamBase(clientID, playerTeam, points, self._getProgressRate(), timeLeft, invadersCnt, capturingStopped)

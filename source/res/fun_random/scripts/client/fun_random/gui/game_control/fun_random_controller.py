@@ -131,9 +131,6 @@ class FunRandomController(IFunRandomController, IGlobalListener):
         self.__hiddenVehicles.updateCurrentVehicle(self.__subModesHolder.getDesiredSubMode())
         self.__subscription.resume()
 
-    def getCurrentFunType(self):
-        return self.__funRandomSettings.FEPType
-
     def getDesiredSubModeID(self):
         return self.__subModesHolder.getDesiredSubMode()
 

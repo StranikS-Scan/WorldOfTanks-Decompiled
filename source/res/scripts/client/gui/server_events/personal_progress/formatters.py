@@ -75,15 +75,22 @@ class ProgressesFormatter(object):
             result.append(self.__addDummyHeaderProgress(isMain=isMain))
 
     def __addDummyHeaderProgress(self, isMain):
+        isRegular = all([ v.getProgressType() == 'regular' for v in self._storage.getBodyProgresses(isMain).values() ])
         if isMain:
             orderType = QUEST_PROGRESS_BASE.MAIN_ORDER_TYPE
             key = PERSONAL_MISSIONS.CONDITIONS_UNLIMITED_LABEL_MAIN
         else:
             orderType = QUEST_PROGRESS_BASE.ADD_ORDER_TYPE
             key = PERSONAL_MISSIONS.CONDITIONS_UNLIMITED_LABEL_ADD
-        return {'progressType': self._dummyHeaderType,
+        if isRegular:
+            progressType = DISPLAY_TYPE.NONE
+            header = ''
+        else:
+            progressType = self._dummyHeaderType
+            header = i18n.makeString(key)
+        return {'progressType': progressType,
          'orderType': orderType,
-         'header': i18n.makeString(key)}
+         'header': header}
 
 
 def _packCondition(title, strConditions):

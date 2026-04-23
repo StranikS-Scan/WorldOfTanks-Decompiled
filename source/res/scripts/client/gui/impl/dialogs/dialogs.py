@@ -21,11 +21,16 @@ if typing.TYPE_CHECKING:
     from frameworks.wulf import View
 
 @th_async
-def show(dialog):
+def show(dialog, loadCallback=None, destroyCallback=None):
     dialog.load()
+    if loadCallback is not None:
+        loadCallback()
     result = yield th_await(dialog.wait())
     dialog.destroy()
+    if destroyCallback is not None:
+        destroyCallback()
     raise AsyncReturn(result)
+    return
 
 
 @th_async
@@ -35,8 +40,8 @@ def showSimpleWithResultData(dialog, submitResults=DialogButtons.ACCEPT_BUTTONS)
 
 
 @th_async
-def showSimple(dialog, submitResult=DialogButtons.SUBMIT):
-    result = yield th_await(show(dialog))
+def showSimple(dialog, submitResult=DialogButtons.SUBMIT, loadCallback=None, destroyCallback=None):
+    result = yield th_await(show(dialog, loadCallback=loadCallback, destroyCallback=destroyCallback))
     raise AsyncReturn(result.result == submitResult)
 
 
@@ -99,8 +104,8 @@ def showSingleDialog(wrappedViewClass, layoutID, parent=None, *args, **kwargs):
 
 
 @th_async
-def showSingleDialogWithResultData(wrappedViewClass, layoutID, parent=None, *args, **kwargs):
-    dialog = FullScreenDialogWindowWrapper.createIfNotExist(layoutID, wrappedViewClass, parent, *args, **kwargs)
+def showSingleDialogWithResultData(wrappedViewClass, layoutID, parent=None, layer=WindowLayer.UNDEFINED, *args, **kwargs):
+    dialog = FullScreenDialogWindowWrapper.createIfNotExist(layoutID, wrappedViewClass, parent, layer, *args, **kwargs)
     if dialog is not None:
         result = yield th_await(showSimpleWithResultData(dialog))
         raise AsyncReturn(SingleDialogResult(busy=False, result=result))

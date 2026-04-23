@@ -10,7 +10,7 @@
   <postProgressionTree>	role_MT_universal	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	46	</forward>
+    <forward>	50	</forward>
     <backward>	18	</backward>
   </speedLimits>
   <invisibility>
@@ -902,8 +902,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	46	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.20	</vehicleMovement>
-        <vehicleRotation>	0.20	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -1921,7 +1921,7 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 0.32 10 0.38 4 0.62 4 0.68 10 1 10	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <shotDispersionRadius>	0.44	</shotDispersionRadius>
           <reloadTime>	21.5	</reloadTime>
           <aimingTime>	3.0	</aimingTime>
           <invisibilityFactorAtShot>	0.15	</invisibilityFactorAtShot>
@@ -2565,7 +2565,7 @@
       <engines>
         <Continental_AOSI_1195_6_O>
           <smplEnginePower>	710	</smplEnginePower>
-          <smplFwMaxSpeed>	46	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </Continental_AOSI_1195_6_O>
       </engines>
       <chassis>

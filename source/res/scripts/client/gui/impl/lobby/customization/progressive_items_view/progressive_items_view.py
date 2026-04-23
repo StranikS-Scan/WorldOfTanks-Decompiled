@@ -1,12 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/customization/progressive_items_view/progressive_items_view.py
+import weakref
 import logging
 import BigWorld
 from adisp import adisp_process
 from CurrentVehicle import g_currentVehicle
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
-from frameworks.wulf import ViewFlags, ViewSettings
+from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
 from gui import GUI_SETTINGS
+from gui.impl.lobby.customization.sound_constants import SOUNDS
+from gui.impl.pub.lobby_window import LobbyWindow
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.game_control.links import URLMacros
 from gui.server_events.events_dispatcher import showProgressiveItemsBrowserView
@@ -16,7 +19,7 @@ from gui.impl.gen.view_models.views.lobby.customization.progressive_items_view.i
 from gui.impl.gen.view_models.views.lobby.customization.progressive_items_view.item_level_info_model import ItemLevelInfoModel
 from gui.impl.gen.view_models.views.lobby.customization.progressive_items_view.progressive_items_view_model import ProgressiveItemsViewModel
 from gui.impl.pub import ViewImpl
-from gui.Scaleform.daapi.view.lobby.customization.shared import getProgressionItemStatusText
+from gui.impl.lobby.customization.shared import getProgressionItemStatusText
 from gui.shared.gui_items.customization import CustomizationTooltipContext
 from helpers import dependency, int2roman
 from helpers.i18n import makeString as _ms
@@ -42,7 +45,7 @@ _PREVIEW_ICON_INNER_SIZE = {ProjectionDecalFormTags.SQUARE: (504, 504),
  ProjectionDecalFormTags.RECT1X6: (504, 84)}
 
 class ProgressiveItemsView(ViewImpl):
-    __slots__ = ('__c11nView', '_itemsProgressData', '_possibleItems', '_vehicle', '__blur', '__layoutID', '__urlMacros', '__guiSettings')
+    __slots__ = ('__customizationView', '_itemsProgressData', '_possibleItems', '_vehicle', '__blur', '__layoutID', '__urlMacros', '__guiSettings')
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __itemsCache = dependency.descriptor(IItemsCache)
     __customizationService = dependency.descriptor(ICustomizationService)
@@ -50,11 +53,11 @@ class ProgressiveItemsView(ViewImpl):
     __settingsCore = dependency.descriptor(ISettingsCore)
     __guiLoader = dependency.descriptor(IGuiLoader)
 
-    def __init__(self, layoutID, c11nView, *args, **kwargs):
+    def __init__(self, layoutID, customizationView, *args, **kwargs):
         settings = ViewSettings(layoutID)
         settings.args = args
         settings.kwargs = kwargs
-        settings.flags = ViewFlags.LOBBY_TOP_SUB_VIEW
+        settings.flags = ViewFlags.VIEW
         settings.model = ProgressiveItemsViewModel()
         super(ProgressiveItemsView, self).__init__(settings)
         self._itemsProgressData = None
@@ -62,7 +65,7 @@ class ProgressiveItemsView(ViewImpl):
         self._vehicle = None
         self.__blur = CachedBlur()
         self.__layoutID = layoutID
-        self.__c11nView = c11nView
+        self.__customizationView = weakref.proxy(customizationView) if customizationView is not None else None
         self.__urlMacros = URLMacros()
         self.__guiSettings = GUI_SETTINGS.progressiveItems.get('tutorialVideo', {})
         return
@@ -82,24 +85,23 @@ class ProgressiveItemsView(ViewImpl):
 
     def _initialize(self, *args, **kwargs):
         super(ProgressiveItemsView, self)._initialize(*args, **kwargs)
-        layoutID = R.views.lobby.customization.CustomizationCart()
-        customizationCartView = self.__guiLoader.windowsManager.getViewByLayoutID(layoutID)
-        if customizationCartView is not None:
-            customizationCartView.destroyWindow()
-        if self.__c11nView is not None:
-            self.__c11nView.changeVisible(False)
+        if self.__customizationView is not None:
+            self.__customizationView.progressiveItemsViewShowed()
+            self.__customizationView.viewModel.setIsProgressiveItemsViewVisible(True)
         self.viewModel.onSelectItem += self._onSelectItem
+        self.viewModel.playSounds += self._playSounds
         self.viewModel.tutorial.showVideo += self._showVideoPage
         return
 
     def _finalize(self):
-        super(ProgressiveItemsView, self)._finalize()
-        if self.__c11nView is not None:
-            self.__c11nView.changeVisible(True)
-            self.__c11nView = None
+        if self.__customizationView is not None:
+            self.__customizationView.viewModel.setIsProgressiveItemsViewVisible(False)
+        self.__customizationView = None
         self.__blur.fini()
-        self.viewModel.onSelectItem -= self._onSelectItem
         self.viewModel.tutorial.showVideo -= self._showVideoPage
+        self.viewModel.playSounds -= self._playSounds
+        self.viewModel.onSelectItem -= self._onSelectItem
+        super(ProgressiveItemsView, self)._finalize()
         return
 
     def _onLoading(self, *args, **kwargs):
@@ -136,6 +138,17 @@ class ProgressiveItemsView(ViewImpl):
 
             BigWorld.callback(0.0, changeTabAndGetItemToHand)
         self.destroyWindow()
+        return
+
+    def _playSounds(self, args=None):
+        if args is not None:
+            isTutorialPageOpened = bool(args['isTutorialPageOpened'])
+            if isTutorialPageOpened:
+                self.soundManager.setState(SOUNDS.STATE_STYLEINFO, SOUNDS.STATE_STYLEINFO_SHOW)
+                self.soundManager.setRTPC(SOUNDS.RTPC_STYLEINFO, 1)
+            else:
+                self.soundManager.setState(SOUNDS.STATE_STYLEINFO, SOUNDS.STATE_STYLEINFO_HIDE)
+                self.soundManager.setRTPC(SOUNDS.RTPC_STYLEINFO, 0)
         return
 
     def _showVideoPage(self, args=None):
@@ -194,3 +207,10 @@ class ProgressiveItemsView(ViewImpl):
     @staticmethod
     def __getTooltipData(intCD, tooltip, level):
         return createTooltipData(isSpecial=True, specialAlias=tooltip, specialArgs=CustomizationTooltipContext(itemCD=intCD, level=level, showOnlyProgressBlock=True))
+
+
+class ProgressiveItemsWindow(LobbyWindow):
+    __slots__ = ()
+
+    def __init__(self, customizationView=None, itemIntCD=None, parent=None):
+        super(ProgressiveItemsWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=ProgressiveItemsView(R.views.lobby.customization.progressive_items_view.ProgressiveItemsView(), customizationView, itemIntCD=itemIntCD), parent=parent)

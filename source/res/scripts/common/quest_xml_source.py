@@ -4,6 +4,7 @@ import time
 import ArenaType
 import ResMgr
 import nations
+import constants
 from soft_exception import SoftException
 from copy import deepcopy
 from pprint import pformat
@@ -188,6 +189,10 @@ class Source(object):
                     raise SoftException('tokenQuest: daily or weekly should be used with bonusLimit tag')
             mainNode.bonus = readBonusSection(availableBonuses, questSection['bonus'], eventType)
             mainNode.bonusDelayed = readBonusSection(availableBonuses, questSection['bonusDelayed'], eventType)
+            if constants.IS_DYNUPDATER:
+                from account_helpers.ServiceTokenDispatcher import ServiceTokenDispatcher
+                ServiceTokenDispatcher.validateFromQuest(mainNode.bonus, info['id'])
+                ServiceTokenDispatcher.validateFromQuest(mainNode.bonusDelayed, info['id'])
             if eventType in (EVENT_TYPE.NT_QUEST, EVENT_TYPE.PERSONAL_MISSION):
                 mainNode.scripts = questSection['scripts'].asString if questSection.has_key('scripts') else ''
             questClientData = dict(info)

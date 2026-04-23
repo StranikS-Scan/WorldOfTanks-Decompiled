@@ -172,12 +172,11 @@
     <Cat_LDS_750>	31032	</Cat_LDS_750>
     <Wright_Continental_R-975C1L_02>	31029	</Wright_Continental_R-975C1L_02>
     <Continental_AOSI_1195_6_O>	31030	</Continental_AOSI_1195_6_O>
+    <AX_1100>	31035	</AX_1100>
     <Continental_AOSI_1195_5_T>	31009	</Continental_AOSI_1195_5_T>
     <Continental_AV-1790-3_832>	35000	</Continental_AV-1790-3_832>
     <Continental_AVCR_MBT_T>	35001	</Continental_AVCR_MBT_T>
     <LDS_750_T>	35002	</LDS_750_T>
-    <Continental_AV_1790_5C_ISP>	37000	</Continental_AV_1790_5C_ISP>
-    <AOI-1490_ISP>	37001	</AOI-1490_ISP>
   </ids>
   <shared>
     <Ford_GAC>
@@ -1190,24 +1189,6 @@
       <rpm_min>	392	</rpm_min>
       <rpm_max>	2903	</rpm_max>
     </AOI-1490>
-    <AOI-1490_ISP>
-      <userString>	#usa_vehicles:AOI-1490_ISP	</userString>
-      <shortUserString>	#usa_vehicles:AOI-1490_ISP_short	</shortUserString>
-      <tags>	gasoline	</tags>
-      <level>	10	</level>
-      <price>	100000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <power>	875	</power>
-      <weight>	1200	</weight>
-      <maxHealth>	260	</maxHealth>
-      <maxRegenHealth>	130	</maxRegenHealth>
-      <repairCost>	6	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	392	</rpm_min>
-      <rpm_max>	2903	</rpm_max>
-    </AOI-1490_ISP>
     <AVI_1790_8>
       <userString>	#usa_vehicles:AVI_1790_8	</userString>
       <shortUserString>	#usa_vehicles:AVI_1790_8_short	</shortUserString>
@@ -1366,24 +1347,6 @@
       <rpm_min>	500	</rpm_min>
       <rpm_max>	2000	</rpm_max>
     </Continental_AV_1790_5C>
-    <Continental_AV_1790_5C_ISP>
-      <userString>	#usa_vehicles:Continental_AV_1790_5C_ISP	</userString>
-      <shortUserString>	#usa_vehicles:Continental_AV_1790_5C_ISP_short	</shortUserString>
-      <tags>	gasoline	</tags>
-      <level>	10	</level>
-      <price>	99000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
-      <power>	900	</power>
-      <weight>	1159	</weight>
-      <maxHealth>	260	</maxHealth>
-      <maxRegenHealth>	130	</maxRegenHealth>
-      <repairCost>	6	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	500	</rpm_min>
-      <rpm_max>	2000	</rpm_max>
-    </Continental_AV_1790_5C_ISP>
     <Continental_AV_1790_5C_T>
       <userString>	#usa_vehicles:Continental_AV_1790_5C_T	</userString>
       <shortUserString>	#usa_vehicles:Continental_AV_1790_5C_T_short	</shortUserString>
@@ -2634,6 +2597,23 @@
       <rpm_min>	290	</rpm_min>
       <rpm_max>	2868	</rpm_max>
     </Continental_AOI_628_2A>
+    <AX_1100>
+      <userString>	#usa_vehicles:AX_1100	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	51000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	717	</power>
+      <weight>	1134	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	670	</rpm_min>
+      <rpm_max>	2268	</rpm_max>
+    </AX_1100>
     <Continental_AOI_895_6>
       <userString>	#usa_vehicles:Continental_AOI_895_6	</userString>
       <tags>	gasoline	</tags>
@@ -2951,16 +2931,16 @@
       <level>	10	</level>
       <price>	100000	</price>
       <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	600	</power>
       <weight>	760	</weight>
       <maxHealth>	285	</maxHealth>
       <maxRegenHealth>	142	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	399	</rpm_min>
-      <rpm_max>	2101	</rpm_max>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	2000	</rpm_max>
     </Cat_LDS_750>
     <Continental_AOI-628-2_IGR>
       <userString>	#igr_vehicles:Continental_AOI-628-2_IGR	</userString>

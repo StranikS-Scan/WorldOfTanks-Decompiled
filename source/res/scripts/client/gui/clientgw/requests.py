@@ -26,6 +26,7 @@ from gui.clientgw.external_battle_handlers import BaseExternalBattleUnitRequestH
 from gui.clientgw.craftmachine.handlers import CraftmachineRequestHandlers
 from gui.clientgw.gift_system.handlers import GiftSystemRequestHandlers
 from gui.clientgw.uilogging.handlers import UILoggingRequestHandlers
+from gui.clientgw.statbox.handlers import StatBoxRequestHandlers
 
 class ClientgwRequestResponse(Response):
 
@@ -112,6 +113,7 @@ class ClientgwRequestsController(RequestsController):
         self.__handlers.update(AgateRequestHandlers(requester).get())
         self.__handlers.update(ShopRequestHandlers(requester).get())
         self.__handlers.update(GoldWagonRequestHandlers(requester).get())
+        self.__handlers.update(StatBoxRequestHandlers(requester).get())
 
     def fini(self):
         super(ClientgwRequestsController, self).fini()

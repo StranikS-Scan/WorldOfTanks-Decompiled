@@ -2,6 +2,7 @@
 # Embedded file name: armory_yard/scripts/client/armory_yard/gui/impl/lobby/feature/tooltips/armory_yard_simple_tooltip_view.py
 from enum import Enum
 from operator import attrgetter
+from datetime import datetime
 from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl import backport
@@ -106,15 +107,21 @@ class ArmoryYardSimpleTooltipView(ViewImpl):
             nowTime = time_utils.getServerUTCTime()
             for cycle in sorted(currentSeason.getAllCycles().values(), key=attrgetter('ID')):
                 if cycle.ID == self.__id and cycle.startDate > nowTime:
-                    startDateString = backport.text(self._RES_ROOT.chapter.disabled.doFuture.noteDate(), color_open='%(brown_open)s', startDate=backport.getDateTimeFormat(cycle.startDate), color_close='%(brown_close)s')
+                    startDate = datetime.strptime(backport.getShortDateFormat(cycle.startDate), '%d.%m.%Y')
+                    startTime = backport.getShortTimeFormat(cycle.startDate)
+                    startDateString = backport.text(self._RES_ROOT.chapter.disabled.doFuture.noteDate(), color_open='%(brown_open)s', weekday=backport.text(self._RES_ROOT.weekday.num(startDate.isoweekday())()), day=startDate.day, month=backport.text(R.strings.menu.dateTime.months.num(startDate.month)()), year=startDate.year, startTime=datetime.strptime(startTime, '%H:%M').strftime('%H:%M'), color_close='%(brown_close)s')
                     return backport.text(self._RES_ROOT.chapter.disabled.doFuture.note(), startText=startDateString)
 
         elif self.__state == SimpleTooltipStates.TAB:
             if self.__id == TabId.QUESTS:
                 startTime, endTime = self.__armoryYardCtrl.getProgressionTimes()
-                periodString = backport.text(self._RES_ROOT.tab.quests.noteDate(), color_open='%(brown_open)s', startDate=backport.getDateTimeFormat(startTime), endDate=backport.getDateTimeFormat(endTime), color_close='%(brown_close)s')
-                return backport.text(self._RES_ROOT.tab.quests.note(), periodText=periodString)
+                return backport.text(self._RES_ROOT.tab.quests.note(), color_open='%(brown_open)s', startDate=self._getFormattedTime(startTime), endDate=self._getFormattedTime(endTime), color_close='%(brown_close)s')
         elif self.__state == SimpleTooltipStates.STEP and self.__armoryYardCtrl.getCurrentProgress() >= self.__step:
             media = self.__getMediaByStepID()
             if media:
                 return backport.text(self._RES_ROOT.step.dyn(media.value).note())
+
+    def _getFormattedTime(self, progressionTime):
+        formattedDate = datetime.strptime(backport.getShortDateFormat(progressionTime), '%d.%m.%Y')
+        formattedTime = backport.getShortTimeFormat(progressionTime)
+        return backport.text(self._RES_ROOT.tab.quests.noteDate(), weekday=backport.text(self._RES_ROOT.after.weekday.num(formattedDate.isoweekday())()), day=formattedDate.day, month=backport.text(R.strings.menu.dateTime.months.num(formattedDate.month)()), year=formattedDate.year, startTime=datetime.strptime(formattedTime, '%H:%M').strftime('%H:%M'))

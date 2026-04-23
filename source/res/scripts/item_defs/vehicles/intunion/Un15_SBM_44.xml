@@ -2322,6 +2322,7 @@
             <shotDispersionPerSec>	1.5	</shotDispersionPerSec>
             <maxShotDispersion>	7	</maxShotDispersion>
             <rate>	4.66	</rate>
+            <rebuildShotDispersionDelay>	1.0	</rebuildShotDispersionDelay>
           </autoShoot>
           <customizationSlots>
             <slot>
@@ -2381,8 +2382,9 @@
             <collisionModelServer>	vehicles/intunion/Un15_SBM_44/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/intunion/Un15_SBM_44/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <effects>	shot_autoshoot_small	</effects>
+          <effects>	shot_autoshoot_small_shell_inside	</effects>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <shotOffset>	0 0 0.205848	</shotOffset>
           <camouflage>
             <density>	147.183701 146.447754	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
@@ -2955,13 +2957,13 @@
           <gunNode>	G_L	</gunNode>
           <gunFire>	HP_gunFire_L	</gunFire>
           <position>	-0.19900 -0.002106 -0.069740	</position>
-          <shotOffset>	0.084062 0.353985 0.000002	</shotOffset>
+          <shotOffset>	0.084062 0.353985 1.32656	</shotOffset>
         </gun>
         <gun>
           <gunNode>	G_R	</gunNode>
           <gunFire>	HP_gunFire_R	</gunFire>
           <position>	0.20100 -0.002106 -0.069740	</position>
-          <shotOffset>	-0.090635 0.352938 0.000003	</shotOffset>
+          <shotOffset>	-0.090635 0.352938 1.327	</shotOffset>
         </gun>
       </multiGun>
       <physicsShape>	1 0 1.049 0 0.932 -0.033 0.832 0.582 0.281 0.5 0.249 0.5 0 0.5 0	</physicsShape>
@@ -3016,7 +3018,7 @@
         <_30mm_vz_53>	shared	  <maxAmmo>	720	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.38 8 0.42 4 0.58 4 0.62 8 1 8	</maxPitch>
+            <maxPitch>	0 8 0.38 8 0.42 2 0.58 2 0.62 8 1 8	</maxPitch>
           </pitchLimits>
           <armor>
             <armor_1>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3046,6 +3048,7 @@
             <shotDispersionPerSec>	1.5	</shotDispersionPerSec>
             <maxShotDispersion>	8	</maxShotDispersion>
             <rate>	4.66	</rate>
+            <rebuildShotDispersionDelay>	1.0	</rebuildShotDispersionDelay>
           </autoShoot>
           <customizationSlots>
             <slot>
@@ -3105,8 +3108,9 @@
             <collisionModelServer>	vehicles/intunion/Un15_SBM_44/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/intunion/Un15_SBM_44/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
-          <effects>	shot_autoshoot_small	</effects>
+          <effects>	shot_autoshoot_small_shell_inside	</effects>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <shotOffset>	-0 0 0.25	</shotOffset>
           <camouflage>
             <density>	154.36264 153.252228	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
@@ -3145,6 +3149,7 @@
             <shotDispersionPerSec>	1.5	</shotDispersionPerSec>
             <maxShotDispersion>	8	</maxShotDispersion>
             <rate>	4.33	</rate>
+            <rebuildShotDispersionDelay>	1.0	</rebuildShotDispersionDelay>
           </autoShoot>
           <customizationSlots>
             <slot>
@@ -3204,8 +3209,9 @@
             <collisionModelServer>	vehicles/intunion/Un15_SBM_44/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/intunion/Un15_SBM_44/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
-          <effects>	shot_autoshoot_small	</effects>
+          <effects>	shot_autoshoot_small_shell_inside	</effects>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <shotOffset>	-0 0 0.250392	</shotOffset>
           <camouflage>
             <density>	156.973846 157.657196	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
@@ -3650,13 +3656,13 @@
           <gunNode>	G_L	</gunNode>
           <gunFire>	HP_gunFire_L	</gunFire>
           <position>	-0.19900 -0.002106 -0.069740	</position>
-          <shotOffset>	0.084062 0.353985 0.000002	</shotOffset>
+          <shotOffset>	0.084062 0.262 1.504	</shotOffset>
         </gun>
         <gun>
           <gunNode>	G_R	</gunNode>
           <gunFire>	HP_gunFire_R	</gunFire>
           <position>	0.20100 -0.002106 -0.069740	</position>
-          <shotOffset>	-0.090635 0.352938 0.000003	</shotOffset>
+          <shotOffset>	-0.090635 0.262031 1.503867	</shotOffset>
         </gun>
       </multiGun>
       <multiGunState>

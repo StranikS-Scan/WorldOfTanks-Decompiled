@@ -1,0 +1,28 @@
+<HBVehiclePositionsComponent.def>
+  <ClientMethods>
+    <receivePosition>
+      <Args>
+        <vehicleEntityID>	UINT32	</vehicleEntityID>
+        <position>	VECTOR3	</position>
+      </Args>
+    </receivePosition>
+    <receivePositions>
+      <Args>
+        <positions>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+              <vehicleID>
+                <Type>	OBJECT_ID	</Type>
+              </vehicleID>
+              <position>
+                <Type>	VECTOR3	</Type>
+              </position>
+            </Properties>
+          </of>
+        </positions>
+      </Args>
+    </receivePositions>
+  </ClientMethods>
+  <ofEntity>
+    <ArenaInfo></ArenaInfo>
+  </ofEntity>
+  <DefaultKeyName>	hbVehiclePositionsComponent	</DefaultKeyName>
+</HBVehiclePositionsComponent.def>

@@ -120,3 +120,9 @@ class VehicleMarkersManager(plugins.IMarkersManager):
             timerID = BigWorld.callback(time_utils.ONE_SECOND, functools.partial(self.onTimerTick, marker, playerName, timeRemained))
             self.__lootTimers[playerName] = timerID
             return
+
+    def setMarkerCustomDistanceStr(self, markerID, customStr):
+        pass
+
+    def setMarkerTextLabelEnabled(self, markerID, enabled):
+        pass

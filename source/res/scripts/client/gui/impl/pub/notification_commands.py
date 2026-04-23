@@ -5,6 +5,7 @@ from frameworks.wulf import WindowStatus
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.framework.entities.sf_window import SFWindow
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
+from shared_utils import CONST_CONTAINER
 from th_async import th_await, th_async
 
 class NotificationEvent(object):
@@ -20,6 +21,11 @@ class NotificationEvent(object):
 
     def isEventSet(self):
         return self._method is not None and callable(self._method)
+
+
+class Priority(CONST_CONTAINER):
+    MEDIUM = 'medium'
+    HIGH = 'high'
 
 
 class NotificationCommand(object):
@@ -40,13 +46,17 @@ class NotificationCommand(object):
     def getWindow(self):
         raise NotImplementedError
 
+    def getPriority(self):
+        raise NotImplementedError
+
 
 class WindowNotificationCommand(NotificationCommand):
-    __slots__ = ('__window',)
+    __slots__ = ('__window', '__priority')
 
-    def __init__(self, window):
+    def __init__(self, window, priority=Priority.MEDIUM):
         super(WindowNotificationCommand, self).__init__()
         self.__window = window
+        self.__priority = priority
 
     def __eq__(self, other):
         return self.__window == other
@@ -62,6 +72,9 @@ class WindowNotificationCommand(NotificationCommand):
 
     def getWindow(self):
         return self.__window
+
+    def getPriority(self):
+        return self.__priority
 
 
 class WindowNotificationWithWaitingCommand(NotificationCommand):
@@ -96,6 +109,9 @@ class WindowNotificationWithWaitingCommand(NotificationCommand):
     def getWindow(self):
         return self.__window
 
+    def getPriority(self):
+        return Priority.MEDIUM
+
 
 class EventNotificationCommand(NotificationCommand):
     __slots__ = ('__event',)
@@ -118,3 +134,6 @@ class EventNotificationCommand(NotificationCommand):
 
     def getWindow(self):
         return None
+
+    def getPriority(self):
+        return Priority.MEDIUM

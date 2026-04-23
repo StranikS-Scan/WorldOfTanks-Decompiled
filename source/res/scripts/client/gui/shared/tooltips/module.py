@@ -94,6 +94,9 @@ _MODULE_EXTRA_STATUS_RESOURCES = {_ModuleExtraStatuses.AUTOLOADER_GUN: (_STR_EXT
 class ModuleBlockTooltipData(BlocksTooltipData):
     itemsCache = dependency.descriptor(IItemsCache)
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
+    PRICE_VALUE_WIDTH = 97
+    TEXT_GAP = -2
+    BLOCK_TOP_PADDING = -4
 
     def __init__(self, context):
         super(ModuleBlockTooltipData, self).__init__(context, TOOLTIP_TYPE.MODULE)
@@ -106,6 +109,9 @@ class ModuleBlockTooltipData(BlocksTooltipData):
     def _getHighLightType(self):
         return self.item.getHighlightType()
 
+    def _getPriceBlockConstructor(self):
+        return PriceBlockConstructor
+
     def _packBlocks(self, *args, **kwargs):
         self.item = self.context.buildItem(*args, **kwargs)
         items = super(ModuleBlockTooltipData, self)._packBlocks()
@@ -113,14 +119,23 @@ class ModuleBlockTooltipData(BlocksTooltipData):
         statsConfig = self.context.getStatsConfiguration(module)
         paramsConfig = self.context.getParamsConfiguration(module)
         statusConfig = self.context.getStatusConfiguration(module)
-        leftPadding = _DEFAULT_PADDING
-        rightPadding = _DEFAULT_PADDING
-        topPadding = _DEFAULT_PADDING
-        priceValueWidth = 97
-        blockTopPadding = -4
-        textGap = -2
-        itemTypeID = module.itemTypeID
-        if itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES:
+        self._appendHeader(items, module, paramsConfig, statusConfig)
+        self._appendEffects(items, module, statusConfig)
+        self._appendCommonStats(items, module, paramsConfig, statsConfig, statusConfig)
+        self._appendPrice(items, module, statsConfig)
+        self._appendInventory(items, module, statsConfig)
+        showModuleCompatibles = self._appendCompatibles(items, module, paramsConfig, statsConfig)
+        self._appendStatus(items, module, statusConfig, showModuleCompatibles)
+        self._appendSituationalBonusNote(items, module)
+        self._applyStaticInfoBottomPadding(items, statsConfig)
+        return items
+
+    def _appendHeader(self, items, module, paramsConfig, statusConfig):
+        headBlock, headConfig, headerBottom = self._getHeaderConstructors(module, paramsConfig, statusConfig)
+        items.append(formatters.packBuildUpBlockData(headBlock(module, headConfig, _DEFAULT_PADDING, _DEFAULT_PADDING).construct(), padding=formatters.packPadding(left=_DEFAULT_PADDING, right=_DEFAULT_PADDING, top=_DEFAULT_PADDING, bottom=headerBottom)))
+
+    def _getHeaderConstructors(self, module, paramsConfig, statusConfig):
+        if module.itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES:
             headerBottom = -10
             headBlock = ModuleHeaderBlockConstructor
             headConfig = statusConfig if statusConfig.vehicle else paramsConfig
@@ -128,63 +143,81 @@ class ModuleBlockTooltipData(BlocksTooltipData):
             headerBottom = -38
             headBlock = HeaderBlockConstructor
             headConfig = statusConfig
-        items.append(formatters.packBuildUpBlockData(headBlock(module, headConfig, leftPadding, rightPadding).construct(), padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=topPadding, bottom=headerBottom)))
-        if itemTypeID in GUI_ITEM_TYPE.ARTEFACTS:
-            if itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
-                effectsBlock = OptDeviceEffectsBlockConstructor(module, statusConfig, leftPadding, 10).construct()
-            else:
-                effectsBlock = EffectsBlockConstructor(module, statusConfig, leftPadding, rightPadding).construct()
-            if effectsBlock:
-                effectsPaddings = formatters.packPadding(left=leftPadding, right=rightPadding, top=-4, bottom=-8)
-                if statusConfig.useWhiteBg:
-                    bgLinkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE
-                else:
-                    bgLinkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE
-                items.append(formatters.packBuildUpBlockData(effectsBlock, padding=effectsPaddings, linkage=bgLinkage, stretchBg=True))
-        if itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES:
-            if paramsConfig.colorless:
-                colorScheme = params_formatters.COLORLESS_SCHEME
-            else:
-                colorScheme = params_formatters.BASE_SCHEME
-            commonStatsBlock = CommonStatsBlockConstructor(module, paramsConfig, statsConfig.slotIdx, leftPadding, rightPadding, colorScheme).construct()
-            if commonStatsBlock:
-                if statusConfig.useWhiteBg:
-                    linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE
-                else:
-                    linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE
-                items.append(formatters.packBuildUpBlockData(commonStatsBlock, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding, bottom=-8), gap=textGap, linkage=linkage))
-        priceBlock = PriceBlockConstructor(module, statsConfig, priceValueWidth, leftPadding, rightPadding).construct()
-        if priceBlock:
-            items.append(formatters.packBuildUpBlockData(priceBlock, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-5, bottom=-8), gap=textGap))
-        inventoryBlock = InventoryBlockConstructor(module, statsConfig, leftPadding, rightPadding).construct()
-        if inventoryBlock:
-            items.append(formatters.packBuildUpBlockData(inventoryBlock, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-5, bottom=-8), gap=textGap))
-        showModuleCompatibles = statsConfig.showCompatibles and itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES
-        if showModuleCompatibles:
-            if paramsConfig.vehicle is not None:
-                paramVehDescr = paramsConfig.vehicle.descriptor
-            else:
-                paramVehDescr = None
+        return (headBlock, headConfig, headerBottom)
+
+    def _appendEffects(self, items, module, statusConfig):
+        itemTypeID = module.itemTypeID
+        if itemTypeID not in GUI_ITEM_TYPE.ARTEFACTS:
+            return
+        if itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
+            effectsBlock = OptDeviceEffectsBlockConstructor(module, statusConfig, _DEFAULT_PADDING, 10).construct()
+        else:
+            effectsBlock = EffectsBlockConstructor(module, statusConfig, _DEFAULT_PADDING, _DEFAULT_PADDING).construct()
+        if not effectsBlock:
+            return
+        bgLinkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE if statusConfig.useWhiteBg else BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE
+        items.append(formatters.packBuildUpBlockData(effectsBlock, padding=formatters.packPadding(left=_DEFAULT_PADDING, right=_DEFAULT_PADDING, top=-4, bottom=-8), linkage=bgLinkage, stretchBg=True))
+
+    def _appendCommonStats(self, items, module, paramsConfig, statsConfig, statusConfig):
+        if module.itemTypeID not in GUI_ITEM_TYPE.VEHICLE_MODULES:
+            return
+        colorScheme = params_formatters.COLORLESS_SCHEME if paramsConfig.colorless else params_formatters.BASE_SCHEME
+        commonStatsBlock = CommonStatsBlockConstructor(module, paramsConfig, statsConfig.slotIdx, _DEFAULT_PADDING, _DEFAULT_PADDING, colorScheme).construct()
+        if not commonStatsBlock:
+            return
+        linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE if statusConfig.useWhiteBg else BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE
+        items.append(formatters.packBuildUpBlockData(commonStatsBlock, padding=formatters.packPadding(left=_DEFAULT_PADDING, right=_DEFAULT_PADDING, top=self.BLOCK_TOP_PADDING, bottom=-8), gap=self.TEXT_GAP, linkage=linkage))
+
+    def _appendPrice(self, items, module, statsConfig):
+        ctor = self._getPriceBlockConstructor()
+        priceBlock = ctor(module, statsConfig, self.PRICE_VALUE_WIDTH, _DEFAULT_PADDING, _DEFAULT_PADDING).construct()
+        if not priceBlock:
+            return
+        items.append(formatters.packBuildUpBlockData(priceBlock, padding=formatters.packPadding(left=_DEFAULT_PADDING, right=_DEFAULT_PADDING, top=-5, bottom=-8), gap=self.TEXT_GAP))
+
+    def _appendInventory(self, items, module, statsConfig):
+        inventoryBlock = InventoryBlockConstructor(module, statsConfig, _DEFAULT_PADDING, _DEFAULT_PADDING).construct()
+        if not inventoryBlock:
+            return
+        items.append(formatters.packBuildUpBlockData(inventoryBlock, padding=formatters.packPadding(left=_DEFAULT_PADDING, right=_DEFAULT_PADDING, top=-5, bottom=-8), gap=self.TEXT_GAP))
+
+    def _appendCompatibles(self, items, module, paramsConfig, statsConfig):
+        showModuleCompatibles = statsConfig.showCompatibles and module.itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES
+        if not showModuleCompatibles:
+            return False
+        else:
+            paramVehDescr = paramsConfig.vehicle.descriptor if paramsConfig.vehicle is not None else None
             moduleCompatibles = params_helper.getCompatibles(module, paramVehDescr)
             compatibleBlocks = []
             for paramType, paramValue in moduleCompatibles:
                 compatibleBlocks.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(_ms(MENU.moduleinfo_compatible(paramType))), desc=text_styles.standard(paramValue)))
 
             if compatibleBlocks:
-                items.append(formatters.packBuildUpBlockData(compatibleBlocks, padding=formatters.packPadding(left=leftPadding)))
-        statusBlock = StatusBlockConstructor(module, statusConfig, leftPadding, rightPadding).construct()
-        if statusBlock and itemTypeID != GUI_ITEM_TYPE.OPTIONALDEVICE:
-            statusTopPadding = -30 if showModuleCompatibles else blockTopPadding
-            items.append(formatters.packBuildUpBlockData(statusBlock, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=statusTopPadding, bottom=-15)))
-        if bonus_helper.isSituationalBonus(module.name):
-            items.append(formatters.packImageTextBlockData(title='', desc=text_styles.standard(backport.text(R.strings.tooltips.vehicleParams.bonus.situational())), img=backport.image(R.images.gui.maps.icons.tooltip.asterisk_optional()), imgPadding=formatters.packPadding(left=4, top=3), txtGap=-4, txtOffset=20, padding=formatters.packPadding(left=59, right=_DEFAULT_PADDING)))
-        if statsConfig.isStaticInfoOnly:
+                items.append(formatters.packBuildUpBlockData(compatibleBlocks, padding=formatters.packPadding(left=_DEFAULT_PADDING)))
+            return True
+
+    def _appendStatus(self, items, module, statusConfig, showModuleCompatibles):
+        statusBlock = StatusBlockConstructor(module, statusConfig, _DEFAULT_PADDING, _DEFAULT_PADDING).construct()
+        if not statusBlock or module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
+            return
+        statusTopPadding = -30 if showModuleCompatibles else self.BLOCK_TOP_PADDING
+        items.append(formatters.packBuildUpBlockData(statusBlock, padding=formatters.packPadding(left=_DEFAULT_PADDING, right=_DEFAULT_PADDING, top=statusTopPadding, bottom=-15)))
+
+    def _appendSituationalBonusNote(self, items, module):
+        if not bonus_helper.isSituationalBonus(module.name):
+            return
+        items.append(formatters.packImageTextBlockData(title='', desc=text_styles.standard(backport.text(R.strings.tooltips.vehicleParams.bonus.situational())), img=backport.image(R.images.gui.maps.icons.tooltip.asterisk_optional()), imgPadding=formatters.packPadding(left=4, top=3), txtGap=-4, txtOffset=20, padding=formatters.packPadding(left=59, right=_DEFAULT_PADDING)))
+
+    def _applyStaticInfoBottomPadding(self, items, statsConfig):
+        if not statsConfig.isStaticInfoOnly or not items:
+            return
+        else:
             lastItem = items[-1]
             lastPadding = lastItem.get('padding', None)
             if lastPadding is None:
                 lastItem['padding'] = {}
             lastItem['padding']['bottom'] = lastItem['padding'].get('bottom', 0) + 15
-        return items
+            return
 
 
 class ModuleTooltipBlockConstructor(object):
@@ -1517,3 +1550,57 @@ class ModernizedKPIIterator(ComplexKPIIterator):
             curMod = item
 
         super(ModernizedKPIIterator, self).__init__(configuration, modules.index(module), *modules)
+
+
+class RestoreOptDeviceBlockTooltipData(ModuleBlockTooltipData):
+
+    def _getPriceBlockConstructor(self):
+        return RestoreOptDevicePriceBlockConstructor
+
+
+class RestoreOptDevicePriceBlockConstructor(PriceBlockConstructor):
+    _EMPTY_FORCED_TEXT = ' '
+    _BASE_DIGITS = 3
+    _MAX_HEADER_SHIFT = 24
+
+    def construct(self):
+        module = self.module
+        restorePrice = self.configuration.restorePrice
+        restoreInfo = module.restoreInfo
+        if not (restorePrice and restoreInfo):
+            return []
+        else:
+            maxPrice = max((v for _, v in restoreInfo.price)) if restoreInfo.price else None
+            shift = self.__calcHeaderShiftByDigits(maxPrice)
+            blocks = [formatters.packTextBlockData(text=text_styles.main(backport.text(self.__getRestoreReason(restoreInfo.reason, module.isModernized))), padding=formatters.packPadding(left=self._priceLeftPadding - shift, bottom=5))]
+            blocks.extend(self.__makeRestorePriceBlocks(priceDict=restoreInfo.price, forcedText=backport.text(R.strings.tooltips.moduleFits.restore.price())))
+            return blocks
+
+    def __getRestoreReason(self, reason, isModernized):
+        baseRestore = R.strings.tooltips.moduleFits.restore
+        root = baseRestore.modernized.reason if isModernized else baseRestore.noModernized.reason
+        return root.dyn('c_{}'.format(reason))()
+
+    def __makeRestorePriceBlocks(self, priceDict, forcedText):
+        blocks = []
+        forcedTextApplied = False
+        for currency, value in priceDict:
+            lineForcedText = forcedText if not forcedTextApplied else self._EMPTY_FORCED_TEXT
+            line = self.__makePriceLine(value=value, currency=currency, valueWidth=self._valueWidth, leftPadding=self._priceLeftPadding, forcedText=lineForcedText)
+            if line is None:
+                continue
+            blocks.append(line)
+            forcedTextApplied = True
+
+        return blocks
+
+    def __makePriceLine(self, value, currency, valueWidth, leftPadding, forcedText=None, iconRightOffset=14):
+        setting = CURRENCY_SETTINGS.getRestoreOptDevicesSetting(currency)
+        return makePriceBlock(value, setting, neededValue=None, oldPrice=None, percent=0, valueWidth=valueWidth, leftPadding=leftPadding, iconRightOffset=iconRightOffset, forcedText=forcedText or self._EMPTY_FORCED_TEXT)
+
+    def __calcHeaderShiftByDigits(self, maxPrice):
+        if maxPrice is None:
+            return 0
+        else:
+            digits = len(str(int(maxPrice)))
+            return int(round((digits - self._BASE_DIGITS) * (self._MAX_HEADER_SHIFT / self._BASE_DIGITS)))

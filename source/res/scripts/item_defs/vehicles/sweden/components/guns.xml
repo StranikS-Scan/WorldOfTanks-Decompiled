@@ -65,7 +65,6 @@
     <_149mm_Haubits_M39>	31008	</_149mm_Haubits_M39>
     <_120mm_akan_L_40_Kranvagn>	31010	</_120mm_akan_L_40_Kranvagn>
     <_155mm_Kanon_L50>	31011	</_155mm_Kanon_L50>
-    <_105mm_kan_strv_103_L_62_ISP>	37000	</_105mm_kan_strv_103_L_62_ISP>
     <_155mm_Kanon_M60_T>	35001	</_155mm_Kanon_M60_T>
     <_152mm_Kanon_FM49_L50_T>	35002	</_152mm_Kanon_FM49_L50_T>
     <_149mm_Haubits_M39_T>	35003	</_149mm_Haubits_M39_T>
@@ -2499,64 +2498,6 @@
         </_105mm_slsgr_m_61A>
       </shots>
     </_105mm_kan_strv_103_L_62>
-    <_105mm_kan_strv_103_L_62_ISP>
-      <userString>	#sweden_vehicles:_105mm_kan_strv_103_L_62_ISP	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	330000	</price>
-      <notInShop>	true	</notInShop>
-      <impulse>	0.48	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.24	</amplitude>
-        <recoilEffect>	main	</recoilEffect>
-      </recoil>
-      <effects>	shot_large	</effects>
-      <reloadEffect>	reload85_107	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -11.0 1.0 -11.0	</minPitch>
-        <maxPitch>	0.0 11.0 1.0 11.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	5.0	</rotationSpeed>
-      <reloadTime>	7.5	</reloadTime>
-      <maxAmmo>	50	</maxAmmo>
-      <aimingTime>	4.04	</aimingTime>
-      <weight>	1645	</weight>
-      <maxHealth>	208	</maxHealth>
-      <maxRegenHealth>	104	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.4	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.05	</turretRotation>
-        <afterShot>	4.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_105mm_slpprj_m_61_ISP>
-          <defaultPortion>	0.95	</defaultPortion>
-          <speed>	1500	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	308 298	</piercingPower>
-        </_105mm_slpprj_m_61_ISP>
-        <_105mm_slpprj_m_66_ISP>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	1450	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	350 340	</piercingPower>
-        </_105mm_slpprj_m_66_ISP>
-        <_105mm_slsgr_m_61A_ISP>
-          <defaultPortion>	0.05	</defaultPortion>
-          <speed>	680	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	53 53	</piercingPower>
-        </_105mm_slsgr_m_61A_ISP>
-      </shots>
-    </_105mm_kan_strv_103_L_62_ISP>
     <_105mm_kan_strv_103_L_62_FL>
       <userString>	#sweden_vehicles:_105mm_kan_strv_103_L_62	</userString>
       <tags></tags>
@@ -3566,7 +3507,7 @@
         <recoilEffect>	S36_VK_155_Projekt	</recoilEffect>
       </recoil>
       <effects>	shot_huge_mb	</effects>
-      <reloadEffect>	autoloader_reload115_152	</reloadEffect>
+      <reloadEffect>	autoloader_reload155_170	</reloadEffect>
       <turretYawLimits>	-180 180	</turretYawLimits>
       <pitchLimits>
         <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
@@ -3619,7 +3560,7 @@
         <recoilEffect>	S36_VK_155_Projekt	</recoilEffect>
       </recoil>
       <effects>	shot_huge_mb	</effects>
-      <reloadEffect>	autoloader_reload115_152	</reloadEffect>
+      <reloadEffect>	autoloader_reload155_170	</reloadEffect>
       <turretYawLimits>	-180 180	</turretYawLimits>
       <pitchLimits>
         <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>

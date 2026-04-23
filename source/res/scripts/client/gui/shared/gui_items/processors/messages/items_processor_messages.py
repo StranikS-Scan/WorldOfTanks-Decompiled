@@ -9,6 +9,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_ZERO, ITEM_PRICE_EMPTY
 from gui.shared.gui_items.processors import makeSuccess, makeError
 from gui.shared.money import ZERO_MONEY
+from gui.shared.notifications import NotificationPriorityLevel
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.game_control import IWotPlusController
@@ -186,6 +187,36 @@ class OptDeviceRemoveProcessorMessage(ItemRemoveProcessorMessage):
         return {'name': self._item.userName,
          'kind': self._item.userType,
          'money': formatPrice(self.__removalPrice, ignoreZeros=True)}
+
+
+class OptDeviceRestoreProcessorMessage(object):
+    __slots__ = ('__device', '__restorePrice', '__count')
+
+    def __init__(self, device=None, restorePrice=None, count=0):
+        self.__device = device
+        self.__restorePrice = restorePrice
+        self.__count = count
+
+    def makeSuccessMsg(self):
+        header = backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.titles.restore())
+        body = backport.text(R.strings.system_messages.artefact_restore.success(), name=self.__device.userName, count=self.__count, money=self._formatSpentMoney(self.__restorePrice))
+        return makeSuccess(userMsg=body, msgType=SM_TYPE.InformationHeader, msgData={'header': header}, msgPriority=NotificationPriorityLevel.MEDIUM)
+
+    def makeErrorMsg(self):
+        body = backport.text(R.strings.system_messages.artefact_restore.server_error())
+        return makeError(userMsg=body, msgPriority=NotificationPriorityLevel.MEDIUM)
+
+    def _formatSpentMoney(self, costs):
+        parts = []
+        for cur, amount in costs:
+            if not amount:
+                continue
+            nameKey = R.strings.system_messages.artefact_restore.dyn(cur)
+            text = backport.text(nameKey())
+            formattedAmount = backport.getIntegralFormat(amount)
+            parts.append(u'{}{}'.format(text, formattedAmount))
+
+        return u', '.join(parts)
 
 
 class BaseLayoutProcessorMessage(object):

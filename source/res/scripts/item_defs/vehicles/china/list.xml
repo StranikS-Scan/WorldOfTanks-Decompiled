@@ -19,6 +19,7 @@
     <longDescriptionSpecial>	#china_vehicles:Ch02_Type62_long_special	</longDescriptionSpecial>
     <price>	8000	  <gold></gold>
     </price>
+    <notInShop>	true	</notInShop>
     <tags>	lightTank role_LT_universal HD scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
     <level>	7	</level>
   </Ch02_Type62>
@@ -489,7 +490,7 @@
     <price>	50000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	new_hp_vfx heavyTank role_HT_assault HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals special	</tags>
+    <tags>	heavyTank new_hp_vfx role_HT_assault HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals special	</tags>
     <level>	11	</level>
   </Ch57_BZT_70>
   <Ch46_113_140>
@@ -577,7 +578,6 @@
     <longDescriptionSpecial>	#china_vehicles:Ch40_WZ120G_FT_long_special	</longDescriptionSpecial>
     <price>	17500	  <gold></gold>
     </price>
-    <notInShop>	true	</notInShop>
     <tags>	AT-SPG role_ATSPG_sniper HD mediumAT-SPG improvedVentilation_class2_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals	</tags>
     <level>	9	</level>
   </Ch40_WZ120G_FT>
@@ -958,6 +958,19 @@
     <tags>	mediumTank role_MT_assault HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank lockOutfit	</tags>
     <level>	8	</level>
   </Ch62_ZZT_58>
+  <Ch76_HSD_1>
+    <id>	31008	</id>
+    <userString>	#china_vehicles:Ch76_HSD_1	</userString>
+    <description>	#china_vehicles:Ch76_HSD_1_descr	</description>
+    <shortUserString>	#china_vehicles:Ch76_HSD_1_short	</shortUserString>
+    <shortDescriptionSpecial>	#china_vehicles:Ch76_HSD_1_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#china_vehicles:Ch76_HSD_1_long_special	</longDescriptionSpecial>
+    <price>	17500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_assault HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user rocketAcceleration earn_crystals secret testTank lockOutfit	</tags>
+    <level>	9	</level>
+  </Ch76_HSD_1>
   <Ch57_BZT_70_T>
     <id>	35001	</id>
     <userString>	#china_vehicles:Ch57_BZT_70_T	</userString>

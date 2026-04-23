@@ -976,6 +976,7 @@ class CURRENCY_SETTINGS(object):
     UPGRADABLE_CREDITS_PRICE = 'upgradableCreditsPrice'
     UPGRADABLE_EQUIPCOINS_PRICE = 'upgradableEquipCoinsPrice'
     DECONSTRUCT_EQUIPCOINS_PRICE = 'deconstructEquipCoinsPrice'
+    DEMOUNT_KIT_PRICE = 'demountKitPrice'
     __BUY_SETTINGS = {Currency.CREDITS: BUY_CREDITS_PRICE,
      Currency.GOLD: BUY_GOLD_PRICE,
      Currency.CRYSTAL: BUY_CRYSTAL_PRICE,
@@ -990,6 +991,11 @@ class CURRENCY_SETTINGS(object):
     __UPGRADABLE_SETTINGS = {Currency.CREDITS: UPGRADABLE_CREDITS_PRICE,
      Currency.EQUIP_COIN: UPGRADABLE_EQUIPCOINS_PRICE}
     __DECONSTRUCT_SETTINGS = {Currency.EQUIP_COIN: DECONSTRUCT_EQUIPCOINS_PRICE}
+    __RESTORE_SETTINGS = {Currency.CREDITS: BUY_CREDITS_PRICE,
+     Currency.GOLD: BUY_GOLD_PRICE,
+     Currency.DEMOUNT_KIT: DEMOUNT_KIT_PRICE,
+     Currency.CRYSTAL: BUY_CRYSTAL_PRICE,
+     Currency.EQUIP_COIN: REMOVAL_EQUIPCOINS_PRICE}
 
     @classmethod
     def getRentSetting(cls, currency):
@@ -1011,6 +1017,10 @@ class CURRENCY_SETTINGS(object):
     def getDeconstracutSetting(cls, currency):
         return cls.__DECONSTRUCT_SETTINGS.get(currency, cls.DECONSTRUCT_EQUIPCOINS_PRICE)
 
+    @classmethod
+    def getRestoreOptDevicesSetting(cls, currency):
+        return cls.__RESTORE_SETTINGS.get(currency, cls.BUY_CREDITS_PRICE)
+
 
 _OPERATIONS_SETTINGS = {CURRENCY_SETTINGS.BUY_CREDITS_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_BUY_PRICE, icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS, iconYOffset=2),
  CURRENCY_SETTINGS.RESTORE_PRICE: _CurrencySetting('#tooltips:vehicle/restore_price', icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS, iconYOffset=0),
@@ -1028,7 +1038,8 @@ _OPERATIONS_SETTINGS = {CURRENCY_SETTINGS.BUY_CREDITS_PRICE: _CurrencySetting(TO
  CURRENCY_SETTINGS.REMOVAL_EQUIPCOINS_PRICE: _CurrencySetting(TOOLTIPS.MODULEFITS_NOT_REMOVABLE_DISMANTLING_PRICE, icons.equipCoin(), text_styles.equipCoin, ICON_TEXT_FRAMES.EQUIP_COIN, iconYOffset=1),
  CURRENCY_SETTINGS.UPGRADABLE_CREDITS_PRICE: _CurrencySetting(TOOLTIPS.MODULEFITS_UPGRADABLE_PRICE, icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS, iconYOffset=0),
  CURRENCY_SETTINGS.UPGRADABLE_EQUIPCOINS_PRICE: _CurrencySetting(TOOLTIPS.MODULEFITS_UPGRADABLE_PRICE, icons.equipCoin(), text_styles.equipCoin, ICON_TEXT_FRAMES.EQUIP_COIN, iconYOffset=1),
- CURRENCY_SETTINGS.DECONSTRUCT_EQUIPCOINS_PRICE: _CurrencySetting(TOOLTIPS.MODULEFITS_DECONSTRUCT_PRICE, icons.equipCoin(), text_styles.equipCoin, ICON_TEXT_FRAMES.EQUIP_COIN, iconYOffset=1)}
+ CURRENCY_SETTINGS.DECONSTRUCT_EQUIPCOINS_PRICE: _CurrencySetting(TOOLTIPS.MODULEFITS_DECONSTRUCT_PRICE, icons.equipCoin(), text_styles.equipCoin, ICON_TEXT_FRAMES.EQUIP_COIN, iconYOffset=1),
+ CURRENCY_SETTINGS.DEMOUNT_KIT_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_BUY_PRICE, icons.demountKit(), text_styles.demountKitText, ICON_TEXT_FRAMES.DEMOUNT_KIT, iconYOffset=0)}
 
 def _getCurrencySetting(key):
     if key not in _OPERATIONS_SETTINGS:

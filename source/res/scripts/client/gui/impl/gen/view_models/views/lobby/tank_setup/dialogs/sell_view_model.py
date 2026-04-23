@@ -16,7 +16,7 @@ class ModuleType(Enum):
 class SellViewModel(DialogTemplateViewModel):
     __slots__ = ('onSell', 'onClose')
 
-    def __init__(self, properties=10, commands=4):
+    def __init__(self, properties=11, commands=4):
         super(SellViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -51,11 +51,18 @@ class SellViewModel(DialogTemplateViewModel):
     def getBalanceType():
         return CurrentBalanceModel
 
+    def getIsOptDeviceRestored(self):
+        return self._getBool(10)
+
+    def setIsOptDeviceRestored(self, value):
+        self._setBool(10, value)
+
     def _initialize(self):
         super(SellViewModel, self)._initialize()
         self._addViewModelProperty('equipmentPrice', EquipmentPriceModel())
         self._addViewModelProperty('equipment', ItemBonusModel())
         self._addStringProperty('moduleType')
         self._addArrayProperty('balance', Array())
+        self._addBoolProperty('isOptDeviceRestored', False)
         self.onSell = self._addCommand('onSell')
         self.onClose = self._addCommand('onClose')

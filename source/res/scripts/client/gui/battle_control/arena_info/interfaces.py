@@ -166,6 +166,9 @@ class IBattleFieldController(IArenaVehiclesController):
     def setVehicleHealth(self, vehicleID, newHealth):
         pass
 
+    def postSetVehicleHealth(self):
+        pass
+
     def setVehicleData(self, data):
         pass
 

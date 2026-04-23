@@ -7,6 +7,7 @@ from constants import Configs
 from gui_lootboxes.gui.lb_gui_constants import TRIGGER_HINT_STATES
 from gui_lootboxes.gui.statistic_helpers.pdata_fetcher import LBPDataFetcher
 from gui_lootboxes.gui.statistic_helpers.statistic_data_provider import StatisticDataCache
+from gui_lootboxes.gui.statistic_helpers.web_fetcher import LBWebFetcher
 from gui_lootboxes.skeletons.statistic_lootbox_controller import IStatisticLootBoxController
 from helpers import dependency, server_settings
 from lootboxes_common import mergeDiffStat
@@ -35,6 +36,7 @@ class StatisticLootBoxController(IStatisticLootBoxController):
 
     def init(self):
         self._statLocalCache.registerProvider('pdata', LBPDataFetcher)
+        self._statLocalCache.registerProvider('webservice', LBWebFetcher)
 
     def fini(self):
         self._statLocalCache.fini()
@@ -93,11 +95,10 @@ class StatisticLootBoxController(IStatisticLootBoxController):
         lootbox = self.__itemsCache.items.tokens.getLootBoxByID(lootboxID)
         if lootbox and lootbox.isStatCollected():
             startVerStat = first(auxData['extData'].get('startVerStat', {}).values(), default=0)
-            if self._statLocalCache.canApplySnapshot(lootboxID, startVerStat):
-                count = auxData['extData']['openedLootBoxes'][lootboxID]
-                self._statLocalCache.applyOpenResult(lootboxID, auxData['bonus'], count)
-            else:
+            if not self._statLocalCache.canApplySnapshot(lootboxID, startVerStat):
                 self._statLocalCache.requestBaseStat()
+            count = auxData['extData']['openedLootBoxes'][lootboxID]
+            self._statLocalCache.applyOpenResult(lootboxID, auxData['bonus'], count)
 
     @server_settings.serverSettingsChangeListener(Configs.LOOTBOX_STATISTICS_CONFIG.value)
     def __onServerSettingsChange(self, diff):

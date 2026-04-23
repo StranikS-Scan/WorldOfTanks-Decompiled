@@ -372,6 +372,9 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         self.__showCircleDelayed = None
         return
 
+    def isTerrainCircleVisible(self):
+        return self.__terrainCircle.isVisible()
+
     def updateTurretVisibility(self):
         self.__requestModelsRefresh()
 

@@ -1,5 +1,4 @@
-<dynamic_objects.xml>
-  <models></models>
+<dynamic_objects.xml>	-	  <models></models>
   <stunAreaVisual>
     <radius>	15.0	</radius>
     <areasNum>	3	</areasNum>
@@ -304,6 +303,15 @@
       <overTerrainHeight>	0.5	</overTerrainHeight>
     </ally>
   </InspireAreaVisual>
+  <EquipmentCircleRestrictionVisual>
+    <ally>
+      <visual>	content/Interface/TargetPoint/inspire.model	</visual>
+      <color>	0xffffffff	</color>
+      <enableAccurateCollision>	False	</enableAccurateCollision>
+      <maxUpdateInterval>	0.04	</maxUpdateInterval>
+      <overTerrainHeight>	0.5	</overTerrainHeight>
+    </ally>
+  </EquipmentCircleRestrictionVisual>
   <HealPointVisual>
     <ally>
       <visual>	content/Interface/TargetPoint/inspire.model	</visual>
@@ -654,6 +662,20 @@
       </effect>
     </enemy>
   </epicMinesIdleEffect>
+  <epicMinesIdleYellowEffect>
+    <ally>
+      <effect>
+        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_allies_yellow.seq	</path_fwd>
+        <path>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_allies_yellow.seq	</path>
+      </effect>
+    </ally>
+    <enemy>
+      <effect>
+        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_enemy.seq	</path_fwd>
+        <path>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_enemy.seq	</path>
+      </effect>
+    </enemy>
+  </epicMinesIdleYellowEffect>
   <minesBlowUpEffect>
     <timeline>
       <lightingEnd>	0.22	</lightingEnd>
@@ -860,12 +882,25 @@
     <prefab>	content/CGFPrefabs/Frontline/Flamer.prefab	</prefab>
     <prefab>	content/CGFPrefabs/Frontline/Pillbox.prefab	</prefab>
     <prefab>	content/CGFPrefabs/Frontline/Mortar.prefab	</prefab>
-    <prefab>	content/CGFPrefabs/Frontline/SupplySpawnEffect.prefab	</prefab>
     <prefab>	content/CGFPrefabs/Frontline/Baloon_Crash.prefab	</prefab>
     <prefab>	content/CGFPrefabs/Frontline/FlamerHeal.prefab	</prefab>
     <prefab>	content/CGFPrefabs/Frontline/PillboxHeal.prefab	</prefab>
     <prefab>	content/CGFPrefabs/Frontline/MortarHeal.prefab	</prefab>
+    <prefab>	content/CGFPrefabs/Frontline/FlamerCamouflage.prefab	</prefab>
+    <prefab>	content/CGFPrefabs/Frontline/PillboxCamouflage.prefab	</prefab>
+    <prefab>	content/CGFPrefabs/Frontline/MortarCamouflage.prefab	</prefab>
   </epicPrefabs>
+  <epicStubs>
+    <path>	vehicles/german/G00_Feuerbunker/Animation/Camo_Feuerbunker_01.seq	</path>
+    <path>	vehicles/german/G00_Feuerbunker/Animation/Camo_Feuerbunker_02.seq	</path>
+    <path>	vehicles/german/G00_Feuerbunker/Animation/Camo_Feuerbunker_03.seq	</path>
+    <path>	vehicles/german/G00_Startgestell/Animation/Camo_Startgestell_01.seq	</path>
+    <path>	vehicles/german/G00_Startgestell/Animation/Camo_Startgestell_02.seq	</path>
+    <path>	vehicles/german/G00_Startgestell/Animation/Camo_Startgestell_03.seq	</path>
+    <path>	vehicles/german/G00_Artilleriebunker/Animation/Camo_Artilleriebunker_01.seq	</path>
+    <path>	vehicles/german/G00_Artilleriebunker/Animation/Camo_Artilleriebunker_02.seq	</path>
+    <path>	vehicles/german/G00_Artilleriebunker/Animation/Camo_Artilleriebunker_03.seq	</path>
+  </epicStubs>
   <spawnPointsConfig>
     <visualsPath>
       <position1>	content/CGFPrefabs/Battle/comp7/prebattle_area_01.visual	</position1>
@@ -917,7 +952,14 @@
       <path>	particles/Environment/interior/280_cosm_portal_flash.eff	</path>
     </effect>
     <effect>
-      <path>	particles/Environment/interior/280_cosmic_geyser.eff	</path>
+      <path>	particles/Environment/interior/280_cosmic_geyser_26.eff	</path>
     </effect>
   </cosmicEffects>
+  <museumOfGlory>
+    <path>	content/Hangars/h16_mt_museum/environment/h01_VD26_Diorama_1_AM.dds	</path>
+    <path>	content/Hangars/h16_mt_museum/environment/h01_VD26_Diorama_2_AM.dds	</path>
+    <path>	content/Hangars/h16_mt_museum/environment/h01_VD26_Diorama_3_AM.dds	</path>
+    <path>	content/Hangars/h16_mt_museum/environment/h01_VD26_Diorama_4_AM.dds	</path>
+    <path>	content/Hangars/h16_mt_museum/environment/h01_VD26_Diorama_5_AM.dds	</path>
+  </museumOfGlory>
 </dynamic_objects.xml>

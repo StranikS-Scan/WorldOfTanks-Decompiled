@@ -10,7 +10,15 @@
         <name>	ev_battle_royale_2019_hangar.bnk	</name>
       </bank>
     </loadBanks>
+    <events>
+      <event>
+        <name>	ev_battle_royale_arcade_garage_music	</name>
+        <mod>	ev_battle_royale_arcade_garage_music	</mod>
+        <modAUX>	tabs_music	</modAUX>
+      </event>
+    </events>
   </soundRemapping>
+  <wwexitSound>	ev_battle_royale_2019_hangar_exit	</wwexitSound>
   <boundingBox>
     <bottomLeft>	-100.000000 -100.000000	</bottomLeft>
     <upperRight>	100.000000 100.000000	</upperRight>

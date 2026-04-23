@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/login_modes/credentials_mode.py
 from collections import namedtuple
-import WWISE
 import constants
 from external_strings_utils import _LOGIN_NAME_MIN_LENGTH
 from external_strings_utils import isAccountLoginValid
 from gui import GUI_SETTINGS
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.locale.MENU import MENU
+from gui.game_loading.loading_sounds import handleLoadingSoundChangeEvent, DEFAULT_LOADING_SOUND
 from gui.impl import backport
 from gui.impl.gen import R
 from helpers.i18n import makeString as _ms
@@ -41,7 +41,7 @@ class CredentialsMode(BaseMode):
         if CredentialsMode.firstRun:
             CredentialsMode.firstRun = False
         else:
-            WWISE.WW_eventGlobal('loginscreen_ambient_start')
+            handleLoadingSoundChangeEvent(DEFAULT_LOADING_SOUND)
 
     def setRememberPassword(self, rememberUser):
         self._rememberUser = rememberUser

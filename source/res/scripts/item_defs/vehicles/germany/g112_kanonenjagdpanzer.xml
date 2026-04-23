@@ -1088,8 +1088,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	46	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.24	</vehicleMovement>
-        <vehicleRotation>	0.24	</vehicleRotation>
+        <vehicleMovement>	0.28	</vehicleMovement>
+        <vehicleRotation>	0.28	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -2464,7 +2464,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_90mm_Rheinmetall_90_L40A>	shared	  <maxAmmo>	51	</maxAmmo>
+        <_90mm_Rheinmetall_90_L40A>	shared	  <maxAmmo>	56	</maxAmmo>
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -2486,14 +2486,18 @@
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.32	</shotDispersionRadius>
-          <reloadTime>	6.3	</reloadTime>
+          <shotDispersionRadius>	0.30	</shotDispersionRadius>
+          <reloadTime>	25.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <afterShot>	3.6	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.8	</aimingTime>
+          <clip>
+            <count>	4	</count>
+            <rate>	30	</rate>
+          </clip>
           <models>
             <undamaged>	vehicles/german/G112_KanonenJagdPanzer/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G112_KanonenJagdPanzer/crash/lod0/Gun_01.model	</destroyed>
@@ -2504,7 +2508,7 @@
             <collisionModelClient>	vehicles/german/G112_KanonenJagdPanzer/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_main_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>

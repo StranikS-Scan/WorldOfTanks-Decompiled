@@ -141,6 +141,7 @@ class EpicBattleTeamsBasesController(BattleTeamsBasesController):
         isEndOfCapture = points == 0 and invadersCount == 0 and capturingStopped
         if expectedCaptureTime < 0 and not isEndOfCapture:
             return
+        self.__clearStaleBarsExcept(baseId)
         truePoints = points * 100
         self.__invalidateTeamBasePoints(baseId, truePoints, expectedCaptureTime, invadersCount, capturingStopped)
 
@@ -149,6 +150,12 @@ class EpicBattleTeamsBasesController(BattleTeamsBasesController):
             self.__extraInvadersSet.add(baseID)
         else:
             self.__extraInvadersSet.discard(baseID)
+
+    def __clearStaleBarsExcept(self, actualBaseID):
+        actualClientID = makeClientTeamBaseID(self.__currentBaseTeam, actualBaseID)
+        for clientID in self._getTrackedClientIDs():
+            if clientID != actualClientID:
+                self._clearClientEntry(clientID)
 
 
 class EpicBattleTeamsBasesPlayer(EpicBattleTeamsBasesController):

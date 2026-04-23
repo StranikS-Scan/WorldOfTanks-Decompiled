@@ -6,7 +6,7 @@ import BigWorld
 from BWUtil import AsyncReturn
 from constants import EMPTY_GEOMETRY_ID, PREMIUM_TYPE
 from gui import SystemMessages
-from gui.Scaleform.daapi.view.lobby.customization.shared import removePartsFromOutfit
+from gui.impl.lobby.customization.shared import removePartsFromOutfit
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.formatters import getStyle

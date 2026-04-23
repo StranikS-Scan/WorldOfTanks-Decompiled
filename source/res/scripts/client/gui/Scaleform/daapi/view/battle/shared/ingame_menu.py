@@ -3,6 +3,7 @@
 import BigWorld
 import constants
 import BattleReplay
+from BWUtil import AsyncReturn
 from adisp import adisp_process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.battle_control.battle_session import BattleExitResult
@@ -120,6 +121,19 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
          INGAMEMENU_CONSTANTS.CANCEL]
         self.as_setMenuButtonsS(buttons)
 
+    @th_async
+    def _doLeaveArena(self):
+        vInfo = self.sessionProvider.getArenaDP().getVehicleInfo()
+        exitResult = BattleExitResult(self._getExitResult(), vInfo.player)
+        if exitResult.isDeserter:
+            isPlayerIGR = self.__isPlayerIGR(exitResult.playerInfo)
+            result = yield th_await(self._showLeaverAliveWindow(isPlayerIGR))
+        elif BattleReplay.isPlaying():
+            result = yield th_await(showLeaverReplayWindow())
+        else:
+            result = yield th_await(showExitWindow())
+        raise AsyncReturn(result)
+
     @adisp_process
     def __doLeaveTutorial(self):
         result = yield DialogsInterface.showDialog(I18nConfirmDialogMeta('refuseTraining', focusedID=DIALOG_BUTTON_ID.CLOSE))
@@ -130,15 +144,7 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     @th_async
     def __doLeaveArena(self):
         self.as_setVisibilityS(False)
-        vInfo = self.sessionProvider.getArenaDP().getVehicleInfo()
-        exitResult = BattleExitResult(self._getExitResult(), vInfo.player)
-        if exitResult.isDeserter:
-            isPlayerIGR = self.__isPlayerIGR(exitResult.playerInfo)
-            result = yield th_await(self._showLeaverAliveWindow(isPlayerIGR))
-        elif BattleReplay.isPlaying():
-            result = yield th_await(showLeaverReplayWindow())
-        else:
-            result = yield th_await(showExitWindow())
+        result = yield th_await(self._doLeaveArena())
         if result:
             self.__doExit()
         else:

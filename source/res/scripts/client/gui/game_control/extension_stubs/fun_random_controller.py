@@ -201,8 +201,5 @@ class FunRandomController(IFunRandomController):
     def setSubModesHolder(self, subModesHolder):
         self.__subModesHolder = subModesHolder
 
-    def getCurrentFunType(self, eventID=None):
-        pass
-
     def selectFunRandomBattle(self, desiredSubModeID, callback=None):
         pass

@@ -42,6 +42,7 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
         if not self.__epicController.isEnabled():
             return
         else:
+            self.__epicController.showWelcomeScreenIfNeed()
             if self.__periodicNotifier is None:
                 self.__periodicNotifier = PeriodicNotifier(self.__epicController.getTimer, self.__update)
             self.__periodicNotifier.startNotification()

@@ -410,6 +410,12 @@ class UILoggingAccessor(BaseAccessor):
         return self._data_source.get_uilogging_session(callback)
 
 
+class StatBoxAccessor(BaseAccessor):
+
+    def get_statistic_lootbox(self, callback):
+        return self._data_source.get_statistic_lootbox(callback)
+
+
 class Requester(object):
     available_data_sources = {'stagings': StagingDataAccessor,
      'fake': FakeDataAccessor,
@@ -433,6 +439,7 @@ class Requester(object):
     uilogging = RequestDescriptor(UILoggingAccessor)
     shop = RequestDescriptor(ShopAccessor)
     gold_wagon_info = RequestDescriptor(GoldWagonAccessor)
+    statbox = RequestDescriptor(StatBoxAccessor)
 
     @classmethod
     def create_requester(cls, url_fetcher, config, client_lang=None, user_agent=None):

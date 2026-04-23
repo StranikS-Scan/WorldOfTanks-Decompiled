@@ -245,29 +245,18 @@ class BaseVehicleParamsTooltipView(ViewImpl):
 class BaseVehicleAdvancedParamsTooltipView(BaseVehicleParamsTooltipView):
 
     def _fillModel(self, model):
-        vehicle = self.vehicle
         isExtraParam = KPI.Name.hasValue(self._paramName)
         model.setIsAdvanced(self._supportAdvanced)
         if isExtraParam:
             title = self.__getKpiTitle()
             desc = self.__getKpiDescr()
         else:
-            titleParamName = param_formatter.getTitleParamName(vehicle, self._paramName)
-            measureParamName = param_formatter.getMeasureParamName(vehicle, self._paramName)
+            titleParamName = param_formatter.getTitleParamName(self.vehicle, self._paramName)
+            measureParamName = param_formatter.getMeasureParamName(self.vehicle, self._paramName)
             title = self.__getTitleStr(titleParamName)
             measureUnitLoc = param_formatter.MEASURE_UNITS.get(measureParamName, '')
             model.setUnitOfMeasurement(i18n.makeString(measureUnitLoc) if i18n.isValidKey(measureUnitLoc) else '')
-            if self._paramName == AUTORELOAD_TIME and self._hasExtendedInfo():
-                desc = self._getAutoReloadTimeDescription()
-            elif self._paramName == CHASSIS_REPAIR_TIME and vehicle and vehicle.isTrackWithinTrack:
-                desc = backport.text(R.strings.tooltips.tank_params.desc.chassisRepairTimeYoh())
-            elif self._paramName == SHOT_DISPERSION_ANGLE and vehicle and vehicle.descriptor.hasDualAccuracy:
-                desc = backport.text(R.strings.tooltips.tank_params.desc.shotDispersionAngle.withDualAccuracy())
-            elif self._paramName == CHASSIS_REPAIR_TIME and vehicle and vehicle.isMultiTrack:
-                trackType = CHASSIS_ITEM_TYPE.TRACK_TYPE_MAP[vehicle.chassisType]
-                desc = backport.text(R.strings.tooltips.tank_params.desc.chassisRepairTimeMultiTrack.dyn(trackType)())
-            else:
-                desc = backport.text(R.strings.tooltips.tank_params.desc.dyn(self._paramName)())
+            desc = self.__getDescriptionStr()
         if isRelativeParameter(self._paramName) and self._context.isApproximately:
             approxImgRes = R.images.gui.maps.icons.vehPostProgression.tooltips.dyn(self._extendedData.state[0])
             if approxImgRes.exists():
@@ -300,9 +289,26 @@ class BaseVehicleAdvancedParamsTooltipView(BaseVehicleParamsTooltipView):
         return backport.text(R.strings.tooltips.tank_params.desc.autoReloadTime.boost.shortDescription())
 
     def __getTitleStr(self, titleParamName):
-        strRootPath = R.strings.menu.tank_params.dyn(titleParamName)
+        if self._paramName == SHOT_DISPERSION_ANGLE and self.vehicle and self.vehicle.descriptor.isMultiGunVehicle and self.vehicle.descriptor.isAutoShootGunVehicle:
+            strRootPath = getattr(R.strings.menu.tank_params, titleParamName).dyn('withAutoShoot')
+        else:
+            strRootPath = R.strings.menu.tank_params.dyn(titleParamName)
         strPath = strRootPath.extendedTitle if strRootPath.dyn('extendedTitle').exists() else strRootPath
         return backport.text(strPath())
+
+    def __getDescriptionStr(self):
+        if self._paramName == AUTORELOAD_TIME and self._hasExtendedInfo():
+            return self._getAutoReloadTimeDescription()
+        if self._paramName == CHASSIS_REPAIR_TIME and self.vehicle and self.vehicle.isTrackWithinTrack:
+            return backport.text(R.strings.tooltips.tank_params.desc.chassisRepairTimeYoh())
+        if self._paramName == SHOT_DISPERSION_ANGLE and self.vehicle and self.vehicle.descriptor.hasDualAccuracy:
+            return backport.text(R.strings.tooltips.tank_params.desc.shotDispersionAngle.withDualAccuracy())
+        if self._paramName == SHOT_DISPERSION_ANGLE and self.vehicle and self.vehicle.descriptor.isMultiGunVehicle and self.vehicle.descriptor.isAutoShootGunVehicle:
+            return backport.text(R.strings.tooltips.tank_params.desc.shotDispersionAngle.withAutoShoot())
+        if self._paramName == CHASSIS_REPAIR_TIME and self.vehicle and self.vehicle.isMultiTrack:
+            trackType = CHASSIS_ITEM_TYPE.TRACK_TYPE_MAP[self.vehicle.chassisType]
+            return backport.text(R.strings.tooltips.tank_params.desc.chassisRepairTimeMultiTrack.dyn(trackType)())
+        return backport.text(R.strings.tooltips.tank_params.desc.dyn(self._paramName)())
 
     @staticmethod
     def __getIcon(parameter):

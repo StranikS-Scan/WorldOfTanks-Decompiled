@@ -6,7 +6,7 @@ import typing
 import BattleReplay
 from helpers.CallbackDelayer import CallbackDelayer
 from gui.battle_control.battle_context_hints.activation_triggers import HintActivationTrigger, PreBattleHintActivationTrigger
-from constants import ARENA_PERIOD
+from constants import ARENA_PERIOD, IS_DEVELOPMENT
 from gui.battle_control.battle_context_hints.applying_triggers import HintApplyingTrigger
 from gui.battle_control.battle_context_hints.hint_descriptor import HintDescriptor
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
@@ -336,7 +336,8 @@ class BattleContextHintsController(ViewComponentsController):
             self.__currentApplyingTrigger.start()
         self.__currentHintId = hintId
         event_dispatcher.activateBattleContextHint()
-        self.__finishHintCheckDelayer.delayCallback(self.MAX_HINT_DURATION, self.__checkFinishHint)
+        if IS_DEVELOPMENT:
+            self.__finishHintCheckDelayer.delayCallback(self.MAX_HINT_DURATION, self.__checkFinishHint)
         return True
 
     def __decrementWatchingCounter(self, hintId, logger):
@@ -356,7 +357,8 @@ class BattleContextHintsController(ViewComponentsController):
     def __finishHint(self, hintId):
         _logger.debug('[BATTLE_CONTEXT_INTS] BattleContextHintsController.__finishHint(hintId=%s)', hintId)
         if self.__currentHintId is not None:
-            self.__finishHintCheckDelayer.stopCallback(self.__checkFinishHint)
+            if IS_DEVELOPMENT:
+                self.__finishHintCheckDelayer.stopCallback(self.__checkFinishHint)
             if self.__currentHintId != hintId:
                 _logger.error('self.__currentHintId != hintId: %s!=%s', self.__currentHintId, hintId)
             self.__currentHintId = None
@@ -370,7 +372,7 @@ class BattleContextHintsController(ViewComponentsController):
 
     def __checkFinishHint(self):
         if self.__currentHintId is not None:
-            _logger.error('__onHintFinished() didnt triggered for hint %s ', self.__currentHintId)
+            _logger.warning('__onHintFinished() didnt triggered for hint %s ', self.__currentHintId)
             self.__finishHint(self.__currentHintId)
         return
 

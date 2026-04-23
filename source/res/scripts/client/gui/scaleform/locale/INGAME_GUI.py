@@ -101,8 +101,10 @@ class INGAME_GUI(object):
     CHAT_SHORTCUTS_HELP_ME = '#ingame_gui:chat_shortcuts/help_me'
     CHAT_SHORTCUTS_RELOADING_GUN = '#ingame_gui:chat_shortcuts/reloading_gun'
     CHAT_SHORTCUTS_RELOADING_CASSETTE = '#ingame_gui:chat_shortcuts/reloading_cassette'
+    CHAT_SHORTCUTS_RELOADING_CASSETTE_AUTO_SHOOT = '#ingame_gui:chat_shortcuts/reloading_cassette_auto_shoot'
     CHAT_SHORTCUTS_RELOADING_READY = '#ingame_gui:chat_shortcuts/reloading_ready'
     CHAT_SHORTCUTS_RELOADING_READY_CASSETTE = '#ingame_gui:chat_shortcuts/reloading_ready_cassette'
+    CHAT_SHORTCUTS_RELOADING_READY_CASSETTE_AUTO_SHOOT = '#ingame_gui:chat_shortcuts/reloading_ready_cassette_auto_shoot'
     CHAT_SHORTCUTS_RELOADING_UNAVAILABLE = '#ingame_gui:chat_shortcuts/reloading_unavailable'
     CHAT_SHORTCUTS_OVERHEAT_CANT_SHOOT = '#ingame_gui:chat_shortcuts/overheat_cant_shoot'
     CHAT_SHORTCUTS_SPG_AIM_AREA_GRIDINFO = '#ingame_gui:chat_shortcuts/spg_aim_area_gridInfo'
@@ -110,6 +112,8 @@ class INGAME_GUI(object):
     CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING_GRIDINFO = '#ingame_gui:chat_shortcuts/spg_aim_area_reloading_gridInfo'
     CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING = '#ingame_gui:chat_shortcuts/spg_aim_area_reloading'
     CHAT_SHORTCUTS_SPG_AIM_AREA_EMPTY_GRIDINFO = '#ingame_gui:chat_shortcuts/spg_aim_area_empty_gridInfo'
+    CHAT_SHORTCUTS_HB_ABILITY_ARTILLERY_ON_YOURSELF = '#ingame_gui:chat_shortcuts/hb_ability/artillery_on_yourself'
+    CHAT_SHORTCUTS_HB_ABILITY_LAST_STAND = '#ingame_gui:chat_shortcuts/hb_ability/last_stand'
     CHAT_SHORTCUTS_ATTACK_ENEMY = '#ingame_gui:chat_shortcuts/attack_enemy'
     CHAT_SHORTCUTS_ATTACKING_ENEMY = '#ingame_gui:chat_shortcuts/attacking_enemy'
     CHAT_SHORTCUTS_ATTACK_ENEMY_WITH_SPG = '#ingame_gui:chat_shortcuts/attack_enemy_with_SPG'
@@ -165,9 +169,11 @@ class INGAME_GUI(object):
     CHAT_EXAMPLE_ATTACK_ENEMY = '#ingame_gui:chat_example/attack_enemy'
     CHAT_EXAMPLE_RELOADING_GUN = '#ingame_gui:chat_example/reloading_gun'
     CHAT_EXAMPLE_RELOADING_CASSETTE = '#ingame_gui:chat_example/reloading_cassette'
+    CHAT_EXAMPLE_RELOADING_CASSETTE_AUTO_SHOOT = '#ingame_gui:chat_example/reloading_cassette_auto_shoot'
     CHAT_EXAMPLE_RELOADING_READY = '#ingame_gui:chat_example/reloading_ready'
     CHAT_EXAMPLE_TURN_BACK = '#ingame_gui:chat_example/turn_back'
     CHAT_EXAMPLE_RELOADING_READY_CASSETTE = '#ingame_gui:chat_example/reloading_ready_cassette'
+    CHAT_EXAMPLE_RELOADING_READY_CASSETTE_AUTO_SHOOT = '#ingame_gui:chat_example/reloading_ready_cassette_auto_shoot'
     CHAT_EXAMPLE_RELOADING_UNAVAILABLE = '#ingame_gui:chat_example/reloading_unavailable'
     CHAT_EXAMPLE_OVERHEAT_CANT_SHOOT = '#ingame_gui:chat_example/overheat_cant_shoot'
     CHAT_EXAMPLE_HELP_ME = '#ingame_gui:chat_example/help_me'
@@ -323,6 +329,7 @@ class INGAME_GUI(object):
     POSTMORTEM_TIPS_OBSERVERMODE_TEXT = '#ingame_gui:postmortem/tips/observerMode/text'
     POSTMORTEM_TIPS_EXITHANGAR_LABEL = '#ingame_gui:postmortem/tips/exitHangar/label'
     POSTMORTEM_TIPS_EXITHANGAR_TEXT = '#ingame_gui:postmortem/tips/exitHangar/text'
+    POSTMORTEM_TIPS_EXITHANGAR_TEXT_HB = '#ingame_gui:postmortem/tips/exitHangar/text_hb'
     PLAYERS_PANEL_STATE_NONE_HEADER = '#ingame_gui:players_panel/state/none/header'
     PLAYERS_PANEL_STATE_NONE_BODY = '#ingame_gui:players_panel/state/none/body'
     PLAYERS_PANEL_STATE_NONE_NOTE = '#ingame_gui:players_panel/state/none/note'
@@ -662,6 +669,7 @@ class INGAME_GUI(object):
     EFFICIENCYRIBBONS_ASSISTSTUN = '#ingame_gui:efficiencyRibbons/assistStun'
     EFFICIENCYRIBBONS_DEATHZONE = '#ingame_gui:efficiencyRibbons/deathZone'
     EFFICIENCYRIBBONS_STATICDEATHZONE = '#ingame_gui:efficiencyRibbons/staticDeathZone'
+    EFFICIENCYRIBBONS_HBDEATHZONE = '#ingame_gui:efficiencyRibbons/HBDeathZone'
     EFFICIENCYRIBBONS_CANNONDMG = '#ingame_gui:efficiencyRibbons/CannonDmg'
     EFFICIENCYRIBBONS_AIRSTRIKEDMG = '#ingame_gui:efficiencyRibbons/AirstrikeDmg'
     EFFICIENCYRIBBONS_ARTILLERYDMG = '#ingame_gui:efficiencyRibbons/ArtilleryDmg'
@@ -1074,8 +1082,10 @@ class INGAME_GUI(object):
      CHAT_SHORTCUTS_HELP_ME,
      CHAT_SHORTCUTS_RELOADING_GUN,
      CHAT_SHORTCUTS_RELOADING_CASSETTE,
+     CHAT_SHORTCUTS_RELOADING_CASSETTE_AUTO_SHOOT,
      CHAT_SHORTCUTS_RELOADING_READY,
      CHAT_SHORTCUTS_RELOADING_READY_CASSETTE,
+     CHAT_SHORTCUTS_RELOADING_READY_CASSETTE_AUTO_SHOOT,
      CHAT_SHORTCUTS_RELOADING_UNAVAILABLE,
      CHAT_SHORTCUTS_OVERHEAT_CANT_SHOOT,
      CHAT_SHORTCUTS_SPG_AIM_AREA_GRIDINFO,
@@ -1083,6 +1093,8 @@ class INGAME_GUI(object):
      CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING_GRIDINFO,
      CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING,
      CHAT_SHORTCUTS_SPG_AIM_AREA_EMPTY_GRIDINFO,
+     CHAT_SHORTCUTS_HB_ABILITY_ARTILLERY_ON_YOURSELF,
+     CHAT_SHORTCUTS_HB_ABILITY_LAST_STAND,
      CHAT_SHORTCUTS_ATTACK_ENEMY,
      CHAT_SHORTCUTS_ATTACKING_ENEMY,
      CHAT_SHORTCUTS_ATTACK_ENEMY_WITH_SPG,
@@ -1137,9 +1149,11 @@ class INGAME_GUI(object):
      CHAT_EXAMPLE_ATTACK_ENEMY,
      CHAT_EXAMPLE_RELOADING_GUN,
      CHAT_EXAMPLE_RELOADING_CASSETTE,
+     CHAT_EXAMPLE_RELOADING_CASSETTE_AUTO_SHOOT,
      CHAT_EXAMPLE_RELOADING_READY,
      CHAT_EXAMPLE_TURN_BACK,
      CHAT_EXAMPLE_RELOADING_READY_CASSETTE,
+     CHAT_EXAMPLE_RELOADING_READY_CASSETTE_AUTO_SHOOT,
      CHAT_EXAMPLE_RELOADING_UNAVAILABLE,
      CHAT_EXAMPLE_OVERHEAT_CANT_SHOOT,
      CHAT_EXAMPLE_HELP_ME,
@@ -1190,6 +1204,7 @@ class INGAME_GUI(object):
      EFFICIENCYRIBBONS_ASSISTSTUN,
      EFFICIENCYRIBBONS_DEATHZONE,
      EFFICIENCYRIBBONS_STATICDEATHZONE,
+     EFFICIENCYRIBBONS_HBDEATHZONE,
      EFFICIENCYRIBBONS_CANNONDMG,
      EFFICIENCYRIBBONS_AIRSTRIKEDMG,
      EFFICIENCYRIBBONS_ARTILLERYDMG,

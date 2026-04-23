@@ -2,9 +2,9 @@
 # Embedded file name: scripts/client/gui/shared/event_dispatcher.py
 import logging
 import typing
+import adisp
 from operator import attrgetter
 from BWUtil import AsyncReturn
-import adisp
 from CurrentVehicle import HeroTankPreviewAppearance
 from constants import GameSeasonType, RentType
 from debug_utils import LOG_WARNING
@@ -44,7 +44,7 @@ from gui.impl.lobby.promo_code_reward_screen import WAITING_DATA_TIMEOUT
 from gui.impl.lobby.tank_setup.dialogs.confirm_dialog import TankSetupConfirmDialog, TankSetupExitConfirmDialog
 from gui.impl.lobby.tank_setup.dialogs.refill_shells import ExitFromShellsConfirm, RefillShells
 from gui.impl.pub.lobby_window import LobbyNotificationWindow, LobbyWindow
-from gui.impl.pub.notification_commands import WindowNotificationCommand, EventNotificationCommand, NotificationEvent, WindowNotificationWithWaitingCommand
+from gui.impl.pub.notification_commands import WindowNotificationCommand, EventNotificationCommand, NotificationEvent, WindowNotificationWithWaitingCommand, Priority
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.resource_well.resource import Resource
 from gui.resource_well.resource_well_helpers import isResourceWellRewardVehicle
@@ -514,6 +514,10 @@ def showStorage(defaultSection=STORAGE_CONSTANTS.FOR_SELL, tabId=None):
      'defaultTab': tabId}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+def showStorageRestoreDevices(backBtnLabel=None):
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.STORAGE_RESTORE_DEVICES_VIEW), ctx={'backBtnLabel': backBtnLabel}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
 def showInterludeVideoWindow(messageVO=None):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_INTERLUDE_VIDEO), ctx=messageVO), EVENT_BUS_SCOPE.LOBBY)
 
@@ -640,8 +644,8 @@ def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, 
     return
 
 
-def showHeroTankPreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previousBackAlias=None, previewBackCb=None, hangarVehicleCD=None, bottomPanelTextData=None, backBtnLabel=None):
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.HERO_VEHICLE_PREVIEW), ctx={'itemCD': vehTypeCompDescr,
+def showHeroTankPreview(vehTypeCompDescr, viewAlias=VIEW_ALIAS.HERO_VEHICLE_PREVIEW, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previousBackAlias=None, previewBackCb=None, hangarVehicleCD=None, bottomPanelTextData=None, backBtnLabel=None):
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(viewAlias), ctx={'itemCD': vehTypeCompDescr,
      'previewAlias': previewAlias,
      'previewAppearance': HeroTankPreviewAppearance(),
      'isHeroTank': True,
@@ -1018,6 +1022,15 @@ def showParagonsRewardsWindow(bonuses, chapter=None, level=None, isVehicleSelect
         window.load()
 
 
+def isViewLoaded(layoutID):
+    uiLoader = dependency.instance(IGuiLoader)
+    if not uiLoader or not uiLoader.windowsManager:
+        return False
+    else:
+        view = uiLoader.windowsManager.getViewByLayoutID(layoutID)
+        return view is not None
+
+
 def showStylePreview(vehCD, style, descr='', backCallback=None, backBtnDescrLabel='', *args, **kwargs):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.STYLE_PREVIEW), ctx={'itemCD': vehCD,
      'style': style,
@@ -1145,14 +1158,14 @@ def showResSimpleDialog(resources, icon, formattedMessage, parent=None):
 
 
 @th_async
-def showDynamicButtonInfoDialogBuilder(resources, icon, formattedMessage, parent=None):
+def showDynamicButtonInfoDialogBuilder(resources, icon, formattedMessage, parent=None, loadCallback=None, destroyCallback=None):
     from gui.impl.dialogs import dialogs
     from gui.impl.dialogs.builders import InfoDialogBuilder
     builder = InfoDialogBuilder()
     builder.setMessagesAndButtons(resources, resources)
     builder.setIcon(icon)
     builder.setFormattedMessage(formattedMessage)
-    result = yield th_await(dialogs.showSimple(builder.build(parent)))
+    result = yield th_await(dialogs.showSimple(builder.build(parent), loadCallback=loadCallback, destroyCallback=destroyCallback))
     raise AsyncReturn(result)
 
 
@@ -1164,13 +1177,13 @@ def tryToShowReplaceExistingStyleDialog(parent=None):
     from gui.impl.wrappers.user_format_string_arg_model import UserFormatStringArgModel
     from gui.impl.pub.dialog_window import DialogButtons
     from gui.shared.gui_items import GUI_ITEM_TYPE
-    from skeletons.account_helpers.settings_core import ISettingsCore
-    from skeletons.gui.customization import ICustomizationService
     from items.components.c11n_constants import EDITABLE_STYLE_STORAGE_DEPTH
     from CurrentVehicle import g_currentVehicle
     from items.customizations import isEditedStyle
     from items.components.c11n_constants import SeasonType
-    from gui.Scaleform.daapi.view.lobby.customization.shared import fitOutfit, getCurrentVehicleAvailableRegionsMap, getEditableStyleOutfitDiffComponent
+    from gui.impl.lobby.customization.shared import fitOutfit, getCurrentVehicleAvailableRegionsMap, getEditableStyleOutfitDiffComponent
+    from skeletons.account_helpers.settings_core import ISettingsCore
+    from skeletons.gui.customization import ICustomizationService
     service = dependency.instance(ICustomizationService)
     settingsCore = dependency.instance(ISettingsCore)
     serverSettings = settingsCore.serverSettings
@@ -1243,6 +1256,9 @@ def showOptionalDeviceDestroy(itemCD, callback):
     title = backport.text(R.strings.dialogs.equipmentDestroy.conformation(), equipment=optionalDevice.userName)
     builder.setTitle(title)
     builder.setDisplayFlags(DisplayFlags.RESPONSIVEHEADER.value)
+    isRestorable = dependency.instance(ILobbyContext).getServerSettings().isOptionalDeviceRestoreEnabled()
+    if not optionalDevice.isRegular and isRestorable:
+        builder.setWarningMsg(backport.text(R.strings.dialogs.equipmentDestroy.warningMsg()))
     from gui.impl.dialogs.dialog_template import DialogTemplateView
     result = yield th_await(showOptDeviceCommonWindowDialog(lambda **_: builder.buildView(), layoutID=DialogTemplateView.LAYOUT_ID))
     callback(result)
@@ -1380,23 +1396,6 @@ def showMultiAwardWindow(rewards, tTips, productCode, notificationMgr=None):
     from gui.impl.lobby.awards.multiple_awards_view import MultipleAwardsViewWindow
     window = MultipleAwardsViewWindow(rewards, tTips, productCode)
     notificationMgr.append(WindowNotificationCommand(window))
-
-
-def showProgressiveItemsView(itemIntCD=None):
-    from gui.impl.lobby.customization.progressive_items_view.progressive_items_view import ProgressiveItemsView
-    appLoader = dependency.instance(IAppLoader)
-    app = appLoader.getApp()
-    view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_CUSTOMIZATION))
-    if view is None:
-        parent = None
-        _logger.error('ProgressiveItemsView shall be created only from customization')
-    else:
-        parent = view.getParentWindow()
-    uiLoader = dependency.instance(IGuiLoader)
-    contentResId = R.views.lobby.customization.progressive_items_view.ProgressiveItemsView()
-    if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
-        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID=contentResId, viewClass=ProgressiveItemsView, scope=ScopeTemplates.LOBBY_SUB_SCOPE, parent=parent), view, wsFlags=ViewFlags.LOBBY_TOP_SUB_VIEW, itemIntCD=itemIntCD), scope=EVENT_BUS_SCOPE.LOBBY)
-    return
 
 
 def showAmmunitionSetupView(**kwargs):
@@ -1603,12 +1602,12 @@ def showBattlePassBuyLevelWindow(ctx=None, parent=None, guiLoader=None):
 
 
 @dependency.replace_none_kwargs(guiLoader=IGuiLoader)
-def showOnboardingView(styleCD=None, isFirstRun=False, parent=None, guiLoader=None):
+def showOnboardingView(styleCD=None, isFirstRun=False, guiLoader=None):
     from gui.impl.lobby.customization.progression_styles.onboarding_view import OnboardingWindow
     view = guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.customization.progression_styles.OnboardingView())
     if view is None:
         window = OnboardingWindow({'styleCD': styleCD,
-         'isFirstRun': isFirstRun}, parent or getParentWindow())
+         'isFirstRun': isFirstRun})
         window.load()
     return
 
@@ -2052,7 +2051,7 @@ def showBattleMattersReward(ctx=None, notificationMgr=None):
     from gui.impl.lobby.battle_matters.battle_matters_rewards_view import BattleMattersRewardsViewWindow
     if ctx is not None:
         window = BattleMattersRewardsViewWindow(ctx=ctx)
-        notificationMgr.append(WindowNotificationCommand(window))
+        notificationMgr.append(WindowNotificationCommand(window, Priority.HIGH))
     else:
         _logger.error('No context for BattleMatters rewards View')
     return

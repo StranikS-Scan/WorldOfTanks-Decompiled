@@ -59,6 +59,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.tutorial import ITutorialLoader
 from soft_exception import SoftException
+from historical_battles.skeletons.gui.game_event_controller import IGameEventController
 if typing.TYPE_CHECKING:
     from typing import Optional
 _logger = logging.getLogger(__name__)
@@ -192,6 +193,15 @@ TOOLTIPS_HANGAR_HEADER_PM3 = {WIDGET_PM_STATE.BRANCH_DISABLED: TOOLTIPS.HANGAR_H
  WIDGET_PM_STATE.UNAVAILABLE: TOOLTIPS.HANGAR_HEADER_PERSONALMISSIONS_BRANCH_DISABLED,
  WIDGET_PM_STATE.OPERATION_DISABLED: TOOLTIPS.HANGAR_HEADER_PERSONALMISSIONS_OPERATION_DISABLED,
  WIDGET_PM_STATE.DISABLED: None}
+ARMORY_YARD_FLAG_BONUS_TYPES = (constants.ARENA_BONUS_TYPE.REGULAR,
+ constants.ARENA_BONUS_TYPE.GLOBAL_MAP,
+ constants.ARENA_BONUS_TYPE.SORTIE_2,
+ constants.ARENA_BONUS_TYPE.FORT_BATTLE_2,
+ constants.ARENA_BONUS_TYPE.BOB,
+ constants.ARENA_BONUS_TYPE.MAPBOX,
+ constants.ARENA_BONUS_TYPE.FUN_RANDOM,
+ constants.ARENA_BONUS_TYPE.COMP7,
+ constants.ARENA_BONUS_TYPE.RANKED)
 _SCREEN_WIDTH_FOR_WRAP_GROUPS = 1300
 _MONITOR_SETTINGS = ('elenSettings',
  constants.PremiumConfigs.PREM_QUESTS,
@@ -515,6 +525,9 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
          'quests': []}
         if not self.__tutorialLoader.gui.hangarHeaderEnabled:
             return emptyHeaderVO
+        historicalBattleController = dependency.getInstanceIfHas(IGameEventController)
+        if historicalBattleController and historicalBattleController.isHBPrbActive():
+            return emptyHeaderVO
         versusAIController = dependency.getInstanceIfHas(IVersusAIController)
         if versusAIController and versusAIController.isVersusAIPrbActive():
             return {'isVisible': True,
@@ -594,14 +607,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         return quests
 
     def __isArmoryYardFlagVisible(self):
-        isActiveInCurrentArenaType = self.__getCurrentArenaBonusType() in (constants.ARENA_BONUS_TYPE.REGULAR,
-         constants.ARENA_BONUS_TYPE.GLOBAL_MAP,
-         constants.ARENA_BONUS_TYPE.SORTIE_2,
-         constants.ARENA_BONUS_TYPE.FORT_BATTLE_2,
-         constants.ARENA_BONUS_TYPE.BOB,
-         constants.ARENA_BONUS_TYPE.MAPBOX,
-         constants.ARENA_BONUS_TYPE.FUN_RANDOM,
-         constants.ARENA_BONUS_TYPE.COMP7)
+        isActiveInCurrentArenaType = self.__getCurrentArenaBonusType() in ARMORY_YARD_FLAG_BONUS_TYPES
         isActiveLimitedUi = self.__limitedUIController.isRuleCompleted(LuiRules.ARMORY_YARD_ENTRY_POINT)
         isActiveAnnouncementSate = self.__armoryYardCtrl.isInAnnouncement() and isActiveInCurrentArenaType and isActiveLimitedUi
         isActivePauseSate = self.__armoryYardCtrl.isPaused and isActiveLimitedUi and not self.__armoryYardCtrl.isAllTokensReceived() and isActiveInCurrentArenaType
@@ -618,6 +624,10 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
 
     def __getRankedQuestsToHeaderVO(self):
         quests = []
+        isArmoryYardFlagVisible = self.__isArmoryYardFlagVisible()
+        if isArmoryYardFlagVisible:
+            ayQuestsVO = self.__getArmoryYardQuestsVO()
+            quests.append(ayQuestsVO)
         rankedBattleQuests = self.__getRankedBattleQuestsVO()
         if rankedBattleQuests:
             quests.append(rankedBattleQuests)

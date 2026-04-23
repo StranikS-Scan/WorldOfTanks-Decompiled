@@ -21,6 +21,7 @@ from gui_lootboxes.skeletons.statistic_lootbox_controller import IStatisticLootB
 from helpers import dependency
 from skeletons.gui.game_control import IGuiLootBoxesController
 from skeletons.gui.impl import IGuiLoader
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 TAB_STATES = (TabState.SINGLE, TabState.ALL)
@@ -31,6 +32,7 @@ class LootBoxesShortStatsSubview(ViewImpl):
     __guiLootBoxes = dependency.descriptor(IGuiLootBoxesController)
     __itemsCache = dependency.descriptor(IItemsCache)
     __statisticCtrl = dependency.descriptor(IStatisticLootBoxController)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, uiLogger):
         settings = ViewSettings(R.views.gui_lootboxes.lobby.gui_lootboxes.LootBoxesShortStatsView())
@@ -97,6 +99,7 @@ class LootBoxesShortStatsSubview(ViewImpl):
         hasVisibleLootBoxes = any((lootbox.isVisibleInStorage() for lootbox in self.__guiLootBoxes.getGuiLootBoxes()))
         model.setHasVisibleLootBoxes(hasVisibleLootBoxes)
         model.setIsLoading(False)
+        model.setIsOptDeviceRestored(self.__getOptDevicesRestoreState())
         return
 
     def __fillCurrentRewardsModel(self, model):
@@ -163,3 +166,6 @@ class LootBoxesShortStatsSubview(ViewImpl):
         view = self.__guiLoader.windowsManager.getViewByLayoutID(R.views.gui_lootboxes.lobby.gui_lootboxes.StorageView())
         if view:
             view.destroyWindow()
+
+    def __getOptDevicesRestoreState(self):
+        return self.__lobbyContext.getServerSettings().isOptionalDeviceRestoreEnabled()

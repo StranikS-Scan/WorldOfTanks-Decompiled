@@ -71,7 +71,7 @@ class IBattleCommandFactory(object):
     def createByBaseIndexAndName(self, pointID, commandName, baseName):
         return None
 
-    def create4Reload(self, isCassetteClip, timeLeft, quantity):
+    def createReloadingCommand(self, isCassetteClip, timeLeft, quantity, hasAutoShoot):
         return None
 
     def createOverheatCantShootCommand(self, timeLeft):

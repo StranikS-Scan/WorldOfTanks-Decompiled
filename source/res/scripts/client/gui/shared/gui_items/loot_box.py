@@ -332,7 +332,7 @@ class LootBox(GUIItem):
         if self.hasLootLists():
             self.__rotationLists, self.__slotBonuses = parseBonusSection(lootBoxConfig['bonus'], self.__config['rotationLevelCount'])
         else:
-            self.__slotBonuses = parseAllOfBonusInfoSection(lootBoxConfig.get('bonus', {}).get('allof', {}))
+            self.__slotBonuses = parseAllOfBonusInfoSection(lootBoxConfig.get('bonus', {}).get('allof', []))
         self.__bonusGroups = None
         self.__guaranteedFrequencyName, self.__guaranteedFrequency = self.__readLimits(lootBoxConfig.get('limits', {}))
         self.__isEnabled = lootBoxConfig.get('enabled', False)

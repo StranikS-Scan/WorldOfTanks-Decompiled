@@ -112,7 +112,8 @@ class _LootEffectCtrl(_EffectCtrlBase):
             LOG_ERROR('[cosmic_battle]: invalid loot')
             return
         prefabPath = cosmic_prefabs.LOOT_SPAWNED_PREFABS.get(loot.itemID, cosmic_prefabs.Loot.UNKNOWN)
-        self.loadPrefabInHierarchy(prefabPath, loot.entityGameObject, self.__lootPrefabs)
+        offset = Vector3(0, -6, 0) if loot.itemID == LOOT_ITEM_ID.COSMIC_CORAL else Vector3()
+        self.loadPrefabInHierarchy(prefabPath, loot.entityGameObject, self.__lootPrefabs, offset=offset)
         if loot.itemID != LOOT_ITEM_ID.COSMIC_CORAL:
             CosmicBattleSounds.playDronAppear(loot.position)
             self.loadPrefabInHierarchy(cosmic_prefabs.Loot.COSMIC_LOOT_PORTAL, loot.entityGameObject, self.__portalPrefabs)

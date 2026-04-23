@@ -2,10 +2,10 @@
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
     <commander></commander>
-    <gunner>	loader	</gunner>
-    <gunner>	loader	</gunner>
+    <gunner></gunner>
     <driver></driver>
     <radioman></radioman>
+    <loader></loader>
   </crew>
   <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
   <postProgressionTree>	role_SPG	</postProgressionTree>
@@ -2515,7 +2515,7 @@
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	270	</circularVisionRadius>
+      <circularVisionRadius>	290	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	90	</maxHealth>
         <maxRegenHealth>	45	</maxRegenHealth>
@@ -2914,6 +2914,24 @@
           <edgeByVisualModel>	false	</edgeByVisualModel>
           <effects>	shot_huge	</effects>
           <reloadEffect>	autoloader_reload115_152	</reloadEffect>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	-35.0	</row>
+                <row>	3.0	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	joint_01	</node>
+                  <table>
+                    <row>	35.0	</row>
+                    <row>	3.0	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
           <camouflage>
             <density>	111.272675 111.01088	</density>
             <aoTextureSize>	1024 1024	</aoTextureSize>
@@ -3311,6 +3329,24 @@
           <effects>	shot_huge	</effects>
           <edgeByVisualModel>	false	</edgeByVisualModel>
           <reloadEffect>	autoloader_reload155_170	</reloadEffect>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	-35.0	</row>
+                <row>	3.0	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	joint_01	</node>
+                  <table>
+                    <row>	35.0	</row>
+                    <row>	3.0	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
           <camouflage>
             <density>	111.207817 111.107445	</density>
             <aoTextureSize>	1024 1024	</aoTextureSize>

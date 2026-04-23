@@ -212,6 +212,15 @@ class Inventory(object):
             self.__account.shop.waitForSync(partial(self.__equipOptionDeviceOnShopSynced, vehInvID, deviceCompDescr, slotIdx, layoutIdx, isAllSetups, isPaidRemoval, callback, useDemountKit))
             return
 
+    def restoreOptionalDevice(self, optionalDeviceCD, reason, count, useDemountKit, callback):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER, None)
+            return
+        else:
+            self.__account.shop.waitForSync(partial(self.__restoreOptionalDeviceOnShopSynced, optionalDeviceCD, reason, count, useDemountKit, callback))
+            return
+
     def equipShells(self, vehInvID, shells, callback):
         if self.__ignore:
             if callback is not None:
@@ -856,4 +865,22 @@ class Inventory(object):
             if callback is not None:
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             self.__commandsProxy.perform(AccountCommands.CMD_SET_CUSTOM_ROLE_SLOT, shopRev, vehInvID, slotID, proxy)
+            return
+
+    def __restoreOptionalDeviceOnShopSynced(self, optionalDeviceCD, reason, count, useDemountKit, callback, resultID, shopRev):
+        if resultID < 0:
+            if callback is not None:
+                callback(resultID, None)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext=None: callback(resultID, ext)
+            else:
+                proxy = None
+            arr = [shopRev,
+             optionalDeviceCD,
+             reason,
+             count,
+             useDemountKit]
+            self.__account._doCmdIntArr(AccountCommands.CMD_OPTDEV_RESTORE, arr, proxy)
             return

@@ -75,7 +75,7 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
     def createMarker(self, symbol, matrixProvider=None, active=True, markerType=CommonMarkerType.NORMAL):
         if active and matrixProvider is None:
             raise SoftException('Active marker {} must has matrixProvider'.format(symbol))
-        markerID = self.__canvas.addMarker(matrixProvider, symbol, active, markerType)
+        markerID = self.__canvas.addMarker(matrixProvider, symbol, active, markerType.value)
         self.__ids.add(markerID)
         return markerID
 
@@ -102,6 +102,14 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         if not self._isMarkerHoveringEnabled:
             return
         self.__canvas.markerSetMarkerObjectInFocus(markerID, inFocus)
+
+    def setMarkerCustomDistanceStr(self, markerID, customStr):
+        if self._isMarkerHoveringEnabled:
+            self.__canvas.markerSetCustomDistanceStr(markerID, customStr)
+
+    def setMarkerTextLabelEnabled(self, markerID, enabled):
+        if self._isMarkerHoveringEnabled:
+            self.__canvas.markerSetTextLabelEnabled(markerID, enabled)
 
     def setMarkerMinScale(self, markerID, minScale):
         self.__canvas.markerSetMinScale(markerID, minScale)

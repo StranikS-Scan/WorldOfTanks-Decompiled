@@ -211,24 +211,12 @@ class StyleItemsProcessor(ItemsProcessor):
 
     def _process(self, style):
         itemsInfo = {}
-        vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
         nationalEmblemItem = self.__service.getItemByID(GUI_ITEM_TYPE.EMBLEM, g_currentVehicle.item.descriptor.type.defaultPlayerEmblemID)
-        showStyleInsteadItems = True
         for season in SeasonType.COMMON_SEASONS:
-            outfit = style.item.getOutfit(season, vehicleCD=vehicleCD)
             seasonInfo = itemsInfo.setdefault(season, _SeasonPurchaseInfo())
-            for intCD in outfit.items():
-                item = self.__service.getItemByCD(intCD)
-                if not item.isHiddenInUI():
-                    if item.intCD != nationalEmblemItem.intCD:
-                        showStyleInsteadItems = False
-                    itemDescription = self._getItemDescription(item)
-                    seasonInfo.add(itemDescription, item.itemTypeID)
-
-            if showStyleInsteadItems:
-                styleDescription = self._getItemDescription(style.item, progressionLevel=style.progressionLevel)
-                seasonInfo.add(styleDescription, GUI_ITEM_TYPE.STYLE)
-                seasonInfo.delete(nationalEmblemItem.intCD, GUI_ITEM_TYPE.EMBLEM)
+            styleDescription = self._getItemDescription(style.item, progressionLevel=style.progressionLevel)
+            seasonInfo.add(styleDescription, GUI_ITEM_TYPE.STYLE)
+            seasonInfo.delete(nationalEmblemItem.intCD, GUI_ITEM_TYPE.EMBLEM)
 
         return itemsInfo
 
@@ -248,13 +236,17 @@ class EditableStyleItemsProcessor(SeparateItemsProcessor):
         showStyleInsteadItems = True
         styleDescription = None
         for idx, pItem in enumerate(items):
+            if pItem.item.itemTypeID not in (GUI_ITEM_TYPE.STYLE,
+             GUI_ITEM_TYPE.PROJECTION_DECAL,
+             GUI_ITEM_TYPE.EMBLEM,
+             GUI_ITEM_TYPE.INSCRIPTION,
+             GUI_ITEM_TYPE.PERSONAL_NUMBER):
+                continue
             if pItem.item.isHiddenInUI():
                 continue
             if pItem.group == AdditionalPurchaseGroups.STYLES_GROUP_ID:
                 styleDescription = self._getItemDescription(pItem, progressionLevel=pItem.progressionLevel)
                 continue
-            if not pItem.isEdited and pItem.item.intCD != nationalEmblemItem.intCD:
-                showStyleInsteadItems = False
             seasonInfo = itemsInfo.setdefault(pItem.group, _SeasonPurchaseInfo(self._getKey))
             itemDescription = self._getItemDescription(pItem, idx)
             orderKey = pItem.getOrderKey()

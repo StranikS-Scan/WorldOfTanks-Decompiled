@@ -9,5 +9,6 @@ class SEASONS_CONSTANTS(object):
     SUMMER = 'summer'
     WINTER = 'winter'
     DESERT = 'desert'
+    ALL = 'all_seasons'
     SEASONS = [SUMMER, WINTER, DESERT]
     INDICES = [SUMMER_INDEX, WINTER_INDEX, DESERT_INDEX]

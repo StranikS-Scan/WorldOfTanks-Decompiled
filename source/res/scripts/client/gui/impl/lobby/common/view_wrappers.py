@@ -25,3 +25,26 @@ def createBackportTooltipDecorator():
         return wrapper
 
     return decorator
+
+
+def createBackportContextMenuDecorator():
+
+    def decorator(method):
+
+        @wraps(method)
+        def wrapper(self, event, *args, **kwargs):
+            if event.contentID != R.views.common.BackportContextMenu():
+                return method(self, event, *args, **kwargs)
+            else:
+                contextMenuData = self.getContextMenuData(event)
+                if contextMenuData is None:
+                    return
+                window = backport.BackportContextMenuWindow(contextMenuData, self.getParentWindow())
+                if window is None:
+                    return
+                window.load()
+                return window
+
+        return wrapper
+
+    return decorator

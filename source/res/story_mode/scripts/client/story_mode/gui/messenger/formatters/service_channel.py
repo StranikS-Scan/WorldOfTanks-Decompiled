@@ -3,14 +3,16 @@
 from adisp import adisp_async, adisp_process
 from gui.impl import backport
 from gui.impl.gen import R
-from helpers import time_utils
+from helpers import time_utils, dependency
 from messenger import g_settings
 from messenger.formatters import TimeFormatter
 from messenger.formatters.service_channel import BattleResultsFormatter, ServiceChannelFormatter
 from messenger.formatters.service_channel_helpers import MessageData
 from story_mode_common.story_mode_constants import FIRST_MISSION_ID
+from story_mode.skeletons.story_mode_controller import IStoryModeController
 
 class StoryModeResultsFormatter(BattleResultsFormatter):
+    _storyModeController = dependency.descriptor(IStoryModeController)
     _battleResultKeys = {-1: 'storyModeBattleDefeatResult',
      0: 'storyModeBattleDefeatResult',
      1: 'storyModeBattleVictoryResult'}
@@ -18,8 +20,11 @@ class StoryModeResultsFormatter(BattleResultsFormatter):
     @adisp_async
     @adisp_process
     def format(self, message, callback):
+        if self._storyModeController.wasOnboardingSkipped:
+            callback(MessageData(None, None))
         messages = yield super(StoryModeResultsFormatter, self).format(message)
         callback(messages)
+        return
 
     def _prepareFormatData(self, message):
         templateName, ctx = super(StoryModeResultsFormatter, self)._prepareFormatData(message)

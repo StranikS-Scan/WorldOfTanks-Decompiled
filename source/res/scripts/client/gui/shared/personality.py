@@ -9,6 +9,7 @@ import SoundGroups
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from PlayerEvents import g_playerEvents
 from account_helpers.account_validator import ValidationCodes, InventoryVehiclesValidator, InventoryOutfitValidator, InventoryTankmenValidator
+from account_helpers.settings_core.settings_logging import logDeferredPlayerSettings
 from adisp import adisp_process
 import th_async as future_async
 from constants import HAS_DEV_RESOURCES
@@ -394,6 +395,7 @@ def __runSettingsSync(_, callback=None):
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.USER_SERVER_SETTINGS_SYNC)
     yield ServicesLocator.settingsCache.update()
     ServicesLocator.settingsCore.serverSettings.applySettings()
+    logDeferredPlayerSettings()
     callback(True)
 
 

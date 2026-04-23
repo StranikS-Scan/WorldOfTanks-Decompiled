@@ -269,10 +269,10 @@ class CombatEquipmentManager(object):
         return
 
     @staticmethod
-    def createEquipmentSelectedArea(pos, direction, equipment, areaSize=None):
+    def createEquipmentSelectedArea(pos, direction, equipment, areaSize=None, areaVisual=None):
         area = CombatSelectedArea.CombatSelectedArea()
         size = areaSize if areaSize else Vector2(equipment.areaWidth, equipment.areaLength)
-        visual = equipment.areaVisual
+        visual = areaVisual if areaVisual else equipment.areaVisual
         color = equipment.areaColor
         if visual is None:
             visual = CombatSelectedArea.DEFAULT_RADIUS_MODEL

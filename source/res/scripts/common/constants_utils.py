@@ -108,7 +108,6 @@ def addInvitationTypes(extInvitationType, personality):
 
 def addClientUnitCmd(extClientUnitCmd, personality):
     extraAttrs = extClientUnitCmd.getExtraAttrs()
-    extClientUnitCmd.inject(personality)
     CMD_NAMES.update({value:attr for attr, value in extraAttrs.iteritems()})
 
 
@@ -262,6 +261,18 @@ def addClientBonusFromExtension(bonusName, clazz, personality):
     LOG_DEBUG('gui.server_events.bonuses._BONUSES:{bonusName} was added. Personality: {p}'.format(bonusName=bonusName, p=personality))
 
 
+def addLootboxStatHandler(bonusName, constValue, converter, unpacker, personality):
+    from lootboxes_common import REWARD_ITEM_IDS, ID_TO_NAME, EXTENSIONS_CONVERTER_PROCESSOR, EXTENSIONS_UNPACK_PROCESSOR
+    if bonusName in REWARD_ITEM_IDS:
+        raise SoftException('lootboxes_common.REWARD_ITEM_IDS already has {value}. Personality: {p}'.format(value=bonusName, p=personality))
+    REWARD_ITEM_IDS[bonusName] = constValue
+    if constValue in ID_TO_NAME:
+        raise SoftException('lootboxes_common.ID_TO_NAME already has {value}. Personality: {p}'.format(value=bonusName, p=personality))
+    EXTENSIONS_CONVERTER_PROCESSOR[bonusName] = converter
+    EXTENSIONS_UNPACK_PROCESSOR[bonusName] = unpacker
+    LOG_DEBUG('Log packer for {bonusName} was added. Personality: {p}'.format(bonusName=bonusName, p=personality))
+
+
 class AbstractExtensionBonuses(object):
 
     def __init__(self, personality):
@@ -331,6 +342,14 @@ class AbstractExtensionBonuses(object):
         for predicate, func in self._getClientMergers():
             registerClientBonusMergers(predicate, func)
 
+    def _getConverterProcessor(self):
+        return {}
+
+    def __registerConverterProcessor(self):
+        for bonusName, values in self._getConverterProcessor().iteritems():
+            constValue, converter, unpacker = values
+            addLootboxStatHandler(bonusName, constValue, converter, unpacker, self._personality)
+
     def __registerCommon(self):
         self.__registerReaders()
         self.__registerMergers()
@@ -345,6 +364,7 @@ class AbstractExtensionBonuses(object):
     def registerBonusBase(self):
         self.__registerCommon()
         self.__registerAppliers()
+        self.__registerConverterProcessor()
         invalidateBonusMergersAppliers(self._personality)
 
     def registerBonusClient(self):
@@ -590,16 +610,24 @@ class AbstractBattleMode(object):
         if self._BASE_WINNER_PROCESSOR_CLASS:
             scu.addWinnerProcessor(self._ARENA_BONUS_TYPE, self._BASE_WINNER_PROCESSOR_CLASS, self._personality)
 
+    def addUnitCmdHandlers(self):
+        import server_constants_utils as scu
+        if self._server_unitCmdHandlers:
+            scu.addUnitCmdHandlers(self._server_unitCmdHandlers, self._personality)
+
+    def addUnitMethodRoles(self):
+        import server_constants_utils as scu
+        if self._server_unitMethodRoles:
+            scu.addUnitMethodRoles(self._server_unitMethodRoles, self._personality)
+
     def registerBaseUnit(self):
         import server_constants_utils as scu
         scu.addCanCreateUnitMgrHandler(self._ROSTER_TYPE, self._server_canCreateUnitMgr, self._personality)
         scu.addSquadConnector(self._UNIT_MGR_FLAGS, self._server_unitConnector, self._personality)
         scu.addUnitVehicleChecker(self._UNIT_MGR_FLAGS, self._server_unitChecker, self._personality)
         scu.addInvitationSquadExtraHandler(self._INVITATION_TYPE, self._server_invitationSquadExtraHandler, self._personality)
-        if self._server_unitCmdHandlers:
-            scu.addUnitCmdHandlers(self._server_unitCmdHandlers, self._personality)
-        if self._server_unitMethodRoles:
-            scu.addUnitMethodRoles(self._server_unitMethodRoles, self._personality)
+        self.addUnitCmdHandlers()
+        self.addUnitMethodRoles()
 
     def registerClient(self):
         from gui.prb_control import prb_utils

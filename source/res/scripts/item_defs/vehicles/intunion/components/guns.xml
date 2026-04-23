@@ -108,7 +108,7 @@
         <amplitude>	0.3	</amplitude>
         <recoilEffect>	small	</recoilEffect>
       </recoil>
-      <effects>	shot_autoshoot_medium	</effects>
+      <effects>	shot_autoshoot_small_shell_inside	</effects>
       <reloadEffect>	reload_autoshoot_reloading_20_49	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
@@ -158,7 +158,7 @@
         <amplitude>	0.3	</amplitude>
         <recoilEffect>	small	</recoilEffect>
       </recoil>
-      <effects>	shot_autoshoot_medium	</effects>
+      <effects>	shot_autoshoot_small_shell_inside	</effects>
       <reloadEffect>	reload_autoshoot_reloading_20_49	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
@@ -209,7 +209,7 @@
         <amplitude>	0.3	</amplitude>
         <recoilEffect>	small	</recoilEffect>
       </recoil>
-      <effects>	shot_autoshoot_medium	</effects>
+      <effects>	shot_autoshoot_small_shell_inside	</effects>
       <reloadEffect>	reload_autoshoot_reloading_20_49	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
@@ -234,17 +234,17 @@
       <shots>
         <_37mm_BR_169_T>
           <defaultPortion>	0.9	</defaultPortion>
-          <speed>	675	</speed>
+          <speed>	930	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	160 128	</piercingPower>
+          <piercingPower>	160 149	</piercingPower>
         </_37mm_BR_169_T>
         <_37mm_OF_169_T>
           <defaultPortion>	0.1	</defaultPortion>
-          <speed>	690	</speed>
+          <speed>	930	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	215 172	</piercingPower>
+          <piercingPower>	215 199	</piercingPower>
         </_37mm_OF_169_T>
       </shots>
     </_37mm_N_37D_T>
@@ -545,7 +545,7 @@
         <amplitude>	0.3	</amplitude>
         <recoilEffect>	small	</recoilEffect>
       </recoil>
-      <effects>	shot_autoshoot_medium	</effects>
+      <effects>	shot_autoshoot_medium_shell_inside	</effects>
       <reloadEffect>	reload_autoshoot_reloading_50_84	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
@@ -570,7 +570,7 @@
       <shots>
         <_50mm_JOSv>
           <defaultPortion>	0.9	</defaultPortion>
-          <speed>	750	</speed>
+          <speed>	900	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
           <piercingPower>	156 138	</piercingPower>
@@ -580,7 +580,7 @@
           <speed>	800	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	206 158	</piercingPower>
+          <piercingPower>	206 178	</piercingPower>
         </_50mm_JOSvP>
       </shots>
     </_50mm_ZK_500>
@@ -653,7 +653,7 @@
         <amplitude>	0.38	</amplitude>
         <recoilEffect>	medium	</recoilEffect>
       </recoil>
-      <effects>	shot_autoshoot_medium	</effects>
+      <effects>	shot_autoshoot_medium_shell_ground	</effects>
       <reloadEffect>	reload_autoshoot_reloading_50_84	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
@@ -704,7 +704,7 @@
         <amplitude>	0.38	</amplitude>
         <recoilEffect>	medium	</recoilEffect>
       </recoil>
-      <effects>	shot_autoshoot_medium	</effects>
+      <effects>	shot_autoshoot_medium_shell_ground	</effects>
       <reloadEffect>	reload_autoshoot_reloading_50_84	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
@@ -729,17 +729,17 @@
       <shots>
         <_57mm_53_BR_279_T>
           <defaultPortion>	0.9	</defaultPortion>
-          <speed>	750	</speed>
+          <speed>	900	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	215 180	</piercingPower>
+          <piercingPower>	215 190	</piercingPower>
         </_57mm_53_BR_279_T>
         <_57mm_53_BR_279P_T>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	850	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	260 190	</piercingPower>
+          <piercingPower>	260 221	</piercingPower>
         </_57mm_53_BR_279P_T>
       </shots>
     </_57mm_RShR_57_T>

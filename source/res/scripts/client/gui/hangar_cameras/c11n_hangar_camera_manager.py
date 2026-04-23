@@ -5,7 +5,6 @@ import math
 import BigWorld
 import Math
 import CGF
-from gui.shared.utils.graphics import isRendererPipelineDeferred
 from items.components.c11n_constants import EASING_TRANSITION_DURATION
 from helpers import dependency
 from helpers.CallbackDelayer import TimeDeltaMeter
@@ -26,12 +25,18 @@ _STYLE_INFO_MAX_VEHICLE_HEIGHT = 0.3
 _STYLE_INFO_VEHICLE_SCREEN_X_SHIFT = 1.0 / 3
 _PROJECTION_DECALS_DIR_CLIP_COS = 0.8
 
+class CustomizationCameraNames(object):
+    CUSTOMIZATION = 'Customization'
+    SHIFTED_TANK_CUSTOMIZATION = 'ShiftedTankCustomization'
+
+
 class C11nCameraModes(object):
     START_STATE = 0
     PREVIEW = 1
     EMBLEM = 2
     ANCHOR = 3
     STYLE_INFO = 4
+    BIN = 5
 
 
 class C11nHangarCameraManager(TimeDeltaMeter):
@@ -65,6 +70,20 @@ class C11nHangarCameraManager(TimeDeltaMeter):
     @property
     def currentMode(self):
         return self.__currentMode
+
+    def moveToBinCamera(self):
+        cameraManager = CGF.getManager(self._hangarSpace.spaceID, HangarCameraManager)
+        if not cameraManager:
+            return
+        cameraManager.switchByCameraName(CustomizationCameraNames.SHIFTED_TANK_CUSTOMIZATION, instantly=False)
+        self.__currentMode = C11nCameraModes.BIN
+
+    def moveToCustomizationCamera(self):
+        cameraManager = CGF.getManager(self._hangarSpace.spaceID, HangarCameraManager)
+        if not cameraManager:
+            return
+        cameraManager.switchByCameraName(CustomizationCameraNames.CUSTOMIZATION, instantly=False)
+        self.__currentMode = C11nCameraModes.PREVIEW
 
     def resetCustomizationCamera(self, resetRotation=True):
         cameraManager = CGF.getManager(self._hangarSpace.spaceID, HangarCameraManager)
@@ -145,12 +164,6 @@ class C11nHangarCameraManager(TimeDeltaMeter):
             halfHeight = dist * halfFOVTan
             halfWidth = halfHeight * aspect
             targetPos += pivotDir * halfWidth * _STYLE_INFO_VEHICLE_SCREEN_X_SHIFT
-            futureCamDir = mat.applyVector(Math.Vector3(0, 0, 1))
-            futureCamPos = targetPos - futureCamDir * dist
-            paramsDOF = None
-            if isRendererPipelineDeferred():
-                paramsDOF = self.__getStyleInfoDOFParams(futureCamPos)
-            cameraManager.setDOFParams(True, paramsDOF)
             cameraManager.moveCamera(targetPos, styleInfoYaw, _STYLE_INFO_PITCH, dist, EASING_TRANSITION_DURATION)
             self.enableMovementByMouse(enableRotation=False, enableZoom=False)
             self.__currentMode = C11nCameraModes.STYLE_INFO

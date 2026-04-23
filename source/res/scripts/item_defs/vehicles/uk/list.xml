@@ -935,7 +935,7 @@
     <price>	25000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_universal HD special improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals secret lockOutfit restoreWithStyle	</tags>
+    <tags>	heavyTank role_HT_universal HD special improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals lockOutfit restoreWithStyle	</tags>
     <level>	10	</level>
   </GB88_T95_Chieftain_turret>
   <GB93_Caernarvon_AX>
@@ -972,6 +972,7 @@
     <longDescriptionSpecial>	#gb_vehicles:GB95_Ekins_Firefly_M4A4_long_special	</longDescriptionSpecial>
     <price>	6000	  <gold></gold>
     </price>
+    <notInShop>	true	</notInShop>
     <tags>	mediumTank role_MT_sniper HD mediumTank1 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	6	</level>
   </GB95_Ekins_Firefly_M4A4>
@@ -1068,7 +1069,7 @@
     <price>	6000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_assault private HD heavyTank1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	heavyTank role_HT_assault private HD heavyTank1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret	</tags>
     <level>	6	</level>
   </GB105_Black_Prince_2019>
   <GB102_LHMTV>
@@ -1149,7 +1150,6 @@
     <longDescriptionSpecial>	#gb_vehicles:GB116_Harry_Hopkins_I_long_special	</longDescriptionSpecial>
     <price>	3500	  <gold></gold>
     </price>
-    <notInShop>	true	</notInShop>
     <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	4	</level>
   </GB116_Harry_Hopkins_I>
@@ -1315,7 +1315,7 @@
     <price>	50000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals special secret	</tags>
+    <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals special	</tags>
     <level>	11	</level>
   </GB140_Champion>
   <GB137_CVT_Spider>
@@ -1367,9 +1367,22 @@
     <price>	11000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_support HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user secret	</tags>
+    <tags>	heavyTank role_HT_support HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </GB141_Celestial_2_51>
+  <GB142_FV249_Castle>
+    <id>	31014	</id>
+    <userString>	#gb_vehicles:GB142_FV249_Castle	</userString>
+    <description>	#gb_vehicles:GB142_FV249_Castle_descr	</description>
+    <shortUserString>	#gb_vehicles:GB142_FV249_Castle_short	</shortUserString>
+    <shortDescriptionSpecial>	#gb_vehicles:GB142_FV249_Castle_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB142_FV249_Castle_long_special	</longDescriptionSpecial>
+    <price>	17500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_support HD siegeMode dualgun charger improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals secret testTank lockOutfit	</tags>
+    <level>	9	</level>
+  </GB142_FV249_Castle>
   <GB135_FV240_T>
     <id>	35001	</id>
     <userString>	#gb_vehicles:GB135_FV240_T	</userString>
@@ -1396,56 +1409,4 @@
     <tags>	heavyTank role_HT_universal HD siegeMode dualgun charger improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals special secret testTank	</tags>
     <level>	10	</level>
   </GB134_FV242B_Condor_T>
-  <GB91_Super_Conqueror_ISP>
-    <id>	37003	</id>
-    <userString>	#gb_vehicles:GB91_Super_Conqueror_ISP	</userString>
-    <shortUserString>	#gb_vehicles:GB91_Super_Conqueror_ISP_short	</shortUserString>
-    <description>	#gb_vehicles:GB91_Super_Conqueror_ISP_descr	</description>
-    <shortDescriptionSpecial>	#gb_vehicles:GB91_Super_Conqueror_ISP_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#gb_vehicles:GB91_Super_Conqueror_ISP_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals private special secret lockCrew lockCrewSkills lockOutfit cannot_be_sold testTank fun_random	</tags>
-    <level>	10	</level>
-  </GB91_Super_Conqueror_ISP>
-  <GB120_Concept_No_5_ISP>
-    <id>	37004	</id>
-    <userString>	#gb_vehicles:GB120_Concept_No_5_ISP	</userString>
-    <shortUserString>	#gb_vehicles:GB120_Concept_No_5_ISP_short	</shortUserString>
-    <description>	#gb_vehicles:GB120_Concept_No_5_ISP_descr	</description>
-    <shortDescriptionSpecial>	#gb_vehicles:GB120_Concept_No_5_ISP_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#gb_vehicles:GB120_Concept_No_5_ISP_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_sniper HD wheeledVehicle wheeledVehicleWithoutFeatures improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals private special secret lockCrew lockCrewSkills lockOutfit cannot_be_sold testTank fun_random	</tags>
-    <level>	10	</level>
-  </GB120_Concept_No_5_ISP>
-  <GB86_Centurion_Action_X_ISP>
-    <id>	37005	</id>
-    <userString>	#gb_vehicles:GB86_Centurion_Action_X_ISP	</userString>
-    <shortUserString>	#gb_vehicles:GB86_Centurion_Action_X_ISP_short	</shortUserString>
-    <description>	#gb_vehicles:GB86_Centurion_Action_X_ISP_descr	</description>
-    <shortDescriptionSpecial>	#gb_vehicles:GB86_Centurion_Action_X_ISP_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#gb_vehicles:GB86_Centurion_Action_X_ISP_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals private special secret lockCrew lockCrewSkills lockOutfit cannot_be_sold testTank fun_random	</tags>
-    <level>	10	</level>
-  </GB86_Centurion_Action_X_ISP>
-  <GB83_FV4005_ISP>
-    <id>	37006	</id>
-    <userString>	#gb_vehicles:GB83_FV4005_ISP	</userString>
-    <description>	#gb_vehicles:GB83_FV4005_ISP_descr	</description>
-    <shortUserString>	#gb_vehicles:GB83_FV4005_ISP_short	</shortUserString>
-    <shortDescriptionSpecial>	#gb_vehicles:GB83_FV4005_ISP_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#gb_vehicles:GB83_FV4005_ISP_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	AT-SPG role_ATSPG_support HD heavyAT-SPG AT-SPG2 improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals private special secret lockCrew lockCrewSkills lockOutfit cannot_be_sold testTank fun_random	</tags>
-    <level>	10	</level>
-  </GB83_FV4005_ISP>
 </list.xml>

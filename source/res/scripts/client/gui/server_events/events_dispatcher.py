@@ -4,12 +4,12 @@ import constants
 from battle_pass_common import BattlePassConsts
 from gui import SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import parseEventID
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.impl.gen.view_models.views.lobby.personal_missions.personal_missions_main_quests_view_model import PageViewIdEnum
+from gui.impl.lobby.customization.progression_helpers import parseEventID
 from gui.impl.lobby.personal_missions.personal_missions_window_events import showPersonalMissionsOperationWindow
 from gui.impl.lobby.reward_window import GiveAwayRewardWindow, PiggyBankRewardWindow, TwitchRewardWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand, EventNotificationCommand, NotificationEvent
@@ -20,7 +20,7 @@ from gui.server_events import anniversary_helper, awards, events_helpers, recrui
 from gui.server_events.events_helpers import getLootboxesFromBonuses, isC11nQuest
 from gui.server_events.finders import BRANCH_TO_OPERATION_IDS
 from gui.shared import EVENT_BUS_SCOPE, event_dispatcher as shared_events, events, g_eventBus
-from gui.shared.event_dispatcher import showProgressiveItemsView, hideWebBrowserOverlay, showBrowserOverlayView
+from gui.shared.event_dispatcher import hideWebBrowserOverlay, showBrowserOverlayView
 from gui.shared.events import PersonalMissionsEvent
 from helpers import dependency
 from personal_missions import PM_BRANCH
@@ -257,12 +257,11 @@ def showMission(eventID, eventType=None):
         itemIntCD, vehicleIntCD = parseEventID(eventID)
         service = dependency.instance(ICustomizationService)
         vehicle = service.getItemByCD(vehicleIntCD)
-        service.showCustomization(vehicle.invID, lambda : showProgressiveItemsView(itemIntCD))
+        service.showCustomization(vehicle.invID, progressiveItemCD=itemIntCD)
         return
     elif isC11nQuest(eventID):
         service = dependency.instance(ICustomizationService)
-        from gui.customization.constants import CustomizationModes
-        service.showCustomization(modeId=CustomizationModes.STYLED)
+        service.showCustomization()
         return
     else:
         eventsCache = dependency.instance(IEventsCache)

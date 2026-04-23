@@ -18,6 +18,7 @@ class STORAGE_CONSTANTS(object):
     STORAGE_SHELLS_TAB = 'ShellsTabViewUI'
     STORAGE_DEVICES_TAB = 'DevicesTabViewUI'
     STORAGE_CREW_BOOKS_TAB = 'CrewBooksTabViewUI'
+    STORAGE_RESTORE_DEVICES_CONTENT = 'StorageRestoreDevicesContentUI'
     IN_HANGAR_VIEW = 'StorageCategoryInHangarViewUI'
     IN_HANGAR_ALL_VEHICLES_TAB = 'AllVehiclesTabViewUI'
     IN_HANGAR_RESTORE_VEHICLES_TAB = 'RestoreVehiclesTabViewUI'

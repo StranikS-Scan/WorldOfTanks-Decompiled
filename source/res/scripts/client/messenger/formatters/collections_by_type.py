@@ -134,7 +134,8 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.paragonsCoinsGranted.index(): _sc.ParagonsCoinsGrantedFormatter(),
  _SM_TYPE.playStreakRewards.index(): _sc.PlayStreakRewardsFormatter(),
  _SM_TYPE.playStreakSysMessage.index(): _sc.PlayStreakSysMessageFormatter(),
- _SM_TYPE.playStreakSysWithRewardsMessage.index(): _sc.PlayStreakSysMessageRewardsFormatter()}
+ _SM_TYPE.playStreakSysWithRewardsMessage.index(): _sc.PlayStreakSysMessageRewardsFormatter(),
+ _SM_TYPE.tradingCaravanMessage.index(): _sc.TradingCaravanMessageFormatter()}
 
 def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.serverReboot.index(), _sc.ServerRebootFormatter())
@@ -219,6 +220,7 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.bonusExcludedMap.index(), _sc.SimpleFormatter('BonusExcludedMapAvailable'))
     registerMessengerServerFormatter(_SM_TYPE.playStreakSysMessage.index(), _sc.PlayStreakSysMessageFormatter())
     registerMessengerServerFormatter(_SM_TYPE.playStreakSysWithRewardsMessage.index(), _sc.PlayStreakSysMessageRewardsFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.tradingCaravanMessage.index(), _sc.TradingCaravanMessageFormatter())
     registerMessengerServerFormatter(_SM_TYPE.goldReserveIsFull.index(), _sc.SimpleFormatter('GoldReserveFullMessage'))
     registerMessengerServerFormatter(_SM_TYPE.passiveXPNoTank.index(), _sc.SimpleFormatter('PassiveXPNoTankMessage'))
     registerMessengerServerFormatter(_SM_TYPE.passiveXPIncompatibleCrewNewDay.index(), _sc.SimpleFormatter('PassiveXPIncompatibleCrewNewDayMessage'))

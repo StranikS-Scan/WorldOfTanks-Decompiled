@@ -70,7 +70,6 @@
     <_149mm_Gun_Type_97_7x7>	31006	</_149mm_Gun_Type_97_7x7>
     <_150mm_Howitzer_Type96_O_I_120>	31007	</_150mm_Howitzer_Type96_O_I_120>
     <_106mm_M40_Recoilless_Dual_Gun>	31008	</_106mm_M40_Recoilless_Dual_Gun>
-    <_150mm_45_41st_Year_Type_ISP>	37000	</_150mm_45_41st_Year_Type_ISP>
     <_90mm_Gun_Type61_IGR>	60001	</_90mm_Gun_Type61_IGR>
     <_75mm_Gun_Type5_M1_auto_IGR>	60002	</_75mm_Gun_Type5_M1_auto_IGR>
     <_105mm_Rifled_Gun_IGR>	60003	</_105mm_Rifled_Gun_IGR>
@@ -3976,64 +3975,6 @@
         </_150mm_Common_Type_0_HE>
       </shots>
     </_150mm_45_41st_Year_Type>
-    <_150mm_45_41st_Year_Type_ISP>
-      <userString>	#japan_vehicles:_150mm_45_41st_Year_Type_ISP	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	330000	</price>
-      <notInShop>	true	</notInShop>
-      <impulse>	0.56	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.24	</amplitude>
-        <recoilEffect>	huge	</recoilEffect>
-      </recoil>
-      <effects>	shot_huge	</effects>
-      <reloadEffect>	reload115_152	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
-        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	20	</rotationSpeed>
-      <reloadTime>	20.0	</reloadTime>
-      <maxAmmo>	40	</maxAmmo>
-      <aimingTime>	3	</aimingTime>
-      <weight>	6700	</weight>
-      <maxHealth>	230	</maxHealth>
-      <maxRegenHealth>	115	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.4	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.12	</turretRotation>
-        <afterShot>	4.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_150mm_Common_Type_91_AP_ISP>
-          <defaultPortion>	0.75	</defaultPortion>
-          <speed>	900	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	252 244	</piercingPower>
-        </_150mm_Common_Type_91_AP_ISP>
-        <_150mm_Common_Type_0_HE_Kai_ISP>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	720	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	295 290	</piercingPower>
-        </_150mm_Common_Type_0_HE_Kai_ISP>
-        <_150mm_Common_Type_0_HE_ISP>
-          <defaultPortion>	0.25	</defaultPortion>
-          <speed>	720	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	90 90	</piercingPower>
-        </_150mm_Common_Type_0_HE_ISP>
-      </shots>
-    </_150mm_45_41st_Year_Type_ISP>
     <_149mm_Gun_Type_97>
       <userString>	#japan_vehicles:_149mm_Gun_Type_97	</userString>
       <tags></tags>

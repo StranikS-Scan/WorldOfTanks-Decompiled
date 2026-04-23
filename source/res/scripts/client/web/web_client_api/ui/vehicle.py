@@ -501,7 +501,7 @@ class VehiclePreviewWebApiMixin(object):
         def styleCallback():
             if result.style is not None:
                 ctx = self.__c11n.getCtx()
-                ctx.changeMode(CustomizationModes.STYLED)
+                ctx.changeMode(CustomizationModes.STYLED_2D)
                 slotId = ctx.mode.STYLE_SLOT
                 ctx.mode.installItem(result.style.intCD, slotId)
             return

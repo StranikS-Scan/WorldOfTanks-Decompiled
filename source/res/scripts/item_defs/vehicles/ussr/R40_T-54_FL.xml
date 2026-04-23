@@ -50,7 +50,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	15400	</weight>
-    <maxHealth>	1240	</maxHealth>
+    <maxHealth>	1400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1114,7 +1114,7 @@
       <terrainResistance>	1 1.1 2.2	</terrainResistance>
       <brakeForce>	42500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	48	</rotationSpeed>
+      <rotationSpeed>	52	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.14	</vehicleMovement>
         <vehicleRotation>	0.14	</vehicleRotation>
@@ -1931,7 +1931,7 @@
         <armor_2>	171	</armor_2>
         <armor_3>	180	</armor_3>
         <armor_4>	57	</armor_4>
-        <armor_5>	30	</armor_5>
+        <armor_5>	40	</armor_5>
         <armor_6>	107	</armor_6>
         <armor_7>	121	</armor_7>
         <armor_8>	0	</armor_8>
@@ -1946,7 +1946,7 @@
       </armor>
       <primaryArmor>	armor_10 armor_3 armor_9	</primaryArmor>
       <weight>	8500	</weight>
-      <maxHealth>	410	</maxHealth>
+      <maxHealth>	350	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -2723,15 +2723,16 @@
         <Chassis_T-54_3_FL>
           <grounds>
             <soft>
-              <rollingFriction>	0.1771	</rollingFriction>
+              <rollingFriction>	0.0871	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.04855	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0805	</rollingFriction>
+              <rollingFriction>	0.0205	</rollingFriction>
             </firm>
           </grounds>
+          <axleCount>	5	</axleCount>
         </Chassis_T-54_3_FL>
       </chassis>
     </detailed>

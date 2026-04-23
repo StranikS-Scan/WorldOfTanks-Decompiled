@@ -34,7 +34,7 @@ def onFinishBattle(eventType, eventData, quest, processor):
     topByExp = eventData['avatarResults']['misc']['max']['xp']
     topByExpRes = topByExp &lt;= questProgress.getProgress(MAIN_PROGRESS_TOP_BY_EXP).getParam("desiredPosition")
 
-    blockedHits = sum(len(shots) for shots in brfilter.filterDamageFrom(hitBlocked=True).itervalues())
+    blockedHits = brfilter.sumReceivedShots(brfilter.filterDamageFrom(hitBlocked=True))
 
     if topByExpRes:
         questProgress.increaseSeriesUntilComplete(MAIN_PROGRESS_SERIES, MAIN_PROGRESS_ID_BLOCK, blockedHits)

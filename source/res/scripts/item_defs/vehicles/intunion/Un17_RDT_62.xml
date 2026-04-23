@@ -1937,7 +1937,7 @@
           </armor>
           <pitchLimits>
             <minPitch>	0 -30 1 -30	</minPitch>
-            <maxPitch>	0 12 0.36 12 0.42 7 0.58 7 0.64 12 1 12	</maxPitch>
+            <maxPitch>	0 12 0.05 12 0.0556 8 0.1 8 0.117 12 0.36 12 0.42 7 0.58 7 0.64 12 0.85 12 0.92 8 0.944 8 0.95 12 1 12	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.15	</shotDispersionRadius>
           <reloadTime>	10	</reloadTime>
@@ -1956,6 +1956,7 @@
             <shotDispersionPerSec>	1.0	</shotDispersionPerSec>
             <maxShotDispersion>	7	</maxShotDispersion>
             <rate>	4	</rate>
+            <rebuildShotDispersionDelay>	1.0	</rebuildShotDispersionDelay>
           </autoShoot>
           <customizationSlots>
             <slot>
@@ -2119,9 +2120,9 @@
             <collisionModelClient>	vehicles/intunion/Un17_RDT_62/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <edgeByVisualModel>	false	</edgeByVisualModel>
-          <effects>	shot_autoshoot_medium	</effects>
+          <effects>	shot_autoshoot_medium_shell_ground	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-          <shotOffset>	0 0.101 0	</shotOffset>
+          <shotOffset>	-0.000009 0.100496 0.879968	</shotOffset>
           <camouflage>
             <density>	146.136719 146.207474	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
@@ -2142,14 +2143,12 @@
         <gun>
           <gunNode>	G_L	</gunNode>
           <gunFire>	HP_gunFire_L	</gunFire>
-          <position>	0.000000 0.000000 1.622654	</position>
-          <shotOffset>	-0.159906 0.667417 -1.325155	</shotOffset>
+          <position>	-0.165035 0.672905 0.116933	</position>
         </gun>
         <gun>
           <gunNode>	G_R	</gunNode>
           <gunFire>	HP_gunFire_R	</gunFire>
-          <position>	0.000000 0.000000 1.622653	</position>
-          <shotOffset>	0.159219 0.66637 -1.338526	</shotOffset>
+          <position>	0.165 0.673 0.117	</position>
         </gun>
       </multiGun>
       <multiGunState>

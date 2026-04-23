@@ -152,9 +152,12 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
     @staticmethod
     def __getAssaultSPGDistance(handler):
         vehicle = BigWorld.player().getVehicleAttached()
-        shotPoint = handler.getDesiredShotPoint(ignoreAimingMode=True, ignoreDetached=True)
-        hitPoint, _ = getShotTargetInfo(vehicle, shotPoint + math_utils.VectorConstant.Vector3J.scale(25), BigWorld.player().gunRotator)
-        return vehicle.position.distTo(hitPoint)
+        if vehicle is None or not vehicle.inWorld or not vehicle.isStarted or vehicle.isDestroyed:
+            return
+        else:
+            shotPoint = handler.getDesiredShotPoint(ignoreAimingMode=True, ignoreDetached=True)
+            hitPoint, _ = getShotTargetInfo(vehicle, shotPoint + math_utils.VectorConstant.Vector3J.scale(25), BigWorld.player().gunRotator)
+            return vehicle.position.distTo(hitPoint)
 
     @staticmethod
     def __getFlameDistance():
@@ -843,6 +846,9 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
                 self._hideVehicle(entry)
                 self._notifyVehicleRemoved(vehicleID)
 
+    def eventSwitchToVehicle(self, prevCtrlID):
+        self.__switchToVehicle(prevCtrlID)
+
     def _notifyVehicleAdded(self, vehicleID):
         pass
 
@@ -867,7 +873,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             animation = self.__getSpottedAnimation(entry, isSpotted)
             if animation:
                 self.__playSpottedSound(entry)
-            self._invoke(entry.getID(), 'setVehicleInfo', vehicleID, classTag, name, guiProps.name(), animation)
+            self._invoke(entry.getID(), 'setVehicleInfo', vehicleID, entry.getClassTag(), name, entry.getGUILabel(), animation)
         return
 
     def _onVehicleHealthChanged(self, vehicleID, currH, maxH):
@@ -1159,23 +1165,26 @@ class EquipmentsPlugin(common.IntervalPlugin):
         super(EquipmentsPlugin, self).stop()
         return
 
+    def _getMarkerSymbol(self, marker):
+        return settings.EQ_MARKER_TO_SYMBOL.get(marker)
+
     def __onEquipmentMarkerShown(self, equipment, position, _, interval, team=None):
         uniqueID = self.__generator.next()
         arenaDP = self.sessionProvider.getArenaDP()
         isAllyTeam = team is None or arenaDP is None or arenaDP.isAllyTeam(team)
         marker = equipment.getMarker() if isAllyTeam else equipment.getEnemyMarker()
-        if marker in settings.EQ_MARKER_TO_SYMBOL:
-            symbol = settings.EQ_MARKER_TO_SYMBOL[marker]
-        else:
+        symbol = self._getMarkerSymbol(marker)
+        if symbol is None:
             LOG_ERROR('Symbol is not found for equipment', equipment)
             return
-        matrix = minimap_utils.makePositionMatrix(position)
-        model = self._addEntryEx(uniqueID, symbol, _C_NAME.EQUIPMENTS, matrix=matrix, active=True)
-        if model is not None:
-            if team is not None:
-                self._invoke(model.getID(), 'setOwningTeam', isAllyTeam)
-            self._setCallback(uniqueID, interval)
-        return
+        else:
+            matrix = minimap_utils.makePositionMatrix(position)
+            model = self._addEntryEx(uniqueID, symbol, _C_NAME.EQUIPMENTS, matrix=matrix, active=True)
+            if model is not None:
+                if team is not None:
+                    self._invoke(model.getID(), 'setOwningTeam', isAllyTeam)
+                self._setCallback(uniqueID, interval)
+            return
 
 
 class AreaStaticMarkerPlugin(common.EntriesPlugin):

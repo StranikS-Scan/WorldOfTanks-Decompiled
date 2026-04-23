@@ -32,6 +32,14 @@ from skeletons.gui.game_control import IWalletController, IArmoryYardShopControl
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.impl import IGuiLoader
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+_LOOTBOX_RES = R.views.dyn('gui_lootboxes').dyn('lobby').dyn('gui_lootboxes').dyn('tooltips').dyn('LootboxTooltip')
+
+def _getConversionTokens(currency, conversionPrice):
+    if not conversionPrice and currency:
+        return None
+    else:
+        return currency / conversionPrice if conversionPrice else 0
+
 
 class ArmoryYardShopBuyView(ArmoryYardShopBaseView):
     __slots__ = ('__productId', '__tooltipData', '__onClosedCallback', '__isPurchasing', '__isArmoryVisiting')
@@ -66,18 +74,34 @@ class ArmoryYardShopBuyView(ArmoryYardShopBaseView):
             return RestRewardTooltipView([] if tooltipData is None else tooltipData.specialArgs[0])
         elif contentID == R.views.armory_yard.lobby.feature.tooltips.ArmoryYardWalletNotAvailableTooltipView():
             return ArmoryYardWalletNotAvailableTooltipView()
+        elif contentID == R.views.armory_yard.lobby.feature.tooltips.ArmoryYardCurrencyTooltipView():
+            return ArmoryYardCurrencyTooltipView(event.getArgument('currency'))
+        elif _LOOTBOX_RES.exists() and contentID == _LOOTBOX_RES():
+            from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import LootboxTooltip
+            tooltipData = self.getTooltipData(event)
+            lootBoxID = tooltipData.get('lootBoxID')
+            lootBox = self.__itemsCache.items.tokens.getLootBoxByID(int(lootBoxID))
+            return LootboxTooltip(lootBox)
         else:
-            return ArmoryYardCurrencyTooltipView(event.getArgument('currency')) if contentID == R.views.armory_yard.lobby.feature.tooltips.ArmoryYardCurrencyTooltipView() else super(ArmoryYardShopBuyView, self).createToolTipContent(event, contentID)
+            return super(ArmoryYardShopBuyView, self).createToolTipContent(event, contentID)
 
     def getTooltipData(self, event):
         return self.__tooltipData.get(event.getArgument('tooltipId'), None)
 
     def onBuyProduct(self, args):
-        gold, tokens, count = int(args['gold']), int(args['tokens']), int(args.get('count', 1))
-        if not self.__checkCost(gold, tokens, count):
+        gold, tokens, crystal, count = (int(args.get('gold', 0)),
+         int(args.get('tokens', 0)),
+         int(args.get('crystal', 0)),
+         int(args.get('count', 1)))
+        if not self.__checkCost(gold, tokens, crystal, count):
             return
         self.__isPurchasing = True
-        BigWorld.player().AccountArmoryYardComponent.buyShopProduct(self.__productId, count, json.dumps({Currency.GOLD: gold / self.viewModel.getGoldConversion()} if gold > 0 else {}), callback=partial(self.__onPurchaseResponse, isBundle=self.__armoryYardShopCtrl.isBundle(self.__productId), stages=self.__getProductData().get('UI', {}).get('stages', 1)))
+        currency = {}
+        if gold > 0:
+            currency.update({Currency.GOLD: gold / self.viewModel.getGoldConversion()})
+        if crystal > 0:
+            currency.update({Currency.CRYSTAL: crystal / self.viewModel.getCrystalConversion()})
+        BigWorld.player().AccountArmoryYardComponent.buyShopProduct(self.__productId, count, json.dumps(currency), callback=partial(self.__onPurchaseResponse, isBundle=self.__armoryYardShopCtrl.isBundle(self.__productId), stages=self.__getProductData().get('UI', {}).get('stages', 1)))
         if not Waiting.isOpened('buyItem'):
             Waiting.show('buyItem', isAlwaysOnTop=True, isSingle=True)
 
@@ -124,17 +148,23 @@ class ArmoryYardShopBuyView(ArmoryYardShopBaseView):
         windows = self.__gui.windowsManager.findViews(self.__findView)
         return len(windows)
 
-    def __checkCost(self, gold, tokens, count):
-        goldConversion = self.__armoryYardShopCtrl.conversionPrices.get(Currency.GOLD)
-        playerGold, playerTokens = self.__getPlayerMoney()
+    def __checkCost(self, gold, tokens, crystal, count):
+        goldConversion = self.__armoryYardShopCtrl.conversionPrices.get(Currency.GOLD, None)
+        crystalConversion = self.__armoryYardShopCtrl.conversionPrices.get(Currency.CRYSTAL, None)
+        playerGold, playerTokens, playerCrystal = self.__getPlayerMoney()
+        goldTokens = _getConversionTokens(gold, goldConversion)
+        crystalTokens = _getConversionTokens(crystal, crystalConversion)
+        if goldTokens is None or crystalTokens is None:
+            return False
         fundsShortage = max(gold - playerGold, 0)
         fundsToken = max(tokens - playerTokens, 0)
-        if fundsToken > 0 or fundsShortage > 0:
-            showBuyGoldForArmoryYard(gold + fundsToken * goldConversion)
+        fundsCrystal = max(crystal - playerCrystal, 0)
+        productTokenCost = self.__getProductData()['price']
+        if fundsToken > 0 or fundsShortage > 0 or fundsCrystal > 0:
+            showBuyGoldForArmoryYard((productTokenCost - playerTokens) * goldConversion)
             return False
-        productCost = self.__getProductData()['price'] * goldConversion * count
-        playerCost = tokens * goldConversion + gold
-        return productCost == playerCost
+        else:
+            return productTokenCost * count == goldTokens + crystalTokens + tokens
 
     def __backCallback(self):
         showHangar()
@@ -159,9 +189,12 @@ class ArmoryYardShopBuyView(ArmoryYardShopBaseView):
             styleID = customization.get('id', '')
             self.onClose()
             self.__armoryYardCtrl.isVehiclePreview = True
-            self.__armoryYardCtrl.showShopStylePreview(styleID=styleID, backCallback=partial(self.__armoryYardCtrl.goToArmoryYard, ctx={'loadShopBuyView': True,
-             'productID': self.__productId}))
-            self.__armoryYardCtrl.cameraManager.goToHangar()
+            if not self.__armoryYardCtrl.isArmoryVisiting:
+                self.__armoryYardCtrl.showShopStylePreview(styleID=styleID, backCallback=self.__backCallback)
+            else:
+                self.__armoryYardCtrl.showShopStylePreview(styleID=styleID, backCallback=partial(self.__armoryYardCtrl.goToArmoryYard, ctx={'loadShopBuyView': True,
+                 'productID': self.__productId}))
+                self.__armoryYardCtrl.cameraManager.goToHangar()
 
     def __onPurchaseResponse(self, requestID, resultID, errorStr, data=None, isBundle=False, stages=0):
         Waiting.hide('buyItem')
@@ -193,11 +226,12 @@ class ArmoryYardShopBuyView(ArmoryYardShopBaseView):
                 return
             with self.viewModel.transaction() as model:
                 model.item.setItemID(self.__productId)
-                model.setGoldConversion(self.__armoryYardShopCtrl.conversionPrices.get(Currency.GOLD, None))
+                model.setGoldConversion(self.__armoryYardShopCtrl.conversionPrices.get(Currency.GOLD, 0))
+                model.setCrystalConversion(self.__armoryYardShopCtrl.conversionPrices.get(Currency.CRYSTAL, 0))
                 itemModel = model.item
                 itemModel.setItemID(self.__productId)
                 packShopItem(self.__productId, productData, itemModel, isLargeIcon=True)
-                itemModel.setAvailable(self.__armoryYardShopCtrl.isProgressionCompleted)
+                itemModel.setAvailable(productData['alwaysAvailable'] or self.__armoryYardShopCtrl.isProgressionCompleted)
                 self.__fillRewards(model.getRewards())
             return
 
@@ -207,7 +241,7 @@ class ArmoryYardShopBuyView(ArmoryYardShopBaseView):
     def __getPlayerMoney(self):
         money = self.__itemsCache.items.stats.actualMoney
         dynMoney = self.__itemsCache.items.stats.dynamicCurrencies
-        return (money.gold, dynMoney.get(Currency.AYCOIN, 0))
+        return (money.gold, dynMoney.get(Currency.AYCOIN, 0), money.crystal)
 
     def __fillRewards(self, modelRewardsList):
         modelRewardsList.clear()
@@ -234,12 +268,13 @@ class ArmoryYardShopBuyView(ArmoryYardShopBaseView):
                 model.item.setAvailable(self.__armoryYardShopCtrl.isProgressionCompleted)
 
     def __updatePlayerMoney(self, _=None):
-        gold, tokens = self.__getPlayerMoney()
+        gold, tokens, crystal = self.__getPlayerMoney()
         if self.viewModel.getGoldAmount() == int(gold) and self.viewModel.getCurrencyAmount() == tokens:
             return
         with self.viewModel.transaction() as model:
             model.setGoldAmount(int(gold))
             model.setCurrencyAmount(tokens)
+            model.setCrystalAmount(int(crystal))
 
     def __getPreviewVehicleCD(self):
         return self.__getProductData().get('exclusiveVehicle', -1)

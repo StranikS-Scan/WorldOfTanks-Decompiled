@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: cosmic_event/scripts/client/cosmic_event/gui/impl/lobby/video_view/video_view.py
 import BigWorld
-import SoundGroups
 import Windowing
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags, WindowLayer
 from gui.impl import backport
@@ -11,13 +10,13 @@ from gui.impl.pub.lobby_window import LobbyWindow
 from cosmic_event.gui.configs.video_subs_config_reader import CosmicVideoSubsConfigReader
 from cosmic_event.gui.impl.gen.view_models.views.lobby.video_view.video_view_model import VideoViewModel
 from cosmic_event.gui.impl.gen.view_models.views.lobby.video_view.video_view_subs_phrase_model import VideoViewSubsPhraseModel
-from cosmic_sound import play2DSoundEvent, setCutSceneSoundGlobalEvent, IntroVideoSound, COSMIC_VIDEO_VIEW_SOUND_SPACE
+from cosmic_event.gui.sound_control.sound_control import IntroVideoSoundControl
+from cosmic_sound import COSMIC_VIDEO_VIEW_SOUND_SPACE
 
 class VideoView(ViewImpl):
-    __slots__ = ('__videoName',)
+    __slots__ = ('__videoName', '__isUserPaused', '__soundController')
     _COMMON_SOUND_SPACE = COSMIC_VIDEO_VIEW_SOUND_SPACE
     __DEFAULT_VOLUME = 0.5
-    __VIDEO_RTPC_VOLUME_EVENT = 'RTPC_ext_volume_fader'
 
     def __init__(self, layoutID, videoName=''):
         settings = ViewSettings(layoutID)
@@ -25,6 +24,8 @@ class VideoView(ViewImpl):
         settings.model = VideoViewModel()
         super(VideoView, self).__init__(settings)
         self.__videoName = videoName
+        self.__isUserPaused = False
+        self.__soundController = IntroVideoSoundControl()
 
     @property
     def viewModel(self):
@@ -37,7 +38,10 @@ class VideoView(ViewImpl):
     def _finalize(self):
         self.__showBack()
         Windowing.removeWindowAccessibilityHandler(self.__onWindowAccessibilityChanged)
+        self.__soundController.stop()
+        self.__isUserPaused = None
         super(VideoView, self)._finalize()
+        return
 
     def _onLoading(self, *args, **kwargs):
         super(VideoView, self)._onLoading(*args, **kwargs)
@@ -60,11 +64,13 @@ class VideoView(ViewImpl):
          (self.viewModel.onClose, self.__onClose))
 
     def __onWindowAccessibilityChanged(self, isWindowAccessible):
-        state = IntroVideoSound.PAUSE
         if isWindowAccessible:
-            state = IntroVideoSound.RESUME
-        setCutSceneSoundGlobalEvent(state)
-        self.viewModel.setIsWindowAccessible(isWindowAccessible)
+            if not self.__isUserPaused:
+                self.__soundController.unpause()
+        else:
+            self.__soundController.pause()
+        with self.viewModel.transaction() as model:
+            model.setIsWindowAccessible(isWindowAccessible)
 
     def __fillPhrases(self, phrasesArrayModel):
         phrasesData = CosmicVideoSubsConfigReader.getIntroVideoPhrases()
@@ -87,25 +93,25 @@ class VideoView(ViewImpl):
         BigWorld.worldDrawEnabled(True)
 
     def __onVideoStarted(self):
-        soundGroupInstance = SoundGroups.g_instance
-        soundGroupInstance.updateVideoVolume()
-        play2DSoundEvent(IntroVideoSound.START)
+        self.__soundController.start()
 
     def __onVideoPlay(self):
-        play2DSoundEvent(IntroVideoSound.RESUME)
+        self.__isUserPaused = False
+        self.__soundController.unpause()
 
     def __onVideoPause(self):
-        play2DSoundEvent(IntroVideoSound.PAUSE)
+        self.__isUserPaused = True
+        self.__soundController.pause()
 
     def __onCurrentVolume(self, volumeData):
-        volume = volumeData.get('volume', 0.5)
-        SoundGroups.g_instance.setRTPC(self.__VIDEO_RTPC_VOLUME_EVENT, volume)
+        volume = volumeData.get('volume', self.__DEFAULT_VOLUME)
+        self.__soundController.setVolume(volume)
 
     def __onError(self):
-        play2DSoundEvent(IntroVideoSound.STOP)
+        self.__soundController.stop()
 
     def __onClose(self):
-        play2DSoundEvent(IntroVideoSound.STOP)
+        self.__soundController.stop()
         self.destroyWindow()
 
 

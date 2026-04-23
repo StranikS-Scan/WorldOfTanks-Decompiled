@@ -8058,6 +8058,31 @@
     <userString>	#vehicle_customization:emblem/special	</userString>
   </itemGroup>
   <itemGroup>
+    <name>	PvEMay26_Emblem_142	</name>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT emblems 25g notInShop	</priceGroup>
+    <type>	emblem	</type>
+    <userString>	#vehicle_customization:emblem/battle	</userString>
+    <decal>
+      <id>	31462	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/battle/PvEMay26_Emblem_01_142.dds	</texture>
+      <userString>	#vehicle_customization:PvEMay26_Emblem_01_142/name	</userString>
+      <description>	#vehicle_customization:PvEMay26_Emblem_01_142/description	</description>
+    </decal>
+    <decal>
+      <id>	31463	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/battle/PvEMay26_Emblem_02_142.dds	</texture>
+      <userString>	#vehicle_customization:PvEMay26_Emblem_02_142/name	</userString>
+      <description>	#vehicle_customization:PvEMay26_Emblem_02_142/description	</description>
+    </decal>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr	</nations>
+      </include>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:emblem/IGR	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
@@ -14890,6 +14915,7 @@
     <decal>
       <id>	31153	</id>
       <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+      <type>	inscription	</type>
       <texture>	gui/maps/vehicles/decals/inscriptions/ussr/Pve_May_inscription_MK_2024_MT.dds	</texture>
       <userString>	#vehicle_customization:Pve_May_inscription_MK_2024_MT/name	</userString>
       <description>	#vehicle_customization:Pve_May_inscription_MK_2024_MT/description	</description>
@@ -14897,6 +14923,7 @@
     <decal>
       <id>	31154	</id>
       <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+      <type>	inscription	</type>
       <texture>	gui/maps/vehicles/decals/inscriptions/ussr/Pve_May_inscription_DK_2024_MT.dds	</texture>
       <userString>	#vehicle_customization:Pve_May_inscription_DK_2024_MT/name	</userString>
       <description>	#vehicle_customization:Pve_May_inscription_DK_2024_MT/description	</description>
@@ -16032,6 +16059,60 @@
     </decal>
     <tags>	hiddenInUI styleOnly	</tags>
     <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+  </itemGroup>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+    <type>	inscription	</type>
+    <userString>	#vehicle_customization:inscription/other	</userString>
+    <decal>
+      <id>	31460	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/9May_Inscription_142.dds	</texture>
+      <userString>	#vehicle_customization:9May_Inscription_142/name	</userString>
+      <description>	#vehicle_customization:9May_Inscription_142/description	</description>
+    </decal>
+    <name>	9May_Inscription_142	</name>
+  </itemGroup>
+  <itemGroup>
+    <name>	9May_Inscription_Style_142	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+    <tags>	hiddenInUI	</tags>
+    <type>	inscription	</type>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <decal>
+      <id>	31459	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/9May_Inscription_Style_142.dds	</texture>
+      <userString>	#vehicle_customization:9May_Inscription_Style_142/name	</userString>
+      <description>	#vehicle_customization:9May_Inscription_Style_142/description	</description>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	PvEMay26_Inscription_142	</name>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+    <type>	inscription	</type>
+    <userString>	#vehicle_customization:inscription/historical	</userString>
+    <decal>
+      <id>	31464	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/ussr/PvEMay26_Inscription_01_142.dds	</texture>
+      <userString>	#vehicle_customization:PvEMay26_Inscription_01_142/name	</userString>
+      <description>	#vehicle_customization:PvEMay26_Inscription_01_142/description	</description>
+    </decal>
+    <decal>
+      <id>	31465	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/ussr/PvEMay26_Inscription_02_142.dds	</texture>
+      <userString>	#vehicle_customization:PvEMay26_Inscription_02_142/name	</userString>
+      <description>	#vehicle_customization:PvEMay26_Inscription_02_142/description	</description>
+    </decal>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr	</nations>
+      </include>
+    </vehicleFilter>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:inscription/IGR	</userString>

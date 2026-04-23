@@ -959,9 +959,6 @@ def _migrateTo101(core, data, initialized):
 def _migrateTo102(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
     data[GUI_START_BEHAVIOR][GuiSettingsBehavior.CREW_22_WELCOME_SHOWN] = False
-    onceOnlyHintsData = data['onceOnlyHints3']
-    onceOnlyHintsData[OnceOnlyHints.REFERRAL_ENTRY_POINT_HINT] = False
-    onceOnlyHintsData[OnceOnlyHints.REFERRAL_RECRUIT_ENTRY_POINT_HINT] = False
 
 
 def _migrateTo103(core, data, initialized):
@@ -1526,6 +1523,21 @@ def _migrateTo143(core, data, initialized):
         else:
             hintData = HintData(0, -1, 0, False)
         data[conf.dataBlock.section()][conf.dataBlock.key()] = conf.dataBlock.pack(hintData)
+
+
+def _migrateTo144(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.ONCE_ONLY_HINTS_3, 0)
+    clear = data['clear']
+    for bitPosition in (0, 1):
+        settingOffset = 1 << bitPosition
+        if storedValue & settingOffset:
+            clear['onceOnlyHints3'] = clear.get('onceOnlyHints3', 0) | settingOffset
+
+
+def _migrateTo145(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
+    data[GUI_START_BEHAVIOR][GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED] = False
 
 
 _versions = ((1,
@@ -2235,6 +2247,16 @@ _versions = ((1,
   True),
  (143,
   _migrateTo143,
+  False,
+  False,
+  False),
+ (144,
+  _migrateTo144,
+  False,
+  False,
+  False),
+ (145,
+  _migrateTo145,
   False,
   False,
   False))

@@ -59,6 +59,7 @@ _HANDLERS_MAP = {GUI_ITEM_TYPE.OPTIONALDEVICE: (CONTEXT_MENU_HANDLER_TYPE.STORAG
  GUI_ITEM_TYPE.RECERTIFICATION_FORM: (CONTEXT_MENU_HANDLER_TYPE.STORAGE_RECERTIFICATION_FORM_ITEM,)}
 OPT_DEVICE_CATEGORIES_ORDER = {category:idx for idx, category in enumerate(SlotCategories.ORDER)}
 CATEGORIES_COUNT = len(OPT_DEVICE_CATEGORIES_ORDER)
+ALT_IMAGE = 'altimage'
 
 def getTopVehicleByNation(nationName):
     customizationCache = vehicles.g_cache.customization20()
@@ -309,8 +310,12 @@ def getItemVo(item):
                 upgradeIconResId = R.images.gui.maps.icons.tanksetup.actions.upgrade_last_modernized()
             upgradeButtonIcon = backport.image(upgradeIconResId) if upgradeIconResId is not None else ''
             actionButtonIcon = backport.image(R.images.gui.maps.icons.library.icon_disassemble())
-    vo = createStorageDefVO(item.intCD, getStorageItemName(item), getStorageItemDescr(item), item.inventoryCount, priceVO, getStorageItemIcon(item, STORE_CONSTANTS.ICON_SIZE_SMALL), 'altimage', itemType=itemType, nationFlagIcon=nationFlagIcon, enabled=item.isForSale, actionButtonIcon=actionButtonIcon, actionButtonTooltip=actionButtonTooltip, contextMenuId=_getContextMenuHandlerID(item), upgradable=upgradable, upgradeButtonIcon=upgradeButtonIcon, upgradeButtonTooltip=makeTooltip(body=backport.text(R.strings.storage.buttonUpgrade.tooltip.body())), extraParams=getItemExtraParams(item), specializations=getCategoriesIcons(item) if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE else ())
+    vo = createStorageDefVO(item.intCD, getStorageItemName(item), getStorageItemDescr(item), item.inventoryCount, priceVO, getStorageItemIcon(item, STORE_CONSTANTS.ICON_SIZE_SMALL), imageAlt=ALT_IMAGE, itemType=itemType, nationFlagIcon=nationFlagIcon, enabled=item.isForSale, actionButtonIcon=actionButtonIcon, actionButtonTooltip=actionButtonTooltip, contextMenuId=_getContextMenuHandlerID(item), upgradable=upgradable, upgradeButtonIcon=upgradeButtonIcon, upgradeButtonTooltip=makeTooltip(body=backport.text(R.strings.storage.buttonUpgrade.tooltip.body())), extraParams=getItemExtraParams(item), specializations=getCategoriesIcons(item) if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE else ())
     return vo
+
+
+def getDeletedOptDevicesVo(item):
+    return createStorageDefVO(itemID=item.intCD, title=getStorageItemName(item), description=getStorageItemDescr(item), count=0, price='', image=getStorageItemIcon(item, STORE_CONSTANTS.ICON_SIZE_SMALL), imageAlt=ALT_IMAGE, itemType=item.getOverlayType(), extraParams=getItemExtraParams(item))
 
 
 def isStorageSessionTimeout():

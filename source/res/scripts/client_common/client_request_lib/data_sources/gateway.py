@@ -682,5 +682,9 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/agate/api/v5/inventory/getInventoryEntitlements/'
         return self._request_data(callback, url, method='POST', post_data=entitlementsFilter)
 
+    def get_statistic_lootbox(self, callback):
+        url = '/statbox/api/v1/get_statistic_lootbox'
+        return self._request_data(callback, url)
+
     def _get_formatted_language_code(self):
         return self.client_lang.replace('_', '-')

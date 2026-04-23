@@ -51,6 +51,7 @@ class TOOLTIPS(object):
     HEADER_BUTTONS_FORTS = '#tooltips:header/buttons/forts'
     HEADER_BUTTONS_FORTS_TURNEDOFF = '#tooltips:header/buttons/forts/turnedOff'
     HEADER_BUTTONS_FORTS_SANDBOX_TURNEDOFF = '#tooltips:header/buttons/forts/sandbox/turnedOff'
+    HEADER_BUTTONS_MUSEUM = '#tooltips:header/buttons/museum'
     HEADER_BUTTONS_CLANS = '#tooltips:header/buttons/clans'
     HEADER_BUTTONS_CLANS_TURNEDOFF = '#tooltips:header/buttons/clans/turnedOff'
     HEADER_BUTTONS_BROWSER = '#tooltips:header/buttons/browser'
@@ -743,6 +744,7 @@ class TOOLTIPS(object):
     HEADER_BUTTONS_EQUIPCOIN_DESCRIPTIONTITLE = '#tooltips:header/buttons/equipCoin/descriptionTitle'
     HEADER_BUTTONS_EQUIPCOIN_DESCRIPTION0 = '#tooltips:header/buttons/equipCoin/description0'
     HEADER_BUTTONS_EQUIPCOIN_DESCRIPTION1 = '#tooltips:header/buttons/equipCoin/description1'
+    HEADER_BUTTONS_EQUIPCOIN_DESCRIPTION2 = '#tooltips:header/buttons/equipCoin/description2'
     HEADER_BUTTONS_EQUIPCOIN_DESCRIPTIONEQUIPCOIN = '#tooltips:header/buttons/equipCoin/descriptionEquipCoin'
     HEADER_BUTTONS_GOLD_TITLE = '#tooltips:header/buttons/gold/title'
     HEADER_BUTTONS_GOLD_CLICKDESC = '#tooltips:header/buttons/gold/clickDesc'
@@ -898,6 +900,13 @@ class TOOLTIPS(object):
     MODULEFITS_NOT_REMOVABLE_DISMANTLING_PRICE = '#tooltips:moduleFits/not_removable/dismantling/price'
     MODULEFITS_UPGRADABLE_PRICE = '#tooltips:moduleFits/upgradable/price'
     MODULEFITS_UPGRADABLE_MODERNIZED_PRICE = '#tooltips:moduleFits/upgradable/modernized/price'
+    MODULEFITS_RESTORE_PRICE = '#tooltips:moduleFits/restore/price'
+    MODULEFITS_RESTORE_NOMODERNIZED_REASON_1 = '#tooltips:moduleFits/restore/noModernized/reason/1'
+    MODULEFITS_RESTORE_NOMODERNIZED_REASON_2 = '#tooltips:moduleFits/restore/noModernized/reason/2'
+    MODULEFITS_RESTORE_NOMODERNIZED_REASON_0 = '#tooltips:moduleFits/restore/noModernized/reason/0'
+    MODULEFITS_RESTORE_MODERNIZED_REASON_1 = '#tooltips:moduleFits/restore/modernized/reason/1'
+    MODULEFITS_RESTORE_MODERNIZED_REASON_2 = '#tooltips:moduleFits/restore/modernized/reason/2'
+    MODULEFITS_RESTORE_MODERNIZED_REASON_0 = '#tooltips:moduleFits/restore/modernized/reason/0'
     MODULEFITS_DECONSTRUCT_PRICE = '#tooltips:moduleFits/deconstruct/price'
     MODULEFITS_DECONSTRUCT_MODERNIZED_PRICE = '#tooltips:moduleFits/deconstruct/modernized/price'
     MODULEFITS_DECONSTRUCT_MODERNIZED_DESCRIPTION = '#tooltips:moduleFits/deconstruct/modernized/description'
@@ -988,6 +997,10 @@ class TOOLTIPS(object):
     LOBY_MESSENGER_LISTVIEW_NEWS_TOOLTIP_BODY = '#tooltips:loby_messenger/listView/news/tooltip/body'
     LOBBY_HEADER_BUYPREMIUMACCOUNT_DISABLED_HEADER = '#tooltips:lobby/header/buyPremiumAccount/disabled/header'
     LOBBY_HEADER_BUYPREMIUMACCOUNT_DISABLED_BODY = '#tooltips:lobby/header/buyPremiumAccount/disabled/body'
+    LOBY_MESSENGER_BTNREFERRALDISABLED_HEADER = '#tooltips:loby_messenger/btnReferralDisabled/header'
+    LOBY_MESSENGER_BTNREFERRALDISABLED_BODY = '#tooltips:loby_messenger/btnReferralDisabled/body'
+    LOBY_MESSENGER_BTNVEHICLECARTDISABLED_HEADER = '#tooltips:loby_messenger/btnVehicleCartDisabled/header'
+    LOBY_MESSENGER_BTNVEHICLECARTDISABLED_BODY = '#tooltips:loby_messenger/btnVehicleCartDisabled/body'
     TRAINING_CREATE_INVITES_CHECKBOX_HEADER = '#tooltips:training/create/invites_checkbox/header'
     TRAINING_CREATE_INVITES_CHECKBOX_BODY = '#tooltips:training/create/invites_checkbox/body'
     TRAINING_OBSERVER_BTN_HEADER = '#tooltips:training/observer/btn/header'
@@ -1491,12 +1504,16 @@ class TOOLTIPS(object):
     BLUEPRINT_BLUEPRINTSCREEN_CREATEMAXFRAGMENTSDISABLED_BODY = '#tooltips:blueprint/BlueprintScreen/createMaxFragmentsDisabled/body'
     VEHICLESELLDIALOG_RENDERER_ALERTICONGOLDWOTPLUS_HEADER = '#tooltips:vehicleSellDialog/renderer/alertIconGoldWotPlus/header'
     VEHICLESELLDIALOG_RENDERER_ALERTICONGOLDWOTPLUS_BODY = '#tooltips:vehicleSellDialog/renderer/alertIconGoldWotPlus/body'
-    VEHICLESELLDIALOG_RENDERER_ALERTICONSELL_HEADER = '#tooltips:vehicleSellDialog/renderer/alertIconSell/header'
-    VEHICLESELLDIALOG_RENDERER_ALERTICONSELL_BODY = '#tooltips:vehicleSellDialog/renderer/alertIconSell/body'
+    VEHICLESELLDIALOG_RENDERER_ALERTICONSELLENABLED_HEADER = '#tooltips:vehicleSellDialog/renderer/alertIconSellEnabled/header'
+    VEHICLESELLDIALOG_RENDERER_ALERTICONSELLENABLED_BODY = '#tooltips:vehicleSellDialog/renderer/alertIconSellEnabled/body'
+    VEHICLESELLDIALOG_RENDERER_ALERTICONSELLDISABLED_HEADER = '#tooltips:vehicleSellDialog/renderer/alertIconSellDisabled/header'
+    VEHICLESELLDIALOG_RENDERER_ALERTICONSELLDISABLED_BODY = '#tooltips:vehicleSellDialog/renderer/alertIconSellDisabled/body'
+    VEHICLESELLDIALOG_RENDERER_ALERTICONDECONSTRUCTENABLED_HEADER = '#tooltips:vehicleSellDialog/renderer/alertIconDeconstructEnabled/header'
+    VEHICLESELLDIALOG_RENDERER_ALERTICONDECONSTRUCTENABLED_BODY = '#tooltips:vehicleSellDialog/renderer/alertIconDeconstructEnabled/body'
+    VEHICLESELLDIALOG_RENDERER_ALERTICONDECONSTRUCTDISABLED_HEADER = '#tooltips:vehicleSellDialog/renderer/alertIconDeconstructDisabled/header'
+    VEHICLESELLDIALOG_RENDERER_ALERTICONDECONSTRUCTDISABLED_BODY = '#tooltips:vehicleSellDialog/renderer/alertIconDeconstructDisabled/body'
     VEHICLESELLDIALOG_RENDERER_ALERTICONREMOVE_HEADER = '#tooltips:vehicleSellDialog/renderer/alertIconRemove/header'
     VEHICLESELLDIALOG_RENDERER_ALERTICONREMOVE_BODY = '#tooltips:vehicleSellDialog/renderer/alertIconRemove/body'
-    VEHICLESELLDIALOG_RENDERER_ALERTICONDECONSTRUCT_HEADER = '#tooltips:vehicleSellDialog/renderer/alertIconDeconstruct/header'
-    VEHICLESELLDIALOG_RENDERER_ALERTICONDECONSTRUCT_BODY = '#tooltips:vehicleSellDialog/renderer/alertIconDeconstruct/body'
     VEHICLESELLDIALOG_ACCEPTBUTTONTOOLTIP_CONTROLNUMBERVALID_HEADER = '#tooltips:vehicleSellDialog/acceptButtonTooltip/controlNumberValid/header'
     VEHICLESELLDIALOG_ACCEPTBUTTONTOOLTIP_CONTROLNUMBERVALID_BODY = '#tooltips:vehicleSellDialog/acceptButtonTooltip/controlNumberValid/body'
     VEHICLESELLDIALOG_ACCEPTBUTTONTOOLTIP_NOTENABLE_HEADER = '#tooltips:vehicleSellDialog/acceptButtonTooltip/notEnable/header'
@@ -2210,6 +2227,7 @@ class TOOLTIPS(object):
     TANK_PARAMS_DESC_RELATIVEABILITY = '#tooltips:tank_params/desc/relativeAbility'
     TANK_PARAMS_DESC_SHOTDISPERSIONANGLE = '#tooltips:tank_params/desc/shotDispersionAngle'
     TANK_PARAMS_DESC_SHOTDISPERSIONANGLE_WITHDUALACCURACY = '#tooltips:tank_params/desc/shotDispersionAngle/withDualAccuracy'
+    TANK_PARAMS_DESC_SHOTDISPERSIONANGLE_WITHAUTOSHOOT = '#tooltips:tank_params/desc/shotDispersionAngle/withAutoShoot'
     TANK_PARAMS_DESC_AIMINGTIME = '#tooltips:tank_params/desc/aimingTime'
     TANK_PARAMS_DESC_EXPLOSIONRADIUS = '#tooltips:tank_params/desc/explosionRadius'
     TANK_PARAMS_DESC_INVISIBILITYSTILLFACTOR = '#tooltips:tank_params/desc/invisibilityStillFactor'
@@ -4049,6 +4067,12 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_TANKMEN_BP19_4_LABEL = '#tooltips:notrecruitedtankman/tankmen_BP19_4/label'
     NOTRECRUITEDTANKMAN_TANKMEN_BP19_5_DESC = '#tooltips:notrecruitedtankman/tankmen_BP19_5/desc'
     NOTRECRUITEDTANKMAN_TANKMEN_BP19_5_LABEL = '#tooltips:notrecruitedtankman/tankmen_BP19_5/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_PVEMAY26_1_DESC = '#tooltips:notrecruitedtankman/tankmen_PvEMay26_1/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_PVEMAY26_1_LABEL = '#tooltips:notrecruitedtankman/tankmen_PvEMay26_1/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_PVEMAY26_2_DESC = '#tooltips:notrecruitedtankman/tankmen_PvEMay26_2/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_PVEMAY26_2_LABEL = '#tooltips:notrecruitedtankman/tankmen_PvEMay26_2/label'
+    HEADER_BUTTONS_MUSEUM_HEADER = '#tooltips:header/buttons/museum/header'
+    HEADER_BUTTONS_MUSEUM_BODY = '#tooltips:header/buttons/museum/body'
     ELEN_SUMMARY_RANK_ENUM = (ELEN_SUMMARY_RANK_1,
      ELEN_SUMMARY_RANK_2,
      ELEN_SUMMARY_RANK_3,
@@ -4179,6 +4203,7 @@ class TOOLTIPS(object):
      TANK_PARAMS_DESC_RELATIVEABILITY,
      TANK_PARAMS_DESC_SHOTDISPERSIONANGLE,
      TANK_PARAMS_DESC_SHOTDISPERSIONANGLE_WITHDUALACCURACY,
+     TANK_PARAMS_DESC_SHOTDISPERSIONANGLE_WITHAUTOSHOOT,
      TANK_PARAMS_DESC_AIMINGTIME,
      TANK_PARAMS_DESC_EXPLOSIONRADIUS,
      TANK_PARAMS_DESC_INVISIBILITYSTILLFACTOR,
@@ -4944,7 +4969,9 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKMEN_BP19_2_LABEL,
      NOTRECRUITEDTANKMAN_TANKMEN_BP19_3_LABEL,
      NOTRECRUITEDTANKMAN_TANKMEN_BP19_4_LABEL,
-     NOTRECRUITEDTANKMAN_TANKMEN_BP19_5_LABEL)
+     NOTRECRUITEDTANKMAN_TANKMEN_BP19_5_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_PVEMAY26_1_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_PVEMAY26_2_LABEL)
     NOTRECRUITEDTANKMAN_ALL_DESC_ENUM = (NOTRECRUITEDTANKMAN_BASE_DESC,
      NOTRECRUITEDTANKMAN_BUFFON_DESC,
      NOTRECRUITEDTANKMAN_TANKWOMAN_DESC,
@@ -5239,7 +5266,9 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKMEN_BP19_2_DESC,
      NOTRECRUITEDTANKMAN_TANKMEN_BP19_3_DESC,
      NOTRECRUITEDTANKMAN_TANKMEN_BP19_4_DESC,
-     NOTRECRUITEDTANKMAN_TANKMEN_BP19_5_DESC)
+     NOTRECRUITEDTANKMAN_TANKMEN_BP19_5_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_PVEMAY26_1_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_PVEMAY26_2_DESC)
     NOTRECRUITEDTANKMAN_ALL_HOWTOGETINFO_ENUM = (NOTRECRUITEDTANKMAN_TANKMAN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_HOWTOGETINFO,

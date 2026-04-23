@@ -367,9 +367,18 @@
       </shotSound>
     </effects>
   </shot_small_mb>
-  <shot_autoshoot_small>
-    <timeline></timeline>
-    <effects></effects>
+  <shot_autoshoot_small_shell_inside>
+    <timeline>
+      <end>	0.4	</end>
+      <soundplaystop>	4	</soundplaystop>
+    </timeline>
+    <effects>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	wpn_autoshoot_medium_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_autoshoot_medium_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
     <relatedEffects>
       <autoShoot>
         <timeline></timeline>
@@ -385,11 +394,12 @@
               <wwsoundPC>	wpn_autoshoot_medium_stop_PC	</wwsoundPC>
               <wwsoundNPC>	wpn_autoshoot_medium_stop_NPC	</wwsoundNPC>
             </deactivationSound>
+            <SWITCH_ext_shell_ejection_autoshoot>	SWITCH_ext_shell_ejection_autoshoot_inside	</SWITCH_ext_shell_ejection_autoshoot>
           </autoShoot>
         </effects>
       </autoShoot>
     </relatedEffects>
-  </shot_autoshoot_small>
+  </shot_autoshoot_small_shell_inside>
   <shot_KwK_L46>
     <timeline>
       <lighting2>	0.075	</lighting2>
@@ -670,9 +680,18 @@
       </groundWave>
     </relatedEffects>
   </shot_medium_mb>
-  <shot_autoshoot_medium>
-    <timeline></timeline>
-    <effects></effects>
+  <shot_autoshoot_medium_shell_inside>
+    <timeline>
+      <end>	0.4	</end>
+      <soundplaystop>	4	</soundplaystop>
+    </timeline>
+    <effects>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	wpn_autoshoot_medium_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_autoshoot_medium_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
     <relatedEffects>
       <autoShoot>
         <timeline></timeline>
@@ -688,11 +707,45 @@
               <wwsoundPC>	wpn_autoshoot_medium_stop_PC	</wwsoundPC>
               <wwsoundNPC>	wpn_autoshoot_medium_stop_NPC	</wwsoundNPC>
             </deactivationSound>
+            <SWITCH_ext_shell_ejection_autoshoot>	SWITCH_ext_shell_ejection_autoshoot_inside	</SWITCH_ext_shell_ejection_autoshoot>
           </autoShoot>
         </effects>
       </autoShoot>
     </relatedEffects>
-  </shot_autoshoot_medium>
+  </shot_autoshoot_medium_shell_inside>
+  <shot_autoshoot_medium_shell_ground>
+    <timeline>
+      <end>	0.4	</end>
+      <soundplaystop>	4	</soundplaystop>
+    </timeline>
+    <effects>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	wpn_autoshoot_medium_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_autoshoot_medium_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
+    <relatedEffects>
+      <autoShoot>
+        <timeline></timeline>
+        <effects>
+          <autoShoot>
+            <startKey>	start	</startKey>
+            <effectsPrefab>	particles/Tank/customization/AutoShoot_tanks/auto_shoot_prefab.prefab	</effectsPrefab>
+            <activationSound>
+              <wwsoundPC>	wpn_autoshoot_medium_start_PC	</wwsoundPC>
+              <wwsoundNPC>	wpn_autoshoot_medium_start_NPC	</wwsoundNPC>
+            </activationSound>
+            <deactivationSound>
+              <wwsoundPC>	wpn_autoshoot_medium_stop_PC	</wwsoundPC>
+              <wwsoundNPC>	wpn_autoshoot_medium_stop_NPC	</wwsoundNPC>
+            </deactivationSound>
+            <SWITCH_ext_shell_ejection_autoshoot>	SWITCH_ext_shell_ejection_autoshoot_ground	</SWITCH_ext_shell_ejection_autoshoot>
+          </autoShoot>
+        </effects>
+      </autoShoot>
+    </relatedEffects>
+  </shot_autoshoot_medium_shell_ground>
   <shot_main>
     <timeline>
       <lighting2>	0.085	</lighting2>
@@ -7578,4 +7631,26 @@
       </groundWave>
     </relatedEffects>
   </shot_largeext_85mm>
+  <shot_empty>
+    <timeline>
+      <lighting2>	0.075	</lighting2>
+      <end>	0.3	</end>
+      <endpixie>	0.1	</endpixie>
+      <soundplaystop>	8	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/Tank/shots/shot_empty.eff	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	ev_se_katyusha_shot_PC	</wwsoundPC>
+        <wwsoundNPC>	ev_se_katyusha_shot_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
+  </shot_empty>
 </gun_effects.xml>

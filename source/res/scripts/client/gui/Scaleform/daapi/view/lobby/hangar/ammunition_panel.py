@@ -9,7 +9,7 @@ from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.Scaleform.daapi.view.lobby.customization.shared import getEditableStylesExtraNotificationCounter, getItemTypesAvailableForVehicle
+from gui.impl.lobby.customization.shared import getEditableStylesExtraNotificationCounter, getItemTypesAvailableForVehicle
 from gui.Scaleform.daapi.view.meta.AmmunitionPanelMeta import AmmunitionPanelMeta
 from gui.impl.lobby.tank_setup.dialogs.need_repair import NeedRepair
 from gui.limited_ui.lui_rules_storage import LuiRules
@@ -117,7 +117,7 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
              'isElite': isElite,
              'tankType': '{}_elite'.format(vehicle.type) if isElite else vehicle.type,
              'vehicleLevel': '{}'.format(int2roman(vehicle.level)) if viewState.isLevelShown() else '',
-             'vehicleName': '{}'.format(vehicle.shortUserName),
+             'vehicleName': self.__getVehicleDescription(vehicle),
              'roleId': vehicle.role if viewState.isRoleShown() else ROLE_TYPE.NOT_DEFINED,
              'roleMessage': getRoleMessage(g_currentVehicle.item.role) if viewState.isRoleShown() else '',
              'vehicleCD': vehicle.intCD})
@@ -135,6 +135,13 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
                 isNeedToShowSpecializationSlot = not specializationSlotIsShown and hasRoleSlot
                 tutorialStorage.setValue(GLOBAL_FLAG.IS_NEED_TO_SHOW_SPECIALIZATION_SLOT, isNeedToShowSpecializationSlot)
         return
+
+    def __getVehicleDescription(self, vehicle):
+        trophyVehicles = ('germany', 'japan', 'czech', 'italy', 'sweden')
+        trophyLabel = ''
+        if vehicle.nationName in trophyVehicles:
+            trophyLabel = backport.text(R.strings.menu.hangar.ammunitionPanel.trophyVehicle())
+        return '{} {}'.format(vehicle.shortUserName, trophyLabel)
 
     def __inventoryUpdateCallBack(self, *args):
         self.update()

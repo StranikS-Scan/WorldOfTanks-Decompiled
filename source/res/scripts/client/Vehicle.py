@@ -35,6 +35,7 @@ from gun_rotation_shared import decodeGunAngles
 from helpers import dependency
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from helpers.EffectsList import SoundStartParam
+from helpers.buffs import BuffContainer
 from items import vehicles
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -100,9 +101,9 @@ StunInfo = namedtuple('StunInfo', ('startTime',
  'totalTime',
  'stunType'))
 DebuffInfo = namedtuple('DebuffInfo', ('duration', 'animated'))
-VEHICLE_COMPONENTS = {BattleAbilitiesComponent}
+VEHICLE_COMPONENTS = {BattleAbilitiesComponent, BuffContainer}
 
-class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesComponent):
+class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesComponent, BuffContainer):
     isEnteringWorld = property(lambda self: self.__isEnteringWorld)
     isTurretDetached = property(lambda self: constants.SPECIAL_VEHICLE_HEALTH.IS_TURRET_DETACHED(self.health) and self.__turretDetachmentConfirmed)
     isTurretMarkedForDetachment = property(lambda self: constants.SPECIAL_VEHICLE_HEALTH.IS_TURRET_DETACHED(self.health))
@@ -201,7 +202,8 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
     def getMasterVehID(self):
         return self.masterVehID
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super(Vehicle, self).__init__(*args, **kwargs)
         for comp in VEHICLE_COMPONENTS:
             comp.__init__(self)
 
@@ -306,6 +308,11 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             return descr
         else:
             return vehicles.VehicleDescr(compactDescr=_stripVehCompDescrIfRoaming(self.publicInfo.compDescr), extData=self)
+
+    def deferredRespawn(self):
+        if hasattr(self, 'respawnCompactDescr') and self.respawnCompactDescr:
+            _logger.debug('respawn compact descr is still valid, request reloading of tank resources %s', self.id)
+            self.respawnVehicle(self.id, self.respawnCompactDescr)
 
     @staticmethod
     def respawnVehicle(vID, compactDescr=None, outfitCompactDescr=None):
@@ -425,10 +432,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
                 self.appearance.receiveShotImpulse(firstHitDir, targetImpulse)
             player = BigWorld.player()
             sessionProvider = self.guiSessionProvider
-            vInfo = sessionProvider.getArenaDP().getVehicleInfo(attackerID)
             shakeReason = ShakeReason.HIT if hasDamageHit else ShakeReason.HIT_NO_DAMAGE
-            if vInfo and vInfo.vehicleType.isAutoShootGunVehicle:
-                shakeReason = ShakeReason.AUT0SHOOT_HIT if hasDamageHit else ShakeReason.AUT0SHOOT_HIT_NO_DAMAGE
             player.inputHandler.onVehicleShaken(self, compMatrix.translation, firstHitDir, effectsDescr['caliber'], effectsDescr['shellType'], shakeReason)
             showFriendlyFlashBang = False
             isAlly = sessionProvider.getArenaDP().isAlly(attackerID)
@@ -575,7 +579,11 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             return
         else:
             __WHEEL_DESTROYED = 3
-            for i in xrange(0, 8):
+            wheelsConfig = self.typeDescriptor.chassis.generalWheelsAnimatorConfig
+            if wheelsConfig is None:
+                return
+            wheelsCount = wheelsConfig.getWheelsCount()
+            for i in xrange(0, wheelsCount):
                 prevState = prev >> i * 2 & 3
                 newState = self.wheelsState >> i * 2 & 3
                 if prevState != newState:
@@ -1028,6 +1036,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
                 TriggersManager.g_manager.fireTrigger(TriggersManager.TRIGGER_TYPE.VEHICLE_VISUAL_VISIBILITY_CHANGED, vehicleId=self.id, isVisible=True)
             self.startGUIVisual()
             self.refreshBuffEffects()
+            self.set_buffs()
             if self.isSpeedCapturing:
                 self.set_isSpeedCapturing()
             if self.isBlockingCapture:
@@ -1041,10 +1050,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             progressionCtrl = self.guiSessionProvider.dynamic.progression
             if progressionCtrl is not None:
                 progressionCtrl.vehicleVisualChangingFinished(self.id)
-            if hasattr(self, 'respawnCompactDescr') and self.respawnCompactDescr:
-                _logger.debug('respawn compact descr is still valid, request reloading of tank resources %s', self.id)
-                vehicleID, respawnCD = self.id, self.respawnCompactDescr
-                BigWorld.callback(0.0, lambda : Vehicle.respawnVehicle(vehicleID, respawnCD))
+            BigWorld.callback(0.0, self.deferredRespawn)
             self.refreshNationalVoice()
             self.set_quickShellChangerFactor()
             return
@@ -1205,7 +1211,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             try:
                 extraTypes[idx].startFor(self)
             except Exception:
-                _logger.exception('Update modifiers. Vehicle id "%d" and CD "%s"', self.id, self.typeDescriptor.makeCompactDescr())
+                _logger.exception('Update modifiers. Vehicle id "%d" and CD "%r"', self.id, self.typeDescriptor.makeCompactDescr())
 
     def __onVehicleDeath(self, isDeadStarted=False):
         if not self.isPlayerVehicle:

@@ -17,10 +17,12 @@ if typing.TYPE_CHECKING:
 _logger = loggers.getCdnConfigLogger()
 
 class LocalSlideModel(LocalImageModel):
-    __slots__ = ('_historyKey',)
+    __slots__ = ('additionalImage', 'sound', '_historyKey')
 
-    def __init__(self, imageRelativePath, vfx=None, localizationText=None, descriptionText=None, minShowTimeSec=0, transition=0):
+    def __init__(self, imageRelativePath, vfx=None, localizationText=None, descriptionText=None, minShowTimeSec=0, transition=0, additionalImage=None, sound=None):
         super(LocalSlideModel, self).__init__(imageRelativePath=imageRelativePath, vfx=vfx, localizationText=localizationText, descriptionText=descriptionText, minShowTimeSec=minShowTimeSec, transition=transition)
+        self.additionalImage = additionalImage
+        self.sound = sound
         self._historyKey = generateKey(self.imageRelativePath)
 
     @property
@@ -48,16 +50,36 @@ class LocalSequenceModel(object):
         return '<LocalSequenceModel(name={}, slides={})>'.format(self.name, len(self.slides))
 
 
-class ConfigSlideModel(BaseConfigModel):
-    __slots__ = ('image', 'vfx', 'localization', '_imageCacheKey', '_localizationCacheKey', '_cacheKeysToUrls', '_langCode')
+class AdditionalImageModel(BaseConfigModel):
+    __slots__ = ('image', 'width', 'height', 'margins', 'paddings', 'position', 'pathInCache')
 
-    def __init__(self, image, vfx, localization):
+    def __init__(self, *args, **kwargs):
+        super(AdditionalImageModel, self).__init__(*args, **kwargs)
+        self.image = kwargs.get('image', '')
+        self.width = kwargs.get('width', 0)
+        self.height = kwargs.get('height', 0)
+        self.margins = kwargs.get('margins', (0, 0, 0, 0))
+        self.paddings = kwargs.get('paddings', (0, 0, 0, 0))
+        self.position = kwargs.get('position', (0, 0))
+        self.pathInCache = None
+        return
+
+
+class ConfigSlideModel(BaseConfigModel):
+    __slots__ = ('image', 'vfx', 'localization', 'additionalImage', 'sound', '_imageCacheKey', '_localizationCacheKey', '_cacheKeysToUrls', '_langCode')
+
+    def __init__(self, image, vfx, localization, additionalImage, sound):
         super(ConfigSlideModel, self).__init__()
         self.image = image
         self.vfx = vfx
         self.localization = localization
+        self.additionalImage = additionalImage
+        self.sound = sound
         self._imageCacheKey = generateKey(self.image)
         self._cacheKeysToUrls = {self._imageCacheKey: self.image}
+        if self.additionalImage:
+            additionalImageUrl = self.additionalImage.image
+            self._cacheKeysToUrls[generateKey(additionalImageUrl)] = additionalImageUrl
         if self.localization:
             self._localizationCacheKey = generateKey(self.localization)
             self._cacheKeysToUrls[self._localizationCacheKey] = self.localization
@@ -87,6 +109,8 @@ class ConfigSlideModel(BaseConfigModel):
             if not localImagePath:
                 _logger.warning('Image file for url [%s] is missing.', self.image)
                 return
+            if self.additionalImage:
+                self.additionalImage.pathInCache = fileCache.getRelativePath(self.additionalImage.image)
             localizationText = None
             descriptionText = None
             if self.localization:
@@ -103,7 +127,7 @@ class ConfigSlideModel(BaseConfigModel):
                     if descriptionSection:
                         descriptionText = descriptionSection.readString(self._langCode, default=None)
                     _logger.debug('Localization for lang [%s] is [%s] [%s].', self._langCode, localizationText, descriptionText)
-            return LocalSlideModel(imageRelativePath=localImagePath, vfx=self.vfx, localizationText=localizationText or None, descriptionText=descriptionText or None, minShowTimeSec=minShowTimeSec, transition=transition)
+            return LocalSlideModel(imageRelativePath=localImagePath, vfx=self.vfx, localizationText=localizationText or None, descriptionText=descriptionText or None, minShowTimeSec=minShowTimeSec, transition=transition, additionalImage=self.additionalImage, sound=self.sound)
 
     def __repr__(self):
         return '<ConfigSlideModel(image={}, vfx={}, localization={})>'.format(self.image, self.vfx, self.localization)
@@ -161,12 +185,13 @@ class CdnCacheDefaultsModel(object):
         return '<CdnCacheDefaultsModel(slides={}, minShowTimeSec={}, transition={})>'.format(len(self.sequence.slides), self.minShowTimeSec, self.transition)
 
 
-class CdnCacheParamsModel(object):
+class CdnCacheParams(object):
     __slots__ = ('configUrl', 'cohort')
 
-    def __init__(self, configUrl=None, cohort=None):
-        self.configUrl = configUrl
-        self.cohort = cohort
+    def __init__(self):
+        self.configUrl = None
+        self.cohort = None
+        return
 
     @property
     def isItemsCacheParamsReady(self):

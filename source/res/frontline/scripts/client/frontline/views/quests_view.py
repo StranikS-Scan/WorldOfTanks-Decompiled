@@ -76,7 +76,7 @@ class EpicBattleQuestsView(ViewImpl):
     def __onQuestChanged(self, questName):
         with self.viewModel.transaction() as tx:
             self.__setQuest(tx, questName)
-            if self.__isInOwnLine:
+            if questName and self.__isInOwnLine:
                 self._playSoundNotification(EPIC_SOUND.QUESTS_VIEW_NEW)
 
     def __onQuestProgressChanged(self, value, state):
@@ -110,7 +110,7 @@ class EpicBattleQuestsView(ViewImpl):
         description, direction = self.__getBlockReason(sectorID)
         tx.setBlockDescription(description)
         tx.setDirectionName(direction)
-        if self.__currentSectorID > 0 and self.__currentSectorID != sectorID:
+        if self.__currentSectorID > 0 and self.__currentSectorID != sectorID and self.__battleController.getQuest():
             self.__playQuestStateSounds()
 
     def __getBlockReason(self, sectorID):

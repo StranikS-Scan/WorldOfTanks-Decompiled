@@ -38,9 +38,11 @@ from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+from collections import namedtuple
 if typing.TYPE_CHECKING:
     from account_helpers.offers.events_data import OfferGift, OfferEventData
     from gui.shared.gui_items.dossier.stats import AccountTotalStatsBlock
+RestoreInfo = namedtuple('RestoreInfo', ('reason', 'price'))
 
 def _getCmpVehicle():
     return cmp_helpers.getCmpConfiguratorMainView().getCurrentVehicle()
@@ -699,6 +701,7 @@ class HangarContext(ToolTipContext):
         value.dailyXP = True
         value.vehicle = self._vehicle
         value.slotIdx = self._slotIdx
+        value.restorePrice = False
         return value
 
     def getParamsConfiguration(self, item):
@@ -721,6 +724,23 @@ class HangarCardContext(HangarContext):
     def getStatsConfiguration(self, item):
         value = super(HangarCardContext, self).getStatsConfiguration(item)
         value.buyPrice = True
+        return value
+
+
+class RestoreCardContext(HangarCardContext):
+
+    def buildItem(self, intCD, reason=0, pricePairs=-1, vehicle=None):
+        module = self.itemsCache.items.getItemByCD(int(intCD))
+        if module is None:
+            return
+        else:
+            module.restoreInfo = RestoreInfo(reason, pricePairs)
+            return module
+
+    def getStatsConfiguration(self, item):
+        value = super(RestoreCardContext, self).getStatsConfiguration(item)
+        value.restorePrice = True
+        value.vehiclesCount = False
         return value
 
 

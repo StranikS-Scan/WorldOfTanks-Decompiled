@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/shared_utils/__init__.py
 import collections
-import time
 import itertools
 import logging
+import time
 import types
 import weakref
-from functools import partial, wraps
+from functools import partial
 import typing
 import BigWorld
 from adisp import adisp_async
@@ -63,6 +63,10 @@ def safeCancelCallback(callbackID):
         _logger.error('Cannot cancel BigWorld callback: incorrect callback ID.')
 
 
+def safeCall(func, *args, **kwargs):
+    return func(*args, **kwargs) if callable(func) else (lambda : None)()
+
+
 def prettyPrint(dictValue, sort_keys=True, indent=4):
     import json
     return json.dumps(dictValue, sort_keys=sort_keys, indent=indent)
@@ -78,6 +82,10 @@ def first(sequence, default=None):
 
 def safeIndexOf(item, collection, default=None):
     return collection.index(item) if item in collection else default
+
+
+def getFullClassName(o):
+    return '.'.join((o.__module__, o.__name__ if o.__class__.__name__ == 'type' else o.__class__.__name__))
 
 
 def collapseIntervals(sequence):

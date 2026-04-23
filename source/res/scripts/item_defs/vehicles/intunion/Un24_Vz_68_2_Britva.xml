@@ -2162,7 +2162,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 9 1 9	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.15	</shotDispersionRadius>
+          <shotDispersionRadius>	0.18	</shotDispersionRadius>
           <reloadTime>	15	</reloadTime>
           <aimingTime>	1.3	</aimingTime>
           <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
@@ -2173,12 +2173,13 @@
           </shotDispersionFactors>
           <clip>
             <count>	20	</count>
-            <rate>	240	</rate>
+            <rate>	210	</rate>
           </clip>
           <autoShoot>
-            <shotDispersionPerSec>	0.8	</shotDispersionPerSec>
-            <maxShotDispersion>	9	</maxShotDispersion>
-            <rate>	4	</rate>
+            <shotDispersionPerSec>	1.3	</shotDispersionPerSec>
+            <maxShotDispersion>	8	</maxShotDispersion>
+            <rate>	3.5	</rate>
+            <rebuildShotDispersionDelay>	0.4	</rebuildShotDispersionDelay>
           </autoShoot>
           <customizationSlots>
             <slot>
@@ -2230,8 +2231,8 @@
             </customizableVehicleAreas>
           </customization>
           <edgeByVisualModel>	false	</edgeByVisualModel>
-          <effects>	shot_autoshoot_medium	</effects>
-          <shotOffset>	-0.000001 -0.010758 0	</shotOffset>
+          <effects>	shot_autoshoot_medium_shell_inside	</effects>
+          <shotOffset>	-0.000001 -0.010758 0.399097	</shotOffset>
           <models>
             <undamaged>	vehicles/intunion/Un24_Vz_68_2_Britva/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/intunion/Un24_Vz_68_2_Britva/crash/lod0/Gun_01.model	</destroyed>
@@ -2265,13 +2266,13 @@
           <gunNode>	G_L	</gunNode>
           <gunFire>	HP_gunFire_L	</gunFire>
           <position>	-0.116857 0.287748 1.451	</position>
-          <shotOffset>	-0.00626 -0.00028 -1.325155	</shotOffset>
+          <shotOffset>	-0.00626 -0.00028 0.244	</shotOffset>
         </gun>
         <gun>
           <gunNode>	G_R	</gunNode>
           <gunFire>	HP_gunFire_R	</gunFire>
           <position>	0.121888 0.284967 1.451391	</position>
-          <shotOffset>	-0.001422 0.001016 -1.325155	</shotOffset>
+          <shotOffset>	-0.001422 0.001016 0.243741	</shotOffset>
         </gun>
       </multiGun>
       <customizationSlots>

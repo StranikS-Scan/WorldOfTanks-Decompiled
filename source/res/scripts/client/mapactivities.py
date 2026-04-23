@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/MapActivities.py
+from __future__ import absolute_import, division
 import math
 import random
 import sys
@@ -15,7 +16,7 @@ from skeletons.map_activities import IMapActivities
 from vehicle_systems.stricted_loading import makeCallbackWeak
 
 class Timer(object):
-    __timeMethod = None
+    __timeMethod = BigWorld.time
 
     @staticmethod
     def init():
@@ -34,7 +35,7 @@ class BaseMapActivity(object):
     name = property(lambda self: self._name)
 
     def __init__(self):
-        self._startTime = sys.maxint
+        self._startTime = sys.maxsize
         self._interval = 0.0
         self._arenaPeriod = 0
         self._name = ''
@@ -177,7 +178,7 @@ class MapActivities(IMapActivities):
                 activity = _createActivity(activityType)
                 if activity is not None:
                     if activity.create(activityXML):
-                        self.__pendingActivities.append((sys.maxint, activity))
+                        self.__pendingActivities.append((sys.maxsize, activity))
 
             return
 
@@ -315,7 +316,7 @@ class WarplaneActivity(BaseMapActivity):
 
     def __init__(self):
         BaseMapActivity.__init__(self)
-        self.__endTime = sys.maxint
+        self.__endTime = sys.maxsize
 
     def create(self, settings):
         BaseMapActivity.create(self, settings)
@@ -354,11 +355,11 @@ class WarplaneActivity(BaseMapActivity):
         if self.isRepeating() and Timer.getTime() > self._startTime:
             self._startTime += math.floor((Timer.getTime() - self._startTime) / self._interval) * self._interval
 
-    def setStartTime(self, parentStartTime):
+    def setStartTime(self, startTime):
         if not self.__firstLaunch:
             self.pause()
         timeFrame = self._settings.readVector2('startTime')
-        self._startTime = parentStartTime + random.uniform(timeFrame[0], timeFrame[1])
+        self._startTime = startTime + random.uniform(timeFrame[0], timeFrame[1])
         self.clampStartTime()
 
     def setPeriod(self, period):
@@ -566,11 +567,11 @@ class ExplosionActivity(BaseMapActivity):
         if self.isRepeating() and Timer.getTime() > self._startTime:
             self._startTime = math.floor((Timer.getTime() - self._startTime) / self._interval) * self._interval + self._startTime
 
-    def setStartTime(self, parentStartTime):
+    def setStartTime(self, startTime):
         if not self.__firstLaunch:
             self.pause()
         timeFrame = self._settings.readVector2('startTime')
-        self._startTime = parentStartTime + random.uniform(timeFrame[0], timeFrame[1])
+        self._startTime = startTime + random.uniform(timeFrame[0], timeFrame[1])
         self.clampStartTime()
 
     def setPeriod(self, interval):
@@ -696,8 +697,8 @@ class ScenarioActivity(BaseMapActivity):
 
             return True
 
-    def setStartTime(self, time):
-        self._startTime = time
+    def setStartTime(self, startTime):
+        self._startTime = startTime
 
     def start(self):
         self.__pendingActivities.extend(self.__currentActivities)
@@ -733,8 +734,7 @@ class ScenarioActivity(BaseMapActivity):
         return Timer.getTime() >= self._startTime and (len(self.__pendingActivities) != 0 or len(self.__currentActivities) != 0)
 
     def isOver(self):
-        over = Timer.getTime() >= self._startTime and all(map(lambda subActivity: subActivity.isOver(), self.__currentActivities + self.__pendingActivities))
-        return over
+        return Timer.getTime() >= self._startTime and all((subActivity.isOver() for subActivity in self.__currentActivities + self.__pendingActivities))
 
     def pauseVisuals(self):
         self.__isVisualsPaused = True

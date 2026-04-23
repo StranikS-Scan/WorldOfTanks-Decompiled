@@ -6,6 +6,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.dialogs.mono_dialog_template_button_model import ButtonType
 from gui.impl.gen.view_models.views.dialogs.mono_dialog_template_view_model import MonoDialogTemplateViewModel
 from gui.impl.lobby.dialogs.wot_plus.base_dialog import BaseDialog
+from gui.impl.pub.dialog_window import DialogButtons
 
 class ServiceRecordCustomizationConfirmDialog(BaseDialog):
 
@@ -23,3 +24,13 @@ class ServiceRecordCustomizationConfirmDialog(BaseDialog):
             cancelButton = MonoButtonTemplate(MonoDialogTemplateViewModel.ACTION_CANCEL, R.strings.dialogs.common.cancel(), 'Button', ButtonType.SECONDARY, False)
             self._addButton(confirmButton)
             self._addButton(cancelButton)
+
+    def _onAction(self, event):
+        act = event.get('action')
+        if act == MonoDialogTemplateViewModel.ACTION_CANCEL:
+            self._setResult(DialogButtons.CANCEL)
+            return
+        if act == MonoDialogTemplateViewModel.ACTION_CLOSE or act == MonoDialogTemplateViewModel.ACTION_ESCAPE:
+            self._setResult('')
+            return
+        super(ServiceRecordCustomizationConfirmDialog, self)._onAction(event)

@@ -4,6 +4,7 @@ import logging
 from functools import partial
 import typing
 from frameworks.wulf import WindowFlags
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_results.random.random_battle_results_view_model import RandomBattleResultsViewModel
 from gui.impl.lobby.battle_results.flag_view import FlagWindow
@@ -93,10 +94,6 @@ class RandomBattleResultsView(ViewComponent[RandomBattleResultsViewModel], IRout
 
         return childComponents
 
-    def _initialize(self, *args, **kwargs):
-        super(RandomBattleResultsView, self)._initialize(*args, **kwargs)
-        self.__subPresenter.initialize()
-
     def _finalize(self):
         self.__arenaUniqueID = None
         self.__subPresenter.finalize()
@@ -118,11 +115,15 @@ class RandomBattleResultsView(ViewComponent[RandomBattleResultsViewModel], IRout
         statsController = self.__battleResults.getStatsCtrl(self.__arenaUniqueID)
         battleResults = statsController.getResults()
         self.__createFlagWindow()
+        self.__subPresenter.initialize()
         with self.viewModel.transaction():
             self.__subPresenter.packBattleResults(battleResults)
 
     def _onClose(self):
-        self.destroyWindow()
+        state = getLobbyStateMachine().getStateFromView(self)
+        if state is not None:
+            state.goBack()
+        return
 
     def _onOpenMissions(self):
         showDailyQuests(subTab=DailyTabs.QUESTS)

@@ -10,7 +10,7 @@ from battle_modifiers_ext.modification_cache.modification_cache import Modificat
 from constants import IS_CELLAPP, IS_CLIENT, SHELL_TYPES, SHELL_MECHANICS_TYPE, VEHICLE_MODE
 from math import tan, atan, cos, acos
 from items.components.chassis_components import TrackPair
-from items.components.component_constants import DEFAULT_GUN_CLIP, DEFAULT_GUN_BURST, DEFAULT_GUN_AUTORELOAD, DEFAULT_GUN_DUALGUN, KMH_TO_MS, MS_TO_KMH, DEFAULT_GUN_AUTOSHOOT, DynamicShotEffect, ZERO_FLOAT, DEFAULT_GUN_TWINGUN
+from items.components.component_constants import DEFAULT_GUN_CLIP, DEFAULT_GUN_BURST, DEFAULT_GUN_AUTORELOAD, DEFAULT_GUN_DUALGUN, KMH_TO_MS, MS_TO_KMH, DEFAULT_GUN_AUTOSHOOT, DynamicShotEffect, ZERO_FLOAT, DEFAULT_GUN_TWINGUN, INVALID_EFFECT_INDEX
 from items.components.shell_components import createShellType
 from typing import TYPE_CHECKING, Optional, Type, Dict, Tuple, List
 from Math import Vector2
@@ -165,6 +165,8 @@ class VehicleModifier(object):
                     gun.effects = [ modifiers(BattleParams.GUN_EFFECTS, effects) for effects in gun.effects ]
                 else:
                     gun.effects = modifiers(BattleParams.GUN_EFFECTS, gun.effects)
+                if gun.prefabEffects is not None:
+                    gun.prefabEffects = modifiers(BattleParams.GUN_PREFAB_EFFECTS, gun.prefabEffects)
             if gun.prefabs:
                 gunPrefabs = copy.deepcopy(gun.prefabs)
                 for outfit, prefabs in viewitems(gunPrefabs):
@@ -225,6 +227,8 @@ class VehicleModifier(object):
             effectsIndex = shell.effectsIndex
             modifiers.modificationCtx['shotsCount'] = vehicles.g_cache.shotEffects[effectsIndex].get('shotsCount', 0)
             shell.effectsIndex = modifiers(BattleParams.SHOT_EFFECTS, effectsIndex)
+            if shell.prefabEffectsIndex != INVALID_EFFECT_INDEX:
+                shell.prefabEffectsIndex = modifiers(BattleParams.SHOT_PREFAB_EFFECTS, shell.prefabEffectsIndex)
             newDynamicEffectsIndexes = []
             for dynamicEffect in shell.dynamicEffectsIndexes:
                 modifiers.modificationCtx['shotsCount'] = dynamicEffect.minShotsCount

@@ -183,6 +183,7 @@
     <_85mm_Ares_MC_AAAC>	331	</_85mm_Ares_MC_AAAC>
     <_75mm_Ares_MC_AAAC>	332	</_75mm_Ares_MC_AAAC>
     <_120mm_American_British_Gun_RC_C>	327	</_120mm_American_British_Gun_RC_C>
+    <_155mm_MPCS_SEG>	333	</_155mm_MPCS_SEG>
     <_165_1mm_M135E1>	336	</_165_1mm_M135E1>
     <_155mm_Howitzer_M1_M41>	2000	</_155mm_Howitzer_M1_M41>
     <_155mm_Gun_M1A1_M12>	2001	</_155mm_Gun_M1A1_M12>
@@ -240,6 +241,7 @@
     <_105mm_Gun_M68_7x7>	503	</_105mm_Gun_M68_7x7>
     <_155mm_AT_Gun_T7E4_7x7>	505	</_155mm_AT_Gun_T7E4_7x7>
     <_120mm_Gun_M58_7x7>	506	</_120mm_Gun_M58_7x7>
+    <_120mm_Gun_T179_7x7>	507	</_120mm_Gun_T179_7x7>
     <_75mm_Howitzer_M3T_MapsTraining_Dummy_MT_1>	18	</_75mm_Howitzer_M3T_MapsTraining_Dummy_MT_1>
     <_75mm_Gun_M3_L37A_MapsTraining_Player_HT_1>	26	</_75mm_Gun_M3_L37A_MapsTraining_Player_HT_1>
     <_76mm_Gun_M1A2L_MapsTraining_Dummy_LT_2>	53	</_76mm_Gun_M1A2L_MapsTraining_Dummy_LT_2>
@@ -252,6 +254,7 @@
     <_76mm_Gun_M1A2_StoryMode_3_4>	64031	</_76mm_Gun_M1A2_StoryMode_3_4>
     <_75mm_Gun_M17_StoryMode>	64032	</_75mm_Gun_M17_StoryMode>
     <_75mm_Gun_M6_StoryModeStealth>	64033	</_75mm_Gun_M6_StoryModeStealth>
+    <Gun_1_A195_Gorilla_id64036>	64036	</Gun_1_A195_Gorilla_id64036>
   </ids>
   <shared>
     <_12.7mm_MG_HB_M2>
@@ -10430,6 +10433,64 @@
         </_120mm_HE_T15E3_T57>
       </shots>
     </_120mm_Gun_T179>
+    <_120mm_Gun_T179_7x7>
+      <userString>	#usa_vehicles:_120mm_Gun_T179_7x7	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	310000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.68	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 11.0 1.0 11.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	10.97142857142860	</reloadTime>
+      <maxAmmo>	22	</maxAmmo>
+      <aimingTime>	2.62857142857143	</aimingTime>
+      <weight>	2849	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_120mm_AP_M358_T57_7x7>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	1067	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	258 238	</piercingPower>
+        </_120mm_AP_M358_T57_7x7>
+        <_120mm_HEAT_M469_T57_7x7>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1067	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	340 340	</piercingPower>
+        </_120mm_HEAT_M469_T57_7x7>
+        <_120mm_HE_T15E3_T57_7x7>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	1067	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	60 60	</piercingPower>
+        </_120mm_HE_T15E3_T57_7x7>
+      </shots>
+    </_120mm_Gun_T179_7x7>
     <_120mm_Gun_T179_Rush_Ep1>
       <userString>	#usa_vehicles:_120mm_Gun_T179_Rush_Ep1	</userString>
       <tags></tags>
@@ -12679,6 +12740,58 @@
         </_155mm_HE_M101E4>
       </shots>
     </_155mm_AT_Gun_T7E4_7x7>
+    <_155mm_MPCS_SEG>
+      <userString>	#usa_vehicles:_155mm_MPCS_SEG	</userString>
+      <tags></tags>
+      <level>	11	</level>
+      <price>	500000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.68	</impulse>
+      <reloadEffect>	reload155_170	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	23.625	</rotationSpeed>
+      <reloadTime>	20	</reloadTime>
+      <maxAmmo>	40	</maxAmmo>
+      <aimingTime>	2.7	</aimingTime>
+      <weight>	3400	</weight>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	120	</maxRegenHealth>
+      <repairCost>	11	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.377142857142857	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_155mm_AP_MPCS>
+          <defaultPortion>	0.875	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	305 295	</piercingPower>
+        </_155mm_AP_MPCS>
+        <_155mm_APCR_MPCS>
+          <defaultPortion>	0.00	</defaultPortion>
+          <speed>	1100	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	380 370	</piercingPower>
+        </_155mm_APCR_MPCS>
+        <_155mm_HE_MPCS>
+          <defaultPortion>	0.125	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	90 90	</piercingPower>
+        </_155mm_HE_MPCS>
+      </shots>
+    </_155mm_MPCS_SEG>
     <_155mm_Gun_T7XM>
       <userString>	#usa_vehicles:_155mm_Gun_T7XM	</userString>
       <tags></tags>
@@ -14757,5 +14870,55 @@
       </shots>
       <notInShop>	True	</notInShop>
     </_75mm_Gun_M6_StoryModeStealth>
+    <Gun_1_A195_Gorilla_id64036>
+      <userString>	Gun_1_A195_Gorilla_id64036	</userString>
+      <description>	TODO: gun Gun_1_A195_Gorilla_id64036 description	</description>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	2750	</price>
+      <models>
+        <undamaged>	vehicles/american/A195_Gorilla/normal/lod0/Gun_01.model	</undamaged>
+        <destroyed>	vehicles/american/A195_Gorilla/crash/lod0/Gun_01.model	</destroyed>
+        <exploded>	vehicles/american/A195_Gorilla/crash/lod0/Gun_01.model	</exploded>
+      </models>
+      <impulse>	0.12	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.14	</amplitude>
+        <backoffTime>	0.1	</backoffTime>
+        <returnTime>	0.1	</returnTime>
+      </recoil>
+      <effects>	shot_huge_mb	</effects>
+      <groundWave></groundWave>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	50.0	</rotationSpeed>
+      <reloadTime>	1.4	</reloadTime>
+      <maxAmmo>	600	</maxAmmo>
+      <aimingTime>	1.5	</aimingTime>
+      <weight>	71	</weight>
+      <maxHealth>	30	</maxHealth>
+      <maxRegenHealth>	14	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <invisibilityFactorAtShot>	0.33	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.47	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	1.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <Development_Shell>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	390	</maxDistance>
+          <piercingPower>	32 13	</piercingPower>
+        </Development_Shell>
+      </shots>
+    </Gun_1_A195_Gorilla_id64036>
   </shared>
 </guns.xml>

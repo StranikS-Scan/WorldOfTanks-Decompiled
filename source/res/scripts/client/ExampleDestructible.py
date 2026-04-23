@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ExampleDestructible.py
+from __future__ import absolute_import
+from future.utils import lrange
 import BigWorld
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from constants import DESTRUCTIBLE_MATKIND
 
 class ExampleDestructible(BigWorld.Entity):
-    __MATKINDS_ALL = range(DESTRUCTIBLE_MATKIND.NORMAL_MIN, DESTRUCTIBLE_MATKIND.DAMAGED_MAX + 1)
+    __MATKINDS_ALL = lrange(DESTRUCTIBLE_MATKIND.NORMAL_MIN, DESTRUCTIBLE_MATKIND.DAMAGED_MAX + 1)
     __MODEL_NAME = 'content/MilitaryEnvironment/mleSU_83_02_OpelBlitz/normal/lod0/mleSU_83_02_OpelBlitz_01.model'
 
     def __init__(self):

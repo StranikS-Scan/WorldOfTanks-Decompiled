@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PoiVehicleComponent.py
+from __future__ import absolute_import
 from PoiBaseComponent import PoiBaseComponent
 from points_of_interest.components import PoiVehicleStateComponent
 

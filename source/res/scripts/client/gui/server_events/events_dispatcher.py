@@ -122,9 +122,10 @@ def canOpenPMPage(branchID=None, operationID=None, missionID=None):
 
 
 def showPersonalMission(missionID=None):
+    from gui.Scaleform.daapi.view.lobby.missions.personal.state import PersonalMissionsPageState
     if not canOpenPMPage(missionID=missionID):
         return
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS), ctx={'eventID': missionID}), EVENT_BUS_SCOPE.LOBBY)
+    PersonalMissionsPageState.goTo(missionID=missionID)
 
 
 def showPersonalMissionsChain(operationID, chainID, missionCategory=None):

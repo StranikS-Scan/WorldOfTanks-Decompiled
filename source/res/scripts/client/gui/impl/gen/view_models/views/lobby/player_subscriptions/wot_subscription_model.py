@@ -23,7 +23,7 @@ class WotPlusPeriodicityEnum(IntEnum):
 class WotSubscriptionModel(SubscriptionModel):
     __slots__ = ()
 
-    def __init__(self, properties=11, commands=0):
+    def __init__(self, properties=12, commands=0):
         super(WotSubscriptionModel, self).__init__(properties=properties, commands=commands)
 
     def getWotSubscriptionState(self):
@@ -44,8 +44,15 @@ class WotSubscriptionModel(SubscriptionModel):
     def setSubscriptionPeriodicity(self, value):
         self._setNumber(10, value.value)
 
+    def getIsButtonHighlighted(self):
+        return self._getBool(11)
+
+    def setIsButtonHighlighted(self, value):
+        self._setBool(11, value)
+
     def _initialize(self):
         super(WotSubscriptionModel, self)._initialize()
         self._addStringProperty('wotSubscriptionState')
         self._addStringProperty('wotTier')
         self._addNumberProperty('subscriptionPeriodicity')
+        self._addBoolProperty('isButtonHighlighted', False)

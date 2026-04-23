@@ -7,7 +7,7 @@ from soft_exception import SoftException
 from sound_gui_manager import ViewSoundExtension
 from .view_event import ViewEvent
 from .view_model import ViewModel
-from ..py_object_binder import PyObjectEntity, getProxy, getObject
+from ..py_object_binder import PyObjectEntity, getProxy
 from ..py_object_wrappers import PyObjectView, PyObjectViewSettings
 from ..gui_constants import ViewFlags, ViewStatus, ViewEventType, ChildFlags, ShowingStatus
 from py2to3 import patched_typing
@@ -53,7 +53,7 @@ class ViewSettings(patched_typing.Generic[TViewModel]):
 
     @property
     def model(self):
-        return getObject(self.__proxy.model)
+        return self.__proxy.model
 
     @model.setter
     def model(self, model):
@@ -68,7 +68,7 @@ class ViewSettings(patched_typing.Generic[TViewModel]):
 
 
 class View(PyObjectEntity, patched_typing.Generic[TViewModel]):
-    __slots__ = ('__viewStatus', '__showingStatus', '__viewModel', '__args', '__kwargs', 'onStatusChanged', 'onShowingStatusChanged', 'onFocusChanged', '__soundExtension', '__isShown', '__isFocused', '__weakref__')
+    __slots__ = ('__viewStatus', '__showingStatus', '__viewModel', '__args', '__kwargs', 'onStatusChanged', 'onShowingStatusChanged', 'onFocusChanged', '__soundExtension', '__isShown', '__isFocused', '__eventManager')
     _COMMON_SOUND_SPACE = None
 
     def __init__(self, settings, wsFlags=ViewFlags.VIEW, viewModelClazz=ViewModel, *args, **kwargs):
@@ -83,14 +83,15 @@ class View(PyObjectEntity, patched_typing.Generic[TViewModel]):
         self.__viewModel = settings.model
         self.__soundExtension = ViewSoundExtension(self._COMMON_SOUND_SPACE)
         self.__soundExtension.initSoundManager()
+        self.__eventManager = em = Event.EventManager()
         super(View, self).__init__(PyObjectView(settings.proxy))
-        self.onStatusChanged = Event.Event()
+        self.onStatusChanged = Event.Event(em)
         self.__viewStatus = ViewStatus.UNDEFINED if self.proxy is None else self.proxy.viewStatus
         self.__showingStatus = ShowingStatus.HIDDEN
         self.__isShown = False
-        self.onShowingStatusChanged = Event.Event()
+        self.onShowingStatusChanged = Event.Event(em)
         self.__isFocused = False
-        self.onFocusChanged = Event.Event()
+        self.onFocusChanged = Event.Event(em)
         self.__args = settings.args
         self.__kwargs = settings.kwargs
         return
@@ -174,10 +175,7 @@ class View(PyObjectEntity, patched_typing.Generic[TViewModel]):
     def destroy(self):
         if self.proxy is not None:
             self.proxy.destroy()
-        self.onStatusChanged.clear()
-        if self.__viewModel is not None:
-            self.__viewModel.unbind()
-            self.__viewModel = None
+        self.__eventManager.clear()
         return
 
     def destroyWindow(self):
@@ -253,7 +251,10 @@ class View(PyObjectEntity, patched_typing.Generic[TViewModel]):
 
     def _cFini(self):
         self._finalize()
+        self.__eventManager.clear()
         self.__soundExtension.destroySoundManager()
+        self.__viewModel = None
+        return
 
     def _cViewStatusChanged(self, oldStatus, newStatus):
         self.__viewStatus = newStatus

@@ -3,6 +3,7 @@
 import typing
 import SoundGroups
 import wg_async as future_async
+from PlayerEvents import g_playerEvents
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from adisp import adisp_process
 from constants import AchievementsLayoutStates, Configs
@@ -25,8 +26,10 @@ from gui.shared.gui_items.dossier import dumpDossier
 from gui.shared.gui_items.dossier.achievements.abstract import isRareAchievement
 from gui.shared.gui_items.processors.achievements import SetAchievementsLayout
 from helpers import dependency, server_settings
+from renewable_subscription_common.schema import renewableSubscriptionsConfigSchema
 from shared_utils import nextTick
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
@@ -38,6 +41,7 @@ class EditView(ViewImpl):
     __itemsCache = dependency.descriptor(IItemsCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __settingsCore = dependency.descriptor(ISettingsCore)
+    __wotPlusCtrl = dependency.descriptor(IWotPlusController)
 
     def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.achievements.EditView())
@@ -78,7 +82,9 @@ class EditView(ViewImpl):
          (self.viewModel.onCancel, self.__onCancel),
          (self.viewModel.onExitConfirm, self.__onShowExitConfirm),
          (self.viewModel.onHideFirstEntryState, self.__onHideFirstEntryState),
-         (self.__lobbyContext.getServerSettings().onServerSettingsChange, self.__onServerSettingsChanged))
+         (self.__lobbyContext.getServerSettings().onServerSettingsChange, self.__onServerSettingsChanged),
+         (g_playerEvents.onRenewableSubscriptionStatusChanged, self.__onRenewableSubscriptionStatusChanged),
+         (g_playerEvents.onConfigModelUpdated, self._onConfigModelUpdated))
 
     def _onLoading(self, *args, **kwargs):
         achievements20 = self.__itemsCache.items.achievements20
@@ -86,7 +92,9 @@ class EditView(ViewImpl):
         self.__initialState = self.__isAutoSelect = achievements20.getLayoutState() == AchievementsLayoutStates.AUTO
         self.__achievementBitmask = achievements20.getAchievementBitmask()
         self.__selectedAchievements = self.__significantAchievements()
+        _, ribbonName = self.__wotPlusCtrl.getServiceRecordRibbon()
         with self.viewModel.transaction() as model:
+            model.setRibbonName(ribbonName)
             self.__fillAchievementsModel(model=model)
             self.__fillFirstEntryState(model=model)
         super(EditView, self)._onLoading(*args, **kwargs)
@@ -126,9 +134,9 @@ class EditView(ViewImpl):
     def __getSignificantAchievementsList(self):
         achievements20GeneralConfig = self.__lobbyContext.getServerSettings().getAchievements20GeneralConfig()
         layoutLength = achievements20GeneralConfig.getLayoutLength()
-        mainlRules = achievements20GeneralConfig.getAutoGeneratingMainRules()
+        mainRules = achievements20GeneralConfig.getAutoGeneratingMainRules()
         extraRules = achievements20GeneralConfig.getAutoGeneratingExtraRules()
-        significantAchievementsList = self.__dossier.getTotalStats().getSignificantAchievements(mainlRules, extraRules, layoutLength)
+        significantAchievementsList = self.__dossier.getTotalStats().getSignificantAchievements(mainRules, extraRules, layoutLength)
         return significantAchievementsList
 
     def __significantAchievements(self):
@@ -281,6 +289,15 @@ class EditView(ViewImpl):
             else:
                 self.__dialogType = DialogType.ERROR
         return
+
+    def __onRenewableSubscriptionStatusChanged(self):
+        _, ribbonName = self.__wotPlusCtrl.getServiceRecordRibbon()
+        with self.viewModel.transaction() as model:
+            model.setRibbonName(ribbonName)
+
+    def _onConfigModelUpdated(self, gpKey):
+        if renewableSubscriptionsConfigSchema.gpKey == gpKey:
+            self.__onRenewableSubscriptionStatusChanged()
 
     def __onHideFirstEntryState(self):
         self.__settingsCore.serverSettings.saveInUIStorage2({UI_STORAGE_KEYS.ACHIEVEMENT_EDIT_VIEW_VISITED: True})

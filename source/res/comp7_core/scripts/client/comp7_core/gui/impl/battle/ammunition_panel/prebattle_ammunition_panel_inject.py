@@ -76,6 +76,8 @@ class Comp7CorePrebattleAmmunitionPanelInject(PrebattleAmmunitionPanelInject):
                 self._state = State.PREBATTLENOTCONFIRMED
 
     def _handleToggleFullStats(self, event):
+        if self.app.containerManager.isModalViewsIsExists():
+            return
         isFullStatsShown = event.ctx['isDown']
         self.__isFullStatsShown = isFullStatsShown
         if not isFullStatsShown and self.__closeOnFullStatsClose:

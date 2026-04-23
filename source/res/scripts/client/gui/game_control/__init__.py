@@ -90,6 +90,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.crew_controller import CrewController
     from gui.pet_system.pet_controller import PetSystemController
     from gui.game_control.ingame_tournament_controller import IngameTournamentController
+    from gui.game_control.w2gt_controller import W2GTGameController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -182,4 +183,5 @@ def getGameControllersConfig(manager):
     _config(_interface.ICrewController, CrewController())
     _config(_interface.IIngameTournamentController, IngameTournamentController())
     _config(skeletons.gui.pet_system.IPetSystemController, PetSystemController())
+    _config(_interface.IW2GTGameController, W2GTGameController())
     collectGameControllers(_config)

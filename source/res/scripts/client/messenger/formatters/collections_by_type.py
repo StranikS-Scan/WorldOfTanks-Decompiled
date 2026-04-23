@@ -169,7 +169,6 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.postProgressionCompleted.index(), _sc.PostProgressionCompletedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.externalVehicleRentStarted.index(), _sc.ExternalVehicleRentFormatter(isStarted=True))
     registerMessengerServerFormatter(_SM_TYPE.externalVehicleRentExpired.index(), _sc.ExternalVehicleRentFormatter(isStarted=False))
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.MENTORING_LICENSE, _sc.MentoringLicenseFormatter())
     registerMessengerServerFormatter(_SM_TYPE.mentorAssignmentUsed.index(), _sc.MentorAssignmentUsedFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.GF_SM_TYPE, _sc.GFSMFormatter())
     registerMessengerServerFormatter(_SM_TYPE.resourceWellOperation.index(), _sc.ResourceWellOperationFormatter())
@@ -182,3 +181,4 @@ def initRegistrationFormatters():
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.COLLECTOR20_REWARD_RECEIVED, _sc.Collector20RewardReceivedFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.PET_SYSTEM_EVENT_CREDITS_AWARD, _sc.PetSystemEventCreditsReceivedFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.PET_SYSYEM_EVENT_ITEMS_AWARD, _sc.PetSystemEventItemsReceivedFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.piggyBankCreditsFull.index(), _sc.PiggyBankCreditsFullFormatter())

@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/GuiSettings.py
+from __future__ import absolute_import
 import logging
 from collections import namedtuple
+from future.utils import viewitems
 import nations
 import constants
 import resource_helper
@@ -217,7 +219,7 @@ class GuiSettings(object):
             else:
                 if macros == 'MACROS_DICT':
                     value = {}
-                    for key, mValue in dictValue.iteritems():
+                    for key, mValue in viewitems(dictValue):
                         value[key] = self.__applyMacros(mValue)
 
                     return value

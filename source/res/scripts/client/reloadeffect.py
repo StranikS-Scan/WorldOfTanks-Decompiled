@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ReloadEffect.py
+from __future__ import absolute_import, division
 import logging
 from copy import copy
 from math import fabs
@@ -165,8 +166,7 @@ class _AutoReloadDesc(_ReloadDesc):
     def __init__(self, dataSection, eType):
         super(_AutoReloadDesc, self).__init__()
         self.duration = dataSection.readFloat('duration', 0.5) / 1000.0
-        if self.duration < 0.5:
-            self.duration = 0.5
+        self.duration = max(self.duration, 0.5)
         self.soundEvent = dataSection.readString('sound', '')
         self.reloadStart = dataSection.readString('reloadStart', '')
         self.autoLoaderFull = dataSection.readString('autoLoaderFull', '')
@@ -175,12 +175,10 @@ class _AutoReloadDesc(_ReloadDesc):
         self.caliber = dataSection.readString('caliber', '')
         self.clipShellLoad = dataSection.readString('clipShellLoad', '')
         self.clipShellLoadT = dataSection.readFloat('clipShellLoadDuration', 2000) / 1000.0
-        if self.clipShellLoadT < 0.5:
-            self.clipShellLoadT = 0.5
+        self.clipShellLoadT = max(self.clipShellLoadT, 0.5)
         self.almostComplete = dataSection.readString('almostComplete', '')
         self.almostCompleteT = dataSection.readFloat('almostCompleteDuration', 5000) / 1000.0
-        if self.almostCompleteT < 0.5:
-            self.almostCompleteT = 0.5
+        self.almostCompleteT = max(self.almostCompleteT, 0.5)
         self.shotFail = dataSection.readString('shotFail', '')
         self.effectType = eType
         intuitionOverrides = dataSection['intuition_overrides']
@@ -349,9 +347,6 @@ class SimpleReload(_GunReload):
     def onClipLoad(self, timeLeft, shellsInClip, lastShell, canBeFull):
         pass
 
-    def onFull(self):
-        pass
-
     def updateReloadTime(self, timeLeft, shellCount, lastShell, canBeFull):
         pass
 
@@ -420,9 +415,6 @@ class BarrelReload(SimpleReload):
         self.stop()
 
     def onClipLoad(self, timeLeft, shellsInClip, lastShell, canBeFull):
-        pass
-
-    def onFull(self):
         pass
 
     def updateReloadTime(self, timeLeft, shellCount, lastShell, canBeFull):
@@ -498,9 +490,7 @@ class LoopSequence(CallbackDelayer):
     def __start(self):
         if self.__sequence:
             callTime, _ = self.__sequence[0]
-            dt = callTime - BigWorld.time()
-            if dt < 0.0:
-                dt = 0.0
+            dt = max(callTime - BigWorld.time(), 0.0)
             self.delayCallback(dt, self.__startCallback)
 
     def __startCallback(self):
@@ -515,12 +505,8 @@ class LoopSequence(CallbackDelayer):
                 playByName(name)
             if self.__sequence:
                 callTime, _ = self.__sequence[0]
-                dt = callTime - BigWorld.time()
-                if dt < 0.0:
-                    dt = 0.0
-                return dt
+                return max(callTime - BigWorld.time(), 0.0)
             self.__inProgress = False
-            return None
             return None
 
     def __generateTimeLine(self, loopStartDT, loopDuration, count):
@@ -538,7 +524,7 @@ class LoopSequence(CallbackDelayer):
             if count > 1:
                 dt = (lastDt - padding) / (count - 1)
                 time += self.alignShellTime
-                for i in xrange(0, count - 1):
+                for i in range(0, count - 1):
                     timeLine.append((time, self.__shell))
                     if self.alignShellTime and i == count - 2:
                         timeLine.append((time, self.__startLoop))
@@ -589,9 +575,7 @@ class AutoReload(_GunReload):
                     playByName(self._desc.reloadStart)
                     if alert:
                         playByName(self._desc.ammoLow)
-            time = shellReloadTime - self._desc.duration
-            if time < 0.0:
-                time = 0.0
+            time = max(shellReloadTime - self._desc.duration, 0.0)
             self.delayCallback(time, self.__onShellInTheBarrel, shellCount, reloadShellCount, BigWorld.time() + time)
             self._checkAndPlayGunRammerEffect(shellReloadTime)
             return
@@ -603,6 +587,7 @@ class AutoReload(_GunReload):
         self.stopCallback(self.__onShellInTheBarrel)
         self.stopCallback(self.__onClipShellLoad)
         self.stopCallback(self.__onAlmostComplete)
+        self.stopCallback(self.__onLoadComplete)
         self._stopGunRammerEffect()
         self._almostCompleteSnd = None
         return
@@ -614,26 +599,18 @@ class AutoReload(_GunReload):
         if BARREL_DEBUG_ENABLED:
             LOG_DEBUG('AutoReload::onClipLoad time = {0} {1} {2} {3}'.format(BigWorld.time(), timeLeft, shellCount, lastShell))
         self.stopCallback(self.__onAlmostComplete)
+        self.stopCallback(self.__onLoadComplete)
         self.stopCallback(self.__onClipShellLoad)
         self.updateReloadTime(timeLeft, shellCount, lastShell, canBeFull)
 
-    def onFull(self):
-        if BARREL_DEBUG_ENABLED:
-            LOG_DEBUG('AutoReload::onFull')
-        playByName(self._desc.autoLoaderFull)
-        self.stopCallback(self.__onAlmostComplete)
-
     def updateReloadTime(self, timeLeft, shellCount, lastShell, canBeFull):
         if shellCount > 0 and not lastShell:
-            time = timeLeft - self._desc.clipShellLoadT
-            if time < 0.0:
-                time = 0.0
+            time = max(timeLeft - self._desc.clipShellLoadT, 0.0)
             self.delayCallback(time, self.__onClipShellLoad, BigWorld.time() + time)
         if lastShell and canBeFull:
-            time = timeLeft - self._desc.almostCompleteT
-            if time < 0.0:
-                time = 0.0
+            time = max(timeLeft - self._desc.almostCompleteT, 0.0)
             self.delayCallback(time, self.__onAlmostComplete, BigWorld.time() + time)
+            self.delayCallback(timeLeft, self.__onLoadComplete, BigWorld.time() + timeLeft)
 
     def shotFail(self):
         playByName(self._desc.shotFail)
@@ -666,6 +643,13 @@ class AutoReload(_GunReload):
         self._almostCompleteSnd = SoundGroups.g_instance.getSound2D(self._desc.almostComplete)
         self._almostCompleteSnd.play()
 
+    def __onLoadComplete(self, time):
+        if fabs(time - BigWorld.time()) > 0.1:
+            return
+        if BARREL_DEBUG_ENABLED:
+            LOG_DEBUG('AutoReload::__onLoadComplete')
+        playByName(self._desc.autoLoaderFull)
+
 
 class DualGunReload(_GunReload):
 
@@ -688,6 +672,8 @@ class DualGunReload(_GunReload):
             timeToStart = shellReloadTime - self._desc.runTimeDelta
             if self.__sound is None:
                 self.__sound = SoundGroups.g_instance.getSound2D(self._desc.soundEvent)
+            else:
+                self.__sound.stop()
             if timeToStart > 0:
                 self.delayCallback(timeToStart, self.__onReloadStart, BigWorld.time() + timeToStart)
             if ammoLow:
@@ -1105,11 +1091,6 @@ class ReloadEffectStrategy(object):
     def onClipLoad(self, timeLeft, shellsInClip, lastShell, canBeFull):
         if self.__currentReloadEffect is not None:
             self.__currentReloadEffect.onClipLoad(timeLeft, shellsInClip, lastShell, canBeFull)
-        return
-
-    def onFull(self):
-        if self.__currentReloadEffect is not None:
-            self.__currentReloadEffect.onFull()
         return
 
     def updateReloadTime(self, timeLeft, shellCount, lastShell, canBeFull):

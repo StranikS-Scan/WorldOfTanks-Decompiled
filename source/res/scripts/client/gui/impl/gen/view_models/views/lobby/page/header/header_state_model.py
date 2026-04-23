@@ -12,7 +12,7 @@ class HeaderType(Enum):
 class HeaderStateModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=3, commands=0):
+    def __init__(self, properties=2, commands=0):
         super(HeaderStateModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -33,14 +33,7 @@ class HeaderStateModel(ViewModel):
     def getFeaturesType():
         return (unicode, bool)
 
-    def getType(self):
-        return HeaderType(self._getString(2))
-
-    def setType(self, value):
-        self._setString(2, value.value)
-
     def _initialize(self):
         super(HeaderStateModel, self)._initialize()
         self._addViewModelProperty('router', RouterModel())
         self._addMapProperty('features', Map(unicode, bool))
-        self._addStringProperty('type', HeaderType.DEFAULT.value)

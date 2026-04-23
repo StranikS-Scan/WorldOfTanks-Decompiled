@@ -39,6 +39,10 @@ from skeletons.gui.shared import IItemsCache
 from vehicle_outfit.outfit import Area
 from uilogging.customization_3d_objects.logger import CustomizationBottomPanelLogger
 from uilogging.customization_3d_objects.logging_constants import CustomizationButtons, CustomizationViewKeys
+if typing.TYPE_CHECKING:
+    from typing import List, Callable
+    from gui.shared.gui_items.customization.c11n_items import Customization
+    from gui.shared.gui_items.gui_item import GUIItem
 CustomizationCarouselDataVO = namedtuple('CustomizationCarouselDataVO', ('displayString', 'isZeroCount', 'shouldShow', 'itemLayoutSize', 'bookmarks', 'arrows', 'showSeparators'))
 
 class CustomizationBottomPanel(CustomizationBottomPanelMeta):
@@ -647,8 +651,12 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     def __onItemsRemoved(self, *_, **__):
         self.__updateTabs()
         self.__setBottomPanelBillData()
+        selectedItem = self._selectedItem
         self.__updatePopoverBtn()
         self.__rebuildCarousel()
+        if selectedItem is not None:
+            self.__scrollToItem(selectedItem.intCD, immediately=True)
+        return
 
     def __onModeChanged(self, modeId, prevModeId):
         self._carouselDP.onModeChanged(modeId, prevModeId)
@@ -671,10 +679,18 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             self.__rebuildCarousel()
 
     def __scrollToNewItem(self):
+        itemsRequester = self.itemsCache.items
+        inventoryRequester = itemsRequester.inventory
+        carrouselItemCDs = self._carouselDP.getCarouselData()
+        currentVehItemType = g_currentVehicle.item.typeDescr
+        getItemByCD = itemsRequester.getItemByCD
+        noveltyCounters = inventoryRequester.getC11nItemsNoveltyCounters(currentVehItemType)
+        carrouselNoveltyItems = [ getItemByCD(intCD) for intCD in carrouselItemCDs if intCD in noveltyCounters ]
+        carrouselNoveltyItems.sort(key=comparisonKey)
+        season = self.__ctx.season
         itemTypes = CustomizationTabs.ITEM_TYPES[self.__ctx.mode.tabId]
-        newItems = sorted(g_currentVehicle.item.getNewC11nItems(g_currentVehicle.itemsCache.items), key=comparisonKey)
-        for item in newItems:
-            if item.itemTypeID in itemTypes and item.season & self.__ctx.season:
+        for item in carrouselNoveltyItems:
+            if item.itemTypeID in itemTypes and item.season & season:
                 self.__scrollToItem(item.intCD)
                 break
 
@@ -706,6 +722,8 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         else:
             self._selectedItem = None
         self._carouselDP.selectItem(self._selectedItem)
+        if self._selectedItem is not None and scroll:
+            self.__scrollToItem(self._selectedItem.intCD, True)
         self.__updateStageSwitcherVisibility()
         self.__updatePopoverBtn()
         return

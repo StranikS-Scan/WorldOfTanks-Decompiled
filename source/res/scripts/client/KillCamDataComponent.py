@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/KillCamDataComponent.py
+from __future__ import absolute_import, division
 import logging
 import BigWorld
 import CGF
@@ -89,6 +90,9 @@ class KillCamDataComponent(BigWorld.DynamicScriptComponent):
         attackerServerData = serverKillCamData['attacker']['unspottedData']
         if attackerServerData:
             attackerData.update(attackerServerData)
+        attackerServerData = serverKillCamData['attacker']['mechanicsInfo']
+        if attackerServerData:
+            attackerData.update({'mechanicsInfo': attackerServerData})
         attackerData['simulationType'] = SimulatedVehicleType.ATTACKER
         return attackerData
 
@@ -193,7 +197,7 @@ class KillCamDataComponent(BigWorld.DynamicScriptComponent):
         unspottedOrigin = None
         if not self.__killerIsSpotted:
             directionVector = origin - impactPoint
-            directionVector *= 1 / directionVector.length
+            directionVector *= 1.0 / directionVector.length
             unspottedOrigin = impactPoint + directionVector * _UNSPOTTED_MARKER_DISTANCE_FACTOR
             origin = impactPoint + directionVector * _UNSPOTTED_PIVOT_DISTANCE_FACTOR
         elif self.processedData['attacker']['vehicleType'] == 'SPG':

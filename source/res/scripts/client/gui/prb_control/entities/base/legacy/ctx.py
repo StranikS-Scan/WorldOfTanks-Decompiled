@@ -199,13 +199,14 @@ class SetTeamStateCtx(LegacyRequestCtx):
 
 @ReprInjector.withParent(('getVehicleInventoryID', 'vInventoryID'), ('__isReadyState', 'isReadyState'), ('__isInitial', 'isInitial'), ('getWaitingID', 'waitingID'))
 class SetPlayerStateCtx(LegacyRequestCtx):
-    __slots__ = ('__isReadyState', '__isInitial', '__errorString')
+    __slots__ = ('__isReadyState', '__isInitial', '__errorString', 'silently')
 
-    def __init__(self, isReadyState, isInitial=False, waitingID=''):
+    def __init__(self, isReadyState, isInitial=False, waitingID='', silently=False):
         super(SetPlayerStateCtx, self).__init__(entityType=prb_getters.getPrebattleType(), waitingID=waitingID)
         self.__isReadyState = isReadyState
         self.__isInitial = isInitial
         self.__errorString = ''
+        self.silently = silently
 
     def doVehicleValidation(self):
         return True

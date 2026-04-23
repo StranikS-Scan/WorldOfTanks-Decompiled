@@ -28,8 +28,8 @@ class PrebattleWindowMeta(AbstractWindowView):
     def isPlayerCreator(self):
         self._printOverrideError('isPlayerCreator')
 
-    def isReadyBtnEnabled(self):
-        self._printOverrideError('isReadyBtnEnabled')
+    def updateReadyBtnState(self):
+        self._printOverrideError('updateReadyBtnState')
 
     def isLeaveBtnEnabled(self):
         self._printOverrideError('isLeaveBtnEnabled')
@@ -48,6 +48,9 @@ class PrebattleWindowMeta(AbstractWindowView):
 
     def as_enableReadyBtnS(self, value):
         return self.flashObject.as_enableReadyBtn(value) if self._isDAAPIInited() else None
+
+    def as_setReadyBtnTooltipS(self, value):
+        return self.flashObject.as_setReadyBtnTooltip(value) if self._isDAAPIInited() else None
 
     def as_setCoolDownForReadyButtonS(self, value):
         return self.flashObject.as_setCoolDownForReadyButton(value) if self._isDAAPIInited() else None

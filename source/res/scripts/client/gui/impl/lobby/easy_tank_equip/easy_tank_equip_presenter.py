@@ -211,12 +211,13 @@ class EasyTankEquipPresenter(ViewComponent[EasyTankEquipViewModel]):
             self.__cards.append(card)
 
     def __initializeBottomContent(self):
-        self.__bottomContent = EasyTankEquipBottomContent(viewModel=self.viewModel.dealPanel, parentView=self.viewModel, providers=self.__providers)
+        self.__bottomContent = EasyTankEquipBottomContent(viewModel=self.viewModel.dealPanel, parentView=weakref.proxy(self), providers=self.__providers)
         self.__bottomContent.initialize()
 
     def __finalizeCards(self):
         for card in self.__cards:
             card.finalize()
+            card.clear()
 
         self.__cards = []
 
@@ -229,6 +230,8 @@ class EasyTankEquipPresenter(ViewComponent[EasyTankEquipViewModel]):
     def __finalizeBottomContent(self):
         if self.__bottomContent is not None:
             self.__bottomContent.finalize()
+            self.__bottomContent.clear()
+            self.__bottomContent = None
         return
 
     def __onSettingsChange(self):

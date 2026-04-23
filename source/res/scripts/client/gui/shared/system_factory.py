@@ -82,6 +82,7 @@ VEHICLE_READY_CHECKERS = 78
 POSTBATTLE_SQUAD_FINDER = 79
 POSTMORTEM_INFO_VIEW = 89
 MODE_HIDDEN_VEHICLES_CRITERIA = 81
+PBS_ENTRY_STATE = 82
 
 class CollectEventsManager(object):
 
@@ -705,6 +706,18 @@ def registerBattleResultStatsCtrl(bonusType, itemCls):
 
 def collectBattleResultStatsCtrl(bonusType):
     return __collectEM.handleEvent((BATTLE_RESULT_STATS_CONTROLLER, bonusType), ctx={}).get('item', None)
+
+
+def registerBattleResultsEntryState(bonusType, pbsEntryCls):
+
+    def onCollect(ctx):
+        ctx['pbsEntryCls'] = pbsEntryCls
+
+    __collectEM.addListener((PBS_ENTRY_STATE, bonusType), onCollect)
+
+
+def collectBattleResultsEntryState(bonusType):
+    return __collectEM.handleEvent((PBS_ENTRY_STATE, bonusType), ctx={}).get('pbsEntryCls', None)
 
 
 def registerProgressionPresenter(questCategory, itemClsTuplesList):

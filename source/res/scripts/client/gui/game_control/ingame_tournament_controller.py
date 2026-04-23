@@ -153,11 +153,25 @@ class _LeaderboardData(typing.NamedTuple('_LeaderboardData', (('fromPosition', i
         return cls(position - len(teams) + 1, position, teams)
 
 
+class _PrizePoolData(typing.NamedTuple('_PrizePoolData', (('qty', int), ('updated_at', int), ('is_dynamic', bool)))):
+
+    @classmethod
+    def fromParamsData(cls, paramsData):
+        amount = paramsData.get('qty')
+        if amount is None:
+            _logger.warning('Ingame tournament parsing error - dynamic prize_pool->qty is not set')
+        updatedAt = paramsData.get('updated_at')
+        if updatedAt is None:
+            _logger.warning('Ingame tournament parsing error - dynamic prize_pool->updated_at is not set')
+        return cls(amount, updatedAt, True)
+
+
 class _IngameTournamentData(typing.NamedTuple('_IngameTournamentData', (('stages', list),
  ('rewards', list),
  ('streamURLs', dict),
  ('teams', dict),
- ('leaderboard', list)))):
+ ('leaderboard', list),
+ ('prizePool', _PrizePoolData)))):
 
     @classmethod
     def fromRequestResponse(cls, wgcgResponse):
@@ -207,7 +221,15 @@ class _IngameTournamentData(typing.NamedTuple('_IngameTournamentData', (('stages
                 formattedLeaderboard.append(_LeaderboardData.fromParamsData(positionData))
 
             formattedLeaderboard.sort(key=lambda leaderboardPosition: leaderboardPosition.fromPosition)
-            return cls(formattedStages, formattedRewards, formattedURLs, formattedTeams, formattedLeaderboard)
+            prizePool = data.get('prize_pool', {})
+            if prizePool:
+                formattedPrizePool = _PrizePoolData.fromParamsData(prizePool)
+                formattedRewards = [ _RewardData(fromPosition=rewardData.fromPosition, toPosition=rewardData.toPosition, amount=rewardData.amount * formattedPrizePool.qty // 100000000) for rewardData in formattedRewards ]
+                _logger.info('Ingame tournament - dynamic prize pool configured')
+            else:
+                formattedPrizePool = _PrizePoolData(0, 0, False)
+                _logger.info('Ingame tournament - constant prize pool configured')
+            return cls(formattedStages, formattedRewards, formattedURLs, formattedTeams, formattedLeaderboard, formattedPrizePool)
 
     def getLiveMatch(self):
         for stage in self.stages:
@@ -237,7 +259,15 @@ class _IngameTournamentData(typing.NamedTuple('_IngameTournamentData', (('stages
         return matches
 
     def getTotalRewardAmount(self):
+        if self.prizePool.is_dynamic:
+            return self.prizePool.qty
         return sum([ reward.amount for reward in self.rewards ])
+
+    def getLastPrizePoolUpdate(self):
+        return self.prizePool.updated_at
+
+    def isDynamicPrizePool(self):
+        return self.prizePool.is_dynamic
 
     def getLeaderboardDataByTeam(self, teamID):
         return findFirst(lambda data: teamID in data.teamIDs, self.leaderboard)
@@ -362,6 +392,10 @@ class IngameTournamentController(IIngameTournamentController, IGlobalListener):
         res = yield self.__webCtrl.sendRequest(IngameTournamentGetDataCtx())
         self.onTournamentWGCGDataUpdated(_IngameTournamentData.fromRequestResponse(res))
 
+    def getTokenStoreOpeningTime(self, tournamentType):
+        config = self.__getConfigByTournamentType(tournamentType)
+        return config.tokenStoreOpeningTime if config else 0
+
     def getOfferGiftsToken(self, tournamentType):
         config = self.__getConfigByTournamentType(tournamentType)
         return config.offerGiftsToken if config else ''
@@ -372,6 +406,11 @@ class IngameTournamentController(IIngameTournamentController, IGlobalListener):
             _logger.warning('offerGiftsToken is not defined in tournament config')
             return
         else:
+            currentTime = getServerUTCTime()
+            config = self.__getConfigByTournamentType(tournamentType)
+            if currentTime < config.tokenStoreOpeningTime:
+                _logger.warning('Token Store is not available yet')
+                return
             offer = self.__offersProvider.getOfferByToken(tokenStoreToken)
             offerID = offer.id if offer else None
             if not offerID:

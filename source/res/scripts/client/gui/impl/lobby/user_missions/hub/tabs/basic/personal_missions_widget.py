@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hub/tabs/basic/personal_missions_widget.py
-import logging
+import typing
 from account_helpers.settings_core.settings_constants import PersonalMission3
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getCurrentOperationLastInstalledDetail
 from gui.impl.gen.view_models.views.lobby.personal_missions_30.operation_status_model import OperationStatus
@@ -11,16 +11,20 @@ from gui.server_events.pm_constants import IS_PM3_QUEST_ENABLED, DISABLED_PM_OPE
 from gui.shared.event_dispatcher import showPersonalMissionMainWindow, showPersonalMissionCampaignSelectorWindow
 from helpers import dependency
 from personal_missions import PM_BRANCH
-from shared_utils import findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from gui.impl.pub.view_component import ViewComponent
 from gui.impl.gen.view_models.views.lobby.user_missions.hub.tabs.basic_missions.personal_missions_model import PersonalMissionsModel, State
 from gui.impl.gen import R
-from gui.server_events.event_items import PMOperation
-_logger = logging.getLogger(__name__)
+if typing.TYPE_CHECKING:
+    from typing import Tuple, Optional, Dict
+    from gui.server_events.event_items import PMOperation
+    OpsByID = Dict[int, PMOperation]
+    UnpackedOp = Tuple[Optional[PMOperation], Optional[PMOperation], Optional[OperationStatus]]
 MIN_PM_POINTS = 0
+_OP_NOT_COMPLETE = {OperationStatus.NOT_ALL_COMPLETED_WITH_HONOR, OperationStatus.NOT_ALL_COMPLETED}
+_NEXT_OP_AVAILABLE = OperationStatus.NEXT_OPERATION_AVAILABLE
 
 class PersonalMissionsWindgetPresenter(ViewComponent[PersonalMissionsModel]):
     LAYOUT_ID = R.aliases.user_missions.hub.basicMissions.PersonalMissions()
@@ -29,9 +33,8 @@ class PersonalMissionsWindgetPresenter(ViewComponent[PersonalMissionsModel]):
     __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
-        self.__personalMissionsCache = self.__eventsCache.getPersonalMissions()
-        self.__pm3Campaign = self.__personalMissionsCache.getCampaignsForBranch(PM_BRANCH.PERSONAL_MISSION_3).get(PM3_CAMPAIGN_ID)
-        self.__pm3Operations = getSortedPm3Operations()
+        self.__pmCache = self.__eventsCache.getPersonalMissions()
+        self.__pm3Campaign = self.__pmCache.getCampaignsForBranch(PM_BRANCH.PERSONAL_MISSION_3).get(PM3_CAMPAIGN_ID)
         self.__currentOperation = None
         self.__linkedOperation = None
         super(PersonalMissionsWindgetPresenter, self).__init__(model=PersonalMissionsModel)
@@ -39,7 +42,7 @@ class PersonalMissionsWindgetPresenter(ViewComponent[PersonalMissionsModel]):
 
     @property
     def viewModel(self):
-        return super(PersonalMissionsWindgetPresenter, self).getViewModel()
+        return self.getViewModel()
 
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.lobby.common.tooltips.ExtendedTextTooltip():
@@ -59,9 +62,8 @@ class PersonalMissionsWindgetPresenter(ViewComponent[PersonalMissionsModel]):
          (self.viewModel.goToCampaigns, self.__goToCampaigns))
 
     def _finalize(self):
-        self.__personalMissionsCache = {}
+        self.__pmCache = None
         self.__pm3Campaign = None
-        self.__pm3Operations = {}
         self.__currentOperation = None
         self.__linkedOperation = None
         super(PersonalMissionsWindgetPresenter, self)._finalize()
@@ -80,73 +82,79 @@ class PersonalMissionsWindgetPresenter(ViewComponent[PersonalMissionsModel]):
     def __goToCampaigns(self):
         showPersonalMissionCampaignSelectorWindow()
 
-    def __getInProgressOperation(self):
-        return findFirst(lambda op: op.isInProgress(), self.__pm3Operations.values()) if self.__pm3Operations else None
+    @staticmethod
+    def __findAndUnpackFirstInProgressOperation(opsByID):
+        for operation in opsByID.values():
+            if operation.isInProgress():
+                status, nextOperationID = getDetailedOperationStatus(operation)
+                nextOp = opsByID.get(nextOperationID)
+                return (operation, nextOp, status)
 
-    def __getProgress(self):
-        detailProgress = 0
-        missionsProgress = 0
-        if self.__currentOperation is not None:
-            detailProgress = getCurrentOperationLastInstalledDetail(self.__currentOperation)
-            missionsProgress = len(self.__currentOperation.getCompletedQuests())
-        return (detailProgress, missionsProgress)
+        return (None, None, None)
 
-    def __getTotalPoints(self):
-        return self.__personalMissionsCache.getOperationPmPointsData(PM_BRANCH.PERSONAL_MISSION_3, self.__currentOperation.getID()) if self.__currentOperation else (0, 0)
-
-    def __isFirstTimeEntrance(self):
-        return not self.__personalMissionsCache.isPM3Activated()
-
-    def __fillModel(self):
-        self.__pm3Operations = getSortedPm3Operations()
-        _, previousMissionsProgress = self.__getProgress()
-        self.__linkedOperation = self.__currentOperation = self.__getInProgressOperation()
-        status, nextOperationID = getDetailedOperationStatus(self.__currentOperation) if self.__currentOperation else (None, None)
-        nextOperation = self.__personalMissionsCache.getAllOperations(PM_BRANCH.V2_BRANCHES).get(nextOperationID) if nextOperationID else None
-        if (not self.__currentOperation or self.__currentOperation and status == OperationStatus.PAUSED) and not self.__isFirstTimeEntrance():
-            currentOperationID = self.__settingsCore.serverSettings.getLastFullCompletedPM3OperationID()
+    @classmethod
+    def __findAndUnpackNextOpIfNoCurrent(cls, isPM3Activated, opsByID, unpackedOp):
+        currOp, nextOp, status = unpackedOp
+        if isPM3Activated and (not currOp or currOp and status == OperationStatus.PAUSED):
+            serverSettings = cls.__settingsCore.serverSettings
+            currentOperationID = serverSettings.getLastFullCompletedPM3OperationID()
             if not currentOperationID:
-                for operation in reversed(self.__pm3Operations.values()):
+                for operation in reversed(opsByID.values()):
                     if operation.isFullCompleted():
                         currentOperationID = operation.getID()
-                        self.__settingsCore.serverSettings.setPersonalMission3Data({PersonalMission3.LAST_FULL_COMPLETED_OP: currentOperationID})
+                        serverSettings.setPersonalMission3Data({PersonalMission3.LAST_FULL_COMPLETED_OP: currentOperationID})
 
-            self.__currentOperation = self.__personalMissionsCache.getAllOperations(PM_BRANCH.V2_BRANCHES).get(currentOperationID)
-        totalPoints, _ = self.__getTotalPoints()
-        _, currentMissionsProgress = self.__getProgress()
-        areAllOperationsCompleted = all((op.isCompleted() for op in self.__pm3Operations.values()))
-        with self.viewModel.transaction() as tx:
-            if self.__currentOperation:
-                tx.setCurrentOperationName(self.__currentOperation.getUserName())
-                tx.setCurrentOperationId(self.__currentOperation.getID())
-                tx.setTotalProgress(self.__currentOperation.getQuestsCount())
-                tx.setVehicleName(self.__currentOperation.getPM3VehicleBonus().descriptor.type.userString)
-            if self.__isFirstTimeEntrance():
+            currOp = opsByID.get(currentOperationID)
+            if currOp:
+                status, nextOperationID = getDetailedOperationStatus(currOp)
+                nextOp = opsByID.get(nextOperationID)
+        return (currOp, nextOp, status)
+
+    def __fillModel(self):
+        opsByID = getSortedPm3Operations()
+        prevOp = self.__currentOperation
+        isPM3Active = self.__pmCache.isPM3Activated()
+        unpackedOp = self.__findAndUnpackFirstInProgressOperation(opsByID)
+        currOp, nextOp, status = self.__findAndUnpackNextOpIfNoCurrent(isPM3Active, opsByID, unpackedOp)
+        with self.getViewModel().transaction() as tx:
+            if currOp:
+                tx.setCurrentOperationName(currOp.getUserName())
+                tx.setCurrentOperationId(currOp.getID())
+                tx.setTotalProgress(currOp.getQuestsCount())
+                tx.setVehicleName(currOp.getPM3VehicleBonus().descriptor.type.userString)
+            linkedOp = currOp
+            if not isPM3Active:
                 tx.setState(State.CAMPAIGN_NOT_ACTIVATED)
                 tx.setCampaignName(self.__pm3Campaign.getUserName())
-            elif areAllOperationsCompleted and self.__currentOperation and not self.__currentOperation.isFullCompleted():
+            elif currOp and not currOp.isFullCompleted() and all((op.isCompleted() for op in opsByID.values())):
                 tx.setState(State.IN_PROGRESS_FOR_HONORS)
-                tx.setPreviousProgress(previousMissionsProgress)
-                tx.setCurrentProgress(currentMissionsProgress)
-            elif status in (OperationStatus.NOT_ALL_COMPLETED_WITH_HONOR, OperationStatus.NOT_ALL_COMPLETED) or status == OperationStatus.PAUSED and self.__currentOperation:
-                tx.setAllOperationsCompleted(status == OperationStatus.NOT_ALL_COMPLETED_WITH_HONOR)
-                self.__linkedOperation = nextOperation
+                tx.setPreviousProgress(len(prevOp.getCompletedQuests()) if prevOp else 0)
+                tx.setCurrentProgress(len(currOp.getCompletedQuests()) if currOp else 0)
+            elif status in _OP_NOT_COMPLETE or status == OperationStatus.PAUSED and currOp:
                 tx.setState(State.COMPLETED_WITH_HONORS)
-            elif status == OperationStatus.NEXT_OPERATION_AVAILABLE or self.__currentOperation and self.__currentOperation.isCompleted() and not self.__currentOperation.isFullCompleted():
-                nextOperation = findFirst(lambda o: o.getID() != self.__currentOperation.getID() and not o.isCompleted(), self.__pm3Operations.values())
-                self.__linkedOperation = nextOperation
+                tx.setAllOperationsCompleted(status == OperationStatus.NOT_ALL_COMPLETED_WITH_HONOR)
+                linkedOp = nextOp
+            elif status == _NEXT_OP_AVAILABLE or currOp and currOp.isCompleted() and not currOp.isFullCompleted():
                 tx.setState(State.COMPLETED)
+                currOpID = currOp.getID()
+                for op in opsByID.values():
+                    if op.getID() != currOpID and not op.isCompleted():
+                        linkedOp = nextOp = op
+                        break
+
             elif status == OperationStatus.ACTIVE:
                 tx.setState(State.IN_PROGRESS)
-                self.__fillDetailProgress(tx, totalPoints)
-            if nextOperation:
-                tx.setNextOperationName(nextOperation.getUserName())
-                tx.setNextOperationId(nextOperation.getID())
-        return
+                self.__fillDetailProgress(tx, currOp)
+            if nextOp:
+                tx.setNextOperationName(nextOp.getUserName())
+                tx.setNextOperationId(nextOp.getID())
+        self.__currentOperation = currOp
+        self.__linkedOperation = linkedOp
 
-    def __fillDetailProgress(self, model, totalPoints):
-        vehDetails = getVehicleDetails(self.__currentOperation)
-        lastInstallDetailID = getCurrentOperationLastInstalledDetail(self.__currentOperation)
+    def __fillDetailProgress(self, model, operation):
+        vehDetails = getVehicleDetails(operation)
+        lastInstallDetailID = getCurrentOperationLastInstalledDetail(operation)
+        totalPoints, _ = self.__pmCache.getOperationPmPointsData(PM_BRANCH.PERSONAL_MISSION_3, operation.getID())
         minMilestonePoints = MIN_PM_POINTS if lastInstallDetailID is 0 else vehDetails[lastInstallDetailID - 1][1]
         maxMilestonePoints = vehDetails[lastInstallDetailID][1]
         maxDetailPoints = maxMilestonePoints - minMilestonePoints
@@ -154,9 +162,10 @@ class PersonalMissionsWindgetPresenter(ViewComponent[PersonalMissionsModel]):
         detailID = getDetailNameByToken(vehDetails[lastInstallDetailID][0])
         model.setStageNumber(nextDetailID)
         model.setDetailId(detailID)
-        previousPMPointsProgress = self.__settingsCore.serverSettings.getPersonalMission3Data().get(PersonalMission3.CHECKED_PM3_POINTS, 0)
+        serverSettings = self.__settingsCore.serverSettings
+        previousPMPointsProgress = serverSettings.getPersonalMission3Data().get(PersonalMission3.CHECKED_PM3_POINTS, 0)
         model.setPreviousProgress(previousPMPointsProgress - minMilestonePoints)
         currentDetailPoints = totalPoints - minMilestonePoints if totalPoints < maxMilestonePoints else maxDetailPoints
         model.setCurrentProgress(currentDetailPoints)
         model.setTotalProgress(maxDetailPoints)
-        self.__settingsCore.serverSettings.setPersonalMission3Data({PersonalMission3.CHECKED_PM3_POINTS: totalPoints})
+        serverSettings.setPersonalMission3Data({PersonalMission3.CHECKED_PM3_POINTS: totalPoints})

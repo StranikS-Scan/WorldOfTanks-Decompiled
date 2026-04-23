@@ -1578,6 +1578,22 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_75mm_Pzgr_39_3002M>
+  <_75mm_Pzgr_39_F>
+    <id>	555	</id>
+    <userString>	#germany_vehicles:_75mm_Pzgr_39_F	</userString>
+    <icon>	ap	</icon>
+    <price>	109	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	135	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_75mm_Pzgr_39_F>
   <_75mm_Pzgr.40>
     <id>	22	</id>
     <userString>	#germany_vehicles:_75mm_Pzgr.40	</userString>
@@ -1680,6 +1696,23 @@
     <normalizationAngle>	2	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_75mm_Pzgr_40_3002M>
+  <_75mm_Pzgr_40_F>
+    <id>	556	</id>
+    <userString>	#germany_vehicles:_75mm_Pzgr_40_F	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR	</effects>
+    <damage>
+      <armor>	135	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_75mm_Pzgr_40_F>
   <_75mm_Sprg.18>
     <id>	23	</id>
     <userString>	#germany_vehicles:_75mm_Sprg.18	</userString>
@@ -1824,6 +1857,30 @@
       </damage>
     </armorSpalls>
   </_75mm_Sprgr_18_3002M>
+  <_75mm_Sprgr_18_F>
+    <id>	557	</id>
+    <userString>	#germany_vehicles:_75mm_Sprgr_18_F	</userString>
+    <icon>	he_modern	</icon>
+    <price>	86	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.06	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	90	</armor>
+        <devices>	50	</devices>
+      </damage>
+    </armorSpalls>
+  </_75mm_Sprgr_18_F>
   <_75_55_mm_Sprgr_41>
     <id>	2154	</id>
     <userString>	#germany_vehicles:_75_55_mm_Sprgr_41	</userString>
@@ -4767,6 +4824,63 @@
       </damage>
     </armorSpalls>
   </_90mm_DM502_K>
+  <_105mm_DM13_RKW>
+    <id>	543	</id>
+    <userString>	#germany_vehicles:_105mm_DM13_RKW	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1080	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_DM13_RKW>
+  <_105mm_DM12_RKW>
+    <id>	544	</id>
+    <userString>	#germany_vehicles:_105mm_DM12_RKW	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	5200	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_105mm_DM12_RKW>
+  <_105mm_DM11_RKW>
+    <id>	545	</id>
+    <userString>	#germany_vehicles:_105mm_DM11_RKW	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1071	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	510	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	255	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_DM11_RKW>
   <_90mm_OFL>
     <id>	132	</id>
     <userString>	#germany_vehicles:_90mm_OFL	</userString>
@@ -5857,6 +5971,63 @@
     <normalizationAngle>	2	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_105mm_Pzgr_40_K>
+  <_105mm_Pzgr_40_K_7x7>
+    <id>	558	</id>
+    <userString>	#germany_vehicles:_105mm_Pzgr_40_K_7x7	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1200	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_Pzgr_40_K_7x7>
+  <_105mm_Gr_39_Hl_A_K_7x7>
+    <id>	559	</id>
+    <userString>	#germany_vehicles:_105mm_Gr_39_Hl_A_K_7x7	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_105mm_Gr_39_Hl_A_K_7x7>
+  <_105mm_Sprgr_18_K_7x7>
+    <id>	560	</id>
+    <userString>	#germany_vehicles:_105mm_Sprgr_18_K_7x7	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1211	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	510	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	255	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_Sprgr_18_K_7x7>
   <_105mm_Sprgr_18_G>
     <id>	59	</id>
     <userString>	#germany_vehicles:_105mm_Sprgr_18_G	</userString>
@@ -7896,6 +8067,63 @@
       </damage>
     </armorSpalls>
   </_128mm_SprG18L50>
+  <_150mm_Pzgr_42_WT_IV_CFE_T>
+    <id>	561	</id>
+    <userString>	#germany_vehicles:_150mm_Pzgr_42_WT_IV_CFE_T	</userString>
+    <icon>	ap	</icon>
+    <price>	2100	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	150	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	750	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_150mm_Pzgr_42_WT_IV_CFE_T>
+  <_150mm_Gr_39_Hl_C_G_WT_IV_CFE_T>
+    <id>	562	</id>
+    <userString>	#germany_vehicles:_150mm_Gr_39_Hl_C_G_WT_IV_CFE_T	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	6800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	150	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	750	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_150mm_Gr_39_Hl_C_G_WT_IV_CFE_T>
+  <_150mm_Sprgr_G_45_WT_IV_CFE_T>
+    <id>	563	</id>
+    <userString>	#germany_vehicles:_150mm_Sprgr_G_45_WT_IV_CFE_T	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1425	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	150	</caliber>
+    <explosionRadius>	3.57	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	950	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	3.57	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	475	</armor>
+        <devices>	100	</devices>
+      </damage>
+    </armorSpalls>
+  </_150mm_Sprgr_G_45_WT_IV_CFE_T>
   <_75mm_Pzgr39D>
     <id>	406	</id>
     <userString>	#germany_vehicles:_75mm_Pzgr39D	</userString>

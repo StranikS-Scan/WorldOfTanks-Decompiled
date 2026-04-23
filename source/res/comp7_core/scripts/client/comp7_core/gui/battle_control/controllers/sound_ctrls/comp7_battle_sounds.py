@@ -7,7 +7,6 @@ import BigWorld
 import WWISE
 import typing
 from enum import Enum
-from shared_utils import nextTick
 import SoundGroups
 from Vehicle import StunInfo
 from constants import EQUIPMENT_STAGES
@@ -19,6 +18,8 @@ from helpers_common import reprSlots
 from helpers.CallbackDelayer import CallbackDelayer
 from points_of_interest_shared import PoiStatus, ENEMY_VEHICLE_ID, PoiBlockReasons
 from skeletons.gui.battle_session import IBattleSessionProvider
+from sound_gui_manager import CommonSoundSpaceSettings
+from shared_utils import nextTick, CONST_CONTAINER
 from vehicle_systems.tankStructure import TankSoundObjectsIndexes
 _logger = logging.getLogger(__name__)
 _EQUIPMENT_ACTIVATED_SOUNDS = {}
@@ -49,6 +50,16 @@ class Comp7BattleSoundController(SoundPlayersBattleController):
 
 
 _PreDeactivationParams = namedtuple('_PreDeactivationParams', ('soundName', 'timeDelta'))
+
+class SOUNDS(CONST_CONTAINER):
+    GENERAL_STATE = 'STATE_gameplay_overlay'
+    GENERAL_STATE_ON = 'STATE_gameplay_overlay_on'
+    GENERAL_STATE_OFF = 'STATE_gameplay_overlay_off'
+    PROGRESSBAR_STOP = 'comp_7_bans_progressbar_stop'
+
+
+BAN_VIEW_SOUND_SPACE = CommonSoundSpaceSettings(name=SOUNDS.GENERAL_STATE, entranceStates={SOUNDS.GENERAL_STATE: SOUNDS.GENERAL_STATE_ON}, exitStates={SOUNDS.GENERAL_STATE: SOUNDS.GENERAL_STATE_OFF}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
+BAN_PROGRESSION_SOUND_SPACE = CommonSoundSpaceSettings(name='ban_progression', entranceStates={}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent=SOUNDS.PROGRESSBAR_STOP)
 
 class _EquipmentStateSoundPlayer(VehicleStateSoundPlayer):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)

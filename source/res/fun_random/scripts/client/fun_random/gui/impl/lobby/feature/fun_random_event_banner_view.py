@@ -4,6 +4,7 @@ from __future__ import absolute_import
 import typing
 from account_helpers.AccountSettings import AccountSettings, FUN_RANDOM_BANNER_INTRO_CLICK_TIMESTAMP
 from adisp import adisp_process
+from fun_random.gui.feature.fun_constants import FunSubModesState
 from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunSubModesWatcher
 from skeletons.gui.game_control import IFunRandomController
 from fun_random.gui.impl.lobby.tooltips.fun_random_entry_point_tooltip_view import FunRandomEntryPointTooltipView
@@ -14,7 +15,7 @@ from gui.impl.gen.view_models.views.lobby.user_missions.constants.event_banner_s
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.base_event_banner import BaseEventBanner
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_container import EventBannersContainer
 from gui.impl.lobby.user_missions.hangar_widget.services import IEventsService
-from helpers import dependency
+from helpers import dependency, time_utils
 if typing.TYPE_CHECKING:
     from typing import Optional
     from frameworks.wulf import View, ViewEvent
@@ -83,7 +84,7 @@ class FunRandomEventBannerView(BaseEventBanner, FunAssetPacksMixin, FunSubModesW
     def prepare(self):
         status = self.getSubModesStatus()
         self.__state = getFunRandomEventState(status)
-        self.__timerValue = status.primeDelta
+        self.__timerValue = status.primeDelta if status.state == FunSubModesState.NOT_AVAILABLE else time_utils.getTimeDeltaFromNowInLocal(status.endTime)
         self.__eventStartDate = status.rightBorder
         self.__eventEndDate = status.endTime
         if self.__state == EventBannerState.IN_PROGRESS:

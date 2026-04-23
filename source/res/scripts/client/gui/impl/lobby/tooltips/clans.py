@@ -22,5 +22,5 @@ class ClanShortInfoTooltipContent(View, ClanEmblemsHelper):
         return super(ClanShortInfoTooltipContent, self).getViewModel()
 
     def onClanEmblem32x32Received(self, clanDbID, emblem):
-        if emblem and self.viewModel and self.viewModel.isBound():
+        if emblem and self.viewModel:
             self.viewModel.setEmblem(self.getMemoryTexturePath(emblem))

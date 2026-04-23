@@ -2150,6 +2150,13 @@
       <userString>	#vehicle_customization:emblem/auto/italian_flag	</userString>
       <mirror>	false	</mirror>
     </decal>
+    <decal>
+      <id>	1336	</id>
+      <texture>	gui/maps/vehicles/decals/spanish_campeador.dds	</texture>
+      <userString>	#vehicle_customization:emblem/auto/spanish_campeador	</userString>
+      <mirror>	false	</mirror>
+      <tags>	hiddenInUI	</tags>
+    </decal>
     <name>	National Emblems	</name>
     <type>	EMBLEM	</type>
     <vehicleFilter>
@@ -7222,7 +7229,7 @@
     <priceGroup>	emblems 50g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	10	</levels>
+        <levels>	10 11	</levels>
       </include>
       <exclude>
         <tags>	excluded_from_customization	</tags>
@@ -9194,6 +9201,124 @@
       <mirror>	false	</mirror>
     </decal>
     <name>	Advent Calendar 2025	</name>
+    <type>	EMBLEM	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	poland:Pl15_60TP_Lewandowskiego_CFE_A usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1231	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_802.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_802	</userString>
+      <mirror>	true	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1232	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_803.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_803	</userString>
+      <mirror>	true	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1233	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_804.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_804	</userString>
+      <mirror>	true	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1234	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_805.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_805	</userString>
+      <mirror>	true	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1235	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_806.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_806	</userString>
+      <mirror>	true	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1236	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_807.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_807	</userString>
+      <mirror>	true	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1237	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_808.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_808	</userString>
+      <mirror>	true	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1238	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_809.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_809	</userString>
+      <mirror>	true	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1239	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_810.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_810	</userString>
+      <mirror>	true	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1240	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_811.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_811	</userString>
+      <mirror>	true	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1241	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_812.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_812	</userString>
+      <mirror>	true	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1242	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_813.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_813	</userString>
+      <mirror>	true	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1243	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_814.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_814	</userString>
+      <mirror>	true	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1244	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_815.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_815	</userString>
+      <mirror>	true	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1245	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_816.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_816	</userString>
+      <mirror>	true	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <name>	Onslaught	</name>
     <type>	EMBLEM	</type>
   </itemGroup>
   <itemGroup>
@@ -15526,7 +15651,7 @@
     <priceGroup>	inscriptions 50g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	10	</levels>
+        <levels>	10 11	</levels>
       </include>
       <exclude>
         <tags>	excluded_from_customization	</tags>
@@ -17733,6 +17858,124 @@
       <userString>	#vehicle_customization:inscription/special/special_862	</userString>
       <mirror>	false	</mirror>
     </decal>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	poland:Pl15_60TP_Lewandowskiego_CFE_A usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1246	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_851.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_851	</userString>
+      <mirror>	false	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1247	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_852.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_852	</userString>
+      <mirror>	false	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1248	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_853.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_853	</userString>
+      <mirror>	false	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1249	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_854.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_854	</userString>
+      <mirror>	false	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1250	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_728.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_781	</userString>
+      <mirror>	false	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1266	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_855.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_855	</userString>
+      <mirror>	false	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1267	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_856.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_856	</userString>
+      <mirror>	false	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <name>	Onslaught	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1292	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_867.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_867	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Beaver Fun	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1288	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_863.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_863	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1289	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_864.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_864	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1290	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_865.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_865	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1291	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_866.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_866	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	BattlePass 2026	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
   <itemGroup>

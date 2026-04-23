@@ -1,0 +1,521 @@
+<equipments.xml>
+  <LS_emptySlot0>
+    <id>	21997	</id>
+    <icon>	empty 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	LS_equipment LS_emptySlot	</tags>
+    <script>	Equipment	</script>
+  </LS_emptySlot0>
+  <LS_emptySlot1>
+    <id>	21998	</id>
+    <icon>	empty 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	LS_equipment LS_emptySlot	</tags>
+    <script>	Equipment	</script>
+  </LS_emptySlot1>
+  <LS_emptySlot2>
+    <id>	21999	</id>
+    <icon>	empty 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	LS_equipment LS_emptySlot	</tags>
+    <script>	Equipment	</script>
+  </LS_emptySlot2>
+  <LS_nitro>
+    <id>	21001	</id>
+    <userString>	#last_stand.artefacts.extend:LS_nitro/name	</userString>
+    <description>	#last_stand.artefacts.extend:LS_nitro/descr	</description>
+    <longDescriptionSpecial>	#last_stand.artefacts.extend:LS_nitro/long_special	</longDescriptionSpecial>
+    <shortDescriptionSpecial>	#last_stand.artefacts.extend:LS_nitro/short_special	</shortDescriptionSpecial>
+    <icon>	ls_nitro 0 0	</icon>
+    <price>	10000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	LS_equipment notForRegularSlot dynComponentsGroup notForSale	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	9	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	last_stand_common.items.ls_artefacts.LSEquipment	  <durationSeconds>	5	</durationSeconds>
+      <cooldownSeconds>	7	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <usageCost>	25	</usageCost>
+      <dynComponentsGroups>	LS_nitro	</dynComponentsGroups>
+      <variantIdFormat>	{hydraulicChassis}	</variantIdFormat>
+      <variants>
+        <variant>
+          <id>	hasHydraulicChassis	</id>
+          <cooldownSeconds>	7	</cooldownSeconds>
+          <durationSeconds>	5	</durationSeconds>
+          <usageCost>	25	</usageCost>
+          <equipmentItem>	LS_nitro	</equipmentItem>
+          <dynComponentsGroups>	LS_nitro_siege	</dynComponentsGroups>
+        </variant>
+      </variants>
+    </script>
+  </LS_nitro>
+  <LS_selfRepair>
+    <id>	21002	</id>
+    <userString>	#last_stand.artefacts.extend:LS_selfRepair/name	</userString>
+    <description>	#last_stand.artefacts.extend:LS_selfRepair/descr	</description>
+    <longDescriptionSpecial>	#last_stand.artefacts.extend:LS_selfRepair/long_special	</longDescriptionSpecial>
+    <shortDescriptionSpecial>	#last_stand.artefacts.extend:LS_selfRepair/short_special	</shortDescriptionSpecial>
+    <icon>	ls_selfRepairKit 0 0	</icon>
+    <price>	10000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	LS_equipment notForRegularSlot dynComponentsGroup notForSale hideIfNotInShop	</tags>
+    <vehicleFilter>
+      <exclude>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </exclude>
+    </vehicleFilter>
+    <script>	last_stand_common.items.ls_artefacts.LSEquipment	  <cooldownSeconds>	3	</cooldownSeconds>
+      <durationSeconds>	5	</durationSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <usageCost>	25	</usageCost>
+      <dynComponentsGroups>	LS_selfRepair	</dynComponentsGroups>
+    </script>
+  </LS_selfRepair>
+  <LS_teamRepair>
+    <id>	21003	</id>
+    <userString>	#last_stand.artefacts.extend:LS_teamRepair/name	</userString>
+    <description>	#last_stand.artefacts.extend:LS_teamRepair/descr	</description>
+    <longDescriptionSpecial>	#last_stand.artefacts.extend:LS_teamRepair/long_special	</longDescriptionSpecial>
+    <shortDescriptionSpecial>	#last_stand.artefacts.extend:LS_teamRepair/short_special	</shortDescriptionSpecial>
+    <icon>	ls_teamRepairKit 0 0	</icon>
+    <price>	3000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	LS_equipment notForRegularSlot dynComponentsGroup notForSale	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	9	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	last_stand_common.items.ls_artefacts.LSEquipment	  <cooldownSeconds>	3	</cooldownSeconds>
+      <durationSeconds>	0	</durationSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <usageCost>	50	</usageCost>
+      <dynComponentsGroups>	LS_teamRepair	</dynComponentsGroups>
+    </script>
+  </LS_teamRepair>
+  <LS_damageShield>
+    <id>	21004	</id>
+    <userString>	#last_stand.artefacts.extend:LS_damageShield/name	</userString>
+    <description>	#last_stand.artefacts.extend:LS_damageShield/descr	</description>
+    <longDescriptionSpecial>	#last_stand.artefacts.extend:LS_damageShield/long_special	</longDescriptionSpecial>
+    <shortDescriptionSpecial>	#last_stand.artefacts.extend:LS_damageShield/short_special	</shortDescriptionSpecial>
+    <icon>	ls_damageShield 0 0	</icon>
+    <price>	10000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	LS_equipment notForRegularSlot dynComponentsGroup notForSale	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	9	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	last_stand_common.items.ls_artefacts.LSEquipment	  <cooldownSeconds>	3	</cooldownSeconds>
+      <durationSeconds>	7	</durationSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <usageCost>	50	</usageCost>
+      <dynComponentsGroups>	LS_damageShield	</dynComponentsGroups>
+    </script>
+  </LS_damageShield>
+  <LS_fastReload>
+    <id>	21005	</id>
+    <userString>	#last_stand.artefacts.extend:LS_fastReload/name	</userString>
+    <description>	#last_stand.artefacts.extend:LS_fastReload/descr	</description>
+    <longDescriptionSpecial>	#last_stand.artefacts.extend:LS_fastReload/long_special	</longDescriptionSpecial>
+    <shortDescriptionSpecial>	#last_stand.artefacts.extend:LS_fastReload/short_special	</shortDescriptionSpecial>
+    <icon>	ls_fastReload	</icon>
+    <price>	10000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	LS_equipment notForRegularSlot dynComponentsGroup notForSale	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	9	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	last_stand_common.items.ls_artefacts.LSEquipment	  <cooldownSeconds>	3	</cooldownSeconds>
+      <durationSeconds>	7	</durationSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <usageCost>	50	</usageCost>
+      <equipmentItem>	fastReload	</equipmentItem>
+      <dynComponentsGroups>	LS_fastReload	</dynComponentsGroups>
+      <variantIdFormat>	{dualGun}_{clip}	</variantIdFormat>
+      <variants>
+        <variant>
+          <id>	noDualGun_hasClip	</id>
+          <cooldownSeconds>	3	</cooldownSeconds>
+          <durationSeconds>	0	</durationSeconds>
+          <usageCost>	50	</usageCost>
+          <equipmentItem>	LS_instantReload	</equipmentItem>
+          <dynComponentsGroups>	LS_instantReload	</dynComponentsGroups>
+        </variant>
+        <variant>
+          <id>	hasDualGun_noClip	</id>
+          <cooldownSeconds>	3	</cooldownSeconds>
+          <durationSeconds>	0	</durationSeconds>
+          <usageCost>	50	</usageCost>
+          <equipmentItem>	LS_instantReload	</equipmentItem>
+          <dynComponentsGroups>	LS_instantReload	</dynComponentsGroups>
+        </variant>
+        <variant>
+          <id>	hasDualGun_hasClip	</id>
+          <cooldownSeconds>	3	</cooldownSeconds>
+          <durationSeconds>	0	</durationSeconds>
+          <usageCost>	50	</usageCost>
+          <equipmentItem>	LS_instantReload	</equipmentItem>
+          <dynComponentsGroups>	LS_instantReload	</dynComponentsGroups>
+        </variant>
+      </variants>
+    </script>
+  </LS_fastReload>
+  <LS_invisibility>
+    <id>	21006	</id>
+    <userString>	#last_stand.artefacts.extend:LS_invisibility/name	</userString>
+    <description>	#last_stand.artefacts.extend:LS_invisibility/descr	</description>
+    <longDescriptionSpecial>	#last_stand.artefacts.extend:LS_invisibility/long_special	</longDescriptionSpecial>
+    <shortDescriptionSpecial>	#last_stand.artefacts.extend:LS_invisibility/short_special	</shortDescriptionSpecial>
+    <icon>	ls_invisibility 0 0	</icon>
+    <price>	10000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	LS_equipment notForRegularSlot dynComponentsGroup notForSale	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	9	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	last_stand_common.items.ls_artefacts.LSEquipment	  <cooldownSeconds>	3	</cooldownSeconds>
+      <durationSeconds>	10	</durationSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <usageCost>	25	</usageCost>
+      <dynComponentsGroups>	LS_invisibility	</dynComponentsGroups>
+    </script>
+  </LS_invisibility>
+  <LS_aoeDamageInstantShot>
+    <id>	21007	</id>
+    <userString>	#last_stand.artefacts.extend:LS_aoeDamageInstantShot/name	</userString>
+    <description>	#last_stand.artefacts.extend:LS_aoeDamageInstantShot/descr	</description>
+    <longDescriptionSpecial>	#last_stand.artefacts.extend:LS_aoeDamageInstantShot/long_special	</longDescriptionSpecial>
+    <shortDescriptionSpecial>	#last_stand.artefacts.extend:LS_aoeDamageInstantShot/short_special	</shortDescriptionSpecial>
+    <icon>	ls_aoeDamageInstantShot 0 0	</icon>
+    <price>	10000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	LS_equipment notForRegularSlot dynComponentsGroup notForSale	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	9	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	last_stand_common.items.ls_artefacts.LSEquipment	  <cooldownSeconds>	3	</cooldownSeconds>
+      <durationSeconds>	0	</durationSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <usageCost>	50	</usageCost>
+      <dynComponentsGroups>	LS_aoeDamageInstantShot	</dynComponentsGroups>
+    </script>
+  </LS_aoeDamageInstantShot>
+  <LS_aoeDrainEnemyHpInstantShot>
+    <id>	21008	</id>
+    <userString>	#last_stand.artefacts.extend:LS_aoeDrainEnemyHpInstantShot/name	</userString>
+    <description>	#last_stand.artefacts.extend:LS_aoeDrainEnemyHpInstantShot/descr	</description>
+    <longDescriptionSpecial>	#last_stand.artefacts.extend:LS_aoeDrainEnemyHpInstantShot/long_special	</longDescriptionSpecial>
+    <shortDescriptionSpecial>	#last_stand.artefacts.extend:LS_aoeDrainEnemyHpInstantShot/short_special	</shortDescriptionSpecial>
+    <icon>	ls_aoeDrainEnemyHpInstantShot 0 0	</icon>
+    <price>	10000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	LS_equipment notForRegularSlot dynComponentsGroup notForSale	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	9	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	last_stand_common.items.ls_artefacts.LSEquipment	  <cooldownSeconds>	3	</cooldownSeconds>
+      <durationSeconds>	0	</durationSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <usageCost>	25	</usageCost>
+      <dynComponentsGroups>	LS_aoeDrainEnemyHpInstantShot	</dynComponentsGroups>
+    </script>
+  </LS_aoeDrainEnemyHpInstantShot>
+  <LS_aoeStunInstantShot>
+    <id>	21009	</id>
+    <userString>	#last_stand.artefacts.extend:LS_aoeStunInstantShot/name	</userString>
+    <description>	#last_stand.artefacts.extend:LS_aoeStunInstantShot/descr	</description>
+    <longDescriptionSpecial>	#last_stand.artefacts.extend:LS_aoeStunInstantShot/long_special	</longDescriptionSpecial>
+    <shortDescriptionSpecial>	#last_stand.artefacts.extend:LS_aoeStunInstantShot/short_special	</shortDescriptionSpecial>
+    <icon>	ls_aoeStunInstantShot 0 0	</icon>
+    <price>	10000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	LS_equipment notForRegularSlot dynComponentsGroup notForSale	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	9	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	last_stand_common.items.ls_artefacts.LSEquipment	  <cooldownSeconds>	3	</cooldownSeconds>
+      <durationSeconds>	0	</durationSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <usageCost>	25	</usageCost>
+      <dynComponentsGroups>	LS_aoeStunInstantShot	</dynComponentsGroups>
+    </script>
+  </LS_aoeStunInstantShot>
+  <LS_doubleDamage>
+    <id>	21010	</id>
+    <userString>	#last_stand.artefacts.extend:LS_doubleDamage/name	</userString>
+    <description>	#last_stand.artefacts.extend:LS_doubleDamage/descr	</description>
+    <longDescriptionSpecial>	#last_stand.artefacts.extend:LS_doubleDamage/long_special	</longDescriptionSpecial>
+    <shortDescriptionSpecial>	#last_stand.artefacts.extend:LS_doubleDamage/short_special	</shortDescriptionSpecial>
+    <icon>	ls_doubleDamage 0 0	</icon>
+    <price>	10000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	LS_equipment notForRegularSlot dynComponentsGroup notForSale	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	9	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	last_stand_common.items.ls_artefacts.LSEquipment	  <cooldownSeconds>	3	</cooldownSeconds>
+      <durationSeconds>	-1	</durationSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <usageCost>	50	</usageCost>
+      <dynComponentsGroups>	LS_doubleDamage	</dynComponentsGroups>
+    </script>
+  </LS_doubleDamage>
+  <LSdetonator_deathzone_aoe>
+    <id>	21098	</id>
+    <userString>	#artefacts:artillery/name	</userString>
+    <description>	#artefacts:artillery/descr	</description>
+    <icon>	artillery	</icon>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <messagePostfix>	LSARTILLERY	</messagePostfix>
+    <script>	AreaOfEffectEquipment	  <shortDescription>	#artefacts:artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	90	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <delay>	5	</delay>
+      <duration>	1	</duration>
+      <shotsNumber>	1	</shotsNumber>
+      <explodeDestructible>	false	</explodeDestructible>
+      <areaRadius>	15	</areaRadius>
+      <areaVisual></areaVisual>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	DEATH_ZONE	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <start>
+          <groundRaycast>	True	</groundRaycast>
+          <sequences>
+            <sequence>
+              <name>	particles/eff_sequence/last_stand/enemies/death_zone.seq	</name>
+            </sequence>
+          </sequences>
+        </start>
+        <action>
+          <shotEffects>	LS_epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	0	</offsetDeviation>
+          <repeatCount>	1	</repeatCount>
+          <repeatDelay>	0.3	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	Team1	</applyTo>
+          <args>
+            <damage>	600	</damage>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </LSdetonator_deathzone_aoe>
+  <LSartillery_deathzone_aoe>
+    <id>	21099	</id>
+    <userString>	#artefacts:artillery/name	</userString>
+    <description>	#artefacts:artillery/descr	</description>
+    <icon>	artillery	</icon>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <messagePostfix>	LSARTILLERY	</messagePostfix>
+    <script>	AreaOfEffectEquipment	  <shortDescription>	#artefacts:artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	90	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <delay>	5	</delay>
+      <duration>	1	</duration>
+      <shotsNumber>	1	</shotsNumber>
+      <explodeDestructible>	false	</explodeDestructible>
+      <areaRadius>	15	</areaRadius>
+      <areaVisual></areaVisual>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	DEATH_ZONE	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <start>
+          <groundRaycast>	True	</groundRaycast>
+          <sequences>
+            <sequence>
+              <name>	particles/eff_sequence/last_stand/enemies/death_zone.seq	</name>
+            </sequence>
+          </sequences>
+        </start>
+        <action>
+          <shotEffects>	LS_epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	0	</offsetDeviation>
+          <repeatCount>	1	</repeatCount>
+          <repeatDelay>	0.3	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	Team1	</applyTo>
+          <args>
+            <damage>	600	</damage>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </LSartillery_deathzone_aoe>
+  <LS_healSituational>
+    <id>	21011	</id>
+    <userString>	#last_stand.artefacts.extend:LS_healSituational/name	</userString>
+    <description>	#last_stand.artefacts.extend:LS_healSituational/descr	</description>
+    <longDescriptionSpecial>	#last_stand.artefacts.extend:LS_healSituational/long_special	</longDescriptionSpecial>
+    <shortDescriptionSpecial>	#last_stand.artefacts.extend:LS_healSituational/short_special	</shortDescriptionSpecial>
+    <icon>	ls_healSituational 0 0	</icon>
+    <price>	10000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	LS_equipment LS_situational notForRegularSlot dynComponentsGroup notForSale hideIfNotInShop	</tags>
+    <vehicleFilter>
+      <exclude>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </exclude>
+    </vehicleFilter>
+    <script>	last_stand_common.items.ls_artefacts.LSEquipment	  <cooldownSeconds>	10	</cooldownSeconds>
+      <durationSeconds>	0	</durationSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <usageCost>	0	</usageCost>
+      <dynComponentsGroups>	LS_healSituational	</dynComponentsGroups>
+    </script>
+  </LS_healSituational>
+  <LS_nitroSituational>
+    <id>	21013	</id>
+    <userString>	#last_stand.artefacts.extend:LS_nitroSituational/name	</userString>
+    <description>	#last_stand.artefacts.extend:LS_nitroSituational/descr	</description>
+    <longDescriptionSpecial>	#last_stand.artefacts.extend:LS_nitroSituational/long_special	</longDescriptionSpecial>
+    <shortDescriptionSpecial>	#last_stand.artefacts.extend:LS_nitroSituational/short_special	</shortDescriptionSpecial>
+    <icon>	ls_nitroSituational 0 0	</icon>
+    <price>	10000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	LS_equipment LS_situational notForRegularSlot dynComponentsGroup notForSale hideIfNotInShop	</tags>
+    <vehicleFilter>
+      <exclude>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </exclude>
+    </vehicleFilter>
+    <script>	last_stand_common.items.ls_artefacts.LSEquipment	  <durationSeconds>	5	</durationSeconds>
+      <cooldownSeconds>	7	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <usageCost>	0	</usageCost>
+      <dynComponentsGroups>	LS_nitroSituational	</dynComponentsGroups>
+      <variantIdFormat>	{hydraulicChassis}	</variantIdFormat>
+      <variants>
+        <variant>
+          <id>	hasHydraulicChassis	</id>
+          <durationSeconds>	5	</durationSeconds>
+          <cooldownSeconds>	7	</cooldownSeconds>
+          <usageCost>	0	</usageCost>
+          <equipmentItem>	LS_nitroSituational	</equipmentItem>
+          <dynComponentsGroups>	LS_nitroSituational_siege	</dynComponentsGroups>
+        </variant>
+      </variants>
+    </script>
+  </LS_nitroSituational>
+  <LS_extraDamageSituational>
+    <id>	21012	</id>
+    <userString>	#last_stand.artefacts.extend:LS_extraDamageSituational/name	</userString>
+    <description>	#last_stand.artefacts.extend:LS_extraDamageSituational/descr	</description>
+    <longDescriptionSpecial>	#last_stand.artefacts.extend:LS_extraDamageSituational/long_special	</longDescriptionSpecial>
+    <shortDescriptionSpecial>	#last_stand.artefacts.extend:LS_extraDamageSituational/short_special	</shortDescriptionSpecial>
+    <icon>	ls_extraDamageSituational 0 0	</icon>
+    <price>	10000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	LS_equipment LS_situational notForRegularSlot dynComponentsGroup notForSale hideIfNotInShop	</tags>
+    <vehicleFilter>
+      <exclude>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </exclude>
+    </vehicleFilter>
+    <script>	last_stand_common.items.ls_artefacts.LSEquipment	  <cooldownSeconds>	7	</cooldownSeconds>
+      <durationSeconds>	0	</durationSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <usageCost>	0	</usageCost>
+      <dynComponentsGroups>	LS_extraDamageSituational	</dynComponentsGroups>
+    </script>
+  </LS_extraDamageSituational>
+</equipments.xml>

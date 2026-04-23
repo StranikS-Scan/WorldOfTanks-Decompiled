@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/EntityMarkerComponent.py
+from __future__ import absolute_import
 import typing
+from future.utils import viewvalues
 from chat_commands_consts import MarkerType, INVALID_TARGET_ID
 from script_component.DynamicScriptComponent import DynamicScriptComponent
 from helpers import dependency
@@ -51,7 +53,7 @@ class EntityMarkerComponent(DynamicScriptComponent):
             advChatCmp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'advancedChatComponent', None)
             marker = ctrl.getMarkerById(self.markerID)
             if advChatCmp and marker and self.bcTargetID != INVALID_TARGET_ID:
-                for component in marker.components.itervalues():
+                for component in viewvalues(marker.components):
                     if component.bcMarkerType == MarkerType.INVALID_MARKER_TYPE:
                         continue
                     advChatCmp.removeActualTargetIfDestroyed(self.bcTargetID, component.bcMarkerType)

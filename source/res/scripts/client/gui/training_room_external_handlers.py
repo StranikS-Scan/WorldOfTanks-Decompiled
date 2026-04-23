@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/training_room_external_handlers.py
+from __future__ import absolute_import
+from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.shared.system_factory import collectTrainingRoomExternalHandlers
 
 class TrainingRoomBaseHandler(object):
@@ -22,8 +24,11 @@ class TrainingRoomBaseHandler(object):
     def getObserverValidator(self):
         return None
 
-    def getPlayerReadyHandler(self):
-        return None
+    def playerReadyHandler(self, result):
+        if result:
+            g_eventDispatcher.loadTrainingRoom()
+        else:
+            g_eventDispatcher.loadHangar()
 
     def getPrebattleLimits(self):
         return None

@@ -802,6 +802,10 @@
       </armor>
       <guns>
         <_110mm_MV_Gun>	shared	  <maxAmmo>	40	</maxAmmo>
+          <unlocks>
+            <vehicle>	GB158_Executor	  <cost>	325000	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>

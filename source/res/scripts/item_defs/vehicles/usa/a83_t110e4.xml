@@ -2146,6 +2146,10 @@
       </surveyingDeviceHealth>
       <guns>
         <_155mm_AT_Gun_T7E4>	shared	  <maxAmmo>	27	</maxAmmo>
+          <unlocks>
+            <vehicle>	A195_Gorilla	  <cost>	325000	</cost>
+            </vehicle>
+          </unlocks>
           <pitchLimits>
             <minPitch>	0 -12 1 -12	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>

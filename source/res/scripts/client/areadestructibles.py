@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AreaDestructibles.py
+from __future__ import absolute_import, division
 import math
 import random
 from collections import namedtuple
 from functools import partial
-from time import clock
+from future.utils import listvalues, viewitems, viewvalues
+from past.builtins import xrange
 import BigWorld
 import DestructiblesCache
 import Math
@@ -14,6 +16,7 @@ import physics_shared
 from constants import DESTRUCTIBLE_MATKIND
 from debug_utils import LOG_ERROR, LOG_CODEPOINT_WARNING
 from helpers import isPlayerAccount
+from py2to3.moves.time import perf_counter
 COLOR_WHITE = 4294967295L
 COLOR_RED = 4294901760L
 g_cache = None
@@ -56,7 +59,7 @@ def _extractEffectLists(desc):
         effDescs = (desc,)
     elif descType == DestructiblesCache.DESTR_TYPE_STRUCTURE:
         effTypes = ('ramEffect', 'hitEffect', 'decayEffect')
-        effDescs = desc['modules'].itervalues()
+        effDescs = listvalues(desc['modules'])
     else:
         effTypes = ('effect', 'decayEffect')
         effDescs = (desc,)
@@ -279,7 +282,7 @@ class DestructiblesManager(object):
         if isPaused == self.__isPaused:
             return
         self.__isPaused = isPaused
-        for ctrl in self.__ctrls.itervalues():
+        for ctrl in viewvalues(self.__ctrls):
             ctrl.setPause(self.__isPaused)
 
     def getSpaceID(self):
@@ -394,7 +397,7 @@ class DestructiblesManager(object):
             self.__savedLoadedChunkIDs = self.__loadedChunkIDs
             self.__savedSpaceID = self.__spaceID
             BigWorld.wg_restoreDestructibles(self.__spaceID)
-            for (chunkID, destrIndex), m in self.__destrInitialMatrices.iteritems():
+            for (chunkID, destrIndex), m in viewitems(self.__destrInitialMatrices):
                 BigWorld.wg_setDestructibleMatrix(self.__spaceID, chunkID, destrIndex, m, 1.0)
 
     def onAfterReplayTimeWarp(self):
@@ -403,7 +406,7 @@ class DestructiblesManager(object):
         else:
             g_destructiblesAnimator.clear()
             self.__spaceID = self.__savedSpaceID
-            for chunkID, numDestructibles in self.__savedLoadedChunkIDs.iteritems():
+            for chunkID, numDestructibles in viewitems(self.__savedLoadedChunkIDs):
                 self.onChunkLoad(chunkID, numDestructibles)
 
             self.__savedSpaceID = None
@@ -497,7 +500,7 @@ class DestructiblesManager(object):
         elif destrType == DestructiblesCache.DESTR_TYPE_STRUCTURE:
             effectCat = 'structures'
         effectName = BigWorld.wg_getDestructibleEffectName(self.__spaceID, lArgs.chunkID, lArgs.destrIndex, lArgs.moduleIndex, lArgs.effectType)
-        if destrType == DestructiblesCache.DESTR_TYPE_TREE or destrType == DestructiblesCache.DESTR_TYPE_FALLING_ATOM:
+        if destrType in (DestructiblesCache.DESTR_TYPE_TREE, DestructiblesCache.DESTR_TYPE_FALLING_ATOM):
             chunkMatrix = BigWorld.wg_getChunkMatrix(self.__spaceID, lArgs.chunkID)
             destrMatrix = BigWorld.wg_getDestructibleMatrix(self.__spaceID, lArgs.chunkID, lArgs.destrIndex)
             direction = destrMatrix.applyVector((0, 0, 1))
@@ -893,7 +896,7 @@ class _DestructiblesAnimator(object):
         cnt = int(math.ceil(dt / self.__MAX_PHYS_UPDATE_DELAY))
         step = dt / cnt
         for body in self.__bodies:
-            for _ in xrange(cnt):
+            for _ in range(cnt):
                 if not self.__moveBody(body, step):
                     removedBodies.append(body)
                     break
@@ -909,7 +912,7 @@ class _DestructiblesAnimator(object):
     def __startUpdate(self):
         if not self.__isUpdating:
             self.__isUpdating = True
-            self.__lastUpdateTime = clock() - self.__UPDATE_INTERVAL
+            self.__lastUpdateTime = perf_counter() - self.__UPDATE_INTERVAL
             self.__updateCallback()
 
     def __stopUpdate(self):
@@ -921,7 +924,7 @@ class _DestructiblesAnimator(object):
 
     def __updateCallback(self):
         self.__updateCallbackID = None
-        curTime = clock()
+        curTime = perf_counter()
         self.__update(curTime - self.__lastUpdateTime)
         self.__lastUpdateTime = curTime
         if self.__isUpdating:

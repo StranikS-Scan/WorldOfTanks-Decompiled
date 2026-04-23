@@ -2470,8 +2470,8 @@
       <achievement>
         <id>	138	</id>
         <UI>
-          <stringKey>	branch_usa_A83_T110E4	</stringKey>
-          <vehicle>	usa:A83_T110E4	</vehicle>
+          <stringKey>	branch_usa_A195_Gorilla	</stringKey>
+          <vehicle>	usa:A195_Gorilla	</vehicle>
           <background>	usa_branch	</background>
           <iconPosition>	bottom	</iconPosition>
         </UI>
@@ -2482,7 +2482,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	139 140 141 142 143	</requiredAchievementIDs>
+          <requiredAchievementIDs>	139 140 141 142 143 482	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -3406,8 +3406,8 @@
       <achievement>
         <id>	190	</id>
         <UI>
-          <stringKey>	branch_france_F82_AMX_M4_Mle1949_Ter	</stringKey>
-          <vehicle>	france:F82_AMX_M4_Mle1949_Ter	</vehicle>
+          <stringKey>	branch_france_F143_Fauteur	</stringKey>
+          <vehicle>	france:F143_Fauteur	</vehicle>
           <background>	france_branch	</background>
           <iconPosition>	bottom	</iconPosition>
         </UI>
@@ -3418,7 +3418,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	185 186 191 192 193	</requiredAchievementIDs>
+          <requiredAchievementIDs>	185 186 191 192 193 483	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -4289,8 +4289,8 @@
       <achievement>
         <id>	239	</id>
         <UI>
-          <stringKey>	branch_uk_GB120_Concept_No_5	</stringKey>
-          <vehicle>	uk:GB120_Concept_No_5	</vehicle>
+          <stringKey>	branch_uk_GB158_Executor	</stringKey>
+          <vehicle>	uk:GB158_Executor	</vehicle>
           <background>	uk_branch	</background>
           <iconPosition>	bottom	</iconPosition>
         </UI>
@@ -4301,7 +4301,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	240 241 242 243 244	</requiredAchievementIDs>
+          <requiredAchievementIDs>	240 241 242 243 244 484	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -8685,6 +8685,60 @@
         </stages>
         <conditions>
           <vehicle>	japan:J51_Ashigaru	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	482	</id>
+        <UI>
+          <stringKey>	A195_Gorilla	</stringKey>
+          <background>	usa	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	usa:A195_Gorilla	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	483	</id>
+        <UI>
+          <stringKey>	F143_Fauteur	</stringKey>
+          <background>	france	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	france:F143_Fauteur	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	484	</id>
+        <UI>
+          <stringKey>	GB158_Executor	</stringKey>
+          <background>	uk	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	uk:GB158_Executor	</vehicle>
         </conditions>
       </achievement>
     </vehicleAchievements>

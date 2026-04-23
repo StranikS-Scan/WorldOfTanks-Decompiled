@@ -621,8 +621,8 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_break HD special siegeMode twinGun improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals secret testTank	</tags>
-    <level>	10	</level>
+    <tags>	heavyTank role_HT_break HD siegeMode twinGun improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals secret testTank	</tags>
+    <level>	9	</level>
   </GB130_FV225_Collector>
   <GB152_AT_FV230_Breaker>
     <id>	95	</id>
@@ -1452,6 +1452,19 @@
     <tags>	heavyTank role_HT_assault HD heavyTank1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user lockOutfit restoreWithStyle	</tags>
     <level>	6	</level>
   </GB150_Churchill_VII_A>
+  <GB151_Headshaker>
+    <id>	100	</id>
+    <userString>	#gb_vehicles:GB151_Headshaker	</userString>
+    <description>	#gb_vehicles:GB151_Headshaker_descr	</description>
+    <shortUserString>	#gb_vehicles:GB151_Headshaker_short	</shortUserString>
+    <shortDescriptionSpecial>	#gb_vehicles:GB151_Headshaker_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB151_Headshaker_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG HD mediumAT-SPG role_ATSPG_universal improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals secret testTank	</tags>
+    <level>	9	</level>
+  </GB151_Headshaker>
   <GB157_FV214t>
     <id>	97	</id>
     <userString>	#gb_vehicles:GB157_FV214t	</userString>
@@ -1513,4 +1526,27 @@
     <cannotBeBought>	true	</cannotBeBought>
     <tags>	mediumTank role_MT_sniper HD wheeledVehicle improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals private secret cannot_be_sold comp7 special	</tags>
   </GB120_Concept_No_5_7x7>
+  <GB155_Pike>
+    <id>	103	</id>
+    <userString>	#gb_vehicles:GB155_Pike	</userString>
+    <shortUserString>	#gb_vehicles:GB155_Pike_short	</shortUserString>
+    <description>	#gb_vehicles:GB155_Pike_descr	</description>
+    <shortDescriptionSpecial>	#gb_vehicles:GB155_Pike_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB155_Pike_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_assault HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user secret testTank earn_crystals	</tags>
+    <level>	9	</level>
+  </GB155_Pike>
+  <GB158_Executor>
+    <id>	104	</id>
+    <userString>	#gb_vehicles:GB158_Executor	</userString>
+    <shortUserString>	#gb_vehicles:GB158_Executor_short	</shortUserString>
+    <description>	#gb_vehicles:GB158_Executor_descr	</description>
+    <longDescriptionSpecial>	#gb_vehicles:GB158_Executor_long_special	</longDescriptionSpecial>
+    <price>	7400000	</price>
+    <tags>	mediumTank role_MT_sniper HD wheeledVehicle wheeledDash improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals	</tags>
+    <level>	11	</level>
+  </GB158_Executor>
 </list.xml>

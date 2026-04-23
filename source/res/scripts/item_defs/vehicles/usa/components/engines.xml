@@ -161,6 +161,7 @@
     <Caterpillar_LVMS_1050_EHO>	185	</Caterpillar_LVMS_1050_EHO>
     <Curtiss_Wright_RC2_350>	186	</Curtiss_Wright_RC2_350>
     <Continental_AOSI_1195_5_Y_VI_RC_C>	181	</Continental_AOSI_1195_5_Y_VI_RC_C>
+    <Continental_AV_1790_5G>	187	</Continental_AV_1790_5G>
     <Continental_AOSI_1195_5F>	190	</Continental_AOSI_1195_5F>
     <Continental_W_670_M41>	2000	</Continental_W_670_M41>
     <Twin_Cadillac_Series_44T4_M41>	2001	</Twin_Cadillac_Series_44T4_M41>
@@ -220,6 +221,7 @@
     <Continental_AV-1790-7B_7x7>	503	</Continental_AV-1790-7B_7x7>
     <AOI-1490_7x7>	505	</AOI-1490_7x7>
     <AOI_1490E4_7x7>	506	</AOI_1490E4_7x7>
+    <Continental_AV_1790_5C_7x7>	507	</Continental_AV_1790_5C_7x7>
     <Development_Engine>	65535	</Development_Engine>
     <Wright_Continental_R-975C4_MapsTraining_Dummy_MT_1>	6	</Wright_Continental_R-975C4_MapsTraining_Dummy_MT_1>
     <Ford_GAC_1_MapsTraining_Player_HT_1>	8	</Ford_GAC_1_MapsTraining_Player_HT_1>
@@ -1915,6 +1917,24 @@
       <rpm_min>	497	</rpm_min>
       <rpm_max>	2008	</rpm_max>
     </Continental_AV_1790_5C>
+    <Continental_AV_1790_5C_7x7>
+      <userString>	#usa_vehicles:Continental_AV_1790_5C_7x7	</userString>
+      <shortUserString>	#usa_vehicles:Continental_AV_1790_5C_7x7_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	99000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	870	</power>
+      <weight>	1159	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	497	</rpm_min>
+      <rpm_max>	2008	</rpm_max>
+    </Continental_AV_1790_5C_7x7>
     <Continental_AV_1790_5C_Rush_Ep1>
       <userString>	#usa_vehicles:Continental_AV_1790_5C_Rush_Ep1	</userString>
       <shortUserString>	#usa_vehicles:Continental_AV_1790_5C_Rush_Ep1_short	</shortUserString>
@@ -4007,6 +4027,24 @@
       <rpm_min>	418	</rpm_min>
       <rpm_max>	2260	</rpm_max>
     </Continental_AOSI-895-5_SH>
+    <Continental_AV_1790_5G>
+      <userString>	#usa_vehicles:Continental_AV_1790_5G	</userString>
+      <shortUserString>	#usa_vehicles:Continental_AV_1790_5G_short	</shortUserString>
+      <tags>	diesel	</tags>
+      <level>	11	</level>
+      <price>	150000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	1000	</power>
+      <weight>	1200	</weight>
+      <maxHealth>	380	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	11	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	253	</rpm_min>
+      <rpm_max>	2440	</rpm_max>
+    </Continental_AV_1790_5G>
     <Ford_GAF_V8_SH>
       <userString>	#usa_vehicles:Ford_GAF_V8_SH	</userString>
       <tags>	gasoline	</tags>

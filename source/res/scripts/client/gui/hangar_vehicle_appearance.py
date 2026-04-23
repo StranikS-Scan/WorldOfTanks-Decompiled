@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/hangar_vehicle_appearance.py
+from __future__ import absolute_import, division
 import logging
 import weakref
 import math
 from collections import namedtuple
 from typing import TYPE_CHECKING
 from functools import partial
+from future.utils import viewitems, viewvalues
 import BigWorld
 import Event
 import Math
@@ -128,6 +130,7 @@ class HangarVehicleAppearance(ScriptGameObject):
     typeDescriptor = property(lambda self: self.__vDesc)
     vehicleStickers = property(lambda self: self.__vehicleStickers)
     vehicleState = property(lambda self: self.__vState)
+    modelsSetParams = property(lambda self: ModelsSetParams(self.__outfit.modelsSet, self.__vState, self.__attachments))
 
     @property
     def filter(self):
@@ -336,11 +339,11 @@ class HangarVehicleAppearance(ScriptGameObject):
         modelsSet = self.__outfit.modelsSet
         splineDesc = vDesc.chassis.splineDesc
         if splineDesc is not None:
-            for _, trackDesc in splineDesc.trackPairs.iteritems():
+            for trackDesc in viewvalues(splineDesc.trackPairs):
                 resources += trackDesc.prerequisites(modelsSet)
 
         from vehicle_systems import model_assembler
-        resources.append(model_assembler.prepareCompoundAssembler(self.__vDesc, ModelsSetParams(modelsSet, self.__vState, self.__attachments), self.__spaceId))
+        resources.append(model_assembler.prepareCompoundAssembler(self.__vDesc, self.modelsSetParams, self.__spaceId))
         g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.VEHICLE_LOADING, ctx={'started': True,
          'vEntityId': self.__vEntity.id,
          'intCD': self.__vDesc.type.compactDescr}), scope=EVENT_BUS_SCOPE.DEFAULT)
@@ -353,7 +356,7 @@ class HangarVehicleAppearance(ScriptGameObject):
          TankPartNames.GUN: vDesc.gun.hitTesterManager}
         bspModels = ()
         crashedBspModels = ()
-        for partName, htManager in hitTesterManagers.iteritems():
+        for partName, htManager in viewitems(hitTesterManagers):
             partId = TankPartNames.getIdx(partName)
             bspModel = (partId, htManager.modelHitTester.bspModelName)
             bspModels = bspModels + (bspModel,)
@@ -402,7 +405,7 @@ class HangarVehicleAppearance(ScriptGameObject):
             crashedModelCA.name = 'CrashedModelCollisions'
             resources.append(crashedModelCA)
         physicalTracksBuilders = vDesc.chassis.physicalTracks
-        for name, builders in physicalTracksBuilders.iteritems():
+        for name, builders in viewitems(physicalTracksBuilders):
             for index, builder in enumerate(builders):
                 resources.append(builder.createLoader(self.__spaceId, '{0}{1}PhysicalTrack'.format(name, index), modelsSet))
 
@@ -449,6 +452,9 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.turretRotator = SimpleTurretRotator(self.compoundModel, self.__staticTurretYaw, self.__vDesc.hull.turretPositions[0], self.__vDesc.hull.turretPitches[0], easingCls=math_utils.Easing.squareEasing)
             self.__applyAttachmentsVisibility()
             self.__fireResourcesLoadedEvent()
+            if not self.__isVehicleDestroyed:
+                from vehicle_systems import model_assembler
+                model_assembler.assembleGunLinkedNodesAnimator(self)
             if succesLoaded:
 
                 def _onAttachmentsReady():
@@ -497,8 +503,9 @@ class HangarVehicleAppearance(ScriptGameObject):
     def _getActiveOutfit(self, vDesc):
         if g_currentPreviewVehicle.isPresent() and not g_currentPreviewVehicle.isHeroTank:
             vehicleCD = g_currentPreviewVehicle.item.descriptor.makeCompactDescr()
-            return self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehicleCD)
-        elif not g_currentVehicle.isPresent():
+            if vDesc.makeCompactDescr() == vehicleCD:
+                return self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehicleCD)
+        if not g_currentVehicle.isPresent():
             if vDesc is not None:
                 vehicleCD = vDesc.makeCompactDescr()
                 outfit = self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehicleCD)
@@ -531,9 +538,9 @@ class HangarVehicleAppearance(ScriptGameObject):
             wheelsSteering = None
             if self.__vDesc.chassis.generalWheelsAnimatorConfig is not None:
                 scrollableWheelsCount = self.__vDesc.chassis.generalWheelsAnimatorConfig.getWheelsCount()
-                wheelsScroll = [ (lambda : 0.0) for _ in xrange(scrollableWheelsCount) ]
+                wheelsScroll = [ (lambda : 0.0) for _ in range(scrollableWheelsCount) ]
                 steerableWheelsCount = self.__vDesc.chassis.generalWheelsAnimatorConfig.getSteerableWheelsCount()
-                wheelsSteering = [ (lambda : 0.0) for _ in xrange(steerableWheelsCount) ]
+                wheelsSteering = [ (lambda : 0.0) for _ in range(steerableWheelsCount) ]
             chassisFashion = self.__fashions.chassis
             splineTracksImpl = model_assembler.setupSplineTracks(chassisFashion, self.__vDesc, self.__vEntity.model, self.__resources, self.__outfit.modelsSet)
             self.wheelsAnimator = model_assembler.createWheelsAnimator(self, ColliderTypes.VEHICLE_COLLIDER, self.__vDesc, lambda : 0, wheelsScroll, wheelsSteering, splineTracksImpl)
@@ -632,7 +639,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         trackPairs = self.typeDescriptor.chassis.trackPairs
         if not trackPairs:
             trackPairs = [None]
-        for x in xrange(len(trackPairs) - 1):
+        for x in range(len(trackPairs) - 1):
             additionalChassisParts.append((defaultPartLength + x, self.compoundModel.matrix))
 
         if additionalChassisParts:
@@ -806,7 +813,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         if self.compoundModel is None:
             return False
         else:
-            localGunMatrix = self.__getGunNode().local
+            localGunMatrix = self.__getGunNode().localMatrix
             currentGunPitch = localGunMatrix.pitch
             if abs(currentGunPitch - gunPitchAngle) < 0.0001:
                 return False
@@ -818,7 +825,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         if self.compoundModel is None:
             return 0.0
         else:
-            localGunMatrix = self.__getGunNode().local
+            localGunMatrix = self.__getGunNode().localMatrix
             return localGunMatrix.pitch
 
     def getVehicleCentralPoint(self):
@@ -962,7 +969,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         for slotType in SLOT_TYPES:
             for areaId in Area.ALL:
                 anchorHelpers = self.__anchorsHelpers[slotType][areaId]
-                for regionIdx, anchorHelper in anchorHelpers.iteritems():
+                for regionIdx, anchorHelper in viewitems(anchorHelpers):
                     attachedPartIdx = anchorHelper.attachedPartIdx
                     if attachedPartIdx not in tankPartsToUpdate:
                         continue
@@ -1138,7 +1145,7 @@ class HangarVehicleAppearance(ScriptGameObject):
 
     def __setGunMatrix(self, gunMatrix):
         gunNode = self.__getGunNode()
-        gunNode.local = gunMatrix
+        gunNode.localMatrix = gunMatrix
 
     @property
     def outfit(self):

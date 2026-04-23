@@ -37,7 +37,10 @@ class MechanicsEnum(Enum):
     STATIONARY_RELOAD = 'stationaryReload'
     OVERHEAT_GUN = 'overheatGun'
     HEATING_ZONES_GUN = 'heatingZonesGun'
+    LOW_CHARGE_SHOT = 'lowChargeShot'
     STAGED_JET_BOOSTERS = 'stagedJetBoosters'
+    PROPELLANT_GUN = 'propellantAfterburnerGun'
+    WHEELED_DASH = 'wheeledDash'
 
 
 class MechanicsRank(Enum):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ChargeShotComponent.py
+from __future__ import absolute_import, division
 import typing
 import BigWorld
 from constants import CHARGE_SHOT_FLAGS as FLAGS, HALF_SERVER_TICK as HALF_TICK, SHOT_PREDICTION_BUFFER as BUFFER

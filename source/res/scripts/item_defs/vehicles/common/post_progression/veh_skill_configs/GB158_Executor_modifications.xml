@@ -1,0 +1,418 @@
+<GB158_Executor_modifications.xml>
+  <gb158_node1>
+    <id>	12301	</id>
+    <imgName>	standardShellVelocity	</imgName>
+    <locName>	standardShellVelocity	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot0/speed	</name>
+        <value>	50	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	standardShellVelocity	</name>
+        <value>	50	</value>
+      </add>
+    </kpi>
+  </gb158_node1>
+  <gb158_node2>
+    <id>	12302	</id>
+    <imgName>	gunStabilizationFromHullRotation	</imgName>
+    <locName>	gunStabilizationFromHullRotation	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <mul>
+        <name>	descrAttrs/chassis/shotDispersionFactors/1	</name>
+        <value>	0.9	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersionChassisRotation	</name>
+        <value>	0.9	</value>
+      </mul>
+    </kpi>
+  </gb158_node2>
+  <gb158_node3>
+    <id>	12303	</id>
+    <imgName>	additionalShellAmmoCapacity	</imgName>
+    <locName>	additionalShellAmmoCapacity	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gun/maxAmmo	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	additionalShellAmmoCapacity	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </gb158_node3>
+  <gb158_node4>
+    <id>	12304	</id>
+    <imgName>	HEshellVelocity	</imgName>
+    <locName>	HEshellVelocity	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot2/speed	</name>
+        <value>	50	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	HEshellVelocity	</name>
+        <value>	50	</value>
+      </add>
+    </kpi>
+  </gb158_node4>
+  <gb158_node5>
+    <id>	12305	</id>
+    <imgName>	forwardSpeed	</imgName>
+    <locName>	forwardSpeed	</locName>
+    <categories>	mobility	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/engine/maxSpeedForward	</name>
+        <value>	2	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleForwardMaxSpeed	</name>
+        <value>	2	</value>
+      </add>
+    </kpi>
+  </gb158_node5>
+  <gb158_node6>
+    <id>	12306	</id>
+    <imgName>	gb158_mechanic_0	</imgName>
+    <locName>	gb158_mechanic_0	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <mul>
+        <name>	dynAttrs/engine/power	</name>
+        <value>	1.1	</value>
+        <filter>	wheeledDash	</filter>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	value	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </gb158_node6>
+  <gb158_node7>
+    <id>	12307	</id>
+    <imgName>	gunStabilizationFromHullMovement	</imgName>
+    <locName>	gunStabilizationFromHullMovement	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <mul>
+        <name>	descrAttrs/chassis/shotDispersionFactors/0	</name>
+        <value>	0.9	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersionChassisMovement	</name>
+        <value>	0.9	</value>
+      </mul>
+    </kpi>
+  </gb158_node7>
+  <gb158_node8>
+    <id>	12308	</id>
+    <imgName>	damagedGunDispersion	</imgName>
+    <locName>	damagedGunDispersion	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/gun/shotDispersionFactors/whileGunDamaged	</name>
+        <value>	0.8	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersionWhileGunDamaged	</name>
+        <value>	0.8	</value>
+      </mul>
+    </kpi>
+  </gb158_node8>
+  <gb158_node9>
+    <id>	12309	</id>
+    <imgName>	ammoRackPenalty	</imgName>
+    <locName>	ammoRackPenalty	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/ammoBayReduceFineFactor	</name>
+        <value>	0.8	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehPenaltyForDamagedAmmorack	</name>
+        <value>	0.8	</value>
+      </mul>
+    </kpi>
+  </gb158_node9>
+  <gb158_node10>
+    <id>	12310	</id>
+    <imgName>	specialShellVelocity	</imgName>
+    <locName>	specialShellVelocity	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot1/speed	</name>
+        <value>	50	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	specialShellVelocity	</name>
+        <value>	50	</value>
+      </add>
+    </kpi>
+  </gb158_node10>
+  <gb158_node11>
+    <id>	12311	</id>
+    <imgName>	reverseSpeed	</imgName>
+    <locName>	reverseSpeed	</locName>
+    <categories>	mobility	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/engine/maxSpeedBack	</name>
+        <value>	2	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleBackwardMaxSpeed	</name>
+        <value>	2	</value>
+      </add>
+    </kpi>
+  </gb158_node11>
+  <gb158_node12>
+    <id>	12312	</id>
+    <imgName>	aimingTime	</imgName>
+    <locName>	aimingTime	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gun/aimingTime	</name>
+        <value>	-0.1	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleGunAimSpeed	</name>
+        <value>	-0.1	</value>
+      </add>
+    </kpi>
+  </gb158_node12>
+  <gb158_node13>
+    <id>	12313	</id>
+    <imgName>	gb158_mechanic_1	</imgName>
+    <locName>	gb158_mechanic_1	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <add>
+        <name>	dynAttrs/vehicle/bkMaxSpeedBonus	</name>
+        <value>	2	</value>
+        <filter>	wheeledDash	</filter>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	2	</value>
+      </add>
+    </kpi>
+  </gb158_node13>
+  <gb158_node14>
+    <id>	12314	</id>
+    <imgName>	aimingTime	</imgName>
+    <locName>	aimingTime	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gun/aimingTime	</name>
+        <value>	-0.1	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleGunAimSpeed	</name>
+        <value>	-0.1	</value>
+      </add>
+    </kpi>
+  </gb158_node14>
+  <gb158_node16>
+    <id>	12316	</id>
+    <imgName>	enginePenalty	</imgName>
+    <locName>	enginePenalty	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/engineReduceFineFactor	</name>
+        <value>	0.8	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehPenaltyForDamagedEngine	</name>
+        <value>	0.8	</value>
+      </mul>
+    </kpi>
+  </gb158_node16>
+  <gb158_node17>
+    <id>	12317	</id>
+    <imgName>	enginePower	</imgName>
+    <locName>	enginePower	</locName>
+    <categories>	mobility	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/engine/power	</name>
+        <value>	50	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleEnginePower	</name>
+        <value>	50	</value>
+      </add>
+    </kpi>
+  </gb158_node17>
+  <gb158_node18>
+    <id>	12318	</id>
+    <imgName>	viewRange	</imgName>
+    <locName>	viewRange	</locName>
+    <categories>	spotting	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/turret/circularVisionRadius	</name>
+        <value>	10	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleCircularVisionRadius	</name>
+        <value>	10	</value>
+      </add>
+    </kpi>
+  </gb158_node18>
+  <gb158_node19>
+    <id>	12319	</id>
+    <imgName>	hitPoints	</imgName>
+    <locName>	hitPoints	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/hull/maxHealth	</name>
+        <value>	50	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleStrength	</name>
+        <value>	50	</value>
+      </add>
+    </kpi>
+  </gb158_node19>
+  <gb158_node20>
+    <id>	12320	</id>
+    <imgName>	standardShellPenetration	</imgName>
+    <locName>	standardShellPenetration	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot0/piercingPower	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	standardShellPenetration	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </gb158_node20>
+  <gb158_node21>
+    <id>	12321	</id>
+    <imgName>	hullTraverseSpeed	</imgName>
+    <locName>	hullTraverseSpeed	</locName>
+    <categories>	mobility	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/chassis/rotationSpeedDegrees	</name>
+        <value>	2	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleAllGroundRotationSpeed	</name>
+        <value>	2	</value>
+      </add>
+    </kpi>
+  </gb158_node21>
+  <gb158_node22>
+    <id>	12322	</id>
+    <imgName>	gb158_mechanic_2	</imgName>
+    <locName>	gb158_mechanic_2	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <add>
+        <name>	miscAttrs/wheeledDash/duration	</name>
+        <value>	1	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	1	</value>
+      </add>
+    </kpi>
+  </gb158_node22>
+  <gb158_node23>
+    <id>	12323	</id>
+    <imgName>	specialShellPenetration	</imgName>
+    <locName>	specialShellPenetration	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot1/piercingPower	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	specialShellPenetration	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </gb158_node23>
+  <gb158_node26>
+    <id>	12326	</id>
+    <imgName>	gb158_mechanic_3	</imgName>
+    <locName>	gb158_mechanic_3	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <add>
+        <name>	miscAttrs/wheeledDash/reloadTime	</name>
+        <value>	-5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	-5	</value>
+      </add>
+    </kpi>
+  </gb158_node26>
+</GB158_Executor_modifications.xml>

@@ -10,7 +10,7 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 
 class WindowsManager(PyObjectEntity):
-    __slots__ = ('__eManager', 'onWindowStatusChanged', 'onWindowShowingStatusChanged', 'onViewStatusChanged', '__weakref__')
+    __slots__ = ('__eManager', 'onWindowStatusChanged', 'onWindowShowingStatusChanged', 'onViewStatusChanged')
 
     def __init__(self, cppObject=None):
         super(WindowsManager, self).__init__(cppObject)

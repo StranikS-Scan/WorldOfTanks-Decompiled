@@ -5182,7 +5182,7 @@
     <priceGroup>	camouflages 50g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <vehicles>	france:F135_AS_XX_40_t france:F136_AMX_67_Imbattable	</vehicles>
+        <vehicles>	france:F135_AS_XX_40_t france:F136_AMX_67_Imbattable france:F143_Fauteur	</vehicles>
       </include>
     </vehicleFilter>
     <camouflage>
@@ -5241,6 +5241,33 @@
       <tiling>
         <france:F03_D26>	6.5 6.5 0 -0.21	</france:F03_D26>
       </tiling>
+    </camouflage>
+    <camouflage>
+      <id>	1103	</id>
+      <texture>	vehicles/french/Camouflage/2_0_progression_f.dds	</texture>
+      <description>	#vehicle_customization:camouflage/2_0_progression/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:special_style/2_0_progression_f	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	4 4	</factor>
+        <offset>	0 -0.12	</offset>
+      </tilingSettings>
+      <glossMetallicMap>	vehicles/french/Camouflage/2_0_progression_f_GMM.dds	</glossMetallicMap>
+      <normal>
+        <normalMap>	vehicles/french/Camouflage/2_0_progression_f_NM.dds	</normalMap>
+        <normalStrength>	1	</normalStrength>
+      </normal>
     </camouflage>
   </itemGroup>
 </france.xml>

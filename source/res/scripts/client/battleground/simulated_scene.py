@@ -17,14 +17,16 @@ from avatar_components.CombatEquipmentManager import CombatEquipmentManager
 from battleground.kill_cam_visuals import EffectsController
 from cgf_components.sequence_components import SequencePauseComponent, SequenceSnapshotComponent
 from cgf_components_common.vehicle_mechanics import StationaryReloadSequenceParamsComponent
-from constants import SHELL_TYPES
+from constants import SHELL_TYPES, DEFAULT_GUN_INSTALLATION_INDEX
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackPauseManager, TimeDeltaMeter
+from items.components.gun_installation_components import GunInstallationSlot
 from skeletons.map_activities import IMapActivities
 from simulation_movement_tracker import SimulationMovementTracker, SimulationMovementData
 from VehicleEffects import DamageFromShotDecoder
 from vehicle_systems.tankStructure import TankPartNames
+from vehicles.mechanics.gun_mechanics.low_charge_shot.public.mechanic_events import postLowChargeShotInitialEvent
 from wotdecorators import noexcept
 if typing.TYPE_CHECKING:
     from typing import Dict, List, Optional
@@ -204,6 +206,12 @@ class SimulatedScene(object):
             dynAttachmentsInfo = simVehicle.getDynAttachments()
             if dynAttachmentsInfo is not None:
                 _updateDynAttachments(simVehicle, dynAttachmentsInfo)
+            mechanicsInfo = self.__getMechanicsInfo(simVehID)
+            if mechanicsInfo is not None:
+                lowChargeShotVisualState = mechanicsInfo.get('lowChargeShotVisualState')
+                if lowChargeShotVisualState is not None:
+                    gunSlotName = GunInstallationSlot.getPartSlotNameByIndex(DEFAULT_GUN_INSTALLATION_INDEX)
+                    postLowChargeShotInitialEvent(lowChargeShotVisualState, simVehicle.spaceID, simVehID, gunSlotName)
 
         return
 
@@ -415,6 +423,12 @@ class SimulatedScene(object):
         else:
             turretYawLimits = gunPitchLimits = None
         return (turretYawLimits, gunPitchLimits)
+
+    def __getMechanicsInfo(self, simVehID):
+        if simVehID == self.__simulatedVictimID:
+            return self.__rawSimulationData.get('player', {}).get('mechanicsInfo')
+        else:
+            return self.__rawSimulationData.get('attacker', {}).get('mechanicsInfo') if simVehID == self.__simulatedKillerID else None
 
     class _PostEffectsManager(object):
 

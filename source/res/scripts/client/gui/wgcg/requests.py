@@ -27,6 +27,7 @@ from gui.wgcg.settings import WebRequestDataType
 from gui.wgcg.uilogging.handlers import UILoggingRequestHandlers
 from gui.wgcg.utils.handlers import UtilsRequestHandlers
 from gui.wgcg.wot_shop.handlers import WotShopRequestHandlers
+from gui.wgcg.w2gt.handlers import W2gtRequestHandlers
 
 class WgcgRequestResponse(Response):
 
@@ -37,10 +38,16 @@ class WgcgRequestResponse(Response):
         return self.code
 
     def clone(self, data=None):
-        return WgcgRequestResponse(self.code, self.txtStr, data or self.data)
+        return WgcgRequestResponse(self.code, self.txtStr, data or self.data, self.extraCode, self.headers)
 
     def mergeData(self, data):
         self.data.update(data)
+
+    def getHeaderByKey(self, key, default=None):
+        return (self.headers or {}).get(key, default)
+
+    def getDataByKey(self, key, default=None):
+        return (self.getData() or {}).get(key, default)
 
 
 class WgcgRequester(ClientRequestsByIDProcessor):
@@ -117,6 +124,7 @@ class WgcgRequestsController(RequestsController):
         self.__handlers.update(ClanSupplyRequestHandlers(requester).get())
         self.__handlers.update(LoadoutsAssistantRequestHandlers(requester).get())
         self.__handlers.update(IngameTournamentHandlers(requester).get())
+        self.__handlers.update(W2gtRequestHandlers(requester).get())
 
     def fini(self):
         super(WgcgRequestsController, self).fini()

@@ -45,6 +45,7 @@ class ResponseCodes(object):
     ACCOUNT_ALREADY_INVITED = 41
     ACCOUNT_ALREADY_APPLIED = 42
     ACCOUNT_IN_COOLDOWN = 43
+    W2GT_ERROR = 44
 
 
 class BaseRequestError(SoftException):

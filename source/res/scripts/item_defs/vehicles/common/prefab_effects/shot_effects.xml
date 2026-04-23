@@ -1,54 +1,65 @@
 <shot_effects.xml>
-  <mainArmorPiercingTest>
-    <groundHit>
+  <regularDefault>
+    <defaultVehicleHit>
+      <prefab>	content/EffectPrefabs/armor_hit.prefab	</prefab>
+      <decal>	common	</decal>
+    </defaultVehicleHit>
+    <defaultSceneHit>
       <prefab>	content/EffectPrefabs/ground_hit.prefab	</prefab>
-    </groundHit>
-    <oilHit>
-      <prefab>	content/EffectPrefabs/oil_hit.prefab	</prefab>
-    </oilHit>
-    <dirtHit>
-      <prefab>	content/EffectPrefabs/dirt_hit.prefab	</prefab>
-    </dirtHit>
-    <sandHit>
-      <prefab>	content/EffectPrefabs/sand_hit.prefab	</prefab>
-    </sandHit>
-    <snowHit>
-      <prefab>	content/EffectPrefabs/snow_hit.prefab	</prefab>
-    </snowHit>
-    <armorBasicRicochet>
-      <prefab>	content/EffectPrefabs/armor_hit.prefab	</prefab>
-      <decal>	ricochet	</decal>
-    </armorBasicRicochet>
-    <armorRicochet>
-      <prefab>	content/EffectPrefabs/armor_hit.prefab	</prefab>
-      <decal>	ricochet	</decal>
-    </armorRicochet>
-    <armorResisted>
-      <prefab>	content/EffectPrefabs/armor_hit.prefab	</prefab>
-      <decal>	resist	</decal>
-    </armorResisted>
-    <armorHit>
-      <prefab>	content/EffectPrefabs/armor_hit.prefab	</prefab>
-      <decal>	pierce	</decal>
-    </armorHit>
-    <armorCriticalHit>
-      <prefab>	content/EffectPrefabs/armor_hit.prefab	</prefab>
-      <decal>	pierce	</decal>
-    </armorCriticalHit>
-    <woodHit>
-      <prefab>	content/EffectPrefabs/wood_hit.prefab	</prefab>
-    </woodHit>
-    <stoneHit>
-      <prefab>	content/EffectPrefabs/stone_hit.prefab	</prefab>
-    </stoneHit>
-    <metalHit>
-      <prefab>	content/EffectPrefabs/metal_hit.prefab	</prefab>
-    </metalHit>
-    <shallowWaterHit>
-      <prefab>	content/EffectPrefabs/water_shallow_hit.prefab	</prefab>
-    </shallowWaterHit>
-    <deepWaterHit>
-      <prefab>	content/EffectPrefabs/water_hit.prefab	</prefab>
-    </deepWaterHit>
-  </mainArmorPiercingTest>
+    </defaultSceneHit>
+  </regularDefault>
+  <regularHollowCharge>
+    <defaultVehicleHit>
+      <prefab>	content/EffectPrefabs/armor_hit_hc.prefab	</prefab>
+      <decal>	regularHollowCharge	</decal>
+    </defaultVehicleHit>
+    <defaultSceneHit>
+      <prefab>	content/EffectPrefabs/ground_hit.prefab	</prefab>
+    </defaultSceneHit>
+  </regularHollowCharge>
+  <regularHighExplosive>
+    <defaultVehicleHit>
+      <prefab>	content/EffectPrefabs/armor_hit_he.prefab	</prefab>
+      <decal>	regularHighExplosive	</decal>
+    </defaultVehicleHit>
+    <defaultSceneHit>
+      <prefab>	content/EffectPrefabs/ground_hit.prefab	</prefab>
+    </defaultSceneHit>
+  </regularHighExplosive>
+  <regularArmorPiercing>
+    <defaultVehicleHit>
+      <prefab>	content/EffectPrefabs/armor_hit_ap.prefab	</prefab>
+      <decal>	regularArmorPiercing	</decal>
+    </defaultVehicleHit>
+    <defaultSceneHit>
+      <prefab>	content/EffectPrefabs/ground_hit.prefab	</prefab>
+    </defaultSceneHit>
+  </regularArmorPiercing>
+  <regularArmorPiercingHE>
+    <defaultVehicleHit>
+      <prefab>	content/EffectPrefabs/armor_hit_ap_he.prefab	</prefab>
+      <decal>	regularArmorPiercingHE	</decal>
+    </defaultVehicleHit>
+    <defaultSceneHit>
+      <prefab>	content/EffectPrefabs/ground_hit.prefab	</prefab>
+    </defaultSceneHit>
+  </regularArmorPiercingHE>
+  <regularArmorPiercingCR>
+    <defaultVehicleHit>
+      <prefab>	content/EffectPrefabs/armor_hit_ap_cr.prefab	</prefab>
+      <decal>	regularArmorPiercingCR	</decal>
+    </defaultVehicleHit>
+    <defaultSceneHit>
+      <prefab>	content/EffectPrefabs/ground_hit.prefab	</prefab>
+    </defaultSceneHit>
+  </regularArmorPiercingCR>
+  <regularSmoke>
+    <defaultVehicleHit>
+      <prefab>	content/EffectPrefabs/armor_hit_smoke.prefab	</prefab>
+      <decal>	regularSmoke	</decal>
+    </defaultVehicleHit>
+    <defaultSceneHit>
+      <prefab>	content/EffectPrefabs/ground_hit.prefab	</prefab>
+    </defaultSceneHit>
+  </regularSmoke>
 </shot_effects.xml>

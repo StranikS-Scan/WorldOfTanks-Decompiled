@@ -70,6 +70,8 @@ class BattleParams(object):
     MAX_DIRT = 'maxDirt'
     SHOT_EFFECTS = 'shotEffects'
     GUN_EFFECTS = 'gunEffects'
+    SHOT_PREFAB_EFFECTS = 'shotPrefabEffects'
+    GUN_PREFAB_EFFECTS = 'gunPrefabEffects'
     DESTRUCTION_EFFECT = 'destructionEffect'
     FULL_DESTRUCTION_EFFECT = 'fullDestructionEffect'
     CHASSIS_DECALS = 'chassisDecals'

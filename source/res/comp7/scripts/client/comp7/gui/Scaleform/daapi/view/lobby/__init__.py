@@ -5,7 +5,6 @@ from comp7_core.gui.Scaleform.genConsts.COMP7_CORE_HANGAR_ALIASES import COMP7_C
 from gui.Scaleform.framework import WindowLayer, ScopeTemplates, ViewSettings, ComponentSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
-from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.app_loader.settings import APP_NAME_SPACE
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 
@@ -17,6 +16,7 @@ def getContextMenuHandlers():
 def getViewSettings():
     from comp7.gui.Scaleform.daapi.view.lobby.comp7_prime_time_view import Comp7PrimeTimeView
     from comp7.gui.Scaleform.daapi.view.lobby.hangar.carousels.tank_carousel import Comp7TankCarousel
+    from comp7.gui.impl.lobby.battle_results.comp7_battle_results_view import Comp7BattleResultsWindow
     from comp7.gui.impl.lobby.hangar.comp7_hangar import Comp7HangarWindow
     from gui.Scaleform.framework import getSwfExtensionUrl
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.style_preview import VehicleStylePreview
@@ -25,6 +25,7 @@ def getViewSettings():
      ViewSettings(COMP7_HANGAR_ALIASES.COMP7_STYLE_PREVIEW, VehicleStylePreview, 'vehicleBasePreview.swf', WindowLayer.SUB_VIEW, COMP7_HANGAR_ALIASES.COMP7_STYLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(COMP7_HANGAR_ALIASES.COMP7_CONFIGURABLE_VEHICLE_PREVIEW, ConfigurableVehiclePreview, 'vehiclePreview.swf', WindowLayer.SUB_VIEW, COMP7_HANGAR_ALIASES.COMP7_CONFIGURABLE_VEHICLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(COMP7_HANGAR_ALIASES.COMP7_LOBBY_HANGAR, Comp7HangarWindow, '', WindowLayer.SUB_VIEW, COMP7_HANGAR_ALIASES.COMP7_LOBBY_HANGAR, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(COMP7_HANGAR_ALIASES.COMP7_BATTLE_RESULTS, Comp7BattleResultsWindow, '', WindowLayer.SUB_VIEW, COMP7_HANGAR_ALIASES.COMP7_BATTLE_RESULTS, ScopeTemplates.LOBBY_SUB_SCOPE),
      ComponentSettings(COMP7_HANGAR_ALIASES.COMP7_TANK_CAROUSEL, Comp7TankCarousel, ScopeTemplates.DEFAULT_SCOPE))
 
 
@@ -38,5 +39,6 @@ class Comp7PackageBusinessHandler(PackageBusinessHandler):
         listeners = ((COMP7_HANGAR_ALIASES.COMP7_PRIME_TIME_ALIAS, self.loadViewByCtxEvent),
          (COMP7_HANGAR_ALIASES.COMP7_LOBBY_HANGAR, self.loadViewByCtxEvent),
          (COMP7_HANGAR_ALIASES.COMP7_STYLE_PREVIEW, self.loadViewByCtxEvent),
-         (COMP7_HANGAR_ALIASES.COMP7_CONFIGURABLE_VEHICLE_PREVIEW, self.loadViewByCtxEvent))
+         (COMP7_HANGAR_ALIASES.COMP7_CONFIGURABLE_VEHICLE_PREVIEW, self.loadViewByCtxEvent),
+         (COMP7_HANGAR_ALIASES.COMP7_BATTLE_RESULTS, self.loadViewByCtxEvent))
         super(Comp7PackageBusinessHandler, self).__init__(listeners, APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)

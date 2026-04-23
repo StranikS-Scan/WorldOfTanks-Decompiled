@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/referral_program.py
+from __future__ import absolute_import
 from adisp import adisp_process
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.referral_program import referral_program_helpers as helpers
@@ -15,11 +16,11 @@ class REFERRAL_PROGRAM_SOUNDS(CONST_CONTAINER):
 
 @adisp_process
 def showGetVehiclePage(vehicle, params=None):
-    if vehicle.isInInventory and not vehicle.isRented:
-        showInventoryMsg('already_exists', vehicle, msgType=SystemMessages.SM_TYPE.Warning)
-        event_dispatcher.selectVehicleInHangar(vehicle.intCD)
-        return
-    url = helpers.getObtainVehicleURL()
-    if url:
-        url = yield URLMacros().parse(url, params=params)
+    if vehicle.isInInventory:
+        if not vehicle.isRented:
+            showInventoryMsg('already_exists', vehicle, msgType=SystemMessages.SM_TYPE.Warning)
+            event_dispatcher.selectVehicleInHangar(vehicle.intCD)
+            return
+        url = helpers.getObtainVehicleURL()
+        url = url and (yield URLMacros().parse(url, params=params))
         showReferralProgramWindow(url)

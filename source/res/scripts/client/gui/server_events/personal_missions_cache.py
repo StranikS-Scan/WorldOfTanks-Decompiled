@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/personal_missions_cache.py
-from typing import Any
 import typing
 import operator
 from collections import defaultdict
@@ -23,11 +22,12 @@ from skeletons.account_helpers.settings_core import ISettingsCore, ISettingsCach
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from wg_async import wg_await, wg_async
+if typing.TYPE_CHECKING:
+    from typing import Any, Tuple, Iterable, List, Union, Dict, Optional
+    from skeletons.gui.server_events import IEventsCache
 _SETTINGS_SYNCED = 1
 _EVENTS_CACHE_UPDATED = 2
 _ALL_SYNCED = _SETTINGS_SYNCED | _EVENTS_CACHE_UPDATED
-if typing.TYPE_CHECKING:
-    from skeletons.gui.server_events import IEventsCache
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def vehicleRequirementsCheck(quest, operation, invVehicles, vehGetter, itemsCache=None):
@@ -202,9 +202,9 @@ class PersonalMissionsCache(object):
         questData = self.__questsData.get(branch, None)
         return questData.freeTokensCount if questData else 0
 
-    def getOperationPmPointsData(self, branch, operation):
+    def getOperationPmPointsData(self, branch, operationID):
         branchData = self.__questsData.get(branch, None)
-        operationData = branchData.operations.get(operation) if branchData else None
+        operationData = branchData.operations.get(operationID) if branchData else None
         if operationData is not None:
             maxPmPointsCount = operationData.getMaxPmPointsCount()
             return (min(operationData.getTotalPmPointsCount(), maxPmPointsCount), maxPmPointsCount)
@@ -283,7 +283,7 @@ class PersonalMissionsCache(object):
         return self.__lobbyContext.getServerSettings().isPersonalMissionsEnabled(branch)
 
     def isPM3Activated(self):
-        return self.getStartedOperations(PM_BRANCH.V2_BRANCHES) or self.__settingsCore.serverSettings.getLastFullCompletedPM3OperationID()
+        return bool(self.getStartedOperations(PM_BRANCH.V2_BRANCHES) or self.__settingsCore.serverSettings.getLastFullCompletedPM3OperationID())
 
     def isActiveOperationDisabled(self, branches=PM_BRANCH.V1_BRANCHES):
         activeOperations = self.getActiveOperations(branches)

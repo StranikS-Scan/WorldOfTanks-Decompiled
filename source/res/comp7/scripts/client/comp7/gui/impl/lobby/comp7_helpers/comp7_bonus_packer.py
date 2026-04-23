@@ -2,6 +2,7 @@
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/comp7_helpers/comp7_bonus_packer.py
 import logging
 import typing
+from shared_utils import findFirst, first
 from comp7.gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS as COMP7_TOOLTIPS
 from comp7.gui.impl.gen.view_models.views.lobby.comp7_bonus_model import Comp7BonusModel, DogTagType
 from comp7.gui.impl.gen.view_models.views.lobby.comp7_style_bonus_model import Comp7StyleBonusModel
@@ -23,12 +24,11 @@ from gui.server_events.bonuses import getNonQuestBonuses, mergeBonuses, splitBon
 from gui.shared.gui_items.Tankman import getFullUserName
 from gui.shared.gui_items.customization import CustomizationTooltipContext
 from gui.shared.missions.packers.bonus import DossierBonusUIPacker, DogTagComponentsUIPacker, BonusUIPacker, BaseBonusUIPacker, BACKPORT_TOOLTIP_CONTENT_ID, SimpleBonusUIPacker, CustomizationBonusUIPacker, VehiclesBonusUIPacker, TokenBonusUIPacker, TankmenBonusUIPacker
-from gui.shared.missions.packers.bonus import getDefaultBonusPackersMap
+from gui.shared.missions.packers.bonus import getDefaultBonusPackersMap, getWeeklyMissionsMapping
 from gui.shared.money import Currency
 from helpers import dependency
 from items import tankmen
 from items.tankmen import getNationConfig
-from shared_utils import findFirst, first
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IComp7Controller
 from skeletons.gui.offers import IOffersDataProvider
@@ -117,6 +117,13 @@ def getComp7YearlyMetaBonusPacker():
     mapping.update({SELECTABLE_BONUS_NAME: Comp7YearlyMetaOfferPacker(),
      'customizations': Comp7CustomizationBonusUIPacker(),
      'tankmen': Comp7YearlyCrewBonusUIPacker()})
+    return BonusUIPacker(mapping)
+
+
+def getWeeklyPBSBonusPacker():
+    mapping = getWeeklyMissionsMapping()
+    mapping.update({SELECTABLE_BONUS_NAME: Comp7OfferBonusUIPacker(),
+     'customizations': Comp7CustomizationBonusUIPacker()})
     return BonusUIPacker(mapping)
 
 

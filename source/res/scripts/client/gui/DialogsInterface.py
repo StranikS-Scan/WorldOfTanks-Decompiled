@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/DialogsInterface.py
+from __future__ import absolute_import
 from constants import ACCOUNT_KICK_REASONS
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDialogMeta, DisconnectMeta, CheckBoxDialogMeta

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/SequenceNetworkSync.py
+from __future__ import absolute_import
 import logging
 import BigWorld
 import CGF
@@ -106,7 +107,7 @@ class SequenceNetworkSyncManager(CGF.ComponentManager):
     def __init__(self):
         super(SequenceNetworkSyncManager, self).__init__()
         self.__isSyncPaused = False
-        self.__snapshots = dict()
+        self.__snapshots = {}
 
     @onAddedQuery(SequenceNetworkSync, Sequence)
     def onSequenceAdded(self, sync, sequence):
@@ -190,9 +191,6 @@ class SequenceNetworkSyncManager(CGF.ComponentManager):
 
     @staticmethod
     def __updateTime(sync, sequence):
-        time = sync.actualTime
-        duration = sequence.duration
-        if time >= duration:
-            time = duration
+        time = min(sync.actualTime, sequence.duration)
         if sequence.time != time:
             sequence.requestTime(time)

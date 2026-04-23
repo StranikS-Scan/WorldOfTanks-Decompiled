@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PlatoonTank.py
+from __future__ import absolute_import
 import typing
 from typing import TYPE_CHECKING
 from collections import namedtuple

@@ -38,7 +38,7 @@ if typing.TYPE_CHECKING:
     from typing import Dict, List, Callable
     from frameworks.wulf.view.array import Array
     from gui.goodies.goodie_items import BoosterUICommon, RecertificationForm, Booster, MentoringLicense
-    from gui.server_events.bonuses import CustomizationsBonus, CrewSkinsBonus, TokensBonus, SimpleBonus, ItemsBonus, DossierBonus, VehicleBlueprintBonus, CrewBooksBonus, GoodiesBonus, TankmenBonus, VehiclesBonus, DogTagComponentBonus, BattlePassPointsBonus, CurrenciesBonus, ExcludedMap
+    from gui.server_events.bonuses import CustomizationsBonus, CrewSkinsBonus, TokensBonus, SimpleBonus, ItemsBonus, DossierBonus, VehicleBlueprintBonus, CrewBooksBonus, GoodiesBonus, TankmenBonus, VehiclesBonus, DogTagComponentBonus, BattlePassPointsBonus, CurrenciesBonus, UndefinedAmountBonus
     from gui.shared.gui_items.customization.c11n_items import Customization
     from gui.shared.gui_items.fitting_item import FittingItem
     from gui.shared.gui_items.Vehicle import Vehicle
@@ -107,7 +107,7 @@ def getDefaultBonusPackersMap():
      constants.WoTPlusBonusType.IDLE_CREW_XP: wotPlusBonusPacker,
      constants.WoTPlusBonusType.EXCLUDED_MAP: ExcludedMapsBonusPacker(),
      constants.WoTPlusBonusType.FREE_EQUIPMENT_DEMOUNTING: wotPlusBonusPacker,
-     constants.WoTPlusBonusType.EXCLUSIVE_VEHICLE: wotPlusBonusPacker,
+     constants.WoTPlusBonusType.EXCLUSIVE_VEHICLE: ExclusiveVehicleBonusPacker(),
      constants.WoTPlusBonusType.ATTENDANCE_REWARD: wotPlusBonusPacker,
      constants.WoTPlusBonusType.BATTLE_BONUSES: wotPlusBonusPacker,
      constants.WoTPlusBonusType.BADGES: wotPlusBonusPacker,
@@ -1094,13 +1094,21 @@ class WoTPlusBonusPacker(SimpleBonusUIPacker):
         return model
 
 
-class ExcludedMapsBonusPacker(WoTPlusBonusPacker):
+class UndefinedAmountBonusPacker(WoTPlusBonusPacker):
 
     @classmethod
     def _pack(cls, bonus):
         name = bonus.getPluralName() if bonus.isPlural else bonus.getName()
         label = getLocalizedBonusName(name)
         return [cls._packSingleBonus(bonus, label if label else '')]
+
+
+class ExcludedMapsBonusPacker(UndefinedAmountBonusPacker):
+    pass
+
+
+class ExclusiveVehicleBonusPacker(UndefinedAmountBonusPacker):
+    pass
 
 
 def getDefaultBonusPacker():

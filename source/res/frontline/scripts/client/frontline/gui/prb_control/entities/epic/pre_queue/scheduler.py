@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/prb_control/entities/epic/pre_queue/scheduler.py
+from gui.periodic_battles.models import PrimeTimeStatus
 from gui.prb_control.entities.base.pre_queue.ctx import LeavePreQueueCtx
 from gui.prb_control.entities.base.scheduler import BaseScheduler
 from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.periodic_battles.models import PrimeTimeStatus
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import IEpicBattleMetaGameController
+from skeletons.gui.lobby_context import ILobbyContext
 
 class EpicMetaScheduler(BaseScheduler):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, entity):
         super(EpicMetaScheduler, self).__init__(entity)
@@ -29,13 +31,13 @@ class EpicMetaScheduler(BaseScheduler):
         self.__unlockableInBattleVehicleLevels = modeSettings.unlockableInBattleVehLevels
         self.__epicController.onPrimeTimeStatusUpdated += self.__onPrimeTimeUpdated
         self.__epicController.onEventEnded += self.__checkEpicIsEnabled
-        self.__epicController.onUpdated += self.__onEpicSettingsUpdated
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onEpicSettingsUpdated
         return
 
     def fini(self):
         self.__epicController.onPrimeTimeStatusUpdated -= self.__onPrimeTimeUpdated
         self.__epicController.onEventEnded -= self.__checkEpicIsEnabled
-        self.__epicController.onUpdated -= self.__onEpicSettingsUpdated
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onEpicSettingsUpdated
 
     def __onPrimeTimeUpdated(self, status):
         if not self.__checkEpicIsEnabled():
@@ -49,12 +51,18 @@ class EpicMetaScheduler(BaseScheduler):
             g_eventDispatcher.updateUI()
 
     def __onEpicSettingsUpdated(self, diff):
-        validVehicleLevels = diff.get('validVehicleLevels', self.__validVehicleLevels)
-        unlockableInBattleVehicleLevels = diff.get('unlockableInBattleVehicleLevels', self.__unlockableInBattleVehicleLevels)
+        if 'epic_config' not in diff:
+            return
+        epicDiff = diff['epic_config']
+        validVehicleLevels = epicDiff.get('validVehicleLevels', self.__validVehicleLevels)
+        unlockableInBattleVehicleLevels = epicDiff.get('unlockableInBattleVehicleLevels', self.__unlockableInBattleVehicleLevels)
         if validVehicleLevels != self.__validVehicleLevels or unlockableInBattleVehicleLevels != self.__unlockableInBattleVehicleLevels:
             self.__validVehicleLevels = validVehicleLevels
             self.__unlockableInBattleVehicleLevels = unlockableInBattleVehicleLevels
             self.__doLeave()
+            return
+        status, _, _ = self.__epicController.getPrimeTimeStatus()
+        self.__onPrimeTimeUpdated(status)
 
     def __checkEpicIsEnabled(self):
         hasCurrentSeason = self.__epicController.getCurrentSeason() is not None

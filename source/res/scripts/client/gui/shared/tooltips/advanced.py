@@ -19,6 +19,7 @@ from gui.shared.tooltips.common import BlocksTooltipData
 from helpers import dependency
 from helpers import i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
 DISABLED_ITEMS_ID = 12793
 CHASSIS_TRACK_WITHIN_TRACK = 'vehicleTrackWithinTrackChassis'
 
@@ -74,7 +75,7 @@ class BaseAdvancedTooltip(BlocksTooltipData):
     def _getBlocksList(self, *args, **kwargs):
         pass
 
-    def _packAdvancedBlocks(self, movie, header, description, descReady=False):
+    def _getDescrText(self, description, descReady=False):
         tokens = description.split('|')
         if len(tokens) == 2:
             description = tokens[1]
@@ -86,11 +87,29 @@ class BaseAdvancedTooltip(BlocksTooltipData):
                 descrText = '#tooltips:advanced/' + description
         else:
             descrText = description
-        if movie is None:
-            items = [formatters.packTextBlockData(text=text_styles.highTitle(header), padding=formatters.packPadding(left=20, top=20)), formatters.packTextBlockData(text=text_styles.main(descrText), padding=formatters.packPadding(left=20, top=10, bottom=20))]
-        else:
-            items = [formatters.packTextBlockData(text=text_styles.highTitle(header), padding=formatters.packPadding(left=20, top=20)), formatters.packImageBlockData(BaseAdvancedTooltip.getMovieAnimationPath(movie), BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, padding=5, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_ADVANCED_CLIP_BLOCK_LINKAGE), formatters.packTextBlockData(text=text_styles.main(descrText), padding=formatters.packPadding(left=20, top=10, bottom=20))]
+        return descrText
+
+    def _packAdvancedBlocks(self, movie, header, description, descReady=False):
+        descrText = self._getDescrText(description, descReady)
+        items = [formatters.packTextBlockData(text=text_styles.highTitle(header), padding=formatters.packPadding(left=20, top=20))]
+        if movie is not None:
+            items.append(formatters.packImageBlockData(BaseAdvancedTooltip.getMovieAnimationPath(movie), BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, padding=5, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_ADVANCED_CLIP_BLOCK_LINKAGE))
+        items.append(formatters.packTextBlockData(text=text_styles.main(descrText), padding=formatters.packPadding(left=20, top=10, bottom=20)))
         return items
+
+
+class AdvancedTooltipWithMechanics(BaseAdvancedTooltip):
+
+    def _hasMechanic(self, vehicle, mechanicName):
+        return vehicle and mechanicName in vehicle.getMechanics()
+
+    def _getDescrText(self, description, descReady=False):
+        descrText = super(AdvancedTooltipWithMechanics, self)._getDescrText(description, descReady)
+        statsConfig = self.context.getStatsConfiguration(self._item)
+        vehicle = statsConfig.vehicle
+        if self._hasMechanic(vehicle, VehicleMechanic.LOW_CHARGE_SHOT):
+            descrText = text_styles.concatStylesToMultiLine(text_styles.concatStylesToMultiLine(descrText, ''), i18n.makeString(TOOLTIPS.ADVANCED_LOW_CHARGE_SHOT_FOOTER, fireMode=text_styles.stats(TOOLTIPS.ADVANCED_LOW_CHARGE_SHOT_FIREMODE), fireRate=text_styles.stats(TOOLTIPS.ADVANCED_LOW_CHARGE_SHOT_FIRERATE)))
+        return descrText
 
 
 class FakeAdvancedTooltip(BaseAdvancedTooltip):
@@ -111,7 +130,7 @@ class ComplexAdvanced(BaseAdvancedTooltip):
         return self._packAdvancedBlocks(text, header, text)
 
 
-class HangarShellAdvanced(BaseAdvancedTooltip):
+class HangarShellAdvanced(AdvancedTooltipWithMechanics):
     _MODERN_SUFFIX = '_MODERN'
     _NOT_PIERCING_DAMAGE = '_NOT_PIERCING_DAMAGE'
     _TRAY = '_TRAY'
@@ -151,7 +170,11 @@ class HangarBoosterAdvanced(BaseAdvancedTooltip):
         return self._packAdvancedBlocks(movie, header, itemId, descReady)
 
 
-class HangarModuleAdvanced(BaseAdvancedTooltip):
+class HangarModuleAdvanced(AdvancedTooltipWithMechanics):
+
+    def _hasMechanic(self, vehicle, mechanicName):
+        mechanics = self._item.getMechanics(vehicle.descriptor) or ()
+        return mechanicName in mechanics
 
     def _getBlocksList(self, *args, **kwargs):
         item = self._item
@@ -160,6 +183,8 @@ class HangarModuleAdvanced(BaseAdvancedTooltip):
         descrKey = itemId
         isEquipment = item.itemTypeName == STORE_CONSTANTS.EQUIPMENT
         isOptionalDevice = item.itemTypeName == STORE_CONSTANTS.OPTIONAL_DEVICE
+        statsConfig = self.context.getStatsConfiguration(self._item)
+        vehicle = statsConfig.vehicle
         if isEquipment or isOptionalDevice:
             header = self._item.shortUserName
         else:
@@ -169,7 +194,15 @@ class HangarModuleAdvanced(BaseAdvancedTooltip):
             descrKey = CHASSIS_TRACK_WITHIN_TRACK
         elif isEquipment and item.isStimulator:
             descrKey = 'ration'
-        movieModule = MODULE_MOVIES.get(movieKey)
+        mechanics = item.getMechanics(vehicle.descriptor) or ()
+        movieModule = None
+        for mechanicName in mechanics:
+            movieModule = MODULE_MOVIES.get('%s_%s' % (movieKey, mechanicName.value))
+            if movieModule:
+                break
+
+        if not movieModule:
+            movieModule = MODULE_MOVIES.get(movieKey)
         return self._packAdvancedBlocks(movieModule, header, descrKey)
 
 
@@ -290,6 +323,7 @@ MODULE_MOVIES = {'largeRepairkit': 'consumablesRepairKitBig',
  'improvedVentilation': 'equipmentImprovedVentilation',
  'rammer': 'equipmentMediumCaliberTankGunRammer',
  'vehicleGun': 'moduleGun',
+ 'vehicleGun_lowChargeShot': 'moduleGun_lowChargeShot',
  'vehicleDualGun': 'moduleDualGun',
  'vehicleRadio': 'moduleRadio',
  'vehicleEngine': 'moduleEngine',

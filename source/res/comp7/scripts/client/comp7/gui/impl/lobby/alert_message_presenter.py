@@ -1,14 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/alert_message_presenter.py
 from __future__ import absolute_import
+import typing
+from CurrentVehicle import g_currentVehicle
 from comp7.gui.impl.gen.view_models.views.lobby.alert_message_model import AlertMessageModel, State
 from comp7.gui.shared import event_dispatcher as comp7_events
 from frameworks.wulf.view.array import fillIntsArray
 from gui.impl import backport
 from gui.impl.pub.view_component import ViewComponent
+from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.periodic_battles.models import PeriodType
 from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller
+if typing.TYPE_CHECKING:
+    from typing import Any
 
 class AlertMessagePresenter(ViewComponent[AlertMessageModel]):
     __comp7Controller = dependency.descriptor(IComp7Controller)
@@ -18,7 +23,9 @@ class AlertMessagePresenter(ViewComponent[AlertMessageModel]):
 
     def _onLoading(self, *args, **kwargs):
         super(AlertMessagePresenter, self)._onLoading(*args, **kwargs)
-        self.__updateAlertData()
+        with self.viewModel.transaction() as model:
+            model.setMinVehiclesRequired(self.__comp7Controller.getModeSettings().minVehiclesRequired)
+            self.__updateAlertData(model=model)
 
     @property
     def viewModel(self):
@@ -34,7 +41,8 @@ class AlertMessagePresenter(ViewComponent[AlertMessageModel]):
          (self.__comp7Controller.onStatusUpdated, self.__updateAlertData),
          (self.__comp7Controller.onStatusTick, self.__updateAlertData),
          (self.__comp7Controller.onModeConfigChanged, self.__updateAlertData),
-         (self.__comp7Controller.onOfflineStatusUpdated, self.__updateAlertData))
+         (self.__comp7Controller.onOfflineStatusUpdated, self.__updateAlertData),
+         (g_currentVehicle.onChanged, self.__updateAlertData))
 
     def __onClick(self):
         state = self.__getAlertState()
@@ -49,6 +57,8 @@ class AlertMessagePresenter(ViewComponent[AlertMessageModel]):
             return State.BAN
         if not self.__comp7Controller.hasSuitableVehicles():
             return State.NOVEHICLES
+        if not self.__comp7Controller.hasEnoughReadyToFightVehicles():
+            return State.NOTENOUGHVEHICLES
         if self.__comp7Controller.isInPreannounceState():
             return State.PREANNOUNCE
         if periodInfo.periodType in (PeriodType.AFTER_SEASON,
@@ -58,20 +68,20 @@ class AlertMessagePresenter(ViewComponent[AlertMessageModel]):
          PeriodType.NOT_AVAILABLE_END,
          PeriodType.STANDALONE_NOT_AVAILABLE_END):
             return State.SEASONEND
-        if self.__comp7Controller.isQualificationResultsProcessing():
+        if self.__comp7Controller.isQualificationResultsProcessing() or self.__comp7Controller.isQualificationCalculationRating():
             return State.QUALIFICATION
-        if not self.__comp7Controller.isInPrimeTime() and self.__comp7Controller.hasAvailablePrimeTimeServers():
-            return State.CEASEFIREAVAILABLE
         if not self.__comp7Controller.isInPrimeTime():
+            if self.__comp7Controller.hasAvailablePrimeTimeServers():
+                return State.CEASEFIREAVAILABLE
             return State.CEASEFIREUNAVAILABLE
         return State.MODEOFFLINE if self.__comp7Controller.isOffline else State.NONE
 
-    def __updateAlertData(self, _=None):
+    @replaceNoneKwargsModel
+    def __updateAlertData(self, _=None, model=None):
         preannouncedSeason = self.__comp7Controller.getPreannouncedSeason()
-        with self.viewModel.transaction() as model:
-            model.setState(self.__getAlertState())
-            model.setBanTimeleftInSeconds(int(round(self.__comp7Controller.banDuration)))
-            fillIntsArray(self.__comp7Controller.getModeSettings().levels, model.getLevels())
-            if preannouncedSeason is not None:
-                model.setStartEventDateTime(backport.getShortDateTimeFormat(preannouncedSeason.getStartDate()))
+        model.setState(self.__getAlertState())
+        model.setBanTimeleftInSeconds(int(round(self.__comp7Controller.banDuration)))
+        fillIntsArray(self.__comp7Controller.getModeSettings().levels, model.getLevels())
+        if preannouncedSeason is not None:
+            model.setStartEventDateTime(backport.getShortDateTimeFormat(preannouncedSeason.getStartDate()))
         return

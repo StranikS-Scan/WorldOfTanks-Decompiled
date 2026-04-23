@@ -490,6 +490,7 @@ class JOIN_FAILURE:
     QUEUE_FULL = 17
     QUEUE_FAILURE = 18
     QUEUE_FORBIDDEN = 19
+    NOT_ENOUGH_VEHICLES = 20
 
 
 JOIN_FAILURE_NAMES = dict([ (v, k) for k, v in JOIN_FAILURE.__dict__.iteritems() if not k.startswith('_') ])
@@ -992,6 +993,7 @@ class Configs(enum.Enum):
     WEEKLY_QUESTS_CONFIGS = 'weekly_quests_configs'
     RENEWABLE_SUBSCRIPTION_CONFIG = 'renewable_subscription_config'
     INGAME_TOURNAMENT_CONFIG = 'ingame_tournament_config'
+    W2GT_CONFIG = 'w2gt_config'
 
 
 INBATTLE_CONFIGS = ['spgRedesignFeatures',
@@ -2086,6 +2088,7 @@ class REQUEST_COOLDOWN:
     SYNC_GIFTS = 0.5
     WATCH_REPLAY = 5.0
     VEHICLE_IN_BATTLE_SWITCH = 2.0
+    VEHICLE_BAN_SELECTION = 0.5
     SET_VIVOX_PRESENCE = 0.5
     UNIT_UPDATE_EXTRAS = 2.0
     SET_ACHIEVEMENTS20_LAYOUT = 1.0
@@ -3770,6 +3773,11 @@ class KILL_CAM_STATUS_CODE(enum.IntEnum):
     FOW_NOT_SUPPORTED = 4
 
 
+class KillCamVehicleRole(enum.IntEnum):
+    ATTACKER = 0
+    VICTIM = 1
+
+
 class IMPACT_TYPES:
     PENETRATION = 0
     LEGACY_HE = 1
@@ -3806,12 +3814,14 @@ class EQUIPMENT_ERROR_STATES(object):
     NO_DAMAGED_ENEMY_VEHICLES = 4
     ALREADY_ACTIVATED = 8
     NOT_SUITABLE_LOADING_STATE = 16
+    GUN_TEMPERATURE_LOW = 32
     ALL = (CAN_BE_ACTIVATED,
      CANNOT_BE_ACTIVATED,
      VEHICLE_IS_NOT_DAMAGED,
      NO_DAMAGED_ENEMY_VEHICLES,
      ALREADY_ACTIVATED,
-     NOT_SUITABLE_LOADING_STATE)
+     NOT_SUITABLE_LOADING_STATE,
+     GUN_TEMPERATURE_LOW)
 
 
 class BuffDisplayedState(enum.IntEnum):
@@ -4189,6 +4199,22 @@ class ExtraShotClipStates(object):
     FULL_RELOAD_WITH_EXTRA_TIME = 2
 
 
+class LowChargeShotReloadingState(object):
+    NONE = 0
+    INITIAL_RELOAD = 1
+    LOW_CHARGE = 2
+    ALMOST_FINISHED = 3
+    FULL_CHARGE = 4
+    QUICK_RELOAD = 5
+    EMPTY = 6
+
+
+class LowChargeShotVisualState(object):
+    NONE = 0
+    QUICK_SHOT = 1
+    FULL_SHOT = 2
+
+
 RAMMING_EFFECT_THRESHOLD = 600
 IMPROVED_RAMMING_EFFECT_THRESHOLD = 100
 
@@ -4387,5 +4413,32 @@ class AcceleratorStatus(enum.IntEnum):
     BOTH = LEFT | RIGHT
 
 
+class WheeledDashDirection(enum.IntEnum):
+    NONE = 0
+    FORWARD = 1
+    BACKWARD = 2
+
+
 VEHICLE_MIN_ABS_INITIAL_SPEED = 0.1
 SHOT_PREDICTION_BUFFER = 0.3
+
+class W2GT_STAGES(object):
+    STAGE1 = 'stage1'
+    STAGE2 = 'stage2'
+    ALL = (STAGE1, STAGE2)
+
+
+class PROPELLANT_GUN_STATE:
+    IDLE = 0
+    CHARGING = 1
+    PAUSE = 2
+    DISCHARGING = 3
+    STATIC_STATES = (IDLE, PAUSE)
+    _STATE_TO_NAME = {IDLE: 'idle',
+     CHARGING: 'charging',
+     PAUSE: 'pause',
+     DISCHARGING: 'discharging'}
+
+    @classmethod
+    def toString(cls, value):
+        return cls._STATE_TO_NAME.get(value)

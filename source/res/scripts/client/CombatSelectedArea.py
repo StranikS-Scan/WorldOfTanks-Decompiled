@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/CombatSelectedArea.py
+from __future__ import absolute_import, division
 import BigWorld
 import Math
 import math_utils
@@ -99,7 +100,7 @@ class CombatSelectedArea(object):
                  (-halfX, 0, halfY),
                  (-halfX, 0, -halfY),
                  (halfX, 0, -halfY)}
-                transformedCorners = map(lambda corner: self.__matrix.applyPoint(corner), corners)
+                transformedCorners = [ self.__matrix.applyPoint(corner) for corner in corners ]
                 arena = BigWorld.player().arena
                 correction = Math.Vector3(0)
                 for transformedCorner in transformedCorners:

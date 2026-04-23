@@ -76,6 +76,14 @@ class Comp7Controller(IComp7Controller):
     def remainingOfferTokensNotifications(self):
         return []
 
+    @property
+    def bans(self):
+        return {}
+
+    @property
+    def vehicleCopiesInfo(self):
+        return None
+
     def fini(self):
         self.__eventsManager.clear()
 
@@ -178,6 +186,9 @@ class Comp7Controller(IComp7Controller):
     def isTrainingEnabled(self):
         return False
 
+    def isVehicleBanEnabled(self):
+        return False
+
     def hasActiveSeason(self, includePreannounced=False):
         return False
 
@@ -227,6 +238,9 @@ class Comp7Controller(IComp7Controller):
         return False
 
     def hasSuitableVehicles(self):
+        return False
+
+    def hasEnoughReadyToFightVehicles(self):
         return False
 
     def vehicleIsAvailableForBuy(self):

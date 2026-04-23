@@ -94,12 +94,6 @@ class SettingsTabIndex(object):
     FEEDBACK = 6
 
 
-def showBattleResultsWindow(arenaUniqueID):
-    window = SFWindow(SFViewLoadParams(VIEW_ALIAS.BATTLE_RESULTS, getViewName(VIEW_ALIAS.BATTLE_RESULTS, str(arenaUniqueID))), EVENT_BUS_SCOPE.LOBBY, ctx={'arenaUniqueID': arenaUniqueID})
-    window.load()
-    return window
-
-
 def notifyBattleResultsPosted(arenaUniqueID):
     g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.BATTLE_RESULTS_POSTED, {'arenaUniqueID': arenaUniqueID}), EVENT_BUS_SCOPE.LOBBY)
 
@@ -1865,6 +1859,12 @@ def showAchievementEditView(*args, **kwargs):
     window.load()
 
 
+def showAchievementCustomisationEditView(userID):
+    from gui.impl.lobby.achievements.achievements_summary_edit_mode_view import AchievementSummaryViewEditModeWindow
+    window = AchievementSummaryViewEditModeWindow(userID, parent=getParentWindow())
+    window.load()
+
+
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
 def showSteamEmailConfirmRewardsView(rewards=None, notificationMgr=None):
     from gui.impl.lobby.account_completion.steam_email_confirm_rewards_view import SteamEmailConfirmRewardsViewWindow
@@ -1995,9 +1995,20 @@ def showResearchConfirmDialog(researchedItemsText, xp, freeXP, parent=None):
     raise AsyncReturn(result)
 
 
-def showRandomBattleResultsWindow(arenaUniqueID, bonusType):
-    from gui.impl.lobby.battle_results.states import PostBattleResultsEntryState
-    PostBattleResultsEntryState.goTo(arenaUniqueID=arenaUniqueID, bonusType=bonusType)
+def showBattleResultsWindow(arenaUniqueID, bonusType):
+    from gui.shared.system_factory import collectBattleResultsEntryState
+    entryPointState = collectBattleResultsEntryState(bonusType)
+    if entryPointState:
+        entryPointState.goTo(arenaUniqueID=arenaUniqueID, bonusType=bonusType)
+    else:
+        from gui.impl.lobby.battle_results.states import PostBattleResultsEntryState
+        PostBattleResultsEntryState.goTo(arenaUniqueID=arenaUniqueID, bonusType=bonusType)
+
+
+def showLegacyBattleResultsWindow(arenaUniqueID):
+    window = SFWindow(SFViewLoadParams(VIEW_ALIAS.BATTLE_RESULTS, getViewName(VIEW_ALIAS.BATTLE_RESULTS, str(arenaUniqueID))), EVENT_BUS_SCOPE.LOBBY, ctx={'arenaUniqueID': arenaUniqueID})
+    window.load()
+    return window
 
 
 def showCustomizationRarityAwardScreen(element, isFirstEntry):

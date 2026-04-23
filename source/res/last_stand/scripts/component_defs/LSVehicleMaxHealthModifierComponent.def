@@ -1,0 +1,13 @@
+<LSVehicleMaxHealthModifierComponent.def>
+  <Properties>
+    <maxHealth>
+      <Type>	INT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </maxHealth>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	lsMaxHealthModifier	</DefaultKeyName>
+</LSVehicleMaxHealthModifierComponent.def>

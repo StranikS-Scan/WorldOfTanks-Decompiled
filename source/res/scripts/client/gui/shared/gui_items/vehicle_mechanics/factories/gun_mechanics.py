@@ -13,6 +13,7 @@ class GunMechanicFactory(BaseMechanicFactory):
          (guiItem.hasDualAccuracy(vehDescr), VehicleMechanic.DUAL_ACCURACY),
          (guiItem.isTwinGun(vehDescr), VehicleMechanic.TWIN_GUN),
          (guiItem.isClipGun(vehDescr), VehicleMechanic.MAGAZINE_GUN),
+         (guiItem.isLowChargeShotGun(vehDescr), VehicleMechanic.LOW_CHARGE_SHOT),
          (guiItem.isAutoReloadableWithBoost(vehDescr), VehicleMechanic.AUTO_LOADER_GUN_BOOST),
          (guiItem.isAutoReloadable(vehDescr) and not guiItem.isAutoReloadableWithBoost(vehDescr), VehicleMechanic.AUTO_LOADER_GUN),
          (guiItem.isDamageMutable(), VehicleMechanic.DAMAGE_MUTABLE),

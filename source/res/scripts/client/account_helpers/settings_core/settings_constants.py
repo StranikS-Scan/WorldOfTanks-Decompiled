@@ -139,6 +139,7 @@ class GAME(CONST_CONTAINER):
     LIMITED_UI_ACTIVE = 'limitedUIActive'
     NEWBIE_PREBATTLE_HINTS = 'newbiePrebattleHints'
     NEWBIE_BATTLE_HINTS = 'newbieBattleHints'
+    W2GT_ENABLE = 'w2gtEnable'
 
 
 class SOUND(CONST_CONTAINER):
@@ -373,6 +374,7 @@ class GuiSettingsBehavior(CONST_CONTAINER):
     PRESTIGE_FIRST_ENTRY_NOTIFICATION_SHOWN = 'prestigeFirstEntryNotificationShown'
     CLAN_SUPPLY_INTRO_SHOWN = 'clanSupplyIntroShown'
     CREW_MENTORING_LICENSE_AWARDS_SHOWN = 'crewMentoringLicenseAwardsShown'
+    W2GT_APPLIED = 'w2gtApplied'
 
 
 class OnceOnlyHints(CONST_CONTAINER):

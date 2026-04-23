@@ -1,0 +1,46 @@
+<LSBeamTargetComponent.def>
+  <ClientMethods>
+    <applyEffects>
+      <Arg>	STRING	</Arg>
+    </applyEffects>
+    <removeEffects>
+      <Arg>	ARRAY	  <of>	INT32	</of>
+      </Arg>
+    </removeEffects>
+    <showDamage>
+      <Arg>	INT32	</Arg>
+    </showDamage>
+  </ClientMethods>
+  <Properties>
+    <beamParams>
+      <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+            <sourcePosition>
+              <Type>	VECTOR3	</Type>
+            </sourcePosition>
+            <sourceVehicleID>
+              <Type>	INT32	</Type>
+            </sourceVehicleID>
+            <entIDs>
+              <Type>	ARRAY	  <of>	INT32	</of>
+              </Type>
+            </entIDs>
+            <vehIDs>
+              <Type>	ARRAY	  <of>	INT32	</of>
+              </Type>
+            </vehIDs>
+            <beamName>
+              <Type>	STRING	</Type>
+            </beamName>
+            <dmgBeamName>
+              <Type>	STRING	</Type>
+            </dmgBeamName>
+          </Properties>
+        </of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </beamParams>
+  </Properties>
+  <ofEntity>
+    <ArenaInfo></ArenaInfo>
+  </ofEntity>
+</LSBeamTargetComponent.def>

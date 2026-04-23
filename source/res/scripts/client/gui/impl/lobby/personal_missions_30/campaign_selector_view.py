@@ -13,7 +13,7 @@ from gui.impl.gen.view_models.views.lobby.personal_missions_30.campaign_selector
 from gui.impl.gen.view_models.views.lobby.personal_missions_30.operation_model import OperationState
 from gui.impl.gen.view_models.views.lobby.personal_missions_30.select_operation_model import SelectOperationModel
 from gui.impl.lobby.personal_missions_30.personal_mission_constants import PERSONAL_MISSIONS_CAMPAIGN_SELECTOR_SPACE, IntroKeys
-from gui.impl.lobby.personal_missions_30.views_helpers import getOperationStatus, getSortedPm3Operations, isIntroShown, isPMCampaignsStarted
+from gui.impl.lobby.personal_missions_30.views_helpers import getOperationStatus, isIntroShown, isPMCampaignsStarted, getBranchSortedPmOperations
 from gui.impl.pub import ViewImpl, WindowImpl
 from gui.server_events.events_dispatcher import showPersonalMissionOperationsPage
 from gui.server_events.finders import getBranchByOperationId, BRANCH_TO_OPERATION_IDS
@@ -156,18 +156,18 @@ class CampaignSelectorView(ViewImpl):
             firstTwoSeasonsAreCompletedWithHonors = []
             campaignId = None
             for branch in PM_BRANCH.ALL:
-                operations = self._personalMissions.getAllOperations((branch,))
+                branchOperations = getBranchSortedPmOperations(branch)
                 cm = vm.getCampaignsType()()
                 operationsList = cm.getOperations()
                 isCampaignWithHonors = True
-                for operationID, operation in operations.items():
+                for operationID, operation in branchOperations.items():
                     om = cm.getOperationsType()()
                     om.setOperationId(operationID)
                     om.setActive(operation.isInProgress())
                     campaignId = operation.getCampaignID()
                     om.setOperationName(operation.getShortUserName())
                     om.setOperationIcon(operation.getIconID())
-                    state = getOperationStatus(operation, getSortedPm3Operations())
+                    state = getOperationStatus(operation, branchOperations)
                     om.setCompleted(operation.isAwardAchieved())
                     om.setState(state)
                     if state != OperationState.COMPLETED_WITH_HONORS:

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/DualAccuracy.py
+from __future__ import absolute_import, division
 import Event
 from constants import DUAL_ACCURACY_STATE
 from gui.shared.utils.decorators import ReprInjector

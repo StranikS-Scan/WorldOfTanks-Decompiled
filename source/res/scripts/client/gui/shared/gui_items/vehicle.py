@@ -786,6 +786,11 @@ class Vehicle(FittingItem):
     def settings(self):
         return self._settings
 
+    @property
+    def isUnsuitableToQueue(self):
+        state, _ = self.getState()
+        return state == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE
+
     @settings.setter
     def settings(self, value):
         self._settings = value

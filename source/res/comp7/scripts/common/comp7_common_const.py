@@ -172,4 +172,4 @@ class Comp7QualificationState(object):
 
     @classmethod
     def isCalculationQualificationRating(cls, state):
-        return state in (Comp7QualificationState.NOT_STARTED,)
+        return state == cls.NOT_STARTED

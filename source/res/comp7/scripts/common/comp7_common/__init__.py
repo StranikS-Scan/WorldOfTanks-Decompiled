@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/common/comp7_common/__init__.py
 import constants
-from constants_utils import addArenaGuiTypesFromExtension, addPrebattleTypesFromExtension, initSquadCommonTypes
+from constants_utils import addArenaGuiTypesFromExtension, addPrebattleTypesFromExtension, initSquadCommonTypes, addBattleProgressCategory
 from comp7_common import comp7_constants
 from constants import PREBATTLE_TYPE
 
@@ -11,6 +11,7 @@ def injectConsts(personality):
     constants.INBATTLE_CONFIGS.extend(comp7_constants.COMP7_INBATTLE_CONFIGS)
     PREBATTLE_TYPE.TRAININGS += (comp7_constants.PREBATTLE_TYPE.TRAINING_COMP7,)
     constants.ARENA_GUI_TYPE.NON_DESERTION_ARENAS += (comp7_constants.ARENA_GUI_TYPE.TRAINING_COMP7,)
+    addBattleProgressCategory(comp7_constants.BATTLE_PROGRESS_CATEGORY, personality)
 
 
 def injectSquadConsts(personality):

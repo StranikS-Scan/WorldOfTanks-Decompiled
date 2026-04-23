@@ -74,7 +74,7 @@ class ViewLoadParams(object):
         return '{}[viewKey={}, loadMode={}, parent={}]'.format(self.__class__.__name__, self.__viewKey, self.loadMode, str(self.__parent))
 
     def __hash__(self):
-        return id(self)
+        return hash((self.__viewKey, self.__loadMode, self.__parent))
 
     def __eq__(self, other):
         return isinstance(other, ViewLoadParams) and self.__viewKey == other.viewKey and self.__loadMode == other.loadMode and self.__parent == other.parent
@@ -119,7 +119,11 @@ class GuiImplViewLoadParams(ViewLoadParams):
         return
 
     def __hash__(self):
-        return id(self)
+        return hash((self.viewKey,
+         self.loadMode,
+         self.parent,
+         self.__viewClass,
+         self.__scope))
 
     def __eq__(self, other):
         return super(GuiImplViewLoadParams, self).__eq__(other) and self.__viewClass == other.viewClass and self.__scope == other.scope

@@ -54,6 +54,7 @@
     <MT_50_TM_CFE_A>	56	</MT_50_TM_CFE_A>
     <SGT_4CzM>	57	</SGT_4CzM>
     <W_2_64_GC>	58	</W_2_64_GC>
+    <_2xGTD_2T5A>	60	</_2xGTD_2T5A>
     <SGT_3Cz_M_7x7>	502	</SGT_3Cz_M_7x7>
     <GTD_2T6x2_7x7>	503	</GTD_2T6x2_7x7>
     <Development_Engine>	65000	</Development_Engine>
@@ -893,6 +894,23 @@
       <rpm_min>	632	</rpm_min>
       <rpm_max>	2354	</rpm_max>
     </GTD_2T5x2>
+    <_2xGTD_2T5A>
+      <userString>	#poland_vehicles:_2xGTD_2T5A	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	60000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	800	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	275	</maxHealth>
+      <maxRegenHealth>	138	</maxRegenHealth>
+      <repairCost>	8.0	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	429	</rpm_min>
+      <rpm_max>	2817	</rpm_max>
+    </_2xGTD_2T5A>
     <GTD_2T6x2>
       <userString>	#poland_vehicles:GTD_2T6x2	</userString>
       <tags>	gasoline	</tags>
@@ -911,7 +929,7 @@
       <rpm_max>	2035	</rpm_max>
     </GTD_2T6x2>
     <GTD_2T6x2_7x7>
-      <userString>	#poland_vehicles:GTD_2T6x2	</userString>
+      <userString>	#poland_vehicles:GTD_2T6x2_7x7	</userString>
       <tags>	gasoline	</tags>
       <level>	10	</level>
       <price>	110000	</price>
@@ -920,9 +938,9 @@
       <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
       <power>	900	</power>
       <weight>	400	</weight>
-      <maxHealth>	370	</maxHealth>
-      <maxRegenHealth>	185	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
+      <maxHealth>	340	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
       <rpm_min>	488	</rpm_min>
       <rpm_max>	2035	</rpm_max>

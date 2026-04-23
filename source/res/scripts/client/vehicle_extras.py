@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_extras.py
+from __future__ import absolute_import, division, print_function
 import typing
 import logging
 from functools import partial
+from future.utils import lrange, viewitems, viewvalues
 import AnimationSequence
 import BigWorld
 import Math
@@ -27,11 +29,11 @@ _logger = logging.getLogger(__name__)
 def reload():
     modNames = (reload.__module__,)
     from sys import modules
-    import __builtin__
+    from py2to3.moves import importLib
     for m in modNames:
-        __builtin__.reload(modules[m])
+        importLib.reload(modules[m])
 
-    print 'vehicle_extras reloaded'
+    print('vehicle_extras reloaded')
 
 
 class NoneExtra(EntityExtra):
@@ -168,7 +170,7 @@ class ShowShootingMultiGun(ShowShooting):
         data['_gunInstallationSlot'] = gunInstallationSlot
         gunDescr = vehicle.typeDescriptor.gun
         if currentGuns == self._SHOT_ALL_GUNS:
-            data['_gunIndex'] = range(0, len(gunDescr.effects))
+            data['_gunIndex'] = lrange(0, len(gunDescr.effects))
             data['_gunSequence'] = [data['_gunIndex']] * burstCount
         else:
             data['_gunIndex'] = [currentGuns]
@@ -294,9 +296,9 @@ class DamageMarker(EntityExtra):
 
 def wheelHealths(name, index, containerName, dataSection, vehType):
     extras = []
-    maxAxleCount = max((len(c[1]['axleSteeringLockAngles']) for c in vehType.xphysics['chassis'].iteritems()))
+    maxAxleCount = max((len(c[1]['axleSteeringLockAngles']) for c in viewitems(vehType.xphysics['chassis'])))
     template = vehicles.makeMultiExtraNameTemplate(name)
-    for number in xrange(maxAxleCount * 2):
+    for number in range(maxAxleCount * 2):
         extraName = template.format(number)
         wheelHealth = DamageMarker(extraName, number + index, containerName, dataSection)
         extras.append(wheelHealth)
@@ -373,7 +375,7 @@ class BlinkingLaserSight(EntityExtra):
             data['beamModelRef'].addMotor(BigWorld.Servo(data['beamMP'].beamMatrix))
             player = BigWorld.player()
             player.addModel(data['beamModelRef'])
-            for beamSeq in self._beamSeqs.itervalues():
+            for beamSeq in viewvalues(self._beamSeqs):
                 loader = AnimationSequence.Loader(beamSeq, player.spaceID)
                 data['animatorRefs'][beamSeq] = loader.loadSync()
                 BigWorld.loadResourceListBG((loader,), makeCallbackWeak(self.__onSequenceLoaded, beamSeq, data))
@@ -415,7 +417,7 @@ class BlinkingLaserSight(EntityExtra):
         self.__stopModel(data)
         data['bindNodeRef'] = None
         data['beamMP'] = None
-        for animator in data['animatorRefs'].itervalues():
+        for animator in viewvalues(data['animatorRefs']):
             animator.unbind()
 
         data['animatorRefs'] = {}

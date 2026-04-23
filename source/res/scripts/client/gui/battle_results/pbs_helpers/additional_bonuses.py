@@ -3,6 +3,7 @@
 import typing
 from constants import PREMIUM_TYPE
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as _CAPS
+from gui.game_control.wot_plus.utils import hasAdditionalXPPromoData
 from gui.impl.gen.view_models.views.lobby.battle_results.additional_bonus_model import PremiumXpBonusRestriction
 from gui.Scaleform.genConsts.BATTLE_RESULTS_PREMIUM_STATES import BATTLE_RESULTS_PREMIUM_STATES as BRPS
 from gui.battle_results.settings import FACTOR_VALUE
@@ -17,10 +18,10 @@ ACCOUNT_STATUS_TO_BRPS = {(False, False, False): {(True, True): BRPS.PLUS_INFO,
                          (False, True): BRPS.PLUS_INFO,
                          (True, False): BRPS.PREMIUM_INFO,
                          (False, False): BRPS.PREMIUM_INFO},
- (True, False, False): {(True, True): BRPS.PREMIUM_ADVERTISING,
-                        (False, True): BRPS.PREMIUM_ADVERTISING,
-                        (True, False): BRPS.PREMIUM_ADVERTISING,
-                        (False, False): BRPS.PREMIUM_ADVERTISING},
+ (True, False, False): {(True, True): BRPS.PLUS_INFO,
+                        (False, True): BRPS.PLUS_INFO,
+                        (True, False): BRPS.PLUS_INFO,
+                        (False, False): BRPS.PLUS_INFO},
  (False, True, False): {(True, True): BRPS.PREMIUM_BONUS,
                         (False, True): BRPS.PLUS_EARNINGS,
                         (True, False): BRPS.PREMIUM_BONUS,
@@ -49,34 +50,34 @@ _ADDITIONAL_BONUS_AVAILABLE_STATUSES = {BRPS.PLUS_YOU_ROCK, BRPS.PREMIUM_BONUS, 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache, lobbyContext=ILobbyContext, wotPlusController=IWotPlusController)
 def getAccountStatusToBRPS(hadPremiumPlus, isBonusAppliedAlready, hasXpInBonusCaps, hasXpBonusInBonusCaps, negativeImpact=False, itemsCache=None, lobbyContext=None, wotPlusController=None):
-    isWotPlusBonusEnabled = isWotPlusBonusEnabledInConfig()
+    hasPremiumPlus = itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
+    isPremiumPlusBonusEnabled = lobbyContext.getServerSettings().getAdditionalBonusConfig().get('enabled', False)
     premiumPlusBonusesLeft = itemsCache.items.stats.applyAdditionalXPCount
     wotPlusBonusesLeft = itemsCache.items.stats.applyAdditionalWoTPlusXPCount
-    if isWotPlusBonusEnabled and premiumPlusBonusesLeft <= 0 and wotPlusBonusesLeft <= 0:
+    hasWotPlusPromo = isWotPlusBonusEnabledInConfig()
+    if premiumPlusBonusesLeft <= 0 and wotPlusBonusesLeft <= 0:
         return BRPS.PLUS_YOU_ROCK
     if isBonusAppliedAlready:
         return BRPS.PREMIUM_BONUS
-    hasPremiumPlus = itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
     if not hasXpInBonusCaps:
         state = BRPS.PREMIUM_BONUS
     elif not hasXpBonusInBonusCaps:
-        if isWotPlusBonusEnabled:
+        if hasWotPlusPromo:
             state = BRPS.PREMIUM_BONUS
         elif hasPremiumPlus:
             state = BRPS.PREMIUM_EARNINGS
         else:
             state = BRPS.PREMIUM_INFO
     else:
-        isPremiumPlusBonusEnabled = lobbyContext.getServerSettings().getAdditionalBonusConfig().get('enabled', False)
-        hasWotPlus = wotPlusController.hasSubscription()
-        bonusesAvailable = hasPremiumPlus and isPremiumPlusBonusEnabled and premiumPlusBonusesLeft > 0 or hasWotPlus and isWotPlusBonusEnabled and wotPlusBonusesLeft > 0
+        hasWotPlusSubscription = wotPlusController.hasSubscription()
+        bonusesAvailable = hasPremiumPlus and isPremiumPlusBonusEnabled and premiumPlusBonusesLeft > 0 or hasWotPlusSubscription and hasWotPlusPromo and wotPlusBonusesLeft > 0
         hasBasicPremium = itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.BASIC)
-        states = ACCOUNT_STATUS_TO_BRPS[hasBasicPremium, hasPremiumPlus, hasWotPlus]
-        state = states[bonusesAvailable, isWotPlusBonusEnabled]
-    if state in (BRPS.PREMIUM_INFO, BRPS.PREMIUM_ADVERTISING) and hadPremiumPlus:
+        states = ACCOUNT_STATUS_TO_BRPS[hasBasicPremium, hasPremiumPlus, hasWotPlusSubscription]
+        state = states[bonusesAvailable, hasWotPlusPromo]
+    if state in (BRPS.PREMIUM_INFO, BRPS.PLUS_INFO) and hadPremiumPlus:
         state = BRPS.PREMIUM_EARNINGS
     if state in (BRPS.PREMIUM_INFO,) and negativeImpact:
-        state = BRPS.PREMIUM_ADVERTISING
+        state = BRPS.PLUS_INFO
     return state
 
 
@@ -103,9 +104,8 @@ def isGoldPiggyBankAvailaible(reusable, wotPlusCtrl=None):
     return wotPlusCtrl.getSettingsStorage().getGoldReserveGain(reusable.common.arenaBonusType, reusable.common.battleModifiers) is not None
 
 
-@dependency.replace_none_kwargs(wotPlusCtrl=IWotPlusController)
-def isWotPlusBonusEnabledInConfig(wotPlusCtrl=None):
-    return wotPlusCtrl.getSettingsStorage().getAdditionalXPBonusCount() > 0
+def isWotPlusBonusEnabledInConfig():
+    return hasAdditionalXPPromoData()
 
 
 @dependency.replace_none_kwargs(battleResults=IBattleResultsService)

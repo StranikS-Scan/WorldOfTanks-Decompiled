@@ -311,10 +311,6 @@ class BATTLE_RESULTS(object):
     TEAM_STATS_LABELS_FLAGS = '#battle_results:team/stats/labels_flags'
     TEAM_STATS_LABELS_DEATHS = '#battle_results:team/stats/labels_deaths'
     TEAM_STATS_MILEAGE = '#battle_results:team/stats/mileage'
-    TEAM_STATS_LABELS_DAMAGEDEALTBYSKILLS = '#battle_results:team/stats/labels_damageDealtBySkills'
-    TEAM_STATS_LABELS_HEALED = '#battle_results:team/stats/labels_healed'
-    TEAM_STATS_LABELS_CAPTUREDPOINTSOFINTEREST = '#battle_results:team/stats/labels_capturedPointsOfInterest'
-    TEAM_STATS_LABELS_ROLESKILLUSED = '#battle_results:team/stats/labels_roleSkillUsed'
     TEAM_STATS_CLOSE = '#battle_results:team/stats/close'
     TEAM_RANKHEADER_HEADER = '#battle_results:team/rankHeader/header'
     TEAM_RANKHEADER_BODY = '#battle_results:team/rankHeader/body'
@@ -512,6 +508,10 @@ class BATTLE_RESULTS(object):
     MISSIONSPROGRESS_NOTIFICATIONSTABS_PERSONALMISSIONS_OPERATION_MISSION_COMPLETE = '#battle_results:missionsProgress/notificationsTabs/personalMissions/operation_mission_complete'
     CONDITIONS_TYPE_OR = '#battle_results:conditions/type/or'
     CONDITIONS_TYPE_AND = '#battle_results:conditions/type/and'
+    TEAM_STATS_LABELS_DAMAGEDEALTBYSKILLS = '#battle_results:team/stats/labels_damageDealtBySkills'
+    TEAM_STATS_LABELS_HEALED = '#battle_results:team/stats/labels_healed'
+    TEAM_STATS_LABELS_CAPTUREDPOINTSOFINTEREST = '#battle_results:team/stats/labels_capturedPointsOfInterest'
+    TEAM_STATS_LABELS_ROLESKILLUSED = '#battle_results:team/stats/labels_roleSkillUsed'
     DETAILS_TIME_LBL_ENUM = (DETAILS_TIME_LBL_OBJECTIVESREACHED,
      DETAILS_TIME_LBL_OBJECTIVESDESTROYED,
      DETAILS_TIME_LBL_BASESCAPTURED,
@@ -615,13 +615,13 @@ class BATTLE_RESULTS(object):
      TEAM_STATS_LABELS_TIMESDESTROYED,
      TEAM_STATS_LABELS_FLAGS,
      TEAM_STATS_LABELS_DEATHS,
+     TEAM_STATS_LABELS_DESTROYRECOVERYRATIO,
+     TEAM_STATS_LABELS_ATKOBJECTIVES,
+     TEAM_STATS_LABELS_DEFOBJECTIVES,
      TEAM_STATS_LABELS_DAMAGEDEALTBYSKILLS,
      TEAM_STATS_LABELS_HEALED,
      TEAM_STATS_LABELS_CAPTUREDPOINTSOFINTEREST,
-     TEAM_STATS_LABELS_ROLESKILLUSED,
-     TEAM_STATS_LABELS_DESTROYRECOVERYRATIO,
-     TEAM_STATS_LABELS_ATKOBJECTIVES,
-     TEAM_STATS_LABELS_DEFOBJECTIVES)
+     TEAM_STATS_LABELS_ROLESKILLUSED)
     TEAM_STATS_INFOTIP_ALL_HEADER_ENUM = (TEAM_STATS_INFOTIP_XPFORATTACK_HEADER, TEAM_STATS_INFOTIP_XPFORASSIST_HEADER, TEAM_STATS_INFOTIP_XPOTHER_HEADER)
     TEAM_STATS_INFOTIP_ALL_BODY_ENUM = (TEAM_STATS_INFOTIP_XPFORATTACK_BODY, TEAM_STATS_INFOTIP_XPFORASSIST_BODY, TEAM_STATS_INFOTIP_XPOTHER_BODY)
     COMMON_VEHICLESTATE_DEAD_ENUM = (COMMON_VEHICLESTATE_DEAD0,

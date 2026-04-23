@@ -118,6 +118,7 @@ class MarkerType(Enum):
     BASE_MARKER_TYPE = 'base'
     HEADQUARTER_MARKER_TYPE = 'headquarter'
     TARGET_POINT_MARKER_TYPE = 'target_point'
+    ZONE_MARKER_TYPE = 'zone_marker_type'
     NON_INTERACTIVE = 'non_interactive'
 
     @staticmethod

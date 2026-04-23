@@ -40,8 +40,9 @@ class TrainingRoomState(SFViewLobbyState):
 
     def _onEntered(self, event):
         super(TrainingRoomState, self)._onEntered(event)
+        silently = event.params.get('silently', False)
         if isinstance(self.prbEntity, TrainingEntity):
-            self.prbEntity.setPlayerState(SetPlayerStateCtx(True, waitingID='prebattle/player_ready'))
+            self.prbEntity.setPlayerState(SetPlayerStateCtx(True, waitingID='prebattle/player_ready', silently=silently))
 
     def _onExited(self):
         super(TrainingRoomState, self)._onExited()

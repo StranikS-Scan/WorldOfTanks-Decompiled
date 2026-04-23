@@ -1,11 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/prb_control/entities/limits.py
+from CurrentVehicle import g_currentVehicle
 from constants import PREBATTLE_MAX_OBSERVERS_IN_TEAM, ROLE_TYPE, PREBATTLE_TYPE
 from gui.prb_control import prb_getters
+from helpers import dependency
 from gui.prb_control.entities.base.limits import ITeamLimit, TeamNoPlayersInBattle, TeamIsValid, TeamAllPlayersReady, LimitsCollection
 from gui.prb_control.entities.training.legacy.limits import TrainingVehicleIsValid, ObserverInTeamIsValid
 from gui.prb_control.settings import PREBATTLE_ROSTER, PREBATTLE_RESTRICTION
 from items.vehicles import getVehicleType
+from skeletons.gui.game_control import IComp7Controller
 
 class MaxPlayersNumber(ITeamLimit):
 
@@ -36,10 +39,22 @@ class MaxPlayersNumber(ITeamLimit):
         return (observersNumber, playersNumber)
 
 
+class Comp7TrainingVehicleLimits(TrainingVehicleIsValid):
+    __comp7Controller = dependency.descriptor(IComp7Controller)
+
+    def check(self, teamLimits):
+        if not g_currentVehicle.isPresent():
+            return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT)
+        if not self.__comp7Controller.hasEnoughReadyToFightVehicles():
+            return (False, PREBATTLE_RESTRICTION.LIMIT_NOT_ENOUGH_SUITABLE_VEHICLES)
+        isValid, restriction = super(Comp7TrainingVehicleLimits, self).check(teamLimits)
+        return (isValid, restriction)
+
+
 class Comp7TrainingLimits(LimitsCollection):
 
     def __init__(self, entity):
-        super(Comp7TrainingLimits, self).__init__(entity, (TrainingVehicleIsValid(),), (TeamNoPlayersInBattle(PREBATTLE_TYPE.TRAINING),
+        super(Comp7TrainingLimits, self).__init__(entity, (Comp7TrainingVehicleLimits(),), (TeamNoPlayersInBattle(PREBATTLE_TYPE.TRAINING),
          TeamIsValid(),
          ObserverInTeamIsValid(),
          TeamAllPlayersReady(),

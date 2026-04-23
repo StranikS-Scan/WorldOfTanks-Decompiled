@@ -15,7 +15,7 @@ class SteamEmailStatusEnum(IntEnum):
 class UserInfoModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=10, commands=0):
+    def __init__(self, properties=11, commands=0):
         super(UserInfoModel, self).__init__(properties=properties, commands=commands)
 
     def getUserName(self):
@@ -42,41 +42,47 @@ class UserInfoModel(ViewModel):
     def setClanAbbrev(self, value):
         self._setString(3, value)
 
+    def getSuffixBadgeID(self):
+        return self._getNumber(4)
+
+    def setSuffixBadgeID(self, value):
+        self._setNumber(4, value)
+
     def getRoleInClan(self):
-        return self._getString(4)
-
-    def setRoleInClan(self, value):
-        self._setString(4, value)
-
-    def getEmail(self):
         return self._getString(5)
 
-    def setEmail(self, value):
+    def setRoleInClan(self, value):
         self._setString(5, value)
 
+    def getEmail(self):
+        return self._getString(6)
+
+    def setEmail(self, value):
+        self._setString(6, value)
+
     def getAnonymized(self):
-        return self._getBool(6)
+        return self._getBool(7)
 
     def setAnonymized(self, value):
-        self._setBool(6, value)
+        self._setBool(7, value)
 
     def getSteamEmailStatus(self):
-        return SteamEmailStatusEnum(self._getNumber(7))
+        return SteamEmailStatusEnum(self._getNumber(8))
 
     def setSteamEmailStatus(self, value):
-        self._setNumber(7, value.value)
+        self._setNumber(8, value.value)
 
     def getHasSteamAccount(self):
-        return self._getBool(8)
-
-    def setHasSteamAccount(self, value):
-        self._setBool(8, value)
-
-    def getTeamKiller(self):
         return self._getBool(9)
 
-    def setTeamKiller(self, value):
+    def setHasSteamAccount(self, value):
         self._setBool(9, value)
+
+    def getTeamKiller(self):
+        return self._getBool(10)
+
+    def setTeamKiller(self, value):
+        self._setBool(10, value)
 
     def _initialize(self):
         super(UserInfoModel, self)._initialize()
@@ -84,6 +90,7 @@ class UserInfoModel(ViewModel):
         self._addNumberProperty('badgeID', 0)
         self._addBoolProperty('isInClan', False)
         self._addStringProperty('clanAbbrev', '')
+        self._addNumberProperty('suffixBadgeID', 0)
         self._addStringProperty('roleInClan', '')
         self._addStringProperty('email', '')
         self._addBoolProperty('anonymized', False)

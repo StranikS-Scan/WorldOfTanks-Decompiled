@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/training/legacy/entity.py
 from functools import partial
+import typing
 import BigWorld
 import account_helpers
 from CurrentVehicle import g_currentVehicle
@@ -25,6 +26,8 @@ from gui.prb_control.settings import PREBATTLE_SETTING_NAME, PREBATTLE_RESTRICTI
 from gui.prb_control.storages import legacy_storage_getter
 from gui.training_room_external_handlers import getTrainingRoomHandler
 from prebattle_shared import decodeRoster
+if typing.TYPE_CHECKING:
+    from typing import Callable
 
 class TrainingEntryPoint(LegacyEntryPoint):
 
@@ -135,12 +138,12 @@ class TrainingEntity(LegacyEntity):
         result = super(TrainingEntity, self).init(clientPrb=clientPrb, ctx=ctx)
         if self.storage.arenaGuiType is None:
             self.storage.arenaGuiType = self.getSettings()['arenaGuiType']
+        self.__updateTrainingLimits()
         self.__enterTrainingRoom(isInitial=ctx.getInitCtx() is None)
         g_eventDispatcher.addTrainingToCarousel(False)
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_WINDOW)
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_PAGE)
         self.__updateVehiclesWatcher()
-        self.__updateTrainingLimits()
         return result
 
     def fini(self, clientPrb=None, ctx=None, woEvents=False):
@@ -361,14 +364,12 @@ class TrainingEntity(LegacyEntity):
             return
 
     def __onPlayerReady(self, result):
-        playerReadyHandler = getTrainingRoomHandler(self.getSettings()['arenaGuiType']).getPlayerReadyHandler()
-        if playerReadyHandler is not None:
-            playerReadyHandler()
-        elif result:
-            g_eventDispatcher.loadTrainingRoom()
+        if self._settings is None:
+            return
         else:
-            g_eventDispatcher.loadHangar()
-        return
+            arenaGuiType = self._settings[PREBATTLE_SETTING_NAME.ARENA_GUI_TYPE]
+            getTrainingRoomHandler(arenaGuiType).playerReadyHandler(result)
+            return
 
     def __onSettingChanged(self, code, record='', errorCode=None, callback=None):
         if code < 0:

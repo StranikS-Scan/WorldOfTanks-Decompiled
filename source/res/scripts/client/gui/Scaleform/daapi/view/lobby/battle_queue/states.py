@@ -45,8 +45,8 @@ class BattleQueueContainerState(LobbyState):
         pass
 
     def __preventTransitionCheck(self, event, state=None):
-        from gui.impl.lobby.battle_results.states import PostBattleResultsEntryState
-        allowedStates = [PostBattleResultsEntryState] + [ type(s) for s in self.getChildrenStates() ]
+        from gui.impl.lobby.battle_results.states import PostBattleResultsEntryProto
+        allowedStates = [PostBattleResultsEntryProto] + [ type(s) for s in self.getChildrenStates() ]
         if not state.isEntered():
             return False
         elif self.prbDispatcher is None or not self.prbDispatcher.getFunctionalState().isNavigationDisabled():

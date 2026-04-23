@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/shop/renewable_subscription.py
-from gui.game_control.wot_plus.utils import getAvailableCoreBonuses, getAvailableProBonuses
+from gui.server_events.bonuses_wot_plus import getAvailableCoreBonuses, getAvailableProBonuses
 from helpers import dependency
 from skeletons.gui.game_control import IWotPlusController
 from uilogging.wot_plus.loggers import WotPlusInfoPageLogger
@@ -21,8 +21,9 @@ class RenewableSubWebApiMixin(object):
          'period_end': self._wotPlusCtrl.getExpiryTime(),
          'enabled_core_bonuses': [ bonus.getName() for bonus in getAvailableCoreBonuses(storage) ],
          'enabled_pro_bonuses': [ bonus.getName() for bonus in getAvailableProBonuses(storage) ],
-         'is_free_deluxe_demount_included': self._wotPlusCtrl.getSettingsStorage().isFreeDeluxeEquipmentDemountingEnabled(),
-         'current_active_tier': _TIER_TO_STRING[self._wotPlusCtrl.getTier()]}
+         'is_free_deluxe_demount_included': self._wotPlusCtrl.getSettingsStorage().isFreeDeluxeEquipmentDemountingAvailable(),
+         'current_active_tier': _TIER_TO_STRING[self._wotPlusCtrl.getTier()],
+         'enabled_for_steam': self._wotPlusCtrl.getSettingsStorage().isEnabledForSteam()}
 
     @w2c(W2CSchema, 'subscription_info_window')
     def handleSubscriptionInfoWindow(self, cmd):

@@ -4,14 +4,14 @@ import inspect
 import logging
 from functools import update_wrapper, wraps
 from typing import TypeVar, Type, Generic, Callable, Any
-from constants import IS_CLIENT, IS_BOT, IS_CGF_DUMP, IS_VS_EDITOR, IS_UE_EDITOR, IS_BASEAPP, IS_CELLAPP, IS_DEVELOPMENT, SERVER_TICK_LENGTH
+from constants import IS_CLIENT, IS_BOT, IS_CGF_DUMP, IS_VS_EDITOR, IS_UE_EDITOR, IS_BASEAPP, IS_CELLAPP, IS_DEVELOPMENT, SERVER_TICK_LENGTH, IS_PROCESS_REPLAY
 from debug_utils import LOG_CURRENT_EXCEPTION, CRITICAL_ERROR, LOG_ERROR
 from soft_exception import SoftException
 from time_tracking import LOG_TIME_WARNING
 import time
 import time_tracking
 CLASS = TypeVar('CLASS')
-if not IS_CLIENT and not IS_BOT and not IS_CGF_DUMP and not IS_VS_EDITOR and not IS_UE_EDITOR:
+if not IS_CLIENT and not IS_BOT and not IS_CGF_DUMP and not IS_VS_EDITOR and not IS_UE_EDITOR and not IS_PROCESS_REPLAY:
     from insights.measurements import incrTickOverspends
 logger = logging.getLogger(__name__)
 

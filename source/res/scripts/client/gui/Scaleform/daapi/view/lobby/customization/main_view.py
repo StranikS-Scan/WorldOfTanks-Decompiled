@@ -29,7 +29,6 @@ from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.customization.constants import CustomizationModes
 from gui.customization.shared import chooseMode, appliedToFromSlotsIds, C11nId, SEASON_IDX_TO_TYPE, SEASON_TYPE_TO_NAME, SEASON_TYPE_TO_IDX, SEASONS_ORDER, getTotalPurchaseInfo, containsVehicleBound, C11N_ITEM_TYPE_MAP
-from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.impl import backport
 from gui.impl.dialogs import dialogs
 from gui.impl.dialogs.builders import ResSimpleDialogBuilder
@@ -166,7 +165,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
     _COMMON_SOUND_SPACE = C11N_SOUND_SPACE
     _ZOOM_ON_EMBLEM = 0.1
     _ZOOM_ON_INSCRIPTION = 0.1
-    _ENVIRONMENT_NAME = 'Customization'
     lobbyContext = dependency.descriptor(ILobbyContext)
     itemsCache = dependency.descriptor(IItemsCache)
     service = dependency.descriptor(ICustomizationService)
@@ -781,10 +779,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__setSeasonData()
         self.__ctx.refreshOutfit()
         self.as_selectSeasonS(SEASON_TYPE_TO_IDX[self.__ctx.season])
-        self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': True,
-         'setIdle': True,
-         'setParallax': True}), scope=EVENT_BUS_SCOPE.LOBBY)
-        self.__setEnvironment()
         if self.__ctx.vehicleAnchorsUpdater is not None:
             self.__ctx.vehicleAnchorsUpdater.setMainView(self.flashObject)
         entity = self.hangarSpace.getVehicleEntity()
@@ -833,14 +827,10 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             entity.appearance.loadState.unsubscribe(self.__onVehicleLoadFinished, self.__onVehicleLoadStarted)
             entity.appearance.turretRotator.onTurretRotated -= self.__onTurretAndGunRotated
         self.__onVehicleLoadFinishedEvent = None
-        self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': False,
-         'setIdle': True,
-         'setParallax': True}), scope=EVENT_BUS_SCOPE.LOBBY)
         if self.__styleInfo is not None:
             self.__styleInfo.disableBlur()
             self.__disableStyleInfoSound()
         self._seasonSoundAnimation = None
-        self.__resetEnvironment()
         self.__viewLifecycleWatcher.stop()
         self.__viewLifecycleWatcher = None
         self.__ctx.events.onCloseDialogShown -= self.__modalWindowsPopupHandler.onViewWithKeyCreated
@@ -891,18 +881,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             self.__finishGrabMode()
         super(MainView, self)._dispose()
         self.__ctx = None
-        return
-
-    def __setEnvironment(self):
-        if self.hangarSpace.space is not None:
-            space = self.hangarSpace.space.getSpace()
-            space.setEnvironment(self._ENVIRONMENT_NAME)
-        return
-
-    def __resetEnvironment(self):
-        if self.hangarSpace.space is not None:
-            space = self.hangarSpace.space.getSpace()
-            space.resetEnvironment()
         return
 
     def _getUpdatedAnchorsData(self):

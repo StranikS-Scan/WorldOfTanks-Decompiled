@@ -5,12 +5,12 @@ import typing
 from comp7.gui.impl.gen.view_models.views.lobby.enums import MetaRootViews
 from frameworks.wulf import Window
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.configurable_vehicle_preview import OptionalBlocks
+from gui.impl.gen import R
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.server_events.events_dispatcher import ifPrbNavigationEnabled
 from helpers import dependency
-from skeletons.gui.game_control import IComp7Controller, IIngameTournamentController
-from skeletons.gui.game_control import IHangarSpaceSwitchController
-from skeletons.gui.impl import INotificationWindowController
+from skeletons.gui.game_control import IComp7Controller, IHangarSpaceSwitchController, IIngameTournamentController
+from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 if typing.TYPE_CHECKING:
     from enum import Enum
 _logger = logging.getLogger(__name__)
@@ -234,3 +234,13 @@ def showComp7SeasonVehiclesStatisticsView(closeCallback=None, vehicleCD=None):
      'closeCallback': closeCallback,
      'battlesType': PROFILE_DROPDOWN_KEYS.COMP7,
      'vehicleCD': vehicleCD}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showComp7VehicleBanWindow():
+    from comp7.gui.impl.battle.vehicle_ban.ban_view import BanViewWindow
+    uiLoader = dependency.instance(IGuiLoader)
+    viewID = R.views.comp7.mono.battle.ban_view()
+    if uiLoader.windowsManager.getViewByLayoutID(viewID) is None:
+        window = BanViewWindow()
+        window.load()
+    return

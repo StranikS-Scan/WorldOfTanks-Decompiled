@@ -9,6 +9,7 @@ import GUI
 import Math
 from CurrentVehicle import g_currentVehicle
 from Math import Vector3
+from disjoint_set import DisjointSet
 from gui.Scaleform.daapi.view.lobby.customization.shared import isSlotFilled, isItemsQuantityLimitReached, CustomizationTabs, getProjectionSlotFormfactor
 from gui.Scaleform.daapi.view.lobby.customization.vehicle_anchor_states import Anchor
 from gui.customization.constants import CustomizationModes
@@ -216,7 +217,7 @@ class VehicleAnchorsUpdater(object):
             if isSlotFilled(outfit, slotId):
                 isDisplayed = self.__menuSlotId != slotId
                 self.changeAnchorParams(slotId, isDisplayed=isDisplayed, isAutoScalable=True)
-                root = self.__closeGroups.find(slotId)
+                root = self.__closeGroups.getRoot(slotId)
                 if root is not None:
                     visibleAnchors[root].add(slotId)
                 continue
@@ -224,7 +225,7 @@ class VehicleAnchorsUpdater(object):
                 anchor = g_currentVehicle.item.getAnchorBySlotId(slotId.slotType, slotId.areaId, slotId.regionIdx)
                 if anchor.isFitForFormfactor(formfactor):
                     self.changeAnchorParams(slotId, isDisplayed=True, isAutoScalable=True, isCollidable=True)
-                    root = self.__closeGroups.find(slotId)
+                    root = self.__closeGroups.getRoot(slotId)
                     if root is not None:
                         visibleAnchors[root].add(slotId)
                     continue
@@ -440,43 +441,3 @@ def getAnchorShiftParams(positionA, positionB, normal):
         distance = 0
     direction.normalise()
     return (direction, distance)
-
-
-class DisjointSet(object):
-
-    def __init__(self):
-        super(DisjointSet, self).__init__()
-        self._root = {}
-        self._set = {}
-
-    @property
-    def subsets(self):
-        return self._set.itervalues()
-
-    def add(self, element):
-        self._root[element] = element
-        self._set[element] = {element}
-
-    def find(self, element):
-        return self._root[element] if element in self._root else None
-
-    def get(self, element):
-        root = self.find(element)
-        return self._set[root] if root is not None and root in self._set else None
-
-    def union(self, elementA, elementB):
-        rootA = self.find(elementA)
-        rootB = self.find(elementB)
-        if rootA is not None and rootB is not None and rootA != rootB:
-            if len(self._set[rootA]) < len(self._set[rootB]):
-                rootA, rootB = rootB, rootA
-            setB = self._set.pop(rootB)
-            for element in setB:
-                self._root[element] = rootA
-
-            self._set[rootA].update(setB)
-        return
-
-    def clear(self):
-        self._root.clear()
-        self._set.clear()

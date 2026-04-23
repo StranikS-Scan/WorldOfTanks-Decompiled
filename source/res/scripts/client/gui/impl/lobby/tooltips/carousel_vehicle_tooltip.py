@@ -55,7 +55,7 @@ class CarouselVehicleTooltipView(ViewComponent[CarouselVehicleTooltipModel]):
             _logger.error('No vehicle for with inventoryId %s for displaying a tooltip', self._inventoryId)
             return
         else:
-            vState, vStateLevel = vehicle.getState()
+            vState, vStateLevel = self._getVehicleStatus(vehicle)
             with self.viewModel.transaction() as model:
                 model.setStatus(vState)
                 model.setStateLevel(vStateLevel)
@@ -66,6 +66,10 @@ class CarouselVehicleTooltipView(ViewComponent[CarouselVehicleTooltipModel]):
                 self.__setServiceRecords(model.serviceRecords, vehicle)
                 fillVehicleMechanicsArray(model.getMechanics(), vehicle)
             return
+
+    def _getVehicleStatus(self, vehicle):
+        vState, vStateLevel = vehicle.getState()
+        return (vState, vStateLevel)
 
     def _getDailyXPFactor(self, vehicle):
         return vehicle.dailyXPFactor

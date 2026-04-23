@@ -8,6 +8,7 @@ from operator import itemgetter
 import BigWorld
 import typing
 from adisp import adisp_process
+from gui.game_control.wot_plus.utils import getAdditionalXPPromoData, getMaxGoldReserveCapacityFromAllTiers
 from shared_utils import CONST_CONTAINER, first, makeTupleByDict, findFirst
 from battle_pass_common import BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_Q_CHAIN_BONUS_NAME, BATTLE_PASS_Q_CHAIN_TOKEN_PREFIX, BATTLE_PASS_RANDOM_QUEST_BONUS_NAME, BATTLE_PASS_RANDOM_QUEST_TOKEN_PREFIX, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME, BATTLE_PASS_TOKEN_3D_STYLE, BATTLE_PASS_TOKEN_PREFIX
 from blueprints.BlueprintTypes import BlueprintTypes
@@ -50,7 +51,7 @@ from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE, getItemTypeID
 from gui.shared.gui_items.Tankman import Tankman, calculateRoleLevel
-from gui.shared.gui_items.Vehicle import getIconResourceName, getWotPlusExclusiveVehicleTypeUserName
+from gui.shared.gui_items.Vehicle import getIconResourceName
 from gui.shared.gui_items.crew_book import orderCmp
 from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.customization import CustomizationTooltipContext
@@ -138,7 +139,7 @@ def expirationToTimestamp(expires, currentTime=None):
 class SimpleBonus(object):
     itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, name, value, isCompensation=False, ctx=None, compensationReason=None):
+    def __init__(self, name, value=None, isCompensation=False, ctx=None, compensationReason=None):
         self._name = name
         self._value = value
         self._isCompensation = isCompensation
@@ -2262,10 +2263,6 @@ class UniversalCrewbook(SimpleBonus):
 class WoTPlusBonus(SimpleBonus):
     _wotPlus = dependency.descriptor(IWotPlusController)
 
-    def __init__(self, name):
-        super(WoTPlusBonus, self).__init__(name, None)
-        return
-
     def isBetterThan(self, other):
         return False
 
@@ -2276,10 +2273,9 @@ class GoldBank(WoTPlusBonus):
         super(GoldBank, self).__init__(WoTPlusBonusType.GOLD_BANK)
 
     def getTooltip(self):
-        goldReserveCapacity = self._wotPlus.getSettingsStorage().getMaxGoldReserveCapacity()
         headerData, bodyData = getSimpleTooltipData(self._name)
         header = i18n.makeString(headerData)
-        body = i18n.makeString(bodyData, goldReserveCapacity=goldReserveCapacity)
+        body = i18n.makeString(bodyData, goldReserveCapacity=getMaxGoldReserveCapacityFromAllTiers())
         return makeTooltip(header, body)
 
 
@@ -2295,30 +2291,32 @@ class IdleCrewXP(WoTPlusBonus):
         super(IdleCrewXP, self).__init__(WoTPlusBonusType.IDLE_CREW_XP)
 
 
-class ExcludedMap(WoTPlusBonus):
-
-    def __init__(self, mapCount):
-        super(ExcludedMap, self).__init__(WoTPlusBonusType.EXCLUDED_MAP)
-        self._value = mapCount
+class UndefinedAmountBonus(WoTPlusBonus):
 
     @property
     def isPlural(self):
-        return self._value > 1
+        return self.getValue() > 1
 
     def getPluralName(self):
         return '{}s'.format(self.getName())
 
     def getTooltip(self):
         if not self.isPlural:
-            return super(ExcludedMap, self).getTooltip()
+            return super(UndefinedAmountBonus, self).getTooltip()
         headerData, bodyData = getSimpleTooltipData(self.getPluralName())
         header = i18n.makeString(headerData)
         body = i18n.makeString(bodyData, mapCount=self._value)
         return makeTooltip(header, body)
 
+
+class ExcludedMap(UndefinedAmountBonus):
+
+    def __init__(self, mapCount):
+        super(ExcludedMap, self).__init__(WoTPlusBonusType.EXCLUDED_MAP, mapCount)
+
     def isBetterThan(self, other):
         super(ExcludedMap, self).isBetterThan(other)
-        return self._value > other.getValue()
+        return self.getValue() > other.getValue()
 
 
 class FreeEquipmentDemounting(WoTPlusBonus):
@@ -2327,22 +2325,11 @@ class FreeEquipmentDemounting(WoTPlusBonus):
         super(FreeEquipmentDemounting, self).__init__(WoTPlusBonusType.FREE_EQUIPMENT_DEMOUNTING)
 
 
-class WoTPlusExclusiveVehicle(WoTPlusBonus):
+class WoTPlusExclusiveVehicle(UndefinedAmountBonus):
     _wotPlusCtrl = dependency.descriptor(IWotPlusController)
 
-    def __init__(self):
-        super(WoTPlusExclusiveVehicle, self).__init__(WoTPlusBonusType.EXCLUSIVE_VEHICLE)
-
-    def getTooltip(self):
-        vehicle = self._wotPlusCtrl.getActiveExclusiveVehicle()
-        vehicleName = self._wotPlusCtrl.getActiveExclusiveVehicleName()
-        header = ''
-        body = ''
-        if vehicle is not None:
-            headerData, bodyData = getSimpleTooltipData(self._name)
-            header = i18n.makeString(headerData)
-            body = i18n.makeString(bodyData, vehicleName=vehicleName, vehicleType=getWotPlusExclusiveVehicleTypeUserName(vehicle.classTag))
-        return makeTooltip(header, body)
+    def __init__(self, vehiclesCount):
+        super(WoTPlusExclusiveVehicle, self).__init__(WoTPlusBonusType.EXCLUSIVE_VEHICLE, vehiclesCount)
 
 
 class WotPlusBattleBonuses(WoTPlusBonus):
@@ -2364,9 +2351,7 @@ class WotPlusAdditionalBonuses(WoTPlusBonus):
 
     def getTooltip(self):
         awardItem = R.strings.tooltips.awardItem.dyn(self._name)
-        from gui.game_control.wot_plus.utils import getAdditionalXPPromoData
-        additionalXPBonusCount = getAdditionalXPPromoData()
-        return makeTooltip(backport.text(awardItem.header()), backport.text(awardItem.body(), applications=additionalXPBonusCount))
+        return makeTooltip(backport.text(awardItem.header()), backport.text(awardItem.body(), applications=getAdditionalXPPromoData()))
 
 
 class WotPlusOptionalDevicesAssistant(WoTPlusBonus):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/SimulatedVehicle.py
+from __future__ import absolute_import
 import logging
 from copy import copy
 from functools import partial
@@ -114,8 +115,6 @@ class VehicleBase(object):
 
 class SimulatedVehicle(BigWorld.Entity, VehicleBase, ScriptGameObject):
     __appearanceCache = dependency.descriptor(IAppearanceCache)
-    isTurretDetached = property(lambda self: SPECIAL_VEHICLE_HEALTH.IS_TURRET_DETACHED(self.health) and self.__turretDetachmentConfirmed)
-    isTurretMarkedForDetachment = property(lambda self: SPECIAL_VEHICLE_HEALTH.IS_TURRET_DETACHED(self.health))
     _CONE_SIZE = 2
 
     def __init__(self):
@@ -140,6 +139,14 @@ class SimulatedVehicle(BigWorld.Entity, VehicleBase, ScriptGameObject):
         self.__turretDetachmentConfirmed = False
         self.__damageDecalEffectId = None
         return
+
+    @property
+    def isTurretDetached(self):
+        return SPECIAL_VEHICLE_HEALTH.IS_TURRET_DETACHED(self.health) and self.__turretDetachmentConfirmed
+
+    @property
+    def isTurretMarkedForDetachment(self):
+        return SPECIAL_VEHICLE_HEALTH.IS_TURRET_DETACHED(self.health)
 
     @property
     def turretYaw(self):

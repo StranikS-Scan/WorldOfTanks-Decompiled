@@ -25,7 +25,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
-    from typing import Optional
+    from typing import Optional, List
 _logger = logging.getLogger(__name__)
 _AVAILABLE_GUI_TYPES_LABELS = {constants.ARENA_BONUS_TYPE.REGULAR: constants.ARENA_GUI_TYPE.RANDOM,
  constants.ARENA_BONUS_TYPE.TRAINING: constants.ARENA_GUI_TYPE.TRAINING,

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/schema_manager.py
+from __future__ import absolute_import
 import typing
 import logging
 from game_params_common.base_manager import BaseSchemaManager, SchemaInfo
@@ -31,10 +32,12 @@ class SchemaManager(BaseSchemaManager[ClientSchemaInfo]):
             schema = schemaInfo.schema
             if schema.gpKey in serverSettings:
                 rawConfig = serverSettings[schema.gpKey]
-                if rawConfig:
+                if rawConfig is not None:
                     self._models[schema.gpKey] = schema.deserialize(rawConfig, filter_=clientFilter, skipValidation=schemaInfo.skipValidation)
                     from PlayerEvents import g_playerEvents
                     g_playerEvents.onConfigModelUpdated(schema.gpKey)
+
+        return
 
     def update(self, serverSettingsDiff):
         for schemaInfo in self.getSchemasInfo():
@@ -44,9 +47,12 @@ class SchemaManager(BaseSchemaManager[ClientSchemaInfo]):
                     _logger.error('Update is called before set. schema=%s', schema.gpKey)
                     continue
                 rawConfig = serverSettingsDiff[schema.gpKey]
-                self._models[schema.gpKey] = schema.deserialize(rawConfig, filter_=clientFilter, skipValidation=schemaInfo.skipValidation)
-                from PlayerEvents import g_playerEvents
-                g_playerEvents.onConfigModelUpdated(schema.gpKey)
+                if rawConfig is not None:
+                    self._models[schema.gpKey] = schema.deserialize(rawConfig, filter_=clientFilter, skipValidation=schemaInfo.skipValidation)
+                    from PlayerEvents import g_playerEvents
+                    g_playerEvents.onConfigModelUpdated(schema.gpKey)
+
+        return
 
     def getModel(self, schema, **kwargs):
         model = self._models.get(schema.gpKey)

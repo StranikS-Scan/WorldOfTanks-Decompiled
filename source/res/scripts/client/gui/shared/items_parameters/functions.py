@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/functions.py
+import typing
 from collections import defaultdict
 from operator import itemgetter
-import typing
 from future.utils import iteritems, itervalues
 import BigWorld
 from gui.shared.formatters import text_styles
@@ -12,12 +12,15 @@ from gui.shared.items_parameters import isTemperatureGun
 from gui.shared.items_parameters.params_constants import MODULES
 from helpers import dependency
 from items import utils, tankmen, getTypeOfCompactDescr
+from items.components.shared_components import LowChargeShotParams
 from items.vehicles import vehicleAttributeFactors
-from items.params_utils import getHeatedShotDispersion
+from items.params_utils import getHeatedShotDispersion, convertModifiersList, extractModifier
 from skeletons.gui.lobby_context import ILobbyContext
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
+    from items.components.shared_components import LowChargeShotShot
     from items.vehicles import VehicleDescriptor, CompositeVehicleDescriptor
+    from items.vehicle_items import Gun, Shell
 
 class _KpiDict(object):
 
@@ -28,24 +31,26 @@ class _KpiDict(object):
 
     def __mul__(self, other):
         resultTypes, resultFactors = {}, defaultdict(float)
-        otherFactors, otherTypes = other.getFactors(), other.getFactorTypes()
+        otherTypes, otherFactors = other.getFactorTypes(), other.getFactors()
         for kpiName in self.__dict.viewkeys() | otherFactors.viewkeys():
             resultTypes[kpiName] = kpiType = self.__typeDict.get(kpiName) or otherTypes[kpiName]
             firstVal, secondVal = self.__dict.get(kpiName, 0.0), otherFactors.get(kpiName, 0.0)
-            resultFactors[kpiName] = firstVal + secondVal + (firstVal * secondVal if kpiType == KPI.Type.MUL else 0.0)
+            resultFactors[kpiName] = (firstVal or 1.0) * (secondVal or 1.0) if kpiType == KPI.Type.MUL else firstVal + secondVal
 
         return _KpiDict(resultFactors, resultTypes)
 
     def addKPI(self, name, value, kpiType):
-        delta = 1.0 if kpiType == KPI.Type.MUL else 0.0
-        self.__dict[name] += value - delta
+        if kpiType == KPI.Type.MUL:
+            self.__dict[name] = value * self.__dict.get(name, 1.0)
+        else:
+            self.__dict[name] += value
         self.__typeDict[name] = kpiType
 
     def getFactor(self, kpiName):
         if kpiName not in self.__dict:
             return 0.0
         kpiType = self.__typeDict[kpiName]
-        return self.__dict[kpiName] * 100 if kpiType == KPI.Type.MUL else self.__dict[kpiName]
+        return (self.__dict[kpiName] - 1.0) * 100 if kpiType == KPI.Type.MUL else self.__dict[kpiName]
 
     def getFactors(self):
         return self.__dict
@@ -55,15 +60,15 @@ class _KpiDict(object):
 
     def getKpi(self, kpiName):
         kpiType = self.__typeDict[kpiName]
-        return KPI(kpiName, (1.0 if kpiType == KPI.Type.MUL else 0.0) + self.__dict[kpiName], kpiType)
+        return KPI(kpiName, self.__dict[kpiName], kpiType)
 
     def getKpiIterator(self):
         for kpiName, kpiValue in iteritems(self.__dict):
             kpiType = self.__typeDict[kpiName]
-            yield KPI(kpiName, (1.0 if kpiType == KPI.Type.MUL else 0.0) + kpiValue, kpiType)
+            yield KPI(kpiName, kpiValue, kpiType)
 
     def getCoeff(self, kpiName):
-        return self.getFactor(kpiName) / 100 + 1
+        return self.__dict.get(kpiName, 1.0)
 
 
 def aggregateKpi(kpiList):
@@ -265,7 +270,7 @@ def getClientCoolingDelay(vehicleDescr, factors):
 
 
 def getMaxSteeringLockAngle(axleSteeringLockAngles):
-    return max(map(abs, axleSteeringLockAngles)) if axleSteeringLockAngles else None
+    return max(map(abs, axleSteeringLockAngles)) if axleSteeringLockAngles and any(axleSteeringLockAngles) else None
 
 
 def getRocketAccelerationEnginePower(vehicleDescr, value):
@@ -283,3 +288,58 @@ def getRocketAccelerationKpiFactors(vehDescr):
 
 def getTurboshaftEnginePower(vehicleDescr, _):
     return vehicleDescr.siegeVehicleDescr.physics['enginePower'] if vehicleDescr.hasTurboshaftEngine else None
+
+
+def getLowChargeReloadTime(vehDescr, baseReloadSpeed):
+    lowChargeParams = vehDescr.gun.mechanicsParams.get(LowChargeShotParams.MECHANICS_NAME)
+    return None if lowChargeParams is None else baseReloadSpeed * lowChargeParams.reloadTimeCoefficient
+
+
+def getLowChargePiercingPower(vehDescr, shellDescr, basePiercingPower):
+    shotParams, shotIdx = _getLowChargeShotParams(vehDescr.gun, shellDescr)
+    if shotParams is None:
+        return basePiercingPower
+    else:
+        attribute = 'piercingValue'
+        return basePiercingPower + shotParams[attribute] + _getLowChargeShotMiscAttr(vehDescr.miscAttrs, shotIdx, attribute)
+
+
+def getLowChargeDamage(vehDescr, shellDescr, baseDamage):
+    shotParams, shotIdx = _getLowChargeShotParams(vehDescr.gun, shellDescr)
+    if shotParams is None:
+        return baseDamage
+    else:
+        attribute = 'damageValue'
+        return baseDamage + shotParams[attribute] + _getLowChargeShotMiscAttr(vehDescr.miscAttrs, shotIdx, attribute)
+
+
+def getLowChargeShotSpeed(vehDescr, shellDescr, baseShotSpeed):
+    shotParams, shotIdx = _getLowChargeShotParams(vehDescr.gun, shellDescr)
+    if shotParams is None:
+        return baseShotSpeed
+    else:
+        attribute = 'shotSpeedValue'
+        return baseShotSpeed + shotParams[attribute] + _getLowChargeShotMiscAttr(vehDescr.miscAttrs, shotIdx, attribute)
+
+
+def getLowChargeShotDispersion(vehDescr, originalShotDisp):
+    lowChargeShotParams = vehDescr.gun.mechanicsParams.get(LowChargeShotParams.MECHANICS_NAME)
+    modifiers = convertModifiersList(lowChargeShotParams.modifiers)
+    modifier = extractModifier(modifiers, 'multShotDispersionFactor')
+    return originalShotDisp * modifier.value
+
+
+def _getLowChargeShotParams(gunDescr, shellDescr):
+    lowChargeShotParams = gunDescr.mechanicsParams.get(LowChargeShotParams.MECHANICS_NAME)
+    shotIdx = -1
+    for idx, shot in enumerate(gunDescr.shots):
+        if shellDescr.id == shot.shell.id:
+            shotIdx = idx
+            break
+
+    return None if lowChargeShotParams is None or shotIdx + 1 > len(lowChargeShotParams.shots) else (lowChargeShotParams.shots[shotIdx], shotIdx)
+
+
+def _getLowChargeShotMiscAttr(miscAttrs, shotIdx, attribute):
+    attr = 'lowChargeShot/shot{}/{}'.format(shotIdx, attribute)
+    return miscAttrs[attr]

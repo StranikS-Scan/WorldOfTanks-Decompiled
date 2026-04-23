@@ -1,0 +1,16 @@
+<LowChargeShotPublicController.def>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <Properties>
+    <vehTypeCD>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehTypeCD>
+    <stateStatus>
+      <Type>	LOW_CHARGE_SHOT_PUBLIC_STATE	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </stateStatus>
+  </Properties>
+  <DefaultKeyName>	lowChargeShotPublicController	</DefaultKeyName>
+</LowChargeShotPublicController.def>

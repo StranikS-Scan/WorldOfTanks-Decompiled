@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/listeners_collection.py
 import itertools
-from debug_utils import LOG_ERROR, LOG_DEBUG
+import logging
+_logger = logging.getLogger(__name__)
 
 class IListenersCollection(object):
 
@@ -26,7 +27,7 @@ class ListenersCollection(IListenersCollection):
         return
 
     def clear(self):
-        LOG_DEBUG('Listeners collection was cleared: ', self)
+        _logger.debug('Listeners collection was cleared: %r', self)
         while self._listeners:
             self._listeners.pop()
 
@@ -35,27 +36,27 @@ class ListenersCollection(IListenersCollection):
         return
 
     def suspend(self):
-        LOG_DEBUG('Listeners collection was suspended: ', self)
+        _logger.debug('Listeners collection was suspended: %r', self)
         self._isSuspended = True
 
     def resume(self):
-        LOG_DEBUG('Listeners collection was resumed: ', self)
+        _logger.debug('Listeners collection was resumed: %r', self)
         self._isSuspended = False
 
     def addMutualListeners(self, mutualListeners):
         if isinstance(mutualListeners, ListenersCollection):
             self._mutualListeners = mutualListeners
         else:
-            LOG_ERROR('Object is not extend {0:>s}'.format(ListenersCollection.__name__), mutualListeners)
+            _logger.error('Object is not extend {0:>s} %r'.format(ListenersCollection.__name__), mutualListeners)
 
     def addListener(self, listener):
         if isinstance(listener, self._clazz):
             if not self.hasListener(listener):
                 self._listeners.append(listener)
             else:
-                LOG_ERROR('Listener already added', listener)
+                _logger.error('Listener already added %r', listener)
         else:
-            LOG_ERROR('Object does not extend {0:>s}'.format(self._clazz.__name__), listener)
+            _logger.error('Object does not extend {0:>s} %r'.format(self._clazz.__name__), listener)
 
     def hasListener(self, listener):
         return listener in self._listeners
@@ -64,7 +65,7 @@ class ListenersCollection(IListenersCollection):
         if listener in self._listeners:
             self._listeners.remove(listener)
         else:
-            LOG_DEBUG('Listener not found.', listener)
+            _logger.debug('Listener not found %r.', listener)
 
     def getListenersIterator(self):
         return itertools.chain(iter(self._listeners), self._mutualListeners.getListenersIterator()) if self._mutualListeners is not None else iter(self._listeners)
@@ -75,9 +76,18 @@ class ListenersCollection(IListenersCollection):
     def _invokeListeners(self, event, *args, **kwargs):
         if self._isSuspended:
             return
-        LOG_DEBUG(event, args, kwargs)
-        for listener in list(self.getListenersIterator()):
-            notifier = getattr(listener, event)
-            if notifier and callable(notifier):
-                notifier(*args, **kwargs)
-            LOG_ERROR('Listener method not found', listener, event)
+        else:
+            _logger.debug('%r %r %r', event, args, kwargs)
+            for listener in list(self.getListenersIterator()):
+                if listener not in self.getListenersIterator():
+                    continue
+                notifier = getattr(listener, event, None)
+                if notifier and callable(notifier):
+                    try:
+                        notifier(*args, **kwargs)
+                    except Exception:
+                        _logger.exception('Error while notifying listener %r for event %r', listener, event)
+
+                _logger.error('Listener method not found %r %r', listener, event)
+
+            return

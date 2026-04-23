@@ -24,9 +24,11 @@
     <R_123_OSP3>	26	</R_123_OSP3>
     <RT10_26P_W>	27	</RT10_26P_W>
     <R_113_GC>	30	</R_113_GC>
+    <R_112>	32	</R_112>
     <R_123S>	29	</R_123S>
     <R_113_CFE_A>	28	</R_113_CFE_A>
     <R_123_7x7>	502	</R_123_7x7>
+    <R_123_NC_Wz_70T_7x7>	503	</R_123_NC_Wz_70T_7x7>
     <Development_Radio>	65000	</Development_Radio>
     <N2_C_SH>	20	</N2_C_SH>
     <R_113_P_SH>	21	</R_113_P_SH>
@@ -269,6 +271,18 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </R_123_7x7>
+    <R_123_NC_Wz_70T_7x7>
+      <userString>	#poland_vehicles:R_123_NC_Wz_70T_7x7	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </R_123_NC_Wz_70T_7x7>
     <R_123M>
       <userString>	#poland_vehicles:R_123M	</userString>
       <tags></tags>
@@ -351,6 +365,18 @@
       <maxRegenHealth>	115	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </R_113_GC>
+    <R_112>
+      <userString>	#poland_vehicles:R_112	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	30000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	55	</weight>
+      <distance>	570	</distance>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	2.5	</repairCost>
+    </R_112>
     <Development_Radio>
       <userString>	Development Radio	</userString>
       <tags></tags>

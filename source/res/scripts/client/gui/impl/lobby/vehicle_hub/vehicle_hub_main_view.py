@@ -48,6 +48,7 @@ if typing.TYPE_CHECKING:
 _REQUIRED_TAGS = [VEHICLE_TAGS.SPECIAL,
  VEHICLE_TAGS.PREMIUM,
  VEHICLE_TAGS.EARN_CRYSTALS,
+ VEHICLE_TAGS.WOT_PLUS,
  CollectorVehicleConsts.COLLECTOR_VEHICLES_TAG]
 VehicleHubCtx = namedtuple('VehicleHubCtx', ('intCD',
  'vehicleStrCD',
@@ -188,8 +189,6 @@ class VehicleHubMainView(ViewComponent, IRoutableView):
         if self.__router is not None:
             self.__router.fini()
             self.__router = None
-        if self.currentPresenter is not None:
-            self.currentPresenter.finalize()
         self.__lsmObserver = None
         self.__clearAllSubPresenters()
         self.__activeTab = None

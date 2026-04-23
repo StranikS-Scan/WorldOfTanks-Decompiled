@@ -80,6 +80,7 @@
     <_152_mm_64_152T_M>	87	</_152_mm_64_152T_M>
     <_122mm_57I>	88	</_122mm_57I>
     <_152_mm_ZPL_75>	89	</_152_mm_ZPL_75>
+    <_57mm_PG70_x2>	91	</_57mm_PG70_x2>
     <_152_mm_ZPL_75_1>	92	</_152_mm_ZPL_75_1>
     <_122mm_57I_CFE_A>	93	</_122mm_57I_CFE_A>
     <_84_mm_Type_79>	94	</_84_mm_Type_79>
@@ -1149,6 +1150,67 @@
         </_57mm_Sha_bao_271_59_16>
       </shots>
     </_57mm_55_57FGA>
+    <_57mm_PG70_x2>
+      <userString>	#china_vehicles:_57mm_PG70_x2	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	200000	</price>
+      <notInShop>	true	</notInShop>
+      <effects>	shot_medium_mb	</effects>
+      <reloadEffect>	reload_autoshoot_reloading_50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0 -40 1 -40	</minPitch>
+        <maxPitch>	0 8 1 8	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	30	</rotationSpeed>
+      <reloadTime>	20	</reloadTime>
+      <maxAmmo>	1024	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	4500	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <invisibilityFactorAtShot>	0.112	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.35	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <clip>
+        <count>	150	</count>
+        <rate>	600	</rate>
+      </clip>
+      <autoShoot>
+        <shotDispersionPerShot>	0.15	</shotDispersionPerShot>
+        <maxShotDispersion>	10	</maxShotDispersion>
+        <groupSize>	1	</groupSize>
+      </autoShoot>
+      <shots>
+        <_57mm_Chuan_bei_PG70>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	236 222	</piercingPower>
+        </_57mm_Chuan_bei_PG70>
+        <_57mm_Chuan_chao_PG70>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1250	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	288 261	</piercingPower>
+        </_57mm_Chuan_chao_PG70>
+        <_57mm_Sha_bao_PG70>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	800	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	50 50	</piercingPower>
+        </_57mm_Sha_bao_PG70>
+      </shots>
+    </_57mm_PG70_x2>
     <_76mm_F_34>
       <userString>	#china_vehicles:_76mm_F_34	</userString>
       <tags></tags>

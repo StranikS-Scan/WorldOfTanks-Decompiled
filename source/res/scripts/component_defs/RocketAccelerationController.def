@@ -1,5 +1,9 @@
 <RocketAccelerationController.def>
   <Properties>
+    <vehTypeCD>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehTypeCD>
     <stateStatus>
       <Type>	ROCKET_ACCELERATION_STATE_STATUS	</Type>
       <Flags>	ALL_CLIENTS	</Flags>

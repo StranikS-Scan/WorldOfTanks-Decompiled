@@ -1903,6 +1903,75 @@
     </attachment>
   </itemGroup>
   <itemGroup>
+    <name>	Mafia: Tommy's Story	</name>
+    <userString>	#vehicle_customization:attachment/Mafia_Tommys_story	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <attachment>
+      <id>	1169	</id>
+      <name>	Cus_180_BP19_TaxiSign	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_180_BP19_TaxiSign/Cus_180_BP19_TaxiSign.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_180_BP19_TaxiSign/Cus_180_BP19_TaxiSign_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	gunMantlet	</applyType>
+      <size>	medium	</size>
+      <rarity>	epic	</rarity>
+      <priceGroup>	attachments 1000g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Mafia_Tommys_story/Cus_180_BP19_TaxiSign	</userString>
+      <tags>	battleEffect	</tags>
+    </attachment>
+    <attachment>
+      <id>	1170	</id>
+      <name>	Cus_181_BP19_TommyGun	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_181_BP19_TommyGun/Cus_181_BP19_TommyGun.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_181_BP19_TommyGun/Cus_181_BP19_TommyGun.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	turret	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Mafia_Tommys_story/Cus_181_BP19_TommyGun	</userString>
+    </attachment>
+    <attachment>
+      <id>	1171	</id>
+      <name>	Cus_182_BP19_BarSign	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_182_BP19_BarSign/Cus_182_BP19_BarSign.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_182_BP19_BarSign/Cus_182_BP19_BarSign_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	legendary	</rarity>
+      <priceGroup>	attachments 2150g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Mafia_Tommys_story/Cus_182_BP19_BarSign	</userString>
+      <description>	#vehicle_customization:attachment/Mafia_Tommys_story/Cus_182_BP19_BarSign/description	</description>
+      <tags>	battleEffect	</tags>
+    </attachment>
+    <attachment>
+      <id>	1172	</id>
+      <name>	Cus_183_BP19_MissionKit	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_183_BP19_MissionKit/Cus_183_BP19_MissionKit.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_183_BP19_MissionKit/Cus_183_BP19_MissionKit.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Mafia_Tommys_story/Cus_183_BP19_MissionKit	</userString>
+    </attachment>
+    <attachment>
+      <id>	1173	</id>
+      <name>	Cus_184_BP19_RacingKit	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_184_BP19_RacingKit/Cus_184_BP19_RacingKit.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_184_BP19_RacingKit/Cus_184_BP19_RacingKit.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Mafia_Tommys_story/Cus_184_BP19_RacingKit	</userString>
+    </attachment>
+  </itemGroup>
+  <itemGroup>
     <name>	GunSlots	</name>
     <userString>	#vehicle_customization:attachment/gunslot	</userString>
     <season>	ALL	</season>
@@ -2230,6 +2299,264 @@
           <vehicles>	usa:A191_Ares_90_C	</vehicles>
         </include>
       </vehicleFilter>
+    </attachment>
+    <attachment>
+      <id>	2023	</id>
+      <name>	GB158_gunsleeve_slipstream	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/gun_slots/GB158_gunsleeve_slipstream/attachment.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	gun	</applyType>
+      <rarity>	epic	</rarity>
+      <priceGroup>	attachments 1300g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/gunslot/GB158_gunsleeve_slipstream	</userString>
+      <shortDescriptionSpecial>	#vehicle_customization:attachment/gunslot/shortDescriptionSpecial	</shortDescriptionSpecial>
+      <tags>	showDisabled	</tags>
+      <vehicleFilter>
+        <include>
+          <vehicles>	uk:GB158_Executor	</vehicles>
+        </include>
+      </vehicleFilter>
+    </attachment>
+    <attachment>
+      <id>	2024	</id>
+      <name>	A195_gunsleeve_quickdraw	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/gun_slots/A195_gunsleeve_quickdraw/attachment.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	gun	</applyType>
+      <rarity>	epic	</rarity>
+      <priceGroup>	attachments 1300g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/gunslot/A195_gunsleeve_quickdraw	</userString>
+      <shortDescriptionSpecial>	#vehicle_customization:attachment/gunslot/shortDescriptionSpecial	</shortDescriptionSpecial>
+      <tags>	showDisabled	</tags>
+      <vehicleFilter>
+        <include>
+          <vehicles>	usa:A195_Gorilla	</vehicles>
+        </include>
+      </vehicleFilter>
+    </attachment>
+    <attachment>
+      <id>	2025	</id>
+      <name>	F143_gunsleeve_ardentsoul	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/gun_slots/F143_gunsleeve_ardentsoul/attachment.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	gun	</applyType>
+      <rarity>	epic	</rarity>
+      <priceGroup>	attachments 1300g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/gunslot/F143_gunsleeve_ardentsoul	</userString>
+      <shortDescriptionSpecial>	#vehicle_customization:attachment/gunslot/shortDescriptionSpecial	</shortDescriptionSpecial>
+      <tags>	showDisabled	</tags>
+      <vehicleFilter>
+        <include>
+          <vehicles>	france:F143_Fauteur	</vehicles>
+        </include>
+      </vehicleFilter>
+    </attachment>
+  </itemGroup>
+  <itemGroup>
+    <name>	Zero Legacy	</name>
+    <userString>	#vehicle_customization:attachment/Zero_Legacy	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <attachment>
+      <id>	1165	</id>
+      <name>	Cus_199_LS_EMP_TurretLamp	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_199_LS_EMP_TurretLamp/Cus_199_LS_EMP_TurretLamp.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_199_LS_EMP_TurretLamp/Cus_199_LS_EMP_TurretLamp.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	turret	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 650g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Zero_Legacy/Cus_199_LS_EMP_TurretLamp	</userString>
+    </attachment>
+    <attachment>
+      <id>	1166	</id>
+      <name>	Cus_200_LS_EMP_Barrel	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_200_LS_EMP_Barrel/Cus_200_LS_EMP_Barrel.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_200_LS_EMP_Barrel/Cus_200_LS_EMP_Barrel.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 650g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Zero_Legacy/Cus_200_LS_EMP_Barrel	</userString>
+    </attachment>
+    <attachment>
+      <id>	1167	</id>
+      <name>	Cus_201_LS_EMP_Plazmoid	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_201_LS_EMP_Plazmoid/Cus_201_LS_EMP_Plazmoid.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_201_LS_EMP_Plazmoid/Cus_201_LS_EMP_Plazmoid.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	epic	</rarity>
+      <priceGroup>	attachments 1300g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Zero_Legacy/Cus_201_LS_EMP_Plazmoid	</userString>
+    </attachment>
+    <attachment>
+      <id>	1168	</id>
+      <name>	Cus_203_LS_EMP_GunLamp	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_203_LS_EMP_GunLamp/Cus_203_LS_EMP_GunLamp.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_203_LS_EMP_GunLamp/Cus_203_LS_EMP_GunLamp.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	gunMantlet	</applyType>
+      <size>	medium	</size>
+      <rarity>	epic	</rarity>
+      <priceGroup>	attachments 1000g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Zero_Legacy/Cus_203_LS_EMP_GunLamp	</userString>
+    </attachment>
+    <attachment>
+      <id>	1174	</id>
+      <name>	Cus_202_LS_EMP_Compressor	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_202_LS_EMP_Compressor/Cus_202_LS_EMP_Compressor.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_202_LS_EMP_Compressor/Cus_202_LS_EMP_Compressor.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 650g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Zero_Legacy/Cus_202_LS_EMP_Compressor	</userString>
+    </attachment>
+  </itemGroup>
+  <itemGroup>
+    <name>	Justice_and_Virtue	</name>
+    <userString>	#vehicle_customization:attachment/Justice_and_Virtue	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <attachment>
+      <id>	1180	</id>
+      <name>	Cus_209_OB_Lantern	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_209_OB_Lantern/Cus_209_OB_Lantern.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_209_OB_Lantern/Cus_209_OB_Lantern.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	gunMantlet	</applyType>
+      <size>	medium	</size>
+      <rarity>	epic	</rarity>
+      <priceGroup>	attachments 1000g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Justice_and_Virtue/Cus_209_OB_Lantern	</userString>
+    </attachment>
+    <attachment>
+      <id>	1181	</id>
+      <name>	Cus_210_OB_Gong	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_210_OB_Gong/Cus_210_OB_Gong.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_210_OB_Gong/Cus_210_OB_Gong.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	turret	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Justice_and_Virtue/Cus_210_OB_Gong	</userString>
+    </attachment>
+    <attachment>
+      <id>	1182	</id>
+      <name>	Cus_211_OB_Ponyaga	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_211_OB_Ponyaga/Cus_211_OB_Ponyaga.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_211_OB_Ponyaga/Cus_211_OB_Ponyaga.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Justice_and_Virtue/Cus_211_OB_Ponyaga	</userString>
+    </attachment>
+    <attachment>
+      <id>	1183	</id>
+      <name>	Cus_212_OB_RedHareArmor	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_212_OB_RedHareArmor/Cus_212_OB_RedHareArmor.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_212_OB_RedHareArmor/Cus_212_OB_RedHareArmor.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Justice_and_Virtue/Cus_212_OB_RedHareArmor	</userString>
+    </attachment>
+    <attachment>
+      <id>	1184	</id>
+      <name>	Cus_213_OB_LamellarArmor	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_213_OB_LamellarArmor/Cus_213_OB_LamellarArmor.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_213_OB_LamellarArmor/Cus_213_OB_LamellarArmor.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	legendary	</rarity>
+      <priceGroup>	attachments 2150g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Justice_and_Virtue/Cus_213_OB_LamellarArmor	</userString>
+      <description>	#vehicle_customization:attachment/Justice_and_Virtue/Cus_213_OB_LamellarArmor/description	</description>
+      <tags>	battleEffect	</tags>
+    </attachment>
+  </itemGroup>
+  <itemGroup>
+    <name>	Heavy_Ordnance	</name>
+    <userString>	#vehicle_customization:attachment/heavy_ordnance	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <vehicleFilter>
+      <include>
+        <levels>	8 9 10 11	</levels>
+      </include>
+    </vehicleFilter>
+    <attachment>
+      <id>	1145	</id>
+      <name>	Cus_117_Historical_CrewStuff	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_117_Historical_CrewStuff/Cus_117_Historical_CrewStuff.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_117_Historical_CrewStuff/Cus_117_Historical_CrewStuff.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 350g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/heavy_ordnance/Cus_117_Historical_CrewStuff	</userString>
+    </attachment>
+    <attachment>
+      <id>	1146	</id>
+      <name>	Cus_113_Historical_M129	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_113_Historical_M129/Cus_113_Historical_M129.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_113_Historical_M129/Cus_113_Historical_M129_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	turret	</applyType>
+      <size>	medium	</size>
+      <rarity>	legendary	</rarity>
+      <priceGroup>	attachments 2150g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/heavy_ordnance/Cus_113_Historical_M129	</userString>
+      <description>	#vehicle_customization:attachment/heavy_ordnance/Cus_113_Historical_M129/description	</description>
+      <tags>	battleEffect	</tags>
+    </attachment>
+    <attachment>
+      <id>	1147	</id>
+      <name>	Cus_114_Historical_MK18	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_114_Historical_MK18/Cus_114_Historical_MK18.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_114_Historical_MK18/Cus_114_Historical_MK18_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	gunMantlet	</applyType>
+      <size>	medium	</size>
+      <rarity>	epic	</rarity>
+      <priceGroup>	attachments 1000g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/heavy_ordnance/Cus_114_Historical_MK18	</userString>
+    </attachment>
+    <attachment>
+      <id>	1148	</id>
+      <name>	Cus_115_Historical_AircraftCannon	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_115_Historical_AircraftCannon/Cus_115_Historical_AircraftCannon.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_115_Historical_AircraftCannon/Cus_115_Historical_AircraftCannon.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 350g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/heavy_ordnance/Cus_115_Historical_AircraftCannon	</userString>
+    </attachment>
+    <attachment>
+      <id>	1149	</id>
+      <name>	Cus_116_Historical_RocketLauncher	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_116_Historical_RocketLauncher/Cus_116_Historical_RocketLauncher.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_116_Historical_RocketLauncher/Cus_116_Historical_RocketLauncher.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 350g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/heavy_ordnance/Cus_116_Historical_RocketLauncher	</userString>
     </attachment>
   </itemGroup>
 </3d_attachments.xml>

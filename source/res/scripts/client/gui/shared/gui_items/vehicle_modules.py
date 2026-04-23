@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/vehicle_modules.py
 import logging
 import typing
-from itertools import chain
 import nations
 from constants import SHELL_TYPES, SHELL_MECHANICS_TYPE
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
@@ -14,14 +13,13 @@ from gui.shared.items_parameters.params_cache import g_paramsCache
 from gui.shared.utils.functions import replaceHyphenToUnderscore
 from gui.shared.gui_items.fitting_item import FittingItem, ICONS_MASK
 from gui.shared.gui_items.vehicle_mechanics.factories import GunMechanicFactory, ChassisMechanicFactory, EngineMechanicFactory
-from gui.shared.utils import GUN_CLIP, GUN_CAN_BE_CLIP, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, GUN_AUTO_SHOOT, GUN_CAN_BE_AUTO_SHOOT, GUN_CAN_BE_TWIN_GUN, GUN_TWIN_GUN
+from gui.shared.utils import GUN_CLIP, GUN_CAN_BE_CLIP, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, GUN_AUTO_SHOOT, GUN_CAN_BE_AUTO_SHOOT, GUN_CAN_BE_TWIN_GUN, GUN_TWIN_GUN, GUN_CAN_BE_LOW_CHARGE_SHOT, LOW_CHARGE_SHOT
 from gui.shared.money import Currency
 from items import vehicles as veh_core
 from shared_utils import CONST_CONTAINER, findFirst
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.vehicle_mechanics.module_mechanic_item import ModuleMechanicItem
     from items.vehicles import VehicleDescr
-    from vehicles.mechanics.mechanic_constants import VehicleMechanic
 MODULE_TYPES_ORDER = ('vehicleGun', 'vehicleTurret', 'vehicleEngine', 'vehicleChassis', 'vehicleRadio', 'vehicleFuelTank')
 MODULE_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(MODULE_TYPES_ORDER)))
 SHELL_TYPES_ORDER = (SHELL_TYPES.ARMOR_PIERCING,
@@ -44,7 +42,6 @@ _logger = logging.getLogger(__name__)
 
 class VehicleModule(FittingItem):
     __slots__ = ('_vehicleModuleDescriptor',)
-    _MECHANICS_FACTORY = ()
 
     def __init__(self, intCompactDescr, proxy=None, descriptor=None):
         super(VehicleModule, self).__init__(intCompactDescr, proxy)
@@ -75,11 +72,8 @@ class VehicleModule(FittingItem):
         resID = R.images.gui.maps.shop.modules.num(size).dyn(replaceHyphenToUnderscore(self.itemTypeName))()
         return backport.image(resID) if resID != -1 else ''
 
-    def getMechanics(self, vehDescr, withOverrides=False):
-        return chain.from_iterable((factory.getMechanics(self, vehDescr, withOverrides=withOverrides) for factory in self._MECHANICS_FACTORY))
-
     def getModuleMechanicItems(self, vehDescr):
-        mechanics = chain.from_iterable((factory.getMechanics(self, vehDescr, withOverrides=True) for factory in self._MECHANICS_FACTORY))
+        mechanics = self.getMechanics(vehDescr, withOverrides=True)
         return [ self.itemsFactory.createModuleMechanicItem(mechanic, self.itemTypeID) for mechanic in mechanics ]
 
     def getExtraIconInfo(self, vehDescr=None):
@@ -226,6 +220,10 @@ class VehicleGun(VehicleModule):
         typeToCheck = GUN_TWIN_GUN if vehicleDescr is not None else GUN_CAN_BE_TWIN_GUN
         return self.getReloadingType(vehicleDescr) == typeToCheck
 
+    def isLowChargeShotGun(self, vehicleDescr=None):
+        typeToCheck = LOW_CHARGE_SHOT if vehicleDescr is not None else GUN_CAN_BE_LOW_CHARGE_SHOT
+        return self.getReloadingType(vehicleDescr) == typeToCheck
+
     def isDamageMutable(self):
         return self.descriptor.isDamageMutable
 
@@ -327,6 +325,12 @@ class VehicleEngine(VehicleModule):
 
     def hasRechargeableNitro(self):
         return g_paramsCache.hasRechargeableNitro(self.intCD)
+
+    def hasWheeledDash(self, vehDescr=None):
+        return vehDescr.hasWheeledDash if vehDescr is not None else g_paramsCache.hasWheeledDash(self.intCD)
+
+    def hasStagedJetBoosters(self, vehDescr=None):
+        return vehDescr.hasStagedJetBoosters if vehDescr is not None else g_paramsCache.hasStagedJetBoosters(self.intCD)
 
     @property
     def iconName(self):

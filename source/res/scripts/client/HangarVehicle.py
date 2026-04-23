@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/HangarVehicle.py
+from __future__ import absolute_import
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraDistanceModes
 from ClientSelectableCameraVehicle import ClientSelectableCameraVehicle
+from ClientSelectableCameraObject import ClientSelectableCameraObject
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
@@ -32,6 +34,10 @@ class HangarVehicle(ClientSelectableCameraVehicle):
         g_eventBus.removeListener(events.HangarCustomizationEvent.CHANGE_VEHICLE_MODEL_TRANSFORM, self.__changeVehicleModelTransform, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM, self.__resetVehicleModelTransform, scope=EVENT_BUS_SCOPE.LOBBY)
         super(HangarVehicle, self).onLeaveWorld()
+
+    def onMouseClick(self):
+        super(HangarVehicle, self).onMouseClick()
+        ClientSelectableCameraObject.switchCamera()
 
     def __onSpaceCreated(self):
         self.setEnable(False)

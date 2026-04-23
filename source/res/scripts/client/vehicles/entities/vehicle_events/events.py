@@ -19,11 +19,14 @@ class VehicleEvents(ClientEventsContainer, IVehicleEventsLogic):
         self.onVehicleDestroyed = self._createEvent()
         self.onCollectAmmoStates = self._createEvent()
         self.onCollectShotParams = self._createEvent()
+        self.onCollectVehicleAttrs = self._createEvent()
+        self.onCurrentShellChanged = self._createEvent()
         self.onDynamicComponentCreated = self._createEvent()
         self.onDynamicComponentDestroyed = self._createEvent()
         self.onDiscreteShotDone = self._createEvent()
         self.onShowDamageFromShot = self._createEvent()
         self.onVehicleHealthChanged = self._createEvent()
+        self.onObserverVehicleDataUpdated = self._createEvent()
 
     def destroy(self):
         self.__vehicle = None
@@ -36,12 +39,17 @@ class VehicleEvents(ClientEventsContainer, IVehicleEventsLogic):
         self.onCollectAmmoStates(ammoStates)
         return ammoStates
 
+    def collectVehicleAttrs(self):
+        vehicleAttrs = {}
+        self.onCollectVehicleAttrs(vehicleAttrs)
+        return vehicleAttrs
+
     def _createEventsDebugger(self):
         return VehicleEventsDebugger(self, self.__vehicle.id)
 
 
 class VehicleEventsDebugger(ClientEventsContainerDebugger):
-    IGNORED_EVENTS = ClientEventsContainerDebugger.IGNORED_EVENTS + ('onAppearanceReady', 'onCollectAmmoStates', 'onCollectShotParams', 'onDiscreteShotDone', 'onShowDamageFromShot', 'onVehicleHealthChanged')
+    IGNORED_EVENTS = ClientEventsContainerDebugger.IGNORED_EVENTS + ('onAppearanceReady', 'onCollectAmmoStates', 'onCollectShotParams', 'onCollectVehicleAttrs', 'onDiscreteShotDone', 'onShowDamageFromShot', 'onVehicleHealthChanged')
 
     def __init__(self, events, vehicleID):
         super(VehicleEventsDebugger, self).__init__(events)

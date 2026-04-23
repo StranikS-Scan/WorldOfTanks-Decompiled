@@ -1716,7 +1716,7 @@
     </price>
     <notInShop>	true	</notInShop>
     <cannotBeBought>	true	</cannotBeBought>
-    <tags>	mediumTank role_MT_assault HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user private secret cannot_be_sold comp7 earn_crystals special	</tags>
+    <tags>	mediumTank role_MT_assault HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user private secret cannot_be_sold comp7 earn_crystals special lockCrew lockCrewSkills lockOptionalDevices	</tags>
     <level>	10	</level>
   </G73_E50_Ausf_M_7x7>
   <G92_VK7201>
@@ -2050,6 +2050,19 @@
     <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals	</tags>
     <level>	9	</level>
   </G169_T_54D>
+  <G183_Radkampfwagen>
+    <id>	123	</id>
+    <userString>	#germany_vehicles:G183_Radkampfwagen	</userString>
+    <shortUserString>	#germany_vehicles:G183_Radkampfwagen_short	</shortUserString>
+    <description>	#germany_vehicles:G183_Radkampfwagen_desc	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:G183_Radkampfwagen_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G183_Radkampfwagen_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_sniper HD wheeledVehicle improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user special earn_crystals testTank secret	</tags>
+    <level>	10	</level>
+  </G183_Radkampfwagen>
   <Env_Artillery>
     <id>	254	</id>
     <userString>	#germany_vehicles:Env_Artillery	</userString>
@@ -2195,6 +2208,19 @@
     <tags>	AT-SPG role_ATSPG_sniper siegeMode hydraulicChassis HD mediumAT-SPG AT-SPG1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </G178_KanJpz_2>
+  <G191_StuG_IIIF_CFE_A>
+    <id>	258	</id>
+    <userString>	#germany_vehicles:G191_StuG_IIIF_CFE_A	</userString>
+    <shortUserString>	#germany_vehicles:G191_StuG_IIIF_CFE_A_short	</shortUserString>
+    <description>	#germany_vehicles:G191_StuG_IIIF_CFE_A_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:G191_StuG_IIIF_CFE_A_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G191_StuG_IIIF_CFE_A_long_special	</longDescriptionSpecial>
+    <price>	1900	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG HD mediumAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user excluded_from_customization	</tags>
+    <level>	5	</level>
+  </G191_StuG_IIIF_CFE_A>
   <G1016_PzVIB_Tiger_II_StoryMode>
     <id>	408	</id>
     <userString>	#germany_vehicles:G16_PzVIB_Tiger_II	</userString>
@@ -2431,4 +2457,17 @@
     <tags>	lightTank private event_battles secret HD battle_royale unobservable bot_hunter cannot_be_sold	</tags>
     <level>	1	</level>
   </G25_PzII_Luchs_SHXXI_L>
+  <G98_Waffentrager_E100_CFE_T>
+    <id>	259	</id>
+    <userString>	#germany_vehicles:G98_Waffentrager_E100_CFE_T	</userString>
+    <description>	#germany_vehicles:G98_Waffentrager_E100_CFE_T_descr	</description>
+    <shortUserString>	#germany_vehicles:G98_Waffentrager_E100_CFE_T_short	</shortUserString>
+    <shortDescriptionSpecial>	#germany_vehicles:G98_Waffentrager_E100_CFE_T_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G98_Waffentrager_E100_CFE_T_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_support HD disabledInRoaming heavyAT-SPG AT-SPG2 extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals special secret testTank	</tags>
+    <level>	10	</level>
+  </G98_Waffentrager_E100_CFE_T>
 </list.xml>

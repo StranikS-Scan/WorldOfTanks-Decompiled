@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/__init__.py
+from __future__ import absolute_import
 import logging
 from collections import defaultdict
+from future.utils import viewvalues
+from past.builtins import unicode
 import nations
 from constants import IS_DEVELOPMENT, HAS_DEV_RESOURCES
 from gui import promo
@@ -56,7 +59,7 @@ except AttributeError:
 GUI_NATIONS_ORDER_INDEX = {name:idx for idx, name in enumerate(GUI_NATIONS)}
 GUI_NATIONS_ORDER_INDEX[NONE_NATION_NAME] = nations.NONE_INDEX
 GUI_NATIONS_ORDER_INDEX_REVERSED = {name:idx for idx, name in enumerate(reversed(GUI_NATIONS))}
-GUI_NATIONS_ORDER_INDICES = {nations.INDICES.get(name, nations.NONE_INDEX):idx for name, idx in GUI_NATIONS_ORDER_INDEX.iteritems()}
+GUI_NATIONS_ORDER_INDICES = {nations.INDICES.get(name, nations.NONE_INDEX):idx for name, idx in GUI_NATIONS_ORDER_INDEX.items()}
 
 def nationCompareByName(first, second):
     if second is None:
@@ -88,7 +91,7 @@ class HtmlTemplatesCache(defaultdict):
         ns = path[1] if len(path) > 1 else ''
         value = XMLCollection(domain, ns)
         value.load()
-        if isinstance(value, str):
+        if isinstance(value, bytes):
             value = unicode(value)
         self[key] = value
         return value
@@ -98,7 +101,7 @@ g_htmlTemplates = HtmlTemplatesCache()
 if IS_DEVELOPMENT:
 
     def _reload_ht():
-        for collection in g_htmlTemplates.itervalues():
+        for collection in viewvalues(g_htmlTemplates):
             collection.load(clear=True)
 
 

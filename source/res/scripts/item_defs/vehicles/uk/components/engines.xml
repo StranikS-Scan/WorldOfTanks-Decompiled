@@ -121,8 +121,11 @@
     <Rolls_Royce_CV_12TCA>	146	</Rolls_Royce_CV_12TCA>
     <Rolls_Royce_Griffon_214t>	148	</Rolls_Royce_Griffon_214t>
     <Rolls_Royce_V12>	149	</Rolls_Royce_V12>
+    <Rolls_Royce_Meteor_MK_VIB>	150	</Rolls_Royce_Meteor_MK_VIB>
     <Rolls_Royce_Meteor_with_twin_turbo_supercharges_CFE_A>	151	</Rolls_Royce_Meteor_with_twin_turbo_supercharges_CFE_A>
     <Rolls_Royce_Meteor_MkIV_B12_CFE_J>	152	</Rolls_Royce_Meteor_MkIV_B12_CFE_J>
+    <Leyland_L60F>	153	</Leyland_L60F>
+    <Leyland_L60_HPT_Dark_Morn>	154	</Leyland_L60_HPT_Dark_Morn>
     <AEC_A190_Bishop>	2000	</AEC_A190_Bishop>
     <GMC_6004_6_71A_Bishop>	2001	</GMC_6004_6_71A_Bishop>
     <Nuffield_Liberty_Mk_III_CSP>	2002	</Nuffield_Liberty_Mk_III_CSP>
@@ -1642,6 +1645,23 @@
       <rpm_min>	488	</rpm_min>
       <rpm_max>	2035	</rpm_max>
     </Rolls_Royce_Meteor_M120_221>
+    <Rolls_Royce_Meteor_MK_VIB>
+      <userString>	#gb_vehicles:Rolls_Royce_Meteor_MK_VIB	</userString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	90000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	800	</power>
+      <weight>	500	</weight>
+      <maxHealth>	310	</maxHealth>
+      <maxRegenHealth>	155	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	429	</rpm_min>
+      <rpm_max>	2817	</rpm_max>
+    </Rolls_Royce_Meteor_MK_VIB>
     <Rolls_Royce_Meteor_M120_A39>
       <userString>	#gb_vehicles:Rolls_Royce_Meteor_M120_A39	</userString>
       <tags>	gasoline	</tags>
@@ -2135,31 +2155,31 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
       <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
-      <power>	1330	</power>
+      <power>	1400	</power>
       <weight>	1050	</weight>
       <maxHealth>	380	</maxHealth>
       <maxRegenHealth>	190	</maxRegenHealth>
       <repairCost>	11	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	367	</rpm_min>
-      <rpm_max>	2422	</rpm_max>
+      <rpm_min>	348	</rpm_min>
+      <rpm_max>	2485	</rpm_max>
     </Parson_s_Turbine_No_2983>
     <Rolls_Royce_Griffon_180_B>
       <userString>	#gb_vehicles:Rolls_Royce_Griffon_180_B	</userString>
       <tags>	gasoline	</tags>
-      <level>	10	</level>
-      <price>	100000	</price>
+      <level>	9	</level>
+      <price>	90000	</price>
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
       <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
-      <power>	1300	</power>
+      <power>	1250	</power>
       <weight>	1050	</weight>
-      <maxHealth>	320	</maxHealth>
-      <maxRegenHealth>	160	</maxRegenHealth>
+      <maxHealth>	310	</maxHealth>
+      <maxRegenHealth>	155	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	376	</rpm_min>
-      <rpm_max>	2395	</rpm_max>
+      <rpm_min>	390	</rpm_min>
+      <rpm_max>	2350	</rpm_max>
     </Rolls_Royce_Griffon_180_B>
     <Rolls_Royce_Griffon_FL>
       <userString>	#gb_vehicles:Rolls_Royce_Griffon	</userString>
@@ -2794,6 +2814,23 @@
       <rpm_min>	309	</rpm_min>
       <rpm_max>	2272	</rpm_max>
     </Leyland_L60_No_4>
+    <Leyland_L60_HPT_Dark_Morn>
+      <userString>	#gb_vehicles:Leyland_L60_HPT_Dark_Morn	</userString>
+      <tags>	diesel	</tags>
+      <level>	11	</level>
+      <price>	150000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_brdm_2_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_brdm_2_npc	</wwsoundNPC>
+      <power>	710	</power>
+      <weight>	1400	</weight>
+      <maxHealth>	380	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	11	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	350	</rpm_min>
+      <rpm_max>	3400	</rpm_max>
+    </Leyland_L60_HPT_Dark_Morn>
     <Leyland_L60_No_4_A>
       <userString>	#gb_vehicles:Leyland_L60_No_4	</userString>
       <tags>	diesel	</tags>
@@ -2845,6 +2882,23 @@
       <rpm_min>	200	</rpm_min>
       <rpm_max>	2600	</rpm_max>
     </Leyland_L60_No_4_Mk_3>
+    <Leyland_L60F>
+      <userString>	#gb_vehicles:Leyland_L60F	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	90000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_leyland_l60_PC	</wwsoundPC>
+      <wwsoundNPC>	eng_leyland_l60_NPC	</wwsoundNPC>
+      <power>	850	</power>
+      <weight>	500	</weight>
+      <maxHealth>	310	</maxHealth>
+      <maxRegenHealth>	155	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	272	</rpm_min>
+      <rpm_max>	2381	</rpm_max>
+    </Leyland_L60F>
     <Leyland_L60_No_4_Mk_2>
       <userString>	#gb_vehicles:Leyland_L60_No_4_Mk_2	</userString>
       <shortUserString>	#gb_vehicles:Leyland_L60_No_4_Mk_2_short	</shortUserString>

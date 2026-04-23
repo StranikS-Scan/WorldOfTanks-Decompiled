@@ -94,10 +94,12 @@ class _BasicMissionTab(LobbyState):
     LOBBY_STATE_DESCR = LobbyStateDescription(title=backport.text(R.strings.pages.titles.userMissions()), infos=(LobbyStateDescription.Info(tooltipHeader=backport.text(R.strings.user_missions.tooltip.hub.info_button.header()), tooltipBody=backport.text(R.strings.user_missions.tooltip.hub.info_button.body()), onMoreInfoRequested=_onMoreInfoRequested),))
 
     def registerTransitions(self):
+        from gui.impl.lobby.personal_missions_30.state import ProgressionState
         from gui.Scaleform.daapi.view.lobby.store.browser.states import ShopState
         lsm = self.getMachine()
         self.addNavigationTransition(lsm.getStateByCls(_CommonMissionTab))
         self.addNavigationTransition(lsm.getStateByCls(ShopState), record=True)
+        self.addNavigationTransition(lsm.getStateByCls(ProgressionState), record=True)
 
     def getNavigationDescription(self):
         return self.LOBBY_STATE_DESCR

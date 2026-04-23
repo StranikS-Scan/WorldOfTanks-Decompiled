@@ -1,6 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/__init__.py
-
+import typing
+if typing.TYPE_CHECKING:
+    from typing import Any, Optional
+    from gui.prb_control.dispatcher import _PreBattleDispatcher
+    from gui.prb_control.entities.base.entity import BasePrbEntity
 
 class prbDispatcherProperty(property):
 

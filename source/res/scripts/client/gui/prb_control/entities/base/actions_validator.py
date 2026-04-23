@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/base/actions_validator.py
+import typing
 import logging
 import weakref
 from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
@@ -9,6 +10,9 @@ from gui.prb_control.settings import PREBATTLE_RESTRICTION
 from helpers import dependency
 from skeletons.tutorial import ITutorialLoader
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from typing import Optional
+    from gui.shared.gui_items.Vehicle import Vehicle
 _logger = logging.getLogger(__name__)
 
 class IActionsValidator(object):
@@ -51,33 +55,47 @@ class CurrentPreviewVehicleActionsValidator(BaseActionsValidator):
         return super(CurrentPreviewVehicleActionsValidator, self)._validate()
 
 
+class VehicleActionsValidator(object):
+
+    @classmethod
+    def validateVehicle(cls, vehicle):
+        if not vehicle.isReadyToFight:
+            if vehicle.isInBattle or vehicle.isDisabled:
+                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_IN_BATTLE)
+            if not vehicle.isCrewFull:
+                return ValidationResult(False, PREBATTLE_RESTRICTION.CREW_NOT_FULL)
+            if vehicle.isBroken:
+                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_BROKEN)
+            if vehicle.isDisabledInRoaming:
+                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_ROAMING)
+            if vehicle.isDisabledInPremIGR:
+                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_IN_PREMIUM_IGR_ONLY)
+            if vehicle.rentalIsOver:
+                if vehicle.isPremiumIGR:
+                    return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_IGR_RENTALS_IS_OVER)
+                if vehicle.isTelecom:
+                    return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_TELECOM_RENTALS_IS_OVER)
+                if vehicle.isWotPlus:
+                    return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_WOT_PLUS_EXCLUSIVE_UNAVAILABLE)
+                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_RENTALS_IS_OVER)
+            if vehicle.isRotationGroupLocked:
+                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_ROTATION_GROUP_LOCKED)
+        return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED) if vehicle.isUnsuitableToQueue else None
+
+    @classmethod
+    def validateVehicleBool(cls, vehicle):
+        return cls.validateVehicle(vehicle) is None
+
+
 class CurrentVehicleActionsValidator(BaseActionsValidator):
 
     def _validate(self):
-        if not g_currentVehicle.isReadyToFight():
-            if not g_currentVehicle.isPresent():
-                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT)
-            if g_currentVehicle.isInBattle() or g_currentVehicle.isDisabled():
-                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_IN_BATTLE)
-            if not g_currentVehicle.isCrewFull():
-                return ValidationResult(False, PREBATTLE_RESTRICTION.CREW_NOT_FULL)
-            if g_currentVehicle.isBroken():
-                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_BROKEN)
-            if g_currentVehicle.isDisabledInRoaming():
-                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_ROAMING)
-            if g_currentVehicle.isDisabledInPremIGR():
-                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_IN_PREMIUM_IGR_ONLY)
-            if g_currentVehicle.isDisabledInRent():
-                if g_currentVehicle.isPremiumIGR():
-                    return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_IGR_RENTALS_IS_OVER)
-                if g_currentVehicle.isTelecom():
-                    return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_TELECOM_RENTALS_IS_OVER)
-                if g_currentVehicle.isWotPlus():
-                    return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_WOT_PLUS_EXCLUSIVE_UNAVAILABLE)
-                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_RENTALS_IS_OVER)
-            if g_currentVehicle.isRotationGroupLocked():
-                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_ROTATION_GROUP_LOCKED)
-        return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED) if g_currentVehicle.isUnsuitableToQueue() else super(CurrentVehicleActionsValidator, self)._validate()
+        vehicle = g_currentVehicle.item
+        if vehicle is None:
+            return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT)
+        else:
+            res = VehicleActionsValidator.validateVehicle(vehicle)
+            return res if res is not None else super(CurrentVehicleActionsValidator, self)._validate()
 
 
 class TutorialActionsValidator(BaseActionsValidator):

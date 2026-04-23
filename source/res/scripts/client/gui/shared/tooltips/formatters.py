@@ -74,6 +74,36 @@ def packTextParameterBlockData(name, value, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP
     return packBlockDataItem(linkage, data, padding, blockWidth)
 
 
+def packTextParameterTwoColBlockData(name, value, value2, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_PARAMETER_BLOCK_TWO_COL_LINKAGE, valueWidth=-1, value2Gap=-1, gap=5, padding=None, highlight=False, blockWidth=0):
+    data = {'name': name,
+     'value': value,
+     'value2': value2}
+    if valueWidth != -1:
+        data['valueWidth'] = valueWidth
+    if value2Gap != -1:
+        data['value2Gap'] = value2Gap
+    if gap != -1:
+        data['gap'] = gap
+    if highlight:
+        data['highlight'] = True
+    return packBlockDataItem(linkage, data, padding, blockWidth)
+
+
+def packTextParameterTwoColWithIconBlockData(leftText, rightText, icon, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_PARAMETER_BLOCK_TWO_COL_WITH_ICON_LINKAGE, valueWidth=-1, value2Gap=-1, padding=None, iconPadding=None, highlight=False, blockWidth=0):
+    data = {'name': rightText,
+     'value': leftText,
+     'icon': icon}
+    if valueWidth != -1:
+        data['valueWidth'] = valueWidth
+    if value2Gap != -1:
+        data['value2Gap'] = value2Gap
+    if iconPadding is not None:
+        data['iconPadding'] = iconPadding
+    if highlight:
+        data['highlight'] = True
+    return packBlockDataItem(linkage, data, padding, blockWidth)
+
+
 def packOptDeviceSlotBlockData(imagePath, slotState, showSlotHighlight=False, showUpArrow=False, slotAlpha=1, slotSpecs=None, deviceSpecs=None, specsGap=-26, slotSpecsOffset=-10, deviceSpecsOffset=-40, padding=None, overlayPath=None, overlayPadding=None, highlightPath=None, highlightPadding=None):
     data = {'imagePath': imagePath,
      'slotState': slotState,

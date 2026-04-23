@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/sound_gui_manager.py
+from __future__ import absolute_import
 from collections import namedtuple
 CommonSoundSpaceSettings = namedtuple('CommonSoundSpaceSettings', ('name', 'entranceStates', 'exitStates', 'persistentSounds', 'stoppableSounds', 'priorities', 'autoStart', 'enterEvent', 'exitEvent', 'parentSpace'))
 CommonSoundSpaceSettings.__new__.func_defaults = (None,) * len(CommonSoundSpaceSettings._fields)

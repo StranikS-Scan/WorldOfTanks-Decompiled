@@ -6,6 +6,17 @@
       <AllowUnsafeData>	true	</AllowUnsafeData>
       <Default>	{}	</Default>
     </ranks>
+    <bannedVehicles>
+      <Type>	PYTHON	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+      <Default>	{}	</Default>
+    </bannedVehicles>
+    <vehicleBanList>
+      <Type>	ARRAY	  <of>	INT64	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehicleBanList>
   </Properties>
   <ofEntity>
     <ArenaInfo></ArenaInfo>

@@ -186,9 +186,12 @@ class Comp7OLSState(GuiImplViewLobbyState):
         return LobbyStateDescription(title=backport.text(R.strings.pages.titles.comp7.tournament()), infos=(LobbyStateDescription.Info(type=LobbyStateDescription.Info.Type.INFO, onMoreInfoRequested=showOlsInfoPage, tooltipHeader=backport.text(R.strings.comp7_ext.tournament.tooltip.infoPageButton.header())),))
 
     def registerTransitions(self):
+        from gui.Scaleform.daapi.view.lobby.storage.states import OfferGiftsState
+        from gui.Scaleform.daapi.view.lobby.storage.states import StorageState
         lsm = self.getMachine()
-        state = lsm.getStateByCls(ShopState)
-        self.addNavigationTransition(state, record=True)
+        self.addNavigationTransition(lsm.getStateByCls(ShopState), record=True)
+        self.addNavigationTransition(lsm.getStateByCls(OfferGiftsState), record=True)
+        self.addNavigationTransition(lsm.getStateByCls(StorageState), record=True)
 
 
 @Comp7ModeState.parentOf

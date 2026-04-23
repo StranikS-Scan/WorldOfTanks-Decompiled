@@ -67,8 +67,8 @@ def setMaxRankInfo(model, comp7Controller=None):
     seasonNumber = comp7Controller.getActualSeasonNumber()
     if not seasonNumber:
         return
-    maxAchivedRankNumber = comp7Controller.getMaxRankNumberForSeason(seasonNumber)
+    maxAchievedRankNumber = comp7Controller.getMaxRankNumberForSeason(seasonNumber)
     config = comp7Controller.getRanksConfig()
     ranksOrder = config.ranksOrder
-    rankId = ranksOrder[maxAchivedRankNumber - 1]
+    rankId = ranksOrder[maxAchievedRankNumber - 1]
     model.setMaxAchievedRank(comp7_shared.getRankById(rankId))

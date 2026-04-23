@@ -239,7 +239,7 @@
     </price>
     <notInShop>	true	</notInShop>
     <cannotBeBought>	true	</cannotBeBought>
-    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals private secret cannot_be_sold comp7 special	</tags>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals private secret cannot_be_sold comp7 special lockCrew lockCrewSkills lockOptionalDevices	</tags>
     <level>	10	</level>
   </Pl29_NC_Wz_70T_7x7>
   <Pl30_SDP_Wz58T>
@@ -402,10 +402,10 @@
     <description>	#poland_vehicles:Pl36_Wz_64GC_Bzyg_descr	</description>
     <shortDescriptionSpecial>	#poland_vehicles:Pl36_Wz_64GC_Bzyg_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#poland_vehicles:Pl36_Wz_64GC_Bzyg_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
+    <price>	22500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_break HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special earn_crystals secret testTank	</tags>
+    <tags>	heavyTank role_HT_break HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special earn_crystals	</tags>
     <level>	10	</level>
   </Pl36_Wz_64GC_Bzyg>
   <Pl15_60TP_Lewandowskiego_CFE_A>
@@ -421,4 +421,17 @@
     <tags>	heavyTank role_HT_break HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals special excluded_from_customization	</tags>
     <level>	10	</level>
   </Pl15_60TP_Lewandowskiego_CFE_A>
+  <Pl40_Krazownik>
+    <id>	211	</id>
+    <userString>	#poland_vehicles:Pl40_Krazownik	</userString>
+    <shortUserString>	#poland_vehicles:Pl40_Krazownik_short	</shortUserString>
+    <description>	#poland_vehicles:Pl40_Krazownik_descr	</description>
+    <shortDescriptionSpecial>	#poland_vehicles:Pl40_Krazownik_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#poland_vehicles:Pl40_Krazownik_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_assault HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user secret testTank	</tags>
+    <level>	8	</level>
+  </Pl40_Krazownik>
 </list.xml>

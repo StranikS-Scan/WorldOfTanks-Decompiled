@@ -6,12 +6,17 @@ from constants import IS_CLIENT, IS_WEB, IS_CGF_DUMP, IS_LOAD_GLOSSARY, IS_EDITO
 from items.components.shared_components import TemperatureGunParams, OverheatGunParams
 if typing.TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor
-_AttributeModifier = namedtuple('_AttributeModifier', ('name', 'value', 'opType'))
+AttributeModifier = namedtuple('AttributeModifier', ('name', 'value', 'opType'))
+
+def convertModifiersList(modifiersList):
+    return [ AttributeModifier(attrName, value, opType) for opType, _, attrName, value, __ in modifiersList ]
+
+
+def extractModifier(modifiers, name):
+    return next((m for m in modifiers if m.name == name), None)
+
+
 if IS_CLIENT or IS_WEB or IS_LOAD_GLOSSARY or IS_CGF_DUMP or IS_EDITOR:
-
-    def convertModifiersList(modifiersList):
-        return [ _AttributeModifier(attrName, value, opType) for opType, _, attrName, value, __ in modifiersList ]
-
 
     def getTemperatureModifier(descr, modifierName):
         mechanicParams = descr.mechanicsParams.get(TemperatureGunParams.MECHANICS_NAME)
@@ -20,7 +25,7 @@ if IS_CLIENT or IS_WEB or IS_LOAD_GLOSSARY or IS_CGF_DUMP or IS_EDITOR:
         else:
             state = mechanicParams.thermalStates.states[-1]
             modifiers = convertModifiersList(state.modifiers)
-            return next((m for m in modifiers if m.name == modifierName), None)
+            return extractModifier(modifiers, modifierName)
 
 
     def getHeatedAimingTime(aimingTime, descr):

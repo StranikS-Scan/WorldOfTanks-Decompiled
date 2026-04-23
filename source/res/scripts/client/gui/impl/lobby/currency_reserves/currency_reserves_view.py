@@ -7,6 +7,7 @@ from constants import PremiumConfigs, PREMIUM_TYPE
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getWotPlusShopUrl, getBuyPremiumUrl
+from gui.game_control.wot_plus.utils import getMaxGoldReserveCapacityFromAllTiers
 from gui.impl.gen.view_models.views.lobby.currency_reserves.currency_reserve_model import CurrencyEnum
 from gui.impl.gen.view_models.views.lobby.currency_reserves.currency_reserves_view_model import CurrencyReservesViewModel
 from gui.impl.lobby.premacc.premacc_helpers import PiggyBankConstants, getDeltaTimeHelper
@@ -15,7 +16,6 @@ from gui.shared.event_dispatcher import showWotPlusInfoPage, showTankPremiumAbou
 from helpers import dependency
 from renewable_subscription_common.schema import renewableSubscriptionsConfigSchema
 from renewable_subscription_common.settings_constants import RS_TIER
-from renewable_subscription_common.settings_helpers import SubscriptionSettingsStorage
 from skeletons.gui.game_control import IGameSessionController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -98,14 +98,13 @@ class CurrencyReservesView(ViewImpl):
             creditReserve.setMaxCapacity(self._creditReserveConfig.get('creditsThreshold', 0))
 
     def _updateGoldReserve(self):
-        storageTier = self._wotPlusCtrl.getSettingsStorage().getEffectiveGoldReserveFeatureTier()
-        storage = SubscriptionSettingsStorage(storageTier)
+        storage = self._wotPlusCtrl.getSettingsStorage()
         with self.viewModel.goldReserve.transaction() as goldReserve:
             goldReserve.setIsEnabled(storage.isGoldReserveFeatureEnabled())
-            goldReserve.setIsActive(self._wotPlusCtrl.hasSubscription())
+            goldReserve.setIsActive(storage.isGoldReserveFeatureAvailable())
             goldReserve.setCurrency(CurrencyEnum.GOLD)
             goldReserve.setAmount(self._wotPlusCtrl.getGoldReserve())
-            goldReserve.setMaxCapacity(storage.getMaxGoldReserveCapacity())
+            goldReserve.setMaxCapacity(getMaxGoldReserveCapacityFromAllTiers())
 
     def _onServerSettingsChange(self, diff):
         if PremiumConfigs.PIGGYBANK in diff:

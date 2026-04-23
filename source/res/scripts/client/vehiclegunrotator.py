@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/VehicleGunRotator.py
+from __future__ import absolute_import, division
 import math
 import weakref
 from collections import namedtuple
 from functools import partial
+from future.utils import lrange
 from math import pi, fmod
 import BattleReplay
 import BigWorld
@@ -624,7 +626,7 @@ class VehicleGunRotator(object):
             multiGun = playerVehicle.typeDescriptor.gun.multiGun
             if not multiGun:
                 return
-            activeGuns = range(len(multiGun)) if twinGun is None else twinGun.getActiveGunIndexes()
+            activeGuns = lrange(len(multiGun)) if twinGun is None else twinGun.getActiveGunIndexes()
             if len(activeGuns) < 2:
                 return
             playerTeam = playerVehicle.publicInfo.team

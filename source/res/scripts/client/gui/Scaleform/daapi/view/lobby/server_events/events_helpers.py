@@ -53,6 +53,7 @@ class BattlePassProgress(object):
     def __init__(self, arenaBonusType, *args, **kwargs):
         self.__arenaBonusType = arenaBonusType
         self.__topPoints = kwargs.get('bpTopPoints', 0)
+        self.__topExternalPoints = kwargs.get('bpTopExternalPoints', {})
         self.__pointsAux = kwargs.get('bpNonChapterPointsDiff', 0)
         self.__hasBattlePass = kwargs.get('hasBattlePass', False)
         self.__questsProgress = kwargs.get('questsProgress', {})
@@ -93,6 +94,19 @@ class BattlePassProgress(object):
     @property
     def bpTopPoints(self):
         return self.__topPoints
+
+    @property
+    def bpTopExternalPoints(self):
+        return self.__topExternalPoints
+
+    @property
+    def bpTopExternalPointsTotalAmount(self):
+        totalPoints = 0
+        for extData in self.__topExternalPoints.values():
+            if extData.get('acquired', False):
+                totalPoints += extData.get('points', 0)
+
+        return totalPoints
 
     @property
     def pointsAux(self):

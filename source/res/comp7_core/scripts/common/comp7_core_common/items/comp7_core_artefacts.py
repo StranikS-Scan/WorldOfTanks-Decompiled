@@ -102,11 +102,12 @@ class Comp7CoreRedlineEquipment(LevelBasedVisualScriptEquipment, BaseMarkerConfi
 
 
 class Comp7CoreFastRechargeEquipment(VisualScriptEquipment):
-    _CONFIG_SLOTS = ('gunReloadTimeBuff',)
+    _CONFIG_SLOTS = ('gunReloadTimeBuff', 'gunTemperatureBuff')
 
     def _readConfig(self, xmlCtx, section):
         super(Comp7CoreFastRechargeEquipment, self)._readConfig(xmlCtx, section)
         self.gunReloadTimeBuff = tuple(map(float, section.readString('gunReloadTimeBuff').split()))
+        self.gunTemperatureBuff = tuple(map(float, section.readString('gunTemperatureBuff').split()))
         self.cooldownSeconds = section.readFloat('cooldownSeconds')
         self._exportSlotsToVSE()
 

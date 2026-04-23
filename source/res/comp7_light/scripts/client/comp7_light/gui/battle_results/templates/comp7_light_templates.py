@@ -3,7 +3,6 @@
 from comp7_light.gui.battle_results.components import comp7_light_components
 from comp7_core.gui.battle_results.components import comp7_core_components
 from comp7_core.gui.battle_results.components import progress
-from comp7_core.gui.battle_results.components import shared as comp7_core_shared
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_results.components import base, vehicles, shared, style
 from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD
@@ -22,7 +21,7 @@ COMPONENTS_TO_EXCLUDE = (SORTING_COMPONENT_NUMBER,)
 COMP7_LIGHT_COMMON_STATS_BLOCK = REGULAR_COMMON_STATS_BLOCK.clone(*COMPONENTS_TO_EXCLUDE)
 TOURNAMENT_COMP7_LIGHT_COMMON_STATS_BLOCK = REGULAR_COMMON_STATS_BLOCK.clone(*COMPONENTS_TO_EXCLUDE)
 TRAINING_COMP7_LIGHT_COMMON_STATS_BLOCK = REGULAR_COMMON_STATS_BLOCK.clone(*COMPONENTS_TO_EXCLUDE)
-COMP7_LIGHT_COMMON_STATS_BLOCK.addComponent(SORTING_COMPONENT_NUMBER, comp7_core_shared.Comp7CoreSortingBlock())
+COMP7_LIGHT_COMMON_STATS_BLOCK.addComponent(SORTING_COMPONENT_NUMBER, comp7_light_components.Comp7LightSortingBlock())
 COMP7_LIGHT_BATTLE_PASS_PROGRESS_STATS_BLOCK = progress.Comp7CoreBattlePassProgressBlock(base.ListMeta(), 'battlePass', _RECORD.PERSONAL)
 VEHICLE_STATS_BLOCK_VO_META = base.PropertyMeta((('shots', 0, 'shots'),
  ('hits', style.SlashedValuesBlock('hits'), 'hits'),

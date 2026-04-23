@@ -255,3 +255,23 @@ class HeatingZonesGunEffects(object):
     soundHeatingDropMarker = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Heating marker drop sound', value='gui_abl_gun_heating_marker')
     soundHeatingIdleMarker = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Heating marker idle sound', value='gui_abl_gun_heating_marker_last_aim')
     soundUtilityStop = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Heating utility stop', value='gui_abl_gun_heating_stop_utility')
+
+
+@registerComponent
+class PropellantGunEffects(object):
+    editorTitle = 'Propellant Gun Effects'
+    category = 'PropellantGun'
+    domain = CGF.DomainOption.DomainClient
+    soundActivationDisabled = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Disabled activation sound', value='gui_abl_button_not_ready')
+    soundChargeMin = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Normal charge mode was set', value='gui_abl_afterburner_set_min')
+    soundChargeMax = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Overcharge mode was set', value='gui_abl_afterburner_set_max')
+    soundPreCharge = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Precharging sound', value='gui_abl_afterburner_pre_min')
+    soundPreOvercharge = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Preovercharging sound', value='gui_abl_afterburner_pre_max')
+    soundReachCharge = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Charge reach sound', value='gui_abl_afterburner_reach_min')
+    soundReachOvercharge = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Overcharge reach sound', value='gui_abl_afterburner_reach_max')
+    soundStartOvercharge = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Start overcharging  sound', value='gui_abl_afterburner_exceed_min')
+    soundShotFromMinCharge = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Shot from normal charge limit', value='gui_abl_afterburner_min_shot')
+    soundShotExitOvercharge = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Shot in overcharge range', value='gui_abl_afterburner_max_shot')
+    soundShotNocharge = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Shot under charge limit', value='gui_abl_afterburner_nocharge_shot')
+    soundDropOvercharge = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Drop overcharge', value='gui_abl_afterburner_drop_max_switch')
+    soundUtilityStop = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Propellant utility stop', value='gui_abl_afterburner_stop_utility')

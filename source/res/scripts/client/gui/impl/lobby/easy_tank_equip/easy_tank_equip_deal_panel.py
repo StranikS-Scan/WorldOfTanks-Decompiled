@@ -89,6 +89,11 @@ class EasyTankEquipBottomContent(SubModelPresenter):
         super(EasyTankEquipBottomContent, self).initialize(*args, **kwargs)
         self.update()
 
+    def finalize(self):
+        self.__providers = None
+        super(EasyTankEquipBottomContent, self).finalize()
+        return
+
     def update(self):
         presets = self.__getSelectedPresets()
         self.getViewModel().setCanAccept(bool(presets))

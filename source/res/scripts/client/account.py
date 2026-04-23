@@ -1,11 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Account.py
-import cPickle
+from __future__ import absolute_import
 import copy
 import logging
 import weakref
 import zlib
 from collections import namedtuple
+from future.moves import pickle
+from future.utils import viewitems, viewvalues
+from past.builtins import long
 import BigWorld
 import AccountCommands
 import ClientPrebattle
@@ -75,22 +78,22 @@ def _isList(a):
 
 
 def _isIntList(l):
-    return _isList(l) and all([ _isInt(arg) for arg in l ])
+    return _isList(l) and all((_isInt(arg) for arg in l))
 
 
 def _isStrList(l):
-    return _isList(l) and all([ _isStr(arg) for arg in l ])
+    return _isList(l) and all((_isStr(arg) for arg in l))
 
 
 class _ClientCommandProxy(object):
     _COMMAND_SIGNATURES = (('doCmdStr', lambda args: len(args) == 1 and _isStr(args[0])),
      ('doCmdIntStr', lambda args: len(args) == 2 and _isInt(args[0]) and _isStr(args[1])),
      ('doCmdInt', lambda args: len(args) == 1 and _isInt(args[0])),
-     ('doCmdInt2', lambda args: len(args) == 2 and all([ _isInt(arg) for arg in args ])),
-     ('doCmdInt3', lambda args: len(args) == 3 and all([ _isInt(arg) for arg in args ])),
-     ('doCmdInt4', lambda args: len(args) == 4 and all([ _isInt(arg) for arg in args ])),
-     ('doCmdInt2Str', lambda args: len(args) == 3 and _isStr(args[2]) and all([ _isInt(arg) for arg in args[:2] ])),
-     ('doCmdInt3Str', lambda args: len(args) == 4 and _isStr(args[3]) and all([ _isInt(arg) for arg in args[:3] ])),
+     ('doCmdInt2', lambda args: len(args) == 2 and all((_isInt(arg) for arg in args))),
+     ('doCmdInt3', lambda args: len(args) == 3 and all((_isInt(arg) for arg in args))),
+     ('doCmdInt4', lambda args: len(args) == 4 and all((_isInt(arg) for arg in args))),
+     ('doCmdInt2Str', lambda args: len(args) == 3 and _isStr(args[2]) and all((_isInt(arg) for arg in args[:2]))),
+     ('doCmdInt3Str', lambda args: len(args) == 4 and _isStr(args[3]) and all((_isInt(arg) for arg in args[:3]))),
      ('doCmdIntArr', lambda args: len(args) == 1 and _isIntList(args[0])),
      ('doCmdIntStrArr', lambda args: len(args) == 2 and _isInt(args[0]) and _isStrList(args[1])),
      ('doCmdStrArr', lambda args: len(args) == 1 and _isStrList(args[0])),
@@ -357,7 +360,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         return
 
     def onCmdResponseExt(self, requestID, resultID, errorStr, ext):
-        ext = cPickle.loads(ext)
+        ext = pickle.loads(ext)
         if resultID == AccountCommands.RES_SHOP_DESYNC:
             self.shop.synchronize(ext.get('shopRev', None))
         callback = self.__onCmdResponse.pop(requestID, None)
@@ -380,7 +383,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def onIGRTypeChanged(self, data):
         try:
-            data = cPickle.loads(data)
+            data = pickle.loads(data)
             events.onIGRTypeChanged(data.get('roomType'), data.get('igrXPFactor'))
             LOG_DEBUG('onIGRTypeChanged', data)
         except Exception:
@@ -403,9 +406,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             else:
                 return eventsData
         try:
-            eventsData = cPickle.loads(zlib.decompress(self.eventsData[typeID]))
+            eventsData = pickle.loads(zlib.decompress(self.eventsData[typeID]))
             self.__eventsDataUnpacked[typeID] = (currentRev, eventsData)
-        except (zlib.error, cPickle.UnpicklingError):
+        except (zlib.error, pickle.UnpicklingError):
             LOG_CURRENT_EXCEPTION()
 
         return eventsData
@@ -561,14 +564,14 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.base.doCmdInt2Str(0, AccountCommands.CMD_NOTIFICATION_REPLY, notificationID, purge, actionName)
 
     def receiveConversionResults(self, resultsDict):
-        resultsDict = cPickle.loads(resultsDict)
+        resultsDict = pickle.loads(resultsDict)
         self.crewAccountController.setConversionResults(resultsDict)
 
     def handleKeyEvent(self, event):
         return False
 
     def showGUI(self, ctx):
-        ctx = cPickle.loads(ctx)
+        ctx = pickle.loads(ctx)
         _logger.info('showGUI %r', ctx)
         self.databaseID = ctx['databaseID']
         if 'prebattleID' in ctx:
@@ -590,7 +593,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if isSuccess:
             try:
                 data = zlib.decompress(data)
-                prbType, prbCount, prebattles = cPickle.loads(data)
+                prbType, prbCount, prebattles = pickle.loads(data)
             except Exception:
                 LOG_CURRENT_EXCEPTION()
                 isSuccess = False
@@ -603,7 +606,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if isSuccess:
             try:
                 data = zlib.decompress(data)
-                prebattleID, rosterAsList = cPickle.loads(data)
+                prebattleID, rosterAsList = pickle.loads(data)
             except Exception:
                 LOG_CURRENT_EXCEPTION()
                 isSuccess = False
@@ -624,7 +627,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         return
 
     def update(self, diff):
-        self._update(True, cPickle.loads(diff))
+        self._update(True, pickle.loads(diff))
 
     def resyncDossiers(self, isFullResync):
         self.dossierCache.resynchronize(isFullResync)
@@ -962,7 +965,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
         else:
             proxy = None
-        argStr = cPickle.dumps(data, -1)
+        argStr = pickle.dumps(data, -1)
         self._doCmdStr(AccountCommands.CMD_CHANGE_EVENT_ENQUEUE_DATA, argStr, proxy)
         return
 
@@ -1195,7 +1198,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
                 for vehTypeCompDescr in diff.get('stats', {}).get('eliteVehicles', ()):
                     events.onVehicleBecomeElite(vehTypeCompDescr)
 
-                for vehInvID, lockReason in diff.get('cache', {}).get('vehsLock', {}).iteritems():
+                for vehInvID, lockReason in viewitems(diff.get('cache', {}).get('vehsLock', {})):
                     if lockReason is None:
                         lockReason = (AccountCommands.LOCK_REASON.NONE, 0)
                     events.onVehicleLockChanged(vehInvID, lockReason)
@@ -1215,7 +1218,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             diff = diffDict.get(key, None)
             if diff is not None:
                 if isinstance(diff, dict):
-                    for k, v in diff.iteritems():
+                    for k, v in viewitems(diff):
                         if v is None:
                             repDict.pop(k, None)
                             continue
@@ -1262,18 +1265,18 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             initial = initialEventsData.pop(EVENT_CLIENT_DATA.NOTIFICATIONS, None)
             initialEventsData.pop(EVENT_CLIENT_DATA.NOTIFICATIONS_REV, None)
             if initial is not None:
-                initial = cPickle.loads(zlib.decompress(initial))
+                initial = pickle.loads(zlib.decompress(initial))
                 self.eventNotifications = g_accountRepository.eventNotifications = initial
                 diffDict['added'].extend(initial)
             updatedEventsData = diff.get('eventsData', {})
             updated = updatedEventsData.pop(EVENT_CLIENT_DATA.NOTIFICATIONS, None)
             updatedEventsData.pop(EVENT_CLIENT_DATA.NOTIFICATIONS_REV, None)
             if updated is not None:
-                updated = cPickle.loads(zlib.decompress(updated))
+                updated = pickle.loads(zlib.decompress(updated))
                 eventNotifications = self.eventNotifications
                 self.eventNotifications = g_accountRepository.eventNotifications = updated
-                new = set([ NotificationItem(n) for n in updated ])
-                prev = set([ NotificationItem(n) for n in eventNotifications ])
+                new = {NotificationItem(n) for n in updated}
+                prev = {NotificationItem(n) for n in eventNotifications}
                 added = new - prev
                 removed = prev - new
                 diffDict['added'].extend([ n.item for n in added ])
@@ -1297,7 +1300,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
                 if isinstance(serverSettingsDiff, dict):
                     schemaManager = getSchemaManager()
                     processedDiff = schemaManager.updateSettings(serverSettings, serverSettingsDiff)
-                    for key, value in processedDiff.iteritems():
+                    for key, value in viewitems(processedDiff):
                         if value is None:
                             serverSettings.pop(key, None)
                             continue
@@ -1358,14 +1361,14 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             return callbackID
 
     def __cancelCommands(self):
-        for requestID, callback in self.__onCmdResponse.iteritems():
+        for requestID, callback in viewitems(self.__onCmdResponse):
             try:
                 callback(requestID, AccountCommands.RES_NON_PLAYER, 'NON_PLAYER')
             except Exception:
                 LOG_CURRENT_EXCEPTION()
 
         self.__onCmdResponse.clear()
-        for callback in self.__onStreamComplete.itervalues():
+        for callback in viewvalues(self.__onStreamComplete):
             try:
                 callback(False, None)
             except Exception:

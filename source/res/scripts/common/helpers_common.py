@@ -277,11 +277,21 @@ def decodeStickerIdData(data):
 def setDamageSticker(sticker, effectsIndex, prefabEffIndex, isPierced):
     cache = vehicles.g_cache
     if prefabEffIndex != component_constants.INVALID_EFFECT_INDEX:
-        if not isPierced:
-            sticker['params'] = HitParamsEncoder.setHitType(sticker['params'], VEHICLE_HIT_EFFECT.ARMOR_NOT_PIERCED)
+        hitType = HitParamsEncoder.getHitType(sticker['params'])
+        if hitType == VEHICLE_HIT_EFFECT.INVALID:
+            return
+        if not isPierced and hitType in VEHICLE_HIT_EFFECT.PIERCED_HITS:
+            hitType = VEHICLE_HIT_EFFECT.ARMOR_NOT_PIERCED
+            sticker['params'] = HitParamsEncoder.setHitType(sticker['params'], hitType)
         shotEffect = cache.prefabEffects.shot.effects[prefabEffIndex]
-        effectGroup = VEHICLE_HIT_EFFECT.getEffectGroup(HitParamsEncoder.getHitType(sticker['params']))
-        stickerID = shotEffect.groups[effectGroup].decal
+        effectGroup = VEHICLE_HIT_EFFECT.getEffectGroup(hitType)
+        stickerID = component_constants.INVALID_EFFECT_INDEX
+        if effectGroup in shotEffect.groups:
+            stickerID = shotEffect.groups[effectGroup].decal
+        if stickerID == component_constants.INVALID_EFFECT_INDEX:
+            stickerID = shotEffect.defaultVehicleHit.decal
+        if stickerID == component_constants.INVALID_EFFECT_INDEX:
+            stickerID = shotEffect.defaultHit.decal
         if stickerID == component_constants.INVALID_EFFECT_INDEX:
             return
         priority = cache.prefabEffects.decals.effects[stickerID].priority

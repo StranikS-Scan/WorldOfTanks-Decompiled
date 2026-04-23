@@ -10,3 +10,4 @@ class COMP7_HANGAR_ALIASES(object):
     COMP7_CONFIGURABLE_VEHICLE_PREVIEW = 'comp7ConfigurableVehiclePreview'
     COMP7_WCI_ENTRY_POINT = 'Comp7WCIEntryPoint'
     COMP7_OLS_ENTRY_POINT = 'Comp7OLSEntryPoint'
+    COMP7_BATTLE_RESULTS = 'comp7BattleResults'

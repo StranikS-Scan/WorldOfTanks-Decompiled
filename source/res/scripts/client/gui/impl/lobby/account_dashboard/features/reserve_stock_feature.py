@@ -4,6 +4,7 @@ import typing
 from PlayerEvents import g_playerEvents
 from constants import PREMIUM_TYPE
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.game_control.wot_plus.utils import getMaxGoldReserveCapacityFromAllTiers
 from gui.impl.lobby.account_dashboard.features.base import FeatureItem
 from gui.impl.lobby.premacc.premacc_helpers import PiggyBankConstants, getOpenTimeHelper
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
@@ -11,7 +12,6 @@ from gui.shared.event_dispatcher import showPiggyBankView
 from helpers import dependency
 from renewable_subscription_common.schema import renewableSubscriptionsConfigSchema
 from renewable_subscription_common.settings_constants import RS_TIER
-from renewable_subscription_common.settings_helpers import SubscriptionSettingsStorage
 from skeletons.gui.game_control import IGameSessionController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -78,14 +78,13 @@ class ReserveStockFeature(FeatureItem):
         submodel = model.reserveStock
         config = self._lobbyContext.getServerSettings().getPiggyBankConfig()
         data = self._itemsCache.items.stats.piggyBank
-        storageTier = self._wotPlus.getSettingsStorage().getEffectiveGoldReserveFeatureTier()
-        storage = SubscriptionSettingsStorage(storageTier)
+        storage = self._wotPlus.getSettingsStorage()
         submodel.setIsCreditReserveEnabled(config.get('enabled', False))
         submodel.setIsGoldReserveEnabled(storage.isGoldReserveFeatureEnabled())
         submodel.setCreditCurrentAmount(credits or data.get('credits', 0))
         submodel.setCreditMaxAmount(config.get('creditsThreshold', PiggyBankConstants.MAX_AMOUNT))
         submodel.setGoldCurrentAmount(gold or data.get('gold', 0))
-        submodel.setGoldMaxAmount(storage.getMaxGoldReserveCapacity())
+        submodel.setGoldMaxAmount(getMaxGoldReserveCapacityFromAllTiers())
         submodel.setIsPremiumActive(self.__isTankPremiumActive())
         submodel.setIsWotPlusActive(self.__isWotPlusActive())
         submodel.setOpeningSoonThreshold(config.get('openSoonThreshold', PiggyBankConstants.OPEN_SOON_THRESHOLD_DEFAULT))

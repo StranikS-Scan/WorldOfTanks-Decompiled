@@ -105,7 +105,7 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
     def isReadyBtnEnabled(self):
         entity = self.prbEntity
         _, assigned = decodeRoster(entity.getRosterKey())
-        return g_currentVehicle.isReadyToPrebattle() and not (entity.getTeamState().isInQueue() and assigned)
+        return g_currentVehicle.isReadyToPrebattle() and not (entity.getTeamState().isInQueue() and assigned) and entity.canPlayerDoAction().isValid
 
     def isLeaveBtnEnabled(self):
         entity = self.prbEntity

@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/dyn_objects_cache.py
+from __future__ import absolute_import
 import logging
-from collections import namedtuple
 import typing
+from collections import namedtuple
+from future.utils import viewvalues, viewitems
 import BigWorld
 import CGF
 import resource_helper
@@ -271,55 +273,6 @@ class _EpicBattleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
         return self.__minesEffects
 
 
-class _KillCamEffectDynObjects(DynObjectsBase):
-    CONFIG_NAME = 'KillCamEffectDynObjects'
-
-    def __init__(self):
-        super(_KillCamEffectDynObjects, self).__init__()
-        self.__cachedPrefabs = set()
-        self.emptyGO = None
-        self.cone = None
-        self.impactPoint = None
-        self.spacedArmorLinePoint = None
-        self.explosionSphere = None
-        self.spacedArmorImpactPoint = None
-        self.trajectoryRed = None
-        self.trajectoryGradient = None
-        return
-
-    def init(self, dataSection):
-        if self._initialized:
-            return
-        killCamEffects = dataSection['killCameraVisualEffects']
-        self.emptyGO = killCamEffects['emptyGO']['path'].asString
-        self.cone = killCamEffects['cone']['path'].asString
-        self.impactPoint = killCamEffects['impactPoint']['path'].asString
-        self.spacedArmorLinePoint = killCamEffects['spacedArmorLinePoint']['path'].asString
-        self.explosionSphere = killCamEffects['explosionSphere']['path'].asString
-        self.spacedArmorImpactPoint = killCamEffects['spacedArmorImpactPoint']['path'].asString
-        self.trajectoryRed = killCamEffects['trajectoryRed']['path'].asString
-        self.trajectoryGradient = killCamEffects['trajectoryGradient']['path'].asString
-        self.__cachedPrefabs.update({self.emptyGO,
-         self.cone,
-         self.impactPoint,
-         self.spacedArmorLinePoint,
-         self.explosionSphere,
-         self.spacedArmorImpactPoint,
-         self.trajectoryRed,
-         self.trajectoryGradient})
-        CGF.cacheGameObjects(list(self.__cachedPrefabs), False)
-        super(_KillCamEffectDynObjects, self).init(dataSection)
-
-    def clear(self):
-        if self.__cachedPrefabs:
-            CGF.clearGameObjectsCache(list(self.__cachedPrefabs))
-            self.__cachedPrefabs.clear()
-
-    def destroy(self):
-        self.clear()
-        super(_KillCamEffectDynObjects, self).destroy()
-
-
 class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
 
     def __init__(self):
@@ -482,12 +435,12 @@ class _PointsOfInterestConfig(object):
         self.__prefabs = prefabs
 
     def getPointOfInterestPrefab(self, radius):
-        for (minRange, maxRange), path in self.__prefabs.iteritems():
+        for (minRange, maxRange), path in viewitems(self.__prefabs):
             if minRange <= radius < maxRange:
                 return path
 
         _logger.error('Failed to get prefab for PointOfInterest (radius=%d)', radius)
-        return first(self.__prefabs.itervalues())
+        return first(viewvalues(self.__prefabs))
 
     def getPrefabs(self):
         return self.__prefabs.values()
@@ -503,13 +456,81 @@ class _PointsOfInterestConfig(object):
         return cls(points)
 
 
+class _FeatureDynObjects(DynObjectsBase):
+    _ROOT_SECTION_NAME = ''
+
+    def __init__(self):
+        super(_FeatureDynObjects, self).__init__()
+        self.__cachedPrefabs = set()
+
+    def init(self, dataSection):
+        if self._initialized:
+            return
+        else:
+            section = dataSection[self._ROOT_SECTION_NAME]
+            if section is None:
+                return
+            toCache = self._init(dataSection=section)
+            self.__cachedPrefabs.update(toCache)
+            CGF.cacheGameObjects(list(self.__cachedPrefabs), False)
+            super(_FeatureDynObjects, self).init(dataSection)
+            return
+
+    def _init(self, dataSection):
+        return set()
+
+    def clear(self):
+        if self.__cachedPrefabs:
+            CGF.clearGameObjectsCache(list(self.__cachedPrefabs))
+            self.__cachedPrefabs.clear()
+
+    def destroy(self):
+        self.clear()
+        super(_FeatureDynObjects, self).destroy()
+
+
+class _KillCamEffectDynObjects(_FeatureDynObjects):
+    CONFIG_NAME = 'KillCamEffectDynObjects'
+    _ROOT_SECTION_NAME = 'killCameraVisualEffects'
+
+    def __init__(self):
+        super(_KillCamEffectDynObjects, self).__init__()
+        self.emptyGO = None
+        self.cone = None
+        self.impactPoint = None
+        self.spacedArmorLinePoint = None
+        self.explosionSphere = None
+        self.spacedArmorImpactPoint = None
+        self.trajectoryRed = None
+        self.trajectoryGradient = None
+        return
+
+    def _init(self, dataSection):
+        self.emptyGO = dataSection['emptyGO']['path'].asString
+        self.cone = dataSection['cone']['path'].asString
+        self.impactPoint = dataSection['impactPoint']['path'].asString
+        self.spacedArmorLinePoint = dataSection['spacedArmorLinePoint']['path'].asString
+        self.explosionSphere = dataSection['explosionSphere']['path'].asString
+        self.spacedArmorImpactPoint = dataSection['spacedArmorImpactPoint']['path'].asString
+        self.trajectoryRed = dataSection['trajectoryRed']['path'].asString
+        self.trajectoryGradient = dataSection['trajectoryGradient']['path'].asString
+        return {self.emptyGO,
+         self.cone,
+         self.impactPoint,
+         self.spacedArmorLinePoint,
+         self.explosionSphere,
+         self.spacedArmorImpactPoint,
+         self.trajectoryRed,
+         self.trajectoryGradient}
+
+
 registerDynObjCache(ARENA_GUI_TYPE.SORTIE_2, _StrongholdDynObjects)
 registerDynObjCache(ARENA_GUI_TYPE.FORT_BATTLE_2, _StrongholdDynObjects)
 registerDynObjCache(ARENA_GUI_TYPE.BATTLE_ROYALE, _BattleRoyaleDynObjects)
 registerDynObjCache(ARENA_GUI_TYPE.EPIC_BATTLE, _EpicBattleDynObjects)
 registerDynObjCache(ARENA_GUI_TYPE.EPIC_TRAINING, _EpicBattleDynObjects)
 registerDynObjCache(ARENA_GUI_TYPE.EVENT_BATTLES, _EpicBattleDynObjects)
-_FEATURES_CONF_STORAGES = {'KillCamEffectDynObjects': _KillCamEffectDynObjects}
+_COMMON_FEATURES_CONF_STORAGES = (_KillCamEffectDynObjects,)
 
 class BattleDynamicObjectsCache(IBattleDynamicObjectsCache):
 
@@ -536,23 +557,23 @@ class BattleDynamicObjectsCache(IBattleDynamicObjectsCache):
                 self.__gameModeConfigStorage[arenaType] = confStorage
                 confStorage.init(section)
                 resource_helper.purgeResource(_CONFIG_PATH)
-        for name, featureStorageType in _FEATURES_CONF_STORAGES.items():
-            fstorage = featureStorageType()
-            self.__featuresConfigStorage[name] = fstorage
+        for featureStorageCls in _COMMON_FEATURES_CONF_STORAGES:
+            fstorage = featureStorageCls()
+            self.__featuresConfigStorage[fstorage.CONFIG_NAME] = fstorage
             fstorage.init(dataSection=section)
 
     def unload(self, arenaType):
-        for cV in self.__gameModeConfigStorage.itervalues():
+        for cV in viewvalues(self.__gameModeConfigStorage):
             cV.clear()
 
     def destroy(self):
         if self.__gameModeConfigStorage is not None:
-            for cV in self.__gameModeConfigStorage.itervalues():
+            for cV in viewvalues(self.__gameModeConfigStorage):
                 cV.destroy()
 
             self.__gameModeConfigStorage = None
         if self.__featuresConfigStorage is not None:
-            for cV in self.__featuresConfigStorage.itervalues():
+            for cV in viewvalues(self.__featuresConfigStorage):
                 cV.destroy()
 
             self.__featuresConfigStorage = None

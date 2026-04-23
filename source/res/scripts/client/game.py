@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/game.py
 from __future__ import absolute_import, print_function
-import cPickle
 import functools
 import locale
 import sys
 import zlib
+from future.moves import pickle
 import Account
 import AreaDestructibles
 import BigWorld
@@ -252,7 +252,7 @@ def onRecreateDevice():
 
 def onStreamComplete(streamID, desc, data):
     try:
-        origPacketLen, origCrc32 = cPickle.loads(desc)
+        origPacketLen, origCrc32 = pickle.loads(desc)
     except Exception:
         origPacketLen, origCrc32 = (-1, -1)
 
@@ -407,7 +407,7 @@ def addChatMsg(*msg):
 def expandMacros(line):
     import re
     from python_macroses import g_macroses
-    patt = '\\$(' + functools.reduce(lambda x, y: x + '|' + y, g_macroses.iterkeys()) + ')(\\W|\\Z)'
+    patt = '\\$(' + functools.reduce(lambda x, y: x + '|' + y, g_macroses) + ')(\\W|\\Z)'
 
     def repl(match):
         return g_macroses[match.group(1)] + match.group(2)

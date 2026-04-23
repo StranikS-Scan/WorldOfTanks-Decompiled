@@ -414,7 +414,7 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
         return
 
     def __updateMarkerPosition(self):
-        if self.__selectedMap and self.viewModel.isBound() and self.hangarSpace.spaceInited:
+        if self.__selectedMap and self.hangarSpace.spaceInited:
             vehEntity = self.hangarSpace.space.getVehicleEntity()
             if not vehEntity or not vehEntity.model:
                 return

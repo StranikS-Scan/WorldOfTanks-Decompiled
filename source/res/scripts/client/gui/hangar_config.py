@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/hangar_config.py
+from __future__ import absolute_import
 import math
 from Math import Vector3
 from items.components import component_constants
@@ -40,7 +41,7 @@ class HangarConfig(object):
         self.vehicleGunPitch = component_constants.ZERO_FLOAT
         self.vehicleTurretYaw = component_constants.ZERO_FLOAT
         self.camMinDistVehicleHullLengthK = component_constants.ZERO_FLOAT
-        self.pivotTransform = dict()
+        self.pivotTransform = {}
         self.camCapsuleScale = Vector3()
         self.camCapsuleGunScale = Vector3()
         self.cameraName = component_constants.EMPTY_STRING

@@ -50,3 +50,8 @@ class CLIENT_UNIT_CMD(UnitBase.CLIENT_UNIT_CMD, ConstInjector):
 
 class GameSeasonType(constants.GameSeasonType, ConstInjector):
     COMP7 = 7
+
+
+class BATTLE_PROGRESS_CATEGORY(constants.BATTLE_PROGRESS_CATEGORY, ConstInjector):
+    COMP7_WEEKLY_QUESTS = 8
+    COMP7_CUSTOMISATION_QUESTS = 9

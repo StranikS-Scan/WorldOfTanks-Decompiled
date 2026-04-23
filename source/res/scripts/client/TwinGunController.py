@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/TwinGunController.py
+from __future__ import absolute_import
 import typing
 from constants import DUPLET_GUN_INDEXES_TUPLE
 from events_handler import eventHandler

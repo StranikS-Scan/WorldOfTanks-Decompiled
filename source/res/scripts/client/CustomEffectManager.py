@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/CustomEffectManager.py
+from __future__ import absolute_import
 import weakref
 import BigWorld
 import Math
@@ -30,7 +31,7 @@ class CustomEffectManager(Component):
         else:
             self.__vt = None
         self.__selectors = []
-        self.__variableArgs = dict()
+        self.__variableArgs = {}
         self.__vehicle = None
         self.__appearance = appearance
         self.__engineState = appearance.detailedEngineState
@@ -182,8 +183,7 @@ class CustomEffectManager(Component):
             self.__variableArgs['__engineStarted'] = True
         self.__variableArgs['physicLoad'] = self.__engineState.physicLoad
         if self.__wheelsData is not None:
-            for wheelIndex in xrange(0, len(self.__wheelsData)):
-                nodeName = self.__wheelsData[wheelIndex]
+            for wheelIndex, nodeName in enumerate(self.__wheelsData):
                 self.__variableArgs[nodeName + ':contact'] = 0 if appearance.wheelsAnimator.wheelIsFlying(wheelIndex) else 1
 
         for effectSelector in self.__selectors:

@@ -221,7 +221,8 @@ class _StylePreviewStateProto(ViewLobbyState):
                  'backPreviewAlias': event.params.get('backPreviewAlias', None),
                  'topPanelData': event.params.get('topPanelData', None),
                  'outfit': event.params.get('outfit', None),
-                 'isHeroTank': event.params.get('isHeroTank', False)}}
+                 'isHeroTank': event.params.get('isHeroTank', False),
+                 'itemsPack': event.params.get('itemsPack', None)}}
 
 
 @VehiclePreviewStateWithTopPanel.parentOf

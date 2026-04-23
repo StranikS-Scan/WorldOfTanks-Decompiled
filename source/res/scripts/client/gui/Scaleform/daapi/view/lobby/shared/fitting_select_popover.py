@@ -21,9 +21,11 @@ from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency, i18n
 from helpers.i18n import makeString as _ms
 from items import getTypeInfoByName
+from items.utils import getVehicleDescriptorWithoutMechanics
 from items.vehicles import VehicleDescriptor
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.vehicle_modules import VehicleGun, VehicleRadio, VehicleEngine, VehicleTurret, VehicleChassis
 _logger = logging.getLogger(__name__)
@@ -44,8 +46,11 @@ _TAB_IDS = (_POPOVER_FIRST_TAB_IDX, _POPOVER_SECOND_TAB_IDX)
 def _extendByModuleData(targetData, vehicleModule, vehDescr, extenders):
     moduleType = vehicleModule.itemTypeID
     paramsList = _PARAMS_LISTS[moduleType]
-    if moduleType == GUI_ITEM_TYPE.GUN and vehicleModule.isDamageMutable():
-        paramsList = ('maxAvgMutableDamageList', 'minAvgMutableDamageList', 'avgPiercingPower', 'reloadTime')
+    if moduleType == GUI_ITEM_TYPE.GUN:
+        if vehicleModule.isDamageMutable():
+            paramsList = ('maxAvgMutableDamageList', 'minAvgMutableDamageList', 'avgPiercingPower', 'reloadTime')
+        if vehicleModule.isLowChargeShotGun():
+            vehDescr = getVehicleDescriptorWithoutMechanics(vehDescr, VehicleMechanic.LOW_CHARGE_SHOT.value)
     values, names = [], []
     paramsData = params_helper.getParameters(vehicleModule, vehDescr)
     serverSettings = dependency.instance(ISettingsCore).serverSettings

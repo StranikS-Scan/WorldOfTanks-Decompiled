@@ -18,7 +18,7 @@ from events_containers.common.containers import ContainersListener
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
 from aih_constants import CTRL_MODE_NAME
-from constants import IS_DEVELOPMENT, VEHICLE_SIEGE_STATE as _SIEGE_STATE, DUALGUN_CHARGER_STATUS, SERVER_TICK_LENGTH, STATIONARY_RELOAD_STATE, VEHICLE_MISC_STATUS
+from constants import IS_DEVELOPMENT, VEHICLE_SIEGE_STATE as _SIEGE_STATE, DUALGUN_CHARGER_STATUS, SERVER_TICK_LENGTH, STATIONARY_RELOAD_STATE, VEHICLE_MISC_STATUS, LowChargeShotReloadingState
 from events_handler import eventHandler
 from gui import makeHtmlString, GUI_SETTINGS
 from gui.Scaleform.daapi.view.battle.shared.crosshair.settings import SHOT_RESULT_TO_ALT_COLOR
@@ -43,6 +43,7 @@ from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from gui.shared.utils.TimeInterval import TimeInterval
 from gui.shared.utils.plugins import IPlugin, PluginsCollection
+from gui.veh_mechanics.battle.updaters.current_shell_damage_updater import CurrentShellDamageUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.dual_accuracy_updater import IDualAccuracyView, DualAccuracyUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import IMechanicPassengerView, VehicleMechanicPassengerUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
@@ -72,7 +73,9 @@ if typing.TYPE_CHECKING:
     from PillboxSiegeComponent import PillboxSiegeModeState
     from StanceDanceController import StanceDanceState
     from StationaryReloadController import StationaryReloadModeState
+    from vehicles.mechanics.gun_mechanics.low_charge_shot.private import LowChargeShotMechanicState
     from vehicles.mechanics.gun_mechanics.temperature.heating_zones_gun import IHeatingZonesGunMechanicState
+    from vehicles.mechanics.gun_mechanics.propellant_gun import IPropellantGunMechanicState
 _logger = logging.getLogger(__name__)
 _SETTINGS_KEY_TO_VIEW_ID = {AIM.ARCADE: CROSSHAIR_VIEW_ID.ARCADE,
  AIM.SNIPER: CROSSHAIR_VIEW_ID.SNIPER}
@@ -2164,13 +2167,13 @@ class AccuracyStacksPlugin(VehicleMechanicCrosshairPlugin, IMechanicStatesListen
             self.parentObj.as_setAccuracyStacksProgressS(self.__level)
 
 
-class OverheatStacksPlugin(VehicleMechanicCrosshairPlugin, IMechanicPassengerView, IMechanicStatesListenerLogic):
+class OverheatStacksPlugin(VehicleMechanicCrosshairPlugin, IMechanicPassengerView):
 
     def setVisibleForPassenger(self, visibleForPassenger):
-        self.parentObj.as_setOverheatVisibleS(visibleForPassenger)
+        self.parentObj.as_setAlternateZoomPositionS(visibleForPassenger)
 
     def _clearParentState(self):
-        self.parentObj.as_setOverheatVisibleS(False)
+        self.parentObj.as_setAlternateZoomPositionS(False)
 
     def _getViewUpdaters(self):
         return [VehicleMechanicPassengerUpdater(VehicleMechanic.OVERHEAT_STACKS, self)]
@@ -2355,6 +2358,76 @@ class TemperatureHeatingZonesPlugin(VehicleMechanicCrosshairPlugin, IMechanicSta
         self.parentObj.as_setDispersionCircleThicknessS(isBold=state.isComfortZone)
 
 
+class LowChargeShotPlugin(VehicleMechanicCrosshairPlugin, IMechanicStatesListenerLogic):
+
+    @eventHandler
+    def onStatePrepared(self, state):
+        self.__invalidateState(state)
+        self.parentObj.as_setReloadingCounterShownS(False)
+
+    @eventHandler
+    def onStateObservation(self, state):
+        self.__invalidateState(state)
+
+    @eventHandler
+    def onStateTick(self, state):
+        if BattleReplay.g_replayCtrl.isPlaying:
+            self.parentObj.as_setLowChargeTimeLeftS(state.calculateTimeLeft(), state.reloadingState, True)
+
+    def _getViewUpdaters(self):
+        return [VehicleMechanicStatesUpdater(VehicleMechanic.LOW_CHARGE_SHOT, self)]
+
+    def _clearParentState(self):
+        self.parentObj.as_setReloadingCounterShownS(True)
+
+    def __invalidateState(self, state):
+        self.parentObj.as_setLowChargeInitialTimeS(state.baseTime, state.lowChargeTime, state.almostFinishedTime, state.reloadTimeCoefficient)
+        if not BattleReplay.g_replayCtrl.isPlaying:
+            if state.reloadingState in (LowChargeShotReloadingState.EMPTY, LowChargeShotReloadingState.FULL_CHARGE):
+                timeLeft = state.timeLeft
+            else:
+                timeLeft = state.calculateTimeLeft()
+            self.parentObj.as_setLowChargeTimeLeftS(timeLeft, state.reloadingState, False)
+
+
+class PropellantGunPlugin(VehicleMechanicCrosshairPlugin, IMechanicPassengerView, IMechanicStatesListenerLogic):
+
+    def __init__(self, parentObj):
+        super(PropellantGunPlugin, self).__init__(parentObj)
+        self.__isVisibleForPassenger = False
+        self.__isUsableShell = False
+        self.__shellDamage = 0.0
+
+    def setVisibleForPassenger(self, visibleForPassenger):
+        self.__isVisibleForPassenger = visibleForPassenger
+        self.__updateView()
+
+    @eventHandler
+    def onStatePrepared(self, state):
+        self.__invalidateState(state)
+
+    @eventHandler
+    def onStateObservation(self, state):
+        self.__invalidateState(state)
+
+    def onCurrentShellDamageChanged(self, newDamage):
+        self.__shellDamage = newDamage
+        self.__updateView()
+
+    def _clearParentState(self):
+        self.parentObj.as_setAlternateZoomPositionS(False)
+
+    def _getViewUpdaters(self):
+        return [VehicleMechanicPassengerUpdater(VehicleMechanic.PROPELLANT_GUN, self), VehicleMechanicStatesUpdater(VehicleMechanic.PROPELLANT_GUN, self), CurrentShellDamageUpdater(self)]
+
+    def __invalidateState(self, state):
+        self.__isUsableShell = state.isUsableShell
+        self.__updateView()
+
+    def __updateView(self):
+        self.parentObj.as_setAlternateZoomPositionS(self.__isVisibleForPassenger and self.__isUsableShell and self.__shellDamage > 0)
+
+
 class VehicleMechanicsPlugin(PluginsCollection, IVehicleTrackedMechanicsView):
     _VEHICLE_MECHANIC_PLUGINS_MAP = {VehicleMechanic.DUAL_ACCURACY: DualAccuracyGunPlugin,
      VehicleMechanic.TWIN_GUN: TwinGunPlugin,
@@ -2366,7 +2439,9 @@ class VehicleMechanicsPlugin(PluginsCollection, IVehicleTrackedMechanicsView):
      VehicleMechanic.PILLBOX_SIEGE_MODE: ReticlePillboxPlugin,
      VehicleMechanic.CHARGEABLE_BURST: ChargeableBurstPlugin,
      VehicleMechanic.STATIONARY_RELOAD: StationaryReloadingPlugin,
-     VehicleMechanic.HEATING_ZONES_GUN: TemperatureHeatingZonesPlugin}
+     VehicleMechanic.HEATING_ZONES_GUN: TemperatureHeatingZonesPlugin,
+     VehicleMechanic.LOW_CHARGE_SHOT: LowChargeShotPlugin,
+     VehicleMechanic.PROPELLANT_GUN: PropellantGunPlugin}
 
     def __init__(self, parentObj):
         super(VehicleMechanicsPlugin, self).__init__(parentObj)

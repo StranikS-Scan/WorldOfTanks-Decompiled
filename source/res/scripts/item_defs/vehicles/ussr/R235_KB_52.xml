@@ -10,8 +10,8 @@
   <postProgressionTree>	role_MT_universal	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	50	</forward>
-    <backward>	20	</backward>
+    <forward>	45	</forward>
+    <backward>	17	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.223	</moving>
@@ -75,6 +75,7 @@
       <armor_25>	60	</armor_25>
       <armor_26>	50	</armor_26>
       <armor_27>	40	</armor_27>
+      <armor_28>	178	</armor_28>
     </armor>
     <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
     <weight>	23136	</weight>
@@ -2020,7 +2021,7 @@
             </armor_32>
           </armor>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <reloadTime>	24	</reloadTime>
+          <reloadTime>	30	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.11	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -2421,7 +2422,7 @@
       <engines>
         <V_12_5B>
           <smplEnginePower>	850	</smplEnginePower>
-          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </V_12_5B>
       </engines>
       <chassis>

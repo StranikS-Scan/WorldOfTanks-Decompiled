@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/RocketAccelerationController.py
+from __future__ import absolute_import
 import logging
 import typing
 from functools import partial
@@ -109,6 +110,8 @@ class RocketAccelerationController(BigWorld.DynamicScriptComponent, ILifeCycleCo
         else:
             typeDescriptor = self.entity.typeDescriptor
             if typeDescriptor is None:
+                return False
+            if typeDescriptor.type.compactDescr != self.vehTypeCD:
                 return False
             appearance = self.entity.appearance
             if appearance is None or not appearance.isConstructed or appearance.isDestroyed:

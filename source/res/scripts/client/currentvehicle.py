@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/CurrentVehicle.py
+from __future__ import absolute_import
 from typing import Optional
+from future.utils import viewvalues
 import BigWorld
 from constants import CustomizationInvData
 from gui.SystemMessages import pushMessagesFromResult
@@ -328,7 +330,7 @@ class _CurrentVehicle(_CachedVehicle):
             vehiclesCriteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.MODE_HIDDEN | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
             invVehs = self.itemsCache.items.getVehicles(criteria=vehiclesCriteria)
             if invVehs:
-                vehInvID = min(invVehs.itervalues()).invID
+                vehInvID = min(viewvalues(invVehs)).invID
             else:
                 vehInvID = 0
         self._selectVehicle(vehInvID, callback, waitingOverlapsUI)
@@ -410,7 +412,7 @@ class _CurrentVehicle(_CachedVehicle):
                 if vehicleOutfitDiff is not None:
                     isCustomizationChanged = season in vehicleOutfitDiff or SeasonType.ALL in vehicleOutfitDiff
             isComponentsChanged = GUI_ITEM_TYPE.TURRET in invDiff or GUI_ITEM_TYPE.GUN in invDiff
-            isVehicleChanged = any((self.__vehInvID in hive or (self.__vehInvID, '_r') in hive for hive in vehsDiff.itervalues()))
+            isVehicleChanged = any((self.__vehInvID in hive or (self.__vehInvID, '_r') in hive for hive in viewvalues(vehsDiff)))
             if isComponentsChanged or isRepaired or isCustomizationChanged:
                 self.refreshModel()
             elif isVehicleDescrChanged:
@@ -436,7 +438,7 @@ class _CurrentVehicle(_CachedVehicle):
         clientPrb = prb_getters.getClientPrebattle()
         if clientPrb is not None:
             rosters = prb_getters.getPrebattleRosters(prebattle=clientPrb)
-            for _, roster in rosters.iteritems():
+            for roster in viewvalues(rosters):
                 if BigWorld.player().id in roster:
                     vehCompDescr = roster[BigWorld.player().id].get('vehCompDescr', '')
                     if vehCompDescr:
@@ -646,7 +648,7 @@ class _CurrentPreviewVehicle(_CachedVehicle):
 
     def _applyCamouflageTTC(self):
         if self.isPresent():
-            camo = first(self._c11nService.getCamouflages(vehicle=self.item).itervalues())
+            camo = first(viewvalues(self._c11nService.getCamouflages(vehicle=self.item)))
             if camo:
                 outfit = self._itemsFactory.createOutfit(vehicleCD=self.item.descriptor.makeCompactDescr())
                 outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).set(camo.intCD)

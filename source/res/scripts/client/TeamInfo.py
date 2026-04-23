@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/TeamInfo.py
+from __future__ import absolute_import
 import BigWorld
 from debug_utils import LOG_DEBUG_DEV
 from helpers import dependency

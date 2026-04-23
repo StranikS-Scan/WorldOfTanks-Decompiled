@@ -47,7 +47,7 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	160	</armor_1>
+      <armor_1>	170	</armor_1>
       <armor_2>	105	</armor_2>
       <armor_3>	90	</armor_3>
       <armor_4>	45	</armor_4>
@@ -60,7 +60,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	15268	</weight>
-    <maxHealth>	1600	</maxHealth>
+    <maxHealth>	1640	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	210	</maxHealth>
       <maxRegenHealth>	140	</maxRegenHealth>
@@ -911,8 +911,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	52	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.16	</vehicleMovement>
-        <vehicleRotation>	0.16	</vehicleRotation>
+        <vehicleMovement>	0.15	</vehicleMovement>
+        <vehicleRotation>	0.15	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -1968,7 +1968,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	10000	</weight>
-      <maxHealth>	400	</maxHealth>
+      <maxHealth>	410	</maxHealth>
       <rotationSpeed>	38	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
@@ -2019,7 +2019,7 @@
           </pitchLimits>
           <reloadTime>	10.2	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2749,7 +2749,7 @@
     <detailed>
       <engines>
         <_4TPD>
-          <smplEnginePower>	640	</smplEnginePower>
+          <smplEnginePower>	740	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </_4TPD>
       </engines>

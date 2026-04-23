@@ -7,6 +7,7 @@ if typing.TYPE_CHECKING:
     from collections_common import Collection, CollectionItem
     from comp7.helpers.comp7_server_settings import Comp7RewardsConfig, Comp7Config
     from comp7.gui.game_control.comp7_controller import _LeaderboardDataProvider, _ProgressionDataProvider
+    from disjoint_set import DisjointSet
     from Event import Event
     from gui.collection.resources.cdn.cache import CollectionsCdnCacheMgr
     from fun_random.gui.feature.configs.modes.mode import FunModeCompositeConfigurationModel
@@ -18,11 +19,13 @@ if typing.TYPE_CHECKING:
     from fun_random.gui.shared.events import FunEventScope, FunEventType
     from fun_random.gui.feature.sub_systems.fun_performance_analyzers import PerformanceGroup
     from gui.Scaleform.daapi.view.lobby.hangar.Hangar import Hangar
+    from gui.battle_control.controllers.w2gt.w2gt_data_mgr import W2gtProgress
     from gui.battle_pass.state_machine.delegator import BattlePassRewardLogic
     from gui.game_control.epic_meta_game_ctrl import EpicMetaGameSkill
     from gui.game_control.mapbox_controller import ProgressionData
     from gui.game_control.trade_in import TradeInDiscounts
     from gui.game_control.live_ops_web_events_controller import EventState
+    from gui.game_control.w2gt_controller import _W2gtResponseData
     from gui.gift_system.hubs.base.hub_core import IGiftEventHub
     from gui.hangar_presets.obsolete.hangar_gui_config import HangarGuiPreset
     from gui.hangar_presets.obsolete.hangar_presets_getters import IPresetsGetter
@@ -49,7 +52,7 @@ if typing.TYPE_CHECKING:
     from gui.shared.gui_items.tankman_skill import TankmanSkill
     from gui.shared.money import Money, CURRENCY_TYPE
     from gui.shared.utils.requesters.EpicMetaGameRequester import EpicMetaGameRequester
-    from helpers.server_settings import BattleRoyaleConfig, EpicGameConfig, GiftSystemConfig, RankedBattlesConfig, VehiclePostProgressionConfig, _MapboxConfig, WinbackConfig, LiveOpsWebEventsConfig, EasyTankEquipConfig, SeniorityAwardsConfig
+    from helpers.server_settings import BattleRoyaleConfig, EpicGameConfig, GiftSystemConfig, RankedBattlesConfig, VehiclePostProgressionConfig, _MapboxConfig, WinbackConfig, LiveOpsWebEventsConfig, EasyTankEquipConfig, SeniorityAwardsConfig, _W2GTConfig
     from items.vehicles import VehicleType
     from season_common import GameSeason
     from items.artefacts import Equipment
@@ -2333,12 +2336,6 @@ class IWotPlusController(IGameController):
     def getExclusiveVehicles(self):
         raise NotImplementedError
 
-    def getActiveExclusiveVehicle(self):
-        raise NotImplementedError
-
-    def getActiveExclusiveVehicleName(self):
-        raise NotImplementedError
-
     def toggleWotPlusDev(self):
         raise NotImplementedError
 
@@ -2956,6 +2953,14 @@ class IComp7Controller(IGameController, ISeasonProvider):
     def remainingOfferTokensNotifications(self):
         raise NotImplementedError
 
+    @property
+    def bans(self):
+        raise NotImplementedError
+
+    @property
+    def vehicleCopiesInfo(self):
+        raise NotImplementedError
+
     def getRanksConfig(self):
         raise NotImplementedError
 
@@ -2969,6 +2974,9 @@ class IComp7Controller(IGameController, ISeasonProvider):
         raise NotImplementedError
 
     def isTrainingEnabled(self):
+        raise NotImplementedError
+
+    def isVehicleBanEnabled(self):
         raise NotImplementedError
 
     def hasActiveSeason(self, includePreannounced=False):
@@ -3020,6 +3028,9 @@ class IComp7Controller(IGameController, ISeasonProvider):
         raise NotImplementedError
 
     def hasSuitableVehicles(self):
+        raise NotImplementedError
+
+    def hasEnoughReadyToFightVehicles(self):
         raise NotImplementedError
 
     def vehicleIsAvailableForBuy(self):
@@ -3955,8 +3966,35 @@ class IIngameTournamentController(IGameController):
     def openShop(self, tournamentType):
         raise NotImplementedError
 
+    def getTokenStoreOpeningTime(self, tournamentType):
+        raise NotImplementedError
+
     def getOfferGiftsToken(self, tournamentType):
         raise NotImplementedError
 
     def openOfferGifts(self, tournamentType, overrideOnBackCallback):
+        raise NotImplementedError
+
+
+class IW2GTGameController(IGameController):
+
+    @property
+    def isEnabled(self):
+        raise NotImplementedError
+
+    @property
+    def isEnabledByServer(self):
+        raise NotImplementedError
+
+    @property
+    def w2gtConfig(self):
+        raise NotImplementedError
+
+    def getTips(self, geometryName, gameplayID, vehRole, vehLevel, team):
+        raise NotImplementedError
+
+    def saveProgress(self, arenaUniqueID, playerID, progress):
+        raise NotImplementedError
+
+    def getProgress(self, arenaUniqueID, playerID):
         raise NotImplementedError

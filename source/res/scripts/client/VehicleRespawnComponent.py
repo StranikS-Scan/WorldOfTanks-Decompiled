@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/VehicleRespawnComponent.py
+from __future__ import absolute_import
 import BigWorld
 import Event
 from constants import RespawnState, VEHICLE_SETTING, IS_VS_EDITOR

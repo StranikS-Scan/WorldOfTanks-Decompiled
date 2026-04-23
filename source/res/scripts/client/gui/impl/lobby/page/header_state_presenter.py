@@ -57,10 +57,9 @@ class HeaderStatePresenter(ViewComponent[HeaderStateModel], IRoutableView):
         if routeInfo.state is None:
             return
         else:
-            self.__router.setRoute(self.__lsm.removeSubtreePrefix(routeInfo.state.getStateID()), routeInfo.params)
-            headerType = HeaderType.DEFAULT
+            params = routeInfo.params.copy()
+            params['routeType'] = HeaderType.DEFAULT.value
             if routeInfo.state.getFlags() & LobbyStateFlags.HANGAR:
-                headerType = HeaderType.HANGAR
-            with self.getViewModel().transaction() as model:
-                model.setType(headerType)
+                params['routeType'] = HeaderType.HANGAR.value
+            self.__router.setRoute(self.__lsm.removeSubtreePrefix(routeInfo.state.getStateID()), params)
             return

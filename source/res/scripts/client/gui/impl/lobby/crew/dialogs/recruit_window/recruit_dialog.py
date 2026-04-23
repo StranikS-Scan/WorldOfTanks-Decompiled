@@ -1,30 +1,31 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/crew/dialogs/recruit_window/recruit_dialog.py
+from adisp import adisp_async, adisp_process
+from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.impl.dialogs.dialog_template_button import CancelButton, ConfirmButton
+from gui.impl.gen.resources import R
+from gui.impl.gen.view_models.views.lobby.crew.dialogs.recruit_window.recruit_dialog_template_view_model import RecruitDialogTemplateViewModel
+from gui.impl.lobby.crew.crew_sounds import SOUNDS as CREW_SOUNDS
 from gui.impl.lobby.crew.dialogs.base_crew_dialog_template_view import BaseCrewDialogTemplateView
 from gui.impl.lobby.crew.dialogs.recruit_window.recruit_content import NO_DATA_VALUE, RecruitContent
-from gui.impl.gen.view_models.views.lobby.crew.dialogs.recruit_window.recruit_dialog_template_view_model import RecruitDialogTemplateViewModel
-from gui.shared.event_dispatcher import showRecruitConfirmIrrelevantConversionDialog
-from gui.shared.gui_items.processors.quests import PMGetTankwomanReward
-from items import vehicles
 from gui.impl.lobby.crew.dialogs.recruit_window.recruit_dialog_utils import getIcon, getTitle, getIconBackground, getIconName, getTitleFromTokenData
-from gui.impl.lobby.crew.crew_sounds import SOUNDS as CREW_SOUNDS
-from gui.impl.dialogs.dialog_template_button import CancelButton, ConfirmButton
 from gui.impl.pub.dialog_window import DialogButtons
-from gui.impl.gen.resources import R
-from gui import SystemMessages
+from gui.server_events import recruit_helper
+from gui.server_events.pm_constants import SOUNDS, PERSONAL_MISSIONS_SILENT_SOUND_SPACE
+from gui.shared.event_dispatcher import showRecruitConfirmIrrelevantConversionDialog
+from gui.shared.gui_items.Tankman import NO_TANKMAN
+from gui.shared.gui_items.processors.quests import PMGetTankwomanReward
 from gui.shared.gui_items.processors.tankman import TankmanTokenRecruit, TankmanUnload, TankmanEquip
 from gui.shared.utils import decorators
+from gui.sounds.filters import States, StatesGroup
 from helpers import dependency
+from items import vehicles
 from skeletons.gui.game_control import ISpecialSoundCtrl
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from sound_gui_manager import CommonSoundSpaceSettings
-from gui.server_events import recruit_helper
-from gui.server_events.pm_constants import SOUNDS, PERSONAL_MISSIONS_SILENT_SOUND_SPACE
-from gui.sounds.filters import States, StatesGroup
-from wg_async import wg_await, wg_async
-from gui.shared.gui_items.Tankman import NO_TANKMAN
+from wg_async import wg_await, wg_async, await_callback
 
 class BaseRecruitDialog(BaseCrewDialogTemplateView):
     __slots__ = ('_selectedNation', '_selectedVehType', '_selectedVehicle', '_selectedSpecialization', '_recruitContent', '_isSlotChanged')
@@ -121,18 +122,22 @@ class TokenRecruitDialog(BaseRecruitDialog):
                  'selectedVehicle': vehicle}))
                 if not confirmResult.result or not confirmResult.result[0]:
                     return
-            self._submit()
+            yield await_callback(self._submit)()
         super(TokenRecruitDialog, self)._setResult(result)
 
-    def _submit(self):
+    @adisp_process
+    def _submit(self, callback):
         tankmen = self.__vehicle.getTankmanIDBySlotIdx(self.__vehicleSlotToUnpack) if self.__vehicle and not self._isSlotChanged else NO_TANKMAN
         if tankmen != NO_TANKMAN:
-            self._unloadOldTankman()
+            yield self._unloadOldTankman()
         else:
-            self._unpackTokenRecruit()
+            yield self._unpackTokenRecruit()
+        callback(None)
+        return
 
+    @adisp_async
     @decorators.adisp_process('updating')
-    def _unpackTokenRecruit(self):
+    def _unpackTokenRecruit(self, callback=None):
         recruit_helper.removeRecruitForVisit(self.__tokenName)
         _, _, vehTypeID = vehicles.parseIntCompactDescr(int(self._selectedVehicle))
         res = yield TankmanTokenRecruit(int(self._selectedNation), int(vehTypeID), self._selectedSpecialization, self.__tokenName, self.__tokenData).request()
@@ -141,23 +146,31 @@ class TokenRecruitDialog(BaseRecruitDialog):
         if res.success:
             if self.__vehicleSlotToUnpack != -1 and not self._isSlotChanged:
                 tmn = self._itemsCache.items.getTankman(res.auxData)
-                self._equipTankman(tmn)
+                yield self._equipTankman(tmn)
         else:
             recruit_helper.setNewRecruitVisited(self.__tokenName)
+        callback(None)
+        return
 
+    @adisp_async
     @decorators.adisp_process('unloading')
-    def _unloadOldTankman(self):
+    def _unloadOldTankman(self, callback=None):
         result = yield TankmanUnload(self.__vehicle.invID, self.__vehicleSlotToUnpack).request()
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         if result.success:
-            self._unpackTokenRecruit()
+            yield self._unpackTokenRecruit()
+        callback(None)
+        return
 
+    @adisp_async
     @decorators.adisp_process('equipping')
-    def _equipTankman(self, newTankman):
+    def _equipTankman(self, newTankman, callback=None):
         result = yield TankmanEquip(newTankman.invID, self.__vehicle.invID, self.__vehicleSlotToUnpack).request()
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+        callback(None)
+        return
 
 
 class QuestRecruitDialog(BaseRecruitDialog):
@@ -202,13 +215,21 @@ class QuestRecruitDialog(BaseRecruitDialog):
         g_clientUpdateManager.removeObjectCallbacks(self)
         return
 
+    @wg_async
     def _setResult(self, result):
         if result == DialogButtons.SUBMIT:
-            self._unpackQuestRecruit()
+            yield await_callback(self._submit)()
         super(QuestRecruitDialog, self)._setResult(result)
 
+    @adisp_process
+    def _submit(self, callback):
+        yield self._unpackQuestRecruit()
+        callback(None)
+        return
+
+    @adisp_async
     @decorators.adisp_process('updating')
-    def _unpackQuestRecruit(self):
+    def _unpackQuestRecruit(self, callback=None):
         missionIDs = str(self.__mission.getID())
         recruit_helper.removeRecruitForVisit(missionIDs)
         _, _, vehTypeID = vehicles.parseIntCompactDescr(int(self._selectedVehicle))
@@ -217,12 +238,17 @@ class QuestRecruitDialog(BaseRecruitDialog):
             SystemMessages.pushMessage(res.userMsg, type=res.sysMsgType)
         newTankman = self._itemsCache.items.getTankman(res.auxData.get('tmanInvID', NO_TANKMAN))
         if res.success and newTankman and self.__vehicle and self.__vehicleSlotToUnpack != -1:
-            self._equipTankman(newTankman)
+            yield self._equipTankman(newTankman)
         else:
             recruit_helper.setNewRecruitVisited(missionIDs)
+        callback(None)
+        return
 
+    @adisp_async
     @decorators.adisp_process('equipping')
-    def _equipTankman(self, newTankman):
+    def _equipTankman(self, newTankman, callback=None):
         result = yield TankmanEquip(newTankman.invID, self.__vehicle.invID, self.__vehicleSlotToUnpack).request()
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+        callback(None)
+        return

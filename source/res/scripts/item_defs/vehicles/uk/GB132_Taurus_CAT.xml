@@ -1269,67 +1269,6 @@
       <topRightCarryingPoint>	1.37471 2.16122	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
-      <trackNodes>
-        <enable>	true	</enable>
-        <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.01	</maxAmplitude>
-        <maxOffset>	0.01	</maxOffset>
-        <gravity>	-9.8	</gravity>
-        <elasticity>	1100	</elasticity>
-        <damping>	2	</damping>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L0	</name>
-          <forwardElastK>	0.8	</forwardElastK>
-          <offset>	-0.41	</offset>
-          <backwardElastK>	1.3	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L1	</name>
-          <offset>	-0.41	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R0	</name>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R1	</name>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L0	</name>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L1	</name>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L2	</name>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L3	</name>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R0	</name>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R1	</name>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R2	</name>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R3	</name>
-        </node>
-      </trackNodes>
       <trackThickness>	0	</trackThickness>
       <hullAiming>
         <audio>
@@ -1388,25 +1327,25 @@
           <startNode>	Lever_Start_L0	</startNode>
           <jointNode>	Lever_Joint_L0	</jointNode>
           <trackNode>	Track_L0	</trackNode>
-          <limits>	200.100006 140	</limits>
+          <limits>	208.800003 127.699997	</limits>
         </lever>
         <lever>
           <startNode>	Lever_Start_R0	</startNode>
           <jointNode>	Lever_Joint_R0	</jointNode>
           <trackNode>	Track_R0	</trackNode>
-          <limits>	200.100006 140	</limits>
+          <limits>	208.800003 127.699997	</limits>
         </lever>
         <lever>
           <startNode>	Lever_Start_L1	</startNode>
           <jointNode>	Lever_Joint_L1	</jointNode>
           <trackNode>	Track_L1	</trackNode>
-          <limits>	192.600006 150	</limits>
+          <limits>	205.900024 128.399994	</limits>
         </lever>
         <lever>
           <startNode>	Lever_Start_R1	</startNode>
           <jointNode>	Lever_Joint_R1	</jointNode>
           <trackNode>	Track_R1	</trackNode>
-          <limits>	192.600006 150	</limits>
+          <limits>	205.900024 128.399994	</limits>
         </lever>
         <lever>
           <startNode>	Lever_Start_L2	</startNode>
@@ -1436,25 +1375,25 @@
           <startNode>	Lever_Start_L4	</startNode>
           <jointNode>	Lever_Joint_L4	</jointNode>
           <trackNode>	Track_L4	</trackNode>
-          <limits>	204.699997 120	</limits>
+          <limits>	205.399994 120	</limits>
         </lever>
         <lever>
           <startNode>	Lever_Start_R4	</startNode>
           <jointNode>	Lever_Joint_R4	</jointNode>
           <trackNode>	Track_R4	</trackNode>
-          <limits>	204.699997 120	</limits>
+          <limits>	205.399994 120	</limits>
         </lever>
         <lever>
           <startNode>	Lever_Start_L5	</startNode>
           <jointNode>	Lever_Joint_L5	</jointNode>
           <trackNode>	Track_L5	</trackNode>
-          <limits>	209 110	</limits>
+          <limits>	213.600006 109.5	</limits>
         </lever>
         <lever>
           <startNode>	Lever_Start_R5	</startNode>
           <jointNode>	Lever_Joint_R5	</jointNode>
           <trackNode>	Track_R5	</trackNode>
-          <limits>	209 110	</limits>
+          <limits>	213.600006 109.5	</limits>
         </lever>
       </leveredSuspension>
       <physicalTracks>
@@ -2008,7 +1947,7 @@
   </siege_mode>
   <hull_aiming>
     <pitch>
-      <wheelCorrectionCenterZ>	0.0	</wheelCorrectionCenterZ>
+      <wheelCorrectionCenterZ>	-0.1	</wheelCorrectionCenterZ>
       <wheelsCorrectionSpeed>	7.5	</wheelsCorrectionSpeed>
       <wheelsCorrectionAngles>
         <pitchMin>	-10	</pitchMin>

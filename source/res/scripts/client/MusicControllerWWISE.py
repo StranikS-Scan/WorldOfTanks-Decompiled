@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/MusicControllerWWISE.py
-import WWISE
+from __future__ import absolute_import
+from future.utils import viewitems, viewvalues
 import BigWorld
 import ResMgr
+import WWISE
 from PlayerEvents import g_playerEvents
 from constants import ARENA_PERIOD
 from helpers import isPlayerAvatar
@@ -213,7 +215,7 @@ class MusicController(object):
                 return
             eventSnd.replace(newSoundEvent, eventId, unlink)
             if params is not None:
-                for paramName, paramValue in params.iteritems():
+                for paramName, paramValue in viewitems(params):
                     self.setEventParam(paramName, paramValue)
 
             return
@@ -287,7 +289,7 @@ class MusicController(object):
                 stateValue = _ARENA_PERIOD_STATE.get(period)
                 if stateValue is not None:
                     WWISE.WW_setState(_ARENA_PERIOD_STATE_NAME, stateValue)
-            if period == ARENA_PERIOD.PREBATTLE or period == ARENA_PERIOD.BATTLE:
+            if period in (ARENA_PERIOD.PREBATTLE, ARENA_PERIOD.BATTLE):
                 if self.__isOnArena and not g_replayCtrl.isTimeWarpInProgress:
                     if not self.isPlaying(AMBIENT_EVENT_COMBAT):
                         self.play(AMBIENT_EVENT_COMBAT)
@@ -356,7 +358,7 @@ class MusicController(object):
                 eventNames[AMBIENT_EVENT_LOBBY] = (s.readString('wwlobby'), s.readString('wwlobby'))
                 eventNames[AMBIENT_EVENT_SHOP] = (s.readString('wwshop'), s.readString('wwlobby'))
                 eventNames[AMBIENT_EVENT_STATISTICS] = (s.readString('wwrating'), s.readString('wwlobby'))
-                for key, const in FORT_MAPPING.iteritems():
+                for key, const in viewitems(FORT_MAPPING):
                     eventNames[const] = (s.readString(key), s.readString(key))
 
         self.__overrideEvents(eventNames)
@@ -374,8 +376,7 @@ class MusicController(object):
             for soundName in soundNames:
                 eventExist = False
                 if prevSounds is not None:
-                    for i in xrange(len(prevSounds)):
-                        event = prevSounds[i]
+                    for i, event in enumerate(prevSounds):
                         if event is not None and event.name == soundName:
                             newSounds.append(event)
                             prevSounds[i] = None
@@ -399,7 +400,7 @@ class MusicController(object):
         return
 
     def __overrideEvents(self, eventNames):
-        for eventId, overriddenNames in self.__overriddenEvents.iteritems():
+        for eventId, overriddenNames in viewitems(self.__overriddenEvents):
             if overriddenNames:
                 if overriddenNames[_SERVER_OVERRIDDEN]:
                     eventNames[eventId] = overriddenNames[_SERVER_OVERRIDDEN]
@@ -496,8 +497,8 @@ class MusicController(object):
         self.play(self.__ambient.getEventId())
 
     def __eraseOverridden(self, index):
-        for eventId, _ in self.__overriddenEvents.iteritems():
-            self.__overriddenEvents[eventId][index] = None
+        for events in viewvalues(self.__overriddenEvents):
+            events[index] = None
 
         return
 

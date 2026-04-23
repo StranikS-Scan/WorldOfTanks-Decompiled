@@ -68,7 +68,7 @@ from skeletons.gui.battle_hints.newbie_battle_hints_controller import INewbieBat
 from skeletons.gui.prebattle_hints.newbie_controller import INewbiePrebattleHintsController
 from skeletons.gui.sounds import ISoundsController
 from gui import makeHtmlString
-from skeletons.gui.game_control import ICommendationsController, ISpecialSoundCtrl, IAnonymizerController, IVehiclePostProgressionController
+from skeletons.gui.game_control import ICommendationsController, ISpecialSoundCtrl, IAnonymizerController, IVehiclePostProgressionController, IW2GTGameController
 if TYPE_CHECKING:
     from typing import Tuple as TTuple
 _logger = logging.getLogger(__name__)
@@ -1748,6 +1748,13 @@ class NewbieBattleHintsSetting(EnablingSettingMixin, StorageSetting):
 
     def getDefaultValue(self):
         return True
+
+
+class W2GTEnabledSetting(EnablingSettingMixin, StorageSetting):
+    __w2gtGameCtrl = dependency.descriptor(IW2GTGameController)
+
+    def _isEnabled(self):
+        return self.__w2gtGameCtrl.isEnabledByServer and not BattleReplay.isPlaying()
 
 
 class ShowMarksOnGunSetting(StorageAccountSetting):

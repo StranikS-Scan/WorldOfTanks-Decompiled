@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Flock.py
+from __future__ import absolute_import, division
 import math
 import random
+from past.builtins import xrange
 import math_utils
 import BigWorld
 import Math

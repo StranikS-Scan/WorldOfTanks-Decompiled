@@ -1,0 +1,25 @@
+<hangar_v4_last_stand.xml>
+  <name>	#arenas:hangar_v4_last_stand/name	</name>
+  <description>	#arenas:hangar_v4_last_stand/description	</description>
+  <wwmusic>	hangar_v4_music	</wwmusic>
+  <wwambientSound>	hangar_v4_ambient_2D	</wwambientSound>
+  <wwDefaultReverb>
+    <auxBus>	AUX_reverb_hangar_v4	</auxBus>
+    <controlValue>	1.0	</controlValue>
+  </wwDefaultReverb>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	hangar_v4.bnk	</name>
+      </bank>
+      <bank>
+        <name>	hangar_v4.pck	</name>
+      </bank>
+    </loadBanks>
+  </soundRemapping>
+  <boundingBox>
+    <bottomLeft>	-100.000000 -100.000000	</bottomLeft>
+    <upperRight>	95.357201 95.357201	</upperRight>
+  </boundingBox>
+  <mapActivities></mapActivities>
+</hangar_v4_last_stand.xml>

@@ -867,13 +867,19 @@ class DynComponentsGroupItem(_TriggerItem):
     def update(self, quantity, stage, timeRemaining, totalTime):
         super(DynComponentsGroupItem, self).update(quantity, stage, timeRemaining, totalTime)
         if stage in (EQUIPMENT_STAGES.COOLDOWN, EQUIPMENT_STAGES.READY):
-            self._totalTime = self._descriptor.cooldownSeconds
+            self._totalTime = self._getCooldownSeconds()
         elif stage == EQUIPMENT_STAGES.ACTIVE:
-            self._timeRemaining = min(self._timeRemaining, self._descriptor.durationSeconds)
-            self._totalTime = self._descriptor.durationSeconds
+            self._timeRemaining = min(self._timeRemaining, self._getDurationSeconds())
+            self._totalTime = self._getDurationSeconds()
 
     def getEntitiesIterator(self, avatar=None):
         return []
+
+    def _getDurationSeconds(self):
+        return self._descriptor.durationSeconds
+
+    def _getCooldownSeconds(self):
+        return self._descriptor.cooldownSeconds
 
 
 class DynComponentsGroupPassiveItem(DynComponentsGroupItem):

@@ -71,7 +71,7 @@ class OptionalDevicesAssistantPresenter(ViewComponent[OptionalDevicesAssistantMo
 
     def _finalize(self):
         super(OptionalDevicesAssistantPresenter, self)._finalize()
-        self._optionalDevicesAssistant = None
+        self._removeOptionalDevicesAssistantPanel()
         lsm = getLobbyStateMachine()
         lsm.disconnect(self.optionalDevicesAssistantObserver)
         self.__slotSelectionObserver = None

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/OfflineMapCreator.py
+from __future__ import absolute_import
 import math
+from future.utils import viewitems, viewvalues
 import BigWorld
 import Math
 from ArenaType import g_cache
@@ -146,13 +148,13 @@ class OfflineMapCreator(object):
 
     @staticmethod
     def __getArenaTypeId(mapName):
-        info = {arenaType.gameplayName:arenaTypeId for arenaTypeId, arenaType in g_cache.iteritems() if mapName == arenaType.geometryName}
+        info = {arenaType.gameplayName:arenaTypeId for arenaTypeId, arenaType in viewitems(g_cache) if mapName == arenaType.geometryName}
         priority = ('ctf',)
         for p in priority:
             if p in info:
                 return info[p]
 
-        return next(iter(info.itervalues()))
+        return next(iter(viewvalues(info)))
 
     def __setupCamera(self):
         global _CAM_START_TARGET_POS

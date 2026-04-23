@@ -12,8 +12,10 @@ class IVehicleEventsLogic(object):
     onAppearanceReady = None
     onSiegeStateUpdated = None
     onVehicleDestroyed = None
+    onObserverVehicleDataUpdated = None
     onCollectAmmoStates = None
     onCollectShotParams = None
+    onCurrentShellChanged = None
     onDynamicComponentCreated = None
     onDynamicComponentDestroyed = None
     onDiscreteShotDone = None
@@ -39,10 +41,16 @@ class IVehicleEventsListenerLogic(object):
     def onVehicleDestroyed(self):
         pass
 
+    def onObserverVehicleDataUpdated(self):
+        pass
+
     def onCollectAmmoStates(self, ammoStates):
         pass
 
     def onCollectShotParams(self, shotParamsList):
+        pass
+
+    def onCurrentShellChanged(self, intCD):
         pass
 
     def onDynamicComponentCreated(self, component):

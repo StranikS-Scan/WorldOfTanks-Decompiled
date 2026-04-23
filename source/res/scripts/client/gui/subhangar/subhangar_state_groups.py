@@ -19,9 +19,10 @@ class SmoothCameraMover(CameraMover):
 
 class SubhangarStateGroupConfig(object):
 
-    def __init__(self, stateGroups=(), cameraMover=CameraMover()):
+    def __init__(self, stateGroups=(), cameraMover=CameraMover(), environmentName=None):
         self.stateGroups = stateGroups
         self.cameraMover = cameraMover
+        self.environmentName = environmentName
 
 
 class SubhangarStateGroupConfigProvider(object):
@@ -56,3 +57,9 @@ class SubhangarStateGroups(Enum):
     PostBattleVictory = 'PostBattleVictoryStates'
     PostBattleDefeat = 'PostBattleDefeatStates'
     PostBattleCommon = 'PostBattleCommonStates'
+    Comp7PostBattleSmall = 'Comp7PostBattleSmallStates'
+    Comp7PostBattleMedium = 'Comp7PostBattleMediumStates'
+    Comp7PostBattleLarge = 'Comp7PostBattleLargeStates'
+    Comp7PostBattleVictory = 'Comp7PostBattleVictoryStates'
+    Comp7PostBattleDefeat = 'Comp7PostBattleDefeatStates'
+    Comp7PostBattleCommon = 'Comp7PostBattleCommonStates'

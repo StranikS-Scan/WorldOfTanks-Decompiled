@@ -67,6 +67,9 @@ class AvatarVehiclesInfoBase(BigWorld.DynamicScriptComponent):
     def setVehInfo_fogOfWar(self, vehInfo, diff):
         self.__arena.updateFogOfWar(diff.new)
 
+    def setVehInfo_position(self, vehInfo, diff):
+        self.__arena.updateVehiclesPosition(vehInfo['vehicleID'], diff.new)
+
     def _updateVehicleInfo(self, vehInfo, diffBuffer):
         self.__arena.updateVehicleInfo(vehInfo['vehicleID'], {name:vehInfo[name] for name in diffBuffer})
 

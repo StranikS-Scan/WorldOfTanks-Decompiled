@@ -57,7 +57,7 @@ class HangarSelectableLogic(BaseSelectableLogic):
     def _onMouseEnter(self, entity):
         if self.__onMouseEnter(entity) and entity.mouseOverSoundName:
             if entity.isOver3DSound:
-                SoundGroups.g_instance.playSoundPos(entity.mouseOverSoundName, entity.model.root.position)
+                SoundGroups.g_instance.playSoundPos(entity.mouseOverSoundName, entity.model.position)
             else:
                 SoundGroups.g_instance.playSound2D(entity.mouseOverSoundName)
 

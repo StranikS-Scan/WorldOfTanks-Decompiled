@@ -315,12 +315,12 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         if changeStatePossible and notReady and not self.prbEntity.isCommander():
             if not skipAmmocheck:
                 changeStatePossible = yield functions.checkAmmoLevel((g_currentVehicle.item,))
-            if changeStatePossible:
-                vehicleReadyCheckers = collectReadyVehicleChekers(prbEntity.getQueueType())
-                for vehicleReadyChecker in vehicleReadyCheckers:
-                    changeStatePossible = yield vehicleReadyChecker(g_currentVehicle.item)
-                    if not changeStatePossible:
-                        break
+        if changeStatePossible and notReady:
+            vehicleReadyCheckers = collectReadyVehicleChekers(self.prbEntity.getQueueType())
+            for vehicleReadyChecker in vehicleReadyCheckers:
+                changeStatePossible = yield vehicleReadyChecker(g_currentVehicle.item)
+                if not changeStatePossible:
+                    break
 
         if changeStatePossible:
             if self.prbEntity is prbEntity:

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/fitting_item.py
 from collections import namedtuple
+from itertools import chain
 import typing
 import BigWorld
 from debug_utils import LOG_CURRENT_EXCEPTION
@@ -19,6 +20,9 @@ from helpers import i18n, time_utils, dependency
 from items import vehicles, getTypeInfoByName
 from rent_common import SeasonRentDuration
 from telecom_rentals_common import TELECOM_RENTALS_RENT_KEY
+if typing.TYPE_CHECKING:
+    from items.vehicles import VehicleDescr
+    from vehicles.mechanics.mechanic_constants import VehicleMechanic
 ICONS_MASK = '../maps/icons/%(type)s/%(subtype)s%(unicName)s.png'
 _RentalInfoProvider = namedtuple('RentalInfoProvider', ('rentExpiryTime', 'compensations', 'battlesLeft', 'winsLeft', 'seasonRent', 'isRented', 'isTelecomRent', 'anyExpires', 'isExternalRent'))
 SeasonRentInfo = namedtuple('SeasonRentInfo', ('seasonType', 'seasonID', 'duration', 'expiryTime'))
@@ -52,6 +56,7 @@ class RentalInfoProvider(_RentalInfoProvider):
     def __new__(cls, additionalData=None, time=0, battles=0, wins=0, seasonRent=None, isRented=False, *args, **kwargs):
         additionalData = additionalData or {}
         seasonRent = seasonRent or {}
+        isRented = isRented or False
         if 'compensation' in additionalData:
             compensations = Money.makeFromMoneyTuple(additionalData['compensation'])
         else:
@@ -173,6 +178,8 @@ class FittingItem(GUIItem):
         CURRENT = 1
         IN_INVENTORY = 2
         OTHER = 3
+
+    _MECHANICS_FACTORY = tuple()
 
     def __init__(self, intCompactDescr, proxy=None, isBoughtForAltPrice=False, strCD=None):
         super(FittingItem, self).__init__(intCD=HasIntCD(intCompactDescr), strCD=strCD)
@@ -409,6 +416,9 @@ class FittingItem(GUIItem):
 
     def getBigOverlayType(self, vehicle=None):
         return _BIG_HIGHLIGHT_TYPES_MAP[self.getOverlayType(vehicle)]
+
+    def getMechanics(self, vehDescr, withOverrides=False):
+        return chain.from_iterable((factory.getMechanics(self, vehDescr, withOverrides=withOverrides) for factory in self._MECHANICS_FACTORY))
 
     def isInstalled(self, vehicle, slotIdx=None):
         return False

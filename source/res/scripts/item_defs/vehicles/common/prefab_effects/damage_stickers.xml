@@ -1,14 +1,30 @@
 <damage_stickers.xml>
-  <ricochet>
+  <common>
     <priority>	1	</priority>
-    <prefab>	content/EffectPrefabs/sample_hit_decal.prefab	</prefab>
-  </ricochet>
-  <resist>
+    <prefab>	content/DecalsPrefabs/armor_hit_decal.prefab	</prefab>
+  </common>
+  <regularHollowCharge>
     <priority>	1	</priority>
-    <prefab>	content/EffectPrefabs/sample_hit_decal.prefab	</prefab>
-  </resist>
-  <pierce>
+    <prefab>	content/DecalsPrefabs/armor_hit_decal_hc.prefab	</prefab>
+  </regularHollowCharge>
+  <regularHighExplosive>
     <priority>	1	</priority>
-    <prefab>	content/EffectPrefabs/sample_hit_decal.prefab	</prefab>
-  </pierce>
+    <prefab>	content/DecalsPrefabs/armor_hit_decal_he.prefab	</prefab>
+  </regularHighExplosive>
+  <regularArmorPiercing>
+    <priority>	1	</priority>
+    <prefab>	content/DecalsPrefabs/armor_hit_decal_ap.prefab	</prefab>
+  </regularArmorPiercing>
+  <regularArmorPiercingHE>
+    <priority>	1	</priority>
+    <prefab>	content/DecalsPrefabs/armor_hit_decal_ap_he.prefab	</prefab>
+  </regularArmorPiercingHE>
+  <regularArmorPiercingCR>
+    <priority>	1	</priority>
+    <prefab>	content/DecalsPrefabs/armor_hit_decal_ap_cr.prefab	</prefab>
+  </regularArmorPiercingCR>
+  <regularSmoke>
+    <priority>	1	</priority>
+    <prefab>	content/DecalsPrefabs/armor_hit_decal_ap_smoke.prefab	</prefab>
+  </regularSmoke>
 </damage_stickers.xml>

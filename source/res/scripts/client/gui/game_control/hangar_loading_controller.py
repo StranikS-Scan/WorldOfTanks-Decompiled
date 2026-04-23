@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/hangar_loading_controller.py
 import Event
-from gui.shared.event_dispatcher import showPEWelcomeScreen
 from helpers import dependency
 from skeletons.gui.game_control import IHangarLoadingController
 from skeletons.gui.goodies import IGoodiesCache
@@ -44,7 +43,6 @@ class HangarLoadingController(IHangarLoadingController):
                 self.__hangarSpace.onSpaceCreate += self.__hangarLoadedAfterLoginNotify
 
     def __hangarLoadedAfterLoginNotify(self):
-        showPEWelcomeScreen()
         self.__hangarSpace.onSpaceCreate -= self.__hangarLoadedAfterLoginNotify
         self.onHangarLoadedAfterLogin()
 

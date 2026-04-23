@@ -16,6 +16,7 @@ def notInReplay():
 class PlanTags(object):
     _tags = {'Load.NotInReplay': notInReplay,
      'Load.Development': lambda : IS_DEVELOPMENT}
+    EXTRA_TAGS = ['Load.Cache']
 
     def __init__(self, arenaBonusType=0):
         self._tagsList = [ tag for tag, func in PlanTags._tags.iteritems() if func() ]
@@ -30,4 +31,5 @@ class PlanTags(object):
 def getAllTags():
     tagsAll = PlanTags._tags.keys()
     tagsAll.extend((bonusCapToTag(cap) for cap in ALLOWED_ARENA_BONUS_TYPE_CAPS))
+    tagsAll.extend(PlanTags.EXTRA_TAGS)
     return tagsAll

@@ -37,6 +37,7 @@ from wg_async import wg_async, wg_await, distributeLoopOverTicks
 if TYPE_CHECKING:
     from typing import Optional, Dict, List
     import skeletons.gui.shared.utils.requesters as requesters
+    from disjoint_set import DisjointSet
     from gui.shared.gui_items.badge import Badge
     from gui.shared.gui_items.Tankman import Tankman
     from gui.shared.gui_items.Vehicle import Vehicle
@@ -147,6 +148,23 @@ class IntCDProtector(object):
 
     def isTriggered(self, intCD):
         return intCD not in self.__intCDs
+
+
+class SelectDistinctFilter(object):
+
+    def __init__(self, dsu):
+        self._dsu = dsu
+        self._filtered_roots = set()
+
+    def __call__(self, item):
+        root = self._dsu.getRoot(item)
+        if root is None:
+            return True
+        elif root in self._filtered_roots:
+            return False
+        else:
+            self._filtered_roots.add(root)
+            return True
 
 
 class RequestCriteria(object):
@@ -1012,8 +1030,8 @@ class ItemsRequester(IItemsRequester):
     def freeTankmenBerthsCount(self):
         return self.stats.tankmenBerthsCount - self.tankmenInBarracksCount()
 
-    def getVehicles(self, criteria=REQ_CRITERIA.EMPTY):
-        return self.getItems(GUI_ITEM_TYPE.VEHICLE, criteria=criteria)
+    def getVehicles(self, criteria=REQ_CRITERIA.EMPTY, limit=None):
+        return self.getItems(GUI_ITEM_TYPE.VEHICLE, criteria=criteria, limit=limit)
 
     def getStyles(self, criteria=REQ_CRITERIA.EMPTY):
         return self.getItems(GUI_ITEM_TYPE.STYLE, criteria=criteria)

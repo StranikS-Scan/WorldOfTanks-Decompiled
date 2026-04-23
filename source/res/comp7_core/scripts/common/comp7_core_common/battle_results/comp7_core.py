@@ -36,4 +36,10 @@ BATTLE_RESULTS = [('comp7PrestigePoints',
   False,
   None,
   'skip',
-  ENTRY_TYPE.ACCOUNT_ALL)]
+  ENTRY_TYPE.ACCOUNT_ALL),
+ ('comp7BannedVehicles',
+  dict,
+  {},
+  None,
+  'skip',
+  ENTRY_TYPE.COMMON)]

@@ -123,7 +123,7 @@ class ConfirmedOptDevice(ConfirmedArtefact):
         isActive = self.__wotPlus.hasSubscription()
         settingsModel = self.__wotPlus.getSettingsStorage()
         isFEDEnabled = settingsModel.isFreeEquipmentDemountingEnabled()
-        isDeluxeEnabled = settingsModel.isFreeDeluxeEquipmentDemountingEnabled()
+        isDeluxeEnabled = settingsModel.isFreeDeluxeEquipmentDemountingAvailable()
         isDeluxe = self._item.isDeluxe
         if not isFEDEnabled:
             return super(ConfirmedOptDevice, self).getOptItemDescKey()

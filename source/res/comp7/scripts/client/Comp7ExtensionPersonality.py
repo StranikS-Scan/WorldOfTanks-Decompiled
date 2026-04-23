@@ -14,7 +14,10 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.game_control.wotlda.constants import SupportedWotldaLoadoutType
 from gui.override_scaleform_views_manager import g_overrideScaleFormViewsConfig
 from gui.prb_control.prb_utils import initGuiTypes, initRequestType
-_LOBBY_EXT_PACKAGES = ['comp7.gui.Scaleform.daapi.view.lobby.profile', 'comp7.gui.Scaleform.daapi.view.lobby.missions.regular', 'comp7.gui.impl.lobby.hangar']
+_LOBBY_EXT_PACKAGES = ['comp7.gui.Scaleform.daapi.view.lobby.profile',
+ 'comp7.gui.Scaleform.daapi.view.lobby.missions.regular',
+ 'comp7.gui.impl.lobby.hangar',
+ 'comp7.gui.impl.lobby.battle_results']
 _BATTLE_EXT_PACKAGES = ['comp7.gui.Scaleform.daapi.view.battle.shared']
 
 class ClientComp7BattleMode(Comp7BattleMode):
@@ -140,11 +143,18 @@ class ClientComp7BattleMode(Comp7BattleMode):
         return Comp7StatsComposer
 
     @property
+    def _client_battleResultsEntryState(self):
+        from comp7.gui.impl.lobby.battle_results.states import Comp7PostBattleResultsEntryState
+        return Comp7PostBattleResultsEntryState
+
+    @property
     def _client_battleResultsReusables(self):
         from gui.battle_results.reusable.extension_utils import ReusableInfoFactory
         from comp7_core.gui.battle_results.reusable.shared import Comp7CoreVehicleDetailedInfo, Comp7CoreVehicleSummarizeInfo
+        from comp7.gui.battle_results.reusable.common import Comp7CommonInfo
         return {ReusableInfoFactory.Keys.VEHICLE_DETAILED: Comp7CoreVehicleDetailedInfo,
-         ReusableInfoFactory.Keys.VEHICLE_SUMMARIZED: Comp7CoreVehicleSummarizeInfo}
+         ReusableInfoFactory.Keys.VEHICLE_SUMMARIZED: Comp7CoreVehicleSummarizeInfo,
+         ReusableInfoFactory.Keys.COMMON: Comp7CommonInfo}
 
     @property
     def _client_battleControllersRepository(self):
@@ -223,6 +233,12 @@ class ClientComp7BattleMode(Comp7BattleMode):
         from comp7.gui.battle_results.composer import TournamentComp7StatsComposer, TrainingComp7StatsComposer
         registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.TOURNAMENT_COMP7, TournamentComp7StatsComposer)
         registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.TRAINING_COMP7, TrainingComp7StatsComposer)
+
+    def registerAdditionalBattleResultsEntryState(self):
+        from constants import ARENA_BONUS_TYPE
+        from gui.shared.system_factory import registerBattleResultsEntryState
+        registerBattleResultsEntryState(ARENA_BONUS_TYPE.TOURNAMENT_COMP7, self._client_battleResultsEntryState)
+        registerBattleResultsEntryState(ARENA_BONUS_TYPE.TRAINING_COMP7, self._client_battleResultsEntryState)
 
     def registerAdditionalBattleRepository(self):
         from comp7_common.comp7_constants import ARENA_GUI_TYPE
@@ -305,6 +321,8 @@ def preInit():
     battleMode.registerBattleResultSysMsgType()
     battleMode.registerAdditionalBattleResultSysMsgType()
     battleMode.registerBattleResultsConfig()
+    battleMode.registerBattleResultsEntryState()
+    battleMode.registerAdditionalBattleResultsEntryState()
     battleMode.registerAdditionalBattleResultsConfig()
     battleMode.registerClientBattleResultsCtrl()
     battleMode.registerAdditionalBattleResultsCtrl()

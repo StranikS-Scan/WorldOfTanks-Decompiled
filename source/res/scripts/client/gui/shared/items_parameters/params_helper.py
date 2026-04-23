@@ -423,9 +423,8 @@ def shellOnVehicleComparator(shell, vehicle):
     return VehiclesComparator(newParams, vehicleParams)
 
 
-def shellComparator(shell, vehicle):
-    if vehicle is not None:
-        vDescriptor = vehicle.descriptor
+def shellComparator(shell, vDescriptor):
+    if vDescriptor is not None:
         basicShellDescr = getBasicShell(vDescriptor)
         return ItemsComparator(params.ShellParams(shell.descriptor, vDescriptor).getParamsDict(), params.ShellParams(basicShellDescr, vDescriptor).getParamsDict())
     else:

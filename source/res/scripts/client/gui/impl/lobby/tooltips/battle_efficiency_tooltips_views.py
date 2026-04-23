@@ -10,6 +10,7 @@ from gui.impl.lobby.battle_results.tooltips_packers import BattleEfficiencyToolt
 from gui.impl.pub import ViewImpl
 
 class BattleResultsStatsTooltipView(ViewImpl):
+    _TOOLTIPS_PACKER = BattleEfficiencyTooltipsPacker
 
     def __init__(self, arenaUniqueID, paramType, userName):
         settings = ViewSettings(layoutID=R.views.lobby.tooltips.BattleResultsStatsTooltipView(), model=EfficiencyTooltipModel())
@@ -30,7 +31,7 @@ class BattleResultsStatsTooltipView(ViewImpl):
     def __packContent(self, presenter=None):
         battleResults = presenter.getResults()
         with self.getViewModel().transaction() as model:
-            BattleEfficiencyTooltipsPacker.packTooltip(model, battleResults, ctx={'paramType': self.__efficiencyParam,
+            self._TOOLTIPS_PACKER.packTooltip(model, battleResults, ctx={'paramType': self.__efficiencyParam,
              'userName': self.__userName,
              'isZeroValuesVisible': False,
              'isAdditionalValuesVisible': True})

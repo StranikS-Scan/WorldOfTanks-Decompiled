@@ -195,6 +195,9 @@
     <MAN_D2840_LXE>	303	</MAN_D2840_LXE>
     <MTU_MB_838_CaM_501>	304	</MTU_MB_838_CaM_501>
     <MB_517_Spezialausfuehrung>	305	</MB_517_Spezialausfuehrung>
+    <Hall_Scott_V12_RKW>	306	</Hall_Scott_V12_RKW>
+    <Maybach_HL_120_TRM_F_2>	310	</Maybach_HL_120_TRM_F_2>
+    <Maybach_HL_234P60_CFE_T>	311	</Maybach_HL_234P60_CFE_T>
     <Praga_EPA_AC_Grille>	2000	</Praga_EPA_AC_Grille>
     <Maybach_HL_120_TRM_112_Hummel>	2001	</Maybach_HL_120_TRM_112_Hummel>
     <Maybach_HL_120_TRM_Hummel>	2002	</Maybach_HL_120_TRM_Hummel>
@@ -638,6 +641,24 @@
       <rpm_min>	324	</rpm_min>
       <rpm_max>	2761	</rpm_max>
     </Maybach_HL_120_TRM_A>
+    <Maybach_HL_120_TRM_F_2>
+      <userString>	#germany_vehicles:Maybach_HL_120_TRM_F_2	</userString>
+      <shortUserString>	#germany_vehicles:Maybach_HL_120_TRM_F_2_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <notInShop>	true	</notInShop>
+      <price>	20000	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	510	</power>
+      <weight>	510	</weight>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	305	</rpm_min>
+      <rpm_max>	2821	</rpm_max>
+    </Maybach_HL_120_TRM_F_2>
     <Maybach_HL_120_TRM_C>
       <userString>	#germany_vehicles:Maybach_HL_120_TRM_C	</userString>
       <tags>	gasoline	</tags>
@@ -963,14 +984,14 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <power>	700	</power>
+      <power>	850	</power>
       <weight>	1400	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	564	</rpm_min>
-      <rpm_max>	2508	</rpm_max>
+      <rpm_min>	362	</rpm_min>
+      <rpm_max>	2972	</rpm_max>
     </Maybach_HL_230P30_2500rpm>
     <Praga_TN_100>
       <userString>	#germany_vehicles:Praga_TN_100	</userString>
@@ -1623,6 +1644,24 @@
       <rpm_min>	404	</rpm_min>
       <rpm_max>	2305	</rpm_max>
     </Maybach_HL_234P60_P>
+    <Maybach_HL_234P60_CFE_T>
+      <userString>	#germany_vehicles:Maybach_HL_234P60_CFE_T	</userString>
+      <shortUserString>	#germany_vehicles:Maybach_HL_234P60_CFE_T_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	120000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1350	</power>
+      <weight>	750	</weight>
+      <maxHealth>	345	</maxHealth>
+      <maxRegenHealth>	173	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.20	</fireStartingChance>
+      <rpm_min>	362	</rpm_min>
+      <rpm_max>	2440	</rpm_max>
+    </Maybach_HL_234P60_CFE_T>
     <Praga_EPA_2>
       <userString>	#germany_vehicles:Praga_EPA_2	</userString>
       <tags>	gasoline	</tags>
@@ -4183,6 +4222,23 @@
       <rpm_min>	235	</rpm_min>
       <rpm_max>	2495	</rpm_max>
     </MTU_MB_838_CaM_500H>
+    <Hall_Scott_V12_RKW>
+      <userString>	#germany_vehicles:Hall_Scott_V12_RKW	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	120000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	640	</power>
+      <weight>	1850	</weight>
+      <maxHealth>	345	</maxHealth>
+      <maxRegenHealth>	173	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </Hall_Scott_V12_RKW>
     <Maybach_HL_210P30_Ausf_A_IGR>
       <userString>	#igr_vehicles:Maybach_HL_210P30_Ausf_A_IGR	</userString>
       <tags>	gasoline	</tags>

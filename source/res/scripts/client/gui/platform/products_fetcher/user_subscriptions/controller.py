@@ -3,6 +3,7 @@
 import logging
 from functools import partial
 import typing
+from future.utils import listvalues
 from BWUtil import AsyncReturn
 import wg_async
 from adisp import adisp_process
@@ -57,14 +58,18 @@ class UserSubscriptionsFetchController(IUserSubscriptionsFetchController):
         subscriptionProductCodes = self._wotPlusCtrl.getSettingsStorage().getAllProductCodes()
         if requestSuccess and subscriptionsData:
             _logger.debug('Subscriptions request from %s has been successfully processed.', str(subscriptionParams))
+            subsLookup = {}
             for subscriptionData in subscriptionsData:
-                if subscriptionData.get('product_code') not in subscriptionProductCodes:
+                productCode = subscriptionData.get('product_code')
+                if productCode not in subscriptionProductCodes:
                     continue
                 userSubscription = UserSubscription(subscriptionData)
-                hasSubscription = any([ subscription.subscriptionId == userSubscription.subscriptionId for subscription in self._fetchResult.products ])
-                if not hasSubscription:
-                    self._fetchResult.products.append(userSubscription)
+                if productCode not in subsLookup:
+                    subsLookup[productCode] = userSubscription
+                if userSubscription.nextBillingTime > subsLookup[productCode].nextBillingTime:
+                    subsLookup[productCode] = userSubscription
 
+            self._fetchResult.products = listvalues(subsLookup)
         if requestSuccess:
             self._fetchResult.setProcessed()
         else:

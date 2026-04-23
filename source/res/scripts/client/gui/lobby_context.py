@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/lobby_context.py
-from helpers.server_settings import ServerSettings
+from __future__ import absolute_import
+from future.utils import viewitems
 import BigWorld
+from helpers.server_settings import ServerSettings
 from Event import Event, EventManager
 from account_helpers import isRoamingEnabled
 from adisp import adisp_async, adisp_process
@@ -65,14 +67,14 @@ class LobbyContext(ILobbyContext):
         self.__guiCtx = ctx or {}
 
     def getArenaUniqueIDByClientID(self, clientArenaID):
-        for arenaUniqueID, cArenaID in self.__arenaUniqueIDs.iteritems():
+        for arenaUniqueID, cArenaID in viewitems(self.__arenaUniqueIDs):
             if cArenaID == clientArenaID:
                 return arenaUniqueID
 
     def getClientIDByArenaUniqueID(self, arenaUniqueID):
         if arenaUniqueID in self.__arenaUniqueIDs:
             return self.__arenaUniqueIDs[arenaUniqueID]
-        clientID = self.__clientArenaIDGenerator.next()
+        clientID = next(self.__clientArenaIDGenerator)
         self.__arenaUniqueIDs[arenaUniqueID] = clientID
         return clientID
 

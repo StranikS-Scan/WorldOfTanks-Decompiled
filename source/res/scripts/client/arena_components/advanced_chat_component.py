@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/arena_components/advanced_chat_component.py
+import typing
 import logging
 from collections import OrderedDict, defaultdict, namedtuple
 from functools import partial
@@ -23,6 +24,8 @@ from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from skeletons.account_helpers.settings_core import IBattleCommunicationsSettings
 from skeletons.gui.battle_session import IBattleSessionProvider
 from shared_utils import first
+if typing.TYPE_CHECKING:
+    from messenger.proto.bw_chat2.battle_chat_cmd import _ReceivedCmdDecorator
 EMPTY_STATE = ''
 MARKER_ACTION_POSITIVE = 'positive'
 MARKER_ACTION_SUPPORTING_YOU = 'supportingYou'

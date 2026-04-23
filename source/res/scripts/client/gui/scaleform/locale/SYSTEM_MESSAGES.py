@@ -74,6 +74,7 @@ class SYSTEM_MESSAGES(object):
     PREBATTLE_KICK_REASON_TIMEOUT = '#system_messages:prebattle/kick/reason/TIMEOUT'
     PREBATTLE_KICK_REASON_MODE_DISABLED = '#system_messages:prebattle/kick/reason/MODE_DISABLED'
     SESSION_TRACKER_KICK = '#system_messages:session_tracker_kick'
+    PREBATTLE_LIMITS_NOTENOUGHVEHICLES = '#system_messages:prebattle/limits/notEnoughVehicles'
     PREBATTLE_VEHICLEINVALID_LIMITS_LEVEL = '#system_messages:prebattle/vehicleInvalid/limits/level'
     PREBATTLE_VEHICLEINVALID_LIMITS_CLASSLEVEL = '#system_messages:prebattle/vehicleInvalid/limits/classLevel'
     PREBATTLE_VEHICLEINVALID_LIMITS_VEHICLES = '#system_messages:prebattle/vehicleInvalid/limits/vehicles'
@@ -141,6 +142,7 @@ class SYSTEM_MESSAGES(object):
     CLIENT_INACTIVE = '#system_messages:client_inactive'
     STEAM_LOGIN_NOT_ALLOWED = '#system_messages:steam_login_not_allowed'
     SERVER_SHUT_DOWN = '#system_messages:server_shut_down'
+    LOCKED_VEHICLE_ERROR = '#system_messages:locked_vehicle_error'
     UNLOCKS_VEHICLE_UNLOCK_SUCCESS = '#system_messages:unlocks/vehicle/unlock_success'
     UNLOCKS_ITEM_UNLOCK_SUCCESS = '#system_messages:unlocks/item/unlock_success'
     UNLOCKS_VEHICLE_ALREADY_UNLOCKED = '#system_messages:unlocks/vehicle/already_unlocked'
@@ -1454,6 +1456,10 @@ class SYSTEM_MESSAGES(object):
     VEHICLEMILESTONES_VANITYAVAILABLE_TEXT = '#system_messages:vehicleMilestones/vanityAvailable/text'
     VEHICLESKILLTREEPROGRESSION_PROCESSORERROR_TITLE = '#system_messages:vehicleSkillTreeProgression/processorError/title'
     VEHICLESKILLTREEPROGRESSION_PROCESSORERROR_BODY = '#system_messages:vehicleSkillTreeProgression/processorError/body'
+    W2GT_SWITCHON_HEADER = '#system_messages:w2gt/switchOn/header'
+    W2GT_SWITCHON_DESCRIPTION = '#system_messages:w2gt/switchOn/description'
+    W2GT_SWITCHOFF_HEADER = '#system_messages:w2gt/switchOff/header'
+    W2GT_SWITCHOFF_DESCRIPTION = '#system_messages:w2gt/switchOff/description'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1652,6 +1658,7 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_KICK_REASON_TIMEOUT,
      PREBATTLE_KICK_REASON_MODE_DISABLED,
      SESSION_TRACKER_KICK,
+     PREBATTLE_LIMITS_NOTENOUGHVEHICLES,
      PREBATTLE_VEHICLEINVALID_LIMITS_LEVEL,
      PREBATTLE_VEHICLEINVALID_LIMITS_CLASSLEVEL,
      PREBATTLE_VEHICLEINVALID_LIMITS_VEHICLES,
@@ -1719,6 +1726,7 @@ class SYSTEM_MESSAGES(object):
      CLIENT_INACTIVE,
      STEAM_LOGIN_NOT_ALLOWED,
      SERVER_SHUT_DOWN,
+     LOCKED_VEHICLE_ERROR,
      UNLOCKS_VEHICLE_UNLOCK_SUCCESS,
      UNLOCKS_ITEM_UNLOCK_SUCCESS,
      UNLOCKS_VEHICLE_ALREADY_UNLOCKED,
@@ -3031,7 +3039,11 @@ class SYSTEM_MESSAGES(object):
      VEHICLEMILESTONES_VANITYAVAILABLE_TITLE,
      VEHICLEMILESTONES_VANITYAVAILABLE_TEXT,
      VEHICLESKILLTREEPROGRESSION_PROCESSORERROR_TITLE,
-     VEHICLESKILLTREEPROGRESSION_PROCESSORERROR_BODY)
+     VEHICLESKILLTREEPROGRESSION_PROCESSORERROR_BODY,
+     W2GT_SWITCHON_HEADER,
+     W2GT_SWITCHON_DESCRIPTION,
+     W2GT_SWITCHOFF_HEADER,
+     W2GT_SWITCHOFF_DESCRIPTION)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

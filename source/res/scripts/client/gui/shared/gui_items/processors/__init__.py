@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/__init__.py
+import functools
 import logging
 import typing
 from collections import namedtuple
+import AccountCommands
 import BigWorld
 from adisp import adisp_process, adisp_async
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -77,7 +79,8 @@ class Processor(object):
             _logger.debug('Server success response: code=%r, error=%r, ctx=%r', code, errStr, ctx)
             return callback(self._successHandler(code, ctx=ctx))
         _logger.warning('Server fail response: code=%r, error=%r, ctx=%r', code, errStr, ctx)
-        return callback(self._errorHandler(code, errStr=errStr, ctx=ctx))
+        baseHandler = functools.partial(self._errorHandler, code, errStr=errStr, ctx=ctx)
+        return callback(self._getResCodeHandler(code, baseHandler)())
 
     @adisp_async
     @adisp_process
@@ -135,6 +138,12 @@ class Processor(object):
             return
         self._request(callback)
 
+    def _getResCodeHandler(self, code, baseHandler):
+        return self._lockedVehicleHandler if code == AccountCommands.RES_LOCKED_VEHICLE else baseHandler
+
+    def _lockedVehicleHandler(self):
+        return makeI18nError(sysMsgKey='locked_vehicle_error')
+
 
 class ItemProcessor(Processor):
 
@@ -145,7 +154,8 @@ class ItemProcessor(Processor):
     def _response(self, code, callback, ctx=None, errStr=''):
         if code < 0:
             _logger.error("Server responses an error [%s] while process %s '%s'", code2str(code), self.item.itemTypeName, str(self.item))
-            return callback(self._errorHandler(code, ctx=ctx, errStr=errStr))
+            baseHandler = functools.partial(self._errorHandler, code, ctx=ctx, errStr=errStr)
+            return callback(self._getResCodeHandler(code, baseHandler)())
         return callback(self._successHandler(code, ctx=ctx))
 
 
@@ -167,7 +177,8 @@ class GroupedRequestProcessor(Processor):
         items = list((GroupedServerResponse(*itemConfig) for itemConfig in ctx)) if ctx else []
         if code < 0:
             _logger.warning('Server fail response: code=%r, error=%r, ctx=%r', code, errStr, ctx)
-            return callback(self._errorHandler(code, errStr=errStr, ctx=items) if ctx else makeError())
+            baseHandler = functools.partial(self._errorHandler, code, errStr=errStr, ctx=items) if ctx else makeError
+            return callback(self._getResCodeHandler(code, baseHandler)())
         _logger.debug('Server success response: code=%r, ctx=%r', code, ctx)
         return callback(self._successHandler(code, ctx=items) if ctx else makeSuccess())
 
@@ -176,6 +187,9 @@ class GroupedRequestProcessor(Processor):
 
     def _makeErrorData(self, *args, **kwargs):
         return [makeError()]
+
+    def _lockedVehicleHandler(self):
+        return makeI18nError(sysMsgKey='locked_vehicle_error', auxData=self._makeErrorData())
 
 
 class VehicleItemProcessor(ItemProcessor):

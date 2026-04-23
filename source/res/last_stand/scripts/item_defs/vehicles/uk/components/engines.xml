@@ -1,0 +1,78 @@
+<engines.xml>
+  <ids>
+    <Rolls_Royce_Griffon_LS_BOT>	6001	</Rolls_Royce_Griffon_LS_BOT>
+    <Rolls_Royce_Griffon_LS_BOT_v2>	6002	</Rolls_Royce_Griffon_LS_BOT_v2>
+    <Rolls_Royse_Meteor_MkIV_LS_PLAYER>	6003	</Rolls_Royse_Meteor_MkIV_LS_PLAYER>
+    <Rolls_Royce_B81_LS_BOT>	5996	</Rolls_Royce_B81_LS_BOT>
+  </ids>
+  <shared>
+    <Rolls_Royce_Griffon_LS_BOT>
+      <userString>	#last_stand.gb_vehicles.extend:Rolls_Royce_Griffon_LS_BOT	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	950	</power>
+      <weight>	952	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	474	</rpm_min>
+      <rpm_max>	2080	</rpm_max>
+    </Rolls_Royce_Griffon_LS_BOT>
+    <Rolls_Royce_Griffon_LS_BOT_v2>
+      <userString>	#last_stand.gb_vehicles.extend:Rolls_Royce_Griffon_LS_BOT_v2	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	950	</power>
+      <weight>	952	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	474	</rpm_min>
+      <rpm_max>	2080	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Rolls_Royce_Griffon_LS_BOT_v2>
+    <Rolls_Royse_Meteor_MkIV_LS_PLAYER>
+      <userString>	#last_stand.gb_vehicles.extend:Rolls_Royse_Meteor_MkIV_LS_PLAYER	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	16000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	650	</power>
+      <weight>	744	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	632	</rpm_min>
+      <rpm_max>	2354	</rpm_max>
+    </Rolls_Royse_Meteor_MkIV_LS_PLAYER>
+    <Rolls_Royce_B81_LS_BOT>
+      <userString>	#last_stand.gb_vehicles.extend:Rolls_Royce_B81_LS_BOT	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	45000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	310	</power>
+      <weight>	457	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </Rolls_Royce_B81_LS_BOT>
+  </shared>
+</engines.xml>

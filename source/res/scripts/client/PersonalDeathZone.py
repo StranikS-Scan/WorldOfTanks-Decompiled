@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PersonalDeathZone.py
+from __future__ import absolute_import
 import Math
 import BigWorld
 from AreaOfEffect import AreaOfEffect
 import TriggersManager
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from helpers import dependency
+from math_common import round_py2_style
 from skeletons.gui.battle_session import IBattleSessionProvider
 TRIGGER_NAME_PREFIX = 'personal_deathzone'
 
@@ -58,7 +60,7 @@ class PersonalDeathZone(AreaOfEffect, TriggersManager.ITriggerListener):
 
     @property
     def adjustedDelay(self):
-        return round(self._adjustedDelay)
+        return round_py2_style(self._adjustedDelay)
 
     @property
     def delay(self):

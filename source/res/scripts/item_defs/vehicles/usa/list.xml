@@ -1,4 +1,5 @@
 <list.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <A21_T14>
     <id>	0	</id>
     <userString>	#usa_vehicles:T14	</userString>
@@ -522,6 +523,18 @@
     <tags>	heavyTank role_HT_support HD heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
     <level>	10	</level>
   </A67_T57_58>
+  <A67_T57_58_7x7>
+    <id>	275	</id>
+    <userString>	#usa_vehicles:A67_T57_58_7x7	</userString>
+    <shortUserString>	#usa_vehicles:A67_T57_58_7x7_short	</shortUserString>
+    <description>	#usa_vehicles:A67_T57_58_7x7_descr	</description>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	heavyTank role_HT_support HD heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals private secret cannot_be_sold comp7 earn_crystals special lockCrew lockCrewSkills lockOptionalDevices	</tags>
+    <level>	10	</level>
+  </A67_T57_58_7x7>
   <A71_T21>
     <id>	59	</id>
     <userString>	#usa_vehicles:T21	</userString>
@@ -1226,6 +1239,7 @@
     </price>
     <tags>	mediumTank HD disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
+    <notInShop>	true	</notInShop>
   </A44_M4A2E4>
   <A45_M6A2E1>
     <id>	205	</id>
@@ -1806,10 +1820,10 @@
     <description>	#usa_vehicles:A194_AHT_7_descr	</description>
     <shortDescriptionSpecial>	#usa_vehicles:A194_AHT_7_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#usa_vehicles:A194_AHT_7_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
+    <price>	22500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG role_ATSPG_support HD heavyAT-SPG AT-SPG2 improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals secret testTank	</tags>
+    <tags>	AT-SPG role_ATSPG_support HD heavyAT-SPG AT-SPG2 improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special earn_crystals	</tags>
     <level>	10	</level>
   </A194_AHT_7>
   <A97_M41_Bulldog_FL>
@@ -2045,4 +2059,14 @@
     <tags>	mediumTank role_MT_sniper HD mediumTank1 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user lockOutfit restoreWithStyle	</tags>
     <level>	6	</level>
   </A192_M4A4_Firefly_CFE_A>
+  <A195_Gorilla>
+    <id>	91	</id>
+    <userString>	#usa_vehicles:A195_Gorilla	</userString>
+    <description>	#usa_vehicles:A195_Gorilla_descr	</description>
+    <shortUserString>	#usa_vehicles:A195_Gorilla_short	</shortUserString>
+    <longDescriptionSpecial>	#usa_vehicles:A195_Gorilla_long_special	</longDescriptionSpecial>
+    <price>	7400000	</price>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
+    <level>	11	</level>
+  </A195_Gorilla>
 </list.xml>

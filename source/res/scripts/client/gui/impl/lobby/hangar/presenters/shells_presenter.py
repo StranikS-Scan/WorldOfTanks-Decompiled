@@ -18,10 +18,13 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_parameters import params_helper, getShellsLoadSize
 from gui.shared.items_parameters.formatters import formatParameter, MEASURE_UNITS
 from helpers import i18n, dependency
+from items.utils import getVehicleDescriptorWithoutMechanics
 from post_progression_common import TankSetupGroupsId
 from shared_utils import first
 from skeletons.gui.game_control import IWalletController, IExchangeRatesWithDiscountsProvider
 from skeletons.gui.shared import IItemsCache
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.vehicle_modules import Shell
     from gui.impl.lobby.tank_setup.interactors.base import InteractingItem
@@ -170,7 +173,10 @@ class ShellsPresenter(LoadoutPresenterBase[ShellsModel]):
         specificationModel = ShellSpecificationModel()
         specificationModel.setParamName(paramName)
         specificationModel.setMetricValue(i18n.makeString(MEASURE_UNITS.get(paramName, '')))
-        shellParam = params_helper.getParameters(shell, g_currentVehicle.item.descriptor)
+        vehDescr = g_currentVehicle.item.descriptor
+        if hasVehicleDescrMechanic(vehDescr, VehicleMechanic.LOW_CHARGE_SHOT):
+            vehDescr = getVehicleDescriptorWithoutMechanics(vehDescr, VehicleMechanic.LOW_CHARGE_SHOT.value)
+        shellParam = params_helper.getParameters(shell, vehDescr)
         specificationModel.setValue(formatParameter(paramName, shellParam.get(paramName)) or '')
         return specificationModel
 

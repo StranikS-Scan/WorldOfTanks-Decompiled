@@ -12,6 +12,26 @@
       <AllowUnsafeData>	true	</AllowUnsafeData>
       <Default>	{}	</Default>
     </teamVivoxChannel>
+    <endPrepickTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </endPrepickTime>
+    <endVotingTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </endVotingTime>
+    <banVotingStates>
+      <Type>	PYTHON	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+      <Default>	{}	</Default>
+    </banVotingStates>
+    <candidatesForBan>
+      <Type>	PYTHON	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+      <Default>	{}	</Default>
+    </candidatesForBan>
   </Properties>
   <CellMethods>
     <setVivoxPresence>

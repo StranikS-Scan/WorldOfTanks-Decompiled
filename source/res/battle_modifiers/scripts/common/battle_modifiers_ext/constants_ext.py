@@ -251,12 +251,16 @@ class ModifiersWithRemapping(object):
     GUN_EFFECTS = 'gunEffects'
     GUN_MAIN_PREFAB = 'gunMainPrefab'
     SHOT_EFFECTS = 'shotEffects'
+    GUN_PREFAB_EFFECTS = 'gunPrefabEffects'
+    SHOT_PREFAB_EFFECTS = 'shotPrefabEffects'
     SOUND_NOTIFICATIONS = 'soundNotifications'
     EXHAUST_EFFECTS = 'exhaustEffects'
     ROOT_PREFABS_MECHANIC_EFFECTS = 'rootPrefabsMechanicEffects'
     ALL = {GUN_EFFECTS,
      GUN_MAIN_PREFAB,
      SHOT_EFFECTS,
+     GUN_PREFAB_EFFECTS,
+     SHOT_PREFAB_EFFECTS,
      SOUND_NOTIFICATIONS,
      EXHAUST_EFFECTS,
      ROOT_PREFABS_MECHANIC_EFFECTS}

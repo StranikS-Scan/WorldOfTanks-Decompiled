@@ -6,18 +6,15 @@ from future.utils import viewitems
 import BigWorld
 import CommandMapping
 import SoundGroups
-from cgf_components.zone_components import IBattleSessionProvider
 from gui.Scaleform.daapi.view.battle.shared.hint_panel import plugins
 from gui.Scaleform.daapi.view.meta.BattleHintPanelMeta import BattleHintPanelMeta
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 from gui.shared import EVENT_BUS_SCOPE, events
 from gui.shared.events import GameEvent
 from gui.shared.utils.plugins import PluginsCollection
-from helpers import dependency
 from shared_utils import first
 
 class BattleHintPanel(BattleHintPanelMeta, IAbstractPeriodView):
-    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(BattleHintPanel, self).__init__()

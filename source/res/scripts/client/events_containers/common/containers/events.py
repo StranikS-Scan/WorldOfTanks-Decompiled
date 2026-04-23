@@ -25,8 +25,8 @@ class ClientEventsContainer(EventsContainer, IClientEventsContainer):
         super(ClientEventsContainer, self).destroy()
         return
 
-    def attachCFGEvents(self):
-        self._cgfIntegration = self._cgfIntegration or self._createCGFIntegration()
+    def attachCoreEvents(self):
+        self._cgfIntegration = self._cgfIntegration or self._createCoreIntegration()
 
     def _createLateEvent(self, lateCallback):
         return LateEvent(lateCallback, self._eventManager)
@@ -35,14 +35,14 @@ class ClientEventsContainer(EventsContainer, IClientEventsContainer):
         from gui.shared.utils.TimeInterval import TimeIntervalEvent
         return TimeIntervalEvent(interval, timeCallback, self._eventManager)
 
-    def _createCGFIntegration(self):
-        return ClientEventsContainerCGFIntegration(self)
+    def _createCoreIntegration(self):
+        return ClientEventsContainerCoreIntegration(self)
 
     def _createEventsDebugger(self):
         return ClientEventsContainerDebugger(self)
 
 
-class ClientEventsContainerCGFIntegration(ContainersListener):
+class ClientEventsContainerCoreIntegration(ContainersListener):
 
     def __init__(self, events):
         self._attachToEventsContainer(events)

@@ -3,11 +3,13 @@
 import BigWorld
 from shared_utils import CONST_CONTAINER
 import BattleReplay
+import SoundGroups
 from aih_constants import CTRL_MODE_NAME
 from comp7_core.gui.Scaleform.daapi.view.battle.lobby_notifier import LobbyNotifier
 from comp7_core.gui.Scaleform.daapi.view.battle.markers2d.manager import Comp7MarkersManager
 from comp7_core.gui.Scaleform.daapi.view.battle.start_countdown_sound_player import Comp7StartTimerSoundPlayer
 from comp7_core.gui.Scaleform.daapi.view.meta.Comp7BattlePageMeta import Comp7BattlePageMeta
+from comp7_core.gui.comp7_core_constants import BATTLE_CTRL_ID
 from constants import ARENA_BONUS_TYPE, ARENA_PERIOD
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.battle.classic.page import COMMON_CLASSIC_CONFIG, EXTENDED_CLASSIC_CONFIG, DynamicAliases
@@ -16,7 +18,6 @@ from gui.Scaleform.daapi.view.battle.shared.markers2d.manager import KillCamMark
 from gui.Scaleform.daapi.view.battle.shared.page import ComponentsConfig
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.battle_control import event_dispatcher, avatar_getter
-from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from gui.shared.gui_items.vehicle_helpers import getRoleMessage
@@ -40,6 +41,7 @@ _COMMON_CONFIG = COMMON_CLASSIC_CONFIG + _COMP7_CONFIG
 _EXTENDED_CONFIG = EXTENDED_CLASSIC_CONFIG + _COMP7_CONFIG
 _EXTERNAL_COMPONENTS = (crosshair.CrosshairPanelContainer, Comp7MarkersManager, KillCamMarkersManager)
 _FULL_STATS_ALIAS = BATTLE_VIEW_ALIASES.FULL_STATS
+_SOUND_NAME = 'comp_7_bans_fly_backward'
 
 class Comp7BattlePage(Comp7BattlePageMeta):
     __TIME_TILL_CAMERA_RETURN = 3.0
@@ -102,7 +104,9 @@ class Comp7BattlePage(Comp7BattlePageMeta):
         self.__updateCurrVehicleInfo()
         periodCtrl = self.sessionProvider.shared.arenaPeriod
         arenaPeriod = periodCtrl.getPeriod() if periodCtrl else None
-        self.__visibilityManager = _ComponentsVisibilityManager(arenaPeriod, isSelectionConfirmed)
+        vehicleBanCtrl = self.sessionProvider.dynamic.getControllerByID(BATTLE_CTRL_ID.COMP7_VEHICLE_BAN_CTRL)
+        isVehicleBanEnabled = vehicleBanCtrl.isVehicleBanEnabled if vehicleBanCtrl else False
+        self.__visibilityManager = _ComponentsVisibilityManager(self, arenaPeriod, isSelectionConfirmed, isVehicleBanEnabled)
         if avatar_getter.isObserver():
             self.as_onVehicleSelectionConfirmedS()
         return
@@ -153,12 +157,16 @@ class Comp7BattlePage(Comp7BattlePageMeta):
         self.__processCallout(needShow=False)
 
     def _toggleFullStats(self, isShown, permanent=None, tabAlias=None):
-        if self.__visibilityManager is not None:
-            self.__visibilityManager.setFullStatsShown(isShown)
-            if not isShown:
-                self._fsToggling.update(self.__visibilityManager.getVisible())
-        super(Comp7BattlePage, self)._toggleFullStats(isShown, permanent=permanent, tabAlias=tabAlias)
-        return
+        if self.app.containerManager.isModalViewsIsExists():
+            return
+        else:
+            if self.__visibilityManager is not None:
+                self.__visibilityManager.setFullStatsShown(isShown)
+                self.__updateComponentsVisibility()
+                if not isShown:
+                    self._fsToggling.update(self.__visibilityManager.getVisible())
+            super(Comp7BattlePage, self)._toggleFullStats(isShown, permanent=permanent, tabAlias=tabAlias)
+            return
 
     def _onAvatarCtrlModeChanged(self, ctrlMode):
         pass
@@ -241,8 +249,10 @@ class Comp7BattlePage(Comp7BattlePageMeta):
     def __setSelectionConfimed(self):
         self.__visibilityManager.updateSelectionConfirmed(True)
         self.as_onVehicleSelectionConfirmedS()
+        self.__updateComponentsVisibility()
 
     def __onPrebattleInputStateLocked(self, _):
+        SoundGroups.g_instance.playSound2D(_SOUND_NAME)
         self.as_onPrebattleInputStateLockedS(False)
 
     def __onVehicleControlling(self, _):
@@ -257,7 +267,7 @@ class Comp7BattlePage(Comp7BattlePageMeta):
 
 class _ComponentsVisibilityManager(object):
 
-    def __init__(self, arenaPeriod, isSelectionConfirmed):
+    def __init__(self, componentsHolder, arenaPeriod, isSelectionConfirmed, isVehicleBanEnabled):
         self.__components = {BATTLE_VIEW_ALIASES.DAMAGE_PANEL: self.__damagePanelPredicate,
          BATTLE_VIEW_ALIASES.WIDGETS_PANEL: self.__widgetsPanelPredicate,
          BATTLE_VIEW_ALIASES.DECORATIVE_CROSSHAIR_PANEL: self.__decorativeCrosshairPanelPredicate,
@@ -268,13 +278,17 @@ class _ComponentsVisibilityManager(object):
          BATTLE_VIEW_ALIASES.RIBBONS_PANEL: self.__ribbonPanelPredicate,
          BATTLE_VIEW_ALIASES.SITUATION_INDICATORS: self.__perksPanelPredicate,
          BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL: self.__prebattleAmmoPredicate,
-         BATTLE_VIEW_ALIASES.VEHICLE_MESSAGES: self.__vehicleMessagesPredicate}
+         BATTLE_VIEW_ALIASES.VEHICLE_MESSAGES: self.__vehicleMessagesPredicate,
+         BATTLE_VIEW_ALIASES.COMP7_BANS_WIDGET: self.__bansWidgetPredicate,
+         BATTLE_VIEW_ALIASES.COMP7_BANS_PROGRESS_WIDGET: self.__bansProgressWidgetPredicate}
         self.__isSelectionConfirmed = isSelectionConfirmed
         self.__arenaPeriod = arenaPeriod
+        self.__isVehicleBanEnabled = isVehicleBanEnabled
         self.__isBattleLoaded = False
         self.__isFullStatsShown = False
         self.__controllingVehicleID = None
         self.__isObserver = avatar_getter.isObserver()
+        self.__componentsHolder = componentsHolder
         self.__visible, self.__hidden = set(), set()
         self.__needUpdateState = True
         self.__updateState()
@@ -303,17 +317,19 @@ class _ComponentsVisibilityManager(object):
     def getVisible(self):
         if self.__needUpdateState:
             self.__updateState()
-        return self.__visible
+        return self.__visible & set(self.__componentsHolder.components.keys())
 
     def getHidden(self):
         if self.__needUpdateState:
             self.__updateState()
-        return self.__hidden
+        return self.__hidden & set(self.__componentsHolder.components.keys())
 
     def clear(self):
         self.__components = {}
         self.__hidden = {}
         self.__visible = {}
+        self.__componentsHolder = None
+        return
 
     def __setNeedUpdateState(self, value):
         if not self.__needUpdateState and value:
@@ -355,6 +371,12 @@ class _ComponentsVisibilityManager(object):
 
     def __carouselPredicate(self):
         return not BattleReplay.g_replayCtrl.isPlaying and self.__arenaPeriod < ARENA_PERIOD.BATTLE and self.__isBattleLoaded and not self.__isSelectionConfirmed and not self.__isFullStatsShown and not self.__isObserver
+
+    def __bansWidgetPredicate(self):
+        return self.__isVehicleBanEnabled and self.__arenaPeriod < ARENA_PERIOD.BATTLE and self.__isBattleLoaded and not self.__isFullStatsShown
+
+    def __bansProgressWidgetPredicate(self):
+        return self.__isVehicleBanEnabled and self.__arenaPeriod < ARENA_PERIOD.BATTLE and self.__isBattleLoaded and not self.__isFullStatsShown
 
     def __POINotificationsPredicate(self):
         return self.__arenaPeriod == ARENA_PERIOD.BATTLE and not self.__isFullStatsShown

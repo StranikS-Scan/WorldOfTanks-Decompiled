@@ -18,27 +18,52 @@ if typing.TYPE_CHECKING:
 _SubModelInfo = typing.NamedTuple('_SubModelInfo', [('ID', AchievementsViews), ('presenter', SubModelPresenter), ('canBeLoaded', typing.Optional[typing.Callable[[], bool]])])
 AchievementsViewCtx = namedtuple('AchievementsViewCtx', ('menuName', 'userID', 'closeCallback'))
 
-class AchievementMainView(ViewImpl):
-    __slots__ = ('__ctx', '__contentPresentersMap', '__regionName')
+class BaseAchievementView(ViewImpl):
+    __slots__ = ('_ctx',)
 
     def __init__(self, ctx, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.achievements.AchievementsMainView())
         settings.args = args
         settings.kwargs = kwargs
         settings.model = AchievementsMainViewModel()
-        self.__ctx = ctx
-        self.__contentPresentersMap = {}
-        self.__regionName = None
-        super(AchievementMainView, self).__init__(settings)
-        return
+        self._ctx = ctx
+        super(BaseAchievementView, self).__init__(settings)
 
     @property
     def viewModel(self):
         return self.getViewModel()
 
+    def _getEvents(self):
+        return ((self.viewModel.onClose, self._onClose),)
+
+    def _onClose(self):
+        raise NotImplementedError
+
     @property
     def currentPresenter(self):
-        return self.__contentPresentersMap[self.__ctx.menuName].presenter
+        raise NotImplementedError
+
+    def _finalize(self):
+        if self._ctx and self._ctx.closeCallback:
+            self._ctx.closeCallback()
+        self._ctx = None
+        super(BaseAchievementView, self)._finalize()
+        return
+
+
+class AchievementMainView(BaseAchievementView):
+    __slots__ = ('__contentPresentersMap', '__regionName')
+
+    def __init__(self, ctx, *args, **kwargs):
+        self._ctx = ctx
+        self.__contentPresentersMap = {}
+        self.__regionName = None
+        super(AchievementMainView, self).__init__(ctx, *args, **kwargs)
+        return
+
+    @property
+    def currentPresenter(self):
+        return self.__contentPresentersMap[self._ctx.menuName].presenter
 
     def createToolTipContent(self, event, contentID):
         return self.currentPresenter.createToolTipContent(event, contentID)
@@ -49,13 +74,18 @@ class AchievementMainView(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(AchievementMainView, self)._onLoading(args, kwargs)
         self.__registerSubModels()
-        self.__switchSubView(self.__ctx)
-
-    def _getEvents(self):
-        return ((self.viewModel.onClose, self.__onClose),)
+        self.__switchSubView(self._ctx)
 
     def _getListeners(self):
         return ((events.Achievements20Event.CHANGE_GF_VIEW, self.__switchSubViewEventHandler, EVENT_BUS_SCOPE.LOBBY),)
+
+    def _onClose(self):
+        if self._ctx.userID is None:
+            from gui.shared.event_dispatcher import showHangar
+            showHangar()
+        else:
+            g_eventBus.handleEvent(events.Achievements20Event(events.Achievements20Event.CLOSE_SUMMARY_VIEW, {'databaseID': self._ctx.userID}), scope=EVENT_BUS_SCOPE.LOBBY)
+        return
 
     def _finalize(self):
         self.currentPresenter.finalize()
@@ -65,19 +95,16 @@ class AchievementMainView(ViewImpl):
         for subModelInfo in self.__contentPresentersMap.itervalues():
             subModelInfo.presenter.clear()
 
+        super(AchievementMainView, self)._finalize()
         self.__contentPresentersMap.clear()
         self.__contentPresentersMap = None
-        if self.__ctx and self.__ctx.closeCallback:
-            self.__ctx.closeCallback()
-        self.__ctx = None
-        super(AchievementMainView, self)._finalize()
         return
 
     def __registerSubModels(self):
-        self.__contentPresentersMap = _PresentersMap(self, self.__ctx.userID)
+        self.__contentPresentersMap = _PresentersMap(self, self._ctx.userID)
 
     def __switchSubViewEventHandler(self, event):
-        if event.ctx.userID != self.__ctx.userID or self.__regionName == event.ctx.menuName:
+        if event.ctx.userID != self._ctx.userID or self.__regionName == event.ctx.menuName:
             return
         self.__switchSubView(event.ctx)
 
@@ -96,16 +123,8 @@ class AchievementMainView(ViewImpl):
                 subModelInfo.presenter.initialize()
                 tx.setViewType(subModelInfo.ID)
                 tx.setIsOtherPlayer(ctx.userID is not None)
-            self.__ctx = ctx
+            self._ctx = ctx
             return
-
-    def __onClose(self):
-        if self.__ctx.userID is None:
-            from gui.shared.event_dispatcher import showHangar
-            showHangar()
-        else:
-            g_eventBus.handleEvent(events.Achievements20Event(events.Achievements20Event.CLOSE_SUMMARY_VIEW, {'databaseID': self.__ctx.userID}), scope=EVENT_BUS_SCOPE.LOBBY)
-        return
 
 
 class _PresentersMap(object):

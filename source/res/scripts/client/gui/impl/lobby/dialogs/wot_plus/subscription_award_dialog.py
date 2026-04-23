@@ -6,7 +6,6 @@ import WWISE
 from chat_shared import SYS_MESSAGE_TYPE
 from constants import IS_CHINA
 from gui.Scaleform.daapi.view.lobby.wot_plus.sound_constants import SOUNDS
-from gui.game_control.wot_plus.utils import getAvailableCoreBonuses, getUniqueAvailableProBonuses
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.constants.date_time_formats import DateTimeFormatsEnum
@@ -14,9 +13,10 @@ from gui.impl.gen.view_models.views.dialogs.mono_dialog_template_button_model im
 from gui.impl.gen.view_models.views.dialogs.mono_dialog_template_view_model import MonoDialogTemplateViewModel
 from gui.impl.gen.view_models.views.lobby.page.header.wot_plus_subscription_model import WotPlusPeriodicityEnum
 from gui.impl.lobby.dialogs.wot_plus.base_dialog import BaseDialog
+from gui.server_events.bonuses_wot_plus import getAvailableCoreBonuses, getUniqueAvailableProBonuses
 from gui.shared.event_dispatcher import showWotPlusInfoPage
 from gui.shared.formatters.date_time import getRegionalDateTime
-from gui.shared.missions.packers.bonus import getLocalizedBonusName
+from gui.shared.missions.packers.bonus import getDefaultBonusPacker
 from helpers import dependency
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from renewable_subscription_common.settings_constants import WotPlusTier, PRO_THRESHOLD_DAYS
@@ -107,11 +107,12 @@ class SubscriptionAwardDialog(BaseDialog):
          'descriptionString': backport.text(R.strings.dialogs.wotPlusActivationDialog.pro.description())}
 
     def __buildBenefits(self, benefitsList):
+        bonusPacker = getDefaultBonusPacker()
         benefitsData = []
         for benefit in benefitsList:
-            benefitType = benefit.getName()
-            benefitsData.append({'type': benefitType,
-             'label': getLocalizedBonusName(benefitType)})
+            packedBonus = bonusPacker.pack(benefit)[0]
+            benefitsData.append({'type': packedBonus.getName(),
+             'label': packedBonus.getLabel()})
 
         return benefitsData
 

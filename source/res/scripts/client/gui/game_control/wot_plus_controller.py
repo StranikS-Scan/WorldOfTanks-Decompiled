@@ -1,16 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/wot_plus_controller.py
 import logging
-from time import time
 import typing
-from BWUtil import AsyncReturn
 from enum import Enum
+from time import time
+import BigWorld
+from BWUtil import AsyncReturn
 from helpers.CallbackDelayer import CallbackDelayer
 from helpers.time_utils import ONE_MINUTE, ONE_DAY
 from shared_utils import findFirst
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
 import AccountCommands
-import BigWorld
 import constants
 from CurrentVehicle import g_currentVehicle
 from Event import Event
@@ -32,7 +32,6 @@ from gui.server_events.bonuses import SimpleBonus
 from gui.shared.gui_items.artefacts import OptionalDevice
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
-from items.vehicles import getItemByCompactDescr
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from piggy_bank_common.settings_constants import PIGGY_BANK_PDATA_KEY
 from renewable_subscription_common.schema import renewableSubscriptionsConfigSchema
@@ -48,7 +47,6 @@ if typing.TYPE_CHECKING:
     from typing import Dict, Optional, Callable, Any, List, Tuple, Generator
     from gui.shared.gui_items import ItemsCollection
     from gui.game_control.account_completion import SteamCompletionController
-    from items.vehicles import VehicleType
     from gui.platform.products_fetcher.user_subscriptions.controller import UserSubscriptionsFetchController
     from gui.platform.products_fetcher.user_subscriptions.fetch_result import UserSubscriptionFetchResult
     from gui.shared.gui_items.Vehicle import Vehicle
@@ -236,7 +234,7 @@ class WotPlusController(IWotPlusController, _ProBoostMixin, CallbackDelayer):
         settingsStorage = self.getSettingsStorage()
         if not settingsStorage.isFreeEquipmentDemountingAvailable():
             return False
-        if device.isDeluxe and not settingsStorage.isFreeDeluxeEquipmentDemountingEnabled():
+        if device.isDeluxe and not settingsStorage.isFreeDeluxeEquipmentDemountingAvailable():
             return False
         if device.isModernized:
             if device.level > 1:
@@ -275,14 +273,6 @@ class WotPlusController(IWotPlusController, _ProBoostMixin, CallbackDelayer):
 
     def getExclusiveVehicles(self):
         return self._itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.WOT_PLUS_VEHICLE)
-
-    def getActiveExclusiveVehicle(self):
-        vehicleInfo = self.getSettingsStorage().getExclusiveVehicle()
-        return getItemByCompactDescr(vehicleInfo['vehTypeCompDescr']) if vehicleInfo else None
-
-    def getActiveExclusiveVehicleName(self):
-        vehicle = self.getActiveExclusiveVehicle()
-        return vehicle.userString if vehicle is not None else ''
 
     def hasOptDeviceAssistLoadout(self, vehicle):
         return self._assistant.optDeviceAssistant.vehicleHasLoadout(vehicle) if self.hasSubscription() else False
@@ -452,8 +442,8 @@ class WotPlusController(IWotPlusController, _ProBoostMixin, CallbackDelayer):
             return
         else:
             self._invalidationInProgress = True
-            self._state = WotPlusState.ACTIVE if self.hasSubscription() else WotPlusState.INACTIVE
             self._hasSteamSubscription = False
+            self._billingPeriod = None
             if constants.IS_CHINA or constants.IS_CT:
                 _logger.warning('Subscriptions are not available for the current realm: %s', constants.CURRENT_REALM)
                 return
@@ -468,8 +458,10 @@ class WotPlusController(IWotPlusController, _ProBoostMixin, CallbackDelayer):
             if subWithBilling is not None:
                 self._billingPeriod = subWithBilling.billingPeriod
             if not activeSubscriptions:
-                hasCancelled = any((subscription.status in SUBSCRIPTION_CANCEL_STATUSES for subscription in userSubscriptions))
-                if hasCancelled:
+                cancelledSubs = (s for s in userSubscriptions if s.status in SUBSCRIPTION_CANCEL_STATUSES)
+                if cancelledSubs:
+                    cancelledSub = max(cancelledSubs, key=lambda s: s.nextBillingTime)
+                    self._billingPeriod = cancelledSub.billingPeriod
                     self._state = WotPlusState.CANCELLED
             self._hasSteamSubscription = any((userSubscription.platform == SubscriptionRequestPlatform.STEAM for userSubscription in userSubscriptions))
             raise AsyncReturn(None)
@@ -524,8 +516,7 @@ class WotPlusController(IWotPlusController, _ProBoostMixin, CallbackDelayer):
     @wg_async
     def _invalidateSubscriptionState(self, stateChanged=False):
         _logger.debug('Invalidating subscription')
-        if self._invalidationInProgress:
-            return
+        self._state = WotPlusState.ACTIVE if self.hasSubscription() else WotPlusState.INACTIVE
         try:
             yield wg_await(self._resolveSubscriptionAndSteamState(clearCache=True))
         finally:

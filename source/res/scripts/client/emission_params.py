@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/emission_params.py
+from __future__ import absolute_import
 from collections import namedtuple
 EmissionParams = namedtuple('EmissionParams', ('emissionTexture', 'emissionDeferredPower', 'emissionForwardPower'))
 EmissionParams.__new__.__defaults__ = ('', 1.0, 1.0)

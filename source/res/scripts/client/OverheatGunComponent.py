@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/OverheatGunComponent.py
+from __future__ import absolute_import
 import typing
 from events_handler import eventHandler
 from gui.shared.utils.decorators import ReprInjector

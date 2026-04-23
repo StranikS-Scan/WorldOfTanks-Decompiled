@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/module_params.py
 import math
-from gui.shared.items_parameters import calcGunParams, getGunDescriptors, isDualAccuracy, isTwinGun, isUnlimitedClipGun, isOverheatedUnlimitedGun, isTemperatureGun
+from gui.shared.items_parameters import calcGunParams, getGunDescriptors, isDualAccuracy, isTwinGun, isUnlimitedClipGun, isOverheatedUnlimitedGun, isTemperatureGun, isLowChargeShotGun, getShotsPerMinute
 from gui.shared.items_parameters.base_params import ParamsDictProxy, WeightedParam
 from gui.shared.items_parameters.params_constants import ONE_HUNDRED_PERCENTS, AUTOCANNON_SHOT_DISTANCE
-from gui.shared.items_parameters.functions import isStunParamVisible, getTurboshaftEnginePower, getRocketAccelerationEnginePower, getMaxSteeringLockAngle, getInstalledModuleVehicle, formatCompatibles
+from gui.shared.items_parameters.functions import isStunParamVisible, getTurboshaftEnginePower, getRocketAccelerationEnginePower, getMaxSteeringLockAngle, getInstalledModuleVehicle, formatCompatibles, getLowChargeReloadTime, getLowChargePiercingPower, getLowChargeDamage, getLowChargeShotDispersion
 from gui.shared.items_parameters.params_cache import g_paramsCache
 from gui.shared.utils import DAMAGE_PROP_NAME, PIERCING_POWER_PROP_NAME, AIMING_TIME_PROP_NAME, STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME, AUTO_RELOAD_PROP_NAME, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, GUN_AUTO_SHOOT, GUN_CAN_BE_AUTO_SHOOT, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, RELOAD_TIME_SECS_PROP_NAME, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, DUAL_ACCURACY_AFTER_SHOT_DISPERSION_ANGLE, BURST_FIRE_RATE, MAX_MUTABLE_DAMAGE_PROP_NAME, MIN_MUTABLE_DAMAGE_PROP_NAME, GUN_CAN_BE_TWIN_GUN, GUN_TWIN_GUN, DISPERSION_RADIUS_PROP_NAME, SHELLS_PROP_NAME, SHELLS_COUNT_PROP_NAME, RELOAD_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, SHELL_LOADING_TIME_PROP_NAME
 from helpers import dependency
@@ -146,11 +146,13 @@ class GunParams(WeightedParam):
             return None
         else:
             gun = self.__getVehicleGun()
-            return (getTemperatureRateOfFire(gun, isVehicle=False),) if isOverheatedUnlimitedGun(gun) else self._getRawParams()[RELOAD_TIME_PROP_NAME]
+            if isOverheatedUnlimitedGun(gun):
+                return (getTemperatureRateOfFire(gun, isVehicle=False),)
+            return (getShotsPerMinute(gun, self.reloadTimeSecs),) if isLowChargeShotGun(self._vehicleDescr) else self._getRawParams()[RELOAD_TIME_PROP_NAME]
 
     @property
     def reloadTimeSecs(self):
-        return self._getRawParams()[RELOAD_TIME_SECS_PROP_NAME]
+        return getLowChargeReloadTime(self._vehicleDescr, self._getRawParams()[RELOAD_TIME_SECS_PROP_NAME][0]) if isLowChargeShotGun(self._vehicleDescr) else self._getRawParams()[RELOAD_TIME_SECS_PROP_NAME]
 
     @property
     def reloadTimeSingleGun(self):
@@ -177,10 +179,16 @@ class GunParams(WeightedParam):
 
     @property
     def avgPiercingPower(self):
+        gun = self.__getVehicleGun()
+        if isLowChargeShotGun(self._vehicleDescr):
+            return [ getLowChargePiercingPower(self._vehicleDescr, shot.shell, shot.piercingPower[0]) for shot in gun.shots ]
         return self._getRawParams()[PIERCING_POWER_PROP_NAME]
 
     @property
     def avgDamageList(self):
+        gun = self.__getVehicleGun()
+        if isLowChargeShotGun(self._vehicleDescr):
+            return [ getLowChargeDamage(self._vehicleDescr, shot.shell, shot.shell.armorDamage[0]) for shot in gun.shots ]
         return self._getRawParams()[DAMAGE_PROP_NAME]
 
     @property
@@ -199,8 +207,10 @@ class GunParams(WeightedParam):
             return (math.tan(gun.dualAccuracy.afterShotDispersionAngle) * 100, disp)
         elif isTwinGun(gun):
             return (disp, math.tan(self._vehicleDescr.siegeVehicleDescr.gun.shotDispersionAngle) * 100)
+        elif isTemperatureGun(gun):
+            return (round(getHeatedShotDispersion(gun.shotDispersionAngle, gun) * 100, 2), disp)
         else:
-            return (round(getHeatedShotDispersion(gun.shotDispersionAngle, gun) * 100, 2), disp) if isTemperatureGun(gun) else (None, disp)
+            return (None, getLowChargeShotDispersion(self._vehicleDescr, disp)) if isLowChargeShotGun(self._vehicleDescr) else (None, disp)
 
     @property
     def aimingTime(self):

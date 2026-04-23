@@ -120,8 +120,6 @@ class BattleResultsService(IBattleResultsService):
     @adisp_process
     def requestResults(self, ctx, callback=None):
         arenaUniqueID = ctx.getArenaUniqueID()
-        if ctx.needToShowImmediately():
-            event_dispatcher.showBattleResultsWindow(arenaUniqueID)
         if not ctx.resetCache() and arenaUniqueID in self.__statsCtrls:
             isSuccess = True
 

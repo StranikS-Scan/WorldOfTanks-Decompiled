@@ -15,11 +15,14 @@ T = t.TypeVar('T', bound='ViewModel')
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 
-class ViewModel(PyObjectEntity):
-    __slots__ = ()
+class ViewModel(object):
+    __slots__ = ('proxy', '__weakref__')
 
     def __init__(self, properties=0, commands=0):
-        super(ViewModel, self).__init__(PyObjectViewModel(properties, commands))
+        self.proxy = PyObjectViewModel(properties, commands)
+        self.proxy.bindPyObject(self)
+        self._initialize()
+        super(ViewModel, self).__init__()
 
     def __repr__(self):
         return '{}(fields={})'.format(self.__class__.__name__, self.proxy.toString() if self.proxy is not None else None)
@@ -56,14 +59,6 @@ class ViewModel(PyObjectEntity):
         except Exception:
             self.rollback()
             raise
-
-    def _bind(self, cppObject):
-        super(ViewModel, self)._bind(cppObject)
-        self._initialize()
-
-    def _unbind(self):
-        self._finalize()
-        super(ViewModel, self)._unbind()
 
     def _getValue(self, index, propertyType):
         _logger.warning('Method "_getValue" can be used for debug only.')
@@ -174,7 +169,4 @@ class ViewModel(PyObjectEntity):
         return cmd
 
     def _initialize(self):
-        pass
-
-    def _finalize(self):
         pass

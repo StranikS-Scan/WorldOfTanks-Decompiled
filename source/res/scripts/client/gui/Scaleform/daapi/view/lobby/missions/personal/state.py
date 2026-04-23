@@ -5,7 +5,6 @@ from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.lobby_state_machine.states import SubScopeSubLayerState, ViewLobbyState
-from personal_missions import PM_BRANCH
 
 def registerStates(machine):
     machine.addState(PersonalMissionsAwardsState())
@@ -37,17 +36,15 @@ class PersonalMissionsPageState(ViewLobbyState):
     VIEW_KEY = ViewKey(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS)
 
     @classmethod
-    def goTo(cls, operationID=None, branch=None, chainID=None):
-        super(PersonalMissionsPageState, cls).goTo(chainID=chainID, operationID=operationID, branch=branch)
+    def goTo(cls, operationID=None, branch=None, chainID=None, missionID=None):
+        super(PersonalMissionsPageState, cls).goTo(chainID=chainID, operationID=operationID, branch=branch, eventID=missionID)
 
     def registerTransitions(self):
         lsm = self.getMachine()
         self.addNavigationTransition(lsm.getStateByCls(PersonalMissionsAwardsState), record=True)
 
     def _getViewLoadCtx(self, event):
-        return {'ctx': {'chainID': event.params.get('chainID', None),
-                 'operationID': event.params.get('operationID', PM_BRANCH.REGULAR),
-                 'branch': event.params.get('branch', None)}}
+        return {'ctx': event.params}
 
     def getBackNavigationDescription(self, params):
         return backport.text(R.strings.personal_missions.header.backBtn.descrLabel.operation())

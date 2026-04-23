@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hangar_widget/presenters/battle_pass_presenter.py
+import typing
 from typing import Optional, Set
 import BigWorld
 from account_helpers.AccountSettings import AccountSettings, IS_BATTLE_PASS_START_ANIMATION_SEEN
@@ -19,6 +20,8 @@ from gui.shared.event_dispatcher import showBattlePass
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared.utils import IHangarSpace
+if typing.TYPE_CHECKING:
+    from frameworks.wulf import View, ViewEvent
 
 class _LastEntryState(object):
 
@@ -67,13 +70,16 @@ class BattlePassPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewComponen
     def createToolTipContent(self, event, contentID):
         if not self.isHoliday and contentID == R.views.mono.battle_pass.tooltips.no_chapter():
             return BattlePassNoChapterTooltipView()
-        return BattlePassCompletedTooltipView() if contentID == R.views.mono.battle_pass.tooltips.completed() else BattlePassInProgressTooltipView()
+        return BattlePassCompletedTooltipView() if contentID == R.views.mono.battle_pass.tooltips.completed() else self._createInProgressTooltipView()
 
     @property
     def hasDeferModelUpdate(self):
         isDeferUpdate = super(BattlePassPresenter, self).hasDeferModelUpdate
         isSpaceInited = self.__hangarSpace.spaceInited
         return isDeferUpdate or not isSpaceInited
+
+    def _createInProgressTooltipView(self):
+        return BattlePassInProgressTooltipView()
 
     @staticmethod
     def _onIntroAnimationPlayed():

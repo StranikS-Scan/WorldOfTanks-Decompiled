@@ -11,7 +11,7 @@ def getObject(proxy):
 
 
 class PyObjectEntity(object):
-    __slots__ = ('__cppObject',)
+    __slots__ = ('__cppObject', '__weakref__')
 
     def __init__(self, cppObject=None):
         super(PyObjectEntity, self).__init__()

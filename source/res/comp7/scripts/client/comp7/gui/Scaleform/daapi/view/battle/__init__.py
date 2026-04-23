@@ -31,6 +31,8 @@ def getViewSettings():
     from comp7.gui.Scaleform.daapi.view.battle import stats_exchange
     from comp7.gui.Scaleform.daapi.view.battle import comp7_battle_carousel
     from comp7.gui.Scaleform.daapi.view.battle import comp7_consumables_panel
+    from comp7.gui.Scaleform.daapi.view.battle import comp7_bans_progress_widget
+    from comp7.gui.Scaleform.daapi.view.battle import comp7_bans_widget
     from comp7.gui.Scaleform.daapi.view.battle import messages
     from comp7.gui.impl.battle.ammunition_panel import prebattle_ammunition_panel_inject
     from comp7_core.gui.Scaleform.daapi.view.battle import players_panel
@@ -57,6 +59,8 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_TIMER, battle_timers.BattleTimer, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_END_WARNING_PANEL, battle_end_warning_panel.BattleEndWarningPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, comp7_consumables_panel.Comp7ConsumablesPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.COMP7_BANS_WIDGET, comp7_bans_widget.Comp7BansWidget, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.COMP7_BANS_PROGRESS_WIDGET, comp7_bans_progress_widget.Comp7BansProgressWidget, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.SITUATION_INDICATORS, situation_indicators.SituationIndicators, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.RIBBONS_PANEL, ribbons_panel.BattleRibbonsPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL, game_messages_panel.GameMessagesPanel, ScopeTemplates.DEFAULT_SCOPE),

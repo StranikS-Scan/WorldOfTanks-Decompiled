@@ -2193,7 +2193,7 @@
       </shotDispersionFactors>
       <dualAccuracy>
         <afterShotDispersionRadius>	0.4	</afterShotDispersionRadius>
-        <coolingDelay>	14	</coolingDelay>
+        <coolingDelay>	12	</coolingDelay>
       </dualAccuracy>
       <shots>
         <_105mm_AP_M68>
@@ -2201,14 +2201,14 @@
           <speed>	1000	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	235 226	</piercingPower>
+          <piercingPower>	240 231	</piercingPower>
         </_105mm_AP_M68>
         <_105mm_APCR_M68>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	1200	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	261 239	</piercingPower>
+          <piercingPower>	279 257	</piercingPower>
         </_105mm_APCR_M68>
         <_105mm_HE_M68>
           <defaultPortion>	0.20	</defaultPortion>
@@ -4983,9 +4983,9 @@
       </shotDispersionFactors>
       <mechanics>
         <temperatureGun>
-          <heatingPerShot>	60	</heatingPerShot>
+          <heatingPerShot>	50	</heatingPerShot>
           <coolingDelay>	1	</coolingDelay>
-          <coolingPerSec>	2.5	</coolingPerSec>
+          <coolingPerSec>	2.8	</coolingPerSec>
           <thermalStateHysteresis>	1	</thermalStateHysteresis>
           <thermalStates>
             <state>

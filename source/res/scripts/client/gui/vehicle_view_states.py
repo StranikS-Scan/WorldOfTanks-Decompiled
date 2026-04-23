@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/vehicle_view_states.py
+from __future__ import absolute_import
 from gui.prb_control import prbDispatcherProperty
 from gui.shared.system_factory import registerVehicleViewState, collectVehicleViewStates
 from shared_utils import findFirst

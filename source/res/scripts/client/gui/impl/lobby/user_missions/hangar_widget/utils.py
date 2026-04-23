@@ -52,7 +52,6 @@ class MissionItemPacker(object):
             model.setEarned(preFormattedConditionModel.getEarned())
             model.setDescription(preFormattedConditionModel.getDescrData())
             setDescription(model, fullQuestModel)
-        fullQuestModel.unbind()
         return isCompleted
 
     def packSpecificMissionItem(self, model, data):

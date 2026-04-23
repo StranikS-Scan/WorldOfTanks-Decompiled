@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ClientSelectableRankedObject.py
+from __future__ import absolute_import
 from ClientSelectableObject import ClientSelectableObject
 from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController

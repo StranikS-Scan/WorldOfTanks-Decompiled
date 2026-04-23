@@ -1,14 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/BattleReplay.py
+from __future__ import absolute_import, print_function
 import base64
 import os
 import datetime
 import json
 import copy
-import cPickle as pickle
 import logging
 import zlib
 from collections import defaultdict
+from builtins import open
+from future.moves import pickle
+from future.utils import lrange, viewitems, viewvalues
 import Math
 import BigWorld
 import ArenaType
@@ -90,8 +93,8 @@ class SimulatedAoI(object):
 
     def __init__(self):
         self.__aoiMapping = defaultdict(dict)
-        self.__withheld = dict()
-        self.__pending = dict()
+        self.__withheld = {}
+        self.__pending = {}
         self.currentVehicleID = None
         self.currentAvatarID = None
         self.__controlMode = CTRL_MODE_NAME.POSTMORTEM
@@ -244,7 +247,7 @@ class BattleReplay(object):
         self.__aoi = SimulatedAoI()
         self.__isVehicleChanging = False
         self.__playerDatabaseID = 0
-        self.__serverSettings = dict()
+        self.__serverSettings = {}
         if isPlayerAccount():
             self.__playerDatabaseID = BigWorld.player().databaseID
         self.__arenaStartTime = None
@@ -347,7 +350,7 @@ class BattleReplay(object):
             return False
 
         success = False
-        for i in xrange(100):
+        for i in range(100):
             try:
                 if useAutoFilename:
                     fileName = os.path.join(self.__replayDir, AUTO_RECORD_TEMP_FILENAME + ('' if i == 0 else str(i)) + REPLAY_FILE_EXTENSION)
@@ -359,8 +362,7 @@ class BattleReplay(object):
             except Exception:
                 if useAutoFilename:
                     continue
-                else:
-                    break
+                break
 
         if not success:
             LOG_ERROR('Failed to create replay file, replays folder may be write-protected')
@@ -384,7 +386,7 @@ class BattleReplay(object):
             self.__playList = []
             self.__isPlayingPlayList = True
             try:
-                f = open(fileName)
+                f = open(fileName, mode='r', encoding='utf-8')
                 s = f.read()
                 f.close()
                 self.__playList = s.replace('\r\n', '\n').replace('\r', '\n').split('\n')
@@ -509,8 +511,7 @@ class BattleReplay(object):
             return False
         currReplayTime = self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_CURRENT_TIME)
         finishReplayTime = self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_REPLAY_FINISHED)
-        if currReplayTime > finishReplayTime:
-            currReplayTime = finishReplayTime
+        currReplayTime = min(currReplayTime, finishReplayTime)
         fastForwardStep = FAST_FORWARD_STEP * (2.0 if mods == 2 else 1.0)
         if key == Keys.KEY_F11 and isDown:
             if self.isPlaying:
@@ -571,7 +572,7 @@ class BattleReplay(object):
         if key == Keys.KEY_C and isDown:
             self.__isChatPlaybackEnabled = not self.__isChatPlaybackEnabled
         suppressCommand = False
-        if cmdMap.isFiredList(xrange(CommandMapping.CMD_AMMO_CHOICE_1, CommandMapping.CMD_AMMO_CHOICE_0 + 1), key) and isDown:
+        if cmdMap.isFiredList(lrange(CommandMapping.CMD_AMMO_CHOICE_1, CommandMapping.CMD_AMMO_CHOICE_0 + 1), key) and isDown:
             suppressCommand = True
         elif cmdMap.isFiredList((CommandMapping.CMD_CM_LOCK_TARGET,
          CommandMapping.CMD_CM_LOCK_TARGET_OFF,
@@ -1101,10 +1102,10 @@ class BattleReplay(object):
             replayRevision = self.arenaInfo.get('lastChangedRevision')
             if replayRevision is None:
                 replayRevision = 'undefined'
-            _logger.info('Current branch: ' + currentBranch)
-            _logger.info('Current revision: ' + str(currentRevision))
-            _logger.info('Replay branch: ' + replayBranch)
-            _logger.info('Replay revision: ' + str(replayRevision))
+            _logger.info('Current branch: %s', currentBranch)
+            _logger.info('Current revision: %s', str(currentRevision))
+            _logger.info('Replay branch: %s', replayBranch)
+            _logger.info('Replay revision: %s', str(replayRevision))
             return
 
     def __showInfoMessages(self):
@@ -1114,7 +1115,7 @@ class BattleReplay(object):
 
     def __getArenaVehiclesInfo(self):
         vehicles = {}
-        for k, v in BigWorld.player().arena.vehicles.iteritems():
+        for k, v in viewitems(BigWorld.player().arena.vehicles):
             vehicle = copy.copy(v)
             vehicle['vehicleType'] = v['vehicleType'].name if v['vehicleType'] is not None else ''
             del vehicle['accountDBID']
@@ -1160,18 +1161,18 @@ class BattleReplay(object):
             modifiedResults = copy.deepcopy(results)
             allPlayersVehicles = modifiedResults.get('vehicles', None)
             if allPlayersVehicles is not None:
-                for playerVehicles in allPlayersVehicles.itervalues():
+                for playerVehicles in viewvalues(allPlayersVehicles):
                     for vehicle in playerVehicles:
                         if vehicle is not None:
                             vehicle['damageEventList'] = None
 
             personals = modifiedResults.get('personal', None)
             if personals is not None:
-                for personal in personals.itervalues():
+                for personal in viewvalues(personals):
                     for field in ('damageEventList', 'xpReplay', 'creditsReplay', 'tmenXPReplay', 'flXPReplay', 'goldReplay', 'crystalReplay', 'eventCoinReplay', 'bpcoinReplay', 'freeXPReplay', 'avatarDamageEventList', 'equipCoinReplay', 'battlePassPointsReplay'):
                         personal[field] = None
 
-                    for currency in personal.get('currencies', {}).itervalues():
+                    for currency in viewvalues(personal.get('currencies', {})):
                         currency['replay'] = None
 
                     if personal.get('outfit', ''):
@@ -1256,6 +1257,10 @@ class BattleReplay(object):
         diff = {key: value}
         self.settingsCore.onSettingsChanged(diff)
 
+    def setServerSetting(self, key, value):
+        if key in getUsedInReplaysConfigKeys():
+            self.__serverSettings[key] = value
+
     def isFinished(self):
         return self.__isFinished if self.isPlaying or g_replayCtrl.isTimeWarpInProgress else False
 
@@ -1273,9 +1278,9 @@ class BattleReplay(object):
 
     def printAIMType(self):
         if self.isServerAim:
-            print 'SERVER_AIM_ACTIVE'
+            print('SERVER_AIM_ACTIVE')
         else:
-            print 'CLIENT_AIM_ACTIVE'
+            print('CLIENT_AIM_ACTIVE')
 
     def setEquipmentID(self, value):
         self.__replayCtrl.onSetEquipmentID(value)
@@ -1368,7 +1373,7 @@ def getSpaceID():
 def _JSON_Encode(obj):
     if isinstance(obj, dict):
         newDict = {}
-        for key, value in obj.iteritems():
+        for key, value in viewitems(obj):
             if isinstance(key, tuple):
                 newDict[str(key)] = _JSON_Encode(value)
             newDict[key] = _JSON_Encode(value)

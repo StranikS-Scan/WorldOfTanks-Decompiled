@@ -14,6 +14,7 @@ from personal_missions import PM_BRANCH
 from gui.battle_results.progress.research import VehicleProgressHelper
 from skeletons.gui.game_control import IBattlePassController
 if typing.TYPE_CHECKING:
+    from typing import List, Tuple
     from gui.battle_results.reusable import _ReusableInfo
     from gui.server_events.event_items import PersonalMission
     from gui.server_events.personal_missions_cache import PersonalMissionsCache

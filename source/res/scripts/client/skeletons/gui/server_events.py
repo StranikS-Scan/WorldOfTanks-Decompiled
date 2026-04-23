@@ -5,6 +5,7 @@ if typing.TYPE_CHECKING:
     from typing import Optional, Dict, Callable, Union
     from Event import Event
     from gui.server_events.event_items import DailyEpicTokenQuest, Quest, DailyQuest, PremiumQuest, WeeklyQuest
+    from gui.server_events.personal_missions_cache import PersonalMissionsCache
 
 class IEventsCache(object):
     onSyncStarted = None

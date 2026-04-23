@@ -7,7 +7,7 @@ from cgf_events import gun_events
 from events_containers.common.containers import ClientEventsContainer
 from events_containers.components.common import ClientComponentEventsDebugger
 from events_handler import eventHandler
-from vehicles.components.component_events import VehicleComponentEventsCGFIntegration
+from vehicles.components.component_events import VehicleComponentEventsCoreIntegration
 from vehicles.parts.guns.common.guns_interfaces import IGunShootingEventsLogic, IGunShootingListenerLogic
 if typing.TYPE_CHECKING:
     from vehicles.parts.guns.common.guns_interfaces import IGunComponent, IGunShootingListener
@@ -44,8 +44,8 @@ class GunShootingEvents(ClientEventsContainer, IGunShootingEventsLogic):
     def _getComponent(self):
         return self.__componentRef() if self.__componentRef is not None else None
 
-    def _createCGFIntegration(self):
-        return GunShootingCGFIntegration(self, self._getComponent())
+    def _createCoreIntegration(self):
+        return GunShootingCoreIntegration(self, self._getComponent())
 
     def _createEventsDebugger(self):
         return GunShootingEventsDebugger(self, self._getComponent())
@@ -58,7 +58,7 @@ class GunShootingEvents(ClientEventsContainer, IGunShootingEventsLogic):
             handler()
 
 
-class GunShootingCGFIntegration(VehicleComponentEventsCGFIntegration, IGunShootingListenerLogic):
+class GunShootingCoreIntegration(VehicleComponentEventsCoreIntegration, IGunShootingListenerLogic):
 
     @eventHandler
     def onDiscreteShot(self, gunIndex):

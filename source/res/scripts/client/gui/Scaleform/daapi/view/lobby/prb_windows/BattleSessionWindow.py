@@ -17,10 +17,11 @@ from gui import SystemMessages
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.meta.BattleSessionWindowMeta import BattleSessionWindowMeta
 from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.prb_control import formatters, prb_getters
 from gui.prb_control.entities.base.legacy.ctx import AssignLegacyCtx, KickPlayerCtx
-from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE, PREBATTLE_SETTING_NAME, PREBATTLE_PROPERTY_NAME, PREBATTLE_PLAYERS_COMPARATORS
+from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE, PREBATTLE_SETTING_NAME, PREBATTLE_PROPERTY_NAME, PREBATTLE_PLAYERS_COMPARATORS, PREBATTLE_RESTRICTION
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.utils import functions
@@ -72,16 +73,24 @@ class BattleSessionWindow(BattleSessionWindowMeta):
     def isLeaveBtnEnabled(self):
         return self._isInLegacyPreBattle() and super(BattleSessionWindow, self).isLeaveBtnEnabled()
 
+    def updateReadyBtnState(self):
+        self.as_enableReadyBtnS(self.isReadyBtnEnabled())
+        tooltip = ''
+        restriction = self.prbEntity.canPlayerDoAction().restriction
+        if restriction == PREBATTLE_RESTRICTION.LIMIT_NOT_ENOUGH_SUITABLE_VEHICLES:
+            tooltip = TOOLTIPS.PREBATTLE_READYBUTTON_VEHICLESREQUIRED3
+        self.as_setReadyBtnTooltipS(tooltip)
+
     def isReadyBtnEnabled(self):
         if not self._isInLegacyPreBattle():
             return False
         result = super(BattleSessionWindow, self).isReadyBtnEnabled()
-        if self.__isTurnamentBattle:
+        if self.__isTournamentBattle:
             result = result and self.__isCurrentPlayerInAssigned()
         return result
 
     def onRostersChanged(self, entity, rosters, full):
-        if self.__isTurnamentBattle:
+        if self.__isTournamentBattle:
             self.requestToReady(self.isPlayerReady() and self.__isCurrentPlayerInAssigned())
         self._setRosterList(rosters)
         self.__updateCommonRequirements(entity.getTeamLimits(), rosters)
@@ -90,13 +99,13 @@ class BattleSessionWindow(BattleSessionWindowMeta):
         super(BattleSessionWindow, self).onPlayerStateChanged(entity, roster, playerInfo)
         rosters = entity.getRosters()
         self._setRosterList(rosters)
-        self.as_setInfoS(self.__isTurnamentBattle, self.__battlesWinsString, self.__arenaName, self.__firstTeam, self.__secondTeam, self.prbEntity.getProps().getBattlesScore(), self.__eventName, self.__sessionName, self.__detachment, self.__vehicleLvl, self.__teamIndex)
+        self.as_setInfoS(self.__isTournamentBattle, self.__battlesWinsString, self.__arenaName, self.__firstTeam, self.__secondTeam, self.prbEntity.getProps().getBattlesScore(), self.__eventName, self.__sessionName, self.__detachment, self.__vehicleLvl, self.__teamIndex)
         self.__updateCommonRequirements(entity.getTeamLimits(), rosters)
 
     def onSettingUpdated(self, entity, settingName, settingValue):
         if settingName == PREBATTLE_SETTING_NAME.ARENA_TYPE_ID:
             self.__arenaName = functions.getArenaShortName(settingValue)
-            self.as_setInfoS(self.__isTurnamentBattle, self.__battlesWinsString, self.__arenaName, self.__firstTeam, self.__secondTeam, self.prbEntity.getProps().getBattlesScore(), self.__eventName, self.__sessionName, self.__detachment, self.__vehicleLvl, self.__teamIndex)
+            self.as_setInfoS(self.__isTournamentBattle, self.__battlesWinsString, self.__arenaName, self.__firstTeam, self.__secondTeam, self.prbEntity.getProps().getBattlesScore(), self.__eventName, self.__sessionName, self.__detachment, self.__vehicleLvl, self.__teamIndex)
 
     def onPropertyUpdated(self, entity, propertyName, propertyValue):
         if propertyName == PREBATTLE_PROPERTY_NAME.TEAMS_POSITIONS:
@@ -117,7 +126,7 @@ class BattleSessionWindow(BattleSessionWindowMeta):
         return self.prbEntity.getPermissions().canSendInvite()
 
     def onCantMoveS(self, accId):
-        if not self.__isTurnamentBattle:
+        if not self.__isTournamentBattle:
             self._showActionErrorMessage(PREBATTLE_ERRORS.INSUFFICIENT_ROLE)
 
     def __getWinnerIfDraw(self):
@@ -186,7 +195,7 @@ class BattleSessionWindow(BattleSessionWindowMeta):
             elif playersCondition:
                 self._showActionErrorMessage(PREBATTLE_ERRORS.PLAYERS_LIMIT)
                 return
-        if not self.canMoveToAssigned(pID) and not self.__isTurnamentBattle:
+        if not self.canMoveToAssigned(pID) and not self.__isTournamentBattle:
             self._showActionErrorMessage(PREBATTLE_ERRORS.INSUFFICIENT_ROLE)
             return
         else:
@@ -214,7 +223,7 @@ class BattleSessionWindow(BattleSessionWindowMeta):
             self._showActionErrorMessage(ctx.getLastErrorString())
 
     def requestToUnassignMember(self, pID):
-        if not self.canMoveToUnassigned(pID) and not self.__isTurnamentBattle:
+        if not self.canMoveToUnassigned(pID) and not self.__isTournamentBattle:
             self._showActionErrorMessage(PREBATTLE_ERRORS.INSUFFICIENT_ROLE)
             return
         self.__doRequestToUnassignMember(pID)
@@ -236,7 +245,7 @@ class BattleSessionWindow(BattleSessionWindowMeta):
             self.__syncStartTime()
             self._setRosterList(rosters)
             self.__updateCommonRequirements(teamLimits, rosters)
-            self.as_setInfoS(self.__isTurnamentBattle, self.__battlesWinsString, self.__arenaName, self.__firstTeam, self.__secondTeam, self.prbEntity.getProps().getBattlesScore(), self.__eventName, self.__sessionName, self.__detachment, self.__vehicleLvl, self.__teamIndex)
+            self.as_setInfoS(self.__isTournamentBattle, self.__battlesWinsString, self.__arenaName, self.__firstTeam, self.__secondTeam, self.prbEntity.getProps().getBattlesScore(), self.__eventName, self.__sessionName, self.__detachment, self.__vehicleLvl, self.__teamIndex)
             self.__updateLimits(teamLimits, rosters)
             self.__showAttackDirection()
         else:
@@ -274,6 +283,9 @@ class BattleSessionWindow(BattleSessionWindowMeta):
 
     def __handleBSWindowHide(self, _):
         self.destroy()
+
+    def _handleCurrentVehicleChanged(self):
+        self.updateReadyBtnState()
 
     def __handleSetPrebattleCoolDown(self, event):
         if event.requestID is REQUEST_TYPE.SET_PLAYER_STATE:
@@ -323,7 +335,7 @@ class BattleSessionWindow(BattleSessionWindowMeta):
         self.__battlesWinsString = '%d/%s' % (battlesLimit, str(winsLimit or '-'))
         self.__eventName = formatters.getPrebattleEventName(extraData)
         clansToInvite = settings['clansToInvite']
-        self.__isTurnamentBattle = not clansToInvite
+        self.__isTournamentBattle = not clansToInvite
         self.__sessionName = formatters.getPrebattleSessionName(extraData)
         description = formatters.getPrebattleDescription(extraData)
         if description:

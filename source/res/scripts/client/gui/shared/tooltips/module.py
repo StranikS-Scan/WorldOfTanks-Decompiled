@@ -25,6 +25,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items.components.supply_slot_categories import SlotCategories
+from items.utils import getVehicleDescriptorWithoutMechanics
 from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IWotPlusController, ILoadoutController
@@ -32,15 +33,20 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
 _logger = logging.getLogger(__name__)
 _TOOLTIP_WIDTH = 468
+_LOW_CHARGE_SHOT_TOOLTIP_WIDTH = 540
 _DEFAULT_PADDING = 20
 _EMPTY_TOOLTIP_WIDTH = 350
 _AUTOCANNON_SHOT_DISTANCE = 400
 _OPT_DEVICE_SPEC_ALPHA = 0.5
 _OPT_DEVICE_SELECTED_SPEC_ALPHA = 1
+_MECHANICS_TEXT_ROOT = R.strings.tooltips.shell.mechanics
+_MECHANICS_IMAGE_ROOT = R.images.gui.maps.icons.tooltip.mechanics
 
 class ModuleBlockTooltipData(BlocksTooltipData):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -49,10 +55,13 @@ class ModuleBlockTooltipData(BlocksTooltipData):
     def __init__(self, context):
         super(ModuleBlockTooltipData, self).__init__(context, TOOLTIP_TYPE.MODULE)
         self.item = None
-        self._setContentMargin(top=0, left=0, bottom=_DEFAULT_PADDING, right=0)
+        self._setContentMargin(top=0, left=17, bottom=_DEFAULT_PADDING, right=0)
         self._setMargins(10, 15)
         self._setWidth(_TOOLTIP_WIDTH)
         return
+
+    def _invalidateWidth(self, width):
+        self._setWidth(max(width, self._getWidth()))
 
     def _getHighLightType(self):
         return self.item.getHighlightType()
@@ -64,7 +73,7 @@ class ModuleBlockTooltipData(BlocksTooltipData):
         statsConfig = self.context.getStatsConfiguration(module)
         paramsConfig = self.context.getParamsConfiguration(module)
         statusConfig = self.context.getStatusConfiguration(module)
-        leftPadding = _DEFAULT_PADDING
+        leftPadding = 0
         rightPadding = _DEFAULT_PADDING
         topPadding = _DEFAULT_PADDING
         priceValueWidth = 160
@@ -97,13 +106,13 @@ class ModuleBlockTooltipData(BlocksTooltipData):
                 colorScheme = params_formatters.COLORLESS_SCHEME
             else:
                 colorScheme = params_formatters.BASE_SCHEME
-            commonStatsBlock = CommonStatsBlockConstructor(module, paramsConfig, statsConfig.slotIdx, leftPadding, rightPadding, colorScheme).construct()
+            commonStatsBlock = self._getStatsBlockConstructor()(module, paramsConfig, statsConfig.slotIdx, leftPadding, rightPadding, colorScheme).construct()
             if commonStatsBlock:
                 if statusConfig.useWhiteBg:
                     linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE
                 else:
                     linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE
-                items.append(formatters.packBuildUpBlockData(commonStatsBlock, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding, bottom=-8), gap=textGap, linkage=linkage))
+                items.append(formatters.packBuildUpBlockData(commonStatsBlock, padding=formatters.packPadding(left=leftPadding, right=45, top=blockTopPadding, bottom=-8), gap=textGap, linkage=linkage))
         priceBlock = PriceBlockConstructor(module, statsConfig, priceValueWidth, leftPadding, rightPadding).construct()
         if priceBlock:
             items.append(formatters.packBuildUpBlockData(priceBlock, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-5, bottom=-8), gap=textGap))
@@ -122,7 +131,7 @@ class ModuleBlockTooltipData(BlocksTooltipData):
                 compatibleBlocks.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(_ms(MENU.moduleinfo_compatible(paramType))), desc=text_styles.standard(paramValue)))
 
             if compatibleBlocks:
-                items.append(formatters.packBuildUpBlockData(compatibleBlocks, padding=formatters.packPadding(left=leftPadding)))
+                items.append(formatters.packBuildUpBlockData(compatibleBlocks, padding=formatters.packPadding(right=rightPadding, left=leftPadding)))
         statusBlock = StatusBlockConstructor(module, statusConfig, leftPadding, rightPadding).construct()
         if statusBlock and itemTypeID != GUI_ITEM_TYPE.OPTIONALDEVICE:
             statusTopPadding = -30 if showModuleCompatibles else blockTopPadding
@@ -145,6 +154,15 @@ class ModuleBlockTooltipData(BlocksTooltipData):
 
     def _getInventoryBlockConstructor(self):
         return InventoryBlockConstructor
+
+    def _getStatsBlockConstructor(self):
+        paramsConfig = self.context.getParamsConfiguration(self.item)
+        vehicle = paramsConfig.vehicle
+        if vehicle is not None and self.item.itemTypeID == GUI_ITEM_TYPE.GUN:
+            if hasVehicleDescrMechanic(vehicle.descriptor, VehicleMechanic.LOW_CHARGE_SHOT):
+                self._invalidateWidth(_LOW_CHARGE_SHOT_TOOLTIP_WIDTH)
+                return TwoColumnsStatsBlockConstructor
+        return CommonStatsBlockConstructor
 
 
 class ModuleTooltipBlockConstructor(object):
@@ -651,18 +669,13 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                     paramsKeyName = self.ROCKET_ACCELERATION_ENGINE_MODULE_PARAM
             paramsList = self.MODULE_PARAMS.get(paramsKeyName, [])
             if vehicle is not None:
-                if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
-                    currModule = module
-                else:
-                    currModuleDescr, _ = vehicle.descriptor.getComponentsByType(module.itemTypeName)
-                    currModule = self.itemsCache.items.getItemByCD(currModuleDescr.compactDescr)
-                comparator = params_helper.itemsComparator(module, currModule, vehicle.descriptor)
+                comparator = self._getValueComparator(self.configuration.vehicle.descriptor)
                 highlightParamsList = self.HIGHLIGHT_MODULE_PARAMS.get(paramsKeyName, []) if paramsKeyName in self.HIGHLIGHT_MODULE_PARAMS else self.HIGHLIGHT_MODULE_PARAMS[self.DEFAULT_PARAM]
                 for paramName in (p for p in paramsList if p in moduleParams):
-                    paramInfo = comparator.getExtendedData(paramName)
-                    fmtValue = params_formatters.colorizedFormatParameter(paramInfo, self.__colorScheme)
-                    if fmtValue is not None:
-                        block.append(formatters.packTextParameterBlockData(name=params_formatters.formatModuleParamName(paramName, vDescr), value=fmtValue, valueWidth=self._valueWidth, gap=12, highlight=highlightPossible and paramName in highlightParamsList))
+                    value = self._getValueBlock(paramName, comparator, self.__colorScheme)
+                    if value is None:
+                        continue
+                    block.append(self._packParamBlock(paramName, value, highlightPossible and paramName in highlightParamsList))
 
             else:
                 formattedModuleParameters = params_formatters.getFormattedParamsList(module.descriptor, moduleParams)
@@ -671,12 +684,32 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                         block.append(formatters.packTextParameterBlockData(name=params_formatters.formatModuleParamName(paramName), value=paramValue, valueWidth=self._valueWidth, gap=12))
 
         if block:
-            block.insert(0, formatters.packTextBlockData(text_styles.middleTitle(backport.text(R.strings.tooltips.tankCarusel.MainProperty())), padding=formatters.packPadding(bottom=7)))
+            block.insert(0, self._getHeaderBlock())
             if module.itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES:
                 extraStatus = self.__getExtraStatusBlock(module, vDescr)
                 if extraStatus is not None:
                     block.insert(0, extraStatus)
         return block
+
+    def _getHeaderBlock(self):
+        return formatters.packTextBlockData(text_styles.middleTitle(backport.text(R.strings.tooltips.tankCarusel.MainProperty())), padding=formatters.packPadding(bottom=7))
+
+    def _getValueBlock(self, paramName, comparator, colorScheme):
+        paramInfo = comparator.getExtendedData(paramName)
+        return params_formatters.colorizedFormatParameter(paramInfo, colorScheme)
+
+    def _packParamBlock(self, paramName, value, highlight):
+        vDescr = self.configuration.vehicle.descriptor
+        return formatters.packTextParameterBlockData(name=params_formatters.formatModuleParamName(paramName, vDescr), value=value, valueWidth=self._valueWidth, gap=12, highlight=highlight)
+
+    def _getValueComparator(self, vDescr):
+        module = self.module
+        if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
+            currModule = module
+        else:
+            currModuleDescr, _ = vDescr.getComponentsByType(module.itemTypeName)
+            currModule = self.itemsCache.items.getItemByCD(currModuleDescr.compactDescr)
+        return params_helper.itemsComparator(self.module, currModule, vDescr)
 
     @classmethod
     def __getExtraStatusBlock(cls, module, vDescr):
@@ -689,6 +722,32 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                 blocks.append(formatters.packImageTextBlockData(title=text_styles.neutral(backport.text(status[0]())), desc='', img=backport.image(status[1]()), imgPadding=formatters.packPadding(top=1, right=10), padding=formatters.packPadding(left=90, bottom=5, right=25), ignoreImageSize=True))
 
             return formatters.packBuildUpBlockData(blocks, padding=formatters.packPadding(top=3, bottom=11)) if blocks else None
+
+
+class TwoColumnsStatsBlockConstructor(CommonStatsBlockConstructor):
+
+    def __init__(self, module, configuration, slotIdx, leftPadding, rightPadding, colorScheme=None):
+        super(TwoColumnsStatsBlockConstructor, self).__init__(module, configuration, slotIdx, leftPadding, rightPadding, colorScheme)
+        vDescr = self.configuration.vehicle.descriptor
+        self.__modifiedComparator = self._getValueComparator(vDescr, False)
+
+    def _getValueBlock(self, paramName, comparator, colorScheme):
+        leftValue = super(TwoColumnsStatsBlockConstructor, self)._getValueBlock(paramName, comparator, colorScheme)
+        if leftValue is None:
+            return
+        else:
+            rightValue = super(TwoColumnsStatsBlockConstructor, self)._getValueBlock(paramName, self.__modifiedComparator, colorScheme)
+            return None if rightValue is None else (leftValue, rightValue)
+
+    def _packParamBlock(self, paramName, value, highlight):
+        vDescr = self.configuration.vehicle.descriptor
+        return formatters.packTextParameterTwoColBlockData(name=params_formatters.formatModuleParamName(paramName, vDescr), value=value[0], value2=value[1], valueWidth=self._valueWidth, padding=formatters.packPadding(left=-3), gap=20, value2Gap=17, highlight=highlight)
+
+    def _getValueComparator(self, vDescr, dropMechanic=True):
+        return super(TwoColumnsStatsBlockConstructor, self)._getValueComparator(getVehicleDescriptorWithoutMechanics(vDescr, VehicleMechanic.LOW_CHARGE_SHOT.value) if dropMechanic else vDescr)
+
+    def _getHeaderBlock(self):
+        return formatters.packTextParameterTwoColWithIconBlockData(leftText=text_styles.middleTitle(backport.text(_MECHANICS_TEXT_ROOT.lowChargeShot.paramsHeader.basic())), rightText=text_styles.middleTitle(backport.text(_MECHANICS_TEXT_ROOT.lowChargeShot.paramsHeader.specific())), icon=backport.image(_MECHANICS_IMAGE_ROOT.lowChargeShot.ability_20x20()), valueWidth=self._valueWidth + 2, padding=formatters.packPadding(left=-4, bottom=8), value2Gap=15, iconPadding=formatters.packPadding(top=2, right=7))
 
 
 class ModuleReplaceBlockConstructor(ModuleTooltipBlockConstructor):

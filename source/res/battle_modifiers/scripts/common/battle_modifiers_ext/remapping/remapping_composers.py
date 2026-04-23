@@ -81,6 +81,30 @@ class _DefaultShotEffectsComposer(_BaseComposer):
         return vehicles.g_cache.shotEffectsNames[oldValue]
 
 
+class _DefaultGunPrefabEffectsComposer(_BaseComposer):
+
+    @classmethod
+    def _getItemName(cls, _, oldValue):
+        from items import vehicles
+        for k, v in viewitems(vehicles.g_cache.prefabEffects.gun):
+            if v == oldValue:
+                return k
+
+        return None
+
+
+class _DefaultShotPrefabEffectsComposer(_BaseComposer):
+
+    @classmethod
+    def _getItemName(cls, _, oldValue):
+        from items import vehicles
+        for k, v in viewitems(vehicles.g_cache.prefabEffects.shot.indexes):
+            if v == oldValue:
+                return k
+
+        return None
+
+
 class _DefaultSoundNotificationsComposer(_BaseComposer):
     _REMOVE_NOTIFICATION = 'none'
 
@@ -113,6 +137,8 @@ class _DefaultExhaustEffectsComposer(_BaseComposer):
 
 _DEFAULT_COMPOSERS = {ModifiersWithRemapping.GUN_EFFECTS: _DefaultGunEffectsComposer,
  ModifiersWithRemapping.SHOT_EFFECTS: _DefaultShotEffectsComposer,
+ ModifiersWithRemapping.GUN_PREFAB_EFFECTS: _DefaultGunPrefabEffectsComposer,
+ ModifiersWithRemapping.SHOT_PREFAB_EFFECTS: _DefaultShotPrefabEffectsComposer,
  ModifiersWithRemapping.SOUND_NOTIFICATIONS: _DefaultSoundNotificationsComposer,
  ModifiersWithRemapping.EXHAUST_EFFECTS: _DefaultExhaustEffectsComposer}
 _COMPOSERS_FACTORY = {}

@@ -5,10 +5,10 @@ import typing
 from events_containers.common.container_wrappers import activateEventsContainer
 from vehicles.parts.guns.common.custom_integrations import GunShootingCustomIntegrations
 from vehicles.parts.guns.common.guns_interfaces import IGunComponent, IGunShootingEvents, IGunShootingEventsLogic, IGunShootingListener, IGunShootingListenerLogic
-from vehicles.parts.guns.common.shooting_events import GunShootingEvents, GunShootingCGFIntegration, GunShootingEventsDebugger
+from vehicles.parts.guns.common.shooting_events import GunShootingEvents, GunShootingCoreIntegration, GunShootingEventsDebugger
 if typing.TYPE_CHECKING:
     from Vehicle import Vehicle
-__all__ = ('IGunComponent', 'IGunShootingEvents', 'IGunShootingEventsLogic', 'IGunShootingListener', 'IGunShootingListenerLogic', 'GunShootingEvents', 'GunShootingCGFIntegration', 'GunShootingEventsDebugger', 'GunShootingCustomIntegrations', 'createGunShootingEvents')
+__all__ = ('IGunComponent', 'IGunShootingEvents', 'IGunShootingEventsLogic', 'IGunShootingListener', 'IGunShootingListenerLogic', 'GunShootingEvents', 'GunShootingCoreIntegration', 'GunShootingEventsDebugger', 'GunShootingCustomIntegrations', 'createGunShootingEvents')
 
 @activateEventsContainer()
 def createGunShootingEvents(vehicle, component, **_):

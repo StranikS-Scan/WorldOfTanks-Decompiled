@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PveMinimapController.py
+from __future__ import absolute_import
 from constants import PVE_MINIMAP_DEFAULT_ZOOM, PVE_MINIMAP_DEFAULT_BORDERS
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from script_component.DynamicScriptComponent import DynamicScriptComponent

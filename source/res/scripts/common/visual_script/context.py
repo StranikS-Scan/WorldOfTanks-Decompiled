@@ -3,11 +3,11 @@
 from inspect import getargspec, ismethod, getmembers, getmro
 from functools import wraps
 from types import FunctionType
-from typing import Tuple, Callable, List, Sequence
+from typing import Tuple, Callable, Sequence
 from soft_exception import SoftException
 from misc import ASPECT
-from constants import IS_DEVELOPMENT
-if IS_DEVELOPMENT:
+from constants import IS_DEVELOPMENT, IS_PROCESS_REPLAY
+if IS_DEVELOPMENT and not IS_PROCESS_REPLAY:
     from debug_plan_loader import debugPlanLoader
 
 class UnsupportedMemberException(SoftException):

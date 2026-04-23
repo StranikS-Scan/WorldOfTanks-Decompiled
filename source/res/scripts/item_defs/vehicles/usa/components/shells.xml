@@ -2978,6 +2978,63 @@
       </damage>
     </armorSpalls>
   </_155mm_HE_M101E4>
+  <_155mm_AP_MPCS>
+    <id>	344	</id>
+    <userString>	#usa_vehicles:_155mm_AP_MPCS	</userString>
+    <icon>	ap	</icon>
+    <price>	1950	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	155	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeArmorPiercing	</effects>
+    <damage>
+      <armor>	800	</armor>
+      <devices>	210	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_155mm_AP_MPCS>
+  <_155mm_APCR_MPCS>
+    <id>	345	</id>
+    <userString>	#usa_vehicles:_155mm_APCR_MPCS	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	6400	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	155	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeAPCR	</effects>
+    <damage>
+      <armor>	800	</armor>
+      <devices>	210	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_155mm_APCR_MPCS>
+  <_155mm_HE_MPCS>
+    <id>	346	</id>
+    <userString>	#usa_vehicles:_155mm_HE_MPCS	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1300	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	155	</caliber>
+    <explosionRadius>	3.78	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeHighExplosive	</effects>
+    <damage>
+      <armor>	1100	</armor>
+      <devices>	210	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	3.78	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	550	</armor>
+        <devices>	105	</devices>
+      </damage>
+    </armorSpalls>
+  </_155mm_HE_MPCS>
   <_120mm_AP_T42_30>
     <id>	252	</id>
     <userString>	#usa_vehicles:_120mm_AP_T42_30	</userString>
@@ -7669,7 +7726,7 @@
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	120	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	largeAPCR	</effects>
+    <effects>	largeHollowCharge	</effects>
     <damage>
       <armor>	400	</armor>
       <devices>	165	</devices>
@@ -7822,6 +7879,63 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_120mm_AP_M358_T57>
+  <_120mm_AP_M358_T57_7x7>
+    <id>	353	</id>
+    <userString>	#usa_vehicles:_120mm_AP_M358_T57_7x7	</userString>
+    <icon>	ap	</icon>
+    <price>	1060	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_120mm_AP_M358_T57_7x7>
+  <_120mm_HEAT_M469_T57_7x7>
+    <id>	354	</id>
+    <userString>	#usa_vehicles:_120mm_HEAT_M469_T57_7x7	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_120mm_HEAT_M469_T57_7x7>
+  <_120mm_HE_T15E3_T57_7x7>
+    <id>	355	</id>
+    <userString>	#usa_vehicles:_120mm_HE_T15E3_T57_7x7	</userString>
+    <icon>	he_modern	</icon>
+    <price>	900	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	120	</caliber>
+    <explosionRadius>	2.42	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	515	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.42	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	260	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_120mm_HE_T15E3_T57_7x7>
   <_120mm_AP_M358E5>
     <id>	2079	</id>
     <userString>	#usa_vehicles:_120mm_AP_M358E5	</userString>

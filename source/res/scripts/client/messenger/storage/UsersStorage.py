@@ -3,9 +3,15 @@
 import logging
 from collections import deque, defaultdict
 import types
+import typing
 from messenger import normalizeGroupId
 from messenger.m_constants import USER_GUI_TYPE, BREAKERS_MAX_LENGTH, USER_TAG, MESSENGER_SCOPE, UserEntityScope
 from messenger.storage.local_cache import RevCachedStorage
+if typing.TYPE_CHECKING:
+    from typing import Dict, Iterable, Optional, Tuple, List
+    from messenger.m_constants import PROTO_TYPE
+    from messenger.proto.entities import UserEntity
+    from messenger.proto.interfaces import IEntityFindCriteria
 _logger = logging.getLogger(__name__)
 
 class UsersStorage(RevCachedStorage):

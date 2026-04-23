@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/python_macroses.py
+from __future__ import absolute_import
 import ResMgr
 from debug_utils import LOG_ERROR
 _MACROSES_XML = 'scripts/python_macroses.xml'

@@ -58,12 +58,10 @@ class Comp7WeeklyQuestPacker(object):
         bonusCondPriority = bonusCond or postBattle
         if bonusCondPriority:
             postBattlePriority = postBattle or bonusCond
-            result = (postBattlePriority.getIconKey(),
+            result = (postBattlePriority.getIconKey() or bonusCondPriority.getIconKey(),
              bonusCondPriority.getCurrent(),
              bonusCondPriority.getTotal() or 1,
              quest.getDescription() or bonusCondPriority.getDescrData())
-        rootBonusCond.unbind()
-        rootPostBattle.unbind()
         return result
 
     def __getQuestState(self, quest):
@@ -96,3 +94,16 @@ class Comp7WeeklyQuestWidgetPacker(Comp7WeeklyQuestPacker):
         if not isQuestAnimationSeen:
             model.setEarned(currentProgress - lastSeenProgress)
         return model
+
+
+class Comp7TokenQuestPacker(object):
+
+    @staticmethod
+    def getData(quest):
+        if quest:
+            tokenConditions = quest.accountReqs.getConditions().find('token')
+            if tokenConditions:
+                return (u'folder',
+                 tokenConditions.getReceivedCount(),
+                 tokenConditions.getNeededCount(),
+                 quest.getDescription())

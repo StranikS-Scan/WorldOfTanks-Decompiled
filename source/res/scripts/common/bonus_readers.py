@@ -16,6 +16,7 @@ from invoices_helpers import checkAccountDossierOperation
 from items import vehicles, tankmen, utils
 from items.components.c11n_constants import SeasonType
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
+from items.components.skills_constants import ROLES_BY_SKILLS
 from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE, INVOICE_LIMITS, ENTITLEMENT_OPS, DailyQuestsLevels, MAX_LOG_EXT_INFO_LEN
 from soft_exception import SoftException
 from customization_quests_common import validateCustomizationQuestToken
@@ -473,6 +474,9 @@ def __readBonus_vehicle(bonus, _name, section, eventType, checkLimit):
     if section.has_key('ammo'):
         ammo = section['ammo'].asString
         extra['ammo'] = [ int(item) for item in ammo.split(' ') ]
+    if section.has_key('eqsLayout'):
+        eqsLayout = section['eqsLayout'].asString
+        extra['eqsLayout'] = [ int(item) for item in eqsLayout.split(' ') ]
     if section.has_key('unlock'):
         extra['unlock'] = True
     if section.has_key('unlockModules'):
@@ -547,6 +551,12 @@ def __readBonus_tankmen(bonus, vehTypeCompDescr, section, eventType, checkLimit)
          'vehicleTypeID': subsection.readInt('vehicleTypeID', -1),
          'skills': subsection.readString('skills', '').split(),
          'freeSkills': subsection.readString('freeSkills', '').split()}
+        if subsection.has_key('bonusSkills'):
+            tmanData['bonusSkills'] = bonusSkills = {}
+            for bonusSkill in subsection.readString('bonusSkills', '').split():
+                skillRole = next((role for role in ROLES_BY_SKILLS[bonusSkill]))
+                bonusSkills.setdefault(skillRole, []).append(bonusSkill)
+
         if checkLimit and tmanData['freeXP'] > INVOICE_LIMITS.TMAN_FREEXP_MAX:
             raise SoftException('Invalid count of tankman free xp with amount %d when limit is %d.' % (tmanData['freeXP'], INVOICE_LIMITS.TMAN_FREEXP_MAX))
         if checkLimit and len(tmanData['skills']) > INVOICE_LIMITS.TMAN_SKILLS_MAX:

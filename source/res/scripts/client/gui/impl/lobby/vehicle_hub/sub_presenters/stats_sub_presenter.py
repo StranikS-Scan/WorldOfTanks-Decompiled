@@ -6,12 +6,12 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.gen.view_models.common.vehicle_mechanic_model import VehicleMechanicModel
 from gui.impl.gen.view_models.views.lobby.vehicle_hub.special_vehicle_param_model import SpecialVehicleParamModel
 from gui.impl.gen.view_models.views.lobby.vehicle_hub.views.sub_models.stats_model import StatsModel
-from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleMechanicModel
+from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleMechanicModel, clearVehicleMechanicModel
 from gui.impl.lobby.hangar.sub_views.veh_param_helpers import formatParameterValue
 from gui.impl.lobby.vehicle_hub.sub_presenters.sub_presenter_base import SubPresenterBase
 from gui.shared.gui_items import VEHICLE_ATTR_TO_KPI_NAME_MAP, KPI
-from gui.shared.items_parameters.formatters import getMeasureUnitsForParameter
 from gui.shared.items_parameters.comparator import PARAM_STATE
+from gui.shared.items_parameters.formatters import getMeasureUnitsForParameter
 from shared_utils import first
 
 class StatsSubPresenter(SubPresenterBase):
@@ -26,6 +26,8 @@ class StatsSubPresenter(SubPresenterBase):
         mechanics = sorted((m for m in currentVehicle.getVehicleMechanicItems() if m.priority >= VehicleMechanicModel.MIN_SPECIAL_PRIORITY), key=lambda m: m.priority, reverse=True)
         specialMechanic = first(mechanics)
         if specialMechanic is None:
+            with self.viewModel.transaction() as model:
+                clearVehicleMechanicModel(model.specialMechanic)
             return
         else:
             with self.viewModel.transaction() as model:

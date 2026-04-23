@@ -178,6 +178,7 @@ class SettingsCore(ISettingsCore):
          (GAME.SCROLL_SMOOTHING, options.StorageAccountSetting(GAME.SCROLL_SMOOTHING, storage=EXTENDED_GAME_2_SETTINGS_STORAGE)),
          (GAME.NEWBIE_PREBATTLE_HINTS, options.NewbiePrebattleHintsSetting(GAME.NEWBIE_PREBATTLE_HINTS, storage=EXTENDED_GAME_2_SETTINGS_STORAGE)),
          (GAME.NEWBIE_BATTLE_HINTS, options.NewbieBattleHintsSetting(GAME.NEWBIE_BATTLE_HINTS, storage=EXTENDED_GAME_2_SETTINGS_STORAGE)),
+         (GAME.W2GT_ENABLE, options.W2GTEnabledSetting(GAME.W2GT_ENABLE, storage=EXTENDED_GAME_2_SETTINGS_STORAGE)),
          (GRAPHICS.MONITOR, options.MonitorSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.WINDOW_SIZE, options.WindowSizeSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.RESOLUTION, options.ResolutionSetting(storage=VIDEO_SETTINGS_STORAGE)),

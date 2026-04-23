@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/macroses.py
+from __future__ import absolute_import
 import base64
-from urllib import quote_plus
+from future.moves.urllib.parse import quote_plus
 import BigWorld
 import constants
 from adisp import adisp_async, adisp_process

@@ -799,8 +799,6 @@ class AmmoController(MethodsRules, ViewComponentsController):
                     self.__gunSettings.reloadEffect.onClipLoad(timeLeft, shellsInClip, lastShell, canBeFull)
                 else:
                     self.__gunSettings.reloadEffect.updateReloadTime(timeLeft, shellsInClip, lastShell, canBeFull)
-            elif self.__gunSettings.clip.size == shellsInClip and not reloadStart:
-                self.__gunSettings.reloadEffect.onFull()
         self.updateShellChangeTime()
         return
 

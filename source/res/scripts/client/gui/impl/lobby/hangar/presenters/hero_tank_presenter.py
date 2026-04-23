@@ -6,11 +6,9 @@ import BigWorld
 import Math
 from GUI import WGMarkerPositionController
 from HeroTank import HeroTank
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
 from gui.impl.gen.view_models.views.lobby.hangar.hero_tank_model import HeroTankModel
 from gui.impl.pub.view_component import ViewComponent
-from gui.shared import EVENT_BUS_SCOPE, event_dispatcher
+from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import HangarVehicleEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
@@ -49,7 +47,7 @@ class HeroTankPresenter(ViewComponent[HeroTankModel]):
         return ((self.__itemsCache.onSyncCompleted, self.__onCacheResync), (self.__space.onSpaceDestroy, self.__clearMarkers))
 
     def _getListeners(self):
-        return ((CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleSelectedEntityUpdated), (HangarVehicleEvent.ON_HERO_TANK_LOADED, self.__fillHeroTank, EVENT_BUS_SCOPE.LOBBY))
+        return ((HangarVehicleEvent.ON_HERO_TANK_LOADED, self.__fillHeroTank, EVENT_BUS_SCOPE.LOBBY),)
 
     def __clearMarkers(self, _):
         if self.__markerCtrl is not None:
@@ -93,19 +91,6 @@ class HeroTankPresenter(ViewComponent[HeroTankModel]):
                 model.setName(descriptor.type.userString)
                 model.setType(descriptor.type.classTag)
         return
-
-    def __handleSelectedEntityUpdated(self, event):
-        ctx = event.ctx
-        if ctx['state'] == CameraMovementStates.FROM_OBJECT:
-            return
-        else:
-            entity = BigWorld.entities.get(ctx['entityId'], None)
-            if isinstance(entity, HeroTank):
-                descriptor = entity.typeDescriptor
-                if descriptor:
-                    vehicleCD = descriptor.type.compactDescr
-                    event_dispatcher.showHeroTankPreview(vehicleCD, previousBackAlias=VIEW_ALIAS.LOBBY_HANGAR)
-            return
 
     def __onCacheResync(self, reason, diff):
         if reason != CACHE_SYNC_REASON.CLIENT_UPDATE:

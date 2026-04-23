@@ -1332,6 +1332,7 @@ class QUESTS(object):
     BONUSNAME_EXCLUDED_MAPS = '#quests:bonusName/excluded_maps'
     BONUSNAME_FREE_EQUIPMENT_DEMOUNTING = '#quests:bonusName/free_equipment_demounting'
     BONUSNAME_EXCLUSIVE_VEHICLE = '#quests:bonusName/exclusive_vehicle'
+    BONUSNAME_EXCLUSIVE_VEHICLES = '#quests:bonusName/exclusive_vehicles'
     BONUSNAME_ATTENDANCE_REWARD = '#quests:bonusName/attendance_reward'
     BONUSNAME_PRO_BOOST = '#quests:bonusName/pro_boost'
     BONUSNAME_SERVICE_RECORD_CUSTOMIZATION = '#quests:bonusName/service_record_customization'
@@ -1830,6 +1831,7 @@ class QUESTS(object):
      BONUSNAME_EXCLUDED_MAPS,
      BONUSNAME_FREE_EQUIPMENT_DEMOUNTING,
      BONUSNAME_EXCLUSIVE_VEHICLE,
+     BONUSNAME_EXCLUSIVE_VEHICLES,
      BONUSNAME_ATTENDANCE_REWARD,
      BONUSNAME_PRO_BOOST,
      BONUSNAME_SERVICE_RECORD_CUSTOMIZATION,

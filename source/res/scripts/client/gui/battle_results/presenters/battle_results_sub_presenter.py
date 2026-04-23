@@ -32,10 +32,9 @@ class BattleResultsSubPresenter(SubModelPresenter):
         raise NotImplementedError
 
     def initialize(self, *args, **kwargs):
+        super(BattleResultsSubPresenter, self).initialize(*args, **kwargs)
         for subPresenter in self._subPresenters:
             subPresenter.initialize(*args, **kwargs)
-
-        super(BattleResultsSubPresenter, self).initialize(*args, **kwargs)
 
     def finalize(self):
         for subPresenter in self._subPresenters:

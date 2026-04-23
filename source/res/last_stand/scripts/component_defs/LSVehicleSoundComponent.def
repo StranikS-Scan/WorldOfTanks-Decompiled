@@ -1,0 +1,23 @@
+<LSVehicleSoundComponent.def>
+  <ClientMethods>
+    <onLootFailed>
+      <Arg>	STRING	</Arg>
+      <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
+      </Arg>
+    </onLootFailed>
+    <onLootSucceed>
+      <Arg>	STRING	</Arg>
+      <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
+      </Arg>
+    </onLootSucceed>
+    <onDamageReceived>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	INT16	</Arg>
+    </onDamageReceived>
+  </ClientMethods>
+  <Properties></Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+</LSVehicleSoundComponent.def>

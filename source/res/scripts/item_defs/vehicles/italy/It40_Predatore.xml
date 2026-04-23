@@ -82,7 +82,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	20214	</weight>
-    <maxHealth>	1320	</maxHealth>
+    <maxHealth>	1360	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	230	</maxHealth>
       <maxRegenHealth>	173	</maxRegenHealth>
@@ -1683,7 +1683,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	10500	</weight>
-      <maxHealth>	330	</maxHealth>
+      <maxHealth>	340	</maxHealth>
       <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
@@ -1736,17 +1736,17 @@
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <reloadTime>	13.5	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <clip>
             <count>	4	</count>
             <rate>	24	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	7 10 14 18	</reloadTime>
+            <reloadTime>	7 9 12 15	</reloadTime>
           </autoreload>
           <models>
             <undamaged>	vehicles/italy/It40_Predatore/normal/lod0/Gun_02.model	</undamaged>

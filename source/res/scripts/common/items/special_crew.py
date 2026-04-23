@@ -85,6 +85,10 @@ def isDarjeelingCrewCompleted(vehicleType, tankmenGroups):
     return _isCrewCompleted(vehicleType, tankmenGroups, SPECIAL_CREW_TAG.DARJEELING_CREW)
 
 
+def isErwinCrewCompleted(vehicleType, tankmenGroups):
+    return _isCrewCompleted(vehicleType, tankmenGroups, SPECIAL_CREW_TAG.HIPPO_CREW)
+
+
 def isYhaCrewCompleted(vehicleType, tankmenGroups):
     return _isCrewCompleted(vehicleType, tankmenGroups, SPECIAL_CREW_TAG.YHA)
 

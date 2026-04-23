@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/override_scaleform_views_manager.py
+from __future__ import absolute_import
 import importlib
 from constants import ARENA_GUI_TYPE
 from soft_exception import SoftException

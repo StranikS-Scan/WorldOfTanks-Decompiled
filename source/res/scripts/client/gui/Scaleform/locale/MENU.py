@@ -549,6 +549,12 @@ class MENU(object):
     TANK_PARAMS_DESIGNATORCOOLDOWNS = '#menu:tank_params/designatorCooldownS'
     TANK_PARAMS_DESIGNATORMARKDURATIONS = '#menu:tank_params/designatorMarkDurationS'
     TANK_PARAMS_DESIGNATORMARKEDENEMIESADDITIONALDAMAGE = '#menu:tank_params/designatorMarkedEnemiesAdditionalDamage'
+    TANK_PARAMS_LOWCHARGESHOTAVGDAMAGE = '#menu:tank_params/lowChargeShotAvgDamage'
+    TANK_PARAMS_LOWCHARGESHOTPENETRATION = '#menu:tank_params/lowChargeShotPenetration'
+    TANK_PARAMS_LOWCHARGESHOTRATEOFFIRE = '#menu:tank_params/lowChargeShotRateOfFire'
+    TANK_PARAMS_LOWCHARGESHOTDISPERTION = '#menu:tank_params/lowChargeShotDispertion'
+    TANK_PARAMS_LOWCHARGESHOTVELOCITY = '#menu:tank_params/lowChargeShotVelocity'
+    TANK_PARAMS_LOWCHARGESHOTBLOCKDURATION = '#menu:tank_params/lowChargeShotBlockDuration'
     TANK_PARAMS_MAXHEALTH = '#menu:tank_params/maxHealth'
     TANK_PARAMS_VEHICLEWEIGHT = '#menu:tank_params/vehicleWeight'
     TANK_PARAMS_ENGINEPOWER = '#menu:tank_params/enginePower'
@@ -666,6 +672,16 @@ class MENU(object):
     TANK_PARAMS_HEATINGPERSHOT = '#menu:tank_params/heatingPerShot'
     TANK_PARAMS_OVERHEATDURATION = '#menu:tank_params/overheatDuration'
     TANK_PARAMS_TIMETOOVERHEAT = '#menu:tank_params/timeToOverheat'
+    TANK_PARAMS_PROPELLANTPRELIMITDAMAGEBONUS = '#menu:tank_params/propellantPreLimitDamageBonus'
+    TANK_PARAMS_PROPELLANTPOSTLIMITDAMAGESPIKE = '#menu:tank_params/propellantPostLimitDamageSpike'
+    TANK_PARAMS_PROPELLANTPOSTLIMITDAMAGEBONUS = '#menu:tank_params/propellantPostLimitDamageBonus'
+    TANK_PARAMS_PROPELLANTCHARGINGPERSEC = '#menu:tank_params/propellantChargingPerSec'
+    TANK_PARAMS_PROPELLANTCHARGESPENDINGAFTERSHOT = '#menu:tank_params/propellantChargeSpendingAfterShot'
+    TANK_PARAMS_PROPELLANTCHARGELIMIT = '#menu:tank_params/propellantChargeLimit'
+    TANK_PARAMS_PROPELLANTDISCHARGINGPERSEC = '#menu:tank_params/propellantDischargingPerSec'
+    TANK_PARAMS_PROPELLANTPOSTLIMITDISPERSION = '#menu:tank_params/propellantPostLimitDispersion'
+    TANK_PARAMS_PROPELLANTPOSTLIMITAIMINGTIME = '#menu:tank_params/propellantPostLimitAimingTime'
+    TANK_PARAMS_PROPELLANTOVERCHARGESWITCHCOOLDOWN = '#menu:tank_params/propellantOverchargeSwitchCooldown'
     TANK_PARAMS_T = '#menu:tank_params/t'
     TANK_PARAMS_P = '#menu:tank_params/p'
     TANK_PARAMS_PT = '#menu:tank_params/pt'
@@ -674,6 +690,7 @@ class MENU(object):
     TANK_PARAMS_SPM = '#menu:tank_params/spm'
     TANK_PARAMS_S = '#menu:tank_params/s'
     TANK_PARAMS_YOH_S_S = '#menu:tank_params/yoh_s_s'
+    TANK_PARAMS_PERCENT_PER_S = '#menu:tank_params/percent_per_s'
     TANK_PARAMS_MM = '#menu:tank_params/mm'
     TANK_PARAMS_VAL = '#menu:tank_params/val'
     TANK_PARAMS_VPM = '#menu:tank_params/vpm'
@@ -708,6 +725,13 @@ class MENU(object):
     TANK_PARAMS_STAGEDJETBOOSTERSCHARGESCOUNT = '#menu:tank_params/stagedJetBoostersChargesCount'
     TANK_PARAMS_STAGEDJETBOOSTERSCHARGEDURATION = '#menu:tank_params/stagedJetBoostersChargeDuration'
     TANK_PARAMS_STAGEDJETBOOSTERSCOOLDOWNTIME = '#menu:tank_params/stagedJetBoostersCooldownTime'
+    TANK_PARAMS_WHEELEDDASHABILITYDURATION = '#menu:tank_params/wheeledDashAbilityDuration'
+    TANK_PARAMS_WHEELEDDASHENGINEPOWER = '#menu:tank_params/wheeledDashEnginePower'
+    TANK_PARAMS_WHEELEDDASHTOPSPEED = '#menu:tank_params/wheeledDashTopSpeed'
+    TANK_PARAMS_WHEELEDDASHABILITYRELOADTIME = '#menu:tank_params/wheeledDashAbilityReloadTime'
+    TANK_PARAMS_WHEELEDDASHABILITYRELOADTIMEBONUS = '#menu:tank_params/wheeledDashAbilityReloadTimeBonus'
+    TANK_PARAMS_WHEELEDDASHSPEEDLIMITS = '#menu:tank_params/wheeledDashSpeedLimits'
+    TANK_PARAMS_WHEELEDDASHREVERSESPEED = '#menu:tank_params/wheeledDashReverseSpeed'
     EXTRAPARAMS_HEADER = '#menu:extraParams/header'
     EXTRAPARAMS_MULTIDESC = '#menu:extraParams/multiDesc'
     EXTRAPARAMS_DESC = '#menu:extraParams/desc'
@@ -929,30 +953,34 @@ class MENU(object):
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RENTALISOVER_BODY = '#menu:headerButtons/fightBtn/tooltip/rentalIsOver/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_TELECOMRENTALISOVER_HEADER = '#menu:headerButtons/fightBtn/tooltip/telecomRentalIsOver/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_TELECOMRENTALISOVER_BODY = '#menu:headerButtons/fightBtn/tooltip/telecomRentalIsOver/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7OFFLINE_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7Offline/header'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7OFFLINE_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7Offline/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7NOTSET_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7NotSet/header'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7NOTSET_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7NotSet/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7LIGHTNOTSET_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7LightNotSet/header'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7LIGHTNOTSET_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7LightNotSet/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7DISABLED_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7Disabled/header'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7DISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7Disabled/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7LIGHTDISABLED_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7LightDisabled/header'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7LIGHTDISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7LightDisabled/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7BANISSET_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7BanIsSet/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7BANISSET_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7BanIsSet/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_WOTPLUSEXCLUSIVEUNAVAILABLE_HEADER = '#menu:headerButtons/fightBtn/tooltip/wotPlusExclusiveUnavailable/header'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_WOTPLUSEXCLUSIVEUNAVAILABLE_BODY = '#menu:headerButtons/fightBtn/tooltip/wotPlusExclusiveUnavailable/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7RATINGCALCULATION_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7RatingCalculation/header'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7RATINGCALCULATION_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7RatingCalculation/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7VEHLEVEL_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7VehLevel/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7VEHLEVEL_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7VehLevel/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7VEHLEVEL_DELIMITER = '#menu:headerButtons/fightBtn/tooltip/comp7VehLevel/delimiter'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7NOTENOUGHSUITABLEVEHICLES_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7NotEnoughSuitableVehicles/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7NOTENOUGHSUITABLEVEHICLES_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7NotEnoughSuitableVehicles/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7PREANNOUNCE_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7Preannounce/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7PREANNOUNCE_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7Preannounce/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7SEASONEND_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7SeasonEnd/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7QUALIFICATIONCALCULATION_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7QualificationCalculation/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7QUALIFICATIONCALCULATION_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7QualificationCalculation/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7NOTSET_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7NotSet/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7NOTSET_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7NotSet/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7DISABLED_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7Disabled/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7DISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7Disabled/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7OFFLINE_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7Offline/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7OFFLINE_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7Offline/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7UNSUITABLEVEHICLE_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7UnsuitableVehicle/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7LIGHTNOTSET_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7LightNotSet/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7LIGHTNOTSET_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7LightNotSet/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7LIGHTDISABLED_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7LightDisabled/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7LIGHTDISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7LightDisabled/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_WOTPLUSEXCLUSIVEUNAVAILABLE_HEADER = '#menu:headerButtons/fightBtn/tooltip/wotPlusExclusiveUnavailable/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_WOTPLUSEXCLUSIVEUNAVAILABLE_BODY = '#menu:headerButtons/fightBtn/tooltip/wotPlusExclusiveUnavailable/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7LIGHTVEHLEVEL_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7LightVehLevel/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7LIGHTVEHLEVEL_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7LightVehLevel/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7LIGHTVEHLEVEL_DELIMITER = '#menu:headerButtons/fightBtn/tooltip/comp7LightVehLevel/delimiter'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7PREANNOUNCE_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7Preannounce/header'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7PREANNOUNCE_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7Preannounce/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7VEHLEVEL_DELIMITER = '#menu:headerButtons/fightBtn/tooltip/comp7VehLevel/delimiter'
     HEADERBUTTONS_DEFAULTCOUNTER = '#menu:headerButtons/defaultCounter'
     HEADERBUTTONS_RATING = '#menu:headerButtons/rating'
     HEADERBUTTONS_PROFILE = '#menu:headerButtons/profile'
@@ -1223,12 +1251,15 @@ class MENU(object):
     MODULEINFO_HYDRAULICWHEELEDCHASSIS = '#menu:moduleInfo/hydraulicWheeledChassis'
     MODULEINFO_MAGAZINEGUN = '#menu:moduleInfo/magazineGun'
     MODULEINFO_OVERHEATGUN = '#menu:moduleInfo/overheatGun'
+    MODULEINFO_PROPELLANTAFTERBURNERGUN = '#menu:moduleInfo/propellantAfterburnerGun'
     MODULEINFO_ROCKETACCELERATION = '#menu:moduleInfo/rocketAcceleration'
     MODULEINFO_STAGEDJETBOOSTERS = '#menu:moduleInfo/stagedJetBoosters'
     MODULEINFO_TRACKWITHINTRACK = '#menu:moduleInfo/trackWithinTrack'
     MODULEINFO_TURBOSHAFTENGINE = '#menu:moduleInfo/turboshaftEngine'
     MODULEINFO_TWINGUN = '#menu:moduleInfo/twinGun'
     MODULEINFO_NONPIERCINGDAMAGELABEL = '#menu:moduleInfo/nonPiercingDamageLabel'
+    MODULEINFO_LOWCHARGESHOT = '#menu:moduleInfo/lowChargeShot'
+    MODULEINFO_WHEELEDDASH = '#menu:moduleInfo/wheeledDash'
     MODULEINFO_PARAMS_SHOTSPEED = '#menu:moduleInfo/params/shotSpeed'
     MODULEINFO_PARAMS_CHASSISREPAIRTIME = '#menu:moduleInfo/params/chassisRepairTime'
     MODULEINFO_PARAMS_CHASSISREPAIRTIMEYOH = '#menu:moduleInfo/params/chassisRepairTimeYoh'
@@ -1318,7 +1349,7 @@ class MENU(object):
     MODULEINFO_PARAMS_ENGINEPOWERPERTON = '#menu:moduleInfo/params/enginePowerPerTon'
     MODULEINFO_PARAMS_TURBOSHAFTENGINEPOWER = '#menu:moduleInfo/params/turboshaftEnginePower'
     MODULEINFO_PARAMS_ROCKETACCELERATIONENGINEPOWER = '#menu:moduleInfo/params/rocketAccelerationEnginePower'
-    MODULEINFO_PARAMS_NORMALISATION = '#menu:moduleInfo/params/normalisation'
+    MODULEINFO_PARAMS_NORMALIZATIONANGLE = '#menu:moduleInfo/params/normalizationAngle'
     MODULEINFO_PARAMS_RICOCHETANGLE = '#menu:moduleInfo/params/ricochetAngle'
     MODULEINFO_PARAMS_PENETRATIONLOSS = '#menu:moduleInfo/params/penetrationLoss'
     MODULEINFO_PARAMS_SCREENSARMORMULTIPLIER = '#menu:moduleInfo/params/screensArmorMultiplier'
@@ -1647,7 +1678,9 @@ class MENU(object):
     TRAINING_INVITATIONS_TITLE = '#menu:training/invitations/title'
     TRAINING_NOTIFICATIONTEXT_ONLYTIERX = '#menu:training/notificationText/onlyTierX'
     TRAINING_NOTIFICATIONTEXT_FREESUPPLIES = '#menu:training/notificationText/freeSupplies'
+    TRAINING_NOTIFICATIONTEXT_VEHICLEREQUIRED3 = '#menu:training/notificationText/vehicleRequired3'
     TRAINING_ADDITIONALINFO_FREESUPPLIESCOMP7 = '#menu:training/additionalInfo/freeSuppliesComp7'
+    TRAINING_ADDITIONALINFO_VEHICLEREQUIRED3 = '#menu:training/additionalInfo/vehicleRequired3'
     TANKMANRETRAININGBTN_FREE = '#menu:tankmanRetrainingBtn/free'
     VEHICLESCAROUSEL_CONTEXTMENU_VEHICLEINFO = '#menu:vehiclesCarousel/contextMenu/vehicleInfo'
     VEHICLESCAROUSEL_CONTEXTMENU_VEHICLESELL = '#menu:vehiclesCarousel/contextMenu/vehicleSell'
@@ -2805,6 +2838,12 @@ class MENU(object):
      TANK_PARAMS_DESIGNATORCOOLDOWNS,
      TANK_PARAMS_DESIGNATORMARKDURATIONS,
      TANK_PARAMS_DESIGNATORMARKEDENEMIESADDITIONALDAMAGE,
+     TANK_PARAMS_LOWCHARGESHOTAVGDAMAGE,
+     TANK_PARAMS_LOWCHARGESHOTPENETRATION,
+     TANK_PARAMS_LOWCHARGESHOTRATEOFFIRE,
+     TANK_PARAMS_LOWCHARGESHOTDISPERTION,
+     TANK_PARAMS_LOWCHARGESHOTVELOCITY,
+     TANK_PARAMS_LOWCHARGESHOTBLOCKDURATION,
      TANK_PARAMS_MAXHEALTH,
      TANK_PARAMS_VEHICLEWEIGHT,
      TANK_PARAMS_ENGINEPOWER,
@@ -2922,6 +2961,16 @@ class MENU(object):
      TANK_PARAMS_HEATINGPERSHOT,
      TANK_PARAMS_OVERHEATDURATION,
      TANK_PARAMS_TIMETOOVERHEAT,
+     TANK_PARAMS_PROPELLANTPRELIMITDAMAGEBONUS,
+     TANK_PARAMS_PROPELLANTPOSTLIMITDAMAGESPIKE,
+     TANK_PARAMS_PROPELLANTPOSTLIMITDAMAGEBONUS,
+     TANK_PARAMS_PROPELLANTCHARGINGPERSEC,
+     TANK_PARAMS_PROPELLANTCHARGESPENDINGAFTERSHOT,
+     TANK_PARAMS_PROPELLANTCHARGELIMIT,
+     TANK_PARAMS_PROPELLANTDISCHARGINGPERSEC,
+     TANK_PARAMS_PROPELLANTPOSTLIMITDISPERSION,
+     TANK_PARAMS_PROPELLANTPOSTLIMITAIMINGTIME,
+     TANK_PARAMS_PROPELLANTOVERCHARGESWITCHCOOLDOWN,
      TANK_PARAMS_T,
      TANK_PARAMS_P,
      TANK_PARAMS_PT,
@@ -2930,6 +2979,7 @@ class MENU(object):
      TANK_PARAMS_SPM,
      TANK_PARAMS_S,
      TANK_PARAMS_YOH_S_S,
+     TANK_PARAMS_PERCENT_PER_S,
      TANK_PARAMS_MM,
      TANK_PARAMS_VAL,
      TANK_PARAMS_VPM,
@@ -2963,7 +3013,14 @@ class MENU(object):
      TANK_PARAMS_STAGEDJETBOOSTERSROTATIONSPEED,
      TANK_PARAMS_STAGEDJETBOOSTERSCHARGESCOUNT,
      TANK_PARAMS_STAGEDJETBOOSTERSCHARGEDURATION,
-     TANK_PARAMS_STAGEDJETBOOSTERSCOOLDOWNTIME)
+     TANK_PARAMS_STAGEDJETBOOSTERSCOOLDOWNTIME,
+     TANK_PARAMS_WHEELEDDASHABILITYDURATION,
+     TANK_PARAMS_WHEELEDDASHENGINEPOWER,
+     TANK_PARAMS_WHEELEDDASHTOPSPEED,
+     TANK_PARAMS_WHEELEDDASHABILITYRELOADTIME,
+     TANK_PARAMS_WHEELEDDASHABILITYRELOADTIMEBONUS,
+     TANK_PARAMS_WHEELEDDASHSPEEDLIMITS,
+     TANK_PARAMS_WHEELEDDASHREVERSESPEED)
     BROWSER_CUSTOMTITLE_ENUM = (BROWSER_CUSTOMTITLE_FORT_OFFENSIVERESULT, BROWSER_CUSTOMTITLE_FORT_CONGRATULATION)
     LOADING_BATTLETYPES_DESC_ENUM = (LOADING_BATTLETYPES_DESC_0,
      LOADING_BATTLETYPES_DESC_1,

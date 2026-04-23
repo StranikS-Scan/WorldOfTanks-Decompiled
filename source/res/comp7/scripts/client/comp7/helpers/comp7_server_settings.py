@@ -24,12 +24,12 @@ class _Comp7QualificationConfig(settingsBlock('_Comp7QualificationConfig', ('bat
         return {'battlesNumber': 0}
 
 
-class Comp7Config(settingsBlock('Comp7Config', ('isEnabled', 'isShopEnabled', 'isTrainingEnabled', 'peripheryIDs', 'primeTimes', 'seasons', 'battleModifiersDescr', 'cycleTimes', 'roleEquipments', 'poiEquipments', 'numPlayers', 'levels', 'forbiddenClassTags', 'forbiddenVehTypes', 'squadRankRestriction', 'squadSizes', 'createVivoxTeamChannels', 'qualification', 'maps', 'remainingOfferTokensNotifications', 'clientEntitlementsCache', 'participantTokens'))):
+class Comp7Config(settingsBlock('Comp7Config', ('isEnabled', 'isShopEnabled', 'isTrainingEnabled', 'isVehicleBanEnabled', 'peripheryIDs', 'primeTimes', 'seasons', 'battleModifiersDescr', 'cycleTimes', 'roleEquipments', 'poiEquipments', 'numPlayers', 'levels', 'forbiddenClassTags', 'forbiddenVehTypes', 'squadRankRestriction', 'squadSizes', 'createVivoxTeamChannels', 'qualification', 'maps', 'remainingOfferTokensNotifications', 'clientEntitlementsCache', 'participantTokens', 'bans', 'vehicleCopiesInfo', 'minVehiclesRequired'))):
     __slots__ = ()
 
     @classmethod
     def defaults(cls):
-        return dict(isEnabled=False, isShopEnabled=False, isTrainingEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, battleModifiersDescr=(), cycleTimes={}, roleEquipments={}, poiEquipments={}, numPlayers=7, levels=[], forbiddenClassTags=set(), forbiddenVehTypes=set(), squadRankRestriction={}, squadSizes=[0, 0], createVivoxTeamChannels=False, qualification={}, maps=set(), remainingOfferTokensNotifications=[], clientEntitlementsCache={}, participantTokens=())
+        return dict(isEnabled=False, isShopEnabled=False, isTrainingEnabled=False, isVehicleBanEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, battleModifiersDescr=(), cycleTimes={}, roleEquipments={}, poiEquipments={}, numPlayers=7, levels=[], forbiddenClassTags=set(), forbiddenVehTypes=set(), squadRankRestriction={}, squadSizes=[0, 0], createVivoxTeamChannels=False, qualification={}, maps=set(), remainingOfferTokensNotifications=[], clientEntitlementsCache={}, participantTokens=(), bans={}, vehicleCopiesInfo={}, minVehiclesRequired=1)
 
     @classmethod
     def _preprocessData(cls, data):
@@ -153,6 +153,8 @@ class Comp7ServerSettings(object):
     def __updateComp7(self, targetSettings):
         config = targetSettings[Configs.COMP7_CONFIG.value]
         self.__comp7Config = self.__comp7Config.replace(copy.deepcopy(config))
+        if not BattleReplay.g_replayCtrl.isPlaying:
+            BattleReplay.g_replayCtrl.setServerSetting(Configs.COMP7_CONFIG.value, config)
         self.onComp7SettingsChanged(targetSettings)
 
     def __updateComp7PrestigeRanks(self, targetSettings):

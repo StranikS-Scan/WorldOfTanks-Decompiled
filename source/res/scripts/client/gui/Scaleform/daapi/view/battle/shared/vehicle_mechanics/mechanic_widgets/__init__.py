@@ -13,5 +13,8 @@ from .support_weapon_widget import SupportWeaponMechanicWidget
 from .target_designator_widget import TargetDesignatorMechanicWidget
 from .temp_overheat_gun_widget import TemperatureOverheatGunWidget
 from .temp_heating_zones_widget import TemperatureHeatingZonesGunWidget
+from .low_charge_shot_widget import LowChargeShotMechanicWidget
 from .staged_jet_boosters_widget import StagedJetBoostersMechanicWidget
-__all__ = ('ChargeShotMechanicWidget', 'ChargeableBurstMechanicWidget', 'ConcentrationMechanicWidget', 'PowerModeMechanicWidget', 'PillboxSiegeMechanicWidget', 'StanceDanceFightMechanicWidget', 'StanceDanceTurboMechanicWidget', 'StationaryReloadingMechanicWidget', 'SupportWeaponMechanicWidget', 'TargetDesignatorMechanicWidget', 'TemperatureOverheatGunWidget', 'TemperatureHeatingZonesGunWidget', 'StagedJetBoostersMechanicWidget')
+from .propellant_gun_widget import PropellantGunMechanicWidget
+from .wheeled_dash_widget import WheeledDashMechanicWidget
+__all__ = ('ChargeShotMechanicWidget', 'ChargeableBurstMechanicWidget', 'ConcentrationMechanicWidget', 'PowerModeMechanicWidget', 'PillboxSiegeMechanicWidget', 'StanceDanceFightMechanicWidget', 'StanceDanceTurboMechanicWidget', 'StationaryReloadingMechanicWidget', 'SupportWeaponMechanicWidget', 'TargetDesignatorMechanicWidget', 'TemperatureOverheatGunWidget', 'TemperatureHeatingZonesGunWidget', 'LowChargeShotMechanicWidget', 'StagedJetBoostersMechanicWidget', 'PropellantGunMechanicWidget', 'WheeledDashMechanicWidget')

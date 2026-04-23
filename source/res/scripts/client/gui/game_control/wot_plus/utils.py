@@ -7,81 +7,16 @@ from constants import ARENA_BONUS_TYPE
 from constants import QUEUE_TYPE, ARENA_BONUS_TYPE_TO_QUEUE_TYPE
 from gui.impl.gen.view_models.views.lobby.battle_results.additional_bonus_model import WotPlusTypeEnum
 from gui.prb_control.settings import PREBATTLE_TYPE_TO_QUEUE_TYPE
-from gui.server_events import bonuses as wotp_b
 from helpers import dependency
-from renewable_subscription_common.schema import Features
 from renewable_subscription_common.settings_constants import WotPlusTier
-from renewable_subscription_common.settings_helpers import SubscriptionSettingsStorage
 from skeletons.gui.game_control import IWotPlusController, IHangarGuiController, ISteamCompletionController
 if typing.TYPE_CHECKING:
     from constants import PREBATTLE_TYPE
-    from gui.server_events.bonuses import WoTPlusBonus
+    from renewable_subscription_common.settings_helpers import SubscriptionSettingsStorage
     from typing import Optional
 WOT_PLUS_TIER_MAP = {WotPlusTier.NONE: WotPlusTypeEnum.NONE,
  WotPlusTier.CORE: WotPlusTypeEnum.CORE,
  WotPlusTier.PRO: WotPlusTypeEnum.PRO}
-
-def _baseArgsProvider(storage):
-    return tuple()
-
-
-_FEATURE_TO_BONUS_ORDER_LIST = ((Features.GOLD_RESERVE, wotp_b.GoldBank, _baseArgsProvider),
- (Features.PASSIVE_CREW_XP, wotp_b.IdleCrewXP, _baseArgsProvider),
- (Features.BATTLE_BONUSES, wotp_b.WotPlusBattleBonuses, _baseArgsProvider),
- (Features.ADDITIONAL_XP, wotp_b.WotPlusAdditionalBonuses, _baseArgsProvider),
- (Features.FREE_EQUIPMENT_DEMOUNTING, wotp_b.FreeEquipmentDemounting, _baseArgsProvider),
- (Features.EXCLUDED_MAP, wotp_b.ExcludedMap, lambda storage: (storage.getExcludedMapsCount(),)),
- (Features.OPTIONAL_DEVICES_ASSISTANT, wotp_b.WotPlusOptionalDevicesAssistant, _baseArgsProvider),
- (Features.CREW_ASSISTANT, wotp_b.WotPlusOptionalDevicesAssistant, _baseArgsProvider),
- (Features.EXCLUSIVE_VEHICLE, wotp_b.WoTPlusExclusiveVehicle, _baseArgsProvider),
- (Features.DAILY_ATTENDANCE, wotp_b.AttendanceReward, _baseArgsProvider),
- (Features.BADGES, wotp_b.WotPlusBadges, _baseArgsProvider),
- (Features.PRO_BOOST, wotp_b.WotPlusProBoostBonus, _baseArgsProvider),
- (Features.SERVICE_RECORD_CUSTOMIZATION, wotp_b.WotPlusServiceCustomizationBonus, _baseArgsProvider),
- (Features.BATTLE_PASS, wotp_b.WotPlusProBattlePass, _baseArgsProvider))
-
-def _updateList(bonusList, bunusClass, bonusArguments):
-    incomingBonus = bunusClass(*bonusArguments)
-    for i, existedBonus in enumerate(bonusList):
-        if isinstance(existedBonus, bunusClass):
-            if incomingBonus.isBetterThan(existedBonus):
-                bonusList[i] = incomingBonus
-            return
-
-    bonusList.append(incomingBonus)
-
-
-def _updateBonusList(bonusList, featureIDList, storage):
-    for fID, bonusClass, argsProvider in _FEATURE_TO_BONUS_ORDER_LIST:
-        if fID in featureIDList:
-            _updateList(bonusList, bonusClass, argsProvider(storage))
-
-
-def _getAvailableBonusesForTier(storage, tierID):
-    bonuses = []
-    _updateBonusList(bonuses, storage.getTierAvailableFeatures(tierID), storage)
-    return bonuses
-
-
-def getAvailableCoreBonuses(storage):
-    return _getAvailableBonusesForTier(storage, WotPlusTier.CORE)
-
-
-def getAvailableProBonuses(storage):
-    return _getAvailableBonusesForTier(storage, WotPlusTier.PRO)
-
-
-def getUniqueAvailableProBonuses(storage):
-    bonuses = []
-    _updateBonusList(bonuses, storage.getTierAvailableFeatures(WotPlusTier.PRO).difference(storage.getTierAvailableFeatures(WotPlusTier.CORE)), storage)
-    return bonuses
-
-
-def getSubscriptionAvailableBonuses(storage):
-    bonuses = getAvailableCoreBonuses(storage)
-    _updateBonusList(bonuses, storage.getTierAvailableFeatures(WotPlusTier.PRO), storage)
-    return bonuses
-
 
 @dependency.replace_none_kwargs(wotPlusController=IWotPlusController)
 def getExcludedMapsPromoData(wotPlusController=None):
@@ -112,6 +47,18 @@ def getAdditionalXPPromoData(wotPlusController=None):
 
 
 @dependency.replace_none_kwargs(wotPlusController=IWotPlusController)
+def hasAdditionalXPPromoData(wotPlusController=None):
+    storage = wotPlusController.getSettingsStorage()
+    if storage.isAdditionalXPBonusEnabled():
+        for _, tierSettings in storage.reverseIterTiers():
+            additionalXPFeature = tierSettings.additionalXPBonusFeature
+            if additionalXPFeature.available and additionalXPFeature.applyCount > 0:
+                return True
+
+    return False
+
+
+@dependency.replace_none_kwargs(wotPlusController=IWotPlusController)
 def hasFreeDeluxeEquipDemountPromo(wotPlusController=None):
     storage = wotPlusController.getSettingsStorage()
     if not storage.isRenewableSubscriptionEnabled():
@@ -136,6 +83,21 @@ def hasFreeEquipDemountPromo(wotPlusController=None):
             return True
 
     return False
+
+
+@dependency.replace_none_kwargs(wotPlusController=IWotPlusController)
+def getMaxGoldReserveCapacityFromAllTiers(wotPlusController=None):
+    storage = wotPlusController.getSettingsStorage()
+    if not storage.isGoldReserveFeatureEnabled():
+        return 0
+    if storage.isGoldReserveFeatureAvailable():
+        return storage.getMaxGoldReserveCapacity()
+    maxCapacity = 0
+    for _, tierSettings in storage.iterTier():
+        if tierSettings.goldReserveFeature.available:
+            maxCapacity = max(maxCapacity, tierSettings.goldReserveFeature.maxCapacity)
+
+    return maxCapacity
 
 
 @dependency.replace_none_kwargs(wotPlusController=IWotPlusController, steamCompletionCtrl=ISteamCompletionController)

@@ -11,7 +11,7 @@
   <postProgressionTree>	role_MT_sniper	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	46	</forward>
+    <forward>	50	</forward>
     <backward>	20	</backward>
   </speedLimits>
   <invisibility>
@@ -66,7 +66,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	19213	</weight>
-    <maxHealth>	1200	</maxHealth>
+    <maxHealth>	1280	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1946,7 +1946,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8000	</weight>
-      <maxHealth>	300	</maxHealth>
+      <maxHealth>	320	</maxHealth>
       <rotationSpeed>	32	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -1979,14 +1979,15 @@
             <maxPitch>	0 8 0.055556 8 0.083333 8 0.375 8 0.402778 8 0.501532 8 0.514544 4 0.597222 4 0.625 8 0.916667 8 0.944444 8 1 8	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <reloadTime>	6.9	</reloadTime>
+          <reloadTime>	6.7	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.2	</aimingTime>
           <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionRadius>	0.29	</shotDispersionRadius>
           <models>
             <undamaged>	vehicles/german/G106_PzKpfwPanther_AusfF/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G106_PzKpfwPanther_AusfF/crash/lod0/Gun_01.model	</destroyed>
@@ -2432,8 +2433,8 @@
     <detailed>
       <engines>
         <Maybach_HL_230P30_2500rpm>
-          <smplEnginePower>	700	</smplEnginePower>
-          <smplFwMaxSpeed>	46	</smplFwMaxSpeed>
+          <smplEnginePower>	850	</smplEnginePower>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </Maybach_HL_230P30_2500rpm>
       </engines>
       <chassis>

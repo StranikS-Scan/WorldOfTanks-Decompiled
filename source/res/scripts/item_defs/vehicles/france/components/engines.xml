@@ -118,6 +118,8 @@
     <Moteur_EPC_version_S5_Fantome>	136	</Moteur_EPC_version_S5_Fantome>
     <Continental_AV_1790_8_Terrifiant>	137	</Continental_AV_1790_8_Terrifiant>
     <MB_838_CaM_500>	139	</MB_838_CaM_500>
+    <SOFAM_12_6S_D>	140	</SOFAM_12_6S_D>
+    <AMX_APX_E_P_C_Moteur_F>	141	</AMX_APX_E_P_C_Moteur_F>
     <SOFAM_8_Gxb_105_AM>	2000	</SOFAM_8_Gxb_105_AM>
     <Baudouin_6F_11_SRY_105_AM>	2001	</Baudouin_6F_11_SRY_105_AM>
     <Maybach_HL_230_TRM_P30_L50>	2002	</Maybach_HL_230_TRM_P30_L50>
@@ -808,6 +810,23 @@
       <rpm_min>	338	</rpm_min>
       <rpm_max>	2184	</rpm_max>
     </SOFAM_12GSds_B>
+    <SOFAM_12_6S_D>
+      <userString>	#france_vehicles:SOFAM_12_6S_D	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	120000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	900	</power>
+      <weight>	500	</weight>
+      <maxHealth>	345	</maxHealth>
+      <maxRegenHealth>	173	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	488	</rpm_min>
+      <rpm_max>	2035	</rpm_max>
+    </SOFAM_12_6S_D>
     <Moteur_EPC_version_S5>
       <userString>	#france_vehicles:Moteur_EPC_version_S5	</userString>
       <tags>	diesel	</tags>
@@ -877,6 +896,23 @@
       <rpm_min>	200	</rpm_min>
       <rpm_max>	2600	</rpm_max>
     </AMX_APX_E_P_C_Moteur>
+    <AMX_APX_E_P_C_Moteur_F>
+      <userString>	#france_vehicles:AMX_APX_E_P_C_Moteur_F	</userString>
+      <tags>	diesel	</tags>
+      <level>	11	</level>
+      <price>	150000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	1390	</power>
+      <weight>	1200	</weight>
+      <maxHealth>	380	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	11	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	200	</rpm_min>
+      <rpm_max>	2600	</rpm_max>
+    </AMX_APX_E_P_C_Moteur_F>
     <SOFAM_12_58>
       <userString>	#france_vehicles:SOFAM_12_58	</userString>
       <tags>	gasoline	</tags>
@@ -2654,7 +2690,7 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <power>	770	</power>
+      <power>	680	</power>
       <weight>	700	</weight>
       <maxHealth>	275	</maxHealth>
       <maxRegenHealth>	138	</maxRegenHealth>
@@ -2671,14 +2707,14 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
       <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
-      <power>	1050	</power>
+      <power>	950	</power>
       <weight>	2053	</weight>
       <maxHealth>	310	</maxHealth>
       <maxRegenHealth>	155	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	446	</rpm_min>
-      <rpm_max>	2170	</rpm_max>
+      <rpm_min>	474	</rpm_min>
+      <rpm_max>	2080	</rpm_max>
     </Continental_AV_1790_8_Terrifiant>
     <MB_838_CaM_500>
       <userString>	#france_vehicles:MB_838_CaM_500	</userString>

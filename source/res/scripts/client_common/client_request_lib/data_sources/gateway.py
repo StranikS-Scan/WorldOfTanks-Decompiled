@@ -748,5 +748,9 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = 'tmsis-wot/api/v2/tournaments/ingame_tournament/'
         return self._request_data(callback, url, method='GET')
 
+    def get_w2gt_tips(self, callback, headers, params):
+        url = '/w2gt/wgcg/battle_tips'
+        return self._request_data(callback, url, method='GET', headers=headers, get_data=params)
+
     def _get_formatted_language_code(self):
         return self.client_lang.replace('_', '-')

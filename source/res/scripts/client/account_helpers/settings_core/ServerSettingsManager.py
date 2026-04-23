@@ -15,6 +15,7 @@ from helpers import dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCache
 GUI_START_BEHAVIOR = 'guiStartBehavior'
+GAME_EXTENDED_2 = 'gameExtData2'
 
 class SETTINGS_SECTIONS(CONST_CONTAINER):
     GAME = 'GAME'
@@ -247,7 +248,8 @@ class ServerSettingsManager(object):
                                          GAME.GAMEPLAY_DEV_MAPS: 5,
                                          GAME.NEWBIE_PREBATTLE_HINTS: 6,
                                          GAME.NEWBIE_BATTLE_HINTS: 7,
-                                         GAME.ENABLE_SERVER_AIM: 8}, offsets={GAME.CUSTOMIZATION_DISPLAY_TYPE: Offset(2, 3 << 2)}),
+                                         GAME.ENABLE_SERVER_AIM: 8,
+                                         GAME.W2GT_ENABLE: 9}, offsets={GAME.CUSTOMIZATION_DISPLAY_TYPE: Offset(2, 3 << 2)}),
      SETTINGS_SECTIONS.GAMEPLAY: Section(masks={}, offsets={GAME.GAMEPLAY_MASK: Offset(0, 65535)}),
      SETTINGS_SECTIONS.GRAPHICS: Section(masks={GAME.LENS_EFFECT: 1}, offsets={}),
      SETTINGS_SECTIONS.SOUND: Section(masks={}, offsets={SOUND.ALT_VOICES: Offset(0, 255)}),
@@ -558,6 +560,7 @@ class ServerSettingsManager(object):
      SETTINGS_SECTIONS.GUI_START_BEHAVIOR: Section(masks={GuiSettingsBehavior.FREE_XP_INFO_DIALOG_SHOWED: 0,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED: 1,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_STARTED: 2,
+                                            GuiSettingsBehavior.W2GT_APPLIED: 3,
                                             GuiSettingsBehavior.CLAN_SUPPLY_INTRO_SHOWN: 4,
                                             GuiSettingsBehavior.CREW_MENTORING_LICENSE_AWARDS_SHOWN: 18,
                                             GuiSettingsBehavior.CREW_PE_WELCOME_SHOWN: 22,
@@ -1370,7 +1373,7 @@ class ServerSettingsManager(object):
         currentVersion = self.settingsCache.getVersion()
         data = {'gameData': {},
          'gameExtData': {},
-         'gameExtData2': {},
+         GAME_EXTENDED_2: {},
          'gameplayData': {},
          'controlsData': {},
          'aimData': {},
@@ -1435,7 +1438,7 @@ class ServerSettingsManager(object):
         clearGameExt = clear.get(SETTINGS_SECTIONS.GAME_EXTENDED, 0)
         if gameExtData or clearGameExt:
             settings[SETTINGS_SECTIONS.GAME_EXTENDED] = self._buildSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED, gameExtData) ^ clearGameExt
-        gameExtData = data.get('gameExtData2', {})
+        gameExtData = data.get(GAME_EXTENDED_2, {})
         clearGameExt = clear.get(SETTINGS_SECTIONS.GAME_EXTENDED_2, 0)
         if gameExtData or clearGameExt:
             settings[SETTINGS_SECTIONS.GAME_EXTENDED_2] = self._buildSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED_2, gameExtData) ^ clearGameExt

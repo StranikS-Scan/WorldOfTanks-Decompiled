@@ -103,7 +103,7 @@ class WindowSettings(object):
 
 
 class Window(PyObjectEntity):
-    __slots__ = ('onStatusChanged', '__windowStatus', 'onShowingStatusChanged', 'onFocusChanged', 'onReady', 'onSizeChanged', 'onPositionChanged', '__showingStatus', '__isReady', '__isShown', '__isFocused', '__weakref__', '__em')
+    __slots__ = ('onStatusChanged', '__windowStatus', 'onShowingStatusChanged', 'onFocusChanged', 'onReady', 'onSizeChanged', 'onPositionChanged', '__showingStatus', '__isReady', '__isShown', '__isFocused', '__em')
 
     def __init__(self, settings):
         if not settings.name:

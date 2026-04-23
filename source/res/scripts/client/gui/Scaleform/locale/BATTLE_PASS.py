@@ -337,6 +337,8 @@ class BATTLE_PASS(object):
     REWARD_POSTBATTLE_PROGRESS_POINTSAUX = '#battle_pass:reward/postBattle/progress/pointsAux'
     REWARD_POSTBATTLE_PROGRESS_POINTS = '#battle_pass:reward/postBattle/progress/points'
     REWARD_POSTBATTLE_PROGRESS_POINTS_BATTLE = '#battle_pass:reward/postBattle/progress/points/battle'
+    REWARD_POSTBATTLE_PROGRESS_POINTS_WOTPLUSPRO = '#battle_pass:reward/postBattle/progress/points/wotPlusPro'
+    REWARD_POSTBATTLE_PROGRESS_POINTS_WOTPLUSCORE = '#battle_pass:reward/postBattle/progress/points/wotPlusCore'
     REWARD_POSTBATTLE_PROGRESS_POINTS_QUEST = '#battle_pass:reward/postBattle/progress/points/quest'
     REWARD_POSTBATTLE_PROGRESS_POINTS_BONUS = '#battle_pass:reward/postBattle/progress/points/bonus'
     REWARD_POSTBATTLE_PROGRESS_TOOLTIP = '#battle_pass:reward/postBattle/progress/tooltip'

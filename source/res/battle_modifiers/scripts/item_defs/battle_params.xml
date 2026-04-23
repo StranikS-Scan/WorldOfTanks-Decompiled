@@ -658,6 +658,16 @@
     <dataType>	string	</dataType>
     <domain>	gun	</domain>
   </gunEffects>
+  <shotPrefabEffects>
+    <scope>	base cell client	</scope>
+    <dataType>	string	</dataType>
+    <domain>	shell	</domain>
+  </shotPrefabEffects>
+  <gunPrefabEffects>
+    <scope>	client	</scope>
+    <dataType>	string	</dataType>
+    <domain>	gun	</domain>
+  </gunPrefabEffects>
   <destructionEffect>
     <scope>	client	</scope>
     <dataType>	string	</dataType>

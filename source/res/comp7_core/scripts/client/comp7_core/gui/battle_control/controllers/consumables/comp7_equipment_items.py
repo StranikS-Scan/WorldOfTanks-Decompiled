@@ -36,6 +36,15 @@ class Comp7RoleSkillCooldown(_ActivationError):
         super(Comp7RoleSkillCooldown, self).__init__('comp7RoleSkillCooldown', {'name': name})
 
 
+class Comp7FastRechargeGunTemperatureLow(_ActivationError):
+
+    def __new__(cls, name):
+        return super(Comp7FastRechargeGunTemperatureLow, cls).__new__(cls, 'comp7FastRechargeGunTemperatureLow', {'name': name})
+
+    def __init__(self, name):
+        super(Comp7FastRechargeGunTemperatureLow, self).__init__('comp7FastRechargeGunTemperatureLow', {'name': name})
+
+
 class _RoleSkillVSItem(_VisualScriptItem):
     __FORBIDDEN_STAGES_TO_ACTIVATE = (EQUIPMENT_STAGES.COOLDOWN,
      EQUIPMENT_STAGES.ACTIVE,

@@ -104,9 +104,9 @@ class EventDispatcher(object):
         self.addTrainingToCarousel()
         self.__showTrainingList()
 
-    def loadTrainingRoom(self):
+    def loadTrainingRoom(self, silently=False):
         self.addTrainingToCarousel(False)
-        self.__showTrainingRoom()
+        self.__showTrainingRoom(silently=silently)
 
     def loadEpicTrainingList(self):
         self.addEpicTrainingToCarousel()
@@ -361,9 +361,9 @@ class EventDispatcher(object):
     def __showSquadWindow(self, prbType, showInvitesWindow=False, toggleUI=False):
         self.platoonCtrl.evaluateVisibility(toggleUI=toggleUI)
 
-    def __showTrainingRoom(self):
+    def __showTrainingRoom(self, silently=False):
         from gui.Scaleform.daapi.view.lobby.trainings.states import TrainingRoomState
-        TrainingRoomState.goTo()
+        TrainingRoomState.goTo(silently=silently)
 
     def __returnToTrainingRoom(self, event=None):
         self.__prbDispatcher.doAction()

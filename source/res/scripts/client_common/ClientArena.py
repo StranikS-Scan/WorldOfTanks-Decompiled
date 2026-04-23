@@ -84,10 +84,10 @@ class ClientArena(object):
      ARENA_UPDATE.RADAR_INFO_RECEIVED: '_ClientArena__onRadarInfoReceived'}
     DEFAULT_ARENA_WORLD_ID = -1
     VEHICLES_AWAIT_TIMEOUT = 5.0
+    NONE_POSITION = (-32768, -32768)
 
-    def __init__(self, arenaUniqueID, arenaTypeID, arenaBonusType, arenaGuiType, arenaExtraData, spaceID):
+    def __init__(self, arenaUniqueID, arenaTypeID, arenaBonusType, arenaGuiType, arenaExtraData, spaceID, avatar):
         self.__vehicles = {}
-        self.__vehicleIndexToId = {}
         self.__positions = {}
         self.__statistics = {}
         self.__teamBasesData = defaultdict(dict)
@@ -148,6 +148,7 @@ class ClientArena(object):
         self.gameSpace = CGF.World(spaceID)
         self.componentSystem = assembler.createComponentSystem(self, self.bonusType, self.arenaType)
         self._awaitVehiclesScope = AsyncScope()
+        self.__avatar = avatar
         return
 
     settings = property(lambda self: self.__settings)
@@ -184,19 +185,6 @@ class ClientArena(object):
             getattr(self, delegateName)(argStr)
         self.componentSystem.update(updateType, argStr)
         return
-
-    def updatePositions(self, indices, positions):
-        self.__positions.clear()
-        if indices:
-            lenPos = len(positions)
-            lenInd = len(indices)
-            indexToId = self.__vehicleIndexToId
-            for i in xrange(0, lenInd):
-                if indices[i] in indexToId:
-                    positionTuple = (positions[2 * i], 0, positions[2 * i + 1])
-                    self.__positions[indexToId[indices[i]]] = positionTuple
-
-        self.onPositionsUpdated()
 
     def updateTeamHealthPercent(self, percents):
         self.onTeamHealthPercentUpdate(percents)
@@ -250,6 +238,10 @@ class ClientArena(object):
 
     def hasBonusCap(self, bonusCap):
         return BONUS_CAPS.checkAny(self.bonusType, bonusCap, specificOverrides=self.bonusCapsOverrides)
+
+    @property
+    def isAvatarReady(self):
+        return self.__avatar.userSeesWorld()
 
     def __setupBBColliders(self):
         if BigWorld.wg_getSpaceBounds().length == 0.0:
@@ -330,10 +322,6 @@ class ClientArena(object):
         self.onInteractiveStats(stats)
         LOG_DEBUG_DEV('[RESPAWN] onInteractiveStats', stats)
 
-    def __rebuildIndexToId(self):
-        vehs = self.__vehicles
-        self.__vehicleIndexToId = dict(zip(range(len(vehs)), sorted(vehs.keys())))
-
     def runVsePlan(self, planName, params, key='', context=None):
         if self._vsePlans is not None:
             self._vsePlans.startPlan(planName, params, key, context)
@@ -362,6 +350,8 @@ class ClientArena(object):
             info['name'] = info['name'] if info['name'] is not None else ''
         if 'fakeName' in info:
             info['fakeName'] = info['fakeName'] if info['fakeName'] is not None else ''
+        if 'position' in info:
+            info['position'] = info['position']
         return info
 
     def getVehicleType(self, vehInfo, compDescr):
@@ -387,7 +377,6 @@ class ClientArena(object):
         vehInfo = dict(vehInfo)
         vehID = vehInfo.pop('vehicleID')
         self.__vehicles[vehID] = self.__preprocessVehicleInfo(vehID, vehInfo)
-        self.__rebuildIndexToId()
         self.__statistics[vehID] = {'frags': vehInfo['frags'],
          'tkills': vehInfo['tkills']}
         if notify:
@@ -411,6 +400,25 @@ class ClientArena(object):
         self.onFogOfWarEnabled(self.__isFogOfWarEnabled)
         self.__hasFogOfWarHiddenVehicles = bool(fogOfWar & 2)
         self.onFogOfWarHiddenVehiclesSet(self.__hasFogOfWarHiddenVehicles)
+
+    def invalidateVehiclesPosition(self):
+        for vehID, vehInfo in self.__vehicles.iteritems():
+            self.__setVehiclePosition(vehID, vehInfo['position'])
+
+        self.onPositionsUpdated()
+
+    def updateVehiclesPosition(self, vehID, position):
+        if not self.isAvatarReady:
+            return
+        self.__setVehiclePosition(vehID, position)
+        self.onPositionsUpdated()
+
+    def __setVehiclePosition(self, vehID, position):
+        if position != self.NONE_POSITION:
+            self.__positions[vehID] = (position[0], 0, position[1])
+        else:
+            self.__positions.pop(vehID, None)
+        return
 
     def updateVehicleIsAlive(self, vehID, compDescr, isPlayerVehicle):
         vehInfo = self.__vehicles[vehID]

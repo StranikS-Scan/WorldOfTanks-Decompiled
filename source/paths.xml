@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/2.2.0.0 Common Test</Path>
-    <Path mask="*.wotmod" mode="recursive" root="res">./mods/2.2.0.0 Common Test</Path>
+    <Path cacheSubdirs="true">./res_mods/2.2.1.1</Path>
+    <Path mask="*.wotmod" mode="recursive" root="res">./mods/2.2.1.1</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part3.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
@@ -65,14 +65,10 @@
       <Package type="hd">./res/packages/128_last_frontier_v_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/13_erlenberg.pkg</Package>
       <Package type="hd">./res/packages/13_erlenberg_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/140_fall_tanks.pkg</Package>
-      <Package type="hd">./res/packages/140_fall_tanks_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/141_dash_to_go.pkg</Package>
-      <Package type="hd">./res/packages/141_dash_to_go_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/142_road_to_dash.pkg</Package>
-      <Package type="hd">./res/packages/142_road_to_dash_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/14_siegfried_line.pkg</Package>
       <Package type="hd">./res/packages/14_siegfried_line_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/14_siegfried_line_ls26_1.pkg</Package>
+      <Package type="hd">./res/packages/14_siegfried_line_ls26_1_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/14_siegfried_line_nom.pkg</Package>
       <Package type="hd">./res/packages/14_siegfried_line_nom_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/17_munchen.pkg</Package>
@@ -139,6 +135,8 @@
       <Package type="hd">./res/packages/h33_comp7_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/hangar_v4.pkg</Package>
       <Package type="hd">./res/packages/hangar_v4_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/hangar_v4_last_stand.pkg</Package>
+      <Package type="hd">./res/packages/hangar_v4_last_stand_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part2.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part3.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part1.pkg</Package>
@@ -149,7 +147,6 @@
       <Package type="sandbox,sd,hd">./res/packages/comp7_light.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/content_exclude.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/event_platform.pkg</Package>
-      <Package type="sandbox,sd,hd">./res/packages/fall_tanks.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/frontline.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/fun_random.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/gui-part4.pkg</Package>
@@ -158,8 +155,11 @@
       <Package type="sandbox,sd,hd">./res/packages/gui-part1.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/in_battle_achievements.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/la_pinger.pkg</Package>
+      <Package type="sandbox,sd,hd">./res/packages/last_stand.pkg</Package>
+      <Package type="hd">./res/packages/last_stand_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/misc.pkg</Package>
       <Package type="hd">./res/packages/misc_hd.pkg</Package>
+      <Package type="sandbox,sd,hd">./res/packages/open_bundle.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/particles.pkg</Package>
       <Package type="hd">./res/packages/particles_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/prime_gaming_content.pkg</Package>
@@ -193,15 +193,15 @@
       <Package type="hd">./res/packages/vehicles_level_08_hd-part2.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_08_hd-part3.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_08_hd-part1.pkg</Package>
-      <Package type="sd,hd">./res/packages/vehicles_level_09-part1.pkg</Package>
       <Package type="sd,hd">./res/packages/vehicles_level_09-part2.pkg</Package>
+      <Package type="sd,hd">./res/packages/vehicles_level_09-part1.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_09_hd-part2.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_09_hd-part1.pkg</Package>
       <Package type="sd,hd">./res/packages/vehicles_level_10-part1.pkg</Package>
-      <Package type="sd,hd">./res/packages/vehicles_level_10-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/vehicles_level_10-part3.pkg</Package>
-      <Package type="hd">./res/packages/vehicles_level_10_hd-part3.pkg</Package>
+      <Package type="sd,hd">./res/packages/vehicles_level_10-part2.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_10_hd-part1.pkg</Package>
+      <Package type="hd">./res/packages/vehicles_level_10_hd-part3.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_10_hd-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/vehicles_level_11.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_11_hd.pkg</Package>

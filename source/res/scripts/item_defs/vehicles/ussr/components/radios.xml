@@ -65,6 +65,7 @@
     <RTY_RCEHb_CFE_T>	238	</RTY_RCEHb_CFE_T>
     <RTY_RCEHb_A>	240	</RTY_RCEHb_A>
     <R_123_1476>	241	</R_123_1476>
+    <R_113C>	243	</R_113C>
     <_10RK_IGR>	60001	</_10RK_IGR>
     <_12RT_IGR>	60002	</_12RT_IGR>
     <R113_IGR>	60003	</R113_IGR>
@@ -78,6 +79,7 @@
     <R113M_7x7>	503	</R113M_7x7>
     <_10RK-26_c_7x7>	504	</_10RK-26_c_7x7>
     <R113M_c_7x7>	505	</R113M_c_7x7>
+    <R113M_140_7x7>	506	</R113M_140_7x7>
     <Development_Radio>	65000	</Development_Radio>
     <_9RM_MapsTraining_Dummy_LT_1>	12	</_9RM_MapsTraining_Dummy_LT_1>
     <_12LL_MapsTraining_Dummy_SPG_1>	33	</_12LL_MapsTraining_Dummy_SPG_1>
@@ -498,6 +500,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </R113M>
+    <R113M_140_7x7>
+      <userString>	#ussr_vehicles:R113M_140_7x7	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52200	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R113M_140_7x7>
     <R113M_7x7>
       <userString>	#ussr_vehicles:R113M_7x7	</userString>
       <tags></tags>
@@ -534,6 +548,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </R113A>
+    <R_113C>
+      <userString>	#ussr_vehicles:R_113C	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	230	</maxHealth>
+      <maxRegenHealth>	115	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </R_113C>
     <R113K>
       <userString>	#ussr_vehicles:R113K	</userString>
       <tags></tags>

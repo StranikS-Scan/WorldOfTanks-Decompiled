@@ -17,6 +17,7 @@ from gui.shared.gui_items.Tankman import crewMemberRealSkillLevel
 from helpers import dependency
 from items.components.skills_constants import SKILL_INDICES_ORDERED
 from skeletons.gui.app_loader import IAppLoader
+from skeletons.gui.impl import IGuiLoader
 if typing.TYPE_CHECKING:
     from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_view import CrewSkillsManager, VehicleCompareConfiguratorMain
 
@@ -37,6 +38,7 @@ propsGetters = {ModelProps.NAME: None,
 class CompareSkillsPanelView(ViewImpl):
     __slots__ = ('__toolTipMgr', '__cmpConf')
     __appLoader = dependency.descriptor(IAppLoader)
+    __guiLoader = dependency.descriptor(IGuiLoader)
 
     def __init__(self):
         settings = ViewSettings(R.views.lobby.vehicle_compare.CompareSkillsPanelView())
@@ -94,6 +96,10 @@ class CompareSkillsPanelView(ViewImpl):
     def _finalize(self):
         self.__toolTipMgr = None
         self.__cmpConf = None
+        view = self.__guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.vehicle_compare.SkillSelectView())
+        if view is not None:
+            window = view.getParentWindow()
+            window.destroy()
         super(CompareSkillsPanelView, self)._finalize()
         return
 

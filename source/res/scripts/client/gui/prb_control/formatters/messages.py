@@ -5,6 +5,8 @@ from constants import JOIN_FAILURE_NAMES, KICK_REASON_NAMES, PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from gui import SystemMessages
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.prb_control import prb_getters
 from gui.prb_control.settings import PREBATTLE_RESTRICTION, CTRL_ENTITY_TYPE
 from gui.prb_control.settings import UNIT_ERROR_NAMES, UNIT_BROWSER_ERROR_NAMES
@@ -34,6 +36,10 @@ def getPrbKickedFromQueueMessage(prbTypeName):
     if guiName != 'squad':
         guiName = 'default'
     return i18n.makeString('#system_messages:prebattle_start_failed/kickedFromQueue/{0:>s}'.format(guiName))
+
+
+def getNotEnoughSuitableVehiclesLimitMessage():
+    return backport.text(R.strings.system_messages.prebattle.limits.notEnoughVehicles())
 
 
 def getVehicleNotPresentMessage():
@@ -94,7 +100,8 @@ def getRotationVehicleIsLockedMessage():
     return i18n.makeString('#system_messages:rotation/vehicleIsLocked')
 
 
-_INVALID_VEHICLE_STATE = {PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT: getVehicleNotPresentMessage,
+_INVALID_VEHICLE_STATE = {PREBATTLE_RESTRICTION.LIMIT_NOT_ENOUGH_SUITABLE_VEHICLES: getNotEnoughSuitableVehiclesLimitMessage,
+ PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT: getVehicleNotPresentMessage,
  PREBATTLE_RESTRICTION.VEHICLE_NOT_READY: getVehicleNotReadyMessage,
  PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED: getVehicleNotSupportedMessage,
  PREBATTLE_RESTRICTION.VEHICLE_EPIC_ONLY: getVehicleEpicOnlyMessage,

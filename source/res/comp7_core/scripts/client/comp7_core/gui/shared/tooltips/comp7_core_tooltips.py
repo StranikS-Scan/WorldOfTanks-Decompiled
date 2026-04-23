@@ -231,6 +231,7 @@ class Comp7FastRechargeTooltipPreprocessor(TooltipPreprocessor):
     @staticmethod
     def processParams(params):
         params['gunReloadTimeBuff'] = tuple((getPercentFromFloat(1.0 - b, 1) for b in params['gunReloadTimeBuff']))
+        params['gunTemperatureBuff'] = tuple((abs(b) for b in params['gunTemperatureBuff']))
         return params
 
 

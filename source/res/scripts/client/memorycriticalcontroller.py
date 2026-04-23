@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/MemoryCriticalController.py
+from __future__ import absolute_import
 from functools import partial
 import BigWorld
 import Event
@@ -48,8 +49,7 @@ class MemoryCriticalController(object):
         while 1:
             (textureSettings[textureMinQuality][1] is False or isLowPreset and textureSettings[textureMinQuality][2] is True) and textureMinQuality -= 1
 
-        if textureMinQuality < texQuality:
-            textureMinQuality = texQuality
+        textureMinQuality = max(textureMinQuality, texQuality)
         if texQuality >= textureMinQuality:
             message = (1, 'insufficient_memory_please_reboot')
             self.__messages.append(message)

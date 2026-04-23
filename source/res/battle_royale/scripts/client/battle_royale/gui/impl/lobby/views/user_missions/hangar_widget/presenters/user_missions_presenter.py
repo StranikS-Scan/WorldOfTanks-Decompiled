@@ -7,6 +7,7 @@ from battle_royale.gui.impl.lobby.views.user_missions.hangar_widget.presenters.p
 from battle_royale.gui.impl.lobby.views.user_missions.hangar_widget.presenters.quests_presenter import BattleRoayaleQuestsPresenter
 from battle_royale.skeletons.game_controller import IBRProgressionOnTokensController
 from gui.impl.lobby.user_missions.hangar_widget.presenters.battle_pass_presenter import BattlePassPresenter
+from battle_royale.gui.impl.lobby.tooltips.battle_pass_in_progress_tooltip import BattleRoyaleBattlePassInProgressTooltipView
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.hangar.user_missions_widget_model import UserMissionsWidgetModel
 from gui.impl.lobby.hangar.presenters.user_missions_presenter import UserMissionsPresenter
@@ -15,7 +16,9 @@ if typing.TYPE_CHECKING:
     from typing import Optional
 
 class _BattlePassPresenter(BattlePassPresenter, BattleRoyaleOverlapCtrlMixin):
-    pass
+
+    def _createInProgressTooltipView(self):
+        return BattleRoyaleBattlePassInProgressTooltipView()
 
 
 class BattleRoyaleUserMissionsPresenter(UserMissionsPresenter):

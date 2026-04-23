@@ -2,8 +2,11 @@
 # Embedded file name: scripts/client/skeletons/gui/battle_session.py
 import typing
 if typing.TYPE_CHECKING:
+    from typing import Iterable, Optional
+    from ClientArena import ClientArena
     from gui.armor_flashlight.interfaces import IArmorFlashlightBattleController
-    from gui.battle_control.arena_info.interfaces import IAppearanceCacheController, IPointsOfInterestController, IMapZonesController, IProgressionController, IRadarController, ISpawnController, IArenaVehiclesController, IVehicleCountController, IOverrideSettingsController, IVSEHUDSettingsController, IBattleSpamController, IPrebattleSetupController
+    from gui.battle_control.arena_info.arena_vos import VehicleArenaInfoVO
+    from gui.battle_control.arena_info.interfaces import IAppearanceCacheController, IPointsOfInterestController, IMapZonesController, IProgressionController, IRadarController, ISpawnController, IArenaVehiclesController, IVehicleCountController, IOverrideSettingsController, IVSEHUDSettingsController, IBattleSpamController, IPrebattleSetupController, IW2GTBattleController
     from gui.battle_control.controllers.consumables.ammo_ctrl import AmmoController
     from gui.battle_control.controllers.consumables.equipment_ctrl import EquipmentsController
     from gui.battle_control.controllers.vehicles_tracking import IVehiclesTrackingController
@@ -257,6 +260,10 @@ class IDynamicControllersLocator(object):
     def shotsResultSound(self):
         raise NotImplementedError
 
+    @property
+    def w2GTBattleController(self):
+        raise NotImplementedError
+
 
 class ISquadInvitationsHandler(object):
     __slots__ = ()
@@ -395,6 +402,9 @@ class IClientArenaVisitor(object):
         raise NotImplementedError
 
     def hasDogTag(self):
+        raise NotImplementedError
+
+    def hasW2gtTag(self):
         raise NotImplementedError
 
     def hasDynSquads(self):
@@ -558,6 +568,9 @@ class IArenaDataProvider(object):
         raise NotImplementedError
 
     def getVehiclesInfoIterator(self):
+        raise NotImplementedError
+
+    def getAllyVehiclesInfoIterator(self):
         raise NotImplementedError
 
     def getVehiclesStatsIterator(self):

@@ -18,7 +18,8 @@ VEHICLE_MECHANIC_CONTROLS = {VehicleMechanic.ROCKET_ACCELERATION: createSimpleAc
  VehicleMechanic.CHARGE_SHOT: createSimpleActivationControl,
  VehicleMechanic.TARGET_DESIGNATOR: createSimpleActivationControl,
  VehicleMechanic.STANCE_DANCE: createStanceDanceControl,
- VehicleMechanic.STATIONARY_RELOAD: createSimpleActivationControl}
+ VehicleMechanic.STATIONARY_RELOAD: createSimpleActivationControl,
+ VehicleMechanic.PROPELLANT_GUN: createSimpleActivationControl}
 
 def createMechanicControls(vehicleDescriptor):
     return tuple((VEHICLE_MECHANIC_CONTROLS[mechanic](mechanic) for mechanic in getVehicleDescrMechanics(vehicleDescriptor) if mechanic in VEHICLE_MECHANIC_CONTROLS))

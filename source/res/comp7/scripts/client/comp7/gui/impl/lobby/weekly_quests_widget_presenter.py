@@ -81,11 +81,9 @@ class WeeklyQuestsWidgetPresenter(TooltipPositionerMixin, Comp7OverlapCtrlMixin,
             if quests.oldQuest:
                 questCardModel = self.__updateQuestData(quests.oldQuest, quests.numCompletedBattleQuests)
                 modelQuests.addViewModel(questCardModel)
-                questCardModel.unbind()
             if quests.newQuest and self.__getQuestsState() == State.ACTIVE:
                 questCardModel = self.__updateQuestData(quests.newQuest, quests.numCompletedBattleQuests + 1)
                 modelQuests.addViewModel(questCardModel)
-                questCardModel.unbind()
             modelQuests.invalidate()
 
     def __updateQuestData(self, quest, questNumber):
@@ -119,7 +117,6 @@ class WeeklyQuestsWidgetPresenter(TooltipPositionerMixin, Comp7OverlapCtrlMixin,
         _, showCompletedAnimation = getLastSeenQuestData(quest.getID())
         if showCompletedAnimation and not packedQuest.getIsCompleted():
             setLastSeenQuestData(quest.getID(), (packedQuest.getCurrentProgress(), False))
-        packedQuest.unbind()
 
     @staticmethod
     def __onGoToWeeklyQuests():

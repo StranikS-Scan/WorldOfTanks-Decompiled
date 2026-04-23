@@ -1731,6 +1731,9 @@
       <unspottedData>
         <Type>	KILL_CAM_ATTACKER_UNSPOTTED	</Type>
       </unspottedData>
+      <mechanicsInfo>
+        <Type>	PYTHON	</Type>
+      </mechanicsInfo>
     </Properties>
   </KILL_CAM_ATTACKER>
   <KILL_CAM_VICTIM>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -1760,6 +1763,9 @@
       <causeOfDeath>
         <Type>	STRING	</Type>
       </causeOfDeath>
+      <mechanicsInfo>
+        <Type>	PYTHON	</Type>
+      </mechanicsInfo>
     </Properties>
   </KILL_CAM_VICTIM>
   <KILL_CAM_PROJECTILE_UNSPOTTED>	FIXED_DICT	  <Properties>
@@ -2686,6 +2692,11 @@
       <fogOfWar>
         <Type>	UINT8	</Type>
       </fogOfWar>
+      <position>
+        <Type>	TUPLE	  <of>	INT16	</of>
+          <size>	2	</size>
+        </Type>
+      </position>
       <__generation>
         <Type>	UINT32	</Type>
       </__generation>
@@ -3066,6 +3077,22 @@
       </endTime>
     </Properties>
   </CONCENTRATION_MODE_STATUS>
+  <WHEELED_DASH_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <state>
+        <Type>	UINT8	</Type>
+      </state>
+      <baseTime>
+        <Type>	FLOAT32	</Type>
+      </baseTime>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+      <isReducedCooldown>
+        <Type>	BOOL	</Type>
+      </isReducedCooldown>
+    </Properties>
+  </WHEELED_DASH_STATUS>
   <ACCURACY_STACKS_STATE>	FIXED_DICT	  <Properties>
       <curLevel>
         <Type>	UINT8	</Type>
@@ -3160,6 +3187,35 @@
       </endTime>
     </Properties>
   </CHARGE_SHOT_PRIVATE_STATE>
+  <LOW_CHARGE_SHOT_STATE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <reloadingState>
+        <Type>	UINT8	</Type>
+      </reloadingState>
+      <baseTime>
+        <Type>	FLOAT32	</Type>
+      </baseTime>
+      <timeLeft>
+        <Type>	FLOAT32	</Type>
+      </timeLeft>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+      <lowChargeTime>
+        <Type>	FLOAT32	</Type>
+      </lowChargeTime>
+    </Properties>
+  </LOW_CHARGE_SHOT_STATE>
+  <LOW_CHARGE_SHOT_PUBLIC_STATE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <visualState>
+        <Type>	UINT8	</Type>
+      </visualState>
+      <fullShotChangeTime>
+        <Type>	FLOAT32	</Type>
+      </fullShotChangeTime>
+    </Properties>
+  </LOW_CHARGE_SHOT_PUBLIC_STATE>
   <STANCE_DANCE_STATE>	FIXED_DICT	  <Properties>
       <state>
         <Type>	UINT8	</Type>
@@ -3279,4 +3335,35 @@
       </networkID>
     </Properties>
   </VEHICLE_HIERARCHY_INFO>
+  <PROPELLANT_GUN_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <state>
+        <Type>	UINT8	</Type>
+      </state>
+      <chargeStageID>
+        <Type>	UINT8	</Type>
+      </chargeStageID>
+      <chargeProgress>
+        <Type>	FLOAT32	</Type>
+      </chargeProgress>
+      <isOverchargeEnabled>
+        <Type>	BOOL	</Type>
+      </isOverchargeEnabled>
+      <isSwitchCooldownActive>
+        <Type>	BOOL	</Type>
+      </isSwitchCooldownActive>
+      <updateTimestamp>
+        <Type>	FLOAT32	</Type>
+      </updateTimestamp>
+      <isForbiddenShell>
+        <Type>	BOOL	</Type>
+      </isForbiddenShell>
+      <lastShotTimestamp>
+        <Type>	FLOAT32	</Type>
+      </lastShotTimestamp>
+      <lastShotCharge>
+        <Type>	FLOAT32	</Type>
+      </lastShotCharge>
+    </Properties>
+  </PROPELLANT_GUN_STATUS>
 </alias.xml>

@@ -1,0 +1,16 @@
+<LSObeliskInfoComponent.def>
+  <ClientMethods>
+    <onDamageReceived></onDamageReceived>
+    <onDeath></onDeath>
+  </ClientMethods>
+  <CellMethods></CellMethods>
+  <Properties>
+    <isPresent>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isPresent>
+  </Properties>
+  <ofEntity>
+    <ArenaInfo></ArenaInfo>
+  </ofEntity>
+</LSObeliskInfoComponent.def>

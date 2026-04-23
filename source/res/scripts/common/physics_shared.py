@@ -240,7 +240,8 @@ def getDefaultWheeledChassisXPhysicsCfg():
                  'warningMaxHealthCritEngine': 50.0,
                  'power': 1.0,
                  'impulse': 0.0},
-     'isWheeledOnSpotRotation': False})
+     'isWheeledOnSpotRotation': False,
+     'isWheeledOnMoveRotation': False})
 
 
 def getDefaultTankVehicleXPhysicsShapeCfg():
@@ -596,7 +597,7 @@ def configurePhysicsMode(cfg, typeDesc, gravityFactor):
     cfg['angVelocityFactor0'] = cfg['chassis']['angVelocityFactor0']
     cfg['axleCount'] = cfg['chassis']['axleCount']
     if cfg['vehiclePhysicsType'] == VEHICLE_PHYSICS_TYPE.WHEELED_TECH:
-        for key in ('axleSteeringLockAngles', 'axleSteeringAngles', 'axleSteeringSpeed', 'fwdFrictionOnAxisModifiers', 'sideFrictionOnAxisModifiers', 'sideFrictionConstantRatioOnAxis', 'sinkageResistOnAxis', 'axleIsLeading', 'axleCanBeRised', 'wheelRiseHeight', 'wheelRiseSpeed', 'enableRail', 'handbrakeBrakeForce', 'brokenWheelRollingFrictionModifier', 'noSignalBrakeForce', 'afterDeathBrakeForce', 'afterDeathMinSpeedForImpulse', 'afterDeathImpulse', 'jumpingFactor', 'jumpingMinForce', 'slowTurnChocker', 'airPitchReduction', 'wheelToHullRollTransmission', 'steeringSpeedInTurnMultiplier', 'isWheeledOnSpotRotation'):
+        for key in ('axleSteeringLockAngles', 'axleSteeringAngles', 'axleSteeringSpeed', 'fwdFrictionOnAxisModifiers', 'sideFrictionOnAxisModifiers', 'sideFrictionConstantRatioOnAxis', 'sinkageResistOnAxis', 'axleIsLeading', 'axleCanBeRised', 'wheelRiseHeight', 'wheelRiseSpeed', 'enableRail', 'handbrakeBrakeForce', 'brokenWheelRollingFrictionModifier', 'noSignalBrakeForce', 'afterDeathBrakeForce', 'afterDeathMinSpeedForImpulse', 'afterDeathImpulse', 'jumpingFactor', 'jumpingMinForce', 'slowTurnChocker', 'airPitchReduction', 'wheelToHullRollTransmission', 'steeringSpeedInTurnMultiplier', 'isWheeledOnSpotRotation', 'isWheeledOnMoveRotation'):
             cfg[key] = cfg['chassis'][key]
 
     cfg['gimletGoalWOnSpot'] = cfg['chassis']['gimletGoalWOnSpot']

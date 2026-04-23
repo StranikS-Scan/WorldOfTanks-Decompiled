@@ -3,6 +3,7 @@
 
 
 class MECHANICS_WIDGET_CONST(object):
+    DEPLOYING = 'deploying'
     PREPARING = 'preparing'
     ACTIVE = 'active'
     PASSIVE_ACTIVE = 'passiveActive'
@@ -12,7 +13,8 @@ class MECHANICS_WIDGET_CONST(object):
     PRIME = 'prime'
     TRANSITION = 'transition'
     EMPTY = 'empty'
-    MECHANICS_WIDGET_STATE = [PREPARING,
+    MECHANICS_WIDGET_STATE = [DEPLOYING,
+     PREPARING,
      ACTIVE,
      PASSIVE_ACTIVE,
      READY,

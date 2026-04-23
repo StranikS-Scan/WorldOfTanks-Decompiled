@@ -41,7 +41,9 @@ class _Comp7PlayerValidator(UnitPlayerValidator):
             return ValidationResult(False, UNIT_RESTRICTION.BAN_IS_SET, None)
         else:
             ranks = self.__getPlayersRanks()
-            return ValidationResult(False, UNIT_RESTRICTION.RANK_RESTRICTION, None) if ranks and max(ranks) - min(ranks) > self.__comp7Ctrl.getPlatoonRankRestriction() else super(_Comp7PlayerValidator, self)._validate()
+            if ranks and max(ranks) - min(ranks) > self.__comp7Ctrl.getPlatoonRankRestriction():
+                return ValidationResult(False, UNIT_RESTRICTION.RANK_RESTRICTION, None)
+            return ValidationResult(False, UNIT_RESTRICTION.LIMIT_NOT_ENOUGH_SUITABLE_VEHICLES, None) if not self.__comp7Ctrl.hasEnoughReadyToFightVehicles() else super(_Comp7PlayerValidator, self)._validate()
 
     def __getPlayersRanks(self):
         playersRanks = []

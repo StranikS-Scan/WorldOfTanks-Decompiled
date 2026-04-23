@@ -25,9 +25,9 @@ class PageState(Enum):
 
 
 class TournamentViewModel(ViewModel):
-    __slots__ = ('onWatchStreamingOne', 'onWatchStreamingTwo', 'onGoToShop', 'onGoToTokenStore', 'onRefresh', 'onClose')
+    __slots__ = ('onWatchStreamingOne', 'onWatchStreamingTwo', 'onGoToShop', 'onGoToTokenStore', 'onRefresh', 'onClose', 'pollServerTime')
 
-    def __init__(self, properties=8, commands=6):
+    def __init__(self, properties=12, commands=7):
         super(TournamentViewModel, self).__init__(properties=properties, commands=commands)
 
     def getOverviewState(self):
@@ -48,50 +48,78 @@ class TournamentViewModel(ViewModel):
     def setPrizeFund(self, value):
         self._setNumber(2, value)
 
-    def getIsRefreshing(self):
+    def getIsDynamicPrizePool(self):
         return self._getBool(3)
 
-    def setIsRefreshing(self, value):
+    def setIsDynamicPrizePool(self, value):
         self._setBool(3, value)
 
+    def getLastPrizePoolUpdate(self):
+        return self._getNumber(4)
+
+    def setLastPrizePoolUpdate(self, value):
+        self._setNumber(4, value)
+
+    def getIsRefreshing(self):
+        return self._getBool(5)
+
+    def setIsRefreshing(self, value):
+        self._setBool(5, value)
+
+    def getTokenStoreAvailabilityTimestamp(self):
+        return self._getNumber(6)
+
+    def setTokenStoreAvailabilityTimestamp(self, value):
+        self._setNumber(6, value)
+
+    def getServerTimestamp(self):
+        return self._getNumber(7)
+
+    def setServerTimestamp(self, value):
+        self._setNumber(7, value)
+
     def getSchedule(self):
-        return self._getArray(4)
+        return self._getArray(8)
 
     def setSchedule(self, value):
-        self._setArray(4, value)
+        self._setArray(8, value)
 
     @staticmethod
     def getScheduleType():
         return MatchModel
 
     def getFundDistribution(self):
-        return self._getArray(5)
+        return self._getArray(9)
 
     def setFundDistribution(self, value):
-        self._setArray(5, value)
+        self._setArray(9, value)
 
     @staticmethod
     def getFundDistributionType():
         return TeamModel
 
     def getStreamingWithDrops(self):
-        return Streaming(self._getString(6))
+        return Streaming(self._getString(10))
 
     def setStreamingWithDrops(self, value):
-        self._setString(6, value.value)
+        self._setString(10, value.value)
 
     def getStreamingWithoutDrops(self):
-        return Streaming(self._getString(7))
+        return Streaming(self._getString(11))
 
     def setStreamingWithoutDrops(self, value):
-        self._setString(7, value.value)
+        self._setString(11, value.value)
 
     def _initialize(self):
         super(TournamentViewModel, self)._initialize()
         self._addStringProperty('overviewState')
         self._addStringProperty('pageState')
         self._addNumberProperty('prizeFund', 0)
+        self._addBoolProperty('isDynamicPrizePool', False)
+        self._addNumberProperty('lastPrizePoolUpdate', 0)
         self._addBoolProperty('isRefreshing', False)
+        self._addNumberProperty('tokenStoreAvailabilityTimestamp', 0)
+        self._addNumberProperty('serverTimestamp', 0)
         self._addArrayProperty('schedule', Array())
         self._addArrayProperty('fundDistribution', Array())
         self._addStringProperty('streamingWithDrops')
@@ -102,3 +130,4 @@ class TournamentViewModel(ViewModel):
         self.onGoToTokenStore = self._addCommand('onGoToTokenStore')
         self.onRefresh = self._addCommand('onRefresh')
         self.onClose = self._addCommand('onClose')
+        self.pollServerTime = self._addCommand('pollServerTime')

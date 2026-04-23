@@ -16,13 +16,14 @@ class FlagWindow(WindowImpl):
 
 
 class FlagView(ViewImpl, IRoutableView):
+    _VIEW_SETTINGS_LAYOUT_ID = R.views.mono.post_battle.flag()
+    _VIEW_MODEL = FlagViewModel
 
     def __init__(self):
-        from gui.impl.lobby.battle_results.states import PostBattleResultsState
-        settings = ViewSettings(R.views.mono.post_battle.flag())
-        settings.model = FlagViewModel()
+        settings = ViewSettings(self._VIEW_SETTINGS_LAYOUT_ID)
+        settings.model = self._VIEW_MODEL()
         lsm = getLobbyStateMachine()
-        self.__router = SubstateRouter(lsm, self, lsm.getStateByCls(PostBattleResultsState))
+        self.__router = SubstateRouter(lsm, self, lsm.getStateByCls(self._getLsmStateClass()))
         super(FlagView, self).__init__(settings)
 
     def _onLoading(self, *args, **kwargs):
@@ -34,6 +35,10 @@ class FlagView(ViewImpl, IRoutableView):
         self.__router = None
         super(FlagView, self)._finalize()
         return
+
+    def _getLsmStateClass(self):
+        from gui.impl.lobby.battle_results.states import PostBattleResultsState
+        return PostBattleResultsState
 
     def getRouterModel(self):
         return self.viewModel.router

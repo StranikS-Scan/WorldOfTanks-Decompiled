@@ -10,7 +10,6 @@ from constants import PREMIUM_TYPE
 from frameworks.wulf import ViewFlags
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getWotPlusShopUrl, getBuyPremiumUrl
 from gui.clans.clan_cache import g_clanCache
-from gui.game_control.wot_plus.utils import getAvailableCoreBonuses, getUniqueAvailableProBonuses
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.page.header.premium_account_subscription_model import PremiumTypeEnum, PremiumStateEnum
 from gui.impl.gen.view_models.views.lobby.page.header.subscriptions_model import SubscriptionsModel
@@ -20,8 +19,9 @@ from gui.impl.gen.view_models.views.lobby.page.header.wot_plus_subscription_bonu
 from gui.impl.gen.view_models.views.lobby.page.header.wot_plus_subscription_model import WotPlusStateEnum, WotPlusTypeEnum, WotPlusPeriodicityEnum
 from gui.impl.pub.view_component import ViewComponent
 from gui.platform.base.statuses.constants import StatusTypes
+from gui.server_events.bonuses_wot_plus import getAvailableCoreBonuses, getUniqueAvailableProBonuses
 from gui.shared.event_dispatcher import showDashboardView, showSubscriptionsPage, showShop, closeViewsWithFlags
-from gui.shared.missions.packers.bonus import getLocalizedBonusName
+from gui.shared.missions.packers.bonus import getDefaultBonusPacker
 from helpers import dependency, isPlayerAccount
 from renewable_subscription_common.schema import renewableSubscriptionsConfigSchema
 from renewable_subscription_common.settings_constants import WotPlusState, WotPlusTier
@@ -149,9 +149,12 @@ class UserAccountPresenter(ViewComponent[UserAccountModel]):
         return
 
     def __updateBadgeInfo(self, _=None):
-        badge = self.__badgesController.getPrefix()
-        selected = badge is not None
-        self.viewModel.userInfo.setBadgeID(badge.badgeID if selected else 0)
+        self.__setBadge(self.viewModel.userInfo.setBadgeID, self.__badgesController.getPrefix())
+        self.__setBadge(self.viewModel.userInfo.setSuffixBadgeID, self.__badgesController.getSuffix())
+
+    @staticmethod
+    def __setBadge(setter, badge):
+        setter(badge.badgeID if badge is not None and badge.isSelected else 0)
         return
 
     def __updatePremiumInfo(self):
@@ -162,6 +165,7 @@ class UserAccountPresenter(ViewComponent[UserAccountModel]):
             model.setExpiryTime(accountStats.activePremiumExpiryTime)
 
     def __updateWotPlusInfo(self):
+        hasSteamAccount = self.__steamRegistrationCtrl.isSteamAccount
         with self.viewModel.subscriptions.wotPlus.transaction() as model:
             model.setType(_WOT_PLUS_TIER_MAP[self.__wotPlusCtrl.getTier()])
             model.setState(_WOT_PLUS_STATES_MAP[self.__wotPlusCtrl.getState()])
@@ -171,7 +175,6 @@ class UserAccountPresenter(ViewComponent[UserAccountModel]):
             self.__setModelBenefits(getAvailableCoreBonuses, model.getBenefits)
             self.__setModelBenefits(getUniqueAvailableProBonuses, model.getProBenefits)
         with self.viewModel.subscriptions.transaction() as model:
-            hasSteamAccount = self.__steamRegistrationCtrl.isSteamAccount
             model.setIsSteamPlatform(hasSteamAccount)
             model.setIsCnRealm(constants.IS_CHINA)
 
@@ -181,11 +184,12 @@ class UserAccountPresenter(ViewComponent[UserAccountModel]):
     def __setModelBenefitsList(self, enabledBonuses, benefitsList):
         benefitsList.clear()
         benefitsList.reserve(len(enabledBonuses))
+        bonusPacker = getDefaultBonusPacker()
         for bonus in enabledBonuses:
             with WotPlusSubscriptionBonusModel() as wotPlusSubBonus:
-                bonusName = bonus.getName()
-                wotPlusSubBonus.setLabel(getLocalizedBonusName(bonusName))
-                wotPlusSubBonus.setType(bonusName)
+                packedBonus = bonusPacker.pack(bonus)[0]
+                wotPlusSubBonus.setLabel(packedBonus.getLabel())
+                wotPlusSubBonus.setType(packedBonus.getName())
                 benefitsList.addViewModel(wotPlusSubBonus)
 
         benefitsList.invalidate()

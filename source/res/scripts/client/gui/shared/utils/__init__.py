@@ -88,6 +88,8 @@ GUN_CAN_BE_AUTO_SHOOT = 9
 GUN_AUTO_SHOOT = 10
 GUN_CAN_BE_TWIN_GUN = 11
 GUN_TWIN_GUN = 12
+GUN_CAN_BE_LOW_CHARGE_SHOT = 13
+LOW_CHARGE_SHOT = 14
 EXTRA_MODULE_INFO = 'extraModuleInfo'
 FIELD_SPECIALIZATIONS = 'specs'
 FIELD_HIGHLIGHT_TYPE = 'highlightType'
@@ -122,7 +124,9 @@ def code2str(code):
         return 'Player dossier is hidden'
     if code == AccountCommands.RES_CENTER_DISCONNECTED:
         return 'Dossiers are unavailable'
-    return 'Identical requests rate limit cooldown' if code == AccountCommands.RES_RATE_LIMIT_COOLDOWN else 'Unknown error code'
+    if code == AccountCommands.RES_RATE_LIMIT_COOLDOWN:
+        return 'Identical requests rate limit cooldown'
+    return 'Vehicle is locked for this request type' if code == AccountCommands.RES_LOCKED_VEHICLE else 'Unknown error code'
 
 
 def isVehicleObserver(vehTypeCompDescr):

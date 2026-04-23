@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/TeamInfoInBattleVehicleSwitch.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import VehicleSelectionPlayerStatus
 from helpers import dependency
@@ -50,7 +52,7 @@ class TeamInfoInBattleVehicleSwitch(ScriptComponent):
     @staticmethod
     def __getNewValues(prevValues, newValues):
         updatedValues = {}
-        for vehId, value in newValues.iteritems():
+        for vehId, value in viewitems(newValues):
             if vehId not in prevValues or prevValues[vehId] != value:
                 updatedValues[vehId] = value
 

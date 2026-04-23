@@ -1,5 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/SoundGroups.py
+from __future__ import absolute_import
+from functools import total_ordering
+from future.utils import lrange, viewitems, viewvalues
 import BigWorld
 import WWISE
 import Event
@@ -24,7 +27,7 @@ DSP_LOWPASS_LOW = 7000
 DSP_LOWPASS_HI = 20000
 DSP_SEEKSPEED = 200000
 SOUND_ENABLE_STATUS_DEFAULT = 0
-SOUND_ENABLE_STATUS_VALUES = range(3)
+SOUND_ENABLE_STATUS_VALUES = lrange(3)
 MASTER_VOLUME_DEFAULT = 0.5
 CUSTOM_MP3_EVENTS = ('sixthSense', 'soundExploring')
 
@@ -43,6 +46,7 @@ class SoundModes(object):
     DEFAULT_NATION = 'default'
     MEDIA_PATH = None
 
+    @total_ordering
     class SoundModeDesc(object):
 
         def __init__(self, dataSection):
@@ -62,6 +66,18 @@ class SoundModes(object):
 
             return
 
+        def __repr__(self):
+            return 'SoundModeDesc<name={}; lang={}; visible={}>'.format(self.name, self.voiceLanguage, not self.invisible)
+
+        def __eq__(self, other):
+            return self.__compare(other) == 0
+
+        def __lt__(self, other):
+            return self.__compare(other) < 0
+
+        def __hash__(self):
+            return id(self)
+
         def getIsValid(self, soundModes):
             if self.__isValid is None:
                 self.__isValid = True
@@ -72,10 +88,7 @@ class SoundModes(object):
 
             return self.__isValid
 
-        def __repr__(self):
-            return 'SoundModeDesc<name=%s; lang=%s; visible=%s>' % (self.name, self.voiceLanguage, not self.invisible)
-
-        def __cmp__(self, other):
+        def __compare(self, other):
             if not isinstance(other, SoundModes.SoundModeDesc):
                 return -1
             if self.name == 'default':
@@ -161,7 +174,7 @@ class SoundModes(object):
         for overridePreset in overrides:
             nationalPresetToOverride = mainNationalPresets.get(overridePreset.name)
             if nationalPresetToOverride is not None:
-                for nationName, soundMode in overridePreset.mapping.iteritems():
+                for nationName, soundMode in viewitems(overridePreset.mapping):
                     nationalPresetToOverride.mapping[nationName] = soundMode
 
             LOG_WARNING("Failed to override nationalPreset '%s'" % overridePreset.name)
@@ -207,7 +220,7 @@ class SoundModes(object):
         return success
 
     def setNationalMapping(self, nationToSoundModeMapping):
-        for soundModeName in nationToSoundModeMapping.itervalues():
+        for soundModeName in viewvalues(nationToSoundModeMapping):
             soundModeDesc = self.__modes.get(soundModeName)
             if soundModeDesc is None:
                 LOG_WARNING("SoundMode '%s' is not found" % soundModeName)
@@ -278,7 +291,7 @@ class SoundGroups(object):
         if not userPrefs.has_key(Settings.KEY_SOUND_PREFERENCES):
             userPrefs.write(Settings.KEY_SOUND_PREFERENCES, '')
             self.__masterVolume = MASTER_VOLUME_DEFAULT
-            for categoryName in self.__categories.iterkeys():
+            for categoryName in self.__categories:
                 self.__volumeByCategory[categoryName] = defCategoryVolumes.get(categoryName, 1.0)
 
             self.savePreferences()
@@ -294,7 +307,7 @@ class SoundGroups(object):
             self.__volumeByCategory['ev_music'] = ds.readFloat('volume_ev_music', 0.8)
             self.__volumeByCategory['ev_vehicles'] = ds.readFloat('volume_ev_vehicles', 0.8)
             self.__volumeByCategory['ev_voice'] = ds.readFloat('volume_ev_voice', 0.8)
-            for categoryName in self.__categories.iterkeys():
+            for categoryName in self.__categories:
                 volume = ds.readFloat('volume_' + categoryName, defCategoryVolumes.get(categoryName, 1.0))
                 self.__volumeByCategory[categoryName] = volume
 
@@ -415,7 +428,7 @@ class SoundGroups(object):
         if updatePrefs:
             self.__volumeByCategory[categoryName] = volume
             self.savePreferences()
-        if categoryName == 'music' or categoryName == 'ambient':
+        if categoryName in ('music', 'ambient'):
             self.onMusicVolumeChanged(categoryName, self.__masterVolume, self.getVolume(categoryName))
         self.onVolumeChanged(categoryName, volume)
 
@@ -425,8 +438,8 @@ class SoundGroups(object):
     def savePreferences(self):
         ds = Settings.g_instance.userPrefs[Settings.KEY_SOUND_PREFERENCES]
         ds.writeFloat('masterVolume', self.__masterVolume)
-        for categoryName in self.__volumeByCategory.iterkeys():
-            ds.writeFloat('volume_' + categoryName, self.__volumeByCategory[categoryName])
+        for categoryName, volume in viewitems(self.__volumeByCategory):
+            ds.writeFloat('volume_' + categoryName, volume)
 
         ds.writeInt('enable', self.__enableStatus)
         soundModeName = SoundModes.DEFAULT_MODE_NAME if self.__soundModes is None else self.__soundModes.currentMode
@@ -439,7 +452,7 @@ class SoundGroups(object):
             if curPresetIsNationalPreset is None:
                 nationsSection = soundModeSection.createSection('nations')
                 mapping = self.__soundModes.nationToSoundModeMapping
-                for nation, mode in mapping.iteritems():
+                for nation, mode in viewitems(mapping):
                     nationsSection.writeString(nation, mode)
 
             elif curPresetIsNationalPreset[1]:
@@ -452,8 +465,7 @@ class SoundGroups(object):
         if not BigWorld.isWindowVisible():
             return False
         self.setMasterVolume(self.__masterVolume)
-        for categoryName in self.__volumeByCategory.iterkeys():
-            newVolume = self.__volumeByCategory[categoryName]
+        for categoryName, newVolume in viewitems(self.__volumeByCategory):
             if self.__muffledByReplay and categoryName in ('vehicles', 'effects', 'ambient'):
                 newVolume = 0.0
             self.setVolume(categoryName, newVolume, updatePrefs=False)

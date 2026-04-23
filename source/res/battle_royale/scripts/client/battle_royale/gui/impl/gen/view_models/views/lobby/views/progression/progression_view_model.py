@@ -12,9 +12,9 @@ class ProgressionState(Enum):
 
 
 class ProgressionViewModel(ViewModel):
-    __slots__ = ('onClose',)
+    __slots__ = ('onClose', 'pollServerTime')
 
-    def __init__(self, properties=10, commands=1):
+    def __init__(self, properties=11, commands=2):
         super(ProgressionViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -79,11 +79,17 @@ class ProgressionViewModel(ViewModel):
     def setEndTimestamp(self, value):
         self._setNumber(8, value)
 
+    def getServerTimestamp(self):
+        return self._getNumber(9)
+
+    def setServerTimestamp(self, value):
+        self._setNumber(9, value)
+
     def getCalendarTooltipId(self):
-        return self._getString(9)
+        return self._getString(10)
 
     def setCalendarTooltipId(self, value):
-        self._setString(9, value)
+        self._setString(10, value)
 
     def _initialize(self):
         super(ProgressionViewModel, self)._initialize()
@@ -96,5 +102,7 @@ class ProgressionViewModel(ViewModel):
         self._addArrayProperty('progressLevels', Array())
         self._addNumberProperty('startTimestamp', 0)
         self._addNumberProperty('endTimestamp', 0)
+        self._addNumberProperty('serverTimestamp', 0)
         self._addStringProperty('calendarTooltipId', '')
         self.onClose = self._addCommand('onClose')
+        self.pollServerTime = self._addCommand('pollServerTime')

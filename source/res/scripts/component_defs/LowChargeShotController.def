@@ -1,0 +1,21 @@
+<LowChargeShotController.def>
+  <DetailLevel>	MY_VEHICLE	</DetailLevel>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <Properties>
+    <vehTypeCD>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehTypeCD>
+    <stateStatus>
+      <Type>	LOW_CHARGE_SHOT_STATE	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </stateStatus>
+    <gunShotsSpeedOverride>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </gunShotsSpeedOverride>
+  </Properties>
+  <DefaultKeyName>	lowChargeShotController	</DefaultKeyName>
+</LowChargeShotController.def>

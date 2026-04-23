@@ -8,8 +8,13 @@ import nations
 from account_helpers.AccountSettings import AccountSettings
 from comp7_core.gui.Scaleform.daapi.view.battle.common import getSavedRowCountValue, rowValueToRowCount
 from comp7_core.gui.Scaleform.daapi.view.meta.Comp7BattleTankCarouselMeta import Comp7BattleTankCarouselMeta
+from comp7_core.gui.comp7_core_constants import BATTLE_CTRL_ID
+from comp7_core_constants import ArenaPrebattlePhase
 from constants import REQUEST_COOLDOWN, ARENA_PERIOD
+from gui.impl import backport
+from gui.impl.gen import R
 from gui import GUI_NATIONS_ORDER_INDEX
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.filters.carousel_filter import CarouselFilter, RoleCriteriesGroup
 from gui.Scaleform import getButtonsAssetPath
 from gui.Scaleform.daapi.view.common.filter_contexts import getFilterSetupContexts, FilterSetupContext
@@ -96,12 +101,24 @@ def getComp7CarouselVehicleDataVO(vehicle):
 
 class _PrebattleCarouselDataProvider(CarouselDataProvider):
     __itemsFactory = dependency.descriptor(IGuiItemsFactory)
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     _RawVehicleData = namedtuple('_RawVehicleData', ('strCD', 'settings', 'isElite', 'isRented'))
 
     def __init__(self, carouselFilter, itemsCache):
         super(_PrebattleCarouselDataProvider, self).__init__(carouselFilter, itemsCache)
         self.__vehiclesData = {}
         self.__selectedCD = None
+        self.__onBanPhaseUpdated()
+        banCtrl = self.__getVehicleBanCtrl()
+        if banCtrl is not None:
+            banCtrl.onBanPhaseUpdated += self.__onBanPhaseUpdated
+        return
+
+    def _dispose(self):
+        banCtrl = self.__getVehicleBanCtrl()
+        if banCtrl is not None:
+            banCtrl.onBanPhaseUpdated -= self.__onBanPhaseUpdated
+        super(_PrebattleCarouselDataProvider, self)._dispose()
         return
 
     def getSelectedCD(self):
@@ -162,7 +179,7 @@ class _PrebattleCarouselDataProvider(CarouselDataProvider):
         self._vehicles = []
         self._vehicleItems = []
         vehicleIcons = []
-        for vehicleData in self.__vehiclesData.itervalues():
+        for vehicleData in self.__vehiclesData.values():
             vehicle = self.__makeGuiVehicle(vehicleData)
             vehicleIcons.append(vehicle.icon)
             self._vehicles.append(vehicle)
@@ -176,6 +193,31 @@ class _PrebattleCarouselDataProvider(CarouselDataProvider):
          GUI_NATIONS_ORDER_INDEX[vehicle.nationName],
          VEHICLE_TYPES_ORDER_INDICES[vehicle.type],
          vehicle.userName)
+
+    def __onBanPhaseUpdated(self):
+        banCtrl = self.__getVehicleBanCtrl()
+        if banCtrl.getArenaPrebattlePhase() == ArenaPrebattlePhase.PICK:
+            bannedVehicleCDs = []
+            for banVehicleInfo in banCtrl.bannedVehicles.values():
+                vehicleCD = banVehicleInfo['vehicleCD']
+                vehicleCopies = banCtrl.getVehicleCopies(vehicleCD)
+                bannedVehicleCDs.append(vehicleCD)
+                bannedVehicleCDs.extend(vehicleCopies)
+
+            anyBanned = False
+            for i, vehicle in enumerate(self._vehicles):
+                if vehicle.compactDescr in bannedVehicleCDs:
+                    self._vehicleItems[i].update({'enabled': False,
+                     'disableReasonIcon': RES_ICONS.MAPS_ICONS_HANGAR_CAROUSEL_CARDS_ALERTS_NOTSUITABLE,
+                     'disableReasonMsg': backport.text(R.strings.comp7_ext.carousel.banned())})
+                    anyBanned = True
+
+            if anyBanned:
+                self.refresh()
+                self._filterByIndices()
+
+    def __getVehicleBanCtrl(self):
+        return self.__sessionProvider.dynamic.getControllerByID(BATTLE_CTRL_ID.COMP7_VEHICLE_BAN_CTRL)
 
     @staticmethod
     def __makeGuiVehicle(vehicleData):

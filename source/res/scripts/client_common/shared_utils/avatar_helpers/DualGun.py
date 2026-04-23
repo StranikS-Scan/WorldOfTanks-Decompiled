@@ -35,6 +35,9 @@ class DualGunHelper(object):
             if switchCD.leftTime > 0:
                 __callReloadTimeWrapper(switchCD.leftTime, switchCD.baseTime)
             elif gunStates[secondGun] == DUAL_GUN.GUN_STATE.READY:
+                if ammoCtrl:
+                    debuff = cooldownTimes[DUAL_GUN.COOLDOWNS.DEBUFF]
+                    ammoCtrl.onDebuffStarted(debuff.leftTime)
                 __callReloadTimeWrapper(0, switchCD.baseTime)
             else:
                 __callReloadTimeWrapper(0, cooldownTimes[activeGun].baseTime)

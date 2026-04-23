@@ -17,6 +17,7 @@ from story_mode.gui import story_mode_gui_constants
 from story_mode.gui.app_loader import observers
 from story_mode.gui.battle_control.arena_info.arena_vos import getDisplayedClassTag
 from story_mode.gui.battle_control.controllers import equipments_items, equipment_ctrl
+from story_mode.gui.battle_control import battle_constant
 from story_mode.gui.battle_control.controllers.repository import OnboardingRepository, StoryModeRepository, StoryModeSharedRepository
 from story_mode.gui.game_control.story_mode_controller import eventEntryPointValidator, newbieEntryPointValidator
 from story_mode.gui.game_control.story_mode_fading_controller import StoryModeFadingController
@@ -163,6 +164,7 @@ def preInit():
     schemaManager.registerSchema(missionsSchema)
     initGuiTypes(story_mode_gui_constants, __name__)
     initScaleformGuiTypes(story_mode_gui_constants, __name__)
+    battle_constant.VEHICLE_VIEW_STATE.inject(__name__)
     sm_client_settings.initialize()
     battle_hints_overlap_controller.addSettings(ARENA_BONUS_TYPE.STORY_MODE_ONBOARDING, HintScope.STORY_MODE.value, set())
     equipment_ctrl.register()

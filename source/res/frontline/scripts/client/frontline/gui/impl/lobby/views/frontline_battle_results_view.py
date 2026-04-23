@@ -55,10 +55,6 @@ class FrontlineBattleResultsView(ViewImpl, IRoutableView):
     def saveLocalStorage(cls, ctx):
         cls.__localStorage = ctx
 
-    def _initialize(self, *args, **kwargs):
-        super(FrontlineBattleResultsView, self)._initialize(*args, **kwargs)
-        self.__subPresenter.initialize()
-
     def _finalize(self):
         self.__subPresenter.finalize()
         self.__subPresenter = None
@@ -79,6 +75,7 @@ class FrontlineBattleResultsView(ViewImpl, IRoutableView):
         super(FrontlineBattleResultsView, self)._onLoading(*args, **kwargs)
         statsController = self.__battleResults.getStatsCtrl(self.__arenaUniqueID)
         battleResults = statsController.getResults()
+        self.__subPresenter.initialize()
         with self.viewModel.transaction():
             self.__subPresenter.packBattleResults(battleResults)
 

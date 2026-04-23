@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/StationaryReloadController.py
+from __future__ import absolute_import
 import math
 import typing
 from collections import namedtuple
@@ -33,6 +34,9 @@ class StationaryReloadAmmoState(DefaultComponentAmmoState):
 
     def __eq__(self, other):
         return isinstance(other, StationaryReloadAmmoState) and self.__state == other.stationaryReloadState and self.__baseTime == other.stationaryBaseTime and self.__timeLeft == other.stationaryTimeLeft
+
+    def __hash__(self):
+        return hash((self.__state, self.__baseTime, self.__timeLeft))
 
     @classmethod
     def fromComponentStatus(cls, status):

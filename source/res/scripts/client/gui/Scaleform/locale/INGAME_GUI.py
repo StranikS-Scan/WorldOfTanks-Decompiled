@@ -35,6 +35,7 @@ class INGAME_GUI(object):
     PLAYER_ERRORS_CANT_SHOOT_GUN_RELOAD = '#ingame_gui:player_errors/cant_shoot/gun_reload'
     PLAYER_ERRORS_CANT_SHOOT_GUN_LOCKED = '#ingame_gui:player_errors/cant_shoot/gun_locked'
     PLAYER_ERRORS_CANT_SHOOT_GUN_OVERHEATED = '#ingame_gui:player_errors/cant_shoot/gun_overheated'
+    PLAYER_ERRORS_CANT_SHOOT_LOW_CHARGE_SHOT_BLOCKING = '#ingame_gui:player_errors/cant_shoot/low_charge_shot_blocking'
     PLAYER_ERRORS_CANT_SWITCH_ENGINE_DESTROYED = '#ingame_gui:player_errors/cant_switch/engine_destroyed'
     PLAYER_ERRORS_CANT_SWITCH_GUN_DESTROYED = '#ingame_gui:player_errors/cant_switch/gun_destroyed'
     PLAYER_ERRORS_CANT_SWITCH_ONE_SHELL_LEFT = '#ingame_gui:player_errors/cant_switch/one_shell_left'
@@ -237,6 +238,7 @@ class INGAME_GUI(object):
     SHELLS_KINDS_ARMOR_PIERCING = '#ingame_gui:shells_kinds/ARMOR_PIERCING'
     SHELLS_KINDS_ARMOR_PIERCING_HE = '#ingame_gui:shells_kinds/ARMOR_PIERCING_HE'
     SHELLS_KINDS_ARMOR_PIERCING_CR = '#ingame_gui:shells_kinds/ARMOR_PIERCING_CR'
+    SHELLS_KINDS_PARAMS_HEADER = '#ingame_gui:shells_kinds/params/header'
     SHELLS_KINDS_PARAMS_DAMAGE = '#ingame_gui:shells_kinds/params/damage'
     SHELLS_KINDS_PARAMS_DAMAGEPERSECOND = '#ingame_gui:shells_kinds/params/damagePerSecond'
     SHELLS_KINDS_PARAMS_PIERCINGPOWER = '#ingame_gui:shells_kinds/params/piercingPower'
@@ -425,6 +427,7 @@ class INGAME_GUI(object):
     PLAYER_MESSAGES_DEATH_FROM_SHOT_ALLY_ENEMY_COMP7 = '#ingame_gui:player_messages/DEATH_FROM_SHOT_ALLY_ENEMY_COMP7'
     PLAYER_MESSAGES_DEATH_FROM_SHOT_ENEMY_ALLY_POI = '#ingame_gui:player_messages/DEATH_FROM_SHOT_ENEMY_ALLY_POI'
     PLAYER_MESSAGES_DEATH_FROM_SHOT_ENEMY_ALLY_COMP7 = '#ingame_gui:player_messages/DEATH_FROM_SHOT_ENEMY_ALLY_COMP7'
+    PLAYER_MESSAGES_DEATH_FROM_SHOT_UNKNOWN_ALLY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_UNKNOWN_ALLY'
     PLAYER_MESSAGES_DEATH_FROM_ARTILLERY_ENEMY_SUICIDE = '#ingame_gui:player_messages/DEATH_FROM_ARTILLERY_ENEMY_SUICIDE'
     PLAYER_MESSAGES_DEATH_FROM_ARTILLERY_ALLY_SUICIDE = '#ingame_gui:player_messages/DEATH_FROM_ARTILLERY_ALLY_SUICIDE'
     PLAYER_MESSAGES_DEATH_FROM_BOMBER_ENEMY_SUICIDE = '#ingame_gui:player_messages/DEATH_FROM_BOMBER_ENEMY_SUICIDE'
@@ -731,6 +734,7 @@ class INGAME_GUI(object):
     SIEGEMODE_HINT_TARGETDESIGNATOR = '#ingame_gui:siegeMode/hint/targetDesignator'
     SIEGEMODE_HINT_TWINGUN = '#ingame_gui:siegeMode/hint/twinGun'
     SIEGEMODE_HINT_STAGEDJETBOOSTERS = '#ingame_gui:siegeMode/hint/stagedJetBoosters'
+    SIEGEMODE_HINT_WHEELEDDASH = '#ingame_gui:siegeMode/hint/wheeledDash'
     EFFICIENCYRIBBONS_ENEMYSECTORCAPTURED = '#ingame_gui:efficiencyRibbons/enemySectorCaptured'
     EFFICIENCYRIBBONS_DESTRUCTIBLEDAMAGED = '#ingame_gui:efficiencyRibbons/destructibleDamaged'
     EFFICIENCYRIBBONS_DESTRUCTIBLEDESTROYED = '#ingame_gui:efficiencyRibbons/destructibleDestroyed'
@@ -1056,6 +1060,8 @@ class INGAME_GUI(object):
     BOT_BOSS = '#ingame_gui:bot/boss'
     GRILLE_STATUS_SPEEDLIMIT = '#ingame_gui:grille/status/speedlimit'
     GRILLE_STATUS_RELOAD = '#ingame_gui:grille/status/reload'
+    BATTLEMESSENGER_W2GT_WARNING_NODATA = '#ingame_gui:battleMessenger/w2gt/warning/noData'
+    BATTLEMESSENGER_W2GT_WARNING_GETTINGDATAERROR = '#ingame_gui:battleMessenger/w2gt/warning/gettingDataError'
     CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_ATTENTION_TO_POSITION_GRIDINFO,
      CHAT_SHORTCUTS_ATTENTION_TO_POSITION,
      CHAT_SHORTCUTS_GOING_THERE_GRIDINFO,

@@ -4,6 +4,7 @@ import typing
 from script_component.DynamicScriptComponent import DynamicScriptComponent
 import VOIP
 from comp7_core.gui.battle_control.arena_info.arena_vos import Comp7CoreKeys
+from comp7_core.gui.comp7_core_constants import BATTLE_CTRL_ID
 from constants import REQUEST_COOLDOWN
 from gui.battle_control import avatar_getter
 from helpers import dependency
@@ -41,6 +42,22 @@ class TeamInfoComp7Component(DynamicScriptComponent):
         if self._isAvatarReady:
             self.__invalidateTeamVivoxChannel()
 
+    def set_endPrepickTime(self, _):
+        if self._isAvatarReady:
+            self.__updateVehiclePrepickEndTime()
+
+    def set_endVotingTime(self, _):
+        if self._isAvatarReady:
+            self.__updateVehicleBanEndTime()
+
+    def set_banVotingStates(self, _):
+        if self._isAvatarReady:
+            self.__updatePlayersChoiceForBan()
+
+    def set_candidatesForBan(self, _):
+        if self._isAvatarReady:
+            self.__updateCandidatesForBan()
+
     def _onAvatarReady(self):
         voipManager = VOIP.getVOIPManager()
         voipManager.onJoinedChannel += self.__onJoinedVoipChannel
@@ -48,6 +65,10 @@ class TeamInfoComp7Component(DynamicScriptComponent):
         self.__updateVoipConnection()
         self.__invalidateRoleSkillLevels()
         self.__invalidateTeamVivoxChannel()
+        self.__updateVehiclePrepickEndTime()
+        self.__updateVehicleBanEndTime()
+        self.__updatePlayersChoiceForBan()
+        self.__updateCandidatesForBan()
 
     def __onJoinedVoipChannel(self, *_, **__):
         self.__updateVivoxPresence()
@@ -82,3 +103,30 @@ class TeamInfoComp7Component(DynamicScriptComponent):
         if self.teamVivoxChannel.get(avatar_getter.getPlayerVehicleID(), False) != isVoipEnabled:
             self.cell.setVivoxPresence(isVoipEnabled)
             self.__callbackDelayer.delayCallback(REQUEST_COOLDOWN.SET_VIVOX_PRESENCE + 1.0, self.__updateVivoxPresence)
+
+    def __updateVehiclePrepickEndTime(self):
+        vehicleBanCtrl = self.__getVehicleBanCtrl()
+        if vehicleBanCtrl is not None:
+            vehicleBanCtrl.vehiclePrepickEndTime = self.endPrepickTime
+        return
+
+    def __updateVehicleBanEndTime(self):
+        vehicleBanCtrl = self.__getVehicleBanCtrl()
+        if vehicleBanCtrl is not None:
+            vehicleBanCtrl.vehicleBanEndTime = self.endVotingTime
+        return
+
+    def __updatePlayersChoiceForBan(self):
+        vehicleBanCtrl = self.__getVehicleBanCtrl()
+        if vehicleBanCtrl is not None:
+            vehicleBanCtrl.updatePlayersChoiceForBan(self.banVotingStates)
+        return
+
+    def __updateCandidatesForBan(self):
+        vehicleBanCtrl = self.__getVehicleBanCtrl()
+        if vehicleBanCtrl is not None and self.candidatesForBan:
+            vehicleBanCtrl.candidatesForBan = self.candidatesForBan
+        return
+
+    def __getVehicleBanCtrl(self):
+        return self.__sessionProvider.dynamic.getControllerByID(BATTLE_CTRL_ID.COMP7_VEHICLE_BAN_CTRL)

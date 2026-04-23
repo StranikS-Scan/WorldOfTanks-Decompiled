@@ -23,6 +23,7 @@ from gui.impl.lobby.personal_missions_30.personal_mission_constants import PERSO
 from gui.server_events.event_items import PersonalMission
 from gui.server_events.events_dispatcher import showPersonalMissionDetails, hidePersonalMissionDetails, showPersonalMissionAwards
 from gui.server_events.events_helpers import AwardSheetPresenter
+from gui.server_events.finders import getBranchByOperationId
 from gui.server_events.personal_missions_navigation import PersonalMissionsNavigation
 from gui.server_events.pm_constants import SOUNDS, PM_TUTOR_FIELDS as _PTF
 from gui.shared import EVENT_BUS_SCOPE
@@ -127,6 +128,7 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
         self.__resetToIncomplete()
         if self.__lastTutorState in (_PTF.MULTIPLE_FAL_SHOWN, _PTF.PM2_MULTIPLE_FAL_SHOWN):
             if self.__PMCache.getFreeTokensCount(self.getBranch()) >= PM_BRANCH_TO_FINAL_PAWN_COST[self.getBranch()]:
+                self.as_hideAwardSheetObtainedPopupS()
                 showPersonalMissionDetails(self.__getLastQuest().getID())
             else:
                 self.as_showAwardsPopoverForTutorS()
@@ -232,16 +234,16 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
         eventID = ctx.get('eventID')
         operationID = ctx.get('operationID')
         chainID = ctx.get('chainID')
-        if operationID:
-            branch = self.__PMCache.getAllOperations().get(operationID).getBranch()
-        else:
-            branch = ctx.get('branch')
+        branch = getBranchByOperationId(operationID) if operationID else ctx.get('branch')
         if branch is not None:
             self.setBranch(branch)
         self.__backAlias = ctx.get('previewAlias')
         self.__eventID = int(eventID) if eventID is not None else eventID
         if eventID:
-            quest = self.__PMCache.getAllQuests().get(self.__eventID)
+            if branch is None:
+                quest = self.__PMCache.getAllQuests().get(self.__eventID)
+            else:
+                quest = self.__PMCache.getQuestsForBranch(branch).get(self.__eventID)
             if quest:
                 self.setBranch(quest.getQuestBranch())
                 self.setOperationID(quest.getOperationID())

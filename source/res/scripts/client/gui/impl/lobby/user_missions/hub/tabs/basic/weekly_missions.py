@@ -156,7 +156,6 @@ class WeeklyMissions(ViewComponent[WeeklyMissionsModel]):
         wmm.setIsRerollInProgress(False)
         wmm.setRerollCooldown(self._rerollTimeout)
         wmm.setTimeToNextReroll(self.__getCountdown(weeklyQuest.getID()))
-        weeklyQuestModel.unbind()
         return wmm
 
     def __getProgressFromQuest(self, quest, conditionModel):

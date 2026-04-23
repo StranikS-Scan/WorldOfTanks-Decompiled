@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/wot_plus/cgf_components/pro_boost_effect_manager.py
+import logging
 from helpers.CallbackDelayer import CallbackDelayer
 from typing import TYPE_CHECKING, Optional, Callable, Dict
 import BigWorld
@@ -21,6 +22,7 @@ if TYPE_CHECKING:
 _ACTIVATION_TIMEOUT = 0.5
 _ACTIVATION_PREFAB = 'content/CGFPrefabs/Lobby/proboost_activation.prefab'
 _DEACTIVATION_PREFAB = 'content/CGFPrefabs/Lobby/proboost_deactivation.prefab'
+_logger = logging.getLogger(__name__)
 
 class WotPlusProBoostManager(CGF.ComponentManager):
     _wotPlusCtrl = dependency.descriptor(IWotPlusController)
@@ -33,6 +35,7 @@ class WotPlusProBoostManager(CGF.ComponentManager):
         self._activationEffectGO = None
         self._deactivationEffectGO = None
         self._windowsManager = self._uiLoader.windowsManager
+        self._loadingInProgressMap = {}
         return
 
     def activate(self):
@@ -65,9 +68,17 @@ class WotPlusProBoostManager(CGF.ComponentManager):
         return g_currentPreviewVehicle.vehicleEntityID and self._boostedVehicleInvID and g_currentVehicle.isInHangar() and g_currentVehicle.invID == self._boostedVehicleInvID
 
     def _loadProBoostActivationEffect(self):
+        if self._loadingInProgressMap.get(_ACTIVATION_PREFAB, False):
+            _logger.debug('Proboost activation effect is already loading')
+            return
+        self._loadingInProgressMap[_ACTIVATION_PREFAB] = True
         self._loadPrefabWithCallback(_ACTIVATION_PREFAB, self._onActivationPrefabLoaded)
 
     def _loadProBoostDeactivationEffect(self):
+        if self._loadingInProgressMap.get(_DEACTIVATION_PREFAB, False):
+            _logger.debug('Proboost deactivation effect is already loading')
+            return
+        self._loadingInProgressMap[_DEACTIVATION_PREFAB] = True
         self._loadPrefabWithCallback(_DEACTIVATION_PREFAB, self._onDeactivationPrefabLoaded)
 
     def _loadPrefabWithCallback(self, prefab, callback):
@@ -105,9 +116,11 @@ class WotPlusProBoostManager(CGF.ComponentManager):
 
     def _onActivationPrefabLoaded(self, prefabGO):
         self._activationEffectGO = prefabGO
+        self._loadingInProgressMap[_ACTIVATION_PREFAB] = False
 
     def _onDeactivationPrefabLoaded(self, prefabGO):
         self._deactivationEffectGO = prefabGO
+        self._loadingInProgressMap[_DEACTIVATION_PREFAB] = False
 
     def _onWindowStatusChanged(self, _, status):
         if not self.isCurrentVehicleAvailableAndBoosted:

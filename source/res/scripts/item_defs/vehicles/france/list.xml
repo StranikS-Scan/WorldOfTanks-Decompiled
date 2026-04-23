@@ -628,10 +628,10 @@
     <shortUserString>	#france_vehicles:F134_Lorraine_120_Alby_short	</shortUserString>
     <shortDescriptionSpecial>	#france_vehicles:F134_Lorraine_120_Alby_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#france_vehicles:F134_Lorraine_120_Alby_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
+    <price>	8150	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG role_ATSPG_support HD mediumAT-SPG improvedVentilation_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
+    <tags>	AT-SPG role_ATSPG_support HD mediumAT-SPG improvedVentilation_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </F134_Lorraine_120_Alby>
   <F135_AS_XX_40_t>
@@ -872,7 +872,7 @@
     </price>
     <notInShop>	true	</notInShop>
     <cannotBeBought>	true	</cannotBeBought>
-    <tags>	AT-SPG role_ATSPG_support HD heavyAT-SPG AT-SPG2 improvedVentilation_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user private secret cannot_be_sold comp7 earn_crystals special	</tags>
+    <tags>	AT-SPG role_ATSPG_support HD heavyAT-SPG AT-SPG2 improvedVentilation_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user private secret cannot_be_sold comp7 earn_crystals special lockCrew lockCrewSkills lockOptionalDevices	</tags>
     <level>	10	</level>
   </F64_AMX_50Fosh_B_7x7>
   <F120_Projet_Louis>
@@ -1262,10 +1262,10 @@
     <shortUserString>	#france_vehicles:F139_Terrifiant_short	</shortUserString>
     <shortDescriptionSpecial>	#france_vehicles:F139_Terrifiant_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#france_vehicles:F139_Terrifiant_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
+    <price>	11050	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_universal HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals secret testTank	</tags>
+    <tags>	heavyTank role_HT_universal HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
     <level>	9	</level>
   </F139_Terrifiant>
   <F137_LEOX>
@@ -1275,10 +1275,33 @@
     <description>	#france_vehicles:F137_LEOX_descr	</description>
     <shortDescriptionSpecial>	#france_vehicles:F137_LEOX_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#france_vehicles:F137_LEOX_long_special	</longDescriptionSpecial>
+    <price>	10450	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_sniper HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals wotPlus noCrewTransferPenalty private	</tags>
+    <level>	9	</level>
+  </F137_LEOX>
+  <F141_Durendal>
+    <id>	269	</id>
+    <userString>	#france_vehicles:F141_Durendal	</userString>
+    <shortUserString>	#france_vehicles:F141_Durendal_short	</shortUserString>
+    <description>	#france_vehicles:F141_Durendal_desc	</description>
+    <shortDescriptionSpecial>	#france_vehicles:F141_Durendal_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#france_vehicles:F141_Durendal_long_special	</longDescriptionSpecial>
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_sniper HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals secret testTank	</tags>
-    <level>	9	</level>
-  </F137_LEOX>
+    <tags>	mediumTank role_MT_support HD special mediumTank2 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals secret testTank	</tags>
+    <level>	10	</level>
+  </F141_Durendal>
+  <F143_Fauteur>
+    <id>	270	</id>
+    <userString>	#france_vehicles:F143_Fauteur	</userString>
+    <shortUserString>	#france_vehicles:F143_Fauteur_short	</shortUserString>
+    <description>	#france_vehicles:F143_Fauteur_descr	</description>
+    <longDescriptionSpecial>	#france_vehicles:F143_Fauteur_long_special	</longDescriptionSpecial>
+    <price>	7400000	</price>
+    <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
+    <level>	11	</level>
+  </F143_Fauteur>
 </list.xml>

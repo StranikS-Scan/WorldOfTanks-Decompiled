@@ -48,5 +48,4 @@ def packMissionItem(model, raw, questPacker=None, eventsCache=None):
     if preFormattedConditionModel:
         setDescription(model, fullQuestModel)
         setProgress(model, fullQuestModel)
-    fullQuestModel.unbind()
     return (isCompleted, model.getCurrentProgress())

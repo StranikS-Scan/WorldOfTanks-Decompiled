@@ -34,7 +34,10 @@ _COMP7_PREV_SEASON_PRODUCTS = {51313,
  60977,
  28665,
  30201,
- 31225}
+ 31225,
+ 31737,
+ 31481,
+ 21793}
 if typing.TYPE_CHECKING:
     from comp7.gui.game_control.comp7_shop_controller import ShopPageProductInfo
 

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/lobby_ctx_listener.py
+from __future__ import absolute_import
 _CHANGE_NOTIFIERS = []
 
 def _getValueFromPath(path, data):

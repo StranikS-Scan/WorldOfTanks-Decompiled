@@ -14,7 +14,7 @@ def activateEventsContainer(withDebug=True, withCGF=True):
             if IS_DEVELOPMENT and withDebug and kwargs.get('withDebug', True):
                 eventsContainer.debugEvents()
             if withCGF:
-                eventsContainer.attachCFGEvents()
+                eventsContainer.attachCoreEvents()
             return eventsContainer
 
         return wrapper

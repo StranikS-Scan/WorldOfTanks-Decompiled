@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/math_utils.py
+from __future__ import absolute_import, division
 import random
 import math
+from past.builtins import xrange
 import Math
 from Math import Vector2, Vector3
 

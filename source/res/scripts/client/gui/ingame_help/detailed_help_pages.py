@@ -399,16 +399,18 @@ class DevMapsPagesBuilder(DetailedHelpPagesBuilder):
 
 class MechanicsPagesBuilder(DetailedHelpPagesBuilder):
     _SUITABLE_CTX_KEYS = ('vehicleMechanics',)
-    _VEHICLE_MECHANIC_KEYS = {VehicleMechanic.ROCKET_ACCELERATION.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, None),
-     VehicleMechanic.TWIN_GUN.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, None),
+    _VEHICLE_MECHANIC_KEYS = {VehicleMechanic.CHARGE_SHOT.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
      VehicleMechanic.CONCENTRATION_MODE.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
-     VehicleMechanic.SUPPORT_WEAPON.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, None),
-     VehicleMechanic.RECHARGEABLE_NITRO.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, None),
-     VehicleMechanic.CHARGE_SHOT.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, None),
+     VehicleMechanic.PROPELLANT_GUN.value: (None, CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION),
+     VehicleMechanic.RECHARGEABLE_NITRO.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
+     VehicleMechanic.ROCKET_ACCELERATION.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
+     VehicleMechanic.STAGED_JET_BOOSTERS.value: (CommandMapping.CMD_CM_SPECIAL_ABILITY,),
      VehicleMechanic.STANCE_DANCE.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, CommandMapping.CMD_CM_SPECIAL_ABILITY),
-     VehicleMechanic.TARGET_DESIGNATOR.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, None),
-     VehicleMechanic.STATIONARY_RELOAD.value: (CommandMapping.CMD_RELOAD_PARTIAL_CLIP, None),
-     VehicleMechanic.STAGED_JET_BOOSTERS.value: (CommandMapping.CMD_CM_SPECIAL_ABILITY, None)}
+     VehicleMechanic.STATIONARY_RELOAD.value: (CommandMapping.CMD_RELOAD_PARTIAL_CLIP,),
+     VehicleMechanic.SUPPORT_WEAPON.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
+     VehicleMechanic.TARGET_DESIGNATOR.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
+     VehicleMechanic.TWIN_GUN.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
+     VehicleMechanic.WHEELED_DASH.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, None)}
     _VEHICLE_MECHANIC_PRIORITIES = (((VehicleMechanic.AUTO_SHOOT_GUN, VehicleMechanic.OVERHEAT_GUN), (VehicleMechanic.AUTO_SHOOT_GUN,)),)
 
     @classmethod
@@ -427,9 +429,10 @@ class MechanicsPagesBuilder(DetailedHelpPagesBuilder):
         for mechanicValue in orderedMechanicsValues + unorderedMechanicsValues:
             iconsRoot = R.images.gui.maps.icons.battleHelp.mechanics.dyn(mechanicValue)
             localsRoot = R.strings.ingame_help.detailsHelp.mechanics.dyn(mechanicValue)
-            keys = cls._VEHICLE_MECHANIC_KEYS.get(mechanicValue, (None, None))
+            keys = cls._VEHICLE_MECHANIC_KEYS.get(mechanicValue, ())
+            keysCount = len(keys)
             for index, (pageID, pageRes) in enumerate(sorted(localsRoot.items())):
-                key = keys[index]
+                key = keys[index] if index < keysCount else None
                 addPage(pages, headerTitle, backport.text(pageRes.title()), text_styles.mainBig(backport.text(pageRes.description())), [cls._buildKey(getVirtualKey(key), getReadableKey(key))] if key is not None else [], backport.image(iconsRoot.dyn(pageID)()), hintCtx=HelpHintContext.MECHANICS)
 
         return pages

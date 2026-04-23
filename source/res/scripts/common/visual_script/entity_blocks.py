@@ -124,7 +124,7 @@ class DestroyEntity(Block, EntityMeta):
         entity = self._entity.getValue()
         try:
             entity.destroy()
-        except (AttributeError, ReferenceError):
+        except (AttributeError, ReferenceError, TypeError):
             if not self._ignoreIfMissing.getValue():
                 errorVScript(self, 'Cannot destroy entity: entity is None')
 

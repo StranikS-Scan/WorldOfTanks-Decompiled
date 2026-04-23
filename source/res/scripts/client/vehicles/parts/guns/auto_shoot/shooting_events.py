@@ -9,7 +9,7 @@ from constants import SERVER_TICK_LENGTH
 from events_handler import eventHandler
 from helpers.CallbackDelayer import CallbackDelayer
 from vehicles.parts.guns.auto_shoot.guns_interfaces import IAutoShootingEventsLogic, IAutoShootingListenerLogic
-from vehicles.parts.guns.common import GunShootingEvents, GunShootingCGFIntegration, GunShootingEventsDebugger
+from vehicles.parts.guns.common import GunShootingEvents, GunShootingCoreIntegration, GunShootingEventsDebugger
 if typing.TYPE_CHECKING:
     from vehicles.parts.guns.auto_shoot.guns_interfaces import IAutoShootGunComponent, IAutoShootGunComponentState
 CONTINUOUS_ACTIVATION_DELTA = 0.0
@@ -60,8 +60,8 @@ class AutoShootingEvents(GunShootingEvents, IAutoShootingEventsLogic):
         if isContinuousInProgress != isContinuousBurst:
             self.__switchBurstPhase(isContinuousBurst)
 
-    def _createCGFIntegration(self):
-        return AutoShootingCGFIntegration(self, self._getComponent())
+    def _createCoreIntegration(self):
+        return AutoShootingCoreIntegration(self, self._getComponent())
 
     def _createEventsDebugger(self):
         return AutoShootingEventsDebugger(self, self._getComponent())
@@ -133,7 +133,7 @@ class AutoShootingEvents(GunShootingEvents, IAutoShootingEventsLogic):
         return
 
 
-class AutoShootingCGFIntegration(GunShootingCGFIntegration, IAutoShootingListenerLogic):
+class AutoShootingCoreIntegration(GunShootingCoreIntegration, IAutoShootingListenerLogic):
 
     @eventHandler
     def onContinuousBurstActivation(self):

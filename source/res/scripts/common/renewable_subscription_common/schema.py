@@ -2,18 +2,15 @@
 # Embedded file name: scripts/common/renewable_subscription_common/schema.py
 import logging
 import typing
-import bonus_readers
 import constants
+from account_shared import validateCustomizationItem
 from battle_pass_integration import getAllIntergatedGameModes
-from game_params_common.schema import GameParamsSchema
-from game_params_common.scope import GameParamsScopeFlags, clientFilter
 from constants import ARENA_BONUS_TYPE_NAMES, IS_CLIENT, VEHICLE_CLASSES, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from dict2model import fields as d2m_fields, models, schemas, validate, exceptions
+from game_params_common.schema import GameParamsSchema
+from game_params_common.scope import GameParamsScopeFlags, clientFilter
 from items import vehicles
-if typing.TYPE_CHECKING:
-    from dict2model.types import ValidatorsType, TFilterParams
 _logger = logging.getLogger(__name__)
-EXCLUSIVE_VEHICLE_SUPPORTED_BONUSES = frozenset(('vehicle',))
 
 class Features(object):
     BATTLE_BONUSES = 1
@@ -59,23 +56,62 @@ def _checkUniqListItems(models, fieldGetter):
         raise exceptions.ValidationError('Duplicate names: {}'.format(duplicates))
 
 
-class _ExclusiveVehicleField(d2m_fields.Field):
+def _validateVehicle(strDescriptor):
+    vehCD = vehicles.makeVehicleTypeCompDescrByName(strDescriptor)
+    if not vehCD:
+        raise exceptions.ValidationError('Unknown vehicle: {}'.format(strDescriptor))
 
-    def __init__(self, required=True, default=dict, filterParams=None, serializedValidators=None, deserializedValidators=None):
-        super(_ExclusiveVehicleField, self).__init__(required=required, default=default, filterParams=filterParams, serializedValidators=serializedValidators, deserializedValidators=deserializedValidators)
 
-    def _deserialize(self, incoming, **kwargs):
-        if not isinstance(incoming, dict):
-            raise exceptions.ValidationError("Dictionary expected, got '{}'".format(type(incoming)))
-        if len(incoming.get('vehicles', {})) != 1:
-            raise exceptions.ValidationError('Bonus section should give exactly one exclusive vehicle.')
-        incoming = {'vehTypeCompDescr': incoming['vehicles'].keys()[0],
-         'bonus': incoming}
-        return super(_ExclusiveVehicleField, self)._deserialize(incoming, **kwargs)
+def _validateStyle(styleId):
+    customizationData = {'value': 1,
+     'custType': 'style',
+     'id': styleId}
+    isValid, item = validateCustomizationItem(customizationData)
+    if not isValid:
+        raise exceptions.ValidationError('Unknown style: {}'.format(item))
 
-    def _serialize(self, incoming, **kwargs):
-        return super(_ExclusiveVehicleField, self)._serialize(incoming.get('bonus', {}), **kwargs)
 
+class _CustomCompensation(models.Model):
+    __slots__ = ('credits', 'gold')
+
+    def __init__(self, credits, gold):
+        super(_CustomCompensation, self).__init__()
+        self.credits = credits
+        self.gold = gold
+
+
+_customCompensationSchema = schemas.Schema(fields={'credits': d2m_fields.Integer(required=True, default=0, deserializedValidators=validate.Range(minValue=0, maxValue=100000)),
+ 'gold': d2m_fields.Integer(required=True, default=0, deserializedValidators=validate.Range(minValue=0, maxValue=4000))}, modelClass=_CustomCompensation, checkUnknown=True)
+
+class _Customization(models.Model):
+    __slots__ = ('styleId', 'customCompensation')
+
+    def __init__(self, styleId, customCompensation):
+        super(_Customization, self).__init__()
+        self.styleId = styleId
+        self.customCompensation = customCompensation
+
+
+_customizationSchema = schemas.Schema(fields={'styleId': d2m_fields.Integer(required=True, default=0, deserializedValidators=_validateStyle),
+ 'customCompensation': d2m_fields.Nested(_customCompensationSchema, required=True)}, modelClass=_Customization, checkUnknown=True)
+
+class _ExclusiveVehicle(models.Model):
+    __slots__ = ('vehicleName', 'noCrew', 'customization', '_vehicleIntCD')
+
+    def __init__(self, vehicleName, noCrew, customization):
+        super(_ExclusiveVehicle, self).__init__()
+        self.vehicleName = vehicleName
+        self.noCrew = noCrew
+        self.customization = customization
+        self._vehicleIntCD = vehicles.makeVehicleTypeCompDescrByName(vehicleName)
+
+    def getVehicleIntCD(self):
+        return self._vehicleIntCD
+
+
+_exclusiveVehicleSchema = schemas.Schema(fields={'vehicleName': d2m_fields.String(required=True, deserializedValidators=[_validateVehicle]),
+ 'noCrew': d2m_fields.Boolean(required=False, default=True),
+ 'customization': d2m_fields.Nested(_customizationSchema, required=False)}, modelClass=_ExclusiveVehicle, checkUnknown=True)
 
 class _FeatureModel(models.Model):
     __slots__ = ('enabled', '_available')
@@ -343,22 +379,18 @@ _additionalXPBonusFeatureSchema = schemas.Schema(fields={'enabled': d2m_fields.B
  'applyCount': d2m_fields.Integer()}, modelClass=_AdditionalXPBonusFeatureModel, checkUnknown=True)
 
 class _ExclusiveVehicleFeatureModel(_FeatureModel):
-    __slots__ = ('exclusiveVehicle',)
+    __slots__ = ('enabled', 'exclusiveVehicles')
 
-    def __init__(self, enabled, exclusiveVehicle):
+    def __init__(self, enabled, exclusiveVehicles):
         super(_ExclusiveVehicleFeatureModel, self).__init__(enabled)
-        self.exclusiveVehicle = exclusiveVehicle
+        self.exclusiveVehicles = exclusiveVehicles
 
     def getFeatureID(self):
         return Features.EXCLUSIVE_VEHICLE
 
 
 _exclusiveVehicleFeatureSchema = schemas.Schema(fields={'enabled': d2m_fields.Boolean(),
- 'exclusiveVehicle': _ExclusiveVehicleField()}, modelClass=_ExclusiveVehicleFeatureModel, checkUnknown=True)
-
-def _getExclusiveVehicleBonusReaders(*args, **kwargs):
-    return bonus_readers.readBonusSection(EXCLUSIVE_VEHICLE_SUPPORTED_BONUSES, *args, **kwargs)
-
+ 'exclusiveVehicles': d2m_fields.UniCapList(required=False, default=list, fieldOrSchema=_exclusiveVehicleSchema)}, modelClass=_ExclusiveVehicleFeatureModel, checkUnknown=True)
 
 class _OptionalDevicesAssistantFeature(_FeatureModel):
 
@@ -422,14 +454,8 @@ class _BPpointsOverride(models.Model):
         super(_BPpointsOverride, self).__init__()
         self.vehicle, self.win, self.loss = vehicle, win, loss
 
-    @staticmethod
-    def validateVehicle(strDescriptor):
-        vehCD = vehicles.makeVehicleTypeCompDescrByName(strDescriptor)
-        if not vehCD:
-            raise exceptions.ValidationError('Unknown vehicle: {}'.format(strDescriptor))
 
-
-_bpPointsOverrideSchema = schemas.Schema(fields={'vehicle': d2m_fields.String(required=True, deserializedValidators=[_BPpointsOverride.validateVehicle]),
+_bpPointsOverrideSchema = schemas.Schema(fields={'vehicle': d2m_fields.String(required=True, deserializedValidators=[_validateVehicle]),
  'win': _createBPpointsListField(),
  'loss': _createBPpointsListField()}, modelClass=_BPpointsOverride, checkUnknown=True)
 
@@ -520,7 +546,6 @@ class _SubscriptionFeaturesSchema(GameParamsSchema[_SubscriptionFeaturesModelTyp
             defaultFields.update(fields)
         if not readers:
             readers = {}
-        readers['exclusiveVehicle'] = _getExclusiveVehicleBonusReaders
         super(_SubscriptionFeaturesSchema, self).__init__(constants.Configs.RENEWABLE_SUBSCRIPTION_CONFIG.value, defaultFields, modelClass, checkUnknown, serializedValidators, deserializedValidators, readers)
 
 

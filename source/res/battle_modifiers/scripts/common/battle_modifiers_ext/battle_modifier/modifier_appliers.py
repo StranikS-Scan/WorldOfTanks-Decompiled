@@ -45,6 +45,18 @@ def _gunEffectsApplier(value, paramVal, ctx=None):
     return vehicles.g_cache.gunEffects.get(overridedValue, value)
 
 
+def _shotPrefabEffectsApplier(value, paramVal, ctx=None):
+    from items import vehicles
+    overridedValue = remappings_cache.g_cache.getValue(ModifiersWithRemapping.SHOT_PREFAB_EFFECTS, paramVal, value, ctx)
+    return vehicles.g_cache.prefabEffects.shot.indexes.get(overridedValue, value)
+
+
+def _gunPrefabEffectsApplier(value, paramVal, ctx=None):
+    from items import vehicles
+    overridedValue = remappings_cache.g_cache.getValue(ModifiersWithRemapping.GUN_PREFAB_EFFECTS, paramVal, value, ctx)
+    return vehicles.g_cache.prefabEffects.gun.get(overridedValue, value)
+
+
 def _gunPrefabsApplier(value, paramVal, ctx=None):
     newPrefabPath = remappings_cache.g_cache.getValue(ModifiersWithRemapping.GUN_MAIN_PREFAB, paramVal, value, ctx)
     return newPrefabPath if newPrefabPath is not None else value
@@ -88,6 +100,8 @@ def _shellStunApplier(value, paramVal, ctx=None):
 _customAppliers = {BattleParams.VEHICLE_HEALTH: {UseType.MUL: lambda val, paramVal, _=None: int(ceilTo(val * paramVal, VEHICLE_HEALTH_DECIMALS))},
  BattleParams.SHOT_EFFECTS: _shotEffectsApplier,
  BattleParams.GUN_EFFECTS: _gunEffectsApplier,
+ BattleParams.SHOT_PREFAB_EFFECTS: _shotPrefabEffectsApplier,
+ BattleParams.GUN_PREFAB_EFFECTS: _gunPrefabEffectsApplier,
  BattleParams.GUN_MAIN_PREFAB: _gunPrefabsApplier,
  BattleParams.ROOT_PREFABS_MECHANIC_EFFECTS: _rootPrefabsMechanicEffectsApplier,
  BattleParams.ENGINE_SOUNDS: _engineSoundsApplier,

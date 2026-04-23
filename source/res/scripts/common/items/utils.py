@@ -125,9 +125,9 @@ def getCircularVisionRadius(vehicleDescr, factors):
     return vehicleDescr.turret.circularVisionRadius * vehicleDescr.miscAttrs['circularVisionRadiusBaseFactor'] * vehicleDescr.miscAttrs['circularVisionRadiusFactor'] * circularVisionRadiusMul
 
 
-def getVehicleShotSpeedByFactors(factors, speed, gravity=1.0):
+def getVehicleShotSpeedByFactors(factors, speed, gravity=1.0, factorName='gunShotsSpeed'):
     projectileSpeedFactor = vehicles.g_cache.commonConfig['miscParams']['projectileSpeedFactor']
-    newProjectileSpeedFactor = projectileSpeedFactor * factors.get('gunShotsSpeed', 1.0)
+    newProjectileSpeedFactor = projectileSpeedFactor * factors.get(factorName, 1.0)
     speed = speed / projectileSpeedFactor * newProjectileSpeedFactor
     gravity = gravity / projectileSpeedFactor ** 2 * newProjectileSpeedFactor ** 2
     return (speed, gravity)
@@ -224,7 +224,7 @@ def getInvisibility(vehicleDescr, factors, baseInvisibility, isMoving):
     baseValue = baseInvisibility[0 if isMoving else 1]
     additiveTerm = factors['invisibility'][0] + factors.get('invisibilityAdditiveTerm', 0.0) + vehicleDescr.miscAttrs['invisibilityBaseAdditive'] + vehicleDescr.miscAttrs['invisibilityAdditiveTerm']
     multFactor = factors['invisibility'][1] * factors.get('invisibilityMultFactor', 1.0)
-    return (baseValue + additiveTerm) * multFactor
+    return max(0.0, (baseValue + additiveTerm) * multFactor)
 
 
 if IS_CLIENT:
@@ -432,3 +432,9 @@ def formatVehicleInfoString(fmtStr, descr):
         return converter(descr) if converter else match.group(0)
 
     return _FORMAT_VEH_INFO_STRING_REXP.sub(_replaceMatch, fmtStr)
+
+
+def getVehicleDescriptorWithoutMechanics(vDescr, mechanicsToDrop):
+    vDescrCopy = copy.copy(vDescr)
+    vDescrCopy.mechanicsParams = {key:value for key, value in vDescr.mechanicsParams.items() if key not in mechanicsToDrop}
+    return vDescrCopy

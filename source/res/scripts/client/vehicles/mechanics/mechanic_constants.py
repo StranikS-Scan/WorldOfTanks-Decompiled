@@ -39,7 +39,10 @@ class VehicleMechanic(Enum):
     TEMPERATURE_GUN = 'temperatureGun'
     OVERHEAT_GUN = 'overheatGun'
     HEATING_ZONES_GUN = 'heatingZonesGun'
+    LOW_CHARGE_SHOT = 'lowChargeShot'
     STAGED_JET_BOOSTERS = 'stagedJetBoosters'
+    PROPELLANT_GUN = 'propellantAfterburnerGun'
+    WHEELED_DASH = 'wheeledDash'
 
 
 VEHICLE_MECHANIC_DYN_COMPONENT_NAMES = {VehicleMechanic.IMPROVED_RAMMING: 'improvedRammingController',
@@ -64,7 +67,10 @@ VEHICLE_MECHANIC_DYN_COMPONENT_NAMES = {VehicleMechanic.IMPROVED_RAMMING: 'impro
  VehicleMechanic.TEMPERATURE_GUN: 'temperatureGunController',
  VehicleMechanic.OVERHEAT_GUN: 'overheatGunComponent',
  VehicleMechanic.HEATING_ZONES_GUN: 'heatingZonesGunComponent',
- VehicleMechanic.STAGED_JET_BOOSTERS: 'stagedJetBoostersController'}
+ VehicleMechanic.LOW_CHARGE_SHOT: 'lowChargeShotController',
+ VehicleMechanic.STAGED_JET_BOOSTERS: 'stagedJetBoostersController',
+ VehicleMechanic.PROPELLANT_GUN: 'propellantGunController',
+ VehicleMechanic.WHEELED_DASH: 'wheeledDashController'}
 TRACKABLE_VEHICLE_MECHANICS = set(VEHICLE_MECHANIC_DYN_COMPONENT_NAMES)
 VEHICLE_MECHANIC_TAGS = {VehicleMechanic.ROCKET_ACCELERATION: 'rocketAcceleration',
  VehicleMechanic.DUAL_ACCURACY: 'dualAccuracy',
@@ -88,7 +94,10 @@ VEHICLE_MECHANIC_TO_PARAMS = {VehicleMechanic.IMPROVED_RAMMING: shared_component
  VehicleMechanic.TEMPERATURE_GUN: shared_components.TemperatureGunParams.MECHANICS_NAME,
  VehicleMechanic.OVERHEAT_GUN: shared_components.OverheatGunParams.MECHANICS_NAME,
  VehicleMechanic.HEATING_ZONES_GUN: shared_components.HeatingZonesGunParams.MECHANICS_NAME,
- VehicleMechanic.STAGED_JET_BOOSTERS: shared_components.StagedJetBoostersParams.MECHANICS_NAME}
+ VehicleMechanic.LOW_CHARGE_SHOT: shared_components.LowChargeShotParams.MECHANICS_NAME,
+ VehicleMechanic.STAGED_JET_BOOSTERS: shared_components.StagedJetBoostersParams.MECHANICS_NAME,
+ VehicleMechanic.PROPELLANT_GUN: shared_components.PropellantGunParams.MECHANICS_NAME,
+ VehicleMechanic.WHEELED_DASH: shared_components.WheeledDashParams.MECHANICS_NAME}
 VEHICLE_PARAMS_TO_MECHANIC = {v:k for k, v in viewitems(VEHICLE_MECHANIC_TO_PARAMS)}
 TRACKABLE_VEHICLE_DESCR_MECHANICS = set()
 TRACKABLE_VEHICLE_DESCR_MECHANICS |= set(VEHICLE_MECHANIC_TAGS)
@@ -115,4 +124,6 @@ VEHICLE_MECHANIC_USED_COMMANDS = {VehicleMechanic.CONCENTRATION_MODE: (VehicleMe
  VehicleMechanic.TARGET_DESIGNATOR: (VehicleMechanicCommand.ACTIVATE,),
  VehicleMechanic.STANCE_DANCE: (VehicleMechanicCommand.ACTIVATE, VehicleMechanicCommand.SWITCH),
  VehicleMechanic.STATIONARY_RELOAD: (VehicleMechanicCommand.MANUAL_RELOAD,),
- VehicleMechanic.STAGED_JET_BOOSTERS: (VehicleMechanicCommand.ACTIVATE,)}
+ VehicleMechanic.STAGED_JET_BOOSTERS: (VehicleMechanicCommand.ACTIVATE,),
+ VehicleMechanic.PROPELLANT_GUN: (VehicleMechanicCommand.ACTIVATE,),
+ VehicleMechanic.WHEELED_DASH: (VehicleMechanicCommand.ACTIVATE,)}

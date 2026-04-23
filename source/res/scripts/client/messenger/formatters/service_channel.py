@@ -51,6 +51,7 @@ from gui.impl import backport
 from gui.impl.backport import getNiceNumberFormat, getShortDateTimeFormat
 from gui.impl.gen import R
 from gui.impl.lobby.winback.winback_helpers import getDiscountFromBlueprint, getDiscountFromGoody, getLevelFromSelectableToken
+from gui.impl.lobby.premacc.premacc_helpers import getDeltaTimeHelper
 from gui.mapbox.mapbox_helpers import formatMapboxRewards
 from gui.prb_control.formatters import getPrebattleFullDescription
 from gui.prestige.prestige_helpers import getCurrentGrade, hasVehiclePrestige, mapGradeIDToUI, needShowPrestigeMilestonesRewardWindow, needShowPrestigeRewardWindow, prestigePointsToXP
@@ -4328,6 +4329,7 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
             else:
                 description = backport.text(self.__MESSAGES.battlePassReward.battle.newLevel.text(), newLevel=text_styles.credits(newLevel), chapter=text_styles.credits(chapterName))
             template = self.__PROGRESSION_BUTTON_TEMPLATE
+            savedData = {u'chapterID': chapterID}
         elif not self.__battlePass.isCompleted():
             if not self.__battlePass.isFinalLevel(chapterID, newLevel):
                 if self.__battlePass.isHoliday():
@@ -5794,22 +5796,6 @@ class ExternalVehicleRentFormatter(ServiceChannelFormatter):
             return [MessageData(formatted, self._getGuiSettings(message, self.template))]
 
 
-class MentoringLicenseFormatter(ClientSysMessageFormatter):
-    __TEMPLATE = u'MentoringLicense'
-    __MESSAGES_TEXT = R.strings.mentoring_license.serviceChannelMessages.adding
-
-    def format(self, message, *args):
-        priorityLevel = None
-        if message:
-            priorityLevel = message.pop(u'priority', None)
-        return [self.__makeMessageData(message, priorityLevel)]
-
-    def __makeMessageData(self, message, priorityLevel):
-        formatted = g_settings.msgTemplates.format(self.__TEMPLATE, ctx={u'header': backport.text(self.__MESSAGES_TEXT.header()),
-         u'text': backport.text(self.__MESSAGES_TEXT.text())})
-        return MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE, priorityLevel=priorityLevel))
-
-
 class GFSMFormatter(ClientSysMessageFormatter):
 
     def format(self, message, *args):
@@ -6085,3 +6071,15 @@ class Collector20RewardReceivedFormatter(ServiceChannelFormatter):
 
     def __formatLines(self, lines):
         return self.__LINE_SPACER.join(lines)
+
+
+class PiggyBankCreditsFullFormatter(ServiceChannelFormatter):
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+    __TEMPLATE = u'PiggyBankCreditsFullMessage'
+    __TIME_LEFT = R.strings.premacc.piggyBankCard.timeLeft
+
+    def format(self, message, *args):
+        config = self.__lobbyContext.getServerSettings().getPiggyBankConfig()
+        timeLeft = getTillTimeByResource(getDeltaTimeHelper(config, message.data), self.__TIME_LEFT)
+        formatted = g_settings.msgTemplates.format(self.__TEMPLATE, ctx={u'timeValue': timeLeft})
+        return [MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE))]

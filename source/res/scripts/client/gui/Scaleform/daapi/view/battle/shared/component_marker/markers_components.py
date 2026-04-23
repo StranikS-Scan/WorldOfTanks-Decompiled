@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/component_marker/markers_components.py
 from __future__ import absolute_import, division
+import logging
+import typing
 import math
 import weakref
 from past.utils import old_div
@@ -23,6 +25,9 @@ from gui.impl.gen import R
 from debug_utils import LOG_CURRENT_EXCEPTION
 import CombatSelectedArea
 from gui.battle_control import minimap_utils
+if typing.TYPE_CHECKING:
+    import ResMgr
+_logger = logging.getLogger(__name__)
 
 def _getDirectionIndicator(swf, mcName):
     indicator = None
@@ -32,6 +37,14 @@ def _getDirectionIndicator(swf, mcName):
         LOG_CURRENT_EXCEPTION()
 
     return indicator
+
+
+class Blending(object):
+    NORMAL = 'normal'
+    ADD = 'add'
+    MULTIPLY = 'multiply'
+    SCREEN = 'screen'
+    SUBTRACT = 'subtract'
 
 
 class ComponentBitMask(BitmaskHelper):
@@ -673,13 +686,6 @@ class TerrainMarkerComponent(_IMarkerComponentBase):
 
 class PolygonalZoneMinimapMarkerComponent(MinimapMarkerComponent):
 
-    class Blending(object):
-        NORMAL = 'normal'
-        ADD = 'add'
-        MULTIPLY = 'multiply'
-        SCREEN = 'screen'
-        SUBTRACT = 'subtract'
-
     def __init__(self, config, matrixProduct, entity=None, targetID=INVALID_TARGET_ID, isVisible=True):
         super(PolygonalZoneMinimapMarkerComponent, self).__init__(config, matrixProduct, entity, targetID, isVisible)
         self._polygon = None
@@ -697,10 +703,10 @@ class PolygonalZoneMinimapMarkerComponent(MinimapMarkerComponent):
             colorTypeSection = colorSection[colorType]
             color.update({colorType: {'fillColor': int(colorTypeSection.readString('fillColor', '0'), 16),
                          'fillAlpha': colorTypeSection.readFloat('fillAlpha'),
-                         'fillBlendMode': colorTypeSection.readString('fillBlendMode', cls.Blending.NORMAL),
+                         'fillBlendMode': colorTypeSection.readString('fillBlendMode', Blending.NORMAL),
                          'outlineColor': int(colorTypeSection.readString('outlineColor', '0'), 16),
                          'outlineAlpha': colorTypeSection.readFloat('outlineAlpha'),
-                         'outlineBlendMode': colorTypeSection.readString('outlineBlendMode', cls.Blending.NORMAL),
+                         'outlineBlendMode': colorTypeSection.readString('outlineBlendMode', Blending.NORMAL),
                          'lineThickness': colorTypeSection.readFloat('lineThickness'),
                          'useGradient': colorTypeSection.readBool('useGradient', False),
                          'gradientColor': int(colorTypeSection.readString('gradientColor', '0'), 16),
@@ -830,3 +836,185 @@ class StaticDeathZoneMinimapMarkerComponent(PolygonalZoneMinimapMarkerComponent)
          (min.x - p.x, max.z - p.z),
          (max.x - p.x, max.z - p.z),
          (max.x - p.x, min.z - p.z)]
+
+
+class W2GTBattleZoneMinimapMarkerComponent(MinimapMarkerComponent):
+    FILL_COLOR = '0xffdd99'
+    FILL_ALPHA = 0.5
+    OUTLINE_THICKNESS = 1.0
+    OUTLINE_COLOR = '0xffdd99'
+    OUTLINE_ALPHA = 1.0
+    DOT_RADIUS = 1.0
+    DOT_GAP = 2.0
+
+    class OutlineStyle(object):
+        SOLID = 'solid'
+        DOTTED = 'dotted'
+
+    class Colors(object):
+        DEFAULT = 'color'
+        BLIND = 'colorBlind'
+        ALL = (DEFAULT, BLIND)
+
+    class ZoneState(object):
+        DEFAULT = 'default'
+        ACTIVE = 'active'
+        HIGHLIGHT = 'highlight'
+        ALL = (DEFAULT, ACTIVE, HIGHLIGHT)
+
+    def __init__(self, config, matrixProduct, entity=None, targetID=INVALID_TARGET_ID, isVisible=True):
+        super(W2GTBattleZoneMinimapMarkerComponent, self).__init__(config, matrixProduct, entity, targetID, isVisible)
+        self.__polygon = None
+        self.__isHighlight = False
+        self.__isActive = False
+        self.__colorSection = None
+        self.__state = None
+        self.__isVisible = True
+        self._properties = config['colors']
+        self._states = config['states']
+        return
+
+    @property
+    def bcMarkerType(self):
+        return MarkerType.ZONE_MARKER_TYPE
+
+    @classmethod
+    def configReader(cls, section):
+        config = super(W2GTBattleZoneMinimapMarkerComponent, cls).configReader(section)
+        colors = {}
+        for sectionType in cls.Colors.ALL:
+            colorSection = section[sectionType]
+            colors.update({sectionType: {'fillColor': int(colorSection.readString('fillColor', cls.FILL_COLOR), 16),
+                           'fillAlpha': colorSection.readFloat('fillAlpha', cls.FILL_ALPHA),
+                           'fillBlendMode': colorSection.readString('fillBlendMode', Blending.NORMAL),
+                           'outlineStyle': colorSection.readString('outlineStyle', cls.OutlineStyle.SOLID),
+                           'outlineThickness': colorSection.readFloat('outlineThickness', cls.OUTLINE_THICKNESS),
+                           'outlineColor': int(colorSection.readString('outlineColor', cls.OUTLINE_COLOR), 16),
+                           'outlineAlpha': colorSection.readFloat('outlineAlpha', cls.OUTLINE_ALPHA),
+                           'dotRadius': colorSection.readFloat('dotRadius', cls.DOT_RADIUS),
+                           'dotGap': colorSection.readFloat('dotGap', cls.DOT_GAP),
+                           'outlineBlendMode': colorSection.readString('outlineBlendMode', Blending.NORMAL)}})
+
+        states = {}
+        statesSection = section['states']
+        for stateType in cls.ZoneState.ALL:
+            stateSection = statesSection[stateType]
+            states.update({stateType: {'fillAlpha': stateSection.readFloat('fillAlpha', cls.FILL_ALPHA)}})
+
+        config.update({'colors': colors,
+         'states': states})
+        return config
+
+    def highlightZone(self, isHighlight):
+        if self.__isHighlight == isHighlight:
+            return
+        self.__isHighlight = isHighlight
+        self.__updateState()
+
+    def activeZone(self, isActive):
+        if self.__isActive == isActive:
+            return
+        self.__isActive = isActive
+        self.__updateState()
+
+    def changeVisibility(self, isVisible):
+        self.__isVisible = isVisible
+
+    def detachGUI(self):
+        super(W2GTBattleZoneMinimapMarkerComponent, self).detachGUI()
+        self.__polygon = None
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        return
+
+    def setVisible(self, isVisible):
+        super(W2GTBattleZoneMinimapMarkerComponent, self).setVisible(isVisible and self.__isVisible)
+
+    def _setupMarker(self, gui, polygon=None, zoneType='', icon='empty', iconX=0, iconY=0, **kwargs):
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
+        state = self._states[self.ZoneState.HIGHLIGHT]
+        hoverAlpha = state.get('fillAlpha', 0)
+        self._gui().invoke(self._componentID, 'initUI', zoneType, hoverAlpha)
+        self.__setIcon(icon, iconX, iconY)
+        self._initPolygon(polygon)
+        if self.__polygon:
+            self._setupPolygon()
+        self.__updateState()
+
+    def _initPolygon(self, polygon):
+        if not polygon:
+            return
+        if not self.__isPolygonValid(polygon):
+            _logger.error('W2GT: BattleZone has invalid polygon')
+            return
+        xc, yc = self._getSize()
+        self.__polygon = sum(([p[0] * xc, -p[1] * yc] for p in polygon), [])
+
+    def _getSize(self):
+        boundingBox = BigWorld.player().arena.arenaType.boundingBox
+        arenaSize = boundingBox[1] - boundingBox[0]
+        xc = minimap_utils.MINIMAP_SIZE[0] / arenaSize[0]
+        yc = minimap_utils.MINIMAP_SIZE[1] / arenaSize[1]
+        return (xc, yc)
+
+    def _setupPolygon(self):
+        self.__updateColorsProperties()
+        self._gui().invoke(self._componentID, 'addZoneData', self.__polygon)
+        self._gui().setActive(self._componentID, self._isVisible and self.__isVisible)
+
+    def __setIcon(self, icon, iconX, iconY):
+        xc, yc = self._getSize()
+        self._gui().invoke(self._componentID, 'setIcon', icon, iconX * xc, -iconY * yc)
+
+    def __getMarkerProperties(self, colorSection, state):
+        props = self._properties[colorSection]
+        state = self._states[state]
+        props.update(state)
+        return (props['fillColor'],
+         props['fillAlpha'],
+         props['fillBlendMode'],
+         props['outlineStyle'],
+         props['outlineThickness'],
+         props['outlineColor'],
+         props['outlineAlpha'],
+         props['dotRadius'],
+         props['dotGap'],
+         props['outlineBlendMode'])
+
+    def __getState(self):
+        if self.__isHighlight:
+            return self.ZoneState.HIGHLIGHT
+        return self.ZoneState.ACTIVE if self.__isActive else self.ZoneState.DEFAULT
+
+    def __isColorBlind(self):
+        return self.settingsCore.getSetting(settings_constants.GRAPHICS.COLOR_BLIND)
+
+    def __updateColorsProperties(self):
+        gui = self._gui()
+        if gui is None:
+            return
+        else:
+            colorSection = 'colorBlind' if self.__isColorBlind() else 'color'
+            state = self.__getState()
+            if self.__colorSection == colorSection and self.__state == state:
+                return
+            self.__colorSection = colorSection
+            self.__state = state
+            gui.invoke(self._componentID, 'setProperties', *self.__getMarkerProperties(colorSection, state))
+            return
+
+    def __updateState(self):
+        gui = self._gui()
+        if gui is None:
+            return
+        else:
+            stateType = self.__getState()
+            state = self._states[stateType]
+            gui.invoke(self._componentID, 'setState', state['fillAlpha'])
+            return
+
+    def __onSettingsChanged(self, diff):
+        if settings_constants.GRAPHICS.COLOR_BLIND in diff:
+            self.__updateColorsProperties()
+
+    def __isPolygonValid(self, polygon):
+        return all((len(p) == 2 for p in polygon))

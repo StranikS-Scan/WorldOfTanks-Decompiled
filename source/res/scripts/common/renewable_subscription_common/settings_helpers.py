@@ -4,13 +4,12 @@ from __future__ import absolute_import, division
 import logging
 import typing
 from battle_modifiers_common import BattleParams
-from debug_utils import LOG_CURRENT_EXCEPTION
-from dict2model.exceptions import ValidationError
 from items import vehicles
 from renewable_subscription_common.schema import renewableSubscriptionsConfigSchema
+from renewable_subscription_common.settings_constants import WotPlusTier
 if typing.TYPE_CHECKING:
     from battle_modifiers_common import BattleModifiers
-    from renewable_subscription_common.schema import _SubscriptionFeaturesModel, _SubscriptionFullModel, _AdditionalXPBonusFeatureModel, _CompatibleVehicles, _BonusFactors, _FeatureModel, _ExclusiveVehicleFeatureModel, _BadgesFeatureModel
+    from renewable_subscription_common.schema import _SubscriptionFeaturesModel, _SubscriptionFullModel, _AdditionalXPBonusFeatureModel, _CompatibleVehicles, _BonusFactors, _FeatureModel, _ExclusiveVehicleFeatureModel, _BadgesFeatureModel, _ExclusiveVehicle
 _logger = logging.getLogger(__name__)
 ONE_HOUR = 3600
 
@@ -20,17 +19,6 @@ def getModelTierSettings(model, tierID):
 
 def getCurrentModelTierSettings(tierID):
     return getModelTierSettings(renewableSubscriptionsConfigSchema.getModel(), tierID)
-
-
-def getSettingsStorageFromDict(tierID, dictData, logAsException=False):
-    try:
-        model = renewableSubscriptionsConfigSchema.deserialize(dictData, silent=False)
-    except ValidationError:
-        model = None
-        if logAsException:
-            LOG_CURRENT_EXCEPTION()
-
-    return SubscriptionSettingsStorage(tierID, _SpecificModelProvider(model))
 
 
 class _ModelProvider(object):
@@ -47,11 +35,11 @@ class _GlobalModelProvider(_ModelProvider):
         return renewableSubscriptionsConfigSchema.getModel()
 
 
-class _SpecificModelProvider(_ModelProvider):
+class SpecificModelProvider(_ModelProvider):
     __slots__ = ('_modelRef',)
 
     def __init__(self, model):
-        super(_SpecificModelProvider, self).__init__()
+        super(SpecificModelProvider, self).__init__()
         self._modelRef = model
 
     def getModelRef(self):
@@ -104,24 +92,13 @@ class SubscriptionSettingsStorage(object):
 
     def isGoldReserveFeatureEnabled(self):
         settingsModel = self._modelProvider.getModelRef()
-        return False if not settingsModel else settingsModel.goldReserveFeature.enabled
+        if not settingsModel:
+            return False
+        return False if not settingsModel.enabled else settingsModel.goldReserveFeature.enabled
 
     def isGoldReserveFeatureAvailable(self):
         tierSettings = self._getEnabledTierSettings()
         return False if not tierSettings else self._getFeatureAvailability(tierSettings.goldReserveFeature)
-
-    def getEffectiveGoldReserveFeatureTier(self):
-        if not self.isGoldReserveFeatureEnabled():
-            return self._tierID
-        tierSettings = self._getEnabledTierSettings()
-        if tierSettings:
-            if tierSettings.goldReserveFeature.available:
-                return self._tierID
-        for tierID, tierSettings in self.reverseIterTiers():
-            if tierSettings.goldReserveFeature.available:
-                return max(tierID, self._tierID)
-
-        return self._tierID
 
     def isExcludedMapFeatureEnabled(self):
         settingsModel = self._modelProvider.getModelRef()
@@ -224,14 +201,22 @@ class SubscriptionSettingsStorage(object):
         return None if not tierSettings else tierSettings.badgesFeature
 
     def isFreeEquipmentDemountingEnabled(self):
-        tierSettings = self._getEnabledTierSettings()
-        return False if not tierSettings else tierSettings.freeEquipmentDemountingFeature.enabled
+        settingsModel = self._modelProvider.getModelRef()
+        if not settingsModel:
+            return False
+        return False if not settingsModel.enabled else settingsModel.freeEquipmentDemountingFeature.enabled
 
     def isFreeEquipmentDemountingAvailable(self):
         tierSettings = self._getEnabledTierSettings()
         return False if not tierSettings else self._getFeatureAvailability(tierSettings.freeEquipmentDemountingFeature)
 
     def isFreeDeluxeEquipmentDemountingEnabled(self):
+        if not self.isFreeEquipmentDemountingEnabled():
+            return False
+        settingsModel = self._modelProvider.getModelRef()
+        return False if not settingsModel else settingsModel.freeEquipmentDemountingFeature.deluxeEnabled
+
+    def isFreeDeluxeEquipmentDemountingAvailable(self):
         if not self.isFreeEquipmentDemountingAvailable():
             return False
         tierSettings = self._getCurrentTierSettings()
@@ -300,11 +285,12 @@ class SubscriptionSettingsStorage(object):
         tierSettings = self._getEnabledTierSettings()
         return False if not tierSettings else self._getFeatureAvailability(tierSettings.exclusiveVehicleFeature)
 
-    def getExclusiveVehicle(self):
+    def getExclusiveVehicles(self):
         config = self.getExclusiveVehicleConfig()
-        if not config:
-            return {}
-        return {} if not config.enabled else config.exclusiveVehicle
+        return config.exclusiveVehicles if config and config.enabled else []
+
+    def getExclusiveVehiclesCount(self):
+        pass
 
     def isOptionalDevicesAssistantEnabled(self):
         tierSettings = self._getEnabledTierSettings()
@@ -339,10 +325,20 @@ class SubscriptionSettingsStorage(object):
         return False if not tierSettings else self._getFeatureAvailability(tierSettings.battlePassFeature)
 
     def getBattlePassVehiclePointsListForMode(self, bonusType, vehTypeCompDescr=0):
-        tierSettings = self._getEnabledTierSettings()
-        if not tierSettings:
+        settingsModel = self._modelProvider.getModelRef()
+        if not settingsModel:
             return (tuple(), tuple())
-        return (tuple(), tuple()) if not tierSettings.battlePassFeature.available else tierSettings.battlePassFeature.getVehiclePointListsForMode(bonusType, vehTypeCompDescr)
+        return (tuple(), tuple()) if not settingsModel.enabled else settingsModel.battlePassFeature.getVehiclePointListsForMode(bonusType, vehTypeCompDescr)
+
+    def getBestBattlePassBonusTier(self):
+        for tierID, tier in self.reverseIterTiers():
+            if tier.battlePassFeature.available:
+                return tierID
+
+        return WotPlusTier.NONE
+
+    def isBattlePassBonusIncludedInAnyTier(self):
+        return self.getBestBattlePassBonusTier() in WotPlusTier.ALL
 
     def getTierAvailableFeatures(self, tierID):
         tierSettings = self._getSpecificTierSettings(tierID)

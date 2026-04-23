@@ -387,6 +387,7 @@ class KPI(object):
         SUSPENSION_DAMAGE_REDUCTION = 'suspensionDamageReduction'
         HP_RECOVER = 'hpRecover'
         COOLING_PER_SEC = 'coolingPerSec'
+        HE_SHELL_VELOCITY = 'HEshellVelocity'
         VEHICLE_CAMOUFLAGE_GROUP = 'vehicleCamouflageGroup'
         VEHICLE_STILL_CAMOUFLAGE_GROUP = 'vehicleStillCamouflageGroup'
         VEHICLE_STILL_CAMOUFLAGE_GROUP_DELUXE = 'vehicleStillCamouflageGroupDeluxe'

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ProjectileMover.py
+from __future__ import absolute_import
 import BigWorld
 import Math
 import CGF
@@ -30,7 +31,7 @@ class ProjectileMover(object):
     __AUTO_SCALE_DISTANCE = 180.0
 
     def __init__(self):
-        self.__projectiles = dict()
+        self.__projectiles = {}
         self.__isPaused = False
         self.salvo = BigWorld.PySalvo(1000, 0, -100)
         self.__ballistics = BigWorld.PyBallisticsSimulator(lambda start, end: BigWorld.player().arena.collideWithSpaceBB(start, end)[1], self.__killProjectile, self.__deleteProjectile)
@@ -49,7 +50,7 @@ class ProjectileMover(object):
         self.__ballistics = None
         if self.__debugDrawer is not None:
             self.__debugDrawer.destroy()
-        shotIDs = self.__projectiles.keys()
+        shotIDs = list(self.__projectiles)
         for shotID in shotIDs:
             self.__delProjectile(shotID)
 
@@ -158,7 +159,7 @@ class ProjectileMover(object):
         self.__isPaused = isPause
         if not self.__isPaused:
             return
-        shotIDs = self.__projectiles.keys()
+        shotIDs = list(self.__projectiles)
         for shotID in shotIDs:
             self.__delProjectile(shotID)
 

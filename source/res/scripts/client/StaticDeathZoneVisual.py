@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/StaticDeathZoneVisual.py
+from __future__ import absolute_import, division
 import enum
 import BigWorld
 from Math import Vector3, Vector4

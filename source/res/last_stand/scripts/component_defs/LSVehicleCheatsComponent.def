@@ -1,0 +1,68 @@
+<LSVehicleCheatsComponent.def>
+  <CellMethods>
+    <spawnLootAtShotPoint>
+      <Args>
+        <lootName>	STRING	</lootName>
+        <team>	INT32	</team>
+      </Args>
+      <Exposed></Exposed>
+    </spawnLootAtShotPoint>
+    <addSouls>
+      <Args>
+        <count>	INT32	</count>
+      </Args>
+      <Exposed></Exposed>
+    </addSouls>
+    <toggleBuff>
+      <Args>
+        <buffName>	STRING	</buffName>
+      </Args>
+      <Exposed></Exposed>
+    </toggleBuff>
+    <addModificator>
+      <Args>
+        <factorName>	STRING	</factorName>
+        <op>	STRING	</op>
+        <value>	FLOAT32	</value>
+      </Args>
+      <Exposed></Exposed>
+    </addModificator>
+    <removeFactor>
+      <Args>
+        <factorName>	STRING	</factorName>
+      </Args>
+      <Exposed></Exposed>
+    </removeFactor>
+    <spawnCampAtShotPoint>
+      <Exposed></Exposed>
+    </spawnCampAtShotPoint>
+    <destroyCamp>
+      <Exposed></Exposed>
+    </destroyCamp>
+    <killAllBots>
+      <Args>
+        <attackReason>	STRING	</attackReason>
+      </Args>
+      <Exposed></Exposed>
+    </killAllBots>
+    <killSelf>
+      <Args>
+        <attackReason>	STRING	</attackReason>
+      </Args>
+      <Exposed></Exposed>
+    </killSelf>
+    <spawnPersonalDeathZones>
+      <Args>
+        <onlyOwner>	BOOL	</onlyOwner>
+        <deathzoneConfig>	STRING	</deathzoneConfig>
+      </Args>
+      <Exposed></Exposed>
+    </spawnPersonalDeathZones>
+  </CellMethods>
+  <ClientMethods></ClientMethods>
+  <Properties></Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	lsCheats	</DefaultKeyName>
+</LSVehicleCheatsComponent.def>

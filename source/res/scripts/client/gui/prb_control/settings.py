@@ -298,6 +298,7 @@ class PREBATTLE_RESTRICTION(object):
     LIMIT_NATIONS = 'limits/nations'
     LIMIT_COMPONENTS = 'limits/components'
     LIMIT_AMMO = 'limits/ammo'
+    LIMIT_NOT_ENOUGH_SUITABLE_VEHICLES = 'limits/notEnoughSuitableVehicles'
     LIMIT_SHELLS = 'limits/shells'
     LIMIT_TAGS = 'limits/tags'
     LIMIT_MAX_OBSERVERS = 'limits/maxObservers'
@@ -440,6 +441,7 @@ class UNIT_RESTRICTION(object):
     HEAVYTANK_IS_FORBIDDEN = 66
     AT_SPG_IS_FULL = 67
     AT_SPG_IS_FORBIDDEN = 68
+    LIMIT_NOT_ENOUGH_SUITABLE_VEHICLES = 69
     VEHICLE_LIMITS = (LIMIT_LEVEL, LIMIT_VEHICLE_TYPE, LIMIT_VEHICLE_CLASS)
     CLASSES_RESTRICTIONS = (SPG_IS_FULL,
      SPG_IS_FORBIDDEN,
@@ -461,16 +463,16 @@ class PRE_QUEUE_RESTRICTION(object):
     LIMIT_VEHICLE_TYPE = 'limits/vehicleType'
     LIMIT_VEHICLE_CLASS = 'limits/vehicleClass'
     LIMIT_NO_SUITABLE_VEHICLES = 'limits/noSuitableVehicles'
+    LIMIT_NOT_ENOUGH_SUITABLE_VEHICLES = 'limits/notEnoughSuitableVehicles'
     MODE_NO_BATTLES = 'mode/noBattles'
     MODE_NOT_SET = 'mode/notSet'
     MODE_NOT_AVAILABLE = 'mode/notAvailable'
     MODE_OFFLINE = 'mode/offline'
     MODE_IS_IN_PREANNOUNCE = 'mode/preannounce'
+    MODE_SEASON_ENDED = 'mode/seasonEnded'
     VEHICLE_WILL_BE_UNLOCKED = 'vehicle/willBeUnlocked'
     BAN_IS_SET = 'ban/isSet'
     QUALIFICATION_RESULTS_PROCESSING = 'qualification/resultsProcessing'
-    QUALIFICATION_CALCULATION_RATING = 'qualification/calculatingRating'
-    SHOP_PAGE_OPENED = 'shopPage/open'
     VEHICLE_LIMITS = (LIMIT_LEVEL, LIMIT_VEHICLE_TYPE, LIMIT_VEHICLE_CLASS)
 
 

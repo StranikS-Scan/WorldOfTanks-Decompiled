@@ -523,7 +523,7 @@ class ProgressionPage(PageSubModelPresenter):
         else:
             style = getComp7ProgressionStyle()
             if style is None:
-                _logger.error('Style could not be found')
+                _logger.debug('Comp7 Progression style is not found')
                 return
             allTokens = self.__itemsCache.items.tokens.getTokens()
             cacher = self.__c11nProgressCacher

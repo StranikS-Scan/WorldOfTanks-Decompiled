@@ -257,9 +257,12 @@ def showProBoostSwitchDialog(dialogParams):
 
 @wg_async
 def showServiceRecordCustomizationConfirmDialog():
-    layoutID = ServiceRecordCustomizationConfirmDialog.LAYOUT_ID
-    result = yield wg_await(showSingleDialog(layoutID=layoutID, wrappedViewClass=ServiceRecordCustomizationConfirmDialog))
-    raise AsyncReturn(result)
+    dialog = FullScreenDialogWindowWrapper.createIfNotExist(ServiceRecordCustomizationConfirmDialog.LAYOUT_ID, ServiceRecordCustomizationConfirmDialog)
+    if dialog is not None:
+        result = yield wg_await(show(dialog))
+        raise AsyncReturn(SingleDialogResult(busy=False, result=result))
+    raise AsyncReturn(SingleDialogResult(busy=True, result=None))
+    return
 
 
 @wg_async

@@ -42,7 +42,6 @@ from gui.collection.collections_constants import COLLECTION_START_EVENT_TYPE, CO
 from gui.game_control.seniority_awards_controller import WDR_CURRENCY
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.impl.lobby.premacc.premacc_helpers import PiggyBankConstants, getDeltaTimeHelper
 from gui.impl.lobby.seniority_awards.seniority_awards_helper import isSeniorityAwardsSystemNotificationShowed, setSeniorityAwardEventStateSetting
 from gui.integrated_auction.constants import AUCTION_FINISH_EVENT_TYPE, AUCTION_FINISH_STAGE_SEEN, AUCTION_STAGE_START_SEEN, AUCTION_START_EVENT_TYPE
 from gui.limited_ui.lui_rules_storage import LUI_RULES
@@ -55,7 +54,7 @@ from gui.prb_control.entities.listener import IGlobalListener
 from gui.prestige.prestige_helpers import MAX_GRADE_ID, isFirstEntryNotificationShown, mapGradeIDToUI, setFirstEntryNotificationShown
 from gui.server_events.recruit_helper import getAllRecruitsInfo
 from gui.shared import events, g_eventBus
-from gui.shared.formatters import text_styles, time_formatters
+from gui.shared.formatters import text_styles
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.system_factory import collectAllNotificationsListeners, registerNotificationsListeners
 from gui.shared.utils import showInvitationInWindowsBar
@@ -158,6 +157,10 @@ class _StateExtractor(object):
     def getMapsTrainingState(cls):
         return cls.__lobbyContext.getServerSettings().isMapsTrainingEnabled()
 
+    @classmethod
+    def getW2gtState(cls):
+        return cls.__lobbyContext.getServerSettings().w2gtConfig.enabled
+
 
 _FEATURES_DATA = {PremiumConfigs.DAILY_BONUS: {_FeatureState.ON: (R.strings.system_messages.daily_xp_bonus.switch_on.title(), R.strings.system_messages.daily_xp_bonus.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
                               _FeatureState.OFF: (R.strings.system_messages.daily_xp_bonus.switch_off.title(), R.strings.system_messages.daily_xp_bonus.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
@@ -191,7 +194,10 @@ _FEATURES_DATA = {PremiumConfigs.DAILY_BONUS: {_FeatureState.ON: (R.strings.syst
                                _FUNCTION: _StateExtractor.getPlayerSubscriptionsState},
  MAPS_TRAINING_ENABLED_KEY: {_FeatureState.ON: (R.strings.system_messages.maps_training.switch.title(), R.strings.system_messages.maps_training.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
                              _FeatureState.OFF: (R.strings.system_messages.maps_training.switch.title(), R.strings.system_messages.maps_training.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
-                             _FUNCTION: _StateExtractor.getMapsTrainingState}}
+                             _FUNCTION: _StateExtractor.getMapsTrainingState},
+ Configs.W2GT_CONFIG.value: {_FeatureState.ON: (R.strings.system_messages.w2gt.switchOn.header(), R.strings.system_messages.w2gt.switchOn.description(), SystemMessages.SM_TYPE.InformationHeader),
+                             _FeatureState.OFF: (R.strings.system_messages.w2gt.switchOff.header(), R.strings.system_messages.w2gt.switchOff.description(), SystemMessages.SM_TYPE.ErrorHeader),
+                             _FUNCTION: _StateExtractor.getW2gtState}}
 
 class _NotificationListener(object):
 
@@ -1048,19 +1054,9 @@ class TankPremiumListener(_NotificationListener):
 
     def __addListeners(self):
         self.__gameSession.onPremiumNotify += self.__onTankPremiumActiveChanged
-        g_clientUpdateManager.addCallbacks({PiggyBankConstants.PIGGY_BANK_CREDITS: self.__onPiggyBankCreditsChanged})
 
     def __removeListeners(self):
         self.__gameSession.onPremiumNotify -= self.__onTankPremiumActiveChanged
-        g_clientUpdateManager.removeCallback(PiggyBankConstants.PIGGY_BANK_CREDITS, self.__onPiggyBankCreditsChanged)
-
-    def __onPiggyBankCreditsChanged(self, credits_=None):
-        config = self.__lobbyContext.getServerSettings().getPiggyBankConfig()
-        maxAmount = config.get('creditsThreshold', PiggyBankConstants.MAX_AMOUNT)
-        data = self.__itemsCache.items.stats.piggyBank
-        if credits_ >= maxAmount:
-            timeLeft = time_formatters.getTillTimeByResource(getDeltaTimeHelper(config, data), R.strings.premacc.piggyBankCard.timeLeft)
-            SystemMessages.pushMessage(priority=NotificationPriorityLevel.MEDIUM, text=backport.text(R.strings.system_messages.piggyBank.piggyBankFull(), timeValue=timeLeft))
 
     def __onTankPremiumActiveChanged(self, isPremActive, *_):
         if not isPremActive:

@@ -35,3 +35,7 @@ class IBattleResultStatsCtrl(object):
     @staticmethod
     def onShowResults(arenaUniqueID):
         raise NotImplementedError
+
+    @classmethod
+    def representativeArenaBonusType(cls):
+        return None

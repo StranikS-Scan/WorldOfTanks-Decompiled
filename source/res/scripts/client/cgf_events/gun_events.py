@@ -21,5 +21,5 @@ def postVehicularFireRateChangedEvent(spaceID, entityID, slotName, shotsPerSec):
     CGF.postEvent(spaceID, Vehicular.FireRateChangedEvent(entityID=entityID, slotName=slotName, shotsPerSec=shotsPerSec))
 
 
-def postVehicularTemperatureChangedEvent(spaceID, entityID, slotName, currentTemperature, maxTemperature):
-    CGF.postEvent(spaceID, Vehicular.TemperatureChangedEvent(entityID=entityID, slotName=slotName, currentTemperature=currentTemperature, maxTemperature=maxTemperature))
+def postVehicularVariablesChangedEvent(spaceID, entityID, slotName, varValueMap):
+    CGF.postEvent(spaceID, Vehicular.VariablesChangedEvent(entityID=entityID, slotName=slotName, varValueMap=varValueMap))

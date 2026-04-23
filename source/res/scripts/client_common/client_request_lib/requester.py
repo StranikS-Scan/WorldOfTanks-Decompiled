@@ -448,6 +448,12 @@ class IngameTournamentsAccessor(BaseAccessor):
         return self._data_source.get_ingame_tournaments(callback, *args, **kwargs)
 
 
+class W2gtAccessor(BaseAccessor):
+
+    def get_w2gt_tips(self, callback, headers, params):
+        return self._data_source.get_w2gt_tips(callback, headers, params)
+
+
 class Requester(object):
     available_data_sources = {'stagings': StagingDataAccessor,
      'fake': FakeDataAccessor,
@@ -473,6 +479,7 @@ class Requester(object):
     server_replays = RequestDescriptor(ServerReplaysAccessor)
     loadouts_assistant = RequestDescriptor(LoadoutsAssistantAccessor)
     tournaments = RequestDescriptor(IngameTournamentsAccessor)
+    w2gt = RequestDescriptor(W2gtAccessor)
 
     @classmethod
     def create_requester(cls, url_fetcher, config, client_lang=None, user_agent=None):

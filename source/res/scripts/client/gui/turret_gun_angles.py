@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/turret_gun_angles.py
+from __future__ import absolute_import
 from gui.ClientHangarSpace import hangarCFG
 from skeletons.gui.turret_gun_angles import ITurretAndGunAngles
 

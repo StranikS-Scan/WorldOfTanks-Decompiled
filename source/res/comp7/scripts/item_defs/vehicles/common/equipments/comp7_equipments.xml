@@ -45,7 +45,7 @@
       </cooldownSeconds>
       <duration>	20	  <exports>	vse tooltip	</exports>
       </duration>
-      <crewBuff>	4 7 10	  <exports>	vse tooltip	</exports>
+      <crewBuff>	5.5 9 13	  <exports>	vse tooltip	</exports>
       </crewBuff>
     </script>
   </comp7_ally_support>
@@ -70,9 +70,9 @@
       </cooldownSeconds>
       <duration>	5	  <exports>	vse tooltip	</exports>
       </duration>
-      <heal>	8 14 20	  <exports>	vse tooltip	</exports>
+      <heal>	10 16 22	  <exports>	vse tooltip	</exports>
       </heal>
-      <gunReloadTimeBuff>	4	  <exports>	vse tooltip	</exports>
+      <gunReloadTimeBuff>	5.5	  <exports>	vse tooltip	</exports>
       </gunReloadTimeBuff>
       <tickInterval>	1.0	  <exports>	vse tooltip	</exports>
       </tickInterval>
@@ -118,11 +118,11 @@
           <plan>	comp7Abilities/berserk_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	3	  <exports>	vse	</exports>
+      <cooldownSeconds>	5	  <exports>	vse	</exports>
       </cooldownSeconds>
       <duration>	12	  <exports>	vse tooltip	</exports>
       </duration>
-      <gunReloadTimeBuff>	0.75 0.7 0.65	  <exports>	vse tooltip	</exports>
+      <gunReloadTimeBuff>	0.75 0.725 0.7	  <exports>	vse tooltip	</exports>
       </gunReloadTimeBuff>
       <damageDistance>	150	  <exports>	vse tooltip	</exports>
       </damageDistance>
@@ -144,7 +144,7 @@
           <plan>	comp7Abilities/aoeInspire_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	3	  <exports>	vse	</exports>
+      <cooldownSeconds>	7	  <exports>	vse	</exports>
       </cooldownSeconds>
       <duration>	20	  <exports>	vse tooltip	</exports>
       </duration>
@@ -217,6 +217,8 @@
       </cooldownSeconds>
       <gunReloadTimeBuff>	0.7 0.6 0.50	  <exports>	vse tooltip	</exports>
       </gunReloadTimeBuff>
+      <gunTemperatureBuff>	-15 -30 -50	  <exports>	vse tooltip	</exports>
+      </gunTemperatureBuff>
     </script>
   </comp7_fast_recharge>
   <comp7_juggernaut>

@@ -116,8 +116,6 @@ def addEventGroup(groupArray, cache):
 
     if boostersGroup:
         groupArray.addViewModel(group)
-    else:
-        group.unbind()
     return
 
 

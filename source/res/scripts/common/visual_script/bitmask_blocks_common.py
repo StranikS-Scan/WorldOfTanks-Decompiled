@@ -51,21 +51,6 @@ class BitMaskBase(Block, BitMaskMeta):
         self._bitMask.setValue(bitMask)
 
 
-class BitwiseNOT(Block, BitMaskMeta):
-
-    def __init__(self, *args, **kwargs):
-        super(BitwiseNOT, self).__init__(*args, **kwargs)
-        self._a = self._makeDataInputSlot('a', SLOT_TYPE.INT)
-        self._res = self._makeDataOutputSlot('res', SLOT_TYPE.INT, self._getValue)
-
-    def _getValue(self):
-        self._res.setValue(~self._a.getValue())
-
-    @classmethod
-    def mode(cls):
-        return Block.mode() | BLOCK_MODE.CAN_BE_CONST_EXPR
-
-
 class BitwiseOperationBase(Block, BitMaskMeta):
 
     def __init__(self, *args, **kwargs):
@@ -97,34 +82,3 @@ class BitwiseOperationBase(Block, BitMaskMeta):
     @classmethod
     def mode(cls):
         return Block.mode() | BLOCK_MODE.CAN_BE_CONST_EXPR
-
-
-class BitwiseAND(BitwiseOperationBase):
-
-    def _getValue(self):
-        masks = self._maskValues
-        self._res.setValue(reduce(long.__and__, masks[1:], masks[0]))
-
-
-class BitwiseOR(BitwiseOperationBase):
-
-    def _getValue(self):
-        masks = self._maskValues
-        self._res.setValue(reduce(long.__or__, masks[1:], masks[0]))
-
-
-class BitwiseXOR(BitwiseOperationBase):
-
-    def _getValue(self):
-        masks = self._maskValues
-        self._res.setValue(reduce(long.__xor__, masks[1:], masks[0]))
-
-
-class BitwiseEQUAL(BitwiseOperationBase):
-
-    def _addOutputNode(self):
-        self._res = self._makeDataOutputSlot('res', SLOT_TYPE.BOOL, self._getValue)
-
-    def _getValue(self):
-        masks = self._maskValues
-        self._res.setValue(all((m == masks[0] for m in masks[1:])))

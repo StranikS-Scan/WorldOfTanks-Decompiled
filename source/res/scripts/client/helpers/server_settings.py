@@ -1207,7 +1207,7 @@ class _ABFeatureTestConfig(namedtuple('_ABFeatureTestConfig', ('newbieHints', 's
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(newbieHints={}, storyMode={})
+        defaults = {field:{} for field in cls._fields}
         defaults.update(kwargs)
         return super(_ABFeatureTestConfig, cls).__new__(cls, **defaults)
 
@@ -1364,7 +1364,8 @@ class _IngameTournamentConfigByTournamentType(settingsBlock('_IngameTournamentCo
  'endTime',
  'showmatches',
  'shop',
- 'offerGiftsToken'))):
+ 'offerGiftsToken',
+ 'tokenStoreOpeningTime'))):
 
     @classmethod
     def defaults(cls):
@@ -1373,7 +1374,8 @@ class _IngameTournamentConfigByTournamentType(settingsBlock('_IngameTournamentCo
          'endTime': 0,
          'showmatches': [],
          'shop': [],
-         'offerGiftsToken': ''}
+         'offerGiftsToken': '',
+         'tokenStoreOpeningTime': 0}
 
     @classmethod
     def _preprocessData(cls, data):
@@ -1410,6 +1412,29 @@ class _IngameTournamentConfig(settingsBlock('_IngameTournamentConfig', (IngameTo
             data[tournamentTypeStr] = _IngameTournamentConfigByTournamentType.defaults()
 
         return data
+
+
+class _W2GTConfig(namedtuple('_W2GTConfig', ('enabled',
+ 'dataLifetime',
+ 'timeLimits',
+ 'restrictedVehicles'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(enabled=False, dataLifetime=0, timeLimits={}, restrictedVehicles={})
+        defaults.update(kwargs)
+        return super(_W2GTConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    def getTimeLimitByStage(self, stage):
+        return self.timeLimits.get(stage, 0)
 
 
 class ServerSettings(object):
@@ -1466,6 +1491,7 @@ class ServerSettings(object):
         self.__exchangeRatesConfig = _ExchangeRatesConfig()
         self.__easyTankEquipConfig = EasyTankEquipConfig()
         self.__ingameTournamentConfig = _IngameTournamentConfig()
+        self.__w2gtConfig = _W2GTConfig()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -1629,6 +1655,10 @@ class ServerSettings(object):
             self.__ingameTournamentConfig = makeTupleByDict(_IngameTournamentConfig, self.__serverSettings[Configs.INGAME_TOURNAMENT_CONFIG.value])
         else:
             self.__ingameTournamentConfig = _IngameTournamentConfig.defaults()
+        if Configs.W2GT_CONFIG.value in self.__serverSettings:
+            self.__w2gtConfig = makeTupleByDict(_W2GTConfig, self.__serverSettings[Configs.W2GT_CONFIG.value])
+        else:
+            self.__w2gtConfig = _W2GTConfig()
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -1751,6 +1781,8 @@ class ServerSettings(object):
             self.__serverSettings[PETS_SYSTEM_CONFIG] = serverSettingsDiff[PETS_SYSTEM_CONFIG]
         if Configs.INGAME_TOURNAMENT_CONFIG.value in serverSettingsDiff:
             self.__updateIngameTournamentConfig(serverSettingsDiff)
+        if Configs.W2GT_CONFIG.value in serverSettingsDiff:
+            self.__updateW2GTConfig(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -1937,6 +1969,10 @@ class ServerSettings(object):
     @property
     def ingameTournamentConfig(self):
         return self.__ingameTournamentConfig
+
+    @property
+    def w2gtConfig(self):
+        return self.__w2gtConfig
 
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled
@@ -2408,6 +2444,9 @@ class ServerSettings(object):
     def __updateAdvancedAchievementsConfig(self, serverSettingsDiff):
         if Configs.ADVANCED_ACHIEVEMENTS_CONFIG.value in serverSettingsDiff:
             self.__advancedAchievementsConfig = self.__advancedAchievementsConfig.replace(serverSettingsDiff[Configs.ADVANCED_ACHIEVEMENTS_CONFIG.value])
+
+    def __updateW2GTConfig(self, serverSettingsDiff):
+        self.__w2gtConfig = self.__w2gtConfig.replace(serverSettingsDiff[Configs.W2GT_CONFIG.value])
 
 
 def serverSettingsChangeListener(*configKeys):

@@ -704,12 +704,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         if 'epic_config' in diff:
             self.__setData()
             self.onUpdated(diff['epic_config'])
-            self.__resetTimer()
-
-    def __resetTimer(self):
-        self.startNotification()
-        self.__timerUpdate()
-        self.__timerTick()
+            self.startNotification()
 
     def __timerUpdate(self):
         status, _, _ = self.getPrimeTimeStatus()

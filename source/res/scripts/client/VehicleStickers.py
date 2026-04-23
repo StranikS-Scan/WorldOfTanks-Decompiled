@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/VehicleStickers.py
+from __future__ import absolute_import, division
 import imghdr
 import logging
 import typing
 import weakref
-from collections import namedtuple
 import math
+from collections import namedtuple
+from future.utils import viewvalues
 import BigWorld
 import CGF
 import GenericComponents
@@ -146,7 +148,7 @@ class ModelStickers(object):
         self.__stickerModel.setupSuperModel(self.__model, self.__toPartRootMatrix)
         self.__parentNode.attach(self.__stickerModel)
         stickerPacks = set()
-        for stickerPackTuple in self.__stickerPacks.itervalues():
+        for stickerPackTuple in viewvalues(self.__stickerPacks):
             for stickerPack in stickerPackTuple:
                 stickerPacks.add(stickerPack)
 
@@ -176,7 +178,7 @@ class ModelStickers(object):
                     self.__parentNode.detach(self.__stickerModel)
                 if self.__dynamicModelComponent is not None:
                     self.__dynamicModelComponent.detachFromCompound(self.__stickerModel)
-            for stickerPackTuple in self.__stickerPacks.itervalues():
+            for stickerPackTuple in viewvalues(self.__stickerPacks):
                 for stickerPack in stickerPackTuple:
                     stickerPack.detach(self.__componentIdx, self.__stickerModel)
 
@@ -330,7 +332,6 @@ class FixedEmblemStickerPack(StickerPack):
             return
 
     def _getDefaultParams(self, stickerID):
-        stickerID = stickerID
         item = items.vehicles.g_cache.customization20().decals.get(stickerID)
         return (None, None) if item is None else _TextureParams(item.texture, '', item.canBeMirrored)
 
@@ -678,7 +679,7 @@ class VehicleStickers(object):
         clanStickerPackTuple = self.__stickerPacks[SlotTypes.CLAN]
         for clanStickerPack in clanStickerPackTuple:
             if clanStickerPack.setClanId(clanID):
-                for componentStickers in self.__stickers.itervalues():
+                for componentStickers in viewvalues(self.__stickers):
                     componentStickers.stickers.updateClanSticker()
 
     def setInsigniaRank(self, insigniaRank):
@@ -686,12 +687,12 @@ class VehicleStickers(object):
         insigniaStickerPacks = set(self.__stickerPacks[SlotTypes.INSIGNIA] + self.__stickerPacks[SlotTypes.INSIGNIA_ON_GUN])
         for insigniaStickerPack in insigniaStickerPacks:
             if insigniaStickerPack.setInsigniaRank(insigniaRank):
-                for componentStickers in self.__stickers.itervalues():
+                for componentStickers in viewvalues(self.__stickers):
                     componentStickers.stickers.updateInsigniaSticker()
 
     def __setAlpha(self, alpha):
         multipliedAlpha = alpha * self.__defaultAlpha
-        for componentStickers in self.__stickers.itervalues():
+        for componentStickers in viewvalues(self.__stickers):
             actualAlpha = multipliedAlpha if self.__show else 0.0
             componentStickers.stickers.setAlpha(actualAlpha)
             componentStickers.alpha = multipliedAlpha
@@ -700,7 +701,7 @@ class VehicleStickers(object):
 
     def __setShow(self, show):
         self.__show = show
-        for componentStickers in self.__stickers.itervalues():
+        for componentStickers in viewvalues(self.__stickers):
             alpha = componentStickers.alpha if show else 0.0
             componentStickers.stickers.setAlpha(alpha)
 
@@ -761,7 +762,7 @@ class VehicleStickers(object):
             componentStickers.stickers.attachStickers(geometryLink, partIdx, node, isDamaged)
             componentStickers.stickers.bindReceiver(receiverId)
             if showDamageStickers:
-                for damageSticker in componentStickers.damageStickers.itervalues():
+                for damageSticker in viewvalues(componentStickers.damageStickers):
                     if damageSticker.handle is not None:
                         componentStickers.stickers.delDamageSticker(damageSticker.handle)
                         damageSticker.handle = None
@@ -788,12 +789,12 @@ class VehicleStickers(object):
         return
 
     def detach(self):
-        for componentStickers in self.__stickers.itervalues():
+        for componentStickers in viewvalues(self.__stickers):
             componentStickers.stickers.detachStickers()
-            for dmgSticker in componentStickers.damageStickers.itervalues():
+            for dmgSticker in viewvalues(componentStickers.damageStickers):
                 dmgSticker.handle = None
 
-        for dmgSticker in self.__childPartDamageStickers.itervalues():
+        for dmgSticker in viewvalues(self.__childPartDamageStickers):
             CGF.removeGameObject(dmgSticker.handle)
             dmgSticker.handle = None
 
@@ -807,12 +808,12 @@ class VehicleStickers(object):
             componentStickers.stickers.bindReceiver(componentID)
 
     def bindReceiver(self, partIdx, receiverId):
-        for componentStickers in self.__stickers.itervalues():
+        for componentStickers in viewvalues(self.__stickers):
             if componentStickers.stickers.partIdx == partIdx and not componentStickers.stickers.partIdxOverriden:
                 componentStickers.stickers.bindReceiver(receiverId)
 
     def unbindReceiver(self, partIdx):
-        for componentStickers in self.__stickers.itervalues():
+        for componentStickers in viewvalues(self.__stickers):
             if componentStickers.stickers.partIdx == partIdx and not componentStickers.stickers.partIdxOverriden:
                 componentStickers.stickers.unbindReceiver()
 
@@ -835,7 +836,7 @@ class VehicleStickers(object):
             return
 
     def delDamageSticker(self, code):
-        for componentStickers in self.__stickers.itervalues():
+        for componentStickers in viewvalues(self.__stickers):
             damageSticker = componentStickers.damageStickers.pop(code, None)
             if damageSticker is not None:
                 if damageSticker.handle is not None:
@@ -900,7 +901,7 @@ class VehicleStickers(object):
         if vehicleDesc.gun.multiGun and len(vehicleDesc.gun.multiGun) == 2:
             slotsCount = len(compatibleGunSlots)
             if slotsCount >= 2:
-                midIndex = slotsCount / 2
+                midIndex = slotsCount // 2
                 i = slotsCount - 1
                 secondHalf = []
                 while i >= midIndex:

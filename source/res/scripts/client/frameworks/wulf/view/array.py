@@ -2,18 +2,19 @@
 # Embedded file name: scripts/client/frameworks/wulf/view/array.py
 import typing
 from contextlib import contextmanager
-from ..py_object_binder import PyObjectEntity
 from ..py_object_wrappers import PyObjectArray
 if typing.TYPE_CHECKING:
     from typing import Iterable, Union
-    from .. import ViewModel
+    from .. import ViewModel, Map
 T = typing.TypeVar('T')
 
-class Array(PyObjectEntity, typing.Iterable[T]):
-    __slots__ = ()
+class Array(typing.Iterable[T]):
+    slots = ('proxy', '__weakref__')
 
     def __init__(self):
-        super(Array, self).__init__(PyObjectArray())
+        self.proxy = PyObjectArray()
+        self.proxy.bindPyObject(self)
+        super(Array, self).__init__()
 
     def __repr__(self):
         return 'Array(size={})'.format(self.proxy.getSize() if self.proxy is not None else 0)
@@ -71,6 +72,9 @@ class Array(PyObjectEntity, typing.Iterable[T]):
     def addArray(self, value):
         self.proxy.addArray(value.proxy)
 
+    def addMap(self, value):
+        self.proxy.addMap(value.proxy)
+
     def setNumber(self, index, value):
         self.proxy.setNumber(index, value)
 
@@ -91,6 +95,9 @@ class Array(PyObjectEntity, typing.Iterable[T]):
 
     def setArray(self, index, value):
         self.proxy.setArray(index, value.proxy)
+
+    def setMap(self, index, value):
+        self.proxy.setMap(index, value.proxy)
 
     def remove(self, index):
         self.proxy.removeValue(index)

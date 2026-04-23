@@ -9,6 +9,7 @@ import typing
 import Event
 from Event import EventManager
 from PlayerEvents import g_playerEvents
+from comp7_core.gui.comp7_core_constants import BATTLE_CTRL_ID
 from comp7.gui.comp7_constants import FUNCTIONAL_FLAG
 from comp7.gui.entitlements_cache import EntitlementsCache, CacheStatus
 from comp7.gui.event_boards.event_boards_items import Comp7LeaderBoard, Comp7PlayerProgression
@@ -19,9 +20,11 @@ from comp7.helpers.comp7_server_settings import Comp7ServerSettings
 from comp7_common.comp7_constants import Configs
 from comp7_common_const import Comp7QualificationState, SEASON_POINTS_ENTITLEMENTS, qualificationTokenBySeasonNumber, ratingEntNameBySeasonNumber, eliteRankEntNameBySeasonNumber, activityPointsEntNameBySeasonNumber, maxRankEntNameBySeasonNumber
 from constants import RESTRICTION_TYPE, COMP7_SCENE, ARENA_BONUS_TYPE, QUEUE_TYPE, ARENA_GUI_TYPE
+from disjoint_set import DisjointSet
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.game_control.season_provider import SeasonProvider
 from gui.prb_control import prb_getters
+from gui.prb_control.entities.base.actions_validator import VehicleActionsValidator
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import PRE_QUEUE_RESTRICTION
@@ -29,6 +32,7 @@ from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import LobbyHeaderMenuEvent
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared.utils.requesters.ItemsRequester import SelectDistinctFilter
 from gui.shared.utils.scheduled_notifications import Notifiable, TimerNotifier, SimpleNotifier
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
@@ -72,6 +76,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.__leaderboardDataProvider = _LeaderboardDataProvider()
         self.__progressionDataProvider = _ProgressionDataProvider()
         self.__isHangarLoadedAfterLogin = False
+        self.__vehicleCopiesInfo = DisjointSet()
         self.__eventsManager = em = EventManager()
         self.onStatusUpdated = Event.Event(em)
         self.onStatusTick = Event.Event(em)
@@ -160,6 +165,14 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
     def remainingOfferTokensNotifications(self):
         return self.getModeSettings().remainingOfferTokensNotifications
 
+    @property
+    def bans(self):
+        return self.getModeSettings().bans
+
+    @property
+    def vehicleCopiesInfo(self):
+        return self.__vehicleCopiesInfo
+
     def init(self):
         super(Comp7Controller, self).init()
         self.addNotificator(SimpleNotifier(self.getTimer, self.__timerUpdate))
@@ -211,6 +224,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
             self.__updateMainConfig()
             self.__roleEquipmentsCache = None
         self.__applyEquipmentOverrides()
+        self.__updateVehicleBanData()
         return
 
     def onConnected(self):
@@ -274,6 +288,9 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
 
     def isTrainingEnabled(self):
         return self.__comp7Config is not None and self.__comp7Config.isTrainingEnabled
+
+    def isVehicleBanEnabled(self):
+        return self.__comp7Config is not None and self.__comp7Config.isVehicleBanEnabled
 
     def hasActiveSeason(self, includePreannounced=False):
         return self.isAvailable() and bool(self.getCurrentSeason(includePreannounced=includePreannounced))
@@ -359,8 +376,16 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
 
     def hasSuitableVehicles(self):
         criteria = self.__filterEnabledVehiclesCriteria(~REQ_CRITERIA.VEHICLE.EVENT_BATTLE | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE | REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.MODE_HIDDEN)
-        v = self.__itemsCache.items.getVehicles(criteria)
-        return len(v) > 0
+        suitableVehicles = self.__itemsCache.items.getVehicles(criteria=criteria, limit=1)
+        return len(suitableVehicles) > 0
+
+    def hasEnoughReadyToFightVehicles(self):
+        if not self.isVehicleBanEnabled():
+            return self.hasSuitableVehicles()
+        selectDistinctFilter = SelectDistinctFilter(self.__vehicleCopiesInfo)
+        criteria = self.__filterEnabledVehiclesCriteria(~REQ_CRITERIA.VEHICLE.EVENT_BATTLE | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE | REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.MODE_HIDDEN | REQ_CRITERIA.CUSTOM(VehicleActionsValidator.validateVehicleBool) | REQ_CRITERIA.CUSTOM(lambda vehicle: selectDistinctFilter(vehicle.intCD)))
+        suitableVehicles = self.__itemsCache.items.getVehicles(criteria=criteria, limit=self.__comp7Config.minVehiclesRequired)
+        return len(suitableVehicles) >= self.__comp7Config.minVehiclesRequired
 
     def vehicleIsAvailableForBuy(self):
         criteria = self.__filterEnabledVehiclesCriteria(REQ_CRITERIA.UNLOCKED)
@@ -492,10 +517,19 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
             self.__updateMainConfig()
             self.__roleEquipmentsCache = None
             self.__resetTimer()
+            self.__updateVehicleCopiesInfo()
             self.onModeConfigChanged()
         if Configs.COMP7_REWARDS_CONFIG.value in diff:
             self.onComp7RewardsConfigChanged()
         return
+
+    def __updateVehicleCopiesInfo(self):
+        dsu = self.__vehicleCopiesInfo = DisjointSet()
+        for baseCD, copiesCDs in self.__comp7Config.vehicleCopiesInfo.iteritems():
+            dsu.add(baseCD)
+            for copyCD in copiesCDs:
+                dsu.add(copyCD)
+                dsu.union(baseCD, copyCD)
 
     def __clearEquipmentOverrides(self):
         for equipment, originalParams in self.__equipmentCacheOverrides.iteritems():
@@ -522,6 +556,17 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
 
     def __updateMainConfig(self):
         self.__comp7Config = self.__comp7ServerSettings.comp7Config
+
+    def __updateVehicleBanData(self):
+        vehicleBanCtrl = self.__battleSessionProvider.dynamic.getControllerByID(BATTLE_CTRL_ID.COMP7_VEHICLE_BAN_CTRL)
+        if vehicleBanCtrl is None:
+            return
+        elif self.__battleSessionProvider.arenaVisitor.getArenaGuiType() not in ARENA_GUI_TYPE.COMP7_RANGE:
+            return
+        else:
+            vehicleBanCtrl.isVehicleBanEnabled = self.isVehicleBanEnabled()
+            vehicleBanCtrl.updateVehicleCopiesInfo(self.__comp7Config.vehicleCopiesInfo)
+            return
 
     def __resetTimer(self):
         self.startNotification()

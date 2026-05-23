@@ -8,6 +8,7 @@ import datetime
 import weakref
 import typing
 import WWISE
+import BigWorld
 from collections import defaultdict
 from functools import partial
 from PlayerEvents import g_playerEvents
@@ -1209,8 +1210,11 @@ class BattlePassListener(_NotificationListener):
             SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_disable.battle_royale.body()), type=SystemMessages.SM_TYPE.Warning)
 
     def __pushEnableChangedForArenaBonusType(self, arenaBonusType, newValue):
-        if arenaBonusType in self.__arenaBonusTypesHandlers:
-            self.__arenaBonusTypesHandlers[arenaBonusType](newValue)
+        if arenaBonusType not in self.__arenaBonusTypesHandlers:
+            return
+        if arenaBonusType == ARENA_BONUS_TYPE.EPIC_BATTLE and not self.__luiController.isRuleCompleted(LuiRules.FRONTLINE_CONTENT):
+            return
+        self.__arenaBonusTypesHandlers[arenaBonusType](newValue)
 
     @staticmethod
     def __pushEnableChangeRanked(isEnabled):
@@ -2757,6 +2761,7 @@ class DailyBonusQuestListener(_NotificationListener):
 class EpicBattleNotificationListener(_NotificationListener):
     __slots__ = ('__lobbyContext',)
     __lobbyContext = dependency.descriptor(ILobbyContext)
+    __luiController = dependency.descriptor(ILimitedUIController)
 
     def start(self, model):
         result = super(EpicBattleNotificationListener, self).start(model)
@@ -2770,6 +2775,8 @@ class EpicBattleNotificationListener(_NotificationListener):
     def __onSettingsChanged(self, diff):
         epicConfig = diff.get('epic_config')
         if epicConfig is not None:
+            if not self.__luiController.isRuleCompleted(LuiRules.FRONTLINE_CONTENT):
+                return
             notif = R.strings.fl_tooltips.notification
             isEnabled = epicConfig.get('isEnabled')
             if isEnabled:
@@ -2777,6 +2784,28 @@ class EpicBattleNotificationListener(_NotificationListener):
             elif isEnabled is not None:
                 SystemMessages.pushMessage(text=backport.text(notif.frontlineDisabled()), type=SystemMessages.SM_TYPE.ErrorHeader, priority=NotificationPriorityLevel.HIGH, messageData={'header': backport.text(notif.header())})
         return
+
+
+class NewbieChatLockNotificationListener(_NotificationListener):
+    __slots__ = ('__lobbyContext',)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+
+    def start(self, model):
+        result = super(NewbieChatLockNotificationListener, self).start(model)
+        g_playerEvents.onNewbieChatLockingStateChanged += self.__onNewbieChatLockingStateChanged
+        return result
+
+    def stop(self):
+        g_playerEvents.onNewbieChatLockingStateChanged -= self.__onNewbieChatLockingStateChanged
+        super(NewbieChatLockNotificationListener, self).stop()
+
+    def __onNewbieChatLockingStateChanged(self):
+        if self.__lobbyContext.getServerSettings().newbieChatLockConfig.enabled and not self.__chatLocked():
+            SystemMessages.pushMessage(text='', type=SystemMessages.SM_TYPE.ChatsUnlocked)
+
+    @staticmethod
+    def __chatLocked():
+        return bool(BigWorld.player().AccountNewbieChatLockComponent.chatLocked)
 
 
 class OptDevicesRestoreListener(_NotificationListener):
@@ -2853,7 +2882,8 @@ registerNotificationsListeners((ServiceChannelListener,
  ParagonsListener,
  DailyBonusQuestListener,
  EpicBattleNotificationListener,
- OptDevicesRestoreListener))
+ OptDevicesRestoreListener,
+ NewbieChatLockNotificationListener))
 
 class NotificationsListeners(_NotificationListener):
 

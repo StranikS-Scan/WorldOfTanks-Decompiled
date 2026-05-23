@@ -1,7 +1,8 @@
 <engine_config.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <personality>	game	</personality>
   <appTitle>	Мир танков	</appTitle>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -206,6 +207,7 @@
     <dxdiag>	false	</dxdiag>
     <dumpTimeout>	600000	</dumpTimeout>
     <reportArchiveSizeThresholdKb>	1024	</reportArchiveSizeThresholdKb>
+    <reportTimeoutDisconnections>	false	</reportTimeoutDisconnections>
   </cat_config>
   <debug>
     <framesCount>	0	</framesCount>
@@ -628,6 +630,12 @@
         <bank>
           <name>	style_3D_R169_ST_II_3Dst_Oberon.bnk	</name>
         </bank>
+        <bank>
+          <name>	style_3D_R87_T62A_3dst_02.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_F108_Panhard_EBR_105_3Dst_Reef_Rush.bnk	</name>
+        </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
         <bank>
@@ -823,6 +831,12 @@
         </bank>
         <bank>
           <name>	style_3D_R169_ST_II_3Dst_Oberon.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_R87_T62A_3dst_02.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_F108_Panhard_EBR_105_3Dst_Reef_Rush.bnk	</name>
         </bank>
       </SFX_soundbanks_arena>
       <SFX_soundbanks_editor>

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/messenger/proto/xmpp/entities.py
 from collections import deque
 from gui.shared.utils.decorators import ReprInjector
+from messenger import g_settings
 from messenger.m_constants import PROTO_TYPE, USER_TAG, GAME_ONLINE_STATUS
 from messenger.proto.entities import LobbyUserEntity, ChannelEntity, MemberEntity
 from messenger.proto.xmpp.gloox_constants import MESSAGE_TYPE, PRESENCE
@@ -21,6 +22,10 @@ class XMPPUserEntity(LobbyUserEntity):
 
     def getResourceID(self):
         return self._item.getResources().getHighestPriorityID()
+
+    def isCurrentGameContact(self):
+        resource = g_settings.server.XMPP.resource
+        return not resource or self.getResourceID() == resource
 
     def getClientInfo(self):
         return self._item.getClientInfo()

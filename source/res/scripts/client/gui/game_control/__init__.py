@@ -99,7 +99,10 @@ def getGameControllersConfig(manager):
     from gui.game_control.unseen_events_manager import UnseenEventManager
     from gui.game_control.play_streak_controller import PlayStreakController
     from gui.game_control.black_market_controller import BlackMarketController
+    from gui.game_control.battle_modifiers_controller import BattleModifiersController
     from gui.game_control.newbie_entry_point_controller import NewbieEntryPointController
+    from gui.game_control.summer_sale_controller import SummerSaleController
+    from gui.game_control.control_point_override_controller import ControlPointOverrideController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -196,4 +199,7 @@ def getGameControllersConfig(manager):
     _config(_interface.IBlackMarketController, BlackMarketController())
     _config(_interface.IUnseenEventsCounter, UnseenEventManager())
     _config(_interface.INewbieEntryPointController, NewbieEntryPointController())
+    _config(_interface.IBattleModifiersController, BattleModifiersController())
+    _config(_interface.ISummerSaleController, SummerSaleController())
+    _config(_interface.IControlPointOverrideController, ControlPointOverrideController())
     collectGameControllers(_config)

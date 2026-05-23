@@ -17,7 +17,7 @@ from debug_utils import LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.server_events import caches as quests_caches
 from gui.server_events.event_items import MotiveQuest, Quest, ServerEventAbstract, createAction, createQuest
-from gui.server_events.events_helpers import getEventsData, getRerollTimeout, isBattleMattersQuestID, isMarathon, getRerollTimeoutPrem, isPremium, isAdvisableQuest, isVersusAIQuest
+from gui.server_events.events_helpers import getEventsData, getRerollTimeout, isBattleMattersQuestID, isMarathon, getRerollTimeoutPrem, isPremium, isAdvisableQuest, isVersusAIQuest, isRankedID, isComp7ID, isFepID
 from gui.server_events.formatters import getLinkedActionID
 from gui.server_events.modifiers import ACTION_MODIFIER_TYPE, ACTION_SECTION_TYPE, clearModifiersCache
 from gui.server_events.personal_missions_cache import PersonalMissionsCache
@@ -30,7 +30,7 @@ from items import getTypeOfCompactDescr
 from personal_missions import PERSONAL_MISSIONS_XML_PATH
 from quest_cache_helpers import readQuestsFromFile
 from shared_utils import first, findFirst
-from skeletons.gui.game_control import IBattleRoyaleController, IEpicBattleMetaGameController, IRankedBattlesController, IFunRandomController, IVersusAIController
+from skeletons.gui.game_control import IBattleRoyaleController, IEpicBattleMetaGameController, IRankedBattlesController, IFunRandomController, IVersusAIController, IComp7Controller
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -98,6 +98,7 @@ class EventsCache(IEventsCache):
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __funRandomController = dependency.descriptor(IFunRandomController)
     __versusAIController = dependency.descriptor(IVersusAIController)
+    __comp7Controller = dependency.descriptor(IComp7Controller)
 
     def __init__(self):
         self.__isStarted = False
@@ -269,13 +270,22 @@ class EventsCache(IEventsCache):
         isPremiumQuestsEnable = self.lobbyContext.getServerSettings().getPremQuestsConfig().get('enabled', False)
         isBattleMattersEnabled = self.battle_matters.isEnabled()
         isVersusAIAvailable = self.__versusAIController and not self.__versusAIController.isLocked()
+        isRankedAvailable = self.rankedController and not self.rankedController.isLocked()
+        isComp7Available = self.__comp7Controller and not self.__comp7Controller.isLocked()
+        isFunRandomAvailable = self.__funRandomController and not self.__funRandomController.isLocked()
 
         def userFilterFunc(q):
             if not isBattleMattersEnabled and isBattleMattersQuestID(q.getID()):
                 return False
             if not isPremiumQuestsEnable and isPremium(q.getGroupID()):
                 return False
-            return False if not isVersusAIAvailable and isVersusAIQuest(q.getGroupID()) else q.getFinishTimeLeft() and filterFunc(q)
+            if not isVersusAIAvailable and isVersusAIQuest(q.getGroupID()):
+                return False
+            if not isRankedAvailable and isRankedID(q.getID()):
+                return False
+            if not isComp7Available and isComp7ID(q.getID()):
+                return False
+            return False if not isFunRandomAvailable and isFepID(q.getID()) else q.getFinishTimeLeft() and filterFunc(q)
 
         return self.getQuests(userFilterFunc)
 

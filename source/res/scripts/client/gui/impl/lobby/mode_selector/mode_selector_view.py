@@ -30,7 +30,8 @@ from gui.impl.lobby.mode_selector.popovers.random_battle_popover import RandomBa
 from gui.impl.lobby.mode_selector.sound_constants import MODE_SELECTOR_SOUND_SPACE
 from gui.impl.lobby.mode_selector.tooltips.simply_format_tooltip import SimplyFormatTooltipView
 from gui.impl.lobby.stronghold.tooltips.stronghold_main_widget_tooltip import StrongholdMainWidgetTooltip
-from gui.impl.lobby.tooltips.limited_ui_unlock_info_tooltip import LimitedUiUnlockInfoTooltip
+from gui.impl.lobby.tooltips.newbie_restrictions_tooltip import NewbieRestrictionsTooltip
+from gui.impl.lobby.tooltips.newbie_restrictions_tooltip_adapters import LimitedUINewbieRestrictionsTooltipAdapter
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.tooltip_window import SimpleTooltipContent
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
@@ -66,8 +67,7 @@ _SIMPLE_TOOLTIP_IDS = [ModeSelectorTooltipsConstants.RANKED_CALENDAR_DAY_INFO_TO
  ModeSelectorTooltipsConstants.RANKED_BATTLES_BONUS_TOOLTIP,
  ModeSelectorTooltipsConstants.MAPBOX_CALENDAR_TOOLTIP,
  ModeSelectorTooltipsConstants.EPIC_BATTLE_CALENDAR_TOOLTIP,
- ModeSelectorTooltipsConstants.COMP7_CALENDAR_DAY_EXTENDED_INFO,
- ModeSelectorTooltipsConstants.HB_CALENDAR_TOOLTIP]
+ ModeSelectorTooltipsConstants.COMP7_CALENDAR_DAY_EXTENDED_INFO]
 
 def _getTooltipByContentIdMap():
     return {R.views.lobby.battle_pass.tooltips.BattlePassNotStartedTooltipView(): BattlePassNotStartedTooltipView,
@@ -159,13 +159,13 @@ class ModeSelectorView(ViewImpl):
                 return
             return SimplyFormatTooltipView(header, body)
         else:
-            if contentID == R.views.lobby.tooltips.LimitedUiUnlockInfoTooltip():
+            if contentID == R.views.lobby.tooltips.NewbieRestrictionsTooltip():
                 index = int(event.getArgument('index'))
                 modeSelectorItem = self.__dataProvider.getItemByIndex(index)
                 if modeSelectorItem:
                     luiRule = modeSelectorItem.getLimitedUIRule()
                     if luiRule:
-                        return LimitedUiUnlockInfoTooltip(luiRule)
+                        return NewbieRestrictionsTooltip(LimitedUINewbieRestrictionsTooltipAdapter(luiRule))
             tooltipClass = self.__tooltipConstants.get(_CONTENT_TOOLTIPS_KEY, {}).get(contentID)
             return tooltipClass() if tooltipClass else None
 

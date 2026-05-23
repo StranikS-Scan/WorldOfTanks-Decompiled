@@ -351,15 +351,15 @@
       <Type>	UINT8	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </botDisplayStatus>
-    <buffs>
-      <Type>	ARRAY	  <of>	UINT16	</of>
-      </Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-    </buffs>
     <thermalVisionFinishTime>
       <Type>	FLOAT	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </thermalVisionFinishTime>
+    <selectedComp7Skill>
+      <Type>	INT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <ExposedForReplay>	true	</ExposedForReplay>
+    </selectedComp7Skill>
   </Properties>
   <TempProperties>
     <events></events>
@@ -383,7 +383,6 @@
     <_ProximityManager__data></_ProximityManager__data>
     <_TimerManager__unpersistedTimers></_TimerManager__unpersistedTimers>
     <gameObject></gameObject>
-    <buffContainer></buffContainer>
   </TempProperties>
   <ClientMethods>
     <onVehiclePickup></onVehiclePickup>
@@ -627,6 +626,10 @@
       <Arg>	VECTOR3	</Arg>
       <Arg>	VECTOR2	</Arg>
     </setEquipmentApplicationPoint>
+    <switchComp7Skill>
+      <Exposed></Exposed>
+      <Arg>	UINT32	</Arg>
+    </switchComp7Skill>
   </CellMethods>
   <BaseMethods>
     <onCreateCellSuccess></onCreateCellSuccess>

@@ -28,6 +28,7 @@ class VehicleDescrCrew(object):
         self._activityFlags = activityFlags
         self._isFire = isFire
         self._defaultSixthSenseDisabled = defaultSixthSenseDisabled
+        self._skillProcessors = self._rebuildSkillProcessors()
         skills, self._perks = self._validateAndComputeCrew()
         self._skills = skills
         if _DO_DEBUG_LOG:
@@ -524,36 +525,38 @@ class VehicleDescrCrew(object):
                 self._crewLevelIncrease = (commanderLevelIncrease, nonCommanderLevelIncrease)
         return self._perksLevelIncrease if isAbility else self._crewLevelIncrease
 
-    _skillProcessors = {'commander': _updateCommanderFactors,
-     'radioman': _updateRadiomanFactors,
-     'driver': _updateDriverFactors,
-     'gunner': _updateGunnerFactors,
-     'loader': _updateLoaderFactors,
-     'repair': _updateRepairFactors,
-     'fireFighting': _updateFireFightingFactors,
-     'camouflage': _updateCamouflageFactors,
-     'commander_universalist': None,
-     'commander_tutor': None,
-     'commander_expert': None,
-     'commander_sixthSense': None,
-     'commander_eagleEye': _process_commander_eagleEye,
-     'commander_enemyShotPredictor': None,
-     'driver_tidyPerson': None,
-     'driver_smoothDriving': None,
-     'driver_virtuoso': None,
-     'driver_badRoadsKing': None,
-     'driver_rammingMaster': None,
-     'gunner_smoothTurret': None,
-     'gunner_gunsmith': None,
-     'gunner_sniper': None,
-     'gunner_rancorous': None,
-     'loader_pedant': None,
-     'loader_desperado': None,
-     'loader_intuition': None,
-     'radioman_finder': _process_radioman_finder,
-     'radioman_inventor': None,
-     'radioman_lastEffort': None,
-     'radioman_retransmitter': None}
+    @classmethod
+    def _rebuildSkillProcessors(cls):
+        return {'commander': cls._updateCommanderFactors,
+         'radioman': cls._updateRadiomanFactors,
+         'driver': cls._updateDriverFactors,
+         'gunner': cls._updateGunnerFactors,
+         'loader': cls._updateLoaderFactors,
+         'repair': cls._updateRepairFactors,
+         'fireFighting': cls._updateFireFightingFactors,
+         'camouflage': cls._updateCamouflageFactors,
+         'commander_universalist': None,
+         'commander_tutor': None,
+         'commander_expert': None,
+         'commander_sixthSense': None,
+         'commander_eagleEye': cls._process_commander_eagleEye,
+         'commander_enemyShotPredictor': None,
+         'driver_tidyPerson': None,
+         'driver_smoothDriving': None,
+         'driver_virtuoso': None,
+         'driver_badRoadsKing': None,
+         'driver_rammingMaster': None,
+         'gunner_smoothTurret': None,
+         'gunner_gunsmith': None,
+         'gunner_sniper': None,
+         'gunner_rancorous': None,
+         'loader_pedant': None,
+         'loader_desperado': None,
+         'loader_intuition': None,
+         'radioman_finder': cls._process_radioman_finder,
+         'radioman_inventor': None,
+         'radioman_lastEffort': None,
+         'radioman_retransmitter': None}
 
     def __getUniqueArenaID(self):
         return -1 if not hasattr(self, '_vehicle') else self._vehicle.arenaUniqueID

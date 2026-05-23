@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/component_constants.py
 import collections
-import enum
 from soft_exception import SoftException
 from wrapped_reflection_framework import reflectedNamedTuple
 from Math import Vector3
@@ -88,7 +87,3 @@ DYNAMIC_SHOT_MAX_COUNT = 10000
 ShootImpulse = collections.namedtuple('ShootImpulse', ['magnitude', 'applicationPoint', 'isStillSafe'])
 DEFAULT_STUN_TYPE = 'DEFAULT'
 DEFAULT_SHELL_HIT_EXTRAS_CHANCE_MULTIPLIER = 1.0
-
-class EquipmentCtrlItemKeys(enum.Enum):
-    default = 'gui.battle_control.controllers.consumables.equipment_ctrl._AutoItem'
-    replay = 'gui.battle_control.controllers.consumables.equipment_ctrl._ReplayItem'

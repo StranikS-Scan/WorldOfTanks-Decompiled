@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.paragons.common.level_model import Lev
 class ChapterModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=9, commands=0):
+    def __init__(self, properties=10, commands=0):
         super(ChapterModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -75,6 +75,12 @@ class ChapterModel(ViewModel):
     def getLevelsType():
         return LevelModel
 
+    def getTimeStamp(self):
+        return self._getNumber(9)
+
+    def setTimeStamp(self, value):
+        self._setNumber(9, value)
+
     def _initialize(self):
         super(ChapterModel, self)._initialize()
         self._addViewModelProperty('chapterStatus', ChapterStatusModel())
@@ -86,3 +92,4 @@ class ChapterModel(ViewModel):
         self._addBoolProperty('isAllRewardsClaimed', False)
         self._addArrayProperty('finalVehicleCDs', Array())
         self._addArrayProperty('levels', Array())
+        self._addNumberProperty('timeStamp', 0)

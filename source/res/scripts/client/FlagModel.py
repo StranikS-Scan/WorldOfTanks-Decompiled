@@ -8,8 +8,6 @@ FlagSettings = namedtuple('FlagSettings', ['flagCompounModel',
  'flagAlias',
  'flagAnim',
  'flagBackgroundTex',
- 'flagEmblemTex',
- 'flagEmblemTexCoords',
  'spaceID'])
 
 class FlagModel(object):
@@ -30,8 +28,6 @@ class FlagModel(object):
         self.__flagStaffFashion = BigWorld.AlphaFadeCompoundFashion()
         self.__flagFashion = BigWorld.FlagAlphaFadeFashion()
         self.__flagFashion.setColor(color)
-        self.__flagFashion.setFlagBackgroundTexture(flagSettings.flagBackgroundTex)
-        self.__flagFashion.setEmblemTexture(flagSettings.flagEmblemTex, flagSettings.flagEmblemTexCoords)
         translationMatrix = Matrix()
         translationMatrix.setTranslate(position)
         self.__flagFashion.overridePosition(translationMatrix)

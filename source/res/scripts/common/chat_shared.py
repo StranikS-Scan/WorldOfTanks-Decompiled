@@ -367,10 +367,7 @@ CHAT_COMMANDS = Enumeration('chatCommands', [('initAck', {'chnlCmd': 0}),
  (BATTLE_CHAT_COMMAND_NAMES.DEFEND_SUPPLY, {'battleCmd': 1}),
  (BATTLE_CHAT_COMMAND_NAMES.DEFENDING_SUPPLY, {'battleCmd': 1}),
  (BATTLE_CHAT_COMMAND_NAMES.SELF_REPAIR_SUPPLY, {'battleCmd': 1}),
- (BATTLE_CHAT_COMMAND_NAMES.FOCUS_SUPPLY, {'battleCmd': 1}),
- (BATTLE_CHAT_COMMAND_NAMES.OBJECTIVES_POINT, {'battleCmd': 1}),
- (BATTLE_CHAT_COMMAND_NAMES.HB_ARTILLERY_ON_YOURSELF, {'battleCmd': 1}),
- (BATTLE_CHAT_COMMAND_NAMES.HB_LAST_STAND, {'battleCmd': 1})], instance=AttributeEnumItem)
+ (BATTLE_CHAT_COMMAND_NAMES.FOCUS_SUPPLY, {'battleCmd': 1})], instance=AttributeEnumItem)
 CHAT_MEMBER_STATUSES = Enumeration('chatMemberStatuses', ['available', 'inBattle'])
 CHAT_MEMBER_BAN_TYPE = Enumeration('chatMemberBanType', ['none', 'readonly', 'full'])
 CHAT_MEMBER_ROLE = Enumeration('chatMemberRole', ['member', 'visitor', 'moderator'])
@@ -526,6 +523,10 @@ def isRegularChannel(channelInfo):
 
 def isRegularChannelFlags(flags):
     return flags == 0
+
+
+def isBanAppliedToChannel(banType, channelInfo):
+    return isRegularChannelFlags(channelInfo.get('flags', 0)) or isPrivateChannel(channelInfo) if banType == constants.NOVICE_RESTRICTIONS_BAN_TYPE else True
 
 
 class BaseChatCommandProcessor(object):
@@ -946,12 +947,14 @@ class UserBannedError(ChatError):
 
 class ChatBannedError(ChatError):
 
-    def __init__(self, banReason, banEndTime):
+    def __init__(self, banReason, banEndTime, banType=None):
         ChatError.__init__(self, CHAT_RESPONSES.chatBanned)
         self.__banReason = banReason
         self.__banEndTime = banEndTime
+        self.__banType = banType
         self._messageArgs = {'banReason': self.__banReason,
-         'banEndTime': self.__banEndTime}
+         'banEndTime': self.__banEndTime,
+         'banType': self.__banType}
 
     def _getMessage(self):
         if self.__banEndTime is not None:
@@ -1322,7 +1325,8 @@ SYS_MESSAGE_TYPE = Enumeration('systemMessageType', ['serverReboot',
  'playStreakSysMessage',
  'playStreakSysWithRewardsMessage',
  'armoryYardRevertRerollMessage',
- 'tradingCaravanMessage'])
+ 'tradingCaravanMessage',
+ 'immediatelyOpenBoxReward'])
 SYS_MESSAGE_IMPORTANCE = Enumeration('systemMessageImportance', ['normal', 'high'])
 SM_REQUEST_PERSONAL_MESSAGES_FLAG = 1
 SM_REQUEST_SYSTEM_MESSAGES_FLAG = 2

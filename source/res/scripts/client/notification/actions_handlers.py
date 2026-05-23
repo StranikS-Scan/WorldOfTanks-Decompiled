@@ -45,7 +45,7 @@ from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE
 from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IBrowserController, IMapboxController, ICollectionsSystemController, IRankedBattlesController, ISeniorityAwardsController, IReferralProgramController, IArmoryYardController, IShopSalesEventController, IParagonsController
+from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IBrowserController, IMapboxController, ICollectionsSystemController, IRankedBattlesController, ISeniorityAwardsController, IReferralProgramController, IArmoryYardController, IShopSalesEventController, IParagonsController, ILimitedUIController
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.web import IWebController
@@ -500,6 +500,7 @@ class OpenPollHandler(ActionHandler):
 
 
 class AcceptPrbInviteHandler(ActionHandler):
+    luiController = dependency.descriptor(ILimitedUIController)
 
     @prbDispatcherProperty
     def prbDispatcher(self):
@@ -524,6 +525,14 @@ class AcceptPrbInviteHandler(ActionHandler):
         postActions = []
         invite = self.prbInvites.getInvite(entityID)
         state = self.prbDispatcher.getFunctionalState()
+        isLuiLocked = not self.luiController.isRuleCompletedByPrebattleType(invite.type)
+        if isLuiLocked:
+            if entityID:
+                self.prbInvites.declineInvite(entityID)
+                self.luiController.sendPlatoonLockedMessage(invite.type, invite.senderFullName)
+            else:
+                LOG_ERROR('Invite is invalid', entityID)
+            return
         if state.doLeaveToAcceptInvite(invite.type):
             postActions.append(actions.LeavePrbModalEntity())
         if invite and invite.anotherPeriphery:

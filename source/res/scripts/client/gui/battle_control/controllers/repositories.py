@@ -6,7 +6,7 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_control.arena_info.interfaces import IArenaController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, REUSABLE_BATTLE_CTRL_IDS, getBattleCtrlName
 from gui.battle_control.battle_context_hints.classic_battle_context_hints_config import createClassicBattleContextHintsController
-from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, bootcamp_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, vehicle_state_ctrl, view_points_ctrl, epic_respawn_ctrl, progress_circle_ctrl, ingame_help_ctrl, epic_maps_ctrl, default_maps_ctrl, epic_spectator_ctrl, epic_missions_ctrl, game_notification_ctrl, epic_team_bases_ctrl, anonymizer_fakes_ctrl, game_restrictions_msgs_ctrl, callout_ctrl, deathzones_ctrl, dog_tags_ctrl, team_health_bar_ctrl, battle_notifier_ctrl, prebattle_setups_ctrl, perk_ctrl
+from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, bootcamp_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, vehicle_state_ctrl, view_points_ctrl, epic_respawn_ctrl, progress_circle_ctrl, ingame_help_ctrl, epic_maps_ctrl, default_maps_ctrl, epic_spectator_ctrl, epic_missions_ctrl, game_notification_ctrl, epic_team_bases_ctrl, anonymizer_fakes_ctrl, game_restrictions_msgs_ctrl, callout_ctrl, deathzones_ctrl, dog_tags_ctrl, team_health_bar_ctrl, battle_notifier_ctrl, prebattle_setups_ctrl, perk_ctrl, prebattle_comp7_skill_ctrl
 from gui.battle_control.controllers import aiming_sounds_ctrl
 from gui.battle_control.controllers import battle_hints_ctrl
 from gui.battle_control.controllers import map_zones_ctrl
@@ -327,6 +327,10 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
     def battleContextHintsCtrl(self):
         return self._repository.getController(BATTLE_CTRL_ID.BATTLE_CONTEXT_HINTS)
 
+    @property
+    def comp7PrebattleSkillController(self):
+        return self._repository.getController(BATTLE_CTRL_ID.COMP7_PREBATTLE_SKILL_CTRL)
+
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):
     __slots__ = ()
@@ -561,6 +565,7 @@ class Comp7ControllerRepository(ClassicControllersRepository):
         repository = super(Comp7ControllerRepository, cls).create(setup)
         repository.addArenaViewController(Comp7PrebattleSetupController(), setup)
         repository.addArenaController(Comp7VOIPController(), setup)
+        repository.addArenaController(prebattle_comp7_skill_ctrl.PrebattleComp7SkillController(), setup)
         repository.addController(Comp7BattleSoundController())
         return repository
 

@@ -20,7 +20,6 @@ class LuiRules(enum.Enum):
     LOBBY_HEADER_COUNTERS_PM_OPERATIONS = 'PersonalMissionOperations'
     AP_ZONE_HINT = 'AmmunitionPanelHintZoneHint'
     AP_BATTLE_ABILITIES_HINT = 'AmmunitionPanelBattleAbilitiesHint'
-    C7N_PROGRESSION_HINT = 'CustomizationProgressionViewHint'
     TECH_TREE_EVENTS = 'TechTreeEvent'
     DOG_TAG_HINT = 'DogTagHangarHint'
     MODE_SELECTOR_WIDGET_BTN_HINT = 'ModeSelectorWidgetsBtnHint'
@@ -60,7 +59,6 @@ class LuiRules(enum.Enum):
     PARAGONS_NOTIFICATION = 'ParagonsNotification'
     PARAGONS_BUTTONS = 'ParagonsButtons'
     NEW_CAMPAIGN_HINT = 'NewCampaignHint'
-    HB_ENTRY_POINT = 'HBEntryPoint'
     TEASER = 'Teaser'
     C7N_BUBBLE = 'CustomizationBubble'
     COMMON_CHAT = 'CommonChat'
@@ -69,6 +67,12 @@ class LuiRules(enum.Enum):
     TOURNAMENTS_CONTENT = 'TournamentsContent'
     VERSUS_AI_CONTENT = 'VersusAIContent'
     STRONGHOLD_CONTENT = 'StrongholdContent'
+    RANKED_CONTENT = 'RankedContent'
+    SPEC_BATTLE_CONTENT = 'SpecBattleContent'
+    COMP7_CONTENT = 'Comp7Content'
+    ARCADE_CONTENT = 'ArcadeContent'
+    FIELD_TRIALS_CONTENT = 'FieldTrialsContent'
+    FRONTLINE_CONTENT = 'FrontlineContent'
 
 
 class _LimitedUIRule(namedtuple('_LimitedUIRule', ('idx', 'expression', 'expressionElements', 'tokens', 'message'))):

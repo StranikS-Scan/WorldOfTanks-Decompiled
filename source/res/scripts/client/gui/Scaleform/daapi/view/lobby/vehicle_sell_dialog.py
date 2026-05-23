@@ -697,7 +697,7 @@ class _CustomizationData(_VSDItemData):
 
     def __init__(self, customization, count):
         super(_CustomizationData, self).__init__(customization, FITTING_TYPES.CUSTOMIZATION)
-        self._flashData['onlyToInventory'] = customization.isRentable or customization.isHidden
+        self._flashData['onlyToInventory'] = customization.isRentable or customization.isHidden or customization.isForbiddenToSell
         self._flashData['count'] = count
 
 

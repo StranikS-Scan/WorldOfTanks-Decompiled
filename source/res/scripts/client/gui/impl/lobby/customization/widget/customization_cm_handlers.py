@@ -187,7 +187,7 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
             availableToSellCount = min(inventoryCount, availableToSellCount)
         else:
             availableToSellCount = inventoryCount
-        availableForSale = availableToSellCount > 0 and sellPrice != ITEM_PRICE_EMPTY and not item.isRentable and not item.isHidden
+        availableForSale = availableToSellCount > 0 and sellPrice != ITEM_PRICE_EMPTY and not (item.isRentable or item.isHidden or item.isForbiddenToSell)
         btn = self._makeItem(optId=CustomizationOptions.SELL, optLabel=MENU.cst_item_ctx_menu(CustomizationOptions.SELL), optInitData={'data': {'price': first(sellPriceData)} if availableForSale else None,
          'enabled': availableForSale,
          'showAlert': showAlert,

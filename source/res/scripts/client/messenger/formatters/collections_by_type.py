@@ -283,3 +283,5 @@ def initRegistrationFormatters():
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.GF_SM_TYPE, _sc.GFSMFormatter())
     registerMessengerServerFormatter(_SM_TYPE.playStreakRewards.index(), _sc.PlayStreakRewardsFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.LIMITED_UI_CONTENT_UNLOCKED, _sc.LimitedUIContentUnlockedFormatter())
+    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.LIMITED_UI_PLATOON_LOCKED, _sc.LimitedUIPlatoonLockedFormatter())
+    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.STALL_RECEIPT, _sc.StallPurchaseReceiptMessageFormatter())

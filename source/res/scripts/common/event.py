@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/Event.py
 from functools import partial
 from debug_utils import LOG_CURRENT_EXCEPTION
+from wotdecorators import noexcept
 
 class Event(list):
     __slots__ = ('__weakref__',)
@@ -208,21 +209,21 @@ class SuspendableEventSubscriber(EventsSubscriber):
 
 
 class ContextEvent(object):
-    __allContexts = object()
+    _allContexts = object()
 
     def __init__(self, manager=None):
-        self.__contextSubscribers = {}
+        self._contextSubscribers = {}
         if manager is not None:
             manager.register(self)
         return
 
     def __call__(self, contextID, *args, **kwargs):
-        subscribers = self.__contextSubscribers.get(contextID)
+        subscribers = self._contextSubscribers.get(contextID)
         if subscribers:
             for subscriber in subscribers:
                 subscriber(contextID, *args, **kwargs)
 
-        subscribers = self.__contextSubscribers.get(self.__allContexts)
+        subscribers = self._contextSubscribers.get(self._allContexts)
         if subscribers:
             for subscriber in subscribers:
                 subscriber(contextID, *args, **kwargs)
@@ -230,19 +231,39 @@ class ContextEvent(object):
     def subscribe(self, delegate, *contextIDs):
         if contextIDs:
             for contextID in contextIDs:
-                self.__contextSubscribers.setdefault(contextID, set())
-                self.__contextSubscribers[contextID].add(delegate)
+                self._contextSubscribers.setdefault(contextID, set())
+                self._contextSubscribers[contextID].add(delegate)
 
         else:
-            self.__contextSubscribers.setdefault(self.__allContexts, set())
-            self.__contextSubscribers[self.__allContexts].add(delegate)
+            self._contextSubscribers.setdefault(self._allContexts, set())
+            self._contextSubscribers[self._allContexts].add(delegate)
 
     def unsubscribe(self, delegate):
-        for contextSubscribers in self.__contextSubscribers.itervalues():
+        for contextSubscribers in self._contextSubscribers.itervalues():
             contextSubscribers.discard(delegate)
 
     def clear(self):
-        self.__contextSubscribers.clear()
+        self._contextSubscribers.clear()
+
+
+class SafeContextEvent(ContextEvent):
+
+    def __call__(self, contextID, *args, **kwargs):
+        subscribers = self._contextSubscribers.get(contextID)
+        if subscribers:
+            for subscriber in subscribers:
+                try:
+                    subscriber(contextID, *args, **kwargs)
+                except:
+                    LOG_CURRENT_EXCEPTION()
+
+        subscribers = self._contextSubscribers.get(self._allContexts)
+        if subscribers:
+            for subscriber in subscribers:
+                try:
+                    subscriber(contextID, *args, **kwargs)
+                except:
+                    LOG_CURRENT_EXCEPTION()
 
 
 class EventCallback(object):

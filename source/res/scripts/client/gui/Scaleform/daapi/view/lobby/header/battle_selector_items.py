@@ -322,6 +322,12 @@ class _SpecBattleItem(_SelectorItem):
             self._isSelected = False
             self._isDisabled = areSpecBattlesHidden()
 
+    def select(self):
+        if self._selectorType is not None:
+            selectorUtils.setBattleTypeAsKnown(self._selectorType)
+        super(_SpecBattleItem, self).select()
+        return
+
 
 class _TrainingItem(_SelectorItem):
 
@@ -999,7 +1005,7 @@ def _addEpicBattleType(items):
 
 
 def _addSpecialBattleType(items):
-    items.append(_SpecBattleItem(backport.text(_R_BATTLE_TYPES.spec()), PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST, 7))
+    items.append(_SpecBattleItem(backport.text(_R_BATTLE_TYPES.spec()), PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST, 7, SELECTOR_BATTLE_TYPES.SPEC_BATTLES))
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)

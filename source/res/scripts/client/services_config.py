@@ -4,6 +4,12 @@ import logging
 __all__ = ('getClientServicesConfig',)
 _logger = logging.getLogger(__name__)
 
+def getOfflineClientServicesConfig(manager):
+    import connection_mgr
+    from skeletons.connection_mgr import IConnectionManager
+    manager.addInstance(IConnectionManager, connection_mgr.ConnectionManager(), finalizer='fini')
+
+
 def getClientServicesConfig(manager):
     import account_helpers
     import connection_mgr

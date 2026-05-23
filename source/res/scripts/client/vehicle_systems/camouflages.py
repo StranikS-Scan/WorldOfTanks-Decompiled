@@ -18,6 +18,7 @@ import items.vehicles
 from constants import IS_EDITOR
 from items.vehicles import makeIntCompactDescrByID, getItemByCompactDescr
 from items.customizations import parseOutfitDescr, CustomizationOutfit, createNationalEmblemComponents, isEditedStyle
+from PrefabsLoading import PrefabDataListLoader
 from vehicle_outfit.outfit import Outfit
 from vehicle_outfit.packers import ProjectionDecalPacker
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, VehiclePartsTuple
@@ -546,6 +547,24 @@ def getAttachmentsAnimatorsPrereqs(attachments, spaceId):
         prereqs.append(AnimationSequence.Loader(sequenceItem.sequenceName, spaceId))
 
     return prereqs
+
+
+def getPrefabAttachments(attachments, isHangar=False):
+    paths = []
+    for attachment in attachments:
+        if attachment.attachmentLogic != 'prefab':
+            continue
+        modelName = attachment.modelName
+        if not IS_EDITOR and attachment.hangarModelName and isHangar:
+            modelName = attachment.hangarModelName
+        if modelName:
+            paths.append(modelName)
+
+    return paths
+
+
+def getPrefabAttachmentsPrereqs(attachments, isHangar=False):
+    return PrefabDataListLoader('StylePrefabAttachments', getPrefabAttachments(attachments, isHangar))
 
 
 def getAttachmentsAnimators(attachments, spaceId, loadedAnimators, compoundModel):

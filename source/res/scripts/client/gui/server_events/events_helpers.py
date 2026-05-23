@@ -19,11 +19,11 @@ from gui.shared.gui_items.customization import C11nStyleProgressData
 from helpers import time_utils, i18n, dependency, isPlayerAccount
 from shared_utils import CONST_CONTAINER, findFirst, first
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IMarathonEventsController, IArmoryYardController, IDebutBoxesController, IEarlyAccessController
+from skeletons.gui.game_control import IMarathonEventsController, IArmoryYardController, IDebutBoxesController, IEarlyAccessController, ISummerSaleController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from gui.server_events.events_constants import BATTLE_MATTERS_QUEST_ID, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX, DAILY_QUEST_ID_PREFIX, RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID, BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, FUN_RANDOM_GROUP_ID, COSMIC_EVENT_PREFIX, VERSUS_AI_QUEST_GROUP_PREFIX, DAILY_SUBS_LEVEL_SUFFIX, DAILY_PREMIUM_LEVEL_SUFFIX
+from gui.server_events.events_constants import BATTLE_MATTERS_QUEST_ID, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX, DAILY_QUEST_ID_PREFIX, RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID, BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, FUN_RANDOM_GROUP_ID, COSMIC_EVENT_PREFIX, VERSUS_AI_QUEST_GROUP_PREFIX, DAILY_SUBS_LEVEL_SUFFIX, DAILY_PREMIUM_LEVEL_SUFFIX, RANKED_QUEST_ID, COMP7_QUEST_ID, FEP_QUEST_ID
 from helpers.i18n import makeString as _ms
 if typing.TYPE_CHECKING:
     from gui.server_events.event_items import Quest
@@ -305,6 +305,11 @@ def isDebutBoxesQuest(questID, debutBoxesController=None):
     return questID in debutBoxesController.getQuestsIDs() if questID else False
 
 
+@dependency.replace_none_kwargs(summerSaleController=ISummerSaleController)
+def isSummerSaleGroup(groupID, summerSaleController=None):
+    return groupID == summerSaleController.getQuestGroupId() if groupID else False
+
+
 def isFunRandomQuest(eventID):
     return eventID.startswith(FUN_RANDOM_GROUP_ID) if eventID else False
 
@@ -315,6 +320,18 @@ def isRankedDaily(eventID):
 
 def isRankedPlatform(eventID):
     return eventID.startswith(RANKED_PLATFORM_GROUP_ID) if eventID else False
+
+
+def isRankedID(eventID):
+    return eventID.startswith(RANKED_QUEST_ID) if eventID else False
+
+
+def isComp7ID(eventID):
+    return eventID.startswith(COMP7_QUEST_ID) if eventID else False
+
+
+def isFepID(eventID):
+    return eventID.startswith(FEP_QUEST_ID) if eventID else False
 
 
 def isDailyQuest(eventID):
@@ -568,22 +585,6 @@ def isArmoryYardQuest(eventID, armoryYardCtrl=None):
 @dependency.replace_none_kwargs(earlyAccessCtrl=IEarlyAccessController)
 def isActiveEarlyAccessQuest(eventID, earlyAccessCtrl=None):
     return earlyAccessCtrl.isQuestActive() and (earlyAccessCtrl.isProgressionQuest(eventID) or earlyAccessCtrl.isPostProgressionQuest(eventID))
-
-
-def getPreviousBattleQuest(quest):
-    eventsCache = dependency.instance(IEventsCache)
-    group = eventsCache.getGroups().get(quest.getGroupID())
-    if group is not None:
-        questID = quest.getID()
-        quests = eventsCache.getQuests()
-        groupContent = group.getGroupContent(quests)
-        sortedQuests = sorted(groupContent, key=operator.methodcaller('getPriority'), reverse=True)
-        for idx, quest_ in enumerate(sortedQuests):
-            if quest_.getID() == questID:
-                if idx != 0:
-                    return sortedQuests[idx - 1]
-
-    return
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)

@@ -91,4 +91,5 @@ def registerHandler(handlerType):
 
 
 def unregisterHandler(handlerType):
-    _HANDLERS_TYPES_LIST.remove(handlerType)
+    if handlerType in _HANDLERS_TYPES_LIST:
+        _HANDLERS_TYPES_LIST.remove(handlerType)

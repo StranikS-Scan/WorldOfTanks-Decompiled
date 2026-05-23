@@ -25,6 +25,7 @@ from cache import cached_property, class_cached_property
 from chat_shared import MapRemovedFromBLReason, SYS_MESSAGE_TYPE, decompressSysMessage
 from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE, AUTO_MAINTENANCE_RESULT, AUTO_MAINTENANCE_TYPE, FAIRPLAY_VIOLATIONS, FINISH_REASON, INVOICE_ASSET, KICK_REASON, KICK_REASON_NAMES, NC_MESSAGE_PRIORITY, NC_MESSAGE_TYPE, OFFER_TOKEN_PREFIX, PREBATTLE_TYPE, PREMIUM_ENTITLEMENTS, PREMIUM_TYPE, RESTRICTION_TYPE, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, SYS_MESSAGE_FORT_EVENT_NAMES, SwitchState, SECONDS_IN_DAY, BattleRoyaleResult
 from gui.impl.lobby.stronghold.stronghold_helpers import CLAN_SEASON_PROGRESS_PREFIX
+from gui.server_events.formatters import formatGold
 from play_streak.play_streak_constants import RANDOM_GOODIE_TOKEN, RANDOM_EQUIPMENT_TOKEN
 from debug_utils import LOG_ERROR
 from dog_tags_common.components_config import componentConfigAdapter
@@ -76,8 +77,8 @@ from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID
 from gui.shared.utils.transport import z_loads
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.battle_pass.battle_pass_constants import ChapterState
+from gui.battle_pass.battle_pass_messages import getBattlePassBuyShopFormattedMsg
 from helpers import dependency, getLocalizedData, html, i18n, int2roman, time_utils
-from historical_battles_common.hb_constants import FRONT_COUPON_TOKEN_PREFIX
 from items import ITEM_TYPES as I_T, getTypeInfoByIndex, getTypeInfoByName, tankmen, vehicles as vehicles_core, ITEM_TYPE_NAMES
 from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, UNBOUND_VEH_KEY
 from items.components.crew_books_constants import CREW_BOOK_RARITY
@@ -1546,6 +1547,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
     def getPurchaseDataAuxMessages(self, data):
         result = []
         result.extend(self.__getReferralProgramMsg(data))
+        result.extend(self.__getBattlePassBuyShopMsg(data))
         return result
 
     def _composeOperations(self, data):
@@ -2127,6 +2129,13 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             template = u'rpLootBoxesInvoiceReceived'
             formatted = g_settings.msgTemplates.format(template, ctx={u'count': referralLootBoxCount,
              u'at': self._getOperationTimeString(data)})
+            result.append(MessageData(formatted, self._getGuiSettings(formatted, template)))
+        return result
+
+    def __getBattlePassBuyShopMsg(self, data):
+        template, formatted = getBattlePassBuyShopFormattedMsg(data)
+        result = []
+        if formatted and template:
             result.append(MessageData(formatted, self._getGuiSettings(formatted, template)))
         return result
 
@@ -2912,9 +2921,6 @@ class QuestAchievesFormatter(object):
                          u'count': intCount}))
                 if tokenID.startswith(EARLY_ACCESS_PREFIX):
                     itemsNames.append(EarlyAccessQuestsTokensFormatter.format(data))
-                if tokenID.startswith(FRONT_COUPON_TOKEN_PREFIX):
-                    name = backport.text(R.strings.hb_tooltips.quest.award(), bonusName=tokenID.split(u'_')[-1], count=int(count))
-                    itemsNames.append(name)
                 if tokenID.startswith(constants.LOOTBOX_KEY_PREFIX) and intCount > 0:
                     key = cls.__guiLootbox.getKeyByTokenID(tokenID)
                     text = backport.text(R.strings.lootboxes.userName.dyn(key.userName)())
@@ -4346,10 +4352,10 @@ class BattlePassBoughtFormatter(WaitItemsSyncFormatter):
         isSynced = yield self._waitForSyncItems()
         resultMessage = []
         if message.data and isSynced and message.data.get(u'chapter') == 0:
-            template = u'BattlePassBuyMultipleMessage'
-            header = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyMultiple.text())
-            formatted = g_settings.msgTemplates.format(template, ctx={u'header': header})
-            settings = self._getGuiSettings(message, template)
+            template = u'battlePassBuyShopInvoiceReceived'
+            formatted = g_settings.msgTemplates.format(template, ctx={u'header': backport.text(R.strings.battle_pass.ingameShop.notification.title()),
+             u'description': backport.text(R.strings.battle_pass.ingameShop.notification.all.description())})
+            settings = self._getGuiSettings(formatted, template)
             settings.showAt = BigWorld.time()
             resultMessage.append(MessageData(formatted, settings))
         callback(resultMessage)
@@ -6019,7 +6025,13 @@ class LimitedUIContentUnlockedFormatter(ClientSysMessageFormatter):
     __TEMPLATE = u'LimitedUIContentUnlocked'
     __SEPARATOR = u'<br/>'
     __BATTLE_MODE_RULE_TO_STRING = {LuiRules.VERSUS_AI_CONTENT: R.strings.messenger.serviceChannelMessages.limitedUIContentUnlocked.versusAI(),
-     LuiRules.STRONGHOLD_CONTENT: R.strings.messenger.serviceChannelMessages.limitedUIContentUnlocked.stronghold()}
+     LuiRules.STRONGHOLD_CONTENT: R.strings.messenger.serviceChannelMessages.limitedUIContentUnlocked.stronghold(),
+     LuiRules.SPEC_BATTLE_CONTENT: R.strings.messenger.serviceChannelMessages.limitedUIContentUnlocked.specBattles(),
+     LuiRules.COMP7_CONTENT: R.strings.messenger.serviceChannelMessages.limitedUIContentUnlocked.comp7(),
+     LuiRules.ARCADE_CONTENT: R.strings.messenger.serviceChannelMessages.limitedUIContentUnlocked.arcade(),
+     LuiRules.FIELD_TRIALS_CONTENT: R.strings.messenger.serviceChannelMessages.limitedUIContentUnlocked.fieldTrials(),
+     LuiRules.FRONTLINE_CONTENT: R.strings.messenger.serviceChannelMessages.limitedUIContentUnlocked.frontline(),
+     LuiRules.RANKED_CONTENT: R.strings.messenger.serviceChannelMessages.limitedUIContentUnlocked.ranked()}
     __CONTENT_RULE_TO_STRINGS = {LuiRules.PERSONAL_MISSIONS_CONTENT: R.strings.messenger.serviceChannelMessages.limitedUIContentUnlocked.personalMissions(),
      LuiRules.TOURNAMENTS_CONTENT: R.strings.messenger.serviceChannelMessages.limitedUIContentUnlocked.tournaments()}
 
@@ -6057,8 +6069,71 @@ class LimitedUIContentUnlockedFormatter(ClientSysMessageFormatter):
             return None
 
 
+class LimitedUIPlatoonLockedFormatter(ClientSysMessageFormatter):
+    __TEMPLATE = u'LimitedUIPlatoonLocked'
+
+    def format(self, message, *args):
+        from gui.prb_control.formatters.invites import getPrbName
+        from gui.prb_control.prb_helpers import getModeNameKwargs
+        name = message.get(u'inviterName')
+        prbType = message.get(u'prbType')
+        kwargs = getModeNameKwargs(prbType, isQueue=False)
+        prbTypeText = backport.text(R.strings.messenger.serviceChannelMessages.limitedUIPlatoonLocked.dyn(getPrbName(prbType))(), **kwargs)
+        if not prbTypeText:
+            return [MessageData(None, None)]
+        else:
+            text = self.__formatText(name, prbTypeText)
+            ctx = {u'text': text}
+            formatted = g_settings.msgTemplates.format(self.__TEMPLATE, ctx)
+            guiSettings = self._getGuiSettings(message, self.__TEMPLATE)
+            return [MessageData(formatted, guiSettings)]
+
+    def __formatText(self, name, prbTypeText):
+        if name:
+            coloredName = formatGold(name)
+            return backport.text(R.strings.messenger.serviceChannelMessages.limitedUIPlatoonLocked.text(), name=coloredName, battleType=prbTypeText)
+        return backport.text(R.strings.messenger.serviceChannelMessages.limitedUIPlatoonLocked.textNoName(), battleType=prbTypeText)
+
+
 class TradingCaravanMessageFormatter(ServiceChannelFormatter):
 
     def format(self, message, *args):
         formatted = g_settings.msgTemplates.format(u'TradingCaravanCoinAdded', ctx={u'count': message.data.get(u'count')})
         return [MessageData(formatted, self._getGuiSettings(message, u'TradingCaravanCoinAdded'))]
+
+
+class StallPurchaseReceiptMessageFormatter(ServiceChannelFormatter):
+    __goodiesCache = dependency.descriptor(IGoodiesCache)
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def format(self, message, *args):
+        messageData = []
+        debitedMessage = self.__formatDebitedMessage(message)
+        messageData.extend(debitedMessage)
+        return messageData
+
+    def __formatGoodiesString(self, message):
+        result = []
+        goodies = message.get(u'goodies', {})
+        boostersStrings = []
+        for goodieId, goodieInfo in goodies.iteritems():
+            count = goodieInfo.get(u'count', 0)
+            if count >= 0:
+                continue
+            if goodieId not in self.__itemsCache.items.shop.boosters:
+                continue
+            booster = self.__goodiesCache.getBooster(goodieId)
+            debitedCount = -count
+            boostersStrings.append(backport.text(R.strings.system_messages.bonuses.booster.value(), name=booster.userName, count=debitedCount))
+
+        if boostersStrings:
+            result.append(g_settings.htmlTemplates.format(u'boostersInvoiceDebited', ctx={u'boosters': u', '.join(boostersStrings)}))
+        return result
+
+    def __formatDebitedMessage(self, message):
+        nowTime = time_utils.getServerUTCTime()
+        result = []
+        result.extend(self.__formatGoodiesString(message))
+        formatted = g_settings.msgTemplates.format(u'StallPurchaseReceipt', ctx={u'date': backport.getDateTimeFormat(nowTime),
+         u'itemName': u'<br/>'.join(result)})
+        return [MessageData(formatted, self._getGuiSettings(formatted, u'StallPurchaseReceipt'))]

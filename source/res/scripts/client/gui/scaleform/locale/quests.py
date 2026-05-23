@@ -1088,6 +1088,7 @@ class QUESTS(object):
     MISSIONS_TAB_MARATHONS_HEADER_AWARD = '#quests:missions/tab/marathons/header/award'
     MISSIONS_TAB_MARATHONS_HEADER_MOREAWARDS = '#quests:missions/tab/marathons/header/moreAwards'
     MISSIONS_TAB_CATEGORY_HEADER_PERFORMEDTASKS = '#quests:missions/tab/category/header/performedTasks'
+    MISSIONS_TAB_LABEL_TEMP = '#quests:missions/tab/label/temp'
     MISSIONS_FILTER_POPOVER_TITLE = '#quests:missions/filter/popover/title'
     MISSIONS_FILTER_POPOVER_HIDEUNAVAILABLE = '#quests:missions/filter/popover/hideUnavailable'
     MISSIONS_FILTER_POPOVER_HIDEDONE = '#quests:missions/filter/popover/hideDone'
@@ -1295,6 +1296,8 @@ class QUESTS(object):
     BONUSNAME_TEAM_CREDITS_BONUS = '#quests:bonusName/team_credits_bonus'
     BONUSNAME_DAILY_QUESTS_REWARDS = '#quests:bonusName/daily_quests_rewards'
     BONUSNAME_CLAN_SEASON_PROGRESS = '#quests:bonusName/clan_season_progress'
+    BONUSNAME_BUMBLEBEE_COIN = '#quests:bonusName/bumblebee_coin'
+    BONUSNAME_HONEY_COIN = '#quests:bonusName/honey_coin'
     ACTION_AUTO_CALENDAR = '#quests:action/auto/calendar'
     ACTION_FULL_CALENDAR = '#quests:action/full/calendar'
     ACTION_HERO_FULL_CALENDAR = '#quests:action/hero/full/calendar'
@@ -1777,6 +1780,13 @@ class QUESTS(object):
     DEBUTBOXES_MISSIONS_HEADER_CAPTION3 = '#quests:debutBoxes/missions/header/caption3'
     DEBUTBOXES_MISSIONS_HEADER_DISABLED = '#quests:debutBoxes/missions/header/disabled'
     DEBUTBOXES_MISSIONS_HEADER_INFO = '#quests:debutBoxes/missions/header/info'
+    SUMMERSALE_MISSIONS_HEADER_CAPTION1 = '#quests:summerSale/missions/header/caption1'
+    SUMMERSALE_MISSIONS_HEADER_CAPTION2 = '#quests:summerSale/missions/header/caption2'
+    SUMMERSALE_MISSIONS_HEADER_CAPTION3 = '#quests:summerSale/missions/header/caption3'
+    SUMMERSALE_MISSIONS_HEADER_DISABLED = '#quests:summerSale/missions/header/disabled'
+    SUMMERSALE_MISSIONS_HEADER_INFO = '#quests:summerSale/missions/header/info'
+    SUMMERSALE_MISSIONS_HEADER_BUTTON_GOTOSHOP = '#quests:summerSale/missions/header/button/gotoShop'
+    SUMMERSALE_MISSIONS_HEADER_BUTTON_GOTOEVENT = '#quests:summerSale/missions/header/button/gotoEvent'
     WEEKLYQUEST_REWARDSCREEN_HEADER = '#quests:weeklyQuest/rewardScreen/header'
     WEEKLYQUEST_REWARDSCREEN_SUBHEADER = '#quests:weeklyQuest/rewardScreen/subheader'
     WEEKLYQUEST_REWARDSCREEN_CLOSE = '#quests:weeklyQuest/rewardScreen/close'
@@ -1958,7 +1968,9 @@ class QUESTS(object):
      BONUSNAME_ATTENDANCE_REWARD,
      BONUSNAME_TEAM_CREDITS_BONUS,
      BONUSNAME_DAILY_QUESTS_REWARDS,
-     BONUSNAME_CLAN_SEASON_PROGRESS)
+     BONUSNAME_CLAN_SEASON_PROGRESS,
+     BONUSNAME_BUMBLEBEE_COIN,
+     BONUSNAME_HONEY_COIN)
     ACTION_ENUM = (ACTION_AUTO_CALENDAR,
      ACTION_FULL_CALENDAR,
      ACTION_HERO_FULL_CALENDAR,

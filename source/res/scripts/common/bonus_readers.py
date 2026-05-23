@@ -22,7 +22,6 @@ from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE, INVOICE_LIMITS, ENTITLEMENT_OPS, DailyQuestsLevels, MAX_LOG_EXT_INFO_LEN, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from soft_exception import SoftException
 from customization_quests_common import validateCustomizationQuestToken
-from collections import OrderedDict
 from items import _xml
 if TYPE_CHECKING:
     from ResMgr import DataSection
@@ -1025,11 +1024,11 @@ def __readBonus_oneof(config, bonusReaders, bonus, section, eventType):
     return resultLimitIDs
 
 
-def __readBonusRotation(config, bonusReaders, section, eventType, checkLimit, orderedBonuses=False):
+def __readBonusRotation(config, bonusReaders, section, eventType, checkLimit):
     bonus = {}
     if config.get('probabilityStageCount'):
         raise SoftException('probabilityStageCount is not allowed to be used with rotation')
-    limitIDs, subBonus = __readBonusSubSection(config, bonusReaders, section['rotation'], eventType, checkLimit, orderedBonuses)
+    limitIDs, subBonus = __readBonusSubSection(config, bonusReaders, section['rotation'], eventType, checkLimit)
     if not set(subBonus.keys()) == {'groups'}:
         raise _xml.raiseWrongXml(None, 'rotation', 'The rotation should consist only <group> nodes.')
     rotationLevelCount = len(subBonus['groups'])
@@ -1227,21 +1226,21 @@ def __readBonusConfig(section):
     return config
 
 
-def readBonusSection(bonusRange, section, eventType=None, checkLimit=True, orderedBonuses=False):
+def readBonusSection(bonusRange, section, eventType=None, checkLimit=True):
     if section is None:
         return {}
     else:
         bonusReaders = getBonusReaders(bonusRange)
         config = __readBonusConfig(section['config']) if section.has_key('config') else {}
         readerBonus = __readBonusRotation if section.has_key('rotation') else __readBonusSubSection
-        limitIDs, bonus = readerBonus(config, bonusReaders, section, eventType, checkLimit, orderedBonuses)
+        limitIDs, bonus = readerBonus(config, bonusReaders, section, eventType, checkLimit)
         if config:
             bonus['config'] = config
         return bonus
 
 
-def __readBonusSubSection(config, bonusReaders, section, eventType=None, checkLimit=True, orderedBonuses=False):
-    bonus = {} if not orderedBonuses else OrderedDict()
+def __readBonusSubSection(config, bonusReaders, section, eventType=None, checkLimit=True):
+    bonus = {}
     resultLimitIDs = set()
     for name, subSection in section.items():
         if name in __PROBABILITY_READERS:

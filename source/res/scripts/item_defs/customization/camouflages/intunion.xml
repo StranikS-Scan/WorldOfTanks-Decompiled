@@ -119,4 +119,115 @@
       </include>
     </vehicleFilter>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <tags>	hiddenInUI fullRGB	</tags>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	intunion	</nations>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	31494	</id>
+      <texture>	vehicles/intunion/Camouflage/UN_Camo_01_143.dds	</texture>
+      <scales>	1.2 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	153 153 153 255	</c0>
+          <c1>	0 255 0 0	</c1>
+          <c2>	0 0 255 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <userString>	#vehicle_customization:UN_Camo_01_143/name	</userString>
+      <description>	#vehicle_customization:UN_Camo_01_143/description	</description>
+      <rotation>
+        <HULL>	-0.713142	</HULL>
+        <TURRET>	-0.713142	</TURRET>
+        <GUN>	-0.713142	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.5 2.5	</factor>
+        <offset>	-1.16 -1.64	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <tags>	hiddenInUI fullRGB	</tags>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	intunion	</nations>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	31495	</id>
+      <texture>	vehicles/intunion/Camouflage/UN_Camo_02_143.dds	</texture>
+      <scales>	1.2 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	43 40 27 255	</c0>
+          <c1>	46 66 41 255	</c1>
+          <c2>	0 0 255 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <description>	#vehicle_customization:UN_Camo_02_143/description	</description>
+      <userString>	#vehicle_customization:UN_Camo_02_143/name	</userString>
+      <rotation>
+        <HULL>	1.396263	</HULL>
+        <TURRET>	1.396263	</TURRET>
+        <GUN>	1.396263	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.5 2.5	</factor>
+        <offset>	-6.47 -5.3	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <tags>	hiddenInUI fullRGB	</tags>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	intunion	</nations>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	31496	</id>
+      <texture>	vehicles/intunion/Camouflage/UN_Camo_03_143.dds	</texture>
+      <scales>	1.2 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	51 51 51 255	</c0>
+          <c1>	0 255 0 0	</c1>
+          <c2>	0 0 255 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <description>	#vehicle_customization:UN_Camo_03_143/description	</description>
+      <rotation>
+        <HULL>	0.122173	</HULL>
+        <TURRET>	0.122173	</TURRET>
+        <GUN>	0.122173	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2 2	</factor>
+        <offset>	-6.76 -1.23	</offset>
+      </tilingSettings>
+      <userString>	#vehicle_customization:UN_Camo_03_143/name	</userString>
+    </camouflage>
+  </itemGroup>
 </intunion.xml>

@@ -120,7 +120,7 @@ def addBonusesToGroup(bonusGroup, bonuses):
 
 
 class LootBox(GUIItem):
-    __slots__ = ('__id', '__invCount', '__type', '__category', '__historyName', '__guaranteedFrequency', '__slotBonuses', '__guaranteedFrequencyName', '__tier', '__isEnabled', '__userNameKey', '__iconName', '__description', '__videoKey', '__weight', '__bonusGroups', '__autoOpenTime', '__rotationLists', '__config', '__rotationStage', '__tags', '__unlockKeys', '__manualMaxOpenCount', '__lootBoxInfoPageURL', '__lootBoxShopURL', '__isStatCollected')
+    __slots__ = ('__id', '__invCount', '__type', '__category', '__historyName', '__guaranteedFrequency', '__slotBonuses', '__guaranteedFrequencyName', '__tier', '__isEnabled', '__userNameKey', '__iconName', '__description', '__videoKey', '__weight', '__bonusGroups', '__autoOpenTime', '__rotationLists', '__config', '__rotationStage', '__tags', '__unlockKeys', '__manualMaxOpenCount', '__lootBoxInfoPageURL', '__lootBoxShopURL', '__isStatCollected', '__immediatelyOpen')
 
     def __init__(self, lootBoxID, lootBoxConfig, invCount):
         super(LootBox, self).__init__()
@@ -222,6 +222,9 @@ class LootBox(GUIItem):
     def isStatCollected(self):
         return self.__isStatCollected
 
+    def isImmediatelyOpen(self):
+        return self.__immediatelyOpen
+
     def getManualMaxOpenCount(self):
         return self.__manualMaxOpenCount if self.__manualMaxOpenCount else 0
 
@@ -291,6 +294,8 @@ class LootBox(GUIItem):
         return bonusesGroups
 
     def getBonusesByGroup(self, group):
+        if self.__bonusGroups is None:
+            self.__bonusGroups = self.__formBonusGroups()
         return self.__bonusGroups[group]
 
     def getBonusSlots(self):
@@ -348,6 +353,7 @@ class LootBox(GUIItem):
         self.__lootBoxShopURL = assetsConfig.get('lootBoxShopURL', '')
         self.__unlockKeys = lootBoxConfig.get('unlockKeys', set())
         self.__manualMaxOpenCount = lootBoxConfig.get('manualMaxOpenCount')
+        self.__immediatelyOpen = lootBoxConfig.get('immediatelyOpen')
         return
 
     def __iterateAllSlots(self):

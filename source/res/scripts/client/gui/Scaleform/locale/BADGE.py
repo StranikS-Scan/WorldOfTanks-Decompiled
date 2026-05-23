@@ -457,6 +457,13 @@ class BADGE(object):
     BADGE_31072 = '#badge:badge_31072'
     BADGE_31072_DESCR = '#badge:badge_31072_descr'
     SUFFIX_BADGE_31072 = '#badge:suffix/badge_31072'
+    BADGE_31073 = '#badge:badge_31073'
+    BADGE_31073_DESCR = '#badge:badge_31073_descr'
+    BADGE_31074 = '#badge:badge_31074'
+    BADGE_31074_DESCR = '#badge:badge_31074_descr'
+    BADGE_31075 = '#badge:badge_31075'
+    BADGE_31075_DESCR = '#badge:badge_31075_descr'
+    SUFFIX_BADGE_31075 = '#badge:suffix/badge_31075'
     BADGE_31041 = '#badge:badge_31041'
     BADGE_31041_DESCR = '#badge:badge_31041_descr'
     BADGE_31042 = '#badge:badge_31042'
@@ -944,6 +951,12 @@ class BADGE(object):
      BADGE_31071_DESCR,
      BADGE_31072,
      BADGE_31072_DESCR,
+     BADGE_31073,
+     BADGE_31073_DESCR,
+     BADGE_31074,
+     BADGE_31074_DESCR,
+     BADGE_31075,
+     BADGE_31075_DESCR,
      BADGE_31041,
      BADGE_31041_DESCR,
      BADGE_31042,
@@ -1229,6 +1242,9 @@ class BADGE(object):
      BADGE_31070_DESCR,
      BADGE_31071_DESCR,
      BADGE_31072_DESCR,
+     BADGE_31073_DESCR,
+     BADGE_31074_DESCR,
+     BADGE_31075_DESCR,
      BADGE_31041_DESCR,
      BADGE_31042_DESCR,
      BADGE_31043_DESCR,

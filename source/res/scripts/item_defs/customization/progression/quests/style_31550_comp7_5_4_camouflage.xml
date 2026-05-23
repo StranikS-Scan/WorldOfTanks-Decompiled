@@ -1,0 +1,214 @@
+<style_31550_comp7_5_4_camouflage.xml>
+  <quests>
+    <tokenQuest>
+      <id>	comp7_5_4_progression_1	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <description>
+        <key>	#vehicle_customization:customization/tooltip/quests/comp7_5_4_ranks_65/condition	</key>
+      </description>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	comp7_5_4:division_first_receive:65	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	comp7_5_4:qualification	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31550_1	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	1	</count>
+          <limit>	1	</limit>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <id>	comp7_5_4_progression_2	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <description>
+        <key>	#vehicle_customization:customization/tooltip/quests/comp7_5_4_ranks_55/condition	</key>
+      </description>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	comp7_5_4:division_first_receive:55	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	comp7_5_4:qualification	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31550_1	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	2	</count>
+          <limit>	2	</limit>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <id>	comp7_5_4_progression_3	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <description>
+        <key>	#vehicle_customization:customization/tooltip/quests/comp7_5_4_ranks_45/condition	</key>
+      </description>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	comp7_5_4:division_first_receive:45	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	comp7_5_4:qualification	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31550_1	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	3	</count>
+          <limit>	3	</limit>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <id>	comp7_5_4_progression_4	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <description>
+        <key>	#vehicle_customization:customization/tooltip/quests/comp7_5_4_ranks_35/condition	</key>
+      </description>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	comp7_5_4:division_first_receive:35	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	comp7_5_4:qualification	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31550_1	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	4	</count>
+          <limit>	4	</limit>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <id>	comp7_5_4_progression_5	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <description>
+        <key>	#vehicle_customization:customization/tooltip/quests/comp7_5_4_ranks_21/condition	</key>
+      </description>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	comp7_5_4:division_first_receive:21	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	comp7_5_4:qualification	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31550_1	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	5	</count>
+          <limit>	5	</limit>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <id>	comp7_5_4_progression_6	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <description>
+        <key>	#vehicle_customization:customization/tooltip/quests/comp7_5_4_ranks_11/condition	</key>
+      </description>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	comp7_5_4:division_first_receive:11	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	comp7_5_4:qualification	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31550_1	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	6	</count>
+          <limit>	6	</limit>
+        </token>
+      </bonus>
+    </tokenQuest>
+  </quests>
+</style_31550_comp7_5_4_camouflage.xml>

@@ -27,14 +27,14 @@ from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.cond_formatters.tokens import TokensMarathonFormatter
 from gui.server_events.event_items import DEFAULTS_GROUPS
 from gui.server_events.events_constants import RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID, BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, FUN_RANDOM_GROUP_ID
-from gui.server_events.events_helpers import isBattleMattersQuestID, isPremium, dailyQuestsSortFunc, isPremiumQuestsEnable, getPremiumGroup, getDailyEpicGroup, getRankedDailyGroup, getRankedPlatformGroup, getDailyBattleRoyaleGroup, getFunRandomDailyGroup, isDebutBoxesGroup, isVersusAIQuest
+from gui.server_events.events_helpers import isBattleMattersQuestID, isPremium, dailyQuestsSortFunc, isPremiumQuestsEnable, getPremiumGroup, getDailyEpicGroup, getRankedDailyGroup, getRankedPlatformGroup, getDailyBattleRoyaleGroup, getFunRandomDailyGroup, isDebutBoxesGroup, isVersusAIQuest, isSummerSaleGroup
 from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.icons import makeImageTag
 from helpers import dependency, time_utils, getLanguageCode
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IEpicBattleMetaGameController, IFunRandomController, IDebutBoxesController, IWinbackController, IUnseenEventsCounter
+from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IEpicBattleMetaGameController, IFunRandomController, IDebutBoxesController, IWinbackController, IUnseenEventsCounter, ISummerSaleController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -250,6 +250,7 @@ class QuestsGroupsBuilder(GroupedEventsBlocksBuilder):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
     __rankedController = dependency.descriptor(IRankedBattlesController)
     __funRandomController = dependency.descriptor(IFunRandomController)
+    __summerSaleController = dependency.descriptor(ISummerSaleController)
 
     def invalidateBlocks(self):
         super(QuestsGroupsBuilder, self).invalidateBlocks()
@@ -285,7 +286,9 @@ class QuestsGroupsBuilder(GroupedEventsBlocksBuilder):
 
     def _createGroupedEventsBlock(self, group):
         groupID = group.getID()
-        return _VersusAIGroupedQuestsBlockInfo(group) if isVersusAIQuest(groupID) else _GroupedQuestsBlockInfo(group)
+        if isVersusAIQuest(groupID):
+            return _VersusAIGroupedQuestsBlockInfo(group)
+        return _SummerSaleQuestsBlockInfo(group) if isSummerSaleGroup(group.getID(), summerSaleController=self.__summerSaleController) else _GroupedQuestsBlockInfo(group)
 
     def _getEventsGroups(self):
         return self.eventsCache.getGroups(filterFunc=lambda g: g.isRegularQuest())
@@ -582,6 +585,33 @@ class _DebutBoxesQuestsBlockInfo(_GroupedEventsBlockInfo):
 
     def _getBodyData(self):
         return {'missions': []} if not self.__debutBoxesController.isEnabled() else super(_DebutBoxesQuestsBlockInfo, self)._getBodyData()
+
+
+class _SummerSaleQuestsBlockInfo(_GroupedEventsBlockInfo):
+    blockType = GuiGroupBlockID.MARATHON_GROUPED_BLOCK
+    __summerSaleController = dependency.descriptor(ISummerSaleController)
+
+    def __init__(self, group):
+        super(_SummerSaleQuestsBlockInfo, self).__init__(group, headerLinkage=QUESTS_ALIASES.MISSION_PACK_SUMMER_SALE_HEADER_LINKAGE, bodyLinkage=QUESTS_ALIASES.MISSION_PACK_MARATHON_BODY_LINKAGE)
+
+    def _getVO(self):
+        data = super(_SummerSaleQuestsBlockInfo, self)._getVO()
+        if not self.__summerSaleController.isEnabled():
+            data.update({'isCollapsed': True})
+        return data
+
+    def _getHeaderData(self):
+        data = super(_SummerSaleQuestsBlockInfo, self)._getHeaderData()
+        data.update({'isEnabled': self.__summerSaleController.isEnabled()})
+        return data
+
+    def _getDescrBlock(self):
+        data = super(_SummerSaleQuestsBlockInfo, self)._getDescrBlock()
+        data.update({'isMultiline': False})
+        return data
+
+    def _getBodyData(self):
+        return {'missions': []} if not self.__summerSaleController.isEnabled() else super(_SummerSaleQuestsBlockInfo, self)._getBodyData()
 
 
 class _UngroupedQuestsBlockInfo(_CollapsableEventsBlockInfo):

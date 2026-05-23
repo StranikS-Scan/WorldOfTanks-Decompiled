@@ -17,7 +17,6 @@ class TOOLTIPS_CONSTANTS(object):
     MARKS_ON_GUN_ACHIEVEMENT = 'marksOnGun'
     BATTLE_STATS_MARKS_ON_GUN_ACHIEVEMENT = 'battleStatsMarksOnGun'
     CAROUSEL_VEHICLE = 'carouselVehicle'
-    COMP7_CAROUSEL_VEHICLE = 'comp7CarouselVehicle'
     MODIFIED_CAROUSEL_VEHICLE = 'modifiedCarouselVehicle'
     FUN_RANDOM_CAROUSEL_VEHICLE = 'funRandomCarouselVehicle'
     INVENTORY_VEHICLE = 'inventoryVehicle'
@@ -90,8 +89,6 @@ class TOOLTIPS_CONSTANTS(object):
     CREW_PERK_GF = 'crewPerkGf'
     BATTLE_ROYALE_CREW_PERK_GF = 'battleRoyaleCrewPerkGf'
     COMMANDER_BONUS = 'commanderBonus'
-    TANKMAN_SKILL = 'tankmanSkill'
-    PREVIEW_CREW_SKILL = 'previewCrewSkill'
     EFFICIENCY_PARAM = 'efficiencyParam'
     MAP = 'map'
     SETTINGS_CONTROL = 'control'
@@ -200,7 +197,6 @@ class TOOLTIPS_CONSTANTS(object):
     BADGE_LOYAL_SERVICE = 'badgeLoyalService'
     EVENT_BOARDS_BADGE = 'eventBoardsBadge'
     EVENT_BOARDS_BADGES_GROUP = 'eventBoardsBadgesGroup'
-    EVENT_SELECTOR_INFO = 'eventSelectorInfo'
     OPERATION = 'operation'
     OPERATIONS_CHAIN_DETAILS = 'operationsChainDetails'
     PERSONAL_MISSIONS_MAP_REGION = 'personalMissionsMapRegion'
@@ -291,7 +287,6 @@ class TOOLTIPS_CONSTANTS(object):
     COMP7_CALENDAR_DAY_INFO = 'comp7CalendarDayInfo'
     COMP7_CALENDAR_DAY_EXTENDED_INFO = 'comp7CalendarDayExtendedInfo'
     COMP7_BATTLE_RESULTS_PRESTIGE_POINTS = 'comp7BattleResultsPrestigePoints'
-    COMP7_VEHICLE_PARAMS_TOOLTIP = 'comp7VehicleParamsTooltip'
     TOURNAMENT_COMP7_BATTLE_RESULTS_PRESTIGE_POINTS = 'tournamentComp7BattleResultsPrestigePoints'
     MODIFIED_VEHICLE_PARAMS_TOOLTIP = 'modifiedVehicleParamsTooltip'
     BLOCKS_DEFAULT_UI = 'ToolTipInblocksDefaultUI'
@@ -360,8 +355,6 @@ class TOOLTIPS_CONSTANTS(object):
     SETTINGS_KEY_CHARGE_FIRE = 'SettingsKeyChargeFire'
     SETTINGS_KEY_CHARGE_FIRE_UI = 'ToolTipInblocksDefaultUI'
     VEH_CMP_SKILLS = 'vehCmpSkills'
-    TANKMAN_SKILL_EXTENDED = 'tankmanSkillExtended'
-    TANKMAN_SKILL_EXTENDED_UI = 'ToolTipInblocksDefaultUI'
     MISSIONS_TOKEN = 'missionsToken'
     MISSIONS_TOKEN_UI = 'ToolTipInblocksDefaultUI'
     BOOTCAMP_AWARD_MEDAL = 'BSTooltipMedalContainer'
@@ -403,20 +396,11 @@ class TOOLTIPS_CONSTANTS(object):
     ABILITY_LOBBY_TOOLTIP = 'abilityLobbyTooltip'
     ECONOMY_BONUS_TOOLTIP = 'economyBonusTooltip'
     SETTINGS_KEY_SHOW_QUEST_PROGRESS = 'SettingsKeyShowQuestProgress'
-    LIMITED_UI_UNLOCK_INFO_TOOLTIP = 'LimitedUIUnlockInfoTooltip'
+    NEWBIE_RESTRICTIONS_TOOLTIP = 'NewbieRestrictionsTooltip'
     EPIC_RANK_UNLOCK_INFO = 'epicRankUnlockTooltip'
     OPTDEV_SLOT_STATE_EMPTY = 'empty'
     OPTDEV_SLOT_STATE_EMPTY_SELECTED = 'emptySelected'
     OPTDEV_SLOT_STATE_ACTIVE_SELECTED = 'activeSelected'
-    HB_QUESTS_PREVIEW = 'HBBattleQuest'
-    HANGAR_INTERACTIVE_OBJECT = 'hangarInteractiveObject'
-    ENTRY_POINT_TOOLTIP = 'EntryPointTooltip'
-    HB_ORDER_TOOLTIP = 'HBOrderTooltip'
-    HB_UNAVAILABLE_QUEST = 'HBUnavailableQuest'
-    HB_VEHICLE = 'HBVehicle'
-    HB_CALENDAR_TOOLTIP = 'HBCalendarTooltip'
-    HB_SPECIAL_VEHICLES_TOOLTIP = 'HBSpecialVehiclesTooltip'
-    HB_EFFICIENCY_TOOLTIP = 'HBEfficiencyTooltip'
     LOOT_BOXES_VEHICLE_BLUEPRINT_FRAGMENT = 'lootBoxesVehicleBlueprintFragment'
     LOOT_BOX_TOOLTIP = 'lootBoxTooltip'
     LOOT_BOX_EXTENDED_TOOLTIP = 'lootBoxExtendedTooltip'
@@ -505,7 +489,7 @@ class TOOLTIPS_CONSTANTS(object):
      OLD_RESERVE_MODULE,
      DEBUT_BOXES_BADGE,
      PARAGONS_VEH_BRANCH_LOCKED,
-     LIMITED_UI_UNLOCK_INFO_TOOLTIP,
+     NEWBIE_RESTRICTIONS_TOOLTIP,
      PARAGONS_CAROUSEL_POINTS_BEFORE_WIN,
      PARAGONS_CAROUSEL_POINTS_BEFORE_UNLOCK_VEH]
     BOOTCAMP_SET = [BOOTCAMP_AWARD_MEDAL, BOOTCAMP_REWARD_PROGRESS, BOOTCAMP_LESSON_PROGRESS]
@@ -630,7 +614,6 @@ class TOOLTIPS_CONSTANTS(object):
      VEHICLE_ROLES,
      VEHICLE_STAT_TRACK,
      MODIFIED_VEHICLE_PARAMS_TOOLTIP,
-     COMP7_CAROUSEL_VEHICLE,
      MODIFIED_CAROUSEL_VEHICLE]
     BLUEPRINTS_SET = [BLUEPRINT_INFO,
      BLUEPRINT_FRAGMENT_INFO,
@@ -733,13 +716,3 @@ class TOOLTIPS_CONSTANTS(object):
      EARLY_ACCESS_ENTRY_POINT]
     BIRTHDAY_SET = [BIRTHDAY_GIFT_SYSTEM_POSTMARK, BIRTHDAY_GOLDEN_TICKET, ECONOMY_BONUS_TOOLTIP]
     STORAGE_SET = [STORAGE_RESTORE_DEVICE_INFO]
-    EVENT_SET = [EVENT_SELECTOR_INFO]
-    HISTORICAL_BATTLES_SET = [HB_QUESTS_PREVIEW,
-     HANGAR_INTERACTIVE_OBJECT,
-     ENTRY_POINT_TOOLTIP,
-     HB_ORDER_TOOLTIP,
-     HB_UNAVAILABLE_QUEST,
-     HB_VEHICLE,
-     HB_CALENDAR_TOOLTIP,
-     HB_SPECIAL_VEHICLES_TOOLTIP,
-     HB_EFFICIENCY_TOOLTIP]

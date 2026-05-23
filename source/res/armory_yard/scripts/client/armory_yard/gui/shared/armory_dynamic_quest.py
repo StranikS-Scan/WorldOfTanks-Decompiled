@@ -85,8 +85,7 @@ class ArmoryDynamicQuest(PersonalQuest):
         return self.eventsCache.getQuestByID(tokenQuestID) if tokenQuestID is not None else None
 
     def getGroupID(self):
-        tokenQuest = self.getTokenQuest()
-        return tokenQuest.getGroupID() if tokenQuest else super(ArmoryDynamicQuest, self).getGroupID()
+        return self.getTokenQuest().getGroupID() if self.getTokenQuestID() else super(ArmoryDynamicQuest, self).getGroupID()
 
 
 class ArmoryDynamicQuestBuilder(IQuestBuilder):

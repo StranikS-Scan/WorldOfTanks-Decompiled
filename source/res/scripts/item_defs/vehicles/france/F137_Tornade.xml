@@ -68,6 +68,13 @@
       <undamaged>	vehicles/french/F137_Tornade/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/french/F137_Tornade/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/french/F137_Tornade/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <F137_Tornade_3Dst_02>
+          <undamaged>	vehicles/french/F137_Tornade/_skins/F137_Tornade_3Dst_02/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/french/F137_Tornade/_skins/F137_Tornade_3Dst_02/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/french/F137_Tornade/_skins/F137_Tornade_3Dst_02/crash/lod0/Hull.model	</exploded>
+        </F137_Tornade_3Dst_02>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -756,6 +763,22 @@
         <showOn>	16	</showOn>
         <verticalMirror>	true	</verticalMirror>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15065	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	F137_Tornade_3Dst_02	</compatibleModels>
+        <position>	-0.000461 1.921045 -2.485787	</position>
+        <rotation>	3.125605 0.027339 -0.006325	</rotation>
+        <scale>	0.542911 0.542911 0.542911	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -797,6 +820,13 @@
         <undamaged>	vehicles/french/F137_Tornade/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/french/F137_Tornade/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/french/F137_Tornade/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <F137_Tornade_3Dst_02>
+            <undamaged>	vehicles/french/F137_Tornade/_skins/F137_Tornade_3Dst_02/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/french/F137_Tornade/_skins/F137_Tornade_3Dst_02/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/french/F137_Tornade/_skins/F137_Tornade_3Dst_02/crash/lod0/Chassis.model	</exploded>
+          </F137_Tornade_3Dst_02>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -867,17 +897,44 @@
                   <row2>	0.000000 0.000000 6.649620	</row2>
                   <row3>	0.000000 1.367888 -0.034695	</row3>
                 </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	F137_Tornade_3Dst_02	</modelsSet>
                 <boxCollider>
-                  <row0>	3.393330 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.282818 0.100071	</row1>
-                  <row2>	0.000000 -0.263115 0.743612	</row2>
-                  <row3>	0.000000 1.360114 3.263381	</row3>
+                  <row0>	2.032870 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.437850 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.231370	</row2>
+                  <row3>	0.000000 1.152940 -0.159545	</row3>
                 </boxCollider>
                 <boxCollider>
-                  <row0>	3.393330 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.209387 -0.214842	</row1>
-                  <row2>	0.000000 0.536048 0.522435	</row2>
-                  <row3>	0.000000 1.166512 -3.548219	</row3>
+                  <row0>	0.971857 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.409462 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.535905	</row2>
+                  <row3>	-1.251189 1.419134 -0.021914	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.971857 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.271541 0.127536	</row1>
+                  <row2>	0.000000 -0.403056 0.858161	</row2>
+                  <row3>	-1.251190 1.366318 3.215374	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.971857 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.211818 -0.212445	</row1>
+                  <row2>	0.000000 0.671398 0.669417	</row2>
+                  <row3>	-1.251189 1.208333 -3.503423	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.564451 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.110237	</row2>
+                  <row3>	-1.691466 1.106822 -0.021914	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.971857 0.000000 0.000000	</row0>
+                  <row1>	0.000000 -0.016265 -0.299559	</row1>
+                  <row2>	0.000000 0.641158 -0.034813	</row2>
+                  <row3>	-1.251190 0.725409 -3.718262	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -932,17 +989,44 @@
                   <row2>	0.000000 0.000000 6.649620	</row2>
                   <row3>	0.000000 1.367890 -0.034695	</row3>
                 </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	F137_Tornade_3Dst_02	</modelsSet>
                 <boxCollider>
-                  <row0>	3.393330 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.282818 0.100071	</row1>
-                  <row2>	0.000000 -0.263115 0.743612	</row2>
-                  <row3>	0.000000 1.360110 3.263380	</row3>
+                  <row0>	2.032870 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.437850 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.231370	</row2>
+                  <row3>	0.000000 1.152940 -0.159545	</row3>
                 </boxCollider>
                 <boxCollider>
-                  <row0>	3.393330 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.209387 -0.214842	</row1>
-                  <row2>	0.000000 0.536048 0.522435	</row2>
-                  <row3>	0.000000 1.166510 -3.548220	</row3>
+                  <row0>	0.971857 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.409462 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.535900	</row2>
+                  <row3>	1.251000 1.419130 -0.021914	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.971857 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.271541 0.127536	</row1>
+                  <row2>	0.000000 -0.403056 0.858161	</row2>
+                  <row3>	1.251000 1.366320 3.215370	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.971857 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.211818 -0.212445	</row1>
+                  <row2>	0.000000 0.671398 0.669417	</row2>
+                  <row3>	1.251000 1.208330 -3.503420	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.564451 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.110240	</row2>
+                  <row3>	1.691000 1.106820 -0.021914	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.971857 0.000000 0.000016	</row0>
+                  <row1>	0.000005 -0.016265 -0.299559	</row1>
+                  <row2>	0.000000 0.641158 -0.034813	</row2>
+                  <row3>	1.251000 0.725409 -3.718260	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1419,6 +1503,12 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <F137_Tornade_3Dst_02>
+              <segmentModelLeft>	vehicles/french/F137_Tornade/track/segment.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/french/F137_Tornade/track/segment.model	</segmentModelRight>
+            </F137_Tornade_3Dst_02>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -2136,6 +2226,32 @@
               <verticalMirror>	true	</verticalMirror>
             </slot>
             <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45041	</slotId>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	F137_Tornade_3Dst_02	</compatibleModels>
+              <position>	-0.415684 2.645498 0.632684	</position>
+              <rotation>	3.11652 -0.000009 -0.000014	</rotation>
+              <scale>	0.608967 0.608967 0.608967	</scale>
+              <showOn>	4096	</showOn>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45042	</slotId>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	F137_Tornade_3Dst_02	</compatibleModels>
+              <position>	-0.1402 2.608247 -0.852992	</position>
+              <rotation>	3.116521 -0.000009 -0.000014	</rotation>
+              <scale>	0.608967 0.608966 0.608966	</scale>
+              <showOn>	4096	</showOn>
+            </slot>
+            <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48000	</slotId>
+              <position>	0 0 0	</position>
+              <rotation>	0 0 0	</rotation>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	0 0.15 3.58	</rayStart>
@@ -2143,6 +2259,17 @@
               <rayUp>	0.15 0 0	</rayUp>
               <applyToFabric>	false	</applyToFabric>
               <size>	0.69	</size>
+              <isUVProportional>	false	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0 0.15 3.02	</rayStart>
+              <rayEnd>	0 0.15 3.53	</rayEnd>
+              <rayUp>	0.15 0 0	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <compatibleModels>	F137_Tornade_3Dst_02	</compatibleModels>
+              <size>	0.51	</size>
               <isUVProportional>	false	</isUVProportional>
             </slot>
           </customizationSlots>
@@ -2156,6 +2283,13 @@
             <undamaged>	vehicles/french/F137_Tornade/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/french/F137_Tornade/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/french/F137_Tornade/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <F137_Tornade_3Dst_02>
+                <undamaged>	vehicles/french/F137_Tornade/_skins/F137_Tornade_3Dst_02/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/french/F137_Tornade/_skins/F137_Tornade_3Dst_02/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/french/F137_Tornade/_skins/F137_Tornade_3Dst_02/crash/lod0/Gun_01.model	</exploded>
+              </F137_Tornade_3Dst_02>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/french/F137_Tornade/collision/Gun_01.model	</collisionModelServer>
@@ -2174,6 +2308,13 @@
         <undamaged>	vehicles/french/F137_Tornade/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/french/F137_Tornade/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/french/F137_Tornade/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <F137_Tornade_3Dst_02>
+            <undamaged>	vehicles/french/F137_Tornade/_skins/F137_Tornade_3Dst_02/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/french/F137_Tornade/_skins/F137_Tornade_3Dst_02/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/french/F137_Tornade/_skins/F137_Tornade_3Dst_02/crash/lod0/Turret_01.model	</exploded>
+          </F137_Tornade_3Dst_02>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/french/F137_Tornade/collision/Turret_01.model	</collisionModelServer>
@@ -2230,6 +2371,12 @@
           <rayUp>	-0.567396 0.823445 -0	</rayUp>
           <size>	0.65	</size>
           <isUVProportional>	false	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0 0 0	</position>
+          <rotation>	0 0 0	</rotation>
         </slot>
       </customizationSlots>
       <customization>

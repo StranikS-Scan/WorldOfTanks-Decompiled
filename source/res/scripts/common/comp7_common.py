@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/comp7_common.py
 import enum
 ROLE_EQUIPMENT_TAG = 'roleEquipment'
-COMP7_CURRENT_SEASON = 3
+COMP7_CURRENT_SEASON = 4
 COMP7_MASKOT_ID = '5'
 SEASONS_IN_YEAR = 4
 COMP7_QUEST_PREFIX = 'comp7_{maskot}_{season}'.format(maskot=COMP7_MASKOT_ID, season=COMP7_CURRENT_SEASON)
@@ -12,11 +12,16 @@ COMP7_TOKEN_WEEKLY_REWARD_ID = 'comp7_{maskot}_{season}_weekly_rewards_token'.fo
 COMP7_TOKEN_WEEKLY_REWARD_NAME = 'comp7TokenWeeklyReward'
 COMP7_TOKEN_COUPON_REWARD_ID = 'comp7:coupon'
 COMP7_TOKEN_COUPON_REWARD_NAME = 'comp7TokenCouponReward'
+COMP7_CUSTOMIZATION_PROGRESS_PREFIX = 'comp7_cust_progress_'
 COMP7_QUALIFICATION_QUEST_ID = 'comp7_{maskot}_{season}_ranks_65'.format(maskot=COMP7_MASKOT_ID, season=COMP7_CURRENT_SEASON)
 COMP7_SEASON_POINTS_ENTITLEMENT_TMPL = 'comp7_season_points'
 
 def seasonPointsCodeBySeasonNumber(seasonNumber):
     return ':'.join((COMP7_SEASON_POINTS_ENTITLEMENT_TMPL, COMP7_MASKOT_ID, str(seasonNumber)))
+
+
+def replaceComp7tokenID(tID, targetTokenPrefix):
+    return tID.replace(COMP7_CUSTOMIZATION_PROGRESS_PREFIX, targetTokenPrefix)
 
 
 SEASON_POINTS_ENTITLEMENTS = [ seasonPointsCodeBySeasonNumber(n + 1) for n in range(SEASONS_IN_YEAR) ]

@@ -47,6 +47,7 @@
     <MTU_MB_837_Ba_500A_bob>	31003	</MTU_MB_837_Ba_500A_bob>
     <SPA_19TB_mod_41>	31004	</SPA_19TB_mod_41>
     <MB_837_Ea_500>	31005	</MB_837_Ea_500>
+    <MB_880_It35>	31006	</MB_880_It35>
     <Development_Engine>	65000	</Development_Engine>
   </ids>
   <shared>
@@ -568,6 +569,23 @@
       <rpm_min>	500	</rpm_min>
       <rpm_max>	1900	</rpm_max>
     </MB_837_Ea_500>
+    <MB_880_It35>
+      <userString>	#italy_vehicles:MB_880_It35	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	85000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
+      <power>	960	</power>
+      <weight>	1200	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	420	</rpm_min>
+      <rpm_max>	2060	</rpm_max>
+    </MB_880_It35>
     <Hanomag_D831_A>
       <userString>	#italy_vehicles:Hanomag_D831_A	</userString>
       <tags>	diesel	</tags>

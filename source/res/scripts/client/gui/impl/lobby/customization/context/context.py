@@ -87,6 +87,7 @@ class CustomizationContext(object):
         self.__season = None
         self.__modeId = None
         self.__tabId = None
+        self.__prevTabId = None
         self.__startModeId = None
         self.__prevModeId = None
         self.__modes = {CustomizationModes.CUSTOM: CustomMode(self),
@@ -141,6 +142,10 @@ class CustomizationContext(object):
     @property
     def tabId(self):
         return self.__tabId
+
+    @property
+    def prevTabId(self):
+        return self.__prevTabId
 
     @property
     def startModeId(self):
@@ -237,6 +242,7 @@ class CustomizationContext(object):
     def changeTab(self, tabId, itemCD=None):
         if self.__tabId == tabId:
             return
+        self.__prevTabId = self.__tabId
         self.__tabId = tabId
         if self.__modeId != CustomizationModes.EDITABLE_STYLE:
             newModeId = (CustomizationModes.STYLED_2D if tabId in CustomizationTabs.STYLES_2D else CustomizationModes.STYLED_3D) if tabId in CustomizationTabs.STYLES_ALL else CustomizationModes.CUSTOM

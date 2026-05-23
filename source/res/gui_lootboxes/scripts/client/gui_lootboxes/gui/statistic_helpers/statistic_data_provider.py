@@ -116,6 +116,7 @@ class StatisticDataCache(object):
 
         if self.__isFirstSync:
             self.requestBaseStat()
+            self.__isFirstSync = False
 
     def onAccountBecomeNonPlayer(self):
         for provider in self._providers.values():

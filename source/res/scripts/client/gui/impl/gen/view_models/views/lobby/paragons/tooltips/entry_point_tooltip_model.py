@@ -17,7 +17,7 @@ class ProgressState(Enum):
 class EntryPointTooltipModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=0):
+    def __init__(self, properties=7, commands=0):
         super(EntryPointTooltipModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -40,29 +40,36 @@ class EntryPointTooltipModel(ViewModel):
     def setPoints(self, value):
         self._setNumber(2, value)
 
-    def getVehicleToReset(self):
+    def getTimeStamp(self):
         return self._getNumber(3)
 
-    def setVehicleToReset(self, value):
+    def setTimeStamp(self, value):
         self._setNumber(3, value)
 
-    def getVehicleCount(self):
+    def getVehicleToReset(self):
         return self._getNumber(4)
 
-    def setVehicleCount(self, value):
+    def setVehicleToReset(self, value):
         self._setNumber(4, value)
 
+    def getVehicleCount(self):
+        return self._getNumber(5)
+
+    def setVehicleCount(self, value):
+        self._setNumber(5, value)
+
     def getProgressState(self):
-        return ProgressState(self._getString(5))
+        return ProgressState(self._getString(6))
 
     def setProgressState(self, value):
-        self._setString(5, value.value)
+        self._setString(6, value.value)
 
     def _initialize(self):
         super(EntryPointTooltipModel, self)._initialize()
         self._addViewModelProperty('currentChapter', ChapterModel())
         self._addBoolProperty('isFirstEntry', False)
         self._addNumberProperty('points', 0)
+        self._addNumberProperty('timeStamp', 0)
         self._addNumberProperty('vehicleToReset', 0)
         self._addNumberProperty('vehicleCount', 0)
         self._addStringProperty('progressState', ProgressState.ACTIVE.value)

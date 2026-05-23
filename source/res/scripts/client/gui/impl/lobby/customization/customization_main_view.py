@@ -474,8 +474,8 @@ class CustomizationMainView(ViewImpl, EventSystemEntity, CustomizationSettingsSe
         if self.__ctx.mode.tabId == CustomizationTabs.INSCRIPTIONS and self.__toolbarProvider.isShownToolbar:
             SoundGroups.g_instance.playSound2D(SOUNDS.CUST_CHOICE_ESC)
         self.__ctx.mode.cancelChanges()
-        if self.__ctx.modeId == CustomizationModes.EDITABLE_STYLE:
-            self.__ctx.changeMode(self.__ctx.prevModeId)
+        if self.__ctx.modeId in CustomizationModes.ALL_STYLES:
+            self.__ctx.changeMode(self.__ctx.prevModeId, tabId=self.__ctx.prevTabId)
             self.__ctx.mode.cancelChanges()
 
     @adisp.adisp_process
@@ -994,7 +994,7 @@ class CustomizationMainView(ViewImpl, EventSystemEntity, CustomizationSettingsSe
 
     @th_async
     def __closeConfirmator(self):
-        if isVehicleEmpty() or self.__ctx.mode.modeId in CustomizationModes.STYLED and self.__ctx.mode.isOutfitsEmpty():
+        if isVehicleEmpty() or not self.__ctx.isOutfitsModified() or self.__ctx.mode.modeId in CustomizationModes.STYLED and self.__ctx.mode.isOutfitsEmpty():
             isOk = True
         else:
             isOk = yield th_await(showCloseConfirmWithoutApplyingChangesDialog())

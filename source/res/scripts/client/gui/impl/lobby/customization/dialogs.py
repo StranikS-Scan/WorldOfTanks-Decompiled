@@ -49,7 +49,8 @@ def getDataForApplyToOtherSeasonsMessage(lockedSeasons):
 @th_async
 def showCloseConfirmWithoutApplyingChangesDialog():
     rCloseConfirm = R.strings.dialogs.customization.close
-    builder = ConfirmCancelDialogBuilder()
+    layoutId = R.views.lobby.customization.CustomizationCloseConfirmationDialog()
+    builder = ConfirmCancelDialogBuilder(layoutID=layoutId)
     builder.setTitle(rCloseConfirm.title())
     builder.setConfirmButtonLabel(rCloseConfirm.submit())
     builder.setCancelButtonLabel(rCloseConfirm.cancel())

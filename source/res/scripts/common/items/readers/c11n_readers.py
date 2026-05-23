@@ -468,7 +468,7 @@ class StyleXmlReader(BaseCustomizationItemXmlReader):
                 ix.raiseWrongXml(xmlCtx, 'type', 'unsupported type is used')
             fn.types = types
         if section.has_key('historical'):
-            fn.customizationDisplayType = ix.readInt(xmlCtx, section, 'historical', CustomizationDisplayType.HISTORICAL, CustomizationDisplayType.FANTASTICAL)
+            fn.customizationDisplayType = ix.readInt(xmlCtx, section, 'historical', CustomizationDisplayType.NON_HISTORICAL)
         return fn
 
     def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
@@ -772,7 +772,8 @@ def _readItems(cache, itemCls, xmlCtx, section, itemSectionName, storage, progre
                 item.priceGroupTags = priceGroupsDict[priceGroupId].tags
                 itemToPriceGroup[item.compactDescr] = priceGroupsDict[priceGroupId].compactDescr
                 itemNotInShop = isection.readBool('notInShop', False)
-                iv._copyPriceForItem(priceGroupsDict[priceGroupId].compactDescr, item.compactDescr, itemNotInShop)
+                itemForbiddenToSell = ItemTags.CANNOT_BE_SOLD in item.tags
+                iv._copyPriceForItem(priceGroupsDict[priceGroupId].compactDescr, item.compactDescr, itemNotInShop, itemForbiddenToSell)
             ix.raiseWrongXml(iCtx, 'priceGroup', 'no price for item %s' % item.id)
 
         if IS_EDITOR:

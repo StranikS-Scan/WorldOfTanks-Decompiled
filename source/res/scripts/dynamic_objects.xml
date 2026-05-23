@@ -1,4 +1,5 @@
-<dynamic_objects.xml>	-	  <models></models>
+<dynamic_objects.xml>
+  <models></models>
   <stunAreaVisual>
     <radius>	15.0	</radius>
     <areasNum>	3	</areasNum>
@@ -21,7 +22,7 @@
     <flagModelName>	content/Environment/env_111_04_RepairFlag/normal/lod0/env_111_04_RepairFlag.model	</flagModelName>
     <radiusModel>	content/Interface/CheckPoint/CheckPoint_yellow_black.visual	</radiusModel>
     <flagAnim>	content/Environment/env_111_04_RepairFlag/animations/env_111_04_RepairFlag.fbx	</flagAnim>
-    <wwsound>	ambient_static_objects_flag_flapping	</wwsound>
+    <wwsound>	ambient_static_objects_flag	</wwsound>
   </stepRepairPoint>
   <sectorBase>
     <flagModelName>	content/MilitaryEnvironment/mle000_BaseFlagstaff/normal/lod0/flag.model	</flagModelName>
@@ -31,8 +32,6 @@
     <flagAnim>	content/MilitaryEnvironment/mle000_BaseFlagstaff/animations/flag.fbx	</flagAnim>
     <flagstaffFlagHP>	HP_UpFlag	</flagstaffFlagHP>
     <flagBackgroundTex>	content/MilitaryEnvironment/mle000_BaseFlagstaff/mle016_Flagstaff_flag	</flagBackgroundTex>
-    <flagEmblemTex>	system/maps/emblem.dds	</flagEmblemTex>
-    <flagEmblemTexCoords>	0.2 0.4 0.6 0.8	</flagEmblemTexCoords>
     <flagScale>	3.0 3.0 3.0	</flagScale>
     <WwsoundBaseCaptureSound>	eb_zone_capture	</WwsoundBaseCaptureSound>
     <wwsound>	ambient_static_objects_flag_flapping	</wwsound>
@@ -303,15 +302,6 @@
       <overTerrainHeight>	0.5	</overTerrainHeight>
     </ally>
   </InspireAreaVisual>
-  <EquipmentCircleRestrictionVisual>
-    <ally>
-      <visual>	content/Interface/TargetPoint/inspire.model	</visual>
-      <color>	0xffffffff	</color>
-      <enableAccurateCollision>	False	</enableAccurateCollision>
-      <maxUpdateInterval>	0.04	</maxUpdateInterval>
-      <overTerrainHeight>	0.5	</overTerrainHeight>
-    </ally>
-  </EquipmentCircleRestrictionVisual>
   <HealPointVisual>
     <ally>
       <visual>	content/Interface/TargetPoint/inspire.model	</visual>
@@ -662,20 +652,6 @@
       </effect>
     </enemy>
   </epicMinesIdleEffect>
-  <epicMinesIdleYellowEffect>
-    <ally>
-      <effect>
-        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_allies_yellow.seq	</path_fwd>
-        <path>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_allies_yellow.seq	</path>
-      </effect>
-    </ally>
-    <enemy>
-      <effect>
-        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_enemy.seq	</path_fwd>
-        <path>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_enemy.seq	</path>
-      </effect>
-    </enemy>
-  </epicMinesIdleYellowEffect>
   <minesBlowUpEffect>
     <timeline>
       <lightingEnd>	0.22	</lightingEnd>
@@ -955,11 +931,4 @@
       <path>	particles/Environment/interior/280_cosmic_geyser_26.eff	</path>
     </effect>
   </cosmicEffects>
-  <museumOfGlory>
-    <path>	content/Hangars/h16_mt_museum/environment/h01_VD26_Diorama_1_AM.dds	</path>
-    <path>	content/Hangars/h16_mt_museum/environment/h01_VD26_Diorama_2_AM.dds	</path>
-    <path>	content/Hangars/h16_mt_museum/environment/h01_VD26_Diorama_3_AM.dds	</path>
-    <path>	content/Hangars/h16_mt_museum/environment/h01_VD26_Diorama_4_AM.dds	</path>
-    <path>	content/Hangars/h16_mt_museum/environment/h01_VD26_Diorama_5_AM.dds	</path>
-  </museumOfGlory>
 </dynamic_objects.xml>

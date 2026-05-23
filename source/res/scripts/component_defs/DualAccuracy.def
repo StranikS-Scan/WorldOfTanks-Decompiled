@@ -1,14 +1,9 @@
 <DualAccuracy.def>
-  <DetailLevel>	MY_VEHICLE	</DetailLevel>
-  <Properties>
-    <vehTypeCD>
-      <Type>	INT32	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-    </vehTypeCD>
-    <state>
-      <Type>	UINT8	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-    </state>
-  </Properties>
-  <DefaultKeyName>	dualAccuracy	</DefaultKeyName>
+  <Parent>	DualAccuracyBase	</Parent>
+  <ClientMethods>
+    <onCoolingDataUpdated>
+      <Arg>	FLOAT32	</Arg>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </onCoolingDataUpdated>
+  </ClientMethods>
 </DualAccuracy.def>

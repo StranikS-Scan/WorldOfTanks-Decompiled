@@ -41,7 +41,15 @@
     <freqX>	0	</freqX>
     <freqZ>	0	</freqZ>
   </water>
-  <estimatedLoad>	0.91	</estimatedLoad>
+  <estimatedLoad>	0.73	</estimatedLoad>
+  <bonusTypeOverrides>
+    <EPIC_RANDOM>
+      <estimatedLoad>	0.73	</estimatedLoad>
+    </EPIC_RANDOM>
+    <EPIC_RANDOM_TRAINING>
+      <estimatedLoad>	0.73	</estimatedLoad>
+    </EPIC_RANDOM_TRAINING>
+  </bonusTypeOverrides>
   <gameplayTypes>
     <ctf30x30>
       <numPlayerGroups>	3	</numPlayerGroups>

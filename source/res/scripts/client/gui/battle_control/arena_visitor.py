@@ -406,6 +406,9 @@ class _ArenaBonusTypeVisitor(IArenaVisitor):
     def hasSwitchSetups(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.SWITCH_SETUPS)
 
+    def hasComp7SkillSwitch(self):
+        return _CAPS.checkAny(self._bonusType, _CAPS.COMP7_SKILL_SWITCH)
+
 
 class _ArenaExtraDataVisitor(IArenaVisitor):
     __slots__ = ('_extra',)

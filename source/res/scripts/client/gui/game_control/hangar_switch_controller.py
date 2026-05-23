@@ -164,12 +164,6 @@ class HangarSpaceSwitchController(IHangarSpaceSwitchController, IGlobalListener)
         self._clear()
         super(HangarSpaceSwitchController, self).onAvatarBecomePlayer()
 
-    def getSpacePath(self, spaceName):
-        if spaceName not in self._sceneSpaceParams:
-            return ''
-        currentSceneConfig = self._sceneSpaceParams[spaceName]
-        return self.hangarSpaceReloader.buildHangarSpacePath(currentSceneConfig.getHangarSpaceId()).lower()
-
     def _clear(self):
         self.stopGlobalListening()
 

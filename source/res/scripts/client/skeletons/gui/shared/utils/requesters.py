@@ -1259,13 +1259,6 @@ class IArmoryYardRequester(IRequester):
         raise NotImplementedError
 
 
-class IHistoricalBattlesRequester(IRequester):
-
-    @property
-    def data(self):
-        raise NotImplementedError
-
-
 class IReferralProgramRequester(IRequester):
 
     def getRPPgbPoints(self):

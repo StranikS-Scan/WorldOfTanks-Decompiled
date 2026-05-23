@@ -155,8 +155,9 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
             self.__packQuestsModel(modelPremiumQuests, premiumQuests)
 
     def __onPlayStreakUpdated(self):
-        with self.viewModel.transaction() as tx:
-            self._updataPlayStreakModel(tx)
+        if self.lobbyContext.getServerSettings().playStreakConfig.isEnabled:
+            with self.viewModel.transaction() as tx:
+                self._updataPlayStreakModel(tx)
 
     def _updateViewModel(self):
         _logger.debug('DailyQuests::UpdatingViewModel')

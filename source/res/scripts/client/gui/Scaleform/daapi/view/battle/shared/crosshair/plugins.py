@@ -3,15 +3,15 @@
 import logging
 import typing
 import math
-from collections import defaultdict, namedtuple
-import BigWorld
-from enum import IntEnum
 import BattleReplay
+import BigWorld
+import SoundGroups
+from collections import defaultdict, namedtuple
+from enum import IntEnum
 from AvatarInputHandler import gun_marker_ctrl, aih_global_binding
 from AvatarInputHandler.spg_marker_helpers.spg_marker_helpers import SPGShotResultEnum
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
-import SoundGroups
 from Vehicle import Vehicle
 from account_helpers.settings_core.settings_constants import GRAPHICS, AIM, GAME, SPGAim, MARKERS
 from aih_constants import CHARGE_MARKER_STATE, CTRL_MODE_NAME as CTRL_MODE
@@ -24,6 +24,7 @@ from gui.Scaleform.daapi.view.battle.shared.formatters import getHealthPercent
 from gui.Scaleform.daapi.view.battle.shared.helper import getClipType
 from gui.Scaleform.daapi.view.battle.shared.timers_common import PythonTimer
 from gui.Scaleform.genConsts.AUTOLOADERBOOSTVIEWSTATES import AUTOLOADERBOOSTVIEWSTATES
+from gui.Scaleform.genConsts.BATTLE_ITEM_STATES import BATTLE_ITEM_STATES
 from gui.Scaleform.genConsts.CROSSHAIR_CASSETTE_TYPES import CROSSHAIR_CASSETTE_TYPES as CC_TYPE
 from gui.Scaleform.genConsts.CROSSHAIR_CONSTANTS import CROSSHAIR_CONSTANTS
 from gui.Scaleform.genConsts.DUAL_GUN_MARKER_STATE import DUAL_GUN_MARKER_STATE
@@ -51,6 +52,8 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
 from wotdecorators import noexceptReturn
 from helpers_common import computeDistanceFactor
+from DualAccuracyBase import getPlayerVehicleDualAccuracy
+from vehicle_systems.tankStructure import TankPartNames as DEVICE_NAMES
 if typing.TYPE_CHECKING:
     from AvatarInputHandler.control_modes import _TrajectoryControlMode
 _logger = logging.getLogger(__name__)
@@ -1688,51 +1691,189 @@ class SPGShotResultIndicatorPlugin(CrosshairPlugin):
 
 
 class DualAccuracyGunPlugin(CrosshairPlugin):
+    __slots__ = ('__dualAccGunCtrl', '__cooldownCb', '__timerTicking', '__ammoEmpty', '__gunDestroyed', '__isEnabled', '__leftTime', '__isIndicatorsEnabled')
+    _TICK = 0.1
+    _EPS = 0.03
+    _HEATED_SOUND = 'dualaccuracy_overheat_ui'
+    _COOLED_SOUND = 'dualaccuracy_cool_down_ui'
 
     def __init__(self, parentObj):
         super(DualAccuracyGunPlugin, self).__init__(parentObj)
         self.__dualAccGunCtrl = None
+        self.__cooldownCb = CallbackDelayer()
+        self.__timerTicking = False
+        self.__ammoEmpty = False
+        self.__gunDestroyed = False
+        self.__isEnabled = False
+        self.__leftTime = 0
+        self.__isIndicatorsEnabled = False
         return
 
+    def __enableIndicatorsOnlyForDualgun(self):
+        self.__isIndicatorsEnabled = False
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        if vStateCtrl is None:
+            return
+        else:
+            vehicle = vStateCtrl.getControllingVehicle()
+            if vehicle is None or not vehicle.typeDescriptor.isDualgunVehicle:
+                return
+            self.__isIndicatorsEnabled = True
+            return
+
     def start(self):
+        ammoCtrl = self.sessionProvider.shared.ammo
+        if ammoCtrl is not None:
+            ammoCtrl.onShellsUpdated += self.__onShellsUpdated
         vStateCtrl = self.sessionProvider.shared.vehicleState
         if vStateCtrl is not None:
             vStateCtrl.onVehicleControlling += self.__onVehicleControlling
-            vehicle = vStateCtrl.getControllingVehicle()
-            self.__onVehicleControlling(vehicle)
+            vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+            self.__onVehicleControlling(vStateCtrl.getControllingVehicle())
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl is not None:
+            crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
         return
 
     def stop(self):
         vStateCtrl = self.sessionProvider.shared.vehicleState
         if vStateCtrl is not None:
             vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
+            vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl is not None:
+            crosshairCtrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
+        ammoCtrl = self.sessionProvider.shared.ammo
+        if ammoCtrl is not None:
+            ammoCtrl.onShellsUpdated -= self.__onShellsUpdated
         self.__unsubscribeDualAccuracyCtrl()
         return
 
+    def __onShellsUpdated(self, *_):
+        if self.__dualAccGunCtrl is None:
+            return
+        else:
+            ammoCtrl = self.sessionProvider.shared.ammo
+            prev = self.__ammoEmpty
+            self.__ammoEmpty = ammoCtrl.isEmptyAmmo()
+            if prev != self.__ammoEmpty and not self.__dualAccGunCtrl.isActive():
+                self.__setGunCoolingTimer()
+            return
+
+    def __onVehicleStateUpdated(self, stateID, value):
+        if stateID != VEHICLE_VIEW_STATE.DEVICES:
+            return
+        else:
+            device = value[0]
+            if device != DEVICE_NAMES.GUN:
+                return
+            if self.__dualAccGunCtrl is None:
+                return
+            prevGunState = self.__gunDestroyed
+            self.__gunDestroyed = value[1] == BATTLE_ITEM_STATES.DESTROYED
+            if prevGunState != self.__gunDestroyed and not self.__dualAccGunCtrl.isActive():
+                self.__setGunCoolingTimer()
+            return
+
     def __onSetDualAccuracyState(self, *_):
-        isVisible = not self.__dualAccGunCtrl.isActive() if self.__dualAccGunCtrl is not None else False
-        self.parentObj.as_setDualAccActiveS(isVisible)
-        return
+        self.__playSound()
+
+    def __onDualAccuracyDataUpdated(self):
+        isActive = self.__dualAccGunCtrl and self.__dualAccGunCtrl.isActive()
+        self.parentObj.as_setDualAccActiveS(not isActive)
+        self.__recalcCoolingTimer()
+
+    def __recalcCoolingTimer(self):
+        left = self.__getLeftForActiveGun()
+        if left <= self._EPS:
+            self.__hideTimer()
+            return
+        self.__setCoolingState(True, left)
+        self.__setGunCoolingTimer()
+        self.__startCoolingTicker()
+
+    def __setCoolingState(self, isEnabled, leftTime):
+        self.__isEnabled = isEnabled
+        self.__leftTime = leftTime
+
+    def __getLeftForActiveGun(self):
+        ctrl = self.__dualAccGunCtrl
+        if ctrl is None or not ctrl.isActive():
+            return 0
+        else:
+            coolingTime = ctrl.getGunCoolingLeftTime()
+            return coolingTime
+
+    def __startCoolingTicker(self):
+        if self.__timerTicking:
+            return
+        self.__timerTicking = True
+        self.__cooldownCb.clearCallbacks()
+        self.__cooldownCb.delayCallback(self._TICK, self.__tickCooling)
+
+    def __tickCooling(self):
+        self.__timerTicking = False
+        self.__recalcCoolingTimer()
+
+    def __hideTimer(self):
+        self.__setCoolingState(True, 0)
+        self.__setGunCoolingTimer()
+        self.__timerTicking = False
+        self.__cooldownCb.clearCallbacks()
 
     def __onVehicleControlling(self, vehicle):
         vTypeDesc = vehicle.typeDescriptor
+        self.__enableIndicatorsOnlyForDualgun()
         if vTypeDesc.hasDualAccuracy:
-            self.__subscribeDualAccuracyCtrl(vehicle.dynamicComponents.get('dualAccuracy'))
+            self.__subscribeDualAccuracyCtrl(getPlayerVehicleDualAccuracy())
         else:
             self.__unsubscribeDualAccuracyCtrl()
+        self.parentObj.as_setGunCoolingVisibilityS(vTypeDesc.hasDualAccuracy and self.__isIndicatorsEnabled)
+
+    def __onCrosshairViewChanged(self, _):
+        self.__timerTicking = False
+        self.__cooldownCb.clearCallbacks()
+        self.__setCoolingState(False, 0)
+        self.__setGunCoolingTimer()
+        self.__cooldownCb.delayCallback(0, self.__recalcCoolingTimer)
 
     def __subscribeDualAccuracyCtrl(self, dualAccuracyGunCtrl):
         if dualAccuracyGunCtrl:
             self.__dualAccGunCtrl = dualAccuracyGunCtrl
             self.__dualAccGunCtrl.onSetDualAccState += self.__onSetDualAccuracyState
-        self.__onSetDualAccuracyState()
+            self.__dualAccGunCtrl.onDualAccuracyDataUpdated += self.__onDualAccuracyDataUpdated
+        self.__onDualAccuracyDataUpdated()
 
     def __unsubscribeDualAccuracyCtrl(self):
         if self.__dualAccGunCtrl:
             self.__dualAccGunCtrl.onSetDualAccState -= self.__onSetDualAccuracyState
+            self.__dualAccGunCtrl.onDualAccuracyDataUpdated -= self.__onDualAccuracyDataUpdated
             self.__dualAccGunCtrl = None
-        self.__onSetDualAccuracyState()
         return
+
+    def __setGunCoolingTimer(self):
+        if not self.__isIndicatorsEnabled:
+            return
+        elif self.__dualAccGunCtrl is None:
+            return
+        else:
+            if not self.__dualAccGunCtrl.isActive():
+                if self.__gunDestroyed or self.__ammoEmpty:
+                    self.parentObj.as_setGunCoolingTimeS(False, 0)
+                    return
+            if self.__gunDestroyed or self.__ammoEmpty:
+                self.parentObj.as_setGunCoolingTimeS(False, self.__leftTime)
+                return
+            self.parentObj.as_setGunCoolingTimeS(self.__isEnabled, self.__leftTime)
+            return
+
+    def __playSound(self):
+        if not self.__isIndicatorsEnabled:
+            return
+        if self.__leftTime != 0:
+            SoundGroups.g_instance.playSound2D(self._HEATED_SOUND)
+        else:
+            SoundGroups.g_instance.playSound2D(self._COOLED_SOUND)
 
 
 class DistanceFactorGunPlugin(CrosshairPlugin, EventsHandler):

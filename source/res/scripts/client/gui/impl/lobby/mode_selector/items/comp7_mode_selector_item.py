@@ -11,6 +11,7 @@ from gui.impl.lobby.comp7.tooltips.rank_inactivity_tooltip import RankInactivity
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
 from gui.impl.lobby.mode_selector.items import setBattlePassState
 from gui.impl.lobby.mode_selector.items.items_constants import ModeSelectorRewardID
+from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.shared.formatters import time_formatters
 from helpers import dependency
 from helpers import time_utils
@@ -87,3 +88,6 @@ class Comp7ModeSelectorItem(ModeSelectorLegacyItem):
             comp7_model_helpers.setRanksInactivityInfo(vm)
             comp7_model_helpers.setElitePercentage(vm)
             comp7_qualification_helpers.setQualificationInfo(vm.qualificationModel)
+
+    def getLimitedUIRule(self):
+        return LuiRules.COMP7_CONTENT

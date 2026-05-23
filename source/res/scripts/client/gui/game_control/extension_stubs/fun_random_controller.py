@@ -203,3 +203,15 @@ class FunRandomController(IFunRandomController):
 
     def selectFunRandomBattle(self, desiredSubModeID, callback=None):
         pass
+
+    def getCurrentFunType(self):
+        return None
+
+    def isArcade(self):
+        return False
+
+    def isFieldTrials(self):
+        return False
+
+    def isLocked(self):
+        return False

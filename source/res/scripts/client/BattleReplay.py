@@ -281,7 +281,6 @@ class BattleReplay(object):
             except Exception:
                 pass
 
-        self.__originalPickleLoads = None
         return
 
     def enableHandleInput(self):
@@ -382,10 +381,9 @@ class BattleReplay(object):
         if self.isRecording:
             self.stop()
         g_reportGenerator.startCollectingData()
-        import SafeUnpickler
-        unpickler = SafeUnpickler.SafeUnpickler()
-        self.__originalPickleLoads = pickle.loads
-        pickle.loads = unpickler.loads
+        from SafeUnpickler import SafeUnpickler
+        pickle._originalPickleLoads = pickle.loads
+        pickle.loads = SafeUnpickler.loads
         if fileName is not None and fileName.rfind('.mtreplaylist') != -1:
             self.__playList = []
             self.__isPlayingPlayList = True
@@ -457,9 +455,10 @@ class BattleReplay(object):
         g_replayEvents.onMuteSound(False)
         g_replayEvents.onReplayTerminated(reason)
         self.__isFinished = False
-        if self.__originalPickleLoads is not None:
-            pickle.loads = self.__originalPickleLoads
-            self.__originalPickleLoads = None
+        originalPickleLoads = getattr(pickle, '_originalPickleLoads', None)
+        if originalPickleLoads is not None:
+            pickle.loads = originalPickleLoads
+            pickle._originalPickleLoads = None
         return
 
     def onReplayMetaData(self, metaData):

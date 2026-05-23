@@ -4,7 +4,7 @@ import typing
 from constants import ARENA_BONUS_TYPE
 from enum import Enum
 if typing.TYPE_CHECKING:
-    from typing import Callable, Dict, Iterable, Iterator, List, Optional, Set, Tuple, Union, Sequence, Any
+    from typing import Any, Callable, Dict, Generator, Iterable, Iterator, List, Optional, Sequence, Set, Tuple, Union
     from armory_yard.gui.game_control.armory_yard_controller import _ServerSettings
     from battle_pass_common import FinalReward
     from collections_common import Collection, CollectionItem
@@ -61,6 +61,7 @@ if typing.TYPE_CHECKING:
     from account_helpers.paragons import Paragons
     from gui.game_control.paragons_controller import _ParagonsBranchesController
     from account_helpers import AccountSettings
+    from gui.game_control.summer_sale_controller import ProductsStates
     BattlePassBonusOpts = Optional[TokensBonus, BattlePassSelectTokensBonus]
     BonusOpts = Optional[TokensBonus, SelectableBonus]
 
@@ -1136,6 +1137,9 @@ class IRankedBattlesController(IGameController, ISeasonProvider):
         raise NotImplementedError
 
     def replaceOfferByReward(self, bonuses):
+        raise NotImplementedError
+
+    def isLocked(self):
         raise NotImplementedError
 
 
@@ -3130,6 +3134,47 @@ class IFunRandomController(IGameController):
     def selectFunRandomBattle(self, desiredSubModeID, callback=None):
         raise NotImplementedError
 
+    def getCurrentFunType(self):
+        raise NotImplementedError
+
+    def isArcade(self):
+        raise NotImplementedError
+
+    def isFieldTrials(self):
+        raise NotImplementedError
+
+    def isLocked(self):
+        raise NotImplementedError
+
+
+class IBattleModifiersController(IGameController):
+
+    class ModifiersDomains(object):
+        STRONGHOLD = 'battleSeasonModifiers'
+        GLOBAL_MAP = 'battleSeasonModifiersGM'
+        COMP7 = 'comp7'
+        STRONGHOLD_DOMAINS = (STRONGHOLD, GLOBAL_MAP)
+
+    @property
+    def battleModifiers(self):
+        raise NotImplementedError
+
+    def getBattleModifiersObject(self):
+        raise NotImplementedError
+
+    def isBattleModifiersAvailable(self):
+        raise NotImplementedError
+
+    @property
+    def tooltipConstant(self):
+        raise NotImplementedError
+
+    def getBattleModifiersQueues(self):
+        raise NotImplementedError
+
+    def getCurrentDomain(self):
+        raise NotImplementedError
+
 
 class IComp7Controller(IGameController, ISeasonProvider):
     onStatusUpdated = None
@@ -3144,6 +3189,7 @@ class IComp7Controller(IGameController, ISeasonProvider):
     onSeasonPointsUpdated = None
     onComp7RewardsConfigChanged = None
     onComp7BattleFinished = None
+    onComp7SkillsConfigChanged = None
 
     @property
     def rating(self):
@@ -3214,6 +3260,12 @@ class IComp7Controller(IGameController, ISeasonProvider):
     def isQualificationSquadAllowed(self):
         raise NotImplementedError
 
+    def getVehicleSkillEquipment(self, vehicle):
+        raise NotImplementedError
+
+    def getVehicleEquipments(self, vehicle):
+        raise NotImplementedError
+
     def getRoleEquipment(self, roleName):
         raise NotImplementedError
 
@@ -3241,12 +3293,6 @@ class IComp7Controller(IGameController, ISeasonProvider):
     def isComp7PrbActive(self):
         raise NotImplementedError
 
-    def isComp7TournamentsPrbActive(self):
-        raise NotImplementedError
-
-    def isBattleModifiersAvailable(self):
-        raise NotImplementedError
-
     def getAlertBlock(self):
         raise NotImplementedError
 
@@ -3262,10 +3308,10 @@ class IComp7Controller(IGameController, ISeasonProvider):
     def getYearlyRewards(self):
         raise NotImplementedError
 
-    def getBattleModifiersObject(self):
+    def isYearlyRewardReceived(self):
         raise NotImplementedError
 
-    def isYearlyRewardReceived(self):
+    def isLocked(self):
         raise NotImplementedError
 
 
@@ -3533,9 +3579,6 @@ class IHangarSpaceSwitchController(IGameController):
     def hangarSpaceUpdate(self, sceneName):
         raise NotImplementedError
 
-    def getSpacePath(self, spaceName):
-        raise NotImplementedError
-
     def lockHangarOverride(self, sceneName):
         raise NotImplementedError
 
@@ -3794,10 +3837,6 @@ class ILimitedUIController(IGameController):
         raise NotImplementedError
 
     @property
-    def configVersion(self):
-        raise NotImplementedError
-
-    @property
     def version(self):
         raise NotImplementedError
 
@@ -3819,6 +3858,9 @@ class ILimitedUIController(IGameController):
     def isRuleCompleted(self, ruleID):
         raise NotImplementedError
 
+    def isRuleCompletedByPrebattleType(self, prbType):
+        raise NotImplementedError
+
     def completeRule(self, ruleID):
         raise NotImplementedError
 
@@ -3829,6 +3871,9 @@ class ILimitedUIController(IGameController):
         raise NotImplementedError
 
     def stopObserve(self, ruleID, handler):
+        raise NotImplementedError
+
+    def sendPlatoonLockedMessage(self, prbType, name):
         raise NotImplementedError
 
 
@@ -4352,6 +4397,9 @@ class IParagonsController(IGameController, IEntitlementsConsumer):
     def getCoinsForBranchReset(self):
         raise NotImplementedError
 
+    def getChapterCloseoutTimeStamp(self, chapterID):
+        raise NotImplementedError
+
 
 class IParagonsRewardsShopController(IGameController):
     onSelectableRewardReceived = None
@@ -4606,3 +4654,71 @@ class INewbieEntryPointController(IGameController):
 
     def goToHangar(self, guiCtx):
         raise NotImplementedError
+
+
+class ISummerSaleController(IGameController):
+    onEventSettingsUpdated = None
+
+    def getStartTime(self):
+        raise NotImplementedError
+
+    def getExpiryTime(self):
+        raise NotImplementedError
+
+    def getQuestGroupId(self):
+        raise NotImplementedError
+
+    def getProductTag(self):
+        raise NotImplementedError
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def isRandomVehicleObtained(self):
+        raise NotImplementedError
+
+    def isFinished(self):
+        raise NotImplementedError
+
+    def isEnding(self):
+        raise NotImplementedError
+
+    def getLocalEndDate(self):
+        raise NotImplementedError
+
+    def fetchProducts(self, callback=lambda x: x):
+        raise NotImplementedError
+
+    def buyProduct(self, productCode, count=1):
+        raise NotImplementedError
+
+    def getShopPageUrl(self):
+        raise NotImplementedError
+
+    def getSummerSaleSetType(self):
+        raise NotImplementedError
+
+    def getSummerSaleSetProductCode(self):
+        raise NotImplementedError
+
+    def getSummerSaleSetCategory(self):
+        raise NotImplementedError
+
+    def getSummerSaleVehiclesSetType(self):
+        raise NotImplementedError
+
+    def getSummerSaleVehicleSetProductCode(self):
+        raise NotImplementedError
+
+    def getSummerSaleVehicleSetCategory(self):
+        raise NotImplementedError
+
+    def getProductsOrder(self):
+        raise NotImplementedError
+
+    def getBalance(self, currency):
+        raise NotImplementedError
+
+
+class IControlPointOverrideController(IGameController):
+    pass

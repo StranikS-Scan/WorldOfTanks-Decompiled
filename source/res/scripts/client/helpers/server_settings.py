@@ -1256,9 +1256,7 @@ class Comp7Config(settingsBlock('Comp7Config', ('isEnabled',
  'peripheryIDs',
  'primeTimes',
  'seasons',
- 'battleModifiersDescr',
  'cycleTimes',
- 'roleEquipments',
  'numPlayers',
  'levels',
  'forbiddenClassTags',
@@ -1271,7 +1269,7 @@ class Comp7Config(settingsBlock('Comp7Config', ('isEnabled',
 
     @classmethod
     def defaults(cls):
-        return dict(isEnabled=False, isTournamentEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, battleModifiersDescr=(), cycleTimes={}, roleEquipments={}, numPlayers=7, levels=[], forbiddenClassTags=set(), forbiddenVehTypes=set(), squadRatingRestriction={}, squadSizes=[], createVivoxTeamChannels=False, qualification=makeTupleByDict(_Comp7QualificationConfig, {}))
+        return dict(isEnabled=False, isTournamentEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, cycleTimes={}, numPlayers=7, levels=[], forbiddenClassTags=set(), forbiddenVehTypes=set(), squadRatingRestriction={}, squadSizes=[], createVivoxTeamChannels=False, qualification=makeTupleByDict(_Comp7QualificationConfig, {}))
 
     @classmethod
     def _preprocessData(cls, data):
@@ -1324,6 +1322,14 @@ class Comp7RewardsConfig(settingsBlock('Comp7RewardsConfig', ('main', 'extra')))
          'extra': []}
 
 
+class Comp7SkillsConfig(settingsBlock('Comp7SkillsConfig', ('balanceVersion', 'roleEquipments'))):
+    __slots__ = ()
+
+    @classmethod
+    def defaults(cls):
+        return dict(balanceVersion=0, roleEquipments={})
+
+
 class BattleModifiersConfig(settingsBlock('BattleModifiersConfig', ('isEnabled',
  'fortBattle_10',
  'sortie_10',
@@ -1331,12 +1337,13 @@ class BattleModifiersConfig(settingsBlock('BattleModifiersConfig', ('isEnabled',
  'sortie_8',
  'sortie_7',
  'sortie_6',
- 'global_map'))):
+ 'global_map',
+ 'comp7'))):
     __slots__ = ()
 
     @classmethod
     def defaults(cls):
-        return dict(isEnabled=False, fortBattle_10=(), sortie_10=(), sortie_9=(), sortie_8=(), sortie_7=(), sortie_6=(), global_map=())
+        return dict(isEnabled=False, fortBattle_10=(), sortie_10=(), sortie_9=(), sortie_8=(), sortie_7=(), sortie_6=(), global_map=(), comp7=())
 
 
 class WinbackConfig(namedtuple('WinbackConfig', ('isEnabled',
@@ -1480,11 +1487,11 @@ class ArmoryYardConfig(namedtuple('ArmoryYardConfig', ('isEnabled',
                 yield (tokenQuestID, conditionID)
 
 
-class _LimitedUIConfig(namedtuple('_LimitedUIConfig', ('enabled', 'rules', 'version'))):
+class _LimitedUIConfig(namedtuple('_LimitedUIConfig', ('enabled', 'rules'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(enabled=False, rules=[], version=0)
+        defaults = dict(enabled=False, rules=[])
         defaults.update(kwargs)
         return super(_LimitedUIConfig, cls).__new__(cls, **defaults)
 
@@ -1801,10 +1808,10 @@ class ParagonsConfig(object):
         return self.paragonsUnlocks.get(paragonsUnlockID, {}).get('enabled', False)
 
     def getParagonsUnlockNationName(self, paragonsUnlockID):
-        return self.paragonsUnlocks.get(paragonsUnlockID).get('nationName')
+        return self.paragonsUnlocks.get(paragonsUnlockID, {}).get('nationName')
 
     def getParagonsUnlockVehicles(self, paragonsUnlockID):
-        return self.paragonsUnlocks.get(paragonsUnlockID).get('lockedItemsByItemTypeName', {}).get('vehicle', set())
+        return self.paragonsUnlocks.get(paragonsUnlockID, {}).get('lockedItemsByItemTypeName', {}).get('vehicle', set())
 
     def getRewardsByChapterAndLevel(self, chapterID, levelID):
         return self.rewards.get(chapterID, {}).get('levels', {}).get(levelID, {}).get('bonus', {})
@@ -1817,6 +1824,9 @@ class ParagonsConfig(object):
 
     def getChapterLevelIDs(self, chapterID):
         return set(self.rewards.get(chapterID).get('levels').keys())
+
+    def getChapterCloseoutTimeStamp(self, chapterID):
+        return self.rewards.get(chapterID, {}).get('closeoutDate', 0)
 
     def getParagonsCoinsAmountForLevelUnlock(self, chapterID, levelID):
         return self.rewards.get(chapterID).get('levels').get(levelID).get('paragonsCoin')
@@ -1943,6 +1953,30 @@ class _SettingsLoggingConfig(namedtuple('_SettingsLoggingConfig', ('isEnabled', 
         return cls()
 
 
+class _ControlPointOverrideConfig(namedtuple('_ControlPointOverrideConfig', ('isEnabled',
+ 'flagPath',
+ 'flagstaffPath',
+ 'wweventName'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, flagPath='', flagstaffPath='', wweventName='')
+        defaults.update(kwargs)
+        return super(_ControlPointOverrideConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
 class _NewbieStartPageConfig(namedtuple('NewbieStartPageConfig', ('isEnabled',))):
     __slots__ = ()
 
@@ -1950,6 +1984,48 @@ class _NewbieStartPageConfig(namedtuple('NewbieStartPageConfig', ('isEnabled',))
         defaults = dict(isEnabled=False)
         defaults.update(kwargs)
         return super(_NewbieStartPageConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
+class _StallConfig(namedtuple('StallConfig', ('isEnabled', 'products'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, products={})
+        defaults.update(kwargs)
+        return super(_StallConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
+class _NewbieChatLockConfig(namedtuple('_NewbieChatLockConfig', ('enabled', 'battlesCountThreshold', 'vehicleLevelThreshold'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(enabled=False, battlesCountThreshold=0, vehicleLevelThreshold=0)
+        defaults.update(kwargs)
+        return super(_NewbieChatLockConfig, cls).__new__(cls, **defaults)
 
     def asDict(self):
         return self._asdict()
@@ -2008,6 +2084,7 @@ class ServerSettings(object):
         self.__battleModifiersConfig = BattleModifiersConfig()
         self.__comp7RanksConfig = Comp7RanksConfig()
         self.__comp7RewardsConfig = Comp7RewardsConfig()
+        self.__comp7SkillsConfig = Comp7SkillsConfig()
         self.__personalReservesConfig = PersonalReservesConfig()
         self.__playLimitsConfig = PlayLimitsConfig()
         self.__preModerationConfig = PreModerationConfig()
@@ -2030,7 +2107,10 @@ class ServerSettings(object):
         self.__lootBoxStatisticsConfig = _LootBoxStatisticsConfig.defaults()
         self.__battleContextHintsConfig = _BattleContextHintsConfig.defaults()
         self.__settingsLoggingConfig = _SettingsLoggingConfig()
+        self.__controlPointConfig = _ControlPointOverrideConfig.defaults()
         self.__newbieStartPageConfig = _NewbieStartPageConfig()
+        self.__stallConfig = _StallConfig()
+        self.__newbieChatLockConfig = _NewbieChatLockConfig()
         self.__schemaManager = getSchemaManager()
         self.set(serverSettings)
 
@@ -2165,9 +2245,14 @@ class ServerSettings(object):
             self.__comp7RewardsConfig = makeTupleByDict(Comp7RewardsConfig, self.__serverSettings[Configs.COMP7_REWARDS_CONFIG.value])
         else:
             self.__comp7RewardsConfig = Comp7RewardsConfig.defaults()
-        if Configs.WGSH_MODIFIER_CONFIG.value in self.__serverSettings:
-            LOG_DEBUG(Configs.WGSH_MODIFIER_CONFIG.value, self.__serverSettings[Configs.WGSH_MODIFIER_CONFIG.value])
-            self.__battleModifiersConfig = makeTupleByDict(BattleModifiersConfig, self.__serverSettings[Configs.WGSH_MODIFIER_CONFIG.value])
+        if Configs.COMP7_SKILLS_CONFIG.value in self.__serverSettings:
+            LOG_DEBUG(Configs.COMP7_SKILLS_CONFIG.value, self.__serverSettings[Configs.COMP7_SKILLS_CONFIG.value])
+            self.__comp7SkillsConfig = makeTupleByDict(Comp7SkillsConfig, self.__serverSettings[Configs.COMP7_SKILLS_CONFIG.value])
+        else:
+            self.__comp7SkillsConfig = Comp7SkillsConfig.defaults()
+        if Configs.BATTLE_MODIFIER_CONFIG.value in self.__serverSettings:
+            LOG_DEBUG(Configs.BATTLE_MODIFIER_CONFIG.value, self.__serverSettings[Configs.BATTLE_MODIFIER_CONFIG.value])
+            self.__battleModifiersConfig = makeTupleByDict(BattleModifiersConfig, self.__serverSettings[Configs.BATTLE_MODIFIER_CONFIG.value])
         else:
             self.__battleModifiersConfig = BattleModifiersConfig.defaults()
         if Configs.PERSONAL_RESERVES_CONFIG.value in self.__serverSettings:
@@ -2229,8 +2314,16 @@ class ServerSettings(object):
             self.__lootBoxStatisticsConfig = makeTupleByDict(_LootBoxStatisticsConfig, self.__serverSettings[Configs.LOOTBOX_STATISTICS_CONFIG.value])
         if Configs.SETTINGS_LOGGING_CONFIG.value in self.__serverSettings:
             self.__settingsLoggingConfig = makeTupleByDict(_SettingsLoggingConfig, self.__serverSettings[Configs.SETTINGS_LOGGING_CONFIG.value])
+        if Configs.CONTROL_POINT_OVERRIDE_CONFIG.value in self.__serverSettings:
+            self.__controlPointConfig = makeTupleByDict(_ControlPointOverrideConfig, self.__serverSettings[Configs.CONTROL_POINT_OVERRIDE_CONFIG.value])
         if Configs.NEWBIE_START_PAGE_CONFIG.value in self.__serverSettings:
             self.__newbieStartPageConfig = makeTupleByDict(_NewbieStartPageConfig, self.__serverSettings[Configs.NEWBIE_START_PAGE_CONFIG.value])
+        if Configs.STALL_CONFIG.value in self.__serverSettings:
+            self.__stallConfig = makeTupleByDict(_StallConfig, self.__serverSettings[Configs.STALL_CONFIG.value])
+        else:
+            self.__stallConfig = _StallConfig.defaults()
+        if Configs.NEWBIE_CHAT_LOCK_CONFIG.value in self.__serverSettings:
+            self.__newbieChatLockConfig = makeTupleByDict(_NewbieChatLockConfig, self.__serverSettings[Configs.NEWBIE_CHAT_LOCK_CONFIG.value])
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -2270,7 +2363,9 @@ class ServerSettings(object):
             self.__updateComp7PrestigeRanks(serverSettingsDiff)
         if Configs.COMP7_REWARDS_CONFIG.value in serverSettingsDiff:
             self.__updateComp7Rewards(serverSettingsDiff)
-        if Configs.WGSH_MODIFIER_CONFIG.value in serverSettingsDiff:
+        if Configs.COMP7_SKILLS_CONFIG.value in serverSettingsDiff:
+            self.__updateComp7Skills(serverSettingsDiff)
+        if Configs.BATTLE_MODIFIER_CONFIG.value in serverSettingsDiff:
             self.__updateBattleModifiers(serverSettingsDiff)
         if 'telecom_config' in serverSettingsDiff:
             self.__telecomConfig = _TelecomConfig(self.__serverSettings['telecom_config'])
@@ -2379,6 +2474,12 @@ class ServerSettings(object):
             self.__updateBattleContextHintsConfig(serverSettingsDiff)
         if Configs.SETTINGS_LOGGING_CONFIG.value in serverSettingsDiff:
             self.__updateSettingsLogging(serverSettingsDiff)
+        if Configs.STALL_CONFIG.value in serverSettingsDiff:
+            self.__updateStallConfig(serverSettingsDiff)
+        if Configs.CONTROL_POINT_OVERRIDE_CONFIG.value in serverSettingsDiff:
+            self.__updateControlPointConfig(serverSettingsDiff)
+        if Configs.NEWBIE_CHAT_LOCK_CONFIG.value in serverSettingsDiff:
+            self.__updateNewbieChatLockConfig(serverSettingsDiff)
         self.__schemaManager.update(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
@@ -2494,6 +2595,10 @@ class ServerSettings(object):
     @property
     def comp7RewardsConfig(self):
         return self.__comp7RewardsConfig
+
+    @property
+    def comp7SkillsConfig(self):
+        return self.__comp7SkillsConfig
 
     @property
     def telecomConfig(self):
@@ -2620,8 +2725,20 @@ class ServerSettings(object):
         return self.__settingsLoggingConfig
 
     @property
+    def controlPointConfig(self):
+        return self.__controlPointConfig
+
+    @property
     def newbieStartPageConfig(self):
         return self.__newbieStartPageConfig
+
+    @property
+    def stallConfig(self):
+        return self.__stallConfig
+
+    @property
+    def newbieChatLockConfig(self):
+        return self.__newbieChatLockConfig
 
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled
@@ -3003,9 +3120,6 @@ class ServerSettings(object):
     def getLootBoxStatisticsConfig(self):
         return self.__getGlobalSetting(Configs.LOOTBOX_STATISTICS_CONFIG.value, {})
 
-    def getMuseumOfGloryConfig(self):
-        return self.__getGlobalSetting('museum_of_glory_config', {})
-
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)
 
@@ -3054,8 +3168,12 @@ class ServerSettings(object):
         config = targetSettings[Configs.COMP7_REWARDS_CONFIG.value]
         self.__comp7RewardsConfig = self.__comp7RewardsConfig.replace(config)
 
+    def __updateComp7Skills(self, targetSettings):
+        config = targetSettings[Configs.COMP7_SKILLS_CONFIG.value]
+        self.__comp7SkillsConfig = self.__comp7SkillsConfig.replace(config)
+
     def __updateBattleModifiers(self, targetSettings):
-        config = targetSettings[Configs.WGSH_MODIFIER_CONFIG.value]
+        config = targetSettings[Configs.BATTLE_MODIFIER_CONFIG.value]
         self.__battleModifiersConfig = self.__battleModifiersConfig.replace(copy.deepcopy(config))
 
     def __updateParagons(self, targetSettings):
@@ -3206,6 +3324,16 @@ class ServerSettings(object):
 
     def __updateSettingsLogging(self, diff):
         self.__settingsLoggingConfig = self.__settingsLoggingConfig.replace(diff[Configs.SETTINGS_LOGGING_CONFIG.value])
+
+    def __updateStallConfig(self, diff):
+        self.__stallConfig = self.__stallConfig.replace(diff[Configs.STALL_CONFIG.value])
+
+    def __updateControlPointConfig(self, diff):
+        self.__controlPointConfig = self.__controlPointConfig.replace(diff[Configs.CONTROL_POINT_OVERRIDE_CONFIG.value])
+
+    def __updateNewbieChatLockConfig(self, serverSettingsDiff):
+        if Configs.NEWBIE_CHAT_LOCK_CONFIG.value in serverSettingsDiff:
+            self.__newbieChatLockConfig = self.__newbieChatLockConfig.replace(serverSettingsDiff[Configs.NEWBIE_CHAT_LOCK_CONFIG.value])
 
 
 def serverSettingsChangeListener(*configKeys):

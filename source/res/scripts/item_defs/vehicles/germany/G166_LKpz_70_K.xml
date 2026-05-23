@@ -42,7 +42,7 @@
   </camouflage>
   <hull>
     <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
-    <weight>	10760	</weight>
+    <weight>	10870	</weight>
     <maxHealth>	1200	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	260	</maxHealth>
@@ -50,16 +50,16 @@
       <repairCost>	1.0	</repairCost>
     </ammoBayHealth>
     <armor>
-      <armor_1>	20	</armor_1>
+      <armor_1>	35	</armor_1>
       <armor_2>	50	</armor_2>
       <armor_3>	35	</armor_3>
       <armor_4>	40	</armor_4>
       <armor_5>	40	</armor_5>
-      <armor_6>	15	</armor_6>
+      <armor_6>	20	</armor_6>
       <armor_7>	20	</armor_7>
       <armor_8>	0	</armor_8>
       <armor_10>	20	</armor_10>
-      <armor_11>	20	</armor_11>
+      <armor_11>	35	</armor_11>
       <armor_12>	20	</armor_12>
       <armor_13>	20	</armor_13>
       <armor_15>	50	</armor_15>
@@ -604,8 +604,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	50	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.12	</vehicleMovement>
-        <vehicleRotation>	0.12	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -1451,7 +1451,7 @@
         <armor_23>	25	</armor_23>
       </armor>
       <guns>
-        <_105mm_Rh_69_2>	shared	  <maxAmmo>	30	</maxAmmo>
+        <_105mm_Rh_69_2>	shared	  <maxAmmo>	42	</maxAmmo>
           <armor>
             <armor_1>	25	</armor_1>
             <armor_2>	20	</armor_2>
@@ -1478,7 +1478,14 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
-          <reloadTime>	11	</reloadTime>
+          <reloadTime>	14	</reloadTime>
+          <clip>
+            <count>	3	</count>
+            <rate>	10	</rate>
+          </clip>
+          <autoreload>
+            <reloadTime>	12.5 14 15.6	</reloadTime>
+          </autoreload>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	4	</afterShot>
@@ -1605,7 +1612,7 @@
             <collisionModelServer>	vehicles/german/G166_LKpz_70_K/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G166_LKpz_70_K/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <reloadEffect>	reload85_107	</reloadEffect>
+          <reloadEffect>	autoloader_reload85_107	</reloadEffect>
           <camouflage>
             <density>	116.473709 116.448357	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
@@ -1790,8 +1797,8 @@
       <on>	strv_siege_mode_on_PC	</on>
       <off>	strv_siege_mode_off_PC	</off>
     </soundStateChange>
-    <autoSwitchOffRequiredVehicleSpeed>	26	</autoSwitchOffRequiredVehicleSpeed>
-    <autoSwitchOnRequiredVehicleSpeed>	10	</autoSwitchOnRequiredVehicleSpeed>
+    <autoSwitchOffRequiredVehicleSpeed>	30	</autoSwitchOffRequiredVehicleSpeed>
+    <autoSwitchOnRequiredVehicleSpeed>	30	</autoSwitchOnRequiredVehicleSpeed>
   </siege_mode>
   <hull_aiming>
     <pitch>

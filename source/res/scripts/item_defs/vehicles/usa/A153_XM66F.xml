@@ -8,10 +8,10 @@
     <loader></loader>
   </crew>
   <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_ATSPG_universal	</postProgressionTree>
+  <postProgressionTree>	role_ATSPG_assault	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	35	</forward>
+    <forward>	30	</forward>
     <backward>	12	</backward>
   </speedLimits>
   <invisibility>
@@ -34,27 +34,27 @@
       <invisibilityBonus>	0.07	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
-  <repairCost>	6.0	</repairCost>
-  <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
+  <repairCost>	9.0	</repairCost>
+  <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
-    <priceFactor>	1.6	</priceFactor>
+    <priceFactor>	1.8	</priceFactor>
     <density>	0.984382 0.984382	</density>
   </camouflage>
   <hull>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	25850	</weight>
-    <maxHealth>	1040	</maxHealth>
+    <maxHealth>	1300	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
     </ammoBayHealth>
     <armor>
-      <armor_1>	95	</armor_1>
-      <armor_2>	100	</armor_2>
-      <armor_3>	50	</armor_3>
-      <armor_4>	40	</armor_4>
+      <armor_1>	150	</armor_1>
+      <armor_2>	140	</armor_2>
+      <armor_3>	100	</armor_3>
+      <armor_4>	80	</armor_4>
       <armor_5>	30	</armor_5>
       <armor_6>	30	</armor_6>
       <armor_7>	70	</armor_7>
@@ -62,14 +62,14 @@
       <armor_9>	40	</armor_9>
       <armor_10>	20	</armor_10>
       <armor_11>	40	</armor_11>
-      <armor_12>	50	</armor_12>
+      <armor_12>	80	</armor_12>
       <armor_13>	40	</armor_13>
       <armor_14>	30	</armor_14>
-      <armor_15>	190	</armor_15>
-      <armor_16>	180	</armor_16>
-      <armor_17>	160	</armor_17>
-      <armor_18>	140	</armor_18>
-      <armor_19>	130	</armor_19>
+      <armor_15>	250	</armor_15>
+      <armor_16>	240	</armor_16>
+      <armor_17>	230	</armor_17>
+      <armor_18>	200	</armor_18>
+      <armor_19>	190	</armor_19>
     </armor>
     <models>
       <undamaged>	vehicles/american/A153_XM66F/normal/lod0/Hull.model	</undamaged>
@@ -762,7 +762,7 @@
     <Chassis_A153_XM66F>
       <userString>	#usa_vehicles:Chassis_A153_XM66F	</userString>
       <tags></tags>
-      <level>	8	</level>
+      <level>	9	</level>
       <price>	30000	</price>
       <notInShop>	true	</notInShop>
       <weight>	10000	</weight>
@@ -775,8 +775,8 @@
         <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <armor>
         <leftTrack>	20	</leftTrack>
@@ -1697,21 +1697,21 @@
     <Turret_1_A153_XM66F>
       <userString>	#usa_vehicles:Turret_1_A153_XM66F	</userString>
       <tags>	cannotDetach	</tags>
-      <level>	8	</level>
+      <level>	9	</level>
       <price>	66000	</price>
       <notInShop>	true	</notInShop>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	14800	</weight>
-      <maxHealth>	260	</maxHealth>
+      <maxHealth>	550	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
+        <maxHealth>	150	</maxHealth>
+        <maxRegenHealth>	75	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	380	</circularVisionRadius>
       <armor>
-        <armor_1>	230	</armor_1>
+        <armor_1>	240	</armor_1>
         <armor_2>	60	</armor_2>
         <armor_3>	120	</armor_3>
         <armor_4>	40	</armor_4>
@@ -1722,19 +1722,29 @@
         <armor_9>	50	</armor_9>
         <armor_10>	25	</armor_10>
         <armor_11>	70	</armor_11>
-        <armor_12>	240	</armor_12>
-        <armor_13>	170	</armor_13>
+        <armor_12>	310	</armor_12>
+        <armor_13>	230	</armor_13>
         <armor_14>	120	</armor_14>
         <armor_15>	70	</armor_15>
+        <armor_16>	290	</armor_16>
+        <armor_17>	230	</armor_17>
+        <armor_18>	165	</armor_18>
+        <armor_19>	300	</armor_19>
+        <armor_20>	245	</armor_20>
+        <armor_21>	210	</armor_21>
+        <armor_22>	170	</armor_22>
+        <armor_23>	55	</armor_23>
+        <armor_24>	160	</armor_24>
+        <armor_25>	85	</armor_25>
       </armor>
       <surveyingDeviceHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_120mm_Gun_T123E6_66>	shared	  <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	10	</reloadTime>
+        <_120mm_Gun_T123E6_66>	shared	  <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	8.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -1757,11 +1767,11 @@
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	180	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_5>	210	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
             <armor_6>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_7>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_7>
             <armor_8>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_8>
@@ -2351,8 +2361,8 @@
     <detailed>
       <engines>
         <LVDS_1100_2>
-          <smplEnginePower>	750	</smplEnginePower>
-          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
+          <smplEnginePower>	700	</smplEnginePower>
+          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
         </LVDS_1100_2>
       </engines>
       <chassis>

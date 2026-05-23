@@ -559,7 +559,7 @@ class Font(object):
         return items.makeIntCompactDescrByID('customizationItem', self.itemType, self.id)
 
 if IS_EDITOR:
-    CUSTOMIZATION_TYPES = {CustomizationType.STYLE: StyleItem, CustomizationType.PAINT: PaintItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem, CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.DECAL: DecalItem, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.MODIFICATION: ModificationItem, CustomizationType.FONT: Font}
+    CUSTOMIZATION_TYPES = {CustomizationType.MODIFICATION: ModificationItem, CustomizationType.DECAL: DecalItem, CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.STYLE: StyleItem, CustomizationType.FONT: Font, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.PAINT: PaintItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem, CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.SEQUENCE: SequenceItem}
     CUSTOMIZATION_CLASSES = {v : k for k, v in CUSTOMIZATION_TYPES.items()}
 class _Filter(object):
     __slots__ = ('include', 'exclude')
@@ -791,13 +791,22 @@ class CustomizationCache(object):
         self.itemGroupByProgressionBonusType = {arenaTypeID : list() for arenaTypeID in ARENA_BONUS_TYPE_NAMES.values() if ARENA_BONUS_TYPE_CAPS.checkAny(arenaTypeID, ARENA_BONUS_TYPE_CAPS.CUSTOMIZATION_PROGRESSION)}
         self._CustomizationCache__vehicleCanMayIncludeCustomization = {}
         self.topVehiclesByNation = {}
-        self.itemTypes = {CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.STYLE: self.styles, CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.PROJECTION_DECAL: self.projection_decals, CustomizationType.PAINT: self.paints, CustomizationType.MODIFICATION: self.modifications, CustomizationType.INSIGNIA: self.insignias, CustomizationType.ATTACHMENT: self.attachments, CustomizationType.DECAL: self.decals, CustomizationType.SEQUENCE: self.sequences}
+        self.itemTypes = {CustomizationType.ATTACHMENT: self.attachments, CustomizationType.INSIGNIA: self.insignias, CustomizationType.DECAL: self.decals, CustomizationType.SEQUENCE: self.sequences, CustomizationType.PROJECTION_DECAL: self.projection_decals, CustomizationType.STYLE: self.styles, CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.MODIFICATION: self.modifications, CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.PAINT: self.paints}
         super(CustomizationCache, self).__init__()
 
     def getQuestProgressionStyles(self):
         if self._CustomizationCache__questStyles is None:
             self._CustomizationCache__questStyles = {id : style for id, style in self.styles.iteritems() if style.isQuestsProgression}
         return self._CustomizationCache__questStyles
+
+    @lru_cache()
+    def getBuiltinStyleForVehicle(self, vehTypeCompDescr):
+        vehicleType = vehicles.getVehicleType(vehTypeCompDescr)
+        for _, style in self.styles.iteritems():
+            if style.isLockedOnVehicle and style.matchVehicleType(vehicleType):
+                return style
+            else:
+                continue
 
     def getVehiclesCanMayInclude(self, item):
         vehsCanUseItem = self._CustomizationCache__vehicleCanMayIncludeCustomization.get(item.compactDescr)

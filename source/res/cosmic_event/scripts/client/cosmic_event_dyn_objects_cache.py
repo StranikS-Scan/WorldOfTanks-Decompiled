@@ -1,10 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: cosmic_event/scripts/client/cosmic_event_dyn_objects_cache.py
 import BigWorld
-import CGF
 import cosmic_prefabs
+import typing
+from PrefabsLoading import PrefabDataListLoader
 from dyn_objects_cache import DynObjectsBase, _PointsOfInterestConfig
 from vehicle_systems.stricted_loading import makeCallbackWeak
+if typing.TYPE_CHECKING:
+    from PrefabsLoading import PrefabData
 
 class CosmicEventDynObjects(DynObjectsBase):
 
@@ -12,7 +15,7 @@ class CosmicEventDynObjects(DynObjectsBase):
         super(CosmicEventDynObjects, self).__init__()
         self.__pointsOfInterestConfig = None
         self.__cachedPrefabs = set()
-        self.__resourcesCache = None
+        self.__resourcesCache = {}
         self.lootPrefabs = {}
         return
 
@@ -29,27 +32,26 @@ class CosmicEventDynObjects(DynObjectsBase):
         self.__collectMinePrefabs()
         self.__collectMarkerPrefabs()
         self.__collectOtherPrefabs()
-        BigWorld.loadResourceListBG(list(self.__cachedPrefabs), makeCallbackWeak(self.__onResourcesLoaded))
-        CGF.cacheGameObjects(list(self.__cachedPrefabs), False)
+        prefabsLoader = PrefabDataListLoader('CosmicPrefabs', list(self.__cachedPrefabs))
+        BigWorld.loadResourceListBG((prefabsLoader,), makeCallbackWeak(self.__onResourcesLoaded))
 
     def clear(self):
         self.__pointsOfInterestConfig = None
         if self.__cachedPrefabs:
-            CGF.clearGameObjectsCache(list(self.__cachedPrefabs))
             self.__cachedPrefabs.clear()
+        self.__resourcesCache = {}
         super(CosmicEventDynObjects, self).clear()
         return
 
     def destroy(self):
-        self.__resourcesCache = None
+        self.clear()
         super(CosmicEventDynObjects, self).destroy()
-        return
 
     def getPointOfInterestConfig(self):
         return self.__pointsOfInterestConfig
 
     def __onResourcesLoaded(self, resourceRefs):
-        self.__resourcesCache = resourceRefs
+        self.__resourcesCache = resourceRefs['CosmicPrefabs']
 
     def __collectLootPrefabs(self):
         prefabs = cosmic_prefabs.Loot.RANGE_LOOT

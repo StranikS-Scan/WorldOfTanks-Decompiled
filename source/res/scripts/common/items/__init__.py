@@ -178,6 +178,7 @@ def init(preloadEverything, pricesToCollect=None, step=None):
         pricesToCollect['operationPrices'] = {}
         pricesToCollect['progressionLvlPrices'] = {}
         pricesToCollect['notInShopProgressionLvlItems'] = {}
+        pricesToCollect['forbiddenToSellItems'] = set()
     from items import stun
     stun.init()
     from items import vehicles

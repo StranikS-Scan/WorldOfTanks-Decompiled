@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: gui_lootboxes/scripts/client/gui_lootboxes/messenger/formatters/auto_boxes_subformatters.py
-import typing
 import BigWorld
+import typing
 from adisp import adisp_async, adisp_process
 from dossiers2.ui.achievements import BADGES_BLOCK
 from gui.impl import backport
@@ -9,11 +9,13 @@ from gui.impl.gen import R
 from gui.server_events.bonuses import getMergedBonusesFromDicts
 from gui.shared.gui_items.dossier import getAchievementFactory
 from gui.shared.gui_items.loot_box import ALL_LUNAR_NY_LOOT_BOX_TYPES, EventLootBoxes, WTLootBoxes, NewYearLootBoxes
-from helpers import dependency
+from helpers import dependency, time_utils
 from messenger import g_settings
 from messenger.formatters.service_channel import LootBoxAchievesFormatter, QuestAchievesFormatter, ServiceChannelFormatter, WaitItemsSyncFormatter
 from messenger.formatters.service_channel_helpers import MessageData, getCustomizationItemData, getRewardsForBoxes
+from skeletons.gui.game_control import ISummerSaleController
 from skeletons.gui.shared import IItemsCache
+from shared_utils import first
 
 class IAutoLootBoxSubFormatter(object):
 
@@ -228,3 +230,44 @@ class NYPostEventSurpriseMachineFormatter(AsyncAutoLootBoxSubFormatter):
     @classmethod
     def _isBoxOfThisGroup(cls, boxID):
         return cls._isBoxOfRequiredTypes(boxID, (NewYearLootBoxes.SURPRISE_COIN,))
+
+
+class ImmediatelyOpenLootBoxFormatter(AsyncAutoLootBoxSubFormatter):
+    DEFAULT_HEADER = R.strings.lb_messenger.serviceChannelMessages.immediatelyOpen.header.default
+    __MESSAGE_TEMPLATE = 'ImmediatelyOpenLootBoxSysMessage'
+    __immediatelyOpenBoxType = set()
+    __summerSaleController = dependency.descriptor(ISummerSaleController)
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    @adisp_async
+    @adisp_process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        if not isSynced:
+            callback([MessageData(None, None)])
+            return
+        else:
+            openedBoxesIDs = self.getBoxesOfThisGroup(message.data.keys())
+            rewards = getRewardsForBoxes(message, openedBoxesIDs)
+            ctx = {'rewards': self._achievesFormatter.formatQuestAchieves(rewards, asBattleFormatter=False, processTokens=False),
+             'date': backport.getDateTimeFormat(time_utils.getServerRegionalTime()),
+             'header': self.__formHeader(first(openedBoxesIDs))}
+            formattedRewards = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, ctx=ctx)
+            settingsRewards = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE)
+            settingsRewards.showAt = BigWorld.time()
+            callback([MessageData(formattedRewards, settingsRewards)])
+            return
+
+    @classmethod
+    def _isBoxOfThisGroup(cls, boxID):
+        return cls._isBoxOfRequiredTypes(boxID, cls.__getLootBoxType())
+
+    @classmethod
+    def __getLootBoxType(cls):
+        cls.__immediatelyOpenBoxType.update((lb.getType() for lb in cls.__itemsCache.items.tokens.getLootBoxes().values() if lb.isImmediatelyOpen))
+        return cls.__immediatelyOpenBoxType
+
+    def __formHeader(self, boxID):
+        lootbox = self.__itemsCache.items.tokens.getLootBoxByID(boxID)
+        headerStr = backport.text(R.strings.lb_messenger.serviceChannelMessages.immediatelyOpen.header.dyn(lootbox.getUserNameKey(), self.DEFAULT_HEADER)())
+        return headerStr

@@ -112,8 +112,6 @@ class INGAME_GUI(object):
     CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING_GRIDINFO = '#ingame_gui:chat_shortcuts/spg_aim_area_reloading_gridInfo'
     CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING = '#ingame_gui:chat_shortcuts/spg_aim_area_reloading'
     CHAT_SHORTCUTS_SPG_AIM_AREA_EMPTY_GRIDINFO = '#ingame_gui:chat_shortcuts/spg_aim_area_empty_gridInfo'
-    CHAT_SHORTCUTS_HB_ABILITY_ARTILLERY_ON_YOURSELF = '#ingame_gui:chat_shortcuts/hb_ability/artillery_on_yourself'
-    CHAT_SHORTCUTS_HB_ABILITY_LAST_STAND = '#ingame_gui:chat_shortcuts/hb_ability/last_stand'
     CHAT_SHORTCUTS_ATTACK_ENEMY = '#ingame_gui:chat_shortcuts/attack_enemy'
     CHAT_SHORTCUTS_ATTACKING_ENEMY = '#ingame_gui:chat_shortcuts/attacking_enemy'
     CHAT_SHORTCUTS_ATTACK_ENEMY_WITH_SPG = '#ingame_gui:chat_shortcuts/attack_enemy_with_SPG'
@@ -329,7 +327,6 @@ class INGAME_GUI(object):
     POSTMORTEM_TIPS_OBSERVERMODE_TEXT = '#ingame_gui:postmortem/tips/observerMode/text'
     POSTMORTEM_TIPS_EXITHANGAR_LABEL = '#ingame_gui:postmortem/tips/exitHangar/label'
     POSTMORTEM_TIPS_EXITHANGAR_TEXT = '#ingame_gui:postmortem/tips/exitHangar/text'
-    POSTMORTEM_TIPS_EXITHANGAR_TEXT_HB = '#ingame_gui:postmortem/tips/exitHangar/text_hb'
     PLAYERS_PANEL_STATE_NONE_HEADER = '#ingame_gui:players_panel/state/none/header'
     PLAYERS_PANEL_STATE_NONE_BODY = '#ingame_gui:players_panel/state/none/body'
     PLAYERS_PANEL_STATE_NONE_NOTE = '#ingame_gui:players_panel/state/none/note'
@@ -669,7 +666,6 @@ class INGAME_GUI(object):
     EFFICIENCYRIBBONS_ASSISTSTUN = '#ingame_gui:efficiencyRibbons/assistStun'
     EFFICIENCYRIBBONS_DEATHZONE = '#ingame_gui:efficiencyRibbons/deathZone'
     EFFICIENCYRIBBONS_STATICDEATHZONE = '#ingame_gui:efficiencyRibbons/staticDeathZone'
-    EFFICIENCYRIBBONS_HBDEATHZONE = '#ingame_gui:efficiencyRibbons/HBDeathZone'
     EFFICIENCYRIBBONS_CANNONDMG = '#ingame_gui:efficiencyRibbons/CannonDmg'
     EFFICIENCYRIBBONS_AIRSTRIKEDMG = '#ingame_gui:efficiencyRibbons/AirstrikeDmg'
     EFFICIENCYRIBBONS_ARTILLERYDMG = '#ingame_gui:efficiencyRibbons/ArtilleryDmg'
@@ -1093,8 +1089,6 @@ class INGAME_GUI(object):
      CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING_GRIDINFO,
      CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING,
      CHAT_SHORTCUTS_SPG_AIM_AREA_EMPTY_GRIDINFO,
-     CHAT_SHORTCUTS_HB_ABILITY_ARTILLERY_ON_YOURSELF,
-     CHAT_SHORTCUTS_HB_ABILITY_LAST_STAND,
      CHAT_SHORTCUTS_ATTACK_ENEMY,
      CHAT_SHORTCUTS_ATTACKING_ENEMY,
      CHAT_SHORTCUTS_ATTACK_ENEMY_WITH_SPG,
@@ -1204,7 +1198,6 @@ class INGAME_GUI(object):
      EFFICIENCYRIBBONS_ASSISTSTUN,
      EFFICIENCYRIBBONS_DEATHZONE,
      EFFICIENCYRIBBONS_STATICDEATHZONE,
-     EFFICIENCYRIBBONS_HBDEATHZONE,
      EFFICIENCYRIBBONS_CANNONDMG,
      EFFICIENCYRIBBONS_AIRSTRIKEDMG,
      EFFICIENCYRIBBONS_ARTILLERYDMG,

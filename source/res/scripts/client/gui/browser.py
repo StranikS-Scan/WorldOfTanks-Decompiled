@@ -5,7 +5,7 @@ import typing
 from web.client_web_api.common import WebEventSender
 from web.web_client_api import WebCommandHandler
 if typing.TYPE_CHECKING:
-    from WebBrowser import WebBrowser
+    from MTWebBrowser import MTWebBrowser
 _logger = logging.getLogger(__name__)
 
 class BrowserViewWebHandlers(object):

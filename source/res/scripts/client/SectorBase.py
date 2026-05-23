@@ -1,36 +1,53 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/SectorBase.py
+import typing
 import BigWorld
 import ResMgr
 import SoundGroups
 from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
 from FlagModel import FlagSettings, FlagModel
-from Math import Vector4, Vector3, Vector2, Matrix
+from Math import Vector3, Vector2, Matrix
 from skeletons.account_helpers.settings_core import ISettingsCore
 from account_helpers.settings_core.settings_constants import GRAPHICS
 import AnimationSequence
+if typing.TYPE_CHECKING:
+    from typing import Tuple
 
 class _SectorBaseSettingsCache(object):
+    _lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, settings):
         self.initSettings(settings)
 
     def initSettings(self, settings):
-        self.flagModelName = settings.readString('flagModelName', '')
-        self.flagStaffModelName = settings.readString('flagstaffModelName', '')
+        self.flagModelName, self.flagStaffModelName = self.__getFlagModels(settings)
         self.radiusModel = settings.readString('radiusModel', '')
         self.flagAnim = settings.readString('flagAnim', '')
         self.flagStaffFlagHP = settings.readString('flagstaffFlagHP', '')
         self.baseAttachedSoundEventName = settings.readString('wwsound', '')
         self.flagBackgroundTex = settings.readString('flagBackgroundTex', '')
-        self.flagEmblemTex = settings.readString('flagEmblemTex', '')
-        self.flagEmblemTexCoords = settings.readVector4('flagEmblemTexCoords', Vector4())
         self.flagScale = settings.readVector3('flagScale', Vector3())
         self.flagNodeAliasName = settings.readString('flagNodeAliasName', '')
+
+    def __getFlagModels(self, settings):
+        controlPointConfig = self._lobbyContext.getServerSettings().controlPointConfig
+        if controlPointConfig.isEnabled:
+            flagPath = controlPointConfig.flagPath
+            flagstaffPath = controlPointConfig.flagstaffPath
+        else:
+            flagPath = settings.readString('flagModelName', '')
+            flagstaffPath = settings.readString('flagstaffModelName', '')
+        return (flagPath, flagstaffPath)
 
 
 ENVIRONMENT_EFFECTS_CONFIG_FILE = 'scripts/dynamic_objects.xml'
 _g_sectorBaseSettings = None
+
+def resetSectorSettings():
+    _g_sectorBaseSettings = None
+    return
+
 
 class SectorBase(BigWorld.Entity):
     _OVER_TERRAIN_HEIGHT = 0.5
@@ -78,7 +95,7 @@ class SectorBase(BigWorld.Entity):
         if self.__isCapturedOnStart != self.isCaptured:
             self.set_isCaptured(self.__isCapturedOnStart)
         teamParams = self.__getTeamParams()
-        flagSettings = FlagSettings(prereqs[_g_sectorBaseSettings.flagStaffModelName], _g_sectorBaseSettings.flagNodeAliasName, prereqs[_g_sectorBaseSettings.flagAnim], _g_sectorBaseSettings.flagBackgroundTex, _g_sectorBaseSettings.flagEmblemTex, _g_sectorBaseSettings.flagEmblemTexCoords, self.spaceID)
+        flagSettings = FlagSettings(flagCompounModel=prereqs[_g_sectorBaseSettings.flagStaffModelName], flagAlias=_g_sectorBaseSettings.flagNodeAliasName, flagAnim=prereqs[_g_sectorBaseSettings.flagAnim], flagBackgroundTex=_g_sectorBaseSettings.flagBackgroundTex, spaceID=self.spaceID)
         self.__flagModel.setupFlag(self.position, flagSettings, teamParams[0])
         self.__terrainSelectedArea = BigWorld.PyTerrainSelectedArea()
         self.__terrainSelectedArea.setup(_g_sectorBaseSettings.radiusModel, Vector2(self.radius * 2.0, self.radius * 2.0), self._OVER_TERRAIN_HEIGHT, teamParams[0])

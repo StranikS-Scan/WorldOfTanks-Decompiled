@@ -53,6 +53,7 @@
     <_105mm_armata_wz_64_7x7>	31012	</_105mm_armata_wz_64_7x7>
     <_122mm_wz_49_48_dualgun>	31013	</_122mm_wz_49_48_dualgun>
     <_85mm_P_DAP_S>	31014	</_85mm_P_DAP_S>
+    <_90mm_armata_wz_44_Pl36>	31015	</_90mm_armata_wz_44_Pl36>
     <_105mm_wz_22_24_G1_SH>	35	</_105mm_wz_22_24_G1_SH>
     <_75mm_wz_36_37_G2_SH>	36	</_75mm_wz_36_37_G2_SH>
     <_90mm_armata_wz_46_G3_SH>	37	</_90mm_armata_wz_46_G3_SH>
@@ -1215,6 +1216,63 @@
         </_90mm_HE>
       </shots>
     </_90mm_armata_wz_39_44>
+    <_90mm_armata_wz_44_Pl36>
+      <userString>	#poland_vehicles:_90mm_armata_wz_44_Pl36	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	80900	</price>
+      <impulse>	0.44	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.32	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_main	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
+        <maxPitch>	0.0 7.0 1.0 7.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	39.375	</rotationSpeed>
+      <reloadTime>	8.5	</reloadTime>
+      <maxAmmo>	40	</maxAmmo>
+      <aimingTime>	2.7	</aimingTime>
+      <weight>	2600	</weight>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.42	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.14	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_90mm_PPp42_Pl36>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	1050	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	225 216	</piercingPower>
+        </_90mm_PPp42_Pl36>
+        <_90mm_PPk44_Pl36>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1388	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	254 240	</piercingPower>
+        </_90mm_PPk44_Pl36>
+        <_90mm_PW42_Pl36>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	1050	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	90 90	</piercingPower>
+        </_90mm_PW42_Pl36>
+      </shots>
+    </_90mm_armata_wz_44_Pl36>
     <_90mm_armata_wz_46>
       <userString>	#poland_vehicles:_90mm_armata_wz_46	</userString>
       <tags></tags>

@@ -7,7 +7,7 @@ import LGC
 import VOIP
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import COLOR_SETTINGS_TAB_IDX
-from account_helpers.settings_core.ServerSettingsManager import LIMITED_UI_KEY
+from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
 from account_helpers.settings_core.settings_constants import SETTINGS_GROUP
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -351,7 +351,7 @@ class SettingsWindow(SettingsWindowMeta):
     def __onSettingsChanged(self, diff):
         if settings_constants.GRAPHICS.COLOR_GRADING_TECHNIQUE in diff:
             self.__setColorGradingTechnique(diff.get(settings_constants.GRAPHICS.COLOR_GRADING_TECHNIQUE, None))
-        if LIMITED_UI_KEY in diff:
+        if any([ section in diff for section in SETTINGS_SECTIONS.LIMITED_UI_GROUP ]):
             self.__setLimitedUISettingVisibility()
         return
 

@@ -15,6 +15,7 @@ from web.web_client_api.battle_royale import BattleRoyaleWebApi
 from web.web_client_api.request import RequestWebApi
 from web.web_client_api.rewards import RewardsWebApi
 from web.web_client_api.shop import ShopWebApi
+from web.web_client_api.shop.summersale import SummerSaleWebApi
 from web.web_client_api.social import SocialWebApi
 from web.web_client_api.sound import HangarSoundWebApi, SoundStateWebApi, SoundWebApi
 from web.web_client_api.ui import CloseWindowWebApi, NotificationWebApi, OpenTabWebApi, OpenWindowWebApi, UtilWebApi
@@ -58,7 +59,8 @@ _DEFAULT_WEB_API_COLLECTION = (CloseWindowWebApi,
  RankedBattlesWebApi,
  BattleRoyaleWebApi,
  UILoggingWebApi,
- Comp7WebApi)
+ Comp7WebApi,
+ SummerSaleWebApi)
 
 def createWebHandlers(replaces=None):
     handlersList = list(_DEFAULT_WEB_API_COLLECTION)

@@ -213,8 +213,8 @@ def __buildCache(geometryID, geometryName, defaultXml, isFullCache, isDevelopmen
             return False
         raise SoftException("Can't open '%s'" % sectionName)
     geometryCfg = __readGeometryCfg(geometryID, geometryName, section, defaultXml)
-    geometryType = GeometryType(geometryCfg)
-    g_geometryCache[geometryID] = __addBonusTypeOverrides(geometryType, section, defaultXml)
+    geometryType = __addBonusTypeOverrides(GeometryType(geometryCfg), section, defaultXml)
+    g_geometryCache[geometryID] = geometryType
     if isFullCache:
         spaceName = os.path.basename(geometryCfg['geometry'])
         spaceData = __readSpaceCfg(spaceName)
@@ -238,28 +238,37 @@ def __addBonusTypeOverrides(overridable, section, defaultXml):
 
 
 def __readBonusTypeCfgs(geometryName, section, defaultXml, bonusType):
-    overrides = section['bonusTypeOverrides'] or defaultXml['bonusTypeOverrides']
-    if overrides is None:
-        return {}
+    arenaOverrides = __getBonusTypeOverrides(section, bonusType)
+    defaultOverrides = __getBonusTypeOverrides(defaultXml, bonusType)
+    arenaOverrides = arenaOverrides or defaultOverrides
+    defaultOverrides = defaultOverrides or arenaOverrides
+    if not arenaOverrides:
+        return None
     else:
-        bonusOverrides = overrides[bonusType]
-        if bonusOverrides is None:
-            return {}
         try:
             cfg = {}
-            if IS_CELLAPP or IS_BASEAPP:
-                cfg['estimatedLoad'] = _readFloat('estimatedLoad', bonusOverrides, defaultXml, ARENA_ESTIMATED_LOAD_DEFAULT)
-            if __hasKey('maxPlayersInTeam', bonusOverrides, defaultXml):
-                cfg['maxPlayersInTeam'] = __readMaxPlayersInTeam(bonusOverrides, defaultXml)
-            if __hasKey('runDelay', bonusOverrides, defaultXml):
-                cfg['runDelay'] = _readInt('runDelay', bonusOverrides, defaultXml)
-            if __hasKey('runDelayDev', bonusOverrides, defaultXml):
-                cfg['runDelayDev'] = _readInt('runDelayDev', bonusOverrides, defaultXml)
+            if (IS_CELLAPP or IS_BASEAPP) and __hasKey('estimatedLoad', arenaOverrides, defaultOverrides):
+                cfg['estimatedLoad'] = _readFloat('estimatedLoad', arenaOverrides, defaultOverrides)
+            if __hasKey('maxPlayersInTeam', arenaOverrides, defaultOverrides):
+                cfg['maxPlayersInTeam'] = __readMaxPlayersInTeam(arenaOverrides, defaultOverrides)
+            if __hasKey('runDelay', arenaOverrides, defaultOverrides):
+                cfg['runDelay'] = _readInt('runDelay', arenaOverrides, defaultOverrides)
+            if __hasKey('runDelayDev', arenaOverrides, defaultOverrides):
+                cfg['runDelayDev'] = _readInt('runDelayDev', arenaOverrides, defaultOverrides)
         except Exception as e:
             LOG_CURRENT_EXCEPTION()
             raise SoftException("wrong %s bonusTypeOverrides section '%s' : %s" % (geometryName, bonusType, e))
 
         return cfg
+
+
+def __getBonusTypeOverrides(Xml, bonusType):
+    Overrides = Xml['bonusTypeOverrides']
+    if Overrides:
+        return Overrides[bonusType]
+    else:
+        return None
+        return None
 
 
 def __readGeometryCfg(geometryID, geometryName, section, defaultXml):
@@ -379,7 +388,6 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
     cfg['teamSpawnPoints'] = __readTeamSpawnPoints(section, maxTeamsInArena)
     cfg['squadTeamNumbers'], cfg['soloTeamNumbers'] = __readTeamNumbers(section, maxTeamsInArena)
     cfg[VisualScriptTag] = _readVisualScript(section)
-    cfg['pythonScript'] = _readPythonScript(section)
     if raiseIfMissing or __hasKey('numPlayerGroups', section, defaultXml):
         cfg['numPlayerGroups'] = _readInt('numPlayerGroups', section, defaultXml, 0)
     if raiseIfMissing or __hasKey('playerGroupLimit', section, defaultXml):
@@ -611,13 +619,6 @@ def _readVisualScript(section):
          ASPECT.SERVER: _readVisualScriptAspect(vseSection, ASPECT.SERVER.lower(), commonParams)}
     return {ASPECT.CLIENT: [],
      ASPECT.SERVER: []}
-
-
-def _readPythonScript(section):
-    if section.has_key('pythonScript'):
-        pythonScriptSection = section['pythonScript']
-        return [ script for script in pythonScriptSection.asString.split(' ') if script ]
-    return []
 
 
 def _readBoundingBox(section):

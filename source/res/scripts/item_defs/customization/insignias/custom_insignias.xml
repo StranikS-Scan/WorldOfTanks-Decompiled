@@ -707,8 +707,6 @@
     <insignia>
       <id>	31047	</id>
       <texture>	gui/maps/vehicles/decals/insignia/custom/ClanSeason_Insignia_140_3.dds	</texture>
-      <atlas>	gui/maps/vehicles/decals/insignia/custom/ClanSeason_Insignia_140.dds	</atlas>
-      <alphabet>	gui/maps/vehicles/decals/insignia/custom/ClanSeason_Insignia_140.xml	</alphabet>
       <emissionMap>	gui/maps/vehicles/decals/insignia/custom/ClanSeason_Insignia_140_Emission_3.dds	</emissionMap>
       <emissionPatternMap>	gui/maps/vehicles/decals/insignia/custom/ClanSeason_Insignia_140_Pattern_3.dds	</emissionPatternMap>
       <forwardEmissionBrightness>	4	</forwardEmissionBrightness>
@@ -852,5 +850,82 @@
     </insignia>
     <name>	BlogersCosmic_Insignia_141	</name>
     <tags>	hiddenInUI	</tags>
+  </itemGroup>
+  <itemGroup>
+    <name>	R87_T62A_3Dst2_insigna	</name>
+    <userString>	#vehicle_customization:insignias/special	</userString>
+    <historical>	1	</historical>
+    <insignia>
+      <id>	31059	</id>
+      <texture>	gui/maps/vehicles/decals/insignia/custom/R87_T62A_3Dst2_3.dds	</texture>
+      <tags>	hiddenInUI	</tags>
+    </insignia>
+    <priceGroup>	insignias 50g notInShop	</priceGroup>
+    <season>	ALL	</season>
+  </itemGroup>
+  <itemGroup>
+    <name>	RushHeavenlyBeast_Insignia_143	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	insignias 50g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:insignias/special	</userString>
+    <insignia>
+      <id>	31057	</id>
+      <texture>	gui/maps/vehicles/decals/insignia/custom/RushHeavenlyBeast_Insignia_143_3.dds	</texture>
+    </insignia>
+  </itemGroup>
+  <itemGroup>
+    <name>	A172_ASTRON_FL_3Dst_Solar_Strike	</name>
+    <userString>	#vehicle_customization:insignias/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	insignias 50g notInShop	</priceGroup>
+    <insignia>
+      <id>	31054	</id>
+      <texture>	gui/maps/vehicles/decals/insignia/custom/A172_ASTRON_FL_3Dst_Solar_Strike_Insignia_143_3.dds	</texture>
+      <vehicleFilter>
+        <include>
+          <vehicles>	usa:A172_ASTRON_FL	</vehicles>
+        </include>
+      </vehicleFilter>
+    </insignia>
+  </itemGroup>
+  <itemGroup>
+    <name>	Ch73_GPT_75_3Dst_Armored_Heat	</name>
+    <userString>	#vehicle_customization:insignias/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <insignia>
+      <id>	31056	</id>
+      <texture>	gui/maps/vehicles/decals/insignia/custom/Ch73_GPT_75_3Dst_Armored_Heat_2026_insignia_3.dds	</texture>
+      <tags>	hiddenInUI	</tags>
+      <priceGroup>	insignias 50g notInShop	</priceGroup>
+    </insignia>
+  </itemGroup>
+  <itemGroup>
+    <name>	F108_Panhard_EBR_105_3Dst_Reef_Rush_2025_insignia	</name>
+    <userString>	#vehicle_customization:insignias/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	insignias 50g notInShop	</priceGroup>
+    <insignia>
+      <id>	31055	</id>
+      <texture>	gui/maps/vehicles/decals/insignia/custom/F108_Panhard_EBR_105_3Dst_Reef_Rush_2025_insignia_3.dds	</texture>
+    </insignia>
+  </itemGroup>
+  <itemGroup>
+    <name>	SummerSale_Insignia_143	</name>
+    <userString>	#vehicle_customization:insignias/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <insignia>
+      <id>	31058	</id>
+      <texture>	gui/maps/vehicles/decals/insignia/custom/SummerSale_Insignia_143_3.dds	</texture>
+    </insignia>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	insignias 50g notInShop	</priceGroup>
   </itemGroup>
 </custom_insignias.xml>

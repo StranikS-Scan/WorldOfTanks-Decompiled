@@ -1,22 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/comp7_controller.py
+import BigWorld
 import logging
 import itertools
 from collections import namedtuple
 import typing
 import Event
 import adisp
-import pkgutil
 from Event import EventManager
-from ExtensionsManager import g_extensionsManager
 from comp7_common import Comp7QualificationState, SEASON_POINTS_ENTITLEMENTS
 from comp7_ranks_common import COMP7_RATING_ENTITLEMENT, COMP7_ELITE_ENTITLEMENT, COMP7_ACTIVITY_ENTITLEMENT
-from constants import Configs, RESTRICTION_TYPE, ARENA_BONUS_TYPE, COMP7_SCENE, ARENA_GUI_TYPE, QUEUE_TYPE
+from constants import Configs, RESTRICTION_TYPE, ARENA_BONUS_TYPE, COMP7_SCENE, ROLE_TYPE_TO_LABEL
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.comp7.shared import Comp7AlertData
 from gui.comp7.comp7_helpers import updateComp7Settings
 from gui.comp7.entitlements_cache import EntitlementsCache
 from gui.event_boards.event_boards_items import Comp7LeaderBoard
+from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.items import ValidationResult
@@ -31,13 +31,15 @@ from helpers.CallbackDelayer import CallbackDelayer
 from helpers.time_utils import ONE_SECOND, getTimeDeltaFromNow, getServerUTCTime
 from items import vehicles
 from season_provider import SeasonProvider
+from shared_utils import findFirst
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IComp7Controller, IHangarSpaceSwitchController
+from skeletons.gui.game_control import IComp7Controller, IHangarSpaceSwitchController, ILimitedUIController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
+    from account_helpers.comp7_storage import Comp7Storage
     from helpers.server_settings import Comp7Config
     from items.artefacts import Equipment
 
@@ -49,12 +51,14 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
     __itemsCache = dependency.descriptor(IItemsCache)
     __eventsCache = dependency.descriptor(IEventsCache)
     __spaceSwitchController = dependency.descriptor(IHangarSpaceSwitchController)
+    __limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def __init__(self):
         super(Comp7Controller, self).__init__()
         self.__serverSettings = None
         self.__comp7Config = None
         self.__comp7RanksConfig = None
+        self.__comp7SkillsConfig = None
         self.__roleEquipmentsCache = None
         self.__viewData = {}
         self.__isOffline = False
@@ -80,22 +84,29 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.onSeasonPointsUpdated = Event.Event(em)
         self.onComp7RewardsConfigChanged = Event.Event(em)
         self.onComp7BattleFinished = Event.Event(em)
+        self.onComp7SkillsConfigChanged = Event.Event(em)
         return
 
     @property
     def __roleEquipments(self):
-        if self.__roleEquipmentsCache is None:
+        if not self.__roleEquipmentsCache:
             self.__roleEquipmentsCache = {}
             equipmentsCache = vehicles.g_cache.equipments()
-            roleEquipmentsConfig = self.getModeSettings().roleEquipments
-            for role, equipmentConfig in roleEquipmentsConfig.iteritems():
-                if equipmentConfig['equipmentID'] is not None:
+            roleEquipmentsConfig = self.__comp7SkillsConfig.roleEquipments
+            for role, equipmentsConfig in roleEquipmentsConfig.iteritems():
+                self.__roleEquipmentsCache[role] = {}
+                for equipmentId, equipmentConfig in equipmentsConfig.iteritems():
                     startCharge = equipmentConfig['startCharge']
                     startLevel = len([ levelCost for levelCost in equipmentConfig['cost'] if levelCost <= startCharge ])
-                    self.__roleEquipmentsCache[role] = {'item': equipmentsCache[equipmentConfig['equipmentID']],
-                     'startLevel': startLevel}
+                    self.__roleEquipmentsCache[role][equipmentId] = {'item': equipmentsCache[equipmentId],
+                     'startLevel': startLevel,
+                     'isDefault': equipmentConfig['isDefault']}
 
         return self.__roleEquipmentsCache
+
+    @property
+    def comp7Storage(self):
+        return BigWorld.player().comp7Storage
 
     @property
     def rating(self):
@@ -197,6 +208,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.__serverSettings = None
         self.__comp7Config = None
         self.__comp7RanksConfig = None
+        self.__comp7SkillsConfig = None
         self.__roleEquipmentsCache = None
         self.__viewData = {}
         self.__rating = 0
@@ -240,11 +252,39 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
     def isQualificationSquadAllowed(self):
         return Comp7QualificationState.isUnitAllowed(self.__qualificationState)
 
+    def getVehicleDefaultEquipmentConfig(self, vehCompDescr, roleName):
+        config = self.__roleEquipments.get(vehCompDescr, self.__roleEquipments.get(roleName, {}))
+        equipmentConfig = findFirst(lambda (key, value): value.get('isDefault'), config.iteritems(), (0, {}))
+        return equipmentConfig[1]
+
+    def getRoleDefaultEquipmentConfig(self, roleName):
+        roleConfig = self.__roleEquipments.get(roleName, {})
+        equipmentConfig = findFirst(lambda (key, value): value.get('isDefault'), roleConfig.iteritems(), (0, {}))
+        return equipmentConfig[1]
+
+    def getVehicleSkillEquipment(self, vehicle):
+        vehInvID = vehicle.invID
+        equipmentID = self.comp7Storage.getVehicleSkill(vehInvID)
+        if not equipmentID:
+            vehCompDescr = vehicle.intCD
+            roleName = ROLE_TYPE_TO_LABEL.get(vehicle.descriptor.role)
+            equipment = self.getVehicleDefaultEquipmentConfig(vehCompDescr, roleName).get('item')
+        else:
+            equipment = vehicles.g_cache.equipments()[equipmentID]
+        return equipment
+
+    def getVehicleEquipments(self, vehicle):
+        vehCompDescr = vehicle.intCD
+        roleName = ROLE_TYPE_TO_LABEL.get(vehicle.descriptor.role)
+        return self.__roleEquipments.get(vehCompDescr, self.__roleEquipments.get(roleName, {}))
+
     def getRoleEquipment(self, roleName):
-        return self.__roleEquipments.get(roleName, {}).get('item')
+        roleDefaultEquipment = self.getRoleDefaultEquipmentConfig(roleName)
+        return roleDefaultEquipment.get('item')
 
     def getEquipmentStartLevel(self, roleName):
-        return self.__roleEquipments.get(roleName, {}).get('startLevel')
+        roleDefaultEquipment = self.getRoleDefaultEquipmentConfig(roleName)
+        return roleDefaultEquipment.get('startLevel')
 
     def isSuitableVehicle(self, vehicle):
         ctx = {}
@@ -307,16 +347,6 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
     def isComp7PrbActive(self):
         return False if self.prbEntity is None else bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.COMP7)
 
-    def isComp7TournamentsPrbActive(self):
-        if self.prbEntity is None:
-            return False
-        else:
-            isSpecBattle = self.prbEntity.getQueueType() == QUEUE_TYPE.SPEC_BATTLE
-            return isSpecBattle and self.prbEntity.getSettings()['arenaGuiType'] == ARENA_GUI_TYPE.TOURNAMENT_COMP7
-
-    def isBattleModifiersAvailable(self):
-        return (self.isComp7PrbActive() or self.isComp7TournamentsPrbActive()) and len(self.battleModifiers) > 0
-
     def getPlatoonRatingRestriction(self):
         unitMgr = prb_getters.getClientUnitMgr()
         return self.__comp7Config.squadRatingRestriction.get(unitMgr.unit.getSquadSize(), 0) if unitMgr is not None and unitMgr.unit is not None else 0
@@ -336,14 +366,6 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
 
     def getYearlyRewards(self):
         return self.__lobbyContext.getServerSettings().comp7RewardsConfig
-
-    def getBattleModifiersObject(self):
-        if 'battle_modifiers' in [ ext.name for ext in g_extensionsManager.activeExtensions ] and pkgutil.find_loader('battle_modifiers_ext'):
-            from battle_modifiers_ext.battle_modifiers import BattleModifiers
-        else:
-            _logger.error('Missing battle_modifiers_ext')
-            return None
-        return BattleModifiers(self.battleModifiers)
 
     def _getAlertBlockData(self):
         if self.isOffline:
@@ -408,6 +430,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.__serverSettings.onServerSettingsChange += self.__onUpdateComp7Settings
         self.__updateMainConfig()
         self.__comp7RanksConfig = self.__serverSettings.comp7RanksConfig
+        self.__comp7SkillsConfig = self.__serverSettings.comp7SkillsConfig
         self.__roleEquipmentsCache = None
         return
 
@@ -417,9 +440,12 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
             self.onComp7RanksConfigChanged()
         if Configs.COMP7_CONFIG.value in diff:
             self.__updateMainConfig()
-            self.__roleEquipmentsCache = None
             self.__resetTimer()
             self.onComp7ConfigChanged()
+        if Configs.COMP7_SKILLS_CONFIG.value in diff:
+            self.__comp7SkillsConfig = self.__serverSettings.comp7SkillsConfig
+            self.__roleEquipmentsCache = None
+            self.onComp7SkillsConfigChanged()
         if Configs.COMP7_REWARDS_CONFIG.value in diff:
             self.onComp7RewardsConfigChanged()
         return
@@ -480,6 +506,9 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.__qualificationState = self.__itemsCache.items.stats.comp7.get('qualification', {}).get('state', Comp7QualificationState.NOT_STARTED)
         if lastQualificationState != self.__qualificationState:
             self.onQualificationStateUpdated()
+
+    def isLocked(self):
+        return not self.__limitedUIController.isRuleCompleted(LuiRules.COMP7_CONTENT)
 
 
 class _LeaderboardDataProvider(object):

@@ -273,7 +273,7 @@ class EliteVehiclesValidator(SyncValidator):
                 return makeError('invalid_vehicle')
             if item.itemTypeID is not GUI_ITEM_TYPE.VEHICLE:
                 return makeError('invalid_module_type')
-            if not item.isElite and not item.isOnlyForEventBattles:
+            if not item.isElite:
                 return makeError('vehicle_not_elite')
 
         return makeSuccess()
@@ -703,17 +703,6 @@ class PMFreeTokensValidator(_EventsCacheValidator):
 
     def _validate(self):
         return makeError('NOT_ENOUGH_FREE_TOKENS') if self.eventsCache.getPersonalMissions().getFreeTokensCount(self._branch) < self.quest.getPawnCost() else makeSuccess()
-
-
-class TokenValidator(_EventsCacheValidator):
-
-    def __init__(self, tokenID, amount, isEnabled=True):
-        super(TokenValidator, self).__init__(isEnabled)
-        self._tokenID = tokenID
-        self._amount = amount
-
-    def _validate(self):
-        return makeError('NOT_ENOUGH_TOKENS') if self.eventsCache.questsProgress.getTokenCount(self._tokenID) < self._amount else makeSuccess()
 
 
 class CheckBoxConfirmator(DialogAbstractConfirmator):
@@ -1272,3 +1261,29 @@ class AsyncDialogConfirmator(AsyncConfirmator):
             callback(makeSuccess())
             return
         callback(makeError())
+
+
+class StallStateValidator(SyncValidator):
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+
+    def _validate(self):
+        return makeError('stall_state_disabled') if not self.__lobbyContext.getServerSettings().stallConfig.isEnabled else makeSuccess()
+
+
+class StallPurchaseParamsValidator(SyncValidator):
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, productCode, count):
+        super(StallPurchaseParamsValidator, self).__init__()
+        self.__productCode = productCode
+        self.__count = count
+
+    def _validate(self):
+        if self.__count < 1:
+            return makeError('stall_purchase_count_less_than_one')
+        products = self.__lobbyContext.getServerSettings().stallConfig.products
+        if self.__productCode not in products.iterkeys():
+            return makeError('stall_invalid_product_code')
+        purchasedCount = self.__itemsCache.items.tokens.getTokenCount('{}_no_log'.format(self.__productCode))
+        return makeError('stall_daily_purchase_limit_reached') if purchasedCount >= products[self.__productCode]['dayLimit'] else makeSuccess()

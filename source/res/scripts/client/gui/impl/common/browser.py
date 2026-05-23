@@ -13,7 +13,7 @@ from adisp import adisp_process
 from skeletons.gui.game_control import IBrowserController
 if typing.TYPE_CHECKING:
     from typing import Optional
-    from WebBrowser import WebBrowser
+    from MTWebBrowser import MTWebBrowser
     from web.web_client_api import webApiCollection
 _logger = logging.getLogger(__name__)
 

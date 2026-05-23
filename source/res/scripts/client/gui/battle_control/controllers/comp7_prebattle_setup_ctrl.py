@@ -232,4 +232,5 @@ class Comp7PrebattleSetupController(IComp7PrebattleSetupController):
         builder.setAmmunitionSetups(vehicleInfo['vehSetups'], vehicleInfo['vehSetupsIndexes'])
         builder.setRoleSlot(vehicleInfo['customRoleSlotTypeId'])
         builder.setPostProgressionState(vehicleInfo['vehPostProgression'], vehicleInfo['vehDisabledSetupSwitches'])
+        builder.setSelectedComp7Skill(vehicleInfo['selectedComp7Skill'])
         return builder.getResult()

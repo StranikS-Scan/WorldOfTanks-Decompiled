@@ -16,6 +16,7 @@ from gui.impl.gen import R
 from gui.shared.tooltips.comp7_tooltips import getRoleEquipmentTooltipParts, getPoIEquipmentDescription
 from gui.shared.utils.functions import stripColorTagDescrTags
 from helpers import dependency
+from items import vehicles
 from points_of_interest_shared import PoiType, POI_EQUIPMENT_TAG
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IComp7Controller
@@ -151,8 +152,12 @@ class Comp7ConsumablesPanel(ConsumablesPanel):
         if arena is not None and arena.period < ARENA_PERIOD.BATTLE and self.__prebattleCtrl is not None:
             vehicle = self.__prebattleCtrl.getCurrentGUIVehicle()
             if vehicle is not None and not vehicle.isObserver:
-                roleName = ROLE_TYPE_TO_LABEL.get(vehicle.descriptor.role)
-                roleSkillEquipment = self.__comp7Controller.getRoleEquipment(roleName)
+                selectedComp7Skill = vehicle.selectedComp7Skill
+                if selectedComp7Skill:
+                    roleSkillEquipment = vehicles.g_cache.equipments()[selectedComp7Skill]
+                else:
+                    roleName = ROLE_TYPE_TO_LABEL.get(vehicle.descriptor.role)
+                    roleSkillEquipment = self.__comp7Controller.getRoleEquipment(roleName)
                 bwKey, sfKey = self._genKey(self._ROLE_EQUIPMENT_IDX)
                 icon = backport.image(self._R_COMP7_EQUIPMENT_ICON.dyn(roleSkillEquipment.icon[0])())
                 tooltip = TOOLTIP_FORMAT.format(*getRoleEquipmentTooltipParts(roleSkillEquipment))

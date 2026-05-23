@@ -8,7 +8,7 @@ from debug_utils import LOG_DEBUG_DEV
 from dossiers2.custom import records
 from dossiers2.custom.config import RECORD_CONFIGS
 from dossiers2.custom.cache import getCache
-from dossiers2.custom.utils import isVehicleSPG, getInBattleSeriesIndex
+from arena_achievements import INBATTLE_SERIES_INDICES
 from arena_achievements_processing.utils import getLevel, getTags
 import arena_achievements
 _BATTLE_HERO_CONFIG = arena_achievements.ACHIEVEMENT_CONDITIONS
@@ -17,9 +17,9 @@ _saveRecordsInAccountDescr = {BONUS_CAPS.DOSSIER_ACHIEVEMENTS_15X15: [{'block': 
  BONUS_CAPS.DOSSIER_ACHIEVEMENTS_7X7: [{'block': 'achievements7x7',
                                         'records': ('maxTacticalBreakthroughSeries',)}]}
 
-def updateVehicleDossier(dossierDescr, battleResults, dossierXP, vehTypeCompDescr, avatarResults):
+def updateVehicleDossier(dossierDescr, battleResults, dossierXP, vehDescr, avatarResults):
     __updateDossierCommonPart(DOSSIER_TYPE.VEHICLE, dossierDescr, battleResults, dossierXP, avatarResults)
-    __updateVehicleDossierImpl(vehTypeCompDescr, dossierDescr, battleResults, dossierXP)
+    __updateVehicleDossierImpl(vehDescr, dossierDescr, battleResults, dossierXP)
 
 
 def getMaxVehResults(results):
@@ -458,7 +458,7 @@ def __updateMarkOfMastery(dossierDescr, results):
         achievements['markOfMastery'] = results['markOfMastery']
 
 
-def __updateVehicleDossierImpl(vehTypeCompDescr, dossierDescr, results, dossierXP):
+def __updateVehicleDossierImpl(vehDescr, dossierDescr, results, dossierXP):
     bonusType = results['bonusType']
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_ACHIEVEMENTS_7X7):
         _updatePerBattleSeries(dossierDescr['achievements7x7'], 'tacticalBreakthroughSeries', results['winnerTeam'] == results['team'])
@@ -476,12 +476,13 @@ def __updateVehicleDossierImpl(vehTypeCompDescr, dossierDescr, results, dossierX
         dossierDescr['singleAchievements']['aimer'] = 1
         if achievements['maxAimerSeries'] < results['aimerSeries']:
             achievements['maxAimerSeries'] = results['aimerSeries']
-    isSPG = isVehicleSPG(vehTypeCompDescr)
-    _updatePerBattleSeries(achievements, 'invincibleSeries', results['deathCount'] == 0 and results['damageReceived'] == 0 and not isSPG)
-    _updatePerBattleSeries(achievements, 'diehardSeries', results['deathCount'] == 0 and not isSPG)
-    _updateInBattleSeries(achievements, 'sniper', results)
+    noDeath = 'SPG' not in vehDescr.type.tags and results['deathCount'] == 0
+    _updatePerBattleSeries(achievements, 'invincibleSeries', results['damageReceived'] == 0 and noDeath)
+    _updatePerBattleSeries(achievements, 'diehardSeries', noDeath)
     _updateInBattleSeries(achievements, 'killing', results)
-    _updateInBattleSeries(achievements, 'piercing', results)
+    if not vehDescr.isAutoShootGunVehicle:
+        _updateInBattleSeries(achievements, 'sniper', results)
+        _updateInBattleSeries(achievements, 'piercing', results)
 
 
 def _updatePerBattleSeries(achievements, achieveName, isNotInterrupted):
@@ -492,7 +493,7 @@ def _updatePerBattleSeries(achievements, achieveName, isNotInterrupted):
 
 
 def _updateInBattleSeries(achievements, seriesName, results):
-    seriesIdx = getInBattleSeriesIndex(seriesName)
+    seriesIdx = INBATTLE_SERIES_INDICES[seriesName]
     recordName = seriesName + 'Series'
     series = results['series'].get(seriesIdx, [])
     if series:

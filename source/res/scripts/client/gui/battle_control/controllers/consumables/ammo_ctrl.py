@@ -743,6 +743,9 @@ class AmmoController(MethodsRules, ViewComponentsController):
     def getShellsLayout(self):
         return self.__ammo.iteritems()
 
+    def isEmptyAmmo(self):
+        return sum((quantity for _, (quantity, _) in self.getShellsLayout())) == 0
+
     def getCurrentShells(self):
         return self.getShells(self.__currShellCD) if self.__currShellCD is not None else (SHELL_QUANTITY_UNKNOWN,) * 2
 
@@ -861,6 +864,9 @@ class AmmoController(MethodsRules, ViewComponentsController):
 
     def setDualGunState(self, left, right):
         self.__dualGunState = _DualGunState(left, right)
+
+    def getDualGunState(self):
+        return self.__dualGunState
 
     def setDualGunQuickChangeReady(self, ready):
         self.__dualGunQuickChangeReady = ready

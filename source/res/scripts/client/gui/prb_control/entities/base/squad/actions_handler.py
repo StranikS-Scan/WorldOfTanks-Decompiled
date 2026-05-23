@@ -81,7 +81,7 @@ class SquadActionsHandler(AbstractActionsHandler):
             return
 
     @th_async
-    def _validateUnitState(self, entity, checkAmmo=True):
+    def _validateUnitState(self, entity):
         fullData = entity.getUnitFullData(unitMgrID=entity.getID())
         if entity.isCommander():
             notReadyCount = 0
@@ -103,11 +103,10 @@ class SquadActionsHandler(AbstractActionsHandler):
                 result = yield th_await(showPlatoonWarningDialog(R.strings.dialogs.squadHaveNotReadyPlayer))
             if not result:
                 raise AsyncReturn(result)
-            if checkAmmo:
-                result = yield await_callback(checkVehicleAmmoFull)(g_currentVehicle.item)
-                if not result:
-                    raise AsyncReturn(result)
-        elif not fullData.playerInfo.isReady and checkAmmo:
+            result = yield await_callback(checkVehicleAmmoFull)(g_currentVehicle.item)
+            if not result:
+                raise AsyncReturn(result)
+        elif not fullData.playerInfo.isReady:
             result = yield await_callback(checkVehicleAmmoFull)(g_currentVehicle.item)
             if not result:
                 raise AsyncReturn(result)

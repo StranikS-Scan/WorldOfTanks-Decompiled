@@ -40,7 +40,7 @@ class AutoShootGunShootingAnimator(CallbackDelayer, EventsHandler):
         super(AutoShootGunShootingAnimator, self).__init__()
         self.__vehicle = weakref.proxy(vehicle)
         self.__controller = weakref.proxy(controller)
-        self.__activationSound = self.__deactivationSound = self.__switchShellEjection = ''
+        self.__activationSound = self.__deactivationSound = ''
         self.__burstParticles = dict()
         self.__recoilAnimators = set()
         self.__shotObjects = list()
@@ -55,7 +55,8 @@ class AutoShootGunShootingAnimator(CallbackDelayer, EventsHandler):
         soundIndex = 0 if isPlayerVehicle else 1
         self.__activationSound = activationSounds.getEvents()[soundIndex]
         self.__deactivationSound = deactivationSounds.getEvents()[soundIndex]
-        self.__switchShellEjection = switchShellEjection
+        gunSoundObject = getGunSoundObject(self.__vehicle)
+        gunSoundObject.setSwitch('SWITCH_ext_shell_ejection_autoshoot', switchShellEjection)
 
     def destroy(self):
         self.__vehicle = None
@@ -125,7 +126,6 @@ class AutoShootGunShootingAnimator(CallbackDelayer, EventsHandler):
         self.__updateBurst()
         gunSoundObject = getGunSoundObject(self.__vehicle)
         gunSoundObject.play(self.__activationSound)
-        gunSoundObject.setSwitch('SWITCH_ext_shell_ejection_autoshoot', self.__switchShellEjection)
 
     def __deactivateBurst(self, burstInProgress):
         getGunSoundObject(self.__vehicle).play(self.__deactivationSound if burstInProgress else '')

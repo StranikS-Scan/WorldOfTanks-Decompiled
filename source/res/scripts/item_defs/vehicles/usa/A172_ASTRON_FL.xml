@@ -76,6 +76,13 @@
       <undamaged>	vehicles/american/A172_ASTRON_FL/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/american/A172_ASTRON_FL/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/american/A172_ASTRON_FL/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <A172_ASTRON_FL_3Dst_Solar_Strike>
+          <undamaged>	vehicles/american/A172_ASTRON_FL/_skins/A172_ASTRON_FL_3Dst_Solar_Strike/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A172_ASTRON_FL/_skins/A172_ASTRON_FL_3Dst_Solar_Strike/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A172_ASTRON_FL/_skins/A172_ASTRON_FL_3Dst_Solar_Strike/crash/lod0/Hull.model	</exploded>
+        </A172_ASTRON_FL_3Dst_Solar_Strike>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -99,8 +106,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.702985 0.62458 2.235831	</rayStart>
-        <rayEnd>	0.70678 0.429497 2.191922	</rayEnd>
+        <rayStart>	0.822265 0.64695 2.146753	</rayStart>
+        <rayEnd>	0.82606 0.451867 2.102844	</rayEnd>
         <rayUp>	-0.011492 0.219358 -0.975577	</rayUp>
         <size>	0.32	</size>
         <isUVProportional>	false	</isUVProportional>
@@ -968,6 +975,27 @@
         <scale>	2.625368 3.321788 2.625376	</scale>
         <showOn>	16	</showOn>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15086	</slotId>
+        <tags></tags>
+        <compatibleModels>	A172_ASTRON_FL_3Dst_Solar_Strike	</compatibleModels>
+        <position>	0.027326 1.414769 2.770855	</position>
+        <rotation>	0.295217 -0.126183 3.093448	</rotation>
+        <scale>	1.637485 1.637485 1.637487	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15087	</slotId>
+        <tags>	direction_left_to_right formfactor_square	</tags>
+        <compatibleModels>	A172_ASTRON_FL_3Dst_Solar_Strike	</compatibleModels>
+        <position>	1.415207 1.593872 -1.630702	</position>
+        <rotation>	3.138249 -1.570445 -0.013432	</rotation>
+        <scale>	0.392815 0.392815 0.392815	</scale>
+        <showOn>	16	</showOn>
+        <verticalMirror>	true	</verticalMirror>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1023,6 +1051,13 @@
         <undamaged>	vehicles/american/A172_ASTRON_FL/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A172_ASTRON_FL/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A172_ASTRON_FL/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <A172_ASTRON_FL_3Dst_Solar_Strike>
+            <undamaged>	vehicles/american/A172_ASTRON_FL/_skins/A172_ASTRON_FL_3Dst_Solar_Strike/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A172_ASTRON_FL/_skins/A172_ASTRON_FL_3Dst_Solar_Strike/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A172_ASTRON_FL/_skins/A172_ASTRON_FL_3Dst_Solar_Strike/crash/lod0/Chassis.model	</exploded>
+          </A172_ASTRON_FL_3Dst_Solar_Strike>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1073,10 +1108,10 @@
                   <wheelName>	W_L6	</wheelName>
                   <wheelName>	W_L5	</wheelName>
                   <wheelName>	W_L4	</wheelName>
-                  <isGroudGroup>	true	</isGroudGroup>
                   <groupRadius>	0.28	</groupRadius>
                   <groupInnerOffset>	0.389959	</groupInnerOffset>
                   <groupOuterOffset>	-0.289959	</groupOuterOffset>
+                  <isGroudGroup>	true	</isGroudGroup>
                 </wheelGroup>
                 <wheelGroup>
                   <wheelName>	WD_L6	</wheelName>
@@ -1093,6 +1128,39 @@
                 </wheelGroup>
               </wheelGroups>
               <hullCollider>
+                <boxCollider>
+                  <row0>	1.801643 0.000000 0.000000	</row0>
+                  <row1>	0.000000 2.019505 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.486654	</row2>
+                  <row3>	-0.232492 1.010562 -0.165911	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.948755 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.603865 0.000000	</row1>
+                  <row2>	0.000000 0.000000 4.139320	</row2>
+                  <row3>	-1.485000 1.473120 -1.536010	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.808480 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.354149 -0.495112	</row1>
+                  <row2>	0.000000 0.809210 0.578820	</row2>
+                  <row3>	-1.485000 1.259717 -3.793546	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.779769 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.761100 0.000000	</row1>
+                  <row2>	0.000000 0.000000 3.846300	</row2>
+                  <row3>	-2.225365 0.870615 -1.931725	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.779769 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.761100 0.000000	</row1>
+                  <row2>	0.000000 0.000000 0.845136	</row2>
+                  <row3>	-1.461541 0.870615 0.392183	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	A172_ASTRON_FL_3Dst_Solar_Strike	</modelsSet>
                 <boxCollider>
                   <row0>	1.801643 0.000000 0.000000	</row0>
                   <row1>	0.000000 2.019505 0.000000	</row1>
@@ -1168,6 +1236,39 @@
                 </wheelGroup>
               </wheelGroups>
               <hullCollider>
+                <boxCollider>
+                  <row0>	1.801640 0.000000 0.000000	</row0>
+                  <row1>	0.000000 2.019510 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.486650	</row2>
+                  <row3>	0.113822 1.010560 -0.165911	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.948755 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.603865 0.000000	</row1>
+                  <row2>	0.000000 0.000000 4.139320	</row2>
+                  <row3>	1.484970 1.473117 -1.536011	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.808480 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.354149 -0.495112	</row1>
+                  <row2>	0.000000 0.809210 0.578820	</row2>
+                  <row3>	1.485000 1.346223 -3.768131	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.779769 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.761100 0.000000	</row1>
+                  <row2>	0.000000 0.000000 3.846301	</row2>
+                  <row3>	2.244747 1.037011 -1.931715	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.779769 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.761100 0.000000	</row1>
+                  <row2>	0.000000 0.000000 0.845136	</row2>
+                  <row3>	1.462000 0.870615 0.392183	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	A172_ASTRON_FL_3Dst_Solar_Strike	</modelsSet>
                 <boxCollider>
                   <row0>	1.801640 0.000000 0.000000	</row0>
                   <row1>	0.000000 2.019510 0.000000	</row1>
@@ -1280,6 +1381,39 @@
                   <row3>	-1.461540 0.870615 -0.442090	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	A172_ASTRON_FL_3Dst_Solar_Strike	</modelsSet>
+                <boxCollider>
+                  <row0>	1.801640 0.000000 0.000000	</row0>
+                  <row1>	0.000000 2.019510 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.486650	</row2>
+                  <row3>	-0.232492 1.010560 -0.165911	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.948755 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.918735 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.281650	</row2>
+                  <row3>	-1.485000 1.606720 -0.143372	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.808480 -0.000002 -0.000001	</row0>
+                  <row1>	0.000001 0.381735 0.474168	</row1>
+                  <row2>	-0.000001 -0.774979 0.623908	</row2>
+                  <row3>	-1.485039 1.410209 3.588539	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.779769 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.761100 0.000000	</row1>
+                  <row2>	0.000000 0.000000 4.003059	</row2>
+                  <row3>	-2.196594 0.870616 1.799866	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.779769 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.761100 0.000000	</row1>
+                  <row2>	0.000000 0.000000 0.845136	</row2>
+                  <row3>	-1.461540 0.870615 -0.442090	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -1324,6 +1458,39 @@
                 </wheelGroup>
               </wheelGroups>
               <hullCollider>
+                <boxCollider>
+                  <row0>	1.801640 0.000000 0.000000	</row0>
+                  <row1>	0.000000 2.019510 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.486650	</row2>
+                  <row3>	0.113822 1.010560 -0.165911	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.948755 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.918735 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.281650	</row2>
+                  <row3>	1.485000 1.606720 -0.143372	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.808480 -0.000002 0.000001	</row0>
+                  <row1>	0.000000 0.381735 0.474168	</row1>
+                  <row2>	-0.000001 -0.774979 0.623908	</row2>
+                  <row3>	1.485000 1.292030 3.627590	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.779769 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.761101 0.000000	</row1>
+                  <row2>	0.000000 0.000000 4.003061	</row2>
+                  <row3>	2.171356 0.870617 1.799889	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.779769 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.761100 0.000000	</row1>
+                  <row2>	0.000000 0.000000 0.845136	</row2>
+                  <row3>	1.572808 0.870615 -0.414361	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	A172_ASTRON_FL_3Dst_Solar_Strike	</modelsSet>
                 <boxCollider>
                   <row0>	1.801640 0.000000 0.000000	</row0>
                   <row1>	0.000000 2.019510 0.000000	</row1>
@@ -1636,24 +1803,150 @@
         </trackPair>
       </trackNodes>
       <groundNodes>
-        <group>
-          <template>	Track_L	</template>
+        <node>
+          <name>	Track_L0	</name>
+          <affectedWheelName>	W_L0	</affectedWheelName>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
           <isLeft>	true	</isLeft>
           <minOffset>	-0.1	</minOffset>
           <maxOffset>	0.2	</maxOffset>
-          <startIndex>	0	</startIndex>
-          <count>	8	</count>
-          <affectedWheelsTemplate>	W_L	</affectedWheelsTemplate>
-        </group>
-        <group>
-          <template>	Track_R	</template>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_L1	</name>
+          <affectedWheelName>	W_L1	</affectedWheelName>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.2	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_L2	</name>
+          <affectedWheelName>	W_L2	</affectedWheelName>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.2	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_L3	</name>
+          <affectedWheelName>	W_L3	</affectedWheelName>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.2	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_L4	</name>
+          <affectedWheelName>	W_L4	</affectedWheelName>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.2	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_L5	</name>
+          <affectedWheelName>	W_L5	</affectedWheelName>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.2	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_L6	</name>
+          <affectedWheelName>	W_L6	</affectedWheelName>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.2	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_L7	</name>
+          <affectedWheelName>	W_L7	</affectedWheelName>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.2	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R0	</name>
+          <affectedWheelName>	W_R0	</affectedWheelName>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
           <isLeft>	false	</isLeft>
           <minOffset>	-0.1	</minOffset>
           <maxOffset>	0.2	</maxOffset>
-          <startIndex>	0	</startIndex>
-          <count>	8	</count>
-          <affectedWheelsTemplate>	W_R	</affectedWheelsTemplate>
-        </group>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R1	</name>
+          <affectedWheelName>	W_R1	</affectedWheelName>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.2	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R2	</name>
+          <affectedWheelName>	W_R2	</affectedWheelName>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.2	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R3	</name>
+          <affectedWheelName>	W_R3	</affectedWheelName>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.2	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R4	</name>
+          <affectedWheelName>	W_R4	</affectedWheelName>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.2	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R5	</name>
+          <affectedWheelName>	W_R5	</affectedWheelName>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.2	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R6	</name>
+          <affectedWheelName>	W_R6	</affectedWheelName>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.2	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R7	</name>
+          <affectedWheelName>	W_R7	</affectedWheelName>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.2	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
       </groundNodes>
       <drivingWheels>	WD_L0 WD_L7	</drivingWheels>
       <effects>
@@ -1712,6 +2005,14 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <A172_ASTRON_FL_3Dst_Solar_Strike>
+              <segmentModelLeft>	vehicles/american/A172_ASTRON_FL/track/segment.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/american/A172_ASTRON_FL/track/segment.model	</segmentModelRight>
+              <segment2ModelLeft>	vehicles/american/A172_ASTRON_FL/track/segment2.model	</segment2ModelLeft>
+              <segment2ModelRight>	vehicles/american/A172_ASTRON_FL/track/segment2.model	</segment2ModelRight>
+            </A172_ASTRON_FL_3Dst_Solar_Strike>
+          </modelSets>
         </trackPair>
         <trackPair>
           <trackPairIdx>	1	</trackPairIdx>
@@ -1728,6 +2029,14 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <A172_ASTRON_FL_3Dst_Solar_Strike>
+              <segmentModelLeft>	vehicles/american/A172_ASTRON_FL/track/segment.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/american/A172_ASTRON_FL/track/segment.model	</segmentModelRight>
+              <segment2ModelLeft>	vehicles/american/A172_ASTRON_FL/track/segment2.model	</segment2ModelLeft>
+              <segment2ModelRight>	vehicles/american/A172_ASTRON_FL/track/segment2.model	</segment2ModelRight>
+            </A172_ASTRON_FL_3Dst_Solar_Strike>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -2821,7 +3130,7 @@
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	-0.05 0.03 2.29	</rayStart>
-              <rayEnd>	-0.05 0.03 2.61	</rayEnd>
+              <rayEnd>	-0.05 0.03 2.82	</rayEnd>
               <rayUp>	0.17 0 0	</rayUp>
               <applyToFabric>	false	</applyToFabric>
               <size>	0.53	</size>
@@ -2837,6 +3146,13 @@
             <undamaged>	vehicles/american/A172_ASTRON_FL/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A172_ASTRON_FL/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A172_ASTRON_FL/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <A172_ASTRON_FL_3Dst_Solar_Strike>
+                <undamaged>	vehicles/american/A172_ASTRON_FL/_skins/A172_ASTRON_FL_3Dst_Solar_Strike/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A172_ASTRON_FL/_skins/A172_ASTRON_FL_3Dst_Solar_Strike/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A172_ASTRON_FL/_skins/A172_ASTRON_FL_3Dst_Solar_Strike/crash/lod0/Gun_01.model	</exploded>
+              </A172_ASTRON_FL_3Dst_Solar_Strike>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A172_ASTRON_FL/collision/Gun_01.model	</collisionModelServer>
@@ -2856,6 +3172,13 @@
         <undamaged>	vehicles/american/A172_ASTRON_FL/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/american/A172_ASTRON_FL/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/american/A172_ASTRON_FL/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <A172_ASTRON_FL_3Dst_Solar_Strike>
+            <undamaged>	vehicles/american/A172_ASTRON_FL/_skins/A172_ASTRON_FL_3Dst_Solar_Strike/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A172_ASTRON_FL/_skins/A172_ASTRON_FL_3Dst_Solar_Strike/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A172_ASTRON_FL/_skins/A172_ASTRON_FL_3Dst_Solar_Strike/crash/lod0/Turret_01.model	</exploded>
+          </A172_ASTRON_FL_3Dst_Solar_Strike>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/american/A172_ASTRON_FL/collision/Turret_01.model	</collisionModelServer>
@@ -3176,6 +3499,38 @@
           <scale>	1.240319 1.239477 1.24033	</scale>
           <showOn>	256	</showOn>
           <clipAngle>	1.019098	</clipAngle>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35026	</slotId>
+          <tags></tags>
+          <compatibleModels>	A172_ASTRON_FL_3Dst_Solar_Strike	</compatibleModels>
+          <position>	1.443179 1.81414 -0.000237	</position>
+          <rotation>	2.129477 -1.534668 0.027335	</rotation>
+          <scale>	0.984421 0.984421 0.833817	</scale>
+          <showOn>	256	</showOn>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35027	</slotId>
+          <tags>	formfactor_square direction_right_to_left	</tags>
+          <compatibleModels>	A172_ASTRON_FL_3Dst_Solar_Strike	</compatibleModels>
+          <position>	-1.064913 1.898924 0.070286	</position>
+          <rotation>	2.892667 1.552281 -0.008353	</rotation>
+          <scale>	0.572755 0.572756 0.572757	</scale>
+          <showOn>	256	</showOn>
+          <verticalMirror>	true	</verticalMirror>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35028	</slotId>
+          <tags>	direction_left_to_right formfactor_square	</tags>
+          <compatibleModels>	A172_ASTRON_FL_3Dst_Solar_Strike	</compatibleModels>
+          <position>	-0.004751 2.277994 -1.745997	</position>
+          <rotation>	-3.133091 0.027661 -0.008981	</rotation>
+          <scale>	0.516588 0.516589 0.51659	</scale>
+          <showOn>	256	</showOn>
+          <verticalMirror>	true	</verticalMirror>
         </slot>
       </customizationSlots>
       <customization>

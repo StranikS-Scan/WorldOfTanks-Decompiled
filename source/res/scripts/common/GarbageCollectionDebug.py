@@ -5,6 +5,7 @@ import sys
 import itertools
 from bwdebug import DEBUG_MSG
 from bwdebug import ERROR_MSG
+import __builtin__ as builtins
 import BigWorld
 import StringIO
 import objgraph
@@ -13,6 +14,10 @@ MAX_LEN = 5
 MAX_DEPTH = 1
 TEST_SIMPLE_LEAK = False
 TEST_COMPLEX_LEAK = False
+EXCLUDED = dir(builtins) + ['frame']
+MAX_REFS_PER_GARBAGE = 10
+MAX_DISPLAYABLE_GARBAGE_PER_ITERATION = 30
+displayed_garbage = []
 try:
     import gc
     GC_DEBUG_FLAGS = gc.DEBUG_SAVEALL
@@ -108,7 +113,6 @@ def gcDump():
         ERROR_MSG('Could not import gc module; ' + 'garbage collection support is not compiled in')
         return
 
-    leakCount = 0
     gcDebugEnable()
     DEBUG_MSG('Forcing a garbage collection...')
     leakCount = gc.collect()
@@ -116,25 +120,66 @@ def gcDump():
     gcWriteLog(None, s, isError=leakCount > 0)
     if leakCount:
         gc_dump = gc.garbage[:]
-        if len(gc_dump) > 0:
-            garbage_ids = {id(x):x for x in gc_dump}
-            garbage_list = []
-            gc_refs, _ = get_refs(gc_dump, garbage_list, garbage_ids)
-            del garbage_list[:]
-            graph_info = get_graph_text_repr(gc_refs, garbage_ids, shortnames=False)
-            for obj in graph_info['nodes'].values():
-                gcWriteLog(None, repr(obj))
+        garbageLen = len(gc_dump)
+        if garbageLen > 0:
+            garbage_data = get_garbage_data_with_extended_info(gc_dump)
+            for data in garbage_data:
+                logStr = 'Source: {}. '.format(data['source'])
+                if data['referents']:
+                    logStr += 'Referents: {}. '.format(', '.join(data['referents']))
+                if data['referrers']:
+                    logStr += 'Referrers: {}. '.format(', '.join(data['referrers']))
+                gcWriteLog(None, logStr)
 
-            for obj in graph_info['edges']:
-                gcWriteLog(None, repr(obj))
-
-            graph_info['nodes'].clear()
-            del graph_info['edges'][:]
-            garbage_ids.clear()
-            del gc_refs[:]
             del gc_dump[:]
+        if garbageLen > MAX_DISPLAYABLE_GARBAGE_PER_ITERATION:
+            gcWriteLog(None, '{} elements omitted for performance purposes...'.format(garbageLen - MAX_DISPLAYABLE_GARBAGE_PER_ITERATION))
     del gc.garbage[:]
     return leakCount
+
+
+def get_garbage_data_with_extended_info(gc_dump):
+    result = []
+
+    def getName(obj, default=''):
+        gName = ''
+        try:
+            gName = obj.__class__.__name__
+        except AttributeError:
+            pass
+
+        return gName if gName else default
+
+    def analyze_refs(refs):
+        matchRefs = []
+        refCounter = 0
+        for ref in refs:
+            name = getName(ref)
+            if name and name not in EXCLUDED:
+                matchRefs.append(name)
+            refCounter += 1
+            if refCounter >= MAX_REFS_PER_GARBAGE:
+                break
+
+        return matchRefs
+
+    garbageCounter = 0
+    for garbage in gc_dump:
+        garbageID = id(garbage)
+        if garbageID in displayed_garbage:
+            continue
+        result.append({'source': (id(garbage),
+                    type(garbage),
+                    getName(garbage, '<indefinable>'),
+                    repr(garbage)[:100]),
+         'referents': analyze_refs(gc.get_referents(garbage)),
+         'referrers': analyze_refs(gc.get_referrers(garbage))})
+        displayed_garbage.append(id(garbage))
+        garbageCounter += 1
+        if garbageCounter >= MAX_DISPLAYABLE_GARBAGE_PER_ITERATION:
+            break
+
+    return result
 
 
 def get_refs(obj, source_list, known_ids, get_unknown_referents=False):

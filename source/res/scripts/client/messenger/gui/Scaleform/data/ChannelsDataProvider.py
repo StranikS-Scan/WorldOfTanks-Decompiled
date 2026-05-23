@@ -14,7 +14,8 @@ DEFAULT_FIELDS = {'clientID': 0,
  'isWindowOpened': False,
  'readyData': None,
  'isWindowFocused': False,
- 'tooltipData': None}
+ 'tooltipData': None,
+ 'isLocked': False}
 
 class ChannelsDataProvider(DAAPIDataProvider):
 
@@ -57,7 +58,8 @@ class ChannelsDataProvider(DAAPIDataProvider):
          'tooltipData': tooltipData,
          'isPrivate': data.get('isPrivate', False),
          'dbID': data.get('dbID', 0),
-         'userName': data.get('userName', None)}
+         'userName': data.get('userName', None),
+         'isLocked': data.get('isLocked', False)}
         if clientID in self.__data:
             self.__data[clientID].update(item)
         else:

@@ -6,13 +6,14 @@ from gui import g_htmlTemplates
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared.formatters import text_styles, getRoleText
+from gui.shared.formatters import text_styles
 from gui.shared.items_parameters import formatters as params_formatters
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips.common import BlocksTooltipData
 from gui.shared.tooltips.module import ModuleTooltipBlockConstructor
 from gui.shared.utils.functions import stripColorTagDescrTags
 from helpers import dependency
+from items import vehicles
 from skeletons.gui.game_control import IComp7Controller
 if typing.TYPE_CHECKING:
     from items.artefacts import Equipment, VisualScriptEquipment
@@ -26,19 +27,19 @@ class RoleSkillBattleTooltipData(BlocksTooltipData):
         self._setWidth(320)
         return
 
-    def _packBlocks(self, roleName):
-        equipment = self.context.buildItem(roleName)
+    def _packBlocks(self, equipmentID):
+        equipment = vehicles.g_cache.equipments()[equipmentID]
         if equipment is None:
-            _logger.error('Missing Role Skill for role = %s', roleName)
+            _logger.error('Missing Role Skill for equipmentID = %d', equipmentID)
             return []
         else:
-            items = [self.__packTooltipBlock(roleName, equipment)]
+            items = [self.__packTooltipBlock(equipment)]
             return items
 
     @staticmethod
-    def __packTooltipBlock(roleName, equipment):
+    def __packTooltipBlock(equipment):
         blocks = []
-        blocks.append(formatters.packTitleDescBlock(title=text_styles.main(getRoleText(roleName)), desc=text_styles.middleTitle(equipment.userString)))
+        blocks.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(equipment.userString)))
         active, passive = getRoleSkillDescription(equipment)
         if active:
             blocks.append(formatters.packTextBlockData(text=text_styles.standard(stripColorTagDescrTags(active)), padding=formatters.packPadding(bottom=15)))

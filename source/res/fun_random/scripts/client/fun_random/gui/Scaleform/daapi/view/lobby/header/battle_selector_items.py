@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/Scaleform/daapi/view/lobby/header/battle_selector_items.py
 from __future__ import absolute_import
+from account_helpers.AccountSettings import FunRandomMaps
 from adisp import adisp_process
 from constants import QUEUE_TYPE, PREBATTLE_TYPE
 from fun_random.gui.feature.fun_constants import FunSubModesState
-from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunSubModesWatcher
+from fun_random.gui.feature.util.fun_mixins import FunAccountSettingsHelper, FunAssetPacksMixin, FunSubModesWatcher
 from fun_random.gui.fun_gui_constants import PREBATTLE_ACTION_NAME, SELECTOR_BATTLE_TYPES
 from gui.impl import backport
 from gui.impl.gen import R
@@ -43,8 +44,17 @@ class _FunRandomItem(SelectorItem, FunAssetPacksMixin, FunSubModesWatcher):
         self._isVisible, self._isDisabled = self.__getIsVisible(), state.hasLockedState
         self._isSelected = state.isQueueSelected(QUEUE_TYPE.FUN_RANDOM)
 
+    def __markModeSelectorCardSeenForCurrentFep(self):
+        fepType = self._funRandomCtrl.getCurrentFunType()
+        key = FunRandomMaps.FUN_RANDOM_MODE_SELECTOR_CARD_SEEN_FEP_TYPES
+        seen = set(FunAccountSettingsHelper.getAccSetting(key))
+        if fepType not in seen:
+            seen.add(fepType)
+            FunAccountSettingsHelper.setAccSetting(key, seen)
+
     @adisp_process
     def _doSelect(self, dispatcher):
+        self.__markModeSelectorCardSeenForCurrentFep()
         yield self.selectFunRandomBattle()
 
     def __getIsVisible(self):

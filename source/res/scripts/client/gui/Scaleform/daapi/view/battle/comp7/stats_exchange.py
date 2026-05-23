@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/comp7/stats_exchange.py
 import typing
 import VOIP
-from constants import ROLE_TYPE_TO_LABEL
 from gui.Scaleform.daapi.view.battle.classic.stats_exchange import DynamicVehicleStatsComponent
 from gui.Scaleform.daapi.view.battle.shared.points_of_interest.stats_exchange import PointsOfInterestStatsController
 from gui.Scaleform.daapi.view.battle.shared.stats_exchange import broker, createExchangeBroker, vehicle
@@ -13,6 +12,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.comp7.comp7_i18n_helpers import RANK_MAP, DIVISION_MAP
 from helpers import dependency
+from items import vehicles
 from skeletons.gui.battle_session import IBattleSessionProvider
 if typing.TYPE_CHECKING:
     from gui.battle_control.arena_info.interfaces import IComp7VOIPController
@@ -26,7 +26,10 @@ class Comp7VehicleInfoComponent(vehicle.VehicleInfoComponent):
         rank, division = vInfoVO.gameModeSpecific.getValue(Comp7Keys.RANK, default=(0, 0))
         rankName = RANK_MAP[rank] if rank > 0 else ''
         divisionName = DIVISION_MAP[division] if division > 0 else ''
-        return self._data.update({'role': ROLE_TYPE_TO_LABEL.get(vInfoVO.vehicleType.role, ''),
+        equipmentID = vInfoVO.gameModeSpecific.getValue(Comp7Keys.ROLE_SKILL, default=0) or vInfoVO.selectedComp7Skill
+        equipment = vehicles.g_cache.equipments()[equipmentID] if equipmentID else None
+        return self._data.update({'equipmentName': equipment.name if equipment else '',
+         'equipmentID': equipmentID,
          'skillLevel': vInfoVO.gameModeSpecific.getValue(Comp7Keys.ROLE_SKILL_LEVEL, default=0),
          'rank': rankName,
          'rankDivision': divisionName,

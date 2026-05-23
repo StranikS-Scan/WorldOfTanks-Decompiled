@@ -22,7 +22,7 @@ from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURREN
 from gui.shared.tooltips.module import ModuleTooltipBlockConstructor
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IComp7Controller
+from skeletons.gui.game_control import IBattleModifiersController
 from skeletons.gui.shared import IItemsCache
 _TOOLTIP_MIN_WIDTH = 380
 _TOOLTIP_MAX_WIDTH = 420
@@ -30,7 +30,7 @@ _AUTOCANNON_SHOT_DISTANCE = 400
 _ASTERISK = '*'
 
 class ShellBlockToolTipData(BlocksTooltipData):
-    _comp7Controller = dependency.descriptor(IComp7Controller)
+    __battleModifiersController = dependency.descriptor(IBattleModifiersController)
 
     def __init__(self, context, basicDataAllowed=True):
         super(ShellBlockToolTipData, self).__init__(context, TOOLTIP_TYPE.SHELL)
@@ -57,8 +57,8 @@ class ShellBlockToolTipData(BlocksTooltipData):
         textGap = -2
         vDescr = paramsConfig.vehicle.descriptor if paramsConfig.vehicle is not None else None
         shots = None
-        if self._comp7Controller.isBattleModifiersAvailable() and vDescr is not None:
-            modifiers = self._comp7Controller.getBattleModifiersObject()
+        if self.__battleModifiersController.isBattleModifiersAvailable() and vDescr is not None:
+            modifiers = self.__battleModifiersController.getBattleModifiersObject()
             if modifiers is not None:
                 shots = copy.deepcopy(vDescr.gun.shots)
                 for shot in vDescr.gun.shots:

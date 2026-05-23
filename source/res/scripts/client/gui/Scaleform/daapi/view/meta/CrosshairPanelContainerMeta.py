@@ -201,3 +201,9 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
 
     def as_setShotHitMarkerVisibilityS(self, isVisible):
         return self.flashObject.as_setShotHitMarkerVisibility(isVisible) if self._isDAAPIInited() else None
+
+    def as_setGunCoolingTimeS(self, isActive, secondsLeft):
+        return self.flashObject.as_setGunCoolingTime(isActive, secondsLeft) if self._isDAAPIInited() else None
+
+    def as_setGunCoolingVisibilityS(self, isVisible):
+        return self.flashObject.as_setGunCoolingVisibility(isVisible) if self._isDAAPIInited() else None

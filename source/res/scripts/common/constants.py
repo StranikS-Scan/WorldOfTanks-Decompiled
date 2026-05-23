@@ -539,8 +539,6 @@ class FINISH_REASON:
     OWN_VEHICLE_DESTROYED = 9
     DESTROYED_OBJECTS = 10
     OBJECTIVES_COMPLETED = 11
-    HB_ENEMY_EXTERMINATION = 12
-    HB_ALLY_SPG_EXTERMINATION = 13
 
 
 FINISH_REASON_NAMES = dict([ (v, k) for k, v in FINISH_REASON.__dict__.iteritems() if not k.startswith('_') ])
@@ -991,6 +989,7 @@ class Configs(enum.Enum):
     COMP7_CONFIG = 'comp7_config'
     COMP7_RANKS_CONFIG = 'comp7_ranks_config'
     COMP7_REWARDS_CONFIG = 'comp7_rewards_config'
+    COMP7_SKILLS_CONFIG = 'comp7_skills_config'
     PERSONAL_RESERVES_CONFIG = 'personal_reserves_config'
     PLAY_LIMITS_CONFIG = 'play_limits_config'
     PRE_MODERATION_CONFIG = 'pre_moderation_config'
@@ -1019,8 +1018,11 @@ class Configs(enum.Enum):
     BATTLE_CONTEXT_HINTS_CONFIG = 'battle_context_hints_config'
     SETTINGS_LOGGING_CONFIG = 'settings_logging_config'
     RANDOM_MATCHMAKER_CONFIG = 'random_matchmaker_config'
-    WGSH_MODIFIER_CONFIG = 'wgsh_modifiers_config'
+    BATTLE_MODIFIER_CONFIG = 'battle_modifiers_config'
     NEWBIE_START_PAGE_CONFIG = 'newbie_start_page_config'
+    STALL_CONFIG = 'stall_config'
+    CONTROL_POINT_OVERRIDE_CONFIG = 'control_point_override_config'
+    NEWBIE_CHAT_LOCK_CONFIG = 'newbie_chat_lock_config'
 
 
 INBATTLE_CONFIGS = ['spgRedesignFeatures',
@@ -1030,7 +1032,8 @@ INBATTLE_CONFIGS = ['spgRedesignFeatures',
  'vehicle_post_progression_config',
  Configs.COMP7_CONFIG.value,
  Configs.FUN_RANDOM_CONFIG.value,
- Configs.BATTLE_CONTEXT_HINTS_CONFIG.value]
+ Configs.BATTLE_CONTEXT_HINTS_CONFIG.value,
+ Configs.COMP7_SKILLS_CONFIG.value]
 
 class RESTRICTION_TYPE:
     NONE = 0
@@ -1248,6 +1251,7 @@ class DEVELOPMENT_INFO:
     EXPLOSION_RAY = 7
     FRONTLINE = 9
     SERVER_DEBUG = 10
+    DEV_DATA_UPDATE = 11
     ENABLE_SENDING_VEH_ATTRS_TO_CLIENT = False
 
 
@@ -1319,11 +1323,6 @@ class ATTACK_REASON(object):
     STATIC_DEATH_ZONE = 'static_deathzone'
     CGF_WORLD = 'cgf_world'
     AUTOSHOOT = 'autoshoot'
-    PERSONAL_DEATH_ZONE = 'personal_death_zone'
-    BOMBERCAS = 'bombercas'
-    ARTILLERY_ROCKET = 'artillery_rocket'
-    ARTILLERY_MORTAR = 'artillery_mortar'
-    ARTILLERY_ON_YOURSELF = 'artillery_on_yourself'
     NONE = 'none'
 
     @classmethod
@@ -1361,14 +1360,8 @@ ATTACK_REASONS = (ATTACK_REASON.SHOT,
  ATTACK_REASON.FORT_ARTILLERY_EQ,
  ATTACK_REASON.STATIC_DEATH_ZONE,
  ATTACK_REASON.AUTOSHOOT,
- ATTACK_REASON.CGF_WORLD,
- ATTACK_REASON.PERSONAL_DEATH_ZONE,
- ATTACK_REASON.BOMBERCAS,
- ATTACK_REASON.ARTILLERY_ROCKET,
- ATTACK_REASON.ARTILLERY_MORTAR,
- ATTACK_REASON.ARTILLERY_ON_YOURSELF)
+ ATTACK_REASON.CGF_WORLD)
 ATTACK_REASON_INDICES = dict(((value, index) for index, value in enumerate(ATTACK_REASONS)))
-ATTACK_REASON_VALUES = dict(((index, value) for index, value in enumerate(ATTACK_REASONS)))
 BOT_RAM_REASONS = (ATTACK_REASON.BRANDER_RAM, ATTACK_REASON.CLING_BRANDER_RAM)
 WORLD_ATTACK_REASONS = (ATTACK_REASON.WORLD_COLLISION, ATTACK_REASON.CGF_WORLD)
 DEATH_REASON_ALIVE = -1
@@ -1946,7 +1939,10 @@ class REQUEST_COOLDOWN:
     CMD_SELL_VEHICLE = 1.0
     MARK_CUSTOMIZATION_ITEM = 0.5
     SET_INITIAL_PLAYER_EXP_LVL = 1.0
+    CMD_EQUIP_COMP7_SKILL = 1.0
+    CMD_EQUIP_COMP7_SKILL_CELL = 0.5
     CMD_OPTDEV_RESTORE = 1.0
+    PURCHASE_STALL_PRODUCT = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -2401,8 +2397,6 @@ class FAIRPLAY_VIOLATIONS:
     COMP7_DESERTER = 'comp7_deserter'
     BATTLEROYALE_DESERTER = 'battleroyale_deserter'
     BATTLEROYALE_AFK = 'battleroyale_afk'
-    HB_AFK = 'hb_afk'
-    HB_DESERTER = 'hb_deserter'
 
 
 FAIRPLAY_VIOLATIONS_NAMES = (FAIRPLAY_VIOLATIONS.DESERTER,
@@ -2413,9 +2407,7 @@ FAIRPLAY_VIOLATIONS_NAMES = (FAIRPLAY_VIOLATIONS.DESERTER,
  FAIRPLAY_VIOLATIONS.EPIC_DESERTER,
  FAIRPLAY_VIOLATIONS.COMP7_DESERTER,
  FAIRPLAY_VIOLATIONS.BATTLEROYALE_DESERTER,
- FAIRPLAY_VIOLATIONS.BATTLEROYALE_AFK,
- FAIRPLAY_VIOLATIONS.HB_AFK,
- FAIRPLAY_VIOLATIONS.HB_DESERTER)
+ FAIRPLAY_VIOLATIONS.BATTLEROYALE_AFK)
 FAIRPLAY_VIOLATIONS_MASKS = {name:1 << index for index, name in enumerate(FAIRPLAY_VIOLATIONS_NAMES)}
 
 class INVALID_CLIENT_STATS:
@@ -3818,23 +3810,6 @@ class UNIQUE_UNLOCK_FEATURE_NAMES:
     PARAGONS_FEATURE_NAME = 'paragons'
 
 
-class BuffComponentVisibilityMode(enum.IntEnum):
-    NONE = 0
-    SELF = 1
-    OTHERS = 2
-    ALL = 3
-
-
-class BuffTarget(enum.IntEnum):
-    VICTIM = 0
-    ATTACKER = 1
-
-
-class EventStorageModifiers(enum.Enum):
-    SOUND_ON_SHOT = 'soundOnShot'
-    MARKER = 'marker'
-
-
 ALL_EVENT_TYPES_FOR_BONUSES = 'all'
 EXTENSIONS_BONUSES = {}
 
@@ -3858,5 +3833,14 @@ class InitialExperienceChoice(enum.IntEnum):
     SKIPPED = 4
 
 
+LIMITED_UI_VERSION = 18
 SERVICE_TOKEN_PREFIX = 'cmd:'
 INVULNERABLE_EXTRAS = ('engine', 'ammoBay', 'fuelTank', 'radio', 'gun', 'track', 'turretRotator', 'surveyingDevice', 'crew')
+
+class DUAL_SHOT_CNT(enum.IntEnum):
+    SINGLE = 1
+    DUAL = 2
+
+
+NOVICE_RESTRICTIONS_BAN_TYPE = 'novice_restrictions'
+NOVICE_RESTRICTIONS_BAN_REASON = '#ban_reason:novice_restrictions'

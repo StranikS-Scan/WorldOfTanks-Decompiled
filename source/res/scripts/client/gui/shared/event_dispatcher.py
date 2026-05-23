@@ -644,8 +644,8 @@ def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, 
     return
 
 
-def showHeroTankPreview(vehTypeCompDescr, viewAlias=VIEW_ALIAS.HERO_VEHICLE_PREVIEW, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previousBackAlias=None, previewBackCb=None, hangarVehicleCD=None, bottomPanelTextData=None, backBtnLabel=None):
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(viewAlias), ctx={'itemCD': vehTypeCompDescr,
+def showHeroTankPreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previousBackAlias=None, previewBackCb=None, hangarVehicleCD=None, bottomPanelTextData=None, backBtnLabel=None):
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.HERO_VEHICLE_PREVIEW), ctx={'itemCD': vehTypeCompDescr,
      'previewAlias': previewAlias,
      'previewAppearance': HeroTankPreviewAppearance(),
      'isHeroTank': True,
@@ -1022,15 +1022,6 @@ def showParagonsRewardsWindow(bonuses, chapter=None, level=None, isVehicleSelect
         window.load()
 
 
-def isViewLoaded(layoutID):
-    uiLoader = dependency.instance(IGuiLoader)
-    if not uiLoader or not uiLoader.windowsManager:
-        return False
-    else:
-        view = uiLoader.windowsManager.getViewByLayoutID(layoutID)
-        return view is not None
-
-
 def showStylePreview(vehCD, style, descr='', backCallback=None, backBtnDescrLabel='', *args, **kwargs):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.STYLE_PREVIEW), ctx={'itemCD': vehCD,
      'style': style,
@@ -1158,14 +1149,14 @@ def showResSimpleDialog(resources, icon, formattedMessage, parent=None):
 
 
 @th_async
-def showDynamicButtonInfoDialogBuilder(resources, icon, formattedMessage, parent=None, loadCallback=None, destroyCallback=None):
+def showDynamicButtonInfoDialogBuilder(resources, icon, formattedMessage, parent=None):
     from gui.impl.dialogs import dialogs
     from gui.impl.dialogs.builders import InfoDialogBuilder
     builder = InfoDialogBuilder()
     builder.setMessagesAndButtons(resources, resources)
     builder.setIcon(icon)
     builder.setFormattedMessage(formattedMessage)
-    result = yield th_await(dialogs.showSimple(builder.build(parent), loadCallback=loadCallback, destroyCallback=destroyCallback))
+    result = yield th_await(dialogs.showSimple(builder.build(parent)))
     raise AsyncReturn(result)
 
 
@@ -2142,6 +2133,15 @@ def showComp7QualificationRewardsScreen(quests, notificationMgr=None):
     notificationMgr.append(WindowNotificationCommand(window))
 
 
+@dependency.replace_none_kwargs(guiLoader=IGuiLoader)
+def showComp7SkillSelectWindow(guiLoader=None):
+    view = guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.comp7.Comp7SkillSelectView())
+    if view is None:
+        from gui.impl.lobby.comp7.comp7_skill_select_view import Comp7SkillSelectWindow
+        Comp7SkillSelectWindow().load()
+    return
+
+
 @dependency.replace_none_kwargs(guiLoader=IGuiLoader, collections=ICollectionsSystemController)
 def showCollectionWindow(collectionId, page=None, backCallback=None, backBtnText='', parent=None, guiLoader=None, collections=None):
     if not collections.isEnabled():
@@ -2332,3 +2332,27 @@ def showPromoCodeRewardScreen(promoCodeToken, rewards, rewardsSource):
     notificationMgr = dependency.instance(INotificationWindowController)
     window = PromoCodeRewardScreenViewWindow(promoCodeToken, rewards, rewardsSource)
     notificationMgr.append(WindowNotificationWithWaitingCommand(window, WAITING_MESSAGE, WAITING_DATA_TIMEOUT))
+
+
+def showSummerSaleIntroWindow():
+    from gui.impl.lobby.summer_sale.summer_sale_intro_page_view import SummerSaleIntroPageView
+    window = LobbyWindow(content=SummerSaleIntroPageView(R.views.lobby.summer_sale.SummerSaleIntroPageView()), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN)
+    window.load()
+
+
+def showSummerSaleInfoPage():
+    from gui.impl.lobby.common.browser_view import BrowserView, makeSettings
+    from web.web_client_api.request import RequestWebApi
+    from web.web_client_api import webApiCollection, ui as ui_web_api, sound as sound_web_api
+    webHandlers = webApiCollection(RequestWebApi, ui_web_api.OpenWindowWebApi, ui_web_api.CloseWindowWebApi, ui_web_api.OpenTabWebApi, ui_web_api.NotificationWebApi, ui_web_api.ContextMenuWebApi, ui_web_api.UtilWebApi, sound_web_api.SoundWebApi, sound_web_api.HangarSoundWebApi)
+    pageUrl = GUI_SETTINGS.lookup('summerSaleInfoPage')
+    window = LobbyWindow(content=BrowserView(R.views.lobby.common.BrowserView(), makeSettings(url=pageUrl, isClosable=False, viewFlags=ViewFlags.VIEW, restoreBackground=True, webHandlers=webHandlers)), wndFlags=WindowFlags.WINDOW_FULLSCREEN, layer=WindowLayer.OVERLAY)
+    window.load()
+
+
+@th_async
+def showSummerSaleConfirmView(productCode):
+    from gui.impl.lobby.summer_sale.summer_sale_confirm_view import SummerSaleConfirmView
+    from gui.impl.dialogs.dialogs import showSingleDialogWithResultData
+    result = yield th_await(showSingleDialogWithResultData(productCode=productCode, layoutID=SummerSaleConfirmView.LAYOUT_ID, wrappedViewClass=SummerSaleConfirmView))
+    raise AsyncReturn(result)

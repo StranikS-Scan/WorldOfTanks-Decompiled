@@ -9,7 +9,7 @@ from GenericComponents import DecalComponent, EntityGOSync, AnimatorComponent
 from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery, autoregister
 from constants import ARENA_BONUS_TYPE
-from helpers import isPlayerAccount
+from helpers import isPlayerAccount, isPlayerAvatar
 from debug_utils import LOG_WARNING, LOG_ERROR
 from items.components.c11n_constants import STAT_TRACK_PROHIBITED_VALUES
 if typing.TYPE_CHECKING:
@@ -39,7 +39,7 @@ class StatTrackComponentManager(CGF.ComponentManager):
 
     def activate(self):
         self.__isInHangar = isPlayerAccount()
-        if self.__isInHangar:
+        if self.__isInHangar or not isPlayerAvatar():
             return
         self.__shouldCountKillOnArena = BigWorld.player().arena.bonusType == ARENA_BONUS_TYPE.REGULAR
         if self.__shouldCountKillOnArena:

@@ -61,13 +61,13 @@ class OnSquadHyperlinkClickPointcut(aop.Pointcut):
 class OnBrowserHyperlinkClickPointcut(aop.Pointcut):
 
     def __init__(self):
-        aop.Pointcut.__init__(self, 'WebBrowser', 'EventListener', 'onFilterNavigation', aspects=(_OnBrowserHyperlinkClickAspect,))
+        aop.Pointcut.__init__(self, 'MTWebBrowser', 'EventListener', 'onFilterNavigation', aspects=(_OnBrowserHyperlinkClickAspect,))
 
 
 class OnFailLoadingFramePointcut(aop.Pointcut):
 
     def __init__(self):
-        aop.Pointcut.__init__(self, 'WebBrowser', 'EventListener', 'onFailLoadingFrame', aspects=(_OnFailLoadingFrameAspect,))
+        aop.Pointcut.__init__(self, 'MTWebBrowser', 'EventListener', 'onFailLoadingFrame', aspects=(_OnFailLoadingFrameAspect,))
 
 
 def _show_continue_client_download_dialog():

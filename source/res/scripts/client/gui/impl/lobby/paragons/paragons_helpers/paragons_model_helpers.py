@@ -92,6 +92,7 @@ def fillChapterModel(chapterModel, chapterID, isNeedUpdateLevels=True, paragonsC
         tx.setChapterLevel(min(paragonsCtrl.paragons.storage.getProgress(chapterID) + 1, len(chapterLevelIDs)))
         tx.setPoints(points)
         tx.setIsAllRewardsClaimed(paragonsCtrl.isChapterComplete(chapterID) and paragonsCtrl.isAllSelectablesClaimed(chapterID))
+        tx.setTimeStamp(paragonsCtrl.getChapterCloseoutTimeStamp(chapterID))
         if isNeedUpdateLevels:
             _fillChapterLevelsModel(tx, chapterID, paragonsCtrl, tooltipData=tooltipData)
 

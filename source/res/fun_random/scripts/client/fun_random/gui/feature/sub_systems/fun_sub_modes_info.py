@@ -4,7 +4,7 @@ import typing
 from fun_random.gui.feature.fun_constants import FunSubModesState, STATE_TO_SINGLE
 from fun_random.gui.feature.util.fun_helpers import mergeIntervals
 from fun_random.gui.feature.models.common import FunSubModesStatus
-from helpers import time_utils
+from helpers import dependency, time_utils
 from shared_utils import first
 from skeletons.gui.game_control import IFunRandomController
 from gui.periodic_battles.models import PeriodType
@@ -15,6 +15,7 @@ _OUTSIDE_PERIODS = (PeriodType.BEFORE_SEASON, PeriodType.BETWEEN_SEASONS, Period
 _NO_BATTLES_PERIODS = _INNER_END_PERIODS + (PeriodType.AFTER_CYCLE,)
 
 class FunSubModesInfo(IFunRandomController.IFunSubModesInfo):
+    __funRandomController = dependency.descriptor(IFunRandomController)
 
     def __init__(self, subModesHolder):
         self.__subModes = subModesHolder
@@ -28,7 +29,7 @@ class FunSubModesInfo(IFunRandomController.IFunSubModesInfo):
 
     def isEntryPointAvailable(self):
         isAvailable = self.getSubModesStatus().state not in FunSubModesState.HIDDEN_ENTRY_STATES
-        return isAvailable and any([ subMode.isEntryPointAvailable() for subMode in self.__subModes.getSubModes() ])
+        return isAvailable and not self.__funRandomController.isLocked()
 
     def getLeftTimeToPrimeTimesEnd(self, now=None, subModes=None):
         now = now or time_utils.getCurrentTimestamp()

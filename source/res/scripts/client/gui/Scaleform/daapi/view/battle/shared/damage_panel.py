@@ -54,8 +54,7 @@ _STATE_HANDLERS = {VEHICLE_VIEW_STATE.HEALTH: '_updateHealthFromServer',
  VEHICLE_VIEW_STATE.THUNDER_STRIKE: '_updateThunderStrike',
  VEHICLE_VIEW_STATE.AOE_INSPIRE: '_updateAoeInspire',
  VEHICLE_VIEW_STATE.ALLY_SUPPORT: '_updateAllySupport',
- VEHICLE_VIEW_STATE.ABILITY: '_updateAbility',
- VEHICLE_VIEW_STATE.HB_LAST_STAND: '_updateHBLastStand'}
+ VEHICLE_VIEW_STATE.ABILITY: '_updateAbility'}
 _ABILITY_HANDLERS = {'tank_ram': 'as_showRammingS'}
 
 class STATUS_ID(CONST_CONTAINER):
@@ -429,10 +428,6 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener, IArenaVehiclesContr
         stunInfo = StunInfo(stunType=StunTypes.DEFAULT.value, startTime=BigWorld.serverTime(), endTime=BigWorld.serverTime() + duration, duration=duration, totalTime=duration)
         self.__updateStunSources(objID, stunInfo)
         self.__updateStunAnimations(stunInfo)
-
-    def _updateHBLastStand(self, _):
-        self._updateHealth(0)
-        self._updateDestroyed()
 
     def __checkAbilityActive(self, name):
         equipments = self.sessionProvider.shared.equipments.getEquipments()

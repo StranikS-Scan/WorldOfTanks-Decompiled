@@ -979,7 +979,10 @@ def loadAppearancePrefab(prefab, appearance, posloadCallback=None):
             posloadCallback(gameObject)
 
     if appearance.compoundModel:
-        CGF.loadGameObjectIntoHierarchy(prefab, appearance.gameObject, Math.Vector3(0, 0, 0), _onLoaded)
+        if prefab in appearance.prefabsResourceRefs:
+            CGF.loadGameObjectIntoHierarchyFromData(appearance.prefabsResourceRefs[prefab], appearance.gameObject, Math.Vector3(0, 0, 0), _onLoaded)
+        else:
+            CGF.loadGameObjectIntoHierarchy(prefab, appearance.gameObject, Math.Vector3(0, 0, 0), _onLoaded)
     else:
         appearance.pushToLoadingQueue(prefab, appearance.gameObject, Math.Vector3(0, 0, 0), _onLoaded)
 

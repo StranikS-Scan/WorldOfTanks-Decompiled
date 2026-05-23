@@ -711,17 +711,25 @@ class Stimulator(Equipment):
 
 
 class Repairkit(ActivatableEquipment):
-    __slots__ = ('repairAll', 'bonusValue')
+    __slots__ = ('repairAll', 'bonusValue', 'isMedkit', 'isRepairkit')
 
     def __init__(self):
         super(Repairkit, self).__init__()
+        self.isMedkit = False
         self.repairAll = False
+        self.isRepairkit = False
         self.bonusValue = component_constants.ZERO_FLOAT
 
     def _readConfig(self, xmlCtx, section):
         super(Repairkit, self)._readConfig(xmlCtx, section)
+        self.isMedkit = 'medkit' in self.tags
+        self.isRepairkit = 'repairkit' in self.tags
         self.repairAll = section.readBool('repairAll', False)
         self.bonusValue = _xml.readFraction(xmlCtx, section, 'bonusValue')
+
+    def updateVehicleAttrFactorsForAspect(self, vehicleDescr, factors, aspect, *args, **kwargs):
+        if self.isRepairkit:
+            factors['repairSpeed'] *= 1.0 + self.bonusValue
 
 
 class CountableConsumableConfigReader(object):
@@ -1019,8 +1027,7 @@ class EffectsConfigReader(object):
              'repeatCount': section.readInt('repeatCount', 1),
              'repeatDelay': section.readFloat('repeatDelay'),
              'areaColor': _xml.readIntOrNone(xmlCtx, section, 'areaColor'),
-             'repeatDelayDeviationPercent': 0,
-             'areaAccurateCollision': section.readBool('areaAccurateCollision', True)}
+             'repeatDelayDeviationPercent': 0}
             if section.has_key('repeatDelayDeviationPercent'):
                 effect['repeatDelayDeviationPercent'] = _xml.readInt(xmlCtx, section, 'repeatDelayDeviationPercent', minVal=0, maxVal=100)
             return effect
@@ -2562,6 +2569,7 @@ class Comp7ConcentrationEquipment(VisualScriptEquipment):
     def tooltipParams(self):
         params = super(Comp7ConcentrationEquipment, self).tooltipParams
         params['shotDispersionFactorsBuff'] = tuple(map(lambda b: (1.0 - b) * 100, self.shotDispersionFactors))
+        params['aimingTimeBuff'] = tuple(map(lambda b: (1.0 - b) * 100, self.aimingTimeBuff))
         return params
 
     def _readConfig(self, xmlCtx, section):
@@ -2767,7 +2775,7 @@ class Comp7MarchEquipment(VisualScriptEquipment):
     @property
     def tooltipParams(self):
         params = super(Comp7MarchEquipment, self).tooltipParams
-        params['enginePowerBuff'] = self.enginePowerBuff * 100
+        params['enginePowerBuff'] = (self.enginePowerBuff - 1.0) * 100
         params['invisibilityFactor'] = (self.invisibilityFactor - 1.0) * 100
         return params
 

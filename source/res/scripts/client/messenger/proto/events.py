@@ -122,7 +122,7 @@ class _ShadowEvents(object):
 
 
 class _MessengerEvents(object):
-    __slots__ = ('__channels', '__users', '__serviceChannel', '__voip', '__shadow', '__eventManager', 'onErrorReceived', 'onWarningReceived', 'onPluginConnected', 'onPluginDisconnected', 'onPluginConnectFailed', 'onLockPopUpMessages', 'onUnlockPopUpMessages', 'onComp7VOIPNotificationReceived', 'onRankedVOIPNotificationReceived', 'onNotificationsClear')
+    __slots__ = ('__channels', '__users', '__serviceChannel', '__voip', '__shadow', '__eventManager', 'onErrorReceived', 'onWarningReceived', 'onPluginConnected', 'onPluginDisconnected', 'onPluginConnectFailed', 'onLockPopUpMessages', 'onUnlockPopUpMessages', 'onComp7VOIPNotificationReceived', 'onRankedVOIPNotificationReceived')
 
     def __init__(self):
         super(_MessengerEvents, self).__init__()
@@ -141,7 +141,6 @@ class _MessengerEvents(object):
         self.onPluginConnectFailed = Event.Event(self.__eventManager)
         self.onLockPopUpMessages = Event.Event(self.__eventManager)
         self.onUnlockPopUpMessages = Event.Event(self.__eventManager)
-        self.onNotificationsClear = Event.Event(self.__eventManager)
 
     @property
     def channels(self):

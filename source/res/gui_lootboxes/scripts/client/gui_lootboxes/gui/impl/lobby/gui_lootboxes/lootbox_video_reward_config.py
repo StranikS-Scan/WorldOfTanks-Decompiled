@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: gui_lootboxes/scripts/client/gui_lootboxes/gui/impl/lobby/gui_lootboxes/lootbox_video_reward_config.py
-REWARD_VIDEO_CONFIG = {'tanks_birthday_2025': {'vehicles': {'hasFooter': True,
+REWARD_VIDEO_CONFIG = {'common': {'vehicles': {'hasFooter': True,
+                         'videos': [{'videoResName': None,
+                                     'duration': 20}]}},
+ 'tanks_birthday_2025': {'vehicles': {'hasFooter': True,
                                       'videos': [{'videoResName': 'intro',
                                                   'duration': 16}, {'videoResName': None,
                                                   'duration': 9,

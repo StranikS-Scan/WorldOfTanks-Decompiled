@@ -320,7 +320,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	0	</historical>
-    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <priceGroup>	MT 2D styles universal 1000g	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	usa	</nations>
@@ -548,7 +548,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	0	</historical>
-    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <priceGroup>	MT 2D styles universal 1000g	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	usa	</nations>
@@ -2716,7 +2716,7 @@
       <longDescriptionSpecial>	#vehicle_customization:A175_OTAC_MT_58_02_Style/longDescription	</longDescriptionSpecial>
       <texture>	gui/maps/vehicles/styles/A175_OTAC_MT_58_02.png	</texture>
     </style>
-    <tags>	styleStatTrackFrags lockedOnVehicle	</tags>
+    <tags>	lockedOnVehicle hiddenInUI styleStatTrackFrags	</tags>
     <vehicleFilter>
       <include>
         <vehicles>	usa:A175_OTAC_MT_58_02	</vehicles>
@@ -2767,5 +2767,53 @@
       </include>
     </vehicleFilter>
     <maxNumber>	1	</maxNumber>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A172_ASTRON_FL	</vehicles>
+      </include>
+    </vehicleFilter>
+    <maxNumber>	1	</maxNumber>
+    <style>
+      <id>	31507	</id>
+      <texture>	gui/maps/vehicles/styles/A172_ASTRON_FL_3Dst_Solar_Strike.png	</texture>
+      <userString>	#vehicle_customization:special_style/A172_ASTRON_FL_3Dst_Solar_Strike/name	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/A172_ASTRON_FL_3Dst_Solar_Strike/longDescription	</longDescriptionSpecial>
+      <modelsSet>	A172_ASTRON_FL_3Dst_Solar_Strike	</modelsSet>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31472	</id>
+              <slotId>	15086	</slotId>
+            </item>
+            <item>
+              <id>	31473	</id>
+              <slotId>	35026	</slotId>
+            </item>
+          </projection_decals>
+          <insignias>
+            <item>
+              <id>	31054	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+    </style>
   </itemGroup>
 </usa.xml>

@@ -46,6 +46,8 @@ class PlayStreakController(IPlayStreakController, EventsHandler):
         return bool(self.__itemsCache.items.playStreak.getRedemptionDay())
 
     def __updateData(self):
+        if not self.__lobbyContext.getServerSettings().playStreakConfig.isEnabled:
+            return
         settings = self.__lobbyContext.getServerSettings().playStreakConfig
         tokenCount = 0
         for token in SKIP_DAY_TOKENS:

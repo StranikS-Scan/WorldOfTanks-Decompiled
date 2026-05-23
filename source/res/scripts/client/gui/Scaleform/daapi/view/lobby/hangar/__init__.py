@@ -74,6 +74,7 @@ def getViewSettings():
     from gui.impl.lobby.ranked.ranked_hangar_widget import RankedWidgetComponent
     from gui.impl.lobby.hangar.modified_vehicle_parameters import ModifiedVehicleParameters
     from gui.Scaleform.daapi.view.lobby.hangar.entry_points.paragons_entry_point import ParagonsBannerEntryPoint
+    from gui.Scaleform.daapi.view.lobby.hangar.entry_points.summer_sale_entry_point import SummerSaleEntryPoint
     return (ConditionalViewSettings(VIEW_ALIAS.LOBBY_HANGAR, BootcampComponentOverride(Hangar, BCHangar), 'hangar.swf', WindowLayer.SUB_VIEW, None, VIEW_ALIAS.LOBBY_HANGAR, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_STRONGHOLD, StrongholdView, 'StrongholdView.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.LOBBY_STRONGHOLD, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.STRONGHOLD_ADS, StrongholdAdsView, 'browserScreen.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.STRONGHOLD_ADS, ScopeTemplates.LOBBY_SUB_SCOPE),
@@ -129,7 +130,8 @@ def getViewSettings():
      ComponentSettings(HANGAR_ALIASES.CAROUSEL_EVENT_ENTRY_HOLDER, CarouselEventEntryHolder, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.EARLY_ACCESS_SECONDARY_ENTRY_POINT, EarlyAccessEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.BATTLE_MODIFIERS_PANEL, BattleModifiersPanelInject, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(HANGAR_ALIASES.PARAGONS_BANNER_ENTRY_POINT, ParagonsBannerEntryPoint, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(HANGAR_ALIASES.PARAGONS_BANNER_ENTRY_POINT, ParagonsBannerEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(HANGAR_ALIASES.SUMMER_SALE_ENTRY_POINT, SummerSaleEntryPoint, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

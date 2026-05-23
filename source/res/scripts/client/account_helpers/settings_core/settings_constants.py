@@ -406,6 +406,7 @@ class OnceOnlyHints(CONST_CONTAINER):
     PARAGONS_RESEARCH_BUTTON_HINT = 'ParagonsResearchButtonHint'
     BIRTHDAY_POSTBATTLE_EXTRA_TAB_HINT = 'BirthdayPostbattleExtraTabHint'
     EPIC_SUPPLY_INFO_HINT = 'EpicSupplyInfoHint'
+    COMP7_SKILL_HINT = 'Comp7SkillHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):

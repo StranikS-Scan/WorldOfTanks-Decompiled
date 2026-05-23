@@ -246,7 +246,7 @@ class ConnectionHandler(ClientEventsHandler):
         client = self.client()
         if not client:
             return
-        g_logOutput.debug(CLIENT_LOG_AREA.CONNECTION, 'Client is disconnected')
+        g_logOutput.debug(CLIENT_LOG_AREA.CONNECTION, 'Client is disconnected', reason, description)
         self.__cancelReconnectCallback()
         self.__cancelReqTokenCallback()
         if reason == DISCONNECT_REASON.AUTHENTICATION:

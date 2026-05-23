@@ -8,6 +8,7 @@ if typing.TYPE_CHECKING:
     from auto_shoot_guns.auto_shoot_guns_common import AutoShootGunState
     from Math import Matrix
     from EmptyEntity import EmptyEntity
+    from Event import Event
     from items.vehicles import VehicleDescr
     from gui.shared.gui_items.Vehicle import Vehicle
     from vehicle_systems.appearance_cache import VehicleAppearanceCacheInfo
@@ -164,9 +165,6 @@ class IBattleFieldController(IArenaVehiclesController):
     __slots__ = ()
 
     def setVehicleHealth(self, vehicleID, newHealth):
-        pass
-
-    def postSetVehicleHealth(self):
         pass
 
     def setVehicleData(self, data):
@@ -384,6 +382,32 @@ class IPrebattleSetupsController(IArenaPeriodController, IArenaLoadController, V
         raise NotImplementedError
 
     def switchLayout(self, groupID, layoutIdx):
+        raise NotImplementedError
+
+
+class IPrebattleComp7SkillController(IArenaPeriodController, IArenaLoadController):
+    onVehicleSkillUpdated = None
+    onSwitchStopped = None
+
+    def getPrebattleVehicleID(self):
+        raise NotImplementedError
+
+    def getCtrlScope(self):
+        return _SCOPE.PERIOD | _SCOPE.LOAD
+
+    def isArenaLoaded(self):
+        raise NotImplementedError
+
+    def isSelectionStarted(self):
+        raise NotImplementedError
+
+    def stopSelection(self):
+        raise NotImplementedError
+
+    def switchComp7Skill(self, equipmentID):
+        raise NotImplementedError
+
+    def canSwitch(self):
         raise NotImplementedError
 
 

@@ -7,6 +7,7 @@ from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_card_types
 from gui.impl.lobby.mode_selector.items import setBattlePassState
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem, formatSeasonLeftTime
 from gui.impl.lobby.mode_selector.items.items_constants import ModeSelectorRewardID
+from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.ranked_battles.ranked_helpers.web_season_provider import UNDEFINED_LEAGUE_ID
 from helpers import dependency, int2roman
 from skeletons.gui.game_control import IRankedBattlesController
@@ -150,3 +151,6 @@ class RankedModeSelectorItem(ModeSelectorLegacyItem):
         if seasonName.isdigit():
             seasonName = int2roman(int(seasonName))
         return backport.text(R.strings.menu.headerButtons.battle.types.ranked.availability.season(), season=seasonName)
+
+    def getLimitedUIRule(self):
+        return LuiRules.RANKED_CONTENT

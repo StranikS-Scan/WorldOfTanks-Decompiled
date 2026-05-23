@@ -19,11 +19,9 @@ ARENA_BONUS_TYPE_FROM_QUEUE_TYPE_MAPPING = {QUEUE_TYPE.RANDOMS: ARENA_BONUS_TYPE
  QUEUE_TYPE.COMP7: ARENA_BONUS_TYPE.COMP7,
  QUEUE_TYPE.VERSUS_AI: ARENA_BONUS_TYPE.VERSUS_AI}
 
-def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, packer=None, startIndex=0, initialTooltipIndex=None):
+def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, packer=None, startIndex=0):
     packer = packer or getDefaultBonusPacker()
     tooltipIndex = 0 if tooltipData is None else len(tooltipData)
-    if initialTooltipIndex is not None:
-        tooltipIndex = initialTooltipIndex
     for bonus in (b for b in bonuses if b.isShowInGUI()):
         bonusList = packer.pack(bonus)
         withTooltips = bonusList and tooltipData is not None

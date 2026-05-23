@@ -1001,6 +1001,60 @@
       </damage>
     </armorSpalls>
   </_105mm_GEF_mod_51>
+  <_105mm_GS_mod_57_It35>
+    <id>	31010	</id>
+    <userString>	#italy_vehicles:_105mm_GS_mod_57_It35	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1165	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_GS_mod_57_It35>
+  <_105mm_GEP_mod_51_It35>
+    <id>	31011	</id>
+    <userString>	#italy_vehicles:_105mm_GEP_mod_51_It35	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_105mm_GEP_mod_51_It35>
+  <_105mm_GEF_mod_51_It35>
+    <id>	31012	</id>
+    <userString>	#italy_vehicles:_105mm_GEF_mod_51_It35	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1015	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	240	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_GEF_mod_51_It35>
   <_105mm_AP_T_M181>
     <id>	44	</id>
     <userString>	#italy_vehicles:_105mm_AP_T_M181	</userString>

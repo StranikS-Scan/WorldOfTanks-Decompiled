@@ -26,7 +26,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.missions.regular.missions_token_popover import MissionsTokenPopover
     from gui.Scaleform.daapi.view.lobby.missions.regular.vehicle_selector import RegularMissionVehicleSelector
     from gui.Scaleform.daapi.view.lobby.missions.regular.vehicle_selector import RegularVehicleSelectorCarousel
-    from gui.Scaleform.daapi.view.lobby.missions.regular.missions_views import MissionsGroupedView, MissionsMarathonView, MissionsCategoriesView, MissionsEventBoardsView, CurrentVehicleMissionsView
+    from gui.Scaleform.daapi.view.lobby.missions.regular.missions_views import MissionsGroupedView, MissionsMarathonView, MissionsCategoriesView, MissionsEventBoardsView, CurrentVehicleMissionsView, TemporaryMissionsTabView
     from gui.Scaleform.daapi.view.lobby.event_boards.event_boards_details_container_view import EventBoardsDetailsBrowserView, EventBoardsDetailsVehiclesView, EventBoardsDetailsAwardsView, EventBoardsDetailsBattleView
     from gui.Scaleform.daapi.view.lobby.event_boards.event_boards_browser_overlay import EventBoardsBrowserOverlay
     from gui.Scaleform.daapi.view.lobby.event_boards.event_boards_vehicles_overlay import EventBoardsVehiclesOverlay
@@ -50,6 +50,7 @@ def getViewSettings():
      ComponentSettings(QUESTS_ALIASES.BATTLE_MATTERS_VIEW_PY_ALIAS, BattleMattersMissionComponent, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS, MissionsEventBoardsView, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS, MissionsCategoriesView, ScopeTemplates.VIEW_SCOPE),
+     ComponentSettings(QUESTS_ALIASES.TEMP_VIEW_PY_ALIAS, TemporaryMissionsTabView, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS, CurrentVehicleMissionsView, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MISSIONS_VEHICLE_SELECTOR_ALIAS, RegularMissionVehicleSelector, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(QUESTS_ALIASES.VEHICLE_SELECTOR_CAROUSEL_ALIAS, RegularVehicleSelectorCarousel, ScopeTemplates.DEFAULT_SCOPE),
@@ -84,7 +85,7 @@ class MissionsPackageBusinessHandler(PackageBusinessHandler):
             elif tabAlias == QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS:
                 subView.currentTab.updateState(**event.ctx)
                 subView.currentTab.markVisited()
-            elif tabAlias == QUESTS_ALIASES.BATTLE_MATTERS_VIEW_PY_ALIAS:
+            elif tabAlias in (QUESTS_ALIASES.BATTLE_MATTERS_VIEW_PY_ALIAS, QUESTS_ALIASES.TEMP_VIEW_PY_ALIAS):
                 subView.currentTab.updateState(**event.ctx)
         else:
             self.loadViewByCtxEvent(event)

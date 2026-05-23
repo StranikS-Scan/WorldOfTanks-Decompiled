@@ -219,6 +219,7 @@
     <V-54K_1_02_B>	31034	</V-54K_1_02_B>
     <V-12_T>	31035	</V-12_T>
     <A_105>	31036	</A_105>
+    <_5TDF_152>	31037	</_5TDF_152>
     <M_50TI_2>	31038	</M_50TI_2>
     <UTD_20_7x7>	31040	</UTD_20_7x7>
     <V_54BB>	31052	</V_54BB>
@@ -235,7 +236,6 @@
     <M_40_1200_M>	31065	</M_40_1200_M>
     <M_40_1000_M>	31066	</M_40_1000_M>
     <M_40_1200_Z>	31067	</M_40_1200_Z>
-    <Hercules_JXD>	31068	</Hercules_JXD>
     <V_2_34_100>	31074	</V_2_34_100>
     <V_2SN>	31070	</V_2SN>
     <DD_1>	31071	</DD_1>
@@ -266,41 +266,9 @@
     <_2xV_11_700_T>	35004	</_2xV_11_700_T>
     <M_40_1200_M_T>	35005	</M_40_1200_M_T>
     <DG>	31076	</DG>
+    <_8TDF_R250>	31081	</_8TDF_R250>
+    <M_850_R253>	31083	</M_850_R253>
     <Baloon_Engine>	40010	</Baloon_Engine>
-    <M-17F_hb25>	40000	</M-17F_hb25>
-    <V-2K_hb25>	40001	</V-2K_hb25>
-    <V-5_hb25>	40002	</V-5_hb25>
-    <V-2IS_hb25>	40003	</V-2IS_hb25>
-    <V-11_700_hb2>	40004	</V-11_700_hb2>
-    <V_2_hb25>	40005	</V_2_hb25>
-    <GAZ_T_26_hb25>	40006	</GAZ_T_26_hb25>
-    <T-26F_hb25>	40007	</T-26F_hb25>
-    <V_3BT_hb25>	40008	</V_3BT_hb25>
-    <M-80_hb25>	40009	</M-80_hb25>
-    <M-80_hb25__0>	40011	</M-80_hb25__0>
-    <V-2-34_hb25>	40012	</V-2-34_hb25>
-    <V-2-34_hb25__0>	40013	</V-2-34_hb25__0>
-    <V-2IS_hb25__0>	40014	</V-2IS_hb25__0>
-    <V-2IS_hb25__1>	40015	</V-2IS_hb25__1>
-    <V-54K_hb25>	40016	</V-54K_hb25>
-    <V-2-54IS_hb25>	40017	</V-2-54IS_hb25>
-    <V-2IS_B_hb25>	40018	</V-2IS_B_hb25>
-    <V-2IS_B_hb25__0>	40019	</V-2IS_B_hb25__0>
-    <V-2-54IS_hb25__0>	40020	</V-2-54IS_hb25__0>
-    <V-2-34A_hb25>	40021	</V-2-34A_hb25>
-    <V-2IS_R1_hb25>	40022	</V-2IS_R1_hb25>
-    <V-2-34M_hb25>	40023	</V-2-34M_hb25>
-    <V-2IS_B_hb25__1>	40024	</V-2IS_B_hb25__1>
-    <V-2-54IS_hb25__1>	40025	</V-2-54IS_hb25__1>
-    <V-12_hb25>	40026	</V-12_hb25>
-    <V-44A_hb25>	40027	</V-44A_hb25>
-    <V-44_hb25>	40028	</V-44_hb25>
-    <M-17F_R_hb25>	40029	</M-17F_R_hb25>
-    <V-2_hb25>	40030	</V-2_hb25>
-    <V_2K_hb25>	40031	</V_2K_hb25>
-    <GAZ-34-BT_hb26>	40032	</GAZ-34-BT_hb26>
-    <V-2-54_hb26>	40033	</V-2-54_hb26>
-    <M-17FA_hb25>	40034	</M-17FA_hb25>
   </ids>
   <shared>
     <V-2>
@@ -2037,8 +2005,8 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	470	</rpm_min>
-      <rpm_max>	1960	</rpm_max>
+      <rpm_min>	435	</rpm_min>
+      <rpm_max>	2030	</rpm_max>
     </V-12-6M_02>
     <V-12-6M1>
       <userString>	#ussr_vehicles:V-12-6M1	</userString>
@@ -2943,6 +2911,23 @@
       <rpm_min>	379	</rpm_min>
       <rpm_max>	2141	</rpm_max>
     </_5TDF>
+    <_5TDF_152>
+      <userString>	#ussr_vehicles:_5TDF_152	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	50000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	600	</power>
+      <weight>	1050	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	2000	</rpm_max>
+    </_5TDF_152>
     <_5TDF_O>
       <userString>	#ussr_vehicles:_5TDF_O	</userString>
       <tags>	diesel	</tags>
@@ -2960,6 +2945,23 @@
       <rpm_min>	400	</rpm_min>
       <rpm_max>	2000	</rpm_max>
     </_5TDF_O>
+    <_8TDF_R250>
+      <userString>	#ussr_vehicles:_8TDF_R250	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	132000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	299	</rpm_min>
+      <rpm_max>	2301	</rpm_max>
+    </_8TDF_R250>
     <GTD_700P>
       <userString>	#ussr_vehicles:GTD_700P	</userString>
       <tags>	diesel	</tags>
@@ -3984,6 +3986,23 @@
       <rpm_min>	425	</rpm_min>
       <rpm_max>	2050	</rpm_max>
     </M_850>
+    <M_850_R253>
+      <userString>	#ussr_vehicles:M_850_R253	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	132000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
+      <power>	830	</power>
+      <weight>	1550	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	485	</rpm_min>
+      <rpm_max>	1930	</rpm_max>
+    </M_850_R253>
     <V_11_NC>
       <userString>	#ussr_vehicles:V_11_NC	</userString>
       <tags>	diesel	</tags>
@@ -4687,23 +4706,6 @@
       <rpm_min>	470	</rpm_min>
       <rpm_max>	2094	</rpm_max>
     </GTD_3TP>
-    <Hercules_JXD>
-      <userString>	#ussr_vehicles:Hercules_JXD	</userString>
-      <tags>	gasoline	</tags>
-      <level>	8	</level>
-      <price>	50000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
-      <power>	95	</power>
-      <weight>	327	</weight>
-      <maxHealth>	260	</maxHealth>
-      <maxRegenHealth>	129	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	400	</rpm_min>
-      <rpm_max>	3200	</rpm_max>
-    </Hercules_JXD>
     <M_40_1200_F>
       <userString>	#ussr_vehicles:M_40_1200_F	</userString>
       <tags>	diesel	</tags>
@@ -4770,583 +4772,5 @@
       <rpm_min>	359	</rpm_min>
       <rpm_max>	2692	</rpm_max>
     </GTD_1GV8>
-    <M-17F_hb25>
-      <userString>	#ussr_vehicles:M-17F	</userString>
-      <tags>	gasoline	</tags>
-      <level>	4	</level>
-      <price>	13460	</price>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	500	</power>
-      <weight>	610	</weight>
-      <maxHealth>	90	</maxHealth>
-      <maxRegenHealth>	44	</maxRegenHealth>
-      <repairCost>	4	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	312	</rpm_min>
-      <rpm_max>	2801	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </M-17F_hb25>
-    <V-2K_hb25>
-      <userString>	#ussr_vehicles:V-2K	</userString>
-      <tags>	diesel	</tags>
-      <level>	6	</level>
-      <price>	23050	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	500	</power>
-      <weight>	750	</weight>
-      <maxHealth>	145	</maxHealth>
-      <maxRegenHealth>	72	</maxRegenHealth>
-      <repairCost>	6	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	386	</rpm_min>
-      <rpm_max>	2040	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </V-2K_hb25>
-    <V-5_hb25>
-      <userString>	#ussr_vehicles:V-5	</userString>
-      <tags>	diesel	</tags>
-      <level>	6	</level>
-      <price>	27860	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	640	</power>
-      <weight>	750	</weight>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	349	</rpm_min>
-      <rpm_max>	2152	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </V-5_hb25>
-    <V-2IS_hb25>
-      <userString>	#ussr_vehicles:V-2IS	</userString>
-      <tags>	diesel	</tags>
-      <level>	7	</level>
-      <price>	36000	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	600	</power>
-      <weight>	750	</weight>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	360	</rpm_min>
-      <rpm_max>	2120	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </V-2IS_hb25>
-    <V-11_700_hb2>
-      <userString>	#ussr_vehicles:V-11_700	</userString>
-      <tags>	diesel	</tags>
-      <level>	8	</level>
-      <price>	55270	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	700	</power>
-      <weight>	750	</weight>
-      <maxHealth>	260	</maxHealth>
-      <maxRegenHealth>	130	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	333	</rpm_min>
-      <rpm_max>	2200	</rpm_max>
-    </V-11_700_hb2>
-    <V_2_hb25>
-      <userString>	#ussr_vehicles:V-2	</userString>
-      <tags>	diesel	</tags>
-      <level>	5	</level>
-      <price>	18750	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	500	</power>
-      <weight>	750	</weight>
-      <maxHealth>	105	</maxHealth>
-      <maxRegenHealth>	52	</maxRegenHealth>
-      <repairCost>	4	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	386	</rpm_min>
-      <rpm_max>	2040	</rpm_max>
-    </V_2_hb25>
-    <GAZ_T_26_hb25>
-      <userString>	#ussr_vehicles:GAZ_T_26	</userString>
-      <tags>	gasoline	</tags>
-      <level>	2	</level>
-      <price>	1500	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	130	</power>
-      <weight>	545	</weight>
-      <maxHealth>	50	</maxHealth>
-      <maxRegenHealth>	25	</maxRegenHealth>
-      <repairCost>	2	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	336	</rpm_min>
-      <rpm_max>	2522	</rpm_max>
-    </GAZ_T_26_hb25>
-    <T-26F_hb25>
-      <userString>	#ussr_vehicles:T-26F	</userString>
-      <tags>	gasoline	</tags>
-      <level>	2	</level>
-      <price>	1500	</price>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	130	</power>
-      <weight>	545	</weight>
-      <maxHealth>	50	</maxHealth>
-      <maxRegenHealth>	25	</maxRegenHealth>
-      <repairCost>	2	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	336	</rpm_min>
-      <rpm_max>	2522	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </T-26F_hb25>
-    <V_3BT_hb25>
-      <userString>	#ussr_vehicles:V_3BT	</userString>
-      <tags>	diesel	</tags>
-      <level>	4	</level>
-      <price>	11000	</price>
-      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
-      <power>	400	</power>
-      <weight>	540	</weight>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
-      <repairCost>	4	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	212	</rpm_min>
-      <rpm_max>	2274	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </V_3BT_hb25>
-    <M-80_hb25>
-      <userString>	#ussr_vehicles:M-80	</userString>
-      <tags>	gasoline	</tags>
-      <level>	3	</level>
-      <price>	4130	</price>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	170	</power>
-      <weight>	550	</weight>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	35	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	286	</rpm_min>
-      <rpm_max>	2683	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </M-80_hb25>
-    <M-17FA_hb25>
-      <userString>	#ussr_vehicles:M-17FA	</userString>
-      <tags>	gasoline	</tags>
-      <notInShop>	true	</notInShop>
-      <level>	4	</level>
-      <price>	13460	</price>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	500	</power>
-      <weight>	610	</weight>
-      <maxHealth>	90	</maxHealth>
-      <maxRegenHealth>	44	</maxRegenHealth>
-      <repairCost>	4	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	312	</rpm_min>
-      <rpm_max>	2801	</rpm_max>
-    </M-17FA_hb25>
-    <M-80_hb25__0>
-      <userString>	#ussr_vehicles:M-80	</userString>
-      <tags>	gasoline	</tags>
-      <level>	3	</level>
-      <price>	4130	</price>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	170	</power>
-      <weight>	550	</weight>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	35	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	286	</rpm_min>
-      <rpm_max>	2683	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </M-80_hb25__0>
-    <V-2-34_hb25>
-      <userString>	#ussr_vehicles:V-2-34	</userString>
-      <tags>	diesel	</tags>
-      <level>	6	</level>
-      <price>	27860	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	500	</power>
-      <weight>	750	</weight>
-      <maxHealth>	145	</maxHealth>
-      <maxRegenHealth>	72	</maxRegenHealth>
-      <repairCost>	6	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	386	</rpm_min>
-      <rpm_max>	2040	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </V-2-34_hb25>
-    <V-2-34_hb25__0>
-      <userString>	#ussr_vehicles:V-2-34	</userString>
-      <tags>	diesel	</tags>
-      <level>	6	</level>
-      <price>	27860	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	500	</power>
-      <weight>	750	</weight>
-      <maxHealth>	145	</maxHealth>
-      <maxRegenHealth>	72	</maxRegenHealth>
-      <repairCost>	6	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	386	</rpm_min>
-      <rpm_max>	2040	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </V-2-34_hb25__0>
-    <V-2IS_hb25__0>
-      <userString>	#ussr_vehicles:V-2IS	</userString>
-      <tags>	diesel	</tags>
-      <level>	7	</level>
-      <price>	36000	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	600	</power>
-      <weight>	750	</weight>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	360	</rpm_min>
-      <rpm_max>	2120	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </V-2IS_hb25__0>
-    <V-2IS_hb25__1>
-      <userString>	#ussr_vehicles:V-2IS	</userString>
-      <tags>	diesel	</tags>
-      <level>	7	</level>
-      <price>	36000	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	600	</power>
-      <weight>	750	</weight>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	360	</rpm_min>
-      <rpm_max>	2120	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </V-2IS_hb25__1>
-    <V-54K_hb25>
-      <userString>	#ussr_vehicles:V-54K	</userString>
-      <tags>	diesel	</tags>
-      <level>	8	</level>
-      <price>	58000	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	600	</power>
-      <weight>	750	</weight>
-      <maxHealth>	260	</maxHealth>
-      <maxRegenHealth>	130	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	360	</rpm_min>
-      <rpm_max>	2120	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </V-54K_hb25>
-    <V-2-54IS_hb25>
-      <userString>	#ussr_vehicles:V-2-54IS	</userString>
-      <tags>	diesel	</tags>
-      <level>	9	</level>
-      <price>	79290	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	700	</power>
-      <weight>	700	</weight>
-      <maxHealth>	370	</maxHealth>
-      <maxRegenHealth>	185	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	333	</rpm_min>
-      <rpm_max>	2200	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </V-2-54IS_hb25>
-    <V-2IS_B_hb25>
-      <userString>	#ussr_vehicles:V-2IS_B	</userString>
-      <tags>	diesel	</tags>
-      <level>	7	</level>
-      <price>	36000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	600	</power>
-      <weight>	750	</weight>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	360	</rpm_min>
-      <rpm_max>	2120	</rpm_max>
-    </V-2IS_B_hb25>
-    <V-2IS_B_hb25__0>
-      <userString>	#ussr_vehicles:V-2IS_B	</userString>
-      <tags>	diesel	</tags>
-      <level>	7	</level>
-      <price>	36000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	600	</power>
-      <weight>	750	</weight>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	360	</rpm_min>
-      <rpm_max>	2120	</rpm_max>
-    </V-2IS_B_hb25__0>
-    <V-2-54IS_hb25__0>
-      <userString>	#ussr_vehicles:V-2-54IS	</userString>
-      <tags>	diesel	</tags>
-      <level>	9	</level>
-      <price>	79290	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	700	</power>
-      <weight>	700	</weight>
-      <maxHealth>	370	</maxHealth>
-      <maxRegenHealth>	185	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	333	</rpm_min>
-      <rpm_max>	2200	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </V-2-54IS_hb25__0>
-    <V-2-34A_hb25>
-      <userString>	#ussr_vehicles:V-2-34	</userString>
-      <tags>	diesel	</tags>
-      <level>	6	</level>
-      <price>	27860	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	600	</power>
-      <weight>	750	</weight>
-      <maxHealth>	145	</maxHealth>
-      <maxRegenHealth>	72	</maxRegenHealth>
-      <repairCost>	6	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	386	</rpm_min>
-      <rpm_max>	2040	</rpm_max>
-    </V-2-34A_hb25>
-    <V-2IS_R1_hb25>
-      <userString>	#ussr_vehicles:V-2IS_R	</userString>
-      <tags>	diesel	</tags>
-      <level>	6	</level>
-      <price>	29000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	600	</power>
-      <weight>	750	</weight>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	381	</rpm_min>
-      <rpm_max>	2056	</rpm_max>
-    </V-2IS_R1_hb25>
-    <V-2-34M_hb25>
-      <userString>	#ussr_vehicles:V-2-34M	</userString>
-      <tags>	diesel	</tags>
-      <level>	6	</level>
-      <price>	29500	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	520	</power>
-      <weight>	750	</weight>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	381	</rpm_min>
-      <rpm_max>	2056	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </V-2-34M_hb25>
-    <V-2IS_B_hb25__1>
-      <userString>	#ussr_vehicles:V-2IS_B	</userString>
-      <tags>	diesel	</tags>
-      <level>	7	</level>
-      <price>	36000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	600	</power>
-      <weight>	750	</weight>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	360	</rpm_min>
-      <rpm_max>	2120	</rpm_max>
-    </V-2IS_B_hb25__1>
-    <V-2-54IS_hb25__1>
-      <userString>	#ussr_vehicles:V-2-54IS	</userString>
-      <tags>	diesel	</tags>
-      <level>	9	</level>
-      <price>	79290	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	700	</power>
-      <weight>	700	</weight>
-      <maxHealth>	370	</maxHealth>
-      <maxRegenHealth>	185	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	333	</rpm_min>
-      <rpm_max>	2200	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </V-2-54IS_hb25__1>
-    <V-12_hb25>
-      <userString>	#ussr_vehicles:V-12	</userString>
-      <tags>	diesel	</tags>
-      <level>	10	</level>
-      <price>	128000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	750	</power>
-      <weight>	1024	</weight>
-      <maxHealth>	370	</maxHealth>
-      <maxRegenHealth>	185	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	320	</rpm_min>
-      <rpm_max>	2240	</rpm_max>
-    </V-12_hb25>
-    <V-44A_hb25>
-      <userString>	#ussr_vehicles:V-44A	</userString>
-      <tags>	diesel	</tags>
-      <level>	6	</level>
-      <price>	27860	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	500	</power>
-      <weight>	750	</weight>
-      <maxHealth>	145	</maxHealth>
-      <maxRegenHealth>	72	</maxRegenHealth>
-      <repairCost>	6	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	386	</rpm_min>
-      <rpm_max>	2040	</rpm_max>
-    </V-44A_hb25>
-    <V-44_hb25>
-      <userString>	#ussr_vehicles:V-44	</userString>
-      <tags>	diesel	</tags>
-      <level>	6	</level>
-      <price>	29000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	700	</power>
-      <weight>	750	</weight>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	317	</rpm_min>
-      <rpm_max>	2248	</rpm_max>
-    </V-44_hb25>
-    <M-17F_R_hb25>
-      <userString>	#ussr_vehicles:M-17F_R	</userString>
-      <tags>	gasoline	</tags>
-      <level>	7	</level>
-      <price>	35000	</price>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <power>	700	</power>
-      <weight>	610	</weight>
-      <maxHealth>	90	</maxHealth>
-      <maxRegenHealth>	44	</maxRegenHealth>
-      <repairCost>	4	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	564	</rpm_min>
-      <rpm_max>	2508	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </M-17F_R_hb25>
-    <V-2_hb25>
-      <userString>	#ussr_vehicles:V-2	</userString>
-      <tags>	diesel	</tags>
-      <level>	5	</level>
-      <price>	18750	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	480	</power>
-      <weight>	750	</weight>
-      <maxHealth>	105	</maxHealth>
-      <maxRegenHealth>	52	</maxRegenHealth>
-      <repairCost>	4	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	392	</rpm_min>
-      <rpm_max>	2024	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </V-2_hb25>
-    <V_2K_hb25>
-      <userString>	#ussr_vehicles:V_2K	</userString>
-      <tags>	diesel	</tags>
-      <level>	6	</level>
-      <price>	23050	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	500	</power>
-      <weight>	750	</weight>
-      <maxHealth>	145	</maxHealth>
-      <maxRegenHealth>	72	</maxRegenHealth>
-      <repairCost>	6	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	386	</rpm_min>
-      <rpm_max>	2040	</rpm_max>
-    </V_2K_hb25>
-    <V-2-54_hb26>
-      <userString>	#ussr_vehicles:V-2-54	</userString>
-      <tags>	diesel	</tags>
-      <level>	9	</level>
-      <price>	79290	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	620	</power>
-      <weight>	700	</weight>
-      <maxHealth>	370	</maxHealth>
-      <maxRegenHealth>	185	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	379	</rpm_min>
-      <rpm_max>	2060	</rpm_max>
-    </V-2-54_hb26>
-    <GAZ-34-BT_hb26>
-      <userString>	#ussr_vehicles:GAZ-34-BT	</userString>
-      <tags>	gasoline	</tags>
-      <level>	8	</level>
-      <price>	57270	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <power>	890	</power>
-      <weight>	632	</weight>
-      <maxHealth>	260	</maxHealth>
-      <maxRegenHealth>	130	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	365	</rpm_min>
-      <rpm_max>	2963	</rpm_max>
-    </GAZ-34-BT_hb26>
   </shared>
 </engines.xml>

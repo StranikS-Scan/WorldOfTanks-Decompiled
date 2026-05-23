@@ -59,7 +59,6 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.tutorial import ITutorialLoader
 from soft_exception import SoftException
-from historical_battles.skeletons.gui.game_event_controller import IGameEventController
 if typing.TYPE_CHECKING:
     from typing import Optional
 _logger = logging.getLogger(__name__)
@@ -524,9 +523,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         emptyHeaderVO = {'isVisible': False,
          'quests': []}
         if not self.__tutorialLoader.gui.hangarHeaderEnabled:
-            return emptyHeaderVO
-        historicalBattleController = dependency.getInstanceIfHas(IGameEventController)
-        if historicalBattleController and historicalBattleController.isHBPrbActive():
             return emptyHeaderVO
         versusAIController = dependency.getInstanceIfHas(IVersusAIController)
         if versusAIController and versusAIController.isVersusAIPrbActive():

@@ -98,10 +98,6 @@ class EventStats(EventStatsMeta, IArenaVehiclesController):
     def setDescription(self, desc):
         self._desc = desc
 
-    @property
-    def hasTabs(self):
-        return False
-
     def __onArenaPeriodChange(self, period, periodEndTime, periodLength, periodAdditionalInfo):
         if period == ARENA_PERIOD.BATTLE:
             self.__updateStats()

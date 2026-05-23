@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/errors.py
+from constants import NOVICE_RESTRICTIONS_BAN_TYPE
 from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI as I18N_INGAME_GUI
 from helpers import i18n, html
 from helpers.time_utils import makeLocalServerTime
 from messenger.proto.interfaces import IChatError
-from messenger.proto.shared_errors import ChatCoolDownError, ClientActionError, I18nActionID, I18nErrorID, ChatBanError
+from messenger.proto.shared_errors import ChatCoolDownError, ClientActionError, I18nActionID, I18nErrorID, makeNoviceChatBanErrorShort, makeChatBanError, ChatBanError
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from messenger_common_chat2 import MESSENGER_ERRORS as _ERRORS
 from messenger_common_chat2 import MESSENGER_LIMITS as _LIMITS
@@ -158,10 +159,25 @@ def createCoolDownError(actionID, remainingTime=0.0):
         return _ActionCoolDownError(actionID, coolDown)
 
 
+class _ChatBanErrorShort(ChatBanError):
+    __slots__ = ('_banType',)
+
+    def __init__(self, endTime, reason, banType=None):
+        super(_ChatBanErrorShort, self).__init__(endTime, reason)
+        self._banType = banType
+
+    def getMessage(self):
+        if self._banType == NOVICE_RESTRICTIONS_BAN_TYPE:
+            msg = makeNoviceChatBanErrorShort()
+        else:
+            msg = makeChatBanError(self._endTime, self._reason)
+        return msg
+
+
 def createBroadcastError(args, broadcastID):
     errorID = args['int32Arg1']
     if errorID == _ERRORS.IN_CHAT_BAN:
-        error = ChatBanError(makeLocalServerTime(args['floatArg1']), args['strArg1'])
+        error = _ChatBanErrorShort(makeLocalServerTime(args['floatArg1']), args['strArg1'], args['strArg2'])
     elif errorID == _ERRORS.IN_COOLDOWN:
         error = _ActionCoolDownError(broadcastID, _LIMITS.BROADCASTS_FROM_CLIENT_COOLDOWN_SEC)
     else:

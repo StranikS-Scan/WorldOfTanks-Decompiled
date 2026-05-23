@@ -42,6 +42,10 @@ def getWhatsNewMapsDeleted():
     return GUI_SETTINGS.whatsNewPageComp7Slides.get('deprecatedMaps', [])
 
 
+def getComp7SkillParamsOrder():
+    return GUI_SETTINGS.comp7SkillParamsOrder
+
+
 def updateComp7Settings():
     _updateClientSettings()
     _updateServerSettings()

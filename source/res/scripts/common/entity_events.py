@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/entity_events.py
-from Event import Event, SafeEvent, EventManager, ContextEvent
+from Event import Event, SafeEvent, EventManager, ContextEvent, SafeContextEvent
 from synchronous_event import SynchronousEvent
 from events_debugger import EventsDebugger
 
@@ -23,6 +23,9 @@ class EntityEvents(object):
 
     def _createContextEvent(self):
         return ContextEvent(self._eventManager)
+
+    def _createSafeContextEvent(self):
+        return SafeContextEvent(self._eventManager)
 
     def createEvent(self):
         return self._createEvent()

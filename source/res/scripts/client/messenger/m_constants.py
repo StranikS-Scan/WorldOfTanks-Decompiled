@@ -93,6 +93,7 @@ class USER_TAG(object):
     SUB_FROM = 'sub/from'
     PRESENCE_DND = 'presence/dnd'
     BAN_CHAT = 'ban/chat'
+    NOVICE_BAN_CHAT = 'ban/chat/novice'
     _SHARED_TAGS = {CLAN_MEMBER, SEARCH, TEMP}
     _CLOSED_CONTACTS = {FRIEND, CLAN_MEMBER}
     _ALL_CONTACTS = {CLAN_MEMBER,
@@ -224,6 +225,8 @@ class SCH_CLIENT_MSG_TYPE(object):
     PARAGONS_SM_TYPE = 41
     GF_SM_TYPE = 42
     LIMITED_UI_CONTENT_UNLOCKED = 43
+    LIMITED_UI_PLATOON_LOCKED = 44
+    STALL_RECEIPT = 45
 
 
 class GFNotificationTemplates(CONST_CONTAINER):

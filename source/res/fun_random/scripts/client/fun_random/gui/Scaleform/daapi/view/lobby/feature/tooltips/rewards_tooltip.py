@@ -12,6 +12,6 @@ class FunRandomRewardsTooltip(AdditionalAwardTooltipData, FunProgressionWatcher)
     @hasActiveProgression(defReturn=[])
     def _packBlocks(self, *args, **kwargs):
         formatter = FunCurtailingAwardsComposer(_MAX_BONUS_COUNT, getFunAwardsPacker())
-        bonuses = self.getActiveProgression().getAllBonuses()
+        bonuses = self.getActiveProgression().getAllBonusesByPriority()
         formattedBonuses = formatter.getShortBonusesData(mergeBonuses(bonuses))
         return super(FunRandomRewardsTooltip, self)._packBlocks(*formattedBonuses)

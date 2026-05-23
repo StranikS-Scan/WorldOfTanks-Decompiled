@@ -132,6 +132,7 @@
     <_155mm_Obusier_Modele_50>	31017	</_155mm_Obusier_Modele_50>
     <Canon_de_155mm_de_33_calibres_MapsTraining_Dummy_SPG_2>	24	</Canon_de_155mm_de_33_calibres_MapsTraining_Dummy_SPG_2>
     <_90mm_canon_DCA_30_CA_bootcamp>	1002	</_90mm_canon_DCA_30_CA_bootcamp>
+    <_90mm_F3_F142>	31018	</_90mm_F3_F142>
   </ids>
   <shared>
     <_13.2mm_Hotchkiss_mle._1930>
@@ -2771,6 +2772,64 @@
         </_90mm_OE_mle_1924>
       </shots>
     </_90mm_F3M_FL>
+    <_90mm_F3_F142>
+      <userString>	#france_vehicles:_90mm_F3_F142	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	190000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.46	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.4	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_main_mb	</effects>
+      <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -12.0 1.0 -12.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	8.0	</reloadTime>
+      <maxAmmo>	52	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	1030	</weight>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	80	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.377142857142857	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.12	</turretRotation>
+        <afterShot>	3.5	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_90mm_OCC_90_62_F142>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	950	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	220 220	</piercingPower>
+        </_90mm_OCC_90_62_F142>
+        <_90mm_OFL_90F1_F142>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1275	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	248 230	</piercingPower>
+        </_90mm_OFL_90F1_F142>
+        <_90mm_OE_90F1_F142>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	750	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	45 45	</piercingPower>
+        </_90mm_OE_90F1_F142>
+      </shots>
+    </_90mm_F3_F142>
     <_90mm_CN_90_F3>
       <userString>	#france_vehicles:_90mm_CN_90_F3	</userString>
       <tags></tags>

@@ -2,8 +2,15 @@
 # Embedded file name: scripts/common/events_core_common/events_core_cgf/helpers.py
 from typing import Optional
 import CGF
-from Vehicle import Vehicle
-from constants import IS_CELLAPP
+from constants import IS_CELLAPP, IS_EDITOR
+if IS_EDITOR:
+
+    class Vehicle(object):
+        pass
+
+
+else:
+    from Vehicle import Vehicle
 
 def getVehicleFromGO(vehicleGO, spaceID):
     hierarchyManager = CGF.HierarchyManager(spaceID)

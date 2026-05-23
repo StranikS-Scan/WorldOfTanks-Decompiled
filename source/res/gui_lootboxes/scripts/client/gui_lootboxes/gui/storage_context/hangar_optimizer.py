@@ -3,7 +3,7 @@
 import enum
 import AnimationSequence
 import BigWorld
-import WebBrowser
+import MTWebBrowser
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.sf_window import SFWindow
@@ -35,7 +35,7 @@ class HangarOptimizer(object):
             if isPlayerAccount() and self.__hangarSpace.spaceInited:
                 BigWorld.worldDrawEnabled(False)
                 AnimationSequence.setEnableAnimationSequenceUpdate(False)
-                WebBrowser.pauseExternalCache(True)
+                MTWebBrowser.pauseExternalCache(True)
             self.__state = _HangarOptimizerStates.ENABLED
 
     def disable(self, needShowHangar=True):
@@ -51,7 +51,7 @@ class HangarOptimizer(object):
             if isPlayerAccount() and self.__hangarSpace.spaceInited:
                 BigWorld.worldDrawEnabled(True)
                 AnimationSequence.setEnableAnimationSequenceUpdate(True)
-                WebBrowser.pauseExternalCache(False)
+                MTWebBrowser.pauseExternalCache(False)
             self.__state = _HangarOptimizerStates.DISABLED
 
     def clear(self):
@@ -62,7 +62,7 @@ class HangarOptimizer(object):
         if self.__state in (_HangarOptimizerStates.ENABLED, _HangarOptimizerStates.DISABLING) and isPlayerAccount() and self.__hangarSpace.spaceInited:
             BigWorld.worldDrawEnabled(True)
             AnimationSequence.setEnableAnimationSequenceUpdate(True)
-            WebBrowser.pauseExternalCache(False)
+            MTWebBrowser.pauseExternalCache(False)
         self.__state = _HangarOptimizerStates.DISABLED
 
     @property
@@ -81,6 +81,6 @@ class HangarOptimizer(object):
         if view.alias == VIEW_ALIAS.LOBBY_HANGAR:
             if self.__state == _HangarOptimizerStates.DISABLING:
                 AnimationSequence.setEnableAnimationSequenceUpdate(True)
-                WebBrowser.pauseExternalCache(False)
+                MTWebBrowser.pauseExternalCache(False)
                 self.__state = _HangarOptimizerStates.DISABLED
             self.__appFactory.getApp().containerManager.onViewLoaded -= self.__onViewLoaded

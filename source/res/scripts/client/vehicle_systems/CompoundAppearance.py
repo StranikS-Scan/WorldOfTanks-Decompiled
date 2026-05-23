@@ -372,9 +372,6 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         self.__showCircleDelayed = None
         return
 
-    def isTerrainCircleVisible(self):
-        return self.__terrainCircle.isVisible()
-
     def updateTurretVisibility(self):
         self.__requestModelsRefresh()
 
@@ -564,6 +561,11 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             return
         else:
             self.highlighter.highlight(False)
+            if self.tracks is not None:
+                self.tracks.reset()
+            if self.trackScrollController is not None:
+                self.trackScrollController.deactivate()
+                self.trackScrollController.setData(None)
             oldHolder = self.findComponentByType(CompoundHolder)
             if oldHolder is not None:
                 self.gameObject.removeComponent(oldHolder)

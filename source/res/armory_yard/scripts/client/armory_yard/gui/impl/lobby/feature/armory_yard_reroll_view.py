@@ -258,17 +258,20 @@ class ArmoryYardRerollView(ViewImpl):
     @args2params(str)
     def __onReroll(self, currency):
         result = False
+        questSnapshot = self.__uiLogger.getQuestSnapshot(self.viewModel.currentQuest)
         tokenQuestID = first(self.__currentQuests).getTokenQuestID()
         if self.__rerollController.getFreeRerollsCount(first(self.__currentQuests).getGroupID()) > 0:
             result = yield self.__rerollController.rerollQuest(tokenQuestID)
+            currency = None
         elif currency:
             setLastCurrencyForReroll(currency)
             result = yield self.__rerollController.rerollQuest(tokenQuestID, currency)
         if not result.success:
             self.viewModel.setIsPaymentError(True)
         else:
-            self.__uiLogger.logRerollQuest(self.viewModel.currentQuest, currency)
+            self.__uiLogger.logRerollQuest(questSnapshot, currency)
             self.__fillSuggestedQuests(result.auxData)
+        return
 
     def __fillSuggestedQuests(self, suggestedConditions):
         with self.viewModel.transaction() as vm:

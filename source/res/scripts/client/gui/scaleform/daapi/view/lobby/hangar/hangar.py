@@ -32,10 +32,8 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control.links import URLMacros
 from gui.game_loading.resources.consts import Milestones
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents
-from gui.hangar_presets.hangar_gui_helpers import ifComponentAvailable
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.impl.lobby.stronghold.stronghold_helpers import isBattleModifierAvailableInQueue, isStrongholdEntity
 from gui.marathon.marathon_event import MarathonEvent
 from gui.periodic_battles.models import PrimeTimeStatus
 from gui.prb_control import prb_getters
@@ -60,7 +58,7 @@ from helpers.time_utils import ONE_MINUTE
 from shared_utils import nextTick
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IWotPlusController, IBattlePassController, IBattleRoyaleController, IBootcampController, IComp7Controller, IEpicBattleMetaGameController, IGuiLootBoxesController, IFunRandomController, IIGRController, IMapboxController, IMarathonEventsController, IPromoController, IRankedBattlesController, IHangarGuiController, IArmoryYardController, IDebutBoxesController, IEarlyAccessController
+from skeletons.gui.game_control import IWotPlusController, IBattlePassController, IBattleRoyaleController, IBootcampController, IComp7Controller, IEpicBattleMetaGameController, IGuiLootBoxesController, IFunRandomController, IIGRController, IMapboxController, IMarathonEventsController, IPromoController, IRankedBattlesController, IHangarGuiController, IArmoryYardController, IDebutBoxesController, IEarlyAccessController, IBattleModifiersController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersBannerController
@@ -94,6 +92,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     bootcampController = dependency.descriptor(IBootcampController)
     __comp7Controller = dependency.descriptor(IComp7Controller)
+    __battleModifiersController = dependency.descriptor(IBattleModifiersController)
     itemsCache = dependency.descriptor(IItemsCache)
     igrCtrl = dependency.descriptor(IIGRController)
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -281,7 +280,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self._offersBannerController.showBanners()
         self.__updateCarouselEventEntryState()
         self.fireEvent(events.HangarCustomizationEvent(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM), scope=EVENT_BUS_SCOPE.LOBBY)
-        if not self.__isHistoricalBattlesMode() and g_currentVehicle.isPresent():
+        if g_currentVehicle.isPresent():
             g_currentVehicle.refreshModel()
         if self.bootcampController.isInBootcamp():
             self.as_setDQWidgetLayoutS(DAILY_QUESTS_WIDGET_CONSTANTS.WIDGET_LAYOUT_SINGLE)
@@ -667,7 +666,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__switchParams()
         self.__updateBattleRoyaleComponents()
         self.__hangarComponentsCtrl.updateComponentsVisibility()
-        self.__updateComp7ModifiersWidget()
         self.__updateBattleModifiersWidget()
         self.__updateFunRandomModifiersWidget()
 
@@ -704,7 +702,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             self.__updateState()
         if Configs.FUN_RANDOM_CONFIG in diff:
             self.__updateFunRandomModifiersWidget()
-        if Configs.WGSH_MODIFIER_CONFIG in diff:
+        if Configs.BATTLE_MODIFIER_CONFIG in diff:
             self.__updateBattleModifiersWidget()
 
     def __onSettingsChanged(self, diff):
@@ -763,21 +761,15 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     def __updateCarouselEventEntryState(self):
         self.as_updateCarouselEventEntryStateS(isAnyEntryVisible())
 
-    @ifComponentAvailable(HANGAR_CONSTS.COMP7_MODIFIERS)
-    def __updateComp7ModifiersWidget(self):
-        self.as_setComp7ModifiersVisibleS(self.__comp7Controller.isBattleModifiersAvailable())
-
     def __updateBattleModifiersWidget(self, *_, **__):
-        if isStrongholdEntity(self.prbEntity):
-            self.as_setBattleModifiersVisibleS(isBattleModifierAvailableInQueue(self.prbEntity))
-        elif self.prbEntity.getQueueType() == QUEUE_TYPE.SPEC_BATTLE:
-            self.as_setBattleModifiersVisibleS(isBattleModifierAvailableInQueue(self.prbEntity))
-        else:
-            self.as_setBattleModifiersVisibleS(False)
+        self.as_setBattleModifiersVisibleS(False)
+        self.as_setComp7ModifiersVisibleS(False)
+        modifiersDomain = self.__battleModifiersController.getCurrentDomain()
+        if modifiersDomain == IBattleModifiersController.ModifiersDomains.COMP7:
+            self.as_setComp7ModifiersVisibleS(True)
+        elif modifiersDomain in IBattleModifiersController.ModifiersDomains.STRONGHOLD_DOMAINS:
+            self.as_setBattleModifiersVisibleS(True)
 
     def __updateFunRandomModifiersWidget(self):
         subModeId = self.__funRandomCtrl.subModesHolder.getDesiredSubModeID()
         self.as_setFunRandomModifiersVisibleS(self.__funRandomCtrl.isFunRandomModifiersVisibleSBySubModeID(subModeId))
-
-    def __isHistoricalBattlesMode(self):
-        return self.__hangarComponentsCtrl.isComponentAvailable(HANGAR_CONSTS.HB_PANELS)

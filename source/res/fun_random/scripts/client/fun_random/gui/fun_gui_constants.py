@@ -5,6 +5,8 @@ from gui.prb_control import settings
 from messenger import m_constants
 ATTR_NAME = 'FUN_RANDOM'
 PRB_REQ_TYPE_ATTR_NAME = 'CHANGE_FUN_SUB_MODE'
+FUN_RANDOM_ARCADE_FEP_TYPE = 0
+FUN_RANDOM_FIELD_TRIALS_FEP_TYPE = 1
 
 class FUNCTIONAL_FLAG(settings.FUNCTIONAL_FLAG, ConstInjector):
     FUN_RANDOM = 268435456

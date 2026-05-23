@@ -83,18 +83,18 @@ def _formatCounter(counter):
     return backport.text(R.strings.ingame_gui.countRibbons.multiSeparator(), multiplier=counter)
 
 
-def _baseRibbonFormatter(ribbon, arenaDP, updater, vehicleDataGetter):
+def _baseRibbonFormatter(ribbon, arenaDP, updater):
     updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), leftFieldStr=str(ribbon.getPoints()))
 
 
-def _perkRibbonFormatter(ribbon, arenaDP, updater, vehicleDataGetter):
+def _perkRibbonFormatter(ribbon, arenaDP, updater):
     perkID = ribbon.getPerkID()
     skillName = tankmen.getSkillsConfig().vsePerkToSkill.get(perkID)
     rightFieldStr = R.strings.crew_perks.dyn(skillName).name
     updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=skillName, rightFieldStr=backport.text(rightFieldStr()))
 
 
-def _enemyDetectionRibbonFormatter(ribbon, arenaDP, updater, vehicleDataGetter):
+def _enemyDetectionRibbonFormatter(ribbon, arenaDP, updater):
     count = ribbon.getTargetsAmount()
     bonusRibbonLabelID = _BRL.BASE_BONUS_LABEL if ribbon.isRoleBonus() else _BRL.NO_BONUS
     if count > 1:
@@ -102,7 +102,7 @@ def _enemyDetectionRibbonFormatter(ribbon, arenaDP, updater, vehicleDataGetter):
     else:
         vIDs = ribbon.getVehIDs()
         if vIDs:
-            vehicleName, vehicleClassTag = vehicleDataGetter(vIDs[0])
+            vehicleName, vehicleClassTag = _getVehicleData(arenaDP, vIDs[0])
         else:
             _logger.error('Enemy detection ribbon has no vehicle ID! %s', ribbon.getID())
             vehicleName = ''
@@ -110,23 +110,23 @@ def _enemyDetectionRibbonFormatter(ribbon, arenaDP, updater, vehicleDataGetter):
         updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, bonusRibbonLabelID=bonusRibbonLabelID, role=ribbon.role())
 
 
-def _enemiesStunRibbonFormatter(ribbon, arenaDP, updater, vehicleDataGetter):
+def _enemiesStunRibbonFormatter(ribbon, arenaDP, updater):
     count = ribbon.getTargetsAmount()
     bonusRibbonLabelID = _BRL.BASE_BONUS_LABEL if ribbon.isRoleBonus() else _BRL.NO_BONUS
     updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), leftFieldStr=_formatCounter(count), bonusRibbonLabelID=bonusRibbonLabelID, role=ribbon.role())
 
 
-def _singleVehRibbonFormatter(ribbon, arenaDP, updater, vehicleDataGetter):
+def _singleVehRibbonFormatter(ribbon, arenaDP, updater):
     if ribbon.getDamageSource() == DAMAGE_SOURCE.PLAYER:
-        vehicleName, vehicleClassTag = vehicleDataGetter(ribbon.getVehicleID())
+        vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
     else:
         vehicleName, vehicleClassTag = '', ribbon.getDamageSource()
     bonusRibbonLabelID = _BRL.BASE_BONUS_LABEL if ribbon.isRoleBonus() else _BRL.NO_BONUS
     updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=backport.getIntegralFormat(ribbon.getExtraValue()), bonusRibbonLabelID=bonusRibbonLabelID, role=ribbon.role())
 
 
-def _receivedRamRibbonFormatter(ribbon, arenaDP, updater, vehicleDataGetter):
-    vehicleName, vehicleClassTag = vehicleDataGetter(ribbon.getVehicleID())
+def _receivedRamRibbonFormatter(ribbon, arenaDP, updater):
+    vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
     if arenaDP.getPlayerVehicleID() == ribbon.getVehicleID():
         vehicleName = ''
         vehicleClassTag = ''
@@ -134,21 +134,21 @@ def _receivedRamRibbonFormatter(ribbon, arenaDP, updater, vehicleDataGetter):
     updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=backport.getIntegralFormat(ribbon.getExtraValue()), bonusRibbonLabelID=bonusRibbonLabelID, role=ribbon.role())
 
 
-def _criticalHitRibbonFormatter(ribbon, arenaDP, updater, vehicleDataGetter):
-    vehicleName, vehicleClassTag = vehicleDataGetter(ribbon.getVehicleID())
+def _criticalHitRibbonFormatter(ribbon, arenaDP, updater):
+    vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
     updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=_formatCounter(ribbon.getExtraValue()))
 
 
-def _receivedCriticalHitRibbonFormatter(ribbon, arenaDP, updater, vehicleDataGetter):
+def _receivedCriticalHitRibbonFormatter(ribbon, arenaDP, updater):
     if ribbon.getDamageSource() == DAMAGE_SOURCE.PLAYER:
-        vehicleName, vehicleClassTag = vehicleDataGetter(ribbon.getVehicleID())
+        vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
     else:
         vehicleName, vehicleClassTag = '', ribbon.getDamageSource()
     updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=_formatCounter(ribbon.getExtraValue()))
 
 
-def killRibbonFormatter(ribbon, arenaDP, updater, vehicleDataGetter, ribbonType=None):
-    vehicleName, vehicleClassTag = vehicleDataGetter(ribbon.getVehicleID())
+def killRibbonFormatter(ribbon, arenaDP, updater, ribbonType=None):
+    vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
     value = ribbon.getExtraValue()
     leftFieldStr = backport.getIntegralFormat(value) if value else ''
     bonusRibbonLabelID = _BRL.BASE_BONUS_LABEL if ribbon.isRoleBonus() else _BRL.NO_BONUS
@@ -215,13 +215,13 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
         self.__isWithVehName = True
         self.__isExtendedAnim = True
         self.__isVisible = True
-        self._arenaDP = self.sessionProvider.getCtx().getArenaDP()
-        self._ribbonsAggregator = self._createRibbonAggregator()
+        self.__arenaDP = self.sessionProvider.getCtx().getArenaDP()
+        self.__ribbonsAggregator = ribbons_aggregator.createRibbonsAggregator()
         self.__delayedRibbons = []
 
     def onShow(self, ribbonID):
         sound = _SHOW_RIBBON_SOUND_NAME
-        ribbon = self._ribbonsAggregator.getRibbon(ribbonID)
+        ribbon = self.__ribbonsAggregator.getRibbon(ribbonID)
         if ribbon and ribbon.isRoleBonus():
             sound = _SHOW_RIBBON_EXP_SOUND_NAME
         self.__playSound(sound)
@@ -230,10 +230,10 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
         self.__playSound(_CHANGE_RIBBON_SOUND_NAME)
 
     def onHide(self, ribbonID):
-        ribbon = self._ribbonsAggregator.getRibbon(ribbonID)
+        ribbon = self.__ribbonsAggregator.getRibbon(ribbonID)
         _logger.debug('RIBBON PANEL: onHide: ribbonID=%s, ribbon="%s"', ribbonID, ribbon)
         if ribbon is not None:
-            self._ribbonsAggregator.resetRibbonData(ribbonID)
+            self.__ribbonsAggregator.resetRibbonData(ribbonID)
             self.__playSound(_HIDE_RIBBON_SOUND_NAME)
         return
 
@@ -248,7 +248,7 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
 
     def _populate(self):
         super(BattleRibbonsPanel, self)._populate()
-        self.__enabled = bool(self.settingsCore.getSetting(BATTLE_EVENTS.SHOW_IN_BATTLE)) and self._arenaDP is not None
+        self.__enabled = bool(self.settingsCore.getSetting(BATTLE_EVENTS.SHOW_IN_BATTLE)) and self.__arenaDP is not None
         self.__isWithRibbonName = bool(self.settingsCore.getSetting(BATTLE_EVENTS.EVENT_NAME))
         self.__isWithVehName = bool(self.settingsCore.getSetting(BATTLE_EVENTS.VEHICLE_INFO))
         self.__isExtendedAnim = self.settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE) == _EXTENDED_RENDER_PIPELINE
@@ -257,33 +257,30 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
 
         self.__setupView()
         self.__addListeners()
-        self._ribbonsAggregator.start()
+        self.__ribbonsAggregator.start()
         if not self.__enabled:
-            self._ribbonsAggregator.suspend()
+            self.__ribbonsAggregator.suspend()
         self.sessionProvider.addArenaCtrl(self)
         return
 
     def __addListeners(self):
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         g_eventBus.addListener(GameEvent.GUI_VISIBILITY, self.__onGUIVisibilityChanged, scope=EVENT_BUS_SCOPE.BATTLE)
-        self._ribbonsAggregator.onRibbonAdded += self.__onRibbonAdded
-        self._ribbonsAggregator.onRibbonUpdated += self.__onRibbonUpdated
+        self.__ribbonsAggregator.onRibbonAdded += self.__onRibbonAdded
+        self.__ribbonsAggregator.onRibbonUpdated += self.__onRibbonUpdated
 
     def _dispose(self):
         self.sessionProvider.removeArenaCtrl(self)
         self.__delayedRibbons = []
-        self._ribbonsAggregator.onRibbonAdded -= self.__onRibbonAdded
-        self._ribbonsAggregator.onRibbonUpdated -= self.__onRibbonUpdated
+        self.__ribbonsAggregator.onRibbonAdded -= self.__onRibbonAdded
+        self.__ribbonsAggregator.onRibbonUpdated -= self.__onRibbonUpdated
         g_eventBus.removeListener(GameEvent.GUI_VISIBILITY, self.__onGUIVisibilityChanged, scope=EVENT_BUS_SCOPE.BATTLE)
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
-        self._ribbonsAggregator.stop()
-        self._arenaDP = None
+        self.__ribbonsAggregator.stop()
+        self.__arenaDP = None
         self.as_resetS()
         super(BattleRibbonsPanel, self)._dispose()
         return
-
-    def _createRibbonAggregator(self):
-        return ribbons_aggregator.createRibbonsAggregator()
 
     def _shouldShowRibbon(self, ribbon):
         return self.__checkUserPreferences(ribbon) and self.__checkControllingOwnVehicle()
@@ -337,9 +334,9 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
          [_BET.PERK, '']]
 
     def __processDelayedRibbons(self):
-        for ribbon, method in ((self._ribbonsAggregator.getRibbon(ribbonID), method) for ribbonID, method in self.__delayedRibbons):
+        for ribbon, method in ((self.__ribbonsAggregator.getRibbon(ribbonID), method) for ribbonID, method in self.__delayedRibbons):
             if self.__canBeShown(ribbon):
-                self._invalidateRibbon(ribbon, method)
+                self.__invalidateRibbon(ribbon, method)
                 self.__delayedRibbons.remove((ribbon.getID(), method))
 
     def __playSound(self, eventName):
@@ -354,12 +351,12 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
                 soundNotifications.play(eventName)
 
     def __onRibbonAdded(self, ribbon):
-        self._invalidateRibbon(ribbon, self.__addRibbon)
+        self.__invalidateRibbon(ribbon, self.__addRibbon)
 
     def __onRibbonUpdated(self, ribbon):
-        self._invalidateRibbon(ribbon, self.__updateRibbon)
+        self.__invalidateRibbon(ribbon, self.__updateRibbon)
 
-    def _invalidateRibbon(self, ribbon, method):
+    def __invalidateRibbon(self, ribbon, method):
         if not self.__canBeShown(ribbon):
             _logger.debug('Delaying ribbon processing %s', ribbon)
             self.__delayedRibbons.append((ribbon.getID(), method))
@@ -368,14 +365,11 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
             ribbonType = ribbon.getType()
             formatter = self._getRibbonFormatter(ribbonType)
             if formatter:
-                formatter(ribbon, self._arenaDP, method, self._getVehicleData)
+                formatter(ribbon, self.__arenaDP, method)
             else:
                 _logger.error('Could not find formatter for ribbon type %s', ribbonType)
         else:
-            self._ribbonsAggregator.resetRibbonData(ribbon.getID())
-
-    def _getVehicleData(self, vehArenaID):
-        return _getVehicleData(self._arenaDP, vehArenaID)
+            self.__ribbonsAggregator.resetRibbonData(ribbon.getID())
 
     def __addRibbon(self, ribbonID, ribbonType='', leftFieldStr='', vehName='', vehType='', rightFieldStr='', bonusRibbonLabelID=_BRL.NO_BONUS, role=''):
         _logger.debug('RIBBON PANEL: as_addBattleEfficiencyEventS: ribbonID=%s, ribbonType="%s", ", leftFieldStr="%s, vehName="%s", vehType="%s", rightFieldStr="%s", bonusRibbonLabelID=%s, role=%s.', ribbonID, ribbonType, leftFieldStr, vehName, vehType, rightFieldStr, bonusRibbonLabelID, role)
@@ -393,7 +387,7 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
     def __canBeShown(self, ribbon):
         ribbonType = ribbon.getType()
         displayPrecondition = _DISPLAY_PRECONDITIONS.get(ribbonType)
-        return False if displayPrecondition and not displayPrecondition(self._arenaDP, ribbon) else True
+        return False if displayPrecondition and not displayPrecondition(self.__arenaDP, ribbon) else True
 
     def __onGUIVisibilityChanged(self, event):
         self.__isVisible = event.ctx['visible']
@@ -412,16 +406,16 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
                 addSettings[item] = diff[item]
 
         if addSettings:
-            enabled = bool(addSettings.get(BATTLE_EVENTS.SHOW_IN_BATTLE, self.__enabled)) and self._arenaDP is not None
+            enabled = bool(addSettings.get(BATTLE_EVENTS.SHOW_IN_BATTLE, self.__enabled)) and self.__arenaDP is not None
             self.__isWithRibbonName = bool(self.settingsCore.getSetting(BATTLE_EVENTS.EVENT_NAME))
             self.__isWithVehName = bool(self.settingsCore.getSetting(BATTLE_EVENTS.VEHICLE_INFO))
             self.__isExtendedAnim = self.settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE) == _EXTENDED_RENDER_PIPELINE
             if self.__enabled != enabled:
                 self.__enabled = enabled
                 if self.__enabled:
-                    self._ribbonsAggregator.resume()
+                    self.__ribbonsAggregator.resume()
                 else:
-                    self._ribbonsAggregator.suspend()
+                    self.__ribbonsAggregator.suspend()
             self.as_setSettingsS(self.__enabled, self.__isExtendedAnim, self.__isWithRibbonName, self.__isWithVehName)
         return
 

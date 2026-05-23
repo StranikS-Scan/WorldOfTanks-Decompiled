@@ -13,14 +13,15 @@ from fun_random.gui.feature.sub_systems.fun_sub_modes_holder import FunSubModesH
 from fun_random.gui.feature.sub_systems.fun_subscription import FunSubscription
 from fun_random.gui.feature.sub_systems.fun_sub_modes_info import FunSubModesInfo
 from fun_random.gui.feature.util.fun_helpers import notifyCaller
-from fun_random.gui.fun_gui_constants import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, SELECTOR_BATTLE_TYPES
+from fun_random.gui.fun_gui_constants import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, SELECTOR_BATTLE_TYPES, FUN_RANDOM_ARCADE_FEP_TYPE, FUN_RANDOM_FIELD_TRIALS_FEP_TYPE
 from fun_random.helpers.server_settings import FunRandomConfig
+from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import events
 from gui.shared.utils.SelectorBattleTypesUtils import setBattleTypeAsUnknown
 from helpers import dependency
-from skeletons.gui.game_control import IFunRandomController
+from skeletons.gui.game_control import IFunRandomController, ILimitedUIController
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.impl.gen import R
 if typing.TYPE_CHECKING:
@@ -28,6 +29,7 @@ if typing.TYPE_CHECKING:
 
 class FunRandomController(IFunRandomController, IGlobalListener):
     __lobbyContext = dependency.descriptor(ILobbyContext)
+    __limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def __init__(self):
         super(FunRandomController, self).__init__()
@@ -130,6 +132,20 @@ class FunRandomController(IFunRandomController, IGlobalListener):
         self.__subModesHolder.setDesiredSubModeID(subModeID, trustedSource)
         self.__hiddenVehicles.updateCurrentVehicle(self.__subModesHolder.getDesiredSubMode())
         self.__subscription.resume()
+
+    def getCurrentFunType(self):
+        return self.__funRandomSettings.FEPType
+
+    def isArcade(self):
+        return self.getCurrentFunType() is FUN_RANDOM_ARCADE_FEP_TYPE
+
+    def isFieldTrials(self):
+        return self.getCurrentFunType() is FUN_RANDOM_FIELD_TRIALS_FEP_TYPE
+
+    def isLocked(self):
+        if self.isArcade():
+            return not self.__limitedUIController.isRuleCompleted(LuiRules.ARCADE_CONTENT)
+        return not self.__limitedUIController.isRuleCompleted(LuiRules.FIELD_TRIALS_CONTENT) if self.isFieldTrials() else False
 
     def getDesiredSubModeID(self):
         return self.__subModesHolder.getDesiredSubMode()

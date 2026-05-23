@@ -204,32 +204,6 @@ class ARENAS(object):
     MODIFIED = '#arenas:modified'
     C_280_COSMIC_2026_NAME = '#arenas:280_cosmic_2026/name'
     C_280_COSMIC_2026_DESCRIPTION = '#arenas:280_cosmic_2026/description'
-    C_08_RUINBERG_ATT_NAME = '#arenas:08_ruinberg_att/name'
-    C_08_RUINBERG_ATT_UPPERNAME = '#arenas:08_ruinberg_att/upperName'
-    C_08_RUINBERG_ATT_DESCRIPTION = '#arenas:08_ruinberg_att/description'
-    C_14_SIEGFRIED_LINE_ATT_NAME = '#arenas:14_siegfried_line_att/name'
-    C_14_SIEGFRIED_LINE_ATT_UPPERNAME = '#arenas:14_siegfried_line_att/upperName'
-    C_14_SIEGFRIED_LINE_ATT_DESCRIPTION = '#arenas:14_siegfried_line_att/description'
-    C_105_GERMANY_ATT_NAME = '#arenas:105_germany_att/name'
-    C_105_GERMANY_ATT_UPPERNAME = '#arenas:105_germany_att/upperName'
-    C_105_GERMANY_ATT_DESCRIPTION = '#arenas:105_germany_att/description'
-    C_13_ERLENBERG_SE22_DEF_NAME = '#arenas:13_erlenberg_se22_def/name'
-    C_13_ERLENBERG_SE22_DEF_UPPERNAME = '#arenas:13_erlenberg_se22_def/upperName'
-    C_13_ERLENBERG_SE22_DEF_DESCRIPTION = '#arenas:13_erlenberg_se22_def/description'
-    C_35_STEPPES_DEF_NAME = '#arenas:35_steppes_def/name'
-    C_35_STEPPES_DEF_UPPERNAME = '#arenas:35_steppes_def/upperName'
-    C_35_STEPPES_DEF_DESCRIPTION = '#arenas:35_steppes_def/description'
-    C_99_POLAND_SE22_DEF_NAME = '#arenas:99_poland_se22_def/name'
-    C_99_POLAND_SE22_DEF_UPPERNAME = '#arenas:99_poland_se22_def/upperName'
-    C_99_POLAND_SE22_DEF_DESCRIPTION = '#arenas:99_poland_se22_def/description'
-    C_513_TURNINGPOINT_DEF_NAME = '#arenas:513_turningpoint_def/name'
-    C_513_TURNINGPOINT_DEF_UPPERNAME = '#arenas:513_turningpoint_def/upperName'
-    C_513_TURNINGPOINT_DEF_DESCRIPTION = '#arenas:513_turningpoint_def/description'
-    C_212_EPIC_RANDOM_VALLEY_ATT_NAME = '#arenas:212_epic_random_valley_att/name'
-    C_212_EPIC_RANDOM_VALLEY_ATT_UPPERNAME = '#arenas:212_epic_random_valley_att/upperName'
-    C_212_EPIC_RANDOM_VALLEY_ATT_DESCRIPTION = '#arenas:212_epic_random_valley_att/description'
-    H01_VICTORY_DAY_2026_NAME = '#arenas:h01_victory_day_2026/name'
-    H01_VICTORY_DAY_2026_DESCRIPTION = '#arenas:h01_victory_day_2026/description'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -430,33 +404,7 @@ class ARENAS(object):
      H08_MT_HANGAR_DESCRIPTION,
      MODIFIED,
      C_280_COSMIC_2026_NAME,
-     C_280_COSMIC_2026_DESCRIPTION,
-     C_08_RUINBERG_ATT_NAME,
-     C_08_RUINBERG_ATT_UPPERNAME,
-     C_08_RUINBERG_ATT_DESCRIPTION,
-     C_14_SIEGFRIED_LINE_ATT_NAME,
-     C_14_SIEGFRIED_LINE_ATT_UPPERNAME,
-     C_14_SIEGFRIED_LINE_ATT_DESCRIPTION,
-     C_105_GERMANY_ATT_NAME,
-     C_105_GERMANY_ATT_UPPERNAME,
-     C_105_GERMANY_ATT_DESCRIPTION,
-     C_13_ERLENBERG_SE22_DEF_NAME,
-     C_13_ERLENBERG_SE22_DEF_UPPERNAME,
-     C_13_ERLENBERG_SE22_DEF_DESCRIPTION,
-     C_35_STEPPES_DEF_NAME,
-     C_35_STEPPES_DEF_UPPERNAME,
-     C_35_STEPPES_DEF_DESCRIPTION,
-     C_99_POLAND_SE22_DEF_NAME,
-     C_99_POLAND_SE22_DEF_UPPERNAME,
-     C_99_POLAND_SE22_DEF_DESCRIPTION,
-     C_513_TURNINGPOINT_DEF_NAME,
-     C_513_TURNINGPOINT_DEF_UPPERNAME,
-     C_513_TURNINGPOINT_DEF_DESCRIPTION,
-     C_212_EPIC_RANDOM_VALLEY_ATT_NAME,
-     C_212_EPIC_RANDOM_VALLEY_ATT_UPPERNAME,
-     C_212_EPIC_RANDOM_VALLEY_ATT_DESCRIPTION,
-     H01_VICTORY_DAY_2026_NAME,
-     H01_VICTORY_DAY_2026_DESCRIPTION)
+     C_280_COSMIC_2026_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

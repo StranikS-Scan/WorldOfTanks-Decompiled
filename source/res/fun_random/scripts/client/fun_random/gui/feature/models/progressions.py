@@ -1,15 +1,43 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/feature/models/progressions.py
 import typing
-from fun_random.gui.feature.fun_constants import PROGRESSION_COUNTER_TEMPLATE
+from fun_random.gui.feature.fun_constants import PROGRESSION_COUNTER_TEMPLATE, FEP_PRIORITY_CONFIG_FILE
+from debug_utils import LOG_CURRENT_EXCEPTION
+from gui.shared.bonuses_layout_controller import BonusesLayoutController
 from gui.shared.utils.decorators import ReprInjector
 from gui.server_events.bonuses import splitBonuses
 from helpers import time_utils
 from shared_utils import findFirst
+from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from fun_random.helpers.server_settings import FunProgressionConfig
     from gui.server_events.bonuses import SimpleBonus
     from gui.server_events.event_items import Quest
+
+class FunProgressionUtils(object):
+
+    def __init__(self):
+        self.__priorityCtrl = None
+        return
+
+    def init(self):
+        try:
+            self.__priorityCtrl = BonusesLayoutController(FEP_PRIORITY_CONFIG_FILE)
+            self.__priorityCtrl.init()
+        except SoftException:
+            LOG_CURRENT_EXCEPTION()
+            self.__priorityCtrl = None
+
+        return
+
+    def createPriorityBonuses(self, bonuses):
+        if self.__priorityCtrl is None:
+            return bonuses
+        else:
+            bonuses = splitBonuses(bonuses)
+            bonuses.sort(key=self.__priorityCtrl.getPriority)
+            return bonuses
+
 
 @ReprInjector.simple(('text', 'text'), ('conditions', 'conditions'), ('resetTimer', 'resetTimer'), ('counterName', 'counterName'), ('counter', 'counter'), ('maximumCounter', 'maximumCounter'))
 class FunProgressionCondition(object):
@@ -55,11 +83,11 @@ class FunProgressionCondition(object):
 @ReprInjector.simple(('requiredCounter', 'requiredCounter'), ('bonuses', 'bonuses'))
 class FunProgressionStage(object):
 
-    def __init__(self, pConfig, index, executor, priorityCtrl):
+    def __init__(self, pConfig, index, executor, funProgressionUtils):
         self.__requiredCounter = pConfig.executors[index]
         self.__prevRequiredCounter = pConfig.executors[index - 1] if index else 0
         self.__bonuses = executor.getBonuses()
-        self.__bonusesByPriority = self.__createPriorityBonuses(priorityCtrl)
+        self.__bonusesByPriority = funProgressionUtils.createPriorityBonuses(self.__bonuses)
         self.__stageIndex = index
 
     @property
@@ -81,11 +109,6 @@ class FunProgressionStage(object):
     @property
     def stageIndex(self):
         return self.__stageIndex
-
-    def __createPriorityBonuses(self, priorityCtrl):
-        bonuses = splitBonuses(self.__bonuses)
-        bonuses.sort(key=priorityCtrl.getPriority)
-        return bonuses
 
 
 @ReprInjector.simple(('isCompleted', 'isCompleted'), ('isLastProgression', 'isLastProgression'), ('currentStageIndex', 'currentStageIndex'), ('maximumStageIndex', 'maximumStageIndex'))
@@ -125,11 +148,12 @@ class FunProgressionState(object):
 @ReprInjector.simple(('condition', 'condition'), ('state', 'state'), ('stages', 'stages'))
 class FunProgression(object):
 
-    def __init__(self, pConfig, isFirst, isLast, counter, trigger, executors, bonusesPriorityCtrl):
+    def __init__(self, pConfig, isFirst, isLast, counter, trigger, executors, funProgressionUtils):
         self.__condition = FunProgressionCondition(pConfig, counter, trigger)
         self.__pConfig = pConfig
-        self.__stages = tuple((FunProgressionStage(pConfig, idx, exe, bonusesPriorityCtrl) for idx, exe in enumerate(executors)))
+        self.__stages = tuple((FunProgressionStage(pConfig, idx, exe, funProgressionUtils) for idx, exe in enumerate(executors)))
         self.__state = FunProgressionState(pConfig, isFirst, isLast, self.__condition, self.__stages)
+        self.__funUtils = funProgressionUtils
 
     @property
     def isNotifiable(self):
@@ -154,6 +178,9 @@ class FunProgression(object):
     @property
     def state(self):
         return self.__state
+
+    def getAllBonusesByPriority(self):
+        return self.__funUtils.createPriorityBonuses(self.getAllBonuses())
 
     def getAllBonuses(self):
         return [ bonus for stage in self.__stages for bonus in stage.bonuses ]

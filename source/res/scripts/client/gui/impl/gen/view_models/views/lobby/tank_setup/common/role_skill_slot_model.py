@@ -3,9 +3,9 @@
 from frameworks.wulf import ViewModel
 
 class RoleSkillSlotModel(ViewModel):
-    __slots__ = ()
+    __slots__ = ('onClick',)
 
-    def __init__(self, properties=5, commands=0):
+    def __init__(self, properties=5, commands=1):
         super(RoleSkillSlotModel, self).__init__(properties=properties, commands=commands)
 
     def getRoleSkill(self):
@@ -14,34 +14,35 @@ class RoleSkillSlotModel(ViewModel):
     def setRoleSkill(self, value):
         self._setString(0, value)
 
+    def getIntCD(self):
+        return self._getNumber(1)
+
+    def setIntCD(self, value):
+        self._setNumber(1, value)
+
     def getRoleName(self):
-        return self._getString(1)
-
-    def setRoleName(self, value):
-        self._setString(1, value)
-
-    def getTooltipId(self):
         return self._getString(2)
 
-    def setTooltipId(self, value):
+    def setRoleName(self, value):
         self._setString(2, value)
 
-    def getTooltipHeader(self):
-        return self._getString(3)
+    def getCanSwitch(self):
+        return self._getBool(3)
 
-    def setTooltipHeader(self, value):
-        self._setString(3, value)
+    def setCanSwitch(self, value):
+        self._setBool(3, value)
 
-    def getTooltipBody(self):
-        return self._getString(4)
+    def getIsPopoverOpen(self):
+        return self._getBool(4)
 
-    def setTooltipBody(self, value):
-        self._setString(4, value)
+    def setIsPopoverOpen(self, value):
+        self._setBool(4, value)
 
     def _initialize(self):
         super(RoleSkillSlotModel, self)._initialize()
         self._addStringProperty('roleSkill', '')
+        self._addNumberProperty('intCD', 0)
         self._addStringProperty('roleName', '')
-        self._addStringProperty('tooltipId', '')
-        self._addStringProperty('tooltipHeader', '')
-        self._addStringProperty('tooltipBody', '')
+        self._addBoolProperty('canSwitch', True)
+        self._addBoolProperty('isPopoverOpen', False)
+        self.onClick = self._addCommand('onClick')

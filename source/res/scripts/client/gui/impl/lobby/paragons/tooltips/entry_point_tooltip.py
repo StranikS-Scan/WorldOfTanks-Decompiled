@@ -25,12 +25,15 @@ class EntryPointTooltip(ViewImpl):
         super(EntryPointTooltip, self)._onLoading()
         currentState = self.__getParagonsState()
         vehiclesCount = min(self.__paragonsController.minUnlockedNecessaryLevelVehiclesCount, self.__paragonsController.unlockedNecessaryLevelVehiclesCount)
+        selectedChapterID = self.__paragonsController.chapterID
+        seasonCloseoutTimestamp = self.__paragonsController.getChapterCloseoutTimeStamp(selectedChapterID) if selectedChapterID else 0
         with self.viewModel.transaction() as tx:
             tx.setProgressState(currentState)
             tx.setPoints(self.__paragonsController.progress)
             tx.setVehicleCount(vehiclesCount)
             tx.setVehicleToReset(self.__paragonsController.minUnlockedNecessaryLevelVehiclesCount)
             tx.setIsFirstEntry(self.__isFirstEntry(currentState))
+            tx.setTimeStamp(seasonCloseoutTimestamp)
             self.__fillChapterModel(tx.currentChapter, currentState)
 
     def __getParagonsState(self):

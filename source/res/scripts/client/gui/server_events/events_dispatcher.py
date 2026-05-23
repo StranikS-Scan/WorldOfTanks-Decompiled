@@ -211,6 +211,10 @@ def showMissionsBattlePass(layoutID=None, chapterID=0):
     _showMissions(tab=QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS, layoutID=layoutID, chapterID=chapterID)
 
 
+def showMissionsTemporary(layoutID=None):
+    _showMissions(tab=QUESTS_ALIASES.TEMP_VIEW_PY_ALIAS, layoutID=layoutID)
+
+
 def showMissions(tab=None, missionID=None, groupID=None, marathonPrefix=None, anchor=None, showDetails=True, subTab=None):
     _showMissions(**{'tab': tab,
      'subTab': subTab,
@@ -455,3 +459,9 @@ def goToArmoryYardQuests(armoryYardCtrl=None):
 
 def _showMissions(**kwargs):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MISSIONS), ctx=kwargs), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showSummerSaleRewardView(rewards, parent=None):
+    from gui.impl.lobby.summer_sale.summer_sale_rewards_view import SummerSaleRewardsViewWindow
+    window = SummerSaleRewardsViewWindow(rewards, parent)
+    window.load()

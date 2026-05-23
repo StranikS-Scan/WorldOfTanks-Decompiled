@@ -22,10 +22,11 @@ from VehicleEffects import DamageFromShotDecoder
 from aih_constants import ShakeReason
 from cgf_components.arena_camera_manager import ArenaCameraManager
 from cgf_script.entity_dyn_components import BWEntitiyComponentTracker
-from constants import VEHICLE_HIT_EFFECT, VEHICLE_SIEGE_STATE, ATTACK_REASON_INDICES, ATTACK_REASON, SPT_MATKIND
+from constants import VEHICLE_HIT_EFFECT, VEHICLE_SIEGE_STATE, ATTACK_REASON_INDICES, ATTACK_REASON, SPT_MATKIND, DUAL_GUN
 from constants import StunTypes
 from debug_utils import LOG_DEBUG_DEV
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
+from gui.battle_control.arena_info.arena_vos import Comp7Keys
 from visual_script.misc import ASPECT
 from Event import Event
 from gui.battle_control import vehicle_getter, avatar_getter
@@ -35,7 +36,6 @@ from gun_rotation_shared import decodeGunAngles
 from helpers import dependency
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from helpers.EffectsList import SoundStartParam
-from helpers.buffs import BuffContainer
 from items import vehicles
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -101,9 +101,9 @@ StunInfo = namedtuple('StunInfo', ('startTime',
  'totalTime',
  'stunType'))
 DebuffInfo = namedtuple('DebuffInfo', ('duration', 'animated'))
-VEHICLE_COMPONENTS = {BattleAbilitiesComponent, BuffContainer}
+VEHICLE_COMPONENTS = {BattleAbilitiesComponent}
 
-class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesComponent, BuffContainer):
+class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesComponent):
     isEnteringWorld = property(lambda self: self.__isEnteringWorld)
     isTurretDetached = property(lambda self: constants.SPECIAL_VEHICLE_HEALTH.IS_TURRET_DETACHED(self.health) and self.__turretDetachmentConfirmed)
     isTurretMarkedForDetachment = property(lambda self: constants.SPECIAL_VEHICLE_HEALTH.IS_TURRET_DETACHED(self.health))
@@ -202,8 +202,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
     def getMasterVehID(self):
         return self.masterVehID
 
-    def __init__(self, *args, **kwargs):
-        super(Vehicle, self).__init__(*args, **kwargs)
+    def __init__(self):
         for comp in VEHICLE_COMPONENTS:
             comp.__init__(self)
 
@@ -930,22 +929,36 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         ownVehicle = self.dynamicComponents.get('ownVehicle')
         return 0.0 if ownVehicle is None else ownVehicle.getSiegeStateTimeLeft()
 
-    def onActiveGunChanged(self, activeGun, switchTimes):
+    def onActiveGunChanged(self, activeGun, cooldownTimes, shotCount):
         if not self.isStarted:
             return
+        elif self.typeDescriptor is None or not self.typeDescriptor.isDualgunVehicle:
+            return
         else:
-            if self.typeDescriptor is not None and self.typeDescriptor.isDualgunVehicle:
-                if self.__activeGunIndex == activeGun:
-                    return
-                self.__activeGunIndex = activeGun
-                swElapsedTime = switchTimes[2] - switchTimes[1]
-                afterShotDelay = self.typeDescriptor.gun.dualGun.afterShotDelay
-                leftDelayTime = max(afterShotDelay - swElapsedTime, 0.0)
-                ctrl = self.guiSessionProvider.shared.feedback
-                if ctrl is not None:
-                    ctrl.invalidateActiveGunChanges(self.id, (activeGun, leftDelayTime))
-            else:
-                _logger.error('switch gun trouble: using with not valid vehicle')
+            switchTimes = cooldownTimes[DUAL_GUN.COOLDOWNS.SWITCH]
+            swElapsedTime = switchTimes[2] - switchTimes[1]
+            afterShotDelay = self.typeDescriptor.gun.dualGun.afterShotDelay
+            leftDelayTime = max(afterShotDelay - swElapsedTime, 0.0)
+            if shotCount:
+                self.updateDualAccuracyData(shotCount)
+            if self.__activeGunIndex == activeGun:
+                return
+            self.__activeGunIndex = activeGun
+            ctrl = self.guiSessionProvider.shared.feedback
+            if ctrl is not None:
+                ctrl.invalidateActiveGunChanges(self.id, (activeGun, leftDelayTime))
+            return
+
+    def isGunsBecomeEmpty(self, gunStates):
+        isEmpty = self.guiSessionProvider.shared.ammo.isEmptyAmmo()
+        return all((state == DUAL_GUN.GUN_STATE.EMPTY for state in gunStates)) and isEmpty
+
+    def updateDualAccuracyData(self, shotCount):
+        dualAccuracy = self.dynamicComponents.get('dualAccuracy')
+        if dualAccuracy is None:
+            return
+        else:
+            dualAccuracy.setDualShotStatus(shotCount == 2)
             return
 
     def collideSegmentExt(self, startPoint, endPoint):
@@ -1036,7 +1049,6 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
                 TriggersManager.g_manager.fireTrigger(TriggersManager.TRIGGER_TYPE.VEHICLE_VISUAL_VISIBILITY_CHANGED, vehicleId=self.id, isVisible=True)
             self.startGUIVisual()
             self.refreshBuffEffects()
-            self.set_buffs()
             if self.isSpeedCapturing:
                 self.set_isSpeedCapturing()
             if self.isBlockingCapture:
@@ -1095,7 +1107,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         if show:
             drawFlags = BigWorld.DrawAll
         else:
-            drawFlags = BigWorld.ShadowPassBit
+            drawFlags = 0
         if self.isStarted:
             va = self.appearance
             if va.tracks is not None:
@@ -1347,6 +1359,18 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             ctrl = self.guiSessionProvider.shared.feedback
             if ctrl is not None:
                 ctrl.invalidateThermalVisionFinishTime(self.id, self.thermalVisionFinishTime)
+        return
+
+    def set_selectedComp7Skill(self, _=None):
+        arena = avatar_getter.getArena()
+        if arena:
+            stats = dict()
+            stats[self.id] = {Comp7Keys.ROLE_SKILL: self.selectedComp7Skill}
+            arena.onGameModeSpecificStats(isStatic=True, stats=stats)
+        if self.isPlayerVehicle:
+            ctrl = self.guiSessionProvider.dynamic.comp7PrebattleSkillController
+            if ctrl is not None:
+                ctrl.onVehicleSkillUpdated(self.selectedComp7Skill)
         return
 
     def getVseContextInstance(self, contextName):

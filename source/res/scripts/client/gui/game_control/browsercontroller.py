@@ -4,7 +4,7 @@ import logging
 import typing
 import BigWorld
 import Event
-from WebBrowser import WebBrowser
+from MTWebBrowser import MTWebBrowser
 from adisp import adisp_async, adisp_process
 from gui import GUI_SETTINGS
 from gui.Scaleform.Waiting import Waiting
@@ -112,7 +112,7 @@ class BrowserController(IBrowserController):
             app = appLoader.getApp()
             if app is None:
                 raise SoftException('Application can not be None')
-            browser = WebBrowser(webBrowserID, app, url, handlers=self.__filters)
+            browser = MTWebBrowser(webBrowserID, app, url, handlers=self.__filters)
             self.__browsers[browserID] = browser
             if self.__isCreatingBrowser():
                 _logger.info('CTRL: Queueing a browser creation: %r - %s', browserID, url)

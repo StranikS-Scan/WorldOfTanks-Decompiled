@@ -1662,7 +1662,6 @@ class MENU(object):
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_BUTTONS_CLOSE = '#menu:hangar/ammunitionPanel/technicalMaitenance/buttons/close'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_BUTTONS_LABELTOTAL = '#menu:hangar/ammunitionPanel/technicalMaitenance/buttons/labelTotal'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_EQUIPMENTDISABLED = '#menu:hangar/ammunitionPanel/technicalMaitenance/equipmentDisabled'
-    HANGAR_AMMUNITIONPANEL_TROPHYVEHICLE = '#menu:hangar/ammunitionPanel/trophyVehicle'
     FITTINGLISTITEMRENDERER_UNLOAD = '#menu:fittingListItemRenderer/unload'
     FITTINGLISTITEMRENDERER_REPLACE = '#menu:fittingListItemRenderer/replace'
     CUSTOMIZATION_TITLE = '#menu:customization/title'
@@ -1728,7 +1727,6 @@ class MENU(object):
     CONTEXTMENU_CREATECOMP7SQUAD = '#menu:contextMenu/createComp7Squad'
     CONTEXTMENU_CREATERANKEDSQUAD = '#menu:contextMenu/createRankedSquad'
     CONTEXTMENU_CREATEEPICSQUAD = '#menu:contextMenu/createEpicSquad'
-    CONTEXTMENU_CREATEHISTORICALBATTLESQUAD = '#menu:contextMenu/createHistoricalBattleSquad'
     CONTEXTMENU_INVITE = '#menu:contextMenu/invite'
     CONTEXTMENU_APPEAL = '#menu:contextMenu/appeal'
     CONTEXTMENU_INCORRECTBEHAVIOR = '#menu:contextMenu/incorrectBehavior'
@@ -2072,7 +2070,6 @@ class MENU(object):
     BOOSTERSWINDOW_TABS_NOTAVAILABLELABEL = '#menu:boostersWindow/tabs/notAvailableLabel'
     BOOSTERSWINDOW_TABS_BUYLABEL = '#menu:boostersWindow/tabs/buyLabel'
     BOOSTERSWINDOW_ACTIVEBOOSTERS = '#menu:boostersWindow/activeBoosters'
-    BOOSTERSWINDOW_BOOSTERSTABLERENDERER_HEADER = '#menu:boostersWindow/boostersTableRenderer/header'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_TIME = '#menu:boostersWindow/boostersTableRenderer/time'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_UNDEFINETIME = '#menu:boostersWindow/boostersTableRenderer/undefineTime'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_QUESTFOROPEN = '#menu:boostersWindow/boostersTableRenderer/questForOpen'
@@ -2388,7 +2385,6 @@ class MENU(object):
     CONTEXTMENU_CREWWIDGETCHANGESPECIALIZATION = '#menu:contextMenu/crewWidgetChangeSpecialization'
     LOADING_BATTLETYPES_300 = '#menu:loading/battleTypes/300'
     LOADING_BATTLETYPES_DESC_300 = '#menu:loading/battleTypes/desc/300'
-    HEADERBUTTON_MUSEUM = '#menu:headerButton/museum'
     CONTEXTMENU_ENUM = (CONTEXTMENU_EXCHANGE,
      CONTEXTMENU_VEHICLEINFO,
      CONTEXTMENU_VEHICLEINFOEX,
@@ -2450,7 +2446,6 @@ class MENU(object):
      CONTEXTMENU_CREATECOMP7SQUAD,
      CONTEXTMENU_CREATERANKEDSQUAD,
      CONTEXTMENU_CREATEEPICSQUAD,
-     CONTEXTMENU_CREATEHISTORICALBATTLESQUAD,
      CONTEXTMENU_INVITE,
      CONTEXTMENU_APPEAL,
      CONTEXTMENU_INCORRECTBEHAVIOR,

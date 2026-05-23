@@ -847,6 +847,10 @@ class InvitesManager(UsersInfoHelper):
         if self.appLoader.getSpaceID() != GuiGlobalSpaceID.BATTLE:
             self.syncUsersInfo()
 
+    def refreshLuiInvites(self, inviteID):
+        self.__invites.pop(inviteID)
+        self.onReceivedInviteListModified([], [], [inviteID])
+
     def __refreshFriendInvitesAdd(self, user):
         invitations = []
         for invite in self.__invitesIgnored.itervalues():

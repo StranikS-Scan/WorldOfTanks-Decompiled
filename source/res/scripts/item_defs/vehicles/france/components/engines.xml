@@ -127,6 +127,7 @@
     <Maybach_HL_295_FA_02>	31013	</Maybach_HL_295_FA_02>
     <Hispano_180CH>	31014	</Hispano_180CH>
     <Hispano_Suiza_HS12_GS>	31015	</Hispano_Suiza_HS12_GS>
+    <MTU_880_10_F142>	31016	</MTU_880_10_F142>
     <Development_Engine>	65000	</Development_Engine>
     <AMX_B_271_SH>	10000	</AMX_B_271_SH>
     <Detroit_Diesel_6V53T_SH>	10001	</Detroit_Diesel_6V53T_SH>
@@ -2140,6 +2141,23 @@
       <rpm_min>	449	</rpm_min>
       <rpm_max>	2360	</rpm_max>
     </Hispano_180CH>
+    <MTU_880_10_F142>
+      <userString>	#france_vehicles:MTU_880_10_F142	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	85000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <power>	500	</power>
+      <weight>	1200	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	399	</rpm_min>
+      <rpm_max>	2101	</rpm_max>
+    </MTU_880_10_F142>
     <Maybach_HL_295_IGR>
       <userString>	#igr_vehicles:Maybach_HL_295_IGR	</userString>
       <tags>	gasoline	</tags>

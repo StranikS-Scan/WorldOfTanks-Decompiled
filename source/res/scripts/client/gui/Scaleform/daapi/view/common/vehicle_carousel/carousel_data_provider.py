@@ -12,7 +12,6 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.impl.lobby.stronghold.stronghold_helpers import canHaveBattleModifiers
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.time_formatters import RentLeftFormatter
 from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES, getVehicleStateIcon, getVehicleStateAddIcon, getBattlesLeft, getSmallIconPath, getIconPath
@@ -20,7 +19,7 @@ from gui.shared.gui_items.dossier.achievements import isMarkOfMasteryAchieved
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers.i18n import makeString as ms
-from skeletons.gui.game_control import IBattleRoyaleController, IBootcampController, IDebutBoxesController, IEarlyAccessController, IParagonsController, IComp7Controller
+from skeletons.gui.game_control import IBattleRoyaleController, IBootcampController, IDebutBoxesController, IEarlyAccessController, IParagonsController, IBattleModifiersController
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsCache
 _VEHICLE_MAX_RESEARCH_LEVEL = 10
@@ -70,14 +69,8 @@ def getVehicleDataVO(vehicle, bootcampCtrl=None, debutBoxCtrl=None, earlyAccessC
     return _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl, earlyAccessCtrl, paragonsCtrl)
 
 
-@dependency.replace_none_kwargs(comp7Ctrl=IComp7Controller)
-def _getTooltipConstant(comp7Ctrl=None):
-    if comp7Ctrl.isBattleModifiersAvailable():
-        return TOOLTIPS_CONSTANTS.COMP7_CAROUSEL_VEHICLE
-    return TOOLTIPS_CONSTANTS.MODIFIED_CAROUSEL_VEHICLE if canHaveBattleModifiers() else TOOLTIPS_CONSTANTS.CAROUSEL_VEHICLE
-
-
-def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl, earlyAccessCtrl, paragonsCtrl):
+@dependency.replace_none_kwargs(battleModifiersController=IBattleModifiersController)
+def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl, earlyAccessCtrl, paragonsCtrl, battleModifiersController=None):
     rentInfoText = ''
     if not vehicle.isTelecomRent:
         rentInfoText = RentLeftFormatter(vehicle.rentInfo, vehicle.isPremiumIGR).getRentLeftStr()
@@ -152,7 +145,7 @@ def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl, earlyAccessCtrl, para
      'isEarnCrystals': vehicle.isEarnCrystals,
      'isCrystalsLimitReached': isCrystalsLimitReached,
      'isUseRightBtn': True,
-     'tooltip': _getTooltipConstant(),
+     'tooltip': battleModifiersController.tooltipConstant,
      'isWotPlusSlot': vehicle.isWotPlus,
      'extraImage': extraImage}
     if earlyAccessCtrl.isEnabled():

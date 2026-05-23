@@ -601,7 +601,7 @@ class ElementTooltip(BlocksTooltipData):
                 if self._item.buyCount > 0:
                     subBlocks.append(makePriceBlock(value, setting(currency), needValue if needValue > 0 else None, defValue if defValue > 0 else None, actionPercent, valueWidth=88, leftPadding=49, iconRightOffset=2, gap=4, forcedText=forcedText))
 
-        if showSellPrice and not (self._item.isHidden or self._item.isRentable):
+        if showSellPrice and not (self._item.isHidden or self._item.isForbiddenToSell or self._item.isRentable):
             for itemPrice in self._item.sellPrices:
                 currency = itemPrice.getCurrency()
                 value = itemPrice.price.getSignValue(currency)

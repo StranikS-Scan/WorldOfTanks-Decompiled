@@ -14,8 +14,6 @@ from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.daapi.view.lobby.tank_setup.ammunition_setup_vehicle import g_tankSetupVehicle
 from gui.impl.lobby.hangar.modified_vehicle import g_modifiedVehicle
 from gui.impl.lobby.hangar.modified_vehicle_parameters import modifiedVehiclesComparator
-from gui.impl.lobby.stronghold.stronghold_helpers import getBattleModifiersObject, getBattleModifiersByPrbEntity, getBattleModifiersDomain
-from gui.prb_control.dispatcher import g_prbLoader
 from gui.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.daapi.view.lobby.veh_post_progression.veh_post_progression_vehicle import g_postProgressionVehicle
@@ -32,7 +30,7 @@ from helpers import dependency
 from items import vehicles
 from rent_common import RENT_TYPE_TO_DURATION
 from shared_utils import first
-from skeletons.gui.game_control import IRankedBattlesController, IBattlePassController, IComp7Controller
+from skeletons.gui.game_control import IRankedBattlesController, IBattlePassController, IBattleModifiersController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
@@ -451,36 +449,8 @@ class CarouselContext(InventoryContext):
         return self.itemsCache.items.getItemByCD(int(intCD))
 
 
-class Comp7CarouselContext(InventoryContext):
-    __comp7Controller = dependency.descriptor(IComp7Controller)
-    __itemsCache = dependency.descriptor(IItemsCache)
-
-    def __init__(self, fieldsToExclude=None):
-        super(InventoryContext, self).__init__(fieldsToExclude)
-        self._component = TOOLTIP_COMPONENT.CAROUSEL
-
-    def getStatusConfiguration(self, item):
-        value = super(Comp7CarouselContext, self).getStatusConfiguration(item)
-        value.checkNotSuitable = True
-        return value
-
-    def getStatsConfiguration(self, item):
-        value = super(Comp7CarouselContext, self).getStatsConfiguration(item)
-        value.rentals = True
-        value.buyPrice = True
-        return value
-
-    def buildItem(self, intCD):
-        vehicle = self.itemsCache.items.getItemByCD(int(intCD))
-        modifiers = self.__comp7Controller.getBattleModifiersObject()
-        if modifiers is not None:
-            vehicle = self.__itemsCache.items.getVehicleCopy(vehicle)
-            vehicle.descriptor.battleModifiers = ModifiersContext(modifiers, vehType=vehicle.descriptor.type)
-            vehicle.descriptor.rebuildAttrs()
-        return vehicle
-
-
 class ModifiedCarouselContext(InventoryContext):
+    __battleModifiersController = dependency.descriptor(IBattleModifiersController)
     __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, fieldsToExclude=None):
@@ -500,8 +470,7 @@ class ModifiedCarouselContext(InventoryContext):
 
     def buildItem(self, intCD):
         vehicle = self.itemsCache.items.getItemByCD(int(intCD))
-        dispatcher = g_prbLoader.getDispatcher()
-        modifiers = getBattleModifiersObject(getBattleModifiersByPrbEntity(dispatcher.getEntity()))
+        modifiers = self.__battleModifiersController.getBattleModifiersObject()
         if modifiers is not None:
             vehicle = self.__itemsCache.items.getVehicleCopy(vehicle)
             vehicle.descriptor.battleModifiers = ModifiersContext(modifiers, vehType=vehicle.descriptor.type)
@@ -587,6 +556,7 @@ class HangarParamContext(BaseHangarParamContext):
 
 
 class ModifiedVehicleParamContext(HangarParamContext):
+    _battleModifiersController = dependency.descriptor(IBattleModifiersController)
 
     def getComparator(self):
         return modifiedVehiclesComparator(g_modifiedVehicle.item, g_modifiedVehicle.defaultItem)
@@ -594,9 +564,8 @@ class ModifiedVehicleParamContext(HangarParamContext):
     def buildItem(self, *args, **kwargs):
         return g_modifiedVehicle.item
 
-    @staticmethod
-    def getBattleModifiersType():
-        return getBattleModifiersDomain()
+    def getBattleModifiersType(self):
+        return self._battleModifiersController.getCurrentDomain()
 
 
 class PreviewParamContext(HangarParamContext):
@@ -1417,13 +1386,12 @@ class SelectableBonusesGiftTokenContext(ToolTipContext):
 
 
 class Comp7RoleSkillBattleContext(ToolTipContext):
-    __comp7Controller = dependency.descriptor(IComp7Controller)
 
     def __init__(self):
         super(Comp7RoleSkillBattleContext, self).__init__(TOOLTIP_COMPONENT.FULL_STATS)
 
-    def buildItem(self, roleName):
-        return self.__comp7Controller.getRoleEquipment(roleName)
+    def buildItem(self, equipmentID):
+        return vehicles.g_cache.equipments()[equipmentID]
 
 
 class Comp7RoleSkillLobbyContext(ToolTipContext):

@@ -234,9 +234,6 @@ class UnavailableQuestTooltipData(BlocksTooltipData):
         super(UnavailableQuestTooltipData, self).__init__(context, TOOLTIP_TYPE.QUESTS)
         self._setWidth(298)
 
-    def _getRequirementsOverrides(self, quest):
-        return []
-
     def _packBlocks(self, *args, **kwargs):
         source = self._eventsCache.getQuests()
         quest = source.get(args[0])

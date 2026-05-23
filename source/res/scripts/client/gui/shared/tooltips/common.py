@@ -42,7 +42,7 @@ from gui.impl.lobby.battle_pass.tooltips.vehicle_points_tooltip_view import Vehi
 from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent
 from gui.impl.lobby.subscription.wot_plus_tooltip import WotPlusTooltip
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
-from gui.impl.lobby.tooltips.limited_ui_unlock_info_tooltip import LimitedUiUnlockInfoTooltip
+from gui.impl.lobby.tooltips.newbie_restrictions_tooltip import NewbieRestrictionsTooltip
 from gui.impl.lobby.tooltips.veh_post_progression_entry_point_tooltip import VehPostProgressionEntryPointTooltip
 from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE
 from gui.server_events.events_helpers import missionsSortFunc
@@ -304,9 +304,8 @@ class ContactTooltipData(ToolTipBaseData):
         else:
             commonGuiData = self.__converter.makeVO(userEntity, useBigIcons=True)
             tags = userEntity.getTags()
-            resourceID = self.__converter.getGuiResourceID(userEntity)
             statusDescription = ''
-            if resourceID == constants.CURRENT_GAME_ID:
+            if self.__converter.isCurrentGameContact(userEntity):
                 statusDescription = makeContactStatusDescription(userEntity.isOnline(), tags, userEntity.getClientInfo())
             commonGuiData['statusDescription'] = statusDescription
             if defaultName and USER_TAG.INVALID_NAME in tags:
@@ -1634,16 +1633,21 @@ class ParagonsLockedTooltipData(ToolTipBaseData):
         return DecoratedTooltipWindow(ParagonsLockedTooltip(vehicleCD), useDecorator=False)
 
 
-class LimitedUIUnlockInfoTooltipContent(ToolTipBaseData):
+class NewbieRestrictionsTooltipContent(ToolTipBaseData):
 
     def __init__(self, context):
-        super(LimitedUIUnlockInfoTooltipContent, self).__init__(context, TOOLTIPS_CONSTANTS.LIMITED_UI_UNLOCK_INFO_TOOLTIP)
+        super(NewbieRestrictionsTooltipContent, self).__init__(context, TOOLTIPS_CONSTANTS.NEWBIE_RESTRICTIONS_TOOLTIP)
 
-    def getDisplayableData(self, ruleID, *args, **kwargs):
-        from gui.limited_ui.lui_rules_storage import LuiRules
-        content = LimitedUiUnlockInfoTooltip(LuiRules(ruleID))
+    def getDisplayableData(self, *args, **kwargs):
+        content = NewbieRestrictionsTooltip(self.__getNewbieRestrictionsTooltipAdapter(*args, **kwargs))
         window = ToolTipWindow(None, content, content.getParentWindow())
         return window
+
+    @staticmethod
+    def __getNewbieRestrictionsTooltipAdapter(luiRuleID=None, *args, **kwargs):
+        from gui.limited_ui.lui_rules_storage import LuiRules
+        from gui.impl.lobby.tooltips.newbie_restrictions_tooltip_adapters import LimitedUINewbieRestrictionsTooltipAdapter, ChatLockNewbieRestrictionsTooltipAdapter
+        return LimitedUINewbieRestrictionsTooltipAdapter(LuiRules(luiRuleID)) if luiRuleID else ChatLockNewbieRestrictionsTooltipAdapter()
 
 
 class ParagonsCarouselPoints(ToolTipBaseData):

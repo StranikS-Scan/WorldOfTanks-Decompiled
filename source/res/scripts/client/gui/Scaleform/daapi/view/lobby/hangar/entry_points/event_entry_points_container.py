@@ -2,29 +2,29 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/entry_points/event_entry_points_container.py
 import json
 import logging
-from operator import attrgetter
 from itertools import chain
+from operator import attrgetter
 from battle_royale.gui.impl.lobby.views.battle_royale_entry_point import isBattleRoyaleEntryPointAvailable
 from constants import QUEUE_TYPE
+from gui.Scaleform.daapi.view.lobby.collection.collection_entry_point import isCollectionEntryPointAvailable
 from gui.Scaleform.daapi.view.lobby.comp7.comp7_entry_point import isComp7EntryPointAvailable
 from gui.Scaleform.daapi.view.meta.EventEntryPointsContainerMeta import EventEntryPointsContainerMeta
-from gui.impl.lobby.mapbox.mapbox_entry_point_view import isMapboxEntryPointAvailable
-from gui.impl.lobby.ranked.ranked_entry_point import isRankedEntryPointAvailable
-from gui.impl.lobby.marathon.marathon_entry_point import isMarathonEntryPointAvailable
-from gui.Scaleform.daapi.view.lobby.collection.collection_entry_point import isCollectionEntryPointAvailable
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
-from gui.limited_ui.lui_rules_storage import LuiRules
-from gui.impl.lobby.stronghold.stronghold_entry_point_view import isStrongholdEntryPointAvailable
-from gui.prb_control.entities.listener import IGlobalListener
-from gui.shared.system_factory import registerBannerEntryPointValidator, collectBannerEntryPointValidator, registerBannerEntryPointLUIRule, collectBannerEntryPointLUIRule
-from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 from gui.game_control.craftmachine_controller import getCraftMachineEntryPointIsActive
 from gui.game_control.shop_sales_event_controller import getShopSalesEntryPointIsActive
+from gui.impl.lobby.mapbox.mapbox_entry_point_view import isMapboxEntryPointAvailable
+from gui.impl.lobby.marathon.marathon_entry_point import isMarathonEntryPointAvailable
+from gui.impl.lobby.ranked.ranked_entry_point import isRankedEntryPointAvailable
+from gui.impl.lobby.stronghold.stronghold_entry_point_view import isStrongholdEntryPointAvailable
+from gui.impl.lobby.summer_sale.summer_sale_entry_point_view import isSummerSaleEntryPointAvailable
+from gui.limited_ui.lui_rules_storage import LuiRules
+from gui.prb_control.entities.listener import IGlobalListener
+from gui.shared.system_factory import collectBannerEntryPointLUIRule, collectBannerEntryPointValidator, registerBannerEntryPointLUIRule, registerBannerEntryPointValidator
+from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 from helpers import dependency
-from helpers.time_utils import getServerUTCTime, ONE_DAY
-from helpers.time_utils import getTimestampByStrDate
-from skeletons.gui.game_control import IEventsNotificationsController, IBootcampController, ILimitedUIController
+from helpers.time_utils import ONE_DAY, getServerUTCTime, getTimestampByStrDate
+from skeletons.gui.game_control import IBootcampController, IEventsNotificationsController, ILimitedUIController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 _HANGAR_ENTRY_POINTS = 'hangarEntryPoints'
@@ -40,6 +40,7 @@ registerBannerEntryPointValidator(HANGAR_ALIASES.COMP7_ENTRY_POINT, isComp7Entry
 registerBannerEntryPointValidator(HANGAR_ALIASES.STRONGHOLD_ENTRY_POINT, isStrongholdEntryPointAvailable)
 registerBannerEntryPointValidator(HANGAR_ALIASES.BR_ENTRY_POINT, isBattleRoyaleEntryPointAvailable)
 registerBannerEntryPointValidator(HANGAR_ALIASES.COLLECTION_ENTRY_POINT, isCollectionEntryPointAvailable)
+registerBannerEntryPointValidator(HANGAR_ALIASES.SUMMER_SALE_ENTRY_POINT, isSummerSaleEntryPointAvailable)
 registerBannerEntryPointLUIRule(HANGAR_ALIASES.COMP7_ENTRY_POINT, LuiRules.COMP7_ENTRY_POINT)
 registerBannerEntryPointLUIRule(HANGAR_ALIASES.CRAFT_MACHINE_ENTRY_POINT, LuiRules.CRAFT_MACHINE_ENTRY_POINT)
 registerBannerEntryPointLUIRule(HANGAR_ALIASES.SHOP_SALES_ENTRY_POINT, LuiRules.SHOP_SALES_ENTRY_POINT)

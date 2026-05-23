@@ -8,7 +8,8 @@ from gui_lootboxes.messenger.formatters.service_channel import LootBoxOpenedForm
 _AUTO_BOXES_SUB_FORMATTERS = (auto_boxes_subformatters.EventBoxesFormatter(),
  auto_boxes_subformatters.EventLootBoxesFormatter(),
  auto_boxes_subformatters.LunarNYEnvelopeAutoOpenFormatter(),
- auto_boxes_subformatters.NYPostEventSurpriseMachineFormatter())
+ auto_boxes_subformatters.NYPostEventSurpriseMachineFormatter(),
+ auto_boxes_subformatters.ImmediatelyOpenLootBoxFormatter())
 
 def registerLootBoxClientFormatters():
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.LB_OPENED, LootBoxOpenedFormatter())
@@ -16,3 +17,4 @@ def registerLootBoxClientFormatters():
 
 def registerLootBoxServerFormatters():
     registerMessengerServerFormatter(_SM_TYPE.lootBoxesAutoOpenReward.index(), LootBoxAutoOpenFormatter(subFormatters=_AUTO_BOXES_SUB_FORMATTERS))
+    registerMessengerServerFormatter(_SM_TYPE.immediatelyOpenBoxReward.index(), LootBoxAutoOpenFormatter(subFormatters=_AUTO_BOXES_SUB_FORMATTERS))

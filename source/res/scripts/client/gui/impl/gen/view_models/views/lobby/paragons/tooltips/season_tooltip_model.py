@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.views.lobby.paragons.common.chapter_status_model i
 class SeasonTooltipModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=5, commands=0):
+    def __init__(self, properties=6, commands=0):
         super(SeasonTooltipModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -41,6 +41,12 @@ class SeasonTooltipModel(ViewModel):
     def setIsAllRewardsClaimed(self, value):
         self._setBool(4, value)
 
+    def getTimeStamp(self):
+        return self._getNumber(5)
+
+    def setTimeStamp(self, value):
+        self._setNumber(5, value)
+
     def _initialize(self):
         super(SeasonTooltipModel, self)._initialize()
         self._addViewModelProperty('chapterStatus', ChapterStatusModel())
@@ -48,3 +54,4 @@ class SeasonTooltipModel(ViewModel):
         self._addNumberProperty('vehicleCount', 0)
         self._addNumberProperty('necessaryVehicleCount', 0)
         self._addBoolProperty('isAllRewardsClaimed', False)
+        self._addNumberProperty('timeStamp', 0)

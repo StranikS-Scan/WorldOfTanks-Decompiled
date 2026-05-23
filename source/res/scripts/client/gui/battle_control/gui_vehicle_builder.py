@@ -63,6 +63,10 @@ class VehicleBuilder(object):
         self.__assertNotSet(self.__invData, 'settings')
         self.__setInvData('settings', settings)
 
+    def setSelectedComp7Skill(self, selectedComp7Skill):
+        self.__assertNotSet(self.__invData, 'selectedComp7Skill')
+        self.__setInvData('selectedComp7Skill', selectedComp7Skill)
+
     def getResult(self):
         extData = self.__extData.copy() if self.__extData is not None else None
         vehicle = self.__itemsFactory.createVehicle(self.__strCD, extData=extData, invData=self.__invData)
@@ -91,24 +95,24 @@ class VehicleBuilder(object):
     @staticmethod
     def __assertNotSet--- This code section failed: ---
 
- 109       0	LOAD_FAST         'target'
+ 113       0	LOAD_FAST         'target'
            3	LOAD_CONST        ''
            6	COMPARE_OP        'is'
            9	POP_JUMP_IF_FALSE '16'
 
- 110      12	LOAD_CONST        ''
+ 114      12	LOAD_CONST        ''
           15	JUMP_FORWARD      37
 
- 112      16	LOAD_GLOBAL       'isinstance'
+ 116      16	LOAD_GLOBAL       'isinstance'
           19	LOAD_FAST         'keys'
           22	LOAD_GLOBAL       'set'
           25	CALL_FUNCTION_2   ''
           28	POP_JUMP_IF_FALSE '34'
 
- 113      31	JUMP_FORWARD      '34'
+ 117      31	JUMP_FORWARD      '34'
         34_0	COME_FROM         '31'
 
- 115      34	LOAD_CONST        ''
+ 119      34	LOAD_CONST        ''
         37_0	COME_FROM         '15'
           37	RETURN_VALUE      ''
 

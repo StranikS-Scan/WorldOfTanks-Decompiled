@@ -29,10 +29,10 @@ class HelpPagePriority(object):
     MULTI_TRACK = 2
     ROCKET_ACCELERATION = 3
     TURBOSHAFT_ENGINE = 4
-    DUAL_ACCURACY = 5
     BATTLE_ROYALE = 6
     DUAL_GUN = 7
     WHEELED = 8
+    DUAL_ACCURACY = 8
     BURNOUT = 9
     SIEGE_MODE = 10
     ROLE_TYPE = 11
@@ -432,7 +432,11 @@ class DualAccuracyPagesBuilder(DetailedHelpPagesBuilder):
     @classmethod
     def buildPages(cls, ctx):
         pages = []
-        addPage(pages, buildTitle(ctx), backport.text(R.strings.ingame_help.detailsHelp.dualAccuracy.mechanics.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.dualAccuracy.mechanics())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.dualAccuracy.mechanics()), hintCtx=HelpHintContext.MECHANICS)
+        if ctx.get('isDualGun'):
+            picture = R.images.gui.maps.icons.battleHelp.dualAccuracy.mechanics()
+        else:
+            picture = R.images.gui.maps.icons.battleHelp.dualAccuracy.mechanics_without_indication()
+        addPage(pages, buildTitle(ctx), backport.text(R.strings.ingame_help.detailsHelp.dualAccuracy.mechanics.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.dualAccuracy.mechanics())), [], [], backport.image(picture), hintCtx=HelpHintContext.MECHANICS)
         return pages
 
     @classmethod
@@ -440,6 +444,7 @@ class DualAccuracyPagesBuilder(DetailedHelpPagesBuilder):
         hasDualAccuracy = vehicle is not None and vehicle.typeDescriptor.hasDualAccuracy
         ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or hasDualAccuracy
         ctx['hasDualAccuracy'] = hasDualAccuracy
+        ctx['isDualGun'] = vehicle is not None and vehicle.typeDescriptor.isDualgunVehicle
         return
 
 

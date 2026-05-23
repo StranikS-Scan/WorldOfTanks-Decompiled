@@ -1216,17 +1216,10 @@ class VehicleParams(_ParameterBase):
         return vehicle.descriptor
 
     def __calcRealChassisRepairTime(self, chassisRepairTime):
-        skillName = 'repair'
-        argName = 'vehicleRepairSpeed'
-        realSkillLevel = crewMemberRealSkillLevel(self.__vehicle, skillName, Tankman.ROLES.COMMANDER)
-        kpiSkillFactor = 1
-        if realSkillLevel > 0:
-            kpiSkillFactor = self.__getKpiValueFromSkillConfig(skillName, argName, Tankman.ROLES.COMMANDER)
-        repairFactor = self.__factors.get('repairSpeed', 1.0)
-        vehicleRepairSpeed = self.__kpi.getCoeff('vehicleRepairSpeed')
-        repairKpi = 1 + (vehicleRepairSpeed - kpiSkillFactor)
-        repairChassisKpi = self.__kpi.getCoeff('vehicleChassisRepairSpeed')
-        return chassisRepairTime / repairFactor / repairKpi / repairChassisKpi
+        repairFactor = self.__factors['repairSpeed']
+        repairFactor *= self._itemDescr.miscAttrs['repairSpeedFactor']
+        repairFactor *= self._itemDescr.miscAttrs['chassisRepairSpeedFactor']
+        return chassisRepairTime / repairFactor
 
     def __speedLimits(self, limits, miscAttrs=None):
         correction = []
@@ -1376,18 +1369,6 @@ class VehicleParams(_ParameterBase):
         if realSkillLevel != tankmen.NO_SKILL:
             realFactorValue += factorPerLevel * realSkillLevel
         return realFactorValue
-
-    def __getKpiValueFromSkillConfig(self, skillName, argName, role, kpiType=KPI.Type.MUL):
-        skillKpi = tankmen.getSkillsConfig().getSkill(skillName).kpi
-        result = 1.0 if kpiType == KPI.Type.MUL else 0.0
-        realSkillLevel = crewMemberRealSkillLevel(self.__vehicle, skillName, role)
-        if realSkillLevel != tankmen.NO_SKILL:
-            for _kpi in skillKpi:
-                if _kpi.name == argName:
-                    baseValue = 1.0 if _kpi.type == KPI.Type.MUL else 0.0
-                    result = baseValue - (baseValue - _kpi.value) * realSkillLevel / tankmen.MAX_SKILL_LEVEL
-
-        return result
 
     def __readAbilityParam(self, item):
         abilityID = self.__vehicle.typeDescr.ability

@@ -9,10 +9,10 @@ import CGF
 import Math
 import math_utils
 from arena_component_system.client_arena_component_system import ClientArenaComponent
-from constants import ROLE_TYPE_TO_LABEL
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from helpers import dependency
+from items import vehicles
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IComp7Controller
@@ -84,12 +84,12 @@ class _Effect(object):
 
     @property
     def radius(self):
-        if self._vehicle is None or not hasattr(self._vehicle, 'typeDescriptor'):
-            _logger.error('Missing typeDescriptor component at vehicle: %s', self._vehicle.id)
+        if self._vehicle is None or not hasattr(self._vehicle, 'selectedComp7Skill'):
+            _logger.error('Missing selectedComp7Skill component at vehicle: %s', self._vehicle.id)
             return
         else:
-            roleType = ROLE_TYPE_TO_LABEL.get(self._vehicle.typeDescriptor.role)
-            equipment = self.__comp7Controller.getRoleEquipment(roleType)
+            equipmentID = self._vehicle.selectedComp7Skill
+            equipment = vehicles.g_cache.equipments()[equipmentID]
             return equipment.radius
 
     def start(self):

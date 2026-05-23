@@ -350,6 +350,10 @@ class Customization(FittingItem):
     def markedAsFavorite(self):
         return self.__markedAsFavorite
 
+    @property
+    def isForbiddenToSell(self):
+        return ItemTags.CANNOT_BE_SOLD in self.tags or ItemTags.CANNOT_BE_SOLD in self.priceGroupTags
+
     def getBonusIcon(self, size='small'):
         return RES_ICONS.getBonusIcon(size, self.itemTypeName)
 

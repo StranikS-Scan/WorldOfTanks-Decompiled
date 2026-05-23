@@ -29,7 +29,7 @@ class ClientSelectableCameraObject(ClientSelectableObject):
         return self.state != CameraMovementStates.FROM_OBJECT
 
     @classmethod
-    def switchCamera(cls, clickedObject=None, cameraName=None, immediate=False):
+    def switchCamera(cls, clickedObject=None, cameraName=None):
         if not cls.hangarSpace.spaceInited:
             return
         else:
@@ -44,20 +44,12 @@ class ClientSelectableCameraObject(ClientSelectableObject):
             else:
                 cameraManager.switchByCameraName(cameraName, False)
             clickedObject.onSelect()
-            if immediate:
-                clickedObject.finishImmediate()
             return
 
     @classmethod
     def deselectAll(cls):
         for cameraObject in ClientSelectableCameraObject.allCameraObjects:
             cameraObject.onDeselect()
-
-    def finishImmediate(self):
-        self.__curTime = 1
-        self.__updateCameraLocation()
-        self.stopCallback(self.__update)
-        self._finishCameraMovement()
 
     def onSelect(self):
         self.setEnable(False)

@@ -4,7 +4,7 @@ from collections import namedtuple
 from string import Template
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES, CHAT_COMMANDS_THAT_IGNORE_COOLDOWNS, _DEFAULT_ACTIVE_COMMAND_TIME, _DEFAULT_SPG_AREA_COMMAND_TIME
-from constants import IS_CLIENT, IS_CHINA, ARENA_BONUS_TYPE
+from constants import IS_CLIENT, IS_CHINA, ARENA_BONUS_TYPE, NOVICE_RESTRICTIONS_BAN_TYPE
 _g_id = None
 
 def _makeID(start=None, range=None):
@@ -137,14 +137,14 @@ class MESSENGER_ACTION_IDS():
         return False
 
     @staticmethod
-    def isChatActionSusceptibleToBan(actionID):
+    def isChatActionSusceptibleToBan(actionID, banType):
         actions = MESSENGER_ACTION_IDS
         if actions.adminChatCommandFromActionID(actionID) is not None:
             return True
         elif actions.isBattleChatAction(actionID):
             return actions.battleChatCommandFromActionID(actionID) is None
         else:
-            return True if actions.isUnitChatAction(actionID) else False
+            return True if actions.isUnitChatAction(actionID) and banType != NOVICE_RESTRICTIONS_BAN_TYPE else False
 
     @staticmethod
     def battleChatCommandFromActionID(actionID):
@@ -269,10 +269,7 @@ BATTLE_CHAT_COMMANDS = (BattleChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS.
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.DEFEND_SUPPLY, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='defend_supply', vehMarker='defend', senderVehMarker='defendSender', soundNotification='ibc_ping_request', soundNotificationReply='ibc_ping_reply'),
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.DEFENDING_SUPPLY, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='defending_supply', vehMarker='defend', senderVehMarker='defendSender', soundNotification='ibc_ping_action', soundNotificationReply='ibc_ping_reply'),
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.SELF_REPAIR_SUPPLY, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='supply_self_repair', vehMarker=None, senderVehMarker=None, soundNotification='ibc_ping_action', soundNotificationReply='ibc_ping_reply'),
- BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.FOCUS_SUPPLY, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText=None, vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None, activeCmdTime=40.0),
- BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.OBJECTIVES_POINT, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText=None, vehMarker='attackBoss', senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
- BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.HB_ARTILLERY_ON_YOURSELF, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='hb_ability/artillery_on_yourself', vehMarker='help_me', senderVehMarker=None),
- BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.HB_LAST_STAND, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='hb_ability/last_stand', vehMarker='help_me', senderVehMarker=None))
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.FOCUS_SUPPLY, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText=None, vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None, activeCmdTime=40.0))
 BATTLE_CHAT_COMMANDS_BY_NAMES = {v.name:v for v in BATTLE_CHAT_COMMANDS}
 
 class MUC_SERVICE_TYPE(object):

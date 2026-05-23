@@ -6,14 +6,16 @@ from gui.impl import backport
 from gui.impl.auxiliary.tooltips.simple_tooltip import createSimpleTooltip
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.hangar.battle_modifiers_panel_view_model import BattleModifiersPanelViewModel, Queue
-from gui.impl.lobby.stronghold.stronghold_helpers import BATTLE_MODIFIERS_DOMAIN, getBattleModifiersByPrbEntity, getBattleModifiersQueues, BATTLE_MODIFIERS_DOMAIN_GM
 from gui.impl.lobby.tooltips.battle_modifiers_domain_tooltip_view import BattleModifiersDomainTooltipView
 from gui.impl.pub import ViewImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.prb_control.entities.listener import IGlobalListener
+from helpers import dependency, int2roman
+from skeletons.gui.game_control import IBattleModifiersController
 _TEXTS = R.strings.fortifications.battleModifiers
 
 class BattleModifiersPanelView(ViewImpl, IGlobalListener):
+    __battleModifiersController = dependency.descriptor(IBattleModifiersController)
 
     def __init__(self, flags=ViewFlags.VIEW):
         settings = ViewSettings(R.views.lobby.hangar.BattleModifiersPanelView())
@@ -26,17 +28,31 @@ class BattleModifiersPanelView(ViewImpl, IGlobalListener):
         return super(BattleModifiersPanelView, self).getViewModel()
 
     def createToolTip(self, event):
-        modifiers = getBattleModifiersByPrbEntity(self.prbEntity)
-        return super(BattleModifiersPanelView, self).createToolTip(event) if modifiers else createSimpleTooltip(self.getParentWindow(), event, header=backport.text(_TEXTS.title()), body=backport.text(_TEXTS.body(), battleModifiersQueue=getBattleModifiersQueues()))
+        if self.__battleModifiersController.battleModifiers:
+            return super(BattleModifiersPanelView, self).createToolTip(event)
+        bmQueues = self.__battleModifiersController.getBattleModifiersQueues()
+        bmTextQueue = self.makeTextQueue(bmQueues)
+        return createSimpleTooltip(self.getParentWindow(), event, header=backport.text(_TEXTS.title()), body=backport.text(_TEXTS.body(), battleModifiersQueue=bmTextQueue))
 
     def createToolTipContent(self, event, contentID):
-        return BattleModifiersDomainTooltipView(BATTLE_MODIFIERS_DOMAIN_GM) if self.prbEntity.getQueueType() == QUEUE_TYPE.SPEC_BATTLE and self.prbEntity.getBonusType() == ARENA_BONUS_TYPE.GLOBAL_MAP else BattleModifiersDomainTooltipView(BATTLE_MODIFIERS_DOMAIN)
+        domain = self.__battleModifiersController.getCurrentDomain()
+        return BattleModifiersDomainTooltipView(domain)
 
     def onPrbEntitySwitched(self):
         self.__fillModel()
 
     def onStrongholdDataChanged(self, header, isFirstBattle, reserve, reserveOrder):
         self.__fillModel()
+
+    @staticmethod
+    def makeTextQueue(bmQueues):
+        textQueues = []
+        for name, level in bmQueues:
+            if level:
+                textQueues.append(backport.text(R.strings.fortifications.battleModifiers.dyn(name)(), level=int2roman(int(level))))
+            textQueues.append(backport.text(R.strings.fortifications.battleModifiers.dyn(name)()))
+
+        return ', '.join(textQueues)
 
     def _onLoading(self, *args, **kwargs):
         super(BattleModifiersPanelView, self)._onLoading(*args, **kwargs)

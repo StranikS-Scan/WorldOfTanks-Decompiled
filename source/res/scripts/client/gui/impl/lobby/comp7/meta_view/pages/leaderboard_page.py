@@ -13,6 +13,7 @@ from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import
 from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.comp7.meta_view.pages import PageSubModelPresenter
 from gui.impl.lobby.comp7.tooltips.last_update_tooltip import LastUpdateTooltip
+from gui.impl.lobby.comp7.tooltips.leaderboard_reward_tooltip import LeaderboardRewardTooltip
 from gui.impl.lobby.comp7.tooltips.sixth_rank_tooltip import SixthRankTooltip
 from gui.impl.lobby.comp7.tooltips.fifth_rank_tooltip import FifthRankTooltip
 from helpers import dependency
@@ -57,6 +58,9 @@ class LeaderboardPage(PageSubModelPresenter):
         if contentID == R.views.lobby.comp7.tooltips.LastUpdateTooltip():
             description = event.getArgument('description')
             return LastUpdateTooltip(description, updateTime=self.__lastUpdateTime)
+        if contentID == R.views.lobby.comp7.tooltips.LeaderboardRewardTooltip():
+            place = event.getArgument('place', 0)
+            return LeaderboardRewardTooltip(place)
 
     def createContextMenu(self, event):
         if event.contentID == R.views.common.BackportContextMenu():

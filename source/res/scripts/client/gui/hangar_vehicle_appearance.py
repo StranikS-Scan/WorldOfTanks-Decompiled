@@ -4,7 +4,7 @@ import logging
 import weakref
 import math
 from collections import namedtuple
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict
 from functools import partial
 import BigWorld
 import Event
@@ -31,6 +31,7 @@ from vehicle_systems import camouflages
 from vehicle_systems.components.vehicle_shadow_manager import VehicleShadowManager
 from vehicle_systems.tankStructure import ModelsSetParams, TankPartNames, ColliderTypes, TankPartIndexes
 from vehicle_systems.tankStructure import VehiclePartsTuple, TankNodeNames
+from prefab_attachment_utils import addPrefabAttachments, getPrefabAttachmentsPrereqs
 from cgf_obsolete_script.script_game_object import ComponentDescriptor, ScriptGameObject
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
@@ -47,6 +48,7 @@ from shared_utils import findFirst
 if TYPE_CHECKING:
     from vehicle_outfit.outfit import Outfit as TOutfit
     from items.vehicles import VehicleDescrType
+    from PrefabsLoading import PrefabData
 _SHOULD_CHECK_DECAL_UNDER_GUN = True
 _PROJECTION_DECAL_OVERLAPPING_FACTOR = 0.7
 _HANGAR_TURRET_SHIFT = math.pi / 8
@@ -156,6 +158,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__attachments = []
         self.__installedAttachments = []
         self.__modelAnimators = []
+        self.prefabsResourceRefs = {}
         self._modelCollisions = None
         self._crashedModelCollisions = None
         self.shadowManager = None
@@ -227,6 +230,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.undamagedStateChildren = []
         self.__attachments = []
         self.__installedAttachments = []
+        self.prefabsResourceRefs = {}
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.itemsCache.onSyncCompleted -= self.__onItemsCacheSyncCompleted
         g_eventBus.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleEntityUpdated)
@@ -299,6 +303,7 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.shadowManager.unregisterCompoundModel(self.__vEntity.model)
         self.shadowManager = None
         self.undamagedStateChildren = []
+        self.prefabsResourceRefs = {}
         self.reset()
         self.shadowManager = VehicleShadowManager()
         self.shadowManager.updatePlayerTarget(None)
@@ -324,6 +329,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         resources = camouflages.getCamoPrereqs(self.__outfit, vDesc)
         if not self.__isVehicleDestroyed:
             self.__attachments = camouflages.getAttachments(self.__outfit, vDesc)
+        resources.append(camouflages.getPrefabAttachmentsPrereqs(self.__attachments, isHangar=True))
         modelsSet = self.__outfit.modelsSet
         splineDesc = vDesc.chassis.splineDesc
         if splineDesc is not None:
@@ -389,6 +395,7 @@ class HangarVehicleAppearance(ScriptGameObject):
             for index, builder in enumerate(builders):
                 resources.append(builder.createLoader(self.__spaceId, '{0}{1}PhysicalTrack'.format(name, index), modelsSet))
 
+        resources.append(getPrefabAttachmentsPrereqs(self, self.__vEntity.typeDescriptor))
         BigWorld.loadResourceListBG(tuple(resources), makeCallbackWeak(self.__onResourcesLoaded, self.__curBuildInd))
         return
 
@@ -431,12 +438,14 @@ class HangarVehicleAppearance(ScriptGameObject):
             if self.turretRotator is not None:
                 self.turretRotator.destroy()
             self.turretRotator = SimpleTurretRotator(self.compoundModel, self.__staticTurretYaw, self.__vDesc.hull.turretPositions[0], self.__vDesc.hull.turretPitches[0], easingCls=math_utils.Easing.squareEasing)
+            self.prefabsResourceRefs = {}
+            self.prefabsResourceRefs.update(resourceRefs['DefaultPrefabAttachments'])
+            self.prefabsResourceRefs.update(resourceRefs['StylePrefabAttachments'])
             self.__applyAttachmentsVisibility()
             self.__fireResourcesLoadedEvent()
             if succesLoaded:
                 self.__doFinalSetup(buildInd)
             if not self.isVehicleDestroyed:
-                from prefab_attachment_utils import addPrefabAttachments
                 addPrefabAttachments(self, self.__vEntity.typeDescriptor)
             super(HangarVehicleAppearance, self).activate()
             return
@@ -573,7 +582,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         return
 
     def getThisVehicleDossierInsigniaRank(self):
-        if self.__vDesc and self.isMarksOnGunVisible:
+        if self.__vDesc and self.__showMarksOnGun:
             vehicleDossier = self.itemsCache.items.getVehicleDossier(self.__vDesc.type.compactDescr)
             return vehicleDossier.getRandomStats().getAchievement(MARK_ON_GUN_RECORD).getValue()
 
@@ -739,7 +748,6 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__updateSequences(outfit)
         self.__customizablePrefabsManager.applyTempOutfitToAttachments(self, self.__vDesc, outfit)
         self.__customizablePrefabsManager.invalidateOutfitDataCache(self.id)
-        from prefab_attachment_utils import addPrefabAttachments
         addPrefabAttachments(self, self.__vEntity.typeDescriptor)
         if callback is not None:
             callback()
@@ -838,7 +846,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__vehicleStickers = VehicleStickers.VehicleStickers(self.__spaceId, self.__vDesc, self.getThisVehicleDossierInsigniaRank(), outfit)
         self.__vehicleStickers.alpha = self.__currentEmblemsAlpha
         self.__vehicleStickers.attach(self.__vEntity.model, self.__isVehicleDestroyed, False, self._modelCollisions)
-        if not outfit.isClanHidden and (not outfit.style or not outfit.style.isClanHidden):
+        if not outfit.style or not outfit.style.isClanHidden:
             self._requestClanDBIDForStickers(self.__onClanDBIDRetrieved)
         return
 
@@ -1070,10 +1078,6 @@ class HangarVehicleAppearance(ScriptGameObject):
     @property
     def outfit(self):
         return self.__outfit
-
-    @property
-    def isMarksOnGunVisible(self):
-        return self.__showMarksOnGun and self.__outfit is not None and not self.__outfit.isMarksOnGunHidden
 
     def __getStyleProgressionOutfitData(self, outfit):
         vehicle = None

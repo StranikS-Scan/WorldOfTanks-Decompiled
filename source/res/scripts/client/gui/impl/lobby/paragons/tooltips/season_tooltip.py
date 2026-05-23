@@ -31,3 +31,4 @@ class SeasonTooltip(ViewImpl):
             tx.setNecessaryVehicleCount(self.__paragonsController.minUnlockedNecessaryLevelVehiclesCount)
             tx.setIsAllRewardsClaimed(self.__paragonsController.isChapterComplete(chapterID) and self.__paragonsController.isAllSelectablesClaimed(chapterID))
             tx.chapterStatus.setStatus(getChapterStatus(chapterID))
+            tx.setTimeStamp(self.__paragonsController.getChapterCloseoutTimeStamp(chapterID))

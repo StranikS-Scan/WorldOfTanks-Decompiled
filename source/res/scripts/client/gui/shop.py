@@ -60,6 +60,7 @@ class Origin(object):
     HANGAR_BONS_SCREEN = 'hangar_bons_screen'
     SHOP = 'shop'
     VEHICLE_PREVIEW = 'vehicle_preview'
+    MISSIONS = 'missions'
 
 
 def _getParams(reason, price, itemId=None):

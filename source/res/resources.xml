@@ -209,6 +209,7 @@
       <module>	client.cgf_components.view_camera_sync	</module>
       <module>	client.cgf_components.view_components	</module>
       <module>	client.cgf_components.stat_track_component	</module>
+      <module>	client.cgf_components.dual_gun_dual_accuracy_heat_component	</module>
       <module>	client.events_core_client.events_core_cgf.entry_point.component	</module>
       <module>	client.events_core_client.events_core_cgf.entry_point.manager	</module>
       <module>	common.events_core_common.events_core_cgf.vehicle_buffs.components	</module>
@@ -265,6 +266,7 @@
       <path>	content/CGFPrefabs/Onboarding/14_plane_crash.prefab	</path>
       <path>	content/CGFPrefabs/Onboarding/14_09a_Planes_out_crash.prefab	</path>
       <path>	content/CGFPrefabs/Onboarding/108_walls_ruins.prefab	</path>
+      <path>	particles/Tank/rocket_accelerator/R253_Object_277_S_Rocket.prefab	</path>
       <path>	content/TestPrefabs/1003_cgf_test/TestStateSwitcher.prefab	</path>
       <path>	content/CGFPrefabs/Frontline/Pillbox.prefab	</path>
       <path>	content/CGFPrefabs/Frontline/Mortar.prefab	</path>
@@ -272,7 +274,6 @@
     </prefabs>
     <prefabFolders>
       <path>	content/CGFPrefabs/cosmic_event	</path>
-      <path>	content/CGFPrefabs/May	</path>
     </prefabFolders>
   </cgf>
 </resources.xml>

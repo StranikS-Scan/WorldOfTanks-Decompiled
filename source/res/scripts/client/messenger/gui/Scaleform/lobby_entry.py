@@ -1,16 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/lobby_entry.py
 import weakref
+import BigWorld
 from collections import defaultdict
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import DialogsInterface, SystemMessages
 from gui.Scaleform.daapi.view import dialogs
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.Scaleform.locale.CHAT import CHAT
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData, TARGET_ID
-from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.events import MessengerEvent, ChannelManagementEvent
-from gui.shared.items_cache import CACHE_SYNC_REASON
-from helpers import dependency
 from messenger.formatters.users_messages import getUserActionReceivedMessage
 from messenger.gui import events_dispatcher
 from messenger.gui.Scaleform import channels
@@ -21,12 +21,9 @@ from messenger.m_constants import MESSENGER_SCOPE, LAZY_CHANNEL
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 from shared_utils import findFirst
-from skeletons.gui.game_control import ILimitedUIController
-from skeletons.gui.shared import IItemsCache
+from PlayerEvents import g_playerEvents
 
 class LobbyEntry(IGUIEntry):
-    __limitedUIController = dependency.descriptor(ILimitedUIController)
-    __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(LobbyEntry, self).__init__()
@@ -92,8 +89,7 @@ class LobbyEntry(IGUIEntry):
         cEvents.onCommandReceived += self.__me_onCommandReceived
         g_messengerEvents.users.onUserActionReceived += self.__me_onUserActionReceived
         g_messengerEvents.onErrorReceived += self.__me_onErrorReceived
-        self.__limitedUIController.startObserve(LuiRules.COMMON_CHAT, self.__updateCommonChatVisibility)
-        self.__itemsCache.onSyncCompleted += self.__onSyncCompleted
+        g_playerEvents.onNewbieChatLockingStateChanged += self.__updateCommonChatAccessibility
 
     def close(self, nextScope):
         self.__components.clear()
@@ -115,8 +111,7 @@ class LobbyEntry(IGUIEntry):
         cEvents.onCommandReceived -= self.__me_onCommandReceived
         g_messengerEvents.users.onUserActionReceived -= self.__me_onUserActionReceived
         g_messengerEvents.onErrorReceived -= self.__me_onErrorReceived
-        self.__limitedUIController.stopObserve(LuiRules.COMMON_CHAT, self.__updateCommonChatVisibility)
-        self.__itemsCache.onSyncCompleted -= self.__onSyncCompleted
+        g_playerEvents.onNewbieChatLockingStateChanged -= self.__updateCommonChatAccessibility
 
     def addClientMessage(self, message, isCurrentPlayer=False):
         pass
@@ -189,11 +184,12 @@ class LobbyEntry(IGUIEntry):
             ctx.clear()
             channel = controller.getChannel()
             if channel.isAlwaysShow():
+                isLocked = False
+                tooltipData = None
                 if channel.getName() == LAZY_CHANNEL.COMMON:
-                    if self.__limitedUIController.isRuleCompleted(LuiRules.COMMON_CHAT):
-                        self.__carouselHandler.addChannel(channel, lazy=True)
-                else:
-                    self.__carouselHandler.addChannel(channel, lazy=True)
+                    isLocked = self.__isCommonChatLocked()
+                    tooltipData = self.__getCommonChatTooltipData(isLocked)
+                self.__carouselHandler.addChannel(channel, lazy=True, isLocked=isLocked, tooltipData=tooltipData)
             self.__setView4Ctrl(controller)
             return
 
@@ -284,20 +280,26 @@ class LobbyEntry(IGUIEntry):
                 controller.exit()
             return
 
-    def __onSyncCompleted(self, reason, _):
-        if reason in (CACHE_SYNC_REASON.SHOW_GUI, CACHE_SYNC_REASON.CLIENT_UPDATE, CACHE_SYNC_REASON.DOSSIER_RESYNC):
-            self.__updateCommonChatVisibility()
-            self.__itemsCache.onSyncCompleted -= self.__onSyncCompleted
-
-    def __updateCommonChatVisibility(self, *_):
+    def __updateCommonChatAccessibility(self):
         channel = findFirst(lambda ch: ch.getName() == LAZY_CHANNEL.COMMON, self.channelsStorage.all())
         if channel is None:
             return
         else:
-            isChannelExists = self.__carouselHandler.isChannelExists(channel)
-            if self.__limitedUIController.isRuleCompleted(LuiRules.COMMON_CHAT):
-                if not isChannelExists:
-                    self.__carouselHandler.addChannel(channel, lazy=True)
-            elif isChannelExists:
-                self.__carouselHandler.removeChannel(channel)
+            isLocked = self.__isCommonChatLocked()
+            tooltipData = self.__getCommonChatTooltipData(isLocked)
+            self.__carouselHandler.updateChannelAccessibility(channel, isLocked=isLocked, tooltipData=tooltipData)
             return
+
+    @staticmethod
+    def __isCommonChatLocked():
+        return bool(BigWorld.player().AccountNewbieChatLockComponent.chatLocked) if getattr(BigWorld.player(), 'AccountNewbieChatLockComponent', False) else False
+
+    @staticmethod
+    def __getCommonChatTooltipData(isLocked):
+        return {'tooltipId': TOOLTIPS_CONSTANTS.NEWBIE_RESTRICTIONS_TOOLTIP,
+         'isWulfTooltip': True,
+         'tooltipArgs': None,
+         'label': None} if isLocked else {'tooltipId': None,
+         'isWulfTooltip': False,
+         'tooltipArgs': None,
+         'label': CHAT.CHANNELS_COMMON_TOOLTIP}

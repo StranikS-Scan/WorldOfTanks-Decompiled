@@ -2,11 +2,10 @@
 # Embedded file name: fun_random/scripts/client/fun_random/gui/feature/sub_systems/fun_progressions.py
 import typing
 from fun_random.helpers.server_settings import FunMetaProgressionConfig, FunProgressionConfig
-from fun_random.gui.feature.fun_constants import PROGRESSION_COUNTER_TEMPLATE, PROGRESSION_TRIGGER_TEMPLATE, PROGRESSION_EXECUTOR_TEMPLATE, FEP_PRIORITY_CONFIG_FILE, FEP_PROGRESSION_EXECUTOR_QUEST_ID, FunTimersShifts
-from fun_random.gui.feature.models.progressions import FunProgression
+from fun_random.gui.feature.fun_constants import PROGRESSION_COUNTER_TEMPLATE, PROGRESSION_TRIGGER_TEMPLATE, PROGRESSION_EXECUTOR_TEMPLATE, FEP_PROGRESSION_EXECUTOR_QUEST_ID, FunTimersShifts
+from fun_random.gui.feature.models.progressions import FunProgressionUtils, FunProgression
 from fun_random.gui.shared.events import FunEventType
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.shared.bonuses_layout_controller import BonusesLayoutController
 from gui.shared.event_bus import SharedEvent
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier, TimerNotifier
 from helpers import dependency, time_utils
@@ -102,13 +101,13 @@ class FunProgressions(IFunRandomController.IFunProgressions, Notifiable):
     def __buildProgression(self, pConfig, isFirst, isLast, quests, tokens):
         executors = tuple((quests.get(PROGRESSION_EXECUTOR_TEMPLATE.format(pConfig.name, amount)) for amount in pConfig.executors))
         trigger = quests.get(PROGRESSION_TRIGGER_TEMPLATE.format(pConfig.name))
-        bonusesPriorityCtrl = BonusesLayoutController(FEP_PRIORITY_CONFIG_FILE)
-        bonusesPriorityCtrl.init()
         if trigger is None or not executors or not all(executors):
             return
         else:
+            funProgressionUtils = FunProgressionUtils()
+            funProgressionUtils.init()
             counter = tokens.getTokenCount(PROGRESSION_COUNTER_TEMPLATE.format(pConfig.name))
-            return FunProgression(pConfig, isFirst, isLast, counter, trigger, executors, bonusesPriorityCtrl)
+            return FunProgression(pConfig, isFirst, isLast, counter, trigger, executors, funProgressionUtils)
 
     def __invalidateProgressions(self):
         isEnabled = self.__settings.isEnabled and self.__eventsCache.isStarted

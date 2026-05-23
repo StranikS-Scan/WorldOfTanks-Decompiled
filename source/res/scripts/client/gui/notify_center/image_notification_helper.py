@@ -7,7 +7,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.image_helper import getTextureLinkByID
 from helpers.CallbackDelayer import CallbackDelayer
-from WebBrowser import getWebCache
+from MTWebBrowser import getWebCache
 _logger = logging.getLogger(__name__)
 
 class WebImageHelper(object):

@@ -6,14 +6,13 @@ from constants import BonusTypes, PenaltyTypes
 from gui.impl.lobby.hangar.modified_vehicle import g_modifiedVehicle
 from gui.Scaleform.daapi.view.lobby.hangar.VehicleParameters import VehicleParameters, _VehParamsDataProvider, _VehParamsGenerator
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.impl.lobby.stronghold.stronghold_helpers import getBattleModifiersByPrbEntity, getBattleModifiersObject, getBattleModifiersDomain
-from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared.items_parameters import params
 from gui.shared.items_parameters.comparator import VehiclesComparator
 from gui.shared.items_parameters.params import _PenaltyInfo
 from gui.shared.items_parameters.params_cache import g_paramsCache
 from helpers import dependency
+from skeletons.gui.game_control import IBattleModifiersController
 from skeletons.gui.shared import IItemsCache
 from CurrentVehicle import g_currentVehicle
 
@@ -30,15 +29,13 @@ def _visionRadiusCalcDiff(value, originalValue):
 _SUPPORTED_MODIFIERS = {'visionRadius': ('circularVisionRadius', _visionRadiusCalcDiff),
  'radioDistance': ('radioDistance', _simpleValueDiff),
  'vehicleHealth': ('maxHealth', _simpleValueDiff),
- 'thermalVisionDistance': ('thermalVisionDistance', _simpleValueDiff)}
+ 'thermalVisionDistance': ('thermalVisionDistance', _simpleValueDiff),
+ 'reloadTime': ('reloadTime', _simpleValueDiff),
+ 'autoreloadTime': ('autoreloadTime', _simpleValueDiff)}
 
-def _getPrbEntity():
-    dispatcher = g_prbLoader.getDispatcher()
-    return dispatcher.getEntity()
-
-
-def appendBattleModifiersPenalties(penalties, modifiedParams, originalParams):
-    modifiers = getBattleModifiersObject(getBattleModifiersByPrbEntity(_getPrbEntity()))
+@dependency.replace_none_kwargs(battleModifiersController=IBattleModifiersController)
+def appendBattleModifiersPenalties(penalties, modifiedParams, originalParams, battleModifiersController=None):
+    modifiers = battleModifiersController.getBattleModifiersObject()
     if modifiers is not None:
         for _, modifier in modifiers:
             if modifier.gameplayImpact == 2 and modifier.param.name in _SUPPORTED_MODIFIERS:
@@ -49,14 +46,15 @@ def appendBattleModifiersPenalties(penalties, modifiedParams, originalParams):
                 value = modifiedParams[paramName]
                 originalValue = originalParams[paramName]
                 diff = calcDiff(value, originalValue)
-                section.append(_PenaltyInfo(getBattleModifiersDomain(), diff, False, PenaltyTypes.BATTLE_MODIFIERS))
+                section.append(_PenaltyInfo(battleModifiersController.getCurrentDomain(), diff, False, PenaltyTypes.BATTLE_MODIFIERS))
                 penalties[paramName] = section
 
     return
 
 
-def appendBattleModifiersBonuses(bonuses):
-    modifiers = getBattleModifiersObject(getBattleModifiersByPrbEntity(_getPrbEntity()))
+@dependency.replace_none_kwargs(battleModifiersController=IBattleModifiersController)
+def appendBattleModifiersBonuses(bonuses, battleModifiersController=None):
+    modifiers = battleModifiersController.getBattleModifiersObject()
     if modifiers is not None:
         for _, modifier in modifiers:
             if modifier.gameplayImpact == 1 and modifier.param.name in _SUPPORTED_MODIFIERS:
@@ -87,6 +85,7 @@ class ModifiedParamsDataProvider(_VehParamsDataProvider):
 
 
 class ModifiedVehicleParameters(VehicleParameters, IGlobalListener):
+    _battleModifiersController = dependency.descriptor(IBattleModifiersController)
     _itemsCache = dependency.descriptor(IItemsCache)
 
     def _populate(self):
@@ -108,7 +107,7 @@ class ModifiedVehicleParameters(VehicleParameters, IGlobalListener):
         self._onVehicleChanged()
 
     def _onVehicleChanged(self, *_):
-        modifiers = getBattleModifiersObject(getBattleModifiersByPrbEntity(_getPrbEntity()))
+        modifiers = self._battleModifiersController.getBattleModifiersObject()
         if modifiers is not None and g_currentVehicle.isPresent():
             vehicle = self._itemsCache.items.getVehicleCopy(g_currentVehicle.item)
             vehicle.descriptor.battleModifiers = ModifiersContext(modifiers, vehType=vehicle.descriptor.type)

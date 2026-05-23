@@ -19,7 +19,7 @@ NEXT_DIV_THRESHOLD = 1
 @dependency.replace_none_kwargs(rankedController=IRankedBattlesController)
 def isRankedEntryPointAvailable(rankedController=None):
     vehicleIsAvailable = rankedController.hasSuitableVehicles() or rankedController.suitableVehicleIsAvailable()
-    return rankedController.isEnabled() and vehicleIsAvailable
+    return rankedController.isEnabled() and vehicleIsAvailable and not rankedController.isLocked()
 
 
 class RankedEntryPoint(ViewImpl):

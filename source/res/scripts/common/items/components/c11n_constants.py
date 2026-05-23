@@ -119,6 +119,7 @@ class ItemTags(object):
     STYLE_SERIAL_NUMBER = 'styleSerialNumber'
     LOCKED_ON_VEHICLE = 'lockedOnVehicle'
     STYLE_STAT_TRACK_FRAGS = 'styleStatTrackFrags'
+    CANNOT_BE_SOLD = 'cannot_be_sold'
 
 
 class ProjectionDecalType(object):

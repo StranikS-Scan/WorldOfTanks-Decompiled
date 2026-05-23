@@ -10,7 +10,7 @@ from gui.impl.gen import R
 from gui.shared.items_parameters.params_cache import g_paramsCache
 from gui.shared.utils.functions import replaceHyphenToUnderscore
 from gui.shared.gui_items.fitting_item import FittingItem, ICONS_MASK
-from gui.shared.utils import GUN_CLIP, GUN_CAN_BE_CLIP, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, GUN_CAN_BE_AUTOSHOOT_FLAME, GUN_AUTOSHOOT_FLAME, GUN_AUTO_RELOAD_DUAL_GUN, GUN_CLIP_DUAL_GUN, GUN_CAN_BE_AUTO_RELOAD_DUAL_GUN, GUN_CAN_BE_CLIP_DUAL_GUN, GUN_AUTOSHOOT, GUN_CAN_BE_AUTOSHOOT
+from gui.shared.utils import GUN_CLIP, GUN_CAN_BE_CLIP, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, GUN_CAN_BE_AUTOSHOOT_FLAME, GUN_AUTOSHOOT_FLAME, GUN_AUTO_RELOAD_DUAL_GUN, GUN_CLIP_DUAL_GUN, GUN_CAN_BE_AUTO_RELOAD_DUAL_GUN, GUN_CAN_BE_CLIP_DUAL_GUN, GUN_AUTOSHOOT, GUN_CAN_BE_AUTOSHOOT, GUN_DUAL_ACCURACY, GUN_DUAL_GUN_DUAL_ACCURACY, GUN_CAN_HAVE_DUAL_ACCURACY, GUN_CAN_BE_DUAL_GUN_DUAL_ACCURACY
 from gui.shared.money import Currency
 import nations
 from items import vehicles as veh_core
@@ -213,8 +213,13 @@ class VehicleGun(VehicleModule):
         typeToCheck = GUN_CLIP_DUAL_GUN if vehicleDescr is not None else GUN_CAN_BE_CLIP_DUAL_GUN
         return self.getReloadingType(vehicleDescr) == typeToCheck
 
+    def hasDualGunDualAccuracy(self, vehicleDescr=None):
+        typeToCheck = GUN_DUAL_GUN_DUAL_ACCURACY if vehicleDescr is not None else GUN_CAN_BE_DUAL_GUN_DUAL_ACCURACY
+        return self.getReloadingType(vehicleDescr) == typeToCheck
+
     def hasDualAccuracy(self, vehicleDescr=None):
-        return vehicleDescr is not None and g_paramsCache.hasDualAccuracy(self.intCD, vehicleDescr.type.compactDescr)
+        typeToCheck = GUN_DUAL_ACCURACY if vehicleDescr is not None else GUN_CAN_HAVE_DUAL_ACCURACY
+        return self.getReloadingType(vehicleDescr) == typeToCheck
 
     def isFlameGun(self):
         return self._defaultAmmo[0].type == SHELL_TYPES.FLAME
@@ -257,6 +262,10 @@ class VehicleGun(VehicleModule):
             return backport.text(R.strings.item_types.autoShootFlameGun.name())
         if self.isFlameGun():
             return backport.text(R.strings.item_types.flameGun.name())
+        if self.hasDualGunDualAccuracy():
+            return backport.text(R.strings.item_types.dualGunCooling.name())
+        if self.hasDualAccuracy():
+            pass
         if self.isDualGun():
             return backport.text(R.strings.item_types.dualGun.name())
         return backport.text(R.strings.item_types.autoShootGun.name()) if self.isAutoShootGun() else userType
@@ -266,6 +275,8 @@ class VehicleGun(VehicleModule):
             return backport.image(R.images.gui.maps.icons.modules.flameGunIcon())
         elif self.isAutoReloadableDualGun(vehDescr):
             return backport.image(R.images.gui.maps.icons.modules.autoLoaderDualGunIcon())
+        elif self.hasDualGunDualAccuracy(vehDescr):
+            return backport.image(R.images.gui.maps.icons.modules.dualGunDualAccuracyIcon())
         elif self.isClipDualGun(vehDescr):
             return backport.image(R.images.gui.maps.icons.modules.magazineDualGunIcon())
         elif self.isAutoShootGun(vehDescr):
@@ -285,7 +296,13 @@ class VehicleGun(VehicleModule):
             return backport.image(R.images.gui.maps.icons.modules.dualAccuracy()) if self.hasDualAccuracy(vehDescr) else None
 
     def getGUIEmblemID(self):
-        return FITTING_TYPES.VEHICLE_DUAL_GUN if self.isDualGun() else super(VehicleGun, self).getGUIEmblemID()
+        if self.hasDualGunDualAccuracy():
+            return FITTING_TYPES.VEHICLE_DUAL_GUN_COOLING
+        if self.hasDualAccuracy():
+            pass
+        elif self.isDualGun():
+            return FITTING_TYPES.VEHICLE_DUAL_GUN
+        return super(VehicleGun, self).getGUIEmblemID()
 
     def _getMaxAmmo(self):
         return self.descriptor.maxAmmo

@@ -1011,112 +1011,6 @@
       </damage>
     </armorSpalls>
   </_88mm_HE_Type_3_Ju_Nu>
-  <_88mm_Edelweiss_AP>
-    <id>	80	</id>
-    <userString>	#japan_vehicles:_88mm_Edelweiss_AP	</userString>
-    <icon>	ap	</icon>
-    <price>	335	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	88	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainArmorPiercing	</effects>
-    <damage>
-      <armor>	240	</armor>
-      <devices>	119	</devices>
-    </damage>
-  </_88mm_Edelweiss_AP>
-  <_88mm_Edelweiss_APCR>
-    <id>	81	</id>
-    <userString>	#japan_vehicles:_88mm_Edelweiss_APCR	</userString>
-    <icon>	ap_cr_premium	</icon>
-    <price>	4400	</price>
-    <improved>	true	</improved>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <caliber>	88	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainAPCR	</effects>
-    <damage>
-      <armor>	240	</armor>
-      <devices>	119	</devices>
-    </damage>
-  </_88mm_Edelweiss_APCR>
-  <_88mm_Edelweiss_ENH>
-    <id>	82	</id>
-    <userString>	#japan_vehicles:_88mm_Edelweiss_ENH	</userString>
-    <icon>	he_modern	</icon>
-    <price>	280	</price>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
-    <caliber>	88	</caliber>
-    <explosionRadius>	1.4	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	mainHighExplosive	</effects>
-    <damage>
-      <armor>	295	</armor>
-      <devices>	119	</devices>
-    </damage>
-    <armorSpalls>
-      <impactRadius>	1.4	</impactRadius>
-      <coneAngle>	90	</coneAngle>
-      <damage>
-        <armor>	150	</armor>
-        <devices>	60	</devices>
-      </damage>
-    </armorSpalls>
-  </_88mm_Edelweiss_ENH>
-  <_88mm_Nameless_AP>
-    <id>	77	</id>
-    <userString>	#japan_vehicles:_88mm_Nameless_AP	</userString>
-    <icon>	ap	</icon>
-    <price>	475	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	88	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainArmorPiercing	</effects>
-    <damage>
-      <armor>	300	</armor>
-      <devices>	119	</devices>
-    </damage>
-  </_88mm_Nameless_AP>
-  <_88mm_Nameless_APCR>
-    <id>	78	</id>
-    <userString>	#japan_vehicles:_88mm_Nameless_APCR	</userString>
-    <icon>	ap_cr_premium	</icon>
-    <price>	4800	</price>
-    <improved>	true	</improved>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <caliber>	88	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainAPCR	</effects>
-    <damage>
-      <armor>	300	</armor>
-      <devices>	119	</devices>
-    </damage>
-  </_88mm_Nameless_APCR>
-  <_88mm_Nameless_ENH>
-    <id>	79	</id>
-    <userString>	#japan_vehicles:_88mm_Nameless_ENH	</userString>
-    <icon>	he_modern	</icon>
-    <price>	345	</price>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
-    <caliber>	88	</caliber>
-    <explosionRadius>	1.4	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	mainHighExplosive	</effects>
-    <damage>
-      <armor>	360	</armor>
-      <devices>	119	</devices>
-    </damage>
-    <armorSpalls>
-      <impactRadius>	1.4	</impactRadius>
-      <coneAngle>	90	</coneAngle>
-      <damage>
-        <armor>	180	</armor>
-        <devices>	60	</devices>
-      </damage>
-    </armorSpalls>
-  </_88mm_Nameless_ENH>
   <_105mm_AP_Type_95>
     <id>	100	</id>
     <userString>	#japan_vehicles:_105mm_AP_Type_95	</userString>
@@ -2208,6 +2102,59 @@
       </damage>
     </armorSpalls>
   </_105mm_HEPT_Type76>
+  <_105mm_AP_M736_02>
+    <id>	31017	</id>
+    <userString>	#japan_vehicles:_105mm_AP_M736_02	</userString>
+    <icon>	ap	</icon>
+    <price>	1070	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_AP_M736_02>
+  <_105mm_HEAT_M457_02>
+    <id>	31018	</id>
+    <userString>	#japan_vehicles:_105mm_HEAT_M457_02	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_HEAT_M457_02>
+  <_105mm_HEPT_Type76_02>
+    <id>	31019	</id>
+    <userString>	#japan_vehicles:_105mm_HEPT_Type76_02	</userString>
+    <icon>	he_modern	</icon>
+    <price>	645	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	200	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_HEPT_Type76_02>
   <_105mm_AP_Type_92>
     <id>	130	</id>
     <userString>	#japan_vehicles:_105mm_AP_Type_92	</userString>

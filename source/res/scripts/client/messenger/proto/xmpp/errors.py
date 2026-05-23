@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/errors.py
+from constants import NOVICE_RESTRICTIONS_BAN_TYPE
 from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER
 from helpers import i18n, time_utils
 from messenger.m_constants import CLIENT_ACTION_ID, CLIENT_ERROR_ID
 from messenger.proto.interfaces import IChatError
 from messenger.proto import shared_errors
-from messenger.proto.shared_errors import ClientActionError
+from messenger.proto.shared_errors import ClientActionError, ChatBanError, makeNoviceChatBanErrorShort, makeChatBanError
 from messenger.proto.xmpp.extensions.error import StanzaErrorExtension, ProjectErrorExtension, DEF_STANZA_ERROR_CONDITION
 from messenger.proto.xmpp.extensions.shared_handlers import IQHandler, ProxyHandler
 from messenger.proto.xmpp import xmpp_constants
@@ -144,6 +145,21 @@ class ServerUserRoomCreationError(IChatError):
         return i18n.makeString(I18N_MESSENGER.XMPP_ERROR_USER_ROOM_CREATION, strArg1=reason)
 
 
+class _ChatBannedError(ChatBanError):
+    __slots__ = ('_banType',)
+
+    def __init__(self, endTime, reason, banType=None):
+        super(_ChatBannedError, self).__init__(endTime, reason)
+        self._banType = banType
+
+    def getMessage(self):
+        if self._banType == NOVICE_RESTRICTIONS_BAN_TYPE:
+            msg = makeNoviceChatBanErrorShort()
+        else:
+            msg = makeChatBanError(self._endTime, self._reason)
+        return msg
+
+
 def createServerIQError(pyGlooxTag):
     return StanzaConditionError(*IQHandler(StanzaErrorExtension()).handleTag(pyGlooxTag))
 
@@ -186,5 +202,5 @@ def createChatBanError(banInfo):
             expiresAt = time_utils.makeLocalServerTime(item.expiresAt)
         else:
             expiresAt = 0
-        error = shared_errors.ChatBanError(expiresAt, item.reason)
+        error = _ChatBannedError(expiresAt, item.reason, item.banType)
     return error

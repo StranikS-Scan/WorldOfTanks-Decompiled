@@ -72,6 +72,11 @@
           <destroyed>	vehicles/russian/R87_T62A/_skins/R87_T62A_3dst/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/russian/R87_T62A/_skins/R87_T62A_3dst/crash/lod0/Hull.model	</exploded>
         </R87_T62A_3dst>
+        <R87_T62A_3Dst_02>
+          <undamaged>	vehicles/russian/R87_T62A/_skins/R87_T62A_3Dst_02/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R87_T62A/_skins/R87_T62A_3Dst_02/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R87_T62A/_skins/R87_T62A_3Dst_02/crash/lod0/Hull.model	</exploded>
+        </R87_T62A_3Dst_02>
       </sets>
     </models>
     <swinging>
@@ -634,6 +639,36 @@
         <clipAngle>	1.5025	</clipAngle>
         <anchorShift>	0.415995	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15047	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R87_T62A_3Dst_02	</compatibleModels>
+        <position>	-0.500146 1.274945 2.316798	</position>
+        <rotation>	0.525856 -0.000013 3.14157	</rotation>
+        <scale>	0.732679 0.33111 0.732686	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.8446	</clipAngle>
+        <anchorShift>	0.1	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15048	</slotId>
+        <tags>	formfactor_rect1x2	</tags>
+        <compatibleModels>	R87_T62A_3Dst_02	</compatibleModels>
+        <position>	-0.409125 0.796429 -3.450804	</position>
+        <rotation>	1.527763 0.000209 0.019718	</rotation>
+        <scale>	0.819551 0.388397 0.819557	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.436332	</clipAngle>
+        <anchorShift>	-0.06	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -681,6 +716,11 @@
             <destroyed>	vehicles/russian/R87_T62A/_skins/R87_T62A_3dst/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/russian/R87_T62A/_skins/R87_T62A_3dst/crash/lod0/Chassis.model	</exploded>
           </R87_T62A_3dst>
+          <R87_T62A_3Dst_02>
+            <undamaged>	vehicles/russian/R87_T62A/_skins/R87_T62A_3Dst_02/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R87_T62A/_skins/R87_T62A_3Dst_02/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R87_T62A/_skins/R87_T62A_3Dst_02/crash/lod0/Chassis.model	</exploded>
+          </R87_T62A_3Dst_02>
         </sets>
       </models>
       <traces>
@@ -765,6 +805,45 @@
                   <row1>	0.000000 0.154873 0.256932	</row1>
                   <row2>	0.000000 -0.856442 0.516244	</row2>
                   <row3>	-1.181409 1.329987 3.097943	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	R87_T62A_3Dst_02	</modelsSet>
+                <boxCollider>
+                  <row0>	2.000000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.000000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.600000	</row2>
+                  <row3>	0.000010 0.953632 -0.143482	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.300000 0.000000 -0.000001	</row0>
+                  <row1>	0.000000 0.299935 -0.006228	</row1>
+                  <row2>	0.000001 0.137021 6.598580	</row2>
+                  <row3>	0.000013 1.307290 -0.143482	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.300000 -0.000005 0.000019	</row0>
+                  <row1>	-0.000001 0.247755 0.169167	</row1>
+                  <row2>	-0.000002 -0.169167 0.247755	</row2>
+                  <row3>	0.000012 1.264230 3.159240	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.300000 -0.000021 0.000032	</row0>
+                  <row1>	-0.000002 0.099817 0.282907	</row1>
+                  <row2>	-0.000003 -0.282907 0.099817	</row2>
+                  <row3>	0.000010 1.113590 3.300190	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.300000 -0.000013 -0.000024	</row0>
+                  <row1>	-0.000001 0.205228 -0.218818	</row1>
+                  <row2>	0.000002 0.218818 0.205228	</row2>
+                  <row3>	0.000012 1.113590 -3.430450	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.699968 -0.006644	</row1>
+                  <row2>	0.000001 0.056265 5.927624	</row2>
+                  <row3>	-1.794540 1.156107 -0.058246	</row3>
                 </boxCollider>
               </hullCollider>
               <hullCollider>
@@ -871,6 +950,45 @@
                   <row1>	0.000000 0.154873 0.256932	</row1>
                   <row2>	0.000000 -0.856442 0.516244	</row2>
                   <row3>	1.181000 1.329990 3.097940	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	R87_T62A_3Dst_02	</modelsSet>
+                <boxCollider>
+                  <row0>	2.000000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.000000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.600000	</row2>
+                  <row3>	0.000010 0.953632 -0.143482	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.300000 0.000000 -0.000001	</row0>
+                  <row1>	0.000000 0.299935 -0.006228	</row1>
+                  <row2>	0.000001 0.137021 6.598580	</row2>
+                  <row3>	0.000013 1.307290 -0.143482	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.300000 -0.000005 0.000019	</row0>
+                  <row1>	-0.000001 0.247755 0.169167	</row1>
+                  <row2>	-0.000002 -0.169167 0.247755	</row2>
+                  <row3>	0.000012 1.264230 3.159240	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.300000 -0.000021 0.000032	</row0>
+                  <row1>	-0.000002 0.099817 0.282907	</row1>
+                  <row2>	-0.000003 -0.282907 0.099817	</row2>
+                  <row3>	0.000010 1.113590 3.300190	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.300000 -0.000013 -0.000024	</row0>
+                  <row1>	-0.000001 0.205228 -0.218818	</row1>
+                  <row2>	0.000002 0.218818 0.205228	</row2>
+                  <row3>	0.000012 1.113590 -3.430450	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.699968 -0.006644	</row1>
+                  <row2>	0.000001 0.053120 5.596256	</row2>
+                  <row3>	1.795000 1.125028 -0.127689	</row3>
                 </boxCollider>
               </hullCollider>
               <hullCollider>
@@ -1282,6 +1400,12 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <R87_T62A_3Dst_02>
+              <segmentModelLeft>	vehicles/russian/R87_T62A/track/segment.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/russian/R87_T62A/track/segment.model	</segmentModelRight>
+            </R87_T62A_3Dst_02>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -1787,6 +1911,11 @@
                 <destroyed>	vehicles/russian/R87_T62A/_skins/R87_T62A_3dst/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/russian/R87_T62A/_skins/R87_T62A_3dst/crash/lod0/Gun_01.model	</exploded>
               </R87_T62A_3dst>
+              <R87_T62A_3Dst_02>
+                <undamaged>	vehicles/russian/R87_T62A/_skins/R87_T62A_3Dst_02/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R87_T62A/_skins/R87_T62A_3Dst_02/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R87_T62A/_skins/R87_T62A_3Dst_02/crash/lod0/Gun_01.model	</exploded>
+              </R87_T62A_3Dst_02>
             </sets>
           </models>
           <hitTester>
@@ -1834,6 +1963,7 @@
               <rayStart>	0.000368 0.004279 1.19	</rayStart>
               <rayEnd>	0.000368 0.004279 1.923	</rayEnd>
               <rayUp>	0.106 0 0	</rayUp>
+              <compatibleModels>	default	</compatibleModels>
               <size>	0.733	</size>
             </slot>
             <slot>
@@ -1845,6 +1975,15 @@
               <compatibleModels>	R87_T62A_3dst	</compatibleModels>
               <size>	0.7	</size>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49002	</slotId>
+              <rayStart>	0.000368 0.004279 1.64	</rayStart>
+              <rayEnd>	0.000368 0.004279 2.25	</rayEnd>
+              <rayUp>	0.1 0 0	</rayUp>
+              <compatibleModels>	R87_T62A_3Dst_02	</compatibleModels>
+              <size>	0.61	</size>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -1852,6 +1991,110 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	-26.22	</row>
+                <row>	-22.15	</row>
+                <row>	-20.98	</row>
+                <row>	-18.09	</row>
+                <row>	-15.73	</row>
+                <row>	-14.03	</row>
+                <row>	-10.49	</row>
+                <row>	-9.96	</row>
+                <row>	-5.9	</row>
+                <row>	-5.25	</row>
+                <row>	-1.83	</row>
+                <row>	0	</row>
+                <row>	2.23	</row>
+                <row>	6.29	</row>
+                <row>	10.36	</row>
+                <row>	14.42	</row>
+                <row>	18.49	</row>
+                <row>	22.55	</row>
+                <row>	26.61	</row>
+                <row>	30.68	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	joint3	</node>
+                  <table>
+                    <row>	-1.341	</row>
+                    <row>	-5.04	</row>
+                    <row>	-6.124	</row>
+                    <row>	-8.803	</row>
+                    <row>	-11.017	</row>
+                    <row>	-12.634	</row>
+                    <row>	-16.029	</row>
+                    <row>	-16.541	</row>
+                    <row>	-20.531	</row>
+                    <row>	-21.178	</row>
+                    <row>	-24.616	</row>
+                    <row>	-26.49	</row>
+                    <row>	-28.812	</row>
+                    <row>	-33.144	</row>
+                    <row>	-37.646	</row>
+                    <row>	-42.373	</row>
+                    <row>	-47.408	</row>
+                    <row>	-52.895	</row>
+                    <row>	-59.115	</row>
+                    <row>	-66.739	</row>
+                  </table>
+                </slave>
+                <slave>
+                  <node>	joint4	</node>
+                  <table>
+                    <row>	0.417	</row>
+                    <row>	3.534	</row>
+                    <row>	4.449	</row>
+                    <row>	6.71	</row>
+                    <row>	8.579	</row>
+                    <row>	9.944	</row>
+                    <row>	12.807	</row>
+                    <row>	13.238	</row>
+                    <row>	16.592	</row>
+                    <row>	17.135	</row>
+                    <row>	20.01	</row>
+                    <row>	21.57	</row>
+                    <row>	23.496	</row>
+                    <row>	27.061	</row>
+                    <row>	30.717	</row>
+                    <row>	34.49	</row>
+                    <row>	38.413	</row>
+                    <row>	42.552	</row>
+                    <row>	47.033	</row>
+                    <row>	52.163	</row>
+                  </table>
+                </slave>
+                <slave>
+                  <node>	joint5	</node>
+                  <table>
+                    <row>	0	</row>
+                    <row>	0	</row>
+                    <row>	0	</row>
+                    <row>	0	</row>
+                    <row>	0	</row>
+                    <row>	0	</row>
+                    <row>	0	</row>
+                    <row>	0	</row>
+                    <row>	0	</row>
+                    <row>	0	</row>
+                    <row>	0	</row>
+                    <row>	0	</row>
+                    <row>	0	</row>
+                    <row>	0	</row>
+                    <row>	0	</row>
+                    <row>	0	</row>
+                    <row>	0	</row>
+                    <row>	0	</row>
+                    <row>	0	</row>
+                    <row>	0	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
           <camouflage>
             <tiling>	0.52 0.25 0.000000 0.000000	</tiling>
             <density>	147.798 146.919	</density>
@@ -1869,6 +2112,11 @@
             <destroyed>	vehicles/russian/R87_T62A/_skins/R87_T62A_3dst/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/russian/R87_T62A/_skins/R87_T62A_3dst/crash/lod0/Turret_01.model	</exploded>
           </R87_T62A_3dst>
+          <R87_T62A_3Dst_02>
+            <undamaged>	vehicles/russian/R87_T62A/_skins/R87_T62A_3Dst_02/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R87_T62A/_skins/R87_T62A_3Dst_02/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R87_T62A/_skins/R87_T62A_3Dst_02/crash/lod0/Turret_01.model	</exploded>
+          </R87_T62A_3Dst_02>
         </sets>
       </models>
       <hitTester>
@@ -1903,9 +2151,9 @@
           <slotType>	player	</slotType>
           <slotId>	33001	</slotId>
           <isMirrored>	true	</isMirrored>
-          <rayStart>	1.12789 0.228407 0.784369	</rayStart>
-          <rayEnd>	0.973256 0.163359 0.675482	</rayEnd>
-          <rayUp>	0 1 0	</rayUp>
+          <rayStart>	1.167508 0.228407 0.728106	</rayStart>
+          <rayEnd>	1.012874 0.163359 0.619219	</rayEnd>
+          <rayUp>	-0.265929 0.945631 -0.187256	</rayUp>
           <size>	0.26	</size>
         </slot>
         <slot>
@@ -2513,8 +2761,40 @@
           <anchorShift>	0.099923	</anchorShift>
         </slot>
         <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35052	</slotId>
+          <tags>	formfactor_rect1x2	</tags>
+          <compatibleModels>	R87_T62A_3Dst_02	</compatibleModels>
+          <position>	-0.639729 1.703113 1.056882	</position>
+          <rotation>	1.391091 -0.753498 3.109549	</rotation>
+          <scale>	0.721297 0.594495 0.721298	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.02282	</clipAngle>
+          <verticalMirror>	true	</verticalMirror>
+          <anchorShift>	0.269788	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35053	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R87_T62A_3Dst_02	</compatibleModels>
+          <position>	-1.005045 1.654335 0.704177	</position>
+          <rotation>	1.391091 -0.7535 -2.757078	</rotation>
+          <scale>	0.42033 0.346437 0.420331	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.02282	</clipAngle>
+          <verticalMirror>	true	</verticalMirror>
+          <anchorShift>	0.269788	</anchorShift>
+        </slot>
+        <slot>
           <slotType>	attachment	</slotType>
           <slotId>	38000	</slotId>
+          <position>	0 0 0	</position>
+          <rotation>	0 0 0	</rotation>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
           <position>	0 0 0	</position>
           <rotation>	0 0 0	</rotation>
         </slot>

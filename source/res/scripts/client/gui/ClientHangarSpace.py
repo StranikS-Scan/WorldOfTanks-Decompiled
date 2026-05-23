@@ -7,7 +7,7 @@ import BigWorld
 import Math
 import MusicControllerWWISE
 import ResMgr
-import WebBrowser
+import MTWebBrowser
 import constants
 import AnimationSequence
 from PlayerEvents import g_playerEvents
@@ -324,7 +324,7 @@ class ClientHangarSpace(object):
         self.__loadingStatus = BigWorld.spaceLoadStatus()
         BigWorld.worldDrawEnabled(True)
         AnimationSequence.setEnableAnimationSequenceUpdate(True)
-        WebBrowser.pauseExternalCache(False)
+        MTWebBrowser.pauseExternalCache(False)
         if self.__loadingStatus < 1 or not BigWorld.virtualTextureRenderComplete():
             self.__waitCallback = BigWorld.callback(0.1, self.__waitLoadingSpace)
         else:

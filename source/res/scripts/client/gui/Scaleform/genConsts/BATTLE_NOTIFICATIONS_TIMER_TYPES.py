@@ -67,5 +67,3 @@ class BATTLE_NOTIFICATIONS_TIMER_TYPES(object):
     CRITICAL_VIEW = 'criticalView'
     ABILITY = 'ability'
     THERMAL_VISION_WARNING = 'thermalVisionWarning'
-    HB_ARTILLERY_ON_YOURSELF = 'hbArtilleryOnYourself'
-    HB_LAST_STAND = 'hbLastStand'

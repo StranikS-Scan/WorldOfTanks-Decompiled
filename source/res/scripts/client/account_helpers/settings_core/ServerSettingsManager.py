@@ -8,6 +8,7 @@ from account_helpers.settings_core.settings_constants import VERSION, GuiSetting
 from adisp import adisp_process, adisp_async
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_pass.battle_pass_helpers import updateBattlePassSettings
+from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
 from helpers import dependency
 from shared_utils import CONST_CONTAINER
@@ -80,6 +81,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     BATTLE_CONTEXT_HINTS_3 = 'BATTLE_CONTEXT_HINTS_3'
     BATTLE_CONTEXT_HINTS_GROUP = (BATTLE_CONTEXT_HINTS, BATTLE_CONTEXT_HINTS_2, BATTLE_CONTEXT_HINTS_3)
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2, ONCE_ONLY_HINTS_3)
+    LIMITED_UI_GROUP = (LIMITED_UI_1, LIMITED_UI_2)
 
 
 class UI_STORAGE_KEYS(CONST_CONTAINER):
@@ -111,53 +113,12 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
     AUTO_RELOAD_DUAL_GUN_MARK_IS_SHOWN = 'auto_reload_dual_gun_mark_is_shown'
     CLIP_DUAL_GUN_HIGHLIGHTS_COUNTER = 'clip_dual_gun_highlights_counter'
     CLIP_DUAL_GUN_MARK_IS_SHOWN = 'clip_dual_gun_mark_is_shown'
+    DUAL_GUN_DUAL_ACCURACY_HIGHLIGHTS_COUNTER = 'dual_gun_dual_accuracy_highlights_count'
 
 
 class BATTLE_MATTERS_KEYS(CONST_CONTAINER):
     QUESTS_SHOWN = 'shown'
     QUEST_PROGRESS = 'questProgress'
-
-
-LIMITED_UI_STORAGES = (SETTINGS_SECTIONS.LIMITED_UI_1, SETTINGS_SECTIONS.LIMITED_UI_2)
-LIMITED_UI_KEY = 'LIMITED_UI'
-
-class LIMITED_UI_SPAM_OFF(CONST_CONTAINER):
-    LOBBY_HEADER_COUNTERS_STORE = 'store'
-    LOBBY_HEADER_COUNTERS_PROFILE = 'profile'
-    PROFILE_HOF = 'profileHof'
-    PROFILE_TECHNIQUE_PAGE = 'profileTechniquePage'
-    SESSION_STATS = 'sessionStats'
-    BLUEPRINTS_BUTTON = 'blueprintsButton'
-    LOBBY_HEADER_COUNTERS_MISSIONS = 'missions'
-    MISSIONS_MARATHON_VIEW = 'MissionsMarathonView'
-    LOBBY_HEADER_COUNTERS_PM_OPERATIONS = 'PersonalMissionOperations'
-    AP_ZONE_HINT = 'AmmunitionPanelHintZoneHint'
-    AP_BATTLE_ABILITIES_HINT = 'AmmunitionPanelBattleAbilitiesHint'
-    C7N_PROGRESSION_HINT = 'CustomizationProgressionViewHint'
-    TECH_TREE_EVENTS = 'TechTreeEvent'
-    DOG_TAG_HINT = 'DogTagHangarHint'
-    MODE_SELECTOR_WIDGET_BTN_HINT = 'ModeSelectorWidgetsBtnHint'
-    PR_HANGAR_HINT = 'PersonalReservesHangarHint'
-    MODERNIZE_SETUP_HINT = 'ModernizedSetupTabHint'
-    OFFER_BANNER_WINDOW = 'OfferBannerWindow'
-    ORDER = (LOBBY_HEADER_COUNTERS_STORE,
-     LOBBY_HEADER_COUNTERS_PROFILE,
-     PROFILE_HOF,
-     PROFILE_TECHNIQUE_PAGE,
-     SESSION_STATS,
-     BLUEPRINTS_BUTTON,
-     LOBBY_HEADER_COUNTERS_MISSIONS,
-     MISSIONS_MARATHON_VIEW,
-     LOBBY_HEADER_COUNTERS_PM_OPERATIONS,
-     AP_ZONE_HINT,
-     AP_BATTLE_ABILITIES_HINT,
-     C7N_PROGRESSION_HINT,
-     TECH_TREE_EVENTS,
-     DOG_TAG_HINT,
-     MODE_SELECTOR_WIDGET_BTN_HINT,
-     PR_HANGAR_HINT,
-     MODERNIZE_SETUP_HINT,
-     OFFER_BANNER_WINDOW)
 
 
 class ARMORY_YARD_KEYS(CONST_CONTAINER):
@@ -615,7 +576,8 @@ class ServerSettingsManager(object):
                                            OnceOnlyHints.PARAGONS_RESEARCH_BUTTON_HINT: 8,
                                            OnceOnlyHints.BIRTHDAY_POSTBATTLE_EXTRA_TAB_HINT: 9,
                                            OnceOnlyHints.ADD_ECONOMIC_DIRECTIVES_HINT: 10,
-                                           OnceOnlyHints.EPIC_SUPPLY_INFO_HINT: 11}, offsets={}),
+                                           OnceOnlyHints.EPIC_SUPPLY_INFO_HINT: 11,
+                                           OnceOnlyHints.COMP7_SKILL_HINT: 12}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESET_CRITS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -684,7 +646,8 @@ class ServerSettingsManager(object):
                                       UI_STORAGE_KEYS.FLAMETHROWER_HIGHLIGHTS_COUNTER: Offset(10, 7168),
                                       UI_STORAGE_KEYS.THERMAL_VISION_HIGHLIGHTS_COUNTER: Offset(14, 114688),
                                       UI_STORAGE_KEYS.AUTO_RELOAD_DUAL_GUN_HIGHLIGHTS_COUNTER: Offset(18, 1835008),
-                                      UI_STORAGE_KEYS.CLIP_DUAL_GUN_HIGHLIGHTS_COUNTER: Offset(22, 29360128)}),
+                                      UI_STORAGE_KEYS.CLIP_DUAL_GUN_HIGHLIGHTS_COUNTER: Offset(22, 29360128),
+                                      UI_STORAGE_KEYS.DUAL_GUN_DUAL_ACCURACY_HIGHLIGHTS_COUNTER: Offset(26, 469762048)}),
      SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS: Section(masks={}, offsets={BATTLE_MATTERS_KEYS.QUESTS_SHOWN: Offset(0, 255),
                                                BATTLE_MATTERS_KEYS.QUEST_PROGRESS: Offset(8, 4294967040L)}),
      SETTINGS_SECTIONS.QUESTS_PROGRESS: Section(masks={}, offsets={QUESTS_PROGRESS.VIEW_TYPE: Offset(0, 3),
@@ -875,8 +838,70 @@ class ServerSettingsManager(object):
                                                       'role_SPG_flame': 26,
                                                       'role_SPG_assault': 27,
                                                       'paragons': 29}, offsets={}),
-     SETTINGS_SECTIONS.LIMITED_UI_1: Section(masks={}, offsets={LIMITED_UI_KEY: Offset(0, 4294967295L)}),
-     SETTINGS_SECTIONS.LIMITED_UI_2: Section(masks={}, offsets={LIMITED_UI_KEY: Offset(0, 4294967295L)}),
+     SETTINGS_SECTIONS.LIMITED_UI_1: Section(masks={LuiRules.LOBBY_HEADER_COUNTERS_STORE: 0,
+                                      LuiRules.LOBBY_HEADER_COUNTERS_PROFILE: 1,
+                                      LuiRules.PROFILE_HOF: 2,
+                                      LuiRules.PROFILE_TECHNIQUE_PAGE: 3,
+                                      LuiRules.SESSION_STATS: 4,
+                                      LuiRules.BLUEPRINTS_BUTTON: 5,
+                                      LuiRules.LOBBY_HEADER_COUNTERS_MISSIONS: 6,
+                                      LuiRules.MISSIONS_MARATHON_VIEW: 7,
+                                      LuiRules.LOBBY_HEADER_COUNTERS_PM_OPERATIONS: 8,
+                                      LuiRules.AP_ZONE_HINT: 9,
+                                      LuiRules.AP_BATTLE_ABILITIES_HINT: 10,
+                                      LuiRules.C7N_BUBBLE: 11,
+                                      LuiRules.TECH_TREE_EVENTS: 12,
+                                      LuiRules.DOG_TAG_HINT: 13,
+                                      LuiRules.MODE_SELECTOR_WIDGET_BTN_HINT: 14,
+                                      LuiRules.PR_HANGAR_HINT: 15,
+                                      LuiRules.MODERNIZE_SETUP_HINT: 16,
+                                      LuiRules.OFFER_BANNER_WINDOW: 17,
+                                      LuiRules.COMP7_ENTRY_POINT: 18,
+                                      LuiRules.BP_ENTRY: 19,
+                                      LuiRules.PROGRESSIVE_ITEMS_REWARD: 20,
+                                      LuiRules.DAILY_MISSIONS: 21,
+                                      LuiRules.CRAFT_MACHINE_ENTRY_POINT: 22,
+                                      LuiRules.MAPBOX_ENTRY_POINT: 23,
+                                      LuiRules.EPIC_BATTLES_ENTRY_POINT: 24,
+                                      LuiRules.BATTLE_MISSIONS: 25,
+                                      LuiRules.BLACK_MARKET_ENTRY_POINT: 26,
+                                      LuiRules.HERO_TANK: 27,
+                                      LuiRules.BM_FLAG: 28,
+                                      LuiRules.PERSONAL_MISSIONS: 29,
+                                      LuiRules.SYS_MSG_COLLECTION_START_BP: 30,
+                                      LuiRules.LOBBY_HEADER_COUNTERS_STORAGE: 31}, offsets={}),
+     SETTINGS_SECTIONS.LIMITED_UI_2: Section(masks={LuiRules.PR_HANGAR_BUTTON: 0,
+                                      LuiRules.STRONGHOLD_ENTRY_POINT: 1,
+                                      LuiRules.BR_ENTRY_POINT: 2,
+                                      LuiRules.FUN_RANDOM_ENTRY_POINT: 3,
+                                      LuiRules.FUN_RANDOM_NOTIFICATIONS: 4,
+                                      LuiRules.SYS_MSG_COLLECTIONS_UPDATED_ENTRY: 5,
+                                      LuiRules.GUI_LOOTBOXES_ENTRY_POINT: 6,
+                                      LuiRules.ARMORY_YARD_ENTRY_POINT: 7,
+                                      LuiRules.RESOURCE_WELL: 8,
+                                      LuiRules.GUI_COSMIC_ENTRY_POINT: 9,
+                                      LuiRules.SHOP_SALES_ENTRY_POINT: 10,
+                                      LuiRules.UNIVERSAL_FLAG_ENTRY_POINT: 11,
+                                      LuiRules.SUBSCRIPTION_STATE: 12,
+                                      LuiRules.EARLY_ACCESS_ENTRY_POINT: 13,
+                                      LuiRules.NEW_CAMPAIGN_HINT: 14,
+                                      LuiRules.PARAGONS_ENTRY_POINT: 15,
+                                      LuiRules.PARAGONS_TREE_BRANCHES: 16,
+                                      LuiRules.PARAGONS_NOTIFICATION: 17,
+                                      LuiRules.TEASER: 18,
+                                      LuiRules.COMMON_CHAT: 19,
+                                      LuiRules.CHANNELS: 20,
+                                      LuiRules.PERSONAL_MISSIONS_CONTENT: 21,
+                                      LuiRules.TOURNAMENTS_CONTENT: 22,
+                                      LuiRules.VERSUS_AI_CONTENT: 23,
+                                      LuiRules.STRONGHOLD_CONTENT: 24,
+                                      LuiRules.PARAGONS_BUTTONS: 25,
+                                      LuiRules.RANKED_CONTENT: 26,
+                                      LuiRules.COMP7_CONTENT: 27,
+                                      LuiRules.SPEC_BATTLE_CONTENT: 28,
+                                      LuiRules.ARCADE_CONTENT: 29,
+                                      LuiRules.FIELD_TRIALS_CONTENT: 30,
+                                      LuiRules.FRONTLINE_CONTENT: 31}, offsets={}),
      SETTINGS_SECTIONS.ARMORY_YARD: Section(masks={}, offsets={ARMORY_YARD_KEYS.BUILD_PROGRESS: Offset(0, 255),
                                      ARMORY_YARD_KEYS.CURRENT_SEASON: Offset(8, 4294967040L)}),
      SETTINGS_SECTIONS.NEW_YEAR: Section(masks={NewYearStorageKeys.HAS_TOYS_HINT_SHOWN: 0,
@@ -1001,6 +1026,7 @@ class ServerSettingsManager(object):
     _MAX_THERMAL_VISION_HIGHLIGHTS_COUNT = 5
     _MAX_AUTO_RELOAD_DUAL_GUN_HIGHLIGHTS_COUNT = 5
     _MAX_CLIP_DUAL_GUN_HIGHLIGHTS_COUNT = 5
+    _MAX_DUAL_GUN_DUAL_ACCURACY_HIGHLIGHTS_COUNT = 5
 
     def __init__(self, core):
         self._core = weakref.proxy(core)
@@ -1113,6 +1139,9 @@ class ServerSettingsManager(object):
     def checkDualAccuracyHighlights(self, increase=False):
         return self.__checkUIHighlights(UI_STORAGE_KEYS.DUAL_ACCURACY_HIGHLIGHTS_COUNTER, self._MAX_DUAL_ACCURACY_HIGHLIGHTS_COUNT, increase)
 
+    def checkDualGunDualAccuracyHighlights(self, increase=False):
+        return self.__checkUIHighlights(UI_STORAGE_KEYS.DUAL_GUN_DUAL_ACCURACY_HIGHLIGHTS_COUNTER, self._MAX_DUAL_GUN_DUAL_ACCURACY_HIGHLIGHTS_COUNT, increase)
+
     def checkFlamethrowerHighlights(self, increase=False):
         return self.__checkUIHighlights(UI_STORAGE_KEYS.FLAMETHROWER_HIGHLIGHTS_COUNTER, self._MAX_FLAMETHROWER_HIGHLIGHTS_COUNT, increase)
 
@@ -1152,51 +1181,35 @@ class ServerSettingsManager(object):
     def setBattleMattersQuestProgress(self, lastSeenProgress):
         self.setSectionSettings(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, {BATTLE_MATTERS_KEYS.QUEST_PROGRESS: lastSeenProgress})
 
-    def getLimitedUIProgress(self, storageIdx, offset):
+    def getLimitedUIProgress(self, ruleID, default=None):
         if not self.settingsCache.isSynced():
             return False
-        if storageIdx >= len(LIMITED_UI_STORAGES):
-            LOG_ERROR("Can't read LimitedUI flag. storageIdx is out of range")
-            return 0
-        storageID = LIMITED_UI_STORAGES[storageIdx]
-        flags = self.getSectionSettings(storageID, LIMITED_UI_KEY, 0)
-        return flags & 1 << offset
+        for limitedUISection in SETTINGS_SECTIONS.LIMITED_UI_GROUP:
+            if self._hasKeyInSection(limitedUISection, ruleID):
+                return self.getSectionSettings(limitedUISection, ruleID, default)
 
-    def setLimitedUIProgress(self, storageIdx, offset):
+        LOG_ERROR('Trying to extract unsupported key in limited ui group: ', ruleID)
+        return default
+
+    def setLimitedUIProgress(self, ruleIDs):
         if not self.settingsCache.isSynced():
             return False
-        if storageIdx >= len(LIMITED_UI_STORAGES):
-            LOG_ERROR("Can't store LimitedUI flag. storageIdx is out of range")
-            return False
-        luiProgress = self.getLimitedUIProgress(storageIdx, offset)
-        if luiProgress:
+        else:
+            settingToServer = {}
+            for section in SETTINGS_SECTIONS.LIMITED_UI_GROUP:
+                keys = self.SECTIONS[section].masks.keys() + self.SECTIONS[section].offsets.keys()
+                currentSettings = {ruleID:True for ruleID in ruleIDs if ruleID in keys}
+                stored = self.settingsCache.getSectionSettings(section, None)
+                storing = self._buildSectionSettings(section, currentSettings)
+                if stored != storing:
+                    settingToServer[section] = storing
+
+            if settingToServer:
+                self.setSettings(settingToServer)
             return True
-        storageID = LIMITED_UI_STORAGES[storageIdx]
-        flags = self.getSectionSettings(storageID, LIMITED_UI_KEY, 0)
-        flags |= 1 << offset
-        self.setSectionSettings(storageID, {LIMITED_UI_KEY: flags})
-        return True
 
-    def setLimitedUIGroupProgress(self, data):
-        if not self.settingsCache.isSynced():
-            return False
-        settings = {}
-        for storageIdx, offsets in data.iteritems():
-            storageID = LIMITED_UI_STORAGES[storageIdx]
-            flags = self.getSectionSettings(storageID, LIMITED_UI_KEY, 0)
-            for offset in offsets:
-                flags |= 1 << offset
-
-            settings[storageID] = flags
-
-        self.setSettings(settings)
-        return True
-
-    def setLimitedUIFullComplete(self, offset):
-        settings = {storage:4294967295L for storage in LIMITED_UI_STORAGES}
-        if offset and settings:
-            flag = (1 << offset) - 1
-            settings[LIMITED_UI_STORAGES[-1]] = flag
+    def setLimitedUIFullComplete(self):
+        settings = {storage:4294967295L for storage in SETTINGS_SECTIONS.LIMITED_UI_GROUP}
         self.setSettings(settings)
 
     def setQuestProgressSettings(self, settings):
@@ -1603,7 +1616,7 @@ class ServerSettingsManager(object):
         nyData = data.get('nyStorage', {})
         if nyData:
             settings[SETTINGS_SECTIONS.NEW_YEAR] = self._buildSectionSettings(SETTINGS_SECTIONS.NEW_YEAR, nyData)
-        for luiStorage in LIMITED_UI_STORAGES:
+        for luiStorage in SETTINGS_SECTIONS.LIMITED_UI_GROUP:
             limitedUI = data.get(luiStorage, {})
             clearLimitedUI = clear.get(luiStorage, 0)
             if limitedUI or clearLimitedUI:

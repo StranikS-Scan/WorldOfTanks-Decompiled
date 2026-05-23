@@ -819,6 +819,9 @@
       <statTrackFrags>
         <Type>	INT32	</Type>
       </statTrackFrags>
+      <selectedComp7Skill>
+        <Type>	INT32	</Type>
+      </selectedComp7Skill>
     </Properties>
   </ARENA_VEH_INFO>
   <USER_EXTRA_SETTINGS>	FIXED_DICT	  <Properties>
@@ -1458,6 +1461,9 @@
         <Type>	ARRAY	  <of>	UINT8	</of>
         </Type>
       </vehDisabledSetupSwitches>
+      <selectedComp7Skill>
+        <Type>	INT32	</Type>
+      </selectedComp7Skill>
     </Properties>
   </RESPAWN_AVAILABLE_VEHICLE>
   <RESPAWN_COOLDOWN_ITEM>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -1581,6 +1587,9 @@
         <Type>	ARRAY	  <of>	UINT8	</of>
         </Type>
       </vehDisabledSetupSwitches>
+      <selectedComp7Skill>
+        <Type>	INT32	</Type>
+      </selectedComp7Skill>
     </Properties>
   </RESPAWN_INFO_VEHICLE>
   <BUFF_EFFECT>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -1823,6 +1832,9 @@
       <statTrackFrags>
         <Type>	INT32	</Type>
       </statTrackFrags>
+      <selectedComp7Skill>
+        <Type>	INT32	</Type>
+      </selectedComp7Skill>
     </Properties>
   </CLIENT_VEHICLE_PUBLIC_INFO>
   <PLAY_LIMITS>	FIXED_DICT	  <Properties>
@@ -2111,6 +2123,9 @@
         <Type>	ARRAY	  <of>	COOLDOWN_INFO	</of>
         </Type>
       </cooldowns>
+      <shotCount>
+        <Type>	UINT8	</Type>
+      </shotCount>
     </Properties>
   </DUAL_GUN_STATE>
   <VEHICLE_AMMO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>

@@ -33,16 +33,17 @@ class PlayStreakTabView(ViewImpl):
         self._updateModel()
 
     def _updateModel(self):
-        with self.viewModel.transaction() as tx:
-            tx.setStreakLength(self.__playStreakController.getStreakProgress())
-            self.__setIsFirstAppearance(model=tx)
-            tx.setSkipDayCount(self.__playStreakController.getSkipDayCount())
-            tx.setDailyWin(self.itemsCache.items.playStreak.getDailyConditionCompleted())
-            tx.setIsPaused(self.lobbyContext.getServerSettings().playStreakConfig.isPaused)
-            tx.setRedemptionDayCount(self.itemsCache.items.playStreak.getRedemptionDay())
-            tx.setIsBlocked(self.__playStreakController.getIsBlocked())
-            tx.setRedemptionMaxDayCount(self.lobbyContext.getServerSettings().playStreakConfig.daySkipSettings.get('freezeModeLength'))
-            tx.setIsEnabled(self.lobbyContext.getServerSettings().playStreakConfig.isEnabled)
+        if self.lobbyContext.getServerSettings().playStreakConfig.isEnabled:
+            with self.viewModel.transaction() as tx:
+                tx.setStreakLength(self.__playStreakController.getStreakProgress())
+                self.__setIsFirstAppearance(model=tx)
+                tx.setSkipDayCount(self.__playStreakController.getSkipDayCount())
+                tx.setDailyWin(self.itemsCache.items.playStreak.getDailyConditionCompleted())
+                tx.setIsPaused(self.lobbyContext.getServerSettings().playStreakConfig.isPaused)
+                tx.setRedemptionDayCount(self.itemsCache.items.playStreak.getRedemptionDay())
+                tx.setIsBlocked(self.__playStreakController.getIsBlocked())
+                tx.setRedemptionMaxDayCount(self.lobbyContext.getServerSettings().playStreakConfig.daySkipSettings.get('freezeModeLength'))
+                tx.setIsEnabled(self.lobbyContext.getServerSettings().playStreakConfig.isEnabled)
 
     def _onSyncCompleted(self, *_):
         self._updateModel()

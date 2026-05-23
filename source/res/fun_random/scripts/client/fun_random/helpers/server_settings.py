@@ -2,6 +2,7 @@
 # Embedded file name: fun_random/scripts/client/fun_random/helpers/server_settings.py
 from collections import namedtuple
 from fun_random_common.fun_constants import DEFAULT_ASSETS_PACK, DEFAULT_SETTINGS_KEY, DEFAULT_PRIORITY, UNKNOWN_WWISE_REMAPPING, UNKNOWN_EVENT_ID, FunSubModeImpl
+from fun_random.gui.fun_gui_constants import FUN_RANDOM_ARCADE_FEP_TYPE
 from shared_utils import makeTupleByDict
 
 class FunSubModeClientConfig(namedtuple('_FunSubModeClientConfig', ('subModeImpl', 'assetsPointer', 'settingsKey', 'priority', 'wwiseRemapping', 'battleModifiersDescr', 'infoPageUrl'))):
@@ -109,11 +110,11 @@ class FunMetaProgressionConfig(namedtuple('_FunMetaProgressionConfig', ('isEnabl
         data['progressions'] = tuple((makeTupleByDict(FunProgressionConfig, p) for p in data['progressions']))
 
 
-class FunRandomConfig(namedtuple('_FunRandomConfig', ('isEnabled', 'subModes', 'metaProgression', 'assetsPointer', 'settingsKey', 'infoPageUrl'))):
+class FunRandomConfig(namedtuple('_FunRandomConfig', ('isEnabled', 'FEPType', 'subModes', 'metaProgression', 'assetsPointer', 'settingsKey', 'infoPageUrl'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, subModes={}, metaProgression={}, assetsPointer=DEFAULT_ASSETS_PACK, settingsKey=DEFAULT_SETTINGS_KEY, infoPageUrl='')
+        defaults = dict(isEnabled=False, FEPType=FUN_RANDOM_ARCADE_FEP_TYPE, subModes={}, metaProgression={}, assetsPointer=DEFAULT_ASSETS_PACK, settingsKey=DEFAULT_SETTINGS_KEY, infoPageUrl='')
         allowedFields = defaults.keys()
         defaults.update(kwargs)
         cls.__packSubModesConfigs(defaults)
@@ -123,7 +124,7 @@ class FunRandomConfig(namedtuple('_FunRandomConfig', ('isEnabled', 'subModes', '
 
     @classmethod
     def defaults(cls):
-        return cls(False, {}, {}, DEFAULT_ASSETS_PACK, DEFAULT_SETTINGS_KEY, '')
+        return cls(False, FUN_RANDOM_ARCADE_FEP_TYPE, {}, {}, DEFAULT_ASSETS_PACK, DEFAULT_SETTINGS_KEY, '')
 
     def replace(self, data):
         data = self.__packSubModesConfigs(data)

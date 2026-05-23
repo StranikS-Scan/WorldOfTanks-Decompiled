@@ -962,18 +962,34 @@ def _migrateTo102(core, data, initialized):
 
 
 def _migrateTo103(core, data, initialized):
-    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS, LIMITED_UI_STORAGES, LIMITED_UI_SPAM_OFF, LIMITED_UI_KEY
-    for storage in LIMITED_UI_STORAGES:
-        data[storage][LIMITED_UI_KEY] = 0
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    from gui.limited_ui.lui_rules_storage import LuiRules
+    for storage in SETTINGS_SECTIONS.LIMITED_UI_GROUP:
+        data[storage] = {}
 
-    settingsPrefix = 'uiSpamVisited_{}'
-    bitMask = 0
-    for index, key in enumerate(LIMITED_UI_SPAM_OFF.ORDER):
-        if AccountSettings.getUIFlag(settingsPrefix.format(key)):
-            AccountSettings.setUIFlag(settingsPrefix.format(key), False)
-            bitMask |= 1 << index
+    limitedUiSpamOffRules = (('uiSpamVisited_store', LuiRules.LOBBY_HEADER_COUNTERS_STORE),
+     ('uiSpamVisited_profile', LuiRules.LOBBY_HEADER_COUNTERS_PROFILE),
+     ('uiSpamVisited_profileHof', LuiRules.PROFILE_HOF),
+     ('uiSpamVisited_profileTechniquePage', LuiRules.PROFILE_TECHNIQUE_PAGE),
+     ('uiSpamVisited_sessionStats', LuiRules.SESSION_STATS),
+     ('uiSpamVisited_blueprintsButton', LuiRules.BLUEPRINTS_BUTTON),
+     ('uiSpamVisited_missions', LuiRules.LOBBY_HEADER_COUNTERS_MISSIONS),
+     ('uiSpamVisited_MissionsMarathonView', LuiRules.MISSIONS_MARATHON_VIEW),
+     ('uiSpamVisited_PersonalMissionOperations', LuiRules.LOBBY_HEADER_COUNTERS_PM_OPERATIONS),
+     ('uiSpamVisited_AmmunitionPanelHintZoneHint', LuiRules.AP_ZONE_HINT),
+     ('uiSpamVisited_AmmunitionPanelBattleAbilitiesHint', LuiRules.AP_BATTLE_ABILITIES_HINT),
+     ('uiSpamVisited_CustomizationProgressionViewHint', LuiRules.C7N_BUBBLE),
+     ('uiSpamVisited_TechTreeEvent', LuiRules.TECH_TREE_EVENTS),
+     ('uiSpamVisited_DogTagHangarHint', LuiRules.DOG_TAG_HINT),
+     ('uiSpamVisited_ModeSelectorWidgetsBtnHint', LuiRules.MODE_SELECTOR_WIDGET_BTN_HINT),
+     ('uiSpamVisited_PersonalReservesHangarHint', LuiRules.PR_HANGAR_HINT),
+     ('uiSpamVisited_ModernizedSetupTabHint', LuiRules.MODERNIZE_SETUP_HINT),
+     ('uiSpamVisited_OfferBannerWindow', LuiRules.OFFER_BANNER_WINDOW))
+    for uiSpamOffRule, limitedUiRule in limitedUiSpamOffRules:
+        if AccountSettings.getUIFlag(uiSpamOffRule):
+            AccountSettings.setUIFlag(uiSpamOffRule, False)
+            data[SETTINGS_SECTIONS.LIMITED_UI_1][limitedUiRule] = 1
 
-    data[SETTINGS_SECTIONS.LIMITED_UI_1][LIMITED_UI_KEY] = bitMask
     newSettingsCounter = AccountSettings.getSettings(NEW_SETTINGS_COUNTER)
     newSettingsCounter['GameSettings'].update({GAME.LIMITED_UI_ACTIVE: True})
     AccountSettings.setSettings(NEW_SETTINGS_COUNTER, newSettingsCounter)

@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/doc_loaders/__init__.py
-from extension_utils import ResMgr
-import ResMgr as rsmgr
+import ResMgr
 from messenger.doc_loaders import colors_schemes, html_templates, settings_set
 from messenger.doc_loaders import user_prefs
 from messenger.doc_loaders._xml_helpers import XMLCtx, XMLError
@@ -25,5 +24,5 @@ def load(messengerSettings):
         if isRequired:
             raise XMLError(xmlCtx, 'Tag "{0:>s}" not found'.format(tag))
 
-    rsmgr.purge(MESSENGER_XML_FILE_PATH, True)
+    ResMgr.purge(MESSENGER_XML_FILE_PATH, True)
     return

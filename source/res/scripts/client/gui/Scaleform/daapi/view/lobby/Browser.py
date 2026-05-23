@@ -9,12 +9,12 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.managers.cursor_mgr import CursorManager
 from gui.shared.events import BrowserEvent
 from gui.shared.formatters import icons
-from WebBrowser import CURSOR_TYPES
+from MTWebBrowser import CURSOR_TYPES
 from helpers import i18n, dependency
 from skeletons.gui.game_control import IBrowserController
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
-    from WebBrowser import WebBrowser
+    from MTWebBrowser import MTWebBrowser
 _CURSOR_TYPES = {CURSOR_TYPES.Hand: CursorManager.HAND,
  CURSOR_TYPES.Pointer: CursorManager.ARROW,
  CURSOR_TYPES.IBeam: CursorManager.IBEAM,

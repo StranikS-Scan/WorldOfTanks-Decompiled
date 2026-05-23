@@ -3,10 +3,10 @@
 from functools import partial
 import BigWorld
 from adisp import adisp_process
-from th_async import th_async, th_await
 from constants import PremiumConfigs
 from debug_utils import LOG_ERROR
-from gui import DialogsInterface
+from frameworks.wulf import ViewStatus
+from gui import DialogsInterface, makeHtmlString
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -16,31 +16,34 @@ from gui.Scaleform.daapi.view.meta.CurrentVehicleMissionsViewMeta import Current
 from gui.Scaleform.daapi.view.meta.MissionsEventBoardsViewMeta import MissionsEventBoardsViewMeta
 from gui.Scaleform.daapi.view.meta.MissionsGroupedViewMeta import MissionsGroupedViewMeta
 from gui.Scaleform.daapi.view.meta.MissionsMarathonViewMeta import MissionsMarathonViewMeta
+from gui.Scaleform.daapi.view.meta.TemporaryMissionsViewMeta import TemporaryMissionsViewMeta
+from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.EVENTBOARDS_ALIASES import EVENTBOARDS_ALIASES
+from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.EVENT_BOARDS import EVENT_BOARDS
 from gui.Scaleform.locale.QUESTS import QUESTS
-from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.event_boards.settings import expandGroup, isGroupMinimized
-from gui.server_events import settings, caches
-from gui.server_events.events_dispatcher import hideMissionDetails
-from gui.server_events.events_dispatcher import showMissionsCategories
-from gui.server_events.events_helpers import isMarathon, isDailyQuest, isPremium, isDebutBoxesQuest, isCosmicQuest
-from gui.shared import actions
-from gui.shared import events, g_eventBus
-from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showTankPremiumAboutPage, showDebutBoxesInfoPage
-from gui.shared.formatters import text_styles, icons
-from helpers import dependency
-from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IReloginController, IMarathonEventsController, IBrowserController, IDebutBoxesController
-from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.server_events import IEventsCache
-from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.lobby.summer_sale.summer_sale_main_view import SummerSaleMainView
+from gui.server_events import caches, settings
+from gui.server_events.events_dispatcher import hideMissionDetails, showMissionsCategories, showMissionsTemporary
+from gui.server_events.events_helpers import isCosmicQuest, isDailyQuest, isDebutBoxesQuest, isMarathon, isPremium
+from gui.shared import actions, events, g_eventBus
+from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showDebutBoxesInfoPage, showTankPremiumAboutPage, showSummerSaleInfoPage, showShop
+from gui.shared.formatters import icons, text_styles
+from helpers import dependency
+from helpers.events_handler import EventsHandler
+from helpers.i18n import makeString as _ms
+from shared_utils import nextTick
+from skeletons.gui.game_control import IBrowserController, IDebutBoxesController, IMarathonEventsController, IReloginController, ISummerSaleController
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.server_events import IEventsCache
+from th_async import th_async, th_await
 
 class _GroupedMissionsView(MissionsGroupedViewMeta):
 
@@ -92,8 +95,9 @@ class MissionsGroupedView(_GroupedMissionsView):
     def _getViewQuestFilter(self):
         return lambda q: isMarathon(q.getGroupID()) or isDebutBoxesQuest(q.getID(), debutBoxesController=self.__debutBoxesController)
 
-    def onClickInfoBtn(self):
-        showDebutBoxesInfoPage(self.__debutBoxesController.getInfoPageUrl())
+    def onClickInfoBtn(self, eventType):
+        if eventType == QUESTS_ALIASES.DEBUT_BOXES_EVENT:
+            showDebutBoxesInfoPage(self.__debutBoxesController.getInfoPageUrl())
 
 
 class MissionsMarathonView(MissionsMarathonViewMeta):
@@ -350,6 +354,7 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
 
 class MissionsCategoriesView(_GroupedMissionsView):
     _lobbyContext = dependency.descriptor(ILobbyContext)
+    __summerSaleController = dependency.descriptor(ISummerSaleController)
     __showDQInMissionsTab = False
 
     @classmethod
@@ -367,6 +372,18 @@ class MissionsCategoriesView(_GroupedMissionsView):
 
     def onClickButtonDetails(self):
         showTankPremiumAboutPage()
+
+    def onClickInfoBtn(self, eventType):
+        if eventType == QUESTS_ALIASES.SUMMER_SALE_EVENT:
+            showSummerSaleInfoPage()
+
+    def onClickOpenShopBtn(self, eventType):
+        if eventType == QUESTS_ALIASES.SUMMER_SALE_EVENT:
+            showShop(self.__summerSaleController.getShopPageUrl())
+
+    def onClickOpenEventBtn(self, eventType):
+        if eventType == QUESTS_ALIASES.SUMMER_SALE_EVENT:
+            showMissionsTemporary()
 
     def _populate(self):
         super(MissionsCategoriesView, self)._populate()
@@ -389,6 +406,49 @@ class MissionsCategoriesView(_GroupedMissionsView):
         diffConfig = diff.get(PremiumConfigs.PREM_QUESTS)
         if 'enabled' in diffConfig:
             self._onEventsUpdate()
+
+
+class TemporaryMissionsTabView(InjectComponentAdaptor, TemporaryMissionsViewMeta, EventsHandler):
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+    __VIEW = {R.views.lobby.summer_sale.SummerSaleMainView(): SummerSaleMainView}
+
+    @nextTick
+    def updateState(self, *args, **kwargs):
+        layoutID = kwargs.get('layoutID', R.invalid())
+        if layoutID == R.invalid():
+            layoutID = self.__getDefaultLayoutID()
+        self._destroyInjected()
+        self._createInjectView(layoutID)
+
+    def markVisited(self):
+        pass
+
+    def _populate(self):
+        super(TemporaryMissionsTabView, self)._populate()
+        self._subscribe()
+
+    def _dispose(self):
+        self._unsubscribe()
+        super(TemporaryMissionsTabView, self)._dispose()
+
+    def _addInjectContentListeners(self):
+        self._injectView.onStatusChanged += self.__onViewStatusChanged
+
+    def _removeInjectContentListeners(self):
+        self._injectView.onStatusChanged -= self.__onViewStatusChanged
+
+    def _makeInjectView(self, layoutID=R.invalid()):
+        if layoutID == R.invalid():
+            layoutID = self.__getDefaultLayoutID()
+        return self.__VIEW[layoutID](layoutID)
+
+    def __getDefaultLayoutID(self):
+        return R.views.lobby.summer_sale.SummerSaleMainView()
+
+    def __onViewStatusChanged(self, state):
+        if state == ViewStatus.LOADED:
+            self.as_showViewS()
+        self.as_setWaitingVisibleS(state not in (ViewStatus.LOADED, ViewStatus.DESTROYED))
 
 
 class CurrentVehicleMissionsView(CurrentVehicleMissionsViewMeta):

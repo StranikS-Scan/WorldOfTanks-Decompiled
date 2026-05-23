@@ -31,3 +31,8 @@ def getReferralShopURL():
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def isCurrentUserRecruit(itemsCache=None):
     return bool(itemsCache.items.stats.refSystem20.get(RECRUITER_ID_ATTR, False))
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def getRecruiterDbId(itemsCache=None):
+    return itemsCache.items.stats.refSystem20.get(RECRUITER_ID_ATTR, 0)

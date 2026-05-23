@@ -204,6 +204,7 @@ class SELECTOR_BATTLE_TYPES(object):
     UNIT = 'unit'
     HISTORICAL = 'historical'
     SORTIE = 'sortie'
+    SPEC_BATTLES = 'specBattles'
     RANKED = 'ranked'
     EPIC = 'epic'
     BATTLE_ROYALE = 'battleRoyale'

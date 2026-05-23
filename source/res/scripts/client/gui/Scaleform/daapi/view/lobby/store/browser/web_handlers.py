@@ -10,6 +10,7 @@ from web.web_client_api.quests import QuestsWebApi
 from web.web_client_api.loot_boxes import LootBoxWebApi
 from web.web_client_api.ranked_battles import RankedBattlesWebApi
 from web.web_client_api.request import RequestWebApi
+from web.web_client_api.shop.summersale import SummerSaleWebApi
 from web.web_client_api.sound import SoundWebApi, SoundStateWebApi, HangarSoundWebApi
 from web.web_client_api.shop import ShopWebApi
 from web.web_client_api.hero_tank import HeroTankWebApi
@@ -47,4 +48,4 @@ class ExtShopWebHandlers(object):
 
 
 def createShopWebHandlers():
-    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, SoundStateWebApi, HangarSoundWebApi, UtilWebApi, FrontLineWebApi, HeroTankWebApi, BattlePassWebApi, ClansWebApi, RankedBattlesWebApi, Comp7WebApi, BlueprintsConvertSaleWebApi, PlatformWebApi, QuestsWebApi, LootBoxWebApi, UILoggingWebApi, *ExtShopWebHandlers.REGISTERED_WEB_API)
+    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, SoundStateWebApi, HangarSoundWebApi, UtilWebApi, FrontLineWebApi, HeroTankWebApi, BattlePassWebApi, ClansWebApi, RankedBattlesWebApi, Comp7WebApi, BlueprintsConvertSaleWebApi, PlatformWebApi, QuestsWebApi, LootBoxWebApi, UILoggingWebApi, SummerSaleWebApi, *ExtShopWebHandlers.REGISTERED_WEB_API)

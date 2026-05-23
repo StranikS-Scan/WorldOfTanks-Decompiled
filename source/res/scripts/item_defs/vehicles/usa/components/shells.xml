@@ -3746,21 +3746,22 @@
       <devices>	165	</devices>
     </damage>
   </_120mm_AP-T_XM66F>
-  <_120mm_APCR_XM66F>
+  <_120mm_HEAT-T_XM66F>
     <id>	196	</id>
-    <userString>	#usa_vehicles:_120mm_APCR_XM66F	</userString>
-    <icon>	ap_cr_premium	</icon>
+    <userString>	#usa_vehicles:_120mm_HEAT-T_XM66F	</userString>
+    <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
-    <kind>	ARMOR_PIERCING_CR	</kind>
+    <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	120	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	largeAPCR	</effects>
+    <effects>	largeHollowCharge	</effects>
     <damage>
       <armor>	400	</armor>
       <devices>	165	</devices>
     </damage>
-  </_120mm_APCR_XM66F>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_120mm_HEAT-T_XM66F>
   <_120mm_HE_XM66F>
     <id>	197	</id>
     <userString>	#usa_vehicles:_120mm_HE_XM66F	</userString>

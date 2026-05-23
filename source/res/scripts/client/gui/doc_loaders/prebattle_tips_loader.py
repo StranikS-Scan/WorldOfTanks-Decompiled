@@ -20,10 +20,12 @@ def readPreBattleTips(prebattleXmlPath):
          'levels': _readPossibleValues(filterSection, 'levels'),
          'vehicleClass': _readPossibleValues(filterSection, 'vehicleClass'),
          'tags': _readPossibleValues(filterSection, 'tags'),
+         'noTags': _readPossibleValues(filterSection, 'noTags'),
          'realms': _readPossibleValues(filterSection, 'realms'),
          'preceding': _readPrecedingData(filterSection),
          'chassisType': filterSection.readInt('chassisType', -1),
-         'vehProperty': filterSection.readString('vehProperty', None)}
+         'vehProperty': filterSection.readString('vehProperty', None),
+         'notVehProperty': filterSection.readString('notVehProperty', None)}
         for key in _OPTIONAL_FILTER_FLAGS:
             if filterSection.has_key(key):
                 filters[filterId][key] = filterSection.readBool(key)

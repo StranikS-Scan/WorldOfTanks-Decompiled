@@ -17,6 +17,7 @@ from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift
+from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.periodic_battles.models import PrimeTimeStatus
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.base.ctx import PrbAction
@@ -48,7 +49,7 @@ from ranked_common import SwitchState
 from season_provider import SeasonProvider
 from shared_utils import findFirst, first
 from skeletons.gui.battle_results import IBattleResultsService
-from skeletons.gui.game_control import IRankedBattlesController
+from skeletons.gui.game_control import IRankedBattlesController, ILimitedUIController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
@@ -92,6 +93,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     __battleResultsService = dependency.descriptor(IBattleResultsService)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __offersProvider = dependency.descriptor(IOffersDataProvider)
+    __limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def __init__(self):
         super(RankedBattlesController, self).__init__()
@@ -1197,3 +1199,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
             AccountSettings.setSettings(RANKED_LAST_CYCLE_ID, cycleID)
             setBattleTypeAsUnknown(SELECTOR_BATTLE_TYPES.RANKED)
         return
+
+    def isLocked(self):
+        return not self.__limitedUIController.isRuleCompleted(LuiRules.RANKED_CONTENT)

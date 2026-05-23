@@ -31,7 +31,7 @@ class ChatMessage(object):
 
 
 ClientInfo = namedtuple('ClientInfo', ('igrID', 'igrRoomID', 'gameHost', 'arenaLabel'))
-_BanInfoItem = namedtuple('_BanInfoItem', ('source', 'setter', 'expiresAt', 'reason', 'components', 'game'))
+_BanInfoItem = namedtuple('_BanInfoItem', ('source', 'setter', 'expiresAt', 'reason', 'components', 'game', 'banType'))
 
 @ReprInjector.simple(('_items', 'items'))
 class BanInfo(object):
@@ -99,6 +99,7 @@ def makeBanInfo(*args):
         if len(item) < 6:
             continue
         source, setter, expiresAt, reason, components, game = item[:6]
+        banType = item[6] if len(item) >= 7 else None
         if source.isdigit():
             source = int(source)
         else:
@@ -107,7 +108,7 @@ def makeBanInfo(*args):
             expiresAt = time_utils.getTimestampFromUTC(time_utils.getTimeStructInUTC(float(expiresAt)))
         else:
             expiresAt = 0
-        items.append(_BanInfoItem(source, setter, expiresAt, reason, XMPP_BAN_COMPONENT.fromString(components), game))
+        items.append(_BanInfoItem(source, setter, expiresAt, reason, XMPP_BAN_COMPONENT.fromString(components), game, banType))
 
     if items:
         info = BanInfo(items)

@@ -1,0 +1,25 @@
+<AccountNewbieChatLockComponent.def>
+  <ofEntity>
+    <Account></Account>
+  </ofEntity>
+  <Properties>
+    <chatLocked>
+      <Type>	BOOL	</Type>
+      <Flags>	BASE_AND_CLIENT	</Flags>
+      <default>	FALSE	</default>
+    </chatLocked>
+  </Properties>
+  <ClientMethods>
+    <setChatLockingState>
+      <Args>
+        <chatLocked>	BOOL	</chatLocked>
+      </Args>
+    </setChatLockingState>
+    <chatLockingStateChanged>
+      <Args>
+        <chatLocked>	BOOL	</chatLocked>
+      </Args>
+    </chatLockingStateChanged>
+  </ClientMethods>
+  <DefaultKeyName>	accountNewbieChatLock	</DefaultKeyName>
+</AccountNewbieChatLockComponent.def>

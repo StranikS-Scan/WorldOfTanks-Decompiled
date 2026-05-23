@@ -5,7 +5,7 @@ import typing
 from adisp import adisp_async, adisp_process
 from gui.impl.lobby.awards import SupportedTokenTypes
 from helpers import dependency
-from WebBrowser import getWebCache
+from MTWebBrowser import getWebCache
 from gui.impl.lobby.offers import getGfImagePath
 from gui.notify_center.image_notification_helper import WebImageHelper
 from skeletons.gui.platform.catalog_service_controller import IPurchaseCache

@@ -12317,6 +12317,34 @@
     </projection_decal>
   </itemGroup>
   <itemGroup>
+    <name>	R87_T62A_3Dst2	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <projection_decal>
+      <id>	31475	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/R87_T62A_3Dst2_Decal_1x2.dds	</texture>
+      <tags>	styleOnly formfactor_rect1x2 hiddenInUI	</tags>
+      <userString>	#vehicle_customization:R87_T62A_3Dst2_Decal_01/name	</userString>
+      <description>	#vehicle_customization:R87_T62A_3Dst2_Decal_01/description	</description>
+    </projection_decal>
+    <projection_decal>
+      <id>	31476	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/R87_T62A_3Dst2_Decal_Front_1x1.dds	</texture>
+      <tags>	styleOnly formfactor_square hiddenInUI	</tags>
+      <userString>	#vehicle_customization:R87_T62A_3Dst2_Decal_02/name	</userString>
+      <description>	#vehicle_customization:R87_T62A_3Dst2_Decal_02/description	</description>
+    </projection_decal>
+    <projection_decal>
+      <id>	31477	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/R87_T62A_3Dst2_Decal_Left_1x1.dds	</texture>
+      <tags>	styleOnly formfactor_rect1x2 hiddenInUI	</tags>
+      <userString>	#vehicle_customization:R87_T62A_3Dst2_Decal_03/name	</userString>
+      <description>	#vehicle_customization:R87_T62A_3Dst2_Decal_03/description	</description>
+    </projection_decal>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+  </itemGroup>
+  <itemGroup>
     <name>	A176_OTAC_LK_7605_Decal_142	</name>
     <season>	ALL	</season>
     <historical>	1	</historical>
@@ -12342,6 +12370,211 @@
       <userString>	#vehicle_customization:A176_OTAC_LK_7605_Decal_02_142/name	</userString>
       <description>	#vehicle_customization:A176_OTAC_LK_7605_Decal_02_142/description	</description>
       <texture>	gui/maps/vehicles/decals/projection_decals/special/A176_OTAC_LK_7605_Decal_02_142.dds	</texture>
+    </projection_decal>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <name>	RushHeavenlyBeast_Decal_143	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	formfactor_square styleOnly hiddenInUI disableVerticalMirror	</tags>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	31466	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/RushHeavenlyBeast_01_Decal_143.dds	</texture>
+      <userString>	#vehicle_customization:RushHeavenlyBeast_01_Decal_143/name	</userString>
+      <description>	#vehicle_customization:RushHeavenlyBeast_01_Decal_143/description	</description>
+      <mirror>	false	</mirror>
+      <scaleFactorId>	3	</scaleFactorId>
+      <tags>	disableVerticalMirror direction_right_to_left hiddenInUI styleOnly formfactor_square	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31467	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/RushHeavenlyBeast_02_Decal_143.dds	</texture>
+      <userString>	#vehicle_customization:RushHeavenlyBeast_02_Decal_143/name	</userString>
+      <description>	#vehicle_customization:RushHeavenlyBeast_02_Decal_143/description	</description>
+      <mirror>	false	</mirror>
+      <scaleFactorId>	3	</scaleFactorId>
+      <tags>	disableVerticalMirror direction_right_to_left hiddenInUI styleOnly formfactor_square	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31468	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/RushHeavenlyBeast_03_Decal_143.dds	</texture>
+      <userString>	#vehicle_customization:RushHeavenlyBeast_03_Decal_143/name	</userString>
+      <description>	#vehicle_customization:RushHeavenlyBeast_03_Decal_143/description	</description>
+      <mirror>	false	</mirror>
+      <scaleFactorId>	3	</scaleFactorId>
+      <tags>	disableVerticalMirror direction_right_to_left hiddenInUI styleOnly formfactor_square	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31469	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/RushHeavenlyBeast_04_Decal_143.dds	</texture>
+      <userString>	#vehicle_customization:RushHeavenlyBeast_04_Decal_143/name	</userString>
+      <description>	#vehicle_customization:RushHeavenlyBeast_04_Decal_143/description	</description>
+      <mirror>	false	</mirror>
+      <scaleFactorId>	3	</scaleFactorId>
+      <tags>	disableVerticalMirror direction_right_to_left hiddenInUI styleOnly formfactor_square	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31470	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/RushHeavenlyBeast_05_Decal_143.dds	</texture>
+      <userString>	#vehicle_customization:RushHeavenlyBeast_05_Decal_143/name	</userString>
+      <description>	#vehicle_customization:RushHeavenlyBeast_05_Decal_143/description	</description>
+      <mirror>	false	</mirror>
+      <scaleFactorId>	3	</scaleFactorId>
+      <tags>	disableVerticalMirror direction_right_to_left hiddenInUI styleOnly formfactor_square	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31471	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/RushHeavenlyBeast_06_Decal_143.dds	</texture>
+      <userString>	#vehicle_customization:RushHeavenlyBeast_06_Decal_143/name	</userString>
+      <description>	#vehicle_customization:RushHeavenlyBeast_06_Decal_143/description	</description>
+      <mirror>	false	</mirror>
+      <scaleFactorId>	3	</scaleFactorId>
+      <tags>	disableVerticalMirror direction_right_to_left hiddenInUI styleOnly formfactor_square	</tags>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	A172_ASTRON_FL_3Dst_Solar_Strike	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <projection_decal>
+      <id>	31472	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/A172_ASTRON_FL_3Dst_Solar_Strike_Decal_01_143.dds	</texture>
+      <userString>	#vehicle_customization:A172_ASTRON_FL_3Dst_Solar_Strike_Decal_01_143/name	</userString>
+      <description>	#vehicle_customization:A172_ASTRON_FL_3Dst_Solar_Strike_Decal_01_143/description	</description>
+      <tags>	disableVerticalMirror safe hiddenInUI formfactor_square styleOnly direction_left_to_right front	</tags>
+      <mirror>	false	</mirror>
+      <vehicleFilter>
+        <include>
+          <vehicles>	usa:A172_ASTRON_FL	</vehicles>
+        </include>
+      </vehicleFilter>
+    </projection_decal>
+    <projection_decal>
+      <id>	31473	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/A172_ASTRON_FL_3Dst_Solar_Strike_Decal_02_143.dds	</texture>
+      <userString>	#vehicle_customization:A172_ASTRON_FL_3Dst_Solar_Strike_Decal_02_143/name	</userString>
+      <description>	#vehicle_customization:A172_ASTRON_FL_3Dst_Solar_Strike_Decal_02_143/description	</description>
+      <tags>	disableVerticalMirror safe hiddenInUI formfactor_square styleOnly right direction_left_to_right	</tags>
+      <mirror>	false	</mirror>
+      <vehicleFilter>
+        <include>
+          <vehicles>	usa:A172_ASTRON_FL	</vehicles>
+        </include>
+      </vehicleFilter>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Ch73_GPT_75_3Dst_Armored_Heat	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch73_GPT_75	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <projection_decal>
+      <id>	31455	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Ch73_GPT_75_3Dst_Armored_Heat_2026_pin_up_decal.dds	</texture>
+      <userString>	#vehicle_customization:Ch73_GPT_75_3Dst_Armored_Heat_2026_pin_up_decal/name	</userString>
+      <description>	#vehicle_customization:Ch73_GPT_75_3Dst_Armored_Heat_2026_pin_up_decal/description	</description>
+      <tags>	formfactor_square styleOnly hiddenInUI	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31456	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Ch73_GPT_75_3Dst_Armored_Heat_2026_savage_text_decal.dds	</texture>
+      <userString>	#vehicle_customization:Ch73_GPT_75_3Dst_Armored_Heat_2026_savage_text_decal/name	</userString>
+      <description>	#vehicle_customization:Ch73_GPT_75_3Dst_Armored_Heat_2026_savage_text_decal/description	</description>
+      <tags>	formfactor_rect1x2 styleOnly hiddenInUI disableVerticalMirror	</tags>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	BP20_Decal_143	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <projection_decal>
+      <id>	31460	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/BP20_03_Decal_01_143.dds	</texture>
+      <userString>	#vehicle_customization:BP20_03_Decal_01_143/name	</userString>
+      <description>	#vehicle_customization:BP20_03_Decal_01_143/description	</description>
+      <tags>	styleOnly formfactor_rect1x2 hiddenInUI	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31461	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/BP20_01_Decal_01_143.dds	</texture>
+      <userString>	#vehicle_customization:BP20_01_Decal_01_143/name	</userString>
+      <description>	#vehicle_customization:BP20_01_Decal_01_143/description	</description>
+      <tags>	formfactor_square hiddenInUI styleOnly direction_left_to_right	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31462	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/BP20_Decal_Ban_143.dds	</texture>
+      <userString>	#vehicle_customization:BP20_Decal_Ban_143/name	</userString>
+      <description>	#vehicle_customization:BP20_Decal_Ban_143/description	</description>
+      <tags>	formfactor_square disableVerticalMirror direction_right_to_left	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31463	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/BP20_Decal_Lifebuoy_143.dds	</texture>
+      <userString>	#vehicle_customization:BP20_Decal_Lifebuoy_143/name	</userString>
+      <description>	#vehicle_customization:BP20_Decal_Lifebuoy_143/description	</description>
+      <tags>	formfactor_square disableVerticalMirror direction_right_to_left	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31464	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/BP20_Decal_Raccoon_143.dds	</texture>
+      <userString>	#vehicle_customization:BP20_Decal_Raccoon_143/name	</userString>
+      <description>	#vehicle_customization:BP20_Decal_Raccoon_143/description	</description>
+      <mirror>	true	</mirror>
+      <tags>	formfactor_square disableVerticalMirror direction_right_to_left	</tags>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	F108_Panhard_EBR_105_3Dst_Reef_Rush	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F108_Panhard_EBR_105	</vehicles>
+      </include>
+    </vehicleFilter>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <projection_decal>
+      <id>	31465	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Rush_Pinup_Decal.dds	</texture>
+      <userString>	#vehicle_customization:Rush_Pinup_Decal/name	</userString>
+      <description>	#vehicle_customization:Rush_Pinup_Decal/description	</description>
+      <tags>	direction_left_to_right styleOnly hiddenInUI formfactor_square	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31474	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/BACK_Driver_Decal.dds	</texture>
+      <userString>	#vehicle_customization:BACK_Driver_Decal/name	</userString>
+      <description>	#vehicle_customization:BACK_Driver_Decal/description	</description>
+      <tags>	direction_left_to_right styleOnly hiddenInUI formfactor_square	</tags>
     </projection_decal>
   </itemGroup>
 </projection_decals.xml>

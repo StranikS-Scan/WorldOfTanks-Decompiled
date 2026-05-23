@@ -9,6 +9,7 @@ from Event import EventManager, Event
 from ab_feature_test_token_based_shared import getFeatures
 from account_helpers import AccountSettings
 from constants import Configs
+from gui import GUI_SETTINGS
 from gui.clans.clan_helpers import isStrongholdsEnabled
 from gui.SystemMessages import SM_TYPE as _SM_TYPE
 from gui.impl import backport
@@ -23,10 +24,11 @@ from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from skeletons.account_helpers.settings_core import ISettingsCore, ISettingsCache
-from skeletons.gui.game_control import ILimitedUIController, IBootcampController, IBattleRoyaleController, IVersusAIController
+from skeletons.gui.game_control import ILimitedUIController, IBootcampController, IBattleRoyaleController, IVersusAIController, IComp7Controller, IFunRandomController, IEpicBattleMetaGameController, IRankedBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.system_messages import ISystemMessages
+from constants import PREBATTLE_TYPE
 if typing.TYPE_CHECKING:
     from typing import Callable, Dict, Optional, Tuple, List, Set, Union
     from helpers.server_settings import _LimitedUIConfig
@@ -156,10 +158,17 @@ class LimitedUIController(ILimitedUIController):
     __itemsCache = dependency.descriptor(IItemsCache)
     __settingsCache = dependency.descriptor(ISettingsCache)
     __versusAIController = dependency.descriptor(IVersusAIController)
-    _SERVER_SETTINGS_BLOCK_BITS = 32
+    __comp7Controller = dependency.descriptor(IComp7Controller)
+    __funRandomController = dependency.descriptor(IFunRandomController)
+    __rankedController = dependency.descriptor(IRankedBattlesController)
+    __epicBattleController = dependency.descriptor(IEpicBattleMetaGameController)
     _SEND_CONTENT_UNLOCKED_MESSAGE_TIMEOUT = 3
     _AB_TEST_TOKEN_FEATURE = 'limited_ui'
     _AB_TEST_TOKEN_DISABLE_ACTION = 'disabled'
+    _PREBATTLE_TYPE_TO_LUI_RULE_MAP = {PREBATTLE_TYPE.RANKED: LuiRules.RANKED_CONTENT,
+     PREBATTLE_TYPE.COMP7: LuiRules.COMP7_CONTENT,
+     PREBATTLE_TYPE.EPIC: LuiRules.FRONTLINE_CONTENT,
+     PREBATTLE_TYPE.VERSUS_AI: LuiRules.VERSUS_AI_CONTENT}
 
     def __init__(self):
         super(LimitedUIController, self).__init__()
@@ -202,10 +211,6 @@ class LimitedUIController(ILimitedUIController):
         return self.__luiConfig is not None
 
     @property
-    def configVersion(self):
-        return self.__luiConfig.version if self.__luiConfig else 0
-
-    @property
     def version(self):
         return self.__itemsCache.items.stats.luiVersion
 
@@ -227,6 +232,15 @@ class LimitedUIController(ILimitedUIController):
     def isRuleCompleted(self, ruleID):
         return not self.isEnabled or self.__checkRule(ruleID)
 
+    def __getRuleByBattleType(self, prbType):
+        if prbType == PREBATTLE_TYPE.FUN_RANDOM and self.__funRandomController.isArcade():
+            return LuiRules.ARCADE_CONTENT
+        return LuiRules.FIELD_TRIALS_CONTENT if prbType == PREBATTLE_TYPE.FUN_RANDOM and self.__funRandomController.isFieldTrials() else self._PREBATTLE_TYPE_TO_LUI_RULE_MAP.get(prbType)
+
+    def isRuleCompletedByPrebattleType(self, prbType):
+        rule = self.__getRuleByBattleType(prbType)
+        return True if not rule else self.isRuleCompleted(rule)
+
     def completeRule(self, ruleID):
         if not self.__isRuleCompleted(ruleID):
             self.__completeRule(ruleID)
@@ -234,9 +248,7 @@ class LimitedUIController(ILimitedUIController):
                 handler(ruleID, CallHandlerReason.COMPLETE_RULE)
 
     def completeAllRules(self):
-        count = len(self.__rules.getRulesIDs())
-        lastStorageOffset = count % self._SERVER_SETTINGS_BLOCK_BITS
-        self.__settingsCore.serverSettings.setLimitedUIFullComplete(lastStorageOffset)
+        self.__settingsCore.serverSettings.setLimitedUIFullComplete()
         for ruleID, handlers in self.__observers.items():
             for handler in handlers:
                 handler(ruleID, CallHandlerReason.COMPLETE_RULE)
@@ -445,38 +457,18 @@ class LimitedUIController(ILimitedUIController):
             return
         self.__sendSysMessage(ruleID)
 
-    def __getServerSettingsID(self, ruleID):
-        rule = self.__rules.getRule(ruleID)
-        if rule is None:
-            return (None, None)
-        else:
-            index = rule.idx
-            storageIdx = index / self._SERVER_SETTINGS_BLOCK_BITS
-            offset = index % self._SERVER_SETTINGS_BLOCK_BITS
-            return (storageIdx, offset)
-
     def __readSettings(self, ruleID):
-        storage, offset = self.__getServerSettingsID(ruleID)
-        return True if storage is None else bool(self.__settingsCore.serverSettings.getLimitedUIProgress(storage, offset))
+        return self.__settingsCore.serverSettings.getLimitedUIProgress(ruleID, default=False)
 
     def __storeSettings(self, ruleID):
-        storage, offset = self.__getServerSettingsID(ruleID)
-        return False if storage is None else self.__settingsCore.serverSettings.setLimitedUIProgress(storage, offset)
+        return self.__settingsCore.serverSettings.setLimitedUIProgress([ruleID])
 
     def __storePostponed(self):
-        settings = defaultdict(list)
-        for ruleID in self.__postponedCompleteRules:
-            storage, offset = self.__getServerSettingsID(ruleID)
-            if storage is None:
-                continue
-            settings[storage].append(offset)
-
-        if settings and self.__settingsCore.serverSettings.setLimitedUIGroupProgress(settings):
+        if self.__postponedCompleteRules and self.__settingsCore.serverSettings.setLimitedUIProgress(self.__postponedCompleteRules):
             for ruleID in self.__postponedCompleteRules:
                 self.__sendSysMessage(ruleID)
 
             self.__postponedCompleteRules.clear()
-        return
 
     def __sendSysMessage(self, ruleID):
         sysMessageTemplate = self.__rules.getSysMessage(ruleID)
@@ -522,6 +514,10 @@ class LimitedUIController(ILimitedUIController):
         self.__systemMessages.proto.serviceChannel.pushClientMessage({'rules': self.__postponedContentUnlockedMessageRules}, SCH_CLIENT_MSG_TYPE.LIMITED_UI_CONTENT_UNLOCKED)
         self.__postponedContentUnlockedMessageRules.clear()
 
+    def sendPlatoonLockedMessage(self, prbType, name):
+        self.__systemMessages.proto.serviceChannel.pushClientMessage({'inviterName': name,
+         'prbType': prbType}, SCH_CLIENT_MSG_TYPE.LIMITED_UI_PLATOON_LOCKED)
+
     def __needToSendContentUnlockedMessage(self, ruleID):
         if ruleID == LuiRules.PERSONAL_MISSIONS_CONTENT:
             return self.__lobbyContext.getServerSettings().isPersonalMissionsEnabled()
@@ -529,4 +525,16 @@ class LimitedUIController(ILimitedUIController):
             return isTournamentEnabled()
         if ruleID == LuiRules.VERSUS_AI_CONTENT:
             return self.__versusAIController and self.__versusAIController.isEnabled()
-        return isStrongholdsEnabled() if ruleID == LuiRules.STRONGHOLD_CONTENT else False
+        if ruleID == LuiRules.STRONGHOLD_CONTENT:
+            return isStrongholdsEnabled()
+        if ruleID == LuiRules.SPEC_BATTLE_CONTENT:
+            return GUI_SETTINGS.specPrebatlesVisible
+        if ruleID == LuiRules.COMP7_CONTENT:
+            return self.__comp7Controller and self.__comp7Controller.isEnabled()
+        if ruleID == LuiRules.ARCADE_CONTENT:
+            return self.__funRandomController and self.__funRandomController.isEnabled() and self.__funRandomController.isArcade()
+        if ruleID == LuiRules.FIELD_TRIALS_CONTENT:
+            return self.__funRandomController and self.__funRandomController.isEnabled() and self.__funRandomController.isFieldTrials()
+        if ruleID == LuiRules.FRONTLINE_CONTENT:
+            return self.__epicBattleController and self.__epicBattleController.isEnabled()
+        return self.__rankedController and self.__rankedController.isEnabled() if ruleID == LuiRules.RANKED_CONTENT else False

@@ -73,7 +73,6 @@ class BattleColorSchemeManager(ColorSchemeManager, IArenaVehiclesController):
 
     def _populate(self):
         super(BattleColorSchemeManager, self)._populate()
-        self.__set3DFlagsEmblem()
         from PlayerEvents import g_playerEvents
         g_playerEvents.onTeamChanged += self.__onTeamChanged
         self.sessionProvider.addArenaCtrl(self)
@@ -96,17 +95,6 @@ class BattleColorSchemeManager(ColorSchemeManager, IArenaVehiclesController):
             for teamIdx in teamsOnArena:
                 color = allyColor if arenaDP.isAllyTeam(teamIdx) else enemyColor
                 BigWorld.setFlagColor(teamIdx, color / 255)
-
-            return
-
-    def __set3DFlagsEmblem(self):
-        arenaDP = self.sessionProvider.getArenaDP()
-        if arenaDP is None:
-            return
-        else:
-            teamsOnArena = arenaDP.getTeamsOnArena()
-            for teamIdx in [0] + teamsOnArena:
-                BigWorld.setFlagEmblem(teamIdx, BigWorld.defaultFlagEmblemPath, BigWorld.defaultFlagEmblemCoords)
 
             return
 

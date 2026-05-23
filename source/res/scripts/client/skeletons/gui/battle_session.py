@@ -228,6 +228,10 @@ class IDynamicControllersLocator(object):
     def battleContextHintsCtrl(self):
         raise NotImplementedError
 
+    @property
+    def comp7PrebattleSkillController(self):
+        raise NotImplementedError
+
 
 class ISquadInvitationsHandler(object):
     __slots__ = ()

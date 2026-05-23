@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/messengerBar/messenger_bar.py
+import BigWorld
 from account_helpers.settings_core.settings_constants import SESSION_STATS
 from adisp import adisp_process
 from constants import PREBATTLE_TYPE, IS_DEVELOPMENT
@@ -16,6 +17,7 @@ from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.VEHICLE_COMPARE_CONSTANTS import VEHICLE_COMPARE_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.limited_ui.lui_rules_storage import LuiRules
@@ -31,6 +33,7 @@ from skeletons.gui.game_control import IVehicleComparisonBasket, IReferralProgra
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 from skeletons.gui.lobby_context import ILobbyContext
+from PlayerEvents import g_playerEvents
 
 def _formatIcon(iconName, width=32, height=32, path='html_templates:lobby/messengerBar'):
     return makeHtmlString(path, 'iconTemplate', {'iconName': iconName,
@@ -144,25 +147,15 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
         self._referralCtrl.onReferralProgramUpdated += self.__onReferralProgramUpdated
         self._referralCtrl.onPointsChanged += self.__onPointsChanged
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
-        self._limitedUIController.startObserve(LuiRules.CHANNELS, self.__updateChannelsBtn)
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.ReferralViewEvent.TOGGLE_BUTTON, self.__onReferralButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.startGlobalListening()
-        self.as_setInitDataS({'channelsHtmlIcon': backport.image(R.images.gui.maps.icons.messenger.iconChannels()),
-         'isReferralEnabled': self.__isReferralProgramGUIEnabled(),
-         'referralCounter': self._referralCtrl.getBubbleCount(),
-         'isReferralScoresLimitIndication': self._referralCtrl.isShouldIndicate(),
-         'referralHtmlIcon': backport.image(R.images.gui.maps.icons.messenger.iconReferral()),
-         'referralTooltip': TOOLTIPS.LOBY_MESSENGER_REFERRAL_BUTTON,
-         'contactsHtmlIcon': backport.image(R.images.gui.maps.icons.messenger.iconContacts()),
-         'vehicleCompareHtmlIcon': backport.image(R.images.gui.maps.icons.messenger.iconComparison()),
-         'contactsTooltip': TOOLTIPS.LOBY_MESSENGER_CONTACTS_BUTTON,
-         'vehicleCompareTooltip': TOOLTIPS.LOBY_MESSENGER_VEHICLE_COMPARE_BUTTON,
-         'sessionStatsHtmlIcon': backport.image(R.images.gui.maps.icons.messenger.iconSessionStats())})
+        self.__updateInitData()
         sessionStatsSettings = SessionStatsSettingsController().getSettings()
         self.__sessionStatsBtnOnlyOnceHintShow = not sessionStatsSettings[SESSION_STATS.ONLY_ONCE_HINT_SHOWN_FIELD]
         self.__updateSessionStatsBtn()
-        self.__updateChannelsBtn()
+        self.as_setChannelButtonVisibleS(True)
+        g_playerEvents.onNewbieChatLockingStateChanged += self.__updateInitData
 
     def _dispose(self):
         self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -173,7 +166,7 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
         self._referralCtrl.onReferralProgramEnabled -= self.__onReferralProgramEnabled
         self._referralCtrl.onPointsChanged -= self.__onPointsChanged
         self.stopGlobalListening()
-        self._limitedUIController.stopObserve(LuiRules.CHANNELS, self.__updateChannelsBtn)
+        g_playerEvents.onNewbieChatLockingStateChanged -= self.__updateInitData
         super(MessengerBar, self)._dispose()
 
     def __onReferralProgramEnabled(self):
@@ -254,10 +247,35 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
         self.__sessionStatsBtnOnlyOnceHintShow = False
         self.__updateSessionStatsHint(self.__sessionStatsBtnOnlyOnceHintShow)
 
-    def __updateChannelsBtn(self, *_):
-        visible = self._limitedUIController.isRuleCompleted(LuiRules.SESSION_STATS)
-        self.as_setChannelButtonVisibleS(visible)
-
     def __onReferralButtonUpdated(self, event):
         isEnabled = event.ctx.get('isEnabled', False)
         self.as_setReferralButtonEnabledS(isEnabled)
+
+    def __updateInitData(self):
+        isChannelsLocked = self.__isChannelsLocked()
+        channelsTooltipData = self.__getChannelsLockedTooltipData() if isChannelsLocked else None
+        self.as_setInitDataS({'channelsLocked': isChannelsLocked,
+         'channelsHtmlIcon': backport.image(R.images.gui.maps.icons.messenger.iconChannels()),
+         'isReferralEnabled': self.__isReferralProgramGUIEnabled(),
+         'referralCounter': self._referralCtrl.getBubbleCount(),
+         'isReferralScoresLimitIndication': self._referralCtrl.isShouldIndicate(),
+         'referralHtmlIcon': backport.image(R.images.gui.maps.icons.messenger.iconReferral()),
+         'referralTooltip': TOOLTIPS.LOBY_MESSENGER_REFERRAL_BUTTON,
+         'contactsHtmlIcon': backport.image(R.images.gui.maps.icons.messenger.iconContacts()),
+         'vehicleCompareHtmlIcon': backport.image(R.images.gui.maps.icons.messenger.iconComparison()),
+         'contactsTooltip': TOOLTIPS.LOBY_MESSENGER_CONTACTS_BUTTON,
+         'channelsTooltipData': channelsTooltipData,
+         'vehicleCompareTooltip': TOOLTIPS.LOBY_MESSENGER_VEHICLE_COMPARE_BUTTON,
+         'sessionStatsHtmlIcon': backport.image(R.images.gui.maps.icons.messenger.iconSessionStats())})
+        return
+
+    @staticmethod
+    def __isChannelsLocked():
+        return bool(BigWorld.player().AccountNewbieChatLockComponent.chatLocked)
+
+    @staticmethod
+    def __getChannelsLockedTooltipData():
+        return {'tooltipId': TOOLTIPS_CONSTANTS.NEWBIE_RESTRICTIONS_TOOLTIP,
+         'isWulfTooltip': True,
+         'tooltipArgs': None,
+         'label': None}

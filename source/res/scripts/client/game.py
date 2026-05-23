@@ -15,7 +15,7 @@ import Settings
 import SoundGroups
 import TriggersManager
 import VOIP
-import WebBrowser
+import MTWebBrowser
 import constants
 import services_config
 from MemoryCriticalController import g_critMemHandler
@@ -34,7 +34,6 @@ from th_async import th_async, th_await
 from gui.impl.dialogs import dialogs
 from system_events import g_systemEvents
 from helpers import styles_perf_toolset
-from helpers.buffs import ClientBuffsRepository
 try:
     locale.setlocale(locale.LC_TIME, '')
 except locale.Error:
@@ -132,7 +131,6 @@ def init(scriptConfig, engineConfig, userPreferences):
         player_ranks.init()
         import destructible_entities
         destructible_entities.init()
-        ClientBuffsRepository.init()
         from AvatarInputHandler.cameras import FovExtended
         FovExtended.instance().resetFov()
         BigWorld.pauseDRRAutoscaling(True)
@@ -147,11 +145,23 @@ def init(scriptConfig, engineConfig, userPreferences):
     return
 
 
+def initOfflineMode():
+    BigWorld.worldDrawEnabled(False)
+    gameLoading.step()
+    manager = dependency.configure(services_config.getOfflineClientServicesConfig)
+    g_systemEvents.onDependencyConfigReady(manager)
+    AreaDestructibles.init()
+    BigWorld.pauseDRRAutoscaling(True)
+    if constants.HAS_DEV_RESOURCES:
+        import development
+        development.init()
+
+
 def start():
     LOG_DEBUG('start')
     styles_perf_toolset.setup()
     checkBotNet()
-    if OfflineMode.onStartup():
+    if OfflineMode.enabled() and OfflineMode.onStartup():
         gameLoading.getLoader().idl()
         LOG_DEBUG('OfflineMode')
         return
@@ -214,7 +224,7 @@ def start():
             ServiceLocator.gameplay.start()
         BigWorld.loginEntered()
         if not g_replayCtrl.isPlaying:
-            WebBrowser.initExternalCache()
+            MTWebBrowser.initExternalCache()
         if BigWorld.dx10DeferredReset():
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.DX10_NODEFERRED_WARNING, type=SystemMessages.SM_TYPE.Warning)
         return
@@ -238,9 +248,9 @@ def fini():
     MusicControllerWWISE.destroy()
     if RSSDownloader.g_downloader is not None:
         RSSDownloader.g_downloader.destroy()
-    ServiceLocator.connectionMgr.onConnected -= onConnected
-    ServiceLocator.connectionMgr.onDisconnected -= onDisconnected
-    MessengerEntry.g_instance.fini()
+    if dependency.isConfigured():
+        ServiceLocator.connectionMgr.onConnected -= onConnected
+        ServiceLocator.connectionMgr.onDisconnected -= onDisconnected
     from helpers import EdgeDetectColorController
     if EdgeDetectColorController.g_instance is not None:
         EdgeDetectColorController.g_instance.destroy()
@@ -252,23 +262,26 @@ def fini():
         TriggersManager.g_manager = None
     if g_replayCtrl is not None:
         g_replayCtrl.unsubscribe()
-    gui_personality.fini()
     from predefined_hosts import g_preDefinedHosts
     if g_preDefinedHosts is not None:
         g_preDefinedHosts.fini()
-    SoundGroups.g_instance.stopListeningGUISpaceChanges()
-    gameLoading.getLoader().stop()
-    dependency.clear()
+    if SoundGroups.g_instance is not None:
+        SoundGroups.g_instance.stopListeningGUISpaceChanges()
+        SoundGroups.g_instance.destroy()
+    if dependency.isConfigured(True):
+        MessengerEntry.g_instance.fini()
+        gui_personality.fini()
+        gameLoading.getLoader().stop()
+        dependency.clear()
     if g_replayCtrl is not None:
         g_replayCtrl.destroy()
         g_replayCtrl = None
     voipRespHandler = VOIP.getVOIPManager()
     if voipRespHandler is not None:
         voipRespHandler.destroy()
-    SoundGroups.g_instance.destroy()
-    Settings.g_instance.save()
-    ClientBuffsRepository.fini()
-    WebBrowser.destroyExternalCache()
+    if Settings.g_instance is not None:
+        Settings.g_instance.save()
+    MTWebBrowser.destroyExternalCache()
     if constants.HAS_DEV_RESOURCES:
         import development
         development.fini()
@@ -359,7 +372,7 @@ def handleKeyEvent(event):
         isDown, key, mods, isRepeat = convertKeyEvent(event)
         if g_bootcamp.isRunning():
             g_bootcamp.handleKeyEvent(event)
-        if WebBrowser.g_mgr.handleKeyEvent(event):
+        if MTWebBrowser.g_mgr.handleKeyEvent(event):
             return True
         if g_replayCtrl.isPlaying:
             if g_replayCtrl.handleKeyEvent(isDown, key, mods, isRepeat, event):

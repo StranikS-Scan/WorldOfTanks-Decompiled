@@ -22,6 +22,12 @@ def configure(config):
     return _g_manager
 
 
+def isConfigured(raiseLog=False):
+    if raiseLog and _g_manager is None:
+        _logger.warning('Dependency manager is not configured')
+    return _g_manager is not None
+
+
 def replaceInstance(class_, obj, finalizer=None):
     _g_manager.replaceInstance(class_, obj, finalizer)
 

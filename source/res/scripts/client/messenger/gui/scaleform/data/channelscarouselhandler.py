@@ -6,6 +6,8 @@ from gui.Scaleform.daapi.view.meta.ChannelCarouselMeta import ChannelCarouselMet
 from gui.Scaleform.framework.managers.containers import ExternalCriteria
 from gui.Scaleform.genConsts.MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES import MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES
 from gui.app_loader import sf_lobby
+from gui.impl.gen import R
+from gui.impl import backport
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import ChannelManagementEvent, ChannelCarouselEvent, PreBattleChannelEvent
 from messenger.ext import channel_num_gen
@@ -93,7 +95,7 @@ class ChannelsCarouselHandler(object):
         remove(ChannelCarouselEvent.ON_WINDOW_CHANGE_OPEN_STATE, self.__handleOnWindowChangeOpenState, scope=EVENT_BUS_SCOPE.LOBBY)
         self.__showByReqs.clear()
 
-    def addChannel(self, channel, lazy=False, isNotified=False):
+    def addChannel(self, channel, lazy=False, isNotified=False, isLocked=False, tooltipData=None):
         clientID = channel.getClientID()
         isSystem = channel.isSystem()
         isPrivate = channel.isPrivate()
@@ -107,12 +109,14 @@ class ChannelsCarouselHandler(object):
         self.__channelsDP.addItem(clientID, {'label': channel.getFullName(),
          'canClose': not isSystem,
          'isNotified': isNotified,
-         'icon': None,
+         'icon': backport.image(R.images.gui.maps.icons.messenger.iconLock()) if isLocked else None,
          'order': order,
          'isInProgress': False,
          'isPrivate': isPrivate,
          'dbID': 0,
-         'userName': None})
+         'userName': None,
+         'isLocked': isLocked,
+         'tooltipData': tooltipData})
         return
 
     def removeChannel(self, channel):
@@ -146,8 +150,20 @@ class ChannelsCarouselHandler(object):
             result = self.__channelsDP.setItemField(clientID, key, value)
         return result
 
+    def __setItemFields(self, clientID, fields):
+        result = self.__preBattleChannelsDP.setItemFields(clientID, fields)
+        if not result:
+            result = self.__channelsDP.setItemFields(clientID, fields)
+        return result
+
     def updateChannel(self, channel):
         self.__setItemField(channel.getClientID(), 'label', channel.getFullName())
+
+    def updateChannelAccessibility(self, channel, isLocked, tooltipData):
+        self.__setItemFields(channel.getClientID(), {'isLocked': isLocked,
+         'tooltipData': tooltipData,
+         'icon': backport.image(R.images.gui.maps.icons.messenger.iconLock()) if isLocked else None})
+        return
 
     def removeChannels(self):
         if self.__channelsDP is not None:

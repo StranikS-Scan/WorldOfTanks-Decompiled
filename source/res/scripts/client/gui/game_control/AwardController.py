@@ -69,10 +69,12 @@ from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattleP
 from gui.impl.lobby.paragons.paragons_window_events import showVideoRewardView
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
+from gui.shared.money import ZERO_MONEY, Money, Currency
 from gui.shared.system_factory import registerAwardControllerHandlers, collectAwardControllerHandlers
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.sounds.sound_constants import SPEAKERS_CONFIG
+from gui.summer_sale.video_reward_handler import tryShowWithVideoReward
 from helpers import dependency, i18n
 from items import ITEM_TYPE_INDICES, vehicles as vehicles_core
 from items.components.crew_books_constants import CREW_BOOK_DISPLAYED_AWARDS_COUNT
@@ -87,7 +89,7 @@ from shared_utils import first, findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IAwardController, IBattlePassController, IBootcampController, ILimitedUIController, IMapboxController, IRankedBattlesController, ISeniorityAwardsController, ICollectionsSystemController, IWotPlusController, IEarlyAccessController, IComp7Controller, IPersonalMissionsController, IParagonsRewardsShopController
+from skeletons.gui.game_control import IAwardController, IBattlePassController, IBootcampController, ILimitedUIController, IMapboxController, IRankedBattlesController, ISeniorityAwardsController, ICollectionsSystemController, IWotPlusController, IEarlyAccessController, IComp7Controller, IPersonalMissionsController, IParagonsRewardsShopController, ISummerSaleController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
@@ -2048,6 +2050,69 @@ class PromoCodeInvoiceHandler(MultiTypeServiceChannelHandler):
             showPromoCodeRewardScreen(token, [reward[0]], reward[1])
 
 
+class SummerSaleRewardReceivedHandler(MultiTypeServiceChannelHandler):
+    __summerSale = dependency.descriptor(ISummerSaleController)
+
+    def __init__(self, awardCtrl):
+        super(SummerSaleRewardReceivedHandler, self).__init__((SYS_MESSAGE_TYPE.invoiceReceived.index(), SYS_MESSAGE_TYPE.immediatelyOpenBoxReward.index()), awardCtrl)
+
+    def _needToShowAward(self, ctx):
+        _, message = ctx
+        if not super(SummerSaleRewardReceivedHandler, self)._needToShowAward(ctx):
+            return False
+        if message.type == SYS_MESSAGE_TYPE.invoiceReceived.index() and self.__summerSale.getProductTag() in message.data.get('tags', []):
+            return True
+        return any((self.itemsCache.items.tokens.getLootBoxByID(lootBoxID).getType() == self.__summerSale.getSummerSaleSetType() for lootBoxID in message.data.iterkeys())) if message.type == SYS_MESSAGE_TYPE.immediatelyOpenBoxReward.index() else False
+
+    def _showAward(self, ctx):
+        _, message = ctx
+        data = message.data
+        rewards = {}
+        if message.type == SYS_MESSAGE_TYPE.invoiceReceived.index():
+            rewards = data.get('data', {})
+        if message.type == SYS_MESSAGE_TYPE.immediatelyOpenBoxReward.index():
+            if data:
+                box = first(data.values())
+                rewards = box.get('rewards', {})
+        self.preformatCompensationValue(rewards)
+        self.preformatStyle(rewards)
+        tryShowWithVideoReward(rewards)
+
+    @classmethod
+    def preformatCompensationValue(cls, rewards):
+        vehiclesList = rewards.get('vehicles', [])
+        compValue = cls.__getCompensationVehicleValue(vehiclesList)
+        for currency in Currency.ALL:
+            if compValue.get(currency, 0) > 0:
+                currencyValue = rewards.pop(currency, 0)
+                if currency is not None:
+                    newCurrencyValue = currencyValue - compValue.get(currency, 0)
+                    if newCurrencyValue:
+                        rewards[currency] = max(newCurrencyValue, 0)
+
+        return
+
+    @classmethod
+    def preformatStyle(cls, rewards):
+        customizations = rewards.get('customizations', [])
+        if customizations:
+            rewards['customizations'] = [ cData for cData in customizations if not cData.get('boundToCurrentVehicle', False) ]
+            if not rewards['customizations']:
+                rewards.pop('customizations')
+
+    @classmethod
+    def __getCompensationVehicleValue(cls, vehiclesList):
+        comp = ZERO_MONEY
+        for vehiclesDict in vehiclesList:
+            for _, vehicleData in vehiclesDict.iteritems():
+                if 'rentCompensation' in vehicleData:
+                    comp += Money.makeFromMoneyTuple(vehicleData['rentCompensation'])
+                if 'customCompensation' in vehicleData:
+                    comp += Money.makeFromMoneyTuple(vehicleData['customCompensation'])
+
+        return comp
+
+
 registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  PunishWindowHandler,
  TokenQuestsWindowHandler,
@@ -2094,4 +2159,5 @@ registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  Comp7CouponHandler,
  EarlyAccessQuestHandler,
  DailyEpicQuestsHandler,
- PromoCodeInvoiceHandler))
+ PromoCodeInvoiceHandler,
+ SummerSaleRewardReceivedHandler))

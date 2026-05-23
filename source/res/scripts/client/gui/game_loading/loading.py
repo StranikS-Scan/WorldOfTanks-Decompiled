@@ -50,5 +50,10 @@ def step():
 
 
 def markLoadingScreenResourcesFreed():
-    statsCollector = dependency.instance(IStatisticsCollector)
-    statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.GAMEFACE_UI_LOADING_SCREEN_DESTROYED)
+    if not dependency.isConfigured(True):
+        return
+    else:
+        statsCollector = dependency.getInstanceIfHas(IStatisticsCollector)
+        if statsCollector is not None:
+            statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.GAMEFACE_UI_LOADING_SCREEN_DESTROYED)
+        return

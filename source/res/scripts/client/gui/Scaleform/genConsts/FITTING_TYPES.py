@@ -22,6 +22,8 @@ class FITTING_TYPES(object):
     ARTEFACT_SLOTS = [OPTIONAL_DEVICE, EQUIPMENT]
     VEHICLE_GUN = 'vehicleGun'
     VEHICLE_DUAL_GUN = 'vehicleDualGun'
+    VEHICLE_DUAL_GUN_COOLING = 'dualGunCooling'
+    VEHICLE_GUN_COOLING = 'gunCooling'
     VEHICLE_TURRET = 'vehicleTurret'
     VEHICLE_CHASSIS = 'vehicleChassis'
     VEHICLE_WHEELED_CHASSIS = 'vehicleWheeledChassis'

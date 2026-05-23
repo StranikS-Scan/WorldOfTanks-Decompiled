@@ -11,13 +11,15 @@ EVENT_LOADING_SOUND_START = 'loadingSoundStart'
 SOUND_ARG = 'sound'
 
 class GameLoadingSoundsListener(object):
-    __slots__ = ('__currentSound',)
+    __slots__ = ('__currentSound', '__notLoadedEvent')
 
     def __init__(self):
         super(GameLoadingSoundsListener, self).__init__()
         g_eventBus.addListener(EVENT_LOADING_SOUND_CHANGE, self.__onChangeSound)
         g_eventBus.addListener(EVENT_LOADING_SOUND_START, self.__onStartLoadingSound)
         self.__currentSound = ''
+        self.__notLoadedEvent = None
+        return
 
     def destroy(self):
         g_eventBus.removeListener(EVENT_LOADING_SOUND_CHANGE, self.__onChangeSound)
@@ -26,17 +28,24 @@ class GameLoadingSoundsListener(object):
     def __onStartLoadingSound(self, _):
         WWISE.loadLogin()
         SoundGroups.g_instance.playSound2D(UE_01_LOGINSCREEN_ENTER_SOUND)
-        self.__playSound(DEFAULT_LOADING_SOUND)
+        if self.__notLoadedEvent:
+            self.__playEvent(self.__notLoadedEvent)
+            self.__notLoadedEvent = None
+        else:
+            self.__playEvent(DEFAULT_LOADING_SOUND)
+        return
 
     def __onChangeSound(self, event):
         ctx = event.ctx
         sound = ctx.get(SOUND_ARG, DEFAULT_LOADING_SOUND)
-        self.__playSound(sound)
+        self.__playEvent(sound)
 
-    def __playSound(self, sound):
-        if sound and sound != self.__currentSound:
+    def __playEvent(self, sound):
+        if SoundGroups.g_instance and sound and sound != self.__currentSound:
             self.__currentSound = sound
             SoundGroups.g_instance.playSound2D(sound)
+        else:
+            self.__notLoadedEvent = sound
 
 
 def handleLoadingSoundStartEvent():

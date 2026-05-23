@@ -33,7 +33,7 @@ class BuilderDialogTemplateView(DialogTemplateView):
 class BaseDialogBuilder(object):
     __slots__ = ('__title', '__description', '__icon', '__buttons', '__uniqueID', '__backgroundID', '__dimmerAlpha', '__layoutID', '__selectedButtonID', '__doBlur', '__layer', '__displayFlags')
 
-    def __init__(self, uniqueID=None):
+    def __init__(self, uniqueID=None, layoutID=None):
         super(BaseDialogBuilder, self).__init__()
         self.__title = None
         self.__description = None
@@ -42,7 +42,7 @@ class BaseDialogBuilder(object):
         self.__uniqueID = uniqueID
         self.__backgroundID = None
         self.__dimmerAlpha = DEFAULT_DIMMER_ALPHA
-        self.__layoutID = None
+        self.__layoutID = layoutID
         self.__selectedButtonID = None
         self.__doBlur = True
         self.__layer = WindowLayer.UNDEFINED
@@ -82,13 +82,12 @@ class BaseDialogBuilder(object):
     def setDescription(self, text):
         self.__description = toString(text)
 
-    def setIcon(self, mainIcon, backgrounds=None, overlays=None, layoutID=None, iconPositionLogic=IconPositionLogicEnum.CENTREDANDTHROUGHCONTENT.value, pushingDown=True):
+    def setIcon(self, mainIcon, backgrounds=None, overlays=None, layoutID=None, iconPositionLogic=IconPositionLogicEnum.CENTREDANDTHROUGHCONTENT.value):
         self.__icon = {'iconResID': mainIcon,
          'backgroundResIDList': backgrounds,
          'overlayResIDList': overlays,
          'layoutID': layoutID,
-         'iconPositionLogic': iconPositionLogic,
-         'isBottomPushingDown': pushingDown}
+         'iconPositionLogic': iconPositionLogic}
 
     def addButton(self, buttonSettings):
         self.__buttons.append(buttonSettings)
@@ -150,8 +149,8 @@ class ResDialogBuilder(BaseDialogBuilder):
 class ConfirmCancelDialogBuilder(BaseDialogBuilder):
     __slots__ = ()
 
-    def __init__(self, uniqueID=None):
-        super(ConfirmCancelDialogBuilder, self).__init__(uniqueID)
+    def __init__(self, uniqueID=None, layoutID=None):
+        super(ConfirmCancelDialogBuilder, self).__init__(uniqueID, layoutID)
         self.addButton(ConfirmButton())
         self.setFocusedButtonID(DialogButtons.SUBMIT)
         self.addButton(CancelButton())

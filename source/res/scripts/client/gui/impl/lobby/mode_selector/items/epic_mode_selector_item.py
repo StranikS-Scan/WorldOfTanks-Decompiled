@@ -8,6 +8,7 @@ from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_normal_car
 from gui.impl.lobby.mode_selector.items import setBattlePassState
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
 from gui.impl.lobby.mode_selector.items.items_constants import ModeSelectorRewardID
+from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from gui.shared.event_dispatcher import showFrontlineInfoWindow
 from gui.shared.formatters import time_formatters
@@ -118,3 +119,6 @@ class EpicModeSelectorItem(ModeSelectorLegacyItem):
         vm.setStatusActive('')
         vm.setStatusNotActive('')
         vm.getRewardList().clear()
+
+    def getLimitedUIRule(self):
+        return LuiRules.FRONTLINE_CONTENT

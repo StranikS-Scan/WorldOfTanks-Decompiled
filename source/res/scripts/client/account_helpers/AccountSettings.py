@@ -316,6 +316,7 @@ NY_GREETINGS_SEEN = 'NYGreetingsSeen'
 PREMIUM_QUESTS_NOTIFICATION = 'PremiumPurchased'
 DEFERRED_LOG_PLAYER_SETTINGS_ACTIONS = 'DeferredLogPlayerSettingsActions'
 DYNAMIC_SETTINGS_REPOSITORY = 'dynamicSettingsRepository'
+SHOWN_SUMMER_SALE_INTRO = 'shownSummerSaleIntro'
 
 class BattleMatters(object):
     BATTLE_MATTERS_SETTINGS = 'battleMattersSettings'
@@ -381,6 +382,7 @@ class FunRandomMaps(object):
     FUN_RANDOM_MAPS_SETTINGS = 'funRandomMapsSettings'
     FUN_RANDOM_LAST_SELECTED_MAP = 'funRandomLastSelectedMap'
     FUN_RANDOM_WIDGET_VISITED_SUBMODES = 'funRandomWidgetVisitedSubModes'
+    FUN_RANDOM_MODE_SELECTOR_CARD_SEEN_FEP_TYPES = 'funRandomModeSelectorCardSeenFepTypes'
 
 
 class Paragons(object):
@@ -1498,7 +1500,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                            NY_ACTIVE_WIDGET_TRANSITION_SHOWN: False,
                            NY_PET_SLOT_VISITED: False,
                            NY_GREETINGS_SEEN: False},
-                DEFERRED_LOG_PLAYER_SETTINGS_ACTIONS: {SettingsLogActions.SETTINGS_INITED}},
+                DEFERRED_LOG_PLAYER_SETTINGS_ACTIONS: {SettingsLogActions.SETTINGS_INITED},
+                SHOWN_SUMMER_SALE_INTRO: False},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
@@ -1712,7 +1715,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                               Paragons.PROJECT_IS_CONTINUING_NOTIFICATION_WAS_SHOWN: False,
                               Paragons.CHAPTER_COUNTER: 1},
  FunRandomMaps.FUN_RANDOM_MAPS_SETTINGS: {FunRandomMaps.FUN_RANDOM_LAST_SELECTED_MAP: None,
-                                          FunRandomMaps.FUN_RANDOM_WIDGET_VISITED_SUBMODES: set()},
+                                          FunRandomMaps.FUN_RANDOM_WIDGET_VISITED_SUBMODES: set(),
+                                          FunRandomMaps.FUN_RANDOM_MODE_SELECTOR_CARD_SEEN_FEP_TYPES: set()},
  PlayStreak.PLAY_STREAK_SETTINGS: {PlayStreak.PLAY_STREAK_CLICK: False,
                                    PlayStreak.PLAY_STREAK_LAST_LEVEL_SEEN: 0,
                                    PlayStreak.PLAY_STREAK_LAST_LEVEL_SEEN_WIDGET: 0,
@@ -2626,6 +2630,10 @@ class AccountSettings(object):
     @staticmethod
     def setNotifications(name, value):
         AccountSettings._setValue(name, value, KEY_NOTIFICATIONS)
+
+    @staticmethod
+    def getNotificationsDefault(name):
+        return DEFAULT_VALUES[KEY_NOTIFICATIONS].get(name)
 
     @staticmethod
     def getSessionSettings(name):

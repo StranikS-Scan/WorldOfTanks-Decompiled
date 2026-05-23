@@ -97,6 +97,9 @@ class BattleSessionProvider(IBattleSessionProvider):
         ctrl = self.__dynamicRepo.respawn
         if ctrl is not None:
             ctrl.spawnVehicle(vID)
+        ctrl = self.__dynamicRepo.comp7PrebattleSkillController
+        if ctrl is not None:
+            ctrl.setPlayerVehicle(vID)
         mapKind = self.__arenaVisitor.type.getVehicleCamouflageKind()
         g_tankActiveCamouflage[vDesc.type.compactDescr] = SeasonType.fromArenaKind(mapKind)
         return

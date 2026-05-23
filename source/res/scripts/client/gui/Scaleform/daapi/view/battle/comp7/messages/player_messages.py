@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/comp7/messages/player_messages.py
 from comp7_common import ROLE_EQUIPMENT_TAG
-from constants import EQUIPMENT_STAGES, ROLE_TYPE_TO_LABEL
+from constants import EQUIPMENT_STAGES
 from helpers import dependency
 from gui.Scaleform.daapi.view.battle.shared.messages import PlayerMessages
+from items import vehicles
 from points_of_interest_shared import ENEMY_VEHICLE_ID
 from skeletons.gui.game_control import IComp7Controller
 _ROLE_EQUIPMENT_READY = 'ROLE_EQUIPMENT_READY'
@@ -65,7 +66,7 @@ class Comp7PlayerMessages(PlayerMessages):
                 vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
                 if vehicle is None or not hasattr(vehicle, 'typeDescriptor'):
                     return
-                roleType = ROLE_TYPE_TO_LABEL.get(vehicle.typeDescriptor.role)
-                equipment = self.__comp7Controller.getRoleEquipment(roleType)
+                equipmentID = vehicle.selectedComp7Skill
+                equipment = vehicles.g_cache.equipments()[equipmentID]
                 self.sessionProvider.shared.messages.showVehicleMessage(_ROLE_EQUIPMENT_PROMOTED, {'name': equipment.userString})
             return

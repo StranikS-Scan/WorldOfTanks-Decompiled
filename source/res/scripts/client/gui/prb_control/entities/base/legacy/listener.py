@@ -4,7 +4,7 @@ from gui.prb_control.entities.base.listener import IPrbListener
 
 class ILegacyIntroListener(IPrbListener):
 
-    def onLegacyListReceived(self, result):
+    def onLegacyListReceived(self, prebattles):
         pass
 
     def onLegacyRosterReceived(self, prebattleID, iterator):

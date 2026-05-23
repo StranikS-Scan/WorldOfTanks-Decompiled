@@ -1916,28 +1916,18 @@
       </server>
     </LSBuffAddDynGroupOnEventComponent>
   </LS_obeliskEnemyStun>
-  <LS_obeliskOnDamage>
-    <LSBuffAddDynGroupComponent>
-      <server>
-        <groups>
-          <item>
-            <groupName>	LS_obeliskDamage_FX	</groupName>
-            <duration>	3.0	</duration>
-            <removeOnDestroy>	False	</removeOnDestroy>
-            <replaceExisting>	True	</replaceExisting>
-            <uniqueGroup>	False	</uniqueGroup>
-          </item>
-        </groups>
-      </server>
-    </LSBuffAddDynGroupComponent>
-  </LS_obeliskOnDamage>
   <LS_obeliskDamage_FX>
+    <LSBuffInterruptibleComponent>
+      <server>
+        <events>	onDeath	</events>
+      </server>
+    </LSBuffInterruptibleComponent>
     <LSBuffSequencesComponent>
       <client>
         <sequences>
           <item>
             <sequence>	particles/eff_sequence/last_stand/enemies/obelisk_hit_damage_01.seq	</sequence>
-            <bindNode>	HP_turretJoint	</bindNode>
+            <bindNode>	Turret_01	</bindNode>
             <loopCount>	1	</loopCount>
             <visibleTo>	all	</visibleTo>
           </item>

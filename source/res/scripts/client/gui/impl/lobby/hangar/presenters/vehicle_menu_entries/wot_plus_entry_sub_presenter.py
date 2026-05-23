@@ -12,8 +12,7 @@ from gui.impl.gen.view_models.views.lobby.hangar.vehicle_menu_model import Vehic
 from gui.impl.lobby.dialogs.wot_plus.pro_boost_confirm_dialog import _ProBoostConfirmDialogParams
 from gui.impl.lobby.dialogs.wot_plus.pro_boost_switch_dialog import _ProBoostSwitchDialogVehicleParams, _ProBoostSwitchDialogParams
 from gui.impl.lobby.hangar.presenters.vehicle_menu_entries.base_menu_entry_sub_presenter import BaseMenuEntrySubPresenter, EntryStateWithReason
-from gui.prb_control.entities.base.listener import IPrbListener
-from gui.shared import events, EVENT_BUS_SCOPE
+from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared.gui_items.Vehicle import getIconShopResource
 from gui.shared.utils.functions import replaceHyphenToUnderscore
 from helpers import dependency, int2roman
@@ -26,9 +25,12 @@ if typing.TYPE_CHECKING:
     from typing import Any, Dict, Generator
     from gui.shared.gui_items.Vehicle import Vehicle
 
-class WotPlusEntrySubPresenter(BaseMenuEntrySubPresenter, IPrbListener):
+class WotPlusEntrySubPresenter(BaseMenuEntrySubPresenter, IGlobalListener):
     __wotPlusCtrl = dependency.descriptor(IWotPlusController)
     __itemsCache = dependency.descriptor(IItemsCache)
+
+    def onPrbEntitySwitched(self):
+        self.packEntry()
 
     @wg_async
     def onNavigate(self):
@@ -51,9 +53,6 @@ class WotPlusEntrySubPresenter(BaseMenuEntrySubPresenter, IPrbListener):
         else:
             self.__wotPlusCtrl.activateProBoostOnVehicle(g_currentVehicle.invID)
             return
-
-    def _getListeners(self):
-        return ((events.PrebattleEvent.SWITCHED, self.__onPrbEntitySwitched, EVENT_BUS_SCOPE.LOBBY),)
 
     def _getEvents(self):
         return ((self.__wotPlusCtrl.onProBoostCooldownIsFinished, self.__onProBoostCooldownIsFinished), (self.__wotPlusCtrl.onDataChanged, self.__onProBoostDataChanged))
@@ -101,9 +100,6 @@ class WotPlusEntrySubPresenter(BaseMenuEntrySubPresenter, IPrbListener):
 
     def __getType48x48IconResource(self, vehicleType, isElite=False):
         return R.images.gui.maps.icons.vehicleTypes.c_48x48.dyn(replaceHyphenToUnderscore(vehicleType + '_elite' if isElite else vehicleType))
-
-    def __onPrbEntitySwitched(self, *args, **kwargs):
-        self.packEntry()
 
     def __onProBoostCooldownIsFinished(self, *args, **kwargs):
         self.packEntry()

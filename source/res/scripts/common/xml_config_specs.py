@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/xml_config_specs.py
+from __future__ import absolute_import
 import json
 from Math import Vector2, Vector3, Vector4
 from typing import TYPE_CHECKING

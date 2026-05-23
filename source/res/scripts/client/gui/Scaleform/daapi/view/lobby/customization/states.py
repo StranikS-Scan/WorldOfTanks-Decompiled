@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/states.py
+from __future__ import absolute_import
 import logging
 import math
 import typing
+from functools import partial
 import BigWorld
 import adisp
 from BWUtil import AsyncReturn
@@ -175,7 +177,7 @@ class _LoadingState(LobbyState, EventsHandler):
             self.__goToMain()
 
     def __goToMain(self):
-        BigWorld.callback(0.0, lambda : _MainState.goTo(**self.__params))
+        BigWorld.callback(0.0, partial(_MainState.goTo, **self.__params))
 
 
 @CustomizationState.parentOf

@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/vehicle_anchors_updater.py
+from __future__ import absolute_import, division
 import logging
 import math
+import typing
 from collections import defaultdict
 from copy import copy
-import typing
+from future.utils import viewitems, viewvalues
 import GUI
 import Math
 from CurrentVehicle import g_currentVehicle
@@ -120,7 +122,7 @@ class VehicleAnchorsUpdater(object):
                 anchor = Anchor(slotId, uid, position, direction)
                 if slotId.slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
                     self.__closeGroups.add(slotId)
-                    for aId, a in self.__processedAnchors.iteritems():
+                    for aId, a in viewitems(self.__processedAnchors):
                         dist = (a.position - anchor.position).length
                         if dist < _MIN_PROJECTION_DECAL_ANCHORS_DIST:
                             self.__closeGroups.union(aId, slotId)
@@ -176,7 +178,7 @@ class VehicleAnchorsUpdater(object):
 
     def __delAllAnchors(self):
         if self.__vehicleCustomizationAnchors is not None:
-            for anchor in self.__processedAnchors.itervalues():
+            for anchor in viewvalues(self.__processedAnchors):
                 self.__vehicleCustomizationAnchors.delAnchor(anchor.uid)
                 anchor.destroy()
 
@@ -243,7 +245,7 @@ class VehicleAnchorsUpdater(object):
             self.changeAnchorParams(slotId, isDisplayed=isDisplayed, isAutoScalable=True, isCollidable=False)
 
     def __spreadAnchorsApart(self, visibleAnchors):
-        for slotIds in visibleAnchors.itervalues():
+        for slotIds in viewvalues(visibleAnchors):
             anchorsCount = len(slotIds)
             if anchorsCount > 1:
                 radius = _MIN_PROJECTION_DECAL_ANCHORS_DIST * 0.5 / math.sin(math.pi / anchorsCount)
@@ -281,7 +283,7 @@ class VehicleAnchorsUpdater(object):
 
     def __onCarouselItemUnselected(self, *_, **__):
         if self.__ctx.mode.tabId == CustomizationTabs.PROJECTION_DECALS or self.__ctx.mode.slotType in GUI_ITEM_TYPE.ATTACHMENT_TYPES:
-            for anchor in self.__processedAnchors.itervalues():
+            for anchor in viewvalues(self.__processedAnchors):
                 anchor.state.onItemUnselected()
 
             self.__changeAnchorsStates()
@@ -293,7 +295,7 @@ class VehicleAnchorsUpdater(object):
             anchor.state.onItemInstalled()
         outfit = self.__ctx.mode.currentOutfit
         if isItemsQuantityLimitReached(outfit, slotId.slotType):
-            for anchor in self.__processedAnchors.itervalues():
+            for anchor in viewvalues(self.__processedAnchors):
                 anchor.state.onLocked()
 
         self.__changeAnchorsStates()
@@ -340,7 +342,7 @@ class VehicleAnchorsUpdater(object):
             return
 
     def __updateAnchorsState(self):
-        for anchor in self.__processedAnchors.itervalues():
+        for anchor in viewvalues(self.__processedAnchors):
             anchor.updateState()
 
         self.__changeAnchorsStates()
@@ -351,7 +353,7 @@ class VehicleAnchorsUpdater(object):
         return
 
     def onCameraLocated(self, locatedSlotId=None):
-        for slotId, anchor in self.__processedAnchors.iteritems():
+        for slotId, anchor in viewitems(self.__processedAnchors):
             if slotId == locatedSlotId:
                 anchor.state.onSelected()
             anchor.state.onUnselected()

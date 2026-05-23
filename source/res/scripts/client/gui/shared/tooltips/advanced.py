@@ -101,13 +101,13 @@ class BaseAdvancedTooltip(BlocksTooltipData):
 class AdvancedTooltipWithMechanics(BaseAdvancedTooltip):
 
     def _hasMechanic(self, vehicle, mechanicName):
-        return vehicle and mechanicName in vehicle.getMechanics()
+        return mechanicName in vehicle.getMechanics()
 
     def _getDescrText(self, description, descReady=False):
         descrText = super(AdvancedTooltipWithMechanics, self)._getDescrText(description, descReady)
         statsConfig = self.context.getStatsConfiguration(self._item)
         vehicle = statsConfig.vehicle
-        if self._hasMechanic(vehicle, VehicleMechanic.LOW_CHARGE_SHOT):
+        if vehicle is not None and self._hasMechanic(vehicle, VehicleMechanic.LOW_CHARGE_SHOT):
             descrText = text_styles.concatStylesToMultiLine(text_styles.concatStylesToMultiLine(descrText, ''), i18n.makeString(TOOLTIPS.ADVANCED_LOW_CHARGE_SHOT_FOOTER, fireMode=text_styles.stats(TOOLTIPS.ADVANCED_LOW_CHARGE_SHOT_FIREMODE), fireRate=text_styles.stats(TOOLTIPS.ADVANCED_LOW_CHARGE_SHOT_FIRERATE)))
         return descrText
 
@@ -183,8 +183,6 @@ class HangarModuleAdvanced(AdvancedTooltipWithMechanics):
         descrKey = itemId
         isEquipment = item.itemTypeName == STORE_CONSTANTS.EQUIPMENT
         isOptionalDevice = item.itemTypeName == STORE_CONSTANTS.OPTIONAL_DEVICE
-        statsConfig = self.context.getStatsConfiguration(self._item)
-        vehicle = statsConfig.vehicle
         if isEquipment or isOptionalDevice:
             header = self._item.shortUserName
         else:
@@ -194,7 +192,9 @@ class HangarModuleAdvanced(AdvancedTooltipWithMechanics):
             descrKey = CHASSIS_TRACK_WITHIN_TRACK
         elif isEquipment and item.isStimulator:
             descrKey = 'ration'
-        mechanics = item.getMechanics(vehicle.descriptor) or ()
+        statsConfig = self.context.getStatsConfiguration(self._item)
+        vehicle = statsConfig.vehicle
+        mechanics = item.getMechanics(vehicle.descriptor) if vehicle is not None else ()
         movieModule = None
         for mechanicName in mechanics:
             movieModule = MODULE_MOVIES.get('%s_%s' % (movieKey, mechanicName.value))

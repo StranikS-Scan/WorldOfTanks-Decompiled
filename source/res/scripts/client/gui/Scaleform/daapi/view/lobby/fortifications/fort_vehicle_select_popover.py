@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/fort_vehicle_select_popover.py
+from __future__ import absolute_import
 from constants import QUEUE_TYPE
 from gui import makeHtmlString
 from gui.Scaleform import MENU

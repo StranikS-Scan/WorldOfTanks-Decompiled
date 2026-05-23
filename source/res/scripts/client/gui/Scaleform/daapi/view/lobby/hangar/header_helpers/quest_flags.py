@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/header_helpers/quest_flags.py
+from __future__ import absolute_import
 import logging
+from future.utils import viewvalues
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.limited_ui.lui_rules_storage import LUI_RULES
@@ -120,7 +122,7 @@ class RankedQuestsFlag(BaseQuestFlag):
         quests = cls.__rankedController.getDailyBattleQuests()
         label = ''
         totalCount = len(quests)
-        completedQuests = len([ q for q in quests.itervalues() if q.isCompleted() ])
+        completedQuests = len([ q for q in viewvalues(quests) if q.isCompleted() ])
         commonQuestsIcon = R.images.gui.maps.icons.library.outline.quests_disabled()
         if totalCount > 0:
             commonQuestsIcon = R.images.gui.maps.icons.library.outline.quests_available()

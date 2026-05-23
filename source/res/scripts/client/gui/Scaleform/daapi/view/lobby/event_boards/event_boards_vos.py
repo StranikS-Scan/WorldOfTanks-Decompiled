@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/event_boards/event_boards_vos.py
+from __future__ import absolute_import
+from future.utils import viewitems
 import nations
 from gui import GUI_NATIONS_ORDER_INDEX_REVERSED
 from gui.impl import backport
@@ -106,7 +108,7 @@ def makeEventBoardsTableDataVO(rewardCategories, method):
     rewardsFormatter = QuestsBonusComposer(getEventBoardsAwardPacker())
     data = []
     stripes = []
-    for categoryNumber, category in rewardCategories.iteritems():
+    for categoryNumber, category in viewitems(rewardCategories):
         players = category.get('players')
         if not players:
             continue
@@ -207,7 +209,7 @@ def _makeCantJoinReasonTooltip(stateReasons, playerData, limits):
     winRateMax = limits.getWinRateMax()
     battlesCount = limits.getBattlesCountMin()
     winRate = playerData.getWinRate()
-    items = list()
+    items = []
     items.append(_addItem(_ms(TOOLTIPS.ELEN_STATUS_CANTJOIN_REASON_BYAGE, date=date), _psr.BYAGE in stateReasons))
     items.append(_addItem(_ms(TOOLTIPS.ELEN_STATUS_CANTJOIN_REASON_BYVEHICLE), _psr.VEHICLESMISSING in stateReasons))
     if battlesCount:

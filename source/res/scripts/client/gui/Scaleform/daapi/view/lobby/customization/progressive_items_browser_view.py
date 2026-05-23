@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/progressive_items_browser_view.py
+from __future__ import absolute_import
 from gui.Scaleform.daapi.view.lobby.shared.web_view import WebView
 from gui.server_events.pm_constants import SOUNDS
 

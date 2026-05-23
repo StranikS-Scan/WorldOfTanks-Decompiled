@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/chapter_choice_view.py
+from __future__ import absolute_import, division
 import logging
 import typing
 from battle_pass_common import BattlePassConsts, FinalReward, isPostProgressionChapter, NON_CHAPTER_ID
@@ -129,7 +130,7 @@ class ChapterChoicePresenter(ViewComponent[ChapterChoiceViewModel]):
         model.setChapterState(_CHAPTER_STATES.get(self.__battlePass.getChapterState(chapterID)))
         model.setCurrentLevel(self.__battlePass.getLevelInChapter(chapterID) + 1)
         points, maxPoints = self.__battlePass.getLevelProgression(chapterID)
-        model.setLevelProgression(_FULL_PROGRESS * points / (maxPoints or _FULL_PROGRESS))
+        model.setLevelProgression(_FULL_PROGRESS * points // (maxPoints or _FULL_PROGRESS))
 
     def __fillChapterFinalReward(self, chapterID, model):
         rewardType = self.__getChapterRewardType(chapterID)

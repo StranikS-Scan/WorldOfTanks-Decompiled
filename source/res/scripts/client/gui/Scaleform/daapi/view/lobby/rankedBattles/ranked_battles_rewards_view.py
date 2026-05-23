@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/ranked_battles_rewards_view.py
+from __future__ import absolute_import
 import logging
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
@@ -163,9 +164,9 @@ class RankedBattlesRewardsRanksView(RankedBattlesRewardsRanksMeta, IResetablePag
         self.__selectedDivisionIdx = self.__rankedController.getCurrentDivision().getID()
         self.__bonusFormatter = getRankedAwardsFormatter()
 
-    def onRequestData(self, divisionIdx, iconSizeID, rewardsCount):
-        if self.__selectedDivisionIdx != int(divisionIdx):
-            self.__selectedDivisionIdx = int(divisionIdx)
+    def onRequestData(self, index, iconSizeID, rewardsCount):
+        if self.__selectedDivisionIdx != int(index):
+            self.__selectedDivisionIdx = int(index)
             self.__updateSounds()
         selectedDivision = self.__getSelectedDivision()
         self.as_setRewardsS(self.__getRewardsData(selectedDivision, iconSizeID, int(rewardsCount)), selectedDivision.isQualification())

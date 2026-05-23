@@ -823,6 +823,27 @@
       <hangarModelName>	particles/Tank/customization/GB142_FV230_Canopener_KS_3Dst/GB142_FV230_Canopener_KS_3Dst_hangar.prefab	</hangarModelName>
       <attachmentLogic>	prefab	</attachmentLogic>
     </attachment>
+    <attachment>
+      <id>	179	</id>
+      <name>	Ch38_WZ113G_FT_BPXX_3Dst	</name>
+      <modelName>	particles/Tank/customization/Ch38_WZ113G_FT_BPXX_3Dst/Ch38_WZ113G_FT_BPXX_3Dst.prefab	</modelName>
+      <hangarModelName></hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
+      <id>	180	</id>
+      <name>	Pl21_CS_63_BPXX_3Dst	</name>
+      <modelName>	particles/Tank/customization/Pl21_CS_63_BPXX_3Dst/Pl21_CS_63_BPXX_3Dst.prefab	</modelName>
+      <hangarModelName></hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
+      <id>	181	</id>
+      <name>	F18_Bat_Chatillon25t_BPXX_3Dst	</name>
+      <modelName>	particles/Tank/customization/F18_Bat_Chatillon25t_BPXX_3Dst/F18_Bat_Chatillon25t_BPXX_3Dst.prefab	</modelName>
+      <hangarModelName></hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
   </itemGroup>
   <itemGroup>
     <name>	Dragon Vanguard	</name>
@@ -2650,6 +2671,74 @@
     </attachment>
   </itemGroup>
   <itemGroup>
+    <name>	Altered Attachments	</name>
+    <userString>	#vehicle_customization:attachment/altered_attachments	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <attachment>
+      <id>	1185	</id>
+      <name>	Cus_214_LS_OpticalDevice	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_214_LS_OpticalDevice/Cus_214_LS_OpticalDevice.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_214_LS_OpticalDevice/Cus_214_LS_OpticalDevice.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	gunMantlet	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/altered_attachments/Cus_214_LS_OpticalDevice	</userString>
+    </attachment>
+    <attachment>
+      <id>	1186	</id>
+      <name>	Cus_215_LS_Machinegun	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_215_LS_Machinegun/Cus_215_LS_Machinegun.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_215_LS_Machinegun/Cus_215_LS_Machinegun.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	turret	</applyType>
+      <size>	medium	</size>
+      <rarity>	epic	</rarity>
+      <priceGroup>	attachments 1000g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/altered_attachments/Cus_215_LS_Machinegunn	</userString>
+    </attachment>
+    <attachment>
+      <id>	1187	</id>
+      <name>	Cus_216_LS_GasBaloons	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_216_LS_GasBaloons/Cus_216_LS_GasBaloons.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_216_LS_GasBaloons/Cus_216_LS_GasBaloons_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	legendary	</rarity>
+      <priceGroup>	attachments 2150g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/altered_attachments/Cus_216_LS_GasBaloons	</userString>
+      <description>	#vehicle_customization:attachment/altered_attachments/Cus_216_LS_GasBaloons/description	</description>
+      <tags>	battleEffect	</tags>
+    </attachment>
+    <attachment>
+      <id>	1188	</id>
+      <name>	Cus_217_LS_Barrels	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_217_LS_Barrels/Cus_217_LS_Barrels.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_217_LS_Barrels/Cus_217_LS_Barrels.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/altered_attachments/Cus_217_LS_Barrels	</userString>
+    </attachment>
+    <attachment>
+      <id>	1189	</id>
+      <name>	Cus_218_LS_Winch	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_218_LS_Winch/Cus_218_LS_Winch.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_218_LS_Winch/Cus_218_LS_Winch.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/altered_attachments/Cus_218_LS_Winch	</userString>
+    </attachment>
+  </itemGroup>
+  <itemGroup>
     <name>	Tank Lads	</name>
     <userString>	#vehicle_customization:attachment/tank_lads	</userString>
     <season>	ALL	</season>
@@ -3375,71 +3464,139 @@
     </attachment>
   </itemGroup>
   <itemGroup>
-    <name>	Altered Attachments	</name>
-    <userString>	#vehicle_customization:attachment/altered_attachments	</userString>
+    <name>	River Race Revelry	</name>
+    <userString>	#vehicle_customization:attachment/River_Race_Revelry	</userString>
     <season>	ALL	</season>
-    <historical>	2	</historical>
+    <historical>	1	</historical>
     <attachment>
-      <id>	1185	</id>
-      <name>	Cus_214_LS_OpticalDevice	</name>
-      <modelName>	content/CGFPrefabs/3D_Customization/Cus_214_LS_OpticalDevice/Cus_214_LS_OpticalDevice.prefab	</modelName>
-      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_214_LS_OpticalDevice/Cus_214_LS_OpticalDevice.prefab	</hangarModelName>
+      <id>	2032	</id>
+      <name>	Cus_224_DB_Basket	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_224_DB_Basket/Cus_224_DB_Basket.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_224_DB_Basket/Cus_224_DB_Basket.prefab	</hangarModelName>
       <attachmentLogic>	prefab	</attachmentLogic>
       <applyType>	gunMantlet	</applyType>
       <size>	medium	</size>
-      <rarity>	rare	</rarity>
-      <priceGroup>	attachments 500g notInShop	</priceGroup>
-      <userString>	#vehicle_customization:attachment/altered_attachments/Cus_214_LS_OpticalDevice	</userString>
+      <rarity>	epic	</rarity>
+      <priceGroup>	attachments 1000g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/River_Race_Revelry/Cus_224_DB_Basket	</userString>
     </attachment>
     <attachment>
-      <id>	1186	</id>
-      <name>	Cus_215_LS_Machinegun	</name>
-      <modelName>	content/CGFPrefabs/3D_Customization/Cus_215_LS_Machinegun/Cus_215_LS_Machinegun.prefab	</modelName>
-      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_215_LS_Machinegun/Cus_215_LS_Machinegun.prefab	</hangarModelName>
+      <id>	2033	</id>
+      <name>	Cus_225_DB_Boat	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_225_DB_Boat/Cus_225_DB_Boat.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_225_DB_Boat/Cus_225_DB_Boat_hangar.prefab	</hangarModelName>
       <attachmentLogic>	prefab	</attachmentLogic>
       <applyType>	turret	</applyType>
       <size>	medium	</size>
-      <rarity>	epic	</rarity>
-      <priceGroup>	attachments 1000g notInShop	</priceGroup>
-      <userString>	#vehicle_customization:attachment/altered_attachments/Cus_215_LS_Machinegunn	</userString>
-    </attachment>
-    <attachment>
-      <id>	1187	</id>
-      <name>	Cus_216_LS_GasBaloons	</name>
-      <modelName>	content/CGFPrefabs/3D_Customization/Cus_216_LS_GasBaloons/Cus_216_LS_GasBaloons.prefab	</modelName>
-      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_216_LS_GasBaloons/Cus_216_LS_GasBaloons_hangar.prefab	</hangarModelName>
-      <attachmentLogic>	prefab	</attachmentLogic>
-      <applyType>	universal	</applyType>
-      <size>	medium	</size>
       <rarity>	legendary	</rarity>
       <priceGroup>	attachments 2150g notInShop	</priceGroup>
-      <userString>	#vehicle_customization:attachment/altered_attachments/Cus_216_LS_GasBaloons	</userString>
-      <description>	#vehicle_customization:attachment/altered_attachments/Cus_216_LS_GasBaloons/description	</description>
+      <userString>	#vehicle_customization:attachment/River_Race_Revelry/Cus_225_DB_Boat	</userString>
+      <description>	#vehicle_customization:attachment/River_Race_Revelry/Cus_225_DB_Boat/description	</description>
       <tags>	battleEffect	</tags>
     </attachment>
     <attachment>
-      <id>	1188	</id>
-      <name>	Cus_217_LS_Barrels	</name>
-      <modelName>	content/CGFPrefabs/3D_Customization/Cus_217_LS_Barrels/Cus_217_LS_Barrels.prefab	</modelName>
-      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_217_LS_Barrels/Cus_217_LS_Barrels.prefab	</hangarModelName>
+      <id>	2034	</id>
+      <name>	Cus_226_DB_Vase	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_226_DB_Vase/Cus_226_DB_Vase.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_226_DB_Vase/Cus_226_DB_Vase.prefab	</hangarModelName>
       <attachmentLogic>	prefab	</attachmentLogic>
       <applyType>	universal	</applyType>
       <size>	medium	</size>
       <rarity>	rare	</rarity>
       <priceGroup>	attachments 500g notInShop	</priceGroup>
-      <userString>	#vehicle_customization:attachment/altered_attachments/Cus_217_LS_Barrels	</userString>
+      <userString>	#vehicle_customization:attachment/River_Race_Revelry/Cus_226_DB_Vase	</userString>
     </attachment>
     <attachment>
-      <id>	1189	</id>
-      <name>	Cus_218_LS_Winch	</name>
-      <modelName>	content/CGFPrefabs/3D_Customization/Cus_218_LS_Winch/Cus_218_LS_Winch.prefab	</modelName>
-      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_218_LS_Winch/Cus_218_LS_Winch.prefab	</hangarModelName>
+      <id>	2035	</id>
+      <name>	Cus_227_DB_Anchor	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_227_DB_Anchor/Cus_227_DB_Anchor.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_227_DB_Anchor/Cus_227_DB_Anchor.prefab	</hangarModelName>
       <attachmentLogic>	prefab	</attachmentLogic>
       <applyType>	universal	</applyType>
       <size>	medium	</size>
       <rarity>	rare	</rarity>
-      <priceGroup>	attachments 50g notInShop	</priceGroup>
-      <userString>	#vehicle_customization:attachment/altered_attachments/Cus_218_LS_Winch	</userString>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/River_Race_Revelry/Cus_227_DB_Anchor	</userString>
+    </attachment>
+    <attachment>
+      <id>	2036	</id>
+      <name>	Cus_228_DB_Boat	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_228_DB_Boat/Cus_228_DB_Boat.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_228_DB_Boat/Cus_228_DB_Boat.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/River_Race_Revelry/Cus_228_DB_Boat	</userString>
+    </attachment>
+  </itemGroup>
+  <itemGroup>
+    <name>	Football Fever	</name>
+    <userString>	#vehicle_customization:attachment/Football_Fever	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <attachment>	ââââââ	  <id>	1195	</id>
+      <name>	Cus_219_FB26_Ball	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_219_FB26_Ball/Cus_219_FB26_Ball.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_219_FB26_Ball/Cus_219_FB26_Ball_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	turret	</applyType>
+      <size>	medium	</size>
+      <rarity>	legendary	</rarity>
+      <priceGroup>	attachments 2150g notInShop	</priceGroup>
+      <tags>	battleEffect	</tags>
+      <description>	#vehicle_customization:attachment/Football_Fever/Cus_219_FB26_Ball/description	</description>
+      <userString>	#vehicle_customization:attachment/Football_Fever/Cus_219_FB26_Ball	</userString>
+    </attachment>
+    <attachment>
+      <id>	1196	</id>
+      <name>	Cus_220_FB26_Referee	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_220_FB26_Referee/Cus_220_FB26_Referee.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_220_FB26_Referee/Cus_220_FB26_Referee_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	gunMantlet	</applyType>
+      <size>	medium	</size>
+      <rarity>	epic	</rarity>
+      <priceGroup>	attachments 1000g notInShop	</priceGroup>
+      <tags>	battleEffect	</tags>
+      <userString>	#vehicle_customization:attachment/Football_Fever/Cus_220_FB26_Referee	</userString>
+    </attachment>
+    <attachment>
+      <id>	1197	</id>
+      <name>	Cus_221_FB26_Footballer	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_221_FB26_Footballer/Cus_221_FB26_Footballer.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_221_FB26_Footballer/Cus_221_FB26_Footballer.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Football_Fever/Cus_221_FB26_Footballer	</userString>
+    </attachment>
+    <attachment>
+      <id>	1198	</id>
+      <name>	Cus_222_FB26_Fan	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_222_FB26_Fan/Cus_222_FB26_Fan.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_222_FB26_Fan/Cus_222_FB26_Fan.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Football_Fever/Cus_222_FB26_Fan	</userString>
+    </attachment>
+    <attachment>
+      <id>	1199	</id>
+      <name>	Cus_223_FB26_Team	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_223_FB26_Team/Cus_223_FB26_Team.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_223_FB26_Team/Cus_223_FB26_Team.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Football_Fever/Cus_223_FB26_Team	</userString>
     </attachment>
   </itemGroup>
   <itemGroup>

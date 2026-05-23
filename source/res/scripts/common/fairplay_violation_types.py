@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/fairplay_violation_types.py
+from __future__ import absolute_import
 from soft_exception import SoftException
 from extension_utils import ResMgr
 from constants import FairplayViolationType, ARENA_BONUS_TYPE, PENALTY_TYPES, IS_CLIENT
@@ -66,7 +67,7 @@ def _readViolations(section):
         vType = item.readString('violationType')
         if vType and not hasattr(FairplayViolationType, vType.upper()):
             raise SoftException('Wrong Attibute {} in class {}'.format(vType, FairplayViolations))
-        elif not vType:
+        if not vType:
             raise SoftException('Empty Attibute violationType in class {}'.format(vType, FairplayViolations))
         violations.append((violation, vType))
 

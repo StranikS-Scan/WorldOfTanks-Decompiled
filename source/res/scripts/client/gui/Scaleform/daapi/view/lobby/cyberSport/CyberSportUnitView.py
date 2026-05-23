@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/CyberSportUnitView.py
+from __future__ import absolute_import
 from UnitBase import UNIT_OP
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
@@ -32,7 +33,7 @@ class CyberSportUnitView(CyberSportUnitMeta):
         if flags.isLockedStateChanged():
             vehGetter = pInfo.getVehiclesToSlot
             slotGetter = entity.getSlotState
-            slotLabels = map(lambda idx: vo_converters.makeSlotLabel(flags, slotGetter(idx), isCreator, len(vehGetter(idx))), rosterSettings.getAllSlotsRange())
+            slotLabels = [ vo_converters.makeSlotLabel(flags, slotGetter(idx), isCreator, len(vehGetter(idx))) for idx in rosterSettings.getAllSlotsRange() ]
             self.as_lockUnitS(flags.isLocked(), slotLabels)
             self._updateRallyData()
         if isCreator and flags.isOpenedStateChanged():
@@ -146,7 +147,7 @@ class CyberSportUnitView(CyberSportUnitMeta):
         if selected:
             vehicle = self.itemsCache.items.getItemByCD(selected[0])
             if not vehicle.activeInNationGroup:
-                itemCD = iterVehTypeCDsInNationGroup(vehicle.intCD).next()
+                itemCD = next(iterVehTypeCDsInNationGroup(vehicle.intCD))
                 self._selectVehicles([itemCD])
 
     def _updateLabels(self, entity):

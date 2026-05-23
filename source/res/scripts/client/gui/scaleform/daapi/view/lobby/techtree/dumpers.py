@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/dumpers.py
+from __future__ import absolute_import
 import gui
 from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation
 from gui.Scaleform.daapi.view.lobby.techtree.settings import VehicleClassInfo
@@ -89,7 +90,7 @@ class ResearchItemsObjDumper(ResearchBaseDumper):
 
     def _fillCacheSection(self, sectionName, data, items):
         rootItem = data.getRootItem()
-        self._cache[sectionName] = map(lambda node: self._getItemData(node, rootItem), items)
+        self._cache[sectionName] = [ self._getItemData(node, rootItem) for node in items ]
 
     def _getDefaultCacheObj(self):
         defCache = super(ResearchItemsObjDumper, self)._getDefaultCacheObj()
@@ -149,7 +150,7 @@ class NationObjDumper(_BaseDumper):
 
     def dump(self, data):
         self.clear()
-        self._cache['nodes'] = map(self._getVehicleData, data.getNodes())
+        self._cache['nodes'] = [ self._getVehicleData(node) for node in data.getNodes() ]
         self._cache['scrollIndex'] = data._scrollIndex
         self._cache['displaySettings'].update(g_techTreeDP.getDisplaySettings(SelectedNation.getIndex()))
         self._cache['gridSettings'].update(g_techTreeDP.getGridSettings(SelectedNation.getIndex()))

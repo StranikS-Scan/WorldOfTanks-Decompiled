@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/material_kinds.py
+from __future__ import absolute_import
+from past.builtins import intern
 import ResMgr
-from constants import IS_EDITOR
 from soft_exception import SoftException
 _MATERIAL_KINDS_FILE = 'system/data/material_kinds.xml'
 _EFFECT_MATERIALS_FILE = 'system/data/effect_materials.xml'

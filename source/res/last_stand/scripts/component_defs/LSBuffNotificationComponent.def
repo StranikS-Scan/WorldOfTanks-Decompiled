@@ -1,4 +1,10 @@
 <LSBuffNotificationComponent.def>
   <DetailLevel>	MY_VEHICLE	</DetailLevel>
-  <Properties></Properties>
+  <Properties>
+    <startTime>
+      <Type>	FLOAT	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0.0	</Default>
+    </startTime>
+  </Properties>
 </LSBuffNotificationComponent.def>

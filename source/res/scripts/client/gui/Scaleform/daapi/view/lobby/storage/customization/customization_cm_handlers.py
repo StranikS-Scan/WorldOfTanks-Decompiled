@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/customization/customization_cm_handlers.py
+from __future__ import absolute_import
 import math
 from adisp import adisp_process
 from gui import DialogsInterface
@@ -19,11 +20,11 @@ class CustomizationCMHandler(ContextMenu, EventSystemEntity):
     __itemsCache = dependency.descriptor(IItemsCache)
     __sqGen = SequenceIDGenerator()
 
-    @option(__sqGen.next(), CMLabel.PREVIEW_CUSTOMIZATION)
+    @option(__sqGen.nextSequenceID, CMLabel.PREVIEW_CUSTOMIZATION)
     def preview(self):
         customizationPreview(itemCD=self._id, vehicleCD=self._vehicleCD)
 
-    @option(__sqGen.next(), CMLabel.SELL)
+    @option(__sqGen.nextSequenceID, CMLabel.SELL)
     @adisp_process
     def sell(self):
         item = self.__itemsCache.items.getItemByCD(self._id)

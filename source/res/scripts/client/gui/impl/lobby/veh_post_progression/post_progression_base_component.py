@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/veh_post_progression/post_progression_base_component.py
 from __future__ import absolute_import
 import typing
-from future.builtins import range
+from builtins import range
 from future.utils import iteritems
 from Event import Event, EventManager
 from frameworks.wulf import ViewFlags, ViewSettings

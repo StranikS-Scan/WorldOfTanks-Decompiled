@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/trainings/TrainingSettingsWindow.py
+from __future__ import absolute_import
+from future.utils import viewitems
 import ArenaType
 from account_helpers import gameplay_ctx
 from constants import PREBATTLE_TYPE, Configs
@@ -35,7 +37,7 @@ class ArenasCache(object):
 
     def build(self):
         cache = []
-        for arenaTypeID, arenaType in ArenaType.g_cache.iteritems():
+        for arenaTypeID, arenaType in viewitems(ArenaType.g_cache):
             if not self.__isArenaSuitableForTraining(arenaType):
                 continue
             try:
@@ -45,7 +47,7 @@ class ArenasCache(object):
                  'arenaType': arenaTypeName,
                  'key': arenaTypeID,
                  'size': arenaType.maxPlayersInTeam,
-                 'time': arenaType.roundLength / 60,
+                 'time': arenaType.roundLength // 60,
                  'description': '',
                  'icon': getArenaImage(arenaType.geometryName),
                  'canChangeArenaTime': not self.__isEpic,
@@ -127,7 +129,7 @@ class TrainingSettingsWindow(TrainingWindowMeta):
             rTitle = R.strings.menu.training.create.title() if self.__isCreateRequest else R.strings.menu.training.info.settings.title()
         canChangeComment = isShowComment = self.__isDescriptionEnabled()
         info = {'description': self.__settings.getComment(),
-         'timeout': self.__settings.getRoundLen() / 60,
+         'timeout': self.__settings.getRoundLen() // 60,
          'arena': self.__settings.getArenaTypeID(),
          'privacy': not self.__settings.isOpened(),
          'create': self.__isCreateRequest,
@@ -136,8 +138,8 @@ class TrainingSettingsWindow(TrainingWindowMeta):
          'canChangeComment': canChangeComment,
          'isShowComment': isShowComment,
          'canChangeArena': True,
-         'minBattleTime': minBound / 60,
-         'maxBattleTime': maxBound / 60}
+         'minBattleTime': minBound // 60,
+         'maxBattleTime': maxBound // 60}
         if not self.__isCreateRequest:
             permissions = self.prbEntity.getPermissions()
             info['canMakeOpenedClosed'] = permissions.canMakeOpenedClosed()
@@ -145,11 +147,11 @@ class TrainingSettingsWindow(TrainingWindowMeta):
             info['canChangeArena'] = permissions.canChangeArena()
         return info
 
-    def updateTrainingRoom(self, arena, roundLength, isPrivate, comment):
-        self.__settings.setArenaTypeID(arena)
-        self.__settings.setRoundLen(roundLength * 60)
+    def updateTrainingRoom(self, key, time, isPrivate, description):
+        self.__settings.setArenaTypeID(key)
+        self.__settings.setRoundLen(time * 60)
         self.__settings.setOpened(not isPrivate)
-        self.__settings.setComment(comment)
+        self.__settings.setComment(description)
         if self.__isEpic:
             eventType = events.TrainingSettingsEvent.UPDATE_EPIC_TRAINING_SETTINGS
         else:

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileSection.py
+from __future__ import absolute_import
 from collections import namedtuple
 from helpers import dependency, i18n
 from gui.Scaleform.daapi.view.meta.ProfileSectionMeta import ProfileSectionMeta

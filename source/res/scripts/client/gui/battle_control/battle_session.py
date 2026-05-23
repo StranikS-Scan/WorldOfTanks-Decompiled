@@ -8,6 +8,7 @@ import BattleReplay
 from PlayerEvents import g_playerEvents
 from adisp import adisp_async
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
+from constants import ARENA_BONUS_TYPE
 from debug_utils import LOG_DEBUG
 from gui import g_tankActiveCamouflage
 from gui.battle_control import arena_visitor
@@ -190,7 +191,8 @@ class BattleSessionProvider(IBattleSessionProvider):
             else:
                 player = BigWorld.player()
                 hasLiftOver = player.hasBonusCap(ARENA_BONUS_TYPE_CAPS.LIFT_OVER) if player else False
-                isDeserter = avatar_getter.isVehicleAlive() and (not avatar_getter.isVehicleOverturned() or hasLiftOver)
+                isComp7 = self.__arenaVisitor.getArenaBonusType() in (ARENA_BONUS_TYPE.COMP7, ARENA_BONUS_TYPE.COMP7_LIGHT)
+                isDeserter = avatar_getter.isVehicleAlive() and (not avatar_getter.isVehicleOverturned() or hasLiftOver or isComp7)
             return BattleExitResult(isDeserter, vInfo.player)
 
     def exit(self):

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/post_progression_view.py
+from __future__ import absolute_import
 from enum import IntEnum, unique
+from future.utils import viewitems
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import IS_BATTLE_PASS_COLLECTION_SEEN, LAST_BATTLE_PASS_CYCLES_SEEN, LAST_BATTLE_PASS_POINTS_SEEN
@@ -228,7 +230,7 @@ class PostProgressionPresenter(ViewComponent[PostProgressionViewModel]):
         return _CHAPTER_STATUSES.get(chapterState, ChapterStatus.NOTSTARTED)
 
     def __getTankmenScreenID(self):
-        tankmenScreens = set((screen for chapter, screen in self.__battlePass.getChapterToTankmenScreen().iteritems() if self.__battlePass.isChapterExists(chapter)))
+        tankmenScreens = set((screen for chapter, screen in viewitems(self.__battlePass.getChapterToTankmenScreen()) if self.__battlePass.isChapterExists(chapter)))
         if len(tankmenScreens) == 1:
             self.__tankmenScreen = first(tankmenScreens)
             return self.__tankmenScreen

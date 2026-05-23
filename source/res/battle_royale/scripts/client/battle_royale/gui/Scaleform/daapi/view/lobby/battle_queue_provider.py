@@ -41,6 +41,7 @@ class BattleRoyaleQueueProvider(RandomQueueProvider):
         battleType = _SUBMODE_ID_TO_BATTLE_TYPE[self.__battleRoyaleController.getCurrentSubModeID()].value
         iconPath = backport.image(R.images.battle_royale.gui.maps.icons.battleQueue.battleType.dyn(battleType)())
         guiType = prb_getters.getArenaGUIType(queueType=self._queueType)
-        titleRes = R.strings.menu.loading.battleTypes.subTitle.num(guiType)
+        isStPatrick = self.__battleRoyaleController.isStPatrick()
+        titleRes = R.strings.menu.loading.battleTypes.subTitle.num(guiType) if isStPatrick else None
         return {'battleTypeIconPath': iconPath,
-         'subTitle': backport.text(titleRes()) if titleRes.exists() else ''}
+         'subTitle': backport.text(titleRes()) if titleRes is not None and titleRes.exists() else ''}

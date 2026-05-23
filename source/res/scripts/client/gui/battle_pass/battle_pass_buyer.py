@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_pass/battle_pass_buyer.py
+from __future__ import absolute_import
 import logging
+from future.utils import viewitems
 from adisp import adisp_async, adisp_process
 from gui import SystemMessages
 from gui.battle_pass.battle_pass_constants import ChapterState
@@ -26,7 +28,7 @@ class BattlePassBuyer(object):
         if chapterID not in cls.__battlePass.getMainChapterIDs():
             _logger.error('Invalid chapterID: %s!', chapterID)
             return
-        currency, amount = first(cls.__battlePass.getBattlePassCost(chapterID).iteritems())
+        currency, amount = first(viewitems(cls.__battlePass.getBattlePassCost(chapterID)))
         result = False
         if currency == Currency.GOLD and cls.__itemsCache.items.stats.actualGold < amount:
             showBuyGoldForBattlePass(amount)

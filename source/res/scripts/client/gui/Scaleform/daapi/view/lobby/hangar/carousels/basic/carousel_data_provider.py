@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/basic/carousel_data_provider.py
+from __future__ import absolute_import
 import typing
+from future.utils import viewitems
 import BigWorld
 from account_helpers.telecom_rentals import TelecomRentals
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as _CAPS
@@ -62,7 +64,7 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         return len(self._filteredIndices) - backItems - frontItems
 
     def getHiddenDynamicFilters(self):
-        return sorted((key for key, state in self._dynamicFiltersState.iteritems() if not state))
+        return sorted((key for key, state in viewitems(self._dynamicFiltersState) if not state))
 
     def clear(self):
         super(HangarCarouselDataProvider, self).clear()

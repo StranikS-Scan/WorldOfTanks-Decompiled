@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/customization/customization_view.py
+from __future__ import absolute_import
 import math
 import typing
+from future.utils import viewitems, viewvalues
 import nations
 from adisp import adisp_process
 from gui import DialogsInterface
@@ -186,9 +188,9 @@ class StorageCategoryCustomizationView(StorageCategoryCustomizationViewMeta):
     def _getFilteredCriteria(self):
         criteria = super(StorageCategoryCustomizationView, self)._getFilteredCriteria()
         typeIds = []
-        for bit in _TYPE_BIT_TO_CUSTOMIZATION_TYPE_MAP.iterkeys():
+        for bit, customizationType in viewitems(_TYPE_BIT_TO_CUSTOMIZATION_TYPE_MAP):
             if self._filterMask & bit:
-                typeIds += _TYPE_BIT_TO_CUSTOMIZATION_TYPE_MAP[bit]
+                typeIds += customizationType
 
         if typeIds:
             criteria |= REQ_CRITERIA.ITEM_TYPES(*typeIds)
@@ -218,7 +220,7 @@ class StorageCategoryCustomizationView(StorageCategoryCustomizationViewMeta):
         dataProviderVoItemsList = []
         self._currentCount = 0
         self._totalCount = 0
-        for item in sorted(totalItems.itervalues(), cmp=self._getComparator()):
+        for item in sorted(viewvalues(totalItems), key=self._getItemSortKey):
             itemVoList = self._getVoListForItem(item)
             self._totalCount += self._calcItemsCount(itemVoList)
             if filterCriteria(item):
@@ -301,19 +303,8 @@ class StorageCategoryCustomizationView(StorageCategoryCustomizationViewMeta):
          'hasRarity': hasRarity})
         return vo
 
-    def _getComparisonKey(self, item):
-        if item.itemTypeID == GUI_ITEM_TYPE.STYLE:
-            if item.is3D:
-                return 0
-            return 3
-        return _TABS_SORT_ORDER[item.itemTypeID]
-
-    def _getComparator(self):
-
-        def _comparator(a, b):
-            return cmp(self._getComparisonKey(a), self._getComparisonKey(b)) or cmp(a.userName, b.userName)
-
-        return _comparator
+    def _getItemSortKey(self, item):
+        return ((0 if item.is3D else 3) if item.itemTypeID == GUI_ITEM_TYPE.STYLE else _TABS_SORT_ORDER[item.itemTypeID], item.userName)
 
     def _getSuitableText(self, item, vehicleCD):
         if item.itemTypeID == GUI_ITEM_TYPE.ATTACHMENT:

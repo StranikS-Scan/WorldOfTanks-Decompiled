@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/enumerations.py
-import types
+from __future__ import absolute_import
+from future.utils import listvalues, iteritems
+from past.builtins import basestring
 from soft_exception import SoftException
 
 class EnumException(SoftException):
@@ -26,6 +28,9 @@ class EnumItem(object):
 
     def __eq__(self, other):
         return other and self.__name == other.name() and self.__index == other.index()
+
+    def __hash__(self):
+        return hash((self.__name, self.__index))
 
 
 class CallabbleEnumItem(EnumItem):
@@ -77,10 +82,10 @@ class Enumeration(object):
         return iter(self.__lookup)
 
     def all(self):
-        return self.__lookup.values()
+        return listvalues(self.__lookup)
 
     def keys(self):
-        return self.__lookup.keys()
+        return list(self.__lookup)
 
     def of(self, name):
         return self.__getattr__(name)
@@ -92,13 +97,13 @@ class Enumeration(object):
         self.__appendEnumItems(enumList, instance)
 
     def __appendEnumItems(self, enumList, instance):
-        uniqueNames = set(self.__lookup.iterkeys())
+        uniqueNames = set(self.__lookup)
         if isinstance(enumList, dict):
-            for idx, enumItem in enumList.iteritems():
+            for idx, enumItem in iteritems(enumList):
                 self.__appendEnumItem(idx, enumItem, instance, uniqueNames)
 
         else:
-            i = max(self.__idxLookup.iterkeys()) + 1 if self.__idxLookup else 0
+            i = max(self.__idxLookup) + 1 if self.__idxLookup else 0
             for e in enumList:
                 self.__appendEnumItem(i, e, instance, uniqueNames)
                 i += 1
@@ -106,11 +111,11 @@ class Enumeration(object):
         uniqueNames.clear()
 
     def __appendEnumItem(self, idx, enumItem, instance, uniqueNames):
-        if isinstance(enumItem, types.TupleType):
+        if isinstance(enumItem, tuple):
             x = enumItem[0:1]
         else:
             x = enumItem
-        if not isinstance(x, types.StringType):
+        if not isinstance(x, basestring):
             raise EnumException('enum name is not a string: {}'.format(x))
         if x in uniqueNames:
             raise EnumException('enum name is not unique: ' + x)

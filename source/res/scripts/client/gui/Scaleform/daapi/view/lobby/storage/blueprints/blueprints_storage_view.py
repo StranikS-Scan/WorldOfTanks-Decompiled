@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/blueprints/blueprints_storage_view.py
+from __future__ import absolute_import
 import nations
 from constants import MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from blueprints.BlueprintTypes import BlueprintTypes

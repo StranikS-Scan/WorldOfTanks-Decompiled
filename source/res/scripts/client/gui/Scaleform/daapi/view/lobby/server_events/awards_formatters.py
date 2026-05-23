@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/awards_formatters.py
+from __future__ import absolute_import
+from future.utils import viewvalues
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import NewStyleBonusComposer
 from gui.impl import backport
 from gui.impl.gen import R
@@ -251,7 +253,7 @@ class OldStyleAwardsPacker(AwardsPacker):
                     isCustomizationBonusExist = True
 
         fmts = [self.__defaultFormatter, self.__newStyleFormatter]
-        fmts.extend(sorted(self.getFormatters().itervalues(), key=lambda f: f.getOrder()))
+        fmts.extend(sorted(viewvalues(self.getFormatters()), key=lambda f: f.getOrder()))
         for formatter in fmts:
             formattedBonuses.extend(formatter.extractFormattedBonuses(isCustomizationBonusExist))
 
@@ -280,7 +282,7 @@ class BattlePassTextBonusesPacker(AwardsPacker):
                 if formatter:
                     formatter.accumulateBonuses(b)
 
-        for formatter in sorted(self.getFormatters().itervalues(), key=lambda f: f.getOrder()):
+        for formatter in sorted(viewvalues(self.getFormatters()), key=lambda f: f.getOrder()):
             formattedBonuses.extend(formatter.extractFormattedBonuses())
 
         return formattedBonuses

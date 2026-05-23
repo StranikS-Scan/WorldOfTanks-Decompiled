@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/image_view/image_view.py
+from __future__ import absolute_import
 from gui.impl.lobby.common.sound_constants import HANGAR_FILTERED_SOUND_SPACE
 from gui.Scaleform.daapi.view.meta.ImageViewMeta import ImageViewMeta
 _IMAGE_ROOT_PATH = '../maps/icons/imageView'

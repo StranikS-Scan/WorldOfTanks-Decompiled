@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileAchievementPage.py
+from __future__ import absolute_import
 from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.impl.lobby.achievements.achievements_main_view import AchievementMainView, AchievementsViewCtx

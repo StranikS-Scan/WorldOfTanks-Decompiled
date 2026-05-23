@@ -59,14 +59,14 @@ class BattlePassBuyViewModel(ViewModel):
     def setIsLogoBg(self, value):
         self._setBool(6, value)
 
-    def getRegularChapters(self):
+    def getChapters(self):
         return self._getArray(7)
 
-    def setRegularChapters(self, value):
+    def setChapters(self, value):
         self._setArray(7, value)
 
     @staticmethod
-    def getRegularChaptersType():
+    def getChaptersType():
         return BuyChapterModel
 
     def _initialize(self):
@@ -78,7 +78,7 @@ class BattlePassBuyViewModel(ViewModel):
         self._addBoolProperty('isShopOfferAvailable', False)
         self._addNumberProperty('shopOfferDiscount', 0)
         self._addBoolProperty('isLogoBg', False)
-        self._addArrayProperty('regularChapters', Array())
+        self._addArrayProperty('chapters', Array())
         self.onShopOfferClick = self._addCommand('onShopOfferClick')
         self.onCloseClick = self._addCommand('onCloseClick')
         self.onBuyClick = self._addCommand('onBuyClick')

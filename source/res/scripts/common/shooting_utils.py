@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/shooting_utils.py
+from __future__ import absolute_import, division
 import WGAI
 import math
 from constants import SERVER_TICK_LENGTH, SHELL_TRAJECTORY_EPSILON_SERVER

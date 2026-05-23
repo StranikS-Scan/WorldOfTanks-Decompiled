@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileUtils.py
+from __future__ import absolute_import, division
 from debug_utils import LOG_ERROR
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.battle_results.components import style
@@ -570,7 +571,7 @@ class ProfileUtils(object):
     def packLditItemData(text, description, tooltip, icon, tooltipData=None):
         finalText = text
         enabled = True
-        if text == -1 or text == '-1':
+        if text in (-1, '-1'):
             enabled = False
             finalText = ProfileUtils.UNAVAILABLE_SYMBOL
         return {'text': finalText,
@@ -591,7 +592,7 @@ class ProfileUtils(object):
 
     @staticmethod
     def getLabelViewTypeDataObject(label, data, viewType):
-        if viewType != ProfileUtils.VIEW_TYPE_TABLES and viewType != ProfileUtils.VIEW_TYPE_CHARTS and viewType != ProfileUtils.VIEW_TYPE_TABLE:
+        if viewType not in (ProfileUtils.VIEW_TYPE_TABLES, ProfileUtils.VIEW_TYPE_CHARTS, ProfileUtils.VIEW_TYPE_TABLE):
             LOG_ERROR('Unknown view type', viewType)
             return None
         else:
@@ -611,8 +612,8 @@ class ProfileUtils(object):
         bodyData = None
         if bodyParamsList is not None:
             bodyData = {}
-            for i in range(0, len(bodyParamsList)):
-                bodyData[HeaderItemsTypes.VALUE_PREFIX + str(i)] = text_styles.titleFont(str(bodyParamsList[i]))
+            for i, param in enumerate(bodyParamsList):
+                bodyData[HeaderItemsTypes.VALUE_PREFIX + str(i)] = text_styles.titleFont(str(param))
 
         result['body'] = bodyData
         result['header'] = {}

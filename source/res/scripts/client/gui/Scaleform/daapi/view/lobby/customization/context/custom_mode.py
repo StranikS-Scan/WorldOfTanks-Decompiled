@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/context/custom_mode.py
+from __future__ import absolute_import
 import logging
 import typing
 import BigWorld
@@ -8,7 +9,7 @@ from adisp import adisp_process, adisp_async
 from gui.Scaleform.daapi.view.lobby.customization.context.customization_mode import CustomizationMode
 from gui.Scaleform.daapi.view.lobby.customization.shared import isSlotFilled, isItemsQuantityLimitReached, fitPersonalNumber, formatPersonalNumber, EMPTY_PERSONAL_NUMBER, getCustomPurchaseItems
 from gui.Scaleform.daapi.view.lobby.customization.shared import getOutfitWithoutItems
-from gui.customization.shared import C11nId, PurchaseItem, getAvailableRegions
+from gui.customization.shared import C11nId, getAvailableRegions
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization import isNeedToMirrorProjectionDecal
 from gui.shared.gui_items.processors.common import OutfitApplier, CustomizationsSeller
@@ -20,6 +21,7 @@ from vehicle_outfit.containers import emptyComponent
 from vehicle_outfit.outfit import Area
 if typing.TYPE_CHECKING:
     from items.customizations import SerializableComponent
+    from gui.customization.shared import PurchaseItem
     from gui.shared.gui_items.customization.c11n_items import Customization
     from vehicle_outfit.outfit import Outfit
     from vehicle_outfit.containers import SlotData
@@ -292,7 +294,7 @@ class CustomMode(CustomizationMode):
 
     def _getRequestData(self, purchaseItems):
         requestData = super(CustomMode, self)._getRequestData(purchaseItems)
-        modifiedOutfits = {season:outfit for season, outfit in self._modifiedOutfits.iteritems()}
+        modifiedOutfits = dict(self._modifiedOutfits)
         for pItem in purchaseItems:
             if not pItem.selected:
                 if pItem.slotType:

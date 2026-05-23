@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/customization_quests.py
+from __future__ import absolute_import
 import itertools
 from collections import namedtuple
 import persistent_data_cache_common as pdc

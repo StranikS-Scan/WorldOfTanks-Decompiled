@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/battle_results_shared.py
+from __future__ import absolute_import
 import struct
-from itertools import izip
+from builtins import zip
+from future.utils import viewitems
+from past.builtins import xrange
 from constants import PREMIUM_TYPE, PREM_BONUS_TYPES
 VEH_INTERACTION_DETAILS = (('spotted', 'B', 1, 0),
  ('deathReason', 'b', 10, -1),
@@ -58,7 +61,7 @@ class UNIT_CLAN_MEMBERSHIP:
 
 def dictToList(indices, d):
     l = [None] * len(indices)
-    for name, index in indices.iteritems():
+    for name, index in viewitems(indices):
         l[index] = d[name]
 
     return l
@@ -92,7 +95,7 @@ class _VehicleInteractionDetailsItem(object):
         return str(dict(self))
 
     def __iter__(self):
-        return izip(VEH_INTERACTION_DETAILS_NAMES, self.__values[self.__offset:])
+        return zip(VEH_INTERACTION_DETAILS_NAMES, self.__values[self.__offset:])
 
 
 class VehicleInteractionDetails(object):
@@ -105,7 +108,7 @@ class VehicleInteractionDetails(object):
 
     @staticmethod
     def fromPacked(packed):
-        count = len(packed) / struct.calcsize(''.join(['<2I', VEH_INTERACTION_DETAILS_LAYOUT]))
+        count = len(packed) // struct.calcsize(''.join(['<2I', VEH_INTERACTION_DETAILS_LAYOUT]))
         packedVehIDsLayout = '<%dI' % (2 * count,)
         packedVehIDsLen = struct.calcsize(packedVehIDsLayout)
         flatIDs = struct.unpack(packedVehIDsLayout, packed[:packedVehIDsLen])
@@ -152,4 +155,4 @@ class VehicleInteractionDetails(object):
         return packed
 
     def toDict(self):
-        return dict([ ((vehID, vehIdx), dict(_VehicleInteractionDetailsItem(self.__values, offset))) for (vehID, vehIdx), offset in self.__offsets.iteritems() ])
+        return {(vehID, vehIdx):dict(_VehicleInteractionDetailsItem(self.__values, offset)) for (vehID, vehIdx), offset in viewitems(self.__offsets)}

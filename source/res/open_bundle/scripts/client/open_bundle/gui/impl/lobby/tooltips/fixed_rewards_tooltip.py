@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: open_bundle/scripts/client/open_bundle/gui/impl/lobby/tooltips/fixed_rewards_tooltip.py
+from __future__ import absolute_import
+from future.utils import viewvalues
 from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.pub import ViewImpl
@@ -31,7 +33,7 @@ class FixedRewardsTooltip(ViewImpl):
     def __fillStepsFixedRewards(self, model):
         steps = model.getSteps()
         steps.clear()
-        for stepInfo in self.__bundle.steps.itervalues():
+        for stepInfo in viewvalues(self.__bundle.steps):
             stepModel = StepModel()
             stepModel.setStepNumber(stepInfo.number)
             self.__fillBonuses(stepModel, stepInfo)

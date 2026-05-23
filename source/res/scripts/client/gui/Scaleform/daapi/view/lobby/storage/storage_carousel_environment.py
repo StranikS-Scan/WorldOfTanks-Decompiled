@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/storage_carousel_environment.py
+from __future__ import absolute_import
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_environment import ICarouselEnvironment
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_environment import formatCountString
 from gui.Scaleform.daapi.view.meta.StorageCarouselEnvironmentMeta import StorageCarouselEnvironmentMeta

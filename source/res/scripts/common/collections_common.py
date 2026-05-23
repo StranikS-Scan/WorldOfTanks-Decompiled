@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/collections_common.py
+from __future__ import absolute_import
 from collections import namedtuple
 from copy import deepcopy
+from future.utils import viewitems
 import typing
 if typing.TYPE_CHECKING:
     from typing import Optional
@@ -36,14 +38,14 @@ class Collection(namedtuple('Collection', ('collectionId', 'name', 'items', 'tag
 
     def replace(self, data):
         allowedFields = self._fields
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        dataToUpdate = dict(((k, v) for k, v in viewitems(data) if k in allowedFields))
         self.__packItemConfigs(dataToUpdate)
         return self._replace(**dataToUpdate)
 
     @classmethod
     def __packItemConfigs(cls, dataToUpdate):
         items = {}
-        for itemId, item in dataToUpdate['items'].iteritems():
+        for itemId, item in viewitems(dataToUpdate['items']):
             items[itemId] = CollectionItem(itemId=itemId, **item)
 
         dataToUpdate['items'] = items
@@ -63,7 +65,7 @@ class CollectionsConfig(namedtuple('CollectionsConfig', ('isEnabled', 'useCdnRes
 
     def replace(self, data):
         allowedFields = self._fields
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        dataToUpdate = dict(((k, v) for k, v in viewitems(data) if k in allowedFields))
         self.__packCollectionConfigs(dataToUpdate)
         return self._replace(**dataToUpdate)
 
@@ -72,7 +74,7 @@ class CollectionsConfig(namedtuple('CollectionsConfig', ('isEnabled', 'useCdnRes
 
     @classmethod
     def __packCollectionConfigs(cls, dataToUpdate):
-        dataToUpdate['collections'] = {collectionID:Collection(collectionId=collectionID, **collection) for collectionID, collection in dataToUpdate['collections'].iteritems()}
+        dataToUpdate['collections'] = {collectionID:Collection(collectionId=collectionID, **collection) for collectionID, collection in viewitems(dataToUpdate['collections'])}
 
 
 def isCollectionsPrefix(itemName):
@@ -100,8 +102,8 @@ class CollectionRelatedItems:
 
     def setData(self, data):
         relatedItemsCfg = {}
-        for collectionId, collectionCfg in data['collections'].iteritems():
-            for itemId, itemCfg in collectionCfg['items'].iteritems():
+        for collectionId, collectionCfg in viewitems(data['collections']):
+            for itemId, itemCfg in viewitems(collectionCfg['items']):
                 if 'relatedId' in itemCfg:
                     relatedItemsCfg[itemCfg['relatedId']] = (collectionId, itemId)
 

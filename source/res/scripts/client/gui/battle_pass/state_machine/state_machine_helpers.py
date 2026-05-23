@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_pass/state_machine/state_machine_helpers.py
+from __future__ import absolute_import
 import logging
 import typing
+from future.builtins import range
 from battle_pass_common import BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_TOKEN_3D_STYLE, BattlePassRewardReason, getBattlePassPassEntitlementName, getBattlePassShopEntitlementName, isPostProgressionChapter
 from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift, getStyleInfoForChapter, makeChapterMediaName
 from gui.impl.gen import R
@@ -33,7 +35,7 @@ def separateRewards(rewards):
     blocksToRemove = []
     for index, rewardBlock in enumerate(defaultRewards):
         if 'tokens' in rewardBlock:
-            for tokenID in rewardBlock['tokens'].iterkeys():
+            for tokenID in rewardBlock['tokens']:
                 if tokenID.startswith(BATTLE_PASS_TOKEN_3D_STYLE):
                     styleTokens.append(tokenID)
                     chapter = int(tokenID.split(':')[3])
@@ -76,7 +78,7 @@ def packStartEvent(rewards, data, packageRewards, starterPack, eventMethod, batt
         isFinalLevel = battlePass.isFinalLevel(chapter, newLevel)
         isRareLevel = False
         if newLevel is not None:
-            for level in xrange(prevLevel + 1, newLevel + 1):
+            for level in range(prevLevel + 1, newLevel + 1):
                 if battlePass.isRareLevel(chapter, level):
                     isRareLevel = True
                     break

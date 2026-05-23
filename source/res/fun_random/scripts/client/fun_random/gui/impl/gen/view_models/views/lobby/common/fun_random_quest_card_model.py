@@ -11,7 +11,7 @@ class CardState(Enum):
 class FunRandomQuestCardModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=8, commands=0):
+    def __init__(self, properties=10, commands=0):
         super(FunRandomQuestCardModel, self).__init__(properties=properties, commands=commands)
 
     def getState(self):
@@ -62,6 +62,18 @@ class FunRandomQuestCardModel(ViewModel):
     def setAltBonusCount(self, value):
         self._setNumber(7, value)
 
+    def getTriggerId(self):
+        return self._getString(8)
+
+    def setTriggerId(self, value):
+        self._setString(8, value)
+
+    def getAnimateCompletion(self):
+        return self._getBool(9)
+
+    def setAnimateCompletion(self, value):
+        self._setBool(9, value)
+
     def _initialize(self):
         super(FunRandomQuestCardModel, self)._initialize()
         self._addStringProperty('state')
@@ -72,3 +84,5 @@ class FunRandomQuestCardModel(ViewModel):
         self._addNumberProperty('totalPoints', 0)
         self._addNumberProperty('mainBonusCount', 0)
         self._addNumberProperty('altBonusCount', 0)
+        self._addStringProperty('triggerId', '')
+        self._addBoolProperty('animateCompletion', False)

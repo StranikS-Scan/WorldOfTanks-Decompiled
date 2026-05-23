@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/mission_details_container_view.py
+from __future__ import absolute_import
 from wg_async import wg_async, wg_await
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.lobby.missions import missions_helper
@@ -9,7 +10,7 @@ from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.server_events.events_helpers import isDailyQuest, isPremium
 from gui.server_events.formatters import parseComplexToken
 from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID
-from gui.shared import events, event_bus_handlers, EVENT_BUS_SCOPE
+from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.game_control import IBattleRoyaleController
@@ -18,7 +19,6 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
     eventsCache = dependency.descriptor(IEventsCache)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __showDQInMissionsTab = False
-    __metaclass__ = event_bus_handlers.EventBusListener
 
     def __init__(self, ctx=None):
         super(MissionDetailsContainerView, self).__init__(ctx)
@@ -59,6 +59,7 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
 
     def _populate(self):
         super(MissionDetailsContainerView, self)._populate()
+        self.addListener(events.HideWindowEvent.HIDE_MISSION_DETAILS_VIEW, self.__handleDetailsClose, EVENT_BUS_SCOPE.LOBBY)
         self.eventsCache.onSyncCompleted += self.__setData
         self.eventsCache.onPMSyncCompleted += self.__setData
         self.__setData(needDemand=True)
@@ -68,6 +69,7 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
         self.__setData(needDemand=False)
 
     def _dispose(self):
+        self.removeListener(events.HideWindowEvent.HIDE_MISSION_DETAILS_VIEW, self.__handleDetailsClose, EVENT_BUS_SCOPE.LOBBY)
         self.eventsCache.onPMSyncCompleted -= self.__setData
         self.eventsCache.onSyncCompleted -= self.__setData
         self.__quests = None
@@ -109,7 +111,6 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
             self.as_setInitDataS({'pages': pages})
         return
 
-    @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_MISSION_DETAILS_VIEW, EVENT_BUS_SCOPE.LOBBY)
     def __handleDetailsClose(self, _):
         self.destroy()
 

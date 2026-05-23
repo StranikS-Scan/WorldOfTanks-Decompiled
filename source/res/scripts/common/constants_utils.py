@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/constants_utils.py
+from __future__ import absolute_import
 import types
 import typing
+from past.builtins import long
+from future.utils import viewitems, viewvalues, with_metaclass
 import arena_bonus_type_caps
 import constants
 from UnitBase import CMD_NAMES, ROSTER_TYPE, PREBATTLE_TYPE_BY_UNIT_MGR_ROSTER, PREBATTLE_TYPE_BY_UNIT_MGR_ROSTER_EXT, ROSTER_TYPE_TO_CLASS, UNIT_MGR_FLAGS_TO_PREBATTLE_TYPE, UNIT_MGR_FLAGS_TO_UNIT_MGR_ENTITY_NAME, UNIT_MGR_FLAGS_TO_INVITATION_TYPE, QUEUE_TYPE_BY_UNIT_MGR_ROSTER, UNIT_ERROR, VEHICLE_TAGS_GROUP_BY_UNIT_MGR_FLAGS
@@ -12,20 +15,19 @@ from soft_exception import SoftException
 
 class ConstInjectorMeta(type):
 
-    def __new__(mcs, clsname, bases, attrs):
+    def __new__(cls, clsname, bases, attrs):
         attrs['_extra_attrs'] = tuple((attr for attr in attrs if attr[0] != '_'))
-        return super(ConstInjectorMeta, mcs).__new__(mcs, clsname, bases, attrs)
+        return super(ConstInjectorMeta, cls).__new__(cls, clsname, bases, attrs)
 
 
-class ConstInjector(object):
-    __metaclass__ = ConstInjectorMeta
+class ConstInjector(with_metaclass(ConstInjectorMeta, object)):
     _extra_attrs = ()
     _const_type = (int, long)
 
     @classmethod
     def inject(cls, personality=None):
         origin = cls.__bases__[0]
-        originValues = {originValue for originAttr, originValue in origin.__dict__.iteritems() if originAttr[0] != '_' and cls._isEligible(originValue)}
+        originValues = {originValue for originAttr, originValue in viewitems(origin.__dict__) if originAttr[0] != '_' and cls._isEligible(originValue)}
         for attr in cls._extra_attrs:
             value = getattr(cls, attr)
             msg = "{cls}: origin {origin} already has attr '{attr}' with value '{value}'"
@@ -48,44 +50,44 @@ class ConstInjector(object):
 
 def addArenaGuiTypesFromExtension(extArenaGuiType, personality):
     extraAttrs = extArenaGuiType.getExtraAttrs()
-    extraValues = tuple(extraAttrs.itervalues())
+    extraValues = tuple(viewvalues(extraAttrs))
     extArenaGuiType.inject(personality)
     ARENA_GUI_TYPE.RANGE += extraValues
     ARENA_GUI_TYPE.VOIP_SUPPORTED += extraValues
     ARENA_GUI_TYPE.BATTLE_CHAT_SETTING_SUPPORTED += extraValues
-    ARENA_GUI_TYPE_LABEL.LABELS.update({value:attr.lower() for attr, value in extraAttrs.iteritems()})
+    ARENA_GUI_TYPE_LABEL.LABELS.update({value:attr.lower() for attr, value in viewitems(extraAttrs)})
 
 
 def addArenaBonusTypesFromExtension(extArenaBonusType, personality):
     extraAttrs = extArenaBonusType.getExtraAttrs()
-    extraValues = tuple(extraAttrs.itervalues())
+    extraValues = tuple(viewvalues(extraAttrs))
     extArenaBonusType.inject(personality)
     ARENA_BONUS_TYPE.RANGE += extraValues
     ARENA_BONUS_TYPE_NAMES.update(extraAttrs)
-    ARENA_BONUS_TYPE_IDS.update({value:attr for attr, value in extraAttrs.iteritems()})
+    ARENA_BONUS_TYPE_IDS.update({value:attr for attr, value in viewitems(extraAttrs)})
     ARENA_BONUS_MASK.reInit()
 
 
 def addArenaBonusCapsFromExtension(extArenaBonusCaps, personality):
     extraAttrs = extArenaBonusCaps.getExtraAttrs()
-    extraValues = tuple(extraAttrs.itervalues())
+    extraValues = tuple(viewvalues(extraAttrs))
     extArenaBonusCaps.inject(personality)
     arena_bonus_type_caps.ALLOWED_ARENA_BONUS_TYPE_CAPS |= frozenset(extraValues)
 
 
 def addQueueTypesFromExtension(extQueueType, personality):
     extraAttrs = extQueueType.getExtraAttrs()
-    extraValues = tuple(extraAttrs.itervalues())
+    extraValues = tuple(viewvalues(extraAttrs))
     extQueueType.inject(personality)
     QUEUE_TYPE.ALL += extraValues
-    QUEUE_TYPE_NAMES.update({value:attr for attr, value in extraAttrs.iteritems()})
-    QUEUE_TYPE_IDS.update({attr.lower():value for attr, value in extraAttrs.iteritems()})
+    QUEUE_TYPE_NAMES.update({value:attr for attr, value in viewitems(extraAttrs)})
+    QUEUE_TYPE_IDS.update({attr.lower():value for attr, value in viewitems(extraAttrs)})
     QUEUE_TYPE.BASE_ON_DEQUEUE += extraValues
 
 
 def addPrebattleTypesFromExtension(extPrebattleType, personality):
     extraAttrs = extPrebattleType.getExtraAttrs()
-    extraValues = tuple(extraAttrs.itervalues())
+    extraValues = tuple(viewvalues(extraAttrs))
     extPrebattleType.inject(personality)
     PREBATTLE_TYPE.RANGE += extraValues
     PREBATTLE_TYPE.SQUAD_PREBATTLES += extraValues
@@ -93,37 +95,37 @@ def addPrebattleTypesFromExtension(extPrebattleType, personality):
     PREBATTLE_TYPE.CREATE_FROM_CLIENT += extraValues
     PREBATTLE_TYPE.CREATE_EX_FROM_SERVER += extraValues
     PREBATTLE_TYPE.JOIN_EX += extraValues
-    PREBATTLE_TYPE_NAMES.update({value:attr for attr, value in extraAttrs.iteritems()})
+    PREBATTLE_TYPE_NAMES.update({value:attr for attr, value in viewitems(extraAttrs)})
 
 
 def addBattleEventTypesFromExtension(extBattleEventType, personality):
     extraAttrs = extBattleEventType.getExtraAttrs()
     extBattleEventType.inject(personality)
-    BATTLE_EVENT_TYPE.ALL |= frozenset(extraAttrs.itervalues())
+    BATTLE_EVENT_TYPE.ALL |= frozenset(viewvalues(extraAttrs))
 
 
 def addRosterTypes(extRosterType, personality):
     extraAttrs = extRosterType.getExtraAttrs()
     extRosterType.inject(personality)
-    for value in extraAttrs.itervalues():
+    for value in viewvalues(extraAttrs):
         ROSTER_TYPE._MASK |= value
 
 
 def addInvitationTypes(extInvitationType, personality):
     extraAttrs = extInvitationType.getExtraAttrs()
     extInvitationType.inject(personality)
-    INVITATION_TYPE.RANGE += tuple(extraAttrs.itervalues())
+    INVITATION_TYPE.RANGE += tuple(viewvalues(extraAttrs))
 
 
 def addClientUnitCmd(extClientUnitCmd, personality):
     extraAttrs = extClientUnitCmd.getExtraAttrs()
     extClientUnitCmd.inject(personality)
-    CMD_NAMES.update({value:attr for attr, value in extraAttrs.iteritems()})
+    CMD_NAMES.update({value:attr for attr, value in viewitems(extraAttrs)})
 
 
 def addAttackReasonTypesFromExtension(extAttackReasonType, personality):
     extraAttrs = extAttackReasonType.getExtraAttrs()
-    extraValues = sorted(extraAttrs.itervalues())
+    extraValues = sorted(viewvalues(extraAttrs))
     extAttackReasonType.inject(personality)
     ATTACK_REASONS.extend(extraValues)
     ATTACK_REASON_INDICES.update(dict(((value, index) for index, value in enumerate(ATTACK_REASONS))))
@@ -138,7 +140,7 @@ def addBattleProgressCategory(extBattleProgressCategory, personality):
 
 
 def addDamageInfoCodes(infoCodesPerAttackReason, personality):
-    for attackReason, damageInfoCode in sorted(infoCodesPerAttackReason.iteritems()):
+    for _, damageInfoCode in sorted(viewitems(infoCodesPerAttackReason)):
         if damageInfoCode in DAMAGE_INFO_INDICES:
             continue
         DAMAGE_INFO_INDICES[damageInfoCode] = len(DAMAGE_INFO_CODES)
@@ -727,7 +729,7 @@ class AbstractBattleMode(object):
 
     def registerClientBattleResultReusabled(self):
         from gui.battle_results.reusable import ReusableInfoFactory
-        for key, infoCls in self._client_battleResultsReusables.iteritems():
+        for key, infoCls in viewitems(self._client_battleResultsReusables):
             ReusableInfoFactory.addForBonusType(self._ARENA_BONUS_TYPE, key, infoCls)
 
     def registerVehicleTags(self):
@@ -840,12 +842,12 @@ class AbstractBattleMode(object):
     def registerMessengerClientFormatters(self, extGuiConstants):
         extGuiConstants.SCH_CLIENT_MSG_TYPE.inject(self._personality)
         from gui.shared.system_factory import registerMessengerClientFormatter
-        for sysMsgType, formatter in self._client_messengerClientFormatters.iteritems():
+        for sysMsgType, formatter in viewitems(self._client_messengerClientFormatters):
             registerMessengerClientFormatter(sysMsgType, formatter)
 
     def registerMessengerServerFormatters(self):
         from gui.shared.system_factory import registerMessengerServerFormatter
-        for sysMsgType, formatter in self._client_messengerServerFormatters.iteritems():
+        for sysMsgType, formatter in viewitems(self._client_messengerServerFormatters):
             registerMessengerServerFormatter(sysMsgType, formatter, True)
 
     def registerClientGamefaceNotifications(self):
@@ -934,7 +936,7 @@ class AbstractBattleMode(object):
 
     def registerControlModes(self):
         from AvatarInputHandler import OVERWRITE_CTRLS_DESC_MAP, addEmptyIfNotExits
-        for name in self._client_controlModes.iterkeys():
+        for name in self._client_controlModes:
             addEmptyIfNotExits(name)
 
         OVERWRITE_CTRLS_DESC_MAP[self._ARENA_BONUS_TYPE] = self._client_controlModes

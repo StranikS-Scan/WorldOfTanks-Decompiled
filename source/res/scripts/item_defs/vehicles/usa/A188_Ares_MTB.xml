@@ -62,7 +62,7 @@
       <armor_13>	114.3	</armor_13>
       <armor_14>	127	</armor_14>
       <armor_16>	139.7	</armor_16>
-      <armor_17>	44.5	</armor_17>
+      <armor_17>	31.8	</armor_17>
       <armor_18>	139.7	</armor_18>
       <armor_19>	120.7	</armor_19>
       <armor_20>	146.1	</armor_20>
@@ -2397,34 +2397,34 @@
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	215.9	</armor_1>
-        <armor_2>	82.6	</armor_2>
+        <armor_2>	63.5	</armor_2>
         <armor_3>	82.6	</armor_3>
         <armor_4>	44.5	</armor_4>
         <armor_5>	25.4	</armor_5>
         <armor_6>	25.4	</armor_6>
         <armor_7>	241.3	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	88.9	</armor_9>
-        <armor_10>	215.9	</armor_10>
-        <armor_11>	203.2	</armor_11>
+        <armor_9>	76.2	</armor_9>
+        <armor_10>	181	</armor_10>
+        <armor_11>	171.5	</armor_11>
         <armor_12>	76.2	</armor_12>
         <armor_13>	82.6	</armor_13>
-        <armor_14>	63.5	</armor_14>
+        <armor_14>	44.5	</armor_14>
         <armor_15>	44.5	</armor_15>
         <armor_16>	25.4	</armor_16>
         <armor_17>	50.8	</armor_17>
-        <armor_18>	50.8	</armor_18>
+        <armor_18>	44.5	</armor_18>
         <armor_19>	82.6	</armor_19>
-        <armor_20>	114.3	</armor_20>
+        <armor_20>	101.6	</armor_20>
         <armor_21>	250.8	</armor_21>
-        <armor_22>	69.9	</armor_22>
-        <armor_23>	190.5	</armor_23>
-        <armor_24>	146.1	</armor_24>
-        <armor_25>	120.7	</armor_25>
+        <armor_22>	44.5	</armor_22>
+        <armor_23>	146.1	</armor_23>
+        <armor_24>	114.9	</armor_24>
+        <armor_25>	114.3	</armor_25>
         <armor_26>	72.6	</armor_26>
-        <armor_27>	152.4	</armor_27>
+        <armor_27>	144.8	</armor_27>
         <armor_28>	181	</armor_28>
-        <armor_29>	171.5	</armor_29>
+        <armor_29>	127	</armor_29>
         <armor_30>	114.3	</armor_30>
         <armor_31>	101.6	</armor_31>
       </armor>
@@ -2456,9 +2456,9 @@
             <armor_6>	25.4	</armor_6>
             <armor_7>	31.8	</armor_7>
             <armor_8>	0	</armor_8>
-            <armor_9>	222.3	</armor_9>
-            <armor_10>	210	</armor_10>
-            <armor_11>	196.9	</armor_11>
+            <armor_9>	215.9	</armor_9>
+            <armor_10>	196.9	</armor_10>
+            <armor_11>	171.5	</armor_11>
             <armor_12>	184.2	</armor_12>
             <armor_13>	171.5	</armor_13>
             <armor_14>	152.4	</armor_14>
@@ -2789,20 +2789,26 @@
         <slot>
           <slotType>	attachment	</slotType>
           <slotId>	38000	</slotId>
-          <position>	-0.638984 0.801386 0.349125	</position>
-          <rotation>	-0 -0 0	</rotation>
+          <position>	-1.201756 0.487274 0.088412	</position>
+          <rotation>	-0 0 0	</rotation>
           <scale>	1 1 1	</scale>
           <applyType>	turret	</applyType>
           <size>	small	</size>
+          <enableVisTunnel>	true	</enableVisTunnel>
+          <hangerId>	5	</hangerId>
+          <hangerRotation>	0.000001 -1.083417 -0.000004	</hangerRotation>
         </slot>
         <slot>
           <slotType>	attachment	</slotType>
           <slotId>	38001	</slotId>
           <size>	small	</size>
-          <position>	0.619999 0.825966 0.152532	</position>
+          <position>	1.157216 0.47931 0.49408	</position>
           <rotation>	-0 -0 0	</rotation>
           <scale>	1 1 1	</scale>
           <applyType>	gunMantlet	</applyType>
+          <enableVisTunnel>	true	</enableVisTunnel>
+          <hangerId>	2	</hangerId>
+          <hangerRotation>	-0 0.977384 0	</hangerRotation>
         </slot>
       </customizationSlots>
       <customization>

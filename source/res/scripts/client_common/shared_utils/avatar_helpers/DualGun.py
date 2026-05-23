@@ -24,6 +24,10 @@ class DualGunHelper(object):
             if gunStates[secondGun] == DUAL_GUN.GUN_STATE.RELOADING:
                 reloadingGun = secondGun
             if reloadingGun is not None:
+                if DUAL_GUN.GUN_STATE.EMPTY in gunStates:
+                    effects = ammoCtrl.getRelloadEffect()
+                    if effects is not None:
+                        effects.stopSoundEffect()
                 ammoCtrl.triggerReloadEffect(cooldownTimes[reloadingGun].leftTime, cooldownTimes[reloadingGun].baseTime, directTrigger=True)
         if gunStates[activeGun] == DUAL_GUN.GUN_STATE.RELOADING:
             if not self.__debuffTrigger:

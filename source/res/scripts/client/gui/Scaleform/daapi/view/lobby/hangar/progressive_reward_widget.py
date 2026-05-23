@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/progressive_reward_widget.py
+from __future__ import absolute_import
 import logging
 from constants import IS_LOOT_BOXES_ENABLED
 from account_helpers import AccountSettings

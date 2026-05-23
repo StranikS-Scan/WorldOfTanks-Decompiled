@@ -7,10 +7,8 @@ from constants_utils import ConstInjector
 EXTENSION_NAME = 'story_mode'
 LOGGER_NAME = 'story_mode'
 DEFAULT_BATTLES_LIMIT = 500
-BATTLES_LIMIT_KEY = 'stats/story_mode/battlesLimit'
-PLAYERS_COUNT_KEY = 'stats/story_mode/Queue{}Players'
-PLAYER_BATTLES_COUNT_KEY = 'stats/story_mode/Queue{}PlayerBattlesCount'
-AVG_WAIT_TIME_KEY = 'stats/story_mode/Queue{}AvgWaitTime'
+MM_STORY_MODE_STATS_KEY = 'stats/story_mode/'
+BATTLES_LIMIT_KEY = MM_STORY_MODE_STATS_KEY + 'battlesLimit'
 SM_CONGRATULATIONS_MESSAGE = 'StoryModeCongratulationsMessage'
 STORY_MODE_BONUS_TYPES = (ARENA_BONUS_TYPE.STORY_MODE_ONBOARDING, ARENA_BONUS_TYPE.STORY_MODE_REGULAR)
 STORY_MODE_GUI_TYPE_BY_BONUS_TYPE = {ARENA_BONUS_TYPE.STORY_MODE_ONBOARDING: ARENA_GUI_TYPE.STORY_MODE_ONBOARDING,
@@ -86,3 +84,10 @@ class TaskId(enum.IntEnum):
     ONE = 1
     TWO = 2
     THREE = 3
+
+
+class MM_STORY_MODE_STATS(object):
+    PLAYERS_COUNT_KEY = MM_STORY_MODE_STATS_KEY + 'Queue{}Players'
+    BATTLES_COUNT_KEY = MM_STORY_MODE_STATS_KEY + 'Queue{}PlayerBattlesCount'
+    AVG_WAIT_TIME_KEY = MM_STORY_MODE_STATS_KEY + 'Queue{}AvgWaitTime'
+    ALL = (PLAYERS_COUNT_KEY, BATTLES_COUNT_KEY, AVG_WAIT_TIME_KEY)

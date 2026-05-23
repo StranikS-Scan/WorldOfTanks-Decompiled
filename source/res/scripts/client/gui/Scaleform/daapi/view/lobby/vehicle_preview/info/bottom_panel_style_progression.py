@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_preview/info/bottom_panel_style_progression.py
+from __future__ import absolute_import
 from CurrentVehicle import g_currentPreviewVehicle
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.daapi.view.meta.VehiclePreviewBottomPanelStyleProgressionMeta import VehiclePreviewBottomPanelStyleProgressionMeta

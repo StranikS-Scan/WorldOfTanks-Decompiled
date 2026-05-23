@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/shared.py
+from __future__ import absolute_import
 import logging
 import struct
 from collections import namedtuple, Counter
 import typing
+from future.utils import viewitems, viewvalues
 import BigWorld
 import Math
 import nations
@@ -140,8 +142,8 @@ class CustomizationTabs(object):
     TABS_WITH_RARITY = (ATTACHMENTS,)
 
 
-ITEM_TYPE_TO_TAB = {value:key for key, values in CustomizationTabs.ITEM_TYPES.iteritems() for value in values}
-ITEM_TYPE_TO_SLOT_TYPE = {itemType:CustomizationTabs.SLOT_TYPES[tabId] for itemType, tabId in ITEM_TYPE_TO_TAB.iteritems()}
+ITEM_TYPE_TO_TAB = {value:key for key, values in viewitems(CustomizationTabs.ITEM_TYPES) for value in values}
+ITEM_TYPE_TO_SLOT_TYPE = {itemType:CustomizationTabs.SLOT_TYPES[tabId] for itemType, tabId in viewitems(ITEM_TYPE_TO_TAB)}
 REGIONS_SLOTS = tuple((CustomizationTabs.SLOT_TYPES[tabId] for tabId in CustomizationTabs.REGIONS))
 APPLIED_TO_TYPES = (GUI_ITEM_TYPE.EMBLEM,
  GUI_ITEM_TYPE.INSCRIPTION,
@@ -301,7 +303,7 @@ def fitOutfit(outfit, availableRegionsMap):
 
 def getOutfitWithoutItems(outfitsInfo, intCD, count):
     customizationService = dependency.instance(ICustomizationService)
-    for season, outfitCompare in outfitsInfo.iteritems():
+    for season, outfitCompare in viewitems(outfitsInfo):
         backward = outfitCompare.modified.diff(outfitCompare.original)
         for container in backward.containers():
             for slot in container.slots():
@@ -319,7 +321,7 @@ def getOutfitWithoutItems(outfitsInfo, intCD, count):
 
 
 def getOutfitWithoutItemsNoDiff(outfits, intCD, count):
-    for season, outfit in outfits.iteritems():
+    for season, outfit in viewitems(outfits):
         for container in outfit.containers():
             for slot in container.slots():
                 for idx in range(slot.capacity()):
@@ -395,7 +397,7 @@ def makeVehiclesShortNamesString(vehiclesCDs, currentVehicle, flat=False, itemsC
     if currentVehicle is not None and currentVehicle.intCD in vehiclesCDs and not flat:
         vehiclesCDs.remove(currentVehicle.intCD)
         vehiclesShortNames.append(currentVehicle.shortUserName + _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_LIMITED_CURRENT_VEHICLE))
-    vehiclesShortNames.extend(map(getVehicleShortName, vehiclesCDs))
+    vehiclesShortNames.extend((getVehicleShortName(vehCD) for vehCD in vehiclesCDs))
     return ', '.join(vehiclesShortNames)
 
 
@@ -518,7 +520,7 @@ def getCurrentVehicleAvailableRegionsMap():
     outfit = Outfit(vehicleCD=vehicleDescr.makeCompactDescr())
     for areaId in Area.ALL:
         availableRegionsMap[areaId] = {}
-        for slotType in CustomizationTabs.SLOT_TYPES.itervalues():
+        for slotType in viewvalues(CustomizationTabs.SLOT_TYPES):
             regions = getAvailableRegions(areaId, slotType, vehicleDescr=vehicleDescr, vehicleOutfit=outfit)
             availableRegionsMap[areaId][slotType] = regions
 
@@ -649,7 +651,7 @@ def getEditableStyleOutfitDiff(outfit, baseOutfit):
 
 def isStyleEditedForCurrentVehicle(outfits, style):
     vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
-    for season, outfit in outfits.iteritems():
+    for season, outfit in viewitems(outfits):
         baseOutfit = style.getOutfit(season, vehicleCD)
         fitOutfit(baseOutfit, getCurrentVehicleAvailableRegionsMap())
         if not outfit.isEqual(baseOutfit):
@@ -661,7 +663,6 @@ def isStyleEditedForCurrentVehicle(outfits, style):
 @dependency.replace_none_kwargs(service=ICustomizationService)
 def getUnsuitableDependentData(outfit, selCamoItemID, styleDependencies, service=None):
     result = []
-    styleDependencies = styleDependencies
     outfitItemsList = tuple(((cIntCD, regionIdx, container) for cIntCD, _, regionIdx, container, _ in outfit.itemsFull()))
     getItemByCD = service.getItemByCD
     camoDependencies = styleDependencies.get(selCamoItemID)
@@ -673,7 +674,7 @@ def getUnsuitableDependentData(outfit, selCamoItemID, styleDependencies, service
             posUnsuitId = possiblyUnsuitable.id
             dependentByType = camoDependencies.get(posUnsuitType)
             if dependentByType and posUnsuitId not in dependentByType:
-                for dependent in styleDependencies.itervalues():
+                for dependent in viewvalues(styleDependencies):
                     dItemIds = dependent.get(posUnsuitType)
                     if dItemIds and posUnsuitId in dItemIds:
                         slotType = ITEM_TYPE_TO_SLOT_TYPE[posUnsuitTypeId]
@@ -781,7 +782,7 @@ def __getStyleInventoryCount(item, outfits=None):
 
 
 def __getItemAppliedCount(item, outfits):
-    appliedCount = sum((outfit.itemsCounter[item.intCD] for outfit in outfits.itervalues()))
+    appliedCount = sum((outfit.itemsCounter[item.intCD] for outfit in viewvalues(outfits)))
     appliedCount -= getItemInstalledCount(item)
     return appliedCount
 
@@ -805,7 +806,7 @@ def __isStyleInstalled(style):
 def __getInventoryCounts(modifiedOutfits, vehicleCD, itemsCache=None, c11nService=None):
     inventoryCounts = Counter()
     removedCounts = Counter()
-    for modifiedOutfit in modifiedOutfits.itervalues():
+    for modifiedOutfit in viewvalues(modifiedOutfits):
         for intCD in modifiedOutfit.items():
             descriptor = getItemByCompactDescr(intCD)
             if descriptor.id == EMPTY_ITEM_ID:
@@ -884,7 +885,7 @@ def getStyledModeRequestData(requestData, style, vehicle, purchaseItems=None, st
             if seasonType == SeasonType.ALL:
                 modifiedStyleOutfits[seasonType] = modifiedStyleOutfits[seasonType].adjust(outfit)
 
-        requestData = [ (outfit, season) for season, outfit in modifiedStyleOutfits.iteritems() ]
+        requestData = [ (outfit, season) for season, outfit in viewitems(modifiedStyleOutfits) ]
     else:
         for season in SeasonType.COMMON_SEASONS:
             outfit = customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD)

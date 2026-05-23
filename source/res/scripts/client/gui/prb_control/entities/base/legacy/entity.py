@@ -26,10 +26,15 @@ from gui.prb_control.settings import FUNCTIONAL_FLAG, CTRL_ENTITY_TYPE, PREBATTL
 from gui.shared.utils.listeners_collection import ListenersCollection
 from prebattle_shared import decodeRoster
 if typing.TYPE_CHECKING:
-    from typing import Callable, Dict, Type
-    from gui.prb_control.entities.base.legacy.ctx import SetPlayerStateCtx
+    from typing import Callable, Dict, Type, List, Optional
+    from gui.prb_control.entities.base.legacy.ctx import SetPlayerStateCtx, AssignLegacyCtx, SetTeamStateCtx, KickPlayerCtx, SwapTeamsCtx
     from gui.prb_control.items import ValidationResult
     from prebattle_shared import PrebattleSettings
+    from ClientPrebattle import ClientPrebattle
+    from gui.prb_control.entities.base.ctx import PrbCtrlRequestCtx, SendInvitesCtx
+    from gui.prb_control.entities.base.limits import LimitsCollection
+    from gui.prb_control.entities.base.listener import IPrbListener
+    from gui.prb_control.entities.base.requester import IPrbListRequester
 
 class BaseLegacyEntity(BasePrbEntity):
 

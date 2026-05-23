@@ -10,14 +10,14 @@
   <postProgressionTree>	role_MT_assault	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	45	</forward>
+    <forward>	50	</forward>
     <backward>	20	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.248	</moving>
-    <still>	0.331	</still>
+    <moving>	0.196	</moving>
+    <still>	0.262	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
-    <firePenalty>	0.497	</firePenalty>
+    <firePenalty>	0.393	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -519,6 +519,36 @@
         <hiddenForUser>	true	</hiddenForUser>
         <showOn>	16	</showOn>
         <clipAngle>	1.23081	</clipAngle>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0.000006 0.487 -3.251297	</position>
+        <rotation>	-0 -1.570796 1.570796	</rotation>
+        <scale>	0.999998 0.999999 0.999999	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+        <hangerId>	11	</hangerId>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	-1.74 0.329746 0.232958	</position>
+        <rotation>	-0 0 1.570796	</rotation>
+        <scale>	0.999999 0.999999 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+        <hangerId>	9	</hangerId>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	1.740124 0.329746 0.232958	</position>
+        <rotation>	-0 3.141593 1.570796	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+        <hangerId>	9	</hangerId>
       </slot>
     </customizationSlots>
     <customization>
@@ -1373,13 +1403,13 @@
       <price>	60000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	220	</armor_1>
-        <armor_2>	210	</armor_2>
-        <armor_3>	200	</armor_3>
-        <armor_4>	190	</armor_4>
+        <armor_1>	250	</armor_1>
+        <armor_2>	230	</armor_2>
+        <armor_3>	220	</armor_3>
+        <armor_4>	210	</armor_4>
         <armor_5>	180	</armor_5>
-        <armor_6>	170	</armor_6>
-        <armor_7>	160	</armor_7>
+        <armor_6>	190	</armor_6>
+        <armor_7>	170	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	150	</armor_9>
         <armor_10>	140	</armor_10>
@@ -1394,6 +1424,7 @@
         <armor_19>	50	</armor_19>
         <armor_20>	40	</armor_20>
         <armor_22>	20	</armor_22>
+        <armor_23>	240	</armor_23>
         <armor_24>	35	</armor_24>
         <armor_25>	45	</armor_25>
         <armor_26>	55	</armor_26>
@@ -1401,7 +1432,7 @@
         <armor_28>	75	</armor_28>
         <armor_29>	85	</armor_29>
         <armor_30>	95	</armor_30>
-        <armor_31>	105	</armor_31>
+        <armor_31>	200	</armor_31>
         <armor_32>	115	</armor_32>
       </armor>
       <primaryArmor>	armor_1 armor_30 armor_26	</primaryArmor>
@@ -1426,7 +1457,7 @@
             <maxPitch>	0.00000 10.00 0.38889 10.00 0.41389 5.00 0.58611 5.00 0.61111 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <armor>
-            <armor_1>	230	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
@@ -1434,15 +1465,15 @@
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_5>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	75	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_6>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_7>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_7>
-            <armor_8>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_8>	115	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_8>
-            <armor_9>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_9>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_9>
             <gun>	30	</gun>
           </armor>
@@ -1462,7 +1493,7 @@
             <rate>	80	</rate>
           </burst>
           <aimingTime>	2.0	</aimingTime>
-          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <customizationSlots>
             <slot>
@@ -1485,6 +1516,17 @@
               <anchorPosition>	0.000628 0.013297 2.70968	</anchorPosition>
               <anchorDirection>	-0 0 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48000	</slotId>
+              <size>	medium	</size>
+              <position>	0.000003 0.31402 0.346224	</position>
+              <rotation>	-0 0 0	</rotation>
+              <scale>	1 1 1	</scale>
+              <enableVisTunnel>	true	</enableVisTunnel>
+              <applyType>	gunMantlet	</applyType>
+              <hangerId>	2	</hangerId>
             </slot>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
@@ -1880,6 +1922,18 @@
           <clipAngle>	1.32305	</clipAngle>
           <anchorShift>	1.35906	</anchorShift>
         </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	-1.02 0.742 0.486394	</position>
+          <rotation>	-0 0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <enableVisTunnel>	true	</enableVisTunnel>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
+          <hangerId>	2	</hangerId>
+          <hangerRotation>	-0 -0.610865 0	</hangerRotation>
+        </slot>
       </customizationSlots>
       <customization>
         <customizableVehicleAreas>
@@ -1908,8 +1962,8 @@
     <detailed>
       <engines>
         <_12150L3_II>
-          <smplEnginePower>	540	</smplEnginePower>
-          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
+          <smplEnginePower>	610	</smplEnginePower>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </_12150L3_II>
       </engines>
       <chassis>

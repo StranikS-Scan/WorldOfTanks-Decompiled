@@ -2,61 +2,59 @@
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/battle_pass/battle_pass_buy_level_view_model.py
 from frameworks.wulf import ViewModel
 from gui.impl.wrappers.user_list_model import UserListModel
-from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_buy_confirm_any_number_view_model import BattlePassBuyConfirmAnyNumberViewModel
-from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_buy_rewards_view_model import BattlePassBuyRewardsViewModel
-from gui.impl.gen.view_models.views.lobby.battle_pass.package_item import PackageItem
+from gui.impl.gen.view_models.views.lobby.battle_pass.reward_item_model import RewardItemModel
 
 class BattlePassBuyLevelViewModel(ViewModel):
-    __slots__ = ('showConfirm', 'showConfirmAny', 'showRewards')
-    CONFIRM_ANY_NUMBER_STATE = 'confirmAnyNumberState'
-    REWARDS_STATE = 'rewardsState'
+    __slots__ = ('onChangeSelectedLevels', 'onPurchase')
 
-    def __init__(self, properties=5, commands=3):
+    def __init__(self, properties=6, commands=2):
         super(BattlePassBuyLevelViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
-    def packages(self):
+    def rewards(self):
         return self._getViewModel(0)
 
     @staticmethod
-    def getPackagesType():
-        return PackageItem
-
-    @property
-    def confirmAnyNumber(self):
-        return self._getViewModel(1)
-
-    @staticmethod
-    def getConfirmAnyNumberType():
-        return BattlePassBuyConfirmAnyNumberViewModel
-
-    @property
-    def rewards(self):
-        return self._getViewModel(2)
-
-    @staticmethod
     def getRewardsType():
-        return BattlePassBuyRewardsViewModel
-
-    def getState(self):
-        return self._getString(3)
-
-    def setState(self, value):
-        self._setString(3, value)
+        return RewardItemModel
 
     def getIsWalletAvailable(self):
-        return self._getBool(4)
+        return self._getBool(1)
 
     def setIsWalletAvailable(self, value):
-        self._setBool(4, value)
+        self._setBool(1, value)
+
+    def getLevelsTotal(self):
+        return self._getNumber(2)
+
+    def setLevelsTotal(self, value):
+        self._setNumber(2, value)
+
+    def getLevelsPassed(self):
+        return self._getNumber(3)
+
+    def setLevelsPassed(self, value):
+        self._setNumber(3, value)
+
+    def getChapterID(self):
+        return self._getNumber(4)
+
+    def setChapterID(self, value):
+        self._setNumber(4, value)
+
+    def getLevelPrice(self):
+        return self._getNumber(5)
+
+    def setLevelPrice(self, value):
+        self._setNumber(5, value)
 
     def _initialize(self):
         super(BattlePassBuyLevelViewModel, self)._initialize()
-        self._addViewModelProperty('packages', UserListModel())
-        self._addViewModelProperty('confirmAnyNumber', BattlePassBuyConfirmAnyNumberViewModel())
-        self._addViewModelProperty('rewards', BattlePassBuyRewardsViewModel())
-        self._addStringProperty('state', 'confirmAnyNumberState')
+        self._addViewModelProperty('rewards', UserListModel())
         self._addBoolProperty('isWalletAvailable', False)
-        self.showConfirm = self._addCommand('showConfirm')
-        self.showConfirmAny = self._addCommand('showConfirmAny')
-        self.showRewards = self._addCommand('showRewards')
+        self._addNumberProperty('levelsTotal', 0)
+        self._addNumberProperty('levelsPassed', 0)
+        self._addNumberProperty('chapterID', 0)
+        self._addNumberProperty('levelPrice', 0)
+        self.onChangeSelectedLevels = self._addCommand('onChangeSelectedLevels')
+        self.onPurchase = self._addCommand('onPurchase')

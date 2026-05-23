@@ -9,10 +9,12 @@ from fun_random.gui.impl.lobby.tooltips.fun_random_progression_tooltip_view impo
 from fun_random.gui.impl.lobby.common.fun_view_helpers import defineProgressionStatus, packProgressionState, packProgressionActiveStage, packInfiniteProgressionState, packInfiniteProgressionStage
 from gui.impl.gen import R
 from gui.impl.pub.view_component import ViewComponent
+from fun_random.gui.impl.lobby.hangar.controllers.fun_random_overlap_controller import FunRandomOverlapCtrlMixin
+from gui.impl.lobby.user_missions.hangar_widget.tooltip_positioner import TooltipPositionerMixin
 if typing.TYPE_CHECKING:
     from frameworks.wulf import View, ViewEvent
 
-class FunRandomProgressionPresenter(ViewComponent[FunRandomProgressionEntryPointModel], FunProgressionWatcher):
+class FunRandomProgressionPresenter(TooltipPositionerMixin, FunRandomOverlapCtrlMixin, ViewComponent[FunRandomProgressionEntryPointModel], FunProgressionWatcher):
 
     def __init__(self):
         super(FunRandomProgressionPresenter, self).__init__(model=FunRandomProgressionEntryPointModel)
@@ -33,19 +35,21 @@ class FunRandomProgressionPresenter(ViewComponent[FunRandomProgressionEntryPoint
         super(FunRandomProgressionPresenter, self).showActiveProgressionPage()
 
     def _onLoading(self, *args, **kwargs):
+        self.initOverlapCtrl()
         super(FunRandomProgressionPresenter, self)._onLoading(*args, **kwargs)
-        self.startProgressionListening(self.__invalidateAll)
-        self.__invalidateAll()
+        self.startProgressionListening(self._updateViewModel)
+        self._updateViewModel()
 
     def _finalize(self):
-        self.stopProgressionListening(self.__invalidateAll)
+        self.stopProgressionListening(self._updateViewModel)
         super(FunRandomProgressionPresenter, self)._finalize()
 
     def _getEvents(self):
         return super(FunRandomProgressionPresenter, self)._getEvents() + ((self.viewModel.onShowInfo, self.showActiveProgressionPage),)
 
     @hasActiveProgression(abortAction='setDisabledProgression')
-    def __invalidateAll(self, *_):
+    def _rawUpdate(self):
+        super(FunRandomProgressionPresenter, self)._rawUpdate()
         with self.viewModel.transaction() as model:
             progression = self.getActiveProgression()
             model.progressionState.setStatus(defineProgressionStatus(progression))
@@ -55,3 +59,7 @@ class FunRandomProgressionPresenter(ViewComponent[FunRandomProgressionEntryPoint
             else:
                 packProgressionState(progression, model.progressionState)
                 packProgressionActiveStage(progression, model.currentProgressionStage)
+
+    @hasActiveProgression(abortAction='setDisabledProgression')
+    def _updateViewModel(self, *_):
+        self.queueUpdate()

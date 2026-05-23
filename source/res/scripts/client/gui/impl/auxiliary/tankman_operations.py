@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 import json
 import typing
-from future.builtins import range
+from builtins import range
 from future.utils import iteritems
 from typing import TYPE_CHECKING
 from frameworks.wulf import Array

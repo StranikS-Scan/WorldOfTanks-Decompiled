@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/tank_setup/context_menu/battle_booster.py
+from __future__ import absolute_import
 import SoundGroups
 from adisp import adisp_process, adisp_async
 from gui import shop
@@ -15,11 +16,11 @@ from ids_generators import SequenceIDGenerator
 class BattleBoosterItemContextMenu(BaseItemContextMenu):
     __sqGen = SequenceIDGenerator()
 
-    @option(__sqGen.next(), TankSetupCMLabel.SELECT)
+    @option(__sqGen.nextSequenceID, TankSetupCMLabel.SELECT)
     def select(self):
         self._sendSlotAction(BaseSetupModel.SELECT_SLOT_ACTION)
 
-    @option(__sqGen.next(), CMLabel.BUY_MORE)
+    @option(__sqGen.nextSequenceID, CMLabel.BUY_MORE)
     def buyMore(self):
         shop.showBattleBooster(itemId=self._intCD, source=shop.Source.EXTERNAL, origin=shop.Origin.BATTLE_BOOSTERS)
 
@@ -33,17 +34,17 @@ class BattleBoosterItemContextMenu(BaseItemContextMenu):
 class BattleBoosterSlotContextMenu(BaseSlotContextMenu):
     __sqGen = SequenceIDGenerator()
 
-    @option(__sqGen.next(), CMLabel.BUY_MORE)
+    @option(__sqGen.nextSequenceID, CMLabel.BUY_MORE)
     def buyMore(self):
         shop.showBattleBooster(itemId=self._intCD, source=shop.Source.EXTERNAL, origin=shop.Origin.BATTLE_BOOSTERS)
 
-    @option(__sqGen.next(), TankSetupCMLabel.UNLOAD)
+    @option(__sqGen.nextSequenceID, TankSetupCMLabel.UNLOAD)
     def unload(self):
         SoundGroups.g_instance.playSound2D(TankSetupSoundEvents.INSTRUCTIONS_DEMOUNT)
         self._sendSlotAction(BaseSetupModel.SELECT_SLOT_ACTION, intCD=None, currentSlotId=self._installedSlotId)
         return
 
-    @option(__sqGen.next(), TankSetupCMLabel.TAKE_OFF)
+    @option(__sqGen.nextSequenceID, TankSetupCMLabel.TAKE_OFF)
     def takeOff(self):
         SoundGroups.g_instance.playSound2D(TankSetupSoundEvents.INSTRUCTIONS_DEMOUNT)
         self._sendSlotAction(BaseSetupModel.REVERT_SLOT_ACTION)
@@ -58,15 +59,15 @@ class BattleBoosterSlotContextMenu(BaseSlotContextMenu):
 class HangarBattleBoosterSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
     _sqGen = SequenceIDGenerator(BaseHangarEquipmentSlotContextMenu._sqGen.currSequenceID)
 
-    @option(_sqGen.next(), CMLabel.BUY_MORE)
+    @option(_sqGen.nextSequenceID, CMLabel.BUY_MORE)
     def buyMore(self):
         shop.showBattleBooster(itemId=self._intCD, source=shop.Source.EXTERNAL, origin=shop.Origin.BATTLE_BOOSTERS)
 
-    @option(_sqGen.next(), TankSetupCMLabel.UNLOAD)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.UNLOAD)
     def unload(self):
         self.__unloadAction()
 
-    @option(_sqGen.next(), TankSetupCMLabel.TAKE_OFF)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.TAKE_OFF)
     def takeOffFromSlot(self):
         self.__unloadAction()
 

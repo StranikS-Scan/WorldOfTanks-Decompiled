@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/helpers_common.py
+from __future__ import absolute_import, division
 import math
 import typing
 from constants import VEHICLE_HIT_EFFECT
@@ -7,11 +8,11 @@ from items.components import component_constants
 from soft_exception import SoftException
 from battle_modifiers_common import BattleModifiers
 from Math import Vector3
-from debug_utils import LOG_WARNING, LOG_ERROR
+from math_common import decimal_round, round_py2_style_int
+from debug_utils import LOG_WARNING
 from items import vehicles
 if typing.TYPE_CHECKING:
     from typing import Sequence, Optional, Tuple, List, Union, Dict
-    from items.vehicle_items import Shell
     from items.readers.prefab_effects_readers import ShotEffectDesc
     from battle_modifiers_common import BATTLE_MODIFIERS_TYPE
     from items.components.gun_components import GunShot
@@ -103,7 +104,7 @@ def isAllRetrainOperationFree(tmanDescr, retrainCost):
 
 def getRetrainCost(tankmanCost, opts):
     retrainCosts = []
-    for idx, (cost, option) in enumerate(zip(tankmanCost, opts)):
+    for cost, option in zip(tankmanCost, opts):
         cost = dict(cost.items() + option.items())
         retrainCosts.append(cost)
 
@@ -114,7 +115,7 @@ def packFloat(value, minBound, maxBound, bits):
     t = (value - minBound) / (maxBound - minBound)
     t = max(0.0, min(t, 1.0))
     mask = (1 << bits) - 1
-    return int(round(mask * t)) & mask
+    return round_py2_style_int(mask * t) & mask
 
 
 def unpacklFloat(packedValue, minBound, maxBound, bits):
@@ -163,7 +164,7 @@ def castNumberToPrettyStr(value):
 
 
 def getPercentFromFloat(value, accuracy=2):
-    return round(value * 100, accuracy)
+    return decimal_round(value * 100, accuracy)
 
 
 def _clipSegmentByAABB(start, stop, aabb):
@@ -214,7 +215,7 @@ def encodeSegment(bbox, componentIndex, startPoint, endPoint):
         a = (test[0] - min) * 255
         b = (test[1] - min) * 255
         d = max - min
-        return int(round(b[2] / d[2])) << 56 | int(round(b[1] / d[1])) << 48 | int(round(b[0] / d[0])) << 40 | int(round(a[2] / d[2])) << 32 | int(round(a[1] / d[1])) << 24 | int(round(a[0] / d[0])) << 16 | componentIndex << 8
+        return round_py2_style_int(b[2] / d[2]) << 56 | round_py2_style_int(b[1] / d[1]) << 48 | round_py2_style_int(b[0] / d[0]) << 40 | round_py2_style_int(a[2] / d[2]) << 32 | round_py2_style_int(a[1] / d[1]) << 24 | round_py2_style_int(a[0] / d[0]) << 16 | componentIndex << 8
 
 
 def getComponentIndexFromEncodedSegment(segment):
@@ -231,7 +232,7 @@ def setEncodedSegmentContextData(segment, data):
 
 def decodeSegment(segment, bbox):
     minimum = Vector3(bbox[0])
-    delta = (bbox[1] - minimum).scale(1.0 / 255.0)
+    delta = (bbox[1] - minimum).scale(0.00392156862745098)
     segStart = minimum + Vector3(delta[0] * (segment >> 16 & 255), delta[1] * (segment >> 24 & 255), delta[2] * (segment >> 32 & 255))
     segEnd = minimum + Vector3(delta[0] * (segment >> 40 & 255), delta[1] * (segment >> 48 & 255), delta[2] * (segment >> 56 & 255))
     offset = (segEnd - segStart) * 0.01

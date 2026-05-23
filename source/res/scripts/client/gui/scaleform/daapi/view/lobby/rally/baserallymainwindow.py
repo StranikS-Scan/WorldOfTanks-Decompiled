@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/BaseRallyMainWindow.py
+from __future__ import absolute_import
 import BigWorld
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
@@ -94,8 +95,8 @@ class BaseRallyMainWindow(BaseRallyMainWindowMeta, IGlobalListener):
 
     def _handleChannelControllerInited(self, event):
         ctx = event.ctx
-        prbType = ctx.get('prbType', 0)
-        if prbType is 0:
+        prbType = ctx.get('prbType')
+        if not prbType:
             LOG_ERROR('Prebattle type is not defined', ctx)
             return
         else:

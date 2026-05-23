@@ -1,10 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/rewards_selection_view.py
+from __future__ import absolute_import
+from collections import OrderedDict
 from functools import partial
+from future.utils import viewitems
 from AccountCommands import RES_SUCCESS
 from frameworks.wulf import WindowFlags
 from gui import SystemMessages
-from gui.battle_pass.rewards_sort import getRewardTypesComparator, getRewardsComparator
+from gui.battle_pass.rewards_sort import getTypesSortKey, getItemsSortKey
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.rewards_selection_view_model import RewardsSelectionViewModel
@@ -52,17 +55,27 @@ class RewardsSelectionView(SelectableRewardBase):
         switchHangarOverlaySoundFilter(on=False)
         super(RewardsSelectionView, self)._finalize()
 
-    def _getTypesComparator(self):
-        return getRewardTypesComparator()
+    def _sortContent(self):
+        tabs = self._getTabs()
+        tabs = OrderedDict(sorted(viewitems(tabs), key=getTypesSortKey()))
+        for tabName in tabs:
+            tabs[tabName]['rewards'] = OrderedDict(sorted(viewitems(tabs[tabName]['rewards']), key=getItemsSortKey(tabName)))
 
-    def _getItemsComparator(self, tabName):
-        return getRewardsComparator(tabName)
+        self._setTabs(tabs)
+
+    def _sortCart(self):
+        cart = self._getCart()
+        cart = OrderedDict(sorted(viewitems(cart), key=getTypesSortKey()))
+        for catName in cart:
+            cart[catName] = OrderedDict(sorted(viewitems(cart[catName]), key=getItemsSortKey(catName)))
+
+        self._setCart(cart)
 
     def _processReceivedRewards(self, result):
         if result.success and result.auxData:
             successRewards = result.auxData.get(RES_SUCCESS, {})
             if successRewards:
-                rewardsGenerator = ({group: rewards} for group, rewards in successRewards.iteritems())
+                rewardsGenerator = ({group: rewards} for group, rewards in viewitems(successRewards))
                 self.__safeCall(self.__onRewardsReceivedCallback, rewardsGenerator)
         else:
             SystemMessages.pushI18nMessage(backport.text(R.strings.system_messages.battlePass.rewardChoice.error()), type=SystemMessages.SM_TYPE.Error, priority=NotificationPriorityLevel.HIGH)

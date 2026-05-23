@@ -6,7 +6,7 @@ from gui.prb_control.entities.base.unit.entity import UnitEntity
 from gui.impl import backport
 from gui.impl.gen import R
 from last_stand.gui.ls_gui_constants import QUEUE_TYPE_TO_DIFFICULTY_LEVEL
-from last_stand_common.last_stand_constants import UNIT_LS_EXTRA_DATA_KEY, UNIT_DIFFICULTY_LEVELS_KEY
+from last_stand_common.last_stand_constants import UNIT_LS_EXTRA_DATA_KEY, UNIT_DIFFICULTY_LEVELS_KEY, DEFAULT_UNIT_DIFFICULTY_LEVELS
 
 def getPlatoonSlotsData(entity, queueType):
     slots = {}
@@ -25,7 +25,7 @@ def getPlatoonSlotsData(entity, queueType):
                     continue
                 if slotInfo.player.dbID != player['dbID']:
                     continue
-                availableQueueTypes = slotInfo.player.extraData.get(UNIT_LS_EXTRA_DATA_KEY, {}).get(UNIT_DIFFICULTY_LEVELS_KEY, [])
+                availableQueueTypes = slotInfo.player.extraData.get(UNIT_LS_EXTRA_DATA_KEY, {}).get(UNIT_DIFFICULTY_LEVELS_KEY, DEFAULT_UNIT_DIFFICULTY_LEVELS)
                 if queueType in availableQueueTypes:
                     continue
                 maxAvailableQueue = max(availableQueueTypes)

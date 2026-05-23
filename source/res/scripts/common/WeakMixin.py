@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/WeakMixin.py
-import new
+from __future__ import absolute_import
 import weakref
 from inspect import getmodule
+from future.utils import viewitems
 
 class Tapped(object):
     __slots__ = ()
@@ -12,7 +13,7 @@ class Tapped(object):
             if callable(applier):
                 applier(self)
 
-        for p, v in props.iteritems():
+        for p, v in viewitems(props):
             try:
                 setattr(self, p, v)
             except (AttributeError, TypeError):
@@ -34,7 +35,7 @@ class WeakMixin(object):
         if not kls:
             mixinName = '_{}_weakMixin'.format(srcKlass.__name__)
             module = getmodule(cls)
-            kls = new.classobj(mixinName, (cls, srcKlass), {})
+            kls = type(mixinName, (cls, srcKlass), {})
             if module is not None:
                 setattr(module, mixinName, kls)
         obj = object.__new__(kls)

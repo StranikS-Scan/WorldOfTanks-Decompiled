@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/tank_setup/context_menu/base.py
+from __future__ import absolute_import
 import typing
 from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import ContextMenu, CMLabel
 from gui.Scaleform.framework.managers.context_menu import CM_BUY_COLOR

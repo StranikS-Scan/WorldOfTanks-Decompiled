@@ -431,6 +431,7 @@ COMP7_BANNER_FIRST_APPEARANCE_TIMESTAMP = 'comp7BannerFirstAppearanceTimestamp'
 COMP7_LIGHT_BANNER_FIRST_APPEARANCE_TIMESTAMP = 'comp7LightBannerFirstAppearanceTimestamp'
 BATTLE_ROYALE_BANNER_FIRST_APPEARANCE_TIMESTAMP = 'battleRoyaleBannerFirstAppearanceTimestamp'
 FUN_RANDOM_BANNER_INTRO_CLICK_TIMESTAMP = 'funRandomBannerIntroClickTimestamp'
+FUN_RANDOM_BANNER_LAST_VISIBLE_PROGRESSION_NAME = 'funRandomBannerLastVisibleProgressionName'
 FUN_RANDOM_LAST_PRESET = 'funRandomLastPreset'
 FUN_RANDOM_PROGRESSION_OPENED = 'funRandomProgressionOpened'
 FUN_RANDOM_INF_PROGRESSION_OPENED = 'funRandomInfProgressionOpened'
@@ -1245,7 +1246,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                            'AdvancedGraphicSettings': {'HAVOK_ENABLED': True,
                                                                                        'TERRAIN_TESSELLATION_ENABLED': True,
                                                                                        'SNIPER_MODE_TERRAIN_TESSELLATION_ENABLED': True,
-                                                                                       'TRACK_PHYSICS_QUALITY': True}},
+                                                                                       'TRACK_PHYSICS_QUALITY': True,
+                                                                                       'VISIBILITY_TUNNEL_ENABLED': True}},
                                        'FeedbackSettings': {'feedbackBattleBorderMap': {'battleBorderMapType': True,
                                                                                         'battleBorderMapMode': True},
                                                             'feedbackQuestsProgress': {ScorePanelStorageKeys.SHOW_HP_VALUES: True,
@@ -1414,6 +1416,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 COMP7_LIGHT_BANNER_FIRST_APPEARANCE_TIMESTAMP: 0,
                 BATTLE_ROYALE_BANNER_FIRST_APPEARANCE_TIMESTAMP: 0,
                 FUN_RANDOM_BANNER_INTRO_CLICK_TIMESTAMP: 0,
+                FUN_RANDOM_BANNER_LAST_VISIBLE_PROGRESSION_NAME: '',
                 FUN_RANDOM_LAST_PRESET: 'undefined',
                 FUN_RANDOM_PROGRESSION_OPENED: False,
                 FUN_RANDOM_INF_PROGRESSION_OPENED: False,

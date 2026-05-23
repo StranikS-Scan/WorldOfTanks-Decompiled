@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/personal/personal_missions_operations.py
+from __future__ import absolute_import
 import operator
+from future.utils import viewitems
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.missions import missions_helper
@@ -26,8 +28,8 @@ class PersonalMissionOperations(LobbySubView, PersonalMissionOperationsMeta, Per
     def showInfo(self):
         pass
 
-    def onOperationClick(self, branch, operationID):
-        self.setBranch(branch)
+    def onOperationClick(self, pmType, operationID):
+        self.setBranch(pmType)
         self.setOperationID(operationID)
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS), ctx={'previewAlias': self.getAlias()}), scope=EVENT_BUS_SCOPE.LOBBY)
 
@@ -51,7 +53,7 @@ class PersonalMissionOperations(LobbySubView, PersonalMissionOperationsMeta, Per
         operations = []
         timeIconAlreadySet = False
         for branch in PM_BRANCH.V1_BRANCHES:
-            for oID, o in sorted(self._eventsCache.getPersonalMissions().getOperationsForBranch(branch).iteritems(), key=operator.itemgetter(0)):
+            for oID, o in sorted(viewitems(self._eventsCache.getPersonalMissions().getOperationsForBranch(branch)), key=operator.itemgetter(0)):
                 state = PERSONAL_MISSIONS_ALIASES.OPERATION_LOCKED_STATE
                 tooltipAlias = TOOLTIPS_CONSTANTS.OPERATION
                 postponedTime = ''

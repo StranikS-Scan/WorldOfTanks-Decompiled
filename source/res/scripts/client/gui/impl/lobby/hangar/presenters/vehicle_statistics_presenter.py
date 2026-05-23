@@ -41,9 +41,9 @@ class VehiclesStatisticsPresenter(ViewComponent[VehicleStatisticsModel]):
         return super(VehiclesStatisticsPresenter, self).getViewModel()
 
     def createToolTipContent(self, event, contentID):
-        if contentID == R.views.lobby.battle_pass.tooltips.VehiclePointsTooltipView():
+        if contentID == R.views.mono.battle_pass.tooltips.vehicle_bp_points():
             return VehiclePointsTooltipView(int(event.getArgument('intCD')))
-        return SimpleTooltipContent(R.views.lobby.battle_pass.tooltips.BattlePassOnPauseTooltipView()) if contentID == R.views.lobby.battle_pass.tooltips.BattlePassOnPauseTooltipView() else super(VehiclesStatisticsPresenter, self).createToolTipContent(event=event, contentID=contentID)
+        return SimpleTooltipContent(R.views.mono.battle_pass.tooltips.on_pause()) if contentID == R.views.mono.battle_pass.tooltips.on_pause() else super(VehiclesStatisticsPresenter, self).createToolTipContent(event=event, contentID=contentID)
 
     def _getEvents(self):
         return ((self.__accountStyles.onChanged, self.__fillVehicles),

@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: open_bundle/scripts/client/open_bundle/gui/impl/lobby/notifications/special_rewards_notification.py
+from __future__ import absolute_import
 from functools import partial
+from future.utils import viewitems
+from gui.customization.constants import CustomizationModes, CustomizationModeSource
 from helpers import dependency
-from open_bundle.gui.impl.gen.view_models.views.lobby.notifications.special_rewards_notification_model import SpecialRewardsNotificationModel
-from open_bundle.helpers.bonuses.bonus_packers import packBonusModelAndTooltipData, sortBonuses
-from open_bundle.skeletons.open_bundle_controller import IOpenBundleController
-from gui.Scaleform.daapi.view.lobby.customization.shared import isC11nEnabled
+from gui.Scaleform.daapi.view.lobby.customization.shared import isC11nEnabled, CustomizationTabs
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getVehicleCDForStyle
 from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.gf_notifications.notification_base import NotificationBase
@@ -13,6 +13,10 @@ from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.server_events.bonuses import getNonQuestBonuses
 from gui.shared.event_dispatcher import showHangar, showStylePreview, selectVehicleInHangar
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from open_bundle.gui.impl.gen.view_models.views.lobby.notifications.special_rewards_notification_model import SpecialRewardsNotificationModel
+from open_bundle.helpers.bonuses.bonus_packers import packBonusModelAndTooltipData, sortBonuses
+from open_bundle.helpers.bonuses.bonuses_constants import ATTACHMENTS_TOKEN_NAME
+from open_bundle.skeletons.open_bundle_controller import IOpenBundleController
 from skeletons.gui.customization import ICustomizationService
 
 class SpecialRewardsNotification(NotificationBase):
@@ -51,13 +55,13 @@ class SpecialRewardsNotification(NotificationBase):
     @replaceNoneKwargsModel
     def __fillBonuses(self, bonusesInfo, model=None):
         bonuses = []
-        for k, v in bonusesInfo.iteritems():
+        for k, v in viewitems(bonusesInfo):
             bonuses.extend(getNonQuestBonuses(k, v))
 
         bonuses = sortBonuses(bonuses)
         bonusModels = model.getBonuses()
         bonusModels.clear()
-        packBonusModelAndTooltipData(bonuses, bonusModels)
+        packBonusModelAndTooltipData(bonuses, bonusModels, showAttachmentSet=True)
 
     @args2params(str, int)
     def __onShowReward(self, bonusType, bonusId):
@@ -68,9 +72,15 @@ class SpecialRewardsNotification(NotificationBase):
                 showStylePreview(vehicleCD, style, backCallback=showHangar)
             elif bonusType == 'vehicles':
                 self.__selectVehicle(vehicleCD=bonusId)
-            elif bonusType == 'attachment':
+            elif bonusType in ('attachment', ATTACHMENTS_TOKEN_NAME):
                 if isC11nEnabled():
-                    self.__c11nService.showCustomization()
+
+                    def _callback():
+                        ctx = self.__c11nService.getCtx()
+                        ctx.changeMode(CustomizationModes.CUSTOM, source=CustomizationModeSource.NOTIFICATION)
+                        ctx.mode.changeTab(tabId=CustomizationTabs.ATTACHMENTS)
+
+                    self.__c11nService.showCustomization(tabId=CustomizationTabs.ATTACHMENTS, callback=_callback)
                 else:
                     showHangar()
 

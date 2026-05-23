@@ -1,0 +1,11 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
+# Embedded file name: scripts/common/py2to3/moves/io.py
+from __future__ import absolute_import
+from io import BytesIO, StringIO
+from py2to3.utils import PY3
+if PY3:
+    FastBytesIO = BytesIO
+    FastStringIO = StringIO
+else:
+    from cStringIO import StringIO as FastStringIO
+    FastBytesIO = FastStringIO

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/fullscreen_video_view.py
+from __future__ import absolute_import
 import logging
 import BigWorld
 import SoundGroups

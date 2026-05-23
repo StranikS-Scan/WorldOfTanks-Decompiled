@@ -6,12 +6,9 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.skill_model import SkillMo
 
 class TankmanStates(Enum):
     RECEIVED = 'received'
-    FREE = 'free'
-    PAID = 'paid'
+    PROGRESSION = 'progression'
     IN_SHOP = 'inShop'
-    QUEST_CHAIN = 'questChain'
     NOT_FULL = 'notFull'
-    AVAILABLE_IN_QUEST_CHAIN = 'availableInQuestChain'
     UNAVAILABLE = 'unavailable'
 
 

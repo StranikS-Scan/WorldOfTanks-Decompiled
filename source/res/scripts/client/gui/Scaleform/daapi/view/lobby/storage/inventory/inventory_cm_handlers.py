@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inventory/inventory_cm_handlers.py
+from __future__ import absolute_import
 from adisp import adisp_process
 from gui import shop
 from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import ContextMenu, option, CMLabel
@@ -21,11 +22,11 @@ class ModulesShellsCMHandler(ContextMenu):
     __sqGen = SequenceIDGenerator()
     _itemsCache = dependency.descriptor(IItemsCache)
 
-    @option(__sqGen.next(), CMLabel.INFORMATION)
+    @option(__sqGen.nextSequenceID, CMLabel.INFORMATION)
     def showInfo(self):
         shared_events.showStorageModuleInfo(self._id)
 
-    @option(__sqGen.next(), CMLabel.SELL)
+    @option(__sqGen.nextSequenceID, CMLabel.SELL)
     def sell(self):
         showSellDialog(self._id)
 
@@ -40,7 +41,7 @@ class ModulesShellsNoSaleCMHandler(ContextMenu):
     _sqGen = SequenceIDGenerator()
     _itemsCache = dependency.descriptor(IItemsCache)
 
-    @option(_sqGen.next(), CMLabel.INFORMATION)
+    @option(_sqGen.nextSequenceID, CMLabel.INFORMATION)
     def showInfo(self):
         shared_events.showStorageModuleInfo(self._id)
 
@@ -55,11 +56,11 @@ class _ArmingCMHandler(ContextMenu):
     _sqGen = SequenceIDGenerator()
     _itemsCache = dependency.descriptor(IItemsCache)
 
-    @option(_sqGen.next(), CMLabel.INFORMATION)
+    @option(_sqGen.nextSequenceID, CMLabel.INFORMATION)
     def showInfo(self):
         shared_events.showStorageModuleInfo(self._id)
 
-    @option(_sqGen.next(), CMLabel.SELL)
+    @option(_sqGen.nextSequenceID, CMLabel.SELL)
     def sell(self):
         showSellDialog(self._id)
 
@@ -85,7 +86,7 @@ class _ArmingCMHandler(ContextMenu):
 
 class EquipmentCMHandler(_ArmingCMHandler):
 
-    @option(_ArmingCMHandler._sqGen.next(), CMLabel.BUY_MORE)
+    @option(_ArmingCMHandler._sqGen.nextSequenceID, CMLabel.BUY_MORE)
     def buy(self):
         typeID = self._itemsCache.items.getItemByCD(self._id).itemTypeID if self._id else UNDEFINED_ITEM_CD
         if typeID == GUI_ITEM_TYPE.EQUIPMENT:
@@ -110,11 +111,11 @@ class EquipmentCMHandler(_ArmingCMHandler):
 class OptionalDeviceCMHandler(_ArmingCMHandler):
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
-    @option(_ArmingCMHandler._sqGen.next(), CMLabel.BUY_MORE)
+    @option(_ArmingCMHandler._sqGen.nextSequenceID, CMLabel.BUY_MORE)
     def buy(self):
         shop.showBuyOptionalDevice(self._id, source=_SOURCE, origin=_ORIGIN)
 
-    @option(_ArmingCMHandler._sqGen.next(), CMLabel.UPGRADE)
+    @option(_ArmingCMHandler._sqGen.nextSequenceID, CMLabel.UPGRADE)
     def upgrade(self):
         module = self._itemsCache.items.getItemByCD(int(self._id))
         ItemsActionsFactory.doAction(ItemsActionsFactory.UPGRADE_OPT_DEVICE, module, None, None, None)
@@ -160,15 +161,15 @@ class BattleBoostersCMHandler(ContextMenu):
         super(BattleBoostersCMHandler, self)._initFlashValues(ctx)
         self._enabled = bool(ctx.enabled)
 
-    @option(__sqGen.next(), CMLabel.INFORMATION)
+    @option(__sqGen.nextSequenceID, CMLabel.INFORMATION)
     def showInfo(self):
         shared_events.showStorageModuleInfo(self._id)
 
-    @option(__sqGen.next(), CMLabel.SELL)
+    @option(__sqGen.nextSequenceID, CMLabel.SELL)
     def sell(self):
         showBattleBoosterSellDialog(self._id)
 
-    @option(__sqGen.next(), CMLabel.BUY_MORE)
+    @option(__sqGen.nextSequenceID, CMLabel.BUY_MORE)
     def buy(self):
         shop.showBattleBooster(self._id, source=_SOURCE, origin=_ORIGIN)
 
@@ -189,16 +190,16 @@ class BattleBoostersCMHandler(ContextMenu):
 class DemountKitsCMHandler(ContextMenu):
     __sqGen = SequenceIDGenerator()
 
-    @option(__sqGen.next(), CMLabel.INFORMATION)
+    @option(__sqGen.nextSequenceID, CMLabel.INFORMATION)
     def showInfo(self):
         shared_events.showGoodieInfo(self._id)
 
-    @option(__sqGen.next(), CMLabel.SELL)
+    @option(__sqGen.nextSequenceID, CMLabel.SELL)
     @adisp_process
     def sell(self):
         raise NotImplementedError
 
-    @option(__sqGen.next(), CMLabel.BUY_MORE)
+    @option(__sqGen.nextSequenceID, CMLabel.BUY_MORE)
     def buy(self):
         raise NotImplementedError
 
@@ -212,16 +213,16 @@ class DemountKitsCMHandler(ContextMenu):
 class RecertificationFormsCMHandler(ContextMenu):
     __sqGen = SequenceIDGenerator()
 
-    @option(__sqGen.next(), CMLabel.INFORMATION)
+    @option(__sqGen.nextSequenceID, CMLabel.INFORMATION)
     def showInfo(self):
         shared_events.showGoodieInfo(self._id)
 
-    @option(__sqGen.next(), CMLabel.SELL)
+    @option(__sqGen.nextSequenceID, CMLabel.SELL)
     @adisp_process
     def sell(self):
         raise NotImplementedError
 
-    @option(__sqGen.next(), CMLabel.BUY_MORE)
+    @option(__sqGen.nextSequenceID, CMLabel.BUY_MORE)
     def buy(self):
         raise NotImplementedError
 
@@ -235,16 +236,16 @@ class RecertificationFormsCMHandler(ContextMenu):
 class MentoringLicensesCMHandler(ContextMenu):
     __sqGen = SequenceIDGenerator()
 
-    @option(__sqGen.next(), CMLabel.INFORMATION)
+    @option(__sqGen.nextSequenceID, CMLabel.INFORMATION)
     def showInfo(self):
         shared_events.showGoodieInfo(self._id)
 
-    @option(__sqGen.next(), CMLabel.SELL)
+    @option(__sqGen.nextSequenceID, CMLabel.SELL)
     @adisp_process
     def sell(self):
         raise NotImplementedError
 
-    @option(__sqGen.next(), CMLabel.BUY_MORE)
+    @option(__sqGen.nextSequenceID, CMLabel.BUY_MORE)
     def buy(self):
         raise NotImplementedError
 

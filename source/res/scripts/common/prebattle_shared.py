@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/prebattle_shared.py
+from __future__ import absolute_import
 import typing
+from future.utils import lfilter, viewitems, viewvalues
 import nations
 from items import vehicles, ITEM_TYPES
 from items.badges_common import BadgesCommon
@@ -99,7 +101,7 @@ def isTeamValid(accountsInfo, limits):
     totalLevel = 0
     observerCount = 0
     vehs = {}
-    for accInfo in accountsInfo.itervalues():
+    for accInfo in viewvalues(accountsInfo):
         if not accInfo['state'] & PREBATTLE_ACCOUNT_STATE.READY:
             continue
         if 'vehTypeCompDescr' not in accInfo or 'vehLevel' not in accInfo:
@@ -138,7 +140,7 @@ def isTeamValid(accountsInfo, limits):
             return (False, 'limit/totalLevel')
         vehicleLimits = limits['vehicles']
         if vehicleLimits is not None:
-            for vehTypeCompDescr, (minCount, maxCount) in vehicleLimits.iteritems():
+            for vehTypeCompDescr, (minCount, maxCount) in viewitems(vehicleLimits):
                 count = vehs.get(vehTypeCompDescr, 0)
                 if not minCount <= count <= maxCount:
                     return (False, 'limits/vehicles')
@@ -258,8 +260,8 @@ def getClanWarsExtraEquipments(clansEquipments, joinedAccountsDBIDs, prebattleID
     equipmentIDs = cache.equipmentIDs()
     equipments = cache.equipments()
     extraEquipments = {}
-    for team, info in clansEquipments.iteritems():
-        accountDBIDs = filter(lambda dbID: dbID in joinedAccountsDBIDs, info['top_leaders'])
+    for info in viewvalues(clansEquipments):
+        accountDBIDs = lfilter(lambda dbID: dbID in joinedAccountsDBIDs, info['top_leaders'])
         if accountDBIDs:
             extraEquipments[accountDBIDs[0]] = {'prebattleID': prebattleID,
              'clanDBID': 0,

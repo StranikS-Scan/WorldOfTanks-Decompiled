@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/tooltips/battle_pass_points_view.py
+from __future__ import absolute_import
 import logging
 from constants import ARENA_BONUS_TYPE
 from frameworks.wulf import ViewSettings

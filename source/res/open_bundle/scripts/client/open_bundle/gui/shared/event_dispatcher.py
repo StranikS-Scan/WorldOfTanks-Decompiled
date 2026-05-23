@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: open_bundle/scripts/client/open_bundle/gui/shared/event_dispatcher.py
+from __future__ import absolute_import
 from gui.impl.gen import R
 from wg_async import wg_async, wg_await
 

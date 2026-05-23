@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_pass/state_machine/states.py
+from __future__ import absolute_import
 from functools import partial
 import typing
+from future.utils import viewitems
 from battle_pass_common import BattlePassRewardReason, get3DStyleProgressToken
 from frameworks.state_machine import ConditionTransition, State, StateEvent, StateFlags
 from gui.battle_pass.battle_pass_helpers import asBPVideoName, getStyleForChapter, getStyleInfoForChapter, makeChapterMediaName, makeProgressionStyleMediaName, showBPFullscreenVideo
@@ -105,7 +107,7 @@ class ChoiceItemState(State):
             if machine.hasRewardToChoose():
 
                 def onCloseCallback():
-                    for token, isTaken in processRewardsToChoose(machine.getRewardsToChoose()).iteritems():
+                    for token, isTaken in viewitems(processRewardsToChoose(machine.getRewardsToChoose())):
                         machine.removeRewardToChoose(token, isTaken)
 
                     machine.post(StateEvent())

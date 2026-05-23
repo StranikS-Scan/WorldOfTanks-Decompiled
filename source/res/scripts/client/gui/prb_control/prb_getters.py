@@ -11,6 +11,7 @@ from soft_exception import SoftException
 from PlayerEvents import g_playerEvents
 if TYPE_CHECKING:
     from typing import Optional, TypeVar
+    from ClientPrebattle import ClientPrebattle
     from prebattle_shared import PrebattleSettings
     from gui.prb_control.entities.base.entity import BasePrbEntity
     PrbEntityType = TypeVar('PrbEntityType', bound=BasePrbEntity)

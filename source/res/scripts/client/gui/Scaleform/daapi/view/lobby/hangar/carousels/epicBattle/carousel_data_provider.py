@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/epicBattle/carousel_data_provider.py
+from __future__ import absolute_import
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import UNLOCK_VEHICLES_IN_BATTLE_HINTS
 from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL

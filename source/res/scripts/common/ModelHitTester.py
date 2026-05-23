@@ -1,11 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/ModelHitTester.py
-from collections import namedtuple
+from __future__ import absolute_import, division
 import math
 import logging
+from collections import namedtuple
+from future.utils import viewvalues, with_metaclass
 import BigWorld
 from Math import Vector2, Matrix
 from constants import IS_DEVELOPMENT, IS_CLIENT, IS_BOT
+from debug_utils import LOG_DEBUG
 from soft_exception import SoftException
 from constants import IS_EDITOR
 from wrapped_reflection_framework import ReflectionMetaclass
@@ -17,8 +20,7 @@ class ModelStatus:
     CRASHED = 1
 
 
-class HitTesterManager(object):
-    __metaclass__ = ReflectionMetaclass
+class HitTesterManager(with_metaclass(ReflectionMetaclass, object)):
     NORMAL_MODEL_TAG = 'normal'
     CRASHED_MODEL_TAG = 'crashed'
     CLIENT_MODEL_TAG = 'collisionModelClient'
@@ -26,6 +28,7 @@ class HitTesterManager(object):
     CLIENT_CAPSULE_TAG = 'capsuleScale'
 
     def __init__(self, dataSection=None):
+        super(HitTesterManager, self).__init__()
         self.__hitTesters = {ModelStatus.NORMAL: None,
          ModelStatus.CRASHED: None}
         self.__status = ModelStatus.NORMAL
@@ -68,7 +71,7 @@ class HitTesterManager(object):
             self.__status = modelStatus
 
     def loadHitTesters(self):
-        for _, hitTester in self.__hitTesters.iteritems():
+        for hitTester in viewvalues(self.__hitTesters):
             if hitTester:
                 hitTester.loadBspModel()
 
@@ -76,7 +79,7 @@ class HitTesterManager(object):
         if IS_EDITOR:
             section.writeString(self.CLIENT_MODEL_TAG, self.edClientBspModel)
             section.writeString(self.SERVER_MODEL_TAG, self.edServerBspModel)
-            if self.edCrashBspModel is not '':
+            if self.edCrashBspModel:
                 section.writeString(self.CRASHED_MODEL_TAG, self.edCrashBspModel)
             elif section.has_key(self.CRASHED_MODEL_TAG):
                 section.deleteSection(self.CRASHED_MODEL_TAG)

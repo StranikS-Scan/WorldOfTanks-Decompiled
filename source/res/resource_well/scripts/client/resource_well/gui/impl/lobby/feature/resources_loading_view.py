@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: resource_well/scripts/client/resource_well/gui/impl/lobby/feature/resources_loading_view.py
 from __future__ import absolute_import, division
-from future.builtins import str
 import logging
+from builtins import str
 from future.utils import iteritems
 from adisp import adisp_process
 from frameworks.wulf import ViewSettings, WindowFlags, ViewStatus

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_pass/rewards_sort.py
+from __future__ import absolute_import
 import logging
 import re
 from enum import Enum, unique
@@ -126,36 +127,36 @@ def _extractRewardNation(rewardRawName):
     return _REWARD_NATION_EXTRACTOR.sub('\\1', rewardRawName)
 
 
-def _rewardTypeComparator(first, second):
-    return cmp(safeIndexOf(_RewardType.makeValue(first[0]), _REWARDS_TYPES_ORDER), safeIndexOf(_RewardType.makeValue(second[0]), _REWARDS_TYPES_ORDER))
+def _rewardTypeSortKey(item):
+    return safeIndexOf(_RewardType.makeValue(item[0]), _REWARDS_TYPES_ORDER)
 
 
-def _compareRewardsByNation(first, second):
-    return cmp(GUI_NATIONS_ORDER_INDEX.get(_extractRewardNation(first[0]), NONE_INDEX), GUI_NATIONS_ORDER_INDEX.get(_extractRewardNation(second[0]), NONE_INDEX))
+def _rewardSortByNation(item):
+    return GUI_NATIONS_ORDER_INDEX.get(_extractRewardNation(item[0]), NONE_INDEX)
 
 
-def _compareRewardsByType(rewardType, first, second):
+def _rewardSortByType(rewardType, item):
     order = _REWARDS_ORDER[rewardType]
     extractor = _REWARD_BATTLE_BOOSTER_EXTRACTOR if rewardType == _RewardType.BATTLE_BOOSTER else _REWARD_NAME_EXTRACTOR
-    return cmp(safeIndexOf(_Reward.makeValue(_extractRewardName(first[0], extractor)), order), safeIndexOf(_Reward.makeValue(_extractRewardName(second[0], extractor)), order))
+    return safeIndexOf(_Reward.makeValue(_extractRewardName(item[0], extractor)), order)
 
 
-def _defaultComparator(first, second):
-    return cmp(first[0], second[0])
+def _defaultItemSort(item):
+    return item[0]
 
 
-_REWARDS_COMPARATORS = {_RewardType.TROPHY: partial(_compareRewardsByType, _RewardType.TROPHY),
- _RewardType.DEVICE: partial(_compareRewardsByType, _RewardType.DEVICE),
- _RewardType.CREW_BOOK: _compareRewardsByNation,
- _RewardType.GUIDE: _compareRewardsByNation,
- _RewardType.BROCHURE: _compareRewardsByNation,
- _RewardType.BLUEPRINT: _compareRewardsByNation,
- _RewardType.BATTLE_BOOSTER: partial(_compareRewardsByType, _RewardType.BATTLE_BOOSTER),
- _RewardType.MODERNIZED_DEVICE: partial(_compareRewardsByType, _RewardType.MODERNIZED_DEVICE)}
+_REWARDS_SORT_KEYS = {_RewardType.TROPHY: partial(_rewardSortByType, _RewardType.TROPHY),
+ _RewardType.DEVICE: partial(_rewardSortByType, _RewardType.DEVICE),
+ _RewardType.CREW_BOOK: _rewardSortByNation,
+ _RewardType.GUIDE: _rewardSortByNation,
+ _RewardType.BROCHURE: _rewardSortByNation,
+ _RewardType.BLUEPRINT: _rewardSortByNation,
+ _RewardType.BATTLE_BOOSTER: partial(_rewardSortByType, _RewardType.BATTLE_BOOSTER),
+ _RewardType.MODERNIZED_DEVICE: partial(_rewardSortByType, _RewardType.MODERNIZED_DEVICE)}
 
-def getRewardTypesComparator():
-    return _rewardTypeComparator
+def getTypesSortKey():
+    return _rewardTypeSortKey
 
 
-def getRewardsComparator(rewardTypeName):
-    return _REWARDS_COMPARATORS.get(_RewardType.makeValue(rewardTypeName), _defaultComparator)
+def getItemsSortKey(rewardTypeName):
+    return _REWARDS_SORT_KEYS.get(_RewardType.makeValue(rewardTypeName), _defaultItemSort)

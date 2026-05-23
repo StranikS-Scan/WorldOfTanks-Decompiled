@@ -4,13 +4,15 @@ from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getSteelHu
 from gui.shared.event_dispatcher import showShop
 from helpers import dependency
 from gui.impl.gen import R
+from battle_royale.gui.impl.lobby.views.user_missions.hangar_widget.overlap_ctrl import BattleRoyaleOverlapCtrlMixin
+from gui.impl.lobby.user_missions.hangar_widget.tooltip_positioner import TooltipPositionerMixin
 from gui.impl.pub.view_component import ViewComponent
 from skeletons.gui.game_control import IBattleRoyaleController
 from skeletons.gui.shared import IItemsCache
 from battle_royale.gui.impl.lobby.tooltips.shop_button_tooltip_view import ShopButtonTooltipView
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.widget.event_shop_model import EventShopModel
 
-class BattleRoyaleEventShopPresenter(ViewComponent[EventShopModel]):
+class BattleRoyaleEventShopPresenter(TooltipPositionerMixin, BattleRoyaleOverlapCtrlMixin, ViewComponent[EventShopModel]):
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __itemsCache = dependency.descriptor(IItemsCache)
 
@@ -30,6 +32,7 @@ class BattleRoyaleEventShopPresenter(ViewComponent[EventShopModel]):
         return super(BattleRoyaleEventShopPresenter, self)._getCallbacks() + (('cache.mayConsumeWalletResources', self.__update),)
 
     def _onLoading(self):
+        self.initOverlapCtrl()
         super(BattleRoyaleEventShopPresenter, self)._onLoading()
         self.__update()
 

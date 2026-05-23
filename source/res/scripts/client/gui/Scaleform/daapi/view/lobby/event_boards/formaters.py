@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/event_boards/formaters.py
+from __future__ import absolute_import
+from future.utils import viewitems
 import nations
 from gui import makeHtmlString
 from gui.impl import backport
@@ -84,7 +86,7 @@ def vehicleTypeText(vType):
 
 
 def formatTimeToEnd(timeValue, period):
-    if timeValue is 0:
+    if not timeValue:
         timeValue = 1
         period = FORMAT_MINUTE_STR
     timeName = EVENT_BOARDS.time_period(period)
@@ -151,7 +153,7 @@ def formatAdditionalParameters(method, params):
         result = {}
         for idx in range(3):
             if idx in additional:
-                result.update({name:func(params[idx]) for name, func in additional[idx].iteritems()})
+                result.update({name:func(params[idx]) for name, func in viewitems(additional[idx])})
 
         return result
     return {}

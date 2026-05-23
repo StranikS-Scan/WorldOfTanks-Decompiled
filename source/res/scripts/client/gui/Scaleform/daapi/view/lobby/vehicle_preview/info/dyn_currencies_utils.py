@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_preview/info/dyn_currencies_utils.py
+from __future__ import absolute_import
 import typing
+from future.utils import viewitems
 from battle_pass_common import CurrencyBP
 from gui.game_control.seniority_awards_controller import WDR_CURRENCY
 from gui.shared.money import Currency, Money
@@ -25,7 +27,7 @@ class DynMoney(object):
         return self._values.get(currency, default)
 
     def getCurrency(self):
-        value = first(self._values.iterkeys())
+        value = first(self._values)
         return value or ''
 
     def isDefined(self):
@@ -60,7 +62,7 @@ def getBuyProductMethod(money):
 
 
 def separatePrice(price):
-    return ({c:v for c, v in price.iteritems() if isCurrency(c)}, {c:v for c, v in price.iteritems() if isDynCurrency(c)})
+    return ({c:v for c, v in viewitems(price) if isCurrency(c)}, {c:v for c, v in viewitems(price) if isDynCurrency(c)})
 
 
 def mayObtainForMoney(money):

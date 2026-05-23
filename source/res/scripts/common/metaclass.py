@@ -5,6 +5,7 @@
 class Metaclass(type):
 
     def __init__(cls, name, bases, attrs):
+        super(Metaclass, cls).__init__(name, bases, attrs)
         mro = list(cls.__mro__)
         mro.pop(0)
         for base in reversed(mro):

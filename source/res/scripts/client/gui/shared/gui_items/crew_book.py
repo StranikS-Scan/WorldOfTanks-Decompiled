@@ -11,18 +11,20 @@ from helpers import dependency
 from items.components.crew_books_constants import CREW_BOOK_RARITY, CREW_BOOK_SPREAD
 from skeletons.gui.lobby_context import ILobbyContext
 
-def orderCmp(item1, item2, rarityReverse=False):
+def orderCmp(item1, item2):
     itemOrder1 = item1.getBookTypeOrder()
     itemOrder2 = item2.getBookTypeOrder()
     if itemOrder1 == itemOrder2:
         return cmp(item1.getNationID(), item2.getNationID())
-    rarityCmp = 1 if itemOrder1 > itemOrder2 else -1
-    reverse = -1 if rarityReverse else 1
-    return rarityCmp * reverse
+    return 1 if itemOrder1 > itemOrder2 else -1
+
+
+def orderKey(item):
+    return (item.getBookTypeOrder(), item.getNationID())
 
 
 def sortItems(items):
-    return sorted(items, orderCmp)
+    return sorted(items, key=orderKey)
 
 
 class CrewBook(FittingItem):

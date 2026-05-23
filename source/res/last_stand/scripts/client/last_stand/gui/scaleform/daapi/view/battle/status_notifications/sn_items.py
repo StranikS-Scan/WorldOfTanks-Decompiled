@@ -83,7 +83,10 @@ class _BaseBuffSN(_LSLocalizationProvider, _DestroyTimerSN):
     def destroy(self):
         if self.lsBattleGuiCtrl:
             self.lsBattleGuiCtrl.onBuffUpdate -= self._onBuffUpdate
+        self.__callbackDelayer.destroy()
+        self.__callbackDelayer = None
         super(_BaseBuffSN, self).destroy()
+        return
 
     def getItemID(self):
         return VEHICLE_VIEW_STATE.LS_BUFF
@@ -99,16 +102,20 @@ class _BaseBuffSN(_LSLocalizationProvider, _DestroyTimerSN):
 
     def _updateLogic(self, value):
         _, params = value
-        (_, duration) = params
-        self._showWithTimer(duration)
+        (_, duration, finishTime) = params
+        self._showWithTimer(duration, finishTime)
 
-    def _showWithTimer(self, duration):
+    def _showWithTimer(self, duration, finishTime=0):
+        remaining = max(0.0, finishTime - BigWorld.serverTime())
+        if remaining == 0.0:
+            return
         self._isVisible = True
-        self._updateTimeParams(duration, 0)
+        self._updateTimeParams(duration, finishTime)
         self._sendUpdate()
-        self.__callbackDelayer.delayCallback(duration, self._hideTimer)
+        self.__callbackDelayer.delayCallback(remaining, self._hideTimer)
 
     def _hideTimer(self):
+        self.__callbackDelayer.clearCallbacks()
         self._setVisible(False)
 
     def _canActivate(self, value):

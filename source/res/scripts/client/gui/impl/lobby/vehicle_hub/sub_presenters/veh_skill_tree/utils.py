@@ -141,6 +141,8 @@ def getFullProgressionState(vehicle):
     state = VehicleState()
     for step in progression.iterOrderedSteps():
         state.addUnlock(step.stepID)
+        if step.action.isFeatureAction():
+            state.addFeature(step.action.actionID)
 
     return state
 

@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/trainings/TrainingRoomBase.py
+from __future__ import absolute_import
+from future.utils import viewvalues
 import BigWorld
 from adisp import adisp_process
 import ArenaType
@@ -24,7 +26,7 @@ from gui.prb_control.entities.base.legacy.listener import ILegacyListener
 from gui.prb_control.entities.training.legacy.ctx import SetPlayerObserverStateCtx, ChangeArenaVoipCtx, ChangeArenaGuiCtx
 from gui.prb_control.entities.training.legacy.entity import TrainingEntity
 from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.prb_control.items.prb_items import getPlayersComparator
+from gui.prb_control.items.prb_items import getPlayersSortKey
 from gui.prb_control.settings import PREBATTLE_ROSTER, PREBATTLE_SETTING_NAME
 from gui.prb_control.settings import REQUEST_TYPE, CTRL_ENTITY_TYPE
 from gui.shared import events, EVENT_BUS_SCOPE
@@ -299,7 +301,7 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
     def _makeAccountsData(self, accounts, rLabel=None):
         listData = []
         isPlayerSpeaking = self.bwProto.voipController.isPlayerSpeaking
-        accounts = sorted(accounts, cmp=getPlayersComparator())
+        accounts = sorted(accounts, key=getPlayersSortKey())
         getUser = self.usersStorage.getUser
         for account in accounts:
             vContourIcon = ''
@@ -419,7 +421,7 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
 
     def __getCreatorFromRosters(self):
         rosters = self.prbEntity.getRosters()
-        for _, roster in rosters.iteritems():
+        for roster in viewvalues(rosters):
             for account in roster:
                 if account.isCreator:
                     return account

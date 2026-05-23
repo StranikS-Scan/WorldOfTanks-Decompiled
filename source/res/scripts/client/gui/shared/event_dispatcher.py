@@ -986,10 +986,13 @@ def showBattlePass(childStateID=R.invalid(), chapterID=0, selectedChapter=0, bat
         STATES[childStateID].goTo(chapterID=chapterID, **kwargs)
         return
     guiLoader = dependency.instance(IGuiLoader)
+    bp = R.aliases.battle_pass
     if guiLoader.windowsManager.getViewByLayoutID(R.views.mono.battle_pass.main()):
-        bp = R.aliases.battle_pass
         if childStateID in (bp.Progression(), bp.PostProgression()):
             STATES[bp.ChapterChoice()].goTo(chapterID=chapterID, **kwargs)
+        STATES[childStateID].goTo(chapterID=chapterID, **kwargs)
+    elif childStateID in (bp.Progression(), bp.PostProgression()):
+        BattlePassState.goTo(childStateID=bp.ChapterChoice(), chapterID=chapterID, selectedChapter=selectedChapter, **kwargs)
         STATES[childStateID].goTo(chapterID=chapterID, **kwargs)
     else:
         BattlePassState.goTo(childStateID=childStateID, chapterID=chapterID, selectedChapter=selectedChapter, **kwargs)
@@ -1873,9 +1876,8 @@ def showSteamEmailConfirmRewardsView(rewards=None, notificationMgr=None):
 
 
 def showBattlePassTankmenVoiceover(screenID, ctx=None):
-    from gui.impl.lobby.battle_pass.tankmen_voiceover_view import TankmenVoiceoverWindow
-    window = TankmenVoiceoverWindow(screenID=screenID, ctx=ctx)
-    window.load()
+    from gui.impl.lobby.battle_pass.states import TankmenBattlePassState
+    TankmenBattlePassState.goTo(screenID=screenID)
 
 
 @adisp.adisp_process

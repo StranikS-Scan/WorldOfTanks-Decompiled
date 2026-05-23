@@ -1985,7 +1985,7 @@
       <userString>	#vehicle_customization:special_style/2_0_progression_f	</userString>
       <description>	#vehicle_customization:special_style/2_0_progression_f_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:special_style/2_0_progression_f_desc/long	</longDescriptionSpecial>
-      <tags>	progression_required c11n2D	</tags>
+      <tags>	progression_required c11n2D volumetric	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2034,7 +2034,7 @@
       <userString>	#vehicle_customization:special_style/2_0_progression_f	</userString>
       <description>	#vehicle_customization:special_style/2_0_progression_f_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:special_style/2_0_progression_f_desc/long	</longDescriptionSpecial>
-      <tags>	progression_required c11n2D	</tags>
+      <tags>	progression_required c11n2D volumetric	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2131,7 +2131,7 @@
       <userString>	#vehicle_customization:special_style/2_0_progression_f	</userString>
       <description>	#vehicle_customization:special_style/2_0_progression_f_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:special_style/2_0_progression_f_desc/long	</longDescriptionSpecial>
-      <tags>	progression_required c11n2D	</tags>
+      <tags>	progression_required c11n2D volumetric	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2152,6 +2152,54 @@
           <modifications>
             <item>	7	</item>
           </modifications>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F18_Bat_Chatillon25t	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1308	</id>
+      <texture>	gui/maps/vehicles/styles/F18_Bat_Chatillon25t_BPXX_3Dst.png	</texture>
+      <userString>	#vehicle_customization:special_style/F18_Bat_Chatillon25t_BPXX_3Dst	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/F18_Bat_Chatillon25t_BPXX_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	F18_Bat_Chatillon25t_BPXX_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <tags>	progression_required c11n3D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	181	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
+            </item>
+          </attachments>
         </outfit>
       </outfits>
       <itemFilters>

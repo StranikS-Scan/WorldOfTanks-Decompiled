@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/tooltips/battle_pass_upgrade_style_tooltip_view.py
+from __future__ import absolute_import
 from frameworks.wulf import ViewSettings
 from gui.Scaleform.daapi.view.lobby.customization.shared import getSuitableText
 from gui.battle_pass.battle_pass_helpers import getStyleForChapter

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inhangar/inhangar_cm_handlers.py
+from __future__ import absolute_import
 from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import ContextMenu, option, CMLabel
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import enoughCreditsForRestore, getVehicleRestoreInfo
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getTradeInVehiclesUrl
@@ -23,7 +24,7 @@ class VehiclesRegularCMHandler(ContextMenu):
     __tradeInController = dependency.descriptor(ITradeInController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
-    @option(__sqGen.next(), CMLabel.EXCHANGE)
+    @option(__sqGen.nextSequenceID, CMLabel.EXCHANGE)
     def exchange(self):
         oldSellVeh = self.__tradeInController.getSelectedVehicleToSell()
         self.__tradeInController.selectVehicleToSell(self._id)
@@ -31,32 +32,32 @@ class VehiclesRegularCMHandler(ContextMenu):
             self.__tradeInController.selectVehicleToBuy(UNDEFINED_ITEM_CD)
         showShop(getTradeInVehiclesUrl())
 
-    @option(__sqGen.next(), CMLabel.INFORMATION)
+    @option(__sqGen.nextSequenceID, CMLabel.INFORMATION)
     def showInfo(self):
         shared_events.showVehicleInfo(self._id)
 
-    @option(__sqGen.next(), CMLabel.STATS)
+    @option(__sqGen.nextSequenceID, CMLabel.STATS)
     def goToStats(self):
         shared_events.showVehicleStats(self._id)
 
-    @option(__sqGen.next(), CMLabel.GO_TO_COLLECTION)
+    @option(__sqGen.nextSequenceID, CMLabel.GO_TO_COLLECTION)
     def goToCollection(self):
         vehicle = self.__itemsCache.items.getItemByCD(self._id)
         shared_events.showCollectibleVehicles(vehicle.nationID)
 
-    @option(__sqGen.next(), CMLabel.SELL)
+    @option(__sqGen.nextSequenceID, CMLabel.SELL)
     def sell(self):
         shared_events.showVehicleSellDialog(self.__itemsCache.items.getItemByCD(self._id).invID)
 
-    @option(__sqGen.next(), CMLabel.ADD_TO_COMPARE)
+    @option(__sqGen.nextSequenceID, CMLabel.ADD_TO_COMPARE)
     def addToCompare(self):
         self.__comparisonBasket.addVehicle(self._id)
 
-    @option(__sqGen.next(), CMLabel.SHOW_IN_HANGAR)
+    @option(__sqGen.nextSequenceID, CMLabel.SHOW_IN_HANGAR)
     def showInHangar(self):
         shared_events.selectVehicleInHangar(self._id)
 
-    @option(__sqGen.next(), CMLabel.NATION_CHANGE)
+    @option(__sqGen.nextSequenceID, CMLabel.NATION_CHANGE)
     def changeNation(self):
         ItemsActionsFactory.doAction(ItemsActionsFactory.CHANGE_NATION, self._id)
 
@@ -111,19 +112,19 @@ class VehiclesRestoreCMHandler(ContextMenu):
     __itemsCache = dependency.descriptor(IItemsCache)
     __comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
-    @option(__sqGen.next(), CMLabel.INFORMATION)
+    @option(__sqGen.nextSequenceID, CMLabel.INFORMATION)
     def showInfo(self):
         shared_events.showVehicleInfo(self._id)
 
-    @option(__sqGen.next(), CMLabel.STATS)
+    @option(__sqGen.nextSequenceID, CMLabel.STATS)
     def goToStats(self):
         shared_events.showVehicleStats(self._id)
 
-    @option(__sqGen.next(), CMLabel.RESTORE)
+    @option(__sqGen.nextSequenceID, CMLabel.RESTORE)
     def restore(self):
         ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, self._id)
 
-    @option(__sqGen.next(), CMLabel.ADD_TO_COMPARE)
+    @option(__sqGen.nextSequenceID, CMLabel.ADD_TO_COMPARE)
     def addToCompare(self):
         self.__comparisonBasket.addVehicle(self._id)
 
@@ -154,27 +155,27 @@ class VehiclesRentedCMHandler(ContextMenu):
     __comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
 
-    @option(__sqGen.next(), CMLabel.INFORMATION)
+    @option(__sqGen.nextSequenceID, CMLabel.INFORMATION)
     def showInfo(self):
         shared_events.showVehicleInfo(self._id)
 
-    @option(__sqGen.next(), CMLabel.STATS)
+    @option(__sqGen.nextSequenceID, CMLabel.STATS)
     def goToStats(self):
         shared_events.showVehicleStats(self._id)
 
-    @option(__sqGen.next(), CMLabel.BUY)
+    @option(__sqGen.nextSequenceID, CMLabel.BUY)
     def buy(self):
         ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, self._id)
 
-    @option(__sqGen.next(), CMLabel.REMOVE)
+    @option(__sqGen.nextSequenceID, CMLabel.REMOVE)
     def remove(self):
         shared_events.showVehicleSellDialog(self.__itemsCache.items.getItemByCD(self._id).invID)
 
-    @option(__sqGen.next(), CMLabel.ADD_TO_COMPARE)
+    @option(__sqGen.nextSequenceID, CMLabel.ADD_TO_COMPARE)
     def addToCompare(self):
         self.__comparisonBasket.addVehicle(self._id)
 
-    @option(__sqGen.next(), CMLabel.SHOW_IN_HANGAR)
+    @option(__sqGen.nextSequenceID, CMLabel.SHOW_IN_HANGAR)
     def showInHangar(self):
         shared_events.selectVehicleInHangar(self._id)
 

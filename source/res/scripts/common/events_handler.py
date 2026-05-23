@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/events_handler.py
+from __future__ import absolute_import
 from inspect import isfunction, ismethod, getmembers
-from metaclass import Metaclass
+from future.utils import with_metaclass
 from operator import attrgetter
 from typing import Callable, Type
 from Event import Event
+from metaclass import Metaclass
 
 def eventHandler(func):
     func.isEventHandler = True
@@ -71,8 +73,7 @@ def unsubscribeFromEvents(handler, events):
     return result
 
 
-class EventsHandler(object):
-    __metaclass__ = Metaclass
+class EventsHandler(with_metaclass(Metaclass, object)):
 
     @classmethod
     def __init_subclass__(cls, _, bases, attributes):
@@ -85,9 +86,8 @@ class EventsHandler(object):
         return unsubscribeFromEvents(self, events)
 
 
-class EventsQuery(object):
+class EventsQuery(with_metaclass(Metaclass, object)):
     EVENTS_PROPERTY_NAME = None
-    __metaclass__ = Metaclass
 
     @classmethod
     def __init_subclass__(cls, _, bases, attributes):

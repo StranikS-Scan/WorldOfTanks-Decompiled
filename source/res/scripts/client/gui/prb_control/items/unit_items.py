@@ -4,12 +4,14 @@ import copy
 import itertools
 import weakref
 from collections import namedtuple
+from past.builtins import cmp
 from UnitBase import UNIT_ROLE, UNIT_FLAGS, ROSTER_TYPE_TO_CLASS, ROSTER_TYPE
 from account_helpers import getAccountDatabaseID
 from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from gui.prb_control.prb_helpers import BadgesHelper
+from gui.shared.sort_key import SortKey
 from helpers import dependency
 from gui.prb_control.settings import CREATOR_SLOT_INDEX
 from gui.shared.utils.decorators import ReprInjector
@@ -434,11 +436,16 @@ class SupportedRosterSettings(object):
         raise SoftException('Unit type is not supported {0}'.format(prbType))
 
 
-def getUnitCandidatesComparator():
+class UnitCandidatesSortKey(SortKey):
+    __slots__ = ('candidate',)
 
-    def comparator(playerData, otherData):
-        unitInfo, chatUser = playerData
-        otherInfo, otherUser = otherData
+    def __init__(self, candidate):
+        super(UnitCandidatesSortKey, self).__init__()
+        self.candidate = candidate
+
+    def _cmp(self, other):
+        unitInfo, chatUser = self.candidate
+        otherInfo, otherUser = other.candidate
         if chatUser is not None:
             isUserFriend = chatUser.isFriend()
         else:
@@ -454,5 +461,3 @@ def getUnitCandidatesComparator():
         else:
             result = cmp(unitInfo.timeJoin, otherInfo.timeJoin)
         return result
-
-    return comparator

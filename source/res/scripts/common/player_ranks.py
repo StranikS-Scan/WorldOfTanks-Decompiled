@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/player_ranks.py
+from __future__ import absolute_import
 import typing
 from collections import namedtuple
+from future.utils import viewitems
 from typing import NamedTuple, Type
 from enum import Enum, unique
 import ResMgr
@@ -97,7 +99,7 @@ def init():
     for name, subsection in section.items():
         settings[SETTINGS_NAMES(name)] = makePlayerRankSettings(subsection)
 
-    for arenaBonusType, caps in ARENA_BONUS_TYPE_CAPS._typeToCaps.iteritems():
+    for arenaBonusType, caps in viewitems(ARENA_BONUS_TYPE_CAPS._typeToCaps):
         if ARENA_BONUS_TYPE_CAPS.PLAYER_RANK_MECHANICS in caps:
             pass
 

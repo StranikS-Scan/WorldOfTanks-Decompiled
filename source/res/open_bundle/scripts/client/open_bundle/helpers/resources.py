@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: open_bundle/scripts/client/open_bundle/helpers/resources.py
+from __future__ import absolute_import
 import typing
 from gui.impl.gen import R
 from helpers import dependency

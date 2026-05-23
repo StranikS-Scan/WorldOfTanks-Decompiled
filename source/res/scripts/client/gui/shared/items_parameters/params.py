@@ -28,6 +28,7 @@ from items import utils as items_utils
 from items.components import component_constants
 from items.components.component_constants import MODERN_HE_PIERCING_POWER_REDUCTION_FACTOR_FOR_SHIELDS
 from items.params_utils import getHeatedAimingTime, getTemperatureRateOfFire
+from math_common import round_py2_style_int
 from post_progression_common import ACTION_TYPES
 from shared_utils import findFirst, first
 from soft_exception import SoftException
@@ -1359,17 +1360,17 @@ class ShellParams(CompatibleParams):
     @property
     def normalizationAngle(self):
         _, normalizationAngle, _, _ = getShellImpactParams(self._itemDescr.type)
-        return int(math.degrees(normalizationAngle))
+        return round_py2_style_int(math.degrees(normalizationAngle))
 
     @property
     def ricochetAngle(self):
         ricochetAngleCos, _, _, _ = getShellImpactParams(self._itemDescr.type)
-        return int(math.degrees(math.acos(ricochetAngleCos)))
+        return round_py2_style_int(math.degrees(math.acos(ricochetAngleCos)))
 
     @property
     def penetrationLoss(self):
         shellType = self._itemDescr.type
-        return None if not hasattr(shellType, 'piercingPowerLossFactorByDistance') else int(shellType.piercingPowerLossFactorByDistance * 10)
+        return None if not hasattr(shellType, 'piercingPowerLossFactorByDistance') else round_py2_style_int(shellType.piercingPowerLossFactorByDistance * 10)
 
     @property
     def screensArmorMultiplier(self):

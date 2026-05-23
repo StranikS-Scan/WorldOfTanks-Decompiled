@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/event_boards/event_boards_filter_vehicles_popover.py
+from __future__ import absolute_import
 from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.daapi.view.lobby.event_boards.event_boards_vos import makeVehiclePopoverVO, vehicleValueGetter
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import packHeaderColumnData

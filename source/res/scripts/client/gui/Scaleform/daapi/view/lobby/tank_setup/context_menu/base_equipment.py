@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/tank_setup/context_menu/base_equipment.py
+from __future__ import absolute_import
 from CurrentVehicle import g_currentVehicle
 from adisp import adisp_async, adisp_process
 from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import CMLabel, option
@@ -15,27 +16,27 @@ class BaseEquipmentItemContextMenu(BaseItemContextMenu):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     _sqGen = SequenceIDGenerator()
 
-    @option(_sqGen.next(), CMLabel.INFORMATION)
+    @option(_sqGen.nextSequenceID, CMLabel.INFORMATION)
     def showInfo(self):
         self._sendSlotAction(BaseSetupModel.SHOW_INFO_SLOT_ACTION)
 
-    @option(_sqGen.next(), CMLabel.UPGRADE)
+    @option(_sqGen.nextSequenceID, CMLabel.UPGRADE)
     def upgrade(self):
         self._upgradeEquipment()
 
-    @option(_sqGen.next(), TankSetupCMLabel.SELECT)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.SELECT)
     def select(self):
         self._sendSlotAction(BaseSetupModel.SELECT_SLOT_ACTION)
 
-    @option(_sqGen.next(), TankSetupCMLabel.PUT_ON_FIRST)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.PUT_ON_FIRST)
     def putOnFirst(self):
         self._sendPutOnSlotAction(onId=FIRST_SLOT)
 
-    @option(_sqGen.next(), TankSetupCMLabel.PUT_ON_SECOND)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.PUT_ON_SECOND)
     def putOnSecond(self):
         self._sendPutOnSlotAction(onId=SECOND_SLOT)
 
-    @option(_sqGen.next(), TankSetupCMLabel.PUT_ON_THIRD)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.PUT_ON_THIRD)
     def putOnThird(self):
         self._sendPutOnSlotAction(onId=THIRD_SLOT)
 
@@ -60,23 +61,23 @@ class BaseEquipmentSlotContextMenu(BaseSlotContextMenu):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     _sqGen = SequenceIDGenerator()
 
-    @option(_sqGen.next(), CMLabel.INFORMATION)
+    @option(_sqGen.nextSequenceID, CMLabel.INFORMATION)
     def showInfo(self):
         self._sendSlotAction(BaseSetupModel.SHOW_INFO_SLOT_ACTION)
 
-    @option(_sqGen.next(), CMLabel.UPGRADE)
+    @option(_sqGen.nextSequenceID, CMLabel.UPGRADE)
     def upgrade(self):
         self._upgradeEquipment()
 
-    @option(_sqGen.next(), TankSetupCMLabel.PUT_ON_FIRST)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.PUT_ON_FIRST)
     def putOnFirst(self):
         self._sendPutOnSlotAction(onId=FIRST_SLOT)
 
-    @option(_sqGen.next(), TankSetupCMLabel.PUT_ON_SECOND)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.PUT_ON_SECOND)
     def putOnSecond(self):
         self._sendPutOnSlotAction(onId=SECOND_SLOT)
 
-    @option(_sqGen.next(), TankSetupCMLabel.PUT_ON_THIRD)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.PUT_ON_THIRD)
     def putOnThird(self):
         self._sendPutOnSlotAction(onId=THIRD_SLOT)
 
@@ -91,23 +92,23 @@ class BaseHangarEquipmentSlotContextMenu(BaseSlotContextMenu):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     _sqGen = SequenceIDGenerator()
 
-    @option(_sqGen.next(), CMLabel.INFORMATION)
+    @option(_sqGen.nextSequenceID, CMLabel.INFORMATION)
     def showInfo(self):
         self._showInfo()
 
-    @option(_sqGen.next(), CMLabel.UPGRADE)
+    @option(_sqGen.nextSequenceID, CMLabel.UPGRADE)
     def upgrade(self):
         self._upgradeEquipment()
 
-    @option(_sqGen.next(), TankSetupCMLabel.PUT_ON_FIRST)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.PUT_ON_FIRST)
     def putOnFirst(self):
         self._putOnAction(onId=FIRST_SLOT)
 
-    @option(_sqGen.next(), TankSetupCMLabel.PUT_ON_SECOND)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.PUT_ON_SECOND)
     def putOnSecond(self):
         self._putOnAction(onId=SECOND_SLOT)
 
-    @option(_sqGen.next(), TankSetupCMLabel.PUT_ON_THIRD)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.PUT_ON_THIRD)
     def putOnThird(self):
         self._putOnAction(onId=THIRD_SLOT)
 

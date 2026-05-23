@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/event_boards/event_boards_table_view.py
+from __future__ import absolute_import
 from functools import partial
 from collections import namedtuple
+from future.utils import viewitems
 import BigWorld
 from adisp import adisp_process
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
@@ -373,7 +375,7 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
         elif leaderboard:
             recalculationTS = leaderboard.getLastLeaderboardRecalculationTS()
             recalculationInterval = leaderboard.getRecalculationInterval()
-            interval = int(recalculationInterval / ONE_MINUTE)
+            interval = int(recalculationInterval // ONE_MINUTE)
             status = text_styles.main(formatUpdateTime(recalculationTS))
             statusTooltip = _ms(TOOLTIPS.SUMMARY_STATUS_TOOLTIP, interval=interval)
         else:
@@ -432,6 +434,6 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
         return None
 
     def __getCategoryByRank(self, rank):
-        for number, category in self.__rewardCategories.iteritems():
+        for number, category in viewitems(self.__rewardCategories):
             if category['rank_min'] <= rank <= category['rank_max']:
                 return number

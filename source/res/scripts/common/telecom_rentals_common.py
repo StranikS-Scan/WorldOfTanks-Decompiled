@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/telecom_rentals_common.py
+from __future__ import absolute_import
 from enum import IntEnum
 RENT_TOKEN_NAME = 'telecom_rent_token'
 PARTNERSHIP_TOKEN_NAME = 'telecom_partnership_token'

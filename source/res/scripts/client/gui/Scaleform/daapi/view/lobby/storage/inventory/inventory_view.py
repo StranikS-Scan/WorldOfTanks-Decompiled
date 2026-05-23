@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inventory/inventory_view.py
+from __future__ import absolute_import
 import copy
 from gui import GUI_NATIONS_ORDER_INDICES
 from gui.Scaleform.daapi.view.lobby.storage import storage_helpers
@@ -9,7 +10,7 @@ from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.crew_book import orderCmp as crewBookCmp
+from gui.shared.gui_items.crew_book import orderKey as crewBookOrderKey
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from skeletons.gui.storage_novelty import IStorageNovelty
@@ -69,8 +70,8 @@ TABS_SORT_ORDER = {n:idx for idx, n in enumerate((GUI_ITEM_TYPE.OPTIONALDEVICE,
  GUI_ITEM_TYPE.RECERTIFICATION_FORM,
  GUI_ITEM_TYPE.MENTORING_LICENSE))}
 
-def _defaultInGroupComparator(a, b):
-    return cmp(storage_helpers.getStorageItemName(a), storage_helpers.getStorageItemName(b))
+def _defaultInGroupSortKey(item):
+    return storage_helpers.getStorageItemName(item)
 
 
 _OPT_DEVICE_TYPE_ORDER = (REQ_CRITERIA.OPTIONAL_DEVICE.SIMPLE,
@@ -83,55 +84,44 @@ def _getDeviceCategoriesOrder(optDevice):
     return min((storage_helpers.OPT_DEVICE_CATEGORIES_ORDER.get(category, storage_helpers.CATEGORIES_COUNT) for category in categories)) if categories else storage_helpers.CATEGORIES_COUNT
 
 
-def _upgradableDeviceComparator(a, b):
-    if a.isUpgradable != b.isUpgradable:
-        if a.isUpgradable:
-            return 1
-        return -1
+def _optionalDevicesSortKey(item):
+    moduleIdx = -1
+    for idx, criteria in enumerate(_OPT_DEVICE_TYPE_ORDER):
+        if criteria(item):
+            moduleIdx = idx
+
+    return (moduleIdx,
+     item.level,
+     item.isUpgradable,
+     _getDeviceCategoriesOrder(item),
+     storage_helpers.getStorageItemName(item))
 
 
-def _optionalDevicesComparator(a, b):
-
-    def getKey(module):
-        moduleIdx = -1
-        for idx, criteria in enumerate(_OPT_DEVICE_TYPE_ORDER):
-            if criteria(module):
-                moduleIdx = idx
-
-        return (moduleIdx,
-         module.level,
-         module.isUpgradable,
-         _getDeviceCategoriesOrder(module),
-         storage_helpers.getStorageItemName(module))
-
-    return cmp(getKey(a), getKey(b))
+def _shellsSortKey(item):
+    return (item.descriptor.caliber, _defaultInGroupSortKey(item))
 
 
-def _shellsComparator(a, b):
-    return cmp(a.descriptor.caliber, b.descriptor.caliber) or _defaultInGroupComparator(a, b)
+def _gunsSortKey(item):
+    return (item.descriptor.level, item.descriptor.shots[0].shell.caliber, _defaultInGroupSortKey(item))
 
 
-def _gunsComparator(a, b):
-    return cmp(a.descriptor.level, b.descriptor.level) or cmp(a.descriptor.shots[0].shell.caliber, b.descriptor.shots[0].shell.caliber) or _defaultInGroupComparator(a, b)
+def _crewBookSortKey(item):
+    return (crewBookOrderKey(item), _defaultInGroupSortKey(item))
 
 
-def _crewBookComparator(a, b):
-    return crewBookCmp(a, b) or _defaultInGroupComparator(a, b)
-
-
-IN_GROUP_COMPARATOR = {GUI_ITEM_TYPE.OPTIONALDEVICE: _optionalDevicesComparator,
- GUI_ITEM_TYPE.EQUIPMENT: _defaultInGroupComparator,
- GUI_ITEM_TYPE.BATTLE_BOOSTER: _defaultInGroupComparator,
- GUI_ITEM_TYPE.TURRET: _defaultInGroupComparator,
- GUI_ITEM_TYPE.ENGINE: _defaultInGroupComparator,
- GUI_ITEM_TYPE.GUN: _gunsComparator,
- GUI_ITEM_TYPE.RADIO: _defaultInGroupComparator,
- GUI_ITEM_TYPE.CHASSIS: _defaultInGroupComparator,
- GUI_ITEM_TYPE.SHELL: _shellsComparator,
- GUI_ITEM_TYPE.CREW_BOOKS: _crewBookComparator,
- GUI_ITEM_TYPE.DEMOUNT_KIT: _defaultInGroupComparator,
- GUI_ITEM_TYPE.RECERTIFICATION_FORM: _defaultInGroupComparator,
- GUI_ITEM_TYPE.MENTORING_LICENSE: _defaultInGroupComparator}
+IN_GROUP_SORT_KEYS = {GUI_ITEM_TYPE.OPTIONALDEVICE: _optionalDevicesSortKey,
+ GUI_ITEM_TYPE.EQUIPMENT: _defaultInGroupSortKey,
+ GUI_ITEM_TYPE.BATTLE_BOOSTER: _defaultInGroupSortKey,
+ GUI_ITEM_TYPE.TURRET: _defaultInGroupSortKey,
+ GUI_ITEM_TYPE.ENGINE: _defaultInGroupSortKey,
+ GUI_ITEM_TYPE.GUN: _gunsSortKey,
+ GUI_ITEM_TYPE.RADIO: _defaultInGroupSortKey,
+ GUI_ITEM_TYPE.CHASSIS: _defaultInGroupSortKey,
+ GUI_ITEM_TYPE.SHELL: _shellsSortKey,
+ GUI_ITEM_TYPE.CREW_BOOKS: _crewBookSortKey,
+ GUI_ITEM_TYPE.DEMOUNT_KIT: _defaultInGroupSortKey,
+ GUI_ITEM_TYPE.RECERTIFICATION_FORM: _defaultInGroupSortKey,
+ GUI_ITEM_TYPE.MENTORING_LICENSE: _defaultInGroupSortKey}
 
 class InventoryCategoryStorageView(StorageCategoryStorageViewMeta):
     __storageNovelty = dependency.descriptor(IStorageNovelty)
@@ -141,8 +131,8 @@ class InventoryCategoryStorageView(StorageCategoryStorageViewMeta):
         self.__currentTabId = STORAGE_CONSTANTS.INVENTORY_TAB_ALL
         self.__views = {}
 
-    def onOpenTab(self, tabId):
-        self.__currentTabId = tabId
+    def onOpenTab(self, index):
+        self.__currentTabId = index
         if self.__currentTabId in self.__views:
             self.__views[self.__currentTabId].setTabId(self.__currentTabId)
 
@@ -245,12 +235,8 @@ class RegularInventoryCategoryTabView(InventoryCategoryView):
     def _getVO(self, item):
         return storage_helpers.getItemVo(item)
 
+    def _getItemSortKey(self, item):
+        return (TABS_SORT_ORDER[item.itemTypeID], GUI_NATIONS_ORDER_INDICES[item.nationID], IN_GROUP_SORT_KEYS[item.itemTypeID](item))
+
     def __onCacheResync(self, *args):
         self._buildItems()
-
-    def _getComparator(self):
-
-        def _comparator(a, b):
-            return cmp(TABS_SORT_ORDER[a.itemTypeID], TABS_SORT_ORDER[b.itemTypeID]) or cmp(GUI_NATIONS_ORDER_INDICES[a.nationID], GUI_NATIONS_ORDER_INDICES[b.nationID]) or IN_GROUP_COMPARATOR[a.itemTypeID](a, b)
-
-        return _comparator

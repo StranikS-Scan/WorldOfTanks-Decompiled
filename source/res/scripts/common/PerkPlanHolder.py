@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/PerkPlanHolder.py
+from __future__ import absolute_import
 from collections import defaultdict
 from constants import IS_CELLAPP, IS_BASEAPP
 from typing import TYPE_CHECKING, List, Optional, Union

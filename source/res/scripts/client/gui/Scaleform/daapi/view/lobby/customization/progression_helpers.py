@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/progression_helpers.py
+from __future__ import absolute_import
 import binascii
 import logging
 import struct
 from collections import namedtuple
+from future.utils import viewitems
 from CurrentVehicle import g_currentVehicle
 from constants import EVENT_TYPE
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -58,8 +60,8 @@ def getProgressionPostBattleInfo(itemIntCD, vehicleIntCD, progressionData, items
 
 def getProgressiveCustomizationProgress(reusable):
     items = []
-    for vehicleIntCD, c11nProgression in reusable.personal.getC11nProgress().iteritems():
-        for intCD, progressionData in sorted(c11nProgression.iteritems(), key=lambda it: -it[1].get('level', 0)):
+    for vehicleIntCD, c11nProgression in viewitems(reusable.personal.getC11nProgress()):
+        for intCD, progressionData in sorted(viewitems(c11nProgression), key=lambda it: -it[1].get('level', 0)):
             info = getProgressionPostBattleInfo(intCD, vehicleIntCD, progressionData)
             if info is not None:
                 items.append(info)
@@ -102,7 +104,7 @@ def __makeAwardsVO(item, level, vehicleIntCD):
 def __makeProgressList(item, level, progressionData):
     progressList = []
     conditions = item.progressionConditions[level + 1].get('conditions', {})
-    for path, (diff, progress) in progressionData['progress'].iteritems():
+    for path, (diff, progress) in viewitems(progressionData['progress']):
         idx = 1
         condition = None
         for c in conditions:

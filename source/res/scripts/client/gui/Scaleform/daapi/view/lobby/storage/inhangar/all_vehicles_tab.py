@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inhangar/all_vehicles_tab.py
+from __future__ import absolute_import
 from PlayerEvents import g_playerEvents
 from gui.filters.carousel_filter import CriteriesGroup
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS

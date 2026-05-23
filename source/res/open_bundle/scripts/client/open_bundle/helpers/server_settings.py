@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: open_bundle/scripts/client/open_bundle/helpers/server_settings.py
+from __future__ import absolute_import
 import logging
 from collections import namedtuple
+from future.utils import viewitems
 from shared_utils import makeTupleByDict
 _logger = logging.getLogger(__name__)
 
@@ -9,7 +11,7 @@ class BundlesConfig(object):
     __slots__ = ('__bundles',)
 
     def __init__(self, config):
-        self.__bundles = {bundleID:BundleConfig(**bundle) for bundleID, bundle in config.iteritems()}
+        self.__bundles = {bundleID:BundleConfig(**bundle) for bundleID, bundle in viewitems(config)}
 
     def getBundleIDs(self):
         return self.__bundles.keys()
@@ -40,11 +42,11 @@ class BundleConfig(namedtuple('_BundleConfig', ('enabled', 'id', 'type', 'start'
 
     @classmethod
     def __packStepConfigs(cls, data):
-        data['steps'] = {stepNumber:makeTupleByDict(StepConfig, step) for stepNumber, step in data['steps'].iteritems()}
+        data['steps'] = {stepNumber:makeTupleByDict(StepConfig, step) for stepNumber, step in viewitems(data['steps'])}
 
     @classmethod
     def __packCellConfigs(cls, data):
-        data['cells'] = {cellName:makeTupleByDict(CellConfig, cell) for cellName, cell in data['cells'].iteritems()}
+        data['cells'] = {cellName:makeTupleByDict(CellConfig, cell) for cellName, cell in viewitems(data['cells'])}
 
 
 class StepConfig(namedtuple('_StepConfig', ('number', 'price', 'fixedBonus'))):

@@ -4,6 +4,7 @@ from __future__ import absolute_import
 import typing
 from battle_modifiers.gui.feature.modifiers_data_provider import ModifiersDataProvider
 from Event import Event, EventManager
+from fun_random.gui.fun_account_settings import setSubModeDefaultSettings
 from fun_random_common.fun_constants import BATTLE_MODE_VEH_TAGS_EXCEPT_FUN
 from fun_random.gui.feature.configs.providers.fun_sub_mode_configuration import FunSubModeConfigurationProvider
 from fun_random.gui.feature.fun_constants import FunTimersShifts
@@ -122,6 +123,7 @@ class FunBaseSubMode(IFunSubMode, SeasonProvider):
 
     def init(self):
         self.startNotification()
+        self._addSubModeDefaultAccountSettings()
 
     def destroy(self):
         self.clearNotification()
@@ -255,6 +257,10 @@ class FunBaseSubMode(IFunSubMode, SeasonProvider):
 
     def _subModeStatusUpdate(self):
         self.onSubModeEvent(FunEventType.SUB_STATUS_UPDATE, self.getSubModeID())
+
+    def _addSubModeDefaultAccountSettings(self):
+        settingsKey = self.getSettings().client.settingsKey
+        setSubModeDefaultSettings(settingsKey)
 
     def __getAllowedVehiclesCriteria(self, settings):
         criteria = REQ_CRITERIA.VEHICLE.LEVELS(settings.levels)

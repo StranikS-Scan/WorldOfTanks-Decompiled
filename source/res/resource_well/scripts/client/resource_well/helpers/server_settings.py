@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 import logging
 from collections import namedtuple
-from future.builtins import str
+from builtins import str
 from future.utils import iteritems
 from typing import Tuple, List
 from shared_utils import makeTupleByDict

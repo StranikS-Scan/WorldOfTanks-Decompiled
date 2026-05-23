@@ -1,16 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/DestructiblesCache.py
 from __future__ import absolute_import, print_function
-import ResMgr
-import BigWorld
-import Math
 import math
+from future.utils import lfilter, lmap, viewitems
+from past.builtins import intern
+import ResMgr
+import Math
+import items
 from constants import TREE_TAG, CUSTOM_DESTRUCTIBLE_TAGS
-import string
 from material_kinds import EFFECT_MATERIALS, EFFECT_MATERIAL_INDEXES_BY_NAMES
+from math_common import round_py2_style_int
 from constants import IS_CLIENT, IS_CELLAPP, IS_DEVELOPMENT, DESTRUCTIBLE_MATKIND
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_WARNING
-import items
 from soft_exception import SoftException
 if IS_CLIENT:
     from helpers import EffectsList
@@ -104,7 +105,7 @@ class DestructiblesCache():
             matName = moduleSec.readString('matName')
             res = _parseMaterialName(matName, filename)
             if res:
-                type, surface, id, depends = res
+                _, surface, id, depends = res
             else:
                 continue
             effectMtrlIdx = EFFECT_MATERIAL_INDEXES_BY_NAMES.get(surface)
@@ -141,7 +142,7 @@ class DestructiblesCache():
             map[normalMat] = tuple((ids.index(id) + matkindNMin for id in depends))
 
         destroyDepends = {}
-        for root in map.iterkeys():
+        for root in map:
             rootDepends = set()
             stack = [root]
             while len(stack) > 0:
@@ -159,7 +160,7 @@ class DestructiblesCache():
                 destroyDepends[root] = rootDepends
 
         inversedDestroyDepends = {}
-        for keyMat, depends in destroyDepends.iteritems():
+        for keyMat, depends in viewitems(destroyDepends):
             for mat in depends:
                 inversedDestroyDepends.setdefault(mat, set()).add(keyMat)
 
@@ -173,7 +174,7 @@ class DestructiblesCache():
                 for matName in matNames:
                     res = _parseMaterialName(matName, filename)
                     if res:
-                        type, surface, id, depends = res
+                        _, surface, id, depends = res
                     else:
                         continue
                     matKinds.append(ids.index(id) + matkindNMin)
@@ -286,7 +287,7 @@ class DestructiblesCache():
             if needLogErrors:
                 LOG_WARNING('Failed to read %s name in %s' % (effectName, effectCategory))
             return
-        elif string.lower(effectName) == 'none':
+        elif effectName.lower() == 'none':
             return
         effects = self.__effects[effectCategory]
         effect = effects.get(effectName)
@@ -301,7 +302,7 @@ class DestructiblesCache():
 def _parseFragileMaterialName(matName, filename):
     try:
         arr = matName.split('_')
-        res = filter(str.isalpha, arr[1])
+        res = lfilter(str.isalpha, arr[1])
     except:
         LOG_ERROR('Fail to parse material name %s in fragile %s' % (matName, filename))
         res = None
@@ -313,9 +314,9 @@ def _parseMaterialName(matName, filename):
     try:
         arr = matName.split('_')
         type = intern(arr[0])
-        surface = intern(filter(str.isalpha, arr[1]))
+        surface = intern(lfilter(str.isalpha, arr[1]))
         id = int(arr[2])
-        depends = map(int, arr[3:])
+        depends = lmap(int, arr[3:])
         res = (type,
          surface,
          id,
@@ -333,7 +334,7 @@ def _readAndMapEffect(cfg, sec, effectKey, effects, destrFilename, needLogErrors
         if needLogErrors:
             LOG_WARNING('Failed to read %s name in %s' % (effectKey, destrFilename))
             return
-    if string.lower(effectName) == 'none':
+    if effectName.lower() == 'none':
         return
     else:
         effect = effects.get(effectName)
@@ -386,10 +387,10 @@ def _readDestructiblePhysicParams(section):
 def _readPreferredTiltDirections(section):
     angles = _readFloatArray(section['preferredTiltDirections']) if section.has_key('preferredTiltDirections') else tuple()
     if angles:
-        angles = map(lambda a: (a + 180.0) % 360.0 - 180.0, angles)
+        angles = lmap(lambda a: (a + 180.0) % 360.0 - 180.0, angles)
         angles.append(max(angles) - 360)
         angles.append(min(angles) + 360)
-        angles = map(math.radians, angles)
+        angles = lmap(math.radians, angles)
     return angles
 
 
@@ -438,8 +439,8 @@ def scaledDestructibleHealth(scale, refHealth):
 
 
 def chunkIDFromChunkPosition(position):
-    chunkX = int(round(position.x * 0.01))
-    chunkZ = int(round(position.z * 0.01))
+    chunkX = round_py2_style_int(position.x * 0.01)
+    chunkZ = round_py2_style_int(position.z * 0.01)
     return chunkX + 127 << 8 | chunkZ + 127
 
 

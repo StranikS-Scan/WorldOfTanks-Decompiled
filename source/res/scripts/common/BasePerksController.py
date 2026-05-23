@@ -1,11 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/BasePerksController.py
-from collections import defaultdict
+from __future__ import absolute_import
 import weakref
+from collections import defaultdict
+from functools import reduce
+from future.utils import lfilter, viewitems, viewvalues
 from operator import mul
-from typing import Union, List, Dict, Tuple, TYPE_CHECKING, Optional, Hashable, Set, Any
+from typing import Union, List, Dict, Tuple, TYPE_CHECKING, Hashable, Set, Any
 from PerkPlanHolder import PCPlanHolder
-from debug_utils import LOG_DEBUG_DEV, LOG_ERROR, LOG_DEBUG, LOG_WARNING
+from debug_utils import LOG_DEBUG_DEV, LOG_ERROR, LOG_DEBUG
 from data_structures import DynamicFactorCollectorKeyError
 from constants import IS_DEVELOPMENT
 from wg_async import wg_async, wg_await
@@ -153,12 +156,12 @@ class BasePerksController(object):
 
     def dropFactorModifiers(self, factor, scopeID, perkID):
         mods = self._modifiedFactors[factor][scopeID]
-        mods[:] = filter(lambda t: t[0] != perkID, mods)
+        mods[:] = lfilter(lambda t: t[0] != perkID, mods)
 
     def dropAllPerkModifiers(self, scopeID, perkID):
         for scopes in self._modifiedFactors.values():
             scope = scopes[scopeID]
-            scope[:] = filter(lambda t: t[0] != perkID, scope)
+            scope[:] = lfilter(lambda t: t[0] != perkID, scope)
 
         return self._scopedPerksToFactors[scopeID].pop(perkID, set())
 
@@ -173,7 +176,7 @@ class BasePerksController(object):
     def onCollectFactors(self, factors):
         if _DO_DEBUG_LOG and IS_DEVELOPMENT:
             oldFactors = factors.copy()
-        for factorName in factors.iterkeys():
+        for factorName in factors:
             try:
                 collector = self._attrFactorCollectors[factorName]
             except KeyError:
@@ -214,7 +217,7 @@ class BasePerksController(object):
             yield wg_await(self._planHolder.isAllPlansLoaded.wait())
         newScopedPerks = self._assignContextsToScopes(newScopedPerks)
         self._planHolder.setScopedPerks(newScopedPerks)
-        for scope in self._scopeContextMap.iterkeys():
+        for scope in self._scopeContextMap:
             oldScope = self._scopedPerks.get(scope)
             newScope = newScopedPerks.get(scope)
             oldPerks = self._getPerkIDs(oldScope)
@@ -233,7 +236,7 @@ class BasePerksController(object):
             changedPerks = self._findChangedPerks(oldScope, newScope, oldPerks.intersection(newPerks))
             self._logUpdatedPerks('updateScopedPerks. VehicleID = {}. Scope = {}. Changed perks = {}', self.vehicleID, scope, changedPerks)
             if newScope is not None:
-                perksTuple, context = newScope
+                perksTuple, _ = newScope
                 for perkTuple in perksTuple:
                     perkID, perkData = perkTuple
                     if perkID not in changedPerks:
@@ -255,18 +258,18 @@ class BasePerksController(object):
         if scopedPerks is None:
             return perkIDs
         else:
-            perksTuple, contextCreator = scopedPerks
+            perksTuple, _ = scopedPerks
             if not perksTuple:
                 return perkIDs
             for perkTuple in perksTuple:
-                perkID, perkData = perkTuple
+                perkID, _ = perkTuple
                 perkIDs.add(perkID)
 
             return perkIDs
 
     @classmethod
     def _isScopeHasContent(cls, scopeContextMap, scopedPerks):
-        return any((cls._getPerkIDs(scopedPerks.get(scope)) for scope in scopeContextMap.iterkeys()))
+        return any((cls._getPerkIDs(scopedPerks.get(scope)) for scope in scopeContextMap))
 
     def _logUpdatedPerks(self, message, vehID, scope, perks):
         if not perks:
@@ -278,8 +281,8 @@ class BasePerksController(object):
         changedPerks = set()
         if not perksToCheck:
             return changedPerks
-        perksTuple0, creator0 = oldScopedPerks
-        perksTuple1, creator1 = newScopedPerks
+        perksTuple0, _ = oldScopedPerks
+        perksTuple1, _ = newScopedPerks
         for perkTuple0 in perksTuple0:
             perkID0, perkData0 = perkTuple0
             if perkID0 not in perksToCheck:
@@ -298,7 +301,7 @@ class BasePerksController(object):
 
     def _assignContextsToScopes(self, scopedPerks):
         controllerWeakRef = weakref.proxy(self)
-        return {scopeId:(scopeData, self._scopeContextMap[scopeId](controllerWeakRef)) for scopeId, scopeData in scopedPerks.iteritems()}
+        return {scopeId:(scopeData, self._scopeContextMap[scopeId](controllerWeakRef)) for scopeId, scopeData in viewitems(scopedPerks)}
 
     def _destroyPlanHolder(self):
         if self._planHolder is not None:
@@ -319,10 +322,10 @@ class BasePerksController(object):
         self.dynamicFactorCollectors.update({key:self.collectAddivieModsForFactor for key in self._additiveDynamicFactors})
 
     def _collectModifiersMulScopes(self, scopes):
-        return reduce(mul, (1 + sum((v[1] for v in mods)) for mods in scopes.itervalues()), 1.0)
+        return reduce(mul, (1 + sum((v[1] for v in mods)) for mods in viewvalues(scopes)), 1.0)
 
     def _collectModifiersAddScopes(self, scopes):
-        return sum((sum((v[1] for v in mods)) for mods in scopes.itervalues()))
+        return sum((sum((v[1] for v in mods)) for mods in viewvalues(scopes)))
 
     def _collectMultiplicativeAttributeFactor(self, key, factors):
         factors[key] *= self._collectModifiersMulScopes(self._modifiedFactors[key])
@@ -335,7 +338,7 @@ class BasePerksController(object):
         if not scopes:
             return
         minV = factors[key]
-        for mods in scopes.itervalues():
+        for mods in viewvalues(scopes):
             for v in mods:
                 minV = min(minV, v[1])
 
@@ -348,7 +351,7 @@ class BasePerksController(object):
 
     def _collectTerrainResistance(self, terrainResKey, factors):
         terrainResistance = factors[terrainResKey]
-        for scope in self._modifiedFactors[terrainResKey].itervalues():
+        for scope in viewvalues(self._modifiedFactors[terrainResKey]):
             tmp = [1] * 3
             for _, mod in scope:
                 tmp[0] += mod[0]

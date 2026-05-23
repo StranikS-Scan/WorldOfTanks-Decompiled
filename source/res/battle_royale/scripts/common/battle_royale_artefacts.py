@@ -569,7 +569,9 @@ class AdaptationHealthRestore(Equipment, CountableConsumableConfigReader, Battle
         return self._prepareDescription(localizeDescr)
 
     def _prepareDescription(self, descr):
-        return i18n.makeString(descr, immediatelyRestore=int(self.immediatelyRestore), duration=int(self.duration))
+        percentSymbol = text(R.strings.common.common.percent())
+        restoringCoefficient = getNiceNumberFormat(100 * self.restoringCoefficient - 100)
+        return i18n.makeString(descr, immediatelyRestore=int(self.immediatelyRestore), duration=int(self.duration), restoringCoefficient=restoringCoefficient + percentSymbol)
 
 
 class ThunderStrike(Equipment, ArcadeEquipmentConfigReader, TooltipConfigReader, CountableConsumableConfigReader, BattleDescriptionConfigReader):

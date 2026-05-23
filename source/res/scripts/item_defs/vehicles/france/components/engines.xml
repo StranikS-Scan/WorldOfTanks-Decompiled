@@ -120,6 +120,7 @@
     <MB_838_CaM_500>	139	</MB_838_CaM_500>
     <SOFAM_12_6S_D>	140	</SOFAM_12_6S_D>
     <AMX_APX_E_P_C_Moteur_F>	141	</AMX_APX_E_P_C_Moteur_F>
+    <Continental_AV_1790_5B_Chevalier>	142	</Continental_AV_1790_5B_Chevalier>
     <SOFAM_8_Gxb_105_AM>	2000	</SOFAM_8_Gxb_105_AM>
     <Baudouin_6F_11_SRY_105_AM>	2001	</Baudouin_6F_11_SRY_105_AM>
     <Maybach_HL_230_TRM_P30_L50>	2002	</Maybach_HL_230_TRM_P30_L50>
@@ -2696,8 +2697,8 @@
       <maxRegenHealth>	138	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	470	</rpm_min>
-      <rpm_max>	2725	</rpm_max>
+      <rpm_min>	591	</rpm_min>
+      <rpm_max>	2447	</rpm_max>
     </Maybach_HL_230_LA>
     <Continental_AV_1790_8_Terrifiant>
       <userString>	#france_vehicles:Continental_AV_1790_8_Terrifiant	</userString>
@@ -2733,6 +2734,24 @@
       <rpm_min>	200	</rpm_min>
       <rpm_max>	2600	</rpm_max>
     </MB_838_CaM_500>
+    <Continental_AV_1790_5B_Chevalier>
+      <userString>	#france_vehicles:Continental_AV_1790_5B_Chevalier	</userString>
+      <shortUserString>	#france_vehicles:Continental_AV_1790_5B_Chevalier_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	90000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1000	</power>
+      <weight>	800	</weight>
+      <maxHealth>	310	</maxHealth>
+      <maxRegenHealth>	155	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	460	</rpm_min>
+      <rpm_max>	2125	</rpm_max>
+    </Continental_AV_1790_5B_Chevalier>
     <Maybach_HL_295_IGR>
       <userString>	#igr_vehicles:Maybach_HL_295_IGR	</userString>
       <tags>	gasoline	</tags>

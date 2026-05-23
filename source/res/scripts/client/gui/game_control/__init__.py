@@ -86,6 +86,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.loadout_controller import LoadoutController
     from gui.game_control.blur_controller import BlurController
     from gui.game_control.commendations_controller import CommendationsController
+    from gui.game_control.oit_availability_controller import OitAvailabilityController
     from gui.game_control.vehicle_playlists_controller import VehiclePlaylistsController
     from gui.game_control.crew_controller import CrewController
     from gui.pet_system.pet_controller import PetSystemController
@@ -179,6 +180,7 @@ def getGameControllersConfig(manager):
     _config(_interface.ILoadoutController, LoadoutController())
     _config(_interface.IBlurController, BlurController())
     _config(_interface.ICommendationsController, CommendationsController())
+    _config(_interface.IOitAvailabilityController, OitAvailabilityController())
     _config(_interface.IVehiclePlaylistsController, VehiclePlaylistsController())
     _config(_interface.ICrewController, CrewController())
     _config(_interface.IIngameTournamentController, IngameTournamentController())

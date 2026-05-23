@@ -7,6 +7,7 @@ import account_helpers
 from CurrentVehicle import g_currentVehicle
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
+from gui import SystemMessages
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.base import cooldown
@@ -19,6 +20,7 @@ from gui.prb_control.entities.training.legacy.limits import TrainingLimits
 from gui.prb_control.entities.training.legacy.permissions import TrainingPermissions, TrainingIntroPermissions
 from gui.prb_control.entities.training.legacy.requester import TrainingListRequester
 from gui.prb_control.events_dispatcher import g_eventDispatcher
+from gui.prb_control.formatters import messages
 from gui.prb_control.items import prb_items, SelectResult, ValidationResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
 from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE
@@ -27,7 +29,9 @@ from gui.prb_control.storages import legacy_storage_getter
 from gui.training_room_external_handlers import getTrainingRoomHandler
 from prebattle_shared import decodeRoster
 if typing.TYPE_CHECKING:
-    from typing import Callable
+    from typing import Optional, Callable
+    from gui.prb_control.entities.training.legacy.ctx import ChangeArenaVoipCtx
+    from gui.prb_control.entities.base.legacy.ctx import AssignLegacyCtx
 
 class TrainingEntryPoint(LegacyEntryPoint):
 
@@ -160,6 +164,18 @@ class TrainingEntity(LegacyEntity):
             self.__watcher.stop()
             self.__watcher = None
         return result
+
+    def assign(self, ctx, callback=None):
+        super(TrainingEntity, self).assign(ctx, callback)
+        limits = self._limits
+        if limits is None:
+            return
+        else:
+            result = limits.isVehicleValid()
+            if result is None:
+                return
+            SystemMessages.pushMessage(messages.getInvalidVehicleMessage(result.restriction, self), type=SystemMessages.SM_TYPE.Error)
+            return
 
     def resetPlayerState(self):
         super(TrainingEntity, self).resetPlayerState()

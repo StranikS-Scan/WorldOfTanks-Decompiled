@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_pass/state_machine/delegator.py
+from __future__ import absolute_import
 import typing
 from battle_pass_common import BattlePassRewardReason as BPReason
 from frameworks.state_machine import StringEvent, StateEvent

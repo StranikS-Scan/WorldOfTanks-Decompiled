@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/stronghold_battle_room_window.py
+from __future__ import absolute_import
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages
@@ -119,8 +120,8 @@ class StrongholdBattleRoomWindow(FortBattleRoomWindowMeta, IStrongholdListener):
         self.as_setWaitingS(visible, '#waiting:prebattle/change_settings')
         g_eventDispatcher.updateUI()
 
-    def onStrongholdMaintenance(self, showWindow):
-        if showWindow:
+    def onStrongholdMaintenance(self, state):
+        if state:
             text = ''.join((icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ALERTBIGICON, 24, 24, -6, 0),
              text_styles.middleTitle(i18n.makeString(FORTIFICATIONS.MAINWINDOW_MAINTENANCE_HEADER)),
              clans_fmts.getHtmlLineDivider(10),

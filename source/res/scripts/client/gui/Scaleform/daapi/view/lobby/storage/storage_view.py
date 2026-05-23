@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/storage_view.py
-from account_helpers.AccountSettings import LAST_STORAGE_VISITED_TIMESTAMP
-from helpers.time_utils import getCurrentTimestamp
+from __future__ import absolute_import
+from future.utils import viewitems
 from account_helpers import AccountSettings
+from account_helpers.AccountSettings import LAST_STORAGE_VISITED_TIMESTAMP
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.lobby.storage import getSectionsList
@@ -16,6 +17,7 @@ from gui.shared.event_dispatcher import showHangar
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
+from helpers.time_utils import getCurrentTimestamp
 from shared_utils import first
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersNovelty, IOffersDataProvider
@@ -173,10 +175,10 @@ class StorageView(LobbySubView, StorageViewMeta):
         self.__activeTab = sectionTab
 
     def __findActiveSectionAndTab(self):
-        for alias, section in self.components.iteritems():
+        for alias, section in viewitems(self.components):
             if section.getActive():
                 if section.components:
-                    for tabAlias, tab in section.components.iteritems():
+                    for tabAlias, tab in viewitems(section.components):
                         if tab.getActive():
                             return (alias, tabAlias)
 

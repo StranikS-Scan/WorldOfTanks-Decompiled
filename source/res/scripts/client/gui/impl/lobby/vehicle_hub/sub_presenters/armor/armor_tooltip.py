@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/impl/lobby/vehicle_hub/sub_presenters/armor/armor_tooltip.py
 from __future__ import absolute_import
 import typing
+from builtins import round
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
-from future.builtins import round
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.vehicle_hub.views.sub_models.armor_layer_model import ArmorLayerModel
 from gui.impl.gen.view_models.views.lobby.vehicle_hub.views.sub_models.armor_tooltip_model import ArmorTooltipModel

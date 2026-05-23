@@ -1938,7 +1938,7 @@ class IBattlePassController(IGameController):
     def isSpecialVehicle(self, intCD):
         raise NotImplementedError
 
-    def getSpecialVehicles(self):
+    def getSpecialVehicles(self, gameMode=ARENA_BONUS_TYPE.REGULAR):
         raise NotImplementedError
 
     def getPointsDiffForVehicle(self, intCD, gameMode=ARENA_BONUS_TYPE.REGULAR):
@@ -3834,6 +3834,12 @@ class ICommendationsController(IGameController):
 
     @property
     def isLiveTagsEnabled(self):
+        raise NotImplementedError
+
+
+class IOitAvailabilityController(IGameController):
+
+    def isOitEnabledForPreset(self, qualityLevel):
         raise NotImplementedError
 
 

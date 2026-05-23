@@ -10,9 +10,6 @@ class HangarHeaderMeta(BaseDAAPIComponent):
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
-    def as_setSecondaryEntryPointVisibleS(self, value):
-        return self.flashObject.as_setSecondaryEntryPointVisible(value) if self._isDAAPIInited() else None
-
     def as_addEntryPointS(self, alias):
         return self.flashObject.as_addEntryPoint(alias) if self._isDAAPIInited() else None
 

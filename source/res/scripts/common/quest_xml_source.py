@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/quest_xml_source.py
+from __future__ import absolute_import
 import sys
 import time
 import typing
+from future.utils import viewitems, viewvalues
+from past.builtins import intern
 import ArenaType
 import ResMgr
 import nations
@@ -253,7 +256,7 @@ class Source(object):
         defaultAnnounceTime = gStartTime if gStartTime != DEFAULT_QUEST_START_TIME else startTime
         announceTime = readUTC(questSection, 'announceTime', defaultAnnounceTime)
         weekDayNames = questSection.readString('weekDays', '').split()
-        weekDays = set([ _WEEKDAYS[val] for val in weekDayNames ])
+        weekDays = {_WEEKDAYS[val] for val in weekDayNames}
         intervalsInString = questSection.readString('activeTimeIntervals', '').split()
         makeHM = lambda hm: tuple((int(v) for v in hm.split(':')))
         makeIntervals = lambda intervals: tuple((makeHM(v) for v in intervals.split('_')))
@@ -605,7 +608,7 @@ class Source(object):
                 break
             else:
                 raise SoftException('Unknown tag %s' % node.name)
-            for descr in nationModules.itervalues():
+            for descr in viewvalues(nationModules):
                 if descr.name == name:
                     modules.add(descr.compactDescr)
                     break
@@ -637,7 +640,7 @@ class Source(object):
                 tags = set(sub.readString('', '').split())
                 if not tags:
                     raise SoftException('Empty tags for corresponded equipment is not allowed')
-                equipment = {equipment.compactDescr for idx, equipment in vehicles.g_cache.equipments().iteritems() if tags == tags & equipment.tags}
+                equipment = {equipment.compactDescr for equipment in viewvalues(vehicles.g_cache.equipments()) if tags == tags & equipment.tags}
                 if not equipment:
                     raise SoftException('No corresponded equipments for tags {}'.format(tags))
                 continue
@@ -746,7 +749,7 @@ class Source(object):
         node.addChild(section.asString)
 
     def __readCondition_rammingInfo(self, _, section, node):
-        rammingConditions = set([ rammingCondition for rammingCondition in section.asString.split() ])
+        rammingConditions = set(section.asString.split())
         for rammingCondition in rammingConditions:
             if rammingCondition not in ('stayedAlive', 'dealtMoreDamage'):
                 raise SoftException('Unsupported kill by ramming condition %s, must be one of (%s %s)' % (rammingCondition, 'stayedAlive', 'dealtMoreDamage'))
@@ -815,7 +818,7 @@ class Source(object):
         node.addChild(section.asInt)
 
     def __readCondition_set(self, _, section, node):
-        node.addChild(set([ int(id) for id in section.asString.split() ]))
+        node.addChild({int(id) for id in section.asString.split()})
 
     def __readCondition_IGRType(self, _, section, node):
         igrType = section.asInt
@@ -827,7 +830,7 @@ class Source(object):
         arenaIDs = []
         for geometryName in section.asString.split():
             initialLen = len(arenaIDs)
-            for id, descr in ArenaType.g_cache.iteritems():
+            for id, descr in viewitems(ArenaType.g_cache):
                 if descr.geometryName == geometryName:
                     arenaIDs.append(id)
 
@@ -846,11 +849,11 @@ class Source(object):
         node.addChild(res)
 
     def __readBattleFilter_CamouflageKind(self, _, section, node):
-        camouflageKindLst = set([ vehicles.CAMOUFLAGE_KINDS[c] for c in section.asString.split() ])
+        camouflageKindLst = {vehicles.CAMOUFLAGE_KINDS[c] for c in section.asString.split()}
         node.addChild(camouflageKindLst)
 
     def __readVehicleFilter_classes(self, _, section, node):
-        classes = set([ VEHICLE_CLASS_INDICES[cls] for cls in section.asString.split() ])
+        classes = {VEHICLE_CLASS_INDICES[cls] for cls in section.asString.split()}
         node.addChild(classes)
 
     def __readVehicleFilter_levels(self, _, section, node):
@@ -863,10 +866,10 @@ class Source(object):
         node.addChild(res)
 
     def __readListOfInts(self, _, section, node):
-        node.addChild(set([ int(val) for val in section.asString.split() ]))
+        node.addChild({int(val) for val in section.asString.split()})
 
     def __readVehicleFilter_nations(self, _, section, node):
-        nationsLst = set([ nations.INDICES[nation] for nation in section.asString.split() ])
+        nationsLst = {nations.INDICES[nation] for nation in section.asString.split()}
         node.addChild(nationsLst)
 
     def __readVehicleFilter_types(self, _, section, node):
@@ -877,7 +880,7 @@ class Source(object):
         return [ vehicles.makeVehicleTypeCompDescrByName(typeName) for typeName in typeNames ]
 
     def __readVehicleFilter_roles(self, _, section, node):
-        roles = set([ ROLE_LABEL_TO_TYPE[role] for role in section.asString.split() ])
+        roles = {ROLE_LABEL_TO_TYPE[role] for role in section.asString.split()}
         node.addChild(roles)
 
     def __readVehicleFilter_excludeTags(self, _, section, node):
@@ -927,8 +930,8 @@ def collectSections(root):
 class QuestValidationSerializer(WGPickleSerializer):
     __slots__ = ()
 
-    def deserialize(self, data):
-        rawData, auxData = super(QuestValidationSerializer, self).deserialize(data)
+    def deserialize(self, serializedData):
+        rawData, auxData = super(QuestValidationSerializer, self).deserialize(serializedData)
         if NEAREST_TIME_BOUNDARY in auxData:
             if auxData[NEAREST_TIME_BOUNDARY] <= time.time():
                 raise SoftException('Quest validation failed: Got an outdated quest!')

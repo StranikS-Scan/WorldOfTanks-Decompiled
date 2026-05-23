@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/manual/manual_chapter_view.py
+from __future__ import absolute_import
 import logging
 from helpers import dependency
 from skeletons.gui.game_control import IMapsTrainingController
@@ -57,8 +58,8 @@ class ManualChapterView(ManualViewBase, ManualChapterViewMeta):
          'returnAlias': VIEW_ALIAS.MANUAL_CHAPTER_VIEW}
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.MANUAL_BROWSER_VIEW), ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
 
-    def onPreviewClicked(self, url):
-        self.openVideo(url)
+    def onPreviewClicked(self, videoUrl):
+        self.openVideo(videoUrl)
 
     def onPageChanged(self, pageId):
         self.markPageAsRead(int(pageId))

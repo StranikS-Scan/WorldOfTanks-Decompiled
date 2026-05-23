@@ -19,7 +19,7 @@ class VehicleAbilityBaseComponent(BigWorld.DynamicScriptComponent):
         self.__isSwitching = False
         self._avatar = BigWorld.player()
         self._subscribeOnEvents()
-        self._updateVisuals()
+        self._updateVisuals(self.entity.health > 0)
 
     def set_finishTime(self, _=None):
         self._finishTime = self.finishTime

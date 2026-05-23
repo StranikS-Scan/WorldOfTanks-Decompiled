@@ -63,7 +63,7 @@ class BattlePassCoinBonusPacker(CurrencyBonusUIPacker):
 
     @classmethod
     def _getContentId(cls, bonus):
-        return [R.views.lobby.battle_pass.tooltips.BattlePassCoinTooltipView()]
+        return [R.views.mono.battle_pass.tooltips.bpcoin()]
 
     @classmethod
     def _packSingleBonus(cls, bonus, label):

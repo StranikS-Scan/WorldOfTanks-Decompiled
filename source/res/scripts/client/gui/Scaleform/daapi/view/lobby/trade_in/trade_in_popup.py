@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/trade_in/trade_in_popup.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleBasicVO
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import packHeaderColumnData
 from gui.Scaleform.daapi.view.meta.TradeInPopupMeta import TradeInPopupMeta
@@ -65,8 +67,8 @@ class TradeInPopup(TradeInPopupMeta):
     def onWindowClose(self):
         self.destroy()
 
-    def onSelectVehicle(self, vehicleCD):
-        self.tradeIn.selectVehicleToSell(vehicleCD)
+    def onSelectVehicle(self, index):
+        self.tradeIn.selectVehicleToSell(index)
         self.onWindowClose()
 
     def __onResync(self, reason, diff):
@@ -113,7 +115,7 @@ class _TradeInDataProvider(SortableDAAPIDataProvider):
         self.__selectedID = selId
 
     def buildList(self, changedVehsCDs):
-        for idx, (vehCD, veh) in enumerate(changedVehsCDs.iteritems()):
+        for idx, (vehCD, veh) in enumerate(viewitems(changedVehsCDs)):
             self.__list.append(self.__makeVO(veh))
             self.__mapping[vehCD] = idx
 

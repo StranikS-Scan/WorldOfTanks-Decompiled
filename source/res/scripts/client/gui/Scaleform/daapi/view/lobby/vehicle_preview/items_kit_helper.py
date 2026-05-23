@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_preview/items_kit_helper.py
+from __future__ import absolute_import
 import itertools
 import typing
-from collections import Container, namedtuple
-from sys import maxint
+from collections import namedtuple
+from future.utils import viewvalues
+from sys import maxsize
 from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.locale.COMMON import COMMON
@@ -21,6 +23,7 @@ from gui.impl.gen import R
 from items import makeIntCompactDescrByID as makeCD
 from items.components.c11n_constants import CustomizationType
 from items.vehicles import MAX_OPTIONAL_DEVICES_SLOTS, NUM_SHELLS_SLOTS
+from py2to3.moves.collections.abc import Container
 from shared_utils import findFirst, first, CONST_CONTAINER
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.goodies import IGoodiesCache
@@ -41,7 +44,7 @@ class ItemSortRule(CONST_CONTAINER):
 
 OFFER_CHANGED_EVENT = 'offerChanged'
 _UNLIMITED_ITEMS_COUNT = -1
-_EXCLUDE_ITEMS = {v for v in ItemPackTypeGroup.CREW} | {ItemPackType.FRONTLINE_TOKEN}
+_EXCLUDE_ITEMS = set(ItemPackTypeGroup.CREW) | {ItemPackType.FRONTLINE_TOKEN}
 _ANY_ITEM_TYPE = {v for _, v in ItemPackType.getIterator()} - _EXCLUDE_ITEMS
 _FRONTLINE_GIFTS = {v for _, v in ItemPackType.getIterator()} - {ItemPackType.FRONTLINE_TOKEN}
 _NATIVE_ITEM_TYPE = set(itertools.chain(ItemPackTypeGroup.VEHICLE, ItemPackTypeGroup.ITEM, ItemPackTypeGroup.CREW_BOOKS))
@@ -732,7 +735,7 @@ def getDataOneVehicle(itemsPack, vehicle, vehicleGroupId):
     return _packDataOneVehicle(root, itemsPack, vehicle, vehicleGroupId)
 
 
-def getCouponDiscountForItemPack(itemsPack, price=maxint):
+def getCouponDiscountForItemPack(itemsPack, price=maxsize):
     discount = 0
     if itemsPack is None:
         return Money(gold=discount)
@@ -873,7 +876,7 @@ def __getFrontlinePackRule():
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def __findVehicle(style, itemsCache=None):
     criteria = REQ_CRITERIA.IN_OWNERSHIP | ~REQ_CRITERIA.VEHICLE.IS_IN_BATTLE
-    vehicles = [ vehicle for vehicle in itemsCache.items.getVehicles(criteria=criteria).itervalues() if style.mayInstall(vehicle) ]
+    vehicles = [ vehicle for vehicle in viewvalues(itemsCache.items.getVehicles(criteria=criteria)) if style.mayInstall(vehicle) ]
     randomStats = itemsCache.items.getAccountDossier().getRandomStats()
     vehRandomStats = randomStats.getVehicles()
 

@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/section2dict.py
+from __future__ import absolute_import
 import typing
 if typing.TYPE_CHECKING:
     from ResMgr import DataSection
     TReaders = typing.Dict[str, typing.Callable[[DataSection], dict]]
 
 def _parseDataSection(dataSection, readers=None, normalizeValues=False):
-    if not len(dataSection):
+    if not dataSection:
         if normalizeValues:
             return _normalizeValue(dataSection.asString)
         else:
@@ -43,4 +44,4 @@ def _normalizeValue(value):
 
 
 def parse(data, readers=None, normalizeValues=False):
-    return {} if not len(data) else _parseDataSection(data, readers, normalizeValues)
+    return {} if not data else _parseDataSection(data, readers, normalizeValues)

@@ -954,21 +954,6 @@
       </value>
     </achievement>
     <achievement>
-      <name>	achievements:medalDumitru	</name>
-      <type>	dict	</type>
-      <value>
-        <item>	repeatable	  <name>	type	</name>
-        </item>
-        <item>	epic	  <name>	section	</name>
-        </item>
-        <item>	609.0	  <name>	weight	</name>
-          <type>	float	</type>
-        </item>
-        <item>	random	  <name>	mode	</name>
-        </item>
-      </value>
-    </achievement>
-    <achievement>
       <name>	achievements:medalPascucci	</name>
       <type>	dict	</type>
       <value>
@@ -2867,6 +2852,21 @@
         <item>	action	  <name>	section	</name>
         </item>
         <item>	1418.15	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalDumitru	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1418.16	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	random	  <name>	mode	</name>
@@ -5259,7 +5259,7 @@
       </value>
     </achievement>
     <achievement>
-      <name>	singleAchievements:BPReserveAchievement_10	</name>
+      <name>	singleAchievements:BattlePassCommonPr_20	</name>
       <type>	dict	</type>
       <value>
         <item>	single	  <name>	type	</name>

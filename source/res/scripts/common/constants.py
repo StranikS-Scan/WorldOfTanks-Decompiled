@@ -1,16 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/constants.py
+from __future__ import absolute_import, division
 import typing
-from enum import IntEnum
 import enum
 from future.utils import iteritems
 import calendar
 import time
+from enum import IntEnum
+from builtins import zip
 from math import cos, radians
 from time import time as timestamp
 from collections import namedtuple
-from itertools import izip, chain
+from itertools import chain
 from Math import Vector3, Vector2
+from future.utils import lmap, lrange, viewitems, with_metaclass
+from past.builtins import xrange
 from realm import CURRENT_REALM
 from functools import reduce
 if typing.TYPE_CHECKING:
@@ -136,7 +140,7 @@ class BIN_FLAGS_META(type):
 
     def __init__(cls, name, bases, dct):
         super(BIN_FLAGS_META, cls).__init__(name, bases, dct)
-        clsAttrsNamesByVals = {v:k for k, v in dct.iteritems()}
+        clsAttrsNamesByVals = {v:k for k, v in viewitems(dct)}
         cls._binFlagNamesByVals = []
         append = cls._binFlagNamesByVals.append
         if 0 in clsAttrsNamesByVals:
@@ -147,8 +151,7 @@ class BIN_FLAGS_META(type):
             append((pow2, clsAttrsNamesByVals[pow2]))
 
 
-class BIN_FLAGS(object):
-    __metaclass__ = BIN_FLAGS_META
+class BIN_FLAGS(with_metaclass(BIN_FLAGS_META, object)):
 
     @classmethod
     def getBinFlagNames(cls, binFlags, force=IS_DEVELOPMENT):
@@ -203,7 +206,7 @@ class HANGAR_VISIBILITY_TAGS:
     REGIONS = ('NA', 'ASIA', 'EU', 'RU')
     IDS = dict(((value, index) for index, value in chain(enumerate(LAYERS), enumerate(RANKED_TAGS, FIRST_BIT_RANKED), enumerate(REGIONS, FIRST_BIT_REGIONS))))
     NAMES = dict(((index, value) for index, value in chain(enumerate(LAYERS), enumerate(RANKED_TAGS, FIRST_BIT_RANKED), enumerate(REGIONS, FIRST_BIT_REGIONS))))
-    ALL_BITS_DEFAULT = (1 << len(LAYERS)) - 1 | sum((1 << key for key in NAMES.iterkeys()))
+    ALL_BITS_DEFAULT = (1 << len(LAYERS)) - 1 | sum((1 << key for key in NAMES))
 
 
 class ARENA_GUI_TYPE:
@@ -398,8 +401,8 @@ class ARENA_BONUS_TYPE:
      TOURNAMENT_COMP7)
 
 
-ARENA_BONUS_TYPE_NAMES = dict([ (k, v) for k, v in ARENA_BONUS_TYPE.__dict__.iteritems() if isinstance(v, int) ])
-ARENA_BONUS_TYPE_IDS = dict([ (v, k) for k, v in ARENA_BONUS_TYPE_NAMES.iteritems() ])
+ARENA_BONUS_TYPE_NAMES = {k:v for k, v in viewitems(ARENA_BONUS_TYPE.__dict__) if isinstance(v, int)}
+ARENA_BONUS_TYPE_IDS = {v:k for k, v in viewitems(ARENA_BONUS_TYPE_NAMES)}
 
 class ARENA_BONUS_MASK:
     TYPE_BITS = dict(((name, 2 ** id) for id, name in enumerate(ARENA_BONUS_TYPE.RANGE[1:])))
@@ -427,7 +430,7 @@ class ARENA_PERIOD:
     AFTERBATTLE = 4
 
 
-ARENA_PERIOD_NAMES = dict([ (v, k) for k, v in ARENA_PERIOD.__dict__.iteritems() if not k.startswith('_') ])
+ARENA_PERIOD_NAMES = {v:k for k, v in ARENA_PERIOD.__dict__.items() if not k.startswith('_')}
 
 class ARENA_UPDATE:
     VEHICLE_LIST = 1
@@ -469,7 +472,7 @@ class ARENA_SYNC_OBJECTS:
     BR_DEATH_ZONE = 8
 
 
-ARENA_SYNC_OBJECT_NAMES = dict([ (v, k) for k, v in ARENA_SYNC_OBJECTS.__dict__.iteritems() if not k.startswith('_') ])
+ARENA_SYNC_OBJECT_NAMES = {v:k for k, v in ARENA_SYNC_OBJECTS.__dict__.items() if not k.startswith('_')}
 
 class JOIN_FAILURE:
     TIME_OUT = 1
@@ -493,7 +496,7 @@ class JOIN_FAILURE:
     NOT_ENOUGH_VEHICLES = 20
 
 
-JOIN_FAILURE_NAMES = dict([ (v, k) for k, v in JOIN_FAILURE.__dict__.iteritems() if not k.startswith('_') ])
+JOIN_FAILURE_NAMES = {v:k for k, v in JOIN_FAILURE.__dict__.items() if not k.startswith('_')}
 
 class KICK_REASON:
     ARENA_CREATION_FAILURE = 1
@@ -511,7 +514,7 @@ class KICK_REASON:
     SERVER_SHUT_DOWN = 13
 
 
-KICK_REASON_NAMES = dict([ (v, k) for k, v in KICK_REASON.__dict__.iteritems() if not k.startswith('_') ])
+KICK_REASON_NAMES = {v:k for k, v in KICK_REASON.__dict__.items() if not k.startswith('_')}
 
 class FINISH_REASON:
     UNKNOWN = 0
@@ -529,7 +532,7 @@ class FINISH_REASON:
     AFK = 101
 
 
-FINISH_REASON_NAMES = dict([ (v, k) for k, v in FINISH_REASON.__dict__.iteritems() if not k.startswith('_') ])
+FINISH_REASON_NAMES = {v:k for k, v in viewitems(FINISH_REASON.__dict__) if not k.startswith('_')}
 
 class ARENA_EXT_MSG:
     UNKNOWN = 0
@@ -649,7 +652,7 @@ class PREBATTLE_TYPE:
      STRONGHOLD)
 
 
-PREBATTLE_TYPE_NAMES = dict([ (v, k) for k, v in PREBATTLE_TYPE.__dict__.iteritems() if not k.startswith('_') ])
+PREBATTLE_TYPE_NAMES = {v:k for k, v in viewitems(PREBATTLE_TYPE.__dict__) if not k.startswith('_')}
 
 class PREBATTLE_START_TYPE:
     DIRECT = 1
@@ -902,7 +905,7 @@ PRIME_GAMING_SUBSCRIPTION_PRODUCT = 'prime_subscription'
 ENTITLEMENT_TO_PREM_TYPE = {PREMIUM_ENTITLEMENTS.BASIC: PREMIUM_TYPE.BASIC,
  PREMIUM_ENTITLEMENTS.PLUS: PREMIUM_TYPE.PLUS,
  PREMIUM_ENTITLEMENTS.VIP: PREMIUM_TYPE.VIP}
-PREM_TYPE_TO_ENTITLEMENT = {v:k for k, v in ENTITLEMENT_TO_PREM_TYPE.iteritems()}
+PREM_TYPE_TO_ENTITLEMENT = {v:k for k, v in ENTITLEMENT_TO_PREM_TYPE.items()}
 
 class ENTITLEMENT_OPS:
     GRANT = 'grant'
@@ -1043,7 +1046,7 @@ SPA_RESTR_NAME_TO_RESTR_TYPE = {'game': RESTRICTION_TYPE.BAN,
  'clan': RESTRICTION_TYPE.CLAN,
  'all': RESTRICTION_TYPE.MINORS_RESTRICTION,
  'modes': RESTRICTION_TYPE.ARENA_BAN}
-RESTR_TYPE_TO_SPA_NAME = dict(((x[1], x[0]) for x in SPA_RESTR_NAME_TO_RESTR_TYPE.iteritems()))
+RESTR_TYPE_TO_SPA_NAME = {x[1]:x[0] for x in SPA_RESTR_NAME_TO_RESTR_TYPE.items()}
 
 class SPA_ATTRS:
     ANONYM_RESTRICTED = '/wot/game/anonym_restricted/'
@@ -1121,8 +1124,8 @@ class BAN_REASON(object):
 
 
 BAN_REASONS = [BAN_REASON.PARENTAL_CONTROL, BAN_REASON.COUNTRY, BAN_REASON.OTHER]
-BAN_REASON_BY_ID = {index:value for index, value in enumerate(BAN_REASONS)}
-ID_BY_BAN_REASON = {value:index for index, value in BAN_REASON_BY_ID.iteritems()}
+BAN_REASON_BY_ID = dict(enumerate(BAN_REASONS))
+ID_BY_BAN_REASON = {value:index for index, value in BAN_REASON_BY_ID.items()}
 
 class RESTRICTION_KEY(object):
     PRIVATE_CHAT = 'privateChat'
@@ -1165,7 +1168,7 @@ class CLAN_ROLES(object):
 
     @classmethod
     def getFlagByRole(cls, memberRole):
-        for flag, role in cls.FLAGS_TO_ROLES.iteritems():
+        for flag, role in viewitems(cls.FLAGS_TO_ROLES):
             if role == memberRole:
                 return flag
 
@@ -1500,7 +1503,7 @@ class VEHICLE_HIT_FLAGS(BIN_FLAGS):
     IS_SHELL_HIT_TO_VEHICLE_MASK = ATTACK_IS_DIRECT_PROJECTILE | ATTACK_IS_EXTERNAL_EXPLOSION
 
 
-VEHICLE_HIT_FLAGS_BY_NAME = dict([ (k, v) for k, v in VEHICLE_HIT_FLAGS.__dict__.iteritems() if not k.startswith('_') ])
+VEHICLE_HIT_FLAGS_BY_NAME = {k:v for k, v in viewitems(VEHICLE_HIT_FLAGS.__dict__) if not k.startswith('_')}
 FIRE_NOTIFICATION_CODES = ('DEVICE_STARTED_FIRE_AT_SHOT', 'DEVICE_STARTED_FIRE_AT_RAMMING', 'FIRE_STOPPED')
 FIRE_NOTIFICATION_INDICES = dict(((x[1], x[0]) for x in enumerate(FIRE_NOTIFICATION_CODES)))
 DAMAGE_INFO_CODES = ['DEVICE_CRITICAL',
@@ -1671,7 +1674,7 @@ class QUEST_RUN_FLAGS:
      'login': LOGIN,
      'click': CLICK,
      'postranked': POSTRANKED}
-    TYPE_TO_NAME = dict(((x[1], x[0]) for x in NAME_TO_TYPE.iteritems()))
+    TYPE_TO_NAME = {x[1]:x[0] for x in NAME_TO_TYPE.items()}
 
 
 DEFAULT_QUEST_START_TIME = 1
@@ -1824,8 +1827,8 @@ class QUEUE_TYPE:
      COMP7_LIGHT)
 
 
-QUEUE_TYPE_NAMES = {v:k for k, v in QUEUE_TYPE.__dict__.iteritems() if isinstance(v, int)}
-QUEUE_TYPE_IDS = {v.lower():k for k, v in QUEUE_TYPE_NAMES.iteritems()}
+QUEUE_TYPE_NAMES = {v:k for k, v in viewitems(QUEUE_TYPE.__dict__) if isinstance(v, int)}
+QUEUE_TYPE_IDS = {v.lower():k for k, v in viewitems(QUEUE_TYPE_NAMES)}
 ARENA_BONUS_TYPE_TO_QUEUE_TYPE = {ARENA_BONUS_TYPE.UNKNOWN: QUEUE_TYPE.UNKNOWN,
  ARENA_BONUS_TYPE.REGULAR: QUEUE_TYPE.RANDOMS,
  ARENA_BONUS_TYPE.TRAINING: QUEUE_TYPE.UNKNOWN,
@@ -1966,7 +1969,7 @@ SEASON_TYPE_BY_NAME = {'ranked': GameSeasonType.RANKED,
  'battle_royale': GameSeasonType.BATTLE_ROYALE,
  'mapbox': GameSeasonType.MAPBOX,
  'event_battles': GameSeasonType.EVENT_BATTLES}
-SEASON_NAME_BY_TYPE = {val:key for key, val in SEASON_TYPE_BY_NAME.iteritems()}
+SEASON_NAME_BY_TYPE = {val:key for key, val in SEASON_TYPE_BY_NAME.items()}
 CHANNEL_SEARCH_RESULTS_LIMIT = 50
 USER_SEARCH_RESULTS_LIMIT = 50
 
@@ -2138,7 +2141,7 @@ GROUND_TYPE_BY_NAME = {'none': 0,
  'soft': 3,
  'slope': 4,
  'death_zone': 5}
-GROUND_TYPE_NAME_BY_INDEX = dict(((v, k) for k, v in GROUND_TYPE_BY_NAME.iteritems()))
+GROUND_TYPE_NAME_BY_INDEX = {v:k for k, v in GROUND_TYPE_BY_NAME.items()}
 
 class DROWN_WARNING_LEVEL:
     SAFE = 0
@@ -2175,15 +2178,15 @@ class ARTILLERY_STRIKE_ZONE_STATUS:
 
 TREE_TAG = 'tree'
 CUSTOM_DESTRUCTIBLE_TAGS = ('monument',)
-DESTR_CODES_BY_TAGS = dict(((tag, code) for code, tag in enumerate(CUSTOM_DESTRUCTIBLE_TAGS)))
+DESTR_CODES_BY_TAGS = {tag:code for code, tag in enumerate(CUSTOM_DESTRUCTIBLE_TAGS)}
 DESTR_CODES_BY_TAGS[TREE_TAG] = len(CUSTOM_DESTRUCTIBLE_TAGS)
-DESTR_TAGS_BY_CODES = dict(((code, tag) for tag, code in DESTR_CODES_BY_TAGS.iteritems()))
+DESTR_TAGS_BY_CODES = {code:tag for tag, code in DESTR_CODES_BY_TAGS.items()}
 
 class SYS_MESSAGE_CLAN_EVENT:
     LEFT_CLAN = 1
 
 
-SYS_MESSAGE_CLAN_EVENT_NAMES = dict([ (v, k) for k, v in SYS_MESSAGE_CLAN_EVENT.__dict__.iteritems() if not k.startswith('_') ])
+SYS_MESSAGE_CLAN_EVENT_NAMES = {v:k for k, v in SYS_MESSAGE_CLAN_EVENT.__dict__.items() if not k.startswith('_')}
 
 class SYS_MESSAGE_FORT_EVENT:
     FORT_READY = 1
@@ -2213,7 +2216,7 @@ class SYS_MESSAGE_FORT_EVENT:
     BATTLE_DELETED_LEVEL = 25
 
 
-SYS_MESSAGE_FORT_EVENT_NAMES = dict([ (v, k) for k, v in SYS_MESSAGE_FORT_EVENT.__dict__.iteritems() if not k.startswith('_') ])
+SYS_MESSAGE_FORT_EVENT_NAMES = {v:k for k, v in SYS_MESSAGE_FORT_EVENT.__dict__.items() if not k.startswith('_')}
 
 class FORT_BUILDING_TYPE:
     MILITARY_BASE = 1
@@ -2242,7 +2245,7 @@ class FORT_BUILDING_TYPE:
      BOMBER_SHOP)
 
 
-FORT_BUILDING_TYPE_NAMES = dict([ (v, k) for k, v in FORT_BUILDING_TYPE.__dict__.iteritems() if not k.startswith('_') ])
+FORT_BUILDING_TYPE_NAMES = {v:k for k, v in FORT_BUILDING_TYPE.__dict__.items() if not k.startswith('_')}
 
 class FORT_ORDER_TYPE:
     COMBAT_PAYMENTS = 1
@@ -2309,7 +2312,7 @@ class FORT_ORDER_TYPE:
         return orderID in FORT_ORDER_TYPE.COMPATIBLES
 
 
-FORT_ORDER_TYPE_NAMES = dict([ (v, k) for k, v in FORT_ORDER_TYPE.__dict__.iteritems() if v in FORT_ORDER_TYPE.ALL ])
+FORT_ORDER_TYPE_NAMES = {v:k for k, v in FORT_ORDER_TYPE.__dict__.items() if v in FORT_ORDER_TYPE.ALL}
 
 class USER_SERVER_SETTINGS:
     VERSION = 0
@@ -2577,7 +2580,7 @@ class PREBATTLE_INVITE_STATUS:
     LEGIONARIES_NOT_ALLOWED = 2
 
 
-PREBATTLE_INVITE_STATUS_NAMES = dict([ (v, k) for k, v in PREBATTLE_INVITE_STATUS.__dict__.iteritems() if not k.startswith('_') ])
+PREBATTLE_INVITE_STATUS_NAMES = {v:k for k, v in PREBATTLE_INVITE_STATUS.__dict__.items() if not k.startswith('_')}
 
 class INVALID_CLIENT_STATS:
     OK = 0
@@ -2758,7 +2761,7 @@ class GLOBAL_MAP_DIVISION(object):
     _ORDER = (MIDDLE, CHAMPION, ABSOLUTE)
 
 
-GLOBAL_MAP_DIVISION_NAMES = dict([ (v, k) for k, v in GLOBAL_MAP_DIVISION.__dict__.iteritems() if not k.startswith('_') ])
+GLOBAL_MAP_DIVISION_NAMES = {v:k for k, v in GLOBAL_MAP_DIVISION.__dict__.items() if not k.startswith('_')}
 
 class RESOURCE_POINT_STATE:
     UNKNOWN = 0
@@ -2806,7 +2809,7 @@ class VEHICLE_SIEGE_STATE:
 
     @classmethod
     def isEnabled(cls, siegeState):
-        return siegeState == VEHICLE_SIEGE_STATE.ENABLED or siegeState == VEHICLE_SIEGE_STATE.PILLBOX_ENABLED
+        return siegeState in (VEHICLE_SIEGE_STATE.ENABLED, VEHICLE_SIEGE_STATE.PILLBOX_ENABLED)
 
     @classmethod
     def toString(cls, siegeState):
@@ -2872,7 +2875,7 @@ class FALLOUT_ARENA_TYPE:
 
     @staticmethod
     def fromGameplayName(gameplayName):
-        for type, names in FALLOUT_ARENA_TYPE.GAMEPLAY_NAMES.iteritems():
+        for type, names in viewitems(FALLOUT_ARENA_TYPE.GAMEPLAY_NAMES):
             if gameplayName in names:
                 return type
 
@@ -3001,7 +3004,7 @@ DAMAGE_INTERPOLATION_DIST_LAST = 500.0
 EPIC_RANDOM_GROUPS = 3
 EPIC_RANDOM_GAMEPLAY_NAMES = ('ctf30x30', 'domination30x30')
 EPIC_RANDOM_GAMEPLAY_IDS = tuple((ARENA_GAMEPLAY_IDS[name] for name in EPIC_RANDOM_GAMEPLAY_NAMES))
-EPIC_RANDOM_GAMEPLAY_MASK = reduce(lambda a, b: a | b, map(lambda x: 1 << x, EPIC_RANDOM_GAMEPLAY_IDS))
+EPIC_RANDOM_GAMEPLAY_MASK = reduce(lambda a, b: a | b, lmap(lambda x: 1 << x, EPIC_RANDOM_GAMEPLAY_IDS))
 
 class WGC_STATE:
     OFF = 0
@@ -3089,7 +3092,7 @@ class PLAYER_RANK:
      CAPTAIN: 'captain',
      MAJOR: 'major',
      GENERAL: 'general'}
-    RANK_BY_NAME = {d:k for k, d in NAMES.iteritems()}
+    RANK_BY_NAME = {d:k for k, d in NAMES.items()}
 
     @staticmethod
     def getPlayerRankByName(name):
@@ -3099,7 +3102,7 @@ class PLAYER_RANK:
 class CHAT_COMMAND_FLAGS:
     EPIC_BATTLE_COMMANDS = 1
     NAMES = {EPIC_BATTLE_COMMANDS: 'EPIC_BATTLE_COMMANDS'}
-    FLAG_BY_NAME = {d:k for k, d in NAMES.iteritems()}
+    FLAG_BY_NAME = {d:k for k, d in NAMES.items()}
 
 
 class RM_STATE:
@@ -3186,11 +3189,11 @@ class LocalizableBotName(object):
     @staticmethod
     def parse(name):
         if name:
-            for namingType, cfg in LocalizableBotName.CONFIGS.iteritems():
+            for namingType, cfg in viewitems(LocalizableBotName.CONFIGS):
                 if name.startswith(cfg.prefix):
                     argsStr = name[len(cfg.prefix):]
                     argTokens = argsStr.split(cfg.argSeparator) if cfg.argSeparator else [argsStr]
-                    args = tuple((t(v) for t, v in izip(cfg.argTypes, argTokens)))
+                    args = tuple((t(v) for t, v in zip(cfg.argTypes, argTokens)))
                     return (namingType, args)
 
         return (None, None)
@@ -3229,7 +3232,7 @@ class CLIENT_COMMAND_SOURCES:
 
 
 EMPTY_GEOMETRY_ID = 0
-ROLE_LEVELS = range(6, MAX_VEHICLE_LEVEL + 1)
+ROLE_LEVELS = lrange(6, MAX_VEHICLE_LEVEL + 1)
 
 class ROLE_TYPE:
     NOT_DEFINED = 0
@@ -3289,7 +3292,7 @@ COMMON_ROLE_TO_ROLE_TYPE = {COMMON_ROLE.ASSAULT: frozenset((ROLE_TYPE.HT_ASSAULT
                       ROLE_TYPE.ATSPG_SNIPER,
                       ROLE_TYPE.ATSPG_SUPPORT)),
  COMMON_ROLE.SUPPORT: frozenset((ROLE_TYPE.LT_UNIVERSAL, ROLE_TYPE.LT_WHEELED, ROLE_TYPE.SPG))}
-ROLE_TYPE_TO_COMMON_ROLE = {role:common_role for common_role, roles in COMMON_ROLE_TO_ROLE_TYPE.iteritems() for role in roles}
+ROLE_TYPE_TO_COMMON_ROLE = {role:common_role for common_role, roles in COMMON_ROLE_TO_ROLE_TYPE.items() for role in roles}
 
 class ACTION_TYPE:
     BLOCK_AND_TAKE_DAMAGE = 1
@@ -4093,7 +4096,7 @@ class VehiclePartName(object):
      TURRET,
      GUN)
     _NAME_TO_IDX = {name:idx for idx, name in enumerate(ALL)}
-    _IDX_TO_NAME = {idx:name for idx, name in enumerate(ALL)}
+    _IDX_TO_NAME = dict(enumerate(ALL))
 
     @classmethod
     def getIdx(cls, name):
@@ -4170,11 +4173,14 @@ class OVERHEAT_GUN_STATE(object):
 
 
 class HEATING_ZONES_GUN_STATE(object):
-    __slots__ = ('IDLE', 'LOW', 'MEDIUM', 'HIGH')
     IDLE = 0
     LOW = 1
     MEDIUM = 2
     HIGH = 3
+    ALL = (IDLE,
+     LOW,
+     MEDIUM,
+     HIGH)
 
     @classmethod
     def toString(cls, value):

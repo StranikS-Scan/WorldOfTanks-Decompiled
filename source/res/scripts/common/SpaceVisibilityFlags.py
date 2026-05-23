@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/SpaceVisibilityFlags.py
+from __future__ import absolute_import
+from future.utils import viewvalues
 from constants import ARENA_GAMEPLAY_IDS, HANGAR_VISIBILITY_TAGS
 from extension_utils import ResMgr
 from soft_exception import SoftException
@@ -57,7 +59,7 @@ class SpaceVisibilityFlags(object):
                 return False
 
         else:
-            self.typeIDToIndex = dict(((i, i) for i in self.types.itervalues() if 0 <= i < SpaceVisibilityFlags._SERVER_FLAGS_NUMBER))
+            self.typeIDToIndex = dict(((i, i) for i in viewvalues(self.types) if 0 <= i < SpaceVisibilityFlags._SERVER_FLAGS_NUMBER))
         return False if len(self.typeIDToIndex) == 0 else True
 
     @staticmethod

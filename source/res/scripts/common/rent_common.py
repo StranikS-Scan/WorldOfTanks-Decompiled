@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/rent_common.py
+from __future__ import division
 GOLD_TO_CREDITS_CONVERSION_RATE = 400
 CREDITS_TO_GOLD_CONVERSION_RATE = 1.0 / GOLD_TO_CREDITS_CONVERSION_RATE
 

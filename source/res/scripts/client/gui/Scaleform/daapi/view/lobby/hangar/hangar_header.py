@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/hangar_header.py
+from __future__ import absolute_import
 import logging
 import typing
 import BigWorld
@@ -17,7 +18,7 @@ from gui.prb_control.entities.listener import IGlobalListener
 from helpers import dependency
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IBattlePassController, IHangarGuiController, IMarathonEventsController, IFestivityController, IRankedBattlesController, IBattleRoyaleController, IMapboxController, ILimitedUIController, ILiveOpsWebEventsController
+from skeletons.gui.game_control import IHangarGuiController, IMarathonEventsController, IFestivityController, IRankedBattlesController, IBattleRoyaleController, IMapboxController, ILimitedUIController, ILiveOpsWebEventsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 if typing.TYPE_CHECKING:
@@ -48,7 +49,6 @@ _SCREEN_WIDTH_FOR_MARATHON_GROUP = 1300
 class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     __slots__ = ('_currentVehicle', '__screenWidth')
     __battleMattersController = dependency.descriptor(IBattleMattersController)
-    __battlePassController = dependency.descriptor(IBattlePassController)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     _eventsCache = dependency.descriptor(IEventsCache)
     _eventsController = dependency.descriptor(IEventBoardController)
@@ -97,7 +97,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self._eventsCache.onSyncCompleted += self.update
         self._eventsCache.onProgressUpdated += self.update
         self._festivityController.onStateChanged += self.update
-        self.__battlePassController.onSeasonStateChanged += self.update
         self.__battleRoyaleController.onPrimeTimeStatusUpdated += self.update
         self.__rankedController.onGameModeStatusUpdated += self.update
         self.__mapboxCtrl.onPrimeTimeStatusUpdated += self.update
@@ -106,7 +105,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.__liveOpsWebEventsController.onEventStateChanged += self.__updateRightWidget
         self.__battleMattersController.onStateChanged += self.__onBattleMattersStateChanged
         self.__battleMattersController.onFinish += self.__onBattleMattersStateChanged
-        self.__limitedUIController.startObserve(LUI_RULES.BattlePassEntry, self.__updateBattlePassWidgetVisibility)
         self.__limitedUIController.startObserve(LUI_RULES.BattleMissions, self.__updateVOHeader)
         self.__limitedUIController.startObserve(LUI_RULES.BattleMattersFlag, self.__updateBattleMattersEntryPoint)
         self.__limitedUIController.startObserve(LUI_RULES.PersonalMissions, self.__updateVOHeader)
@@ -128,14 +126,12 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self._eventsCache.onSyncCompleted -= self.update
         self._eventsCache.onProgressUpdated -= self.update
         self._festivityController.onStateChanged -= self.update
-        self.__battlePassController.onSeasonStateChanged -= self.update
         self.__battleRoyaleController.onPrimeTimeStatusUpdated -= self.update
         self.__rankedController.onGameModeStatusUpdated -= self.update
         self.__liveOpsWebEventsController.onEventStateChanged -= self.__updateRightWidget
         self.__liveOpsWebEventsController.onSettingsChanged -= self.__updateRightWidget
         self.__battleMattersController.onStateChanged -= self.__onBattleMattersStateChanged
         self.__battleMattersController.onFinish -= self.__onBattleMattersStateChanged
-        self.__limitedUIController.stopObserve(LUI_RULES.BattlePassEntry, self.__updateBattlePassWidgetVisibility)
         self.__limitedUIController.stopObserve(LUI_RULES.BattleMissions, self.__updateVOHeader)
         self.__limitedUIController.stopObserve(LUI_RULES.BattleMattersFlag, self.__updateBattleMattersEntryPoint)
         self.__limitedUIController.stopObserve(LUI_RULES.PersonalMissions, self.__updateVOHeader)
@@ -183,34 +179,11 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             queueType = self.prbEntity.getQueueType()
         return getSupportedArenaBonusTypeFor(queueType, isInUnit)
 
-    def __getBPWidget(self):
-        isBPAvailable = not self.__battlePassController.isDisabled()
-        isValidBattleType = self.prbDispatcher and self.prbDispatcher.getEntity() and self.__battlePassController.isValidBattleType(self.prbDispatcher.getEntity())
-        isRuleCompleted = self.__limitedUIController.isRuleCompleted(LUI_RULES.BattlePassEntry)
-        isVisible = isBPAvailable and isValidBattleType and isRuleCompleted
-        return HANGAR_ALIASES.BATTLE_PASSS_ENTRY_POINT if isVisible else ''
-
     def __updateWidget(self):
-        alias = self.__hangarGuiCtrl.sfController.currentPresetGetter.getHangarWidgetAlias() or self.__getBPWidget()
+        alias = self.__hangarGuiCtrl.sfController.currentPresetGetter.getHangarWidgetAlias()
         if not self.__activeWidgets.update(ActiveWidgets.CENTER, alias):
             return
         self.as_addEntryPointS(alias)
-        self.__updateBattlePassSmallWidget()
-
-    def __updateBattlePassWidgetVisibility(self, *_):
-        self.__updateWidget()
-
-    def __updateBattlePassSmallWidget(self):
-        currentArenaBonusType = self.__getCurentArenaBonusType()
-        secondaryPointCanBeAvailable = currentArenaBonusType not in (constants.ARENA_BONUS_TYPE.REGULAR,
-         constants.ARENA_BONUS_TYPE.UNKNOWN,
-         constants.ARENA_BONUS_TYPE.MAPBOX,
-         constants.ARENA_BONUS_TYPE.WINBACK)
-        isRuleCompleted = self.__limitedUIController.isRuleCompleted(LUI_RULES.BattlePassEntry)
-        secondaryEntryPointAvailable = secondaryPointCanBeAvailable and not self.__battlePassController.isDisabled() and isRuleCompleted
-        self.as_setSecondaryEntryPointVisibleS(secondaryEntryPointAvailable)
-        if secondaryEntryPointAvailable:
-            self.getComponent(HANGAR_ALIASES.SECONDARY_ENTRY_POINT).update(currentArenaBonusType)
 
     def __updateVOHeader(self, *_):
         headerVO = self._makeHeaderVO()

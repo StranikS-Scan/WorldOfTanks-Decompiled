@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/shared/fitting_select_popover.py
+from __future__ import absolute_import
 import logging
 import typing
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
-from gui.Scaleform.daapi.view.lobby.shared.fitting_select.module_extenders import ModuleParamsExtender, fittingSelectModuleExtenders
+from gui.Scaleform.daapi.view.lobby.shared.fitting_select.module_extenders import fittingSelectModuleExtenders
 from gui.Scaleform.daapi.view.meta.FittingSelectPopoverMeta import FittingSelectPopoverMeta
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -28,6 +29,7 @@ from skeletons.gui.shared import IItemsCache
 from vehicles.mechanics.mechanic_constants import VehicleMechanic
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.vehicle_modules import VehicleGun, VehicleRadio, VehicleEngine, VehicleTurret, VehicleChassis
+    from gui.Scaleform.daapi.view.lobby.shared.fitting_select.module_extenders import ModuleParamsExtender
 _logger = logging.getLogger(__name__)
 FITTING_MODULES = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.CHASSIS],
  GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.TURRET],
@@ -123,9 +125,9 @@ class CommonFittingSelectPopover(FittingSelectPopoverMeta):
         self._logicProvider = logicProvider
         self.setCurrentTab(self._getInitialTabIndex())
 
-    def showModuleInfo(self, itemCD):
-        if self.__vehicle is not None and itemCD is not None and int(itemCD) > 0:
-            shared_events.showModuleInfo(itemCD, self.__vehicle.descriptor)
+    def showModuleInfo(self, moduleId):
+        if self.__vehicle is not None and moduleId is not None and int(moduleId) > 0:
+            shared_events.showModuleInfo(moduleId, self.__vehicle.descriptor)
         return
 
     def setVehicleModule(self, newId, oldId, isRemove):
@@ -282,7 +284,7 @@ class PopoverLogicProvider(object):
          'tooltipType': self._tooltipType,
          'status': _getStatus(reason)}
 
-    def _buildModuleData(self, module, isInstalled, stats):
+    def _buildModuleData(self, vehicleModule, isInstalledInSlot, stats):
         return NotImplemented
 
     def _buildList(self):
@@ -375,12 +377,12 @@ class _PreviewLogicProvider(PopoverLogicProvider):
     def setModule(self, newId, oldId, isRemove):
         g_currentPreviewVehicle.installComponent(int(newId))
 
-    def _buildModuleData(self, vehicleModule, isInstalled, _):
+    def _buildModuleData(self, vehicleModule, isInstalledInSlot, _):
         isFit, reason = vehicleModule.mayInstall(self._vehicle, 0)
         moduleData = self._buildCommonModuleData(vehicleModule, reason)
-        moduleData.update({'targetVisible': isInstalled,
+        moduleData.update({'targetVisible': isInstalledInSlot,
          'showPrice': False,
-         'isSelected': isInstalled,
+         'isSelected': isInstalledInSlot,
          'disabled': not isFit,
          'removeButtonLabel': MENU.MODULEFITS_REMOVENAME,
          'removeButtonTooltip': MENU.MODULEFITS_REMOVETOOLTIP})

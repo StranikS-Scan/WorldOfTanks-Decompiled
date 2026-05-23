@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/tank_setup/states.py
+from __future__ import absolute_import
 import logging
 import typing
 from WeakMethod import WeakMethodProxy
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
-from gui.lobby_state_machine.states import SubScopeTopLayerState, SFViewLobbyState, TopScopeTopLayerState, LobbyState, LobbyStateDescription
+from gui.lobby_state_machine.states import SubScopeTopLayerState, SFViewLobbyState, TopScopeTopLayerState, LobbyState
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import AmmunitionSetupViewEvent
 from helpers.dependency import replace_none_kwargs
@@ -13,6 +14,7 @@ from skeletons.gui.app_loader import IAppLoader
 from wg_async import wg_async, BrokenPromiseError
 if typing.TYPE_CHECKING:
     from gui.impl.lobby.tank_setup.ammunition_setup.base import BaseAmmunitionSetupView
+    from gui.lobby_state_machine.states import LobbyStateDescription
 _logger = logging.getLogger(__name__)
 
 def registerStates(machine):

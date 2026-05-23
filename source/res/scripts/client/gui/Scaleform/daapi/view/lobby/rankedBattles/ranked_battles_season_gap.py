@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/ranked_battles_season_gap.py
+from __future__ import absolute_import
 import time
 from helpers import dependency, time_utils
 from gui.ClientUpdateManager import g_clientUpdateManager

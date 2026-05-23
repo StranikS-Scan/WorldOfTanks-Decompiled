@@ -1,16 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/ValueReplay.py
+from __future__ import absolute_import
 import struct
+from future.utils import viewvalues
+from past.utils import old_div
 from bit_coder import BitCoder
 from soft_exception import SoftException
 from battle_results import g_config as battleResultsConfig
+from math_common import round_py2_style_int
 
 def makeFactor10(factor):
-    return int(round(factor * 10))
+    return round_py2_style_int(factor * 10)
 
 
 def makeFactor100(factor):
-    return int(round(factor * 100))
+    return round_py2_style_int(factor * 100)
 
 
 class BattleResults(dict):
@@ -161,7 +165,7 @@ class ValueReplay:
     def __getitem__(self, item):
         if item == self.__recordName:
             finalResult = 0
-            for op, (_, _), (_, finalResult) in self:
+            for _, (_, _), (_, finalResult) in self:
                 pass
 
             return finalResult
@@ -228,6 +232,8 @@ class ValueReplay:
         self.__connector[self.__recordName] = self.__OPERATORS[self.SUBCOEFF](self, other, coeff)
         self.__replay.append(ValueReplay.makeStepCompDescr(self.SUBCOEFF, idx))
         return self
+
+    __hash__ = None
 
     def __eq__(self, other):
         return False if not isinstance(other, ValueReplay) else self.__replay == other.__replay
@@ -310,7 +316,7 @@ class ValueReplay:
         factor = self.__getFactorValue(other)
         if factor is not None:
             value /= factor
-        return int(round(x * value))
+        return round_py2_style_int(x * value)
 
     def __opSub(self, other, _, x=None):
         if x is None:
@@ -337,14 +343,14 @@ class ValueReplay:
         factor = self.__getFactorValue(other)
         if factor is not None:
             value /= factor
-        return x + int(round(value * next(self.__tags.itervalues())))
+        return x + round_py2_style_int(value * next(iter(viewvalues(self.__tags))))
 
     def __addCoeffImpl(self, initial, value, coeff, op):
         connector = self.__connector
         if initial is None:
             initial = connector[self.__recordName]
         overiddenValues = self.__overiddenValues
-        return op(initial, int(round(overiddenValues.get(value, connector[value]) * overiddenValues.get(coeff, connector[coeff]) / self.__getFactorValue(coeff))))
+        return op(initial, round_py2_style_int(old_div(overiddenValues.get(value, connector[value]) * overiddenValues.get(coeff, connector[coeff]), self.__getFactorValue(coeff))))
 
     def __opAddCoeff(self, other, coeff, x=None):
         return self.__addCoeffImpl(x, other, coeff, lambda a, b: a + b)
@@ -354,7 +360,7 @@ class ValueReplay:
 
     def getDiffForTag(self, seekForTagName):
         prevFinalResult = None
-        for op, (tagName, originalValue), (_, finalResult) in self.__iter__():
+        for _, (tagName, _), (_, finalResult) in self.__iter__():
             if seekForTagName == tagName:
                 if prevFinalResult is not None:
                     return finalResult - prevFinalResult

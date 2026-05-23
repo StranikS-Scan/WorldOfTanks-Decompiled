@@ -286,7 +286,7 @@ class Comp7TankmenBonusUIPacker(BaseBonusUIPacker):
         cd = bonus.get('tmanCompDescr', bonus)
         tankmanData = tankmen.TankmanDescr(cd)
         model = Comp7BonusModel()
-        model.setName('tankman')
+        model.setName('tankwoman' if tankmanData.isFemale else 'tankman')
         model.setLabel(getFullUserName(tankmanData.nationID, tankmanData.firstNameID, tankmanData.lastNameID))
         model.setGroupName(cls.__getTankmanGroupName(tankmanData))
         return model

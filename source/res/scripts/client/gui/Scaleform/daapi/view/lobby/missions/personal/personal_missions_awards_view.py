@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/personal/personal_missions_awards_view.py
+from __future__ import absolute_import
+from future.utils import viewvalues
 from gui import makeHtmlString, SystemMessages
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import MainOperationAwardComposer, AddOperationAwardComposer
@@ -65,15 +67,15 @@ class PersonalMissionsAwardsView(LobbySubView, PersonalMissionsAwardsViewMeta, P
         self.setOperationID(operationID)
         self.refresh()
 
-    def showMissionByVehicleType(self, operationChain):
+    def showMissionByVehicleType(self, vehicleType):
         finalQuests = self.getOperation().getFinalQuests().values()
-        finalQuest = findFirst(lambda q: q.getQuestClassifier().classificationAttr == operationChain, finalQuests)
+        finalQuest = findFirst(lambda q: q.getQuestClassifier().classificationAttr == vehicleType, finalQuests)
         showPersonalMissionsChain(finalQuest.getOperationID(), finalQuest.getChainID())
 
     @decorators.adisp_process('updating')
-    def buyMissionsByVehicleType(self, operationChain):
+    def buyMissionsByVehicleType(self, vehicleType):
         finalQuests = self.getOperation().getFinalQuests().values()
-        finalQuest = findFirst(lambda q: q.getQuestClassifier().classificationAttr == operationChain, finalQuests)
+        finalQuest = findFirst(lambda q: q.getQuestClassifier().classificationAttr == vehicleType, finalQuests)
         result = yield quests.PMPawn(finalQuest).request()
         if result and result.userMsg:
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
@@ -114,7 +116,7 @@ class PersonalMissionsAwardsView(LobbySubView, PersonalMissionsAwardsViewMeta, P
     def __getVehicleAwardVO(self):
         slots = []
         finalQuestsMap = {}
-        for q in self.getOperation().getFinalQuests().itervalues():
+        for q in viewvalues(self.getOperation().getFinalQuests()):
             finalQuestsMap[q.getMajorTag()] = q
 
         if not finalQuestsMap:

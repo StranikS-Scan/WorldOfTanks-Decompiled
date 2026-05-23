@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: open_bundle/scripts/client/open_bundle/web/w2c_api.py
+from __future__ import absolute_import
 import logging
 from helpers import dependency
 from open_bundle.gui.shared.event_dispatcher import showOpenBundleMainView

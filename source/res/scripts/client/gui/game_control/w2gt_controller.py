@@ -5,6 +5,7 @@ from collections import namedtuple
 import typing
 from BWUtil import AsyncReturn
 import ArenaType
+import BigWorld
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
 from account_helpers.settings_core.settings_constants import GAME, GuiSettingsBehavior
 from adisp import adisp_process
@@ -30,6 +31,7 @@ _VALIDATE_RESPONSE_FIELDS = ('battle_zones',)
 _ETAG_FIELD = 'etag'
 _UPDATED_TIME_FIELD = 'Updated'
 _NOT_MODIFIED_CODE = 304
+_NEW_ACCOUNT_SESSIONS_COUNT = 2
 _W2gtResponseData = namedtuple('_W2gtResponseData', ('success', 'responseCode', 'data'))
 
 class W2GTGameController(IW2GTGameController):
@@ -165,7 +167,7 @@ class W2GTGameController(IW2GTGameController):
     def __applySettingsSection(self):
         isW2gtApplied = self.__settingsCore.serverSettings.getSectionSettings(SETTINGS_SECTIONS.GUI_START_BEHAVIOR, GuiSettingsBehavior.W2GT_APPLIED, 0)
         if not isW2gtApplied:
-            isEnabledByPlayer = self.__isPlayerWinbacker()
+            isEnabledByPlayer = self.__isPlayerWinbacker() or self.__isNewPlayer()
             self.__settingsCore.serverSettings.setSectionSettings(SETTINGS_SECTIONS.GUI_START_BEHAVIOR, {GuiSettingsBehavior.W2GT_APPLIED: True})
             self.__settingsCore.serverSettings.setSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED_2, {GAME.W2GT_ENABLE: isEnabledByPlayer})
             g_clientUpdateManager.addCallback('tokens', self.__onTokensUpdated)
@@ -217,3 +219,7 @@ class W2GTGameController(IW2GTGameController):
     def __writeCache(self):
         if self.__cache:
             self.__cache.write()
+
+    @staticmethod
+    def __isNewPlayer():
+        return BigWorld.player().incarnationID < _NEW_ACCOUNT_SESSIONS_COUNT

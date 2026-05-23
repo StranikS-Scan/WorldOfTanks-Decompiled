@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/ops_pack.py
+from __future__ import absolute_import
 import struct
+from future.utils import iteritems
+from past.builtins import unicode, xrange
 from external_strings_utils import truncate_utf8
 from soft_exception import SoftException
 MAX_PASCAL_STRING_LEN = 65535
@@ -96,7 +99,7 @@ class OpsPacker:
         self._packedOps += self._getOpPack(op, *args)
 
     def _getOpPack(self, op, *args):
-        unpackFormat, methodName, specialFormat, additionals, sz, packFormat = self._opsFormatDefs[op]
+        _, _, specialFormat, additionals, _, packFormat = self._opsFormatDefs[op]
         specialCount = len(specialFormat)
         fixedArgs = args[:-specialCount] if specialCount else args
         pack = struct.pack(packFormat, op, *fixedArgs)
@@ -133,7 +136,7 @@ class OpsPacker:
                     lenFormat, elemFormat, subkeyNames = adds[:3]
                     lenElements = len(arg)
                     pack += struct.pack(lenFormat, lenElements)
-                    for key, subdict in arg.iteritems():
+                    for key, subdict in iteritems(arg):
                         vals = []
                         for subkey in subkeyNames:
                             vals.append(subdict.get(subkey, 0))
@@ -165,10 +168,10 @@ class OpsUnpacker:
 
     def unpackOps(self, packedOps=''):
         invokedOps = set()
-        while len(packedOps):
+        while packedOps:
             opCode = struct.unpack_from('<B', packedOps)[0]
             try:
-                unpackFormat, methodName, specialFormat, additionals, calcSize, packFormat = self._opsFormatDefs[opCode]
+                unpackFormat, methodName, specialFormat, additionals, calcSize, _ = self._opsFormatDefs[opCode]
             except:
                 raise SoftException('%s unpackOps: unknown opcode %s' % (self.__class__, opCode))
 
@@ -201,7 +204,7 @@ class OpsUnpacker:
                             lenElements = struct.unpack_from(headerFormat, packedOps, packOfs)[0]
                             packOfs += headerSize
                             arg = []
-                            for i in xrange(lenElements):
+                            for _ in xrange(lenElements):
                                 elements = struct.unpack_from(elemFormat, packedOps, packOfs)
                                 arg.append(elements)
                                 packOfs += elemSize
@@ -222,7 +225,7 @@ class OpsUnpacker:
                             lenElements = struct.unpack_from(lenFormat, packedOps, packOfs)[0]
                             packOfs += lenSize
                             arg = {}
-                            for i in xrange(lenElements):
+                            for _ in xrange(lenElements):
                                 values = struct.unpack_from(elemFormat, packedOps, packOfs)
                                 key = values[0]
                                 subkeyOfs = 1

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/invites/ClanInvitesViewWithTable.py
+from __future__ import absolute_import, division
 import weakref
 import math
 from debug_utils import LOG_ERROR
@@ -232,7 +233,7 @@ class ClanInvitesAbstractDataProvider(SortableDAAPIDataProvider):
             return text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_STATUS_DECLINED))
         if status == CLAN_INVITE_STATES.EXPIRED:
             return text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_STATUS_EXPIRED))
-        if status == CLAN_INVITE_STATES.EXPIRED_RESENT or status == CLAN_INVITE_STATES.DECLINED_RESENT:
+        if status in (CLAN_INVITE_STATES.EXPIRED_RESENT, CLAN_INVITE_STATES.DECLINED_RESENT):
             return text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_STATUS_SENT))
         return text_styles.error(_ms(CLANS.CLANINVITESWINDOW_STATUS_ERROR)) if status == CLAN_INVITE_STATES.ERROR else ''
 
@@ -246,6 +247,6 @@ class ClanInvitesAbstractDataProvider(SortableDAAPIDataProvider):
         elif delta >= time_utils.ONE_HOUR:
             state = _ms(CLANS.CLANINVITESWINDOW_STATUS_HOURSLEFT, hours=int(math.ceil(float(delta) / time_utils.ONE_HOUR)))
         else:
-            mins = max(1, int(delta / time_utils.ONE_MINUTE))
+            mins = max(1, int(delta // time_utils.ONE_MINUTE))
             state = _ms(CLANS.CLANINVITESWINDOW_STATUS_MINUTESLEFT, min=mins)
         return state

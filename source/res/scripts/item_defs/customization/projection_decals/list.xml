@@ -12628,7 +12628,81 @@
       <tags>	formfactor_square	</tags>
       <mirror>	false	</mirror>
     </projection_decal>
+    <projection_decal>
+      <id>	1361	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_1054.dds	</texture>
+      <userString>	#vehicle_customization:special_style/bp2026_june_1	</userString>
+      <tags>	styleOnly formfactor_rect1x2 hiddenInUI	</tags>
+      <mirror>	false	</mirror>
+      <glossTexture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_1054_GMM.dds	</glossTexture>
+    </projection_decal>
+    <projection_decal>
+      <id>	1362	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_1055.dds	</texture>
+      <userString>	#vehicle_customization:special_style/bp2026_june_2	</userString>
+      <tags>	styleOnly formfactor_rect1x2 hiddenInUI	</tags>
+      <mirror>	false	</mirror>
+      <glossTexture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_1055_GMM.dds	</glossTexture>
+    </projection_decal>
+    <projection_decal>
+      <id>	1363	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_1056.dds	</texture>
+      <userString>	#vehicle_customization:special_style/bp2026_june_3	</userString>
+      <tags>	styleOnly formfactor_rect1x2 hiddenInUI	</tags>
+      <mirror>	false	</mirror>
+      <glossTexture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_1056_GMM.dds	</glossTexture>
+    </projection_decal>
+    <projection_decal>
+      <id>	1364	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_1057.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_1057	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	1365	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_1058.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_1058	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	1366	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_1059.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_1059	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
     <name>	BattlePass 2026	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	projection_decals 160g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	1359	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_1052.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_1052	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	1360	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_1053.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_1053	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <name>	Dragonboat Festival 2026	</name>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:projection_decals/special	</userString>
@@ -12651,6 +12725,50 @@
       <mirror>	false	</mirror>
     </projection_decal>
     <name>	Beaver Fun	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	projection_decals 160g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	1372	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_1067.dds	</texture>
+      <userString>	#vehicle_customization:special_style/wot_heat_mission_reward	</userString>
+      <tags>	styleOnly formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <name>	WoT x WoT HEAT Mission Reward Skin	</name>
+  </itemGroup>
+  <itemGroup>
+    <name>	Football Event 2026	</name>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	projection_decals 160g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	1559	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_1086.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_1086	</userString>
+      <tags>	styleOnly hiddenInUI disableVerticalMirror direction_left_to_right formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:projection_decals/animals	</userString>
@@ -15144,6 +15262,20 @@
       <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_1061.dds	</texture>
       <mirror>	true	</mirror>
       <userString>	#vehicle_customization:projection_decals/special/projection_decal_1061	</userString>
+      <tags>	disableVerticalMirror formfactor_square direction_right_to_left	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	1557	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_1081.dds	</texture>
+      <mirror>	true	</mirror>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_1081	</userString>
+      <tags>	disableVerticalMirror formfactor_square direction_right_to_left	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	1558	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_1082.dds	</texture>
+      <mirror>	true	</mirror>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_1082	</userString>
       <tags>	disableVerticalMirror formfactor_square direction_right_to_left	</tags>
     </projection_decal>
   </itemGroup>

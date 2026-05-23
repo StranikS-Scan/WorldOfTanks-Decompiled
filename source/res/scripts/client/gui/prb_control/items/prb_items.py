@@ -1,12 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/items/prb_items.py
 from collections import namedtuple
+from past.builtins import cmp
 from account_helpers import getAccountDatabaseID, getPlayerID
-from gui.prb_control.prb_helpers import BadgesHelper
-from helpers import dependency
 from constants import PREBATTLE_ACCOUNT_STATE, PREBATTLE_TEAM_STATE, OVERRIDDEN_BADGE
-from gui.prb_control.settings import PREBATTLE_PLAYERS_COMPARATORS
+from gui.prb_control.prb_helpers import BadgesHelper
+from gui.prb_control.settings import PREBATTLE_PLAYERS_SORT_TYPES
 from gui.shared.gui_items.Vehicle import Vehicle, getOrderByVehicleClass
+from gui.shared.sort_key import SortKey
+from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 
 class PlayerPrbInfo(object):
@@ -123,25 +125,19 @@ class PrbPropsInfo(object):
         return 'PrbPropsInfo(wins = {0!r:s}, battlesCount = {1:n}, createTime = {2:n})'.format(self.wins, self.battlesCount, self.createTime)
 
 
-def getPlayersComparator(playerComparatorType=PREBATTLE_PLAYERS_COMPARATORS.REGULAR):
+class _PrebattlePlayersSortKey(SortKey):
+    __slots__ = ('player',)
 
-    def comparator(player, other):
-        if player.isCreator ^ other.isCreator:
-            result = -1 if player.isCreator else 1
-        else:
-            result = cmp(player.time, other.time)
-        return result
+    def __init__(self, player):
+        super(_PrebattlePlayersSortKey, self).__init__()
+        self.player = player
 
-    def comparator_observers_to_bottom(player, other):
-        player_is_observer = player.isVehicleSpecified() and player.getVehicle().isObserver
-        other_is_observer = other.isVehicleSpecified() and other.getVehicle().isObserver
-        if player_is_observer ^ other_is_observer:
-            result = 1 if player_is_observer else -1
-        else:
-            result = cmp(player.time, other.time)
-        return result
+    @classmethod
+    def _playerNameComparator(cls, player, other):
+        return cmp(player.name, other.name)
 
-    def comparator_by_vehicle(player, other):
+    @classmethod
+    def _vehicleTypeComparator(cls, player, other):
         isPlayerVehicleSpecified = player.isVehicleSpecified()
         isOtherVehicleSpecified = other.isVehicleSpecified()
         if isPlayerVehicleSpecified != isOtherVehicleSpecified:
@@ -158,17 +154,57 @@ def getPlayersComparator(playerComparatorType=PREBATTLE_PLAYERS_COMPARATORS.REGU
         otherVehicleLevel = otherVehicle.level
         return cmp(otherVehicleLevel, playerVehicleLevel) if playerVehicleLevel != otherVehicleLevel else cmp(playerVehicle.shortUserName, otherVehicle.shortUserName)
 
-    def comparator_by_status(player, other):
+
+class _PrebattlePlayersRegularSortKey(_PrebattlePlayersSortKey):
+
+    def _cmp(self, other):
+        player, other = self.player, other.player
+        if player.isCreator ^ other.isCreator:
+            result = -1 if player.isCreator else 1
+        else:
+            result = cmp(player.time, other.time)
+        return result
+
+
+class _PrebattlePlayersObserversToBottomSortKey(_PrebattlePlayersSortKey):
+
+    def _cmp(self, other):
+        player, other = self.player, other.player
+        playerIsObserver = player.isVehicleSpecified() and player.getVehicle().isObserver
+        otherIsObserver = other.isVehicleSpecified() and other.getVehicle().isObserver
+        if playerIsObserver ^ otherIsObserver:
+            result = 1 if playerIsObserver else -1
+        else:
+            result = cmp(player.time, other.time)
+        return result
+
+
+class _PrebattlePlayersByVehicleSortKey(_PrebattlePlayersSortKey):
+
+    def _cmp(self, other):
+        return self._vehicleTypeComparator(self.player, other.player)
+
+
+class _PrebattlePlayersByNameSortKey(_PrebattlePlayersSortKey):
+
+    def _cmp(self, other):
+        return self._playerNameComparator(self.player, other.player)
+
+
+class _PrebattlePalyersByStateSortKey(_PrebattlePlayersSortKey):
+
+    def _cmp(self, other):
+        player, other = self.player, other.player
         if player.state != other.state:
             return cmp(other.state, player.state)
-        return comparator_by_vehicle(player, other) if player.isVehicleSpecified() else comparator_by_player_name(player, other)
+        return self._vehicleTypeComparator(player, other) if player.isVehicleSpecified() else self._playerNameComparator(player, other)
 
-    def comparator_by_player_name(player, other):
-        return cmp(player.name, other.name)
 
-    comparators = {PREBATTLE_PLAYERS_COMPARATORS.REGULAR: comparator,
-     PREBATTLE_PLAYERS_COMPARATORS.OBSERVERS_TO_BOTTOM: comparator_observers_to_bottom,
-     PREBATTLE_PLAYERS_COMPARATORS.BY_VEHICLE: comparator_by_vehicle,
-     PREBATTLE_PLAYERS_COMPARATORS.BY_STATE: comparator_by_status,
-     PREBATTLE_PLAYERS_COMPARATORS.BY_PLAYER_NAME: comparator_by_player_name}
-    return comparators.get(playerComparatorType, comparator)
+_PREBATTLE_PLAYERS_SORT_KEYS = {PREBATTLE_PLAYERS_SORT_TYPES.REGULAR: _PrebattlePlayersRegularSortKey,
+ PREBATTLE_PLAYERS_SORT_TYPES.OBSERVERS_TO_BOTTOM: _PrebattlePlayersObserversToBottomSortKey,
+ PREBATTLE_PLAYERS_SORT_TYPES.BY_VEHICLE: _PrebattlePlayersByVehicleSortKey,
+ PREBATTLE_PLAYERS_SORT_TYPES.BY_PLAYER_NAME: _PrebattlePlayersByNameSortKey,
+ PREBATTLE_PLAYERS_SORT_TYPES.BY_STATE: _PrebattlePalyersByStateSortKey}
+
+def getPlayersSortKey(playerSortKeyType=PREBATTLE_PLAYERS_SORT_TYPES.REGULAR):
+    return _PREBATTLE_PLAYERS_SORT_KEYS.get(playerSortKeyType, _PrebattlePlayersRegularSortKey)

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: open_bundle/scripts/client/open_bundle/notification/decorators.py
+from __future__ import absolute_import
 from gui.shared.notifications import NotificationGroup, NotificationGuiSettings
 from helpers import dependency
 from messenger import g_settings

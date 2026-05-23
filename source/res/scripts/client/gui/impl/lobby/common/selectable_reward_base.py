@@ -155,6 +155,18 @@ class SelectableRewardBase(ViewImpl):
         for catName in self.__cart:
             self.__cart[catName] = OrderedDict(sorted(self.__cart[catName].iteritems(), cmp=self._getItemsComparator(catName)))
 
+    def _getTabs(self):
+        return self.__tabs
+
+    def _setTabs(self, tabs):
+        self.__tabs = tabs
+
+    def _getCart(self):
+        return self.__cart
+
+    def _setCart(self, cart):
+        self.__cart = cart
+
     def _getTypesComparator(self):
 
         def _defaultCompare(first, second):

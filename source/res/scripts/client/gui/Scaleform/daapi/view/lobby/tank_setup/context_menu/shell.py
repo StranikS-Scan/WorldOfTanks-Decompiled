@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/tank_setup/context_menu/shell.py
+from __future__ import absolute_import
 from adisp import adisp_async, adisp_process
 from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import CMLabel, option
 from gui.Scaleform.daapi.view.lobby.tank_setup.context_menu.base import TankSetupCMLabel, FIRST_SLOT, SECOND_SLOT, THIRD_SLOT, BaseTankSetupContextMenu
@@ -12,19 +13,19 @@ from ids_generators import SequenceIDGenerator
 class ShellItemContextMenu(BaseTankSetupContextMenu):
     __sqGen = SequenceIDGenerator()
 
-    @option(__sqGen.next(), CMLabel.INFORMATION)
+    @option(__sqGen.nextSequenceID, CMLabel.INFORMATION)
     def showInfo(self):
         self._sendSlotAction(BaseSetupModel.SHOW_INFO_SLOT_ACTION)
 
-    @option(__sqGen.next(), TankSetupCMLabel.PUT_ON_FIRST)
+    @option(__sqGen.nextSequenceID, TankSetupCMLabel.PUT_ON_FIRST)
     def putOnFirst(self):
         self._sendPutOnSlotAction(onId=FIRST_SLOT)
 
-    @option(__sqGen.next(), TankSetupCMLabel.PUT_ON_SECOND)
+    @option(__sqGen.nextSequenceID, TankSetupCMLabel.PUT_ON_SECOND)
     def putOnSecond(self):
         self._sendPutOnSlotAction(onId=SECOND_SLOT)
 
-    @option(__sqGen.next(), TankSetupCMLabel.PUT_ON_THIRD)
+    @option(__sqGen.nextSequenceID, TankSetupCMLabel.PUT_ON_THIRD)
     def putOnThird(self):
         self._sendPutOnSlotAction(onId=THIRD_SLOT)
 

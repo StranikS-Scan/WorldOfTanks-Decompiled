@@ -28,7 +28,6 @@ from gui.impl.dialogs import dialogs
 from gui.shared import personality as gui_personality
 from helpers import RSSDownloader, OfflineMode, LightingGenerationMode
 from helpers import dependency, log
-from helpers import styles_perf_toolset
 from messenger import MessengerEntry
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gameplay import IGameplayLogic
@@ -162,7 +161,6 @@ def init(scriptConfig, engineConfig, userPreferences):
 def start():
     LOG_DEBUG('start')
     pdc.start()
-    styles_perf_toolset.setup()
     checkBotNet()
     if OfflineMode.onStartup():
         gameLoading.getLoader().idle()

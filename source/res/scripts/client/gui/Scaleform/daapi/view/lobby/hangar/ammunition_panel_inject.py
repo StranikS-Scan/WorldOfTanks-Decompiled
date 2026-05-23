@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/ammunition_panel_inject.py
+from __future__ import absolute_import
 import BigWorld
 from shared_utils import nextTick
 from frameworks.wulf import ViewFlags

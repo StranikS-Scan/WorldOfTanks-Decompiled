@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/header_helpers/personal_mission_flags.py
+from __future__ import absolute_import
+from future.utils import viewitems, viewvalues
 import nations
 from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.Scaleform.daapi.view.lobby.hangar.header_helpers.base_flags import IQuestsFlag
@@ -20,7 +22,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 QUEST_TYPE_BY_PM_BRANCH = {PM_BRANCH.REGULAR: HANGAR_HEADER_QUESTS.QUEST_TYPE_PERSONAL_REGULAR,
  PM_BRANCH.PERSONAL_MISSION_2: HANGAR_HEADER_QUESTS.QUEST_TYPE_PERSONAL_PM2}
-HANGAR_HEADER_QUESTS_TO_PM_BRANCH = {value:key for key, value in QUEST_TYPE_BY_PM_BRANCH.iteritems()}
+HANGAR_HEADER_QUESTS_TO_PM_BRANCH = {value:key for key, value in viewitems(QUEST_TYPE_BY_PM_BRANCH)}
 
 class WIDGET_PM_STATE(object):
     DISABLED = 0
@@ -87,7 +89,7 @@ def _findPersonalMissionsState(eventsCache, vehicle, branch):
      WIDGET_PM_STATE.OPERATION_DISABLED,
      WIDGET_PM_STATE.DISABLED)
     currentState = branchState
-    for operation in eventsCache.getPersonalMissions().getOperationsForBranch(branch).itervalues():
+    for operation in viewvalues(eventsCache.getPersonalMissions().getOperationsForBranch(branch)):
         operationState = WIDGET_PM_STATE.DISABLED
         if not operation.isCompleted():
             fullDone = False
@@ -96,13 +98,13 @@ def _findPersonalMissionsState(eventsCache, vehicle, branch):
         elif not operation.isUnlocked():
             operationState |= WIDGET_PM_STATE.UNAVAILABLE
             continue
-        for chainID, chain in operation.getQuests().iteritems():
+        for chainID, chain in viewitems(operation.getQuests()):
             if not operation.getChainClassifier(chainID).matchVehicle(vehicleType):
                 continue
             firsQuest = chain.values()[0]
             if vehicleLvl < firsQuest.getVehMinLevel():
                 operationState |= WIDGET_PM_STATE.NO_VEHICLE
-            for quest in chain.itervalues():
+            for quest in viewvalues(chain):
                 if quest.isInProgress():
                     if operation.isDisabled():
                         return (WIDGET_PM_STATE.OPERATION_DISABLED, None)
@@ -230,7 +232,7 @@ class PersonalMissionsFlag(IQuestsFlag):
                     enable = False
                 result.append(headerQuestFormatterVo(enable, icon, label, questType, questID=personalMissionID, tooltip=tooltip, isTooltipSpecial=bool(pmState & WIDGET_PM_STATE.IN_PROGRESS or pmState & WIDGET_PM_STATE.ON_PAUSE)))
 
-            if all([ st == WIDGET_PM_STATE.NO_VEHICLE for st in states ]):
+            if all((st == WIDGET_PM_STATE.NO_VEHICLE for st in states)):
                 for vo in result:
                     vo['tooltip'] = TOOLTIPS.HANGAR_HEADER_PERSONALMISSIONS_DISABLEDALL
 

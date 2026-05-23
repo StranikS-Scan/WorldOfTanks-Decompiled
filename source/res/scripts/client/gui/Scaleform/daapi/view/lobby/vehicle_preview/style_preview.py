@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_preview/style_preview.py
+from __future__ import absolute_import
 import logging
 import typing
 from CurrentVehicle import g_currentPreviewVehicle
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
+from gui.Scaleform.daapi.view.lobby.vehicle_preview.preview_selectable_logic import PreviewSelectableLogic
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.sound_constants import STYLE_PREVIEW_SOUND_SPACE
 from gui.Scaleform.daapi.view.meta.VehicleBasePreviewMeta import VehicleBasePreviewMeta
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
@@ -13,11 +15,10 @@ from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.shared import EVENT_BUS_SCOPE, event_bus_handlers, event_dispatcher, events, g_eventBus
+from gui.shared import EVENT_BUS_SCOPE, event_dispatcher, events, g_eventBus
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.customization.c11n_items import getGroupFullNameResourceID
 from helpers import dependency
-from preview_selectable_logic import PreviewSelectableLogic
 from skeletons.gui.game_control import IHeroTankController
 from skeletons.gui.shared.utils import IHangarSpace
 from uilogging.shop.loggers import ShopVehicleStylePreviewMetricsLogger, ShopVehicleStylePreviewFlowLogger
@@ -25,7 +26,6 @@ _logger = logging.getLogger(__name__)
 
 class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
     __background_alpha__ = 0.0
-    __metaclass__ = event_bus_handlers.EventBusListener
     __hangarSpace = dependency.descriptor(IHangarSpace)
     __heroTanksControl = dependency.descriptor(IHeroTankController)
     _COMMON_SOUND_SPACE = STYLE_PREVIEW_SOUND_SPACE
@@ -66,6 +66,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
             event_dispatcher.showHangar()
         self.__hangarSpace.onSpaceCreate += self.__onHangarCreateOrRefresh
         self.addListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading, EVENT_BUS_SCOPE.DEFAULT)
+        self.addListener(events.HideWindowEvent.HIDE_VEHICLE_PREVIEW, self.__handleWindowClose, EVENT_BUS_SCOPE.LOBBY)
         self.__heroTanksControl.setInteractive(False)
         self.as_setAdditionalInfoS(self._getAdditionalInfoVO())
         if self.__backPreviewAlias and self.__backPreviewAlias == VIEW_ALIAS.LOBBY_STORE:
@@ -76,6 +77,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
     def _dispose(self):
         self.__selectedVehicleEntityId = None
         self.removeListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading, EVENT_BUS_SCOPE.DEFAULT)
+        self.removeListener(events.HideWindowEvent.HIDE_VEHICLE_PREVIEW, self.__handleWindowClose, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__hangarSpace.onSpaceCreate -= self.__onHangarCreateOrRefresh
         self.__heroTanksControl.setInteractive(True)
@@ -117,7 +119,6 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         self.__handleWindowClose()
         g_eventDispatcher.loadHangar()
 
-    @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_VEHICLE_PREVIEW, EVENT_BUS_SCOPE.LOBBY)
     def __handleWindowClose(self, event=None):
         if event is not None:
             if event.ctx.get('back', True):

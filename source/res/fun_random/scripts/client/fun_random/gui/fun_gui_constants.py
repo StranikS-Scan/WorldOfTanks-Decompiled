@@ -49,5 +49,13 @@ class FunRandomTooltipConstants(CONST_CONTAINER):
     LOBBY_TOOLTIPS_SET = (FUN_RANDOM_CALENDAR_DAY, FUN_RANDOM_MODE_SELECTOR_CALENDAR_DAY, FUN_RANDOM_REWARDS)
 
 
+class AccountSettingsConstants(CONST_CONTAINER):
+    FUN_RANDOM_ACCOUNT_SETTINGS = 'funRandomAccountSettings'
+    FUN_RANDOM_INFO_PAGE_SHOWN = 'funRandomInfoPageShown'
+    FUN_RANDOM_SEEN_TRIGGERS_COMPLETION = 'funRandomSeenTriggersCompletion'
+
+
+ACCOUNT_SUBMODE_DEFAULT_SETTINGS = {AccountSettingsConstants.FUN_RANDOM_INFO_PAGE_SHOWN: False}
+
 def initFunRandomLimitedUIIds():
     LUI_RULES.inject(_LUI_RULES)

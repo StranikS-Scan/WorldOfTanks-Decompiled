@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/ResearchPanel.py
+from __future__ import absolute_import
 import typing
 from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.genConsts.RESEARCH_COUNTER_STATES import RESEARCH_COUNTER_STATES

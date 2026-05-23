@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: open_bundle/scripts/client/open_bundle/messenger/formatters/service_channel.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.server_events.recruit_helper import getRecruitInfo
@@ -35,9 +37,9 @@ class OpenBundleAchievesFormatter(QuestAchievesFormatter):
             return None
 
     @classmethod
-    def _processTokens(cls, data):
+    def _processTokens(cls, tokens):
         result = []
-        for token, tokenData in data.get('tokens', {}).items():
+        for token, tokenData in viewitems(tokens.get('tokens', {})):
             tankmanTokenResult = cls._processTankmanToken(token, tokenData)
             if tankmanTokenResult:
                 result.append(tankmanTokenResult)

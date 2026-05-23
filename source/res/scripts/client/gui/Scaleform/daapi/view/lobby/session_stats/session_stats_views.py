@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/session_stats/session_stats_views.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from account_helpers.settings_core.settings_constants import SESSION_STATS
 from constants import ARENA_BONUS_TYPE
 from gui.Scaleform.daapi.view.lobby.session_stats.shared import packLastBattleData, packBattleEfficiencyData, packTotalData, toIntegral, toNiceNumber, getDeltaAsData, getNationIcon
@@ -61,7 +63,7 @@ class SessionVehicleStatsView(SessionVehicleStatsViewMeta):
         vehiclesData = []
         vehiclesSortData = []
         if vehiclesDict:
-            for intCD, vehicle in vehiclesDict.iteritems():
+            for intCD, vehicle in viewitems(vehiclesDict):
                 data = self.itemsCache.items.sessionStats.getVehiclesStats(ARENA_BONUS_TYPE.REGULAR, intCD)
                 vehiclesSortData.append((intCD, (data.battleCnt, vehicle.level, data.averageDamage.value)))
                 vehiclesData.append({'intCD': intCD,

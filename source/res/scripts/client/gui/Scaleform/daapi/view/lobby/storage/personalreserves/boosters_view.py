@@ -1,14 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/personalreserves/boosters_view.py
-from gui.impl.lobby.personal_reserves.personal_reserves_utils import findNearestExpiryTimeInBoostersList
-from gui.shared.utils.scheduled_notifications import Notifiable, TimerNotifier
-from helpers.i18n import makeString as _ms
+from __future__ import absolute_import
 import copy
+import typing
+from future.utils import viewitems, viewvalues
 from account_helpers import AccountSettings
 from goodies.goodie_constants import GOODIE_RESOURCE_TYPE
 from goodies.goodie_helpers import GoodieExpirationData
 from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.impl.lobby.personal_reserves.personal_reserves_utils import findNearestExpiryTimeInBoostersList
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import createStorageDefVO, isStorageSessionTimeout
@@ -18,6 +19,7 @@ from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.STORAGE import STORAGE
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.shared.utils.scheduled_notifications import Notifiable, TimerNotifier
 from gui.goodies.goodie_items import BOOSTERS_ORDERS, MAX_ACTIVE_BOOSTERS_COUNT
 from gui.impl import backport
 from gui.impl.common.personal_reserves.personal_reserves_shared_constants import PREMIUM_BOOSTER_IDS
@@ -28,6 +30,7 @@ from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from helpers import time_utils
+from helpers.i18n import makeString as _ms
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.goodies import IGoodiesCache
@@ -79,10 +82,10 @@ _TYPE_FILTER_ITEMS = [{'filterValue': _FilterBit.XP,
 
 def getCriteriaFromFilterMask(filterMask):
     criteria = REQ_CRITERIA.EMPTY
-    typesSet = {_TYPE_BIT_TO_RESOURCE_TYPE_MAP[bit] for bit in _TYPE_BIT_TO_RESOURCE_TYPE_MAP.iterkeys() if filterMask & bit}
+    typesSet = {resourceType for bit, resourceType in viewitems(_TYPE_BIT_TO_RESOURCE_TYPE_MAP) if filterMask & bit}
     if typesSet:
         criteria |= REQ_CRITERIA.BOOSTER.BOOSTER_TYPES(typesSet)
-    for bit, crit in _TYPE_BIT_TO_CRITERIA.iteritems():
+    for bit, crit in viewitems(_TYPE_BIT_TO_CRITERIA):
         if filterMask & bit:
             criteria |= crit
 
@@ -109,14 +112,14 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
         self.as_resetFilterS(self.__filterMask)
         self.__onUpdateBoosters()
 
-    def onFiltersChange(self, filterMask):
-        self.__filterMask = filterMask
+    def onFiltersChange(self, filters):
+        self.__filterMask = filters
         self.__onUpdateBoosters()
 
     def onInfoClicked(self):
         showPersonalReservesInfomationScreen()
 
-    def activateReserve(self, boosterID):
+    def activateReserve(self, boosterId):
         showBoostersActivation()
 
     def _getClientSectionKey(self):
@@ -183,7 +186,7 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
         for booster in self.__getBoosters():
             expirations = booster.expirations
             totalBoostersCount += len(expirations)
-            remaining = booster.count - sum((exp.amount for exp in expirations.itervalues()))
+            remaining = booster.count - sum((exp.amount for exp in viewvalues(expirations)))
             if remaining:
                 totalBoostersCount += 1
 
@@ -204,13 +207,13 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
             for booster in boosters:
                 expirations = booster.expirations
                 if not filterNonExpirable:
-                    newBoosters.extend(expirations.itervalues())
-                remaining = booster.count - sum((exp.amount for exp in expirations.itervalues()))
+                    newBoosters.extend(viewvalues(expirations))
+                remaining = booster.count - sum((exp.amount for exp in viewvalues(expirations)))
                 if remaining and not filterExpirable:
                     newBoosters.append(GoodieExpirationData(booster, float('inf'), remaining))
 
         if newBoosters:
-            for booster, timestamp, amount in sorted(newBoosters, cmp=self.__sort):
+            for booster, timestamp, amount in sorted(newBoosters, key=self.__sortKey):
                 influence = backport.text(R.strings.menu.booster.influence.dyn(booster.boosterGuiType)())
                 limitResource = R.strings.menu.booster.limit.dyn(booster.boosterGuiType)
                 if limitResource:
@@ -239,8 +242,11 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
     def __onQuestsUpdate(self, *args):
         self.__onUpdateBoosters()
 
-    def __sort(self, a, b):
-        return cmp(a.timestamp, b.timestamp) or cmp(BOOSTERS_ORDERS[a.booster.boosterType], BOOSTERS_ORDERS[b.booster.boosterType]) or cmp(b.booster.effectValue, a.booster.effectValue) or cmp(b.booster.effectTime, a.booster.effectTime)
+    def __sortKey(self, expirationData):
+        return (expirationData.timestamp,
+         BOOSTERS_ORDERS[expirationData.booster.boosterType],
+         expirationData.booster.effectValue,
+         expirationData.booster.effectTime)
 
     def __initFilter(self):
         typeItems = copy.deepcopy(_TYPE_FILTER_ITEMS)

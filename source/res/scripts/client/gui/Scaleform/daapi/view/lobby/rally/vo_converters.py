@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/vo_converters.py
+from __future__ import absolute_import
+from future.utils import lrange
 import BigWorld
 from UnitBase import UNIT_ROLE
 from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL, PREBATTLE_TYPE
@@ -249,8 +251,7 @@ _ROLE_ICONS = {UNIT_ROLE.CAN_USE_EXTRA_EQUIPMENTS: 'gunner',
 def makeTotalLevelLabel(unitStats, restriction=''):
     templateKey = 'sumLevelLabel'
     if restriction:
-        if restriction in _UNIT_RESTRICTION_TO_LABEL:
-            templateKey = _UNIT_RESTRICTION_TO_LABEL[restriction]
+        templateKey = _UNIT_RESTRICTION_TO_LABEL.get(restriction, templateKey)
     else:
         templateKey = 'levelOk'
     label = makeHtmlString('html_templates:lobby/cyberSport/unit', templateKey, {'sumLevels': unitStats.curTotalLevel})
@@ -418,7 +419,7 @@ def _getXPFactorSlotInfo(unit, eventsCache, slotInfo):
             maxDistance = max(eventsCache.getSquadBonusLevelDistance())
             minLevel = max(MIN_VEHICLE_LEVEL, levels[0] - maxDistance)
             maxLevel = min(MAX_VEHICLE_LEVEL, levels[0] + maxDistance)
-            rangeString = toRomanRangeString(range(minLevel, maxLevel + 1), 1)
+            rangeString = toRomanRangeString(lrange(minLevel, maxLevel + 1), 1)
             additionalMsg = i18n.makeString(PLATOON.MEMBERS_CARD_SELECTVEHICLE, level=rangeString)
     slotNotificationIcon = ''
     if slotInfo.vehicle:
@@ -530,10 +531,10 @@ def makeUnitRosterConditions(slots, isDefaultSlot, index=None, levelsRange=None)
             if not isDefault:
                 if not rosterSlot.isNationMaskFull():
                     nationMask = rosterSlot.nationMask
-                    params['nationIDRange'] = filter(lambda k, mask=nationMask: 1 << NATIONS_INDICES[k] & mask, NATIONS_NAMES)
+                    params['nationIDRange'] = [ name for name in NATIONS_NAMES if 1 << NATIONS_INDICES[name] & nationMask ]
                 if not rosterSlot.isVehClassMaskFull():
                     vehClassMask = rosterSlot.vehClassMask
-                    params['vTypeRange'] = filter(lambda k, mask=vehClassMask: 1 << VEHICLE_CLASS_INDICES[k] & mask, VEHICLE_CLASSES)
+                    params['vTypeRange'] = [ vClass for vClass in VEHICLE_CLASSES if 1 << VEHICLE_CLASS_INDICES[vClass] & vehClassMask ]
                 levels = rosterSlot.levels
                 if levels != rosterSlot.DEFAULT_LEVELS:
                     params['vLevelRange'] = levels
@@ -570,7 +571,7 @@ def makeBuildingIndicatorsVOByDescr(buildingDescr):
 
 def makeBuildingIndicatorsVO(buildingLevel, progress, hpVal, hpTotalVal, defResVal, maxDefResVal):
     FORMAT_PATTERN = '###'
-    if progress == FORT_ALIAS.STATE_FOUNDATION_DEF or progress == FORT_ALIAS.STATE_FOUNDATION:
+    if progress in (FORT_ALIAS.STATE_FOUNDATION_DEF, FORT_ALIAS.STATE_FOUNDATION):
         hpValueFormatter = text_styles.alert(FORMAT_PATTERN)
     else:
         hpValueFormatter = text_styles.defRes(FORMAT_PATTERN)

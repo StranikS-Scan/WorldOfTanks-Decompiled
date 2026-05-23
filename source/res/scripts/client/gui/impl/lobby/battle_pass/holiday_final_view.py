@@ -1,15 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/holiday_final_view.py
+from __future__ import absolute_import
 import logging
 from typing import TYPE_CHECKING
+from future.utils import viewitems
 from battle_pass_common import BattlePassConsts, BattlePassTankmenSource, FinalReward
 from gui.battle_pass.battle_pass_award import BattlePassAwardsManager
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData
 from gui.battle_pass.battle_pass_constants import ChapterState
 from gui.battle_pass.battle_pass_helpers import getAllFinalRewards, getReceivedTankmenCount, getTankmenShopPackages, getVehicleInfoForChapter, isSeasonEndingSoon, showFinalRewardPreviewBattlePassState
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.battle_pass.holiday_final_view_model import FinalRewardTypes, HolidayFinalViewModel
-from gui.impl.gen.view_models.views.lobby.battle_pass.package_item import ChapterStates
+from gui.impl.gen.view_models.views.lobby.battle_pass.holiday_final_view_model import FinalRewardTypes, HolidayFinalViewModel, ChapterStates
 from gui.impl.pub.view_component import ViewComponent
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.shared import events
@@ -93,7 +94,15 @@ class HolidayFinalPresenter(ViewComponent[HolidayFinalViewModel]):
             tx.setCurrentLevel(self.__battlePass.getLevelInChapter(self.__chapterID) + 1)
 
     def __isTankmenReceived(self, shopPackages):
-        return all((packageCount - getReceivedTankmenCount(tankman) == 0 for tankman, packageCount in shopPackages.iteritems())) and all((getReceivedTankmenCount(tankman) > 0 for tankman, info in self.__battlePass.getSpecialTankmen().iteritems() if info.get('source') == BattlePassTankmenSource.QUEST_CHAIN)) and all((info.get('availableCount', 0) - getReceivedTankmenCount(tankman) == 0 for tankman, info in self.__battlePass.getSpecialTankmen().iteritems() if info.get('source') in BattlePassTankmenSource.PROGRESSION))
+        for tankman, packageCount in viewitems(shopPackages):
+            if packageCount - getReceivedTankmenCount(tankman) != 0:
+                return False
+
+        for tankman, info in viewitems(self.__battlePass.getSpecialTankmen()):
+            if info.get('source') == BattlePassTankmenSource.PROGRESSION and info.get('availableCount', 0) - getReceivedTankmenCount(tankman) != 0:
+                return False
+
+        return True
 
     def __update(self):
         self.__fillModel()

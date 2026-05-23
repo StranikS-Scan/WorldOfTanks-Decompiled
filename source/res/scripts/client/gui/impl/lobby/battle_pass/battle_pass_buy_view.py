@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/battle_pass_buy_view.py
+from __future__ import absolute_import
 import logging
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData
 from gui.battle_pass.battle_pass_buyer import BattlePassBuyer
@@ -8,7 +9,6 @@ from gui.battle_pass.battle_pass_package import generatePackage
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_buy_view_model import BattlePassBuyViewModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.buy_chapter_model import BuyChapterModel
-from gui.impl.gen.view_models.views.lobby.battle_pass.package_item import ChapterStates, PackageType
 from gui.impl.pub.view_component import ViewComponent
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.shared import EVENT_BUS_SCOPE
@@ -17,10 +17,6 @@ from gui.shared.events import BattlePassEvent
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController, IWalletController
 _logger = logging.getLogger(__name__)
-_CHAPTER_STATES = {ChapterState.ACTIVE: ChapterStates.ACTIVE,
- ChapterState.COMPLETED: ChapterStates.COMPLETED,
- ChapterState.PAUSED: ChapterStates.PAUSED,
- ChapterState.NOT_STARTED: ChapterStates.NOTSTARTED}
 
 class BuyPassPresenter(ViewComponent[BattlePassBuyViewModel]):
     __battlePass = dependency.descriptor(IBattlePassController)
@@ -72,13 +68,13 @@ class BuyPassPresenter(ViewComponent[BattlePassBuyViewModel]):
 
     def _onLoading(self, *args, **kwargs):
         super(BuyPassPresenter, self)._onLoading(*args, **kwargs)
-        self.__selectedPackage = generatePackage(self.__packageID, battlePass=self.__battlePass)
+        self.__selectedPackage = generatePackage(self.__packageID)
         if self.__childStateID == R.aliases.battle_pass.BuyPassRewards():
             self.viewModel.setState(self.viewModel.REWARDS_STATE)
         with self.viewModel.transaction() as model:
             self.__setGeneralFields(model=model)
             self.__setSelectedPackage(model=model)
-            self.__setRegularChapters(model=model)
+            self.__setMainChapters(model=model)
 
     def _finalize(self):
         self.__selectedPackage = None
@@ -160,7 +156,6 @@ class BuyPassPresenter(ViewComponent[BattlePassBuyViewModel]):
             tx.setFromLevel(fromLevel)
             tx.setToLevel(toLevel)
             tx.setChapterID(chapterID)
-            tx.setPackageState(PackageType.BATTLEPASS)
             tx.setIsPurchaseWithLevels(self.__selectedPackage.isWithLevels())
             packBonusModelAndTooltipData(self.__selectedPackage.getNowAwards(), tx.nowRewards, self.__tooltipItems)
             packBonusModelAndTooltipData(self.__selectedPackage.getFutureAwards(), tx.futureRewards, self.__tooltipItems)
@@ -196,7 +191,7 @@ class BuyPassPresenter(ViewComponent[BattlePassBuyViewModel]):
         if not isValidState or allBought:
             showBattlePass(R.aliases.battle_pass.ChapterChoice())
             return
-        self.__selectedPackage = generatePackage(self.__packageID, battlePass=ctrl)
+        self.__selectedPackage = generatePackage(self.__packageID)
         self.__updateState()
 
     @replaceNoneKwargsModel
@@ -217,13 +212,14 @@ class BuyPassPresenter(ViewComponent[BattlePassBuyViewModel]):
         showBattlePass(R.aliases.battle_pass.Progression(), self.__packageID)
 
     @replaceNoneKwargsModel
-    def __setRegularChapters(self, model=None):
-        chapters = model.getRegularChapters()
+    def __setMainChapters(self, model=None):
+        chapters = model.getChapters()
         chapters.clear()
-        for chapterID in self.__battlePass.getRegularChapterIDs():
+        for chapterID in self.__battlePass.getMainChapterIDs():
             chapterModel = BuyChapterModel()
             chapterModel.setChapterID(chapterID)
             chapterModel.setHasStarterPack(bool(self.__battlePass.getChapterStarterPack(chapterID)))
+            chapterModel.setIsExtra(self.__battlePass.isExtraChapter(chapterID))
             chapters.addViewModel(chapterModel)
 
         chapters.invalidate()

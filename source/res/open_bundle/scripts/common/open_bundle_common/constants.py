@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: open_bundle/scripts/common/open_bundle_common/constants.py
+from __future__ import absolute_import
 from datetime import timedelta
 OPEN_BUNDLE_GAME_PARAMS_KEY = 'open_bundle_config'
 OPEN_BUNDLE_PDATA_KEY = 'openBundle'

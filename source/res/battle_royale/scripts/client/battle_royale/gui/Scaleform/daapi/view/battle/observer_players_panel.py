@@ -4,7 +4,7 @@ import BigWorld
 from battle_royale.gui.Scaleform.daapi.view.battle.shared.utils import getVehicleLevel
 from Event import EventsSubscriber
 from aih_constants import CTRL_MODE_NAME
-from arena_bonus_type_caps import ARENA_BONUS_TYPE
+from constants import ARENA_BONUS_TYPE
 from gui.Scaleform.daapi.view.meta.BattleRoyalePlayersPanelMeta import BattleRoyalePlayersPanelMeta
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/CyberSportMainWindow.py
+from __future__ import absolute_import
 from UnitBase import UNIT_BROWSER_ERROR
 from adisp import adisp_process
 from constants import PREBATTLE_TYPE
@@ -136,9 +137,9 @@ class CyberSportMainWindow(CyberSportMainWindowMeta):
         self.destroy()
         g_eventDispatcher.showUnitProgressInCarousel(self.getPrbType())
 
-    def onAutoMatch(self, value, vehTypes):
+    def onAutoMatch(self, value, values):
         if value == CYBER_SPORT_ALIASES.INTRO_VIEW_UI:
-            self.prbEntity.request(AutoSearchUnitCtx(vehTypes=vehTypes))
+            self.prbEntity.request(AutoSearchUnitCtx(vehTypes=values))
 
     def onBrowseRallies(self):
         self._doSelect(PREBATTLE_ACTION_NAME.PUBLICS_LIST)
@@ -146,11 +147,11 @@ class CyberSportMainWindow(CyberSportMainWindowMeta):
     def onCreateRally(self):
         self.__requestToCreate()
 
-    def onJoinRally(self, rallyId, slotIndex, peripheryID):
+    def onJoinRally(self, rallyId, slotIndex, peripheryId):
         ctx = JoinUnitCtx(rallyId, self.prbEntity.getEntityType(), slotIndex, waitingID='prebattle/join')
-        if self.lobbyContext.isAnotherPeriphery(peripheryID):
-            if self.lobbyContext.isPeripheryAvailable(peripheryID):
-                self.__requestToReloginAndJoin(peripheryID, ctx)
+        if self.lobbyContext.isAnotherPeriphery(peripheryId):
+            if self.lobbyContext.isPeripheryAvailable(peripheryId):
+                self.__requestToReloginAndJoin(peripheryId, ctx)
             else:
                 SystemMessages.pushI18nMessage('#system_messages:periphery/errors/isNotAvailable', type=SystemMessages.SM_TYPE.Error)
         else:
@@ -165,7 +166,7 @@ class CyberSportMainWindow(CyberSportMainWindowMeta):
 
     def autoSearchCancel(self, value):
         self.__currentState = value
-        if value == CYBER_SPORT_ALIASES.AUTO_SEARCH_COMMANDS_STATE or value == CYBER_SPORT_ALIASES.AUTO_SEARCH_ERROR_STATE or value == CYBER_SPORT_ALIASES.AUTO_SEARCH_WAITING_PLAYERS_STATE:
+        if value in (CYBER_SPORT_ALIASES.AUTO_SEARCH_COMMANDS_STATE, CYBER_SPORT_ALIASES.AUTO_SEARCH_ERROR_STATE, CYBER_SPORT_ALIASES.AUTO_SEARCH_WAITING_PLAYERS_STATE):
             self.prbEntity.request(AutoSearchUnitCtx(action=0))
         elif value == CYBER_SPORT_ALIASES.AUTO_SEARCH_CONFIRMATION_STATE:
             self.prbEntity.request(DeclineSearchUnitCtx())

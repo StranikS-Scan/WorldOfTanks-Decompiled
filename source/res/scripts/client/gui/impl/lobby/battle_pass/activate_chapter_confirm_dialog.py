@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/activate_chapter_confirm_dialog.py
+from __future__ import absolute_import
 from frameworks.wulf import ViewSettings
 from gui.battle_pass.sounds import ACTIVATE_CHAPTER_SOUND_SPACE
 from gui.impl.gen import R

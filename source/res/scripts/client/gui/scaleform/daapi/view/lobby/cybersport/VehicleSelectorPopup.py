@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/VehicleSelectorPopup.py
+from __future__ import absolute_import
 from account_helpers.AccountSettings import AccountSettings
 from constants import VEHICLE_CLASSES, BATTLE_MODE_VEHICLE_TAGS
 from gui.Scaleform.daapi.view.lobby.vehicle_selector_base import VehicleSelectorBase

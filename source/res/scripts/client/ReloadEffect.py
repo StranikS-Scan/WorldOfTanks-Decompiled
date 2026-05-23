@@ -285,6 +285,9 @@ class _GunReload(CallbackDelayer):
     def onAmmoStatesInfoUpdate(self, ammoStatesInfo):
         pass
 
+    def stopSoundEffect(self):
+        pass
+
     def calculateReloadFlags(self, reloadInProgress, timeLeft, baseTime, clipCapacity, ammoStatesInfo):
         return self._calculateReloadFlags(reloadInProgress, timeLeft, baseTime, clipCapacity, ammoStatesInfo)
 
@@ -672,8 +675,6 @@ class DualGunReload(_GunReload):
             timeToStart = shellReloadTime - self._desc.runTimeDelta
             if self.__sound is None:
                 self.__sound = SoundGroups.g_instance.getSound2D(self._desc.soundEvent)
-            else:
-                self.__sound.stop()
             if timeToStart > 0:
                 self.delayCallback(timeToStart, self.__onReloadStart, BigWorld.time() + timeToStart)
             if ammoLow:
@@ -683,11 +684,15 @@ class DualGunReload(_GunReload):
             self._checkAndPlayGunRammerEffect(shellReloadTime)
             return
 
-    def stop(self):
+    def stopSoundEffect(self):
         for sound in (self.__sound, self.__ammoLowSound):
             if sound is not None:
                 sound.stop()
 
+        return
+
+    def stop(self):
+        self.stopSoundEffect()
         self.__sound = None
         self.__ammoLowSound = None
         self.stopCallback(self.__onReloadStart)
@@ -1115,17 +1120,22 @@ class ReloadEffectStrategy(object):
     def onAmmoStatesInfoUpdate(self, ammoStatesInfo):
         self.__gunReloadEffect.onAmmoStatesInfoUpdate(ammoStatesInfo)
 
+    def getRelloadEffect(self):
+        ammoCtrl = self.__sessionProvider.shared.ammo
+        isIntuition = ammoCtrl.getIntuitionReloadInProcess()
+        if isIntuition and self.__intuitionReloadEffect is not None:
+            relloadEffect = self.__intuitionReloadEffect
+        else:
+            relloadEffect = self.__gunReloadEffect
+        return relloadEffect
+
     def __reloadStartEffect(self, timeLeft, clipCapacity, reloadFromStart, ammoStatesInfo, directTrigger=False):
         ammoCtrl = self.__sessionProvider.shared.ammo
         currentShellCD = ammoCtrl.getCurrentShellCD()
         shellCounts = ammoCtrl.getShells(currentShellCD)
         shellsQuantityLeft = ammoCtrl.getShellsQuantityLeft()
-        isIntuition = ammoCtrl.getIntuitionReloadInProcess()
         reloadShellCount = clipCapacity
-        if isIntuition and self.__intuitionReloadEffect is not None:
-            relloadEffect = self.__intuitionReloadEffect
-        else:
-            relloadEffect = self.__gunReloadEffect
+        relloadEffect = self.getRelloadEffect()
         if self.__currentReloadEffect != relloadEffect:
             self.__currentReloadEffect.stop()
         self.__currentReloadEffect = relloadEffect

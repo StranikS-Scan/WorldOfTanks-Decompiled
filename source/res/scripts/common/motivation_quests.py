@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/motivation_quests.py
+from __future__ import absolute_import
 import os
 from pprint import pformat
 from quest_cache_helpers import readQuestsFromFile, makeI18nString

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/battle_pass_integration.py
+from __future__ import absolute_import
 from copy import copy
 from collections import namedtuple
 from constants import ARENA_BONUS_TYPE, ARENA_BONUS_TYPE_NAMES
@@ -46,7 +47,7 @@ class BattlePassIntegrationRandom(BattlePassIntegrationInterface):
 
         checkPointsList(winPoints, '{}/win'.format(self.bonusTypeName))
         checkPointsList(losePoints, '{}/lose'.format(self.bonusTypeName))
-        for key, value in points.iteritems():
+        for key in points:
             if key not in ('win', 'lose', 'enabled', 'visible'):
                 vehCD = key
                 if not vehicles.g_list.isVehicleExistingByCD(vehCD):
@@ -67,7 +68,7 @@ class BattlePassIntegrationEpicBattle(BattlePassIntegrationRandom):
     __slots__ = ()
 
     def calculatePointsSettings(self, storage):
-        vehTypeCompDescr, isWinner, rank = super(BattlePassIntegrationEpicBattle, self).calculatePointsSettings(storage)
+        _, isWinner, rank = super(BattlePassIntegrationEpicBattle, self).calculatePointsSettings(storage)
         return BpPointsSettings(NON_VEH_CD, isWinner, rank)
 
     def validatePoints(self, season):
@@ -110,7 +111,7 @@ class BattlePassIntegrationBattleRoyale(BattlePassIntegrationRandom):
             raise SoftException('BattlePass royale points are wrong.Example: win: 10 0 0 0..., lose: 0 7 7 5 5 5 0 0 ..3 thresholds. Should decrease')
 
     def calculatePointsSettings(self, storage):
-        vehTypeCompDescr, results = storage['tempResults'].items()[0]
+        vehTypeCompDescr, _ = storage['tempResults'].items()[0]
         place = storage['avatarResults']['brPosInBattle']
         isWinner = place == 1
         return BpPointsSettings(vehTypeCompDescr, isWinner, place)
@@ -148,7 +149,6 @@ class BattlePassIntegrationComp7Light(BattlePassIntegrationComp7Base):
 
 
 _BATTLEPASS_BY_GAMEMODE = {ARENA_BONUS_TYPE.REGULAR: BattlePassIntegrationRandom(teamSize=15, bonusTypeName='REGULAR'),
- ARENA_BONUS_TYPE.RANKED: BattlePassIntegrationRandom(teamSize=10, bonusTypeName='RANKED'),
  ARENA_BONUS_TYPE.MAPBOX: BattlePassIntegrationRandom(teamSize=15, bonusTypeName='MAPBOX'),
  ARENA_BONUS_TYPE.COMP7: BattlePassIntegrationComp7(teamSize=7, bonusTypeName='COMP7'),
  ARENA_BONUS_TYPE.COMP7_LIGHT: BattlePassIntegrationComp7Light(teamSize=7, bonusTypeName='COMP7_LIGHT'),
@@ -163,4 +163,4 @@ def getBattlePassByGameMode(arenaBonusType):
 
 
 def getAllIntergatedGameModes():
-    return _BATTLEPASS_BY_GAMEMODE.keys()
+    return list(_BATTLEPASS_BY_GAMEMODE)

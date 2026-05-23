@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/category_view.py
+from __future__ import absolute_import
+from future.utils import viewitems, viewvalues
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.storage import storage_helpers
 from gui.Scaleform.daapi.view.meta.BaseStorageCategoryViewMeta import BaseStorageCategoryViewMeta
@@ -98,9 +100,9 @@ class InventoryCategoryView(BaseCategoryView):
 
     def scrolledToBottom(self):
         storageNovelty = dependency.instance(IStorageNovelty)
-        for key in NOVELTY_OBJECTS:
+        for key, value in viewitems(NOVELTY_OBJECTS):
             if self.containItemType(key):
-                storageNovelty.setAsSeen(NOVELTY_OBJECTS[key])
+                storageNovelty.setAsSeen(value)
 
     def containItemType(self, itemType):
         return next((item for item in self._getItemList().values() if item.itemTypeID == itemType), None) is not None
@@ -122,7 +124,7 @@ class InventoryCategoryView(BaseCategoryView):
     def _getInvVehicleCriteria(self):
         return REQ_CRITERIA.INVENTORY
 
-    def _getComparator(self):
+    def _getItemSortKey(self, item):
         return None
 
     def _getItemTypeID(self):
@@ -138,7 +140,7 @@ class InventoryCategoryView(BaseCategoryView):
     def _getVoList(self):
         items = self._getItemList()
         dataProviderValues = []
-        for item in sorted(items.itervalues(), cmp=self._getComparator()):
+        for item in sorted(viewvalues(items), key=self._getItemSortKey):
             dataProviderValues.append(self._getVO(item))
 
         return dataProviderValues

@@ -2,10 +2,10 @@
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/lobby/feature/fun_random_event_banner_view.py
 from __future__ import absolute_import
 import typing
-from account_helpers.AccountSettings import AccountSettings, FUN_RANDOM_BANNER_INTRO_CLICK_TIMESTAMP
+from account_helpers.AccountSettings import AccountSettings, FUN_RANDOM_BANNER_INTRO_CLICK_TIMESTAMP, FUN_RANDOM_BANNER_LAST_VISIBLE_PROGRESSION_NAME
 from adisp import adisp_process
 from fun_random.gui.feature.fun_constants import FunSubModesState
-from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunSubModesWatcher
+from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunSubModesWatcher, FunProgressionWatcher
 from skeletons.gui.game_control import IFunRandomController
 from fun_random.gui.impl.lobby.tooltips.fun_random_entry_point_tooltip_view import FunRandomEntryPointTooltipView
 from fun_random.gui.impl.lobby.common.fun_view_helpers import getFunRandomEventState
@@ -25,7 +25,7 @@ def isFunRandomEntryPointAvailable(funRandomCtrl=None):
     return funRandomCtrl.subModesInfo.isEntryPointAvailable()
 
 
-class FunRandomEventBannerView(BaseEventBanner, FunAssetPacksMixin, FunSubModesWatcher):
+class FunRandomEventBannerView(BaseEventBanner, FunProgressionWatcher, FunAssetPacksMixin, FunSubModesWatcher):
     NAME = FUNRANDOM_ALIASES.FUN_RANDOM_ENTRY_POINT
     __eventsService = dependency.descriptor(IEventsService)
 
@@ -35,6 +35,7 @@ class FunRandomEventBannerView(BaseEventBanner, FunAssetPacksMixin, FunSubModesW
         self.__timerValue = 0
         self.__eventStartDate = 0
         self.__eventEndDate = 0
+        self.__playAppearAnim = False
         return
 
     @property
@@ -78,6 +79,10 @@ class FunRandomEventBannerView(BaseEventBanner, FunAssetPacksMixin, FunSubModesW
         return self.__eventEndDate
 
     @property
+    def playAppearAnim(self):
+        return self.__playAppearAnim
+
+    @property
     def timerValue(self):
         return self.__timerValue
 
@@ -91,6 +96,15 @@ class FunRandomEventBannerView(BaseEventBanner, FunAssetPacksMixin, FunSubModesW
             savedClickTime = AccountSettings.getSettings(FUN_RANDOM_BANNER_INTRO_CLICK_TIMESTAMP)
             if savedClickTime < self.__eventStartDate:
                 self.__state = EventBannerState.INTRO
+        currentProgression = self.getActiveProgression()
+        if currentProgression is not None:
+            self.__playAppearAnim = False
+            savedProgressionName = AccountSettings.getSettings(FUN_RANDOM_BANNER_LAST_VISIBLE_PROGRESSION_NAME)
+            currentProgressionName = currentProgression.config.name
+            if savedProgressionName != currentProgressionName:
+                self.__playAppearAnim = True
+                AccountSettings.setSettings(FUN_RANDOM_BANNER_LAST_VISIBLE_PROGRESSION_NAME, currentProgressionName)
+        return
 
     def createToolTipContent(self, event):
         return FunRandomEntryPointTooltipView()

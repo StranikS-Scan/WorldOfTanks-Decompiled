@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/battle_pass_wot_plus.py
+from __future__ import absolute_import
 import sys
 import typing
 from helpers.dependency import replace_none_kwargs
@@ -8,7 +9,7 @@ from renewable_subscription_common.settings_helpers import getCurrentModelTierSe
 from skeletons.gui.game_control import IWotPlusController, ISteamCompletionController, IBattlePassController
 if typing.TYPE_CHECKING:
     pass
-_MAX_INT = sys.maxint
+_MAX_INT = sys.maxsize
 
 @replace_none_kwargs(wotPlusCtrl=IWotPlusController, steamCtrl=ISteamCompletionController, battlePassCtrl=IBattlePassController)
 def getWotPlusBattlePassTier(wotPlusCtrl=None, steamCtrl=None, battlePassCtrl=None):
@@ -66,9 +67,7 @@ def getMergedWotPlusPointsList(tierID, bonusType, vehTypeCompDescr=None):
     wpWinList = list(wpWinList)
     wpLossList = list(wpLossList)
     if len(wpWinList) < len(wpLossList):
-        tmpList = wpWinList
-        wpWinList = wpLossList
-        wpLossList = tmpList
+        wpWinList, wpLossList = wpLossList, wpWinList
     for i, wpW in enumerate(wpWinList):
         if wpW == 0:
             wpWinList[i] = wpLossList[i]

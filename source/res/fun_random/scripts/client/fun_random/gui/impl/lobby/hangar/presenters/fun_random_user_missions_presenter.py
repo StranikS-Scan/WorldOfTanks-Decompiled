@@ -3,6 +3,7 @@
 from __future__ import absolute_import
 from fun_random.gui.feature.util.fun_mixins import FunProgressionWatcher
 from fun_random.gui.impl.lobby.hangar.presenters.fun_random_progression_presenter import FunRandomProgressionPresenter
+from fun_random.gui.impl.lobby.hangar.presenters.fun_random_progression_quests_presenter import FunRandomProgressionQuestsPresenter
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.hangar.user_missions_widget_model import UserMissionsWidgetModel
 from gui.impl.lobby.hangar.presenters.user_missions_presenter import UserMissionsPresenter
@@ -22,7 +23,8 @@ class FunRandomUserMissionsPresenter(UserMissionsPresenter, FunProgressionWatche
      R.aliases.user_missions.hangarWidget.Quests(): _QuestsPresenter}
 
     def _getChildComponents(self):
-        return {R.aliases.fun_random.shared.ProgressionEntryPoint(): FunRandomProgressionPresenter}
+        return {R.aliases.fun_random.shared.ProgressionEntryPoint(): FunRandomProgressionPresenter,
+         R.aliases.fun_random.shared.ProgressionQuests(): FunRandomProgressionQuestsPresenter}
 
     def _onLoading(self, *args, **kwargs):
         super(FunRandomUserMissionsPresenter, self)._onLoading(*args, **kwargs)

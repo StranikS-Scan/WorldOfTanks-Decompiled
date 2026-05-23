@@ -10,7 +10,7 @@ import typing
 from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
 from adisp import adisp_process
-from battle_pass_common import BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS, BATTLE_PASS_CONFIG_NAME, BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_PDATA_KEY, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME, BP_TANKMAN_QUEST_CHAIN_TOKEN_POSTFIX, BP_TANKMEN_ENTITLEMENT_TAG_PREFIX, BattlePassConfig, BattlePassConsts, BattlePassState, NON_CHAPTER_ID, getBattlePassPassTokenName, getMaxAvalable3DStyleProgressInChapter, isPostProgressionChapter, NON_VEH_CD
+from battle_pass_common import BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS, BATTLE_PASS_CONFIG_NAME, BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_PDATA_KEY, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME, BP_TANKMEN_ENTITLEMENT_TAG_PREFIX, BattlePassConfig, BattlePassConsts, BattlePassState, NON_CHAPTER_ID, getBattlePassPassTokenName, getMaxAvalable3DStyleProgressInChapter, isPostProgressionChapter, NON_VEH_CD
 from constants import ARENA_BONUS_TYPE, OFFERS_ENABLED_KEY, QUEUE_TYPE
 from gui.battle_pass.battle_pass_award import BattlePassAwardsManager, awardsFactory
 from gui.battle_pass.battle_pass_constants import ChapterState
@@ -274,7 +274,7 @@ class BattlePassController(IBattlePassController, EventsHandler):
 
     def getChapterStarterPack(self, chapterID):
         rewards = self.__getConfig().getChapterStarterPack(chapterID)
-        return BattlePassAwardsManager.composeBonuses([rewards]) if rewards else []
+        return BattlePassAwardsManager.hideInvisible(BattlePassAwardsManager.composeBonuses([rewards])) if rewards else []
 
     def getSingleAward(self, chapterId, level, awardType=BattlePassConsts.REWARD_FREE, needSort=True):
         reward = {}
@@ -512,8 +512,8 @@ class BattlePassController(IBattlePassController, EventsHandler):
     def isSpecialVehicle(self, intCD):
         return self.__getConfig().isSpecialVehicle(intCD)
 
-    def getSpecialVehicles(self):
-        return self.__getConfig().getSpecialVehicles()
+    def getSpecialVehicles(self, gameMode=ARENA_BONUS_TYPE.REGULAR):
+        return self.__getConfig().getSpecialVehiclesByGameMode(gameMode=gameMode)
 
     def getPointsDiffForVehicle(self, intCD, gameMode=ARENA_BONUS_TYPE.REGULAR):
         defaultWinList = self.__getPackedBonusPointsList(gameMode=gameMode)
@@ -670,12 +670,9 @@ class BattlePassController(IBattlePassController, EventsHandler):
             self.onSelectTokenUpdated()
         if self.getTankmenScreens():
             for tokenID in tokens.iterkeys():
-                if self.__getNeededTokenForTankmen(tokenID):
+                if self.__isBPTankmanToken(tokenID):
                     self.tankmenCacheUpdate(isWaiting=True)
                     break
-
-    def __getNeededTokenForTankmen(self, tokenID):
-        return tokenID.endswith(BP_TANKMAN_QUEST_CHAIN_TOKEN_POSTFIX) and not tokenID.startswith('img') or self.__isBPTankmanToken(tokenID)
 
     def __isBPTankmanToken(self, tokenID):
         return tokenID in self.getSpecialTankmen().iterkeys()

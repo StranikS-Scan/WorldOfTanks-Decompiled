@@ -113,6 +113,7 @@
     <_105_mm_gun_CN_105_F1_L56>	135	</_105_mm_gun_CN_105_F1_L56>
     <_120mm_Canon_de_120_67_T53_D>	136	</_120mm_Canon_de_120_67_T53_D>
     <_120mm_IPC_1>	137	</_120mm_IPC_1>
+    <_105mm_CN_105_F1_Chevalier>	138	</_105mm_CN_105_F1_Chevalier>
     <_105mm_court_mle_1934_S_105_AM>	2000	</_105mm_court_mle_1934_S_105_AM>
     <_105mm_obusier_mle_1950_105_AM>	2001	</_105mm_obusier_mle_1950_105_AM>
     <Canon_de_155mm_de_33_calibres_F3_AM>	2002	</Canon_de_155mm_de_33_calibres_F3_AM>
@@ -6930,6 +6931,64 @@
       </shots>
       <groundWave></groundWave>
     </Canon_de_105_DEFA_4767_mod>
+    <_105mm_CN_105_F1_Chevalier>
+      <userString>	#france_vehicles:_105mm_CN_105_F1_Chevalier	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	200000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.46	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.45	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	10	</reloadTime>
+      <maxAmmo>	50	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	2600	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_OFL_105_F1_Chevalier>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1300	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	250 239	</piercingPower>
+        </_105mm_OFL_105_F1_Chevalier>
+        <_105mm_OCC_105_F1_Chevalier>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	310 310	</piercingPower>
+        </_105mm_OCC_105_F1_Chevalier>
+        <_105mm_OE_105_Mle_60_Chevalier>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	53 53	</piercingPower>
+        </_105mm_OE_105_Mle_60_Chevalier>
+      </shots>
+    </_105mm_CN_105_F1_Chevalier>
     <_110mm_CN_110_F1_Fantome>
       <userString>	#france_vehicles:_110mm_CN_110_F1_Fantome	</userString>
       <tags></tags>

@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/action_composer.py
+from __future__ import absolute_import
+from future.utils import lmap, viewvalues
 from debug_utils import LOG_WARNING
 from shared_utils import findFirst, first
 
@@ -23,7 +25,7 @@ class SimpleMixCollection(ComposedActionsCollection):
 
     def compose(self):
         actionsGroups = self._separateActions()
-        return [self._findBetter(self._actions)] if len(self._actions) == 1 or len(actionsGroups) == 1 else self._composeActions(map(self._findBetter, actionsGroups.values()))
+        return [self._findBetter(self._actions)] if len(self._actions) == 1 or len(actionsGroups) == 1 else self._composeActions(lmap(self._findBetter, viewvalues(actionsGroups)))
 
     def _composeActions(self, actions, compositionKey='mixed'):
         result = []
@@ -57,7 +59,7 @@ class SimpleMixCollection(ComposedActionsCollection):
 
     @classmethod
     def _findBetter(cls, actionsGroup):
-        return first(sorted(actionsGroup, cmp=cls._cmpActions, reverse=True))
+        return first(sorted(actionsGroup, key=lambda action: action.getMaxDiscountValue(), reverse=True))
 
     @staticmethod
     def _cmpActions(action1, action2):
@@ -86,7 +88,7 @@ class PremiumActionsCollection(SimpleMixCollection):
 
     def compose(self):
         actionsGroups = self._separateActions()
-        return [self._findBetter(self._actions)] if len(self._actions) == 1 or len(actionsGroups) == 1 else map(self._findBetter, actionsGroups.values())
+        return [self._findBetter(self._actions)] if len(self._actions) == 1 or len(actionsGroups) == 1 else lmap(self._findBetter, viewvalues(actionsGroups))
 
 
 class CompositionRule(object):

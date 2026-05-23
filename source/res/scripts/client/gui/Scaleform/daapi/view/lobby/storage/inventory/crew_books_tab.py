@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inventory/crew_books_tab.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from gui.Scaleform.daapi.view.lobby.storage.inventory.filters.filter_by_nation import FiltrableInventoryCategoryByNationTabView
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -58,7 +60,7 @@ class CrewBooksTabView(FiltrableInventoryCategoryByNationTabView):
     def _getFilteredCriteria(self):
         criteria = super(CrewBooksTabView, self)._getFilteredCriteria() | REQ_CRITERIA.CREW_ITEM.IN_ACCOUNT
         kindsList = []
-        for bit, kinds in _TYPE_ID_BIT_TO_TYPE_ID_MAP.iteritems():
+        for bit, kinds in viewitems(_TYPE_ID_BIT_TO_TYPE_ID_MAP):
             if self._filterMask & bit:
                 kindsList.extend(kinds)
 

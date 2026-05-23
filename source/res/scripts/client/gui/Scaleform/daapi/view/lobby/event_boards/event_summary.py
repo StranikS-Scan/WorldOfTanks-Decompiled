@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/event_boards/event_summary.py
+from __future__ import absolute_import
 from helpers.time_utils import ONE_MINUTE
 from helpers import dependency
 from helpers import int2roman
@@ -148,7 +149,7 @@ class _Summary(object):
         recalculationInterval = leaderboard.getRecalculationInterval()
         if recalculationInterval is None:
             recalculationInterval = 0
-        interval = int(recalculationInterval / ONE_MINUTE)
+        interval = int(recalculationInterval // ONE_MINUTE)
         return makeTooltip(body=_ms(TOOLTIPS.SUMMARY_STATUS_TOOLTIP, interval=interval))
 
 
@@ -162,7 +163,7 @@ class _SummaryMax(_Summary):
         event = self._event
         method = event.getMethod()
         op = event.getObjectiveParameter()
-        order = list(filter(lambda t: op not in t, self._ParameterOrder))
+        order = [ t for t in self._ParameterOrder if op not in t ]
         info = self._excelItem.getInfo()
         param1 = order[0][0]
         statistic1 = EVENT_BOARDS.summary_param_all(method, param1)
@@ -297,10 +298,7 @@ class _SummaryTable(_Summary):
 
     def __getSortedParams(self):
         op = self._event.getObjectiveParameter()
-        order = filter(lambda t: op not in t, self._ParameterOrder)
-        params = [op]
-        params.extend([ p[0] for p in order ])
-        return params
+        return [op] + [ p[0] for p in (t for t in self._ParameterOrder if op not in t) ]
 
 
 class _SummarySumN(_SummaryTable):

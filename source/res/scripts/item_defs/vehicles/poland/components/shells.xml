@@ -3151,6 +3151,66 @@
       </damage>
     </armorSpalls>
   </PW_GG_m100_162_K>
+  <PP_GG_m100_162_Husarz>
+    <id>	163	</id>
+    <userString>	#poland_vehicles:PP_GG_m100_162_Husarz	</userString>
+    <icon>	ap_cr_tray	</icon>
+    <price>	1400	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effectsCaliber>	108	</effectsCaliber>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	700 200	</armor>
+      <devices>	203 50	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </PP_GG_m100_162_Husarz>
+  <PPrz_GG_m100_162_Husarz>
+    <id>	164	</id>
+    <userString>	#poland_vehicles:PPrz_GG_m100_162_Husarz	</userString>
+    <icon>	ap_cr_premium_tray	</icon>
+    <price>	5200	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effectsCaliber>	108	</effectsCaliber>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	700 200	</armor>
+      <devices>	203 50	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </PPrz_GG_m100_162_Husarz>
+  <PW_GG_m100_162_Husarz>
+    <id>	165	</id>
+    <userString>	#poland_vehicles:PW_GG_m100_162_Husarz	</userString>
+    <icon>	he_modern_tray	</icon>
+    <price>	950	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	100	</caliber>
+    <explosionRadius>	3.66	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effectsCaliber>	108	</effectsCaliber>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	700	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	3.66	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	350	</armor>
+        <devices>	100	</devices>
+      </damage>
+    </armorSpalls>
+  </PW_GG_m100_162_Husarz>
   <_128mm_Pzgr_39K>
     <id>	166	</id>
     <userString>	#poland_vehicles:_128mm_Pzgr_39K	</userString>

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/missions_tab_bar.py
+from __future__ import absolute_import
 import logging
 from frameworks.wulf import ViewFlags
 from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor

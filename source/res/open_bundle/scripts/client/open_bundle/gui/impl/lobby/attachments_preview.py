@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: open_bundle/scripts/client/open_bundle/gui/impl/lobby/attachments_preview.py
+from __future__ import absolute_import
 from frameworks.wulf import ViewSettings, WindowLayer, WindowFlags
 from open_bundle.gui.impl.gen.view_models.views.lobby.attachments_preview_model import AttachmentsPreviewModel
 from open_bundle.gui.impl.gen.view_models.views.lobby.bonus_model import BonusModel

@@ -7,6 +7,7 @@ from account_helpers.AccountSettings import REFERRAL_COUNTER
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from constants import Configs
 from frameworks.wulf import WindowLayer
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.referral_program.browser.web_handlers import createReferralWebHandlers
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL, isCurrentUserRecruit
@@ -15,6 +16,7 @@ from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl.lobby.common.sound_constants import SUBVIEW_SOUND_SPACE
 from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showHangar
 from gui.wgnc.custom_actions_keeper import CustomActionsKeeper
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -63,8 +65,14 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
 
     def hideWindow(self):
         browserView = self.__getBrowserView()
-        if browserView:
-            browserView.onCloseView()
+        if not browserView:
+            return
+        state = getLobbyStateMachine().getStateFromView(browserView)
+        if state:
+            state.goBack()
+        else:
+            showHangar()
+        browserView.onCloseView()
 
     def isFirstIndication(self):
         return not self.__settingsCore.serverSettings.getUIStorage().get(UI_STORAGE_KEYS.REFERRAL_BUTTON_CIRCLES_SHOWN) and isCurrentUserRecruit()

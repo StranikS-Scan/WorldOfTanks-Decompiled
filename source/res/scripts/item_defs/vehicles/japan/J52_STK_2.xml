@@ -2251,20 +2251,24 @@
         <slot>
           <slotType>	attachment	</slotType>
           <slotId>	38000	</slotId>
-          <position>	0 0.917 -1.494414	</position>
-          <rotation>	-0 -0 -0	</rotation>
+          <position>	1.03194 0.930881 0.318007	</position>
+          <rotation>	-0 -0 0	</rotation>
           <scale>	1 1 1	</scale>
           <applyType>	turret	</applyType>
           <size>	medium	</size>
+          <enableVisTunnel>	true	</enableVisTunnel>
+          <hangerId>	5	</hangerId>
         </slot>
         <slot>
           <slotType>	attachment	</slotType>
           <slotId>	38001	</slotId>
-          <position>	0.775052 0.917 0.209	</position>
-          <rotation>	-0 -0 -0	</rotation>
+          <position>	0 0.859815 1.089685	</position>
+          <rotation>	-0 0 0	</rotation>
           <scale>	1 1 1	</scale>
           <applyType>	gunMantlet	</applyType>
           <size>	medium	</size>
+          <enableVisTunnel>	true	</enableVisTunnel>
+          <hangerId>	16	</hangerId>
         </slot>
       </customizationSlots>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>

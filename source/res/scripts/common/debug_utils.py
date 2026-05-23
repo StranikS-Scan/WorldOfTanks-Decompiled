@@ -9,16 +9,16 @@ import BigWorld
 import excepthook
 import time
 import traceback
-from GarbageCollectionDebug import gcDump, getGarbageGraph
+from GarbageCollectionDebug import gcDump
 from functools import wraps
 from collections import defaultdict
+from future.utils import listitems, lzip, viewitems
+from past.builtins import xrange, unicode
 from warnings import warn_explicit
-from traceback import format_exception
 from constants import IS_CLIENT, IS_CELLAPP, IS_BASEAPP, CURRENT_REALM, IS_DEVELOPMENT, IS_BOT
 from constants import LEAKS_DETECTOR_MAX_EXECUTION_TIME
 from contextlib import contextmanager
 from threading import RLock
-from soft_exception import SoftException
 _src_file_trim_to = re.compile('res/(?:wot|wot_ext)/(?:.*/)?scripts/')
 _g_logMapping = {}
 _g_logLock = RLock()
@@ -163,7 +163,6 @@ def LOG_WRAPPED_CURRENT_EXCEPTION(wrapperName, orgName, orgSource, orgLineno):
         list = list + format_tb(tb)
     else:
         list = []
-    list = list
     for ln in list:
         if ln.find(wrapperName) == -1:
             sys.stderr.write(ln)
@@ -289,7 +288,7 @@ def trace(func):
 
     @wraps(func)
     def wrapper(*args, **kwds):
-        BigWorld.logDebug(' '.join('(%s, %d) call %s:' % (frame.f_code.co_filename, frame.f_lineno, fname), ':', ', '.join(('%s=%r' % entry for entry in zip(argnames, args) + kwds.items()))))
+        BigWorld.logDebug(' '.join('(%s, %d) call %s:' % (frame.f_code.co_filename, frame.f_lineno, fname), ':', ', '.join(('%s=%r' % entry for entry in lzip(argnames, args) + listitems(kwds)))))
         ret = func(*args, **kwds)
         BigWorld.logDebug(' '.join('(%s, %d) return from %s:' % (frame.f_code.co_filename, frame.f_lineno, fname), ':', repr(ret)))
         return ret
@@ -329,7 +328,6 @@ def disabled_if(checker, msg=''):
 
 
 def dump_garbage(source=False):
-    import inspect
     import gc
     print('\nCollecting GARBAGE:')
     gc.collect()
@@ -381,7 +379,7 @@ def dump_garbage_2(verbose=True, generation=2):
             d[t] += 1
 
     if verbose:
-        for t, cnt in d.iteritems():
+        for t, cnt in viewitems(d):
             msg = '%d %s' % (cnt, t)
             if isinstance(msg, unicode):
                 msg = msg.encode()
@@ -405,7 +403,7 @@ def memoryLeaksSafeDump(id, _):
 
 
 def printConnections(ports):
-    portsRE = '\\|'.join(map(lambda p: str(p), ports))
+    portsRE = '\\|'.join(map(str, ports))
     ns = subprocess.Popen(['netstat', '-atupn'], stdout=subprocess.PIPE)
     gr = subprocess.Popen(['grep', portsRE], stdin=ns.stdout, stdout=subprocess.PIPE)
     output = gr.communicate()[0].splitlines()
@@ -459,7 +457,7 @@ def traceCalls(func):
          frame.f_lineno,
          entID,
          fname,
-         ', '.join(('%s=%r' % entry for entry in zip(argnames, args) + kwds.items()))), None)
+         ', '.join(('%s=%r' % entry for entry in lzip(argnames, args) + listitems(kwds)))), None)
         ret = func(*args, **kwds)
         BigWorld.logDebug('traceCalls', '%s returned %s' % (fname, repr(ret)), None)
         return ret

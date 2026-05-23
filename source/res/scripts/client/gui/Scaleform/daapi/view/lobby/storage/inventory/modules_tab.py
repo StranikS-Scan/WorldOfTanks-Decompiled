@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inventory/modules_tab.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from gui.Scaleform.daapi.view.lobby.storage.inventory.filters.filter_by_vehicle import FiltrableInventoryCategoryByVehicleTabView
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -53,7 +55,7 @@ class ModulesTabView(FiltrableInventoryCategoryByVehicleTabView):
 
     def _getFilteredCriteria(self):
         criteria = super(ModulesTabView, self)._getFilteredCriteria()
-        typeIds = [ _TYPE_ID_BIT_TO_TYPE_ID_MAP[bit] for bit in _TYPE_ID_BIT_TO_TYPE_ID_MAP.iterkeys() if self._filterMask & bit ]
+        typeIds = [ guiTypeID for bit, guiTypeID in viewitems(_TYPE_ID_BIT_TO_TYPE_ID_MAP) if self._filterMask & bit ]
         if typeIds:
             criteria |= REQ_CRITERIA.ITEM_TYPES(*typeIds)
         if self._selectedVehicle:

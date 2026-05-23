@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/ArenaType.py
+from __future__ import absolute_import, division
 import os
 from collections import defaultdict
 from functools import partial
+from future.utils import viewitems, viewvalues
+from past.builtins import xrange
 from typing import Dict
 import persistent_data_cache_common as pdc
 from Math import Vector2
@@ -22,9 +25,8 @@ from soft_exception import SoftException
 from visual_script.misc import ASPECT, VisualScriptTag, readVisualScriptSection as _readVisualScriptSection
 if IS_CLIENT:
     from helpers import i18n
-    import WWISE
 elif IS_WEB:
-    from web_stubs import *
+    from web_stubs import i18n
 if IS_CELLAPP or IS_BASEAPP:
     from server_constants import ARENA_ESTIMATED_LOAD_DEFAULT
 g_cache = {}
@@ -101,7 +103,7 @@ def _readCache(isFullCache):
     ResMgr.purge(_LIST_XML, True)
     ResMgr.purge(_DEFAULT_XML, True)
     g_gameplaysMask = getGameplaysMask(g_gameplayNames)
-    g_geometryNamesToIDs = {arenaType.geometryName:arenaType.geometryID for arenaType in g_cache.itervalues()}
+    g_geometryNamesToIDs = {arenaType.geometryName:arenaType.geometryID for arenaType in viewvalues(g_cache)}
     return (g_cache,
      g_geometryCache,
      g_spaceCache,
@@ -113,9 +115,9 @@ def _readCache(isFullCache):
 class _CacheSerializer(WGPickleSerializer):
     __slots__ = ()
 
-    def deserialize(self, data):
+    def deserialize(self, serializedData):
         global g_gameplaysMask
-        cache, geometryCache, spaceCache, geometryNamesToIDs, gameplayNames, gameplaysMask = super(_CacheSerializer, self).deserialize(data)
+        cache, geometryCache, spaceCache, geometryNamesToIDs, gameplayNames, gameplaysMask = super(_CacheSerializer, self).deserialize(serializedData)
         g_cache.update(cache)
         g_geometryCache.update(geometryCache)
         g_spaceCache.update(spaceCache)
@@ -266,7 +268,7 @@ def __buildCache(geometryID, geometryName, defaultXml, isFullCache, isDevelopmen
 
 
 def __addBonusTypeOverrides(overridable, section, defaultXml):
-    for bonusTypeID, bonusType in ARENA_BONUS_TYPE_IDS.iteritems():
+    for bonusTypeID, bonusType in viewitems(ARENA_BONUS_TYPE_IDS):
         with overridable.useBonusTypeOverrides(bonusTypeID) as overriden:
             bonusTypeCfg = __readBonusTypeCfgs(overridable.geometryName, section, defaultXml, bonusType)
             overriden.setBonusTypeCfg(bonusTypeCfg)
@@ -874,8 +876,8 @@ def __readTeamNumbers(section, maxTeamsInArena):
         if maxTeamsInArena > 2:
             raise SoftException('For multiteam mode squadTeamNumbers and (or) soloTeamNumbers must be set')
         return (set(), set())
-    squadTeamNumbers = set([ int(v) for v in section.readString('squadTeamNumbers', '').split() ])
-    soloTeamNumbers = set([ int(v) for v in section.readString('soloTeamNumbers', '').split() ])
+    squadTeamNumbers = {int(v) for v in section.readString('squadTeamNumbers', '').split()}
+    soloTeamNumbers = {int(v) for v in section.readString('soloTeamNumbers', '').split()}
     if len(squadTeamNumbers) + len(soloTeamNumbers) != maxTeamsInArena:
         raise SoftException('Number of squad (%d) and solo (%d) teams must be equal to maxTeamsInArena (%d)' % (len(squadTeamNumbers), len(soloTeamNumbers), maxTeamsInArena))
     if len(squadTeamNumbers & soloTeamNumbers) > 0:
@@ -908,8 +910,8 @@ def __readDefaultGroundEffect(section, defaultXml):
     else:
         if defaultGroundEff.find('|') != -1:
             defaultGroundEff = defaultGroundEff.split('|')
-            for i in xrange(0, len(defaultGroundEff)):
-                defaultGroundEff[i] = defaultGroundEff[i].strip()
+            for i, effect in enumerate(defaultGroundEff):
+                defaultGroundEff[i] = effect.strip()
 
         return defaultGroundEff
 
@@ -950,7 +952,7 @@ def __readPointsOfInterest(section):
 
 def __readTeamBasePositions(section, maxTeamsInArena):
     section = section['teamBasePositions']
-    teamBases = tuple([ {} for _ in xrange(maxTeamsInArena) ])
+    teamBases = tuple(({} for _ in xrange(maxTeamsInArena)))
     if section is None:
         return teamBases
     else:
@@ -972,7 +974,7 @@ def __readTeamBasePositions(section, maxTeamsInArena):
 
 def __readTeamSpawnPoints(section, maxTeamsInArena, nodeNameTemplate='team%d', required=True):
     section = section['teamSpawnPoints']
-    allTeamSpawnPoints = tuple([ [] for _ in xrange(maxTeamsInArena) ])
+    allTeamSpawnPoints = tuple(([] for _ in xrange(maxTeamsInArena)))
     if section is None:
         return allTeamSpawnPoints
     else:

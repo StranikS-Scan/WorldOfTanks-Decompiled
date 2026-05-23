@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/ranked_battles_season_complete_view.py
+from __future__ import absolute_import
 import logging
+from future.utils import viewitems
 import SoundGroups
 from gui.Scaleform.daapi.view.meta.RankedBattlesSeasonCompleteViewMeta import RankedBattlesSeasonCompleteViewMeta
 from gui.impl import backport
@@ -61,7 +63,7 @@ class RankedBattlesSeasonCompleteView(RankedBattlesSeasonCompleteViewMeta):
     def __packAwards(self):
         result = []
         formatter = getRankedAwardsFormatter()
-        for name, value in self._awards.iteritems():
+        for name, value in viewitems(self._awards):
             result.extend(formatter.getFormattedBonuses(getBonuses(self._quest, name, value), size=AWARDS_SIZES.BIG))
 
         return result

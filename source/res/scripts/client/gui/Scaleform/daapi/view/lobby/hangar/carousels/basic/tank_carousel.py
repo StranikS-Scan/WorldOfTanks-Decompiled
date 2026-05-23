@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/basic/tank_carousel.py
+from __future__ import absolute_import
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core import settings_constants
 from BonusCaps import BonusCapsConst

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/PrebattleWindow.py
+from __future__ import absolute_import
 from CurrentVehicle import g_currentVehicle
 from adisp import adisp_process
 from constants import MODULE_NAME_SEPARATOR
@@ -17,7 +18,7 @@ from gui.prb_control.entities.base.legacy.ctx import SetPlayerStateCtx
 from gui.prb_control.entities.base.legacy.listener import ILegacyListener
 from gui.prb_control.formatters import messages
 from gui.prb_control.items import prb_items
-from gui.prb_control.settings import CTRL_ENTITY_TYPE, PREBATTLE_PLAYERS_COMPARATORS
+from gui.prb_control.settings import CTRL_ENTITY_TYPE, PREBATTLE_PLAYERS_SORT_TYPES
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.events import FocusEvent
 from helpers import dependency
@@ -146,7 +147,8 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
         if chat:
             chat.as_addMessageS(messages.getPlayerAssignFlagChanged(actorInfo, playerInfo))
 
-    def onPlayerStateChanged(self, entity, roster, playerInfo):
+    def onPlayerStateChanged(self, entity, roster, accountInfo):
+        playerInfo = accountInfo
         team, assigned = decodeRoster(roster)
         data = {'dbID': playerInfo.dbID,
          'state': playerInfo.state,
@@ -200,12 +202,12 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
     def _setRosterList(self, rosters):
         raise NotImplementedError
 
-    def _makeAccountsData(self, accounts, playerComparatorType=PREBATTLE_PLAYERS_COMPARATORS.REGULAR):
+    def _makeAccountsData(self, accounts, playerSortKeyType=PREBATTLE_PLAYERS_SORT_TYPES.REGULAR):
         result = []
         isPlayerSpeaking = self.bwProto.voipController.isPlayerSpeaking
         getUser = self.usersStorage.getUser
         getColors = g_settings.getColorScheme('rosters').getColors
-        accounts = sorted(accounts, cmp=prb_items.getPlayersComparator(playerComparatorType))
+        accounts = sorted(accounts, key=prb_items.getPlayersSortKey(playerSortKeyType))
         for account in accounts:
             vContourIcon = ''
             vShortName = ''
@@ -275,8 +277,8 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
 
     def __handlePrbChannelControllerInited(self, event):
         ctx = event.ctx
-        prbType = ctx.get('prbType', 0)
-        if prbType is 0:
+        prbType = ctx.get('prbType')
+        if not prbType:
             LOG_ERROR('Prebattle type is not defined', ctx)
             return
         else:

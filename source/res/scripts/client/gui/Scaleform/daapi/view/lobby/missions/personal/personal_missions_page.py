@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/personal/personal_missions_page.py
+from __future__ import absolute_import
 import logging
 import operator
 from collections import namedtuple
+from future.utils import lfilter, viewvalues
 import BigWorld
 from gui import SystemMessages
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_BUTTONS import PERSONAL_MISSIONS_BUTTONS
@@ -69,15 +71,15 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
     def showAwards(self):
         showPersonalMissionAwards()
 
-    def onBarClick(self, chainID, operationID):
-        if chainID == -1 or operationID == -1:
+    def onBarClick(self, chainID, operationIdx):
+        if chainID == -1 or operationIdx == -1:
             return
         if chainID != self.getChainID():
             self.soundManager.playInstantSound(SOUNDS.CHAIN_NAV_CLICK)
-        if operationID != self.getOperationID():
+        if operationIdx != self.getOperationID():
             self.soundManager.playInstantSound(SOUNDS.OPERATION_NAV_CLICK_ANIMATION)
             self.soundManager.playInstantSound(SOUNDS.OPERATION_NAV_CLICK)
-        self.__navigateTo(operationID, chainID)
+        self.__navigateTo(operationIdx, chainID)
 
     def onSkipTaskClick(self, btnID):
         if btnID == PERSONAL_MISSIONS_BUTTONS.OPERATION_FOOTER_BTN_COMPLETE_USING_SHEETS:
@@ -265,7 +267,7 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
             self.__mapView.refresh()
 
     def __getProgress(self, pmQuests):
-        completed = filter(operator.methodcaller('isCompleted'), pmQuests.itervalues())
+        completed = lfilter(operator.methodcaller('isCompleted'), viewvalues(pmQuests))
         return {'value': len(completed),
          'minValue': 0,
          'maxValue': len(pmQuests),
@@ -349,8 +351,8 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
         else:
             status = text_styles.concatStylesWithSpace(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICONFILLED, 16, 16, -2), text_styles.neutral(PERSONAL_MISSIONS.STATUSPANEL_STATUS_SELECTTASK))
         tankwomanQuests = []
-        for operation in pm.getAllOperations().itervalues():
-            tankwomanQuests.extend(operation.getQuestsByFilter(PersonalMission.needToGetTankWoman).itervalues())
+        for operation in viewvalues(pm.getAllOperations()):
+            tankwomanQuests.extend(viewvalues(operation.getQuestsByFilter(PersonalMission.needToGetTankWoman)))
 
         counterText = ''
         tankwomanVisible = False
@@ -483,7 +485,7 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
         isCompleted = True
         isFullCompleted = True
         questInProgress = None
-        for q in pmQuests.itervalues():
+        for q in viewvalues(pmQuests):
             if q.isUnlocked():
                 hasUnlocked = True
             if q.hasRequiredVehicles():

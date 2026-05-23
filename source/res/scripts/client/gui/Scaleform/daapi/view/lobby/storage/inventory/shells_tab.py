@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inventory/shells_tab.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from constants import SHELL_TYPES
 from gui.Scaleform.daapi.view.lobby.storage import storage_helpers
 from gui.Scaleform.daapi.view.lobby.storage.inventory.filters.filter_by_vehicle import FiltrableInventoryCategoryByVehicleTabView
@@ -49,7 +51,7 @@ class ShellsTabView(FiltrableInventoryCategoryByVehicleTabView):
 
     def _getFilteredCriteria(self):
         criteria = super(ShellsTabView, self)._getFilteredCriteria()
-        kindsList = [ _TYPE_ID_BIT_TO_TYPE_ID_MAP[bit] for bit in _TYPE_ID_BIT_TO_TYPE_ID_MAP.iterkeys() if self._filterMask & bit ]
+        kindsList = [ shellType for bit, shellType in viewitems(_TYPE_ID_BIT_TO_TYPE_ID_MAP) if self._filterMask & bit ]
         if kindsList:
             criteria |= REQ_CRITERIA.SHELL.TYPE(kindsList)
         if self._selectedVehicle:

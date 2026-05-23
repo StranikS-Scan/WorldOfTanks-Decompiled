@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/live_crc_accountdata.py
-from live_crc import *
+from __future__ import absolute_import
+from live_crc import gen_delSubkeys_fn, gen_livehash_fn, gen_mergeCache_fn, gen_extract_fn, INCLUDE
 accountPersistentCacheDataScheme = {INCLUDE: {'economics',
            'inventory',
            'quests',

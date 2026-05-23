@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/pickle_intern.py
+from __future__ import absolute_import
 import pickle
 from copy import deepcopy
-from StringIO import StringIO
-from struct_helpers import unpackByte, packByte
+from io import BytesIO
+from past.builtins import intern
+from struct_helpers import unpackByte
 STR_LEN_FOR_INTERN = 20
 
 class UnpicklerWithIntern(pickle.Unpickler, object):
@@ -22,5 +24,5 @@ class UnpicklerWithIntern(pickle.Unpickler, object):
 
     @classmethod
     def loads(cls, data):
-        unpickler = cls(StringIO(data))
+        unpickler = cls(BytesIO(data))
         return unpickler.load()

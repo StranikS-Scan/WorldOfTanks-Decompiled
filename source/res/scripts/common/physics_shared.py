@@ -1,17 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/physics_shared.py
-import BigWorld
-import Math
+from __future__ import absolute_import, division
+import copy
 import math
 import collections
+from future.utils import viewitems
+from past.builtins import xrange
+from typing import Any
+import BigWorld
+import Math
 from items import vehicles
 from items.components.component_constants import KMH_TO_MS, ZERO_VECTOR3
 from items.vehicles import VEHICLE_PHYSICS_TYPE, VehicleDescriptor, VehicleDescrType
 from constants import IS_CLIENT, IS_EDITOR, SERVER_TICK_LENGTH, SHOT_PREDICTION_BUFFER, HALF_SERVER_TICK
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR
-import copy
 from gun_rotation_shared import encodeRestrictedValueToUint, decodeRestrictedValueFromUint
-from typing import Any
 G = 9.81
 GRAVITY_FACTOR = 1.25
 WEIGHT_SCALE = 0.001
@@ -473,7 +476,7 @@ def configurePhysics(physics, baseCfg, typeDescr, gravityFactor, updateSiegeMode
                 siegeBaseCfg = siegeVehicleDescr.type.xphysics['detailed']
             updatePhysicsCfg(siegeBaseCfg, siegeVehicleDescr, cfg['modes']['siegeMode'])
     cfg = __buildConfigurations(cfg)
-    for name, mode in cfg['modes'].iteritems():
+    for name, mode in viewitems(cfg['modes']):
         tDescr = typeDescr.siegeVehicleDescr if typeDescr.hasSiegeMode and name == 'siegeMode' else typeDescr
         applyVehDescrMiscFactors(tDescr, mode)
         configurePhysicsMode(mode, tDescr, gravityFactor)
@@ -568,7 +571,7 @@ def updatePhysics(physics, typeDesc, isSoftUpdate=False, gravityMultiplier=1.0):
             siegeBaseCfg = siegeVehicleDescr.type.xphysics['detailed']
         updatePhysicsCfg(siegeBaseCfg, siegeVehicleDescr, cfg['modes']['siegeMode'])
     cfg = __buildConfigurations(cfg)
-    for name, mode in cfg['modes'].iteritems():
+    for name, mode in viewitems(cfg['modes']):
         tDescr = typeDesc.siegeVehicleDescr if typeDesc.hasSiegeMode and name == 'siegeMode' else typeDesc
         if isSoftUpdate:
             applyVehDescrMiscFactors(tDescr, mode)
@@ -884,7 +887,7 @@ def decodeTrackScrolling(code):
 def __deepUpdate(orig_dict, new_dict):
     if orig_dict is new_dict:
         return
-    for key, val in new_dict.iteritems():
+    for key, val in viewitems(new_dict):
         if isinstance(val, collections.Mapping):
             tmp = __deepUpdate(orig_dict.get(key, {}), val)
             orig_dict[key] = tmp
@@ -898,7 +901,7 @@ def __buildConfigurations(configuration):
     modes = configuration.get('modes')
     if modes is not None:
         del configurations['normal']['modes']
-        for key, value in modes.iteritems():
+        for key, value in viewitems(modes):
             basic = copy.deepcopy(configuration)
             modified = __deepUpdate(basic, value)
             configurations[key] = modified

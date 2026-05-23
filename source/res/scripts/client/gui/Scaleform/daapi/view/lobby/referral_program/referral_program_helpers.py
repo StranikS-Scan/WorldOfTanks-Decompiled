@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/referral_program/referral_program_helpers.py
+from __future__ import absolute_import
 from gui import GUI_SETTINGS
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache

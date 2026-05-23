@@ -5,6 +5,7 @@ from collections import namedtuple
 import BigWorld
 import BattleReplay
 import CommandMapping
+import Event
 import Keys
 from chat_commands_consts import _PERSONAL_MESSAGE_MUTE_DURATION, BATTLE_CHAT_COMMAND_NAMES
 from commendations_common.CommendationHelpers import CommendationsSource
@@ -54,10 +55,10 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
     __commendationsCtrl = dependency.descriptor(ICommendationsController)
     __appLoader = dependency.descriptor(IAppLoader)
     __guiLoader = dependency.descriptor(IGuiLoader)
-    __slots__ = ('__isActive', '__isCalloutEnabled', '__isIBCEnabled', '__commandReceivedData', '__lastPersonalMsgTimestamp', '__lastCalloutTimestamp', '__ui', '__radialKeyDown', '__radialMenuIsOpen', '__previousForcedGuiControlModeFlags', '_uiPlayerSatisfactionRatingLogger', '__isCommendationsCalloutEnabled', '__isCommendationsEnabled', '__statsKeyDown', '__statsScreenIsOpen')
 
     def __init__(self, setup):
         super(CalloutController, self).__init__()
+        self.__eventManager = Event.EventManager()
         self.__isActive = False
         self.__isCalloutEnabled = True
         self.__isCommendationsCalloutEnabled = True
@@ -73,6 +74,7 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
         self.__statsScreenIsOpen = False
         self.__previousForcedGuiControlModeFlags = None
         self._uiPlayerSatisfactionRatingLogger = BattleResponseLogger()
+        self.onRadialMenuOpenChanged = Event.SafeEvent(self.__eventManager)
         return
 
     @property
@@ -103,6 +105,7 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
         self.__lastPersonalMsgTimestamp = -_PERSONAL_MESSAGE_MUTE_DURATION
         self.__lastCalloutTimestamp = -_CALLOUT_MESSAGES_BLOCK_DURATION
         self.resetRadialMenuData(onStop=True)
+        self.__eventManager.clear()
         return
 
     def setViewComponents(self, component):
@@ -118,6 +121,10 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
     def isRadialMenuOpened(self):
         return self.__radialMenuIsOpen
 
+    def __setRadialMenuOpen(self, value):
+        self.__radialMenuIsOpen = value
+        self.onRadialMenuOpenChanged()
+
     def resetRadialMenuData(self, onStop=False, reshow=False):
         if reshow:
             return
@@ -126,7 +133,7 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
             if not avatar_getter.isVehicleAlive() or isPlayerObserver:
                 return
             if self.__radialKeyDown is not None:
-                self.__radialMenuIsOpen = False
+                self.__setRadialMenuOpen(False)
                 self.__radialKeyDown = None
                 if self.hasDelayedCallback(self.__delayOpenRadialMenu):
                     self.stopCallback(self.__delayOpenRadialMenu)
@@ -307,7 +314,7 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
         self.__openRadialMenu()
 
     def __openRadialMenu(self):
-        self.__radialMenuIsOpen = True
+        self.__setRadialMenuOpen(True)
         if avatar_getter.isVehicleAlive() and not self.sessionProvider.getCtx().isPlayerObserver():
             self.__executeHide()
             gui_event_dispatcher.setRadialMenuCmd(self.__radialKeyDown, self.__radialMenuIsOpen)

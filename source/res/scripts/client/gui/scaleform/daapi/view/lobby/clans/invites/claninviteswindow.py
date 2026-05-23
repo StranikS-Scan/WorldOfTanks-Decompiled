@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/invites/ClanInvitesWindow.py
+from __future__ import absolute_import
 import weakref
 from functools import partial
+from future.utils import viewitems, viewvalues
 import gui
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.meta.ClanInvitesWindowMeta import ClanInvitesWindowMeta
@@ -187,25 +189,25 @@ class _PaginatorsController(object):
         return self.__paginators[viewAlias, f]
 
     def setCallback(self, callback):
-        for k, v in self.__paginators.iteritems():
+        for k, v in viewitems(self.__paginators):
             v.onListUpdated += partial(callback, k[0], k[1])
 
     def removeCallbacks(self):
-        for v in self.__paginators.itervalues():
+        for v in viewvalues(self.__paginators):
             v.onListUpdated.clear()
 
     def resetAllPanginators(self):
-        for v in self.__paginators.itervalues():
+        for v in viewvalues(self.__paginators):
             v.reset()
 
     def markPanginatorsAsUnSynced(self, viewAlias):
-        for (alias, _), paginator in self.__paginators.iteritems():
+        for (alias, _), paginator in viewitems(self.__paginators):
             if alias == viewAlias:
                 paginator.markAsUnSynced()
 
     def isInProgress(self):
         inProgress = False
-        for v in self.__paginators.itervalues():
+        for v in viewvalues(self.__paginators):
             if v.isInProgress():
                 inProgress = True
                 break

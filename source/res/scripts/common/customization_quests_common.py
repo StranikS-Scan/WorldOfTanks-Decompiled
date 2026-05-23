@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/customization_quests_common.py
+from __future__ import absolute_import
 from typing import Dict, Optional
 from copy import deepcopy
+from future.utils import viewitems, viewvalues
 from items import vehicles
 from constants import CUSTOMIZATION_PROGRESS_PREFIX as PREFIX, EVENT_TYPE
 from items.components.c11n_components import CustomizationType, QuestProgressForCustomization as qpc
@@ -28,7 +30,7 @@ def validateCustomizationQuestToken(id, token):
     if validateToken(id):
         if token['count'] > 0 and not ('limit' in token and token['limit'] == token['count']):
             return (False, 'Use limits equale count for token: {}, count {}'.format(id, token['count']))
-        styleId, groupId = deserializeToken(id)
+        styleId, _ = deserializeToken(id)
         questStyles = vehicles.g_cache.customization20().getQuestProgressionStyles()
         if styleId not in questStyles:
             return (False, 'Invalid styleId token format: {}'.format(id))
@@ -44,7 +46,7 @@ class CustQuestsCache(object):
         if groupByToken is None:
             self._groupByToken = groupByToken = {}
             cache = vehicles.g_cache.customization20()
-            for _, style in cache.getQuestProgressionStyles().iteritems():
+            for style in viewvalues(cache.getQuestProgressionStyles()):
                 qp = style.questsProgression
                 for tokenId in qp.getGroupTokens():
                     groupByToken[tokenId] = [ {'finishTime': finishTime,
@@ -59,9 +61,9 @@ class CustQuestsCache(object):
             return
         cache = vehicles.g_cache.customization20()
         groupByToken = self._groupByToken
-        for tokenId, info in quest['bonus'].get('tokens', {}).iteritems():
+        for tokenId, info in viewitems(quest['bonus'].get('tokens', {})):
             if validateToken(tokenId):
-                styleId, groupId = deserializeToken(tokenId)
+                styleId, _ = deserializeToken(tokenId)
                 if tokenId not in groupByToken:
                     continue
                 qp = cache.itemTypes[CustomizationType.STYLE][styleId].questsProgression
@@ -75,9 +77,9 @@ class CustQuestsCache(object):
                 levels[level]['finishTime'] = finishTime
 
     def __iter__(self):
-        for token, levels in self._groupByToken.iteritems():
+        for token, levels in viewitems(self._groupByToken):
             for i, level in enumerate(levels):
-                for et, questIds in level['questIds'].iteritems():
+                for et, questIds in viewitems(level['questIds']):
                     for id in questIds:
                         yield (token,
                          i,
@@ -93,7 +95,7 @@ class CustQuestsCache(object):
 
     def updateQuests(self, custQuestCache):
         groupByToken = self._groupByToken
-        for tokenId, levelsCombine in custQuestCache.asDict().iteritems():
+        for tokenId, levelsCombine in viewitems(custQuestCache.asDict()):
             if tokenId not in groupByToken:
                 groupByToken[tokenId] = deepcopy(levelsCombine)
                 continue

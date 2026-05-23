@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/BWAutoImport.py
+from __future__ import absolute_import
 import collections
 from weakref import proxy as _proxy
 from WeakMethod import WeakMethodProxy
@@ -7,7 +8,10 @@ import inspect
 
 def _fix_base_handler_in_urllib2():
     import functools
-    from urllib2 import BaseHandler
+    try:
+        from urllib2 import BaseHandler
+    except ImportError:
+        from urllib.request import BaseHandler
 
     def add_parent(self_, parent):
         self_.parent = _proxy(parent)
@@ -17,7 +21,10 @@ def _fix_base_handler_in_urllib2():
 
 
 def _fix_proxy_handler_in_urllib2():
-    from urllib2 import ProxyHandler
+    try:
+        from urllib2 import ProxyHandler
+    except ImportError:
+        from urllib.request import ProxyHandler
 
     def wrapper_setattr(self_, key, value):
         if inspect.isfunction(value):
@@ -31,8 +38,13 @@ def _fix_proxy_handler_in_urllib2():
 def _fix_http_response_in_urllib2():
     import functools
     import socket
-    from urllib import addinfourl
-    from urllib2 import AbstractHTTPHandler, URLError
+    try:
+        from urllib import addinfourl
+        from urllib2 import AbstractHTTPHandler, URLError
+    except ImportError:
+        from urllib.request import AbstractHTTPHandler
+        from urllib.response import addinfourl
+        from urllib.error import URLError
 
     def do_open(self, http_class, req, **http_conn_args):
         host = req.get_host()
@@ -74,7 +86,7 @@ def _fix_http_response_in_urllib2():
 
 
 def _fix_ordered_dict():
-    from collections import MutableMapping
+    from py2to3.moves.collections.abc import MutableMapping
 
     class _Link(object):
         __slots__ = ('prev', 'next', 'key', '__weakref__')
@@ -82,6 +94,7 @@ def _fix_ordered_dict():
     class OrderedDict(dict, MutableMapping):
 
         def __init__(self, *args, **kwds):
+            super(OrderedDict, self).__init__()
             if len(args) > 1:
                 raise TypeError('expected at most 1 arguments, got %d' % len(args))
             try:
@@ -194,6 +207,7 @@ def _fix_ordered_dict():
         values = MutableMapping.values
         items = MutableMapping.items
         __ne__ = MutableMapping.__ne__
+        __hash__ = None
 
         def __repr__(self):
             return '%s()' % (self.__class__.__name__,) if not self else '%s(%r)' % (self.__class__.__name__, list(self.items()))

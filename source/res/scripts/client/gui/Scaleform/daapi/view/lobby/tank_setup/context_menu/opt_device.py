@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/tank_setup/context_menu/opt_device.py
+from __future__ import absolute_import
 import typing
 import SoundGroups
 from adisp import adisp_process, adisp_async
@@ -45,31 +46,31 @@ class OptDeviceSlotContextMenu(BaseEquipmentSlotContextMenu):
     _sqGen = SequenceIDGenerator(BaseEquipmentSlotContextMenu._sqGen.currSequenceID)
     _wotPlusController = dependency.descriptor(IWotPlusController)
 
-    @option(_sqGen.next(), TankSetupCMLabel.DEMOUNT)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.DEMOUNT)
     def demount(self):
         self._sendSlotAction(BaseSetupModel.DEMOUNT_SLOT_ACTION)
 
-    @option(_sqGen.next(), TankSetupCMLabel.DEMOUNT_FROM_SETUP)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.DEMOUNT_FROM_SETUP)
     def demountFromSetup(self):
         self._sendSlotAction(BaseSetupModel.DEMOUNT_SLOT_FROM_SETUP_ACTION)
 
-    @option(_sqGen.next(), TankSetupCMLabel.DEMOUNT_FROM_SETUPS)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.DEMOUNT_FROM_SETUPS)
     def demountFromSetups(self):
         self._sendSlotAction(BaseSetupModel.DEMOUNT_SLOT_FROM_SETUPS_ACTION)
 
-    @option(_sqGen.next(), TankSetupCMLabel.DESTROY)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.DESTROY)
     def destroy(self):
         self._sendSlotAction(BaseSetupModel.DESTROY_SLOT_ACTION)
 
-    @option(_sqGen.next(), CMLabel.DECONSTRUCT)
+    @option(_sqGen.nextSequenceID, CMLabel.DECONSTRUCT)
     def deconstruct(self):
         self._sendSlotAction(BaseSetupModel.DECONSTRUCT_SLOT_ACTION)
 
-    @option(_sqGen.next(), TankSetupCMLabel.TAKE_OFF)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.TAKE_OFF)
     def takeOff(self):
         self._sendSlotAction(BaseSetupModel.REVERT_SLOT_ACTION)
 
-    @option(_sqGen.next(), TankSetupCMLabel.UNLOAD)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.UNLOAD)
     def unload(self):
         self._sendSlotAction(BaseSetupModel.REVERT_SLOT_ACTION)
 
@@ -84,7 +85,7 @@ class OptDeviceSlotContextMenu(BaseEquipmentSlotContextMenu):
             return self._isMounted and self._getItem().isModernized
         if label == TankSetupCMLabel.DEMOUNT:
             return self._isMounted and not self._isMountedMoreThanOne
-        if label == TankSetupCMLabel.DEMOUNT_FROM_SETUP or label == TankSetupCMLabel.DEMOUNT_FROM_SETUPS:
+        if label in (TankSetupCMLabel.DEMOUNT_FROM_SETUP, TankSetupCMLabel.DEMOUNT_FROM_SETUPS):
             return self._isMountedMoreThanOne
         if label == TankSetupCMLabel.UNLOAD:
             return not self._isMounted and self._isItemInInventory() and not self._isItemInOtherLayout()
@@ -101,23 +102,23 @@ class HangarOptDeviceSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
     _sqGen = SequenceIDGenerator(BaseHangarEquipmentSlotContextMenu._sqGen.currSequenceID)
     _wotPlusController = dependency.descriptor(IWotPlusController)
 
-    @option(_sqGen.next(), TankSetupCMLabel.DEMOUNT)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.DEMOUNT)
     def demount(self):
         self._demountProcess(isDestroy=False, everywhere=True)
 
-    @option(_sqGen.next(), TankSetupCMLabel.DEMOUNT_FROM_SETUP)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.DEMOUNT_FROM_SETUP)
     def demountFromSetup(self):
         self._demountProcess(isDestroy=False, everywhere=False)
 
-    @option(_sqGen.next(), TankSetupCMLabel.DEMOUNT_FROM_SETUPS)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.DEMOUNT_FROM_SETUPS)
     def demountFromSetups(self):
         self._demountProcess(isDestroy=False, everywhere=True)
 
-    @option(_sqGen.next(), TankSetupCMLabel.DESTROY)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.DESTROY)
     def destroy(self):
         self._demountProcess(isDestroy=True, everywhere=True)
 
-    @option(_sqGen.next(), CMLabel.DECONSTRUCT)
+    @option(_sqGen.nextSequenceID, CMLabel.DECONSTRUCT)
     def deconstruct(self):
         self._deconstruct()
 
@@ -175,7 +176,7 @@ class HangarOptDeviceSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
     def _isVisible(self, label):
         if label == TankSetupCMLabel.DEMOUNT:
             return self._isMounted and not self._isMountedMoreThanOne
-        if label == TankSetupCMLabel.DEMOUNT_FROM_SETUP or label == TankSetupCMLabel.DEMOUNT_FROM_SETUPS:
+        if label in (TankSetupCMLabel.DEMOUNT_FROM_SETUP, TankSetupCMLabel.DEMOUNT_FROM_SETUPS):
             return self._isMountedMoreThanOne
         if label == TankSetupCMLabel.DESTROY:
             return self._isMounted and not self._getItem().isModernized and not self._wotPlusController.isFreeToDemount(self._getItem())

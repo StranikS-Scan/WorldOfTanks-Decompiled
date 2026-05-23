@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/arena_bonus_type_caps.py
+from __future__ import absolute_import
 import typing
-from constants import ARENA_BONUS_TYPE, ARENA_BONUS_TYPE_NAMES, PREM_BONUS_TYPES
+from future.utils import viewitems
+from constants import ARENA_BONUS_TYPE_NAMES, PREM_BONUS_TYPES
 from debug_utils import LOG_ERROR
 from soft_exception import SoftException
 from BonusCaps import BonusCapsConfig
@@ -209,7 +211,7 @@ class ARENA_BONUS_TYPE_CAPS():
 
     @staticmethod
     def check():
-        for capsID in ARENA_BONUS_TYPE_CAPS._typeToCaps.iterkeys():
+        for capsID in ARENA_BONUS_TYPE_CAPS._typeToCaps:
             for rule in ARENA_BONUS_TYPE_CAPS.__RULES:
                 if not rule(ARENA_BONUS_TYPE_CAPS.get(capsID)):
                     raise SoftException('Caps is invalid for ARENA_BONUS_TYPE={}'.format(capsID))
@@ -263,7 +265,7 @@ def init():
     ARENA_BONUS_TYPE_CAPS.init()
 
 
-ALLOWED_ARENA_BONUS_TYPE_CAPS = frozenset([ v for k, v in ARENA_BONUS_TYPE_CAPS.__dict__.iteritems() if not k.startswith('__') and isinstance(v, str) ])
+ALLOWED_ARENA_BONUS_TYPE_CAPS = frozenset([ v for k, v in viewitems(ARENA_BONUS_TYPE_CAPS.__dict__) if not k.startswith('__') and isinstance(v, str) ])
 PREM_BONUS_TO_CAP = {PREM_BONUS_TYPES.CREDITS: ARENA_BONUS_TYPE_CAPS.PREM_CREDITS,
  PREM_BONUS_TYPES.XP: ARENA_BONUS_TYPE_CAPS.PREM_XP,
  PREM_BONUS_TYPES.TMEN_XP: ARENA_BONUS_TYPE_CAPS.PREM_TMEN_XP}

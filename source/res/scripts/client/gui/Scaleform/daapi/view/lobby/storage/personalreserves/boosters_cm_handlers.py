@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/personalreserves/boosters_cm_handlers.py
+from __future__ import absolute_import
 from adisp import adisp_process
 from gui import shop
 from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import ContextMenu, option, CMLabel
@@ -15,16 +16,16 @@ class PersonalReservesCMHandler(ContextMenu):
     __sqGen = SequenceIDGenerator()
     __goodiesCache = dependency.descriptor(IGoodiesCache)
 
-    @option(__sqGen.next(), CMLabel.INFORMATION)
+    @option(__sqGen.nextSequenceID, CMLabel.INFORMATION)
     def showInfo(self):
         shared_events.showStorageBoosterInfo(self._id)
 
-    @option(__sqGen.next(), CMLabel.ACTIVATE)
+    @option(__sqGen.nextSequenceID, CMLabel.ACTIVATE)
     @adisp_process
     def activate(self):
         _ = yield shared_events.showBoosterActivateDialog(self._id)
 
-    @option(__sqGen.next(), CMLabel.BUY_MORE)
+    @option(__sqGen.nextSequenceID, CMLabel.BUY_MORE)
     def buy(self):
         shop.showBuyPersonalReservesOverlay(self._id, _SOURCE, _ORIGIN)
 

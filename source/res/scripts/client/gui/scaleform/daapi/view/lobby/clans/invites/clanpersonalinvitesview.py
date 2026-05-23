@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/invites/ClanPersonalInvitesView.py
+from __future__ import absolute_import
 from gui.clans import formatters
 from gui.clans.clan_helpers import ClanPersonalInvitesPaginator, ClanListener
 from gui.clans.items import ClanCommonData
@@ -49,12 +50,12 @@ class ClanPersonalInvitesView(ClanPersonalInvitesViewMeta, ClanListener):
             self.showWaiting(True)
             self._paginator.right()
 
-    def setSelectAllInvitesCheckBoxSelected(self, checked):
-        self.dataProvider.setSelectAll(checked)
+    def setSelectAllInvitesCheckBoxSelected(self, selected):
+        self.dataProvider.setSelectAll(selected)
         self._updateDeclineSelectedGroup()
 
-    def setInviteSelected(self, dbID, checked):
-        self.dataProvider.setCheckedID(dbID, checked)
+    def setInviteSelected(self, dbID, selected):
+        self.dataProvider.setCheckedID(dbID, selected)
         self._updateDeclineSelectedGroup()
 
     def onSortChanged(self, dataProvider, sort):
@@ -245,7 +246,7 @@ class PersonalInvitesDataProvider(ClanInvitesAbstractDataProvider):
          'awgExp': formatField(getter=item.getBattlesPerformanceAvg, formatter=backport.getIntegralFormat),
          'status': {'text': self._makeInviteStateString(item),
                     'tooltip': self._makeTooltip(body=self._makeRequestTooltip(status=item.getStatus(), user=formatField(getter=item.getSenderName), date=formatField(getter=item.getUpdatedAt, formatter=formatters.formatShortDateShortTimeString)))},
-         'enabled': status == CLAN_INVITE_STATES.ACTIVE or status == CLAN_INVITE_STATES.ERROR,
+         'enabled': status in (CLAN_INVITE_STATES.ACTIVE, CLAN_INVITE_STATES.ERROR),
          'canShowContextMenu': True,
          'messageTooltip': self._makeTooltip(body=escape(item.getComment()) if isValueAvailable(getter=item.getComment) else str()),
          'actions': self.__buildActionsSection(item.getStatus())}
@@ -254,9 +255,9 @@ class PersonalInvitesDataProvider(ClanInvitesAbstractDataProvider):
     def _makeRequestTooltip(self, status, date, user=None):
         if status == CLAN_INVITE_STATES.ACCEPTED:
             return text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_INVITE_INVITEACCEPTED)), text_styles.main(date), text_styles.main(''), text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_INVITE_BYUSER)), text_styles.stats(user))
-        if status == CLAN_INVITE_STATES.DECLINED or status == CLAN_INVITE_STATES.DECLINED_RESENT:
+        if status in (CLAN_INVITE_STATES.DECLINED, CLAN_INVITE_STATES.DECLINED_RESENT):
             return text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_INVITE_INVITEDECLINED)), text_styles.main(date), text_styles.main(''), text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_INVITE_BYUSER)), text_styles.stats(user))
-        return text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_INVITE_INVITESENT)), text_styles.main(date), text_styles.main(''), text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_INVITE_SENDER)), text_styles.stats(user)) if status == CLAN_INVITE_STATES.ACTIVE or status == CLAN_INVITE_STATES.EXPIRED or status == CLAN_INVITE_STATES.EXPIRED_RESENT else None
+        return text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_INVITE_INVITESENT)), text_styles.main(date), text_styles.main(''), text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_INVITE_SENDER)), text_styles.stats(user)) if status in (CLAN_INVITE_STATES.ACTIVE, CLAN_INVITE_STATES.EXPIRED, CLAN_INVITE_STATES.EXPIRED_RESENT) else None
 
     def __buildActionsSection(self, inviteStatus):
         acceptButtonEnabled = False

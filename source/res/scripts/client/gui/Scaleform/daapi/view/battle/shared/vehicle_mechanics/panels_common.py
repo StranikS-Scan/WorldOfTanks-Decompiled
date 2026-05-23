@@ -28,6 +28,7 @@ class VehicleMechanicsPanel(BaseDAAPIComponent, ContainersListener, IVehicleTrac
         self.__updatersCollection = ViewUpdatersCollection()
         self.__crosshairViewID = CROSSHAIR_VIEW_ID.UNDEFINED
         self.__isAllowedByContext = True
+        self.__isRadialMenuOpened = False
 
     @eventHandler
     def onTrackedMechanicsUpdate(self, mechanics):
@@ -41,6 +42,10 @@ class VehicleMechanicsPanel(BaseDAAPIComponent, ContainersListener, IVehicleTrac
         if prebattleSetup is not None:
             prebattleSetup.onBattleStarted += self.__onBattleStarted
             self.__updateContextAvailability()
+        calloutCtrl = self.__sessionProvider.shared.calloutCtrl
+        if calloutCtrl is not None:
+            calloutCtrl.onRadialMenuOpenChanged += self.__onRadialMenuOpenChanged
+            self.__updateRadialMenuOpened()
         crosshairCtrl = self.__sessionProvider.shared.crosshair
         if crosshairCtrl is not None:
             crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
@@ -62,6 +67,9 @@ class VehicleMechanicsPanel(BaseDAAPIComponent, ContainersListener, IVehicleTrac
         prebattleSetup = self.__sessionProvider.dynamic.prebattleSetup
         if prebattleSetup is not None:
             prebattleSetup.onBattleStarted -= self.__onBattleStarted
+        calloutCtrl = self.__sessionProvider.shared.calloutCtrl
+        if calloutCtrl is not None:
+            calloutCtrl.onRadialMenuOpenChanged -= self.__onRadialMenuOpenChanged
         super(VehicleMechanicsPanel, self)._dispose()
         return
 
@@ -84,6 +92,10 @@ class VehicleMechanicsPanel(BaseDAAPIComponent, ContainersListener, IVehicleTrac
     def _addMechanicUIComponent(self, mechanicComponents):
         raise NotImplementedError
 
+    def __onRadialMenuOpenChanged(self):
+        self.__updateRadialMenuOpened()
+        self.__updateVisibility()
+
     def __onBattleStarted(self):
         self.__updateContextAvailability()
         self.__updateVisibility()
@@ -94,6 +106,10 @@ class VehicleMechanicsPanel(BaseDAAPIComponent, ContainersListener, IVehicleTrac
     def __onCrosshairViewChanged(self, viewID):
         self.__updateCrosshairViewID(viewID)
         self.__updateVisibility()
+
+    def __updateRadialMenuOpened(self):
+        calloutCtrl = self.__sessionProvider.shared.calloutCtrl
+        self.__isRadialMenuOpened = calloutCtrl.isRadialMenuOpened()
 
     def __updateContextAvailability(self):
         prebattleSetup = self.__sessionProvider.dynamic.prebattleSetup
@@ -106,4 +122,4 @@ class VehicleMechanicsPanel(BaseDAAPIComponent, ContainersListener, IVehicleTrac
 
     def __updateVisibility(self):
         isValidCrosshairID = self.__crosshairViewID not in (CROSSHAIR_VIEW_ID.UNDEFINED, CROSSHAIR_VIEW_ID.POSTMORTEM)
-        self._setIsVisible(isValidCrosshairID and self.__isAllowedByContext)
+        self._setIsVisible(isValidCrosshairID and self.__isAllowedByContext and not self.__isRadialMenuOpened)

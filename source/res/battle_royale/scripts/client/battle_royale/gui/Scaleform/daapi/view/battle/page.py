@@ -6,9 +6,9 @@ from battle_royale.gui.Scaleform.daapi.view.battle.respawn_message_panel import 
 from gui.battle_control.event_dispatcher import toggleCrosshairVisibility
 from shared_utils import CONST_CONTAINER
 import PlayerEvents
-from constants import ARENA_PERIOD
+from constants import ARENA_BONUS_TYPE, ARENA_PERIOD
 from aih_constants import CTRL_MODE_NAME
-from arena_bonus_type_caps import ARENA_BONUS_TYPE, ARENA_BONUS_TYPE_CAPS
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from gui.battle_control import avatar_getter
 from Event import EventsSubscriber
 from battle_royale.gui.Scaleform.daapi.view.battle.markers2d.manager import BattleRoyaleMarkersManager

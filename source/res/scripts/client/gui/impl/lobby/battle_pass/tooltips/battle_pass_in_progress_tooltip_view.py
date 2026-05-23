@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/tooltips/battle_pass_in_progress_tooltip_view.py
+from __future__ import absolute_import
 from collections import OrderedDict
 from battle_pass_common import BattlePassConsts, isPostProgressionChapter
 import constants

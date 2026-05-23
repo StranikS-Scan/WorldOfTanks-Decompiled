@@ -4,7 +4,7 @@ from __future__ import absolute_import
 import json
 import logging
 import typing
-from future.builtins import str
+from builtins import str
 from Event import Event
 from gui.game_control.reactive_comm import Subscription
 from helpers import dependency

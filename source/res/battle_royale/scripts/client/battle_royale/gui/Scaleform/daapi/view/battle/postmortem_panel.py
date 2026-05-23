@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/postmortem_panel.py
 import BigWorld
-from arena_bonus_type_caps import ARENA_BONUS_TYPE
+from constants import ARENA_BONUS_TYPE
 from gui.Scaleform.daapi.view.battle.shared.postmortem_panel import _ALLOWED_EQUIPMENT_DEATH_CODES
 from gui.Scaleform.daapi.view.meta.BattleRoyalePostmortemPanelMeta import BattleRoyalePostmortemPanelMeta
 from gui.shared.gui_items import Vehicle

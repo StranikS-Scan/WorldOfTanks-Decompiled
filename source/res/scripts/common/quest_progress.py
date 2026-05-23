@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/quest_progress.py
+from __future__ import absolute_import
+import typing
+from builtins import zip
 from collections import Counter
-from itertools import izip
+from future.utils import viewitems, viewvalues
 from constants import QUEST_PROGRESS_STATE
 from personal_missions_constants import PROGRESS_TEMPLATE, CONFIG_KEYS
 
@@ -215,10 +218,10 @@ class CounterProgress(Progress):
         return self.__totalGoal
 
     def getTotalCount(self):
-        return sum(self.__counter.itervalues())
+        return sum(viewvalues(self.__counter))
 
     def getUniqueKeys(self):
-        return self.__counter.keys()
+        return list(self.__counter)
 
     def setCounter(self, counter):
         if self.__counter != counter:
@@ -413,7 +416,7 @@ class ProgressStorage(object):
             self.__addBuilder(builder)
 
         battleUniqueVehicles = self.__tryToGetBattlesUniqueVehiclesFromProgresses(savedProgresses)
-        for progressID, configData in questCfg.iteritems():
+        for progressID, configData in viewitems(questCfg):
             uniqueBattlesCount = len(battleUniqueVehicles)
             configData['config'][CONFIG_KEYS.UNIQUE_BATTLES_COUNT] = uniqueBattlesCount
             configData['config'][CONFIG_KEYS.BATTLES_UNIQUE_VEHICLES] = battleUniqueVehicles
@@ -426,7 +429,7 @@ class ProgressStorage(object):
         return
 
     def update(self, progressesInfo):
-        for progressID, progressInfo in progressesInfo.iteritems():
+        for progressID, progressInfo in viewitems(progressesInfo):
             progress = self.__progresses.get(progressID)
             if progress:
                 progress.updateProgress(progressInfo)
@@ -442,10 +445,10 @@ class ProgressStorage(object):
         return self.__progresses.get(progressID)
 
     def getMainProgress(self):
-        return [ value for value in self.__progresses.itervalues() if value.isMain() and value.isAward() ]
+        return [ value for value in viewvalues(self.__progresses) if value.isMain() and value.isAward() ]
 
     def getAdditionalProgressIDs(self):
-        return [ progress.getProgressID() for progress in self.__progresses.itervalues() if not progress.isMain() and progress.isAward() ]
+        return [ progress.getProgressID() for progress in viewvalues(self.__progresses) if not progress.isMain() and progress.isAward() ]
 
     def save(self):
         return self._collectProgressInfo(CumulativeOnlyProgressCollector())
@@ -456,7 +459,7 @@ class ProgressStorage(object):
 
     def _collectProgressInfo(self, dataCollector):
         result = {}
-        for progressID, progress in self.__progresses.iteritems():
+        for progressID, progress in viewitems(self.__progresses):
             if dataCollector.validate(progress):
                 result[progressID] = dataCollector.collect(progress)
 
@@ -474,7 +477,7 @@ class ProgressStorage(object):
 
     def __escapeFailedStateForOrGroup(self, progressesInfo):
         if any(self._orProgresses.values()):
-            for progressID, progressInfo in progressesInfo.iteritems():
+            for progressID, progressInfo in viewitems(progressesInfo):
                 progress = self.__progresses.get(progressID)
                 if hasattr(progress, 'isInOrGroup') and progress.isInOrGroup() and progressInfo['state'] == QUEST_PROGRESS_STATE.FAILED:
                     progress.setState(QUEST_PROGRESS_STATE.COMPLETED)
@@ -517,7 +520,7 @@ class BaseQuestProgress(object):
                 self.setCompleted(progress.getProgressID(), True)
 
         isMainProgressCompleted = self.isCompleted(progresses[0].getProgressID())
-        for progress in (x for x in self._progressStorage.getProgresses().itervalues() if x not in progresses):
+        for progress in (x for x in viewvalues(self._progressStorage.getProgresses()) if x not in progresses):
             if progress.isAward() and progress.isCumulative() and progress.checkIsCompleted() and isMainProgressCompleted:
                 self.setCompleted(progress.getProgressID(), True)
 
@@ -598,7 +601,7 @@ class BaseQuestProgress(object):
                 if mulCfg:
                     task = mulCfg.get('task')
                     if task:
-                        task_id, multiplier = next(task.iteritems())
+                        task_id, multiplier = next(iter(viewitems(task)))
                         needMultiply = self.isCompleted(task_id)
                         if needMultiply:
                             value *= multiplier
@@ -632,7 +635,7 @@ class BaseQuestProgress(object):
 
     def checkProgressForCountdown(self):
         updated = False
-        for progressID, progress in self._progressStorage.getProgresses().iteritems():
+        for progressID, progress in viewitems(self._progressStorage.getProgresses()):
             if progress.isCumulative():
                 continue
             if progress.getState() in QUEST_PROGRESS_STATE.COMPLETED_STATES + (QUEST_PROGRESS_STATE.FAILED,):
@@ -678,7 +681,7 @@ class BaseQuestProgress(object):
             values = (values,)
         if mainProgressIDs is not None and not isinstance(mainProgressIDs, (tuple, list)):
             mainProgressIDs = (mainProgressIDs,)
-        progressesCompleted = [ self.increaseUntilComplete(p, v) for p, v in izip(progressIDs, values) ]
+        progressesCompleted = [ self.increaseUntilComplete(p, v) for p, v in zip(progressIDs, values) ]
         isProgressesCompleted = all(progressesCompleted)
         isMainOrMainCompleted = True if not mainProgressIDs else all((self.isCompleted(p) for p in mainProgressIDs))
         if isProgressesCompleted and not self.isFinished(attemptsID) and isMainOrMainCompleted:

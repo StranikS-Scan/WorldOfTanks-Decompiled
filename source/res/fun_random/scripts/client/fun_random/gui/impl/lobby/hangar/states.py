@@ -100,5 +100,5 @@ class _FunRandomConsumablesLoadoutStatePrototype(_ConsumablesLoadoutStatePrototy
         return self.getDesiredSubMode().getConfigurationModel().common.regularConsumables
 
 
-FunRandomHangarState, _, _, _ = generateBasicHangarStateClasses(SubScopeSubLayerState, R.invalid, hangarPrototypeCls=_HangarStateProto)
+FunRandomHangarState, DefaultFunRandomHangarState, _, _ = generateBasicHangarStateClasses(SubScopeSubLayerState, R.invalid, hangarPrototypeCls=_HangarStateProto)
 FunRandomLoadoutState, _, _, FunRandomShellsLoadoutState, _, _, _ = generateBasicLoadoutStateClasses(FunRandomHangarState, R.invalid, loadoutStatePrototypeCls=_FunRandomLoadoutStateProto, confirmStatePrototypeCls=_FunRandomLoadoutConfirmStateProto, shellsStatePrototypeCls=_FunRandomShellsLoadoutStatePrototype, equipmentStatePrototypeCls=_FunRandomEquipmentLoadoutStatePrototype, instructionsStatePrototypeCls=_FunRandomInstructionsLoadoutStatePrototype, consumablesStatePrototypeCls=_FunRandomConsumablesLoadoutStatePrototype)

@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/AccountCommands.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from streamIDs import STREAM_ID_ACCOUNT_CMDS_MAX, STREAM_ID_ACCOUNT_CMDS_MIN
 RES_FAILURE = -1
 RES_WRONG_ARGS = -2
@@ -268,7 +270,7 @@ CMD_WOT_PLUS_REFRESH_PRO_BOOST_COOLDOWN_DEV = 10411
 CMD_WOT_PLUS_ACTIVATE_PRO_BOOST = 10412
 CMD_WOT_PLUS_SET_SERVICE_RECORD_CUSTOMIZATIONS = 10413
 CMD_WOT_PLUS_SIMULATE_WG_MONEY_UPDATE = 10414
-PLAYER_CMD_NAMES = dict([ (v, k) for k, v in globals().items() if k.startswith('CMD_') ])
+PLAYER_CMD_NAMES = {v:k for k, v in globals().items() if k.startswith('CMD_')}
 KEYS_ARE_UNIQUE = len(PLAYER_CMD_NAMES) == len(set((key for key in globals() if key.startswith('CMD_'))))
 
 class LOCK_REASON:
@@ -281,7 +283,7 @@ class LOCK_REASON:
     ANY_MASK = 255
 
 
-LOCK_REASON_NAMES = dict([ (v, k) for k, v in LOCK_REASON.__dict__.items() if not k.startswith('__') ])
+LOCK_REASON_NAMES = {v:k for k, v in viewitems(LOCK_REASON.__dict__) if not k.startswith('__')}
 
 class BUY_VEHICLE_FLAG:
     NONE = 0

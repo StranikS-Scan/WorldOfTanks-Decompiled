@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/BaseRallyRoomView.py
+from __future__ import absolute_import
 import account_helpers
 from CurrentVehicle import g_currentVehicle
 from UnitBase import UNIT_SLOT
@@ -60,9 +61,9 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta):
 
     def requestToUpdateRoster(self, data):
         c = SetRostersSlotsUnitCtx('prebattle/change_settings')
-        for i in range(0, len(data)):
-            c.addRosterSlot(i * 2, self.__getRosterSlotCtx(data[i][0]))
-            c.addRosterSlot(i * 2 + 1, self.__getRosterSlotCtx(data[i][1]))
+        for i, item in enumerate(data):
+            c.addRosterSlot(i * 2, self.__getRosterSlotCtx(item[0]))
+            c.addRosterSlot(i * 2 + 1, self.__getRosterSlotCtx(item[1]))
 
         self.sendRequest(c)
 
@@ -217,10 +218,10 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta):
     def toggleReadyStateRequest(self):
         self.prbEntity.doAction()
 
-    def ignoreUserRequest(self, databaseID):
+    def ignoreUserRequest(self, slotIndex):
         playerInfo = self.prbEntity.getPlayerInfo()
         if playerInfo.isCommander():
-            self.requestToKickUser(databaseID)
+            self.requestToKickUser(slotIndex)
 
     def onSlotsHighlihgtingNeed(self, databaseID):
         availableSlots = self.getAvailableSlots(databaseID)
@@ -285,7 +286,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta):
     def isPlayerInUnit(self, databaseID):
         result = False
         players = self.prbEntity.getPlayers()
-        for dbId, _ in players.iteritems():
+        for dbId in players:
             if dbId == databaseID:
                 result = True
                 break
@@ -354,7 +355,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta):
                     for changedVehCD in vehDiff:
                         vehicle = self.itemsCache.items.getItemByCD(changedVehCD)
                         if not vehicle.activeInNationGroup and selected[0] == changedVehCD:
-                            itemCD = iterVehTypeCDsInNationGroup(vehicle.intCD).next()
+                            itemCD = next(iterVehTypeCDsInNationGroup(vehicle.intCD))
                             self._selectVehicles([itemCD])
 
             return

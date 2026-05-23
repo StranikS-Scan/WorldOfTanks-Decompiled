@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/missions_token_popover.py
+from __future__ import absolute_import
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.view.meta.MissionsTokenPopoverMeta import MissionsTokenPopoverMeta
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -31,8 +32,8 @@ class MissionsTokenPopover(MissionsTokenPopoverMeta):
         self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.TOKEN_SHOP, params={'name': self._token.getWebID()}))
         self.destroy()
 
-    def onQuestClick(self, questID):
-        quest = self.eventsCache.getQuests()[questID]
+    def onQuestClick(self, idx):
+        quest = self.eventsCache.getQuests()[idx]
         showMissionDetails(quest.getID(), quest.getGroupID())
         self.destroy()
 

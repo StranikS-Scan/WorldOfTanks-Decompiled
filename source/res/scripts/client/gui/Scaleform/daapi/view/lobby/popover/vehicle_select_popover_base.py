@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/popover/vehicle_select_popover_base.py
+from __future__ import absolute_import
+from future.utils import viewvalues
 import nations
 from gui import GUI_NATIONS_ORDER_INDEX_REVERSED
 from gui.Scaleform.daapi.view.meta.VehicleSelectPopoverMeta import VehicleSelectPopoverMeta
@@ -97,7 +99,7 @@ class VehiclesDataProvider(SortableDAAPIDataProvider):
         self.refresh()
 
     def getSelected(self):
-        return tuple((v['dbID'] for v in self.__listMapping.itervalues() if v['selected']))
+        return tuple((v['dbID'] for v in viewvalues(self.__listMapping) if v['selected']))
 
     def getLastSortMethod(self):
         return self._sort

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/VersionUpdater.py
+from __future__ import absolute_import
 import sys
+from past.builtins import xrange
 from debug_utils import LOG_DEBUG_DEV
 
 class VersionUpdaterBase(object):

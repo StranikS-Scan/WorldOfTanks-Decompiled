@@ -46,7 +46,7 @@ from items.writers import gun_writers
 from items.writers import shared_writers
 from items.writers import sound_writers
 from math import radians, cos, tan, atan, pi, isnan, degrees
-from math_common import ceilTo, round_int
+from math_common import ceilTo, round_py2_style_int
 from persistent_data_cache_common.serializers import WGPickleSerializer
 from post_progression_common import POST_PROGRESSION_ALL_PRICES, ALLOWED_CURRENCIES_FOR_TREE_STEP, ALLOWED_CURRENCIES_FOR_BUY_MODIFICATION_STEP, ALLOWED_CURRENCIES_FOR_CUSTOM_ROLE_SLOT_CHANGE, POST_PROGRESSION_UNLOCK_MODIFICATIONS_PRICES, CUSTOM_ROLE_SLOT_CHANGE_PRICE, POST_PROGRESSION_BUY_MODIFICATIONS_PRICES, VEH_SKILL_TREE_ID_OFFSET
 from soft_exception import SoftException
@@ -1670,10 +1670,10 @@ class VehicleDescriptor(object):
         for attribute in self.enhancements:
             miscAttrs[attribute.name] = attribute.applyFactor(miscAttrs[attribute.name])
 
-        hullMaxHealth = round_int(miscAttrs['hullMaxHealth'])
+        hullMaxHealth = round_py2_style_int(miscAttrs['hullMaxHealth'])
         if hullMaxHealth <= 0:
             hullMaxHealth = self.hull.maxHealth
-        turretMaxHealth = round_int(miscAttrs['turretMaxHealth'])
+        turretMaxHealth = round_py2_style_int(miscAttrs['turretMaxHealth'])
         if turretMaxHealth <= 0:
             turretMaxHealth = sum((turretDescr.maxHealth for turretDescr, _ in self.turrets), 0)
         maxHealth = hullMaxHealth + turretMaxHealth

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: open_bundle/scripts/client/open_bundle/gui/impl/lobby/intro_view.py
+from __future__ import absolute_import
 from frameworks.wulf import ViewSettings, WindowLayer, WindowFlags
 from gui.shared import g_eventBus, events
 from open_bundle.helpers.account_settings import setIntroShown

@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/ranked_battles_page.py
+from __future__ import absolute_import
+from future.utils import viewvalues
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import GUI_START_BEHAVIOR, RANKED_AWARDS_COUNTER, RANKED_INFO_COUNTER, RANKED_SHOP_COUNTER, RANKED_YEAR_RATING_COUNTER, RANKED_AWARDS_BUBBLE_YEAR_REACHED, RANKED_ENTITLEMENT_EVENTS_AMOUNT, RANKED_CURRENT_AWARDS_BUBBLE_YEAR_REACHED
 from gui.ranked_battles.ranked_helpers.sound_manager import RANKED_MAIN_PAGE_SOUND_SPACE
@@ -144,7 +146,7 @@ class RankedMainPage(LobbySubView, RankedBattlesPageMeta):
             completedYearQuest = self.__rankedController.getCompletedYearQuest()
             receivedPoints = completedYearQuest.keys()[0] if completedYearQuest else 0
             points = self.__rankedController.getYearRewardPoints() or receivedPoints
-            for minPoints, maxPoints in self.__rankedController.getYearAwardsPointsMap().itervalues():
+            for minPoints, maxPoints in viewvalues(self.__rankedController.getYearAwardsPointsMap()):
                 if maxPoints >= points >= minPoints:
                     counter = self.__rankedController.getYearRewardCount() or 1
                     AccountSettings.setCounters(RANKED_AWARDS_COUNTER, counter)

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/personal_missions_config.py
+from __future__ import absolute_import
 from constants import ASSIST_TYPES, ATTACK_REASON, VEHICLE_CLASS
 from personal_missions_constants import TARGET_NATIONS, DESCRIPTIONS, DISPLAY_TYPE, CRIT_TYPES
 from personal_missions_constants import PROGRESS_TEMPLATE, CONDITION_ICON, VISIBLE_SCOPE, MULTIPLIER_TYPE

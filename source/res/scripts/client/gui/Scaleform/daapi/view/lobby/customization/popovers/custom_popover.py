@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/popovers/custom_popover.py
-from itertools import ifilter
+from __future__ import absolute_import
 import typing
+from builtins import filter
 from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.daapi.view.lobby.customization.popovers import orderKey, C11nPopoverItemData
 from gui.impl import backport
@@ -54,10 +55,10 @@ class CustomPopover(CustomizationItemsPopoverMeta):
 
         return
 
-    def onFilterChanged(self, showHistoric, showNonHistoric, showFantastical):
+    def onFilterChanged(self, showHistoric, showNonHistoric, showFantastic):
         self.__isHistoric = showHistoric
         self.__isNonHistoric = showNonHistoric
-        self.__isFantastical = showFantastical
+        self.__isFantastical = showFantastic
         self._assignedDP.setHistoric(self.__isHistoric)
         self._assignedDP.setNonHistoric(self.__isNonHistoric)
         self._assignedDP.setFantastical(self.__isFantastical)
@@ -192,7 +193,7 @@ class CustomPopoverDataProvider(SortableDAAPIDataProvider):
         itemData = {}
         purchaseItems = self.__ctx.getPurchaseItems()
         season = season or self.__ctx.season
-        purchaseItems = ifilter(lambda i: i.group == season, purchaseItems)
+        purchaseItems = filter(lambda i: i.group == season, purchaseItems)
         if season == SeasonType.ALL:
             modifiedOutfit = self.__ctx.commonModifiedOutfit
             originalOutfit = self.__ctx.commonOriginalOutfit

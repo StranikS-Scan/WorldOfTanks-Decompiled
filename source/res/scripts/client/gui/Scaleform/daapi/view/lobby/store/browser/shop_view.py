@@ -1,16 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/browser/shop_view.py
+from __future__ import absolute_import
 import logging
 from PlayerEvents import g_playerEvents
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.lobby.shared.web_view import WebView
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL
+from gui.Scaleform.daapi.view.lobby.store.browser.sound_constants import SHOP_SOUND_SPACE
 from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from sound_constants import SHOP_SOUND_SPACE
 from uilogging.shop.loggers import ShopMetricsLogger
 from uilogging.shop.logging_constants import ShopLogKeys
 _logger = logging.getLogger(__name__)

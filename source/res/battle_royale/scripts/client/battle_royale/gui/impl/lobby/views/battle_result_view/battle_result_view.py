@@ -3,7 +3,7 @@
 import typing
 from collections import OrderedDict
 import SoundGroups
-from arena_bonus_type_caps import ARENA_BONUS_TYPE
+from constants import ARENA_BONUS_TYPE
 from battle_royale.gui.impl.lobby.tooltips.reward_currency_tooltip_view import RewardCurrencyTooltipView
 from battle_royale.skeletons.game_controller import IBRProgressionOnTokensController
 from frameworks.wulf import WindowFlags
@@ -374,7 +374,7 @@ class BattleRoyaleBattleResultsView(ViewComponent[BattleResultViewModel], IPrbLi
         earned = self.__getFinancialData(section)
         if self.__brController.isBattlePassAvailable(self.__arenaBonusType):
             earned.update({BattleRewardItemModel.BATTLE_PASS_POINTS: self.__getBattlePassPointsTotal()})
-        if self.__brProgressionController.isEnabled:
+        if section == BRSections.FINANCE and self.__brProgressionController.isEnabled:
             progressionTokensEarned = self.__getBrProgressionTokenCount()
             if progressionTokensEarned:
                 earned[BattleRewardItemModel.BR_PROGRESSION_TOKEN] = progressionTokensEarned

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: open_bundle/scripts/client/open_bundle/helpers/bonuses/bonus_layout_config.py
+from __future__ import absolute_import
 import ResMgr
+from future.utils import viewitems
 from items import _xml
 from open_bundle.helpers.bonuses.bonuses_constants import BonusesLayoutAttrs
 from open_bundle.helpers.bonuses.bonuses_layout_helper import BonusesHelper
@@ -83,5 +85,5 @@ def _parseOverride(storage, section):
     names = ids.split(' ')
     for name in names:
         storage[name] = {}
-        for key, value in values.iteritems():
+        for key, value in viewitems(values):
             storage[name][key] = value

@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/season_common.py
+from __future__ import absolute_import
 import time
-from typing import Dict, Optional, Any, List
 from collections import namedtuple
+from functools import total_ordering
+from past.builtins import cmp
+from typing import Dict, Optional, Any, List
 
 class CycleStatus(object):
     PAST = 'past'
@@ -10,16 +13,26 @@ class CycleStatus(object):
     FUTURE = 'future'
 
 
+@total_ordering
 class GameSeasonCycle(namedtuple('GameSeasonCycle', 'ID, status, startDate, endDate, ordinalNumber, announceOnly')):
 
-    def __cmp__(self, other):
-        return cmp(self.ID, other.ID)
+    def __hash__(self):
+        return self.ID
+
+    def __eq__(self, other):
+        return self.__compare(other) == 0
+
+    def __lt__(self, other):
+        return self.__compare(other) < 0
 
     def getUserName(self):
         return str(self.ordinalNumber)
 
     def getEpicCycleNumber(self):
         return int(self.ID % 100)
+
+    def __compare(self, other):
+        return cmp(self.ID, other.ID)
 
 
 class GameSeason(object):
@@ -88,11 +101,11 @@ class GameSeason(object):
         return None
 
     def getFirstCycleInfo(self):
-        firstCycleID = min(self.getAllCycles().iterkeys())
+        firstCycleID = min(self.getAllCycles())
         return self.getAllCycles()[firstCycleID]
 
     def getLastCycleInfo(self):
-        lastCycleID = max(self.getAllCycles().iterkeys())
+        lastCycleID = max(self.getAllCycles())
         return self.getAllCycles()[lastCycleID]
 
     def getLastActiveCycleInfo(self, now):

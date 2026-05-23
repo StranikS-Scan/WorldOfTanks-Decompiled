@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/tooltips/element.py
+from __future__ import absolute_import, division
 import logging
+from future.utils import viewitems
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from gui.Scaleform.daapi.view.lobby.customization.shared import getItemInventoryCount, makeVehiclesShortNamesString, getSuitableText, ITEM_TYPE_TO_TAB, CustomizationTabs
 from gui.Scaleform.daapi.view.lobby.customization.shared import getProgressionItemStatusText
@@ -32,6 +34,7 @@ from helpers import dependency, int2roman, time_utils
 from helpers.i18n import makeString as _ms
 from items.components.c11n_constants import ProjectionDecalFormTags, SeasonType, ItemTags, CustomizationDisplayType, Rarity
 from items.vehicles import g_cache
+from math_common import round_py2_style_int
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.server_events import IEventsCache
@@ -414,7 +417,7 @@ class ElementTooltip(BlocksTooltipData):
                                 _logger.error('Description is not provided for questID: %d', 0)
                             current = int(andItem.current or 0 if battlesCount is None else battlesCount.current)
                             total = int(andItem.total or 1 if battlesCount is None else battlesCount.total)
-                            progress += int(round(current * 100.0 / total))
+                            progress += round_py2_style_int(current * 100.0 / total)
                             conditionsBlocks.append(formatCondition(quest, isCompleted, isAvailable, current, total, description))
 
                         if andItems:
@@ -457,7 +460,7 @@ class ElementTooltip(BlocksTooltipData):
         isWideOffset = False
         if self._item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:
             tag = self._item.formfactor
-            isWideOffset = tag == ProjectionDecalFormTags.RECT1X4 or tag == ProjectionDecalFormTags.RECT1X6
+            isWideOffset = tag in (ProjectionDecalFormTags.RECT1X4, ProjectionDecalFormTags.RECT1X6)
         if self._item.hasBattleEffect:
             blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.neutral(backport.text(rCharacteristics.specialEffect())), padding=formatters.packPadding(top=-2), icon=self.SPECIAL_EFFECT_ICON, isWideOffset=isWideOffset))
         if mapType:
@@ -849,7 +852,7 @@ class ElementTooltip(BlocksTooltipData):
             itemsBySlot[itemSlotName].append(item.userName)
 
         image = R.images.gui.maps.icons.customization.customization_icon.c_16x16
-        for key, value in itemsBySlot.iteritems():
+        for key, value in viewitems(itemsBySlot):
             blocks.append(self.__packDependentContentFormat(text=', '.join([ backport.text(quotedText(), slotTypeName) for slotTypeName in value ]), icon=backport.image(image.dyn(key)())))
 
         return formatters.packBuildUpBlockData(blocks=blocks, padding=formatters.packPadding(top=-3))

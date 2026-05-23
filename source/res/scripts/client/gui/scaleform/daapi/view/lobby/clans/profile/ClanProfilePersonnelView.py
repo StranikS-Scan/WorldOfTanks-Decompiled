@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/ClanProfilePersonnelView.py
+from __future__ import absolute_import, division
 from account_helpers import getAccountDatabaseID
 from adisp import adisp_process
 from constants import CLAN_MEMBER_FLAGS
@@ -156,17 +157,17 @@ class ClanProfilePersonnelView(ClanProfilePersonnelViewMeta):
         self._updateHeaderState()
         self._hideWaiting()
 
-    def onHeaderButtonClick(self, actionID):
-        if actionID == OPEN_CLAN_CHANNEL_ACTION_ID:
+    def onHeaderButtonClick(self, actionId):
+        if actionId == OPEN_CLAN_CHANNEL_ACTION_ID:
             channel = self.channelsStorage.getChannelByCriteria(BWClanChannelFindCriteria())
             if channel is not None:
                 g_messengerEvents.channels.onPlayerEnterChannelByAction(channel)
             else:
                 LOG_WARNING("Clan channel couldn't find!")
-        elif actionID == OPEN_INVITES_ACTION_ID:
+        elif actionId == OPEN_INVITES_ACTION_ID:
             showClanInvitesWindow()
         else:
-            super(ClanProfilePersonnelView, self).onHeaderButtonClick(actionID)
+            super(ClanProfilePersonnelView, self).onHeaderButtonClick(actionId)
         return
 
     def onAccountClanProfileChanged(self, profile):
@@ -337,7 +338,15 @@ class _ClanMembersDataProvider(SortableDAAPIDataProvider, UsersInfoHelper):
         super(_ClanMembersDataProvider, self)._dispose()
 
     def __me_onUserActionReceived(self, actionID, contact, shadowMode):
-        if actionID == USER_ACTION_ID.FRIEND_REMOVED or actionID == USER_ACTION_ID.FRIEND_ADDED or actionID == USER_ACTION_ID.MUTE_SET or actionID == USER_ACTION_ID.MUTE_UNSET or actionID == USER_ACTION_ID.NOTE_CHANGED or actionID == USER_ACTION_ID.IGNORED_ADDED or actionID == USER_ACTION_ID.IGNORED_REMOVED or actionID == USER_ACTION_ID.TMP_IGNORED_ADDED or actionID == USER_ACTION_ID.TMP_IGNORED_REMOVED:
+        if actionID in (USER_ACTION_ID.FRIEND_REMOVED,
+         USER_ACTION_ID.FRIEND_ADDED,
+         USER_ACTION_ID.MUTE_SET,
+         USER_ACTION_ID.MUTE_UNSET,
+         USER_ACTION_ID.NOTE_CHANGED,
+         USER_ACTION_ID.IGNORED_ADDED,
+         USER_ACTION_ID.IGNORED_REMOVED,
+         USER_ACTION_ID.TMP_IGNORED_ADDED,
+         USER_ACTION_ID.TMP_IGNORED_REMOVED):
             self.buildList(self.__accountsList)
             self.refresh()
 

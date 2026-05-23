@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inventory/select_vehicle_popover.py
+from __future__ import absolute_import
 import nations
 from gui import GUI_NATIONS_ORDER_INDEX_REVERSED
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import packHeaderColumnData
@@ -85,8 +86,8 @@ class VehicleSelectPopover(VehicleSelectPopoverStorage, VehicleSelectorBase):
             self.as_showDummyS(True)
         self._updateSortField()
 
-    def setVehicleSelected(self, dbID, autoClose):
-        self.fireEvent(events.StorageEvent(events.StorageEvent.VEHICLE_SELECTED, ctx={'vehicleId': dbID}), scope=EVENT_BUS_SCOPE.LOBBY)
+    def setVehicleSelected(self, intCD, autoClose):
+        self.fireEvent(events.StorageEvent(events.StorageEvent.VEHICLE_SELECTED, ctx={'vehicleId': intCD}), scope=EVENT_BUS_SCOPE.LOBBY)
         self.onWindowClose()
 
     def changeSearchNameVehicle(self, inputText):

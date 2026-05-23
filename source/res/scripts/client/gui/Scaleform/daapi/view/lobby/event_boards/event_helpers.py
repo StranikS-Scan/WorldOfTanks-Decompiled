@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/event_boards/event_helpers.py
+from __future__ import absolute_import
 from io import BufferedIOBase, TextIOWrapper
 from functools import wraps
+from future.utils import lrange, viewitems
+from past.builtins import unicode
 import xmltodict
 from ResMgr import DataSection
 from constants import ARENA_GUI_TYPE, MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL
@@ -29,7 +32,7 @@ from gui.Scaleform.daapi.view.lobby.event_boards.event_boards_vos import makeCan
 from gui.Scaleform.daapi.view.lobby.event_boards.formaters import formatVehicleNameWithTypeIcon, getNationEmblemIcon, getNationBigFlagIcon, getNationText, vehicleTypeText, formatTimeToEnd, formatErrorTextWithIcon, formatOkTextWithIcon, formatTimeAndDate, formatUpdateTime, formatAllertTextWithIcon, formatAttentionTextWithIcon, timeEndStyle, getLevelBackgroundIcon
 from gui import GUI_NATIONS
 from helpers.time_utils import ONE_MINUTE
-LEVELS_RANGE = range(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL + 1)
+LEVELS_RANGE = lrange(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL + 1)
 
 class _Task(object):
 
@@ -150,9 +153,9 @@ class _PrimeTimeCondition(_Condition):
     def getInfo(self):
         primeTimes = self._event.getPrimeTimes().getPrimeTimes()
         count = len(primeTimes)
-        if count is 0:
+        if count == 0:
             result = _ms(EVENT_BOARDS.CONDITION_PRIMETIME_ANY)
-        elif count is 1:
+        elif count == 1:
             pt = primeTimes[0]
             periphery = int(pt.getServer())
             name = self._lobbyContext.getPeripheryName(periphery, False)
@@ -185,8 +188,8 @@ class _VehiclesCondition(_Condition):
                     availableVehicle = vehicle
                     available += 1
 
-        singleVehicle = allCount is 1
-        vehicleMissing = available is 0
+        singleVehicle = allCount == 1
+        vehicleMissing = available == 0
         if singleVehicle:
             vehicle = availableVehicle or items.getItemByCD(vehicles[0])
             vehicleName = formatVehicleNameWithTypeIcon(vehicle, 'html_templates:lobby/elen/objective')
@@ -471,7 +474,7 @@ class EventInfo(object):
                         description1 = text_styles.standard(formatUpdateTime(recalculationTS))
                     recalculationInterval = self._topMeta.getRecalculationInterval()
                     if recalculationInterval is not None:
-                        interval = int(recalculationInterval / ONE_MINUTE)
+                        interval = int(recalculationInterval // ONE_MINUTE)
                         description1Tooltip = makeTooltip(_ms(TOOLTIPS.SUMMARY_STATUS_TOOLTIP, interval=interval))
             if not anyTops:
                 description2 = formatAttentionTextWithIcon(text_styles.neutral(EVENT_BOARDS.STATUS_PARTICIPATE_NEEDMOREBATTLES))
@@ -727,7 +730,7 @@ def convertRewardsDictToBonusObjects(dictData, key='rewards'):
         dataSection.createSectionFromString(xmlData)
         bonuses.update(readBonusSection(dictData[key].keys(), dataSection[key]))
         bonusObjects = []
-        for bKey, bValue in bonuses.iteritems():
+        for bKey, bValue in viewitems(bonuses):
             bonusObjects.extend(getEventBoardsBonusObj(bKey, bValue))
 
         bonusObjects.sort(key=lambda b: BONUS_PRIORITY.index(b.getName()) if b.getName() in BONUS_PRIORITY else len(BONUS_PRIORITY))

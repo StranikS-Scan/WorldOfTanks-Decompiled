@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/customization_bottom_panel.py
+from __future__ import absolute_import
+import typing
 from collections import namedtuple
 from functools import partial
-import typing
+from future.utils import viewvalues
 import BigWorld
 from CurrentVehicle import g_currentVehicle
 from account_helpers.AccountSettings import AccountSettings, CUSTOMIZATION_SECTION, PROJECTION_DECAL_HINT_SHOWN_FIELD, CUSTOMIZATION_STYLE_ITEMS_VISITED, CUSTOMIZATION_TABS_VISITED
@@ -144,7 +146,8 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__rebuildCarousel()
         self.__updateHints()
 
-    def showGroupFromTab(self, tabIndex):
+    def showGroupFromTab(self, groupId):
+        tabIndex = groupId
         if tabIndex not in CustomizationTabs.MODES[self.__ctx.modeId]:
             self.__changeMode(CustomizationTabs.TAB_TO_MODE[tabIndex][0], tabIndex)
         else:
@@ -232,7 +235,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             self.__rebuildCarousel(scroll=True)
         else:
             self._carouselDP.refresh()
-            self.__updateSelection(scroll=True)
+            self.__updateSelection()
         self.__updatePopoverBtn()
         self.__updatefilterFallbackData()
 
@@ -244,7 +247,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
                 self.__scrollToItem(prevSelected.intCD, True)
         else:
             self._carouselDP.refresh()
-            self.__updateSelection(scroll=True)
+            self.__updateSelection()
         self.__updatefilterFallbackData()
         self.__updatePopoverBtn()
         return
@@ -588,7 +591,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         if self.__ctx.isInStyleMode(CustomizationModes.STYLE_3D):
             itemsPopoverBtnEnabled = self.__ctx.hasCommonItems()
         else:
-            for outfit in self.__ctx.mode.outfits.itervalues():
+            for outfit in viewvalues(self.__ctx.mode.outfits):
                 for intCD, component, _, _, _ in outfit.itemsFull():
                     isMatchingProjection = component.customType == ProjectionDecalComponent.customType and component.matchingTag is not None
                     if component.isFilled() or isMatchingProjection:
@@ -626,7 +629,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__updateTabs()
         self.__setBottomPanelBillData()
         self.__updatePopoverBtn()
-        self.__rebuildCarousel()
+        self.__rebuildCarousel(scroll=True)
 
     def __onTabChanged(self, tabIndex, itemCD=None):
         self.__updateTabs()

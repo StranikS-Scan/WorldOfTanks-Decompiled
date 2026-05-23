@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: open_bundle/scripts/client/open_bundle/helpers/bonuses/bonuses_layout_helper.py
+from __future__ import absolute_import
 import logging
 from enum import Enum
 from typing import TYPE_CHECKING
@@ -67,7 +68,6 @@ class _BaseSubTypeGetter(object):
     @staticmethod
     def getSubType(bonus):
         _logger.debug('No subType getter for bonus: %s', bonus.getName())
-        return None
 
 
 class _VehiclesSubTypeGetter(_BaseSubTypeGetter):
@@ -184,7 +184,6 @@ class _BaseValueGetter(object):
     @classmethod
     def getValue(cls, bonus, _):
         _logger.debug('No value getter for bonus: %s', bonus.getName())
-        return None
 
 
 class _IntCDValueGetter(_BaseValueGetter):
@@ -252,7 +251,7 @@ class _TokenValueGetter(_BaseValueGetter):
 
     @classmethod
     def getValue(cls, bonus, _):
-        return first(bonus.getTokens().iterkeys(), '')
+        return first(bonus.getTokens(), '')
 
 
 class _LootBoxValueGetter(_BaseValueGetter):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/missions_filter_popover.py
+from __future__ import absolute_import
 from account_helpers.AccountSettings import AccountSettings, MISSIONS_PAGE
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import HIDE_DONE, HIDE_UNAVAILABLE
 from gui.Scaleform.daapi.view.meta.MissionsFilterPopoverViewMeta import MissionsFilterPopoverViewMeta

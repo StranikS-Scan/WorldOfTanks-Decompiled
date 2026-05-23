@@ -9,6 +9,7 @@ from fun_random.gui.impl.gen.view_models.views.lobby.common.fun_random_progressi
 from fun_random.gui.impl.gen.view_models.views.lobby.common.fun_random_quest_card_model import FunRandomQuestCardModel, CardState
 from fun_random.gui.impl.lobby.common.lootboxes import FunRandomLootBoxTokenBonusPacker, FunRandomRewardLootBoxTokenBonusPacker, FunRandomLootBoxVehiclesBonusUIPacker, FEP_CATEGORY
 from fun_random.gui.feature.fun_constants import FunSubModesState
+from fun_random.gui.fun_account_settings import FunAccountSettings
 from fun_random.gui.feature.sub_systems.fun_performance_analyzers import PerformanceGroup
 from gui.impl import backport
 from gui.impl.auxiliary.collections_helper import TmanTemplateBonusPacker
@@ -35,6 +36,7 @@ if TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.common.mode_performance_model import ModePerformanceModel
     from fun_random.gui.impl.gen.view_models.views.lobby.common.fun_random_progression_condition import FunRandomProgressionCondition
     from fun_random.gui.impl.gen.view_models.views.lobby.common.fun_random_infinite_progression_condition import FunRandomInfiniteProgressionCondition
+    from fun_random.gui.impl.gen.view_models.views.lobby.tooltips.fun_random_base_quest_tooltip_view_model import FunRandomBaseQuestTooltipViewModel
     from fun_random.gui.server_events.event_items import FunProgressionTriggerQuest
 _PROGRESSION_STATUS_MAP = {(False, False, False): FunRandomProgressionStatus.ACTIVE_RESETTABLE,
  (False, False, True): FunRandomProgressionStatus.ACTIVE_RESETTABLE,
@@ -238,13 +240,18 @@ def _packTriggers(triggers, cardsModel):
     cardsModel.clear()
     for trigger in sorted(triggers, key=lambda q: q.isCompleted()):
         cardModel = FunRandomQuestCardModel()
-        _packTrigger(cardModel, trigger)
+        packTrigger(cardModel, trigger)
         cardsModel.addViewModel(cardModel)
 
     cardsModel.invalidate()
 
 
-def _packTrigger(cardModel, trigger):
+def packQuestTooltip(tooltipModel, progression, assetsPointer):
+    tooltipModel.setStatusTimer(progression.statusTimer)
+    tooltipModel.setAssetsPointer(assetsPointer)
+
+
+def packTrigger(cardModel, trigger):
     cardModel.setState(CardState.COMPLETED if trigger.isCompleted() else CardState.ACTIVE)
     cardModel.setDescription(trigger.getDescription())
     cardModel.setQuestCondition(trigger.getQuestCondition())
@@ -254,6 +261,10 @@ def _packTrigger(cardModel, trigger):
     altQuest = trigger.getAltQuest()
     cardModel.setMainBonusCount(trigger.getBonusCounterNumber())
     cardModel.setAltBonusCount(altQuest.getBonusCounterNumber() if altQuest else 0)
+    triggerId = trigger.getID()
+    cardModel.setTriggerId(triggerId)
+    isTriggerCompletionSeen = FunAccountSettings.getIsTriggerCompletionSeen(triggerId)
+    cardModel.setAnimateCompletion(not isTriggerCompletionSeen and trigger.isCompleted())
 
 
 def _packStage(bonuses, currentPoints, requiredPoints, maximumPoints, isCompleted, stageModel, isSpecial=False, tooltips=None):

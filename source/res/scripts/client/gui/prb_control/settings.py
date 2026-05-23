@@ -550,7 +550,7 @@ class PRB_INVITE_STATE(CONST_CONTAINER):
         return cls.EXPIRED if invite.isExpired() else invite.state
 
 
-class PREBATTLE_PLAYERS_COMPARATORS(object):
+class PREBATTLE_PLAYERS_SORT_TYPES(object):
     REGULAR = 1
     OBSERVERS_TO_BOTTOM = 2
     BY_VEHICLE = 3

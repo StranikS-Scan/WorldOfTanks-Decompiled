@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/missions_page.py
+from __future__ import absolute_import
 import weakref
 from collections import namedtuple
 import typing
+from future.utils import viewitems, viewvalues
 import BigWorld
 import Windowing
 from CurrentVehicle import g_currentVehicle
@@ -31,7 +33,7 @@ from gui.marathon.marathon_event_controller import getMarathons
 from gui.server_events import caches, settings
 from gui.server_events.events_dispatcher import hideMissionDetails, showMissionDetails
 from gui.server_events.events_helpers import isBattleMattersQuestID
-from gui.shared import event_bus_handlers, events, g_eventBus
+from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showHangar
 from gui.shared.events import MissionsEvent
@@ -79,7 +81,6 @@ def setHideDoneFilter():
 
 
 class MissionsPage(LobbySubView, MissionsPageMeta):
-    __metaclass__ = event_bus_handlers.EventBusListener
     _COMMON_SOUND_SPACE = TASKS_SOUND_SPACE
     __sound_env__ = LobbySubViewEnv
     __VOICED_TABS = {QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS: (backport.sound(R.sounds.ev_mapbox_enter()), backport.sound(R.sounds.ev_mapbox_exit())),
@@ -116,7 +117,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         return
 
     def onTabSelected(self, alias, prefix):
-        for tab, soundEvents in self.__VOICED_TABS.iteritems():
+        for tab, soundEvents in viewitems(self.__VOICED_TABS):
             if alias == tab and self.__currentTabAlias != tab:
                 self.soundManager.playSound(soundEvents[0])
                 break
@@ -178,7 +179,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
 
     def _populate(self):
         super(MissionsPage, self)._populate()
-        for builder in self.__builders.itervalues():
+        for builder in viewvalues(self.__builders):
             builder.init()
 
         self.__mapboxCtrl.onPrimeTimeStatusUpdated += self.__onPrimeTimeStatusUpdated
@@ -186,6 +187,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         self.addListener(MissionsEvent.ON_FILTER_CHANGED, self.__onFilterChanged, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(MissionsEvent.ON_FILTER_CLOSED, self.__onFilterClosed, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(MissionsEvent.PAGE_INVALIDATE, self.__pageInvalidate, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.HideWindowEvent.HIDE_MISSIONS_PAGE_VIEW, self.__handleMissionsPageClose)
         self.eventsCache.onEventsVisited += self.__onEventsVisited
         enterEvent, _ = self.__VOICED_TABS.get(self.__currentTabAlias, (None, None))
         if enterEvent is not None:
@@ -212,7 +214,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
 
     def _dispose(self):
         super(MissionsPage, self)._dispose()
-        for builder in self.__builders.itervalues():
+        for builder in viewvalues(self.__builders):
             builder.clear()
 
         _, exitEvent = self.__VOICED_TABS.get(self.__currentTabAlias, (None, None))
@@ -229,6 +231,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         self.removeListener(MissionsEvent.ON_FILTER_CHANGED, self.__onFilterChanged, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(MissionsEvent.ON_FILTER_CLOSED, self.__onFilterClosed, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(MissionsEvent.PAGE_INVALIDATE, self.__pageInvalidate, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.HideWindowEvent.HIDE_MISSIONS_PAGE_VIEW, self.__handleMissionsPageClose)
         self.eventsCache.onEventsVisited -= self.__onEventsVisited
         self.__mapboxCtrl.onPrimeTimeStatusUpdated -= self.__onPrimeTimeStatusUpdated
         caches.getNavInfo().setMissionsTab(self.__currentTabAlias)
@@ -297,7 +300,6 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         if self.currentTab:
             self.currentTab.markVisited()
 
-    @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_MISSIONS_PAGE_VIEW, EVENT_BUS_SCOPE.DEFAULT)
     def __handleMissionsPageClose(self, _):
         self.destroy()
 
@@ -522,7 +524,7 @@ class MissionViewBase(MissionsListViewBaseMeta):
     def getSuitableEvents(self):
         return self._builder.getSuitableEvents()
 
-    def setActive(self, value):
+    def setActive(self, isActive):
         pass
 
     def markVisited(self):
@@ -588,7 +590,7 @@ class MissionView(MissionViewBase):
             self._filterMissions()
         self._onDataChangedNotify()
 
-    def dummyClicked(self, eventType):
+    def dummyClicked(self, clickType):
         filterData = {'hideDone': False,
          'hideUnavailable': False}
         AccountSettings.setFilter(MISSIONS_PAGE, filterData)

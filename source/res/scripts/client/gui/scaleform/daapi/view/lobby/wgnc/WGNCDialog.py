@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/wgnc/WGNCDialog.py
+from __future__ import absolute_import
 from gui.Scaleform.daapi.view.meta.WGNCDialogMeta import WGNCDialogMeta
 from gui.wgnc import g_wgncProvider
 
@@ -13,8 +14,8 @@ class WGNCDialog(WGNCDialogMeta):
     def onWindowClose(self):
         self.destroy()
 
-    def doAction(self, actionID, isButtonClicked):
-        g_wgncProvider.doAction(self.__notID, actionID, self.__target)
+    def doAction(self, actionId, isButtonClicked):
+        g_wgncProvider.doAction(self.__notID, actionId, self.__target)
         if isButtonClicked:
             self.destroy()
 

@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/xmltodict.py
+from __future__ import absolute_import
+from future.utils import lzip
 try:
     from defusedexpat import pyexpat as expat
 except ImportError:
@@ -68,7 +70,7 @@ class _DictSAXHandler(object):
         return name if not short_namespace else self.namespace_separator.join((short_namespace, name))
 
     def _attrs_to_dict(self, attrs):
-        return attrs if isinstance(attrs, dict) else self.dict_constructor(zip(attrs[0::2], attrs[1::2]))
+        return attrs if isinstance(attrs, dict) else self.dict_constructor(lzip(attrs[0::2], attrs[1::2]))
 
     def startNamespaceDecl(self, prefix, uri):
         self.namespace_declarations[prefix or ''] = uri

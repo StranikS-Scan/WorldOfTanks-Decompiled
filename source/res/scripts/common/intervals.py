@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/intervals.py
+from __future__ import absolute_import
 import collections
+from functools import total_ordering
 _Interval = collections.namedtuple('Interval', ['begin', 'end'])
 
+@total_ordering
 class Interval(_Interval):
     EMPTY = None
 
@@ -17,8 +20,10 @@ class Interval(_Interval):
         else:
             return self.begin <= item <= self.end
 
-    def __nonzero__(self):
+    def __bool__(self):
         return self is not self.EMPTY
+
+    __nonzero__ = __bool__
 
     def __or__(self, other):
         if self.begin in other or self.end in other:
@@ -28,13 +33,22 @@ class Interval(_Interval):
     def __and__(self, other):
         return Interval(max(self.begin, other.begin), min(self.end, other.end)) if self.begin in other or self.end in other else self.EMPTY
 
-    def __cmp__(self, other):
-        if self & other:
-            return 0
-        return 1 if self.begin > other.end else -1
+    def __hash__(self):
+        return hash((self.begin, self.end))
+
+    def __eq__(self, other):
+        return self.__compare(other) == 0
+
+    def __lt__(self, other):
+        return self.__compare(other) < 0
 
     def __str__(self):
         return '[[{}, {}]]'.format(self.begin, self.end)
+
+    def __compare(self, other):
+        if self & other:
+            return 0
+        return 1 if self.begin > other.end else -1
 
 
 Interval.EMPTY = Interval(None, None)

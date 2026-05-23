@@ -1707,6 +1707,63 @@
       </damage>
     </armorSpalls>
   </_90mm_sgr_m_F_90>
+  <_105mm_slpprj_m_F_Ambassador>
+    <id>	111	</id>
+    <userString>	#sweden_vehicles:_105mm_slpprj_m_F_Ambassador	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	850	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_slpprj_m_F_Ambassador>
+  <_105mm_slpsgr_m_F_Ambassador>
+    <id>	112	</id>
+    <userString>	#sweden_vehicles:_105mm_slpsgr_m_F_Ambassador	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_105mm_slpsgr_m_F_Ambassador>
+  <_105mm_sgr_m_F_Ambassador>
+    <id>	113	</id>
+    <userString>	#sweden_vehicles:_105mm_sgr_m_F_Ambassador	</userString>
+    <icon>	he_modern	</icon>
+    <price>	430	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	220	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_sgr_m_F_Ambassador>
   <_105mm_lt_sgr_m_34>
     <id>	42	</id>
     <userString>	#sweden_vehicles:_105mm_lt_sgr_m_34	</userString>

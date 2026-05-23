@@ -5312,6 +5312,63 @@
       </damage>
     </armorSpalls>
   </_105mm_OE_105_Mle_60_LEOX>
+  <_105mm_OFL_105_F1_Chevalier>
+    <id>	241	</id>
+    <userString>	#france_vehicles:_105mm_OFL_105_F1_Chevalier	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	899	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_OFL_105_F1_Chevalier>
+  <_105mm_OCC_105_F1_Chevalier>
+    <id>	242	</id>
+    <userString>	#france_vehicles:_105mm_OCC_105_F1_Chevalier	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_105mm_OCC_105_F1_Chevalier>
+  <_105mm_OE_105_Mle_60_Chevalier>
+    <id>	243	</id>
+    <userString>	#france_vehicles:_105mm_OE_105_Mle_60_Chevalier	</userString>
+    <icon>	he_modern	</icon>
+    <price>	469	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	240	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_OE_105_Mle_60_Chevalier>
   <_110mm_OPS_110_Fantome>
     <id>	220	</id>
     <userString>	#france_vehicles:_110mm_OPS_110_Fantome	</userString>

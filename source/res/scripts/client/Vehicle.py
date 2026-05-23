@@ -39,7 +39,6 @@ from gun_rotation_shared import decodeGunAngles
 from helpers import dependency
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from helpers.EffectsList import SoundStartParam
-from helpers.styles_perf_toolset import g_stylesOverrider
 from items import vehicles
 from items.components.component_constants import DEFAULT_TRACK_HIT_VECTOR, DEFAULT_GUN_BURST
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS
@@ -295,9 +294,6 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         self.typeDescriptor = self.getDescr(None if isDelayedRespawn else self.respawnCompactDescr)
         forceReloading = self.respawnCompactDescr is not None
         var_storage.createForRoot(self)
-        result = g_stylesOverrider.overrideStyleForVehicle(self.typeDescriptor.name)
-        if result is not None:
-            outfitDescr = result
         if 'battle_royale' in self.typeDescriptor.type.tags:
             from InBattleUpgrades import onBattleRoyalePrerequisites
             forceReloading = onBattleRoyalePrerequisites(self, oldTypeDescriptor, forceReloading)

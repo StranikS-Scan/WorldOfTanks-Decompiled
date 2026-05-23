@@ -47,7 +47,7 @@ class AwardsView(ViewImpl):
         return super(AwardsView, self).createToolTip(event)
 
     def createToolTipContent(self, event, contentID):
-        if contentID == R.views.lobby.battle_pass.tooltips.BattlePassCoinTooltipView():
+        if contentID == R.views.mono.battle_pass.tooltips.bpcoin():
             return BattlePassCoinTooltipView()
         else:
             if contentID == R.views.lobby.collection.tooltips.CollectionItemTooltipView():

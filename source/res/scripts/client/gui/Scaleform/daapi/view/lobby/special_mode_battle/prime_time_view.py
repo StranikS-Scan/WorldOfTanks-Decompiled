@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/special_mode_battle/prime_time_view.py
+from __future__ import absolute_import
 import time
 from collections import namedtuple
 from gui.Scaleform import MENU

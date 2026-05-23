@@ -747,7 +747,6 @@ class ServerSettingsManager(object):
                                        SESSION_STATS.SHOW_SPOTTED: 16,
                                        SESSION_STATS.ONLY_ONCE_HINT_SHOWN_FIELD: 17}, offsets={}),
      SETTINGS_SECTIONS.BATTLE_PASS_STORAGE: Section(masks={BATTLE_PASS.INTRO_SHOWN: 18,
-                                             BATTLE_PASS.EXTRA_CHAPTER_INTRO_SHOWN: 19,
                                              BATTLE_PASS.INTRO_VIDEO_SHOWN: 20}, offsets={BATTLE_PASS.FLAGS_VERSION: Offset(21, 63 << 21),
                                              BATTLE_PASS.FLAGS_VERSION_HOLIDAY: Offset(28, 31 << 28)}),
      SETTINGS_SECTIONS.BATTLE_COMM: Section(masks={BATTLE_COMM.ENABLE_BATTLE_COMMUNICATION: 0,

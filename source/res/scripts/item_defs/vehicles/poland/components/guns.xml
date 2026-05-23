@@ -49,6 +49,7 @@
     <_155mm_armata_wz_40_46>	60	</_155mm_armata_wz_40_46>
     <_115mm_armata_U_5TS>	62	</_115mm_armata_U_5TS>
     <GG_85_175_mm_GC>	63	</GG_85_175_mm_GC>
+    <GG_100_162_mm_Husarz>	64	</GG_100_162_mm_Husarz>
     <_128_mm_SK_C_34L>	65	</_128_mm_SK_C_34L>
     <_90mm_wz_39_90_40>	2000	</_90mm_wz_39_90_40>
     <_100mm_DAP_44>	2001	</_100mm_DAP_44>
@@ -3353,6 +3354,65 @@
         </PW_GG_m100_162_K>
       </shots>
     </GG_100_162_mm_K>
+    <GG_100_162_mm_Husarz>
+      <userString>	#poland_vehicles:GG_100_162_mm_Husarz	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.44	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.0	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effectsCaliber>	162	</effectsCaliber>
+      <effects>	shot_mainext	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	24	</rotationSpeed>
+      <reloadTime>	13	</reloadTime>
+      <maxAmmo>	40	</maxAmmo>
+      <aimingTime>	2.3	</aimingTime>
+      <weight>	2400	</weight>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <PP_GG_m100_162_Husarz>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	1400	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	265 257	</piercingPower>
+        </PP_GG_m100_162_Husarz>
+        <PPrz_GG_m100_162_Husarz>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1600	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	290 282	</piercingPower>
+        </PPrz_GG_m100_162_Husarz>
+        <PW_GG_m100_162_Husarz>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	80 80	</piercingPower>
+        </PW_GG_m100_162_Husarz>
+      </shots>
+    </GG_100_162_mm_Husarz>
     <GG_85_175_mm>
       <userString>	#poland_vehicles:GG_85_175_mm	</userString>
       <tags></tags>

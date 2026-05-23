@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/excepthook.py
-import BigWorld
+from __future__ import absolute_import
 import sys
-import re
 import linecache
 from functools import wraps
+from future.utils import viewitems, viewvalues
 from traceback import format_exception_only
+import BigWorld
 from constants import IS_BASEAPP
 _MAX_OBJECT_SIZE = 16384
 _MAX_DEPTH = 10
@@ -77,7 +78,7 @@ def __processVar(k, v, localsProcessorCache):
     varID = id(v)
     if varID in localsProcessorCache:
         return localsProcessorCache[varID]
-    if k == 'self' or IS_BASEAPP and (isinstance(v, BigWorld.Base) or isinstance(v, BigWorld.Proxy)):
+    if k == 'self' or IS_BASEAPP and isinstance(v, (BigWorld.Base, BigWorld.Proxy)):
         res = {'className': v.__class__.__name__}
         for field, alias in (('id', 'id'), ('databaseID', 'dbID'), ('className', 'entityType')):
             if hasattr(v, field):
@@ -108,7 +109,7 @@ def __checkObjectSize(d, meta):
             return False
         meta['cycleReferences'].add(id(d))
         if isinstance(d, dict):
-            for v in d.itervalues():
+            for v in viewvalues(d):
                 if not __checkObjectSize(v, meta):
                     return False
 
@@ -123,7 +124,7 @@ def __checkObjectSize(d, meta):
 
 
 def __processLocals(locals, localsProcessorCache):
-    return {k:__processVar(k, v, localsProcessorCache) for k, v in locals.iteritems()}
+    return {k:__processVar(k, v, localsProcessorCache) for k, v in viewitems(locals)}
 
 
 def __excepthook(excepthook, fileNameToTrim):

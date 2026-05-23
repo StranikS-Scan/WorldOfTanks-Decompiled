@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/components/CalendarComponent.py
+from __future__ import absolute_import
 from Event import Event, EventManager
 from gui.Scaleform.daapi.view.meta.CalendarMeta import CalendarMeta
 from gui.impl import backport
@@ -12,11 +13,11 @@ class CalendarComponent(CalendarMeta):
         self.onMonthChangedEvent = Event(self.__em)
         self.onDateSelectedEvent = Event(self.__em)
 
-    def onMonthChanged(self, timestamp):
-        self.onMonthChangedEvent(timestamp)
+    def onMonthChanged(self, rawDate):
+        self.onMonthChangedEvent(rawDate)
 
-    def onDateSelected(self, timestamp):
-        self.onDateSelectedEvent(timestamp)
+    def onDateSelected(self, rawDate):
+        self.onDateSelectedEvent(rawDate)
 
     def formatYMHeader(self, rawDate):
         return backport.getYearMonthFormat(rawDate)

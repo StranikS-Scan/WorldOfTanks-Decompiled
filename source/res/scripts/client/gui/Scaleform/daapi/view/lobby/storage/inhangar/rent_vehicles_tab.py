@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inhangar/rent_vehicles_tab.py
+from __future__ import absolute_import
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.view.lobby.storage.inhangar import StorageCarouselDataProvider, StorageCarouselFilter
 from gui.Scaleform.daapi.view.meta.RentVehiclesTabViewMeta import RentVehiclesTabViewMeta
@@ -47,11 +48,11 @@ class _RentVehiclesDataProvider(StorageCarouselDataProvider):
     def applyFilter(self, forceApply=False):
         pass
 
-    def _buildVehicle(self, item):
-        vo = super(_RentVehiclesDataProvider, self)._buildVehicle(item)
-        rentText = RentLeftFormatter(item.rentInfo, item.isPremiumIGR).getRentLeftStr() or _ms(MENU.STORE_VEHICLESTATES_RENTALISOVER)
+    def _buildVehicle(self, vehicle):
+        vo = super(_RentVehiclesDataProvider, self)._buildVehicle(vehicle)
+        rentText = RentLeftFormatter(vehicle.rentInfo, vehicle.isPremiumIGR).getRentLeftStr() or _ms(MENU.STORE_VEHICLESTATES_RENTALISOVER)
         vo.update({'isMoneyEnough': True,
-         'enabled': item.canSell and item.rentalIsOver and not item.isTelecomRent,
+         'enabled': vehicle.canSell and vehicle.rentalIsOver and not vehicle.isTelecomRent,
          'rentText': rentText,
          'rentIcon': RES_ICONS.MAPS_ICONS_LIBRARY_CLOCKICON_1,
          'contextMenuId': CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_RENTED_ITEM,

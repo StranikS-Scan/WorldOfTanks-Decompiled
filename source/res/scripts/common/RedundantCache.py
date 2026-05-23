@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/RedundantCache.py
+from __future__ import absolute_import
 import collections
 from itertools import chain
 
@@ -30,7 +31,7 @@ class RedundantCache(object):
         return result
 
     def fini(self):
-        for i in range(0, self.__redundancy):
+        for _ in range(0, self.__redundancy):
             self.flush()
 
     def add(self, value):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_preview/hero_tank_preview_constants.py
+from __future__ import absolute_import
 from collections import namedtuple
 from gui.impl.gen import R
 from helpers import dependency

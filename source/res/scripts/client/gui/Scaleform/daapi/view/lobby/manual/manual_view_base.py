@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/manual/manual_view_base.py
+from __future__ import absolute_import
 import logging
 from gui.Scaleform.framework.entities.View import View
 from helpers import dependency

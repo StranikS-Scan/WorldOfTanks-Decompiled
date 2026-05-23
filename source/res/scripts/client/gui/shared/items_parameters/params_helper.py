@@ -151,6 +151,13 @@ def isValidEmptyValue(paramName, paramValue):
     return func(paramValue) if func is not None else False
 
 
+def lackVehicleSteeringAngles(currentVehicle):
+    vehicleDesc = currentVehicle.descriptor
+    chassis = vehicleDesc.type.xphysics['chassis'][vehicleDesc.chassis.name]
+    axleSteeringAngles = chassis.get('axleSteeringAngles', None)
+    return axleSteeringAngles is not None and all((v == 0 for v in axleSteeringAngles))
+
+
 def _getParamsProvider(item, vehicleDescr=None):
     if vehicles.isVehicleDescr(item.descriptor):
         return _ITEM_TYPE_HANDLERS[ITEM_TYPES.vehicle](item)
@@ -558,6 +565,7 @@ class VehParamsBaseGenerator(object):
 
     def _getExtraParams(self, comparator, groupName, diffParams):
         from gui.Scaleform.daapi.view.lobby.tank_setup.ammunition_setup_vehicle import g_tankSetupVehicle
+        from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_vehicle import g_cmpConfiguratorVehicle
         result = []
         if self._isExtraParamEnabled():
             hasExtraParams = False
@@ -567,7 +575,13 @@ class VehParamsBaseGenerator(object):
             installedBoosters = []
             if vehicle and vehicle.compactDescr == diffParams.get('vehIntCD'):
                 installedBoosters = vehicle.battleBoosters.installed
+            steeringAnglesEmpty = False
+            compareVehicle = g_cmpConfiguratorVehicle.item
+            if compareVehicle is not None:
+                steeringAnglesEmpty = lackVehicleSteeringAngles(compareVehicle)
             for extraParamName in EXTRA_PARAMS_GROUP[groupName]:
+                if extraParamName == KPI.Name.WHEELS_ROTATION_SPEED and steeringAnglesEmpty:
+                    continue
                 param = comparator.getExtendedData(extraParamName)
                 if self._isHiddenBooster(vehicle, extraParamName, param.value, installedBoosters):
                     continue

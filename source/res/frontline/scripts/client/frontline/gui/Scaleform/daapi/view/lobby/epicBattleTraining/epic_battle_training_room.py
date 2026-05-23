@@ -15,7 +15,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control.entities.base.legacy.ctx import GroupAssignLegacyCtx, GroupSwapInTeamLegacyCtx, GroupSwapBetweenTeamLegacyCtx
 from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.prb_control.items.prb_items import getPlayersComparator
+from gui.prb_control.items.prb_items import getPlayersSortKey
 from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE
 from gui.shared import events, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.events import ChannelCarouselEvent
@@ -141,7 +141,7 @@ class EpicBattleTrainingRoom(EpicBattleTrainingRoomMeta):
     def __makeAccountsDataForLane(self, accounts, lane, rLabel=None):
         listData = []
         isPlayerSpeaking = self.app.voiceChatManager.isPlayerSpeaking
-        accounts = sorted(accounts, cmp=getPlayersComparator())
+        accounts = sorted(accounts, key=getPlayersSortKey())
         getUser = self.usersStorage.getUser
         lanecounter = [0, 0, 0]
         for account in accounts:

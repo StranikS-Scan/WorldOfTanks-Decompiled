@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/shared/cm_handlers.py
+from __future__ import absolute_import
 import inspect
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
 from gui.impl import backport

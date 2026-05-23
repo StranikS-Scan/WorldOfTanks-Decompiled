@@ -7,7 +7,10 @@ from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
 from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import HANGAR_VIEW_SETTINGS, HANGAR_KEY_BINDINGS
 from frameworks.wulf import WindowFlags
+from fun_random.gui.feature.util.fun_mixins import FunSubModesWatcher
+from fun_random.gui.feature.util.fun_wrappers import hasDesiredSubMode
 from fun_random.gui.filters.fun_random_carousel_filter import FunRandomCarouselFilter
+from fun_random.gui.fun_account_settings import FunSubModeAccountSettings
 from fun_random.gui.impl.lobby.hangar.base.fun_vehicles_filter_component import FunRandomVehiclesFilterComponent
 from fun_random.gui.impl.lobby.hangar.presenters.fun_random_loadout_presenter import FunRandomLoadoutPresenter
 from fun_random.gui.impl.lobby.hangar.presenters.fun_random_modifiers_presenter import FunRandomModifiersPresenter
@@ -16,6 +19,7 @@ from fun_random.gui.impl.lobby.hangar.presenters.fun_random_vehicle_filters_pres
 from fun_random.gui.impl.lobby.hangar.presenters.fun_random_vehicles_info_presenter import FunRandomVehiclesInfoPresenter
 from fun_random.gui.impl.lobby.hangar.presenters.fun_random_vehicle_inventory_presenter import FunRandomVehicleInventoryPresenter
 from fun_random.gui.impl.lobby.hangar.presenters.fun_random_user_missions_presenter import FunRandomUserMissionsPresenter
+from fun_random_common.fun_constants import UNKNOWN_EVENT_ID
 from gui.impl.lobby.hangar.presenters.vehicle_menu_presenter import VehicleMenuPresenter
 from gui.app_loader import app_getter
 from gui.Scaleform.lobby_entry import getLobbyStateMachine
@@ -51,6 +55,7 @@ from helpers.statistics import HANGAR_LOADING_STATE
 from shared_utils import nextTick
 from skeletons.helpers.statistics import IStatisticsCollector
 if typing.TYPE_CHECKING:
+    from fun_random.gui.shared.events import FunSelectionEvent
     from gui.impl.pub.view_impl import TViewModel
     from hangar_selectable_objects.interfaces import ISelectableLogic
 
@@ -66,7 +71,7 @@ class FunRandomHangarWindow(WindowImpl):
         g_playerEvents.onLoadingMilestoneReached(Milestones.HANGAR_UI_READY)
 
 
-class FunRandomHangar(ViewComponent[RouterModel], IRoutableView):
+class FunRandomHangar(ViewComponent[RouterModel], IRoutableView, FunSubModesWatcher):
     _COMMON_SOUND_SPACE = RANDOM_HANGAR_SOUND_SPACE
 
     def __init__(self, layoutId=R.views.fun_random.mono.lobby.hangar(), model=RouterModel):
@@ -124,9 +129,11 @@ class FunRandomHangar(ViewComponent[RouterModel], IRoutableView):
     def _subscribe(self):
         super(FunRandomHangar, self)._subscribe()
         self.__inputManager.addEscapeListener(self.__escapeHandler)
+        self.startSubSelectionListening(self.__onSubModeChanged)
 
     def _unsubscribe(self):
         self.__inputManager.removeEscapeListener(self.__escapeHandler)
+        self.stopSubSelectionListening(self.__onSubModeChanged)
         super(FunRandomHangar, self)._unsubscribe()
 
     def _onLoading(self, *args, **kwargs):
@@ -142,6 +149,21 @@ class FunRandomHangar(ViewComponent[RouterModel], IRoutableView):
         g_currentPreviewVehicle.selectNoVehicle()
         if g_currentVehicle.isPresent():
             g_currentVehicle.refreshModel()
+        self.__showInfoPageIfNeeded()
+
+    def __onSubModeChanged(self, funSelectionEvent):
+        if funSelectionEvent.selectedSubModeID is not None and funSelectionEvent.selectedSubModeID != UNKNOWN_EVENT_ID:
+            self.__showInfoPageIfNeeded()
+        return
+
+    @hasDesiredSubMode()
+    def __showInfoPageIfNeeded(self):
+        currentSubMode = self.getDesiredSubMode()
+        showInfoPageOnFirstVisit = currentSubMode.getConfigurationModel().subMode.showInfoPageOnFirstVisit
+        if showInfoPageOnFirstVisit:
+            subModeAccountSettings = FunSubModeAccountSettings(currentSubMode.getSettings().client.settingsKey)
+            if not subModeAccountSettings.isInfoPageShown():
+                self.showSubModeInfoPage(currentSubMode.getSubModeID())
 
     @app_getter
     def __app(self):

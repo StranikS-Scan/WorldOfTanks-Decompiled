@@ -629,11 +629,13 @@ class _BaseSoundEvent(_EffectDesc):
         isPlayer, pID = self._isPlayer(args)
         return (self._soundName[0 if isPlayer else 1], pID)
 
-    def _register(self, effects, node, sound):
-        elem = {'typeDesc': self}
-        elem['node'] = node
-        elem['sound'] = sound
-        effects.append(elem)
+    def _register(self, effects, node, sound, args=None):
+        effects.append(self._makeElem(node, sound))
+
+    def _makeElem(self, node, sound):
+        return {'typeDesc': self,
+         'node': node,
+         'sound': sound}
 
 
 class _ShotSoundEffectDesc(_BaseSoundEvent):
@@ -701,7 +703,7 @@ class _NodeSoundEffectDesc(_BaseSoundEvent):
                         if sndName:
                             soundObject.play(sndName)
 
-                    self._register(effects, node, soundObject)
+                    self._register(effects, node, soundObject, args=args)
                     return soundObject
             else:
                 return
@@ -709,7 +711,7 @@ class _NodeSoundEffectDesc(_BaseSoundEvent):
 
 
 class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
-    __slots__ = ('__stopSoundEventName', '__tracerDelaySound')
+    __slots__ = ('__tracerDelaySound',)
     TYPE = '_TracerSoundEffectDesc'
     shellTypesMap = {'AP': 0,
      'HE': 1,
@@ -721,12 +723,8 @@ class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
         shellType = dataSection.readString('type', '').split()[0]
         shellType = _TracerSoundEffectDesc.shellTypesMap.get(shellType, 0)
         self._parameters = [SoundStartParam('psb_shell_type', shellType)]
-        self.__stopSoundEventName = ''
         delaySoundSection = dataSection['tracerDelaySound']
-        if delaySoundSection is not None:
-            self.__tracerDelaySound = _TracerDelaySound(delaySoundSection)
-        else:
-            self.__tracerDelaySound = None
+        self.__tracerDelaySound = _TracerDelaySound(delaySoundSection) if delaySoundSection is not None else None
         return
 
     def _getName(self, args):
@@ -734,25 +732,20 @@ class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
         return (self._soundName[0 if isPlayer else 1], id)
 
     def create(self, model, effects, args):
-        isPlayer, attackerID = self._isPlayer(args)
-        if not self._canCreateSoundObject(attackerID):
-            return
-        else:
-            self.__stopSoundEventName = 'psb_pc_stop' if isPlayer else 'psb_npc_stop'
-            soundObject = super(_TracerSoundEffectDesc, self).create(model, effects, args)
-            if soundObject is not None and self.__tracerDelaySound is not None:
-                self.__tracerDelaySound.create(soundObject, args)
-            return soundObject
+        _, attackerID = self._isPlayer(args)
+        return None if not self._canCreateSoundObject(attackerID) else super(_TracerSoundEffectDesc, self).create(model, effects, args)
 
     def delete(self, elem, reason):
-        if self.__tracerDelaySound is not None:
-            self.__tracerDelaySound.delete()
+        state = elem.get('tracerDelaySoundState')
+        if state is not None and self.__tracerDelaySound is not None:
+            self.__tracerDelaySound.delete(state)
         if reason != EFFECT_DELETE_REASON.LIST_DESTRUCTION:
             soundObject = elem.get('sound', None)
             if soundObject is not None:
                 if self._dopplerEffect is not None:
                     soundObject.stopDopplerEffect()
-                soundObject.play(self.__stopSoundEventName)
+                isPlayer = elem.get('isPlayer', True)
+                soundObject.play('psb_pc_stop' if isPlayer else 'psb_npc_stop')
         super(_TracerSoundEffectDesc, self).delete(elem, EFFECT_DELETE_REASON.LIST_DESTRUCTION)
         return
 
@@ -767,6 +760,17 @@ class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
 
     def _canCreateSoundObject(self, attackerID):
         return True
+
+    def _register(self, effects, node, sound, args=None):
+        args = args or {}
+        elem = self._makeElem(node, sound)
+        isPlayer, _ = self._isPlayer(args)
+        elem['isPlayer'] = isPlayer
+        if self.__tracerDelaySound is not None:
+            state = self.__tracerDelaySound.create(sound, args)
+            elem['tracerDelaySoundState'] = state
+        effects.append(elem)
+        return
 
 
 class _AutoShootTracerSoundEffectDesc(_TracerSoundEffectDesc):
@@ -1328,49 +1332,51 @@ class _LightEffectDesc(_EffectDesc):
 
 
 class _TracerDelaySound(object):
-    __slots__ = ('_soundName', '__soundDelayBeforeEnd', '__soundCallback', '__data')
+    __slots__ = ('_soundName', '__soundDelayBeforeEnd')
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, dataSection):
         self._soundName = (dataSection.readString('wwsoundEnemy', ''), dataSection.readString('wwsoundAlly', ''))
         self.__soundDelayBeforeEnd = dataSection.readFloat('delayBeforeEnd', 0.0)
-        self.__soundCallback = None
-        self.__data = {}
-        return
 
     def create(self, soundObject, args):
         collisionTime = args.get('collisionTime', None)
         entityID = args.get('attackerID', -1)
         if entityID > 0 and self.__needPlay(collisionTime, entityID):
-            self.__data.clear()
-            self.__data['soundObject'] = soundObject
-            self.__data['soundCallback'] = BigWorld.callback(collisionTime - self.__soundDelayBeforeEnd, lambda : self.__playSound(self.__getSoundName(entityID)))
-            return True
+            state = _TracerDelaySoundState(soundObject=soundObject)
+            state.soundCallback = BigWorld.callback(collisionTime - self.__soundDelayBeforeEnd, lambda : self.__playSound(state, self.__getSoundName(entityID)))
+            return state
         else:
-            return False
+            return
 
-    def delete(self):
-        soundCallback = self.__data.get('soundCallback', None)
-        if soundCallback is not None:
-            BigWorld.cancelCallback(soundCallback)
-            self.__data['soundCallback'] = None
-        self.__data.clear()
+    def delete(self, state):
+        if state.soundCallback is not None:
+            BigWorld.cancelCallback(state.soundCallback)
+            state.soundCallback = None
+        state.soundObject = None
         return
 
     def __needPlay(self, collisionTime, entityID):
         return collisionTime is not None and collisionTime > self.__soundDelayBeforeEnd and self.__getSoundName(entityID)
 
-    def __playSound(self, soundName):
+    def __playSound(self, state, soundName):
         if SoundGroups.DEBUG_TRACE_EFFECTLIST:
             _logger.debug('SOUND: EffectList _TracerDelaySoundEffectDesc, name=%s', soundName)
-        soundObject = self.__data.get('soundObject', None)
-        if soundObject is not None:
-            soundObject.play(soundName)
-        self.__data['soundCallback'] = None
+        if state.soundObject is not None:
+            state.soundObject.play(soundName)
+        state.soundCallback = None
         return
 
     def __getSoundName(self, entityID):
         return self._soundName[1] if self.__sessionProvider.getArenaDP().isAlly(entityID) else self._soundName[0]
+
+
+class _TracerDelaySoundState(object):
+    __slots__ = ('soundObject', 'soundCallback')
+
+    def __init__(self, soundObject=None, soundCallback=None):
+        self.soundObject = soundObject
+        self.soundCallback = soundCallback
 
 
 _effectDescFactory = {'pixie': _PixieEffectDesc,

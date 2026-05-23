@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_pass/state_machine/__init__.py
+from __future__ import absolute_import
 from helpers import dependency
 from skeletons.gui.impl import INotificationWindowController
 _LOCK_SOURCE_NAME = 'BATTLE_PASS_REWARD_LOGIC'

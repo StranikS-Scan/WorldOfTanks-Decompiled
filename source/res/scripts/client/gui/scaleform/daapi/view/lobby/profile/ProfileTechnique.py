@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileTechnique.py
-from constants import Configs
-from shared_utils import findFirst
+from __future__ import absolute_import, division
+from future.utils import viewitems
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PROFILE_TECHNIQUE_MEMBER
+from constants import Configs
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, MARK_ON_GUN_RECORD
 from gui import GUI_NATIONS_ORDER_INDEX
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -28,7 +29,9 @@ from gui.shared.gui_items.dossier import dumpDossier
 from gui.shared.gui_items.dossier.achievements import isMarkOfMasteryAchieved
 from gui.shared.gui_items.dossier.stats import UNAVAILABLE_MARKS_OF_MASTERY
 from helpers import i18n, dependency
+from math_common import round_py2_style_int
 from nations import NAMES
+from shared_utils import findFirst
 from skeletons.gui.game_control import IVehicleComparisonBasket
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -250,9 +253,9 @@ class ProfileTechnique(ProfileTechniqueMeta):
         showMarkOfMastery = self._battlesType in __markOfMasteryBattles and targetData.getMarksOfMastery() != UNAVAILABLE_MARKS_OF_MASTERY
         isPrestigeVisible = self._isPrestigeVisible()
         prestigeVehicles = self._dossier.getPrestigeStats().getVehicles()
-        for intCD, vehParams in targetData.getVehicles().iteritems():
+        for intCD, vehParams in viewitems(targetData.getVehicles()):
             battlesCount, wins, xp, avgPrestigePoints = self._unpackVehicleParams(vehParams)
-            avgXP = xp / battlesCount if battlesCount else 0
+            avgXP = xp // battlesCount if battlesCount else 0
             vehicle = self.itemsCache.items.getItemByCD(intCD)
             if vehicle is not None:
                 isInHangar = vehicle.invID > 0
@@ -263,7 +266,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
                     winsEfficiencyStr = backport.getIntegralFormat(winsEfficiency)
                 else:
                     winsEfficiency = 100.0 * wins / battlesCount if battlesCount else 0
-                    winsEfficiencyStr = backport.getIntegralFormat(round(winsEfficiency)) + '%'
+                    winsEfficiencyStr = backport.getIntegralFormat(round_py2_style_int(winsEfficiency)) + '%'
                 if showMarkOfMastery:
                     markOfMastery = targetData.getMarkOfMasteryForVehicle(intCD)
                     if not isMarkOfMasteryAchieved(markOfMastery):
@@ -300,7 +303,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
 
         return result
 
-    def requestData(self, data):
+    def requestData(self, vehicleId):
         pass
 
     def _receiveVehicleDossier(self, vehicleIntCD, databaseId):

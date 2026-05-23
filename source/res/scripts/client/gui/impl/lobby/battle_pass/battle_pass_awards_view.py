@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/battle_pass_awards_view.py
+from __future__ import absolute_import
+from future.utils import viewitems
 import SoundGroups
 from battle_pass_common import BattlePassRewardReason, FinalReward
 from frameworks.wulf import ViewSettings, ViewStatus, WindowFlags
@@ -98,7 +100,7 @@ class BattlePassAwardsView(ViewImpl):
             tx.setIsStarterPack(isStarterPack)
             tx.starterPackRewards.clearItems()
             if isStarterPack:
-                packBonusModelAndTooltipData(BattlePassAwardsManager.composeBonuses([starterPack]), tx.starterPackRewards, self.__tooltipItems)
+                packBonusModelAndTooltipData(BattlePassAwardsManager.hideInvisible(BattlePassAwardsManager.composeBonuses([starterPack])), tx.starterPackRewards, self.__tooltipItems)
         if packageBonuses is not None and packageBonuses:
             self.__setPackageRewards(packageBonuses)
         self.__setAwards(bonuses, isFinalReward)
@@ -195,4 +197,4 @@ class BattlePassAwardWindow(LobbyNotificationWindow):
         super(BattlePassAwardWindow, self).__init__(wndFlags=WindowFlags.SERVICE_WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=BattlePassAwardsView(**self.__params))
 
     def isParamsEqual(self, *args, **kwargs):
-        return all((pValue in args or kwargs.get(pName) == pValue for pName, pValue in self.__params.iteritems()))
+        return all((pValue in args or kwargs.get(pName) == pValue for pName, pValue in viewitems(self.__params)))

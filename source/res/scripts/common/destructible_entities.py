@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/destructible_entities.py
+from __future__ import absolute_import
 import ResMgr
 from items import _xml
 from constants import IS_CLIENT, IS_BASEAPP, IS_BOT, IS_CELLAPP, IS_WEB
@@ -101,7 +102,7 @@ def init():
     for _, (typeXmlCtx, typeSection) in _xml.getItemsWithContext(xmlCtx, section, 'type'):
         destructibleEntityType = _readType(typeXmlCtx, typeSection)
         if g_destructibleEntitiesCache.getDestructibleEntityType(destructibleEntityType.id) is not None:
-            _xml.raiseWrongXml(typeXmlCtx, 'id', 'duplicate id' % destructibleEntityType.id)
+            _xml.raiseWrongXml(typeXmlCtx, 'id', 'duplicate id %s' % destructibleEntityType.id)
         g_destructibleEntitiesCache.addDestructibleEntityType(destructibleEntityType)
 
     if IS_CLIENT:
@@ -136,7 +137,7 @@ def _readType(xmlCtx, section):
 
 def _readPointList(xmlCtx, section):
     result = []
-    for _, ((stateCompXmlCtx, _), point) in _xml.getItemsWithContext(xmlCtx, section, 'point'):
+    for _, ((_, _), point) in _xml.getItemsWithContext(xmlCtx, section, 'point'):
         result.append(point.asVector3)
 
     return result

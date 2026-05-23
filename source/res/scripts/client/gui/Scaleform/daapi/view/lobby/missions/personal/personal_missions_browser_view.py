@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/personal/personal_missions_browser_view.py
+from __future__ import absolute_import
 from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import BrowserView
 from gui.server_events.pm_constants import PERSONAL_MISSIONS_SOUND_SPACE, SOUNDS
 

@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/wg_async.py
-from future.utils import raise_
+from __future__ import absolute_import, division
 import sys
 import time
 import weakref
 from collections import deque
+from future.utils import raise_
+from past.builtins import xrange
 from soft_exception import SoftException
 import BigWorld
 from BWUtil import AsyncReturn

@@ -1742,18 +1742,18 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.14	</invisibilityFactorAtShot>
           <reloadTime>	10.5	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	3.0	</afterShot>
             <whileGunDamaged>	2.4	</whileGunDamaged>
           </shotDispersionFactors>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <shotDispersionRadius>	0.33	</shotDispersionRadius>
           <mechanics>
             <propellantAfterburnerGun>
-              <chargingPerSec>	2.2	</chargingPerSec>
+              <chargingPerSec>	4	</chargingPerSec>
               <dischargingPerSec>	10	</dischargingPerSec>
-              <chargeSpendingAfterShot>	50	</chargeSpendingAfterShot>
+              <chargeSpendingAfterShot>	61	</chargeSpendingAfterShot>
               <forbiddenShells>	france:_120mm_OE_IPC_1	</forbiddenShells>
               <shouldPauseOnReload>	false	</shouldPauseOnReload>
               <chargeDelay>	0.1	</chargeDelay>
@@ -1770,11 +1770,11 @@
                   <modifiers>
                     <mul>
                       <name>	dynAttrs/multShotDispersionFactor	</name>
-                      <value>	2.5	</value>
+                      <value>	1.95	</value>
                     </mul>
                     <mul>
                       <name>	dynAttrs/gun/aimingTime	</name>
-                      <value>	2.5	</value>
+                      <value>	2	</value>
                     </mul>
                   </modifiers>
                   <isOvercharge>	true	</isOvercharge>
@@ -2219,20 +2219,24 @@
         <slot>
           <slotType>	attachment	</slotType>
           <slotId>	38000	</slotId>
-          <position>	-0.779428 1.191815 -1.307684	</position>
+          <position>	-1.054395 1.191818 0.269701	</position>
           <rotation>	-0 0 0	</rotation>
           <scale>	1 1 1	</scale>
           <applyType>	turret	</applyType>
           <size>	medium	</size>
+          <enableVisTunnel>	true	</enableVisTunnel>
+          <hangerId>	16	</hangerId>
         </slot>
         <slot>
           <slotType>	attachment	</slotType>
           <slotId>	38001	</slotId>
-          <position>	0.964241 1.188514 -1.128594	</position>
-          <rotation>	-0 -0 0	</rotation>
+          <position>	-0.000003 0.943771 1.049276	</position>
+          <rotation>	-0 0 0	</rotation>
           <scale>	1 1 1	</scale>
           <applyType>	gunMantlet	</applyType>
           <size>	medium	</size>
+          <enableVisTunnel>	true	</enableVisTunnel>
+          <hangerId>	2	</hangerId>
         </slot>
       </customizationSlots>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>

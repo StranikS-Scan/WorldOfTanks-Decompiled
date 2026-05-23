@@ -5,7 +5,7 @@ import logging
 import typing
 import itertools
 from collections import namedtuple
-from future.builtins import range
+from builtins import range
 from future.utils import iteritems, itervalues
 from blueprints.BlueprintTypes import BlueprintTypes
 from frameworks.wulf import ViewFlags

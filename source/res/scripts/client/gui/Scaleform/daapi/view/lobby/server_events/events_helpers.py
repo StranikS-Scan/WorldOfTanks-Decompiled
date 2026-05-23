@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/events_helpers.py
+from __future__ import absolute_import, division
 import operator
 from collections import defaultdict, namedtuple
 from typing import TYPE_CHECKING
+from future.utils import viewitems, viewvalues
 from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import getC11n2dProgressionLinkBtnParams
 from gui.Scaleform.daapi.view.lobby.server_events.token_converter_helper import getBonusDataFromOneOfBonuses, convertTokensInBonusData
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -28,6 +30,7 @@ from gui.server_events.personal_progress.formatters import PostBattleConditionsF
 from gui.shared.formatters import icons, text_styles
 from helpers import dependency, i18n, int2roman, time_utils
 from helpers.i18n import makeString as _ms
+from math_common import round_py2_style_int
 from nations import ALLIANCE_TO_NATIONS
 from personal_missions import PM_BRANCH
 from quest_xml_source import MAX_BONUS_LIMIT
@@ -164,7 +167,7 @@ class BattlePassProgress(object):
     def __initExtendedData(self):
         if not self.__battlePassController.isEnabled() or not self.__chaptersInfo:
             return
-        for chapterID, pointsInfo in self.__chaptersInfo.iteritems():
+        for chapterID, pointsInfo in viewitems(self.__chaptersInfo):
             previousPoints, currentPoints = pointsInfo
             if not isPostProgressionChapter(chapterID):
                 prevLevel = self.__battlePassController.getLevelByPoints(chapterID, previousPoints)
@@ -277,7 +280,7 @@ class EventPostBattleInfo(EventInfoModel):
         isQuestDailyQuest = isDailyQuest(str(self.event.getID()))
         for cond in self.event.bonusCond.getConditions().items:
             if isinstance(cond, conditions._Cumulativable):
-                for _, (curProg, totalProg, diff, _) in cond.getProgressPerGroup(pCur, pPrev).iteritems():
+                for curProg, totalProg, diff, _ in viewvalues(cond.getProgressPerGroup(pCur, pPrev)):
                     if not isQuestDailyQuest:
                         label = cond.getUserString()
                     else:
@@ -376,7 +379,7 @@ class QuestPostBattleInfo(EventPostBattleInfo, QuestInfoModel):
             for cond in condsRoot.items:
                 if isinstance(cond, conditions._Cumulativable):
                     countOfCumulatives += 1
-                    for groupByKey, (cur, tot, _, isCompleted) in cond.getProgressPerGroup(pCur, pPrev).iteritems():
+                    for groupByKey, (cur, tot, _, isCompleted) in viewitems(cond.getProgressPerGroup(pCur, pPrev)):
                         if not isCompleted:
                             cumulatives[groupByKey].append((cur, tot))
 
@@ -384,9 +387,9 @@ class QuestPostBattleInfo(EventPostBattleInfo, QuestInfoModel):
                 (current, total), progressType = cumulatives[None][0], formatters.PROGRESS_BAR_TYPE.SIMPLE
             else:
                 avgProgressesPerGroup = []
-                for groupByKey, values in cumulatives.iteritems():
+                for groupByKey, values in viewitems(cumulatives):
                     progressesSum = sum([ c / float(t) for c, t in values ])
-                    avgProgressesPerGroup.append((groupByKey, int(round(100.0 * progressesSum / len(values))), 100))
+                    avgProgressesPerGroup.append((groupByKey, round_py2_style_int(100.0 * progressesSum / len(values)), 100))
 
                 avgProgresses = sorted(avgProgressesPerGroup, key=operator.itemgetter(1), reverse=True)
                 if avgProgresses:
@@ -489,7 +492,7 @@ class _BattleMattersQuestInfo(QuestPostBattleInfo):
         progresses = []
         for cond in self.event.bonusCond.getConditions().items:
             if isinstance(cond, conditions._Cumulativable):
-                for _, (curProg, totalProg, diff, _) in cond.getProgressPerGroup(pCur, pPrev).iteritems():
+                for curProg, totalProg, diff, _ in viewvalues(cond.getProgressPerGroup(pCur, pPrev)):
                     if not diff:
                         continue
                     index += 1
@@ -531,7 +534,7 @@ class Progression2dStyleFormater(object):
         progresses = []
         for cond in event.bonusCond.getConditions().items:
             if isinstance(cond, conditions._Cumulativable):
-                for _, (curProg, totalProg, diff, _) in cond.getProgressPerGroup(pCur, pPrev).iteritems():
+                for curProg, totalProg, diff, _ in viewvalues(cond.getProgressPerGroup(pCur, pPrev)):
                     label = cond.getUserString()
                     customDescription = cond.getCustomDescription()
                     if customDescription is not None:
@@ -598,7 +601,7 @@ class Progression2dStyleFormater(object):
         count = 0
         for cond in event.bonusCond.getConditions().items:
             if isinstance(cond, conditions._Cumulativable):
-                for _, (curProg, totalProg, __, ___) in cond.getProgressPerGroup(pCur, pPrev).iteritems():
+                for curProg, totalProg, __, ___ in viewvalues(cond.getProgressPerGroup(pCur, pPrev)):
                     progress += curProg / float(totalProg)
                     count += 1
 

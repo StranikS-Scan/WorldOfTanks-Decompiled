@@ -1,10 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/optional_bonuses.py
+from __future__ import absolute_import
 import copy
 import random
 import time
 import typing
-from itertools import izip
+from builtins import zip
+from future.utils import iteritems, itervalues
+from past.builtins import xrange, basestring
 from account_shared import getCustomizationItem
 from constants import LOOTBOX_TOKEN_PREFIX
 from dog_tags_common.components_config import componentConfigAdapter
@@ -51,7 +54,7 @@ def __mergeFactor(total, key, value, isLeaf, count=1, *args):
 
 def __mergeItems(total, key, value, isLeaf=False, count=1, *args):
     items = total.setdefault(key, {})
-    for itemCompDescr, itemCount in value.iteritems():
+    for itemCompDescr, itemCount in iteritems(value):
         items[itemCompDescr] = items.get(itemCompDescr, 0) + count * itemCount
 
 
@@ -85,7 +88,7 @@ def __mergeCustomizations(total, key, value, isLeaf, count, vehTypeCompDescr):
 
 def __findCustomization(customizations, value):
     for customization in customizations:
-        if all([ customization.get(param) == value.get(param) for param in ('custType', 'id', 'vehTypeCompDescr') ]):
+        if all((customization.get(param) == value.get(param) for param in ('custType', 'id', 'vehTypeCompDescr'))):
             return customization
 
     return None
@@ -97,7 +100,7 @@ def __mergeCrewSkins(total, key, value, isLeaf, count, *args):
 
 def __mergeTokens(total, key, value, isLeaf=False, count=1, *args):
     totalTokens = total.setdefault(key, {})
-    for tokenID, tokenData in value.iteritems():
+    for tokenID, tokenData in iteritems(value):
         total = totalTokens.setdefault(tokenID, {'count': 0,
          'expires': {},
          'limit': 0})
@@ -118,7 +121,7 @@ def __mergeTokens(total, key, value, isLeaf=False, count=1, *args):
 
 def __mergeGoodies(total, key, value, isLeaf=False, count=1, *args):
     totalGoodies = total.setdefault(key, {})
-    for goodieID, goodieData in value.iteritems():
+    for goodieID, goodieData in iteritems(value):
         total = totalGoodies.setdefault(goodieID, {'count': 0,
          'expires': {},
          'limit': 0})
@@ -131,7 +134,7 @@ def __mergeGoodies(total, key, value, isLeaf=False, count=1, *args):
 
 def __mergeEntitlements(total, key, value, isLeaf=False, count=1, *args):
     totalEntitlements = total.setdefault(key, {})
-    for entitlementCode, entitlementData in value.iteritems():
+    for entitlementCode, entitlementData in iteritems(value):
         total = totalEntitlements.setdefault(entitlementCode, {'count': 0})
         total['count'] += count * entitlementData.get('count', 1)
         if 'expires' not in total and 'expires' in entitlementData:
@@ -149,17 +152,17 @@ def __mergePets(total, key, value, isLeaf, count, *args):
 
 def __mergeCurrencies(total, key, value, isLeaf=False, count=1, *args):
     totalCurrency = total.setdefault(key, {})
-    for currencyCode, currencyData in value.iteritems():
+    for currencyCode, currencyData in iteritems(value):
         total = totalCurrency.setdefault(currencyCode, {'count': 0})
         total['count'] = total.get('count', 0) + count * currencyData.get('count', 1)
 
 
 def __mergeDossier(total, key, value, isLeaf=False, count=1, *args):
     totalDossiers = total.setdefault(key, {})
-    for _dossierType, changes in value.iteritems():
+    for _dossierType, changes in iteritems(value):
         totalDossier = totalDossiers.setdefault(_dossierType, {})
         duplicatedkeys = not isinstance(changes, dict)
-        it = changes if duplicatedkeys else changes.iteritems()
+        it = changes if duplicatedkeys else iteritems(changes)
         for record, data in it:
             block, name = record
             try:
@@ -184,14 +187,14 @@ def __mergeDossier(total, key, value, isLeaf=False, count=1, *args):
 
 def __mergeBlueprints(total, key, value, isLeaf=False, count=1, *args):
     totalBlueprints = total.setdefault(key, {})
-    for fragmentCD, fragmentData in value.iteritems():
+    for fragmentCD, fragmentData in iteritems(value):
         totalBlueprints.setdefault(fragmentCD, 0)
         totalBlueprints[fragmentCD] += count * fragmentData
 
 
 def __mergeEnhancements(total, key, value, isLeaf=False, count=1, *args):
     enhancementsTotal = total.setdefault(key, {})
-    for enhancementID, enhancementData in value.iteritems():
+    for enhancementID, enhancementData in iteritems(value):
         enhancementMerged = enhancementsTotal.setdefault(enhancementID, {})
         enhancementMerged.update({'count': enhancementMerged.get('count', 0) + enhancementData.get('count', 0) * count,
          'wipe': enhancementMerged.get('wipe', False) or enhancementData.get('wipe', False)})
@@ -218,7 +221,7 @@ def __mergeBattlePassPoints(total, key, value, isLeaf=False, count=1, *args):
 
 def __mergeFreePremiumCrew(total, key, value, isLeaf=False, count=1, *args):
     freePremiumCrewBonus = total.setdefault(key, {})
-    for vehLevel, freePremiumCrewCount in value.iteritems():
+    for vehLevel, freePremiumCrewCount in iteritems(value):
         freePremiumCrewBonus.setdefault(vehLevel, 0)
         freePremiumCrewBonus[vehLevel] += freePremiumCrewCount * count
 
@@ -297,7 +300,7 @@ class BonusItemsCache(object):
         cache = self.__cache.setdefault(itemName, {})
         state = cache.setdefault(itemKey, {}).get(isRent, None)
         if state is not None:
-            wasInInventory, wasAccepted = state
+            wasInInventory, _ = state
         else:
             wasInInventory = (RENT_ITEM_INVENTORY_CHECKERS if isRent else ITEM_INVENTORY_CHECKERS)[itemName](self.__account, itemKey)
         cache[itemKey][isRent] = (wasInInventory, True)
@@ -318,21 +321,21 @@ class BonusItemsCache(object):
 
     def getFinalizedCache(self):
         result = {}
-        for bonus, checks in self.__cache.iteritems():
+        for bonus, checks in iteritems(self.__cache):
             bonusResult = result.setdefault(bonus, {})
-            for key, keyData in checks.iteritems():
+            for key, keyData in iteritems(checks):
                 keyResult = bonusResult.setdefault(key, {})
-                for flag, (wasInInventory, wasAccepted) in keyData.iteritems():
+                for flag, (wasInInventory, wasAccepted) in iteritems(keyData):
                     keyResult[flag] = (wasInInventory or wasAccepted, False)
 
         return result
 
     @staticmethod
     def isInventoryChanged(account, itemsCache):
-        for bonus, checks in itemsCache.iteritems():
+        for bonus, checks in iteritems(itemsCache):
             checker = ITEM_INVENTORY_CHECKERS[bonus]
             skipChecker = SKIP_INVENTORY_CHANGE_CHECKERS.get(bonus)
-            for key, keyData in checks.iteritems():
+            for key, keyData in iteritems(checks):
                 if skipChecker and skipChecker(key):
                     continue
                 if False in keyData and checker(account, key) != keyData[False][0]:
@@ -377,7 +380,7 @@ class BonusNodeAcceptor(object):
             self.__cooldowns = cooldowns = {}
             self.__locals = {}
             self.__bonusProbabilityUses = bonusProbabilityUses = {}
-            for limitID, config in self.__limitsConfig.iteritems():
+            for limitID, config in iteritems(self.__limitsConfig):
                 if 'guaranteedFrequency' in config or 'maxFrequency' in config or 'useBonusProbabilityAfter' in config:
                     cooldowns[limitID], uses[limitID], bonusProbabilityUses[limitID] = counters.get(limitID, (0, 0, 0))
 
@@ -389,7 +392,7 @@ class BonusNodeAcceptor(object):
             cooldowns = self.__cooldowns
             uses = self.__uses
             bonusProbabilityUses = self.__bonusProbabilityUses
-            for limitID, config in self.__limitsConfig.iteritems():
+            for limitID, config in iteritems(self.__limitsConfig):
                 if 'guaranteedFrequency' in config or 'maxFrequency' in config or 'useBonusProbabilityAfter' in config:
                     result[limitID] = (cooldowns[limitID], uses[limitID], bonusProbabilityUses[limitID])
 
@@ -430,11 +433,11 @@ class BonusNodeAcceptor(object):
     def updateBonusCache(self, bonusNode):
         cache = self.__bonusCache
         if 'vehicles' in bonusNode:
-            for itemID, itemData in bonusNode['vehicles'].iteritems():
+            for itemID, itemData in iteritems(bonusNode['vehicles']):
                 cache.onItemAccepted('vehicles', itemID, bool(itemData.get('rent', None)))
 
         if 'tokens' in bonusNode:
-            for itemID in bonusNode['tokens'].iterkeys():
+            for itemID in bonusNode['tokens']:
                 cache.onItemAccepted('tokens', itemID)
 
         if 'customizations' in bonusNode:
@@ -447,12 +450,12 @@ class BonusNodeAcceptor(object):
     def isBonusExists(self, bonusNode):
         cache = self.__bonusCache
         if 'vehicles' in bonusNode:
-            for itemID, itemData in bonusNode['vehicles'].iteritems():
+            for itemID, itemData in iteritems(bonusNode['vehicles']):
                 if cache.isItemExists('vehicles', itemID, bool(itemData.get('rent', None))):
                     return True
 
         if 'tokens' in bonusNode:
-            for itemID, itemData in bonusNode['tokens'].iteritems():
+            for itemID, itemData in iteritems(bonusNode['tokens']):
                 if cache.isItemExists('tokens', itemID):
                     return True
 
@@ -469,13 +472,13 @@ class BonusNodeAcceptor(object):
             return False
         if 'vehicles' in bonusNode:
             cache = self.__dropInGroupsBonuses.setdefault('vehicles', set())
-            for itemID, _ in bonusNode['vehicles'].iteritems():
+            for itemID in bonusNode['vehicles']:
                 if itemID in cache:
                     return True
 
         if 'tokens' in bonusNode:
             cache = self.__dropInGroupsBonuses.setdefault('tokens', set())
-            for itemID, itemData in bonusNode['tokens'].iteritems():
+            for itemID in bonusNode['tokens']:
                 if itemID in cache:
                     return True
 
@@ -493,12 +496,12 @@ class BonusNodeAcceptor(object):
             return
         if 'vehicles' in bonusNode:
             cache = self.__dropInGroupsBonuses.setdefault('vehicles', set())
-            for itemID, _ in bonusNode['vehicles'].iteritems():
+            for itemID in bonusNode['vehicles']:
                 cache.add(itemID)
 
         if 'tokens' in bonusNode:
             cache = self.__dropInGroupsBonuses.setdefault('tokens', set())
-            for itemID, itemData in bonusNode['tokens'].iteritems():
+            for itemID in bonusNode['tokens']:
                 cache.add(itemID)
 
         if 'customizations' in bonusNode:
@@ -527,7 +530,7 @@ class BonusNodeAcceptor(object):
 
     def depthCheck(self, bonusNode, checkInventory, depthLevel=None):
         currentDepthLevel = bonusNode.get('properties', {}).get('depthLevel', 0) if depthLevel is None else depthLevel
-        return True if currentDepthLevel <= 0 else all((DEEP_CHECKERS[bonusNodeName](self, bonusNodeValue, checkInventory, currentDepthLevel) for bonusNodeName, bonusNodeValue in bonusNode.iteritems() if bonusNodeName in DEEP_CHECKERS))
+        return True if currentDepthLevel <= 0 else all((DEEP_CHECKERS[bonusNodeName](self, bonusNodeValue, checkInventory, currentDepthLevel) for bonusNodeName, bonusNodeValue in iteritems(bonusNode) if bonusNodeName in DEEP_CHECKERS))
 
     def getProbabilityStages(self):
         return self.__probabilitiesStage
@@ -555,8 +558,8 @@ class BonusNodeAcceptor(object):
         return self.__dropInGroupsBonuses
 
     def __updateDropInGroupLimits(self):
-        if self.__dropInGroupsBonusesLimit <= sum((len(v) for v in self.__dropInGroupsBonuses.itervalues())):
-            for v in self.__dropInGroupsBonuses.itervalues():
+        if self.__dropInGroupsBonusesLimit <= sum((len(v) for v in itervalues(self.__dropInGroupsBonuses))):
+            for v in itervalues(self.__dropInGroupsBonuses):
                 v.clear()
 
     def getUseBonusProbability(self):
@@ -612,7 +615,7 @@ class BonusNodeAcceptor(object):
             bonusProbabilityUses = self.__bonusProbabilityUses
             if self.__shouldResetUsedLimits:
                 self.__usedLimits = set()
-            for limitID, limitConfig in self.__limitsConfig.iteritems():
+            for limitID, limitConfig in iteritems(self.__limitsConfig):
                 bonusLimit = limitConfig.get('bonusLimit', None)
                 if bonusLimit is not None:
                     locals[limitID] = bonusLimit
@@ -658,7 +661,7 @@ class NodeVisitor(object):
 
     def _walkSubsection(self, storage, bonusSection):
         result = {}
-        for bonusName, bonusValue in bonusSection.iteritems():
+        for bonusName, bonusValue in iteritems(bonusSection):
             if bonusName == 'oneof':
                 self.onOneOf(result, bonusValue)
             if bonusName == 'allof':
@@ -669,7 +672,7 @@ class NodeVisitor(object):
                 continue
             self.onMergeValue(result, bonusName, bonusValue, True)
 
-        for name, value in result.iteritems():
+        for name, value in iteritems(result):
             self.onMergeValue(storage, name, value, False)
 
     def walkBonuses(self, bonusSection, storage=None):
@@ -686,13 +689,13 @@ class TrackVisitor(NodeVisitor):
         self.__track = _trackIterator(track)
 
     def onOneOf(self, storage, values):
-        for probability, bonusProbability, limitIDs, bonusValue in values[1]:
+        for _, _, _, bonusValue in values[1]:
             if next(self.__track):
                 self._walkSubsection(storage, bonusValue)
                 return
 
     def onAllOf(self, storage, values):
-        for probability, bonusProbability, refGlobalID, bonusValue in values:
+        for _, _, _, bonusValue in values:
             if next(self.__track):
                 self._walkSubsection(storage, bonusValue)
 
@@ -825,7 +828,7 @@ class StripVisitor(NodeVisitor):
     def __getShownProbability(self, probability, prevProbability=None):
         if self.__needProbabilitiesInfo:
             if prevProbability and probability != [0.0] * len(probability):
-                return [ currProb - prevProb for currProb, prevProb in izip(probability, prevProbability) ]
+                return [ currProb - prevProb for currProb, prevProb in zip(probability, prevProbability) ]
             return probability
         else:
             return [-1]
@@ -833,7 +836,7 @@ class StripVisitor(NodeVisitor):
     def onOneOf(self, storage, values):
         strippedValues = []
         _, values = values
-        for index, (probability, bonusProbability, refGlobalID, bonusValue) in enumerate(values):
+        for index, (probability, _, _, bonusValue) in enumerate(values):
             stippedValue = {}
             self._walkSubsection(stippedValue, bonusValue)
             prevProbability = values[index - 1][0] if index > 0 else None
@@ -850,7 +853,7 @@ class StripVisitor(NodeVisitor):
 
     def onAllOf(self, storage, values):
         strippedValues = []
-        for probability, bonusProbability, refGlobalID, bonusValue in values:
+        for probability, _, _, bonusValue in values:
             stippedValue = {}
             self._walkSubsection(stippedValue, bonusValue)
             bonusValueName = bonusValue.get('properties', {}).get('name', None)

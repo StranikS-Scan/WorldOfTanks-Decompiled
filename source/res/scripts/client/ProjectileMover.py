@@ -279,7 +279,7 @@ def collideDynamic(startPoint, endPoint, exceptIDs, skipGun=False):
     ignoreID = 0
     if exceptIDs:
         ignoreID = exceptIDs[0]
-    res = BigWorld.wg_collideDynamic(BigWorld.player().spaceID, startPoint, endPoint, ignoreID, -1 if skipGun else TankPartNames.getIdx(TankPartNames.GUN))
+    res = BigWorld.wg_collideDynamic(BigWorld.player().spaceID, startPoint, endPoint, ignoreID, TankPartNames.getIdx(TankPartNames.GUN) if skipGun else -1)
     if res is not None:
         isVehicle = res[2] == ColliderTypes.VEHICLE_COLLIDER
         res = (res[0], EntityCollisionData(res[3], res[4], res[5], isVehicle))

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/epic_constants.py
+from __future__ import absolute_import
 from constants import IS_CLIENT, OFFER_TOKEN_PREFIX, IS_WEB
 from items.components.supply_slot_categories import SlotCategories
 EPIC_TOKEN_PREFIX = 'epic:'

@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_pass/battle_pass_bonuses_helper.py
+from __future__ import absolute_import
 import logging
 import typing
+from future.utils import viewitems
 from battle_pass_common import BATTLE_PASS_TOKEN_BLUEPRINT_GIFT_OFFER
 from gui.battle_pass.battle_pass_constants import BonusesLayoutConsts
 from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift
@@ -19,7 +21,7 @@ from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from shared_utils import first
 from skeletons.gui.offers import IOffersDataProvider
 if typing.TYPE_CHECKING:
-    from gui.server_events.bonuses import SimpleBonus, VehicleBlueprintBonus, ItemsBonus, CurrenciesBonus, CustomizationsBonus, BattlePassSelectTokensBonus, BattlePassStyleProgressTokenBonus, TokensBonus
+    from gui.server_events.bonuses import SimpleBonus, VehicleBlueprintBonus, ItemsBonus, CurrenciesBonus, CustomizationsBonus, BattlePassSelectTokensBonus, BattlePassStyleProgressTokenBonus, TokensBonus, TmanTemplateTokensBonus
 _logger = logging.getLogger(__name__)
 
 class BonusesHelper(object):
@@ -179,6 +181,9 @@ class _CustomizationValueGetter(_BaseValueGetter):
     def getValue(cls, bonus, _):
         customizations = bonus.getCustomizations()
         itemData = first(customizations)
+        if itemData.get('custType', '') == 'attachment':
+            c11nItem = bonus.getC11nItem(itemData)
+            return c11nItem.rarity
         return str(itemData.get('id', ''))
 
 
@@ -206,7 +211,17 @@ class _TokenValueGetter(_BaseValueGetter):
 
     @classmethod
     def getValue(cls, bonus, _):
-        return first(bonus.getTokens().iterkeys(), '')
+        return first(bonus.getTokens(), '')
+
+
+class _TankmanValueGetter(_BaseValueGetter):
+
+    @classmethod
+    def getValue(cls, bonus, _):
+        keys = bonus.getValue().keys()
+        tID = first(keys)
+        recruitInfo = getRecruitInfo(tID)
+        return recruitInfo.getGroupName()
 
 
 _VALUE_GETTERS_MAP = {'default': _BaseValueGetter,
@@ -217,7 +232,8 @@ _VALUE_GETTERS_MAP = {'default': _BaseValueGetter,
  'customizations': _CustomizationValueGetter,
  'styleProgressToken': _StyleProgressTokenValueGetter,
  'vehicles': _VehiclesValueGetter,
- 'tokens': _TokenValueGetter}
+ 'tokens': _TokenValueGetter,
+ 'tmanToken': _TankmanValueGetter}
 
 class _BaseTextGetter(object):
 
@@ -284,7 +300,7 @@ class _CrewSkinTextGetter(_HtmlTextGetter):
                 lastName = item.getLastName()
                 sortedByRarity[rarity] = (totalCount + count, firstName, lastName)
 
-        return [ (count, firstNameID, lastNameID) for _, (count, firstNameID, lastNameID) in sortedByRarity.iteritems() ]
+        return [ (count, firstNameID, lastNameID) for _, (count, firstNameID, lastNameID) in viewitems(sortedByRarity) ]
 
     @staticmethod
     def _getKey(_):
@@ -361,7 +377,7 @@ class _TankmanTokenTextGetter(_BaseTextGetter):
 
     @classmethod
     def getText(cls, item):
-        for tokenID in item.getTokens().iterkeys():
+        for tokenID in item.getTokens():
             if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
                 recruitInfo = getRecruitInfo(tokenID)
                 if recruitInfo is not None:

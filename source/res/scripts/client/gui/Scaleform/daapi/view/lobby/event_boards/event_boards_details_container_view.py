@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/event_boards/event_boards_details_container_view.py
-from gui.shared import events, event_bus_handlers, EVENT_BUS_SCOPE
+from __future__ import absolute_import
+from gui.shared import events, EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.view.meta.EventBoardsDetailsContainerViewMeta import EventBoardsDetailsContainerViewMeta
 from gui.Scaleform.genConsts.EVENTBOARDS_ALIASES import EVENTBOARDS_ALIASES
 from gui.shared.formatters import text_styles
@@ -9,7 +10,6 @@ from skeletons.gui.event_boards_controllers import IEventBoardController
 
 class EventBoardsDetailsContainerView(EventBoardsDetailsContainerViewMeta):
     eventsController = dependency.descriptor(IEventBoardController)
-    __metaclass__ = event_bus_handlers.EventBusListener
     _linkage = None
     _extra = {}
 
@@ -24,16 +24,20 @@ class EventBoardsDetailsContainerView(EventBoardsDetailsContainerViewMeta):
 
     def _populate(self):
         super(EventBoardsDetailsContainerView, self)._populate()
+        self.addListener(events.HideWindowEvent.HIDE_MISSION_DETAILS_VIEW, self.__handleDetailsClose, EVENT_BUS_SCOPE.LOBBY)
         data = {'linkage': self._linkage,
          'title': text_styles.superPromoTitle(self.eventData.getName())}
         data.update(self._extra)
         self.as_setInitDataS(data)
 
+    def _dispose(self):
+        self.removeListener(events.HideWindowEvent.HIDE_MISSION_DETAILS_VIEW, self.__handleDetailsClose, EVENT_BUS_SCOPE.LOBBY)
+        super(EventBoardsDetailsContainerView, self)._dispose()
+
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(EventBoardsDetailsContainerView, self)._onRegisterFlashComponent(viewPy, alias)
         viewPy.setOpener(self)
 
-    @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_MISSION_DETAILS_VIEW, EVENT_BUS_SCOPE.LOBBY)
     def __handleDetailsClose(self, _):
         self.destroy()
 

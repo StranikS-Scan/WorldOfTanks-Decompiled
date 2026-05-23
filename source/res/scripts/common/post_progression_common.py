@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/post_progression_common.py
+from __future__ import absolute_import
 from typing import Dict, Set, List, Callable, Optional, TYPE_CHECKING
 from copy import copy
 from itertools import chain
+from future.utils import viewitems
 if TYPE_CHECKING:
     from items.components.post_progression_components import ProgressionTree
     from items.vehicles import VehicleDescriptor
@@ -66,10 +68,10 @@ TANK_SETUP_GROUPS = {TankSetupGroupsId.OPTIONAL_DEVICES_AND_BOOSTERS: (TankSetup
  TankSetupGroupsId.EQUIPMENT_AND_SHELLS: (TankSetupLayouts.EQUIPMENT, TankSetupLayouts.SHELLS)}
 MAX_LAYOUTS_NUMBER_ON_VEHICLE = {TankSetupGroupsId.OPTIONAL_DEVICES_AND_BOOSTERS: 2,
  TankSetupGroupsId.EQUIPMENT_AND_SHELLS: 2}
-GROUP_ID_BY_LAYOUT = {layout:groupName for groupName, layouts in TANK_SETUP_GROUPS.iteritems() for layout in layouts}
+GROUP_ID_BY_LAYOUT = {layout:groupName for groupName, layouts in TANK_SETUP_GROUPS.items() for layout in layouts}
 FEATURE_BY_GROUP_ID = {TankSetupGroupsId.EQUIPMENT_AND_SHELLS: 'shells_consumables_switch',
  TankSetupGroupsId.OPTIONAL_DEVICES_AND_BOOSTERS: 'opt_dev_boosters_switch'}
-GROUP_ID_BY_FEATURE = {feature:groupID for groupID, feature in FEATURE_BY_GROUP_ID.iteritems()}
+GROUP_ID_BY_FEATURE = {feature:groupID for groupID, feature in FEATURE_BY_GROUP_ID.items()}
 DEFAULT_LAYOUT_CAPACITY = 1
 SWITCH_LAYOUT_CAPACITY = 2
 POST_PROGRESSION_UNLOCKS_IDX = 0
@@ -79,7 +81,7 @@ POST_PROGRESSION_DISABLED_SWITCHES_IDX = 3
 
 def extractSelectedSetup(setups, setupsIndexes):
     selectedSetup = {}
-    for tankSetupId, tankSetupGroup in TANK_SETUP_GROUPS.iteritems():
+    for tankSetupId, tankSetupGroup in TANK_SETUP_GROUPS.items():
         chosenIndex = setupsIndexes.get(tankSetupId, 0)
         for tankSetupLayout in tankSetupGroup:
             tankSetups = tankSetupLayout.replace('Layout', 'Setups')
@@ -130,7 +132,7 @@ def unpackVehSetupsIndexes(vehSetupsIndexes):
 
 
 def packVehSetupsIndexes(vehSetupsIndexes):
-    return list(chain(*vehSetupsIndexes.iteritems()))
+    return list(chain(*viewitems(vehSetupsIndexes)))
 
 
 def getLayoutCapacity(invData, layout, vehDescr):
@@ -146,8 +148,8 @@ def packPostProgression(unlocks, pairs, tree):
     result = []
     packed = 0
     pos = 0
-    for order, step in enumerate(tree.ppBattleIndex):
-        actionID, itemID = step.action
+    for step in tree.ppBattleIndex:
+        actionID, _ = step.action
         if actionID == atPirModification:
             value = 0
             if step.id in unlocks:
@@ -189,7 +191,7 @@ def unpackActiveModifications(actionCDs, vppCache, treeID):
     atPairModification = ACTION_TYPES.PAIR_MODIFICATION
     atModification = ACTION_TYPES.MODIFICATION
     pos = 0
-    for order, step in enumerate(tree.ppBattleIndex):
+    for step in tree.ppBattleIndex:
         actionID, itemID = step.action
         if actionID == atPairModification:
             value = packed >> pos & 3
@@ -217,7 +219,7 @@ def unpackActionCDs(actionCDs, vppCache, treeID):
         return result
     atPairModification = ACTION_TYPES.PAIR_MODIFICATION
     pos = 0
-    for order, step in enumerate(tree.ppBattleIndex):
+    for step in tree.ppBattleIndex:
         actionID, itemID = step.action
         if actionID == atPairModification:
             value = packed >> pos & 3
@@ -243,6 +245,8 @@ class VehicleState(object):
         self._features = copy(data[POST_PROGRESSION_FEATURES_IDX])
         self._disabledSwitches = copy(data[POST_PROGRESSION_DISABLED_SWITCHES_IDX])
 
+    __hash__ = None
+
     def __eq__(self, other):
         return self.unlocks == other.unlocks and self.pairs == other.pairs and self.features == other.features and self._disabledSwitches == other.disabledSwitches
 
@@ -254,7 +258,7 @@ class VehicleState(object):
         for stepID in other.unlocks:
             result.addUnlock(stepID)
 
-        for stepID, pairTypeID in other.pairs.iteritems():
+        for stepID, pairTypeID in viewitems(other.pairs):
             result.setPair(stepID, pairTypeID)
 
         for featureID in other.features:
@@ -376,7 +380,7 @@ class VehicleState(object):
 
     @staticmethod
     def __getDefaultPairsState():
-        return dict()
+        return {}
 
     @staticmethod
     def __getDefaultFeaturesState():
@@ -384,7 +388,7 @@ class VehicleState(object):
 
     @staticmethod
     def __getDefaultDisabledSwitchesState():
-        return list()
+        return []
 
 
 class VehiclesPostProgression(object):
@@ -427,4 +431,4 @@ class VehiclesPostProgression(object):
 
     @staticmethod
     def getDefaultStorage():
-        return dict()
+        return {}

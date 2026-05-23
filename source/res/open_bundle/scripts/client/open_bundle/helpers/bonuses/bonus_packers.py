@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: open_bundle/scripts/client/open_bundle/helpers/bonuses/bonus_packers.py
+from __future__ import absolute_import
 import logging
 import typing
+from future.utils import viewitems
 from battle_pass_common import CurrencyBP
 from constants import PREMIUM_ENTITLEMENTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -33,7 +35,7 @@ _logger = logging.getLogger(__name__)
 def composeBonuses(rewards):
     bonuses = []
     for reward in rewards:
-        for key, value in reward.iteritems():
+        for key, value in viewitems(reward):
             bonuses.extend(getNonQuestBonuses(key, value))
 
     return bonuses
@@ -329,7 +331,7 @@ class OpenBundleCurrenciesBonusUIPacker(CurrenciesBonusUIPacker):
 
     @classmethod
     def _getContentId(cls, bonus):
-        return [R.views.lobby.battle_pass.tooltips.BattlePassTalerTooltip()] if bonus.getCode() == CurrencyBP.TALER.value else super(OpenBundleCurrenciesBonusUIPacker, cls)._getContentId(bonus)
+        return [R.views.mono.battle_pass.tooltips.bptaler()] if bonus.getCode() == CurrencyBP.TALER.value else super(OpenBundleCurrenciesBonusUIPacker, cls)._getContentId(bonus)
 
 
 class OpenBundleBPCoinBonusUIPacker(SimpleBonusUIPacker):
@@ -346,7 +348,7 @@ class OpenBundleBPCoinBonusUIPacker(SimpleBonusUIPacker):
 
     @classmethod
     def _getContentId(cls, bonus):
-        return [R.views.lobby.battle_pass.tooltips.BattlePassCoinTooltipView()]
+        return [R.views.mono.battle_pass.tooltips.bpcoin()]
 
 
 class OpenBundleItemBonusUIPacker(ItemBonusUIPacker):
@@ -498,7 +500,7 @@ class OpenBundleTmanTemplateBonusUIPacker(SimpleBonusUIPacker):
     @classmethod
     def _pack(cls, bonus):
         result = []
-        for tokenID, tokenRecord in bonus.getTokens().iteritems():
+        for tokenID, tokenRecord in viewitems(bonus.getTokens()):
             if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
                 count = tokenRecord.count
                 packed = cls.__packTmanTemplateToken(tokenID, bonus, count)
@@ -537,7 +539,7 @@ class OpenBundleTmanTemplateBonusUIPacker(SimpleBonusUIPacker):
     @classmethod
     def _getToolTip(cls, bonus):
         tooltipData = []
-        for tokenID in bonus.getTokens().iterkeys():
+        for tokenID in bonus.getTokens():
             if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
                 tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED, specialArgs=[tokenID]))
 
@@ -546,7 +548,7 @@ class OpenBundleTmanTemplateBonusUIPacker(SimpleBonusUIPacker):
     @classmethod
     def _getContentId(cls, bonus):
         result = []
-        for tokenID in bonus.getTokens().iterkeys():
+        for tokenID in bonus.getTokens():
             if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
                 result.append(BACKPORT_TOOLTIP_CONTENT_ID)
 

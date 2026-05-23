@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/session_stats/shared.py
+from __future__ import absolute_import
+from future.utils import viewitems
 import nations
 from account_helpers.settings_core.settings_constants import SESSION_STATS
 from gui import makeHtmlString
@@ -270,7 +272,7 @@ def packBattleEfficiencyData(data, parameters):
     settings = SessionStatsSettingsController().getSettings()
     view = []
     for parameter in parameters:
-        for idEfficientData, efficient in _EFFICIENT_DATA.iteritems():
+        for idEfficientData, efficient in viewitems(_EFFICIENT_DATA):
             if efficient['settings'] == parameter and settings[efficient['settings']]:
                 view.append({'icon': backport.image(efficient['icon']),
                  'label': text_styles.main(backport.text(efficient['label'])),

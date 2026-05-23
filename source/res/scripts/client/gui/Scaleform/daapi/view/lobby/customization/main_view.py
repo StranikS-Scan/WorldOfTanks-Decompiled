@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/main_view.py
+from __future__ import absolute_import
 import logging
 import typing
 from collections import namedtuple
+from future.utils import viewitems
 import BigWorld
 from CurrentVehicle import g_currentVehicle
 from Event import Event
@@ -234,11 +236,11 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             from gui.Scaleform.daapi.view.lobby.customization.states import CustomizationCartState
             CustomizationCartState.goTo(ctx=ctx)
 
-    def onEntryPointClick(self, itemID):
-        if itemID == CUSTOMIZATION_CONSTS.INNER_ENTRY_POINT_PROGRESSIVE:
+    def onEntryPointClick(self, itemId):
+        if itemId == CUSTOMIZATION_CONSTS.INNER_ENTRY_POINT_PROGRESSIVE:
             showProgressiveItemsView()
             self.__updateInnerEntryPoints()
-        elif itemID == CUSTOMIZATION_CONSTS.INNER_ENTRY_POINT_STATS_TRACKER:
+        elif itemId == CUSTOMIZATION_CONSTS.INNER_ENTRY_POINT_STATS_TRACKER:
             self.__bottomPanel.showGroupFromTab(CustomizationTabs.STAT_TRACKERS)
 
     def onShopEntryPointClick(self):
@@ -490,8 +492,8 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             self.__ctx.mode.unselectSlot()
         return
 
-    def fadeOutAnchors(self, isFadeOut):
-        self.fadeAnchorsOut = isFadeOut
+    def fadeOutAnchors(self, value):
+        self.fadeAnchorsOut = value
 
     def onCloseWindow(self, force=False):
         if self.isDisposed():
@@ -525,13 +527,13 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
                 self.__propertiesSheet.handleDelBtn()
             return
 
-    def onSelectAnchor(self, areaId, slotType, regionIdx):
-        slotId = C11nId(areaId, slotType, regionIdx)
+    def onSelectAnchor(self, areaID, slotID, regionID):
+        slotId = C11nId(areaID, slotID, regionID)
         self.__uiLogger.onAnchorClick(slotId, CustomizationViewKeys.CUSTOMIZATION_HANGAR_3D_SCENE)
         anchorState = self.__ctx.vehicleAnchorsUpdater.getAnchorState(slotId)
         if anchorState == CUSTOMIZATION_ALIASES.ANCHOR_STATE_REMOVED:
             self.__ctx.mode.removeItem(slotId)
-            self.onHoverAnchor(areaId, slotType, regionIdx, hover=True)
+            self.onHoverAnchor(areaID, slotID, regionID, hover=True)
             return
         self.__slotSelector.selectSlot(slotId)
 
@@ -729,9 +731,9 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             self.__ctx.vehicleAnchorsUpdater.setAnchors(anchors)
         return
 
-    def propertiesSheetSet(self, sheet, width, height, centerX, centerY):
+    def propertiesSheetSet(self, sheet, width, height, crnterX, centerY):
         if self.__ctx.vehicleAnchorsUpdater is not None:
-            self.__ctx.vehicleAnchorsUpdater.setMenuParams(sheet, width, height, centerX, centerY)
+            self.__ctx.vehicleAnchorsUpdater.setMenuParams(sheet, width, height, crnterX, centerY)
         return
 
     def _populate(self):
@@ -1223,7 +1225,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             return
 
     def __onAnchorsStateChanged(self, changedStates):
-        anchorStateVOs = [ CustomizationAnchorsStateVO(uid, state)._asdict() for uid, state in changedStates.iteritems() ]
+        anchorStateVOs = [ CustomizationAnchorsStateVO(uid, state)._asdict() for uid, state in viewitems(changedStates) ]
         self.as_setAnchorsStateS({'anchorsData': anchorStateVOs})
 
     def __onTurretAndGunRotated(self):

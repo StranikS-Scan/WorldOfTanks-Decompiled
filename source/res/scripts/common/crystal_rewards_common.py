@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/crystal_rewards_common.py
+from __future__ import absolute_import
 from constants import ARENA_BONUS_TYPE_NAMES
 from soft_exception import SoftException
 

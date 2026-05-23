@@ -2,10 +2,10 @@
 # Embedded file name: scripts/client/gui/impl/lobby/vehicle_hub/sub_presenters/armor/utils.py
 from __future__ import absolute_import, division
 import math
-from collections import OrderedDict
-from future.builtins import round
-from future.utils import listvalues
 import typing
+from collections import OrderedDict
+from builtins import round
+from future.utils import listvalues
 import BigWorld
 import GUI
 import armor_inspector

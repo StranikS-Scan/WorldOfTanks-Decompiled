@@ -3,12 +3,12 @@
 from __future__ import absolute_import, division
 import math
 import typing
+from builtins import round
 from collections import namedtuple
 import armor_inspector
 import math_utils
 from account_helpers.settings_core import settings_constants
 from constants import SHELL_TYPES, SHELL_MECHANICS_TYPE
-from future.builtins import round
 from gui.impl.lobby.vehicle_hub.sub_presenters.armor.utils import colorInt2Str, applyNormalizationForArmor
 from helpers import dependency
 from gui.impl.lobby.vehicle_hub.sub_presenters.armor.config import getConfig

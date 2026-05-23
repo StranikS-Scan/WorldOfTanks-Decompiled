@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/random_utils.py
+from __future__ import absolute_import, division
 import itertools
 import random
 from bisect import bisect
 from copy import deepcopy
+from past.builtins import xrange
 import typing
 
 class wchoices(object):
@@ -33,7 +35,7 @@ class wchoices(object):
                         yield e
                         break
                 else:
-                    raise LookupError('At least one option must be selected from %s', welist)
+                    raise LookupError('At least one option must be selected from %s' % welist)
 
         return wrapper()
 

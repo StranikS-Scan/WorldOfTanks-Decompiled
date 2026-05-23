@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/BonusCaps.py
+from __future__ import absolute_import
 from typing import Dict, Optional, Set, FrozenSet
 
 class BonusCapsConst(object):
@@ -17,13 +18,13 @@ class BonusCapsConfig(object):
 
     def __init__(self, config=None):
         if not config:
-            config = dict()
+            config = {}
         self.__config = config
 
     def __performOperations(self, arenaBonusType, defaultBonusCaps):
         configBonusCaps = self.__config[arenaBonusType]
         resultBonusCaps = set(defaultBonusCaps)
-        for operation in configBonusCaps.iterkeys():
+        for operation in configBonusCaps:
             resultBonusCaps = self.__OPERATIONS[operation](resultBonusCaps, configBonusCaps[operation])
 
         return resultBonusCaps

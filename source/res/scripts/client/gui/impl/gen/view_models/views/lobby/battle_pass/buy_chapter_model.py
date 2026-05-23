@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class BuyChapterModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=2, commands=0):
+    def __init__(self, properties=3, commands=0):
         super(BuyChapterModel, self).__init__(properties=properties, commands=commands)
 
     def getChapterID(self):
@@ -20,7 +20,14 @@ class BuyChapterModel(ViewModel):
     def setHasStarterPack(self, value):
         self._setBool(1, value)
 
+    def getIsExtra(self):
+        return self._getBool(2)
+
+    def setIsExtra(self, value):
+        self._setBool(2, value)
+
     def _initialize(self):
         super(BuyChapterModel, self)._initialize()
         self._addNumberProperty('chapterID', 0)
         self._addBoolProperty('hasStarterPack', False)
+        self._addBoolProperty('isExtra', False)

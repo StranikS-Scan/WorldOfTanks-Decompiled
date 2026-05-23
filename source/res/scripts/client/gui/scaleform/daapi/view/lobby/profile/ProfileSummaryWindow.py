@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileSummaryWindow.py
+from __future__ import absolute_import
 from adisp import adisp_process
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport

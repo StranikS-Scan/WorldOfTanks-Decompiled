@@ -4,6 +4,7 @@ from functools import partial
 import typing
 import Math
 import cPickle
+from future.utils import lzip
 from collections import namedtuple
 from constants import IS_CLIENT, IS_WEB, IS_EDITOR, IS_BOT, HEATING_ZONES_GUN_STATE, DEBUFFS_TYPES
 from debug_utils import LOG_WARNING
@@ -1408,12 +1409,12 @@ class HeatingZonesGunParams(GunMechanicsParams):
         if any((zoneValue < 0.0 for zoneValue in zonesValues)):
             _xml.raiseWrongXml(ctx, '', "[{}] Invalid zones values: all zones values should be non negative '{}'".format(cls.__name__, zonesValues))
         zonesCount = len(zonesValues)
-        statesCount = len(cls.ZONE_STATE.__slots__)
+        statesCount = len(cls.ZONE_STATE.ALL)
         if zonesCount != statesCount:
             _xml.raiseWrongXml(ctx, '', '[{}] Invalid zones count: expected: {}, got: {}'.format(cls.__name__, statesCount, zonesCount))
         if any((zonesValues[idx] > zonesValues[idx + 1] for idx in xrange(zonesCount - 1))):
             _xml.raiseWrongXml(ctx, '', '[{}] Invalid zones: zone value should be not less than previous one'.format(cls.__name__, zonesValues))
-        return cls([ (getattr(cls.ZONE_STATE, stateName), zoneValue) for stateName, zoneValue in zip(sorted(cls.ZONE_STATE.__slots__, key=cls.ZONE_STATE.__dict__.get), zonesValues) ])
+        return cls(lzip(cls.ZONE_STATE.ALL, zonesValues))
 
 
 class StagedJetBoostersParams(MechanicsParams):

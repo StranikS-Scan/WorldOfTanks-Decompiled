@@ -55,8 +55,8 @@ _SIMPLE_TOOLTIP_IDS = [ModeSelectorTooltipsConstants.RANKED_CALENDAR_DAY_INFO_TO
  ModeSelectorTooltipsConstants.EPIC_BATTLE_CALENDAR_TOOLTIP]
 
 def _getTooltipByContentIdMap():
-    return {R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView(): BattlePassCompletedTooltipView,
-     R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView(): partial(BattlePassInProgressTooltipView, battleType=QUEUE_TYPE.RANDOMS)}
+    return {R.views.mono.battle_pass.tooltips.completed(): BattlePassCompletedTooltipView,
+     R.views.mono.battle_pass.tooltips.in_progress(): partial(BattlePassInProgressTooltipView, battleType=QUEUE_TYPE.RANDOMS)}
 
 
 registerModeSelectorTooltips(_SIMPLE_TOOLTIP_IDS, _getTooltipByContentIdMap())

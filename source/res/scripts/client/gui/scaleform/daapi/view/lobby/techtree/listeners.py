@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/listeners.py
-from logging import getLogger
+from __future__ import absolute_import
 import weakref
+from logging import getLogger
+from future.utils import viewitems
 from collector_vehicle import CollectorVehicleConsts
 from PlayerEvents import g_playerEvents
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -98,7 +100,7 @@ class _StatsListener(_Listener):
         self._page.invalidateElites(elites)
 
     def _onVehiclesXPUpdate(self, xps):
-        newXPs = {key:(value if value else 0) for key, value in xps.iteritems()}
+        newXPs = {key:(value if value else 0) for key, value in viewitems(xps)}
         self._page.invalidateVTypeXP(newXPs)
 
     def _onUnlocksUpdate(self, unlocks):
@@ -159,7 +161,7 @@ class _ItemsCacheListener(_Listener):
 
     def __items_onSyncCompleted(self, reason, invalidated):
         self.__invalidated = set()
-        for itemTypeID, uniqueIDs in invalidated.iteritems():
+        for itemTypeID, uniqueIDs in viewitems(invalidated):
             if itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES or itemTypeID == GUI_ITEM_TYPE.VEHICLE:
                 self.__invalidated |= uniqueIDs
 

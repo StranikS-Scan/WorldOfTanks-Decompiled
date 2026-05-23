@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/ClanProfileSummaryView.py
+from __future__ import absolute_import
+from past.builtins import basestring
 from adisp import adisp_process
 from constants import IS_CHINA
 from gui.Scaleform.daapi.view.meta.ClanProfileSummaryViewMeta import ClanProfileSummaryViewMeta
@@ -325,7 +327,7 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
             elif tooltipBody is None:
                 tooltipBody = None
                 tooltipHeader = None
-            if not isinstance(value, (str, unicode)):
+            if not isinstance(value, basestring):
                 value = backport.getIntegralFormat(value)
             icon = item.get('icon', None)
             if icon is not None:

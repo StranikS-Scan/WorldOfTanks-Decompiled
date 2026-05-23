@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/mapbox/tooltips/mapbox_calendar_day_tooltip.py
+from __future__ import absolute_import
 from gui.impl.gen import R
 from gui.shared.tooltips import TOOLTIP_TYPE
 from gui.shared.tooltips.periodic.calendar_day import PeriodicCalendarDayTooltip
@@ -15,5 +16,5 @@ class MapboxCalendarDayTooltip(PeriodicCalendarDayTooltip):
         return self._controller
 
     def _isValidPrimeTimes(self, serversPeriodsMapping):
-        periods = [ periods for serverPeriods in serversPeriodsMapping.values() for periods in serverPeriods ]
-        return len(periods) > 0
+        allPeriods = [ periods for serverPeriods in serversPeriodsMapping.values() for periods in serverPeriods ]
+        return len(allPeriods) > 0

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/blueprints/blueprints_cm_handlers.py
+from __future__ import absolute_import
 from wg_async import wg_await, wg_async
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
@@ -15,21 +16,21 @@ class BlueprintsCMHandler(ContextMenu):
     __sqGen = SequenceIDGenerator()
     __itemsCache = dependency.descriptor(IItemsCache)
 
-    @option(__sqGen.next(), CMLabel.CONVERT_BLUEPRINT)
+    @option(__sqGen.nextSequenceID, CMLabel.CONVERT_BLUEPRINT)
     @wg_async
     def convertBlueprintFragment(self):
         isResearchClicked, (usedFragmentsData, _) = yield wg_await(dialogs.blueprintsConversion(self._id))
         if isResearchClicked:
             factory.doAction(factory.CONVERT_BLUEPRINT_FRAGMENT, self._id, usedNationalFragments=usedFragmentsData)
 
-    @option(__sqGen.next(), CMLabel.CONVERT_BLUEPRINT_MAX)
+    @option(__sqGen.nextSequenceID, CMLabel.CONVERT_BLUEPRINT_MAX)
     @wg_async
     def convertMaxBlueprintFragments(self):
         isResearchClicked, (usedFragmentsData, fragmentCount) = yield wg_await(dialogs.blueprintsConversion(self._id, fragmentCount=self.__getMaxFragmentCount()))
         if isResearchClicked:
             factory.doAction(factory.CONVERT_BLUEPRINT_FRAGMENT, self._id, fragmentCount, usedNationalFragments=usedFragmentsData)
 
-    @option(__sqGen.next(), CMLabel.SHOW_BLUEPRINT)
+    @option(__sqGen.nextSequenceID, CMLabel.SHOW_BLUEPRINT)
     def showBlueprintView(self):
         storageView = self.app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_STORAGE))
         if storageView is not None:

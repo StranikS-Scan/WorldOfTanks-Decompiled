@@ -10,7 +10,7 @@ from battle_modifiers_ext.modification_cache.modification_cache import Modificat
 from constants import IS_CELLAPP, IS_CLIENT, SHELL_TYPES, SHELL_MECHANICS_TYPE, VEHICLE_MODE
 from math import tan, atan, cos, acos
 from items.components.chassis_components import TrackPair
-from items.components.component_constants import DEFAULT_GUN_CLIP, DEFAULT_GUN_BURST, DEFAULT_GUN_AUTORELOAD, DEFAULT_GUN_DUALGUN, KMH_TO_MS, MS_TO_KMH, DEFAULT_GUN_AUTOSHOOT, DynamicShotEffect, ZERO_FLOAT, DEFAULT_GUN_TWINGUN, INVALID_EFFECT_INDEX
+from items.components.component_constants import DEFAULT_GUN_CLIP, DEFAULT_GUN_BURST, DEFAULT_GUN_AUTORELOAD, DEFAULT_GUN_DUALGUN, KMH_TO_MS, MS_TO_KMH, DEFAULT_GUN_AUTOSHOOT, DynamicShotEffect, ZERO_FLOAT, DEFAULT_GUN_TWINGUN, INVALID_EFFECT_INDEX, DEFAULT_GUN_DUAL_ACCURACY
 from items.components.shell_components import createShellType
 from typing import TYPE_CHECKING, Optional, Type, Dict, Tuple, List
 from Math import Vector2
@@ -149,6 +149,10 @@ class VehicleModifier(object):
             if BattleParams.SHOT_DISPERSION_RADIUS in modifiers:
                 initRadius = tan(gun.shotDispersionAngle) * 100.0
                 gun.shotDispersionAngle = atan(modifiers(BattleParams.SHOT_DISPERSION_RADIUS, initRadius) / 100.0)
+                if gun.dualAccuracy != DEFAULT_GUN_DUAL_ACCURACY:
+                    initAfterShotRadius = tan(gun.dualAccuracy.afterShotDispersionAngle) * 100.0
+                    newAfterShotRadius = modifiers(BattleParams.SHOT_DISPERSION_RADIUS, initAfterShotRadius)
+                    gun.dualAccuracy = gun.dualAccuracy._replace(afterShotDispersionAngle=atan(newAfterShotRadius / 100.0))
             dispFactors = gun.shotDispersionFactors
             gun.shotDispersionFactors = {'turretRotation': modifiers(BattleParams.DISP_FACTOR_TURRET_ROTATION, dispFactors['turretRotation']),
              'afterShot': modifiers(BattleParams.DISP_FACTOR_AFTER_SHOT, dispFactors['afterShot']),

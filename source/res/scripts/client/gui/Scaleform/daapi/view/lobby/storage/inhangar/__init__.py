@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inhangar/__init__.py
+from __future__ import absolute_import
+from future.utils import viewitems
 import constants
 import nations
 from account_helpers.AccountSettings import AccountSettings
@@ -22,14 +24,14 @@ class _ShortNameVehiclesCriteriesGroup(CriteriesGroup):
     def update(self, filters):
         super(_ShortNameVehiclesCriteriesGroup, self).update(filters)
         selectedNationsIds = []
-        for nation, nId in nations.INDICES.iteritems():
+        for nation, nId in viewitems(nations.INDICES):
             if filters[nation]:
                 selectedNationsIds.append(nId)
 
         if selectedNationsIds:
             self._criteria |= REQ_CRITERIA.NATIONS(selectedNationsIds)
         selectedVehiclesIds = []
-        for vehicleType, _ in constants.VEHICLE_CLASS_INDICES.iteritems():
+        for vehicleType in constants.VEHICLE_CLASS_INDICES:
             if filters[vehicleType]:
                 selectedVehiclesIds.append(vehicleType)
 
@@ -70,7 +72,7 @@ class StorageCarouselFilter(SessionCarouselFilter):
 
     def load(self):
         if isStorageSessionTimeout():
-            defaultFilters = dict()
+            defaultFilters = {}
             for section in self._clientSections:
                 defaultFilters.update(AccountSettings.getSessionSettingsDefault(section))
 
@@ -91,8 +93,8 @@ class StorageCarouselDataProvider(CarouselDataProvider):
         self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING
         self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
 
-    def _buildVehicle(self, item):
-        return getStorageVehicleVo(item)
+    def _buildVehicle(self, vehicle):
+        return getStorageVehicleVo(vehicle)
 
     def _getVehicleStats(self, vehicle):
         return {}

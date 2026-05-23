@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/objgraph.py
-from __future__ import print_function
+from __future__ import absolute_import, division, print_function
 import codecs
 import collections
 import gc
@@ -96,9 +96,9 @@ def show_most_common_types(limit=10, objects=None, shortnames=True, file=None, f
     if file is None:
         file = sys.stdout
     stats = most_common_types(limit, objects, shortnames=shortnames, filter=filter)
-    width = max((len(name) for name, count in stats))
-    for name, count in stats:
-        file.write('%-*s %i\n' % (width, name, count))
+    width = max((len(name) for name, stats_count in stats))
+    for name, stats_count in stats:
+        file.write('%-*s %i\n' % (width, name, stats_count))
 
     return
 
@@ -107,11 +107,11 @@ def growth(limit=10, peak_stats={}, shortnames=True, filter=None):
     gc.collect()
     stats = typestats(shortnames=shortnames, filter=filter)
     deltas = {}
-    for name, count in iteritems(stats):
+    for name, stats_count in iteritems(stats):
         old_count = peak_stats.get(name, 0)
-        if count > old_count:
-            deltas[name] = count - old_count
-            peak_stats[name] = count
+        if stats_count > old_count:
+            deltas[name] = stats_count - old_count
+            peak_stats[name] = stats_count
 
     deltas = sorted(deltas.items(), key=operator.itemgetter(1), reverse=True)
     if limit:
@@ -128,10 +128,10 @@ def show_growth(limit=10, peak_stats=None, shortnames=True, file=None, filter=No
         if file is None:
             file = sys.stdout
         width = max((len(name) for name, _, _ in result))
-        for name, count, delta in result:
+        for name, stats_count, delta in result:
             file.write('%-*s%9d %+9d\n' % (width,
              name,
-             count,
+             stats_count,
              delta))
 
     return
@@ -301,7 +301,7 @@ def show_chain(*chains, **kw):
     def in_chains(x, ids=set(map(id, itertools.chain(*chains)))):
         return id(x) in ids
 
-    max_depth = max(map(len, chains)) - 1
+    max_depth = max((len(chain) for chain in chains)) - 1
     if backrefs:
         show_backrefs([ chain[-1] for chain in chains ], max_depth=max_depth, filter=in_chains, **kw)
     else:
@@ -355,7 +355,7 @@ def _show_graph(objs, edge_func, swap_source_target, max_depth=3, extra_ignore=(
     is_interactive = False
     if filename and output:
         raise ValueError('Cannot specify both output and filename.')
-    elif output:
+    if output:
         f = output
     elif filename and filename.endswith('.dot'):
         f = codecs.open(filename, 'w', encoding='utf-8')
@@ -479,7 +479,7 @@ def _present_graph(dot_filename, filename=None):
         if not filename:
             print('Graph viewer (xdot) not found, generating a png instead')
             filename = dot_filename[:-4] + '.png'
-        stem, ext = os.path.splitext(filename)
+        _, ext = os.path.splitext(filename)
         cmd = ['dot',
          '-T' + ext[1:],
          '-o' + filename,

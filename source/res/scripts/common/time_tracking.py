@@ -1,17 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/time_tracking.py
-from constants import SERVER_TICK_LENGTH, IS_CLIENT, IS_BOT, IS_CGF_DUMP, IS_VS_EDITOR, IS_UE_EDITOR, IS_PROCESS_REPLAY
-from debug_utils import LOG_WARNING
+from __future__ import absolute_import, division
 import sys
 from time import time
 from functools import wraps
+from constants import SERVER_TICK_LENGTH, IS_CLIENT, IS_BOT, IS_CGF_DUMP, IS_VS_EDITOR, IS_UE_EDITOR, IS_PROCESS_REPLAY
+from debug_utils import LOG_WARNING
+from math_common import round_py2_style
 if not IS_CLIENT and not IS_BOT and not IS_CGF_DUMP and not IS_VS_EDITOR and not IS_UE_EDITOR and not IS_PROCESS_REPLAY:
     from insights.measurements import incrTickOverspends
 DEFAULT_TIME_LIMIT = 0.02
 DEFAULT_TICK_LENGTH = SERVER_TICK_LENGTH
 
 def LOG_TIME_WARNING(spentTime, context=None, tickLength=DEFAULT_TICK_LENGTH, *args):
-    percent = round(spentTime / tickLength * 100)
+    percent = round_py2_style(spentTime / tickLength * 100)
     if context is None:
         context = sys._getframe(1).f_code.co_name
     LOG_WARNING(('Time is overspent in %s: %.4f sec, %d%% of %.2f sec tick' % (context,

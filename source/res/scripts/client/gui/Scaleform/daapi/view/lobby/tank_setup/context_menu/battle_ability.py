@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/tank_setup/context_menu/battle_ability.py
+from __future__ import absolute_import
 from adisp import adisp_process, adisp_async
 from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import option, CMLabel
 from gui.Scaleform.daapi.view.lobby.tank_setup.context_menu.base import TankSetupCMLabel
@@ -28,7 +29,7 @@ class BattleAbilityItemContextMenu(BaseEquipmentItemContextMenu):
 class BattleAbilitySlotContextMenu(BaseEquipmentSlotContextMenu):
     _sqGen = SequenceIDGenerator(BaseEquipmentSlotContextMenu._sqGen.currSequenceID)
 
-    @option(_sqGen.next(), TankSetupCMLabel.TAKE_OFF)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.TAKE_OFF)
     def takeOff(self):
         if self._isMounted:
             self._sendSlotAction(BaseSetupModel.SELECT_SLOT_ACTION, intCD=None, currentSlotId=self._installedSlotId)
@@ -52,7 +53,7 @@ class BattleAbilitySlotContextMenu(BaseEquipmentSlotContextMenu):
 class HangarBattleAbilitySlotContextMenu(BaseHangarEquipmentSlotContextMenu):
     _sqGen = SequenceIDGenerator(BaseHangarEquipmentSlotContextMenu._sqGen.currSequenceID)
 
-    @option(_sqGen.next(), TankSetupCMLabel.TAKE_OFF)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.TAKE_OFF)
     @adisp_process
     def takeOff(self):
         copyVehicle = self._getCopyVehicle()

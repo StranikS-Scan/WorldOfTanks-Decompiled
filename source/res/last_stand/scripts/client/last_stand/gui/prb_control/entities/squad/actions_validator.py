@@ -10,7 +10,7 @@ from gui.shared.gui_items.Vehicle import Vehicle
 from last_stand.gui.prb_control.entities import checkVehicleAbilitiesFull
 from last_stand.gui.prb_control.entities.squad.ctx import LastStandSquadSettingsCtx
 from last_stand.gui.shared.event_dispatcher import showBattleResult
-from last_stand_common.last_stand_constants import UNIT_LS_EXTRA_DATA_KEY, UNIT_DIFFICULTY_LEVELS_KEY, CURRENT_QUEUE_TYPE_KEY
+from last_stand_common.last_stand_constants import UNIT_LS_EXTRA_DATA_KEY, UNIT_DIFFICULTY_LEVELS_KEY, CURRENT_QUEUE_TYPE_KEY, DEFAULT_UNIT_DIFFICULTY_LEVELS
 from helpers import dependency
 from gui.prb_control.items import ValidationResult
 from last_stand.skeletons.ls_controller import ILSController
@@ -75,7 +75,7 @@ class LastStandStateValidator(SquadVehiclesValidator):
             queueType = None
             if unit and playerInfo:
                 queueType = unit._extras.get(CURRENT_QUEUE_TYPE_KEY)
-                queueTypes = playerInfo.extraData.get(UNIT_LS_EXTRA_DATA_KEY, {}).get(UNIT_DIFFICULTY_LEVELS_KEY, [])
+                queueTypes = playerInfo.extraData.get(UNIT_LS_EXTRA_DATA_KEY, {}).get(UNIT_DIFFICULTY_LEVELS_KEY, DEFAULT_UNIT_DIFFICULTY_LEVELS)
                 if queueType not in queueTypes:
                     return ValidationResult(False, UNIT_RESTRICTION.UNIT_WRONG_DATA)
             vehicle = g_currentVehicle.item

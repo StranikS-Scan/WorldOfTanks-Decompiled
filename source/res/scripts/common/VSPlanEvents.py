@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/VSPlanEvents.py
+from __future__ import absolute_import
 from collections import namedtuple
-from typing import TYPE_CHECKING, Optional
+from typing import Optional
 
 class PcVSPlanSimpleEvent(object):
     CLIENT_ACTIVATION_EVENT = 'OnClientActivation'

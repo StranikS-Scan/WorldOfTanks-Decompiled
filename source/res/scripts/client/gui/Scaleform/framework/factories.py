@@ -8,7 +8,7 @@ from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.framework.entities.wulf_adapter import WulfPackageLayoutAdapter
 from gui.shared.events import LoadViewEvent
-from py2to3.utils import getargspec
+from py2to3.backport.inspect import getargspec
 from soft_exception import SoftException
 
 class EntityFactory(object):

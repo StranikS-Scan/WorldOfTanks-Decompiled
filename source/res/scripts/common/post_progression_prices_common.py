@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/post_progression_prices_common.py
+from __future__ import absolute_import
 from items import vehicles
 
 def getPostProgressionPrice(priceTag, vehType, priceContainer=None):

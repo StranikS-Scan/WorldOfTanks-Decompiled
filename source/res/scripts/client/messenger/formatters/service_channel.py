@@ -3316,13 +3316,24 @@ class LootBoxSystemAchievesFormatter(QuestAchievesFormatter):
 class BattlePassQuestAchievesFormatter(QuestAchievesFormatter):
     __offersProvider = dependency.descriptor(IOffersDataProvider)
     _BULLET = u'\u2022 '
-    _SEPARATOR = u'<br/>' + _BULLET
 
     @classmethod
     def formatQuestAchieves(cls, data, asBattleFormatter, processCustomizations=True, processTokens=True):
         extractLockedStyle(data)
-        result = super(BattlePassQuestAchievesFormatter, cls).formatQuestAchieves(data, asBattleFormatter, processCustomizations, processTokens)
-        return cls._BULLET + result if result else result
+        from gui.battle_pass.battle_pass_helpers import extractCompensationMoney
+        dataCopy = extractCompensationMoney(data)
+        formattedAchieves = cls.getFormattedAchieves(dataCopy, asBattleFormatter, processCustomizations, processTokens)
+        if formattedAchieves:
+            result = []
+            for s in formattedAchieves:
+                if s.startswith(cls._SEPARATOR):
+                    s = s[len(cls._SEPARATOR):]
+                s = u'{}{}'.format(cls._BULLET, s)
+                result.append(s.replace(u' ' + cls._SEPARATOR, backport.text(R.strings.common.common.colon()) + u' '))
+
+            return cls._SEPARATOR.join(result)
+        else:
+            return None
 
     @classmethod
     def _processTokens(cls, data):
@@ -3350,7 +3361,7 @@ class BattlePassQuestAchievesFormatter(QuestAchievesFormatter):
         result.extend(cls.__processStyleTokens(styleTokens))
         result.extend(cls.__processRewardChoiceTokens(rewardChoiceTokens))
         result.extend(cls.__processLootBoxTokens(lootBoxTokens))
-        return cls._SEPARATOR.join(result)
+        return u'{}{}'.format(cls._SEPARATOR, cls._BULLET).join(result)
 
     @classmethod
     def _extractAchievements(cls, data):

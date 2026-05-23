@@ -134,32 +134,6 @@ class EngineWrapper(ItemWrapper):
         type.speedLimits[index] = value
 
 
-class ChassisWrapper(ItemWrapper):
-
-    def __init__(self, chassis, vehDescrWrapper):
-        super(ChassisWrapper, self).__init__(chassis)
-        self.vehDescrWrapper = proxy(vehDescrWrapper)
-
-    @property
-    def rotationSpeedDegrees(self):
-        return degrees(self.item.rotationSpeed)
-
-    @rotationSpeedDegrees.setter
-    def rotationSpeedDegrees(self, value):
-        self.item.rotationSpeed = radians(value)
-        if IS_CELLAPP:
-            physicsChassis = self.vehDescrWrapper.xphysicsChassis
-            prevValue = physicsChassis.gimletGoalWOnSpot
-            if prevValue < 1e-07:
-                LOG_WARNING('Rotation Speed cant change', self.vehDescrWrapper.vehDescr.name)
-                return
-            currentValue = physicsChassis.gimletGoalWOnSpot = self.item.rotationSpeed
-            koef = currentValue / prevValue
-            physicsChassis.gimletGoalWOnMove *= koef
-            physicsChassis.angVelocityFactor *= koef
-            physicsChassis.angVelocityFactor0 *= koef
-
-
 class TurretWrapper(ItemWrapper):
 
     def __init__(self, turret):
@@ -312,7 +286,7 @@ class VehDescrWrapper(object):
     @cached_property
     def chassis(self):
         self.vehDescr.chassis = copy(self.vehDescr.chassis)
-        return ChassisWrapper(self.vehDescr.chassis, self)
+        return self.vehDescr.chassis
 
     @cached_property
     def chassisShotDispersionFactors(self):
@@ -615,6 +589,28 @@ def maxSpeedBackProcesser(engine, valueName, index, operation, attrName, value, 
     return True
 
 
+def chassisRotationSpeedDegrees(chassis, valueName, index, operation, attrName, value, vehDescrWrapper):
+    applier = APPLIERS[operation]
+    if operation == 'add' or operation == 'set':
+        value = radians(value)
+    chassis.rotationSpeed = applier(chassis.rotationSpeed, value)
+    if not IS_CELLAPP:
+        return
+    physicsChassis = vehDescrWrapper.xphysicsChassis
+    prevValue = physicsChassis.gimletGoalWOnSpot
+    physicsChassis.gimletGoalWOnSpot = applier(physicsChassis.gimletGoalWOnSpot, value)
+    if prevValue < 1e-07:
+        LOG_WARNING('Error on rotation speed apply', vehDescrWrapper.vehDescr.name)
+        return
+    physicsChassis.angVelocityFactor0 *= physicsChassis.gimletGoalWOnSpot / prevValue
+    prevValue = physicsChassis.gimletGoalWOnMove
+    physicsChassis.gimletGoalWOnMove = applier(physicsChassis.gimletGoalWOnMove, value)
+    if prevValue < 1e-07:
+        LOG_WARNING('Error on rotation speed apply', vehDescrWrapper.vehDescr.name)
+        return
+    physicsChassis.angVelocityFactor *= physicsChassis.gimletGoalWOnMove / prevValue
+
+
 customValueProcessors = {'gunPitchLimits/maxPitchDegrees': gunPitchLimitsProcessor,
  'gunPitchLimits/minPitchDegrees': gunPitchLimitsProcessor,
  'gun/turretYawLimitsDegrees': gunTurretYawLimitsDegrees,
@@ -629,7 +625,8 @@ customValueProcessors = {'gunPitchLimits/maxPitchDegrees': gunPitchLimitsProcess
  'shot2/speed': shotSpeedProcessor,
  'engine/power': enginePowerProcessor,
  'engine/maxSpeedForward': maxSpeedForwardProcesser,
- 'engine/maxSpeedBack': maxSpeedBackProcesser}
+ 'engine/maxSpeedBack': maxSpeedBackProcesser,
+ 'chassis/rotationSpeedDegrees': chassisRotationSpeedDegrees}
 
 def parseValue(attrName):
     attrs = attrName.split('/')

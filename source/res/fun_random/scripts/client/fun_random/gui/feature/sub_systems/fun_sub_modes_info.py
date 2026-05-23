@@ -54,6 +54,24 @@ class FunSubModesInfo(IFunRandomController.IFunSubModesInfo):
         allPrimeTimes = [ sm.getPrimeTimesForDay(selectedTime, groupIdentical) for sm in subModes ]
         return first(allPrimeTimes) if len(subModes) == 1 else mergeIntervals(allPrimeTimes)
 
+    def getTimeLeftUntilCycleSequenceFinish(self, now=None, subModesIDs=None):
+        now = now or time_utils.getCurrentTimestamp()
+        subModes = self.__subModes.getSubModes(subModesIDs)
+        seasons = [ season for subMode in subModes for season in subMode.getAllSeasons() ]
+        cycleDates = [ (c.startDate, c.endDate) for s in seasons for c in s.getAllCycles().values() if c.endDate >= now ]
+        if not cycleDates:
+            return 0
+        cycleDates = sorted(cycleDates)
+        mergedCycleDates = []
+        for startDate, endDate in cycleDates:
+            if not mergedCycleDates or startDate > mergedCycleDates[-1][1]:
+                mergedCycleDates.append([startDate, endDate])
+            mergedCycleDates[-1][1] = max(mergedCycleDates[-1][1], endDate)
+
+        for startDate, endDate in mergedCycleDates:
+            if startDate <= now <= endDate:
+                return endDate - now
+
     def getPerformanceAlertGroup(self, subModesIDs=None):
         subModes = self.__subModes.getSubModes(subModesIDs)
         allPerfGroups = [ sm.getPerformanceAlertGroup() for sm in subModes ]

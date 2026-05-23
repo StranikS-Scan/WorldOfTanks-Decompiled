@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/ClanProfileBaseView.py
+from __future__ import absolute_import
 from adisp import adisp_process
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.meta.ClanProfileBaseViewMeta import ClanProfileBaseViewMeta
@@ -29,8 +30,8 @@ class ClanProfileBaseView(ClanProfileBaseViewMeta, ClanEmblemsHelper, ClanListen
         self._clanDossier = clanDossier
         self._updateClanEmblem(clanDossier.getDbID())
 
-    def onHeaderButtonClick(self, actionID):
-        if actionID == _JOIN_BTN_ACTION_ID:
+    def onHeaderButtonClick(self, actionId):
+        if actionId == _JOIN_BTN_ACTION_ID:
             self._sendApplication()
 
     def onClanEmblem128x128Received(self, clanDbID, emblem):

@@ -11,7 +11,7 @@ from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_cont
 from gui.impl.lobby.user_missions.hangar_widget.services import IEventsService
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
-from gui.shared.utils.SelectorBattleTypesUtils import isKnownBattleType
+from gui.shared.utils.SelectorBattleTypesUtils import isKnownBattleType, setBattleTypeAsUnknown
 from helpers import dependency
 from helpers.time_utils import getCurrentLocalServerTimestamp
 from skeletons.gui.game_control import IBattleRoyaleController
@@ -77,6 +77,7 @@ class BattleRoyaleEventBanner(BaseEventBanner):
         if savedAppearTime != cycleStartDate:
             self.__playAppearAnim = True
             AccountSettings.setSettings(BATTLE_ROYALE_BANNER_FIRST_APPEARANCE_TIMESTAMP, cycleStartDate)
+            setBattleTypeAsUnknown(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE)
 
     def createToolTipContent(self, event):
         return BannerTooltipView(modeState=self.bannerState)

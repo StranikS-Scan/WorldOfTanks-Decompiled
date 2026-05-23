@@ -1123,7 +1123,7 @@
       <userString>	#vehicle_customization:special_style/2_0_progression_pl	</userString>
       <description>	#vehicle_customization:special_style/2_0_progression_pl_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:special_style/2_0_progression_pl_desc/long	</longDescriptionSpecial>
-      <tags>	progression_required c11n2D	</tags>
+      <tags>	progression_required c11n2D volumetric	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -1194,6 +1194,54 @@
           </attachments>
         </outfit>
       </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	poland:Pl21_CS_63	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1306	</id>
+      <texture>	gui/maps/vehicles/styles/Pl21_CS_63_BPXX_3Dst.png	</texture>
+      <modelsSet>	Pl21_CS_63_BPXX_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/Pl21_CS_63_BPXX_3Dst_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required c11n3D addNationalEmblem	</tags>
+      <userString>	#vehicle_customization:special_style/Pl21_CS_63_BPXX_3Dst	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18004	</slotId>
+              <id>	180	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
     </style>
   </itemGroup>
 </poland.xml>

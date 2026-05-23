@@ -20,7 +20,6 @@ class ClientSelectableObject(BigWorld.Entity, ScriptGameObject, ISelectableObjec
         ISelectableObject.__init__(self)
         self.__enabled = True
         self.__edged = False
-        self.__clickSound = None
         self.model = None
         return
 
@@ -47,13 +46,7 @@ class ClientSelectableObject(BigWorld.Entity, ScriptGameObject, ISelectableObjec
     def onLeaveWorld(self):
         ScriptGameObject.deactivate(self)
         ScriptGameObject.destroy(self)
-        if self.__clickSound is not None:
-            if self.__clickSound.isPlaying:
-                self.__clickSound.stop()
-            self.__clickSound.releaseMatrix()
-            self.__clickSound = None
         self.setHighlight(False)
-        return
 
     def setEnable(self, enabled):
         self.__enabled = enabled
@@ -76,18 +69,11 @@ class ClientSelectableObject(BigWorld.Entity, ScriptGameObject, ISelectableObjec
         pass
 
     def onMouseClick(self):
-        if self.__clickSound is None:
-            if self.clickSoundName and self.__enabled:
-                if self.isClick3DSound:
-                    self.__clickSound = SoundGroups.g_instance.getSound3D(self.model.root, self.clickSoundName)
-                else:
-                    self.__clickSound = SoundGroups.g_instance.getSound2D(self.clickSoundName)
-                self.__clickSound.play()
-        elif self.__clickSound.isPlaying:
-            self.__clickSound.stop()
-        else:
-            self.__clickSound.play()
-        return
+        if self.clickSoundName and self.__enabled:
+            if self.isClick3DSound:
+                SoundGroups.g_instance.playSoundPos(self.clickSoundName, self.model.position)
+            else:
+                SoundGroups.g_instance.playSound2D(self.clickSoundName)
 
     def _getModelHeight(self):
         return self.model.height

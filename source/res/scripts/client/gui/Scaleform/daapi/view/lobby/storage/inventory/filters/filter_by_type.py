@@ -1,13 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inventory/filters/filter_by_type.py
+from __future__ import absolute_import
 import copy
 import typing
+from builtins import filter
+from future.utils import viewvalues
 from helpers import dependency
 from constants import SwitchState
 from account_helpers import AccountSettings
 from gui import GUI_NATIONS_ORDER_INDICES
 from gui.Scaleform.daapi.view.lobby.storage import storage_helpers
-from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_view import IN_GROUP_COMPARATOR
+from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_view import IN_GROUP_SORT_KEYS
 from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_view import TABS_SORT_ORDER
 from gui.Scaleform.daapi.view.meta.ItemsWithTypeFilterTabViewMeta import ItemsWithTypeFilterTabViewMeta
 from gui.impl import backport
@@ -50,8 +53,8 @@ class FiltrableInventoryCategoryByTypeTabView(ItemsWithTypeFilterTabViewMeta):
         else:
             showSellDialog(dataCompactId)
 
-    def onFiltersChange(self, filterMask):
-        self._filterMask = filterMask
+    def onFiltersChange(self, filters):
+        self._filterMask = filters
         self._buildItems()
 
     def resetFilter(self):
@@ -109,7 +112,7 @@ class FiltrableInventoryCategoryByTypeTabView(ItemsWithTypeFilterTabViewMeta):
         self._totalCount = len(totalItems.values())
         filterCriteria = self._getFilteredCriteria()
         dataProviderListVoItems = []
-        for item in sorted(totalItems.itervalues(), cmp=self._getComparator()):
+        for item in sorted(viewvalues(totalItems), key=self._getItemSortKey):
             if filterCriteria(item):
                 dataProviderListVoItems.append(self._getVO(item))
 
@@ -120,12 +123,8 @@ class FiltrableInventoryCategoryByTypeTabView(ItemsWithTypeFilterTabViewMeta):
         values = filter(self._getFilteredCriteria(), self._getItemList().values())
         return next((item for item in values if item.itemTypeID == itemType), None) is not None
 
-    def _getComparator(self):
-
-        def _comparator(a, b):
-            return cmp(TABS_SORT_ORDER[a.itemTypeID], TABS_SORT_ORDER[b.itemTypeID]) or cmp(GUI_NATIONS_ORDER_INDICES[a.nationID], GUI_NATIONS_ORDER_INDICES[b.nationID]) or IN_GROUP_COMPARATOR[a.itemTypeID](a, b)
-
-        return _comparator
+    def _getItemSortKey(self, item):
+        return (TABS_SORT_ORDER[item.itemTypeID], GUI_NATIONS_ORDER_INDICES[item.nationID], IN_GROUP_SORT_KEYS[item.itemTypeID](item))
 
     def _getInitFilterItems(self):
         return copy.deepcopy(self.filterItems) if self.filterItems is not None else []

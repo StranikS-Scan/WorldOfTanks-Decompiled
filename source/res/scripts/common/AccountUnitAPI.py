@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/AccountUnitAPI.py
+from __future__ import absolute_import
 import json
+from future.utils import viewitems
 from typing import Optional as TOptional
 from constants import PREBATTLE_TYPE, IS_DEVELOPMENT
+from debug_utils import LOG_DEBUG
 from UnitBase import UNIT_SLOT, CLIENT_UNIT_CMD, INV_ID_CLEAR_VEHICLE
-from debug_utils import *
 from unit_roster_config import UnitRosterSlot
 
 class UNIT_API:
@@ -15,7 +17,7 @@ class UNIT_API:
     EXTERNAL_API = (WGSH, TMS)
 
 
-UNIT_API_NAMES = dict([ (v, k) for k, v in UNIT_API.__dict__.iteritems() if not k.startswith('_') ])
+UNIT_API_NAMES = {v:v for k, v in viewitems(UNIT_API.__dict__) if not k.startswith('_')}
 
 def makeServerRequestID(unitApiID, webRequestID):
     return unitApiID << 32 | webRequestID & 4294967295L

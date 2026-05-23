@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: open_bundle/scripts/client/open_bundle/notification/__init__.py
+from __future__ import absolute_import
 from open_bundle.gui.constants import GFNotificationTemplates
 from open_bundle.gui.impl.lobby.notifications.start_notification import StartNotification
 from open_bundle.gui.impl.lobby.notifications.special_rewards_notification import SpecialRewardsNotification

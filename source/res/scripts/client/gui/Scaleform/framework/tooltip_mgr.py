@@ -16,7 +16,7 @@ from gui.shared import events
 from gui.shared.tooltips import builders
 from helpers import dependency, uniprof
 from ids_generators import SequenceIDGenerator
-from py2to3.utils import getargspec
+from py2to3.backport.inspect import getargspec
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.impl import IGuiLoader
 from soft_exception import SoftException

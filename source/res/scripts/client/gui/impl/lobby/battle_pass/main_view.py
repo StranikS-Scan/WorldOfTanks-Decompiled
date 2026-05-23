@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/main_view.py
+from __future__ import absolute_import
 import logging
 from typing import TYPE_CHECKING
 import Event
@@ -15,8 +16,8 @@ from gui.impl.lobby.battle_pass.battle_pass_buy_view import BuyPassPresenter
 from gui.impl.lobby.battle_pass.battle_pass_progressions_view import ProgressionPresenter
 from gui.impl.lobby.battle_pass.chapter_choice_view import ChapterChoicePresenter
 from gui.impl.lobby.battle_pass.holiday_final_view import HolidayFinalPresenter
-from gui.impl.lobby.battle_pass.intro_view import IntroPresenter
 from gui.impl.lobby.battle_pass.post_progression_view import PostProgressionPresenter
+from gui.impl.lobby.battle_pass.tankmen_voiceover_view import TankmenVoiceoverPresenter
 from gui.impl.pub import WindowImpl
 from gui.impl.pub.view_component import ViewComponent
 from gui.lobby_state_machine.routable_view import IRoutableView
@@ -32,16 +33,15 @@ if TYPE_CHECKING:
     from gui.lobby_state_machine.states import LobbyState
 _logger = logging.getLogger(__name__)
 _BP = R.aliases.battle_pass
-_PRESENTERS = {_BP.Intro(): IntroPresenter,
- _BP.ChapterChoice(): ChapterChoicePresenter,
+_PRESENTERS = {_BP.ChapterChoice(): ChapterChoicePresenter,
  _BP.Progression(): ProgressionPresenter,
  _BP.PostProgression(): PostProgressionPresenter,
  _BP.BuyPass(): BuyPassPresenter,
  _BP.BuyLevels(): BuyLevelsPresenter,
- _BP.HolidayFinal(): HolidayFinalPresenter}
-_PARENTS = {_BP.BuyPassRewards(): _BP.BuyPass(),
- _BP.BuyLevelsRewards(): _BP.BuyLevels()}
-_UNTRACKED = frozenset((_BP.IntroVideo(), _BP.ExtraVideo(), _BP.FinalRewardPreview()))
+ _BP.HolidayFinal(): HolidayFinalPresenter,
+ _BP.TankmenScreen(): TankmenVoiceoverPresenter}
+_PARENTS = {_BP.BuyPassRewards(): _BP.BuyPass()}
+_UNTRACKED = frozenset((_BP.FinalRewardPreview(),))
 
 class _BattlePassStatesObserver(BaseStateObserver):
 

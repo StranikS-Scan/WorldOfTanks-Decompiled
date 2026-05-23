@@ -1,20 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/battle/vehicle_ban/ban_view.py
 import typing
+import BattleReplay
 import SoundGroups
-from comp7_core_constants import ArenaPrebattlePhase
-from comp7_core.gui.comp7_core_constants import BATTLE_CTRL_ID
-from comp7_core.gui.impl.lobby.comp7_core_helpers import comp7_core_model_helpers
-from comp7_core.gui.battle_control.controllers.sound_ctrls.comp7_battle_sounds import BAN_VIEW_SOUND_SPACE
+from ReplayEvents import g_replayEvents
 from comp7.gui.battle_control.arena_info.arena_vos import Comp7Keys
 from comp7.gui.battle_control.arena_info.vos_collections import Comp7SortKey
+from comp7.gui.impl.battle.tooltips.ban_show_tooltip import BanShowTooltip
+from comp7.gui.impl.battle.vehicle_ban.ban_helpers import convertVehicleCD, fillComp7VehicleModel, fillBanProgressionModel, getOwnDatabaseID
 from comp7.gui.impl.gen.view_models.views.battle.ban_view_model import BanViewModel
 from comp7.gui.impl.gen.view_models.views.battle.comp7_vehicle_model import Comp7VehicleModel
 from comp7.gui.impl.gen.view_models.views.battle.constants import Constants
 from comp7.gui.impl.gen.view_models.views.battle.player_model import PlayerModel
 from comp7.gui.impl.gen.view_models.views.lobby.enums import Division, Rank, SeasonName
-from comp7.gui.impl.battle.tooltips.ban_show_tooltip import BanShowTooltip
-from comp7.gui.impl.battle.vehicle_ban.ban_helpers import convertVehicleCD, fillComp7VehicleModel, fillBanProgressionModel, getOwnDatabaseID
+from comp7_core.gui.battle_control.controllers.sound_ctrls.comp7_battle_sounds import BAN_VIEW_SOUND_SPACE
+from comp7_core.gui.comp7_core_constants import BATTLE_CTRL_ID
+from comp7_core.gui.impl.lobby.comp7_core_helpers import comp7_core_model_helpers
+from comp7_core_constants import ArenaPrebattlePhase
 from constants import REQUEST_COOLDOWN
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from gui import GUI_NATIONS
@@ -30,9 +32,9 @@ from helpers.CallbackDelayer import CallbackDelayer
 from messenger.m_constants import USER_ACTION_ID, UserEntityScope
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IComp7Controller
-from skeletons.gui.app_loader import IAppLoader
 if typing.TYPE_CHECKING:
     from typing import Optional, Tuple
     from frameworks.wulf import Array
@@ -126,6 +128,8 @@ class BanView(ViewImpl, BattleGUIKeyHandler):
             arena.onVehicleUpdated += self.__updateData
         g_messengerEvents.voip.onPlayerSpeaking += self.__onPlayerSpeaking
         g_messengerEvents.users.onUserActionReceived += self.__onUserActionReceived
+        if BattleReplay.g_replayCtrl.isPlaying:
+            g_replayEvents.onTimeWarpStart += self.__onReplayTimeWarp
         return
 
     def __removeListeners(self):
@@ -145,6 +149,8 @@ class BanView(ViewImpl, BattleGUIKeyHandler):
             arena.onVehicleUpdated -= self.__updateData
         g_messengerEvents.voip.onPlayerSpeaking -= self.__onPlayerSpeaking
         g_messengerEvents.users.onUserActionReceived -= self.__onUserActionReceived
+        if BattleReplay.g_replayCtrl.isPlaying:
+            g_replayEvents.onTimeWarpStart -= self.__onReplayTimeWarp
         return
 
     def __updateData(self, *_):
@@ -316,6 +322,9 @@ class BanView(ViewImpl, BattleGUIKeyHandler):
 
     def __setSelectionAvailable(self):
         self.viewModel.setIsSelectionAvailable(True)
+
+    def __onReplayTimeWarp(self):
+        self.__destroyWindow()
 
     @staticmethod
     def __playSound():

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_preview/vehicle_preview.py
+from __future__ import absolute_import
 import itertools
 from copy import deepcopy
 import BigWorld
@@ -19,6 +20,7 @@ from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveSta
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.hero_tank_preview_constants import getHeroTankPreviewParams
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.crew_tab_view import DOG
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import OFFER_CHANGED_EVENT, addBuiltInEquipment, getActiveOffer
+from gui.Scaleform.daapi.view.lobby.vehicle_preview.preview_selectable_logic import PreviewSelectableLogic
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.sound_constants import RESEARCH_PREVIEW_SOUND_SPACE, VEHICLE_PREVIEW_SOUND_SPACE, COMMON_VEHICLE_PREVIEW_SOUND_SPACE
 from gui.Scaleform.daapi.view.meta.VehiclePreviewMeta import VehiclePreviewMeta
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
@@ -34,14 +36,13 @@ from gui.impl.gen import R
 from gui.impl.lobby.battle_results.states import PostBattleResultsEntryState
 from gui.impl.lobby.hangar.buy_vehicle_view import BuyVehicleWindow
 from gui.prb_control.dispatcher import g_prbLoader
-from gui.shared import EVENT_BUS_SCOPE, event_bus_handlers, event_dispatcher, events, g_eventBus
+from gui.shared import EVENT_BUS_SCOPE, event_dispatcher, events, g_eventBus
 from gui.shared.formatters import getRoleTextWithIcon, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import MONEY_UNDEFINED
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from preview_selectable_logic import PreviewSelectableLogic
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IHeroTankController, IVehicleComparisonBasket
 from skeletons.gui.impl import IGuiLoader
@@ -119,7 +120,6 @@ def _getModulesTabIdx():
 
 class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
     __background_alpha__ = 0.0
-    __metaclass__ = event_bus_handlers.EventBusListener
     _itemsCache = dependency.descriptor(IItemsCache)
     __comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     __heroTanksControl = dependency.descriptor(IHeroTankController)
@@ -216,6 +216,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             self.__uiFlowLogger.logOpenPreview()
             self.__uiMetricsLogger.onViewOpen()
         self.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.handleSelectedEntityUpdated)
+        self.addListener(events.HideWindowEvent.HIDE_VEHICLE_PREVIEW, self.__handleWindowClose, EVENT_BUS_SCOPE.LOBBY)
         specialData = getHeroTankPreviewParams() if self.__isHeroTank else None
         if specialData is not None and specialData.enterEvent:
             SoundGroups.g_instance.playSound2D(specialData.enterEvent)
@@ -243,6 +244,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self._hangarSpace.onSpaceRefresh -= self.closeView
         self._hangarSpace.unlockVehicleSelectable(self)
         self.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.handleSelectedEntityUpdated)
+        self.removeListener(events.HideWindowEvent.HIDE_VEHICLE_PREVIEW, self.__handleWindowClose, EVENT_BUS_SCOPE.LOBBY)
         isMapsTrainingViewOpened = self.__guiLoader.windowsManager.getViewByLayoutID(R.views.mono.maps_training.maps_training_page()) is not None
         g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.VEHICLE_PREVIEW_HIDDEN), scope=EVENT_BUS_SCOPE.LOBBY)
         if self._backAlias == VIEW_ALIAS.VEHICLE_PREVIEW:
@@ -288,13 +290,8 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
     def handleSelectedEntityUpdated(self, event):
         ctx = event.ctx
         entity = BigWorld.entities.get(ctx['entityId'], None)
-        if ctx['state'] == CameraMovementStates.MOVING_TO_OBJECT:
-            if isinstance(entity, HeroTank):
-                descriptor = entity.typeDescriptor
-                if descriptor:
-                    vehicleCD = descriptor.type.compactDescr
-                    event_dispatcher.showHeroTankPreview(vehicleCD, previewAlias=VIEW_ALIAS.VEHICLE_PREVIEW, previousBackAlias=self._backAlias, backOutfit=self.__outfit)
-            elif entity.id == self._hangarSpace.space.vehicleEntityId:
+        if ctx['state'] == CameraMovementStates.MOVING_TO_OBJECT and not isinstance(entity, HeroTank):
+            if entity.id == self._hangarSpace.space.vehicleEntityId:
                 self._processBackClick({'entity': entity})
         return
 
@@ -463,7 +460,6 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             return
         self.__handleWindowClose()
 
-    @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_VEHICLE_PREVIEW, EVENT_BUS_SCOPE.LOBBY)
     def __handleWindowClose(self, event=None):
         if event is not None:
             if event.ctx.get('back', True):

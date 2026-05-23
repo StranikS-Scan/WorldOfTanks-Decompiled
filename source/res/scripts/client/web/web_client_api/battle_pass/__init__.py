@@ -11,8 +11,7 @@ from web.common import formatBattlePassInfo
 from web.web_client_api import Field, W2CSchema, WebCommandException, w2c, w2capi
 _logger = logging.getLogger(__name__)
 _R_VIEWS = R.aliases.battle_pass
-_VIEWS_IDS = {'intro': _R_VIEWS.Intro(),
- 'chapter_choice': _R_VIEWS.ChapterChoice(),
+_VIEWS_IDS = {'chapter_choice': _R_VIEWS.ChapterChoice(),
  'progression': _R_VIEWS.Progression()}
 _VIEWS_COMMANDS = {'voiceover': showBattlePassTankmenVoiceover}
 

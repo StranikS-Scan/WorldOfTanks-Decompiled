@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/profile_statistics_vos.py
+from __future__ import absolute_import
 from collections import namedtuple
+from future.utils import viewitems
 import nations
 from dossiers2.ui import layouts
 from gui import GUI_NATIONS, getNationIndex
@@ -39,7 +41,7 @@ def getDetailedStatisticsData(label, targetData, isCurrentUser, layout=STATISTIC
 def getVehStatsByLevel(battlesStats, levelDisabledTooltip):
     tDict = battlesStats[2]
     lvlRes = len(tDict) * [None]
-    for level, value in tDict.iteritems():
+    for level, value in viewitems(tDict):
         tooltip = PROFILE.SECTION_STATISTICS_CHART_LEVEL_TOOLTIP
         if value is None:
             value = -1
@@ -87,7 +89,7 @@ def setChartDataPercentages(chartData):
     if yMax == 0:
         yMax = 1
     for data in chartData:
-        data['percentValue'] = int(100 * data['yField'] / yMax)
+        data['percentValue'] = int(100 * data['yField'] // yMax)
 
 
 def formatChartsData(data):
@@ -105,7 +107,7 @@ def getChartsFullData(targetData, levelDisabledTooltip=None):
 
 def getFortAvgLoot(targetData, totalLootValue):
     battlesCount = targetData.getBattlesCountVer2()
-    return backport.getNiceNumberFormat(totalLootValue / battlesCount) if battlesCount > 0 else PUtils.UNAVAILABLE_VALUE
+    return backport.getNiceNumberFormat(totalLootValue // battlesCount) if battlesCount > 0 else PUtils.UNAVAILABLE_VALUE
 
 
 class BaseDictStatisticsVO(dict):
@@ -399,7 +401,7 @@ class ProfileStatisticsBattleRoyaleVO(BaseDictStatisticsVO):
         placeRes = len(tDict) * [None]
         index = 0
         battleType = 'solo' if self.__targetData.isSolo() else 'squad'
-        for place, value in tDict.iteritems():
+        for place, value in tDict.items():
             placeRes[index] = {'xField': place,
              'icon': '../maps/icons/battleRoyale/charts/places/{0}/{1}.png'.format(battleType, place),
              'yField': value,

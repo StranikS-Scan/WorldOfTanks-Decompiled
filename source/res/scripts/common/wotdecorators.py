@@ -1,15 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/wotdecorators.py
-import inspect
+from __future__ import absolute_import
 import logging
+import time
 from functools import update_wrapper, wraps
 from typing import TypeVar, Type, Generic, Callable, Any
+import time_tracking
 from constants import IS_CLIENT, IS_BOT, IS_CGF_DUMP, IS_VS_EDITOR, IS_UE_EDITOR, IS_BASEAPP, IS_CELLAPP, IS_DEVELOPMENT, SERVER_TICK_LENGTH, IS_PROCESS_REPLAY
 from debug_utils import LOG_CURRENT_EXCEPTION, CRITICAL_ERROR, LOG_ERROR
+from py2to3.backport import inspect
 from soft_exception import SoftException
 from time_tracking import LOG_TIME_WARNING
-import time
-import time_tracking
 CLASS = TypeVar('CLASS')
 if not IS_CLIENT and not IS_BOT and not IS_CGF_DUMP and not IS_VS_EDITOR and not IS_UE_EDITOR and not IS_PROCESS_REPLAY:
     from insights.measurements import incrTickOverspends
@@ -48,7 +49,7 @@ def noexcept(func):
 
 def noexceptReturn(returnOnExcept):
 
-    def noexcept(func):
+    def noexceptDecorator(func):
 
         @wraps(func)
         def noexceptWrapper(*args, **kwArgs):
@@ -62,7 +63,7 @@ def noexceptReturn(returnOnExcept):
 
         return noexceptWrapper
 
-    return noexcept
+    return noexceptDecorator
 
 
 def nofail(func):
@@ -127,7 +128,7 @@ def decorator(dec):
 
 def condition(attributeName, logFunc=None, logStack=True):
 
-    def decorator(func):
+    def conditionDecorator(func):
 
         def wrapper(*args, **kwargs):
             attribute = getattr(args[0], attributeName)
@@ -139,7 +140,7 @@ def condition(attributeName, logFunc=None, logStack=True):
 
         return decorate(func, wrapper)
 
-    return decorator
+    return conditionDecorator
 
 
 def limitExposedToClientCalls(cooldown=SERVER_TICK_LENGTH - 0.01, periodLength=1.0, errorThreshold=1, storageAttr='__exposedCallsStorage__'):

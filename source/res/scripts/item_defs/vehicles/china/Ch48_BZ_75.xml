@@ -2044,7 +2044,7 @@
               <slotId>	49002	</slotId>
               <compatibleModels>	Ch48_BZ_75_HO26_3Dst	</compatibleModels>
               <rayStart>	0 0 1.69338	</rayStart>
-              <rayEnd>	0 0 2.15338	</rayEnd>
+              <rayEnd>	0 0 2.44338	</rayEnd>
               <rayUp>	0.16 0 0	</rayUp>
               <size>	0.75	</size>
             </slot>
@@ -2702,20 +2702,25 @@
         <slot>
           <slotType>	attachment	</slotType>
           <slotId>	38000	</slotId>
-          <position>	-0.127085 0.971897 0.416773	</position>
-          <rotation>	-0 -0 0	</rotation>
+          <position>	0 1.006 -0.296	</position>
+          <rotation>	-0 0 0	</rotation>
           <scale>	1 1 1	</scale>
           <applyType>	gunMantlet	</applyType>
           <size>	medium	</size>
+          <enableVisTunnel>	true	</enableVisTunnel>
+          <hangerId>	2	</hangerId>
         </slot>
         <slot>
           <slotType>	attachment	</slotType>
           <slotId>	38001	</slotId>
-          <position>	-0.000006 0.765 -1.578175	</position>
+          <position>	-1.359 0.93 0.543	</position>
           <rotation>	-0 0 0	</rotation>
           <scale>	1 1 1	</scale>
           <applyType>	turret	</applyType>
           <size>	medium	</size>
+          <enableVisTunnel>	true	</enableVisTunnel>
+          <hangerId>	3	</hangerId>
+          <hangerRotation>	-0 -0.785398 0	</hangerRotation>
         </slot>
       </customizationSlots>
       <customization>

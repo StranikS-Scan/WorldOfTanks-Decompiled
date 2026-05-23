@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/stronghold_battle_room.py
+from __future__ import absolute_import
 import weakref
+from future.utils import viewitems
 from UnitBase import UNIT_OP
 from adisp import adisp_process
 from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_TYPE
@@ -94,7 +96,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
     def isPlayerInUnit(self, databaseID):
         result = False
         players = self.prbEntity.getPlayers()
-        for dbId, playerInfo in players.iteritems():
+        for dbId, playerInfo in viewitems(players):
             if dbId == databaseID and not playerInfo.isInvite():
                 result = True
                 break
@@ -220,8 +222,8 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         self._updateConfigureButtonState(isFirstBattle, readyButtonEnabled)
         self.as_setReservesEnabledS([ readyButtonEnabled for _ in reserveOrder ])
 
-    def onStrongholdMaintenance(self, showWindow):
-        self.__maintenanceWindowVisible = showWindow
+    def onStrongholdMaintenance(self, state):
+        self.__maintenanceWindowVisible = state
         if not self.__maintenanceWindowVisible:
             self.__forceUpdateBuildings()
 
@@ -436,9 +438,9 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         if data['isSortie']:
             headerDescr = i18n.makeString(FORTIFICATIONS.STRONGHOLDINFO_SORTIE) % {'level': level}
             timetext = None
-            if textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_ENDOFBATTLESOON or textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLESOON:
+            if textid in (FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_ENDOFBATTLESOON, FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLESOON):
                 timetext = makeHtmlString('html_templates:lobby/fortifications/introView', 'fortBattles', {'text': time_utils.getTimeLeftFormat(data['dtime'])})
-            elif textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETOMORROW or textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETODAY:
+            elif textid in (FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETOMORROW, FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETODAY):
                 timetext = makeHtmlString('html_templates:lobby/fortifications/introView', 'fortBattles', {'text': backport.getShortTimeFormat(data['peripheryStartTimestamp'])})
             wfbDescr = i18n.makeString(textid, nextDate=timetext)
         else:
@@ -446,7 +448,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
             headerDescr = i18n.makeString(FORTIFICATIONS.STRONGHOLDINFO_STRONGHOLD) % {'direction': direction}
             if textid != FORTIFICATIONS.ROSTERINTROWINDOW_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLESOON:
                 timetext = None
-                if textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETOMORROW or textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETODAY:
+                if textid in (FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETOMORROW, FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETODAY):
                     timetext = makeHtmlString('html_templates:lobby/fortifications/introView', 'fortBattles', {'text': backport.getShortTimeFormat(data['matchmakerNextTick'])})
                 wfbDescr = i18n.makeString(textid, nextDate=timetext)
             else:
@@ -476,22 +478,22 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         if GUI_ITEM_TYPE.VEHICLE in diff:
             mnVehs = {vehCD:self.itemsCache.items.getItemByCD(vehCD) for vehCD in diff[GUI_ITEM_TYPE.VEHICLE] if hasNationGroup(vehCD)}
             if mnVehs:
-                for slotIndex, vehCDs in self.__vehiclesInSlotFilters.iteritems():
+                for slotIndex, vehCDs in viewitems(self.__vehiclesInSlotFilters):
                     for cd in vehCDs:
                         if cd in mnVehs and not mnVehs[cd].activeInNationGroup:
-                            vehCDs[vehCDs.index(cd)] = iterVehTypeCDsInNationGroup(cd).next()
+                            vehCDs[vehCDs.index(cd)] = next(iterVehTypeCDsInNationGroup(cd))
 
                     self.sendRequest(ChangeVehiclesInSlotFilterCtx(slotIndex, vehCDs or [], waitingID='prebattle/change_settings'))
 
     def __postMinimiseFilterUpdate(self):
         filterData = self.prbEntity.getSlotFilters()
-        for slotIndex, data in filterData.iteritems():
+        for slotIndex, data in viewitems(filterData):
             vehCDs = data['vehicle_cds'][:]
             for cd in vehCDs:
                 if hasNationGroup(cd):
                     vehItem = self.itemsCache.items.getItemByCD(cd)
                     if not vehItem.activeInNationGroup:
-                        vehCDs[vehCDs.index(cd)] = iterVehTypeCDsInNationGroup(cd).next()
+                        vehCDs[vehCDs.index(cd)] = next(iterVehTypeCDsInNationGroup(cd))
 
             self.__setVehicles(slotIndex, vehCDs)
 
@@ -500,7 +502,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         if selected:
             vehicle = self.itemsCache.items.getItemByCD(selected[0])
             if not vehicle.activeInNationGroup:
-                itemCD = iterVehTypeCDsInNationGroup(vehicle.intCompactDescr).next()
+                itemCD = next(iterVehTypeCDsInNationGroup(vehicle.intCompactDescr))
                 self._selectVehicles([itemCD])
 
     def __forceUpdateBuildings(self):

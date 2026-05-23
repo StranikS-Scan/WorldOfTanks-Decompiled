@@ -1,12 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/external_strings_utils.py
+from __future__ import absolute_import
 import re
-import string
 import unicodedata
+from builtins import chr
+from future.utils import lrange
+from past.builtins import unicode, xrange
 from debug_utils import LOG_CURRENT_EXCEPTION
 from constants import CREDENTIALS_RESTRICTION, CREDENTIALS_RESTRICTION_SET
 from soft_exception import SoftException
-from struct_helpers import unpackByte, packByte
+from struct_helpers import unpackByte
 _MAX_NORMALIZED_NAME_BYTES = 96
 
 class TextRestrictionsBasic(object):
@@ -34,7 +37,7 @@ class TextRestrictionsChinese(TextRestrictionsBasic):
 
     def __init__(self):
         super(TextRestrictionsChinese, self).__init__()
-        ACCOUNT_NAME_EXCLUDED_SYMBOLS = range(32) + [34,
+        ACCOUNT_NAME_EXCLUDED_SYMBOLS = lrange(32) + [34,
          38,
          39,
          47,
@@ -43,7 +46,7 @@ class TextRestrictionsChinese(TextRestrictionsBasic):
          62,
          64,
          127]
-        self.ACCOUNT_NAME_RE = re.compile(u'(?u)^[^' + u''.join(map(lambda n: u'\\x%0.2x' % n, ACCOUNT_NAME_EXCLUDED_SYMBOLS)) + unichr(65535) + unichr(65534) + u']+$')
+        self.ACCOUNT_NAME_RE = re.compile(u'(?u)^[^' + u''.join(map(lambda n: u'\\x%0.2x' % n, ACCOUNT_NAME_EXCLUDED_SYMBOLS)) + chr(65535) + chr(65534) + u']+$')
         self.ACCOUNT_NAME_MIN_LENGTH_REG = self.ACCOUNT_NAME_MIN_LENGTH
         self.LOGIN_NAME_RE = re.compile('^[_a-z0-9-+@.]+$')
         self.LOGIN_NAME_MIN_LENGTH = 4
@@ -301,7 +304,7 @@ def _decode_utf8_len_byte(byte):
 
 
 def strtobool(val):
-    val = string.lower(val)
+    val = val.lower()
     if val in ('y', 'yes', 't', 'true', 'on', '1'):
         return True
     if val in ('n', 'no', 'f', 'false', 'off', '0'):

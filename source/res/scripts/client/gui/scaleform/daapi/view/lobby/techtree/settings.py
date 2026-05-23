@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/settings.py
+from __future__ import absolute_import
 from collections import namedtuple, defaultdict
+from future.utils import viewitems
 import nations
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
@@ -167,7 +169,7 @@ class NODE_STATE(object):
     @classmethod
     def printStates(cls, state):
         states = []
-        for k, v in NODE_STATE_FLAGS.__dict__.iteritems():
+        for k, v in viewitems(NODE_STATE_FLAGS.__dict__):
             if not k.startswith('_') and state & v:
                 states.append(k)
 

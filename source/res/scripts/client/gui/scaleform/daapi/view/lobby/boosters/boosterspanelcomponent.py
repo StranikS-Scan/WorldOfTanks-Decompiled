@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/boosters/BoostersPanelComponent.py
+from __future__ import absolute_import
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.meta.SlotsPanelMeta import SlotsPanelMeta
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
@@ -47,8 +48,8 @@ class BoostersPanelComponent(SlotsPanelMeta):
     def getBoosterSlotID(self, idx):
         return self._slotsMap.get(int(idx), None)
 
-    def getSlotTooltipBody(self, slotIdx):
-        boosterID = self._slotsMap.get(int(slotIdx), None)
+    def getSlotTooltipBody(self, orderID):
+        boosterID = self._slotsMap.get(int(orderID), None)
         tooltip = ''
         if boosterID in (ADD_BOOSTER_ID, _ADD_AVAILABLE_BOOSTER_ID):
             if not self._isPanelInactive:

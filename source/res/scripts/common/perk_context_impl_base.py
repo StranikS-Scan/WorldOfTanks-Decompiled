@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/perk_context_impl_base.py
+from __future__ import absolute_import
 from visual_script.misc import ASPECT
 
 class PerkContextImplBase(object):
@@ -43,6 +44,6 @@ class CrewContextImplBase(PerkContextImplBase):
     ASPECT = ASPECT.ALL
 
     def __init__(self, perksControllerWeakRef, perkID, perkLevel, scopeID, tmanIdxs):
-        super(PerkContextImplBase).__init__(perksControllerWeakRef, perkID, perkLevel, scopeID)
+        super(CrewContextImplBase).__init__(perksControllerWeakRef, perkID, perkLevel, scopeID)
         self._levelOverride = False
         self._tmanIdxs = tmanIdxs

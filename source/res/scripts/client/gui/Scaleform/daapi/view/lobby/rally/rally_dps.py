@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/rally_dps.py
+from __future__ import absolute_import
+from future.utils import viewitems, viewvalues
 from gui.impl import backport
 from gui.prb_control import prbEntityProperty
 from helpers import dependency
@@ -11,7 +13,7 @@ from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.prb_control.items.unit_items import getUnitCandidatesComparator
+from gui.prb_control.items.unit_items import UnitCandidatesSortKey
 from gui.shared.formatters import icons, text_styles
 from helpers import i18n
 from messenger import g_settings
@@ -55,8 +57,8 @@ class CandidatesDataProvider(DAAPIDataProvider):
         isPlayerSpeaking = self.bwProto.voipController.isPlayerSpeaking
         userGetter = storage_getter('users')().getUser
         colorGetter = g_settings.getColorScheme('rosters').getColors
-        mapping = [ (pInfo, userGetter(pInfo.dbID)) for pInfo in candidates.itervalues() ]
-        sortedList = sorted(mapping, cmp=getUnitCandidatesComparator())
+        mapping = [ (pInfo, userGetter(pInfo.dbID)) for pInfo in viewvalues(candidates) ]
+        sortedList = sorted(mapping, key=UnitCandidatesSortKey)
         for pInfo, user in sortedList:
             dbID = pInfo.dbID
             self._mapping[dbID] = len(self._list)
@@ -109,7 +111,7 @@ class SortieCandidatesLegionariesDP(SortieCandidatesDP):
         self.__legionariesCount = 0
         clanPlayers = {}
         legionaryPlayers = {}
-        for key, value in candidates.iteritems():
+        for key, value in viewitems(candidates):
             if value.isLegionary():
                 legionaryPlayers[key] = value
             clanPlayers[key] = value
@@ -142,7 +144,7 @@ class StaticFormationCandidatesDP(CandidatesDataProvider):
         self.clear()
         teamPlayers = {}
         legionaryPlayers = {}
-        for key, value in candidates.iteritems():
+        for key, value in viewitems(candidates):
             if value.isLegionary():
                 legionaryPlayers[key] = value
             teamPlayers[key] = value

@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/UnitRoster.py
+from __future__ import absolute_import
 import struct
+from future.utils import viewitems
+from past.builtins import xrange
 import nations
 from items import vehicles
 from constants import VEHICLE_CLASSES, VEHICLE_CLASS_INDICES, MAX_VEHICLE_LEVEL
@@ -30,8 +33,8 @@ class BaseUnitRoster:
             self.limits = self.LIMITS_TYPE(**limitsDefs)
             if slotCount is None:
                 slotCount = self.limits.get('maxSlotCount', self.MAX_SLOTS)
-            if slotDefs and isinstance(slotDefs, dict) and len(slotDefs) <= slotCount * 2 and min(slotDefs.iterkeys()) >= 0 and max(slotDefs.iterkeys()) < slotCount * 2:
-                self.slots = dict(((i, self.SLOT_TYPE(**slotDef)) for i, slotDef in slotDefs.iteritems()))
+            if slotDefs and isinstance(slotDefs, dict) and len(slotDefs) <= slotCount * 2 and min(slotDefs) >= 0 and max(slotDefs) < slotCount * 2:
+                self.slots = dict(((i, self.SLOT_TYPE(**slotDef)) for i, slotDef in viewitems(slotDefs)))
                 self.pack()
                 return
             if slotCount:
@@ -43,7 +46,7 @@ class BaseUnitRoster:
 
     def __repr__(self):
         repr = '%s( slots len=%s' % (self.__class__.__name__, len(self.slots))
-        for n, slot in self.slots.iteritems():
+        for n, slot in viewitems(self.slots):
             repr += '\n    [%d] %s' % (n, slot)
 
         repr += '\n)'
@@ -53,7 +56,7 @@ class BaseUnitRoster:
     def pack(self):
         slots = self.slots
         packed = struct.pack('<B', len(slots))
-        for idx, slot in slots.iteritems():
+        for idx, slot in viewitems(slots):
             packed += struct.pack('<B', idx)
             packed += slot.pack()
 
@@ -65,7 +68,7 @@ class BaseUnitRoster:
         self.slots = {}
         slotsLen = struct.unpack_from('<B', packed)[0]
         unpacking = packed[1:]
-        for i in range(0, slotsLen):
+        for _ in range(0, slotsLen):
             slot = self.SLOT_TYPE()
             idx = struct.unpack_from('<B', unpacking)[0]
             unpacking = slot.unpack(unpacking[1:])
@@ -85,7 +88,7 @@ class BaseUnitRoster:
 
     def checkVehicleList(self, vehTypeCompDescrList, unitSlotIdx=None):
         for vehTypeCompDescr in vehTypeCompDescrList:
-            res, chosenSlotIdx = self.checkVehicle(vehTypeCompDescr, unitSlotIdx)
+            res, _ = self.checkVehicle(vehTypeCompDescr, unitSlotIdx)
             if res:
                 return True
 
@@ -94,7 +97,7 @@ class BaseUnitRoster:
     def matchVehicleList(self, vehTypeCompDescrList, unitSlotIdx=None):
         matchList = []
         for vehTypeCompDescr in vehTypeCompDescrList:
-            res, chosenSlotIdx = self.checkVehicle(vehTypeCompDescr, unitSlotIdx)
+            res, _ = self.checkVehicle(vehTypeCompDescr, unitSlotIdx)
             if res:
                 matchList.append(vehTypeCompDescr)
 
@@ -129,9 +132,9 @@ class BaseUnitRoster:
             return (False, unitSlotIdx)
         else:
             if unitSlotIdx is None:
-                for i, slot in self.slots.iteritems():
+                for i, slot in viewitems(self.slots):
                     if slot.checkVehicle(vehTypeCompDescr):
-                        return (True, i / 2)
+                        return (True, i // 2)
 
             else:
                 if isinstance(unitSlotIdx, int):
@@ -189,7 +192,7 @@ def _reprBitMask(bitMask, nameList):
 def reprBitMaskFromDict(bitMask, nameDict):
     repr = ''
     if bitMask:
-        for nameMask, name in nameDict.iteritems():
+        for nameMask, name in viewitems(nameDict):
             if nameMask & bitMask == nameMask and nameMask:
                 repr += name + ','
 
@@ -200,7 +203,7 @@ def reprBitMaskFromDict(bitMask, nameDict):
 
 def buildNamesDict(constDefClass):
     ret = {}
-    for k, v in constDefClass.__dict__.iteritems():
+    for k, v in viewitems(constDefClass.__dict__):
         if k[0] != '_':
             ret[v] = k
 
@@ -308,7 +311,7 @@ class BaseUnitRosterSlot(object):
             if not self.nationMask & 1 << vehType.id[0]:
                 return False
             level = vehType.level
-            if not (self.levels[0] <= level and level <= self.levels[1]):
+            if not self.levels[0] <= level <= self.levels[1]:
                 return False
             classTag = vehicles.getVehicleClass(vehTypeCompDescr)
             classIndex = VEHICLE_CLASS_INDICES.get(classTag, _BAD_CLASS_INDEX)
@@ -337,7 +340,7 @@ class BaseUnitRosterLimits(object):
      'vehicleTypes': (('<H', 2), ('<H2B', 4))}
 
     def __init__(self, **limitsDefs):
-        limits = self.limits = {key:value for key, value in limitsDefs.iteritems() if value is not None}
+        limits = self.limits = {key:value for key, value in viewitems(limitsDefs) if value is not None}
         if not limits:
             self.mask = 0
             return
@@ -345,7 +348,7 @@ class BaseUnitRosterLimits(object):
             self.mask = _makeBitMask(limits.keys(), self._ROSTER_LIMIT_INDICES)
             vehicleLevelLimitsByClass = limits.pop('vehicleLevelLimitsByClass', None)
             if vehicleLevelLimitsByClass is not None:
-                limits['vehicleLevelLimitsByClass'] = {VEHICLE_CLASS_INDICES[key]:value for key, value in vehicleLevelLimitsByClass.iteritems()}
+                limits['vehicleLevelLimitsByClass'] = {VEHICLE_CLASS_INDICES[key]:value for key, value in viewitems(vehicleLevelLimitsByClass)}
             vehicleClasses = limits.pop('vehicleClasses', None)
             if vehicleClasses is not None:
                 limits['vehicleClasses'] = _makeBitMask(vehicleClasses, VEHICLE_CLASS_INDICES)
@@ -366,7 +369,7 @@ class BaseUnitRosterLimits(object):
             if limitName in ('vehicleLevelLimitsByClass', 'vehicleTypes'):
                 (lenFormat, _), (limitFormat, _) = packFormat
                 packed = struct.pack(lenFormat, len(limitValue))
-                for key, (lowerBound, upperBound) in limitValue.iteritems():
+                for key, (lowerBound, upperBound) in viewitems(limitValue):
                     packed += struct.pack(limitFormat, key, lowerBound, upperBound)
 
                 return packed
@@ -391,7 +394,7 @@ class BaseUnitRosterLimits(object):
             length = struct.unpack_from(lenFormat, packed)[0]
             packed = packed[lenSize:]
             subLimits = limits[limitName] = {}
-            for idx in xrange(length):
+            for _ in xrange(length):
                 key, lowerBound, upperBound = struct.unpack_from(limitFormat, packed)
                 subLimits[key] = (lowerBound, upperBound)
                 packed = packed[limitSize:]

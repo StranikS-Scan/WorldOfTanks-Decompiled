@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/quest_cache_helpers.py
+from __future__ import absolute_import
 import logging
 import time
 from constants import EVENT_TYPE, IS_CLIENT

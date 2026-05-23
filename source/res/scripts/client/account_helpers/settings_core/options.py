@@ -1199,19 +1199,24 @@ class ResolutionSetting(PreferencesSetting):
 
     def _getOptions(self):
         res = []
+        aspectRatioExceptions = {(64, 27): (21, 9),
+         (43, 18): (21, 9)}
         for resolutions in self._getSuitableResolutions():
             formatedRes = []
             for width, height in resolutions:
                 gcd = fractions.gcd(width, height)
                 widthOpt = width / gcd
                 heightOpt = height / gcd
-                if widthOpt > 32:
-                    p = self._findBestAspect(float(widthOpt) / heightOpt, 32)
+                if widthOpt > 64:
+                    p = self._findBestAspect(float(widthOpt) / heightOpt, 64)
                     widthOpt = p[0]
                     heightOpt = p[1]
                 if widthOpt == 8:
                     widthOpt *= 2
                     heightOpt *= 2
+                widthOpt, heightOpt = int(widthOpt), int(heightOpt)
+                if (widthOpt, heightOpt) in aspectRatioExceptions:
+                    widthOpt, heightOpt = aspectRatioExceptions[widthOpt, heightOpt]
                 formatedRes.append('{0}x{1} [{2}:{3}]'.format(width, height, widthOpt, heightOpt))
 
             res.append(formatedRes)

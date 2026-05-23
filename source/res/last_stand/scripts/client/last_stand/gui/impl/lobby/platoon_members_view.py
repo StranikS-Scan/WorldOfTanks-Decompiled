@@ -17,7 +17,7 @@ from last_stand.gui.impl.gen.view_models.views.lobby.ext_members_window_model im
 from last_stand.gui.shared.event_dispatcher import isViewLoaded, closeViewsByID
 from last_stand.gui.impl.lobby.ls_helpers.platoon_helpers import getPlatoonSlotsData
 from last_stand.skeletons.difficulty_level_controller import IDifficultyLevelController
-from last_stand_common.last_stand_constants import UNIT_LS_EXTRA_DATA_KEY, CURRENT_QUEUE_TYPE_KEY, UNIT_DIFFICULTY_LEVELS_KEY
+from last_stand_common.last_stand_constants import UNIT_LS_EXTRA_DATA_KEY, CURRENT_QUEUE_TYPE_KEY, UNIT_DIFFICULTY_LEVELS_KEY, DEFAULT_UNIT_DIFFICULTY_LEVELS
 from helpers import i18n, dependency
 
 class ExtMembersView(SquadMembersView, IGlobalListener):
@@ -194,7 +194,7 @@ class ExtMembersView(SquadMembersView, IGlobalListener):
             level = QUEUE_TYPE_TO_DIFFICULTY_LEVEL[queueType].value
             self.__addPlayerDifficultyLevelNotification('changedDifficultyLevel', entity.getPlayerInfo(), level)
             for player in viewvalues(entity.getPlayers()):
-                if not player.isReady and queueType not in player.extraData.get(UNIT_LS_EXTRA_DATA_KEY, {}).get(UNIT_DIFFICULTY_LEVELS_KEY, []):
+                if not player.isReady and queueType not in player.extraData.get(UNIT_LS_EXTRA_DATA_KEY, {}).get(UNIT_DIFFICULTY_LEVELS_KEY, DEFAULT_UNIT_DIFFICULTY_LEVELS):
                     self.__addPlayerDifficultyLevelNotification('notReadyDifficultyLevel', player)
 
     def onUnitPlayerInfoChanged(self, pInfo):
@@ -220,7 +220,7 @@ class ExtMembersView(SquadMembersView, IGlobalListener):
         entity = self._platoonCtrl.getPrbEntity()
         _, unit = entity.getUnit()
         for player in viewvalues(unit.getPlayers()):
-            queueTypes = player.get('extraData', {}).get(UNIT_LS_EXTRA_DATA_KEY, {}).get(UNIT_DIFFICULTY_LEVELS_KEY, [])
+            queueTypes = player.get('extraData', {}).get(UNIT_LS_EXTRA_DATA_KEY, {}).get(UNIT_DIFFICULTY_LEVELS_KEY, DEFAULT_UNIT_DIFFICULTY_LEVELS)
             if levelInfo.queueType not in queueTypes:
                 return False
 

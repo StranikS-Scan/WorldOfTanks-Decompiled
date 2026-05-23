@@ -83,12 +83,19 @@
       <undamaged>	vehicles/chinese/Ch38_WZ113G_FT/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/chinese/Ch38_WZ113G_FT/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/chinese/Ch38_WZ113G_FT/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <Ch38_WZ113G_FT_BPXX_3Dst>
+          <undamaged>	vehicles/chinese/Ch38_WZ113G_FT/_skins/Ch38_WZ113G_FT_BPXX_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/chinese/Ch38_WZ113G_FT/_skins/Ch38_WZ113G_FT_BPXX_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/chinese/Ch38_WZ113G_FT/_skins/Ch38_WZ113G_FT_BPXX_3Dst/crash/lod0/Hull.model	</exploded>
+        </Ch38_WZ113G_FT_BPXX_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
       <pitchParams>	0.34 38 0.36 1 0.05 0.34	</pitchParams>
       <rollParams>	1 0.34 38 0.36 1 0.06 0.4	</rollParams>
-      <sensitivityToImpulse>	0.94	</sensitivityToImpulse>
+      <sensitivityToImpulse>	0.45	</sensitivityToImpulse>
     </swinging>
     <exhaust>
       <pixie>	diesel_large	</pixie>
@@ -110,6 +117,15 @@
         <rayStart>	-0.762653 1.44921 2.57826	</rayStart>
         <rayEnd>	-0.762434 0.734558 1.78703	</rayEnd>
         <rayUp>	0 1 0	</rayUp>
+        <size>	0.35	</size>
+      </slot>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10001	</slotId>
+        <compatibleModels>	Ch38_WZ113G_FT_BPXX_3Dst	</compatibleModels>
+        <rayStart>	-0.204962 0.39586 2.910407	</rayStart>
+        <rayEnd>	-0.204921 0.261804 2.761985	</rayEnd>
+        <rayUp>	0.000186 0.742106 -0.670282	</rayUp>
         <size>	0.35	</size>
       </slot>
       <slot>
@@ -1034,6 +1050,78 @@
         <anchorShift>	0.352513	</anchorShift>
       </slot>
       <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15077	</slotId>
+        <position>	1.304729 1.128253 3.55062	</position>
+        <rotation>	0.562522 0.000018 3.14157	</rotation>
+        <scale>	0.55028 0.679736 0.550294	</scale>
+        <tags>	direction_right_to_left formfactor_square	</tags>
+        <compatibleModels>	Ch38_WZ113G_FT_BPXX_3Dst	</compatibleModels>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.545656	</clipAngle>
+        <anchorShift>	0.12625	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15078	</slotId>
+        <position>	-0.765396 1.941909 2.358692	</position>
+        <rotation>	0.80896 0 3.139847	</rotation>
+        <scale>	0.67322 0.241234 0.673229	</scale>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Ch38_WZ113G_FT_BPXX_3Dst	</compatibleModels>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.62468	</clipAngle>
+        <anchorShift>	-0.00571	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15079	</slotId>
+        <position>	-0.839994 2.33505 1.286365	</position>
+        <rotation>	-0 0.000021 3.14003	</rotation>
+        <scale>	0.602712 0.215966 0.602704	</scale>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Ch38_WZ113G_FT_BPXX_3Dst	</compatibleModels>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.866039	</clipAngle>
+        <anchorShift>	0.1591	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15080	</slotId>
+        <position>	-1.785748 0.865576 2.145054	</position>
+        <rotation>	1.500792 1.631681 0.055607	</rotation>
+        <scale>	0.500382 0.34325 0.500384	</scale>
+        <tags>	direction_right_to_left formfactor_square	</tags>
+        <compatibleModels>	Ch38_WZ113G_FT_BPXX_3Dst	</compatibleModels>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.15616	</clipAngle>
+        <anchorShift>	-0.004533	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15081	</slotId>
+        <position>	1.786 0.865576 2.14505	</position>
+        <rotation>	1.500809 -1.631708 -0.055676	</rotation>
+        <scale>	0.500382 0.34325 0.500385	</scale>
+        <tags>	direction_right_to_left formfactor_square	</tags>
+        <compatibleModels>	Ch38_WZ113G_FT_BPXX_3Dst	</compatibleModels>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.15616	</clipAngle>
+        <anchorShift>	-0.004533	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15082	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Ch38_WZ113G_FT_BPXX_3Dst	</compatibleModels>
+        <position>	-0.854408 2.127792 -2.440026	</position>
+        <rotation>	2.096895 -0.012762 -0.005893	</rotation>
+        <scale>	0.520582 0.350349 0.520579	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.905629	</clipAngle>
+        <anchorShift>	0.021172	</anchorShift>
+      </slot>
+      <slot>
         <slotType>	attachment	</slotType>
         <slotId>	18000	</slotId>
         <position>	-1.739 0.402 -0.099	</position>
@@ -1063,11 +1151,21 @@
       <slot>
         <slotType>	attachment	</slotType>
         <slotId>	18003	</slotId>
-        <position>	0.003538 1.686955 -0.025426	</position>
+        <position>	0.80531 1.716704 0.387607	</position>
         <rotation>	-0 -0 0	</rotation>
         <scale>	1 1 1	</scale>
         <applyType>	turret	</applyType>
         <size>	medium	</size>
+        <enableVisTunnel>	true	</enableVisTunnel>
+        <hangerId>	6	</hangerId>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18004	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <hiddenForUser>	true	</hiddenForUser>
+        <scale>	1 1 1	</scale>
       </slot>
     </customizationSlots>
     <customization>
@@ -1110,6 +1208,13 @@
         <undamaged>	vehicles/chinese/Ch38_WZ113G_FT/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/chinese/Ch38_WZ113G_FT/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/chinese/Ch38_WZ113G_FT/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <Ch38_WZ113G_FT_BPXX_3Dst>
+            <undamaged>	vehicles/chinese/Ch38_WZ113G_FT/_skins/Ch38_WZ113G_FT_BPXX_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch38_WZ113G_FT/_skins/Ch38_WZ113G_FT_BPXX_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch38_WZ113G_FT/_skins/Ch38_WZ113G_FT_BPXX_3Dst/crash/lod0/Chassis.model	</exploded>
+          </Ch38_WZ113G_FT_BPXX_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1184,6 +1289,39 @@
                   <row3>	-0.000001 1.129641 -3.656274	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	Ch38_WZ113G_FT_BPXX_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	1.972398 0.000000 0.000000	</row0>
+                  <row1>	0.000000 2.174461 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.304000	</row2>
+                  <row3>	0.000000 1.436000 -0.094000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.756000 0.000000 0.000001	</row0>
+                  <row1>	0.000000 1.033462 0.006854	</row1>
+                  <row2>	-0.000002 -0.049065 7.397837	</row2>
+                  <row3>	0.000000 1.630000 0.046000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.530940 0.000000 0.000002	</row0>
+                  <row1>	0.000000 0.155963 0.256272	</row1>
+                  <row2>	0.000000 -0.545485 0.331974	</row2>
+                  <row3>	-0.000001 1.087993 3.788815	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.530940 0.000001 -0.000001	</row0>
+                  <row1>	0.000000 0.192730 -0.229903	</row1>
+                  <row2>	0.000000 0.489357 0.410233	</row2>
+                  <row3>	-0.000001 1.193201 -3.751224	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.033460 0.006854	</row1>
+                  <row2>	-0.000002 -0.049589 7.476836	</row2>
+                  <row3>	-1.819000 0.999466 -0.035000	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -1244,6 +1382,39 @@
                   <row1>	0.000000 0.192730 -0.229903	</row1>
                   <row2>	0.000000 0.489357 0.410233	</row2>
                   <row3>	0.000001 1.129641 -3.656274	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	Ch38_WZ113G_FT_BPXX_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	1.972400 0.000000 0.000000	</row0>
+                  <row1>	0.000000 2.174460 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.304000	</row2>
+                  <row3>	0.000000 1.436000 -0.094000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.020000 0.000000 0.000001	</row0>
+                  <row1>	0.000000 1.033460 0.006854	</row1>
+                  <row2>	-0.000002 -0.049065 7.397840	</row2>
+                  <row3>	0.099000 1.630000 0.046000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.530940 0.000000 0.000002	</row0>
+                  <row1>	0.000000 0.155963 0.256272	</row1>
+                  <row2>	0.000000 -0.545485 0.331974	</row2>
+                  <row3>	-0.000001 1.087990 3.788820	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.530940 0.000001 -0.000001	</row0>
+                  <row1>	0.000000 0.192730 -0.229903	</row1>
+                  <row2>	0.000000 0.489357 0.410233	</row2>
+                  <row3>	-0.000001 1.193200 -3.751220	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.446000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.033460 0.006854	</row1>
+                  <row2>	-0.000002 -0.049589 7.476836	</row2>
+                  <row3>	1.890000 0.999466 -0.035000	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1467,24 +1638,28 @@
           <name>	Track_VD_R0	</name>
           <forwardElastK>	1.5	</forwardElastK>
           <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.12	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
           <forwardElastK>	1.5	</forwardElastK>
           <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.12	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
           <forwardElastK>	2	</forwardElastK>
           <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.12	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
           <forwardElastK>	2	</forwardElastK>
           <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.12	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
@@ -1694,7 +1869,7 @@
             </wheel>
             <wheel>
               <name>	WD_L0	</name>
-              <radius>	0.285129	</radius>
+              <radius>	0.292	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -1702,7 +1877,7 @@
             <segmentSyncPivotOffset>	-1.332	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L1	</name>
-              <startAngle>	-160.889999	</startAngle>
+              <startAngle>	0.017453	</startAngle>
               <teethCount>	14	</teethCount>
             </sync>
             <sync>
@@ -1887,7 +2062,7 @@
             </wheel>
             <wheel>
               <name>	WD_R0	</name>
-              <radius>	0.28515	</radius>
+              <radius>	0.292	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -1895,7 +2070,7 @@
             <segmentSyncPivotOffset>	1.332	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R1	</name>
-              <startAngle>	-160.897995	</startAngle>
+              <startAngle>	0.017453	</startAngle>
               <teethCount>	14	</teethCount>
             </sync>
             <sync>
@@ -2097,6 +2272,13 @@
             <undamaged>	vehicles/chinese/Ch38_WZ113G_FT/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch38_WZ113G_FT/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/chinese/Ch38_WZ113G_FT/crash/lod0/Gun_05.model	</exploded>
+            <sets>
+              <Ch38_WZ113G_FT_BPXX_3Dst>
+                <undamaged>	vehicles/chinese/Ch38_WZ113G_FT/_skins/Ch38_WZ113G_FT_BPXX_3Dst/normal/lod0/Gun_05.model	</undamaged>
+                <destroyed>	vehicles/chinese/Ch38_WZ113G_FT/_skins/Ch38_WZ113G_FT_BPXX_3Dst/crash/lod0/Gun_05.model	</destroyed>
+                <exploded>	vehicles/chinese/Ch38_WZ113G_FT/_skins/Ch38_WZ113G_FT_BPXX_3Dst/crash/lod0/Gun_05.model	</exploded>
+              </Ch38_WZ113G_FT_BPXX_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/chinese/Ch38_WZ113G_FT/collision/Gun_05.model	</collisionModelServer>
@@ -2140,11 +2322,13 @@
             <slot>
               <slotType>	attachment	</slotType>
               <slotId>	48000	</slotId>
-              <position>	0.000001 0.36432 0.47486	</position>
-              <rotation>	-0 0 0	</rotation>
+              <position>	0.000002 0.464328 0.47486	</position>
+              <rotation>	-0 -0 0	</rotation>
               <scale>	1 1 1	</scale>
               <applyType>	gunMantlet	</applyType>
               <size>	medium	</size>
+              <enableVisTunnel>	true	</enableVisTunnel>
+              <hangerId>	2	</hangerId>
             </slot>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
@@ -2153,6 +2337,16 @@
               <rayEnd>	-0.000022 -0.000031 2.05	</rayEnd>
               <rayUp>	0.126 0 0	</rayUp>
               <size>	0.6	</size>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <compatibleModels>	Ch38_WZ113G_FT_BPXX_3Dst	</compatibleModels>
+              <rayStart>	0 -0.000031 1.59	</rayStart>
+              <rayEnd>	0 -0.000031 2.09	</rayEnd>
+              <rayUp>	0.156 0 0	</rayUp>
+              <size>	0.5	</size>
+              <applyToFabric>	false	</applyToFabric>
             </slot>
           </customizationSlots>
           <customization>
@@ -2172,6 +2366,13 @@
         <undamaged>	vehicles/chinese/Ch38_WZ113G_FT/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/chinese/Ch38_WZ113G_FT/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/chinese/Ch38_WZ113G_FT/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <Ch38_WZ113G_FT_BPXX_3Dst>
+            <undamaged>	vehicles/chinese/Ch38_WZ113G_FT/_skins/Ch38_WZ113G_FT_BPXX_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch38_WZ113G_FT/_skins/Ch38_WZ113G_FT_BPXX_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch38_WZ113G_FT/_skins/Ch38_WZ113G_FT_BPXX_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </Ch38_WZ113G_FT_BPXX_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/chinese/Ch38_WZ113G_FT/collision/Turret_01.model	</collisionModelServer>

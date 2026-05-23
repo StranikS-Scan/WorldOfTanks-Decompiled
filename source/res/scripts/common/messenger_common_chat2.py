@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/messenger_common_chat2.py
+from __future__ import absolute_import
 from collections import namedtuple
 from string import Template
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES, CHAT_COMMANDS_THAT_IGNORE_COOLDOWNS, GENERIC_MESSENGER_ARGS
-from constants import IS_CLIENT, IS_CHINA, ARENA_BONUS_TYPE
+from constants import IS_CLIENT, IS_CHINA
+from math_common import decimal_round
 _g_id = None
 
 def _makeID(start=None, range=None):
@@ -127,7 +128,7 @@ class MESSENGER_ACTION_IDS():
     @staticmethod
     def isRateLimitedBroadcastFromClient(actionID):
         actions = MESSENGER_ACTION_IDS
-        if actionID == actions.BROADCAST_BATTLE_MESSAGE or actionID == actions.BROADCAST_UNIT_MESSAGE:
+        if actionID in (actions.BROADCAST_BATTLE_MESSAGE, actions.BROADCAST_UNIT_MESSAGE):
             return True
         battleChatCmdStartID = actions._BATTLE_CHAT_COMMAND_START_ID
         if battleChatCmdStartID <= actionID < battleChatCmdStartID + len(BATTLE_CHAT_COMMANDS):
@@ -173,8 +174,8 @@ class CHAT_COMMAND_COOLDOWN_TYPE_IDS():
     ATTENTION_TO_BLOCKED_COOLDOWN = _makeID()
 
 
-_MESSENGER_ACTION_NAMES = {_id:_name for _name, _id in MESSENGER_ACTION_IDS.__dict__.iteritems() if isinstance(_id, int) and not _name.startswith('_')}
-_MESSENGER_ERROR_NAMES = {_id:_name for _name, _id in MESSENGER_ERRORS.__dict__.iteritems() if not _name.startswith('_')}
+_MESSENGER_ACTION_NAMES = {_id:_name for _name, _id in MESSENGER_ACTION_IDS.__dict__.items() if isinstance(_id, int) and not _name.startswith('_')}
+_MESSENGER_ERROR_NAMES = {_id:_name for _name, _id in MESSENGER_ERRORS.__dict__.items() if not _name.startswith('_')}
 AdminChatCommand = namedtuple('AdminChatCommand', ('id', 'name', 'timeout'))
 ADMIN_CHAT_COMMANDS = (AdminChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._ADMIN_COMMAND_START_ID), name='USERBAN', timeout=30.0), AdminChatCommand(id=_makeID(), name='USERUNBAN', timeout=30.0))
 ADMIN_CHAT_COMMANDS_BY_NAMES = {v.name:v for v in ADMIN_CHAT_COMMANDS}
@@ -312,10 +313,10 @@ def areSenderCooldownsActive(currTime, listOfCoolDownTimeData, cmdIDToSend, targ
     if listOfCoolDownTimeData is None:
         return listOfCoolDownTimeData
     else:
-        removeDataList = list()
+        removeDataList = []
         blockReasonData = None
         for cmdBlockedData in listOfCoolDownTimeData:
-            if round(cmdBlockedData.cooldownEnd - currTime, 2) <= BATTLE_CMD_COOLDOWN_ALLOWED_MARGIN:
+            if decimal_round(cmdBlockedData.cooldownEnd - currTime, 2) <= BATTLE_CMD_COOLDOWN_ALLOWED_MARGIN:
                 removeDataList.append(cmdBlockedData)
             validBlockData = None
             if cmdBlockedData.cooldownType == CHAT_COMMAND_COOLDOWN_TYPE_IDS.SAME_COMMAND_COOLDOWN and cmdBlockedData.cmdID == cmdIDToSend:

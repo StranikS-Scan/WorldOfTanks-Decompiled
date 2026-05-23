@@ -106,24 +106,33 @@ class FunRandomLootboxAutoOpenFormatter(AsyncAutoLootBoxSubFormatter, FunAssetPa
         return cls._isBoxOfRequiredTypes(boxID, FunRandomLootBoxTypes.ALL)
 
     def _collectBonusesData(self, data):
-        legendaryRewards = []
+        mainRewards = []
         otherRewards = []
+        mainRewardsLootBoxRarity = FunRandomLootBoxTypes.ALL.index(FunRandomLootBoxTypes.EPIC)
         for lootBoxID, lootBoxData in viewitems(data):
             if self._isBoxOfThisGroup(lootBoxID):
                 lb = self._itemsCache.items.tokens.getLootBoxByID(lootBoxID)
-                awardList = legendaryRewards if lb.getType() == FunRandomLootBoxTypes.LEGENDARY else otherRewards
-                awardList.append(lootBoxData.get('rewards', {}))
+                rewards = lootBoxData.get('rewards', {})
+                lootboxRarityOrder = FunRandomLootBoxTypes.ALL.index(lb.getType())
+                if lootboxRarityOrder > mainRewardsLootBoxRarity:
+                    mainRewardsLootBoxRarity = lootboxRarityOrder
+                    otherRewards = mainRewards + otherRewards
+                    mainRewards = [rewards]
+                elif lootboxRarityOrder < mainRewardsLootBoxRarity:
+                    otherRewards.append(rewards)
+                else:
+                    mainRewards.append(rewards)
 
         composer = FunRandomMessageAwardsComposer(MAX_AWARDS_COUNT, getFunAwardsPacker())
-        legendaryFormatted = composer.getFormattedBonuses(self.__getRawBonuses(legendaryRewards), AWARDS_SIZES.S232X174)
+        legendaryFormatted = composer.getFormattedBonuses(self.__getRawBonuses(mainRewards), AWARDS_SIZES.S232X174)
         bgIcon = backport.image(self.getModeIconsResRoot().library.notification_bg())
         if len(legendaryFormatted) == 1:
             return {'mainReward': first(legendaryFormatted),
              'rewards': composer.getFormattedBonuses(self.__getRawBonuses(otherRewards), AWARDS_SIZES.SMALL),
              'bgIcon': bgIcon}
         else:
-            legendaryRewards.extend(otherRewards)
-            rawBonuses = self.__getRawBonuses(legendaryRewards)
+            mainRewards.extend(otherRewards)
+            rawBonuses = self.__getRawBonuses(mainRewards)
             mainFormatted = composer.getFormattedBonuses(rawBonuses, AWARDS_SIZES.S232X174)
             if len(mainFormatted) == 1:
                 return {'mainReward': first(mainFormatted),

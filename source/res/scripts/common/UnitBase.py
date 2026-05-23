@@ -1,10 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/UnitBase.py
-import cPickle
+from __future__ import absolute_import
 import copy
 import struct
 import weakref
 from collections import namedtuple
+from future.moves import pickle
+from future.utils import listvalues, viewitems, viewvalues
+from past.builtins import xrange
 from typing import TYPE_CHECKING
 from constants import VEHICLE_CLASS_INDICES, PREBATTLE_TYPE, QUEUE_TYPE, INVITATION_TYPE, BATTLE_MODE_VEHICLE_TAGS
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
@@ -191,7 +194,7 @@ class UNIT_ERROR:
 
 
 OK = UNIT_ERROR.OK
-UNIT_ERROR_NAMES = dict(((v, k) for k, v in UNIT_ERROR.__dict__.iteritems()))
+UNIT_ERROR_NAMES = dict(((v, k) for k, v in viewitems(UNIT_ERROR.__dict__)))
 
 class UNIT_SLOT:
     ANY = -1
@@ -343,7 +346,7 @@ class CLIENT_UNIT_CMD:
     SET_RANDOM_FLAGS = 30
 
 
-CMD_NAMES = dict([ (v, k) for k, v in CLIENT_UNIT_CMD.__dict__.items() if not k.startswith('__') ])
+CMD_NAMES = {v:k for k, v in CLIENT_UNIT_CMD.__dict__.items() if not k.startswith('__')}
 FORCED_CLIENT_UNIT_CMDS = (CLIENT_UNIT_CMD.LEAVE_UNIT,)
 
 class UNIT_NOTIFY_ID:
@@ -451,7 +454,7 @@ UNIT_MGR_FLAGS_TO_PREBATTLE_TYPE = {UNIT_MGR_FLAGS.EVENT: PREBATTLE_TYPE.EVENT,
 
 def _prebattleTypeFromFlags(flags):
     flag = flags ^ UNIT_MGR_FLAGS.SQUAD if flags != UNIT_MGR_FLAGS.SQUAD and flags & UNIT_MGR_FLAGS.SQUAD else flags
-    for unitMgrFlag, prbType in UNIT_MGR_FLAGS_TO_PREBATTLE_TYPE.iteritems():
+    for unitMgrFlag, prbType in viewitems(UNIT_MGR_FLAGS_TO_PREBATTLE_TYPE):
         if flag & unitMgrFlag:
             return prbType
 
@@ -468,7 +471,7 @@ UNIT_MGR_FLAGS_TO_UNIT_MGR_ENTITY_NAME = {UNIT_MGR_FLAGS.EVENT: 'EventUnitMgr',
 
 def _entityNameFromFlags(flags):
     flag = flags ^ UNIT_MGR_FLAGS.SQUAD if flags != UNIT_MGR_FLAGS.SQUAD and flags & UNIT_MGR_FLAGS.SQUAD else flags
-    for unitMgrFlag, unitMgrName in UNIT_MGR_FLAGS_TO_UNIT_MGR_ENTITY_NAME.iteritems():
+    for unitMgrFlag, unitMgrName in viewitems(UNIT_MGR_FLAGS_TO_UNIT_MGR_ENTITY_NAME):
         if flag & unitMgrFlag:
             return unitMgrName
 
@@ -482,7 +485,7 @@ UNIT_MGR_FLAGS_TO_INVITATION_TYPE = {UNIT_MGR_FLAGS.EVENT: INVITATION_TYPE.EVENT
 
 def _invitationTypeFromFlags(flags):
     flag = flags ^ UNIT_MGR_FLAGS.SQUAD if flags != UNIT_MGR_FLAGS.SQUAD and flags & UNIT_MGR_FLAGS.SQUAD else flags
-    for unitMgrFlag, invitationType in UNIT_MGR_FLAGS_TO_INVITATION_TYPE.iteritems():
+    for unitMgrFlag, invitationType in viewitems(UNIT_MGR_FLAGS_TO_INVITATION_TYPE):
         if flag & unitMgrFlag:
             return invitationType
 
@@ -736,7 +739,7 @@ class UnitBase(OpsUnpacker):
             self.storeOp(UNIT_OP.DEL_MEMBER, slotIdx)
             return OK
 
-    def _autoSelectProfileVehicle(self, accountDBID, vehicles):
+    def _autoSelectProfileVehicle(self, accountDBID, unitVehicles):
         pass
 
     def _setProfileVehicle(self, accountDBID, vehCompDescr, vehOutfitCD, seasonType, marksOnGun, prestigeLevel, stFrags):
@@ -811,7 +814,7 @@ class UnitBase(OpsUnpacker):
         return
 
     def isEmpty(self):
-        for accountDBID, playerInfo in self._players.iteritems():
+        for playerInfo in viewvalues(self._players):
             role = playerInfo.get('role', 0)
             if role & UNIT_ROLE.INVITED == 0:
                 return False
@@ -865,21 +868,21 @@ class UnitBase(OpsUnpacker):
          self._squadSize,
          self._randomFlags)
         packed += struct.pack(self._HEADER, *args)
-        for accountDBID, vehList in vehs.iteritems():
+        for accountDBID, vehList in viewitems(vehs):
             packed += struct.pack(self._PLAYER_VEHICLES_LIST, accountDBID, len(vehList))
             for vehTuple in vehList:
                 packed += struct.pack(self._PLAYER_VEHICLE_TUPLE, vehTuple.vehInvID, vehTuple.vehTypeCompDescr)
 
-        for slotIdx, member in members.iteritems():
+        for slotIdx, member in viewitems(members):
             packed += struct.pack(self._SLOT_PLAYERS, slotIdx, member['accountDBID'])
 
-        for accountDBID, playerData in players.iteritems():
+        for accountDBID, playerData in viewitems(players):
             packed += self.__packPlayerData(accountDBID, **playerData)
 
-        for accountDBID, profileVehicle in profileVehicles.iteritems():
+        for accountDBID, profileVehicle in viewitems(profileVehicles):
             packed += self.__packProfileVehicle(accountDBID, profileVehicle)
 
-        for accountDBID, searchFlags in searchFlags.iteritems():
+        for accountDBID, searchFlags in viewitems(searchFlags):
             packed += struct.pack(self._PLAYER_SEARCH_FLAGS_TUPLE, accountDBID, searchFlags)
 
         packed += extrasStr
@@ -900,23 +903,23 @@ class UnitBase(OpsUnpacker):
         self._freeSlots = set(xrange(0, slotCount))
         memberCount, vehCount, playerCount, profilesCount, searchFlagsCount, extrasLen, self._readyMask, self._flags, self._closedSlotMask, self._modalTimestamp, self._estimatedTimeInQueue, self._gameplaysMask, self._arenaType, self._squadSize, self._randomFlags = struct.unpack_from(self._HEADER, unpacking)
         unpacking = unpacking[self._HEADER_SIZE:]
-        for i in xrange(0, vehCount):
+        for _ in xrange(0, vehCount):
             accountDBID, vehListCount = struct.unpack_from(self._PLAYER_VEHICLES_LIST, unpacking)
             unpacking = unpacking[self._PLAYER_VEHICLES_LIST_SIZE:]
             vehDataList = []
-            for i in xrange(0, vehListCount):
+            for _ in xrange(0, vehListCount):
                 vehInvID, vehTypeCompDescr = struct.unpack_from(self._PLAYER_VEHICLE_TUPLE, unpacking)
                 unpacking = unpacking[self._PLAYER_VEHICLE_TUPLE_SIZE:]
                 vehDataList.append((vehInvID, vehTypeCompDescr))
 
             self._setVehicleList(accountDBID, vehDataList)
 
-        for i in xrange(0, memberCount):
+        for _ in xrange(0, memberCount):
             slotIdx, accountDBID = struct.unpack_from(self._SLOT_PLAYERS, unpacking)
             self._setMember(accountDBID, slotIdx)
             unpacking = unpacking[self._SLOT_PLAYERS_SIZE:]
 
-        for i in xrange(0, playerCount):
+        for _ in xrange(0, playerCount):
             blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, accountWTR, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, extraData = self.__unpackPlayerData(unpacking)
             unpacking = unpacking[blockLength:]
             playerData = {UnitPlayerDataKey.ACCOUNT_ID: accountID,
@@ -934,11 +937,11 @@ class UnitBase(OpsUnpacker):
              UnitPlayerDataKey.EXTRA_DATA: extraData}
             self._addPlayer(accountDBID, **playerData)
 
-        for i in xrange(0, profilesCount):
+        for _ in xrange(0, profilesCount):
             profileLen = self.__unpackProfileVehicle(unpacking)
             unpacking = unpacking[profileLen:]
 
-        for i in xrange(0, searchFlagsCount):
+        for _ in xrange(0, searchFlagsCount):
             accountDBID, searchFlags = struct.unpack_from(self._PLAYER_SEARCH_FLAGS_TUPLE, unpacking)
             self.setAutoSearchFlags(accountDBID, searchFlags)
             unpacking = unpacking[self._PLAYER_SEARCH_FLAGS_TUPLE_SIZE:]
@@ -966,10 +969,10 @@ class UnitBase(OpsUnpacker):
 
     def getAccountsStates(self):
         statesDict = {}
-        assignedPlayers = self._playerSlots.keys()
+        assignedPlayers = list(self._playerSlots)
         accountsVehicles = self._vehicles
         isMemberReadyFunc = self.isMemberReady
-        for accountDBID, playerData in self._players.iteritems():
+        for accountDBID in self._players:
             vehs = accountsVehicles.get(accountDBID)
             statesDict[accountDBID] = (vehs[0].vehTypeCompDescr if vehs else None, accountDBID in assignedPlayers, isMemberReadyFunc(accountDBID))
 
@@ -981,7 +984,7 @@ class UnitBase(OpsUnpacker):
         newExtras = self._extras
         LOG_DEBUG_DEV('updateUnitExtras', oldExtras, newExtras)
         self.storeOp(UNIT_OP.EXTRAS_UPDATE, updateStr)
-        for accountDBID, playerData in self._players.iteritems():
+        for accountDBID, playerData in viewitems(self._players):
             if playerData and playerData.get('role', 0) & UNIT_ROLE.INVITED == 0:
                 self._storeNotification(accountDBID, UNIT_NOTIFY_CMD.EXTRAS_UPDATED, [newExtras])
 
@@ -1039,7 +1042,7 @@ class UnitBase(OpsUnpacker):
 
     def __repr__(self):
         repr = 'Unit(\n  _members len=%s {' % len(self._members)
-        for slotIdx, member in self._members.iteritems():
+        for slotIdx, member in viewitems(self._members):
             repr += '\n    [%d] %s' % (slotIdx, member)
 
         repr += '\n  },'
@@ -1051,12 +1054,12 @@ class UnitBase(OpsUnpacker):
         repr += '\n  modalTimestamp:%s' % self._modalTimestamp
         repr += '\n  estimatedTimeInQueue:%s' % self._estimatedTimeInQueue
         repr += '\n  _vehicles len=%s {' % len(self._vehicles)
-        for accountDBID, veh in self._vehicles.iteritems():
+        for accountDBID, veh in viewitems(self._vehicles):
             repr += '\n    [%d] %s' % (accountDBID, str(veh))
 
         repr += '\n  },'
         repr += '\n  _players len=%s {' % len(self._players)
-        for accountDBID, playerData in self._players.iteritems():
+        for accountDBID, playerData in viewitems(self._players):
             repr += '\n    [%d] %s role=%s' % (accountDBID, playerData, reprBitMaskFromDict(playerData.get('role', 0), UNIT_ROLE_NAMES))
 
         repr += '\n  },'
@@ -1069,7 +1072,7 @@ class UnitBase(OpsUnpacker):
 
     def dump(self):
         repr = 'Unit(\n membs(%s)={' % len(self._members)
-        for slotIdx, member in self._members.iteritems():
+        for slotIdx, member in viewitems(self._members):
             repr += '%d:%s, ' % (slotIdx, member.get('accountDBID', 0))
 
         repr += '},'
@@ -1079,12 +1082,12 @@ class UnitBase(OpsUnpacker):
          self._closedSlotMask)
         repr += ', stamp:%s, timeInQueue:%d, free=%r' % (self._modalTimestamp, self._estimatedTimeInQueue, list(self._freeSlots))
         repr += '\n vehs(%s)={' % len(self._vehicles)
-        for accountDBID, veh in self._vehicles.iteritems():
+        for accountDBID, veh in viewitems(self._vehicles):
             repr += '%d:%s, ' % (accountDBID, str(veh))
 
         repr += '},'
         repr += '\n plrs(%s)={' % len(self._players)
-        for accountDBID, playerData in self._players.iteritems():
+        for accountDBID, playerData in viewitems(self._players):
             repr += '%d:%r:%02X, ' % (accountDBID, playerData.get('nickName', ''), playerData.get('role', 0))
 
         repr += '},'
@@ -1126,7 +1129,7 @@ class UnitBase(OpsUnpacker):
 
     def removeAutoSearchFlags(self, flags):
         anyChange = False
-        for k, v in self._unitAssemblerSearchFlags.iteritems():
+        for k in self._unitAssemblerSearchFlags:
             self._unitAssemblerSearchFlags[k] &= ~flags
             anyChange = True
 
@@ -1143,12 +1146,12 @@ class UnitBase(OpsUnpacker):
         if numSearchFlags == 0:
             return UnitAssemblerSearchFlags.NO_FILTER
         if numSearchFlags == 1:
-            return self._unitAssemblerSearchFlags.values()[0]
+            return listvalues(self._unitAssemblerSearchFlags)[0]
         tankFilter = 0
-        for userFilter in self._unitAssemblerSearchFlags.itervalues():
+        for userFilter in viewvalues(self._unitAssemblerSearchFlags):
             tankFilter |= userFilter
 
-        for userFilter in self._unitAssemblerSearchFlags.itervalues():
+        for userFilter in viewvalues(self._unitAssemblerSearchFlags):
             if userFilter & UnitAssemblerSearchFlags.ALL_VEH_TIERS != 0:
                 tankFilter &= userFilter
 
@@ -1190,7 +1193,7 @@ class UnitBase(OpsUnpacker):
         else:
             squadSize = self._squadSize
             if squadSize != newSquadSize or self._freeSlots > squadSize:
-                playerSlotsIterator = iter(sorted(self._playerSlots.iteritems(), key=lambda x: x[1]))
+                playerSlotsIterator = iter(sorted(viewitems(self._playerSlots), key=lambda x: x[1]))
                 for squadSlotIdx in xrange(newSquadSize):
                     accountDBID, prevSlotIdx = next(playerSlotsIterator, (None, None))
                     if squadSlotIdx == LEADER_SLOT:
@@ -1201,7 +1204,7 @@ class UnitBase(OpsUnpacker):
                 self._refreshFreeSlots(squadSize, newSquadSize)
                 self._squadSize = newSquadSize
                 self.storeOp(UNIT_OP.SQUAD_SIZE, newSquadSize)
-                for accountDBID, _ in self._players.iteritems():
+                for accountDBID in self._players:
                     self._storeNotification(accountDBID, UNIT_NOTIFY_CMD.CHANGE_SQUAD_SIZE, [newSquadSize, bool(self._freeSlots)])
 
                 self._dirty = 1
@@ -1237,10 +1240,10 @@ class UnitBase(OpsUnpacker):
 
     def getMaxSlotCount(self):
         if self._roster.slots:
-            _max = max(self._roster.slots.iterkeys())
+            _max = max(self._roster.slots)
         else:
             _max = 0
-        return _max / 2 + 1
+        return _max // 2 + 1
 
     def getClosedSlotsCount(self):
         count = 0
@@ -1252,7 +1255,7 @@ class UnitBase(OpsUnpacker):
 
     def getPointsSum(self):
         sum = 0
-        for slotIdx, member in self._members.iteritems():
+        for member in viewvalues(self._members):
             accountDBID = member.get('accountDBID', 0)
             vehs = self._vehicles.get(accountDBID)
             if vehs:
@@ -1261,7 +1264,7 @@ class UnitBase(OpsUnpacker):
         return sum
 
     def checkVehicleLevelsRange(self, lvlsByClass, commonLvls):
-        for slotIdx, member in self._members.iteritems():
+        for member in viewvalues(self._members):
             accountDBID = member.get('accountDBID', None)
             if accountDBID is None:
                 continue
@@ -1280,7 +1283,7 @@ class UnitBase(OpsUnpacker):
 
     def checkVehicleTypesRange(self, vehicleTypes):
         vehicleCount = {}
-        for slotIdx, member in self._members.iteritems():
+        for member in viewvalues(self._members):
             accountDBID = member.get('accountDBID', None)
             if accountDBID is None:
                 continue
@@ -1297,13 +1300,13 @@ class UnitBase(OpsUnpacker):
                     vehicleCount[vehTypeCompDescr] = 0
                 vehicleCount[vehTypeCompDescr] += 1
 
-        if any((value < vehicleTypes[key][0] for key, value in vehicleCount.iteritems())):
+        if any((value < vehicleTypes[key][0] for key, value in viewitems(vehicleCount))):
             return UNIT_ERROR.TOO_FEW_VEHICLE_TYPE
         else:
-            return UNIT_ERROR.TOO_MANY_VEHICLE_TYPE if any((value > vehicleTypes[key][1] for key, value in vehicleCount.iteritems())) else OK
+            return UNIT_ERROR.TOO_MANY_VEHICLE_TYPE if any((value > vehicleTypes[key][1] for key, value in viewitems(vehicleCount))) else OK
 
     def hasInArenaMembers(self):
-        for slotIdx, member in self._members.iteritems():
+        for member in viewvalues(self._members):
             accountDBID = member.get('accountDBID', 0)
             role = self.getAccountRole(accountDBID)
             if role & UNIT_ROLE.IN_ARENA:
@@ -1313,7 +1316,7 @@ class UnitBase(OpsUnpacker):
 
     def getLegionaryCount(self):
         count = 0
-        for accountDBID, slotIdx in self._playerSlots.iteritems():
+        for accountDBID in self._playerSlots:
             playerData = self._players[accountDBID]
             role = playerData.get('role', 0)
             if role & UNIT_ROLE.LEGIONARY:
@@ -1363,13 +1366,13 @@ class UnitBase(OpsUnpacker):
 
     def _packVehicleDict(self, accountDBID, vehDict={}):
         packedArgs = struct.pack(self._VEHICLE_DICT_HEADER, len(vehDict), accountDBID)
-        for vehTypeCompDescr, vehInvID in vehDict.iteritems():
+        for vehTypeCompDescr, vehInvID in viewitems(vehDict):
             packedArgs += struct.pack(self._VEHICLE_DICT_ITEM, vehTypeCompDescr, vehInvID)
 
         self._appendCmdrOp(UNIT_OP.VEHICLE_DICT, packedArgs)
 
     def _packFullVehDictUpdates(self):
-        for accountDBID, playerData in self._players.iteritems():
+        for accountDBID, playerData in viewitems(self._players):
             if playerData and playerData.get('role', 0) & UNIT_ROLE.INVITED == 0:
                 vehDict = playerData.get('vehDict')
                 if vehDict:
@@ -1379,7 +1382,7 @@ class UnitBase(OpsUnpacker):
         vehCount, accountDBID = struct.unpack_from(self._VEHICLE_DICT_HEADER, packedOps)
         vehDict = {}
         opLen = self._VEHICLE_DICT_HEADER_SIZE
-        for i in xrange(vehCount):
+        for _ in xrange(vehCount):
             vehTypeCompDescr, vehInvID = struct.unpack_from(self._VEHICLE_DICT_ITEM, packedOps, opLen)
             vehDict[vehTypeCompDescr] = vehInvID
             opLen += self._VEHICLE_DICT_ITEM_SIZE
@@ -1454,7 +1457,7 @@ class UnitBase(OpsUnpacker):
     def _checkAllVehiclesMatchSlot(self, accountDBID, unitSlotIdx):
         vehList = self._vehicles.get(accountDBID, [])
         for veh in vehList:
-            res, slotChosenIdx = self._roster.checkVehicle(veh.vehTypeCompDescr, unitSlotIdx)
+            res, _ = self._roster.checkVehicle(veh.vehTypeCompDescr, unitSlotIdx)
             if not res:
                 return (False, veh.vehInvID)
 
@@ -1503,7 +1506,7 @@ class UnitBase(OpsUnpacker):
     @staticmethod
     def __packPlayerExtraData(packedData):
         LOG_DEBUG_DEV('pack: extra data = ', packedData)
-        strDict = cPickle.dumps(packedData, -1)
+        strDict = pickle.dumps(packedData, -1)
         return packPascalString(strDict)
 
     @staticmethod
@@ -1512,7 +1515,7 @@ class UnitBase(OpsUnpacker):
         offset = initialOffset
         strDict, lenKeyBytes = unpackPascalString(packedData, offset)
         offset += lenKeyBytes
-        return (cPickle.loads(strDict), offset - initialOffset)
+        return (pickle.loads(strDict), offset - initialOffset)
 
     def __packProfileVehicle(self, accountDBID, profileVehicle):
         packed = struct.pack(self._VEHICLE_PROFILE_HEADER, accountDBID, profileVehicle.seasonType, profileVehicle.marksOnGun, profileVehicle.prestigeLevel, profileVehicle.stFrags)

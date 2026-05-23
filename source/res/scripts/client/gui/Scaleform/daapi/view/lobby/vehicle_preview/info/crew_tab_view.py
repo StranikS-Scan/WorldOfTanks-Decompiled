@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_preview/info/crew_tab_view.py
+from __future__ import absolute_import
 import typing
 from CurrentVehicle import g_currentPreviewVehicle
 from debug_utils import LOG_DEBUG_DEV
@@ -24,10 +25,11 @@ from shared_utils import first
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
-from web.web_client_api.common import ItemPackTypeGroup, ItemPackType, ItemPackEntry
+from web.web_client_api.common import ItemPackTypeGroup, ItemPackType
 if typing.TYPE_CHECKING:
     from typing import Optional
     from gui.shared.gui_items.Vehicle import Vehicle
+    from web.web_client_api.common import ItemPackEntry
 DOG = 'dog'
 
 class CrewTabView(ViewImpl):

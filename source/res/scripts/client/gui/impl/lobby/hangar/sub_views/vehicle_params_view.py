@@ -246,10 +246,12 @@ class _VehicleParamsPresenterBase(ViewComponent[VehicleParamsViewModel]):
          'Name': self._getLocalizedName(param, self._applyFormatting)}
 
     def _prepareData(self, diffParams=None, concreteGroup=None):
-        if self._getVehicle() is None:
+        vehicle = self._getVehicle()
+        if vehicle is None:
             return
         else:
             diffParams = diffParams if diffParams is not None else {}
+            steeringAnglesEmpty = params_helper.lackVehicleSteeringAngles(vehicle)
             for _, groupName in enumerate(RELATIVE_PARAMS):
                 if concreteGroup is not None and concreteGroup != groupName:
                     continue
@@ -262,6 +264,8 @@ class _VehicleParamsPresenterBase(ViewComponent[VehicleParamsViewModel]):
 
                 if self._isExtraParamEnabled():
                     for paramName in params_helper.EXTRA_PARAMS_GROUP[groupName]:
+                        if steeringAnglesEmpty and paramName == KPI.Name.WHEELS_ROTATION_SPEED:
+                            continue
                         self.__addParam(paramName, groupName, diffParams, self.__extraParams, skipMissing=True)
 
             return

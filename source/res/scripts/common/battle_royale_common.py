@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/battle_royale_common.py
-
+from __future__ import absolute_import, division
+from future.utils import viewitems
+from math_common import decimal_round
 
 class BattleRoyaleVehicleStats(object):
     __DAMAGE_DEALT = 0
@@ -104,7 +106,7 @@ class BattleRoyaleVehicleStats(object):
         return self.__rawData['brplaces'].get(1, 0)
 
     def getLossesCount(self):
-        return sum([ count for place, count in self.__rawData['brplaces'].iteritems() if place != 1 ])
+        return sum((count for place, count in viewitems(self.__rawData['brplaces']) if place != 1))
 
     def getAvgXP(self):
         return self._getAvgValue(self.getBattlesCount(), self.getXP())
@@ -113,16 +115,16 @@ class BattleRoyaleVehicleStats(object):
         return self._getAvgValue(self.getBattlesCount(), self.getDamageDealt())
 
     def getAveragePosition(self):
-        return round(self._getAvgValue(self.getBattlesCount(), self.getPositionSum()), 1)
+        return decimal_round(self._getAvgValue(self.getBattlesCount(), self.getPositionSum()), 1)
 
     def getAverageLevel(self):
-        return round(self._getAvgValue(self.getBattlesCount(), self.getAchivedLevelSum()), 1)
+        return decimal_round(self._getAvgValue(self.getBattlesCount(), self.getAchivedLevelSum()), 1)
 
     def getPositionSum(self):
-        return sum([ k * v for k, v in self.__rawData['brplaces'].iteritems() ])
+        return sum((k * v for k, v in viewitems(self.__rawData['brplaces'])))
 
     def getAchivedLevelSum(self):
-        return sum([ k * v for k, v in self.__rawData['brlevels'].iteritems() ])
+        return sum((k * v for k, v in viewitems(self.__rawData['brlevels'])))
 
     def incrementPlace(self, place):
         self.__rawData['brplaces'][place] = self.__rawData['brplaces'].get(place, 0) + 1

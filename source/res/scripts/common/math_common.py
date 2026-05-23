@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/math_common.py
+from __future__ import absolute_import, division
 from decimal import ROUND_HALF_UP, Decimal
 from math import ceil, floor
 from future.utils import PY3
@@ -8,11 +9,7 @@ _CEIL_EPS = 1
 
 def ceilTo(num, decimals=0, epsilon=0.0004):
     multiplier = 10 ** decimals
-    return ceil(round((num + epsilon) / multiplier, _CEIL_EPS)) * multiplier
-
-
-def round_int(number):
-    return int(round(number))
+    return ceil(decimal_round((num + epsilon) / multiplier, _CEIL_EPS)) * multiplier
 
 
 def isAlmostEqual(first, second, epsilon=0.0004):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/tank_setup/context_menu/consumable.py
+from __future__ import absolute_import
 import SoundGroups
 from adisp import adisp_process, adisp_async
 from gui import shop
@@ -30,7 +31,7 @@ def consumableDecorator(originalClass):
 class ConsumableItemContextMenu(BaseEquipmentItemContextMenu):
     _sqGen = SequenceIDGenerator(BaseEquipmentItemContextMenu._sqGen.currSequenceID)
 
-    @option(_sqGen.next(), CMLabel.BUY_MORE)
+    @option(_sqGen.nextSequenceID, CMLabel.BUY_MORE)
     def buyMore(self):
         shop.showBuyEquipment(itemId=self._intCD, source=shop.Source.EXTERNAL, origin=shop.Origin.CONSUMABLES)
 
@@ -61,17 +62,17 @@ class ConsumableItemContextMenu(BaseEquipmentItemContextMenu):
 class ConsumableSlotContextMenu(BaseEquipmentSlotContextMenu):
     _sqGen = SequenceIDGenerator(BaseEquipmentSlotContextMenu._sqGen.currSequenceID)
 
-    @option(_sqGen.next(), CMLabel.BUY_MORE)
+    @option(_sqGen.nextSequenceID, CMLabel.BUY_MORE)
     def buyMore(self):
         shop.showBuyEquipment(itemId=self._intCD, source=shop.Source.EXTERNAL, origin=shop.Origin.CONSUMABLES)
 
-    @option(_sqGen.next(), TankSetupCMLabel.UNLOAD)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.UNLOAD)
     def unload(self):
         SoundGroups.g_instance.playSound2D(TankSetupSoundEvents.CONSUMABLES_DEMOUNT)
         self._sendSlotAction(BaseSetupModel.SELECT_SLOT_ACTION, intCD=None, currentSlotId=self._installedSlotId)
         return
 
-    @option(_sqGen.next(), TankSetupCMLabel.TAKE_OFF)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.TAKE_OFF)
     def takeOff(self):
         SoundGroups.g_instance.playSound2D(TankSetupSoundEvents.CONSUMABLES_DEMOUNT)
         self._sendSlotAction(BaseSetupModel.REVERT_SLOT_ACTION)
@@ -88,15 +89,15 @@ class ConsumableSlotContextMenu(BaseEquipmentSlotContextMenu):
 class HangarConsumableSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
     _sqGen = SequenceIDGenerator(BaseHangarEquipmentSlotContextMenu._sqGen.currSequenceID)
 
-    @option(_sqGen.next(), CMLabel.BUY_MORE)
+    @option(_sqGen.nextSequenceID, CMLabel.BUY_MORE)
     def buyMore(self):
         shop.showBuyEquipment(itemId=self._intCD, source=shop.Source.EXTERNAL, origin=shop.Origin.CONSUMABLES)
 
-    @option(_sqGen.next(), TankSetupCMLabel.UNLOAD)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.UNLOAD)
     def unload(self):
         self._unloadAction()
 
-    @option(_sqGen.next(), TankSetupCMLabel.TAKE_OFF)
+    @option(_sqGen.nextSequenceID, TankSetupCMLabel.TAKE_OFF)
     def takeOffFromSlot(self):
         self._unloadAction()
 

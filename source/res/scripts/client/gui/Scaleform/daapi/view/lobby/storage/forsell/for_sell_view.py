@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/forsell/for_sell_view.py
+from __future__ import absolute_import
 import nations
 from account_helpers import getAccountDatabaseID
 from gui.Scaleform.daapi.view.lobby.storage.category_view import StorageDataProvider
@@ -257,19 +258,14 @@ class StorageCategoryForSellView(StorageCategoryForSellViewMeta):
 
     def _getVoList(self):
         modulesList = super(StorageCategoryForSellView, self)._getVoList()
-        modulesList.extend(getStorageShellsData(self._invVehicles, False, self._getComparator()))
+        modulesList.extend(getStorageShellsData(self._invVehicles, False, self._getItemSortKey))
         return modulesList
 
     def _getVO(self, item):
         return item
 
-    def _getComparator(self):
-
-        def _comparator(a, b):
-            result = cmp(b.getSellPrice().price, a.getSellPrice().price)
-            return result
-
-        return _comparator
+    def _getItemSortKey(self, item):
+        return item.getSellPrice().price * -1
 
     def _getItemTypeID(self):
         return GUI_ITEM_TYPE.VEHICLE_MODULES

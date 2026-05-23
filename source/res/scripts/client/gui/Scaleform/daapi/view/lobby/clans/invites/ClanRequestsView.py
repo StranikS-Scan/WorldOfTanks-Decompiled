@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/invites/ClanRequestsView.py
+from __future__ import absolute_import
 from adisp import adisp_process
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.lobby.clans.invites.ClanInvitesViewWithTable import ClanInvitesAbstractDataProvider
@@ -45,13 +46,13 @@ class ClanRequestsView(ClanRequestsViewMeta):
     def processedRequestsPaginator(self):
         return self._getPaginatorByFilterName(CLANS_ALIASES.INVITE_WINDOW_FILTER_PROCESSED)
 
-    def acceptRequest(self, applicationID):
-        applicationID = int(applicationID)
+    def acceptRequest(self, dbId):
+        applicationID = int(dbId)
         ctx = AcceptApplicationCtx(applicationID)
         self._getCurrentPaginator().accept(applicationID, ctx)
 
-    def declineRequest(self, applicationID):
-        applicationID = int(applicationID)
+    def declineRequest(self, dbId):
+        applicationID = int(dbId)
         ctx = DeclineApplicationCtx(applicationID)
         self._getCurrentPaginator().decline(applicationID, ctx)
 
@@ -177,9 +178,9 @@ class RequestDataProvider(ClanInvitesAbstractDataProvider):
     def _makeRequestTooltip(self, status, date, user=None):
         if status == CLAN_INVITE_STATES.ACCEPTED:
             return text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_REQUESTACCEPTED)), text_styles.main(date), text_styles.main(''), text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_BYUSER)), text_styles.stats(user))
-        if status == CLAN_INVITE_STATES.DECLINED or status == CLAN_INVITE_STATES.DECLINED_RESENT:
+        if status in (CLAN_INVITE_STATES.DECLINED, CLAN_INVITE_STATES.DECLINED_RESENT):
             return text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_REQUESTDECLINED)), text_styles.main(date), text_styles.main(''), text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_BYUSER)), text_styles.stats(user))
-        if status == CLAN_INVITE_STATES.EXPIRED or status == CLAN_INVITE_STATES.EXPIRED_RESENT:
+        if status in (CLAN_INVITE_STATES.EXPIRED, CLAN_INVITE_STATES.EXPIRED_RESENT):
             return text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_REQUESTEXPIRED)), text_styles.main(date))
         return text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_REQUESTSENT)), text_styles.main(date)) if status == CLAN_INVITE_STATES.ACTIVE else None
 

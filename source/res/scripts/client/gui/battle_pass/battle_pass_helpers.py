@@ -1,11 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_pass/battle_pass_helpers.py
+from __future__ import absolute_import
+import copy
 import itertools
 import logging
 from collections import namedtuple
+from future.utils import viewvalues, viewitems
 import nations
 import typing
-from battle_pass_common import BattlePassConsts, BattlePassTankmenSource, HOLIDAY_SEASON_OFFSET, TANKMAN_QUEST_CHAIN_ENTITLEMENT_POSTFIX, isPostProgressionChapter, FinalReward
+from battle_pass_common import BattlePassConsts, BattlePassTankmenSource, HOLIDAY_SEASON_OFFSET, isPostProgressionChapter, FinalReward
 from constants import ARENA_BONUS_TYPE, QUEUE_TYPE
 from enum import Enum
 from items.tankmen import getNationGroups
@@ -89,7 +92,7 @@ def getFormattedTimeLeft(seconds):
 
 
 def getBattlePassUrl(urlPathName):
-    return ''.join((GUI_SETTINGS.baseUrls['webBridgeRootURL'], GUI_SETTINGS.battlePassUrls.get(urlPathName)))
+    return ''.join((GUI_SETTINGS.baseUrls['webBridgeRootURL'], getBattlePassSetting(urlPathName).get('url')))
 
 
 def getInfoPageURL():
@@ -105,11 +108,30 @@ def getIntroVideoURL():
 
 
 def getExtraVideoURL():
-    return getBattlePassUrl('extraVideo')
+    return getBattlePassUrl('extraIntroVideo')
 
 
 def getIntroSlidesNames():
-    return GUI_SETTINGS.battlePassIntroSlides
+    return getBattlePassSetting('intro').get('slides') or []
+
+
+def isIntroEnabled():
+    return getBattlePassSetting('intro').get('isEnabled', False)
+
+
+def isIntroVideoEnabled():
+    return getBattlePassSetting('introVideo').get('isEnabled', False)
+
+
+def isExtraIntroVideoEnabled():
+    return getBattlePassSetting('extraIntroVideo').get('isEnabled', False)
+
+
+def getBattlePassSetting(settingName):
+    if settingName in GUI_SETTINGS.battlePass:
+        return GUI_SETTINGS.battlePass[settingName]
+    _logger.warning('Setting %s is absent in GUI_SETTINGS.battlePass', settingName)
+    return {}
 
 
 @dependency.replace_none_kwargs(battlePass=IBattlePassController)
@@ -144,8 +166,8 @@ def getSupportedCurrentArenaBonusType(queueType=None):
 
 
 def getTankmanFirstNationGroup(tankmanGroupName):
-    for nationID in nations.MAP.iterkeys():
-        group = findFirst(lambda nationGroup: nationGroup.name == tankmanGroupName, itertools.chain(getNationGroups(nationID, True).itervalues(), getNationGroups(nationID, False).itervalues()))
+    for nationID in nations.MAP:
+        group = findFirst(lambda nationGroup: nationGroup.name == tankmanGroupName, itertools.chain(viewvalues(getNationGroups(nationID, True)), viewvalues(getNationGroups(nationID, False))))
         if group is not None:
             return group
 
@@ -271,13 +293,10 @@ def getReceivedTankmenCount(tankman, tankmanPostfix='', battlePass=None):
 def getTankmenShopPackages(battlePass=None):
     shopPackages = {}
     tankmen = battlePass.getSpecialTankmen()
-    for tankman, tankmanInfo in tankmen.iteritems():
+    for tankman, tankmanInfo in viewitems(tankmen):
         source = tankmanInfo.get('source')
         if source == BattlePassTankmenSource.SHOP:
             shopPackages[tankman] = tankmanInfo.get('availableCount', 0)
-        if source == BattlePassTankmenSource.QUEST_CHAIN:
-            packageName = tankman + TANKMAN_QUEST_CHAIN_ENTITLEMENT_POSTFIX
-            shopPackages[packageName] = tankmanInfo.get('availableCount', 0)
 
     return shopPackages
 
@@ -301,7 +320,7 @@ def fillBattlePassCompoundPrice(compoundPriceModel, compoundPrice):
 
 
 def getCompoundPriceDefaultID(compoundPrice):
-    return next((priceID for currency in _BATTLE_PASS_PRICE_CURRENCY_PRIORITY for priceID, priceData in compoundPrice.iteritems() if currency in priceData and priceData[currency]))
+    return next((priceID for currency in _BATTLE_PASS_PRICE_CURRENCY_PRIORITY for priceID, priceData in viewitems(compoundPrice) if currency in priceData and priceData[currency]))
 
 
 @replace_none_kwargs(battlePass=IBattlePassController)
@@ -321,6 +340,36 @@ def updateBuyAnimationFlag(chapterID):
         AccountSettings.setSettings(BUY_ANIMATIONS_WAS_SHOWN, settings)
         return True
     return False
+
+
+def extractCompensationMoney(data):
+    dataCopy = copy.deepcopy(data)
+    vehicles = dataCopy.get('vehicles')
+    if not vehicles:
+        return dataCopy
+    else:
+        creditsCompensation = 0
+        goldCompensation = 0
+        if isinstance(vehicles, dict):
+            vehicles = [vehicles]
+        for vehicleDict in vehicles:
+            for vehicleInfo in viewvalues(vehicleDict):
+                if not vehicleInfo.get('compensatedNumber', 0):
+                    continue
+                compensation = vehicleInfo.get('customCompensation')
+                if compensation is not None:
+                    creditsCompensation += compensation[0]
+                    goldCompensation += compensation[1]
+
+        if 'credits' in dataCopy:
+            dataCopy['credits'] -= creditsCompensation
+            if not dataCopy['credits']:
+                dataCopy.pop('credits')
+        if 'gold' in dataCopy:
+            dataCopy['gold'] -= goldCompensation
+            if not dataCopy['gold']:
+                dataCopy.pop('gold')
+        return dataCopy
 
 
 @replace_none_kwargs(battlePass=IBattlePassController)
@@ -352,7 +401,6 @@ def _updateClientSettings():
 def _updateServerSettings(data):
     data[BattlePassStorageKeys.INTRO_SHOWN] = False
     data[BattlePassStorageKeys.INTRO_VIDEO_SHOWN] = False
-    data[BattlePassStorageKeys.EXTRA_CHAPTER_INTRO_SHOWN] = False
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)

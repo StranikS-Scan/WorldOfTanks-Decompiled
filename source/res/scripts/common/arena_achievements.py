@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/arena_achievements.py
+from __future__ import absolute_import
+from future.utils import lrange
 from dossiers2.custom.records import RECORD_DB_IDS
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 ACHIEVEMENTS = ('warrior', 'invader', 'sniper', 'sniper2', 'mainGun', 'defender', 'steelwall', 'supporter', 'scout', 'evileye', 'medalWittmann', 'medalOrlik', 'medalOskin', 'medalHalonen', 'medalBurda', 'medalBillotte', 'medalKolobanov', 'medalFadin', 'medalRadleyWalters', 'medalLafayettePool', 'medalLehvaslaiho', 'medalNikolas', 'medalPascucci', 'medalDumitru', 'medalBrunoPietro', 'medalTarczay', 'heroesOfRassenay', 'medalDeLanglade', 'medalTamadaYoshio', 'raider', 'kamikaze', 'huntsman', 'bombardier', 'luckyDevil', 'ironMan', 'sturdy', 'alaric', 'lumberjack', 'medalBrothersInArms', 'medalCrucialContribution', 'armoredFist', 'kingOfTheHill', 'willToWinSpirit', 'shoulderToShoulder', 'aloneInTheField', 'fallenFlags', 'effectiveSupport', 'falloutDieHard', 'stormLord', 'winnerLaurels', 'predator', 'unreachable', 'champion', 'bannerman', 'markIProtector', 'markIBaseProtector', 'markIBomberman', 'markIRepairer', 'occupyingForce', 'ironShield', 'generalOfTheArmy', 'supremeGun', 'smallArmy', 'frontlineMedal', 'se12019Medal', 'bootcampMedal', 'se2020Medal', 'hw2019Medal', 'hw2019Medal1', 'hw2019Medal2', 'hw2019Medal3')
@@ -53,7 +55,7 @@ ACHIEVEMENT_CONDITIONS = {'warrior': {'minFrags': 6,
  'medalDumitru': {'minKills': 3,
                   'maxKills': 255},
  'medalBurda': {'minVictimLevelDelta': 1,
-                'minKills': 3,
+                'minKills': 2,
                 'maxKills': 255},
  'medalBillotte': {'cmn_cnds': _BILLOTTE_CMN_CNDS,
                    'minKills': 2,
@@ -122,7 +124,7 @@ ACHIEVEMENT_CONDITIONS = {'warrior': {'minFrags': 6,
  'smallArmy': {'minVehiclesDestroyed': 20},
  'steamTopLeague': {'level': 10,
                     'minXP': 1},
- 'artilleryFortEquipment': {'id': range(400, 436)}}
+ 'artilleryFortEquipment': {'id': lrange(400, 436)}}
 ACHIEVEMENT_CONDITIONS_EXT = {'warrior': {'minFrags': 8,
              'minKills': 8},
  'heroesOfRassenay': {'minKills': 21,

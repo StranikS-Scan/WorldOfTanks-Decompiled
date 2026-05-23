@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/lootboxes_common.py
+from __future__ import absolute_import
 from constants import LOOTBOX_TOKEN_PREFIX
 from soft_exception import SoftException
 

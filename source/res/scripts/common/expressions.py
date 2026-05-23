@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/expressions.py
-from soft_exception import SoftException
-import cStringIO
+from __future__ import absolute_import
 import tokenize
 import token
+from py2to3.moves.io import FastStringIO
+from soft_exception import SoftException
 
 class ParserException(SoftException):
 
@@ -14,14 +15,14 @@ class ParserException(SoftException):
 class _Tokenizer:
 
     def __init__(self, s):
-        self.tokenizer = tokenize.generate_tokens(cStringIO.StringIO(s).readline)
+        self.tokenizer = tokenize.generate_tokens(FastStringIO(s).readline)
         self.__currentToken = None
         return
 
     def __next(self):
         try:
             while True:
-                toknum, tokval, _, _, _ = self.tokenizer.next()
+                toknum, tokval, _, _, _ = next(self.tokenizer)
                 self.__currentToken = (toknum, tokval)
                 if toknum not in (tokenize.NL,
                  token.NEWLINE,

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/unlock.py
+from __future__ import absolute_import
 from collections import namedtuple
 import BigWorld
 from debug_utils import LOG_ERROR, LOG_DEBUG
@@ -15,9 +16,7 @@ from gui.shared.gui_items.processors import Processor, plugins as proc_plugs
 UnlockItemCtx = namedtuple('UnlockItemCtx', ('itemCD', 'itemTypeID', 'parentCD', 'unlockIdx'))
 
 def makeCostCtx(vehXP, xpCost, xpDiscount):
-    freeXP = xpCost - vehXP
-    if freeXP < 0:
-        freeXP = 0
+    freeXP = max(xpCost - vehXP, 0)
     if xpCost < vehXP:
         vehXP = xpCost
     return {'xpCost': xpCost,

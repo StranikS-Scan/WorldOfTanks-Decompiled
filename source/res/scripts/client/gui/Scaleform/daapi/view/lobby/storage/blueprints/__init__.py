@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/blueprints/__init__.py
+from __future__ import absolute_import
+from future.utils import iteritems
 import nations
 from account_helpers.AccountSettings import STORAGE_BLUEPRINTS_CAROUSEL_FILTER
 from gui import GUI_NATIONS_ORDER_INDEX
@@ -103,24 +105,24 @@ class BlueprintsStorageCarouselDataProvider(StorageCarouselDataProvider):
         self._vehicleItems = [ self._vehicleItems[ndx] for ndx in self._filteredIndices ]
         self.refresh()
 
-    def _buildVehicle(self, item):
+    def _buildVehicle(self, vehicle):
         bpRequester = self._itemsCache.items.blueprints
-        name = getVehicleName(vehicle=item)
+        name = getVehicleName(vehicle=vehicle)
         intelligenceIcon = RES_ICONS.getBlueprintFragment('special', 'intelligence')
-        current, total = bpRequester.getBlueprintCount(item.intCD, item.level)
-        _, intelligenceCost = bpRequester.getRequiredIntelligenceAndNational(item.level)
-        nationalsCost = bpRequester.getNationalRequiredOptions(item.intCD, item.level)
-        availableCount = bpRequester.getConvertibleFragmentCount(item.intCD, item.level)
+        current, total = bpRequester.getBlueprintCount(vehicle.intCD, vehicle.level)
+        _, intelligenceCost = bpRequester.getRequiredIntelligenceAndNational(vehicle.level)
+        nationalsCost = bpRequester.getNationalRequiredOptions(vehicle.intCD, vehicle.level)
+        availableCount = bpRequester.getConvertibleFragmentCount(vehicle.intCD, vehicle.level)
         if availableCount > 0:
             description = makeString(STORAGE.BLUEPRINTS_CARD_CONVERTAVAILABLE, count=text_styles.stats(backport.getIntegralFormat(availableCount)))
         else:
             description = text_styles.error(STORAGE.BLUEPRINTS_CARD_CONVERTREQUIRED)
-        availableToUnlock, _ = g_techTreeDP.isNext2Unlock(item.intCD, unlocked=self._itemsCache.items.stats.unlocks, xps=self._itemsCache.items.stats.vehiclesXPs, freeXP=self._itemsCache.items.stats.actualFreeXP, level=item.level)
+        availableToUnlock, _ = g_techTreeDP.isNext2Unlock(vehicle.intCD, unlocked=self._itemsCache.items.stats.unlocks, xps=self._itemsCache.items.stats.vehiclesXPs, freeXP=self._itemsCache.items.stats.actualFreeXP, level=vehicle.level)
         intelligenceCostText, fragmentsCost = self.__formatFragmentsCost(intelligenceCost=intelligenceCost, intelligenceIcon=intelligenceIcon, nationalsCost=nationalsCost)
-        discount = bpRequester.getBlueprintDiscount(item.intCD, item.level)
+        discount = bpRequester.getBlueprintDiscount(vehicle.intCD, vehicle.level)
         fragmentsProgress = self.__formatFragmentProgress(current, total, discount)
-        image = item.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL)
-        return {'id': item.intCD,
+        image = vehicle.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL)
+        return {'id': vehicle.intCD,
          'title': name,
          'description': description,
          'image': image,
@@ -147,7 +149,7 @@ class BlueprintsStorageCarouselDataProvider(StorageCarouselDataProvider):
         intelligenceCostText = text_styles.concatStylesWithSpace(self.__formatFragment(intelligenceCost, intelligenceIcon, 19), text_styles.mainBig(backport.text(R.strings.storage.blueprints.card.plus())), text_styles.main(backport.text(R.strings.storage.blueprints.card.additional())))
         nationalCostTexts = []
         lastPriceIdx = len(nationalsCost) - 1
-        for index, (nId, cost) in enumerate(nationalsCost.iteritems()):
+        for index, (nId, cost) in enumerate(iteritems(nationalsCost)):
             nationName = nations.MAP[nId]
             nationalsCost = self.__gui.systemLocale.getNumberFormat(cost)
             nationalIcon = backport.image(R.images.gui.maps.icons.blueprints.fragment.special.dyn(nationName)())

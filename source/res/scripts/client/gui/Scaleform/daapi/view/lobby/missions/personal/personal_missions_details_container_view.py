@@ -1,13 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/personal/personal_missions_details_container_view.py
+from __future__ import absolute_import
 import logging
 from operator import methodcaller
+from future.utils import viewvalues
 from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getDetailedMissionData, getMapRegionTooltipData
 from gui.Scaleform.daapi.view.meta.PersonalMissionDetailsContainerViewMeta import PersonalMissionDetailsContainerViewMeta
 from gui.server_events.pm_constants import PM_SUIT_OP_PLUGIN_ERR_RESPONSE, DISABLED_PM_OPERATIONS, DISABLED_PM_MISSIONS, IS_PM2_QUEST_ENABLED, IS_REGULAR_QUEST_ENABLED
-from gui.shared import events, event_bus_handlers, EVENT_BUS_SCOPE
+from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.processors import quests as quests_proc
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
@@ -22,7 +24,6 @@ _logger = logging.getLogger(__name__)
 class PersonalMissionDetailsContainerView(LobbySubView, PersonalMissionDetailsContainerViewMeta):
     _lobbyCtx = dependency.descriptor(ILobbyContext)
     _eventsCache = dependency.descriptor(IEventsCache)
-    __metaclass__ = event_bus_handlers.EventBusListener
 
     def __init__(self, ctx=None):
         super(PersonalMissionDetailsContainerView, self).__init__(ctx)
@@ -98,6 +99,7 @@ class PersonalMissionDetailsContainerView(LobbySubView, PersonalMissionDetailsCo
 
     def _populate(self):
         super(PersonalMissionDetailsContainerView, self)._populate()
+        self.addListener(events.HideWindowEvent.HIDE_PERSONAL_MISSION_DETAILS_VIEW, self.__handleDetailsClose, EVENT_BUS_SCOPE.LOBBY)
         self._eventsCache.onProgressUpdated += self._onProgressUpdated
         self._lobbyCtx.getServerSettings().onServerSettingsChange += self._onSettingsChanged
         self.__setData()
@@ -112,6 +114,7 @@ class PersonalMissionDetailsContainerView(LobbySubView, PersonalMissionDetailsCo
     def _dispose(self):
         self.fireEvent(PersonalMissionsEvent(PersonalMissionsEvent.ON_DETAILS_VIEW_CLOSE), EVENT_BUS_SCOPE.LOBBY)
         super(PersonalMissionDetailsContainerView, self)._dispose()
+        self.removeListener(events.HideWindowEvent.HIDE_PERSONAL_MISSION_DETAILS_VIEW, self.__handleDetailsClose, EVENT_BUS_SCOPE.LOBBY)
         self._lobbyCtx.getServerSettings().onServerSettingsChange -= self._onSettingsChanged
         self._eventsCache.onProgressUpdated -= self._onProgressUpdated
         self.__storage = None
@@ -126,7 +129,6 @@ class PersonalMissionDetailsContainerView(LobbySubView, PersonalMissionDetailsCo
                 if qData['eventID'] == str(self.__selectedQuestID):
                     self.as_setMissionDataS(qData)
 
-    @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_PERSONAL_MISSION_DETAILS_VIEW, EVENT_BUS_SCOPE.LOBBY)
     def __handleDetailsClose(self, _):
         self.closeView()
 
@@ -139,7 +141,7 @@ class PersonalMissionDetailsContainerView(LobbySubView, PersonalMissionDetailsCo
     def __setData(self):
         self.__datailedList = []
         pages = []
-        for idx, q in enumerate(sorted(self.__quests.itervalues(), key=methodcaller('getID'))):
+        for idx, q in enumerate(sorted(viewvalues(self.__quests), key=methodcaller('getID'))):
             qData = getDetailedMissionData(q).getInfo()
             self.__datailedList.append(qData)
             eventID = q.getID()

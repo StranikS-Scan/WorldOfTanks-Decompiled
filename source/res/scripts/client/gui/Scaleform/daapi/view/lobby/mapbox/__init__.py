@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/mapbox/__init__.py
+from __future__ import absolute_import
 from gui.Scaleform.framework import WindowLayer, ScopeTemplates, ViewSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.MAPBOX_ALIASES import MAPBOX_ALIASES

@@ -171,7 +171,6 @@ class StatisticsCollector(IStatisticsCollector):
         result = {'system': None,
          'session': None}
         stat = BigWorld.wg_getClientStatistics()
-        BigWorld.wg_clearCrashedState()
         if not stat:
             return result
         else:
@@ -336,7 +335,8 @@ class StatisticsCollector(IStatisticsCollector):
          'virt_total': statisticsDict['virtTotal'],
          'page_file_total': statisticsDict['pageFileTotal'],
          'system_hdd_name': statisticsDict['systemHddName'],
-         'game_hdd_name': statisticsDict['gameHddName']}
+         'game_hdd_name': statisticsDict['gameHddName'],
+         'cat_hw_id': statisticsDict['cat_hw_id']}
         BigWorld.wg_reportSystemData(data)
         return data
 

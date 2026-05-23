@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/shop/rental_term_selection_popover.py
+from __future__ import absolute_import
 import constants
 from constants import RentType, GameSeasonType
 from rent_common import parseRentID, isWithinMaxRentTime, SeasonRentDuration

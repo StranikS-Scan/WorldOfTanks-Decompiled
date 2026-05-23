@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/battle_queue/battle_queue.py
+from __future__ import absolute_import
 import weakref
 import BigWorld
 from adisp import adisp_process, adisp_async
@@ -384,7 +385,7 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
     def onStartBattle(self):
         self.__stopUpdateScreen()
 
-    def onStrongholdMaintenance(self, showWindow):
+    def onStrongholdMaintenance(self, state):
         self.__showBattleRoom()
 
     def onUnitFlagsChanged(self, flags, timeLeft):

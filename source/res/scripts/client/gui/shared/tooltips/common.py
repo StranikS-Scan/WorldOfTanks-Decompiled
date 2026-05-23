@@ -37,9 +37,6 @@ from gui.impl import backport
 from gui.impl.backport.backport_tooltip import DecoratedTooltipWindow
 from gui.impl.gen import R
 from gui.impl.common.param_tooltip_view import ParamTooltipView
-from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view import BattlePassCompletedTooltipView
-from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view import BattlePassInProgressTooltipView
-from gui.impl.lobby.battle_pass.tooltips.battle_pass_no_chapter_tooltip_view import BattlePassNoChapterTooltipView
 from gui.impl.lobby.battle_pass.tooltips.vehicle_points_tooltip_view import VehiclePointsTooltipView
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.impl.lobby.tooltips.veh_post_progression_entry_point_tooltip import VehPostProgressionEntryPointTooltip
@@ -1454,34 +1451,6 @@ class VehiclePointsTooltipContentWindowData(ToolTipBaseData):
 
     def getDisplayableData(self, intCD, *args, **kwargs):
         return DecoratedTooltipWindow(VehiclePointsTooltipView(intCD), useDecorator=False)
-
-
-class _BattlePassMixedContentTooltipData(ToolTipBaseData):
-
-    def __init__(self, context, tooltipType, viewImpl):
-        super(_BattlePassMixedContentTooltipData, self).__init__(context, tooltipType)
-        self.__viewImpl = viewImpl
-
-    def getDisplayableData(self, *args, **kwargs):
-        return DecoratedTooltipWindow(self.__viewImpl(), useDecorator=False) if TOOLTIPS_CONSTANTS.BATTLE_PASS_AS3_TOOLTIP_CALL in args else self.__viewImpl()
-
-
-class BattlePassNoChapterTooltipWindowData(_BattlePassMixedContentTooltipData):
-
-    def __init__(self, context):
-        super(BattlePassNoChapterTooltipWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.BATTLE_PASS_NO_CHAPTER, BattlePassNoChapterTooltipView)
-
-
-class BattlePassInProgressTooltipContentWindowData(_BattlePassMixedContentTooltipData):
-
-    def __init__(self, context):
-        super(BattlePassInProgressTooltipContentWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.BATTLE_PASS_IN_PROGRESS, BattlePassInProgressTooltipView)
-
-
-class BattlePassCompletedTooltipContentWindowData(_BattlePassMixedContentTooltipData):
-
-    def __init__(self, context):
-        super(BattlePassCompletedTooltipContentWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.BATTLE_PASS_COMPLETED, BattlePassCompletedTooltipView)
 
 
 class TechTreeEventTooltipBase(BlocksTooltipData):

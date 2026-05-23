@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/common.py
+from __future__ import absolute_import
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import EXTRA_CHAPTERS_VIDEO_SHOWN, LAST_BATTLE_PASS_EXTRA_CHAPTER_SEEN, UMG_BATTLE_PASS_EXTRA_CHAPTER_SEEN, LAST_BATTLE_PASS_HOLIDAY_CHAPTER_SEEN
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.battle_pass.battle_pass_helpers import isIntroVideoEnabled, isIntroEnabled
 from gui.impl.gen import R
 from gui.shared.event_dispatcher import showBrowserOverlayView
 from helpers import dependency
@@ -19,12 +21,12 @@ def getActualBattlePassIDs(layoutID=R.invalid(), chapterID=0, battlePass=None):
             return (R.aliases.battle_pass.BuyPass(), chapterID)
         if battlePass.isCompleted():
             return (R.aliases.battle_pass.HolidayFinal(), chapterID)
-    if not isIntroVideoShown() or not isIntroShown():
-        return (R.aliases.battle_pass.Intro(), chapterID)
+    if isIntroVideoEnabled() and not isIntroVideoShown() or isIntroEnabled() and not isIntroShown():
+        return (R.aliases.battle_pass.ChapterChoice(), chapterID)
     if layoutID:
         return (layoutID, chapterID if battlePass.isChapterExists(chapterID) else battlePass.getCurrentChapterID())
-    if not isExtraVideoShown():
-        return (R.aliases.battle_pass.Intro(), chapterID)
+    if battlePass.hasExtra() and not (isExtraVideoShown() and isExtraChapterSeen()):
+        return (R.aliases.battle_pass.ChapterChoice(), chapterID)
     if battlePass.isPostProgressionActive():
         if battlePass.hasExtra() and not isUmgExtraChapterSeen():
             return (R.aliases.battle_pass.ChapterChoice(), chapterID)
@@ -34,8 +36,13 @@ def getActualBattlePassIDs(layoutID=R.invalid(), chapterID=0, battlePass=None):
     return (R.aliases.battle_pass.Progression(), battlePass.getCurrentChapterID()) if battlePass.hasActiveChapter() else (R.aliases.battle_pass.ChapterChoice(), chapterID)
 
 
-def showOverlayVideo(url, callbackOnClose=None):
-    showBrowserOverlayView(url, VIEW_ALIAS.BATTLE_PASS_VIDEO_BROWSER, callbackOnClose=callbackOnClose)
+def showOverlayVideo(url, callbackOnClose=None, callbackOnLoad=None):
+    showBrowserOverlayView(url, VIEW_ALIAS.BATTLE_PASS_VIDEO_BROWSER, callbackOnClose=callbackOnClose, callbackOnLoad=callbackOnLoad)
+
+
+def showIntroView(callback=None):
+    from gui.impl.lobby.battle_pass.intro_view import IntroWindow
+    IntroWindow(callback=callback).load()
 
 
 @dependency.replace_none_kwargs(settingsCore=ISettingsCore)
@@ -64,7 +71,7 @@ def setExtraVideoShown(battlePass=None):
 
 @dependency.replace_none_kwargs(settingsCore=ISettingsCore)
 def isIntroShown(settingsCore=None):
-    return True
+    return settingsCore.serverSettings.getBPStorage().get(BattlePassStorageKeys.INTRO_SHOWN)
 
 
 @dependency.replace_none_kwargs(settingsCore=ISettingsCore)

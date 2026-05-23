@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/epic_quest_progress_view.py
+from __future__ import absolute_import
 from gui.Scaleform.daapi.view.battle_results_window import IBattleResultsComponent
 from gui.Scaleform.daapi.view.meta.EpicQuestProgressInfoMeta import EpicQuestProgressInfoMeta
 from gui.shared import g_eventBus, events

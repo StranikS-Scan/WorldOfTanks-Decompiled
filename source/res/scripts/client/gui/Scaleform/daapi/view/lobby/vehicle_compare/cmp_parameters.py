@@ -197,11 +197,11 @@ class _VehCompareParametersData(object):
             for idx, (role, skills) in self.__skillsByTankman.items():
                 for skill in skills:
                     skillRole = tankmen.getSkillRoleType(skill)
-                    if skillRole != role:
-                        bonusRoleSkills = bonusSkillsDict.setdefault(idx, {}).setdefault(skillRole, [])
-                        bonusRoleSkills.append(skill)
-                    majorSkills = majorSkillsDict.setdefault(idx, [])
-                    majorSkills.append(skill)
+                    if skillRole in (role, tankmen.COMMON_SKILL_ROLE_TYPE):
+                        majorSkills = majorSkillsDict.setdefault(idx, [])
+                        majorSkills.append(skill)
+                    bonusRoleSkills = bonusSkillsDict.setdefault(idx, {}).setdefault(skillRole, [])
+                    bonusRoleSkills.append(skill)
 
             if crewLvl == CrewTypes.CURRENT:
                 levelsByIndexes, nativeVehiclesByIndexes = cmp_helpers.getVehCrewInfo(self.__vehicle.intCD)

@@ -1,5 +1,4 @@
 <list.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <A21_T14>
     <id>	0	</id>
     <userString>	#usa_vehicles:T14	</userString>
@@ -1239,7 +1238,6 @@
     </price>
     <tags>	mediumTank HD disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
-    <notInShop>	true	</notInShop>
   </A44_M4A2E4>
   <A45_M6A2E1>
     <id>	205	</id>
@@ -2069,4 +2067,17 @@
     <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
     <level>	11	</level>
   </A195_Gorilla>
+  <A197_Jezevec>
+    <id>	277	</id>
+    <userString>	#usa_vehicles:A197_Jezevec	</userString>
+    <description>	#usa_vehicles:A197_Jezevec_descr	</description>
+    <shortUserString>	#usa_vehicles:A197_Jezevec_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A197_Jezevec_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A197_Jezevec_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_support HD mediumTank3 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals secret testTank	</tags>
+    <level>	9	</level>
+  </A197_Jezevec>
 </list.xml>

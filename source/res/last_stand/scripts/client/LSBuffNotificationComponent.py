@@ -27,11 +27,16 @@ class LSBuffNotificationComponent(DynamicScriptComponent):
 
     @property
     def params(self):
-        return [ (item.key, item.value) for item in self._params ]
+        return [ (item.key, item.value, self.startTime + item.value) for item in self._params ]
+
+    def set_startTime(self, _):
+        if self.startTime > 0.0:
+            self.lsBattleGuiCtrl.applyBuff((self.buffKey, self.params), self.entity.id)
 
     def _onAvatarReady(self):
         super(LSBuffNotificationComponent, self)._onAvatarReady()
-        self.lsBattleGuiCtrl.applyBuff((self.buffKey, self.params), self.entity.id)
+        if self.startTime > 0.0:
+            self.lsBattleGuiCtrl.applyBuff((self.buffKey, self.params), self.entity.id)
 
     def onDestroy(self):
         self.lsBattleGuiCtrl.unApplyBuff((self.buffKey, self.params))

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hof/web_handlers.py
+from __future__ import absolute_import
 from web.web_client_api import webApiCollection, w2capi
 from web.web_client_api.exchange import PersonalExchangeRatesDiscountsWebApi
 from web.web_client_api.shop import ShopWebApi

@@ -51,6 +51,7 @@
     <_37_mm_kan_fm_32>	60	</_37_mm_kan_fm_32>
     <_120mm_akan_L_40B>	300	</_120mm_akan_L_40B>
     <_120mm_Bofors_strvkan_L_40>	301	</_120mm_Bofors_strvkan_L_40>
+    <_105mm_L_7_Gun_Ambassador>	302	</_105mm_L_7_Gun_Ambassador>
     <_105mm_strvkan_L_45_16>	2000	</_105mm_strvkan_L_45_16>
     <_90mm_Bofors_L_53_65>	2001	</_90mm_Bofors_L_53_65>
     <_90mm_kan_m_F_90>	2002	</_90mm_kan_m_F_90>
@@ -1933,6 +1934,64 @@
         </_90mm_sgr_m_F_90>
       </shots>
     </_90mm_kan_m_F_90>
+    <_105mm_L_7_Gun_Ambassador>
+      <userString>	#sweden_vehicles:_105mm_L_7_Gun_Ambassador	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	200000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.38	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0 -15 1 -15	</minPitch>
+        <maxPitch>	0 10 1 10	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	24	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	60	</maxAmmo>
+      <aimingTime>	2.2	</aimingTime>
+      <weight>	2050	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.35	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.18	</turretRotation>
+        <afterShot>	3.5	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_slpprj_m_F_Ambassador>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	1178	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	256 239	</piercingPower>
+        </_105mm_slpprj_m_F_Ambassador>
+        <_105mm_slpsgr_m_F_Ambassador>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	973	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	310 310	</piercingPower>
+        </_105mm_slpsgr_m_F_Ambassador>
+        <_105mm_sgr_m_F_Ambassador>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	973	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	53 53	</piercingPower>
+        </_105mm_sgr_m_F_Ambassador>
+      </shots>
+    </_105mm_L_7_Gun_Ambassador>
     <_105mm_kan_m_44_sav>
       <userString>	#sweden_vehicles:_105mm_kan_m_44_sav	</userString>
       <tags></tags>

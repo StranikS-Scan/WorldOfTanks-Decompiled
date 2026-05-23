@@ -16,7 +16,7 @@ from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.daapi.view.lobby.veh_post_progression.veh_post_progression_vehicle import g_postProgressionVehicle
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_vehicle import g_cmpConfiguratorVehicle
 from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift
-from gui.battle_pass.rewards_sort import getRewardsComparator
+from gui.battle_pass.rewards_sort import getItemsSortKey
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.personal_missions_30.common.enums import ParamTooltipType
@@ -1411,7 +1411,7 @@ class BattlePassGiftTokenContext(ToolTipContext):
                     result.append(gift.bonus.displayedItem.getXP())
             else:
                 shortOfferName = offerToken.split(':')[2]
-                gifts = sorted(offer.getAllGifts(), cmp=getRewardsComparator(shortOfferName), key=lambda item: (item.bonus.getLightViewModelData()[0],))
+                gifts = sorted(offer.getAllGifts(), key=lambda item: (item.bonus.getLightViewModelData()[0], getItemsSortKey(shortOfferName)))
                 for gift in gifts:
                     result.append(gift.title)
 

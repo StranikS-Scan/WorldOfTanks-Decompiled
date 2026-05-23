@@ -7899,6 +7899,8 @@ class VEHICLE_CUSTOMIZATION(object):
     SPECIAL_STYLE_PUB_WEST_TANKFEST_2026 = '#vehicle_customization:special_style/pub_west_tankfest_2026'
     SPECIAL_STYLE_PUB_WEST_TANKFEST_2026_DESC = '#vehicle_customization:special_style/pub_west_tankfest_2026_desc'
     SPECIAL_STYLE_PUB_WEST_TANKFEST_2026_DESC_LONG = '#vehicle_customization:special_style/pub_west_tankfest_2026_desc/long'
+    SPECIAL_STYLE_GB142_FV230_CANOPENER_KS_3DST = '#vehicle_customization:special_style/GB142_FV230_Canopener_KS_3Dst'
+    SPECIAL_STYLE_GB142_FV230_CANOPENER_KS_3DST_DESC_LONG = '#vehicle_customization:special_style/GB142_FV230_Canopener_KS_3Dst_desc/long'
     SPECIAL_STYLE_BP2026_MARCH_1 = '#vehicle_customization:special_style/bp2026_march_1'
     SPECIAL_STYLE_BP2026_MARCH_1_DESC = '#vehicle_customization:special_style/bp2026_march_1_desc'
     SPECIAL_STYLE_BP2026_MARCH_1_DESC_LONG = '#vehicle_customization:special_style/bp2026_march_1_desc/long'
@@ -10565,6 +10567,13 @@ class VEHICLE_CUSTOMIZATION(object):
     ATTACHMENT_HEAVY_ORDNANCE_CUS_113_HISTORICAL_M129_DESCRIPTION = '#vehicle_customization:attachment/heavy_ordnance/Cus_113_Historical_M129/description'
     ATTACHMENT_HEAVY_ORDNANCE_CUS_114_HISTORICAL_MK18 = '#vehicle_customization:attachment/heavy_ordnance/Cus_114_Historical_MK18'
     ATTACHMENT_HEAVY_ORDNANCE_CUS_115_HISTORICAL_AIRCRAFTCANNON = '#vehicle_customization:attachment/heavy_ordnance/Cus_115_Historical_AircraftCannon'
+    ATTACHMENT_ALTERED_ATTACHMENTS = '#vehicle_customization:attachment/altered_attachments'
+    ATTACHMENT_ALTERED_ATTACHMENTS_CUS_214_LS_OPTICALDEVICE = '#vehicle_customization:attachment/altered_attachments/Cus_214_LS_OpticalDevice'
+    ATTACHMENT_ALTERED_ATTACHMENTS_CUS_215_LS_MACHINEGUNN = '#vehicle_customization:attachment/altered_attachments/Cus_215_LS_Machinegunn'
+    ATTACHMENT_ALTERED_ATTACHMENTS_CUS_216_LS_GASBALOONS = '#vehicle_customization:attachment/altered_attachments/Cus_216_LS_GasBaloons'
+    ATTACHMENT_ALTERED_ATTACHMENTS_CUS_216_LS_GASBALOONS_DESCRIPTION = '#vehicle_customization:attachment/altered_attachments/Cus_216_LS_GasBaloons/description'
+    ATTACHMENT_ALTERED_ATTACHMENTS_CUS_217_LS_BARRELS = '#vehicle_customization:attachment/altered_attachments/Cus_217_LS_Barrels'
+    ATTACHMENT_ALTERED_ATTACHMENTS_CUS_218_LS_WINCH = '#vehicle_customization:attachment/altered_attachments/Cus_218_LS_Winch'
     BONUS_NAME_ENUM = (BONUS_NAME_CAMOUFLAGE, BONUS_NAME_EXTENDED_CAMOUFLAGE)
     BONUS_NAME_EXTENDED_ENUM = (BONUS_NAME_EXTENDED_CAMOUFLAGE,)
     SEASON_SELECTION_ENUM = (SEASON_SELECTION_SUMMER, SEASON_SELECTION_WINTER, SEASON_SELECTION_DESERT, SEASON_SELECTION_SELECTED_SUMMER, SEASON_SELECTION_SELECTED_WINTER, SEASON_SELECTION_SELECTED_DESERT, SEASON_SELECTION_TOOLTIP, SEASON_SELECTION_MAPNAME_SUMMER, SEASON_SELECTION_MAPNAME_WINTER, SEASON_SELECTION_MAPNAME_DESERT, SEASON_SELECTION_MAPNAME_ALL)

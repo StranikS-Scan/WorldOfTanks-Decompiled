@@ -144,6 +144,7 @@
     <_105mm_AT_Gun_L7A1_CFE_J>	158	</_105mm_AT_Gun_L7A1_CFE_J>
     <_128_mm_Gun_L_50>	159	</_128_mm_Gun_L_50>
     <_110mm_HV_Gun>	160	</_110mm_HV_Gun>
+    <Twin_120_mm_Gun_L1_MBC_CFE_G>	161	</Twin_120_mm_Gun_L1_MBC_CFE_G>
     <Q_F_25_Pr_Gun_How_Bishop>	2000	</Q_F_25_Pr_Gun_How_Bishop>
     <Q_F_4_5_in_Howitzer_Bishop>	2001	</Q_F_4_5_in_Howitzer_Bishop>
     <Q_F_25_Pr_Gun_How_304>	2002	</Q_F_25_Pr_Gun_How_304>
@@ -9475,6 +9476,58 @@
         </_120mm_HE_L1_MBC>
       </shots>
     </Twin_120_mm_Gun_L1_MBC>
+    <Twin_120_mm_Gun_L1_MBC_CFE_G>
+      <userString>	#gb_vehicles:Twin_120_mm_Gun_L1_MBC_CFE_G	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	300000	</price>
+      <notInShop>	True	</notInShop>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	twingun_reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0 10 0.4 10 0.42 1 0.58 1 0.6 10 1 10	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	10	</reloadTime>
+      <maxAmmo>	80	</maxAmmo>
+      <aimingTime>	1.8	</aimingTime>
+      <weight>	4850	</weight>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	110	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.180	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.3	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_120mm_AP_L1_MBC_CFE_G>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	1050	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	258 240	</piercingPower>
+        </_120mm_AP_L1_MBC_CFE_G>
+        <_120mm_APDS_L1_MBC_CFE_G>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1280	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	318 296	</piercingPower>
+        </_120mm_APDS_L1_MBC_CFE_G>
+        <_120mm_HE_L1_MBC_CFE_G>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	1050	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	60 60	</piercingPower>
+        </_120mm_HE_L1_MBC_CFE_G>
+      </shots>
+    </Twin_120_mm_Gun_L1_MBC_CFE_G>
     <Twin_4_5_in_Gun_MBC>
       <userString>	#gb_vehicles:Twin_4_5_in_Gun_MBC	</userString>
       <tags></tags>

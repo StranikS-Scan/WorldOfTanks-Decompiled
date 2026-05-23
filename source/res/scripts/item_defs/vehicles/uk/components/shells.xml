@@ -8017,6 +8017,63 @@
       </damage>
     </armorSpalls>
   </_120mm_HE_L1_MBC>
+  <_120mm_AP_L1_MBC_CFE_G>
+    <id>	347	</id>
+    <userString>	#gb_vehicles:_120mm_AP_L1_MBC_CFE_G	</userString>
+    <icon>	ap	</icon>
+    <price>	1084	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_120mm_AP_L1_MBC_CFE_G>
+  <_120mm_APDS_L1_MBC_CFE_G>
+    <id>	348	</id>
+    <userString>	#gb_vehicles:_120mm_APDS_L1_MBC_CFE_G	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_120mm_APDS_L1_MBC_CFE_G>
+  <_120mm_HE_L1_MBC_CFE_G>
+    <id>	349	</id>
+    <userString>	#gb_vehicles:_120mm_HE_L1_MBC_CFE_G	</userString>
+    <icon>	he_modern	</icon>
+    <price>	624	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	120	</caliber>
+    <explosionRadius>	2.42	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	520	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.42	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	260	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_120mm_HE_L1_MBC_CFE_G>
   <_4_5_in_AP_MBC>
     <id>	311	</id>
     <userString>	#gb_vehicles:_4_5_in_AP_MBC	</userString>

@@ -2684,4 +2684,51 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB142_FV230_Canopener_CFE_G	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1304	</id>
+      <texture>	gui/maps/vehicles/styles/GB142_FV230_Canopener_KS_3Dst.png	</texture>
+      <modelsSet>	GB142_FV230_Canopener_KS_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/GB142_FV230_Canopener_KS_3Dst	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/GB142_FV230_Canopener_KS_3Dst_desc/long	</longDescriptionSpecial>
+      <tags>	lockedOnVehicle c11n3D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	177	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
+            </item>
+          </attachments>
+          <insignias>
+            <item>
+              <id>	120	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </uk.xml>

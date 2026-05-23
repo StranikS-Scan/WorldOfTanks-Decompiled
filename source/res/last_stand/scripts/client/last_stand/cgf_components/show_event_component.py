@@ -7,6 +7,7 @@ from cgf_script.component_meta_class import registerComponent
 from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery, registerRule, Rule, registerManager
 from gui.prb_control.entities.listener import IGlobalListener
 from helpers import dependency
+from skeletons.gui.game_control import IHangarLoadingController
 from last_stand.skeletons.ls_controller import ILSController
 from last_stand.skeletons.ls_sound_controller import ILSSoundController
 
@@ -33,6 +34,7 @@ class LSShowEventRewardComponent(object):
 
 class LSShowEventComponentManager(CGF.ComponentManager, IGlobalListener):
     lsCtrl = dependency.descriptor(ILSController)
+    hangarLoadingController = dependency.descriptor(IHangarLoadingController)
 
     def __init__(self):
         super(LSShowEventComponentManager, self).__init__()
@@ -43,7 +45,8 @@ class LSShowEventComponentManager(CGF.ComponentManager, IGlobalListener):
         return
 
     def activate(self):
-        self.lsCtrl.onSettingsUpdate += self._updateVisibility
+        self.lsCtrl.onSettingsUpdate += self._onSettingsUpdate
+        self.hangarLoadingController.onHangarLoadedAfterLogin += self._updateVisibility
         self._updateVisibility()
 
     def deactivate(self):
@@ -51,7 +54,8 @@ class LSShowEventComponentManager(CGF.ComponentManager, IGlobalListener):
         self._rewardGoIDs.clear()
         if self.prbDispatcher and self.prbDispatcher.hasListener(self):
             self.stopGlobalListening()
-        self.lsCtrl.onSettingsUpdate -= self._updateVisibility
+        self.lsCtrl.onSettingsUpdate -= self._onSettingsUpdate
+        self.hangarLoadingController.onHangarLoadedAfterLogin -= self._updateVisibility
 
     @onAddedQuery(CGF.GameObject, LSShowEventComponent)
     def onShowEventAdded(self, go, _):
@@ -92,20 +96,24 @@ class LSShowEventComponentManager(CGF.ComponentManager, IGlobalListener):
             eventGameObject.createComponent(SelectionComponent)
         return
 
-    def _updateVisibility(self):
+    def _onSettingsUpdate(self):
         config3dPointVisible = self.lsCtrl.isHangar3dPointVisible()
         config3dPointRewardVisible = self.lsCtrl.isHangar3dPointRewardVisible()
         if self._is3dPointVisible == config3dPointVisible and self._is3dPointRewardVisible == config3dPointRewardVisible:
             return
+        self._updateVisibility()
+        self._is3dPointVisible = config3dPointVisible
+        self._is3dPointRewardVisible = config3dPointRewardVisible
+
+    def _updateVisibility(self):
+        config3dPointVisible = self.lsCtrl.isHangar3dPointVisible()
+        config3dPointRewardVisible = self.lsCtrl.isHangar3dPointRewardVisible()
         for go in self._allGOs:
             if not go.isValid():
                 continue
             if not config3dPointVisible or go.id in self._rewardGoIDs and not config3dPointRewardVisible:
                 go.deactivate()
             go.activate()
-
-        self._is3dPointVisible = config3dPointVisible
-        self._is3dPointRewardVisible = config3dPointRewardVisible
 
 
 @registerRule

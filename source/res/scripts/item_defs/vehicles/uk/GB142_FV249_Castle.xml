@@ -11,8 +11,8 @@
   <postProgressionTree>	role_HT_support	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	40	</forward>
-    <backward>	20	</backward>
+    <forward>	36	</forward>
+    <backward>	16	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.048	</moving>
@@ -925,8 +925,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	28	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.16	</vehicleMovement>
-        <vehicleRotation>	0.16	</vehicleRotation>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -2177,7 +2177,7 @@
             <preChargeIndication>	0.25	</preChargeIndication>
           </dualGun>
           <dualAccuracy>
-            <afterShotDispersionRadius>	0.42	</afterShotDispersionRadius>
+            <afterShotDispersionRadius>	0.44	</afterShotDispersionRadius>
             <coolingDelay>	18.0	</coolingDelay>
           </dualAccuracy>
           <customizationSlots>
@@ -2740,7 +2740,7 @@
       <engines>
         <Rolls_Royce_Griffon_IIT_GB142>
           <smplEnginePower>	940	</smplEnginePower>
-          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	36	</smplFwMaxSpeed>
         </Rolls_Royce_Griffon_IIT_GB142>
       </engines>
       <chassis>

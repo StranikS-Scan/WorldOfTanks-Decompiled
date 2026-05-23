@@ -42,7 +42,7 @@ class PlayerLoadingTransition(StringEventTransition):
                     if image:
                         nextSlideDuration = max(source.timeLeft, 0)
                 if image is not None:
-                    slide = LocalSlideModel(imageRelativePath=image.imageRelativePath, minShowTimeSec=nextSlideDuration, localizationText=image.localizationText, descriptionText=image.descriptionText, vfx=vfx)
+                    slide = LocalSlideModel(imageRelativePath=image.imageRelativePath, minShowTimeSec=nextSlideDuration, localizationText=image.localizationText, descriptionText=image.descriptionText, vfx=vfx, additionalImage=image.additionalImage, sound=image.sound)
                     targetList = self.getTargets()
                     for target in targetList:
                         if isinstance(target, PlayerLoadingState):

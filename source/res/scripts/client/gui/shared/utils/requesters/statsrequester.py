@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/StatsRequester.py
+from __future__ import absolute_import
 import json
 from collections import namedtuple
 import typing
+from future.utils import iteritems
 import BigWorld
 from account_helpers.premium_info import PremiumInfo
 from constants import SPA_ATTRS, MIN_VEHICLE_LEVEL
@@ -106,15 +108,15 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
 
     @property
     def vehiclesXPs(self):
-        return NationalGroupDataAccumulator(self.getCacheValue('vehTypeXP', dict()))
+        return NationalGroupDataAccumulator(self.getCacheValue('vehTypeXP', {}))
 
     @property
     def multipliedVehicles(self):
-        return self.getCacheValue('multipliedXPVehs', list())
+        return self.getCacheValue('multipliedXPVehs', [])
 
     @property
     def prestigeMilestonesAchieved(self):
-        return self.getCacheValue('prestigeMilestonesAchieved', dict())
+        return self.getCacheValue('prestigeMilestonesAchieved', {})
 
     @property
     def applyAdditionalXPCount(self):
@@ -140,11 +142,11 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
 
     @property
     def vehicleTypeLocks(self):
-        return self.getCacheValue('vehTypeLocks', dict())
+        return self.getCacheValue('vehTypeLocks', {})
 
     @property
     def globalVehicleLocks(self):
-        return self.getCacheValue('globalVehicleLocks', dict())
+        return self.getCacheValue('globalVehicleLocks', {})
 
     @property
     def attributes(self):
@@ -285,7 +287,7 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
         return result
 
     def getTelecomBundleId(self):
-        for key, attrValue in self.SPA.iteritems():
+        for key, attrValue in iteritems(self.SPA):
             if key.startswith(SPA_ATTRS.RSS):
                 value = json.loads(attrValue)
                 return value['bundleID']
@@ -345,7 +347,7 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
         extraXPInfo = result.get(_ADDITIONAL_XP_DATA_KEY, {})
         if extraXPInfo:
             result[_ADDITIONAL_XP_DATA_KEY] = processedXP = {}
-            for vehicleID, XPData in extraXPInfo.iteritems():
+            for vehicleID, XPData in iteritems(extraXPInfo):
                 if XPData:
                     arenaUniqueID = XPData[0]
                     processedXP[arenaUniqueID] = _ControllableXPData(vehicleID, *XPData[1:])

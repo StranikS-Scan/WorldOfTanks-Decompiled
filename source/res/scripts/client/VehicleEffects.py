@@ -147,11 +147,11 @@ class DamageFromShotDecoder(object):
     @classmethod
     def getPartIndexByNetworkID(cls, spaceID, networkID):
         gameObject = cgf_network.getGameObjectByNetworkID(spaceID, networkID)
-        if not gameObject.isValid():
+        if not gameObject.valid:
             LOG_DEBUG_DEV("[DamageFromShotDecoder] Can't find game object for networkID {}".format(networkID))
             return None
         else:
-            linker = gameObject.findComponentByType(Physics.DynamicCollisionLinker)
+            linker = gameObject.findWrite(Physics.DynamicCollisionLinker)
             if linker and linker.collisionPartIndexes:
                 return linker.collisionPartIndexes[cls._PRIMARY_COLLISION_INDEX]
             LOG_DEBUG_DEV("[DamageFromShotDecoder] Can't find collision for networkID {}".format(networkID))

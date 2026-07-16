@@ -40,7 +40,9 @@ from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE, makePathToIcon
 from personal_missions import PM_BRANCH
 from pet_system_common import pet_constants
+from shared_utils import first
 from skeletons.gui.battle_matters import IBattleMattersController
+from skeletons.gui.challenges import IChallengesController
 from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IHangarSpaceSwitchController, ILootBoxSystemController, IMapboxController, ISeniorityAwardsController
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.impl import IGuiLoader
@@ -1543,3 +1545,94 @@ class PetSystemDecorator(LockButtonMessageDecorator):
     def __onServerSettingsChange(self, diff):
         if pet_constants.PETS_SYSTEM_CONFIG in diff:
             self._updateButtonsState()
+
+
+class ChallengesStartDecorator(MessageDecorator):
+    __challenges = dependency.descriptor(IChallengesController)
+
+    def __init__(self, entityID, notificationType, savedData, model, template, priority):
+        self.__notificationType = notificationType
+        entity = g_settings.msgTemplates.format(template, data={'linkageData': savedData})
+        settings = NotificationGuiSettings(isNotify=True, priorityLevel=priority, groupID=self.getGroup())
+        super(ChallengesStartDecorator, self).__init__(entityID, entity=entity, settings=settings, model=model)
+
+    def getType(self):
+        return self.__notificationType
+
+    def getGroup(self):
+        return NotificationGroup.INFO
+
+    def getSavedData(self):
+        return self._entity.get('linkageData')
+
+    def isShouldCountOnlyOnce(self):
+        return True
+
+    def decrementCounterOnHidden(self):
+        return True
+
+    def _make(self, entity=None, settings=None):
+        self.__updateEntityButtons()
+        super(ChallengesStartDecorator, self)._make(entity, settings)
+
+    def _getButtonState(self):
+        state = NOTIFICATION_BUTTON_STATE.VISIBLE
+        if self.__challenges.isEnabled:
+            state |= NOTIFICATION_BUTTON_STATE.ENABLED
+        return state
+
+    def __updateEntityButtons(self):
+        if self._entity is None:
+            return
+        else:
+            buttonsLayout = self._entity.get('buttonsLayout')
+            if not buttonsLayout:
+                return
+            buttonsStates = self._entity.get('buttonsStates')
+            state = self._getButtonState()
+            buttonsStates['submit'] = state
+            return
+
+
+class ChallengesReminderDecorator(MessageDecorator):
+    __challenges = dependency.descriptor(IChallengesController)
+    ENTITY_ID = 0
+
+    def __init__(self, model):
+        super(ChallengesReminderDecorator, self).__init__(self.ENTITY_ID, self.__makeEntity(), self.__makeSettings(), model)
+
+    def getSavedData(self):
+        return self._entity.get('savedData', {})
+
+    def _getEvents(self):
+        return ((self.__challenges.onChallengesSettingsChanged, self.__update),)
+
+    def _make(self, formatted=None, settings=None):
+        self.__updateEntityButtons()
+        super(ChallengesReminderDecorator, self)._make(formatted, settings)
+
+    def __makeEntity(self):
+        return g_settings.msgTemplates.format('ChallengesReminderSysMessage')
+
+    def __makeSettings(self):
+        return NotificationGuiSettings(isNotify=True, priorityLevel=g_settings.msgTemplates.priority('ChallengesReminderSysMessage'))
+
+    def __updateEntityButtons(self):
+        if self._entity is None:
+            return
+        else:
+            state = NOTIFICATION_BUTTON_STATE.VISIBLE
+            expiringChallenge = first(self.__challenges.getSoonEndingChallenges())
+            if expiringChallenge is not None and expiringChallenge.isExpiringSoon:
+                state |= NOTIFICATION_BUTTON_STATE.ENABLED
+            self._entity['buttonsStates'] = {'submit': state}
+            return
+
+    def __update(self, *_):
+        self.__updateEntityButtons()
+        if self._model is not None:
+            self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
+        return
+
+    def getType(self):
+        return NOTIFICATION_TYPE.CHALLENGES_REMINDER

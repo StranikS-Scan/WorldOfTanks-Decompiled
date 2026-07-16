@@ -104,7 +104,7 @@ def _CSISResponseParser(out, requestedIDs):
 
 
 def _createDefaultCSISResponse(requestedIDs):
-    return dict(((reqID, HOST_AVAILABILITY.UNKNOWN) for reqID in requestedIDs))
+    return {reqID:HOST_AVAILABILITY.UNKNOWN for reqID in requestedIDs}
 
 
 class _CSISRequestWorker(threading.Thread):
@@ -408,7 +408,7 @@ class _PreDefinedHostList(object):
                     areaID = subSec.readString('game_area_id')
                     if not areaID:
                         areaID = None
-                    app = self._makeHostItem(name, shortName, host, urlToken=subSec.readString('url_token'), urlIterator=urls if len(urls) > 1 else None, keyPath=keyPath, areaID=areaID, peripheryID=subSec.readInt('periphery_id', 0))
+                    app = self._makeHostItem(name, shortName, host, urlToken=subSec.readString('url_token'), urlIterator=urls if len(urls) > 1 else None, keyPath=keyPath, areaID=areaID, peripheryID=subSec.readInt('periphery_id', constants.STANDALONE_CLUSTER_ID))
                     idx = len(self._hosts)
                     url = app.url
                     if url in self._urlMap:
@@ -520,7 +520,7 @@ class _PreDefinedHostList(object):
             return self._hosts[index]
         else:
             if useRoaming:
-                roamingHosts = dict(((host.peripheryID, host) for host in self.roamingHosts()))
+                roamingHosts = {host.peripheryID:host for host in self.roamingHosts()}
                 if peripheryID in roamingHosts:
                     return roamingHosts[peripheryID]
             return None

@@ -4,9 +4,9 @@ import logging
 import math
 import typing
 import BigWorld
+import Math
 from Math import Vector2
 from helpers.CallbackDelayer import CallbackDelayer
-from gui.battle_control.matrix_factory import makeVehicleEntityMP
 if typing.TYPE_CHECKING:
     from BigWorld import PyTerrainSelectedArea
 g_logger = logging.getLogger(__name__)
@@ -134,7 +134,9 @@ class TerrainCircleComponent(CallbackDelayer):
 
     def __setMotor(self):
         vehicle = BigWorld.entity(self.__vehicleID)
-        self.__motor = BigWorld.Servo(makeVehicleEntityMP(vehicle))
+        provider = Math.WGTranslationOnlyMP()
+        provider.source = vehicle.matrix
+        self.__motor = BigWorld.Servo(provider)
         self.__model.addMotor(self.__motor)
 
     def __removeMotor(self):

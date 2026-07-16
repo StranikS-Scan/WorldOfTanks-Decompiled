@@ -7,12 +7,12 @@ from gui.prb_control.prb_getters import getPrebattleSettings
 from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.shared.utils.decorators import ReprInjector
 
-@ReprInjector.withParent(('getID', 'prbID'), ('getPrbTypeName', 'type'), ('getWaitingID', 'waitingID'))
+@ReprInjector.withParent(('getID', 'prbID'), ('getPrbTypeName', 'type'), ('getPrbClusterId', 'prbClusterID'), ('getWaitingID', 'waitingID'))
 class JoinBattleSessionCtx(JoinLegacyCtx):
     __slots__ = ()
 
-    def __init__(self, prbID, prbType, waitingID='', flags=FUNCTIONAL_FLAG.UNDEFINED):
-        super(JoinBattleSessionCtx, self).__init__(prbID, prbType, waitingID=waitingID, flags=flags)
+    def __init__(self, prbID, prbType, prbClusterID, waitingID='', flags=FUNCTIONAL_FLAG.UNDEFINED):
+        super(JoinBattleSessionCtx, self).__init__(prbID, prbType, prbClusterID, waitingID=waitingID, flags=flags)
 
 
 class BattleSessionSetPlayerStateCtx(SetPlayerStateCtx):

@@ -10,21 +10,24 @@ from events_containers.components.life_cycle import createComponentLifeCycleEven
 from events_handler import eventHandler, EventsQuery
 from PlayerEvents import g_playerEvents
 from shared_utils import skipInEditor
-from vehicles.components.component_wrappers import ifPlayerVehicle
+from vehicle_appearance.constants import AppearanceState
+from vehicles.components.component_wrappers import ifAppearanceReady, ifPlayerVehicle
 from vehicles.entities.vehicle_events import IVehicleEventsListenerLogic
 if typing.TYPE_CHECKING:
     from Avatar import PlayerAvatar
     from events_containers.components.life_cycle import IComponentLifeCycleEvents
     from Vehicle import Vehicle
+    from vehicle_systems.CompoundAppearance import CompoundAppearance
 _logger = logging.getLogger(__name__)
 
 class VehicleDynamicComponent(ReplicableDynamicScriptComponent, ILifeCycleComponent, EventsQuery, ContainersListener, IVehicleEventsListenerLogic):
     EVENTS_PROPERTY_NAME = 'events'
+    APPEARANCE_READY_STATE = AppearanceState.CONSTRUCTED
 
     @skipInEditor
     def __init__(self):
         super(VehicleDynamicComponent, self).__init__()
-        self.__appearanceInited = self.__componentDestroyed = False
+        self.__appearanceReady = self.__componentDestroyed = False
         self.__lifeCycleEvents = createComponentLifeCycleEvents(self)
         self.lateSubscribeTo(self._getEvents(self.entity))
 
@@ -33,7 +36,7 @@ class VehicleDynamicComponent(ReplicableDynamicScriptComponent, ILifeCycleCompon
         return self.__lifeCycleEvents
 
     def isAppearanceReady(self):
-        return self.__appearanceInited and self.__isAppearanceReady()
+        return self.__appearanceReady
 
     def isComponentDestroyed(self):
         return self.__componentDestroyed
@@ -48,7 +51,7 @@ class VehicleDynamicComponent(ReplicableDynamicScriptComponent, ILifeCycleCompon
         if self.__componentDestroyed:
             return
         self._unsubscribeFromEvents(self._getEvents(self.entity))
-        self.__appearanceInited = False
+        self.__appearanceReady = False
         g_playerEvents.onAvatarReady -= self.__onAvatarReady
         self.__componentDestroyed = True
         self.__lifeCycleEvents.destroy()
@@ -58,16 +61,24 @@ class VehicleDynamicComponent(ReplicableDynamicScriptComponent, ILifeCycleCompon
 
     @eventHandler
     def onAppearanceReady(self):
-        if self.__appearanceInited:
-            return
-        self._onAppearanceReady()
-        self._onComponentAppearanceUpdate()
-        self.__appearanceInited = True
+        if self.__appearanceReadyState() == AppearanceState.CONSTRUCTED:
+            self.__processAppearanceReady()
 
     @eventHandler
+    def onAppearanceComponentsReady(self):
+        if self.__appearanceReadyState() == AppearanceState.COMPONENTS_CREATED:
+            self.__processAppearanceReady()
+
+    @eventHandler
+    @ifAppearanceReady
+    def onAppearanceReset(self):
+        self._onAppearanceReset()
+        self.__lifeCycleEvents.processAppearanceReset()
+        self.__appearanceReady = False
+
+    @eventHandler
+    @ifAppearanceReady
     def onSiegeStateUpdated(self, newState, timeToNextMode):
-        if not self.__appearanceInited:
-            return
         self._collectComponentParams(self.entity.typeDescriptor)
         self.__lifeCycleEvents.processParamsCollected()
         self._updateComponentAvatar()
@@ -79,6 +90,9 @@ class VehicleDynamicComponent(ReplicableDynamicScriptComponent, ILifeCycleCompon
     def _onAppearanceReady(self):
         self._collectComponentParams(self.entity.typeDescriptor)
         self.__lifeCycleEvents.processParamsCollected()
+
+    def _onAppearanceReset(self):
+        pass
 
     def _onAvatarReady(self, player):
         pass
@@ -96,9 +110,9 @@ class VehicleDynamicComponent(ReplicableDynamicScriptComponent, ILifeCycleCompon
     def _updateComponentAvatar(self, player=None):
         self._onComponentAvatarUpdate(player)
 
+    @ifAppearanceReady
     def _updateComponentAppearance(self, **kwargs):
-        if self.__appearanceInited and self.__isAppearanceReady():
-            self._onComponentAppearanceUpdate(**kwargs)
+        self._onComponentAppearanceUpdate(**kwargs)
 
     def __initComponentAvatar(self):
         if self.__isAvatarReady():
@@ -108,24 +122,29 @@ class VehicleDynamicComponent(ReplicableDynamicScriptComponent, ILifeCycleCompon
 
     def __initComponentAppearance(self):
         if self.__isAppearanceReady():
-            self.onAppearanceReady()
+            self.__processAppearanceReady()
 
     def __isAvatarReady(self, player=None):
         player = player or BigWorld.player()
         return player is not None and player.userSeesWorld()
 
     def __isAppearanceReady(self):
-        typeDescriptor = self.entity.typeDescriptor
-        if typeDescriptor is None or typeDescriptor.type.compactDescr != self.vehTypeCD:
-            return False
-        else:
-            player = BigWorld.player()
-            if player is None or player.isDisableRespawnMode:
-                return False
-            appearance = self.entity.appearance
-            return appearance is not None and appearance.isConstructed and not appearance.isDestroyed
+        appearance = self.entity.appearance
+        return appearance is not None and appearance.state >= self.__appearanceReadyState() and appearance.isActualVehicle(self.entity)
 
     @ifPlayerVehicle
     def __onAvatarReady(self, player=None):
         self._onAvatarReady(player)
         self._onComponentAvatarUpdate(player)
+
+    def __processAppearanceReady(self):
+        if self.__appearanceReady:
+            return
+        self._onAppearanceReady()
+        self.__appearanceReady = True
+        self.__lifeCycleEvents.processAppearanceReady()
+        self._onComponentAppearanceUpdate()
+
+    @classmethod
+    def __appearanceReadyState(cls):
+        return cls.APPEARANCE_READY_STATE

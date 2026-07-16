@@ -7,7 +7,7 @@ from constants import PREBATTLE_TYPE, QUEUE_TYPE, BATTLE_MODE_VEHICLE_TAGS, BATT
 from gui.impl.gen import R
 from gui.impl.lobby.platoon.view.platoon_members_view import MembersWindow
 from gui.impl.lobby.platoon.view.platoon_members_view import SquadMembersView, EventMembersView, EpicMembersView, BattleRoyaleMembersView, MapboxMembersView
-from gui.impl.lobby.platoon.view.platoon_search_view import SearchWindow
+from gui.impl.lobby.platoon.view.platoon_search_view import SearchWindow, SearchView
 from gui.impl.lobby.platoon.view.platoon_selection_view import SelectionWindow
 from gui.impl.lobby.platoon.view.platoon_welcome_view import WelcomeView
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
@@ -54,6 +54,8 @@ PRB_TYPE_TO_WELCOME_VIEW_CONTENT_FACTORY = {PREBATTLE_TYPE.SQUAD: WelcomeView,
  PREBATTLE_TYPE.EPIC: WelcomeView,
  PREBATTLE_TYPE.BATTLE_ROYALE: WelcomeView,
  PREBATTLE_TYPE.MAPBOX: WelcomeView}
+PRB_TYPE_TO_SEARCH_VIEW_CONTENT_FACTORY = {PREBATTLE_TYPE.SQUAD: SearchView,
+ PREBATTLE_TYPE.EPIC: SearchView}
 RANDOM_VEHICLE_CRITERIA = ~(REQ_CRITERIA.VEHICLE.HAS_ANY_TAG(BATTLE_MODE_VEHICLE_TAGS) ^ REQ_CRITERIA.VEHICLE.MAPS_TRAINING)
 PREBATTLE_TYPE_TO_VEH_CRITERIA = {PREBATTLE_TYPE.SQUAD: RANDOM_VEHICLE_CRITERIA,
  PREBATTLE_TYPE.EPIC: ~REQ_CRITERIA.VEHICLE.HAS_ANY_TAG(BATTLE_MODE_VEH_TAGS_EXCEPT_EPIC),
@@ -75,6 +77,14 @@ def addPlatoonWelcomeViewByPrbType(prbType, welcomeView, personality):
         raise SoftException('PRB_TYPE_TO_WELCOME_VIEW_CONTENT_FACTORY already has pre battle type:{prb}. Personality: {p}'.format(prb=prbType, p=personality))
     PRB_TYPE_TO_WELCOME_VIEW_CONTENT_FACTORY.update({prbType: welcomeView})
     msg = 'prbType:{prb} was added to PRB_TYPE_TO_WELCOME_VIEW_CONTENT_FACTORY. Personality: {p}'.format(prb=prbType, p=personality)
+    logging.debug(msg)
+
+
+def addPlatoonSearchViewByPrbType(prbType, searchView, personality):
+    if prbType in PRB_TYPE_TO_SEARCH_VIEW_CONTENT_FACTORY:
+        raise SoftException('PRB_TYPE_TO_SEARCH_VIEW_CONTENT_FACTORY already has pre battle type:{prb}. Personality: {p}'.format(prb=prbType, p=personality))
+    PRB_TYPE_TO_SEARCH_VIEW_CONTENT_FACTORY.update({prbType: searchView})
+    msg = 'prbType:{prb} was added to PRB_TYPE_TO_SEARCH_VIEW_CONTENT_FACTORY. Personality: {p}'.format(prb=prbType, p=personality)
     logging.debug(msg)
 
 

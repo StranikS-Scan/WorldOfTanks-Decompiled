@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/graphics.py
+from __future__ import absolute_import, division
 import math
+from builtins import range
 from collections import namedtuple
+from past.utils import old_div
 import BigWorld
 from shared_utils import CONST_CONTAINER
 MIN_SCREEN_WIDTH = 1280
@@ -142,13 +145,13 @@ def getResolution():
 def getInterfaceScalesList(size, powerOfTwo=True):
     result = [SCALE_PREFIX[0]]
     if powerOfTwo:
-        scale = max(min(int(math.log(max(size[0] / getResolution().width, 1.0), 2)), int(math.log(max(size[1] / getResolution().height, 1.0), 2))), 0)
-        for i in xrange(scale + 1):
+        scale = max(min(int(math.log(max(old_div(size[0], getResolution().width), 1.0), 2)), int(math.log(max(old_div(size[1], getResolution().height), 1.0), 2))), 0)
+        for i in range(scale + 1):
             result.append(SCALE_PREFIX[1] % 2 ** i)
 
     else:
-        scale = min(int(size[0] / MIN_SCREEN_WIDTH), int(size[1] / MIN_SCREEN_HEIGHT))
-        for i in xrange(1, scale):
+        scale = min(int(old_div(size[0], MIN_SCREEN_WIDTH)), int(old_div(size[1], MIN_SCREEN_HEIGHT)))
+        for i in range(1, scale):
             result.append(SCALE_PREFIX[1] % i)
 
     return result

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/contexts/perks_context.py
+from __future__ import absolute_import
 import weakref
+from future.utils import lzip
 from VSPlanEvents import OnVehicleEquipmentActivated, OnInnerDeviceWasCrit, OnVehicleTotalDamageDealtIncrease, OnVehicleAssistIncrease, OnVehicleInRange, OnVehicleShotDamagedEnemyVehicle, OnVehicleRadioDistanceChange, OnWitnessEnemyDamaged, OnTankmanStatusChanged, OnVehicleBlockDamage
 from items.components.perks_constants import PerkState
 from visual_script.slot_types import SLOT_TYPE
@@ -45,15 +47,15 @@ class PerkContext(VScriptContext):
     OnVehicleOnTargetCrit = vse_forward_event('OnVehicleOnTargetCrit', (), display_name='OnVehicleOnTargetCrit', description='On vehicle on target crit')
     OnArenaOnBattleStart = vse_forward_event('OnArenaOnBattleStart', (), display_name='OnArenaOnBattleStart', description='On battle start')
     OnNoDamageShot = vse_forward_event('OnNoDamageShot', (), display_name='OnNoDamageShot', description='the shot did no damage')
-    OnInnerDeviceWasCrit = vse_forward_event(OnInnerDeviceWasCrit.__name__, zip(OnInnerDeviceWasCrit._fields, (SLOT_TYPE.INT,)), display_name='OnInnerDeviceWasCrit', description='On inner device was crit')
-    OnVehicleEquipmentActivated = vse_forward_event(OnVehicleEquipmentActivated.__name__, zip(OnVehicleEquipmentActivated._fields, (SLOT_TYPE.INT, SLOT_TYPE.STR)), display_name='OnEquipmentActivated', description='On equipment activated')
-    OnVehicleTotalDamageDealtIncrease = vse_forward_event(OnVehicleTotalDamageDealtIncrease.__name__, zip(OnVehicleTotalDamageDealtIncrease._fields, (SLOT_TYPE.INT,)), display_name='OnVehicleTotalDamageDealtIncrease', description='On vehicle total damage dealt increase')
-    OnVehicleAssistIncrease = vse_forward_event(OnVehicleAssistIncrease.__name__, zip(OnVehicleAssistIncrease._fields, (SLOT_TYPE.INT,)), display_name='OnVehicleAssistIncrease', description='On vehicle assist increase')
-    OnVehicleBlockDamage = vse_forward_event(OnVehicleBlockDamage.__name__, zip(OnVehicleBlockDamage._fields, (SLOT_TYPE.INT,)), display_name='OnVehicleBlockDamage', description='On vehicle_block_damage')
-    OnVehicleInRange = vse_forward_event(OnVehicleInRange.__name__, zip(OnVehicleInRange._fields, (SLOT_TYPE.INT, SLOT_TYPE.STR, SLOT_TYPE.BOOL)), display_name='OnVehicleInRange', description='On vehicle in range')
-    OnVehicleShotDamagedEnemyVehicle = vse_forward_event(OnVehicleShotDamagedEnemyVehicle.__name__, zip(OnVehicleShotDamagedEnemyVehicle._fields, (SLOT_TYPE.INT,)), display_name='OnVehicleShotDamagedEnemyVehicle', description='On vehicle shot damaged enemy vehicle')
-    OnWitnessEnemyDamaged = vse_forward_event(OnWitnessEnemyDamaged.__name__, zip(OnWitnessEnemyDamaged._fields, (SLOT_TYPE.INT,)), display_name='OnWitnessEnemyDamaged', description='Vehicle has been damage in our vision')
-    OnVehicleRadioDistanceChange = vse_forward_event(OnVehicleRadioDistanceChange.__name__, zip(OnVehicleRadioDistanceChange._fields, (SLOT_TYPE.FLOAT,)), display_name='OnVehicleRadioDistanceChange', description='On vehicle radio distance change')
+    OnInnerDeviceWasCrit = vse_forward_event(OnInnerDeviceWasCrit.__name__, lzip(OnInnerDeviceWasCrit._fields, (SLOT_TYPE.INT,)), display_name='OnInnerDeviceWasCrit', description='On inner device was crit')
+    OnVehicleEquipmentActivated = vse_forward_event(OnVehicleEquipmentActivated.__name__, lzip(OnVehicleEquipmentActivated._fields, (SLOT_TYPE.INT, SLOT_TYPE.STR)), display_name='OnEquipmentActivated', description='On equipment activated')
+    OnVehicleTotalDamageDealtIncrease = vse_forward_event(OnVehicleTotalDamageDealtIncrease.__name__, lzip(OnVehicleTotalDamageDealtIncrease._fields, (SLOT_TYPE.INT,)), display_name='OnVehicleTotalDamageDealtIncrease', description='On vehicle total damage dealt increase')
+    OnVehicleAssistIncrease = vse_forward_event(OnVehicleAssistIncrease.__name__, lzip(OnVehicleAssistIncrease._fields, (SLOT_TYPE.INT,)), display_name='OnVehicleAssistIncrease', description='On vehicle assist increase')
+    OnVehicleBlockDamage = vse_forward_event(OnVehicleBlockDamage.__name__, lzip(OnVehicleBlockDamage._fields, (SLOT_TYPE.INT,)), display_name='OnVehicleBlockDamage', description='On vehicle_block_damage')
+    OnVehicleInRange = vse_forward_event(OnVehicleInRange.__name__, lzip(OnVehicleInRange._fields, (SLOT_TYPE.INT, SLOT_TYPE.STR, SLOT_TYPE.BOOL)), display_name='OnVehicleInRange', description='On vehicle in range')
+    OnVehicleShotDamagedEnemyVehicle = vse_forward_event(OnVehicleShotDamagedEnemyVehicle.__name__, lzip(OnVehicleShotDamagedEnemyVehicle._fields, (SLOT_TYPE.INT,)), display_name='OnVehicleShotDamagedEnemyVehicle', description='On vehicle shot damaged enemy vehicle')
+    OnWitnessEnemyDamaged = vse_forward_event(OnWitnessEnemyDamaged.__name__, lzip(OnWitnessEnemyDamaged._fields, (SLOT_TYPE.INT,)), display_name='OnWitnessEnemyDamaged', description='Vehicle has been damage in our vision')
+    OnVehicleRadioDistanceChange = vse_forward_event(OnVehicleRadioDistanceChange.__name__, lzip(OnVehicleRadioDistanceChange._fields, (SLOT_TYPE.FLOAT,)), display_name='OnVehicleRadioDistanceChange', description='On vehicle radio distance change')
     OnPerkRestarted = vse_forward_event('OnPerkRestarted', (), display_name='onPerkRestarted', description='On perk restarted', display_group='Perk')
 
     def __init__(self, aspectImplClass, perksControllerWeakRef, perkID, perkLevel, scopeID):
@@ -126,7 +128,7 @@ class PerkContext(VScriptContext):
 
 class CrewContext(PerkContext):
 
-    @vse_context_effect_forward_event(OnTankmanStatusChanged.__name__, zip(OnTankmanStatusChanged._fields, (SLOT_TYPE.INT,)), display_name='OnTankmanStatusChanged', description='Tankman has been deactivated or healed. This event should only be used to track perk activity and not for internal perk logic.', display_group='Crew')
+    @vse_context_effect_forward_event(OnTankmanStatusChanged.__name__, lzip(OnTankmanStatusChanged._fields, (SLOT_TYPE.INT,)), display_name='OnTankmanStatusChanged', description='Tankman has been deactivated or healed. This event should only be used to track perk activity and not for internal perk logic.', display_group='Crew')
     def tankmanStatusChangedEffect(self, *args):
         self._aspectImpl.tankmanStatusChanged(*args)
 

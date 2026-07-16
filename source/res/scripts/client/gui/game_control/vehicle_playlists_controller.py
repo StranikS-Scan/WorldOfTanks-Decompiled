@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/vehicle_playlists_controller.py
+from __future__ import absolute_import
 import json
 import logging
 import os
 import uuid
 import typing
+from future.utils import iteritems
 import Event
 from PlayerEvents import g_playerEvents
 from gui.shared.utils import getPlayerDatabaseID
@@ -153,7 +155,7 @@ class VehiclePlaylistsController(IVehiclePlaylistsController):
 
     def iterPlaylists(self):
         if self.isEnabled and self.__cache:
-            for plID, pStrData in self.__cache.data.iteritems():
+            for plID, pStrData in iteritems(self.__cache.data):
                 yield (plID, pStrData)
 
     def simplePlayListParser(self, pStrData):

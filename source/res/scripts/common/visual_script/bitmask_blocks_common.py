@@ -1,5 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/bitmask_blocks_common.py
+from __future__ import absolute_import
+from future.utils import viewitems
+from past.builtins import long, xrange
 from visual_script.block import Block, InitParam, buildStrKeysValue, Meta
 from visual_script.misc import errorVScript, EDITOR_TYPE, BLOCK_MODE
 from visual_script.slot_types import SLOT_TYPE
@@ -27,7 +30,7 @@ class BitMaskBase(Block, BitMaskMeta):
         self._flags = []
         flagsCount, bitMaskType = self._getInitParams()
         type = self._MASK_TYPES[bitMaskType]
-        self._inFlags = {name:getattr(type, name) for name, value in type.__dict__.iteritems() if not name.startswith('_')}
+        self._inFlags = {name:getattr(type, name) for name, value in viewitems(type.__dict__) if not name.startswith('_')}
         for _ in xrange(flagsCount):
             self._addInputNode()
 
@@ -35,7 +38,7 @@ class BitMaskBase(Block, BitMaskMeta):
 
     def _addInputNode(self):
         self._flags.append(self._makeDataInputSlot('f' + str(len(self._flags)), SLOT_TYPE.STR, EDITOR_TYPE.ENUM_SELECTOR))
-        self._flags[-1].setEditorData([ name for name in self._inFlags.iterkeys() ])
+        self._flags[-1].setEditorData(list(self._inFlags))
 
     @classmethod
     def initParams(cls):

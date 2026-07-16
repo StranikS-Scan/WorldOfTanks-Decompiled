@@ -1,13 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/components/shot_damage_components.py
-from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
-from cgf_script.managers_registrator import autoregister, onAddedQuery, onRemovedQuery
 import CGF
 import Math
 import BigWorld
-import GenericComponents
 from items import vehicles
 from vehicle_systems.tankStructure import TankPartNames
+from cgf_script.registration import ComponentProperty, registerComponent
 
 class ShotDamageComponent(object):
 
@@ -19,11 +17,12 @@ class ShotDamageComponent(object):
 @registerComponent
 class DamageStickerComponent(object):
     category = 'Render'
-    domain = CGF.DomainOption.DomainClient
-    damageSticker = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Damage sticker', value='')
-    lodDistance = ComponentProperty(type=CGFMetaTypes.FLOAT, editorName='Lod Distance', value=100)
-    fadeoutTime = ComponentProperty(type=CGFMetaTypes.FLOAT, editorName='Fadeout time', value=0)
-    offset = ComponentProperty(type=CGFMetaTypes.FLOAT, editorName='Offset', value=1.0)
+    editorTitle = 'Damage Sticker Component'
+    domain = CGF.Domain.Client
+    damageSticker = ComponentProperty(type=CGF.PropertyType.String, editorName='Damage sticker', value='')
+    lodDistance = ComponentProperty(type=CGF.PropertyType.Float, editorName='Lod Distance', value=100)
+    fadeoutTime = ComponentProperty(type=CGF.PropertyType.Float, editorName='Fadeout time', value=0)
+    offset = ComponentProperty(type=CGF.PropertyType.Float, editorName='Offset', value=1.0)
 
     def __init__(self):
         super(DamageStickerComponent, self).__init__()
@@ -31,33 +30,34 @@ class DamageStickerComponent(object):
         return
 
 
-@autoregister(presentInAllWorlds=True)
-class DamageStickerManager(CGF.ComponentManager):
+class DamageStickerSystem(CGF.System):
+    StickerActivated = CGF.ActivateReaction(CGF.ReactRw(ShotDamageComponent), CGF.ReactRw(DamageStickerComponent), CGF.Ro(CGF.TransformComponent))
+    StickerDeaactivated = CGF.DeactivateReaction(CGF.ReactRw(ShotDamageComponent), CGF.ReactRw(DamageStickerComponent))
+    Reactions = CGF.Reactions(StickerActivated, StickerDeaactivated)
 
-    @onAddedQuery(ShotDamageComponent, DamageStickerComponent, GenericComponents.TransformComponent)
-    def onAddedSticker(self, shotDamage, damageSticker, transform):
-        if shotDamage.partName == TankPartNames.CHASSIS:
-            return
-        damageSticker.stickerModel = BigWorld.WGStickerModel(self.spaceID)
-        geometryLink = shotDamage.compound.getPartGeometryLink(TankPartNames.getIdx(shotDamage.partName))
-        m = Math.Matrix()
-        m.setIdentity()
-        stickerModel = damageSticker.stickerModel
-        stickerModel.setupSuperModel(geometryLink, m)
-        node = shotDamage.compound.node(TankPartNames.getActualNodeNameByPartName(shotDamage.partName))
-        node.attach(damageSticker.stickerModel)
-        stickerModel.setLODDistance(damageSticker.lodDistance)
-        stickerId = vehicles.g_cache.damageStickers['ids'][damageSticker.damageSticker]
-        segStart = transform.transform.applyPoint(Math.Vector3(0, 0, -damageSticker.offset))
-        segEnd = transform.transform.applyPoint(Math.Vector3(0, 0, damageSticker.offset))
-        stickerModel.addDamageSticker(stickerId, segStart, segEnd, True)
-        stickerModel.setupFadeout(damageSticker.fadeoutTime)
+    def update(self):
+        for damage, sticker in self.reaction(self.StickerDeaactivated):
+            if sticker.stickerModel is None:
+                continue
+            node = damage.compound.node(TankPartNames.getActualNodeNameByPartName(damage.partName))
+            node.detach(sticker.stickerModel)
 
-    @onRemovedQuery(ShotDamageComponent, DamageStickerComponent)
-    def onRemovedSticker(self, shotDamage, damageSticker):
-        if damageSticker.stickerModel is None:
-            return
-        else:
-            node = shotDamage.compound.node(TankPartNames.getActualNodeNameByPartName(shotDamage.partName))
-            node.detach(damageSticker.stickerModel)
-            return
+        for damage, sticker, tr in self.reaction(self.StickerActivated):
+            if damage.partName == TankPartNames.CHASSIS:
+                continue
+            sticker.stickerModel = BigWorld.WGStickerModel(self.spaceID)
+            geometryLink = damage.compound.getPartGeometryLink(TankPartNames.getIdx(damage.partName))
+            m = Math.Matrix()
+            m.setIdentity()
+            stickerModel = sticker.stickerModel
+            stickerModel.setupSuperModel(geometryLink, m)
+            node = damage.compound.node(TankPartNames.getActualNodeNameByPartName(damage.partName))
+            node.attach(sticker.stickerModel)
+            stickerModel.setLODDistance(sticker.lodDistance)
+            stickerId = vehicles.g_cache.damageStickers['ids'][sticker.damageSticker]
+            segStart = tr.transform.applyPoint(Math.Vector3(0, 0, -sticker.offset))
+            segEnd = tr.transform.applyPoint(Math.Vector3(0, 0, sticker.offset))
+            stickerModel.addDamageSticker(stickerId, segStart, segEnd, True)
+            stickerModel.setupFadeout(sticker.fadeoutTime)
+
+        return

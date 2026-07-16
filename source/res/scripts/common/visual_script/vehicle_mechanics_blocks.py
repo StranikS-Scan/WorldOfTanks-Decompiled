@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/vehicle_mechanics_blocks.py
+from __future__ import absolute_import
 import typing
 from constants import CONCENTRATION_MODE_STATE, OVERHEAT_GAIN_STATE, POWER_MODE_STATE, RECHARGEABLE_NITRO_STATE, SECONDARY_GUN_STATE, VEHICLE_SIEGE_STATE, TARGET_DESIGNATOR_STATE, STATIONARY_RELOAD_STATE, GUN_LOCK_REASONS, OVERHEAT_GUN_STATE, TEMPERATURE_GUN_STATE, HEATING_ZONES_GUN_STATE, PHASED_MECHANIC_STATE, AcceleratorStatus, PROPELLANT_GUN_STATE, LowChargeShotReloadingState, WheeledDashDirection
 from visual_script.misc import ASPECT

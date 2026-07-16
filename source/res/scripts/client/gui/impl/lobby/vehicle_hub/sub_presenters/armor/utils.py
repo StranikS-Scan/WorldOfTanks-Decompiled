@@ -12,7 +12,7 @@ import armor_inspector
 import math_utils
 from constants import VehicleArmorTags, VehicleTurretTags
 from AvatarInputHandler import cameras
-from Vehicle import SegmentCollisionResultExt
+from helpers.collisions import SegmentCollisionResultExt
 from account_helpers.AccountSettings import AccountSettings, AttackerVehicleConfiguration
 from account_helpers.settings_core.settings_constants import ArmorInspector as ArmorInspectorSettingsKeys
 from gui.impl import backport
@@ -265,7 +265,7 @@ def getCollisionsAtCursor(vehicleEntity):
     ray, startPoint = cameras.getWorldRayAndPoint(cursorPosition.x, cursorPosition.y)
     endPoint = startPoint + ray * COLLISION_RAY_LENGTH
     res = []
-    if vehicleEntity.appearance.collisions is not None:
+    if vehicleEntity.appearance.collisions:
         collisions = vehicleEntity.appearance.collisions.collideAllWorld(startPoint, endPoint)
         if collisions:
             for dist, hitAngleCos, matKind, parIndex in collisions:
@@ -308,14 +308,14 @@ def _buildDynamicMatInfos(vehicle):
         return {}
     else:
         collisionComponent = vehicle.appearance.collisions
-        if collisionComponent is None:
+        if not collisionComponent:
             return {}
         dynamicMaterials = {}
         for partIndex in collisionComponent.partIndices:
             if partIndex <= collisionComponent.maxStaticPartIndex:
                 continue
             partGO = collisionComponent.getPartGameObject(partIndex)
-            if partGO is None or not partGO.isValid():
+            if partGO is None or not partGO.valid:
                 continue
             partMaterials = BigWorld.getMaterials(partGO)
             if not partMaterials:

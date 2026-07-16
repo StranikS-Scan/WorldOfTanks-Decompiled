@@ -13,6 +13,7 @@ from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.entities.View import ViewKey
 from open_bundle.gui.impl.lobby.main_view import MainView
 from open_bundle.gui.shared.event_dispatcher import showIntro
+from open_bundle.helpers.account_settings import isIntroShown
 from open_bundle.helpers.resources import getTextResource
 if typing.TYPE_CHECKING:
     from typing import Optional
@@ -51,3 +52,6 @@ class OpenBundleState(GuiImplViewLobbyState):
     def _onEntered(self, event):
         super(OpenBundleState, self)._onEntered(event)
         self.__params = event.params
+        bundleID = self.__params.get('bundleID')
+        if not isIntroShown(bundleID):
+            showIntro(bundleID)

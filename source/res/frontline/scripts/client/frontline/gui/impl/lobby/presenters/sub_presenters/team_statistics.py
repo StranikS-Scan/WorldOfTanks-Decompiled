@@ -2,6 +2,7 @@
 # Embedded file name: frontline/scripts/client/frontline/gui/impl/lobby/presenters/sub_presenters/team_statistics.py
 import typing
 from frontline.gui.impl.gen.view_models.views.lobby.views.post_battle_results_view.battle_team_stats_model import BattleTeamStatsModel
+from constants import ARENA_BONUS_TYPE
 from helpers import dependency
 from frontline.gui.frontline_presenters_packers import FrontlineTeamEfficiency
 from skeletons.connection_mgr import IConnectionManager
@@ -45,4 +46,4 @@ class FrontlineTeamStatisticsSubPresenter(BattleResultsSubPresenter):
     def __onTeamStatsSorted(self, event):
         column = event.get('column')
         sortDirection = event.get('sortDirection')
-        self._battleResults.saveStatsSorting(self.parentView.arenaUniqueID, column, sortDirection)
+        self._battleResults.saveStatsSorting(ARENA_BONUS_TYPE.EPIC_BATTLE, column, sortDirection)

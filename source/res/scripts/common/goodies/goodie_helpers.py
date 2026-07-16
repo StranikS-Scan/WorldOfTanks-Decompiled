@@ -1,18 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/goodies/goodie_helpers.py
-from typing import TYPE_CHECKING, Type
+from __future__ import absolute_import, division
 from collections import namedtuple
 from copy import deepcopy
-from GoodieConditions import MaxVehicleLevel
-from GoodieDefinition import GoodieDefinition
-from GoodieResources import Gold, Credits, Experience, CrewExperience, FreeExperience, FrontlineExperience
-from GoodieTargets import BuyPremiumAccount, BuySlot, PostBattle, BuyGoldTankmen, BuyVehicle, EpicMeta, DemountOptionalDevice, EpicPostBattle, DropSkill, XpTransfer, BuyPet
-from goodie_multiple_resources import FreeXpCrewXpMultiResourceList, FreeXpMainXpMultiResourceList
-from Goodies import GoodieException
+from future.utils import viewitems
+from typing import TYPE_CHECKING, Type
+from goodies.GoodieConditions import MaxVehicleLevel
+from goodies.GoodieDefinition import GoodieDefinition
+from goodies.GoodieResources import Gold, Credits, Experience, CrewExperience, FreeExperience, FrontlineExperience
+from goodies.GoodieTargets import BuyPremiumAccount, BuySlot, PostBattle, BuyGoldTankmen, BuyVehicle, EpicMeta, DemountOptionalDevice, EpicPostBattle, DropSkill, XpTransfer, BuyPet
+from goodies.goodie_multiple_resources import FreeXpCrewXpMultiResourceList, FreeXpMainXpMultiResourceList
+from goodies.Goodies import GoodieException
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
-from goodie_constants import GOODIE_TARGET_TYPE, GOODIE_CONDITION_TYPE, GOODIE_RESOURCE_TYPE
+from goodies.goodie_constants import GOODIE_TARGET_TYPE, GOODIE_CONDITION_TYPE, GOODIE_RESOURCE_TYPE
 if TYPE_CHECKING:
-    from typing import Tuple, Dict, Optional
+    from typing import Tuple, Dict
     from goodies.Goodies import Goodies
     from goodies.GoodieResources import GoodieResourceType
 GoodieData = namedtuple('GoodieData', ['variety',
@@ -47,7 +49,7 @@ RESOURCES = {GOODIE_RESOURCE_TYPE.GOLD: Gold,
  GOODIE_RESOURCE_TYPE.FL_XP: FrontlineExperience,
  GOODIE_RESOURCE_TYPE.FREE_XP_CREW_XP: FreeXpCrewXpMultiResourceList,
  GOODIE_RESOURCE_TYPE.FREE_XP_MAIN_XP: FreeXpMainXpMultiResourceList}
-RESOURCE_TO_GOODIE_LOOKUP = {resource:goodieType for goodieType, resource in RESOURCES.iteritems()}
+RESOURCE_TO_GOODIE_LOOKUP = {resource:goodieType for goodieType, resource in viewitems(RESOURCES)}
 GOODIE_CONDITION_TO_TEXT = {MaxVehicleLevel: 'max_vehicle_level'}
 GOODIE_RESOURCE_TO_TEXT = {Gold: 'gold',
  Credits: 'credits',
@@ -89,14 +91,14 @@ GOODIE_TEXT_TO_TARGET = {'premium': GOODIE_TARGET_TYPE.ON_BUY_PREMIUM,
  'pet': GOODIE_TARGET_TYPE.ON_BUY_PET}
 CURRENCY_TO_RESOURCE_TYPE = {'gold': GOODIE_RESOURCE_TYPE.GOLD,
  'credits': GOODIE_RESOURCE_TYPE.CREDITS}
-CURRENCY_TO_RESOURCE = {k:RESOURCES[v] for k, v in CURRENCY_TO_RESOURCE_TYPE.iteritems()}
+CURRENCY_TO_RESOURCE = {k:RESOURCES[v] for k, v in viewitems(CURRENCY_TO_RESOURCE_TYPE)}
 
 def loadDefinitions(d):
     goodies = {'goodies': {},
      'prices': deepcopy(d['prices']),
      'notInShop': deepcopy(d['notInShop'])}
-    for uid, d in d['goodies'].iteritems():
-        v_variety, v_target, v_enabled, v_lifetime, v_useby, v_limit, v_autostart, v_condition, v_resource, v_expireAfter, v_roundToEndOfGameDay = d
+    for uid, definition in viewitems(d['goodies']):
+        v_variety, v_target, v_enabled, v_lifetime, v_useby, v_limit, v_autostart, v_condition, v_resource, v_expireAfter, v_roundToEndOfGameDay = definition
         if v_condition is not None:
             condition = _CONDITIONS.get(v_condition[0])(v_condition[1])
         else:
@@ -132,7 +134,7 @@ def getPremiumCost(premiumCosts, goodie):
 
 
 def loadPdata(pdataGoodies, goodies, logID):
-    for uid, (status, finishTime, count, expirations) in pdataGoodies.iteritems():
+    for uid, (status, finishTime, count, expirations) in viewitems(pdataGoodies):
         try:
             goodies.load(uid, status, finishTime, count, expirations)
         except GoodieException as detail:
@@ -144,7 +146,7 @@ def calcDefaultPrice(default, actual):
     result = {}
     defaultPrices = default['prices']
     actualPrices = actual['prices']
-    for goodieID, defaultPrice in defaultPrices.iteritems():
+    for goodieID, defaultPrice in viewitems(defaultPrices):
         actualPrice = actualPrices.get(goodieID, None)
         if actualPrice is None:
             continue
@@ -161,7 +163,7 @@ def calcDefaultPrice(default, actual):
 
 def wipe(goodies, pdata, leaveGold):
     if leaveGold:
-        for goodieID in pdata['goodies'].keys():
+        for goodieID in list(pdata['goodies']):
             price = goodies['prices'].get(goodieID, None)
             if price is not None and price[0] != 0:
                 del pdata['goodies'][goodieID]

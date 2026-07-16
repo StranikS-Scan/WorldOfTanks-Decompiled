@@ -1,18 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/descr_modify_attrs.py
+from __future__ import absolute_import, division
 import inspect
 from copy import copy
 from functools import partial
 from math import tan, atan, radians, degrees
 from weakref import proxy
+from future.utils import lrange, iteritems
+from past.builtins import xrange
 from typing import TYPE_CHECKING
 from constants import IS_CELLAPP, IS_CLIENT
 from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
-from descr_modify_attrs_allowed import DESCR_MODIFY_ATTRS_ALLOWED, DESCR_MODIFY_ATTRS_TYPE, IS_ARRAY
 from items.attributes_helpers import DESCR_MODIFY_ATTR_PREFIX, MODIFIER_TYPE
 from items.components.component_constants import HP_TO_WATTS, KMH_TO_MS, MS_TO_KMH
+from items.descr_modify_attrs_allowed import DESCR_MODIFY_ATTRS_ALLOWED, DESCR_MODIFY_ATTRS_TYPE, IS_ARRAY
 if TYPE_CHECKING:
-    import items.vehicle_items as vehicle_items
+    from items import vehicle_items
     from items.components.gun_components import GunShot
     from items.components.shared_components import DeviceHealth
     from items.components.shell_components import ShellType, HighExplosiveImpactParams
@@ -111,9 +114,7 @@ class GunWrapper(ItemWrapper):
 
     @shotDispersionRadius.setter
     def shotDispersionRadius(self, value):
-        if value < 0.01:
-            value = 0.01
-        self.item.shotDispersionAngle = atan(value / 100.0)
+        self.item.shotDispersionAngle = atan(max(value, 0.01) / 100.0)
 
 
 class EngineWrapper(ItemWrapper):
@@ -468,7 +469,7 @@ def processValue(obj, valueName, index, operation, attrName, value):
         if isArray:
             nextObj = list(valueObj)
             if index is None:
-                indexes = range(len(nextObj))
+                indexes = lrange(len(nextObj))
             else:
                 indexes = [index]
             for ind in indexes:
@@ -501,7 +502,7 @@ def gunPitchLimitsProcessor(obj, valueName, index, operation, attrName, value, v
 
         vehDescrWrapper.finalizers.append(finalize)
     if index is None:
-        indexes = range(len(valueObj))
+        indexes = lrange(len(valueObj))
     else:
         indexes = [index]
     applier = APPLIERS[operation]
@@ -542,7 +543,7 @@ def armorSpallProcessor(spallValueName, obj, valueName, index, operation, attrNa
         return False
     else:
         attrName = '{}/{}'.format(spallValueName, valueName)
-        if operation == 'add' or operation == 'set':
+        if operation in ('add', 'set'):
             value *= 0.5
         processValue(obj, valueName, index, operation, attrName, value)
         return False
@@ -591,7 +592,7 @@ def maxSpeedBackProcesser(engine, valueName, index, operation, attrName, value, 
 
 def chassisRotationSpeedDegrees(chassis, valueName, index, operation, attrName, value, vehDescrWrapper):
     applier = APPLIERS[operation]
-    if operation == 'add' or operation == 'set':
+    if operation in ('add', 'set'):
         value = radians(value)
     chassis.rotationSpeed = applier(chassis.rotationSpeed, value)
     if not IS_CELLAPP:
@@ -691,7 +692,7 @@ def applyMergedDescrModifyAttrs(vehDescr, attrs):
     items = [ (parseValue(attrName),
      opType,
      attrName,
-     value) for (attrName, opType), value in attrs.iteritems() ]
+     value) for (attrName, opType), value in iteritems(attrs) ]
     items.sort(key=lambda value: opOrder[value[1]])
     for (objName, valueName, index), operation, attrName, value in items:
         if objName is None:
@@ -712,6 +713,6 @@ def applyMergedDescrModifyAttrs(vehDescr, attrs):
 
 def getAttrValue(vehDescr, attrName):
     vehDescrWrapper = VehDescrWrapper(vehDescr)
-    objName, valueName, index = parseValue(attrName)
+    objName, valueName, _ = parseValue(attrName)
     obj = getattr(vehDescrWrapper, objName, None)
     return None if obj is None else getattr(obj, valueName, None)

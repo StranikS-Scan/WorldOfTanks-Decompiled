@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/arena_dp.py
+from __future__ import absolute_import
 import logging
 import operator
+from future.utils import iteritems, viewvalues
 from constants import TEAMS_IN_ARENA, PLAYER_RANK
 from shared_utils import first
 from gui.battle_control import avatar_getter
@@ -61,14 +63,14 @@ class ArenaDataProvider(IArenaDataProvider):
 
     def buildVehiclesData(self, vehicles):
         self.defaultInfo()
-        for vID, vData in vehicles.iteritems():
+        for vID, vData in iteritems(vehicles):
             self.__addVehicleInfoVO(vID, arena_vos.VehicleArenaInfoVO(vID, **vData))
 
         self.__findSquads()
 
     def buildStatsData(self, stats):
         self.clearStats()
-        for vID, vStats in stats.iteritems():
+        for vID, vStats in iteritems(stats):
             vStatsVO = self.__vStatsVOs[vID]
             vStatsVO.updateVehicleStats(**vStats)
 
@@ -119,7 +121,7 @@ class ArenaDataProvider(IArenaDataProvider):
         self.__vStatsVOs.clearInteractiveStats()
         updatedStats = []
         updatedStatuses = []
-        for (vehicleID, _), iStat in iStats.iteritems():
+        for (vehicleID, _), iStat in iteritems(iStats):
             vStatsVO = self.__vStatsVOs[vehicleID]
             flags = vStatsVO.updateInteractiveStats(*iStat)
             if flags != _OP.NONE:
@@ -333,20 +335,20 @@ class ArenaDataProvider(IArenaDataProvider):
         return sessionID
 
     def getVehiclesInfoIterator(self):
-        return self.__vInfoVOs.itervalues()
+        return viewvalues(self.__vInfoVOs)
 
     def getAllyVehiclesInfoIterator(self):
         return (vehicleVO for vehicleVO in self.getVehiclesInfoIterator() if self.isAllyTeam(vehicleVO.team))
 
     def getVehiclesStatsIterator(self):
-        return self.__vStatsVOs.itervalues()
+        return viewvalues(self.__vStatsVOs)
 
     def getVehiclesItemsGenerator(self):
-        for vInfo in self.__vInfoVOs.itervalues():
+        for vInfo in viewvalues(self.__vInfoVOs):
             yield (vInfo, self.__vStatsVOs[vInfo.vehicleID])
 
     def getActiveVehiclesGenerator(self):
-        for vInfo in self.__vInfoVOs.itervalues():
+        for vInfo in viewvalues(self.__vInfoVOs):
             if vInfo.isPlayer():
                 yield (vInfo, self.__vStatsVOs[vInfo.vehicleID])
 
@@ -430,7 +432,7 @@ class ArenaDataProvider(IArenaDataProvider):
         if not successful:
             playerName = avatar_getter.getPlayerName()
             _logger.info('Uses slow player search by name')
-            for vo in self.__vInfoVOs.itervalues():
+            for vo in viewvalues(self.__vInfoVOs):
                 if vo.player.name == playerName:
                     self.__playerTeam = vo.team
                     self.__playerVehicleID = vo.vehicleID

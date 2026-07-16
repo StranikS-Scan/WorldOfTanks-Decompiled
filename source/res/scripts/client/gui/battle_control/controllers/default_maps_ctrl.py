@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/default_maps_ctrl.py
+from __future__ import absolute_import
 import Event
 from gui.battle_control import minimap_utils
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID

@@ -76,6 +76,9 @@ class IUnitListener(IUnitIntroListener):
     def onUnitExtraChanged(self, extra):
         pass
 
+    def onUnitSizeChanged(self):
+        pass
+
     def onUnitCurfewChanged(self):
         pass
 

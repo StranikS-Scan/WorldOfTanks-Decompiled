@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/ranked/ranked_quests_preview_tooltip.py
+from __future__ import absolute_import
+from future.utils import listvalues
 from gui.impl.gen import R
 from gui.impl import backport
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
@@ -26,7 +28,7 @@ class RankedQuestsPreviewTooltip(BlocksTooltipData):
 
     def _packBlocks(self, *args, **kwargs):
         items = super(RankedQuestsPreviewTooltip, self)._packBlocks()
-        quests = self.__eventsCache.getActiveQuests(lambda quest: isRankedDaily(quest.getID())).values()
+        quests = listvalues(self.__eventsCache.getActiveQuests(lambda quest: isRankedDaily(quest.getID())))
         quests.sort(key=lambda q: (q.isCompleted(), not q.isAvailable().isValid, -q.getPriority()))
         season = self.__rankedController.getCurrentSeason()
         if quests and season is not None:

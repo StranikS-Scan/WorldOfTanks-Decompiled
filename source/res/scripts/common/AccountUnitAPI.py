@@ -17,7 +17,7 @@ class UNIT_API:
     EXTERNAL_API = (WGSH, TMS)
 
 
-UNIT_API_NAMES = {v:v for k, v in viewitems(UNIT_API.__dict__) if not k.startswith('_')}
+UNIT_API_NAMES = {v:k for k, v in viewitems(UNIT_API.__dict__) if not k.startswith('_')}
 
 def makeServerRequestID(unitApiID, webRequestID):
     return unitApiID << 32 | webRequestID & 4294967295L

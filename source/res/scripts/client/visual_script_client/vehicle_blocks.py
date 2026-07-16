@@ -392,7 +392,7 @@ class GameObjectToVehicle(Block, VehicleMeta):
             errorVScript(self, 'Please check input game object.')
             return
         else:
-            goSyncComponent = go.findComponentByType(GenericComponents.EntityGOSync)
+            goSyncComponent = go.findRead(GenericComponents.EntityGOSync)
             if goSyncComponent is None:
                 LOG_DEBUG_DEV("Can't find associated entity. Please check input game object")
                 self._vehicle.setValue(None)
@@ -561,8 +561,8 @@ class GetVehicleOverturnLevel(Block, VehicleMeta):
 
     def _getData(self):
         vehicleGO = self._vehicleGO.getValue()
-        if vehicleGO.isValid():
-            ownVehicle = vehicleGO.findComponentByType(OwnVehicle.OwnVehicle)
+        if vehicleGO.valid:
+            ownVehicle = vehicleGO.findRead(OwnVehicle.OwnVehicle)
             if ownVehicle is not None:
                 overturnLevel = ownVehicle.overturnLevel
                 if overturnLevel is not None:
@@ -585,8 +585,8 @@ class GetVehicleDrownLevel(Block, VehicleMeta):
 
     def _getData(self):
         vehicleGO = self._vehicleGO.getValue()
-        if vehicleGO.isValid():
-            ownVehicle = vehicleGO.findComponentByType(OwnVehicle.OwnVehicle)
+        if vehicleGO.valid:
+            ownVehicle = vehicleGO.findRead(OwnVehicle.OwnVehicle)
             if ownVehicle is not None:
                 drownLevel = ownVehicle.drownLevel
                 if drownLevel is not None:

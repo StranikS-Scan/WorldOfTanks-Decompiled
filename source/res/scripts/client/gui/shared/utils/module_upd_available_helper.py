@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/module_upd_available_helper.py
+from __future__ import absolute_import
 from collections import namedtuple
 import typing
 from CurrentVehicle import g_currentVehicle

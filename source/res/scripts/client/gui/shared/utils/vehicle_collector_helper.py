@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/vehicle_collector_helper.py
+from __future__ import absolute_import
 import typing
 from backports.functools_lru_cache import lru_cache
 from account_helpers import AccountSettings

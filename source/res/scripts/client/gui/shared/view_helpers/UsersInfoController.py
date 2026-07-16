@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/view_helpers/UsersInfoController.py
+from __future__ import absolute_import
+from future.utils import viewitems
 import BigWorld
 from AccountCommands import isCodeValid
 from debug_utils import LOG_WARNING
@@ -86,7 +88,7 @@ class UsersInfoController(RequestsController):
 
         def _ratingsCallback(code, errStr, ratings):
             if isCodeValid(code):
-                for userDbID, rating in (ratings or {}).iteritems():
+                for userDbID, rating in viewitems(ratings or {}):
                     user = getter(userDbID)
                     if user:
                         user.update(globalRating=rating)

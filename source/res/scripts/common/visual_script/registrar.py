@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/registrar.py
+from __future__ import absolute_import
 import inspect
-from block import Block
-from context import VScriptContext
-from type import VScriptType, VScriptEnum, VScriptStruct
+from visual_script.block import Block
+from visual_script.context import VScriptContext
+from visual_script.type import VScriptType, VScriptEnum, VScriptStruct
 __all__ = ['VSBlockRegistrar']
 
 def _findVScriptConponentsInModule(module, cls):

@@ -2,35 +2,44 @@
 # Embedded file name: scripts/client/vehicle_systems/components/vehicle_custom_effects_settings.py
 import CGF
 import Vehicular
-from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
-from cgf_script.managers_registrator import onAddedQuery, autoregister
+from cgf_script.registration import ComponentProperty, registerComponent
 from constants import IS_CGF_DUMP
 if not IS_CGF_DUMP:
     from CustomEffectManager import CustomEffectManager
+else:
+
+    class CustomEffectManager(object):
+        pass
+
 
 @registerComponent
 class VehicleCustomEffectsSettings(object):
-    domain = CGF.DomainOption.DomainClient
+    domain = CGF.Domain.Client
     category = 'Vehicle'
     editorTitle = 'Vehicle Custom Effects Settings'
-    disableDefaultChassis = ComponentProperty(type=CGFMetaTypes.BOOL, value=False, editorName='Disable Default Chassis Effects')
-    disableDefaultHull = ComponentProperty(type=CGFMetaTypes.BOOL, value=False, editorName='Disable Default Hull Effects')
-    additionalEngineSoundPC = ComponentProperty(type=CGFMetaTypes.STRING, value='', editorName='Additional Engine Sound PC')
-    additionalEngineSoundNPC = ComponentProperty(type=CGFMetaTypes.STRING, value='', editorName='Additional Engine Sound NPC')
+    disableDefaultChassis = ComponentProperty(type=CGF.PropertyType.Bool, value=False, editorName='Disable Default Chassis Effects')
+    disableDefaultHull = ComponentProperty(type=CGF.PropertyType.Bool, value=False, editorName='Disable Default Hull Effects')
+    additionalEngineSoundPC = ComponentProperty(type=CGF.PropertyType.String, value='', editorName='Additional Engine Sound PC')
+    additionalEngineSoundNPC = ComponentProperty(type=CGF.PropertyType.String, value='', editorName='Additional Engine Sound NPC')
 
 
-@autoregister(presentInAllWorlds=True, domain=CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor)
-class VehicleCustomEffectsManager(CGF.ComponentManager):
+class VehicleCustomEffectsSystem(CGF.System):
+    VehicleCustomEffectsSettings = CGF.ActivateReaction(CGF.GameObject, CGF.ReactRw(VehicleCustomEffectsSettings))
+    CustomEffectManagerAccess = CGF.AccessReaction(CGF.Rw(CustomEffectManager))
+    AuditionAccess = CGF.AccessReaction(CGF.Rw(Vehicular.VehicleAudition))
+    Reactions = CGF.Reactions(VehicleCustomEffectsSettings, CustomEffectManagerAccess, AuditionAccess)
 
-    @onAddedQuery(VehicleCustomEffectsSettings, CGF.GameObject)
-    def onAdded(self, effectsSettings, gameObject):
-        hierarchy = CGF.HierarchyManager(self.spaceID)
-        parent = hierarchy.getParent(gameObject)
-        if not parent.isValid():
-            return
-        vehicleAudition = parent.findComponentByType(Vehicular.VehicleAudition)
-        if vehicleAudition:
-            vehicleAudition.initAdditionalEngineEvent(effectsSettings.additionalEngineSoundPC, effectsSettings.additionalEngineSoundNPC)
-        effects = parent.findComponentByType(CustomEffectManager)
-        if effects:
-            effects.disableDefaultSelectors(effectsSettings.disableDefaultChassis, effectsSettings.disableDefaultHull)
+    def update(self):
+        hierarchy = self.hierarchy
+        customAccess = self.reaction(self.CustomEffectManagerAccess)
+        auditionAccess = self.reaction(self.AuditionAccess)
+        for go, settings in self.reaction(self.VehicleCustomEffectsSettings):
+            parent = hierarchy.getParent(go)
+            if not parent.valid:
+                return
+            vehicleAudition = auditionAccess.find(parent)
+            if vehicleAudition:
+                vehicleAudition.initAdditionalEngineEvent(settings.additionalEngineSoundPC, settings.additionalEngineSoundNPC)
+            effects = customAccess.find(parent)
+            if effects:
+                effects.disableDefaultSelectors(settings.disableDefaultChassis, settings.disableDefaultHull)

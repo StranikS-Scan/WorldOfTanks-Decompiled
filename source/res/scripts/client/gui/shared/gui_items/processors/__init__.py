@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/__init__.py
+from __future__ import absolute_import
 import functools
 import logging
 import typing
+from builtins import zip
 from collections import namedtuple
 import AccountCommands
 import BigWorld
@@ -39,7 +41,7 @@ class GroupedServerResponse(namedtuple('GroupedServerResponse', ['itemID', 'item
 
     def __new__(cls, *args, **kwargs):
         data = dict(itemID=-1, itemCount=0)
-        data.update(dict(((field, val) for field, val in zip(cls._fields[:len(args)], args))))
+        data.update(zip(cls._fields[:len(args)], args))
         data.update(kwargs)
         return super(GroupedServerResponse, cls).__new__(cls, **data)
 
@@ -151,7 +153,7 @@ class ItemProcessor(Processor):
         super(ItemProcessor, self).__init__(plugins or [])
         self.item = item
 
-    def _response(self, code, callback, ctx=None, errStr=''):
+    def _response(self, code, callback, errStr='', ctx=None):
         if code < 0:
             _logger.error("Server responses an error [%s] while process %s '%s'", code2str(code), self.item.itemTypeName, str(self.item))
             baseHandler = functools.partial(self._errorHandler, code, ctx=ctx, errStr=errStr)
@@ -169,12 +171,12 @@ class GroupedRequestProcessor(Processor):
         self.__groupSize = kwargs.get('groupSize', 1)
 
     def _request(self, callback):
-        _logger.debug('Make server request {}: '.format(self.__request.__name__) + ', '.join((str(i) for i in self.__params)))
+        _logger.debug('Make server request %s: %s', self.__request.__name__, ', '.join((str(i) for i in self.__params)))
         self.__request(*(self.__params + (self.__groupID, self.__groupSize, lambda code, errStr, ctx=None: self._response(code, callback, errStr=errStr, ctx=ctx))))
         return
 
-    def _response(self, code, callback, ctx=None, errStr=''):
-        items = list((GroupedServerResponse(*itemConfig) for itemConfig in ctx)) if ctx else []
+    def _response(self, code, callback, errStr='', ctx=None):
+        items = [ GroupedServerResponse(*itemConfig) for itemConfig in ctx ] if ctx else []
         if code < 0:
             _logger.warning('Server fail response: code=%r, error=%r, ctx=%r', code, errStr, ctx)
             baseHandler = functools.partial(self._errorHandler, code, errStr=errStr, ctx=items) if ctx else makeError

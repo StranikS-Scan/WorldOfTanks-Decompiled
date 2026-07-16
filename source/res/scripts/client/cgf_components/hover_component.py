@@ -1,14 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/cgf_components/hover_component.py
+from __future__ import absolute_import
 import BigWorld
 import CGF
 import GUI
 import Event
 from GenericComponents import VSEComponent
 from Physics import CameraCollideComponent
-from cgf_common.cgf_helpers import getParentGameObjectByComponent
-from cgf_script.managers_registrator import tickGroup, onAddedQuery, onRemovedQuery
-from cgf_script.component_meta_class import registerComponent, ComponentProperty, CGFMetaTypes
+from cgf_script.registration import ComponentProperty, registerComponent
 from constants import IS_CLIENT, CollisionFlags
 from vehicle_systems.tankStructure import ColliderTypes
 from helpers import dependency
@@ -18,10 +17,10 @@ if IS_CLIENT:
 
 @registerComponent
 class SelectionComponent(object):
+    group = 'Common'
     editorTitle = 'Selection'
-    category = 'Common'
-    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
-    highlight = ComponentProperty(type=CGFMetaTypes.BOOL, value=True, editorName='highlight')
+    domain = CGF.Domain.ClientEditor
+    highlight = ComponentProperty(type=CGF.PropertyType.Bool, value=True, editorName='highlight')
 
     def __init__(self):
         super(SelectionComponent, self).__init__()
@@ -30,14 +29,15 @@ class SelectionComponent(object):
 
 @registerComponent
 class IsHoveredComponent(object):
-    domain = CGF.DomainOption.DomainClient
+    editorTitle = 'Is Hovered'
+    domain = CGF.Domain.Client
 
 
 @registerComponent
 class HoverGroupTrackerComponent(object):
-    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
+    group = 'Common'
     editorTitle = 'Hover group tracker'
-    category = 'Common'
+    domain = CGF.Domain.ClientEditor
 
     def __init__(self):
         super(HoverGroupTrackerComponent, self).__init__()
@@ -45,59 +45,95 @@ class HoverGroupTrackerComponent(object):
 
     def addHoveredGO(self, gameObject):
         self.__hoveredGOs.add(gameObject.id)
-        root = getParentGameObjectByComponent(gameObject, HoverGroupTrackerComponent)
-        if root and not root.findComponentByType(IsHoveredComponent):
-            root.createComponent(IsHoveredComponent)
+        root, _ = CGF.findParentWithComponent(gameObject, HoverGroupTrackerComponent)
+        if root and not root.hasComponent(IsHoveredComponent):
+            queue = CGF.CommandQueue(root.spaceID)
+            queue.createComponent(root, IsHoveredComponent)
 
     def removeHoveredGO(self, gameObject):
         self.__hoveredGOs.discard(gameObject.id)
         if self.__hoveredGOs:
             return
-        root = getParentGameObjectByComponent(gameObject, HoverGroupTrackerComponent)
-        if root and root.findComponentByType(IsHoveredComponent):
-            root.removeComponentByType(IsHoveredComponent)
+        root, _ = CGF.findParentWithComponent(gameObject, HoverGroupTrackerComponent)
+        if root and root.hasComponent(IsHoveredComponent):
+            root.removeComponent(IsHoveredComponent)
 
 
-class HoverManager(CGF.ComponentManager):
+class HoverSystem(CGF.System):
     _hangarSpace = dependency.descriptor(IHangarSpace)
-    _hoveredQuery = CGF.QueryConfig(CGF.GameObject, IsHoveredComponent, CGF.No(HoverGroupTrackerComponent))
+    HoveredActivated = CGF.ActivateReaction(VSEComponent, CGF.ReactRo(IsHoveredComponent))
+    HoveredDeactivated = CGF.DeactivateReaction(VSEComponent, CGF.ReactRo(IsHoveredComponent))
+    SelectionDeactivated = CGF.DeactivateReaction(CGF.GameObject, CGF.ReactRo(SelectionComponent))
+    HoverIterate = CGF.IterateReaction(CGF.ActiveOnly, CGF.GameObject, CGF.Ro(IsHoveredComponent), CGF.No(HoverGroupTrackerComponent))
+    HoverAccess = CGF.AccessReaction(CGF.Ro(IsHoveredComponent))
+    SelectionAccess = CGF.AccessReaction(CGF.Ro(SelectionComponent))
+    CameraCollideAccess = CGF.AccessReaction(CGF.Ro(CameraCollideComponent))
+    Reactions = CGF.Reactions(HoveredActivated, HoveredDeactivated, SelectionDeactivated, HoverIterate, HoverAccess, SelectionAccess, CameraCollideAccess)
+    _MAX_PICK_RAY_LEN = 1500.0
 
-    @onAddedQuery(VSEComponent, IsHoveredComponent)
-    def onIsHoveredAdded(self, vseComponent, *args):
+    def __init__(self):
+        super(HoverSystem, self).__init__()
+        self.__lastCursorPos = None
+        self.__lastCursorActive = False
+        return
+
+    def update(self):
+        q = CGF.CommandQueue(self.gom)
+        hoverAccess = self.reaction(self.HoverAccess)
+        hoverStateChanged = False
+        for go, _ in self.reaction(self.SelectionDeactivated):
+            self.onIsSelectableRemoved(go, hoverAccess, q)
+            hoverStateChanged = True
+
+        for vseComponent, _ in self.reaction(self.HoveredDeactivated):
+            self.onIsHoveredRemoved(vseComponent)
+            hoverStateChanged = True
+
+        for vseComponent, _ in self.reaction(self.HoveredActivated):
+            self.onIsHoveredAdded(vseComponent)
+            hoverStateChanged = True
+
+        self.tick(q, hoverAccess, hoverStateChanged)
+
+    def onIsHoveredAdded(self, vseComponent):
         vseComponent.context.onGameObjectHoverIn()
 
-    @onRemovedQuery(VSEComponent, IsHoveredComponent)
-    def onIsHoveredRemoved(self, vseComponent, *args):
+    def onIsHoveredRemoved(self, vseComponent):
         vseComponent.context.onGameObjectHoverOut()
 
-    @onRemovedQuery(CGF.GameObject, SelectionComponent)
-    def onIsSelectableRemoved(self, gameObject, *args):
-        if gameObject.findComponentByType(IsHoveredComponent):
-            gameObject.removeComponentByType(IsHoveredComponent)
+    def onIsSelectableRemoved(self, gameObject, hoverAccess, queue):
+        if hoverAccess.find(gameObject):
+            queue.removeComponent(gameObject, IsHoveredComponent)
 
-    @tickGroup(groupName='Simulation')
-    def tick(self):
-        hoveredGameObject = None
-        if GUI.mcursor().inWindow and GUI.mcursor().inFocus and self._hangarSpace.isSelectionEnabled and self._hangarSpace.isCursorOver3DScene:
-            hoveredGameObject = self.__getGameObjectUnderCursor()
-        if hoveredGameObject and hoveredGameObject.findComponentByType(IsHoveredComponent):
+    def tick(self, queue, hoverAccess, hoverStateChanged):
+        cursor = GUI.mcursor()
+        cursorPos = cursor.position
+        cursorActive = cursor.inWindow and cursor.inFocus and self._hangarSpace.isSelectionEnabled and self._hangarSpace.isCursorOver3DScene
+        if not hoverStateChanged and cursorActive == self.__lastCursorActive and cursorPos == self.__lastCursorPos:
             return
         else:
-            for gameObject, _ in self._hoveredQuery:
-                gameObject.removeComponentByType(IsHoveredComponent)
+            self.__lastCursorActive = cursorActive
+            self.__lastCursorPos = cursorPos
+            hoveredGameObject = self.__getGameObjectUnderCursor() if cursorActive else None
+            if hoveredGameObject and hoverAccess.find(hoveredGameObject):
+                return
+            for gameObject, _ in self.reaction(self.HoverIterate):
+                queue.removeComponent(gameObject, IsHoveredComponent)
 
-            if hoveredGameObject and hoveredGameObject.findComponentByType(SelectionComponent):
-                hoveredGameObject.createComponent(IsHoveredComponent)
+            selectionAccess = self.reaction(self.SelectionAccess)
+            if hoveredGameObject and selectionAccess.find(hoveredGameObject):
+                queue.createComponent(hoveredGameObject, IsHoveredComponent)
             return
 
     def __getGameObjectUnderCursor(self):
         cursorPosition = GUI.mcursor().position
         ray, wpoint = cameras.getWorldRayAndPoint(cursorPosition.x, cursorPosition.y)
         skipFlags = CollisionFlags.TRIANGLE_PROJECTILENOCOLLIDE | CollisionFlags.TRIANGLE_NOCOLLIDE
-        res = BigWorld.wg_collideDynamicStatic(self.spaceID, wpoint, wpoint + ray * 1500, skipFlags, -1, -1, ColliderTypes.HANGAR_FLAG)
-        if res is not None and res[5] and res[5].isValid():
+        res = BigWorld.wg_collideDynamicStatic(self.spaceID, wpoint, wpoint + ray * self._MAX_PICK_RAY_LEN, skipFlags, -1, -1, ColliderTypes.HANGAR_FLAG)
+        if res is not None and res[5] and res[5].valid:
             gameObject = res[5]
-            cameraCollideComponent = gameObject.findComponentByType(CameraCollideComponent)
+            cameraCollideAccess = self.reaction(self.CameraCollideAccess)
+            cameraCollideComponent = cameraCollideAccess.find(gameObject)
             if cameraCollideComponent and cameraCollideComponent.isColliding:
                 return
             return gameObject

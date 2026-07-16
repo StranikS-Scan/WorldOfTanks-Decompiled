@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/blueprints_requester.py
+from __future__ import absolute_import, division
 import logging
 from collections import namedtuple, defaultdict, OrderedDict
 from copy import copy
+from future.utils import iteritems, viewitems
+from past.utils import old_div
 import BigWorld
 import nations
 from blueprints.BlueprintTypes import BlueprintTypes
@@ -11,6 +14,7 @@ from blueprints.FragmentTypes import NationalBlueprintFragment, IntelligenceData
 from blueprints.FragmentTypes import toIntFragmentCD, getFragmentType
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from helpers import dependency
+from math_common import round_py2_style, round_py2_style_int
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils.requesters import IBlueprintsRequester
@@ -52,7 +56,7 @@ def getUniqueBlueprints(blueprints, isFullNationCD=False):
     vehicleFragments = defaultdict(int)
     nationalFragments = defaultdict(int)
     intelligenceData = 0
-    for fragmentCD, count in blueprints.iteritems():
+    for fragmentCD, count in iteritems(blueprints):
         fragmentType = getFragmentType(fragmentCD)
         if fragmentType == BlueprintTypes.VEHICLE:
             vehicleFragments[getVehicleCD(fragmentCD)] += count
@@ -115,28 +119,28 @@ class BlueprintsRequester(AbstractSyncDataRequester, IBlueprintsRequester):
         if filledCount >= totalCount and filledCount != 0:
             return 100
         discount = self._bpfConfig.getFragmentDiscount(vLevel)
-        return int(round(discount * filledCount * 100))
+        return round_py2_style_int(discount * filledCount * 100)
 
     def getRequiredCountAndDiscount(self, vehicleCD, vLevel):
         filledCount, totalCount = self.getBlueprintCount(vehicleCD, vLevel)
         requiredDiscount = self._bpfConfig.getFragmentDiscount(vLevel)
         if self.isLastFragment(totalCount, filledCount):
             requiredDiscount = 1 - filledCount * requiredDiscount
-        return (totalCount, int(round(requiredDiscount * 100)))
+        return (totalCount, round_py2_style_int(requiredDiscount * 100))
 
     def getFragmentDiscountAndCost(self, vehicleCD, vLevel, xpFullCost):
         _, fragmentDiscount = self.getRequiredCountAndDiscount(vehicleCD, vLevel)
-        return (fragmentDiscount, int(round(xpFullCost * fragmentDiscount * 0.01)))
+        return (fragmentDiscount, round_py2_style_int(xpFullCost * fragmentDiscount * 0.01))
 
     def getAllNationalFragmentsData(self):
         nationalFragments = {}
-        for nationID, fragments in self.__nationalFragments.iteritems():
+        for nationID, fragments in viewitems(self.__nationalFragments):
             nationalFragments[nationID] = sum(fragments.values())
 
         return nationalFragments
 
     def calculateCost(self, oldCost, discount):
-        return oldCost if not discount else int(round(oldCost * (100 - discount) * 0.01))
+        return oldCost if not discount else round_py2_style_int(oldCost * (100 - discount) * 0.01)
 
     def getNationalFragments(self, fragmentCD):
         if not self.__nationalFragments:
@@ -148,10 +152,10 @@ class BlueprintsRequester(AbstractSyncDataRequester, IBlueprintsRequester):
         allianceNationIds = sorted(self.__getAllyConversionCoefs(fragmentCD, vehicleLevel).keys())
         return OrderedDict(((nId, 0) for nId in allianceNationIds)) if not self.__nationalFragments else OrderedDict(((nId, sum(self.__nationalFragments[nId].values()) if nId in self.__nationalFragments else 0) for nId in allianceNationIds))
 
-    def getNationalRequiredOptions(self, vehicleCD, vehicleLevel):
+    def getNationalRequiredOptions(self, fragmentCD, vehicleLevel):
         national, _ = self.getRequiredIntelligenceAndNational(vehicleLevel)
-        allyCoefs = self.__getAllyConversionCoefs(vehicleCD, vehicleLevel)
-        return OrderedDict(((nId, round(national * allyCoef)) for nId, allyCoef in sorted(allyCoefs.iteritems())))
+        allyCoefs = self.__getAllyConversionCoefs(fragmentCD, vehicleLevel)
+        return OrderedDict(((nId, round_py2_style(national * allyCoef)) for nId, allyCoef in sorted(viewitems(allyCoefs))))
 
     def getIntelligenceCount(self):
         return 0 if not self.__intelligence else sum(self.__intelligence.values())
@@ -174,7 +178,7 @@ class BlueprintsRequester(AbstractSyncDataRequester, IBlueprintsRequester):
             return False
         existingAllianceFragments = self.getNationalAllianceFragments(vehicleCD, vehicleLevel)
         allyConversionCoefs = self.__getAllyConversionCoefs(vehicleCD, vehicleLevel)
-        return any((existingAllianceFragments[nId] >= round(allyConversionCoefs[nId] * national) for nId in existingAllianceFragments.iterkeys()))
+        return any((existingAllianceFragments[nId] >= round_py2_style(allyConversionCoefs[nId] * national) for nId in existingAllianceFragments))
 
     def getConvertibleFragmentCount(self, vehicleCD, vehicleLevel):
         national, intelligence = self._bpfConfig.getRequiredFragmentsForConversion(vehicleLevel)
@@ -184,9 +188,9 @@ class BlueprintsRequester(AbstractSyncDataRequester, IBlueprintsRequester):
         existingAlliance = self.getNationalAllianceFragments(vehicleCD, vehicleLevel)
         filledCount, totalCount = self.getBlueprintCount(vehicleCD, vehicleLevel)
         need = totalCount - filledCount
-        availableIntelligence = int(existingIntelligence / intelligence) if intelligence else 0
+        availableIntelligence = int(old_div(existingIntelligence, intelligence)) if intelligence else 0
         allyConversionCoefs = self.__getAllyConversionCoefs(vehicleCD, vehicleLevel)
-        availableNational = sum((int(existingAlliance[nId] / round(national * allyConversionCoefs[nId])) for nId in existingAlliance.iterkeys()))
+        availableNational = sum((int(old_div(existingAlliance[nId], round_py2_style(national * allyConversionCoefs[nId]))) for nId in existingAlliance))
         return min((need, availableNational, availableIntelligence))
 
     def getLayout(self, vehicleCD, vLevel):
@@ -244,7 +248,7 @@ class BlueprintsRequester(AbstractSyncDataRequester, IBlueprintsRequester):
             columns = allLayout.get(fragments, None)
             if columns is None:
                 return (0, 0, ())
-            rows = fragments / columns
+            rows = fragments // columns
             layout = [int(hasBlueprints)] * rows * columns
             return (rows, columns, layout)
 
@@ -256,7 +260,7 @@ class BlueprintsRequester(AbstractSyncDataRequester, IBlueprintsRequester):
             vehicleFragments = {}
             nationalFragments = {}
             intelligenceData = defaultdict(int)
-            for fragmentCD, count in blueprintData.iteritems():
+            for fragmentCD, count in iteritems(blueprintData):
                 fragmentType = getFragmentType(fragmentCD)
                 if fragmentType == BlueprintTypes.VEHICLE:
                     vehicleCD = getVehicleCD(fragmentCD)

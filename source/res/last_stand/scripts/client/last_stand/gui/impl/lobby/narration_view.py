@@ -1,19 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: last_stand/scripts/client/last_stand/gui/impl/lobby/narration_view.py
 from __future__ import absolute_import
+import WWISE
 from gui.impl.gen import R
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from last_stand.gui.impl.gen.view_models.views.lobby.narration_view_model import NarrationViewModel
 from frameworks.wulf import WindowFlags, WindowLayer
 from last_stand.gui.impl.lobby.base_view import SwitcherPresenter
 from last_stand.gui.impl.lobby.widgets.parallax_view import ParallaxView
-from last_stand.gui.sounds import playSound
+from last_stand.gui.sounds import playSound, getSound2D
 from gui.impl.pub.view_component import ViewComponent
 from last_stand.gui.sounds.sound_constants import META_VOICEOVER_UNMUTE, META_VOICEOVER_BUTTON_CLICK_UNMUTE, META_VOICEOVER_MUTE, META_VOICEOVER_BUTTON_CLICK_MUTE, META_STORY_POINT_OPEN_SOUND, META_STORY_POINT_CLOSE_SOUND
 from last_stand.gui import ls_account_settings
 from helpers import dependency
 from last_stand.gui.ls_account_settings import AccountSettingsKeys
 from last_stand.skeletons.ls_story_point_controller import ILSStoryPointController
+from last_stand.uilogging.last_stand.constants import NARRATION_PREFIX, START_MARKER_KEY, END_MARKER_KEY
+from last_stand.uilogging.last_stand.loggers import NarrationEventLogger
 
 class NarrationView(ViewComponent[NarrationViewModel]):
     lsStoryPointCtrl = dependency.descriptor(ILSStoryPointController)
@@ -22,6 +25,9 @@ class NarrationView(ViewComponent[NarrationViewModel]):
     def __init__(self, layoutID=R.views.last_stand.mono.lobby.narration_view()):
         super(NarrationView, self).__init__(layoutID, NarrationViewModel)
         self.__currentSlideIndex = self.lsStoryPointCtrl.FIRST_STORY_POINT_INDEX
+        self._uiLogger = NarrationEventLogger()
+        self._sound = None
+        return
 
     @property
     def viewModel(self):
@@ -33,12 +39,17 @@ class NarrationView(ViewComponent[NarrationViewModel]):
 
     def _onLoading(self, *args, **kwargs):
         super(NarrationView, self)._onLoading(*args, **kwargs)
+        WWISE.WW_addMarkerListener(self._soundMarkerHandler)
         self.__prepareSelectedStoryPoint()
         self.__fillViewModel()
 
     def _finalize(self):
         playSound(META_STORY_POINT_CLOSE_SOUND.format(self.__currentSlideIndex))
         self.lsStoryPointCtrl.selectedStoryPointID = None
+        WWISE.WW_removeMarkerListener(self._soundMarkerHandler)
+        if self._sound is not None:
+            self._sound.stop()
+            self._sound = None
         super(NarrationView, self)._finalize()
         return
 
@@ -50,6 +61,20 @@ class NarrationView(ViewComponent[NarrationViewModel]):
 
     def _onClose(self):
         self.destroyWindow()
+
+    def _playCurrentSlideSound(self):
+        self._sound = getSound2D(META_STORY_POINT_OPEN_SOUND.format(self.__currentSlideIndex))
+        if self._sound is not None:
+            self._sound.play()
+        return
+
+    def _soundMarkerHandler(self, marker):
+        if marker.startswith(NARRATION_PREFIX):
+            _, action = marker.split(':')
+            if START_MARKER_KEY in action:
+                self._uiLogger.logStartEvent(marker)
+            elif END_MARKER_KEY in action:
+                self._uiLogger.logEndEvent(marker)
 
     def __onVoiceoverToggle(self):
         isMuted = ls_account_settings.getSettings(AccountSettingsKeys.STORY_POINT_VOICEOVER_MUTED)
@@ -68,8 +93,8 @@ class NarrationView(ViewComponent[NarrationViewModel]):
         viewModel = self.viewModel
         viewModel.setSlideNumber(slideIndex)
         playSound(META_STORY_POINT_CLOSE_SOUND.format(self.__currentSlideIndex))
-        playSound(META_STORY_POINT_OPEN_SOUND.format(slideIndex))
         self.__currentSlideIndex = slideIndex
+        self._playCurrentSlideSound()
         self.lsStoryPointCtrl.selectedStoryPointID = self.lsStoryPointCtrl.getStoryPointIDByIndex(slideIndex)
         self.__updateButtonLock(viewModel)
 
@@ -108,7 +133,7 @@ class NarrationView(ViewComponent[NarrationViewModel]):
                 playSound(META_VOICEOVER_MUTE)
             else:
                 playSound(META_VOICEOVER_UNMUTE)
-            playSound(META_STORY_POINT_OPEN_SOUND.format(self.__currentSlideIndex))
+            self._playCurrentSlideSound()
 
     def __onStoryPointStatusUpdated(self, token):
         self.lsStoryPointCtrl.selectedStoryPointID = token

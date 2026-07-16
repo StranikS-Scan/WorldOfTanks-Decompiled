@@ -3,6 +3,7 @@
 from __future__ import absolute_import
 import gui.shared
 from constants import Configs
+from debug_utils import LOG_ERROR
 from gui.app_loader import sf_lobby
 from gui.shared.utils.functions import getViewName
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
@@ -13,7 +14,6 @@ from last_stand.gui.ls_account_settings import AccountSettingsKeys
 from last_stand.gui.ls_gui_constants import LAZY_CHANNEL
 from last_stand.skeletons.ls_controller import ILSController
 from last_stand.skeletons.ls_global_chat_controller import ILSGlobalChatController
-from last_stand_common.last_stand_constants import LS_CHAT_CHANNEL
 from helpers import dependency
 from messenger.ext import channel_num_gen
 from gui.prb_control.events_dispatcher import _defCarouselItemCtx
@@ -22,7 +22,6 @@ from messenger.gui.Scaleform.data.ChannelsCarouselHandler import ChannelFindCrit
 from messenger.gui.events_dispatcher import showLazyChannelWindow
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 from messenger.inject import channelsCtrlProperty
-from soft_exception import SoftException
 from frameworks.wulf import WindowLayer
 from skeletons.gui.lobby_context import ILobbyContext
 
@@ -34,7 +33,7 @@ class LSGlobalChatController(ILSGlobalChatController, IGlobalListener):
     def __init__(self):
         self.__clientID = channel_num_gen.getClientID4LazyChannel(LAZY_CHANNEL.LAST_STAND_GLOBAL_CHANNEL)
         if not self.__clientID:
-            SoftException('Client ID not found. Last stand channel does not work')
+            LOG_ERROR('Client ID not found. Last stand channel does not work')
         self.__handler = (ChannelFindCriteria(self.__clientID), WindowLayer.WINDOW)
         self.__isShown = False
 
@@ -77,7 +76,7 @@ class LSGlobalChatController(ILSGlobalChatController, IGlobalListener):
 
     def isChatEnabled(self):
         sysChannelConfig = self.lobbyContext.getServerSettings().getSettings()[self.SYS_CHANNELS_PARAM_KEY]
-        return sysChannelConfig.get('sysChannelsConfig', {}).get(LS_CHAT_CHANNEL, False)
+        return sysChannelConfig.get('sysChannelsConfig', {}).get(LAZY_CHANNEL.LAST_STAND_GLOBAL_CHANNEL, False)
 
     def removeChannel(self):
         if self.__isShown:
@@ -86,10 +85,10 @@ class LSGlobalChatController(ILSGlobalChatController, IGlobalListener):
 
     def addChannel(self):
         if not self.__isShown and self.channelsCtrl.getController(self.__clientID):
-            currCarouselItemCtx = _defCarouselItemCtx._replace(label=LAZY_CHANNEL.LAST_STAND_GLOBAL_CHANNEL, order=channel_num_gen.getOrder4LazyChannel(LAZY_CHANNEL.LAST_STAND_GLOBAL_CHANNEL), isNotified=not ls_account_settings.getSettings(AccountSettingsKeys.CHAT_FIRST_SEEN), criteria={VIEW_SEARCH_CRITERIA.VIEW_UNIQUE_NAME: getViewName(MESSENGER_VIEW_ALIAS.LAZY_CHANNEL_WINDOW, self.__clientID)}, openHandler=lambda : showLazyChannelWindow(self.__clientID))
+            currCarouselItemCtx = _defCarouselItemCtx._replace(label=LAZY_CHANNEL.LAST_STAND_GLOBAL_CHANNEL, order=channel_num_gen.getOrder4LazyChannel(LAZY_CHANNEL.LAST_STAND_GLOBAL_CHANNEL), isNotified=not ls_account_settings.getSettings(AccountSettingsKeys.CHAT_FIRST_SEEN).get(self.SYS_CHANNELS_PARAM_KEY, False), criteria={VIEW_SEARCH_CRITERIA.VIEW_UNIQUE_NAME: getViewName(MESSENGER_VIEW_ALIAS.LAZY_CHANNEL_WINDOW, self.__clientID)}, openHandler=lambda : showLazyChannelWindow(self.__clientID))
             gui.shared.g_eventBus.handleEvent(gui.shared.events.ChannelManagementEvent(self.__clientID, gui.shared.events.PreBattleChannelEvent.REQUEST_TO_ADD, currCarouselItemCtx._asdict()), gui.shared.EVENT_BUS_SCOPE.LOBBY)
             self.__isShown = True
-            ls_account_settings.setSettings(AccountSettingsKeys.CHAT_FIRST_SEEN, True)
+            ls_account_settings.setChatFirstSeen(Configs.SYSTEM_CHANNELS, True)
 
     def _update(self):
         if self.isEnabled() and self.lsCtrl.isEventPrb():

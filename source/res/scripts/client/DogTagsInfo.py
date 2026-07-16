@@ -10,6 +10,7 @@ if typing.TYPE_CHECKING:
 class DogTagsInfo(BigWorld.DynamicScriptComponent):
 
     def __init__(self):
+        super(DogTagsInfo, self).__init__()
         self.__eManager = Event.EventManager()
         self.onUsedComponentsUpdated = Event.Event(self.__eManager)
 

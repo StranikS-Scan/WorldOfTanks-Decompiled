@@ -1,11 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/tankmen_components.py
+from __future__ import absolute_import
+import typing
 from debug_utils import LOG_ERROR
 from items.components import component_constants
 from items.components import legacy_stuff
-from items.components import shared_components
 from items.components import skills_constants
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from past.builtins import unicode
+    from items.components import shared_components
 
 class SPECIAL_VOICE_TAG(object):
     BUFFON = 'buffonSpecialVoice'
@@ -70,6 +74,7 @@ class SPECIAL_VOICE_TAG(object):
     BP_H5 = ('tankmen_bp1005_1', 'tankmen_bp1005_2')
     BP_H6 = ('tankmen_bp1006_1', 'tankmen_bp1006_2', 'tankmen_bp1006_3', 'tankmen_bp1006_4', 'tankmen_bp1006_5', 'tankmen_bp1006_6')
     BP_19_M = ('tankmen_bp19_5', 'tankmen_bp19_6', 'tankmen_bp19_7', 'tankmen_bp19_8', 'tankmen_bp19_9')
+    BP_20_M = ('tankmen_bp20_5', 'tankmen_bp20_6', 'tankmen_bp20_7', 'tankmen_bp20_8', 'tankmen_bp20_9')
     ALL = (BUFFON,
      SABATON,
      OFFSPRING,
@@ -108,7 +113,7 @@ class SPECIAL_VOICE_TAG(object):
      HW25_DA_KUN_CN,
      HW25_PANCHEZHANG_CN,
      CELEBRITY_2026,
-     ERWIN) + BATTLE_OF_BLOGGERS + BATTLE_OF_BLOGGERS_2021 + G_I_JOE_TWITCH_2021 + WHITE_TIGER_EVENT_2021 + G_I_JOE_2022 + WHITE_TIGER_EVENT_2022 + BPH_2022 + WHITE_TIGER_EVENT_2023 + BP_12_M + BP_H2 + BP_13 + CTM_24 + BP_14_M + WHITE_TIGER_EVENT_2024 + BP_15_M + BP_H4 + BP_16_M + BP_17_DC_M + BP_18_M + BP_18_NM + BP_H5 + BP_H6 + BP_19_M
+     ERWIN) + BATTLE_OF_BLOGGERS + BATTLE_OF_BLOGGERS_2021 + G_I_JOE_TWITCH_2021 + WHITE_TIGER_EVENT_2021 + G_I_JOE_2022 + WHITE_TIGER_EVENT_2022 + BPH_2022 + WHITE_TIGER_EVENT_2023 + BP_12_M + BP_H2 + BP_13 + CTM_24 + BP_14_M + WHITE_TIGER_EVENT_2024 + BP_15_M + BP_H4 + BP_16_M + BP_17_DC_M + BP_18_M + BP_18_NM + BP_H5 + BP_H6 + BP_19_M + BP_20_M
 
 
 class SPECIAL_CREW_TAG(object):
@@ -178,7 +183,7 @@ class RanksSet(object):
         self.__rankIDsByNames = {}
 
     def __repr__(self):
-        return 'RanksSet({})'.format(self.__rankIDsByNames.keys())
+        return 'RanksSet({})'.format(list(self.__rankIDsByNames))
 
     def add(self, rank):
         self.__rankIDsByNames[rank.name] = len(self.__ranks)
@@ -341,7 +346,7 @@ class NationGroup(legacy_stuff.LegacyStuff):
 
     @property
     def isUnique(self):
-        return 1 == len(self.__firstNamesIDs) * len(self.__lastNamesIDs) * len(self.__iconsIDs)
+        return len(self.__firstNamesIDs) * len(self.__lastNamesIDs) * len(self.__iconsIDs) == 1
 
 
 class NationConfig(legacy_stuff.LegacyStuff):
@@ -435,7 +440,7 @@ class NationConfig(legacy_stuff.LegacyStuff):
 
 
 class LoreGroupComponent(object):
-    __slots__ = 'descr_by_nation'
+    __slots__ = ('descr_by_nation',)
     DEFAULT = 'default'
 
     def __init__(self, descr):

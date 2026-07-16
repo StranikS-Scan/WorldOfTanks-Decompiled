@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/formatters/time_formatters.py
+from __future__ import absolute_import, division
 import math
 import time
 from gui.Scaleform.locale.MENU import MENU
@@ -144,14 +145,13 @@ class RentLeftFormatter(object):
             formatter = defaultFormatter
         identifier = None
         timeLeftString = ''
-        extraData = dict()
+        extraData = {}
         if rentData.seasonType == GameSeasonType.RANKED:
             identifier, timeLeftString, extraData = self.getRentRankedSeasonLeftStr(rentData, timeStyle)
-        if rentData.seasonType == GameSeasonType.EPIC:
+        elif rentData.seasonType == GameSeasonType.EPIC:
             return i18n.makeString(localization % _SEASON_TYPE_KEY[rentData.seasonType] + '/base')
-        else:
-            ctx.update(extraData)
-            return '' if not identifier else formatter(localization % _SEASON_TYPE_KEY[rentData.seasonType] + '/%s', identifier, timeLeftString, ctx)
+        ctx.update(extraData)
+        return '' if not identifier else formatter(localization % _SEASON_TYPE_KEY[rentData.seasonType] + '/%s', identifier, timeLeftString, ctx)
 
     def getRentRankedSeasonLeftStr(self, rentData, timeStyle):
         ctx = {}

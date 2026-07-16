@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/player_notifications/siege_mode/sound_notifications.py
 import BigWorld
-from cgf_obsolete_script.py_component import Component
+from components_base.component import Component
 import SoundGroups
 from constants import VEHICLE_SIEGE_STATE
 from gui.battle_control import avatar_getter

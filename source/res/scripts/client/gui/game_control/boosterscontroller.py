@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/BoostersController.py
+from __future__ import absolute_import
 import logging
+from future.utils import listvalues, viewvalues
 from typing import TYPE_CHECKING
 import Event
 from adisp import adisp_process
@@ -27,6 +29,7 @@ from skeletons.gui.system_messages import ISystemMessages
 if TYPE_CHECKING:
     from typing import Dict, TypeVar
     from helpers.server_settings import ServerSettings
+    from gui.goodies.goodie_items import Booster
     from gui.prb_control.entities.base.entity import BasePrbEntity
     from gui.prb_control.entities.base.legacy.entity import LegacyEntity
     from gui.server_events.settings import _PersonalReservesSettings
@@ -163,14 +166,14 @@ class BoostersController(IBoostersController, IGlobalListener):
         self.updateGameModeStatus()
 
     def __timeTillNextPersonalReserveTick(self):
-        activeBoosters = self.goodiesCache.getBoosters(REQ_CRITERIA.BOOSTER.ACTIVE).values()
+        activeBoosters = listvalues(self.goodiesCache.getBoosters(REQ_CRITERIA.BOOSTER.ACTIVE))
         return min((booster.getUsageLeftTime() for booster in activeBoosters)) if activeBoosters else 0
 
     def __notifyBoosterTime(self):
         self.onPersonalReserveTick()
 
     def __timeTillNextClanReserveTick(self):
-        clanReserves = self.goodiesCache.getClanReserves().values()
+        clanReserves = listvalues(self.goodiesCache.getClanReserves())
         return min((reserve.getUsageLeftTime() for reserve in clanReserves)) + 1 if clanReserves else 0
 
     def __processNotifications(self):
@@ -182,7 +185,7 @@ class BoostersController(IBoostersController, IGlobalListener):
         if accountSettings.isFirstTimeNotificationShown:
             return
         totalBoostersCount = 0
-        for booster in self.getExpirableBoosters().itervalues():
+        for booster in viewvalues(self.getExpirableBoosters()):
             totalBoostersCount += booster.count
 
         if totalBoostersCount > 0:
@@ -193,9 +196,9 @@ class BoostersController(IBoostersController, IGlobalListener):
         if self.soonExpireNotificationDisplayed:
             return
         totalBoostersCount = 0
-        for booster in self.getExpirableBoosters().itervalues():
+        for booster in viewvalues(self.getExpirableBoosters()):
             expirations = booster.expirations
-            for variant in expirations.itervalues():
+            for variant in viewvalues(expirations):
                 expireInTime = time_utils.getTimeDeltaFromNow(variant.timestamp)
                 if expireInTime < time_utils.ONE_DAY:
                     totalBoostersCount += variant.amount

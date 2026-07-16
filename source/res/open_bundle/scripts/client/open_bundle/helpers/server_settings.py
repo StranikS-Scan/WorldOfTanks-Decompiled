@@ -11,13 +11,17 @@ class BundlesConfig(object):
     __slots__ = ('__bundles',)
 
     def __init__(self, config):
-        self.__bundles = {bundleID:BundleConfig(**bundle) for bundleID, bundle in viewitems(config)}
+        if config is not None:
+            self.__bundles = {bundleID:BundleConfig(**bundle) for bundleID, bundle in viewitems(config)}
+        else:
+            self.__bundles = {}
+        return
 
     def getBundleIDs(self):
-        return self.__bundles.keys()
+        return list(self.__bundles.keys())
 
     def getBundles(self):
-        return self.__bundles.values()
+        return list(self.__bundles.values())
 
     def getBundle(self, bundleID):
         if bundleID in self.__bundles:

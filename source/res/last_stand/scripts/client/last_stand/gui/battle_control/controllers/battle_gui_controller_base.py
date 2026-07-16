@@ -134,8 +134,6 @@ class LSBattleGUIControllerBase(IArenaVehiclesController):
 
     def _onPhaseChanged(self, arenaPhases):
         self.onPhaseChanged()
-        if self.arenaPhases.isBCMarkersCleanupEnabled:
-            self._removeBattleCommunicationMarkers()
 
     def _onPhaseTimeChanged(self, timeLeft, prev, lastPhase, isTimerAlarmEnabled):
         self.onPhaseTimeChanged(timeLeft, prev, lastPhase, isTimerAlarmEnabled)

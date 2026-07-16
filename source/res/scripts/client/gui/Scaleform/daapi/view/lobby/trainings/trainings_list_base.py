@@ -74,7 +74,8 @@ class TrainingsListBase(LobbySubView, TrainingFormMeta, ILegacyListener):
              'creatorRegion': self._lobbyContext.getRegionCode(item.creatorDbId),
              'icon': getArenaImage(arenaType.geometryName, 'small'),
              'disabled': not item.isOpened,
-             'badgeVisualVO': badgeVO})
+             'badgeVisualVO': badgeVO,
+             'prbClusterId': item.prbClusterID})
 
         self.sendData(listData, playersTotal)
 

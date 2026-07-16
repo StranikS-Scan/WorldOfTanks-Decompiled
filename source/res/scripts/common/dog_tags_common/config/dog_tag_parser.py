@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dog_tags_common/config/dog_tag_parser.py
+from __future__ import absolute_import
 import typing
+from future.utils import viewitems
 import ResMgr
-import dog_tag_framework as dtf
+import dog_tags_common.config.dog_tag_framework as dtf
 from constants import IS_CLIENT, IS_BASEAPP
 from dog_tags_common.config.common import ParseException, ParameterType, Visibility, ComponentPurpose, ComponentViewType, DOG_TAGS_FILE, ComponentNumberType
 from soft_exception import SoftException
@@ -82,7 +84,7 @@ PARAM_PARSERS = {ParameterType.INT: _parseInt,
  ParameterType.FLOAT_LIST: _parseFloatList}
 
 def _parseSection(sectionName, section, *builderAttrs):
-    operationName, cls, operationParamNames, operationParamsInfo, operationDefaults = dtf.parserInfo[sectionName]
+    _, cls, operationParamNames, operationParamsInfo, operationDefaults = dtf.parserInfo[sectionName]
     childrens = section.keys()
     operationParams = {}
     for chilName in childrens:
@@ -91,16 +93,16 @@ def _parseSection(sectionName, section, *builderAttrs):
             paramType = operationParamsInfo[chilName][0]
             operationParams[chilName] = PARAM_PARSERS[paramType](section.readString(chilName), chilName)
 
-    for key, value in operationDefaults.iteritems():
+    for key, value in viewitems(operationDefaults):
         if key not in operationParams:
             operationParams[key] = value
 
-    missedParams = operationParamNames - set(operationParams.iterkeys())
+    missedParams = operationParamNames - set(operationParams)
     for miss in missedParams:
         operationParams[miss] = None
 
     builder = cls(*builderAttrs)
-    for key, value in operationParams.iteritems():
+    for key, value in viewitems(operationParams):
         getattr(builder, key)(value)
 
     return builder.build()

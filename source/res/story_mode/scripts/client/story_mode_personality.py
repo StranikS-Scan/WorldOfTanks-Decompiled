@@ -4,6 +4,7 @@ from aih_constants import CTRL_TYPE, CTRL_MODE_NAME
 from chat_shared import SYS_MESSAGE_TYPE
 from constants import HAS_DEV_RESOURCES, ARENA_GUI_TYPE, ARENA_BONUS_TYPE
 from debug_utils import LOG_DEBUG
+from gui.impl.gen import R
 from gui.battle_hints import battle_hints_overlap_controller
 from gui.battle_hints.battle_hints_overlap_controller import HintScope
 from gui.override_scaleform_views_manager import g_overrideScaleFormViewsConfig
@@ -117,6 +118,10 @@ class ClientStoryModeBattleMode(battle_mode.StoryModeBattleMode):
          CTRL_MODE_NAME.SM_ENTITY_VIEW: (SMEntityViewMode, 'postMortemMode', CTRL_TYPE.USUAL)}
 
     @property
+    def _client_dynamicViewsForMonitoring(self):
+        return [R.views.story_mode.mono.lobby.mission_selection_view()]
+
+    @property
     def _client_hangarEventBannerType(self):
         return StoryModeNewbieBanner
 
@@ -186,6 +191,7 @@ def preInit():
     battleMode.registerControlModes()
     battleMode.registerHangarEventBanner()
     battleMode.registerDisplayedClassTagGetter()
+    battleMode.registerClientDynamicViewsForMonitoring()
     onboardingBattleMode = ClientOnboardingBattleMode(__name__)
     onboardingBattleMode.registerGuiType()
     onboardingBattleMode.registerScaleformRequiredLibraries()

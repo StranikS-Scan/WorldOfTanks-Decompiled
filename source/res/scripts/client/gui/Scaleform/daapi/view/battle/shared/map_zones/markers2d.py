@@ -25,7 +25,8 @@ class MapZonesPlugin(plugins.MarkerPlugin, MapZonesListener):
         super(MapZonesPlugin, self).start()
         mapZones = self.sessionProvider.shared.mapZones
         if mapZones:
-            for zoneMarker, matrix in viewvalues(mapZones.getZoneMarkers()):
+            for zoneMarkerAccess, matrix in viewvalues(mapZones.getZoneMarkers()):
+                zoneMarker = zoneMarkerAccess()
                 if zoneMarker.isVisibleOn3DScene:
                     self.__addMarkerToZone(zoneMarker, matrix)
 

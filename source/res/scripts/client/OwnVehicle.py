@@ -12,6 +12,10 @@ _logger = logging.getLogger(__name__)
 
 class OwnVehicle(OwnVehicleBase):
 
+    def initialUpdate(self, force=False):
+        super(OwnVehicle, self).initialUpdate(force=force)
+        _logger.info('[%d] initialUpdate force=%s result=%s', self.entity.id, force, self.isInitialUpdated)
+
     def _avatar(self):
         avatar = BigWorld.player()
         if avatar.isObserver() and BattleReplay.isServerSideReplay():

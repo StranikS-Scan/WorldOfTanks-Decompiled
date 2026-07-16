@@ -1,13 +1,27 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/BWUtil.py
-import sys
+from __future__ import absolute_import
+import io
 import os
-from functools import partial, wraps
-from types import GeneratorType
 import platform
-import ResMgr
+import sys
+from functools import partial
 import BigWorld
+import ResMgr
 from bwdebug import TRACE_MSG
+try:
+    import builtins
+except ImportError:
+    import __builtin__ as builtins
+
+try:
+    _unicode = unicode
+    _basestring = basestring
+except NameError:
+    _unicode = str
+    _basestring = str
+
+_PY2 = sys.version_info.major < 3
 
 class _BuiltinsAccessor(object):
 
@@ -43,23 +57,23 @@ class _BuiltinsAccessor(object):
 class _ItemAccessor(_BuiltinsAccessor):
 
     def _set(self, value):
-        __builtins__[self._field_name] = value
+        builtins[self._field_name] = value
 
     def _get(self):
-        return __builtins__[self._field_name]
+        return builtins[self._field_name]
 
 
 class _AttrAccessor(_BuiltinsAccessor):
 
     def _set(self, value):
-        setattr(__builtins__, self._field_name, value)
+        setattr(builtins, self._field_name, value)
 
     def _get(self):
-        return getattr(__builtins__, self._field_name)
+        return getattr(builtins, self._field_name)
 
 
 try:
-    _ = __builtins__['open']
+    _ = builtins['open']
     _open_accessor = _ItemAccessor('open')
 except TypeError:
     _open_accessor = _AttrAccessor('open')
@@ -79,19 +93,30 @@ class _BwFile(object):
         return iter(self._content)
 
 
-def bwResReplaceOpen(name, *args):
+def bwResReplaceOpen(name, *args, **kwargs):
     return _BwFile(name)
 
 
-@partial
-def bwResRelativeOpen(name, *args):
+def bwResRelativePatch(function, name, *args, **kwargs):
     try:
         absname = ResMgr.resolveToAbsolutePath(name)
     except Exception as e:
         raise IOError(2, 'Error = {}; name = {}'.format(str(e), name))
 
-    absname = unicode(absname)
-    return _open_accessor.original(absname, *args)
+    absname = _unicode(absname)
+    return function(absname, *args, **kwargs)
+
+
+@partial
+def bwResRelativeOpen(name, *args, **kwargs):
+    if _PY2:
+        kwargs.pop('encoding', None)
+    return bwResRelativePatch(_open_accessor.original, name, *args, **kwargs)
+
+
+@partial
+def bwResRelativeIOOpen(name, *args, **kwargs):
+    return bwResRelativePatch(io.open, name, *args, **kwargs)
 
 
 def monkeyPatchOpen(full_replace=False):
@@ -101,6 +126,15 @@ def monkeyPatchOpen(full_replace=False):
     else:
         new_open = bwResRelativeOpen
     _open_accessor.set(new_open)
+
+
+def monkeyPatchFutureOpen():
+    TRACE_MSG('BWUtil.monkeyPatchFutureOpen: Patching future open()')
+    try:
+        from future import builtins as future_builtins
+        future_builtins.open = bwResRelativeIOOpen
+    except ImportError:
+        TRACE_MSG('BWUtil.monkeyPatchFutureOpen: Patching aborted since no future library')
 
 
 def revertPatchedOpen():
@@ -117,7 +151,7 @@ def extendPath(path, name):
     init_py = '__init__' + os.extsep + 'py'
     path = path[:]
     for dir in sys.path:
-        if not isinstance(dir, basestring) or not ResMgr.isDir(dir):
+        if not isinstance(dir, _basestring) or not ResMgr.isDir(dir):
             continue
         subdir = os.path.join(dir, pname)
         initfile = os.path.join(subdir, init_py)

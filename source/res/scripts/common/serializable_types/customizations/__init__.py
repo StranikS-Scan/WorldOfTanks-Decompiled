@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/serializable_types/customizations/__init__.py
+from __future__ import absolute_import
 from serialization import parseCompDescr
 from serialization.serializable_component import SerializableComponentChildType
 from .attachment import AttachmentComponent

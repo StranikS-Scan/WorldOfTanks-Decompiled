@@ -177,7 +177,7 @@ class SYSTEM_MESSAGES(object):
     SQUAD_KICKEDFROMQUEUE = '#system_messages:squad/kickedFromQueue'
     SQUAD_NOTVALIDDELETED = '#system_messages:squad/notValidDeleted'
     SQUAD_NOTVALIDDELETEDFILTER = '#system_messages:squad/notValidDeletedFilter'
-    SQUAD_NOTVALIDMAXVEHTYPEDELETED = '#system_messages:squad/notValidMaxVehTypeDeleted'
+    SQUAD_NOTVALIDMAXCOUNTVEHDELETED = '#system_messages:squad/notValidMaxCountVehDeleted'
     SQUAD_NOTVALIDENQUEUEDATA = '#system_messages:squad/notValidEnqueueData'
     BATTLESESSION_KICKEDFROMQUEUE = '#system_messages:battleSession/kickedFromQueue'
     MEMBERROSTERCHANGEDMAIN = '#system_messages:memberRosterChangedMain'
@@ -1460,6 +1460,24 @@ class SYSTEM_MESSAGES(object):
     W2GT_SWITCHON_DESCRIPTION = '#system_messages:w2gt/switchOn/description'
     W2GT_SWITCHOFF_HEADER = '#system_messages:w2gt/switchOff/header'
     W2GT_SWITCHOFF_DESCRIPTION = '#system_messages:w2gt/switchOff/description'
+    CHALLENGES_ACTIVATE_SERVERERROR = '#system_messages:challenges/activate/serverError'
+    CHALLENGES_ACTIVATE_SUCCESS_TITLE = '#system_messages:challenges/activate/success/title'
+    CHALLENGES_ACTIVATE_SUCCESS_TEXT = '#system_messages:challenges/activate/success/text'
+    CHALLENGES_RESTART_SERVERERROR = '#system_messages:challenges/restart/serverError'
+    CHALLENGES_RESTART_PAID_TITLE = '#system_messages:challenges/restart/paid/title'
+    CHALLENGES_RESTART_FREE_TITLE = '#system_messages:challenges/restart/free/title'
+    CHALLENGES_RESTART_FREE_TEXT = '#system_messages:challenges/restart/free/text'
+    CHALLENGES_SURRENDER_SERVERERROR = '#system_messages:challenges/surrender/serverError'
+    CHALLENGES_SURRENDER_SUCCESS_TEXT = '#system_messages:challenges/surrender/success/text'
+    CHALLENGES_SERVERERROR_COOLDOWN = '#system_messages:challenges/serverError/COOLDOWN'
+    CHALLENGES_FORMATTER_SPENT_CREDITS = '#system_messages:challenges/formatter/spent/credits'
+    CHALLENGES_FORMATTER_SPENT_GOLD = '#system_messages:challenges/formatter/spent/gold'
+    CHALLENGES_FORMATTER_SPENT_CRYSTAL = '#system_messages:challenges/formatter/spent/crystal'
+    CHALLENGES_CHALLENGEEND_TITLE = '#system_messages:challenges/challengeEnd/title'
+    CHALLENGES_CHALLENGEEND_TEXT = '#system_messages:challenges/challengeEnd/text'
+    CHALLENGES_CHALLENGEEND_BUTTON = '#system_messages:challenges/challengeEnd/button'
+    CHALLENGES_CHALLENGEMISSIONCOMPLETE_HEADER = '#system_messages:challenges/challengeMissionComplete/header'
+    CHALLENGES_CHALLENGEMISSIONCOMPLETE_TEXT = '#system_messages:challenges/challengeMissionComplete/text'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1761,7 +1779,7 @@ class SYSTEM_MESSAGES(object):
      SQUAD_KICKEDFROMQUEUE,
      SQUAD_NOTVALIDDELETED,
      SQUAD_NOTVALIDDELETEDFILTER,
-     SQUAD_NOTVALIDMAXVEHTYPEDELETED,
+     SQUAD_NOTVALIDMAXCOUNTVEHDELETED,
      SQUAD_NOTVALIDENQUEUEDATA,
      BATTLESESSION_KICKEDFROMQUEUE,
      MEMBERROSTERCHANGEDMAIN,
@@ -3043,7 +3061,25 @@ class SYSTEM_MESSAGES(object):
      W2GT_SWITCHON_HEADER,
      W2GT_SWITCHON_DESCRIPTION,
      W2GT_SWITCHOFF_HEADER,
-     W2GT_SWITCHOFF_DESCRIPTION)
+     W2GT_SWITCHOFF_DESCRIPTION,
+     CHALLENGES_ACTIVATE_SERVERERROR,
+     CHALLENGES_ACTIVATE_SUCCESS_TITLE,
+     CHALLENGES_ACTIVATE_SUCCESS_TEXT,
+     CHALLENGES_RESTART_SERVERERROR,
+     CHALLENGES_RESTART_PAID_TITLE,
+     CHALLENGES_RESTART_FREE_TITLE,
+     CHALLENGES_RESTART_FREE_TEXT,
+     CHALLENGES_SURRENDER_SERVERERROR,
+     CHALLENGES_SURRENDER_SUCCESS_TEXT,
+     CHALLENGES_SERVERERROR_COOLDOWN,
+     CHALLENGES_FORMATTER_SPENT_CREDITS,
+     CHALLENGES_FORMATTER_SPENT_GOLD,
+     CHALLENGES_FORMATTER_SPENT_CRYSTAL,
+     CHALLENGES_CHALLENGEEND_TITLE,
+     CHALLENGES_CHALLENGEEND_TEXT,
+     CHALLENGES_CHALLENGEEND_BUTTON,
+     CHALLENGES_CHALLENGEMISSIONCOMPLETE_HEADER,
+     CHALLENGES_CHALLENGEMISSIONCOMPLETE_TEXT)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

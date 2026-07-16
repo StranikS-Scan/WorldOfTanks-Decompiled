@@ -7,7 +7,7 @@ import ResMgr
 import BigWorld
 import constants
 import pwd_token
-from Event import Event, EventManager
+from Event import Event, SafeEvent, EventManager
 from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG, LOG_NOTE, LOG_WARNING
 from shared_utils import nextTick
@@ -81,13 +81,13 @@ class ConnectionManager(IConnectionManager):
         g_playerEvents.onLoginQueueNumberReceived += self.__processQueue
         g_playerEvents.onPeripheryRoutingGroupReceived += self.setPeripheryRoutingGroup
         self.__eManager = EventManager()
-        self.onLoggedOn = Event(self.__eManager)
-        self.onConnected = Event(self.__eManager)
+        self.onLoggedOn = SafeEvent(self.__eManager)
+        self.onConnected = SafeEvent(self.__eManager)
         self.onRejected = Event(self.__eManager)
         self.onDisconnected = Event(self.__eManager)
         self.onKickedFromServer = Event(self.__eManager)
         self.onKickWhileLoginReceived = Event(self.__eManager)
-        self.onQueued = Event(self.__eManager)
+        self.onQueued = SafeEvent(self.__eManager)
         self.onPeripheryRoutingGroupUpdated = Event(self.__eManager)
         return
 
@@ -312,7 +312,7 @@ class ConnectionManager(IConnectionManager):
         return self.__connectionStatus != LOGIN_STATUS.LOGGED_ON
 
     def isStandalone(self):
-        return self.peripheryID == 0
+        return self.peripheryID == constants.STANDALONE_CLUSTER_ID
 
     def isConnected(self):
         return self.__connectionStatus == LOGIN_STATUS.LOGGED_ON

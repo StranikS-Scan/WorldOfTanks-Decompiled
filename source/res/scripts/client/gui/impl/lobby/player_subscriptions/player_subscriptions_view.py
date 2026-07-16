@@ -176,7 +176,7 @@ class PlayerSubscriptionsView(ViewImpl):
             subscriptions.invalidate()
 
     def __getSortedProducts(self, products):
-        return sorted(products, key=lambda product: not isinstance(product, WotPlusDescriptor))
+        return sorted(products, key=lambda product: (product.type != SubscriptionTypeEnum.WOTSUBSCRIPTION, not isinstance(product, WotPlusDescriptor)))
 
     def __onBackClick(self):
         self._wotPlusUILogger.logCloseEvent()

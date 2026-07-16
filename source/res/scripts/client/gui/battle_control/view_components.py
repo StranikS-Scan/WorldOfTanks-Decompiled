@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/view_components.py
+from __future__ import absolute_import
 import logging
 import weakref
 from collections import defaultdict
@@ -80,9 +81,8 @@ class _ComponentsBridge(object):
                 sameViewAliases = set(componentsIDs).intersection(self.__indexes[ctrlID])
                 if sameViewAliases:
                     raise ComponentsBridgeError('Linkage of controller ID to view alias have to be defined only once! ' + 'Controller ID: {}, same view aliases: {}'.format(ctrlID, sameViewAliases))
-                else:
-                    self.__components[ctrlID].extend([None] * len(componentsIDs))
-                    self.__indexes[ctrlID].extend(componentsIDs)
+                self.__components[ctrlID].extend([None] * len(componentsIDs))
+                self.__indexes[ctrlID].extend(componentsIDs)
             else:
                 self.__components[ctrlID] = [None] * len(componentsIDs)
                 self.__indexes[ctrlID] = list(componentsIDs)

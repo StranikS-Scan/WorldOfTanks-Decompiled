@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/msgs_ctrl.py
+from __future__ import absolute_import
 import weakref
 import BigWorld
 from helpers import dependency
@@ -275,7 +276,7 @@ class EpicBattleMessagesPlayer(BattleMessagesPlayer):
                 targetLane = voTarget.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PLAYER_GROUP)
                 attackerLane = voAttacker.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PLAYER_GROUP)
                 playerLane = playerDataComp.physicalLane
-                if playerLane != targetLane and playerLane != attackerLane:
+                if playerLane not in (targetLane, attackerLane):
                     return False
         return True
 
@@ -301,7 +302,7 @@ class EpicBattleMessagesController(BattleMessagesController):
                 targetLane = voTarget.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PLAYER_GROUP)
                 attackerLane = voAttacker.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PLAYER_GROUP)
                 playerLane = playerDataComp.physicalLane
-                if playerLane != targetLane and playerLane != attackerLane:
+                if playerLane not in (targetLane, attackerLane):
                     return False
         return True
 

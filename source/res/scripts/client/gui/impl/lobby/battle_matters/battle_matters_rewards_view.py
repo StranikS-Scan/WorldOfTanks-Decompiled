@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_matters/battle_matters_rewards_view.py
+from __future__ import absolute_import
 import logging
 from collections import OrderedDict
 import typing
+from future.utils import iteritems
 from frameworks.wulf import ViewSettings, WindowFlags
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.gen import R
@@ -15,7 +17,7 @@ from gui.server_events.bonuses import getNonQuestBonuses, getMergedBonusesFromDi
 from gui.server_events.events_dispatcher import showBattleMatters
 from gui.shared.event_dispatcher import showDelayedReward, selectVehicleInHangar, showHangar
 from gui.shared.missions.packers.bonus import packMissionsBonusModelAndTooltipData
-from gui.impl.lobby.battle_matters.battle_matters_bonus_packer import getBattleMattersBonusPacker, bonusesSort, blueprintsCmp, battleMattersSort
+from gui.impl.lobby.battle_matters.battle_matters_bonus_packer import getBattleMattersBonusPacker, bonusesSortKey, blueprintsSortKey, battleMattersSortKey
 from helpers import dependency
 from sound_gui_manager import CommonSoundSpaceSettings
 from shared_utils import first
@@ -98,8 +100,8 @@ class BattleMattersRewardsView(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(BattleMattersRewardsView, self)._onLoading(args, kwargs)
         vehicles = self.__processVehicles()
-        regularBonuses = sorted(self.__getBonuses(self.__regularRewards), cmp=bonusesSort) if self.__regularQuestID else []
-        intermediateBonuses = sorted(self.__getBonuses(self.__intermediateRewards), cmp=bonusesSort) if self.__intermediateQuestID else []
+        regularBonuses = sorted(self.__getBonuses(self.__regularRewards), key=bonusesSortKey) if self.__regularQuestID else []
+        intermediateBonuses = sorted(self.__getBonuses(self.__intermediateRewards), key=bonusesSortKey) if self.__intermediateQuestID else []
         self.__processBlueprints(regularBonuses)
         self.__processBlueprints(intermediateBonuses)
         self.__processDelayedBonuses(regularBonuses)
@@ -131,19 +133,19 @@ class BattleMattersRewardsView(ViewImpl):
     def __fillVehicles(self, model, vehicles, packer):
         vehiclesModel = model.getVehicles()
         vehiclesModel.clear()
-        packMissionsBonusModelAndTooltipData(vehicles, packer, vehiclesModel, self.__tooltipData[RewardType.VEHICLE], sort=battleMattersSort)
+        packMissionsBonusModelAndTooltipData(vehicles, packer, vehiclesModel, self.__tooltipData[RewardType.VEHICLE], sortKey=battleMattersSortKey)
         vehiclesModel.invalidate()
 
     def __fillIntermediate(self, model, bonuses, packer):
         intermediateModel = model.getIntermediateRewards()
         intermediateModel.clear()
-        packMissionsBonusModelAndTooltipData(bonuses, packer, intermediateModel, self.__tooltipData[RewardType.INTERMEDIATE], sort=battleMattersSort)
+        packMissionsBonusModelAndTooltipData(bonuses, packer, intermediateModel, self.__tooltipData[RewardType.INTERMEDIATE], sortKey=battleMattersSortKey)
         intermediateModel.invalidate()
 
     def __fillRegular(self, model, bonuses, packer):
         regularModel = model.getRegularRewards()
         regularModel.clear()
-        packMissionsBonusModelAndTooltipData(bonuses, packer, regularModel, self.__tooltipData[RewardType.REGULAR], sort=battleMattersSort)
+        packMissionsBonusModelAndTooltipData(bonuses, packer, regularModel, self.__tooltipData[RewardType.REGULAR], sortKey=battleMattersSortKey)
         regularModel.invalidate()
 
     def __processVehicles(self):
@@ -164,7 +166,7 @@ class BattleMattersRewardsView(ViewImpl):
     def __processDelayedBonuses(self, bonuses):
         if self.__delayedReward:
             vehInfo = first(self.__delayedReward.get(VehiclesBonus.VEHICLES_BONUS))
-            for vehCD, vehicle in vehInfo.iteritems():
+            for vehCD, vehicle in iteritems(vehInfo):
                 if vehicle:
                     bonuses.append(TankmenBonus('tankmen', [TankmenBonus.getTankmenDataForCrew(vehCD, vehicle.get('crewLvl', 0))]))
 
@@ -194,7 +196,7 @@ class BattleMattersRewardsView(ViewImpl):
         firstIdx = bonuses.index(blueprints[0]) if blueprints else 0
         secondIdx = firstIdx + len(blueprints)
         if secondIdx:
-            bonuses[firstIdx:secondIdx] = sorted(blueprints, cmp=blueprintsCmp)
+            bonuses[firstIdx:secondIdx] = sorted(blueprints, key=blueprintsSortKey)
 
 
 class BattleMattersRewardsViewWindow(LobbyNotificationWindow):

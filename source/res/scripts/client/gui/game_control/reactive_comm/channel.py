@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/reactive_comm/channel.py
+from __future__ import absolute_import
 import logging
 import re
 import zlib
@@ -222,8 +223,10 @@ class SubscriptionStatus(object):
     def __repr__(self):
         return '{}(client={}, server={})'.format(self.__class__.__name__, self.__clientStatus, self.__serverStatus)
 
-    def __nonzero__(self):
+    def __bool__(self):
         return self.isSubscribed
+
+    __nonzero__ = __bool__
 
     @property
     def isSubscribed(self):

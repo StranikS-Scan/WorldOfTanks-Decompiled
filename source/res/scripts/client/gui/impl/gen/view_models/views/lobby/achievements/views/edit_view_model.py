@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.achievements.views.achievement_section
 class EditViewModel(ViewModel):
     __slots__ = ('onChangeAutoSelect', 'onReplaceAchievement', 'onSave', 'onCancel', 'onExitConfirm', 'onHideFirstEntryState')
 
-    def __init__(self, properties=6, commands=6):
+    def __init__(self, properties=8, commands=6):
         super(EditViewModel, self).__init__(properties=properties, commands=commands)
 
     def getIsAutoSelect(self):
@@ -48,11 +48,23 @@ class EditViewModel(ViewModel):
     def getAchievementSectionsType():
         return AchievementSectionModel
 
-    def getRibbonName(self):
+    def getRibbonSmall(self):
         return self._getString(5)
 
-    def setRibbonName(self, value):
+    def setRibbonSmall(self, value):
         self._setString(5, value)
+
+    def getRibbonNormal(self):
+        return self._getString(6)
+
+    def setRibbonNormal(self, value):
+        self._setString(6, value)
+
+    def getRibbonLarge(self):
+        return self._getString(7)
+
+    def setRibbonLarge(self, value):
+        self._setString(7, value)
 
     def _initialize(self):
         super(EditViewModel, self)._initialize()
@@ -61,7 +73,9 @@ class EditViewModel(ViewModel):
         self._addBoolProperty('hasChanges', False)
         self._addArrayProperty('selectedAchievements', Array())
         self._addArrayProperty('achievementSections', Array())
-        self._addStringProperty('ribbonName', '')
+        self._addStringProperty('ribbonSmall', '')
+        self._addStringProperty('ribbonNormal', '')
+        self._addStringProperty('ribbonLarge', '')
         self.onChangeAutoSelect = self._addCommand('onChangeAutoSelect')
         self.onReplaceAchievement = self._addCommand('onReplaceAchievement')
         self.onSave = self._addCommand('onSave')

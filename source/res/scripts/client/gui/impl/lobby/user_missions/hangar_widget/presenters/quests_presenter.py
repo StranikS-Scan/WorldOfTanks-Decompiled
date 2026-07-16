@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hangar_widget/presenters/quests_presenter.py
+from __future__ import absolute_import
 from frameworks.wulf import Array
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.user_missions.widget.quests_list_model import QuestsListModel
@@ -116,13 +117,13 @@ class QuestsPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewComponent[Qu
         missionPacker = data.getMissionPacker()
         missionPacker.packMissionItem(model, data.rawData)
         missionPacker.packSpecificMissionItem(model, data)
-        self._packBonuses(model, data.rawData, data.getBonusPacker(), data.getRewardsSortFunc())
+        self._packBonuses(model, data.rawData, data.getBonusPacker(), data.getRewardsSortKey())
         return model
 
-    def _packBonuses(self, model, data, bonusPacker, sort):
+    def _packBonuses(self, model, data, bonusPacker, sortKey):
         bonuses = model.getBonuses()
         bonuses.clear()
-        packQuestBonusModel(quest=data, packer=bonusPacker, array=bonuses, sort=sort)
+        packQuestBonusModel(quest=data, packer=bonusPacker, array=bonuses, sortKey=sortKey)
 
     @args2params(str)
     def __onMissionClick(self, questId):

@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/dependencies.py
+from __future__ import absolute_import
 import time
-from functools import partial
+from past.builtins import xrange
 from dossiers2.custom.config import RECORD_CONFIGS
 from dossiers2.custom.cache import getCache
 from dossiers2.custom.utils import getVehicleNationID
@@ -290,7 +291,7 @@ def _updateRankedBadge(dossierDescr, dossierBlockDescr, key, value, prevValue):
     eventsEnabled = dossierBlockDescr.eventsEnabled
     if eventsEnabled:
         dossierBlockDescr.eventsEnabled = False
-    dossierBlockDescr[key] = int(time.time()) / _SECONDS_IN_DAY if value == 1 else 0
+    dossierBlockDescr[key] = int(time.time()) // _SECONDS_IN_DAY if value == 1 else 0
     if eventsEnabled:
         dossierBlockDescr.eventsEnabled = True
 
@@ -487,19 +488,19 @@ def _updateMedalEkins(dossierDescr, dossierBlockDescr, key, value, prevValue):
 
 
 def _updateBeasthunter(dossierDescr, dossierBlockDescr, key, value, prevValue):
-    medals, series = divmod(value, RECORD_CONFIGS['beasthunter'])
+    medals, _ = divmod(value, RECORD_CONFIGS['beasthunter'])
     if dossierBlockDescr['beasthunter'] != medals:
         dossierBlockDescr['beasthunter'] = medals
 
 
 def _updateSinai(dossierDescr, dossierBlockDescr, key, value, prevValue):
-    medals, series = divmod(value, RECORD_CONFIGS['sinai'])
+    medals, _ = divmod(value, RECORD_CONFIGS['sinai'])
     if dossierBlockDescr['sinai'] != medals:
         dossierBlockDescr['sinai'] = medals
 
 
 def _updatePattonValley(dossierDescr, dossierBlockDescr, key, value, prevValue):
-    medals, series = divmod(value, RECORD_CONFIGS['pattonValley'])
+    medals, _ = divmod(value, RECORD_CONFIGS['pattonValley'])
     if dossierBlockDescr['pattonValley'] != medals:
         dossierBlockDescr['pattonValley'] = medals
 
@@ -611,14 +612,14 @@ def _updateMaxDeathTrackWinSeries(dossierDescr, dossierBlockDescr, key, value, p
 
 
 def _updateMousebane(dossierDescr, dossierBlockDescr, key, value, prevValue):
-    medals, series = divmod(value, RECORD_CONFIGS['mousebane'])
+    medals, _ = divmod(value, RECORD_CONFIGS['mousebane'])
     if dossierDescr['achievements']['mousebane'] != medals:
         dossierDescr['achievements']['mousebane'] = medals
 
 
 def _updateTankExpert(dossierDescr, dossierBlockDescr, key, value):
     cache = getCache()
-    killedVehTypes = set(dossierBlockDescr.iterkeys())
+    killedVehTypes = set(dossierBlockDescr)
     vehiclesInTrees = cache['vehiclesInTrees']
     if key not in vehiclesInTrees:
         return

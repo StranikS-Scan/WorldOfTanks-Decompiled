@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/external_inventory_common/external_rent_entitlement.py
+from __future__ import absolute_import
 from items import vehicles
 EXTERNAL_RENT_ENTITLEMENT_PREFIX = 'ext_rent'
 

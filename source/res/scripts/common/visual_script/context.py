@@ -1,14 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/context.py
-from inspect import getargspec, ismethod, getmembers, getmro
+from __future__ import absolute_import
+from inspect import ismethod, getmembers, getmro
 from functools import wraps
+from future.utils import lzip
 from types import FunctionType
 from typing import Tuple, Callable, Sequence
-from soft_exception import SoftException
-from misc import ASPECT
 from constants import IS_DEVELOPMENT, IS_PROCESS_REPLAY
+from py2to3.backport.inspect import getargspec
+from soft_exception import SoftException
+from visual_script.misc import ASPECT
 if IS_DEVELOPMENT and not IS_PROCESS_REPLAY:
-    from debug_plan_loader import debugPlanLoader
+    from visual_script.debug_plan_loader import debugPlanLoader
 
 class UnsupportedMemberException(SoftException):
 
@@ -74,7 +77,7 @@ def vse_get_property(*args, **kwargs):
 def vse_get_param_property(res, args, **kwargs):
 
     def wrapper(f):
-        signature = [MetaData.make_res_record(res)] + zip(getargspec(f).args[1:], args)
+        signature = [MetaData.make_res_record(res)] + lzip(getargspec(f).args[1:], args)
         meta = MetaData(MetaData.PROPERTY_PARAM_GET, f.__name__, signature, **kwargs)
 
         @wraps(f)
@@ -109,7 +112,7 @@ def vse_set_property(*args, **kwargs):
 def vse_func_call(res, args, **kwargs):
 
     def wrapper(f):
-        signature = [MetaData.make_res_record(res)] + zip(getargspec(f).args[1:], args)
+        signature = [MetaData.make_res_record(res)] + lzip(getargspec(f).args[1:], args)
         meta = MetaData(MetaData.FUNC_CALL, f.__name__, signature, **kwargs)
 
         @wraps(f)
@@ -127,7 +130,7 @@ def vse_func_call(res, args, **kwargs):
 def vse_event_out(*args, **kwargs):
 
     def wrapper(f):
-        meta = MetaData(MetaData.EVENT_OUT, f.__name__, zip(getargspec(f).args[1:], args), **kwargs)
+        meta = MetaData(MetaData.EVENT_OUT, f.__name__, lzip(getargspec(f).args[1:], args), **kwargs)
 
         @wraps(f)
         def w(self, *args_, **kwargs_):

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/battle_royale.py
-import vehicles
+from __future__ import absolute_import
+from items import vehicles
 SPAWNED_TAG_NAME = 'spawned'
 BATTLE_ROYALE_TAG_NAME = 'battle_royale'
 HUNTER_BOT_TAG_NAME = 'bot_hunter'
@@ -21,7 +22,7 @@ class ModulesInstaller(object):
     _UNLOCKS_START_INDEX = 2
 
     @classmethod
-    def checkModuleValidity(self, intCD, vehicleDescriptor):
+    def checkModuleValidity(cls, intCD, vehicleDescriptor):
         module = vehicles.getItemByCompactDescr(intCD)
         vehicleModules = (vehicleDescriptor.chassis,
          vehicleDescriptor.turret,
@@ -38,10 +39,10 @@ class ModulesInstaller(object):
                     unlocksDescrs = vehicleDescriptor.type.unlocksDescrs
                     for modulesData in unlocksDescrs:
                         modulesDataLen = len(modulesData)
-                        if modulesDataLen > self._UNLOCKS_START_INDEX:
+                        if modulesDataLen > cls._UNLOCKS_START_INDEX:
                             moduleCD = modulesData[1]
                             if moduleCD == intCD:
-                                i = self._UNLOCKS_START_INDEX
+                                i = cls._UNLOCKS_START_INDEX
                                 while i < modulesDataLen:
                                     if modulesData[i] == previousModule.compactDescr:
                                         return (True, None)
@@ -52,15 +53,15 @@ class ModulesInstaller(object):
             return (True, None)
 
     @classmethod
-    def getItemsThisModuleUnlocks(self, targetIntCD, vehicleDescriptor):
+    def getItemsThisModuleUnlocks(cls, targetIntCD, vehicleDescriptor):
         outcome = []
         unlocksDescrs = vehicleDescriptor.type.unlocksDescrs
         for modulesData in unlocksDescrs:
             modulesDataLen = len(modulesData)
-            if modulesDataLen > self._UNLOCKS_START_INDEX:
+            if modulesDataLen > cls._UNLOCKS_START_INDEX:
                 targetModuleLevel = vehicles.getItemByCompactDescr(targetIntCD).level
                 unlockedIntCD = modulesData[1]
-                i = self._UNLOCKS_START_INDEX
+                i = cls._UNLOCKS_START_INDEX
                 while i < modulesDataLen:
                     unlockIntCD = modulesData[i]
                     if unlockIntCD == targetIntCD:

@@ -68,8 +68,9 @@ class LSStoryPointController(ILSStoryPointController, IGlobalListener):
 
     @selectedStoryPointID.setter
     def selectedStoryPointID(self, storyPointID):
-        if self.isStoryPointReceived(storyPointID):
+        if storyPointID is None or self.isStoryPointReceived(storyPointID):
             self._selectedStoryPointID = storyPointID
+        return
 
     @property
     def storyPoints(self):

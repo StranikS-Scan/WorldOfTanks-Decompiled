@@ -7,6 +7,7 @@ from gui.impl.lobby.hangar.base.vehicle_playlists_helper import DefaultVehiclePl
 from gui.impl.lobby.hangar.presenters.vehicle_menu_entries.vehicle_menu_helper import DefaultHangarVehicleMenuHelper
 from gui.impl.lobby.missions.missions_helpers import DefaultMissionsGuiHelper
 from gui.Scaleform.daapi.view.lobby.header.helpers.controls_helpers import DefaultLobbyHeaderHelper
+from gui.prb_control.prb_helpers import DefaultVehicleAutoSearchHelper
 
 class DefaultHangarDynamicGuiProvider(BaseHangarDynamicGuiProvider):
     _QUEUE_TYPE = QUEUE_TYPE.UNKNOWN
@@ -15,6 +16,7 @@ class DefaultHangarDynamicGuiProvider(BaseHangarDynamicGuiProvider):
     _PRESETS_GETTER = DefaultPresetsGetter
     _VEHICLE_MENU_HELPER = DefaultHangarVehicleMenuHelper
     _VEHICLE_PLAYLISTS_HELPER = DefaultVehiclePlaylistsGuiHelper
+    _VEHICLE_AUTO_SEARCH_HELPER = DefaultVehicleAutoSearchHelper
 
     def __init__(self, config):
         super(DefaultHangarDynamicGuiProvider, self).__init__(config)

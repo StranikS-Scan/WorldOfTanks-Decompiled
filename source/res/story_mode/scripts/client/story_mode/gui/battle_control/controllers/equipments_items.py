@@ -7,6 +7,7 @@ import BigWorld
 import CGF
 import Math
 import SoundGroups
+from typing import List
 from AvatarInputHandler import MapCaseMode
 from SMReconAbilityEntityComponent import SMReconAbilityEntityComponent
 from aih_constants import CTRL_MODE_NAME
@@ -137,18 +138,20 @@ class SMStrategicAbilityItem(AbilityItem):
 
     def _loadPrefab(self):
         self._isSelecting = True
-        CGF.loadGameObjectIntoHierarchy(self._PREFAB_URL, BigWorld.player().vehicle.entityGameObject, Math.Vector3(), self._onPrefabLoaded)
+        CGF.loadAndCreatePrefabWithParent(self._PREFAB_URL, BigWorld.player().vehicle.entityGameObject, Math.Vector3(), self._onPrefabLoaded)
 
-    def _onPrefabLoaded(self, prefab):
+    def _onPrefabLoaded(self, objects, queue):
+        root = objects[0]
         if self._isSelecting:
-            self._prefab = prefab
-            self._prefab.activate()
+            self._prefab = queue.gameObject(root)
+            queue.activateGameObject(root)
         else:
-            CGF.removeGameObject(prefab)
+            return False
+        return True
 
     def _removePrefab(self):
         if self._prefab is not None:
-            CGF.removeGameObject(self._prefab)
+            self._prefab.destroy()
             self._prefab = None
         self._isSelecting = False
         return

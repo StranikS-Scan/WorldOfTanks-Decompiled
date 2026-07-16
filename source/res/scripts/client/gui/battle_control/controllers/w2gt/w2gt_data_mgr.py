@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/w2gt/w2gt_data_mgr.py
+from __future__ import absolute_import
 from collections import namedtuple
 import typing
 if typing.TYPE_CHECKING:

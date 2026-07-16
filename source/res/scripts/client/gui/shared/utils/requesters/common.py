@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/common.py
-import abc
+from __future__ import absolute_import
 import typing
 import BigWorld
 from helpers import dependency
@@ -33,12 +33,11 @@ class RequestProcessor(object):
 
 
 class BaseDelta(object):
-    __metaclass__ = abc.ABCMeta
     eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, prevFactory=None):
-        self._currValues = dict()
-        self._prevValues = dict()
+        self._currValues = {}
+        self._prevValues = {}
         self._prevFactory = prevFactory
         self._prevIsInitialized = False
 
@@ -68,15 +67,13 @@ class BaseDelta(object):
         return self._currValues.get(entryId) != prevValues
 
     def _removeOutdatedValues(self):
-        for entryId in self._prevValues.keys():
+        for entryId in list(self._prevValues):
             if entryId not in self._currValues:
                 del self._prevValues[entryId]
 
-    @abc.abstractmethod
     def _getDataIterator(self, data):
         raise NotImplementedError
 
-    @abc.abstractmethod
     def _getDefaultValue(self):
         raise NotImplementedError
 
@@ -86,6 +83,5 @@ class BaseDelta(object):
         if self._prevFactory:
             self._prevValues = self._prevFactory()
         else:
-            self._prevValues = dict()
-            self._prevValues = {k:v for k, v in self._currValues.iteritems()}
+            self._prevValues = dict(self._currValues)
         self._prevIsInitialized = True

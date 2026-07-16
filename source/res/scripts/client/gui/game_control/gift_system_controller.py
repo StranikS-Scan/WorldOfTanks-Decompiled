@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/gift_system_controller.py
+from __future__ import absolute_import
 import typing
+from future.utils import viewitems, viewvalues
 from constants import Configs
 from Event import Event, EventManager
 from gifts.gifts_common import ClientReqStrategy
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.gift_system.hubs import createGiftEventHub
-from gui.gift_system.hubs.base.hub_core import IGiftEventHub
 from gui.gift_system.requesters.history_requester import GiftSystemHistoryRequester
 from gui.gift_system.requesters.state_requester import GiftSystemWebStateRequester
 from gui.gift_system.wrappers import skipNoHubsAction
@@ -16,6 +17,7 @@ from skeletons.gui.game_control import IGiftSystemController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
+    from gui.gift_system.hubs.base.hub_core import IGiftEventHub
     from gui.gift_system.wrappers import GiftsHistoryData, GiftsWebState
     from gui.shared import events
     from helpers.server_settings import ServerSettings, GiftEventConfig
@@ -85,22 +87,22 @@ class GiftSystemController(IGiftSystemController):
     def __onHistoryReadyChanged(self, isHistoryReady):
         if not isHistoryReady:
             return
-        reqEventIDs = set((eID for eID, eHub in self.__eventHubs.iteritems() if eHub.isHistoryRequired()))
+        reqEventIDs = {eID for eID, eHub in viewitems(self.__eventHubs) if eHub.isHistoryRequired()}
         self.__historyRequester.request(reqEventIDs)
 
     def __onHistoryReceived(self, history):
-        for eventID, eventHub in ((eID, eHub) for eID, eHub in self.__eventHubs.iteritems() if eID in history):
+        for eventID, eventHub in ((eID, eHub) for eID, eHub in viewitems(self.__eventHubs) if eID in history):
             eventHub.processHistory(history[eventID])
 
         self.__onWebStateReadyChanged(strategy=ClientReqStrategy.AUTO)
 
     def __onWebStateReadyChanged(self, strategy, eventIDs=None):
-        eventIDs = eventIDs or self.__eventHubs.keys()
-        reqEventIDs = set((eID for eID in eventIDs if self.__eventHubs[eID].isWebStateRequired(strategy)))
+        eventIDs = eventIDs or list(self.__eventHubs)
+        reqEventIDs = {eID for eID in eventIDs if self.__eventHubs[eID].isWebStateRequired(strategy)}
         self.__webStateRequester.request(reqEventIDs)
 
     def __onWebStateReceived(self, webState):
-        for eventID, eventHub in ((eID, eHub) for eID, eHub in self.__eventHubs.iteritems() if eID in webState):
+        for eventID, eventHub in ((eID, eHub) for eID, eHub in viewitems(self.__eventHubs) if eID in webState):
             eventHub.processWebState(webState[eventID])
 
     def __onServerSettingsChanged(self, serverSettings):
@@ -145,10 +147,10 @@ class GiftSystemController(IGiftSystemController):
 
     def __updateLobbyState(self, isLobbyInited=False):
         self.__isLobbyInited = isLobbyInited
-        for eventHub in self.__eventHubs.itervalues():
+        for eventHub in viewvalues(self.__eventHubs):
             eventHub.getMessenger().setMessagesAllowed(isLobbyInited)
 
     def __updateReadyListening(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
-        if [ eventHub for eventHub in self.__eventHubs.itervalues() if eventHub.isHistoryRequired() ]:
+        if any((eventHub.isHistoryRequired() for eventHub in viewvalues(self.__eventHubs))):
             g_clientUpdateManager.addCallbacks({'cache.giftsData.isReady': self.__onHistoryReadyChanged})

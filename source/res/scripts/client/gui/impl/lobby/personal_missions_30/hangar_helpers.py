@@ -7,8 +7,8 @@ import CGF
 import Event
 import SoundGroups
 from GenericComponents import Sequence
-from cgf_components.hangar_camera_manager import HangarCameraManager
-from cgf_components.pm30_hangar_components import HangarOperationsManager
+from cgf_components.hangar_camera_manager import HangarCameraSystem
+from cgf_components.pm30_hangar_components import HangarOperationsSystem
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.impl.lobby.personal_missions_30.personal_mission_constants import OperationIDs, CameraNameTemplates, StageAdditions, STAGES_CONFIG, TopCameras, SoundsKeys, SoundsStateKeys
 from gui.impl.lobby.personal_missions_30.personal_mission_constants import StageInfo
@@ -84,14 +84,14 @@ class AssemblingManager(object):
     def getHangarOperationsManager(self):
         if not self.__hangarOperationsManager:
             spaceID = self.hangarSpace.spaceID
-            manager = CGF.getManager(spaceID, HangarOperationsManager) if spaceID is not None else None
+            manager = CGF.getSystem(spaceID, HangarOperationsSystem) if spaceID is not None else None
             self.__hangarOperationsManager = manager
         return self.__hangarOperationsManager
 
     def getCameraManager(self):
         if not self.__cameraManager:
             spaceID = self.hangarSpace.spaceID
-            manager = CGF.getManager(spaceID, HangarCameraManager) if spaceID is not None else None
+            manager = CGF.getSystem(spaceID, HangarCameraSystem) if spaceID is not None else None
             self.__cameraManager = manager
         return self.__cameraManager
 
@@ -155,14 +155,15 @@ class AssemblingManager(object):
     def deactivateVehicleGO(self):
         if self.__hangarOperationsManager.gameObjectsAreRemoved:
             return
-        if self.__vehicleGO and self.__vehicleGO.isValid():
+        if self.__vehicleGO and self.__vehicleGO.valid:
             for activeStageNumber in self.__activeComponents.stages.copy():
                 self.__deactivateStage(activeStageNumber)
 
             for activeAddition in self.__activeComponents.additions.copy():
                 self.__deactivateAddition(activeAddition)
 
-            self.__vehicleGO.deactivate()
+            queue = CGF.CommandQueue(self.hangarSpace.spaceID)
+            queue.deactivateGameObject(self.__vehicleGO)
         else:
             _logger.warning('[PM3.0] Vehicle GO for %s operation is not found or invalid', self.__operationID)
 
@@ -199,7 +200,8 @@ class AssemblingManager(object):
     def __activateVehicleGO(self):
         if self.__vehicleGO:
             self.assembleObtainedStages()
-            self.__vehicleGO.activate()
+            queue = CGF.CommandQueue(self.hangarSpace.spaceID)
+            queue.activateGameObject(self.__vehicleGO)
 
     def __switchByCameraName(self, cameraName, instantly=False, callback=None):
         cameraManager = self.getCameraManager()
@@ -253,7 +255,7 @@ class AssemblingManager(object):
             return
         stageKey = 'stage_{}_fade' if isFade else 'stage_{}'
         stage = getattr(self.__vehicleStagesComponent, stageKey.format(stageNumber))
-        if not (stage and stage.isValid()):
+        if not (stage and stage.valid):
             if not isFade:
                 _logger.warning('[PM3.0] GO for %s is not found or invalid', stageKey.format(stageNumber))
             return
@@ -264,7 +266,7 @@ class AssemblingManager(object):
             _logger.warning('[PM3.0] AssemblingStagesComponent is not found')
             return
         addition = getattr(self.__vehicleStagesComponent, additionKey)
-        if not (addition and addition.isValid()):
+        if not (addition and addition.valid):
             _logger.warning('[PM3.0] GO for %s is not found or invalid', additionKey)
             return
         return addition
@@ -286,41 +288,51 @@ class AssemblingManager(object):
     def __activateStage(self, stageNumber):
         stage = self.__getStage(stageNumber)
         if stage:
-            stage.activate()
+            queue = CGF.CommandQueue(self.hangarSpace.spaceID)
+            queue.activateGameObject(stage)
             self.__activeComponents.stages.add(stageNumber)
 
     def __deactivateStage(self, stageNumber):
         stage = self.__getStage(stageNumber)
         if stage:
-            stage.deactivate()
+            queue = CGF.CommandQueue(self.hangarSpace.spaceID)
+            queue.deactivateGameObject(stage)
             if stageNumber in self.__activeComponents.stages:
                 self.__activeComponents.stages.remove(stageNumber)
 
     def __activateAddition(self, additionKey):
         addition = self.__getStageAddition(additionKey)
         if addition:
-            addition.activate()
+            queue = CGF.CommandQueue(self.hangarSpace.spaceID)
+            queue.activateGameObject(addition)
             self.__activeComponents.additions.add(additionKey)
 
     def __deactivateAddition(self, additionKey):
         addition = self.__getStageAddition(additionKey)
         if addition:
-            addition.deactivate()
+            queue = CGF.CommandQueue(self.hangarSpace.spaceID)
+            queue.deactivateGameObject(addition)
             if additionKey in self.__activeComponents.additions:
                 self.__activeComponents.additions.remove(additionKey)
 
     def __activateStageFade(self, stageFade):
-        sequence = stageFade.findComponentByType(Sequence)
+        spaceID = self.hangarSpace.spaceID
+        stage = CGF.gameObject(spaceID, stageFade)
+        if not stage:
+            return
+        sequence = stage.findWrite(Sequence)
         if sequence:
             self.__hangarOperationsManager.addTimer('assemblingAnimation_{}'.format(self.__stageNumberForAssembling), sequence.duration, self.__onAnimationFinished)
             soundEvent = SoundsKeys.PLAY_ANIMATION_EVENT % (self.__operationID, self.__stageNumberForAssembling)
             SoundGroups.g_instance.playSound2D(soundEvent)
-            stageFade.activate()
+            queue = CGF.CommandQueue(self.hangarSpace.spaceID)
+            queue.activateGameObject(stageFade)
             sequence.start()
 
     def __deactivateStageFade(self):
-        if self.__stageFade and self.__stageFade.isValid():
-            self.__stageFade.deactivate()
+        if self.__stageFade and self.__stageFade.valid:
+            queue = CGF.CommandQueue(self.hangarSpace.spaceID)
+            queue.deactivateGameObject(self.__stageFade)
             self.__stageFade = None
         else:
             _logger.warning('[PM3.0] GO for %s is not found or invalid', 'stage_{}_fade'.format(self.__stageNumberForAssembling))

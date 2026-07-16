@@ -69,25 +69,25 @@
         <normalSettings>
           <enginePowerRatio>	160	</enginePowerRatio>
           <maxSpeedForward>	70	</maxSpeedForward>
-          <maxSpeedBackward>	40	</maxSpeedBackward>
+          <maxSpeedBackward>	20	</maxSpeedBackward>
           <terrainResistance>	16 16 16	</terrainResistance>
         </normalSettings>
         <normalCombinedSettings>
           <enginePowerRatio>	200	</enginePowerRatio>
           <maxSpeedForward>	90	</maxSpeedForward>
-          <maxSpeedBackward>	50	</maxSpeedBackward>
+          <maxSpeedBackward>	20	</maxSpeedBackward>
           <terrainResistance>	18 18 18	</terrainResistance>
         </normalCombinedSettings>
         <siegeSettings>
           <enginePowerRatio>	160	</enginePowerRatio>
           <maxSpeedForward>	70	</maxSpeedForward>
-          <maxSpeedBackward>	40	</maxSpeedBackward>
+          <maxSpeedBackward>	20	</maxSpeedBackward>
           <terrainResistance>	16 16 16	</terrainResistance>
         </siegeSettings>
         <siegeCombinedSettings>
           <enginePowerRatio>	200	</enginePowerRatio>
           <maxSpeedForward>	90	</maxSpeedForward>
-          <maxSpeedBackward>	50	</maxSpeedBackward>
+          <maxSpeedBackward>	20	</maxSpeedBackward>
           <terrainResistance>	18 18 18	</terrainResistance>
         </siegeCombinedSettings>
       </server>
@@ -137,13 +137,13 @@
         <normalSettings>
           <enginePowerRatio>	160	</enginePowerRatio>
           <maxSpeedForward>	70	</maxSpeedForward>
-          <maxSpeedBackward>	40	</maxSpeedBackward>
+          <maxSpeedBackward>	20	</maxSpeedBackward>
           <terrainResistance>	16 16 16	</terrainResistance>
         </normalSettings>
         <normalCombinedSettings>
           <enginePowerRatio>	200	</enginePowerRatio>
           <maxSpeedForward>	90	</maxSpeedForward>
-          <maxSpeedBackward>	50	</maxSpeedBackward>
+          <maxSpeedBackward>	20	</maxSpeedBackward>
           <terrainResistance>	18 18 18	</terrainResistance>
         </normalCombinedSettings>
         <siegeSettings>
@@ -155,7 +155,7 @@
         <siegeCombinedSettings>
           <enginePowerRatio>	200	</enginePowerRatio>
           <maxSpeedForward>	40	</maxSpeedForward>
-          <maxSpeedBackward>	25	</maxSpeedBackward>
+          <maxSpeedBackward>	20	</maxSpeedBackward>
           <terrainResistance>	16 16 16	</terrainResistance>
         </siegeCombinedSettings>
       </server>
@@ -507,10 +507,10 @@
     </LSBuffInterruptibleComponent>
     <LSBuffLaserSightComponent>
       <client>
-        <bindNode>	HP_laser	</bindNode>
+        <bindNode>	HP_gunFire	</bindNode>
         <sightMaxDistance>	500.0	</sightMaxDistance>
-        <beamModel>	particles/content_deferred/GFX_models/environment/halloween/hell_sight.model	</beamModel>
-        <beamModelFwd>	particles/content_deferred/GFX_models/environment/halloween/hell_sight_fwd.model	</beamModelFwd>
+        <beamModel>	particles/content_deferred/GFX_models/environment/last_stand/hell_sight_orange.model	</beamModel>
+        <beamModelFwd>	particles/content_deferred/GFX_models/environment/last_stand/hell_sight_orange.model	</beamModelFwd>
         <modelLength>	10.0	</modelLength>
       </client>
     </LSBuffLaserSightComponent>
@@ -735,6 +735,65 @@
       </client>
     </LSBuffSoundComponent>
   </LS_damageShield>
+  <LS_damageShieldBotNet>
+    <LSBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	stunResistanceEffect	</key>
+            <max>	1.0	</max>
+          </item>
+        </factors>
+      </server>
+    </LSBuffFactorsComponent>
+    <LSBuffDamageResistsComponent>
+      <server>
+        <resistReason>	LS_DAMAGE_SHIELD	</resistReason>
+        <resists>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	ALL	</attackReason>
+            <value>	1.0	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	DROWNING	</attackReason>
+            <value>	-1.0	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	WORLD_COLLISION	</attackReason>
+            <value>	-1.0	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	LS_PHASE_TIMER	</attackReason>
+            <value>	-1.0	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	LS_DEATH_PIT	</attackReason>
+            <value>	-1.0	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	LS_LEAVER	</attackReason>
+            <value>	-1.0	</value>
+          </item>
+        </resists>
+      </server>
+    </LSBuffDamageResistsComponent>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/last_stand/our_tank_demolitiy/tank_bubble_defense.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+  </LS_damageShieldBotNet>
   <LS_fastReload>
     <LSBuffSoundComponent>
       <client>
@@ -1021,7 +1080,7 @@
     </LSBuffAddDynGroupComponent>
     <LSBuffStunVehicleComponent>
       <server>
-        <stunDuration>	7	</stunDuration>
+        <stunDuration>	12	</stunDuration>
         <guaranteedStunDuration>	1.0	</guaranteedStunDuration>
       </server>
     </LSBuffStunVehicleComponent>
@@ -1322,7 +1381,18 @@
       </client>
     </LSBuffSequencesComponent>
   </LS_alphaCharger>
-  <LS_magnus>
+  <LS_final_trigger_vfx>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/last_stand/trigger_vehicle_area_large.seq	</sequence>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+  </LS_final_trigger_vfx>
+  <LS_lose_trigger_vfx>
     <LSBuffSequencesComponent>
       <client>
         <sequences>
@@ -1332,7 +1402,7 @@
         </sequences>
       </client>
     </LSBuffSequencesComponent>
-  </LS_magnus>
+  </LS_lose_trigger_vfx>
   <LS_vehicleInvulnerableMarker>
     <LSVehicleInvulnerableMarkerComponent></LSVehicleInvulnerableMarkerComponent>
   </LS_vehicleInvulnerableMarker>
@@ -1596,6 +1666,20 @@
       </client>
     </LSBuffSequencesComponent>
   </LS_extraDamageVisual>
+  <LS_absoluteInvulnerability>
+    <LSBuffDamageResistsComponent>
+      <server>
+        <resistReason>	LS_DAMAGE_SHIELD	</resistReason>
+        <resists>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	ALL	</attackReason>
+            <value>	1.0	</value>
+          </item>
+        </resists>
+      </server>
+    </LSBuffDamageResistsComponent>
+  </LS_absoluteInvulnerability>
   <LS_boss_slowbuff>
     <LSBuffFactorsComponent>
       <server>
@@ -1696,7 +1780,29 @@
       </server>
     </LSBuffRepairComponent>
   </LS_obeliskRepair>
-  <LS_obeliskRepairTeamOnDeath>
+  <LS_BOT_OBELISK_HP_REGEN>
+    <LSBuffDamageResistsComponent>
+      <server>
+        <resistReason>	LS_DAMAGE_SHIELD	</resistReason>
+        <resists>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	DROWNING	</attackReason>
+            <value>	1.0	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	WORLD_COLLISION	</attackReason>
+            <value>	1.0	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	RAM	</attackReason>
+            <value>	1.0	</value>
+          </item>
+        </resists>
+      </server>
+    </LSBuffDamageResistsComponent>
     <LSBuffAddDynGroupOnEventComponent>
       <server>
         <events>	onDeathByPlayer	</events>
@@ -1715,7 +1821,7 @@
         </groups>
       </server>
     </LSBuffAddDynGroupOnEventComponent>
-  </LS_obeliskRepairTeamOnDeath>
+  </LS_BOT_OBELISK_HP_REGEN>
   <LS_obeliskShield>
     <LSBuffInterruptibleComponent>
       <server>
@@ -1812,7 +1918,29 @@
       </client>
     </LSBuffNotificationComponent>
   </LS_obeliskShield>
-  <LS_obeliskTeamShield>
+  <LS_BOT_OBELISK_SHIELD>
+    <LSBuffDamageResistsComponent>
+      <server>
+        <resistReason>	LS_DAMAGE_SHIELD	</resistReason>
+        <resists>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	DROWNING	</attackReason>
+            <value>	1.0	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	WORLD_COLLISION	</attackReason>
+            <value>	1.0	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	RAM	</attackReason>
+            <value>	1.0	</value>
+          </item>
+        </resists>
+      </server>
+    </LSBuffDamageResistsComponent>
     <LSBuffAddDynGroupOnEventComponent>
       <server>
         <events>	onDeathByPlayer	</events>
@@ -1831,7 +1959,7 @@
         </groups>
       </server>
     </LSBuffAddDynGroupOnEventComponent>
-  </LS_obeliskTeamShield>
+  </LS_BOT_OBELISK_SHIELD>
   <LS_obeliskStun>
     <LSBuffAddDynGroupComponent>
       <server>
@@ -1897,7 +2025,29 @@
       </server>
     </LSBuffFactorsComponent>
   </LS_obeliskStun_debuff>
-  <LS_obeliskEnemyStun>
+  <LS_BOT_OBELISK_STUN>
+    <LSBuffDamageResistsComponent>
+      <server>
+        <resistReason>	LS_DAMAGE_SHIELD	</resistReason>
+        <resists>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	DROWNING	</attackReason>
+            <value>	1.0	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	WORLD_COLLISION	</attackReason>
+            <value>	1.0	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	RAM	</attackReason>
+            <value>	1.0	</value>
+          </item>
+        </resists>
+      </server>
+    </LSBuffDamageResistsComponent>
     <LSBuffAddDynGroupOnEventComponent>
       <server>
         <events>	onDeathByPlayer	</events>
@@ -1915,8 +2065,23 @@
         </groups>
       </server>
     </LSBuffAddDynGroupOnEventComponent>
-  </LS_obeliskEnemyStun>
-  <LS_obeliskDamage_FX>
+  </LS_BOT_OBELISK_STUN>
+  <LS_BOT_OBELISK_HP_REGEN_DAMAGE>
+    <LSBuffAddDynGroupComponent>
+      <server>
+        <groups>
+          <item>
+            <groupName>	LS_BOT_OBELISK_HP_REGEN_DAMAGE_FX	</groupName>
+            <duration>	3.0	</duration>
+            <removeOnDestroy>	False	</removeOnDestroy>
+            <replaceExisting>	True	</replaceExisting>
+            <uniqueGroup>	False	</uniqueGroup>
+          </item>
+        </groups>
+      </server>
+    </LSBuffAddDynGroupComponent>
+  </LS_BOT_OBELISK_HP_REGEN_DAMAGE>
+  <LS_BOT_OBELISK_HP_REGEN_DAMAGE_FX>
     <LSBuffInterruptibleComponent>
       <server>
         <events>	onDeath	</events>
@@ -1927,12 +2092,168 @@
         <sequences>
           <item>
             <sequence>	particles/eff_sequence/last_stand/enemies/obelisk_hit_damage_01.seq	</sequence>
-            <bindNode>	Turret_01	</bindNode>
+            <bindNode>	HP_turretJoint	</bindNode>
             <loopCount>	1	</loopCount>
             <visibleTo>	all	</visibleTo>
           </item>
         </sequences>
       </client>
     </LSBuffSequencesComponent>
-  </LS_obeliskDamage_FX>
+  </LS_BOT_OBELISK_HP_REGEN_DAMAGE_FX>
+  <LS_BOT_OBELISK_SHIELD_DAMAGE>
+    <LSBuffAddDynGroupComponent>
+      <server>
+        <groups>
+          <item>
+            <groupName>	LS_BOT_OBELISK_SHIELD_DAMAGE_FX	</groupName>
+            <duration>	3.0	</duration>
+            <removeOnDestroy>	False	</removeOnDestroy>
+            <replaceExisting>	True	</replaceExisting>
+            <uniqueGroup>	False	</uniqueGroup>
+          </item>
+        </groups>
+      </server>
+    </LSBuffAddDynGroupComponent>
+  </LS_BOT_OBELISK_SHIELD_DAMAGE>
+  <LS_BOT_OBELISK_SHIELD_DAMAGE_FX>
+    <LSBuffInterruptibleComponent>
+      <server>
+        <events>	onDeath	</events>
+      </server>
+    </LSBuffInterruptibleComponent>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/last_stand/enemies/obelisk_hit_damage_02.seq	</sequence>
+            <bindNode>	HP_turretJoint	</bindNode>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+  </LS_BOT_OBELISK_SHIELD_DAMAGE_FX>
+  <LS_BOT_OBELISK_STUN_DAMAGE>
+    <LSBuffAddDynGroupComponent>
+      <server>
+        <groups>
+          <item>
+            <groupName>	LS_BOT_OBELISK_STUN_DAMAGE_FX	</groupName>
+            <duration>	3.0	</duration>
+            <removeOnDestroy>	False	</removeOnDestroy>
+            <replaceExisting>	True	</replaceExisting>
+            <uniqueGroup>	False	</uniqueGroup>
+          </item>
+        </groups>
+      </server>
+    </LSBuffAddDynGroupComponent>
+  </LS_BOT_OBELISK_STUN_DAMAGE>
+  <LS_BOT_OBELISK_STUN_DAMAGE_FX>
+    <LSBuffInterruptibleComponent>
+      <server>
+        <events>	onDeath	</events>
+      </server>
+    </LSBuffInterruptibleComponent>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/last_stand/enemies/obelisk_hit_damage_03.seq	</sequence>
+            <bindNode>	HP_turretJoint	</bindNode>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+  </LS_BOT_OBELISK_STUN_DAMAGE_FX>
+  <LS_bosAttentionEffectStep1>
+    <LSBuffInterruptibleComponent>
+      <server>
+        <events>	onDeath	</events>
+      </server>
+    </LSBuffInterruptibleComponent>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/last_stand/enemies/boss_charging_outside_zone.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+  </LS_bosAttentionEffectStep1>
+  <LS_bosAttentionEffectStep2>
+    <LSBuffInterruptibleComponent>
+      <server>
+        <events>	onDeath	</events>
+      </server>
+    </LSBuffInterruptibleComponent>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/last_stand/enemies/boss_charging_inside_zone.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+  </LS_bosAttentionEffectStep2>
+  <LS_bosAttentionEffectStep3>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/last_stand/enemies/boss_electromagnetic_pulse.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <visibleTo>	all	</visibleTo>
+            <loopCount>	1	</loopCount>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+  </LS_bosAttentionEffectStep3>
+  <LS_BastionBuff>
+    <LSBuffInterruptibleComponent>
+      <server>
+        <events>	onDeath	</events>
+      </server>
+    </LSBuffInterruptibleComponent>
+    <LSBuffDamageResistsComponent>
+      <server>
+        <resistReason>	LS_DAMAGE_SHIELD	</resistReason>
+        <resists>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	RAM	</attackReason>
+            <value>	0.75	</value>
+          </item>
+        </resists>
+      </server>
+    </LSBuffDamageResistsComponent>
+  </LS_BastionBuff>
+  <LS_ChargerBuff>
+    <LSBuffInterruptibleComponent>
+      <server>
+        <events>	onDeath	</events>
+      </server>
+    </LSBuffInterruptibleComponent>
+    <LSBuffDamageResistsComponent>
+      <server>
+        <resistReason>	LS_DAMAGE_SHIELD	</resistReason>
+        <resists>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	RAM	</attackReason>
+            <value>	0.9	</value>
+          </item>
+        </resists>
+      </server>
+    </LSBuffDamageResistsComponent>
+  </LS_ChargerBuff>
 </dyn_components_groups.xml>

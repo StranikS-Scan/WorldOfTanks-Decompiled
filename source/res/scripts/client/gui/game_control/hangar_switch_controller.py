@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/hangar_switch_controller.py
+from __future__ import absolute_import
 import json
 import logging
 import BigWorld
@@ -138,7 +139,7 @@ class HangarSpaceSwitchController(IHangarSpaceSwitchController, IGlobalListener)
         self.hangarSpaceUpdated = True
 
     def lockHangarOverride(self, sceneName):
-        for name in self._sceneSpaceParams.iterkeys():
+        for name in self._sceneSpaceParams:
             self._sceneSpaceParams[name] = SceneSpaceConfig(sceneName)
 
         for isPremium in (True, False):

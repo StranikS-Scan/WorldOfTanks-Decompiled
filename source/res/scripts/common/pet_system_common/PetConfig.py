@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/pet_system_common/PetConfig.py
+from __future__ import absolute_import
 import typing
-from pet_constants import PetsConsts as pc
+from pet_system_common.pet_constants import PetsConsts as pc
 if typing.TYPE_CHECKING:
     from typing import Optional, Dict, Iterable
 INVALID_ID = -1

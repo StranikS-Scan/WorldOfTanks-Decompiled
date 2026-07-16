@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/module.py
+from __future__ import absolute_import
 import logging
 import typing
+from builtins import filter, next, range, zip
+from future.utils import itervalues, viewvalues
 from gui.Scaleform import MENU
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
@@ -357,7 +360,7 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
         moduleName = self.module.descriptor.iconName
         icon = R.images.gui.maps.shop.artefacts.c_180x135.dyn(moduleName)
         if not icon:
-            _logger.warn('Artefact icon missed: R.images.gui.maps.shop.artefacts.c_180x135.%s', moduleName)
+            _logger.warning('Artefact icon missed: R.images.gui.maps.shop.artefacts.c_180x135.%s', moduleName)
             return R.invalid()
         return icon()
 
@@ -409,7 +412,7 @@ class ModuleHeaderBlockConstructor(ModuleTooltipBlockConstructor):
             moduleName = 'vehicleWheeledChassis'
         icon = R.images.gui.maps.shop.modules.c_180x135.dyn(moduleName)
         if not icon:
-            _logger.warn('Artefact icon missed: R.images.gui.maps.shop.modules.c_180x135.%s', moduleName)
+            _logger.warning('Artefact icon missed: R.images.gui.maps.shop.modules.c_180x135.%s', moduleName)
             return R.invalid()
         return icon()
 
@@ -616,7 +619,7 @@ class InventoryBlockConstructor(ModuleTooltipBlockConstructor):
         return text
 
     def _getInstalledVehicles(self, module, inventoryVehicles):
-        return module.getInstalledVehicles(inventoryVehicles.itervalues())
+        return module.getInstalledVehicles(itervalues(inventoryVehicles))
 
 
 class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
@@ -945,7 +948,7 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
         titleFormatter = text_styles.middleTitle
         if vehicle is not None and (vehicle.isInInventory or configuration.isCompare):
             isFit, reason = module.mayInstall(vehicle, slotIdx)
-        inventoryVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).itervalues()
+        inventoryVehicles = viewvalues(self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY))
         totalInstalledVehicles = [ x.shortUserName for x in module.getInstalledVehicles(inventoryVehicles) ]
         installedVehicles = totalInstalledVehicles[:self.MAX_INSTALLED_LIST_LEN]
         tooltipHeader = None
@@ -1109,7 +1112,7 @@ class OptDeviceSlotsHeaderBlockConstructor(ModuleTooltipBlockConstructor):
         moduleName = module.descriptor.iconName
         icon = R.images.gui.maps.icons.quests.bonuses.big.dyn(moduleName)
         if not icon:
-            _logger.warn('Artefact icon missed: R.images.gui.maps.icons.quests.bonuses.big.%s', moduleName)
+            _logger.warning('Artefact icon missed: R.images.gui.maps.icons.quests.bonuses.big.%s', moduleName)
             return R.invalid()
         return icon()
 

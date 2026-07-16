@@ -28,6 +28,7 @@ class LSBattleGUIController(LSBattleGUIControllerBase):
         self.onConvoyStatusChanged = Event(self._eManager)
         self.onConvoyHealthChanged = Event(self._eManager)
         self.onConvoyDistanceIndicatorChanged = Event(self._eManager)
+        self.onClearObeliskVehicleMarker = Event(self._eManager)
         self._enemiesInfo = {}
         self._healthBreakpoints = []
         self._enemiesStatus = []

@@ -103,6 +103,11 @@ class LSArenaPhasesComponent(DynamicScriptComponent):
             return
         self._setupEnvironment()
 
+    def set_isBCMarkersCleanupEnabled(self, prev):
+        _logger.info('LSArenaPhasesComponent set isBCMarkersCleanupEnabled=%s', self.isBCMarkersCleanupEnabled)
+        if self.isBCMarkersCleanupEnabled:
+            self.onCleanBCMarkersRequested()
+
     def _setupEnvironment(self, isInstant=False):
         if self.envSwitcher is None or not self.activeEnvironment:
             return

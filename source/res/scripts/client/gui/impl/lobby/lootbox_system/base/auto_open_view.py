@@ -8,6 +8,7 @@ from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.pub import ViewImpl, WindowImpl
 from gui.lootbox_system.base.bonuses_helpers import REWARDS_GROUP_NAME_RES, RewardsGroup, getGoodiesFilter, getItemsFilter, getTankmenFilter, getVehiclesFilter, isBattleBooster, isCrewBook, noCompensation, isOptionalDevice, packBonusGroups
 from gui.lootbox_system.base.common import LOOTBOX_COMPENSATION_TOKEN_PREFIX
+from gui.lootbox_system.base.decorators import createTooltipContentDecorator
 from gui.lootbox_system.base.views_loaders import showItemPreview
 from helpers import dependency
 from skeletons.gui.goodies import IGoodiesCache
@@ -31,9 +32,12 @@ class AutoOpenView(ViewImpl):
     def createToolTip(self, event):
         return super(AutoOpenView, self).createToolTip(event)
 
+    @createTooltipContentDecorator()
+    def createToolTipContent(self, event, contentID):
+        return super(AutoOpenView, self).createToolTipContent(event, contentID)
+
     def getTooltipData(self, event):
-        tooltipId = event.getArgument('tooltipId')
-        return None if tooltipId is None else self.__tooltips.get(tooltipId)
+        return self.__tooltips.get(event.getArgument('tooltipId', 0))
 
     def _onLoading(self, *args, **kwargs):
         super(AutoOpenView, self)._onLoading(*args, **kwargs)

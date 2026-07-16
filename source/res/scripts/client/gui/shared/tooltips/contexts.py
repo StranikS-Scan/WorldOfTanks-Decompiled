@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/contexts.py
+from __future__ import absolute_import
 import typing
 import constants
 import gui
@@ -27,9 +28,9 @@ from gui.shared.gui_items.dossier import factories, loadDossier
 from gui.shared.items_parameters import params_helper, bonus_helper
 from gui.shared.items_parameters.formatters import NO_BONUS_SIMPLIFIED_SCHEME
 from gui.shared.tooltips import TOOLTIP_COMPONENT
+from gui.shared.tooltips.personal_missions import PM_BRANCH
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID
 from helpers import dependency
-from personal_missions import PM_BRANCH
 from rent_common import RENT_TYPE_TO_DURATION
 from shared_utils import first
 from skeletons.gui.game_control import IRankedBattlesController, IBattlePassController, IHangarGuiController, ILoadoutController
@@ -217,7 +218,7 @@ class BadgeContext(ToolTipContext):
     def __init__(self, fieldsToExclude=None):
         super(BadgeContext, self).__init__(TOOLTIP_COMPONENT.BADGE, fieldsToExclude)
 
-    def getParamsConfiguration(self, badge):
+    def getParamsConfiguration(self, item):
         return BadgeParamsConfiguration()
 
     def buildItem(self, badgeID):
@@ -226,8 +227,8 @@ class BadgeContext(ToolTipContext):
 
 class ReferralProgramBadgeContext(BadgeContext):
 
-    def getParamsConfiguration(self, badge):
-        value = super(ReferralProgramBadgeContext, self).getParamsConfiguration(badge)
+    def getParamsConfiguration(self, item):
+        value = super(ReferralProgramBadgeContext, self).getParamsConfiguration(item)
         value.showVehicle = False
         return value
 
@@ -278,7 +279,7 @@ class AwardContext(DefaultContext):
         return value
 
     def getParams(self):
-        seasonRent = dict()
+        seasonRent = {}
         for key in ('season', 'cycle'):
             for seasonType, seasonID in self._seasonRent[key]:
                 seasonRent.setdefault(seasonType, []).append((int(seasonID), RENT_TYPE_TO_DURATION[key]))
@@ -1250,7 +1251,7 @@ class BoosterInfoContext(ToolTipContext):
     def __init__(self, fieldsToExclude=None):
         super(BoosterInfoContext, self).__init__(TOOLTIP_COMPONENT.BOOSTER, fieldsToExclude)
 
-    def getStatsConfiguration(self, booster):
+    def getStatsConfiguration(self, item):
         return BoosterStatsConfiguration()
 
     def buildItem(self, boosterID):
@@ -1269,24 +1270,24 @@ class DemountKitContext(ToolTipContext):
 
 class BoosterContext(BoosterInfoContext):
 
-    def getStatsConfiguration(self, booster):
-        value = super(BoosterContext, self).getStatsConfiguration(booster)
+    def getStatsConfiguration(self, item):
+        value = super(BoosterContext, self).getStatsConfiguration(item)
         value.buyPrice = True
         return value
 
 
 class QuestsBoosterContext(BoosterInfoContext):
 
-    def getStatsConfiguration(self, booster):
-        value = super(QuestsBoosterContext, self).getStatsConfiguration(booster)
+    def getStatsConfiguration(self, item):
+        value = super(QuestsBoosterContext, self).getStatsConfiguration(item)
         value.quests = True
         return value
 
 
 class ShopBoosterContext(BoosterInfoContext):
 
-    def getStatsConfiguration(self, booster):
-        value = super(ShopBoosterContext, self).getStatsConfiguration(booster)
+    def getStatsConfiguration(self, item):
+        value = super(ShopBoosterContext, self).getStatsConfiguration(item)
         value.activateInfo = True
         value.activeState = False
         value.inventoryCount = True
@@ -1298,8 +1299,8 @@ class ClanReserveContext(BoosterInfoContext):
     def buildItem(self, boosterID):
         return self._goodiesCache.getClanReserves().get(boosterID)
 
-    def getStatsConfiguration(self, booster):
-        boosterStatsConfig = super(ClanReserveContext, self).getStatsConfiguration(booster)
+    def getStatsConfiguration(self, item):
+        boosterStatsConfig = super(ClanReserveContext, self).getStatsConfiguration(item)
         boosterStatsConfig.activeState = False
         return boosterStatsConfig
 
@@ -1411,7 +1412,8 @@ class BattlePassGiftTokenContext(ToolTipContext):
                     result.append(gift.bonus.displayedItem.getXP())
             else:
                 shortOfferName = offerToken.split(':')[2]
-                gifts = sorted(offer.getAllGifts(), key=lambda item: (item.bonus.getLightViewModelData()[0], getItemsSortKey(shortOfferName)))
+                sortKey = getItemsSortKey(shortOfferName)
+                gifts = sorted(offer.getAllGifts(), key=lambda item: sortKey((item.bonus.getLightViewModelData()[0],)))
                 for gift in gifts:
                     result.append(gift.title)
 

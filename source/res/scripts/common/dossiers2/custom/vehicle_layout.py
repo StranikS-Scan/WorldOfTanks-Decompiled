@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/vehicle_layout.py
+from __future__ import absolute_import
 from dossiers2.common.DossierBlockBuilders import *
-from battle_statistics_layouts import *
+from dossiers2.custom.battle_statistics_layouts import *
 from dossiers2.custom.dependencies import ACHIEVEMENT15X15_DEPENDENCIES
 from dossiers2.custom.dependencies import ACHIEVEMENT7X7_DEPENDENCIES
 from dossiers2.custom.dependencies import FALLOUT_STATS_DEPENDENCIES

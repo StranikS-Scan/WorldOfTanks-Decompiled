@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/browser_filters.py
+from __future__ import absolute_import
 from collections import namedtuple
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS

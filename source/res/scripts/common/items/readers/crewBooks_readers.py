@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/readers/crewBooks_readers.py
+from __future__ import absolute_import
 import ResMgr
 import nations
 import os
+from past.builtins import intern
 from items import _xml
 from items import vehicles
 from items.components import crew_books_constants
@@ -41,9 +43,9 @@ def _readPriceGroups(pricesCache, cache, xmlCtx, section, sectionName):
         _readPriceForItem(pricesCache, iCtx, iSection, priceGroup.compactDescr)
         if iSection.has_key('tags'):
             tags = iSection.readString('tags').split()
-            priceGroup.tags = frozenset(map(intern, tags))
-            for tag in priceGroup.tags:
-                cache.priceGroupTags.setdefault(tag, []).append(priceGroup)
+            priceGroup.tags = frozenset((intern(tag) for tag in tags))
+            for priceTag in priceGroup.tags:
+                cache.priceGroupTags.setdefault(priceTag, []).append(priceGroup)
 
         cache.priceGroupNames[priceGroup.name] = priceGroup.id
         cache.priceGroups[priceGroup.id] = priceGroup
@@ -112,7 +114,7 @@ def _readBookTypeItem(pricesCache, cache, xmlCtx, section, storage):
 
 
 def _readCrewBooksCacheFromXMLSection(pricesCache, cache, xmlCtx, section, sectionName, storage):
-    for i, (gname, gsection) in enumerate(section.items()):
+    for gname, gsection in section.items():
         if gname != sectionName:
             continue
         reader = __xmlReaders[sectionName]

@@ -1,18 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/cgf_components/mechanic_components/cyclic_rocket/staged_jet_boosters.py
+from __future__ import absolute_import
 import CGF
-from cgf_script.managers_registrator import autoregister, onAddedQuery, onRemovedQuery
 from StagedJetBoostersController import StagedJetBoostersController
 
-@autoregister(presentInAllWorlds=True, domain=CGF.DomainOption.DomainClient)
-class StagedJetBoostersComponentManager(CGF.ComponentManager):
+class StagedJetBoostersComponentSystem(CGF.System):
+    Activated = CGF.ActivateReaction(CGF.ReactRw(StagedJetBoostersController))
+    Deactivated = CGF.DeactivateReaction(CGF.ReactRw(StagedJetBoostersController))
+    Reactions = CGF.Reactions(Activated, Deactivated)
 
-    @onAddedQuery(StagedJetBoostersController)
-    def onAdded(self, ctrl):
-        ctrl.attachInput()
-        ctrl.createInputLogger()
+    def update(self):
+        for controller in self.reaction(self.Deactivated):
+            if controller.isValid and not controller.isComponentDestroyed():
+                controller.detachInput()
 
-    @onRemovedQuery(StagedJetBoostersController)
-    def onRemoved(self, ctrl):
-        if ctrl.isValid and not ctrl.isComponentDestroyed():
-            ctrl.detachInput()
+        for controller in self.reaction(self.Activated):
+            controller.attachInput()
+            controller.createInputLogger()

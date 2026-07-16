@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/arena_vscript_config/schemas.py
+from __future__ import absolute_import
 import typing
 from constants import IS_CLIENT
 from dict2model import fields, models, validate

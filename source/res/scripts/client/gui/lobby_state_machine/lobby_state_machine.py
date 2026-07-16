@@ -3,7 +3,6 @@
 from __future__ import absolute_import
 import logging
 from collections import deque
-from functools import cmp_to_key
 import typing
 from future.utils import itervalues
 from Event import Event, EventManager
@@ -392,16 +391,13 @@ class LobbyStateMachine(StateMachine, EventsHandler):
 
     def __sortNavigationQueue(self):
 
-        def eventComparator(event, otherEvent):
+        def eventSortKey(event):
             target = self.getStateByID(event.targetStateID)
-            otherTarget = self.getStateByID(otherEvent.targetStateID)
             subtree = self.findOwningSubtree(target)
-            otherSubtree = self.findOwningSubtree(otherTarget)
             eventSubtreePriority = self.__subtreePriorities.index(subtree.getStateID())
-            otherSubtreePriority = self.__subtreePriorities.index(otherSubtree.getStateID())
-            return int(isinstance(target, EmptyState)) - int(isinstance(otherTarget, EmptyState)) if eventSubtreePriority == otherSubtreePriority else eventSubtreePriority - otherSubtreePriority
+            return (eventSubtreePriority, int(isinstance(target, EmptyState)))
 
-        self.__navigationQueue.sort(key=cmp_to_key(eventComparator))
+        self.__navigationQueue.sort(key=eventSortKey)
 
     def __getBackNavigationTargetAndParams(self, currentVisibleState, peekOnly=True):
         backNavigationTarget = self.getStateByCls(_SubScopeSubLayerEmptyState)

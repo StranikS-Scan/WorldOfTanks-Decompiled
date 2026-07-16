@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/wotlda/response.py
-import httplib
+from __future__ import absolute_import
+from http import client as httplib
 from typing import Dict, Optional, TYPE_CHECKING
 from gui.game_control.wotlda.constants import LAST_UPDATE_TIMESTAMP, SupportedWotldaLoadoutType
 if TYPE_CHECKING:

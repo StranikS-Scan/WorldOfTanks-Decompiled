@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: server_side_replay/scripts/client/server_side_replay/gui/impl/lobby/pages/best_replays_page.py
+from __future__ import absolute_import
 import logging
+from past.builtins import unicode
 import time
-from typing import TYPE_CHECKING, Optional, List
+from typing import TYPE_CHECKING, Optional, List, Dict
 import BigWorld
 from BattleReplay import BattleReplay
 from adisp import adisp_process
@@ -182,15 +184,15 @@ class BestReplaysPage(PageSubModelPresenter):
         replayModel.setMarksOfMastery(_DataToModelMarkOfMastery.get(replayInfo.mastery_mark, MarksOfMastery.NONE))
         epicMedals = replayModel.getEpicMedals()
         for record in replayInfo.achievements:
-            a_id = record.get('achievement_type_id')
-            a_value = record.get('achievement_value')
-            record = DB_ID_TO_RECORD[a_id]
+            achievementId = record.get('achievement_type_id')
+            achievementValue = record.get('achievement_value')
+            record = DB_ID_TO_RECORD[achievementId]
             factory = getAchievementFactory(record)
             if factory is not None and layouts.isAchievementRegistered(record):
-                achievement = factory.create(value=a_value)
-                a_name = achievement.getUserName()
-                if a_name not in epicMedals:
-                    epicMedals.addString(a_name)
+                achievement = factory.create(value=achievementValue)
+                achievementName = achievement.getUserName()
+                if achievementName not in epicMedals:
+                    epicMedals.addString(achievementName)
 
         try:
             vehicle = self.__itemsCache.items.getItemByCD(replayInfo.vehicle_cd)

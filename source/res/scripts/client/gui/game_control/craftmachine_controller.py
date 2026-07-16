@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/craftmachine_controller.py
+from __future__ import absolute_import
 import logging
+from future.utils import viewitems
 from adisp import adisp_process
 from constants import EnhancementsConfig as config
 from constants import MAX_VEHICLE_LEVEL, BATTLE_MODE_VEH_TAGS_EXCEPT_CLAN
@@ -53,7 +55,7 @@ class CraftmachineController(ICraftmachineController):
         if response.isSuccess():
             self.__enabledSync = False
             data = response.getData() or {}
-            for key, element in data.iteritems():
+            for key, element in viewitems(data):
                 self.__modules[key] = element.get('localizations', {}).get('name', '')
 
         else:

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: server_side_replay/scripts/client/server_side_replay/gui/shared/event_dispatcher.py
+from __future__ import absolute_import
 from helpers import dependency
 from gui.impl.gen import R
 from gui.shared import events, g_eventBus

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/blueprints/__init__.py
+from __future__ import absolute_import
 import typing
+from past.builtins import xrange
 import nations
 from constants import IS_CLIENT, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from debug_utils import LOG_CURRENT_EXCEPTION
@@ -72,7 +74,7 @@ def _readBlueprints(reader, subsectionName):
 def _readConversionCoefs(section, subsectionName):
     result = {}
     for allianceName, groupSection in section[subsectionName].items():
-        result[nations.ALLIANCE_IDS[allianceName]] = group = dict()
+        result[nations.ALLIANCE_IDS[allianceName]] = group = {}
         for nationName, _ in groupSection.items():
             group[nations.INDICES[nationName]] = groupSection.readFloat(nationName, 1)
 
@@ -90,6 +92,11 @@ class g_cache(object):
             return self.__cfg[attr]
         except KeyError:
             raise AttributeError
+
+    def __bool__(self):
+        return bool(self.__cfg)
+
+    __nonzero__ = __bool__
 
     def init(self, gameParams=None, nofail=True):
         cfg = self.__cfg
@@ -109,9 +116,6 @@ class g_cache(object):
 
     def fini(self):
         self.__cfg.clear()
-
-    def __nonzero__(self):
-        return bool(self.__cfg)
 
 
 def init(gameParams=None, nofail=True):

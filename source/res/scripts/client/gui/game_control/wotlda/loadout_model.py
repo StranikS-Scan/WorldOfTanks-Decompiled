@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/wotlda/loadout_model.py
+from __future__ import absolute_import
 from typing import List, Tuple, Union, Any, Optional, TYPE_CHECKING
 from dict2model import models, fields, utils
 from dict2model.schemas import Schema, validate

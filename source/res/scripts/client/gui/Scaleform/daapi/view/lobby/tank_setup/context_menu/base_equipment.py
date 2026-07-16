@@ -121,11 +121,15 @@ class BaseHangarEquipmentSlotContextMenu(BaseSlotContextMenu):
     def _putOnAction(self, onId):
         pass
 
+    def _postProcessLayoutAfterSwap(self, layout):
+        pass
+
     @adisp_process
     def _makePutOnAction(self, setupName, onId, copyVehicle, layout):
         leftID, rightID = sorted((onId, self._installedSlotId))
         leftItem, rightItem = layout[leftID], layout[rightID]
         layout[leftID], layout[rightID] = layout[rightID], layout[leftID]
+        self._postProcessLayoutAfterSwap(layout)
         result = yield self._doPutOnAction(copyVehicle)
         if result:
             self._sendLastSlotAction(setupName, BaseSetupModel.SWAP_SLOTS_ACTION, {'leftID': leftID,

@@ -1108,6 +1108,19 @@ class DIALOGS(object):
     SELECTVEHICLE_SELECTATTACKERTITLE = '#dialogs:selectVehicle/selectAttackerTitle'
     SELECTVEHICLE_SELECTVEHICLE = '#dialogs:selectVehicle/selectVehicle'
     SELECTVEHICLE_COUNTER = '#dialogs:selectVehicle/counter'
+    CHALLENGE_MISSIONS_ACTIVATION_CONFIRM = '#dialogs:challenge_missions/activation/confirm'
+    CHALLENGE_MISSIONS_ACTIVATION_CANCEL = '#dialogs:challenge_missions/activation/cancel'
+    CHALLENGE_MISSIONS_ACTIVATION_TITLE = '#dialogs:challenge_missions/activation/title'
+    CHALLENGE_MISSIONS_ACTIVATION_DESCRIPTION = '#dialogs:challenge_missions/activation/description'
+    CHALLENGE_MISSIONS_SURRENDER_CONFIRM = '#dialogs:challenge_missions/surrender/confirm'
+    CHALLENGE_MISSIONS_SURRENDER_CANCEL = '#dialogs:challenge_missions/surrender/cancel'
+    CHALLENGE_MISSIONS_SURRENDER_TITLE = '#dialogs:challenge_missions/surrender/title'
+    CHALLENGE_MISSIONS_SURRENDER_DESCRIPTION = '#dialogs:challenge_missions/surrender/description'
+    CHALLENGE_MISSIONS_RESTART_CONFIRM = '#dialogs:challenge_missions/restart/confirm'
+    CHALLENGE_MISSIONS_RESTART_CANCEL = '#dialogs:challenge_missions/restart/cancel'
+    CHALLENGE_MISSIONS_RESTART_FREE_TITLE = '#dialogs:challenge_missions/restart/free/title'
+    CHALLENGE_MISSIONS_RESTART_PAID_TITLE = '#dialogs:challenge_missions/restart/paid/title'
+    CHALLENGE_MISSIONS_RESTART_DESCRIPTION = '#dialogs:challenge_missions/restart/description'
     VEHICLESELLDIALOG_VEHICLETYPE_ENUM = (VEHICLESELLDIALOG_VEHICLETYPE_LIGHTTANK,
      VEHICLESELLDIALOG_VEHICLETYPE_MEDIUMTANK,
      VEHICLESELLDIALOG_VEHICLETYPE_HEAVYTANK,
@@ -2204,7 +2217,20 @@ class DIALOGS(object):
      FILLALLPERKS_DESCRIPTION,
      SELECTVEHICLE_SELECTATTACKERTITLE,
      SELECTVEHICLE_SELECTVEHICLE,
-     SELECTVEHICLE_COUNTER)
+     SELECTVEHICLE_COUNTER,
+     CHALLENGE_MISSIONS_ACTIVATION_CONFIRM,
+     CHALLENGE_MISSIONS_ACTIVATION_CANCEL,
+     CHALLENGE_MISSIONS_ACTIVATION_TITLE,
+     CHALLENGE_MISSIONS_ACTIVATION_DESCRIPTION,
+     CHALLENGE_MISSIONS_SURRENDER_CONFIRM,
+     CHALLENGE_MISSIONS_SURRENDER_CANCEL,
+     CHALLENGE_MISSIONS_SURRENDER_TITLE,
+     CHALLENGE_MISSIONS_SURRENDER_DESCRIPTION,
+     CHALLENGE_MISSIONS_RESTART_CONFIRM,
+     CHALLENGE_MISSIONS_RESTART_CANCEL,
+     CHALLENGE_MISSIONS_RESTART_FREE_TITLE,
+     CHALLENGE_MISSIONS_RESTART_PAID_TITLE,
+     CHALLENGE_MISSIONS_RESTART_DESCRIPTION)
 
     @classmethod
     def vehicleselldialog_vehicletype(cls, key0):

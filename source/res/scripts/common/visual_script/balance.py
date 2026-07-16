@@ -1,16 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/balance.py
-import BigWorld
-import sys
+from __future__ import absolute_import
 import os
-from block import Meta, Block, InitParam, buildStrKeysValue
-from slot_types import SLOT_TYPE, arrayOf
-from type import VScriptStruct, VScriptStructField
-from visual_script.misc import errorVScript, ASPECT, EDITOR_TYPE
+import BigWorld
 import ResMgr
 import constants
 import nations
 import items.vehicles as iv
+from visual_script.block import Meta, Block, InitParam, buildStrKeysValue
+from visual_script.misc import errorVScript, ASPECT, EDITOR_TYPE
+from visual_script.slot_types import SLOT_TYPE, arrayOf
+from visual_script.type import VScriptStruct, VScriptStructField
 _dataSection = None
 _gList = None
 
@@ -153,13 +153,13 @@ class IntCompDescrDecoder(Block, EquipmentMeta):
 
     def __parseCDs(self):
         cache()
-        from items import vehicles, ITEM_TYPE_NAMES
+        from items import ITEM_TYPE_NAMES
         err = ''
         results = []
         for intCD in self._intCDs.getValue():
             try:
-                itemTypeID, nationID, vehID = vehicles.parseIntCompactDescr(intCD)
-                item = vehicles.getItemByCompactDescr(intCD)
+                itemTypeID, nationID, vehID = iv.parseIntCompactDescr(intCD)
+                item = iv.getItemByCompactDescr(intCD)
             except Exception as e:
                 err += '{}: {}\n'.format(intCD, e)
                 results.append(err)
@@ -204,7 +204,6 @@ class EquipmentParams(Block, EquipmentMeta):
         else:
             if constants.IS_CELLAPP:
                 from items.vehicles import g_cache
-                import InfluenceZone
                 eqExtra = g_cache.commonConfig['extrasDict'].get(self.eqName)
                 if eqExtra:
                     eqExtra._readConfig(None, None)

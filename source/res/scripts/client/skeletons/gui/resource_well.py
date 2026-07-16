@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/gui/resource_well.py
+from __future__ import absolute_import
 from typing import Dict, Optional, Set, List
 from Event import Event
 from skeletons.gui.game_control import IGameController

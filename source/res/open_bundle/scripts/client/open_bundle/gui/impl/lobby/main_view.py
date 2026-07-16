@@ -25,9 +25,8 @@ from open_bundle.gui.impl.gen.view_models.views.lobby.main_view_model import Mai
 from open_bundle.gui.impl.lobby.decorators import createTooltipContentDecorator
 from open_bundle.gui.impl.lobby.sounds import OPEN_BUNDLE_SOUND_SPACE
 from open_bundle.gui.impl.lobby.tooltips.fixed_rewards_tooltip import FixedRewardsTooltip
-from open_bundle.gui.shared.event_dispatcher import showIntro, showAttachmentsPreview
+from open_bundle.gui.shared.event_dispatcher import showAttachmentsPreview
 from open_bundle.gui.shared.gui_items.processors.processors import ProcessNextStepProcessor
-from open_bundle.helpers.account_settings import isIntroShown
 from open_bundle.helpers.bonuses.bonus_packers import composeBonuses, hideInvisible, packBonusModelAndTooltipData, sortBonuses
 from open_bundle.skeletons.open_bundle_controller import IOpenBundleController
 from shared_utils import first
@@ -82,10 +81,6 @@ class MainView(ViewImpl):
         self.__bundle = self.__openBundle.config.getBundle(bundleID)
         self.__receivedCells = set(self.__openBundle.getReceivedCells(bundleID))
         self.__updateModel()
-
-    def _onLoaded(self, *args, **kwargs):
-        if not isIntroShown(self.__bundle.id):
-            showIntro(self.__bundle.id)
 
     def _finalize(self):
         self.__unlockSpoilers()
@@ -169,7 +164,7 @@ class MainView(ViewImpl):
         bonuses = hideInvisible(sortBonuses(cellBonusInfo['bonuses']))
         bonusModels = cellModel.getBonuses()
         bonusModels.clear()
-        packBonusModelAndTooltipData(bonuses, bonusModels, self.__tooltipItems, showAttachmentSet=True)
+        packBonusModelAndTooltipData(bonuses, bonusModels, self.__tooltipItems, showAttachmentsSets=True)
         cellModel.setBonuses(bonusModels)
 
     @replaceNoneKwargsModel

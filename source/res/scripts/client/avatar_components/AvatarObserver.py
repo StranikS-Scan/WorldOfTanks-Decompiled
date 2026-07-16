@@ -99,7 +99,8 @@ class AvatarObserver(CallbackDelayer):
                 if not self.guiSessionProvider.shared.vehicleState.isInPostmortem:
                     for v in BigWorld.player().vehicles:
                         if v.appearance is not None:
-                            v.appearance.highlighter.setVehicleOwnership()
+                            if v.appearance.highlighter:
+                                v.appearance.highlighter.setVehicleOwnership()
                             self.guiSessionProvider.stopVehicleVisual(v.id, False)
                             self.guiSessionProvider.startVehicleVisual(v, True)
 
@@ -254,7 +255,7 @@ class AvatarObserver(CallbackDelayer):
     def __resetHighlightProperties(self, vehicle):
         if self.isObserverFPV:
             BigWorld.target.exclude = vehicle
-            if vehicle.appearance and vehicle.appearance.collisions is not None:
+            if vehicle.appearance and vehicle.appearance.collisions:
                 BigWorld.wgAddIgnoredCollisionEntity(vehicle, vehicle.appearance.collisions)
         else:
             BigWorld.target.exclude = None

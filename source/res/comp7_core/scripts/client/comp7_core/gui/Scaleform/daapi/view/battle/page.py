@@ -165,6 +165,7 @@ class Comp7BattlePage(Comp7BattlePageMeta):
                 self.__updateComponentsVisibility()
                 if not isShown:
                     self._fsToggling.update(self.__visibilityManager.getVisible())
+                    self._fsToggling.difference_update(self.__visibilityManager.getHidden())
             super(Comp7BattlePage, self)._toggleFullStats(isShown, permanent=permanent, tabAlias=tabAlias)
             return
 

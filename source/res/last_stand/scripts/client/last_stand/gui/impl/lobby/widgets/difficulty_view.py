@@ -5,6 +5,8 @@ from gui.impl.gen import R
 from gui.impl.pub.view_component import ViewComponent
 from gui.prb_control import prbEntityProperty
 from gui.prb_control.entities.listener import IGlobalListener
+from gui.prb_control.entities.base.unit.listener import IUnitListener
+from skeletons.gui.game_control import IPlatoonController
 from account_helpers import AccountSettings
 from helpers import dependency
 from last_stand.gui.game_control.ls_difficulty_missions_controller import getFormattedMissionsList
@@ -19,10 +21,11 @@ from last_stand.skeletons.ls_controller import ILSController
 from last_stand.skeletons.ls_difficulty_missions_controller import ILSDifficultyMissionsController
 from last_stand_common.last_stand_constants import DEFAULT_DIFFICULTY_MODIFIER
 
-class DifficultyView(ViewComponent[DifficultyViewModel], IGlobalListener):
+class DifficultyView(ViewComponent[DifficultyViewModel], IGlobalListener, IUnitListener):
     _difficultyCtrl = dependency.descriptor(IDifficultyLevelController)
     lsCtrl = dependency.descriptor(ILSController)
     lsMissionsCtrl = dependency.descriptor(ILSDifficultyMissionsController)
+    _platoonCtrl = dependency.descriptor(IPlatoonController)
 
     def __init__(self):
         super(DifficultyView, self).__init__(R.aliases.last_stand.shared.Difficulty(), DifficultyViewModel)
@@ -46,6 +49,10 @@ class DifficultyView(ViewComponent[DifficultyViewModel], IGlobalListener):
     def onPrbEntitySwitched(self):
         super(DifficultyView, self).onPrbEntitySwitched()
         self.__onUpdateDifficultyLevelsViewState()
+
+    def onUnitFlagsChanged(self, flags, timeLeft):
+        if flags.isSearchStateChanged():
+            self.__onUpdateDifficultyLevelsViewState()
 
     def _onLoading(self, *args, **kwargs):
         super(DifficultyView, self)._onLoading(*args, **kwargs)
@@ -129,8 +136,12 @@ class DifficultyView(ViewComponent[DifficultyViewModel], IGlobalListener):
 
     def __onUpdateDifficultyLevelsViewState(self, *args, **kwargs):
         with self.viewModel.transaction() as model:
-            isDisabled = isinstance(self.prbEntity, LastStandSquadEntity) and not self.prbEntity.isCommander()
+            if self._platoonCtrl.isInQueue() or self._platoonCtrl.isInSearch():
+                isDisabled = True
+            else:
+                isDisabled = isinstance(self.prbEntity, LastStandSquadEntity) and not self.prbEntity.isCommander()
             model.setIsDisabled(isDisabled)
+            model.setIsSearchingPlatoon(self._platoonCtrl.isInSearch())
 
     def __onSwitchLevel(self, result):
         selectedID = int(result.get('level', 1))

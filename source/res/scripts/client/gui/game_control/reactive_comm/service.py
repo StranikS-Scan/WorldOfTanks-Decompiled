@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/reactive_comm/service.py
+from __future__ import absolute_import
 import weakref
 from collections import deque
 import typing

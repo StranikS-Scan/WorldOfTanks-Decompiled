@@ -8,6 +8,7 @@ import random
 import typing
 import weakref
 from collections import namedtuple
+from typing import List
 import BigWorld
 import CGF
 import GenericComponents
@@ -15,26 +16,28 @@ import InstantStatuses
 import Math
 import Statuses
 import WoT
-from GenericComponents import TransformComponent
 import AreaDestructibles
 import BattleReplay
 import DestructiblesCache
 import TriggersManager
 import constants
 import physics_shared
+from CGF import TransformComponent
 from account_helpers.settings_core.settings_constants import GAME
 from aih_constants import ShakeReason
-from cgf_components.arena_camera_manager import ArenaCameraManager
+from cgf_components.arena_camera_manager import ArenaCameraSystem
 from cgf_modules import game_events
 from cgf_modules.game_events import ArmorHitPlacement
 from cgf_script.entity_dyn_components import BWEntitiyComponentTracker
 from constants import VEHICLE_HIT_EFFECT, VEHICLE_SIEGE_STATE, ATTACK_REASON_INDICES, ATTACK_REASON, SPT_MATKIND
+from helpers.collisions import SegmentCollisionResultExt
 from vehicle_systems.components.vehicle_assembly_manager import GunInfoAssembler
 from common_tank_structure import VehicleAppearanceCacheInfo
 from DamageComponents import DamageZoneType
 from gui.battle_control import vehicle_getter, avatar_getter
 from gui.battle_control.avatar_getter import getSoundNotifications
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _FET, VEHICLE_VIEW_STATE
+from gui.shared.utils.decorators import ReprInjector
 from gun_rotation_shared import decodeGunAngles
 from helpers import dependency
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
@@ -53,6 +56,7 @@ from skeletons.vehicle_appearance_cache import IAppearanceCache
 from soft_exception import SoftException
 from TriggersManager import TRIGGER_TYPE
 from VehicleEffects import DamageFromShotDecoder
+from helpers.StubCollisionComponent import StubCollisionComponent
 from vehicles.entities.vehicle_events import createVehicleEvents
 from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_helpers import getVehicleMechanicComponent, getVehicleDescrMechanicParams
@@ -66,6 +70,7 @@ from visual_script.misc import ASPECT
 if typing.TYPE_CHECKING:
     import OwnVehicle
     from vehicles.entities.vehicle_events import IVehicleEvents
+    from vehicle_systems.CompoundAppearance import CompoundAppearance
 _logger = logging.getLogger(__name__)
 LOW_ENERGY_COLLISION_D = 0.3
 HIGH_ENERGY_COLLISION_D = 0.6
@@ -99,10 +104,6 @@ class _VehicleSpeedProvider(object):
         self.__value = Math.Vector4Basic()
 
 
-SegmentCollisionResultExt = namedtuple('SegmentCollisionResultExt', ('dist',
- 'hitAngleCos',
- 'matInfo',
- 'compName'))
 StunInfo = namedtuple('StunInfo', ('startTime',
  'endTime',
  'duration',
@@ -110,6 +111,11 @@ StunInfo = namedtuple('StunInfo', ('startTime',
 DebuffInfo = namedtuple('DebuffInfo', ('duration', 'animated'))
 VEHICLE_COMPONENTS = {BattleAbilitiesComponent}
 
+def _logVehicle(logger, msg, vID, *args, **kwargs):
+    logger(('[%d] ' + msg), vID, *args, **kwargs)
+
+
+@ReprInjector.simple('id')
 class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesComponent):
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -176,8 +182,9 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
 
     @property
     def wheelsScrollSmoothed(self):
+        time = BigWorld.time()
         if self.__wheelsScrollFilter is not None:
-            return [ scrollFilter.output(BigWorld.time()) for scrollFilter in self.__wheelsScrollFilter ]
+            return [ scrollFilter.output(time) for scrollFilter in self.__wheelsScrollFilter ]
         else:
             return
 
@@ -187,8 +194,9 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
 
     @property
     def wheelsSteeringSmoothed(self):
+        time = BigWorld.time()
         if self.__wheelsSteeringFilter is not None:
-            return [ steeringFilter.output(BigWorld.time()) for steeringFilter in self.__wheelsSteeringFilter ]
+            return [ steeringFilter.output(time) for steeringFilter in self.__wheelsSteeringFilter ]
         else:
             return []
 
@@ -199,6 +207,10 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
     @property
     def maxHealth(self):
         return self.publicInfo.maxHealth
+
+    @property
+    def typeCompDescr(self):
+        return self.typeDescriptor and self.typeDescriptor.makeCompactDescr()
 
     @property
     def battleModifiers(self):
@@ -222,7 +234,10 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         return self.__events
 
     def getBounds(self, partIdx):
-        return self.appearance.collisions.getExtendedBoundingBox(partIdx) if self.appearance is not None else (Math.Vector3(0.0, 0.0, 0.0), Math.Vector3(0.0, 0.0, 0.0), 0)
+        if self.appearance is not None:
+            if self.appearance.collisions:
+                return self.appearance.collisions.getExtendedBoundingBox(partIdx)
+        return (Math.Vector3(0.0, 0.0, 0.0), Math.Vector3(0.0, 0.0, 0.0), 0)
 
     def getSpeed(self):
         return self.__speedInfo.value[0]
@@ -231,6 +246,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         return self.masterVehID
 
     def __init__(self):
+        self.__logVehicle(_logger.debug, '__init__')
         self.__events = createVehicleEvents(self)
         for comp in VEHICLE_COMPONENTS:
             comp.__init__(self)
@@ -267,7 +283,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         return
 
     def reload(self):
-        _logger.debug('reload(%d)', self.id)
+        self.__logVehicle(_logger.debug, 'reload')
         vehicles.reload()
         Vehicle.respawnVehicle(self.id, self.publicInfo.compDescr)
 
@@ -275,7 +291,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         global _g_respawnQueue
         pair = _g_respawnQueue.pop(self.id, None)
         if pair is not None:
-            _logger.debug('found delayed respawn request(%d)', self.id)
+            self.__logVehicle(_logger.info, 'found delayed respawn request')
             self.respawnCompactDescr = pair[0]
             self.respawnOutfitCompactDescr = pair[1]
             return True
@@ -283,7 +299,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             return False
 
     def onEnterWorld(self, _=None):
-        _logger.debug('onEnterWorld(%d)', self.id)
+        self.__logVehicle(_logger.debug, 'onEnterWorld')
         isDelayedRespawn = self.__checkDelayedRespawn()
         if self.respawnOutfitCompactDescr is not None:
             outfitDescr = self.respawnOutfitCompactDescr
@@ -293,18 +309,19 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         oldTypeDescriptor = self.typeDescriptor
         self.typeDescriptor = self.getDescr(None if isDelayedRespawn else self.respawnCompactDescr)
         forceReloading = self.respawnCompactDescr is not None
-        var_storage.createForRoot(self)
+        queue = CGF.CommandQueue(self.spaceID)
+        queue.setGameObjectName(self.entityGameObject, 'Vehicle: {}, id: {}'.format(self.typeDescriptor.name, self.id))
+        var_storage.createForRoot(self, queue)
         if 'battle_royale' in self.typeDescriptor.type.tags:
             from InBattleUpgrades import onBattleRoyalePrerequisites
             forceReloading = onBattleRoyalePrerequisites(self, oldTypeDescriptor, forceReloading)
         strCD = self.typeDescriptor.makeCompactDescr()
-        newInfo = VehicleAppearanceCacheInfo(self.typeDescriptor, self.health, self.isCrewActive, self.isTurretDetached, outfitDescr, forceDynAttachmentLoading=False, entityGameObject=self.entityGameObject)
+        newInfo = VehicleAppearanceCacheInfo(self.typeDescriptor, self.health, self.isCrewActive, self.isTurretDetached, outfitDescr, forceDynAttachmentLoading=False, entityGameObject=self.entityGameObject, respawnID=self.publicInfo['respawnID'])
         ctrl = self.guiSessionProvider.dynamic.appearanceCache
         if ctrl is not None:
             appearance = ctrl.getAppearance(self.id, newInfo, None, strCD, False)
             if appearance:
-                isAppearanceAlive = not appearance.isDestroyed
-                forceReloading = forceReloading or isAppearanceAlive != self.isAlive()
+                forceReloading = forceReloading or appearance.isAlive != self.isAlive()
             if forceReloading:
                 oldStrCD = oldTypeDescriptor.makeCompactDescr() if oldTypeDescriptor is not None else None
                 appearance = ctrl.reloadAppearance(self.id, newInfo, self.__onAppearanceReady, strCD, oldStrCD)
@@ -315,7 +332,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             else:
                 self.appearance = ctrl.getAppearance(self.id, newInfo, self.__onAppearanceReady, strCD)
         else:
-            _logger.error('Failed to load vehicle appearance. Missing AppearanceCache controller. vId=%s; vInfo=%s; strCD=%s', self.id, newInfo._asdict(), strCD)
+            self.__logVehicle(_logger.error, 'Failed to load vehicle appearance. No AppearanceCache controller. vInfo=%s; strCD=%r', newInfo._asdict(), strCD)
         self.respawnCompactDescr = None
         self.set_vehPostProgression(self.vehPostProgression)
         self.set_customRoleSlotTypeId(self.customRoleSlotTypeId)
@@ -336,12 +353,11 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
     @staticmethod
     def deferredRespawnVehicle(vehicleObj):
         if hasattr(vehicleObj, 'respawnCompactDescr') and vehicleObj.respawnCompactDescr:
-            _logger.debug('respawn vehCD is still valid, request reloading of tank resources %s', vehicleObj.id)
+            _logVehicle(_logger.debug, 'respawn vehCD is still valid, calling respawnVehicle again', vehicleObj.id)
             vehicleObj.respawnVehicle(vehicleObj.id, vehicleObj.respawnCompactDescr)
 
     @staticmethod
     def respawnVehicle(vID, compactDescr=None, outfitCompactDescr=None):
-        _logger.debug('respawnVehicle(%d)', vID)
         vehicle = BigWorld.entities.get(vID)
         avatar = BigWorld.player()
         if vID == avatar.playerVehicleID:
@@ -349,6 +365,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             if ctrl:
                 ctrl.respawnRequested()
         if vehicle is not None:
+            _logVehicle(_logger.info, 'respawnVehicle %r -> %r', vID, vehicle.typeCompDescr, compactDescr)
             vehInfo = avatar.arena.vehicles[vID]
             avatarVehicle = avatar.vehicle
             isVehicleAlive = vehInfo['isAlive'] and vehicle.isAlive()
@@ -367,7 +384,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
                 vehicle.isLeavingWorldForRespawn = False
 
         else:
-            _logger.debug('Delayed respawn %d', vID)
+            _logVehicle(_logger.debug, 'Delayed respawnVehicle %r', vID, compactDescr)
             _g_respawnQueue[vID] = [compactDescr, outfitCompactDescr]
         return
 
@@ -380,7 +397,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         self.__wheelsScrollFilter, self.__wheelsSteeringFilter = createWheelFilters(self.typeDescriptor)
 
     def __onAppearanceReady(self, appearance):
-        _logger.info('__onAppearanceReady(%d)', self.id)
+        self.__logVehicle(_logger.info, '__onAppearanceReady %s %r', id(appearance), appearance.vStrCD)
         self.appearance = appearance
         self.__waitingForAppearanceReload = False
         self.__isEnteringWorld = True
@@ -398,27 +415,42 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         self.__prevHealth = self.maxHealth
         self.resetProperties()
         self.__events.onAppearanceReady()
+        self.appearance.onAppearanceActivated += self.__onActivateAppearance
+        if appearance.isComponentsCreated:
+            self.__events.onAppearanceComponentsReady()
+        else:
+            self.appearance.onComponentsCreated += self.__onCreateAppearanceComponents
 
     def __onVehicleInfoAdded(self, vehID):
         if self.id != vehID:
-            _logger.error('__onVehicleInfoAdded(): Received unexpected vehicle id %d. Waiting for %d', vehID, self.id)
+            self.__logVehicle(_logger.warning, '__onVehicleInfoAdded - skip info for %d', vehID)
             return
-        _logger.debug('__onVehicleInfoAdded(%d)', self.id)
         player = BigWorld.player()
         player.arena.onVehicleAdded -= self.__onVehicleInfoAdded
+        self.__logVehicle(_logger.debug, '__onVehicleInfoAdded - setVehicleInfo')
         self.appearance.setVehicleInfo(player.arena.vehicles[vehID])
 
+    def __resetAppearance(self):
+        if self.appearance is not None:
+            self.__logVehicle(_logger.info, '__resetAppearance %s', id(self.appearance))
+            self.events.onAppearanceReset()
+            self.appearance.onComponentsCreated -= self.__onCreateAppearanceComponents
+            self.appearance.onAppearanceActivated -= self.__onActivateAppearance
+            self.appearance = None
+        return
+
     def onLeaveWorld(self):
-        _logger.debug('onLeaveWorld %d', self.id)
+        self.__logVehicle(_logger.debug, 'onLeaveWorld')
         self.__appearanceCache.stopLoading(self.id, self.typeDescriptor.makeCompactDescr())
         self.__stopExtras()
         BigWorld.player().vehicle_onLeaveWorld(self)
+        self.__resetAppearance()
 
     def onDestroy(self):
         self.__events.destroy()
 
     def showShooting(self, burstCount, currentGuns, shellType, isPredictedShot=False):
-        blockShooting = self.siegeState is not None and self.siegeState in VEHICLE_SIEGE_STATE.SWITCHING and not self.typeDescriptor.hasAutoSiegeMode
+        blockShooting = self.siegeState is not None and self.siegeState in VEHICLE_SIEGE_STATE.SWITCHING and not self.typeDescriptor.hasAutoSiegeMode and isPredictedShot
         if not self.isStarted or blockShooting:
             return
         else:
@@ -450,7 +482,10 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             self.__events.onShowDamageFromShot(attackerID, hitPoints, effectsIndex, damageFactor, lastMaterialIsShield)
             invokeInstantStatusForVehicle(self, InstantStatuses.ProjectileHitsReceivedComponent)
             effectsDescr = vehicles.g_cache.shotEffects[effectsIndex]
-            decodedPoints = DamageFromShotDecoder.parseHitPoints(hitPoints, self.appearance.collisions)
+            decodedPoints = []
+            collisionComponent = self.__getCollisionComponent()
+            if collisionComponent is not None:
+                decodedPoints = DamageFromShotDecoder.parseHitPoints(hitPoints, collisionComponent)
             if not decodedPoints:
                 return
             firstHitPoint = decodedPoints[0]
@@ -466,44 +501,46 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             self.appearance.receiveShotImpulse(firstHitDir, effectsDescr['targetImpulse'])
             player = BigWorld.player()
             player.inputHandler.onVehicleShaken(self, ShakeReason.HIT if hasDamageHit else ShakeReason.HIT_NO_DAMAGE, partTransform.translation, firstHitDir, effectsDescr['caliber'], effectsDescr['targetCameraSensitivity'])
-            showFriendlyFlashBang = False
             sessionProvider = self.guiSessionProvider
-            isAlly = sessionProvider.getArenaDP().isAlly(attackerID)
-            if isAlly:
-                isFriendlyFireMode = sessionProvider.arenaVisitor.bonus.isFriendlyFireMode()
-                hasCustomAllyDamageEffect = sessionProvider.arenaVisitor.bonus.hasCustomAllyDamageEffect()
-                showFriendlyFlashBang = isFriendlyFireMode and hasCustomAllyDamageEffect
-            showFullscreenEffs = self.isPlayerVehicle and self.isAlive()
-            keyPoints, effects, _ = effectsDescr[maxPriorityHitPoint.hitEffectGroup]
-            self.appearance.boundEffects.addNewToNode(TankPartNames.getActualNodeNameByPartName(maxPriorityHitPoint.componentName, self.isAlive()), maxPriorityHitPoint.matrix, effects, keyPoints, isPlayerVehicle=self.isPlayerVehicle, showShockWave=showFullscreenEffs, showFlashBang=showFullscreenEffs and not showFriendlyFlashBang, showFriendlyFlashBang=showFullscreenEffs and showFriendlyFlashBang, entity_id=self.id, damageFactor=damageFactor, attackerID=attackerID, hitdir=firstHitDir, surfaceNormal=maxPriorityHitPoint.matrix.applyVector(Math.Vector3(0, 0, -1)), componentIdx=maxPriorityHitPoint.componentIdx, isDynCollision=maxPriorityHitPoint.isDynCollision)
-            prefabHit = effectsDescr['hitPrefabs'].get(maxPriorityHitPoint.hitEffectGroup) if 'hitPrefabs' in effectsDescr else None
-            if prefabHit:
+            if not BattleReplay.g_replayCtrl.isTimeWarpInProgress:
+                showFriendlyFlashBang = False
+                isAlly = sessionProvider.getArenaDP().isAlly(attackerID)
+                if isAlly:
+                    isFriendlyFireMode = sessionProvider.arenaVisitor.bonus.isFriendlyFireMode()
+                    hasCustomAllyDamageEffect = sessionProvider.arenaVisitor.bonus.hasCustomAllyDamageEffect()
+                    showFriendlyFlashBang = isFriendlyFireMode and hasCustomAllyDamageEffect
+                showFullscreenEffs = self.isPlayerVehicle and self.isAlive()
+                keyPoints, effects, _ = effectsDescr[maxPriorityHitPoint.hitEffectGroup]
+                self.appearance.boundEffects.addNewToNode(TankPartNames.getActualNodeNameByPartName(maxPriorityHitPoint.componentName, self.isAlive()), maxPriorityHitPoint.matrix, effects, keyPoints, isPlayerVehicle=self.isPlayerVehicle, showShockWave=showFullscreenEffs, showFlashBang=showFullscreenEffs and not showFriendlyFlashBang, showFriendlyFlashBang=showFullscreenEffs and showFriendlyFlashBang, entity_id=self.id, damageFactor=damageFactor, attackerID=attackerID, hitdir=firstHitDir, surfaceNormal=maxPriorityHitPoint.matrix.applyVector(Math.Vector3(0, 0, -1)), componentIdx=maxPriorityHitPoint.componentIdx, isDynCollision=maxPriorityHitPoint.isDynCollision)
+                prefabHit = effectsDescr['hitPrefabs'].get(maxPriorityHitPoint.hitEffectGroup) if 'hitPrefabs' in effectsDescr else None
+                if prefabHit:
 
-                def hitLoadCallback(go):
-                    if self.isAlive():
-                        go.createComponent(ShotDamageComponent, firstHitPoint.componentName, compoundModel)
-                    else:
-                        CGF.removeGameObject(go)
+                    def hitLoadCallback(objects, queue):
+                        root = objects[0]
+                        if self.isAlive():
+                            queue.createComponent(root, ShotDamageComponent, firstHitPoint.componentName, compoundModel)
+                            return True
+                        return False
 
-                partGO = self.appearance.partsGameObjects.getPartGameObject(prefabHit, self.spaceID, self.appearance.gameObject)
-                CGF.loadGameObjectIntoHierarchy(prefabHit, partGO, firstHitPoint.matrix, hitLoadCallback)
-            nodeName = TankPartNames.getActualNodeNameByPartName(firstHitPoint.componentName, self.isAlive())
-            hitGo = GenericComponents.findSlot(self.entityGameObject, nodeName)
-            if hitGo.isValid():
-                isWheel = firstHitPoint.componentName in self.typeDescriptor.chassis.wheelsArmor
-                location = firstHitPoint.matrix.translation
-                effGroup = maxPriorityHitPoint.hitEffectGroup
-                armorHitPlacement = ArmorHitPlacement.WHEEL if isWheel else ArmorHitPlacement.REGULAR
-                if isWheel:
-                    transformComponent = hitGo.findComponentByType(TransformComponent)
-                    if transformComponent:
-                        transform = transformComponent.transform
-                        transform.translation = Math.Vector3(0, 0, 0)
-                        transform.invert()
-                        location = transform.applyVector(location)
-                CGF.postEvent(self.spaceID, game_events.VehicleHitEvent(self.entityGameObject, hitGo, location, firstHitPoint.normal, game_events.GunShellInfo(firstHitPoint.caliber, firstHitPoint.shellType), shellVelocity, damage, firstHitDirLocal, prefabEffIndex, effGroup, maxHitEffectCode, armorHitPlacement))
-            else:
-                _logger.error('Unable to post VehicleHitEvent: hitGo was not found by name: %s', firstHitPoint.componentName)
+                    partGO = self.appearance.partsGameObjects.getPartGameObject(prefabHit, self.spaceID, self.appearance.gameObject)
+                    CGF.loadAndCreatePrefabWithParent(prefabHit, partGO, firstHitPoint.matrix, hitLoadCallback)
+                nodeName = TankPartNames.getActualNodeNameByPartName(firstHitPoint.componentName, self.isAlive())
+                hitGo = GenericComponents.findSlot(self.entityGameObject, nodeName)
+                if hitGo.valid:
+                    isWheel = firstHitPoint.componentName in self.typeDescriptor.chassis.wheelsArmor
+                    location = firstHitPoint.matrix.translation
+                    effGroup = maxPriorityHitPoint.hitEffectGroup
+                    armorHitPlacement = ArmorHitPlacement.WHEEL if isWheel else ArmorHitPlacement.REGULAR
+                    if isWheel:
+                        transformComponent = hitGo.findRead(TransformComponent)
+                        if transformComponent:
+                            transform = transformComponent.transform
+                            transform.translation = Math.Vector3(0, 0, 0)
+                            transform.invert()
+                            location = transform.applyVector(location)
+                    CGF.postEvent(self.spaceID, game_events.VehicleHitEvent(self.entityGameObject, hitGo, location, firstHitPoint.normal, game_events.GunShellInfo(firstHitPoint.caliber, firstHitPoint.shellType), shellVelocity, damage, firstHitDirLocal, prefabEffIndex, effGroup, maxHitEffectCode, armorHitPlacement))
+                else:
+                    self.__logVehicle(_logger.error, 'Unable to post VehicleHitEvent: hitGo was not found by name: %s', firstHitPoint.componentName)
             if not self.isAlive():
                 return
             soundNotifications = getSoundNotifications()
@@ -590,7 +627,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         return
 
     def set_postmortemViewPointName(self, _=None):
-        cameraManager = CGF.getManager(self.spaceID, ArenaCameraManager)
+        cameraManager = CGF.getSystem(self.spaceID, ArenaCameraSystem)
         if cameraManager is not None and self.postmortemViewPointName:
             transform = cameraManager.getCameraTransform(self.postmortemViewPointName)
             if transform is not None:
@@ -609,7 +646,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             return
         else:
             isAttachedVehicle = self.id == attachedVehicle.id
-            if self.appearance.detailedEngineState is not None:
+            if self.appearance.detailedEngineState:
                 self.appearance.detailedEngineState.throttle = 1 if self.burnoutLevel > 0.01 else 0
             if self.burnoutLevel > 0 and not self.__handbrakeFired:
                 if self.getSpeed() > 0.5:
@@ -643,7 +680,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         self.__setDamageStickers(True)
 
     def __setDamageStickers(self, isActive):
-        if not hasattr(self, 'isStarted') or not self.isStarted:
+        if not hasattr(self, 'isStarted') or not self.isStarted or not self.appearance.collisions:
             return
         else:
             prev = self.__prevDamageStickerCodes
@@ -705,7 +742,6 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         return
 
     def set_isSpeedCapturing(self, _=None):
-        _logger.debug('set_isSpeedCapturing %s', self.isSpeedCapturing)
         if not self.isPlayerVehicle:
             ctrl = self.guiSessionProvider.shared.feedback
             if ctrl is not None:
@@ -713,7 +749,6 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         return
 
     def set_isBlockingCapture(self, _=None):
-        _logger.debug('set_isBlockingCapture %s', self.isBlockingCapture)
         if not self.isPlayerVehicle:
             ctrl = self.guiSessionProvider.shared.feedback
             if ctrl is not None:
@@ -813,7 +848,8 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         return
 
     def onVehiclePickup(self):
-        self.entityGameObject.createComponent(VehiclePickupComponent, self.appearance)
+        queue = CGF.CommandQueue(self.spaceID)
+        queue.createComponent(self.entityGameObject, VehiclePickupComponent, self.appearance)
         attachedVehicle = BigWorld.player().getVehicleAttached()
         if attachedVehicle is None or self.id != attachedVehicle.id:
             return
@@ -879,13 +915,13 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             return
 
     def set_stunInfo(self, prev=None):
-        _logger.debug('Set stun info(curr,~ prev): %s, %s', self.stunInfo, prev)
-        if self.stunInfo > 0.0 and self.appearance.findComponentByType(Statuses.StunComponent) is None:
-            self.appearance.createComponent(Statuses.StunComponent)
+        self.__logVehicle(_logger.debug, 'Set stun info(curr, prev): %s, %s', self.stunInfo, prev)
+        queue = CGF.CommandQueue(self.spaceID)
+        if self.stunInfo > 0.0 and self.appearance.gameObject.hasComponent(Statuses.StunComponent):
+            queue.createComponent(self.appearance.gameObject, Statuses.StunComponent)
         if self.stunInfo < 0.01:
-            self.appearance.removeComponentByType(Statuses.StunComponent)
+            queue.removeComponent(self.appearance.gameObject, Statuses.StunComponent)
         self.updateStunInfo()
-        return
 
     def __updateCachedStunInfo(self, endTime):
         if endTime:
@@ -917,7 +953,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
                     if ctrl is not None:
                         ctrl.invalidateStun(self.id, self.__cachedStunInfo)
             else:
-                _logger.warning('Stun features is disabled!')
+                self.__logVehicle(_logger.warning, 'Stun features is disabled!')
             return
 
     def showAmmoBayEffect(self, mode, fireballVolume, projectedTurretSpeed):
@@ -984,14 +1020,14 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         else:
             if self.typeDescriptor is not None and self.typeDescriptor.hasSiegeMode:
                 self.typeDescriptor.onSiegeStateChanged(newState)
-                self.appearance.onSiegeStateChanged(newState, timeToNextMode)
+                self.appearance.onSiegeStateChanged(newState)
                 self.__events.onSiegeStateUpdated(newState, timeToNextMode)
                 if self.isPlayerVehicle or self.id == BigWorld.player().observedVehicleID:
                     inputHandler = BigWorld.player().inputHandler
                     if inputHandler.siegeModeNotifier:
                         inputHandler.siegeModeNotifier.notifySiegeModeChanged(self.id, newState, timeToNextMode)
             else:
-                _logger.error('Wrong usage! Should be called only on vehicle with valid typeDescriptor and siege mode')
+                self.__logVehicle(_logger.error, 'onSiegeStateUpdated is called for not siege or None typeDescriptor')
             return
 
     def getVehicleMechanicComponent(self, mechanicName):
@@ -1016,11 +1052,11 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
                 if ctrl is not None:
                     ctrl.invalidateActiveGunChanges(self.id, [dualGunIndex], leftDelayTime)
             else:
-                _logger.error('switch gun trouble: using with not valid vehicle')
+                self.__logVehicle(_logger.error, 'onActiveDualGunChanged called for not dual or None typeDescriptor')
             return
 
     def collideSegmentExt(self, startPoint, endPoint):
-        if self.appearance.collisions is not None:
+        if self.appearance.collisions:
             collisions = self.appearance.collisions.collideAllWorld(startPoint, endPoint)
             if collisions:
                 res = []
@@ -1029,7 +1065,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
                     res.append(SegmentCollisionResultExt(collision[0], collision[1], matInfo, collision[3]))
 
                 return res
-        return
+        return None
 
     def getMatinfo(self, partIndex, matKind):
         return getMatinfo(self, partIndex, matKind, self.isWheeledTech)
@@ -1044,44 +1080,23 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         return decodeGunAngles(self.gunAnglesPacked, self.typeDescriptor.gun.pitchLimits['absolute'])
 
     def startVisual(self):
-        _logger.debug('startVisual(%d)', self.id)
+        self.__logVehicle(_logger.debug, 'startVisual')
         if self.isHidden:
-            _logger.info('Vehicle is marked as hidden: %d', self.id)
+            self.__logVehicle(_logger.info, 'Vehicle is marked as hidden')
             return
         elif self.__waitingForAppearanceReload:
-            _logger.info('Waiting for appearance reload: %d', self.id)
+            self.__logVehicle(_logger.info, 'Waiting for appearance reload')
             return
         elif not self.appearance.isConstructed:
-            _logger.warning('Vehicle appearance is not constructed: %d', self.id)
+            self.__logVehicle(_logger.warning, 'Vehicle appearance is not constructed')
             return
         else:
             if self.isStarted:
                 raise SoftException('Vehicle is already started')
-            avatar = BigWorld.player()
             self.appearance.setVehicle(self)
-            self.appearance.removeComponentByType(GenericComponents.HierarchyComponent)
-            self.appearance.createComponent(GenericComponents.HierarchyComponent, self.entityGameObject)
-            self.appearance.activate()
-            vehInfo = avatar.arena.vehicles.get(self.id, None)
-            if vehInfo is not None:
-                self.appearance.setVehicleInfo(vehInfo)
-            else:
-                avatar.arena.onVehicleAdded += self.__onVehicleInfoAdded
-            self.appearance.changeEngineMode(self.engineMode)
-            if self.isPlayerVehicle or self.typeDescriptor is None or not self.typeDescriptor.hasSiegeMode:
-                self.appearance.changeSiegeState(self.siegeState)
-            showEffects = False if BattleReplay.g_replayCtrl.isPlaying and not self.isAlive() else self.isPlayerVehicle
-            self.appearance.onVehicleHealthChanged(showEffects)
-            if self.isPlayerVehicle:
-                if self.isAlive():
-                    self.appearance.setupGunMatrixTargets(avatar.gunRotator)
-            if hasattr(self.filter, 'allowStrafeCompensation'):
-                self.filter.allowStrafeCompensation = not self.isPlayerVehicle
+            self.appearance.activate(self.entityGameObject.uuid)
             self.isStarted = True
-            if not self.appearance.isObserver:
-                self.show(True)
             self.set_publicStateModifiers()
-            self.__setDamageStickers(False)
             if TriggersManager.g_manager:
                 TriggersManager.g_manager.fireTrigger(TriggersManager.TRIGGER_TYPE.VEHICLE_VISUAL_VISIBILITY_CHANGED, vehicleId=self.id, isVisible=True)
             self.startGUIVisual()
@@ -1090,12 +1105,6 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
                 self.set_isSpeedCapturing()
             if self.isBlockingCapture:
                 self.set_isBlockingCapture()
-            if self.isTurretMarkedForDetachment:
-                self.confirmTurretDetachment()
-            self.__startWGPhysics()
-            if not self.isPlayerVehicle and self.typeDescriptor is not None and self.typeDescriptor.hasSiegeMode:
-                self.onSiegeStateUpdated(self.siegeState, 0.0)
-            self.appearance.highlighter.setVehicleOwnership()
             progressionCtrl = self.guiSessionProvider.dynamic.progression
             if progressionCtrl is not None:
                 progressionCtrl.vehicleVisualChangingFinished(self.id)
@@ -1119,21 +1128,19 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             self.__specialSounds.setPlayerVehicle(self.publicInfo, True)
 
     def stopVisual(self):
-        _logger.debug('Vehicle.stopVisual(%d)', self.id)
+        self.__logVehicle(_logger.debug, 'stopVisual')
         if not self.isStarted:
             raise SoftException('Vehicle is already stopped')
         self.__stopExtras()
         if TriggersManager.g_manager:
             TriggersManager.g_manager.fireTriggerInstantly(TriggersManager.TRIGGER_TYPE.VEHICLE_VISUAL_VISIBILITY_CHANGED, vehicleId=self.id, isVisible=False)
-        self.appearance.removeComponentByType(GenericComponents.HierarchyComponent)
         self.appearance.deactivate()
         self.stopGUIVisual()
-        self.appearance = None
+        self.__resetAppearance()
         self.isStarted = False
         self.__speedInfo.reset()
         if self.__isInDebuff:
             self.onDebuffEffectApplied(False)
-        return
 
     def stopGUIVisual(self):
         self.guiSessionProvider.stopVehicleVisual(self.id, self.isPlayerVehicle)
@@ -1145,11 +1152,10 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             drawFlags = BigWorld.ShadowPassBit
         if self.isStarted:
             va = self.appearance
-            if va.tracks is not None:
+            if va.tracks:
                 va.tracks.setPhysicalDestroyedTracksVisible(show)
             va.changeDrawPassVisibility(drawFlags)
             va.showStickers(show)
-        return
 
     def addCameraCollider(self):
         if self.appearance is not None:
@@ -1247,7 +1253,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             extraTypes[index].stop(data)
 
         if self.extras:
-            _logger.warning('this code point should have never been reached')
+            self.__logVehicle(_logger.warning, 'this code point should have never been reached')
 
     def __updateModifiers(self, addedExtras, removedExtras):
         extraTypes = self.typeDescriptor.extras
@@ -1258,7 +1264,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             try:
                 extraTypes[idx].startFor(self)
             except Exception:
-                _logger.exception('Update modifiers')
+                self.__logVehicle(_logger.exception, 'Update modifiers')
 
     def __onVehicleDeath(self, isDeadStarted=False):
         if not self.isPlayerVehicle:
@@ -1273,12 +1279,15 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             bwfilter.velocityErrorCompensation = 100.0
         return
 
+    def __logVehicle(self, logger, msg, *args, **kwargs):
+        _logVehicle(logger, msg, self.id, *args, **kwargs)
+
     def confirmTurretDetachment(self):
         self.__turretDetachmentConfirmed = True
         if self.isTurretDetached:
             self.appearance.updateTurretVisibility()
         else:
-            _logger.error('Vehicle::confirmTurretDetachment: Confirming turret detachment, though the turret is not detached')
+            self.__logVehicle(_logger.error, 'confirmTurretDetachment is called without detached turret')
 
     def updateLaserSight(self, vehicleID, isTakesAim, beamMode):
         if self.id == vehicleID and not self.isPlayerVehicle:
@@ -1299,18 +1308,23 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
     def addModel(self, model):
         super(Vehicle, self).addModel(model)
         highlighter = self.appearance.highlighter
+        if not highlighter:
+            self.__logVehicle(_logger.error, "Vehicle appearance's Highlighter component is not ready/not created")
+            return
         if highlighter.isOn:
             highlighter.highlight(False)
             highlighter.highlight(True)
 
     def delModel(self, model):
         if self.isDestroyed or not hasattr(self, 'appearance'):
-            _logger.warning('Vehicle::delModel called by %d after destroy', type(model))
+            self.__logVehicle(_logger.warning, 'DelModel called by %s after destroy', type(model))
             return
         highlighter = self.appearance.highlighter
-        hlOn = highlighter.isOn
-        hlSimpleEdge = highlighter.isSimpleEdge
-        highlighter.removeHighlight()
+        hlOn = False
+        if highlighter:
+            hlOn = highlighter.isOn
+            hlSimpleEdge = highlighter.isSimpleEdge
+            highlighter.removeHighlight()
         super(Vehicle, self).delModel(model)
         if hlOn:
             highlighter.highlight(True, hlSimpleEdge)
@@ -1318,14 +1332,12 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
     def notifyInputKeysDown(self, movementDir, rotationDir, handbrakeFired):
         self.filter.notifyInputKeysDown(movementDir, rotationDir)
         self.__handbrakeFired = handbrakeFired
-        if self.appearance.detailedEngineState is not None:
+        if self.appearance.detailedEngineState:
             self.appearance.detailedEngineState.throttle = movementDir or rotationDir
-        return
 
     def turnoffThrottle(self):
-        if self.appearance.detailedEngineState is not None:
+        if self.appearance.detailedEngineState:
             self.appearance.detailedEngineState.throttle = 0
-        return
 
     def onDebuffEffectApplied(self, applied):
         self.__isInDebuff = applied
@@ -1400,7 +1412,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         if contextName == CGFGameObjectContext.__name__:
             if self.entityGameObject:
                 return CGFGameObjectContext(self.entityGameObject, ASPECT.CLIENT)
-            _logger.error('Could not create CGFGameObjectContext because self.entityGameObject is None')
+            self.__logVehicle(_logger.error, 'CGFGameObjectContext is not created: self.entityGameObject is None')
         return BigWorld.player().arena.getVseContextInstance(contextName)
 
     def getGunBurstParams(self, gunDescr):
@@ -1411,6 +1423,46 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         if self.appearance is not None and self.appearance.isCompositionReady:
             GunInfoAssembler.update(self.appearance, var_storage.VehicleGunVars.TIME_BETWEEN_SHOTS.value, newValue)
         return
+
+    def __onCreateAppearanceComponents(self):
+        self.__events.onAppearanceComponentsReady()
+
+    def __onActivateAppearance(self):
+        avatar = BigWorld.player()
+        vehInfo = avatar.arena.vehicles.get(self.id, None)
+        if vehInfo is not None:
+            self.appearance.setVehicleInfo(vehInfo)
+        else:
+            avatar.arena.onVehicleAdded += self.__onVehicleInfoAdded
+        self.appearance.changeEngineMode(self.engineMode)
+        if self.isPlayerVehicle or self.typeDescriptor is None or not self.typeDescriptor.hasSiegeMode:
+            self.appearance.changeSiegeState(self.siegeState)
+        showEffects = False if BattleReplay.g_replayCtrl.isPlaying and not self.isAlive() else self.isPlayerVehicle
+        self.appearance.onVehicleHealthChanged(showEffects)
+        if self.isPlayerVehicle:
+            if self.isAlive():
+                self.appearance.setupGunMatrixTargets(avatar.gunRotator)
+        if not self.appearance.isObserver:
+            self.show(True)
+        self.__setDamageStickers(False)
+        if hasattr(self.filter, 'allowStrafeCompensation'):
+            self.filter.allowStrafeCompensation = not self.isPlayerVehicle
+        if self.isTurretMarkedForDetachment and not self.__turretDetachmentConfirmed:
+            self.confirmTurretDetachment()
+        self.__startWGPhysics()
+        if not self.isPlayerVehicle and self.typeDescriptor is not None and self.typeDescriptor.hasSiegeMode:
+            self.onSiegeStateUpdated(self.siegeState, 0.0)
+        if self.appearance.highlighter:
+            self.appearance.highlighter.setVehicleOwnership()
+        elif self.isAlive():
+            self.__logVehicle(_logger.error, 'Highlighter component is not ready/not created')
+        return
+
+    def __getCollisionComponent(self):
+        if self.appearance.collisions:
+            return self.appearance.collisions
+        else:
+            return StubCollisionComponent(self.spaceID) if BattleReplay.g_replayCtrl.isTimeWarpInProgress else None
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)

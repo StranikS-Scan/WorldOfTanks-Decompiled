@@ -186,6 +186,47 @@ class CrewPresenter(ViewComponent[CrewModel]):
          (self.viewModel.onToggleIntensiveTraining, self.__onToggleIntensiveTraining),
          (g_playerEvents.onConfigModelUpdated, self._onConfigModelUpdated))
 
+    def _getCrewPanelState(self):
+        veh = g_currentVehicle.item
+        return CrewModel.DISABLED_STATE if veh.isDisabled or veh.isLocked or veh.isInBattle or veh.isAwaitingBattle or veh.isInPrebattle else CrewModel.DEFAULT_STATE
+
+    def _createTankmanModel(self, tman, battleBoosterBonus, isQuickTrainingEnabled, vehicleBonusDetails, vehicleCrewBoosterBonusDetails, optDeviceBonuses):
+        newSkillsCount, lastSkillLevel = getTmanNewSkillCount(tman, withFree=True)
+        man = TankmanModel()
+        man.setId(tman.invID)
+        man.setQuickTraining(isQuickTrainingEnabled)
+        man.setLevel(tman.earnedSkillsCount - len(tman.skillsInProgress))
+        man.setMaxLevelAchieved(tman.allSkillsLearned())
+        man.setCrewSkinId(tman.getExtensionLessIconWithSkin())
+        man.setCustomizedSkin(tman.isInSkin)
+        man.setNewPerksCount(newSkillsCount)
+        man.setTrainingProgress(lastSkillLevel.intSkillLvl)
+        self.__addMajorSkills(tman, man)
+        self.__addBonusSkills(tman, man)
+        man.setIsInNativeTank(tman.isInNativeTank or tman.canUseSkillsInCurrentVehicle)
+        man.setRole(tman.role)
+        man.setFullName(tman.getFullUserNameWithSkin())
+        man.setNation(AVAILABLE_NAMES[tman.nationID])
+        man.setSkillsEfficiency(tman.skillsEfficiency)
+        man.setSkillsEfficiencyXP(tman.skillsEfficiencyXP)
+        man.setCurrentVehicleSkillsEfficiency(tman.currentVehicleSkillsEfficiency)
+        man.setLockedByVehicle(tman.isLockedByVehicle())
+        man.nativeVehicle.setNation(AVAILABLE_NAMES[tman.nationID])
+        man.nativeVehicle.setShortName(tman.vehicleNativeDescr.type.shortUserString)
+        man.nativeVehicle.setType(tman.vehicleNativeDescr.type.classTag)
+        man.nativeVehicle.setTier(tman.vehicleNativeDescr.type.level)
+        man.vehicleBonus.setCommander(tman.vehicleBonuses.get('commander', 0))
+        man.vehicleBonus.setEquipment(tman.vehicleBonuses.get('equipment', 0))
+        man.vehicleBonus.setBrotherhood(tman.vehicleBonuses.get('brotherhood', 0))
+        man.vehicleBonus.setOptDevices(tman.vehicleBonuses.get('optDevices', 0))
+        boosterBonusValue = tman.vehicleBonuses.get('battleBooster', 0)
+        if battleBoosterBonus is not None:
+            boosterBonusValue = battleBoosterBonus.getBonus()
+        man.vehicleBonus.setBattleBooster(boosterBonusValue)
+        man.setTankmanSuitable(self.__isTankmanTrainedForVehicle(tman))
+        self.__setEquipmentsBonuses(man, tman, battleBoosterBonus, vehicleBonusDetails, vehicleCrewBoosterBonusDetails, optDeviceBonuses)
+        return man
+
     @wg_async
     def __onToggleIntensiveTraining(self):
         wasActive = self.viewModel.getIntensiveTraining() == CrewModel.ON_TRAINING_STATE
@@ -323,7 +364,7 @@ class CrewPresenter(ViewComponent[CrewModel]):
             tankmenBerthsAmount = self.__itemsCache.items.stats.tankmenBerthsCount
             inBarracksTanksmenAmount = self.__itemsCache.items.tankmenInBarracksCount()
             model.setBerthsCount(max(tankmenBerthsAmount - inBarracksTanksmenAmount, 0))
-            model.setState(self.__getCrewPanelState())
+            model.setState(self._getCrewPanelState())
             model.setHasDog(DOG in self.__itemsCache.items.getItemByCD(g_currentVehicle.item.intCD).tags)
             crew = model.getCrew()
             crew.clear()
@@ -335,7 +376,7 @@ class CrewPresenter(ViewComponent[CrewModel]):
             for _, tman in vehicle.crew:
                 if tman:
                     quickTrainingEnabled = vehicle.crewIndices.get(tman.invID) == lessMastered and vehicle.isXPToTman
-                    tankman = self.__createTankmanModel(tman, battleBoosterBonus, quickTrainingEnabled, vehicleBonusDetails, vehicleCrewBoosterBonusDetails, optDeviceBonuses)
+                    tankman = self._createTankmanModel(tman, battleBoosterBonus, quickTrainingEnabled, vehicleBonusDetails, vehicleCrewBoosterBonusDetails, optDeviceBonuses)
                     crew.addViewModel(tankman)
 
             for slotIdx, tman in vehicle.crew:
@@ -397,43 +438,6 @@ class CrewPresenter(ViewComponent[CrewModel]):
                     return self.__createVehicleBonusDetail(name=booster.descriptor.iconName, bonusType=TankSetupConstants.BATTLE_BOOSTERS, bonus=booster.getCrewBonus(vehicle))
 
         return None
-
-    def __createTankmanModel(self, tman, battleBoosterBonus, isQuickTrainingEnabled, vehicleBonusDetails, vehicleCrewBoosterBonusDetails, optDeviceBonuses):
-        newSkillsCount, lastSkillLevel = getTmanNewSkillCount(tman, withFree=True)
-        man = TankmanModel()
-        man.setId(tman.invID)
-        man.setQuickTraining(isQuickTrainingEnabled)
-        man.setLevel(tman.earnedSkillsCount - len(tman.skillsInProgress))
-        man.setMaxLevelAchieved(tman.allSkillsLearned())
-        man.setCrewSkinId(tman.getExtensionLessIconWithSkin())
-        man.setCustomizedSkin(tman.isInSkin)
-        man.setNewPerksCount(newSkillsCount)
-        man.setTrainingProgress(lastSkillLevel.intSkillLvl)
-        self.__addMajorSkills(tman, man)
-        self.__addBonusSkills(tman, man)
-        man.setIsInNativeTank(tman.isInNativeTank or tman.canUseSkillsInCurrentVehicle)
-        man.setRole(tman.role)
-        man.setFullName(tman.getFullUserNameWithSkin())
-        man.setNation(AVAILABLE_NAMES[tman.nationID])
-        man.setSkillsEfficiency(tman.skillsEfficiency)
-        man.setSkillsEfficiencyXP(tman.skillsEfficiencyXP)
-        man.setCurrentVehicleSkillsEfficiency(tman.currentVehicleSkillsEfficiency)
-        man.setLockedByVehicle(tman.isLockedByVehicle())
-        man.nativeVehicle.setNation(AVAILABLE_NAMES[tman.nationID])
-        man.nativeVehicle.setShortName(tman.vehicleNativeDescr.type.shortUserString)
-        man.nativeVehicle.setType(tman.vehicleNativeDescr.type.classTag)
-        man.nativeVehicle.setTier(tman.vehicleNativeDescr.type.level)
-        man.vehicleBonus.setCommander(tman.vehicleBonuses.get('commander', 0))
-        man.vehicleBonus.setEquipment(tman.vehicleBonuses.get('equipment', 0))
-        man.vehicleBonus.setBrotherhood(tman.vehicleBonuses.get('brotherhood', 0))
-        man.vehicleBonus.setOptDevices(tman.vehicleBonuses.get('optDevices', 0))
-        boosterBonusValue = tman.vehicleBonuses.get('battleBooster', 0)
-        if battleBoosterBonus is not None:
-            boosterBonusValue = battleBoosterBonus.getBonus()
-        man.vehicleBonus.setBattleBooster(boosterBonusValue)
-        man.setTankmanSuitable(self.__isTankmanTrainedForVehicle(tman))
-        self.__setEquipmentsBonuses(man, tman, battleBoosterBonus, vehicleBonusDetails, vehicleCrewBoosterBonusDetails, optDeviceBonuses)
-        return man
 
     def __addMajorSkills(self, tman, model):
         perks = model.getPerks()
@@ -509,10 +513,6 @@ class CrewPresenter(ViewComponent[CrewModel]):
             vehicleBonusDetailsModel.addViewModel(battleBoosterBonus)
         vehicleBonusDetailsModel.invalidate()
         return
-
-    def __getCrewPanelState(self):
-        veh = g_currentVehicle.item
-        return CrewModel.DISABLED_STATE if veh.isDisabled or veh.isLocked or veh.isInBattle or veh.isAwaitingBattle or veh.isInPrebattle else CrewModel.DEFAULT_STATE
 
     @staticmethod
     def __isTankmanTrainedForVehicle(tman):

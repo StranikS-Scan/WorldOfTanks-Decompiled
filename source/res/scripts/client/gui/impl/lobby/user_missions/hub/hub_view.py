@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hub/hub_view.py
+from __future__ import absolute_import
+import typing
 from collections import OrderedDict
 from account_helpers.AccountSettings import Winback
 from PlayerEvents import g_playerEvents
@@ -9,6 +11,7 @@ from gui.impl.gen.view_models.views.lobby.user_missions.hub.hub_view_model impor
 from gui.impl.gen.view_models.views.lobby.user_missions.hub.tab_model import TabModel
 from gui.impl.gen.view_models.views.lobby.user_missions.hub.tabs.tab_id import TabId
 from gui.impl.lobby.user_missions.hub.tabs.basic.basic_missions_tab import BasicMissionsTab
+from gui.impl.lobby.user_missions.hub.tabs.challenges.challenge_missions_tab import ChallengeMissionsTab
 from gui.impl.lobby.user_missions.hub.update_children_mixin import UpdateChildrenMixin
 from gui.impl.pub.view_component import ViewComponent
 from gui.shared import EVENT_BUS_SCOPE
@@ -18,7 +21,9 @@ from gui.shared.events import UserMissionsEvent
 from gui.winback.winback_helpers import getWinbackSetting, setWinbackSetting
 from helpers import dependency
 from skeletons.gui.game_control import IWinbackController
-TABS = OrderedDict([(TabId.BASIC, BasicMissionsTab)])
+if typing.TYPE_CHECKING:
+    from typing import Optional
+TABS = OrderedDict([(TabId.BASIC, BasicMissionsTab), (TabId.CHALLENGES, ChallengeMissionsTab)])
 
 class DailyTabs(object):
     QUESTS = 0
@@ -28,9 +33,10 @@ class DailyTabs(object):
 class HubView(ViewComponent[HubViewModel]):
     __winbackController = dependency.descriptor(IWinbackController)
 
-    def __init__(self, tabID, questId):
+    def __init__(self, tabID, questId, challengeId):
         self.__tabID = tabID
         self.__questId = questId
+        self.__challengeId = challengeId
         self.__isFirstLayoutUpdate = True
         self.__createdTabs = []
         super(HubView, self).__init__(R.views.mono.user_missions.hub(), HubViewModel)
@@ -38,6 +44,13 @@ class HubView(ViewComponent[HubViewModel]):
     @property
     def viewModel(self):
         return super(HubView, self).getViewModel()
+
+    def getTabView(self, tabID):
+        if tabID in self.__createdTabs:
+            viewCls = TABS.get(tabID)
+            if viewCls is not None:
+                return self._getChild(viewCls.LAYOUT_ID)
+        return
 
     def _onLoaded(self, *args, **kwargs):
         super(HubView, self)._onLoaded(*args, **kwargs)
@@ -62,6 +75,7 @@ class HubView(ViewComponent[HubViewModel]):
             if umgConfigSchema.getModel().enableDailyWeeklyUI:
                 tabsList.addViewModel(self.__createTab(TabId.BASIC, R.strings.user_missions.hub.basic_missions.title()))
             tabsList.addViewModel(self.__createTab(TabId.COMMON, R.strings.user_missions.hub.common_missions.title()))
+            tabsList.addViewModel(self.__createTab(TabId.CHALLENGES, R.strings.user_missions.hub.challenge_missions.title()))
             vm.setCurrentTabId(self.__tabID)
             tabsList.invalidate()
             tabIds = {tab.getId() for tab in tabsList}
@@ -82,24 +96,34 @@ class HubView(ViewComponent[HubViewModel]):
         tab.setTitle(title)
         return tab
 
-    def __updateTab(self, tabID):
+    def __updateTab(self, tabID, challengeID=None):
         self.__tabID = tabID
+        self.__challengeId = challengeID if challengeID is not None else self.__challengeId
         viewCls = TABS.get(self.__tabID)
         if self.__tabID in self.__createdTabs:
             if viewCls:
                 tabView = self._getChild(viewCls.LAYOUT_ID)
                 if isinstance(tabView, UpdateChildrenMixin):
-                    tabView.update()
+                    if self.__tabID == TabId.CHALLENGES and challengeID is not None:
+                        tabView.update(challengeID=challengeID)
+                    else:
+                        tabView.update()
             return
-        if viewCls:
-            self._registerChild(viewCls.LAYOUT_ID, viewCls(self.__questId))
-        self.__createdTabs.append(self.__tabID)
+        else:
+            if viewCls:
+                childArg = self.__challengeId if self.__tabID == TabId.CHALLENGES else self.__questId
+                self._registerChild(viewCls.LAYOUT_ID, viewCls(childArg))
+            self.__createdTabs.append(self.__tabID)
+            return
 
-    def __changeTab(self, tabID):
-        if tabID != self.viewModel.getCurrentTabId():
-            self.__updateTab(tabID)
+    def __changeTab(self, tabID, challengeID=None):
+        isTabChanged = tabID != self.viewModel.getCurrentTabId()
+        if isTabChanged or challengeID is not None:
+            self.__updateTab(tabID, challengeID=challengeID)
+        if isTabChanged:
             self.viewModel.setCurrentTabId(self.__tabID)
             g_eventBus.handleEvent(UserMissionsEvent(UserMissionsEvent.CHANGE_TAB, self.__tabID), EVENT_BUS_SCOPE.LOBBY)
+        return
 
     def __onTabChange(self, args):
         self.__changeTab(args.get('tabId'))
@@ -115,4 +139,4 @@ class HubView(ViewComponent[HubViewModel]):
             self._updateTabs()
 
     def __onTransitionToMission(self, event):
-        self.__changeTab(event.tabID)
+        self.__changeTab(event.tabID, challengeID=event.challengeID)

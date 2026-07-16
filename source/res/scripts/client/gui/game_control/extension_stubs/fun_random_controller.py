@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/extension_stubs/fun_random_controller.py
+from __future__ import absolute_import
 from collections import namedtuple
 from skeletons.gui.game_control import IFunRandomController
 _FunRandomConfig = namedtuple('_FunRandomConfig', ('isEnabled', 'subModes', 'metaProgression'))

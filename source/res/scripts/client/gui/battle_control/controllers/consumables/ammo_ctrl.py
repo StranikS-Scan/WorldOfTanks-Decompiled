@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/consumables/ammo_ctrl.py
+from __future__ import absolute_import, division
 import logging
 import typing
 import weakref
 from collections import namedtuple, defaultdict
+from future.utils import viewitems, viewvalues
 from math import fabs, ceil
 import BigWorld
 import CommandMapping
@@ -25,6 +27,7 @@ from gui.shared.utils.decorators import ReprInjector
 from gui.Scaleform.genConsts.AUTOLOADERBOOSTVIEWSTATES import AUTOLOADERBOOSTVIEWSTATES
 from ReloadEffect import ReloadEffectStrategy
 from items import vehicles
+from math_common import round_py2_style_int
 from skeletons.gui.battle_session import IBattleSessionProvider
 from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_helpers import getVehicleDescrMechanicParams
@@ -129,7 +132,7 @@ class _GunSettings(object):
 
     @cached_property
     def lowCurrentAmmo(self):
-        return int(round(self.temperatureParams.maxTemperature / self.temperatureParams.heatingPerShot)) if self.isUnlimitedClip and self.temperatureParams is not None else 0
+        return round_py2_style_int(self.temperatureParams.maxTemperature / self.temperatureParams.heatingPerShot) if self.isUnlimitedClip and self.temperatureParams is not None else 0
 
     def hasAutoShoot(self):
         return self.autoShoot is not None
@@ -322,8 +325,8 @@ class ReloadingTimeState(ReloadingTimeSnapshot, IGunReloadingState):
         else:
             self._startTime = 0.0
             self._updateTime = 0.0
-        if actualTime == 0:
-            self.stopPredicateReloading()
+            if actualTime == 0:
+                self.stopPredicateReloading()
         self._actualTime = actualTime
         self._baseTime = baseTime
 
@@ -872,7 +875,7 @@ class AmmoController(MethodsRules, ViewComponentsController):
         return (intCD for intCD in self._order)
 
     def getShellsLayout(self):
-        return self.__ammo.iteritems()
+        return viewitems(self.__ammo)
 
     def getCurrentShells(self):
         return self.getShells(self.__currShellCD) if self.__currShellCD is not None else (SHELL_QUANTITY_UNKNOWN,) * 2
@@ -883,17 +886,14 @@ class AmmoController(MethodsRules, ViewComponentsController):
             result = quantityInClip
             if result == 0 and (isReloadingFinished or self._reloadingState.isReloadingFinished()):
                 clipSize = self.__gunSettings.clip.size
-                if clipSize <= quantity:
-                    result = clipSize
-                else:
-                    result = quantity
+                result = min(clipSize, quantity)
             return result
         else:
             return quantity
 
     def getAllShellsQuantityLeft(self):
         quantity = self.getShellsQuantityLeft()
-        return sum((quantity for quantity, _ in self.__ammo.itervalues())) if quantity == 0 else quantity
+        return sum((quantity for quantity, _ in viewvalues(self.__ammo))) if quantity == 0 else quantity
 
     def getClipPercentLeft(self):
         if not self.__gunSettings.isRegularClip:
@@ -1072,7 +1072,7 @@ class AmmoController(MethodsRules, ViewComponentsController):
         return self.__ammoStatesInfo.getSpecialReloadMessage()
 
     def handleAmmoChoice(self, key):
-        if any([ component.isActive for component in self._viewComponents ]):
+        if any((component.isActive for component in self._viewComponents)):
             for component in self._viewComponents:
                 component.handleAmmoKey(key)
 
@@ -1138,7 +1138,7 @@ class AmmoController(MethodsRules, ViewComponentsController):
             component.setNextShellCD(intCD)
 
     def __canChangeShell(self):
-        return sum((1 for quantity, _ in self.__ammo.itervalues() if quantity > 0)) > 1
+        return sum((1 for quantity, _ in viewvalues(self.__ammo) if quantity > 0)) > 1
 
     def __shotFail(self):
         if self.__gunSettings.reloadEffect is not None and self.__currShellCD in self.__ammo:

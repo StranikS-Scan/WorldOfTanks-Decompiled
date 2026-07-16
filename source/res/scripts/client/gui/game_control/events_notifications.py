@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/events_notifications.py
+from __future__ import absolute_import
+from builtins import map
 from collections import namedtuple
+from future.utils import lfilter, lmap
 import BigWorld
 import Event
 from PlayerEvents import g_playerEvents
@@ -31,15 +34,15 @@ class EventsNotificationsController(IEventsNotificationsController):
 
     def getEventsNotifications(self, filterFunc=None):
         player = BigWorld.player()
-        return filter(filterFunc or (lambda a: True), map(EventNotification.make, player.eventNotifications)) if player else ()
+        return lfilter(filterFunc or (lambda a: True), map(EventNotification.make, player.eventNotifications)) if player else ()
 
     def __stop(self):
         self.__eventMgr.clear()
         g_playerEvents.onEventNotificationsChanged -= self.__onEventNotification
 
     def __onEventNotification(self, diff):
-        added = map(EventNotification.make, diff.get('added', ()))
-        removed = map(EventNotification.make, diff.get('removed', ()))
+        added = lmap(EventNotification.make, diff.get('added', ()))
+        removed = lmap(EventNotification.make, diff.get('removed', ()))
         self.onEventNotificationsChanged(added, removed)
 
 

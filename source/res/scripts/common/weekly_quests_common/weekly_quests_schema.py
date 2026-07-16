@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/weekly_quests_common/weekly_quests_schema.py
+from __future__ import absolute_import
 from game_params_common.schema import GameParamsSchema
 from constants import Configs
 from dict2model import fields, models, validate

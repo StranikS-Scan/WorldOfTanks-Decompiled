@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/chassis_components.py
+from __future__ import absolute_import
 from collections import namedtuple
-from copy import deepcopy
-from wrapped_reflection_framework import reflectedNamedTuple, ReflectionMetaclass
-from items.components import component_constants
+from future.utils import viewitems
 from items.components import path_builder
-from items.components import shared_components
+from py2to3.patched_future import with_metaclass
+from wrapped_reflection_framework import reflectedNamedTuple, ReflectionMetaclass
 __all__ = ('Wheel', 'WheelGroup', 'TrackPair', 'TrackNode', 'TrackBasicVisualParams', 'TrackPairParams', 'TrackPairDebris', 'TrackDebrisParams', 'GroundNode', 'GroundNodeGroup', 'Traces', 'LeveredSuspensionConfig', 'SuspensionLever', 'SplineSegmentModelSet')
 Wheel = reflectedNamedTuple('Wheel', ('index', 'isLeft', 'radius', 'nodeName', 'isLeading', 'leadingSyncAngle', 'hitTesterManager', 'materials', 'position'))
 Wheel.hitTester = property(lambda self: self.hitTesterManager.activeHitTester)
@@ -26,11 +26,11 @@ LeveredSuspensionConfig = reflectedNamedTuple('LeveredSuspensionConfig', ('lever
 SuspensionLever = reflectedNamedTuple('SuspensionLever', ('startNodeName', 'jointNodeName', 'trackNodeName', 'minAngle', 'maxAngle', 'collisionSamplesCount', 'hasLiftMode', 'affectedWheelName'))
 SplineSegmentModelSet = reflectedNamedTuple('SplineSegmentModelSet', ('left', 'right', 'secondLeft', 'secondRight'))
 
-class SplineTrackPairDesc(object):
-    __metaclass__ = ReflectionMetaclass
+class SplineTrackPairDesc(with_metaclass(ReflectionMetaclass, object)):
     __slots__ = ('trackPairIdx', 'segmentModelSets', 'leftDesc', 'rightDesc', 'segmentLength', 'segmentOffset', 'segment2Offset', 'atlasUTiles', 'atlasVTiles')
 
     def __init__(self, trackPairIdx, segmentModelSets, leftDesc, rightDesc, segmentLength, segmentOffset, segment2Offset, atlasUTiles, atlasVTiles):
+        super(SplineTrackPairDesc, self).__init__()
         self.trackPairIdx = trackPairIdx
         self.leftDesc = leftDesc
         self.rightDesc = rightDesc
@@ -41,7 +41,7 @@ class SplineTrackPairDesc(object):
         self.atlasVTiles = atlasVTiles
         self.segmentModelSets = {}
         segmentModelSets = segmentModelSets or {}
-        for setName, setPaths in segmentModelSets.iteritems():
+        for setName, setPaths in viewitems(segmentModelSets):
             left = tuple(path_builder.makeIndexes(setPaths.left))
             right = tuple(path_builder.makeIndexes(setPaths.right))
             if setPaths.secondLeft:

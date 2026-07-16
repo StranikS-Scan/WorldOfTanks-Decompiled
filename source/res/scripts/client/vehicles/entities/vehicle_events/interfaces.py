@@ -10,6 +10,7 @@ if typing.TYPE_CHECKING:
 
 class IVehicleEventsLogic(object):
     onAppearanceReady = None
+    onAppearanceReset = None
     onSiegeStateUpdated = None
     onVehicleDestroyed = None
     onObserverVehicleDataUpdated = None
@@ -33,6 +34,9 @@ class IVehicleEvents(IClientEventsContainer, IVehicleEventsLogic):
 class IVehicleEventsListenerLogic(object):
 
     def onAppearanceReady(self):
+        pass
+
+    def onAppearanceReset(self):
         pass
 
     def onSiegeStateUpdated(self, newState, timeToNextMode):

@@ -8,7 +8,8 @@ from frameworks.state_machine import BaseStateObserver, StateEvent, visitor
 from frameworks.wulf import WindowFlags
 from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
-from gui.battle_pass.sounds import BATTLE_PASS_TASKS_SOUND_SPACE, switchBattlePassSoundFilter, getBattlePassEnterSound, getBattlePassExitSound, getBattlePassExtraExitSound, getBattlePassExtraEnterSound
+from gui.battle_pass.battle_pass_helpers import getChapterForTankmenScreen
+from gui.battle_pass.sounds import BATTLE_PASS_TASKS_SOUND_SPACE, switchBattlePassSoundFilter, getBattlePassEnterSound, getBattlePassExitSound, getBattlePassExtraExitSound, getBattlePassExtraEnterSound, switchOverlaySoundFilter
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.main_view_model import MainViewModel
 from gui.impl.lobby.battle_pass.battle_pass_buy_levels_view import BuyLevelsPresenter
@@ -23,7 +24,6 @@ from gui.impl.pub.view_component import ViewComponent
 from gui.lobby_state_machine.routable_view import IRoutableView
 from gui.lobby_state_machine.router import SubstateRouter
 from gui.shared.event_dispatcher import showHangar
-from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
 from shared_utils import safeCall
 from skeletons.gui.game_control import IBattlePassController
@@ -42,6 +42,7 @@ _PRESENTERS = {_BP.ChapterChoice(): ChapterChoicePresenter,
  _BP.TankmenScreen(): TankmenVoiceoverPresenter}
 _PARENTS = {_BP.BuyPassRewards(): _BP.BuyPass()}
 _UNTRACKED = frozenset((_BP.FinalRewardPreview(),))
+_NO_CHAPTER_PRESENTERS = frozenset((_BP.ChapterChoice(), _BP.PostProgression()))
 
 class _BattlePassStatesObserver(BaseStateObserver):
 
@@ -143,6 +144,10 @@ class MainView(ViewComponent[MainViewModel], IRoutableView):
         previousChapter = self.__activeChapterID
         if 'chapterID' in kwargs and kwargs['chapterID']:
             self.__activeChapterID = kwargs['chapterID']
+        elif 'screenID' in kwargs:
+            chapter = getChapterForTankmenScreen(kwargs['screenID'])
+            if chapter is not None:
+                self.__activeChapterID = chapter
         if self.__activePresenterID not in self._childrenUidByPosition:
             self._registerChild(self.__activePresenterID, _PRESENTERS[self.__activePresenterID](**kwargs))
         else:
@@ -150,6 +155,7 @@ class MainView(ViewComponent[MainViewModel], IRoutableView):
             if self.__activePresenterID != kwargs['originStateID']:
                 self.__safeCallOnActivePresenter('activate')
         self.__playSwitchSounds(kwargs.get('originStateID'), previousChapter)
+        return
 
     def __safeCallOnActivePresenter(self, methodName, *args, **kwargs):
         return safeCall(getattr(self._childrenByUid[self._childrenUidByPosition[self.__activePresenterID]], methodName, None), *args, **kwargs)
@@ -159,15 +165,20 @@ class MainView(ViewComponent[MainViewModel], IRoutableView):
         self.soundManager.playSound(getBattlePassEnterSound(battlePass=self.__battlePass))
 
     def __playSwitchSounds(self, originalPresenterID, previousChapter):
-        switchHangarOverlaySoundFilter(self.__activePresenterID in (_BP.BuyPass(), _BP.BuyLevels()))
-        if self.__battlePass.isHoliday() or self.__activePresenterID not in (_BP.ChapterChoice(), _BP.Progression(), _BP.PostProgression()) or originalPresenterID in (_BP.BuyPass(), _BP.BuyLevels()) and self.__activePresenterID == _BP.Progression():
+        switchOverlaySoundFilter(self.__activePresenterID in (_BP.BuyPass(), _BP.BuyLevels()))
+        includedActivePresenters = (_BP.ChapterChoice(),
+         _BP.Progression(),
+         _BP.PostProgression(),
+         _BP.TankmenScreen())
+        sameChapterTransition = previousChapter == self.__activeChapterID and (originalPresenterID in (_BP.BuyPass(), _BP.BuyLevels(), _BP.TankmenScreen()) and self.__activePresenterID == _BP.Progression() or originalPresenterID == _BP.Progression() and self.__activePresenterID == _BP.TankmenScreen())
+        if self.__battlePass.isHoliday() or self.__activePresenterID not in includedActivePresenters or sameChapterTransition:
             return
         if self.__isExtraChapterPresenter():
             extraEnterSound = getBattlePassExtraEnterSound(self.__activeChapterID)
             self.soundManager.stopSound(extraEnterSound)
             self.soundManager.playSound(extraEnterSound)
             switchBattlePassSoundFilter(on=False)
-        elif (previousChapter != self.__activeChapterID or self.__activePresenterID in (_BP.ChapterChoice(), _BP.PostProgression())) and self.__battlePass.isExtraChapter(previousChapter):
+        elif (previousChapter != self.__activeChapterID or self.__activePresenterID in _NO_CHAPTER_PRESENTERS) and originalPresenterID not in _NO_CHAPTER_PRESENTERS and self.__battlePass.isExtraChapter(previousChapter):
             self.soundManager.playSound(getBattlePassExtraExitSound(previousChapter))
             switchBattlePassSoundFilter(on=True)
 
@@ -175,10 +186,10 @@ class MainView(ViewComponent[MainViewModel], IRoutableView):
         if self.__isExtraChapterPresenter():
             self.soundManager.playSound(getBattlePassExtraExitSound(self.__activeChapterID))
         self.soundManager.playSound(getBattlePassExitSound(battlePass=self.__battlePass))
-        switchHangarOverlaySoundFilter(on=False)
+        switchOverlaySoundFilter(on=False)
 
     def __isExtraChapterPresenter(self):
-        return self.__activePresenterID not in (_BP.ChapterChoice(), _BP.PostProgression()) and self.__battlePass.isExtraChapter(self.__activeChapterID)
+        return self.__activePresenterID not in _NO_CHAPTER_PRESENTERS and self.__battlePass.isExtraChapter(self.__activeChapterID)
 
 
 class BattlePassWindow(WindowImpl):

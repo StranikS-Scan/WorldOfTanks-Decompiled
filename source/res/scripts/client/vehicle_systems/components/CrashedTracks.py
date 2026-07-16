@@ -4,8 +4,9 @@ import weakref
 import math_utils
 import Math
 import BigWorld
-from cgf_obsolete_script.auto_properties import AutoProperty
-from cgf_obsolete_script.py_component import Component
+import CGF
+import Vehicular
+from cgf_script.registration import registerComponent
 from items.components.component_constants import MAIN_TRACK_PAIR_IDX, DEFAULT_TRACK_HIT_VECTOR, TrackState
 from items.vehicle_items import CHASSIS_ITEM_TYPE
 from vehicle_systems import model_assembler
@@ -18,15 +19,17 @@ class _TRACK_SIDE(object):
     RIGHT = 'right'
 
 
-class CrashedTrackController(Component):
-    baseTracksComponent = AutoProperty()
+@registerComponent
+class CrashedTracksController(object):
+    domain = CGF.Domain.ClientEditor
+    userVisible = False
+    vseVisible = False
 
-    def __init__(self, vehicleDesc, trackFashion, modelsSet):
+    def __init__(self, vehicleDesc, trackFashion, modelsSet, tracksGo):
         self.__vehicleDesc = vehicleDesc
         self.__entity = None
         self.__modelsSet = modelsSet
         self.__baseTrackFashion = trackFashion
-        self.baseTracksComponent = None
         self.__crashedTracks = None
         self.__resetBrokenTracks()
         self.__model = None
@@ -34,6 +37,8 @@ class CrashedTrackController(Component):
         self.__loading = False
         self.__isActive = False
         self.__visibilityMask = 15
+        self.__tracksGo = tracksGo
+        self.__dynAccess = CGF.DynamicComponentAccess(tracksGo.spaceID)
         return
 
     def isLeftTrackBroken(self):
@@ -41,6 +46,11 @@ class CrashedTrackController(Component):
 
     def isRightTrackBroken(self):
         return any([ state.isBroken for state in self.__crashedTracks[_TRACK_SIDE.RIGHT] ])
+
+    def hasDebris(self, isLeft, pairIndex):
+        side = _TRACK_SIDE.LEFT if isLeft else _TRACK_SIDE.RIGHT
+        state = self.__crashedTracks[side][pairIndex]
+        return state.isBroken and state.isDebris
 
     def getTrackStates(self, isLeft):
         side = _TRACK_SIDE.LEFT if isLeft else _TRACK_SIDE.RIGHT
@@ -68,6 +78,7 @@ class CrashedTrackController(Component):
             self.__entity.delModel(self.__model)
         self.__isActive = False
         self.__loading = False
+        self.__entity = None
         return
 
     def destroy(self):
@@ -77,7 +88,6 @@ class CrashedTrackController(Component):
         self.__loading = False
         self.__baseTrackFashion = None
         self.__fashion = None
-        self.baseTracksComponent = None
         return
 
     def setVisible(self, visibilityMask):
@@ -180,11 +190,12 @@ class CrashedTrackController(Component):
             trackIndices = list(xrange(len(self.__vehicleDesc.chassis.tracks.trackPairs)))
         elif tracksPresent:
             trackIndices = [MAIN_TRACK_PAIR_IDX]
-        if self.baseTracksComponent is not None and self.baseTracksComponent.valid:
+        baseTrackRw = self.__dynAccess.findWrite(self.__tracksGo, Vehicular.VehicleTracks)
+        if baseTrackRw:
             for i in trackIndices:
                 hideLeftTrack = force or self.__crashedTracks[_TRACK_SIDE.LEFT][i].isBroken
                 hideRightTrack = force or self.__crashedTracks[_TRACK_SIDE.RIGHT][i].isBroken
-                self.baseTracksComponent.disableTrack(hideLeftTrack, hideRightTrack, i)
+                baseTrackRw.disableTrack(hideLeftTrack, hideRightTrack, i)
 
         if self.__fashion is not None:
             for i in trackIndices:
@@ -228,3 +239,16 @@ class CrashedTrackController(Component):
                 self.__entity.addModel(self.__model)
                 self.__applyVisibilityMask()
             return
+
+
+class CrashedTracksSystem(CGF.System):
+    Activate = CGF.ActivateReaction(CGF.ReactRw(CrashedTracksController))
+    Deactivate = CGF.DeactivateReaction(CGF.ReactRw(CrashedTracksController))
+    Reactions = CGF.Reactions(Activate, Deactivate)
+
+    def update(self):
+        for crashedTracks in self.reaction(self.Deactivate):
+            crashedTracks.deactivate()
+
+        for crashedTracks in self.reaction(self.Activate):
+            crashedTracks.activate()

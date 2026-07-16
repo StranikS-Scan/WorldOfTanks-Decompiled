@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/crew_book.py
+from __future__ import absolute_import
+from past.builtins import cmp
 import nations
 from gui.impl import backport
 from gui.impl.gen import R

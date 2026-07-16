@@ -1,18 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/points_of_interest_ctrl.py
+from __future__ import absolute_import
 import logging
 import typing
 import BigWorld
 import CGF
 import Event
-import GenericComponents
 from gui.battle_control.arena_info.interfaces import IPointsOfInterestController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
-from points_of_interest.components import PoiStateComponent
+from points_of_interest.managers import PoiStateUpdateSystem
 from shared_utils import findFirst
 if typing.TYPE_CHECKING:
     from EmptyEntity import EmptyEntity
     from gui.battle_control.controllers.repositories import BattleSessionSetup
+    from points_of_interest.components import PoiStateComponent
 _logger = logging.getLogger(__name__)
 
 class PointsOfInterestController(IPointsOfInterestController):
@@ -38,8 +39,9 @@ class PointsOfInterestController(IPointsOfInterestController):
 
     @staticmethod
     def getPoiState(poiID):
-        query = CGF.Query(BigWorld.player().spaceID, PoiStateComponent)
-        return findFirst(lambda s: s.id == poiID, query)
+        poiStateSystem = CGF.getSystem(BigWorld.player().spaceID, PoiStateUpdateSystem)
+        states = poiStateSystem.getStates()
+        return findFirst(lambda s: s.id == poiID, states)
 
     @staticmethod
     def getPoiEntity(poiID):
@@ -47,9 +49,11 @@ class PointsOfInterestController(IPointsOfInterestController):
 
     def getVehicleCapturingPoiGO(self, poiName, entityGameObject, vehicleID, spaceID):
         poiGameObject = self.__vehPoiRegistry.get(vehicleID, {}).get(poiName)
-        if poiGameObject is None or not poiGameObject.isValid():
-            self.__vehPoiRegistry.setdefault(vehicleID, {})[poiName] = poiGameObject = CGF.GameObject(spaceID, poiName)
+        if poiGameObject is None or not poiGameObject.valid:
+            queue = CGF.CommandQueue(spaceID)
+            poiGameObject = queue.createGameObject(poiName)
+            self.__vehPoiRegistry.setdefault(vehicleID, {})[poiName] = poiGameObject
             if entityGameObject:
-                poiGameObject.createComponent(GenericComponents.HierarchyComponent, entityGameObject)
-            poiGameObject.activate()
+                queue.createComponent(poiGameObject, CGF.HierarchyComponent, entityGameObject)
+            queue.activateGameObject(poiGameObject)
         return poiGameObject

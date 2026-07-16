@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/ClientPrebattle.py
-import cPickle
+from __future__ import absolute_import
+from future.moves import pickle
 import Event
 from constants import PREBATTLE_UPDATE, PREBATTLE_TEAM_STATE
 from debug_utils import LOG_DEBUG_DEV
@@ -66,7 +67,7 @@ class ClientPrebattle(object):
           'role': role})
 
     def __onRosterReceived(self, argStr):
-        rostersAsList = cPickle.loads(argStr)
+        rostersAsList = pickle.loads(argStr)
         self.rosters.clear()
         for accInfoAsTuple in rostersAsList:
             roster, pID, accInfo = self.__accInfoAsDict(accInfoAsTuple)
@@ -75,18 +76,18 @@ class ClientPrebattle(object):
         self.onRosterReceived()
 
     def __onPlayerAdded(self, argStr):
-        accInfoAsTuple = cPickle.loads(argStr)
+        accInfoAsTuple = pickle.loads(argStr)
         roster, pID, accInfo = self.__accInfoAsDict(accInfoAsTuple)
         self.rosters.setdefault(roster, {})[pID] = accInfo
         self.onPlayerAdded(pID, roster)
 
     def __onPlayerRemoved(self, argStr):
-        pID, roster = cPickle.loads(argStr)
+        pID, roster = pickle.loads(argStr)
         name = self.rosters.get(roster, {}).pop(pID, {}).get('name', '')
         self.onPlayerRemoved(pID, roster, name)
 
     def __onPlayerStateChanged(self, argStr):
-        pID, roster, state, vehCompDescr, igrType, badges, clanDBID, clanAbbrev, vehEnhancements, role = cPickle.loads(argStr)
+        pID, roster, state, vehCompDescr, igrType, badges, clanDBID, clanAbbrev, vehEnhancements, role = pickle.loads(argStr)
         LOG_DEBUG_DEV('__onPlayerStateChanged', pID, roster, state, vehCompDescr, igrType, clanDBID, clanAbbrev, vehEnhancements, role)
         accInfo = self.rosters.get(roster, {}).get(pID, None)
         if accInfo is None:
@@ -104,14 +105,14 @@ class ClientPrebattle(object):
             return
 
     def __onPlayerRosterChanged(self, argStr):
-        pID, prevRoster, roster, actorID = cPickle.loads(argStr)
+        pID, prevRoster, roster, actorID = pickle.loads(argStr)
         accInfo = self.rosters.get(prevRoster, {}).pop(pID, None)
         self.rosters.setdefault(roster, {})[pID] = accInfo
         self.onPlayerRosterChanged(pID, prevRoster, roster, actorID)
         return
 
     def __onPlayerGroupChanged(self, argStr):
-        groupId, prevRoster, roster, group, actorID = cPickle.loads(argStr)
+        groupId, prevRoster, roster, group, actorID = pickle.loads(argStr)
         accInfo = self.rosters.get(prevRoster, {}).pop(groupId, None)
         self.rosters.setdefault(roster, {})[groupId] = accInfo
         self.rosters.setdefault(roster, {}).setdefault(groupId, {})['group'] = group
@@ -119,29 +120,29 @@ class ClientPrebattle(object):
         return
 
     def __onTeamStatesReceived(self, argStr):
-        team1, team2 = cPickle.loads(argStr)
+        team1, team2 = pickle.loads(argStr)
         self.teamStates = [None, team1, team2]
         self.onTeamStatesReceived()
         return
 
     def __onSettingsReceived(self, argStr):
-        self.settings = cPickle.loads(argStr)
+        self.settings = pickle.loads(argStr)
         self.onSettingsReceived()
 
     def __onSettingUpdated(self, argStr):
-        name, value = cPickle.loads(argStr)
+        name, value = pickle.loads(argStr)
         self.settings[name] = value
         self.onSettingUpdated(name)
 
     def __onPropertiesReceived(self, argStr):
-        self.properties = cPickle.loads(argStr)
+        self.properties = pickle.loads(argStr)
         self.onPropertiesReceived()
 
     def __onPropertyUpdated(self, argStr):
         if self.properties is None:
             return
         else:
-            name, value = cPickle.loads(argStr)
+            name, value = pickle.loads(argStr)
             self.properties[name] = value
             self.onPropertyUpdated(name)
             return

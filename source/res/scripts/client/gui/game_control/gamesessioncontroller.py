@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/GameSessionController.py
+from __future__ import absolute_import, division
 import sys
 import time
 import typing
@@ -139,8 +140,8 @@ class GameSessionController(IGameSessionController, IGlobalListener, Notifiable)
         return
 
     def isSessionStartedThisDay(self):
-        svrDaysCount = int(_getSvrLocal()) / time_utils.ONE_DAY
-        clientDaysCount = int(self.__sessionStartedAt - self.__regionals().getDayStartingTime()) / time_utils.ONE_DAY
+        svrDaysCount = int(_getSvrLocal()) // time_utils.ONE_DAY
+        clientDaysCount = int(self.__sessionStartedAt - self.__regionals().getDayStartingTime()) // time_utils.ONE_DAY
         return svrDaysCount == clientDaysCount
 
     def getDailyPlayTimeLeft(self):
@@ -318,7 +319,7 @@ class GameSessionController(IGameSessionController, IGlobalListener, Notifiable)
         if self.__curfewBlockTime is not None:
             curfewTimeLeft = self.__curfewBlockTime - _getSvrUtcToday()
         else:
-            curfewTimeLeft = sys.maxint
+            curfewTimeLeft = sys.maxsize
         return (playTimeLeft, _checkForNegative(curfewTimeLeft))
 
     def __loadBanCallback(self, banTimeLeft=0):

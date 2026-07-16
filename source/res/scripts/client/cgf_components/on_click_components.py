@@ -1,16 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/cgf_components/on_click_components.py
+from __future__ import absolute_import
 import logging
 import CGF
 from GenericComponents import VSEComponent
 from adisp import adisp_process
-from cgf_script.component_meta_class import CGFMetaTypes, ComponentProperty, registerComponent
-from cgf_script.managers_registrator import autoregister, onAddedQuery, onRemovedQuery
+from cgf_script.registration import ComponentProperty, registerComponent
 from constants import MarathonConfig, IS_CLIENT
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.utils import IHangarSpace
-from hover_component import IsHoveredComponent, SelectionComponent
+from cgf_components.hover_component import IsHoveredComponent, SelectionComponent
 if IS_CLIENT:
     from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
     from gui.game_control.links import URLMacros
@@ -19,8 +19,9 @@ _logger = logging.getLogger(__name__)
 
 @registerComponent
 class OpenBrowserOnClickComponent(object):
-    domain = CGF.DomainOption.DomainClient
-    urlProvider = ComponentProperty(type=CGFMetaTypes.STRING, editorName='url provider', value='MARATHON_VIDEO_URL_PROVIDER')
+    domain = CGF.Domain.Client
+    editorTitle = 'Open Browser On Click'
+    urlProvider = ComponentProperty(type=CGF.PropertyType.String, editorName='url provider', value='MARATHON_VIDEO_URL_PROVIDER')
 
     def __init__(self):
         super(OpenBrowserOnClickComponent, self).__init__()
@@ -44,54 +45,76 @@ def getMarathonVideoUrl():
 
 URL_PROVIDERS = {'MARATHON_VIDEO_URL_PROVIDER': getMarathonVideoUrl}
 
-@autoregister(presentInAllWorlds=False, category='lobby')
-class ClientSelectableComponentsManager(CGF.ComponentManager):
+class ClientSelectableComponentsSystem(CGF.System):
+    BrowserActivated = CGF.ActivateReaction(CGF.ReactRo(OpenBrowserOnClickComponent), CGF.Rw(SelectionComponent))
+    BrowserDeactivated = CGF.DeactivateReaction(CGF.ReactRo(OpenBrowserOnClickComponent), CGF.Rw(SelectionComponent))
+    Reactions = CGF.Reactions(BrowserActivated, BrowserDeactivated)
 
-    @onAddedQuery(OpenBrowserOnClickComponent, SelectionComponent)
+    def update(self):
+        for openBrowserOnClickComponent, selectionComponent in self.reaction(self.BrowserDeactivated):
+            self.handleOpenBrowserOnClickRemoved(openBrowserOnClickComponent, selectionComponent)
+
+        for openBrowserOnClickComponent, selectionComponent in self.reaction(self.BrowserActivated):
+            self.handleOpenBrowserOnClickAdded(openBrowserOnClickComponent, selectionComponent)
+
     def handleOpenBrowserOnClickAdded(self, openBrowserOnClickComponent, selectionComponent):
         selectionComponent.onClickAction += openBrowserOnClickComponent.doAction
 
-    @onRemovedQuery(OpenBrowserOnClickComponent, SelectionComponent)
     def handleOpenBrowserOnClickRemoved(self, openBrowserOnClickComponent, selectionComponent):
         selectionComponent.onClickAction -= openBrowserOnClickComponent.doAction
 
 
-@autoregister(presentInAllWorlds=True, category='lobby')
-class ClickVSEComponentsManager(CGF.ComponentManager):
+class ClickVSEComponentsSystem(CGF.System):
+    ComponentActivated = CGF.ActivateReaction(CGF.ReactRw(VSEComponent), CGF.ReactRw(SelectionComponent))
+    ComponentDeactivated = CGF.DeactivateReaction(CGF.ReactRw(VSEComponent), CGF.ReactRw(SelectionComponent))
+    Reactions = CGF.Reactions(ComponentActivated, ComponentDeactivated)
 
-    @onAddedQuery(SelectionComponent, VSEComponent)
+    def update(self):
+        for vseComponent, selectionComponent in self.reaction(self.ComponentDeactivated):
+            self.handleComponentRemoved(selectionComponent, vseComponent)
+
+        for vseComponent, selectionComponent in self.reaction(self.ComponentActivated):
+            self.handleComponentAdded(selectionComponent, vseComponent)
+
     def handleComponentAdded(self, selectionComponent, vseComponent):
-        selectionComponent.onClickAction += vseComponent.context.onGameObjectClick
+        ctx = vseComponent.context
+        if ctx is not None:
+            selectionComponent.onClickAction += ctx.onGameObjectClick
+        return
 
-    @onRemovedQuery(SelectionComponent, VSEComponent)
     def handleComponentRemoved(self, selectionComponent, vseComponent):
-        selectionComponent.onClickAction -= vseComponent.context.onGameObjectClick
+        ctx = vseComponent.context
+        if ctx is not None:
+            selectionComponent.onClickAction -= ctx.onGameObjectClick
+        return
 
 
-class ClickManager(CGF.ComponentManager):
+class ClickSystem(CGF.System):
     _hangarSpace = dependency.descriptor(IHangarSpace)
+    ClickIterate = CGF.IterateReaction(CGF.ActiveOnly, CGF.GameObject, CGF.Rw(SelectionComponent), CGF.Has(IsHoveredComponent))
+    Reactions = CGF.Reactions(ClickIterate)
 
     def __init__(self, *args):
-        super(ClickManager, self).__init__(*args)
+        super(ClickSystem, self).__init__(*args)
         self._selectedGO = None
         return
 
-    def activate(self):
+    def onMappingLoaded(self):
         self._hangarSpace.onMouseDown += self._onMouseDown
         self._hangarSpace.onMouseUp += self._onMouseUp
 
-    def deactivate(self):
+    def onMappingUnloaded(self):
         self._hangarSpace.onMouseDown -= self._onMouseDown
         self._hangarSpace.onMouseUp -= self._onMouseUp
 
     def _onMouseDown(self):
-        clickQuery = CGF.Query(self.spaceID, (CGF.GameObject, IsHoveredComponent, SelectionComponent))
-        for go, _, __ in clickQuery:
+        clickIterate = self.reaction(self.ClickIterate)
+        for go, _ in clickIterate:
             self._selectedGO = go
 
     def _onMouseUp(self):
-        clickQuery = CGF.Query(self.spaceID, (CGF.GameObject, IsHoveredComponent, SelectionComponent))
-        for go, _, selectionComponent in clickQuery:
+        clickIterate = self.reaction(self.ClickIterate)
+        for go, selectionComponent in clickIterate:
             if self._selectedGO == go:
                 _logger.info('ClickManager::Clicked')
                 selectionComponent.onClickAction()

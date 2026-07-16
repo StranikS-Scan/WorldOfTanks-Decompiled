@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/squad_finder.py
+from __future__ import absolute_import
 from collections import defaultdict, namedtuple
+from future.utils import viewitems, viewvalues
 from constants import ARENA_GUI_TYPE
 from gui.battle_control.arena_info import settings
 from soft_exception import SoftException
@@ -59,7 +61,7 @@ class _SquadFinder(ISquadFinder):
         self._prbStats = {team:defaultdict(set) for team in teams}
 
     def clear(self):
-        for stats in self._prbStats.itervalues():
+        for stats in viewvalues(self._prbStats):
             stats.clear()
 
     def addVehicleInfo(self, team, prebattleID, vehicleID):
@@ -94,42 +96,42 @@ class TeamScopeNumberingFinder(_SquadFinder):
         self._teamsSquadIndices = {team:{} for team in teams}
 
     def clear(self):
-        for indices in self._teamsSquadIndices.itervalues():
+        for indices in viewvalues(self._teamsSquadIndices):
             indices.clear()
 
         super(TeamScopeNumberingFinder, self).clear()
 
     def getNumberOfSquads(self):
-        return sum((max(indices.itervalues()) for indices in self._teamsSquadIndices.itervalues() if indices))
+        return sum((max(viewvalues(indices)) for indices in viewvalues(self._teamsSquadIndices) if indices))
 
     def findSquadSizes(self):
         squadRange = self._getSquadRange()
-        for teamID, team in self._prbStats.iteritems():
+        for teamID, team in viewitems(self._prbStats):
             squadIndices = self._teamsSquadIndices[teamID]
-            squads = [ item for item in team.iteritems() if len(item[1]) in squadRange ]
+            squads = [ item for item in viewitems(team) if len(item[1]) in squadRange ]
             if not squads:
                 continue
             squads = sorted(squads, key=lambda item: item[0])
             for prebattleID, vehiclesIDs in squads:
                 if prebattleID not in squadIndices:
                     if squadIndices:
-                        squadIndices[prebattleID] = max(squadIndices.itervalues()) + 1
+                        squadIndices[prebattleID] = max(viewvalues(squadIndices)) + 1
                     else:
                         squadIndices[prebattleID] = 1
                 yield SquadSizeDescription(teamID, squadIndices[prebattleID], len(vehiclesIDs))
 
     def findSquads(self):
         squadRange = self._getSquadRange()
-        for teamID, team in self._prbStats.iteritems():
+        for teamID, team in viewitems(self._prbStats):
             squadIndices = self._teamsSquadIndices[teamID]
-            squads = [ item for item in team.iteritems() if len(item[1]) in squadRange ]
+            squads = [ item for item in viewitems(team) if len(item[1]) in squadRange ]
             if not squads:
                 continue
             squads = sorted(squads, key=lambda item: item[0])
             for prebattleID, vehiclesIDs in squads:
                 if prebattleID not in squadIndices:
                     if squadIndices:
-                        squadIndices[prebattleID] = max(squadIndices.itervalues()) + 1
+                        squadIndices[prebattleID] = max(viewvalues(squadIndices)) + 1
                     else:
                         squadIndices[prebattleID] = 1
                 for vehicleID in vehiclesIDs:
@@ -148,17 +150,17 @@ class ContinuousNumberingFinder(_SquadFinder):
         super(ContinuousNumberingFinder, self).clear()
 
     def getNumberOfSquads(self):
-        return max(self._squadIndices.itervalues()) if self._squadIndices else 0
+        return max(viewvalues(self._squadIndices)) if self._squadIndices else 0
 
     def findSquads(self):
         squadRange = self._getSquadRange()
-        for _, team in self._prbStats.iteritems():
-            for prebattleID, vehiclesIDs in team.iteritems():
+        for team in viewvalues(self._prbStats):
+            for prebattleID, vehiclesIDs in viewitems(team):
                 if not vehiclesIDs or len(vehiclesIDs) not in squadRange:
                     continue
                 if prebattleID not in self._squadIndices:
                     if self._squadIndices:
-                        self._squadIndices[prebattleID] = max(self._squadIndices.itervalues()) + 1
+                        self._squadIndices[prebattleID] = max(viewvalues(self._squadIndices)) + 1
                     else:
                         self._squadIndices[prebattleID] = 1
                 for vehicleID in vehiclesIDs:

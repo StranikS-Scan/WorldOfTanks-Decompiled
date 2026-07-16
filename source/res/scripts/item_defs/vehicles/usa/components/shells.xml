@@ -5358,6 +5358,63 @@
       </damage>
     </armorSpalls>
   </_94mm_HE_MkI>
+  <_103mm_APDS_T_T183_XM94_Shadow>
+    <id>	359	</id>
+    <userString>	#usa_vehicles:_103mm_APDS_T_T183_XM94_Shadow	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	594	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	103	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	310	</armor>
+      <devices>	139	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_103mm_APDS_T_T183_XM94_Shadow>
+  <_103mm_HEATFS_T187_XM94_Shadow>
+    <id>	360	</id>
+    <userString>	#usa_vehicles:_103mm_HEATFS_T187_XM94_Shadow	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	103	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	310	</armor>
+      <devices>	139	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_103mm_HEATFS_T187_XM94_Shadow>
+  <_103mm_HE_T189_XM94_Shadow>
+    <id>	361	</id>
+    <userString>	#usa_vehicles:_103mm_HE_T189_XM94_Shadow	</userString>
+    <icon>	he_modern	</icon>
+    <price>	369	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	103	</caliber>
+    <explosionRadius>	1.85	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	410	</armor>
+      <devices>	139	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.85	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	205	</armor>
+        <devices>	70	</devices>
+      </damage>
+    </armorSpalls>
+  </_103mm_HE_T189_XM94_Shadow>
   <_105mm_HE_M1>
     <id>	26	</id>
     <userString>	#usa_vehicles:_105mm_HE_M1	</userString>

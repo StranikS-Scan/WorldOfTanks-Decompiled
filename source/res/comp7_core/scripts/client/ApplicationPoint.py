@@ -4,7 +4,6 @@ import weakref
 import BigWorld
 import CGF
 import CombatSelectedArea
-import GenericComponents
 import Math
 import math_utils
 from helpers import dependency
@@ -15,6 +14,7 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from AreaOfEffect import EffectRunner
+from typing import List
 
 def _equipmentEffectFactory(entity):
     equipment = vehicles.g_cache.equipments().get(entity.equipmentID)
@@ -124,7 +124,7 @@ class _Comp7ApplicationPointEffect(_ApplicationPointEffect):
         self._area = BigWorld.player().createEquipmentSelectedArea(self._position, self._direction, self._equipment, areaSize)
         self._callbackDelayer.delayCallback(duration, self._clearArea)
         if self._equipment.areaUsedPrefab:
-            CGF.loadGameObjectIntoHierarchy(self._equipment.areaUsedPrefab, self._entity.entityGameObject, Math.Vector3(), self.__onAreaGOLoaded)
+            CGF.loadAndCreatePrefabWithParent(self._equipment.areaUsedPrefab, self._entity.entityGameObject, Math.Vector3(), self.__onAreaGOLoaded)
 
     def _clearArea(self):
         if self._area is not None:
@@ -166,11 +166,12 @@ class _Comp7ApplicationPointEffect(_ApplicationPointEffect):
     def _getRadius(self):
         return self._equipment.getRadiusBasedOnSkillLevel(self._entity.level)
 
-    def __onAreaGOLoaded(self, gameObject):
+    def __onAreaGOLoaded(self, objects, queue):
         if self._entity.isDestroyed:
             return
-        self.__areaGO = gameObject
-        t = gameObject.findComponentByType(GenericComponents.TransformComponent)
+        root = objects[0]
+        self.__areaGO = queue.gameObject(root)
+        t = queue.component(root, CGF.TransformComponent)
         floatEpsilon = 0.001
         t.transform = math_utils.createSRTMatrix(Math.Vector3(self._getRadius(), 1.0, self._getRadius()), (0.0, 0.0, 0.0), (0.0, floatEpsilon, 0.0))
 

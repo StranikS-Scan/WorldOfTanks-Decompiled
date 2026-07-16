@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/blur_controller.py
+from __future__ import absolute_import
 import logging
 from gui.doc_loaders.blur_loader import readBlurSettings
 from gui.shared.view_helpers.blur_manager import BlurManager, BlurEffect

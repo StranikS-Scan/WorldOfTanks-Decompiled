@@ -28,8 +28,10 @@ class PointsOfInterestPlugin(EntriesPlugin, PointsOfInterestListener):
             self.onPoiAdded(poiState)
 
         self._registerPoiListener()
+        self.sessionProvider.onBattleSessionStop += self.__onBattleSessionStop
 
     def stop(self):
+        self.sessionProvider.onBattleSessionStop -= self.__onBattleSessionStop
         self._unregisterPoiListener()
         super(PointsOfInterestPlugin, self).stop()
 
@@ -89,3 +91,6 @@ class PointsOfInterestPlugin(EntriesPlugin, PointsOfInterestListener):
     def __updateCooldownProgress(self, entryID, poiState):
         progress = getPoiCooldownProgress(poiState)
         self._invoke(entryID, 'setProgress', progress)
+
+    def __onBattleSessionStop(self):
+        self._unregisterPoiListener()

@@ -129,7 +129,7 @@ class LegacyEntryPoint(BasePrbEntryPoint):
     def join(self, ctx, callback=None):
         if prb_getters.getClientPrebattle() is None or ctx.isForced():
             ctx.startProcessing(callback=callback)
-            BigWorld.player().prb_join(ctx.getID())
+            BigWorld.player().prb_join(ctx.getID(), ctx.getPrbClusterId())
         else:
             LOG_ERROR('First, player has to confirm exit from the current prebattle', prb_getters.getPrebattleType())
             if callback:

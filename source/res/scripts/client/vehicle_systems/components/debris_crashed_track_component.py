@@ -2,9 +2,14 @@
 # Embedded file name: scripts/client/vehicle_systems/components/debris_crashed_track_component.py
 import logging
 import CGF
+from cgf_script.registration import registerComponent
 _logger = logging.getLogger(__name__)
 
+@registerComponent
 class DebrisCrashedTrackComponent(object):
+    domain = CGF.Domain.ClientEditor
+    userVisible = False
+    vseVisible = False
     MAX_DEBRIS_COUNT = (14, 10, 4)
     CURRENT_DEBRIS_COUNT = 0
     isLeft = property(lambda self: self.__isLeft)
@@ -47,23 +52,21 @@ class DebrisCrashedTrackComponent(object):
         self.__shouldCreateDebris = shouldCreateDebris
         self.__hitPoint = hitPoint
         self.__modelsSet = modelsSet
-        self.__debrisGameObject = None
+        self.__debrisGameObject = CGF.GameObject.INVALID_GAME_OBJECT
         if shouldCreateDebris:
             DebrisCrashedTrackComponent.CURRENT_DEBRIS_COUNT += 1
-        return
 
-    def createDebrisGameObject(self, spaceID):
-        if self.__debrisGameObject is not None:
+    def createDebrisGameObject(self, queue):
+        if self.__debrisGameObject.valid:
             _logger.error('Debris go already created, something went wrong')
-            CGF.removeGameObject(self.__debrisGameObject)
-        self.__debrisGameObject = CGF.GameObject(spaceID)
+            self.__debrisGameObject.destroy()
+        self.__debrisGameObject = queue.createGameObject()
         return self.__debrisGameObject
 
     def removeDebrisGameObject(self):
-        if self.__debrisGameObject is not None:
-            CGF.removeGameObject(self.__debrisGameObject)
-            self.__debrisGameObject = None
-        return
+        if self.__debrisGameObject.valid:
+            self.__debrisGameObject.destroy()
+            self.__debrisGameObject = CGF.GameObject.INVALID_GAME_OBJECT
 
 
 class NodeRemapperComponent(object):

@@ -2503,6 +2503,63 @@
       </damage>
     </armorSpalls>
   </_122mm_pocisk_wybuchowy_wz_59>
+  <_122mm_PP_62_PCC>
+    <id>	169	</id>
+    <userString>	#poland_vehicles:_122mm_PP_62_PCC	</userString>
+    <icon>	ap	</icon>
+    <price>	1091	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	450	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_122mm_PP_62_PCC>
+  <_122mm_PK_62_PCC>
+    <id>	170	</id>
+    <userString>	#poland_vehicles:_122mm_PK_62_PCC	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	5200	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	450	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_122mm_PK_62_PCC>
+  <_122mm_POB_62_PCC>
+    <id>	171	</id>
+    <userString>	#poland_vehicles:_122mm_POB_62_PCC	</userString>
+    <icon>	he_modern	</icon>
+    <price>	607	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	122	</caliber>
+    <explosionRadius>	2.49	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	540	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.49	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	270	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_122mm_POB_62_PCC>
   <_130mm_AZ_PB_46>
     <id>	11	</id>
     <userString>	#poland_vehicles:_130mm_AZ_PB_46	</userString>
@@ -2560,6 +2617,63 @@
       </damage>
     </armorSpalls>
   </_130mm_AZ_OF_46>
+  <_140mm_pocisk_podkalibrowy_wz_65>
+    <id>	181	</id>
+    <userString>	#poland_vehicles:_140mm_pocisk_podkalibrowy_wz_65	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1449	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	140	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	600	</armor>
+      <devices>	189	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_140mm_pocisk_podkalibrowy_wz_65>
+  <_140mm_pocisk_kumulacyjny_wz_65>
+    <id>	182	</id>
+    <userString>	#poland_vehicles:_140mm_pocisk_kumulacyjny_wz_65	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	6000	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	140	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	600	</armor>
+      <devices>	189	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_140mm_pocisk_kumulacyjny_wz_65>
+  <_140mm_pocisk_wybuchowy_wz_65>
+    <id>	183	</id>
+    <userString>	#poland_vehicles:_140mm_pocisk_wybuchowy_wz_65	</userString>
+    <icon>	he_modern	</icon>
+    <price>	968	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	140	</caliber>
+    <explosionRadius>	3.17	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	750	</armor>
+      <devices>	189	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	3.17	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	375	</armor>
+        <devices>	95	</devices>
+      </damage>
+    </armorSpalls>
+  </_140mm_pocisk_wybuchowy_wz_65>
   <_152mm_pocisk_przeciwpancerny>
     <id>	30	</id>
     <userString>	#poland_vehicles:_152mm_pocisk_przeciwpancerny	</userString>

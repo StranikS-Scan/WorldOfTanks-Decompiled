@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/w2gt/w2gt_ctrl.py
+from __future__ import absolute_import
 import enum
 import logging
 import typing
@@ -96,11 +97,11 @@ class W2GTBattleController(IW2GTBattleController):
     def invalidateVehiclesInfo(self, arenaDP):
         self.__tryInitializeData()
 
-    def invalidateVehicleStatus(self, flags, vInfo, arenaDP):
-        if vInfo.isObserver():
+    def invalidateVehicleStatus(self, flags, vInfoVO, arenaDP):
+        if vInfoVO.isObserver():
             return
-        vehicleID = vInfo.vehicleID
-        if vehicleID == self.__playerVehicleID and not vInfo.isAlive():
+        vehicleID = vInfoVO.vehicleID
+        if vehicleID == self.__playerVehicleID and not vInfoVO.isAlive():
             self.__isPlayerAlive = False
             if self.__plugin:
                 self.__plugin.setDestroyed()

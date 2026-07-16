@@ -11,8 +11,8 @@
   <postProgressionTree>	role_HT_assault	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	38	</forward>
-    <backward>	15	</backward>
+    <forward>	35	</forward>
+    <backward>	14	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.059	</moving>
@@ -54,26 +54,21 @@
       <armor_4>	250	</armor_4>
       <armor_5>	240	</armor_5>
       <armor_6>	230	</armor_6>
-      <armor_7>	220	</armor_7>
+      <armor_7>	210	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_10>	200	</armor_10>
-      <armor_11>	190	</armor_11>
+      <armor_10>	190	</armor_10>
+      <armor_11>	170	</armor_11>
       <armor_13>	150	</armor_13>
-      <armor_15>	150	</armor_15>
-      <armor_17>	130	</armor_17>
+      <armor_15>	130	</armor_15>
+      <armor_17>	110	</armor_17>
       <armor_18>	90	</armor_18>
-      <armor_19>	110	</armor_19>
-      <armor_20>	100	</armor_20>
-      <armor_21>	90	</armor_21>
+      <armor_21>	150	</armor_21>
       <armor_22>	70	</armor_22>
       <armor_23>	70	</armor_23>
       <armor_24>	60	</armor_24>
       <armor_25>	50	</armor_25>
-      <armor_26>	40	</armor_26>
       <armor_27>	30	</armor_27>
       <armor_28>	20	</armor_28>
-      <armor_29>	25	</armor_29>
-      <armor_30>	35	</armor_30>
     </armor>
     <primaryArmor>	armor_13 armor_18 armor_25	</primaryArmor>
     <weight>	28620	</weight>
@@ -717,7 +712,7 @@
       </armor>
       <weight>	15250	</weight>
       <terrainResistance>	1 1.2 2	</terrainResistance>
-      <brakeForce>	39500	</brakeForce>
+      <brakeForce>	61000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	28	</rotationSpeed>
       <shotDispersionFactors>
@@ -1583,7 +1578,6 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
-      <maxLoad>	4890	</maxLoad>
       <repairTime>	6.66666651	</repairTime>
     </Chassis_Pl40_Krazownik>
   </chassis>
@@ -1608,6 +1602,7 @@
         <armor_11>	190	</armor_11>
         <armor_12>	180	</armor_12>
         <armor_13>	170	</armor_13>
+        <armor_14>	130	</armor_14>
         <armor_15>	150	</armor_15>
         <armor_16>	140	</armor_16>
         <armor_17>	130	</armor_17>
@@ -1621,6 +1616,7 @@
         <armor_25>	50	</armor_25>
         <armor_26>	40	</armor_26>
         <armor_27>	30	</armor_27>
+        <armor_28>	195	</armor_28>
         <armor_29>	25	</armor_29>
         <armor_30>	35	</armor_30>
         <armor_31>	50	  <tags>	screen	</tags>
@@ -1662,7 +1658,7 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 9 0.355556 9 0.43 4 0.57 4 0.644444 9 1 9	</maxPitch>
           </pitchLimits>
-          <invisibilityFactorAtShot>	0.17	</invisibilityFactorAtShot>
+          <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/poland/Pl40_Krazownik/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/poland/Pl40_Krazownik/crash/lod0/Gun_01.model	</destroyed>
@@ -2252,7 +2248,7 @@
       <engines>
         <_2xGTD_2T5A>
           <smplEnginePower>	800	</smplEnginePower>
-          <smplFwMaxSpeed>	38	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </_2xGTD_2T5A>
       </engines>
       <chassis>

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/wallet.py
+from __future__ import absolute_import
 import logging
 import BigWorld
 import Event
@@ -50,7 +51,7 @@ class WalletController(IWalletController):
         self.__clearWeaver()
         super(WalletController, self).fini()
 
-    def onLobbyStarted(self, event):
+    def onLobbyStarted(self, ctx):
         wallet = BigWorld.player().serverSettings['wallet']
         self.__useGold = bool(wallet[0])
         self.__useFreeXP = bool(wallet[1])
@@ -83,7 +84,7 @@ class WalletController(IWalletController):
 
     @property
     def dynamicComponentsStatuses(self):
-        return {currencyCode:(self.__currentStatus if not constants.IS_CHINA else self.STATUS.AVAILABLE) for currencyCode in self.itemsCache.items.stats.dynamicCurrencies.keys()}
+        return {currencyCode:(self.__currentStatus if not constants.IS_CHINA else self.STATUS.AVAILABLE) for currencyCode in self.itemsCache.items.stats.dynamicCurrencies}
 
     @property
     def isSyncing(self):

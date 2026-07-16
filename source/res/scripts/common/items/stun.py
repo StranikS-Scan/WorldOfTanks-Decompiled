@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/stun.py
+from __future__ import absolute_import
+import ResMgr
 from soft_exception import SoftException
 from items import _xml
-import ResMgr
 _CONFIG_FILE = 'scripts/item_defs/vehicles/common/stun.xml'
 g_cfg = {}
 

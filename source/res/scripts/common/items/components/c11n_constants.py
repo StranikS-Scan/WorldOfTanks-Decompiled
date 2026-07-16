@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/c11n_constants.py
-import constants
-from soft_exception import SoftException
+from __future__ import absolute_import
 from functools import reduce
+from future.utils import viewitems
+from soft_exception import SoftException
 RENT_DEFAULT_BATTLES = 50
 MAX_OUTFIT_LENGTH = 1024
 MAX_CAMOUFLAGE_PATTERN_SIZE = 5
@@ -87,7 +88,7 @@ class CustomizationType(object):
 
 
 CustomizationTypeNames = {getattr(CustomizationType, k):k for k in dir(CustomizationType) if isinstance(getattr(CustomizationType, k), int)}
-CustomizationNamesToTypes = {v:k for k, v in CustomizationTypeNames.iteritems()}
+CustomizationNamesToTypes = {v:k for k, v in viewitems(CustomizationTypeNames)}
 
 class CustomizationDisplayType(object):
     HISTORICAL = 0
@@ -379,9 +380,9 @@ class CamouflageTilingType(object):
     RANGE = None
 
 
-CamouflageTilingType.RANGE = tuple([ getattr(CamouflageTilingType, k) for k in dir(CamouflageTilingType) if not k.startswith('_') and k not in ('RANGE', 'NONE') ])
+CamouflageTilingType.RANGE = tuple((getattr(CamouflageTilingType, k) for k in dir(CamouflageTilingType) if not k.startswith('_') and k not in ('RANGE', 'NONE')))
 CamouflageTilingTypeNames = {getattr(CamouflageTilingType, k):k for k in dir(CamouflageTilingType) if not k.startswith('_') and k not in ('RANGE', 'NONE')}
-CamouflageTilingTypeNameToType = {v:k for k, v in CamouflageTilingTypeNames.iteritems()}
+CamouflageTilingTypeNameToType = {v:k for k, v in viewitems(CamouflageTilingTypeNames)}
 EASING_TRANSITION_DURATION = 0.8
 IMMEDIATE_TRANSITION_DURATION = 0.0
 

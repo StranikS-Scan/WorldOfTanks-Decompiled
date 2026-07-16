@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/renewable_subscription_common/schema.py
+from __future__ import absolute_import
 import logging
 import typing
 import constants
@@ -43,10 +44,10 @@ class Features(object):
      SERVICE_RECORD_CUSTOMIZATION)
 
 
-def _checkUniqListItems(models, fieldGetter):
+def _checkUniqListItems(modelsList, fieldGetter):
     keys = set()
     duplicates = set()
-    for m in models:
+    for m in modelsList:
         arenaBonusType = fieldGetter(m)
         if arenaBonusType in keys:
             duplicates.add(arenaBonusType)
@@ -166,8 +167,8 @@ class _TierModel(models.Model):
         self.features = features
 
     @classmethod
-    def checkUniqFeatures(cls, models):
-        _checkUniqListItems(models, lambda model: model.name)
+    def checkUniqFeatures(cls, modelsList):
+        _checkUniqListItems(modelsList, lambda model: model.name)
 
 
 _tierSchema = schemas.Schema(fields={'id': d2m_fields.Integer(required=True, deserializedValidators=validate.Range(minValue=1)),
@@ -273,8 +274,8 @@ class _GoldReserveFeatureModel(_FeatureModel):
         return dataAsDict
 
     @classmethod
-    def checkUniqArenaBonusTypes(cls, models):
-        _checkUniqListItems(models, lambda model: model.arenaBonusType)
+    def checkUniqArenaBonusTypes(cls, modelsList):
+        _checkUniqListItems(modelsList, lambda model: model.arenaBonusType)
 
     def getFeatureID(self):
         return Features.GOLD_RESERVE
@@ -308,8 +309,8 @@ class _ProBoostFeatureModel(_FeatureModel):
         self.compatibleVehicles = compatibleVehicles
 
     @classmethod
-    def checkUniqueTankClasses(cls, models):
-        _checkUniqListItems(models, lambda model: model.tankClass)
+    def checkUniqueTankClasses(cls, modelsList):
+        _checkUniqListItems(modelsList, lambda model: model.tankClass)
 
     def getFeatureID(self):
         return Features.PRO_BOOST
@@ -427,19 +428,19 @@ class _BattlePassFeature(_FeatureModel):
         return bonusTypePoints.getPointsForVehicle(vehTypeCompDescr)
 
     @classmethod
-    def checkUniqArenaBonusTypes(cls, models):
-        _checkUniqListItems(models, lambda model: model.arenaBonusType)
+    def checkUniqArenaBonusTypes(cls, modelsList):
+        _checkUniqListItems(modelsList, lambda model: model.arenaBonusType)
 
     @classmethod
-    def checkBPIntegratedModes(cls, models):
-        incommingModes = {cls._getArenaBonusTypeIdByName(model) for model in models}
+    def checkBPIntegratedModes(cls, modelsList):
+        incommingModes = {cls._getArenaBonusTypeIdByName(model) for model in modelsList}
         allowedIntegrations = set(getAllIntergatedGameModes())
         diff = incommingModes.difference(allowedIntegrations)
         if diff:
             raise exceptions.ValidationError('[BattlePass] Integrations must be defined for the following game modes: "{}".'.format(diff))
 
     @classmethod
-    def _getArenaBonusTypeIdByName(self, model):
+    def _getArenaBonusTypeIdByName(cls, model):
         return ARENA_BONUS_TYPE_NAMES[model.arenaBonusType]
 
 

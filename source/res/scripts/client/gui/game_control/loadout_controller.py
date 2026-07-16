@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/loadout_controller.py
+from __future__ import absolute_import
 from Event import Event, EventManager
 from skeletons.gui.game_control import ILoadoutController
 from wg_async import wg_async, await_callback

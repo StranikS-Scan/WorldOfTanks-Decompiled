@@ -1,12 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: server_side_replay/scripts/client/server_side_replay/gui/impl/lobby/filter/data_providers.py
+from __future__ import absolute_import
+from future.utils import viewvalues
 from typing import Optional
 from Event import Event
 from constants import MAX_VEHICLE_LEVEL
-from state import ToggleGroupType
-from ..sort_helpers import SortHeap
-from ..utils import getRentCriteria
-from . import GRADE_PREMIUM, VEHICLE_LOCATION_IN_HANGAR
+from server_side_replay.gui.impl.lobby.filter.state import ToggleGroupType
+from server_side_replay.gui.impl.lobby.sort_helpers import SortHeap
+from server_side_replay.gui.impl.lobby.utils import getRentCriteria
+from server_side_replay.gui.impl.lobby.filter import GRADE_PREMIUM, VEHICLE_LOCATION_IN_HANGAR
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES
 from gui.shared.utils.requesters import REQ_CRITERIA, RequestCriteria
 from helpers import dependency
@@ -132,29 +134,29 @@ class CompoundDataProvider(object):
         return len(self.__dataProviders)
 
     def reinit(self, *args, **kwargs):
-        for dataProvider in self.__dataProviders.itervalues():
+        for dataProvider in viewvalues(self.__dataProviders):
             dataProvider.reinit(*args, **kwargs)
 
     def update(self):
         self.__updatingCount += len(self)
-        for dataProvider in self.__dataProviders.itervalues():
+        for dataProvider in viewvalues(self.__dataProviders):
             dataProvider.update()
 
     def subscribe(self):
-        for dataProvider in self.__dataProviders.itervalues():
+        for dataProvider in viewvalues(self.__dataProviders):
             dataProvider.onDataChanged += self._onProviderDataChanged
 
     def unsubscribe(self):
-        for dataProvider in self.__dataProviders.itervalues():
+        for dataProvider in viewvalues(self.__dataProviders):
             dataProvider.onDataChanged -= self._onProviderDataChanged
 
     @property
     def itemsCount(self):
-        return sum((provider.itemsCount for provider in self.__dataProviders.itervalues()))
+        return sum((provider.itemsCount for provider in viewvalues(self.__dataProviders)))
 
     @property
     def initialItemsCount(self):
-        return sum((provider.initialItemsCount for provider in self.__dataProviders.itervalues()))
+        return sum((provider.initialItemsCount for provider in viewvalues(self.__dataProviders)))
 
     def _onProviderDataChanged(self):
         self.__updatingCount -= 1
@@ -188,9 +190,9 @@ class VehiclesDataProvider(FilterableItemsDataProvider):
         self.__vehicle = vehicle
         super(VehiclesDataProvider, self).reinit()
 
-    def updateRoot(self, vehicle):
-        self.__vehicle = vehicle
-        super(VehiclesDataProvider, self).updateRoot(vehicle)
+    def updateRoot(self, item):
+        self.__vehicle = item
+        super(VehiclesDataProvider, self).updateRoot(item)
 
     def _getFiltersList(self):
         return [self._getFilterByVehicleTypeCriteria(),

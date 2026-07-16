@@ -23,7 +23,7 @@ class StartNotification(NotificationBase):
         return self._getPayload()['bundleID']
 
     def _getEvents(self):
-        return super(StartNotification, self)._getEvents() + ((self.__openBundle.onStatusChanged, self.__onStatusChanged), (self.viewModel.onOpenBundle, self.__onOpenBundle))
+        return super(StartNotification, self)._getEvents() + ((self.__openBundle.onSettingsChanged, self.__onSettingsChanged), (self.__openBundle.onStatusChanged, self.__onStatusChanged), (self.viewModel.onOpenBundle, self.__onOpenBundle))
 
     def _canNavigate(self):
         return super(StartNotification, self)._canNavigate() and self.__openBundle.isBundleActive(self.bundleID)
@@ -35,6 +35,9 @@ class StartNotification(NotificationBase):
             tx.setBundleID(self.bundleID)
             tx.setBundleType(self.__openBundle.getBundle(self.bundleID).type)
         setStartNotificationShown(self.bundleID)
+
+    def __onSettingsChanged(self):
+        self.viewModel.setIsButtonDisabled(not self._canNavigate())
 
     def __onStatusChanged(self, bundleID):
         if bundleID == self.bundleID:

@@ -6,6 +6,7 @@ import enum
 import typing
 from future.utils import viewitems, viewvalues
 import BigWorld
+import CGF
 from gui.Scaleform.daapi.view.battle.shared.points_of_interest.constants import POI_TYPE_UI_MAPPING
 from gui.Scaleform.daapi.view.battle.shared.points_of_interest.poi_helpers import getPoiEquipmentByType
 from helpers import dependency
@@ -13,6 +14,7 @@ from points_of_interest.mixins import PointsOfInterestListener
 from points_of_interest_shared import ENEMY_VEHICLE_ID
 from skeletons.gui.battle_session import IBattleSessionProvider
 from points_of_interest_shared import PoiStatus
+from points_of_interest.managers import PoiStateUpdateSystem
 if typing.TYPE_CHECKING:
     from points_of_interest.components import PoiStateComponent
 _logger = logging.getLogger(__name__)
@@ -81,7 +83,7 @@ class PointsOfInterestStatsController(PointsOfInterestListener):
     def __onPoiEquipmentUsed(self, equipment, vehicleID):
         statusItems = self.__poiStatusItems.get(vehicleID, {})
         for item in viewvalues(statusItems):
-            poiEquipment = getPoiEquipmentByType(item.state.type)
+            poiEquipment = getPoiEquipmentByType(item.type)
             if poiEquipment is not None and poiEquipment.id == equipment.id:
                 item.setCaptured(isCaptured=False)
 
@@ -114,16 +116,13 @@ class PointsOfInterestStatsController(PointsOfInterestListener):
 class PoiStatusItem(object):
 
     def __init__(self, poiState):
-        self.__state = poiState
+        self.__stateUUID = poiState.object.uuid
         self.__invader = poiState.invader
         self.__type = POI_TYPE_UI_MAPPING[poiState.type]
         self.__progress = poiState.progress
         self.__status = poiState.status.statusID
+        self.__system = CGF.getSystem(BigWorld.player().spaceID, PoiStateUpdateSystem)
         self.__isCaptured = False
-
-    @property
-    def state(self):
-        return self.__state
 
     @property
     def invader(self):
@@ -142,16 +141,17 @@ class PoiStatusItem(object):
         return self.__isCaptured
 
     def update(self):
-        if self.__status is PoiStatus.CAPTURING and self.__state.status.statusID is PoiStatus.COOLDOWN:
+        state = self.__system.getStateAccess().find(self.__stateUUID)
+        if self.__status is PoiStatus.CAPTURING and state.status.statusID is PoiStatus.COOLDOWN:
             self.setCaptured(True)
-        self.__status = self.__state.status.statusID
+        self.__status = state.status.statusID
         if self.isCaptured:
             return PoiStatusItemUpdateResult.VALID
-        if self.__state.invader != self.__invader:
-            self.__invader = self.__state.invader
+        if state.invader != self.__invader:
+            self.__invader = state.invader
             return PoiStatusItemUpdateResult.INVALID
-        if self.__state.progress != self.__progress:
-            self.__progress = self.__state.progress
+        if state.progress != self.__progress:
+            self.__progress = state.progress
             return PoiStatusItemUpdateResult.UPDATED
         return PoiStatusItemUpdateResult.VALID
 
@@ -163,5 +163,5 @@ class PoiStatusItem(object):
 
     def getVO(self):
         return {'vehicleID': self.invader,
-         'type': self.type,
+         'type': POI_TYPE_UI_MAPPING[self.type],
          'progress': 1 if self.isCaptured else self.progress / 100}

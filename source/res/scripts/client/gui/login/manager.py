@@ -190,7 +190,7 @@ class Manager(ILoginManager):
         return
 
     def writePeripheryLifetime(self):
-        if AUTO_LOGIN_QUERY_ENABLED and self.connectionMgr.peripheryID:
+        if AUTO_LOGIN_QUERY_ENABLED and self.connectionMgr.peripheryID != constants.STANDALONE_CLUSTER_ID:
             self._preferences['peripheryLifetime'] = pickle.dumps((self.connectionMgr.peripheryID, time.time() + _PERIPHERY_DEFAULT_LIFETIME))
             self._preferences.writeLoginInfo()
 

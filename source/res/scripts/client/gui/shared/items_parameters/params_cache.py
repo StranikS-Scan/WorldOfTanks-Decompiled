@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/params_cache.py
+from __future__ import absolute_import
 import itertools
 import math
 import sys
@@ -222,7 +223,7 @@ def _precacheEquipments(data):
 def _precacheOptionalDevices(data):
     data.cache.setdefault(nations.NONE_INDEX, {})[ITEM_TYPES.optionalDevice] = {}
     for deviceDescr in itervalues(vehicles.g_cache.optionalDevices()):
-        wmin, wmax = sys.maxint, -1
+        wmin, wmax = sys.maxsize, -1
         deviceNations = set()
         for vDescr in data.vehiclesCache.generator():
             if not deviceDescr.checkCompatibilityWithVehicle(vDescr)[0]:

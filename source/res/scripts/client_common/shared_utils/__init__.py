@@ -1,31 +1,36 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/shared_utils/__init__.py
-import collections
+from __future__ import absolute_import
 import time
 import itertools
 import logging
-import types
 import typing
 import weakref
+from builtins import filter
 from functools import partial, wraps
+from future.utils import viewitems
+from past.builtins import basestring, long
 import BigWorld
 from adisp import adisp_async
 from constants import IS_EDITOR
+from math_common import decimal_round
+from debug_utils import LOG_CURRENT_EXCEPTION
 if typing.TYPE_CHECKING:
     from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Tuple, Type, TypeVar, Union
     T = TypeVar('T')
     R = TypeVar('R')
 _logger = logging.getLogger(__name__)
-ScalarTypes = (types.IntType,
- types.LongType,
- types.FloatType,
- types.BooleanType) + types.StringTypes
-IntegralTypes = (types.IntType, types.LongType)
+ScalarTypes = (int,
+ long,
+ float,
+ bool,
+ basestring)
+IntegralTypes = (int, long)
 
 def makeTupleByDict(ntClass, data):
     unsupportedFields = set(data) - set(ntClass._fields)
     supported = {}
-    for k, v in data.iteritems():
+    for k, v in viewitems(data):
         if k not in unsupportedFields:
             supported[k] = v
 
@@ -46,6 +51,21 @@ class BoundMethodWeakref(object):
 def forEach(function, sequence):
     for e in sequence:
         function(e)
+
+
+def safeForEach(function, sequence):
+    for e in sequence:
+        try:
+            function(e)
+        except Exception:
+            LOG_CURRENT_EXCEPTION()
+
+
+def safeExecute(function):
+    try:
+        function()
+    except Exception:
+        LOG_CURRENT_EXCEPTION()
 
 
 def isEmpty(sequence):
@@ -70,7 +90,7 @@ def prettyPrint(dictValue, sort_keys=True, indent=4):
 
 
 def findFirst(function_or_None, sequence, default=None):
-    return next(itertools.ifilter(function_or_None, sequence), default)
+    return next(filter(function_or_None, sequence), default)
 
 
 def first(sequence, default=None):
@@ -132,9 +152,9 @@ class CONST_CONTAINER(object):
 
     @classmethod
     def getIterator(cls):
-        attrs = itertools.chain.from_iterable([ c.__dict__.iteritems() for c in itertools.chain([cls], cls.__bases__) ])
+        attrs = itertools.chain.from_iterable([ viewitems(c.__dict__) for c in itertools.chain([cls], cls.__bases__) ])
         for k, v in attrs:
-            if not k.startswith('_') and type(v) in ScalarTypes:
+            if not k.startswith('_') and isinstance(v, ScalarTypes):
                 yield (k, v)
 
     @classmethod
@@ -153,7 +173,7 @@ class CONST_CONTAINER(object):
 
     @classmethod
     def ALL(cls):
-        return tuple([ v for _, v in cls.getIterator() ])
+        return tuple((v for _, v in cls.getIterator()))
 
     @classmethod
     def __doInit(cls):
@@ -222,7 +242,7 @@ class BitmaskHelper(object):
 
     @classmethod
     def getSetBitIndexes(cls, mask):
-        return [ i for i in BitmaskHelper.iterateSetBitsIndexes(mask) ]
+        return list(BitmaskHelper.iterateSetBitsIndexes(mask))
 
     @classmethod
     def iterateSetBitsIndexes(cls, number):
@@ -255,6 +275,30 @@ class AlwaysValidObject(object):
     def __call__(self, *args, **kwargs):
         return AlwaysValidObject()
 
+    def __len__(self):
+        pass
+
+    def __eq__(self, other):
+        return False
+
+    def __hash__(self):
+        return id(self)
+
+    def __add__(self, other):
+        return AlwaysValidObject()
+
+    def __sub__(self, other):
+        return AlwaysValidObject()
+
+    def __mul__(self, mul):
+        return AlwaysValidObject()
+
+    def __floordiv__(self, mul):
+        return AlwaysValidObject()
+
+    def __truediv__(self, mul):
+        return AlwaysValidObject()
+
     def getName(self):
         return self.__name
 
@@ -265,7 +309,7 @@ class AlwaysValidObject(object):
 
 def updateDict(sourceDict, diffDict):
     if isinstance(diffDict, dict):
-        for key, value in diffDict.iteritems():
+        for key, value in viewitems(diffDict):
             if value is None:
                 sourceDict.pop(key, None)
                 continue
@@ -278,7 +322,7 @@ def updateDict(sourceDict, diffDict):
 
 
 def isDefaultDict(sourceDict, defaultDict):
-    for k, v in defaultDict.iteritems():
+    for k, v in viewitems(defaultDict):
         if k not in sourceDict:
             return False
         if sourceDict[k] != v:
@@ -315,7 +359,7 @@ def timeit(method):
 
 
 def inPercents(fraction, digitsToRound=1):
-    return round(fraction * 100, digitsToRound)
+    return decimal_round(fraction * 100, digitsToRound)
 
 
 def skipInEditor(method):

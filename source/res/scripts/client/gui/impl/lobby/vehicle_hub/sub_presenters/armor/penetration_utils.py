@@ -17,7 +17,7 @@ from gui.impl.gen.view_models.views.lobby.vehicle_hub.views.sub_models.armor_mod
 from items.components.component_constants import MODERN_HE_PIERCING_POWER_REDUCTION_FACTOR_FOR_SHIELDS, MODERN_HE_DAMAGE_ABSORPTION_FACTOR
 from skeletons.account_helpers.settings_core import ISettingsCore
 if typing.TYPE_CHECKING:
-    from Vehicle import SegmentCollisionResultExt
+    from helpers.collisions import SegmentCollisionResultExt
     from items.components.gun_components import GunShot
 ShellParams = namedtuple('ShellParams', ('shellCaliber', 'shellPiercingFull', 'shellPiercingMin', 'shellPiercingMax', 'shellPiercingPowerRandomization', 'normalizationAngle', 'ricochetAngleCos', 'shellJetLossPPByDist', 'shellMayRicochet', 'shellCheckCaliberForRicochet', 'shieldPenetration', 'shellTypeMaxDamage', 'useHEShell'))
 PenetrationInfo = namedtuple('PenetrationInfo', ('chance', 'color', 'resultType'))

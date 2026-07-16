@@ -9,29 +9,30 @@ from gui.impl.lobby.platoon.view.platoon_members_view import SquadMembersView, B
 from gui.impl.gen.view_models.views.lobby.platoon.slot_model import SlotModel
 from gui.impl.lobby.platoon.view.subview.platoon_chat_subview import ChatSubview
 from gui.prb_control.entities.listener import IGlobalListener
+from gui.prb_control.entities.base.unit.listener import IUnitListener
 from gui.prb_control.settings import UNIT_RESTRICTION
 from gui.Scaleform.daapi.view.lobby.prb_windows.squad_action_button_state_vo import SquadActionButtonStateVO
 from last_stand.gui.ls_gui_constants import PREBATTLE_ACTION_NAME, DifficultyLevel, QUEUE_TYPE_TO_DIFFICULTY_LEVEL
 from last_stand.gui.impl.gen.view_models.views.lobby.difficulty_dropdown_item_model import DifficultyDropdownItemModel
 from last_stand.gui.impl.gen.view_models.views.lobby.ext_members_window_model import ExtMembersWindowModel, PrebattleTypes
 from last_stand.gui.shared.event_dispatcher import isViewLoaded, closeViewsByID
-from last_stand.gui.impl.lobby.ls_helpers.platoon_helpers import getPlatoonSlotsData
+from last_stand.gui.impl.lobby.ls_helpers.platoon_helpers import getPlatoonSlotsData, slotsPlayerSortKey
 from last_stand.skeletons.difficulty_level_controller import IDifficultyLevelController
 from last_stand_common.last_stand_constants import UNIT_LS_EXTRA_DATA_KEY, CURRENT_QUEUE_TYPE_KEY, UNIT_DIFFICULTY_LEVELS_KEY, DEFAULT_UNIT_DIFFICULTY_LEVELS
 from helpers import i18n, dependency
 
-class ExtMembersView(SquadMembersView, IGlobalListener):
+class ExtMembersView(SquadMembersView, IGlobalListener, IUnitListener):
     _prebattleType = PrebattleTypes.LASTSTAND
     _layoutID = R.views.last_stand.lobby.MembersWindow()
     _difficultyCtrl = dependency.descriptor(IDifficultyLevelController)
     _DROPDOWN_ORDER = [DifficultyLevel.EASY, DifficultyLevel.MEDIUM, DifficultyLevel.HARD]
 
-    def __init__(self, prbType):
-        super(ExtMembersView, self).__init__(prbType)
-        self.viewModel.setShouldShowFindPlayersButton(False)
-
     def getPrebattleType(self):
         return PREBATTLE_ACTION_NAME.LAST_STAND
+
+    def onUnitFlagsChanged(self, flags, timeLeft):
+        if flags.isSearchStateChanged():
+            self.__updateDropdownState()
 
     @property
     def _viewModelClass(self):
@@ -43,9 +44,6 @@ class ExtMembersView(SquadMembersView, IGlobalListener):
 
     def _addSubviews(self):
         self._addSubviewToLayout(ChatSubview())
-
-    def _onFindPlayers(self):
-        pass
 
     def _onLoading(self, *args, **kwargs):
         super(ExtMembersView, self)._onLoading(*args, **kwargs)
@@ -95,6 +93,11 @@ class ExtMembersView(SquadMembersView, IGlobalListener):
         body = backport.text(tooltip.body())
         return self._createSimpleTooltipContent(header=header, body=body)
 
+    def _hasFreeSlots(self):
+        entity = self._platoonCtrl.getPrbEntity()
+        _, unit = entity.getUnit()
+        return False if not unit else len(unit.getFreeSlots()) > 0
+
     def _updateMembers(self):
         super(ExtMembersView, self)._updateMembers()
         self.__updateDropdownState()
@@ -128,7 +131,7 @@ class ExtMembersView(SquadMembersView, IGlobalListener):
             return
         queueType = unit._extras.get(CURRENT_QUEUE_TYPE_KEY)
         slots, squadSize = getPlatoonSlotsData(self._platoonCtrl.getPrbEntity(), queueType)
-        slots.sort(key=self.__playerTimeJoin)
+        slots.sort(key=slotsPlayerSortKey)
         return slots[:squadSize]
 
     def _updateCommandersDifficultyLevel(self):
@@ -179,6 +182,7 @@ class ExtMembersView(SquadMembersView, IGlobalListener):
             self.__initDifficultyDropdown(model)
 
     def onUnitPlayerRolesChanged(self, pInfo, pPermissions):
+        self.__updateDropdownState()
         entity = self._platoonCtrl.getPrbEntity()
         _, unit = entity.getUnit()
         if entity.isCommander() and unit:
@@ -209,6 +213,10 @@ class ExtMembersView(SquadMembersView, IGlobalListener):
         with self.viewModel.transaction() as model:
             self.__initDifficultyDropdown(model)
 
+    def _updateFindPlayersButton(self, *args):
+        super(ExtMembersView, self)._updateFindPlayersButton(args)
+        self.__updateDropdownState()
+
     @adisp_process
     def _onSwitchReady(self):
         result = yield self._platoonCtrl.togglePlayerReadyAction(skipAmmocheck=True)
@@ -235,11 +243,9 @@ class ExtMembersView(SquadMembersView, IGlobalListener):
             channelCtrl.addMessage(text)
 
     def __updateDropdownState(self):
+        entity = self._platoonCtrl.getPrbEntity()
         with self.viewModel.transaction() as model:
-            model.setSelectionDisabled(self._platoonCtrl.isInQueue())
-
-    @staticmethod
-    def __playerTimeJoin(slot):
-        player = slot['player'] or {}
-        roleIndex = -slot['role'] if not player.get('isOffline') else 0
-        return (not player, roleIndex, player.get('timeJoin', 0))
+            isInSearch = self._platoonCtrl.isInSearch()
+            model.setSelectionDisabled(self._platoonCtrl.isInQueue() or isInSearch or not entity.isCommander())
+            model.setIsInSearch(isInSearch)
+            model.setHasFreeSlots(self._hasFreeSlots())

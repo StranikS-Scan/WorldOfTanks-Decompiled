@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/game_params_common/schema.py
+from __future__ import absolute_import
 import typing
 from constants import IS_CLIENT, IS_BASEAPP, IS_CELLAPP
-from dict2model.fields import Field
 from dict2model.schemas import Schema, SchemaModelType
 from dict2model.types import SchemaModelClassesType, ValidatorsType
 if typing.TYPE_CHECKING:
+    from dict2model.fields import Field
     from section2dict import TReaders
 
 class GameParamsSchema(Schema[SchemaModelType]):

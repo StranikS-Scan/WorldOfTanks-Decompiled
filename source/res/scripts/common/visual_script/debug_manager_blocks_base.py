@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/debug_manager_blocks_base.py
-from visual_script.block import Block, Meta
-from visual_script.misc import ASPECT, errorVScript
-from visual_script.slot_types import SLOT_TYPE, arrayOf
+from __future__ import absolute_import
 import DebugManager
 from DebugManager import COLORS, isGroupEnabled, setGroupEnabled
+from visual_script.block import Block, Meta
+from visual_script.misc import ASPECT, errorVScript
+from visual_script.slot_types import SLOT_TYPE
 
 def uint32toInt32(value):
     if value <= 2147483647:

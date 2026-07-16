@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/links.py
+from __future__ import absolute_import
 import re
 from gui import macroses
 from debug_utils import LOG_ERROR
@@ -12,8 +13,8 @@ class URLMacros(object):
         super(URLMacros, self).__init__()
         self.__asyncMacroses = macroses.getAsyncMacroses()
         self.__syncMacroses = macroses.getSyncMacroses()
-        macrosKeys = self.__syncMacroses.keys()
-        macrosKeys.extend(self.__asyncMacroses.keys())
+        macrosKeys = list(self.__syncMacroses)
+        macrosKeys.extend(self.__asyncMacroses)
         if allowedMacroses is not None:
             macrosKeys = [ key for key in macrosKeys if key in allowedMacroses ]
         patterns = []

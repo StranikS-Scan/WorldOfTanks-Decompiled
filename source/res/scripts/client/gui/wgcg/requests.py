@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgcg/requests.py
-import types
 import weakref
 from client_request_lib.exceptions import ResponseCodes
 from debug_utils import LOG_WARNING, LOG_DEBUG
@@ -64,7 +63,7 @@ class WgcgRequester(ClientRequestsByIDProcessor):
         return super(WgcgRequester, self).doRequestEx(ctx, callback, methodName, *args, **kwargs)
 
     def _getSenderMethod(self, sender, methodName):
-        if isinstance(methodName, types.TupleType):
+        if isinstance(methodName, tuple):
             storageName, methodName = methodName
             sender = getattr(sender, storageName, None)
         return super(WgcgRequester, self)._getSenderMethod(sender, methodName)

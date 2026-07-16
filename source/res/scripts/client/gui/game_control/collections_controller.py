@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/collections_controller.py
+from __future__ import absolute_import
 import logging
 from collections import OrderedDict
 import typing
+from future.utils import itervalues, viewvalues
 from Event import Event, EventManager
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import COLLECTIONS_SECTION, COLLECTION_WAS_ENABLED
@@ -81,7 +83,7 @@ class CollectionsSystemController(ICollectionsSystemController, EventsHandler):
         return collection
 
     def getCollectionByName(self, collectionName):
-        collection = first((c for c in self.__getConfig().collections.itervalues() if c.name == collectionName))
+        collection = first((c for c in itervalues(self.__getConfig().collections) if c.name == collectionName))
         if collection is None:
             _logger.error('Collection with name <%s> does not exist!', collectionName)
         return collection
@@ -94,7 +96,7 @@ class CollectionsSystemController(ICollectionsSystemController, EventsHandler):
         return [collectionId]
 
     def getCollectionIDs(self):
-        return self.__getConfig().collections.keys()
+        return list(self.__getConfig().collections)
 
     def isRelatedEventActive(self, collectionId):
         collection = self.getCollection(collectionId)
@@ -108,7 +110,7 @@ class CollectionsSystemController(ICollectionsSystemController, EventsHandler):
         return len(self.getCollection(collectionId).items)
 
     def getMaxProgressItemCount(self, collectionId):
-        return sum((not item.isSpecial for item in self.getCollection(collectionId).items.itervalues()))
+        return sum((not item.isSpecial for item in viewvalues(self.getCollection(collectionId).items)))
 
     def getNewCollectionItemCount(self, collectionId):
         collection = self.getCollection(collectionId)
@@ -116,19 +118,19 @@ class CollectionsSystemController(ICollectionsSystemController, EventsHandler):
             _logger.error('Collection with id <%s> does not exist!', collectionId)
             return 0
         else:
-            return sum((self.isItemReceived(collectionId, item.itemId) and isItemNew(collectionId, item.itemId) for item in collection.items.itervalues()))
+            return sum((self.isItemReceived(collectionId, item.itemId) and isItemNew(collectionId, item.itemId) for item in viewvalues(collection.items)))
 
     def getNewLinkedCollectionsItemCount(self, collectionId):
         return sum((self.getNewCollectionItemCount(linkedId) for linkedId in self.getLinkedCollections(collectionId)))
 
     def getReceivedItemCount(self, collectionId):
         balance = self.__entitlementsCache.getCollectionBalance(collectionId)
-        return sum((code.startswith(COLLECTION_ITEM_PREFIX_NAME) for code in balance.iterkeys()))
+        return sum((code.startswith(COLLECTION_ITEM_PREFIX_NAME) for code in balance))
 
     def getReceivedProgressItemCount(self, collectionId):
         balance = self.__entitlementsCache.getCollectionBalance(collectionId)
         collection = self.getCollection(collectionId)
-        items = set((makeCollectionItemEntitlementName(collectionId, item.itemId) for item in collection.items.itervalues() if not item.isSpecial))
+        items = {makeCollectionItemEntitlementName(collectionId, item.itemId) for item in viewvalues(collection.items) if not item.isSpecial}
         return len(items.intersection(balance.keys()))
 
     def isRewardReceived(self, collectionId, requiredCount):

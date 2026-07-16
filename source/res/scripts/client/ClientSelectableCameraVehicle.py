@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/ClientSelectableCameraVehicle.py
 from __future__ import absolute_import
 from collections import namedtuple
+import CGF
 import Math
 import BigWorld
 from ClientSelectableCameraObject import ClientSelectableCameraObject
@@ -16,8 +17,8 @@ _VehicleTransformParams = namedtuple('_VehicleTransformParams', ('targetPos', 'r
 class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
     appearance = property(lambda self: self.__vAppearance)
 
-    def __init__(self):
-        ClientSelectableCameraObject.__init__(self)
+    def __init__(self, name='ClientSelectableCameraVehicle'):
+        ClientSelectableCameraObject.__init__(self, name)
         self.__vAppearance = None
         self.typeDescriptor = None
         self.__onLoadedCallback = None
@@ -123,9 +124,6 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         maxY = boundsTurret.translation.y + boundsTurret.get(1, 1)
         return maxY - minY
 
-    def getModelLength(self):
-        return self.__vAppearance.computeVehicleLength() if self.__vAppearance else 0
-
     @property
     def isVehicleLoaded(self):
         return self._isVehicleLoaded
@@ -149,13 +147,14 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         if self.__isHighlightable():
             super(ClientSelectableCameraVehicle, self)._addEdgeDetect()
             go = self.__vAppearance.gameObject
-            go.createComponent(EdgeHighlightComponent, 0, False, self.edgeMode, False)
+            queue = CGF.CommandQueue(go.spaceID)
+            queue.createComponent(go, EdgeHighlightComponent, 0, False, self.edgeMode, False)
 
     def _delEdgeDetect(self):
         if self.__isHighlightable():
             super(ClientSelectableCameraVehicle, self)._delEdgeDetect()
             go = self.__vAppearance.gameObject
-            go.removeComponentByType(EdgeHighlightComponent)
+            go.removeComponent(EdgeHighlightComponent)
 
     def __isHighlightable(self):
         return self.__vAppearance is not None and not self.__vAppearance.isDestroyed

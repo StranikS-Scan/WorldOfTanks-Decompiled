@@ -78,7 +78,6 @@ class SupportWeaponComponent(VehicleDynamicComponent, IMechanicComponent, IMecha
 
     def _onAppearanceReady(self):
         super(SupportWeaponComponent, self)._onAppearanceReady()
-        self.__mechanicPrefabSpawner.loadAppearancePrefab()
         self.__statesEvents.processStatePrepared()
 
     def _onComponentAppearanceUpdate(self, **kwargs):

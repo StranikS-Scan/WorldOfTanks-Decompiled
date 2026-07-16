@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/gui/shared/utils/requesters.py
+from __future__ import absolute_import
 import typing
 if typing.TYPE_CHECKING:
     from typing import Dict, Generator, List, NamedTuple, Optional, Sequence, Set, Tuple, Union
@@ -51,7 +52,7 @@ class IInventoryRequester(IRequester):
     def getC11nItemAppliedVehicles(self, itemCD):
         raise NotImplementedError
 
-    def getC11nItemAppliedOnVehicleCount(self, itemCD, vehicleCD):
+    def getC11nItemAppliedOnVehicleCount(self, itemCD, vehicleIntCD):
         raise NotImplementedError
 
     def initC11nItemsNoveltyData(self):
@@ -93,7 +94,7 @@ class IInventoryRequester(IRequester):
     def getVehicleData(self, vehInvID):
         raise NotImplementedError
 
-    def getOutfitData(self, intCompactDescr, season):
+    def getOutfitData(self, intCD, season):
         raise NotImplementedError
 
     def getPreviousItem(self, itemTypeID, invDataIdx):
@@ -901,19 +902,19 @@ class IEpicMetaGameRequester(IRequester):
 
 class IBlueprintsRequester(IRequester):
 
-    def getBlueprintCount(self, vehicleCD, vehicleLevel):
+    def getBlueprintCount(self, vehicleCD, vLevel):
         raise NotImplementedError
 
-    def getBlueprintData(self, vehicleCD, vehicleLevel):
+    def getBlueprintData(self, vehicleCD, vLevel):
         raise NotImplementedError
 
-    def getBlueprintDiscount(self, vehicleCD, vehicleLevel, potentialFilledCount=0):
+    def getBlueprintDiscount(self, vehicleCD, vLevel, potentialFilledCount=0):
         raise NotImplementedError
 
     def getRequiredCountAndDiscount(self, vehicleCD, vLevel):
         raise NotImplementedError
 
-    def getFragmentDiscountAndCost(self, vehicleCD, vehicleLevel, xpFullCost):
+    def getFragmentDiscountAndCost(self, vehicleCD, vLevel, xpFullCost):
         raise NotImplementedError
 
     def getAllNationalFragmentsData(self):
@@ -934,7 +935,7 @@ class IBlueprintsRequester(IRequester):
     def getIntelligenceCount(self):
         raise NotImplementedError
 
-    def getRequiredIntelligenceAndNational(self, vLevel):
+    def getRequiredIntelligenceAndNational(self, vehicleLevel):
         raise NotImplementedError
 
     def hasUniversalFragments(self):
@@ -949,7 +950,7 @@ class IBlueprintsRequester(IRequester):
     def getConvertibleFragmentCount(self, vehicleCD, vehicleLevel):
         raise NotImplementedError
 
-    def getLayout(self, vehicleCD, vehicleLevel):
+    def getLayout(self, vehicleCD, vLevel):
         raise NotImplementedError
 
     def isBlueprintsAvailable(self):
@@ -1250,4 +1251,10 @@ class IPetSystemRequester(IRequester):
         raise NotImplementedError
 
     def getFirstClickedSynergyPets(self):
+        raise NotImplementedError
+
+
+class IChallengesRequester(IRequester):
+
+    def getUsedFreeRestarts(self, challengeID):
         raise NotImplementedError

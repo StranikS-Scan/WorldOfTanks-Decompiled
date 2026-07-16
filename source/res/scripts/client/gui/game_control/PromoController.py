@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/PromoController.py
+from __future__ import absolute_import
 import logging
 import typing
 from collections import namedtuple
@@ -275,8 +276,7 @@ class PromoController(IPromoController):
         self.__notificationsCtrl.onEventNotificationsChanged -= self.__onEventNotification
         g_eventBus.removeListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
         self.__browserCreationCallbacks = {}
-        watcherKeys = self.__browserWatchers.keys()
-        for browserID in watcherKeys:
+        for browserID in list(self.__browserWatchers):
             self.__clearWatcher(browserID)
 
         return

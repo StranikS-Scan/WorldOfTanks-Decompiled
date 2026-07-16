@@ -37,9 +37,10 @@ class RewardPathView(ViewComponent[RewardPathViewModel]):
     difficultyCtrl = dependency.descriptor(IDifficultyLevelController)
     _MAX_BONUSES_IN_VIEW = 6
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, ctx, *args, **kwargs):
         super(RewardPathView, self).__init__(R.views.last_stand.mono.lobby.reward_path_view(), RewardPathViewModel, *args, **kwargs)
         self.__bonusCache = {}
+        self.__openFromQuestCard = ctx.get('openFromQuestCard', False)
         self.__idGen = SequenceIDGenerator()
 
     @property
@@ -92,6 +93,7 @@ class RewardPathView(ViewComponent[RewardPathViewModel]):
 
     def __fillItems(self):
         with self.viewModel.transaction() as tx:
+            tx.setOpenFromQuestCard(self.__openFromQuestCard)
             self.__fillArtefacts(tx)
 
     def __fillArtefacts(self, tx):

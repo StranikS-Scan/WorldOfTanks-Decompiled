@@ -45,6 +45,7 @@ class AppearanceCache(IAppearanceCache):
         if key in self.__appearanceCache:
             _logger.debug('getAppearance of (%d) is in __appearanceCache', vId)
             appearance = self.__appearanceCache.get(key)
+            appearance.actualize(info)
             if onCreatedCallback is not None:
                 onCreatedCallback(appearance)
             return appearance
@@ -75,6 +76,7 @@ class AppearanceCache(IAppearanceCache):
         if info is not None:
             _logger.debug('stopLoadResourceListBGTask vehicle = (%d), task = (%d)', vId, info.taskId)
             info.onConstructed.clear()
+            info.appearance.destroy()
             BigWorld.stopLoadResourceListBGTask(info.taskId)
         return
 
@@ -103,6 +105,7 @@ class AppearanceCache(IAppearanceCache):
         for task in self.__loadingAssemblerQueue.itervalues():
             BigWorld.stopLoadResourceListBGTask(task.taskId)
             task.onConstructed.clear()
+            task.appearance.destroy()
 
         self.__loadingAssemblerQueue.clear()
         self.__resourceCache.clear()

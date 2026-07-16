@@ -6,8 +6,7 @@ import Math
 import BigWorld
 from death_zones_helpers import ZONE_STATE, idxFrom, zoneIdFrom, ZONES_SIZE
 from constants import IS_CLIENT
-from cgf_script.managers_registrator import Rule, registerManager, onProcessQuery, registerRule
-from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes
+from cgf_script.registration import ComponentProperty, registerComponent
 if IS_CLIENT:
     from gui.shared import g_eventBus, EVENT_BUS_SCOPE
     from battle_royale.gui.shared.events import DeathZoneEvent
@@ -32,15 +31,51 @@ DeathZoneWallParameters = namedtuple('DeathZoneWallParameters', ['enableCenter',
  'groundLineHeight',
  'groundLineAlpha'])
 
-class DeathZoneDrawManager(CGF.ComponentManager):
+@registerComponent
+class DeathZoneComponentSettings(object):
+    category = 'Steel Hunter'
+    editorTitle = 'Death Zones Mechanics Rule'
+    domain = CGF.Domain.Client
+    activeEnableCenter = ComponentProperty(type=CGF.PropertyType.Bool, value=True, editorName='Active Enable Center Point')
+    activeMaxAlpha = ComponentProperty(type=CGF.PropertyType.Float, value=0.5, editorName='Max Alpha')
+    activeCentarAlpha = ComponentProperty(type=CGF.PropertyType.Float, value=0.35, editorName='Active Center Alpha')
+    activeWallHeight = ComponentProperty(type=CGF.PropertyType.Float, value=32.0, editorName='Active Wall Height')
+    activeCenterHeight = ComponentProperty(type=CGF.PropertyType.Float, value=16.0, editorName='Active Center Height')
+    activeGroundLineHeight = ComponentProperty(type=CGF.PropertyType.Float, value=16.0, editorName='Active Ground Line Height')
+    activeGroundLineAlpha = ComponentProperty(type=CGF.PropertyType.Float, value=16.0, editorName=' Active Ground Line Alpha')
+    activeColor = ComponentProperty(type=CGF.PropertyType.Vector4, value=Math.Vector4(0.8, 0.0, 0.0, 0.0), editorName='Active color')
+    waitingEnableCenter = ComponentProperty(type=CGF.PropertyType.Bool, value=False, editorName='Waiting Enable Center Point')
+    waitingMaxAlpha = ComponentProperty(type=CGF.PropertyType.Float, value=0.5, editorName='Waiting Max Alpha')
+    waitingCentarAlpha = ComponentProperty(type=CGF.PropertyType.Float, value=0.5, editorName='Waiting Center Alpha')
+    waitingWallHeight = ComponentProperty(type=CGF.PropertyType.Float, value=16.0, editorName='Waiting Wall Height')
+    waitingCenterHeight = ComponentProperty(type=CGF.PropertyType.Float, value=16.0, editorName='Waiting Center Height')
+    waitingGroundLineHeight = ComponentProperty(type=CGF.PropertyType.Float, value=16.0, editorName='Waiting Ground Line Height')
+    waitingGroundLineAlpha = ComponentProperty(type=CGF.PropertyType.Float, value=16.0, editorName='Waiting Ground Line Alpha')
+    waitingColor = ComponentProperty(type=CGF.PropertyType.Vector4, value=Math.Vector4(1.0, 0.6, 0.0, 0.0), editorName='Waiting Color')
 
-    def __init__(self, args):
-        super(DeathZoneDrawManager, self).__init__(args)
-        self.activeWall, self.waitingWall = args
+
+class DeathZoneDrawSystem(CGF.System):
+    DeathZonesIterate = CGF.IterateReaction(CGF.ActiveOnly, CGF.Rw(ArenaInfoDeathZonesComponent))
+    SettingsCreate = CGF.CreateReaction(CGF.ReactRw(DeathZoneComponentSettings))
+    Reactions = CGF.Reactions(DeathZonesIterate, SettingsCreate)
+
+    def commonUpdate(self):
+        for settings in self.reaction(self.SettingsCreate):
+            self.activeWall = DeathZoneWallParameters(settings.activeEnableCenter, settings.activeMaxAlpha, settings.activeCentarAlpha, settings.activeWallHeight, settings.activeCenterHeight, settings.activeColor, settings.activeGroundLineHeight, settings.activeGroundLineAlpha)
+            self.waitingWall = DeathZoneWallParameters(settings.waitingEnableCenter, settings.waitingMaxAlpha, settings.waitingCentarAlpha, settings.waitingWallHeight, settings.waitingCenterHeight, settings.waitingColor, settings.waitingGroundLineHeight, settings.waitingGroundLineAlpha)
+
+    def periodUpdate(self):
+        for deathZone in self.reaction(self.DeathZonesIterate):
+            self.onProcess(deathZone)
+
+    def __init__(self):
+        super(DeathZoneDrawSystem, self).__init__()
+        self.activeWall = None
+        self.waitingWall = None
         self.__hashedBoundingBox = None
         return
 
-    def activate(self):
+    def onMappingLoaded(self):
         boundingBox = self.__getBoundingBox()
         self._cornerPosition = Math.Vector3(boundingBox[0][0], 0, boundingBox[0][1])
         self._zoneSizeX, self._zoneSizeY = (boundingBox[1] - boundingBox[0]).tuple()
@@ -51,12 +86,11 @@ class DeathZoneDrawManager(CGF.ComponentManager):
         self._zonePositionOffset = Math.Vector3(halfSizeX, 0, halfSizeY)
         self._zoneScale = Math.Vector4(-halfSizeX, -halfSizeY, halfSizeX, halfSizeY)
 
-    @onProcessQuery(ArenaInfoDeathZonesComponent, tickGroup='Simulation', period=_UPDATE_PERIOD)
-    def onProcess(self, deathZones):
-        if deathZones.updatedZones:
-            g_eventBus.handleEvent(DeathZoneEvent(DeathZoneEvent.UPDATE_DEATH_ZONE, ctx={'deathZones': deathZones}), scope=EVENT_BUS_SCOPE.BATTLE)
-            self._updateZones(deathZones)
-            deathZones.updatedZones = []
+    def onProcess(self, zone):
+        if zone.updatedZones:
+            g_eventBus.handleEvent(DeathZoneEvent(DeathZoneEvent.UPDATE_DEATH_ZONE, ctx={'deathZones': zone}), scope=EVENT_BUS_SCOPE.BATTLE)
+            self._updateZones(zone)
+            zone.updatedZones = []
 
     def _updateZones(self, deathZones):
         for zoneID in deathZones.updatedZones:
@@ -119,30 +153,3 @@ class DeathZoneDrawManager(CGF.ComponentManager):
         if self.__hashedBoundingBox is None:
             self.__hashedBoundingBox = BigWorld.player().arena.arenaType.boundingBox
         return self.__hashedBoundingBox
-
-
-@registerRule
-class DeathZonesRule(Rule):
-    category = 'Steel Hunter'
-    editorTitle = 'Death Zones Mechanics Rule'
-    domain = CGF.DomainOption.DomainAll
-    activeEnableCenter = ComponentProperty(type=CGFMetaTypes.BOOL, value=True, editorName='Active Enable Center Point')
-    activeMaxAlpha = ComponentProperty(type=CGFMetaTypes.FLOAT, value=0.5, editorName='Max Alpha')
-    activeCentarAlpha = ComponentProperty(type=CGFMetaTypes.FLOAT, value=0.35, editorName='Active Center Alpha')
-    activeWallHeight = ComponentProperty(type=CGFMetaTypes.FLOAT, value=32.0, editorName='Active Wall Height')
-    activeCenterHeight = ComponentProperty(type=CGFMetaTypes.FLOAT, value=16.0, editorName='Active Center Height')
-    activeGroundLineHeight = ComponentProperty(type=CGFMetaTypes.FLOAT, value=16.0, editorName='Active Ground Line Height')
-    activeGroundLineAlpha = ComponentProperty(type=CGFMetaTypes.FLOAT, value=16.0, editorName=' Active Ground Line Alpha')
-    activeColor = ComponentProperty(type=CGFMetaTypes.VECTOR4, value=Math.Vector4(0.8, 0.0, 0.0, 0.0), editorName='Active color')
-    waitingEnableCenter = ComponentProperty(type=CGFMetaTypes.BOOL, value=False, editorName='Waiting Enable Center Point')
-    waitingMaxAlpha = ComponentProperty(type=CGFMetaTypes.FLOAT, value=0.5, editorName='Waiting Max Alpha')
-    waitingCentarAlpha = ComponentProperty(type=CGFMetaTypes.FLOAT, value=0.5, editorName='Waiting Center Alpha')
-    waitingWallHeight = ComponentProperty(type=CGFMetaTypes.FLOAT, value=16.0, editorName='Waiting Wall Height')
-    waitingCenterHeight = ComponentProperty(type=CGFMetaTypes.FLOAT, value=16.0, editorName='Waiting Center Height')
-    waitingGroundLineHeight = ComponentProperty(type=CGFMetaTypes.FLOAT, value=16.0, editorName='Waiting Ground Line Height')
-    waitingGroundLineAlpha = ComponentProperty(type=CGFMetaTypes.FLOAT, value=16.0, editorName='Waiting Ground Line Alpha')
-    waitingColor = ComponentProperty(type=CGFMetaTypes.VECTOR4, value=Math.Vector4(1.0, 0.6, 0.0, 0.0), editorName='Waiting Color')
-
-    @registerManager(DeathZoneDrawManager)
-    def registerDeathZonesDrawManager(self):
-        return (DeathZoneWallParameters(self.activeEnableCenter, self.activeMaxAlpha, self.activeCentarAlpha, self.activeWallHeight, self.activeCenterHeight, self.activeColor, self.activeGroundLineHeight, self.activeGroundLineAlpha), DeathZoneWallParameters(self.waitingEnableCenter, self.waitingMaxAlpha, self.waitingCentarAlpha, self.waitingWallHeight, self.waitingCenterHeight, self.waitingColor, self.waitingGroundLineHeight, self.waitingGroundLineAlpha))

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/arena_component_system/step_repair_point_component.py
-from client_arena_component_system import ClientArenaComponent
+from __future__ import absolute_import
+from arena_component_system.client_arena_component_system import ClientArenaComponent
 import Event
 
 class StepRepairPointComponent(ClientArenaComponent):

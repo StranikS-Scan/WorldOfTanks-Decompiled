@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/comp7_helpers.py
+from __future__ import absolute_import
 import collections
 import operator
+from functools import reduce
+from future.utils import viewitems
 from dossiers2.common.updater_utils import getStaticSizeBlockRecordValues, getDictBlockRecordValues, updateDictRecords, addRecords, removeRecords, updateStaticSizeBlockRecords
 SEASON_KEY = 'comp7Season'
 MAX_SEASON_KEY = 'maxComp7Season'
@@ -26,13 +29,13 @@ def getCutSeasonsRecords(seasonKey, seasonsNumber, ctx):
 
 
 def getSumSeasonsValues(seasonsValues):
-    return dict(reduce(operator.add, map(collections.Counter, seasonsValues)))
+    return dict(reduce(operator.add, (collections.Counter(value) for value in seasonsValues)))
 
 
 def getMaxSeasonsValues(seasonsValues):
     maxValues = seasonsValues[0]
     for seasonValues in seasonsValues[1:]:
-        for key, value in seasonValues.iteritems():
+        for key, value in viewitems(seasonValues):
             if key.endswith('Vehicle'):
                 continue
             if value >= maxValues.get(key):
@@ -46,7 +49,7 @@ def getMaxSeasonsValues(seasonsValues):
 
 def prepareArchiveSeasonsRecords(values, packing):
     archiveRecords = []
-    for key, packingFormat in packing.iteritems():
+    for key, packingFormat in viewitems(packing):
         archiveRecords.append((packingFormat[0], packingFormat[1], values.get(key, 0)))
 
     return archiveRecords
@@ -55,7 +58,7 @@ def prepareArchiveSeasonsRecords(values, packing):
 def prepareArchiveCutSeasonsRecords(cutSeasonsValues):
     cutArchiveRecords = cutSeasonsValues[0]
     for seasonValue in cutSeasonsValues[1:]:
-        for key, value in seasonValue.iteritems():
+        for key, value in viewitems(seasonValue):
             archiveValue = cutArchiveRecords.setdefault(key, (0, 0, 0, 0))
             cutArchiveRecords[key] = tuple(map(sum, tuple(zip(archiveValue, value))))
 

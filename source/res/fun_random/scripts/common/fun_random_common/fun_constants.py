@@ -18,8 +18,7 @@ class FunSubModeImpl(object):
     UNDEFINED = 0
     DEFAULT = 1
     DEV_TEST = 2
-    EQUALIZE = 4
-    ALL = (DEFAULT, EQUALIZE) + ((DEV_TEST,) if constants.IS_DEVELOPMENT else ())
+    ALL = (DEFAULT,) + ((DEV_TEST,) if constants.IS_DEVELOPMENT else ())
 
 
 class FunProgressionCondition(object):

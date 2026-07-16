@@ -5,6 +5,7 @@ import BigWorld
 class BattleXPArenaInfo(BigWorld.DynamicScriptComponent):
 
     def __init__(self):
+        super(BattleXPArenaInfo, self).__init__()
         self.__setAverageLevel()
 
     def set_vehiclesAverageBattleLevel(self, _):

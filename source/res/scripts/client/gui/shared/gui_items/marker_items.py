@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/marker_items.py
+from __future__ import absolute_import
 import Math
 import copy
 import ResMgr
@@ -43,7 +44,7 @@ class MarkerParamsFactory(object):
     @classmethod
     def buildBitMask(cls, params):
         bitMask = FLAG.NONE
-        for key in params.iterkeys():
+        for key in params:
             if key in FLAG.LIST:
                 bitMask |= key
 

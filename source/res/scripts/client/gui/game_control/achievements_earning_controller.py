@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/achievements_earning_controller.py
+from __future__ import absolute_import
 import typing
 import BigWorld
 from constants import IS_DEVELOPMENT

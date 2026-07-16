@@ -77,6 +77,7 @@ from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CANT_SHOOT_E
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.game_loading.resources.consts import Milestones
 from gui.prb_control.formatters import messages
+from gui.shared.system_factory import collectTeamVoipSupport
 from gui.sounds.epic_sound_constants import EPIC_SOUND
 from gui.wgnc import g_wgncProvider
 from gui.shared.gui_items.marker_items import DEFAULT_MARKER
@@ -362,6 +363,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
              1.0]
             if not g_offlineMapCreator.Active():
                 self.guiSessionProvider.start(BattleSessionSetup(avatar=self, replayCtrl=BattleReplay.g_replayCtrl))
+            self.arena.componentSystem.activate()
             self.__forcedGuiCtrlModeFlags = GUI_CTRL_MODE_FLAG.CURSOR_DETACHED
             self.__cruiseControlMode = _CRUISE_CONTROL_MODE.NONE
             self.__stopUntilFire = False
@@ -504,6 +506,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             LOG_CURRENT_EXCEPTION()
 
         try:
+            self.arena.componentSystem.deactivate()
             self.arena.destroy()
             self.arena = None
         except Exception:
@@ -868,8 +871,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     if cmdMap.isFiredList(lrange(CommandMapping.CMD_AMMO_CHOICE_4, CommandMapping.CMD_AMMO_CHOICE_0 + 1), key):
                         gui_event_dispatcher.choiceConsumable(key)
                         return True
+                teamVoipSupportEnabled = collectTeamVoipSupport(self.arenaGuiType)
                 isComp7 = self.hasBonusCap(_CAPS.COMP7)
-                if not isComp7 and not isBR and cmdMap.isFired(CommandMapping.CMD_VOICECHAT_ENABLE, key) and not isDown:
+                skipVoipActivation = isComp7 or isBR or teamVoipSupportEnabled
+                if not skipVoipActivation and cmdMap.isFired(CommandMapping.CMD_VOICECHAT_ENABLE, key) and not isDown:
                     if self.__isPlayerInSquad() and not BattleReplay.isPlaying():
                         if VOIP.getVOIPManager().isVoiceSupported():
                             gui_event_dispatcher.toggleVoipChannelEnabled(self.arenaBonusType)
@@ -933,7 +938,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             return not app.hasGuiControlModeConsumers(BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL_FILTER_POPOVER) if self.hasBonusCap(_CAPS.COMP7) and self.arena.period <= ARENA_PERIOD.PREBATTLE else not self.isForcedGuiControlMode()
 
     def set_playerVehicleID(self, *args):
-        LOG_DEBUG('[INIT_STEPS] Avatar.set_playerVehicleID')
+        _logger.info('[INIT_STEPS] Avatar.set_playerVehicleID %d', self.playerVehicleID)
         self.__initProgress |= _INIT_STEPS.SET_PLAYER_ID
         self.__onInitStepCompleted()
         self.__isObserver = None
@@ -1019,13 +1024,12 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__reloadGUI()
 
     def vehicle_onAppearanceReady(self, vehicle):
-        LOG_DEBUG('Avatar.vehicle_onAppearanceReady')
         self.__vehicles.add(vehicle)
         AvatarObserver.vehicle_onAppearanceReady(self, vehicle)
         if vehicle.id != self.playerVehicleID:
             vehicle.targetCaps = [1]
         else:
-            LOG_DEBUG('[INIT_STEPS] Avatar.vehicle_onAppearanceReady', vehicle.id)
+            _logger.debug('[INIT_STEPS] Avatar.vehicle_onAppearanceReady %d', vehicle.id)
             vehicle.isPlayerVehicle = True
             if not self.__initProgress & _INIT_STEPS.VEHICLE_ENTERED:
                 self.vehicleTypeDescriptor = vehicle.typeDescriptor
@@ -1141,7 +1145,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def vehicle_onLeaveWorld(self, vehicle):
         self.__vehiclesWaitedInfo.pop(vehicle.id, None)
         if vehicle.id == self.playerVehicleID:
-            LOG_DEBUG('[INIT_STEPS] Avatar.vehicle_onLeaveWorld', vehicle.id)
+            _logger.debug('[INIT_STEPS] Avatar.vehicle_onLeaveWorld %d', vehicle.id)
             self.__initProgress &= ~_INIT_STEPS.VEHICLE_ENTERED
         if not vehicle.isStarted:
             if vehicle.isHidden:
@@ -1158,7 +1162,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 LOG_CURRENT_EXCEPTION()
                 raise VehicleDeinitFailureException
 
-            vehicle.model = None
             return
 
     def __onSetOwnVehicleAuxPhysicsData(self, prev):
@@ -1307,7 +1310,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             return
         else:
             vehicle = BigWorld.entity(vehicleID)
-            ammoStates = vehicle.events.collectAmmoStates()
+            ammoStates = vehicle.events.collectAmmoStates() if vehicle is not None else {}
             extraShotState = ammoStates.get(VehicleMechanic.EXTRA_SHOT_CLIP.value)
             if timeLeft == baseTime if extraShotState is None else extraShotState.isReloadAfterShot(timeLeft, baseTime):
                 self.__gunReloadCommandWaitEndTime = 0.0
@@ -1699,16 +1702,14 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             return
 
     def syncVehicleAttrs(self, vehicleID, attrs):
-        vehicleAttrs = dict(attrs)
+        _logger.debug('syncVehicleAttrs - initial %s', attrs)
         vehicle = BigWorld.entity(vehicleID)
-        if vehicle is not None:
-            vehicleAttrsCollected = vehicle.events.collectVehicleAttrs()
-            vehicleAttrs.update(vehicleAttrsCollected)
-        LOG_DEBUG('syncVehicleAttrs', vehicleAttrs)
+        attrs = vehicle.events.collectVehicleAttrs(attrs) if vehicle is not None else attrs
+        _logger.info('syncVehicleAttrs - collected %s', attrs)
         if self.guiSessionProvider.shared.prebattleSetups.isSelectionStarted():
-            self.guiSessionProvider.shared.prebattleSetups.setVehicleAttrs(self.playerVehicleID, vehicleAttrs)
+            self.guiSessionProvider.shared.prebattleSetups.setVehicleAttrs(vehicleID, attrs)
         else:
-            self.guiSessionProvider.shared.feedback.setVehicleAttrs(self.playerVehicleID, vehicleAttrs)
+            self.guiSessionProvider.shared.feedback.setVehicleAttrs(vehicleID, attrs)
         return
 
     def showTracer(self, shooterID, shotID, isRicochet, effectsIndex, prefabEffIndex, shellTypeIdx, shellCaliber, refStartPoint, velocity, gravity, maxShotDist, gunIndex, gunInstallationIndex):
@@ -2590,7 +2591,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def __initGUI(self):
         prereqs = []
         if not g_offlineMapCreator.Active():
-            self.inputHandler = AvatarInputHandler.AvatarInputHandler(self.spaceID)
+            self.inputHandler = AvatarInputHandler.AvatarInputHandler()
             prereqs += self.inputHandler.prerequisites()
         self.soundNotifications = IngameSoundNotifications.IngameSoundNotifications(self.arena.arenaType)
         self.complexSoundNotifications = IngameSoundNotifications.ComplexSoundNotifications()
@@ -3140,10 +3141,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
     def change_rank_xp(self, value):
         self.base.setDevelopmentFeature(0, 'change_rank_xp', value, '')
-
-    def flRandomReservesOffer(self, *value):
-        strArgs = ','.join(map(str, value))
-        self.base.setDevelopmentFeature(0, 'flRandomReservesOffer', 0, strArgs)
 
     def flGetAbilitiesProperties(self):
         self.base.setDevelopmentFeature(0, 'flGetAbilitiesProperties', 0, '')

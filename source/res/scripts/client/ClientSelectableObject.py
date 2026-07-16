@@ -2,22 +2,21 @@
 # Embedded file name: scripts/client/ClientSelectableObject.py
 from __future__ import absolute_import
 import BigWorld
+import CGF
 import SoundGroups
 from vehicle_systems.tankStructure import ColliderTypes
-from cgf_obsolete_script.script_game_object import ScriptGameObject, ComponentDescriptor
 from hangar_selectable_objects import ISelectableObject
 
-class ClientSelectableObject(BigWorld.Entity, ScriptGameObject, ISelectableObject):
-    collisions = ComponentDescriptor()
+class ClientSelectableObject(BigWorld.Entity, ISelectableObject):
 
     @property
     def enabled(self):
         return self.__enabled
 
-    def __init__(self):
+    def __init__(self, name='ClientSelectableObject'):
         BigWorld.Entity.__init__(self)
-        ScriptGameObject.__init__(self, self.spaceID, 'ClientSelectableObject')
         ISelectableObject.__init__(self)
+        self.__name = name
         self.__enabled = True
         self.__edged = False
         self.model = None
@@ -31,6 +30,8 @@ class ClientSelectableObject(BigWorld.Entity, ScriptGameObject, ISelectableObjec
         return [self.modelName, collisionAssembler]
 
     def onEnterWorld(self, prereqs):
+        cgfQueue = CGF.CommandQueue(self.spaceID)
+        cgfQueue.setGameObjectName(self.entityGameObject, self.__name)
         if not self.modelName:
             return
         if self.modelName not in prereqs.failedIDs:
@@ -38,14 +39,11 @@ class ClientSelectableObject(BigWorld.Entity, ScriptGameObject, ISelectableObjec
             self.model = model
             self.filter = BigWorld.DumbFilter()
             self.model.addMotor(BigWorld.Servo(self.matrix))
-            self.collisions = self.createComponent(BigWorld.CollisionComponent, prereqs['collisionAssembler'])
+            collisions = cgfQueue.createComponent(self.entityGameObject, BigWorld.CollisionComponent, self.spaceID, prereqs['collisionAssembler'])
             collisionData = ((0, self.model.matrix),)
-            self.collisions.connect(self.id, ColliderTypes.DYNAMIC_COLLIDER, collisionData)
-        ScriptGameObject.activate(self)
+            collisions.connect(self.id, ColliderTypes.DYNAMIC_COLLIDER, collisionData)
 
     def onLeaveWorld(self):
-        ScriptGameObject.deactivate(self)
-        ScriptGameObject.destroy(self)
         self.setHighlight(False)
 
     def setEnable(self, enabled):

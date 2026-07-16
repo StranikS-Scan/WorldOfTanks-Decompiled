@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 import json
 from builtins import round
-from past.types import basestring
+from past.builtins import basestring
 from gui.impl import backport
 from gui.impl.gen.view_models.views.lobby.hangar.sub_views.vehicle_param_base_view_model import HighlightType
 from gui.impl.gen.view_models.views.lobby.hangar.sub_views.vehicle_param_group_view_model import BuffIconType

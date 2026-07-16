@@ -13,6 +13,7 @@
     </StaticComponents>
     <DynamicComponents>
       <LSTeamInfoStatsComponent></LSTeamInfoStatsComponent>
+      <LSTeamInfoVoiceChatComponent></LSTeamInfoVoiceChatComponent>
       <LSVehicleBattleStatsComponent></LSVehicleBattleStatsComponent>
       <LSArenaDropComponent></LSArenaDropComponent>
       <LSArenaPhasesComponent></LSArenaPhasesComponent>
@@ -90,7 +91,7 @@
   <ExternalComponents></ExternalComponents>
   <cgf>
     <script>
-      <module>	client.last_stand.cgf_components.show_event_component	</module>
+      <module>	client.last_stand.last_stand_module	</module>
     </script>
   </cgf>
 </extension.xml>

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/points_of_interest/poi_view_states.py
 from collections import namedtuple
 import typing
+import CGF
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 PointViewState = namedtuple('PointState', ('id', 'type', 'status', 'invader'))
@@ -14,27 +15,26 @@ if typing.TYPE_CHECKING:
 class _ViewStateUpdater(object):
     __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
-    def __init__(self, state):
-        self._state = state
+    def __init__(self, stateUUID):
+        self.__stateUUID = stateUUID
         self.__viewState = None
         return
 
-    @property
-    def state(self):
-        return self._state
+    def getState(self, statesAccess):
+        return statesAccess.find(self.__stateUUID)
 
-    def update(self):
-        if self._state is None:
+    def update(self, statesAccess):
+        state = self.getState(statesAccess)
+        if state is None:
             return
         else:
-            viewState = self._getViewState(self._state)
+            viewState = self._getViewState(state)
             if viewState != self.__viewState:
                 self.__viewState = viewState
                 self.__invalidateViewState()
             return
 
     def clear(self):
-        self._state = None
         self.__viewState = None
         self.__invalidateViewState()
         return

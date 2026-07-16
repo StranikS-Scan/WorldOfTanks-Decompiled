@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/minimap_utils.py
+from __future__ import absolute_import, division
 import math
 import string
+from past.utils import old_div
 import BigWorld
 import Math
 import math_utils
@@ -89,7 +91,7 @@ def getPositionByCellIndex(cellIndex, bottomLeft, upperRight, dimensions):
     spaceSize = upperRight - bottomLeft
     xOffset = -bottomLeft[0]
     yOffset = -bottomLeft[1]
-    return (column * spaceSize[0] / dimensions - xOffset, 0, -row * spaceSize[1] / dimensions + spaceSize[1] - yOffset)
+    return (old_div(column * spaceSize[0], dimensions) - xOffset, 0, old_div(-row * spaceSize[1], dimensions) + spaceSize[1] - yOffset)
 
 
 def getCellName(cellId, dimensions):
@@ -102,5 +104,5 @@ def getCellName(cellId, dimensions):
 
 
 def getMinimapBasePingScale(minimapSizeIndex, minScale, maxScale):
-    p = minimapSizeIndex / _MAX_SIZE_INDEX
+    p = old_div(minimapSizeIndex, _MAX_SIZE_INDEX)
     return (1 - p) * minScale + maxScale * p

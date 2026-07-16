@@ -39,6 +39,10 @@ class VehicleDamageState(object):
     isCurrentModelDamaged = property(lambda self: VehicleDamageState.isDamagedModel(self.modelState))
     isCurrentModelUndamaged = property(lambda self: VehicleDamageState.isUndamagedModel(self.modelState))
     isCurrentModelExploded = property(lambda self: VehicleDamageState.isExplodedModel(self.modelState))
+    isAlive = property(lambda self: self.__state == 'alive')
+    isCrewDeath = property(lambda self: self.__state == 'crewDeath')
+    isSubmersionDeath = property(lambda self: self.__state == 'submersionDeath')
+    isCrewActive = property(lambda self: not (self.isCrewDeath or self.isSubmersionDeath))
     effect = property(lambda self: self.__effect)
 
     @staticmethod

@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/post_progression_components.py
+from __future__ import absolute_import
+from future.utils import listvalues, viewitems
 import ResMgr
 import constants
-from constants import IS_CLIENT, IS_WEB, TTC_TOOLTIP_SECTIONS, IS_LOAD_GLOSSARY
+from constants import IS_CLIENT, IS_WEB, TTC_TOOLTIP_SECTIONS
 from items import _xml
 from items.attributes_helpers import readModifiers
 from items.artefacts_helpers import VehicleFilter, readKpi
-from items.components.supply_slot_categories import SlotCategories
 from typing import Dict, Optional, Tuple, List, Union, Set
 from post_progression_common import ACTION_TYPES, FEATURES_NAMES, PAIR_TYPES, parseActionCompDescr, ID_THRESHOLD, POST_PROGRESSION_UNLOCK_MODIFICATIONS_PRICES, POST_PROGRESSION_BUY_MODIFICATIONS_PRICES, POST_PROGRESSION_UNLOCK_AND_BUY_MODIFICATIONS_PRICES, ALLOWED_CURRENCIES_FOR_TREE_STEP, ALLOWED_CURRENCIES_FOR_BUY_MODIFICATION_STEP, ALLOWED_ACTIONS_CATEGORIES, unpackActiveModifications
 from soft_exception import SoftException
@@ -15,7 +16,7 @@ _XML_NAMESPACE = 'xmlns:xmlref'
 def getFeatures(actionCDs, vppCache):
     result = set()
     for actionCD in actionCDs:
-        actionType, itemId, subId = parseActionCompDescr(actionCD)
+        actionType, itemId, _ = parseActionCompDescr(actionCD)
         if actionType == ACTION_TYPES.FEATURE:
             featureName = vppCache.features[itemId].name
             result.add(featureName)
@@ -230,7 +231,7 @@ class ProgressionTree(SimpleItem):
             step.readFromXML(xmlCtx, data, _ACTION_RESOLVERS)
             steps[step.id] = step
 
-        for stepID, step in steps.iteritems():
+        for stepID, step in viewitems(steps):
             for unlockID in step.unlocks:
                 steps[unlockID].addRequiredUnlock(stepID)
 
@@ -239,13 +240,13 @@ class ProgressionTree(SimpleItem):
         if self.rootStep not in self.steps or steps[self.rootStep].requiredUnlocks:
             _xml.raiseWrongXml(xmlCtx, None, 'Invalid root step id {}'.format(self.rootStep))
         self._validateLevels(xmlCtx)
-        self.ppBattleIndex = steps.values()
+        self.ppBattleIndex = listvalues(steps)
         self.ppBattleIndex.sort(key=lambda step: step.id)
         return
 
     def _validateLevels(self, xmlCtx):
         steps = self.steps
-        for stepID, step in steps.iteritems():
+        for stepID, step in viewitems(steps):
             for unlockID in step.unlocks:
                 unlockerLevel = step.level
                 unlocksLevel = steps[unlockID].level
@@ -321,8 +322,8 @@ class PostProgressionCache(object):
         section = ResMgr.openSection(xmlPath)
         if section is None:
             _xml.raiseWrongXml(None, xmlPath, 'Unable to open or read')
-        ids = dict()
-        names = dict()
+        ids = {}
+        names = {}
         for name, data in section.items():
             if name == _XML_NAMESPACE:
                 continue
@@ -344,23 +345,23 @@ class PostProgressionCache(object):
         section = ResMgr.openSection(xmlPath)
         if section is None:
             _xml.raiseWrongXml(None, xmlPath, 'Unable to open or read')
-        prices = dict()
+        prices = {}
         for name, data in section.items():
             if name not in POST_PROGRESSION_UNLOCK_AND_BUY_MODIFICATIONS_PRICES:
                 _xml.raiseWrongXml(xmlCtx, name, 'Incorrect price tag <%s>' % name)
             ctx = (xmlCtx, name)
-            prices[name] = dict()
+            prices[name] = {}
             for sname, _ in data.items():
                 _, level = str(sname).split('_', 1)
                 prices[name][int(level)] = _xml.readPostProgressionPrice(ctx, data, sname)
 
             if name in POST_PROGRESSION_UNLOCK_MODIFICATIONS_PRICES:
-                for _, value in prices[name].iteritems():
+                for _, value in viewitems(prices[name]):
                     if not ALLOWED_CURRENCIES_FOR_TREE_STEP.issuperset(value.keys()):
                         raise SoftException('Wrong currency for section: {}, path: {}'.format(name, xmlPath))
 
             if name in POST_PROGRESSION_BUY_MODIFICATIONS_PRICES:
-                for _, value in prices[name].iteritems():
+                for _, value in viewitems(prices[name]):
                     if not ALLOWED_CURRENCIES_FOR_BUY_MODIFICATION_STEP.issuperset(value.keys()):
                         raise SoftException('Wrong currency for section: {}, path: {}'.format(name, xmlPath))
 

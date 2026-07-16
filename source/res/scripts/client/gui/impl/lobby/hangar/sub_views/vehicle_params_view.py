@@ -134,7 +134,7 @@ class _VehicleParamsPresenterBase(ViewComponent[VehicleParamsViewModel]):
         self.__stockParams = None
         return
 
-    def _onIgrTypeChanged(self):
+    def _onIgrTypeChanged(self, *args):
         self.__fillViewModel()
 
     def _onCacheResync(self, reason, diff):
@@ -443,7 +443,7 @@ class VehicleCompareParamsPresenter(_VehicleParamsPresenterBase):
         super(VehicleCompareParamsPresenter, self)._finalize()
         return
 
-    def _onIgrTypeChanged(self):
+    def _onIgrTypeChanged(self, *args):
         pass
 
     def _onCurrentVehicleChanged(self):
@@ -515,7 +515,7 @@ class EasyTankEquipParamsPresenter(_VehicleParamsPresenterBase):
     def _onCacheResync(self, *_):
         pass
 
-    def _onIgrTypeChanged(self):
+    def _onIgrTypeChanged(self, *args):
         pass
 
     def _isExtraParamEnabled(self):

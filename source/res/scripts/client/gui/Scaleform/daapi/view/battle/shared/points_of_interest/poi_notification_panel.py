@@ -41,6 +41,7 @@ class PointsOfInterestPanel(PointsOfInterestNotificationPanelMeta, PointsOfInter
 
         self._registerPoiListener()
         self.__es.subscribeToEvent(self.__sessionProvider.dynamic.pointsOfInterest.onPoiCaptured, self.__onPoiCaptured)
+        self.__es.subscribeToEvent(self.__sessionProvider.onBattleSessionStop, self.__onBattleSessionStop)
 
     def _dispose(self):
         self.__es.unsubscribeFromAllEvents()
@@ -98,3 +99,6 @@ class PointsOfInterestPanel(PointsOfInterestNotificationPanelMeta, PointsOfInter
     @staticmethod
     def __isAlly(poiState):
         return bool(poiState.invader)
+
+    def __onBattleSessionStop(self):
+        self._unregisterPoiListener()

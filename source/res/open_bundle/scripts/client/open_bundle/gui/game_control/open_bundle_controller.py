@@ -150,3 +150,5 @@ class OpenBundleController(IOpenBundleController, EventsHandler):
                 return bundleConfig.start - currentTime
             if bundleConfig.start < currentTime < bundleConfig.finish - ONE_DAY:
                 return bundleConfig.finish - ONE_DAY - currentTime
+            if bundleConfig.finish - ONE_DAY < currentTime < bundleConfig.finish:
+                return bundleConfig.finish - currentTime

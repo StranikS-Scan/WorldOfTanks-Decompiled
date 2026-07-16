@@ -7,10 +7,7 @@ import CGF
 import Event
 import WWISE
 import adisp
-from account_helpers import AccountSettings
-from account_helpers.AccountSettings import CURRENT_VEHICLE
-from CurrentVehicle import g_currentVehicle
-from cgf_components.hangar_camera_manager import HangarCameraManager
+from cgf_components.hangar_camera_manager import HangarCameraSystem
 from skeletons.gui.shared import IItemsCache
 from frameworks.wulf import WindowLayer
 from gui import SystemMessages
@@ -25,10 +22,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showHangar as showMainHangar
-from gui.shared.system_factory import collectIgnoredModeForAutoSelectVehicle
 from last_stand.gui.shared.event_dispatcher import closeViewsByID, showHangar
-from last_stand.gui.prb_control.entities.pre_queue.entity import LastStandEntity
-from last_stand.gui.prb_control.entities.squad.entity import LastStandSquadEntity
 from last_stand.gui.shared.utils.performance_analyzer import PerformanceAnalyzerMixin
 from last_stand.gui.shared.event_dispatcher import showPromoWindowView
 from last_stand.gui.sounds.sound_constants import LS_SOUND_REMAPPING
@@ -45,11 +39,11 @@ from skeletons.gui.game_control import ILimitedUIController
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.game_control import ILootBoxSystemController
 
-class _LSConfig(namedtuple('_LSConfig', ('isEnabled', 'isBattlesEnabled', 'startDate', 'endDate', 'artefactsSettings', 'vehicles', 'shop', 'isPromoScreenEnabled', 'isIntroVideoEnabled', 'isInfoPageEnabled', 'isMetaInfoEnabled', 'isLootBoxEntryPointEnabled', 'isHangar3dPointVisible', 'isHangar3dPointRewardVisible', 'prominentBonus', 'modeSelectorShowRewards', 'lsBoostersConfig', 'metaConfigs', 'storyPointsList', 'isParallaxEnabled'))):
+class _LSConfig(namedtuple('_LSConfig', ('isEnabled', 'isBattlesEnabled', 'startDate', 'endDate', 'artefactsSettings', 'vehicles', 'shop', 'isPromoScreenEnabled', 'isIntroVideoEnabled', 'isInfoPageEnabled', 'isMetaInfoEnabled', 'isLootBoxEntryPointEnabled', 'isHangar3dPointVisible', 'isHangar3dPointRewardVisible', 'prominentBonus', 'modeSelectorShowRewards', 'lsBoostersConfig', 'metaConfigs', 'storyPointsList', 'isParallaxEnabled', 'isObeliskRadialMenuEnabled', 'createVivoxTeamChannels'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, isBattlesEnabled={}, startDate=0, endDate=0, artefactsSettings={}, vehicles={}, shop={}, isPromoScreenEnabled=False, isIntroVideoEnabled=False, isInfoPageEnabled=False, isMetaInfoEnabled=False, isLootBoxEntryPointEnabled=False, isHangar3dPointVisible=False, isHangar3dPointRewardVisible=False, prominentBonus={}, modeSelectorShowRewards={}, lsBoostersConfig=[], metaConfigs={}, storyPointsList=[], isParallaxEnabled=False)
+        defaults = dict(isEnabled=False, isBattlesEnabled={}, startDate=0, endDate=0, artefactsSettings={}, vehicles={}, shop={}, isPromoScreenEnabled=False, isIntroVideoEnabled=False, isInfoPageEnabled=False, isMetaInfoEnabled=False, isLootBoxEntryPointEnabled=False, isHangar3dPointVisible=False, isHangar3dPointRewardVisible=False, prominentBonus={}, modeSelectorShowRewards={}, lsBoostersConfig=[], metaConfigs={}, storyPointsList=[], isParallaxEnabled=False, isObeliskRadialMenuEnabled=False, createVivoxTeamChannels=False)
         defaults.update(kwargs)
         return super(_LSConfig, cls).__new__(cls, **defaults)
 
@@ -127,8 +121,6 @@ class LSController(ILSController, Notifiable, SeasonProvider, IGlobalListener, P
 
     def onPrbEntitySwitched(self):
         self.__referralCtrl.setReferralHardDisabled(self.isEventPrb())
-        if not any((self.prbEntity.getModeFlags() & flag for flag in collectIgnoredModeForAutoSelectVehicle())):
-            g_currentVehicle.selectVehicle(AccountSettings.getFavorites(CURRENT_VEHICLE))
         if self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.STRONGHOLD:
             showMainHangar()
 
@@ -197,18 +189,6 @@ class LSController(ILSController, Notifiable, SeasonProvider, IGlobalListener, P
     def prbEntity(self):
         pass
 
-    def selectVehicle(self, invID):
-        if not self.isEventPrb():
-            return
-        else:
-            dispatcher = self.prbDispatcher
-            if dispatcher is None:
-                return
-            entity = dispatcher.getEntity()
-            if entity and isinstance(entity, (LastStandEntity, LastStandSquadEntity)):
-                entity.selectModeVehicle(invID)
-            return
-
     def getVehiclesConfig(self):
         limits = self.getModeSettings().vehicles
         return _VehiclesConfig(limits.get('allowedVehicles', []), limits.get('allowedLevels', []), limits.get('forbiddenClassTags', []), limits.get('forbiddenVehicles', []))
@@ -231,20 +211,20 @@ class LSController(ILSController, Notifiable, SeasonProvider, IGlobalListener, P
 
     def __onServerSettingsChanged(self, serverSettings):
         if self.__serverSettings is not None:
-            self.__serverSettings.onServerSettingsChange -= self.__updateEventBattlesSettings
+            self.__serverSettings.onServerSettingsChange -= self.__updateLastStandSettings
         self.__serverSettings = serverSettings
-        self.__serverSettings.onServerSettingsChange += self.__updateEventBattlesSettings
+        self.__serverSettings.onServerSettingsChange += self.__updateLastStandSettings
         return
 
     def __onHangarLoadedAfterLogin(self):
         if self.isPromoScreenEnabled():
             showPromoWindowView()
         if self.isEventPrb():
-            cameraManager = CGF.getManager(self.__hangarSpace.spaceID, HangarCameraManager)
+            cameraManager = CGF.getSystem(self.__hangarSpace.spaceID, HangarCameraSystem)
             if cameraManager:
                 cameraManager.enablePlatoonMode(False)
 
-    def __updateEventBattlesSettings(self, diff):
+    def __updateLastStandSettings(self, diff):
         if LAST_STAND_GAME_PARAMS_KEY in diff:
             self.startNotification()
             self.onSettingsUpdate()
@@ -282,7 +262,7 @@ class LSController(ILSController, Notifiable, SeasonProvider, IGlobalListener, P
         self.stopGlobalListening()
         g_eventBus.removeListener(events.HangarVehicleEvent.SELECT_VEHICLE_IN_HANGAR, self.__onSelectVehicleInHangar, scope=EVENT_BUS_SCOPE.LOBBY)
         if self.__serverSettings is not None:
-            self.__serverSettings.onServerSettingsChange -= self.__updateEventBattlesSettings
+            self.__serverSettings.onServerSettingsChange -= self.__updateLastStandSettings
         self.__serverSettings = None
         WWISE.deactivateRemapping(LS_SOUND_REMAPPING)
         return

@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/battle_availability.py
+from __future__ import absolute_import
+from builtins import range
 import Event
 from helpers import time_utils
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -29,6 +31,7 @@ def getForbiddenPeriods(hours, formatter=None):
         for h in hours:
             if currRange is None:
                 currRange = [h, h]
+                continue
             if h - currRange[1] > 1:
                 guiData.append(_formatPeriod(currRange[0], _getNextHour(currRange[1])))
                 currRange = [h, h]

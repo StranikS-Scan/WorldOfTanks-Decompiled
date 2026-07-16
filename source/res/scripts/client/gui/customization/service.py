@@ -39,14 +39,14 @@ from skeletons.gui.shared.utils import IHangarSpace
 from items.components.c11n_constants import SeasonType, ApplyArea, CustomizationType
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from vehicle_systems.camouflages import getStyleProgressionOutfit
-from cgf_components.hangar_camera_manager import HangarCameraManager
+from cgf_components.hangar_camera_manager import HangarCameraSystem
+from gui.hangar_cameras.c11n_hangar_camera_manager import CUSTOMIZATION_CAMERA_NAME
 if typing.TYPE_CHECKING:
     from gui.customization.constants import CustomizationModeSource
     from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationModes, CustomizationTabs
     from gui.shared.gui_items.customization.c11n_items import Style
     from items.components.c11n_components import StyleItem
 _logger = logging.getLogger(__name__)
-CUSTOMIZATION_CAMERA_NAME = 'Customization'
 
 class _ServiceItemShopMixin(object):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -245,7 +245,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
     def closeCustomization(self):
         if self.hangarSpace.space is not None:
             self.hangarSpace.space.turretAndGunAngles.reset()
-            cameraManager = CGF.getManager(self.hangarSpace.spaceID, HangarCameraManager)
+            cameraManager = CGF.getSystem(self.hangarSpace.spaceID, HangarCameraSystem)
             if cameraManager:
                 if cameraManager.getCurrentCameraName() == CUSTOMIZATION_CAMERA_NAME:
                     cameraManager.switchToTank()

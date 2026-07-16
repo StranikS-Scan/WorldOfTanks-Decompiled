@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/writers/chassis_writers.py
-from items import _xml
-from . import shared_writers
-from items.components import component_constants
-from Math import Vector3
+from __future__ import absolute_import
+from future.utils import viewitems
 import ResMgr
+from Math import Vector3
+from items import _xml
+from items.writers import shared_writers
 
 def writeWheelsAndGroups(wheelsConfig, section, materialData, chassisName):
     wheelId = 0
@@ -53,7 +54,7 @@ def writeTrackBasicParams(trackBasicParams, section, cache):
         return
     else:
         tracksSection = section['tracks']
-        for childSectionName, childSection in tracksSection.items():
+        for childSectionName in tracksSection.keys():
             tracksSection.deleteSection(childSectionName)
 
         shared_writers.writeLodDist(trackBasicParams.lodDist, section, 'tracks/lodDist', cache)
@@ -76,7 +77,7 @@ def __writeDebris(tracksDebris, section):
     if tracksDebris is None:
         return
     else:
-        for sname, subsection in section.items():
+        for sname in section.keys():
             if sname == 'trackDebris':
                 section.deleteSection(sname)
 
@@ -215,7 +216,7 @@ def writeSplineDesc(splineDesc, section, cache):
             if len(item.segmentModelSets) < 2:
                 return
             modelSetsSection = section.createSection('modelSets')
-            for modelSetName, modelSet in item.segmentModelSets.iteritems():
+            for modelSetName, modelSet in viewitems(item.segmentModelSets):
                 if modelSetName == 'default':
                     continue
                 currentModelSetSection = modelSetsSection.createSection(modelSetName)
@@ -237,7 +238,7 @@ def writeSplineDesc(splineDesc, section, cache):
 
 
 def writeMudEffect(effect, cache, section, subsectionName):
-    for n, e in cache._customEffects['slip'].iteritems():
+    for n, e in viewitems(cache._customEffects['slip']):
         if e is effect:
             return _xml.rewriteString(section, subsectionName, n)
 

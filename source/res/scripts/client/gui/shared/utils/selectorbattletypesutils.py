@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/SelectorBattleTypesUtils.py
+from __future__ import absolute_import
 from account_helpers.AccountSettings import AccountSettings, KNOWN_SELECTOR_BATTLES
 
 def setBattleTypeAsKnown(bType):

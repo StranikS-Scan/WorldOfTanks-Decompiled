@@ -115,8 +115,9 @@ class FrontlineTeamEfficiency(TeamStats):
         bonusType = reusable.common.arenaBonusType
         sortingKey = collectBattleResultsStatsSorting().get(bonusType)
         column, sortingOrder = stored_sorting.readStatsSorting(sortingKey)
+        frontlineColumnValues = {item.value for item in FrontlineColumnType}
         model.setSortingOrder(SortingOrder(sortingOrder))
-        model.setSortingColumn(FrontlineColumnType(column) if column in FrontlineColumnType else FrontlineColumnType.PLAYER)
+        model.setSortingColumn(FrontlineColumnType(column) if column in frontlineColumnValues else FrontlineColumnType.PLAYER)
 
 
 class FrontlineTeamAchievementsPacker(object):

@@ -1,12 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/arena_component_system/arena_equipment_component.py
+from __future__ import absolute_import
 from collections import namedtuple
 from functools import partial
+from future.utils import viewitems, viewvalues
 import logging
 import BigWorld
+import CGF
 from aih_constants import CTRL_MODE_NAME
 from battle_royale.gui.constants import BattleRoyaleEquipments
-from client_arena_component_system import ClientArenaComponent
+from arena_component_system.client_arena_component_system import ClientArenaComponent
 from constants import ARENA_SYNC_OBJECTS, ARENA_GUI_TYPE
 from debug_utils import LOG_ERROR_DEV
 from gui.battle_control import avatar_getter
@@ -127,16 +130,16 @@ class Effect(object):
         self.vehicleViewState = vehicleViewState
         self.feedbackEventID = feedbackEventID
         self.visualSettings = visualSettings
-        self.exposedVehicles = exposedVehicles if exposedVehicles is not None else dict()
-        self.providingVehicles = providingVehicles if providingVehicles is not None else dict()
+        self.exposedVehicles = exposedVehicles if exposedVehicles is not None else {}
+        self.providingVehicles = providingVehicles if providingVehicles is not None else {}
         return
 
     def destroy(self):
-        for exposedVehicle in (data for data in self.exposedVehicles.itervalues() if data is not None):
+        for exposedVehicle in (data for data in viewvalues(self.exposedVehicles) if data is not None):
             exposedVehicle.destroy()
 
         self.exposedVehicles.clear()
-        for providingVehicle in (data for data in self.providingVehicles.itervalues() if data is not None):
+        for providingVehicle in (data for data in viewvalues(self.providingVehicles) if data is not None):
             providingVehicle.destroy()
 
         self.providingVehicles.clear()
@@ -149,7 +152,7 @@ class ArenaEquipmentComponent(ClientArenaComponent, CallbackDelayer):
     def __init__(self, componentSystem):
         ClientArenaComponent.__init__(self, componentSystem)
         CallbackDelayer.__init__(self)
-        self.__smokeScreen = dict()
+        self.__smokeScreen = {}
         self.__healingEffect = None
         self.__inspiringEffect = None
         self.__repairPointEffect = None
@@ -253,14 +256,15 @@ class ArenaEquipmentComponent(ClientArenaComponent, CallbackDelayer):
             self.__restartEffectData(exposedVehicleData, effect, isSource=False)
             return
 
-    def __checkAffectComponent(self, vehicleID, affectComponent, isInfluenceZone):
+    def __checkAffectComponent(self, vehicleID, affectComponentType, isInfluenceZone):
         vehicle = BigWorld.entities.get(vehicleID)
         if vehicle and vehicle.isAlive():
-            appearance = vehicle.appearance
-            if appearance.findComponentByType(affectComponent) is not None:
+            cgfQueue = CGF.CommandQueue(vehicle.appearance.spaceID)
+            appearanceGo = vehicle.appearance.gameObject
+            if appearanceGo.hasComponent(affectComponentType):
                 if not isInfluenceZone:
-                    curAffectComponent = appearance.findComponentByType(affectComponent)
-                    appearance.removeComponent(curAffectComponent)
+                    curAffectComponent = appearanceGo.findRead(affectComponentType)
+                    cgfQueue.removeComponent(appearanceGo, affectComponentType)
                     if curAffectComponent.hasDebuff:
                         vehicle.onDebuffEffectApplied(False)
                 return
@@ -269,11 +273,10 @@ class ArenaEquipmentComponent(ClientArenaComponent, CallbackDelayer):
                 attachedVehicle = BigWorld.player().getVehicleAttached()
                 if not vehicle.isPlayerVehicle and attachedVehicle and BigWorld.player().isObserver():
                     isPlayerVehicle = attachedVehicle.id == vehicle.id
-                appearance.createComponent(affectComponent, appearance.gameObject, isPlayerVehicle, BigWorld.player().spaceID, vehicleID)
-                curAffectComponent = appearance.findComponentByType(affectComponent)
-                if curAffectComponent.hasDebuff:
+                affectInstance = affectComponentType(appearanceGo, isPlayerVehicle, BigWorld.player().spaceID, vehicleID)
+                cgfQueue.assignComponent(appearanceGo, affectInstance)
+                if affectInstance.hasDebuff:
                     vehicle.onDebuffEffectApplied(True)
-        return
 
     def _updateEffectSource(self, vehicleID, startTime, endTime, inactivationDelay, effectSourceRadius, effect, equipmentID=None):
         if effect is None:
@@ -406,7 +409,7 @@ class ArenaEquipmentComponent(ClientArenaComponent, CallbackDelayer):
         return None if not vehicle else BigWorld.Servo(makeVehicleEntityMP(vehicle))
 
     def __onSmokeScreenUpdated(self, args):
-        for key, value in args.iteritems():
+        for key, value in viewitems(args):
             if value is not None:
                 smokeItem = self.__smokeScreen.get(key, None)
                 if smokeItem is not None:

@@ -194,5 +194,9 @@
       <type>	includeByPath	</type>
       <params>	systemChannels	</params>
     </rule>
+    <rule>
+      <pattern>	.*/server_xml/unit_assembler_config\.xml$	</pattern>
+      <type>	include	</type>
+    </rule>
   </xml_whitelist>
 </extension_rules.xml>

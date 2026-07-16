@@ -17,11 +17,12 @@ class DynObstacleComponent(DynamicScriptComponent):
         if self.isHidden:
             return
         parentGO = self.entity.entityGameObject
-        self._gameObject = gameObject = CGF.GameObject(self.spaceID)
-        gameObject.createComponent(GenericComponents.HierarchyComponent, parentGO)
-        gameObject.createComponent(GenericComponents.TransformComponent, self.localMatrix)
-        gameObject.createComponent(Physics.CollidersComponent, [Physics.MeshColliderDesc(self.modelPath, '')])
-        model = gameObject.createComponent(GenericComponents.DynamicModelComponent, self.modelPath)
+        cgfQueue = CGF.CommandQueue(self.spaceID)
+        self._gameObject = gameObject = cgfQueue.createGameObject()
+        cgfQueue.createComponent(gameObject, CGF.HierarchyComponent, parentGO)
+        cgfQueue.createComponent(gameObject, CGF.TransformComponent, self.localMatrix)
+        cgfQueue.createComponent(gameObject, Physics.CollidersComponent, [Physics.MeshColliderDesc(self.modelPath, '')])
+        model = cgfQueue.createComponent(gameObject, GenericComponents.DynamicModelComponent, self.modelPath)
         model.setOverlayEnabled(self.applyOverlay)
 
     def onDestroy(self):

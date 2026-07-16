@@ -1,12 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/cgf_components/attack_artillery_fort_components.py
+from __future__ import absolute_import
 import CGF
 import GenericComponents
 import Math
 from GenericComponents import EntityGOSync
-from cache import cached_property
-from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
-from cgf_script.managers_registrator import autoregister, onAddedQuery, onProcessQuery, onRemovedQuery
+from cgf_script.registration import ComponentProperty, registerComponent
 from constants import IS_CGF_DUMP, IS_CLIENT
 from helpers import dependency
 from helpers.gui_utils import hexARGBToRGBAFloatColor
@@ -21,12 +20,12 @@ else:
 
 @registerComponent
 class ColorComponent(object):
-    category = 'UI'
+    group = 'UI'
     editorTitle = 'Color Component'
-    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
-    model = ComponentProperty(type=CGFMetaTypes.LINK, editorName='model', value=GenericComponents.DynamicModelComponent)
-    colorParamName = ComponentProperty(type=CGFMetaTypes.STRING, editorName='colorParamName', value='g_color')
-    color = ComponentProperty(type=CGFMetaTypes.VECTOR4, value=Math.Vector4(1, 0, 0, 0), editorName='color')
+    domain = CGF.Domain.ClientEditor
+    model = ComponentProperty(type=CGF.PropertyType.Link, editorName='model', value=GenericComponents.DynamicModelComponent)
+    colorParamName = ComponentProperty(type=CGF.PropertyType.String, editorName='colorParamName', value='g_color')
+    color = ComponentProperty(type=CGF.PropertyType.Vector4, value=Math.Vector4(1, 0, 0, 0), editorName='color')
 
     def __init__(self):
         super(ColorComponent, self).__init__()
@@ -35,73 +34,97 @@ class ColorComponent(object):
         self.currentModel = self.model
 
 
-@autoregister(presentInAllWorlds=False, category='UI')
-class ColorManager(CGF.ComponentManager):
+class ColorSystem(CGF.System):
+    ColorActivated = CGF.ActivateReaction(CGF.ReactRw(ColorComponent))
+    ColorIterate = CGF.IterateReaction(CGF.ActiveOnly, CGF.Rw(ColorComponent))
+    ModelAccess = CGF.AccessReaction(CGF.Rw(GenericComponents.DynamicModelComponent))
+    Reactions = CGF.Reactions(ColorActivated, ColorIterate, ModelAccess)
 
-    @onAddedQuery(ColorComponent)
-    def handleColorComponentAdded(self, colorComponent):
-        colorComponent.model().setMaterialParameterVector4(colorComponent.colorParamName, colorComponent.color)
+    def update(self):
+        modelAccess = self.reaction(self.ModelAccess)
+        for colorComponent in self.reaction(self.ColorActivated):
+            self.handleColorComponentAdded(colorComponent, modelAccess)
+
+        for colorComponent in self.reaction(self.ColorIterate):
+            self.processingHandler(colorComponent, modelAccess)
+
+    def handleColorComponentAdded(self, colorComponent, modelAccess):
+        model = modelAccess.find(colorComponent.model)
+        model.setMaterialParameterVector4(colorComponent.colorParamName, colorComponent.color)
         colorComponent.currentColor = colorComponent.color
         colorComponent.currentColorParamName = colorComponent.currentColorParamName
         colorComponent.currentModel = colorComponent.model
 
-    @onProcessQuery(ColorComponent, tickGroup='Simulation')
-    def processingHandler(self, colorComponent):
+    def processingHandler(self, colorComponent, modelAccess):
         if colorComponent.currentColor != colorComponent.color or colorComponent.currentModel != colorComponent.model or colorComponent.currentColorParamName != colorComponent.colorParamName:
-            colorComponent.model().setMaterialParameterVector4(colorComponent.colorParamName, colorComponent.color)
+            model = modelAccess.find(colorComponent.model)
+            model.setMaterialParameterVector4(colorComponent.colorParamName, colorComponent.color)
             colorComponent.currentColor = colorComponent.color
-            colorComponent.currentColorParamName = colorComponent.currentColorParamName
+            colorComponent.currentColorParamName = colorComponent.colorParamName
             colorComponent.currentModel = colorComponent.model
 
 
 @registerComponent
 class ArtilleryFortColorComponent(object):
-    category = 'Abilities'
-    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
-    colorComponent = ComponentProperty(type=CGFMetaTypes.LINK, editorName='colorComponent', value=ColorComponent)
+    group = 'Abilities'
+    editorTitle = 'Artillery Fort Color'
+    domain = CGF.Domain.ClientEditor
+    colorComponent = ComponentProperty(type=CGF.PropertyType.Link, editorName='colorComponent', value=ColorComponent)
 
     def __init__(self):
         super(ArtilleryFortColorComponent, self).__init__()
         self.entityGO = None
         return
 
-    def changeColor(self):
-        if self.entityGO is not None and self.entityGO.isValid():
-            goSyncComponent = self.entityGO.findComponentByType(EntityGOSync)
-            if goSyncComponent is not None:
-                self.colorComponent().color = hexARGBToRGBAFloatColor(goSyncComponent.entity.areaColor)
+
+class AttackArtilleryFortColorSystem(CGF.System):
+    if not IS_CGF_DUMP:
+        __settingsCore = dependency.descriptor(ISettingsCore)
+    FortColorActivated = CGF.ActivateReaction(CGF.GameObject, CGF.ReactRw(ArtilleryFortColorComponent))
+    FortColorDeactivated = CGF.DeactivateReaction(CGF.ReactRw(ArtilleryFortColorComponent))
+    FortColorIterate = CGF.IterateReaction(CGF.ActiveOnly, CGF.Rw(ArtilleryFortColorComponent))
+    EntitySyncAccess = CGF.AccessReaction(CGF.Ro(EntityGOSync))
+    ColorAccess = CGF.AccessReaction(CGF.Rw(ColorComponent))
+    Reactions = CGF.Reactions(FortColorActivated, FortColorDeactivated, FortColorIterate, EntitySyncAccess, ColorAccess)
+
+    def onMappingLoaded(self):
+        if IS_CLIENT:
+            self.__settingsCore.onSettingsChanged += self.colorSettingsChanged
+
+    def onMappingUnloaded(self):
+        if IS_CLIENT:
+            self.__settingsCore.onSettingsChanged -= self.colorSettingsChanged
+
+    def update(self):
+        for fortColor in self.reaction(self.FortColorDeactivated):
+            fortColor.entityGO = None
+
+        entitySyncAccess = self.reaction(self.EntitySyncAccess)
+        colorAccess = self.reaction(self.ColorAccess)
+        for gameObject, fortColor in self.reaction(self.FortColorActivated):
+            self.handleColorComponentAdded(gameObject, fortColor, entitySyncAccess, colorAccess)
+
+        return
+
+    def handleColorComponentAdded(self, gameObject, fortColor, entitySyncAccess, colorAccess):
+        rootGameObject = self.hierarchy.getTopMostParent(gameObject)
+        goSyncComponent = entitySyncAccess.find(rootGameObject)
+        if goSyncComponent is not None:
+            fortColor.entityGO = rootGameObject
+            self.changeColor(fortColor, entitySyncAccess, colorAccess)
         return
 
     def colorSettingsChanged(self, diff):
         if GRAPHICS.COLOR_BLIND in diff:
-            self.changeColor()
+            entitySyncAccess = self.reaction(self.EntitySyncAccess)
+            colorAccess = self.reaction(self.ColorAccess)
+            for activeColor in self.reaction(self.FortColorIterate):
+                self.changeColor(activeColor, entitySyncAccess, colorAccess)
 
-
-@autoregister(presentInAllWorlds=False, category='Abilities')
-class AttackArtilleryFortColorManager(CGF.ComponentManager):
-    if not IS_CGF_DUMP:
-        __settingsCore = dependency.descriptor(ISettingsCore)
-
-    @onAddedQuery(CGF.GameObject, ArtilleryFortColorComponent)
-    def handleColorComponentAdded(self, gameObject, colorComponent):
-        rootGameObject = self.__hierarchyManager.getTopMostParent(gameObject)
-        goSyncComponent = rootGameObject.findComponentByType(EntityGOSync)
-        if goSyncComponent is not None:
-            colorComponent.entityGO = rootGameObject
-            colorComponent.changeColor()
-            if IS_CLIENT:
-                self.__settingsCore.onSettingsChanged += colorComponent.colorSettingsChanged
+    def changeColor(self, fortColor, entitySyncAccess, colorAccess):
+        if fortColor.entityGO is not None and fortColor.entityGO.valid:
+            goSyncComponent = entitySyncAccess.find(fortColor.entityGO)
+            if goSyncComponent is not None:
+                colorComponent = colorAccess.find(fortColor.colorComponent)
+                colorComponent.color = hexARGBToRGBAFloatColor(goSyncComponent.entity.areaColor)
         return
-
-    @onRemovedQuery(ArtilleryFortColorComponent)
-    def handleColorComponentRemoved(self, colorComponent):
-        if colorComponent.entityGO is not None:
-            if IS_CLIENT:
-                self.__settingsCore.onSettingsChanged -= colorComponent.colorSettingsChanged
-            colorComponent.entityGO = None
-        return
-
-    @cached_property
-    def __hierarchyManager(self):
-        hierarchyManager = CGF.HierarchyManager(self.spaceID)
-        return hierarchyManager

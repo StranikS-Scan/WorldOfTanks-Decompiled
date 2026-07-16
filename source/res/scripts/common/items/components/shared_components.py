@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/shared_components.py
+from __future__ import absolute_import, division
 from functools import partial
 import typing
-import Math
-import cPickle
-from future.utils import lzip
+from past.builtins import xrange
+from future.moves import pickle
+from future.utils import lmap, lzip
 from collections import namedtuple
 from constants import IS_CLIENT, IS_WEB, IS_EDITOR, IS_BOT, HEATING_ZONES_GUN_STATE, DEBUFFS_TYPES
 from debug_utils import LOG_WARNING
@@ -13,6 +14,7 @@ from items.components import path_builder
 from items.components.component_constants import KMH_TO_MS
 from items.components.c11n_constants import AttachmentSize
 from items.attributes_helpers import ALLOWED_STATIC_ATTRS, isclose
+from py2to3.patched_future import with_metaclass
 from soft_exception import SoftException
 from wrapped_reflection_framework import ReflectionMetaclass, reflectedNamedTuple
 from items import _xml, ITEM_TYPES
@@ -39,11 +41,11 @@ MaterialInfo = reflectedNamedTuple('MaterialInfo', ('kind', 'armor', 'extra', 'm
 DEFAULT_MATERIAL_INFO = MaterialInfo(0, 0, None, False, 0.0, False, False, False, False, False, False, False, 0, 0.0, 0.0, False, frozenset())
 EmblemSlot = reflectedNamedTuple('EmblemSlot', ('rayStart', 'rayEnd', 'rayUp', 'size', 'hideIfDamaged', 'type', 'isMirrored', 'isUVProportional', 'emblemId', 'slotId', 'applyToFabric', 'compatibleModels'))
 
-class CustomizationSlotDescription(object):
-    __metaclass__ = ReflectionMetaclass
+class CustomizationSlotDescription(with_metaclass(ReflectionMetaclass, object)):
     __slots__ = ('type', 'slotId', 'anchorPosition', 'anchorDirection', 'applyTo')
 
     def __init__(self, slotType='', slotId=0, anchorPosition=None, anchorDirection=None, applyTo=None, tags=None):
+        super(CustomizationSlotDescription, self).__init__()
         self.type = slotType
         self.slotId = slotId
         self.anchorPosition = anchorPosition
@@ -51,11 +53,11 @@ class CustomizationSlotDescription(object):
         self.applyTo = applyTo
 
 
-class ProjectionDecalSlotDescription(object):
-    __metaclass__ = ReflectionMetaclass
+class ProjectionDecalSlotDescription(with_metaclass(ReflectionMetaclass, object)):
     __slots__ = ('type', 'slotId', 'position', 'rotation', 'scale', 'scaleFactors', 'doubleSided', 'hiddenForUser', 'canBeMirroredVertically', 'showOn', 'tags', 'clipAngle', 'compatibleModels', 'itemId', 'options', 'anchorShift', 'modificationOrder')
 
     def __init__(self, slotType='', slotId=0, position=None, rotation=None, scale=None, scaleFactors=c11n_constants.DEFAULT_DECAL_SCALE_FACTORS, doubleSided=False, hiddenForUser=False, canBeMirroredVertically=False, showOn=None, tags=None, clipAngle=c11n_constants.DEFAULT_DECAL_CLIP_ANGLE, compatibleModels=(c11n_constants.SLOT_DEFAULT_ALLOWED_MODEL,), itemId=None, options=c11n_constants.Options.NONE, anchorShift=c11n_constants.DEFAULT_DECAL_ANCHOR_SHIFT, modificationOrder=0):
+        super(ProjectionDecalSlotDescription, self).__init__()
         self.type = slotType
         self.slotId = slotId
         self.position = position
@@ -75,11 +77,11 @@ class ProjectionDecalSlotDescription(object):
         self.modificationOrder = modificationOrder
 
 
-class AttachmentSlotDescription(object):
-    __metaclass__ = ReflectionMetaclass
+class AttachmentSlotDescription(with_metaclass(ReflectionMetaclass, object)):
     __slots__ = ('type', 'slotId', 'position', 'rotation', 'scale', 'attachNode', 'hiddenForUser', 'enableVisTunnel', 'applyType', 'size', 'hangerId', 'hangerRotation', 'compatibleModels')
 
     def __init__(self, slotType='', slotId=0, position=None, rotation=None, scale=None, attachNode=None, hiddenForUser=False, enableVisTunnel=False, applyType='', size='', hangerId=0, hangerRotation=None, compatibleModels=(c11n_constants.SLOT_DEFAULT_ALLOWED_MODEL,)):
+        super(AttachmentSlotDescription, self).__init__()
         self.type = slotType
         self.slotId = slotId
         self.position = position
@@ -272,9 +274,8 @@ class DeviceHealth(object):
 
 DEFAULT_DEVICE_HEALTH = DeviceHealth(1)
 
-class ModelStatesPaths(object):
+class ModelStatesPaths(with_metaclass(ReflectionMetaclass, object)):
     __slots__ = ('__undamaged', '__destroyed', '__exploded')
-    __metaclass__ = ReflectionMetaclass
 
     def __init__(self, undamaged, destroyed, exploded):
         super(ModelStatesPaths, self).__init__()
@@ -386,7 +387,7 @@ class MechanicsParams(object):
     def createMechanicsParamsOrigin(self):
         origin = self.__origin
         if origin:
-            params = cPickle.loads(origin)
+            params = pickle.loads(origin)
             params.__origin = origin
             return params
         else:
@@ -430,7 +431,7 @@ class MechanicsParams(object):
         pass
 
     def _saveOrigin(self):
-        self.__origin = cPickle.dumps(self, -1)
+        self.__origin = pickle.dumps(self, -1)
 
     def __repr__(self):
         return '{}({})'.format(self.__class__.__name__, ', '.join(('{}={}'.format(slotName, getattr(self, slotName)) for slotName in self.__slots__ if not slotName.startswith('_'))))
@@ -829,15 +830,15 @@ class AccuracyStacksParams(MechanicsParams):
          'accuracyStacks/stabilizeBonus': 0.0}
 
     @classmethod
-    def _readMechanicsParams(cls, mechCtx, mechSection, readModifiers):
-        levelMax = _xml.readPositiveInt(mechCtx, mechSection, 'levelMax')
-        levelInitial = _xml.readNonNegativeInt(mechCtx, mechSection, 'levelInitial')
-        levelAfterShot = _xml.readNonNegativeInt(mechCtx, mechSection, 'levelAfterShot')
-        aimLevelBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'aimLevelBonus')
-        aimBonusCap = _xml.readNonNegativeFloat(mechCtx, mechSection, 'aimBonusCap', 0.99)
-        gainMaxSpd = _xml.readNonNegativeFloat(mechCtx, mechSection, 'gainMaxSpd')
-        gainTime = _xml.readPositiveFloat(mechCtx, mechSection, 'gainTime')
-        stabilizeBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'stabilizeBonus')
+    def _readMechanicsParams(cls, ctx, section, readModifiers):
+        levelMax = _xml.readPositiveInt(ctx, section, 'levelMax')
+        levelInitial = _xml.readNonNegativeInt(ctx, section, 'levelInitial')
+        levelAfterShot = _xml.readNonNegativeInt(ctx, section, 'levelAfterShot')
+        aimLevelBonus = _xml.readNonNegativeFloat(ctx, section, 'aimLevelBonus')
+        aimBonusCap = _xml.readNonNegativeFloat(ctx, section, 'aimBonusCap', 0.99)
+        gainMaxSpd = _xml.readNonNegativeFloat(ctx, section, 'gainMaxSpd')
+        gainTime = _xml.readPositiveFloat(ctx, section, 'gainTime')
+        stabilizeBonus = _xml.readNonNegativeFloat(ctx, section, 'stabilizeBonus')
         return cls(levelMax=levelMax, levelInitial=levelInitial, levelAfterShot=levelAfterShot, aimLevelBonus=aimLevelBonus, aimBonusCap=aimBonusCap, gainMaxSpd=gainMaxSpd, gainTime=gainTime, stabilizeBonus=stabilizeBonus)
 
     def _applyMechanicsAttrs(self, attr, value):
@@ -851,9 +852,8 @@ class AccuracyStacksParams(MechanicsParams):
             self.stabilizeBonus += value
 
 
-class SecondaryGunParams(GunMechanicsParams):
+class SecondaryGunParams(with_metaclass(ReflectionMetaclass, GunMechanicsParams)):
     __slots__ = ('initiationTime', 'dependentOnMainGun')
-    __metaclass__ = ReflectionMetaclass
     MECHANICS_NAME = 'secondaryGun'
 
     def __init__(self, initiationTime, dependentOnMainGun):
@@ -908,7 +908,7 @@ class SupportWeaponParams(MechanicsParams):
         return SecondaryGunParams.MECHANICS_NAME in mechanicsParams and mechanicsParams[SecondaryGunParams.MECHANICS_NAME].isActiveMechanics(vehicleDescriptor)
 
     @classmethod
-    def _readMechanicsParams(cls, xmlCtx, section, readModifiers):
+    def _readMechanicsParams(cls, ctx, section, readModifiers):
         return cls()
 
 
@@ -1023,10 +1023,10 @@ class ChargeShotParams(MechanicsParams):
         self._saveOrigin()
 
     @classmethod
-    def _readMechanicsParams(cls, mechCtx, mechSection, readModifiers):
-        timePerLevel = list(_xml.readTupleOfNonNegativeFloats(mechCtx, mechSection, 'timePerLevel'))
-        damageFactorsPerLevel = list(_xml.readTupleOfNonNegativeFloats(mechCtx, mechSection, 'damageFactorsPerLevel'))
-        shotBlockTime = _xml.readNonNegativeFloat(mechCtx, mechSection, 'shotBlockTime')
+    def _readMechanicsParams(cls, ctx, section, readModifiers):
+        timePerLevel = list(_xml.readTupleOfNonNegativeFloats(ctx, section, 'timePerLevel'))
+        damageFactorsPerLevel = list(_xml.readTupleOfNonNegativeFloats(ctx, section, 'damageFactorsPerLevel'))
+        shotBlockTime = _xml.readNonNegativeFloat(ctx, section, 'shotBlockTime')
         return cls(timePerLevel, damageFactorsPerLevel, shotBlockTime)
 
     @classmethod
@@ -1082,13 +1082,13 @@ class OverheatStacksParams(MechanicsParams):
          'overheatStacks/totalTime': 0.0}
 
     @classmethod
-    def _readMechanicsParams(cls, mechCtx, mechSection, _):
-        heatingTime = _xml.readNonNegativeInt(mechCtx, mechSection, 'heatingTime', 0)
-        coolingTime = _xml.readNonNegativeInt(mechCtx, mechSection, 'coolingTime', 0)
-        dmgBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'dmgBonus', 0.0)
-        aimBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'aimBonus', 0.0)
-        gainMaxSpd = _xml.readNonNegativeFloat(mechCtx, mechSection, 'gainMaxSpd', 0.0)
-        delayTimerDuration = _xml.readNonNegativeFloat(mechCtx, mechSection, 'delayTimerDuration', 0.0)
+    def _readMechanicsParams(cls, ctx, section, _):
+        heatingTime = _xml.readNonNegativeInt(ctx, section, 'heatingTime', 0)
+        coolingTime = _xml.readNonNegativeInt(ctx, section, 'coolingTime', 0)
+        dmgBonus = _xml.readNonNegativeFloat(ctx, section, 'dmgBonus', 0.0)
+        aimBonus = _xml.readNonNegativeFloat(ctx, section, 'aimBonus', 0.0)
+        gainMaxSpd = _xml.readNonNegativeFloat(ctx, section, 'gainMaxSpd', 0.0)
+        delayTimerDuration = _xml.readNonNegativeFloat(ctx, section, 'delayTimerDuration', 0.0)
         return cls(heatingTime, coolingTime, dmgBonus, aimBonus, gainMaxSpd, delayTimerDuration)
 
     def _applyMechanicsAttrs(self, attr, value):
@@ -1127,8 +1127,8 @@ class TargetDesignatorParams(MechanicsParams):
         self._saveOrigin()
 
     @classmethod
-    def _readMechanicsParams(cls, mechCtx, mechSection, _):
-        readFloat = partial(_xml.readNonNegativeFloat, mechCtx, mechSection)
+    def _readMechanicsParams(cls, ctx, section, _):
+        readFloat = partial(_xml.readNonNegativeFloat, ctx, section)
         return cls(readFloat('damageIncomeFactor', 1.0), readFloat('cooldownTime', 1.0), readFloat('deployTime', 0.0), readFloat('spottedMarkedTime', 1.0), readFloat('unspottedMarkedTime', 1.0))
 
     @classmethod
@@ -1189,37 +1189,37 @@ class StanceDanceParams(MechanicsParams):
         self._saveOrigin()
 
     @classmethod
-    def _readMechanicsParams(cls, mechCtx, mechSection, readModifiers):
-        timeSwitchStance = _xml.readNonNegativeFloat(mechCtx, mechSection, 'timeSwitchStance')
-        maxEnergy = _xml.readNonNegativeFloat(mechCtx, mechSection, 'maxEnergy')
-        gainFightEnergyPoints = _xml.readNonNegativeFloat(mechCtx, mechSection, 'gainFightEnergyPoints')
-        gainTurboEnergyPoints = _xml.readNonNegativeFloat(mechCtx, mechSection, 'gainTurboEnergyPoints')
-        gainEnergyTime = _xml.readNonNegativeFloat(mechCtx, mechSection, 'gainEnergyTime')
-        gainTurboEnergyBonusPoints = _xml.readNonNegativeFloat(mechCtx, mechSection, 'gainTurboEnergyBonusPoints')
-        gainTurboEnergySpdLimitKmh = _xml.readNonNegativeFloat(mechCtx, mechSection, 'gainTurboEnergySpdLimitKmh')
-        passiveFightEnergyBonusPerHit = _xml.readNonNegativeFloat(mechCtx, mechSection, 'passiveFightEnergyBonusPerHit')
-        passiveTurboFwdSpdBonusKmh = _xml.readNonNegativeFloat(mechCtx, mechSection, 'passiveTurboFwdSpdBonusKmh')
-        passiveTurboBkwdSpdBonusKmh = _xml.readNonNegativeFloat(mechCtx, mechSection, 'passiveTurboBkwdSpdBonusKmh')
-        passiveTurboEnginePowerBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'passiveTurboEnginePowerBonus')
-        passiveTurboAccuracyDebuff = _xml.readNonNegativeFloat(mechCtx, mechSection, 'passiveTurboAccuracyDebuff')
-        passiveTurboAimSpeedDebuff = _xml.readNonNegativeFloat(mechCtx, mechSection, 'passiveTurboAimSpeedDebuff')
-        passiveTurboStabilizeDebuff = _xml.readNonNegativeFloat(mechCtx, mechSection, 'passiveTurboStabilizeDebuff')
-        passiveTurboAfterShotDispersionDebuff = _xml.readNonNegativeFloat(mechCtx, mechSection, 'passiveTurboAfterShotDispersionDebuff')
-        activeFightCost = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeFightCost')
-        activeFightDuration = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeFightDuration')
-        activeFightAccuracyBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeFightAccuracyBonus')
-        activeFightAimSpeedBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeFightAimSpeedBonus')
-        activeFightStabilizeBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeFightStabilizeBonus')
-        activeFightAfterShotDispersionBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeFightAfterShotDispersionBonus')
-        activeFightReloadSpdBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeFightReloadSpdBonus')
-        activeTurboCost = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeTurboCost')
-        activeTurboDuration = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeTurboDuration')
-        activeTurboFwdSpdBonusKmh = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeTurboFwdSpdBonusKmh')
-        activeTurboBkwdSpdBonusKmh = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeTurboBkwdSpdBonusKmh')
-        activeTurboEnginePowerBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeTurboEnginePowerBonus')
-        activeTurboRotationSpeedDebuff = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeTurboRotationSpeedDebuff')
-        activeTurboRammingDmgBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeTurboRammingDmgBonus')
-        impulse = readImpulseData(mechCtx, mechSection)
+    def _readMechanicsParams(cls, ctx, section, readModifiers):
+        timeSwitchStance = _xml.readNonNegativeFloat(ctx, section, 'timeSwitchStance')
+        maxEnergy = _xml.readNonNegativeFloat(ctx, section, 'maxEnergy')
+        gainFightEnergyPoints = _xml.readNonNegativeFloat(ctx, section, 'gainFightEnergyPoints')
+        gainTurboEnergyPoints = _xml.readNonNegativeFloat(ctx, section, 'gainTurboEnergyPoints')
+        gainEnergyTime = _xml.readNonNegativeFloat(ctx, section, 'gainEnergyTime')
+        gainTurboEnergyBonusPoints = _xml.readNonNegativeFloat(ctx, section, 'gainTurboEnergyBonusPoints')
+        gainTurboEnergySpdLimitKmh = _xml.readNonNegativeFloat(ctx, section, 'gainTurboEnergySpdLimitKmh')
+        passiveFightEnergyBonusPerHit = _xml.readNonNegativeFloat(ctx, section, 'passiveFightEnergyBonusPerHit')
+        passiveTurboFwdSpdBonusKmh = _xml.readNonNegativeFloat(ctx, section, 'passiveTurboFwdSpdBonusKmh')
+        passiveTurboBkwdSpdBonusKmh = _xml.readNonNegativeFloat(ctx, section, 'passiveTurboBkwdSpdBonusKmh')
+        passiveTurboEnginePowerBonus = _xml.readNonNegativeFloat(ctx, section, 'passiveTurboEnginePowerBonus')
+        passiveTurboAccuracyDebuff = _xml.readNonNegativeFloat(ctx, section, 'passiveTurboAccuracyDebuff')
+        passiveTurboAimSpeedDebuff = _xml.readNonNegativeFloat(ctx, section, 'passiveTurboAimSpeedDebuff')
+        passiveTurboStabilizeDebuff = _xml.readNonNegativeFloat(ctx, section, 'passiveTurboStabilizeDebuff')
+        passiveTurboAfterShotDispersionDebuff = _xml.readNonNegativeFloat(ctx, section, 'passiveTurboAfterShotDispersionDebuff')
+        activeFightCost = _xml.readNonNegativeFloat(ctx, section, 'activeFightCost')
+        activeFightDuration = _xml.readNonNegativeFloat(ctx, section, 'activeFightDuration')
+        activeFightAccuracyBonus = _xml.readNonNegativeFloat(ctx, section, 'activeFightAccuracyBonus')
+        activeFightAimSpeedBonus = _xml.readNonNegativeFloat(ctx, section, 'activeFightAimSpeedBonus')
+        activeFightStabilizeBonus = _xml.readNonNegativeFloat(ctx, section, 'activeFightStabilizeBonus')
+        activeFightAfterShotDispersionBonus = _xml.readNonNegativeFloat(ctx, section, 'activeFightAfterShotDispersionBonus')
+        activeFightReloadSpdBonus = _xml.readNonNegativeFloat(ctx, section, 'activeFightReloadSpdBonus')
+        activeTurboCost = _xml.readNonNegativeFloat(ctx, section, 'activeTurboCost')
+        activeTurboDuration = _xml.readNonNegativeFloat(ctx, section, 'activeTurboDuration')
+        activeTurboFwdSpdBonusKmh = _xml.readNonNegativeFloat(ctx, section, 'activeTurboFwdSpdBonusKmh')
+        activeTurboBkwdSpdBonusKmh = _xml.readNonNegativeFloat(ctx, section, 'activeTurboBkwdSpdBonusKmh')
+        activeTurboEnginePowerBonus = _xml.readNonNegativeFloat(ctx, section, 'activeTurboEnginePowerBonus')
+        activeTurboRotationSpeedDebuff = _xml.readNonNegativeFloat(ctx, section, 'activeTurboRotationSpeedDebuff')
+        activeTurboRammingDmgBonus = _xml.readNonNegativeFloat(ctx, section, 'activeTurboRammingDmgBonus')
+        impulse = readImpulseData(ctx, section)
         return cls(timeSwitchStance=timeSwitchStance, maxEnergy=maxEnergy, gainFightEnergyPoints=gainFightEnergyPoints, gainTurboEnergyPoints=gainTurboEnergyPoints, gainEnergyTime=gainEnergyTime, gainTurboEnergyBonusPoints=gainTurboEnergyBonusPoints, gainTurboEnergySpdLimitKmh=gainTurboEnergySpdLimitKmh, passiveFightEnergyBonusPerHit=passiveFightEnergyBonusPerHit, passiveTurboFwdSpdBonusKmh=passiveTurboFwdSpdBonusKmh, passiveTurboBkwdSpdBonusKmh=passiveTurboBkwdSpdBonusKmh, passiveTurboEnginePowerBonus=passiveTurboEnginePowerBonus, passiveTurboAccuracyDebuff=passiveTurboAccuracyDebuff, passiveTurboAimSpeedDebuff=passiveTurboAimSpeedDebuff, passiveTurboStabilizeDebuff=passiveTurboStabilizeDebuff, passiveTurboAfterShotDispersionDebuff=passiveTurboAfterShotDispersionDebuff, activeFightCost=activeFightCost, activeFightDuration=activeFightDuration, activeFightAccuracyBonus=activeFightAccuracyBonus, activeFightAimSpeedBonus=activeFightAimSpeedBonus, activeFightStabilizeBonus=activeFightStabilizeBonus, activeFightAfterShotDispersionBonus=activeFightAfterShotDispersionBonus, activeFightReloadSpdBonus=activeFightReloadSpdBonus, activeTurboCost=activeTurboCost, activeTurboDuration=activeTurboDuration, activeTurboFwdSpdBonusKmh=activeTurboFwdSpdBonusKmh, activeTurboBkwdSpdBonusKmh=activeTurboBkwdSpdBonusKmh, activeTurboEnginePowerBonus=activeTurboEnginePowerBonus, activeTurboRotationSpeedDebuff=activeTurboRotationSpeedDebuff, activeTurboRammingDmgBonus=activeTurboRammingDmgBonus, impulse=impulse)
 
     @classmethod
@@ -1259,11 +1259,11 @@ class DebuffsParams(MechanicsParams):
         self._saveOrigin()
 
     @classmethod
-    def _readMechanicsParams(cls, mechCtx, mechSection, readModifiers):
+    def _readMechanicsParams(cls, ctx, section, readModifiers):
         debuffs = {}
-        for debuff in mechSection.keys():
+        for debuff in section.keys():
             debuffIdx = DEBUFFS_TYPES.getIdx(debuff)
-            debuffs[debuffIdx] = readModifiers(mechCtx, mechSection[debuff])
+            debuffs[debuffIdx] = readModifiers(ctx, section[debuff])
 
         return cls(debuffs)
 
@@ -1280,6 +1280,12 @@ class TemperatureGunThermalStates(object):
 
     def __eq__(self, other):
         return self.states == other.states and self.thermalStateHysteresis == other.thermalStateHysteresis if isinstance(other, TemperatureGunThermalStates) else False
+
+    def __ne__(self, other):
+        return not self == other
+
+    def __hash__(self):
+        return hash((self.states, self.thermalStateHysteresis))
 
     @classmethod
     def readThermalStates(cls, ctx, section, readModifiers, mechanicName):
@@ -1405,7 +1411,7 @@ class HeatingZonesGunParams(GunMechanicsParams):
 
     @classmethod
     def _readMechanicsParams(cls, ctx, section, readModifiers):
-        zonesValues = map(float, _xml.readNonEmptyString(ctx, section, 'zones').split())
+        zonesValues = lmap(float, _xml.readNonEmptyString(ctx, section, 'zones').split())
         if any((zoneValue < 0.0 for zoneValue in zonesValues)):
             _xml.raiseWrongXml(ctx, '', "[{}] Invalid zones values: all zones values should be non negative '{}'".format(cls.__name__, zonesValues))
         zonesCount = len(zonesValues)
@@ -1494,6 +1500,11 @@ class PropellantGunDamageFactors(object):
 
     def __eq__(self, other):
         return isclose(self.minFactor, other.minFactor) and isclose(self.maxFactor, other.maxFactor)
+
+    def __ne__(self, other):
+        return not self == other
+
+    __hash__ = None
 
 
 class PropellantGunParams(GunMechanicsParams):

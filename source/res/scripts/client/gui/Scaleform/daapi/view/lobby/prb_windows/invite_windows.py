@@ -89,7 +89,7 @@ class AutoInviteWindow(_InviteWindow):
             success = yield DialogsInterface.showI18nConfirmDialog('changeRoamingPeriphery')
             if not success:
                 return
-        self.prbPeripheriesHandler.join(invite.peripheryID, JoinBattleSessionCtx(prbID, invite.prbType, 'prebattle/join'), postActions, finishActions)
+        self.prbPeripheriesHandler.join(invite.peripheryID, JoinBattleSessionCtx(prbID, invite.prbType, invite.peripheryID, 'prebattle/join'), postActions, finishActions)
 
     def declineInvite(self):
         self.onWindowClose()

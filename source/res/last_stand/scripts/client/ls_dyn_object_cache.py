@@ -2,6 +2,7 @@
 # Embedded file name: last_stand/scripts/client/ls_dyn_object_cache.py
 from __future__ import absolute_import
 import typing
+import CGF
 import ResMgr
 from dyn_objects_cache import DynObjectsBase
 from helpers import dependency
@@ -9,7 +10,9 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 
 class LSPrefabs(object):
-    ALL = ()
+    BEAM_IDLE = 'lsBeamIdle'
+    BEAM_DAMAGE = 'lsBeamDamage'
+    ALL = (BEAM_IDLE, BEAM_DAMAGE)
 
 
 class LSEffects(object):
@@ -43,11 +46,21 @@ class _LSDynObjects(DynObjectsBase):
         for effectKey in LSEffects.ALL:
             self.__effectSections[effectKey] = self.__readEffect(dataSection, effectKey)
 
+        if self.__prefabPaths:
+            CGF.cachePrefabs(list(self.__prefabPaths.values()))
         super(_LSDynObjects, self).init(dataSection)
 
-    def destroy(self):
+    def clear(self):
+        if self.__prefabPaths:
+            CGF.removePrefabsFromCache(list(self.__prefabPaths.values()))
+            self.__prefabPaths.clear()
+        self._initialized = False
         super(_LSDynObjects, self).clear()
+
+    def destroy(self):
+        self.clear()
         self.__effectSections.clear()
+        super(_LSDynObjects, self).destroy()
 
     def getPrefab(self, key):
         return self.__prefabPaths.get(key, None)

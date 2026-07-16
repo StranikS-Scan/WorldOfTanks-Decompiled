@@ -43,11 +43,11 @@ class BRUpgradeEffectPlayer(IProgressionListener, IViewComponentsCtrlListener):
         vehicle = BigWorld.entities.get(vehicleID)
         if vehicle:
             config = self.__dynObjectsCache.getConfig(self.__sessionProvider.arenaVisitor.getArenaGuiType()).getVehicleUpgradeEffect().effectDescr
-            gameObject = CGF.GameObject(vehicle.appearance.spaceID)
-            gameObject.createComponent(GenericComponents.HierarchyComponent, vehicle.appearance.gameObject)
-            gameObject.createComponent(GenericComponents.ParticleComponent, config.path, True, config.rate)
-            gameObject.createComponent(GenericComponents.TransformComponent, config.offset)
-            gameObject.activate()
-            gameObject.transferOwnershipToWorld()
+            queue = CGF.CommandQueue(vehicle.appearance.spaceID)
+            gameObject = queue.createPendingGameObject()
+            queue.createComponent(gameObject, CGF.HierarchyComponent, vehicle.appearance.gameObject)
+            queue.createComponent(gameObject, GenericComponents.ParticleComponent, config.path, True, config.rate)
+            queue.createComponent(gameObject, CGF.TransformComponent, config.offset)
+            queue.activateGameObject(gameObject)
         else:
             _logger.warning('Unable to get vehicle by id %s', vehicleID)

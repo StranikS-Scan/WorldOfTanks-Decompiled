@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/development_features/__init__.py
+from __future__ import absolute_import
 from constants import ARENA_BONUS_TYPE, ARENA_BONUS_MASK
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from collections import namedtuple

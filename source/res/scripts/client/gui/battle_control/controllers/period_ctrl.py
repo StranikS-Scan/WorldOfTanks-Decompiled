@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/period_ctrl.py
+from __future__ import absolute_import
 import weakref
 import BattleReplay
 import BigWorld
@@ -185,8 +186,7 @@ class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
             viewCmp.setTotalTime(totalTime)
 
         minutes, seconds = divmod(int(totalTime), 60)
-        for idx in range(len(self._timeNotifications)):
-            m, s, f, state = self._timeNotifications[idx]
+        for idx, (m, s, f, state) in enumerate(self._timeNotifications):
             condValid = totalTime <= m * 60 + s
             if condValid and not state:
                 f(minutes, seconds)

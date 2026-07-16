@@ -9004,6 +9004,33 @@
       <userString>	#vehicle_customization:special_style/bp2026_june_4	</userString>
       <tags>	hiddenInUI	</tags>
     </paint>
+    <paint>
+      <id>	669	</id>
+      <texture>	gui/maps/vehicles/repaints/poland_color_05.png	</texture>
+      <color>	51 51 51 255	</color>
+      <gloss>	0.4	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/bp2026_june_5	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	670	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_26.png	</texture>
+      <color>	0 25 51 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/bp2026_june_6	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	671	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <color>	17 17 20 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <userString>	#vehicle_customization:special_style/bp2026_june_7	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
   </itemGroup>
   <itemGroup>
     <name>	LS 26.1	</name>
@@ -9027,6 +9054,36 @@
       <metallic>	0.63	</metallic>
       <userString>	#vehicle_customization:special_style/ls26_1	</userString>
       <tags>	styleOnly hiddenInUI	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	PUB West Token Store	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	649	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_13.png	</texture>
+      <color>	148 136 114 255	</color>
+      <gloss>	0.41	</gloss>
+      <metallic>	0.203	</metallic>
+      <userString>	#vehicle_customization:special_style/pub_west_token_store	</userString>
+      <tags>	hiddenInUI	</tags>
     </paint>
     <usages>
       <item>
@@ -9089,6 +9146,105 @@
       <gloss>	0.63	</gloss>
       <metallic>	0.235	</metallic>
       <userString>	#vehicle_customization:special_style/dragonboat_festival_2026_2	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	Brazen Bull	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	656	</id>
+      <texture>	gui/maps/vehicles/repaints/china_color_04.png	</texture>
+      <color>	138 110 94 255	</color>
+      <gloss>	0.525	</gloss>
+      <metallic>	0.3	</metallic>
+      <userString>	#vehicle_customization:special_style/brazen_bull	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	PUB West Community	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	662	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_26.png	</texture>
+      <color>	15 34 46 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/pub_west_community_1	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	663	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_26.png	</texture>
+      <color>	17 55 74 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/pub_west_community_2	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	cn360 relaunch 2026	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	664	</id>
+      <texture>	gui/maps/vehicles/repaints/france_color_04.png	</texture>
+      <color>	158 130 93 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/cn360_relaunch_2026	</userString>
       <tags>	hiddenInUI	</tags>
     </paint>
     <usages>
@@ -9198,6 +9354,87 @@
       <metallic>	0.23	</metallic>
       <tags>	styleOnly hiddenInUI	</tags>
       <userString>	#vehicle_customization:special_style/match_day	</userString>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	LS26_2	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	673	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <color>	18 17 17 255	</color>
+      <gloss>	0.738	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/ls26_2	</userString>
+      <tags>	styleOnly hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	674	</id>
+      <texture>	gui/maps/vehicles/repaints/france_color_02.png	</texture>
+      <color>	62 63 64 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.63	</metallic>
+      <userString>	#vehicle_customization:special_style/ls26_2	</userString>
+      <tags>	styleOnly hiddenInUI	</tags>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	2D Customization Challenges	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	679	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_40.png	</texture>
+      <color>	30 17 20 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/2d_cust_challenges_2026_1	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	OLS7	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	685	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_36.png	</texture>
+      <color>	22 22 38 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/ols_2026_1	</userString>
+      <tags>	hiddenInUI	</tags>
     </paint>
   </itemGroup>
   <itemGroup>
@@ -9928,6 +10165,15 @@
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/movieNight	</userString>
       <texture>	gui/maps/vehicles/repaints/france_color_05.png	</texture>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	5605	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <color>	17 17 20 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <userString>	#vehicle_customization:repaint/cowmouflage	</userString>
       <tags>	hiddenInUI	</tags>
     </paint>
   </itemGroup>

@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/hints_common/battle/manager.py
+from __future__ import absolute_import
 import logging
 import typing
+from future.utils import listvalues
 from dict2model import exceptions
 from hints_common.battle.schemas.base import HMCType, CommonHintSchema
 from hints_common.common.manager import BaseHintsModelsManager
@@ -22,17 +24,17 @@ class CommonBattleHintsModelsManager(BaseHintsModelsManager, patched_typing.Gene
         return self._hints.get(uniqueName)
 
     def getAll(self):
-        return self._hints.values()
+        return listvalues(self._hints)
 
     def getBySchema(self, schema):
         return self._hintsBySchemas.get(schema, [])
 
-    def _addToStorage(self, schema, hint):
-        if hint.uniqueName in self._hints:
-            raise exceptions.ValidationError('{} already exist.'.format(hint.uniqueName))
-        hint.prepare(schema)
-        self._hints[hint.uniqueName] = hint
-        self._hintsBySchemas.setdefault(schema, []).append(hint)
+    def _addToStorage(self, schema, model):
+        if model.uniqueName in self._hints:
+            raise exceptions.ValidationError('{} already exist.'.format(model.uniqueName))
+        model.prepare(schema)
+        self._hints[model.uniqueName] = model
+        self._hintsBySchemas.setdefault(schema, []).append(model)
 
     def _checkSchemaType(self, schema):
         if not isinstance(schema, CommonHintSchema):

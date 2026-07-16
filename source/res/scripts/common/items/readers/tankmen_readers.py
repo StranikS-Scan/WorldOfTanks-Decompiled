@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/readers/tankmen_readers.py
+from __future__ import absolute_import
+from past.builtins import intern
 import ResMgr
 from constants import IS_CLIENT, IS_WEB, IS_BOT
 from items import _xml
@@ -108,7 +110,7 @@ def _readTankmenGroup(xmlCtx, groupName, subsection, firstNames, lastNames, icon
         parseIcon = _parseIcon
     else:
         parseName = parseIcon = None
-    return tankmen_components.NationGroup(_xml.readNonNegativeInt(xmlCtx, subsection, 'groupID'), groupName, 'female' == _xml.readNonEmptyString(xmlCtx, subsection, 'sex'), subsection.readBool('notInShop', False), _readIDs((xmlCtx, 'firstNames'), _xml.getChildren(xmlCtx, subsection, 'firstNames'), firstNames, parseName), _readIDs((xmlCtx, 'lastNames'), _xml.getChildren(xmlCtx, subsection, 'lastNames'), lastNames, parseName), _readIDs((xmlCtx, 'icons'), _xml.getChildren(xmlCtx, subsection, 'icons'), icons, parseIcon), _xml.readNonNegativeFloat(xmlCtx, subsection, 'weight'), _readGroupTags((xmlCtx, 'tags'), subsection, 'tags'), _readGroupRoles((xmlCtx, 'roles'), subsection, 'roles'))
+    return tankmen_components.NationGroup(_xml.readNonNegativeInt(xmlCtx, subsection, 'groupID'), groupName, _xml.readNonEmptyString(xmlCtx, subsection, 'sex') == 'female', subsection.readBool('notInShop', False), _readIDs((xmlCtx, 'firstNames'), _xml.getChildren(xmlCtx, subsection, 'firstNames'), firstNames, parseName), _readIDs((xmlCtx, 'lastNames'), _xml.getChildren(xmlCtx, subsection, 'lastNames'), lastNames, parseName), _readIDs((xmlCtx, 'icons'), _xml.getChildren(xmlCtx, subsection, 'icons'), icons, parseIcon), _xml.readNonNegativeFloat(xmlCtx, subsection, 'weight'), _readGroupTags((xmlCtx, 'tags'), subsection, 'tags'), _readGroupRoles((xmlCtx, 'roles'), subsection, 'roles'))
 
 
 def _readNationConfigSection(xmlCtx, section):

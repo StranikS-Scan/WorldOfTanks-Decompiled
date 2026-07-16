@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/vehicle_outfit/containers.py
+from __future__ import absolute_import
 import logging
 import typing
+from future.utils import viewitems, viewvalues
 from items.components.c11n_constants import ProjectionDecalMatchingTags
 from shared_utils import first
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -118,13 +120,13 @@ class OutfitContainer(object):
         return result
 
     def pack(self, component):
-        for slot in self._slots.itervalues():
+        for slot in viewvalues(self._slots):
             packersList = packers.pickPackers(slot.getTypes())
             for packer in packersList:
                 packer.pack(slot, component)
 
     def unpack(self, component):
-        for slot in self._slots.itervalues():
+        for slot in viewvalues(self._slots):
             packersList = packers.pickPackers(slot.getTypes())
             for packer in packersList:
                 packer.unpack(slot, component)
@@ -139,7 +141,7 @@ class OutfitContainer(object):
         self._slots[itemTypeID] = slot
 
     def slots(self):
-        for slot in set(self._slots.itervalues()):
+        for slot in set(viewvalues(self._slots)):
             yield slot
 
     def diff(self, other):
@@ -255,13 +257,13 @@ class MultiSlot(object):
 
     def items(self, customizationTypes=None):
         if customizationTypes:
-            for idx, pair in self._items.iteritems():
+            for idx, pair in viewitems(self._items):
                 item = getItemByCompactDescr(pair.intCD)
                 if item.itemType in customizationTypes:
                     yield (self._regions[idx], pair.intCD, pair.component)
 
         else:
-            for idx, pair in self._items.iteritems():
+            for idx, pair in viewitems(self._items):
                 yield (self._regions[idx], pair.intCD, pair.component)
 
     def values(self):

@@ -11,7 +11,6 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.page.footer.platoon_member_model import PlatoonMemberModel
 from gui.impl.gen.view_models.views.lobby.page.footer.platoon_model import PlatoonModel
 from gui.impl.pub.view_component import ViewComponent
-from gui.prb_control import prb_getters
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency
@@ -45,9 +44,9 @@ class PlatoonPresenter(ViewComponent[PlatoonModel], IGlobalListener):
         return super(PlatoonPresenter, self).createPopOver(event)
 
     def onPrbEntitySwitched(self):
-        unitMgr = prb_getters.getClientUnitMgr()
-        if unitMgr and unitMgr.unit:
-            unitMgr.unit.onSquadSizeChanged += self._onUpdatePlatoon
+        self._onUpdatePlatoon()
+
+    def onUnitSizeChanged(self):
         self._onUpdatePlatoon()
 
     def onEnqueued(self, *args, **kwargs):
@@ -75,9 +74,6 @@ class PlatoonPresenter(ViewComponent[PlatoonModel], IGlobalListener):
     def _finalize(self):
         self.stopGlobalListening()
         self.app = None
-        unitMgr = prb_getters.getClientUnitMgr()
-        if unitMgr and unitMgr.unit:
-            unitMgr.unit.onSquadSizeChanged -= self._onUpdatePlatoon
         super(PlatoonPresenter, self)._finalize()
         return
 
@@ -95,9 +91,6 @@ class PlatoonPresenter(ViewComponent[PlatoonModel], IGlobalListener):
     def _onInPlatoonAction(self):
         if self.prbDispatcher:
             self.__platoonCtrl.evaluateVisibility(toggleUI=True)
-
-    def __onUpdatePrbControls(self, *_):
-        self._onUpdatePlatoon()
 
     def _onUpdatePlatoon(self):
         pFuncState = self.prbDispatcher.getFunctionalState()
@@ -124,6 +117,9 @@ class PlatoonPresenter(ViewComponent[PlatoonModel], IGlobalListener):
             members.addViewModel(member)
 
         members.invalidate()
+
+    def __onUpdatePrbControls(self, *_):
+        self._onUpdatePlatoon()
 
     def __getTooltip(self, extendedSquadInfoVo, isInSquad):
         controlsHelper = self.__hangarGuiCtrl.currentGuiProvider.getLobbyHeaderHelper()

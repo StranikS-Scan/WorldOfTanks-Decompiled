@@ -2,18 +2,16 @@
 # Embedded file name: scripts/client/gui/subhangar/subhangar_observer.py
 import logging
 from collections import namedtuple
-from functools import partial
 import CGF
 import Hangar
 import Math
 import ResMgr
 import typing
 from shared_utils import first
-from cgf_components.hangar_camera_manager import HangarCameraManager
+from cgf_components.hangar_camera_manager import HangarCameraSystem
 from frameworks.state_machine import BaseStateObserver
-from gui.subhangar.subhangar_state_groups import SubhangarStateGroupConfigProvider, CameraMover
+from gui.subhangar.subhangar_state_groups import SubhangarStateGroupConfigProvider
 from helpers import dependency
-from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.gui.shared.utils import IHangarSpace
 from vehicle_systems.tankStructure import TankPartIndexes
 if typing.TYPE_CHECKING:
@@ -113,7 +111,6 @@ class SubhangarObserver(BaseStateObserver):
         self.__subHangarsToActivate = set()
         self.__subHangarsToDeactivate = set()
         self.__config = _SubhangarConfig(path)
-        self.__callbackDelayer = CallbackDelayer()
         self.__lsm = lsm
         lsm.onVisibleRouteChanged += self.__navigationsFinished
         self.__hangarSpace.onSpaceCreate += self.__navigationsFinished
@@ -125,7 +122,6 @@ class SubhangarObserver(BaseStateObserver):
         self.__lsm.onVisibleRouteChanged -= self.__navigationsFinished
         self.__lsm = None
         self.__hangarSpace.onSpaceCreate -= self.__navigationsFinished
-        self.__callbackDelayer.destroy()
         self.__activatedSubHangars = []
         self.__subHangarsToActivate = set()
         self.__subHangarsToDeactivate = set()
@@ -186,27 +182,18 @@ class SubhangarObserver(BaseStateObserver):
                     Hangar.activateGroup(hangarSpaceId, config.subHangar.name)
                     self.__activatedSubHangars.append(config)
 
-            cameraManager = CGF.getManager(hangarSpaceId, HangarCameraManager)
+            cameraManager = CGF.getSystem(hangarSpaceId, HangarCameraSystem)
             if cameraManager and (self.__subHangarsToDeactivate or self.__subHangarsToActivate):
                 configWithCameras = [ config for config in self.__activatedSubHangars if config.subHangar.defaultCamera ]
                 if configWithCameras:
                     subHangar, _, cameraMover, _ = configWithCameras[-1]
                     _logger.debug('Switching to %s camera (group: %s).', subHangar.defaultCamera, subHangar)
-                    self.__callbackDelayer.clearCallbacks()
-                    self.__callbackDelayer.delayCallback(0, partial(self.__switchToCameraWhenLoaded, subHangar.defaultCamera, cameraMover))
+                    if not cameraManager.cameraExists(subHangar.defaultCamera):
+                        cameraMover.moveCameraFailed()
+                    else:
+                        cameraMover.moveCamera(cameraManager, subHangar.defaultCamera)
                 else:
-                    self.__callbackDelayer.clearCallbacks()
                     _logger.debug('No camera specified for current set of rooms. Returning camera to tank.')
                     if self.__hangarSpace.spaceInited:
                         cameraManager.switchToTank()
             return
-
-    def __switchToCameraWhenLoaded(self, cameraName, cameraMover):
-        hangarSpaceId = self.__hangarSpace.spaceID
-        cameraManager = CGF.getManager(hangarSpaceId, HangarCameraManager)
-        if not cameraManager or not cameraManager.cameraExists(cameraName):
-            cameraMover.moveCameraFailed()
-            return 0
-        else:
-            cameraMover.moveCamera(cameraManager, cameraName)
-            return None

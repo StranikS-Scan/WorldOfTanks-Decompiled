@@ -35,6 +35,9 @@ class GunShootingEvents(ClientEventsContainer, IGunShootingEventsLogic):
         self._isAppearanceReady = True
         self.onAppearanceReady()
 
+    def processAppearanceReset(self):
+        self._isAppearanceReady = False
+
     def processDiscreteShot(self, gunIndex):
         self.onDiscreteShot(gunIndex)
 

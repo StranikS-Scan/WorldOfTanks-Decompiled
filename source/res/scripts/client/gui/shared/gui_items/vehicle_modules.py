@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/vehicle_modules.py
+from __future__ import absolute_import, division
 import logging
 import typing
+from future.utils import viewvalues
 import nations
 from constants import SHELL_TYPES, SHELL_MECHANICS_TYPE
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
@@ -21,13 +23,13 @@ if typing.TYPE_CHECKING:
     from gui.shared.gui_items.vehicle_mechanics.module_mechanic_item import ModuleMechanicItem
     from items.vehicles import VehicleDescr
 MODULE_TYPES_ORDER = ('vehicleGun', 'vehicleTurret', 'vehicleEngine', 'vehicleChassis', 'vehicleRadio', 'vehicleFuelTank')
-MODULE_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(MODULE_TYPES_ORDER)))
+MODULE_TYPES_ORDER_INDICES = {n:i for i, n in enumerate(MODULE_TYPES_ORDER)}
 SHELL_TYPES_ORDER = (SHELL_TYPES.ARMOR_PIERCING,
  SHELL_TYPES.ARMOR_PIERCING_CR,
  SHELL_TYPES.HOLLOW_CHARGE,
  SHELL_TYPES.HIGH_EXPLOSIVE,
  SHELL_TYPES.SMOKE)
-SHELL_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(SHELL_TYPES_ORDER)))
+SHELL_TYPES_ORDER_INDICES = {n:i for i, n in enumerate(SHELL_TYPES_ORDER)}
 
 class ModulesIconNames(CONST_CONTAINER):
     WHEELED_CHASSIS = 'wheeledChassis'
@@ -149,7 +151,7 @@ class VehicleTurret(VehicleModule):
             optDevicesLayouts = None
             if vehicle.optDevices.setupLayouts.capacity > 1:
                 optDevicesLayouts = []
-                for setup in vehicle.optDevices.setupLayouts.setups.itervalues():
+                for setup in viewvalues(vehicle.optDevices.setupLayouts.setups):
                     optDevicesLayouts.append(setup.getIntCDs())
 
             installPossible, reason = vehicle.descriptor.mayInstallTurret(self.intCD, gunCD, optDevicesLayouts=optDevicesLayouts)
@@ -306,7 +308,7 @@ class VehicleEngine(VehicleModule):
         return result
 
     def getConflictedEquipments(self, vehicle):
-        conflictEqs = list()
+        conflictEqs = []
         oldModuleId = vehicle.engine.intCD
         vehicle.descriptor.installComponent(self.intCD)
         for eq in vehicle.consumables.installed.getItems():
@@ -436,7 +438,7 @@ class Shell(FittingItem):
     def getBonusIcon(self, size='small'):
         sizeFldr = R.images.gui.maps.icons.shell.dyn(size)
         if not sizeFldr:
-            _logger.warn('Shell %s icon for size %s doesnt exists!', self.descriptor.iconName, size)
+            _logger.warning('Shell %s icon for size %s doesnt exists!', self.descriptor.iconName, size)
             return ''
         return backport.image(sizeFldr.dyn(self.descriptor.iconName)())
 

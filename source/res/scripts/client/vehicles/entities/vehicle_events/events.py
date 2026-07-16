@@ -15,6 +15,8 @@ class VehicleEvents(ClientEventsContainer, IVehicleEventsLogic):
         super(VehicleEvents, self).__init__()
         self.__vehicle = weakref.proxy(vehicle)
         self.onAppearanceReady = self._createEvent()
+        self.onAppearanceComponentsReady = self._createEvent()
+        self.onAppearanceReset = self._createEvent()
         self.onSiegeStateUpdated = self._createEvent()
         self.onVehicleDestroyed = self._createEvent()
         self.onCollectAmmoStates = self._createEvent()
@@ -39,8 +41,8 @@ class VehicleEvents(ClientEventsContainer, IVehicleEventsLogic):
         self.onCollectAmmoStates(ammoStates)
         return ammoStates
 
-    def collectVehicleAttrs(self):
-        vehicleAttrs = {}
+    def collectVehicleAttrs(self, attrs):
+        vehicleAttrs = dict(attrs)
         self.onCollectVehicleAttrs(vehicleAttrs)
         return vehicleAttrs
 
@@ -49,7 +51,7 @@ class VehicleEvents(ClientEventsContainer, IVehicleEventsLogic):
 
 
 class VehicleEventsDebugger(ClientEventsContainerDebugger):
-    IGNORED_EVENTS = ClientEventsContainerDebugger.IGNORED_EVENTS + ('onAppearanceReady', 'onCollectAmmoStates', 'onCollectShotParams', 'onCollectVehicleAttrs', 'onDiscreteShotDone', 'onShowDamageFromShot', 'onVehicleHealthChanged')
+    IGNORED_EVENTS = ClientEventsContainerDebugger.IGNORED_EVENTS + ('onAppearanceReady', 'onAppearanceReset', 'onCollectAmmoStates', 'onCollectShotParams', 'onCurrentShellChanged', 'onCollectVehicleAttrs', 'onDiscreteShotDone', 'onShowDamageFromShot', 'onVehicleHealthChanged')
 
     def __init__(self, events, vehicleID):
         super(VehicleEventsDebugger, self).__init__(events)

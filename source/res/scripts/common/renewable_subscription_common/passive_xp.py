@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/renewable_subscription_common/passive_xp.py
+from __future__ import absolute_import
 import typing
 from constants import VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG
 from items import vehicles, tankmen
@@ -32,6 +33,9 @@ class _Tank(object):
 
     def __eq__(self, other):
         return self.vehicleType.id == other.vehicleType.id
+
+    def __hash__(self):
+        return hash(self.vehicleType.id)
 
 
 class CrewSlotValidationResult(object):

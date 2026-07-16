@@ -325,7 +325,7 @@ class _VehicleBlockedByArmorFormatter(MissionsVehicleListFormatter):
             labelKey = labelKey.all
         damage = ''
         if condition.relationValue:
-            damage = '{} '.format(int(condition.relationValue))
+            damage = '{}'.format(int(condition.relationValue))
         return FormattableField(FORMATTER_IDS.DESCRIPTION, (backport.text(labelKey(), damage=damage, classes=cls._formatClassesEnumeration(condition)),))
 
     @classmethod

@@ -8,9 +8,10 @@ from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from adisp import adisp_process
 from constants import AchievementsLayoutStates, Configs
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags, WindowLayer
-from gui.achievements.achievements_helper import fillAchievementSectionModel, fillAchievementModel, convertAchievementsToDbIds, convertDbIdsToAchievements
-from gui.impl.backport import TooltipData
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.achievements.achievements_helper import fillAchievementSectionModel, fillAchievementModel, convertAchievementsToDbIds, convertDbIdsToAchievements
+from gui.game_control.wot_plus.service_record_customization.service_record_customization import CdnResourcesCacheManager, ServiceRecordAssetManager
+from gui.impl.backport import TooltipData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.achievements.dialogs.edit_confirm_model import DialogType
 from gui.impl.gen.view_models.views.lobby.achievements.views.edit_view_model import EditViewModel
@@ -22,6 +23,7 @@ from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
+from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.gui_items.dossier import dumpDossier
 from gui.shared.gui_items.dossier.achievements.abstract import isRareAchievement
 from gui.shared.gui_items.processors.achievements import SetAchievementsLayout
@@ -32,7 +34,6 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 if typing.TYPE_CHECKING:
     from typing import Dict
 
@@ -92,9 +93,13 @@ class EditView(ViewImpl):
         self.__initialState = self.__isAutoSelect = achievements20.getLayoutState() == AchievementsLayoutStates.AUTO
         self.__achievementBitmask = achievements20.getAchievementBitmask()
         self.__selectedAchievements = self.__significantAchievements()
-        _, ribbonName = self.__wotPlusCtrl.getServiceRecordRibbon()
+        ribbonID = self.__wotPlusCtrl.getServiceRecordRibbonID()
         with self.viewModel.transaction() as model:
-            model.setRibbonName(ribbonName)
+            assetManager = self.__wotPlusCtrl.getSRCAssetManager()
+            ribbon = assetManager.getRibbon(ribbonID)
+            model.setRibbonSmall(ribbon.urls.getSmallAsset())
+            model.setRibbonNormal(ribbon.urls.getBaseAsset())
+            model.setRibbonLarge(ribbon.urls.getLargeAsset())
             self.__fillAchievementsModel(model=model)
             self.__fillFirstEntryState(model=model)
         super(EditView, self)._onLoading(*args, **kwargs)
@@ -291,9 +296,13 @@ class EditView(ViewImpl):
         return
 
     def __onRenewableSubscriptionStatusChanged(self):
-        _, ribbonName = self.__wotPlusCtrl.getServiceRecordRibbon()
+        ribbonID = self.__wotPlusCtrl.getServiceRecordRibbonID()
         with self.viewModel.transaction() as model:
-            model.setRibbonName(ribbonName)
+            assetManager = self.__wotPlusCtrl.getSRCAssetManager()
+            ribbon = assetManager.getRibbon(ribbonID)
+            model.setRibbonSmall(ribbon.urls.getSmallAsset())
+            model.setRibbonNormal(ribbon.urls.getBaseAsset())
+            model.setRibbonLarge(ribbon.urls.getLargeAsset())
 
     def _onConfigModelUpdated(self, gpKey):
         if renewableSubscriptionsConfigSchema.gpKey == gpKey:

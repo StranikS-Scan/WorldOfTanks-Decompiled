@@ -1,26 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/components/siegeEffectsController.py
+import CGF
 import Math
-import cgf_obsolete_script.py_component
 from constants import VEHICLE_SIEGE_STATE
+from cgf_script.registration import registerComponent
 
-class SiegeEffectsController(cgf_obsolete_script.py_component.Component):
-    SIEGE_TIMEOUT = 0.5
+@registerComponent
+class SiegeEffectsController(object):
+    domain = CGF.Domain.ClientEditor
+    userVisible = False
+    vseVisible = False
     SIEGE_IMPULSE = 0.1
-    HIGH_PRIORITY_TICK_RATE = 0.1
-    NPC_TICK_RATE = 0.25
+    SIEGE_START_NAME = 'siegeStart'
+    SIEGE_PROGRESS_NAME = 'siegeProgress'
 
-    def __init__(self, appearance, isHighPriority, hasSwitchImpulse):
+    def __init__(self, appearance, hasSwitchImpulse):
         self.__appearance = appearance
         self.__effectManager = appearance.customEffectManager
         self.__hasSwitchImpulse = hasSwitchImpulse
-        self.__siegeTimeOut = 0.0
-        self.__siegeInProgress = 0
         self.__state = VEHICLE_SIEGE_STATE.DISABLED
-        if isHighPriority:
-            self.__tickRate = SiegeEffectsController.HIGH_PRIORITY_TICK_RATE
-        else:
-            self.__tickRate = SiegeEffectsController.NPC_TICK_RATE
+        self.__pendingStateChanges = 0
 
     def destroy(self):
         self.__effectManager = None
@@ -33,26 +32,30 @@ class SiegeEffectsController(cgf_obsolete_script.py_component.Component):
             impulseDir = -matrix.applyToAxis(2)
             self.__appearance.receiveShotImpulse(impulseDir, self.SIEGE_IMPULSE)
 
-    def onSiegeStateChanged(self, newState, timeToNextMode):
-        switchingTime = timeToNextMode if timeToNextMode > 0.0 else self.SIEGE_TIMEOUT
-        if self.__state != newState:
+    def onSiegeStateChanged(self, newState):
+        if self.__state == newState:
+            return
+        else:
+            isTransition = None
             if newState == VEHICLE_SIEGE_STATE.SWITCHING_ON:
-                self.__siegeInProgress = 1
-                self.__siegeTimeOut = switchingTime
+                isTransition = 1
                 self.__shake()
             elif VEHICLE_SIEGE_STATE.isEnabled(newState):
-                self.__siegeInProgress = 0
+                isTransition = 0
             elif newState == VEHICLE_SIEGE_STATE.SWITCHING_OFF:
-                self.__siegeInProgress = 1
-                self.__siegeTimeOut = switchingTime
+                isTransition = 1
                 self.__shake()
             elif newState == VEHICLE_SIEGE_STATE.DISABLED:
-                self.__siegeInProgress = 0
+                isTransition = 0
             self.__state = newState
+            if isTransition is not None:
+                if self.__pendingStateChanges > 0:
+                    self.__effectManager.scheduleResetForEffect(self.SIEGE_START_NAME)
+                    self.__effectManager.scheduleResetForEffect(self.SIEGE_PROGRESS_NAME)
+                self.__pendingStateChanges += 1
+                self.__effectManager.variables[self.SIEGE_START_NAME] = isTransition
+                self.__effectManager.variables[self.SIEGE_PROGRESS_NAME] = isTransition
+            return
 
     def tick(self):
-        if self.__siegeTimeOut > 0.0:
-            self.__siegeTimeOut -= self.__tickRate
-        self.__effectManager.variables['siegeStart'] = 1 if self.__siegeTimeOut > 0.0 else 0
-        self.__effectManager.variables['siegeProgress'] = self.__siegeInProgress
-        return self.__tickRate
+        self.__pendingStateChanges = 0

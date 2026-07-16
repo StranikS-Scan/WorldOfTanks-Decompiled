@@ -1,14 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/_xml.py
-from typing import *
+from __future__ import absolute_import
+import collections
 from functools import wraps, partial
-from soft_exception import SoftException
+from future.utils import iteritems
+from past.builtins import intern
+from typing import Any, Callable, Generator, Optional, TYPE_CHECKING
+import ResMgr
 import constants
 from constants import SEASON_TYPE_BY_NAME, RentType
 from debug_utils import LOG_ERROR
-import type_traits
-import collections
-import ResMgr
+from items import type_traits
+from soft_exception import SoftException
+if TYPE_CHECKING:
+    import Math
 _g_floats = {'count': 0}
 _g_intTuples = {'count': 0}
 _g_floatTuples = {'count': 0}
@@ -25,7 +30,7 @@ def cacheTuple(f, valueStorage, tupleStorage):
             cached = tupleStorage.get(v, None)
             if cached is not None:
                 return cached
-            cached = tuple([ valueStorage.setdefault(fl, fl) for fl in v ])
+            cached = tuple((valueStorage.setdefault(fl, fl) for fl in v))
             tupleStorage[cached] = cached
             return cached
 
@@ -361,7 +366,7 @@ def readTupleOfBools(xmlCtx, section, subsectionName, count=None):
     if count is not None and len(strings) != count:
         raiseWrongXml(xmlCtx, subsectionName, '%d bools expected' % count)
     try:
-        return tuple(map(lambda s: s.lower() == 'true', strings))
+        return tuple((s.lower() == 'true' for s in strings))
     except Exception:
         raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
 
@@ -454,7 +459,7 @@ def readRentSeason(xmlCtx, rentPrices, previousSeasonIDs, section, subsectionNam
          'compensation': (seasonCompensation.get('credits', 0), seasonCompensation.get('gold', 0)),
          'seasonType': seasonType,
          'defaultCycleCost': (defaultCyclePrice.get('credits', 0), defaultCyclePrice.get('gold', 0)),
-         'cycles': cycles.keys()}
+         'cycles': list(cycles)}
         rentPrices.setdefault(RentType.SEASON_CYCLE_RENT, {}).update(cycles)
         rentPrices.setdefault(RentType.SEASON_RENT, {})[seasonID] = seasonRentConfig
     return
@@ -487,7 +492,7 @@ def readRentSeasonCycles(xmlCtx, section, subsectionName, defaultPrice, defaultC
             cyclesRentPrices[cycleID] = cycleRentConfig
 
     else:
-        raiseWrongXml(xmlCtx, packageName, '<{}><{}> missing!'.format(subsectionName, subsectionName))
+        raiseWrongXml(xmlCtx, packageName, '<{name}><{name}> missing!'.format(name=subsectionName))
     return cyclesRentPrices
 
 
@@ -623,7 +628,7 @@ def removeSameSection(sectionA, sectionB):
     dictChildB = multidict(sectionB.items())
     childSectionsToRemove = []
     isAllChildRemoved = True
-    for name, childSectionsA in dictChildA.iteritems():
+    for name, childSectionsA in iteritems(dictChildA):
         childSectionsB = dictChildB.get(name)
         if childSectionsB is not None:
             for a, b in zip(childSectionsA, childSectionsB):
@@ -669,7 +674,7 @@ def listChildren(section, path):
 
     else:
         for name, child in section.items():
-            if name == path or path == '*':
+            if path in (name, '*'):
                 yield child
 
 
@@ -715,7 +720,7 @@ class ListRewriter(object):
     def __iter__(self):
         return self
 
-    def next(self, preferredPredicate=None, sectionPicker=None, path=None):
+    def __next__(self, preferredPredicate=None, sectionPicker=None, path=None):
         if preferredPredicate is not None and sectionPicker is not None:
             raise SoftException('You must pass ony one parameter into ListRewriter.next()')
         if sectionPicker is not None:
@@ -738,6 +743,8 @@ class ListRewriter(object):
         if path is None:
             path = self.__path
         return self.__section.createSection(path)
+
+    next = __next__
 
     def flush(self):
         for s in self.__sections:

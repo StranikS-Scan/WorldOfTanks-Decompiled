@@ -1,15 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/reactive_comm/manager.py
-import itertools
+from __future__ import absolute_import
 import logging
 from collections import deque
 import typing
+from future.utils import lfilter, viewitems, viewvalues
 import BigWorld
 import wg_async
 import websocket
-from gui.game_control.reactive_comm import packer
-from gui.game_control.reactive_comm import channel as _ce
-from gui.game_control.reactive_comm import constants
+from gui.game_control.reactive_comm import constants, packer, channel as _ce
 _logger = logging.getLogger(__name__)
 
 class ChannelsManager(object):
@@ -46,7 +45,7 @@ class ChannelsManager(object):
             event.set()
             event.destroy()
 
-        for channel, callbackID in self.__callbackIDs.iteritems():
+        for channel, callbackID in viewitems(self.__callbackIDs):
             BigWorld.cancelCallback(callbackID)
             if channel in self.__channels:
                 self.__channels[channel].unsubscribe(self.__client)
@@ -82,24 +81,22 @@ class ChannelsManager(object):
             raise wg_async.AsyncReturn(_ce.SubscriptionStatus(constants.SubscriptionClientStatus.InvalidObject))
         if channel.isSubscribed:
             raise wg_async.AsyncReturn(channel.status)
-        elif self.__tryToCreateClient():
+        if self.__tryToCreateClient():
             if self.__client.open(self.__url, reconnect=True):
                 event = wg_async.AsyncEvent()
                 self.__pending.append((event, subscription))
                 yield wg_async.wg_await(event.wait())
                 raise wg_async.AsyncReturn(channel.status)
-            else:
-                _logger.error('Can not connect to server by url %s', self.__url)
-                raise wg_async.AsyncReturn(False)
+            _logger.error('Can not connect to server by url %s', self.__url)
+            raise wg_async.AsyncReturn(False)
+        if self.__client.status == websocket.ConnectionStatus.Opened:
+            channel.subscribe(self.__client)
         else:
-            if self.__client.status == websocket.ConnectionStatus.Opened:
-                channel.subscribe(self.__client)
-            else:
-                _logger.warning('Connection is not opened, waiting for reconnect to subscribe to channel <%s>', channel.name)
-            event = wg_async.AsyncEvent()
-            self.__pending.append((event, subscription))
-            yield wg_async.wg_await(event.wait())
-            raise wg_async.AsyncReturn(channel.status)
+            _logger.warning('Connection is not opened, waiting for reconnect to subscribe to channel <%s>', channel.name)
+        event = wg_async.AsyncEvent()
+        self.__pending.append((event, subscription))
+        yield wg_async.wg_await(event.wait())
+        raise wg_async.AsyncReturn(channel.status)
 
     def unsubscribe(self, subscription):
         name = subscription.channel
@@ -149,14 +146,14 @@ class ChannelsManager(object):
             self.__client.terminate()
             self.__client = None
         if reset:
-            for channel in self.__channels.itervalues():
+            for channel in viewvalues(self.__channels):
                 channel.clear()
 
             self.__channels.clear()
         return
 
     def __tryToTriggerEvents(self, criteria):
-        found = list(itertools.ifilter(criteria, self.__pending))
+        found = lfilter(criteria, self.__pending)
         for event, subscription in found:
             self.__pending.remove((event, subscription))
             event.set()
@@ -212,13 +209,13 @@ class ChannelsManager(object):
 
     def __onWebsocketOpened(self, server):
         _logger.debug('ChannelsManager is connected to subscription service: server = %s', server)
-        for channel in self.__channels.itervalues():
+        for channel in viewvalues(self.__channels):
             if not channel.isSubscribed:
                 channel.subscribe(self.__client)
 
     def __onWebsocketClosed(self, server, code, reason):
         _logger.debug('ChannelsManager is disconnected from subscription service: server = %s, code = %r, reason = %s', server, code, reason)
-        for channel in self.__channels.itervalues():
+        for channel in viewvalues(self.__channels):
             channel.close()
 
     def __onWebsocketMessage(self, code, payload):

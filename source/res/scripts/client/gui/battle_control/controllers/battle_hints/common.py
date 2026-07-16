@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/battle_hints/common.py
+from __future__ import absolute_import
 import logging
 from hints_common.battle.schemas.const import MAX_PRIORITY
 DEFAULT_LOGGER_NAME = 'BattleHints'

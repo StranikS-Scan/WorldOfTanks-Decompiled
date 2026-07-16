@@ -5,11 +5,12 @@ from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComp
 
 class UserMissionsHubContentInject(InjectComponentAdaptor, UserMissionsHubContentInjectMeta):
 
-    def __init__(self, tabID, questId):
+    def __init__(self, tabID, questId, challengeId):
         super(UserMissionsHubContentInject, self).__init__()
         self.tabID = tabID
         self.questId = questId
+        self.challengeId = challengeId
 
     def _makeInjectView(self):
         from gui.impl.lobby.user_missions.hub.hub_view import HubView
-        return HubView(self.tabID, self.questId)
+        return HubView(self.tabID, self.questId, self.challengeId)

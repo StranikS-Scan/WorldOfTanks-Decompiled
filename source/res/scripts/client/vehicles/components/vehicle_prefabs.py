@@ -4,7 +4,9 @@ from __future__ import absolute_import
 import logging
 import typing
 import weakref
+from functools import partial
 import CGF
+from ids_generators import SequenceIDGenerator
 from events_containers.common.containers import ContainersListener
 from events_containers.components.life_cycle import IComponentLifeCycleListenerLogic
 from events_handler import eventHandler
@@ -22,21 +24,9 @@ class VehiclePrefabSpawner(ContainersListener, IComponentLifeCycleListenerLogic)
         super(VehiclePrefabSpawner, self).__init__()
         self.__vehicle = weakref.proxy(vehicle)
         self.__vehicleID = self.__vehicle.id
+        self.__idGen = SequenceIDGenerator()
         self.__prefabRoot = None
         self.__prefabPath = ''
-        return
-
-    def isPrefabRoot(self, gameObject):
-        return self.__prefabRoot is not None and self.__prefabRoot.id == gameObject.id
-
-    @eventHandler
-    def onComponentDestroyed(self, component):
-        self.__prefabPath = ''
-        if self.__prefabRoot is not None:
-            _logger.debug('[VehiclePrefabSpawner] removeGameObject (onDestroy) for %s', self.__vehicleID)
-            CGF.removeGameObject(self.__prefabRoot)
-            self.__prefabRoot = None
-        self.__vehicle = None
         return
 
     @eventHandler
@@ -44,27 +34,47 @@ class VehiclePrefabSpawner(ContainersListener, IComponentLifeCycleListenerLogic)
         skin = self.__vehicle.appearance.modelsSetParams.skin or self._DEFAULT_OUTFIT
         self.__prefabPath = self._getPrefabPath(self.__vehicle.typeDescriptor, skin)
 
-    def loadAppearancePrefab(self):
-        loadAppearancePrefab(self.__prefabPath, self.__vehicle.appearance, self.__onComponentPrefabLoaded)
-        _logger.debug('[VehiclePrefabSpawner] loadAppearancePrefab for %s', self.__vehicleID)
+    @eventHandler
+    def onComponentAppearanceReady(self, component):
+        postLoadedCallback = partial(self.__onComponentPrefabLoaded, self.__idGen.nextSequenceID)
+        loadAppearancePrefab(self.__prefabPath, self.__vehicle.appearance, postLoadedCallback, False)
+        self.__logMessage(_logger.debug, 'loadAppearancePrefab')
 
-    def getPrefabRoot(self):
-        return self.__prefabRoot
+    @eventHandler
+    def onComponentAppearanceReset(self, component):
+        self.__removePrefabRoot('onComponentAppearanceReset')
+        _ = self.__idGen.nextSequenceID
+
+    @eventHandler
+    def onComponentDestroyed(self, component):
+        self.__removePrefabRoot('onComponentDestroyed')
+        self.__vehicle, self.__prefabPath = (None, '')
+        self.__idGen.clear()
+        return None
 
     def _getPrefabPath(self, typeDescriptor, skin):
         raise NotImplementedError
 
-    def __onComponentPrefabLoaded(self, root):
-        if not root.isValid:
-            _logger.error('[VehiclePrefabSpawner] failed to load prefab: %s', self.__prefabPath)
-            return
-        elif self.__vehicle is None:
-            _logger.debug('[VehiclePrefabSpawner] removeGameObject (onLoaded) for %s', self.__vehicleID)
-            CGF.removeGameObject(root)
-            return
+    def __onComponentPrefabLoaded(self, sequenceID, root, _, queue):
+        if not root:
+            self.__logMessage(_logger.error, 'failed to load prefab')
+            return False
+        elif self.__vehicle is None or sequenceID != self.__idGen.currSequenceID:
+            self.__logMessage(_logger.debug, 'removeGameObject (onLoaded) {}'.format(sequenceID))
+            return False
         else:
-            self.__prefabRoot = root
-            return
+            self.__prefabRoot = queue.gameObject(root)
+            return True
+
+    def __logMessage(self, logMethod, message):
+        logMethod('[VehiclePrefabSpawner][%s][%s][%s] %s', self.__vehicleID, self.__idGen.currSequenceID, self.__prefabPath, message)
+
+    def __removePrefabRoot(self, source):
+        if self.__prefabRoot is not None:
+            self.__logMessage(_logger.debug, 'removeGameObject ({})'.format(source))
+            CGF.removeGameObject(self.__prefabRoot)
+            self.__prefabRoot = None
+        return
 
 
 class VehiclePrefabSetsSpawner(VehiclePrefabSpawner):

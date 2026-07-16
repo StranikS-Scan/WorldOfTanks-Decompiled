@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/trade_in.py
+from __future__ import absolute_import
 import logging
 from contextlib import contextmanager
 import typing
 from enum import Enum
+from future.utils import iteritems, itervalues, viewvalues
 from cache import cached_property
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -55,6 +57,13 @@ class TradeInDiscounts(object):
     def __eq__(self, other):
         return self.minDiscountVehicleCD == other.minDiscountVehicleCD and self.minDiscountPrice == other.minDiscountPrice and self.maxDiscountVehicleCD == other.maxDiscountVehicleCD and self.maxDiscountPrice == other.maxDiscountPrice and self.freeExchange == other.freeExchange
 
+    def __hash__(self):
+        return hash((self.minDiscountVehicleCD,
+         self.minDiscountPrice,
+         self.maxDiscountVehicleCD,
+         self.maxDiscountPrice,
+         self.freeExchange))
+
 
 class TradeInConfig(object):
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -72,14 +81,14 @@ class TradeInConfig(object):
             return True if not token else token in tokens
 
         rules = self._config.get('conversionRules', {})
-        infos = (TradeInInfo(sellGroupId, buyGroupId, ConversionRule(*conversionRule)) for (sellGroupId, buyGroupId), conversionRule in rules.iteritems())
+        infos = (TradeInInfo(sellGroupId, buyGroupId, ConversionRule(*conversionRule)) for (sellGroupId, buyGroupId), conversionRule in iteritems(rules))
         return [ ti for ti in infos if tokenSatisfied(ti) ]
 
     @cached_property
     def allAccessTokenSet(self):
         rules = self._config.get('conversionRules', {})
         tokens = set()
-        for conversionRule in rules.itervalues():
+        for conversionRule in itervalues(rules):
             token = ConversionRule(*conversionRule).accessToken
             if token:
                 tokens.add(token)
@@ -89,7 +98,7 @@ class TradeInConfig(object):
     @cached_property
     def hasOfferVisibleForEveryone(self):
         rules = self._config.get('conversionRules', {})
-        for conversionRule in rules.itervalues():
+        for conversionRule in itervalues(rules):
             if ConversionRule(*conversionRule).visibleToEveryone:
                 return True
 
@@ -255,7 +264,7 @@ class TradeInController(ITradeInController):
         def tradeInActionFilter(act):
             return any((mod.getName() == 'tradein' for mod in act.getModifiers()))
 
-        actions = self.eventsCache.getActions(tradeInActionFilter).values()
+        actions = viewvalues(self.eventsCache.getActions(tradeInActionFilter))
         for action in actions:
             return action.getFinishTime()
 
@@ -358,10 +367,10 @@ class TradeInController(ITradeInController):
     def validatePossibleVehicleToBuy(self, vehicle):
         return vehicle.intCD in self._vehicleToSellInfo.possibleVehiclesToTradeInCDs
 
-    def getTradeInPrice(self, veh):
-        price = veh.buyPrices.itemPrice.price
-        defPrice = veh.buyPrices.itemPrice.defPrice
-        if self.validatePossibleVehicleToBuy(veh):
+    def getTradeInPrice(self, vehicle):
+        price = vehicle.buyPrices.itemPrice.price
+        defPrice = vehicle.buyPrices.itemPrice.defPrice
+        if self.validatePossibleVehicleToBuy(vehicle):
             if self._vehicleToSellInfo.conversionRule.freeExchange:
                 price = MONEY_ZERO_GOLD
             else:
@@ -424,9 +433,9 @@ class TradeInController(ITradeInController):
                 vehicleToBuyCDs = set(vehicleToBuyItems.keys())
                 if tradeInInfo.conversionRule.visibleToEveryone:
                     allVehiclesToBuy |= vehicleToBuyCDs
-                for vehToSell in vehicleToSellItems.itervalues():
+                for vehToSell in viewvalues(vehicleToSellItems):
                     vehsToBuy = []
-                    for vehToBuy in vehicleToBuyItems.itervalues():
+                    for vehToBuy in viewvalues(vehicleToBuyItems):
                         if tradeInInfo.conversionRule.checkVehicleAscendingLevels:
                             if vehToSell.level > vehToBuy.level:
                                 continue
@@ -483,7 +492,7 @@ class TradeInController(ITradeInController):
     def _onTokensUpdated(self, diff):
         if not self.isEnabled():
             return
-        modifiedTokens = set(diff.iterkeys())
+        modifiedTokens = set(diff)
         accessTokens = self.getConfig().allAccessTokenSet
         if accessTokens & modifiedTokens:
             with self._eventBus.getTransaction():

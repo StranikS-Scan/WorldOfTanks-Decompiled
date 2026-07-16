@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/__init__.py
+from __future__ import absolute_import, division
+from past.utils import old_div
 from math import ceil
 import sys
 from future.utils import itervalues
@@ -11,6 +13,7 @@ from helpers import time_utils
 from helpers_common import computeDamageAtDist
 from items import vehicles, artefacts
 from items.components import component_constants
+from math_common import decimal_round
 from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic
 from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from items.components.shared_components import StationaryReloadParams
@@ -102,19 +105,19 @@ def getShotsPerMinute(descriptor, reloadTime, autoReloadGun=False):
         reloadTime = max(reloadTime, clip[1])
     else:
         clipCount = float(clip[0]) / (burstCount if clip[0] > 1 else 1)
-    value = burstCount * clipCount * time_utils.ONE_MINUTE / (reloadTime + (burstCount - 1) * burst[1] * clipCount + (clipCount - 1) * clip[1])
+    value = old_div(burstCount * clipCount * time_utils.ONE_MINUTE, reloadTime + (burstCount - 1) * burst[1] * clipCount + (clipCount - 1) * clip[1])
     return value
 
 
 def calcGunParams(gunDescr, descriptors):
-    result = {SHELLS_COUNT_PROP_NAME: (sys.maxint, -1),
-     RELOAD_TIME_PROP_NAME: (sys.maxint, -1),
-     RELOAD_MAGAZINE_TIME_PROP_NAME: (sys.maxint, -1),
+    result = {SHELLS_COUNT_PROP_NAME: (sys.maxsize, -1),
+     RELOAD_TIME_PROP_NAME: (sys.maxsize, -1),
+     RELOAD_MAGAZINE_TIME_PROP_NAME: (sys.maxsize, -1),
      RELOAD_TIME_SECS_PROP_NAME: [],
-     SHELL_RELOADING_TIME_PROP_NAME: (sys.maxint, -1),
+     SHELL_RELOADING_TIME_PROP_NAME: (sys.maxsize, -1),
      BURST_FIRE_RATE: [],
-     DISPERSION_RADIUS_PROP_NAME: (sys.maxint, -1),
-     AIMING_TIME_PROP_NAME: (sys.maxint, -1),
+     DISPERSION_RADIUS_PROP_NAME: (sys.maxsize, -1),
+     AIMING_TIME_PROP_NAME: (sys.maxsize, -1),
      PIERCING_POWER_PROP_NAME: [],
      DAMAGE_PROP_NAME: [],
      MAX_MUTABLE_DAMAGE_PROP_NAME: [],
@@ -123,9 +126,9 @@ def calcGunParams(gunDescr, descriptors):
      STUN_DURATION_PROP_NAME: [],
      GUARANTEED_STUN_DURATION_PROP_NAME: [],
      AUTO_RELOAD_PROP_NAME: [],
-     DUAL_GUN_RATE_TIME: (sys.maxint, -1),
+     DUAL_GUN_RATE_TIME: (sys.maxsize, -1),
      DUAL_GUN_CHARGE_TIME: [],
-     DUAL_ACCURACY_COOLING_DELAY: (sys.maxint, -1)}
+     DUAL_ACCURACY_COOLING_DELAY: (sys.maxsize, -1)}
     for descr in descriptors:
         currShellsCount = descr.clip[0]
         factors = __getGunMechanicsFactors(descr)
@@ -142,8 +145,8 @@ def calcGunParams(gunDescr, descriptors):
         else:
             reloadTime = descr.reloadTime + factors['gun/extraReloadTime'] + mechanicsReloadDelay
         _updateMinMaxValues(result, RELOAD_TIME_PROP_NAME, getShotsPerMinute(descr, reloadTime, autoReload))
-        curDispRadius = round(descr.shotDispersionAngle * 100, 2)
-        curAimingTime = round(descr.aimingTime, 1)
+        curDispRadius = decimal_round(descr.shotDispersionAngle * 100, 2)
+        curAimingTime = decimal_round(descr.aimingTime, 1)
         _updateMinMaxValues(result, DISPERSION_RADIUS_PROP_NAME, curDispRadius)
         _updateMinMaxValues(result, AIMING_TIME_PROP_NAME, curAimingTime)
         chargeTime = ()
@@ -194,8 +197,8 @@ def calcGunParams(gunDescr, descriptors):
 
 
 def calcShellParams(descriptors):
-    result = {PIERCING_POWER_PROP_NAME: (sys.maxint, -1),
-     DAMAGE_PROP_NAME: (sys.maxint, -1)}
+    result = {PIERCING_POWER_PROP_NAME: (sys.maxsize, -1),
+     DAMAGE_PROP_NAME: (sys.maxsize, -1)}
     for d in descriptors:
         piercingPower = d.piercingPower[0]
         shell = d.shell

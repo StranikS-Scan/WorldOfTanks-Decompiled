@@ -1,12 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/__init__.py
+from __future__ import absolute_import, division
 import imghdr
-import itertools
 import sys
 import inspect
 import uuid
 import struct
+from builtins import filter, zip, range
 from collections import namedtuple
+from future.utils import viewitems
+from past.builtins import cmp, unicode
 import BigWorld
 import AccountCommands
 import Settings
@@ -14,11 +17,12 @@ import constants
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG, LOG_WARNING
 from gui.impl import backport
 from gui.impl.gen import R
-from helpers import getLanguageCode, i18n
+from gui.shared.sort_key import SortKey
+from helpers import getLanguageCode
 from items import vehicles as vehs_core
 from account_helpers import getAccountDatabaseID
 from account_helpers.AccountSettings import AccountSettings
-from avatar_helpers import getAvatarDatabaseID, getAvatarSessionID
+from avatar_helpers import getAvatarDatabaseID
 SHELLS_COUNT_PROP_NAME = 'shellsCount'
 RELOAD_TIME_SECS_PROP_NAME = 'reloadTimeSecs'
 RELOAD_TIME_PROP_NAME = 'reloadTime'
@@ -98,8 +102,8 @@ ValidationResult = namedtuple('ValidationResult', ['isValid', 'reason'])
 
 def flashObject2Dict(obj):
     if hasattr(obj, 'children'):
-        filtered = itertools.ifilter(lambda item: item[0] not in _FLASH_OBJECT_SYS_ATTRS, obj.children.iteritems())
-        return dict(((k, flashObject2Dict(v)) for k, v in filtered))
+        filtered = filter(lambda item: item[0] not in _FLASH_OBJECT_SYS_ATTRS, viewitems(obj.children))
+        return {k:flashObject2Dict(v) for k, v in filtered}
     return obj
 
 
@@ -148,18 +152,27 @@ def class_for_name(module_name, class_name):
         return c
 
 
-def sortByFields(fields, sequence, valueGetter=dict.get):
+class _SortKeyByFields(SortKey):
+    __slots__ = ('fields', 'valueGetter', 'item')
 
-    def comparator(x, y):
-        for field, order in fields:
-            fieldValueX = valueGetter(x, field)
-            fieldValueY = valueGetter(y, field)
+    def __init__(self, fields, valueGetter, item):
+        super(_SortKeyByFields, self).__init__()
+        self.fields = fields
+        self.valueGetter = valueGetter
+        self.item = item
+
+    def _cmp(self, other):
+        for field, order in self.fields:
+            fieldValueX = self.valueGetter(self.item, field)
+            fieldValueY = self.valueGetter(other.item, field)
             if fieldValueX != fieldValueY:
                 if order:
                     return cmp(fieldValueX, fieldValueY)
                 return cmp(fieldValueY, fieldValueX)
 
-    return sorted(sequence, cmp=comparator)
+
+def sortByFields(fields, sequence, valueGetter=dict.get):
+    return sorted(sequence, key=lambda x: _SortKeyByFields(fields, valueGetter, x))
 
 
 def roundByModulo(value, rate):

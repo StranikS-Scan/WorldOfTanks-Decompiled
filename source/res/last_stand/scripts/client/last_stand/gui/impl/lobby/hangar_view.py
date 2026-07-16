@@ -11,7 +11,6 @@ from gui.impl.gen.view_models.views.lobby.hangar.key_bindings_model import KeyBi
 from gui.impl.lobby.common.presenters.settings_presenter import SettingsPresenter
 from gui.impl.lobby.common.presenters.vehicles_info_presenter import VehiclesInfoPresenter
 from gui.impl.lobby.hangar.base.account_styles import AccountStyles
-from gui.impl.lobby.hangar.presenters.crew_presenter import CrewPresenter
 from gui.impl.lobby.hangar.presenters.lootbox_entry_point_presenter import LootboxEntryPointPresenter
 from gui.impl.lobby.hangar.presenters.main_menu_presenter import MainMenuPresenter
 from gui.impl.lobby.hangar.presenters.optional_devices_assistant_presenter import OptionalDevicesAssistantPresenter
@@ -27,6 +26,7 @@ from gui.shared.event_dispatcher import showLobbyMenu
 from last_stand.gui.impl.lobby.base_view import SwitcherPresenter
 from last_stand.gui.impl.lobby.battle_result_view import BattleResultView
 from last_stand.gui.impl.lobby.ls_vehicle_params_view import LSVehicleParamsPresenter
+from last_stand.gui.impl.lobby.crew.ls_crew_presenter import LSCrewPresenter
 from last_stand.gui.impl.lobby.vehicles_data_providers.ls_vehicle_daily_presenter import LSVehiclesDailyPresenter
 from last_stand.gui.impl.lobby.vehicles_data_providers.ls_vehicle_filter import LSBattleCarouselFilter
 from last_stand.gui.impl.lobby.vehicles_data_providers.ls_vehicle_inventory_presenter import LSVehicleInventoryPresenter
@@ -150,7 +150,7 @@ class HangarView(ViewComponent[HangarViewModel], IRoutableView):
          lastStand.Gsw(): LastStandUserMissionsPresenter,
          lastStand.VehiclesDaily(): lambda : LSVehiclesDailyPresenter(self.__accountVehicleFilter),
          coreRandom.Loadout(): LastStandLoadoutPresenter,
-         coreRandom.Crew(): CrewPresenter,
+         coreRandom.Crew(): LSCrewPresenter,
          coreRandom.VehiclesInfo(): lambda : VehiclesInfoPresenter(self.__allModeVehicleFilter),
          coreRandom.VehiclesStatistics(): lambda : LSVehiclesStatisticsPresenter(self.__accountVehicleFilter, self.__accountStyles),
          coreRandom.VehicleParams(): LSVehicleParamsPresenter,

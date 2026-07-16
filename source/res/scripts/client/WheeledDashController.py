@@ -9,7 +9,7 @@ import CGF
 from constants import PHASED_MECHANIC_STATE as MECHANIC_STATE
 from vehicles.components.vehicle_component import VehicleDynamicComponent
 from vehicles.mechanics.common import IMechanicComponent
-from vehicles.mechanics.generic_mechanics.wheeled_dash.mechanic_events import WheeledDashStateEvents
+from vehicles.mechanics.generic_mechanics.wheeled_dash import createWheeledDashMiscEvents
 from vehicles.mechanics.mechanic_commands import createMechanicCommandsEvents, IMechanicCommandsComponent
 from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand, VehicleMechanic
 from vehicles.mechanics.mechanic_helpers import getVehicleDescrMechanicParams
@@ -21,7 +21,7 @@ from CommandMapping import CMD_CM_VEHICLE_SWITCH_AUTOROTATION
 if typing.TYPE_CHECKING:
     from vehicles.mechanics.mechanic_commands import IMechanicCommandsEvents
     from vehicles.mechanics.mechanic_states import IMechanicStatesEvents
-    from vehicles.mechanics.generic_mechanics.wheeled_dash.mechanic_interfaces import IWheeledDashEvents
+    from vehicles.mechanics.generic_mechanics.wheeled_dash import IWheeledDashEvents
 
 class PlayerVehicleInputPredicate(object):
 
@@ -65,7 +65,7 @@ class WheeledDashController(VehicleDynamicComponent, IMechanicComponent, IMechan
         super(WheeledDashController, self).__init__()
         self.__commandsEvents = createMechanicCommandsEvents(self)
         self.__statesEvents = createMechanicStatesEvents(self)
-        self.__impulseEvents = WheeledDashStateEvents()
+        self.__impulseEvents = createWheeledDashMiscEvents()
         self.__prefabSpawner = createMechanicPrefabSpawner(self.entity, self)
         self.__action = None
         self.__params = None
@@ -140,7 +140,6 @@ class WheeledDashController(VehicleDynamicComponent, IMechanicComponent, IMechan
     def _onAppearanceReady(self):
         super(WheeledDashController, self)._onAppearanceReady()
         self.__statesEvents.processStatePrepared()
-        self.__prefabSpawner.loadAppearancePrefab()
 
     def _onComponentAppearanceUpdate(self):
         state = self.getMechanicState()

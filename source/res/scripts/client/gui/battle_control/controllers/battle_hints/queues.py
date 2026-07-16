@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/battle_hints/queues.py
+from __future__ import absolute_import
 import time
 from functools import partial
 import typing
-from typing import Optional, Dict, Union, Tuple, List, Type
+from future.utils import viewvalues
 import BigWorld
 import SoundGroups
 from gui.battle_control.controllers.battle_hints.common import getLogger, DEFAULT_LOGGER_NAME, HIGHEST_PRIORITY, QUEUE_HINTS_MAX_SIZE, HIDE_ANIMATION_TIMEOUT
@@ -14,6 +15,7 @@ from debug_utils import LOG_WARNING
 from PlayerEvents import g_playerEvents
 if typing.TYPE_CHECKING:
     import weakref
+    from typing import Optional, Dict, Union, Tuple, List, Type
     from hints.battle.schemas.base import CHMType
     from gui.battle_control.controllers.battle_hints.component import BattleHintComponent
     from gui.battle_control.controllers.battle_hints.history import BattleHintsHistory
@@ -31,6 +33,15 @@ class BattleHint(object):
         self._enqueueTime = 0
         self._startDisplayTime = 0
         self._maxPriorityOffset = -1
+
+    def __eq__(self, other):
+        return False if not isinstance(other, BattleHint) else self.uniqueName == other.uniqueName
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __hash__(self):
+        return hash(self.uniqueName)
 
     @property
     def model(self):
@@ -136,12 +147,6 @@ class BattleHint(object):
                     soundNotifications.play(soundNotify)
                     _hintLogger.debug('<%s> notify sound <%s> played.', self.uniqueName, soundNotify)
             return
-
-    def __eq__(self, other):
-        return False if not isinstance(other, BattleHint) else self.uniqueName == other.uniqueName
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
 
 
 class BattleHintsQueue(object):
@@ -346,7 +351,7 @@ class BattleHintsQueuesMgr(object):
 
     def destroy(self):
         self._enabled = False
-        for queue in self._queues.itervalues():
+        for queue in viewvalues(self._queues):
             queue.destroy()
 
         self._queues.clear()

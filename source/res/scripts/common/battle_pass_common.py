@@ -15,7 +15,7 @@ from debug_utils import LOG_ERROR, LOG_CODEPOINT_WARNING
 from items import parseIntCompactDescr, vehicles
 from optional_bonuses import BONUS_MERGERS
 if typing.TYPE_CHECKING:
-    from typing import Dict, Generator, Sequence, Tuple, Union, List, Set
+    from typing import Dict, Generator, Sequence, Tuple, Union, List
 BATTLE_PASS_TOKEN_PREFIX = 'battle_pass:'
 BATTLE_PASS_TOKEN_PASS = BATTLE_PASS_TOKEN_PREFIX + 'pass:'
 BATTLE_PASS_ENTITLEMENT_PASS = BATTLE_PASS_TOKEN_PASS.replace(':', '_')

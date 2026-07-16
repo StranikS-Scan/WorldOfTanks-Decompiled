@@ -114,7 +114,6 @@ class RechargeableNitroController(VehicleDynamicComponent, IMechanicComponent, I
 
     def _onAppearanceReady(self):
         super(RechargeableNitroController, self)._onAppearanceReady()
-        self.__mechanicPrefabSpawner.loadAppearancePrefab()
         self.__statesEvents.processStatePrepared()
 
     def _onComponentAppearanceUpdate(self, **kwargs):

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: server_side_replay/scripts/client/server_side_replay/gui/impl/lobby/pages/find_replay_page.py
+from __future__ import absolute_import
 import logging
+from past.builtins import unicode
 from typing import TYPE_CHECKING
 import BigWorld
 from BattleReplay import BattleReplay

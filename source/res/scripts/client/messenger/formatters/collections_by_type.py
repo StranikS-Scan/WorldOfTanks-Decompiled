@@ -161,7 +161,7 @@ def initRegistrationFormatters():
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.PERSONAL_RESERVES_SOON_EXPIRATION, _prFormatters.PersonalReservesSoonExpirationFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_SWITCH, _wotPlusFormatters.WotPlusSwitchFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.ACHIEVEMENTS20_EARNING_SM_TYPE, _sc.AchievementsEarningSMFormatter())
-    registerMessengerServerFormatter(_SM_TYPE.prbVehicleKickFromSquad.index(), _sc.PrbVehicleMaxTypeKickFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.prbVehicleKickFromSquad.index(), _sc.PrbVehicleMaxCountKickFormatter())
     registerMessengerServerFormatter(_SM_TYPE.skillsCrewBoostersConversion.index(), _sc.SkillsCrewBoostersConversionFormatter())
     registerMessengerServerFormatter(_SM_TYPE.passiveXPDeactivateDueToPostProgression.index(), _wotPlusFormatters.PassiveXPDeactivateDueToPostProgressionFormatter())
     registerMessengerServerFormatter(_SM_TYPE.crewBooksConversion.index(), _sc.CrewBooksConversionFormatter())

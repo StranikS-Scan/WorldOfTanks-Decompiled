@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/listeners.py
+from __future__ import absolute_import
+import functools
 import operator
 import weakref
 from collections import namedtuple
+from future.utils import iteritems
 import BigWorld
 from constants import ARENA_PERIOD, FINISH_REASON
 from debug_utils import LOG_DEBUG, LOG_ERROR
@@ -12,6 +15,7 @@ from gui.battle_control.arena_info.settings import INVALIDATE_OP
 from gui.prb_control import prbInvitesProperty
 from messenger.m_constants import USER_ACTION_ID, USER_TAG
 from messenger.proto.events import g_messengerEvents
+from shared_utils import safeExecute
 
 class _PeriodAdditionalInfo(namedtuple('_PeriodAdditionalInfo', ['winStatus', 'winnerTeam', 'finishReason'])):
 
@@ -85,7 +89,7 @@ class _Listener(object):
         for ref in set(self._controllers):
             controller = ref()
             if controller is not None:
-                caller(controller)
+                safeExecute(functools.partial(caller, controller))
 
         return
 
@@ -211,7 +215,7 @@ class ArenaVehiclesListener(_Listener):
             self._invokeListenersMethod('updateVehiclesStats', stats, self._arenaDP)
 
     def __arena_onGameModeSpecificStats(self, isStatic, stats):
-        for vehicleID, vehicleStats in stats.iteritems():
+        for vehicleID, vehicleStats in iteritems(stats):
             flags, vo = self._arenaDP.updateGameModeSpecificStats(vehicleID, isStatic, vehicleStats)
             if isStatic:
                 self._invokeListenersMethod('updateVehiclesInfo', [(flags, vo)], self._arenaDP)
@@ -219,9 +223,9 @@ class ArenaVehiclesListener(_Listener):
                 self._invokeListenersMethod('updateVehiclesStats', [(flags, vo)], self._arenaDP)
 
     def __arena_onChatCommandTargetUpdate(self, isStatic, chatCommandStates):
-        updateList = list()
+        updateList = []
         updateFlag = INVALIDATE_OP.NONE
-        for vehicleID, state in chatCommandStates.iteritems():
+        for vehicleID, state in iteritems(chatCommandStates):
             chatCommand, chatCommandFlags = state
             flags, vo = self._arenaDP.updateChatCommandState(vehicleID, (chatCommand, chatCommandFlags))
             if flags != INVALIDATE_OP.NONE:
@@ -572,7 +576,7 @@ class PositionsListener(_Listener):
                 return None
 
         def _iterator():
-            for vehicleID, position in positions.iteritems():
+            for vehicleID, position in iteritems(positions):
                 yield (getter(vehicleID), position)
 
         self._invokeListenersMethod('updatePositions', _iterator)

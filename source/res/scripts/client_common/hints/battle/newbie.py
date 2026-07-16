@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/hints/battle/newbie.py
+from __future__ import absolute_import
 import logging
 LOGGER_NAME = 'NewbieBattleHints'
 

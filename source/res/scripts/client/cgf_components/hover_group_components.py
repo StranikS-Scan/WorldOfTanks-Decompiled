@@ -1,46 +1,64 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/cgf_components/hover_group_components.py
+from __future__ import absolute_import
 import CGF
 import SoundGroups
-from cgf_script.component_meta_class import registerComponent, ComponentProperty, CGFMetaTypes
-from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery
-from hover_component import IsHoveredComponent, HoverGroupTrackerComponent
+from cgf_script.registration import ComponentProperty, registerComponent
+from cgf_components.hover_component import IsHoveredComponent, HoverGroupTrackerComponent
 
 @registerComponent
 class HoverableComponent(object):
-    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
+    domain = CGF.Domain.ClientEditor
     editorTitle = 'Hoverable'
-    category = 'Common'
-    groupTracker = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Group tracker', value=HoverGroupTrackerComponent)
+    group = 'Common'
+    groupTracker = ComponentProperty(type=CGF.PropertyType.Link, editorName='Group tracker', value=HoverGroupTrackerComponent)
 
 
 @registerComponent
 class HoverSoundComponent(object):
-    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
+    domain = CGF.Domain.ClientEditor
     editorTitle = 'Hover group sound'
-    category = 'Common'
-    hoverAddingSound = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Hover adding sound', value='')
-    hoverRemovingSound = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Hover removing sound', value='')
+    group = 'Common'
+    hoverAddingSound = ComponentProperty(type=CGF.PropertyType.String, editorName='Hover adding sound', value='')
+    hoverRemovingSound = ComponentProperty(type=CGF.PropertyType.String, editorName='Hover removing sound', value='')
 
 
-class HoverGroupManager(CGF.ComponentManager):
+class HoverGroupSystem(CGF.System):
+    HoverableActivated = CGF.ActivateReaction(CGF.GameObject, CGF.ReactRw(HoverableComponent), CGF.ReactHas(IsHoveredComponent))
+    HoverableDeactivated = CGF.DeactivateReaction(CGF.GameObject, CGF.ReactRw(HoverableComponent), CGF.ReactHas(IsHoveredComponent))
+    HoverSoundActivated = CGF.ActivateReaction(CGF.ReactRo(HoverSoundComponent), CGF.ReactHas(IsHoveredComponent))
+    HoverSoundDeactivated = CGF.DeactivateReaction(CGF.ReactRo(HoverSoundComponent), CGF.ReactHas(IsHoveredComponent))
+    HoverGroupTrackerAccess = CGF.AccessReaction(CGF.Ro(HoverGroupTrackerComponent))
+    Reactions = CGF.Reactions(HoverableActivated, HoverableDeactivated, HoverSoundActivated, HoverSoundDeactivated, HoverGroupTrackerAccess)
 
-    @onAddedQuery(IsHoveredComponent, HoverableComponent, CGF.GameObject, tickGroup='preInitGroup')
-    def onHoverAdded(self, _, hoverableComponent, gameObject):
-        if hoverableComponent.groupTracker:
-            hoverableComponent.groupTracker().addHoveredGO(gameObject)
+    def update(self):
+        hoverGroupTrackerAccess = self.reaction(self.HoverGroupTrackerAccess)
+        for gameObject, hoverableComponent in self.reaction(self.HoverableDeactivated):
+            self.onHoverRemoved(hoverableComponent, gameObject, hoverGroupTrackerAccess)
 
-    @onRemovedQuery(IsHoveredComponent, HoverableComponent, CGF.GameObject)
-    def onHoverRemoved(self, _, hoverableComponent, gameObject):
-        if hoverableComponent.groupTracker:
-            hoverableComponent.groupTracker().removeHoveredGO(gameObject)
+        for hoverSound in self.reaction(self.HoverSoundDeactivated):
+            self.onHoverSoundRemoved(hoverSound)
 
-    @onAddedQuery(IsHoveredComponent, HoverSoundComponent, CGF.GameObject)
-    def onHoverSoundAdded(self, _, hoverSound, __):
+        for gameObject, hoverableComponent in self.reaction(self.HoverableActivated):
+            self.onHoverAdded(hoverableComponent, gameObject, hoverGroupTrackerAccess)
+
+        for hoverSound in self.reaction(self.HoverSoundActivated):
+            self.onHoverSoundAdded(hoverSound)
+
+    def onHoverAdded(self, hoverableComponent, gameObject, hoverGroupTrackerAccess):
+        groupTracker = hoverGroupTrackerAccess.find(hoverableComponent.groupTracker)
+        if groupTracker:
+            groupTracker.addHoveredGO(gameObject)
+
+    def onHoverRemoved(self, hoverableComponent, gameObject, hoverGroupTrackerAccess):
+        groupTracker = hoverGroupTrackerAccess.find(hoverableComponent.groupTracker)
+        if groupTracker:
+            groupTracker.removeHoveredGO(gameObject)
+
+    def onHoverSoundAdded(self, hoverSound):
         if hoverSound.hoverAddingSound:
             SoundGroups.g_instance.playSound2D(hoverSound.hoverAddingSound)
 
-    @onRemovedQuery(IsHoveredComponent, HoverSoundComponent, CGF.GameObject)
-    def onHoverSoundRemoved(self, _, hoverSound, __):
+    def onHoverSoundRemoved(self, hoverSound):
         if hoverSound.hoverRemovingSound:
             SoundGroups.g_instance.playSound2D(hoverSound.hoverRemovingSound)

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_matters/tooltips/battle_matters_entry_tooltip_view.py
+from __future__ import absolute_import
 from frameworks.wulf import ViewSettings
 from gui.battle_pass.battle_pass_bonuses_packers import ExtendedItemBonusUIPacker
 from gui.impl.gen import R
@@ -9,7 +10,7 @@ from gui.shared.missions.packers.bonus import getDefaultBonusPacker
 from helpers import dependency
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.shared import IItemsCache
-from gui.impl.lobby.battle_matters.battle_matters_bonus_packer import BattleMattersEntitlementsBonusUIPacker, bonusesSort, battleMattersSort
+from gui.impl.lobby.battle_matters.battle_matters_bonus_packer import BattleMattersEntitlementsBonusUIPacker, bonusesSortKey, battleMattersSortKey
 
 class BattleMattersEntryTooltipView(ViewImpl):
     __slots__ = ()
@@ -41,13 +42,13 @@ class BattleMattersEntryTooltipView(ViewImpl):
                 currentProgress, maxProgress = self.__battleMattersController.getQuestProgress(currentQuest)
                 tx.setCurrentProgress(currentProgress)
                 tx.setMaxProgress(maxProgress)
-                bonuses = sorted(currentQuest.getBonuses(), cmp=bonusesSort)
+                bonuses = sorted(currentQuest.getBonuses(), key=bonusesSortKey)
                 packer = self.__getBonusBacker()
                 rewards = tx.getRewards()
                 rewards.clear()
                 for bonus in bonuses:
                     packedRewards = packer.pack(bonus)
-                    packedRewards = sorted(packedRewards, cmp=battleMattersSort(bonus.getName()))
+                    packedRewards = sorted(packedRewards, key=battleMattersSortKey(bonus.getName()))
                     for reward in packedRewards:
                         rewards.addViewModel(reward)
 

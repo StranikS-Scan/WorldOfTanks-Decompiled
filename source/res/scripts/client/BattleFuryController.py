@@ -63,7 +63,6 @@ class BattleFuryController(VehicleDynamicComponent, IMechanicComponent, IMechani
 
     def _onAppearanceReady(self):
         super(BattleFuryController, self)._onAppearanceReady()
-        self.__mechanicPrefabSpawner.loadAppearancePrefab()
         self.__statesEvents.processStatePrepared()
 
     def _onComponentAppearanceUpdate(self, **kwargs):

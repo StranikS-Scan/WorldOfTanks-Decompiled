@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/BrowserController.py
+from __future__ import absolute_import
 import logging
 import typing
 import BigWorld
@@ -64,7 +65,7 @@ class BrowserController(IBrowserController):
         self.__stop()
         BigWorld.destroyBrowser()
 
-    def onLobbyInited(self, ctx):
+    def onLobbyInited(self, event):
         BigWorld.createBrowser()
 
     def addFilterHandler(self, handler):
@@ -74,7 +75,7 @@ class BrowserController(IBrowserController):
         self.__filters.discard(handler)
 
     def nextBrowserID(self):
-        return self.__browserIDGenerator.next()
+        return next(self.__browserIDGenerator)
 
     @adisp_async
     @adisp_process
@@ -89,10 +90,10 @@ class BrowserController(IBrowserController):
         size = browserSize or BROWSER.SIZE
         webBrowserID = browserID
         if browserID is None:
-            browserID = self.__browserIDGenerator.next()
+            browserID = next(self.__browserIDGenerator)
             webBrowserID = browserID
         elif not isinstance(browserID, int):
-            webBrowserID = self.__browserIDGenerator.next()
+            webBrowserID = next(self.__browserIDGenerator)
         ctx = {'url': url,
          'title': title,
          'showActionBtn': showActionBtn,

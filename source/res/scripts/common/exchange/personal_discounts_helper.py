@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/exchange/personal_discounts_helper.py
+from __future__ import absolute_import, division
 import logging
 import math
 import typing
@@ -8,16 +9,12 @@ if typing.TYPE_CHECKING:
     from typing import Tuple, List, Optional, Dict
 _logger = logging.getLogger(__name__)
 
-def sortExchangeRatesDiscountsRule(discount1, discount2):
-
-    def _getComparisonKeys(discount):
-        return (float(discount.resourceRateValue) / discount.goldRateValue,
-         not discount.isPersonal,
-         discount.discountType == ExchangeDiscountType.UNLIMITED,
-         discount.amountOfDiscount,
-         -discount.discountLifetime)
-
-    return cmp(_getComparisonKeys(discount1), _getComparisonKeys(discount2))
+def sortExchangeRatesDiscountsKey(discount):
+    return (float(discount.resourceRateValue) / discount.goldRateValue,
+     not discount.isPersonal,
+     discount.discountType == ExchangeDiscountType.UNLIMITED,
+     discount.amountOfDiscount,
+     -discount.discountLifetime)
 
 
 def isExchangeRateDiscountAvailable(discount, currentTime):
@@ -49,7 +46,7 @@ def getDiscountsRequiredForExchange(discounts, goldExchangeAmount, currentTime):
 
 
 def sortExchangeRatesDiscounts(discountsInfo):
-    return sorted(discountsInfo, cmp=sortExchangeRatesDiscountsRule, reverse=True)
+    return sorted(discountsInfo, key=sortExchangeRatesDiscountsKey, reverse=True)
 
 
 def createCommonDiscount(exchangeType, exchangeRate):

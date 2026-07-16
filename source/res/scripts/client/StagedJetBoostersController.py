@@ -7,7 +7,7 @@ import BigWorld
 import CGF
 from CommandMapping import CMD_CM_SPECIAL_ABILITY, CMD_CM_VEHICLE_SWITCH_AUTOROTATION
 from cgf_components_common.vehicle_mechanics.staged_jet_boosters import StagedJetBoostersControllerDescriptor
-from cgf_script.component_meta_class import registerReplicableComponent
+from cgf_script.registration import registerReplicableComponent
 from constants import PHASED_MECHANIC_STATE, IS_CLIENT, AcceleratorStatus
 from gui.shared.utils.decorators import ReprInjector
 from items.components.shared_components import StagedJetBoostersParams

@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/team_bases_ctrl.py
+from __future__ import absolute_import
+from builtins import range
 from collections import defaultdict
-import BattleReplay
+from future.utils import viewitems, viewvalues
 import BigWorld
+import BattleReplay
 import SoundGroups
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -125,7 +128,7 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
 
         playerTeam = self.__battleCtx.getArenaDP().getNumberOfTeam()
         isCapturing = False
-        for clientID, (points, timeLeft, invadersCnt, stopped) in self.__points.iteritems():
+        for clientID, (points, timeLeft, invadersCnt, stopped) in viewitems(self.__points):
             if clientID in self.__captured:
                 for viewCmp in self._viewComponents:
                     isCapturing = True
@@ -293,7 +296,7 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
         return
 
     def __stopCaptureSounds(self):
-        teams = self.__sounds.keys()
+        teams = list(self.__sounds)
         for team in teams:
             self.__stopCaptureSound(team)
 
@@ -326,7 +329,7 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
         return
 
     def __clearUpdateCallbacks(self):
-        for _, callbackID in self.__callbackIDs.items():
+        for callbackID in viewvalues(self.__callbackIDs):
             BigWorld.cancelCallback(callbackID)
 
         self.__callbackIDs.clear()

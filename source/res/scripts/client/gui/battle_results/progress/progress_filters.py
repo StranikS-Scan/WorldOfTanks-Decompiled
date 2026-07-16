@@ -4,7 +4,8 @@ import copy
 import typing
 import constants
 import personal_missions
-from future.utils import itervalues
+from future.utils import itervalues, viewitems
+from challenges_common import isChallengeQuest
 from gui.battle_results.progress.progress_helpers import packQuestProgressData, isQuestCompleted, getPrestigeProgress, isPMOperationAndMissionEnabled
 from gui.server_events.events_helpers import isPremium, isDailyQuest, isWeeklyQuest, isBattleMattersQuestID, isCommonBattleQuest
 from potapov_quests import isPM3Quest
@@ -12,7 +13,9 @@ from skeletons.gui.server_events import IEventsCache
 from helpers import dependency
 from personal_missions import PM_BRANCH
 from gui.battle_results.progress.research import VehicleProgressHelper
+from gui.impl.lobby.challenges.views_helpers import parseChallengeQuestId
 from skeletons.gui.game_control import IBattlePassController
+from skeletons.gui.challenges import IChallengesController
 if typing.TYPE_CHECKING:
     from typing import List, Tuple
     from gui.battle_results.reusable import _ReusableInfo
@@ -129,3 +132,24 @@ def commonBattleQuestsProgressFilter(reusable, allCommonQuests):
                     commonBattleQuestsProgress.append(data)
 
         return commonBattleQuestsProgress
+
+
+@dependency.replace_none_kwargs(challenges=IChallengesController)
+def challengesMissionsProgressFilter(reusable, allCommonQuests, challenges=None):
+    commonQuestsProgress = reusable.personal.getQuestsProgress()
+    if not challenges.isEnabled or not commonQuestsProgress:
+        return []
+    else:
+        challengesQuestsWithProgress = []
+        for qID, qProgress in viewitems(commonQuestsProgress):
+            if not isChallengeQuest(qID):
+                continue
+            challengeID, _ = parseChallengeQuestId(qID)
+            if not challengeID:
+                continue
+            if challenges.getChallenge(challengeID) is not None:
+                data = packQuestProgressData(qID, allCommonQuests, qProgress, isQuestCompleted(*qProgress))
+                if data:
+                    challengesQuestsWithProgress.append(data)
+
+        return challengesQuestsWithProgress

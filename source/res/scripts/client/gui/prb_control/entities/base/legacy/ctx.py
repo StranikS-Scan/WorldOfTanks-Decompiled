@@ -57,16 +57,20 @@ class TeamSettingsCtx(LegacyRequestCtx):
         return self.isOpenedChanged(settings) or self.isCommentChanged(settings)
 
 
-@ReprInjector.withParent(('__prbID', 'id'), ('__prbType', 'type'))
+@ReprInjector.withParent(('__prbID', 'id'), ('__prbType', 'type'), ('__prbClusterId', 'prbClusterId'))
 class JoinLegacyCtx(LegacyRequestCtx):
-    __slots__ = ('__prbID',)
+    __slots__ = ('__prbID', '__prbClusterId')
 
-    def __init__(self, prbID, prbType, waitingID='', flags=_FUNCTIONAL_FLAG.UNDEFINED):
+    def __init__(self, prbID, prbType, prbClusterId, waitingID='', flags=_FUNCTIONAL_FLAG.UNDEFINED):
         super(JoinLegacyCtx, self).__init__(entityType=int(prbType), waitingID=waitingID, flags=flags)
         self.__prbID = int(prbID)
+        self.__prbClusterId = int(prbClusterId)
 
     def getID(self):
         return self.__prbID
+
+    def getPrbClusterId(self):
+        return self.__prbClusterId
 
     def getRequestType(self):
         return _REQUEST_TYPE.JOIN

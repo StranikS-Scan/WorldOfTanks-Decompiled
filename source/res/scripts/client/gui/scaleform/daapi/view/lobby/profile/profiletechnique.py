@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileTechnique.py
 from __future__ import absolute_import, division
 from future.utils import viewitems
+from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PROFILE_TECHNIQUE_MEMBER
 from constants import Configs
@@ -47,7 +48,6 @@ class ProfileTechnique(ProfileTechniqueMeta):
     def __init__(self, *args):
         super(ProfileTechnique, self).__init__(*args)
         selectedData = self._selectedData
-        self.__dumpedVehDossiers = {}
         self._selectedVehicleIntCD = selectedData.get('itemCD') if selectedData else None
         self.__prestigeView = None
         self._seasonsManagers = makeTechniqueSeasonManagers()
@@ -83,10 +83,11 @@ class ProfileTechnique(ProfileTechniqueMeta):
         super(ProfileTechnique, self)._populate()
         self._setRatingButton()
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+        g_playerEvents.onDossiersResync += self.__dossierResyncHandler
 
     def _dispose(self):
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
-        self.__dumpedVehDossiers = None
+        g_playerEvents.onDossiersResync -= self.__dossierResyncHandler
         self.__prestigeView = None
         super(ProfileTechnique, self)._dispose()
         g_eventBus.handleEvent(ProfileTechniqueEvent(ProfileTechniqueEvent.DISPOSE), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -311,9 +312,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
         if not vehDossier:
             return
         else:
-            vehDossierDumped = self.__dumpedVehDossiers.get(vehicleIntCD)
-            if vehDossierDumped is None:
-                self.__dumpedVehDossiers[vehicleIntCD] = vehDossierDumped = dumpDossier(vehDossier)
+            vehDossierDumped = dumpDossier(vehDossier)
             achievementsList = None
             specialMarksStats = []
             specialRankedStats = []
@@ -428,6 +427,10 @@ class ProfileTechnique(ProfileTechniqueMeta):
         if 'hallOfFame' in diff:
             self._setRatingButton()
         if Configs.PRESTIGE_CONFIG.value in diff:
+            self.invokeUpdate()
+
+    def __dossierResyncHandler(self, *args):
+        if self.isActive:
             self.invokeUpdate()
 
     def __packAchievement(self, stats, vehDossier, record, vehDossierDumped):

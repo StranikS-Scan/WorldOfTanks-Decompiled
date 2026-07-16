@@ -5,7 +5,7 @@ from constants import IS_EDITOR
 from vehicle_systems.tankStructure import TankSoundObjectsIndexes
 
 def getGunSoundObject(vehicle):
-    if vehicle.appearance is not None and vehicle.appearance.engineAudition is not None:
+    if vehicle.appearance is not None and vehicle.appearance.engineAudition:
         soundObject = vehicle.appearance.engineAudition.getSoundObject(TankSoundObjectsIndexes.GUN)
         if soundObject is not None:
             return soundObject

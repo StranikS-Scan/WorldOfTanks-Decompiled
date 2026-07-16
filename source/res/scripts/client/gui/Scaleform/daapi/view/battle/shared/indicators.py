@@ -576,6 +576,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         super(SiegeModeIndicator, self).__init__()
         self.__isEnabled = False
         self.__isAllowedByContext = True
+        self.__isRadialMenuOpened = False
         self._siegeState = _SIEGE_STATE.DISABLED
         self._siegeDevice = 'engine'
         self._devices = {}
@@ -605,7 +606,11 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         if prbCtrl is not None:
             prbCtrl.onBattleStarted += self.__onBattleStarted
             self.__updateContextAvailability()
-        self.as_setVisibleS(self.__isEnabled and self.__isAllowedByContext)
+        calloutCtrl = self.sessionProvider.shared.calloutCtrl
+        if calloutCtrl is not None:
+            calloutCtrl.onRadialMenuOpenChanged += self.__onRadialMenuOpenChanged
+            self.__updateRadialMenuOpened()
+        self.__updateVisibility()
         return
 
     def _dispose(self):
@@ -621,6 +626,9 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         prbCtrl = self.sessionProvider.dynamic.prebattleSetup
         if prbCtrl is not None:
             prbCtrl.onBattleStarted -= self.__onBattleStarted
+        calloutCtrl = self.sessionProvider.shared.calloutCtrl
+        if calloutCtrl is not None:
+            calloutCtrl.onRadialMenuOpenChanged -= self.__onRadialMenuOpenChanged
         self._switchTimeTable.clear()
         self._siegeComponent.clear()
         self._siegeComponent = None
@@ -686,7 +694,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
             self._siegeState = _SIEGE_STATE.DISABLED
             self._siegeDevice = 'engine'
             self.__isEnabled = False
-        self.as_setVisibleS(self.__isEnabled and self.__isAllowedByContext)
+        self.__updateVisibility()
         return
 
     def __onVehicleStateUpdated(self, state, value):
@@ -694,7 +702,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
             self.__resetDevices()
             if not value:
                 self.__isEnabled = False
-                self.as_setVisibleS(self.__isEnabled and self.__isAllowedByContext)
+                self.__updateVisibility()
         else:
             if not self.__isEnabled:
                 return
@@ -718,7 +726,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         if viewID == CROSSHAIR_VIEW_ID.UNDEFINED:
             self.as_setVisibleS(False)
         else:
-            self.as_setVisibleS(self.__isEnabled and self.__isAllowedByContext)
+            self.__updateVisibility()
 
     def __updateSiegeState(self, siegeState, switchTime):
         if self._siegeState in _SIEGE_STATE.SWITCHING:
@@ -745,7 +753,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
 
     def __onBattleStarted(self):
         self.__updateContextAvailability()
-        self.as_setVisibleS(self.__isAllowedByContext and self.__isEnabled)
+        self.__updateVisibility()
 
     def __updateContextAvailability(self):
         prebattleCtrl = self.sessionProvider.dynamic.prebattleSetup
@@ -754,6 +762,17 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         else:
             self.__isAllowedByContext = True
         return
+
+    def __onRadialMenuOpenChanged(self):
+        self.__updateRadialMenuOpened()
+        self.__updateVisibility()
+
+    def __updateRadialMenuOpened(self):
+        calloutCtrl = self.sessionProvider.shared.calloutCtrl
+        self.__isRadialMenuOpened = calloutCtrl.isRadialMenuOpened()
+
+    def __updateVisibility(self):
+        self.as_setVisibleS(self.__isEnabled and self.__isAllowedByContext and not self.__isRadialMenuOpened)
 
     @classmethod
     def __getDeviceStateConverter(cls, vTypeDesc):

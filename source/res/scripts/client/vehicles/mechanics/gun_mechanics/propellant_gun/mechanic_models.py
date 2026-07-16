@@ -74,7 +74,7 @@ class PropellantGunMechanicState(IPropellantGunMechanicState):
         return not self == other
 
     def __hash__(self):
-        return hash((value for key, value in self.__dict__.items() if key != '_PropellantGunMechanicState__updateTime'))
+        return hash(tuple((value for key, value in self.__dict__.items() if key != '_PropellantGunMechanicState__updateTime')))
 
     @classmethod
     def fromComponentStatus(cls, status, params, isForbiddenShell=None):

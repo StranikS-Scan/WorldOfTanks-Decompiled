@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/tunable_event_block.py
+from __future__ import absolute_import
 import BigWorld
 from functools import wraps
-from block import Block
-from slot_types import SLOT_TYPE
+from visual_script.block import Block
+from visual_script.slot_types import SLOT_TYPE
 
 class TunableEventBlock(Block):
     _EVENT_SLOT_NAMES = ['onEvent']

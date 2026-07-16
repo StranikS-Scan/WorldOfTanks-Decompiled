@@ -13,6 +13,7 @@ from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import LobbySimpleEvent
 from helpers import dependency
 from helpers.events_handler import EventsHandler
+from shared_utils import safeExecute
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Window
@@ -34,7 +35,7 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         self.__isLobbyLoaded = False
         self.__accountID = 0
         self.__isExecuting = False
-        self.onPostponedQueueUpdated = Event.Event()
+        self.onPostponedQueueUpdated = Event.SafeEvent()
         return
 
     @property
@@ -230,7 +231,7 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
                 _logger.debug('Executing next command: %r', command)
                 self.__currentWindow = command.getWindow()
                 self.__isExecuting = True
-                command.execute()
+                safeExecute(command.execute)
                 self.__isExecuting = False
             return
 

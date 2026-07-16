@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 from account_helpers.AccountSettings import AccountSettings, KEY_SETTINGS
 from constants import HAS_DEV_RESOURCES
-from constants_utils import initCommonTypes, initSquadCommonTypes, addBattleEventTypesFromExtension, addAttackReasonTypesFromExtension, addDamageInfoCodes, addDamageResistanceReasonsFromExtension
+from constants_utils import initCommonTypes, initSquadCommonTypes, addBattleEventTypesFromExtension, addAttackReasonTypesFromExtension, addDamageInfoCodes, addDamageResistanceReasonsFromExtension, addBattleChatCommands, initSquadAssemblerCommonTypes
 from debug_utils import LOG_DEBUG
 from aih_constants import CTRL_TYPE, CTRL_MODE_NAME
 from last_stand.gui.game_control.ls_quests_ui_cache import LSQuestsUICache
@@ -19,6 +19,7 @@ from last_stand.control_modes import LSArcadeControlMode, LSSniperControlMode
 from gui.override_scaleform_views_manager import g_overrideScaleFormViewsConfig
 from gui.prb_control.prb_utils import initGuiTypes, initScaleformGuiTypes, initBattleCtrlIDs
 from gui.shared.system_factory import registerScaleformBattlePackages
+from last_stand_common.last_stand_constants import LS_BATTLE_CHAT_COMMAND_SETTINGS
 from messenger.m_constants import BATTLE_CHANNEL
 from chat_shared import SYS_MESSAGE_TYPE as _SM_TYPE
 
@@ -57,6 +58,8 @@ class ClientLastStandBattleMode(last_stand_constants.LastStandBattleMode):
     def _client_gameControllers(self):
         from last_stand.skeletons.ls_controller import ILSController
         from last_stand.gui.game_control.ls_controller import LSController
+        from last_stand.skeletons.ls_vehicle_selection_controller import ILSVehicleSelectionController
+        from last_stand.gui.game_control.ls_vehicle_selection_controller import LSVehicleSelectionController
         from last_stand.skeletons.difficulty_level_controller import IDifficultyLevelController
         from last_stand.gui.game_control.difficulty_level_controller import DifficultyLevelController
         from last_stand.skeletons.ls_artefacts_controller import ILSArtefactsController
@@ -67,17 +70,21 @@ class ClientLastStandBattleMode(last_stand_constants.LastStandBattleMode):
         from last_stand.gui.sounds.ls_sound_controller import LSSoundController
         from last_stand.skeletons.ls_global_chat_controller import ILSGlobalChatController
         from last_stand.gui.game_control.ls_global_chat_controller import LSGlobalChatController
+        from last_stand.skeletons.ls_global_chat_controller import ILSDifficultyChatController
+        from last_stand.gui.game_control.ls_chat_by_difficulty_controller import LSDifficultyChatController
         from last_stand.skeletons.ls_difficulty_missions_controller import ILSDifficultyMissionsController
         from last_stand.gui.game_control.ls_difficulty_missions_controller import LSDifficultyMissionsController
         from last_stand.skeletons.ls_story_point_controller import ILSStoryPointController
         from last_stand.gui.game_control.ls_story_point_controller import LSStoryPointController
         return ((ILSController, LSController, False),
+         (ILSVehicleSelectionController, LSVehicleSelectionController, False),
          (ILSQuestsUICache, LSQuestsUICache, False),
          (IDifficultyLevelController, DifficultyLevelController, False),
          (ILSArtefactsController, LSArtefactsController, False),
          (ILSShopController, LSShopController, False),
          (ILSSoundController, LSSoundController, False),
          (ILSGlobalChatController, LSGlobalChatController, False),
+         (ILSDifficultyChatController, LSDifficultyChatController, False),
          (ILSDifficultyMissionsController, LSDifficultyMissionsController, False),
          (ILSStoryPointController, LSStoryPointController, False))
 
@@ -123,18 +130,30 @@ class ClientLastStandBattleMode(last_stand_constants.LastStandBattleMode):
 
     @property
     def _client_platoonWelcomeViewClass(self):
-        from gui.impl.lobby.platoon.view.platoon_welcome_view import WelcomeView
-        return WelcomeView
+        from last_stand.gui.impl.lobby.platoon.platoon_welcome_view import LSWelcomeView
+        return LSWelcomeView
+
+    @property
+    def _client_platoonSearchViewClass(self):
+        from last_stand.gui.impl.lobby.platoon.platoon_search_view import LSSearchView
+        return LSSearchView
 
     @property
     def _client_platoonLayouts(self):
         from gui.impl.gen import R
         from gui.impl.lobby.platoon.platoon_config import EPlatoonLayout, MembersWindow, PlatoonLayout
-        return [(EPlatoonLayout.MEMBER, PlatoonLayout(R.views.last_stand.lobby.MembersWindow(), MembersWindow))]
+        from gui.impl.lobby.platoon.view.platoon_selection_view import SelectionWindow
+        from gui.impl.lobby.platoon.view.platoon_search_view import SearchWindow
+        return [(EPlatoonLayout.WELCOME, PlatoonLayout(R.views.last_stand.lobby.PlatoonDropdown(), SelectionWindow)), (EPlatoonLayout.MEMBER, PlatoonLayout(R.views.last_stand.lobby.MembersWindow(), MembersWindow)), (EPlatoonLayout.SEARCH, PlatoonLayout(R.views.last_stand.lobby.SearchingDropdown(), SearchWindow))]
 
     @property
     def _client_readyVehicleCheckers(self):
         return [checkAbilities]
+
+    @property
+    def _client_unitMembersOrderKey(self):
+        from last_stand.gui.impl.lobby.ls_helpers.platoon_helpers import slotsPlayerSortKey
+        return slotsPlayerSortKey
 
     @property
     def _client_arenaDescrClass(self):
@@ -322,11 +341,13 @@ def preInit():
     LOG_DEBUG('preInit personality:', __name__)
     initCommonTypes(last_stand_constants, __name__)
     initSquadCommonTypes(last_stand_constants, __name__)
+    initSquadAssemblerCommonTypes(last_stand_constants, __name__)
     initGuiTypes(ls_gui_constants, __name__)
     initAdditionalGuiTypes(ls_gui_constants, __name__)
     initScaleformGuiTypes(ls_gui_constants, __name__)
     initBattleCtrlIDs(ls_gui_constants, __name__)
     addBattleEventTypesFromExtension(last_stand_constants.BATTLE_EVENT_TYPE, __name__)
+    addBattleChatCommands(LS_BATTLE_CHAT_COMMAND_SETTINGS)
     ls_gui_constants.FEEDBACK_EVENT_ID.inject(__name__)
     ls_battle_constants.VEHICLE_VIEW_STATE.inject(__name__)
     addAttackReasonTypesFromExtension(last_stand_constants.ATTACK_REASON, __name__)

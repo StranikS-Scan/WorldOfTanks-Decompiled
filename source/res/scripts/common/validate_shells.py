@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/validate_shells.py
+from __future__ import absolute_import, print_function
 import ResMgr
 
 def gatherChunks(spaceDir):
@@ -35,4 +36,4 @@ def validateShells(spaceDir):
             if shell in shells:
                 shells.remove(shell)
 
-    print shells
+    print(shells)

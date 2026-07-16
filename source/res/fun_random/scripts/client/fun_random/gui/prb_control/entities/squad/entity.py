@@ -16,7 +16,7 @@ from fun_random.gui.prb_control.entities.squad.scheduler import FunRandomSquadSc
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEntity
-from gui.prb_control.entities.base.squad.mixins import RestrictedRoleTagMixin
+from gui.prb_control.entities.base.squad.mixins import SquadRestrictionsMixin
 from gui.prb_control.entities.random.squad.actions_handler import BalancedSquadActionsHandler
 from gui.prb_control.entities.random.squad.entity import BalancedSquadDynamicRosterSettings
 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -67,7 +67,7 @@ class FunRandomSquadEntryPoint(SquadEntryPoint):
         g_prbCtrlEvents.onUnitCreationFailure(reason)
 
 
-class FunRandomSquadEntity(SquadEntity, RestrictedRoleTagMixin):
+class FunRandomSquadEntity(SquadEntity, SquadRestrictionsMixin):
     __eventsCache = dependency.descriptor(IEventsCache)
     __funRandomController = dependency.descriptor(IFunRandomController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -196,10 +196,9 @@ class FunRandomSquadEntity(SquadEntity, RestrictedRoleTagMixin):
         if v.getCustomState() == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE:
             return True
         if self._isBalancedSquad:
-            result = v.level in self._rosterSettings.getLevelsRange()
-            if not result:
+            if v.level not in self._rosterSettings.getLevelsRange():
                 return False
-        return self.isTagVehicleAvailable(v.tags) if self.isRoleRestrictionValid() else super(FunRandomSquadEntity, self)._vehicleStateCondition(v)
+        return self.isVehicleSuitableForSquad(v) if self.isSquadRestrictionValid() else super(FunRandomSquadEntity, self)._vehicleStateCondition(v)
 
     def __getUnitSubModeID(self):
         extraData = self.getExtra()

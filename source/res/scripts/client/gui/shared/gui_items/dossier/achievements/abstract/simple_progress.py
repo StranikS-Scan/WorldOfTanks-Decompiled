@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/abstract/simple_progress.py
-from regular import RegularAchievement
+from __future__ import absolute_import, division
+from gui.shared.gui_items.dossier.achievements.abstract.regular import RegularAchievement
 from dossiers2.custom.config import RECORD_CONFIGS
 
 class SimpleProgressAchievement(RegularAchievement):
@@ -25,7 +26,7 @@ class SimpleProgressAchievement(RegularAchievement):
 
     def _readLevelUpValue(self, dossier):
         minValue = RECORD_CONFIGS[self._name]
-        medals, series = divmod(self._progressValue, minValue)
+        _, series = divmod(self._progressValue, minValue)
         return minValue - series
 
     def _readLevelUpTotalValue(self, dossier):

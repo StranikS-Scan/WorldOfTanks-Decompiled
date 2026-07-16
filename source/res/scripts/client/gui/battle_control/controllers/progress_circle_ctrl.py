@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/progress_circle_ctrl.py
+from __future__ import absolute_import
 from functools import partial
+from builtins import round
+from future.utils import viewitems, viewvalues
 import BigWorld
 import Event
 from constants import REPAIR_POINT_ACTION, SECTOR_BASE_ACTION
@@ -53,15 +56,15 @@ class ProgressTimerPlugin(object):
 
     def _cooldownCallback(self):
         delCallbacks = []
-        for idx in self._cooldown:
-            if self._getTime(self._cooldown[idx]) > 0:
-                self._controller.onTimerUpdated(self._type, idx, self._getTime(self._cooldown[idx]))
+        for idx, time in viewitems(self._cooldown):
+            if self._getTime(time) > 0:
+                self._controller.onTimerUpdated(self._type, idx, self._getTime(time))
             delCallbacks.append(idx)
 
-        for i in range(0, len(delCallbacks)):
-            del self._cooldown[delCallbacks[i]]
+        for idx in delCallbacks:
+            del self._cooldown[idx]
 
-        if self._cooldown.keys():
+        if self._cooldown:
             self._callback = BigWorld.callback(1, self._cooldownCallback)
         else:
             self._callback = None
@@ -112,11 +115,10 @@ class StepRepairPlugin(ProgressTimerPlugin):
         if stepRepairPointComponent is not None:
             stepRepairPointComponent.onStepRepairPointPlayerAction += self._action
             actions = stepRepairPointComponent.repairPointPlayerActions
-            for idx in actions.keys():
-                action, time, hphealed = actions[idx]
+            for idx, (action, time, hphealed) in viewitems(actions):
                 if action == REPAIR_POINT_ACTION.COOLDOWN_AFTER_COMPLETE:
                     self._action(idx, REPAIR_POINT_ACTION.COOLDOWN, time, hphealed)
-                if action != REPAIR_POINT_ACTION.CANCEL_REPAIR and action != REPAIR_POINT_ACTION.LEAVE_WHILE_CD:
+                if action not in (REPAIR_POINT_ACTION.CANCEL_REPAIR, REPAIR_POINT_ACTION.LEAVE_WHILE_CD):
                     self._action(idx, action, time, hphealed)
 
         else:
@@ -276,8 +278,8 @@ class SectorBasePlugin(ProgressTimerPlugin):
         if sectorBaseComp is not None:
             sectorBaseComp.onSectorBasePlayerAction += self._action
             actions = sectorBaseComp.stepSectorBasePlayerAction
-            for idx, action, time in actions.iteritems():
-                if action != SECTOR_BASE_ACTION.LEAVE and action != SECTOR_BASE_ACTION.LEAVE_WHILE_CD and action != SECTOR_BASE_ACTION.CAPTURED:
+            for idx, (action, time) in viewitems(actions):
+                if action not in (SECTOR_BASE_ACTION.LEAVE, SECTOR_BASE_ACTION.LEAVE_WHILE_CD, SECTOR_BASE_ACTION.CAPTURED):
                     self._action(idx, action, time)
 
         else:
@@ -349,14 +351,14 @@ class ProgressTimerController(IBattleController):
             self.__plugins[PROGRESS_CIRCLE_TYPE.RESUPPLY_CIRCLE] = StepRepairPlugin(self, self.__sessionProvider)
         if visitor.hasSectors():
             self.__plugins[PROGRESS_CIRCLE_TYPE.SECTOR_BASE_CIRCLE] = SectorBasePlugin(self, self.__sessionProvider)
-        for p in self.__plugins:
-            self.__plugins[p].start()
+        for plugin in viewvalues(self.__plugins):
+            plugin.start()
 
     def stopControl(self):
         self.__eManager.clear()
         self.__eManager = None
-        for p in self.__plugins:
-            self.__plugins[p].fini()
+        for plugin in viewvalues(self.__plugins):
+            plugin.fini()
 
         self.__plugins = {}
         return

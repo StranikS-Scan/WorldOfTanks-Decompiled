@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/blueprints/FragmentLayouts.py
+from __future__ import absolute_import
 from bitstring import BitArray
 from bit_coder import BitCoder
+from past.builtins import xrange, long
 
 class Layout(object):
-    __slots__ = ('rows', 'columns', 'stamps', '__iadd__', '__isub__', '__len__', 'asInt', 'fromInt', 'layoutData')
+    __slots__ = ('rows', 'columns', 'stamps', 'layoutData')
     LAYOUTS = dict(((16, 4),
      (15, 5),
      (14, 7),
@@ -37,13 +39,13 @@ class Layout(object):
     def __init__(self, intLayout, length):
         layoutDataLength = int(intLayout >> 28 or length)
         self.columns = intLayout >> 24 & 15 or self.LAYOUTS.get(layoutDataLength, layoutDataLength)
-        self.rows = layoutDataLength / self.columns
+        self.rows = layoutDataLength // self.columns
         arrayData = BitArray(length=32, uint=intLayout)
         self.stamps = arrayData[8:16]
         self.layoutData = arrayData[-layoutDataLength:]
 
     def __iadd__(self, other):
-        if type(other) not in (int, long):
+        if not isinstance(other, (int, long)):
             raise TypeError()
         layoutData = self.layoutData
         layoutDataLength = self.layoutData.length

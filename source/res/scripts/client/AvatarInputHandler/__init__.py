@@ -59,7 +59,8 @@ from helpers import dependency
 from player_notifications.siege_mode.notifier import SiegeModeNotifier
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
-from cgf_obsolete_script.script_game_object import ScriptGameObject, ComponentDescriptor
+from components_base.component_descriptor import ComponentDescriptor
+from components_base.component_controller import ComponentController
 from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic
 from vehicles.mechanics.mechanic_constants import VehicleMechanic
 INPUT_HANDLER_CFG = 'gui/avatar_input_handler.xml'
@@ -167,7 +168,7 @@ class DynamicCameraSettings(object):
         return ranges
 
 
-class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
+class AvatarInputHandler(CallbackDelayer, ComponentController):
     ctrl = property(lambda self: self.__curCtrl)
     ctrls = property(lambda self: self.__ctrls)
     isSPG = property(lambda self: self.__isSPG)
@@ -226,11 +227,9 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     siegeModeNotifier = ComponentDescriptor()
     DEFAULT_AIH_WORLD_ID = -1
 
-    def __init__(self, spaceID):
+    def __init__(self):
         CallbackDelayer.__init__(self)
-        if spaceID == 0:
-            spaceID = self.DEFAULT_AIH_WORLD_ID
-        ScriptGameObject.__init__(self, spaceID, 'AvatarInputHandler')
+        ComponentController.__init__(self, 'AvatarInputHandler')
         self.__alwaysShowAimKey = None
         self.__showMarkersKey = None
         sec = self._readCfg()
@@ -307,12 +306,21 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             self.__persistentCommands.append(createDevCommandsControl())
             if player.hasBonusCap(ARENA_BONUS_TYPE_CAPS.SWITCH_SETUPS):
                 self.__persistentCommands.append(PrebattleSetupsControl())
+            queue = CGF.CommandQueue(player.spaceID)
+            mode = _CTRL_MODES.index(self.__ctrlModeName)
             if vehicle.appearance:
-                vehicle.appearance.removeComponentByType(GenericComponents.ControlModeStatus)
-                vehicle.appearance.createComponent(GenericComponents.ControlModeStatus, _CTRL_MODES.index(self.__ctrlModeName))
+                go = vehicle.appearance.gameObject
+                status = go.findWrite(GenericComponents.ControlModeStatus)
+                if status is None:
+                    queue.createComponent(go, GenericComponents.ControlModeStatus, mode)
+                else:
+                    status.mode = mode
             if player.inWorld:
-                player.entityGameObject.removeComponentByType(GenericComponents.ControlModeStatus)
-                player.entityGameObject.createComponent(GenericComponents.ControlModeStatus, _CTRL_MODES.index(self.__ctrlModeName))
+                status = player.entityGameObject.findWrite(GenericComponents.ControlModeStatus)
+                if status is None:
+                    queue.createComponent(player.entityGameObject, GenericComponents.ControlModeStatus, mode)
+                else:
+                    status.mode = mode
             self.__commands.append(ArmorFlashlightControl())
             return
 
@@ -569,7 +577,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         BigWorld.player().consistentMatrices.onVehicleMatrixBindingChanged -= self.__onVehicleMatrixBindingChanged
         self.__inputSingleton = None
-        ScriptGameObject.destroy(self)
+        ComponentController.destroy(self)
         CallbackDelayer.destroy(self)
         return
 
@@ -673,12 +681,21 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             vehicle = player.getVehicleAttached()
             if not isReplayPlaying and vehicle is not None and not vehicle.isUpgrading:
                 self.__curCtrl.handleMouseEvent(0.0, 0.0, 0.0)
+            queue = CGF.CommandQueue(player.spaceID)
+            mode = _CTRL_MODES.index(eMode)
             if vehicle is not None and vehicle.appearance is not None:
-                vehicle.appearance.removeComponentByType(GenericComponents.ControlModeStatus)
-                vehicle.appearance.createComponent(GenericComponents.ControlModeStatus, _CTRL_MODES.index(eMode))
+                go = vehicle.appearance.gameObject
+                status = go.findWrite(GenericComponents.ControlModeStatus)
+                if status is None:
+                    queue.createComponent(go, GenericComponents.ControlModeStatus, mode)
+                else:
+                    status.mode = mode
             if player.inWorld:
-                player.entityGameObject.removeComponentByType(GenericComponents.ControlModeStatus)
-                player.entityGameObject.createComponent(GenericComponents.ControlModeStatus, _CTRL_MODES.index(self.__ctrlModeName))
+                status = player.entityGameObject.findWrite(GenericComponents.ControlModeStatus)
+                if status is None:
+                    queue.createComponent(player.entityGameObject, GenericComponents.ControlModeStatus, mode)
+                else:
+                    status.mode = mode
             BigWorld.setEdgeDrawerRenderMode(1 if eMode in aih_constants.MAP_CASE_MODES else 0)
             return
 

@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/SoundEventChecker.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.app_loader import sf_lobby
 from gui.shared.SoundEffectsId import SoundEffectsId
@@ -79,7 +81,7 @@ class SoundEventChecker(ISoundEventChecker):
     def __onStatsChanged(self, stats):
         newValues = Money.extractMoneyDict(stats)
         if newValues:
-            for currency, value in newValues.iteritems():
+            for currency, value in viewitems(newValues):
                 if value < self.__currentMoney.get(currency, 0):
                     self.__spendCurrencies.append(currency)
                 if value > self.__currentMoney.get(currency, 0):

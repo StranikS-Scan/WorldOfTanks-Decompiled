@@ -9,7 +9,6 @@ from gui.impl.gen import R
 from gui.lootbox_system.base.awards import preformatRewardsInfo
 from gui.lootbox_system.base.common import TEXT_RESOURCE_PREFIX, NotificationPathPart, getTextResource, DEFAULT_EVENT_NAME
 from gui.server_events.bonuses import getMergedBonusesFromDicts
-from gui.shared.formatters import text_styles
 from gui.shared.gui_items.dossier import getAchievementFactory
 from gui.shared.gui_items.loot_box import ALL_LUNAR_NY_LOOT_BOX_TYPES, WTLootBoxes, NewYearLootBoxes
 from gui.shared.notifications import NotificationGroup, NotificationPriorityLevel
@@ -298,15 +297,11 @@ class LootBoxSystemAutoOpenFormatter(AsyncAutoLootBoxSubFormatter):
         textPathParts = [NotificationPathPart.MAIN, NotificationPathPart.AUTOOPEN]
         header = backport.text(getTextResource(textPathParts + [NotificationPathPart.HEADER], eventName)())
         description = backport.text(getTextResource(textPathParts + [NotificationPathPart.TEXT], eventName)())
-        countRes = getTextResource(textPathParts + [NotificationPathPart.COUNT], eventName)
-        boxes = sum((message.data[boxId]['count'] for boxId in openedBoxes))
-        count = backport.text(self.__BREAK) + backport.text(countRes(), boxes=text_styles.credits(boxes)) if countRes.exists() else ''
         boxesCounts = {bID:message.data[bID]['count'] for bID in openedBoxes}
         rewards = getRewardsForBoxes(message, openedBoxes)
         preformatRewardsInfo(rewards)
         formatted = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, ctx={'header': header,
-         'description': description,
-         'count': count}, data={'savedData': {'eventName': eventName,
+         'description': description}, data={'savedData': {'eventName': eventName,
                        'rewards': rewards,
                        'boxIDs': boxesCounts}})
         settings = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE, priorityLevel=NotificationPriorityLevel.HIGH)

@@ -3,7 +3,7 @@
 import typing
 import CGF
 from Event import Event
-from cgf_components.hangar_camera_manager import HangarCameraManager
+from cgf_components.hangar_camera_manager import HangarCameraSystem
 from frameworks.state_machine import StateFlags, StateIdsObserver
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -125,7 +125,7 @@ class PetEventFullscreenWindowState(SFViewLobbyState, EventsHandler):
     def __switchCamera(self, isExit=False):
         yield self.fadeManager.show(WindowLayer.OVERLAY)
         try:
-            cameraManager = CGF.getManager(self.hangarSpace.spaceID, HangarCameraManager)
+            cameraManager = CGF.getSystem(self.hangarSpace.spaceID, HangarCameraSystem)
             if cameraManager:
                 if not isExit:
                     cameraManager.switchByCameraName(PET_CAMERA_NAME, instantly=True)

@@ -1,9 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/functions.py
+from __future__ import absolute_import, division
 import typing
+from builtins import map
 from collections import defaultdict
+from future.utils import iteritems, itervalues, viewkeys
 from operator import itemgetter
-from future.utils import iteritems, itervalues
+from past.utils import old_div
 import BigWorld
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import KPI
@@ -32,7 +35,7 @@ class _KpiDict(object):
     def __mul__(self, other):
         resultTypes, resultFactors = {}, defaultdict(float)
         otherTypes, otherFactors = other.getFactorTypes(), other.getFactors()
-        for kpiName in self.__dict.viewkeys() | otherFactors.viewkeys():
+        for kpiName in viewkeys(self.__dict) | viewkeys(otherFactors):
             resultTypes[kpiName] = kpiType = self.__typeDict.get(kpiName) or otherTypes[kpiName]
             firstVal, secondVal = self.__dict.get(kpiName, 0.0), otherFactors.get(kpiName, 0.0)
             resultFactors[kpiName] = (firstVal or 1.0) * (secondVal or 1.0) if kpiType == KPI.Type.MUL else firstVal + secondVal
@@ -177,13 +180,13 @@ def calculateAdditionalCrewLevelIncrease(vehicle, situationalBonuses):
             for skill in tankman.skills:
                 if skill.isSkillActive and skill.name in situationalBonuses:
                     skillLevelIncrease = getattr(tankmen.getSkillsConfig().getSkill(skill.name), 'crewLevelIncrease', 0.0)
-                    resultCrewLevelIncrease += skillLevelIncrease / tankmen.MAX_SKILL_LEVEL * skill.level
+                    resultCrewLevelIncrease += old_div(skillLevelIncrease, tankmen.MAX_SKILL_LEVEL) * skill.level
 
             for bonusSkills in itervalues(tankman.bonusSkills):
                 for bonusSkill in bonusSkills:
                     if bonusSkill and bonusSkill.isSkillActive:
                         skillLevelIncrease = getattr(tankmen.getSkillsConfig().getSkill(bonusSkill.name), 'crewLevelIncrease', 0.0)
-                        resultCrewLevelIncrease += skillLevelIncrease / tankmen.MAX_SKILL_LEVEL * bonusSkill.level
+                        resultCrewLevelIncrease += old_div(skillLevelIncrease, tankmen.MAX_SKILL_LEVEL) * bonusSkill.level
 
         return resultCrewLevelIncrease
 

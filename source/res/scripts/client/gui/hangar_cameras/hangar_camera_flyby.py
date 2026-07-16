@@ -4,12 +4,11 @@ import logging
 import math
 import CGF
 import Math
-from shared_utils import first
 import math_utils
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
 from skeletons.gui.shared.utils import IHangarSpace
-from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
+from cgf_script.registration import ComponentProperty, registerComponent
 _logger = logging.getLogger(__name__)
 _MAX_DT = 0.05
 
@@ -17,10 +16,10 @@ _MAX_DT = 0.05
 class FlyByComponent(object):
     editorTitle = 'Camera Flyby'
     category = 'Camera'
-    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
-    pitch = ComponentProperty(type=CGFMetaTypes.FLOAT, value=-30, editorName='Goal Pitch')
-    distance = ComponentProperty(type=CGFMetaTypes.FLOAT, value=6.5, editorName='Goal Distance')
-    duration = ComponentProperty(type=CGFMetaTypes.FLOAT, value=12, editorName='Duration')
+    domain = CGF.Domain.ClientEditor
+    pitch = ComponentProperty(type=CGF.PropertyType.Float, value=-30, editorName='Goal Pitch')
+    distance = ComponentProperty(type=CGF.PropertyType.Float, value=6.5, editorName='Goal Distance')
+    duration = ComponentProperty(type=CGF.PropertyType.Float, value=12, editorName='Duration')
 
 
 class HangarCameraFlyby(object):
@@ -108,13 +107,9 @@ class HangarCameraFlyby(object):
             return
 
     def __findFlybyComponent(self):
-        from CameraComponents import ActiveCameraComponent
-        currentCameraQuery = CGF.Query(self.__hangarSpace.spaceID, (CGF.GameObject, ActiveCameraComponent))
-        if not currentCameraQuery.empty():
-            gameObject, _ = first(currentCameraQuery)
-            return gameObject.findComponentByType(FlyByComponent)
-        else:
-            return None
+        from cgf_components.hangar_camera_manager import HangarCameraSystem
+        cameraManager = CGF.getSystem(self.__hangarSpace.spaceID, HangarCameraSystem)
+        return cameraManager.getCameraFlyBy()
 
 
 class _FlybyEasing(object):

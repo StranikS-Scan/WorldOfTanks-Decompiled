@@ -85,6 +85,8 @@ class StoryModeController(IStoryModeController, IGlobalListener):
         self.__missionsProgressDiff = {}
         self.__soundController = SoundsController()
         self._delayedBattleResultsID = None
+        self.__pendingLastArenaUniqueId = None
+        self.__isWaitingLobbyInit = False
         self._eventMissionSelectorMap = {EventMissionSelector.DEFAULT: self.__getNotCompletedMissions,
          EventMissionSelector.BATTLES_COUNT: self.__getMissionsByBattleCount,
          EventMissionSelector.WITH_UNLOCK_MISSION: self.__getMissionsWithUnlockMission}
@@ -424,6 +426,11 @@ class StoryModeController(IStoryModeController, IGlobalListener):
 
     def __clear(self):
         g_eventBus.removeListener(events.HangarVehicleEvent.SELECT_VEHICLE_IN_HANGAR, self.__onSelectVehicleInHangar, scope=EVENT_BUS_SCOPE.LOBBY)
+        if self.__isWaitingLobbyInit:
+            g_eventBus.removeListener(events.AppLifeCycleEvent.INITIALIZED, self.__onLobbyAppInitialized, EVENT_BUS_SCOPE.GLOBAL)
+            self.__isWaitingLobbyInit = False
+        self.__pendingLastArenaUniqueId = None
+        return
 
     def __onAvatarBecomeNonPlayer(self):
         self.stopMusic(True)
@@ -479,14 +486,25 @@ class StoryModeController(IStoryModeController, IGlobalListener):
             self.__requestBattleResults(lastArenaUniqueId)
             self.__closeExcessiveWindows()
         else:
-
-            def _onAppInitialized(event):
-                if event.ns == app_loader.settings.APP_NAME_SPACE.SF_LOBBY:
-                    self.__requestBattleResults(lastArenaUniqueId)
-                    g_eventBus.removeListener(events.AppLifeCycleEvent.INITIALIZED, _onAppInitialized, EVENT_BUS_SCOPE.GLOBAL)
-
-            g_eventBus.addListener(events.AppLifeCycleEvent.INITIALIZED, _onAppInitialized, EVENT_BUS_SCOPE.GLOBAL)
+            self.__pendingLastArenaUniqueId = lastArenaUniqueId
+            if not self.__isWaitingLobbyInit:
+                g_eventBus.addListener(events.AppLifeCycleEvent.INITIALIZED, self.__onLobbyAppInitialized, EVENT_BUS_SCOPE.GLOBAL)
+                self.__isWaitingLobbyInit = True
         return
+
+    def __onLobbyAppInitialized(self, event):
+        if event.ns != app_loader.settings.APP_NAME_SPACE.SF_LOBBY:
+            return
+        else:
+            if self.__isWaitingLobbyInit:
+                g_eventBus.removeListener(events.AppLifeCycleEvent.INITIALIZED, self.__onLobbyAppInitialized, EVENT_BUS_SCOPE.GLOBAL)
+                self.__isWaitingLobbyInit = False
+            if self.__pendingLastArenaUniqueId is None:
+                return
+            lastArenaUniqueId = self.__pendingLastArenaUniqueId
+            self.__pendingLastArenaUniqueId = None
+            self.__requestBattleResults(lastArenaUniqueId)
+            return
 
     @adisp_process
     def __requestBattleResults(self, lastArenaUniqueId):

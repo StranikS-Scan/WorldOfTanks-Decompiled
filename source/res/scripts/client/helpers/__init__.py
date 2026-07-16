@@ -27,6 +27,10 @@ def isPlayerAvatar():
     return hasattr(BigWorld.player(), 'arena')
 
 
+def isPlayerExist():
+    return hasattr(BigWorld, 'player')
+
+
 def getLanguageCode():
     return i18n.makeString('#settings:LANGUAGE_CODE') if i18n.doesTextExist('#settings:LANGUAGE_CODE') else None
 

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/view_helpers/CooldownHelper.py
+from __future__ import absolute_import
 import operator
+from future.utils import viewitems
 import BigWorld
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.rq_cooldown import getRequestCoolDown
@@ -54,7 +56,7 @@ class CooldownHelper(object):
             cooldowns[requestID] = getRequestCoolDown(self._eventScope, requestID)
 
         if cooldowns:
-            requestID, cooldown = max(cooldowns.items(), key=operator.itemgetter(1))
+            requestID, cooldown = max(viewitems(cooldowns), key=operator.itemgetter(1))
             if cooldown > 0:
                 self.__isInCooldown = True
                 self.__handler(True)

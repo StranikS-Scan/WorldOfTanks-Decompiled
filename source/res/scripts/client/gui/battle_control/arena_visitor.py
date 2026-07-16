@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_visitor.py
+from __future__ import absolute_import
 import functools
 import typing
 import weakref
+from future.utils import lrange
 import BigWorld
 import win_points
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as _CAPS
@@ -211,7 +213,7 @@ class _ArenaTypeVisitor(IArenaVisitor):
         return self._arenaType.maxTeamsInArena
 
     def getTeamsOnArenaRange(self):
-        return range(1, self.getMaxTeamsOnArena() + 1)
+        return lrange(1, self.getMaxTeamsOnArena() + 1)
 
     @catch_attribute_exception(default=_ArenaTypeSkeleton.soloTeamNumbers)
     def getSoloTeamNumbers(self):

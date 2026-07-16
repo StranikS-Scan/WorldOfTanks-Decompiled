@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/quest_progress/quest_progress_ctrl.py
+from __future__ import absolute_import
 import logging
+import typing
+from future.utils import iteritems, itervalues, viewvalues
 import BigWorld
 import personal_missions
 from Event import EventManager, Event
@@ -89,7 +92,7 @@ class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
                         self.__storage[generalQuestID] = BattleProgressStorage(generalQuestID, mission.getConditionsConfig(), mission.getConditionsProgress(), mission.isOneBattleQuest())
 
                 if self.__selectedQuest is None:
-                    self.__selectedQuest = first(self.__inProgressQuests.itervalues())
+                    self.__selectedQuest = first(viewvalues(self.__inProgressQuests))
                 self.__updateTimerConditions(sendDiff=False)
             self.__isInited = True
             if self.__selectedQuest:
@@ -173,16 +176,16 @@ class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
         if selectedQuest is not None:
             storage = self.__storage[selectedQuest.getGeneralQuestID()]
             needHeaderResync = False
-            for headerProgress in storage.getHeaderProgresses().itervalues():
+            for headerProgress in itervalues(storage.getHeaderProgresses()):
                 if headerProgress.isChanged():
                     needHeaderResync = True
                     headerProgress.markAsVisited()
 
-            for headerProgress in storage.getUniqueCompletionRequirement().itervalues():
+            for headerProgress in itervalues(storage.getUniqueCompletionRequirement()):
                 if headerProgress.isChanged():
                     needHeaderResync = True
 
-            for changedCondition in storage.sortProgresses(storage.getChangedConditions().itervalues()):
+            for changedCondition in storage.sortProgresses(viewvalues(storage.getChangedConditions())):
                 changedCondition.markAsVisited()
                 self.onConditionProgressUpdate(changedCondition.getProgressID(), changedCondition.getProgress())
 
@@ -231,7 +234,7 @@ class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
             startTime = self._endTime - self._length
             timesGoneFromStart = BigWorld.serverTime() - startTime
             timerConditions = self.__storage[selectedQuest.getGeneralQuestID()].getTimerConditions()
-            for progressID, condProgress in timerConditions.iteritems():
+            for progressID, condProgress in iteritems(timerConditions):
                 secondsLeft = max(condProgress.getCountDown() - timesGoneFromStart, 0)
                 isChanged = condProgress.setTimeLeft(secondsLeft)
                 if isChanged and sendDiff:

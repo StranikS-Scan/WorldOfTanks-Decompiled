@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dog_tags_common/components_config.py
+from __future__ import absolute_import
 import itertools
 from collections import defaultdict
 import typing
 from enum import Enum
+from future.utils import iterkeys, iteritems, viewkeys, viewitems, viewvalues
 from cache import cached_property
 from dog_tags_common.config.common import ComponentPurpose
 from dog_tags_common.config.dog_tag_parser import readDogTags
@@ -23,18 +25,23 @@ class DictIterator(object):
     def __init__(self, *dicts):
         self._dicts = dicts
 
-    @cached_property
-    def _dict(self):
-        return dict(self.iteritems())
+    def __repr__(self):
+        return self._dicts.__repr__()
+
+    def __iter__(self):
+        return iterkeys(self)
+
+    def __getitem__(self, item):
+        return self._dict[item]
 
     def iteritems(self):
-        return itertools.chain(*[ d.iteritems() for d in self._dicts ])
+        return itertools.chain(*[ viewitems(d) for d in self._dicts ])
 
     def itervalues(self):
-        return itertools.chain(*[ d.itervalues() for d in self._dicts ])
+        return itertools.chain(*[ viewvalues(d) for d in self._dicts ])
 
     def iterkeys(self):
-        return itertools.chain(*[ d.iterkeys() for d in self._dicts ])
+        return itertools.chain(*[ viewkeys(d) for d in self._dicts ])
 
     def items(self):
         return self._dict.items()
@@ -45,17 +52,12 @@ class DictIterator(object):
     def values(self):
         return self._dict.values()
 
-    def __getitem__(self, item):
-        return self._dict[item]
-
     def get(self, item, default=None):
         return self._dict.get(item, default)
 
-    def __repr__(self):
-        return self._dicts.__repr__()
-
-    def __iter__(self):
-        return self.iterkeys()
+    @cached_property
+    def _dict(self):
+        return dict(iteritems(self))
 
 
 class _ComponentConfigAdapter(object):

@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/qa_blocks.py
+from __future__ import absolute_import
 import BigWorld
-from block import Block, Meta, InitParam, buildStrKeysValue, makeResEditorData
-from slot_types import SLOT_TYPE, arrayOf
-from misc import ASPECT, BLOCK_MODE, EDITOR_TYPE
 from constants import IS_DEVELOPMENT, IS_CELLAPP
-from wg_async import wg_async
+from visual_script.block import Block, Meta, InitParam, buildStrKeysValue
+from visual_script.misc import ASPECT, BLOCK_MODE, EDITOR_TYPE
+from visual_script.slot_types import SLOT_TYPE, arrayOf
 
 class QAMeta(Meta):
 

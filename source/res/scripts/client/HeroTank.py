@@ -54,9 +54,9 @@ class HeroTank(ClientSelectableCameraVehicle):
     __c11nService = dependency.descriptor(ICustomizationService)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
 
-    def __init__(self):
+    def __init__(self, name='HeroTank'):
         self.__heroTankCD = None
-        ClientSelectableCameraVehicle.__init__(self)
+        ClientSelectableCameraVehicle.__init__(self, name)
         return
 
     def onEnterWorld(self, prereqs):

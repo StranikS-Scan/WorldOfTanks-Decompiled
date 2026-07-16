@@ -24,7 +24,7 @@ from skeletons.gui.game_control import IVehicleComparisonBasket, IEpicBattleMeta
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import NATION_CHANGE_VIEWED, BECOME_ELITE_VEHICLES_WATCHED
+from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
 _logger = getLogger(__name__)
 if TYPE_CHECKING:
     from typing import Optional
@@ -178,10 +178,6 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
     def showPostProgression(self):
         vehicle = self.itemsCache.items.getVehicle(self.getVehInvID())
         shared_events.showVehPostProgressionView(vehicle.intCD)
-        eliteWatchedList = AccountSettings.getSettings(BECOME_ELITE_VEHICLES_WATCHED)
-        if vehicle.intCD not in eliteWatchedList:
-            eliteWatchedList.add(vehicle.intCD)
-            AccountSettings.setSettings(BECOME_ELITE_VEHICLES_WATCHED, eliteWatchedList)
 
     def showVehSkillTree(self):
         vehicle = self.itemsCache.items.getVehicle(self.getVehInvID())

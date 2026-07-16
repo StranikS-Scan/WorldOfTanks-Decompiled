@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/persistent_data_cache_common/caches.py
-import abc
+from __future__ import absolute_import
 import os
 import enum
 import typing
@@ -30,7 +30,6 @@ class SavingCacheFailedException(SoftException):
 
 class BasePDCache(object):
     __slots__ = ('_events', '_logger', '_config', '_cachedData', '_destroyed', '_savingState')
-    __metaclass__ = abc.ABCMeta
 
     def __init__(self, config, eventsDispatcher):
         self._logger = getLogger(self.__class__.__name__)
@@ -180,21 +179,17 @@ class BasePDCache(object):
             self._logger.exception('Cannot delete cache file <%s>.', filePath)
             return False
 
-    @abc.abstractmethod
     def _loadCachedData(self, filePath):
-        pass
+        raise NotImplementedError
 
-    @abc.abstractmethod
     def _saveCachedData(self, filePath, cachedData):
-        pass
+        raise NotImplementedError
 
-    @abc.abstractmethod
     def _isFileExist(self, filePath):
-        pass
+        raise NotImplementedError
 
-    @abc.abstractmethod
     def _deleteFile(self, filePath):
-        pass
+        raise NotImplementedError
 
 
 class DefaultPDCache(BasePDCache):

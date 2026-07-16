@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/ranked/ranked_prime_time.py
+from __future__ import absolute_import
 from helpers import time_utils
 from gui.shared.tooltips import ToolTipBaseData, TOOLTIP_TYPE
 from helpers import dependency

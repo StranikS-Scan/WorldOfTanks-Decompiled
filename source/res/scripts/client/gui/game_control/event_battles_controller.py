@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/event_battles_controller.py
+from __future__ import absolute_import
 import typing
 import Event
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import IEventBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
-from season_provider import SeasonProvider
+from gui.game_control.season_provider import SeasonProvider
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 if typing.TYPE_CHECKING:
     from helpers.server_settings import _EventBattlesConfig

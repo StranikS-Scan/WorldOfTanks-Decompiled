@@ -3,9 +3,11 @@
 from __future__ import absolute_import, division
 import collections
 from builtins import open
-from future.utils import listvalues, viewvalues, viewitems, with_metaclass
+from future.utils import listvalues, viewvalues, viewitems
 from past.builtins import xrange
 import Math
+from py2to3.compat.ioCompat import UnicodeFileAdapter
+from py2to3.patched_future import with_metaclass
 from wrapped_reflection_framework import ReflectionMetaclass
 _DEBUG_WITH_SVG = False
 
@@ -238,7 +240,7 @@ class _Scene:
         else:
             self.svgname = self.name + '.svg'
         file = open(self.svgname, 'w', encoding='utf-8')
-        file.writelines(self.strarray())
+        UnicodeFileAdapter(file).writelines(self.strarray())
         file.close()
 
     def display(self, prog='explorer'):

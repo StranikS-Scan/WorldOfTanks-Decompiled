@@ -54,6 +54,27 @@ class HangarShellItemContextMenu(BaseHangarEquipmentSlotContextMenu):
     def _initFlashValues(self, ctx):
         super(HangarShellItemContextMenu, self)._initFlashValues(ctx)
         self._slotsCount = self._getVehicleItems().getShellsCount()
+        self._shellsCounts = getattr(ctx, 'shellsCounts', None)
+        return
+
+    def _applyShellCounts(self, layout):
+        for idx, item in enumerate(layout):
+            if item is None:
+                continue
+            for shellData in self._shellsCounts:
+                if shellData.intCD == item.intCD:
+                    if shellData.count is None:
+                        continue
+                    item.count = int(shellData.count)
+                    layout[idx] = item
+                    break
+
+        return
+
+    def _postProcessLayoutAfterSwap(self, layout):
+        if self._shellsCounts is not None:
+            self._applyShellCounts(layout)
+        return
 
     def _putOnAction(self, onId):
         copyVehicle = self._getCopyVehicle()

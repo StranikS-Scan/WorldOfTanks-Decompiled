@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/abstract.py
+from __future__ import absolute_import
 import logging
 from collections import namedtuple
 import BigWorld
@@ -229,7 +230,7 @@ class RequestsByIDProcessor(object):
 
     def _doCall(self, method, *args, **kwargs):
         result = method(*args, **kwargs)
-        return self._idsGenerator.next() if self._idsGenerator is not None else result
+        return next(self._idsGenerator) if self._idsGenerator is not None else result
 
     def _getSenderMethod(self, sender, methodName):
         return getattr(sender, methodName, None)
@@ -278,7 +279,7 @@ class DataRequestsByIDProcessor(RequestsByIDProcessor):
         return
 
     def _doCall(self, method, *args, **kwargs):
-        requestID = self._idsGenerator.next()
+        requestID = next(self._idsGenerator)
         method(requestID, *args, **kwargs)
         return requestID
 
@@ -327,7 +328,7 @@ class ClientRequestsByIDProcessor(RequestsByIDProcessor):
         return
 
     def _doCall(self, method, *args, **kwargs):
-        requestID = self._idsGenerator.next()
+        requestID = next(self._idsGenerator)
 
         def _callback(code, txtMsg, data):
             ctx = self._requests.get(requestID)

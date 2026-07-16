@@ -4,6 +4,7 @@ from __future__ import absolute_import
 import random
 import weakref
 import BigWorld
+import CGF
 from constants import FIRE_NOTIFICATION_CODES
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -33,9 +34,10 @@ class Fire(BigWorld.DynamicScriptComponent):
             return False
         else:
             if vehicle.health > 0:
-                fire = appearance.findComponentByType(Statuses.FireComponent)
-                if fire is None:
-                    appearance.createComponent(Statuses.FireComponent)
+                gameObject = appearance.gameObject
+                if not gameObject.hasComponent(Statuses.FireComponent):
+                    queue = CGF.CommandQueue(gameObject.spaceID)
+                    queue.createComponent(gameObject, Statuses.FireComponent)
                 isUnderwater = appearance.isUnderwater
                 if not isUnderwater and self.__effectListPlayerRef is None:
                     self.__playEffect()
@@ -70,7 +72,7 @@ class Fire(BigWorld.DynamicScriptComponent):
             return
         else:
             if vehicle.appearance:
-                vehicle.appearance.removeComponentByType(Statuses.FireComponent)
+                vehicle.appearance.gameObject.removeComponent(Statuses.FireComponent)
             vehicle.events.onAppearanceReady -= self.__tryShowFlameEffect
             if vehicle.health > 0:
                 self.__fadeEffects()

@@ -85,8 +85,9 @@ class SimulatedScene(object):
 
     def create(self):
         self.__movementTracker.create()
-        self.__deathSceneObject = CGF.GameObject(BigWorld.player().spaceID)
-        self.__deathSceneObject.activate()
+        queue = CGF.CommandQueue(BigWorld.player().spaceID)
+        self.__deathSceneObject = queue.createGameObject()
+        queue.activateGameObject(self.__deathSceneObject)
 
     def destroy(self):
         self.__movementTracker.destroy()
@@ -251,8 +252,9 @@ class SimulatedScene(object):
             _logger.error('SimulatedScene.saveKillSnapshot: No CGF scene object!')
             return
         else:
-            self.__deathSceneObject.removeComponentByType(SequenceSnapshotComponent)
-            self.__deathSceneObject.createComponent(SequenceSnapshotComponent)
+            queue = CGF.CommandQueue(self.__deathSceneObject.spaceID)
+            queue.removeComponent(self.__deathSceneObject, SequenceSnapshotComponent)
+            queue.createComponent(self.__deathSceneObject, SequenceSnapshotComponent)
             return
 
     def setPendingShotID(self, shotID):
@@ -381,11 +383,12 @@ class SimulatedScene(object):
             _logger.error('SimulatedScene.__pauseSequences: No CGF scene object! (isPaused: %s)', isPaused)
             return
         else:
+            queue = CGF.CommandQueue(self.__deathSceneObject.spaceID)
             if isPaused:
-                self.__deathSceneObject.createComponent(SequencePauseComponent)
+                queue.createComponent(self.__deathSceneObject, SequencePauseComponent)
             else:
-                self.__deathSceneObject.removeComponentByType(SequencePauseComponent)
-                self.__deathSceneObject.removeComponentByType(SequenceSnapshotComponent)
+                queue.removeComponent(self.__deathSceneObject, SequencePauseComponent)
+                queue.removeComponent(self.__deathSceneObject, SequenceSnapshotComponent)
             return
 
     def __createSimulatedVehicles(self):
@@ -677,24 +680,21 @@ def _calculateWorldHitPoint(vehicle, segments):
 
 
 def _updateDynAttachments(simulatedVehicle, dynAttachmentInfo):
-    hierarchy = CGF.HierarchyManager(simulatedVehicle.spaceID)
     parentGameObject = simulatedVehicle.entityGameObject
-    result = hierarchy.findComponentsInHierarchy(parentGameObject, StationaryReloadSequenceParamsComponent)
+    result = CGF.findInHierarchyWithComponent(parentGameObject, StationaryReloadSequenceParamsComponent)
     if not result:
         return
-    else:
-        for gameObject, _ in result:
-            if not gameObject.isValid():
-                continue
-            sequence = gameObject.findComponentByType(Sequence)
-            if sequence is None:
-                _logger.warning('Can not change position for a dynamic attachment')
-                continue
-            sequence.requestLayerChange(dynAttachmentInfo.activeSequenceLayer, 0.0)
-            sequence.requestTime(dynAttachmentInfo.sequenceTime)
-            stateSwitcher = gameObject.findComponentByType(StateSwitcherComponent)
-            if stateSwitcher is not None:
-                state = dynAttachmentInfo.attachmentState
-                stateSwitcher.requestState(StateSwitcherComponent.NONE_STATE if state == StateSwitcherComponent.CRITICAL_STATE else state)
-
-        return
+    for accessor in result:
+        gameObject = accessor.object
+        if not gameObject.valid:
+            continue
+        sequence = gameObject.findWrite(Sequence)
+        if not sequence:
+            _logger.warning('Can not change position for a dynamic attachment')
+            continue
+        sequence.requestLayerChange(dynAttachmentInfo.activeSequenceLayer, 0.0)
+        sequence.requestTime(dynAttachmentInfo.sequenceTime)
+        stateSwitcher = gameObject.findWrite(StateSwitcherComponent)
+        if stateSwitcher:
+            state = dynAttachmentInfo.attachmentState
+            stateSwitcher.requestState(StateSwitcherComponent.NONE_STATE if state == StateSwitcherComponent.CRITICAL_STATE else state)

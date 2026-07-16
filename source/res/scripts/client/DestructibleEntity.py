@@ -2,35 +2,18 @@
 # Embedded file name: scripts/client/DestructibleEntity.py
 from __future__ import absolute_import
 import logging
-import typing
 from future.utils import viewitems, viewvalues
 import BigWorld
 import destructible_entities
 import Math
-import CGF
-import GenericComponents
+from DestructibleEntityState import DestructibleEntityState
 from DestructibleStickers import DestructibleStickers
-from Vehicle import SegmentCollisionResultExt
+from helpers.collisions import SegmentCollisionResultExt
 from VehicleEffects import DamageFromShotDecoder
-from helpers.EffectsList import effectsFromSection, EffectsListPlayer
 from constants import VEHICLE_HIT_EFFECT
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _FET
-from vehicle_systems.tankStructure import ColliderTypes
-from cgf_obsolete_script.script_game_object import ComponentDescriptor, ScriptGameObject
 from shared_utils import nextTick
-import helpers
-COLLISION_SEGMENT_LENGTH = 2
 _logger = logging.getLogger(__name__)
-
-class PART_PROPERTIES(object):
-    HIGHLIGHTABLE = 0
-    HIGHLIGHTBYVISUAL = 2
-
-
-class ASSEMBLER_NAME_SUFFIXES(object):
-    VISUAL = '_vis'
-    PHYSICS = '_phys'
-
 
 class DestructibleEntity(BigWorld.Entity):
 
@@ -87,7 +70,6 @@ class DestructibleEntity(BigWorld.Entity):
             self.__activeStateResource.deactivate()
             self.__activeStateResource = None
         for stateResource in viewvalues(self.__stateResources):
-            stateResource.setParent(None)
             stateResource.destroy()
 
         self.__stateResources.clear()
@@ -233,153 +215,3 @@ class DestructibleEntity(BigWorld.Entity):
 
     def __setPickingEnabled(self, enable):
         self.targetCaps = [1] if enable else [0]
-
-
-class DestructibleEntityState(ScriptGameObject):
-    guiNode = property(lambda self: self.__guiNode)
-    damageStickers = property(lambda self: self.__damageStickers)
-    collisionComponent = ComponentDescriptor()
-    name = property(lambda self: self.__stateName)
-
-    def __init__(self, stateName, stateProperties, entityId, trigger, spaceID):
-        ScriptGameObject.__init__(self, spaceID, 'DestructibleEntityState')
-        self.__entityId = entityId
-        self.__stateName = stateName
-        self.__stateProperties = stateProperties
-        self.__guiNode = None
-        self.__active = False
-        self.__visualModel = None
-        self.__damageStickers = {}
-        self.__gameObjects = {}
-        self.__effectsPlayer = None
-        self.__trigger = trigger
-        return
-
-    def isTriggered(self):
-        return self.__trigger() and not self.__active
-
-    def reduceSegmentLength(self, hitCompIndx, segStart, segEnd):
-        hitDist, _, _, _ = self.collisionComponent.collideLocal(hitCompIndx, segStart, segEnd)
-        if hitDist is None:
-            return (segStart, segEnd)
-        else:
-            rayDir = Math.Vector3(segEnd) - Math.Vector3(segStart)
-            rayDir.normalise()
-            hitPoint = segStart + rayDir * hitDist
-            return (hitPoint - rayDir / 2.0 * COLLISION_SEGMENT_LENGTH, hitPoint + rayDir / 2.0 * COLLISION_SEGMENT_LENGTH)
-
-    def prereqs(self, spaceId):
-        visualModel = BigWorld.CompoundAssembler(self.__stateName + ASSEMBLER_NAME_SUFFIXES.VISUAL, spaceId)
-        bspModels = []
-        for componentIdx, (componentId, component) in enumerate(viewitems(self.__stateProperties.components)):
-            if componentIdx == 0:
-                visualModel.addRootPart(component.visualModel, 'root')
-            else:
-                visualModel.emplacePart(component.visualModel, 'root', componentId)
-            bspModels.append((componentIdx, component.physicsModel))
-
-        collisionAssembler = BigWorld.CollisionAssembler(tuple(bspModels), self.spaceID)
-        collisionAssembler.name = self.__stateName + ASSEMBLER_NAME_SUFFIXES.PHYSICS
-        return [visualModel, collisionAssembler]
-
-    def onResourcesLoaded(self, prereqs):
-        assemblerName = self.__stateName + ASSEMBLER_NAME_SUFFIXES.PHYSICS
-        if assemblerName not in prereqs.failedIDs:
-            self.collisionComponent = self.createComponent(BigWorld.CollisionComponent, prereqs[assemblerName])
-        assemblerName = self.__stateName + ASSEMBLER_NAME_SUFFIXES.VISUAL
-        if assemblerName not in prereqs.failedIDs:
-            self.__visualModel = prereqs[assemblerName]
-            for componentIdx, component in enumerate(viewvalues(self.__stateProperties.components)):
-                self.__visualModel.setPartProperties(componentIdx, int(component.destructible) << PART_PROPERTIES.HIGHLIGHTABLE | PART_PROPERTIES.HIGHLIGHTBYVISUAL)
-                fashion = BigWorld.WGVehicleFashion()
-                self.__visualModel.setupPartFashion(componentIdx, fashion)
-                self.__gameObjects[componentIdx] = go = CGF.GameObject(self.spaceID)
-                go.createComponent(GenericComponents.TransformComponent, Math.Matrix())
-                go.createComponent(GenericComponents.HierarchyComponent, self.gameObject)
-                go.createComponent(GenericComponents.DynamicModelComponent, self.__visualModel)
-                go.createComponent(GenericComponents.FashionComponent, fashion, componentIdx)
-                self.__damageStickers[componentIdx] = DestructibleStickers(self.spaceID, self.__visualModel, componentIdx, go)
-
-            nodeName = next((comp.guiNode for comp in viewvalues(self.__stateProperties.components) if comp.guiNode is not None), None)
-            if nodeName is not None:
-                self.__guiNode = self.__visualModel.node(nodeName)
-        return
-
-    def setParent(self, parent):
-        if parent is not None:
-            self.createComponent(GenericComponents.TransformComponent, Math.Matrix())
-            self.createComponent(GenericComponents.HierarchyComponent, parent)
-        else:
-            self.removeComponentByType(GenericComponents.HierarchyComponent)
-            self.removeComponentByType(GenericComponents.TransformComponent)
-        return
-
-    def activate(self, matrix):
-        payload = []
-        for componentIdx, _ in enumerate(self.__stateProperties.components):
-            payload.append((componentIdx, self.__visualModel.node('root')))
-
-        self.collisionComponent.connect(self.__entityId, ColliderTypes.VEHICLE_COLLIDER, tuple(payload))
-        self.__visualModel.matrix = matrix
-        self.__playEffect(self.__stateProperties.effect, self.__visualModel)
-        self.__active = True
-        super(DestructibleEntityState, self).activate()
-        return self.__visualModel
-
-    def deactivate(self):
-        for componentIdx in range(len(self.__stateProperties.components)):
-            self.collisionComponent.removeAttachment(componentIdx)
-
-        super(DestructibleEntityState, self).deactivate()
-        self.__stopEffect()
-        self.__active = False
-
-    def destroy(self):
-        super(DestructibleEntityState, self).destroy()
-        self.__effectsPlayer = None
-        for damageSticker in viewvalues(self.__damageStickers):
-            damageSticker.destroy()
-
-        self.__damageStickers = {}
-        for go in viewvalues(self.__gameObjects):
-            go.deactivate()
-
-        self.__gameObjects = {}
-        self.__visualModel = None
-        self.__guiNode = None
-        self.__stateProperties = None
-        self.__stateName = None
-        return
-
-    def collideAllWorld(self, startPoint, endPoint):
-        return self.__collisionComponent.collideAllWorld(startPoint, endPoint) if self.__collisionComponent is not None else None
-
-    def isDestructibleComponent(self, componentID):
-        component = next((c for cIDx, c in enumerate(viewvalues(self.__stateProperties.components)) if cIDx == componentID), None)
-        return component.destructible if component is not None else False
-
-    def __playEffect(self, effectName, model):
-        if self.__effectsPlayer is not None or None in (model, effectName):
-            return
-        else:
-            effectsSection = destructible_entities.g_destructibleEntitiesCache.getDestroyEffectList(effectName)
-            if effectsSection is None:
-                return
-            effects = effectsFromSection(effectsSection)
-            if effects is None:
-                return
-            fakeModel = helpers.newFakeModel()
-            BigWorld.player().addModel(fakeModel)
-            tmpMatrix = Math.Matrix(self.__visualModel.matrix)
-            fakeModel.position = tmpMatrix.translation
-            self.__effectsPlayer = EffectsListPlayer(effects.effectsList, effects.keyPoints)
-            self.__effectsPlayer.play(fakeModel, None)
-            return
-
-    def __stopEffect(self):
-        if self.__effectsPlayer is None:
-            return
-        else:
-            self.__effectsPlayer.stop()
-            self.__effectsPlayer = None
-            return

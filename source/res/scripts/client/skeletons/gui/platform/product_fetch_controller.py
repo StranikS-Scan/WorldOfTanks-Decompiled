@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/gui/platform/product_fetch_controller.py
+from __future__ import absolute_import
 import typing
 from skeletons.gui.platform.controller import IPlatformRequestController
 if typing.TYPE_CHECKING:

@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/battle_ability_tooltip_params.py
+from __future__ import absolute_import, division
 import logging
-from functools import partial
 from collections import namedtuple
+from future.utils import viewitems, viewvalues
+from functools import partial
+from past.utils import old_div
 import ResMgr
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import _getFormattedNum, _cutDigits
 from gui.Scaleform.locale.COMMON import COMMON
@@ -55,7 +58,7 @@ class ReciprocalValuesMixin(DisplayValuesMixin):
     @classmethod
     def _getDisplayParams(cls, curEq, eqsRange, param):
         param = _getAttrName(param)
-        values = [ _getFormattedNum(1 / val if val != 0 else float('inf')) for val in (getattr(eq, param) for eq in eqsRange) ]
+        values = [ _getFormattedNum(old_div(1, val) if val != 0 else float('inf')) for val in (getattr(eq, param) for eq in eqsRange) ]
         if _allElementsEq(values):
             values = [values[0]]
         return values
@@ -171,40 +174,40 @@ class NumericLabelMixin(DisplayLabelMixin):
 class SecondsLabelMixin(DisplayLabelMixin):
 
     @classmethod
-    def _formatParamString(cls, value, isMultiplier=True, returnArray=False):
-        return cls._formatParamStringInternal(value, EPIC_BATTLE.ABILITYINFO_UNITS_SECONDS, returnArray=returnArray)
+    def _formatParamString(cls, values, isMultiplier=True, returnArray=False):
+        return cls._formatParamStringInternal(values, EPIC_BATTLE.ABILITYINFO_UNITS_SECONDS, returnArray=returnArray)
 
 
 class AdditionalSecondsLabelMixin(DisplayLabelMixin):
 
     @classmethod
-    def _formatParamString(cls, value, isMultiplier=True, returnArray=False):
-        return cls._formatParamStringInternal(value, EPIC_BATTLE.ABILITYINFO_UNITS_SECONDS, returnArray=returnArray)
+    def _formatParamString(cls, values, isMultiplier=True, returnArray=False):
+        return cls._formatParamStringInternal(values, EPIC_BATTLE.ABILITYINFO_UNITS_SECONDS, returnArray=returnArray)
 
 
 class MeterLabelMixin(DisplayLabelMixin):
 
     @classmethod
-    def _formatParamString(cls, value, isMultiplier=True, returnArray=False):
-        return cls._formatParamStringInternal(value, EPIC_BATTLE.ABILITYINFO_UNITS_METER, returnArray=returnArray)
+    def _formatParamString(cls, values, isMultiplier=True, returnArray=False):
+        return cls._formatParamStringInternal(values, EPIC_BATTLE.ABILITYINFO_UNITS_METER, returnArray=returnArray)
 
 
 class PercentageLabelMixin(DisplayLabelMixin):
 
     @classmethod
-    def _formatParamString(cls, value, isMultiplier=True, returnArray=False):
+    def _formatParamString(cls, values, isMultiplier=True, returnArray=False):
         if isMultiplier:
-            value = [ _getFormattedNum(v * 100 - 100) for v in value ]
+            values = [ _getFormattedNum(v * 100 - 100) for v in values ]
         else:
-            value = [ _getFormattedNum(v * 100) for v in value ]
-        return cls._formatParamStringInternal(value, COMMON.COMMON_PERCENT, returnArray=returnArray)
+            values = [ _getFormattedNum(v * 100) for v in values ]
+        return cls._formatParamStringInternal(values, COMMON.COMMON_PERCENT, returnArray=returnArray)
 
 
 class PerksControllerModPercentageMixin(DisplayLabelMixin):
 
     @classmethod
-    def _formatParamString(cls, value, isMultiplier=True, returnArray=False):
-        return cls._formatParamStringInternal([ _getFormattedNum(v * 100) for v in value ], COMMON.COMMON_PERCENT, returnArray=returnArray)
+    def _formatParamString(cls, values, isMultiplier=True, returnArray=False):
+        return cls._formatParamStringInternal([ _getFormattedNum(v * 100) for v in values ], COMMON.COMMON_PERCENT, returnArray=returnArray)
 
 
 class MultiMeterLabelMixin(DisplayLabelMixin):
@@ -353,14 +356,14 @@ class BattleAbilityTooltipManager(object):
         return
 
     def _validateTooltipsData(self, tooltipsSettings):
-        for itemName, data in tooltipsSettings.iteritems():
+        for itemName, data in viewitems(tooltipsSettings):
             name = data.name
             localised = i18n.makeString(name)
             if name.endswith(localised):
                 logger = logging.getLogger(__name__)
                 logger.error("[ERROR] BattleAbilityTooltipManager: %s: Localization for '%s' not found.", itemName, data.name)
             if g_battleAbilityParamsRenderers.get(data.renderer, None) is None:
-                raise SoftException("{}: '{}' No renderer with the name '{}' exists. Allowed are {}.".format(TOOLTIPS_PATH, itemName, data.renderer, g_battleAbilityParamsRenderers.keys()))
+                raise SoftException("{}: '{}' No renderer with the name '{}' exists. Allowed are {}.".format(TOOLTIPS_PATH, itemName, data.renderer, list(g_battleAbilityParamsRenderers)))
 
         return
 
@@ -398,7 +401,7 @@ class BattleAbilityTooltipManager(object):
                 continue
             renderer = g_battleAbilityParamsRenderers.get(tooltipInfo.renderer, None)
             if renderer:
-                renderer(staticBlock, dynamicBlock, curLvlEq, (equipments[lvl.eqID] for lvl in levels.itervalues()), tooltipIdentifier, tooltipInfo.name)
+                renderer(staticBlock, dynamicBlock, curLvlEq, (equipments[lvl.eqID] for lvl in viewvalues(levels)), tooltipIdentifier, tooltipInfo.name)
 
         return
 

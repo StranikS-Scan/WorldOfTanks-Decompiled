@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/common/view_helpers.py
+from __future__ import absolute_import
 import logging
 import typing
+from gui.server_events.bonuses import processAttachmentsSetTokens
 from gui.shared.missions.packers.bonus import getDefaultBonusPacker
 if typing.TYPE_CHECKING:
-    from typing import TypeVar
+    from typing import TypeVar, Optional, Dict, List
     from frameworks.wulf import Array
     from gui.server_events.bonuses import SimpleBonus
     from gui.shared.missions.packers.bonus import BonusUIPacker
@@ -12,9 +14,10 @@ if typing.TYPE_CHECKING:
     BonusModelType = TypeVar('BonusModelType', bound=BonusModel)
 _logger = logging.getLogger(__name__)
 
-def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, packer=None):
+def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, packer=None, showAttachmentsSets=False):
     packer = packer or getDefaultBonusPacker()
     tooltipIndex = 0 if tooltipData is None else len(tooltipData)
+    bonuses = processAttachmentsSetTokens(bonuses, showAttachmentsSets=showAttachmentsSets)
     for bonus in (b for b in bonuses if b.isShowInGUI()):
         bonusList = packer.pack(bonus)
         withTooltips = bonusList and tooltipData is not None

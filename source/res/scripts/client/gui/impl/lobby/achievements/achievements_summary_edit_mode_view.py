@@ -5,7 +5,7 @@ from PlayerEvents import g_playerEvents
 from adisp import adisp_process
 from frameworks.wulf import WindowFlags, WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.game_control.wot_plus.service_record_customization import ServiceRecordProcessor
+from gui.game_control.wot_plus.service_record_customization.service_record_customization import ServiceRecordProcessor, CdnResourcesCacheManager
 from gui.impl.dialogs.dialogs import showServiceRecordCustomizationConfirmDialog
 from gui.impl.gen.view_models.views.lobby.achievements.views.achievements_main_view_model import AchievementsViews
 from gui.impl.lobby.achievements.achievements_main_view import AchievementsViewCtx, BaseAchievementView
@@ -20,8 +20,8 @@ if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.achievements.views.summary.summary_view_model import SummaryViewModel
 
 @adisp_process
-def _storeNewCustomization(bg, ribbon):
-    yield ServiceRecordProcessor(bg, ribbon).request()
+def _storeNewCustomization(backgroundID, ribbonID):
+    yield ServiceRecordProcessor(backgroundID, ribbonID).request()
 
 
 class SummaryEditModeView(SummaryView):
@@ -43,42 +43,38 @@ class SummaryEditModeView(SummaryView):
         pass
 
     def __onCustomizationConfirmed(self, ctx):
-        _storeNewCustomization(int(ctx.get('backgroundSlug')), int(ctx.get('ribbonSlug')))
+        _storeNewCustomization(int(ctx.get('backgroundId')), int(ctx.get('ribbonId')))
         self.parentView.destroy()
 
     def __onCustomizationDiscard(self, _):
         self.__setInitialData()
 
     def __onSetBackgroundDraft(self, ctx):
-        self.__setBackgroundDraftBySlug(slug=int(ctx.get('backgroundDraftSlug')))
+        self.__setBackgroundDraftById(int(ctx.get('backgroundDraftId')))
 
     def __setInitialData(self):
-        backgroundIndex, _, ribbonIndex, _ = self._getCustomizationData()
-        self.__setBackgroundDraftBySlug(backgroundIndex)
-        self.__setRibbonDraftBySlug(ribbonIndex)
+        background, ribbon = self._getCustomizationData()
+        self.__setBackgroundDraftById(background)
+        self.__setRibbonDraftById(ribbon)
 
     def __onSetRibbonDraft(self, ctx):
-        self.__setRibbonDraftBySlug(slug=int(ctx.get('ribbonDraftSlug')))
+        self.__setRibbonDraftById(int(ctx.get('ribbonDraftId')))
 
-    def __setRibbonDraftBySlug(self, slug):
+    def __setRibbonDraftById(self, id_):
         with self.viewModel.transaction() as model:
-            ribbonImages = self._getServiceRecordRibbonOptions()
-            for index, image, icon in ribbonImages:
-                if slug == index:
-                    model.ribbonDraft.setSlug(str(index))
-                    model.ribbonDraft.setImage(image)
-                    model.ribbonDraft.setIcon(icon)
-                    break
+            cdnCache = self._wotPlusCtrl.getSRCAssetManager()
+            ribbon = cdnCache.getRibbon(id_)
+            model.ribbonDraft.setId(ribbon.id)
+            model.ribbonDraft.setImage(ribbon.urls.getBaseAsset())
+            model.ribbonDraft.setIcon(ribbon.urls.getIconAsset())
 
-    def __setBackgroundDraftBySlug(self, slug):
+    def __setBackgroundDraftById(self, id_):
         with self.viewModel.transaction() as model:
-            bgOptionsData = self._getServiceRecordBackgroundOptions()
-            for index, image, label in bgOptionsData:
-                if slug == index:
-                    model.backgroundDraft.setSlug(str(index))
-                    model.backgroundDraft.setImage(image)
-                    model.backgroundDraft.setLabel(label)
-                    break
+            cdnCache = self._wotPlusCtrl.getSRCAssetManager()
+            background = cdnCache.getBackground(id_)
+            model.backgroundDraft.setId(background.id)
+            model.backgroundDraft.setImage(background.getAsset())
+            model.backgroundDraft.setLabel(background.getLocalization())
 
 
 class _AchievemetSummaryEditModeView(BaseAchievementView):
@@ -116,9 +112,9 @@ class _AchievemetSummaryEditModeView(BaseAchievementView):
     @wg_async
     def _onClose(self):
         summaryViewModel = self.__summaryViewPresenter.viewModel
-        bgNewVal = summaryViewModel.backgroundDraft.getSlug()
-        ribbonNewVal = summaryViewModel.ribbonDraft.getSlug()
-        if bgNewVal == summaryViewModel.background.getSlug() and ribbonNewVal == summaryViewModel.ribbon.getSlug():
+        backgroundId = summaryViewModel.backgroundDraft.getId()
+        riddonId = summaryViewModel.ribbonDraft.getId()
+        if backgroundId == summaryViewModel.background.getId() and riddonId == summaryViewModel.ribbon.getId():
             self.destroy()
             return
         else:
@@ -131,7 +127,7 @@ class _AchievemetSummaryEditModeView(BaseAchievementView):
             if btnClicked == DialogButtons.CANCEL:
                 self.destroy()
                 return
-            _storeNewCustomization(int(bgNewVal), int(ribbonNewVal))
+            _storeNewCustomization(backgroundId, riddonId)
             self.destroy()
             return
 

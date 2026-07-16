@@ -32,8 +32,10 @@ class PointsOfInterestPlugin(plugins.MarkerPlugin, PointsOfInterestListener):
         super(PointsOfInterestPlugin, self).start()
         self.__initMarkers()
         self._registerPoiListener()
+        self.sessionProvider.onBattleSessionStop += self.__onBattleSessionStop
 
     def stop(self):
+        self.sessionProvider.onBattleSessionStop -= self.__onBattleSessionStop
         self._unregisterPoiListener()
         self.__destroyMarkers()
         super(PointsOfInterestPlugin, self).stop()
@@ -125,3 +127,6 @@ class PointsOfInterestPlugin(plugins.MarkerPlugin, PointsOfInterestListener):
     def __isMarkerActive(self, poiID):
         poiVehicleState = self._poiVehicleState
         return False if poiVehicleState is not None and poiVehicleState.id == poiID else True
+
+    def __onBattleSessionStop(self):
+        self._unregisterPoiListener()

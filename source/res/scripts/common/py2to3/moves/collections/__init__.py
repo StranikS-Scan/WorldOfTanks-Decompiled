@@ -9,4 +9,4 @@ else:
     from UserList import UserList
     from UserDict import UserDict
     from UserString import UserString
-    from future.backports.misc import ChainMap, count, recursive_repr, cmp_to_key
+    from future.backports.misc import ChainMap, count, recursive_repr

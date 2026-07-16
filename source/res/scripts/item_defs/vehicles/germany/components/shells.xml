@@ -4449,6 +4449,63 @@
       </damage>
     </armorSpalls>
   </_88mm_Sprgr_43_Typ_101>
+  <_88mm_Pzgr39_43_C>
+    <id>	582	</id>
+    <userString>	#germany_vehicles:_88mm_Pzgr39_43_C	</userString>
+    <icon>	ap	</icon>
+    <price>	377	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	88	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	280	</armor>
+      <devices>	119	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_88mm_Pzgr39_43_C>
+  <_88mm_Pzgr40_43_C>
+    <id>	583	</id>
+    <userString>	#germany_vehicles:_88mm_Pzgr40_43_C	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	3600	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	88	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	280	</armor>
+      <devices>	119	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_88mm_Pzgr40_43_C>
+  <_88mm_Sprg43_C>
+    <id>	584	</id>
+    <userString>	#germany_vehicles:_88mm_Sprg43_C	</userString>
+    <icon>	he_modern	</icon>
+    <price>	253	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	88	</caliber>
+    <explosionRadius>	1.4	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	370	</armor>
+      <devices>	119	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.4	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	185	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
+  </_88mm_Sprg43_C>
   <_90mm_Pzgr39_48>
     <id>	102	</id>
     <userString>	#germany_vehicles:_90mm_Pzgr39_48	</userString>
@@ -4837,7 +4894,7 @@
       <armor>	400	</armor>
       <devices>	150	</devices>
     </damage>
-    <normalizationAngle>	5	</normalizationAngle>
+    <normalizationAngle>	2	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_105mm_DM13_RKW>
   <_105mm_DM12_RKW>

@@ -91,7 +91,11 @@ def _readCache(isFullCache):
     geometriesSet = set()
     for key, value in rootSection.items():
         isDevelopmentArena = value.readBool('isDevelopment')
-        if value.readBool('isHangar') or key != 'map':
+        if key != 'map':
+            continue
+        if value.readBool('isHangar'):
+            if IS_CLIENT:
+                SpaceVisibilityFlagsFactory.create(value.readString('name'))
             continue
         geometryID = value.readInt('id')
         if geometryID in geometriesSet:
@@ -104,12 +108,14 @@ def _readCache(isFullCache):
     ResMgr.purge(_DEFAULT_XML, True)
     g_gameplaysMask = getGameplaysMask(g_gameplayNames)
     g_geometryNamesToIDs = {arenaType.geometryName:arenaType.geometryID for arenaType in viewvalues(g_cache)}
+    svfCache = SpaceVisibilityFlagsFactory._g_cache
     return (g_cache,
      g_geometryCache,
      g_spaceCache,
      g_geometryNamesToIDs,
      g_gameplayNames,
-     g_gameplaysMask)
+     g_gameplaysMask,
+     svfCache)
 
 
 class _CacheSerializer(WGPickleSerializer):
@@ -117,19 +123,22 @@ class _CacheSerializer(WGPickleSerializer):
 
     def deserialize(self, serializedData):
         global g_gameplaysMask
-        cache, geometryCache, spaceCache, geometryNamesToIDs, gameplayNames, gameplaysMask = super(_CacheSerializer, self).deserialize(serializedData)
+        cache, geometryCache, spaceCache, geometryNamesToIDs, gameplayNames, gameplaysMask, svfCache = super(_CacheSerializer, self).deserialize(serializedData)
         g_cache.update(cache)
         g_geometryCache.update(geometryCache)
         g_spaceCache.update(spaceCache)
         g_geometryNamesToIDs.update(geometryNamesToIDs)
         g_gameplayNames.update(gameplayNames)
+        SpaceVisibilityFlagsFactory._g_cache.update(svfCache)
         g_gameplaysMask = gameplaysMask
+        svfCache = SpaceVisibilityFlagsFactory._g_cache
         return (cache,
          geometryCache,
          spaceCache,
          geometryNamesToIDs,
          gameplayNames,
-         gameplaysMask)
+         gameplaysMask,
+         svfCache)
 
     def rollbackSideEffects(self):
         global g_gameplaysMask
@@ -138,6 +147,7 @@ class _CacheSerializer(WGPickleSerializer):
         g_spaceCache.clear()
         g_geometryNamesToIDs.clear()
         g_gameplayNames.clear()
+        SpaceVisibilityFlagsFactory._g_cache.clear()
         g_gameplaysMask = 0
 
 

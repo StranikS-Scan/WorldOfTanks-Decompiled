@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/exchange_rates_with_discounts.py
+from __future__ import absolute_import, division
 import logging
 import math
-from abc import abstractmethod, ABCMeta
+from past.utils import old_div
 from Event import Event, EventManager
 from exchange.personal_discounts_constants import EXCHANGE_RATE_GOLD_NAME, EXCHANGE_RATE_FREE_XP_NAME, EXCHANGE_NAME_TO_GAME_PARAM_NAME, ExchangeRate
 from exchange import personal_discounts_parser, personal_discounts_helper
@@ -25,7 +26,6 @@ def _filterTokensWithSubStr(tokensDict, template):
 
 
 class ExchangeRateWithDiscounts(IExchangeRateWithDiscounts):
-    __metaclass__ = ABCMeta
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __itemsCache = dependency.descriptor(IItemsCache)
     _EXCHANGE_NAME = None
@@ -110,8 +110,8 @@ class ExchangeRateWithDiscounts(IExchangeRateWithDiscounts):
 
     @property
     def exchangeDiscountPercent(self):
-        defaultRate = float(self.defaultRate.resourceRateValue / self.defaultRate.goldRateValue)
-        discountRate = float(self.discountRate.resourceRateValue / self.discountRate.goldRateValue)
+        defaultRate = float(old_div(self.defaultRate.resourceRateValue, self.defaultRate.goldRateValue))
+        discountRate = float(old_div(self.discountRate.resourceRateValue, self.discountRate.goldRateValue))
         return math.floor(float(discountRate - defaultRate) / defaultRate * 100)
 
     def isDiscountAvailable(self):
@@ -126,13 +126,11 @@ class ExchangeRateWithDiscounts(IExchangeRateWithDiscounts):
     def calculateResourceToExchange(self, resourceAmount):
         return personal_discounts_helper.calculateResourceExchangeWithDiscounts(self._allDiscounts, resourceAmount, self.defaultRate, getCurrentTime())
 
-    @abstractmethod
     def isPersonalDiscountConfigEnabled(self):
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
     def _getExchangeRateObject(self, rate):
-        pass
+        raise NotImplementedError
 
     @property
     def _allDiscounts(self):

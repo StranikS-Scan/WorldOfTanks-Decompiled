@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/common_extras.py
+from __future__ import absolute_import
 from extension_utils import importClass
 from items import _xml
 from constants import IS_CLIENT, IS_EDITOR, IS_BOT

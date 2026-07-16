@@ -1,12 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/multi_plan_provider.py
-import VSE
-from context import VScriptContext
+from __future__ import absolute_import
+from future.utils import lmap, viewvalues
 from typing import Iterable, Any
-from plan_tags import PlanTags
+import VSE
 from constants import IS_DEVELOPMENT
 from soft_exception import SoftException
-from plan_holder import PlanHolder
+from visual_script.context import VScriptContext
+from visual_script.plan_holder import PlanHolder
+from visual_script.plan_tags import PlanTags
 
 class MultiPlanProvider(object):
     PLAN_KEY_SEPARATOR = '#'
@@ -28,7 +30,7 @@ class MultiPlanProvider(object):
 
     def reset(self):
         self.stop()
-        for holder in self._plans.itervalues():
+        for holder in viewvalues(self._plans):
             holder.loadState = PlanHolder.INACTIVE
 
         self._plans = {}
@@ -40,33 +42,33 @@ class MultiPlanProvider(object):
         return self._plans.get(nameWithKey, PlanHolder(None, PlanHolder.INACTIVE)).plan
 
     def start(self):
-        for holder in self._plans.itervalues():
+        for holder in viewvalues(self._plans):
             holder.setOptionalInputParams(**holder.params)
             if holder.isLoaded:
                 holder.plan.start(holder.params)
             holder.autoStart = True
 
     def stop(self):
-        for holder in self._plans.itervalues():
+        for holder in viewvalues(self._plans):
             if holder.isLoaded:
                 holder.plan.stop()
             holder.autoStart = False
 
     def restart(self):
-        for holder in self._plans.itervalues():
+        for holder in viewvalues(self._plans):
             holder.setOptionalInputParams(**holder.params)
             if holder.isLoaded:
                 holder.plan.stop()
                 holder.plan.start(holder.params)
 
     def pause(self):
-        map(lambda holder: holder.plan.pause() if holder.isLoaded else None, self._plans.itervalues())
+        lmap(lambda holder: holder.plan.pause() if holder.isLoaded else None, viewvalues(self._plans))
 
     def isLoaded(self):
-        return all((holder.isLoaded or holder.isLoadCanceled for holder in self._plans.itervalues()))
+        return all((holder.isLoaded or holder.isLoadCanceled for holder in viewvalues(self._plans)))
 
     def isError(self):
-        return any((holder.isError for holder in self._plans.itervalues()))
+        return any((holder.isError for holder in viewvalues(self._plans)))
 
     def load(self, planNames, autoStart=False):
         self.reset()
@@ -97,20 +99,20 @@ class MultiPlanProvider(object):
 
     def removePlan(self, planName, key=''):
         nameWithKey = self.getPlanNameWithKey(planName, key)
-        if nameWithKey in self._plans.keys():
+        if nameWithKey in list(self._plans):
             self.stopPlan(planName, key)
             del self._plans[nameWithKey]
 
     def setOptionalInputParam(self, name, value):
-        for holder in self._plans.itervalues():
+        for holder in viewvalues(self._plans):
             holder.setOptionalInputParam(name, value)
 
     def setOptionalInputParams(self, **kwargs):
-        for holder in self._plans.itervalues():
+        for holder in viewvalues(self._plans):
             holder.setOptionalInputParams(**kwargs)
 
     def setContext(self, context):
-        for holder in self._plans.itervalues():
+        for holder in viewvalues(self._plans):
             holder.plan.setContext(context)
 
         self._context = context
@@ -156,7 +158,7 @@ if IS_DEVELOPMENT:
          CallableProviderType.DEATH_ZONES: set(),
          CallableProviderType.LOOT: set(),
          CallableProviderType.ENTITY: set()}
-        plansOnLoad = dict()
+        plansOnLoad = {}
 
         def __init__(self, aspect, name, arenaBonusType=0):
             super(CallablePlanProvider, self).__init__(aspect, arenaBonusType)
@@ -206,7 +208,7 @@ class MultiPlanCache(object):
         self._aspect = aspect
 
     def destroy(self):
-        for key, bucket in self._plansBucket.items():
+        for bucket in self._plansBucket.values():
             for vsePlans in bucket:
                 vsePlans.stop()
                 vsePlans.destroy()

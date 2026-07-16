@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/achievements_controller.py
+from __future__ import absolute_import
+from future.utils import iteritems, viewitems, viewvalues
 from Event import Event, EventManager
 from achievements20.cache import ALLOWED_ACHIEVEMENT_TYPES, ROOT_ACHIEVEMENT_IDS
 from chat_shared import SYS_MESSAGE_TYPE
@@ -98,7 +100,7 @@ class AchievementsController(IAchievementsController, EventsHandler):
         dossierDescr = self.__getDossierDescr(userId)
         for achievementCategory in ALLOWED_ACHIEVEMENT_TYPES:
             if achievementCategory in dossierDescr:
-                for _, stage, __ in dossierDescr[achievementCategory].itervalues():
+                for _, stage, __ in viewvalues(dossierDescr[achievementCategory]):
                     if stage:
                         totalCount += stage
 
@@ -159,9 +161,9 @@ class AchievementsController(IAchievementsController, EventsHandler):
                     achievementsData[achievement.getCategory()] = []
                 achievementsData[achievement.getCategory()].append(achievement.getID())
 
-            for category in achievementsData:
+            for category, achievementIDs in viewitems(achievementsData):
                 seenAchievements = self.getSeenTrophiesAdvancedAchievements(category)
-                count += len(set(achievementsData[category]) - seenAchievements)
+                count += len(set(achievementIDs) - seenAchievements)
 
             return count
 
@@ -190,8 +192,8 @@ class AchievementsController(IAchievementsController, EventsHandler):
                 unseenAchievements[category] = []
             unseenAchievements[category].append(id)
 
-        for category in unseenAchievements:
-            self.__accSettings.addUnseenAdvancedAchievements(category, set(unseenAchievements[category]))
+        for category, achievementIDs in viewitems(unseenAchievements):
+            self.__accSettings.addUnseenAdvancedAchievements(category, set(achievementIDs))
 
         self.onUnseenAchievementsUpdate()
         return
@@ -230,13 +232,13 @@ class AchievementsController(IAchievementsController, EventsHandler):
     def __getAdvancedAchievementsData(self, message):
         achievementIDs = []
         popUpRecords = message.data.get('popUpRecords', {})
-        for key, value in popUpRecords.iteritems():
+        for key, value in iteritems(popUpRecords):
             category, id = key
             if category in ALLOWED_ACHIEVEMENT_TYPES:
                 achievedValue, stage, timestapm = value
                 if stage > 0:
                     currentAchievement = self.getAchievementByID(id, category)
-                    if achievedValue == 1 or achievedValue == currentAchievement.getFakeAchievementForStage(stage).getProgress().total:
+                    if achievedValue in (1, currentAchievement.getFakeAchievementForStage(stage).getProgress().total):
                         achievementIDs.append((id,
                          category,
                          stage,
@@ -266,8 +268,8 @@ class AchievementsController(IAchievementsController, EventsHandler):
                 unseenAchievements[category] = []
             unseenAchievements[category].append(id)
 
-        for category in unseenAchievements:
-            self.__accSettings.addUnseenAdvancedAchievements(category, set(unseenAchievements[category]))
+        for category, achievementIDs in viewitems(unseenAchievements):
+            self.__accSettings.addUnseenAdvancedAchievements(category, set(achievementIDs))
 
         self.onUnseenAchievementsUpdate()
         return
@@ -277,7 +279,7 @@ class AdvancedAchievementsSettingsManager(object):
     __slots__ = ('__settings',)
 
     def __init__(self):
-        self.__settings = dict()
+        self.__settings = {}
 
     def start(self):
         self.__settings = AccountSettings.getSettings(ADVANCED_ACHIEVEMENTS)

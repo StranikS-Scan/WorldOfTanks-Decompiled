@@ -2,6 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/veh_post_progression/states.py
 from __future__ import absolute_import
 import typing
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import BECOME_ELITE_VEHICLES_WATCHED
 from frameworks.state_machine import StateFlags
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
@@ -45,6 +47,13 @@ class VehiclePostProgressionState(ViewLobbyState):
     def _onEntered(self, event):
         super(VehiclePostProgressionState, self)._onEntered(event)
         self.__cachedParams = event.params
+        vehTypeCompDescr = event.params.get('intCD')
+        if vehTypeCompDescr is not None:
+            eliteWatchedList = AccountSettings.getSettings(BECOME_ELITE_VEHICLES_WATCHED)
+            if vehTypeCompDescr not in eliteWatchedList:
+                eliteWatchedList.add(vehTypeCompDescr)
+                AccountSettings.setSettings(BECOME_ELITE_VEHICLES_WATCHED, eliteWatchedList)
+        return
 
     def _onExited(self):
         super(VehiclePostProgressionState, self)._onExited()

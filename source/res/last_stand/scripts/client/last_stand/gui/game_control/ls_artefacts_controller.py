@@ -58,7 +58,6 @@ BONUS_ORDER = [BoostersSettings.BONUS_NAME,
  PREMIUM_ENTITLEMENTS.PLUS,
  PREMIUM_ENTITLEMENTS.BASIC,
  Currency.BPCOIN,
- 'battlePassPoints',
  ProgressPointsSettings.BONUS_NAME,
  Currency.CRYSTAL,
  Currency.GOLD,
@@ -75,7 +74,7 @@ BONUS_ORDER = [BoostersSettings.BONUS_NAME,
  'tankmenXP',
  'goodies',
  'items',
- 'blueprints_universal'] + _blueprints_national_order + ['blueprints', 'blueprintsAny']
+ 'blueprints_universal'] + _blueprints_national_order + ['blueprints', 'blueprintsAny'] + ['battlePassPoints']
 
 class Artefact(namedtuple('Artefact', ('artefactID', 'decodePrice', 'skipPrice', 'bonusRewards', 'questConditions', 'artefactTypes', 'limit'))):
 

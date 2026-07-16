@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/winback/winback_selectable_reward_view.py
+from __future__ import absolute_import
 from collections import OrderedDict
 from copy import deepcopy
 from logging import getLogger
@@ -66,12 +67,9 @@ def _sortByType(vehicleTuple):
     return _TYPES_ORDER.index(vehicleType)
 
 
-def _sortByName(firstVehicleTuple, secondVehicleTuple):
-    _, firstVehicleDict = firstVehicleTuple
-    _, secondVehicleDict = secondVehicleTuple
-    firstUserName = firstVehicleDict['vehicle'].userName
-    secondUserName = secondVehicleDict['vehicle'].userName
-    return cmp(firstUserName, secondUserName)
+def _sortByName(vehicleTuple):
+    _, vehicleDict = vehicleTuple
+    return vehicleDict['vehicle'].userName
 
 
 def _sortAndClearVehicles(vehicles):
@@ -81,7 +79,7 @@ def _sortAndClearVehicles(vehicles):
         sortedByType = sorted([ (cd, veh) for cd, veh in vehicleSortedByNations if veh['vehicle'].nationName == nation ], key=_sortByType)
         finallySortedByType = []
         for vehicleType in _TYPES_ORDER:
-            sortedByName = sorted([ (cd, veh) for cd, veh in sortedByType if veh['vehicle'].type == vehicleType ], cmp=_sortByName)
+            sortedByName = sorted([ (cd, veh) for cd, veh in sortedByType if veh['vehicle'].type == vehicleType ], key=_sortByName)
             finallySortedByType += sortedByName
 
         sortedVehicles += finallySortedByType

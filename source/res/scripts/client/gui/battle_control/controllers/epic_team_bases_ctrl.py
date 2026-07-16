@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/epic_team_bases_ctrl.py
+from __future__ import absolute_import
 import BigWorld
 import BattleReplay
 from debug_utils import LOG_ERROR
 from epic_constants import EPIC_BATTLE_TEAM_ID
+from gui.battle_control.controllers.team_bases_ctrl import BattleTeamsBasesController, makeClientTeamBaseID
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
-from team_bases_ctrl import BattleTeamsBasesController, makeClientTeamBaseID
 
 class EpicBattleTeamsBasesController(BattleTeamsBasesController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)

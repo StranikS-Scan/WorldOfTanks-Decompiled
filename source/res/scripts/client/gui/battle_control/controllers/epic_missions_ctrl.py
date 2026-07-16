@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/epic_missions_ctrl.py
+from __future__ import absolute_import, division
+import typing
+from builtins import range
 from collections import defaultdict
 from collections import namedtuple
-import BattleReplay
 import BigWorld
+import BattleReplay
 import Event
-import typing
 from ReplayEvents import g_replayEvents
 from constants import SECTOR_STATE, PLAYER_RANK
 from debug_utils import verify, LOG_ERROR, LOG_DEBUG
@@ -103,7 +105,7 @@ class EpicMissionsController(IViewComponentsController):
         self.__overTimeEnd = None
         self.__isRegisterEpicMissionPanel = False
         self.__missionPanelDelayQueue = set()
-        self.__orderBattleAbilities = list()
+        self.__orderBattleAbilities = []
         self.__isLaneContested = [False, False, False]
         self.__contestedEndTime = [0, 0, 0]
         self.__lastTimeHQDamaged = defaultdict(lambda : 0)

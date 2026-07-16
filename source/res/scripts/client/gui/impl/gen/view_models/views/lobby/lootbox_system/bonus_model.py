@@ -21,7 +21,7 @@ class BonusRarity(Enum):
 class BonusModel(IconBonusModel):
     __slots__ = ()
 
-    def __init__(self, properties=25, commands=0):
+    def __init__(self, properties=26, commands=0):
         super(BonusModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -86,41 +86,47 @@ class BonusModel(IconBonusModel):
     def setIsElite(self, value):
         self._setBool(18, value)
 
-    def getIsRent(self):
+    def getIsWheeled(self):
         return self._getBool(19)
 
-    def setIsRent(self, value):
+    def setIsWheeled(self, value):
         self._setBool(19, value)
 
-    def getIsInHangar(self):
+    def getIsRent(self):
         return self._getBool(20)
 
-    def setIsInHangar(self, value):
+    def setIsRent(self, value):
         self._setBool(20, value)
 
+    def getIsInHangar(self):
+        return self._getBool(21)
+
+    def setIsInHangar(self, value):
+        self._setBool(21, value)
+
     def getRarity(self):
-        return BonusRarity(self._getString(21))
+        return BonusRarity(self._getString(22))
 
     def setRarity(self, value):
-        self._setString(21, value.value)
+        self._setString(22, value.value)
 
     def getSpecialAwardName(self):
-        return self._getString(22)
-
-    def setSpecialAwardName(self, value):
-        self._setString(22, value)
-
-    def getVehicleShortName(self):
         return self._getString(23)
 
-    def setVehicleShortName(self, value):
+    def setSpecialAwardName(self, value):
         self._setString(23, value)
 
-    def getVehicle3DStyleName(self):
+    def getVehicleShortName(self):
         return self._getString(24)
 
-    def setVehicle3DStyleName(self, value):
+    def setVehicleShortName(self, value):
         self._setString(24, value)
+
+    def getVehicle3DStyleName(self):
+        return self._getString(25)
+
+    def setVehicle3DStyleName(self, value):
+        self._setString(25, value)
 
     def _initialize(self):
         super(BonusModel, self)._initialize()
@@ -134,6 +140,7 @@ class BonusModel(IconBonusModel):
         self._addStringProperty('type')
         self._addNumberProperty('level', 0)
         self._addBoolProperty('isElite', False)
+        self._addBoolProperty('isWheeled', False)
         self._addBoolProperty('isRent', False)
         self._addBoolProperty('isInHangar', False)
         self._addStringProperty('rarity')

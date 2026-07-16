@@ -9,6 +9,7 @@ import CGF
 import AnimationSequence
 import math_utils
 from battleground.components import ModelComponent, SequenceComponent
+from components_base.component_controller import ComponentController
 from math_utils import Easing
 from BombersWing import CompoundBomber, BomberDesc, CurveControlPoint
 from Event import Event
@@ -18,9 +19,8 @@ from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 from skeletons.gui.battle_session import IBattleSessionProvider
-from cgf_obsolete_script.py_component import Component
-from cgf_obsolete_script.script_game_object import ScriptGameObject, ComponentDescriptorTyped, ComponentDescriptor
-from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
+from components_base.component import Component
+from components_base.component_descriptor import ComponentDescriptor, ComponentDescriptorTyped
 
 class DescendSimulator(Component):
     matrix = property(lambda self: self.__matrix)
@@ -45,7 +45,7 @@ class DescendSimulator(Component):
         return
 
 
-class ParachuteCargo(ScriptGameObject, CallbackDelayer):
+class ParachuteCargo(ComponentController, CallbackDelayer):
     model = ComponentDescriptorTyped(ModelComponent)
     landingAnimation = ComponentDescriptorTyped(SequenceComponent)
     descendSimulator = ComponentDescriptor()
@@ -53,15 +53,16 @@ class ParachuteCargo(ScriptGameObject, CallbackDelayer):
     LANDING_ANIMATION_TRIGGER_OFFSET = -0.3
 
     def __init__(self, yaw, dropPoint, landingPosition, landingTime, landingDuration):
-        ScriptGameObject.__init__(self, BigWorld.player().spaceID)
+        ComponentController.__init__(self, BigWorld.player().spaceID)
         CallbackDelayer.__init__(self)
+        self.stopLoading = False
         self.__descendTime = max(landingTime - BigWorld.time(), 0.0)
         self.__timeCorrection = landingDuration - self.__descendTime
         self.__dropPoint = math_utils.lerp(dropPoint, landingPosition, self.__timeCorrection / landingDuration)
         self.descendSimulator = DescendSimulator(yaw, self.__dropPoint, landingPosition, self.__descendTime)
 
     def activate(self):
-        ScriptGameObject.activate(self)
+        ComponentController.activate(self)
         self.model.activate()
         self.model.compoundModel.position = self.__dropPoint
         self.model.compoundModel.matrix = self.descendSimulator.matrix
@@ -77,8 +78,12 @@ class ParachuteCargo(ScriptGameObject, CallbackDelayer):
         return
 
     def destroy(self):
-        ScriptGameObject.destroy(self)
+        self.stopLoading = True
+        ComponentController.destroy(self)
         CallbackDelayer.destroy(self)
+
+    def tick(self):
+        self.descendSimulator.tick()
 
     def __animateLanding(self):
         if self.landingAnimation is not None:
@@ -151,10 +156,8 @@ class DropPlane(Component, CallbackDelayer):
         self.prevTime = curTime
 
 
-@registerComponent
 class PlaneLootAirdrop(CallbackDelayer, ISelfAssembler):
-    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
-    parent = ComponentProperty(type=CGFMetaTypes.LINK, value=CGF.GameObject)
+    domain = CGF.Domain.ClientEditor
     __dynamicObjectsCache = dependency.descriptor(IBattleDynamicObjectsCache)
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     FLY_TIME_BEFORE_DROP = DropPlane.FLY_TIME_BEFORE_DROP
@@ -165,13 +168,12 @@ class PlaneLootAirdrop(CallbackDelayer, ISelfAssembler):
 
     def __init__(self, dropID, deliveryPosition, deliveryTime):
         CallbackDelayer.__init__(self)
-        owner = CGF.GameObject(BigWorld.player().spaceID)
-        owner.addComponent(self)
-        owner.activate()
-        owner.transferOwnershipToWorld()
+        queue = CGF.CommandQueue(BigWorld.player().spaceID)
+        owner = queue.createGameObject()
+        queue.assignComponent(owner, self)
+        queue.activateGameObject(owner)
         self.parent = owner
-        self.plane = None
-        self.cargo = None
+        self.inactiveCargo = None
         self.id = dropID
         self.deliveryPosition = deliveryPosition
         self.deliveryTime = deliveryTime + BigWorld.time() - BigWorld.serverTime()
@@ -191,16 +193,13 @@ class PlaneLootAirdrop(CallbackDelayer, ISelfAssembler):
             self.inactiveCargo.stopLoading = True
             self.inactiveCargo.destroy()
         self.inactiveCargo = None
-        if self.cargo:
-            self.cargo.stopLoading = True
-        self.plane = None
         CallbackDelayer.destroy(self)
         return
 
     def __launchPlane(self):
         if self.parent is not None:
-            self.plane = DropPlane(self.deliveryPosition, self.DROP_ALTITUDE, self.deliveryTime - self.DESCEND_TIME)
-            self.parent.addComponent(self.plane)
+            plane = DropPlane(self.deliveryPosition, self.DROP_ALTITUDE, self.deliveryTime - self.DESCEND_TIME)
+            self.parent.assignComponent(plane)
         self.delayCallback(self.deliveryTime + self.FLY_TIME_AFTER_DROP - BigWorld.time(), self.__processFlightEnd)
         return
 
@@ -213,32 +212,48 @@ class PlaneLootAirdrop(CallbackDelayer, ISelfAssembler):
         animationPath = airDropConfig.dropAnimation
         animationBuilder = AnimationSequence.Loader(animationPath, spaceId)
         dropPoint = self.deliveryPosition + Math.Vector3(0, self.DROP_ALTITUDE, 0)
-        crateYaw = 0
-        if self.plane is not None:
-            crateYaw = self.plane.flightYaw
+        plane = self.parent.findRead(DropPlane)
+        crateYaw = plane.flightYaw if plane else 0
         self.inactiveCargo = parachuteCargo = ParachuteCargo(crateYaw, dropPoint, self.deliveryPosition, self.deliveryTime, self.DESCEND_TIME)
         loadComponentSystem(parachuteCargo, self.__onCargoLoad, {'model': Loader(modelAssembler),
          'landingAnimation': Loader(animationBuilder)})
         self.delayCallback(self.deliveryTime - BigWorld.time() + self.POST_DELIVERY_CARGO_LIFETIME, self.__killCargo)
-        return
 
     def __onCargoLoad(self, cargo):
-        self.cargo = cargo
         self.inactiveCargo = None
-        cargo.activate()
+        self.parent.assignComponent(cargo)
         return
 
     def __killCargo(self):
-        self.cargo = None
-        if self.plane is None and self.parent is not None:
-            CGF.removeGameObject(self.parent)
-        return
+        if self.parent:
+            self.parent.removeComponent(ParachuteCargo)
+            if not self.parent.hasComponent(DropPlane):
+                self.parent.destroy()
 
     def __processFlightEnd(self):
         self.onFlightEnd(self)
-        if self.parent is not None:
-            self.parent.removeComponent(self.plane)
-            self.plane = None
-            if self.cargo is None:
-                CGF.removeGameObject(self.parent)
-        return
+        if self.parent:
+            self.parent.removeComponent(DropPlane)
+            if not self.parent.hasComponent(ParachuteCargo):
+                self.parent.destroy()
+
+
+class PlaneLootAirdropSystem(CGF.System):
+    DropPlaneIterate = CGF.IterateReaction(CGF.ActiveOnly, CGF.Rw(DropPlane))
+    ParachuteCargoActivate = CGF.ActivateReaction(CGF.ReactRw(ParachuteCargo))
+    ParachuteCargoDeactivate = CGF.DeactivateReaction(CGF.ReactRw(ParachuteCargo))
+    ParachuteCargoIterate = CGF.IterateReaction(CGF.ActiveOnly, CGF.Rw(ParachuteCargo))
+    Reactions = CGF.Reactions(DropPlaneIterate, ParachuteCargoActivate, ParachuteCargoDeactivate, ParachuteCargoIterate)
+
+    def update(self):
+        for parachuteCargo in self.reaction(self.ParachuteCargoDeactivate):
+            parachuteCargo.deactivate()
+
+        for parachuteCargo in self.reaction(self.ParachuteCargoActivate):
+            parachuteCargo.activate()
+
+        for dropPlane in self.reaction(self.DropPlaneIterate):
+            dropPlane.tick()
+
+        for parachuteCargo in self.reaction(self.ParachuteCargoIterate):
+            parachuteCargo.tick()

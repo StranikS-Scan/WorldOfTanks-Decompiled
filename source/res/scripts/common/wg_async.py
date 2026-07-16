@@ -22,11 +22,12 @@ def wg_return(value):
 def wg_async(func):
     if (IS_BASEAPP or IS_CELLAPP) and not isgeneratorfunction(func):
         LOG_WARNING('wg_async: not a generator:', func.__module__, func.__name__)
+    _context = '{}.{}'.format(func.__module__, func.__qualname__ if hasattr(func, '__qualname__') else func.__name__)
 
     @wraps(func)
     def wrapper(*args, **kwargs):
         gen = func(*args, **kwargs)
-        promise = _Promise()
+        promise = _Promise(_context)
         executor = _AsyncExecutor(gen, promise)
         executor.start()
         return promise.get_future()
@@ -70,9 +71,12 @@ def post(func):
 
 
 def await_callback(func, timeout=None):
+    _context = None
+    if not isinstance(func, partial):
+        _context = '{}.{}'.format(func.__module__, func.__qualname__ if hasattr(func, '__qualname__') else func.__name__)
 
     def wrapper(*args, **kwargs):
-        promise = _Promise()
+        promise = _Promise(_context)
 
         def callback(*args):
             if len(args) == 1:
@@ -87,7 +91,8 @@ def await_callback(func, timeout=None):
 
 
 def await_deferred(d):
-    promise = _Promise()
+    _frame = sys._getframe(1)
+    promise = _Promise('wg_async.await_deferred @ {}:{}'.format(_frame.f_code.co_filename, _frame.f_lineno))
 
     def callback(value):
         if isinstance(value, tuple) and len(value) == 1:
@@ -115,7 +120,7 @@ if IS_CLIENT:
     from shared_utils import safeCancelCallback
 
     def delay(timeout):
-        promise = _Promise()
+        promise = _Promise('wg_async.delay(timeout={})'.format(timeout))
 
         def onDelayTimer(*_):
             promise.set_value(None)
@@ -129,7 +134,7 @@ if IS_CLIENT:
 else:
 
     def delay(timeout):
-        promise = _Promise()
+        promise = _Promise('wg_async.delay(timeout={})'.format(timeout))
 
         def onDelayTimer(*_):
             promise.set_value(None)
@@ -175,7 +180,7 @@ else:
 
 
     def delayWhileTickPending(maxTicksToDelay=1, timeout=0.105, minTimeout=0.1, logID=None):
-        promise = _Promise()
+        promise = _Promise('wg_async.delayWhileTickPending(maxTicksToDelay={}, logID={!r})'.format(maxTicksToDelay, logID))
         _onDelayWhileTickPendingTimer(0, (logID,
          timeout,
          maxTicksToDelay,
@@ -252,7 +257,10 @@ class TimeoutError(SoftException):
 
 
 class BrokenPromiseError(SoftException):
-    pass
+
+    def __init__(self, context=None):
+        msg = 'broken promise: {}'.format(context) if context else 'broken promise'
+        super(BrokenPromiseError, self).__init__(msg)
 
 
 class _AlwaysReadyFuture(object):
@@ -354,14 +362,15 @@ class _Future(object):
 
 
 class _Promise(object):
-    __slots__ = ('__value_set', '__future_set', '__exc_info', '__value', '__future', '__cancelled', '__cancel', '__weakref__')
+    __slots__ = ('__value_set', '__future_set', '__exc_info', '__value', '__future', '__cancelled', '__cancel', '__weakref__', '__context')
 
-    def __init__(self):
+    def __init__(self, context=None):
         self.__value_set = self.__future_set = False
         self.__exc_info = self.__value = None
         self.__future = None
         self.__cancelled = False
         self.__cancel = None
+        self.__context = context
         return
 
     def __del__(self):
@@ -370,7 +379,7 @@ class _Promise(object):
                 if self.__cancelled:
                     self.__future._confirm_cancel()
                 else:
-                    self.__future.set_result(_BrokenPromiseResult())
+                    self.__future.set_result(_BrokenPromiseResult(self.__context))
         elif not self.__future_set and self.__exc_info is not None:
             try:
                 raise_(self.__exc_info[0], self.__exc_info[1], self.__exc_info[2])
@@ -453,10 +462,13 @@ class _ExpiredPromiseResult(object):
 
 
 class _BrokenPromiseResult(object):
-    __slots__ = ()
+    __slots__ = ('__context',)
+
+    def __init__(self, context=None):
+        self.__context = context
 
     def get(self):
-        raise BrokenPromiseError()
+        raise BrokenPromiseError(self.__context)
 
 
 class _AsyncExecutor(object):
@@ -554,7 +566,8 @@ class AsyncEvent(AsyncObject):
         self.__state = False
 
     def wait(self):
-        promise = _Promise()
+        _frame = sys._getframe(1)
+        promise = _Promise('AsyncEvent.wait @ {}:{}'.format(_frame.f_code.co_filename, _frame.f_lineno))
         if self.__state:
             promise.set_value(None)
         else:
@@ -586,7 +599,8 @@ class AsyncSemaphore(AsyncObject):
         return
 
     def acquire(self):
-        promise = _Promise()
+        _frame = sys._getframe(1)
+        promise = _Promise('AsyncSemaphore.acquire @ {}:{}'.format(_frame.f_code.co_filename, _frame.f_lineno))
         if self.__value != 0:
             promise.set_value(None)
             self.__value -= 1
@@ -611,7 +625,8 @@ class AsyncQueue(AsyncObject):
         self.__values = deque()
 
     def dequeue(self):
-        promise = _Promise()
+        _frame = sys._getframe(1)
+        promise = _Promise('AsyncQueue.dequeue @ {}:{}'.format(_frame.f_code.co_filename, _frame.f_lineno))
         if self.__values:
             value, exc_info = self.__values.popleft()
             if exc_info is None:

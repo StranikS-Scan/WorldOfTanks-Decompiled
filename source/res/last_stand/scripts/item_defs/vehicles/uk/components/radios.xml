@@ -4,6 +4,9 @@
     <C45_LS_BOT>	6002	</C45_LS_BOT>
     <N22_LS_PLAYER>	6003	</N22_LS_PLAYER>
     <N19Mk3_LS_BOT>	5996	</N19Mk3_LS_BOT>
+    <British_Wireless_set_N19_EASY_LS_BOT>	5997	</British_Wireless_set_N19_EASY_LS_BOT>
+    <British_Wireless_set_N19_MEDIUM_LS_BOT>	5998	</British_Wireless_set_N19_MEDIUM_LS_BOT>
+    <British_Wireless_set_N19_HARD_LS_BOT>	5999	</British_Wireless_set_N19_HARD_LS_BOT>
   </ids>
   <shared>
     <C42_LS_BOT>
@@ -13,7 +16,7 @@
       <price>	54000	</price>
       <notInShop>	true	</notInShop>
       <weight>	40	</weight>
-      <distance>	50	</distance>
+      <distance>	700	</distance>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
@@ -25,7 +28,7 @@
       <price>	45600	</price>
       <notInShop>	true	</notInShop>
       <weight>	40	</weight>
-      <distance>	50	</distance>
+      <distance>	700	</distance>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
@@ -54,5 +57,41 @@
       <maxRegenHealth>	84	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </N19Mk3_LS_BOT>
+    <British_Wireless_set_N19_EASY_LS_BOT>
+      <userString>	#gb_vehicles:British_Wireless_set_N19	</userString>
+      <tags></tags>
+      <notInShop>	true	</notInShop>
+      <level>	9	</level>
+      <price>	29400	</price>
+      <weight>	40	</weight>
+      <distance>	700	</distance>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	96	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </British_Wireless_set_N19_EASY_LS_BOT>
+    <British_Wireless_set_N19_MEDIUM_LS_BOT>
+      <userString>	#gb_vehicles:British_Wireless_set_N19	</userString>
+      <tags></tags>
+      <notInShop>	true	</notInShop>
+      <level>	9	</level>
+      <price>	29400	</price>
+      <weight>	40	</weight>
+      <distance>	700	</distance>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	96	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </British_Wireless_set_N19_MEDIUM_LS_BOT>
+    <British_Wireless_set_N19_HARD_LS_BOT>
+      <userString>	#gb_vehicles:British_Wireless_set_N19	</userString>
+      <tags></tags>
+      <notInShop>	true	</notInShop>
+      <level>	9	</level>
+      <price>	29400	</price>
+      <weight>	40	</weight>
+      <distance>	700	</distance>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	96	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </British_Wireless_set_N19_HARD_LS_BOT>
   </shared>
 </radios.xml>

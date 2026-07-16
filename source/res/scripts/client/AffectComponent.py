@@ -58,16 +58,17 @@ class AffectComponent(object):
 
     def _createParticles(self):
         if self.__vehicleEffectConfig is not None:
-            self.__particle = gameObject = CGF.GameObject(self.__gameObject.spaceID)
-            gameObject.createComponent(GenericComponents.HierarchyComponent, self.__gameObject)
-            gameObject.createComponent(GenericComponents.ParticleComponent, self.__vehicleEffectConfig.path, True, self.__vehicleEffectConfig.rate)
-            gameObject.createComponent(GenericComponents.TransformComponent, self.__vehicleEffectConfig.offset)
-            gameObject.activate()
+            queue = CGF.CommandQueue(self.__spaceID)
+            self.__particle = gameObject = queue.createGameObject()
+            queue.createComponent(gameObject, CGF.HierarchyComponent, self.__gameObject)
+            queue.createComponent(gameObject, GenericComponents.ParticleComponent, self.__vehicleEffectConfig.path, True, self.__vehicleEffectConfig.rate)
+            queue.createComponent(gameObject, CGF.TransformComponent, self.__vehicleEffectConfig.offset)
+            queue.activateGameObject(gameObject)
         return
 
     def _removeParticles(self):
         if self.__particle is not None:
-            CGF.removeGameObject(self.__particle)
+            self.__particle.destroy()
             self.__particle = None
         return
 
@@ -132,3 +133,32 @@ def getInfluenceZoneType(pointDescr):
 
 def getEffectConfig(influenceZoneType, config):
     return config.getRepairPointEffect() if influenceZoneType == _HEAL_OVER_TIME_ZONE_ else None
+
+
+class AffectComponentsSystem(CGF.System):
+    TrapActivated = CGF.ActivateReaction(CGF.ReactRw(TrapAffectComponent))
+    TrapDeactivated = CGF.DeactivateReaction(CGF.ReactRw(TrapAffectComponent))
+    FireCircleActivated = CGF.ActivateReaction(CGF.ReactRw(FireCircleAffectComponent))
+    FireCircleDeactivated = CGF.DeactivateReaction(CGF.ReactRw(FireCircleAffectComponent))
+    RepairActivated = CGF.ActivateReaction(CGF.ReactRw(RepairAffectComponent))
+    RepairDeactivated = CGF.DeactivateReaction(CGF.ReactRw(RepairAffectComponent))
+    Reactions = CGF.Reactions(TrapActivated, TrapDeactivated, FireCircleActivated, FireCircleDeactivated, RepairActivated, RepairDeactivated)
+
+    def update(self):
+        for trapAffect in self.reaction(self.TrapDeactivated):
+            trapAffect.deactivate()
+
+        for trapAffect in self.reaction(self.TrapActivated):
+            trapAffect.activate()
+
+        for fireCircle in self.reaction(self.FireCircleDeactivated):
+            fireCircle.deactivate()
+
+        for fireCircle in self.reaction(self.FireCircleActivated):
+            fireCircle.activate()
+
+        for repair in self.reaction(self.RepairDeactivated):
+            repair.deactivate()
+
+        for repair in self.reaction(self.RepairActivated):
+            repair.activate()

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/skill_presenter_helper.py
+from __future__ import absolute_import
 import typing
 from debug_utils import LOG_WARNING
 from gui.impl import backport

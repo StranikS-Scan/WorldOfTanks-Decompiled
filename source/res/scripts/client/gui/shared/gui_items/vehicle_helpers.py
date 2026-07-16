@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/vehicle_helpers.py
-from Vehicle import Vehicle
+from __future__ import absolute_import
 from constants import ROLE_TYPE, ROLE_TYPE_TO_LABEL
 from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles, getRoleIcon
+from gui.shared.gui_items.Vehicle import Vehicle
 
 def getRoleMessage(role):
     if role == ROLE_TYPE.NOT_DEFINED:

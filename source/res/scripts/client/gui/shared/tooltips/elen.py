@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/elen.py
+from __future__ import absolute_import
 import constants
 from CurrentVehicle import g_currentVehicle
 from gui.event_boards.event_boards_timer import FORMAT_MINUTE_STR
@@ -57,14 +58,14 @@ class ElenPreviewTooltipData(BlocksTooltipData, IGlobalListener):
                 flagIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_FLAG_ICON)
             textData = currentEvent.getFormattedRemainingTime(EVENT_DATE_TYPE.PARTICIPANTS_FREEZE)
             msgText = TOOLTIPS.HANGAR_ELEN_HEADER_TOENDOFREGISTRATION
-            time = textData[0] if textData[0] is not 0 else 1
+            time = textData[0] if textData[0] != 0 else 1
             timeText = textData[1] if textData[1] else FORMAT_MINUTE_STR
             timeName = EVENT_BOARDS.time_period(str(timeText))
             text = '{} {} {} {}'.format(flagIcon, text_styles.tutorial(_ms(msgText)), text_styles.tutorial(time), text_styles.tutorial(timeName))
         else:
             textData = currentEvent.getFormattedRemainingTime(EVENT_DATE_TYPE.END)
             msgText = TOOLTIPS.HANGAR_ELEN_HEADER_TOEND
-            time = textData[0] if textData[0] is not 0 else 1
+            time = textData[0] if textData[0] != 0 else 1
             timeText = textData[1] if textData[1] else FORMAT_MINUTE_STR
             timeName = EVENT_BOARDS.time_period(str(timeText))
             if currentEvent.isEndSoon():

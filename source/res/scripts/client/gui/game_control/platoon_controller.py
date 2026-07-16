@@ -1,17 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/platoon_controller.py
+from __future__ import absolute_import
 import logging
 from collections import namedtuple
+from builtins import range
+from future.utils import viewitems, viewvalues
 from typing import TYPE_CHECKING
+import CGF
 import BigWorld
 import Event
 import SoundGroups
 import VOIP
 from CurrentVehicle import g_currentVehicle
-import CGF
 from shared_utils import findFirst
 from UnitBase import UNIT_ROLE, UnitAssemblerSearchFlags, extendTiersFilter
-from constants import EPlatoonButtonState, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL, Configs, SquadManStates
+from constants import EPlatoonButtonState, Configs, SquadManStates
 from PlatoonTank import PlatoonTank, PlatoonTankInfo
 from account_helpers.AccountSettings import AccountSettings, UNIT_FILTER, GUI_START_BEHAVIOR
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
@@ -23,7 +26,7 @@ from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.impl.lobby.platoon.platoon_config import QUEUE_TYPE_TO_PREBATTLE_ACTION_NAME, PREBATTLE_TYPE_TO_VEH_CRITERIA, PrbEntityInfo, EPlatoonLayout, ePlatoonLayouts, Position, SquadInfo, buildCurrentLayouts
+from gui.impl.lobby.platoon.platoon_config import QUEUE_TYPE_TO_PREBATTLE_ACTION_NAME, PrbEntityInfo, EPlatoonLayout, ePlatoonLayouts, Position, SquadInfo, buildCurrentLayouts
 from gui.prb_control import prb_getters
 from gui.prb_control import settings
 from gui.prb_control.entities.base.ctx import LeavePrbAction
@@ -44,19 +47,18 @@ from skeletons.gui.game_control import IPlatoonController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.game_control import IHangarGuiController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, PREBATTLE_TYPE, QUEUE_TYPE_TO_PREBATTLE_TYPE
 from gui.prb_control.entities.base.unit.permissions import UnitPermissions
 from gui.prb_control.entities.base.unit.entity import UnitEntity
-from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.formatters.ranges import toRomanRangeString
-from gui.shared.system_factory import collectReadyVehicleChekers
+from gui.shared.system_factory import collectReadyVehicleChekers, collectUnitMembersOrderKey
 from gui.impl.lobby.platoon.platoon_helpers import convertTierFilterToList
 from gui.prb_control.settings import REQUEST_TYPE
-from cgf_components.hangar_camera_manager import HangarCameraManager
+from cgf_components.hangar_camera_manager import HangarCameraSystem
 if TYPE_CHECKING:
     from typing import Any, Optional as TOptional, Tuple as TTuple, List, Dict
     from UnitBase import ProfileVehicle
@@ -64,6 +66,16 @@ if TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 _MIN_PERF_PRESET_NAME = 'MIN'
 _MAX_SLOT_COUNT_FOR_PLAYER_RESORTING = 3
+
+def _unitMembersDisplayOrder(slot):
+    player = slot['player']
+    if player is None:
+        return (1, 0, 0)
+    else:
+        roleIndex = -slot['role'] if not player.get('isOffline') else 0
+        return (0, roleIndex, player.get('timeJoin', 0))
+
+
 PopoverParams = namedtuple('PopoverParams', ('bbox', 'direction'))
 
 class _FilterExpander(CallbackDelayer):
@@ -97,7 +109,7 @@ class _FilterExpander(CallbackDelayer):
             return
         else:
             self.__initialTierFlags = self.__expandedTierFlags = newTierFlags
-            for _ in xrange(self.__iterations):
+            for _ in range(self.__iterations):
                 self.__expandedTierFlags = extendTiersFilter(self.__expandedTierFlags)
 
             self.__platoonCtrl.onFilterUpdate()
@@ -154,6 +166,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
     __itemsCache = dependency.descriptor(IItemsCache)
     __settingsCore = dependency.descriptor(ISettingsCore)
     __hangarSpace = dependency.descriptor(IHangarSpace)
+    __hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
 
     def __init__(self):
         super(PlatoonController, self).__init__()
@@ -375,8 +388,8 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
     def getPlayerInfo(self):
         return self.prbEntity.getPlayerInfo() if isinstance(self.prbEntity, UnitEntity) else None
 
-    def registerPlatoonTank(self, platoonTankRef):
-        self.__availablePlatoonTanks[platoonTankRef.slotIndex] = platoonTankRef
+    def registerPlatoonTank(self, platoonTank):
+        self.__availablePlatoonTanks[platoonTank.slotIndex] = platoonTank
 
     def evaluateVisibility(self, toggleUI=False):
         if self.isAnyPlatoonUIShown() and toggleUI:
@@ -457,7 +470,11 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
                 return orderedSlots
             _, slots = vo_converters.makeSlotsVOs(entity, entity.getID(), withPrem=True)
             squadSize = unitFullData.unit.getSquadSize() or len(slots)
-            orderedSlots = self.orderSlotsBasedOnDisplaySlotsIndices(slots)[:squadSize]
+            membersOrderKey = collectUnitMembersOrderKey(self.getQueueType())
+            if membersOrderKey:
+                orderedSlots = sorted(slots, key=membersOrderKey)[:squadSize]
+            else:
+                orderedSlots = self.orderSlotsBasedOnDisplaySlotsIndices(slots)[:squadSize]
         return orderedSlots
 
     def buildExtendedSquadInfoVo(self):
@@ -838,7 +855,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             self.__channelCtrl = controller
             self.onChannelControllerChanged(self.__channelCtrl)
             players = self.__getPlayers()
-            for _, pInfo in players.iteritems():
+            for pInfo in viewvalues(players):
                 self.__addPlayerJoinNotification(pInfo)
 
             return
@@ -851,7 +868,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         if not needToShowOtherPlayers:
             return
         self.__updatePlatoonTankInfo()
-        cameraManager = CGF.getManager(self.__hangarSpace.spaceID, HangarCameraManager)
+        cameraManager = CGF.getSystem(self.__hangarSpace.spaceID, HangarCameraSystem)
         if cameraManager:
             cameraManager.enablePlatoonMode(True)
 
@@ -940,14 +957,14 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
     def __platoonTankLoaded(self, event):
         self.__currentlyDisplayedTanks += 1
         if self.__currentlyDisplayedTanks == 1:
-            cameraManager = CGF.getManager(self.__hangarSpace.spaceID, HangarCameraManager)
+            cameraManager = CGF.getSystem(self.__hangarSpace.spaceID, HangarCameraSystem)
             if cameraManager:
                 cameraManager.enablePlatoonMode(True)
 
     def __platoonTankDestroyed(self, event):
         self.__currentlyDisplayedTanks = max(0, self.__currentlyDisplayedTanks - 1)
         if self.__currentlyDisplayedTanks <= 0:
-            cameraManager = CGF.getManager(self.__hangarSpace.spaceID, HangarCameraManager)
+            cameraManager = CGF.getSystem(self.__hangarSpace.spaceID, HangarCameraSystem)
             if cameraManager:
                 cameraManager.enablePlatoonMode(False)
 
@@ -1014,7 +1031,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         else:
             unitSlotCount = entity.getRosterSettings().getMaxSlots()
             isPlayerOnSlotAvailable = {i:False for i in range(unitSlotCount)}
-            result = dict()
+            result = {}
             if not self.__hasEnoughSlots(unitSlotCount) or not self.__isPlatoonVisualizationEnabled:
                 self.onPlatoonTankVisualizationChanged(False)
                 return
@@ -1033,7 +1050,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
                     result[displaySlotIndex] = tankInfo
                     isPlayerOnSlotAvailable[displaySlotIndex] = True
 
-            for displaySlotIndex, isAvailable in isPlayerOnSlotAvailable.iteritems():
+            for displaySlotIndex, isAvailable in viewitems(isPlayerOnSlotAvailable):
                 if not isAvailable:
                     result[displaySlotIndex] = None
 
@@ -1048,7 +1065,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
 
     def __updateDisplaySlotsIndices(self):
         players = self.prbEntity.getPlayers()
-        playerIds = [ player.accID for player in players.values() if player.isInSlot ]
+        playerIds = [ player.accID for player in sorted(players.values(), key=lambda p: p.slotIdx) if player.isInSlot ]
         maxSlotCount = self.prbEntity.getRosterSettings().getMaxSlots()
         if len(playerIds) > maxSlotCount:
             _logger.warning('The number of players in slot (%s) is higher then max slots to display (%s). This state should not happen for this type of unit.', len(playerIds), maxSlotCount)
@@ -1081,7 +1098,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
                     self.__tankDisplayPosition[playerId] = displaySlot
 
             return
-        for playerId, _ in self.__tankDisplayPosition.items():
+        for playerId in list(self.__tankDisplayPosition):
             if playerId in playerIds:
                 playerIds.remove(playerId)
                 continue
@@ -1106,7 +1123,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
                 self.__removeAccFromPositions(teamMateAccID)
             self.__tankDisplayPosition[teamMateAccID] = newSlotIdx
         else:
-            allTeams = [ data for data in self.__tankDisplayPosition.iteritems() if data[0] != currentPlayer.accID ]
+            allTeams = [ data for data in viewitems(self.__tankDisplayPosition) if data[0] != currentPlayer.accID ]
             if allTeams:
                 teamMateAccID, teamMateIdx = allTeams[0]
                 self.onPlatoonTankRemove(teamMateIdx)
@@ -1120,7 +1137,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         currPlayerIdx = self.__tankDisplayPosition[BigWorld.player().id]
         if removedIdx is not None:
             if maxSlotCount == _MAX_SLOT_COUNT_FOR_PLAYER_RESORTING:
-                for playerID, slotIdx in self.__tankDisplayPosition.iteritems():
+                for playerID, slotIdx in viewitems(self.__tankDisplayPosition):
                     if slotIdx > removedIdx:
                         if slotIdx == currPlayerIdx + 1:
                             self.__tankDisplayPosition[playerID] = slotIdx - 2
@@ -1128,7 +1145,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
                             self.__tankDisplayPosition[playerID] = slotIdx - 1
 
             else:
-                for playerID, slotIdx in self.__tankDisplayPosition.iteritems():
+                for playerID, slotIdx in viewitems(self.__tankDisplayPosition):
                     if slotIdx > removedIdx:
                         self.__tankDisplayPosition[playerID] = slotIdx - 1
 
@@ -1152,20 +1169,11 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             prebattleType = self.getPrbEntityType()
             allowedLevels = self.getAllowedTankLevels(prebattleType)
             if checkVehicles or self.__availableTiersInventory is None:
-                criteria = REQ_CRITERIA.INVENTORY
-                criteria |= ~REQ_CRITERIA.VEHICLE.DISABLED_IN_PREM_IGR
-                criteria |= PREBATTLE_TYPE_TO_VEH_CRITERIA.get(prebattleType, REQ_CRITERIA.EMPTY)
-                allowedList = [ lvl for lvl in range(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL + 1) if allowedLevels & 1 << lvl ]
-                criteria |= REQ_CRITERIA.VEHICLE.LEVELS(allowedList)
-                vehicles = self.__itemsCache.items.getVehicles(criteria)
                 self.__availableTiersInventory = 0
-                for v in vehicles.itervalues():
-                    state, vStateLvl = v.getState()
-                    if state in (Vehicle.VEHICLE_STATE.LOCKED, Vehicle.VEHICLE_STATE.IN_PREBATTLE) and v.checkUndamagedState(Vehicle.VEHICLE_STATE.UNDAMAGED) == Vehicle.VEHICLE_STATE.UNDAMAGED or vStateLvl not in (Vehicle.VEHICLE_STATE_LEVEL.CRITICAL,
-                     Vehicle.VEHICLE_STATE_LEVEL.WARNING,
-                     Vehicle.VEHICLE_STATE_LEVEL.RENTABLE,
-                     Vehicle.VEHICLE_STATE_LEVEL.ATTENTION):
-                        self.__availableTiersInventory |= 1 << v.level
+                autoSearchHelper = self.__hangarGuiCtrl.currentGuiProvider.getVehicleAutoSearchHelper()
+                availableVehLevels = autoSearchHelper.getVehiclesLevelsChecker()
+                for lvl in availableVehLevels:
+                    self.__availableTiersInventory |= 1 << lvl
 
             availableTiers = self.__availableTiersInventory & allowedLevels
             if availableTiers != self.__availableTiersForSearch:

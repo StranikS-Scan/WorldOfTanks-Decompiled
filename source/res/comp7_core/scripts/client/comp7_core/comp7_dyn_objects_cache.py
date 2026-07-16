@@ -29,12 +29,12 @@ class Comp7DynObjects(DynObjectsBase):
         self.__pointsOfInterestConfig = _PointsOfInterestConfig.createFromXML(dataSection['pointOfInterest'])
         self.__cachedPrefabs.update(set(self.__prefabPaths.values()))
         self.__cachedPrefabs.update(set(self.__pointsOfInterestConfig.getPrefabs()))
-        CGF.cacheGameObjects(list(self.__cachedPrefabs), False)
+        CGF.cachePrefabs(list(self.__cachedPrefabs))
         super(Comp7DynObjects, self).init(dataSection)
 
     def clear(self):
         if self.__cachedPrefabs:
-            CGF.clearGameObjectsCache(list(self.__cachedPrefabs))
+            CGF.removePrefabsFromCache(list(self.__cachedPrefabs))
             self.__cachedPrefabs.clear()
         self.__spawnPointConfig = None
         self.__pointsOfInterestConfig = None

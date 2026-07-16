@@ -1,9 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/serialization/component_bin_deserializer.py
-from cStringIO import StringIO
+from __future__ import absolute_import
+from future.utils import iteritems
+from past.builtins import xrange
 from typing import Dict, Type
 import varint
 from constants import IS_EDITOR
+from py2to3.moves.io import FastBytesIO
 from serialization.definitions import FieldFlags, FieldTypes
 from serialization.exceptions import SerializationException, FoundItemException
 from serialization.serializable_component import SerializableComponent
@@ -18,7 +21,7 @@ class ComponentBinDeserializer(object):
         return
 
     def decode(self, data):
-        self.__stream = StringIO(data)
+        self.__stream = FastBytesIO(data)
         try:
             code = varint.decode_stream(self.__stream)
             obj = self.__decodeCustomType(code)
@@ -28,7 +31,7 @@ class ComponentBinDeserializer(object):
         return obj
 
     def hasItem(self, data, path, value):
-        self.__stream = StringIO(data)
+        self.__stream = FastBytesIO(data)
         try:
             code = varint.decode_stream(self.__stream)
             self.__decodeCustomType(code, path, value)
@@ -49,7 +52,7 @@ class ComponentBinDeserializer(object):
         io = self.__stream
         valueMap = varint.decode_stream(io)
         offset = 1
-        for k, t in fields.iteritems():
+        for k, t in iteritems(fields):
             if t.flags & FieldFlags.NON_BIN:
                 continue
             if IS_EDITOR and t.flags & FieldFlags.SAVE_AS_EDITOR_ONLY:
@@ -68,7 +71,7 @@ class ComponentBinDeserializer(object):
                 elif ftype & FieldTypes.TYPED_ARRAY:
                     value = self.__decodeArray(ftype ^ FieldTypes.TYPED_ARRAY, k, path, next, wanted)
                 elif ftype >= FieldTypes.CUSTOM_TYPE_OFFSET:
-                    value = self.__decodeCustomType(ftype / FieldTypes.CUSTOM_TYPE_OFFSET, next, wanted)
+                    value = self.__decodeCustomType(ftype // FieldTypes.CUSTOM_TYPE_OFFSET, next, wanted)
                 else:
                     raise SerializationException('Unsupported field type index')
                 if not t.flags & FieldFlags.DEPRECATED or hasattr(obj, k) or obj is None:
@@ -89,7 +92,7 @@ class ComponentBinDeserializer(object):
                 raise FoundItemException()
             return array
         elif itemType >= FieldTypes.CUSTOM_TYPE_OFFSET:
-            customType = itemType / FieldTypes.CUSTOM_TYPE_OFFSET
+            customType = itemType // FieldTypes.CUSTOM_TYPE_OFFSET
             return [ self.__decodeCustomType(customType, next, wanted) for _ in xrange(n) ]
         else:
             raise SerializationException('Unsupported item type')

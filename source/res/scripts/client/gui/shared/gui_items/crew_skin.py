@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/crew_skin.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import CREW_SKINS_VIEWED
 from helpers import i18n
@@ -38,7 +40,7 @@ class CrewSkin(FittingItem):
         if proxy is not None and proxy.inventory.isSynced():
             self.__freeCount = proxy.inventory.getItems(GUI_ITEM_TYPE.CREW_SKINS, self.__id)
             allTankmen = proxy.getTankmen()
-            self.__tankmenIDs = {invID for invID, tankman in allTankmen.iteritems() if tankman.skinID != NO_CREW_SKIN_ID and tankman.skinID == self.__id}
+            self.__tankmenIDs = {invID for invID, tankman in viewitems(allTankmen) if tankman.skinID != NO_CREW_SKIN_ID and tankman.skinID == self.__id}
         return
 
     def getID(self):

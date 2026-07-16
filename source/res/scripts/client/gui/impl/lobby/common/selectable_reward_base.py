@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/common/selectable_reward_base.py
+from __future__ import absolute_import
 from collections import OrderedDict
 import typing
+from future.utils import iteritems, itervalues, listvalues, viewitems, viewvalues
 from frameworks.wulf import ViewSettings
 from gui.impl import backport
 from gui.impl.gen import R
@@ -20,7 +22,7 @@ if typing.TYPE_CHECKING:
     from frameworks.wulf import ViewModel, ViewEvent, Window, View
 
 class SelectableRewardBase(ViewImpl):
-    __slots__ = ('__selectedTab', '__tabs', '__selectableRewards', '__cart', '_packer')
+    __slots__ = ('__selectedTab', '__tabs', '__selectableRewards', '__cart')
     _helper = SelectableRewardManager
     _packer = getDefaultBonusPacker()
 
@@ -133,8 +135,8 @@ class SelectableRewardBase(ViewImpl):
         pass
 
     def _iterSelectableBonus(self, cart):
-        for tab in cart.itervalues():
-            for reward in tab.itervalues():
+        for tab in itervalues(cart):
+            for reward in itervalues(tab):
                 for bonus in reward:
                     yield bonus
 
@@ -143,17 +145,17 @@ class SelectableRewardBase(ViewImpl):
         for bonus in self._iterSelectableBonus(self.__cart):
             self.__addItemToOrder(order, bonus)
 
-        self._helper.chooseRewards(order.values(), self._processReceivedRewards)
+        self._helper.chooseRewards(listvalues(order), self._processReceivedRewards)
 
     def _sortContent(self):
-        self.__tabs = OrderedDict(sorted(self.__tabs.iteritems(), cmp=self._getTypesComparator()))
+        self.__tabs = OrderedDict(sorted(viewitems(self.__tabs), key=self._getTypesSortKey()))
         for tabName in self.__tabs:
-            self.__tabs[tabName]['rewards'] = OrderedDict(sorted(self.__tabs[tabName]['rewards'].iteritems(), cmp=self._getItemsComparator(tabName)))
+            self.__tabs[tabName]['rewards'] = OrderedDict(sorted(viewitems(self.__tabs[tabName]['rewards']), key=self._getItemsSortKey(tabName)))
 
     def _sortCart(self):
-        self.__cart = OrderedDict(sorted(self.__cart.iteritems(), cmp=self._getTypesComparator()))
+        self.__cart = OrderedDict(sorted(viewitems(self.__cart), key=self._getTypesSortKey()))
         for catName in self.__cart:
-            self.__cart[catName] = OrderedDict(sorted(self.__cart[catName].iteritems(), cmp=self._getItemsComparator(catName)))
+            self.__cart[catName] = OrderedDict(sorted(viewitems(self.__cart[catName]), key=self._getItemsSortKey(catName)))
 
     def _getTabs(self):
         return self.__tabs
@@ -167,19 +169,19 @@ class SelectableRewardBase(ViewImpl):
     def _setCart(self, cart):
         self.__cart = cart
 
-    def _getTypesComparator(self):
+    def _getTypesSortKey(self):
 
-        def _defaultCompare(first, second):
-            return cmp(first[0], second[0])
+        def _defaultSortKey(x):
+            return x[0]
 
-        return _defaultCompare
+        return _defaultSortKey
 
-    def _getItemsComparator(self, tabName):
+    def _getItemsSortKey(self, tabName):
 
-        def _defaultCompare(first, second):
-            return cmp(first[0], second[0])
+        def _defaultSortKey(x):
+            return x[0]
 
-        return _defaultCompare
+        return _defaultSortKey
 
     def _getRewardType(self, reward):
         return reward.getType()
@@ -195,8 +197,6 @@ class SelectableRewardBase(ViewImpl):
                 if len(order[rewardType][1]) < cls._helper.getRemainedChoices(selectableReward):
                     order[rewardType][1].append(offerID)
                     break
-                else:
-                    continue
             order[rewardType] = (selectableReward, [offerID])
             break
 
@@ -225,7 +225,7 @@ class SelectableRewardBase(ViewImpl):
 
     def __getTotalTabCount(self, tabName):
         totalCount = 0
-        for rewardList in self.__cart.get(tabName, {}).itervalues():
+        for rewardList in viewvalues(self.__cart.get(tabName, {})):
             totalCount += len(rewardList)
 
         return totalCount
@@ -278,7 +278,7 @@ class SelectableRewardBase(ViewImpl):
                 vm.addViewModel(newReward)
 
     def __prepareRewardsData(self, tabName):
-        for rewardName, reward in self.__tabs[tabName]['rewards'].iteritems():
+        for rewardName, reward in iteritems(self.__tabs[tabName]['rewards']):
             count = self._getRewardsInCartCount(rewardName) + reward['receivedRewards']
             if reward['receivedRewards'] >= reward['limit'] > 0:
                 state = SelectableRewardItemModel.STATE_RECEIVED
@@ -292,7 +292,7 @@ class SelectableRewardBase(ViewImpl):
         with self.viewModel.selectableRewardModel.transaction() as vm:
             tabs = vm.getTabs()
             tabs.clear()
-            for tabName, tabContent in self.__tabs.iteritems():
+            for tabName, tabContent in iteritems(self.__tabs):
                 newTab = SelectableRewardTabModel()
                 newTab.setType(tabName)
                 newTab.setCount(tabContent['count'])
@@ -317,7 +317,7 @@ class SelectableRewardBase(ViewImpl):
         for selectableReward in self.__selectableRewards:
             offer = self._helper.getBonusOptions(selectableReward)
             currentTab = self.__tabs[self._getRewardType(selectableReward)]
-            for giftID, gift in offer.iteritems():
+            for giftID, gift in viewitems(offer):
                 if currentTab.get('rewards') is None:
                     currentTab['rewards'] = {}
                 if gift['option'] is None:

@@ -313,6 +313,7 @@ class BasePerksController(object):
         self._attrFactorCollectors.update({key:self._collectMultiplicativeAttributeFactor for key in self._multiplicativeAttributeFactors})
         self._attrFactorCollectors.update({key:self._collectAdditiveAttributeFactor for key in self._additiveAttributeFactors})
         self._attrFactorCollectors.update({'chassis/terrainResistance': self._collectTerrainResistance,
+         'chassis/terrainResistanceRotation': self._collectTerrainResistance,
          'invisibility': self._collectInvisibility,
          'damageMonitoringDelay': self._collectMinAttributeFactor,
          'artNotificationDelay': self._collectMinAttributeFactor})

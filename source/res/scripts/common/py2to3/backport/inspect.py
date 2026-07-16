@@ -13,7 +13,7 @@ def _joinseq(seq):
 
 
 def _strseq(obj, convert, join=_joinseq):
-    if type(obj) in (list, tuple):
+    if isinstance(obj, (list, tuple)):
         return join(lmap(lambda o, c=convert, j=join: _strseq(o, c, j), obj))
     else:
         return convert(obj)

@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/vehicle_hub/sub_presenters/armor/armor_sub_presenter.py
 from __future__ import absolute_import
-from functools import partial, cmp_to_key
-import typing
 import logging
+from functools import partial
+import typing
 import BigWorld
 import GUI
 import Math
@@ -33,6 +33,7 @@ from gui.impl.lobby.vehicle_hub.sub_presenters.armor.penetration_utils import se
 from gui.impl.lobby.vehicle_hub.sub_presenters.sub_presenter_base import SubPresenterBase
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.vehicle_modules import ModulesIconNames
+from gui.shared.sort_key import SortKey
 from gun_rotation_shared import calcPitchLimitsFromDesc
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -41,6 +42,7 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from uilogging.vehicle_hub.loggers import ArmorTabLogger
 if typing.TYPE_CHECKING:
+    import CGF
     from ClientSelectableCameraVehicle import ClientSelectableCameraVehicle
     from gui.Scaleform.framework.application import AppEntry
     from gui.impl.gen.view_models.views.lobby.vehicle_hub.views.sub_models.armor_model import ArmorModel
@@ -63,42 +65,46 @@ class _ModeBase(object):
         self.isEntered = False
 
 
-class _NominalMode(_ModeBase):
+class _ArmorMode(_ModeBase):
+
+    def enter(self):
+        super(_ArmorMode, self).enter()
+        gameObject = self._p.vehicleEntity.appearance.gameObject
+        if not gameObject.hasComponent(ArmorInspectorComponent):
+            comp = ArmorInspectorComponent()
+            comp.showProbability = self._isShowProbability()
+            gameObject.assignComponent(comp)
+
+    def exit(self):
+        super(_ArmorMode, self).exit()
+        gameObject = self._p.vehicleEntity.appearance.gameObject
+        comp = gameObject.findWrite(ArmorInspectorComponent)
+        if comp:
+            comp.fadeOnRemove = not self._p.isClosing
+            gameObject.removeComponent(ArmorInspectorComponent)
+
+    def _isShowProbability(self):
+        return False
+
+
+class _NominalMode(_ArmorMode):
 
     def enter(self):
         super(_NominalMode, self).enter()
         _logger.debug('Armor mode switched to nominal armor')
-        appearance = self._p.vehicleEntity.appearance
-        if not appearance.findComponentByType(ArmorInspectorComponent):
-            comp = appearance.createComponent(ArmorInspectorComponent)
-            comp.showProbability = False
 
-    def exit(self):
-        super(_NominalMode, self).exit()
-        comp = self._p.vehicleEntity.appearance.findComponentByType(ArmorInspectorComponent)
-        if comp is not None:
-            comp.fadeOnRemove = not self._p.isClosing
-        self._p.vehicleEntity.appearance.removeComponentByType(ArmorInspectorComponent)
-        return
+    def _isShowProbability(self):
+        return False
 
 
-class _PenetrationMode(_ModeBase):
+class _PenetrationMode(_ArmorMode):
 
     def enter(self):
         super(_PenetrationMode, self).enter()
         _logger.debug('Armor mode switched to penetration chance')
-        appearance = self._p.vehicleEntity.appearance
-        if not appearance.findComponentByType(ArmorInspectorComponent):
-            comp = appearance.createComponent(ArmorInspectorComponent)
-            comp.showProbability = True
 
-    def exit(self):
-        super(_PenetrationMode, self).exit()
-        comp = self._p.vehicleEntity.appearance.findComponentByType(ArmorInspectorComponent)
-        if comp is not None:
-            comp.fadeOnRemove = not self._p.isClosing
-        self._p.vehicleEntity.appearance.removeComponentByType(ArmorInspectorComponent)
-        return
+    def _isShowProbability(self):
+        return True
 
 
 class _NoArmorMode(_ModeBase):
@@ -527,7 +533,7 @@ class _ModulesSetup(object):
         gunsModel = vehicle.getGuns()
         turretsModel.clear()
         gunsModel.clear()
-        turrets = sorted(typeDescriptor.type.turrets[0], key=cmp_to_key(partial(_sortModules, typeDescriptor.type)))
+        turrets = sorted(typeDescriptor.type.turrets[0], key=partial(_ModulesSortKey, typeDescriptor.type))
         if hasTurrets:
             for turret in turrets:
                 turretModel = ArmorVehicleModule()
@@ -549,8 +555,9 @@ class _ModulesSetup(object):
             gunsModel.addViewModel(gunModel)
             gunItem = self._itemsCache.items.getItemByCD(gun.compactDescr)
             mechanics = gunModel.getMechanics()
-            for mechanicName in gunItem.getMechanics(typeDescriptor):
-                mechanics.addString(mechanicName.value)
+            for m in gunItem.getModuleMechanicItems(typeDescriptor):
+                if not m.isHidden:
+                    mechanics.addString(m.guiName.value)
 
             gunDependencies = gunModel.getDependencies()
             for turret in turrets:
@@ -659,8 +666,9 @@ class _AttackerSetup(object):
             gunModel.setCompactDescr(gun.compactDescr)
             mechanics = gunModel.getMechanics()
             gunItem = self._itemsCache.items.getItemByCD(gun.compactDescr)
-            for mechanicName in gunItem.getMechanics(attackerDescr):
-                mechanics.addString(mechanicName.value)
+            for m in gunItem.getModuleMechanicItems(attackerDescr):
+                if not m.isHidden:
+                    mechanics.addString(m.guiName.value)
 
             gunsModel.addViewModel(gunModel)
 
@@ -718,24 +726,34 @@ class _AttackerSetup(object):
             self._update(attackerModel, getDefaultAttackerVehicleConfigByCD(vehicleCD))
 
 
-def _sortModules(vehType, a, b):
-    if a.unlocks:
-        for unlockId in a.unlocks:
-            unlock = vehType.unlocksDescrs[unlockId]
-            if unlock[1] == b.compactDescr:
-                return -1
+class _ModulesSortKey(SortKey):
+    __slots__ = ('vehType', 'item')
 
-    if b.unlocks:
-        for unlockId in b.unlocks:
-            unlock = vehType.unlocksDescrs[unlockId]
-            if unlock[1] == a.compactDescr:
-                return 1
+    def __init__(self, vehType, item):
+        super(_ModulesSortKey, self).__init__()
+        self.vehType = vehType
+        self.item = item
 
-    return a.level - b.level
+    def _cmp(self, other):
+        a = self.item
+        b = other.item
+        if a.unlocks:
+            for unlockId in a.unlocks:
+                unlock = self.vehType.unlocksDescrs[unlockId]
+                if unlock[1] == b.compactDescr:
+                    return -1
+
+        if b.unlocks:
+            for unlockId in b.unlocks:
+                unlock = self.vehType.unlocksDescrs[unlockId]
+                if unlock[1] == a.compactDescr:
+                    return 1
+
+        return a.level - b.level
 
 
 def _getSortedGuns(vehType):
-    turrets = sorted(vehType.turrets[0], key=cmp_to_key(partial(_sortModules, vehType)))
+    turrets = sorted(vehType.turrets[0], key=partial(_ModulesSortKey, vehType))
     guns = []
     gunIds = []
     for turret in turrets:
@@ -745,4 +763,4 @@ def _getSortedGuns(vehType):
             guns.append(gun)
             gunIds.append(gun.compactDescr)
 
-    return sorted(guns, key=cmp_to_key(partial(_sortModules, vehType)))
+    return sorted(guns, key=partial(_ModulesSortKey, vehType))

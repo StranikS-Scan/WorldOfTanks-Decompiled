@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/realm_utils.py
 from __future__ import absolute_import
-from future.utils import with_metaclass
 import ResMgr as rmgr
 from constants import CURRENT_REALM, IS_CLIENT, IS_EDITOR, REALMS
+from py2to3.patched_future import with_metaclass
 
 def getRealmFilePath(filepath):
     parts = filepath.split('.')

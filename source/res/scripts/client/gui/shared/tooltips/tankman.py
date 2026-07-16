@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/tankman.py
+from __future__ import absolute_import
+from builtins import range
 from typing import List, Optional
 import nations
 from gui import makeHtmlString
@@ -98,8 +100,7 @@ class NotRecruitedTooltipData(BlocksTooltipData):
         items = super(NotRecruitedTooltipData, self)._packBlocks()
         item = self.context.buildItem(*args)
         self.item = item
-        blocks = list()
-        blocks.append(formatters.packImageTextBlockData(title=text_styles.highTitle(item.getFullUserName()), desc=text_styles.main(item.getLabel())))
+        blocks = [formatters.packImageTextBlockData(title=text_styles.highTitle(item.getFullUserName()), desc=text_styles.main(item.getLabel()))]
         specialIcon = item.getSpecialIcon()
         blocks.append(formatters.packImageBlockData(img=specialIcon if specialIcon is not None else item.getBigIcon(), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, width=350 if specialIcon is not None else -1, height=238 if specialIcon is not None else -1))
         blocks.append(formatters.packSeparatorBlockData(paddings=formatters.packPadding(top=-40)))
@@ -140,12 +141,11 @@ class SpecialTankmanTooltipData(BlocksTooltipData):
 
     def _packBlocks(self, tankmanData, groupName, *args, **kwargs):
         items = super(SpecialTankmanTooltipData, self)._packBlocks()
-        blocks = list()
         fullName = getFullUserName(tankmanData.nationID, tankmanData.firstNameID, tankmanData.lastNameID)
-        blocks.append(formatters.packImageTextBlockData(title=text_styles.highTitle(fullName), desc=text_styles.main(TOOLTIPS.getNotRecruitedTankmanEventLabel(groupName))))
-        blocks.append(formatters.packImageBlockData(img=getSpecialIconPath(tankmanData.nationID, tankmanData.iconID), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
-        blocks.append(formatters.packSeparatorBlockData(paddings=formatters.packPadding(top=-40), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
-        blocks.append(formatters.packTextBlockData(text_styles.main(TOOLTIPS.getNotRecruitedTankmanEventDesc(groupName)), useHtml=True, padding=formatters.packPadding(top=18)))
+        blocks = [formatters.packImageTextBlockData(title=text_styles.highTitle(fullName), desc=text_styles.main(TOOLTIPS.getNotRecruitedTankmanEventLabel(groupName))),
+         formatters.packImageBlockData(img=getSpecialIconPath(tankmanData.nationID, tankmanData.iconID), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER),
+         formatters.packSeparatorBlockData(paddings=formatters.packPadding(top=-40), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER),
+         formatters.packTextBlockData(text_styles.main(TOOLTIPS.getNotRecruitedTankmanEventDesc(groupName)), useHtml=True, padding=formatters.packPadding(top=18))]
         freeSkills = tankmanData.freeSkills
         if freeSkills:
             blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.NOTRECRUITEDTANKMAN_FREESKILLSTITLE), useHtml=True, padding=formatters.packPadding(top=17, bottom=10)))
@@ -154,7 +154,7 @@ class SpecialTankmanTooltipData(BlocksTooltipData):
         icon = backport.image(R.images.gui.maps.icons.tankmen.skills.big.new_skill_with_frame())
         if skillNum:
             blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.NOTRECRUITEDTANKMAN_SKILLSTITLE), useHtml=True, padding=formatters.packPadding(top=17, bottom=10)))
-            blocks.append(formatters.packImageListParameterBlockData(listIconSrc=[ formatters.packImageListIconData(icon) for _ in range(skillNum) ], columnWidth=52, rowHeight=52, verticalGap=10, horizontalGap=10))
+            blocks.append(formatters.packImageListParameterBlockData(listIconSrc=[formatters.packImageListIconData(icon)] * skillNum, columnWidth=52, rowHeight=52, verticalGap=10, horizontalGap=10))
         items.append(formatters.packBuildUpBlockData(blocks, padding=formatters.packPadding(bottom=-5)))
         return items
 
@@ -163,7 +163,7 @@ class SpecialTankmanTooltipData(BlocksTooltipData):
         skillsCost = 0
         while skillsCost <= freeXP:
             skillNum += 1
-            skillsCost += sum((TankmanDescr.levelUpXpCost(level, skillNum) for level in xrange(0, MAX_SKILL_LEVEL)))
+            skillsCost += sum((TankmanDescr.levelUpXpCost(level, skillNum) for level in range(0, MAX_SKILL_LEVEL)))
 
         return skillNum - 1
 

@@ -1,21 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/abilities/area_abilities.py
 import CGF
-import GenericComponents
 import Math
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from battle_royale.abilities.adaptation_restore_health import AdaptationHealthRestoreEffectArea
-from cgf_script.bonus_caps_rules import bonusCapsManager
-from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
-from cgf_script.managers_registrator import onAddedQuery
+from cgf_script.registration import ComponentProperty, registerComponent
 from battle_royale_artefacts import ThunderStrike, ZonesCircle
 
 @registerComponent
 class AreaAbilityVisualizer(object):
     editorTitle = 'Area Ability Visualizer'
-    category = 'Abilities'
-    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
-    areaTransform = ComponentProperty(type=CGFMetaTypes.LINK, value=GenericComponents.TransformComponent, editorName='Area object')
+    group = 'Abilities'
+    domain = CGF.Domain.ClientEditor
+    areaTransform = ComponentProperty(type=CGF.PropertyType.Link, value=CGF.TransformComponent, editorName='Area object')
 
     def __init__(self):
         super(AreaAbilityVisualizer, self).__init__()
@@ -23,8 +19,27 @@ class AreaAbilityVisualizer(object):
         return
 
 
-@bonusCapsManager(ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, CGF.DomainOption.DomainClient)
-class AreaAbilityVisualizationManager(CGF.ComponentManager):
+class AreaAbilityVisualizationSystem(CGF.System):
+    VisualizerActivated = CGF.ActivateReaction(CGF.ReactRw(AreaAbilityVisualizer))
+    ThunderStrikeActivated = CGF.ActivateReaction(AreaAbilityVisualizer, CGF.ReactRw(ThunderStrike))
+    ZonesCircleActivated = CGF.ActivateReaction(AreaAbilityVisualizer, CGF.ReactRw(ZonesCircle))
+    HealthRestoreActivated = CGF.ActivateReaction(AreaAbilityVisualizer, CGF.ReactRw(AdaptationHealthRestoreEffectArea))
+    TransformAccess = CGF.AccessReaction(CGF.Rw(CGF.TransformComponent))
+    Reactions = CGF.Reactions(VisualizerActivated, ThunderStrikeActivated, ZonesCircleActivated, HealthRestoreActivated, TransformAccess)
+
+    def update(self):
+        transformAccess = self.reaction(self.TransformAccess)
+        for visualizer in self.reaction(self.VisualizerActivated):
+            self.checkManualRadius(visualizer, transformAccess)
+
+        for visualizer, thunderStrike in self.reaction(self.ThunderStrikeActivated):
+            self.resizeThunderTransform(visualizer, thunderStrike, transformAccess)
+
+        for visualizer, zonesCircle in self.reaction(self.ZonesCircleActivated):
+            self.resizeZonesCircle(visualizer, zonesCircle, transformAccess)
+
+        for visualizer, area in self.reaction(self.HealthRestoreActivated):
+            self.resizeHealthRestoreAbilityCircle(visualizer, area, transformAccess)
 
     def __applyScale(self, transformComponent, radius):
         scaleMatrix = Math.Matrix()
@@ -33,25 +48,21 @@ class AreaAbilityVisualizationManager(CGF.ComponentManager):
         matrix.preMultiply(scaleMatrix)
         transformComponent.transform = matrix
 
-    def __resizeVisualizer(self, visualizer, radius):
+    def __resizeVisualizer(self, visualizer, radius, transformAccess):
         if visualizer.manualRadius is None:
-            self.__applyScale(visualizer.areaTransform(), radius)
+            self.__applyScale(transformAccess.find(visualizer.areaTransform), radius)
         return
 
-    @onAddedQuery(AreaAbilityVisualizer)
-    def checkManualRadius(self, visualizer):
+    def checkManualRadius(self, visualizer, transformAccess):
         if visualizer.manualRadius is not None:
-            self.__applyScale(visualizer.areaTransform(), visualizer.manualRadius)
+            self.__applyScale(transformAccess.find(visualizer.areaTransform), visualizer.manualRadius)
         return
 
-    @onAddedQuery(AreaAbilityVisualizer, ThunderStrike)
-    def resizeThunderTransform(self, visualizer, thunderStrike):
-        self.__resizeVisualizer(visualizer, thunderStrike.damageRadius)
+    def resizeThunderTransform(self, visualizer, thunderStrike, transformAccess):
+        self.__resizeVisualizer(visualizer, thunderStrike.damageRadius, transformAccess)
 
-    @onAddedQuery(AreaAbilityVisualizer, ZonesCircle)
-    def resizeZonesCircle(self, visualizer, zonesCircle):
-        self.__resizeVisualizer(visualizer, zonesCircle.radius)
+    def resizeZonesCircle(self, visualizer, zonesCircle, transformAccess):
+        self.__resizeVisualizer(visualizer, zonesCircle.radius, transformAccess)
 
-    @onAddedQuery(AreaAbilityVisualizer, AdaptationHealthRestoreEffectArea)
-    def resizeHealthRestoreAbilityCircle(self, visualizer, area):
-        self.__applyScale(visualizer.areaTransform(), area.teamMateRestoringRadius)
+    def resizeHealthRestoreAbilityCircle(self, visualizer, area, transformAccess):
+        self.__applyScale(transformAccess.find(visualizer.areaTransform), area.teamMateRestoringRadius)

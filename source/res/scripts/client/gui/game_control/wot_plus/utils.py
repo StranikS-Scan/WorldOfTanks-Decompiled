@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/wot_plus/utils.py
+from __future__ import absolute_import
 from collections import defaultdict
 import typing
+from future.utils import viewitems
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from constants import ARENA_BONUS_TYPE
 from constants import QUEUE_TYPE, ARENA_BONUS_TYPE_TO_QUEUE_TYPE
@@ -147,7 +149,7 @@ class ProBoostUtils(object):
             queueTypes = [queueType]
         if not cls._QUEUE_TYPE_TO_ARENA_BONUS_TYPES:
             cls._QUEUE_TYPE_TO_ARENA_BONUS_TYPES = defaultdict(set)
-            for abt, qbt in ARENA_BONUS_TYPE_TO_QUEUE_TYPE.iteritems():
+            for abt, qbt in viewitems(ARENA_BONUS_TYPE_TO_QUEUE_TYPE):
                 cls._QUEUE_TYPE_TO_ARENA_BONUS_TYPES[qbt].add(abt)
 
         for queueType in queueTypes:

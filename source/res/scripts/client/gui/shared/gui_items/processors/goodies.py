@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/goodies.py
+from __future__ import absolute_import
 import logging
 import typing
 import BigWorld
@@ -22,7 +23,7 @@ class BoosterProcessor(Processor):
         self.booster = booster
         self.opType = opType
 
-    def _response(self, code, callback, ctx=None, errStr=''):
+    def _response(self, code, callback, errStr='', ctx=None):
         if code < 0:
             _logger.error("Server responses an error [%s] while process %s '%s'", code2str(code), self.booster.boosterGuiType, str(self.booster))
             return callback(self._errorHandler(code, ctx=ctx, errStr=errStr))

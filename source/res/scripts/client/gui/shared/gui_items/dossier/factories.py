@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/factories.py
+from __future__ import absolute_import
+from future.utils import viewitems
 import nations
 from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, getType as getAchieveType, ACHIEVEMENT_BLOCK as _AB, RARE_STORAGE_RECORD, HONORED_RANK_RECORD
 from gui.shared.gui_items.dossier import achievements as _as
@@ -69,7 +71,7 @@ class _SequenceAchieveFactory(_AchieveFactory):
             counts[achieveID] = achieves.count(achieveID)
 
         result = {}
-        for achieveID, count in counts.iteritems():
+        for achieveID, count in viewitems(counts):
             factory = getAchievementFactory((self._block, achieveID), self._dossier)
             if factory is not None:
                 achieve = factory.create(value=count)
@@ -79,8 +81,8 @@ class _SequenceAchieveFactory(_AchieveFactory):
         return result
 
     @classmethod
-    def get(cls, defaultClass):
-        return lambda name, block, dossier: cls(defaultClass, name, block, dossier)
+    def get(cls, achieveClass):
+        return lambda name, block, dossier: cls(achieveClass, name, block, dossier)
 
     def isInDossier(self):
         return True

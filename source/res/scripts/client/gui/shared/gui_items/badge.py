@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/badge.py
+from __future__ import absolute_import
 import re
 import typing
+from past.builtins import cmp
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import LAST_BADGES_VISIT
 from dossiers2.ui.achievements import BADGES_BLOCK
@@ -50,14 +52,6 @@ class Badge(GUIItem):
             if self.isAchieved:
                 self.achievedAt = receivedBadges[self.badgeID]
         return
-
-    def __cmp__(self, other):
-        if self.achievedAt == other.achievedAt:
-            return cmp(self.getWeight(), other.getWeight())
-        elif self.achievedAt is None:
-            return 1
-        else:
-            return -1 if other.achievedAt is None else cmp(other.achievedAt, self.achievedAt)
 
     def hasDynamicContent(self):
         return False
@@ -172,6 +166,14 @@ class Badge(GUIItem):
     def getBadgeIDFromIconPath(iconPath):
         m = re.search('badge_([0-9]+)*', iconPath)
         return m.group(1) if m else ''
+
+    def _compare(self, other):
+        if self.achievedAt == other.achievedAt:
+            return cmp(self.getWeight(), other.getWeight())
+        elif self.achievedAt is None:
+            return 1
+        else:
+            return -1 if other.achievedAt is None else cmp(other.achievedAt, self.achievedAt)
 
     def __getIconPath(self, size, shortIconName=False):
         iconPostfix = self.getIconPostfix()

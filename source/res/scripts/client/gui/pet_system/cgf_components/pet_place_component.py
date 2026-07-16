@@ -2,12 +2,12 @@
 # Embedded file name: scripts/client/gui/pet_system/cgf_components/pet_place_component.py
 import typing
 import WWISE
-from collections import namedtuple
-from functools import partial
 import Math
 import CGF
-from cgf_script.component_meta_class import CGFMetaTypes, ComponentProperty, registerComponent
-from cgf_script.managers_registrator import onAddedQuery
+from typing import List
+from collections import namedtuple
+from functools import partial
+from cgf_script.registration import ComponentProperty, registerComponent
 from gui.pet_system.constants import PetPlaceName
 from helpers import dependency
 from pet_system_common import pet_constants
@@ -25,29 +25,31 @@ def getPetPrefabByID(petID, petContoller=None):
 
 @registerComponent
 class PetPlaceComponent(object):
-    domain = CGF.DomainOption.DomainClient
+    domain = CGF.Domain.Client
     editorTitle = 'Pet Place Component'
-    category = 'Pet system'
+    group = 'Pets'
     names = {name:name for name in PetPlaceName.ALL}
-    placeName = ComponentProperty(type=CGFMetaTypes.STRING, editorName='place name', value='default', annotations={'comboBox': names})
+    placeName = ComponentProperty(type=CGF.PropertyType.String, editorName='place name', value='default', annotations={'comboBox': names})
 
 
 _ActivePrefabInfo = namedtuple('_ActivePrefabInfo', ['petID', 'prefabGO'])
 _LoadingPrefabInfo = namedtuple('_LoadingPrefabInfo', ['prefabPath', 'placeGO', 'petID'])
 
-class PetPrefabManager(CGF.ComponentManager):
+class PetPrefabSystem(CGF.System):
     petController = dependency.descriptor(IPetSystemController)
     lobbyContext = dependency.descriptor(ILobbyContext)
     _activePet = None
     _loadingPet = None
-    placeQuery = CGF.QueryConfig(CGF.GameObject, PetPlaceComponent)
+    PlacementActivated = CGF.ActivateReaction(CGF.GameObject, CGF.ReactRw(PetPlaceComponent))
+    PlaceIterate = CGF.IterateReaction(CGF.ActiveOnly, CGF.GameObject, CGF.Rw(PetPlaceComponent))
+    Reactions = CGF.Reactions(PlacementActivated, PlaceIterate)
 
-    def activate(self):
+    def onMappingLoaded(self):
         self.petController.onUpdatePrefab += self.updateActivePet
         self.petController.petProxy.onUpdatePetPlace += self.onUpdatePetPlace
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
 
-    def deactivate(self):
+    def onMappingUnloaded(self):
         self.petController.onUpdatePrefab -= self.updateActivePet
         self.petController.petProxy.onUpdatePetPlace -= self.onUpdatePetPlace
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
@@ -55,50 +57,47 @@ class PetPrefabManager(CGF.ComponentManager):
         self._loadingPet = None
         return
 
-    @property
-    def __hierarchy(self):
-        return CGF.HierarchyManager(self.spaceID)
-
-    @onAddedQuery(CGF.GameObject, PetPlaceComponent)
-    def onPetPlaceAdded(self, placeGO, placeComp):
-        if self._activePet:
-            return
-        else:
+    def update(self):
+        for go, place in self.reaction(self.PlacementActivated):
+            if self._activePet:
+                return
             petID = self.petController.getPetIDInHangar()
             if petID is None:
                 return
             prefab = getPetPrefabByID(petID)
-            if placeComp.placeName == self.petController.petProxy.placeName:
-                self._createPet(prefab, placeGO, petID)
-            return
+            if place.placeName == self.petController.petProxy.placeName:
+                self._createPet(prefab, go, petID)
+
+        return
 
     def _createPet(self, prefabPath, placeGO, petID):
         loadingPet = _LoadingPrefabInfo(prefabPath, placeGO, petID)
         if self._loadingPet and self._loadingPet == loadingPet:
             return
         self._loadingPet = loadingPet
-        CGF.loadGameObjectIntoHierarchy(prefabPath, placeGO, Math.Vector3(0, 0, 0), partial(self._onPrefabLoaded, loadingPet, petID))
+        CGF.loadAndCreatePrefabWithParent(prefabPath, placeGO, Math.Vector3(0, 0, 0), partial(self._onPrefabLoaded, loadingPet, petID))
         self._setRTPC(petID)
 
     def _removePet(self):
         if self._activePet:
-            CGF.removeGameObject(self._activePet.prefabGO)
+            self._activePet.prefabGO.destroy()
             self._activePet = None
         return
 
     def _setRTPC(self, petID):
         WWISE.WW_setRTCPGlobal(PET_RTPC_DOG_TYPE, petID - 1)
 
-    def _onPrefabLoaded(self, loadingPet, petID, prefabGO):
+    def _onPrefabLoaded(self, loadingPet, petID, objects, queue):
         if self._loadingPet:
-            self._activePet = _ActivePrefabInfo(petID, prefabGO)
+            root = objects[0]
+            self._activePet = _ActivePrefabInfo(petID, queue.gameObject(root))
             if self._loadingPet != loadingPet:
-                self._removePet()
-            else:
-                self._loadingPet = None
+                self._activePet = None
+                return False
+            self._loadingPet = None
         else:
-            CGF.removeGameObject(prefabGO)
-        return
+            return False
+        return True
 
     def updateActivePet(self, petID):
         if self._activePet and self._activePet.petID == petID:
@@ -111,7 +110,7 @@ class PetPrefabManager(CGF.ComponentManager):
             if not prefab:
                 return
             self._removePet()
-            for placeGO, placeComp in self.placeQuery:
+            for placeGO, placeComp in self.reaction(self.PlaceIterate):
                 if placeComp.placeName == self.petController.petProxy.placeName:
                     self._createPet(prefab, placeGO, petID)
                     return
@@ -128,11 +127,11 @@ class PetPrefabManager(CGF.ComponentManager):
                 self.updateActivePet(self.petController.getPetIDInHangar())
 
     def onUpdatePetPlace(self, petPlaceName):
-        if not self._activePet:
+        if not self._activePet or not self._activePet.prefabGO:
             return
-        parent = self.__hierarchy.getParent(self._activePet.prefabGO)
-        for placeGO, placeComp in self.placeQuery:
+        parent = self.hierarchy.getParent(self._activePet.prefabGO)
+        for placeGO, placeComp in self.reaction(self.PlaceIterate):
             if placeComp.placeName == petPlaceName:
                 if parent == placeGO:
                     return
-                self.__hierarchy.changeParent(self._activePet.prefabGO, placeGO)
+                self._activePet.prefabGO.findWrite(CGF.HierarchyComponent).parent = self.gom.gameObjectUuid(placeGO)

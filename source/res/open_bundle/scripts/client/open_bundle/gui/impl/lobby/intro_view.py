@@ -47,4 +47,4 @@ class Intro(ViewImpl):
 class IntroWindow(WindowImpl):
 
     def __init__(self, bundleID):
-        super(IntroWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, layer=WindowLayer.FULLSCREEN_WINDOW, content=Intro(layoutID=R.views.open_bundle.mono.lobby.intro(), model=IntroViewModel, bundleID=bundleID))
+        super(IntroWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, layer=WindowLayer.TOP_WINDOW, content=Intro(layoutID=R.views.open_bundle.mono.lobby.intro(), model=IntroViewModel, bundleID=bundleID))

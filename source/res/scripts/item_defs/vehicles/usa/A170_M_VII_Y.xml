@@ -14,10 +14,10 @@
     <backward>	18	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.025	</moving>
-    <still>	0.049	</still>
+    <moving>	0.022	</moving>
+    <still>	0.045	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
-    <firePenalty>	0.074	</firePenalty>
+    <firePenalty>	0.067	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -58,7 +58,7 @@
       <armor_13>	177.8	</armor_13>
       <armor_17>	152.4	</armor_17>
       <armor_19>	139.7	</armor_19>
-      <armor_22>	120.7	</armor_22>
+      <armor_22>	146.1	</armor_22>
       <armor_24>	146.1	</armor_24>
       <armor_25>	127	</armor_25>
       <armor_26>	95.3	</armor_26>
@@ -70,7 +70,7 @@
     </armor>
     <primaryArmor>	armor_22 armor_26 armor_29	</primaryArmor>
     <weight>	21250	</weight>
-    <maxHealth>	1480	</maxHealth>
+    <maxHealth>	1600	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	230	</maxHealth>
       <maxRegenHealth>	173	</maxRegenHealth>
@@ -80,6 +80,13 @@
       <undamaged>	vehicles/american/A170_M_VII_Y/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/american/A170_M_VII_Y/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/american/A170_M_VII_Y/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <A170_M_VII_Y_FCC_3Dst>
+          <undamaged>	vehicles/american/A170_M_VII_Y/_skins/A170_M_VII_Y_FCC_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A170_M_VII_Y/_skins/A170_M_VII_Y_FCC_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A170_M_VII_Y/_skins/A170_M_VII_Y_FCC_3Dst/crash/lod0/Hull.model	</exploded>
+        </A170_M_VII_Y_FCC_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -106,6 +113,16 @@
         <rayEnd>	-0.033652 0.125725 2.684612	</rayEnd>
         <rayUp>	0.058292 0.497201 -0.865675	</rayUp>
         <size>	0.35	</size>
+        <isUVProportional>	false	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10001	</slotId>
+        <compatibleModels>	A170_M_VII_Y_FCC_3Dst	</compatibleModels>
+        <rayStart>	-0.650796 0.615054 2.236712	</rayStart>
+        <rayEnd>	-0.624871 0.443159 2.137818	</rayEnd>
+        <rayUp>	0.029371 0.501787 -0.864493	</rayUp>
+        <size>	0.3	</size>
         <isUVProportional>	false	</isUVProportional>
       </slot>
       <slot>
@@ -361,6 +378,17 @@
         <clipAngle>	0.355801	</clipAngle>
       </slot>
       <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15022	</slotId>
+        <position>	0.298356 1.392282 2.563426	</position>
+        <rotation>	0.516419 0.000016 3.13986	</rotation>
+        <scale>	0.543441 0.344693 0.54344	</scale>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A170_M_VII_Y_FCC_3Dst	</compatibleModels>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.355801	</clipAngle>
+      </slot>
+      <slot>
         <slotType>	attachment	</slotType>
         <slotId>	18000	</slotId>
         <position>	-1.78 0.09644 -0.452663	</position>
@@ -449,6 +477,13 @@
         <undamaged>	vehicles/american/A170_M_VII_Y/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A170_M_VII_Y/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A170_M_VII_Y/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <A170_M_VII_Y_FCC_3Dst>
+            <undamaged>	vehicles/american/A170_M_VII_Y/_skins/A170_M_VII_Y_FCC_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A170_M_VII_Y/_skins/A170_M_VII_Y_FCC_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A170_M_VII_Y/_skins/A170_M_VII_Y_FCC_3Dst/crash/lod0/Chassis.model	</exploded>
+          </A170_M_VII_Y_FCC_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1054,6 +1089,12 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <A170_M_VII_Y_FCC_3Dst>
+              <segmentModelLeft>	vehicles/american/A170_M_VII_Y/_skins/A170_M_VII_Y_FCC_3Dst/track/segment_pair_0.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/american/A170_M_VII_Y/_skins/A170_M_VII_Y_FCC_3Dst/track/segment_pair_0.model	</segmentModelRight>
+            </A170_M_VII_Y_FCC_3Dst>
+          </modelSets>
         </trackPair>
         <trackPair>
           <trackPairIdx>	1	</trackPairIdx>
@@ -1070,6 +1111,14 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <A170_M_VII_Y_FCC_3Dst>
+              <segmentModelLeft>	vehicles/american/A170_M_VII_Y/_skins/A170_M_VII_Y_FCC_3Dst/track/segment_01_pair_1.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/american/A170_M_VII_Y/_skins/A170_M_VII_Y_FCC_3Dst/track/segment_01_pair_1.model	</segmentModelRight>
+              <segment2ModelLeft>	vehicles/american/A170_M_VII_Y/_skins/A170_M_VII_Y_FCC_3Dst/track/segment_02_pair_1.model	</segment2ModelLeft>
+              <segment2ModelRight>	vehicles/american/A170_M_VII_Y/_skins/A170_M_VII_Y_FCC_3Dst/track/segment_02_pair_1.model	</segment2ModelRight>
+            </A170_M_VII_Y_FCC_3Dst>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -1084,6 +1133,11 @@
             <model>	vehicles/american/A170_M_VII_Y/track/segment_pair_0.model	</model>
             <length>	0.118641	</length>
           </mainSegment>
+          <modelSets>
+            <A170_M_VII_Y_FCC_3Dst>
+              <mainSegmentModel>	vehicles/american/A170_M_VII_Y/_skins/A170_M_VII_Y_FCC_3Dst/track/segment_pair_0.model	</mainSegmentModel>
+            </A170_M_VII_Y_FCC_3Dst>
+          </modelSets>
           <springsLength>
             <backwardMovement>
               <back>	0.112795	</back>
@@ -1319,6 +1373,12 @@
             <model>	vehicles/american/A170_M_VII_Y/track/segment_02_pair_1.model	</model>
             <length>	0.08908	</length>
           </secSegment>
+          <modelSets>
+            <A170_M_VII_Y_FCC_3Dst>
+              <mainSegmentModel>	vehicles/american/A170_M_VII_Y/_skins/A170_M_VII_Y_FCC_3Dst/track/segment_01_pair_1.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/american/A170_M_VII_Y/_skins/A170_M_VII_Y_FCC_3Dst/track/segment_02_pair_1.model	</secSegmentModel>
+            </A170_M_VII_Y_FCC_3Dst>
+          </modelSets>
           <springsLength>
             <backwardMovement>
               <back>	0.084845	</back>
@@ -1570,6 +1630,11 @@
             <model>	vehicles/american/A170_M_VII_Y/track/segment_pair_0.model	</model>
             <length>	0.118091	</length>
           </mainSegment>
+          <modelSets>
+            <A170_M_VII_Y_FCC_3Dst>
+              <mainSegmentModel>	vehicles/american/A170_M_VII_Y/_skins/A170_M_VII_Y_FCC_3Dst/track/segment_pair_0.model	</mainSegmentModel>
+            </A170_M_VII_Y_FCC_3Dst>
+          </modelSets>
           <springsLength>
             <backwardMovement>
               <back>	0.110745	</back>
@@ -1805,6 +1870,12 @@
             <model>	vehicles/american/A170_M_VII_Y/track/segment_02_pair_1.model	</model>
             <length>	0.090618	</length>
           </secSegment>
+          <modelSets>
+            <A170_M_VII_Y_FCC_3Dst>
+              <mainSegmentModel>	vehicles/american/A170_M_VII_Y/_skins/A170_M_VII_Y_FCC_3Dst/track/segment_01_pair_1.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/american/A170_M_VII_Y/_skins/A170_M_VII_Y_FCC_3Dst/track/segment_02_pair_1.model	</secSegmentModel>
+            </A170_M_VII_Y_FCC_3Dst>
+          </modelSets>
           <springsLength>
             <backwardMovement>
               <back>	0.084845	</back>
@@ -2058,6 +2129,7 @@
       <price>	60000	</price>
       <armor>
         <armor_1>	323.9	</armor_1>
+        <armor_2>	266.7	</armor_2>
         <armor_4>	279.4	</armor_4>
         <armor_5>	247.7	</armor_5>
         <armor_6>	285.8	</armor_6>
@@ -2091,14 +2163,14 @@
       </armor>
       <primaryArmor>	armor_1 armor_25 armor_30	</primaryArmor>
       <weight>	8600	</weight>
-      <maxHealth>	370	</maxHealth>
+      <maxHealth>	400	</maxHealth>
       <rotationSpeed>	35	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
         <maxRegenHealth>	85	</maxRegenHealth>
         <repairCost>	9	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	380	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	110	</maxHealth>
         <maxRegenHealth>	55	</maxRegenHealth>
@@ -2107,9 +2179,9 @@
       <guns>
         <_120mm_T123E1>	shared	  <maxAmmo>	40	</maxAmmo>
           <armor>
-            <armor_1>	247.7	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	317.5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	222.3	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	292.1	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	215.9	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
@@ -2119,7 +2191,7 @@
             </armor_5>
             <armor_6>	19.1	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	209.6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_7>	260.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_7>
             <gun>	50	</gun>
           </armor>
@@ -2129,14 +2201,14 @@
             <maxPitch>	0 10 0.402778 10 0.444444 6 0.555556 6 0.597222 10 1 10	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	10.2	</reloadTime>
+          <reloadTime>	9.7	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.2	</aimingTime>
-          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
+          <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -2160,12 +2232,31 @@
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48000	</slotId>
+              <position>	0 0 0	</position>
+              <rotation>	0 0 0	</rotation>
+              <scale>	1 1 1	</scale>
+              <hiddenForUser>	true	</hiddenForUser>
+              <compatibleModels>	A170_M_VII_Y_FCC_3Dst	</compatibleModels>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	0.000001 0 2.8213	</rayStart>
               <rayEnd>	0.000001 0 3.4213	</rayEnd>
               <rayUp>	0.11 0 0	</rayUp>
               <size>	0.6	</size>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <compatibleModels>	A170_M_VII_Y_FCC_3Dst	</compatibleModels>
+              <rayStart>	0.000001 0 3.1413	</rayStart>
+              <rayEnd>	0.000001 0 3.7113	</rayEnd>
+              <rayUp>	0.11 0 0	</rayUp>
+              <size>	0.57	</size>
+              <isUVProportional>	false	</isUVProportional>
             </slot>
           </customizationSlots>
           <customization>
@@ -2178,6 +2269,13 @@
             <undamaged>	vehicles/american/A170_M_VII_Y/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/american/A170_M_VII_Y/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/american/A170_M_VII_Y/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <A170_M_VII_Y_FCC_3Dst>
+                <undamaged>	vehicles/american/A170_M_VII_Y/_skins/A170_M_VII_Y_FCC_3Dst/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/american/A170_M_VII_Y/_skins/A170_M_VII_Y_FCC_3Dst/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/american/A170_M_VII_Y/_skins/A170_M_VII_Y_FCC_3Dst/crash/lod0/Gun_02.model	</exploded>
+              </A170_M_VII_Y_FCC_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A170_M_VII_Y/collision/Gun_02.model	</collisionModelServer>
@@ -2196,6 +2294,13 @@
         <undamaged>	vehicles/american/A170_M_VII_Y/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/american/A170_M_VII_Y/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/american/A170_M_VII_Y/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <A170_M_VII_Y_FCC_3Dst>
+            <undamaged>	vehicles/american/A170_M_VII_Y/_skins/A170_M_VII_Y_FCC_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A170_M_VII_Y/_skins/A170_M_VII_Y_FCC_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A170_M_VII_Y/_skins/A170_M_VII_Y_FCC_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </A170_M_VII_Y_FCC_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/american/A170_M_VII_Y/collision/Turret_01.model	</collisionModelServer>
@@ -2679,6 +2784,41 @@
           <showOn>	4368	</showOn>
           <clipAngle>	1.06532	</clipAngle>
           <anchorShift>	1.17772	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35038	</slotId>
+          <position>	-0.976092 2.099407 0.768447	</position>
+          <rotation>	1.177819 -1.112371 3.08216	</rotation>
+          <scale>	0.480435 0.261078 0.480434	</scale>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A170_M_VII_Y_FCC_3Dst	</compatibleModels>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.859194	</clipAngle>
+          <anchorShift>	0.05	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35039	</slotId>
+          <position>	0.976 2.09941 0.768447	</position>
+          <rotation>	1.177748 1.112298 -3.082077	</rotation>
+          <scale>	0.480435 0.261078 0.480434	</scale>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A170_M_VII_Y_FCC_3Dst	</compatibleModels>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.137955	</clipAngle>
+          <anchorShift>	0.05	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35040	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A170_M_VII_Y_FCC_3Dst	</compatibleModels>
+          <position>	-0.384661 2.713063 0.603296	</position>
+          <rotation>	0.330211 0.000355 3.14	</rotation>
+          <scale>	0.539285 0.3 0.539282	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.685799	</clipAngle>
         </slot>
         <slot>
           <slotType>	attachment	</slotType>

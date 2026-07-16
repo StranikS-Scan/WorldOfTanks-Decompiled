@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 import BigWorld
 from script_component.DynamicScriptComponent import DynamicScriptComponent
-from vehicle_systems.tankStructure import VehiclePartsTuple, TankPartNames
+from vehicle_systems.tankStructure import VehiclePartsTuple
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.gui.battle_session import IBattleSessionProvider
 from helpers import dependency
@@ -21,6 +21,7 @@ class LSVehicleDissolveComponent(DynamicScriptComponent):
         super(LSVehicleDissolveComponent, self).__init__()
         self.__callbackDelayer = CallbackDelayer()
         self.__dissolveHandler = None
+        self.__dissolveFashions = None
         return
 
     def onDestroy(self):
@@ -33,7 +34,7 @@ class LSVehicleDissolveComponent(DynamicScriptComponent):
     def _onAvatarReady(self):
         appearance = self.entity.appearance
         self.entity.events.onAppearanceReady += self.__onAppearanceReady
-        if appearance is not None:
+        if appearance is not None and appearance.isConstructed:
             if appearance.isAlive:
                 self.__onAppearanceReady()
             else:
@@ -48,6 +49,7 @@ class LSVehicleDissolveComponent(DynamicScriptComponent):
     def __onAppearanceReady(self):
         self.lsBattleGuiCtrl.setVehicleHidden(self.entity.id, False)
         self.__dissolveHandler = None
+        self.__dissolveFashions = None
         self.__callbackDelayer.clearCallbacks()
         appearance = self.entity.appearance
         if appearance.isAlive:
@@ -60,21 +62,24 @@ class LSVehicleDissolveComponent(DynamicScriptComponent):
         vehicle = self.entity
         if vehicle.isDestroyed or vehicle.health > 0:
             return
-        appearance = vehicle.appearance
-        if not appearance.damageState.isCurrentModelDamaged:
+        elif self.__dissolveHandler is not None:
             return
-        fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(), BigWorld.WGVehicleFashion(), BigWorld.WGVehicleFashion(), BigWorld.WGVehicleFashion())
-        appearance._setFashions(fashions, appearance.isTurretDetached)
-        self.__dissolveHandler = BigWorld.PyDissolveHandler()
-        for fashionIdx, _ in enumerate(TankPartNames.ALL):
-            fashion = appearance.fashions[fashionIdx]
-            fashion.addMaterialHandler(self.__dissolveHandler)
-            fashion.addTrackMaterialHandler(self.__dissolveHandler)
+        else:
+            appearance = vehicle.appearance
+            if not appearance.damageState.isCurrentModelDamaged:
+                return
+            self.__dissolveFashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(), BigWorld.WGVehicleFashion(), BigWorld.WGVehicleFashion(), BigWorld.WGVehicleFashion())
+            appearance._setFashions(self.__dissolveFashions, appearance.isTurretDetached)
+            self.__dissolveHandler = BigWorld.PyDissolveHandler()
+            for fashion in self.__dissolveFashions:
+                fashion.addMaterialHandler(self.__dissolveHandler)
+                fashion.addTrackMaterialHandler(self.__dissolveHandler)
 
-        self.__dissolveHandler.setEnabled(True)
-        effectDuration = BigWorld.serverTime() - self.deathTime if self.deathTime > 0.0 else 0.0
-        initialFactor = 0.0 if effectDuration < _INSTANT_DISSOLVE_TIME_PASSED else _DISSOLVE_INSTANT_FACTOR
-        self.__dissolve(initialFactor)
+            self.__dissolveHandler.setEnabled(True)
+            effectDuration = BigWorld.serverTime() - self.deathTime if self.deathTime > 0.0 else 0.0
+            initialFactor = 0.0 if effectDuration < _INSTANT_DISSOLVE_TIME_PASSED else _DISSOLVE_INSTANT_FACTOR
+            self.__dissolve(initialFactor)
+            return
 
     def __dissolve(self, factor):
         factor += _DISSOLVE_FACTOR_STEP
@@ -83,9 +88,11 @@ class LSVehicleDissolveComponent(DynamicScriptComponent):
             self.__callbackDelayer.delayCallback(_DISSOLVE_TIME_TICK, self.__dissolve, factor)
         else:
             self.__hideModel()
-            for fashionIdx, _ in enumerate(TankPartNames.ALL):
-                self.entity.appearance.fashions[fashionIdx].removeMaterialHandler(self.__dissolveHandler)
+            if self.__dissolveFashions is not None:
+                for fashion in self.__dissolveFashions:
+                    fashion.removeMaterialHandler(self.__dissolveHandler)
 
+                self.__dissolveFashions = None
             self.__dissolveHandler = None
         return
 

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/unit_helpers/ExtrasHandler.py
-import cPickle
-from debug_utils import LOG_DEBUG_DEV
+from __future__ import absolute_import
+from future.moves import pickle
 
 class EmptyExtrasHandler(object):
 
@@ -30,22 +30,23 @@ class EmptyExtrasHandler(object):
 class SimpleExtrasHandler(EmptyExtrasHandler):
 
     def pack(self, extras):
-        return cPickle.dumps(extras, -1)
+        return pickle.dumps(extras, -1)
 
     def unpack(self, extrasStr):
-        return cPickle.loads(extrasStr)
+        return pickle.loads(extrasStr)
 
     def reset(self, extras):
         return extras
 
     def updateUnitExtras(self, extras, updateStr):
-        update = cPickle.loads(updateStr)
+        update = pickle.loads(updateStr)
         extras.update(update)
 
 
 class ClanBattleExtrasHandler(SimpleExtrasHandler):
 
     def __init__(self, unit=None):
+        super(ClanBattleExtrasHandler, self).__init__(unit)
         self._unit = unit
         from unit_helpers.MsgProcessor import ClanBattleMgrMsgProcessor
         self._processor = ClanBattleMgrMsgProcessor(unit)

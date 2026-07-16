@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/ranked/ranked_battles_division_tooltip.py
+from __future__ import absolute_import
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles

@@ -1,133 +1,129 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/gui/skill.py
-from abc import ABCMeta, abstractproperty, abstractmethod
+from __future__ import absolute_import
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from typing import Optional
 
-class ISkill:
-    __metaclass__ = ABCMeta
+class ISkill(object):
 
-    @abstractmethod
+    @property
     def name(self):
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
+    @property
     def customName(self):
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
+    @property
     def crewCustomName(self):
-        pass
+        raise NotImplementedError
 
 
 class ISkillPresenter(ISkill):
-    __metaclass__ = ABCMeta
 
-    @abstractmethod
+    @property
     def userName(self):
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
+    @property
     def description(self):
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
+    @property
     def shortDescription(self):
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
+    @property
     def maxLvlDescription(self):
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
+    @property
     def currentLvlDescription(self):
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
+    @property
     def altDescription(self):
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
+    @property
     def altInfo(self):
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
+    @property
     def icon(self):
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
+    @property
     def extensionLessIconName(self):
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
+    @property
     def bigIconPath(self):
-        pass
+        raise NotImplementedError
 
 
 class ISkillData(ISkill):
-    __metaclass__ = ABCMeta
 
-    @abstractproperty
+    @property
     def level(self):
-        pass
+        raise NotImplementedError
 
-    @abstractproperty
+    @property
     def roleType(self):
-        pass
+        raise NotImplementedError
 
-    @abstractproperty
+    @property
     def typeName(self):
-        pass
+        raise NotImplementedError
 
-    @abstractproperty
+    @property
     def isEnable(self):
-        pass
+        raise NotImplementedError
 
-    @abstractproperty
+    @property
     def isZero(self):
-        pass
+        raise NotImplementedError
 
-    @abstractproperty
+    @property
     def isSituational(self):
-        pass
+        raise NotImplementedError
 
-    @abstractproperty
+    @property
     def isLearned(self):
-        pass
+        raise NotImplementedError
 
-    @abstractproperty
+    @property
     def isLearnedAsMajor(self):
-        pass
+        raise NotImplementedError
 
-    @abstractproperty
+    @property
     def isLearnedAsBonus(self):
-        pass
+        raise NotImplementedError
 
-    @abstractproperty
+    @property
     def isMaxLevel(self):
-        pass
+        raise NotImplementedError
 
-    @abstractproperty
+    @property
     def isSkillActive(self):
-        pass
+        raise NotImplementedError
 
-    @abstractproperty
+    @property
     def isRelevant(self):
-        pass
+        raise NotImplementedError
 
-    @abstractproperty
+    @property
     def learnState(self):
-        pass
+        raise NotImplementedError
 
-    @abstractproperty
+    @property
     def skillRole(self):
-        pass
+        raise NotImplementedError
 
-    @abstractproperty
+    @property
     def tankmanRole(self):
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
     def setIsSkillActive(self, isSkillActive):
-        pass
+        raise NotImplementedError

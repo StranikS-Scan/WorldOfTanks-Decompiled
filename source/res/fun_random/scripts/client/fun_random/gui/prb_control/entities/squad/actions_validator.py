@@ -7,7 +7,7 @@ from fun_random.gui.feature.util.fun_wrappers import hasDesiredSubMode
 from gui.periodic_battles.prb_control.actions_validator import SquadPrimeTimeValidator
 from gui.prb_control.entities.base.actions_validator import ActionsValidatorComposite
 from gui.prb_control.entities.base.squad.actions_validator import SquadActionsValidator, SquadVehiclesValidator
-from gui.prb_control.entities.random.squad.actions_validator import BalancedSquadVehiclesValidator, BalancedSquadSlotsValidator, RoleForbiddenSquadVehiclesValidator
+from gui.prb_control.entities.random.squad.actions_validator import BalancedSquadVehiclesValidator, BalancedSquadSlotsValidator, SquadRestrictionsVehiclesValidator
 
 class _FunRandomSquadStateValidator(SquadPrimeTimeValidator, FunSubModesWatcher):
 
@@ -34,4 +34,4 @@ class FunRandomActionsValidator(SquadActionsValidator):
         return ActionsValidatorComposite(entity, validators=[baseValidator, BalancedSquadSlotsValidator(entity)])
 
     def _createVehiclesValidator(self, entity):
-        return ActionsValidatorComposite(entity, validators=[_FunRandomSquadVehicleValidator(entity), BalancedSquadVehiclesValidator(entity), RoleForbiddenSquadVehiclesValidator(entity)])
+        return ActionsValidatorComposite(entity, validators=[_FunRandomSquadVehicleValidator(entity), BalancedSquadVehiclesValidator(entity), SquadRestrictionsVehiclesValidator(entity)])

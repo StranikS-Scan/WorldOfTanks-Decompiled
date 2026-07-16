@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/artefacts_helpers.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from typing import Optional, Dict, Set, Tuple, List, TYPE_CHECKING
 import nations
 from constants import MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
@@ -80,7 +82,7 @@ class SubFilter(object):
         info = '{}: nationIDs = {}, typeFilter = {}'.format(self.__class__.__name__, self._nationIDs, str(self._typeFilter))
         if self._compFilters:
             info += ', componentFilters:\n'
-            for compName, compFilter in self._compFilters.iteritems():
+            for compName, compFilter in viewitems(self._compFilters):
                 info += '\t{}: {}\n'.format(compName, str(compFilter))
 
         return info
@@ -98,7 +100,7 @@ class SubFilter(object):
         return False if self._nationIDs and nationID not in self._nationIDs else self._typeFilter.isItemCompatible(vehicleType)
 
     def isComponentsCompatible(self, vehicleDescr):
-        for compName, compFilter in self._compFilters.iteritems():
+        for compName, compFilter in viewitems(self._compFilters):
             compDescr = getattr(vehicleDescr, compName)
             if not compFilter.isItemCompatible(compDescr):
                 return False

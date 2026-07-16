@@ -6,11 +6,10 @@ from copy import copy
 from functools import partial
 import BigWorld
 import Math
-import GenericComponents
+import CGF
 from cgf_network import C_INVALID_NETWORK_OBJECT_ID
 from Event import Event
 from VehicleEffects import DamageFromShotDecoder
-from cgf_obsolete_script.script_game_object import ScriptGameObject
 from common_tank_structure import VehicleAppearanceCacheInfo
 from constants import DEFAULT_GUN_INSTALLATION_INDEX, VEHICLE_SIEGE_STATE, SPECIAL_VEHICLE_HEALTH, VEHICLE_HIT_EFFECT
 from gui.battle_control import vehicle_getter
@@ -47,7 +46,7 @@ class VehicleBase(object):
     def __init__(self):
         self._wheelsScrollFilter = None
         self._wheelsSteeringFilter = None
-        self._isCrewActive = False
+        self._isCrewActive = True
         self._speedInfo = _SimulatedVehicleSpeedProvider()
         self.typeDescriptor = None
         self._isEnteringWorld = False
@@ -113,19 +112,19 @@ class VehicleBase(object):
         return vehicle_getter.getOptionalDevices() if self.isPlayerVehicle else []
 
 
-class SimulatedVehicle(BigWorld.Entity, VehicleBase, ScriptGameObject):
+class SimulatedVehicle(BigWorld.Entity, VehicleBase):
     __appearanceCache = dependency.descriptor(IAppearanceCache)
     _CONE_SIZE = 2
 
     def __init__(self):
         BigWorld.Entity.__init__(self)
-        ScriptGameObject.__init__(self, self.spaceID)
         VehicleBase.__init__(self)
         self.isStarted = False
         self.typeDescriptor = vehicles.VehicleDescr(self.publicInfo.compDescr)
         self._initAdditionalFilters(self.typeDescriptor)
         self.appearance = None
         self.__appearanceCacheID = self.id
+        self.__appearanceCacheInfo = None
         self.onAppearanceLoaded = Event()
         self.extras = {}
         turretYaw, gunPitch = self.simulationData_gunAngles
@@ -207,24 +206,26 @@ class SimulatedVehicle(BigWorld.Entity, VehicleBase, ScriptGameObject):
     def stopVisual(self):
         if not self.isStarted:
             return
-        else:
-            self.__stopExtras()
-            self.appearance.removeComponentByType(GenericComponents.HierarchyComponent)
-            self.appearance.deactivate()
-            self.appearance = None
-            self.isStarted = False
-            self._speedInfo.reset()
-            return
+        self.__stopExtras()
+        self.__resetAppearance()
+        self.isStarted = False
+        self._speedInfo.reset()
 
     def addModel(self, model):
         super(SimulatedVehicle, self).addModel(model)
         highlighter = self.appearance.highlighter
+        if not highlighter:
+            _logger.error('Highlighter component is not ready/not created')
+            return
         if highlighter.isOn:
             highlighter.highlight(False)
             highlighter.highlight(True)
 
     def delModel(self, model):
         highlighter = self.appearance.highlighter
+        if not highlighter:
+            _logger.error('Highlighter component is not ready/not created')
+            return
         hlOn = highlighter.isOn
         hlSimpleEdge = highlighter.isSimpleEdge
         highlighter.removeHighlight()
@@ -250,10 +251,9 @@ class SimulatedVehicle(BigWorld.Entity, VehicleBase, ScriptGameObject):
         shellDescr = vehicles.getItemByCompactDescr(shellCompactDescr)
         effectsIndex = shellDescr.effectsIndex
         prefabEffIndex = shellDescr.prefabEffectsIndex
-        targetSticker = 'armorPierced' if isArmorPierced else 'armorResisted'
         for hitPoint in hitPoints:
             sticker = copy(hitPoint)
-            if setDamageSticker(sticker, effectsIndex, prefabEffIndex, targetSticker) is None:
+            if setDamageSticker(sticker, effectsIndex, prefabEffIndex, isArmorPierced) is None:
                 continue
             self.__decodeAndAddSticker(sticker)
 
@@ -264,7 +264,7 @@ class SimulatedVehicle(BigWorld.Entity, VehicleBase, ScriptGameObject):
             oldAppearance = self.__appearanceCache.removeAppearance(entityID)
             if oldAppearance is not None:
                 oldAppearance.destroy()
-        newInfo = VehicleAppearanceCacheInfo(self.typeDescriptor, self.health, self.isCrewActive, self.isTurretDetached, self.publicInfo.outfit, forceDynAttachmentLoading=True, entityGameObject=self.gameObject)
+        self.__appearanceCacheInfo = newInfo = VehicleAppearanceCacheInfo(self.typeDescriptor, self.health, self.isCrewActive, self.isTurretDetached, self.publicInfo.outfit, forceDynAttachmentLoading=True, entityGameObject=self.entityGameObject, respawnID=self.publicInfo.respawnID)
         appearance = self.__appearanceCache.getAppearance(entityID, newInfo, self.__onAppearanceReady)
         appearance.setUseEngStartControlIdle(True)
         return appearance
@@ -276,32 +276,21 @@ class SimulatedVehicle(BigWorld.Entity, VehicleBase, ScriptGameObject):
         _logger.info('__onAppearanceReady(%d)', self.id)
         self.appearance = appearance
         self.__startVisual()
-        self.onAppearanceLoaded(self.id)
 
     def __startVisual(self):
         if self.isStarted:
             return
         else:
-            self.appearance = self.__appearanceCache.getAppearance(self.__appearanceCacheID, self.__prereqs)
+            self.appearance = self.__appearanceCache.getAppearance(self.__appearanceCacheID, self.__appearanceCacheInfo)
+            self.appearance.onAppearanceActivated += self.__onActivateAppearance
             self.appearance.setIgnoreEngineStart()
             if not self.appearance.isConstructed:
                 self.appearance.construct(isPlayer=False, resourceRefs=self.__prereqs)
-            self.appearance.addCameraCollider()
             self.appearance.setVehicle(self)
-            self.appearance.removeComponentByType(GenericComponents.HierarchyComponent)
-            self.appearance.createComponent(GenericComponents.HierarchyComponent, self.entityGameObject)
-            self.appearance.activate()
-            self.appearance.changeEngineMode(self.simulationData_engineMode)
-            if self.typeDescriptor.hasSiegeMode:
-                if self.simulationData_siegeState != 0:
-                    self.appearance.changeSiegeState(self.simulationData_siegeState)
-                    self.appearance.onSiegeStateChanged(self.simulationData_siegeState, 0.0)
-                else:
-                    self.appearance.changeSiegeState(VEHICLE_SIEGE_STATE.DISABLED)
-            self.appearance.onVehicleHealthChanged(showEffects=False)
+            hierarchy = self.appearance.gameObject.findWrite(CGF.HierarchyComponent)
+            if hierarchy:
+                hierarchy.parent = self.entityGameObject.uuid
             self.isStarted = True
-            self.appearance.setupGunMatrixTargets(self)
-            self.__showDamageStickers(self.simulationData_damageStickers)
             if self.isTurretMarkedForDetachment:
                 self.__turretDetachmentConfirmed = True
                 self.appearance.updateTurretVisibility()
@@ -357,3 +346,23 @@ class SimulatedVehicle(BigWorld.Entity, VehicleBase, ScriptGameObject):
             if trackState['isBroken'] and not self.__brokenTrackVisible[index]:
                 self.__brokenTrackVisible[index] = True
                 self.appearance.addSimulatedCrashedTrack(index, self.simulationData_tracksInAir, trackState['hitPoint'])
+
+    def __onActivateAppearance(self):
+        self.appearance.addCameraCollider()
+        self.appearance.changeEngineMode(self.simulationData_engineMode)
+        if self.typeDescriptor.hasSiegeMode:
+            if self.simulationData_siegeState != 0:
+                self.appearance.changeSiegeState(self.simulationData_siegeState)
+                self.appearance.onSiegeStateChanged(self.simulationData_siegeState)
+            else:
+                self.appearance.changeSiegeState(VEHICLE_SIEGE_STATE.DISABLED)
+        self.appearance.onVehicleHealthChanged(showEffects=False)
+        self.appearance.setupGunMatrixTargets(self)
+        self.__showDamageStickers(self.simulationData_damageStickers)
+        self.onAppearanceLoaded(self.id)
+
+    def __resetAppearance(self):
+        if self.appearance is not None:
+            self.appearance.onAppearanceActivated -= self.__onActivateAppearance
+            self.appearance = None
+        return

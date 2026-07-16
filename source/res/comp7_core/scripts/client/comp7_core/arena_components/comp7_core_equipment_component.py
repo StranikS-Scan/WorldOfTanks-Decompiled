@@ -15,6 +15,7 @@ from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from helpers import dependency
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 from skeletons.gui.battle_session import IBattleSessionProvider
+from typing import List
 _logger = logging.getLogger(__name__)
 
 class Comp7CoreEquipmentComponent(ClientArenaComponent):
@@ -100,8 +101,8 @@ class _Effect(object):
 
     def destroy(self):
         if self._prefab is not None:
-            if self._prefab.isValid():
-                CGF.removeGameObject(self._prefab)
+            if self._prefab:
+                self._prefab.destroy()
             self._prefab = None
         self.__destroyed = True
         return
@@ -119,15 +120,17 @@ class _Effect(object):
         path = self._getPath()
         parent = self._getParent()
         position = self._getPosition()
-        CGF.loadGameObjectIntoHierarchy(path, parent, position, self._onLoaded)
+        CGF.loadAndCreatePrefabWithParent(path, parent, position, self._onLoaded)
 
-    def _onLoaded(self, prefab):
+    def _onLoaded(self, objects, queue):
+        root = objects[0]
         if not self.__destroyed:
-            self._prefab = prefab
-            self._updateRadius()
-            self._prefab.activate()
+            self._prefab = queue.gameObject(root)
+            self._updateRadius(root, queue)
+            queue.activateGameObject(root)
         else:
-            CGF.removeGameObject(prefab)
+            return False
+        return True
 
     def _getPath(self):
         raise NotImplementedError
@@ -143,12 +146,12 @@ class _Effect(object):
         arenaGuiType = cls.__sessionProvider.arenaVisitor.getArenaGuiType()
         return cls._dynObjectsCache.getConfig(arenaGuiType)
 
-    def _updateRadius(self):
-        if self._prefab is None:
+    def _updateRadius(self, root, queue):
+        if not root:
             _logger.error('Failed to update Effect radius. Missing prefab.')
             return
         else:
-            terrainSelectedArea = self._prefab.findComponentByType(GenericComponents.TerrainSelectedAreaComponent)
+            terrainSelectedArea = queue.component(root, GenericComponents.TerrainSelectedAreaComponent)
             if terrainSelectedArea is None:
                 _logger.error('Failed to update Effect radius. Missing TerrainSelectedArea component.')
                 return
@@ -161,9 +164,9 @@ class _AoeHealEffect(_Effect):
     def _getPath(self):
         return self._getDynObjectsCacheConfig().getAoeHealPrefab()
 
-    def _updateRadius(self):
-        super(_AoeHealEffect, self)._updateRadius()
-        transformComponent = self._prefab.findComponentByType(GenericComponents.TransformComponent)
+    def _updateRadius(self, root, queue):
+        super(_AoeHealEffect, self)._updateRadius(root, queue)
+        transformComponent = queue.component(root, CGF.TransformComponent)
         if transformComponent is None:
             _logger.error('Failed to update Effect radius. Missing TransformComponent component.')
             return

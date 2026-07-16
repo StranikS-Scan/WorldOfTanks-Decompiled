@@ -274,6 +274,12 @@ class _LSPassiveFireDamageRibbon(_LSCausedDamageRibbon):
     BATTLE_EFFICIENCY_TYPE = LS_BATTLE_EFFICIENCY_TYPES.LS_PASSIVE_IGNITE
 
 
+@LSDamageRibbonsFactory.registerAttackReasonRibbon(ATTACK_REASON.LS_OBELISK_DAMAGE_TRANSFER)
+class _ObeliskDamageTransferRibbon(_LSCausedDamageRibbon):
+    __slots__ = ()
+    BATTLE_EFFICIENCY_TYPE = BATTLE_EFFICIENCY_TYPES.DAMAGE
+
+
 @LSReceiveDamageRibbonsFactory.registerAttackReasonRibbon(ATTACK_REASON.LS_BOMBER_EXPLOSION)
 class _LSReceivedBomberExplosionHitRibbon(_SingleVehicleReceivedHitRibbon):
     __slots__ = ()

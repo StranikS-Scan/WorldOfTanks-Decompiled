@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/game_notification_ctrl.py
+from __future__ import absolute_import
 from collections import defaultdict
+import BigWorld
 import Event
 import SoundGroups
-import BigWorld
+import TriggersManager
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.sounds.epic_sound_constants import EPIC_SOUND, EPIC_OVERTIME_SOUND_NOTIFICATIONS
 from gui.sounds.epic_sound_constants import BF_EB_MAIN_OBJECTIVES_SOUND_NOTIFICATIONS
@@ -14,7 +16,6 @@ from gui.Scaleform.genConsts.GAME_MESSAGES_CONSTS import GAME_MESSAGES_CONSTS
 from gui.battle_control import avatar_getter
 from shared_utils import CONST_CONTAINER
 from arena_component_system.sector_base_arena_component import ID_TO_BASENAME
-import TriggersManager
 from PlayerEvents import g_playerEvents
 
 class GameNotificationsController(IViewComponentsController, TriggersManager.ITriggerListener):
@@ -31,16 +32,16 @@ class GameNotificationsController(IViewComponentsController, TriggersManager.ITr
         self.onGameNotificationRecieved = Event.Event(self.__eManager)
         return
 
-    def onMessagePlaybackEnded(self, notificationID, data):
+    def onMessagePlaybackEnded(self, messageID, data):
         pass
 
-    def onMessagePlaybackStarted(self, notificationID, data):
+    def onMessagePlaybackStarted(self, messageID, data):
         pass
 
-    def onMessagePlaybackPhaseStarted(self, notificationID, data):
+    def onMessagePlaybackPhaseStarted(self, messageID, data):
         pass
 
-    def onMessagePlaybackHide(self, notificationID, data):
+    def onMessagePlaybackHide(self, messageID, data):
         pass
 
     def _setupNotificationMap(self):
@@ -71,7 +72,7 @@ class GameNotificationsController(IViewComponentsController, TriggersManager.ITr
         self.__eManager = None
         return
 
-    def onTriggerDeactivated(self, params):
+    def onTriggerDeactivated(self, args):
         pass
 
     def translateMsgId(self, msgId):

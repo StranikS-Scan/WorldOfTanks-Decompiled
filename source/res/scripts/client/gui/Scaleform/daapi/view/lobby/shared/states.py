@@ -43,5 +43,5 @@ class BrowserLobbyTopState(SFViewLobbyState):
                  'callbackOnClose': ctx.get('callbackOnClose'),
                  'webHandlers': ctx.get('webHandlers'),
                  'forcedSkipEscape': ctx.get('forcedSkipEscape'),
-                 'browserParams': ctx.get('forcedSkipEscape'),
+                 'browserParams': ctx.get('browserParams', {}),
                  'hiddenLayers': ctx.get('hiddenLayers', ())}}

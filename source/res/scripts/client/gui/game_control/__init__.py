@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/__init__.py
+from __future__ import absolute_import
 from typing import TYPE_CHECKING
 import skeletons.gui.pet_system
 import constants
@@ -7,6 +8,7 @@ import skeletons.gui.resource_well
 from gui.graphics_optimization_controller.optimization_controller import GraphicsOptimizationController
 from gui.shared.system_factory import collectGameControllers
 from skeletons.festivity_factory import IFestivityFactory
+from skeletons.gui.challenges import IChallengesController
 if TYPE_CHECKING:
     from helpers.dependency import DependencyManager
 
@@ -92,6 +94,7 @@ def getGameControllersConfig(manager):
     from gui.pet_system.pet_controller import PetSystemController
     from gui.game_control.ingame_tournament_controller import IngameTournamentController
     from gui.game_control.w2gt_controller import W2GTGameController
+    from gui.game_control.challenges_controller import ChallengesController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -186,4 +189,5 @@ def getGameControllersConfig(manager):
     _config(_interface.IIngameTournamentController, IngameTournamentController())
     _config(skeletons.gui.pet_system.IPetSystemController, PetSystemController())
     _config(_interface.IW2GTGameController, W2GTGameController())
+    _config(IChallengesController, ChallengesController())
     collectGameControllers(_config)

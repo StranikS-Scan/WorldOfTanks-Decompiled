@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/battle_cache/__init__.py
+from __future__ import absolute_import
 import struct
+from future.utils import viewvalues
 import BigWorld
 from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_ERROR
 from skeletons.gui.battle_session import IBattleClientCache
@@ -26,20 +28,20 @@ class BattleClientCache(IBattleClientCache):
         return record
 
     def clear(self):
-        for r in self.__records.itervalues():
+        for r in viewvalues(self.__records):
             r.clear()
 
         self.__chunks = {}
         self.__records = {}
 
     def save(self):
-        for r in self.__records.itervalues():
+        for r in viewvalues(self.__records):
             chunk = self._packRecord(r)
             if chunk:
                 self.__chunks[r.getRecordID()] = chunk
             self.__chunks.pop(r.getRecordID(), None)
 
-        blob = ''.join(self.__chunks.itervalues())
+        blob = ''.join(viewvalues(self.__chunks))
         if len(blob) > _CACHE_MAX_LENGTH:
             LOG_ERROR('Could not store client cache on the server. Exceeded max size: {} > {}'.format(len(blob), _CACHE_MAX_LENGTH))
             return False

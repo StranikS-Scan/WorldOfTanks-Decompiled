@@ -12,18 +12,18 @@ from gui.impl import backport
 from gui.impl.backport import TooltipData, createTooltipData
 from gui.impl.gen import R
 from gui.server_events.awards_formatters import BATTLE_BONUS_X5_TOKEN, CREW_BONUS_X3_TOKEN
-from gui.server_events.bonuses import getNonQuestBonuses, BlueprintsBonusSubtypes, mergeBonuses, splitBonuses
+from gui.server_events.bonuses import getNonQuestBonuses, BlueprintsBonusSubtypes, mergeBonuses, splitBonuses, AttachmentsSetTokenBonus, parseAttachmentsSetToken, processAttachmentsSetTokens
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.Vehicle import getUnicName
 from gui.shared.gui_items.customization import CustomizationTooltipContext
-from gui.shared.missions.packers.bonus import SimpleBonusUIPacker, getDefaultBonusPackersMap, BonusUIPacker, VehiclesBonusUIPacker, BaseBonusUIPacker, BACKPORT_TOOLTIP_CONTENT_ID, CrewSkinBonusUIPacker, CurrenciesBonusUIPacker, GoodiesBonusUIPacker, TokenBonusUIPacker, ItemBonusUIPacker, BlueprintBonusUIPacker, CrewBookBonusUIPacker
+from gui.shared.missions.packers.bonus import SimpleBonusUIPacker, getDefaultBonusPackersMap, BonusUIPacker, VehiclesBonusUIPacker, BaseBonusUIPacker, BACKPORT_TOOLTIP_CONTENT_ID, CrewSkinBonusUIPacker, CurrenciesBonusUIPacker, GoodiesBonusUIPacker, TokenBonusUIPacker, ItemBonusUIPacker, BlueprintBonusUIPacker, CrewBookBonusUIPacker, AttachmentsSetTokenBonusPacker
 from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from open_bundle.gui.impl.gen.view_models.views.lobby.bonus_model import BonusModel, VehicleType
-from open_bundle.helpers.bonuses.bonuses_constants import ATTACHMENTS_TOKEN_PREFIX, ATTACHMENTS_TOKEN_NAME
+from open_bundle.helpers.bonuses.bonuses_constants import ATTACHMENTS_TOKEN_NAME
 from open_bundle.skeletons.open_bundle_controller import IOpenBundleController
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
@@ -54,44 +54,15 @@ def sortBonuses(bonuses, reverse=True, openBundle=None):
     return bonuses
 
 
-def processAttachmentTokens(bonuses, showAttachmentSet):
-    if not showAttachmentSet:
-        return [ bonus for bonus in bonuses if not isAttachmentToken(bonus) ]
-    else:
-        finalBonuses = []
-        attachmentIDs = set()
-        for bonus in bonuses:
-            if isAttachmentToken(bonus):
-                tokenID = bonus.getTokens().keys()[0]
-                attachmentIDs.update(tokenID.split(':')[2:])
+def findVehicleCD(bonuses):
+    vehicleCD = None
+    for bonus in bonuses:
+        if bonus.getName() == 'vehicles':
+            vehicles = bonus.getVehicles()
+            vehicleCD = vehicles[0][0].intCD if vehicles is not None else None
+            break
 
-        for bonus in bonuses:
-            if bonus.getName() == 'customizations':
-                customizations = bonus.getCustomizations()
-                for item in customizations:
-                    customizationItem = bonus.getC11nItem(item)
-                    if not (customizationItem is not None and customizationItem.itemTypeName == GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.ATTACHMENT] and str(customizationItem.id) in attachmentIDs):
-                        finalBonuses.append(bonus)
-
-            finalBonuses.append(bonus)
-
-        return finalBonuses
-
-
-def isAttachmentToken(bonus):
-    if bonus.getName() != 'battleToken':
-        return False
-    tokenID = bonus.getTokens().keys()[0]
-    return tokenID.startswith(ATTACHMENTS_TOKEN_PREFIX)
-
-
-def parseAttachmentToken(token):
-    if not token.startswith(ATTACHMENTS_TOKEN_PREFIX):
-        return ('', [])
-    tokenParts = token.split(':')
-    attachmentSetName = tokenParts[1]
-    attachmentIDs = [ int(attachmentID) for attachmentID in tokenParts[2:] ]
-    return (attachmentSetName, attachmentIDs)
+    return vehicleCD
 
 
 def getOpenBundleBonusPacker():
@@ -116,15 +87,16 @@ def getOpenBundleBonusPacker():
      Currency.EQUIP_COIN: currencyPacker,
      Currency.CRYSTAL: currencyPacker,
      Currency.BPCOIN: OpenBundleBPCoinBonusUIPacker(),
-     PREMIUM_ENTITLEMENTS.PLUS: OpenBundlePremiumBonusUIPacker()})
+     PREMIUM_ENTITLEMENTS.PLUS: OpenBundlePremiumBonusUIPacker(),
+     AttachmentsSetTokenBonus.NAME: OpenBundleAttachmentsSetTokenBonusPacker()})
     return BonusUIPacker(mapping)
 
 
-def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, packer=None, showAttachmentSet=False):
+def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, packer=None, showAttachmentsSets=False):
     if packer is None:
         packer = getOpenBundleBonusPacker()
     bonusIndexTotal = len(tooltipData) if tooltipData is not None else 0
-    bonuses = processAttachmentTokens(bonuses, showAttachmentSet=showAttachmentSet)
+    bonuses = processAttachmentsSetTokens(bonuses, showAttachmentsSets=showAttachmentsSets)
     for bonus in bonuses:
         if bonus.isShowInGUI():
             bonusList = packer.pack(bonus)
@@ -402,7 +374,6 @@ class OpenBundlePremiumBonusUIPacker(BaseBonusUIPacker):
 
 
 class OpenBundleTokenBonusUIPacker(TokenBonusUIPacker):
-    _ATTACHMENTS_RES = R.strings.open_bundle.bonuses.attachmentsSet
 
     @classmethod
     def _packToken(cls, bonusPacker, bonus, *args):
@@ -412,19 +383,13 @@ class OpenBundleTokenBonusUIPacker(TokenBonusUIPacker):
     @classmethod
     def _getTokenBonusPackers(cls):
         return {BATTLE_BONUS_X5_TOKEN: cls.__packBattleBonusX5Token,
-         CREW_BONUS_X3_TOKEN: cls.__packCrewBonusX3Token,
-         ATTACHMENTS_TOKEN_NAME: cls.__packAttachmentsToken}
+         CREW_BONUS_X3_TOKEN: cls.__packCrewBonusX3Token}
 
     @classmethod
     def _getTooltipsPackers(cls):
         packers = super(OpenBundleTokenBonusUIPacker, cls)._getTooltipsPackers()
         return {BATTLE_BONUS_X5_TOKEN: packers[BATTLE_BONUS_X5_TOKEN],
-         CREW_BONUS_X3_TOKEN: packers[CREW_BONUS_X3_TOKEN],
-         ATTACHMENTS_TOKEN_NAME: cls.__getAttachmentTokenTooltip}
-
-    @classmethod
-    def _getTokenBonusType(cls, tokenID, complexToken):
-        return ATTACHMENTS_TOKEN_NAME if tokenID.startswith(ATTACHMENTS_TOKEN_PREFIX) else super(OpenBundleTokenBonusUIPacker, cls)._getTokenBonusType(tokenID, complexToken)
+         CREW_BONUS_X3_TOKEN: packers[CREW_BONUS_X3_TOKEN]}
 
     @classmethod
     def __packBattleBonusX5Token(cls, model, bonus, *args):
@@ -439,24 +404,6 @@ class OpenBundleTokenBonusUIPacker(TokenBonusUIPacker):
         model.setLabel(backport.text(R.strings.open_bundle.bonuses.crewBonusX3()))
         model.setIcon(CREW_BONUS_X3_TOKEN)
         return model
-
-    @classmethod
-    def __packAttachmentsToken(cls, model, bonus, *args):
-        tokenName = bonus.getTokens().keys()[0]
-        attachmentsName, _ = parseAttachmentToken(tokenName)
-        model.setIcon(attachmentsName)
-        model.setName(ATTACHMENTS_TOKEN_NAME)
-        model.setCount(bonus.getCount())
-        model.setValue(tokenName)
-        labelRes = cls._ATTACHMENTS_RES.dyn(attachmentsName, cls._ATTACHMENTS_RES.default)
-        model.setLabel(backport.text(labelRes()))
-        return model
-
-    @classmethod
-    def __getAttachmentTokenTooltip(cls, _, token):
-        attachmentsName, _ = parseAttachmentToken(token.id)
-        nameRes = cls._ATTACHMENTS_RES.dyn(attachmentsName, cls._ATTACHMENTS_RES.default)
-        return createTooltipData(makeTooltip(backport.text(nameRes()), backport.text(cls._ATTACHMENTS_RES.tooltip.body())))
 
 
 class OpenBundleBlueprintBonusUIPacker(BlueprintBonusUIPacker):
@@ -553,3 +500,33 @@ class OpenBundleTmanTemplateBonusUIPacker(SimpleBonusUIPacker):
                 result.append(BACKPORT_TOOLTIP_CONTENT_ID)
 
         return result
+
+
+class OpenBundleAttachmentsSetTokenBonusPacker(AttachmentsSetTokenBonusPacker):
+    _ATTACHMENTS_RES = R.strings.open_bundle.bonuses.attachmentsSet
+
+    @classmethod
+    def _getBonusModel(cls):
+        return BonusModel()
+
+    @classmethod
+    def _packSingleBonus(cls, tokenID, token, bonus):
+        model = cls._getBonusModel()
+        setName, _ = parseAttachmentsSetToken(tokenID)
+        model.setIcon(setName)
+        model.setName(ATTACHMENTS_TOKEN_NAME)
+        model.setCount(token.count)
+        model.setValue(tokenID)
+        labelRes = cls._ATTACHMENTS_RES.dyn(setName, cls._ATTACHMENTS_RES.default)
+        model.setLabel(backport.text(labelRes()))
+        return model
+
+    @classmethod
+    def _getToolTip(cls, bonus):
+        tooltipData = []
+        for tokenID in bonus.getTokens():
+            setName, _ = parseAttachmentsSetToken(tokenID)
+            setNameRes = cls._ATTACHMENTS_RES.dyn(setName, cls._ATTACHMENTS_RES.default)
+            tooltipData.append(createTooltipData(makeTooltip(header=backport.text(setNameRes()), body=backport.text(cls._ATTACHMENTS_RES.tooltip.body()))))
+
+        return tooltipData

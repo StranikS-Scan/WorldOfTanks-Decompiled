@@ -76,7 +76,6 @@ class PowerModeController(VehicleDynamicComponent, IMechanicComponent, IMechanic
     def _onAppearanceReady(self):
         super(PowerModeController, self)._onAppearanceReady()
         self.__updateMechanicState()
-        self.__mechanicPrefabSpawner.loadAppearancePrefab()
         self.__statesEvents.processStatePrepared()
 
     def _onComponentAppearanceUpdate(self, **kwargs):

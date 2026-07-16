@@ -9,7 +9,7 @@ from gui.battle_control import avatar_getter
 from gui.battle_control.controllers.consumables import equipment_ctrl
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from items import vehicles
-from points_of_interest.components import PoiStateComponent
+from points_of_interest.managers import PoiStateUpdateSystem
 from points_of_interest_shared import PoiEquipmentNamesByPoiType
 from comp7_core.gui.battle_control.controllers.consumables.comp7_equipment_items import EQUIPMENT_TAG_TO_ITEM, REPLAY_EQUIPMENT_TAG_TO_ITEM
 if typing.TYPE_CHECKING:
@@ -70,7 +70,8 @@ class Comp7EquipmentController(equipment_ctrl.EquipmentsController):
         self.__addPoiByType(point.type)
 
     def __rediscoverPoi(self):
-        statesQuery = CGF.Query(BigWorld.player().spaceID, PoiStateComponent)
+        poiStateSystem = CGF.getSystem(BigWorld.player().spaceID, PoiStateUpdateSystem)
+        statesQuery = poiStateSystem.getStates()
         for poiState in statesQuery:
             self.__addPoiByType(poiState.type)
 

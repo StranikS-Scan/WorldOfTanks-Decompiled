@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/player_format.py
+from __future__ import absolute_import
 from collections import namedtuple
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext

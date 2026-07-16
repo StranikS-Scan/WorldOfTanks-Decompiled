@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/exchange/personal_discounts_constants.py
+from __future__ import absolute_import
 from collections import namedtuple
 from enum import Enum
 EXCHANGE_RATE_GOLD_NAME = 'gold_exchange'

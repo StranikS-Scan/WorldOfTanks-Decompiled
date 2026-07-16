@@ -60,6 +60,7 @@ class _VehicleHubChildState(LobbyState, SubhangarStateGroupConfigProvider):
         from gui.Scaleform.daapi.view.lobby.profile.states import ServiceRecordState
         from gui.Scaleform.daapi.view.lobby.store.browser.states import ShopState
         from gui.Scaleform.daapi.view.lobby.missions.personal.state import PersonalMissionsAwardsState
+        from gui.impl.lobby.personal_missions_30.state import ProgressionState, AssemblingState
         lsm = self.getMachine()
         self.addNavigationTransition(lsm.getStateByCls(VehicleCompareState), record=True)
         self.addNavigationTransition(lsm.getStateByCls(BlueprintState), record=True)
@@ -68,6 +69,8 @@ class _VehicleHubChildState(LobbyState, SubhangarStateGroupConfigProvider):
         self.addTransition(loadingState.makeTransition(TransitionType.INTERNAL, True), loadingState)
         self.addNavigationTransition(lsm.getStateByCls(ServiceRecordState), record=True)
         self.addNavigationTransition(lsm.getStateByCls(PersonalMissionsAwardsState), record=True)
+        self.addNavigationTransition(lsm.getStateByCls(ProgressionState), record=True)
+        self.addNavigationTransition(lsm.getStateByCls(AssemblingState), record=True)
 
     def _onEntered(self, event):
         super(_VehicleHubChildState, self)._onEntered(event)

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/kill_cam_ctrl.py
+from __future__ import absolute_import
 from collections import namedtuple
+from decimal import ROUND_HALF_EVEN
 from enum import Enum
 import Event
 import Math
@@ -9,6 +11,7 @@ from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.controllers.interfaces import IBattleController
 from gui.shared.events import DeathCamEvent
 from helpers import dependency
+from math_common import decimal_round
 from skeletons.gui.battle_session import IBattleSessionProvider
 _logger = logging.getLogger(__name__)
 DistanceMarkerData = namedtuple('DistanceMarkerData', 'projectile phaseDuration impactPoint isAttackerSpotted')
@@ -55,7 +58,7 @@ class KillCameraController(IBattleController):
         self.__distanceMarkerData = self.__buildDistanceMarkerData(projectile=projectile, phaseDuration=phase2Duration, hasSpottedData=hasSpottedData)
         self.__impactMarkerData = self.__buildImpactMarkerData(projectile=projectile, phaseDuration=phase3Duration, playerRelativeArmor=playerRelativeArmor, playerIsSpotted=playerIsSpotted, causeOfDeath=causeOfDeath)
         self.__gunMarkerData = self.__buildGunMarkerData(projectile=projectile, phaseDuration=phase1Duration, simulatedKillerGunInfo=simulatedKillerGunInfo, hasSpottedData=hasSpottedData, hasAttackerVehicle=hasAttackerVehicle, unspottedOrigin=unspottedOrigin)
-        self.__totalSceneDuration = round(totalSceneDuration, 1)
+        self.__totalSceneDuration = decimal_round(totalSceneDuration, 1, ROUND_HALF_EVEN)
         self.__isKillCamActive = True
 
     def killCamModeEffectsPlaced(self, isSpotted=False):

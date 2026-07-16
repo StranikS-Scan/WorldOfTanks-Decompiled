@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/formatters/plain_text.py
+from __future__ import absolute_import
 from gui.server_events.cond_formatters import FORMATTER_IDS
 from gui.server_events import formatters
 from gui.shared.formatters import text_styles

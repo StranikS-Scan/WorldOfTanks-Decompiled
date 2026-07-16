@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/formatters/date_time.py
+from __future__ import absolute_import
 import time
 import re
 from gui.impl.gen import R

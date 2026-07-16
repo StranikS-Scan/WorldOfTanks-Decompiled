@@ -47,8 +47,8 @@ class EpicBattlesList(TrainingsListBase):
          'battleTypeID': BATTLE_TYPES.EPIC_TRAINING}
 
     @adisp_process
-    def joinTrainingRequest(self, prbID):
-        yield self.prbDispatcher.join(JoinEpicBattleTrainingCtx(prbID, waitingID='prebattle/join'))
+    def joinTrainingRequest(self, prbID, prbClusterID):
+        yield self.prbDispatcher.join(JoinEpicBattleTrainingCtx(prbID, prbClusterID, waitingID='prebattle/join'))
 
     def createTrainingRequest(self):
         settings = EpicTrainingSettingsCtx()

@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/links_handlers/external.py
+from __future__ import absolute_import
 from collections import defaultdict
 import typing
 import logging
-import urlparse
+from future.moves.urllib.parse import urlparse, parse_qs
+from future.utils import viewitems, viewvalues
 import BigWorld
 from constants import DISTRIBUTION_PLATFORM
 from debug_utils import LOG_CURRENT_EXCEPTION
@@ -62,10 +64,10 @@ class AddPlatformTagLinksHandler(OpenBrowserHandler):
         return DISTRIBUTION_PLATFORM.STEAM.value if self.__loginManager.isWgcSteam else ''
 
     def _hasWotPlatformTags(self, url):
-        query = urlparse.urlparse(url).query
+        query = urlparse(url).query
         if not query:
             return False
-        tags = urlparse.parse_qs(query, keep_blank_values=True)
+        tags = parse_qs(query, keep_blank_values=True)
         return _WOT_PLATFORM_PARAM in tags
 
     def _addPlatformParamToUrl(self, url, param):
@@ -73,10 +75,10 @@ class AddPlatformTagLinksHandler(OpenBrowserHandler):
 
 
 def _getUrlsMapFromLinkArgs(url):
-    parts = urlparse.urlparse(url)
+    parts = urlparse(url)
     if not parts.query or not parts.path or not parts.path.startswith(_PATH_TO_CHECK_ARGS):
         return {}
-    tags = urlparse.parse_qs(parts.query, keep_blank_values=False)
+    tags = parse_qs(parts.query, keep_blank_values=False)
     return {arg:tags[arg][0] for arg in _URL_ARGS_TO_CHECK if arg in tags}
 
 
@@ -84,7 +86,7 @@ class AddPlatformTagLinksToArgsUrlHandler(AddPlatformTagLinksHandler):
 
     def _hasWotPlatformTags(self, url):
         urls = _getUrlsMapFromLinkArgs(url)
-        for argUrl in urls.itervalues():
+        for argUrl in viewvalues(urls):
             if super(AddPlatformTagLinksToArgsUrlHandler, self)._hasWotPlatformTags(argUrl):
                 return True
 
@@ -95,7 +97,7 @@ class AddPlatformTagLinksToArgsUrlHandler(AddPlatformTagLinksHandler):
         if platform:
             urls = _getUrlsMapFromLinkArgs(url)
             if urls:
-                urls = {arg:[self._addPlatformParamToUrl(url, platform)] for arg, url in urls.iteritems() if AddPlatformTagLinksHandler._hasWotPlatformTags(self, url)}
+                urls = {arg:[self._addPlatformParamToUrl(url, platform)] for arg, url in viewitems(urls) if AddPlatformTagLinksHandler._hasWotPlatformTags(self, url)}
                 url = addParamsToUrlQuery(url, urls, keepBlankValues=True)
                 return OpenBrowserHandler.handle(self, url)
         return False
@@ -115,12 +117,12 @@ class PremShopLinksHandler(ILinksHandler):
         return False
 
     def __getIngameShopArgs(self, url):
-        query = urlparse.urlparse(url).query
+        query = urlparse(url).query
         if not query:
             return {}
-        tags = urlparse.parse_qs(query, keep_blank_values=True)
+        tags = parse_qs(query, keep_blank_values=True)
         args = defaultdict(list)
-        for t, v in tags.iteritems():
+        for t, v in viewitems(tags):
             if t.startswith(_INGAME_SHOP_PARAM):
                 args.update({t: v})
 
@@ -131,7 +133,7 @@ class PremShopLinksForArgsUrlHandler(PremShopLinksHandler):
 
     def checkHandle(self, url):
         urls = _getUrlsMapFromLinkArgs(url)
-        for argUrl in urls.itervalues():
+        for argUrl in viewvalues(urls):
             res = super(PremShopLinksForArgsUrlHandler, self).checkHandle(argUrl)
             if res.handled:
                 return res
@@ -140,7 +142,7 @@ class PremShopLinksForArgsUrlHandler(PremShopLinksHandler):
 
     def handle(self, url):
         urls = _getUrlsMapFromLinkArgs(url)
-        for argUrl in urls.itervalues():
+        for argUrl in viewvalues(urls):
             if super(PremShopLinksForArgsUrlHandler, self).handle(argUrl):
                 return True
 

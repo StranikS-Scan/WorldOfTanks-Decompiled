@@ -1,13 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/client_request_lib/data_sources/gateway.py
+from __future__ import absolute_import
 import zlib
 import json
-import urllib
-from base64 import b64encode
 from datetime import datetime, timedelta, time as dt_time
+from future.moves.urllib import parse
+from future.utils import viewitems
 from client_request_lib import exceptions
 from client_request_lib.data_sources import base
 from debug_utils import LOG_ERROR
+from py2to3.compat import base64compat
 EXAMPLES = {}
 DEFAULT_SINCE_DELAY = timedelta(days=1)
 SUCCESS_STATUSES = [200, 201, 304]
@@ -34,6 +36,7 @@ def timestamp_to_datetime(timestamp):
 class GatewayDataAccessor(base.BaseDataAccessor):
 
     def __init__(self, url_fetcher, gateway_host, client_lang=None, user_agent=None):
+        super(GatewayDataAccessor, self).__init__()
         self.client_lang = client_lang
         self._session_id = None
         self.url_fetcher = url_fetcher
@@ -102,7 +105,7 @@ class GatewayDataAccessor(base.BaseDataAccessor):
             auth_data = spa_token
         else:
             auth_type = 'Basic'
-            auth_data = b64encode(':'.join([str(account_id), str(spa_token)]))
+            auth_data = base64compat.b64encode(':'.join([str(account_id), str(spa_token)]))
         extra_headers = {'AUTHORIZATION': '%s %s' % (auth_type, auth_data)}
 
         def inner_callback(data, status_code, response_code, headers):
@@ -119,16 +122,16 @@ class GatewayDataAccessor(base.BaseDataAccessor):
 
     def _request_data(self, callback, url, get_data=None, method='GET', post_data=None, headers=None, converters=None):
         get_data = get_data or {}
-        get_data = {k:v for k, v in get_data.iteritems() if v is not None}
+        get_data = {k:v for k, v in viewitems(get_data) if v is not None}
         url = '/'.join([self.gateway_host.rstrip('/'), url.lstrip('/')])
         if get_data:
             values = []
-            for k, val in get_data.iteritems():
+            for k, val in viewitems(get_data):
                 if not isinstance(val, (list, tuple)):
                     val = [val]
                 values.append((k, ','.join((str(i) for i in val))))
 
-            urlencoded_string = urllib.urlencode(values)
+            urlencoded_string = parse.urlencode(values)
             url = '{}?{}'.format(url, urlencoded_string)
         default_headers = {'Accept-Encoding': 'compress, gzip'}
         if self.client_lang:
@@ -138,7 +141,7 @@ class GatewayDataAccessor(base.BaseDataAccessor):
             default_headers['COOKIE'] = 'session=%s' % self._session_id
         if self.user_agent:
             default_headers['User-Agent'] = self.user_agent
-        headers = tuple(('{}: {}'.format(k, v) for k, v in default_headers.iteritems() if v))
+        headers = tuple(('{}: {}'.format(k, v) for k, v in viewitems(default_headers) if v))
         args = [headers, 30.0, method]
         if post_data:
             args.append(json.dumps(post_data))
@@ -671,7 +674,7 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def get_inventory_entitlements(self, callback, entitlement_codes):
         url = '/shop/inventory_entitlements/'
         if entitlement_codes:
-            urlencoded_string = urllib.urlencode([ ('entitlement_codes', code) for code in entitlement_codes ])
+            urlencoded_string = parse.urlencode([ ('entitlement_codes', code) for code in entitlement_codes ])
             url = '{}?{}'.format(url, urlencoded_string)
         return self._request_data(callback, url, method='GET')
 

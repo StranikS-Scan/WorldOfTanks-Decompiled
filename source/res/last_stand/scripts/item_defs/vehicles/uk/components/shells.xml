@@ -255,4 +255,184 @@
       </damage>
     </armorSpalls>
   </_90mm_HE_T342K_LS_BOT>
+  <_55pdr_APCBC_EASY_LS_BOT>
+    <id>	6009	</id>
+    <userString>	#gb_vehicles:_55pdr_APCBC	</userString>
+    <icon>	ap	</icon>
+    <price>	710	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	108	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	270	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_55pdr_APCBC_EASY_LS_BOT>
+  <_55pdr_APDS_EASY_LS_BOT>
+    <id>	6010	</id>
+    <userString>	#gb_vehicles:_55pdr_APDS	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	108	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	LS_Bastion_largeAPCR	</effects>
+    <damage>
+      <armor>	430	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_55pdr_APDS_EASY_LS_BOT>
+  <_55pdr_HE_EASY_LS_BOT>
+    <id>	6011	</id>
+    <userString>	#gb_vehicles:_55pdr_HE	</userString>
+    <icon>	he_modern	</icon>
+    <price>	420	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	108	</caliber>
+    <explosionRadius>	2.03	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	430	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.03	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	215	</armor>
+        <devices>	70	</devices>
+      </damage>
+    </armorSpalls>
+  </_55pdr_HE_EASY_LS_BOT>
+  <_55pdr_APCBC_MEDIUM_LS_BOT>
+    <id>	6012	</id>
+    <userString>	#gb_vehicles:_55pdr_APCBC	</userString>
+    <icon>	ap	</icon>
+    <price>	710	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	108	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	270	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_55pdr_APCBC_MEDIUM_LS_BOT>
+  <_55pdr_APDS_MEDIUM_LS_BOT>
+    <id>	6013	</id>
+    <userString>	#gb_vehicles:_55pdr_APDS	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	108	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	LS_Bastion_largeAPCR	</effects>
+    <damage>
+      <armor>	450	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_55pdr_APDS_MEDIUM_LS_BOT>
+  <_55pdr_HE_MEDIUM_LS_BOT>
+    <id>	6014	</id>
+    <userString>	#gb_vehicles:_55pdr_HE	</userString>
+    <icon>	he_modern	</icon>
+    <price>	420	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	108	</caliber>
+    <explosionRadius>	2.03	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	430	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.03	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	215	</armor>
+        <devices>	70	</devices>
+      </damage>
+    </armorSpalls>
+  </_55pdr_HE_MEDIUM_LS_BOT>
+  <_55pdr_APCBC_HARD_LS_BOT>
+    <id>	6015	</id>
+    <userString>	#gb_vehicles:_55pdr_APCBC	</userString>
+    <icon>	ap	</icon>
+    <price>	710	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	108	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	330	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_55pdr_APCBC_HARD_LS_BOT>
+  <_55pdr_APDS_HARD_LS_BOT>
+    <id>	6016	</id>
+    <userString>	#gb_vehicles:_55pdr_APDS	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	108	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	LS_Bastion_largeAPCR	</effects>
+    <damage>
+      <armor>	470	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_55pdr_APDS_HARD_LS_BOT>
+  <_55pdr_HE_HARD_LS_BOT>
+    <id>	6017	</id>
+    <userString>	#gb_vehicles:_55pdr_HE	</userString>
+    <icon>	he_modern	</icon>
+    <price>	420	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	108	</caliber>
+    <explosionRadius>	2.03	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	430	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.03	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	215	</armor>
+        <devices>	70	</devices>
+      </damage>
+    </armorSpalls>
+  </_55pdr_HE_HARD_LS_BOT>
 </shells.xml>

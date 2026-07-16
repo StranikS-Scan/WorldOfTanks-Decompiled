@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/reactive_comm/constants.py
+from __future__ import absolute_import
 from enum import Enum, unique
 MAX_CHANNEL_HISTORY = 10
 CHANNEL_UNSUBSCRIPTION_DELAY = 60

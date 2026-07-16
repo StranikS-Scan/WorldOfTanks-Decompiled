@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hub/tabs/basic/weekly_missions.py
+from __future__ import absolute_import
 import sys
 from datetime import datetime
 import typing
+from future.utils import viewvalues
 from constants import Configs
 from gui.impl.gen.view_models.views.lobby.tooltips.additional_rewards_tooltip_model import AdditionalRewardsTooltipModel
 from gui.impl.lobby.missions.missions_helpers import markQuestProgressAsViewed
@@ -20,7 +22,7 @@ from gui.impl.pub.view_component import ViewComponent
 from gui.impl.lobby.user_missions.hangar_widget.utils import addSpecialConditions
 from gui.server_events import weekly_quests
 from gui.server_events.events_helpers import getWeeklyRerollTimeout
-from gui.shared.missions.packers.bonus import getWeeklyMissionsBonusPacker, weeklyBonusSort
+from gui.shared.missions.packers.bonus import getWeeklyMissionsBonusPacker, weeklyBonusSortKey
 from gui.shared.missions.packers.events import WeeklyQuestUIDataPacker, findFirstConditionModel, packQuestBonusModelAndTooltipData, packQuestBonusModel
 from gui.shared.utils import decorators
 from gui.shared.utils.scheduled_notifications import AcyclicNotifier
@@ -28,7 +30,7 @@ from gui.impl.backport import BackportTooltipWindow, TooltipData
 from gui.impl.gen.view_models.views.lobby.user_missions.hub.tabs.basic_missions.weekly_missions_model import WeeklyMissionsModel
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from typing import Union
+    from typing import Optional, Union
     from frameworks.wulf.view.view_event import ViewEvent
 
 class WeeklyMissions(ViewComponent[WeeklyMissionsModel]):
@@ -79,9 +81,9 @@ class WeeklyMissions(ViewComponent[WeeklyMissionsModel]):
             showFromIndex = event.getArgument('showFromIndex')
             questId = event.getArgument('questId')
             bonuses = AdditionalRewardsTooltipModel().getBonus()
-            for _, weeklyQuest in self.__weeklyQuests.iteritems():
+            for weeklyQuest in viewvalues(self.__weeklyQuests):
                 if weeklyQuest.getID() == questId:
-                    packQuestBonusModel(weeklyQuest, getWeeklyMissionsBonusPacker(), bonuses, sort=weeklyBonusSort)
+                    packQuestBonusModel(weeklyQuest, getWeeklyMissionsBonusPacker(), bonuses, sortKey=weeklyBonusSortKey)
 
             return AdditionalRewardsTooltip(bonuses[int(showFromIndex):])
         return super(WeeklyMissions, self).createToolTipContent(event=event, contentID=contentID)
@@ -134,7 +136,7 @@ class WeeklyMissions(ViewComponent[WeeklyMissionsModel]):
             questId = weeklyQuest.getID()
             wmm = self.__createWeeklyMissionModel(weeklyQuest, questInfo)
             missionModelList.addViewModel(wmm)
-            bonuses = sorted(weeklyQuest.getBonuses(), cmp=weeklyBonusSort)
+            bonuses = sorted(weeklyQuest.getBonuses(), key=weeklyBonusSortKey)
             self._tooltipData[questId] = {}
             packQuestBonusModelAndTooltipData(getWeeklyMissionsBonusPacker(), wmm.getBonuses(), weeklyQuest, questBonuses=bonuses, tooltipData=self._tooltipData[questId])
             self.eventsCache.questsProgress.markQuestProgressAsViewed(questId)
@@ -171,7 +173,7 @@ class WeeklyMissions(ViewComponent[WeeklyMissionsModel]):
 
     def __getQuestData(self, weeklyQuests):
         questData = {}
-        for _, weeklyQuest in weeklyQuests.iteritems():
+        for weeklyQuest in viewvalues(weeklyQuests):
             questInfo = weeklyQuest.getInfo()
             questData[questInfo.id] = (weeklyQuest, questInfo)
 

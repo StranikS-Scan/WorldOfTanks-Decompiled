@@ -3,7 +3,7 @@
 import typing
 from dict2model import models, schemas, fields
 from section2dict import parse
-from constants import IS_DEVELOPMENT
+from constants import HAS_DEV_RESOURCES
 if typing.TYPE_CHECKING:
     from ResMgr import DataSection
 PDC_SETTINGS_KEY = 'persistent_data_cache'
@@ -31,7 +31,7 @@ def createPDCSettings(scriptsConfig, engineConfig, userPreferences):
         raw = parse(scriptsConfig[PDC_SETTINGS_KEY])
     elif engineConfig.has_key(PDC_SETTINGS_KEY):
         raw = parse(engineConfig[PDC_SETTINGS_KEY])
-    elif IS_DEVELOPMENT:
+    elif HAS_DEV_RESOURCES:
         from gui.development.dev_settings import USER_PREF_KEY_DEVELOPMENT
         if userPreferences.has_key(USER_PREF_KEY_DEVELOPMENT) and userPreferences[USER_PREF_KEY_DEVELOPMENT].has_key(PDC_SETTINGS_KEY):
             raw = parse(userPreferences[USER_PREF_KEY_DEVELOPMENT][PDC_SETTINGS_KEY])

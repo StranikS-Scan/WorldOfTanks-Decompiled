@@ -48,8 +48,8 @@ class Trainings(TrainingsListBase):
          'battleTypeID': BATTLE_TYPES.TRAINING}
 
     @adisp_process
-    def joinTrainingRequest(self, prbID):
-        yield self.prbDispatcher.join(JoinTrainingCtx(prbID, waitingID='prebattle/join'))
+    def joinTrainingRequest(self, prbID, prbClusterID):
+        yield self.prbDispatcher.join(JoinTrainingCtx(prbID, prbClusterID, waitingID='prebattle/join'))
 
     def createTrainingRequest(self):
         settings = TrainingSettingsCtx()

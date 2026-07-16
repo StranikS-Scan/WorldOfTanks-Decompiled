@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/chat_cmd_ctrl.py
+from __future__ import absolute_import
 import logging
 import math
 import weakref
+from future.utils import viewitems
 import BigWorld
 import CommandMapping
 import DestructibleEntity
@@ -186,7 +188,7 @@ class ChatCommandsController(IBattleController):
         if advChatCmp is None:
             return
         else:
-            for chatCmd, keyboardCmd in KB_MAPPING.iteritems():
+            for chatCmd, keyboardCmd in viewitems(KB_MAPPING):
                 if cmdMap.isFired(keyboardCmd, key):
                     if chatCmd in DIRECT_ACTION_BATTLE_CHAT_COMMANDS:
                         self.handleChatCommand(chatCmd)

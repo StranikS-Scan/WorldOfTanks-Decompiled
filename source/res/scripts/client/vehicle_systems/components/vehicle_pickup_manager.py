@@ -3,20 +3,20 @@
 import CGF
 import Math
 import math
-import GenericComponents
-from cgf_script.managers_registrator import autoregister, onProcessQuery
 from vehicle_systems.components.vehicle_pickup_component import VehiclePickupComponent
 
-@autoregister(presentInAllWorlds=True, domain=CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor)
-class VehiclePickupManager(CGF.ComponentManager):
+class VehiclePickupSystem(CGF.System):
+    PickupActivated = CGF.ActivateReaction(CGF.GameObject, CGF.ReactRw(VehiclePickupComponent), CGF.Ro(CGF.TransformComponent))
+    Reactions = CGF.Reactions(PickupActivated)
 
-    @onProcessQuery(CGF.GameObject, VehiclePickupComponent, GenericComponents.TransformComponent)
-    def processPickup(self, go, vehiclePickupComponent, vehicleTransform):
-        dt = self.clock.gameDelta
-        vehiclePickupComponent.time += dt
-        if vehiclePickupComponent.time > VehiclePickupComponent.MAX_LIFETIME:
-            go.removeComponent(vehiclePickupComponent)
-        tankUp = vehicleTransform.worldTransform.applyToAxis(1)
-        angle = math.degrees(tankUp.angle(Math.Vector3(0, 1, 0)))
-        if angle < VehiclePickupComponent.MAX_ANGLE_DEVIATION:
-            go.removeComponent(vehiclePickupComponent)
+    def update(self):
+        dt = self.clock.updateDelta
+        q = CGF.CommandQueue(self.gom)
+        for go, pickup, tr in self.reaction(self.PickupActivated):
+            pickup.time += dt
+            if pickup.time > VehiclePickupComponent.MAX_LIFETIME:
+                q.removeComponent(go, VehiclePickupComponent)
+            tankUp = tr.worldTransform.applyToAxis(1)
+            angle = math.degrees(tankUp.angle(Math.Vector3(0, 1, 0)))
+            if angle < VehiclePickupComponent.MAX_ANGLE_DEVIATION:
+                q.removeComponent(go, VehiclePickupComponent)

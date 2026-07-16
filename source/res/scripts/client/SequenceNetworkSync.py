@@ -7,8 +7,7 @@ import CGF
 from constants import HAS_DEV_RESOURCES
 from cgf_client_common.entity_dyn_components import ReplicableDynamicScriptComponent
 from cgf_components.sequence_components import SequencePauseComponent, SequenceSnapshotComponent
-from cgf_script.managers_registrator import onAddedQuery, autoregister, onProcessQuery, onRemovedQuery
-from cgf_script.component_meta_class import registerReplicableComponent, ComponentProperty, CGFMetaTypes
+from cgf_script.registration import registerReplicableComponent, ComponentProperty
 from GenericComponents import Sequence
 _logger = logging.getLogger(__name__)
 _STATE_STOPPED = Sequence.State.Stopped
@@ -20,7 +19,8 @@ _INT_STATE_RUNNING = int(_STATE_RUNNING)
 
 @registerReplicableComponent
 class SequenceNetworkSync(ReplicableDynamicScriptComponent):
-    timeCorrection = ComponentProperty(type=CGFMetaTypes.FLOAT, editorName='Time Correction', value=0.3)
+    editorTitle = 'Sequence Network Sync'
+    timeCorrection = ComponentProperty(type=CGF.PropertyType.Float, editorName='Time Correction', value=0.3)
 
     def __init__(self):
         super(SequenceNetworkSync, self).__init__()
@@ -100,61 +100,61 @@ class SequenceSnapshot(object):
         self.transition = transition
 
 
-@autoregister(presentInAllWorlds=True, domain=CGF.DomainOption.DomainClient)
-class SequenceNetworkSyncManager(CGF.ComponentManager):
-    syncQuery = CGF.QueryConfig(SequenceNetworkSync, Sequence)
+class SequenceNetworkSyncSystem(CGF.System):
+    SequenceSyncIterate = CGF.IterateReaction(CGF.ActiveOnly, CGF.GameObject, CGF.Ro(SequenceNetworkSync), CGF.Rw(Sequence))
+    SequenceActivated = CGF.ActivateReaction(CGF.ReactHas(SequenceNetworkSync), CGF.Rw(Sequence))
+    SequenceDeactivated = CGF.DeactivateReaction(CGF.GameObject, CGF.ReactHas(SequenceNetworkSync), CGF.Rw(Sequence))
+    SnapshotActivated = CGF.ActivateReaction(CGF.ReactRo(SequenceSnapshotComponent))
+    SnapshotDeactivated = CGF.DeactivateReaction(CGF.ReactRo(SequenceSnapshotComponent))
+    PauseActivated = CGF.ActivateReaction(CGF.ReactRo(SequencePauseComponent))
+    PauseDeactivated = CGF.DeactivateReaction(CGF.ReactRo(SequencePauseComponent))
+    Reactions = CGF.Reactions(SequenceSyncIterate, SequenceActivated, SequenceDeactivated, SnapshotActivated, SnapshotDeactivated, PauseActivated, PauseDeactivated)
 
     def __init__(self):
-        super(SequenceNetworkSyncManager, self).__init__()
+        super(SequenceNetworkSyncSystem, self).__init__()
         self.__isSyncPaused = False
         self.__snapshots = {}
 
-    @onAddedQuery(SequenceNetworkSync, Sequence)
-    def onSequenceAdded(self, sync, sequence):
-        if self.__isSyncPaused:
-            sequence.pause()
+    def update(self):
+        syncIter, sequenceActivated, sequenceDeactivated, snapshotActivated, snapshotDeactivated, pauseActivated, pauseDeactivated = self.reactions
+        snapshots = self.__snapshots
+        for go, sequence in sequenceDeactivated:
+            snapshots.pop(go.id, None)
 
-    @onRemovedQuery(SequenceNetworkSync, Sequence)
-    def onSequenceRemoved(self, sync, sequence):
-        self.__snapshots.pop(sequence, None)
+        if snapshotDeactivated:
+            snapshots.clear()
+        if pauseDeactivated and self.__isSyncPaused:
+            self.__isSyncPaused = False
+        isSyncPaused = self.__isSyncPaused
+        if isSyncPaused:
+            for sequence in sequenceActivated:
+                sequence.pause()
+
+        createSnapshot = bool(snapshotActivated)
+        needPause = False
+        if pauseActivated and not isSyncPaused:
+            self.__isSyncPaused = True
+            isSyncPaused = True
+            needPause = True
+        _syncSequence = self.__syncSequence
+        for go, sync, sequence in syncIter:
+            if createSnapshot:
+                snapshots[go.id] = SequenceSnapshot(sync.syncTime, sync.speed, sync.state, sync.activeLayerIdx, sync.transition)
+            if needPause:
+                snapshot = snapshots.get(go.id)
+                if snapshot is not None:
+                    _syncSequence(snapshot, sequence)
+            if isSyncPaused:
+                break
+            _syncSequence(sync, sequence)
+
         return
-
-    @onProcessQuery(SequenceNetworkSync, Sequence, tickGroup='PreSimulation')
-    def onProcess(self, sync, sequence):
-        if self.__isSyncPaused:
-            return
-        SequenceNetworkSyncManager.__syncSequence(sync, sequence)
-
-    @onAddedQuery(SequenceSnapshotComponent)
-    def onSnapshotRequested(self, _):
-        for sync, sequence in self.syncQuery:
-            self.__snapshots[sequence] = SequenceSnapshot(sync.syncTime, sync.speed, sync.state, sync.activeLayerIdx, sync.transition)
-
-    @onRemovedQuery(SequenceSnapshotComponent)
-    def onSnapshotCleared(self, _):
-        self.__snapshots.clear()
-
-    @onAddedQuery(SequencePauseComponent)
-    def onPauseRequested(self, _):
-        if self.__isSyncPaused:
-            return
-        self.__isSyncPaused = True
-        for _, sequence in self.syncQuery:
-            if sequence in self.__snapshots:
-                snapshot = self.__snapshots[sequence]
-                SequenceNetworkSyncManager.__syncSequence(snapshot, sequence)
-
-    @onRemovedQuery(SequencePauseComponent)
-    def onPauseLifted(self, _):
-        if not self.__isSyncPaused:
-            return
-        self.__isSyncPaused = False
 
     @staticmethod
     def __syncSequence(sync, sequence):
-        if not SequenceNetworkSyncManager.__trySyncTransition(sync, sequence):
-            SequenceNetworkSyncManager.__trySyncActiveLayerIdx(sync, sequence)
-        SequenceNetworkSyncManager.__syncLayer(sync, sequence)
+        if not SequenceNetworkSyncSystem.__trySyncTransition(sync, sequence):
+            SequenceNetworkSyncSystem.__trySyncActiveLayerIdx(sync, sequence)
+        SequenceNetworkSyncSystem.__syncLayer(sync, sequence)
 
     @staticmethod
     def __trySyncTransition(sync, sequence):
@@ -186,7 +186,7 @@ class SequenceNetworkSyncManager(CGF.ComponentManager):
             sequence.stop()
             return
         if syncState in (_INT_STATE_RUNNING, _INT_STATE_PAUSED):
-            SequenceNetworkSyncManager.__updateTime(sync, sequence)
+            SequenceNetworkSyncSystem.__updateTime(sync, sequence)
             return
 
     @staticmethod

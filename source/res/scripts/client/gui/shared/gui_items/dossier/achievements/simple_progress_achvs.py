@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/simple_progress_achvs.py
+from __future__ import absolute_import
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -7,8 +8,8 @@ from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
 from dossiers2.custom.cache import getCache as getDossiersCache
 from dossiers2.custom.collector20 import getCollector20Config
 from dossiers2.custom.helpers import getCollector20Requirements
-from abstract import SimpleProgressAchievement
-from abstract.mixins import Deprecated, HasVehiclesList
+from gui.shared.gui_items.dossier.achievements.abstract import SimpleProgressAchievement
+from gui.shared.gui_items.dossier.achievements.abstract.mixins import Deprecated, HasVehiclesList
 
 class BeasthunterAchievement(SimpleProgressAchievement):
     __slots__ = ()
@@ -239,5 +240,5 @@ class Collector20Achievement(HasVehiclesList, SimpleProgressAchievement):
         return len(self._vehTypeCompDescrs)
 
     @classmethod
-    def _sortFunc(cls, i1, i2):
-        return i1.level - i2.level or i1.innationID - i2.innationID or i1.nation - i2.nation
+    def _sortKey(cls, v):
+        return (v.level, v.innationID, v.nation)

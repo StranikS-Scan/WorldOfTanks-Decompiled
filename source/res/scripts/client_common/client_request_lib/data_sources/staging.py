@@ -1,13 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/client_request_lib/data_sources/staging.py
-from itertools import groupby
+from __future__ import absolute_import
+import functools
 import json
-from urllib import urlencode
-from functools import wraps
 from datetime import datetime, time as dt_time
+from functools import wraps
+from future.moves.urllib.parse import urlencode
+from future.utils import viewitems
+from itertools import groupby
 from client_request_lib import exceptions
 from client_request_lib.data_sources import base
-import functools
 
 def _doResponse(callback, result, status_code, response_code):
     callback(result, status_code, response_code)
@@ -59,10 +61,10 @@ def timestamp_to_datetime(timestamp):
 
 def translate_field_names(response, field_mapping, requested_fields=None):
     if requested_fields:
-        field_mapping = {k:v for k, v in field_mapping.iteritems() if k in requested_fields}
+        field_mapping = {k:v for k, v in viewitems(field_mapping) if k in requested_fields}
     if isinstance(response, list):
         return [ translate_field_names(i, field_mapping) for i in response ]
-    backward_mapping = sorted([ (v, k) for k, v in field_mapping.iteritems() ])
+    backward_mapping = sorted(((v, k) for k, v in viewitems(field_mapping)))
     result = {}
     for key, field_iter in groupby(backward_mapping, key=lambda x: x[0].split('.', 1)[0]):
         inner_mapping = {}
@@ -89,7 +91,7 @@ def translate_field_names(response, field_mapping, requested_fields=None):
 
 def generate_docstring_mapping(field_mapping):
     result = ['\n        .. list-table::\n            :widths: 50 50\n            :header-rows: 1\n\n            * - client_request_lib\n            - Backend\n    ']
-    for our, their in field_mapping.iteritems():
+    for our, their in viewitems(field_mapping):
         row = '\n            * - ``{our}``\n            - ``{their}``\n        '.format(our=our, their=their)
         result.append(row)
 
@@ -238,6 +240,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
     requests_before_logout = -1
 
     def __init__(self, url_fetcher, staging_hosts=None, client_lang=None, user_agent=None):
+        super(StagingDataAccessor, self).__init__()
         self.client_lang = client_lang
         self._account = None
         self.url_fetcher = url_fetcher
@@ -334,7 +337,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
         @preprocess_callback(callback, 'spa')
         def inner_callback(data):
             return [ {'id': k,
-             'name': v} for k, v in data.iteritems() ]
+             'name': v} for k, v in viewitems(data) ]
 
         return self._request_data(inner_callback, 'spa', url)
 

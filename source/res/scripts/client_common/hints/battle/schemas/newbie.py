@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/hints/battle/schemas/newbie.py
+from __future__ import absolute_import
 import typing
 from dict2model import fields, validate
 from helpers import dependency

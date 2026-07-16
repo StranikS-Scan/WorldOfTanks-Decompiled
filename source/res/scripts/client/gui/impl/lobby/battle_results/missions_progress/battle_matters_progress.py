@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_results/missions_progress/battle_matters_progress.py
+from __future__ import absolute_import
 import typing
 from gui.battle_results.pbs_helpers.common import getBattleResults
 from gui.impl.gen import R
@@ -7,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.battle_results.progression.battle_matt
 from gui.impl.lobby.battle_results.missions_progress.progression_presenter_interface import IProgressionCategoryPresenter
 from gui.impl.pub.view_component import ViewComponent
 from gui.shared.missions.packers.bonus import packMissionsBonusModelAndTooltipData
-from gui.impl.lobby.battle_matters.battle_matters_bonus_packer import getBattleMattersBonusPacker, bonusesSort, battleMattersSort
+from gui.impl.lobby.battle_matters.battle_matters_bonus_packer import getBattleMattersBonusPacker, bonusesSortKey, battleMattersSortKey
 from gui.impl.gen.view_models.views.lobby.battle_matters.quest_view_model import QuestViewModel, State
 from gui.server_events.events_dispatcher import showBattleMatters
 from gui.impl.backport import BackportTooltipWindow
@@ -122,8 +123,8 @@ class BattleMattersProgressPresenter(ViewComponent[BattleMattersProgressModel], 
             questModel.setLastSeenProgress(curProg - diff)
             questModel.setCurrentProgress(curProg)
             questModel.setMaxProgress(totalProg)
-        bonuses = sorted(quest.getBonuses(), cmp=bonusesSort)
-        packMissionsBonusModelAndTooltipData(bonuses, getBattleMattersBonusPacker(), questModel.getRewards(), self.__tooltipData, sort=battleMattersSort)
+        bonuses = sorted(quest.getBonuses(), key=bonusesSortKey)
+        packMissionsBonusModelAndTooltipData(bonuses, getBattleMattersBonusPacker(), questModel.getRewards(), self.__tooltipData, sortKey=battleMattersSortKey)
         self.__bonusesModel[quest.getID()] = questModel.getRewards()
         return questModel
 

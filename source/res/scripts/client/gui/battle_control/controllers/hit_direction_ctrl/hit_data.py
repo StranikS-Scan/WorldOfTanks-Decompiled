@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/hit_direction_ctrl/hit_data.py
+from __future__ import absolute_import
 import math
 from gui.battle_control.battle_constants import HIT_FLAGS
 from constants import ATTACK_REASON_INDICES, ATTACK_REASON

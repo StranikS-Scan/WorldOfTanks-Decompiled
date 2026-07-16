@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/view_helpers/emblems.py
+from __future__ import absolute_import
 from functools import partial
 from enum import IntEnum
 from gui.clans import settings as clan_settings

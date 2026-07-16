@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: in_battle_achievements/scripts/common/in_battle_achievements.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from dossiers2.custom.records import RECORD_DB_IDS
 DISABLE_ACHIEVEMENTS_VEHICLE_TAG = 'disableIBA'
 EXCLUDED_VEHICLE_TAGS = ('observer', DISABLE_ACHIEVEMENTS_VEHICLE_TAG)
@@ -52,4 +54,4 @@ ENABLED_ACHIEVEMENTS = {('achievements', 'kamikaze'): True,
  ('achievements', 'shootToKill'): True,
  ('achievements', 'medalGore'): True,
  ('achievements', 'mainGun'): True}
-ENABLED_ACHIEVEMENTS_BY_ID = {RECORD_DB_IDS[item]:isEnabled for item, isEnabled in ENABLED_ACHIEVEMENTS.iteritems()}
+ENABLED_ACHIEVEMENTS_BY_ID = {RECORD_DB_IDS[item]:isEnabled for item, isEnabled in viewitems(ENABLED_ACHIEVEMENTS)}

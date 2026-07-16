@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: in_battle_achievements/scripts/client/VehicleAchievementsComponent.py
+from __future__ import absolute_import
 import logging
 import BigWorld
 from dossiers2.custom.records import DB_ID_TO_RECORD as ID2NAME
@@ -16,4 +17,4 @@ class VehicleAchievementsComponent(BigWorld.DynamicScriptComponent):
         startIndex, endIndex = changePath[-1]
         receivedAchievements = self.achievements[startIndex:endIndex]
         revokedAchievements = oldValue
-        logger.debug('[IN_BATTLE_ACHIEVEMENTS] Received: %s - Revoked: %s', ', '.join([ ID2NAME[item][1] for item in receivedAchievements if item in ID2NAME.iterkeys() ]), ', '.join([ ID2NAME[item][1] for item in revokedAchievements if item in ID2NAME.iterkeys() ]))
+        logger.debug('[IN_BATTLE_ACHIEVEMENTS] Received: %s - Revoked: %s', ', '.join([ ID2NAME[item][1] for item in receivedAchievements if item in ID2NAME ]), ', '.join([ ID2NAME[item][1] for item in revokedAchievements if item in ID2NAME ]))

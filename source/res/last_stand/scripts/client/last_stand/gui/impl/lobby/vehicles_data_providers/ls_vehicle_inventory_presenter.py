@@ -20,6 +20,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from last_stand.gui.impl.lobby.tooltips.ls_carousel_tooltip_view import LSVehicleCarouselTooltipView
 from last_stand.skeletons.ls_controller import ILSController
+from last_stand.skeletons.ls_vehicle_selection_controller import ILSVehicleSelectionController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.game_control import IBattlePassController
@@ -32,6 +33,7 @@ class LSVehicleInventoryPresenter(ViewComponent[VehiclesInventoryModel], IGlobal
     __battlePass = dependency.descriptor(IBattlePassController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     _lsCtrl = dependency.descriptor(ILSController)
+    _lsVehicleCtrl = dependency.descriptor(ILSVehicleSelectionController)
 
     def __init__(self, vehiclesComponent):
         self.__vehiclesComponent = vehiclesComponent
@@ -93,7 +95,7 @@ class LSVehicleInventoryPresenter(ViewComponent[VehiclesInventoryModel], IGlobal
 
     def __onSelectVehicle(self, vehId):
         inventoryId = int(vehId['id'])
-        self._lsCtrl.selectVehicle(inventoryId)
+        self._lsVehicleCtrl.selectVehicle(inventoryId)
 
     def __onCacheResync(self, reason, diff):
         if reason == CACHE_SYNC_REASON.CLIENT_UPDATE:

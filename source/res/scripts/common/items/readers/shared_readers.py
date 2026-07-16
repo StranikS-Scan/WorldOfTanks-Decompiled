@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/readers/shared_readers.py
-import itertools
+from __future__ import absolute_import, division
 import logging
 import typing
+from builtins import filter
 from copy import deepcopy
+from past.builtins import intern
 import ResMgr
 import Math
 from constants import IS_CLIENT, IS_BOT, ITEM_DEFS_PATH, IS_EDITOR, DeviceRepairMode, IS_UE_EDITOR
@@ -124,25 +126,25 @@ def _initCustomizationConstants():
     if __customizationConstants is not None:
         return
     else:
-        __customizationConstants = dict()
+        __customizationConstants = {}
         filePath = _CUSTOMIZATION_CONSTANTS_PATH
         section = ResMgr.openSection(filePath)
         if section is None:
             _xml.raiseWrongXml(None, filePath, 'can not open or read')
         xmlCtx = (None, filePath)
-        __customizationConstants['slot_id_ranges'] = dict()
+        __customizationConstants['slot_id_ranges'] = {}
         slots = _xml.getSubsection(xmlCtx, section, 'slot_id_ranges')
         for partName, _ in _xml.getChildren(xmlCtx, section, 'slot_id_ranges'):
-            __customizationConstants['slot_id_ranges'][partName] = dict()
+            __customizationConstants['slot_id_ranges'][partName] = {}
             for itemName, item in _xml.getChildren(xmlCtx, slots, partName):
                 range_min = _xml.readInt(xmlCtx, item, 'range_min')
                 range_max = _xml.readInt(xmlCtx, item, 'range_max')
                 __customizationConstants['slot_id_ranges'][partName][itemName] = (range_min, range_max)
 
-        __customizationConstants['attachment_slot_sizes'] = dict()
+        __customizationConstants['attachment_slot_sizes'] = {}
         attachmentSlotTypes = _xml.getSubsection(xmlCtx, section, 'attachment_slot_sizes')
-        for typeName, type in _xml.getChildren(xmlCtx, section, 'attachment_slot_sizes'):
-            __customizationConstants['attachment_slot_sizes'][typeName] = dict()
+        for typeName, _ in _xml.getChildren(xmlCtx, section, 'attachment_slot_sizes'):
+            __customizationConstants['attachment_slot_sizes'][typeName] = {}
             for sizeName, item in _xml.getChildren(xmlCtx, attachmentSlotTypes, typeName):
                 size = _xml.readVector3(xmlCtx, item, 'size')
                 premountSize = _xml.readVector3(xmlCtx, item, 'premount_size')
@@ -153,10 +155,10 @@ def _initCustomizationConstants():
                  'mountSize': mountSize,
                  'shift': shift}
 
-        __customizationConstants['attachment_hanging_effects'] = dict()
+        __customizationConstants['attachment_hanging_effects'] = {}
         attachmentSlotTypes = _xml.getSubsection(xmlCtx, section, 'attachment_hanging_effects')
-        for typeName, type in _xml.getChildren(xmlCtx, section, 'attachment_hanging_effects'):
-            __customizationConstants['attachment_hanging_effects'][typeName] = dict()
+        for typeName, _ in _xml.getChildren(xmlCtx, section, 'attachment_hanging_effects'):
+            __customizationConstants['attachment_hanging_effects'][typeName] = {}
             for rareName, value in _xml.getChildren(xmlCtx, attachmentSlotTypes, typeName):
                 __customizationConstants['attachment_hanging_effects'][typeName][rareName] = value.asString
 
@@ -168,13 +170,13 @@ def _initHangers():
     if __hangers is not None:
         return
     else:
-        __hangers = dict()
+        __hangers = {}
         filePath = _HANGERS_PATH
         section = ResMgr.openSection(filePath)
         if section is None:
             _xml.raiseWrongXml(None, filePath, 'can not open or read')
         xmlCtx = (None, filePath)
-        for itemName, item in _xml.getChildren(xmlCtx, section, 'hanger'):
+        for _, item in _xml.getChildren(xmlCtx, section, 'hanger'):
             id = _xml.readInt(xmlCtx, item, 'id')
             modelName = _xml.readString(xmlCtx, item, 'modelName')
             crashModelName = _xml.readStringOrNone(xmlCtx, item, 'crashModelName')
@@ -211,7 +213,7 @@ def _verifySlotId(ctx, slotType, slotId):
 def _verifyMatchingSlotSettings(xmlCtx, descr):
 
     def findTag(function, sequence):
-        return next(itertools.ifilter(function, sequence), None)
+        return next(filter(function, sequence), None)
 
     matchingTag = findTag(lambda tag: tag in c11n_constants.ProjectionDecalMatchingTags.ALL, descr.tags)
     if descr.hiddenForUser:

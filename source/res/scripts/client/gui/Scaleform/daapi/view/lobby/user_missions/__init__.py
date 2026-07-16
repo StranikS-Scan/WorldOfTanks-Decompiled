@@ -7,6 +7,7 @@ from gui.Scaleform.framework import WindowLayer, ScopeTemplates, ViewSettings, C
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.USERMISSSIONS_ALIASES import USERMISSSIONS_ALIASES
 from gui.app_loader import settings as app_settings
+from gui.impl.lobby.challenges.info_view import ChallengesInfoBrowserView
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 
 def getStateMachineRegistrators():
@@ -19,7 +20,7 @@ def getContextMenuHandlers():
 
 
 def getViewSettings():
-    return (ViewSettings(VIEW_ALIAS.USER_MISSIONS_HUB_CONTAINER, UserMissionsHubContainerView, 'userMissionsHubContainer.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.USER_MISSIONS_HUB_CONTAINER, ScopeTemplates.LOBBY_SUB_SCOPE), ComponentSettings(USERMISSSIONS_ALIASES.USER_MISSIONS_HUB_CONTENT_INJECT, UserMissionsHubContentInject, ScopeTemplates.DEFAULT_SCOPE))
+    return (ViewSettings(VIEW_ALIAS.USER_MISSIONS_HUB_CONTAINER, UserMissionsHubContainerView, 'userMissionsHubContainer.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.USER_MISSIONS_HUB_CONTAINER, ScopeTemplates.LOBBY_SUB_SCOPE), ComponentSettings(USERMISSSIONS_ALIASES.USER_MISSIONS_HUB_CONTENT_INJECT, UserMissionsHubContentInject, ScopeTemplates.DEFAULT_SCOPE), ViewSettings(VIEW_ALIAS.CHALLENGES_INFO, ChallengesInfoBrowserView, 'browserScreen.swf', WindowLayer.TOP_WINDOW, VIEW_ALIAS.CHALLENGES_INFO, ScopeTemplates.LOBBY_SUB_SCOPE))
 
 
 def getBusinessHandlers():
@@ -29,5 +30,5 @@ def getBusinessHandlers():
 class UserMissionsHubPackageBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
-        listeners = ((VIEW_ALIAS.USER_MISSIONS_HUB_CONTAINER, self.loadViewByCtxEvent),)
+        listeners = ((VIEW_ALIAS.USER_MISSIONS_HUB_CONTAINER, self.loadViewByCtxEvent), (VIEW_ALIAS.CHALLENGES_INFO, self.loadViewByCtxEvent))
         super(UserMissionsHubPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)

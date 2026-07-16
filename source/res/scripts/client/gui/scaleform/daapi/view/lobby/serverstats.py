@@ -45,7 +45,7 @@ class ServerStats(ServerStatsMeta, ILegacyListener):
         builder.setMessagesAndButtons(R.strings.dialogs.dyn(confirmationType))
         success = yield wg_await(showSimple(builder.buildInLobby()))
         if success:
-            BigWorld.callback(0.0, lambda : self.reloginCtrl.doRelogin(peripheryID, self.__onReloing))
+            BigWorld.callback(0.0, lambda : self.reloginCtrl.doRelogin(peripheryID, self.__onRelogin))
         else:
             self.as_changePeripheryFailedS()
 
@@ -104,7 +104,7 @@ class ServerStats(ServerStatsMeta, ILegacyListener):
                  'id': peripheryID,
                  'csisStatus': csisStatus})
 
-        if self.connectionMgr.peripheryID == 0:
+        if self.connectionMgr.peripheryID == constants.STANDALONE_CLUSTER_ID:
             result.insert(0, {'label': self.connectionMgr.serverUserName,
              'id': 0,
              'csisStatus': HOST_AVAILABILITY.IGNORED,
@@ -112,7 +112,7 @@ class ServerStats(ServerStatsMeta, ILegacyListener):
         if not self.__isListSelected:
             self.__isListSelected = True
             index = 0
-            if self.connectionMgr.peripheryID != 0:
+            if self.connectionMgr.peripheryID != constants.STANDALONE_CLUSTER_ID:
                 for idx, (hostName, name, csisStatus, peripheryID) in enumerate(simpleHostList):
                     if hostName == self.connectionMgr.url:
                         index = idx
@@ -134,6 +134,6 @@ class ServerStats(ServerStatsMeta, ILegacyListener):
     def __onServersUpdate(self, _=None):
         self._updateServersList()
 
-    def __onReloing(self, isCompleted):
+    def __onRelogin(self, isCompleted):
         if not isCompleted:
             self.as_changePeripheryFailedS()

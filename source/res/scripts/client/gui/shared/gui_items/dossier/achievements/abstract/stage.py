@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/abstract/stage.py
+from __future__ import absolute_import
 from gui.shared.gui_items.dossier.achievements.abstract.regular import RegularAchievement
 from dossiers2.ui.achievements import ACHIEVEMENT_TYPE
 

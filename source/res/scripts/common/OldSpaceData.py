@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/OldSpaceData.py
+from __future__ import absolute_import
 import BigWorld
 import logging
 import struct
@@ -12,7 +13,7 @@ def ShowWarningOnce():
         WarningFlag = False
         import inspect
         func_name = inspect.stack()[1][3]
-        logging.warning(func_name + ': This API will be deprecated soon, please use the new API.' + ' All deprecated functions: delSpaceDataForKey,' + ' getSpaceDataFirstForKey, setSpaceData, setSpaceTimeOfDay,' + ' timeOfDay, setSpaceArtificialMinLoad')
+        logging.warning('%s: This API will be deprecated soon, please use the new API.', func_name)
 
 
 def getPropertyNameForKey(key):
@@ -79,7 +80,7 @@ def timeOfDay(spaceID):
         tod = BigWorld.spaces[spaceID].timeOfDay
         return BigWorld.time() * tod.gameSecondsPerSecond + tod.initialTimeOfDay
     except KeyError:
-        logging.warning('BigWorld.timeOfDay( spaceID ): Space is not found, spaceID=' + str(spaceID))
+        logging.warning('BigWorld.timeOfDay( spaceID ): Space is not found, spaceID=%s', str(spaceID))
         return -1.0
 
 

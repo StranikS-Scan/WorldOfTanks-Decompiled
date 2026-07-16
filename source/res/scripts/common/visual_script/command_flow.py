@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/command_flow.py
+from __future__ import absolute_import
 from visual_script import ASPECT
 from visual_script.block import Block, Meta
 from visual_script.slot_types import SLOT_TYPE

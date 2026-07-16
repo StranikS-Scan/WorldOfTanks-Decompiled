@@ -1,13 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/cgf_components/power_mode_components.py
+from __future__ import absolute_import
 import bisect
 import CGF
 from GenericComponents import Sequence
 from constants import IS_CLIENT
-from cgf_script.component_meta_class import CGFMetaTypes, ComponentProperty, registerComponent
-from cgf_script.managers_registrator import autoregister, onAddedQuery, onRemovedQuery, onProcessQuery
+from cgf_script.registration import ComponentProperty, registerComponent
 from Vehicular import VehicleAudition
-from cgf_common.cgf_helpers import getParentGameObjectByComponent
 from vehicle_systems.tankStructure import TankSoundObjectsIndexes
 if IS_CLIENT:
     from PowerModeController import PowerModeController
@@ -20,9 +19,9 @@ else:
 @registerComponent
 class PowerModeRTPCComponent(object):
     category = 'Sound'
-    domain = CGF.DomainOption.DomainClient
     editorTitle = 'PowerMode RTPC'
-    RTPCName = ComponentProperty(type=CGFMetaTypes.STRING, value='RTPC_ext_abl_power_volume', editorName='RTPC name')
+    domain = CGF.Domain.Client
+    RTPCName = ComponentProperty(type=CGF.PropertyType.String, value='RTPC_ext_abl_power_volume', editorName='RTPC name')
 
     def __init__(self):
         super(PowerModeRTPCComponent, self).__init__()
@@ -35,11 +34,11 @@ class PowerModeRTPCComponent(object):
 @registerComponent
 class PowerModeActiveProgressLayers(object):
     category = 'Vehicle Mechanics'
-    domain = CGF.DomainOption.DomainClient
     editorTitle = 'Power Mode Active Progress Layers'
-    points = ComponentProperty(type=CGFMetaTypes.FLOAT_LIST, editorName='Points', value=(0.0,))
-    transitionTime = ComponentProperty(type=CGFMetaTypes.FLOAT, editorName='Transition time', value=2.0)
-    layerNamePattern = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Layer name pattern', value='layer_{}')
+    domain = CGF.Domain.Client
+    points = ComponentProperty(type=CGF.PropertyType.FloatList, editorName='Points', value=(0.0,))
+    transitionTime = ComponentProperty(type=CGF.PropertyType.Float, editorName='Transition time', value=2.0)
+    layerNamePattern = ComponentProperty(type=CGF.PropertyType.String, editorName='Layer name pattern', value='layer_{}')
 
     def __init__(self):
         super(PowerModeActiveProgressLayers, self).__init__()
@@ -49,50 +48,58 @@ class PowerModeActiveProgressLayers(object):
         return
 
 
-@autoregister(presentInAllWorlds=True)
-class PowerModeMechanicManager(CGF.ComponentManager):
+class PowerModeMechanicSystem(CGF.System):
+    PowerModeProgressActivated = CGF.ActivateReaction(CGF.GameObject, CGF.ReactRw(PowerModeActiveProgressLayers), CGF.Rw(Sequence))
+    PowerModeProgressDectivated = CGF.DeactivateReaction(CGF.ReactRw(PowerModeActiveProgressLayers))
+    PowerModeProgressIterate = CGF.IterateReaction(CGF.ActiveOnly, CGF.Rw(PowerModeActiveProgressLayers), CGF.Rw(Sequence))
+    PowerModeRTPCActivated = CGF.ActivateReaction(CGF.GameObject, CGF.ReactRw(PowerModeRTPCComponent))
+    PowerModeRTPCDeactivated = CGF.DeactivateReaction(CGF.ReactRw(PowerModeRTPCComponent))
+    PowerModeRTPCIterate = CGF.IterateReaction(CGF.ActiveOnly, CGF.Rw(PowerModeRTPCComponent))
+    PowerModeControllerAccess = CGF.AccessReaction(CGF.GameObject, CGF.Rw(PowerModeController))
+    VehicleAuditionAccess = CGF.AccessReaction(CGF.GameObject, CGF.Rw(VehicleAudition))
+    Reactions = CGF.Reactions(PowerModeProgressActivated, PowerModeProgressDectivated, PowerModeProgressIterate, PowerModeRTPCActivated, PowerModeRTPCDeactivated, PowerModeControllerAccess, VehicleAuditionAccess, PowerModeRTPCIterate)
 
-    @onAddedQuery(CGF.GameObject, PowerModeActiveProgressLayers, Sequence)
-    def onPowerModeActiveProgressLayersAdded(self, gameObject, powerModeLayers, sequence):
-        powerModeLayers.powerModeControllerGO = getParentGameObjectByComponent(gameObject, PowerModeController)
-        self.__requestActiveProgressLayer(powerModeLayers, sequence, isInstantly=True)
+    def commonUpdate(self):
+        powerModeAccess = self.reaction(self.PowerModeControllerAccess)
+        auditionAccess = self.reaction(self.VehicleAuditionAccess)
+        for layers in self.reaction(self.PowerModeProgressDectivated):
+            layers.powerModeControllerGO = None
 
-    @onRemovedQuery(PowerModeActiveProgressLayers)
-    def onPowerModeActiveProgressLayersRemoved(self, powerModeLayers):
-        powerModeLayers.powerModeControllerGO = None
+        for rtpc in self.reaction(self.PowerModeRTPCDeactivated):
+            rtpc.powerModeControllerGO = None
+            self.__setEnginePowerMode(rtpc, powerModeAccess, auditionAccess)
+
+        for go, rtpc in self.reaction(self.PowerModeRTPCActivated):
+            rtpc.vehicleAuditionGO, _ = CGF.findParentWithReaction(go, auditionAccess)
+            rtpc.powerModeControllerGO, _ = CGF.findParentWithReaction(go, powerModeAccess)
+            self.__setEnginePowerMode(rtpc, powerModeAccess, auditionAccess)
+
+        for go, layers, sequence in self.reaction(self.PowerModeProgressActivated):
+            layers.powerModeControllerGO, _ = CGF.findParentWithReaction(go, powerModeAccess)
+            self.__requestActiveProgressLayer(layers, powerModeAccess, sequence, isInstantly=True)
+
         return
 
-    @onProcessQuery(PowerModeActiveProgressLayers, Sequence, period=0.2)
-    def onPowerModeProgressActiveProgressLayersProcess(self, powerModeLayers, sequence):
-        self.__requestActiveProgressLayer(powerModeLayers, sequence)
+    def periodUpdate(self):
+        powerModeAccess = self.reaction(self.PowerModeControllerAccess)
+        auditionAccess = self.reaction(self.VehicleAuditionAccess)
+        for layers, sequence in self.reaction(self.PowerModeProgressIterate):
+            self.__requestActiveProgressLayer(layers, powerModeAccess, sequence)
 
-    @onAddedQuery(CGF.GameObject, PowerModeRTPCComponent)
-    def onPowerModeRTPCAdded(self, gameObject, powerModeRTPCComponent):
-        powerModeRTPCComponent.vehicleAuditionGO = getParentGameObjectByComponent(gameObject, VehicleAudition)
-        powerModeRTPCComponent.powerModeControllerGO = getParentGameObjectByComponent(gameObject, PowerModeController)
-        self.__setEnginePowerMode(powerModeRTPCComponent)
-
-    @onRemovedQuery(PowerModeRTPCComponent)
-    def onPowerModeRTPCRemoved(self, powerModeRTPCComponent):
-        powerModeRTPCComponent.powerModeControllerGO = None
-        self.__setEnginePowerMode(powerModeRTPCComponent)
-        return
-
-    @onProcessQuery(PowerModeRTPCComponent, period=0.2)
-    def onPowerModeProgressRTPCProcess(self, powerModeRTPCComponent):
-        self.__setEnginePowerMode(powerModeRTPCComponent)
+        for rtpc in self.reaction(self.PowerModeRTPCIterate):
+            self.__setEnginePowerMode(rtpc, powerModeAccess, auditionAccess)
 
     @classmethod
-    def __getPowerModeActiveProgress(cls, powerModeControllerGO):
-        powerModeController = powerModeControllerGO.findComponentByType(PowerModeController)
+    def __getPowerModeActiveProgress(cls, powerModeControllerGO, powerModeAccess):
+        _, powerModeController = powerModeAccess.find(powerModeControllerGO)
         return powerModeController.getMechanicState().activeProgress if powerModeController is not None else 0.0
 
     @classmethod
-    def __setEnginePowerMode(cls, powerModeRTPCComponent):
+    def __setEnginePowerMode(cls, powerModeRTPCComponent, powerModeAccess, auditionAccess):
         if powerModeRTPCComponent.vehicleAuditionGO is None:
             return
         else:
-            audition = powerModeRTPCComponent.vehicleAuditionGO.findComponentByType(VehicleAudition)
+            _, audition = auditionAccess.find(powerModeRTPCComponent.vehicleAuditionGO)
             if audition is None:
                 return
             soundObj = audition.getSoundObject(TankSoundObjectsIndexes.ENGINE)
@@ -100,21 +107,21 @@ class PowerModeMechanicManager(CGF.ComponentManager):
                 return
             progress = 0.0
             if powerModeRTPCComponent.powerModeControllerGO is not None:
-                progress = cls.__getPowerModeActiveProgress(powerModeRTPCComponent.powerModeControllerGO)
+                progress = cls.__getPowerModeActiveProgress(powerModeRTPCComponent.powerModeControllerGO, powerModeAccess)
             if powerModeRTPCComponent.progress != progress:
                 soundObj.setRTPC(powerModeRTPCComponent.RTPCName, progress)
                 powerModeRTPCComponent.progress = progress
             return
 
     @classmethod
-    def __requestActiveProgressLayer(cls, powerModeLayers, sequence, isInstantly=False):
+    def __requestActiveProgressLayer(cls, powerModeLayers, powerModeAccess, sequence, isInstantly=False):
         if powerModeLayers.powerModeControllerGO is None:
             return
         else:
             isInTransition = sequence.activeLayerName == Sequence.TRANSITION_LAYER_NAME
             if isInTransition and not isInstantly:
                 return
-            progress = cls.__getPowerModeActiveProgress(powerModeLayers.powerModeControllerGO)
+            progress = cls.__getPowerModeActiveProgress(powerModeLayers.powerModeControllerGO, powerModeAccess)
             if powerModeLayers.progress == progress:
                 return
             point = bisect.bisect_left(powerModeLayers.points, progress)

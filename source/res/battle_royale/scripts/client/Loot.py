@@ -17,7 +17,7 @@ class Loot(BigWorld.Entity):
     def onEnterWorld(self, *args):
         self.__lootDescr = loadLootById(self.typeID)
         if self.__lootDescr is not None:
-            CGF.loadGameObjectIntoHierarchy(self.__lootDescr.prefab, self.entityGameObject, Math.Vector3())
+            CGF.loadAndCreatePrefabWithParent(self.__lootDescr.prefab, self.entityGameObject, Math.Vector3())
         return
 
     def onLeaveWorld(self):
@@ -27,5 +27,5 @@ class Loot(BigWorld.Entity):
     def set_pickedUpBy(self, prev=None):
         g_eventBus.handleEvent(LootEvent(LootEvent.LOOT_PICKED_UP, ctx={'id': self.id}), scope=EVENT_BUS_SCOPE.BATTLE)
         if self.__lootDescr is not None:
-            CGF.loadGameObject(self.__lootDescr.prefabPickup, self.spaceID, self.position)
+            CGF.loadAndCreatePrefab(self.__lootDescr.prefabPickup, self.spaceID, self.position)
         return

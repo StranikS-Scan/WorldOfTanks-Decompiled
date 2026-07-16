@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/shared_utils/account_helpers/diff_utils.py
+from __future__ import absolute_import
+from past.builtins import basestring
 _KEY_DELIMITER = '.'
 
 def synchronizeDicts(diff, cache, parentKey='', changeList=None, defaultCacheType=dict):
@@ -7,7 +9,7 @@ def synchronizeDicts(diff, cache, parentKey='', changeList=None, defaultCacheTyp
     if parentKey != '':
         parentKey = parentKey + _KEY_DELIMITER
     keys_r, keys_d, keys_u = [], [], []
-    for k in diff.iterkeys():
+    for k in diff:
         if changeList is not None and isinstance(k, basestring):
             changeList[parentKey + k] = diff[k]
         if isinstance(k, tuple):
@@ -15,7 +17,7 @@ def synchronizeDicts(diff, cache, parentKey='', changeList=None, defaultCacheTyp
                 keys_r.append(k)
                 replaces += 1
                 continue
-            elif k[1] == '_d':
+            if k[1] == '_d':
                 keys_d.append(k)
                 deletes += 1
                 if changeList is not None:

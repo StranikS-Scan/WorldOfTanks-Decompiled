@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/vse_hud_settings_ctrl/settings/respawn_hud.py
+from __future__ import absolute_import
 from gui.battle_control.controllers.vse_hud_settings_ctrl.settings.base_models import TextClientModel
 
 class RespawnHUDClientModel(TextClientModel):

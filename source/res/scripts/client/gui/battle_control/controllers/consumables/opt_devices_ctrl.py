@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/consumables/opt_devices_ctrl.py
+from __future__ import absolute_import
+from future.utils import lmap
 import Event
 from PlayerEvents import g_playerEvents
 from constants import ARENA_PERIOD
@@ -82,7 +84,7 @@ class OptionalDevicesController(IBattleController):
         def getItem(deviceID):
             return self.__optionalDevices[deviceID]
 
-        return map(getItem, self.__order)
+        return lmap(getItem, self.__order)
 
     def setOptionalDevice(self, deviceID, isOn):
         optDeviceInBattle = self.__optionalDevices.get(deviceID, None)

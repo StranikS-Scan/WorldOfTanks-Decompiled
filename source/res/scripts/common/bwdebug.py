@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/bwdebug.py
+from __future__ import absolute_import, print_function
 import BigWorld
 import sys
 printPath = False
@@ -35,15 +36,15 @@ def getClassName(f):
 
 def defaultOutputMethod(category, message, metaData):
     if category == '':
-        print message
+        print(message)
     else:
-        print '[{category}] {message}'.format(category=category, message=message)
+        print('[{category}] {message}'.format(category=category, message=message))
 
 
-def _printMessage(outputMethod, args, printPath):
+def _printMessage(outputMethod, args, printPathArg):
     f = sys._getframe(2)
     output = ''
-    if printPath:
+    if printPathArg:
         output += f.f_code.co_filename + '(' + str(f.f_lineno) + ') : '
     output += getClassName(f) + f.f_code.co_name + ': '
     output += ' '.join([ str(m) for m in args ])

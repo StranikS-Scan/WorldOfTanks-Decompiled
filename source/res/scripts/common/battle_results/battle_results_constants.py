@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/battle_results/battle_results_constants.py
+from __future__ import absolute_import
 import typing
 from chat_shared import SYS_MESSAGE_TYPE
 from constants import ARENA_BONUS_TYPE

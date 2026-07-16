@@ -420,7 +420,7 @@ def _play2d(soundName):
 
 def _playVehiclePC(soundName, soundObjectIndex):
     vehicle = _getPlayerVehicle()
-    if vehicle is not None:
+    if vehicle is not None and vehicle.appearance is not None and vehicle.appearance.engineAudition:
         soundObject = vehicle.appearance.engineAudition.getSoundObject(soundObjectIndex)
         if soundObject is not None:
             soundObject.play(soundName)

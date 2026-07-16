@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_matters/battle_matters_main_view.py
+from __future__ import absolute_import
 import logging
 import typing
 import BigWorld
 import resource_helper
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
-from battle_matters_constants import QuestCardSections, CARDS_CONFIG_XML_PATH
 from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus
 from frameworks.wulf.gui_constants import WindowStatus
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator
@@ -18,7 +18,8 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_matters.battle_matters_main_view_model import BattleMattersMainViewModel
 from gui.impl.gen.view_models.views.lobby.battle_matters.intermediate_quest_model import IntermediateQuestModel
 from gui.impl.gen.view_models.views.lobby.battle_matters.quest_view_model import QuestViewModel, State
-from gui.impl.lobby.battle_matters.battle_matters_bonus_packer import getBattleMattersBonusPacker, bonusesSort, battleMattersSort
+from gui.impl.lobby.battle_matters.battle_matters_bonus_packer import getBattleMattersBonusPacker, bonusesSortKey, battleMattersSortKey
+from gui.impl.lobby.battle_matters.battle_matters_constants import QuestCardSections, CARDS_CONFIG_XML_PATH
 from gui.impl.lobby.battle_matters.battle_matters_main_reward_view import BattleMattersMainRewardView
 from gui.impl.lobby.battle_matters.battle_matters_vehicle_selection_view import BattleMattersVehicleSelectionView
 from gui.impl.lobby.battle_matters.battle_matters_paused_view import BattleMattersPausedView
@@ -37,7 +38,6 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.game_control import IManualController
 from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.Scaleform.locale.MENU import MENU
 if typing.TYPE_CHECKING:
@@ -119,7 +119,6 @@ class BattleMattersMainView(ViewImpl):
     __appLoader = dependency.descriptor(IAppLoader)
     __battleMattersController = dependency.descriptor(IBattleMattersController)
     __eventsCache = dependency.descriptor(IEventsCache)
-    __itemsCache = dependency.descriptor(IItemsCache)
     __manualController = dependency.descriptor(IManualController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __settingsCore = dependency.descriptor(ISettingsCore)
@@ -149,13 +148,13 @@ class BattleMattersMainView(ViewImpl):
             showCount = int(event.getArgument('showCount'))
             questIdx = int(event.getArgument(BattleMattersMainViewModel.ARG_QUEST_ID, 1))
             quest = self.__battleMattersController.getQuestByIdx(questIdx - 1)
-            bonuses = sorted(quest.getBonuses(), cmp=bonusesSort)
+            bonuses = sorted(quest.getBonuses(), key=bonusesSortKey)
             packer = getBattleMattersBonusPacker()
             packed = []
             for bonus in bonuses:
                 packed.extend(packer.pack(bonus))
 
-            additionalRewards = [ bonus for bonus in packed[showCount:] ]
+            additionalRewards = list(packed[showCount:])
             return AdditionalRewardsTooltip(additionalRewards)
         return BattleMattersTokenTooltipView() if contentID == R.views.lobby.battle_matters.tooltips.BattleMattersTokenTooltipView() else super(BattleMattersMainView, self).createToolTipContent(event, contentID)
 
@@ -270,8 +269,8 @@ class BattleMattersMainView(ViewImpl):
         intermediateQuestModel = IntermediateQuestModel()
         intermediateQuestModel.setQuestIdx(quest.getOrder())
         rewardsModel = intermediateQuestModel.getRewards()
-        bonuses = sorted(quest.getBonuses(), cmp=bonusesSort)
-        packMissionsBonusModelAndTooltipData(bonuses, getBattleMattersBonusPacker(), rewardsModel, self.__tooltips, sort=battleMattersSort)
+        bonuses = sorted(quest.getBonuses(), key=bonusesSortKey)
+        packMissionsBonusModelAndTooltipData(bonuses, getBattleMattersBonusPacker(), rewardsModel, self.__tooltips, sortKey=battleMattersSortKey)
         return intermediateQuestModel
 
     def __updateQuests(self, model, quests):
@@ -315,8 +314,8 @@ class BattleMattersMainView(ViewImpl):
             questModel.setLastSeenProgress(maxProgress)
         questModel.setCurrentProgress(currentProgress)
         questModel.setMaxProgress(maxProgress)
-        bonuses = sorted(quest.getBonuses(), cmp=bonusesSort)
-        packMissionsBonusModelAndTooltipData(bonuses, getBattleMattersBonusPacker(), questModel.getRewards(), self.__tooltips, sort=battleMattersSort)
+        bonuses = sorted(quest.getBonuses(), key=bonusesSortKey)
+        packMissionsBonusModelAndTooltipData(bonuses, getBattleMattersBonusPacker(), questModel.getRewards(), self.__tooltips, sortKey=battleMattersSortKey)
         return questModel
 
     def __isRegularQuestCompleted(self, quest):

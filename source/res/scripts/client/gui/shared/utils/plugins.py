@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/plugins.py
+from __future__ import absolute_import
 import operator
 import weakref
+from future.utils import viewitems, viewvalues
 from debug_utils import LOG_ERROR
-from shared_utils import forEach
+from shared_utils import safeForEach
 
 class IPlugin(object):
     __slots__ = ('_parentObj',)
@@ -51,7 +53,7 @@ class PluginsCollection(IPlugin):
         return iter(self.__plugins)
 
     def addPlugins(self, plugins, autoStart=False):
-        for pluginName, pluginClass in plugins.iteritems():
+        for pluginName, pluginClass in viewitems(plugins):
             if pluginName in self.__plugins:
                 LOG_ERROR('Plugin with this name was already added: ', pluginName, pluginClass)
                 continue
@@ -96,4 +98,4 @@ class PluginsCollection(IPlugin):
         self._invoke('update')
 
     def _invoke(self, method, *args):
-        forEach(operator.methodcaller(method, *args), self.__plugins.itervalues())
+        safeForEach(operator.methodcaller(method, *args), viewvalues(self.__plugins))

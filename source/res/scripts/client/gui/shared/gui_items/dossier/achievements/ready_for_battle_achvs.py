@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/ready_for_battle_achvs.py
-from abstract import ClassProgressAchievement, getCompletedPersonalMissionsCount
+from __future__ import absolute_import
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
+from gui.shared.gui_items.dossier.achievements.abstract import ClassProgressAchievement, getCompletedPersonalMissionsCount
 from nations import Alliances
 from personal_missions import PM_BRANCH, PM3QType
 

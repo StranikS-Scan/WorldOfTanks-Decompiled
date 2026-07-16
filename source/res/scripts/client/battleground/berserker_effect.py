@@ -2,14 +2,16 @@
 # Embedded file name: scripts/client/battleground/berserker_effect.py
 import logging
 import BigWorld
+import CGF
 import AnimationSequence
 import Math
 import math_utils
 import ResMgr
 from battle_royale.gui.constants import BattleRoyaleEquipments
+from components_base.component_controller import ComponentController
 from helpers import dependency, newFakeModel, CallbackDelayer
 from vehicle_systems.tankStructure import TankPartIndexes
-from cgf_obsolete_script.script_game_object import ScriptGameObject, ComponentDescriptorTyped
+from components_base.component_descriptor import ComponentDescriptorTyped
 from battleground.component_loading import loadComponentSystem, Loader
 from battleground.components import SequenceComponent, AvatarRelatedComponent
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -178,7 +180,7 @@ class _VehicleTurretEffect(_VehicleNodeEffect):
         return typeDescriptor.turret.name
 
 
-class _BerserkerEffectObject(ScriptGameObject):
+class _BerserkerEffectObject(ComponentController):
     turretEffectPlayer = ComponentDescriptorTyped(_VehicleTurretEffect)
     hullEffectPlayer = ComponentDescriptorTyped(_VehicleHullEffect)
 
@@ -262,3 +264,20 @@ class _TransformationParser(object):
         else:
             partTransform = vehTransform.get(vehPartName)
             return None if not partTransform else partTransform.get(moduleName) or partTransform.get(cls.__DEFAULT_SECTION)
+
+
+class BerserkerEffectObjectsSystem(CGF.System):
+    Activate = CGF.ActivateReaction(CGF.ReactRw(_BerserkerEffectObject))
+    Deactivate = CGF.DeactivateReaction(CGF.ReactRw(_BerserkerEffectObject))
+    Iterate = CGF.IterateReaction(CGF.ActiveOnly, CGF.Rw(_BerserkerEffectObject))
+    Reactions = CGF.Reactions(Activate, Deactivate, Iterate)
+
+    def update(self):
+        for effect in self.reaction(self.Deactivate):
+            effect.deactivate()
+
+        for effect in self.reaction(self.Activate):
+            effect.activate()
+
+        for effect in self.reaction(self.Iterate):
+            effect.tick()

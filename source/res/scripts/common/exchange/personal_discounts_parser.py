@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/exchange/personal_discounts_parser.py
+from __future__ import absolute_import
 import logging
 import re
-from decimal import Decimal
 from backports.functools_lru_cache import lru_cache
 import typing
 from exchange.personal_discounts_constants import EXCHANGE_RATE_GOLD_NAME, ExchangeRateCoefficientType, ExchangeDiscountInfo, ExchangeDiscountType, ExchangeRateShowFormat, ExchangeRateDiscountToken, EXCHANGE_RATE_FREE_XP_NAME, DIGITAL_TEMPLATE

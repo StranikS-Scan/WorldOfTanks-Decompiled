@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/auto_shoot_guns/auto_shoot_ctrl.py
+from __future__ import absolute_import
 import BigWorld
 import CommandMapping
 from auto_shoot_guns.auto_shoot_guns_common import BURST_VERIFYING_DELTA, BURST_CONFIRMATION_DELTA
@@ -8,7 +9,7 @@ from gui.battle_control.arena_info.interfaces import IAutoShootController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.controllers.auto_shoot_guns.auto_shoot_helpers import AUTO_SHOOT_DEV_KEYS, AUTO_SHOOT_DEV_BURST_CLAMP, AutoShootDevCommand
 from helpers.CallbackDelayer import CallbackDelayer
-from math_common import isAlmostEqual
+from math_common import isAlmostEqual, round_py2_style_int
 from math_utils import clamp
 from shared_utils import findFirst
 from vehicles.mechanics.mechanic_constants import VehicleMechanic
@@ -179,7 +180,7 @@ class DevAutoShootController(AutoShootController):
         if ctrl is None:
             return
         else:
-            currentRate = int(round(ctrl.getComponentState().getDefaultShotRatePerSecond() * 60.0))
+            currentRate = round_py2_style_int(ctrl.getComponentState().getDefaultShotRatePerSecond() * 60.0)
             if isAlmostEqual(currentRate, self.__desiredRate, epsilon=0.5):
                 self.__desiredRateInited = True
                 return

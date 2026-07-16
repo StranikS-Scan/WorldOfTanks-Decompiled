@@ -8,3 +8,8 @@ class GFNotificationTemplates(CONST_CONTAINER):
     SENIORITY_AWARD_TOKENS_NOTIFICATION = 'SeniorityAwardsTokens'
     SENIORITY_AWARD_VEHICLE_SELECTION_NOTIFICATION = 'SeniorityAwardsVehicleSelection'
     SENIORITY_AWARD_MANUAL_CLAIM_NOTIFICATION = 'SeniorityAwardsManualClaim'
+    CHALLENGES_FAIL_NOTIFICATION = 'ChallengesFailNotification'
+    CHALLENGES_SHIELD_USED_NOTIFICATION = 'ChallengesShieldUsedNotification'
+    CHALLENGES_START_NOTIFICATION = 'ChallengesStartNotification'
+    CHALLENGES_MISSION_COMPLETED_NOTIFICATION = 'ChallengesMissionCompletedNotification'
+    CHALLENGES_CHALLENGE_COMPLETED_NOTIFICATION = 'ChallengesChallengeCompletedNotification'

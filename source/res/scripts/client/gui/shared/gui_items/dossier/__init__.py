@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/__init__.py
+from __future__ import absolute_import, division
 import math
+from future.moves import pickle
+from future.utils import viewitems
+from past.utils import old_div
 from typing import Dict, List, Optional
-import cPickle
 import dossiers2
 from constants import DOSSIER_TYPE
 from gui.Scaleform.locale.MENU import MENU
@@ -20,12 +23,12 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
 def loadDossier(dumpData):
-    args = cPickle.loads(dumpData)
+    args = pickle.loads(dumpData)
     return args[0].unpack(*args[1:])
 
 
 def dumpDossier(dossierItem):
-    return cPickle.dumps(dossierItem.pack())
+    return pickle.dumps(dossierItem.pack())
 
 
 _SECONDS_IN_MINUTE = 60
@@ -118,7 +121,7 @@ class AccountDossier(_Dossier, stats.AccountDossierStats):
 
     def getRated7x7Seasons(self):
         result = {}
-        for sID, d in self._rated7x7Seasons.iteritems():
+        for sID, d in viewitems(self._rated7x7Seasons):
             result[sID] = self._makeSeasonDossier(d)
 
         return result
@@ -162,7 +165,7 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
     def getAvgXP(self):
         totalXP = self.__totalStats.getXP() - self.__clanStats.getXP() + self.__globalMapStats.getXP()
         totalBattles = self.__totalStats.getBattlesCount() - self.__clanStats.getBattlesCount() + self.__globalMapStats.getBattlesCount()
-        return 0 if totalBattles == 0 else totalXP / totalBattles
+        return 0 if totalBattles == 0 else old_div(totalXP, totalBattles)
 
     def getBattlesCount(self):
         return self.getTotalStats().getBattlesCount()
@@ -223,7 +226,7 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
             xpFactorToUse = self.__currentVehicleCrewXpFactor
         if value is not None:
             if value != 0:
-                return max(1, value / xpFactorToUse)
+                return max(1, old_div(value, xpFactorToUse))
             return 0
         else:
             return

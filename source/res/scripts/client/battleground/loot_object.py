@@ -3,8 +3,6 @@
 import logging
 import BigWorld
 import CGF
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
-from cgf_script.bonus_caps_rules import bonusCapsManager
 from helpers import dependency
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -18,8 +16,7 @@ def loadLootById(typeID, dynamicObjectsCache=None, battleSession=None):
     return descr
 
 
-@bonusCapsManager(ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, CGF.DomainOption.DomainClient)
-class SteelHunterDynamicObjectsCachingManager(CGF.ComponentManager):
+class SteelHunterDynamicObjectsCachingManager(CGF.System):
     __dynamicObjectsCache = dependency.descriptor(IBattleDynamicObjectsCache)
 
     def __init__(self):
@@ -36,7 +33,7 @@ class SteelHunterDynamicObjectsCachingManager(CGF.ComponentManager):
 
     def deactivate(self):
         if self.__cachedPrefabs:
-            CGF.clearGameObjectsCache(list(self.__cachedPrefabs))
+            CGF.removePrefabsFromCache(list(self.__cachedPrefabs))
 
     def __cachePrefabs(self, lootDescr):
         if lootDescr is not None:
@@ -46,7 +43,7 @@ class SteelHunterDynamicObjectsCachingManager(CGF.ComponentManager):
                     self.__cachedPrefabs.add(prefabPath)
 
         if self.__cachedPrefabs:
-            CGF.cacheGameObjects(list(self.__cachedPrefabs), False)
+            CGF.cachePrefabs(list(self.__cachedPrefabs))
         return
 
     def __getConfig(self):

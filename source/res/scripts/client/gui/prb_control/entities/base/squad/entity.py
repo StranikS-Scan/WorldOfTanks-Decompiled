@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/base/squad/entity.py
+from __future__ import absolute_import
+import typing
 from debug_utils import LOG_ERROR
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.base.squad.actions_handler import SquadActionsHandler

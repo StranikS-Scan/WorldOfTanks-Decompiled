@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/battle_booster.py
+from __future__ import absolute_import
 import logging
 from gui.impl import backport
 from gui.impl.gen import R
@@ -51,7 +52,7 @@ class HeaderBlockConstructor(BattleBoosterTooltipBlockConstructor):
         moduleName = self.module.descriptor.iconName
         icon = R.images.gui.maps.shop.artefacts.c_180x135.dyn(moduleName)
         if icon is None:
-            _logger.warn('BattleBooster icon missed: R.images.gui.maps.shop.artefacts.c_180x135.%s', moduleName)
+            _logger.warning('BattleBooster icon missed: R.images.gui.maps.shop.artefacts.c_180x135.%s', moduleName)
             return ''
         else:
             return icon()
@@ -161,7 +162,7 @@ class EffectsBlockConstructor(BattleBoosterTooltipBlockConstructor):
                 value = text_styles.bonusAppliedText(getKpiValueString(kpi, kpi.value, False))
                 block.append(formatters.packTextParameterBlockData(descriptor, value, valueWidth=110, gap=15))
             else:
-                _logger.warn('BattleBooster kpi missed %s', module.descriptor.iconName)
+                _logger.warning('BattleBooster kpi missed %s', module.descriptor.iconName)
         return block
 
     @staticmethod
@@ -176,7 +177,7 @@ class EffectsBlockConstructor(BattleBoosterTooltipBlockConstructor):
 class BoosterHasNoEffectBlockConstructor(BattleBoosterTooltipBlockConstructor):
 
     def construct(self):
-        block = list()
+        block = []
         module = self.module
         vehicle = self.configuration.vehicle
         if vehicle is not None and not module.isAffectsOnVehicle(vehicle, self.configuration.eqSetupIDx):

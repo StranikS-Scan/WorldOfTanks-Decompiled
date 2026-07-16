@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/prestige_system/prestige_common.py
+from __future__ import absolute_import
 import typing
 from constants import IS_CLIENT
 from prestige_system import getCache, computePrestigeCache
 if typing.TYPE_CHECKING:
-    from typing import Dict, List, Optional, Iterable
+    from typing import Dict, List, Optional
 PrestigeGrade = typing.NamedTuple('_PrestigeGrade', (('level', int), ('prestigeMarkID', int), ('main', bool)))
 
 class PrestigeConfig(object):

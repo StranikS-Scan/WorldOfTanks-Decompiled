@@ -29,7 +29,7 @@ from gui.platform.base.statuses.constants import StatusTypes
 from gui.prb_control import prbDispatcherProperty, prbInvitesProperty
 from gui.prestige.prestige_helpers import showPrestigeOnboardingWindow, showPrestigeVehicleStats
 from gui.ranked_battles import ranked_helpers
-from gui.server_events.events_dispatcher import showMissionsMapboxProgression, showPersonalMission, showBanWindow, showPenaltyWindow, showWarningWindow, showBattleMatters
+from gui.server_events.events_dispatcher import showMissionsMapboxProgression, showPersonalMission, showBanWindow, showPenaltyWindow, showWarningWindow, showBattleMatters, showChallenges
 from gui.shared import EVENT_BUS_SCOPE, actions, event_dispatcher as shared_events, events, g_eventBus
 from gui.shared.event_dispatcher import hideWebBrowserOverlay, showBattlePass, showBlueprintsSalePage, showCollectionAwardsWindow, showCollectionWindow, showCollectionsMainPage, showDelayedReward, showEpicBattlesAfterBattleWindow, showProgressiveRewardWindow, showRankedYearAwardWindow, showShop, showSteamConfirmEmailOverlay, showWinbackSelectRewardView, showBarracks, showSeniorityRewardVehiclesWindow, showAdvancedAchievementsView, showTrophiesView, showAdvancedAchievementsCatalogView, showExchangeGoldWindow, showExchangeFreeXPWindow, showCrewPostProgressionView, showPersonalMissionMainWindow, showPetStorageView, showSubscriptionsPage
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -44,7 +44,9 @@ from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE
 from predefined_hosts import g_preDefinedHosts
+from shared_utils import first
 from skeletons.gui.battle_results import IBattleResultsService
+from skeletons.gui.challenges import IChallengesController
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IBrowserController, ICollectionsSystemController, IMapboxController, IRankedBattlesController, ISeniorityAwardsController, IWinbackController, ISteamCompletionController
 from skeletons.gui.impl import INotificationWindowController
@@ -1497,6 +1499,24 @@ class _WotPlusExpiredNotification(NavigationDisabledActionHandler):
             showSubscriptionsPage()
 
 
+class _ChallengesReminderNotification(NavigationDisabledActionHandler):
+    __challenges = dependency.descriptor(IChallengesController)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.CHALLENGES_REMINDER
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        expiringChallenge = first(self.__challenges.getSoonEndingChallenges())
+        if expiringChallenge is not None and expiringChallenge.isExpiringSoon:
+            showChallenges(expiringChallenge.challengeID)
+        return
+
+
 _AVAILABLE_HANDLERS = [ShowBattleResultsHandler,
  ShowFortBattleResultsHandler,
  OpenPollHandler,
@@ -1571,7 +1591,8 @@ _AVAILABLE_HANDLERS = [ShowBattleResultsHandler,
  _AffirmativePM3Notification,
  _BattleMattersTaskReminder,
  _PetSystemPetAddedNotification,
- _WotPlusExpiredNotification]
+ _WotPlusExpiredNotification,
+ _ChallengesReminderNotification]
 registerNotificationsActionsHandlers(_AVAILABLE_HANDLERS)
 
 class NotificationsActionsHandlers(object):

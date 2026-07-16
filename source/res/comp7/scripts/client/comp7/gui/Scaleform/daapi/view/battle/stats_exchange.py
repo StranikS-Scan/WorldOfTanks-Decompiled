@@ -2,6 +2,7 @@
 # Embedded file name: comp7/scripts/client/comp7/gui/Scaleform/daapi/view/battle/stats_exchange.py
 import VOIP
 from comp7.gui.Scaleform.daapi.view.meta.Comp7BattleStatisticDataControllerMeta import Comp7BattleStatisticDataControllerMeta
+from comp7.gui.Scaleform.genConsts.TOOLTIPS_BATTLE_CONSTANTS import TOOLTIPS_BATTLE_CONSTANTS
 from comp7.gui.battle_control.arena_info import vos_collections
 from comp7.gui.battle_control.arena_info.arena_vos import Comp7Keys
 from comp7.gui.impl.lobby.comp7_helpers.comp7_i18n_helpers import RANK_MAP, DIVISION_MAP
@@ -26,6 +27,7 @@ class Comp7VehicleInfoComponent(vehicle.VehicleInfoComponent):
         rankName = RANK_MAP[rank] if rank > 0 else ''
         divisionName = DIVISION_MAP[division] if division > 0 else ''
         return self._data.update({'role': ROLE_TYPE_TO_LABEL.get(vInfoVO.vehicleType.role, ''),
+         'roleSkillTooltipId': TOOLTIPS_BATTLE_CONSTANTS.COMP7_ROLE_SKILL_BATTLE_TOOLTIP,
          'skillLevel': vInfoVO.gameModeSpecific.getValue(Comp7CoreKeys.ROLE_SKILL_LEVEL, default=0),
          'rank': rankName,
          'rankDivision': divisionName,

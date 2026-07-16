@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/pet_system_common/pet_constants.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from dossiers2.custom.records import RECORD_DB_IDS
 PETS_SYSTEM_CONFIG = 'pets_system_config'
 PETS_SYSTEM_PDATA_KEY = 'pets_system'
@@ -81,7 +83,7 @@ class PET_SYSTEM_BONUS_RESOURCE_TYPE(object):
 
 PET_SYSTEM_BONUS_TEXT_TO_RESOURCE = {'unknown': PET_SYSTEM_BONUS_RESOURCE_TYPE.UNKNOWN,
  'credits': PET_SYSTEM_BONUS_RESOURCE_TYPE.CREDITS}
-PET_SYSTEM_RESOURCE_TO_TEXT = {v:k for k, v in PET_SYSTEM_BONUS_TEXT_TO_RESOURCE.iteritems()}
+PET_SYSTEM_RESOURCE_TO_TEXT = {v:k for k, v in viewitems(PET_SYSTEM_BONUS_TEXT_TO_RESOURCE)}
 
 class SYNERGY_POINTS_TYPE(object):
     EVENT_INTERACTION = 'eventInteraction'
@@ -91,7 +93,7 @@ class SYNERGY_POINTS_TYPE(object):
 
 
 SYNERGY_POINTS_TYPE_TO_IDX = {key:idx for idx, key in enumerate(SYNERGY_POINTS_TYPE.ALL, 1)}
-SYNERGY_POINTS_IDX_TO_TYPE = {idx:key for key, idx in SYNERGY_POINTS_TYPE_TO_IDX.iteritems()}
+SYNERGY_POINTS_IDX_TO_TYPE = {idx:key for key, idx in viewitems(SYNERGY_POINTS_TYPE_TO_IDX)}
 
 class PetSynergyConsts(object):
     CONFIG_NAME = 'pets_synergy'

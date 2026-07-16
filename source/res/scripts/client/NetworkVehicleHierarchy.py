@@ -1,48 +1,30 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/NetworkVehicleHierarchy.py
 from __future__ import absolute_import
-from BigWorld import DynamicScriptComponent
-from vehicle_hierarchy import createClientVehicleHierarchy, removeClientVehicleHierarchy, updateClientVehicleHierarchy
+from vehicle_hierarchy import createClientVehicleHierarchy, removeClientVehicleHierarchy
+from vehicles.components.vehicle_component import VehicleDynamicComponent
 
-class NetworkVehicleHierarchy(DynamicScriptComponent):
+class NetworkVehicleHierarchy(VehicleDynamicComponent):
 
     def __init__(self):
         super(NetworkVehicleHierarchy, self).__init__()
-        self.__create()
+        self._initComponent()
 
-    def onEnterWorld(self, _):
-        self.__create()
-
-    def onLeaveWorld(self):
+    def onDestroy(self):
         gameObject = self.entity.entityGameObject
-        if gameObject is None:
-            return
-        else:
+        if gameObject is not None:
             removeClientVehicleHierarchy(gameObject)
-            return
+        super(NetworkVehicleHierarchy, self).onDestroy()
+        return
 
-    def setSlice_hierarchyInfo(self, changePath, prev):
-        gameObject = self.entity.entityGameObject
-        if gameObject is None:
-            return
-        else:
-            begin, end = changePath[0]
-            if begin == end:
-                p = prev[0]
-                updateClientVehicleHierarchy(gameObject, p['slotName'], p['networkID'])
-            return
+    def _onAppearanceReady(self):
+        super(NetworkVehicleHierarchy, self)._onAppearanceReady()
+        self.__create()
 
     def __create(self):
-        ready = True
-        typeDescriptor = self.entity.typeDescriptor
-        if typeDescriptor is None or typeDescriptor.type.compactDescr != self.vehTypeCD:
-            ready = False
-        appearance = self.entity.appearance
-        if appearance is None or not appearance.isConstructed or appearance.isDestroyed:
-            ready = False
         gameObject = self.entity.entityGameObject
         if gameObject is None:
             return
         else:
-            createClientVehicleHierarchy(gameObject, self.hierarchyInfo, ready)
+            createClientVehicleHierarchy(gameObject, self.hierarchyInfo, True)
             return

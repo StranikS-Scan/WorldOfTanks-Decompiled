@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/fortifications.py
+from __future__ import absolute_import, division
+from past.utils import old_div
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
@@ -49,7 +51,7 @@ class ToolTipRefSysDirects(ToolTipBaseData):
     def buildMapPoints(self, size, teamBasePositions, playerTeam, isCurrentBattle):
         minimapSize = 300
         bottomLeft, upperRight = size
-        mapWidth, mapHeight = (upperRight - bottomLeft) / minimapSize
+        mapWidth, mapHeight = old_div(upperRight - bottomLeft, minimapSize)
         viewpoint = (upperRight + bottomLeft) * 0.5
         pointsData = []
         for team, points in enumerate(teamBasePositions, 1):
@@ -61,8 +63,8 @@ class ToolTipRefSysDirects(ToolTipBaseData):
                 else:
                     pointType = 'control'
                     color = 'empty'
-                pointsData.append({'x': pos[0] / mapWidth - viewpoint.x * 0.5,
-                 'y': pos[2] / mapHeight - viewpoint.y * 0.5,
+                pointsData.append({'x': old_div(pos[0], mapWidth) - viewpoint.x * 0.5,
+                 'y': old_div(pos[2], mapHeight) - viewpoint.y * 0.5,
                  'pointType': pointType,
                  'color': color,
                  'id': baseNumber if len(points) > 1 else 1})
@@ -104,7 +106,7 @@ class ToolTipRefSysDirects(ToolTipBaseData):
             resourceMultiplier = header.getIndustrialResourceMultiplier()
             rewardOnePoint = battle.getBattleReward()
             rewardTotal = rewardOnePoint
-            rewardRequisition = int(rewardTotal * reserves.getRequisitionBonusPercent() / 100)
+            rewardRequisition = int(rewardTotal * reserves.getRequisitionBonusPercent() // 100)
             if isEnemyBuilding:
                 rewardResourceMultiplier = rewardOnePoint * (resourceMultiplier - 1)
                 rewardTotal += rewardResourceMultiplier

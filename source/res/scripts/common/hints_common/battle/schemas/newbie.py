@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/hints_common/battle/schemas/newbie.py
+from __future__ import absolute_import
 from dict2model import models, fields
 from game_params_common.schema import GameParamsSchema
 

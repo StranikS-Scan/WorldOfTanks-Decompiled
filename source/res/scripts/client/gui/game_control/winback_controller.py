@@ -1,13 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/winback_controller.py
-from enum import Enum
+from __future__ import absolute_import
 import typing
+from enum import Enum
+from future.utils import viewvalues
 import Event
 from account_helpers.AccountSettings import Winback
 from constants import Configs
 from gui.impl.lobby.winback.winback_helpers import getLevelFromSelectableToken, WinbackQuestTypes, TOKEN_TO_REWARD_MAPPING, getNonCompensationToken
 from gui.macroses import getLanguageCode
-from gui.server_events.event_items import Quest
 from gui.server_events.events_helpers import getIdxFromQuestID
 from gui.winback.winback_helpers import getWinbackSetting, setWinbackSetting
 from helpers import dependency
@@ -18,6 +19,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import Optional
+    from gui.server_events.event_items import Quest
     from helpers.server_settings import WinbackConfig
 DEFAULT_CHAIN_VERSION = ''
 
@@ -38,7 +40,7 @@ class WinbackController(IWinbackController):
         self.onConfigUpdated = Event.Event()
         self.onStateUpdated = Event.Event()
         self.chainVersion = None
-        self.__questsChain = dict()
+        self.__questsChain = {}
         self.__state = None
         return
 
@@ -128,14 +130,14 @@ class WinbackController(IWinbackController):
     def onDisconnected(self):
         super(WinbackController, self).onDisconnected()
         self.chainVersion = None
-        self.__questsChain = dict()
+        self.__questsChain = {}
         self.__state = None
         return
 
     def getPossibleQuestsNames(self):
         winbackQuestPrefix = self.winbackConfig.tokenQuestPrefix
         winbackQuestTemplate = '{}{}{}_'
-        possibleQuestsNames = dict()
+        possibleQuestsNames = {}
         possibleQuestsNames['dNormalQuestsBody'] = winbackQuestTemplate.format(winbackQuestPrefix, DEFAULT_CHAIN_VERSION, WinbackQuestTypes.NORMAL.value)
         possibleQuestsNames['dCompensationQuestsBody'] = winbackQuestTemplate.format(winbackQuestPrefix, DEFAULT_CHAIN_VERSION, WinbackQuestTypes.COMPENSATION.value)
         possibleQuestsNames['cNormalQuestsBody'] = winbackQuestTemplate.format(winbackQuestPrefix, self.chainVersion, WinbackQuestTypes.NORMAL.value)
@@ -203,7 +205,7 @@ class WinbackController(IWinbackController):
             questNames = self.getPossibleQuestsNames()
             actualQuestsByType = {chekpoint:{WinbackQuestTypes.NORMAL: allWinbackQuests.get(questNames['cNormalQuestsBody'] + chekpoint, allWinbackQuests.get(questNames['dNormalQuestsBody'] + chekpoint)),
              WinbackQuestTypes.COMPENSATION: allWinbackQuests.get(questNames['cCompensationQuestsBody'] + chekpoint, allWinbackQuests.get(questNames['dCompensationQuestsBody'] + chekpoint))} for chekpoint in questChainChekpoints}
-            self.__questsChain = {quest.getID():quest for questGroup in actualQuestsByType.values() for quest in questGroup.values() if quest}
+            self.__questsChain = {quest.getID():quest for questGroup in viewvalues(actualQuestsByType) for quest in viewvalues(questGroup) if quest}
         else:
             self.__questsChain = {}
 
@@ -221,7 +223,7 @@ class WinbackController(IWinbackController):
             self.onStateUpdated()
 
     def __updateWinbackSettings(self):
-        startingQuest = first(self.__eventsCache.getAllQuests(lambda q: q.getID() == self.winbackConfig.winbackStartingQuest).values())
+        startingQuest = first(viewvalues(self.__eventsCache.getAllQuests(lambda q: q.getID() == self.winbackConfig.winbackStartingQuest)))
         if startingQuest is None:
             return
         else:

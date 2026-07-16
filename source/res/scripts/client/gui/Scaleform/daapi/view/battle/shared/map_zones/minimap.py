@@ -26,12 +26,13 @@ class MapZonesEntriesPlugin(common.EntriesPlugin, MapZonesListener):
 
         mapZones = self.sessionProvider.shared.mapZones
         if mapZones:
-            for zoneMarker, matrix in viewvalues(mapZones.getZoneMarkers()):
+            for zoneMarkerAccess, matrix in viewvalues(mapZones.getZoneMarkers()):
+                zoneMarker = zoneMarkerAccess()
                 if zoneMarker.isVisibleOnMinimap:
                     self.__addMarkerToZone(zoneMarker, matrix)
 
-            for transformedZone in viewvalues(mapZones.getTransformedZones()):
-                self.__addTransromedZone(transformedZone)
+            for transformedZoneAccess in viewvalues(mapZones.getTransformedZones()):
+                self.__addTransromedZone(transformedZoneAccess())
 
         self.startListen()
 

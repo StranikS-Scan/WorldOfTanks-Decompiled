@@ -6,6 +6,7 @@ class TabId(ViewModel):
     __slots__ = ()
     BASIC = 'basic'
     COMMON = 'common'
+    CHALLENGES = 'challenges'
 
     def __init__(self, properties=0, commands=0):
         super(TabId, self).__init__(properties=properties, commands=commands)

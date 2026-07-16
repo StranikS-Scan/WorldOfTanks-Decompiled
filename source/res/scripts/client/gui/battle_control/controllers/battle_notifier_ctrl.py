@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/battle_notifier_ctrl.py
+from __future__ import absolute_import
 import logging
 from PlayerEvents import g_playerEvents
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID

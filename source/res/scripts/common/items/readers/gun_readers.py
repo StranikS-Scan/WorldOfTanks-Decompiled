@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/readers/gun_readers.py
-import typing
+from __future__ import absolute_import
+from typing import TYPE_CHECKING, Tuple, Optional
 import ResMgr
 from items import _xml
 from items.components import component_constants
@@ -9,10 +10,9 @@ from items.components.component_constants import ZERO_FLOAT
 from items.components.shell_components import Stun
 from items.stun import g_cfg as stunConfig
 from items.readers import shared_readers
+from items.readers.shared_readers import readFloatPair
 from constants import IS_EDITOR, IS_UE_EDITOR, IS_CLIENT, IS_WEB
 from math_common import ceilTo
-from shared_readers import readFloatPair
-from typing import TYPE_CHECKING, Tuple, Optional
 if TYPE_CHECKING:
     from items.vehicles import Cache
 
@@ -89,7 +89,7 @@ def readStunParams(section, xmlCtx=None, useDefaults=False):
         stunParams['damageEffectCoeff'] = _xml.readFraction(xmlCtx, section, 'damageEffectCoeff')
     elif useDefaults:
         stunParams['damageEffectCoeff'] = stunConfig['damageEffectCoeff']
-    for key in stunParams.iterkeys():
+    for key in stunParams:
         pass
 
     return stunParams

@@ -43,4 +43,4 @@ class SequenceIDGenerator(object):
         self.__sequenceID = self.__lowBound
 
     currSequenceID = property(lambda self: self.__sequenceID)
-    nextSequenceID = property(next)
+    nextSequenceID = property(__next__)

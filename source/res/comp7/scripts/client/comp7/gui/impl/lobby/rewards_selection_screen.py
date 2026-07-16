@@ -45,15 +45,15 @@ class Comp7RewardsSelectionView(SelectableRewardBase):
             SystemMessages.pushI18nMessage(backport.text(R.strings.system_messages.battlePass.rewardChoice.error()), type=SystemMessages.SM_TYPE.Error)
         self.destroyWindow()
 
-    def _getTypesComparator(self):
+    def _getTypesSortKey(self):
 
         def _getPriority(token):
             return next((i for i, value in enumerate(TABS_PRIORITY) if value in token), len(TABS_PRIORITY))
 
-        def _tabsCompare(first, second):
-            return _getPriority(first[0]) - _getPriority(second[0])
+        def _tabsSortKey(x):
+            return _getPriority(x[0])
 
-        return _tabsCompare
+        return _tabsSortKey
 
     def _getRewardType(self, reward):
         return self._helper.getBonusOfferToken(reward)

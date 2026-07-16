@@ -13,6 +13,10 @@ def playSound(eventName):
         SoundGroups.g_instance.playSound2D(eventName)
 
 
+def getSound2D(eventName):
+    return SoundGroups.g_instance.getSound2D(eventName) if eventName else None
+
+
 def playVoiceover(voiceover):
     if voiceover:
         soundNotifications = getSoundNotifications()

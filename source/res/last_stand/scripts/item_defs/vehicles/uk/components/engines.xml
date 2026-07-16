@@ -4,6 +4,9 @@
     <Rolls_Royce_Griffon_LS_BOT_v2>	6002	</Rolls_Royce_Griffon_LS_BOT_v2>
     <Rolls_Royse_Meteor_MkIV_LS_PLAYER>	6003	</Rolls_Royse_Meteor_MkIV_LS_PLAYER>
     <Rolls_Royce_B81_LS_BOT>	5996	</Rolls_Royce_B81_LS_BOT>
+    <Rolls_Royce_Meteor_P_EASY_LS_BOT>	5997	</Rolls_Royce_Meteor_P_EASY_LS_BOT>
+    <Rolls_Royce_Meteor_P_MEDIUM_LS_BOT>	5998	</Rolls_Royce_Meteor_P_MEDIUM_LS_BOT>
+    <Rolls_Royce_Meteor_P_HARD_LS_BOT>	5999	</Rolls_Royce_Meteor_P_HARD_LS_BOT>
   </ids>
   <shared>
     <Rolls_Royce_Griffon_LS_BOT>
@@ -74,5 +77,56 @@
       <rpm_min>	400	</rpm_min>
       <rpm_max>	3200	</rpm_max>
     </Rolls_Royce_B81_LS_BOT>
+    <Rolls_Royce_Meteor_P_EASY_LS_BOT>
+      <userString>	#gb_vehicles:Rolls_Royce_Meteor_P	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	40000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	800	</power>
+      <weight>	744	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	429	</rpm_min>
+      <rpm_max>	2817	</rpm_max>
+    </Rolls_Royce_Meteor_P_EASY_LS_BOT>
+    <Rolls_Royce_Meteor_P_MEDIUM_LS_BOT>
+      <userString>	#gb_vehicles:Rolls_Royce_Meteor_P	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	40000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	800	</power>
+      <weight>	744	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	429	</rpm_min>
+      <rpm_max>	2817	</rpm_max>
+    </Rolls_Royce_Meteor_P_MEDIUM_LS_BOT>
+    <Rolls_Royce_Meteor_P_HARD_LS_BOT>
+      <userString>	#gb_vehicles:Rolls_Royce_Meteor_P	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	40000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	800	</power>
+      <weight>	744	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	429	</rpm_min>
+      <rpm_max>	2817	</rpm_max>
+    </Rolls_Royce_Meteor_P_HARD_LS_BOT>
   </shared>
 </engines.xml>

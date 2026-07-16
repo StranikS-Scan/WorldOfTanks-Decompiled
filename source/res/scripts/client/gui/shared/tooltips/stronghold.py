@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/stronghold.py
+from __future__ import absolute_import
 import logging
 import typing
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import getReserveNameVO

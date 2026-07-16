@@ -17,7 +17,6 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.personal_missions_30.common.enums import OperationState, MissionCategory
 from gui.impl.gen.view_models.views.lobby.personal_missions_30.main_view_model import MainScreenState, AnimationState
 from gui.impl.lobby.hangar.states import HangarState
-from gui.impl.lobby.personal_missions_30.camera_mover import PersonalMissions3CameraMover
 from gui.impl.lobby.personal_missions_30.hangar_helpers import AssemblingManager
 from gui.impl.lobby.personal_missions_30.personal_mission_constants import SoundsKeys, IntroKeys
 from gui.impl.lobby.personal_missions_30.views_helpers import openInfoPageScreen, isIntroShown, getOperationStatus, getSortedPm3Operations
@@ -80,11 +79,10 @@ class PersonalMissions3EntryState(LobbyState, EventsHandler, SubhangarStateGroup
     def __init__(self, flags=StateFlags.UNDEFINED):
         super(PersonalMissions3EntryState, self).__init__(flags)
         self.assemblingManager = None
-        self.__cachedParams = {}
         return
 
     def getSubhangarStateGroupConfig(self):
-        return SubhangarStateGroupConfig((SubhangarStateGroups.PersonalMissions,), PersonalMissions3CameraMover(callback=self.moveCamera))
+        return SubhangarStateGroupConfig((SubhangarStateGroups.PersonalMissions,))
 
     def registerStates(self):
         lsm = self.getMachine()
@@ -94,30 +92,14 @@ class PersonalMissions3EntryState(LobbyState, EventsHandler, SubhangarStateGroup
         super(PersonalMissions3EntryState, self)._onEntered(event)
         self._subscribe()
         self.assemblingManager = AssemblingManager()
-        self.__cachedParams = dict(event.params)
 
     def _onExited(self):
         self._unsubscribe()
         self.assemblingManager.deactivate()
         self.assemblingManager.destroy()
         self.assemblingManager = None
-        self.__cachedParams.clear()
         super(PersonalMissions3EntryState, self)._onExited()
         return
-
-    def moveCamera(self):
-        if self.__cachedParams:
-            operationID = self.__cachedParams.get('operationID')
-            state = self.__cachedParams.get('state')
-            operation = self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.V2_BRANCHES).get(operationID)
-            if state == MainScreenState.ASSEMBLING.value:
-                self.assemblingManager.switchCameraToFreePosition(instantly=True)
-            elif operation.isFullCompleted():
-                self.assemblingManager.switchCameraToFreeFarPosition(instantly=True)
-            elif self.assemblingManager.isSwitchingToTopCameraNeeded():
-                self.assemblingManager.startTopCameraAnimation()
-        else:
-            _logger.error('PersonalMissions3EntryState cachedParams is empty')
 
     def _getEvents(self):
         return ((self.__hangarSpace.onSpaceChanged, self.__onSpaceChanged),)
@@ -340,11 +322,26 @@ class _LoadingState(_PersonalMissionsChildState, EventsHandler):
     def onLoaded(self):
         if not self.assemblingManager.inited:
             self.__initAssemblingManager()
+            self.__moveCamera()
         self.goBack()
 
     def __onWindowStatusChanged(self, _, status):
         if self.readyToEnter():
             self.onLoaded()
+
+    def __moveCamera(self):
+        if self._cachedParams:
+            operationID = self._cachedParams.get('operationID')
+            state = self._cachedParams.get('state')
+            operation = self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.V2_BRANCHES).get(operationID)
+            if state == MainScreenState.ASSEMBLING.value:
+                self.assemblingManager.switchCameraToFreePosition(instantly=True)
+            elif operation.isFullCompleted():
+                self.assemblingManager.switchCameraToFreeFarPosition(instantly=True)
+            elif self.assemblingManager.isSwitchingToTopCameraNeeded():
+                self.assemblingManager.startTopCameraAnimation()
+        else:
+            _logger.error('PersonalMissions3LoadingState cachedParams is empty')
 
     def __initAssemblingManager(self):
         mainView = self.getMachine().getRelatedView(self)

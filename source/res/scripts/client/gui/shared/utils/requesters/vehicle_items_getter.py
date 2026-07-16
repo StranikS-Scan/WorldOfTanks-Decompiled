@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/vehicle_items_getter.py
+from __future__ import absolute_import
+from future.utils import itervalues, viewkeys, viewvalues
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_parameters import params
 from items import vehicles, tankmen, EQUIPMENT_TYPES, ItemsPrices
@@ -8,31 +10,31 @@ from soft_exception import SoftException
 import nations
 
 def _getVehicles(nationID):
-    return vehicles.g_list.getList(nationID).itervalues()
+    return itervalues(vehicles.g_list.getList(nationID))
 
 
 def _getChassis(nationID):
-    return vehicles.g_cache.chassis(nationID).itervalues()
+    return itervalues(vehicles.g_cache.chassis(nationID))
 
 
 def _getEngines(nationID):
-    return vehicles.g_cache.engines(nationID).itervalues()
+    return itervalues(vehicles.g_cache.engines(nationID))
 
 
 def _getRadios(nationID):
-    return vehicles.g_cache.radios(nationID).itervalues()
+    return itervalues(vehicles.g_cache.radios(nationID))
 
 
 def _getTurrets(nationID):
-    return vehicles.g_cache.turrets(nationID).itervalues()
+    return itervalues(vehicles.g_cache.turrets(nationID))
 
 
 def _getGuns(nationID):
-    return vehicles.g_cache.guns(nationID).itervalues()
+    return itervalues(vehicles.g_cache.guns(nationID))
 
 
 def _getShells(nationID):
-    return vehicles.g_cache.shells(nationID).itervalues()
+    return itervalues(vehicles.g_cache.shells(nationID))
 
 
 def _filterByNationAndEqType(items, getParameters, nationID, eqType=None):
@@ -41,7 +43,7 @@ def _filterByNationAndEqType(items, getParameters, nationID, eqType=None):
     if ignoreNation and ignoreEquipmentType:
         return
     else:
-        for value in items.itervalues():
+        for value in itervalues(items):
             itemParams = getParameters(value)
             if ignoreNation:
                 conditionNation = True
@@ -74,61 +76,61 @@ def _getOptionalDevices(nationID):
 
 
 def _getPaints(_):
-    return vehicles.g_cache.customization20().paints.itervalues()
+    return itervalues(vehicles.g_cache.customization20().paints)
 
 
 def _getCamouflages(_):
-    return vehicles.g_cache.customization20().camouflages.itervalues()
+    return itervalues(vehicles.g_cache.customization20().camouflages)
 
 
 def _getCrewSkins(_):
-    return tankmen.g_cache.crewSkins().skins.itervalues()
+    return itervalues(tankmen.g_cache.crewSkins().skins)
 
 
 def _getCrewBooks(_):
-    return tankmen.g_cache.crewBooks().books.itervalues()
+    return itervalues(tankmen.g_cache.crewBooks().books)
 
 
 def _getModifications(_):
-    return vehicles.g_cache.customization20().modifications.itervalues()
+    return itervalues(vehicles.g_cache.customization20().modifications)
 
 
 def _getDecals(_):
-    return vehicles.g_cache.customization20().decals.itervalues()
+    return itervalues(vehicles.g_cache.customization20().decals)
 
 
 def _getEmblems(_):
     decals = vehicles.g_cache.customization20().decals
-    return [ decal for decal in decals.itervalues() if decal.type == DecalType.EMBLEM ]
+    return [ decal for decal in itervalues(decals) if decal.type == DecalType.EMBLEM ]
 
 
 def _getInscriptions(_):
     decals = vehicles.g_cache.customization20().decals
-    return [ decal for decal in decals.itervalues() if decal.type == DecalType.INSCRIPTION ]
+    return [ decal for decal in itervalues(decals) if decal.type == DecalType.INSCRIPTION ]
 
 
 def _getStyles(_):
-    return vehicles.g_cache.customization20().styles.itervalues()
+    return itervalues(vehicles.g_cache.customization20().styles)
 
 
 def _getProjectionDecal(_):
-    return vehicles.g_cache.customization20().projection_decals.itervalues()
+    return itervalues(vehicles.g_cache.customization20().projection_decals)
 
 
 def _getPersonalNumber(_):
-    return vehicles.g_cache.customization20().personal_numbers.itervalues()
+    return itervalues(vehicles.g_cache.customization20().personal_numbers)
 
 
 def _getAttachment(_):
-    return vehicles.g_cache.customization20().attachments.itervalues()
+    return itervalues(vehicles.g_cache.customization20().attachments)
 
 
 def _getStatTrackers(_):
-    return vehicles.g_cache.customization20().stat_trackers.itervalues()
+    return itervalues(vehicles.g_cache.customization20().stat_trackers)
 
 
 def _getSequence(_):
-    return vehicles.g_cache.customization20().sequences.itervalues()
+    return itervalues(vehicles.g_cache.customization20().sequences)
 
 
 _MODULES_GETTERS = {GUI_ITEM_TYPE.VEHICLE: _getVehicles,
@@ -164,13 +166,13 @@ def getItemsIterator(data, nationID=None, itemTypeID=None, onlyWithPrices=False)
         prices = ItemsPrices()
     getters = _MODULES_GETTERS
     if itemTypeID is None:
-        itemTypeIDs = getters.keys()
+        itemTypeIDs = viewkeys(getters)
     elif itemTypeID in getters:
         itemTypeIDs = (itemTypeID,)
     else:
         raise SoftException('itemTypeID is invalid: {}'.format(itemTypeID))
     if nationID is None:
-        nationIDs = nations.INDICES.itervalues()
+        nationIDs = viewvalues(nations.INDICES)
     else:
         nationIDs = (nationID,)
     for nextID in nationIDs:

@@ -1,28 +1,29 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/cgf_components/highlight_component.py
+from __future__ import absolute_import
 import BigWorld
 import CGF
-from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery
-from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
+from cgf_script.registration import ComponentProperty, registerComponent
 from GenericComponents import DynamicModelComponent
-from hover_component import IsHoveredComponent, SelectionComponent
+from cgf_components.hover_component import IsHoveredComponent, SelectionComponent
 
 @registerComponent
 class IsHighlighted(object):
-    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
+    editorTitle = 'Is Highlighted'
+    domain = CGF.Domain.ClientEditor
 
 
 @registerComponent
 class HighlightComponent(object):
-    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
+    domain = CGF.Domain.ClientEditor
     editorTitle = 'Highlight'
-    category = 'Common'
-    color = ComponentProperty(type=CGFMetaTypes.VECTOR4, editorName='Color', value=(0, 0, 0, 1), annotations={'colorPicker': {'255Range': False,
+    group = 'Common'
+    color = ComponentProperty(type=CGF.PropertyType.Vector4, editorName='Color', value=(0, 0, 0, 1), annotations={'colorPicker': {'255Range': False,
                      'useAlpha': True}})
-    groupName = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Group name')
-    drawerMode = ComponentProperty(type=CGFMetaTypes.INT, value=0, editorName='drawerMode')
-    colorIndex = ComponentProperty(type=CGFMetaTypes.INT, value=4, editorName='colorIndex')
-    overridenHighlightModel = ComponentProperty(type=CGFMetaTypes.LINK, value=CGF.GameObject, editorName='overridenHighlightModel')
+    groupName = ComponentProperty(type=CGF.PropertyType.String, editorName='Group name')
+    drawerMode = ComponentProperty(type=CGF.PropertyType.Int, value=0, editorName='drawerMode')
+    colorIndex = ComponentProperty(type=CGF.PropertyType.Int, value=4, editorName='colorIndex')
+    overridenHighlightModel = ComponentProperty(type=CGF.PropertyType.Link, value=CGF.GameObject, editorName='overridenHighlightModel')
 
     def __init__(self):
         super(HighlightComponent, self).__init__()
@@ -30,37 +31,60 @@ class HighlightComponent(object):
         return
 
 
-class HighlightManager(CGF.ComponentManager):
+class HighlightSystem(CGF.System):
+    HoverActivated = CGF.ActivateReaction(CGF.GameObject, CGF.ReactRo(IsHoveredComponent), CGF.ReactRo(SelectionComponent))
+    HoverDeactivated = CGF.DeactivateReaction(CGF.GameObject, CGF.ReactRo(IsHoveredComponent), CGF.ReactRo(SelectionComponent))
+    DynamicModelHighlightActivated = CGF.ActivateReaction(CGF.ReactRo(IsHighlighted), CGF.ReactRo(HighlightComponent), CGF.ReactRo(DynamicModelComponent))
+    DynamicModelHighlightDeactivated = CGF.DeactivateReaction(CGF.ReactRo(IsHighlighted), CGF.ReactRo(HighlightComponent), CGF.ReactRo(DynamicModelComponent))
+    HighlightComponentDeactivated = CGF.DeactivateReaction(CGF.ReactRo(HighlightComponent), CGF.ReactRo(DynamicModelComponent))
+    HighlightModelIterate = CGF.IterateReaction(CGF.ActiveOnly, CGF.Ro(HighlightComponent), CGF.Ro(DynamicModelComponent))
+    DynamicModelAccess = CGF.AccessReaction(CGF.Ro(DynamicModelComponent))
+    Reactions = CGF.Reactions(HoverActivated, HoverDeactivated, DynamicModelHighlightActivated, DynamicModelHighlightDeactivated, HighlightComponentDeactivated, HighlightModelIterate, DynamicModelAccess)
 
-    @onAddedQuery(IsHoveredComponent, SelectionComponent, CGF.GameObject)
-    def onHoverAdded(self, _, selection, gameObject):
+    def update(self):
+        q = CGF.CommandQueue(self.gom)
+        dynamicModelAccess = self.reaction(self.DynamicModelAccess)
+        highlightModelIterate = self.reaction(self.HighlightModelIterate)
+        for gameObject, _, selection in self.reaction(self.HoverDeactivated):
+            self.onHoverRemoved(selection, gameObject, q)
+
+        for _, highlightComponent, dynamicModelComponent in self.reaction(self.DynamicModelHighlightDeactivated):
+            self.onDynamicModelHighlightRemoved(highlightComponent, dynamicModelComponent, dynamicModelAccess, highlightModelIterate)
+
+        for highlightComponent, dynamicModelComponent in self.reaction(self.HighlightComponentDeactivated):
+            self.onHighlightComponentRemoved(highlightComponent, dynamicModelComponent, dynamicModelAccess)
+
+        for gameObject, _, selection in self.reaction(self.HoverActivated):
+            self.onHoverAdded(selection, gameObject, q)
+
+        for _, highlightComponent, dynamicModelComponent in self.reaction(self.DynamicModelHighlightActivated):
+            self.onDynamicModelHighlightAdded(highlightComponent, dynamicModelComponent, dynamicModelAccess, highlightModelIterate)
+
+    def onHoverAdded(self, selection, gameObject, queue):
         if selection.highlight:
-            gameObject.createComponent(IsHighlighted)
+            queue.createComponent(gameObject, IsHighlighted)
 
-    @onRemovedQuery(IsHoveredComponent, SelectionComponent, CGF.GameObject)
-    def onHoverRemoved(self, _, selection, gameObject):
+    def onHoverRemoved(self, selection, gameObject, queue):
         if selection.highlight:
-            gameObject.removeComponentByType(IsHighlighted)
+            queue.removeComponent(gameObject, IsHighlighted)
 
-    @onAddedQuery(IsHighlighted, HighlightComponent, DynamicModelComponent)
-    def onDynamicModelHighlightAdded(self, _, highlightComponent, dynamicModelComponent):
+    def onDynamicModelHighlightAdded(self, highlightComponent, dynamicModelComponent, dynamicModelAccess, highlightModelIterate):
         BigWorld.wgSetEdgeDetectEdgeColor(highlightComponent.colorIndex - 1, highlightComponent.color)
-        self.__edgeDetectDynamicModel(True, highlightComponent, dynamicModelComponent)
-        self.__enableGroupDraw(True, highlightComponent.groupName)
+        self.__edgeDetectDynamicModel(True, highlightComponent, dynamicModelComponent, dynamicModelAccess)
+        self.__enableGroupDraw(True, highlightComponent.groupName, highlightModelIterate, dynamicModelAccess)
 
-    @onRemovedQuery(IsHighlighted, HighlightComponent, DynamicModelComponent)
-    def onDynamicModelHighlightRemoved(self, _, highlightComponent, dynamicModelComponent):
-        self.__edgeDetectDynamicModel(False, highlightComponent, dynamicModelComponent)
-        self.__enableGroupDraw(False, highlightComponent.groupName)
+    def onDynamicModelHighlightRemoved(self, highlightComponent, dynamicModelComponent, dynamicModelAccess, highlightModelIterate):
+        self.__edgeDetectDynamicModel(False, highlightComponent, dynamicModelComponent, dynamicModelAccess)
+        self.__enableGroupDraw(False, highlightComponent.groupName, highlightModelIterate, dynamicModelAccess)
 
-    @onRemovedQuery(HighlightComponent, DynamicModelComponent)
-    def onHighlightComponentRemoved(self, highlightComponent, dynamicModelComponent):
-        self.__edgeDetectDynamicModel(False, highlightComponent, dynamicModelComponent)
+    def onHighlightComponentRemoved(self, highlightComponent, dynamicModelComponent, dynamicModelAccess):
+        self.__edgeDetectDynamicModel(False, highlightComponent, dynamicModelComponent, dynamicModelAccess)
 
-    def __edgeDetectDynamicModel(self, enable, highlightComponent, dynamicModelComponent):
+    def __edgeDetectDynamicModel(self, enable, highlightComponent, dynamicModelComponent, dynamicModelAccess):
         dynamicModel = dynamicModelComponent
-        if highlightComponent.overridenHighlightModel.isValid():
-            overridenHighlightModel = highlightComponent.overridenHighlightModel.findComponentByType(DynamicModelComponent)
+        highlightObj = self.gom.gameObject(highlightComponent.overridenHighlightModel)
+        if highlightObj.valid:
+            overridenHighlightModel = dynamicModelAccess.find(highlightObj)
             if overridenHighlightModel:
                 dynamicModel = overridenHighlightModel
         if enable:
@@ -68,8 +92,7 @@ class HighlightManager(CGF.ComponentManager):
         else:
             BigWorld.wgDelEdgeDetectDynamicModel(dynamicModel)
 
-    def __enableGroupDraw(self, enable, groupName):
-        highlightQuery = CGF.Query(self.spaceID, (HighlightComponent, DynamicModelComponent))
-        for highlightComponent, dynamicModelComponent in highlightQuery:
+    def __enableGroupDraw(self, enable, groupName, highlightModelIterate, dynamicModelAccess):
+        for highlightComponent, dynamicModelComponent in highlightModelIterate:
             if highlightComponent.groupName and highlightComponent.groupName == groupName:
-                self.__edgeDetectDynamicModel(enable, highlightComponent, dynamicModelComponent)
+                self.__edgeDetectDynamicModel(enable, highlightComponent, dynamicModelComponent, dynamicModelAccess)

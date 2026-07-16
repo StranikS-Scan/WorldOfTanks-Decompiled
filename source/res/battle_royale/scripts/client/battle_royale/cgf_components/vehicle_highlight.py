@@ -4,9 +4,6 @@ import BigWorld
 import CGF
 import GenericComponents
 from aih_constants import CTRL_MODES, CTRL_MODE_NAME
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
-from cgf_script.bonus_caps_rules import bonusCapsManager
-from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery
 from constants import IS_CLIENT
 if IS_CLIENT:
     from Avatar import PlayerAvatar
@@ -16,15 +13,22 @@ else:
         pass
 
 
-@bonusCapsManager(bonusCap=ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, domain=CGF.DomainOption.DomainClient)
-class VehicleHighlightComponentManager(CGF.ComponentManager):
+class VehicleHighlightSystem(CGF.System):
+    AvatarActivated = CGF.ActivateReaction(CGF.ReactRo(PlayerAvatar), CGF.Ro(GenericComponents.ControlModeStatus))
+    AvatarDeactivated = CGF.DeactivateReaction(CGF.ReactRo(PlayerAvatar), CGF.Ro(GenericComponents.ControlModeStatus))
+    Reactions = CGF.Reactions(AvatarActivated, AvatarDeactivated)
 
-    @onAddedQuery(GenericComponents.ControlModeStatus, PlayerAvatar)
-    def onAdded(self, controlModeStatus, *args):
+    def update(self):
+        for _, controlModeStatus in self.reaction(self.AvatarDeactivated):
+            self.onRemoved(controlModeStatus)
+
+        for _, controlModeStatus in self.reaction(self.AvatarActivated):
+            self.onAdded(controlModeStatus)
+
+    def onAdded(self, controlModeStatus):
         if controlModeStatus.mode == CTRL_MODES.index(CTRL_MODE_NAME.VIDEO):
             BigWorld.wg_setHideEdges(True)
 
-    @onRemovedQuery(GenericComponents.ControlModeStatus, PlayerAvatar)
-    def onRemoved(self, controlModeStatus, *args):
+    def onRemoved(self, controlModeStatus):
         if controlModeStatus.mode == CTRL_MODES.index(CTRL_MODE_NAME.VIDEO):
             BigWorld.wg_setHideEdges(False)

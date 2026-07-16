@@ -359,6 +359,8 @@ VEH_SKILL_TREE_RECORDED_NOFITICATION_NODE = 'vehSkillTreeRecordedNotificationNod
 VEH_SKILL_TREE_PRESTIGE_GLARE_SHOWN = 'vehSkillTreePrestigeGlareShown'
 VEH_SKILL_TREE_INTRO_SHOWN = 'vehSkillTreeIntroShown'
 PERSONAL_MISSION_3 = 'PERSONAL_MISSION_3'
+CHALLENGES_START_SEEN_NOTIFICATION = 'challengesStartSeenNotification'
+CHALLENGES_REMINDER_SEEN_NOTIFICATION = 'challengesReminderSeenNotification'
 HANGAR_VIEW_SETTINGS = 'hangarView'
 HANGAR_KEY_BINDINGS = 'hangarKeyBindings'
 
@@ -418,6 +420,14 @@ class PetSystem(object):
     SEEN_PET_LEVELS = 'petSystemSeenPetLevels'
     SEEN_IN_STORAGE_PET_IDS = 'petSystemSeenInStoragePetIDs'
     SEEN_PROMO_PET_IDS = 'petSystemSeenPromoPetIDs'
+
+
+class ChallengesMissions(object):
+    SETTINGS = 'challengesSettings'
+    CHALLENGES_BUNDLE_SHOWN = 'challengesBundleIntroShown'
+    CHALLENGES_BUNDLE_ANIMATION_SHOWN = 'challengesBundleAnimationShown'
+    VISITED_CHALLENGES = 'visitedChallenges'
+    CHALLENGES_INFO_SHOWN = 'challengesInfoShown'
 
 
 AttackerVehicleConfiguration = namedtuple('AttackerVehicleConfiguration', ['compactDescr', 'gunCompactDescr', 'activeGunShotIndex'])
@@ -1492,6 +1502,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                      PetSystem.SEEN_PET_LEVELS: {},
                                      PetSystem.SEEN_IN_STORAGE_PET_IDS: set(),
                                      PetSystem.SEEN_PROMO_PET_IDS: set()},
+                ChallengesMissions.SETTINGS: {ChallengesMissions.CHALLENGES_BUNDLE_SHOWN: False,
+                                              ChallengesMissions.CHALLENGES_BUNDLE_ANIMATION_SHOWN: False,
+                                              ChallengesMissions.CHALLENGES_INFO_SHOWN: False,
+                                              ChallengesMissions.VISITED_CHALLENGES: set()},
                 HANGAR_VIEW_SETTINGS: {'allVehicles': {'crewEnabled': True,
                                                        'ttcEnabled': True}},
                 HANGAR_KEY_BINDINGS: {'vehicleMenu': {}},
@@ -1540,7 +1554,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                      COMP7_LAST_SEASON_WITH_SEEN_REWARD: None,
                      COMP7_LAST_MASKOT_WITH_SEEN_REWARD: None,
                      OPEN_BUNDLE_NOTIFICATIONS: {OPEN_BUNDLE_START_SHOWN: set(),
-                                                 OPEN_BUNDLE_REMINDER_SHOWN: set()}},
+                                                 OPEN_BUNDLE_REMINDER_SHOWN: set()},
+                     CHALLENGES_START_SEEN_NOTIFICATION: set(),
+                     CHALLENGES_REMINDER_SEEN_NOTIFICATION: set()},
  KEY_SESSION_SETTINGS: {STORAGE_VEHICLES_CAROUSEL_FILTER_1: {'ussr': False,
                                                              'germany': False,
                                                              'usa': False,
@@ -1763,7 +1779,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 100
+    version = 101
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -2672,6 +2688,12 @@ class AccountSettings(object):
                         accSettings.deleteSection('grinch_keys')
                     if accSettings.has_key('grinch_progression_key'):
                         accSettings.deleteSection('grinch_progression_key')
+
+            if currVersion < 101:
+                for key, section in _filterAccountSection(ads):
+                    uiSettings = AccountSettings._readSection(section, KEY_UI_FLAGS)
+                    if uiSettings.has_key(COMP7_LIGHT_UI_SECTION):
+                        uiSettings.deleteSection(COMP7_LIGHT_UI_SECTION)
 
             ads.writeInt('version', AccountSettings.version)
         return

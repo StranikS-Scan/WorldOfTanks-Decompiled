@@ -3,8 +3,8 @@
 from __future__ import absolute_import
 from future.utils import viewitems
 import BigWorld
+from Event import SafeEvent, EventManager
 from helpers.server_settings import ServerSettings
-from Event import Event, EventManager
 from account_helpers import isRoamingEnabled
 from adisp import adisp_async, adisp_process
 from constants import CURRENT_REALM, MISC_GUI_SETTINGS
@@ -36,7 +36,7 @@ class LobbyContext(ILobbyContext):
         self.__changeListener = LobbyContextChangeListener(self)
         self.__isAccountComplete = True
         self.__em = EventManager()
-        self.onServerSettingsChanged = Event(self.__em)
+        self.onServerSettingsChanged = SafeEvent(self.__em)
         return
 
     @property

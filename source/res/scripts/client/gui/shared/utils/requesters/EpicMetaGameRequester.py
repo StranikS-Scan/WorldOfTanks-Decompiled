@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/EpicMetaGameRequester.py
+from __future__ import absolute_import, division
 import typing
+from past.utils import old_div
 import BigWorld
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from skeletons.gui.shared.utils.requesters import IEpicMetaGameRequester
@@ -13,7 +15,7 @@ class EpicMetaGameRequester(AbstractSyncDataRequester, IEpicMetaGameRequester):
 
     @property
     def seasonData(self):
-        return self.getCacheValue('seasonData', (0, None, dict()))
+        return self.getCacheValue('seasonData', (0, None, {}))
 
     @property
     def skillPoints(self):
@@ -33,10 +35,10 @@ class EpicMetaGameRequester(AbstractSyncDataRequester, IEpicMetaGameRequester):
 
     @property
     def averageXP(self):
-        return self.getCacheValue('famePts', 0) / self.battleCount if self.battleCount > 0 else 0
+        return old_div(self.getCacheValue('famePts', 0), self.battleCount) if self.battleCount > 0 else 0
 
     def _requestCache(self, callback=None):
         BigWorld.player().epicMetaGame.getCache(lambda resID, value: self._response(resID, value, callback))
 
     def _preprocessValidData(self, data):
-        return dict(data['epicMetaGame']) if 'epicMetaGame' in data else dict()
+        return dict(data['epicMetaGame']) if 'epicMetaGame' in data else {}

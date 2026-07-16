@@ -59,7 +59,7 @@ class LSAppearanceCacheController(DefaultAppearanceCacheController):
     @staticmethod
     def collectPrerequisitesForEventBattle(typeDescriptor, outfit, spaceID, isTurretDetached, damageState):
         isUndamaged = VehicleDamageState.isUndamagedModel(damageState)
-        prereqs = typeDescriptor.prerequisites(True)
+        prereqs = typeDescriptor.prerequisites(True, outfit.modelsSet)
         attachments = camouflages.getAttachments(outfit, typeDescriptor) if isUndamaged else []
         prereqs.extend(camouflages.getCamoPrereqs(outfit, typeDescriptor))
         prereqs.extend(camouflages.getAttachmentsAnimatorsPrereqs(attachments, spaceID))

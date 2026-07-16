@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/vehicle_state_ctrl.py
-from functools import partial
+from __future__ import absolute_import
 import weakref
+from functools import partial
+from future.utils import listvalues
 import BigWorld
 import BattleReplay
 import Event
@@ -277,7 +279,7 @@ class VehicleStateController(IBattleController):
     def getStateValue(self, stateID):
         if stateID in self.__cachedStateValues:
             if stateID == VEHICLE_VIEW_STATE.DEVICES:
-                value = self.__cachedStateValues[stateID].values()
+                value = listvalues(self.__cachedStateValues[stateID])
             else:
                 value = self.__cachedStateValues[stateID]
             return value
@@ -289,7 +291,7 @@ class VehicleStateController(IBattleController):
             self.onVehicleStateUpdated(stateID, self.__cachedStateValues[stateID])
 
     def invalidate(self, state, value, vehicleID=0):
-        if vehicleID != 0 and vehicleID != self.__vehicleID:
+        if vehicleID not in (0, self.__vehicleID):
             return
         else:
             isStateChangeHandled = False

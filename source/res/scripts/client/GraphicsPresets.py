@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/GraphicsPresets.py
+from __future__ import absolute_import, print_function
 import BigWorld
 import ResMgr
 graphicsPresetsResource = 'system/data/graphics_settings_presets.xml'
@@ -29,14 +30,14 @@ class GraphicsPresets:
         for currentOption in BigWorld.graphicsSettings():
             currentOptionMap[currentOption[0]] = currentOption[1]
 
-        for i in range(0, len(self.entryNames)):
+        for i, entryName in enumerate(self.entryNames):
             foundOption = True
-            for setting in self.entries[self.entryNames[i]].items():
+            for setting in self.entries[entryName].items():
                 if currentOptionMap.get(setting[0]) != setting[1]:
                     foundOption = False
                     break
 
-            if foundOption == True:
+            if foundOption:
                 self.selectedOption = i
                 break
 
@@ -46,6 +47,6 @@ class GraphicsPresets:
             try:
                 BigWorld.setGraphicsSetting(setting[0], setting[1])
             except:
-                print 'selectGraphicsOptions: unable to set option ', setting[0]
+                print('selectGraphicsOptions: unable to set option ', setting[0])
 
         self.selectedOption = option

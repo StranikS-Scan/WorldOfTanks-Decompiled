@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/readers/skills_readers.py
+from __future__ import absolute_import
 from collections import namedtuple
 import ResMgr
 from constants import IS_CLIENT, IS_WEB, TTC_TOOLTIP_SECTIONS

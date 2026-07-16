@@ -66,11 +66,16 @@ class BrowserView(Browser[BrowserViewModel]):
     def _finalize(self):
         self.getViewModel().onClose -= self.__onClose
         self.onBrowserObtained -= self.__onBrowserObtained
+        app = self.__appLoader.getApp()
+        if app is not None:
+            tooltipMgr = app.getToolTipMgr()
+            if tooltipMgr is not None:
+                tooltipMgr.hide()
         returnCallback = self.__settings.returnClb
         if returnCallback is not None:
             returnCallback(byUser=self.__closedByUser, url=self.browser.url if self.browser else '', forceClosed=self.__forceClosed)
         if self.__settings.restoreBackground and self.__savedBackAlpha is not None:
-            self.__appLoader.getApp().setBackgroundAlpha(self.__savedBackAlpha)
+            app.setBackgroundAlpha(self.__savedBackAlpha)
         super(BrowserView, self)._finalize()
         return
 

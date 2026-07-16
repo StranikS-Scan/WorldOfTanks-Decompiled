@@ -60,9 +60,6 @@ class ServerListItemPresenter(object):
     def __eq__(self, other):
         return self._compare(other) == 0
 
-    def __ne__(self, other):
-        return not self == other
-
     def __lt__(self, other):
         return self._compare(other) < 0
 

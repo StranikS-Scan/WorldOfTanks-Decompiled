@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/badges_controller.py
+from __future__ import absolute_import
 import typing
+from future.utils import viewvalues
 import Event
 import constants
 from adisp import adisp_process
@@ -127,7 +129,7 @@ class BadgesController(IBadgesController, Notifiable):
 
     def __badgesProcessing(self):
         currentSelectedPrefix = self.__currentSelectedPrefix
-        for badge in self.__itemsCache.items.getReceivedBadges().itervalues():
+        for badge in viewvalues(self.__itemsCache.items.getReceivedBadges()):
             if self.__tutorStorage is not None and badge.isNew():
                 if badge.isPrefixLayout():
                     self.__tutorStorage.setValue(GLOBAL_FLAG.HAVE_NEW_BADGE, True)

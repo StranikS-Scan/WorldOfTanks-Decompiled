@@ -16,6 +16,8 @@ class LS_DAMAGE_SOURCE_TYPES(object):
     DETONATOR = 'detonator'
     BOSS = 'boss'
     OBELISK = 'obelisk'
+    BASTION = 'bastion'
+    ARCHER = 'archer'
     DAMAGE_SOURCES = [ALPHA,
      BOMBER_ALPHA,
      BOMBER,

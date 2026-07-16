@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/battle_field_ctrl.py
+from __future__ import absolute_import
 import logging
 import typing
 import BigWorld
@@ -106,10 +107,10 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
     def stopVehicleVisual(self, vehicleID):
         self.__updateSpottedStatus(vehicleID, VehicleSpottedStatus.UNSPOTTED)
 
-    def addVehicleInfo(self, vInfoVO, arenaDP):
-        vehicleID = vInfoVO.vehicleID
-        if vInfoVO.isAlive() and vehicleID not in self._aliveAllies and vehicleID not in self._aliveEnemies:
-            self.__registerAliveVehicle(vInfoVO, arenaDP)
+    def addVehicleInfo(self, vo, arenaDP):
+        vehicleID = vo.vehicleID
+        if vo.isAlive() and vehicleID not in self._aliveAllies and vehicleID not in self._aliveEnemies:
+            self.__registerAliveVehicle(vo, arenaDP)
             self.__updateVehiclesHealth()
         else:
             if vehicleID in self._aliveAllies:
@@ -200,7 +201,7 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
 
     def __updateDeadVehicles(self):
         for viewCmp in self._viewComponents:
-            viewCmp.updateDeadVehicles(set(self._aliveAllies.iterkeys()), self.__deadAllies, set(self._aliveEnemies.iterkeys()), self.__deadEnemies)
+            viewCmp.updateDeadVehicles(set(self._aliveAllies), self.__deadAllies, set(self._aliveEnemies), self.__deadEnemies)
 
     def __updateVehicleHealth(self, vehicleID):
         if vehicleID in self._aliveAllies:

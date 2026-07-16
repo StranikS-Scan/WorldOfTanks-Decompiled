@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/persistent_data_cache_common/manager.py
+from __future__ import absolute_import
 from collections import OrderedDict
 import typing
+from future.utils import itervalues
 import wg_async
 from persistent_data_cache_common.common import getLogger, MeasureExecutionTime, DEFAULT_SAVING_TIMEOUT
 from persistent_data_cache_common.data_providers import PDProvider
@@ -26,7 +28,7 @@ class DefaultPDCManager(object):
         self._started = False
         self._cache.destroy()
         self._cache = None
-        for dataProvider in self._dataProviders.itervalues():
+        for dataProvider in itervalues(self._dataProviders):
             dataProvider.destroy()
 
         self._dataProviders = None
@@ -55,7 +57,7 @@ class DefaultPDCManager(object):
         if not self._started:
             self._logger.warning('Not started yet.')
             raise wg_async.AsyncReturn(False)
-        providersToSave = [ provider for provider in self._dataProviders.itervalues() if provider.isDataCreated ]
+        providersToSave = [ provider for provider in itervalues(self._dataProviders) if provider.isDataCreated ]
         if not providersToSave:
             self._logger.debug('Nothing to save.')
             raise wg_async.AsyncReturn(True)

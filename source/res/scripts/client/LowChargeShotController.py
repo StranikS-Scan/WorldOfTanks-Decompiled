@@ -68,7 +68,6 @@ class LowChargeShotController(VehicleDynamicComponent, IGunMechanicComponent, IM
 
     def _onAppearanceReady(self):
         super(LowChargeShotController, self)._onAppearanceReady()
-        self.__mechanicPrefabSpawner.loadAppearancePrefab()
         self.__updateMechanicState()
         self.__statesEvents.processStatePrepared()
 

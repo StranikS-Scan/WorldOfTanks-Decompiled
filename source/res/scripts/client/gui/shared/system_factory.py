@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/system_factory.py
+from __future__ import absolute_import
 from collections import defaultdict, namedtuple, OrderedDict
+from future.utils import viewitems
 BATTLE_REPO = 1
 EQUIPMENT_ITEMS = 2
 SCALEFORM_COMMON_PACKAGES = 3
@@ -83,6 +85,8 @@ POSTBATTLE_SQUAD_FINDER = 79
 POSTMORTEM_INFO_VIEW = 89
 MODE_HIDDEN_VEHICLES_CRITERIA = 81
 PBS_ENTRY_STATE = 82
+UNIT_MEMBERS_ORDER_KEY = 83
+TEAM_VOIP_SUPPORT = 84
 
 class CollectEventsManager(object):
 
@@ -336,7 +340,7 @@ def collectPrbStorage(name):
 
 def collectAllStorages():
     storages = []
-    for eventID, handlers in __collectEM.handlers.iteritems():
+    for eventID, handlers in viewitems(__collectEM.handlers):
         if isinstance(eventID, tuple) and eventID[0] == PBR_STORAGE:
             for handler in handlers:
                 ctx = {}
@@ -1164,6 +1168,18 @@ def collectReadyVehicleChekers(queueType):
     return __collectEM.handleEvent((VEHICLE_READY_CHECKERS, queueType), ctx={}).get('listCheckerFunc', [])
 
 
+def registerUnitMembersOrderKey(queueType, unitMembersOrderKey):
+
+    def onCollect(ctx):
+        ctx['unitMembersOrderKey'] = unitMembersOrderKey
+
+    __collectEM.addListener((UNIT_MEMBERS_ORDER_KEY, queueType), onCollect)
+
+
+def collectUnitMembersOrderKey(queueType):
+    return __collectEM.handleEvent((UNIT_MEMBERS_ORDER_KEY, queueType), ctx={}).get('unitMembersOrderKey', [])
+
+
 def registerPostbattleSquadFinder(guiType, squadFinderClass):
 
     def onCollect(ctx):
@@ -1198,3 +1214,15 @@ def registerModeHiddenVehiclesCriteria(bonusType, criteria):
 
 def collectModeHiddenVehiclesCriteria():
     return __collectEM.handleEvent(MODE_HIDDEN_VEHICLES_CRITERIA, {'modeHiddenCriteria': {}})['modeHiddenCriteria']
+
+
+def registerTeamVoipSupport(guiType, status):
+
+    def onCollect(ctx):
+        ctx['teamVoipSupport'] = status
+
+    __collectEM.addListener((TEAM_VOIP_SUPPORT, guiType), onCollect)
+
+
+def collectTeamVoipSupport(guiType):
+    return __collectEM.handleEvent((TEAM_VOIP_SUPPORT, guiType), ctx={}).get('teamVoipSupport', False)

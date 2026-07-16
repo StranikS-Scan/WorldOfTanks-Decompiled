@@ -20,10 +20,10 @@ def _getStunSwitch(lobbyContext=None):
 
 
 class SettingsCore(ISettingsCore):
-    onOnceOnlyHintsChanged = Event.Event()
-    onSettingsChanged = Event.Event()
-    onSettingsApplied = Event.Event()
-    onSettingsReady = Event.Event()
+    onOnceOnlyHintsChanged = Event.SafeEvent()
+    onSettingsChanged = Event.SafeEvent()
+    onSettingsApplied = Event.SafeEvent()
+    onSettingsReady = Event.SafeEvent()
 
     def __init__(self):
         super(SettingsCore, self).__init__()

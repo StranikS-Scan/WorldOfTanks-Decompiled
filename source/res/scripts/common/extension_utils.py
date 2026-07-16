@@ -2,12 +2,12 @@
 # Embedded file name: scripts/common/extension_utils.py
 from __future__ import absolute_import
 import importlib
-from future.utils import with_metaclass
 from soft_exception import SoftException
 from ExtensionsManager import g_extensionsManager
 from constants import IS_CLIENT, IS_EDITOR, IS_BOT
 from debug_utils import LOG_CURRENT_EXCEPTION
 from extension_rules import isExtXML, READ_METHOD
+from py2to3.patched_future import with_metaclass
 if IS_CLIENT or IS_EDITOR:
     import ResMgr as rmgr
 

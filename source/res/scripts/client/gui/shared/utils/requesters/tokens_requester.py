@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/tokens_requester.py
+from __future__ import absolute_import
 import functools
 import logging
 import time
 import typing
+from future.utils import iteritems, viewitems, viewvalues
 import BigWorld
 from account_helpers.AccountSettings import QUEST_DELTAS_TOKENS_PROGRESS
 from constants import LOOTBOX_TOKEN_PREFIX
@@ -26,12 +28,10 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
-        self.__lastShopRev = None
         self.__lootBoxCache = {}
         self.__lootBoxTotalCount = 0
         self.__tokensProgressDelta = TokensProgressDelta(functools.partial(QuestDeltasSettings, QUEST_DELTAS_TOKENS_PROGRESS))
         super(TokensRequester, self).__init__()
-        return
 
     def clear(self):
         self.__lootBoxCache.clear()
@@ -69,7 +69,7 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
 
     def getFreeLootBoxes(self):
         result = {}
-        for boxTokenID, box in self.__lootBoxCache.iteritems():
+        for boxTokenID, box in viewitems(self.__lootBoxCache):
             if box.isFree():
                 result[boxTokenID] = box
 
@@ -79,9 +79,8 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
         return self.__lootBoxTotalCount
 
     def getLootBoxesCountByType(self):
-        boxes = self.__lootBoxCache.values()
         result = {}
-        for box in boxes:
+        for box in viewvalues(self.__lootBoxCache):
             boxType = box.getType()
             boxCount = box.getInventoryCount()
             boxCategory = box.getCategory()
@@ -136,7 +135,7 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
 
     def getTokensByPrefixAndPostfix(self, prefix='', postfix=''):
         tokens = self.getTokens()
-        return {k:v for k, v in tokens.iteritems() if k.startswith(prefix) and k.endswith(postfix)}
+        return {k:v for k, v in viewitems(tokens) if k.startswith(prefix) and k.endswith(postfix)}
 
     def _preprocessValidData(self, data):
         self.__tokensProgressDelta.update(data)
@@ -156,7 +155,7 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
 
     def __createLootBoxes(self, data):
         lootBoxTokensList = []
-        for lootBoxID, lootBoxData in data.iteritems():
+        for lootBoxID, lootBoxData in iteritems(data):
             lootBoxTokenID = LOOTBOX_TOKEN_PREFIX + str(lootBoxID)
             lootBoxTokensList.append(lootBoxTokenID)
             if lootBoxTokenID not in self.__lootBoxCache:
@@ -167,8 +166,7 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
         return lootBoxTokensList
 
     def __updateLootBoxes(self, tokensCache):
-        for lootBoxTokenID, data in tokensCache.items():
-            _, count = data
+        for lootBoxTokenID, (_, count) in tokensCache.items():
             if lootBoxTokenID in self.__lootBoxCache:
                 item = self.__lootBoxCache[lootBoxTokenID]
                 self.__lootBoxTotalCount += count - item.getInventoryCount()
@@ -177,8 +175,7 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
         self.__clearLootBoxes(tokensCache)
 
     def __clearLootBoxes(self, data, isRemove=False):
-        lootBoxIDs = self.__lootBoxCache.keys()
-        for lootBoxID in lootBoxIDs:
+        for lootBoxID in list(self.__lootBoxCache):
             if lootBoxID not in data:
                 item = self.__lootBoxCache[lootBoxID]
                 self.__lootBoxTotalCount -= item.getInventoryCount()
@@ -191,7 +188,7 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
 class TokensProgressDelta(BaseDelta):
 
     def _getDataIterator(self, data):
-        for tokenId, value in data.get('tokens', {}).iteritems():
+        for tokenId, value in iteritems(data.get('tokens', {})):
             yield (tokenId, Token(*value).count)
 
     def _getDefaultValue(self):

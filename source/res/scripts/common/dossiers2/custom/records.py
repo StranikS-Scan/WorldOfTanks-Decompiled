@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/records.py
+from __future__ import absolute_import
+from future.utils import lmap, viewitems
 RECORDS = (('total',
   'creationTime',
   'p',
@@ -10909,7 +10911,7 @@ RECORD_DB_IDS = {('total', 'creationTime'): 68,
  ('singleAchievements', 'BPReserveAchievement_6'): 2107,
  ('singleAchievements', 'BPReserveAchievement_7'): 2108,
  ('singleAchievements', 'BPReserveAchievement_9'): 2109}
-DB_ID_TO_RECORD = dict([ (value, key) for key, value in RECORD_DB_IDS.iteritems() ])
+DB_ID_TO_RECORD = {value:key for key, value in viewitems(RECORD_DB_IDS)}
 RECORD_DB_IDS.update({('vehTypeFrags', ''): 863,
  ('a15x15Cut', ''): 864,
  ('a7x7Cut', ''): 865,
@@ -10970,8 +10972,8 @@ EPIC_MEDAL_SET = {RECORD_DB_IDS[achievementDescriptor] for achievementDescriptor
  ('achievements', 'medalTamadaYoshio'),
  ('achievements', 'medalStark')]}
 BIT_STORAGES = {}
-map(lambda rec: BIT_STORAGES.setdefault((rec[0], rec[3]), []).append(rec[1]), (rec for rec in RECORDS if rec[2] == 'b'))
-RECORD_MAX_VALUES = dict([ (rec[:2], rec[4]) for rec in RECORDS if rec[2] == 'p' ])
+lmap(lambda rec: BIT_STORAGES.setdefault((rec[0], rec[3]), []).append(rec[1]), (rec for rec in RECORDS if rec[2] == 'b'))
+RECORD_MAX_VALUES = {rec[:2]:rec[4] for rec in RECORDS if rec[2] == 'p'}
 PLATFORM_ACHIEVEMENTS = {'steamLittleSavingsMedal': (('steamAchievements', 'steamLittleSavingsMedal'), ('steamAchievements', 'steamBattleCredits')),
  'steamMintedCoinMedal': (('steamAchievements', 'steamMintedCoinMedal'), ('steamAchievements', 'steamBattleCredits')),
  'steamKingMidasMedal': (('steamAchievements', 'steamKingMidasMedal'), ('steamAchievements', 'steamBattleCredits')),

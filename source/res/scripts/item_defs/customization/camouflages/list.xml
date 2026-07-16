@@ -112395,6 +112395,88 @@
       </palettes>
       <glossMetallicMap>	vehicles/russian/Camouflage/bp2026_june_4_GMM.dds	</glossMetallicMap>
     </camouflage>
+    <camouflage>
+      <id>	1137	</id>
+      <texture>	vehicles/russian/Camouflage/bp2026_june_5.dds	</texture>
+      <description>	#vehicle_customization:camouflage/empty/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bp2026_june_5/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <rotation>
+        <HULL>	-0.366519	</HULL>
+        <TURRET>	-0.366519	</TURRET>
+        <GUN>	-0.366519	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.4 2.4	</factor>
+        <offset>	-0.62 1.63	</offset>
+      </tilingSettings>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+    </camouflage>
+    <camouflage>
+      <id>	1138	</id>
+      <texture>	vehicles/russian/Camouflage/bp2026_june_6.dds	</texture>
+      <description>	#vehicle_customization:camouflage/empty/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bp2026_june_6/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <rotation>
+        <HULL>	-0.88017	</HULL>
+        <TURRET>	-0.88017	</TURRET>
+        <GUN>	-0.88017	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.37 2.37	</factor>
+        <offset>	-3.69 -4.12	</offset>
+      </tilingSettings>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+    </camouflage>
+    <camouflage>
+      <id>	1139	</id>
+      <texture>	vehicles/russian/Camouflage/bp2026_june_7.dds	</texture>
+      <description>	#vehicle_customization:camouflage/empty/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bp2026_june_7/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <rotation>
+        <HULL>	-0.438776	</HULL>
+        <TURRET>	-0.438776	</TURRET>
+        <GUN>	-0.438776	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	1.54 1.54	</factor>
+        <offset>	-2.28 -1.25	</offset>
+      </tilingSettings>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <glossMetallicMap>	vehicles/russian/Camouflage/bp2026_june_7_GMM.dds	</glossMetallicMap>
+    </camouflage>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:camouflage/transparent	</userString>
@@ -112434,6 +112516,47 @@
         <type>	relativewithfactor	</type>
         <factor>	1 1	</factor>
         <offset>	-7.11 -1.85	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	1110	</id>
+      <texture>	vehicles/russian/Camouflage/pub_west_token_store.dds	</texture>
+      <description>	#vehicle_customization:camouflage/empty/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/pub_west_token_store/label	</userString>
+      <tags>	hiddenInUI fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.358142	</HULL>
+        <TURRET>	-0.358142	</TURRET>
+        <GUN>	-0.358142	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.19 2.19	</factor>
+        <offset>	-1.82 0.85	</offset>
       </tilingSettings>
     </camouflage>
   </itemGroup>
@@ -112543,6 +112666,115 @@
         <type>	relativewithfactor	</type>
         <factor>	1.91 1.91	</factor>
         <offset>	1.12 -2.17	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	1115	</id>
+      <texture>	vehicles/russian/Camouflage/brazen_bull.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/brazen_bull/label	</userString>
+      <description>	#vehicle_customization:camouflage/empty/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <tags>	hiddenInUI fullRGB	</tags>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.167028	</HULL>
+        <TURRET>	0.167028	</TURRET>
+        <GUN>	0.167028	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.22 2.22	</factor>
+        <offset>	1.83 2	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	1123	</id>
+      <texture>	vehicles/russian/Camouflage/pub_west_community_1.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/pub_west_community_1/label	</userString>
+      <description>	#vehicle_customization:camouflage/empty/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <tags>	hiddenInUI	</tags>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.20944	</HULL>
+        <TURRET>	0.20944	</TURRET>
+        <GUN>	0.20944	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.27 2.27	</factor>
+        <offset>	-13.97 -14.21	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	1124	</id>
+      <texture>	vehicles/russian/Camouflage/pub_west_community_2.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/pub_west_community_2/label	</userString>
+      <description>	#vehicle_customization:camouflage/empty/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <tags>	hiddenInUI	</tags>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.247662	</HULL>
+        <TURRET>	0.247662	</TURRET>
+        <GUN>	0.247662	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.51 2.51	</factor>
+        <offset>	0 0	</offset>
       </tilingSettings>
     </camouflage>
   </itemGroup>
@@ -112789,6 +113021,371 @@
         <factor>	3.2 3.2	</factor>
         <offset>	-0.44 -0.14	</offset>
       </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	1147	</id>
+      <texture>	vehicles/russian/Camouflage/pub_cn360_welfare.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/pub_cn360_welfare/label	</userString>
+      <description>	#vehicle_customization:camouflage/empty/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.71 2.71	</factor>
+        <offset>	0 -0.99	</offset>
+      </tilingSettings>
+      <rotation>
+        <HULL>	-0.123744	</HULL>
+        <TURRET>	-0.123744	</TURRET>
+        <GUN>	-0.123744	</GUN>
+      </rotation>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	1145	</id>
+      <texture>	vehicles/russian/Camouflage/ls26_2.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/ls26_2/label	</userString>
+      <description>	#vehicle_customization:camouflage/empty/description	</description>
+      <scales>	3 1 0.7	</scales>
+      <tags>	fullRGB styleOnly hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	1.94 1.94	</factor>
+        <offset>	0.82 0.03	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	1146	</id>
+      <texture>	vehicles/russian/Camouflage/ls26_2_turret.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/ls26_2/label	</userString>
+      <description>	#vehicle_customization:camouflage/empty/description	</description>
+      <scales>	1.33 1 0.7	</scales>
+      <tags>	fullRGB styleOnly hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	1.94 1.94	</factor>
+        <offset>	0.82 0.03	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	1152	</id>
+      <texture>	vehicles/russian/Camouflage/2d_cust_challenges_2026_1.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/2d_cust_challenges_2026_1/label	</userString>
+      <description>	#vehicle_customization:camouflage/empty/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.208392	</HULL>
+        <TURRET>	-0.208392	</TURRET>
+        <GUN>	-0.208392	</GUN>
+      </rotation>
+      <tiling>
+        <china:Ch05_T34_233>	1.46 1.46 -0.21 0.63	</china:Ch05_T34_233>
+        <china:Ch05_T34_268>	4.76 4.76 -1.59 -0.26	</china:Ch05_T34_268>
+        <china:Ch05_T34_266>	4.48 4.48 -13.72 0.04	</china:Ch05_T34_266>
+        <china:Ch05_T34_259>	3.49 3.49 -1.33 0.21	</china:Ch05_T34_259>
+        <china:Ch04_T34_182>	3.29 3.29 0.03 -0.29	</china:Ch04_T34_182>
+        <china:Ch01_Type59>	1.36 1.36 -0.04 0.2	</china:Ch01_Type59>
+        <china:Ch06_Renault_NC314>	1.2 1.2 -0.14 -0.41	</china:Ch06_Renault_NC314>
+        <china:Ch01_Type59_Gold36>	3.36 3.36 2.06 -0.66	</china:Ch01_Type59_Gold36>
+        <china:Ch01_Type59_Gold37>	3.36 3.36 2.06 -0.66	</china:Ch01_Type59_Gold37>
+        <china:Ch01_Type59_Gold38>	3.36 3.36 2.06 -0.66	</china:Ch01_Type59_Gold38>
+        <china:Ch01_Type59_Gold65>	4.44 4.44 2.1 -1.08	</china:Ch01_Type59_Gold65>
+        <china:Ch07_Vickers_MkE_Type_BT264>	2.64 2.64 -0.63 0.03	</china:Ch07_Vickers_MkE_Type_BT264>
+        <china:Ch08_Type97_Chi_Ha1>	1.59 1.59 -0.44 1.01	</china:Ch08_Type97_Chi_Ha1>
+        <china:Ch02_Type6259>	3 3 -0.7 -0.61	</china:Ch02_Type6259>
+        <china:Ch02_Type6260>	3 3 -0.7 -0.61	</china:Ch02_Type6260>
+        <china:Ch03_WZ-11110>	3.84 3.84 -3.41 -1.92	</china:Ch03_WZ-11110>
+        <china:Ch03_WZ-11114>	2.41 2.41 -0.86 -0.82	</china:Ch03_WZ-11114>
+        <china:Ch03_WZ-11121>	2.89 2.89 -0.24 0.73	</china:Ch03_WZ-11121>
+        <china:Ch02_Type6209>	10.64 10.64 0.18 -0.52	</china:Ch02_Type6209>
+        <china:Ch03_WZ-11130>	1.42 1.42 0.4 -0.37	</china:Ch03_WZ-11130>
+        <china:Ch03_WZ-11169>	3.17 3.17 -1.59 0.88	</china:Ch03_WZ-11169>
+        <china:Ch03_WZ-11178>	1.56 1.56 -1.7 -2.47	</china:Ch03_WZ-11178>
+        <china:Ch03_WZ_111_A98>	2.51 2.51 2.61 0.67	</china:Ch03_WZ_111_A98>
+        <china:Ch04_T34_107>	0.56 0.56 2.05 0.41	</china:Ch04_T34_107>
+        <china:Ch04_T34_126>	2.77 2.77 0.62 0.21	</china:Ch04_T34_126>
+        <china:Ch04_T34_134>	1.38 1.38 -0.07 0.14	</china:Ch04_T34_134>
+        <china:Ch04_T34_135>	1.38 1.38 -0.07 0.14	</china:Ch04_T34_135>
+        <china:Ch05_T34_279>	4.67 4.67 -0.05 -0.86	</china:Ch05_T34_279>
+        <china:Ch07_Vickers_MkE_Type_BT2635>	2.91 2.91 0.41 -0.77	</china:Ch07_Vickers_MkE_Type_BT2635>
+        <china:Ch06_Renault_NC3112>	3.67 3.67 -0.31 1.07	</china:Ch06_Renault_NC3112>
+        <china:Ch05_T34_298>	3.67 3.67 -0.31 1.07	</china:Ch05_T34_298>
+      </tiling>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.38 2.38	</factor>
+        <offset>	-7.29 -2.45	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	1153	</id>
+      <texture>	vehicles/russian/Camouflage/2d_cust_challenges_2026_2.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/2d_cust_challenges_2026_2/label	</userString>
+      <description>	#vehicle_customization:camouflage/empty/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.208392	</HULL>
+        <TURRET>	-0.208392	</TURRET>
+        <GUN>	-0.208392	</GUN>
+      </rotation>
+      <tiling>
+        <china:Ch05_T34_233>	1.46 1.46 -0.21 0.63	</china:Ch05_T34_233>
+        <china:Ch05_T34_268>	4.76 4.76 -1.59 -0.26	</china:Ch05_T34_268>
+        <china:Ch05_T34_266>	4.48 4.48 -13.72 0.04	</china:Ch05_T34_266>
+        <china:Ch05_T34_259>	3.49 3.49 -1.33 0.21	</china:Ch05_T34_259>
+        <china:Ch04_T34_182>	3.29 3.29 0.03 -0.29	</china:Ch04_T34_182>
+        <china:Ch01_Type59>	1.36 1.36 -0.04 0.2	</china:Ch01_Type59>
+        <china:Ch06_Renault_NC314>	1.2 1.2 -0.14 -0.41	</china:Ch06_Renault_NC314>
+        <china:Ch01_Type59_Gold36>	3.36 3.36 2.06 -0.66	</china:Ch01_Type59_Gold36>
+        <china:Ch01_Type59_Gold37>	3.36 3.36 2.06 -0.66	</china:Ch01_Type59_Gold37>
+        <china:Ch01_Type59_Gold38>	3.36 3.36 2.06 -0.66	</china:Ch01_Type59_Gold38>
+        <china:Ch01_Type59_Gold65>	4.44 4.44 2.1 -1.08	</china:Ch01_Type59_Gold65>
+        <china:Ch07_Vickers_MkE_Type_BT264>	2.64 2.64 -0.63 0.03	</china:Ch07_Vickers_MkE_Type_BT264>
+        <china:Ch08_Type97_Chi_Ha1>	1.59 1.59 -0.44 1.01	</china:Ch08_Type97_Chi_Ha1>
+        <china:Ch02_Type6259>	3 3 -0.7 -0.61	</china:Ch02_Type6259>
+        <china:Ch02_Type6260>	3 3 -0.7 -0.61	</china:Ch02_Type6260>
+        <china:Ch03_WZ-11110>	3.84 3.84 -3.41 -1.92	</china:Ch03_WZ-11110>
+        <china:Ch03_WZ-11114>	2.41 2.41 -0.86 -0.82	</china:Ch03_WZ-11114>
+        <china:Ch03_WZ-11121>	2.89 2.89 -0.24 0.73	</china:Ch03_WZ-11121>
+        <china:Ch02_Type6209>	10.64 10.64 0.18 -0.52	</china:Ch02_Type6209>
+        <china:Ch03_WZ-11130>	1.42 1.42 0.4 -0.37	</china:Ch03_WZ-11130>
+        <china:Ch03_WZ-11169>	3.17 3.17 -1.59 0.88	</china:Ch03_WZ-11169>
+        <china:Ch03_WZ-11178>	1.56 1.56 -1.7 -2.47	</china:Ch03_WZ-11178>
+        <china:Ch03_WZ_111_A98>	2.51 2.51 2.61 0.67	</china:Ch03_WZ_111_A98>
+        <china:Ch04_T34_107>	0.56 0.56 2.05 0.41	</china:Ch04_T34_107>
+        <china:Ch04_T34_126>	2.77 2.77 0.62 0.21	</china:Ch04_T34_126>
+        <china:Ch04_T34_134>	1.38 1.38 -0.07 0.14	</china:Ch04_T34_134>
+        <china:Ch04_T34_135>	1.38 1.38 -0.07 0.14	</china:Ch04_T34_135>
+        <china:Ch05_T34_279>	4.67 4.67 -0.05 -0.86	</china:Ch05_T34_279>
+        <china:Ch07_Vickers_MkE_Type_BT2635>	2.91 2.91 0.41 -0.77	</china:Ch07_Vickers_MkE_Type_BT2635>
+        <china:Ch06_Renault_NC3112>	3.67 3.67 -0.31 1.07	</china:Ch06_Renault_NC3112>
+        <china:Ch05_T34_298>	3.67 3.67 -0.31 1.07	</china:Ch05_T34_298>
+      </tiling>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.38 2.38	</factor>
+        <offset>	-7.29 -2.45	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	1154	</id>
+      <texture>	vehicles/russian/Camouflage/2d_cust_challenges_2026_3.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/2d_cust_challenges_2026_3/label	</userString>
+      <description>	#vehicle_customization:camouflage/empty/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.208392	</HULL>
+        <TURRET>	-0.208392	</TURRET>
+        <GUN>	-0.208392	</GUN>
+      </rotation>
+      <tiling>
+        <china:Ch05_T34_233>	1.46 1.46 -0.21 0.63	</china:Ch05_T34_233>
+        <china:Ch05_T34_268>	4.76 4.76 -1.59 -0.26	</china:Ch05_T34_268>
+        <china:Ch05_T34_266>	4.48 4.48 -13.72 0.04	</china:Ch05_T34_266>
+        <china:Ch05_T34_259>	3.49 3.49 -1.33 0.21	</china:Ch05_T34_259>
+        <china:Ch04_T34_182>	3.29 3.29 0.03 -0.29	</china:Ch04_T34_182>
+        <china:Ch01_Type59>	1.36 1.36 -0.04 0.2	</china:Ch01_Type59>
+        <china:Ch06_Renault_NC314>	1.2 1.2 -0.14 -0.41	</china:Ch06_Renault_NC314>
+        <china:Ch01_Type59_Gold36>	3.36 3.36 2.06 -0.66	</china:Ch01_Type59_Gold36>
+        <china:Ch01_Type59_Gold37>	3.36 3.36 2.06 -0.66	</china:Ch01_Type59_Gold37>
+        <china:Ch01_Type59_Gold38>	3.36 3.36 2.06 -0.66	</china:Ch01_Type59_Gold38>
+        <china:Ch01_Type59_Gold65>	4.44 4.44 2.1 -1.08	</china:Ch01_Type59_Gold65>
+        <china:Ch07_Vickers_MkE_Type_BT264>	2.64 2.64 -0.63 0.03	</china:Ch07_Vickers_MkE_Type_BT264>
+        <china:Ch08_Type97_Chi_Ha1>	1.59 1.59 -0.44 1.01	</china:Ch08_Type97_Chi_Ha1>
+        <china:Ch02_Type6259>	3 3 -0.7 -0.61	</china:Ch02_Type6259>
+        <china:Ch02_Type6260>	3 3 -0.7 -0.61	</china:Ch02_Type6260>
+        <china:Ch03_WZ-11110>	3.84 3.84 -3.41 -1.92	</china:Ch03_WZ-11110>
+        <china:Ch03_WZ-11114>	2.41 2.41 -0.86 -0.82	</china:Ch03_WZ-11114>
+        <china:Ch03_WZ-11121>	2.89 2.89 -0.24 0.73	</china:Ch03_WZ-11121>
+        <china:Ch02_Type6209>	10.64 10.64 0.18 -0.52	</china:Ch02_Type6209>
+        <china:Ch03_WZ-11130>	1.42 1.42 0.4 -0.37	</china:Ch03_WZ-11130>
+        <china:Ch03_WZ-11169>	3.17 3.17 -1.59 0.88	</china:Ch03_WZ-11169>
+        <china:Ch03_WZ-11178>	1.56 1.56 -1.7 -2.47	</china:Ch03_WZ-11178>
+        <china:Ch03_WZ_111_A98>	2.51 2.51 2.61 0.67	</china:Ch03_WZ_111_A98>
+        <china:Ch04_T34_107>	0.56 0.56 2.05 0.41	</china:Ch04_T34_107>
+        <china:Ch04_T34_126>	2.77 2.77 0.62 0.21	</china:Ch04_T34_126>
+        <china:Ch04_T34_134>	1.38 1.38 -0.07 0.14	</china:Ch04_T34_134>
+        <china:Ch04_T34_135>	1.38 1.38 -0.07 0.14	</china:Ch04_T34_135>
+        <china:Ch05_T34_279>	4.67 4.67 -0.05 -0.86	</china:Ch05_T34_279>
+        <china:Ch07_Vickers_MkE_Type_BT2635>	2.91 2.91 0.41 -0.77	</china:Ch07_Vickers_MkE_Type_BT2635>
+        <china:Ch06_Renault_NC3112>	3.67 3.67 -0.31 1.07	</china:Ch06_Renault_NC3112>
+        <china:Ch05_T34_298>	3.67 3.67 -0.31 1.07	</china:Ch05_T34_298>
+      </tiling>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.38 2.38	</factor>
+        <offset>	-7.29 -2.45	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	1163	</id>
+      <texture>	vehicles/russian/Camouflage/ols_2026_1_silver.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/ols_2026_1_silver/label	</userString>
+      <description>	#vehicle_customization:camouflage/empty/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	fullRGB styleOnly questsProgression	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.506145	</HULL>
+        <TURRET>	-0.506145	</TURRET>
+        <GUN>	-0.506145	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.5 2.5	</factor>
+        <offset>	0 -0.2	</offset>
+      </tilingSettings>
+      <glossMetallicMap>	vehicles/russian/Camouflage/ols_2026_1_GMM.dds	</glossMetallicMap>
+      <style>	1377	</style>
+    </camouflage>
+    <camouflage>
+      <id>	1164	</id>
+      <texture>	vehicles/russian/Camouflage/ols_2026_1_gold.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/ols_2026_1_gold/label	</userString>
+      <description>	#vehicle_customization:camouflage/empty/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	fullRGB styleOnly questsProgression	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.506145	</HULL>
+        <TURRET>	-0.506145	</TURRET>
+        <GUN>	-0.506145	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.5 2.5	</factor>
+        <offset>	0 -0.2	</offset>
+      </tilingSettings>
+      <glossMetallicMap>	vehicles/russian/Camouflage/ols_2026_1_GMM.dds	</glossMetallicMap>
+      <style>	1378	</style>
     </camouflage>
   </itemGroup>
   <itemGroup>
@@ -118746,6 +119343,74 @@
     </vehicleFilter>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	1108	</id>
+      <texture>	vehicles/russian/Camouflage/liveops_liberty_1.dds	</texture>
+      <description>	#vehicle_customization:camouflage/empty/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/liveops_liberty/label	</userString>
+      <tags>	styleOnly fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	3.07 3.07	</factor>
+        <offset>	-1.58 -2.67	</offset>
+      </tilingSettings>
+      <rotation>
+        <HULL>	0.257785	</HULL>
+        <TURRET>	0.257785	</TURRET>
+        <GUN>	0.257785	</GUN>
+      </rotation>
+    </camouflage>
+    <camouflage>
+      <id>	1109	</id>
+      <texture>	vehicles/russian/Camouflage/liveops_liberty_2.dds	</texture>
+      <description>	#vehicle_customization:camouflage/empty/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/liveops_liberty/label	</userString>
+      <tags>	styleOnly fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	3.07 3.07	</factor>
+        <offset>	-1.58 -2.67	</offset>
+      </tilingSettings>
+      <rotation>
+        <HULL>	0.257785	</HULL>
+        <TURRET>	0.257785	</TURRET>
+        <GUN>	0.257785	</GUN>
+      </rotation>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
     <season>	ALL	</season>
     <historical>	1	</historical>
     <userString>	#vehicle_customization:camouflage/opaque	</userString>
@@ -118783,6 +119448,47 @@
         <type>	relativewithfactor	</type>
         <factor>	3.4 3.4	</factor>
         <offset>	0.96 -0.44	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	1271	</id>
+      <texture>	vehicles/russian/Camouflage/cowmouflage.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/cowmouflage/label	</userString>
+      <description>	#vehicle_customization:camouflage/empty/description	</description>
+      <tags>	hiddenInUI fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.506145	</HULL>
+        <TURRET>	-0.506145	</TURRET>
+        <GUN>	-0.506145	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	3.3 3.3	</factor>
+        <offset>	0.3 -0.13	</offset>
       </tilingSettings>
     </camouflage>
   </itemGroup>

@@ -1,11 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/utils.py
+from __future__ import absolute_import, division
 import copy
+import re
 from operator import sub
 from functools import partial
+from future.utils import lmap, viewitems, viewvalues
+from past.builtins import long, basestring
 from typing import Any, Dict, Tuple
-from constants import VEHICLE_TTC_ASPECTS
-from debug_utils import *
+import ResMgr
+from account_shared import AmmoIterator
+from constants import VEHICLE_TTC_ASPECTS, IS_CLIENT
+from debug_utils import LOG_ERROR
 from items import tankmen, ITEM_TYPES
 from items import vehicles
 from items.components.c11n_constants import CUSTOMIZATION_SLOTS_VEHICLE_PARTS
@@ -14,8 +20,6 @@ from items.tankmen import MAX_SKILL_LEVEL, MIN_ROLE_LEVEL, getSkillsConfig
 from items.vehicles import vehicleAttributeFactors, VehicleDescriptor
 from items.artefacts import StaticOptionalDevice, AdditiveBattleBooster
 from items.components import component_constants
-from account_shared import AmmoIterator
-import ResMgr
 __defaultGlossTexture = None
 _FORMAT_VEH_INFO_STRING_REXP = re.compile('{([a-zA-Z]+)}')
 _VEH_INFO_STRING_CONVERTERS = {'level': lambda descr: str(descr.type.level),
@@ -57,7 +61,7 @@ def isItemWithCompactDescrExist(compDescr):
 
 def _makeDefaultVehicleFactors(sample):
     default = {}
-    for key, value in sample.iteritems():
+    for key, value in viewitems(sample):
         if value is None:
             default[key] = value
         if isinstance(value, (float,
@@ -250,19 +254,18 @@ if IS_CLIENT:
 
     def _compareFactors(original, changed):
         result = {}
-        for factor in original.iterkeys():
+        for factor in original:
             if not _comparableFactors(original[factor], changed[factor]):
                 continue
             if all((isinstance(x, list) for x in (original[factor], changed[factor]))):
-                if not all(map(isclose, original[factor], changed[factor])):
-                    result[factor] = map(sub, original[factor], changed[factor])
+                if not all(lmap(isclose, original[factor], changed[factor])):
+                    result[factor] = lmap(sub, original[factor], changed[factor])
             if not isclose(original[factor], changed[factor]):
                 originalFactor = original.get(factor, CLIENT_VEHICLE_ATTRIBUTE_FACTORS[factor])
                 changedFactor = changed[factor]
                 if originalFactor == changedFactor:
                     continue
-                else:
-                    result[factor] = originalFactor - changedFactor
+                result[factor] = originalFactor - changedFactor
 
         return result
 
@@ -285,14 +288,14 @@ if IS_CLIENT:
     def updateAttrFactorsWithSplit(vehicleDescr, crewCompactDescrs, eqs, factors, additionalCrewLevelIncrease=0, isModifySkillProcessors=False):
         extras = {}
         extraAspects = {VEHICLE_TTC_ASPECTS.WHEN_STILL: ('invisibility',)}
-        for aspect in extraAspects.iterkeys():
+        for aspect, coefficients in viewitems(extraAspects):
             currFactors = copy.deepcopy(factors)
             updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, currFactors, aspect, additionalCrewLevelIncrease, isModifySkillProcessors)
-            for coefficient in extraAspects[aspect]:
+            for coefficient in coefficients:
                 extras.setdefault(coefficient, {})[aspect] = currFactors[coefficient]
 
         updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, factors, VEHICLE_TTC_ASPECTS.DEFAULT, additionalCrewLevelIncrease, isModifySkillProcessors)
-        for coefficientName, coefficientValue in extras.iteritems():
+        for coefficientName, coefficientValue in viewitems(extras):
             coefficientValue[VEHICLE_TTC_ASPECTS.DEFAULT] = factors[coefficientName]
             factors[coefficientName] = coefficientValue
 
@@ -320,7 +323,7 @@ if IS_CLIENT:
 
 
     def updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, factors, aspect, additionalCrewLevelIncrease=0, isModifySkillProcessors=False):
-        from VehicleDescrCrew import VehicleDescrCrew
+        from items.VehicleDescrCrew import VehicleDescrCrew
         factors['crewLevelIncrease'] = _sumCrewLevelIncrease(eqs)
         for eq in eqs:
             if eq is not None:
@@ -344,7 +347,7 @@ if IS_CLIENT:
         shotDispersionFactors = [multShotDispersionFactor, 0.0]
         vehicleDescrCrew.onCollectShotDispersionFactors(shotDispersionFactors)
         factors['shotDispersion'] = shotDispersionFactors
-        for mechanic in vehicleDescr.mechanicsParams.itervalues():
+        for mechanic in viewvalues(vehicleDescr.mechanicsParams):
             mechanic.updateVehicleAttrFactorsForAspect(vehicleDescr, factors, aspect)
 
         return
@@ -400,7 +403,7 @@ def commanderTutorXpBonusFactorForCrew(crew, ammo, vehCompDescr):
     optionalDevCrewLevelIncrease = component_constants.ZERO_FLOAT
     cache = vehicles.g_cache
     optDev = set()
-    for compDescr, count in AmmoIterator(ammo):
+    for compDescr, _ in AmmoIterator(ammo):
         itemTypeIdx, _, itemIdx = vehicles.parseIntCompactDescr(compDescr)
         if itemTypeIdx == ITEM_TYPES.optionalDevice:
             obj = cache.optionalDevices()[itemIdx]
@@ -408,7 +411,7 @@ def commanderTutorXpBonusFactorForCrew(crew, ammo, vehCompDescr):
                 optionalDevCrewLevelIncrease += obj.getFactorValue(vehDescriptor, 'miscAttrs/crewLevelIncrease')
                 optDev.add(obj)
 
-    for compDescr, count in AmmoIterator(ammo):
+    for compDescr, _ in AmmoIterator(ammo):
         itemTypeIdx, _, itemIdx = vehicles.parseIntCompactDescr(compDescr)
         if itemTypeIdx == ITEM_TYPES.equipment:
             eqip = cache.equipments()[itemIdx]

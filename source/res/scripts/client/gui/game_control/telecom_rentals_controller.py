@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/telecom_rentals_controller.py
+from __future__ import absolute_import
 import BigWorld
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -62,5 +63,5 @@ class TelecomRentalsNotificationController(ITelecomRentalsNotificationController
             self.processSwitchNotifications()
 
     def __onTokensUpdate(self, diff):
-        if PARTNERSHIP_BLOCKED_TOKEN_NAME in diff.keys():
+        if PARTNERSHIP_BLOCKED_TOKEN_NAME in diff:
             self.processSwitchNotifications()

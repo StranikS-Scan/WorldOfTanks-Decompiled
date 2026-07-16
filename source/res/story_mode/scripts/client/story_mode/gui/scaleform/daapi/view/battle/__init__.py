@@ -49,6 +49,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.shared.messages import VehicleMessages, VehicleErrorMessages
     from gui.Scaleform.daapi.view.battle.shared.situation_indicators import SituationIndicators
     from gui.Scaleform.daapi.view.battle.shared.indicators import SiegeModeIndicator
+    from gui.Scaleform.daapi.view.battle.shared.indicators import TargetDesignatorUnspottedIndicator
     from gui.Scaleform.daapi.view.battle.shared.legacy_mechanics import dualgun_component
     from gui.Scaleform.daapi.view.battle.shared.damage_info_panel import DamageInfoPanel
     from gui.Scaleform.daapi.view.battle.classic.map_info_tip import MapInfoTip
@@ -114,7 +115,8 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_INFO_PAGE, PostmortemInfoPanel, ScopeTemplates.DEFAULT_SCOPE),
      ConditionalStoryModeViewSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL, PostmortemPanel, StoryModePostmortemPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(STORY_MODE_BATTLE_VIEW_ALIASES.DELAYED_SIXTH_SENSE, DelayedSixthSenseIndicator, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.SIXTH_SENSE, StoryModeSixthSenseIndicator, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(BATTLE_VIEW_ALIASES.SIXTH_SENSE, StoryModeSixthSenseIndicator, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.TARGET_DESIGNATOR_UNSPOTTED_MARKER, TargetDesignatorUnspottedIndicator, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

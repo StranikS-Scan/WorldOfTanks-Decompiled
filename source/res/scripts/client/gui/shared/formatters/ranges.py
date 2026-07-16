@@ -1,31 +1,26 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/formatters/ranges.py
+from __future__ import absolute_import
+from builtins import range
+from future.utils import lmap
 from helpers import int2roman
 
 def toRangeString(sequence, step=1, itemDelimiter=', ', rangeDelimiter='-'):
-    items = list()
-    for item in list(stringRanges(sequence, step)):
-        items.append(rangeDelimiter.join(item))
-
-    return itemDelimiter.join(items)
+    return itemDelimiter.join((rangeDelimiter.join(item) for item in stringRanges(sequence, step)))
 
 
 def toRomanRangeString(sequence, step=1, itemDelimiter=', ', rangeDelimiter='-'):
-    items = list()
-    for item in list(romanStringRanges(sequence, step)):
-        items.append(rangeDelimiter.join(item))
-
-    return itemDelimiter.join(items)
+    return itemDelimiter.join((rangeDelimiter.join(item) for item in romanStringRanges(sequence, step)))
 
 
 def stringRanges(sequence, step):
     for item in numberRanges(sequence, step):
-        yield map(str, item)
+        yield lmap(str, item)
 
 
 def romanStringRanges(sequence, step):
     for item in numberRanges(sequence, step):
-        yield map(int2roman, item)
+        yield lmap(int2roman, item)
 
 
 def numberRanges(sequence, step):
@@ -33,7 +28,7 @@ def numberRanges(sequence, step):
     if length > 0:
         q = sorted(sequence)
         i = 0
-        for j in xrange(1, length):
+        for j in range(1, length):
             if q[j] > step + q[j - 1]:
                 if i == j - 1:
                     yield (q[i],)

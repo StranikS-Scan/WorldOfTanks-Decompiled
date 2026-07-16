@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/abstract/rare.py
+from __future__ import absolute_import
 import uuid
 import imghdr
 import BigWorld
+from gui.shared.gui_items.dossier.achievements.abstract.regular import RegularAchievement
 from gui.shared.utils.RareAchievementsCache import IMAGE_TYPE
-from regular import RegularAchievement
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
 from gui.shared.gui_items.dossier.achievements import validators
 from helpers import dependency

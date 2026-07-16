@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/serialization/field.py
+from __future__ import absolute_import
 from .definitions import FieldTypes, FieldType, FieldFlags
 __all__ = ('arrayField', 'intField', 'strField', 'xmlOnlyIntField', 'xmlOnlyFloatField', 'xmlOnlyFloatArrayField', 'applyAreaEnumField', 'xmlOnlyApplyAreaEnumField', 'xmlOnlyTagsField', 'optionsEnumField', 'customFieldType', 'intArrayField', 'customArrayField')
 

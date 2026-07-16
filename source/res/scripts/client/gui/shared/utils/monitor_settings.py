@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/monitor_settings.py
+from __future__ import absolute_import
 import math
+from future.utils import lmap
 import BigWorld
 import GUI
 from shared_utils import findFirst
@@ -20,7 +22,7 @@ class MonitorSettings(object):
 
     @property
     def currentWindowSize(self):
-        return WindowSize(*map(int, BigWorld.wg_getCurrentResolution(BigWorld.WindowModeWindowed)))
+        return WindowSize(*lmap(int, BigWorld.wg_getCurrentResolution(BigWorld.WindowModeWindowed)))
 
     @property
     def borderlessSizes(self):
@@ -38,7 +40,7 @@ class MonitorSettings(object):
 
     @property
     def currentBorderlessSize(self):
-        return BorderlessSize(*map(int, BigWorld.getBorderlessParameters())) if self.windowMode == BigWorld.WindowModeBorderless else VideoMode(*BigWorld.listBorderlessResolutionsAllMonitors()[self.currentMonitor][0])
+        return BorderlessSize(*lmap(int, BigWorld.getBorderlessParameters())) if self.windowMode == BigWorld.WindowModeBorderless else VideoMode(*BigWorld.listBorderlessResolutionsAllMonitors()[self.currentMonitor][0])
 
     @property
     def videoModes(self):

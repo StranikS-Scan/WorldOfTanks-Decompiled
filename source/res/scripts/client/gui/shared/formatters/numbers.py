@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/formatters/numbers.py
+from __future__ import absolute_import
 from typing import Optional, Callable
 from gui.impl import backport
 

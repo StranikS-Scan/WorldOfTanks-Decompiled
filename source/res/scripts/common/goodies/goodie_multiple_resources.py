@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/goodies/goodie_multiple_resources.py
+from __future__ import absolute_import
 from typing import TYPE_CHECKING
-import GoodieResources as res
-from GoodieValue import GoodieValue
+import goodies.GoodieResources as res
+from goodies.GoodieValue import GoodieValue
 if TYPE_CHECKING:
     from typing import Generator, TypeVar
     GoodieResource = TypeVar('GoodieResource', bound=res.GoodieResource)
@@ -10,13 +11,13 @@ if TYPE_CHECKING:
 class GoodieMultiValueDescr(GoodieValue):
 
     def increase(self, xList):
-        return tuple([ super(GoodieMultiValueDescr, self).increase(x) for x in xList.values ])
+        return tuple((super(GoodieMultiValueDescr, self).increase(x) for x in xList.values))
 
     def reduce(self, xList):
-        return tuple([ super(GoodieMultiValueDescr, self).reduce(x) for x in xList.values ])
+        return tuple((super(GoodieMultiValueDescr, self).reduce(x) for x in xList.values))
 
     def delta(self, xList):
-        return tuple([ super(GoodieMultiValueDescr, self).delta(x) for x in xList.values ])
+        return tuple((super(GoodieMultiValueDescr, self).delta(x) for x in xList.values))
 
 
 class MultiValueResourceObject(object):
@@ -25,6 +26,9 @@ class MultiValueResourceObject(object):
     def __init__(self, values):
         super(MultiValueResourceObject, self).__init__()
         self.__values = values
+
+    def __hash__(self):
+        return hash(self.__values)
 
     def __eq__(self, number):
         for v in self.__values:
@@ -36,9 +40,9 @@ class MultiValueResourceObject(object):
     def __sub__(self, other):
         diff = 0
         for i, v in self.__values:
-            res = v - other[i]
-            if res > diff:
-                diff = res
+            result = v - other[i]
+            if result > diff:
+                diff = result
 
         return diff
 

@@ -8,8 +8,8 @@ from frameworks.wulf.gui_constants import ShowingStatus
 from gui.graphics_optimization_controller.utils import rescaleRectBounds
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
+from helpers import dependency
 from skeletons.gui.game_control import IGraphicsOptimizationController
-from visual_script_client.arena_blocks import dependency
 _logger = logging.getLogger(__name__)
 DEFAULT_APPLICATION_SCALE = 1.0
 

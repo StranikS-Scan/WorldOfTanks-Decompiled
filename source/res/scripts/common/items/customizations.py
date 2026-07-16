@@ -1,14 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/customizations.py
-import base64
+from __future__ import absolute_import, division
 import copy
-from string import lower
+from future.utils import viewitems
+from past.builtins import xrange
 from typing import Dict, TypeVar, Optional, TYPE_CHECKING
 from constants import IS_CELLAPP, IS_BASEAPP
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from items import decodeEnum, vehicles
 from items.components import c11n_components as cn
 from items.components.c11n_constants import ApplyArea, SeasonType, CustomizationType, CustomizationTypeNames, MAX_USERS_PROJECTION_DECALS, EMPTY_ITEM_ID, MAX_ATTACHMENTS, MAX_STAT_TRACKERS
+from math_common import round_py2_style_int
+from py2to3.compat import base64compat
 from serializable_types.customizations import PaintComponent, CamouflageComponent, getAllItemsFromOutfit, AttachmentComponent, ProjectionDecalComponent, SequenceComponent, PersonalNumberComponent, InsigniaComponent, CustomizationOutfit, DecalComponent, CUSTOMIZATION_CLASSES as _CUSTOMIZATION_CLASSES, parseC11sComponentDescr, StatTrackerComponent
 from serialization import ComponentBinDeserializer, ComponentXmlDeserializer, SerializationException, EmptyComponent, makeCompDescr, FieldTypes, FieldFlags, FieldType, SerializableComponent, intField, intArrayField, xmlOnlyFloatField, xmlOnlyFloatArrayField, applyAreaEnumField, customFieldType, customArrayField, optionsEnumField, arrayField, strField, xmlOnlyApplyAreaEnumField, xmlOnlyIntField, xmlOnlyTagsField
 from serialization.serializable_component import SerializableComponentChildType
@@ -27,7 +30,7 @@ def checkItemInCompDescr(item, customizationElementCompDescr):
     elif itemType == CustomizationType.MODIFICATION:
         path = ('modifications', None)
     else:
-        path = ('{}s'.format(lower(CustomizationTypeNames[itemType])), ('id', None))
+        path = ('{}s'.format(CustomizationTypeNames[itemType].lower()), ('id', None))
     return ComponentBinDeserializer(_CUSTOMIZATION_CLASSES).hasItem(customizationElementCompDescr, path, item[1])
 
 
@@ -38,7 +41,7 @@ def parseOutfitDescr(outfitDescr):
         outfit = parseC11sComponentDescr(outfitDescr)
     except SerializationException:
         LOG_CURRENT_EXCEPTION()
-        LOG_ERROR('Bad outfit descr', base64.b64encode(outfitDescr))
+        LOG_ERROR('Bad outfit descr', base64compat.b64encode(outfitDescr))
         outfit = CustomizationOutfit()
 
     if outfit.customType != CustomizationOutfit.customType:
@@ -232,7 +235,7 @@ class OutfitLogEntry(object):
         return value
 
     def toDict(self):
-        return {k:v for k, v in self.__dict__.iteritems() if not k.startswith('_')}
+        return {k:v for k, v in viewitems(self.__dict__) if not k.startswith('_')}
 
 
 def makeLogOutfitValues(outfitDescr):
@@ -260,8 +263,7 @@ def createNationalEmblemComponents(vehDescr):
 
 
 def _clamp(value, minValue, maxValue, limit):
-    value = int(round((min(max(float(value), minValue), maxValue) - minValue) / (maxValue - minValue) * limit))
-    return value
+    return round_py2_style_int((min(max(float(value), minValue), maxValue) - minValue) / (maxValue - minValue) * limit)
 
 
 def _unclamp(value, minValue, maxValue, limit):

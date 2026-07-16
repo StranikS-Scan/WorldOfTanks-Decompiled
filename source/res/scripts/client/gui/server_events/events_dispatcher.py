@@ -18,7 +18,7 @@ from gui.server_events.events_helpers import getLootboxesFromBonuses, isC11nQues
 from gui.server_events.finders import getBranchByOperationId
 from gui.shared import EVENT_BUS_SCOPE, event_dispatcher as shared_events, events, g_eventBus
 from gui.shared.event_dispatcher import showProgressiveItemsView, hideWebBrowserOverlay, showBrowserOverlayView, showPersonalMissionMainWindow, showPersonalMissionChain
-from gui.shared.events import PersonalMissionsEvent
+from gui.shared.events import PersonalMissionsEvent, UserMissionsEvent
 from helpers import dependency
 from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
@@ -217,7 +217,7 @@ def showMissionsLiveOpsWebEvents():
     _showMissions(tab=QUESTS_ALIASES.LIVE_OPS_WEB_EVENTS_VIEW_PY_ALIAS)
 
 
-def showMissions(tab=None, missionID=None, groupID=None, marathonPrefix=None, anchor=None, showDetails=True, subTab=None, questId=''):
+def showMissions(tab=None, missionID=None, groupID=None, marathonPrefix=None, anchor=None, showDetails=True, subTab=None, questId='', challengeID=None):
     _showMissions(**{'tab': tab,
      'subTab': subTab,
      'eventID': missionID,
@@ -225,7 +225,12 @@ def showMissions(tab=None, missionID=None, groupID=None, marathonPrefix=None, an
      'marathonPrefix': marathonPrefix,
      'anchor': anchor,
      'showMissionDetails': showDetails,
-     'questId': questId})
+     'questId': questId,
+     'challengeID': challengeID})
+
+
+def showChallenges(challengeID=None):
+    _showMissions(tab=TabId.CHALLENGES, challengeID=challengeID)
 
 
 def showMissionDetails(missionID, groupID):
@@ -461,7 +466,7 @@ def showActions(tab=None, anchor=None):
 
 def _showMissions(**kwargs):
     tab = kwargs.get('tab')
-    tabId = None
+    tabId = tab if tab == TabId.CHALLENGES else None
     if tab is None or tab == QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS:
         tabId = TabId.BASIC
     elif tab == QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS:
@@ -471,8 +476,13 @@ def _showMissions(**kwargs):
         MissionsState.goTo(ctx=kwargs)
     else:
         kwargs['tab'] = tabId
+        from gui.Scaleform.lobby_entry import getLobbyStateMachine
         from gui.Scaleform.daapi.view.lobby.user_missions.states import UserMissionsState
         UserMissionsState.goTo(**kwargs)
+        lsm = getLobbyStateMachine()
+        state = lsm.getStateByCls(UserMissionsState)
+        if state is not None and state.isEntered():
+            g_eventBus.handleEvent(UserMissionsEvent(UserMissionsEvent.TRANSITION_TO_MISSION, tabID=kwargs.get('tab'), questId=kwargs.get('questId'), showMissionDetails=kwargs.get('showMissionDetails'), eventID=kwargs.get('eventID'), groupID=kwargs.get('groupID'), challengeID=kwargs.get('challengeID')), EVENT_BUS_SCOPE.LOBBY)
     return
 
 

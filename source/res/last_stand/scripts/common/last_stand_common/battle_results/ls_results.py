@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: last_stand/scripts/common/last_stand_common/battle_results/ls_results.py
+from __future__ import absolute_import
 from battle_results.battle_results_constants import BATTLE_RESULT_ENTRY_TYPE as ENTRY_TYPE
 BATTLE_RESULTS = [('ls_phase',
   int,

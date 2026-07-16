@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: server_side_replay/scripts/client/server_side_replay/gui/impl/lobby/filter/__init__.py
+from __future__ import absolute_import
 import typing
+from builtins import str
 from constants import MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from gui import GUI_NATIONS
 from gui.impl.gen import R
@@ -75,4 +77,4 @@ def getVehicleTypeSettings(labelResId=R.strings.replays.filter.group.vehicleType
 
 
 def getVehicleTierSettings(labelResId=R.strings.replays.filter.group.vehicleTier.longTitle()):
-    return FilterGroupSettings(toggleID=ToggleGroupType.VEHICLETIER.value, labelResId=labelResId, toggleType=ToggleGroupType.VEHICLETIER, toggles=[ ToggleButtonSettings(toggleID=str(level)) for level in xrange(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL + 1) ])
+    return FilterGroupSettings(toggleID=ToggleGroupType.VEHICLETIER.value, labelResId=labelResId, toggleType=ToggleGroupType.VEHICLETIER, toggles=[ ToggleButtonSettings(toggleID=str(level)) for level in range(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL + 1) ])

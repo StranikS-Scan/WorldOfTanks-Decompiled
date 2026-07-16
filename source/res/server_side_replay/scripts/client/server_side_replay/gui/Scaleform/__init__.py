@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: server_side_replay/scripts/client/server_side_replay/gui/Scaleform/__init__.py
+from __future__ import absolute_import
 from server_side_replay.gui.shared.event_dispatcher import showReplays
 from gui.shared.system_factory import registerMenuItems
 from helpers import dependency

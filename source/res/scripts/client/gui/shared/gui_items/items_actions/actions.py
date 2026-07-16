@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/items_actions/actions.py
+from __future__ import absolute_import
 import logging
 import typing
 from collections import namedtuple
 from functools import partial
+from future.utils import listvalues, viewitems
 from itertools import chain
 from typing import Callable
 import wg_async as future_async
@@ -843,7 +845,7 @@ class ActivateBoosterAction(CachedItemAction):
     def canReplace(self, callback):
         booster = self.booster
         criteria = RequestCriteria(REQ_CRITERIA.BOOSTER.BOOSTER_TYPES([booster.boosterType]), REQ_CRITERIA.BOOSTER.ACTIVE)
-        boosters = self.goodiesCache.getBoosters(criteria=criteria).values()
+        boosters = listvalues(self.goodiesCache.getBoosters(criteria=criteria))
         currentBooster = boosters[0]
         canActivate = False
         if self.isUpgrade(booster, currentBooster):
@@ -1210,7 +1212,7 @@ class DeconstructMultOptDevice(AsyncGUIItemAction):
     def __init__(self, ctx):
         super(DeconstructMultOptDevice, self).__init__()
         self.ctx = ctx
-        self.__sellItems = ctx.cart.storage.values()
+        self.__sellItems = listvalues(ctx.cart.storage)
         self.__vehItems = list(chain(*ctx.cart.onVehicle.values()))
         self.__upgradeDevicePair = ctx.upgradedPair
 
@@ -1232,7 +1234,7 @@ class DeconstructMultOptDevice(AsyncGUIItemAction):
                 _item = self._itemsCache.items.getItemByCD(itemSpec.intCD)
                 _vehicle = self._itemsCache.items.getItemByCD(itemSpec.vehicleCD)
                 _slotIdx = None
-                for layoutIdx, setup in _vehicle.optDevices.setupLayouts.setups.iteritems():
+                for layoutIdx, setup in viewitems(_vehicle.optDevices.setupLayouts.setups):
                     if _item in setup:
                         _slotIdx = setup.index(_item)
                         break
@@ -1249,7 +1251,7 @@ class DeconstructMultOptDevice(AsyncGUIItemAction):
             itemsList = itemsDict.setdefault(itemSpec.intCD, [])
             itemsList.append(itemSpec)
 
-        for intCD, itemSpecs in sorted(itemsDict.items(), key=self.__sortItemsKey):
+        for intCD, itemSpecs in sorted(viewitems(itemsDict), key=self.__sortItemsKey):
             item = self._itemsCache.items.getItemByCD(intCD)
             count = sum(((itemSpec.count if isinstance(itemSpec, ItemSellSpec) else 1) for itemSpec in itemSpecs))
             modules.append((item, count))
@@ -1266,7 +1268,7 @@ class DeconstructMultOptDevice(AsyncGUIItemAction):
                 _vehicle = self._itemsCache.items.getItemByCD(vehicleCD)
                 _slotIdx = None
                 _setupIdx = None
-                for layoutIdx, setup in _vehicle.optDevices.setupLayouts.setups.iteritems():
+                for layoutIdx, setup in viewitems(_vehicle.optDevices.setupLayouts.setups):
                     if _item in setup:
                         _setupIdx = layoutIdx
                         _slotIdx = setup.index(_item)

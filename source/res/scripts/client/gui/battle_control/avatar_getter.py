@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/avatar_getter.py
+from __future__ import absolute_import
 import logging
 import BigWorld
 import Math
@@ -403,7 +404,7 @@ def setClientReady(avatar=None):
     try:
         avatar.setClientReady()
     except AttributeError as error:
-        _logger.exception('Attribute "setClientReady" not found, exception %s', error.message)
+        _logger.exception('Attribute "setClientReady" not found, exception %s', error)
 
     return
 
@@ -426,7 +427,7 @@ def isVehiclesColorized(avatar=None):
     try:
         result = avatar.isVehiclesColorized()
     except AttributeError as error:
-        _logger.exception('Attribute "isVehiclesColorized" not found, exception %s', error.message)
+        _logger.exception('Attribute "isVehiclesColorized" not found, exception %s', error)
         result = False
 
     return result
@@ -438,7 +439,7 @@ def isObserverSeesAll(avatar=None):
     try:
         result = avatar.observerSeesAll()
     except AttributeError as error:
-        _logger.exception('Attribute "isObserverSeesAll" not found, exception %s', error.message)
+        _logger.exception('Attribute "isObserverSeesAll" not found, exception %s', error)
         result = False
 
     return result
@@ -450,7 +451,7 @@ def isBecomeObserverAfterDeath(avatar=None):
     try:
         result = avatar.isBecomeObserverAfterDeath()
     except AttributeError as error:
-        _logger.exception('Attribute "isBecomeObserverAfterDeath" not found, exception %s', error.message)
+        _logger.exception('Attribute "isBecomeObserverAfterDeath" not found, exception %s', error)
         result = False
 
     return result
@@ -462,7 +463,7 @@ def isObserverBothTeams(avatar=None):
     try:
         result = bool(avatar.isObserverBothTeams)
     except AttributeError as error:
-        _logger.exception('Attribute "isObserverBothTeams" not found, exception %s', error.message)
+        _logger.exception('Attribute "isObserverBothTeams" not found, exception %s', error)
         result = False
 
     return result
@@ -483,7 +484,7 @@ def getInBattleVehicleSwitchComponent():
     try:
         return avatar.AvatarInBattleVehicleSwitch
     except AttributeError as error:
-        _logger.exception('Static component "AvatarInBattleVehicleSwitch" not found, exception %s', error.message)
+        _logger.exception('Static component "AvatarInBattleVehicleSwitch" not found, exception %s', error)
 
 
 def getSpaceID():
@@ -515,7 +516,7 @@ def isPostmortemFeatureEnabled(ctrlModeName, avatar=None):
     try:
         result = avatar.isPostmortemFeatureEnabled(ctrlModeName)
     except AttributeError as error:
-        _logger.debug('Attribute "isPostmortemFeatureEnabled" not found, exception %s', error.message)
+        _logger.debug('Attribute "isPostmortemFeatureEnabled" not found, exception %s', error)
         result = False
 
     return result

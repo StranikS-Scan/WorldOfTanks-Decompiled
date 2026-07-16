@@ -126,7 +126,8 @@ class Comp7CustomizationProgressPresenter(ViewComponent[Comp7CustomizationQuests
     def __getCustomizationData(self, questID):
         style = getComp7ProgressionStyle()
         for item in style.alternateItems:
-            for quest in item.getUnlockingQuests():
+            quests = item.getUnlockingQuests()
+            for quest in quests or ():
                 if quest.getID() == questID:
                     icon = item.texture.split('/')[-1].split('.')[0]
                     level = item.descriptor.requiredTokenCount if item.itemTypeID == GUI_ITEM_TYPE.EMBLEM else 0

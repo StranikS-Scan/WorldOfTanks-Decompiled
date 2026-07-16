@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/gui/app_loader.py
+from __future__ import absolute_import
 import typing
 from Event import Event
 from constants import ARENA_GUI_TYPE

@@ -1,22 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: server_side_replay/scripts/client/server_side_replay/gui/impl/lobby/replays_root_view.py
+from __future__ import absolute_import
 import logging
 import typing
 from frameworks.wulf import ViewFlags, ViewSettings
-from ..gen.view_models.views.lobby.root_view_model import RootViewModel
-from ..gen.view_models.views.lobby.tab_model import TabModel
-from ..gen.view_models.views.lobby.enums import ReplaysViews
+from server_side_replay.gui.impl.gen.view_models.views.lobby.root_view_model import RootViewModel
+from server_side_replay.gui.impl.gen.view_models.views.lobby.tab_model import TabModel
+from server_side_replay.gui.impl.gen.view_models.views.lobby.enums import ReplaysViews
 from gui.impl.gui_decorators import args2params
-from .replays_lobby_sounds import REPLAYS_SOUND_SPACE
-from .pages.best_replays_page import BestReplaysPage
-from .pages.my_replays_page import MyReplaysPage
-from .pages.find_replay_page import FindReplayPage
+from server_side_replay.gui.impl.lobby.replays_lobby_sounds import REPLAYS_SOUND_SPACE
+from server_side_replay.gui.impl.lobby.pages.best_replays_page import BestReplaysPage
+from server_side_replay.gui.impl.lobby.pages.my_replays_page import MyReplaysPage
+from server_side_replay.gui.impl.lobby.pages.find_replay_page import FindReplayPage
 from gui.impl.pub import ViewImpl
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.shared.event_dispatcher import showHangar
 if typing.TYPE_CHECKING:
-    from ..lobby.pages import PageSubModelPresenter
+    from server_side_replay.gui.impl.lobby.pages import PageSubModelPresenter
 _logger = logging.getLogger(__name__)
 
 class ReplaysRootView(ViewImpl, IGlobalListener):

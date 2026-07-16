@@ -20,7 +20,7 @@ from last_stand.gui.ls_account_settings import getFirstNewStatusUnlockLevel
 from last_stand.gui.prb_control.entities.squad.ctx import SetDifficultyLevelUnitCtx, LastStandSquadSettingsCtx
 from last_stand.gui.prb_control.entities.vehicles_watcher import VehiclesWatcher
 from last_stand.gui.shared.event_dispatcher import showHangar
-from last_stand.gui.prb_control.entities.vehicle_switcher import VehicleSwitcher
+from last_stand.skeletons.ls_vehicle_selection_controller import ILSVehicleSelectionController
 from last_stand.skeletons.difficulty_level_controller import IDifficultyLevelController
 from helpers import dependency
 from last_stand.gui.prb_control.entities.squad.actions_validator import LastStandSquadActionsValidator, LastStandSquadActionsHandler
@@ -51,15 +51,12 @@ class LastStandEntryPoint(SquadEntryPoint):
         unitMgr.createSquadByQueueType(QUEUE_TYPE.LAST_STAND, unitExtrasInitStr=unitExtrasInit)
 
 
-class LastStandSquadEntity(SquadEntity, VehicleSwitcher):
+class LastStandSquadEntity(SquadEntity):
     __difficultyLevelCtrl = dependency.descriptor(IDifficultyLevelController)
-
-    def setReserve(self, ctx, callback=None):
-        pass
-
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
     lsCtrl = dependency.descriptor(ILSController)
+    lsVehicleCtrl = dependency.descriptor(ILSVehicleSelectionController)
 
     def __init__(self):
         super(LastStandSquadEntity, self).__init__(FUNCTIONAL_FLAG.LAST_STAND, PREBATTLE_TYPE.LAST_STAND)
@@ -67,6 +64,9 @@ class LastStandSquadEntity(SquadEntity, VehicleSwitcher):
         self.__watcher = None
         self._arenaUniqueID = None
         return
+
+    def setReserve(self, ctx, callback=None):
+        pass
 
     @storage_getter(RECENT_PRB_STORAGE)
     def storage(self):
@@ -87,7 +87,7 @@ class LastStandSquadEntity(SquadEntity, VehicleSwitcher):
             self._arenaUniqueID = initCtx.getArenaUniqueID()
         self.__difficultyLevelCtrl.onChangeDifficultyLevel += self._updateEntityType
         self.__updateQueueTypeFromUnit()
-        self.startSwitcher()
+        self.lsVehicleCtrl.activate()
         self._switchActionsValidator()
         self._switchRosterSettings()
         self.invalidateVehicleStates()
@@ -103,7 +103,7 @@ class LastStandSquadEntity(SquadEntity, VehicleSwitcher):
         self.__difficultyLevelCtrl.onChangeDifficultyLevel -= self._updateEntityType
         self.__difficultyLevelCtrl.onLevelsInfoReady -= self._onLevelsInfoReady
         g_clientUpdateManager.removeObjectCallbacks(self, force=True)
-        self.stopSwitcher()
+        self.lsVehicleCtrl.deactivate()
         self.invalidateVehicleStates()
         if self.__watcher is not None:
             self.__watcher.stop()
@@ -116,7 +116,7 @@ class LastStandSquadEntity(SquadEntity, VehicleSwitcher):
         super(LastStandSquadEntity, self).leave(ctx, callback)
 
     def getQueueType(self):
-        return self.storage.queueType
+        return self.storage.queueType or self.currentQueueType
 
     def doAction(self, action=None):
         self._mmData = 0 if action is None else action.mmData
@@ -156,7 +156,7 @@ class LastStandSquadEntity(SquadEntity, VehicleSwitcher):
                 if newLevel and self.isCommander():
                     levelFromQueue = DifficultyLevel(newLevel)
                 self.__difficultyLevelCtrl.selectLevel(levelFromQueue)
-                self.selectModeVehicle()
+                self.lsVehicleCtrl.selectModeVehicle()
                 break
 
     def getConfirmDialogMeta(self, ctx):
@@ -217,7 +217,7 @@ class LastStandSquadEntity(SquadEntity, VehicleSwitcher):
     def _updateEntityType(self, *args, **kwargs):
         self.storage.queueType = self.currentQueueType
         self.__updateVehiclesWatcher()
-        self.selectModeVehicle()
+        self.lsVehicleCtrl.selectModeVehicle()
         pInfo = self.getPlayerInfo()
         if not pInfo.isCommander():
             return
@@ -228,7 +228,7 @@ class LastStandSquadEntity(SquadEntity, VehicleSwitcher):
         self.__difficultyLevelCtrl.onLevelsInfoReady -= self._onLevelsInfoReady
         self.__updateQueueTypeFromUnit()
         self.__updateVehiclesWatcher()
-        self.selectModeVehicle()
+        self.lsVehicleCtrl.selectModeVehicle()
 
     @property
     def _showUnitActionNames(self):

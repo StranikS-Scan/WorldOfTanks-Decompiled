@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/cgf_components/stats_display_components.py
+from __future__ import absolute_import, division
 import logging
 import math
 import typing
@@ -12,10 +13,9 @@ from items.components.c11n_constants import StatTrackerStatistic
 from skeletons.gui.shared.utils import IHangarSpace
 from PlayerEvents import g_playerEvents
 from skeletons.gui.battle_session import IBattleSessionProvider
-from helpers import dependency, isPlayerAccount, isPlayerAvatar
+from helpers import dependency, isPlayerAccount, isPlayerAvatar, isPlayerExist
 from GenericComponents import AnimatorComponent, DecalComponent
-from cgf_script.component_meta_class import CGFMetaTypes, ComponentProperty, registerComponent
-from cgf_script.managers_registrator import autoregister, onAddedQuery, onProcessQuery
+from cgf_script.registration import ComponentProperty, registerComponent
 from vehicle_systems.vehicle_composition import findParentVehicle
 if typing.TYPE_CHECKING:
     from typing import Optional
@@ -23,9 +23,10 @@ _logger = logging.getLogger(__name__)
 
 @registerComponent
 class StatisticDisplayComponent(object):
-    domain = CGF.DomainOption.DomainClient
-    delayList = ComponentProperty(type=CGFMetaTypes.FLOAT_LIST, editorName='Delays List', value=(0.25, 0.75, 1.25, 1.75))
-    trackedStatistic = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Tracked statistic', value=StatTrackerStatistic.KILLS)
+    editorTitle = 'Statistic Display'
+    domain = CGF.Domain.Client
+    delayList = ComponentProperty(type=CGF.PropertyType.FloatList, editorName='Delays List', value=(0.25, 0.75, 1.25, 1.75))
+    trackedStatistic = ComponentProperty(type=CGF.PropertyType.String, editorName='Tracked statistic', value=StatTrackerStatistic.KILLS)
 
     def __init__(self):
         self.cachedValue = -1
@@ -79,14 +80,19 @@ def _isAvatarReady():
     return isPlayerAvatar() and BigWorld.player().userSeesWorld()
 
 
-@autoregister(presentInAllWorlds=True)
-class TrackedStatisticComponentManager(CGF.ComponentManager):
+class TrackedStatisticComponentSystem(CGF.System):
+    StatisticActivated = CGF.ActivateReaction(CGF.GameObject, CGF.ReactRw(StatisticDisplayComponent), CGF.Rw(DecalComponent))
+    StatisticsIterate = CGF.IterateReaction(CGF.ActiveOnly, CGF.GameObject, CGF.Rw(StatisticDisplayComponent), CGF.Rw(DecalComponent))
+    StatisticsUpdateIterate = CGF.IterateReaction(CGF.GameObject, CGF.Rw(DelayDisplayUpdater), CGF.Rw(StatisticDisplayComponent), CGF.Rw(DecalComponent))
+    AnimatorAccess = CGF.AccessReaction(CGF.Rw(AnimatorComponent))
+    Reactions = CGF.Reactions(StatisticActivated, StatisticsIterate, StatisticsUpdateIterate, AnimatorAccess)
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     __hangarSpace = dependency.descriptor(IHangarSpace)
     __availableStats = (StatTrackerStatistic.KILLS,)
-    statisticDisplayQuery = CGF.QueryConfig(CGF.GameObject, StatisticDisplayComponent, DecalComponent)
 
-    def activate(self):
+    def onMappingLoaded(self):
+        if not isPlayerExist():
+            return
         if _isAvatarReady():
             self.__onAvatarReady()
         elif not isPlayerAccount():
@@ -94,33 +100,34 @@ class TrackedStatisticComponentManager(CGF.ComponentManager):
         else:
             g_playerEvents.onDossiersResync += self.__onDossierResync
 
-    def deactivate(self):
+    def onMappingUnloaded(self):
+        if not isPlayerExist():
+            return
         if isPlayerAvatar() and BigWorld.player().arena:
             BigWorld.player().arena.onVehicleStatisticsUpdate -= self.__onVehicleStatisticsUpdate
         g_playerEvents.onDossiersResync -= self.__onDossierResync
         g_playerEvents.onAvatarReady -= self.__onAvatarReady
 
-    @onAddedQuery(StatisticDisplayComponent, DecalComponent, CGF.GameObject)
-    def onAdded(self, statisticDisplay, decalComponent, gameObject):
-        vehicle = findParentVehicle(gameObject)
-        if vehicle:
-            if isPlayerAvatar():
-                self.__inBattleUpdate(statisticDisplay, vehicle, decalComponent)
-            else:
-                self.__hangarUpdate(statisticDisplay, vehicle, decalComponent)
+    def update(self):
+        for go, stat, decal in self.reaction(self.StatisticActivated):
+            vehicle = findParentVehicle(go)
+            if vehicle:
+                if isPlayerAvatar():
+                    self.__inBattleUpdate(stat, vehicle, decal)
+                else:
+                    self.__hangarUpdate(stat, vehicle, decal)
 
-    @onProcessQuery(CGF.GameObject, DelayDisplayUpdater, StatisticDisplayComponent, DecalComponent)
-    def onProcess(self, go, updater, delayConfig, decal):
-        updater.time += self.clock.gameDelta
-        for i, symbols in enumerate(updater.symbolsList):
-            if i in updater.updatedIndexes:
-                continue
-            if delayConfig.delayList[i] <= updater.time:
-                decal.setCounterStickerValue(i, symbols)
-                updater.updatedIndexes.add(i)
+        for go, updater, stat, decal in self.reaction(self.StatisticsUpdateIterate):
+            updater.time += self.clock.updateDelta
+            for i, symbols in enumerate(updater.symbolsList):
+                if i in updater.updatedIndexes:
+                    continue
+                if stat.delayList[i] <= updater.time:
+                    decal.setCounterStickerValue(i, symbols)
+                    updater.updatedIndexes.add(i)
 
-        if len(updater.updatedIndexes) == len(delayConfig.delayList):
-            go.removeComponent(updater)
+            if len(updater.updatedIndexes) == len(stat.delayList):
+                go.removeComponent(updater)
 
     @staticmethod
     def updateCounterValue(value, statisticDisplay, decalComponent, animatorCtx=None):
@@ -128,25 +135,23 @@ class TrackedStatisticComponentManager(CGF.ComponentManager):
         if statisticDisplay.cachedValue == allowedNum:
             _logger.info('statistic display ignore cached value %s', allowedNum)
             return
-        else:
-            statisticDisplay.cachedValue = allowedNum
-            decalLength = decalComponent.getStickerCount()
-            formattedNumber = numberStatsFormatter(allowedNum, decalLength)
-            symbolsList = displaySymbolsIterator(formattedNumber)
-            if animatorCtx:
-                go, animator = animatorCtx
-                animator.start()
-                if len(statisticDisplay.delayList) != len(symbolsList):
-                    _logger.info('symbolsList length not equal to delayList length')
-                    return
-                if go.findComponentByType(DelayDisplayUpdater) is not None:
-                    go.removeComponentByType(DelayDisplayUpdater)
-                go.createComponent(DelayDisplayUpdater, symbolsList)
+        statisticDisplay.cachedValue = allowedNum
+        decalLength = decalComponent.getStickerCount()
+        formattedNumber = numberStatsFormatter(allowedNum, decalLength)
+        symbolsList = displaySymbolsIterator(formattedNumber)
+        if animatorCtx:
+            go, animator = animatorCtx
+            animator.start()
+            if len(statisticDisplay.delayList) != len(symbolsList):
+                _logger.info('symbolsList length not equal to delayList length')
                 return
-            for i, symbols in enumerate(symbolsList):
-                decalComponent.setCounterStickerValue(i, symbols)
-
+            queue = CGF.CommandQueue(go.spaceID)
+            if go.hasComponent(DelayDisplayUpdater):
+                queue.removeComponent(go, DelayDisplayUpdater)
+            queue.createComponent(go, DelayDisplayUpdater, symbolsList)
             return
+        for i, symbols in enumerate(symbolsList):
+            decalComponent.setCounterStickerValue(i, symbols)
 
     def __onAvatarReady(self):
         if isPlayerAvatar() and BigWorld.player().arena:
@@ -156,16 +161,17 @@ class TrackedStatisticComponentManager(CGF.ComponentManager):
     def __onDossierResync(self, *_):
         if not self.__hangarSpace.spaceInited:
             return
-        for gameObject, statisticDisplay, decalComponent in self.statisticDisplayQuery:
+        for gameObject, statisticDisplay, decalComponent in self.reaction(self.StatisticsIterate):
             if statisticDisplay.trackedStatistic in self.__availableStats:
                 vehicle = findParentVehicle(gameObject)
                 self.__hangarUpdate(statisticDisplay, vehicle, decalComponent)
 
     def __onVehicleStatisticsUpdate(self, vehicleID):
-        for gameObject, statisticDisplay, decalComponent in self.statisticDisplayQuery:
+        animatorAccess = self.reaction(self.AnimatorAccess)
+        for gameObject, statisticDisplay, decalComponent in self.reaction(self.StatisticsIterate):
             vehicle = findParentVehicle(gameObject)
             if vehicle.id == vehicleID and statisticDisplay.trackedStatistic in self.__availableStats:
-                animator = gameObject.findComponentByType(AnimatorComponent)
+                animator = animatorAccess.find(gameObject)
                 animatorCtx = (gameObject, animator) if animator else None
                 self.__inBattleUpdate(statisticDisplay, vehicle, decalComponent, animatorCtx)
 

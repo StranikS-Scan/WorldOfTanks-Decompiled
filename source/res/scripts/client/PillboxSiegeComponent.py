@@ -110,7 +110,6 @@ class PillboxSiegeComponent(VehicleDynamicComponent, IMechanicComponent, IMechan
 
     def _onAppearanceReady(self):
         super(PillboxSiegeComponent, self)._onAppearanceReady()
-        self.__mechanicPrefabSpawner.loadAppearancePrefab()
         self.__statesEvents.processStatePrepared()
 
     def _onComponentAppearanceUpdate(self, **kwargs):

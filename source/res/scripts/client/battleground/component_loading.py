@@ -4,7 +4,8 @@ import functools
 import weakref
 import BigWorld
 from battleground.iself_assembler import ISelfAssembler
-from cgf_obsolete_script.script_game_object import ComponentDescriptorTyped, ScriptGameObject
+from components_base.component_controller import ComponentController
+from components_base.component_descriptor import ComponentDescriptorTyped
 from vehicle_systems import stricted_loading
 
 class Loader(object):

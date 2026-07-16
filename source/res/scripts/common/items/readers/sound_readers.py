@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/readers/sound_readers.py
+from __future__ import absolute_import
 import math
 import typing
+from past.builtins import intern
 import ResMgr
 from constants import IS_DEVELOPMENT
 from debug_utils import LOG_DEBUG

@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_matters/popovers/battle_matters_filter_popover_view.py
+from __future__ import absolute_import
+from future.utils import iteritems
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.impl.gen.view_models.views.lobby.battle_matters.popovers.battle_matters_filter_popover_view_model import BattleMattersFilterPopoverViewModel
 from gui.impl.gen.view_models.views.lobby.battle_matters.popovers.filter_control_view_model import FilterControlViewModel
@@ -24,7 +26,7 @@ class BattleMattersFilterPopoverView(PopOverViewImpl):
     def onToggleFilter(self, event):
         changesFromEvent = {'Types': event.get(BattleMattersFilterPopoverViewModel.ARG_CONTROL_TYPE, {}),
          'Nations': event.get(BattleMattersFilterPopoverViewModel.ARG_CONTROL_NATION, {})}
-        changes = {k:{v: not self.__filters[k][v]} for k, v in changesFromEvent.iteritems() if k and v}
+        changes = {k:{v: not self.__filters[k][v]} for k, v in changesFromEvent.items() if v}
         self._updateFilter(changes)
 
     def updateFilterFromOutside(self, changes):
@@ -45,7 +47,7 @@ class BattleMattersFilterPopoverView(PopOverViewImpl):
                 filterArray = getattr(tx, 'get' + key)()
                 filterArray.clear()
                 filters = self.__filters[key]
-                for filterName, filterValue in filters.iteritems():
+                for filterName, filterValue in iteritems(filters):
                     currentControl = FilterControlViewModel()
                     currentControl.setName(filterName)
                     currentControl.setIsSelected(filterValue)

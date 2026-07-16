@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/nation_change/nation_change_helpers.py
+from __future__ import absolute_import
 import typing
+from functools import reduce
 from operator import add, contains
 import nation_change
 from items import vehicles

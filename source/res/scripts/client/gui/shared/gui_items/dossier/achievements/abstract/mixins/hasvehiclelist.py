@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/abstract/mixins/HasVehicleList.py
+from __future__ import absolute_import
 from collections import namedtuple
-from gui import nationCompareByIndex
+from gui import nationSortKeyByIndex
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 
@@ -16,7 +17,7 @@ class HasVehiclesList(object):
             vehicle = self.itemsCache.items.getItemByCD(vCD)
             result.append(self.VehicleData(vehicle.userName, vehicle.nationID, vehicle.level, vehicle.type, vehicle.iconSmall, vehicle.innationID))
 
-        return map(lambda i: i._asdict(), sorted(result, cmp=self._sortFunc))
+        return [ i._asdict() for i in sorted(result, key=self._sortKey) ]
 
     @classmethod
     def getVehiclesListTitle(cls):
@@ -29,6 +30,5 @@ class HasVehiclesList(object):
         return True
 
     @classmethod
-    def _sortFunc(cls, i1, i2):
-        res = i1.level - i2.level
-        return res if res else nationCompareByIndex(i1.nation, i2.nation)
+    def _sortKey(cls, v):
+        return (v.level, nationSortKeyByIndex(v.nation))

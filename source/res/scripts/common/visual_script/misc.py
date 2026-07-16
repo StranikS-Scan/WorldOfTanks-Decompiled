@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/misc.py
+from __future__ import absolute_import
 import typing
 from debug_utils import LOG_ERROR, LOG_WARNING
 if typing.TYPE_CHECKING:
@@ -70,7 +71,7 @@ def readVisualScriptPlanParams(section, commonParams={}):
             else:
                 paramReader = DEFAULT_PARAM_READER
             if subsection.has_key('item'):
-                params[name] = [ paramReader(value) for idx, value in subsection.items() ]
+                params[name] = [ paramReader(value) for value in subsection.values() ]
             params[name] = paramReader(subsection)
 
     return params

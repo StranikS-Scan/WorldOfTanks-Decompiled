@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/live_ops_web_events_controller.py
+from __future__ import absolute_import
 import BigWorld
 from enum import Enum
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES

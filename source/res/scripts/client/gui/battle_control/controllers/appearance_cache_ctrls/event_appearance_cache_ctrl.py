@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/appearance_cache_ctrls/event_appearance_cache_ctrl.py
+from __future__ import absolute_import
 import logging
+from future.utils import iteritems, itervalues
 import BigWorld
 from gui.battle_control.controllers.appearance_cache_ctrls.default_appearance_cache_ctrl import DefaultAppearanceCacheController
 from helpers import uniprof
@@ -58,14 +60,14 @@ class EventAppearanceCacheController(DefaultAppearanceCacheController):
     @staticmethod
     def collectPrerequisitesForEventBattle(typeDescriptor, outfit, spaceID, isTurretDetached, damageState):
         isUndamaged = VehicleDamageState.isUndamagedModel(damageState)
-        prereqs = typeDescriptor.prerequisites(True)
+        prereqs = typeDescriptor.prerequisites(True, outfit.modelsSet)
         attachments = camouflages.getAttachments(outfit, typeDescriptor) if isUndamaged else []
         prereqs.extend(camouflages.getCamoPrereqs(outfit, typeDescriptor))
         prereqs.extend(camouflages.getAttachmentsAnimatorsPrereqs(attachments, spaceID))
         splineDesc = typeDescriptor.chassis.splineDesc
         modelsSet = outfit.modelsSet
         if splineDesc is not None:
-            for trackDesc in splineDesc.trackPairs.itervalues():
+            for trackDesc in itervalues(splineDesc.trackPairs):
                 prereqs += trackDesc.prerequisites(modelsSet)
 
         modelsSetParams = ModelsSetParams(outfit.modelsSet, damageState, attachments)
@@ -74,7 +76,7 @@ class EventAppearanceCacheController(DefaultAppearanceCacheController):
         collisionAssembler = model_assembler.prepareCollisionAssembler(typeDescriptor, isTurretDetached, spaceID)
         prereqs.append(collisionAssembler)
         physicalTracksBuilders = typeDescriptor.chassis.physicalTracks
-        for name, builders in physicalTracksBuilders.iteritems():
+        for name, builders in iteritems(physicalTracksBuilders):
             for index, builder in enumerate(builders):
                 prereqs.append(builder.createLoader(spaceID, '{0}{1}PhysicalTrack'.format(name, index), modelsSetParams.skin))
 

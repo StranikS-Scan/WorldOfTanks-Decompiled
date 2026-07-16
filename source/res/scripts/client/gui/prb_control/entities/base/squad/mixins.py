@@ -1,37 +1,32 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/base/squad/mixins.py
-from gui.prb_control.entities.base.squad.components import RestrictedRoleTagDataProvider
+from gui.prb_control.entities.base.squad.components import SquadRestrictionsProvider
 
-class RestrictedRoleTagMixin(object):
+class SquadRestrictionsMixin(object):
 
     def __init__(self):
-        self.__restrictedRoleTagDataProvider = self._createRestrictedRoleTagDataProvider()
+        self.__squadRestrictionsProvider = self._createSquadRestrictionsProvider()
 
     def initRestrictedRoleDataProvider(self, unit):
-        self.__restrictedRoleTagDataProvider.init(unit)
+        self.__squadRestrictionsProvider.init(unit)
 
     def finiRestrictedRoleDataProvider(self):
-        self.__restrictedRoleTagDataProvider.fini()
+        self.__squadRestrictionsProvider.fini()
 
-    def getMaxRoleCount(self, roleTag):
-        return self.__restrictedRoleTagDataProvider.getMaxPossibleVehicles(roleTag)
+    def isSquadRestrictionValid(self):
+        return self.__squadRestrictionsProvider.isValid()
 
-    def getMaxRoleLevels(self, roleTag):
-        return self.__restrictedRoleTagDataProvider.getRestrictionLevels(roleTag)
+    def isVehicleSuitableForSquad(self, vehicle):
+        hasSlot, _ = self.__squadRestrictionsProvider.hasSlotForVehicle(vehicle, ignoreOwnVehiclesInUnit=True)
+        return hasSlot
 
-    def hasSlotForRole(self, roleTag):
-        return self.__restrictedRoleTagDataProvider.hasSlotForVehicle(roleTag)
-
-    def isRoleRestrictionValid(self):
-        return self.__restrictedRoleTagDataProvider.isValid()
-
-    def isTagVehicleAvailable(self, tags):
-        return self.__restrictedRoleTagDataProvider.isTagVehicleAvailable(tags)
+    def hasSlotForVehicle(self, vehicle):
+        return self.__squadRestrictionsProvider.hasSlotForVehicle(vehicle)
 
     @property
     def squadRestrictions(self):
         raise NotImplementedError
 
     @classmethod
-    def _createRestrictedRoleTagDataProvider(cls):
-        return RestrictedRoleTagDataProvider()
+    def _createSquadRestrictionsProvider(cls):
+        return SquadRestrictionsProvider()

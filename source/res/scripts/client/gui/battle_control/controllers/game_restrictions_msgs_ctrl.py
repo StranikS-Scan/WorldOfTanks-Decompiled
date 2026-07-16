@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/game_restrictions_msgs_ctrl.py
-import sys
+from __future__ import absolute_import
 import time
 from constants import getTimeOnArena, getArenaStartTime
 from messenger import MessengerEntry, g_settings
@@ -11,6 +11,7 @@ from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 from gui.impl import backport
 from gui.impl.gen import R
 from helpers import time_utils
+_MAX_TIME = 2147483647
 
 class GameRestrictionsMessagesController(Notifiable, IBattleController):
     TIME_RESERVE = 59
@@ -40,19 +41,19 @@ class GameRestrictionsMessagesController(Notifiable, IBattleController):
 
     def __getDailyPlayTimeLeft(self):
         res = self.__playLimits['dailyPlayLimit']
-        return res if res != -1 else sys.maxint
+        return res if res != -1 else _MAX_TIME
 
     def __getWeeklyPlayTimeLeft(self):
         res = self.__playLimits['weeklyPlayLimit']
-        return res if res != -1 else sys.maxint
+        return res if res != -1 else _MAX_TIME
 
     def __getCurfew(self):
         res = self.__playLimits['curfew']
-        return res if res != -1 else sys.maxint
+        return res if res != -1 else _MAX_TIME
 
     def __getSessionPlayTimeLeft(self):
         res = self.__playLimits['sessionLimit']
-        return res if res != -1 else sys.maxint
+        return res if res != -1 else _MAX_TIME
 
     def __getTimeLeft(self):
         return min(self.__getCurfew(), self.__getDailyPlayTimeLeft(), self.__getWeeklyPlayTimeLeft(), self.__getSessionPlayTimeLeft())

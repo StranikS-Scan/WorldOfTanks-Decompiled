@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/goodies/GoodieResources.py
+from __future__ import absolute_import
 from typing import TYPE_CHECKING, TypeVar
-from GoodieValue import GoodieValue
+from goodies.GoodieValue import GoodieValue
 if TYPE_CHECKING:
     from typing import Generator
 

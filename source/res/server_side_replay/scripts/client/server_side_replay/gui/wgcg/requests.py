@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: server_side_replay/scripts/client/server_side_replay/gui/wgcg/requests.py
-import types
+from __future__ import absolute_import
 from shared_utils import CONST_CONTAINER
 from gui.shared.utils.requesters.abstract import Response, ClientRequestsByIDProcessor
 from gui.shared.utils.requesters.RequestsController import RequestsController
@@ -34,7 +34,7 @@ class ServerSideReplayRequester(ClientRequestsByIDProcessor):
         super(ServerSideReplayRequester, self).__init__(sender, ServerSideReplayRequestResponse)
 
     def _getSenderMethod(self, sender, methodName):
-        if isinstance(methodName, types.TupleType):
+        if isinstance(methodName, tuple):
             storageName, methodName = methodName
             sender = getattr(sender, storageName, None)
         return super(ServerSideReplayRequester, self)._getSenderMethod(sender, methodName)

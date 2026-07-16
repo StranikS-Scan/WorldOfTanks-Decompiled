@@ -16,11 +16,10 @@ from helpers.CallbackDelayer import CallbackDelayer
 from items import vehicles
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 from skeletons.gui.battle_session import IBattleSessionProvider
-from cgf_obsolete_script.script_game_object import ScriptGameObject
 from vehicle_systems.stricted_loading import makeCallbackWeak
 _logger = logging.getLogger(__name__)
 
-class BotAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
+class BotAirdrop(CallbackDelayer, ISelfAssembler):
     __dynamicObjectsCache = dependency.descriptor(IBattleDynamicObjectsCache)
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     ALTITUDE_CORRECTING = 0.5
@@ -31,7 +30,6 @@ class BotAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
 
     def __init__(self, dropID, deliveryPosition, teamID, yawAxis, deliveryTime, airdropType):
         self.__spaceID = BigWorld.player().spaceID
-        ScriptGameObject.__init__(self, self.__spaceID)
         CallbackDelayer.__init__(self)
         self.__deliveryTime = deliveryTime
         self.__deliveryPosition = deliveryPosition
@@ -60,18 +58,13 @@ class BotAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
             self.delayCallback(timeToStartDeliveryAnim, partial(self.__createDeliveryEffect, config))
         else:
             _logger.error('Delivery animation of Kamikaze will not be playing, no time for it!')
-        self.activate()
-        self.transferOwnershipToWorld()
 
     def destroy(self):
         super(BotAirdrop, self).destroy()
-        CallbackDelayer.destroy(self)
         if BattleReplay.g_replayCtrl.isPlaying:
             g_replayEvents.onTimeWarpStart -= self.__onReplayTimeWarpStart
         self.__removeMarkerArea()
         self.__removeDeliveryEffect()
-        ScriptGameObject.destroy(self)
-        CallbackDelayer.destroy(self)
 
     def __onReplayTimeWarpStart(self):
         self.__removeMarkerArea()
@@ -81,7 +74,8 @@ class BotAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
         return effects.ally if self.__sessionProvider.getArenaDP().isAllyTeam(self.__teamID) else effects.enemy
 
     def __createMarkerArea(self, config, equipmentDescr):
-        markerArea = CGF.GameObject(self.__spaceID)
+        queue = CGF.CommandQueue(self.__spaceID)
+        markerArea = queue.createGameObject()
         effect3D = self.__getEffect(config.getBotDeliveryMarker())
         if effect3D is not None:
             effectPath = effect3D.path
@@ -94,14 +88,13 @@ class BotAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
 
     def __on3dEffectLoaded(self, equipmentDescr, effectP, position, resourceRefs):
         markerArea = self.__markerArea
-        if effectP in resourceRefs.failedIDs or markerArea is None:
+        if effectP in resourceRefs.failedIDs or not markerArea:
             return
-        else:
-            clientVisuals = equipmentDescr.clientVisuals
-            sequenceComponent = markerArea.createComponent(SequenceComponent, resourceRefs[effectP])
-            sequenceComponent.createTerrainEffect(position + clientVisuals.markerPositionOffset, scale=clientVisuals.markerScale, loopCount=-1)
-            markerArea.activate()
-            return
+        clientVisuals = equipmentDescr.clientVisuals
+        queue = CGF.CommandQueue(self.__spaceID)
+        sequenceComponent = queue.assignComponent(markerArea, SequenceComponent(resourceRefs[effectP]))
+        sequenceComponent.createTerrainEffect(position + clientVisuals.markerPositionOffset, scale=clientVisuals.markerScale, loopCount=-1)
+        queue.activateGameObject(markerArea)
 
     def __createDeliveryEffect(self, config):
         if self.__airdropType == AirdropType.BOT_CLING:
@@ -119,23 +112,24 @@ class BotAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
         if effectP in resourceRefs.failedIDs:
             _logger.error('Effect %s has not been loaded!', effectP)
             return
-        effectAnimation = CGF.GameObject(self.__spaceID)
-        sequenceComponent = effectAnimation.createComponent(SequenceComponent, resourceRefs[effectP])
+        queue = CGF.CommandQueue(self.__spaceID)
+        effectAnimation = queue.createGameObject()
+        sequenceComponent = queue.assignComponent(effectAnimation, SequenceComponent(resourceRefs[effectP]))
         correctedPosition = position + Math.Vector3(0, self.ALTITUDE_CORRECTING, 0)
         sequenceComponent.createTerrainEffect(correctedPosition, loopCount=1, rotation=(self.__yawAxis, 0, 0))
-        effectAnimation.activate()
+        queue.activateGameObject(effectAnimation)
         self.__deliveryEffect = effectAnimation
         timeToSpawn = self.__deliveryTime - BigWorld.serverTime()
         self.delayCallback(timeToSpawn + self.END_ANIMATION_TIME_CORRECTING, self.__removeDeliveryEffect)
 
     def __removeMarkerArea(self):
-        if self.__markerArea is not None:
+        if self.__markerArea:
             self.__markerArea.destroy()
         self.__markerArea = None
         return
 
     def __removeDeliveryEffect(self):
-        if self.__deliveryEffect is not None:
+        if self.__deliveryEffect:
             self.__deliveryEffect.destroy()
         self.__deliveryEffect = None
         return

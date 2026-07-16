@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/wgm_currency.py
+from __future__ import absolute_import
+from future.utils import viewvalues
 from debug_utils import LOG_ERROR
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -75,12 +77,12 @@ class WGMCurrencyTooltip(DynamicBlocksTooltipData):
 
     @staticmethod
     def __checkDiff(d1, d2):
-        s1 = frozenset(d1.itervalues())
-        s2 = frozenset(d2.itervalues())
+        s1 = frozenset(viewvalues(d1))
+        s2 = frozenset(viewvalues(d2))
         return s1 ^ s2
 
     def __getValueBlocks(self):
-        valueBlocks = list()
+        valueBlocks = []
         if self._btnType == Currency.GOLD:
             valueBlocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.HANGAR_HEADER_WGMONEYTOOLTIP_PURCHASEDVALUE), value=self.__getGoldString(wgm_balance_info_requester.GOLD_PURCHASED), icon=Currency.GOLD, valueWidth=84, iconYOffset=2))
             valueBlocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.HANGAR_HEADER_WGMONEYTOOLTIP_EARNEDVALUE), value=self.__getGoldString(wgm_balance_info_requester.GOLD_EARNED), icon=Currency.GOLD, padding=formatters.packPadding(bottom=10), valueWidth=84, iconYOffset=2))

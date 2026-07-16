@@ -2,34 +2,34 @@
 # Embedded file name: scripts/client/BasicMine.py
 from __future__ import absolute_import
 from battleground.mines_object import loadMines
-from entity_game_object import EntityGameObject
+from entity_world_object import EntityWorldObject
 
-class BasicMine(EntityGameObject):
+class BasicMine(EntityWorldObject):
 
     def set_isDetonated(self, prev=None):
         if self.isDetonated:
-            if self.gameObject is not None:
-                self.gameObject.detonate()
+            if self.worldObject is not None:
+                self.worldObject.detonate()
         return
 
-    def _loadGameObject(self):
-        return loadMines(self.ownerVehicleID, self._registerGameObject)
+    def _loadWorldObject(self):
+        return loadMines(self.ownerVehicleID, self._registerWorldObject)
 
-    def _registerGameObject(self, gameObject):
-        self.gameObject.setPosition(self.position)
-        self.gameObject.setIsEnemyMarkerEnabled(self.isMarkerEnabled)
-        self.gameObject.setIsActivated(self.isActivated)
-        self.gameObject.setActivationTimeDelay(self.activationTimeDelay)
-        self.gameObject.setMineNumber(self.mineNumber)
-        super(BasicMine, self)._registerGameObject(gameObject)
+    def _registerWorldObject(self, worldObject):
+        worldObject.setPosition(self.position)
+        worldObject.setIsEnemyMarkerEnabled(self.isMarkerEnabled)
+        worldObject.setIsActivated(self.isActivated)
+        worldObject.setActivationTimeDelay(self.activationTimeDelay)
+        worldObject.setMineNumber(self.mineNumber)
+        super(BasicMine, self)._registerWorldObject(worldObject)
 
     def set_isActivated(self, prev=None):
         if self.isActivated:
-            if self.gameObject is not None:
-                self.gameObject.activateMine()
+            if self.worldObject is not None:
+                self.worldObject.activateMine()
         return
 
     def set_isMarkerEnabled(self, prev=None):
-        if self.gameObject is not None:
-            self.gameObject.enableEnemyIdleEffect(self.isMarkerEnabled)
+        if self.worldObject is not None:
+            self.worldObject.enableEnemyIdleEffect(self.isMarkerEnabled)
         return

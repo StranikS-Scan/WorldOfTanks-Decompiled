@@ -11,7 +11,7 @@ class PrebattleTypes(Enum):
 class ExtMembersWindowModel(MembersWindowModel):
     __slots__ = ()
 
-    def __init__(self, properties=20, commands=3):
+    def __init__(self, properties=23, commands=3):
         super(ExtMembersWindowModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -34,8 +34,29 @@ class ExtMembersWindowModel(MembersWindowModel):
     def setSelectionDisabled(self, value):
         self._setBool(19, value)
 
+    def getIsInSearch(self):
+        return self._getBool(20)
+
+    def setIsInSearch(self, value):
+        self._setBool(20, value)
+
+    def getIsCommander(self):
+        return self._getBool(21)
+
+    def setIsCommander(self, value):
+        self._setBool(21, value)
+
+    def getHasFreeSlots(self):
+        return self._getBool(22)
+
+    def setHasFreeSlots(self, value):
+        self._setBool(22, value)
+
     def _initialize(self):
         super(ExtMembersWindowModel, self)._initialize()
         self._addViewModelProperty('eventDifficulty', EventDifficultyModel())
         self._addNumberProperty('selectedDifficulty', 1)
         self._addBoolProperty('selectionDisabled', False)
+        self._addBoolProperty('isInSearch', False)
+        self._addBoolProperty('isCommander', False)
+        self._addBoolProperty('hasFreeSlots', False)

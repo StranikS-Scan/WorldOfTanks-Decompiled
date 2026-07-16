@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/arena_descrs.py
+from __future__ import absolute_import
 import weakref
 import BattleReplay
 from constants import IS_DEVELOPMENT, ARENA_GUI_TYPE

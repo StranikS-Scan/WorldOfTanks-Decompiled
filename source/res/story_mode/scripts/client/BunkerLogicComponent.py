@@ -1,14 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/BunkerLogicComponent.py
 import BigWorld
+import CGF
 from story_mode_common.cgf_components_common.bunkers import BunkerLogicComponentDescriptor
 from constants import IS_CGF_DUMP, IS_EDITOR
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
-from cgf_script.component_meta_class import registerReplicableComponent
+from cgf_script.registration import registerReplicableComponent
 if not IS_CGF_DUMP and not IS_EDITOR:
     from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, ENTITY_IN_FOCUS_TYPE
-if IS_EDITOR:
+if IS_EDITOR or IS_CGF_DUMP:
 
     class DynamicScriptComponent(object):
         pass
@@ -21,10 +22,16 @@ else:
 class BunkerLogicComponent(DynamicScriptComponent, BunkerLogicComponentDescriptor):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
+    def __init__(self):
+        super(BunkerLogicComponent, self).__init__()
+        self._spaceID = None
+        return
+
     def bunkerDestroyed(self):
         self._onBunkerDestroyed()
 
-    def startLogic(self):
+    def startLogic(self, spaceID):
+        self._spaceID = spaceID
         feedbackCtrl = self.sessionProvider.shared.feedback
         if feedbackCtrl is not None:
             feedbackCtrl.onVehicleFeedbackReceived += self._onVehicleFeedbackReceived
@@ -69,10 +76,12 @@ class BunkerLogicComponent(DynamicScriptComponent, BunkerLogicComponentDescripto
             return
 
     def _onBunkerDestroyed(self):
-        self._activateGameObject(self.destroyedChild)
-        self._activateGameObject(self.transitionChild)
+        queue = CGF.CommandQueue(self._spaceID)
+        self._activateGameObject(self.destroyedChild, queue)
+        self._activateGameObject(self.transitionChild, queue)
 
-    def _activateGameObject(self, gameObject):
-        if gameObject is not None and gameObject.isValid():
-            gameObject.activate()
+    def _activateGameObject(self, gameObjectID, queue):
+        gameObject = queue.manager.gameObject(gameObjectID)
+        if gameObject is not None and gameObject.valid:
+            queue.activateGameObject(gameObject)
         return

@@ -5,6 +5,7 @@ import logging
 import WWISE
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.sounds.filters import StatesGroup, States
 from helpers.dependency import replace_none_kwargs
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IBattlePassController
@@ -48,6 +49,10 @@ ACTIVATE_CHAPTER_SOUND_SPACE = CommonSoundSpaceSettings(name=BattlePassStates.DI
 
 def switchBattlePassSoundFilter(on=True):
     WWISE.WW_setState(BattlePassStates.BATTLE_PASS_PLACE_STATE, BattlePassStates.BATTLE_PASS_PLACE_STATE_ON if on else BattlePassStates.BATTLE_PASS_PLACE_STATE_OFF)
+
+
+def switchOverlaySoundFilter(on=True):
+    WWISE.WW_setState(StatesGroup.OVERLAY_HANGAR_GENERAL, States.OVERLAY_HANGAR_GENERAL_ON if on else States.OVERLAY_HANGAR_GENERAL_OFF)
 
 
 @replace_none_kwargs(battlePass=IBattlePassController)

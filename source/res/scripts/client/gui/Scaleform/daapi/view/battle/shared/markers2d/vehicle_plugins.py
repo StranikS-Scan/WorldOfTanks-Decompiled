@@ -736,12 +736,15 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         if newState or text or iconAnimation:
             self._invokeMarker(handle, 'updateState', newState, immediate, text, iconAnimation, isFrequent)
 
+    def _getActiveCommandTime(self, action):
+        return _DEFAULT_ACTIVE_COMMAND_TIME
+
     def __showActionMarker(self, handle, newAction, vehicleID, numberOfReplies, isTargetForPlayer, isPermanent):
         self._invokeMarker(handle, 'showActionMarker', newAction)
         if not isPermanent:
             if handle in self.__callbackIDs and self.__callbackIDs[handle] is not None:
                 self.__removeMarkerCallback(handle)
-            self.__callbackIDs[handle] = BigWorld.callback(_DEFAULT_ACTIVE_COMMAND_TIME, partial(self.__handleCallback, handle, vehicleID))
+            self.__callbackIDs[handle] = BigWorld.callback(self._getActiveCommandTime(newAction), partial(self.__handleCallback, handle, vehicleID))
         marker = self._markers[vehicleID]
         marker.setIsActionMarkerActive(True)
         if numberOfReplies > 0:

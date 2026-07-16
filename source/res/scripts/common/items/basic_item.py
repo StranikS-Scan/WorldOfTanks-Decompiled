@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/basic_item.py
+from __future__ import absolute_import
 from items import ITEM_TYPE_NAMES
 from items.components import legacy_stuff, shared_components, component_constants
 _LONG_DESCR_PROPERTY = 'longDescriptionSpecial'

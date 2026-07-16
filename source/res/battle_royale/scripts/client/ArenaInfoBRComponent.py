@@ -10,6 +10,7 @@ import GenericComponents
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
 from script_component.DynamicScriptComponent import DynamicScriptComponent
 from battle_royale.gui.shared.events import AirDropEvent
+from typing import List
 from skeletons.gui.battle_session import IBattleSessionProvider
 from debug_utils import LOG_DEBUG_DEV
 
@@ -46,11 +47,12 @@ class ArenaInfoBRComponent(DynamicScriptComponent, CallbackDelayer):
 
     def __launch(self, equipment, position, duration):
 
-        def postloadSetup(go):
-            go.addComponent(equipment)
-            go.createComponent(GenericComponents.RemoveGoDelayedComponent, duration)
+        def postloadSetup(objects, queue):
+            go = objects[0]
+            queue.assignComponent(go, equipment)
+            queue.createComponent(go, GenericComponents.RemoveGoDelayedComponent, duration)
 
-        CGF.loadGameObject(equipment.usagePrefab, self.entity.spaceID, position, postloadSetup)
+        CGF.loadAndCreatePrefab(equipment.usagePrefab, self.entity.spaceID, position, postloadSetup)
 
     def set_nextDropWave(self, prev):
         LOG_DEBUG_DEV('set_nextDropWave', self.nextDropWave)

@@ -72,7 +72,7 @@ def getDatabaseID(args=None, connectionMgr=None):
 
 @dependency.replace_none_kwargs(connectionMgr=IConnectionManager)
 def getPeripheryID(args=None, connectionMgr=None):
-    return str(connectionMgr.peripheryID) if connectionMgr is not None else '0'
+    return str(connectionMgr.peripheryID) if connectionMgr is not None else str(constants.STANDALONE_CLUSTER_ID)
 
 
 def getUnitServerID(args=None):

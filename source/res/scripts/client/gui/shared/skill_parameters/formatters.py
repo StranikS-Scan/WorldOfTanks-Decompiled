@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/skill_parameters/formatters.py
+from __future__ import absolute_import
 import typing
 from gui.impl import backport
 from gui.impl.backport import getNiceNumberFormat
@@ -8,6 +9,7 @@ from gui.shared.gui_items import VEHICLE_ATTR_TO_KPI_NAME_MAP
 from gui.shared.items_parameters.param_name_helper import getVehicleParameterText
 from items.components.component_constants import EMPTY_STRING
 from items.components.skills_constants import ParamMeasureType, ParamSignType
+from math_common import decimal_round
 if typing.TYPE_CHECKING:
     from items.readers.skills_readers import SkillDescrsArg
 
@@ -17,7 +19,7 @@ def getDescriptionValue(paramDescrArg, value):
 
 def _formatParamValue(paramDescrArg, value):
     convertedValue = value * 100 if paramDescrArg.measureType == ParamMeasureType.PERCENTS else value
-    formattedValue = str(getNiceNumberFormat(round(convertedValue, 3)))
+    formattedValue = str(getNiceNumberFormat(decimal_round(convertedValue, 3)))
     measuredValue = getMeasureText(formattedValue, paramDescrArg)
     return measuredValue
 

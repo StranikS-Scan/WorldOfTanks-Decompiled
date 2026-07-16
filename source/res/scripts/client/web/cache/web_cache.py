@@ -274,6 +274,10 @@ class BaseExternalCache(WebExternalCache):
     def syncing(self):
         return self._state == CacheStates.SYNCING
 
+    @property
+    def synced(self):
+        return self._state == CacheStates.SYNCED
+
     def prefetchStart(self, callback=None, timeout=0.0):
         if self._state == CacheStates.INITIALIZED:
             self._startTime = BigWorld.timeExact()
@@ -350,14 +354,14 @@ class BaseExternalCache(WebExternalCache):
             return
         elif not url or rawConfig is None:
             _logger.error('Config [%s] download error.', url)
-            self._prefetchEnd(CachePrefetchResult.FAIL)
+            self._onManifestDownloadFailed()
             return
         else:
             try:
                 config = self.decodeConfig(url, rawConfig)
             except Exception:
                 _logger.exception('Config [%s] decoding error.', url)
-                self._prefetchEnd(CachePrefetchResult.FAIL)
+                self._onManifestParsingFailed()
                 return
 
             if self._CONFIGS_DIR_NAME:
@@ -422,6 +426,12 @@ class BaseExternalCache(WebExternalCache):
     def _createManifest(self, config=None):
         raise NotImplementedError
 
+    def _onManifestDownloadFailed(self):
+        self._prefetchEnd(CachePrefetchResult.FAIL)
+
+    def _onManifestParsingFailed(self):
+        self._prefetchEnd(CachePrefetchResult.FAIL)
+
 
 class BaseExternalCacheManager(object):
     _REQUEST_TIMEOUT = 180.0
@@ -436,6 +446,10 @@ class BaseExternalCacheManager(object):
     @property
     def isSyncing(self):
         return self._cache is not None and self._cache.syncing
+
+    @property
+    def isSynced(self):
+        return self._cache is not None and self._cache.synced
 
     def destroy(self):
         self._destroyCache()

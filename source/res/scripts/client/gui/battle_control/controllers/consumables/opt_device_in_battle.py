@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/consumables/opt_device_in_battle.py
+from __future__ import absolute_import
 import BattleReplay
 import SoundGroups
 import nations

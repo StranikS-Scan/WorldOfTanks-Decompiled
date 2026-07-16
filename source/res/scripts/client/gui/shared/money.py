@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/money.py
+from __future__ import absolute_import, division
 from collections import namedtuple
+from future.utils import viewitems
 from typing import TYPE_CHECKING
+from py2to3.utils import PY3
 from skeletons.gui.game_control import IExchangeRatesWithDiscountsProvider
 from helpers import dependency
 from shared_utils import CONST_CONTAINER
@@ -43,7 +46,7 @@ class Currency(CONST_CONTAINER):
      EVENT_COIN: 'event_coin',
      BPCOIN: 'bpcoin',
      EQUIP_COIN: 'equipCoin'}
-    _CURRENCY_INTERNAL_MAP = {external:internal for internal, external in _CURRENCY_EXTERNAL_MAP.iteritems()}
+    _CURRENCY_INTERNAL_MAP = {external:internal for internal, external in viewitems(_CURRENCY_EXTERNAL_MAP)}
 
     @classmethod
     def currencyExternalName(cls, currencyName):
@@ -55,7 +58,7 @@ class Currency(CONST_CONTAINER):
 
     @classmethod
     def convertExternal(cls, **kwargs):
-        return {Currency.currencyInternalName(currency):value for currency, value in kwargs.iteritems()}
+        return {Currency.currencyInternalName(currency):value for currency, value in viewitems(kwargs)}
 
 
 __Money = namedtuple('_Money', Currency.ALL)
@@ -113,7 +116,7 @@ class Money(object):
 
     def __add__(self, other):
         copy = self.copy()
-        for c, _ in other.iteritems():
+        for c, _ in other.items():
             if c in copy:
                 copy._values[c] += other.get(c)
             copy._values[c] = other.get(c)
@@ -125,7 +128,7 @@ class Money(object):
 
     def __sub__(self, other):
         copy = self.copy()
-        for c, _ in other.iteritems():
+        for c, _ in other.items():
             if c in copy:
                 copy._values[c] -= other.get(c)
             copy._values[c] = -other.get(c)
@@ -141,28 +144,31 @@ class Money(object):
     def __rmul__(self, n):
         return self.__mul__(n)
 
-    def __div__(self, n):
+    def __truediv__(self, n):
         return self.__convert(lambda c, v, o: float(v) / o, n)
 
-    def __rdiv__(self, n):
-        return self.__div__(n)
+    def __rtruediv__(self, n):
+        return self.__truediv__(n)
+
+    __div__ = __truediv__
+    __rdiv__ = __rtruediv__
 
     def __lt__(self, other):
-        for c, v in self.iteritems():
+        for c, v in self.items():
             if c not in other or v >= other.get(c):
                 return False
 
         return other.isDefined()
 
     def __le__(self, other):
-        for c, v in self.iteritems():
+        for c, v in self.items():
             if c not in other or v > other.get(c):
                 return False
 
         return True
 
     def __gt__(self, other):
-        for c, v in self.iteritems():
+        for c, v in self.items():
             if v <= other.get(c):
                 return False
 
@@ -171,7 +177,7 @@ class Money(object):
     def __ge__(self, other):
         if other.isDefined():
             if self.isDefined():
-                for c, v in self.iteritems():
+                for c, v in self.items():
                     if v < other.get(c):
                         return False
 
@@ -180,28 +186,17 @@ class Money(object):
         return True
 
     def __eq__(self, other):
-        if other is None:
-            return False
-        else:
-            for c in self.ALL:
-                if self.get(c) != other.get(c):
-                    return False
-
-            return True
+        return False if other is None else all((self.get(c) == other.get(c) for c in self.ALL))
 
     def __ne__(self, other):
-        for c in self.ALL:
-            if self.get(c) != other.get(c):
-                return True
+        return not self == other
 
-        return False
+    __hash__ = None
 
-    def __nonzero__(self):
-        for v in self:
-            if v != 0:
-                return True
+    def __bool__(self):
+        return any(self)
 
-        return False
+    __nonzero__ = __bool__
 
     def __len__(self):
         return len(self._values)
@@ -266,7 +261,7 @@ class Money(object):
 
     @classmethod
     def hasMoney(cls, data):
-        return any((c in cls.ALL for c in data.iterkeys()))
+        return any((c in cls.ALL for c in data))
 
     @classmethod
     def extractMoneyDict(cls, data):
@@ -287,7 +282,7 @@ class Money(object):
         return cls(**setValues)
 
     def get(self, currency, default=None):
-        return self._values[currency] if currency in self._values else default
+        return self._values.get(currency, default)
 
     @property
     def currencies(self):
@@ -300,7 +295,7 @@ class Money(object):
 
     def replaceAll(self, values):
         copy = self._values.copy()
-        for currency, value in values.iteritems():
+        for currency, value in viewitems(values):
             self._setValue(copy, currency, value)
 
         return self._copy(**copy)
@@ -356,20 +351,20 @@ class Money(object):
         return self.apply(abs)
 
     def toDict(self):
-        return {c:v for c, v in self._values.iteritems()}
+        return dict(self._values)
 
     def toSignDict(self):
-        return {c:v for c, v in self._values.iteritems() if v != 0}
+        return {c:v for c, v in viewitems(self._values) if v != 0}
 
     def toDictsList(self):
         return [self.toSignDict()]
 
-    def iteritems(self, byWeight=False):
+    def items(self, byWeight=False):
         for c in self.__getCurrenciesIterator(byWeight=byWeight):
             yield (c, self._values.get(c))
 
-    def items(self):
-        return list(self.iteritems())
+    if not PY3:
+        iteritems = items
 
     def apply(self, formatter):
         return self.__convert(lambda c, v, o: formatter(v), None)
@@ -384,10 +379,10 @@ class Money(object):
         return shortage
 
     def getNegative(self):
-        return [ (c, v) for c, v in self.iteritems() if v < 0 ]
+        return [ (c, v) for c, v in self.items() if v < 0 ]
 
     def getPositive(self):
-        return [ (c, v) for c, v in self.iteritems() if v > 0 ]
+        return [ (c, v) for c, v in self.items() if v > 0 ]
 
     def toMoneyTuple(self):
         return _Money(**self._values)
@@ -414,7 +409,7 @@ class Money(object):
         return cls(**values)
 
     def __convert(self, function, other):
-        kwargs = {c:function(c, v, other) for c, v in self._values.iteritems()}
+        kwargs = {c:function(c, v, other) for c, v in viewitems(self._values)}
         return self._copy(**kwargs)
 
     def __getCurrenciesIterator(self, byWeight=True):
@@ -439,7 +434,7 @@ class DynamicMoney(Money):
     def __init__(self, *args, **kwargs):
         super(DynamicMoney, self).__init__(*args, **kwargs)
         if kwargs:
-            extended = {key:value for key, value in kwargs.iteritems() if key not in self._values}
+            extended = {key:value for key, value in viewitems(kwargs) if key not in self._values}
             self._values.update(extended)
             currencies = tuple(extended.keys())
             self.ALL = Currency.ALL + currencies
@@ -481,12 +476,15 @@ class CurrencyCollection(_CurrencyCollection):
     def copy(self):
         return CurrencyCollection(*self)
 
-    def iteritems(self):
+    def items(self):
         for c in Currency.ALL:
             yield (c, self.get(c))
 
+    if not PY3:
+        iteritems = items
+
     def toDict(self):
-        return {c:v for c, v in self.iteritems()}
+        return dict(self.items())
 
     def __iter__(self):
         for c in Currency.ALL:

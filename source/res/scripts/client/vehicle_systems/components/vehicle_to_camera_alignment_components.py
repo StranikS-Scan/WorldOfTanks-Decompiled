@@ -11,8 +11,7 @@ from CameraComponents import CameraComponent
 from constants import IS_CLIENT
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
-from cgf_script.component_meta_class import registerComponent
-from cgf_script.managers_registrator import registerManager, onAddedQuery, registerRule, Rule, tickGroup
+from cgf_script.registration import registerComponent
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.shared import g_eventBus
 from skeletons.gui.shared.utils import IHangarSpace
@@ -41,17 +40,20 @@ g_alignmentCameraVisuals = _AlignmentCameraVisuals()
 
 @registerComponent
 class VehicleToCameraAlignmentComponent(object):
+    category = 'Vehicle'
     editorTitle = 'Vehicle To Camera Alignment Component'
-    serialName = 'VehicleToCameraAlignmentComponent'
-    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
+    serialName = 'BW::VehicleToCameraAlignmentComponent'
+    domain = CGF.Domain.ClientEditor
 
 
-class VehicleToCameraAlignmentManager(CGF.ComponentManager):
+class VehicleToCameraAlignmentSystem(CGF.System):
     _hangarSpace = dependency.descriptor(IHangarSpace)
-    _query = CGF.QueryConfig(CGF.GameObject, VehicleToCameraAlignmentComponent, CameraComponent)
+    Veh2CamAlignmentActivate = CGF.ActivateReaction(CGF.ReactRo(VehicleToCameraAlignmentComponent))
+    Veh2CamAlignmentIterate = CGF.IterateReaction(CGF.Has(VehicleToCameraAlignmentComponent), CGF.Ro(CameraComponent))
+    Reactions = CGF.Reactions(Veh2CamAlignmentActivate, Veh2CamAlignmentIterate)
 
-    def __init__(self, *args):
-        super(VehicleToCameraAlignmentManager, self).__init__(*args)
+    def __init__(self):
+        super(VehicleToCameraAlignmentSystem, self).__init__()
         self.__aabbCenter = None
         self.__vehicleSize = None
         self.__shouldAlignCenters = False
@@ -62,23 +64,29 @@ class VehicleToCameraAlignmentManager(CGF.ComponentManager):
         self.__callbackDelayer = CallbackDelayer()
         return
 
-    def activate(self):
-        from cgf_components.hangar_camera_manager import HangarCameraManager
+    def onMappingLoaded(self):
+        from cgf_components.hangar_camera_manager import HangarCameraSystem
         g_eventBus.addListener(CameraRelatedEvents.ON_RESIZE, self.__handleResize)
-        cameraManager = CGF.getManager(self._hangarSpace.spaceID, HangarCameraManager)
+        cameraManager = CGF.getSystem(self._hangarSpace.spaceID, HangarCameraSystem)
         if cameraManager:
             cameraManager.onCameraSwitched += self.__onCameraSwitched
 
-    def deactivate(self):
-        from cgf_components.hangar_camera_manager import HangarCameraManager
-        cameraManager = CGF.getManager(self._hangarSpace.spaceID, HangarCameraManager)
+    def onMappingUnloaded(self):
+        from cgf_components.hangar_camera_manager import HangarCameraSystem
+        cameraManager = CGF.getSystem(self._hangarSpace.spaceID, HangarCameraSystem)
         if cameraManager:
             cameraManager.onCameraSwitched -= self.__onCameraSwitched
         g_eventBus.removeListener(CameraRelatedEvents.ON_RESIZE, self.__handleResize)
 
+    def update(self):
+        for _ in self.reaction(self.Veh2CamAlignmentActivate):
+            _logger.debug('VehicleToCameraAlignmentManager is activated')
+
+        self.tick()
+
     def alignCamera(self, cameraName):
         self.__shouldAlignCenters = False
-        for _, _, cameraComponent in self._query:
+        for cameraComponent in self.reaction(self.Veh2CamAlignmentIterate):
             if cameraComponent.name == cameraName:
                 self.__shouldAlignCenters = True
                 self.__callbackDelayer.delayCallback(0.0, WeakMethodProxy(self.__waitAABBLoaded))
@@ -86,11 +94,6 @@ class VehicleToCameraAlignmentManager(CGF.ComponentManager):
     def getTargetPosition(self):
         return self.__aabbCenter
 
-    @onAddedQuery(VehicleToCameraAlignmentComponent)
-    def onAdded(self, _):
-        _logger.debug('VehicleToCameraAlignmentManager is activated')
-
-    @tickGroup(groupName='Simulation')
     def tick(self):
         if self.__aabbCenter:
             if g_alignmentCameraVisuals.enabled:
@@ -190,13 +193,3 @@ class VehicleToCameraAlignmentManager(CGF.ComponentManager):
         visiblePointInLocal = localFromWS.applyPoint(visiblePointInWorld)
         pivotPosition = screenCenterInLocal - visiblePointInLocal
         camera.pivotPosition = pivotPosition
-
-
-@registerRule
-class VehicleToCameraAlignmentRule(Rule):
-    category = 'Hangar rules'
-    domain = CGF.DomainOption.DomainClient
-
-    @registerManager(VehicleToCameraAlignmentManager)
-    def reg1(self):
-        return None

@@ -123,9 +123,9 @@ class ShowShooting(EntityExtra):
             _logger.debug('Composition is not ready to post VehicleShotEvent')
             return
         gunGo = findSlot(vehicle.entityGameObject, VehicleSlots.GUN.value)
-        if IS_UE_EDITOR and not gunGo.isValid():
+        if IS_UE_EDITOR and not gunGo.valid:
             gunGo = findSlot(vehicle.appearance.gameObject, VehicleSlots.GUN.value)
-        if gunGo.isValid():
+        if gunGo.valid:
             shot_event.postVehicleShotEvent(vehicle.entityGameObject, gunGo, 0, shellType)
         else:
             _logger.error('Unable to post VehicleShotEvent: gunGo was not found')
@@ -353,7 +353,7 @@ class BlinkingLaserSight(EntityExtra):
         self._shouldCollideTarget = dataSection.readBool('shouldCollideTarget')
         self._beamLength = dataSection.readFloat('beamLength', 1.0)
         self._bindNode = dataSection.readString('bindNode')
-        self._beamSeqs = dict(((name, dataSection.readString(name)) for name in self._SEQUENCE_NAMES if self._isEnabledBlinking or name == 'beamStaticSeq'))
+        self._beamSeqs = {name:dataSection.readString(name) for name in self._SEQUENCE_NAMES if self._isEnabledBlinking or name == 'beamStaticSeq'}
 
     def _newData(self, entity):
         data = super(BlinkingLaserSight, self)._newData(entity)

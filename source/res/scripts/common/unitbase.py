@@ -391,6 +391,8 @@ class UnitAssemblerImplType(object):
     EPIC = 2
 
 
+UNIT_ASSEMBLER_IMPL_NAMES = {k.lower():v for k, v in viewitems(UnitAssemblerImplType.__dict__) if isinstance(v, int) and not k.startswith('_')}
+UNIT_ASSEMBLER_IMPL_IDS = {v:k for k, v in viewitems(UNIT_ASSEMBLER_IMPL_NAMES)}
 UNIT_ASSEMBLER_IMPL_TO_CONFIG = {UnitAssemblerImplType.SQUAD: 'squad',
  UnitAssemblerImplType.EPIC: 'epic'}
 PREBATTLE_TYPE_TO_UNIT_ASSEMBLER = {PREBATTLE_TYPE.SQUAD: UnitAssemblerImplType.SQUAD,
@@ -1229,8 +1231,8 @@ class UnitBase(OpsUnpacker):
     def _setReadyMask(self, mask):
         self._readyMask = mask
 
-    def _setUnitFlags(self, state):
-        self._flags = state
+    def _setUnitFlags(self, flags):
+        self._flags = flags
 
     def _closeSlot(self, slotIdx):
         self._closedSlotMask |= 1 << slotIdx

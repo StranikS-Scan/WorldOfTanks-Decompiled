@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/achievement.py
+from __future__ import absolute_import
 import logging
 import constants
 from CurrentVehicle import g_currentVehicle
@@ -48,7 +49,7 @@ class AchievementParamsField(ToolTipParameterField):
 class AchievementStatsField(ToolTipDataField):
 
     def _getValue(self):
-        result = dict()
+        result = {}
         achievement = self._tooltip.item
         if achievement and achievement.getType() == 'class':
             result['classParams'] = RECORD_CONFIGS.get(achievement.getName())

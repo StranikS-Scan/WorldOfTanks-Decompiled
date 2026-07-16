@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: server_side_replay/scripts/client/server_side_replay/gui/wgcg/providers/base_provider.py
+from __future__ import absolute_import
 import logging
 import time
-from abc import ABCMeta, abstractmethod, abstractproperty
 from collections import defaultdict, namedtuple
 from enum import Enum
 from typing import Dict, Optional, NamedTuple, Type, TYPE_CHECKING
@@ -81,7 +81,6 @@ class JwtRequestor(object):
 _g_jwtRequestor = JwtRequestor()
 
 class BaseProvider(IBaseProvider):
-    __metaclass__ = ABCMeta
 
     def __init__(self):
         super(BaseProvider, self).__init__()
@@ -110,19 +109,18 @@ class BaseProvider(IBaseProvider):
         if withClear:
             self.__data.clear()
 
-    @abstractproperty
+    @property
     def _isEnabled(self):
         raise NotImplementedError
 
-    @abstractproperty
+    @property
     def _dataNameContainer(self):
         raise NotImplementedError
 
     @property
     def _fakeDataStorage(self):
-        return dict()
+        return {}
 
-    @abstractmethod
     def _getSettings(self):
         raise NotImplementedError
 

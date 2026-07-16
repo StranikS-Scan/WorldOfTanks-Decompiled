@@ -25,11 +25,11 @@ def getSquadFightBtnTooltipData(result):
         header = backport.text(_TOOLTIP_PATH.redButton.disabled.vehicle.group_is_not_ready.header())
         body = backport.text(_TOOLTIP_PATH.hangar.startBtn.squadNotReady.body())
     elif state == UNIT_RESTRICTION.VEHICLE_INVALID_LEVEL:
-        header = backport.text(_TOOLTIP_PATH.hangar.tankCarusel.wrongSquadVehicle.header())
-        body = backport.text(_TOOLTIP_PATH.hangar.tankCarusel.wrongSquadVehicle.body())
-    elif state in UNIT_RESTRICTION.CLASSES_RESTRICTIONS:
-        header = backport.text(_TOOLTIP_PATH.hangar.tankCarusel.wrongSquadTypeVehicle.header())
-        body = backport.text(_TOOLTIP_PATH.hangar.tankCarusel.wrongSquadTypeVehicle.body())
+        header = backport.text(_TOOLTIP_PATH.hangar.startBtn.wrongSquadVehicleLevel.header())
+        body = backport.text(_TOOLTIP_PATH.hangar.startBtn.wrongSquadVehicleLevel.body())
+    elif state == UNIT_RESTRICTION.VEHICLES_GROUP_IS_FULL:
+        header = backport.text(_TOOLTIP_PATH.hangar.startBtn.wrongSquadVehicle.header())
+        body = backport.text(_TOOLTIP_PATH.hangar.startBtn.wrongSquadVehicle.body())
     else:
         return ''
     return makeTooltip(header, body)

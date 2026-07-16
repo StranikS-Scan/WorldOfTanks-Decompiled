@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/epic_maps_ctrl.py
+from __future__ import absolute_import
+import Math
+import CommandMapping
 import Event
 from chat_commands_consts import INVALID_VEHICLE_POSITION
-import CommandMapping
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
-import Math
 from gui.battle_control.controllers.default_maps_ctrl import DefaultMapsController
 
 class EpicMapsController(DefaultMapsController):

@@ -1,6 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/battle_results_processors.py
+from __future__ import absolute_import
 import time
+from builtins import round
+from future.utils import viewitems
+from past.builtins import xrange
 from constants import DESTR_CODES_BY_TAGS, GLOBAL_MAP_DIVISION, DOSSIER_TYPE
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from battle_results_helpers import determineWinnerTeam
@@ -27,7 +31,7 @@ def getMaxVehResults(results):
     if not results:
         return {}
     tmpVehMaxResults = {}
-    for vehTypeCompDescr, vehResults in results.iteritems():
+    for vehTypeCompDescr, vehResults in viewitems(results):
         for record in ('maxFragsVehicle', 'maxWinPointsVehicle', 'maxDamageVehicle', 'maxXPVehicle', 'maxDamageBlockedByArmorVehicle', 'maxAssistedVehicle'):
             if record == 'maxFragsVehicle':
                 kills = len(vehResults['killList'])
@@ -54,7 +58,7 @@ def getMaxVehResults(results):
                 if tmpVehMaxResults.get('maxAssistedVehicle', (0, 0))[1] <= assisted:
                     tmpVehMaxResults['maxAssistedVehicle'] = (vehTypeCompDescr, assisted)
 
-    return {key:value[0] for key, value in tmpVehMaxResults.iteritems()}
+    return {key:value[0] for key, value in viewitems(tmpVehMaxResults)}
 
 
 def updateAccountDossier(dossierDescr, battleResults, dossierXP, vehDossiers, maxVehResults, avatarResults):
@@ -66,7 +70,7 @@ def updateAccountDossier(dossierDescr, battleResults, dossierXP, vehDossiers, ma
             func(dossierDescr, battleResults, vehDossiers)
 
     if checkAny(bonusType, BONUS_CAPS.DOSSIER_ACHIEVEMENTS):
-        for vehTypeCompDescr, (_, vehDossierDescr) in vehDossiers.iteritems():
+        for vehTypeCompDescr, (_, vehDossierDescr) in viewitems(vehDossiers):
             __updateAccountRecords(BONUS_CAPS.get(bonusType), dossierDescr, vehDossierDescr)
 
     if checkAny(bonusType, BONUS_CAPS.DOSSIER_7X7):
@@ -162,12 +166,12 @@ def updateAccountDossier(dossierDescr, battleResults, dossierXP, vehDossiers, ma
             maxEpicBattle[record] = maxVehResults[record]
 
     __updateSteamMasteryMarks(dossierDescr, battleResults, vehDossiers)
-    for vehTypeCompDescr, (_, vehDossierDescr) in vehDossiers.iteritems():
+    for vehTypeCompDescr, (_, vehDossierDescr) in viewitems(vehDossiers):
         __updateAccountDossierCuts(dossierDescr, battleResults, dossierXP, vehTypeCompDescr, vehDossierDescr, avatarResults)
 
 
 def __updateAccountRecords(bonusCaps, dossierDescr, vehDossierDescr):
-    for cap, descr in _saveRecordsInAccountDescr.iteritems():
+    for cap, descr in viewitems(_saveRecordsInAccountDescr):
         if cap in bonusCaps:
             for item in descr:
                 blockName = item['block']
@@ -192,11 +196,11 @@ def updateTankmanDossier(dossierDescr, battleResults):
 
 def updatePotapovQuestAchievements(accDossierDescr, progress):
     import potapov_quests
-    achievementCounters = dict()
-    completedCounters = dict()
+    achievementCounters = {}
+    completedCounters = {}
     tileCache = potapov_quests.g_tileCache
     completedBranches = set()
-    for questID, (flags, state) in progress.iteritems():
+    for questID, (_, state) in viewitems(progress):
         if state < potapov_quests.PQ_STATE.NEED_GET_MAIN_REWARD:
             continue
         pqType = potapov_quests.g_cache.questByPotapovQuestID(questID)
@@ -222,9 +226,9 @@ def updatePotapovQuestAchievements(accDossierDescr, progress):
         if needToAward and not accDossierDescr[dossierBlockName][achievementName]:
             accDossierDescr[dossierBlockName][achievementName] = True
 
-    if len(completedBranches) and not accDossierDescr['steamAchievements']['steamDoAllBranchPotapovQuestMedal']:
+    if completedBranches and not accDossierDescr['steamAchievements']['steamDoAllBranchPotapovQuestMedal']:
         accDossierDescr['steamAchievements']['steamDoAllBranchPotapovQuestMedal'] = True
-    for chainAchievement, counter in achievementCounters.iteritems():
+    for chainAchievement, counter in viewitems(achievementCounters):
         if chainAchievement not in RECORD_CONFIGS:
             continue
         steps = RECORD_CONFIGS[chainAchievement]
@@ -336,7 +340,7 @@ def __processKillList(dossierDescr, killList):
 
     if killsByTag:
         achievements = dossierDescr['achievements']
-        for record, frags in killsByTag.iteritems():
+        for record, frags in viewitems(killsByTag):
             achievements[record] += frags
 
     return frags8p
@@ -605,7 +609,7 @@ def __updateSteamBasePoints(dossierDescr, results, vehDossiers):
 def __updateSteamFighter(dossierDescr, results, vehDossiers):
     if dossierDescr['steamAchievements']['steamFighterMedal']:
         return
-    for vehTypeCompDescr, (_, _) in vehDossiers.iteritems():
+    for vehTypeCompDescr in vehDossiers:
         killerLevel = getLevel(vehTypeCompDescr)
         break
 
@@ -618,7 +622,7 @@ def __updateSteamFighter(dossierDescr, results, vehDossiers):
 def __updateSteamHardCharacter(dossierDescr, results, vehDossiers):
     if dossierDescr['steamAchievements']['steamHardCharacterMedal']:
         return
-    for vehTypeCompDescr, (_, _) in vehDossiers.iteritems():
+    for vehTypeCompDescr in vehDossiers:
         if 'heavyTank' not in getTags(vehTypeCompDescr):
             return
         break
@@ -629,7 +633,7 @@ def __updateSteamHardCharacter(dossierDescr, results, vehDossiers):
 def __updateSteamMedium(dossierDescr, results, vehDossiers):
     if dossierDescr['steamAchievements']['steamMediumMedal']:
         return
-    for vehTypeCompDescr, (_, _) in vehDossiers.iteritems():
+    for vehTypeCompDescr in vehDossiers:
         if 'mediumTank' not in getTags(vehTypeCompDescr):
             return
         break
@@ -640,7 +644,7 @@ def __updateSteamMedium(dossierDescr, results, vehDossiers):
 def __updateSteamATSPG(dossierDescr, results, vehDossiers):
     if dossierDescr['steamAchievements']['steamATSPGMedal']:
         return
-    for vehTypeCompDescr, (_, _) in vehDossiers.iteritems():
+    for vehTypeCompDescr in vehDossiers:
         if 'AT-SPG' not in getTags(vehTypeCompDescr):
             return
         break
@@ -651,7 +655,7 @@ def __updateSteamATSPG(dossierDescr, results, vehDossiers):
 def __updateSteamDieHard(dossierDescr, results, vehDossiers):
     if dossierDescr['steamAchievements']['steamDieHardMedal']:
         return
-    for vehTypeCompDescr, (_, _) in vehDossiers.iteritems():
+    for vehTypeCompDescr in vehDossiers:
         if 'heavyTank' not in getTags(vehTypeCompDescr):
             return
         break
@@ -664,7 +668,7 @@ def __updateSteamDieHard(dossierDescr, results, vehDossiers):
 def __updateSteamDestroyer(dossierDescr, results, vehDossiers):
     if dossierDescr['steamAchievements']['steamDestroyerMedal']:
         return
-    for vehTypeCompDescr, (_, _) in vehDossiers.iteritems():
+    for vehTypeCompDescr in vehDossiers:
         if 'AT-SPG' not in getTags(vehTypeCompDescr):
             return
         break
@@ -676,7 +680,7 @@ def __updateSteamDestroyer(dossierDescr, results, vehDossiers):
 def __updateSteamMediumPerformance(dossierDescr, results, vehDossiers):
     if dossierDescr['steamAchievements']['steamMediumPerformanceMedal']:
         return
-    for vehTypeCompDescr, (_, _) in vehDossiers.iteritems():
+    for vehTypeCompDescr in vehDossiers:
         if 'mediumTank' not in getTags(vehTypeCompDescr):
             return
         break
@@ -688,7 +692,7 @@ def __updateSteamMediumPerformance(dossierDescr, results, vehDossiers):
 def __updateSteamReconnoiter(dossierDescr, results, vehDossiers):
     if dossierDescr['steamAchievements']['steamReconnoiterMedal']:
         return
-    for vehTypeCompDescr, (_, _) in vehDossiers.iteritems():
+    for vehTypeCompDescr in vehDossiers:
         if 'lightTank' not in getTags(vehTypeCompDescr):
             return
         break
@@ -699,7 +703,7 @@ def __updateSteamReconnoiter(dossierDescr, results, vehDossiers):
 def __updateSteamPotentialStun(dossierDescr, results, vehDossiers):
     if dossierDescr['steamAchievements']['steamPotentialStunMedal']:
         return
-    for vehTypeCompDescr, (_, _) in vehDossiers.iteritems():
+    for vehTypeCompDescr in vehDossiers:
         if 'SPG' not in getTags(vehTypeCompDescr):
             return
         break
@@ -715,7 +719,7 @@ def __updateSteamMileage(dossierDescr, results, vehDossiers):
 def __updateSteamHorizonSupport(dossierDescr, results, vehDossiers):
     if dossierDescr['steamAchievements']['steamHorizonSupportMedal']:
         return
-    for vehTypeCompDescr, (_, _) in vehDossiers.iteritems():
+    for vehTypeCompDescr in vehDossiers:
         if 'SPG' not in getTags(vehTypeCompDescr):
             return
         break
@@ -728,7 +732,7 @@ def __updateSteamHorizonSupport(dossierDescr, results, vehDossiers):
 def __updateSteamSmallSupport(dossierDescr, results, vehDossiers):
     if dossierDescr['steamAchievements']['steamSmallSupportMedal']:
         return
-    for vehTypeCompDescr, (_, _) in vehDossiers.iteritems():
+    for vehTypeCompDescr in vehDossiers:
         if 'lightTank' not in getTags(vehTypeCompDescr):
             return
         break
@@ -808,7 +812,7 @@ def __updateSteamTopLeague(dossierDescr, results, vehDossiers):
         originalXP = -1
         if results['misc'].get('max') is not None:
             originalXP = results['misc']['max']['xp']
-        for vehTypeCompDescr, (_, _) in vehDossiers.iteritems():
+        for vehTypeCompDescr in vehDossiers:
             level = getLevel(vehTypeCompDescr)
             if originalXP == 1 and level == _BATTLE_HERO_CONFIG['steamTopLeague']['level'] and results['originalXP'] >= _BATTLE_HERO_CONFIG['steamTopLeague']['minXP']:
                 dossierDescr['steamAchievements']['steamTopLeague'] += 1

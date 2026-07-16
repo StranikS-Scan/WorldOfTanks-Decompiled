@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dog_tags_common/config/dog_tag_framework.py
+from __future__ import absolute_import
 import inspect
 import sys
 from functools import partial
 import typing
-from common import ParameterType, Visibility, ParseException, ComponentPurpose, ComponentViewType, ComponentNumberType
-from validators import validateTriumphMedal, validateTriumph, validateSkill, validateDedication, validateDedicationUnlock, validateBase, validateRankedSkill, validateViewType, validateCommon, validateStartingComponent, validateCoupled
+from future.utils import viewitems
+from dog_tags_common.config.common import ParameterType, Visibility, ParseException, ComponentPurpose, ComponentViewType, ComponentNumberType
+from dog_tags_common.config.validators import validateTriumphMedal, validateTriumph, validateSkill, validateDedication, validateDedicationUnlock, validateBase, validateRankedSkill, validateViewType, validateCommon, validateStartingComponent, validateCoupled
 if typing.TYPE_CHECKING:
     from typing import List
 
@@ -222,9 +224,9 @@ def buildParserInfo():
         if tag:
             if tag in res:
                 raise ParseException(ParseException.TAG_DUPLICITY, tag)
-            paramNames = set(cls.PARAMS.iterkeys())
+            paramNames = set(cls.PARAMS)
             paramsInfo = {}
-            for paramName, paramType in cls.PARAMS.iteritems():
+            for paramName, paramType in viewitems(cls.PARAMS):
                 if paramName in paramsInfo:
                     raise ParseException(ParseException.PARAM_DUPLICITY, paramName)
                 paramsInfo[paramName] = paramType

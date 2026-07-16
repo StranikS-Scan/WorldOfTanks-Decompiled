@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/auto_shoot_guns/auto_shoot_guns_common.py
+from __future__ import absolute_import
 from constants import SERVER_TICK_LENGTH
 DISCRETE_SHOOTING_THRESHOLD = 0.25
 BURST_VERIFYING_DELTA = 0.0

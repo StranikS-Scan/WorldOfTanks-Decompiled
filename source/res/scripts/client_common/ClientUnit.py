@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/ClientUnit.py
-from typing import TYPE_CHECKING
+from __future__ import absolute_import
 import struct
 from collections import namedtuple
+from future.utils import viewitems, viewvalues
+from typing import TYPE_CHECKING
 import Event
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG_DEV
@@ -42,7 +44,7 @@ class ClientUnit(UnitBase):
         self.onUnitEstimateInQueueChanged = Event.SuspendedEvent(self.__eManager)
         self.onUnitSearchFlagsChanged = Event.SuspendedEvent(self.__eManager)
         self.onUnitExtraChanged = Event.SuspendedEvent(self.__eManager)
-        self.onSquadSizeChanged = Event.SuspendedEvent(self.__eManager)
+        self.onUnitSizeChanged = Event.SuspendedEvent(self.__eManager)
         self.onUnitUpdated = Event.SuspendedEvent(self.__eManager)
         self._creatorDBID = 0
         UnitBase.__init__(self, limitsDefs or {}, slotDefs or {}, slotCount, packedRoster, extrasInit, packedUnit)
@@ -88,9 +90,7 @@ class ClientUnit(UnitBase):
         return self._playerProfileVehicles
 
     def getSelectedVehicleLevels(self):
-        lst = list(set([ vehInfo.vehLevel for vehicles in self._vehicles.itervalues() for vehInfo in vehicles ]))
-        lst.sort()
-        return lst
+        return sorted({vehInfo.vehLevel for vehicles in viewvalues(self._vehicles) for vehInfo in vehicles})
 
     def getRoster(self):
         return self._roster
@@ -103,7 +103,7 @@ class ClientUnit(UnitBase):
 
     def getLegionarySlots(self):
         result = {}
-        for accountDBID, slotIdx in self._playerSlots.iteritems():
+        for accountDBID, slotIdx in viewitems(self._playerSlots):
             playerData = self._players[accountDBID]
             role = playerData.get('role', 0)
             if role & UNIT_ROLE.LEGIONARY:
@@ -163,8 +163,8 @@ class ClientUnit(UnitBase):
         result = False
         if ignored is None:
             ignored = []
-        for rosterSlotIdx, slot in self._roster.slots.iteritems():
-            slotIndex = int(rosterSlotIdx / 2)
+        for rosterSlotIdx, slot in viewitems(self._roster.slots):
+            slotIndex = int(rosterSlotIdx // 2)
             if rosterSlotIdx in ignored or self.isSlotClosed(slotIndex):
                 continue
             if not self._roster.isDefaultSlot(slot):
@@ -202,7 +202,7 @@ class ClientUnit(UnitBase):
         if {UNIT_OP.EXTRAS_UPDATE, UNIT_OP.EXTRAS_RESET} & invokedOps:
             self.onUnitExtraChanged(self._extras)
         if {UNIT_OP.SQUAD_SIZE} & invokedOps:
-            self.onSquadSizeChanged()
+            self.onUnitSizeChanged()
 
     def updateUnitExtras(self, updateStr):
         UnitBase.updateUnitExtras(self, updateStr)
@@ -236,9 +236,9 @@ class ClientUnit(UnitBase):
         UnitBase._setVehicle(self, accountDBID, vehTypeCompDescr, vehInvID)
         self.onUnitVehicleChanged(accountDBID, vehInvID, vehTypeCompDescr)
 
-    def _setVehicleList(self, accountDBID, vehDataList):
-        UnitBase._setVehicleList(self, accountDBID, vehDataList)
-        self.onUnitVehiclesChanged(accountDBID, vehDataList)
+    def _setVehicleList(self, accountDBID, vehShortList):
+        UnitBase._setVehicleList(self, accountDBID, vehShortList)
+        self.onUnitVehiclesChanged(accountDBID, vehShortList)
 
     def _clearVehicle(self, accountDBID):
         UnitBase._clearVehicle(self, accountDBID)
@@ -260,7 +260,7 @@ class ClientUnit(UnitBase):
         accountDBID, hasPlayer = 0, False
         try:
             accountDBID = struct.unpack_from(PLAYER_ID_CHR, packedOps)
-            filtered = dict((item for item in self._players.iteritems() if item[1].get('role', 0) & UNIT_ROLE.INVITED == 0))
+            filtered = dict((item for item in viewitems(self._players) if item[1].get('role', 0) & UNIT_ROLE.INVITED == 0))
             hasPlayer = accountDBID in filtered
         except struct.error as e:
             LOG_ERROR(e)
@@ -318,12 +318,12 @@ class ClientUnit(UnitBase):
 
         return nextOps
 
-    def _giveLeadership(self, memberDBID):
-        prevRoleFlags = self._players[memberDBID]['role']
-        UnitBase._giveLeadership(self, memberDBID)
-        newRoleFlags = self._players[memberDBID]['role']
+    def _giveLeadership(self, newLeaderDBID):
+        prevRoleFlags = self._players[newLeaderDBID]['role']
+        UnitBase._giveLeadership(self, newLeaderDBID)
+        newRoleFlags = self._players[newLeaderDBID]['role']
         prev_creatorDBID = self._creatorDBID
-        self._creatorDBID = memberDBID
+        self._creatorDBID = newLeaderDBID
         self.onUnitMembersListChanged()
-        self.onUnitPlayerRoleChanged(memberDBID, prevRoleFlags, newRoleFlags)
+        self.onUnitPlayerRoleChanged(newLeaderDBID, prevRoleFlags, newRoleFlags)
         self.onUnitPlayerRoleChanged(prev_creatorDBID, prevRoleFlags, newRoleFlags)

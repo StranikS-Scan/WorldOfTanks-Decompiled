@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/quests.py
+from __future__ import absolute_import
 import constants
 from battle_pass_common import BATTLE_PASS_RANDOM_QUEST_ID_PREFIX
 from CurrentVehicle import g_currentVehicle
@@ -103,7 +104,7 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
         requestCriteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
         vehicles = self.__itemsCache.items.getVehicles(requestCriteria).values() or []
         getCurrentModeQuestsForVehicle = self._questController.getCurrentModeQuestsForVehicle
-        return any([ bool(getCurrentModeQuestsForVehicle(veh, True)) for veh in vehicles ])
+        return any((bool(getCurrentModeQuestsForVehicle(veh, True)) for veh in vehicles))
 
     def __getQuestItem(self, quest):
         bonusNames = []
@@ -336,11 +337,9 @@ class RentVehicleAwardTooltipData(BlocksTooltipData):
 
     def _packBlocks(self, *args, **kwargs):
         items = super(RentVehicleAwardTooltipData, self)._packBlocks()
-        blocks = list()
-        blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.QUESTS_AWARDS_VEHICLERENT_HEADER), padding=formatters.packPadding(top=8)))
-        blocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.premiumVehicleName(TOOLTIPS.QUESTS_AWARDS_VEHICLERENT_EXPIRE), value='', icon=ICON_TEXT_FRAMES.RENTALS, padding=formatters.packPadding(left=-60), iconYOffset=3))
+        blocks = [formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.QUESTS_AWARDS_VEHICLERENT_HEADER), padding=formatters.packPadding(top=8)), formatters.packTextParameterWithIconBlockData(name=text_styles.premiumVehicleName(TOOLTIPS.QUESTS_AWARDS_VEHICLERENT_EXPIRE), value='', icon=ICON_TEXT_FRAMES.RENTALS, padding=formatters.packPadding(left=-60), iconYOffset=3)]
         items.append(formatters.packBuildUpBlockData(blocks, padding=formatters.packPadding(bottom=-19)))
-        blocks = list()
+        blocks = []
         vehiclesCount = 0
         for rentVehicleData in args:
             rentVehicleData = flashObject2Dict(rentVehicleData)

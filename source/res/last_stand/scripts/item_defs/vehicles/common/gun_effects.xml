@@ -1115,4 +1115,26 @@
       </shotSound>
     </effects>
   </LS_shot_auto>
+  <LS_shot_Bastion_bot>
+    <timeline>
+      <lighting2>	0.075	</lighting2>
+      <end>	0.3	</end>
+      <endpixie>	0.1	</endpixie>
+      <soundplaystop>	8	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/Tank/shots/last_stand/ls_shot_bastion_bot.eff	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	ls_gp_enemies_bastion_gun_shot_NPC	</wwsoundPC>
+        <wwsoundNPC>	ls_gp_enemies_bastion_gun_shot_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
+  </LS_shot_Bastion_bot>
 </gun_effects.xml>

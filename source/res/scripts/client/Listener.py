@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Listener.py
+from __future__ import absolute_import
 import copy
 import weakref
 
@@ -28,7 +29,7 @@ class _Listeners(object):
     def removeListener(self, eventName, fn):
         if eventName in self.listeners and fn in self.listeners[eventName]:
             self.listeners[eventName].remove(fn)
-        if len(self.listeners[eventName]) == 0:
+        if eventName in self.listeners and len(self.listeners[eventName]) == 0:
             del self.listeners[eventName]
 
     def __getattribute__(self, name):
@@ -97,15 +98,15 @@ class FunctionListeners(object):
         self.listeners.append(_ListenerFunc(func))
 
     def remove(self, func):
-        for l in self.listeners:
-            if l.matches(func):
-                self.listeners.remove(l)
+        for listener in self.listeners:
+            if listener.matches(func):
+                self.listeners.remove(listener)
                 break
 
     def reset(self):
         self.listeners = []
 
     def __call__(self, *args, **kwargs):
-        self.listeners = [ l for l in self.listeners if l.alive() ]
-        for l in self.listeners:
-            l(*args, **kwargs)
+        self.listeners = [ item for item in self.listeners if item.alive() ]
+        for listener in self.listeners:
+            listener(*args, **kwargs)

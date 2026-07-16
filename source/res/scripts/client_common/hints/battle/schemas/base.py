@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/hints/battle/schemas/base.py
+from __future__ import absolute_import
 import logging
 import typing
 from constants import IS_DEVELOPMENT, IS_VS_EDITOR
@@ -212,7 +213,7 @@ def validateHintTextModel(model):
     count = sum([ 1 for text in (model.raw, model.key, model.template) if text ])
     if count <= 0:
         raise exceptions.ValidationError('Text not provided.')
-    elif count != 1:
+    if count != 1:
         raise exceptions.ValidationError('More than one text source provided.')
 
 

@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/perks/vse_plan.py
+from __future__ import absolute_import
 import BigWorld
 import VSE
 from constants import IS_CELLAPP
 from items import perks
 from visual_script.misc import ASPECT
 from functools import wraps
-from debug_utils import LOG_ERROR, LOG_DEBUG_DEV, LOG_WARNING, LOG_DEBUG
+from debug_utils import LOG_ERROR, LOG_DEBUG_DEV, LOG_WARNING
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from visual_script.contexts.perks_context import PerkContext

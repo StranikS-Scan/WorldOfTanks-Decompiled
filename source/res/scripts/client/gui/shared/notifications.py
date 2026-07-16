@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/notifications.py
+from __future__ import absolute_import
 import logging
 from constants import IS_DEVELOPMENT, NC_MESSAGE_PRIORITY
 _logger = logging.getLogger(__name__)

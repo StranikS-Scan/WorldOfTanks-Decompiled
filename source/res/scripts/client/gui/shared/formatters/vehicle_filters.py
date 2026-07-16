@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/formatters/vehicle_filters.py
+from __future__ import absolute_import
+from builtins import range
 from constants import MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from nations import INDICES
 from gui import GUI_NATIONS, GUI_NATIONS_ORDER_INDEX
@@ -47,7 +49,7 @@ def packNationsFilter(nations=GUI_NATIONS):
     return result
 
 
-def packVehicleLevelsFilter(levelRange=range(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL + 1)):
+def packVehicleLevelsFilter(levelRange=tuple(range(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL + 1))):
     result = [{'label': MENU.LEVELS_ALL,
       'data': -1,
       'icon': getLevelsAssetPath('level_all')}]

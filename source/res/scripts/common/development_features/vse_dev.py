@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/development_features/vse_dev.py
+from __future__ import absolute_import
 import fnmatch
 import logging
 import os
@@ -39,7 +40,7 @@ def unwrapBlock(block):
 
 def collectPlans(vseDir, testDir, include, exclude=None):
     collected = []
-    for root, dirs, files in os.walk(os.path.join(vseDir, testDir)):
+    for root, _, files in os.walk(os.path.join(vseDir, testDir)):
         for fn in files:
             relPath = os.path.relpath(os.path.join(root, fn), vseDir)
             included = any((fnmatch.fnmatch(relPath, '*' + p) for p in include))
@@ -59,10 +60,10 @@ def runTestPlan(planPath, aspect=None):
         if not self._value.getValue():
             logger.error('[FAILED] VSE assert: %s', self._msg.getValue())
         else:
-            logger.warn('[PASSED] VSE assert: %s', self._msg.getValue())
+            logger.warning('[PASSED] VSE assert: %s', self._msg.getValue())
 
     wrapBlock(Assert, _logAssert)
-    logger.warn('-- running VSE test plan: %s ', planPath)
+    logger.warning('-- running VSE test plan: %s ', planPath)
     if aspect is None:
         aspect = 'CLIENT'
     if planObj.load(planPath, '', aspect):

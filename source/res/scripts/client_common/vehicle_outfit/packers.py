@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/vehicle_outfit/packers.py
+from __future__ import absolute_import
 from itertools import product
+from past.builtins import long
 from debug_utils import LOG_WARNING
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from items.components.c11n_constants import CustomizationType
@@ -14,7 +16,7 @@ def pickPacker(itemTypeID):
         return CamouflagePacker
     if itemTypeID == GUI_ITEM_TYPE.PAINT:
         return PaintPacker
-    if itemTypeID == GUI_ITEM_TYPE.EMBLEM or itemTypeID == GUI_ITEM_TYPE.INSCRIPTION:
+    if itemTypeID in (GUI_ITEM_TYPE.EMBLEM, GUI_ITEM_TYPE.INSCRIPTION):
         return DecalPacker
     if itemTypeID == GUI_ITEM_TYPE.MODIFICATION:
         return ModificationPacker

@@ -41,7 +41,7 @@ class BattleSessionList(PrebattlesListWindow, BattleSessionListMeta):
         if self.lobbyContext.isAnotherPeriphery(item.peripheryID):
             self.fireEvent(events.LoadViewEvent(SFViewLoadParams(PREBATTLE_ALIASES.AUTO_INVITE_WINDOW_PY), ctx={'prbID': prbID}), scope=EVENT_BUS_SCOPE.LOBBY)
         else:
-            self.__requestToJoin(prbID, prbType)
+            self.__requestToJoin(prbID, prbType, item.peripheryID)
 
     def getClientID(self):
         return channel_num_gen.getClientID4LazyChannel(LAZY_CHANNEL.SPECIAL_BATTLES)
@@ -66,8 +66,8 @@ class BattleSessionList(PrebattlesListWindow, BattleSessionListMeta):
         self.destroy()
 
     @adisp_process
-    def __requestToJoin(self, prbID, prbType):
-        yield self.prbDispatcher.join(JoinBattleSessionCtx(prbID, prbType, 'prebattle/join'))
+    def __requestToJoin(self, prbID, prbType, prbClusterID):
+        yield self.prbDispatcher.join(JoinBattleSessionCtx(prbID, prbType, prbClusterID, 'prebattle/join'))
 
     def __onBSListReceived(self, sessions):
         result = []

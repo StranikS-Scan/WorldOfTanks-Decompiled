@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: last_stand/scripts/common/last_stand_common/ls_battle_feedback.py
+from __future__ import absolute_import
 from collections import namedtuple
 LSGameplayAction = namedtuple('LSGameplayAction', ('value', 'targetID', 'id'))
 

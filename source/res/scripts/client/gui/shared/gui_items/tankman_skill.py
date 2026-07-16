@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/tankman_skill.py
+from __future__ import absolute_import
 import typing
 from gui.impl import backport
 from gui.impl.gen import R
@@ -188,6 +189,9 @@ class TankmanSkill(_SkillData, _SkillPresenter):
 
     def __eq__(self, other):
         return False if not isinstance(other, TankmanSkill) else self.name == other.name
+
+    def __hash__(self):
+        return hash(self.name)
 
 
 def getIsSkillEnable(skillName, roles):

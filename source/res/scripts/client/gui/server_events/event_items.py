@@ -1390,7 +1390,7 @@ class PersonalMission(ServerEventAbstract):
         return self.__canBePawned and not self.isMainCompleted()
 
     def isDone(self):
-        return self.__checkForStates(_PMS.ALL_REWARDS_GOTTEN)
+        return self.__checkForStates(_PMS.NEED_GET_ALL_REWARDS, _PMS.ALL_REWARDS_GOTTEN)
 
     def needToGetMainReward(self):
         return self.__checkForStates(_PMS.NEED_GET_ALL_REWARDS, _PMS.NEED_GET_MAIN_REWARD)

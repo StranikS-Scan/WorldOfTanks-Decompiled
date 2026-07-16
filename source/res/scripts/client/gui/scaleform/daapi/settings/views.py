@@ -222,6 +222,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     FEEDBACK_BATTLE_BORDER_MAP = 'feedbackBattleBorderMap'
     FEEDBACK_QUESTS_PROGRESS = 'feedbackQuestsProgress'
     USER_MISSIONS_HUB_CONTAINER = 'userMissionsHubContainer'
+    CHALLENGES_INFO = 'challengesInfo'
     BATTLE_PAGES = (CLASSIC_BATTLE_PAGE,
      DEV_BATTLE_PAGE,
      EVENT_BATTLE_PAGE,

@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/repositories.py
+from __future__ import absolute_import
 import logging
 import typing
 from constants import ARENA_GUI_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
-from gui.armor_flashlight.battle_controller import ArmorFlashlightBattleController
 from gui.battle_control.arena_info.interfaces import IArenaController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, REUSABLE_BATTLE_CTRL_IDS, getBattleCtrlName
 from gui.battle_control.controllers import aiming_sounds_ctrl
@@ -426,6 +426,7 @@ class SharedControllersRepository(_ControllersRepository):
     def create(cls, setup):
         repository = cls()
         from gui.battle_control.controllers import crosshair_proxy
+        from gui.armor_flashlight.battle_controller import ArmorFlashlightBattleController
         repository.addController(crosshair_proxy.CrosshairDataProxy())
         ammo = consumables.createAmmoCtrl(setup)
         repository.addViewController(ammo, setup)
@@ -441,7 +442,7 @@ class SharedControllersRepository(_ControllersRepository):
         feedback = feedback_adaptor.createFeedbackAdaptor(setup)
         repository.addController(feedback)
         repository.addController(messages)
-        repository.addController(chat_cmd_ctrl.ChatCommandsController(setup, feedback, ammo))
+        repository.addController(cls.getChatCommandsController(setup, feedback, ammo))
         repository.addController(drr_scale_ctrl.DRRScaleController(messages))
         repository.addController(personal_efficiency_ctrl.createEfficiencyCtrl(setup, feedback, state))
         repository.addController(game_restrictions_msgs_ctrl.createGameRestrictionsMessagesController())
@@ -479,6 +480,10 @@ class SharedControllersRepository(_ControllersRepository):
     @classmethod
     def getOptionalDevicesController(cls, setup):
         return consumables.createOptDevicesCtrl(setup)
+
+    @classmethod
+    def getChatCommandsController(cls, setup, feedback, ammo):
+        return chat_cmd_ctrl.ChatCommandsController(setup, feedback, ammo)
 
     @classmethod
     def getAreaMarkersController(cls):

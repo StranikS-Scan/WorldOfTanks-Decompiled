@@ -28,5 +28,5 @@ class BattleRoyaleProgressionQuestTooltip(BaseQuestTooltip):
             fillViewModelsArray(packedBonuses, vm.getBonuses())
             packMissionItem(vm, self._quest, DailyQuestUIDataPacker)
 
-    def _getRewardsSortFunc(self):
+    def _getRewardsSortKey(self):
         return None

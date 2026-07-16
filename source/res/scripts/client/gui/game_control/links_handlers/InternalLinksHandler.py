@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/links_handlers/InternalLinksHandler.py
+from __future__ import absolute_import
+from future.utils import iteritems
 from adisp import adisp_async, adisp_process
 from debug_utils import LOG_ERROR
 from gui import GUI_SETTINGS
@@ -21,7 +23,7 @@ class InternalLinksHandler(IInternalLinksController):
     def init(self):
         self.__urlMacros = URLMacros()
         addListener = g_eventBus.addListener
-        for eventType, handlerName in _LISTENERS.iteritems():
+        for eventType, handlerName in iteritems(_LISTENERS):
             handler = getattr(self, handlerName, None)
             if not handler:
                 LOG_ERROR('Handler is not found', eventType, handlerName)
@@ -39,7 +41,7 @@ class InternalLinksHandler(IInternalLinksController):
             self.__urlMacros = None
         self._browserID = None
         removeListener = g_eventBus.removeListener
-        for eventType, handlerName in _LISTENERS.iteritems():
+        for eventType, handlerName in iteritems(_LISTENERS):
             handler = getattr(self, handlerName, None)
             if handler:
                 removeListener(eventType, handler)

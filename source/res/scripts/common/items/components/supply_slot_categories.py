@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/supply_slot_categories.py
+from __future__ import absolute_import
 from typing import Set, Any, Optional, List, Dict, Tuple
 from ResMgr import DataSection
-from debug_utils import LOG_CODEPOINT_WARNING, LOG_WARNING
+from debug_utils import LOG_CODEPOINT_WARNING
 from items import _xml
 from soft_exception import SoftException
 

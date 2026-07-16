@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/goodies/pr2_converter.py
-from typing import TYPE_CHECKING
+from __future__ import absolute_import, division
 from math import ceil
+from typing import TYPE_CHECKING
+from future.utils import viewitems
 if TYPE_CHECKING:
     from typing import List, Tuple
     ConversionDataType = Tuple[int, int, int, int, int]
@@ -18,7 +20,7 @@ _NEW_ID_TO_OLD_IDS = {XP: (5061, 5062, 9015, 9017, 9019, 9021, 9023, 9025, 11001
  XP_DEF: tuple(range(5020, 5028)) + (5060, 10001, 10002, 10003),
  CRED_DEF: tuple(range(5042, 5050)) + (5065,),
  XP_CREW_FREE_DEF: tuple(range(5029, 5042)) + (5052, 6002, 6003, 6005) + tuple(range(9027, 9035)) + tuple(range(10011, 10014)) + tuple(range(10021, 10024))}
-_OLD_ID_TO_NEW_ID = {oldId:newId for newId, oldItems in _NEW_ID_TO_OLD_IDS.iteritems() for oldId in oldItems}
+_OLD_ID_TO_NEW_ID = {oldId:newId for newId, oldItems in viewitems(_NEW_ID_TO_OLD_IDS) for oldId in oldItems}
 
 class BType(object):
     GOLD = 10
@@ -32,7 +34,7 @@ class BType(object):
 
 def postConversionByType(convertedByState):
     convertedByNewID = {}
-    for (oldType, newBoosterId), newCount in convertedByState.iteritems():
+    for (oldType, newBoosterId), newCount in viewitems(convertedByState):
         if oldType in (BType.FREE_XP, BType.CREW_XP):
             savedResult = convertedByNewID.get(newBoosterId, 0)
             if savedResult >= newCount:

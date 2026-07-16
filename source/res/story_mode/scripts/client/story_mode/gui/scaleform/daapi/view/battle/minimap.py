@@ -4,7 +4,7 @@ import BattleReplay
 import BigWorld
 import CGF
 import Math
-from BunkerLogicComponent import BunkerLogicComponent
+from story_mode.cgf_components.bunkers import BunkersSystem
 from aih_constants import CTRL_MODE_NAME
 from constants import IS_DEVELOPMENT
 from gui.Scaleform.daapi.view.battle.classic.minimap import ClassicTeleportPlugin, ClassicMinimapPingPlugin
@@ -91,9 +91,9 @@ class BunkersPlugin(SimplePlugin):
         if entity.health == 0:
             self._setActive(entityId, True)
         elif entity.isActive:
-            bunkerQuery = CGF.Query(BigWorld.player().spaceID, (CGF.GameObject, BunkerLogicComponent))
-            bunkerLogic = next((bunker for _, bunker in bunkerQuery if bunker.destructibleEntityId == entity.destructibleEntityID), None)
-            if bunkerLogic:
+            bunkersSystem = CGF.getSystem(BigWorld.player().spaceID, BunkersSystem)
+            bunkerLogic = bunkersSystem.findActiveBunkerDirect(entity.destructibleEntityID)
+            if bunkerLogic is not None:
                 distance = (entity.position - avatar_getter.getOwnVehiclePosition()).length
                 self._setActive(entityId, distance < bunkerLogic.markerDistance)
         else:

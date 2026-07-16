@@ -19,18 +19,13 @@ if TYPE_CHECKING:
 class _Presenters(PresentersMap):
 
     def _makeLoadersMap(self):
-        return {SubViewID.NO_BOXES: self.__loadNoBoxes,
-         SubViewID.HAS_BOXES: self.__loadHasBoxes,
+        return {SubViewID.HOME: self.__loadHome,
          SubViewID.SINGLE_BOX_REWARDS: self.__loadSingleBoxRewards,
          SubViewID.MULTIPLE_BOXES_REWARDS: self.__loadMultipleBoxesRewards}
 
-    def __loadNoBoxes(self):
-        from gui.impl.lobby.lootbox_system.base.submodels.no_boxes import NoBoxes
-        return NoBoxes(self._mainView.viewModel.noBoxes, self._mainView)
-
-    def __loadHasBoxes(self):
-        from gui.impl.lobby.lootbox_system.base.submodels.has_boxes import HasBoxes
-        return HasBoxes(self._mainView.viewModel.hasBoxes, self._mainView)
+    def __loadHome(self):
+        from gui.impl.lobby.lootbox_system.base.submodels.home import Home
+        return Home(self._mainView.viewModel.home, self._mainView)
 
     def __loadSingleBoxRewards(self):
         from gui.impl.lobby.lootbox_system.base.submodels.single_box_rewards import SingleBoxRewards
@@ -98,7 +93,7 @@ class MainView(MainViewImpl):
         return _Presenters(self)
 
     def _getDefaultSubViewID(self):
-        return SubViewID.HAS_BOXES if self.__lootBoxes.getBoxesCount(self.__eventName) else SubViewID.NO_BOXES
+        return SubViewID.HOME
 
     def __onResourcesLoadCompleted(self):
         Waiting.hide('loading')

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/oit_availability_controller.py
+from __future__ import absolute_import
 import BigWorld
 from PlayerEvents import g_playerEvents
 from config_schemas.oit_availability import oitAvailabilitySchema

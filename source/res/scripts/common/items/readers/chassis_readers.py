@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/readers/chassis_readers.py
+from __future__ import absolute_import
 import math
+from future.utils import lrange
+from past.builtins import intern
 import ResMgr
 from items import _xml
 from items.components import chassis_components
@@ -35,7 +38,7 @@ def readWheelsAndGroups(xmlCtx, section):
             wheelId += 1
 
     wheelIndices = [ wheel.index for wheel in wheels ]
-    if sorted(wheelIndices) == range(len(wheels)):
+    if sorted(wheelIndices) == lrange(len(wheels)):
         sortedWheels = [None] * len(wheels)
         for wheel in wheels:
             sortedWheels[wheel.index] = wheel

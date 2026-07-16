@@ -159,12 +159,12 @@ class _CrosshairShotResults(object):
     _PP_RANDOM_ADJUSTMENT_MIN = 0.5
     _MAX_HIT_ANGLE_BOUND = math.pi / 2.0 - 1e-05
     _CRIT_ONLY_SHOT_RESULT = _SHOT_RESULT.NOT_PIERCED
-    shellExtraData = namedtuple('shellExtraData', ('hasNormalization', 'mayRicochet', 'checkCaliberForRicochet', 'jetLossPPByDist'))
-    _SHELL_EXTRA_DATA = {constants.SHELL_TYPES.ARMOR_PIERCING: shellExtraData(True, True, True, 0.0),
-     constants.SHELL_TYPES.ARMOR_PIERCING_CR: shellExtraData(True, True, True, 0.0),
-     constants.SHELL_TYPES.ARMOR_PIERCING_HE: shellExtraData(True, False, False, 0.0),
-     constants.SHELL_TYPES.HOLLOW_CHARGE: shellExtraData(False, True, False, 0.5),
-     constants.SHELL_TYPES.HIGH_EXPLOSIVE: shellExtraData(False, False, False, 0.0)}
+    shellExtraData = namedtuple('shellExtraData', ('hasNormalization', 'mayRicochet', 'checkCaliberForRicochet', 'hasPenetrationLoss'))
+    _SHELL_EXTRA_DATA = {constants.SHELL_TYPES.ARMOR_PIERCING: shellExtraData(True, True, True, False),
+     constants.SHELL_TYPES.ARMOR_PIERCING_CR: shellExtraData(True, True, True, False),
+     constants.SHELL_TYPES.ARMOR_PIERCING_HE: shellExtraData(True, False, False, False),
+     constants.SHELL_TYPES.HOLLOW_CHARGE: shellExtraData(False, True, False, True),
+     constants.SHELL_TYPES.HIGH_EXPLOSIVE: shellExtraData(False, False, False, False)}
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     @classmethod
@@ -322,7 +322,11 @@ class _CrosshairShotResults(object):
             if isJet:
                 jetDist = cDetails.dist - jetStartDist
                 if jetDist > 0.0:
-                    lossByDist = 1.0 - jetDist * cls._SHELL_EXTRA_DATA[shell.kind].jetLossPPByDist
+                    if cls._SHELL_EXTRA_DATA[shell.kind].hasPenetrationLoss:
+                        jetLossPPByDist = shell.type.piercingPowerLossFactorByDistance
+                    else:
+                        jetLossPPByDist = 0.0
+                    lossByDist = 1.0 - jetDist * jetLossPPByDist
                     piercingPower *= lossByDist
                     minPiercingPower = round(minPiercingPower * lossByDist)
                     maxPiercingPower = round(maxPiercingPower * lossByDist)
@@ -369,7 +373,7 @@ class _CrosshairShotResults(object):
                     ignoredMaterials.add((cDetails.compName, matInfo.kind))
             if piercingPower <= 0.0:
                 break
-            if cls._SHELL_EXTRA_DATA[shell.kind].jetLossPPByDist > 0.0:
+            if cls._SHELL_EXTRA_DATA[shell.kind].hasPenetrationLoss:
                 isJet = True
                 mInfo = cDetails.matInfo
                 armor = mInfo.armor if mInfo is not None else 0.0

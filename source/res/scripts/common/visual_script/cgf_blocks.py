@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/cgf_blocks.py
+from __future__ import absolute_import
 import weakref
 from visual_script.block import Meta, Block
 from visual_script.misc import ASPECT
@@ -37,24 +38,3 @@ class GetEntityGameObject(Block, CGFMeta):
         gameObject = entity.entityGameObject
         goWrapper = GameObjectWrapper(gameObject)
         self._gameObject.setValue(weakref.proxy(goWrapper))
-
-
-class TransferOwnershipToWorld(Block, CGFMeta):
-
-    def __init__(self, *args, **kwargs):
-        super(TransferOwnershipToWorld, self).__init__(*args, **kwargs)
-        self._in = self._makeEventInputSlot('in', self._exec)
-        self._go = self._makeDataInputSlot('GO', SLOT_TYPE.GAME_OBJECT)
-        self._out = self._makeEventOutputSlot('out')
-
-    def _exec(self):
-        if self._go.hasValue():
-            go = self._go.getValue()
-            if go is not None:
-                go.transferOwnershipToWorld()
-        self._out.call()
-        return
-
-    @classmethod
-    def blockAspects(cls):
-        return [ASPECT.CLIENT, ASPECT.SERVER]

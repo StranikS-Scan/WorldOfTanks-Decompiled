@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/ClientUnitMgr.py
-import cPickle
-from ClientUnit import ClientUnit
+from __future__ import absolute_import
+from future.moves import pickle
+from future.utils import iteritems, listvalues
 import Event
+from ClientUnit import ClientUnit
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
 from UnitBase import UNIT_SLOT, UNIT_BROWSER_CMD, UNIT_BROWSER_TYPE, UNIT_ERROR, CMD_NAMES
 from unit_roster_config import UnitRosterSlot
@@ -103,7 +105,7 @@ class ClientUnitMgr(UnitClientAPI):
     def setAllRosterSlots(self, rosterDefsDict):
         LOG_DEBUG('setAllRosterSlots: rosterDefsDict=%r' % rosterDefsDict)
         rosterSlots = {}
-        for rosterSlotIdx, rosterDict in rosterDefsDict.iteritems():
+        for rosterSlotIdx, rosterDict in iteritems(rosterDefsDict):
             vehTypeID = rosterDict.get('vehTypeID', None)
             nationNames = rosterDict.get('nationNames', [])
             levels = rosterDict.get('levels', None)
@@ -112,7 +114,7 @@ class ClientUnitMgr(UnitClientAPI):
             rosterSlots[rosterSlotIdx] = rSlot.pack()
 
         LOG_DEBUG('unit.setAllRosterSlots: rosterSlots=%r' % rosterSlots, self.id)
-        return self._callAPI('setRosterSlots', self.id, rosterSlots.keys(), rosterSlots.values())
+        return self._callAPI('setRosterSlots', self.id, list(rosterSlots), listvalues(rosterSlots))
 
     def _callAPI(self, methodName, *args):
         requestID = self.__getNextRequestID()
@@ -199,7 +201,7 @@ class ClientUnitBrowser(object):
         self.onErrorReceived(errorCode, errorString)
 
     def onResultsSet(self, pickledBrowserResultsList):
-        browserResultsList = cPickle.loads(pickledBrowserResultsList)
+        browserResultsList = pickle.loads(pickledBrowserResultsList)
         LOG_DEBUG('unitBrowser.onResultsSet: %s' % browserResultsList)
         self.results.clear()
         for row in browserResultsList:
@@ -214,10 +216,10 @@ class ClientUnitBrowser(object):
         self.onResultsReceived(self.results)
 
     def onResultsUpdate(self, pickledBrowserUpdatesDict):
-        browserUpdatesDict = cPickle.loads(pickledBrowserUpdatesDict)
+        browserUpdatesDict = pickle.loads(pickledBrowserUpdatesDict)
         LOG_DEBUG('unitBrowser.onResultsUpdate: %s' % browserUpdatesDict)
         res = {}
-        for cfdUnitID, (cmdrRating, strUnitPack) in browserUpdatesDict.iteritems():
+        for cfdUnitID, (cmdrRating, strUnitPack) in iteritems(browserUpdatesDict):
             try:
                 if strUnitPack is None:
                     self.results.pop(cfdUnitID, None)

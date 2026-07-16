@@ -61,6 +61,7 @@ class BattlePassPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewComponen
     def __init__(self):
         self._firstUpdatePerformed = False
         self._readyForAnimations = self.__hangarSpace.spaceInited
+        self._isOffersUpdatedCall = False
         super(BattlePassPresenter, self).__init__(model=BattlePassModel)
 
     @property
@@ -109,7 +110,9 @@ class BattlePassPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewComponen
 
     def _onOffersUpdated(self, *_):
         if not self.__battlePass.isDisabled():
+            self._isOffersUpdatedCall = True
             self._updateOptional()
+            self._isOffersUpdatedCall = False
 
     def _delayedUpdateAfterSpaceCreated(self):
         if self._isFinalized:
@@ -166,7 +169,8 @@ class BattlePassPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewComponen
         rewards = set(self.__battlePass.getNotChosenRewardsIter())
         rewardsHash = _g_entryLastState.getRewardsHash(rewards)
         self._fillModel(tx, chapterID, points, limit, level, rewardsHash)
-        self._fillLastSeen(tx, chapterID, points, level, rewards, rewardsHash)
+        if not self._isOffersUpdatedCall:
+            self._fillLastSeen(tx, chapterID, points, level, rewards, rewardsHash)
 
     def _fillModel(self, tx, chapterID, points, limit, level, rewardsHash):
         extraChapterId = getExtraChapterID()

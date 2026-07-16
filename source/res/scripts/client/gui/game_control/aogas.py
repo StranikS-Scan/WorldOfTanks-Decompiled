@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/AOGAS.py
+from __future__ import absolute_import, division
 import time
 import weakref
+from builtins import round
 import BigWorld
 import Event
 from constants import AOGAS_TIME, ACCOUNT_ATTR

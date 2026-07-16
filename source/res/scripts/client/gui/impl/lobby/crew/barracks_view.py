@@ -42,7 +42,7 @@ class BarracksView(BaseTankmanListView):
     specialSounds = dependency.descriptor(ISpecialSoundCtrl)
     eventsCache = dependency.descriptor(IEventsCache)
     crewController = dependency.descriptor(ICrewController)
-    __slots__ = ('__dataProviders', '__filterState', '__hasFilters', '__filterPanelWidget', '__berthPrice', '__berthsInPack', '__defaultBerthPrice', '__tankmenStatsCache')
+    __slots__ = ('__dataProviders', '__filterState', '__hasFilters', '__filterPanelWidget', '__berthPrice', '__berthsInPack', '__defaultBerthPrice', '__tankmenStatsCache', '__recruitsForVisit')
 
     def __init__(self, layoutID=R.views.lobby.crew.BarracksView(), *args, **kwargs):
         settings = ViewSettings(layoutID, flags=ViewFlags.LOBBY_SUB_VIEW, model=BarracksViewModel(), args=args, kwargs=kwargs)
@@ -166,6 +166,10 @@ class BarracksView(BaseTankmanListView):
             _, time = restore_contoller.getTankmenRestoreInfo(tankman)
             tm.setTimeToDismiss(time)
         cardsList.addViewModel(tm)
+
+    def _fillVisibleCards(self, cardsList):
+        self.__refreshRecruitsForVisit()
+        super(BarracksView, self)._fillVisibleCards(cardsList)
 
     def _fillRecruitCard(self, cardsList, recruitInfo):
         tm = TankmanModel()

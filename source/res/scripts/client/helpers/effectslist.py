@@ -1433,7 +1433,7 @@ def _getDynCollisionTransformProvider(entityID, componentIDx):
         return None
     else:
         go = vehicle.appearance.collisions.getPartGameObject(componentIDx)
-        return vehicle.appearance.collisions.getPartTransformProvider(componentIDx) if go.isValid() else None
+        return vehicle.appearance.collisions.getPartTransformProvider(componentIDx) if go.valid else None
 
 
 def _getSurfaceAlignedTransform(model, nodeName, localTransform, precalculatedNormal=None):

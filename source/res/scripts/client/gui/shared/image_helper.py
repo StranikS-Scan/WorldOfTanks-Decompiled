@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/image_helper.py
+from __future__ import absolute_import
+from future.utils import viewitems, viewvalues
 import BigWorld
 import ResMgr
 from adisp import adisp_async
@@ -56,7 +58,7 @@ class ImagesFetchCoordinator(object):
         self.__isDying = False
 
     def __del__(self):
-        for url, imageID in self.__texturesCache.iteritems():
+        for url, imageID in viewitems(self.__texturesCache):
             LOG_ERROR('Image "{}" was not removed from memory (id={}). Perhaps, forgot to call "fini"'.format(url, imageID))
 
     @adisp_async
@@ -88,7 +90,7 @@ class ImagesFetchCoordinator(object):
             removeTextureFromMemory(self.__texturesCache[url])
 
     def clearAllMappedImages(self):
-        for imageID in self.__texturesCache.values():
+        for imageID in viewvalues(self.__texturesCache):
             removeTextureFromMemory(imageID)
 
         self.__texturesCache.clear()

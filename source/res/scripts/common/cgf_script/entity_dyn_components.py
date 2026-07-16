@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/cgf_script/entity_dyn_components.py
+from __future__ import absolute_import
 from cgf_network import processCreateDynamicComponent, processDestroyDynamicComponent
 
 class BWEntitiyComponentTracker(object):
@@ -8,13 +9,11 @@ class BWEntitiyComponentTracker(object):
         networkID = getattr(component, 'game_object_network_id', None)
         if networkID is not None:
             processCreateDynamicComponent(networkID, self.spaceID, component)
-        else:
-            existing = self.entityGameObject.findComponentByType(type(component))
-            if existing is None:
-                self.entityGameObject.addComponent(component)
+        elif not self.entityGameObject.hasComponent(type(component)):
+            self.entityGameObject.assignComponent(component)
         supMethod = getattr(super(BWEntitiyComponentTracker, self), 'onDynamicComponentCreated', None)
-        if supMethod is not None:
-            supMethod(self, component)
+        if callable(supMethod):
+            supMethod(component)
         return
 
     def onDynamicComponentDestroyed(self, component):
@@ -22,10 +21,10 @@ class BWEntitiyComponentTracker(object):
         if networkID is not None:
             processDestroyDynamicComponent(networkID, self.spaceID, component)
         else:
-            existing = self.entityGameObject.findComponentByType(type(component))
-            if existing is component:
-                self.entityGameObject.removeComponent(component)
+            tp = type(component)
+            if self.entityGameObject.hasComponent(tp):
+                self.entityGameObject.removeComponent(tp)
         supMethod = getattr(super(BWEntitiyComponentTracker, self), 'onDynamicComponentDestroyed', None)
-        if supMethod is not None:
-            supMethod(self, component)
+        if callable(supMethod):
+            supMethod(component)
         return

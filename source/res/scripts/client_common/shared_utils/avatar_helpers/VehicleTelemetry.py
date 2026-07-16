@@ -1,15 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/shared_utils/avatar_helpers/VehicleTelemetry.py
-from __future__ import absolute_import, print_function
-import cPickle
+from __future__ import absolute_import, division, print_function
 import zlib
 import math
 import os.path
 import datetime
+from builtins import open
+from future.moves import pickle
+from future.utils import viewitems
 import ResMgr
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CODEPOINT_WARNING
 from constants import ENABLE_DEBUG_DYNAMICS_INFO
 from physics_shared import G
+from py2to3.compat.ioCompat import UnicodeFileAdapter
 
 class VehicleTelemetry(object):
 
@@ -66,7 +69,7 @@ class VehicleTelemetry(object):
         self.saveTextLog = saveTextLog
         self.logName = self.__generateDynamicsLogName()
         cmd = cmd.strip()
-        zippedArg = zlib.compress(cPickle.dumps((rapidModeSpeedup, cmd)), 9)
+        zippedArg = zlib.compress(pickle.dumps((rapidModeSpeedup, cmd)), 9)
         self.__completionFlag = False
         self.avatar.base.setDevelopmentFeature(0, 'record_vehicle_dynamics', 0, zippedArg)
 
@@ -81,7 +84,7 @@ class VehicleTelemetry(object):
         self.refTime = refTime
         self.refDist = refDist
         if self.saveTextLog:
-            self.dynamicsLog = open(self.logPath, 'w')
+            self.dynamicsLog = UnicodeFileAdapter(open(self.logPath, 'w', encoding='utf-8'))
             self.__writeHeader()
 
     HEADER_TEMPLATE = '# vehicle : {}\n# engine  : {}\n# chassis : {}\n# scenario: {}\n#  time    distance    Vz      Vx        Az       Ax      X        Y       Z         w        wcc     yaw      pitch     roll     r   health\n'
@@ -99,7 +102,7 @@ class VehicleTelemetry(object):
         if self.dynamicsData:
             dataFileName = '{}.pkl'.format(self.logName)
             with open(os.path.join(VehicleTelemetry.DYNAMICS_LOG_DIR, dataFileName), 'wb') as dataFile:
-                cPickle.dump(self.dynamicsData, dataFile, protocol=2)
+                pickle.dump(self.dynamicsData, dataFile, protocol=2)
         self.dynamicsData = {}
         self.refTime = None
         self.refDist = None
@@ -173,7 +176,7 @@ class VehicleTelemetry(object):
              'rtslp': getSnapshotValue(snapshot, 'rTrackScrolling', default=-30.0),
              'ltbf': getSnapshotValue(snapshot, 'ltbf'),
              'rtbf': getSnapshotValue(snapshot, 'rtbf')}
-            for key, value in data.iteritems():
+            for key, value in viewitems(data):
                 self.dynamicsData.setdefault(key, []).append(value)
 
             line = VehicleTelemetry.LOG_LINE_TEMPLATE.format(**data)
@@ -184,11 +187,11 @@ class VehicleTelemetry(object):
         return
 
     def receivePhysicsDebugInfo(self, info, modifDict):
-        infoDict = cPickle.loads(zlib.decompress(info))
+        infoDict = pickle.loads(zlib.decompress(info))
         cmd = infoDict['cmd']
         if cmd == 'telemetry':
             nDict = {}
-            for key, value in modifDict.iteritems():
+            for key, value in viewitems(modifDict):
                 try:
                     index = infoDict['paramNamesMap'][key]
                     nDict[index] = value

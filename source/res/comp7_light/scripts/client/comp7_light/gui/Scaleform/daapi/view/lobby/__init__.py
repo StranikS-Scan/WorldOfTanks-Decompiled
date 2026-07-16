@@ -15,7 +15,8 @@ def getViewSettings():
     from comp7_light.gui.impl.lobby.hangar.comp7_light_hangar import Comp7LightHangarWindow
     from comp7_light.gui.Scaleform.daapi.view.lobby.comp7_light_prime_time_view import Comp7LightPrimeTimeView
     from gui.Scaleform.framework import getSwfExtensionUrl
-    return (ViewSettings(COMP7_LIGHT_HANGAR_ALIASES.COMP7_LIGHT_PRIME_TIME_ALIAS, Comp7LightPrimeTimeView, getSwfExtensionUrl('comp7_core', COMP7_CORE_HANGAR_ALIASES.COMP7_CORE_PRIME_TIME_SWF), WindowLayer.SUB_VIEW, COMP7_LIGHT_HANGAR_ALIASES.COMP7_LIGHT_PRIME_TIME_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE, True), ViewSettings(COMP7_LIGHT_HANGAR_ALIASES.COMP7_LIGHT_LOBBY_HANGAR, Comp7LightHangarWindow, '', WindowLayer.SUB_VIEW, COMP7_LIGHT_HANGAR_ALIASES.COMP7_LIGHT_LOBBY_HANGAR, ScopeTemplates.LOBBY_SUB_SCOPE))
+    from comp7_light.gui.impl.lobby.battle_results.comp7_light_battle_results_view import Comp7LightBattleResultsWindow
+    return (ViewSettings(COMP7_LIGHT_HANGAR_ALIASES.COMP7_LIGHT_BATTLE_RESULTS, Comp7LightBattleResultsWindow, '', WindowLayer.SUB_VIEW, COMP7_LIGHT_HANGAR_ALIASES.COMP7_LIGHT_BATTLE_RESULTS, ScopeTemplates.LOBBY_SUB_SCOPE), ViewSettings(COMP7_LIGHT_HANGAR_ALIASES.COMP7_LIGHT_PRIME_TIME_ALIAS, Comp7LightPrimeTimeView, getSwfExtensionUrl('comp7_core', COMP7_CORE_HANGAR_ALIASES.COMP7_CORE_PRIME_TIME_SWF), WindowLayer.SUB_VIEW, COMP7_LIGHT_HANGAR_ALIASES.COMP7_LIGHT_PRIME_TIME_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE, True), ViewSettings(COMP7_LIGHT_HANGAR_ALIASES.COMP7_LIGHT_LOBBY_HANGAR, Comp7LightHangarWindow, '', WindowLayer.SUB_VIEW, COMP7_LIGHT_HANGAR_ALIASES.COMP7_LIGHT_LOBBY_HANGAR, ScopeTemplates.LOBBY_SUB_SCOPE))
 
 
 def getBusinessHandlers():
@@ -25,5 +26,5 @@ def getBusinessHandlers():
 class Comp7LightHangarBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
-        listeners = ((COMP7_LIGHT_HANGAR_ALIASES.COMP7_LIGHT_PRIME_TIME_ALIAS, self.loadViewByCtxEvent), (COMP7_LIGHT_HANGAR_ALIASES.COMP7_LIGHT_LOBBY_HANGAR, self.loadViewByCtxEvent))
+        listeners = ((COMP7_LIGHT_HANGAR_ALIASES.COMP7_LIGHT_PRIME_TIME_ALIAS, self.loadViewByCtxEvent), (COMP7_LIGHT_HANGAR_ALIASES.COMP7_LIGHT_LOBBY_HANGAR, self.loadViewByCtxEvent), (COMP7_LIGHT_HANGAR_ALIASES.COMP7_LIGHT_BATTLE_RESULTS, self.loadViewByCtxEvent))
         super(Comp7LightHangarBusinessHandler, self).__init__(listeners, APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)

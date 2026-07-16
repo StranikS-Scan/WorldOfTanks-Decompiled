@@ -24,6 +24,7 @@ class UserMissionsHubContainerView(UserMissionsHubContainerViewMeta):
         self.__eventID = ctx.get('eventID')
         self.__groupID = ctx.get('groupID')
         self.__showMissionDetails = ctx.get('showMissionDetails')
+        self.__challengeID = ctx.get('challengeID')
         self.__isFirstUpdate = True
         self.__builder = missions_group_packers.QuestsGroupsBuilder()
         self.__filterData = AccountSettings.getFilter(MISSIONS_PAGE)
@@ -32,7 +33,7 @@ class UserMissionsHubContainerView(UserMissionsHubContainerViewMeta):
 
     def registerFlashComponent(self, component, alias, *args):
         if alias == USERMISSSIONS_ALIASES.USER_MISSIONS_HUB_CONTENT_INJECT:
-            super(UserMissionsHubContainerView, self).registerFlashComponent(component, alias, self.__tabID, self.__questId)
+            super(UserMissionsHubContainerView, self).registerFlashComponent(component, alias, self.__tabID, self.__questId, self.__challengeID)
         else:
             super(UserMissionsHubContainerView, self).registerFlashComponent(component, alias)
 

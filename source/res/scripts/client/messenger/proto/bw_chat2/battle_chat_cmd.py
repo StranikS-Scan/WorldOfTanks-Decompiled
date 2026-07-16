@@ -6,9 +6,9 @@ import Math
 from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES
 from constants import CommendationsState
 from debug_utils import LOG_ERROR
-from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI as I18N_INGAME_GUI
+from gui.impl import backport
+from gui.impl.gen import R
 from helpers import dependency
-from helpers import i18n
 from messenger import g_settings
 from messenger.ext.channel_num_gen import getClientID4BattleChannel
 from messenger.m_constants import PROTO_TYPE, BATTLE_CHANNEL
@@ -252,6 +252,7 @@ class _OutCmdDecorator(OutChatCommand):
 class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
     __slots__ = ('_commandID', '__isSilentMode')
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    _LOCALE_RESOURCE = R.strings.ingame_gui.chat_shortcuts
 
     def __init__(self, commandID, args):
         super(_ReceivedCmdDecorator, self).__init__(args, getClientID4BattleChannel(BATTLE_CHANNEL.TEAM.name))
@@ -271,20 +272,19 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
             return u''
         elif not command.msgText:
             return None
-        i18nKey = I18N_INGAME_GUI.chat_shortcuts(command.msgText)
-        if not i18nKey:
+        elif not self._LOCALE_RESOURCE.dyn(command.msgText).isValid():
             text = command.msgText
             if isinstance(text, str):
                 text = unicode(text, 'utf-8', errors='ignore')
             return text
         elif self.isOnMinimap():
-            return self._handleOnMinimap(i18nKey)
+            return self._handleOnMinimap(command.msgText)
         elif self.hasTarget():
-            return self._handleHasTarget(i18nKey)
+            return self._handleHasTarget(command.msgText)
         elif self.isBaseRelatedCommand():
-            return self._handleBaseRelatedCommand(i18nKey)
+            return self._handleBaseRelatedCommand(command.msgText)
         else:
-            return self._handleLocationRelatedCommand(i18nKey) if self.isLocationRelatedCommand() else i18n.makeString(i18nKey, **self._protoData)
+            return self._handleLocationRelatedCommand(command.msgText) if self.isLocationRelatedCommand() else backport.text(self._LOCALE_RESOURCE.dyn(command.msgText)(), **self._protoData)
 
     def getSenderID(self):
         return self.sessionProvider.getArenaDP().getSessionIDByVehID(self._protoData['int64Arg1'])
@@ -387,12 +387,8 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
 
     def messageOnMarker(self):
         command = _ACTIONS.battleChatCommandFromActionID(self._commandID)
-        i18nKey = I18N_INGAME_GUI.chat_shortcuts(command.msgOnMarker)
-        if i18nKey is not None:
-            text = i18n.makeString(i18nKey)
-        else:
-            text = command.msgOnMarker
-        return unicode(text, 'utf-8', errors='ignore')
+        locale = self._LOCALE_RESOURCE.dyn(command.msgOnMarker)
+        return backport.text(locale()) if locale.isValid() else command.msgOnMarker
 
     def isMuteTypeMessage(self):
         return self._commandID in _MUTED_MESSAGE_IDS
@@ -440,51 +436,51 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
             return ''
         return command.soundNotification
 
-    def _handleOnMinimap(self, i18nKey):
-        i18nArguments = {}
+    def _handleOnMinimap(self, msgKey):
+        msgArguments = {}
         if self.isSPGAimCommand():
             reloadTime = self._protoData['floatArg1']
             if reloadTime > 0:
-                i18nArguments['reloadTime'] = reloadTime
-                i18nKey += '_reloading'
-        return i18n.makeString(i18nKey, **i18nArguments)
+                msgArguments['reloadTime'] = reloadTime
+                msgKey += '_reloading'
+        return backport.text(self._LOCALE_RESOURCE.dyn(msgKey)(), **msgArguments)
 
-    def _handleHasTarget(self, i18nKey):
-        i18nArguments = {'target': self._getTarget()}
+    def _handleHasTarget(self, msgKey):
+        msgArguments = {'target': self._getTarget()}
         if self.isSPGAimCommand():
             reloadTime = self._protoData['floatArg1']
             if reloadTime > 0:
-                i18nArguments['reloadTime'] = reloadTime
-                i18nKey += '_reloading'
+                msgArguments['reloadTime'] = reloadTime
+                msgKey += '_reloading'
             elif reloadTime < 0:
-                i18nKey += '_empty'
-        return i18n.makeString(i18nKey, **i18nArguments)
+                msgKey += '_empty'
+        return backport.text(self._LOCALE_RESOURCE.dyn(msgKey)(), **msgArguments)
 
-    def _handleBaseRelatedCommand(self, i18nKey):
-        i18nArguments = {}
+    def _handleBaseRelatedCommand(self, msgKey):
+        msgArguments = {}
         strArg = self._protoData['strArg1']
         if strArg != '':
-            i18nArguments['strArg1'] = strArg
-            i18nKey += '_numbered'
-        return i18n.makeString(i18nKey, **i18nArguments)
+            msgArguments['strArg1'] = strArg
+            msgKey += '_numbered'
+        return backport.text(self._LOCALE_RESOURCE.dyn(msgKey)(), **msgArguments)
 
-    def _handleLocationRelatedCommand(self, i18nKey):
-        i18nArguments = {}
+    def _handleLocationRelatedCommand(self, msgKey):
+        msgArguments = {}
         if self.isSPGAimCommand():
             reloadTime = self._protoData['floatArg1']
             if reloadTime > 0:
-                i18nArguments['reloadTime'] = reloadTime
-                i18nKey += '_reloading'
+                msgArguments['reloadTime'] = reloadTime
+                msgKey += '_reloading'
             elif reloadTime < 0:
-                i18nKey += '_empty'
+                msgKey += '_empty'
         mapsCtrl = self.sessionProvider.dynamic.maps
         if mapsCtrl and mapsCtrl.hasMinimapGrid():
             cellId = mapsCtrl.getMinimapCellIdByPosition(self.getMarkedPosition())
             if cellId is None:
                 cellId = self.getFirstTargetID()
-            i18nKey += '_gridInfo'
-            i18nArguments['gridId'] = mapsCtrl.getMinimapCellNameById(cellId)
-        return i18n.makeString(i18nKey, **i18nArguments)
+            msgKey += '_gridInfo'
+            msgArguments['gridId'] = mapsCtrl.getMinimapCellNameById(cellId)
+        return backport.text(self._LOCALE_RESOURCE.dyn(msgKey)(), **msgArguments)
 
 
 class BattleCommandFactory(IBattleCommandFactory):

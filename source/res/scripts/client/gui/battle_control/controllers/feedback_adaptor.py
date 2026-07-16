@@ -1,16 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/feedback_adaptor.py
+from __future__ import absolute_import
 import typing
 import weakref
 from collections import namedtuple
+from future.utils import lmap
 import BigWorld
 import Event
 import TriggersManager
-import feedback_events
 from constants import DEFAULT_GUN_INSTALLATION_INDEX, VEHICLE_HIT_EFFECT
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _FET, BATTLE_CTRL_ID
+from gui.battle_control.controllers import feedback_events
 from gui.battle_control.controllers.interfaces import IBattleController
 from vehicle_systems.tankStructure import TankPartNames
 if typing.TYPE_CHECKING:
@@ -24,7 +26,7 @@ class _DamagedDevicesExtraFetcher(object):
 
     def __init__(self, total, critical, destroyed, isInFire):
         super(_DamagedDevicesExtraFetcher, self).__init__()
-        self.__total = map(self.__convertExtra, total)
+        self.__total = lmap(self.__convertExtra, total)
         self.__critical = critical
         self.__destroyed = destroyed
         self.__isInFire = isInFire

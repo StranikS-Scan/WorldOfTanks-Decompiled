@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/persistent_data_cache_common/serializers.py
-import abc
+from __future__ import absolute_import
 import typing
 import wg_pickle
 if typing.TYPE_CHECKING:
@@ -8,19 +8,15 @@ if typing.TYPE_CHECKING:
 
 class ISerializer(object):
     __slots__ = ()
-    __metaclass__ = abc.ABCMeta
 
-    @abc.abstractmethod
     def deserialize(self, serializedData):
-        pass
+        raise NotImplementedError
 
-    @abc.abstractmethod
     def serialize(self, rawData):
-        pass
+        raise NotImplementedError
 
-    @abc.abstractmethod
     def rollbackSideEffects(self):
-        pass
+        raise NotImplementedError
 
 
 class WGPickleSerializer(ISerializer):

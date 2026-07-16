@@ -1,13 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/crosshair_proxy.py
-import Event
+from __future__ import absolute_import, division
 import GUI
+import Event
 import aih_constants
 import BattleReplay
 from AvatarInputHandler import aih_global_binding
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, CROSSHAIR_VIEW_ID, STRATEGIC_CAMERA_ID
 from gui.battle_control.controllers.interfaces import IBattleController
 from helpers import dependency
+from math_common import decimal_round
 from skeletons.account_helpers.settings_core import ISettingsCore
 _BINDING_ID = aih_global_binding.BINDING_ID
 _CTRL_MODE = aih_constants.CTRL_MODE_NAME
@@ -33,8 +35,7 @@ _STRATEGIC_CAMERA_TO_ID = {_STRATEGIC_CAMERA.AERIAL: STRATEGIC_CAMERA_ID.AERIAL,
  _STRATEGIC_CAMERA.TRAJECTORY: STRATEGIC_CAMERA_ID.TRAJECTORY}
 
 def getCrosshairViewIDByCtrlMode(ctrlMode):
-    viewID = _CTRL_MODE_TO_VIEW_ID.get(ctrlMode, CROSSHAIR_VIEW_ID.UNDEFINED)
-    return viewID
+    return _CTRL_MODE_TO_VIEW_ID.get(ctrlMode, CROSSHAIR_VIEW_ID.UNDEFINED)
 
 
 class GunMarkersSetInfo(object):
@@ -114,7 +115,7 @@ class CrosshairDataProxy(IBattleController):
 
         BattleReplay.g_replayCtrl.onServerAimChanged += self.__onGunMarkersSetChanged
         self.__viewID = getCrosshairViewIDByCtrlMode(self.__ctrlMode)
-        self.__scale = round(self.settingsCore.interfaceScale.get(), 1)
+        self.__scale = decimal_round(self.settingsCore.interfaceScale.get(), 1)
         self.__calculateSize(notify=False)
         self.__calculatePosition(notify=False)
 
@@ -215,7 +216,7 @@ class CrosshairDataProxy(IBattleController):
         self.__calculatePosition()
 
     def __onScaleFactorChanged(self, scale):
-        scale = round(scale, 1)
+        scale = decimal_round(scale, 1)
         if self.__scale != scale:
             self.__scale = scale
             self.onCrosshairScaleChanged(scale)

@@ -7,11 +7,11 @@ from helpers import dependency
 from skeletons.gui.game_control import ILootBoxSystemController
 if TYPE_CHECKING:
     from typing import Dict, Union
-    from gui.impl.gen.view_models.views.lobby.lootbox_system.submodels.has_boxes_view_model import HasBoxesViewModel
+    from gui.impl.gen.view_models.views.lobby.lootbox_system.submodels.home_view_model import HomeViewModel
     from gui.impl.gen.view_models.views.lobby.lootbox_system.submodels.single_box_rewards_view_model import SingleBoxRewardsViewModel
     from gui.impl.gen.view_models.views.lobby.lootbox_system.submodels.multiple_boxes_rewards_view_model import MultipleBoxesRewardsViewModel
     from gui.shared.gui_items.loot_box import LootBox
-    IAnimatedViewModel = Union[HasBoxesViewModel, SingleBoxRewardsViewModel, MultipleBoxesRewardsViewModel]
+    IAnimatedViewModel = Union[HomeViewModel, SingleBoxRewardsViewModel, MultipleBoxesRewardsViewModel]
 
 @dependency.replace_none_kwargs(lootBoxes=ILootBoxSystemController)
 def updateBoxesInfoModel(eventName, boxesInfo, lootBoxes=None):

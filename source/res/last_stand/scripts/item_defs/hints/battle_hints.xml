@@ -40,6 +40,29 @@
   <hint>
     <clientSchema>	last_stand.gui.battle_hints.battle_hints_schemas:hintSchema	</clientSchema>
     <props>
+      <name>	destroyObelisk	</name>
+      <scope>	last_stand	</scope>
+      <component>	battleHint	</component>
+      <priority>	99	</priority>
+    </props>
+    <text>
+      <template>	LS_destroyObelisk	</template>
+      <templateSmall>	LS_destroyObelisk_small	</templateSmall>
+    </text>
+    <sound>
+      <notify>	ev_gp_bot_obelisk_explosion_2D	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	20	</waitTime>
+    </lifecycle>
+    <context>
+      <isAdaptive>	true	</isAdaptive>
+    </context>
+  </hint>
+  <hint>
+    <clientSchema>	last_stand.gui.battle_hints.battle_hints_schemas:hintSchema	</clientSchema>
+    <props>
       <name>	turret	</name>
       <scope>	last_stand	</scope>
       <component>	battleHint	</component>
@@ -113,7 +136,7 @@
       <aliveOnly>	False	</aliveOnly>
     </sound>
     <lifecycle>
-      <showTime>	3	</showTime>
+      <showTime>	5	</showTime>
       <waitTime>	20	</waitTime>
     </lifecycle>
     <context>
@@ -276,6 +299,9 @@
     <text>
       <template>	LS_stopConvoyBeforeMagnus	</template>
     </text>
+    <sound>
+      <notify>	ev_gp_bot_boss_zero_spawn_2D	</notify>
+    </sound>
     <lifecycle>
       <showTime>	5	</showTime>
       <waitTime>	20	</waitTime>

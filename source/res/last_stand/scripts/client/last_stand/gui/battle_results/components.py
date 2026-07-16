@@ -2,6 +2,7 @@
 # Embedded file name: last_stand/scripts/client/last_stand/gui/battle_results/components.py
 from __future__ import absolute_import
 from past.builtins import cmp
+from ArenaType import parseTypeID
 from constants import DEATH_REASON_ALIVE
 from gui.battle_results.reusable import sort_keys
 from gui.battle_results.components import base, common
@@ -49,6 +50,14 @@ class LSObeliskPointsItem(base.StatsItem):
 
     def _convert(self, value, reusable):
         return reusable.getPersonalVehiclesInfo(value).obeliskPoints
+
+
+class LSGeometryIdItem(base.StatsItem):
+
+    def _convert(self, value, reusable):
+        typeId = reusable.common.arenaType.getID()
+        _, geometryID = parseTypeID(typeId)
+        return geometryID
 
 
 class PersonalFirstTeamItemSortKey(sort_keys.TeamItemSortKey):

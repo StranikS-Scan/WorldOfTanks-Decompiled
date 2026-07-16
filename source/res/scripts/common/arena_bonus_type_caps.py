@@ -254,10 +254,10 @@ class ARENA_BONUS_TYPE_CAPS():
 
 
 def parseArenaBonusType(parsedBonusTypes, bonusTypes, arenaBonusTypeCap):
-    for k in bonusTypes:
-        arenaBonusType = ARENA_BONUS_TYPE_NAMES[k]
+    for key in bonusTypes:
+        arenaBonusType = ARENA_BONUS_TYPE_NAMES[key]
         if not ARENA_BONUS_TYPE_CAPS.checkAny(arenaBonusType, arenaBonusTypeCap):
-            raise SoftException('Wrong arena bonus type: %s is not enabled for %s' % (arenaBonusTypeCap, k))
+            raise SoftException('Wrong arena bonus type: %s is not enabled for %s' % (arenaBonusTypeCap, key))
         parsedBonusTypes.add(arenaBonusType)
 
 

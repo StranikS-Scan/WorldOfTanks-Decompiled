@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/param_name_helper.py
+from __future__ import absolute_import
 import logging
 from gui.impl.gen import R
 _logger = logging.getLogger(__name__)

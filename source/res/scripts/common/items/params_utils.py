@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/params_utils.py
-from collections import namedtuple
+from __future__ import absolute_import, division
 import typing
+from collections import namedtuple
 from constants import IS_CLIENT, IS_WEB, IS_CGF_DUMP, IS_LOAD_GLOSSARY, IS_EDITOR
 from items.components.shared_components import TemperatureGunParams, OverheatGunParams
+from math_common import round_py2_style
 if typing.TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor
 AttributeModifier = namedtuple('AttributeModifier', ('name', 'value', 'opType'))
@@ -50,7 +52,7 @@ if IS_CLIENT or IS_WEB or IS_LOAD_GLOSSARY or IS_CGF_DUMP or IS_EDITOR:
             coolingPerSecFactor = overheatMechanicParams.coolingPerSecFactor
             coolingTime = thermalScoreLimit / (tempMechanicParams.coolingPerSec * coolingPerSecFactor)
             gunDescr = descr.gun if isVehicle else descr
-            clipRate = round(60.0 / gunDescr.clip[1])
+            clipRate = round_py2_style(60.0 / gunDescr.clip[1])
             burstTime = thermalScoreLimit * 60 / (heatingPerShot * clipRate)
             shootingCyclesPerMinute = 60 / (burstTime + tempMechanicParams.coolingDelay + coolingTime)
             shellsPerCycle = thermalScoreLimit / heatingPerShot

@@ -10,6 +10,7 @@ from messenger import g_settings
 from messenger.proto.xmpp.xmpp_constants import XMPP_MUC_CHANNEL_TYPE
 from skeletons.connection_mgr import IConnectionManager
 from soft_exception import SoftException
+from constants import STANDALONE_CLUSTER_ID
 
 class BareJID(object):
     __slots__ = ('_node', '_domain')
@@ -188,7 +189,7 @@ def _getSystemChannelNameFormatter(service, connectionMgr=None):
     if connectionMgr is not None:
         peripheryID = connectionMgr.peripheryID
     else:
-        peripheryID = 0
+        peripheryID = STANDALONE_CLUSTER_ID
     chanTemplate = Template(service['format'])
     return chanTemplate.safe_substitute(peripheryID=peripheryID, userString=service['userString'], hostname=service['hostname'], type=service['type']) if chanTemplate else None
 

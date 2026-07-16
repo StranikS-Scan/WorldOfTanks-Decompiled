@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/prestige_system/prestige_milestones_common.py
+from __future__ import absolute_import
 from typing import Optional, Dict, Set, Any, Union
 from copy import copy
 from constants import IS_CLIENT

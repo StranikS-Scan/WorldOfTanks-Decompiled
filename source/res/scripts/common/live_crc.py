@@ -352,7 +352,7 @@ def gen_delSubkeys_fn(use={}):
             def func(data):
                 if isinstance(data, dict):
                     data = copy(data)
-                    for k in data.keys():
+                    for k in list(data):
                         if k not in excludeThisLevel:
                             data.pop(k, None)
                             data.pop((k, '_r'), None)
@@ -369,7 +369,7 @@ def gen_delSubkeys_fn(use={}):
             def func(data):
                 if isinstance(data, dict):
                     data = copy(data)
-                    for k in data.keys():
+                    for k in list(data):
                         if k not in excludeThisLevel:
                             data.pop(k, None)
                             data.pop((k, '_r'), None)

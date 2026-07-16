@@ -5,6 +5,9 @@
     <_183mm_AT_Gun_LS_BOT>	6003	</_183mm_AT_Gun_LS_BOT>
     <_105mm_AT_Gun_L7_LS_PLAYER>	6004	</_105mm_AT_Gun_L7_LS_PLAYER>
     <_90mm_Kenerga_Mk8_LS_BOT>	5996	</_90mm_Kenerga_Mk8_LS_BOT>
+    <OQF_55_pdr_AT_Gun_EASY_LS_BOT>	5997	</OQF_55_pdr_AT_Gun_EASY_LS_BOT>
+    <OQF_55_pdr_AT_Gun_MEDIUM_LS_BOT>	5998	</OQF_55_pdr_AT_Gun_MEDIUM_LS_BOT>
+    <OQF_55_pdr_AT_Gun_HARD_LS_BOT>	5999	</OQF_55_pdr_AT_Gun_HARD_LS_BOT>
   </ids>
   <shared>
     <_20pdr_Gun_Type_B_LS_BOT>
@@ -276,5 +279,179 @@
         </_90mm_HE_T342K_LS_BOT>
       </shots>
     </_90mm_Kenerga_Mk8_LS_BOT>
+    <OQF_55_pdr_AT_Gun_EASY_LS_BOT>
+      <userString>	#gb_vehicles:OQF_55_pdr_AT_Gun	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	125000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	LS_shot_Bastion_bot	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	10	</reloadTime>
+      <maxAmmo>	72	</maxAmmo>
+      <aimingTime>	3	</aimingTime>
+      <weight>	3500	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_55pdr_APCBC_EASY_LS_BOT>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1050	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	280 268	</piercingPower>
+        </_55pdr_APCBC_EASY_LS_BOT>
+        <_55pdr_APDS_EASY_LS_BOT>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1200	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	310 296	</piercingPower>
+        </_55pdr_APDS_EASY_LS_BOT>
+        <_55pdr_HE_EASY_LS_BOT>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	1050	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	94 94	</piercingPower>
+        </_55pdr_HE_EASY_LS_BOT>
+      </shots>
+    </OQF_55_pdr_AT_Gun_EASY_LS_BOT>
+    <OQF_55_pdr_AT_Gun_MEDIUM_LS_BOT>
+      <userString>	#gb_vehicles:OQF_55_pdr_AT_Gun	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	125000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	LS_shot_Bastion_bot	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	72	</maxAmmo>
+      <aimingTime>	3	</aimingTime>
+      <weight>	3500	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_55pdr_APCBC_MEDIUM_LS_BOT>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1050	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	280 268	</piercingPower>
+        </_55pdr_APCBC_MEDIUM_LS_BOT>
+        <_55pdr_APDS_MEDIUM_LS_BOT>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1200	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	310 296	</piercingPower>
+        </_55pdr_APDS_MEDIUM_LS_BOT>
+        <_55pdr_HE_MEDIUM_LS_BOT>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	1050	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	94 94	</piercingPower>
+        </_55pdr_HE_MEDIUM_LS_BOT>
+      </shots>
+    </OQF_55_pdr_AT_Gun_MEDIUM_LS_BOT>
+    <OQF_55_pdr_AT_Gun_HARD_LS_BOT>
+      <userString>	#gb_vehicles:OQF_55_pdr_AT_Gun	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	125000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	LS_shot_Bastion_bot	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	72	</maxAmmo>
+      <aimingTime>	3	</aimingTime>
+      <weight>	3500	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_55pdr_APCBC_HARD_LS_BOT>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1050	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	280 268	</piercingPower>
+        </_55pdr_APCBC_HARD_LS_BOT>
+        <_55pdr_APDS_HARD_LS_BOT>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1200	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	310 296	</piercingPower>
+        </_55pdr_APDS_HARD_LS_BOT>
+        <_55pdr_HE_HARD_LS_BOT>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	1050	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	94 94	</piercingPower>
+        </_55pdr_HE_HARD_LS_BOT>
+      </shots>
+    </OQF_55_pdr_AT_Gun_HARD_LS_BOT>
   </shared>
 </guns.xml>

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/dog_tag_composer.py
+from __future__ import absolute_import
 from dog_tags_common.config.common import ComponentViewType, ComponentPurpose
 from dog_tags_common.number_formatter import formatComponentValue
 from dog_tags_common.player_dog_tag import DisplayableDogTag

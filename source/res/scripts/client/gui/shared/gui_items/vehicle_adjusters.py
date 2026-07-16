@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/vehicle_adjusters.py
+from __future__ import absolute_import
+import typing
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from helpers import dependency
 from adisp import adisp_process
@@ -8,14 +10,17 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors import module as installer_module
 from items import tankmen
 from skeletons.gui.shared import IItemsCache
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.Vehicle import Vehicle
+    from gui.shared.gui_items.fitting_item import FittingItem
 
 @adisp_process
 def installModulesSet(vehicle, modules, notFitted):
     UNDEFINED_INDEX = -1
 
     def __findModuleIndex(mList, moduleTypeID):
-        for i in xrange(len(mList)):
-            if mList[i].itemTypeID == moduleTypeID:
+        for i, m in enumerate(mList):
+            if m.itemTypeID == moduleTypeID:
                 return i
 
         return UNDEFINED_INDEX
@@ -47,8 +52,7 @@ def installModulesSet(vehicle, modules, notFitted):
                     modules.append(modules.pop(turretIndex))
                     installModulesSet(vehicle, modules, notFitted)
                     break
-                else:
-                    notFitted.append(notFitReason)
+                notFitted.append(notFitReason)
             if notFitReason == 'need gun':
                 gunIndex = __findModuleIndex(modules, GUI_ITEM_TYPE.GUN)
                 if gunIndex != UNDEFINED_INDEX:
@@ -56,8 +60,7 @@ def installModulesSet(vehicle, modules, notFitted):
                     modules.append(modules.pop(gunIndex))
                     installModulesSet(vehicle, modules, notFitted)
                     break
-                else:
-                    notFitted.append(notFitReason)
+                notFitted.append(notFitReason)
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -69,7 +72,7 @@ def installEquipment(vehicle, intCD, slotIndex, itemsCache=None):
     if equipment:
         success, reason = equipment.mayInstall(vehicle, slotIndex)
         if not success:
-            LOG_WARNING('Equipment could not been installed, reason: '.format(reason))
+            LOG_WARNING('Equipment could not been installed, reason: {}'.format(reason))
             return
     vehicle.consumables.installed[slotIndex] = equipment
     vehicle.consumables.layout[slotIndex] = equipment

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/formatters/currency.py
+from __future__ import absolute_import, division
 import logging
+from past.builtins import unicode
 from gui.impl import backport
 from gui.shared.formatters import text_styles
 from gui.shared.money import Currency

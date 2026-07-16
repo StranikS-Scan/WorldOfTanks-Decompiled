@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/common/buy_sell_item_base_dialog.py
-from abc import abstractproperty
+from __future__ import absolute_import
 from typing import TYPE_CHECKING
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.backport import BackportTooltipWindow, createTooltipData
@@ -17,13 +17,13 @@ class DialogBuySellItemBaseView(FullScreenDialogView):
         self._itemCD = typeCompDescr
         self._item = self._itemsCache.items.getItemByCD(self._itemCD)
 
-    @abstractproperty
+    @property
     def viewModel(self):
-        pass
+        raise NotImplementedError
 
-    @abstractproperty
+    @property
     def isBuying(self):
-        pass
+        raise NotImplementedError
 
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():

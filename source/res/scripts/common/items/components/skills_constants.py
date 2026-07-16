@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/skills_constants.py
+from __future__ import absolute_import
 from collections import OrderedDict
+from future.utils import iteritems
 SKILL_NAMES = ('reserved', 'commander', 'radioman', 'driver', 'gunner', 'loader', 'repair', 'fireFighting', 'camouflage', 'brotherhood', 'any', 'armorPatching', 'reserved', 'reserved', 'reserved', 'reserved', 'commander_tutor', 'commander_eagleEye', 'commander_sixthSense', 'commander_expert', 'commander_universalist', 'commander_enemyShotPredictor', 'commander_practical', 'commander_emergency', 'commander_coordination', 'commander_holdLine', 'commander_staySharp', 'reserved', 'driver_virtuoso', 'driver_smoothDriving', 'driver_badRoadsKing', 'driver_rammingMaster', 'driver_tidyPerson', 'driver_motorExpert', 'driver_reliablePlacement', 'driver_suspensionRepair', 'driver_bulletproof', 'gunner_gunsmith', 'gunner_sniper', 'gunner_smoothTurret', 'gunner_rancorous', 'gunner_focus', 'gunner_quickAiming', 'gunner_armorer', 'gunner_pointBlast', 'gunner_loneWolf', 'loader_pedant', 'loader_desperado', 'loader_intuition', 'loader_perfectCharge', 'loader_ammunitionImprove', 'loader_melee', 'loader_magMastery', 'radioman_inventor', 'radioman_finder', 'radioman_retransmitter', 'radioman_lastEffort', 'radioman_interference', 'radioman_signalInterception', 'radioman_sideBySide', 'radioman_expert', 'radioman_battleTempered', 'radioman_threatSearch', 'loader_secondChance')
 
 class ROLE_NAMES(object):
@@ -38,11 +40,11 @@ SKILLS_BY_ROLES_ORDERED = {ROLE_NAMES.COMMANDER: COMMON_SKILLS_ORDERED + COMMAND
 SKILL_NAMES_ORDERED = COMMON_SKILLS_ORDERED + COMMANDER_SKILLS + GUNNER_SKILLS + DRIVER_SKILLS + RADIOMAN_SKILLS + LOADER_SKILLS
 SKILL_INDICES_ORDERED = dict(((x[1], x[0]) for x in enumerate(SKILL_NAMES_ORDERED)))
 SKILLS_BY_ROLES = {}
-for role, skills in SKILLS_BY_ROLES_ORDERED.iteritems():
+for role, skills in iteritems(SKILLS_BY_ROLES_ORDERED):
     SKILLS_BY_ROLES.setdefault(role, frozenset(skills))
 
 ROLES_BY_SKILLS = {}
-for role, skills in SKILLS_BY_ROLES.iteritems():
+for role, skills in iteritems(SKILLS_BY_ROLES):
     for skill in skills:
         ROLES_BY_SKILLS.setdefault(skill, set()).add(role)
 

@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/persistent_data_cache_common/cached_data.py
+from __future__ import absolute_import
 import typing
 from collections import OrderedDict
+from future.utils import iteritems, listitems
 import wg_pickle
 from persistent_data_cache_common.common import getLogger, MeasureExecutionTime
 if typing.TYPE_CHECKING:
@@ -35,7 +37,7 @@ class LoadedData(object):
                 self._logger.debug('Data <%s> has been loaded with <%s>.', name, serializer)
 
         except Exception:
-            for name, appliedSerializer in appliedSerializers.iteritems():
+            for name, appliedSerializer in iteritems(appliedSerializers):
                 appliedSerializer.rollbackSideEffects()
                 self._logger.debug('Deserialized data <%s|%s> side effects rollback.', name, appliedSerializer)
 
@@ -67,7 +69,7 @@ class CreatedData(object):
 
     def toDict(self):
         return {'version': self._version,
-         'data': self._data.items()}
+         'data': listitems(self._data)}
 
 
 def dumps(cachedData):

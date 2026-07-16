@@ -417,7 +417,7 @@ class VehicleAnchorsUpdater(object):
                 return
             if appearance.isLoaded():
                 collisions = appearance.collisions
-                if collisions is not None:
+                if collisions:
                     self.__vehicleCustomizationAnchors.setCollisions(collisions)
                 else:
                     _logger.error('Missing vehicle collisions.')

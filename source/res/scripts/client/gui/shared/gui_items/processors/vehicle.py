@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/vehicle.py
+from __future__ import absolute_import
 import logging
 from itertools import chain
+from functools import reduce
+from future.utils import viewitems, viewvalues
 import AccountCommands
 import BigWorld
 from AccountCommands import VEHICLE_SETTINGS_FLAG
@@ -448,13 +451,13 @@ class VehicleSeller(ItemProcessor):
         result = {}
         for vehicle in self.nationGroupVehs:
             itemTypeIds = (GUI_ITEM_TYPE.SHELL,) + GUI_ITEM_TYPE.VEHICLE_MODULES
-            vehInv = self.itemsCache.items.getItems(itemTypeID=itemTypeIds, criteria=REQ_CRITERIA.VEHICLE.SUITABLE([vehicle], itemTypeIds) | REQ_CRITERIA.INVENTORY, nationID=vehicle.nationID).values()
+            vehInv = viewvalues(self.itemsCache.items.getItems(itemTypeID=itemTypeIds, criteria=REQ_CRITERIA.VEHICLE.SUITABLE([vehicle], itemTypeIds) | REQ_CRITERIA.INVENTORY, nationID=vehicle.nationID))
             result[vehicle.invID] = set((m.intCD for m in vehInv)) & self.inventory
 
-        full = reduce(lambda acc, inv: acc | inv, result.itervalues())
-        unique = reduce(lambda acc, inv: acc ^ inv, result.itervalues())
+        full = reduce(lambda acc, inv: acc | inv, viewvalues(result))
+        unique = reduce(lambda acc, inv: acc ^ inv, viewvalues(result))
         difference = full - unique
-        for key in result.iterkeys():
+        for key in result:
             result[key] -= difference
 
         result[self.vehicle.invID].update(difference)
@@ -800,7 +803,7 @@ class BuyAndInstallConsumablesProcessor(Processor):
         layout = [ (item.defaultLayoutValue if item is not None else (0, 0)) for item in self._vehicle.consumables.layout ]
         currentBoosters = [ (item.defaultLayoutValue if item is not None else (0, 0)) for item in self._vehicle.battleBoosters.installed ]
         layout.extend(currentBoosters)
-        return [ v for v in chain.from_iterable(layout) ]
+        return list(chain.from_iterable(layout))
 
 
 class EasyTankEquipApplyProcessor(Processor):
@@ -969,7 +972,7 @@ class BuyAndInstallShellsProcessor(Processor):
 
     def __getShellsRaw(self):
         itemsIntAndCount = [ item.defaultLayoutValue for item in self.__vehicle.shells.layout ]
-        return [ v for v in chain.from_iterable(itemsIntAndCount) ]
+        return list(chain.from_iterable(itemsIntAndCount))
 
 
 class BuyAndInstallBattleBoostersProcessor(Processor):
@@ -997,7 +1000,7 @@ class BuyAndInstallBattleBoostersProcessor(Processor):
         desiredBoosters = [ (item.defaultLayoutValue if item is not None else (0, 0)) for item in self.__vehicle.battleBoosters.layout ]
         layout = [ (item.defaultLayoutValue if item is not None else (0, 0)) for item in self.__vehicle.consumables.installed ]
         layout.extend(desiredBoosters)
-        return [ v for v in chain.from_iterable(layout) ]
+        return list(chain.from_iterable(layout))
 
 
 class AutoFillVehicleLayoutProcessor(Processor):
@@ -1036,11 +1039,11 @@ class AutoFillVehicleLayoutProcessor(Processor):
 
     def __getShellsRaw(self):
         itemsIntAndCount = [ item.defaultLayoutValue for item in self.__vehicle.shells.layout ]
-        return [ v for v in chain.from_iterable(itemsIntAndCount) ]
+        return list(chain.from_iterable(itemsIntAndCount))
 
     def __getConsumablesRaw(self):
         itemsIntAndCount = [ (item.defaultLayoutValue if item is not None else (0, 0)) for item in self.__vehicle.consumables.layout ]
-        return [ v for v in chain.from_iterable(itemsIntAndCount) ]
+        return list(chain.from_iterable(itemsIntAndCount))
 
     def __getPrice(self):
         return getVehicleShellsLayoutPrice(self.__vehicle).price + getVehicleConsumablesLayoutPrice(self.__vehicle).price
@@ -1068,11 +1071,13 @@ class InstallBattleAbilitiesProcessor(Processor):
         return BattleAbilitiesApplyProcessorMessage().makeErrorMsg(errStr)
 
     def __getCurrentSkills(self):
-        skillToAbilitiesIds = {skillID:skillInfo.eqID for skillID, skillInfo in self.__epicMetaGameCtrl.getAllUnlockedSkillInfoBySkillId().iteritems()}
+        skillToAbilitiesIds = {skillID:skillInfo.eqID for skillID, skillInfo in viewitems(self.__epicMetaGameCtrl.getAllUnlockedSkillInfoBySkillId())}
         currentSkills = [-1] * self.__epicMetaGameCtrl.getNumAbilitySlots(self.__vehicle.descriptor.type)
         for slotIdx, item in enumerate(self.__vehicle.battleAbilities.layout):
-            for skillID, battleAbilitiesID in skillToAbilitiesIds.iteritems():
-                if item != EMPTY_ITEM and item.innationID == battleAbilitiesID:
+            if item == EMPTY_ITEM:
+                continue
+            for skillID, battleAbilitiesID in viewitems(skillToAbilitiesIds):
+                if item.innationID == battleAbilitiesID:
                     currentSkills[slotIdx] = skillID
 
         return currentSkills

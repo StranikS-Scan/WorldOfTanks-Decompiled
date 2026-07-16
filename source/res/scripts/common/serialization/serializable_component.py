@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/serialization/serializable_component.py
-from cStringIO import StringIO
+from __future__ import absolute_import
 from collections import OrderedDict
+from future.utils import iteritems
 from typing import MutableMapping, Any, TypeVar
 import Math
 from .definitions import FieldTypes, FieldFlags, FieldType
+from py2to3.moves.io import FastStringIO
 __all__ = ('SerializableComponent', 'SerializableComponentChildType')
 
 class SerializableComponent(object):
@@ -18,7 +20,7 @@ class SerializableComponent(object):
             return False
         if id(self) == id(other):
             return True
-        for fname, ftype in self.fields.iteritems():
+        for fname, ftype in iteritems(self.fields):
             if ftype.flags & ignoreFlags:
                 continue
             v1 = getattr(self, fname)
@@ -39,20 +41,20 @@ class SerializableComponent(object):
 
     def __hash__(self):
         result = 17
-        for name, ftype in self.fields.iteritems():
+        for name, ftype in iteritems(self.fields):
             if ftype.flags & FieldFlags.DEPRECATED:
                 continue
             v1 = getattr(self, name)
             if isinstance(v1, list):
                 v1 = tuple(v1)
-            if isinstance(v1, Math.Vector2) or isinstance(v1, Math.Vector3) or isinstance(v1, Math.Vector4):
+            if isinstance(v1, (Math.Vector2, Math.Vector3, Math.Vector4)):
                 v1 = tuple(v1)
             result = (result * 31 + hash(v1)) % 18446744073709551616L
 
         return result
 
     def __repr__(self):
-        buf = StringIO()
+        buf = FastStringIO()
         self.__writeStr(buf)
         return buf.getvalue()
 
@@ -61,7 +63,7 @@ class SerializableComponent(object):
 
     def copy(self):
         value = self.__class__()
-        for fname in self.fields.iterkeys():
+        for fname in self.fields:
             setattr(value, fname, getattr(self, fname))
 
         return value
@@ -73,7 +75,7 @@ class SerializableComponent(object):
         stream.write('{')
         i = 0
         n = len(self.fields)
-        for name, fieldInfo in self.fields.iteritems():
+        for name, fieldInfo in iteritems(self.fields):
             if fieldInfo.flags & FieldFlags.DEPRECATED:
                 continue
             v = getattr(self, name)

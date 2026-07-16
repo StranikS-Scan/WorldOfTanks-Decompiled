@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/blueprint.py
+from __future__ import absolute_import
+from future.utils import iteritems
 import nations
 from blueprints.BlueprintTypes import BlueprintTypes
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
@@ -77,7 +79,7 @@ class BlueprintTooltipData(BlocksTooltipData):
             intelText = text_styles.warning(str(intelRequired))
         blocks.append(formatters.packImageTextBlockData(desc=intelText, img=backport.image(R.images.gui.maps.icons.blueprints.fragment.special.intelligence()), imgAtLeft=False, txtAlign=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, imgPadding=formatters.packPadding(top=4, left=2), padding=formatters.packPadding(top=4)))
         blocks.append(formatters.packImageTextBlockData(desc=text_styles.main(backport.text(R.strings.tooltips.blueprint.VehicleBlueprintTooltip.chose())), img=backport.image(R.images.gui.maps.icons.blueprints.blueprintScreen.icPlus()), txtPadding=formatters.packPadding(top=1, left=4), padding=formatters.packPadding(top=3, left=6)))
-        for index, (nationId, cost) in enumerate(nationalRequiredOptions.iteritems()):
+        for index, (nationId, cost) in enumerate(iteritems(nationalRequiredOptions)):
             nationName = nations.MAP[nationId]
             if cost > nationalAllianceFragments[nationId]:
                 nationText = text_styles.critical(backport.getIntegralFormat(cost))
@@ -230,8 +232,6 @@ class BlueprintFragmentRandomTooltipData(BlueprintTooltipData):
     def __init__(self, context):
         super(BlueprintFragmentRandomTooltipData, self).__init__(context)
         self._setWidth(390)
-        self.__nationName = None
-        return
 
     def _packBlocks(self, fragmentCD):
         super(BlueprintFragmentRandomTooltipData, self)._packBlocks(fragmentCD)
@@ -259,8 +259,6 @@ class BlueprintFragmentRandomNationalTooltipData(BlueprintTooltipData):
     def __init__(self, context):
         super(BlueprintFragmentRandomNationalTooltipData, self).__init__(context)
         self._setWidth(420)
-        self.__nationName = None
-        return
 
     def _packBlocks(self, fragmentCD):
         super(BlueprintFragmentRandomNationalTooltipData, self)._packBlocks(fragmentCD)

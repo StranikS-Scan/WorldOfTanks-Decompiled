@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/missions/packers/conditions.py
+from __future__ import absolute_import
 import logging
 import typing
 from gui.Scaleform.genConsts.MISSIONS_ALIASES import MISSIONS_ALIASES
@@ -13,6 +14,7 @@ from gui.server_events.cond_formatters import FormattableField
 from gui.server_events.cond_formatters import prebattle, postbattle, vehicle
 from gui.server_events.cond_formatters.bonus import BattlesCountFormatter
 from gui.server_events.cond_formatters.bonus import MissionsBonusConditionsFormatter
+from gui.server_events.cond_formatters.challenges.postbattle import ChallengePostBattleConditionsFormatter
 from gui.server_events.formatters import PreFormattedCondition
 from gui.shared.formatters.plain_text import PlainTextFormatter
 from personal_missions_constants import CONDITION_ICON
@@ -237,6 +239,13 @@ class PostBattleConditionPacker(UIConditionPacker):
         descrArgs = (backport.text(R.strings.quests.missionDetails.conditions.playBattle()),)
         playBattleCondition = formatters.packMissionIconCondition(FormattableField(FORMATTER_IDS.SIMPLE_TITLE, titleArgs), MISSIONS_ALIASES.NONE, FormattableField(FORMATTER_IDS.DESCRIPTION, descrArgs), icon)
         return packer.pack(playBattleCondition, CONDITION_DEFAULT_NAME)
+
+
+class ChallengePostBattleConditionPacker(PostBattleConditionPacker):
+
+    def __init__(self):
+        super(ChallengePostBattleConditionPacker, self).__init__()
+        self.postBattleCondFormatter = ChallengePostBattleConditionsFormatter()
 
 
 def getDefaultBonusCondPacker():

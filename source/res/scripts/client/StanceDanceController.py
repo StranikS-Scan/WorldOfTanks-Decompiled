@@ -175,7 +175,6 @@ class StanceDanceController(VehicleDynamicComponent, IMechanicComponent, IMechan
 
     def _onAppearanceReady(self):
         super(StanceDanceController, self)._onAppearanceReady()
-        self.__mechanicPrefabSpawner.loadAppearancePrefab()
         self.__statesEvents.processStatePrepared()
 
     def _onComponentAppearanceUpdate(self, **kwargs):

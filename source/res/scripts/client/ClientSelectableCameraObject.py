@@ -6,15 +6,15 @@ from ClientSelectableObject import ClientSelectableObject
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from helpers import dependency
-from cgf_components.hangar_camera_manager import HangarCameraManager
+from cgf_components.hangar_camera_manager import HangarCameraSystem
 from skeletons.gui.shared.utils import IHangarSpace
 
 class ClientSelectableCameraObject(ClientSelectableObject):
     hangarSpace = dependency.descriptor(IHangarSpace)
     allCameraObjects = set()
 
-    def __init__(self):
-        ClientSelectableObject.__init__(self)
+    def __init__(self, name='ClientSelectableCameraObject'):
+        ClientSelectableObject.__init__(self, name)
         self.__state = CameraMovementStates.FROM_OBJECT
 
     def onEnterWorld(self, prereqs):
@@ -41,7 +41,7 @@ class ClientSelectableCameraObject(ClientSelectableObject):
             if clickedObject is None or clickedObject.state != CameraMovementStates.FROM_OBJECT:
                 return
             cls.deselectAll()
-            cameraManager = CGF.getManager(cls.hangarSpace.spaceID, HangarCameraManager)
+            cameraManager = CGF.getSystem(cls.hangarSpace.spaceID, HangarCameraSystem)
             if cameraName is None:
                 cameraManager.switchToTank(instantly)
             else:

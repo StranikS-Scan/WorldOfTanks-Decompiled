@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/restore_contoller.py
+from __future__ import absolute_import
 import operator
 import time
 from operator import itemgetter
@@ -108,7 +109,7 @@ class RestoreController(IRestoreController, Notifiable):
         restoreConfig = self.itemsCache.items.shop.tankmenRestoreConfig
         self.__maxTankmenBufferLength = restoreConfig.limit
         self.__tankmanLiveTime = restoreConfig.billableDuration
-        if invalidItems == {} or any([ tmanID < 0 for tmanID in invalidItems.get(GUI_ITEM_TYPE.TANKMAN, []) ]):
+        if invalidItems == {} or any((tmanID < 0 for tmanID in invalidItems.get(GUI_ITEM_TYPE.TANKMAN, []))):
             self.__updateTankmenList()
         self.__clearRestoreTimeNotifyCallback()
         self.__startRestoreTimeNotifyCallback()
@@ -170,7 +171,7 @@ class RestoreController(IRestoreController, Notifiable):
 
     def __checkLimitedRestoreNotification(self):
         criteria = IntCDProtectionRequestCriteria(_hasLimitedRestore, self.itemsCache.items.recycleBin.getVehiclesIntCDs())
-        vehicles = self.itemsCache.items.getVehicles(criteria).values()
+        vehicles = self.itemsCache.items.getVehicles(criteria)
         lastRestoreNotification = AccountSettings.getSettings(LAST_RESTORE_NOTIFICATION)
         if lastRestoreNotification is None:
             showMessage = True

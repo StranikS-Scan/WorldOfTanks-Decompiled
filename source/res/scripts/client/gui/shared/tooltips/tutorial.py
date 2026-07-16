@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/tutorial.py
+from __future__ import absolute_import
 from gui.Scaleform.locale.RES_COMMON import RES_COMMON
 from gui.shared.tooltips.common import BlocksTooltipData
 from gui.shared.tooltips import TOOLTIP_TYPE

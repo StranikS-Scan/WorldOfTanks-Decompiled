@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/common.py
+from __future__ import absolute_import
 import logging
 import copy
 import time
+from future.utils import viewvalues
 import BigWorld
 from BWUtil import AsyncReturn
 from constants import EMPTY_GEOMETRY_ID, PREMIUM_TYPE
@@ -410,7 +412,7 @@ class ClaimRewardForPostProgression(Processor):
     def _successHandler(self, code, ctx=None):
         crewBookID = ctx.get('crewBookID')
         itemsCache = dependency.instance(IItemsCache)
-        crewBook = first(itemsCache.items.getItems(GUI_ITEM_TYPE.CREW_BOOKS, REQ_CRITERIA.CREW_ITEM.ID(crewBookID)).values())
+        crewBook = first(viewvalues(itemsCache.items.getItems(GUI_ITEM_TYPE.CREW_BOOKS, REQ_CRITERIA.CREW_ITEM.ID(crewBookID))))
         formatedDate = str(time.strftime('%d.%m.%Y %H:%M:%S', time.localtime(time.time())))
         text = backport.text(R.strings.system_messages.post_progression.success(), book_name=crewBook.getName().strip(), amount=str(int(ctx.get('count'))), at=formatedDate)
         return makeI18nSuccess(sysMsgKey=text, type=SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.MEDIUM, auxData={'header': backport.text(R.strings.system_messages.post_progression.success.title())})

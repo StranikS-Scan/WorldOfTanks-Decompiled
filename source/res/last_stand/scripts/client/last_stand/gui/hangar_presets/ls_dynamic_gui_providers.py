@@ -5,12 +5,14 @@ from gui.hangar_presets.providers.default_dynamic_gui_provider import DefaultHan
 from last_stand.gui.impl.lobby.vehicle_menu_helper import LSHangarVehicleMenuHelper
 from last_stand_common.last_stand_constants import QUEUE_TYPE, ARENA_BONUS_TYPE
 from last_stand.gui.scaleform.daapi.view.lobby.header.helpers.controls_helpers import LSLobbyHeaderHelper
+from last_stand.gui.prb_control import LSVehicleAutoSearchHelper
 
 class LSHangarDynamicGuiProvider(DefaultHangarDynamicGuiProvider):
     _QUEUE_TYPE = QUEUE_TYPE.LAST_STAND
     _BONUS_TYPES = (ARENA_BONUS_TYPE.LAST_STAND,)
     _LOBBY_HEADER_HELPER = LSLobbyHeaderHelper
     _VEHICLE_MENU_HELPER = LSHangarVehicleMenuHelper
+    _VEHICLE_AUTO_SEARCH_HELPER = LSVehicleAutoSearchHelper
 
 
 class LSMediumHangarDynamicGuiProvider(LSHangarDynamicGuiProvider):

@@ -323,7 +323,7 @@ class TriggerSoundOnEngine(Block, SoundMeta):
     def _execute(self):
         vehicleGameObject = self._object.getValue()
         if vehicleGameObject is not None:
-            audition = vehicleGameObject.findComponentByType(Vehicular.VehicleAudition)
+            audition = vehicleGameObject.findWrite(Vehicular.VehicleAudition)
             if audition is not None:
                 soundName = self._eventName.getValue()
                 soundObj = audition.getSoundObject(tankStructure.TankSoundObjectsIndexes.ENGINE)

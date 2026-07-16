@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/battle_cache/cache_records.py
-from collections import defaultdict
+from __future__ import absolute_import
 import struct
 import weakref
+from builtins import zip
+from collections import defaultdict
+from future.utils import listvalues
 from debug_utils import LOG_ERROR
 from gui.battle_control.battle_constants import CACHE_RECORDS_IDS
 from helpers import dependency
@@ -121,7 +124,7 @@ class RelationsCacheRecord(AbstractCacheRecord):
                     keys = struct.unpack_from(_RELATIONS_KEYS_LIST_FORMAT.format(count), record, offset=_RELATIONS_SIZE_LEN)
                     values = struct.unpack_from(_RELATIONS_VALUES_LIST_FORMAT.format(count), record, offset=_RELATIONS_SIZE_LEN + struct.calcsize(_RELATIONS_KEYS_LIST_FORMAT.format(count)))
                     self.__relations.clear()
-                    self.__relations.update({key:val for key, val in zip(keys, values)})
+                    self.__relations.update(zip(keys, values))
             except struct.error as e:
                 LOG_ERROR('Could not unpack the following record: ', record, e)
 
@@ -130,7 +133,7 @@ class RelationsCacheRecord(AbstractCacheRecord):
 
     def pack(self):
         amount = len(self.__relations)
-        return struct.pack(_IGNORE_LIST_RECORD_FORMAT.format(amount, amount), amount, *(self.__relations.keys() + self.__relations.values()))
+        return struct.pack(_IGNORE_LIST_RECORD_FORMAT.format(amount, amount), amount, *(list(self.__relations) + listvalues(self.__relations)))
 
     def clear(self):
         self.__relations.clear()

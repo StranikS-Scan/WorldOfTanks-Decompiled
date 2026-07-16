@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/items_actions/factory.py
+from __future__ import absolute_import
 import logging
 from adisp import adisp_process, adisp_async
 from gui.shared.gui_items.items_actions import actions

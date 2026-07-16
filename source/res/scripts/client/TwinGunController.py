@@ -6,6 +6,7 @@ from constants import DUPLET_GUN_INDEXES_TUPLE
 from events_handler import eventHandler
 from gui.shared.utils.decorators import ReprInjector
 from gui.battle_control.components_states.ammo import DefaultComponentAmmoState
+from vehicle_appearance.constants import AppearanceState
 from vehicles.components.component_wrappers import ifAppearanceReady
 from vehicles.components.vehicle_component import VehicleDynamicComponent
 from vehicles.entities import ShotParams
@@ -27,6 +28,7 @@ class TwinGunAmmoState(DefaultComponentAmmoState):
 
 @ReprInjector.withParent()
 class TwinGunController(VehicleDynamicComponent, ITwinShootGunComponent, IMechanicComponentLogic):
+    APPEARANCE_READY_STATE = AppearanceState.COMPONENTS_CREATED
 
     def __init__(self):
         super(TwinGunController, self).__init__()
@@ -86,6 +88,10 @@ class TwinGunController(VehicleDynamicComponent, ITwinShootGunComponent, IMechan
     def _onAppearanceReady(self):
         super(TwinGunController, self)._onAppearanceReady()
         self.__shootingEvents.processAppearanceReady()
+
+    def _onAppearanceReset(self):
+        super(TwinGunController, self)._onAppearanceReset()
+        self.__shootingEvents.processAppearanceReset()
 
     def _onComponentAppearanceUpdate(self, **kwargs):
         super(TwinGunController, self)._onComponentAppearanceUpdate(**kwargs)

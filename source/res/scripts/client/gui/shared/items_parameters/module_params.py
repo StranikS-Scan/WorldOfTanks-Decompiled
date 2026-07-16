@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/module_params.py
+from __future__ import absolute_import, division
 import math
+from past.utils import old_div
 from gui.shared.items_parameters import calcGunParams, getGunDescriptors, isDualAccuracy, isTwinGun, isUnlimitedClipGun, isOverheatedUnlimitedGun, isTemperatureGun, isLowChargeShotGun, getShotsPerMinute
 from gui.shared.items_parameters.base_params import ParamsDictProxy, WeightedParam
 from gui.shared.items_parameters.params_constants import ONE_HUNDRED_PERCENTS, AUTOCANNON_SHOT_DISTANCE
@@ -10,6 +12,7 @@ from gui.shared.utils import DAMAGE_PROP_NAME, PIERCING_POWER_PROP_NAME, AIMING_
 from helpers import dependency
 from items.components import component_constants
 from items.params_utils import getTemperatureRateOfFire, getHeatedAimingTime, getHeatedShotDispersion
+from math_common import decimal_round, round_py2_style, round_py2_style_int
 from skeletons.gui.shared import IItemsCache
 
 class RadioParams(WeightedParam):
@@ -23,12 +26,12 @@ class EngineParams(WeightedParam):
 
     @property
     def enginePower(self):
-        return int(round(self._itemDescr.power / component_constants.HP_TO_WATTS, 0))
+        return round_py2_style_int(self._itemDescr.power / component_constants.HP_TO_WATTS)
 
     @property
     def turboshaftEnginePower(self):
         power = getTurboshaftEnginePower(self._vehicleDescr, self._itemDescr.name)
-        return power and int(round(power / component_constants.HP_TO_WATTS))
+        return power and round_py2_style_int(power / component_constants.HP_TO_WATTS)
 
     @property
     def rocketAccelerationEnginePower(self):
@@ -36,7 +39,7 @@ class EngineParams(WeightedParam):
 
     @property
     def fireStartingChance(self):
-        return int(round(self._itemDescr.fireStartingChance * ONE_HUNDRED_PERCENTS))
+        return round_py2_style_int(self._itemDescr.fireStartingChance * ONE_HUNDRED_PERCENTS)
 
     @property
     def forwardMaxSpeed(self):
@@ -48,7 +51,7 @@ class ChassisParams(WeightedParam):
 
     @property
     def rotationSpeed(self):
-        return int(round(math.degrees(self._itemDescr.rotationSpeed))) if not self.isWheeled or self.isWheeledOnSpotRotation else None
+        return round_py2_style_int(math.degrees(self._itemDescr.rotationSpeed)) if not self.isWheeled or self.isWheeledOnSpotRotation else None
 
     @property
     def maxSteeringLockAngle(self):
@@ -92,11 +95,11 @@ class TurretParams(WeightedParam):
 
     @property
     def armor(self):
-        return tuple((round(armor) for armor in self._itemDescr.primaryArmor))
+        return tuple((round_py2_style(armor) for armor in self._itemDescr.primaryArmor))
 
     @property
     def rotationSpeed(self):
-        return int(round(math.degrees(self._itemDescr.rotationSpeed)))
+        return round_py2_style_int(math.degrees(self._itemDescr.rotationSpeed))
 
     @property
     def circularVisionRadius(self):
@@ -111,9 +114,7 @@ class TurretParams(WeightedParam):
             curGun = self._vehicleDescr.gun.i18n.userString
         else:
             curGun = None
-        compatibleVehicles = list(super(TurretParams, self)._getCompatible())
-        compatibleVehicles.append(('guns', formatCompatibles(curGun, self.gunCompatibles)))
-        return tuple(compatibleVehicles)
+        return super(TurretParams, self)._getCompatible() + (('guns', formatCompatibles(curGun, self.gunCompatibles)),)
 
 
 class GunParams(WeightedParam):
@@ -208,7 +209,7 @@ class GunParams(WeightedParam):
         elif isTwinGun(gun):
             return (disp, math.tan(self._vehicleDescr.siegeVehicleDescr.gun.shotDispersionAngle) * 100)
         elif isTemperatureGun(gun):
-            return (round(getHeatedShotDispersion(gun.shotDispersionAngle, gun) * 100, 2), disp)
+            return (decimal_round(getHeatedShotDispersion(gun.shotDispersionAngle, gun) * 100, 2), disp)
         else:
             return (None, getLowChargeShotDispersion(self._vehicleDescr, disp)) if isLowChargeShotGun(self._vehicleDescr) else (None, disp)
 
@@ -247,16 +248,16 @@ class GunParams(WeightedParam):
 
     @property
     def continuousShotsPerMinute(self):
-        return tuple((round(60.0 / t) for t in self.shellReloadingTime)) if self.getReloadingType() in (GUN_AUTO_SHOOT, GUN_CAN_BE_AUTO_SHOOT) else None
+        return tuple((round_py2_style(60.0 / t) for t in self.shellReloadingTime)) if self.getReloadingType() in (GUN_AUTO_SHOOT, GUN_CAN_BE_AUTO_SHOOT) else None
 
     @property
     def continuousDamagePerSecond(self):
-        return tuple((round(self.avgDamageList[0] / t) for t in self.shellReloadingTime)) if self.getReloadingType() in (GUN_AUTO_SHOOT, GUN_CAN_BE_AUTO_SHOOT) else None
+        return tuple((round_py2_style(old_div(self.avgDamageList[0], t)) for t in self.shellReloadingTime)) if self.getReloadingType() in (GUN_AUTO_SHOOT, GUN_CAN_BE_AUTO_SHOOT) else None
 
     @property
     def avgDamagePerMinute(self):
         gun = self.__getVehicleGun()
-        return round(self.continuousShotsPerMinute[0] * self.avgDamageList[0]) if isUnlimitedClipGun(gun) and not isTemperatureGun(gun) else round(self.reloadTime[0] * self.avgDamageList[0])
+        return round_py2_style(self.continuousShotsPerMinute[0] * self.avgDamageList[0]) if isUnlimitedClipGun(gun) and not isTemperatureGun(gun) else round_py2_style(self.reloadTime[0] * self.avgDamageList[0])
 
     @property
     def stunMaxDurationList(self):
@@ -271,7 +272,7 @@ class GunParams(WeightedParam):
     @property
     def burstCount(self):
         burstSize = self.burstSize
-        return self.shellsCount[0] / burstSize if burstSize else None
+        return old_div(self.shellsCount[0], burstSize) if burstSize else None
 
     @property
     def burstSize(self):

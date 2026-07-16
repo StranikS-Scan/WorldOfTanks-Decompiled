@@ -1,10 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/ranked_battles_controller.py
+from __future__ import absolute_import
 import logging
 import operator
 import sys
 from collections import defaultdict
 import typing
+from builtins import range
+from future.utils import iteritems, itervalues, listvalues, lrange, viewitems
 import BigWorld
 import Event
 import season_common
@@ -13,6 +16,7 @@ from account_helpers.AccountSettings import RANKED_LAST_CYCLE_ID, RANKED_WEB_INF
 from adisp import adisp_process
 from constants import ARENA_BONUS_TYPE, EVENT_TYPE, BATTLE_MODE_VEHICLE_TAGS
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.game_control.season_provider import SeasonProvider
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
@@ -34,7 +38,6 @@ from gui.ranked_battles.ranked_helpers.year_position_provider import RankedYearP
 from gui.ranked_battles.ranked_models import BattleRankInfo, Division, Rank, RankChangeStates, RankData, RankProgress, RankState, RankStep, RankedAlertData, RankedSeason, ShieldStatus
 from gui.selectable_reward.common import RankedSelectableRewardManager
 from gui.server_events.awards_formatters import AWARDS_SIZES
-from gui.server_events.event_items import RankedQuest
 from gui.server_events.events_helpers import EventInfoModel, isRankedDaily
 from gui.shared import EVENT_BUS_SCOPE, event_dispatcher, events, g_eventBus
 from gui.shared.formatters.ranges import toRomanRangeString
@@ -45,7 +48,6 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier, TimerNotifier
 from helpers import dependency, time_utils
 from ranked_common import SwitchState
-from season_provider import SeasonProvider
 from shared_utils import findFirst, first
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_results import IBattleResultsService
@@ -59,7 +61,7 @@ if typing.TYPE_CHECKING:
     from gui.ranked_battles.constants import YearAwardsNames
     from gui.ranked_battles.ranked_helpers.web_season_provider import WebSeasonInfo
     from gui.ranked_battles.ranked_models import PostBattleRankInfo
-    from gui.server_events.event_items import Quest
+    from gui.server_events.event_items import Quest, RankedQuest
     from season_common import GameSeason
     from helpers.server_settings import RankedBattlesConfig
 _logger = logging.getLogger(__name__)
@@ -249,7 +251,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
             ctx = {'forbiddenClass': vehicle.type}
         if vehicle.level < config.minLevel or config.maxLevel < vehicle.level:
             restriction = PRE_QUEUE_RESTRICTION.LIMIT_LEVEL
-            ctx = {'levels': range(config.minLevel, config.maxLevel + 1)}
+            ctx = {'levels': lrange(config.minLevel, config.maxLevel + 1)}
         return ValidationResult(False, restriction, ctx) if restriction is not None else None
 
     def isUnset(self):
@@ -570,7 +572,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def getYearAwardsPointsMap(self):
         result = {}
         awardsMarks = self.__rankedSettings.yearAwardsMarks[:]
-        awardsMarks.append(sys.maxint)
+        awardsMarks.append(sys.maxsize)
         for idx, name in enumerate(YEAR_AWARDS_ORDER):
             result[name] = (awardsMarks[idx], awardsMarks[idx + 1] - 1)
 
@@ -590,8 +592,8 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def getCompletedYearQuest(self):
         quests = self.__eventsCache.getHiddenQuests()
         maxPoints, _ = self.getYearAwardsPointsMap().get(YEAR_AWARDS_ORDER[-1], (0, 0))
-        rankedFinalQuests = {points:quests.get(FINAL_QUEST_PATTERN.format(points)) for points in xrange(0, maxPoints + 1)}
-        for points, quest in rankedFinalQuests.iteritems():
+        rankedFinalQuests = {points:quests.get(FINAL_QUEST_PATTERN.format(points)) for points in range(maxPoints + 1)}
+        for points, quest in viewitems(rankedFinalQuests):
             if quest is not None and quest.isCompleted():
                 return {points: quest}
 
@@ -602,7 +604,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
             qualificationQuests = self.getQuestsForRank(ZERO_RANK_ID) or {}
         else:
             qualificationQuests = {quest.getID():quest for quest in quests}
-        return {value.getQualificationBattlesCount():value for key, value in qualificationQuests.iteritems() if value.isQualificationQuest()}
+        return {value.getQualificationBattlesCount():value for key, value in viewitems(qualificationQuests) if value.isQualificationQuest()}
 
     def awardWindowShouldBeShown(self, rankChangeInfo):
         if rankChangeInfo.prevAccRank == ZERO_RANK_ID:
@@ -637,8 +639,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
             awardsSequence = []
             quests = self.__eventsCache.getRankedQuests(lambda q: q.isHidden() and q.isForRank() and q.getSeasonID() == season.getSeasonID())
             formatter = getRankedAwardsFormatter(maxRewardsCount=6)
-            for qID, qProgress in questsProgress.iteritems():
-                _, pPrev, pCur = qProgress
+            for qID, (_, pPrev, pCur) in iteritems(questsProgress):
                 isCompleted = pCur.get('bonusCount', 0) - pPrev.get('bonusCount', 0) > 0
                 quest = quests.get(qID)
                 if quest is not None and quest.isForRank() and isCompleted:
@@ -749,7 +750,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
             self.__yearPositionProvider.stop()
         if ENTITLEMENT_EVENT_TOKEN in diff:
             self.onEntitlementEvent()
-        if any((key.startswith(YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX) for key in diff.keys())):
+        if any((key.startswith(YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX) for key in diff)):
             self.onSelectableRewardsChanged()
 
     def __onServerSettingsChanged(self, serverSettings):
@@ -840,7 +841,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         if season is not None and season.hasActiveCycle(currTime):
             seasonEnd = season.getEndDate()
             peripheryIDs = self._getAllPeripheryIDs()
-            for peripheryID, primeTime in self.getPrimeTimes().iteritems():
+            for peripheryID, primeTime in viewitems(self.getPrimeTimes()):
                 if peripheryID in peripheryIDs and primeTime.getPeriodsBetween(currTime, seasonEnd):
                     return True
 
@@ -924,9 +925,9 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
             self.__battlesGroups = self.__buildGroupsForBattle()
         return self.__battlesGroups
 
-    def getQuestsForRank(self, rankId):
+    def getQuestsForRank(self, rankID):
         season = self.getCurrentSeason()
-        return None if season is None else self.__eventsCache.getRankedQuests(lambda q: q.getRank() == rankId and q.isHidden() and q.isForRank() and q.getSeasonID() == season.getSeasonID())
+        return None if season is None else self.__eventsCache.getRankedQuests(lambda q: q.getRank() == rankID and q.isHidden() and q.isForRank() and q.getSeasonID() == season.getSeasonID())
 
     def __getRank(self, currentProgress, lastProgress, maxProgress, lastShield, shield, rankID, bonusSteps=None):
         stepsToProgress = self.__rankedSettings.accSteps
@@ -939,7 +940,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         isCurrent = rankID == currentProgress[0]
         shieldStatus = self.__getDynamicShieldStatus(rankID, isCurrent, shield, lastShield)
         quests = self.getQuestsForRank(rankID)
-        quests = quests.values() if quests is not None else None
+        quests = listvalues(quests) if quests is not None else None
         rank = Rank(division=self.getDivision(rankID), quests=quests, shield=shieldStatus, isUnburnable=(rankID in self.__rankedSettings.unburnableRanks), *self.__buildRank(rankID, stepsCount, bonusStepsCount, currentProgress, maxProgress, lastProgress))
         return rank
 
@@ -1006,7 +1007,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def __buildDivisions(self):
         divisions = []
         maxPossibleRank = self.__rankedSettings.accRanks
-        startRanks = sorted([ data['startRank'] for data in self.__rankedSettings.divisions.itervalues() if not data['isLeague'] ])
+        startRanks = sorted([ data['startRank'] for data in itervalues(self.__rankedSettings.divisions) if not data['isLeague'] ])
         numDivisions = len(startRanks)
         lastDivisionIdx = numDivisions - 1
         rank, _ = self.__itemsCache.items.ranked.accRank
@@ -1032,7 +1033,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
             divisionID = division.getID()
             if maxRankInGroup == division.lastRank:
                 divisionID += 1
-            divisionsGroups[divisionID].append(range(previousPosition, position))
+            divisionsGroups[divisionID].append(lrange(previousPosition, position))
             previousPosition = position
 
         return divisionsGroups

@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/crew_books_constants.py
+from __future__ import absolute_import
+from builtins import range
 CREW_BOOKS_XML_FILE = 'crewBooks.xml'
 CREW_BOOKS_PRICE_GROUPS_XML_FILE = 'priceGroups.xml'
 CREW_BOOK_TYPES_XML_FILE = 'crewBookTypes.xml'

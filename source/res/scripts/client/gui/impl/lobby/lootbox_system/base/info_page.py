@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/lootbox_system/base/info_page.py
 from enum import Enum
+from account_helpers.AccountSettings import LOOT_BOXES_SELECTED_BOX
 from frameworks.wulf import WindowFlags
 from gui.Scaleform.Waiting import Waiting
 from gui.impl.gen import R
@@ -17,6 +18,7 @@ from gui.lootbox_system.base.sound import playInfopageEnterSound, playInfopageEx
 from gui.lootbox_system.base.utils import getInfoPageSettings, isCountryForShowingExternalLootList, isShopVisible, openExternalLootList
 from gui.lootbox_system.base.views_loaders import showItemPreview
 from helpers import dependency
+from helpers.time_utils import getServerUTCTime
 from shared_utils import first
 from skeletons.gui.game_control import ILootBoxSystemController
 
@@ -31,6 +33,7 @@ class InfoPage(ViewComponent):
     def __init__(self, ctx=None):
         self.__category = ctx.get('category')
         self.__eventName = ctx.get('eventName')
+        self.__savedCategory = self.__lootBoxes.getSetting(self.__eventName, LOOT_BOXES_SELECTED_BOX)
         self.__tooltipData = {}
         super(InfoPage, self).__init__(R.views.mono.lootbox.info_page(), InfoPageModel)
 
@@ -89,20 +92,23 @@ class InfoPage(ViewComponent):
         elif box is not None:
             self.__category = box.getCategory()
         self.viewModel.setChosenCategory(self.__category)
+        self.__lootBoxes.setSetting(self.__eventName, LOOT_BOXES_SELECTED_BOX, self.__category)
         return
 
     def __updateCategory(self, ctx=None, model=None):
         if ctx is not None:
             self.__fillChosenCategory(category=ctx.get('chosenCategory', ''))
+        elif self.__savedCategory is not None:
+            self.__fillChosenCategory(category=self.__savedCategory)
         else:
             self.__fillChosenCategory(category=self.__category, box=first(self.__lootBoxes.getActiveBoxes(self.__eventName)))
         return
 
     @replaceNoneKwargsModel
     def __updateState(self, model=None):
-        starTime, endTime = self.__lootBoxes.getActiveTime(self.__eventName)
-        model.setStartDate(starTime)
-        model.setEndDate(endTime)
+        _, endTime = self.__lootBoxes.getActiveTime(self.__eventName)
+        timeLeft = max(0, endTime - getServerUTCTime())
+        model.setEventExpireTime(timeLeft)
         model.setEventName(self.__eventName)
         self.__updateCategory()
         self.__updateBoxes(model=model)
@@ -113,15 +119,17 @@ class InfoPage(ViewComponent):
         boxes.clear()
         for box in self.__lootBoxes.getActiveBoxes(self.__eventName):
             boxInfo = self.__lootBoxes.getBoxInfo(box.getID())
-            filledBoxModel = self.__setLootBox(box.getCategory(), boxInfo.get('limit', 0), boxInfo.get('slots', {}))
+            filledBoxModel = self.__setLootBox(box.getCategory(), boxInfo.get('limit', 0), box.getInventoryCount(), boxInfo.get('boxCountToGuaranteedBonus', 0), boxInfo.get('slots', {}))
             boxes.addViewModel(filledBoxModel)
 
         boxes.invalidate()
 
-    def __setLootBox(self, category, guaranteed, slotsInfo):
+    def __setLootBox(self, category, guaranteed, count, countToGuaranteed, slotsInfo):
         boxModel = BoxModel()
         boxModel.setCategory(category)
         boxModel.setGuaranteedLimit(guaranteed)
+        boxModel.setCount(count)
+        boxModel.setCountToGuaranteed(countToGuaranteed)
         slotsModel = boxModel.getSlots()
         slotsModel.clear()
         for slotID in self.__sortedSlotsIDs(slotsInfo):

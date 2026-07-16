@@ -83,7 +83,9 @@ class PrestigeProfileTechniqueView(PrestigeProfileTechniqueCommon):
     def _updateModel(self):
         self._checkData(self._updateModel)
         currentLevel, remainingPts = getVehiclePrestige(self._selectedVehIntCD, itemsCache=self._itemsCache)
-        currentXP, nextLvlXP = getCurrentProgress(self._selectedVehIntCD, currentLevel, remainingPts, lobbyContext=self._lobbyContext)
+        currentXP, nextLvlXP = (-1, -1)
+        if currentLevel > 0:
+            currentXP, nextLvlXP = getCurrentProgress(self._selectedVehIntCD, currentLevel, remainingPts, lobbyContext=self._lobbyContext)
         nextLevel = getNextGradeLevel(currentLevel, self._selectedVehIntCD)
         with self.viewModel.transaction() as tx:
             tx.setCurrentProgress(currentXP)

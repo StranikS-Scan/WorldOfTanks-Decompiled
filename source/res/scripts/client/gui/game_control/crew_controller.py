@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/crew_controller.py
+from __future__ import absolute_import
 from gui.shared.gui_items.Tankman import NO_SLOT, NO_TANKMAN
 from gui.prb_control.entities.listener import IGlobalListener
 from helpers import dependency

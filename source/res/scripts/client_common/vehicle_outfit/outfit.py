@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/vehicle_outfit/outfit.py
+from __future__ import absolute_import
 import typing
 from collections import Counter, namedtuple
+from future.utils import viewitems, viewvalues
 from constants import IS_EDITOR
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.gui_item import HasStrCD
@@ -31,7 +33,7 @@ ANCHOR_TYPE_TO_SLOT_TYPE_MAP = {'inscription': GUI_ITEM_TYPE.INSCRIPTION,
  'sequence': GUI_ITEM_TYPE.SEQUENCE,
  'attachment': GUI_ITEM_TYPE.ATTACHMENT,
  'statTracker': GUI_ITEM_TYPE.STAT_TRACKER}
-SLOT_TYPE_TO_ANCHOR_TYPE_MAP = {v:k for k, v in ANCHOR_TYPE_TO_SLOT_TYPE_MAP.iteritems()}
+SLOT_TYPE_TO_ANCHOR_TYPE_MAP = {v:k for k, v in viewitems(ANCHOR_TYPE_TO_SLOT_TYPE_MAP)}
 SLOT_TYPES = tuple((slotType for slotType in SLOT_TYPE_TO_ANCHOR_TYPE_MAP))
 EditableStyleDiff = namedtuple('EditableStyleDiff', ('applied', 'removed'))
 
@@ -87,7 +89,7 @@ class Outfit(HasStrCD):
                 if g_cache.customization20(createNew=False):
                     self._styleDescr = getItemByCompactDescr(intCD)
         self._construct(vehicleType=vehicleType)
-        for container in self._containers.itervalues():
+        for container in viewvalues(self._containers):
             container.unpack(component)
 
         self.__itemsCounter = None
@@ -125,7 +127,7 @@ class Outfit(HasStrCD):
 
     def pack(self):
         component = CustomizationOutfit()
-        for container in self._containers.itervalues():
+        for container in viewvalues(self._containers):
             container.pack(component)
 
         component.styleId = self._id
@@ -141,7 +143,7 @@ class Outfit(HasStrCD):
     def diff(self, other):
         self._validateVehicle(other)
         result = Outfit(vehicleCD=self.vehicleCD)
-        for areaID in self._containers.iterkeys():
+        for areaID in self._containers:
             acont = self.getContainer(areaID)
             bcont = other.getContainer(areaID)
             result.setContainer(areaID, acont.diff(bcont))
@@ -157,7 +159,7 @@ class Outfit(HasStrCD):
     def discard(self, other):
         self._validateVehicle(other)
         result = self.copy()
-        for areaID in self._containers.iterkeys():
+        for areaID in self._containers:
             acont = self.getContainer(areaID)
             bcont = other.getContainer(areaID)
             result.setContainer(areaID, acont.discard(bcont))
@@ -170,7 +172,7 @@ class Outfit(HasStrCD):
         result = self.copy()
         result.setProgressionLevel(other.progressionLevel or result.progressionLevel)
         result.setSerialNumber(other.serialNumber or result.serialNumber)
-        for areaID in self._containers.iterkeys():
+        for areaID in self._containers:
             acont = self.getContainer(areaID)
             bcont = other.getContainer(areaID)
             result.setContainer(areaID, acont.adjust(bcont))
@@ -249,17 +251,17 @@ class Outfit(HasStrCD):
         self.__styleSerialNumber = value
 
     def containers(self):
-        for container in self._containers.itervalues():
+        for container in viewvalues(self._containers):
             yield container
 
     def items(self):
-        for container in self._containers.itervalues():
+        for container in viewvalues(self._containers):
             for slot in container.slots():
                 for item in slot.values():
                     yield item
 
     def itemsFull(self):
-        for container in self._containers.itervalues():
+        for container in viewvalues(self._containers):
             for slot in container.slots():
                 for regionIdx in range(slot.capacity()):
                     slotData = slot.getSlotData(regionIdx)
@@ -271,7 +273,7 @@ class Outfit(HasStrCD):
                          slot)
 
     def slotsData(self):
-        for container in self._containers.itervalues():
+        for container in viewvalues(self._containers):
             for slot in container.slots():
                 for regionIdx in range(slot.capacity()):
                     slotData = slot.getSlotData(regionIdx)
@@ -279,7 +281,7 @@ class Outfit(HasStrCD):
                         yield slotData
 
     def slots(self):
-        for container in self._containers.itervalues():
+        for container in viewvalues(self._containers):
             for slot in container.slots():
                 yield slot
 
@@ -298,17 +300,17 @@ class Outfit(HasStrCD):
         return isEmpty(self.items())
 
     def removePreview(self):
-        for container in self._containers.itervalues():
+        for container in viewvalues(self._containers):
             container.removePreview()
 
         self.invalidate()
 
     def clear(self):
-        for container in self._containers.itervalues():
+        for container in viewvalues(self._containers):
             container.clear()
 
     def invalidate(self):
-        for container in self._containers.itervalues():
+        for container in viewvalues(self._containers):
             container.invalidate()
 
         self.invalidateItemsCounter()

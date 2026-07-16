@@ -20,7 +20,7 @@ from last_stand.gui.shared.gui_items.items_actions import actions
 from last_stand.gui.impl.lobby.tank_setup.interactor import ActionTypes
 from gui.impl.lobby.tank_setup.dialogs.confirm_dialog import _SECTION_TO_FITTING_TYPE
 from last_stand.gui.impl.lobby.tank_setup import LSTankSetupConstants, LSFittingTypes
-from gui.shared.system_factory import registerHitDirectionController, registerPrbInviteHtmlFormatter, registerLobbyTooltipsBuilders, registerIgnoredModeForAutoSelectVehicle, registerReadyVehicleChekers
+from gui.shared.system_factory import registerHitDirectionController, registerPrbInviteHtmlFormatter, registerLobbyTooltipsBuilders, registerIgnoredModeForAutoSelectVehicle, registerReadyVehicleChekers, registerTeamVoipSupport
 from last_stand.gui.battle_control.controllers.hit_direction_ctrl.ls_ctrl import LSHitDirectionController, LSHitDirectionControllerPlayer
 from messenger.m_constants import LAZY_CHANNEL
 from messenger.ext.channel_num_gen import _CHANNEL_LAZY_ORDER, _LAZY_CLIENT_IDS
@@ -63,6 +63,7 @@ def registerAdditionalParams(personality):
     registerIgnoredModeForAutoSelectVehicle([FUNCTIONAL_FLAG.LAST_STAND])
     registerConditionFormatterIcons()
     registerDailyQuestDecorationMap(personality)
+    registerTeamVoipSupport(ARENA_GUI_TYPE.LAST_STAND, True)
 
 
 def registerLazyChannelParam(extChannelConst, personality):
@@ -70,7 +71,7 @@ def registerLazyChannelParam(extChannelConst, personality):
     extChannelConst.inject(personality)
     for value in viewvalues(extraAttrs):
         LAZY_CHANNEL.ALL += (value,)
-        _CHANNEL_LAZY_ORDER.update({value: 1})
+        _CHANNEL_LAZY_ORDER.update({value: 0})
 
     _LAZY_CLIENT_IDS.update(dict(((name, -(idx + 1 + 32)) for idx, name in enumerate(LAZY_CHANNEL.ALL))))
 

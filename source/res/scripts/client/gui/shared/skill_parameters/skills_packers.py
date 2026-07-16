@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/skill_parameters/skills_packers.py
+from __future__ import absolute_import
 from typing import TYPE_CHECKING
 from gui.impl.gen.view_models.views.lobby.crew.crew_constants import Color
 from gui.impl.gen.view_models.views.lobby.crew.tooltips.crew_perks_tooltip_booster_model import PerkImpactType

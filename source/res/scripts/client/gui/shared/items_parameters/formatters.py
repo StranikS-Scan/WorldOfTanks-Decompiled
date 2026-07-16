@@ -1,9 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/formatters.py
+from __future__ import absolute_import
+from builtins import zip
 from collections import namedtuple
+from future.utils import iteritems, lzip
 from itertools import chain
+from past.builtins import unicode
 from typing import TYPE_CHECKING
-from future.utils import iteritems
 from constants import BonusTypes, DAMAGE_INTERPOLATION_DIST_LAST
 from debug_utils import LOG_ERROR
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
@@ -20,6 +23,7 @@ from gui.shared.items_parameters.params_helper import hasGroupPenalties, getComm
 from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_SWITCH_TIME, CHASSIS_REPAIR_TIME, CHASSIS_REPAIR_TIME_YOH, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, DUAL_ACCURACY_COOLING_DELAY, SHOT_DISPERSION_ANGLE, DISPERSION_RADIUS, BURST_FIRE_RATE, BURST_TIME_INTERVAL, BURST_SIZE, BURST_COUNT, AVG_DAMAGE_PER_SECOND, AUTO_SHOOT_CLIP_FIRE_RATE, CONTINUOUS_SHOTS_PER_MINUTE, CONTINUOUS_DAMAGE_PER_SECOND, TWIN_GUN_SWITCH_FIRE_MODE_TIME, TWIN_GUN_TOP_SPEED, TWIN_GUN_RELOAD_ONE_GUN_TIME, TWIN_GUN_RELOAD_TWO_GUN_TIME, TWIN_GUN_RELOAD_TIME, SHELL_RELOADING_TIME_PROP_NAME, SHELL_LOADING_TIME_PROP_NAME, RELOAD_TIME_PROP_NAME, TEMPERATURE_RELOAD_TIME, TEMPERATURE_AVG_DAMAGE_PER_MINUTE
 from helpers.i18n import makeString, isValidKey
 from items import vehicles, artefacts, getTypeOfCompactDescr, ITEM_TYPES
+from math_common import decimal_round, round_py2_style
 from web_stubs import i18n
 if TYPE_CHECKING:
     from typing import Optional
@@ -389,7 +393,7 @@ def formatVehicleParamName(paramName, showMeasureUnit=True):
 
 def getRelativeDiffParams(comparator):
     relativeParams = [ p for p in comparator.getAllDifferentParams() if isRelativeParameterVisible(p) ]
-    return sorted(relativeParams, cmp=lambda a, b: cmp(RELATIVE_PARAMS.index(a.name), RELATIVE_PARAMS.index(b.name)))
+    return sorted(relativeParams, key=lambda k: RELATIVE_PARAMS.index(k.name))
 
 
 _NBSP = R.strings.common.common.nbsp()
@@ -461,7 +465,7 @@ def shotDispersionAnglePreprocessor(values, states):
 
 
 def _getRoundReload(value):
-    return backport.getNiceNumberFormat(round(value, 1))
+    return backport.getNiceNumberFormat(decimal_round(value, 1))
 
 
 FORMAT_SETTINGS = {'relativePower': _integralFormat,
@@ -584,7 +588,7 @@ def _deltaWrapper(fn):
 
     def wrapped(paramValue):
         formattedValue = fn(paramValue)
-        if formattedValue == '0' or formattedValue == '-0':
+        if formattedValue in ('0', '-0'):
             return _EQUAL_TO_ZERO_LITERAL
         return '+%s' % formattedValue if isinstance(paramValue, (int, float)) and paramValue > 0 else formattedValue
 
@@ -681,7 +685,7 @@ def formatParameter(parameterName, paramValue, parameterState=None, colorScheme=
     preprocessor = settings.get('preprocessor')
     if KPI.Name.hasValue(parameterName):
         formatter = KPI_FORMATTERS.get(parameterName, kpiFormatValue)
-        values, separator = formatter(parameterName, round(paramValue, 3)), None
+        values, separator = formatter(parameterName, decimal_round(paramValue, 3)), None
     elif preprocessor:
         values, separator, parameterState = preprocessor(paramValue, parameterState)
     else:
@@ -701,7 +705,7 @@ def formatParameter(parameterName, paramValue, parameterState=None, colorScheme=
         if skipNone:
             params = [ (val, state) for val, state in zip(values, parameterState) if val is not None ]
         else:
-            params = zip(values, parameterState)
+            params = lzip(values, parameterState)
         paramsList = [ _applyFormat(val, state, settings, doSmartRound, colorScheme) for val, state in params ]
         return separator.join(paramsList)
     else:
@@ -798,5 +802,5 @@ def getAllParametersTitles(hiddenParams=()):
 
 def _cutDigits(value):
     if abs(value) > 99:
-        return round(value)
-    return round(value, 1) if abs(value) > 9 else round(value, 2)
+        return round_py2_style(value)
+    return decimal_round(value, 1) if abs(value) > 9 else decimal_round(value, 2)

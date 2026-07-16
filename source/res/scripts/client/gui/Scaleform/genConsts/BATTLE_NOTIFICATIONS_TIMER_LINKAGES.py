@@ -53,6 +53,7 @@ class BATTLE_NOTIFICATIONS_TIMER_LINKAGES(object):
     THUNDER_STRIKE_ICON = 'thunderStrikeIconUI'
     SHOT_PASSION_ICON = 'shotPassionIconUI'
     HP_RESTORE_ON_DAMAGE_ICON = 'hpRestoreOnDamageIconUI'
+    SHIELD_ICON = 'shieldIconUI'
     POI_GREEN_ARTILLERY_ICON = 'PoIGreenArtilleryIconUI'
     POI_GREEN_ARTILLERY_SMALL_ICON = 'PoIGreenArtillerySmallIconUI'
     POI_GREEN_RECON_ICON = 'PoIGreenReconIconUI'

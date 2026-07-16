@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/veh_post_progression_controller.py
+from __future__ import absolute_import
 import typing
+from builtins import map
+from future.utils import viewvalues
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import GUI_START_BEHAVIOR
 from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
@@ -54,10 +57,10 @@ class VehiclePostProgressionController(IVehiclePostProgressionController):
     def onLobbyInited(self, _):
         self.__tryShowWelcomeUnlockMsg()
 
-    def isDisabledFor(self, veh, settings=None, skipRentalIsOver=False):
+    def isDisabledFor(self, vehicle, settings=None, skipRentalIsOver=False):
         settings = settings or self.__postProgressionSettings
-        inEnabledRented = settings is not None and veh.intCD in settings.enabledRentedVehicles
-        return veh.isRented and not inEnabledRented or veh.rentalIsOver and inEnabledRented and not skipRentalIsOver
+        inEnabledRented = settings is not None and vehicle.intCD in settings.enabledRentedVehicles
+        return vehicle.isRented and not inEnabledRented or vehicle.rentalIsOver and inEnabledRented and not skipRentalIsOver
 
     def isEnabled(self):
         return self.__postProgressionSettings.isPostProgressionEnabled
@@ -136,7 +139,7 @@ class VehiclePostProgressionController(IVehiclePostProgressionController):
             criteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.ELITE
             suitVehs = self.__itemsCache.items.getVehicles(criteria=criteria)
             progressionSettings = self.__postProgressionSettings
-            if findFirst(lambda v: self.isExistsFor(v.typeDescr, progressionSettings), suitVehs.itervalues()) is not None:
+            if findFirst(lambda v: self.isExistsFor(v.typeDescr, progressionSettings), viewvalues(suitVehs)) is not None:
                 showWelcomeUnlockMsg()
             settings[GuiSettingsBehavior.VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW] = False
             self.__settingsCore.serverSettings.setSectionSettings(GUI_START_BEHAVIOR, settings)

@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/queues/LimitedThroughputQueue.py
+from __future__ import absolute_import
+from past.builtins import xrange
 import BigWorld
 
 class LimitedThroughputQueue:
@@ -26,7 +28,7 @@ class LimitedThroughputQueue:
         self.__timerID = 0
 
     def _job(self, timerID, _=0):
-        for i in xrange(0, self.__actionsPerSecond / self.__maxActionsPerBatch):
+        for _ in xrange(0, self.__actionsPerSecond // self.__maxActionsPerBatch):
             action = self.__queue.pop()
             action()
             if len(self.__queue) == 0:

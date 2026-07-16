@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_matters/battle_matters_bonus_packer.py
+from __future__ import absolute_import
 import typing
 import logging
 from constants import PREMIUM_ENTITLEMENTS
@@ -62,61 +63,45 @@ _DEVICES_TYPES_ORDER = (SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS,
  SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT)
 _ITEMS_TYPES_ORDER = (GUI_ITEM_TYPE.OPTIONALDEVICE, GUI_ITEM_TYPE.BATTLE_BOOSTER, GUI_ITEM_TYPE.EQUIPMENT)
 
-def _vehiclesCmp(firstModel, secondModel):
-    return cmp(firstModel.getLevel(), secondModel.getLevel())
+def _vehiclesSortKey(model):
+    return model.getLevel()
 
 
-def _customizationsCmp(firstModel, secondModel):
-    return indexesCmp(_CUSTOMIZATIONS_ORDER, firstModel.getIcon(), secondModel.getIcon())
+def _customizationsSortKey(model):
+    return indexesSortKey(_CUSTOMIZATIONS_ORDER, model.getIcon())
 
 
-def _itemsCmp(firstModel, secondModel):
-    result = indexesCmp(_ITEMS_TYPES_ORDER, firstModel.getItemType(), secondModel.getItemType())
-    if not result:
-        result = indexesCmp(_DEVICES_TYPES_ORDER, firstModel.getOverlayType(), secondModel.getOverlayType())
-    return result
+def _itemsSortKey(model):
+    return (indexesSortKey(_ITEMS_TYPES_ORDER, model.getItemType()), indexesSortKey(_DEVICES_TYPES_ORDER, model.getOverlayType()))
 
 
-_CUSTOM_SORT = {VehiclesBonus.VEHICLES_BONUS: _vehiclesCmp,
- 'customizations': _customizationsCmp,
- 'items': _itemsCmp}
+_CUSTOM_SORT_KEY = {VehiclesBonus.VEHICLES_BONUS: _vehiclesSortKey,
+ 'customizations': _customizationsSortKey,
+ 'items': _itemsSortKey}
 
-def battleMattersSort(rewardType):
-    return _CUSTOM_SORT.get(rewardType, lambda _, __: 0)
-
-
-def bonusesSort(firstBonus, secondBonus):
-    firstBonusName = firstBonus.getName()
-    secondBonusName = secondBonus.getName()
-    if firstBonusName == secondBonusName == BlueprintBonusTypes.BLUEPRINTS:
-        result = blueprintsCmp(firstBonus, secondBonus)
-    else:
-        result = indexesCmp(_REWARDS_ORDER, firstBonusName, secondBonusName)
-    return result
+def battleMattersSortKey(rewardType):
+    return _CUSTOM_SORT_KEY.get(rewardType, lambda _: 0)
 
 
-def indexesCmp(sequence, firstBonusName, secondBonusName):
-    firstOrder = secondOrder = len(sequence)
-    if firstBonusName in sequence:
-        firstOrder = sequence.index(firstBonusName)
-    if secondBonusName in sequence:
-        secondOrder = sequence.index(secondBonusName)
-    return cmp(firstOrder, secondOrder)
+def bonusesSortKey(bonus):
+    bonusName = bonus.getName()
+    blueprintKey = blueprintsSortKey(bonus) if bonusName == BlueprintBonusTypes.BLUEPRINTS else 0
+    return (indexesSortKey(_REWARDS_ORDER, bonusName), blueprintKey)
 
 
-def blueprintsCmp(firstBonus, secondBonus):
-    firstBlueprintName = firstBonus.getBlueprintName()
-    secondBlueprintName = secondBonus.getBlueprintName()
-    result = 0
-    if firstBlueprintName == BlueprintsBonusSubtypes.UNIVERSAL_FRAGMENT:
-        result = -1
-    elif firstBlueprintName == secondBlueprintName == BlueprintsBonusSubtypes.NATION_FRAGMENT:
-        result = _blueprintsNationCmp(firstBonus, secondBonus)
-    return result
+def indexesSortKey(sequence, bonusName):
+    return sequence.index(bonusName) if bonusName in sequence else len(sequence)
 
 
-def _blueprintsNationCmp(firstBonus, secondBonus):
-    return cmp(GUI_NATIONS_ORDER_INDEX.get(firstBonus.getImageCategory(), NONE_INDEX), GUI_NATIONS_ORDER_INDEX.get(secondBonus.getImageCategory(), NONE_INDEX))
+def blueprintsSortKey(bonus):
+    blueprintName = bonus.getBlueprintName()
+    if blueprintName == BlueprintsBonusSubtypes.UNIVERSAL_FRAGMENT:
+        return -1
+    return _blueprintsNationSortKey(bonus) if blueprintName == BlueprintsBonusSubtypes.NATION_FRAGMENT else 0
+
+
+def _blueprintsNationSortKey(bonus):
+    return GUI_NATIONS_ORDER_INDEX.get(bonus.getImageCategory(), NONE_INDEX)
 
 
 def getBattleMattersBonusPacker():

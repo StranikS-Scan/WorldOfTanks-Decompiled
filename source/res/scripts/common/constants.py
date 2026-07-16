@@ -1,22 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/constants.py
 from __future__ import absolute_import, division
-import typing
-import enum
-from future.utils import iteritems
 import calendar
+import enum
 import time
+import typing
 from enum import IntEnum
 from builtins import zip
 from math import cos, radians
 from time import time as timestamp
 from collections import namedtuple
 from itertools import chain
-from Math import Vector3, Vector2
-from future.utils import lmap, lrange, viewitems, with_metaclass
-from past.builtins import xrange
-from realm import CURRENT_REALM
 from functools import reduce
+from future.utils import iteritems, lmap, lrange, viewitems
+from past.builtins import xrange
+from Math import Vector3, Vector2
+from py2to3.patched_future import with_metaclass
+from realm import CURRENT_REALM
 if typing.TYPE_CHECKING:
     from typing import Sequence, Union
 try:
@@ -24,7 +24,7 @@ try:
 except ImportError:
 
     class BigWorld:
-        component = 'unknown'
+        component = 'Unknown'
 
 
 IS_VS_EDITOR = BigWorld.component == 'vs_editor'
@@ -39,6 +39,7 @@ IS_DYNUPDATER = False
 IS_LOAD_GLOSSARY = False
 IS_CGF_DUMP = BigWorld.component == 'client_cgf_dump'
 IS_PROCESS_REPLAY = BigWorld.component.endswith('process_replay')
+IS_UNKNOWN = BigWorld.component == 'Unknown'
 DEFAULT_LANGUAGE = 'en'
 AUTH_REALM = 'EU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -77,6 +78,8 @@ REGIONAL_REALMS = frozenset(['RU',
  'CN',
  'KR'])
 CURRENT_REALM_IS_REGIONAL = CURRENT_REALM in REGIONAL_REALMS
+NULL_CLUSTER_ID = BigWorld.NULL_CLUSTER_ID
+STANDALONE_CLUSTER_ID = BigWorld.DEFAULT_CLUSTER_ID
 
 class REALM_HELPER:
 
@@ -761,6 +764,7 @@ class PREBATTLE_CACHE_KEY:
     CREATOR_IGR_TYPE = 17
     CREATOR_DB_ID = 18
     CREATOR_BADGES = 19
+    CLUSTER_ID = 20
 
 
 class PREBATTLE_INVITE_STATE:
@@ -997,6 +1001,7 @@ class Configs(enum.Enum):
     RENEWABLE_SUBSCRIPTION_CONFIG = 'renewable_subscription_config'
     INGAME_TOURNAMENT_CONFIG = 'ingame_tournament_config'
     W2GT_CONFIG = 'w2gt_config'
+    CHALLENGES_CONFIG = 'challenges_config'
 
 
 INBATTLE_CONFIGS = ['spgRedesignFeatures',
@@ -1633,6 +1638,7 @@ class BATTLE_PROGRESS_CATEGORY:
     PRESTIGE = 5
     RESEARCH_NEW_MODULES_AND_VEHICLES = 6
     COMMON_QUESTS = 7
+    CHALLENGES_MISSIONS = 10
 
 
 class QUEST_DATA_IDX:
@@ -1708,6 +1714,7 @@ HAS_PM_BRANCH_COMPLETED_TOKEN = 'has_completed_pm_branch'
 PM3_FINISHED_OPERATION_TEMPLATE = 'token:pt:s3:t{}:finished:base'
 LINKED_SET_UNFINISHED_TOKEN = 'linkedset_unfinished'
 FREE_PREMIUM_CREW_LOG_EXT_PREFIX = 'free_premium_crew:level:'
+ATTACHMENTS_SET_TOKEN_PREFIX = 'attachments_set'
 
 def personalMissionFreeTokenName(branch):
     return PERSONAL_MISSION_FREE_TOKEN_NAME if branch <= 1 else '_'.join([PERSONAL_MISSION_FREE_TOKEN_NAME, str(branch)])
@@ -2112,6 +2119,10 @@ class REQUEST_COOLDOWN:
     CMD_PET_SYSTEM_SELECT_PET_NAME = 1.0
     CMD_PET_SYSTEM_SELECT_ACTIVE_PET_BONUS = 0.5
     CMD_PET_SYSTEM_ADD_SYNERGY = 1.0
+    CMD_CHALLENGE_ACTIVATE = 5.0
+    CMD_CHALLENGE_RESTART = 5.0
+    CMD_CHALLENGE_SURRENDER = 5.0
+    CMD_CHALLENGES_CHEAT = 1.0
 
 
 class REQUEST_RATE_LIMIT:
@@ -3378,6 +3389,7 @@ class DUAL_GUN:
 
 
 UNKNOWN_VEHICLE_ID = 0
+UNKNOWN_RESPAWN_ID = -1
 UNKNOWN_GUN_INDEX = -1
 DEFAULT_GUN_INDEX = 0
 DUPLET_GUN_INDEXES = [DUAL_GUN.ACTIVE_GUN.LEFT, DUAL_GUN.ACTIVE_GUN.RIGHT]
@@ -4003,8 +4015,6 @@ class SCENARIO_RESULT:
     PARTIAL = 0
     WIN = 1
 
-
-PLATOON_RESTRICTED_VEHICLE_TAGS = ('role_LT_wheeled', 'scout', 'mediumTank', 'heavyTank', 'AT-SPG', 'SPG')
 
 class NEW_PERK_SYSTEM:
     MAX_MAJOR_PERKS = 6

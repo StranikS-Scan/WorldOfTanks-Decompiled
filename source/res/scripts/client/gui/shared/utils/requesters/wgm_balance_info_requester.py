@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/wgm_balance_info_requester.py
+from __future__ import absolute_import
+from future.utils import viewkeys
 from functools import partial
 import BigWorld
 import AccountCommands
@@ -96,6 +98,5 @@ class WGMBalanceInfoRequester(object):
     @staticmethod
     def __checkFields(row):
         expected_keys = frozenset((_TOKEN_CURRENCY_CODE, _TOKEN_CLASS, _TOKEN_AMOUNT))
-        view = row.viewkeys()
-        diff = expected_keys - view
+        diff = expected_keys - viewkeys(row)
         return not diff and _TOKEN_IS_PAID in row[_TOKEN_CLASS]

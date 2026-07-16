@@ -1,13 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/writers/c11n_writers.py
+from __future__ import absolute_import
+import re
+import typing
 from collections import namedtuple
-from constants import IS_EDITOR
+from future.utils import iteritems, itervalues, lmap
 import Math
 import ResMgr
-import typing
-import re
-from string import lower
 import items.vehicles as iv
+from constants import IS_EDITOR
 from items import _xml, parseIntCompactDescr
 from serializable_types.types import C11nSerializationTypes as _C11nSerializationTypes
 from soft_exception import SoftException
@@ -62,7 +63,7 @@ def saveCustomizationItems(cache, folder):
 class GroupSectionPicker(object):
 
     def __init__(self, group):
-        self.ids = set(map(lambda itemRef: itemRef().id, group.editorData.itemRefs))
+        self.ids = {itemRef().id for itemRef in group.editorData.itemRefs}
         self.name = group.name
 
     def __call__(self, gsections):
@@ -70,7 +71,7 @@ class GroupSectionPicker(object):
         bestMatch = 0
         for gsection in gsections:
             match = 0
-            for iname, isection in gsection.items():
+            for isection in gsection.values():
                 if isection.has_key('id'):
                     id = isection['id'].asInt
                     if id in self.ids:
@@ -114,8 +115,7 @@ def writeItemType(writer, cache, folder, itemName, endGroupWriter=None):
         if changed:
             changedRefs.add(sourceXml)
 
-    for ref in fileListRewriters:
-        listRewriter = fileListRewriters[ref]
+    for ref, listRewriter in iteritems(fileListRewriters):
         changed = listRewriter.flush()
         if changed:
             changedRefs.add(ref)
@@ -155,7 +155,7 @@ def writeFontType(writer, cache, folder, itemName):
             if refSection is None:
                 _xml.raiseWrongXml(None, refSection, "can't find datasection")
             fontRefs[fontFile] = refSection
-            for name, isection in refSection.items():
+            for isection in refSection.values():
                 if isection.has_key('id'):
                     id = isection['id'].asInt
                     if id in fontsSections.keys():
@@ -206,7 +206,7 @@ def _natkey(s):
         except ValueError:
             return t.lower()
 
-    return map(convert, re.split('([0-9]+)', s))
+    return lmap(convert, re.split('([0-9]+)', s))
 
 
 def natsorted(seq):
@@ -230,7 +230,7 @@ class VehicleFilterLevelConvertor(object):
 class VehicleFilterNationConvertor(object):
 
     def convertToString(self, valuesList):
-        result = ' '.join(natsorted(map(lambda item: NAMES[item], valuesList)))
+        result = ' '.join(natsorted([ NAMES[item] for item in valuesList ]))
         return result
 
 
@@ -247,7 +247,7 @@ class VehicleFilterVehicleConvertor(object):
                 tankName = basicInfo.name
             return tankName
 
-        result = ' '.join(natsorted(map(lambda item: getTankName(item), valuesList)))
+        result = ' '.join(natsorted(lmap(getTankName, valuesList)))
         return result
 
 
@@ -281,7 +281,7 @@ class ItemsFilterDecalTypeConvertor(object):
         def getDecalTypeMame(typeId):
             return DECAL_TYPE_STRING[typeId]
 
-        result = ' '.join(natsorted(map(lambda item: getDecalTypeMame(item), valuesList)))
+        result = ' '.join(natsorted(lmap(getDecalTypeMame, valuesList)))
         return result
 
 
@@ -328,7 +328,7 @@ def saveItemFilter(filter, section, filterName, valueDescription):
     def countFilters(filterSection):
         includeCount = 0
         excludeCount = 0
-        for iname, isection in filterSection.items():
+        for iname in filterSection.keys():
             if iname == 'include':
                 includeCount += 1
             if iname == 'exclude':
@@ -571,7 +571,7 @@ class ComponentXmlSerializer(object):
             if objSection is None:
                 objSection = section.createSection(key)
                 changed = True
-        for fieldName, fieldType in obj.fields.iteritems():
+        for fieldName, fieldType in iteritems(obj.fields):
             if fieldType.flags & FieldFlags.DEPRECATED:
                 continue
             if fieldType.flags & FieldFlags.NON_XML:
@@ -676,7 +676,7 @@ class StyleXmlWriter(BaseCustomizationItemXmlWriter):
     def __writeOutfits(self, outfits, section):
         singleOutfit = None
         seasonsMask = 0
-        for season, outfit in outfits.iteritems():
+        for season, outfit in iteritems(outfits):
             seasonsMask |= season
             if singleOutfit is None:
                 singleOutfit = outfit
@@ -690,7 +690,7 @@ class StyleXmlWriter(BaseCustomizationItemXmlWriter):
         changed = False
         with _xml.ListRewriter(section, 'outfits/outfit') as oSections:
             if singleOutfit is None:
-                for season, outfit in outfits.iteritems():
+                for season, outfit in iteritems(outfits):
                     changed |= self.__writeOutfit(oSections, season, outfit)
 
             else:
@@ -747,7 +747,7 @@ class StyleXmlWriter(BaseCustomizationItemXmlWriter):
                 changed |= True
             childCount = len(alternateItemsSection)
             childIndex = childCount - 1
-            currentItemsNames = ' '.join(natsorted(map(lambda item: ALTERNATE_TO_NAME[item], alterItems.keys())))
+            currentItemsNames = ' '.join(natsorted([ ALTERNATE_TO_NAME[item] for item in alterItems.keys() ]))
             while childIndex >= 0:
                 childSection = alternateItemsSection.child(childIndex)
                 sectionName = childSection.name
@@ -756,7 +756,7 @@ class StyleXmlWriter(BaseCustomizationItemXmlWriter):
                     changed |= True
                 childIndex -= 1
 
-        for itemType, itemValues in alterItems.iteritems():
+        for itemType, itemValues in iteritems(alterItems):
             alternateItemSectionName = ALTERNATE_TO_NAME[itemType]
             oSection = alternateItemsSection[alternateItemSectionName]
             if oSection is None:
@@ -784,8 +784,8 @@ class StyleXmlWriter(BaseCustomizationItemXmlWriter):
                 camoSection = dependenciesSection.child(sectionIndex)
                 changed |= resizeSection(camoSection, 1, lambda id: 'id')
                 changed |= _xml.rewriteInt(camoSection, 'id', camoId)
-                for childKey, idsList in items.iteritems():
-                    childName = '{}'.format(lower(CustomizationTypeNames[childKey]))
+                for childKey, idsList in iteritems(items):
+                    childName = '{}'.format(CustomizationTypeNames[childKey].lower())
                     idsStr = ' '.join(map(str, idsList))
                     changed |= _xml.rewriteString(camoSection, childName, idsStr)
 
@@ -804,7 +804,7 @@ class StyleXmlWriter(BaseCustomizationItemXmlWriter):
             if itemFiltersSection is None:
                 itemFiltersSection = isection.createSection('itemFilters')
                 changed |= True
-            for filterId, filterValue in filters.iteritems():
+            for filterId, filterValue in iteritems(filters):
                 filterName = FILTER_ID_NAME[filterId]
                 changed |= saveItemFilter(filterValue, itemFiltersSection, filterName, ITEMS_FILTER_VALUE_DESCRIPTION)
 
@@ -832,7 +832,7 @@ class StyleXmlWriter(BaseCustomizationItemXmlWriter):
                 if stagesCount != len(progression3dSection):
                     changed |= resizeSection(progression3dSection, stagesCount, lambda id: 'stage')
                 stageIndex = 0
-                for stageName, progressionValue in progression.iteritems():
+                for progressionValue in itervalues(progression):
                     stageSection = progression3dSection.child(stageIndex)
                     if 'materials' in progressionValue.keys():
                         materialsList = progressionValue['materials']
@@ -933,7 +933,7 @@ def writeFontAlphabet(item):
         if len(section.items()) != len(item.editorData.alphabetList):
             changed |= resizeSection(section, len(item.editorData.alphabetList), lambda id: 'glyph')
         itemIndex = 0
-        for name, isection in section.items():
+        for isection in section.values():
             glyphItem = item.editorData.alphabetList[itemIndex]
             changed |= _xml.rewriteString(isection, 'name', glyphItem.name)
             vBegin = Math.Vector2(glyphItem.position[0], glyphItem.position[1])
@@ -1106,7 +1106,7 @@ def rewriteCamouflageTiling(section, camouflageItem):
             tilingRes = Math.Vector4(value[0], value[1], value[2], value[3])
             changed |= _xml.rewriteVector4(tilingSection, correctedTankName, tilingRes)
 
-        for iname, isection in tilingSection.items():
+        for iname in tilingSection.keys():
             found = False
             for tankTilingName in camouflageItem.editorData.tilingName.values():
                 if tankTilingName.find(iname) != -1:
@@ -1194,7 +1194,7 @@ def encodeFlagEnum(enumClass, intValue):
 
 
 def encodeEnum(enumClass, intValue):
-    for enum, value in enumClass.__dict__.iteritems():
+    for enum, value in iteritems(enumClass.__dict__):
         if enum.startswith('_'):
             continue
         if intValue == value:

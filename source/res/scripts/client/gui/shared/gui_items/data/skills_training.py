@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/data/skills_training.py
+from __future__ import absolute_import
 from items.components.skills_constants import ROLE_NAMES
 SKILLS_BY_ROLES_ST = {ROLE_NAMES.COMMANDER: ('commander_eagleEye', 'commander_emergency', 'commander_tutor', 'commander_holdLine', 'commander_coordination', 'commander_enemyShotPredictor', 'commander_practical', 'commander_staySharp'),
  ROLE_NAMES.GUNNER: ('gunner_smoothTurret', 'gunner_sniper', 'gunner_rancorous', 'gunner_pointBlast', 'gunner_focus', 'gunner_quickAiming', 'gunner_armorer', 'gunner_loneWolf'),

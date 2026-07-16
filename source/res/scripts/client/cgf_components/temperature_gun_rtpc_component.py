@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/cgf_components/temperature_gun_rtpc_component.py
+from __future__ import absolute_import
 import CGF
 import SoundGroups
+import typing
 from constants import IS_CLIENT
-from cgf_script.component_meta_class import CGFMetaTypes, ComponentProperty, registerComponent
-from cgf_script.managers_registrator import autoregister, onAddedQuery, onRemovedQuery, onProcessQuery
-from cgf_common.cgf_helpers import getParentGameObjectByComponent
+from cgf_script.registration import ComponentProperty, registerComponent
 if IS_CLIENT:
     from TemperatureGunController import TemperatureGunController
 else:
@@ -17,9 +17,9 @@ else:
 @registerComponent
 class TemperatureGunRTPCComponent(object):
     category = 'Vehicle Mechanics'
-    domain = CGF.DomainOption.DomainClient
     editorTitle = 'Temperature Gun RTPC'
-    RTPCName = ComponentProperty(type=CGFMetaTypes.STRING, value='RTPC_ext_gun_temperature_global', editorName='RTPC name')
+    domain = CGF.Domain.Client
+    RTPCName = ComponentProperty(type=CGF.PropertyType.String, value='RTPC_ext_gun_temperature_global', editorName='RTPC name')
 
     def __init__(self):
         super(TemperatureGunRTPCComponent, self).__init__()
@@ -28,35 +28,51 @@ class TemperatureGunRTPCComponent(object):
         return
 
 
-@autoregister(presentInAllWorlds=True)
-class TemperatureGunMechanicManager(CGF.ComponentManager):
+class TemperatureGunMechanicSystem(CGF.System):
+    TemperatureGunActivated = CGF.ActivateReaction(CGF.GameObject, CGF.ReactRw(TemperatureGunRTPCComponent))
+    TemperatureGunDeactivated = CGF.DeactivateReaction(CGF.ReactRw(TemperatureGunRTPCComponent))
+    TemperatureGunIterate = CGF.IterateReaction(CGF.ActiveOnly, CGF.Rw(TemperatureGunRTPCComponent))
+    TemperatureControllerAccess = CGF.AccessReaction(CGF.GameObject, CGF.Ro(TemperatureGunController))
+    Reactions = CGF.Reactions(TemperatureGunActivated, TemperatureGunDeactivated, TemperatureControllerAccess, TemperatureGunIterate)
 
-    @onAddedQuery(CGF.GameObject, TemperatureGunRTPCComponent)
-    def onTemperatureGunRTPCAdded(self, gameObject, temperatureGunRTPCComponent):
-        temperatureGunRTPCComponent.temperatureGunControllerGO = getParentGameObjectByComponent(gameObject, TemperatureGunController)
-        self.__setGunTemperature(temperatureGunRTPCComponent)
+    def commonUpdate(self):
+        controllerAccess = self.reaction(self.TemperatureControllerAccess)
+        for rtpc in self.reaction(self.TemperatureGunDeactivated):
+            rtpc.temperatureGunControllerGO = None
+            self.__setGunTemperature(rtpc, None)
 
-    @onRemovedQuery(TemperatureGunRTPCComponent)
-    def onTemperatureGunRTPCRemoved(self, temperatureGunRTPCComponent):
-        temperatureGunRTPCComponent.temperatureGunControllerGO = None
-        self.__setGunTemperature(temperatureGunRTPCComponent)
+        for go, rtpc in self.reaction(self.TemperatureGunActivated):
+            self.__resolveController(rtpc, go, controllerAccess)
+
         return
 
-    @onProcessQuery(TemperatureGunRTPCComponent, period=0.2)
-    def onTemperatureGunProgressRTPCProcess(self, temperatureGunRTPCComponent):
-        self.__setGunTemperature(temperatureGunRTPCComponent)
+    def periodUpdate(self):
+        controllerAccess = self.reaction(self.TemperatureControllerAccess)
+        for rtpc in self.reaction(self.TemperatureGunIterate):
+            _, controller = controllerAccess.find(rtpc.temperatureGunControllerGO)
+            if controller is not None:
+                self.__setGunTemperature(rtpc, controller)
 
-    @classmethod
-    def __getTemperatureGunProgress(cls, temperatureGunControllerGO):
-        temperController = temperatureGunControllerGO.findComponentByType(TemperatureGunController)
-        return temperController.getMechanicState().temperatureProgress * 100.0 if temperController is not None else 0.0
-
-    @classmethod
-    def __setGunTemperature(cls, temperatureGunRTPCComponent):
-        progress = 0.0
-        if temperatureGunRTPCComponent.temperatureGunControllerGO is not None:
-            progress = cls.__getTemperatureGunProgress(temperatureGunRTPCComponent.temperatureGunControllerGO)
-        if temperatureGunRTPCComponent.progress != progress:
-            SoundGroups.g_instance.setGlobalRTPC(temperatureGunRTPCComponent.RTPCName, progress)
-            temperatureGunRTPCComponent.progress = progress
         return
+
+    def __resolveController(self, rtpc, go, controllerAccess):
+        found = CGF.findParentWithReaction(go, controllerAccess)
+        if found is None:
+            rtpc.temperatureGunControllerGO = None
+            self.__setGunTemperature(rtpc, None)
+            return
+        else:
+            rtpc.temperatureGunControllerGO, controller = found
+            self.__setGunTemperature(rtpc, controller)
+            return
+
+    @classmethod
+    def __getTemperatureGunProgress(cls, controller):
+        return controller.getMechanicState().temperatureProgress * 100.0 if controller is not None else 0.0
+
+    @classmethod
+    def __setGunTemperature(cls, rtpc, controller):
+        progress = cls.__getTemperatureGunProgress(controller)
+        if rtpc.progress != progress:
+            SoundGroups.g_instance.setGlobalRTPC(rtpc.RTPCName, progress)
+            rtpc.progress = progress

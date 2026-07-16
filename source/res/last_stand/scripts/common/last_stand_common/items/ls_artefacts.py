@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: last_stand/scripts/common/last_stand_common/items/ls_artefacts.py
+from __future__ import absolute_import
 from typing import TYPE_CHECKING
 from collections import namedtuple
 from items.artefacts import DynComponentsGroupEquipment
@@ -12,8 +13,9 @@ LSEquipmentVariant = namedtuple('LSEquipmentVariant', ('id', 'cooldownSeconds', 
 class LSEquipment(DynComponentsGroupEquipment):
     __slots__ = ('equipmentItem', 'usageCost', 'variantIdFormat', 'variants', '_fallbackVariant')
 
-    def _readConfig(self, xmlCtx, section):
-        super(LSEquipment, self)._readConfig(xmlCtx, section)
+    def _readConfig(self, xmlCtx, scriptSection):
+        super(LSEquipment, self)._readConfig(xmlCtx, scriptSection)
+        section = scriptSection
         self.equipmentItem = _xml.readString(xmlCtx, section, 'equipmentItem') if section.has_key('equipmentItem') else None
         self.usageCost = _xml.readFloat(xmlCtx, section, 'usageCost')
         self.variantIdFormat = section.readString('variantIdFormat') if section.has_key('variantIdFormat') else None

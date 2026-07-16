@@ -78,7 +78,7 @@ class _PlatoonTankAppearance(HangarVehicleAppearance):
     def _getGunPitch(self):
         return self.__gunPitch
 
-    def _reloadColliderType(self, state):
+    def _reloadColliderType(self, state, collisions):
         pass
 
     def _getColliderType(self):

@@ -1,9 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/client_request_lib/requester.py
+from __future__ import absolute_import
 from functools import wraps
+from future.utils import iteritems
 from client_request_lib.data_sources.staging import StagingDataAccessor
 from client_request_lib.data_sources.fake import FakeDataAccessor
 from client_request_lib.data_sources.gateway import GatewayDataAccessor
+from py2to3.patched_future import with_metaclass
 try:
     import BigWorld
 except ImportError:
@@ -54,14 +57,13 @@ class BigworldCallbackMutator(type):
 
     def __new__(cls, name, bases, attr_dict):
         new_attr_dict = {}
-        for k, v in attr_dict.iteritems():
+        for k, v in iteritems(attr_dict):
             new_attr_dict[k] = bigworld_wrapped(v)
 
         return type.__new__(cls, name, bases, new_attr_dict)
 
 
-class BaseAccessor(object):
-    __metaclass__ = BigworldCallbackMutator
+class BaseAccessor(with_metaclass(BigworldCallbackMutator, object)):
 
     def __init__(self, data_source):
         self._data_source = data_source

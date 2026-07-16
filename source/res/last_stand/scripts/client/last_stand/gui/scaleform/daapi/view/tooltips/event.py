@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: last_stand/scripts/client/last_stand/gui/scaleform/daapi/view/tooltips/event.py
 from __future__ import absolute_import
-import BigWorld
 from future.utils import viewvalues
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -15,8 +14,6 @@ from gui.shared.tooltips import formatters
 from gui.shared.tooltips.vehicle import VehicleInfoTooltipData, StatusBlockConstructor, HeaderBlockConstructor, SimplifiedStatsBlockConstructor, CommonStatsBlockConstructor
 from gui.shared.tooltips.module import ModuleBlockTooltipData, EffectsBlockConstructor, InventoryBlockConstructor, HeaderBlockConstructor as ModuleHeaderBlockConstructor
 from gui.shared.tooltips.shell import ShellBlockToolTipData
-from last_stand.gui.scaleform.genConsts.LS_ICON_TEXT_FRAMES import LS_ICON_TEXT_FRAMES
-from last_stand.gui.scaleform.genConsts.LS_BLOCKS_TOOLTIP_TYPES import LS_BLOCKS_TOOLTIP_TYPES
 from LSAccountEquipmentController import getLSConsumables
 
 class EventVehicleInfoTooltipData(VehicleInfoTooltipData, IGlobalListener):
@@ -39,12 +36,8 @@ class EventVehicleInfoTooltipData(VehicleInfoTooltipData, IGlobalListener):
         blockTopPadding = -4
         leftRightPadding = formatters.packPadding(left=leftPadding, right=rightPadding)
         blockPadding = formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding)
-        valueWidth = 77
         headerItems = [formatters.packBuildUpBlockData(EventHeaderBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct(), padding=leftRightPadding, blockWidth=410), formatters.packBuildUpBlockData(self._getCrewIconBlock(), gap=2, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, padding=formatters.packPadding(top=34, right=0), blockWidth=20)]
         headerBlockItems = [formatters.packBuildUpBlockData(headerItems, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, padding=formatters.packPadding(bottom=-16))]
-        account = getattr(BigWorld.player(), 'LSAccountComponent', None)
-        if account and vehicle.intCD not in account.vehicleDailyCompleted and not isShort:
-            headerBlockItems.append(formatters.packTextParameterWithIconBlockData(linkage=LS_BLOCKS_TOOLTIP_TYPES.LS_TOOLTIP_TEXT_PARAMETER_WITH_ICON_BLOCK_LINKAGE, name=text_styles.main(backport.text(R.strings.last_stand_tooltips.vehicle.eventBonus())), value='', icon=LS_ICON_TEXT_FRAMES.LS_EVENT_KEY, iconYOffset=-2, valueWidth=valueWidth - 8, nameOffset=8, gap=0, padding=formatters.packPadding(left=2, top=3, bottom=3)))
         items.append(formatters.packBuildUpBlockData(headerBlockItems, gap=-4, padding=formatters.packPadding(bottom=-12)))
         simplifiedStatsBlock = SimplifiedStatsBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
         if simplifiedStatsBlock:
@@ -138,9 +131,6 @@ class EventVehicleInfoTooltipDataDef(VehicleInfoTooltipData, IGlobalListener):
         textGap = -2
         headerItems = [formatters.packBuildUpBlockData(HeaderBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct(), padding=leftRightPadding, blockWidth=410), formatters.packBuildUpBlockData(self._getCrewIconBlock(), gap=2, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, padding=formatters.packPadding(top=34, right=0), blockWidth=20)]
         headerBlockItems = [formatters.packBuildUpBlockData(headerItems, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, padding=formatters.packPadding(bottom=-16))]
-        account = getattr(BigWorld.player(), 'LSAccountComponent', None)
-        if account and vehicle.intCD not in account.vehicleDailyCompleted:
-            headerBlockItems.append(formatters.packTextParameterWithIconBlockData(linkage=LS_BLOCKS_TOOLTIP_TYPES.LS_TOOLTIP_TEXT_PARAMETER_WITH_ICON_BLOCK_LINKAGE, name=text_styles.main(backport.text(R.strings.last_stand_tooltips.vehicle.eventBonus())), value='', icon=LS_ICON_TEXT_FRAMES.LS_EVENT_KEY, iconYOffset=-2, valueWidth=valueWidth - 8, nameOffset=8, gap=0, padding=formatters.packPadding(left=2, top=3, bottom=3)))
         items.append(formatters.packBuildUpBlockData(headerBlockItems, gap=-4, padding=formatters.packPadding(bottom=-12)))
         simplifiedStatsBlock = SimplifiedStatsBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
         if simplifiedStatsBlock:

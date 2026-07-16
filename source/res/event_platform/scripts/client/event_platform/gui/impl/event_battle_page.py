@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: event_platform/scripts/client/event_platform/gui/impl/event_battle_page.py
+from __future__ import absolute_import
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.battle.classic import ClassicPage
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES

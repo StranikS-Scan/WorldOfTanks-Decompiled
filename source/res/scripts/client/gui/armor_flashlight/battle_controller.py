@@ -176,16 +176,19 @@ class ArmorFlashlightBattleController(IArenaLoadController, IArmorFlashlightBatt
         dispAngle = player.gunRotator.getCurShotDispersionAngles()[0]
         extraAlphaFactor = (vDesc.gun.shotDispersionAngle / dispAngle) ** config.fadeoffFactorWhenNotAimed if dispAngle > 0.0 else 1.0
         shotPos, _, _ = player.gunRotator.getShotParams(hitPoint, True)
-        ppDesc = vDesc.shot.piercingPower
-        maxDist = vDesc.shot.maxDistance
+        shot = vDesc.shot
+        ppDesc = shot.piercingPower
+        maxDist = shot.maxDistance
         distance = (hitPoint - player.getOwnVehiclePosition()).length
         vehAttrs = self.sessionProvider.shared.feedback.getVehicleAttrs()
         piercingMultiplier = vehAttrs.get(GUN_PIERCING, 1)
         fullPiercingPower = computePiercingPowerAtDist(ppDesc, distance, maxDist, piercingMultiplier)
-        ricochetAngleCos, normalizationAngle, shieldPenetration, shellTypeMaxDamage = getShellImpactParams(shell.type)
+        shellType = shell.type
+        ricochetAngleCos, normalizationAngle, shieldPenetration, shellTypeMaxDamage = getShellImpactParams(shellType)
         isServerMarker = self.gunMarkersFlags & GUN_MARKER_FLAG.SERVER_MODE_ENABLED
         markerProvider = self.serverMarkerDataProvider if isServerMarker else self.clientMarkerDataProvider
-        self._armorFlashlightSingleton.setShotParams(shell.piercingPowerRandomization, vDesc.shot.maxDistance, shell.caliber, SHELL_TYPES_INDICES[shell.kind], ricochetAngleCos, normalizationAngle, self.zoomFactor, distance, markerProvider.positionMatrixProvider, shotPos, direction, fullPiercingPower, extraAlphaFactor, gunAimingCircleSize, shieldPenetration, shellTypeMaxDamage)
+        jetLossPPByDist = shellType.piercingPowerLossFactorByDistance if hasattr(shellType, 'piercingPowerLossFactorByDistance') else 0.0
+        self._armorFlashlightSingleton.setShotParams(shell.piercingPowerRandomization, vDesc.shot.maxDistance, shell.caliber, SHELL_TYPES_INDICES[shell.kind], ricochetAngleCos, normalizationAngle, self.zoomFactor, distance, markerProvider.positionMatrixProvider, shotPos, direction, fullPiercingPower, extraAlphaFactor, gunAimingCircleSize, shieldPenetration, shellTypeMaxDamage, jetLossPPByDist)
 
     def _stopFlashlight(self):
         if self._targetTankID is not None:

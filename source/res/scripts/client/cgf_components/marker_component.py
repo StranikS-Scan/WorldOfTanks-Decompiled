@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/cgf_components/marker_component.py
+from __future__ import absolute_import
 import importlib
 import logging
 import typing
@@ -8,11 +9,7 @@ import Event
 import GenericComponents
 import Math
 import math_utils
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
-from cache import cached_property
-from cgf_script.bonus_caps_rules import bonusCapsManager
-from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
-from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery, autoregister
+from cgf_script.registration import ComponentProperty, registerComponent
 from constants import IS_CLIENT, IS_CGF_DUMP
 from helpers import dependency
 from UIComponents import GamefaceMarkerComponent
@@ -48,29 +45,31 @@ _logger = logging.getLogger(__name__)
 
 @registerComponent
 class LobbyFlashMarker(object):
-    domain = CGF.DomainOption.DomainClient
-    icon = ComponentProperty(type=CGFMetaTypes.STRING, editorName='marker icon', value='gui/maps/icons/marathon/marker/video.png', annotations={'path': '*.png'})
-    textKey = ComponentProperty(type=CGFMetaTypes.STRING, editorName='marker text key', value='#marathon:3dObject/showVideo')
+    domain = CGF.Domain.Client
+    editorTitle = 'Lobby Flash Marker'
+    icon = ComponentProperty(type=CGF.PropertyType.String, editorName='marker icon', value='gui/maps/icons/marathon/marker/video.png', annotations={'path': '*.png'})
+    textKey = ComponentProperty(type=CGF.PropertyType.String, editorName='marker text key', value='#marathon:3dObject/showVideo')
 
 
 @registerComponent
 class LobbyFlashMarkerVisibility(object):
-    domain = CGF.DomainOption.DomainClient
-    mainTankMarkerGO = ComponentProperty(type=CGFMetaTypes.LINK, value=CGF.GameObject, editorName='non-hero tank marker GO')
-    heroTankMarkerGO = ComponentProperty(type=CGFMetaTypes.LINK, value=CGF.GameObject, editorName='hero tank marker GO')
+    domain = CGF.Domain.Client
+    editorTitle = 'Lobby Flash Marker Visibility'
+    mainTankMarkerGO = ComponentProperty(type=CGF.PropertyType.Link, value=CGF.GameObject, editorName='non-hero tank marker GO')
+    heroTankMarkerGO = ComponentProperty(type=CGF.PropertyType.Link, value=CGF.GameObject, editorName='hero tank marker GO')
 
 
 @registerComponent
 class CombatMarker(object):
-    category = 'UI'
+    group = 'UI'
     editorTitle = 'Combat Marker'
-    domain = CGF.DomainOption.DomainClient
-    shape = ComponentProperty(type=CGFMetaTypes.STRING, value='', editorName='Shape')
-    offset = ComponentProperty(type=CGFMetaTypes.VECTOR3, value=Math.Vector3(0, 0, 0), editorName='offset')
-    areaRadius = ComponentProperty(type=CGFMetaTypes.FLOAT, value=0.0, editorName='areaRadius')
-    disappearanceRadius = ComponentProperty(type=CGFMetaTypes.FLOAT, value=1.0, editorName='Disappearance Radius')
-    reverseDisappearing = ComponentProperty(type=CGFMetaTypes.BOOL, value=False, editorName='Reverse disappearing')
-    distanceFieldColor = ComponentProperty(type=CGFMetaTypes.STRING, value='white', editorName='Distance Field Color')
+    domain = CGF.Domain.Client
+    shape = ComponentProperty(type=CGF.PropertyType.String, value='', editorName='Shape')
+    offset = ComponentProperty(type=CGF.PropertyType.Vector3, value=Math.Vector3(0, 0, 0), editorName='offset')
+    areaRadius = ComponentProperty(type=CGF.PropertyType.Float, value=0.0, editorName='areaRadius')
+    disappearanceRadius = ComponentProperty(type=CGF.PropertyType.Float, value=1.0, editorName='Disappearance Radius')
+    reverseDisappearing = ComponentProperty(type=CGF.PropertyType.Bool, value=False, editorName='Reverse disappearing')
+    distanceFieldColor = ComponentProperty(type=CGF.PropertyType.String, value='white', editorName='Distance Field Color')
 
     def __init__(self):
         super(CombatMarker, self).__init__()
@@ -79,41 +78,45 @@ class CombatMarker(object):
         return
 
 
-@autoregister(presentInAllWorlds=False, category='lobby')
-class LobbyMarkersManager(CGF.ComponentManager):
+class LobbyMarkersSystem(CGF.System):
     if not IS_CGF_DUMP:
         __appLoader = dependency.descriptor(IAppLoader)
+    MarkerActivated = CGF.ActivateReaction(CGF.GameObject, CGF.ReactRo(LobbyFlashMarker), CGF.Ro(CGF.TransformComponent))
+    MarkerDeactivated = CGF.DeactivateReaction(CGF.GameObject, CGF.ReactRo(LobbyFlashMarker), CGF.Has(CGF.TransformComponent))
+    EntitySyncAccess = CGF.AccessReaction(CGF.Ro(GenericComponents.EntityGOSync))
+    Reactions = CGF.Reactions(MarkerActivated, MarkerDeactivated, EntitySyncAccess)
 
     def __init__(self, *args):
-        super(LobbyMarkersManager, self).__init__(*args)
+        super(LobbyMarkersSystem, self).__init__(*args)
         self.onMarkerComponentAdded = Event.Event()
         self.onMarkerComponentRemoved = Event.Event()
 
-    @onAddedQuery(CGF.GameObject, LobbyFlashMarker, GenericComponents.TransformComponent)
-    def handleMarkerAdded(self, gameObject, flashMarkerComponent, transformComponent):
-        entity = self.__getRootEntity(gameObject)
+    def update(self):
+        entitySyncAccess = self.reaction(self.EntitySyncAccess)
+        for gameObject, _ in self.reaction(self.MarkerDeactivated):
+            self.handleMarkerRemoved(gameObject, entitySyncAccess)
+
+        for gameObject, flashMarkerComponent, transformComponent in self.reaction(self.MarkerActivated):
+            self.handleMarkerAdded(gameObject, flashMarkerComponent, transformComponent, entitySyncAccess)
+
+    def handleMarkerAdded(self, gameObject, flashMarkerComponent, transformComponent, entitySyncAccess):
+        entity = self.__getRootEntity(gameObject, entitySyncAccess)
         matrix = transformComponent.worldTransform
         view = self.__getMarkerView()
         if entity is not None and view is not None:
             view.addCgfMarker(entity.id, flashMarkerComponent, matrix)
         return
 
-    @onRemovedQuery(CGF.GameObject, LobbyFlashMarker, GenericComponents.TransformComponent)
-    def handleMarkerRemoved(self, gameObject, *_):
-        entity = self.__getRootEntity(gameObject)
+    def handleMarkerRemoved(self, gameObject, entitySyncAccess):
+        entity = self.__getRootEntity(gameObject, entitySyncAccess)
         view = self.__getMarkerView()
         if entity is not None and view is not None:
             view.removeCgfMarker(entity.id)
         return
 
-    @cached_property
-    def __hierarchyManager(self):
-        hierarchyManager = CGF.HierarchyManager(self.spaceID)
-        return hierarchyManager
-
-    def __getRootEntity(self, gameObject):
-        rootGameObject = self.__hierarchyManager.getTopMostParent(gameObject)
-        goSyncComponent = rootGameObject.findComponentByType(GenericComponents.EntityGOSync)
+    def __getRootEntity(self, gameObject, entitySyncAccess):
+        rootGameObject = self.hierarchy.getTopMostParent(gameObject)
+        goSyncComponent = entitySyncAccess.find(rootGameObject)
         if goSyncComponent is None:
             _logger.error('gameObject id=%d, name=%s has no root bigworld entity to show marker', gameObject.id, gameObject.name)
             return
@@ -125,44 +128,73 @@ class LobbyMarkersManager(CGF.ComponentManager):
         return app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW))
 
 
-@autoregister(presentInAllWorlds=False, category='lobby')
-class LobbyMarkersVisibilityManager(CGF.ComponentManager):
+class LobbyMarkersVisibilitySystem(CGF.System):
+    VisibilityActivated = CGF.ActivateReaction(CGF.GameObject, CGF.ReactRo(LobbyFlashMarkerVisibility))
+    VisibilityDeactivated = CGF.DeactivateReaction(CGF.GameObject, CGF.ReactRo(LobbyFlashMarkerVisibility))
+    VisibilityAccess = CGF.AccessReaction(CGF.Ro(LobbyFlashMarkerVisibility))
+    Reactions = CGF.Reactions(VisibilityActivated, VisibilityDeactivated, VisibilityAccess)
 
-    @onAddedQuery(LobbyFlashMarkerVisibility, CGF.GameObject)
-    def handleVisibilityAdded(self, lobbyFlashMarkerVisibility, _):
-        self.__onHeroTankAction(lobbyFlashMarkerVisibility)
-        g_currentPreviewVehicle.onSelected += lambda : self.__onHeroTankAction(lobbyFlashMarkerVisibility)
+    def update(self):
+        for gameObject, _ in self.reaction(self.VisibilityDeactivated):
+            self.handleVisibilityRemoved(gameObject)
 
-    @onRemovedQuery(LobbyFlashMarkerVisibility, CGF.GameObject)
-    def handleVisibilityRemoved(self, lobbyFlashMarkerVisibility, _):
-        g_currentPreviewVehicle.onSelected -= lambda : self.__onHeroTankAction(lobbyFlashMarkerVisibility)
+        for gameObject, lobbyFlashMarkerVisibility in self.reaction(self.VisibilityActivated):
+            self.handleVisibilityAdded(gameObject, lobbyFlashMarkerVisibility)
 
-    def __onHeroTankAction(self, component):
+    def handleVisibilityAdded(self, gameObject, lobbyFlashMarkerVisibility):
+        self.__onHeroTankAction(gameObject, lobbyFlashMarkerVisibility)
+        g_currentPreviewVehicle.onSelected += lambda : self.__onHeroTankAction(gameObject)
+
+    def handleVisibilityRemoved(self, gameObject):
+        g_currentPreviewVehicle.onSelected -= lambda : self.__onHeroTankAction(gameObject)
+
+    def __onHeroTankAction(self, gameObject, visibilityComponent=None):
+        component = visibilityComponent
+        if component is None:
+            visibilityAccess = self.reaction(self.VisibilityAccess)
+            component = visibilityAccess.find(gameObject)
         if g_currentPreviewVehicle.isHeroTank and g_currentPreviewVehicle.item:
-            self.__activateMarkerFromHeroTank(component)
+            self.__activateMarkerFromHeroTank(component, self.gom)
         else:
-            self.__activateMarkerFromNonHeroTank(component)
+            self.__activateMarkerFromNonHeroTank(component, self.gom)
+        return
 
     @staticmethod
-    def __activateMarkerFromNonHeroTank(component):
-        if component.heroTankMarkerGO and component.heroTankMarkerGO.isValid():
-            component.heroTankMarkerGO.deactivate()
-        if component.mainTankMarkerGO and component.mainTankMarkerGO.isValid():
-            component.mainTankMarkerGO.activate()
+    def __activateMarkerFromNonHeroTank(component, gameObjectManager):
+        if component.heroTankMarkerGO:
+            heroMarkerObj = gameObjectManager.gameObject(component.heroTankMarkerGO)
+            if heroMarkerObj.valid:
+                heroMarkerObj.deactivate()
+        if component.mainTankMarkerGO:
+            mainMarkerObj = gameObjectManager.gameObject(component.mainTankMarkerGO)
+            if mainMarkerObj.valid:
+                mainMarkerObj.activate()
 
     @staticmethod
-    def __activateMarkerFromHeroTank(component):
-        if component.mainTankMarkerGO and component.mainTankMarkerGO.isValid():
-            component.mainTankMarkerGO.deactivate()
-        if component.heroTankMarkerGO and component.heroTankMarkerGO.isValid():
-            component.heroTankMarkerGO.activate()
+    def __activateMarkerFromHeroTank(component, gameObjectManager):
+        if component.mainTankMarkerGO:
+            mainMarkerObj = gameObjectManager.gameObject(component.mainTankMarkerGO)
+            if mainMarkerObj.valid:
+                mainMarkerObj.deactivate()
+        if component.heroTankMarkerGO:
+            heroMarkerObj = gameObjectManager.gameObject(component.heroTankMarkerGO)
+            if heroMarkerObj.valid:
+                heroMarkerObj.activate()
 
 
-@bonusCapsManager(ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, CGF.DomainOption.DomainClient)
-class CombatMarkerManager(CGF.ComponentManager):
+class CombatMarkerSystem(CGF.System):
     __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
+    MarkerActivated = CGF.ActivateReaction(CGF.ReactRw(CombatMarker), CGF.Ro(CGF.TransformComponent))
+    MarkerDeactivated = CGF.DeactivateReaction(CGF.ReactRo(CombatMarker))
+    Reactions = CGF.Reactions(MarkerActivated, MarkerDeactivated)
 
-    @onAddedQuery(CombatMarker, GenericComponents.TransformComponent)
+    def update(self):
+        for combatMarker in self.reaction(self.MarkerDeactivated):
+            self.onRemovedMarker(combatMarker)
+
+        for combatMarker, transform in self.reaction(self.MarkerActivated):
+            self.onAddedMarker(combatMarker, transform)
+
     def onAddedMarker(self, combatMarker, transform):
         transform = transform.worldTransform
         matrixProduct = math_utils.MatrixProviders.product(transform, math_utils.createTranslationMatrix(combatMarker.offset))
@@ -181,16 +213,23 @@ class CombatMarkerManager(CGF.ComponentManager):
         combatMarker.marker = AreaMarker(data)
         combatMarker.markerID = self.__guiSessionProvider.shared.areaMarker.addMarker(combatMarker.marker)
 
-    @onRemovedQuery(CombatMarker)
     def onRemovedMarker(self, combatMarker):
         self.__guiSessionProvider.shared.areaMarker.removeMarker(combatMarker.markerID)
 
 
-@autoregister(presentInAllWorlds=True, domain=CGF.DomainOption.DomainClient)
-class GFMarkersCreator(CGF.ComponentManager):
+class GFMarkersCreatorSystem(CGF.System):
     __gui = dependency.descriptor(IGuiLoader)
+    MarkerActivated = CGF.ActivateReaction(CGF.ReactRw(GamefaceMarkerComponent))
+    MarkerDeactivated = CGF.DeactivateReaction(CGF.ReactRo(GamefaceMarkerComponent))
+    Reactions = CGF.Reactions(MarkerActivated, MarkerDeactivated)
 
-    @onAddedQuery(GamefaceMarkerComponent)
+    def update(self):
+        for markerComponent in self.reaction(self.MarkerDeactivated):
+            self.onMarkerRemoved(markerComponent)
+
+        for markerComponent in self.reaction(self.MarkerActivated):
+            self.onMarkerAdded(markerComponent)
+
     def onMarkerAdded(self, markerComponent):
         module = importlib.import_module(markerComponent.viewPath)
         if not module or not hasattr(module, markerComponent.viewName):
@@ -201,7 +240,6 @@ class GFMarkersCreator(CGF.ComponentManager):
         window.load()
         markerComponent.windowID = window.uniqueID
 
-    @onRemovedQuery(GamefaceMarkerComponent)
     def onMarkerRemoved(self, markerComponent):
         window = self.__gui.windowsManager.getWindow(markerComponent.windowID)
         if window:

@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/ClientUpdateManager.py
 from __future__ import absolute_import
+import functools
 import inspect
 from future.utils import viewitems
 from gui.shared.money import Currency
+from shared_utils import safeExecute
 
 class _ClientUpdateManager(object):
     EVENT_TYPE_DELIMITER = '.'
@@ -20,7 +22,7 @@ class _ClientUpdateManager(object):
             for diffpath in list(diffpaths):
                 isFire, args = self.__processPath(diffpath, diff)
                 if isFire:
-                    handler(args)
+                    safeExecute(functools.partial(handler, args))
                     break
 
     def addCallback(self, diffpath, handler):

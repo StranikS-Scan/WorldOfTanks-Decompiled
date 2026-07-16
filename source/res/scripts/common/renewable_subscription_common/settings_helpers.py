@@ -153,10 +153,10 @@ class SubscriptionSettingsStorage(object):
         return None if not tierSettings else tierSettings.proBoostFeature.bonusFactors
 
     def getProBoostExcludedTags(self):
-        return self._getCurrentTierSettings().proBoostFeature.excludedTags if self.isProBoostFeatureAvailable() else list()
+        return self._getCurrentTierSettings().proBoostFeature.excludedTags if self.isProBoostFeatureAvailable() else []
 
     def getProBoostCompatibleVehicles(self):
-        return self._getCurrentTierSettings().proBoostFeature.compatibleVehicles if self.isProBoostFeatureAvailable() else list()
+        return self._getCurrentTierSettings().proBoostFeature.compatibleVehicles if self.isProBoostFeatureAvailable() else []
 
     def hasVehicleProBoostExcludedTags(self, vehicleCD):
         vehType = vehicles.getVehicleType(vehicleCD)

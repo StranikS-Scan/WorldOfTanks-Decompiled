@@ -6,7 +6,7 @@ from last_stand.gui.impl.gen.view_models.views.lobby.widgets.difficulty_item_mod
 class DifficultyViewModel(ViewModel):
     __slots__ = ('onSwitchLevel',)
 
-    def __init__(self, properties=2, commands=1):
+    def __init__(self, properties=3, commands=1):
         super(DifficultyViewModel, self).__init__(properties=properties, commands=commands)
 
     def getDifficulties(self):
@@ -25,8 +25,15 @@ class DifficultyViewModel(ViewModel):
     def setIsDisabled(self, value):
         self._setBool(1, value)
 
+    def getIsSearchingPlatoon(self):
+        return self._getBool(2)
+
+    def setIsSearchingPlatoon(self, value):
+        self._setBool(2, value)
+
     def _initialize(self):
         super(DifficultyViewModel, self)._initialize()
         self._addArrayProperty('difficulties', Array())
         self._addBoolProperty('isDisabled', False)
+        self._addBoolProperty('isSearchingPlatoon', False)
         self.onSwitchLevel = self._addCommand('onSwitchLevel')

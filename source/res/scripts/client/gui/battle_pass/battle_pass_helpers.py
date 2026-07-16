@@ -333,6 +333,16 @@ def getFinalTankmen(chapterID, awardType, battlePass=None):
     return [ getTankmanInfo(bonus) for bonus in characterBonuses ]
 
 
+@replace_none_kwargs(battlePass=IBattlePassController)
+def getChapterForTankmenScreen(screenID, battlePass=None):
+    chapters = set((k for k, v in viewitems(battlePass.getChapterToTankmenScreen()) if v == screenID))
+    if len(chapters) == 1:
+        return first(chapters)
+    else:
+        _logger.info('There is no unique chapter for tankmen screen: %s', screenID)
+        return None
+
+
 def updateBuyAnimationFlag(chapterID):
     settings = AccountSettings.getSettings(BUY_ANIMATIONS_WAS_SHOWN)
     if chapterID not in settings:

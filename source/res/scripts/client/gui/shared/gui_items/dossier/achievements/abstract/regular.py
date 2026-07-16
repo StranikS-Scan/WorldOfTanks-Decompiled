@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/abstract/regular.py
+from __future__ import absolute_import
+from past.builtins import cmp
 from dossiers2.custom.records import RECORD_MAX_VALUES
 from dossiers2.ui import achievements
 from gui.impl import backport
@@ -42,6 +44,14 @@ class RegularAchievement(GUIItem):
             self._lvlUpValue = self._readLevelUpValue(dossier)
             self._isDone = self._getDoneStatus(dossier)
         return
+
+    def __repr__(self):
+        return '%s<name=%s; value=%s; levelUpValue=%s levelUpTotalValue=%s isDone=%s>' % (self.__class__.__name__,
+         self._name,
+         str(self._value),
+         str(self._lvlUpValue),
+         str(self._lvlUpTotalValue),
+         str(self._isDone))
 
     def getName(self):
         return self._name
@@ -217,21 +227,7 @@ class RegularAchievement(GUIItem):
     def _getDoneStatus(self, dossier):
         return self.getProgressValue() == 1.0
 
-    def __getPredefinedValue(self, getter):
-        value = getter(self.getRecordName())
-        if value is None:
-            value = getter(achievements.makeAchievesStorageName(self._block))
-        return value
-
-    def __repr__(self):
-        return '%s<name=%s; value=%s; levelUpValue=%s levelUpTotalValue=%s isDone=%s>' % (self.__class__.__name__,
-         self._name,
-         str(self._value),
-         str(self._lvlUpValue),
-         str(self._lvlUpTotalValue),
-         str(self._isDone))
-
-    def __cmp__(self, other):
+    def _compare(self, other):
         if isinstance(other, RegularAchievement):
             aSection, bSection = self.getSection(), other.getSection()
             if aSection is not None and bSection is not None:
@@ -241,3 +237,9 @@ class RegularAchievement(GUIItem):
             return cmp(self.getWeight(), other.getWeight())
         else:
             return 1
+
+    def __getPredefinedValue(self, getter):
+        value = getter(self.getRecordName())
+        if value is None:
+            value = getter(achievements.makeAchievesStorageName(self._block))
+        return value

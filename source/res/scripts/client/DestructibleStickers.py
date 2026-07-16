@@ -20,8 +20,9 @@ class DestructibleStickers(object):
 
     def __init__(self, spaceID, compound, partIdx, gameObject):
         self.__model = compound.getPartGeometryLink(partIdx)
+        cgfQueue = CGF.CommandQueue(spaceID)
+        cgfQueue.createComponent(gameObject, GpuDecals.GpuDecalsReceiverComponent)
         self.__gameObject = gameObject
-        self.__gameObject.createComponent(GpuDecals.GpuDecalsReceiverComponent)
         self.__stickerModel = BigWorld.WGStickerModel(spaceID)
         self.__stickerModel.setLODDistance(self.__LOD_DISTANCE)
         self.__stickerModel.setupSuperModel(self.__model, math_utils.createIdentityMatrix())
@@ -39,7 +40,7 @@ class DestructibleStickers(object):
             self.__stickerModel.clear()
             self.__stickerModel = None
             self.__nodeToAttach = None
-            self.__gameObject.removeComponentByType(GpuDecals.GpuDecalsReceiverComponent)
+            self.__gameObject.removeComponent(GpuDecals.GpuDecalsReceiverComponent)
             self.__gameObject = None
             self.__model = None
             return

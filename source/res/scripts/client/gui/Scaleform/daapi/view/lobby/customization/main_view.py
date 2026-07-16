@@ -296,8 +296,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
                     self.__initAnchorsPositionsCallback = BigWorld.callback(0.0, self.__initAnchorsPositions)
                     return
             self.__setAnchorsInitData()
-            if not self.__styleInfo.visible:
-                self.__resetCustomizationCamera()
             return
 
     def onBuyConfirmed(self, isOk):
@@ -1219,8 +1217,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         else:
             self.__ctx.mode.unselectItem()
             self.__ctx.mode.unselectSlot()
-            if self.__ctx.c11nCameraManager is not None and self.__ctx.c11nCameraManager.isStyleInfo():
-                self.__resetCustomizationCamera()
             self.service.resumeHighlighter()
             return
 

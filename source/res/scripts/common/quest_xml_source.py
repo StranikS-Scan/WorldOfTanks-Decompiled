@@ -762,7 +762,7 @@ class Source(object):
         if len(records) == 2:
             blockName, rec = records
             for blockBuilder in accountDossierLayout + vehicleDossierLayout:
-                if type(blockBuilder) not in (StaticSizeBlockBuilder, BinarySetDossierBlockBuilder):
+                if not isinstance(blockBuilder, (StaticSizeBlockBuilder, BinarySetDossierBlockBuilder)):
                     continue
                 if blockBuilder.name == blockName:
                     if rec in blockBuilder.recordsLayout or rec.startswith('tankExpert') or rec.startswith('mechanicEngineer') or rec.startswith('collectorVehicle'):

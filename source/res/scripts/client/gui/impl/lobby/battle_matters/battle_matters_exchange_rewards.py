@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_matters/battle_matters_exchange_rewards.py
+from __future__ import absolute_import
 from functools import partial
 from frameworks.wulf import ViewSettings
 from gui.impl.gen import R

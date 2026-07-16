@@ -6,7 +6,7 @@ import BigWorld
 import CGF
 from AvatarInputHandler import aih_global_binding
 from AvatarInputHandler.aih_global_binding import BINDING_ID
-from BunkerLogicComponent import BunkerLogicComponent
+from story_mode.cgf_components.bunkers import BunkersSystem
 from Math import Vector4, Vector2, Matrix, Vector3
 from aih_constants import CTRL_MODE_NAME
 from gui.Scaleform.daapi.view.battle.shared.markers2d import MarkersManager, settings
@@ -315,10 +315,10 @@ class BunkersPlugin(MarkerPluginWithOffsetInZoom):
         _, top, __ = destructibleEntity.getStateBounds(_BUNKER_ALIVE_STATE, 0)
         topY = top.y + _MIN_TURRET_OFFSET if top.y > 0 else 0
         vehOffsets = []
-        bunkerQuery = CGF.Query(BigWorld.player().spaceID, (CGF.GameObject, BunkerLogicComponent))
-        bunkerLogic = next((bunker for _, bunker in bunkerQuery if bunker.destructibleEntityId == destructibleEntity.destructibleEntityID), None)
+        bunkersSystem = CGF.getSystem(BigWorld.player().spaceID, BunkersSystem)
+        bunkerLogic = bunkersSystem.findActiveBunkerDirect(destructibleEntity.destructibleEntityID)
         turretsSpotted = False
-        if bunkerLogic:
+        if bunkerLogic is not None:
             vehOffsets = list([ _calculateVehicleTurretOffset(v) + v.position.y - destructibleEntity.position.y for v in BigWorld.player().vehicles if v.id in bunkerLogic.vehicleIDs and v.isAlive ])
             turretsSpotted = len(bunkerLogic.vehicleIDs) == len(vehOffsets)
         return (max(topY, *vehOffsets) if vehOffsets else topY, turretsSpotted)
@@ -339,9 +339,9 @@ class BunkersPlugin(MarkerPluginWithOffsetInZoom):
 
     def _updateDistanceToEntity(self, entityId, entity):
         if entity.isActive:
-            bunkerQuery = CGF.Query(BigWorld.player().spaceID, (CGF.GameObject, BunkerLogicComponent))
-            bunkerLogic = next((bunker for _, bunker in bunkerQuery if bunker.destructibleEntityId == entity.destructibleEntityID), None)
-            if bunkerLogic:
+            bunkersSystem = CGF.getSystem(BigWorld.player().spaceID, BunkersSystem)
+            bunkerLogic = bunkersSystem.findActiveBunkerDirect(entity.destructibleEntityID)
+            if bunkerLogic is not None:
                 distance = (entity.position - avatar_getter.getOwnVehiclePosition()).length
                 self._setMarkerActive(entityId, distance < bunkerLogic.markerDistance)
         else:

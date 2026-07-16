@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/shell_components.py
+from __future__ import absolute_import
 from constants import SHELL_TYPES, DamageAbsorptionTypeToLabel, SHELL_MECHANICS_TYPE
 from items.components.component_constants import DEFAULT_ENABLE_TRACE_RICOCHET, ZERO_FLOAT, ZERO_TUPLE2
 from typing import Set, Optional, Tuple, Union

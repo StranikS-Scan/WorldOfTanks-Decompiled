@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/writers/sound_writers.py
+from __future__ import absolute_import
 import math
 import ResMgr
 from items import _xml

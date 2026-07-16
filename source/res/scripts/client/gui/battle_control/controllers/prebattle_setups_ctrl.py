@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/prebattle_setups_ctrl.py
+from __future__ import absolute_import
 import logging
-import BigWorld
 import typing
+from future.utils import viewitems
+import BigWorld
 from account_helpers.settings_core.settings_constants import GAME
 from battle_modifiers_common import EXT_DATA_MODIFIERS_KEY
 from constants import ARENA_PERIOD, VEHICLE_SIEGE_STATE
@@ -109,7 +111,7 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
         self.__extData[EXT_DATA_MODIFIERS_KEY] = arenaVisitor.getArenaModifiers()
 
     def stopControl(self):
-        self.clear(reset=True)
+        self.clear(leave=True)
         self.__state = _States.IDLE
         self.__invData.clear()
         self.__extData.clear()
@@ -199,7 +201,7 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
         self.__onInitStepCompleted(_States.SETUPS)
 
     def setInvData(self, setups):
-        self.__invData.update({_SETUP_NAME_TO_LAYOUT[key]:value for key, value in setups.iteritems()})
+        self.__invData.update({_SETUP_NAME_TO_LAYOUT[key]:value for key, value in viewitems(setups)})
 
     @MethodsRules.delayable('setPlayerVehicle')
     def setSetupsIndexes(self, vehicleID, setupsIndexes):
@@ -291,7 +293,7 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
     def __isSelectionAvailable(self):
         if not self.__hasValidCaps:
             return False
-        for groupID in TANK_SETUP_GROUPS.iterkeys():
+        for groupID in TANK_SETUP_GROUPS:
             if self.__vehicle.isSetupSwitchActive(groupID) and not self.__vehicle.postProgression.isPrebattleSwitchDisabled(groupID):
                 return True
 

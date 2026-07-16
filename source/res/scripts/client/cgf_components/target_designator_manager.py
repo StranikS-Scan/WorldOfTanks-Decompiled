@@ -1,18 +1,24 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/cgf_components/target_designator_manager.py
+from __future__ import absolute_import
 import BigWorld
 import CGF
 import SoundGroups
-from cgf_script.managers_registrator import autoregister
 from chat_commands_consts import LocationMarkerSubType
 from constants import DIRECT_DETECTION_TYPE
-from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
-from gui.battle_control.controllers.vehicle_passenger import VehiclePassengerInfoWatcher
 from helpers import dependency
+from constants import IS_EDITOR
 from skeletons.gui.battle_session import IBattleSessionProvider
+if IS_EDITOR:
 
-@autoregister(presentInAllWorlds=True)
-class TargetDesignatorSoundManager(CGF.ComponentManager, VehiclePassengerInfoWatcher):
+    class VehiclePassengerInfoWatcher(object):
+        pass
+
+
+else:
+    from gui.battle_control.controllers.vehicle_passenger import VehiclePassengerInfoWatcher
+
+class TargetDesignatorSoundSystem(CGF.System, VehiclePassengerInfoWatcher):
     _SOUND_SPOTTED_VEHICLE_HIT_PC = 'gui_abl_tda_spotted'
     _SOUND_UNSPOTTED_VEHICLE_HIT_PC = 'gui_abl_tda_blindshot'
     _SOUND3D_UNSPOTTED_VEHICLE_HIT = 'gui_abl_tda_marker'
@@ -21,14 +27,15 @@ class TargetDesignatorSoundManager(CGF.ComponentManager, VehiclePassengerInfoWat
     _STATE_VEHICLE_HIT_PC_GROUP_ON = 'STATE_ext_abl_tda_on'
     _STATE_VEHICLE_HIT_PC_GROUP_OFF = 'STATE_ext_abl_tda_off'
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    Reactions = CGF.Reactions()
 
     def __init__(self):
-        super(TargetDesignatorSoundManager, self).__init__()
+        super(TargetDesignatorSoundSystem, self).__init__()
         self.__markers = None
         self.__currentVehicle = None
         return
 
-    def activate(self):
+    def onMappingLoaded(self):
         self.__markers = set()
         ctrl = self.__sessionProvider.shared.feedback
         if ctrl is not None:
@@ -40,7 +47,7 @@ class TargetDesignatorSoundManager(CGF.ComponentManager, VehiclePassengerInfoWat
         self.startVehiclePassengerLateListening(self.__onVehiclePassengerUpdate, self.__onVehiclePassengerUpdating)
         return
 
-    def deactivate(self):
+    def onMappingUnloaded(self):
         self.__markers = None
         self.__currentVehicle = None
         ctrl = self.__sessionProvider.shared.feedback
@@ -58,6 +65,7 @@ class TargetDesignatorSoundManager(CGF.ComponentManager, VehiclePassengerInfoWat
             self.__play3DSound(self._SOUND3D_UNSPOTTED_VEHICLE_HIT, position)
 
     def __onVehicleFeedbackReceived(self, eventID, vehicleID, value):
+        from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
         if eventID != FEEDBACK_EVENT_ID.TARGET_DESIGNATOR_SPOTTED_MARKER:
             return
         else:

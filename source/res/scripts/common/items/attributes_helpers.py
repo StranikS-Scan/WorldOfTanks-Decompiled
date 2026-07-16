@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/attributes_helpers.py
-from items import _xml
+from __future__ import absolute_import
+from past.builtins import intern
+from future.utils import iteritems
 from typing import Dict, Tuple, Iterable, List, TYPE_CHECKING
+from items import _xml
 if TYPE_CHECKING:
     import ResMgr
 STATIC_ATTR_PREFIX = 'miscAttrs/'
@@ -107,7 +110,7 @@ AUTOSHOOT_DYNAMIC_ATTRS = {'shotIntervalMultFactor', 'shotDispersionPerShotFacto
 class DescrModifyAttrsCheker(object):
 
     def __contains__(self, item):
-        from descr_modify_attrs import checkAttrName
+        from items.descr_modify_attrs import checkAttrName
         return checkAttrName(item)
 
 
@@ -206,7 +209,7 @@ class AggregatedCollectorHelper(object):
 
     @staticmethod
     def collect(total, modifiersList, attrPrefix, filter=None):
-        uniqueAttrs = dict()
+        uniqueAttrs = {}
         mergers = AggregatedCollectorHelper._MERGERS
         for modifiers in modifiersList:
             for opType, attrType, attrName, value, modifierFilter in modifiers:
@@ -219,7 +222,7 @@ class AggregatedCollectorHelper(object):
 
         isEmpty = AggregatedCollectorHelper.isEmpty
         appliers = AggregatedCollectorHelper._APPLIERS
-        for (attrName, opType), value in uniqueAttrs.iteritems():
+        for (attrName, opType), value in iteritems(uniqueAttrs):
             if isEmpty(opType, value):
                 continue
             total[attrName] = appliers[opType](total.get(attrName, 0), value)

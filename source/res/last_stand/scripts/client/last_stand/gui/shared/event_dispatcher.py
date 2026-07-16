@@ -86,9 +86,9 @@ def showHeroTankPreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, 
     LastStandHeroTankPreviewState.goTo(ctx=ctx)
 
 
-def showRewardPathView():
+def showRewardPathView(openFromQuestCard=False):
     from last_stand.gui.impl.lobby.states import LastStandRewardPathState
-    LastStandRewardPathState.goTo()
+    LastStandRewardPathState.goTo(ctx={'openFromQuestCard': openFromQuestCard})
 
 
 @dependency.replace_none_kwargs(notificationsMgr=INotificationWindowController)

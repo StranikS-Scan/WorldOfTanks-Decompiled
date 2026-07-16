@@ -8,7 +8,7 @@ import CGF
 import Math
 from ClientSelectableCameraObject import ClientSelectableCameraObject
 from CurrentVehicle import g_currentPreviewVehicle
-from cgf_components.pbs_components import PostBattleManager
+from cgf_components.pbs_components import PostBattleSystem
 from frameworks.state_machine import StateFlags
 from frameworks.state_machine.transitions import TransitionType
 from gui import SystemMessages
@@ -523,7 +523,7 @@ class PBSSceneSetup(CameraMover):
         hangarConfig = customizationHangarCFG()
         _moveTank(hangarConfig, hangarConfig['v_start_pos'], tuple((math.radians(angle) for angle in hangarConfig['v_start_angles'])))
         spaceID = self.__hangarSpace.spaceID
-        pbsManager = CGF.getManager(spaceID, PostBattleManager)
+        pbsManager = CGF.getSystem(spaceID, PostBattleSystem)
         if pbsManager and self.__mapImageName:
             pbsManager.applyArenaImage(self.__mapImageName)
         Waiting.hide('loadingData')

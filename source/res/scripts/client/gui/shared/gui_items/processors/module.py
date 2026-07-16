@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/module.py
+from __future__ import absolute_import
 import typing
 import logging
+from future.utils import viewitems
 import AccountCommands
 import BigWorld
 from constants import EquipSideEffect
@@ -475,7 +477,7 @@ class BuyAndInstallItemProcessor(ModuleBuyer):
         else:
             super(BuyAndInstallItemProcessor, self)._request(callback)
 
-    def _response(self, code, callback, ctx=None, errStr=''):
+    def _response(self, code, callback, errStr='', ctx=None):
         super(BuyAndInstallItemProcessor, self)._response(code, callback, errStr, ctx)
         from gui.Scaleform.Waiting import Waiting
         Waiting.hide('applyModule')
@@ -526,7 +528,7 @@ class BattleAbilityInstaller(ModuleInstallProcessor):
         super(BattleAbilityInstaller, self).__init__(vehicle, item, (GUI_ITEM_TYPE.BATTLE_ABILITY,), slotIdx, install, conflictedEqs, skipConfirm=skipConfirm)
 
     def _request(self, callback):
-        selectedSkill = next((skillID for skillID, levelInfo in self.__epicMetaGameCtrl.getAllUnlockedSkillInfoBySkillId().iteritems() if self.item.innationID == levelInfo.eqID), -1)
+        selectedSkill = next((skillID for skillID, levelInfo in viewitems(self.__epicMetaGameCtrl.getAllUnlockedSkillInfoBySkillId()) if self.item.innationID == levelInfo.eqID), -1)
         currentSkills = self.__epicMetaGameCtrl.getSelectedSkills(self.vehicle.intCD)[:]
         previousSkill = currentSkills[self.slotIdx] if len(currentSkills) >= self.slotIdx else -1
         for idx, skillID in enumerate(currentSkills):

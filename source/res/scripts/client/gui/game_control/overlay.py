@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/overlay.py
+from __future__ import absolute_import
 import typing
 import GUI
 from wg_async import wg_async, wg_await, AsyncEvent

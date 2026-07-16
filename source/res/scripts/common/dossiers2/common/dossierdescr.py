@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/common/DossierDescr.py
+from __future__ import absolute_import
 import struct
 from array import array
+from future.utils import viewitems
 from typing import Dict, Iterable
 from dossiers2.common.DossierBlockBuilders import TYPE_BLOCK_BUILDER
 from dossiers2.custom.records import PLATFORM_ACHIEVEMENTS
@@ -13,8 +15,8 @@ class DossierDescr(object):
         self.__headerFormat = headerFormat
         self.__blocksOffset = struct.calcsize(headerFormat)
         self.__blocksLayout = [ builder.name for builder in blockBuilders ]
-        self.__blocksIndexes = dict([ (name, idx) for idx, name in enumerate(self.__blocksLayout) ])
-        self.__blocksBuilders = dict([ (builder.name, builder) for builder in blockBuilders ])
+        self.__blocksIndexes = {name:idx for idx, name in enumerate(self.__blocksLayout)}
+        self.__blocksBuilders = {b.name:b for b in blockBuilders}
         self.__blocks = {}
         self._dependentUpdates = 0
         self.__popUps = {}
@@ -79,8 +81,8 @@ class DossierDescr(object):
         return logRecords
 
     def getChanges(self):
-        changes = dict()
-        for key, block in self.__blocks.iteritems():
+        changes = {}
+        for key, block in viewitems(self.__blocks):
             blockChanges = block.getChanges()
             if blockChanges:
                 changes[key] = blockChanges
@@ -90,7 +92,7 @@ class DossierDescr(object):
     def checkPlatformAchievements(self, disabledAchievements, oldDossierDescr, revertAchievements):
         platformAchievements = []
         changes = self.getChanges()
-        for name, (medal, stat) in PLATFORM_ACHIEVEMENTS.iteritems():
+        for name, (medal, stat) in viewitems(PLATFORM_ACHIEVEMENTS):
             medalBlock, medalName = medal
             isMedalAchived = medalBlock in changes and medalName in changes[medalBlock]
             isStatsChanges = stat and stat[0] in changes and stat[1] in changes[stat[0]]

@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/pathes_config/__init__.py
+from __future__ import absolute_import
 import os
 import sys
 import site
+from soft_exception import SoftException
 
 def setupPaths():
     root = '../../../../..'

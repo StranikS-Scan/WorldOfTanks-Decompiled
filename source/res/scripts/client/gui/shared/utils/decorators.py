@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/decorators.py
+from __future__ import absolute_import
 import time
-from string import join
 import adisp
 import BigWorld
 from debug_utils import LOG_DEBUG
@@ -132,19 +132,19 @@ class InternalRepresenter(object):
             clazz.__repr_params__ = self.argNames
         representation = []
         attrMethNames = []
-        for i in xrange(len(clazz.__repr_params__)):
-            attrMethNames.append(makeArr(clazz.__repr_params__[i]))
+        for i, param in enumerate(clazz.__repr_params__):
+            attrMethNames.append(makeArr(param))
             if attrMethNames[-1][0][:2] == '__':
                 if clazz.__name__[0] != '_':
-                    attrMethNames[-1][0] = join(['_', clazz.__name__, attrMethNames[-1][0]], sep='')
+                    attrMethNames[-1][0] = ''.join(['_', clazz.__name__, attrMethNames[-1][0]])
                 else:
-                    attrMethNames[-1][0] = join([clazz.__name__, attrMethNames[-1][0]], sep='')
+                    attrMethNames[-1][0] = ''.join([clazz.__name__, attrMethNames[-1][0]])
             representation.append('{0} = {{{1}}}'.format(attrMethNames[-1][1], i))
 
-        representation = join([clazz.__name__,
+        representation = ''.join([clazz.__name__,
          '(',
-         join(representation, sep=', '),
-         ')'], sep='')
+         ', '.join(representation),
+         ')'])
 
         def __repr__(self):
             formatedArgs = []

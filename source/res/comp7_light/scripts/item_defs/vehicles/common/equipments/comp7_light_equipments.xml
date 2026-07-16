@@ -66,13 +66,13 @@
           <plan>	comp7Abilities/hunter_client	</plan>
         </client>
       </visualScript>
-      <cooldownSeconds>	15	  <exports>	vse	</exports>
+      <cooldownSeconds>	20	  <exports>	vse	</exports>
       </cooldownSeconds>
       <duration>	5	  <exports>	vse tooltip	</exports>
       </duration>
-      <heal>	4 5 7	  <exports>	vse tooltip	</exports>
+      <heal>	6 10 14	  <exports>	vse tooltip	</exports>
       </heal>
-      <gunReloadTimeBuff>	4	  <exports>	vse tooltip	</exports>
+      <gunReloadTimeBuff>	6.5	  <exports>	vse tooltip	</exports>
       </gunReloadTimeBuff>
       <tickInterval>	1.0	  <exports>	vse tooltip	</exports>
       </tickInterval>
@@ -92,7 +92,7 @@
           <plan>	comp7Abilities/concentration_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	18	  <exports>	vse	</exports>
+      <cooldownSeconds>	15	  <exports>	vse	</exports>
       </cooldownSeconds>
       <duration>	12	  <exports>	vse tooltip	</exports>
       </duration>
@@ -118,11 +118,11 @@
           <plan>	comp7Abilities/berserk_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	3	  <exports>	vse	</exports>
+      <cooldownSeconds>	5	  <exports>	vse	</exports>
       </cooldownSeconds>
       <duration>	12	  <exports>	vse tooltip	</exports>
       </duration>
-      <gunReloadTimeBuff>	0.75 0.7 0.65	  <exports>	vse tooltip	</exports>
+      <gunReloadTimeBuff>	0.8 0.75 0.7	  <exports>	vse tooltip	</exports>
       </gunReloadTimeBuff>
       <damageDistance>	150	  <exports>	vse tooltip	</exports>
       </damageDistance>
@@ -144,7 +144,7 @@
           <plan>	comp7Abilities/aoeInspire_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	3	  <exports>	vse	</exports>
+      <cooldownSeconds>	12	  <exports>	vse	</exports>
       </cooldownSeconds>
       <duration>	20	  <exports>	vse tooltip	</exports>
       </duration>
@@ -171,7 +171,7 @@
       </cooldownSeconds>
       <delay>	3	  <exports>	vse tooltip	</exports>
       </delay>
-      <radius>	10 12.5 15	  <exports>	vse tooltip	</exports>
+      <radius>	12.5 12.5 15	  <exports>	vse tooltip	</exports>
       </radius>
       <damage>	60 90 150	  <exports>	vse tooltip	</exports>
       </damage>
@@ -217,7 +217,7 @@
       </cooldownSeconds>
       <gunReloadTimeBuff>	0.7 0.6 0.5	  <exports>	vse tooltip	</exports>
       </gunReloadTimeBuff>
-      <gunTemperatureBuff>	-15 -30 -50	  <exports>	vse tooltip	</exports>
+      <gunTemperatureBuff>	-35 -47.5 -60	  <exports>	vse tooltip	</exports>
       </gunTemperatureBuff>
     </script>
   </comp7_light_fast_recharge>
@@ -245,7 +245,7 @@
       </enginePowerFactor>
       <fwMaxSpeedBonus>	6	  <exports>	vse tooltip	</exports>
       </fwMaxSpeedBonus>
-      <bkMaxSpeedBonus>	4	  <exports>	vse tooltip	</exports>
+      <bkMaxSpeedBonus>	1	  <exports>	vse tooltip	</exports>
       </bkMaxSpeedBonus>
       <rammingDamageBonus>	1.30	  <exports>	vse tooltip	</exports>
       </rammingDamageBonus>
@@ -351,7 +351,7 @@
           <plan>	comp7Abilities/recon_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	10	  <exports>	vse	</exports>
+      <cooldownSeconds>	12	  <exports>	vse	</exports>
       </cooldownSeconds>
       <duration>	7 10 15	  <exports>	vse tooltip	</exports>
       </duration>
@@ -382,7 +382,7 @@
       </cooldownSeconds>
       <duration>	15	  <exports>	vse tooltip	</exports>
       </duration>
-      <visionFactor>	1.15 1.2 1.25	  <exports>	vse tooltip	</exports>
+      <visionFactor>	1.2 1.275 1.35	  <exports>	vse tooltip	</exports>
       </visionFactor>
     </script>
   </comp7_light_aggressive_detection>

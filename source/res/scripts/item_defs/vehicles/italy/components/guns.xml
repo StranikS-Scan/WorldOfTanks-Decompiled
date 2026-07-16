@@ -47,6 +47,7 @@
     <_105mm_Cannone_Da_105_57>	48	</_105mm_Cannone_Da_105_57>
     <_105mm_Cannone_da_105_58_Rh_V1>	49	</_105mm_Cannone_da_105_58_Rh_V1>
     <_120mm_Cannone_binato_da_120_59>	50	</_120mm_Cannone_binato_da_120_59>
+    <_60mm_OTO_HVGS_Donnola>	51	</_60mm_OTO_HVGS_Donnola>
     <_127mm_OTO_Melara_B>	54	</_127mm_OTO_Melara_B>
     <Cannone_da_90_42_ter>	2000	</Cannone_da_90_42_ter>
     <Cannone_da_90_53_ter>	2001	</Cannone_da_90_53_ter>
@@ -574,6 +575,64 @@
         </_47mm_c_g_47_32_EP_1>
       </shots>
     </_47_mm_Cannone_Da_47_40_bis>
+    <_60mm_OTO_HVGS_Donnola>
+      <userString>	#italy_vehicles:_60mm_OTO_HVGS_Donnola	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	200000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.26	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.35	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium	</effects>
+      <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0 -20 1 -20	</minPitch>
+        <maxPitch>	0 10 1 10	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	40	</rotationSpeed>
+      <reloadTime>	2.2	</reloadTime>
+      <maxAmmo>	100	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	2800	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.3	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.1	</turretRotation>
+        <afterShot>	3.5	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_60mm_Type_300_APFSDS_T_Donnola>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	1270	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	218 194	</piercingPower>
+        </_60mm_Type_300_APFSDS_T_Donnola>
+        <_60mm_Type_310_HEAT_FS_Donnola>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	260 260	</piercingPower>
+        </_60mm_Type_310_HEAT_FS_Donnola>
+        <_60mm_Type_301_HE_T_Donnola>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	30 30	</piercingPower>
+        </_60mm_Type_301_HE_T_Donnola>
+      </shots>
+    </_60mm_OTO_HVGS_Donnola>
     <_75mm_Cannone_da_75_18>
       <userString>	#italy_vehicles:_75mm_Cannone_da_75_18	</userString>
       <tags></tags>

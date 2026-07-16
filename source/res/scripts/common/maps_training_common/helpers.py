@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/maps_training_common/helpers.py
-from collections import defaultdict
+from __future__ import absolute_import
+from future.utils import listvalues, viewitems
 from bonus_readers import SUPPORTED_BONUSES_IDS, SUPPORTED_BONUSES_NAMES
 from constants import VEHICLE_CLASS_INDICES, VEHICLE_CLASSES, MAPS_REWARDS_INDEX
-from maps_training_constants import DEFAULT_PROGRESS_VALUE, PROGRESS_DATA_MASK, VEHICLE_TYPE, MAX_SCENARIO_PROGRESS
+from maps_training_common.maps_training_constants import PROGRESS_DATA_MASK, VEHICLE_TYPE, MAX_SCENARIO_PROGRESS
 
 def extractScenarioProgress(progress, team, veh_type):
     offset = VEHICLE_TYPE.OFFSET[team][veh_type]
@@ -54,9 +55,9 @@ def unpackMapsTrainingScenarios(scenarios):
 
 def packMapsTrainingRewards(rewards):
     out = [ [] for _ in range(len(rewards)) ]
-    for stageName, stageRewards in rewards.iteritems():
+    for stageName, stageRewards in viewitems(rewards):
         stageOut = []
-        for rewardName, rewardData in stageRewards.iteritems():
+        for rewardName, rewardData in viewitems(stageRewards):
             rewardIndex = SUPPORTED_BONUSES_IDS.get(rewardName)
             if rewardIndex is None and rewardName == 'items':
                 rewardIndex = SUPPORTED_BONUSES_IDS['item']
@@ -72,7 +73,7 @@ def packMapsTrainingRewards(rewards):
 def unpackMapsTrainingRewards(rewards):
     out = {}
     for stageIndex, stageRewards in enumerate(rewards):
-        stageName = MAPS_REWARDS_INDEX.keys()[MAPS_REWARDS_INDEX.values().index(stageIndex)]
+        stageName = list(MAPS_REWARDS_INDEX)[listvalues(MAPS_REWARDS_INDEX).index(stageIndex)]
         out[stageName] = stageOut = {}
         for rewardIndex, rewardData in stageRewards:
             rewardName = SUPPORTED_BONUSES_NAMES[rewardIndex]

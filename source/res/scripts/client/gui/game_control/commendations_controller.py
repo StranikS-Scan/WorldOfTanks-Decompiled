@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/commendations_controller.py
+from __future__ import absolute_import
 from enum import Enum
 import Event
 from gui.server_events import settings

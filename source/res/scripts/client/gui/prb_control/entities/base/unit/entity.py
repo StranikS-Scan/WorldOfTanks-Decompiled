@@ -1277,6 +1277,9 @@ class UnitEntity(_UnitEntity):
     def unit_onUnitExtraChanged(self, extras):
         self._invokeListeners('onUnitExtraChanged', extras)
 
+    def unit_onUnitSizeChanged(self):
+        self._invokeListeners('onUnitSizeChanged')
+
     def _createActionsValidator(self):
         return UnitActionsValidator(self)
 
@@ -1341,6 +1344,7 @@ class UnitEntity(_UnitEntity):
         unit.onUnitPlayerProfileVehicleChanged += self.unit_onUnitPlayerProfileVehicleChanged
         unit.onUnitSearchFlagsChanged += self.unit_onUnitSearchFlagsChanged
         unit.onUnitExtraChanged += self.unit_onUnitExtraChanged
+        unit.onUnitSizeChanged += self.unit_onUnitSizeChanged
 
     def _removeClientUnitListeners(self):
         unit = prb_getters.getUnit(safe=True)
@@ -1360,6 +1364,7 @@ class UnitEntity(_UnitEntity):
             unit.onUnitPlayerInfoChanged -= self.unit_onUnitPlayerInfoChanged
             unit.onUnitPlayerProfileVehicleChanged -= self.unit_onUnitPlayerProfileVehicleChanged
             unit.onUnitExtraChanged -= self.unit_onUnitExtraChanged
+            unit.onUnitSizeChanged -= self.unit_onUnitSizeChanged
         return
 
     def _unassign(self, ctx, callback=None):

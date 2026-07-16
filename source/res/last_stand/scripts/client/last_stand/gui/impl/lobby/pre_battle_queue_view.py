@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: last_stand/scripts/client/last_stand/gui/impl/lobby/pre_battle_queue_view.py
 from __future__ import absolute_import
+import time
 import typing
 from CurrentVehicle import g_currentVehicle
 from gui.prestige.prestige_helpers import hasVehiclePrestige, fillPrestigeEmblemModel, getVehiclePrestige
@@ -18,6 +19,7 @@ from last_stand.gui.sounds import playSound
 from last_stand.gui.sounds.sound_constants import PRE_QUEUE_EXIT, PRE_QUEUE_ENTER
 from last_stand_common.last_stand_constants import CURRENT_QUEUE_TYPE_KEY, DEFAULT_DIFFICULTY_MODIFIER
 from helpers import dependency
+from helpers.time_utils import MS_IN_SECOND
 from gui.impl.gen import R
 from frameworks.wulf import ViewFlags, ViewSettings, WindowLayer
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
@@ -51,6 +53,11 @@ class PreBattleQueueView(BaseView):
             isLocked = event.getArgument('isLocked')
             return DifficultyTooltipView(isHangar=True, difficulty=difficulty, completedMissions=self._lsMissionsCtrl.getCompletedMissionsIndexByDifficulty(difficulty), state=state, isLocked=isLocked)
         return super(PreBattleQueueView, self).createToolTipContent(event, contentID)
+
+    def onUnitFlagsChanged(self, flags, timeLeft):
+        if flags.isInQueueChanged() and flags.isInQueue():
+            self.__startTime = time.time() * MS_IN_SECOND
+            self._loadModel()
 
     @property
     def viewModel(self):
@@ -101,7 +108,10 @@ class PreBattleQueueView(BaseView):
         difficultyVM.setCompletedMissions(getFormattedMissionsList(self._lsMissionsCtrl.getCompletedMissionsIndexByDifficulty(selectedDifficultyLevel)))
 
     def _getEvents(self):
-        return [(self.viewModel.onExitBattle, self.__onExitBattleButtonClick), (self.viewModel.onEscape, self.__onEscape), (self.viewModel.onMoveSpace, self.__onMoveSpace)]
+        return [(self.viewModel.onExitBattle, self.__onExitBattleButtonClick),
+         (self.viewModel.onEscape, self.__onEscape),
+         (self.viewModel.onMoveSpace, self.__onMoveSpace),
+         (self._difficultyLevelCtrl.onChangeDifficultyLevel, self.__onDifficultyLevelChanged)]
 
     def _initialize(self, *args, **kwargs):
         super(PreBattleQueueView, self)._initialize(*args, **kwargs)
@@ -132,6 +142,9 @@ class PreBattleQueueView(BaseView):
             g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.LOBBY_VIEW_MOUSE_MOVE, ctx=moveTypeArgs), EVENT_BUS_SCOPE.GLOBAL)
             g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.NOTIFY_SPACE_MOVED, ctx=moveTypeArgs), EVENT_BUS_SCOPE.GLOBAL)
             return
+
+    def __onDifficultyLevelChanged(self, *args, **kwargs):
+        self._loadModel()
 
     def __getSelectedDifficultyLevel(self):
         if isinstance(self.prbEntity, LastStandSquadEntity):

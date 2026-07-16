@@ -1,15 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hangar_widget/providers/user_mission_item.py
-from abc import ABCMeta
+from __future__ import absolute_import
 from typing import TYPE_CHECKING
 from gui.server_events.events_helpers import EventInfoModel
 from gui.impl.lobby.user_missions.hangar_widget.utils import DailyMissionItemPacker, WeeklyMissionItemPacker
-from gui.shared.missions.packers.bonus import getDailyMissionsBonusPacker, getWeeklyMissionsBonusPacker, weeklyBonusSort
+from gui.shared.missions.packers.bonus import getDailyMissionsBonusPacker, getWeeklyMissionsBonusPacker, weeklyBonusSortKey
 if TYPE_CHECKING:
     from gui.server_events.event_items import DailyQuest
 
 class MissionItem(object):
-    __metaclass__ = ABCMeta
     __slots__ = ('itemId', 'itemType', 'weight', 'secondaryKey', '_rawData', '_isCompleted')
 
     def __init__(self, itemId, itemType, weight=0, secondaryKey=None):
@@ -47,7 +46,7 @@ class MissionItem(object):
     def getBonusPacker(self):
         raise NotImplementedError
 
-    def getRewardsSortFunc(self):
+    def getRewardsSortKey(self):
         raise NotImplementedError
 
     def getAnimationId(self):
@@ -79,7 +78,7 @@ class DailyQuestMissionItem(MissionItem):
     def getBonusPacker(self):
         return getDailyMissionsBonusPacker()
 
-    def getRewardsSortFunc(self):
+    def getRewardsSortKey(self):
         return None
 
     def getAnimationId(self):
@@ -102,7 +101,7 @@ class PremiumDailyQuestMissionItem(MissionItem):
     def getBonusPacker(self):
         return getDailyMissionsBonusPacker()
 
-    def getRewardsSortFunc(self):
+    def getRewardsSortKey(self):
         return None
 
     def getAnimationId(self):
@@ -144,8 +143,8 @@ class WeeklyQuestMissionItem(MissionItem):
     def getBonusPacker(self):
         return getWeeklyMissionsBonusPacker()
 
-    def getRewardsSortFunc(self):
-        return weeklyBonusSort
+    def getRewardsSortKey(self):
+        return weeklyBonusSortKey
 
     def getAnimationId(self):
         return '%s::%s' % (self._TYPE, self._questId)

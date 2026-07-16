@@ -35,6 +35,7 @@ from sound_gui_manager import ViewSoundExtension
 from last_stand.gui.ls_account_settings import AccountSettingsKeys, getSettings, setSettings
 if typing.TYPE_CHECKING:
     from gui.lobby_state_machine.lobby_state_machine import LobbyStateMachine
+    from gui.shared.events import NavigationEvent
 
 def registerStates(machine):
     machine.addState(LastStandModeState())
@@ -193,6 +194,15 @@ class LastStandRewardPathState(SFViewLobbyState):
     def _onExited(self):
         self.__cachedParams = {}
         super(LastStandRewardPathState, self)._onExited()
+
+    def _getViewLoadCtx(self, event):
+        if 'ctx' in event.params:
+            return super(LastStandRewardPathState, self)._getViewLoadCtx(event)
+        ctx = {}
+        for key, value in event.params.items():
+            ctx[key] = value
+
+        return {'ctx': ctx}
 
 
 @BattleQueueContainerState.parentOf

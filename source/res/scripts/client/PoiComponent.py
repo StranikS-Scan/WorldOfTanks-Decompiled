@@ -7,6 +7,7 @@ import typing
 import CGF
 import GenericComponents
 import Math
+from typing import List
 from helpers import dependency, fixed_dict
 from points_of_interest.components import PoiStateComponent
 from points_of_interest_shared import PoiType, PoiStatus
@@ -21,8 +22,7 @@ class PoiComponent(DynamicScriptComponent):
         super(PoiComponent, self).__init__()
         self.__sessionProvider = dependency.instance(IBattleSessionProvider)
         self.__dynObjectsCache = dependency.instance(IBattleDynamicObjectsCache)
-        self.__prefab = None
-        self.__stateComponent = None
+        self.__prefabGo = None
         self.__createVisual()
         return
 
@@ -33,25 +33,26 @@ class PoiComponent(DynamicScriptComponent):
     def onDestroy(self):
         from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
         g_eventBus.handleEvent(events.PointOfInterestEvent(events.PointOfInterestEvent.REMOVED, {'point': weakref.proxy(self)}), scope=EVENT_BUS_SCOPE.BATTLE)
-        self.entity.entityGameObject.removeComponent(self.__stateComponent)
-        self.__stateComponent = None
+        self.entity.entityGameObject.removeComponent(PoiStateComponent)
         self.__removeVisual()
         super(PoiComponent, self).onDestroy()
-        return
 
     def set_progress(self, prev):
-        if self.__stateComponent is not None:
-            self.__stateComponent.progress = self.progress
+        component = self.entity.entityGameObject.findWrite(PoiStateComponent)
+        if component is not None:
+            component.progress = self.progress
         return
 
     def set_invader(self, prev):
-        if self.__stateComponent is not None:
-            self.__stateComponent.invader = self.invader
+        component = self.entity.entityGameObject.findWrite(PoiStateComponent)
+        if component is not None:
+            component.invader = self.invader
         return
 
     def set_status(self, prev):
-        if self.__stateComponent is not None:
-            self.__stateComponent.status = self.__getStatus()
+        component = self.entity.entityGameObject.findWrite(PoiStateComponent)
+        if component is not None:
+            component.status = self.__getStatus()
         return
 
     def _onAvatarReady(self):
@@ -60,35 +61,34 @@ class PoiComponent(DynamicScriptComponent):
             return
         else:
             status = self.__getStatus()
-            self.__stateComponent = self.entity.entityGameObject.createComponent(PoiStateComponent, self.pointID, PoiType(self.type), self.progress, self.invader, status)
+            queue = CGF.CommandQueue(self.spaceID)
+            queue.createComponent(self.entity.entityGameObject, PoiStateComponent, self.pointID, PoiType(self.type), self.progress, self.invader, status)
             from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
             g_eventBus.handleEvent(events.PointOfInterestEvent(events.PointOfInterestEvent.ADDED, {'point': weakref.proxy(self)}), scope=EVENT_BUS_SCOPE.BATTLE)
             return
 
     def __createVisual(self):
         parent = self.entity.entityGameObject
-        CGF.loadGameObjectIntoHierarchy(self._poiVisualConfig.getPointOfInterestPrefab(self.radius), parent, Math.Vector3(), self.__onPrefabLoaded)
+        CGF.loadAndCreatePrefabWithParent(self._poiVisualConfig.getPointOfInterestPrefab(self.radius), parent, Math.Vector3(), self.__onPrefabLoaded)
 
     def __removeVisual(self):
-        if self.__prefab is not None:
-            CGF.removeGameObject(self.__prefab)
-            self.__prefab = None
+        if self.__prefabGo is not None:
+            self.__prefabGo.destroy()
+        self.__prefabGo = None
         return
 
-    def __onPrefabLoaded(self, prefab):
-        self.__prefab = prefab
-        self.__updateRadius()
-        self.__prefab.activate()
+    def __onPrefabLoaded(self, objects, queue):
+        root = objects[0]
+        self.__prefabGo = queue.gameObject(root)
+        self.__updateRadius(root, queue)
+        queue.activateGameObject(root)
 
-    def __updateRadius(self):
-        if self.__prefab is None:
-            _logger.error('Failed to update PoI %s radius. Missing prefab.', self.entity.id)
+    def __updateRadius(self, root, queue):
+        terrainSelectedArea = queue.component(root, GenericComponents.TerrainSelectedAreaComponent)
+        if terrainSelectedArea is None:
+            _logger.error('Failed to update PoI %s radius. Missing TerrainSelectedArea component.', self.entity.id)
             return
         else:
-            terrainSelectedArea = self.__prefab.findComponentByType(GenericComponents.TerrainSelectedAreaComponent)
-            if terrainSelectedArea is None:
-                _logger.error('Failed to update PoI %s radius. Missing TerrainSelectedArea component.', self.entity.id)
-                return
             terrainSelectedArea.size = Math.Vector2(self.radius * 2, self.radius * 2)
             return
 

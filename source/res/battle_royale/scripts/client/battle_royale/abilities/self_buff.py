@@ -2,10 +2,8 @@
 # Embedded file name: battle_royale/scripts/client/battle_royale/abilities/self_buff.py
 import BigWorld
 import CGF
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
-from cgf_script.bonus_caps_rules import bonusCapsManager
-from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
-from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery
+from typing import List
+from cgf_script.registration import ComponentProperty, registerComponent
 from constants import IS_CLIENT
 from helpers import dependency
 import GenericComponents
@@ -34,47 +32,59 @@ _GUN_LENGTH_RANGES = {'short': (0.0, 2.0),
 @registerComponent
 class SelfBuffComponent(object):
     editorTitle = 'Self Buff Component'
-    category = 'Abilities'
-    domain = CGF.DomainOption.DomainClient
-    gunNode = ComponentProperty(type=CGFMetaTypes.LINK, value=CGF.GameObject, editorName='Gun Node')
+    group = 'Abilities'
+    domain = CGF.Domain.Client
+    gunNode = ComponentProperty(type=CGF.PropertyType.Link, value=CGF.GameObject, editorName='Gun Node')
 
 
 @registerComponent
 class SelfBuffNodeComponent(object):
     editorTitle = 'Self Buff Node Component'
-    category = 'Abilities'
-    domain = CGF.DomainOption.DomainClient
-    effectPathTemplate = ComponentProperty(type=CGFMetaTypes.STRING, value='', editorName='Effect Path Template')
+    group = 'Abilities'
+    domain = CGF.Domain.Client
+    effectPathTemplate = ComponentProperty(type=CGF.PropertyType.String, value='', editorName='Effect Path Template')
 
 
-@bonusCapsManager(ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, CGF.DomainOption.DomainClient)
-class SelfBuffComponentManager(CGF.ComponentManager):
+class SelfBuffSystem(CGF.System):
     __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
+    VehicleSelfBuffActivated = CGF.ActivateReaction(CGF.ReactRw(VehicleSelfBuffComponent))
+    UpgradeDeactivated = CGF.DeactivateReaction(CGF.ReactRo(UpgradeInProgressComponent), CGF.Rw(VehicleSelfBuffComponent))
+    SelfBuffNodeAccess = CGF.AccessReaction(CGF.Rw(SelfBuffNodeComponent))
+    Reactions = CGF.Reactions(VehicleSelfBuffActivated, UpgradeDeactivated, SelfBuffNodeAccess)
 
-    @onAddedQuery(VehicleSelfBuffComponent, CGF.GameObject)
-    def visualizeSelfBuff(self, vehicleSelfBuffComponent, _):
+    def update(self):
+        for _, vehicleSelfBuffComponent in self.reaction(self.UpgradeDeactivated):
+            self.inBattleUpgradeCompleted(vehicleSelfBuffComponent)
+
+        for vehicleSelfBuffComponent in self.reaction(self.VehicleSelfBuffActivated):
+            self.visualizeSelfBuff(vehicleSelfBuffComponent)
+
+    def visualizeSelfBuff(self, vehicleSelfBuffComponent):
         self.__launch(vehicleSelfBuffComponent)
 
     def __launch(self, vehicleSelfBuffComponent):
-        appearance = vehicleSelfBuffComponent.entity.appearance
+        vehicle = vehicleSelfBuffComponent.entity
+        if vehicle.isDestroyed:
+            return
+        appearance = vehicle.appearance
+        finishTime = vehicleSelfBuffComponent.finishTime
 
-        def postloadSetup(go):
-            selfBuffComponent = go.findComponentByType(SelfBuffComponent)
-            self.__setupVFX(selfBuffComponent.gunNode, appearance)
-            go.createComponent(GenericComponents.RemoveGoDelayedComponent, vehicleSelfBuffComponent.finishTime - BigWorld.serverTime())
+        def postloadSetup(root, _, queue):
+            selfBuffComponent = queue.component(root, SelfBuffComponent)
+            node = queue.pendingGameObject(selfBuffComponent.gunNode)
+            self.__setupVFX(node, appearance, queue)
+            queue.createComponent(root, GenericComponents.RemoveGoDelayedComponent, finishTime - BigWorld.serverTime())
 
         equipmentID = vehicles.g_cache.equipmentIDs().get(VehicleSelfBuffComponent.EQUIPMENT_NAME)
         equipment = vehicles.g_cache.equipments()[equipmentID]
-        loadAppearancePrefab(equipment.usagePrefab, appearance, postloadSetup)
+        loadAppearancePrefab(equipment.usagePrefab, appearance, postloadSetup, False)
 
-    def __setupVFX(self, nodeGO, appearance):
-        nodeComponent = nodeGO.findComponentByType(SelfBuffNodeComponent)
+    def __setupVFX(self, nodeGO, appearance, queue):
+        nodeComponent = queue.component(nodeGO, SelfBuffNodeComponent)
         effectName = getEffectSuffixForGunLength(_GUN_LENGTH_RANGES, appearance)
-        nodeGO.removeComponentByType(GenericComponents.AnimatorComponent)
-        nodeGO.createComponent(GenericComponents.AnimatorComponent, nodeComponent.effectPathTemplate.format(effectName), 0, 1, -1, True, '')
-        nodeGO.deactivate()
-        nodeGO.activate()
+        if queue.hasComponent(nodeGO, GenericComponents.AnimatorComponent):
+            queue.removeComponent(nodeGO, GenericComponents.AnimatorComponent)
+        queue.createComponent(nodeGO, GenericComponents.AnimatorComponent, nodeComponent.effectPathTemplate.format(effectName), 0, 1, -1, True, '')
 
-    @onRemovedQuery(VehicleSelfBuffComponent, CGF.GameObject, UpgradeInProgressComponent)
-    def inBattleUpgradeCompleted(self, vehicleSelfBuffComponent, *_):
+    def inBattleUpgradeCompleted(self, vehicleSelfBuffComponent):
         self.__launch(vehicleSelfBuffComponent)

@@ -182,7 +182,10 @@ class _SummaryPostmortemPanel(_BasePostmortemPanel):
         self.__prepareMessageFromSummary(vehID, deathReasonID)
 
     def __prepareMessageFromSummary(self, vehID, deathReasonCode):
-        if deathReasonCode not in _ATTACK_REASON_CODE_TO_MSG:
+        isInPostmortem = self.sessionProvider.shared.vehicleState.isInPostmortem
+        if not isInPostmortem:
+            return
+        elif deathReasonCode not in _ATTACK_REASON_CODE_TO_MSG:
             return
         else:
             if deathReasonCode == ATTACK_REASON_INDICES['shot']:

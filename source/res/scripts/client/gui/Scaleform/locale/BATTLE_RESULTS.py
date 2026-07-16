@@ -506,6 +506,7 @@ class BATTLE_RESULTS(object):
     MISSIONSPROGRESS_NOTIFICATIONSTABS_ELITESYSTEM_MAXLEVEL = '#battle_results:missionsProgress/notificationsTabs/eliteSystem/maxLevel'
     MISSIONSPROGRESS_NOTIFICATIONSTABS_BATTLEMATTERS = '#battle_results:missionsProgress/notificationsTabs/battleMatters'
     MISSIONSPROGRESS_NOTIFICATIONSTABS_PERSONALMISSIONS_OPERATION_MISSION_COMPLETE = '#battle_results:missionsProgress/notificationsTabs/personalMissions/operation_mission_complete'
+    MISSIONSPROGRESS_NOTIFICATIONSTABS_CHALLENGE = '#battle_results:missionsProgress/notificationsTabs/challenge'
     CONDITIONS_TYPE_OR = '#battle_results:conditions/type/or'
     CONDITIONS_TYPE_AND = '#battle_results:conditions/type/and'
     TEAM_STATS_LABELS_DAMAGEDEALTBYSKILLS = '#battle_results:team/stats/labels_damageDealtBySkills'

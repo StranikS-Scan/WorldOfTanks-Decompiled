@@ -138,7 +138,6 @@ class ChargeShotComponent(VehicleDynamicComponent, IMechanicComponent, IMechanic
 
     def _onAppearanceReady(self):
         super(ChargeShotComponent, self)._onAppearanceReady()
-        self.__mechanicPrefabSpawner.loadAppearancePrefab()
         self.__state = self.__getCurrentState()
         self.__statesEvents.processStatePrepared()
 

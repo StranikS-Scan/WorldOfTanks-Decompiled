@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/ranked/ranked_calendar_day_extended_tooltip.py
+from __future__ import absolute_import
 from datetime import datetime
+from past.utils import old_div
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles
@@ -25,7 +27,7 @@ class RankedCalendarDayExtendedTooltip(RankedCalendarDayTooltip):
         blocks = []
         currentSeason = self.__rankedController.getCurrentSeason()
         if currentSeason:
-            daysLeft = int((currentSeason.getEndDate() - time_utils.getServerUTCTime()) / time_utils.ONE_DAY)
+            daysLeft = int(old_div(currentSeason.getEndDate() - time_utils.getServerUTCTime(), time_utils.ONE_DAY))
             seasonName = currentSeason.getUserName() or currentSeason.getNumber()
             blocks.append(self.__packTimeLeftBlock(seasonName, daysLeft))
         blocks.append(self._packHeaderBlock())

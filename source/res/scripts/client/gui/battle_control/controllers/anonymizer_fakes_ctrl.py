@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/anonymizer_fakes_ctrl.py
+from __future__ import absolute_import
 import typing
 import logging
 import BigWorld
@@ -348,7 +349,7 @@ class AnonymizerFakesController(IAnonymizerFakesController):
             return False
 
     def __notifyModification(self, vehicleData):
-        actions = list()
+        actions = []
         user = self.usersStorage.getUser(vehicleData.sessionID, scope=UserEntityScope.BATTLE)
         if user is None:
             user = self.__addBattleUser(vehicleData)

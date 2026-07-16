@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 from cgf_client_common.entity_dyn_components import ReplicableDynamicScriptComponent
 from cgf_components_common.state_components import HealthComponentDescriptor
-from cgf_script.component_meta_class import registerReplicableComponent
+from cgf_script.registration import registerReplicableComponent
 from Event import Event
 
 @registerReplicableComponent

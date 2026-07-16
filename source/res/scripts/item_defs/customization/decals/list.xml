@@ -10024,6 +10024,13 @@
       <mirror>	true	</mirror>
       <tags>	hiddenInUI	</tags>
     </decal>
+    <decal>
+      <id>	1354	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_884.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_884	</userString>
+      <mirror>	true	</mirror>
+      <tags>	hiddenInUI	</tags>
+    </decal>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:emblem/special	</userString>
@@ -18001,7 +18008,51 @@
       <userString>	#vehicle_customization:inscription/special/special_866	</userString>
       <mirror>	false	</mirror>
     </decal>
+    <decal>
+      <id>	1300	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_874.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_874	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1316	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_875.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_875	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1317	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_876.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_876	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1318	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_877.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_877	</userString>
+      <mirror>	false	</mirror>
+    </decal>
     <name>	BattlePass 2026	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1356	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_880.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_880	</userString>
+      <mirror>	false	</mirror>
+      <tags>	styleOnly	</tags>
+    </decal>
+    <name>	OLS	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
   <itemGroup>

@@ -99,7 +99,8 @@ def _getComp7StyleProgressionQuestIDs():
     else:
         questIDs = []
         for item in style.alternateItems:
-            for quest in item.getUnlockingQuests():
+            quests = item.getUnlockingQuests()
+            for quest in quests or ():
                 questIDs.append(quest.getID())
 
         return questIDs

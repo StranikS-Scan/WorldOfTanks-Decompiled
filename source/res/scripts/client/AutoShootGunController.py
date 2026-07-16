@@ -110,6 +110,10 @@ class AutoShootGunController(VehicleDynamicComponent, IAutoShootGunComponent, IM
         self.__updateComponentState()
         self.__shootingEvents.processAppearanceReady()
 
+    def _onAppearanceReset(self):
+        super(AutoShootGunController, self)._onAppearanceReset()
+        self.__shootingEvents.processAppearanceReset()
+
     def _onAvatarReady(self, player):
         super(AutoShootGunController, self)._onAvatarReady(player)
         self.__updateDispersionState()

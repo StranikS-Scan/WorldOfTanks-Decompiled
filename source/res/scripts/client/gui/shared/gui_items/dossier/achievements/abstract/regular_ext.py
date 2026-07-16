@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/abstract/regular_ext.py
-from regular import RegularAchievement
-from helpers import i18n
+from __future__ import absolute_import
 from gui.shared.formatters import text_styles
+from gui.shared.gui_items.dossier.achievements.abstract.regular import RegularAchievement
+from helpers import i18n
 
 class RegularExtAchievement(RegularAchievement):
     __slots__ = ()

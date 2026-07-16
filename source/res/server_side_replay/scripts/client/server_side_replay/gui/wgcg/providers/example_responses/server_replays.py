@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: server_side_replay/scripts/client/server_side_replay/gui/wgcg/providers/example_responses/server_replays.py
+from __future__ import absolute_import
 from server_side_replay.gui.wgcg.data_wrappers.server_replays import DataNames
 EXAMPLE_DATA = {DataNames.TOP_REPLAYS: {'kills_made': [{'rank': 1,
                                          'top_stat_param': 'kills_made',

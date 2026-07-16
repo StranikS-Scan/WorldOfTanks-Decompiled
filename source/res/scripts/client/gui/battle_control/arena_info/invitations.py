@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/invitations.py
+from __future__ import absolute_import
+from builtins import zip
 import BattleReplay
 from adisp import adisp_process
 from constants import INVITATION_TYPE
@@ -195,15 +197,15 @@ class _SquadInvitationsRecorder(_SquadInvitationsHandler):
         self.__idGen = SequenceIDGenerator()
 
     def send(self, sessionID):
-        BattleReplay.g_replayCtrl.serializeCallbackData(CallbackDataNames.DYN_SQUAD_SEND_ACTION_NAME, (self.__idGen.next(), sessionID))
+        BattleReplay.g_replayCtrl.serializeCallbackData(CallbackDataNames.DYN_SQUAD_SEND_ACTION_NAME, (next(self.__idGen), sessionID))
         super(_SquadInvitationsRecorder, self).send(sessionID)
 
     def accept(self, sessionID):
-        BattleReplay.g_replayCtrl.serializeCallbackData(CallbackDataNames.DYN_SQUAD_ACCEPT_ACTION_NAME, (self.__idGen.next(), sessionID))
+        BattleReplay.g_replayCtrl.serializeCallbackData(CallbackDataNames.DYN_SQUAD_ACCEPT_ACTION_NAME, (next(self.__idGen), sessionID))
         super(_SquadInvitationsRecorder, self).accept(sessionID)
 
     def reject(self, sessionID):
-        BattleReplay.g_replayCtrl.serializeCallbackData(CallbackDataNames.DYN_SQUAD_REJECT_ACTION_NAME, (self.__idGen.next(), sessionID))
+        BattleReplay.g_replayCtrl.serializeCallbackData(CallbackDataNames.DYN_SQUAD_REJECT_ACTION_NAME, (next(self.__idGen), sessionID))
         super(_SquadInvitationsRecorder, self).reject(sessionID)
 
 

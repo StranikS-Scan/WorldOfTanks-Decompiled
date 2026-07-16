@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/gui/battle_results.py
+from __future__ import absolute_import
 import typing
 from Event import Event
 if typing.TYPE_CHECKING:

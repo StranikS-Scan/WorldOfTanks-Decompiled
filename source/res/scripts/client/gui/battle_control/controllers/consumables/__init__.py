@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/consumables/__init__.py
-from gui.battle_control.controllers.consumables import ammo_ctrl
-from gui.battle_control.controllers.consumables import equipment_ctrl
-from gui.battle_control.controllers.consumables import opt_devices_ctrl
+from __future__ import absolute_import
+from gui.battle_control.controllers.consumables import ammo_ctrl, equipment_ctrl, opt_devices_ctrl
 _EQUIPMENT_CONTROLLERS = {}
 _REPLAY_EQUIPMENT_CONTROLLERS = {}
 

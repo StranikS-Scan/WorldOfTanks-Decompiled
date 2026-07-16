@@ -2,6 +2,7 @@
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/Scaleform/daapi/view/battle/stats_exchange.py
 import VOIP
 from comp7_core.gui.Scaleform.daapi.view.meta.Comp7BattleStatisticDataControllerMeta import Comp7BattleStatisticDataControllerMeta
+from comp7_light.gui.Scaleform.genConsts.TOOLTIPS_BATTLE_CONSTANTS import TOOLTIPS_BATTLE_CONSTANTS
 from comp7_core.gui.battle_control.arena_info.arena_vos import Comp7CoreKeys
 from comp7_core.gui.comp7_core_constants import BATTLE_CTRL_ID
 from comp7_light.gui.battle_control.arena_info import vos_collections
@@ -21,6 +22,7 @@ class Comp7LightVehicleInfoComponent(vehicle.VehicleInfoComponent):
     def addVehicleInfo(self, vInfoVO, overrides):
         super(Comp7LightVehicleInfoComponent, self).addVehicleInfo(vInfoVO, overrides)
         return self._data.update({'role': ROLE_TYPE_TO_LABEL.get(vInfoVO.vehicleType.role, ''),
+         'roleSkillTooltipId': TOOLTIPS_BATTLE_CONSTANTS.COMP7_LIGHT_ROLE_SKILL_BATTLE_TOOLTIP,
          'skillLevel': vInfoVO.gameModeSpecific.getValue(Comp7CoreKeys.ROLE_SKILL_LEVEL, default=0),
          'voiceChatConnected': self.__getVoiceChatConnected(vInfoVO),
          'isSuperSquad': self.__isSuperSquad(vInfoVO)})

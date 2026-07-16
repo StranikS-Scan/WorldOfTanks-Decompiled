@@ -20,4 +20,52 @@
     <upperRight>	95.357201 95.357201	</upperRight>
   </boundingBox>
   <mapActivities></mapActivities>
+  <modules>
+    <common>
+      <module>	BW::CgfCameraModule	</module>
+      <module>	BW::CollisionSceneModule	</module>
+      <module>	cgf::network::ClientNetworkModule	</module>
+      <module>	BW::CompoundModule	</module>
+      <module>	BW::Hangar::SubHangarModule	</module>
+      <module>	BW::input::InputModule	</module>
+      <module>	BW::RompModule	</module>
+      <module>	cgf::events::EventsModule	</module>
+      <module>	cgf::FoundationModule	</module>
+      <module>	cgf::TriggersModule	</module>
+      <module>	BW::ConstraintsModule	</module>
+      <module>	BW::CGF::GenericComponentsModule	</module>
+      <module>	BW::tags::TagsModule	</module>
+      <module>	BW::variables::VariablesModule	</module>
+      <module>	vehicle::hierarchy::HierarchyModule	</module>
+      <module>	BW::DebugSoundRenderModule	</module>
+      <module>	cgf_debug_render::Module	</module>
+      <module>	BW::VisualScriptModule	</module>
+      <module>	BW::GameLogicModule	</module>
+      <module>	BW::SoundModule	</module>
+      <module>	BW::SoundSpatialModule	</module>
+      <module>	wot_physics::Module	</module>
+      <module>	BW::GpuDecalsModule	</module>
+      <module>	BW::WotRenderModule	</module>
+      <module>	BW::WULF::Module	</module>
+      <module>	BW::VehicleTracksModule	</module>
+      <module>	script::AfterburningModule	</module>
+      <module>	script::ClientCommonModule	</module>
+      <module>	script::ClientArmorInspectorModule	</module>
+      <module>	script::ClientUiModule	</module>
+      <module>	script::HangarSelectionModule	</module>
+      <module>	script::HangarCameraModule	</module>
+      <module>	script::VehicleToCameraAlignmentModule	</module>
+      <module>	script::PostBattleModule	</module>
+      <module>	script::HangarOperationsModule	</module>
+      <module>	script::LobbyModule	</module>
+      <module>	script::PetModule	</module>
+      <module>	script::VehicleAppearanceModule	</module>
+      <module>	script::VehicleSystemsModule	</module>
+      <module>	BW::SpaceZonesModule	</module>
+      <module>	BW::ControlPointModule	</module>
+      <module>	script::WotPlusProBoostModule	</module>
+      <module>	BW::VehicleTriggersModule	</module>
+      <module>	BW::VehicleBasicModule	</module>
+    </common>
+  </modules>
 </hangar_v4.xml>

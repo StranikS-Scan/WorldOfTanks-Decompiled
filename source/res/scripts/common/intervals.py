@@ -2,10 +2,8 @@
 # Embedded file name: scripts/common/intervals.py
 from __future__ import absolute_import
 import collections
-from functools import total_ordering
 _Interval = collections.namedtuple('Interval', ['begin', 'end'])
 
-@total_ordering
 class Interval(_Interval):
     EMPTY = None
 
@@ -17,8 +15,7 @@ class Interval(_Interval):
             if not self or not item:
                 return False
             return item.begin in self and item.end in self
-        else:
-            return self.begin <= item <= self.end
+        return self.begin <= item <= self.end
 
     def __bool__(self):
         return self is not self.EMPTY
@@ -39,8 +36,20 @@ class Interval(_Interval):
     def __eq__(self, other):
         return self.__compare(other) == 0
 
+    def __ne__(self, other):
+        return self.__compare(other) != 0
+
     def __lt__(self, other):
         return self.__compare(other) < 0
+
+    def __le__(self, other):
+        return self.__compare(other) <= 0
+
+    def __gt__(self, other):
+        return self.__compare(other) > 0
+
+    def __ge__(self, other):
+        return self.__compare(other) >= 0
 
     def __str__(self):
         return '[[{}, {}]]'.format(self.begin, self.end)

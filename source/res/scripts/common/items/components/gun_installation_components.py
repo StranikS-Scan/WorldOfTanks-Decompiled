@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/gun_installation_components.py
+from __future__ import absolute_import
 import typing
-import shared_components
-import component_constants
 from constants import DEFAULT_GUN_INSTALLATION_INDEX
+from items.components import shared_components
+from items.components import component_constants
 if typing.TYPE_CHECKING:
     from items.vehicle_items import Gun
 
@@ -35,15 +36,15 @@ class GunInstallationSlot(object):
         return self.getPartSlotNameByIndex(self.installationIndex)
 
     @property
-    def slotPrefabs(self):
-        mainPrefabs = self.gun.prefabs.get('default', {}).get('main', ())
-        return self.gun.slotPrefabs + ([(self.partSlotName, mainPrefabs[0])] if mainPrefabs else [])
-
-    @property
     def objectSlots(self):
         if self.__objectSlots is None:
             self.__objectSlots = self.__collectObjectSlots()
         return self.__objectSlots
+
+    def getSlotPrefabs(self, styleName=None):
+        styleType = styleName if styleName in self.gun.prefabs else 'default'
+        mainPrefabs = self.gun.prefabs.get(styleType, {}).get('main', ())
+        return self.gun.slotPrefabs + ([(self.partSlotName, mainPrefabs[0])] if mainPrefabs else [])
 
     def isMainInstallation(self):
         return self.isMainInstallationIndex(self.installationIndex)

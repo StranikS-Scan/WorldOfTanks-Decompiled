@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/functions.py
+from __future__ import absolute_import
 import random
 import re
 import typing
+from builtins import map, range
 import ArenaType
 import wg_async as future_async
 from adisp import adisp_async
@@ -23,7 +25,7 @@ if typing.TYPE_CHECKING:
 
 def rnd_choice(*args):
     args = list(args)
-    for _ in xrange(len(args)):
+    for _ in range(len(args)):
         c = random.choice(args)
         yield c
         args.remove(c)

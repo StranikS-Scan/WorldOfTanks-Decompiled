@@ -29,7 +29,6 @@
     <Interface>	AccountUnitBrowser	</Interface>
     <Interface>	AccountDebugger	</Interface>
     <Interface>	QuestProcessor	</Interface>
-    <Interface>	AvatarCreator	</Interface>
     <Interface>	AccountVersion	</Interface>
     <Interface>	PlayLimits	</Interface>
     <Interface>	ServerSideReplays	</Interface>
@@ -74,6 +73,10 @@
       <Flags>	BASE	</Flags>
       <Persistent>	true	</Persistent>
     </premiumExpiryTime>
+    <creator>
+      <Type>	STRING	</Type>
+      <Flags>	BASE	</Flags>
+    </creator>
     <autoBanTime>
       <Type>	UINT32	</Type>
       <Flags>	BASE	</Flags>
@@ -347,6 +350,9 @@
     <onMapsTrainingEnqueued>
       <Arg>	UINT8	</Arg>
     </onMapsTrainingEnqueued>
+    <onAvatarCreated>
+      <Arg>	MAILBOX	</Arg>
+    </onAvatarCreated>
     <onArenaCreated>
       <Arg>	MAILBOX	</Arg>
       <Arg>	UINT64	</Arg>
@@ -374,6 +380,7 @@
     </onKickedFromArena>
     <releaseClientForLogin>
       <Arg>	PYTHON	</Arg>
+      <Arg>	UINT64	</Arg>
       <Arg>	PYTHON	</Arg>
       <ReturnValues>
         <Arg>	UINT8	</Arg>

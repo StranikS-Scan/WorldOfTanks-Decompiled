@@ -1,17 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/arena_component_system/client_arena_component_system.py
-import cPickle
+from __future__ import absolute_import
 import weakref
+from future.moves import pickle
+from future.utils import viewitems
+import Event
+from arena_component_system.arena_sync_object import ArenaSyncObject
+from components_base.component import Component
+from components_base.component_controller import ComponentController
 from constants import ARENA_UPDATE, ARENA_SYNC_OBJECT_NAMES
 from debug_utils import LOG_ERROR
-import Event
-from arena_sync_object import ArenaSyncObject
-from cgf_obsolete_script.py_component import Component
-from cgf_obsolete_script.script_game_object import ScriptGameObject
 
 class ClientArenaComponent(Component):
 
     def __init__(self, componentSystem):
+        super(ClientArenaComponent, self).__init__()
         self._componentSystem = weakref.ref(componentSystem)
         self._onUpdate = {}
         self._eventManager = Event.EventManager()
@@ -42,21 +45,21 @@ class ClientArenaComponent(Component):
         return self._componentSystem().getSyncDataObjectData(syncDataObjectType, key)
 
 
-class ClientArenaComponentSystem(ScriptGameObject):
+class ClientArenaComponentSystem(ComponentController):
 
     def __init__(self, arena, bonusType, arenaType):
-        ScriptGameObject.__init__(self, arena.gameSpace.spaceID, 'ClientArenaComponentSystem')
+        super(ClientArenaComponentSystem, self).__init__('ClientArenaComponentSystem')
         self.bonusType = bonusType
         self.arenaType = arenaType
         self.arena = weakref.ref(arena)
         self._onUpdate = {ARENA_UPDATE.SYNC_OBJECTS: self.__onFullSyncObjectReceived,
          ARENA_UPDATE.SYNC_OBJECTS_DIFF: self.__onSyncObjectUpdateReceived}
         self.__syncDataObjects = {}
-        for k, _ in ARENA_SYNC_OBJECT_NAMES.iteritems():
+        for k in ARENA_SYNC_OBJECT_NAMES:
             self.__syncDataObjects[k] = ArenaSyncObject()
 
     def destroy(self):
-        ScriptGameObject.destroy(self)
+        super(ClientArenaComponentSystem, self).destroy()
         self._onUpdate.clear()
         self.__syncDataObjects.clear()
 
@@ -90,8 +93,8 @@ class ClientArenaComponentSystem(ScriptGameObject):
             return
 
     def __onFullSyncObjectReceived(self, argStr):
-        o = cPickle.loads(argStr)
-        for key, syncObject in self.__syncDataObjects.iteritems():
+        o = pickle.loads(argStr)
+        for key, syncObject in viewitems(self.__syncDataObjects):
             fullSyncData = o.get(key, None)
             if fullSyncData is not None:
                 syncObject.synchronize(True, fullSyncData)
@@ -99,8 +102,8 @@ class ClientArenaComponentSystem(ScriptGameObject):
         return
 
     def __onSyncObjectUpdateReceived(self, argStr):
-        diff = cPickle.loads(argStr)
-        for key, syncObject in self.__syncDataObjects.iteritems():
+        diff = pickle.loads(argStr)
+        for key, syncObject in viewitems(self.__syncDataObjects):
             syncDataDiff = diff.get(key, None)
             if syncDataDiff is not None:
                 syncObject.synchronize(False, syncDataDiff)

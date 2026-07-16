@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/QuestsProgressRequester.py
+from __future__ import absolute_import
 import functools
 from collections import namedtuple
 import copy
 import logging
 import typing
+from future.utils import iteritems
 import BigWorld
 import personal_missions
 from account_helpers.AccountSettings import QUEST_DELTAS_PROGRESS, QUEST_DELTAS_COMPLETION
@@ -30,7 +32,7 @@ class _QuestsProgressRequester(AbstractSyncDataRequester):
 
     def getTokenNames(self):
         tokens = self.getTokensData()
-        return tokens.keys()
+        return list(tokens)
 
     def getTokensData(self):
         return self.itemsCache.items.tokens.getTokens()
@@ -144,7 +146,7 @@ class PersonalMissionsProgressRequester(_QuestsProgressRequester):
 class _QuestProgressDelta(BaseDelta):
 
     def _getDataIterator(self, data):
-        for questId, quest in data.get('quests', {}).iteritems():
+        for questId, quest in iteritems(data.get('quests', {})):
             yield (questId, copy.deepcopy(quest.get('progress', {})))
 
     def _getDefaultValue(self):
@@ -155,14 +157,14 @@ class _QuestCompletionDelta(BaseDelta):
 
     def __init__(self, prevFactory=None):
         super(_QuestCompletionDelta, self).__init__(prevFactory)
-        self.questsFilters = dict()
+        self.questsFilters = {}
 
     def questFilter(self, quest):
         return events_helpers.isDailyQuest(quest.getID()) or events_helpers.isPremium(quest.getID()) or events_helpers.isWeeklyQuest(quest.getID()) or any((filterFunc(quest) for filterFunc in self.questsFilters.values()))
 
     def clear(self):
         super(_QuestCompletionDelta, self).clear()
-        self.questsFilters = dict()
+        self.questsFilters = {}
 
     def _getDataIterator(self, data):
         events = self.eventsCache.getAllEvents(self.questFilter)

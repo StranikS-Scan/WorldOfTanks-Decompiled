@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/contexts/cgf_context.py
+from __future__ import absolute_import
 import weakref
 import BigWorld
+from constants import IS_CELLAPP, IS_CLIENT
 from visual_script.misc import ASPECT
 from visual_script.slot_types import SLOT_TYPE
 from visual_script.context import VScriptContext, vse_get_property, vse_event_out
-from constants import IS_CELLAPP, IS_UE_EDITOR, IS_CLIENT
 from visual_script.dependency import dependencyImporter
 if IS_CELLAPP:
     helpers = dependencyImporter('helpers')

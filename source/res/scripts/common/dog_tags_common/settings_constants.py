@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dog_tags_common/settings_constants.py
+from __future__ import absolute_import
 from enum import Enum
 DT_PDATA_KEY = 'dogTags'
 

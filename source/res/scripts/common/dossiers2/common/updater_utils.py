@@ -1,13 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/common/updater_utils.py
+from __future__ import absolute_import
 import struct
+from future.utils import viewitems, viewvalues
+from past.builtins import xrange
 
 def buildBlocksLayout(buildersLayout):
     return [ builder.name for builder in buildersLayout ]
 
 
 def buildAllRecordsFormat(block, recordsInfo):
-    return dict([ (recordInfo[1], recordInfo[3]) for recordInfo in recordsInfo if recordInfo[0] == block and recordInfo[2] == 'p' ])
+    return {recordInfo[1]:recordInfo[3] for recordInfo in recordsInfo if recordInfo[0] == block and recordInfo[2] == 'p'}
 
 
 def buildRecordsPacking(records, layout, formats):
@@ -39,7 +42,7 @@ def getStaticSizeBlockRecordValues(updateCtx, block, recordsPacking):
         return {}
     blockOffset = updateCtx['headerLength'] + sum(updateCtx['header'][1:blockIndex + 1])
     res = {}
-    for record, (offset, format) in recordsPacking.iteritems():
+    for record, (offset, format) in viewitems(recordsPacking):
         res[record] = struct.unpack_from('<' + format, updateCtx['dossierCompDescr'], blockOffset + offset)[0]
 
     return res
@@ -49,7 +52,7 @@ def getDictBlockRecordValues(updateCtx, block, keyFormat, valueFormat):
     compDescr = getBlockCompDescr(updateCtx, block)
     itemFormat = keyFormat + valueFormat
     itemSize = struct.calcsize('<' + itemFormat)
-    length = len(compDescr) / itemSize
+    length = len(compDescr) // itemSize
     keyLength = len(keyFormat)
     valueLength = len(valueFormat)
     if length == 0:
@@ -74,7 +77,7 @@ def updateDictRecords(updateCtx, block, keyFormat, valueFormat, values):
     blockOffset = headerLength + sum(header[1:blockIndex + 1])
     fmt = '<' + (keyFormat + valueFormat) * len(values)
     writeValues = []
-    for key, value in values.iteritems():
+    for key, value in viewitems(values):
         writeValues += key + value
 
     blockCompDescr = struct.pack(fmt, *writeValues)
@@ -89,7 +92,7 @@ def setStaticSizeBlockRecordValues(updateCtx, block, recordsPacking, recordsValu
     if updateCtx['header'][blockIndex + 1] == 0:
         return {}
     blockOffset = updateCtx['headerLength'] + sum(updateCtx['header'][1:blockIndex + 1])
-    for key, value in recordsValues.iteritems():
+    for key, value in viewitems(recordsValues):
         offset, format = recordsPacking[key]
         data = struct.pack('<' + format, value)
         updateCtx['dossierCompDescr'] = updateCtx['dossierCompDescr'][:blockOffset + offset] + data + updateCtx['dossierCompDescr'][blockOffset + offset + len(data):]
@@ -183,7 +186,7 @@ def updateStaticSizeBlockRecords(updateCtx, block, records):
     header = updateCtx['header']
     blockIndex = updateCtx['blocksLayout'].index(block)
     blockSize = header[blockIndex + 1]
-    if blockSize == 0 and not any([ True for _, _, value in records if value != 0 ]):
+    if blockSize == 0 and not any((True for _, _, value in records if value != 0)):
         return
     dossierCompDescr = updateCtx['dossierCompDescr']
     blockOffset = updateCtx['headerLength'] + sum(header[1:blockIndex + 1])
@@ -228,7 +231,7 @@ def removeRecords(updateCtx, block, recordsPacking):
     if header[blockIndex + 1] == 0:
         return
     blockOffset = updateCtx['headerLength'] + sum(header[1:blockIndex + 1])
-    l = [ (offset, struct.calcsize('<' + format)) for record, (offset, format) in recordsPacking.iteritems() ]
+    l = [ (offset, struct.calcsize('<' + format)) for offset, format in viewvalues(recordsPacking) ]
     l.sort()
     totalSizeDec = 0
     dossierCompDescr = updateCtx['dossierCompDescr']

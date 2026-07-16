@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/wotlda/easy_tank_equip_provider.py
+from __future__ import absolute_import
 import logging
 from typing import Optional
 from gui.game_control.wotlda.loadout_model import BaseOptDeviceLoadoutModel

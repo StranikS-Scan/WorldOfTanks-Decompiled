@@ -1,12 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/compat_vehicles_cache.py
+from __future__ import absolute_import
+import typing
 from collections import defaultdict
+from future.utils import itervalues
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from skeletons.gui.shared import IItemsCache
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.Vehicle import Vehicle
 
 def getItemsByType(itemType, proxy):
-    return proxy.items.getItems(itemType, ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET).itervalues()
+    return itervalues(proxy.items.getItems(itemType, ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET))
 
 
 class CompatVehiclesCache(object):
@@ -28,7 +33,7 @@ class CompatVehiclesCache(object):
         if not self.__compatCache:
             self.__compatCache.update({itemType:defaultdict(list) for itemType in self._COMPAT_TYPES})
             vehicles = proxy.items.getItems(GUI_ITEM_TYPE.VEHICLE, REQ_CRITERIA.INVENTORY, onlyWithPrices=False)
-            self.__invalidateCompatCache(proxy, vehicles.itervalues(), [])
+            self.__invalidateCompatCache(proxy, itervalues(vehicles), [])
         return self.__compatCache
 
     def getFittedCache(self, proxy):
@@ -60,7 +65,7 @@ class CompatVehiclesCache(object):
     def __invalidateFittedCache(self, proxy):
         self.__fittedCache.update({itemType:defaultdict(list) for itemType in self._FITTED_TYPES})
         inventoryVehicles = proxy.items.getItems(GUI_ITEM_TYPE.VEHICLE, REQ_CRITERIA.INVENTORY, onlyWithPrices=False)
-        for veh in inventoryVehicles.itervalues():
+        for veh in itervalues(inventoryVehicles):
             for optDevice in veh.optDevices.installed:
                 if optDevice is not None:
                     self.__fittedCache[GUI_ITEM_TYPE.OPTIONALDEVICE][optDevice.intCD].append(veh.intCD)

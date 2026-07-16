@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/NotifyController.py
+from __future__ import absolute_import
 import base64
-import cPickle
 from collections import namedtuple
+from future.moves import pickle
 import BigWorld
 import Settings
 from adisp import adisp_async, adisp_process
@@ -167,12 +168,12 @@ class NotifyController(INotifyController):
         try:
             userPrefs = Settings.g_instance.userPrefs
             if userPrefs.has_key(Settings.KEY_GUI_NOTIFY_INFO):
-                self.__settings = self.__settings._replace(**cPickle.loads(base64.b64decode(userPrefs.readString(Settings.KEY_GUI_NOTIFY_INFO))))
+                self.__settings = self.__settings._replace(**pickle.loads(base64.b64decode(userPrefs.readString(Settings.KEY_GUI_NOTIFY_INFO))))
         except Exception as msg:
             LOG_DEBUG('There is error while reading gui notifying settings', msg)
 
     def __writeSettings(self):
-        Settings.g_instance.userPrefs.write(Settings.KEY_GUI_NOTIFY_INFO, base64.b64encode(cPickle.dumps(self.__settings._asdict())))
+        Settings.g_instance.userPrefs.write(Settings.KEY_GUI_NOTIFY_INFO, base64.b64encode(pickle.dumps(self.__settings._asdict())))
 
     @classmethod
     def __wrapHtmlMessage(cls, message):

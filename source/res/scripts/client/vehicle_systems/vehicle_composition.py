@@ -12,7 +12,7 @@ from constants import IS_UE_EDITOR
 from items.components import component_constants
 from items.components.c11n_constants import HANGER_POSTFIX, AttachmentType
 from vehicle_systems.tankStructure import TankNodeNames, TankPartNames, TankCollisionPartNames
-from vehicle_systems.components.vehicle_appearance_component import VehicleAppearanceComponent
+from vehicle_appearance.component import VehicleAppearanceComponent
 from helpers import isPlayerAccount
 from objects_hierarchy import PrefabsMapItem, ExtraSlotsMapItem
 if typing.TYPE_CHECKING:
@@ -21,7 +21,7 @@ if typing.TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor
     from ClientSelectableCameraVehicle import ClientSelectableCameraVehicle
     from SimulatedVehicle import SimulatedVehicle
-    from common_tank_appearance import CommonTankAppearance
+    from vehicle_appearance.common_tank_appearance import CommonTankAppearance
     from gui.hangar_vehicle_appearance import HangarVehicleAppearance
     from typing import Iterable
     TAppearance = typing.Union[HangarVehicleAppearance, CommonTankAppearance, None]
@@ -41,12 +41,13 @@ class VehicleSlots(enum.Enum):
     GUN_COLLISION = TankCollisionPartNames.GUN
 
 
-def removeComposition(gameObject):
+def removeComposition(gameObject, queue=None):
     Compound.onClientCompositionAboutToBeRemoved(gameObject)
-    gameObject.removeComponent(Compound.CompoundBasedComposerComponent)
+    queue = queue or CGF.CommandQueue(gameObject.spaceID)
+    queue.removeComponent(gameObject, Compound.CompoundBasedComposerComponent)
 
 
-def createVehicleComposition(gameObject, vehicleGameObject=CGF.GameObject.INVALID_GAME_OBJECT, prefabMap=None, followNodes=True, extraSlots=None, dynSlotNodes=None):
+def createVehicleComposition(gameObject, vehicleGameObject=CGF.GameObject.INVALID_GAME_OBJECT, prefabMap=None, followNodes=True, extraSlots=None, dynSlotNodes=None, queue=None):
     dynSlotNodes = dynSlotNodes or {}
     if IS_UE_EDITOR:
 
@@ -63,7 +64,8 @@ def createVehicleComposition(gameObject, vehicleGameObject=CGF.GameObject.INVALI
 
     slotsMap = {node:node for node in dynSlotNodes}
     slotsMap.update(_VEHICLE_SLOTS_MAP)
-    gameObject.createComponent(Compound.CompoundBasedComposerComponent, vehicleGameObject, predicate, nodeInteractTypeResolver, slotsMap, prefabMap or [], extraSlots or [])
+    queue = queue or CGF.CommandQueue(gameObject.spaceID)
+    queue.createComponent(gameObject, Compound.CompoundBasedComposerComponent, vehicleGameObject, predicate, nodeInteractTypeResolver, slotsMap, prefabMap or [], extraSlots or [])
 
 
 def _getSlotTransform(scale, rotation, position):
@@ -112,7 +114,8 @@ def getExtraSlotMap(vDesc, appearance):
 
 
 def createDetachedTurretComposition(gameObject, prefabMap=None, extraSlots=None):
-    gameObject.createComponent(Compound.CompoundBasedComposerComponent, CGF.GameObject.INVALID_GAME_OBJECT, lambda *args: True, lambda *args: Compound.NodeInteractType.NONE, _DETACHED_TURRET_SLOTS_MAP, prefabMap or [], extraSlots or [])
+    queue = CGF.CommandQueue(gameObject.spaceID)
+    queue.createComponent(gameObject, Compound.CompoundBasedComposerComponent, CGF.GameObject.INVALID_GAME_OBJECT, lambda *args: True, lambda *args: Compound.NodeInteractType.NONE, _DETACHED_TURRET_SLOTS_MAP, prefabMap or [], extraSlots or [])
 
 
 def findParentVehicle(gameObject):
@@ -120,10 +123,10 @@ def findParentVehicle(gameObject):
     from SimulatedVehicle import SimulatedVehicle
     from ClientSelectableCameraVehicle import ClientSelectableCameraVehicle
     from DetachedTurret import DetachedTurret
-    hierarchy = CGF.HierarchyManager(gameObject.spaceID)
-    findResult = hierarchy.findComponentInParent(gameObject, GenericComponents.EntityGOSync)
-    if findResult is not None and len(findResult) > 1:
-        entity = findResult[1].entity
+    result = CGF.findParentWithComponent(gameObject, GenericComponents.EntityGOSync)
+    if result is not None:
+        _, sync = result
+        entity = sync.entity
         if entity is None:
             return
         if isPlayerAccount():
@@ -138,8 +141,7 @@ def findParentVehicle(gameObject):
 
 
 def findParentVehicleAppearance(gameObject):
-    hierarchy = CGF.HierarchyManager(gameObject.spaceID)
-    findResult = hierarchy.findComponentInParent(gameObject, VehicleAppearanceComponent)
+    findResult = CGF.findParentWithComponent(gameObject, VehicleAppearanceComponent)
     return findResult[1].appearance if findResult is not None and len(findResult) > 1 else None
 
 

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/perks_constants.py
+from __future__ import absolute_import
 import typing
+from functools import reduce
 PERKS_XML_FILE = 'perks.xml'
 PERK_BONUS_VALUE_PRECISION = 5
 POINT_BLAST_DISTANCE = 50

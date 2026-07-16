@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/achievements20_controller.py
+from __future__ import absolute_import
 import logging
 import Event
 from PlayerEvents import g_playerEvents
@@ -233,7 +234,7 @@ class Achievements20SettingsManager(object):
     __slots__ = ('__settings',)
 
     def __init__(self):
-        self.__settings = dict()
+        self.__settings = {}
 
     def start(self):
         self.__settings = AccountSettings.getSettings(ACHIEVEMENTS_INFO)

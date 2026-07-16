@@ -1,13 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/shared_utils/account_helpers/ClientInvitations.py
+from __future__ import absolute_import
 from collections import namedtuple
 from functools import partial
-from shared_utils import safeCancelCallback
+from future.utils import viewvalues
 import BigWorld
 import AccountCommands
 from constants import INVITATION_STATUS
 from helpers.time_utils import getCurrentTimestamp, getServerUTCTime
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
+from shared_utils import safeCancelCallback
 UniqueId = namedtuple('UniqueId', ['id', 'senderID'])
 
 class InvitationScope(object):
@@ -92,7 +94,7 @@ class ClientInvitations(object):
         return
 
     def _cancelInvitations(self, predicate):
-        for inv in self.__invitations.itervalues():
+        for inv in viewvalues(self.__invitations):
             if predicate(inv):
                 inv['status'] = INVITATION_STATUS.ERROR
 

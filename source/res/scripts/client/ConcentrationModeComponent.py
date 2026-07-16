@@ -75,7 +75,6 @@ class ConcentrationModeComponent(VehicleDynamicComponent, IMechanicComponent, IM
 
     def _onAppearanceReady(self):
         super(ConcentrationModeComponent, self)._onAppearanceReady()
-        self.__mechanicPrefabSpawner.loadAppearancePrefab()
         self.__statesEvents.processStatePrepared()
 
     def _onComponentAppearanceUpdate(self, **kwargs):

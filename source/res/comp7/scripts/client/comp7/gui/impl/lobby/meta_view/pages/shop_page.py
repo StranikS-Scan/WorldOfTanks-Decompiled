@@ -195,13 +195,28 @@ class ShopPage(PageSubModelPresenter):
         from comp7.gui.impl.lobby.hangar.states import Comp7ModeState
         lsm = getLobbyStateMachine()
         isComp7State = lsm.getStateByCls(Comp7ModeState).isEntered()
-        if self.__switchCameraToDefault and isComp7State:
+        isReferralState = self.__isRefferalStateLoaded()
+        if self.__switchCameraToDefault and (isComp7State or isReferralState):
             self.__rotationHelper.switchCamera(Comp7Cameras.DEFAULT.value, False)
         self.__rotationHelper = None
         if self.__blur is not None:
             self.__blur.fini()
         self.__hideWaiting()
         return
+
+    def __isRefferalStateLoaded(self):
+        from gui.lobby_state_machine.states import UntrackedState
+        from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+        from gui.Scaleform.lobby_entry import _UntrackedStateForwardedParams
+        lsm = getLobbyStateMachine()
+        currentState = lsm.visibleState
+        if isinstance(currentState, UntrackedState):
+            stateParams = currentState.serializeParams().get(UntrackedState.LOAD_PARAMS_KEY)
+            if isinstance(stateParams, _UntrackedStateForwardedParams):
+                ctx = stateParams.kwargs.get('ctx', {})
+                if ctx.get('browser_alias') == VIEW_ALIAS.REFERRAL_PROGRAM_WINDOW:
+                    return True
+        return False
 
     def _getEvents(self):
         events = self.__rotationHelper.getCameraEvents(self.viewModel)

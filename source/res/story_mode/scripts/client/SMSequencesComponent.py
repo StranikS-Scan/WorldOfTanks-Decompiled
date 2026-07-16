@@ -134,7 +134,7 @@ class SMSequencesComponent(SMEffectComponentCommon):
     @property
     def _animators(self):
         for go in self._gameObjects:
-            animator = go.findComponentByType(GenericComponents.AnimatorComponent) if go and go.isValid() else None
+            animator = go.findWrite(GenericComponents.AnimatorComponent) if go else None
             if animator:
                 yield animator
 
@@ -154,8 +154,9 @@ class SMSequencesComponent(SMEffectComponentCommon):
                     self._gameObjects[i] = None
                 continue
             if gameObject is None:
-                gameObject = self._createGameObject(config.bindNode, config.offset)
-                gameObject.createComponent(GenericComponents.AnimatorComponent, config.sequence, 0, 1, config.loopCount, config.autoStart, '')
+                cgfQueue = CGF.CommandQueue(self.spaceID)
+                gameObject = self._createGameObject(cgfQueue, config.bindNode, config.offset)
+                cgfQueue.createComponent(gameObject, GenericComponents.AnimatorComponent, config.sequence, 0, 1, config.loopCount, config.autoStart, '')
                 self._gameObjects[i] = gameObject
             if self._needsListenToSniperMode(config.sniperModeVisibleTo):
                 self._gameObjectsHideInSniperMode.append(gameObject)
@@ -184,20 +185,20 @@ class SMSequencesComponent(SMEffectComponentCommon):
 
         return
 
-    def _createGameObject(self, bindNode='', offset=(0, 0, 0)):
+    def _createGameObject(self, cgfQueue, bindNode='', offset=(0, 0, 0)):
         if self._hasAppearance:
             parentGO = self.entity.appearance.gameObject
         else:
             parentGO = self.entity.entityGameObject
-        gameObject = CGF.GameObject(self.spaceID)
-        gameObject.createComponent(GenericComponents.HierarchyComponent, parentGO)
-        gameObject.createComponent(GenericComponents.TransformComponent, offset)
-        gameObject.createComponent(GenericComponents.NodeFollower, bindNode, parentGO)
+        gameObject = cgfQueue.createGameObject()
+        cgfQueue.createComponent(gameObject, CGF.HierarchyComponent, parentGO)
+        cgfQueue.createComponent(gameObject, CGF.TransformComponent, offset)
+        cgfQueue.createComponent(gameObject, GenericComponents.NodeFollowerComponent, bindNode, parentGO.uuid)
         return gameObject
 
     def _onSniperModeChanged(self, isEnabled):
         for go in self._gameObjectsHideInSniperMode:
-            if not go.isValid():
+            if not go.valid:
                 continue
             if isEnabled:
                 go.deactivate()
@@ -215,5 +216,5 @@ class SMSequencesComponent(SMEffectComponentCommon):
             return False if not self._hasAppearance or not getattr(self.entity, 'model', None) else self.entity.model.node(config.bindNode)
 
     def __destroyObject(self, gameObject):
-        if gameObject.isValid():
+        if gameObject.valid:
             gameObject.destroy()

@@ -1,10 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/stats.py
+from __future__ import absolute_import, division
 import collections
 import itertools
 import logging
-from collections import namedtuple, defaultdict, OrderedDict
 import typing
+from builtins import range
+from collections import namedtuple, defaultdict, OrderedDict
+from future.utils import iteritems, itervalues, lmap, viewitems, viewvalues
 import constants
 import nations
 from constants import ARENA_BONUS_TYPE
@@ -17,6 +20,7 @@ from items import vehicles
 from soft_exception import SoftException
 from dossiers2.custom.account_layout import VEHICLE_STATS
 from helpers import dependency
+from math_common import decimal_round, round_py2_style
 from skeletons.gui.game_control import IRankedBattlesController
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import getAvailableNationsNames, getAvailableVehicleTypes
 from skeletons.gui.shared import IItemsCache
@@ -31,14 +35,9 @@ _TOP_ACHIEVEMENTS = 9
 _7X7_AVAILABLE_RANGE = (6, 7, 8)
 _FALLOUT_AVAILABLE_RANGE = (8, 9, 10)
 
-def _nearestComparator(x, y):
-    if x.getLevelUpValue() == 1 or y.getLevelUpValue() == 1:
-        if x.getLevelUpValue() == y.getLevelUpValue():
-            return cmp(x.getProgressValue(), y.getProgressValue())
-        if x.getLevelUpValue() == 1:
-            return 1
-        return -1
-    return cmp(x.getProgressValue(), y.getProgressValue())
+def _nearestSortKey(x):
+    first = 1 if x.getLevelUpValue() == 1 else 0
+    return (first, x.getProgressValue())
 
 
 class _StatsBlockAbstract(object):
@@ -94,7 +93,7 @@ class _VehiclesStatsBlock(_StatsBlockAbstract):
     def __init__(self, dossier):
         self._vehsList = {}
         self._markOfMasteryCut = dossier.getDossierDescr()['markOfMasteryCut']
-        for intCD, cut in self._getVehDossiersCut(dossier).iteritems():
+        for intCD, cut in viewitems(self._getVehDossiersCut(dossier)):
             if isinstance(cut, collections.Iterable):
                 self._vehsList[intCD] = self._packVehicle(*cut)
             self._vehsList[intCD] = self._packVehicle(cut)
@@ -104,7 +103,7 @@ class _VehiclesStatsBlock(_StatsBlockAbstract):
 
     def getMarksOfMastery(self):
         result = [0] * len(mark_of_mastery.MarkOfMasteryAchievement.MARK_OF_MASTERY.ALL())
-        for _, markOfMastery in self._markOfMasteryCut.iteritems():
+        for markOfMastery in viewvalues(self._markOfMasteryCut):
             if mark_of_mastery.isMarkOfMasteryAchieved(markOfMastery):
                 result[markOfMastery - 1] += 1
 
@@ -117,16 +116,16 @@ class _VehiclesStatsBlock(_StatsBlockAbstract):
         return self._getBattlesStats(availableRange=range(1, constants.MAX_VEHICLE_LEVEL + 1))
 
     def _getBattlesStats(self, availableRange):
-        vehsByType = dict(((t, 0) for t in vehicles.VEHICLE_CLASS_TAGS))
-        vehsByNation = dict(((idx, 0) for idx, n in enumerate(nations.NAMES)))
-        vehsByLevel = dict(((k, 0) for k in xrange(1, constants.MAX_VEHICLE_LEVEL + 1)))
-        for vehTypeCompDescr, vehCut in self.getVehicles().iteritems():
+        vehsByType = {t:0 for t in vehicles.VEHICLE_CLASS_TAGS}
+        vehsByNation = {idx:0 for idx, n in enumerate(nations.NAMES)}
+        vehsByLevel = {k:0 for k in range(1, constants.MAX_VEHICLE_LEVEL + 1)}
+        for vehTypeCompDescr, vehCut in viewitems(self.getVehicles()):
             vehType = vehicles.getVehicleType(vehTypeCompDescr)
             vehsByNation[vehType.id[0]] += vehCut.battlesCount
             vehsByLevel[vehType.level] += vehCut.battlesCount
             vehsByType[set(vehType.tags & vehicles.VEHICLE_CLASS_TAGS).pop()] += vehCut.battlesCount
 
-        for level in vehsByLevel.iterkeys():
+        for level in vehsByLevel:
             if level not in availableRange:
                 vehsByLevel[level] = None
 
@@ -156,7 +155,7 @@ class _MapStatsBlock(_StatsBlockAbstract):
 
     def __init__(self, dossier):
         self._mapsList = {}
-        for intCD, cut in self._getMapDossiersCut(dossier).iteritems():
+        for intCD, cut in iteritems(self._getMapDossiersCut(dossier)):
             self._mapsList[intCD] = self._packMap(*cut)
 
     def getMaps(self):
@@ -363,13 +362,13 @@ class _Battle2StatsBlock(_StatsBlockAbstract):
     def getDamageAssistedEfficiency(self):
         value = self._getAvgValue(self.getBattlesCountVer2, lambda : self.getDamageAssistedRadio() + self.getDamageAssistedTrack())
         if value is not None:
-            value = round(value)
+            value = round_py2_style(value)
         return value
 
     def getDamageAssistedEfficiencyWithStan(self):
         value = self._getAvgValue(self.getBattlesCountVer2, lambda : self.getDamageAssistedRadio() + self.getDamageAssistedTrack() + self.getDamageAssistedStun())
         if value is not None:
-            value = round(value)
+            value = round_py2_style(value)
         return value
 
     def getArmorUsingEfficiency(self):
@@ -459,7 +458,7 @@ class _AchievementsBlock(_StatsBlockAbstract):
                         if achieve is not None:
                             if not isinstance(factory, _SequenceAchieveFactory):
                                 achieve = {achieve.getName(): achieve}
-                            for a in achieve.itervalues():
+                            for a in itervalues(achieve):
                                 if not a.isHidden() or showHidden:
                                     section = a.getSection()
                                     if section is None:
@@ -480,7 +479,7 @@ class _AchievementsBlock(_StatsBlockAbstract):
                 if a is not None and a.isValid() and not a.isDone() and a.isInNear() and not a.isHidden():
                     uncompletedAchievements.append(a)
 
-        return tuple(sorted(uncompletedAchievements, cmp=_nearestComparator, reverse=True)[:_NEAREST_ACHIEVEMENTS_COUNT])
+        return tuple(sorted(uncompletedAchievements, key=_nearestSortKey, reverse=True)[:_NEAREST_ACHIEVEMENTS_COUNT])
 
     def getSignificantAchievements(self, mainRules, extraRules, layoutLength):
         significantAchievements = []
@@ -506,7 +505,7 @@ class _AchievementsBlock(_StatsBlockAbstract):
         def mapQueryEntry(entry):
             return sorted(entry, key=lambda x: x.getWeight())
 
-        result = itertools.chain(*map(mapQueryEntry, itertools.chain(sections)))
+        result = itertools.chain(*lmap(mapQueryEntry, itertools.chain(sections)))
         return tuple(result)[:achievesCount]
 
     def _getAcceptableAchieves(self):
@@ -539,15 +538,11 @@ class _StoredRankedSeasonsStatsBlock(_RankedSeasonsStatsBlock):
 
     def hadAchievedRank(self):
         statsIdx = self._RANK_IDX
-        for stats in self._stats.itervalues():
-            if stats[statsIdx] > 0:
-                return True
-
-        return False
+        return any((stats[statsIdx] > 0 for stats in viewvalues(self._stats)))
 
     def __getTotalStatistics(self, statsIdx):
         total = 0
-        for (_, cycleID), stats in self._stats.iteritems():
+        for (_, cycleID), stats in viewitems(self._stats):
             if len(stats) > statsIdx:
                 if cycleID == 0:
                     total += stats[statsIdx]
@@ -558,7 +553,7 @@ class _StoredRankedSeasonsStatsBlock(_RankedSeasonsStatsBlock):
     def __getSeasonData(self, seasonID):
         finishedSeasonStats = self._stats.get((seasonID, 0))
         if not finishedSeasonStats:
-            for (statSeasonID, _), stats in self._stats.iteritems():
+            for (statSeasonID, _), stats in viewitems(self._stats):
                 if statSeasonID == seasonID:
                     return stats
 
@@ -569,7 +564,7 @@ class _StoredVehRankedSeasonsStatsBlock(_RankedSeasonsStatsBlock):
 
     def getTotalRanksCount(self):
         sumPoints = 0
-        for (_, cycleID), (rank, _) in self._stats.iteritems():
+        for (_, cycleID), (rank, _) in viewitems(self._stats):
             if cycleID > 0:
                 sumPoints += rank
 
@@ -790,7 +785,7 @@ class BattleRoyaleAccountStatsBase(object):
         self.__initVehicles(rawData)
 
     def __initVehicles(self, rawData):
-        self.__vehicles = {vehCD:BattleRoyaleVehicleStats(stats) for vehCD, stats in rawData.iteritems()}
+        self.__vehicles = {vehCD:BattleRoyaleVehicleStats(stats) for vehCD, stats in viewitems(rawData)}
 
     def getVehicle(self, vehicleCD):
         if vehicleCD not in self.__vehicles:
@@ -870,32 +865,32 @@ class BattleRoyaleAccountStatsBase(object):
         return self.getBattlesCount() - (self.getWinsCount() + self.getLossesCount())
 
     def getMaxXp(self):
-        return max([ (key, data.getMaxXp()) for key, data in self.__vehicles.iteritems() ] or [(0, 0)], key=lambda item: item[1])[1]
+        return max([ (key, data.getMaxXp()) for key, data in viewitems(self.__vehicles) ] or [(0, 0)], key=lambda item: item[1])[1]
 
     def getMaxFrags(self):
-        return max([ (key, data.getMaxFrags()) for key, data in self.__vehicles.iteritems() ] or [(0, 0)], key=lambda item: item[1])[1]
+        return max([ (key, data.getMaxFrags()) for key, data in viewitems(self.__vehicles) ] or [(0, 0)], key=lambda item: item[1])[1]
 
     def getMaxDamage(self):
-        return max([ (key, data.getMaxDamage()) for key, data in self.__vehicles.iteritems() ] or [(0, 0)], key=lambda item: item[1])[1]
+        return max([ (key, data.getMaxDamage()) for key, data in viewitems(self.__vehicles) ] or [(0, 0)], key=lambda item: item[1])[1]
 
     def getAveragePosition(self):
-        return round(self.__getAvgValue(self.getBattlesCount(), self.getPositionSum()), 1)
+        return decimal_round(self.__getAvgValue(self.getBattlesCount(), self.getPositionSum()), 1)
 
     def getAverageLevel(self):
-        return round(self.__getAvgValue(self.getBattlesCount(), self.getAchivedLevelSum()), 1)
+        return decimal_round(self.__getAvgValue(self.getBattlesCount(), self.getAchivedLevelSum()), 1)
 
     def getMaxXpVehicle(self):
-        return max([ (key, data.getMaxXp()) for key, data in self.__vehicles.iteritems() ] or [(0, 0)], key=lambda item: item[1])[0]
+        return max([ (key, data.getMaxXp()) for key, data in viewitems(self.__vehicles) ] or [(0, 0)], key=lambda item: item[1])[0]
 
     def getMaxDamageVehicle(self):
-        return max([ (key, data.getMaxDamage()) for key, data in self.__vehicles.iteritems() ] or [(0, 0)], key=lambda item: item[1])[0]
+        return max([ (key, data.getMaxDamage()) for key, data in viewitems(self.__vehicles) ] or [(0, 0)], key=lambda item: item[1])[0]
 
     def getMaxFragsVehicle(self):
-        return max([ (key, data.getMaxFrags()) for key, data in self.__vehicles.iteritems() ] or [(0, 0)], key=lambda item: item[1])[0]
+        return max([ (key, data.getMaxFrags()) for key, data in viewitems(self.__vehicles) ] or [(0, 0)], key=lambda item: item[1])[0]
 
     def getPlaceData(self):
         res = {}
-        for _, vehicleStats in self.__vehicles.iteritems():
+        for vehicleStats in viewvalues(self.__vehicles):
             places = vehicleStats.places
             res.update({k:res.get(k, 0) + places.get(k, 0) for k in set(res) | set(places)})
 
@@ -905,8 +900,8 @@ class BattleRoyaleAccountStatsBase(object):
         avNames = getAvailableNationsNames()
         avTypes = getAvailableVehicleTypes()
         vehsByType = OrderedDict(((t, 0) for t in avTypes))
-        vehsByNation = dict(((idx, 0) for idx, n in enumerate(nations.NAMES) if n in avNames))
-        for vehTypeCompDescr, vehicle in self.__vehicles.iteritems():
+        vehsByNation = {idx:0 for idx, n in enumerate(nations.NAMES) if n in avNames}
+        for vehTypeCompDescr, vehicle in viewitems(self.__vehicles):
             vehType = vehicles.getVehicleType(vehTypeCompDescr)
             battlesCount = vehicle.getBattlesCount()
             vehsByNation[vehType.id[0]] += battlesCount
@@ -932,7 +927,7 @@ class BattleRoyaleAccountStatsBase(object):
         return self._PLACES_COUNT
 
     def __getSumByVehicles(self, vehicleDataGetter):
-        return sum([ getattr(data, vehicleDataGetter)() for data in self.__vehicles.values() ])
+        return sum((getattr(data, vehicleDataGetter)() for data in self.__vehicles.values()))
 
     def __getAvgValue(self, allOccurs, effectiveOccurs):
         return float(effectiveOccurs) / allOccurs if allOccurs else 0.0
@@ -1034,7 +1029,7 @@ class AccountTotalStatsBlock(TotalStatsBlock, _VehiclesStatsBlock, _MaxVehicleSt
         vehs = {}
         for stats in self._statsBlocks:
             if isinstance(stats, _VehiclesStatsBlock):
-                for vTypeCompDescr, vData in stats.getVehicles().iteritems():
+                for vTypeCompDescr, vData in viewitems(stats.getVehicles()):
                     if vTypeCompDescr not in vehs:
                         vehs[vTypeCompDescr] = vData
                     vehs[vTypeCompDescr] += vData

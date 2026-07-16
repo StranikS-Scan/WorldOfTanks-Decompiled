@@ -1,11 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/abilities/corroding_shot_preparing.py
 import CGF
+from typing import List
 import math_utils
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
-from cgf_script.bonus_caps_rules import bonusCapsManager
-from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
-from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery
+from cgf_script.registration import ComponentProperty, registerComponent
 from constants import IS_CLIENT
 from helpers import dependency
 import GenericComponents
@@ -37,58 +35,70 @@ _GUN_EFFECT_OFFSET = {'_105mm_F34M_G1_SH': 0.07646,
 @registerComponent
 class CorrodingShotPreparingComponent(object):
     editorTitle = 'Corroding Shot Preparing Component'
-    category = 'Abilities'
-    domain = CGF.DomainOption.DomainClient
-    gunNode = ComponentProperty(type=CGFMetaTypes.LINK, value=CGF.GameObject, editorName='Gun Node')
+    group = 'Abilities'
+    domain = CGF.Domain.Client
+    gunNode = ComponentProperty(type=CGF.PropertyType.Link, value=CGF.GameObject, editorName='Gun Node')
 
 
 @registerComponent
 class CorrodingShotPreparingNodeComponent(object):
     editorTitle = 'Corroding Shot Preparing Node Component'
-    category = 'Abilities'
-    domain = CGF.DomainOption.DomainClient
-    effectPathTemplate = ComponentProperty(type=CGFMetaTypes.STRING, value='', editorName='Effect Path Template')
+    group = 'Abilities'
+    domain = CGF.Domain.Client
+    effectPathTemplate = ComponentProperty(type=CGF.PropertyType.String, value='', editorName='Effect Path Template')
 
 
-@bonusCapsManager(ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, CGF.DomainOption.DomainClient)
-class CorrodingShotPreparingManager(CGF.ComponentManager):
+class CorrodingShotPreparingSystem(CGF.System):
     __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
+    VehicleShotActivated = CGF.ActivateReaction(CGF.ReactRw(VehicleCorrodingShotPreparingComponent))
+    BattleUpgradeDeactivated = CGF.DeactivateReaction(CGF.ReactRo(UpgradeInProgressComponent), CGF.Rw(VehicleCorrodingShotPreparingComponent))
+    VehicleShotDeactivated = CGF.DeactivateReaction(CGF.GameObject, CGF.ReactRo(VehicleCorrodingShotPreparingComponent))
+    Reactions = CGF.Reactions(VehicleShotActivated, BattleUpgradeDeactivated, VehicleShotDeactivated)
 
-    @onAddedQuery(VehicleCorrodingShotPreparingComponent, CGF.GameObject)
-    def visualizeAbility(self, vehicleAbilityComponent, _):
+    def update(self):
+        for _, vehicleAbilityComponent in self.reaction(self.BattleUpgradeDeactivated):
+            self.inBattleUpgradeCompleted(vehicleAbilityComponent)
+
+        q = CGF.CommandQueue(self.gom)
+        for gameObject, _ in self.reaction(self.VehicleShotDeactivated):
+            self.stopVisualizeAbility(gameObject, q)
+
+        for vehicleAbilityComponent in self.reaction(self.VehicleShotActivated):
+            self.visualizeAbility(vehicleAbilityComponent)
+
+    def visualizeAbility(self, vehicleAbilityComponent):
         self.__launch(vehicleAbilityComponent)
 
     def __launch(self, vehicleAbilityComponent):
-        appearance = vehicleAbilityComponent.entity.appearance
+        abilityEntity = vehicleAbilityComponent.entity
+        if abilityEntity.isDestroyed:
+            return
 
-        def postloadSetup(go):
-            corrodingShotPreparingComponent = go.findComponentByType(CorrodingShotPreparingComponent)
-            self.__setupVFX(corrodingShotPreparingComponent.gunNode, vehicleAbilityComponent.entity)
+        def postloadSetup(root, objects, queue):
+            corrodingShotPreparingComponent = queue.component(root, CorrodingShotPreparingComponent)
+            node = queue.pendingGameObject(corrodingShotPreparingComponent.gunNode)
+            self.__setupVFX(node, abilityEntity, queue)
 
         equipmentID = vehicles.g_cache.equipmentIDs().get(VehicleCorrodingShotPreparingComponent.EQUIPMENT_NAME)
         equipment = vehicles.g_cache.equipments()[equipmentID]
-        loadAppearancePrefab(equipment.usagePrefab, appearance, postloadSetup)
+        loadAppearancePrefab(equipment.usagePrefab, abilityEntity.appearance, postloadSetup, False)
 
-    def __setupVFX(self, nodeGO, vehicle):
+    def __setupVFX(self, nodeGO, vehicle, queue):
         appearance = vehicle.appearance
-        nodeComponent = nodeGO.findComponentByType(CorrodingShotPreparingNodeComponent)
-        transformComponent = nodeGO.findComponentByType(GenericComponents.TransformComponent)
+        nodeComponent = queue.component(nodeGO, CorrodingShotPreparingNodeComponent)
+        transformComponent = queue.component(nodeGO, CGF.TransformComponent)
         offset = _GUN_EFFECT_OFFSET.get(vehicle.typeDescriptor.gun.name, 0.0)
         if transformComponent:
             transformComponent.transform = math_utils.createSRTMatrix((1.0, 1.0, 1.0), (0.0, 0.0, 0.0), (0.0, offset, 0.0))
         effectName = getEffectSuffixForGunLength(_GUN_LENGTH_RANGES, appearance)
-        nodeGO.removeComponentByType(GenericComponents.AnimatorComponent)
-        nodeGO.createComponent(GenericComponents.AnimatorComponent, nodeComponent.effectPathTemplate.format(effectName), 0, 1, -1, True, '')
-        nodeGO.deactivate()
-        nodeGO.activate()
+        if queue.hasComponent(nodeGO, GenericComponents.AnimatorComponent):
+            queue.removeComponent(nodeGO, GenericComponents.AnimatorComponent)
+        queue.createComponent(nodeGO, GenericComponents.AnimatorComponent, nodeComponent.effectPathTemplate.format(effectName), 0, 1, -1, True, '')
 
-    @onRemovedQuery(VehicleCorrodingShotPreparingComponent, CGF.GameObject, UpgradeInProgressComponent)
-    def inBattleUpgradeCompleted(self, vehicleAbilityComponent, *_):
+    def inBattleUpgradeCompleted(self, vehicleAbilityComponent):
         self.__launch(vehicleAbilityComponent)
 
-    @onRemovedQuery(VehicleCorrodingShotPreparingComponent, CGF.GameObject)
-    def stopVisualizeAbility(self, _, gameObject):
-        h = CGF.HierarchyManager(gameObject.spaceID)
-        effectRoots = h.findComponentsInHierarchy(gameObject, CorrodingShotPreparingComponent)
-        for effectRoot, _ in effectRoots:
-            CGF.removeGameObject(effectRoot)
+    def stopVisualizeAbility(self, gameObject, queue):
+        corrodingShots = CGF.findInHierarchyWithComponent(gameObject, CorrodingShotPreparingComponent)
+        for corrodingShot in corrodingShots:
+            queue.removeGameObject(corrodingShot.object)

@@ -46,7 +46,7 @@ class TextRestrictionsChinese(TextRestrictionsBasic):
          62,
          64,
          127]
-        self.ACCOUNT_NAME_RE = re.compile(u'(?u)^[^' + u''.join(map(lambda n: u'\\x%0.2x' % n, ACCOUNT_NAME_EXCLUDED_SYMBOLS)) + chr(65535) + chr(65534) + u']+$')
+        self.ACCOUNT_NAME_RE = re.compile(u'(?u)^[^' + u''.join((u'\\x%0.2x' % n for n in ACCOUNT_NAME_EXCLUDED_SYMBOLS)) + chr(65535) + chr(65534) + u']+$')
         self.ACCOUNT_NAME_MIN_LENGTH_REG = self.ACCOUNT_NAME_MIN_LENGTH
         self.LOGIN_NAME_RE = re.compile('^[_a-z0-9-+@.]+$')
         self.LOGIN_NAME_MIN_LENGTH = 4
@@ -119,7 +119,7 @@ CLAN_MOTTO_MAX_BYTES = CLAN_MOTTO_MAX_LENGTH * 4
 
 def unicode_from_utf8(utf8str, unicodeNormalForm='NFKC'):
     unicodeStr = utf8str
-    if isinstance(unicodeStr, str):
+    if isinstance(unicodeStr, bytes):
         unicodeStr = unicode(unicodeStr, 'utf8')
     return (unicodedata.normalize(unicodeNormalForm, unicodeStr), unicodeStr)
 
@@ -210,7 +210,7 @@ def isClanNameValid(text):
         if not 2 <= len(utext) <= _CLAN_NAME_MAX_LENGTH:
             return False
         for word in utext.split(' '):
-            if not word or any(map(lambda c: ord(c) < 32, word)):
+            if not word or any((ord(c) < 32 for c in word)):
                 return False
 
         return True

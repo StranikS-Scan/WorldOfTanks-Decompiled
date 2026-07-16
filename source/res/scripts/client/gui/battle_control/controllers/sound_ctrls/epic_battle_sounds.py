@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/sound_ctrls/epic_battle_sounds.py
+from __future__ import absolute_import
 import SoundGroups
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE
 from constants import EQUIPMENT_STAGES, VEHICLE_HIT_FLAGS as VHF

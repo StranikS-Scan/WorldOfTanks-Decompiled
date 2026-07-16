@@ -1,10 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/dependency.py
+from __future__ import absolute_import
 import sys
 import typing
 from importlib import import_module
-from types import ModuleType
 from constants import IS_VS_EDITOR
+from py2to3.patched_future import with_metaclass
+if typing.TYPE_CHECKING:
+    from types import ModuleType
 if IS_VS_EDITOR:
 
     class MockObjectMeta(type):
@@ -22,8 +25,7 @@ if IS_VS_EDITOR:
             return
 
 
-    class MockObject(object):
-        __metaclass__ = MockObjectMeta
+    class MockObject(with_metaclass(MockObjectMeta, object)):
 
         def __init__(self, *args, **kwargs):
             pass
@@ -54,7 +56,7 @@ if IS_VS_EDITOR:
             try:
                 yield import_module(module)
             except Exception as er:
-                MOCK_IMPORT_ERRORS.append('On import module <%s> was raised ImportError with msg - %s' % (module, er.message))
+                MOCK_IMPORT_ERRORS.append('On import module <%s> was raised ImportError with msg - %s' % (module, str(er)))
                 yield MockObject
 
 

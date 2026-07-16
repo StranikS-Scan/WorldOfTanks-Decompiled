@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/InventoryRequester.py
+from __future__ import absolute_import, print_function
 import typing
-from future.utils import iteritems, iterkeys
-from itertools import imap
+from builtins import map
 from collections import namedtuple, defaultdict
+from future.utils import iteritems, iterkeys, listvalues, viewitems, viewvalues
 import BigWorld
 from constants import CustomizationInvData, SkinInvData, VEHICLE_NO_INV_ID
 from debug_utils import LOG_DEBUG
@@ -49,7 +50,7 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
     def invalidateItem(self, itemTypeID, invIdx):
         cache = self.__itemsCache[itemTypeID]
         if itemTypeID == 29:
-            print invIdx
+            print(invIdx)
         if invIdx in cache:
             self.__itemsPreviousCache[itemTypeID][invIdx] = cache[invIdx]
             del cache[invIdx]
@@ -66,7 +67,7 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
          itemType,
          itemId)
         vehs = self.getCacheValueByPath(path, defaultValue={})
-        return vehs.keys()
+        return list(vehs)
 
     def getC11nItemAppliedOnVehicleCount(self, itemCD, vehicleIntCD):
         _, itemType, itemId = parseIntCompactDescr(itemCD)
@@ -83,8 +84,8 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
         self.__newC11nItemsByVehicleCache.clear()
         customizationInvData = self.getCacheValue(GUI_ITEM_TYPE.CUSTOMIZATION, {})
         newItemsInvData = customizationInvData.get(CustomizationInvData.NOVELTY_DATA, {})
-        for cType, itemsData in newItemsInvData.iteritems():
-            for itemId, itemData in itemsData.iteritems():
+        for cType, itemsData in iteritems(newItemsInvData):
+            for itemId, itemData in iteritems(itemsData):
                 if itemData is not None:
                     intCD = makeIntCompactDescrByID('customizationItem', cType, itemId)
                     self.__newC11nItems[intCD] = itemData
@@ -96,7 +97,7 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
         if itemData:
             self.__newC11nItems[itemIntCD] = itemData
             itemDescriptor = vehicles.getItemByCompactDescr(itemIntCD)
-            for vehCD, vehData in self.__newC11nItemsByVehicleCache.iteritems():
+            for vehCD, vehData in viewitems(self.__newC11nItemsByVehicleCache):
                 counter = 0
                 vehicleType = vehicles.getVehicleType(vehCD)
                 if not itemDescriptor.filter or itemDescriptor.filter.matchVehicleType(vehicleType):
@@ -108,7 +109,7 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
 
         else:
             self.__newC11nItems.pop(itemIntCD, None)
-            for vehData in self.__newC11nItemsByVehicleCache.itervalues():
+            for vehData in viewvalues(self.__newC11nItemsByVehicleCache):
                 vehData.pop(itemIntCD, None)
 
         return
@@ -144,8 +145,8 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
         self.__c11nProgressionData = {}
         customizationInvData = self.getCacheValue(GUI_ITEM_TYPE.CUSTOMIZATION, {})
         itemsInvData = customizationInvData.get(CustomizationInvData.PROGRESSION, {})
-        for cType, typeInvData in itemsInvData.iteritems():
-            for idx, itemData in typeInvData.iteritems():
+        for cType, typeInvData in iteritems(itemsInvData):
+            for idx, itemData in iteritems(typeInvData):
                 itemIntCD = makeIntCompactDescrByID('customizationItem', cType, idx)
                 self.__updateC11nProgressionDataForItem(itemIntCD, itemData)
 
@@ -159,7 +160,7 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
             self.updateC11nProgressionData()
         result = {}
         vehicleType = vehicles.getVehicleType(vehicleIntCD)
-        for itemIntCD, progressionData in self.__c11nProgressionForVehicle.get(UNBOUND_VEH_KEY, {}).iteritems():
+        for itemIntCD, progressionData in iteritems(self.__c11nProgressionForVehicle.get(UNBOUND_VEH_KEY, {})):
             itemDescriptor = vehicles.getItemByCompactDescr(itemIntCD)
             if not itemDescriptor.filter or itemDescriptor.filter.matchVehicleType(vehicleType):
                 result[itemIntCD] = progressionData
@@ -179,7 +180,7 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
 
     def getItemsData(self, itemTypeID):
         invData = self.getCacheValue(itemTypeID, {})
-        for invID in invData.get('compDescr', {}).iterkeys():
+        for invID in invData.get('compDescr', {}):
             self.__makeItem(itemTypeID, invID)
 
         return self.__itemsCache[itemTypeID]
@@ -225,7 +226,7 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
             return activeInNationGroup(flag)
 
         vehcielsData = self.__getVehiclesData() or {}
-        activeVehicles = sum(imap(checker, vehcielsData.itervalues()))
+        activeVehicles = sum(map(checker, viewvalues(vehcielsData)))
         return vehiclesSlots - activeVehicles
 
     def getInventoryEnhancements(self):
@@ -235,10 +236,10 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
         return self.getCacheValue(GUI_ITEM_TYPE.VEHICLE, {}).get('enhancements', {})
 
     def getIventoryVehiclesCDs(self):
-        return self.__vehsCDsByID.values()
+        return listvalues(self.__vehsCDsByID)
 
     def getInvIDsIterator(self):
-        return self.__vehsCDsByID.iterkeys()
+        return iterkeys(self.__vehsCDsByID)
 
     def getVehPostProgression(self, vehIntCD):
         return self.__vehPostProgression.getVehicleState(vehIntCD)
@@ -259,13 +260,13 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
     def _response(self, resID, invData, callback=None):
         self.__vehsCDsByID = {}
         if invData is not None:
-            for invID, vCompDescr in invData[GUI_ITEM_TYPE.VEHICLE]['compDescr'].iteritems():
+            for invID, vCompDescr in iteritems(invData[GUI_ITEM_TYPE.VEHICLE]['compDescr']):
                 self.__vehsCDsByID[invID] = vehicles.makeIntCompactDescrByID('vehicle', *vehicles.parseVehicleCompactDescr(vCompDescr))
 
             self.__vehPostProgression = VehiclesPostProgression(invData[GUI_ITEM_TYPE.VEHICLE])
         else:
             self.__vehPostProgression = _DUMMY_VEH_POST_PROGRESSION
-        self.__vehsIDsByCD = dict(((v, k) for k, v in self.__vehsCDsByID.iteritems()))
+        self.__vehsIDsByCD = {v:k for k, v in viewitems(self.__vehsCDsByID)}
         super(InventoryRequester, self)._response(resID, invData, callback)
         return
 
@@ -354,18 +355,18 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
         elif inventoryID is not None:
             return self.__getTankmanData(tankmanItemsData, inventoryID)
         else:
-            result = dict()
-            for invID in tankmanItemsData.get('compDescr', dict()).iterkeys():
+            result = {}
+            for invID in iterkeys(tankmanItemsData.get('compDescr', {})):
                 result[invID] = self.__getTankmanData(tankmanItemsData, invID)
 
             return result
 
     def __getTankmanData(self, tankmanItemsData, invID):
-        if invID not in tankmanItemsData['compDescr'].keys():
+        if invID not in tankmanItemsData['compDescr']:
             return
         else:
-            result = dict()
-            for key, values in tankmanItemsData.iteritems():
+            result = {}
+            for key, values in iteritems(tankmanItemsData):
                 value = values.get(invID)
                 if value is not None:
                     result[key] = value
@@ -400,7 +401,7 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
 
     def __getC11nItemNoveltyDataForVehicle(self, vehicleType):
         vehCache = {}
-        for itemCD, itemData in self.__newC11nItems.iteritems():
+        for itemCD, itemData in viewitems(self.__newC11nItems):
             counter = 0
             itemDescriptor = vehicles.getItemByCompactDescr(itemCD)
             if not itemDescriptor.filter or itemDescriptor.filter.matchVehicleType(vehicleType):
@@ -414,7 +415,7 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
     def __updateC11nProgressionDataForItem(self, itemIntCD, itemData):
         if itemData is not None:
             c11nProgressionData = {}
-            for vehicleIntCD, vehData in itemData.iteritems():
+            for vehicleIntCD, vehData in iteritems(itemData):
                 progressionData = self.CUSTOMIZATION_PROGRESS_DATA(currentLevel=vehData[C11N_PROGRESS_LEVEL_IDX], currentProgressOnLevel=vehData[C11N_PROGRESS_PROGRESS_IDX], maxProgressOnLevel=vehData[C11N_PROGRESS_VALUE_IDX])
                 c11nProgressionData[vehicleIntCD] = progressionData
                 self.__c11nProgressionForVehicle.setdefault(vehicleIntCD, {})[itemIntCD] = progressionData

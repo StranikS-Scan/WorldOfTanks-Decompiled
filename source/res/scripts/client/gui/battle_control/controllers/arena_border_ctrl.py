@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/arena_border_ctrl.py
+from __future__ import absolute_import, division
 import BigWorld
 import Math
 from gui.battle_control.arena_info.interfaces import IArenaLoadController

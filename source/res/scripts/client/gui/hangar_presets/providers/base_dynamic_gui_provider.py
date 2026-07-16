@@ -13,6 +13,7 @@ if typing.TYPE_CHECKING:
     from gui.impl.lobby.hangar.presenters.vehicle_menu_entries.vehicle_menu_helper import IHangarVehicleMenuHelper
     from gui.Scaleform.daapi.view.lobby.header.helpers.controls_helpers import ILobbyHeaderControlsHelper
     from gui.impl.lobby.hangar.base.vehicle_playlists_helper import IVehiclePlaylistsGuiHelper
+    from gui.prb_control.prb_helpers import IVehicleAutoSearchHelper
 
 class IHangarDynamicGuiProvider(object):
 
@@ -44,6 +45,9 @@ class IHangarDynamicGuiProvider(object):
         raise NotImplementedError
 
     def getVehiclePlaylistsHelper(self):
+        raise NotImplementedError
+
+    def getVehicleAutoSearchHelper(self):
         raise NotImplementedError
 
 
@@ -83,6 +87,10 @@ class EmptyHangarDynamicGuiProvider(IHangarDynamicGuiProvider):
     def getDefaultVehiclePlaylistsHelper(cls):
         return EmptyVehiclePlaylistsGuiHelper
 
+    @classmethod
+    def getDefaultVehicleAutoSearchHelper(cls):
+        return None
+
     def createAllBonusTypes(self):
         return {}
 
@@ -113,6 +121,9 @@ class EmptyHangarDynamicGuiProvider(IHangarDynamicGuiProvider):
     def getVehiclePlaylistsHelper(self):
         return self.getDefaultVehiclePlaylistsHelper()
 
+    def getVehicleAutoSearchHelper(self):
+        return self.getDefaultVehicleAutoSearchHelper()
+
 
 class BaseHangarDynamicGuiProvider(EmptyHangarDynamicGuiProvider):
     _BONUS_TYPES = (ARENA_BONUS_TYPE.UNKNOWN,)
@@ -120,6 +131,7 @@ class BaseHangarDynamicGuiProvider(EmptyHangarDynamicGuiProvider):
     _MISSIONS_HELPER = None
     _VEHICLE_MENU_HELPER = None
     _VEHICLE_PLAYLISTS_HELPER = None
+    _VEHICLE_AUTO_SEARCH_HELPER = None
 
     def __init__(self, config):
         self._config = config
@@ -144,3 +156,6 @@ class BaseHangarDynamicGuiProvider(EmptyHangarDynamicGuiProvider):
 
     def createAllBonusTypes(self):
         return {bonusType:self for bonusType in self._BONUS_TYPES if bonusType != ARENA_BONUS_TYPE.UNKNOWN}
+
+    def getVehicleAutoSearchHelper(self):
+        return self._VEHICLE_AUTO_SEARCH_HELPER

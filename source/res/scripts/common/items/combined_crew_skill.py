@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/combined_crew_skill.py
+from __future__ import absolute_import
 from typing import Optional
+from math_common import round_py2_style_int
 from items import tankmen
 
 class CombinedCrewSkill(object):
@@ -16,7 +18,7 @@ class CombinedCrewSkill(object):
 
     @property
     def level(self):
-        return int(round(self._floatLevel()))
+        return round_py2_style_int(self._floatLevel())
 
     def _floatLevel(self):
         if self.boosterMultiplier is None:

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/extension_stubs/comp7_controller.py
+from __future__ import absolute_import
 import Event
 from skeletons.gui.game_control import IComp7Controller
 from gui.periodic_battles.models import PrimeTimeStatus

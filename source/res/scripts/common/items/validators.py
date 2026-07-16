@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/validators.py
+from __future__ import absolute_import
 from items import ITEM_TYPES, EQUIPMENT_TYPES, vehicles
 
 def isBattleBooster(compDescr):

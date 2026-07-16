@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/personal_death_zones_gui_ctrl.py
-import BigWorld
+from __future__ import absolute_import
 import weakref
+from typing import TYPE_CHECKING
+import BigWorld
 from Event import EventManager, Event
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.controllers.interfaces import IBattleController
-from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     import PersonalDeathZone
 
@@ -16,7 +17,7 @@ class PersonalDeathZonesGUIController(IBattleController):
         self.__eManager = EventManager()
         self.onPlayerEnteredDeathZone = Event(self.__eManager)
         self.onPlayerLeftDeathZone = Event(self.__eManager)
-        self._deathZones = dict()
+        self._deathZones = {}
 
     def startControl(self, *args):
         pass

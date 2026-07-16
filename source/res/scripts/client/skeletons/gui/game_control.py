@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/gui/game_control.py
+from __future__ import absolute_import
 import typing
 from constants import ARENA_BONUS_TYPE
 if typing.TYPE_CHECKING:
@@ -71,6 +72,7 @@ if typing.TYPE_CHECKING:
     from gui.game_control.ingame_tournament_controller import _IngameTournamentData
     from renewable_subscription_common.settings_helpers import SubscriptionSettingsStorage
     from gui.impl.gen.view_models.views.lobby.page.header.wot_plus_subscription_model import WotPlusPeriodicityEnum
+    from gui.game_control.wot_plus.service_record_customization.service_record_customization import ServiceRecordAssetManager
     BattlePassBonusOpts = Optional[TokensBonus, BattlePassSelectTokensBonus]
 
 class IGameController(object):
@@ -618,6 +620,9 @@ class IPlatoonController(IGameController):
     def hasVehiclesForSearch(self, tierLevel=None):
         raise NotImplementedError
 
+    def getSquadManStates(self, player, role):
+        raise NotImplementedError
+
     def orderSlotsBasedOnDisplaySlotsIndices(self, slots):
         raise NotImplementedError
 
@@ -876,7 +881,7 @@ class ITradeInController(IGameController):
     def getConfig(self):
         raise NotImplementedError
 
-    def getTradeInDiscounts(self, item):
+    def getTradeInDiscounts(self, vehicle):
         raise NotImplementedError
 
     def validatePossibleVehicleToBuy(self, vehicle):
@@ -912,7 +917,7 @@ class IQuestsController(IGameController):
     def getQuestGroups(self):
         raise NotImplementedError
 
-    def getCurrentModeQuestsForVehicle(self, vehicle):
+    def getCurrentModeQuestsForVehicle(self, vehicle, notCompleted=False):
         raise NotImplementedError
 
 
@@ -1129,7 +1134,7 @@ class IRankedBattlesController(IGameController, ISeasonProvider):
     def runQuests(self, quests):
         raise NotImplementedError
 
-    def showRankedAwardWindow(self, rankInfo, questsProgress):
+    def showRankedAwardWindow(self, rankedInfo, questsProgress):
         raise NotImplementedError
 
     def showRankedBattlePage(self, ctx):
@@ -1369,7 +1374,7 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
     def getReserveCategory(self, reserve):
         raise NotImplementedError
 
-    def getReserveTechName(self, extraName):
+    def getReserveTechName(self, reserve):
         raise NotImplementedError
 
     def setBattleTypeAsKnown(self):
@@ -1878,7 +1883,7 @@ class IBattlePassController(IGameController):
     def getPackedAwardsInterval(self, chapterId, fromLevel, toLevel, awardType='free'):
         raise NotImplementedError
 
-    def isNeedToTakeReward(self, awardType, chapterId, level):
+    def isNeedToTakeReward(self, chapterId, awardType, level):
         raise NotImplementedError
 
     def isChooseRewardEnabled(self, awardType, chapterId, level):
@@ -1887,13 +1892,13 @@ class IBattlePassController(IGameController):
     def canChooseAnyReward(self):
         raise NotImplementedError
 
-    def getLevelsConfig(self, chapterId):
+    def getLevelsConfig(self, chapterID):
         raise NotImplementedError
 
     def getChapterConfig(self):
         raise NotImplementedError
 
-    def getChapterLevelInterval(self, chapter):
+    def getChapterLevelInterval(self, chapterID):
         raise NotImplementedError
 
     def getChapterState(self, chapterID):
@@ -2134,6 +2139,7 @@ class IMapboxController(IGameController, ISeasonProvider):
 
 class IOverlayController(IGameController):
 
+    @property
     def isActive(self):
         raise NotImplementedError
 
@@ -2274,7 +2280,7 @@ class IVehiclePostProgressionController(IGameController):
     def getInvalidProgressions(self, diff, existingIDs):
         raise NotImplementedError
 
-    def processVehExtData(self, vehCD, extData):
+    def processVehExtData(self, vehType, extData):
         raise NotImplementedError
 
 
@@ -2393,13 +2399,16 @@ class IWotPlusController(IGameController):
     def getSettingsStorage(self):
         raise NotImplementedError
 
-    def getServiceRecordBackground(self):
+    def getServiceRecordBackgroundID(self):
         raise NotImplementedError
 
-    def getServiceRecordRibbon(self):
+    def getServiceRecordRibbonID(self):
         raise NotImplementedError
 
     def canBeProBoosted(self, vehicleCD):
+        raise NotImplementedError
+
+    def getSRCAssetManager(self):
         raise NotImplementedError
 
 
@@ -2505,7 +2514,7 @@ class ILootBoxSystemController(IGameController):
     def getBoxInfo(self, boxID):
         raise NotImplementedError
 
-    def getBoxInfoByCategory(self, category):
+    def getBoxInfoByCategory(self, boxCategory):
         raise NotImplementedError
 
     def getBoxesInfo(self):
@@ -3856,7 +3865,7 @@ class IVehiclePlaylistsController(IGameController):
     def updateModifiedPlaylist(self, plStrID, playlistData):
         raise NotImplementedError
 
-    def setInitialModifiedPlaylist(self, plStrID, plStrData):
+    def setInitialModifiedPlaylist(self, plStrID, playlistData):
         raise NotImplementedError
 
     def discardModifiedPlaylist(self):

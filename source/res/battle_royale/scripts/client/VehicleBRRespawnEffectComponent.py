@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/VehicleBRRespawnEffectComponent.py
 import CGF
-import GenericComponents
 import Event
 from helpers import dependency
 from script_component.DynamicScriptComponent import DynamicScriptComponent
@@ -22,5 +21,5 @@ class VehicleBRRespawnEffectComponent(DynamicScriptComponent):
         if not prefabPath:
             return
         vehGO = self.entity.entityGameObject
-        transformComponent = vehGO.findComponentByType(GenericComponents.TransformComponent)
-        CGF.loadGameObject(prefabPath, vehGO.spaceID, transformComponent.worldPosition)
+        transformComponent = vehGO.findRead(CGF.TransformComponent)
+        CGF.loadAndCreatePrefab(prefabPath, vehGO.spaceID, transformComponent.worldPosition)

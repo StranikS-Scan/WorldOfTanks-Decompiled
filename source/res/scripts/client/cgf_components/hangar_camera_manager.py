@@ -1,22 +1,26 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/cgf_components/hangar_camera_manager.py
+from __future__ import absolute_import, division
 import math
 import logging
+from functools import partial
+import typing
 from collections import namedtuple
 import math_utils
 import Event
 import BigWorld
 import Math
 import CGF
+from WeakMethod import WeakMethodProxy
+from shared_utils import first
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
+from gui.hangar_cameras.hangar_camera_flyby import FlyByComponent
 from gui.shared import g_eventBus
 from helpers import dependency
 from math_common import isAlmostEqual
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared.utils import IHangarSpace
-from GenericComponents import TransformComponent
 from vehicle_systems.components.vehicle_to_camera_alignment_components import VehicleToCameraAlignmentComponent
-from cgf_script.managers_registrator import tickGroup, onAddedQuery, Rule, registerRule, registerManager
 from CameraComponents import CameraComponent, ActiveCameraComponent, CameraFlightComponent, OrbitComponent, DofComponent, IdleComponent, ParallaxComponent, FovComponent, ShiftComponent
 from constants import IS_CLIENT
 if IS_CLIENT:
@@ -25,6 +29,8 @@ if IS_CLIENT:
     from gui.hangar_cameras.hangar_camera_parallax import HangarCameraParallax
     from gui.hangar_cameras.hangar_camera_idle import HangarCameraIdle
     from gui.hangar_cameras.hangar_camera_flyby import HangarCameraFlyby
+if typing.TYPE_CHECKING:
+    from typing import Optional
 _EASE_SQUARE_OUT = 2
 _DURATION_ = 2.0
 _DEFAULT_MOTION_BLUR_ = 0.12
@@ -86,15 +92,39 @@ class _DOFParams(object):
         self.farDist = farDist
 
 
-class HangarCameraManager(CGF.ComponentManager):
+class HangarCameraSystem(CGF.System):
     _settingsCore = dependency.descriptor(ISettingsCore)
     _hangarSpace = dependency.descriptor(IHangarSpace)
-    _activeCameraQuery = CGF.QueryConfig(CGF.GameObject, ActiveCameraComponent)
-    _cameraQuery = CGF.QueryConfig(CGF.GameObject, CameraComponent)
-    _vehicleToCameraAlignmentQuery = CGF.QueryConfig(CGF.GameObject, CameraComponent, VehicleToCameraAlignmentComponent)
+    CameraActivated = CGF.ActivateReaction(CGF.ReactRo(CameraComponent), CGF.Has(CGF.TransformComponent))
+    OrbitActivated = CGF.ActivateReaction(CGF.ReactRo(OrbitComponent), CGF.Ro(CameraComponent))
+    ActiveCameraIterate = CGF.IterateReaction(CGF.ActiveOnly, CGF.GameObject, CGF.Ro(ActiveCameraComponent))
+    CameraIterate = CGF.IterateReaction(CGF.GameObject, CGF.Ro(CameraComponent))
+    OrbitIterate = CGF.IterateReaction(CGF.ActiveOnly, CGF.GameObject, CGF.Ro(OrbitComponent), CGF.Ro(CameraComponent))
+    ActiveCameraAccess = CGF.AccessReaction(CGF.Ro(ActiveCameraComponent))
+    VehicleToCameraAlignmentAccess = CGF.AccessReaction(CGF.Ro(VehicleToCameraAlignmentComponent))
+    TransformAccess = CGF.AccessReaction(CGF.Ro(CGF.TransformComponent))
+    OrbitAccess = CGF.AccessReaction(CGF.ActiveOnly, CGF.Ro(OrbitComponent))
+    CameraAccess = CGF.AccessReaction(CGF.Ro(CameraComponent))
+    FovAccess = CGF.AccessReaction(CGF.Ro(FovComponent))
+    DofAccess = CGF.AccessReaction(CGF.Ro(DofComponent))
+    IdleAccess = CGF.AccessReaction(CGF.Ro(IdleComponent))
+    ParallaxAccess = CGF.AccessReaction(CGF.Ro(ParallaxComponent))
+    CameraFlightAccess = CGF.AccessReaction(CGF.Ro(CameraFlightComponent))
+    ShiftAccess = CGF.AccessReaction(CGF.Ro(ShiftComponent))
+    FlyByAccess = CGF.AccessReaction(CGF.Ro(FlyByComponent))
+    Reactions = CGF.Reactions(CameraActivated, OrbitActivated, ActiveCameraIterate, OrbitIterate, CameraIterate, ActiveCameraAccess, TransformAccess, OrbitAccess, CameraAccess, FovAccess, ShiftAccess, DofAccess, IdleAccess, ParallaxAccess, CameraFlightAccess, FlyByAccess, VehicleToCameraAlignmentAccess)
 
-    def __init__(self, *args):
-        super(HangarCameraManager, self).__init__(*args)
+    def update(self):
+        for cameraComponent in self.reaction(self.CameraActivated):
+            self.onCameraAdded(cameraComponent)
+
+        for _, cameraComponent in self.reaction(self.OrbitActivated):
+            self.onOrbitCameraActivated(cameraComponent)
+
+        self.tick()
+
+    def __init__(self):
+        super(HangarCameraSystem, self).__init__()
         self.__cam = None
         self.__flightCam = None
         self.__customizationHelper = None
@@ -115,13 +145,14 @@ class HangarCameraManager(CGF.ComponentManager):
         self.__zoomEnabled = True
         self.__cameraMode = CameraMode.DEFAULT
         self.__cameraName = None
+        self.__orbitCameraMap = {}
         self.__isActive = False
         self.__flybyCallback = None
         self.onCameraSwitched = Event.Event()
         self.onNewCameraAdded = Event.Event()
         return
 
-    def activate(self):
+    def onMappingLoaded(self):
         if not self._hangarSpace.inited or self.__isActive:
             return
         else:
@@ -143,10 +174,10 @@ class HangarCameraManager(CGF.ComponentManager):
             self.__currentDOFParams = _DOFParams()
             self.__currentHorizontalFov = fovInstance.horizontalFov
             self.__isActive = True
-            _logger.info('HangarCameraManager::activate')
+            _logger.info('HangarCameraSystem::activate')
             return
 
-    def deactivate(self):
+    def onMappingUnloaded(self):
         if not self.__isActive:
             return
         else:
@@ -154,8 +185,10 @@ class HangarCameraManager(CGF.ComponentManager):
             self.__customizationHelper = None
             g_eventBus.removeListener(CameraRelatedEvents.LOBBY_VIEW_MOUSE_MOVE, self.__handleLobbyViewMouseEvent)
             FovExtended.instance().onSetFovSettingEvent -= self.__onSetFovSetting
-            for gameObject, _ in self._activeCameraQuery:
-                gameObject.removeComponentByType(ActiveCameraComponent)
+            activeCameraIterate = self.reaction(self.ActiveCameraIterate)
+            q = CGF.CommandQueue(self.gom)
+            for gameObject, _ in activeCameraIterate:
+                q.removeComponent(gameObject, ActiveCameraComponent)
 
             self.__deactivateCameraComponents()
             self.__cameraParallax.destroy()
@@ -168,18 +201,22 @@ class HangarCameraManager(CGF.ComponentManager):
             self.__flybyCallback = None
             return
 
-    @onAddedQuery(CGF.GameObject, CameraComponent, TransformComponent, tickGroup='postTickUpdate')
-    def onCameraAdded(self, go, cameraComponent, transformComponent):
+    def onCameraAdded(self, cameraComponent):
         if not self.__isActive:
             return
         self.onNewCameraAdded(cameraComponent.name)
         if cameraComponent.name == self.__cameraMode:
             if not self.isCameraSwitching():
                 self.switchToTank()
-            _logger.info('HangarCameraManager::onTankCameraAdded')
+            _logger.info('HangarCameraSystem::onTankCameraAdded')
+
+    def onOrbitCameraActivated(self, cameraComponent):
+        if cameraComponent.name in self.__orbitCameraMap:
+            self.__orbitCameraMap[cameraComponent.name]()
 
     def isCameraAdded(self, cameraName):
-        for cameraComponent in self._cameraQuery:
+        cameraIterate = self.reaction(self.CameraIterate)
+        for _, cameraComponent in cameraIterate:
             if cameraComponent.name == cameraName:
                 return True
 
@@ -195,38 +232,52 @@ class HangarCameraManager(CGF.ComponentManager):
         self.switchByCameraName(self.__cameraMode, instantly, resetTransform)
 
     def cameraExists(self, cameraName):
-        for _, cameraComponent in self._cameraQuery:
+        cameraIterate = self.reaction(self.CameraIterate)
+        for _, cameraComponent in cameraIterate:
             if cameraComponent.name == cameraName:
                 return True
 
         return False
 
     def findCameraGameObjectByName(self, name):
+        cameraIterate = self.reaction(self.CameraIterate)
         gameObject = None
-        for go, cameraComponent in self._cameraQuery:
+        for go, cameraComponent in cameraIterate:
             if cameraComponent.name == name:
                 gameObject = go
                 break
 
         return gameObject
 
+    def getCameraFlyBy(self):
+        flyByComponent = None
+        activeCameraIterate = self.reaction(self.ActiveCameraIterate)
+        go, _ = first(activeCameraIterate)
+        if go is not None:
+            flyByAccess = self.reaction(self.FlyByAccess)
+            flyByComponent = flyByAccess.find(go)
+        return flyByComponent
+
     def activateCamera(self, name):
         gameObject = None
         prevCameraName = None
         self.__vehicleToCameraCompIsActive = False
-        for go, cameraComponent, _ in self._vehicleToCameraAlignmentQuery:
-            if cameraComponent.name == name:
-                self.__vehicleToCameraCompIsActive = True
-
-        for go, cameraComponent in self._cameraQuery:
-            if go.findComponentByType(ActiveCameraComponent) is not None:
+        q = CGF.CommandQueue(self.gom)
+        activeCameraAccess = self.reaction(self.ActiveCameraAccess)
+        vehicleToCameraAlignmentAccess = self.reaction(self.VehicleToCameraAlignmentAccess)
+        cameraIterate = self.reaction(self.CameraIterate)
+        for go, cameraComponent in cameraIterate:
+            isActive = activeCameraAccess.contains(go)
+            if isActive:
                 prevCameraName = cameraComponent.name
                 if cameraComponent.name != name:
-                    go.removeComponentByType(ActiveCameraComponent)
+                    q.removeComponent(go, ActiveCameraComponent)
             if cameraComponent.name == name:
                 gameObject = go
-                if go.findComponentByType(ActiveCameraComponent) is None:
-                    go.createComponent(ActiveCameraComponent)
+                if not isActive:
+                    q.createComponent(go, ActiveCameraComponent)
+                if vehicleToCameraAlignmentAccess.contains(go):
+                    self.__vehicleToCameraCompIsActive = True
 
         if gameObject is not None:
             self.__cameraName = name
@@ -237,11 +288,20 @@ class HangarCameraManager(CGF.ComponentManager):
             _logger.debug('Camera is already installed: %s', name)
             self.onCameraSwitched(self.__cameraName)
             return
-        else:
-            gameObject, prevCameraName = self.activateCamera(name)
-            if gameObject is None:
-                _logger.warning("Can't find camera: %s", name)
+        orbitIterate = self.reaction(self.OrbitIterate)
+        for _, __, cameraComponent in orbitIterate:
+            if cameraComponent.name == name:
+                self.__switchByCameraName(name, instantly, resetTransform, forceUpdate)
                 return
+
+        self.__orbitCameraMap[name] = partial(WeakMethodProxy(self.__switchByCameraName), name, instantly, resetTransform, forceUpdate)
+
+    def __switchByCameraName(self, name, instantly=True, resetTransform=True, forceUpdate=True):
+        gameObject, prevCameraName = self.activateCamera(name)
+        if gameObject is None:
+            _logger.warning("Can't find camera: %s", name)
+            return
+        else:
             self.__cam.stop()
             if instantly:
                 self.__setupCamera(gameObject, resetTransform, forceUpdate)
@@ -263,12 +323,15 @@ class HangarCameraManager(CGF.ComponentManager):
             return
         else:
             targetPos, yaw, pitch, distance, distConstraints = (None, None, None, None, None)
-            for gameObject, _ in self._activeCameraQuery:
-                hierarchy = CGF.HierarchyManager(self._hangarSpace.spaceID)
-                parent = hierarchy.getParent(gameObject)
-                parentTransformComponent = parent.findComponentByType(TransformComponent)
-                transformComponent = gameObject.findComponentByType(TransformComponent)
-                orbitComponent = gameObject.findComponentByType(OrbitComponent)
+            activeCameraIterate = self.reaction(self.ActiveCameraIterate)
+            transformAccess = self.reaction(self.TransformAccess)
+            orbitAccess = self.reaction(self.OrbitAccess)
+            shiftAccess = self.reaction(self.ShiftAccess)
+            for gameObject, _ in activeCameraIterate:
+                parent = self.hierarchy.getParent(gameObject)
+                parentTransformComponent = transformAccess.find(parent)
+                transformComponent = transformAccess.find(gameObject)
+                orbitComponent = orbitAccess.find(gameObject)
                 if not orbitComponent or not parentTransformComponent or not transformComponent:
                     return
                 targetPos = parentTransformComponent.worldTransform.translation
@@ -278,7 +341,7 @@ class HangarCameraManager(CGF.ComponentManager):
                 pitch = self.__normaliseAngle(orbitComponent.currentPitch + worldPitch) if resetRotation else None
                 distance = orbitComponent.currentDist if resetDistance else None
                 distConstraints = orbitComponent.distLimits
-                self.__setCameraShift(gameObject.findComponentByType(ShiftComponent))
+                self.__setCameraShift(shiftAccess.find(gameObject))
 
             self.moveCamera(targetPos, yaw=yaw, pitch=pitch, distance=distance, duration=duration, distConstraints=distConstraints)
             return
@@ -322,10 +385,10 @@ class HangarCameraManager(CGF.ComponentManager):
         cameraYaw = sourceMatrix.yaw
         cameraPitch = sourceMatrix.pitch
         if self.__vehicleToCameraCompIsActive:
-            from vehicle_systems.components.vehicle_to_camera_alignment_components import VehicleToCameraAlignmentManager
-            vehicleToCameraAlignmentManager = CGF.getManager(self._hangarSpace.spaceID, VehicleToCameraAlignmentManager)
-            if vehicleToCameraAlignmentManager and vehicleToCameraAlignmentManager.getTargetPosition():
-                targetPos = vehicleToCameraAlignmentManager.getTargetPosition()
+            from vehicle_systems.components.vehicle_to_camera_alignment_components import VehicleToCameraAlignmentSystem
+            vehicleToCameraAlignmentSystem = CGF.getSystem(self._hangarSpace.spaceID, VehicleToCameraAlignmentSystem)
+            if vehicleToCameraAlignmentSystem and vehicleToCameraAlignmentSystem.getTargetPosition():
+                targetPos = vehicleToCameraAlignmentSystem.getTargetPosition()
         if targetPos is not None:
             targetMatrix.setTranslate(targetPos)
         if yaw is not None:
@@ -435,11 +498,13 @@ class HangarCameraManager(CGF.ComponentManager):
         return angle + 2 * math.pi if angle < -math.pi - eps else angle
 
     def __setupCamera(self, gameObject, resetTransform=True, forceUpdate=True):
-        hierarchy = CGF.HierarchyManager(self._hangarSpace.spaceID)
-        cameraComponent = gameObject.findComponentByType(CameraComponent)
-        parent = hierarchy.getParent(gameObject)
-        parentTransformComponent = parent.findComponentByType(TransformComponent)
-        orbitComponent = gameObject.findComponentByType(OrbitComponent)
+        cameraAccess = self.reaction(self.CameraAccess)
+        transformAccess = self.reaction(self.TransformAccess)
+        orbitAccess = self.reaction(self.OrbitAccess)
+        cameraComponent = cameraAccess.find(gameObject)
+        parent = self.hierarchy.getParent(gameObject)
+        parentTransformComponent = transformAccess.find(parent)
+        orbitComponent = orbitAccess.find(gameObject)
         if not cameraComponent or not orbitComponent or not parentTransformComponent:
             return
         else:
@@ -453,7 +518,8 @@ class HangarCameraManager(CGF.ComponentManager):
             self.__mouseMoveParams = _MouseMoveParams(cameraComponent.rotationSensitivity, cameraComponent.zoomSensitivity, yawConstraints, pitchConstraints, distConstraints)
             self.__yawCameraFilter = HangarCameraYawFilter(yawConstraints[0], orbitComponent.yawLimits.y - orbitComponent.yawLimits.x, cameraComponent.rotationSensitivity)
             if not self.__vehicleToCameraCompIsActive:
-                self.__setCameraShift(gameObject.findComponentByType(ShiftComponent))
+                shiftAccess = self.reaction(self.ShiftAccess)
+                self.__setCameraShift(shiftAccess.find(gameObject))
             if resetTransform:
                 targetPos = parentTransformComponent.worldTransform.translation
                 yaw = self.__normaliseAngle(orbitComponent.currentYaw + worldYaw + math.pi)
@@ -468,10 +534,10 @@ class HangarCameraManager(CGF.ComponentManager):
             targetMatrix = Math.Matrix()
             targetMatrix.setTranslate(targetPos)
             if self.__vehicleToCameraCompIsActive:
-                from vehicle_systems.components.vehicle_to_camera_alignment_components import VehicleToCameraAlignmentManager
-                vehicleToCameraAlignmentManager = CGF.getManager(self._hangarSpace.spaceID, VehicleToCameraAlignmentManager)
-                if vehicleToCameraAlignmentManager and vehicleToCameraAlignmentManager.getTargetPosition():
-                    targetMatrix.setTranslate(vehicleToCameraAlignmentManager.getTargetPosition())
+                from vehicle_systems.components.vehicle_to_camera_alignment_components import VehicleToCameraAlignmentSystem
+                vehicleToCameraAlignmentSystem = CGF.getSystem(self._hangarSpace.spaceID, VehicleToCameraAlignmentSystem)
+                if vehicleToCameraAlignmentSystem and vehicleToCameraAlignmentSystem.getTargetPosition():
+                    targetMatrix.setTranslate(vehicleToCameraAlignmentSystem.getTargetPosition())
             self.__cam.target = targetMatrix
             sourceMatrix = Math.Matrix()
             sourceMatrix.setRotateYPR(Math.Vector3(yaw, pitch, 0.0))
@@ -483,7 +549,8 @@ class HangarCameraManager(CGF.ComponentManager):
             if forceUpdate:
                 self.__cam.forceUpdate()
             self.__prevHorizontalFov = FovExtended.instance().getFovAbsoluteValue()
-            fovComponent = gameObject.findComponentByType(FovComponent)
+            fovAccess = self.reaction(self.FovAccess)
+            fovComponent = fovAccess.find(gameObject)
             if fovComponent:
                 self.__customFov = True
                 self.__currentHorizontalFov = math.degrees(fovComponent.value)
@@ -495,7 +562,8 @@ class HangarCameraManager(CGF.ComponentManager):
                 else:
                     self.__currentHorizontalFov = FovExtended.instance().horizontalFov
             self.__prevDOFParams = self.__currentDOFParams
-            dofComponent = gameObject.findComponentByType(DofComponent)
+            dofAccess = self.reaction(self.DofAccess)
+            dofComponent = dofAccess.find(gameObject)
             if dofComponent:
                 self.__currentDOFParams = _DOFParams(True, dofComponent.nearStart, dofComponent.nearDist, dofComponent.farStart, dofComponent.farDist)
                 if not self.__prevDOFParams.active:
@@ -505,7 +573,8 @@ class HangarCameraManager(CGF.ComponentManager):
                 self.__currentDOFParams = _DOFParams()
                 self.__customizationHelper.setDOFenabled(False)
             self.__deactivateCameraComponents()
-            idleComponent = gameObject.findComponentByType(IdleComponent)
+            idleAccess = self.reaction(self.IdleAccess)
+            idleComponent = idleAccess.find(gameObject)
             if idleComponent:
                 pitchParams = HangarCameraIdle.IdleParams()
                 distParams = HangarCameraIdle.IdleParams()
@@ -516,7 +585,8 @@ class HangarCameraManager(CGF.ComponentManager):
                 distParams.maxValue = idleComponent.distLimits[1]
                 distParams.period = idleComponent.distPeriod
                 self.__cameraIdle.initialize(idleComponent.easingInTime, pitchParams, distParams, idleComponent.yawPeriod)
-            parallaxComponent = gameObject.findComponentByType(ParallaxComponent)
+            parallaxAccess = self.reaction(self.ParallaxAccess)
+            parallaxComponent = parallaxAccess.find(gameObject)
             if parallaxComponent:
                 self.__cameraParallax.initialize(parallaxComponent.distanceDelta, parallaxComponent.angelsDelta, parallaxComponent.smoothing)
             if self.__minDist is not None:
@@ -543,13 +613,13 @@ class HangarCameraManager(CGF.ComponentManager):
         if not prevCameraName:
             return
         else:
-            hierarchy = CGF.HierarchyManager(self._hangarSpace.spaceID)
-            children = hierarchy.getChildren(gameObject)
+            children = self.hierarchy.getDirectChildren(gameObject)
             if not children:
                 return
             cameraFlightComponent = None
+            flightAccess = self.reaction(self.CameraFlightAccess)
             for child in children:
-                flightComponent = child.findComponentByType(CameraFlightComponent)
+                flightComponent = flightAccess.find(child)
                 if flightComponent and flightComponent.cameraName and flightComponent.cameraName == prevCameraName:
                     cameraFlightComponent = flightComponent
                     break
@@ -557,9 +627,11 @@ class HangarCameraManager(CGF.ComponentManager):
             if not cameraFlightComponent:
                 return
             transforms = []
+            transformAccess = self.reaction(self.TransformAccess)
+            cameraAccess = self.reaction(self.CameraAccess)
             for point in cameraFlightComponent.points:
-                cameraComponent = point.findComponentByType(CameraComponent)
-                transformComponent = point.findComponentByType(TransformComponent)
+                cameraComponent = cameraAccess.find(point)
+                transformComponent = transformAccess.find(point)
                 if cameraComponent and transformComponent:
                     transforms.append(transformComponent.worldTransform)
 
@@ -593,7 +665,6 @@ class HangarCameraManager(CGF.ComponentManager):
             self.__flightCam = None
         return
 
-    @tickGroup(groupName='Simulation')
     def tick(self):
         if not self.__flightCam:
             if self.__cam and self.__cam.isInTransition():
@@ -634,13 +705,3 @@ class HangarCameraManager(CGF.ComponentManager):
             farDist = self.__prevDOFParams.farDist + progress * (self.__currentDOFParams.farDist - self.__prevDOFParams.farDist)
             self.__customizationHelper.setDOFenabled(True)
             self.__customizationHelper.setDOFparams(nearStart, nearDist, farStart, farDist)
-
-
-@registerRule
-class CameraRule(Rule):
-    category = 'Hangar rules'
-    domain = CGF.DomainOption.DomainClient
-
-    @registerManager(HangarCameraManager)
-    def reg1(self):
-        return None

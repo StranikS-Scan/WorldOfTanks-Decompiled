@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/actions/__init__.py
+from __future__ import absolute_import
 import BigWorld
 import game_loading_bindings
 from adisp import adisp_process
@@ -178,11 +179,12 @@ class DisconnectFromPeriphery(Action):
         app = self.appLoader.getApp()
         if app:
             from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-            view = app.containerManager.getView(WindowLayer.VIEW)
-            if view and view.settings.alias == VIEW_ALIAS.LOGIN and view.isCreated() and self.connectionMgr.isDisconnected():
-                LOG_DEBUG('Disconnect action. Player came to login')
-                self._completed = True
-                self._running = False
+            if app.containerManager:
+                view = app.containerManager.getView(WindowLayer.VIEW)
+                if view and view.settings.alias == VIEW_ALIAS.LOGIN and view.isCreated() and self.connectionMgr.isDisconnected():
+                    LOG_DEBUG('Disconnect action. Player came to login')
+                    self._completed = True
+                    self._running = False
         return self._running
 
 

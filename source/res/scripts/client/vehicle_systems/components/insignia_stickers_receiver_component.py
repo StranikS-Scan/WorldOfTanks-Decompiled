@@ -5,8 +5,7 @@ import GenericComponents
 import GpuDecals
 import Math
 from VehicleStickers import Insignia
-from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
-from cgf_script.managers_registrator import autoregister, onAddedQuery
+from cgf_script.registration import ComponentProperty, registerComponent
 from constants import IS_EDITOR
 from helpers import dependency, isPlayerAccount
 from skeletons.gui.shared.utils import IHangarSpace
@@ -15,22 +14,25 @@ from vehicle_systems.vehicle_composition import findParentVehicleAppearance, Veh
 @registerComponent
 class InsigniaStickersReceiverComponent(object):
     category = 'Render'
-    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
-    vehiclePart = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Vehicle Part', value=Insignia.Types.SINGLE, annotations={'comboBox': {Insignia.Types.SINGLE: Insignia.Types.SINGLE,
+    editorTitle = 'Insignia Stickers Receiver Component'
+    domain = CGF.Domain.ClientEditor
+    vehiclePart = ComponentProperty(type=CGF.PropertyType.String, editorName='Vehicle Part', value=Insignia.Types.SINGLE, annotations={'comboBox': {Insignia.Types.SINGLE: Insignia.Types.SINGLE,
                   Insignia.Types.DUAL_LEFT: Insignia.Types.DUAL_LEFT,
                   Insignia.Types.DUAL_RIGHT: Insignia.Types.DUAL_RIGHT}})
 
 
-@autoregister(presentInAllWorlds=True, domain=CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor)
-class InsigniaStickersReceiverManager(CGF.ComponentManager):
-    receiverQuery = CGF.QueryConfig(CGF.GameObject, InsigniaStickersReceiverComponent, GpuDecals.GpuDecalsReceiverComponent, GenericComponents.DynamicModelComponent, GenericComponents.TransformComponent)
+class InsigniaStickersReceiverSystem(CGF.System):
+    InsigniaAcitvated = CGF.ActivateReaction(CGF.GameObject, CGF.ReactRw(InsigniaStickersReceiverComponent), CGF.ReactRw(GpuDecals.GpuDecalsReceiverComponent), CGF.Ro(GenericComponents.DynamicModelComponent), CGF.Ro(CGF.TransformComponent))
+    InsigniaIterate = CGF.IterateReaction(CGF.ActiveOnly, CGF.GameObject, CGF.Rw(InsigniaStickersReceiverComponent), CGF.Rw(GpuDecals.GpuDecalsReceiverComponent), CGF.Ro(GenericComponents.DynamicModelComponent), CGF.Ro(CGF.TransformComponent))
+    TransformAccess = CGF.AccessReaction(CGF.TransformComponent)
     hangarSpace = dependency.descriptor(IHangarSpace)
+    Reactions = CGF.Reactions(InsigniaAcitvated, InsigniaIterate, TransformAccess)
 
-    def activate(self):
+    def onMappingLoaded(self):
         if not IS_EDITOR and isPlayerAccount() and self.hangarSpace:
             self.hangarSpace.onVehicleChanged += self.vehicleChanged
 
-    def deactivate(self):
+    def onMappingUnloaded(self):
         if not IS_EDITOR and isPlayerAccount() and self.hangarSpace:
             self.hangarSpace.onVehicleChanged -= self.vehicleChanged
             appearance = self.hangarSpace.getVehicleEntityAppearance()
@@ -38,26 +40,30 @@ class InsigniaStickersReceiverManager(CGF.ComponentManager):
                 appearance.onDecalsUpdated -= self.onDecalsUpdated
         return
 
-    @onAddedQuery(CGF.GameObject, InsigniaStickersReceiverComponent, GpuDecals.GpuDecalsReceiverComponent, GenericComponents.DynamicModelComponent, GenericComponents.TransformComponent, tickGroup='postTickUpdate')
-    def onAdded(self, gameobject, vehicleStickersReceiver, gpuDecalsReceiver, dynamicModelComponent, transformComponent):
-        self.attach(gameobject, vehicleStickersReceiver, gpuDecalsReceiver, dynamicModelComponent, transformComponent)
+    def update(self):
+        transformAccess = self.reaction(self.TransformAccess)
+        for go, insignia, receiver, model, tr in self.reaction(self.InsigniaAcitvated):
+            self.attach(go, insignia, receiver, model, tr, transformAccess)
 
     def onDecalsUpdated(self):
-        for gameobject, vehicleStickersReceiver, gpuDecalsReceiver, dynamicModelComponent, transformComponent in self.receiverQuery:
-            self.attach(gameobject, vehicleStickersReceiver, gpuDecalsReceiver, dynamicModelComponent, transformComponent)
+        transformAccess = self.reaction(self.TransformAccess)
+        insigniaIterate = self.reaction(self.InsigniaIterate)
+        for go, insignia, receiver, model, tr in insigniaIterate:
+            self.attach(go, insignia, receiver, model, tr, transformAccess)
 
-    def attach(self, gameobject, vehicleStickersReceiver, gpuDecalsReceiver, dynamicModelComponent, transformComponent):
+    def attach(self, gameobject, vehicleStickersReceiver, gpuDecalsReceiver, dynamicModelComponent, transformComponent, transformAccess):
         appearance = findParentVehicleAppearance(gameobject)
         if appearance is not None and gpuDecalsReceiver.blockIdx != GpuDecals.INVALID_BLOCK_IDX:
             gunGo = GenericComponents.findSlot(appearance.gameObject, VehicleSlots.GUN.value)
-            if not gunGo.isValid():
+            if not gunGo.valid:
                 return
-            gunWorldTransform = gunGo.findComponentByType(GenericComponents.TransformComponent).worldTransform
+            gunWorldTransform = transformAccess.find(gunGo).worldTransform
             offsetToRootMatrix = transformComponent.worldTransform
             offsetToRootMatrix.invert()
             offsetToRootMatrix.preMultiply(gunWorldTransform)
             offsetToRootMatrix = Math.createSRTMatrix(offsetToRootMatrix.scale, Math.Vector3(), offsetToRootMatrix.translation)
-            appearance.vehicleStickers.attachInsigniaReceiverStickers(vehicleStickersReceiver.vehiclePart, dynamicModelComponent, dynamicModelComponent.getRootSuperModel(), offsetToRootMatrix, gpuDecalsReceiver.blockIdx)
+            modelLink = CGF.ComponentLink(gameobject, GenericComponents.DynamicModelComponent)
+            appearance.vehicleStickers.attachInsigniaReceiverStickers(vehicleStickersReceiver.vehiclePart, modelLink, offsetToRootMatrix, gpuDecalsReceiver.blockIdx)
         return
 
     def vehicleChanged(self):

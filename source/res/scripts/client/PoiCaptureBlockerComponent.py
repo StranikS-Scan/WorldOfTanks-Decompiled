@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/PoiCaptureBlockerComponent.py
 from __future__ import absolute_import
 import logging
-import typing
+import CGF
 from PoiBaseComponent import PoiBaseComponent
 from helpers import fixed_dict
 from points_of_interest.components import PoiCaptureBlockerStateComponent
@@ -11,31 +11,26 @@ _logger = logging.getLogger(__name__)
 
 class PoiCaptureBlockerComponent(PoiBaseComponent):
 
-    def __init__(self):
-        super(PoiCaptureBlockerComponent, self).__init__()
-        self.__stateComponent = None
-        return
-
     def onDestroy(self):
-        if self._poiGameObject is not None and self._poiGameObject.isValid():
-            self._poiGameObject.removeComponent(self.__stateComponent)
-        self.__stateComponent = None
+        if self._poiGameObject is not None and self._poiGameObject.valid:
+            self._poiGameObject.removeComponent(PoiCaptureBlockerStateComponent)
         super(PoiCaptureBlockerComponent, self).onDestroy()
         return
 
     def set_blockReasons(self, prev):
-        if self.__stateComponent is not None:
-            self.__stateComponent.blockReasons = self.__getBlockReasons()
-        return
+        stateComponent = self._poiGameObject.findWrite(PoiCaptureBlockerStateComponent)
+        if stateComponent:
+            stateComponent.blockReasons = self.__getBlockReasons()
 
     def _onAvatarReady(self):
-        if self._poiGameObject is not None and self._poiGameObject.isValid():
+        if self._poiGameObject is not None and self._poiGameObject.valid:
             blockReasons = self.__getBlockReasons()
-            self.__stateComponent = self._poiGameObject.findComponentByType(PoiCaptureBlockerStateComponent)
-            if self.__stateComponent:
-                self.__stateComponent.blockReasons = blockReasons
+            stateComponent = self._poiGameObject.findWrite(PoiCaptureBlockerStateComponent)
+            if stateComponent:
+                stateComponent.blockReasons = blockReasons
                 return
-            self.__stateComponent = self._poiGameObject.createComponent(PoiCaptureBlockerStateComponent, self.pointID, blockReasons)
+            queue = CGF.CommandQueue(self.spaceID)
+            queue.createComponent(self._poiGameObject, PoiCaptureBlockerStateComponent, self.pointID, blockReasons)
         return
 
     def __getBlockReasons(self):

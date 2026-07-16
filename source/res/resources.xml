@@ -168,100 +168,27 @@
   </asset_pipeline>
   <cgf>
     <script>
-      <module>	client.cgf_components.attack_artillery_fort_components	</module>
-      <module>	client.cgf_components.marker_component	</module>
-      <module>	client.cgf_components.serial_number_component	</module>
-      <module>	client.cgf_components.stats_display_components	</module>
-      <module>	client.cgf_components.trigger_vse_component	</module>
-      <module>	client.cgf_components.highlight_component	</module>
-      <module>	client.cgf_components.hover_component	</module>
-      <module>	client.cgf_components.on_click_components	</module>
-      <module>	client.cgf_components.arena_camera_manager	</module>
-      <module>	client.cgf_components.hangar_camera_manager	</module>
+      <module>	client.cgf_components.cgf_client_module	</module>
+      <module>	common.cgf_components_common.cgf_common_module	</module>
+      <module>	cell.cgf_cell.cgf_cell_module	</module>
+      <module>	editor.cgf_editor.editor_module	</module>
       <module>	client.gui.hangar_cameras.hangar_camera_flyby	</module>
-      <module>	client.cgf_components.hangar_rules	</module>
       <module>	client.points_of_interest.registrars	</module>
-      <module>	client.vehicle_systems.components.vehicle_custom_effects_settings	</module>
-      <module>	client.vehicle_systems.components.shot_damage_components	</module>
-      <module>	client.vehicle_systems.components.insignia_stickers_receiver_component	</module>
-      <module>	client.vehicle_systems.components.debris_crashed_track_manager	</module>
       <module>	client.vehicle_systems.components.vehicle_pickup_manager	</module>
-      <module>	client.vehicle_systems.components.vehicle_assembly_manager	</module>
-      <module>	client.vehicle_systems.components.decal_manager	</module>
-      <module>	client.cgf_components.rocket_acceleration_component	</module>
-      <module>	client.cgf_components.zone_components	</module>
-      <module>	client.cgf_components.on_shot_components	</module>
-      <module>	client.cgf_components.on_death_components	</module>
-      <module>	client.cgf_components.shot_color_transmission_component	</module>
-      <module>	client.cgf_components.gun_audition_component	</module>
-      <module>	client.cgf_components.rtpc_component_manager	</module>
-      <module>	client.cgf_components.on_player_in_zone_manager	</module>
-      <module>	client.cgf_components.vehicle_health_observer_manager	</module>
-      <module>	client.cgf_components.temperature_gun_rtpc_component	</module>
-      <module>	client.cgf_components.audition_component_2d	</module>
-      <module>	common.cgf_components_common.state_components	</module>
-      <module>	common.cgf_components_common.vehicle_components	</module>
-      <module>	common.cgf_components_common.material_component	</module>
-      <module>	common.cgf_components_common.managers.state_managers	</module>
-      <module>	cell.ai.cgf_ai.dynamic_event	</module>
-      <module>	cell.cgf_cell.damage.shot_damage	</module>
-      <module>	cell.cgf_cell.shooting_obstacle	</module>
-      <module>	cell.cgf_cell.cgf_vehicle	</module>
-      <module>	cell.cgf_cell.cgf_loggers	</module>
-      <module>	cell.cgf_cell.damage_on_collision_manager	</module>
-      <module>	cell.cgf_cell.heightmap_patch_manager	</module>
-      <module>	cell.cgf_cell.static_obstacle_manager	</module>
-      <module>	cell.cgf_cell.vehicle_destroying_manager	</module>
-      <module>	editor.cgf_editor.entity_follower	</module>
-      <module>	client.cgf_components.visual_effect_component_manager	</module>
-      <module>	cell.cgf_cell.partial_visibility_group	</module>
-      <module>	cell.cgf_cell.damage_zone	</module>
-      <module>	client.cgf_components.pm30_hangar_components	</module>
-      <module>	client.cgf_components.pbs_components	</module>
-      <module>	client.cgf_components.color_blind_component	</module>
+      <module>	client.vehicle_systems.components.vehicle_systems_module	</module>
+      <module>	client.DeathComponent	</module>
       <module>	client.cgf_components.vehicle_as_polyline_target_rule	</module>
       <module>	client.HealthComponent	</module>
-      <module>	client.DeathComponent	</module>
       <module>	client.SequenceNetworkSync	</module>
       <module>	client.ShotsReceiver	</module>
-      <module>	client.StagedJetBoostersController	</module>
-      <module>	client.gui.pet_system.cgf_components.pet_place_component	</module>
       <module>	client.gui.pet_system.cgf_components.storage_state_component	</module>
-      <module>	cell.cgf_cell.cgf_replication_hash	</module>
-      <module>	client.cgf_components.armor_inspector_component	</module>
-      <module>	common.cgf_components_common.vehicle_mechanics.stationary_reload_sequence_params_component	</module>
-      <module>	cell.cgf_cell.vehicle_health_observer_manager	</module>
+      <module>	client.cgf_components.temperature_gun_rtpc_component	</module>
       <module>	client.gui.game_control.wot_plus.cgf_components.pro_boost_effect_manager	</module>
-      <module>	client.cgf_components.mechanic_components.cyclic_rocket.nozzle_controller	</module>
-      <module>	client.cgf_components.mechanic_components.cyclic_rocket.staged_jet_boosters	</module>
-      <module>	client.cgf_components.mechanic_components.cyclic_rocket.accelerator_status_tracker	</module>
-      <module>	client.cgf_components.vehicle_mechanics_components	</module>
-      <module>	client.cgf_components.power_mode_components	</module>
-      <module>	client.cgf_components.rechargeable_nitro_components	</module>
-      <module>	client.cgf_components.accuracy_stacks_manager	</module>
-      <module>	client.cgf_components.target_designator_manager	</module>
-      <module>	cell.cgf_cell.vehicle_mechanics.stationary_reload_sequence_params	</module>
-      <module>	cell.cgf_cell.vehicle_mechanics.phased_mechanic_component	</module>
-      <module>	cell.cgf_cell.vehicle_mechanics.staged_boosters_stats_collector	</module>
-      <module>	cell.cgf_cell.vehicle_mechanics.custom_rotation_point	</module>
     </script>
     <testScript>
-      <module>	client.cgf_demo_client.test_client_component	</module>
-      <module>	client.cgf_demo_client.test_hierarchy_modificator	</module>
-      <module>	client.cgf_demo_client.test_state_machine_trigger	</module>
-      <module>	client.cgf_demo_client.test_triggers	</module>
-      <module>	client.cgf_demo_client.demo_rules	</module>
-      <module>	client.cgf_demo_client.test_zone_components	</module>
-      <module>	client.cgf_demo_client.test_death_triggers	</module>
-      <module>	common.cgf_demo.test_movers	</module>
-      <module>	common.cgf_demo.test_triggers	</module>
-      <module>	common.cgf_demo.test_bridge	</module>
-      <module>	common.cgf_demo.test_manager_rule	</module>
-      <module>	common.cgf_demo.test_edge_drawer	</module>
-      <module>	cell.cgf_demo_cell.demo_rules	</module>
-      <module>	cell.cgf_demo_cell.demo_managers	</module>
-      <module>	cell.cgf_demo_cell.demo_scenario_trigger	</module>
-      <module>	cell.TestReplicableComponent	</module>
+      <module>	cell.cgf_demo_cell.demo_module	</module>
+      <module>	client.cgf_demo_client.demo_module	</module>
+      <module>	common.cgf_demo.test_module	</module>
     </testScript>
     <testPrefabs></testPrefabs>
     <prefabs>
@@ -329,9 +256,6 @@
       <path>	content/CGFPrefabs/Vehicle/mechanic_effects/germany/G189_overheat_stacks.prefab	</path>
       <path>	content/CGFPrefabs/Vehicle/mechanic_effects/poland/Pl37_CS_67_Szakal_stance_dance.prefab	</path>
       <path>	content/CGFPrefabs/Vehicle/mechanic_effects/ussr/R230_charge_shot.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/mechanic_effects/china/Ch70_PTZ_78_staged_boosters/Ch70_PTZ_78_staged_boosters.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/mechanic_effects/china/Ch70_PTZ_78_staged_boosters/Ch70_PTZ_78_staged_boosters_client_left.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/mechanic_effects/china/Ch70_PTZ_78_staged_boosters/Ch70_PTZ_78_staged_boosters_client_right.prefab	</path>
       <path>	content/CGFPrefabs/Vehicle/mechanic_effects/uk/GB158_vfx.prefab	</path>
       <path>	content/CGFPrefabs/Vehicle/guns/czech	</path>
       <path>	content/CGFPrefabs/Vehicle/guns/germany	</path>

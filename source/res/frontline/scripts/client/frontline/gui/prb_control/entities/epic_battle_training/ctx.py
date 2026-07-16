@@ -45,5 +45,5 @@ class EpicTrainingSettingsCtx(TeamSettingsCtx):
 class JoinEpicBattleTrainingCtx(JoinLegacyCtx):
     __slots__ = ()
 
-    def __init__(self, prbID, waitingID='', flags=_FUNCTIONAL_FLAG.UNDEFINED):
-        super(JoinEpicBattleTrainingCtx, self).__init__(prbID, PREBATTLE_TYPE.EPIC_TRAINING, waitingID=waitingID, flags=flags)
+    def __init__(self, prbID, prbClusterID, waitingID='', flags=_FUNCTIONAL_FLAG.UNDEFINED):
+        super(JoinEpicBattleTrainingCtx, self).__init__(prbID, PREBATTLE_TYPE.EPIC_TRAINING, prbClusterID, waitingID=waitingID, flags=flags)

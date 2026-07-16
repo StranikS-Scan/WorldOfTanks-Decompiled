@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/vehicle_equipment.py
+from __future__ import absolute_import
 import logging
 import weakref
 import typing
+from builtins import range
+from future.utils import listvalues, viewitems, viewvalues
 from itertools import chain
 from account_shared import LayoutIterator
 from items.components.supply_slots_components import SupplySlot
@@ -84,6 +87,8 @@ class _Equipment(object):
 
     def __ne__(self, equipment):
         return not self.__eq__(equipment)
+
+    __hash__ = None
 
     def __repr__(self):
         return '{}, guiItemType: {}, capacity: {}'.format(self.__class__.__name__, GUI_ITEM_TYPE_NAMES[self.__guiItemType], self.__capacity)
@@ -353,7 +358,7 @@ class _BattleAbilitiesCollector(_ExpendableCollector):
 
     @staticmethod
     def _getSupplySlots(vehDescr):
-        return vehicles.g_cache.supplySlots().slotDescrs.values()
+        return listvalues(vehicles.g_cache.supplySlots().slotDescrs)
 
 
 class _ShellsEquipment(_Equipment):
@@ -596,7 +601,7 @@ class _EquipmentsSetupGroups(object):
         self._groups, self.__capacity = self._parse(invData, postProgressionFeatures, vehDescr)
 
     def __eq__(self, setupGroups):
-        if len(self._groups.keys()) != len(setupGroups.groups.keys()):
+        if len(self._groups) != len(setupGroups.groups):
             return False
         for groupID, layoutIdx in setupGroups.groups.items():
             if self.getLayoutIndex(groupID) != layoutIdx:
@@ -606,6 +611,8 @@ class _EquipmentsSetupGroups(object):
 
     def __ne__(self, setupGroups):
         return not self.__eq__(setupGroups)
+
+    __hash__ = None
 
     @property
     def groups(self):
@@ -633,7 +640,7 @@ class _EquipmentsSetupGroups(object):
                 if feature.name in SETUPS_FEATURES:
                     capacity[GROUP_ID_BY_FEATURE.get(feature.name)] = SWITCH_LAYOUT_CAPACITY
 
-        for group, layouts in TANK_SETUP_GROUPS.iteritems():
+        for group, layouts in viewitems(TANK_SETUP_GROUPS):
             possibleCapacities = [capacity.get(group, DEFAULT_LAYOUT_CAPACITY)]
             for layout in layouts:
                 possibleCapacities.append(getLayoutCapacity(invData, layout, vehDescr))
@@ -655,7 +662,7 @@ class _EquipmentSetupLayout(object):
         self.__setups = {}
 
     def __iter__(self):
-        for item in chain.from_iterable(self.__setups.itervalues()):
+        for item in chain.from_iterable(viewvalues(self.__setups)):
             if item:
                 yield item
 
@@ -691,18 +698,18 @@ class _EquipmentSetupLayout(object):
         return self.__setups.get(idx, None)
 
     def isInSetup(self, item):
-        for _, setup in self.__setups.iteritems():
+        for setup in viewvalues(self.__setups):
             if item in setup:
                 return True
 
         return False
 
     def isInOtherLayout(self, item):
-        return bool([ idx for idx, setup in self.__setups.iteritems() if item in setup and idx != self.__layoutIdx ])
+        return any((item in setup and idx != self.__layoutIdx for idx, setup in viewitems(self.__setups)))
 
     def getIntCDs(self, setupIdx=None, default=ZERO_COMP_DESCR):
         if setupIdx is None:
-            return [ (self._getIntCD(itemData) if itemData != EMPTY_ITEM else default) for itemData in chain.from_iterable(self.__setups.itervalues()) ]
+            return [ (self._getIntCD(itemData) if itemData != EMPTY_ITEM else default) for itemData in chain.from_iterable(viewvalues(self.__setups)) ]
         else:
             setup = self.setupByIndex(setupIdx)
             if setup is not None:
@@ -723,7 +730,7 @@ class _EquipmentSetupLayout(object):
             return item != EMPTY_ITEM and self._getIntCD(item) == intCD
 
     def hasAlternativeItems(self, setupIdx):
-        for idx, setup in self.__setups.iteritems():
+        for idx, setup in viewitems(self.__setups):
             if idx != setupIdx:
                 for itemData in setup:
                     if itemData != EMPTY_ITEM:
@@ -734,7 +741,7 @@ class _EquipmentSetupLayout(object):
     def getUniqueItems(self):
         equipments = []
         intCDs = set()
-        for setup in self.__setups.values():
+        for setup in viewvalues(self.__setups):
             for item in setup.getItems():
                 if item.intCD not in intCDs:
                     intCDs.add(item.intCD)
@@ -754,7 +761,7 @@ class _ShellsSetupLayout(_EquipmentSetupLayout):
 
     def ammoLoaded(self, intCD):
         ammo = 0
-        for s in chain.from_iterable(self.setups.itervalues()):
+        for s in chain.from_iterable(viewvalues(self.setups)):
             if s and self._getIntCD(s) == intCD:
                 ammo = max(ammo, s.count)
 
@@ -762,7 +769,7 @@ class _ShellsSetupLayout(_EquipmentSetupLayout):
 
     def ammoLoadedInOtherSetups(self, intCD):
         ammo = 0
-        for idx, setup in self.setups.iteritems():
+        for idx, setup in viewitems(self.setups):
             if idx != self.layoutIndex:
                 for s in setup:
                     if s and self._getIntCD(s) == intCD:
@@ -771,7 +778,7 @@ class _ShellsSetupLayout(_EquipmentSetupLayout):
         return ammo
 
     def isAmmoNotFull(self, minAmmo=0):
-        for idx, setup in self.setups.iteritems():
+        for idx, setup in viewitems(self.setups):
             count = sum(((s.count if s != EMPTY_ITEM else 0) for s in setup))
             if count < minAmmo:
                 return (True, idx)
@@ -780,7 +787,7 @@ class _ShellsSetupLayout(_EquipmentSetupLayout):
 
     def isAmmoFull(self, setupIdx=None, minAmmo=0):
         if setupIdx is None:
-            return sum(((s.count if s != EMPTY_ITEM else 0) for s in chain.from_iterable(self.setups.itervalues()))) >= minAmmo
+            return sum(((s.count if s != EMPTY_ITEM else 0) for s in chain.from_iterable(viewvalues(self.setups)))) >= minAmmo
         else:
             setup = self.setupByIndex(setupIdx)
             return sum(((s.count if s != EMPTY_ITEM else 0) for s in setup)) >= minAmmo if setup is not None else True
@@ -806,7 +813,7 @@ class _ShellsSetupLayout(_EquipmentSetupLayout):
 
     def __hasAlternativeAmmo(self, setupIdx):
         count = 0
-        for idx, setup in self.setups.iteritems():
+        for idx, setup in viewitems(self.setups):
             if idx != setupIdx:
                 count += sum(((s.count if s != EMPTY_ITEM else 0) for s in setup))
 

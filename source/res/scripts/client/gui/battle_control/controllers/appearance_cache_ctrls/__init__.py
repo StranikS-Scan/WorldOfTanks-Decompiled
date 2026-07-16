@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/appearance_cache_ctrls/__init__.py
+from __future__ import absolute_import
+from future.utils import itervalues
 import BigWorld
 from items import vehicles
 
@@ -13,7 +15,7 @@ def getWholeVehModels(vDesc):
     for chassie in vType.chassis:
         models.add(chassie.models.undamaged)
         splinePairs = chassie.splineDesc.trackPairs if chassie.splineDesc else {}
-        for splinePairDesc in splinePairs.itervalues():
+        for splinePairDesc in itervalues(splinePairs):
             if splinePairDesc is not None:
                 models.add(splinePairDesc.segmentModelLeft())
                 models.add(splinePairDesc.segmentModelRight())

@@ -203,7 +203,7 @@ UnitChatCommand = namedtuple('UnitChatCommand', ('id',
  'msgText'))
 UNIT_CHAT_COMMANDS = (UnitChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._UNIT_COMMAND_START_ID), name='ATTENTIONTOCELL', cooldownPeriod=1.0 + _COOLDOWN_OFFSET, msgText='attention_to_cell'),)
 UNIT_CHAT_COMMANDS_BY_NAMES = {v.name:v for v in UNIT_CHAT_COMMANDS}
-BATTLE_CHAT_COMMANDS = (BattleChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._BATTLE_CHAT_COMMAND_START_ID), name=BATTLE_CHAT_COMMAND_NAMES.SOS, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='help_me', vehMarker='help_me', senderVehMarker=None, soundNotification='ibc_ping_request', soundNotificationReply='ibc_ping_help_me_ex_reply'),
+BATTLE_CHAT_COMMANDS = [BattleChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._BATTLE_CHAT_COMMAND_START_ID), name=BATTLE_CHAT_COMMAND_NAMES.SOS, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='help_me', vehMarker='help_me', senderVehMarker=None, soundNotification='ibc_ping_request', soundNotificationReply='ibc_ping_help_me_ex_reply'),
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.POSITIVE, cooldownPeriod=_SAME_PRIVATE_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='positive', vehMarker='positive', senderVehMarker=None, soundNotification='ibc_ping_affirmative', soundNotificationReply=None),
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.NEGATIVE, cooldownPeriod=_SAME_PRIVATE_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='negative', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.AFFIRMATIVE, cooldownPeriod=_SAME_PRIVATE_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='affirmative', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
@@ -266,8 +266,34 @@ BATTLE_CHAT_COMMANDS = (BattleChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS.
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.FLAG_POINT, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText=None, vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.MOVE_TO_TARGET_POINT, cooldownPeriod=_SAME_TARGET_PERSONAL_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='move_to_target', vehMarker='attackObjective', senderVehMarker=None, soundNotification='ibc_ping_request', soundNotificationReply='ibc_ping_reply'),
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.MOVING_TO_TARGET_POINT, cooldownPeriod=_SAME_TARGET_PERSONAL_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='move_to_target_autocommit', vehMarker='attackingObjective', senderVehMarker=None, soundNotification='ibc_ping_action', soundNotificationReply='ibc_ping_reply'),
- BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.COMMENDATION, cooldownPeriod=0.5 + _COOLDOWN_OFFSET, soundNotification='ibc_ping_request', soundNotificationReply='ibc_ping_reply'))
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.COMMENDATION, cooldownPeriod=0.5 + _COOLDOWN_OFFSET, soundNotification='ibc_ping_request', soundNotificationReply='ibc_ping_reply')]
 BATTLE_CHAT_COMMANDS_BY_NAMES = {v.name:v for v in BATTLE_CHAT_COMMANDS}
+ExtBattleChatCommand = namedtuple('ExtBattleChatCommand', ('name',
+ 'markerType',
+ 'cooldownPeriod',
+ 'processorType',
+ 'msgText',
+ 'vehMarker',
+ 'senderVehMarker',
+ 'soundNotification',
+ 'msgOnMarker',
+ 'soundNotificationReply'))
+ExtBattleChatCommand.__new__.__defaults__ = (None,
+ None,
+ 0,
+ 0,
+ None,
+ None,
+ None,
+ None,
+ None,
+ None)
+
+def addBattleChatCommand(extCommand):
+    command = BattleChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._BATTLE_CHAT_COMMAND_START_ID + len(BATTLE_CHAT_COMMANDS)), name=extCommand.name, cooldownPeriod=extCommand.cooldownPeriod if extCommand.cooldownPeriod > 0 else _SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText=extCommand.msgText, vehMarker=extCommand.vehMarker, senderVehMarker=extCommand.senderVehMarker, soundNotification=extCommand.soundNotification, msgOnMarker=extCommand.msgOnMarker, soundNotificationReply=extCommand.soundNotificationReply)
+    BATTLE_CHAT_COMMANDS.append(command)
+    BATTLE_CHAT_COMMANDS_BY_NAMES[extCommand.name] = command
+
 
 class MUC_SERVICE_TYPE(object):
     STANDARD = 1

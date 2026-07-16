@@ -2,11 +2,11 @@
 # Embedded file name: scripts/common/events_handler.py
 from __future__ import absolute_import
 from inspect import isfunction, ismethod, getmembers
-from future.utils import with_metaclass
 from operator import attrgetter
 from typing import Callable, Type
 from Event import Event
 from metaclass import Metaclass
+from py2to3.patched_future import with_metaclass
 
 def eventHandler(func):
     func.isEventHandler = True

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/utils.py
+from __future__ import absolute_import
 from items import vehicles
 import arena_achievements
 
@@ -8,7 +9,7 @@ def getVehicleNationID(vehTypeCompDescr):
 
 
 def isVehicleSPG(vehTypeCompDescr):
-    itemTypeID, nationID, vehicleID = vehicles.parseIntCompactDescr(vehTypeCompDescr)
+    _, nationID, vehicleID = vehicles.parseIntCompactDescr(vehTypeCompDescr)
     return 'SPG' in vehicles.g_list.getList(nationID)[vehicleID].tags
 
 

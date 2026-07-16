@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/crew_books_components.py
+from __future__ import absolute_import
 import items
 import nations
 from items.components.crew_books_constants import CrewBookCacheType, CREW_BOOK_RARITY

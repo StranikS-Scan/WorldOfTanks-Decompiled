@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/wot_plus/wot_plus_opt_device_assist.py
+from __future__ import absolute_import
 import logging
 from functools import partial
 import typing
@@ -191,11 +192,11 @@ class _OptDevicesAssistLocalDataProvider(_IOptDeviceAssistDataProvider):
                 deviceKey = GENERIC_OPTIONAL_DEVICE_MAP_TO_EQUIPMENT_NAME[device]
                 criteria = REQ_CRITERIA.OPTIONAL_DEVICE.SIMPLE | REQ_CRITERIA.OPTIONAL_DEVICE.HAS_ANY_FROM_TAGS({deviceKey})
                 optionalDevices = self._itemsCache.items.getItems(GUI_ITEM_TYPE.OPTIONALDEVICE, criteria=criteria).values()
-                compatible = any([ optionalDevice.descriptor.checkCompatibilityWithVehicle(vehicle.descriptor)[0] for optionalDevice in optionalDevices ])
+                compatible = any((optionalDevice.descriptor.checkCompatibilityWithVehicle(vehicle.descriptor)[0] for optionalDevice in optionalDevices))
                 if not compatible:
                     criteria = REQ_CRITERIA.OPTIONAL_DEVICE.MODERNIZED | REQ_CRITERIA.OPTIONAL_DEVICE.HAS_ANY_BY_ARCHETYPE(deviceKey)
                     optionalDevices = self._itemsCache.items.getItems(GUI_ITEM_TYPE.OPTIONALDEVICE, criteria=criteria).values()
-                    compatible = any([ optionalDevice.descriptor.checkCompatibilityWithVehicle(vehicle.descriptor)[0] for optionalDevice in optionalDevices ])
+                    compatible = any((optionalDevice.descriptor.checkCompatibilityWithVehicle(vehicle.descriptor)[0] for optionalDevice in optionalDevices))
                     if not compatible:
                         return False
 

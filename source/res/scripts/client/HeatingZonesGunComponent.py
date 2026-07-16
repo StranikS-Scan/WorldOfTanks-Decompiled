@@ -49,7 +49,6 @@ class HeatingZonesGunComponent(VehicleDynamicComponent, IGunMechanicComponent, I
     def _onAppearanceReady(self):
         super(HeatingZonesGunComponent, self)._onAppearanceReady()
         self.__updateMechanicState()
-        self.__mechanicPrefabSpawner.loadAppearancePrefab()
         self.__statesEvents.processStatePrepared()
 
     def _onComponentAppearanceUpdate(self, **kwargs):

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/tankman_flags.py
-
+from __future__ import absolute_import
+from struct_helpers import packByte
 
 class TankmanFlags(object):
     __slots__ = ('_len', 'extendedVehicleTypeID', 'isPremium', 'isFemale', 'hasFreeSkills', 'hasBonusSkills', 'firstSkillResetDisabled')
@@ -32,7 +33,7 @@ class TankmanFlags(object):
         cd = compactDescriptor
         f = TankmanFlags()
         f._len = 1
-        byte = ord(cd[0])
+        byte = ord(cd[:1])
         f.extendedVehicleTypeID = bool(byte & f.EXTENDED_VEHICLE_TYPE_ID_FLAG)
         f.isPremium = bool(byte & f.IS_PREMIUM_FLAG)
         f.isFemale = bool(byte & f.IS_FEMALE_FLAG)
@@ -42,7 +43,7 @@ class TankmanFlags(object):
         while byte & f.MORE_FLAGS_FLAG:
             f._len += 1
             cd = cd[1:]
-            byte = ord(cd[0])
+            byte = ord(cd[:1])
 
         return f
 
@@ -53,7 +54,7 @@ class TankmanFlags(object):
         v += self.HAS_FREE_SKILLS_FLAG if self.hasFreeSkills else 0
         v += self.HAS_BONUS_SKILLS_FLAG if self.hasBonusSkills else 0
         v += self.DISABLE_FIRST_SKILL_RESET if self.firstSkillResetDisabled else 0
-        return chr(v)
+        return packByte(v)
 
     @property
     def len(self):

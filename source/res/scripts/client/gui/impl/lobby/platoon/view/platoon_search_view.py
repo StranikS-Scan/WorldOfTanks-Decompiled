@@ -31,7 +31,7 @@ class SearchView(ViewImpl, CallbackDelayer):
     searchTimestamp = 0
 
     def __init__(self):
-        settings = ViewSettings(layoutID=self._layoutID, model=SearchingDropdownModel())
+        settings = ViewSettings(layoutID=self._layoutID, model=self._viewModelClass())
         self.__tiersLimitSubview = TiersLimitSubview()
         self.__prbEntityType = self.__platoonCtrl.getPrbEntityType()
         super(SearchView, self).__init__(settings)
@@ -60,6 +60,10 @@ class SearchView(ViewImpl, CallbackDelayer):
     @property
     def viewModel(self):
         return self.getViewModel()
+
+    @property
+    def _viewModelClass(self):
+        return SearchingDropdownModel
 
     def createToolTipContent(self, event, contentID):
         return SquadBonusTooltipContent(bonusState=getPlatoonBonusState(False)) if contentID == R.views.lobby.premacc.tooltips.SquadBonusTooltip() else super(SearchView, self).createToolTipContent(event=event, contentID=contentID)
@@ -137,7 +141,7 @@ class SearchWindow(PreloadableWindow):
         popoverParams = self.__platoonCtrl.getPopoverParams()
         decorator = WindowView(layoutID=0, flags=ViewFlags.POP_OVER_DECORATOR, viewModelClazz=PopOverWindowModel)
         areaID = R.areas.pop_over()
-        super(SearchWindow, self).__init__(wndFlags=WindowFlags.POP_OVER, content=SearchView(), decorator=decorator, layer=WindowLayer.WINDOW, areaID=areaID)
+        super(SearchWindow, self).__init__(wndFlags=WindowFlags.POP_OVER, content=self.preBattleView, decorator=decorator, layer=WindowLayer.WINDOW, areaID=areaID)
         if popoverParams is not None:
             with self.popOverModel.transaction() as tx:
                 tx.setBoundX(popoverParams.bbox.positionX)
@@ -149,6 +153,12 @@ class SearchWindow(PreloadableWindow):
         else:
             _logger.warning('Initializing window with empty popover parameters')
         return
+
+    @property
+    def preBattleView(self):
+        prbEntity = self.__platoonCtrl.getPrbEntityType()
+        from gui.impl.lobby.platoon.platoon_config import PRB_TYPE_TO_SEARCH_VIEW_CONTENT_FACTORY
+        return PRB_TYPE_TO_SEARCH_VIEW_CONTENT_FACTORY.get(prbEntity, SearchView)()
 
     @property
     def popOverModel(self):

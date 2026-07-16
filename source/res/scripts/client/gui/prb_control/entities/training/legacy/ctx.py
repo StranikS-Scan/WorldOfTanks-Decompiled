@@ -51,8 +51,8 @@ class TrainingSettingsCtx(TeamSettingsCtx):
 class JoinTrainingCtx(JoinLegacyCtx):
     __slots__ = ()
 
-    def __init__(self, prbID, waitingID='', flags=_FUNCTIONAL_FLAG.UNDEFINED):
-        super(JoinTrainingCtx, self).__init__(prbID, PREBATTLE_TYPE.TRAINING, waitingID=waitingID, flags=flags)
+    def __init__(self, prbID, prbClusterID, waitingID='', flags=_FUNCTIONAL_FLAG.UNDEFINED):
+        super(JoinTrainingCtx, self).__init__(prbID, PREBATTLE_TYPE.TRAINING, prbClusterID, waitingID=waitingID, flags=flags)
 
 
 @ReprInjector.withParent(('__channels', 'channels'))

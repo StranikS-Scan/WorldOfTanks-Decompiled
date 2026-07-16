@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/gifts/gifts_common.py
+from __future__ import absolute_import
 from constants import IS_DEVELOPMENT
 from soft_exception import SoftException
 UNKNOWN_SENDER_ID = 0

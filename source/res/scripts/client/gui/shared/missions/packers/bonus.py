@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/missions/packers/bonus.py
+from __future__ import absolute_import
 import logging
 import typing
+from builtins import range, zip
+from future.utils import iteritems, iterkeys, lzip, viewitems, viewkeys, viewvalues
 import constants
 from adisp import adisp_async, adisp_process
 from collections_common import g_collectionsRelatedItems
@@ -17,6 +20,9 @@ from gui.impl.gen.view_models.common.missions.bonuses.icon_bonus_model import Ic
 from gui.impl.gen.view_models.common.missions.bonuses.item_bonus_model import ItemBonusModel
 from gui.impl.gen.view_models.common.missions.bonuses.token_bonus_model import TokenBonusModel
 from gui.ranked_battles.constants import YEAR_POINTS_TOKEN
+from gui.server_events.bonuses import TmanTemplateTokensBonus
+from gui.server_events.recruit_helper import getRecruitInfo
+from gui.server_events.bonuses import AttachmentsSetTokenBonus, parseAttachmentsSetToken
 from gui.server_events.finders import isPM3Points
 from gui.server_events.awards_formatters import AWARDS_SIZES, BATTLE_BONUS_X5_TOKEN, GOLD_MISSION, ItemsBonusFormatter, TOKEN_SIZES, TokenBonusFormatter, formatCountLabel, CREW_BONUS_X3_TOKEN, PM_POINTS_TOKEN
 from gui.server_events.formatters import COMPLEX_TOKEN, TokenComplex, parseComplexToken
@@ -26,6 +32,7 @@ from gui.shared.gui_items.customization.c11n_items import Style
 from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency, i18n, time_utils
+from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from shared_utils import first
 from skeletons.gui.game_control import ICollectionsSystemController
 from skeletons.gui.server_events import IEventsCache
@@ -45,19 +52,13 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 WEEKLY_REWARDS_ORDER = ('battlePassPoints', 'personal_missions_points')
 
-def weeklyBonusSort(firstBonus, secondBonus):
-    return _bonusesSort(WEEKLY_REWARDS_ORDER, firstBonus, secondBonus)
+def weeklyBonusSortKey(bonus):
+    return _bonusSortKey(WEEKLY_REWARDS_ORDER, bonus)
 
 
-def _bonusesSort(sequence, firstBonus, secondBonus):
-    firstBonusName = firstBonus.getName()
-    secondBonusName = secondBonus.getName()
-    firstOrder = secondOrder = len(sequence)
-    if firstBonusName in sequence:
-        firstOrder = sequence.index(firstBonusName)
-    if secondBonusName in sequence:
-        secondOrder = sequence.index(secondBonusName)
-    return cmp(firstOrder, secondOrder)
+def _bonusSortKey(sequence, bonus):
+    bonusName = bonus.getName()
+    return sequence.index(bonusName) if bonusName in sequence else len(sequence)
 
 
 def getDefaultBonusPackersMap():
@@ -85,6 +86,7 @@ def getDefaultBonusPackersMap():
      'meta': simpleBonusPacker,
      'slots': simpleBonusPacker,
      'strBonus': simpleBonusPacker,
+     'tmanToken': TmanTemplateBonusPacker(),
      'tankmen': TankmenBonusUIPacker(),
      'tankmenXP': simpleBonusPacker,
      'tankmenXPFactor': simpleBonusPacker,
@@ -115,7 +117,8 @@ def getDefaultBonusPackersMap():
      constants.WoTPlusBonusType.OPTIONAL_DEVICES_ASSISTANT: wotPlusBonusPacker,
      constants.WoTPlusBonusType.PRO_BOOST: wotPlusBonusPacker,
      constants.WoTPlusBonusType.SERVICE_RECORD_CUSTOMIZATION: wotPlusBonusPacker,
-     constants.WoTPlusBonusType.BATTLE_PASS_PLUS: wotPlusBonusPacker}
+     constants.WoTPlusBonusType.BATTLE_PASS_PLUS: wotPlusBonusPacker,
+     AttachmentsSetTokenBonus.NAME: AttachmentsSetTokenBonusPacker()}
 
 
 def getLocalizedBonusName(name):
@@ -208,7 +211,7 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
         bonusTokens = bonus.getTokens()
         result = []
         bonusPackers = cls._getTokenBonusPackers()
-        for tokenID, token in bonusTokens.iteritems():
+        for tokenID, token in viewitems(bonusTokens):
             complexToken = parseComplexToken(tokenID)
             tokenType = cls._getTokenBonusType(tokenID, complexToken)
             specialPacker = bonusPackers.get(tokenType)
@@ -225,7 +228,7 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
         bonusTokens = bonus.getTokens()
         tooltipPackers = cls._getTooltipsPackers()
         result = []
-        for tokenID, token in bonusTokens.iteritems():
+        for tokenID, token in viewitems(bonusTokens):
             if not cls._isTokenForTooltipValid(tokenID):
                 continue
             complexToken = parseComplexToken(tokenID)
@@ -374,7 +377,7 @@ class ItemBonusUIPacker(BaseBonusUIPacker):
     def _pack(cls, bonus):
         bonusItems = bonus.getItems()
         result = []
-        for item, count in sorted(bonusItems.iteritems(), key=cls._itemsSortFunction):
+        for item, count in sorted(viewitems(bonusItems), key=cls._itemsSortFunction):
             if item is None or not count:
                 continue
             result.append(cls._packSingleBonus(bonus, item, count))
@@ -402,7 +405,7 @@ class ItemBonusUIPacker(BaseBonusUIPacker):
     @classmethod
     def _getToolTip(cls, bonus):
         tooltipData = []
-        for item, _ in sorted(bonus.getItems().iteritems(), key=lambda i: i[0]):
+        for item in sorted(viewkeys(bonus.getItems())):
             tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=ItemsBonusFormatter.getTooltip(item), specialArgs=[item.intCD]))
 
         return tooltipData
@@ -410,7 +413,7 @@ class ItemBonusUIPacker(BaseBonusUIPacker):
     @classmethod
     def _getContentId(cls, bonus):
         result = []
-        for _, _ in sorted(bonus.getItems().iteritems(), key=lambda i: i[0]):
+        for _ in range(len(bonus.getItems())):
             result.append(BACKPORT_TOOLTIP_CONTENT_ID)
 
         return result
@@ -421,22 +424,22 @@ class GoodiesBonusUIPacker(BaseBonusUIPacker):
     @classmethod
     def _pack(cls, bonus):
         result = []
-        for booster, count in sorted(bonus.getBoosters().iteritems(), key=lambda b: b[0].boosterID):
+        for booster, count in sorted(iteritems(bonus.getBoosters()), key=lambda b: b[0].boosterID):
             if booster is None or not count:
                 continue
             result.append(cls._packSingleBoosterBonus(bonus, booster, count))
 
-        for demountkit, count in sorted(bonus.getDemountKits().iteritems()):
+        for demountkit, count in sorted(iteritems(bonus.getDemountKits())):
             if demountkit is None or not count:
                 continue
             result.append(cls._packSingleDemountKitBonus(bonus, demountkit, count))
 
-        for form, count in sorted(bonus.getRecertificationForms().iteritems()):
+        for form, count in sorted(iteritems(bonus.getRecertificationForms())):
             if form is None or not count:
                 continue
             result.append(cls._packRecertificationFormsBonus(bonus, form, count))
 
-        for item, count in sorted(bonus.getMentoringLicenses().iteritems()):
+        for item, count in sorted(iteritems(bonus.getMentoringLicenses())):
             if item is None or not count:
                 continue
             result.append(cls._packMentorLicensesBonus(bonus, item, count))
@@ -472,16 +475,16 @@ class GoodiesBonusUIPacker(BaseBonusUIPacker):
     @classmethod
     def _getToolTip(cls, bonus):
         tooltipData = []
-        for booster, _ in sorted(bonus.getBoosters().iteritems(), key=lambda b: b[0].boosterID):
+        for booster in sorted(iterkeys(bonus.getBoosters()), key=lambda b: b.boosterID):
             tooltipData.append(TooltipData(tooltip=TOOLTIPS_CONSTANTS.SHOP_BOOSTER, isSpecial=False, specialAlias=None, specialArgs=[booster.boosterID], isWulfTooltip=True))
 
-        for demountkit in sorted(bonus.getDemountKits().iterkeys()):
+        for demountkit in sorted(viewkeys(bonus.getDemountKits())):
             tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.AWARD_DEMOUNT_KIT, specialArgs=[demountkit.intCD]))
 
-        for form in sorted(bonus.getRecertificationForms().iterkeys()):
+        for form in sorted(viewkeys(bonus.getRecertificationForms())):
             tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.EPIC_BATTLE_RECERTIFICATION_FORM_TOOLTIP, specialArgs=[form.intCD]))
 
-        for item in sorted(bonus.getMentoringLicenses().iterkeys()):
+        for item in sorted(viewkeys(bonus.getMentoringLicenses())):
             tooltipData.append(TooltipData(tooltip=TOOLTIPS_CONSTANTS.MENTOR_LICENSE, isSpecial=False, specialAlias=None, specialArgs=[item.intCD], isWulfTooltip=True))
 
         return tooltipData
@@ -489,16 +492,16 @@ class GoodiesBonusUIPacker(BaseBonusUIPacker):
     @classmethod
     def _getContentId(cls, bonus):
         tooltipData = []
-        for _ in sorted(bonus.getBoosters().iterkeys(), key=lambda b: b.boosterID):
+        for _ in range(len(bonus.getBoosters())):
             tooltipData.append(BACKPORT_TOOLTIP_CONTENT_ID)
 
-        for _ in sorted(bonus.getDemountKits().iterkeys()):
+        for _ in range(len(bonus.getDemountKits())):
             tooltipData.append(BACKPORT_TOOLTIP_CONTENT_ID)
 
-        for _ in sorted(bonus.getRecertificationForms().iterkeys()):
+        for _ in range(len(bonus.getRecertificationForms())):
             tooltipData.append(BACKPORT_TOOLTIP_CONTENT_ID)
 
-        for _ in sorted(bonus.getMentoringLicenses().iterkeys()):
+        for _ in range(len(bonus.getMentoringLicenses())):
             tooltipData.append(BACKPORT_TOOLTIP_CONTENT_ID)
 
         return tooltipData
@@ -761,7 +764,7 @@ class TankmenBonusUIPacker(BaseBonusUIPacker):
     @classmethod
     def _pack(cls, bonus):
         result = []
-        for group in bonus.getTankmenGroups().itervalues():
+        for group in viewvalues(bonus.getTankmenGroups()):
             result.append(cls._packSingleBonus(bonus, cls._getLabel(group)))
 
         return result
@@ -785,14 +788,64 @@ class TankmenBonusUIPacker(BaseBonusUIPacker):
     @classmethod
     def _getToolTip(cls, bonus):
         tooltipData = []
-        for group in bonus.getTankmenGroups().itervalues():
+        for group in viewvalues(bonus.getTankmenGroups()):
             tooltipData.append(createTooltipData(makeTooltip(TOOLTIPS.getAwardHeader(bonus.getName()), cls._getLabel(group))))
 
         return tooltipData
 
     @classmethod
     def _getContentId(cls, bonus):
-        return [ BACKPORT_TOOLTIP_CONTENT_ID for _ in bonus.getTankmenGroups().itervalues() ]
+        return [ BACKPORT_TOOLTIP_CONTENT_ID for _ in viewvalues(bonus.getTankmenGroups()) ]
+
+
+class TmanTemplateBonusPacker(BaseBonusUIPacker):
+
+    @classmethod
+    def _pack(cls, bonus):
+        result = []
+        for tokenID in bonus.getTokens():
+            if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
+                packed = cls._packTmanTemplateToken(tokenID, bonus)
+                if packed is not None:
+                    result.append(packed)
+
+        return result
+
+    @classmethod
+    def _packTmanTemplateToken(cls, tokenID, bonus):
+        recruitInfo = getRecruitInfo(tokenID)
+        if recruitInfo is None:
+            _logger.error('Received wrong tman_template token from server: %s', tokenID)
+            return
+        else:
+            model = IconBonusModel()
+            cls._packCommon(bonus, model)
+            model.setIcon(cls.__getBonusImageName(recruitInfo))
+            model.setLabel(recruitInfo.getFullUserName())
+            return model
+
+    @classmethod
+    def _getToolTip(cls, bonus):
+        tooltipData = []
+        for tokenID in bonus.getTokens():
+            if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
+                tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED, specialArgs=[tokenID]))
+
+        return tooltipData
+
+    @classmethod
+    def _getContentId(cls, bonus):
+        result = []
+        for tokenID in bonus.getTokens():
+            if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
+                result.append(BACKPORT_TOOLTIP_CONTENT_ID)
+
+        return result
+
+    @classmethod
+    def __getBonusImageName(cls, recruitInfo):
+        baseName = 'tank{}man'.format('wo' if recruitInfo.isFemale() else '')
+        return baseName
 
 
 class VehiclesBonusUIPacker(BaseBonusUIPacker):
@@ -1111,6 +1164,48 @@ class ExclusiveVehicleBonusPacker(UndefinedAmountBonusPacker):
     pass
 
 
+class AttachmentsSetTokenBonusPacker(BaseBonusUIPacker):
+    _ATTACHMENTS_SET_NAME_RES = R.strings.quests.bonusName.attachments_set
+    _ATTACHMENTS_SET_TOOLTIP_RES = R.strings.tooltips.quests.bonuses.attachments_set
+
+    @classmethod
+    def _pack(cls, bonus):
+        result = []
+        for tokenID, token in viewitems(bonus.getTokens()):
+            result.append(cls._packSingleBonus(tokenID, token, bonus))
+
+        return result
+
+    @classmethod
+    def _packSingleBonus(cls, tokenID, token, bonus):
+        model = cls._getBonusModel()
+        cls._packCommon(bonus, model)
+        model.setValue(str(token.count))
+        setName, _ = parseAttachmentsSetToken(tokenID)
+        model.setIcon(setName)
+        setNameRes = cls._ATTACHMENTS_SET_NAME_RES.dyn(setName, cls._ATTACHMENTS_SET_NAME_RES.default)
+        model.setLabel(backport.text(setNameRes()))
+        return model
+
+    @classmethod
+    def _getBonusModel(cls):
+        return IconBonusModel()
+
+    @classmethod
+    def _getToolTip(cls, bonus):
+        tooltipData = []
+        for tokenID in bonus.getTokens():
+            setName, _ = parseAttachmentsSetToken(tokenID)
+            setNameRes = cls._ATTACHMENTS_SET_NAME_RES.dyn(setName, cls._ATTACHMENTS_SET_NAME_RES.default)
+            tooltipData.append(createTooltipData(makeTooltip(header=backport.text(setNameRes()), body=backport.text(cls._ATTACHMENTS_SET_TOOLTIP_RES.body()))))
+
+        return tooltipData
+
+    @classmethod
+    def _getContentId(cls, bonus):
+        return [BACKPORT_TOOLTIP_CONTENT_ID] * len(bonus.getTokens())
+
+
 def getDefaultBonusPacker():
     return BonusUIPacker(getDefaultBonusPackersMap())
 
@@ -1140,27 +1235,25 @@ def getPersonalMissionsBonusPacker():
     return BonusUIPacker(getDefaultBonusPackersMap())
 
 
-def packMissionsBonusModelAndTooltipData(bonuses, packer, model, tooltipData=None, sort=None):
+def packMissionsBonusModelAndTooltipData(bonuses, packer, model, tooltipData=None, sortKey=None):
     bonusIndexTotal = 0
     if tooltipData is not None:
         bonusIndexTotal = len(tooltipData)
     bonusTooltipList = []
-    hasSort = sort is not None and callable(sort)
+    hasSortKey = sortKey is not None and callable(sortKey)
     for bonus in bonuses:
         if bonus.isShowInGUI():
             bonusList = packer.pack(bonus)
             if bonusList and tooltipData is not None:
                 bonusTooltipList = packer.getToolTip(bonus)
-            if bonusList and hasSort:
+            if bonusList and hasSortKey:
                 if bonusTooltipList:
-                    sortMethod = sort(bonus.getName())
+                    bonusSortKey = sortKey(bonus.getName())
                     merged = zip(bonusList, bonusTooltipList)
-                    merged = sorted(merged, key=lambda x: x[0], cmp=sortMethod)
-                    bonusList, bonusTooltipList = zip(*merged)
-                    bonusList = list(bonusList)
-                    bonusTooltipList = list(bonusTooltipList)
+                    merged = sorted(merged, key=lambda x: bonusSortKey(x[0]))
+                    bonusList, bonusTooltipList = lzip(*merged)
                 else:
-                    bonusList = sorted(bonusList, cmp=sort(bonus.getName()))
+                    bonusList = sorted(bonusList, key=sortKey(bonus.getName()))
             for bonusIndex, item in enumerate(bonusList):
                 item.setIndex(bonusIndexTotal)
                 tooltipIdx = str(bonusIndexTotal)

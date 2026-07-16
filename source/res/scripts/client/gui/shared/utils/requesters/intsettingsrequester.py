@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/IntSettingsRequester.py
+from __future__ import absolute_import
 import logging
-from functools import wraps
 from copy import copy
+from future.utils import viewitems
+from functools import wraps
 from account_helpers.AccountSettings import MAPBOX_CAROUSEL_FILTER_1, MAPBOX_CAROUSEL_FILTER_2, FUN_RANDOM_CAROUSEL_FILTER_1, FUN_RANDOM_CAROUSEL_FILTER_2, COMP7_CAROUSEL_FILTER_1, COMP7_CAROUSEL_FILTER_2, CAROUSEL_FILTER_3, RANKED_CAROUSEL_FILTER_3, EPICBATTLE_CAROUSEL_FILTER_3, MAPBOX_CAROUSEL_FILTER_3, COMP7_CAROUSEL_FILTER_3, FUN_RANDOM_CAROUSEL_FILTER_3, COMP7_LIGHT_CAROUSEL_FILTER_1, COMP7_LIGHT_CAROUSEL_FILTER_2, COMP7_LIGHT_CAROUSEL_FILTER_3
 import BigWorld
 import constants
@@ -107,14 +109,14 @@ class IntSettingsRequester(object):
 
     def __init__(self):
         self.__isSynced = False
-        self.__cache = dict()
+        self.__cache = {}
 
     def isSynced(self):
         return self.__isSynced
 
     def clear(self):
         self.__isSynced = False
-        self.__cache = dict()
+        self.__cache = {}
 
     @adisp_async
     @adisp_process
@@ -133,7 +135,7 @@ class IntSettingsRequester(object):
     @requireSync
     @adisp_process
     def setSettings(self, settings):
-        intSettings = {self.__SETTINGS[k]:int(v) for k, v in settings.iteritems()}
+        intSettings = {self.__SETTINGS[k]:int(v) for k, v in viewitems(settings)}
         yield self._addIntSettings(intSettings)
 
     @requireSync
@@ -148,7 +150,7 @@ class IntSettingsRequester(object):
     def _response(self, resID, value, callback):
         if resID < 0:
             _logger.error('[class %s] There is error while getting data from cache: %s[%d]', self.__class__.__name__, code2str(resID), resID)
-            return callback(dict())
+            return callback({})
         self.__isSynced = True
         callback(copy(value))
 

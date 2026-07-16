@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: server_side_replay/scripts/client/server_side_replay/gui/impl/lobby/replays_lobby_sounds.py
+from __future__ import absolute_import
 from shared_utils import CONST_CONTAINER
 from sound_gui_manager import CommonSoundSpaceSettings
 

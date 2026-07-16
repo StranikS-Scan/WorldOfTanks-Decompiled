@@ -861,9 +861,8 @@ class KamikazeSoundPlayer(BaseEfficiencySoundPlayer):
         vehicle = BigWorld.entity(vInfo.vehicleID)
         if vehicle.typeDescriptor.name == self.__KAMIKAZE_VEH_NAME and guiProps != PLAYER_GUI_PROPS.ally:
             audition = vehicle.appearance.engineAudition
-            if audition is not None:
+            if audition:
                 audition.getSoundObject(TankSoundObjectsIndexes.ENGINE).play('BR_perk_kamikaze_distance_timer')
-        return
 
 
 class MineFieldSoundPlayer(BaseEfficiencySoundPlayer):

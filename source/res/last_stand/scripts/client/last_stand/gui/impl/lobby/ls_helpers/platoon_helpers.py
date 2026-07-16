@@ -1,12 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: last_stand/scripts/client/last_stand/gui/impl/lobby/ls_helpers/platoon_helpers.py
 from __future__ import absolute_import
+from UnitBase import UNIT_ROLE
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.prb_control.entities.base.unit.entity import UnitEntity
 from gui.impl import backport
 from gui.impl.gen import R
 from last_stand.gui.ls_gui_constants import QUEUE_TYPE_TO_DIFFICULTY_LEVEL
 from last_stand_common.last_stand_constants import UNIT_LS_EXTRA_DATA_KEY, UNIT_DIFFICULTY_LEVELS_KEY, DEFAULT_UNIT_DIFFICULTY_LEVELS
+
+def slotsPlayerSortKey(slot):
+    player = slot['player'] or {}
+    roleIndex = -slot['role'] if not player.get('isOffline') else 0
+    roleIndex &= ~UNIT_ROLE.AUTO_SEARCH
+    return (not player, roleIndex, player.get('timeJoin', 0))
+
 
 def getPlatoonSlotsData(entity, queueType):
     slots = {}

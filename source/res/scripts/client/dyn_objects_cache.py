@@ -313,7 +313,7 @@ class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
             precacheCandidates.update(self.__fireCircleEffects.prefabs)
             precacheCandidates.update(self.__vehicleRespawnEffects.prefabs)
             precacheCandidates.update(self.__stPatrickLootEffect.prefabs)
-            CGF.cacheGameObjects(list(precacheCandidates), False)
+            CGF.cachePrefabs(list(precacheCandidates))
             prerequisites = set()
             self.__dropPlane = _createDropPlane(dataSection['dropPlane'], prerequisites)
             self.__airDrop = _createAirDrop(dataSection['airDrop'], prerequisites)
@@ -472,7 +472,7 @@ class _FeatureDynObjects(DynObjectsBase):
                 return
             toCache = self._init(dataSection=section)
             self.__cachedPrefabs.update(toCache)
-            CGF.cacheGameObjects(list(self.__cachedPrefabs), False)
+            CGF.cachePrefabs(list(self.__cachedPrefabs))
             super(_FeatureDynObjects, self).init(dataSection)
             return
 
@@ -481,7 +481,7 @@ class _FeatureDynObjects(DynObjectsBase):
 
     def clear(self):
         if self.__cachedPrefabs:
-            CGF.clearGameObjectsCache(list(self.__cachedPrefabs))
+            CGF.removePrefabsFromCache(list(self.__cachedPrefabs))
             self.__cachedPrefabs.clear()
 
     def destroy(self):

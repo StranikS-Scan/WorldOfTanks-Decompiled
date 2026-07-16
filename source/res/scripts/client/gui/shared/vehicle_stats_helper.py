@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/vehicle_stats_helper.py
+from __future__ import absolute_import
 import typing
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache

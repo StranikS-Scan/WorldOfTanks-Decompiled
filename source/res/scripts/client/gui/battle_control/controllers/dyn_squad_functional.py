@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/dyn_squad_functional.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from typing import TYPE_CHECKING
-import CommandMapping
 import Keys
+import CommandMapping
 import Event
 import VOIP
 from constants import IS_CHINA
@@ -75,12 +77,12 @@ class DynSquadArenaController(object):
             squadSizes = arenaDP.getSquadSizes()
             otherTeams = arenaDP.getEnemyTeams()
             for myTeam in myTeams:
-                for squadIdx, squadSize in squadSizes[myTeam].iteritems():
+                for squadIdx, squadSize in viewitems(squadSizes[myTeam]):
                     self.__sentAllyCreatePlatoons.append(squadIdx)
                     self.__squadMembersAlly[squadIdx] = squadSize
 
             for otherTeam in otherTeams:
-                for squadIdx, squadSize in squadSizes[otherTeam].iteritems():
+                for squadIdx, squadSize in viewitems(squadSizes[otherTeam]):
                     self.__sentEnemyCreatePlatoons.append(squadIdx)
                     self.__squadMembersEnemy[squadIdx] = squadSize
 

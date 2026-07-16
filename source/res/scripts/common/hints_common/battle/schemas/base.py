@@ -1,12 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/hints_common/battle/schemas/base.py
+from __future__ import absolute_import
 import logging
 import typing
 from dict2model import exceptions, fields, models, schemas, validate
-from dict2model.extensions.battle_type import BattleTypeModel, BattleTypesModel, BattleTypesSchema
+from dict2model.extensions.battle_type import BattleTypesModel, BattleTypesSchema
 from hints_common.battle.schemas.const import DEFAULT_PRIORITY, DEFAULT_COMPONENT, DEFAULT_SCOPE, RESERVED_SCOPES, MAX_PRIORITY
 from py2to3 import patched_typing
 if typing.TYPE_CHECKING:
+    from dict2model.extensions.battle_type import BattleTypeModel
     from dict2model.types import ValidatorsType
 _logger = logging.getLogger(__name__)
 

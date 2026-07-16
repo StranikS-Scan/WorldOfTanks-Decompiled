@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/regular_achvs.py
-from abstract import RegularAchievement
-from abstract.mixins import NoProgressBar
+from __future__ import absolute_import
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
 from gui.shared.gui_items.dossier.achievements import validators
+from gui.shared.gui_items.dossier.achievements.abstract import RegularAchievement
+from gui.shared.gui_items.dossier.achievements.abstract.mixins import NoProgressBar
 
 class Achieved(RegularAchievement):
     __slots__ = ()

@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/TokenRequester.py
-import cPickle
+from __future__ import absolute_import
 import logging
 import time
 from functools import partial
+from future.moves import pickle
+from future.utils import viewvalues
 import BigWorld
-from TokenResponse import TokenResponse
 from adisp import adisp_async, adisp_process
 from constants import REQUEST_COOLDOWN, TOKEN_TYPE
 from debug_utils import LOG_CURRENT_EXCEPTION
+from gui.shared.utils.requesters.TokenResponse import TokenResponse
 from helpers import isPlayerAccount
 from ids_generators import SequenceIDGenerator
 _logger = logging.getLogger(__name__)
@@ -28,7 +30,7 @@ def getTokenRequester(tokenType):
 
 
 def fini():
-    for requester in _tokenRqs.itervalues():
+    for requester in viewvalues(_tokenRqs):
         requester.clear()
 
     _tokenRqs.clear()
@@ -106,7 +108,7 @@ class TokenRequester(object):
                     callback(None)
                 return
             self.__callback = callback
-            self.__requestID = self.__idsGen.next()
+            self.__requestID = self.__idsGen.nextSequenceID
             if timeout:
                 self._loadTimeout(self.__requestID, self.__tokenType, max(timeout, 0.0))
             repository = _getAccountRepository()
@@ -132,7 +134,7 @@ class TokenRequester(object):
             if repository:
                 repository.onTokenReceived -= self._onTokenReceived
             try:
-                self.__lastResponse = self.__wrapper(**cPickle.loads(data))
+                self.__lastResponse = self.__wrapper(**pickle.loads(data))
             except TypeError:
                 LOG_CURRENT_EXCEPTION()
 
@@ -157,4 +159,4 @@ class TokenRequester(object):
 
     def __onTimeout(self, requestID, tokenType):
         self.__clearTimeoutCb()
-        self._onTokenReceived(requestID, tokenType, cPickle.dumps({'error': 'TIMEOUT'}, -1))
+        self._onTokenReceived(requestID, tokenType, pickle.dumps({'error': 'TIMEOUT'}, -1))

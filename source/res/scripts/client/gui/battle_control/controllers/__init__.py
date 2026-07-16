@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/__init__.py
+from __future__ import absolute_import
 from gui.shared.system_factory import collectBattleControllerRepo, collectSharedControllerRepo
 from gui.battle_control.controllers.repositories import BattleSessionSetup
 from gui.battle_control.controllers.repositories import SharedControllersLocator

@@ -14,6 +14,7 @@ if typing.TYPE_CHECKING:
 
 class _Progress(object):
     __slots__ = ('current', 'total')
+    __hash__ = None
 
     def __init__(self, current=0, total=0):
         self.current = current
@@ -49,6 +50,9 @@ class _Progress(object):
 
     def __eq__(self, other):
         return int(self.current) == int(other.current) and int(self.total) == int(other.total)
+
+    def __ne__(self, other):
+        return not self == other
 
     def __repr__(self):
         return '{}: {} of {}'.format(self.__class__.__name__, self.current, self.total)

@@ -10,6 +10,7 @@ from constants import QUEUE_TYPE
 from gui.clans.clan_cache import g_clanCache
 from gui.impl.lobby.stronghold_event.stronghold_event_banner import StrongholdEventBanner
 from gui.impl.lobby.stronghold_event.stronghold_event_helpers import isStrongholdEventBannerAvailable
+from gui.impl.lobby.user_missions.hangar_widget.event_banners.challenges_event_banner import ChallengesEventBanner, isChallengesBannerAvailable
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_container import EventBannersContainer
 from gui.impl.lobby.user_missions.hangar_widget.services import IEventsService
 from gui.integrated_auction.auction_event_banner import IntegratedAuctionEventBanner, isAuctionEventBannerAvailable
@@ -26,8 +27,10 @@ _HANGAR_ENTRY_POINTS = 'hangarEntryPoints'
 _SECONDS_BEFORE_UPDATE = 2
 EventBannersContainer().registerEventBanner(StrongholdEventBanner)
 EventBannersContainer().registerEventBanner(IntegratedAuctionEventBanner)
+EventBannersContainer().registerEventBanner(ChallengesEventBanner)
 registerBannerEntryPointValidator(StrongholdEventBanner.NAME, isStrongholdEventBannerAvailable)
 registerBannerEntryPointValidator(IntegratedAuctionEventBanner.NAME, isAuctionEventBannerAvailable)
+registerBannerEntryPointValidator(ChallengesEventBanner.NAME, isChallengesBannerAvailable)
 _logger = logging.getLogger(__name__)
 
 class _EntryPointData(object):

@@ -1,22 +1,27 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/missions/packers/events.py
+from __future__ import absolute_import
 import logging
 import typing
 import constants
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import CurtailingAwardsComposer
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData
+from gui.challenges.challenges_award_manager import AwardsManager as ChallengesAwardManager
+from gui.challenges.challenges_bonuses_packers import getChallengesBonusPacker
+from gui.impl.gen.view_models.common.missions.challenge_mission_model import ChallengeMissionModel
 from gui.impl.gen.view_models.common.missions.conditions.preformatted_condition_model import PreformattedConditionModel
 from gui.impl.gen.view_models.common.missions.daily_quest_model import DailyQuestModel
 from gui.impl.gen.view_models.common.missions.weekly_quest_model import WeeklyQuestModel
 from gui.impl.gen.view_models.common.missions.event_model import EventStatus
 from gui.impl.gen.view_models.common.missions.quest_model import QuestModel
+from gui.impl.lobby.common.view_helpers import packBonusModelAndTooltipData
 from gui.impl.lobby.missions.missions_helpers import getDailyEpicQuestToken
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.events_helpers import isPremium, isDailyQuest, isWeeklyQuest, isDailyEpicReward
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.shared.missions.packers.bonus import getDefaultBonusPacker, packMissionsBonusModelAndTooltipData
 from gui.shared.missions.packers.conditions import BonusConditionPacker, CONDITION_GROUP_AND, getDefaultPreformattedConditionModel
-from gui.shared.missions.packers.conditions import PostBattleConditionPacker
+from gui.shared.missions.packers.conditions import PostBattleConditionPacker, ChallengePostBattleConditionPacker
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
 from soft_exception import SoftException
@@ -173,10 +178,10 @@ class DailyEpicQuestUIDataPacker(TokenUIDataPacker):
             return
 
 
-def packQuestBonusModel(quest, packer, array, sort=None):
+def packQuestBonusModel(quest, packer, array, sortKey=None):
     bonuses = quest.getBonuses()
-    if sort is not None and callable(sort):
-        bonuses = sorted(bonuses, cmp=sort)
+    if sortKey is not None and callable(sortKey):
+        bonuses = sorted(bonuses, key=sortKey)
     for bonus in bonuses:
         if bonus.isShowInGUI():
             bonusList = packer.pack(bonus)
@@ -187,11 +192,11 @@ def packQuestBonusModel(quest, packer, array, sort=None):
     return
 
 
-def additionalRewardsBonusPacker(quest, packer, sort=None):
+def additionalRewardsBonusPacker(quest, packer, sortKey=None):
     filteredBonus = []
     bonuses = quest.getBonuses()
-    if sort is not None and callable(sort):
-        bonuses = sorted(bonuses, cmp=sort)
+    if sortKey is not None and callable(sortKey):
+        bonuses = sorted(bonuses, key=sortKey)
     for bonus in bonuses:
         if bonus.isShowInGUI():
             filteredBonus.extend(packer.pack(bonus))
@@ -221,6 +226,37 @@ class WeeklyQuestUIDataPacker(BattleQuestUIDataPacker):
             model = model if model is not None else WeeklyQuestModel()
             self._packModel(model)
             return model
+
+
+class ChallengeMissionUIDataPacker(BattleQuestUIDataPacker):
+
+    def pack(self, model=None):
+        if model is not None:
+            if not isinstance(model, ChallengeMissionModel):
+                _logger.error('Provided model type is not matching quest type. Expected ChallengeMissionModel')
+                return
+            model.preBattleCondition.getItems().clear()
+            model.bonusCondition.getItems().clear()
+            model.postBattleCondition.getItems().clear()
+            model.getBonuses().clear()
+        else:
+            model = ChallengeMissionModel()
+        self._packModel(model)
+        return model
+
+    def _packBonuses(self, model):
+        packer = self._getBonusPacker()
+        self._tooltipData = {}
+        bonuses = ChallengesAwardManager.sortMergeBonuses(self._event.getBonuses(), reverse=True)
+        bonuses = ChallengesAwardManager.hideInvisible(bonuses)
+        packBonusModelAndTooltipData(bonuses, model.getBonuses(), self._tooltipData, packer, showAttachmentsSets=True)
+
+    def _getBonusPacker(self):
+        return getChallengesBonusPacker()
+
+    def _packPostBattleConds(self, model):
+        postBattleContitionPacker = ChallengePostBattleConditionPacker()
+        postBattleContitionPacker.pack(self._event, model.postBattleCondition)
 
 
 def getEventUIDataPacker(event):

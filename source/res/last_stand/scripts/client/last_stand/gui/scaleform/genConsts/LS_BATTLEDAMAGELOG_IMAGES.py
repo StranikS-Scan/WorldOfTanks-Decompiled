@@ -16,3 +16,5 @@ class LS_BATTLEDAMAGELOG_IMAGES(object):
     LS_DAMAGELOG_DETONATOR_16X16 = 'ls_damageLog_detonator_16x16'
     LS_DAMAGELOG_BOSS_16X16 = 'ls_damageLog_boss_16x16'
     LS_DAMAGELOG_OBELISK_16X16 = 'ls_damageLog_obelisk_16x16'
+    LS_DAMAGELOG_BASTION_16X16 = 'ls_damageLog_bastion_16x16'
+    LS_DAMAGELOG_ARCHER_16X16 = 'ls_damageLog_archer_16x16'

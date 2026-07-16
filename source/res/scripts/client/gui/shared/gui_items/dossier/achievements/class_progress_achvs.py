@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/class_progress_achvs.py
-from abstract import ClassProgressAchievement
-from abstract.mixins import Deprecated, Fortification, NoProgressBar
+from __future__ import absolute_import
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
 from gui.shared.gui_items.dossier.achievements import validators
+from gui.shared.gui_items.dossier.achievements.abstract import ClassProgressAchievement
+from gui.shared.gui_items.dossier.achievements.abstract.mixins import Deprecated, Fortification, NoProgressBar
 
 class BattleTestedAchievement(ClassProgressAchievement):
     __slots__ = ()

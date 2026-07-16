@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/readers/perks_readers.py
+from __future__ import absolute_import
 import os
 from collections import OrderedDict
 import typing
+from future.utils import lmap
 import ResMgr
 from items import _xml
 from items.components import perks_constants
@@ -16,7 +18,7 @@ def _readPerkArguments(xmlCtx, section):
         for _, argSection in argsSection.items():
             argId = _xml.readString(xmlCtx, argSection, 'argId')
             value = argSection.readFloat('value', 0.0)
-            postValues = map(float, _xml.readStringOrEmpty(xmlCtx, argSection, 'postValues').split())
+            postValues = lmap(float, _xml.readStringOrEmpty(xmlCtx, argSection, 'postValues').split())
             argsDict[argId] = PerkArgument(value, postValues)
 
     return argsDict
@@ -33,7 +35,7 @@ def _readPerksCacheFromXMLSection(xmlCtx, section, sectionName, storage):
     if sectionName not in PERKS_READERS:
         _xml.raiseWrongXml(xmlCtx, sectionName, 'unknown section')
     reader = PERKS_READERS[sectionName]
-    for i, (gname, gsection) in enumerate(section.items()):
+    for gname, gsection in section.items():
         if gname != sectionName:
             continue
         reader(xmlCtx, gsection, storage)

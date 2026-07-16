@@ -9,10 +9,12 @@ from gui.battle_control import avatar_getter
 from helpers import dependency
 from Math import Matrix
 from battleground.component_loading import loadComponentSystem, Loader, CompositeLoaderMixin
-from battleground.components import TerrainAreaGameObject, EffectPlayerObject, SequenceObject, SmartSequenceObject
+from battleground.components import TerrainAreaObject, EffectPlayerObject, SequenceObject, SmartSequenceObject
+from ids_generators import SequenceIDGenerator
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 from skeletons.gui.battle_session import IBattleSessionProvider
 _CONFIG_PATH = 'scripts/dynamic_objects.xml'
+_idGen = SequenceIDGenerator()
 
 def _getSequenceResourceMapping(path, spaceId):
     return {'sequence': Loader(AnimationSequence.Loader(path, spaceId))}
@@ -38,24 +40,25 @@ def loadMines(ownerVehicleID, callback, startEffectEnabled=True, dynamicObjectsC
         isAlly = playerTeam == ownerVehicleInfo.team
     idleEff = effDescr.idleEffect.ally if isAlly else effDescr.idleEffect.enemy
     hasActivationEffect = hasattr(effDescr, 'activationEffect') and effDescr.activationEffect
-    gameObject = MinesObject(isAlly, hasActivationEffect, startEffectEnabled)
-    gameObject.prepareCompositeLoader(callback)
+    mines = MinesObject(isAlly, hasActivationEffect, startEffectEnabled)
+    mines.prepareCompositeLoader(callback)
     spaceId = BigWorld.player().spaceID
-    loadComponentSystem(gameObject.startEffectPlayer, gameObject.appendPiece, _getSequenceResourceMapping(effDescr.plantEffect.effectDescr.path, spaceId))
-    loadComponentSystem(gameObject.destroyEffectPlayer, gameObject.appendPiece, _getSequenceResourceMapping(effDescr.destroyEffect.effectDescr.path, spaceId))
-    loadComponentSystem(gameObject.idleEffectPlayer, gameObject.appendPiece, _getSequenceResourceMapping(idleEff.path, spaceId))
-    loadComponentSystem(gameObject.blowUpEffectPlayer, gameObject.appendPiece, _getEffectResourceMapping(effDescr.blowUpEffectName))
+    loadComponentSystem(mines.startEffectPlayer, mines.appendPiece, _getSequenceResourceMapping(effDescr.plantEffect.effectDescr.path, spaceId))
+    loadComponentSystem(mines.destroyEffectPlayer, mines.appendPiece, _getSequenceResourceMapping(effDescr.destroyEffect.effectDescr.path, spaceId))
+    loadComponentSystem(mines.idleEffectPlayer, mines.appendPiece, _getSequenceResourceMapping(idleEff.path, spaceId))
+    loadComponentSystem(mines.blowUpEffectPlayer, mines.appendPiece, _getEffectResourceMapping(effDescr.blowUpEffectName))
     if hasActivationEffect:
-        loadComponentSystem(gameObject.activationEffectPlayer, gameObject.appendPiece, _getEffectResourceMapping(effDescr.activationEffect))
-    loadComponentSystem(gameObject.decalEffectPlayer, gameObject.appendPiece, _getEffectResourceMapping(effDescr.placeMinesEffect))
-    loadComponentSystem(gameObject, gameObject.appendPiece, loaders)
-    return gameObject
+        loadComponentSystem(mines.activationEffectPlayer, mines.appendPiece, _getEffectResourceMapping(effDescr.activationEffect))
+    loadComponentSystem(mines.decalEffectPlayer, mines.appendPiece, _getEffectResourceMapping(effDescr.placeMinesEffect))
+    loadComponentSystem(mines, mines.appendPiece, loaders)
+    return mines
 
 
-class MinesObject(TerrainAreaGameObject, CompositeLoaderMixin):
+class MinesObject(TerrainAreaObject, CompositeLoaderMixin):
 
     def __init__(self, isAllyMine, hasActivationDelay, startEffectEnabled=True):
-        super(MinesObject, self).__init__(BigWorld.player().spaceID)
+        super(MinesObject, self).__init__()
+        self.__spaceID = BigWorld.player().spaceID
         self.__position = Math.Vector3()
         self.isAllyMine = isAllyMine
         self.__startEffectEnabled = startEffectEnabled
@@ -63,6 +66,7 @@ class MinesObject(TerrainAreaGameObject, CompositeLoaderMixin):
         self.__isActivated = False
         self.activationTimeDelay = 0
         self.mineNumber = 0
+        self.id = _idGen.next()
         self.__pendingEffects = []
         if not self.__isAvatarReady:
             g_playerEvents.onAvatarReady += self.__onAvatarReady
@@ -88,6 +92,9 @@ class MinesObject(TerrainAreaGameObject, CompositeLoaderMixin):
     def destroy(self):
         self.__pendingEffects = []
         g_playerEvents.onAvatarReady -= self.__onAvatarReady
+        for child in self.__children:
+            child.destroy()
+
         super(MinesObject, self).destroy()
 
     def setPosition(self, position):
@@ -167,7 +174,7 @@ class MinesObject(TerrainAreaGameObject, CompositeLoaderMixin):
 
     def __playStartEffects(self):
         if self.__startEffectEnabled:
-            self.startEffectPlayer.bindAndStart(self.__position, self._nativeSystem.spaceID)
+            self.startEffectPlayer.bindAndStart(self.__position, self.__spaceID)
         if not self.hasActivationEffect() or self.__isActivated:
             if self.isAllyMine or self.__isEnemyMarkerEnabled:
                 self.__playIdleEffects()
@@ -187,7 +194,7 @@ class MinesObject(TerrainAreaGameObject, CompositeLoaderMixin):
         self.activationEffectPlayer.start(self.__position)
 
     def __playStopEffects(self):
-        self.destroyEffectPlayer.bindAndStart(self.__position, self._nativeSystem.spaceID)
+        self.destroyEffectPlayer.bindAndStart(self.__position, self.__spaceID)
 
     def __playIdleEffects(self):
         self.idleEffectPlayer.bindAndStart(self.__position)

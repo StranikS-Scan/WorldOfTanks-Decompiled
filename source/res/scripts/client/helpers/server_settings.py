@@ -20,6 +20,7 @@ from battle_pass_common import BATTLE_PASS_CONFIG_NAME, BattlePassConfig
 from collections_common import CollectionsConfig
 from collector_vehicle import CollectorVehicleConsts
 from constants import BATTLE_NOTIFIER_CONFIG, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, MAGNETIC_AUTO_AIM_CONFIG, MISC_GUI_SETTINGS, OPTIONAL_DEVICES_USAGE_CONFIG, PLAYER_SUBSCRIPTIONS_CONFIG, TOURNAMENT_CONFIG, ClansConfig, Configs, PremiumConfigs
+from challenges_common import ChallengesConfig
 from debug_utils import LOG_DEBUG, LOG_NOTE
 from gifts.gifts_common import ClientReqStrategy, GiftEventID, GiftEventState
 from gui import GUI_SETTINGS, SystemMessages
@@ -154,6 +155,9 @@ class _FileServerSettings(object):
 
     def getGameLoadingConfigUrl(self):
         return self.__getUrl('game_loading_config')
+
+    def getServiceRecordCustomizationRootUrl(self):
+        return self.__getUrl('service_record_customization')
 
     def getCollectionsContentConfigUrl(self):
         return self.__getUrl('collections_content_config')
@@ -501,11 +505,11 @@ class EpicGameConfig(namedtuple('EpicGameConfig', ('isEnabled',
         return cls()
 
 
-class _UnitAssemblerConfig(namedtuple('_UnitAssemblerConfig', ('squad', 'epic'))):
+class _UnitAssemblerConfig(namedtuple('_UnitAssemblerConfig', ('configs',))):
     __slots__ = ()
 
     def asDict(self):
-        return self._asdict()
+        return self._asdict().get('configs', {})
 
     def replace(self, data):
         allowedFields = self._fields
@@ -536,7 +540,7 @@ class _UnitAssemblerConfig(namedtuple('_UnitAssemblerConfig', ('squad', 'epic'))
 
     @classmethod
     def defaults(cls):
-        return cls(squad={}, epic={})
+        return cls(configs={})
 
 
 class _SquadPremiumBonus(namedtuple('_SquadPremiumBonus', ('isEnabled', 'ownCredits', 'mateCredits'))):
@@ -861,7 +865,7 @@ class VehiclePostProgressionConfig(namedtuple('_VehiclePostProgression', ('isPos
 
     @classmethod
     def defaults(cls):
-        return cls(False, frozenset(), frozenset(), frozenset())
+        return cls()
 
     @property
     def isEnabled(self):
@@ -918,7 +922,7 @@ class GiftEventConfig(namedtuple('_GiftEventConfig', ('eventID',
 
     @classmethod
     def defaults(cls):
-        return cls(GiftEventID.UNKNOWN, GiftEventState.DISABLED, [], ClientReqStrategy.AUTO)
+        return cls()
 
     @property
     def isEnabled(self):
@@ -944,7 +948,7 @@ class GiftSystemConfig(namedtuple('_GiftSystemConfig', ('events',))):
 
     @classmethod
     def defaults(cls):
-        return cls({})
+        return cls()
 
     def replace(self, data):
         allowedFields = self._fields
@@ -1012,7 +1016,7 @@ class PeripheryRoutingConfig(namedtuple('_PeripheryRoutingConfig', ('isEnabled',
 
     @classmethod
     def defaults(cls):
-        return cls({})
+        return cls()
 
     def replace(self, data):
         allowedFields = self._fields
@@ -1492,6 +1496,7 @@ class ServerSettings(object):
         self.__easyTankEquipConfig = EasyTankEquipConfig()
         self.__ingameTournamentConfig = _IngameTournamentConfig()
         self.__w2gtConfig = _W2GTConfig()
+        self.__challengesConfig = ChallengesConfig({})
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -1659,6 +1664,10 @@ class ServerSettings(object):
             self.__w2gtConfig = makeTupleByDict(_W2GTConfig, self.__serverSettings[Configs.W2GT_CONFIG.value])
         else:
             self.__w2gtConfig = _W2GTConfig()
+        if Configs.CHALLENGES_CONFIG.value in self.__serverSettings:
+            self.__challengesConfig = ChallengesConfig(self.__serverSettings[Configs.CHALLENGES_CONFIG.value])
+        else:
+            self.__challengesConfig = ChallengesConfig({})
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -1783,6 +1792,8 @@ class ServerSettings(object):
             self.__updateIngameTournamentConfig(serverSettingsDiff)
         if Configs.W2GT_CONFIG.value in serverSettingsDiff:
             self.__updateW2GTConfig(serverSettingsDiff)
+        if Configs.CHALLENGES_CONFIG.value in serverSettingsDiff:
+            self.__challengesConfig = ChallengesConfig(serverSettingsDiff[Configs.CHALLENGES_CONFIG.value])
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -1973,6 +1984,10 @@ class ServerSettings(object):
     @property
     def w2gtConfig(self):
         return self.__w2gtConfig
+
+    @property
+    def challengesConfig(self):
+        return self.__challengesConfig
 
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled

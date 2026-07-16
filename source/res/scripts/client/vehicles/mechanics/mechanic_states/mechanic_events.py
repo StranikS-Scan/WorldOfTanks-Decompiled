@@ -32,8 +32,12 @@ class MechanicStatesEvents(ClientEventsContainer, IMechanicStatesEventsLogic):
         super(MechanicStatesEvents, self).lateSubscribe(listener)
 
     def processStatePrepared(self):
-        self.__mechanicState = self._getComponent().getMechanicState()
-        self.onStatePrepared(self.__mechanicState)
+        if self.__mechanicState is not None:
+            return
+        else:
+            self.__mechanicState = self._getComponent().getMechanicState()
+            self.onStatePrepared(self.__mechanicState)
+            return
 
     def updateMechanicState(self, state):
         if self._isStateTransition(self.__mechanicState, state):

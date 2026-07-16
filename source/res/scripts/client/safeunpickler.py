@@ -7,14 +7,14 @@ from io import BytesIO
 from future.moves import pickle
 
 class SafeUnpickler(object):
-    PICKLE_SAFE = {'__builtin__': set(['object',
+    PICKLE_SAFE = {'__builtin__': {'object',
                      'set',
                      'frozenset',
                      'list',
-                     'tuple']),
-     'datetime': set(['datetime']),
-     '_BWp': set(['Array', 'FixedDict']),
-     'Math': set(['Vector2', 'Vector3'])}
+                     'tuple'},
+     'datetime': {'datetime'},
+     '_BWp': {'Array', 'FixedDict'},
+     'Math': {'Vector2', 'Vector3'}}
 
     def __init__(self):
         import items.components.shared_components as sc

@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/hints_common/prebattle/schemas.py
+from __future__ import absolute_import
 import typing
 from game_params_common.schema import GameParamsSchema
 from constants import ARENA_BONUS_TYPE_IDS
-from dict2model import fields, models, validate
-from dict2model.fields import String
+from dict2model import models, validate
+from dict2model.fields import Boolean, Integer, List, String
 from dict2model.schemas import Schema
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
@@ -60,7 +61,7 @@ class HintModel(BaseHintModel):
 class HintSchema(BaseHintSchema[HintModel]):
 
     def __init__(self):
-        super(HintSchema, self).__init__(fields={'arenaBonusTypes': fields.List(required=True, fieldOrSchema=fields.Integer(deserializedValidators=[validate.OneOf(ARENA_BONUS_TYPE_IDS.keys())]))}, checkUnknown=True, modelClass=HintModel)
+        super(HintSchema, self).__init__(fields={'arenaBonusTypes': List(required=True, fieldOrSchema=Integer(deserializedValidators=[validate.OneOf(ARENA_BONUS_TYPE_IDS.keys())]))}, checkUnknown=True, modelClass=HintModel)
 
 
 hintSchema = HintSchema()
@@ -77,5 +78,5 @@ class PrebattleHintsConfigModel(models.Model):
         return 'enabled={}, battleTimerThreshold={}'.format(self.enabled, self.battleTimerThreshold)
 
 
-configSchema = GameParamsSchema[PrebattleHintsConfigModel](gameParamsKey='prebattle_hints_config', fields={'enabled': fields.Boolean(required=True),
- 'battleTimerThreshold': fields.Integer(required=True, deserializedValidators=validate.Range(minValue=0))}, modelClass=PrebattleHintsConfigModel)
+configSchema = GameParamsSchema[PrebattleHintsConfigModel](gameParamsKey='prebattle_hints_config', fields={'enabled': Boolean(required=True),
+ 'battleTimerThreshold': Integer(required=True, deserializedValidators=validate.Range(minValue=0))}, modelClass=PrebattleHintsConfigModel)

@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/bwdeprecations.py
+from __future__ import absolute_import
 import functools
-import sys
 import warnings
+import BigWorld
 
 def deprecatedAlias(method, oldname):
 
@@ -25,7 +26,6 @@ def addDeprecatedAliasOf(module, newname, oldname):
     setattr(module, oldname, deprecatedAlias(method, oldname))
 
 
-import BigWorld
 if BigWorld.component == 'client':
     addDeprecatedAliasOf(BigWorld, 'serverTime', 'stime')
 addDeprecatedAliasOf(BigWorld, 'ThirdPersonTargetingMatrix', 'ThirdPersonTargettingMatrix')

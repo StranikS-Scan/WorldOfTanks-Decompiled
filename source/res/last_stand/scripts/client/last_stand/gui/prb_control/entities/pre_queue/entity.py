@@ -8,7 +8,7 @@ from last_stand.gui.prb_control.entities.pre_queue.ctx import LastStandQueueCtx
 from last_stand.gui.prb_control.entities.pre_queue.scheduler import LastStandBattleScheduler
 from last_stand.gui.ls_account_settings import getFirstNewStatusUnlockLevel
 from last_stand.gui.ls_gui_constants import DifficultyLevel, FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
-from last_stand.gui.prb_control.entities.vehicle_switcher import VehicleSwitcher
+from last_stand.skeletons.ls_vehicle_selection_controller import ILSVehicleSelectionController
 from last_stand.gui.prb_control.entities.vehicles_watcher import VehiclesWatcher
 from last_stand.gui.shared.event_dispatcher import showHangar
 from last_stand.skeletons.difficulty_level_controller import IDifficultyLevelController
@@ -34,8 +34,9 @@ def canSelectPrbEntity(ctrl=None):
     return ctrl.isAvailable()
 
 
-class LastStandEntity(PreQueueEntity, VehicleSwitcher):
+class LastStandEntity(PreQueueEntity):
     lsCtrl = dependency.descriptor(ILSController)
+    lsVehicleCtrl = dependency.descriptor(ILSVehicleSelectionController)
     __difficultyLevelCtrl = dependency.descriptor(IDifficultyLevelController)
 
     def __init__(self):
@@ -57,13 +58,13 @@ class LastStandEntity(PreQueueEntity, VehicleSwitcher):
         if newLevel:
             self.__difficultyLevelCtrl.selectLevel(DifficultyLevel(newLevel))
         self.storage.queueType = self.currentQueueType
-        self.startSwitcher()
+        self.lsVehicleCtrl.activate()
         self._updateVehiclesWatcher()
         return super(LastStandEntity, self).init(ctx=ctx)
 
     def fini(self, ctx=None, woEvents=False):
         self.__difficultyLevelCtrl.onChangeDifficultyLevel -= self._updateEntityType
-        self.stopSwitcher()
+        self.lsVehicleCtrl.deactivate()
         if self.__watcher is not None:
             self.__watcher.stop()
             self.__watcher = None
@@ -115,7 +116,7 @@ class LastStandEntity(PreQueueEntity, VehicleSwitcher):
         self._queueType = self.currentQueueType
         self.storage.queueType = self._queueType
         self._updateVehiclesWatcher()
-        self.selectModeVehicle()
+        self.lsVehicleCtrl.selectModeVehicle()
 
     def _updateVehiclesWatcher(self):
         watcherType = VehiclesWatcher

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/impl/lobby/progression_view.py
 import typing
+import BigWorld
 import SoundGroups
 from comp7_core.gui.impl.lobby.comp7_core_helpers import comp7_core_model_helpers
 from comp7_light.gui.impl.gen.view_models.views.lobby.progression.progress_level_model import ProgressLevelModel
@@ -78,10 +79,13 @@ class ProgressionView(SubModelPresenter):
         SoundGroups.g_instance.playSound2D('comp_7_progression_enter')
 
     def finalize(self):
-        SoundGroups.g_instance.playSound2D('comp_7_progression_exit')
-        self.__comp7LightProgressionController.saveCurPoints()
+        if BigWorld.player() is not None:
+            SoundGroups.g_instance.playSound2D('comp_7_progression_exit')
+        if self.__eventsCache.questsProgress.isSynced():
+            self.__comp7LightProgressionController.saveCurPoints()
         self.__bonuses.clear()
         super(ProgressionView, self).finalize()
+        return
 
     def _getEvents(self):
         return ((self.viewModel.onClose, self.__onClose),
@@ -134,9 +138,13 @@ class ProgressionView(SubModelPresenter):
             self.__markAsVisited(data)
 
     def __updateSchedule(self):
-        newCountdownVal = EventInfoModel.getDailyProgressResetTimeDelta()
-        self.viewModel.battleQuests.setCurrentTimerDate(newCountdownVal)
-        comp7_core_model_helpers.setScheduleInfo(self.viewModel.scheduleInfo, self.__comp7LightController, COMP7_LIGHT_TOOLTIPS.COMP7_LIGHT_CALENDAR_DAY_INFO, SeasonState, YearState, SeasonName)
+        if BigWorld.player() is None:
+            return
+        else:
+            newCountdownVal = EventInfoModel.getDailyProgressResetTimeDelta()
+            self.viewModel.battleQuests.setCurrentTimerDate(newCountdownVal)
+            comp7_core_model_helpers.setScheduleInfo(self.viewModel.scheduleInfo, self.__comp7LightController, COMP7_LIGHT_TOOLTIPS.COMP7_LIGHT_CALENDAR_DAY_INFO, SeasonState, YearState, SeasonName)
+            return
 
     def __updateProgression(self, data, model):
         model.setCurProgressPoints(data['curPoints'])

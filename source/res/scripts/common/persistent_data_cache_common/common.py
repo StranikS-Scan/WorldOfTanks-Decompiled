@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/persistent_data_cache_common/common.py
+from __future__ import absolute_import
 import typing
 import time
 import logging

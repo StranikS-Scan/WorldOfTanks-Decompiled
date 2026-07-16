@@ -11,6 +11,7 @@ from frontline.gui.impl.lobby.progression_screen_view import ProgressionScreenVi
 from gui import SystemMessages
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.entities.View import ViewKey
+from gui.battle_results.service import PostBattleResultsStateMixin
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.hangar.base.proto_states import _LoadoutConfirmStatePrototype, generateBasicLoadoutStateClasses
@@ -19,7 +20,6 @@ from gui.lobby_state_machine.states import GuiImplViewLobbyState, LobbyState, Lo
 from gui.lobby_state_machine.transitions import HijackTransition
 from gui.prb_control import prbDispatcherProperty
 from gui.shared.event_dispatcher import showFrontlineInfoWindow
-from gui.shared.lock_overlays import lockNotificationManager
 from gui.shared.utils.functions import getViewName
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
@@ -204,7 +204,7 @@ class FrontlineLoadoutState(FrontlineLoadoutStateBase):
 
 
 @FrontlineModeState.parentOf
-class FrontlinePostBattleResultsState(SFViewLobbyState):
+class FrontlinePostBattleResultsState(SFViewLobbyState, PostBattleResultsStateMixin):
     STATE_ID = FrontlineStateIDs.BATTLE_RESULTS
     VIEW_KEY = ViewKey(FrontlineHangarAliases.FRONTLINE_BATTLE_RESULTS)
     __hangarSpace = dependency.descriptor(IHangarSpace)
@@ -228,10 +228,8 @@ class FrontlinePostBattleResultsState(SFViewLobbyState):
         super(FrontlinePostBattleResultsState, cls).goTo(arenaUniqueID=arenaUniqueID)
 
     def _onEntered(self, event):
-        lockNotificationManager(True, source=self.STATE_ID)
         self.__cachedParams = dict(event.params)
         super(FrontlinePostBattleResultsState, self)._onEntered(event)
-        lockNotificationManager(False, source=self.STATE_ID, releasePostponed=True)
 
     def _onExited(self):
         super(FrontlinePostBattleResultsState, self)._onExited()

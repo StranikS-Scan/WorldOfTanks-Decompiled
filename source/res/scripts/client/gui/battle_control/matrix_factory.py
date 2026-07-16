@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/matrix_factory.py
+from __future__ import absolute_import
 import BigWorld
 import Math
 from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION

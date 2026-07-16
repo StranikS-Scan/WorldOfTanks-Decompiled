@@ -36,3 +36,7 @@ class SecondaryGunComponent(VehicleDynamicComponent, IGunComponent):
     def _onAppearanceReady(self):
         super(SecondaryGunComponent, self)._onAppearanceReady()
         self.__shootingEvents.processAppearanceReady()
+
+    def _onAppearanceReset(self):
+        super(SecondaryGunComponent, self)._onAppearanceReset()
+        self.__shootingEvents.processAppearanceReset()

@@ -157,11 +157,6 @@ class Comp7MembersView(SquadMembersView):
             self.__updateDropDown(model)
             self.__updateRankTips(model)
 
-    def _getPlatoonSlotsData(self):
-        slots = super(Comp7MembersView, self)._getPlatoonSlotsData()
-        slots.sort(key=self.__playerTimeJoin)
-        return slots
-
     def _getLayoutStyle(self):
         return _LayoutStyle.VERTICAL
 
@@ -172,14 +167,14 @@ class Comp7MembersView(SquadMembersView):
         super(Comp7MembersView, self)._addListeners()
         self.viewModel.header.memberCountDropdown.onChange += self.__onMemberCountDropdown
         if self.__unitMgr is not None and self.__unitMgr.unit is not None:
-            self.__unitMgr.unit.onSquadSizeChanged += self.__updateEntityState
+            self.__unitMgr.unit.onUnitSizeChanged += self.__updateEntityState
         return
 
     def _removeListeners(self):
         super(Comp7MembersView, self)._removeListeners()
         self.viewModel.header.memberCountDropdown.onChange -= self.__onMemberCountDropdown
         if self.__unitMgr is not None and self.__unitMgr.unit is not None:
-            self.__unitMgr.unit.onSquadSizeChanged -= self.__updateEntityState
+            self.__unitMgr.unit.onUnitSizeChanged -= self.__updateEntityState
         return
 
     @args2params(int)
@@ -230,9 +225,3 @@ class Comp7MembersView(SquadMembersView):
         ranksConfig = cls._comp7Controller.getRanksConfig()
         division = findFirst(lambda d: rating in d.range, ranksConfig.divisionsByRank.get(rank, ()))
         return division
-
-    @staticmethod
-    def __playerTimeJoin(slot):
-        player = slot['player'] or {}
-        roleIndex = -slot['role'] if not player.get('isOffline') else 0
-        return (not player, roleIndex, player.get('timeJoin', 0))

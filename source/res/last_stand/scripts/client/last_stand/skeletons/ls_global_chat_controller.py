@@ -7,3 +7,9 @@ class ILSGlobalChatController(IGameController):
 
     def isEnabled(self):
         raise NotImplementedError
+
+
+class ILSDifficultyChatController(IGameController):
+
+    def isEnabled(self):
+        raise NotImplementedError

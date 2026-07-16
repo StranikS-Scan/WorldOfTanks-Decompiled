@@ -10042,68 +10042,6 @@
         </_120mm_HESH_L311>
       </shots>
     </_120mm_Gun_L11PA>
-    <_5_5_inch_AT_Gun_Mk_II>
-      <userString>	#gb_vehicles:_5_5_inch_AT_Gun_Mk_II	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	200000	</price>
-      <notInShop>	true	</notInShop>
-      <impulse>	0.68	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.24	</amplitude>
-        <recoilEffect>	large	</recoilEffect>
-      </recoil>
-      <effects>	shot_largeext_mb	</effects>
-      <reloadEffect>	reload115_152	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
-        <maxPitch>	0.0 11.0 1.0 11.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	26.25	</rotationSpeed>
-      <reloadTime>	9.97142857142860	</reloadTime>
-      <maxAmmo>	35	</maxAmmo>
-      <aimingTime>	2.62857142857143	</aimingTime>
-      <weight>	1500	</weight>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	100	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.4	</shotDispersionRadius>
-      <dualAccuracy>
-        <afterShotDispersionRadius>	0.4	</afterShotDispersionRadius>
-        <coolingDelay>	20	</coolingDelay>
-      </dualAccuracy>
-      <shotDispersionFactors>
-        <turretRotation>	0.08	</turretRotation>
-        <afterShot>	4.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_5_5_inch_AP_Mk_II>
-          <defaultPortion>	0.95	</defaultPortion>
-          <speed>	900	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	275 265	</piercingPower>
-        </_5_5_inch_AP_Mk_II>
-        <_5_5_inch_HESH_Mk_II>
-          <defaultPortion>	0.00	</defaultPortion>
-          <speed>	900	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	220 220	</piercingPower>
-        </_5_5_inch_HESH_Mk_II>
-        <_5_5_inch_HE_Mk_II>
-          <defaultPortion>	0.05	</defaultPortion>
-          <speed>	900	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	70 70	</piercingPower>
-        </_5_5_inch_HE_Mk_II>
-      </shots>
-    </_5_5_inch_AT_Gun_Mk_II>
     <_128_mm_Gun_L_50>
       <userString>	#gb_vehicles:_128_mm_Gun_L_50	</userString>
       <tags></tags>
@@ -10567,6 +10505,68 @@
         </_5_5inch_HE_Mk_1T>
       </shots>
     </_5_5inch_AT_Gun>
+    <_5_5_inch_AT_Gun_Mk_II>
+      <userString>	#gb_vehicles:_5_5_inch_AT_Gun_Mk_II	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	200000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.68	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_huge_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 11.0 1.0 11.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	9.97142857142860	</reloadTime>
+      <maxAmmo>	35	</maxAmmo>
+      <aimingTime>	2.62857142857143	</aimingTime>
+      <weight>	1500	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <dualAccuracy>
+        <afterShotDispersionRadius>	0.44	</afterShotDispersionRadius>
+        <coolingDelay>	20	</coolingDelay>
+      </dualAccuracy>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_5_5_inch_AP_Mk_II>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	265 255	</piercingPower>
+        </_5_5_inch_AP_Mk_II>
+        <_5_5_inch_HESH_Mk_II>
+          <defaultPortion>	0.00	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	205 205	</piercingPower>
+        </_5_5_inch_HESH_Mk_II>
+        <_5_5_inch_HE_Mk_II>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	70 70	</piercingPower>
+        </_5_5_inch_HE_Mk_II>
+      </shots>
+    </_5_5_inch_AT_Gun_Mk_II>
     <B_L_5_5_in_Gun>
       <userString>	#gb_vehicles:B_L_5_5_in_Gun	</userString>
       <tags></tags>

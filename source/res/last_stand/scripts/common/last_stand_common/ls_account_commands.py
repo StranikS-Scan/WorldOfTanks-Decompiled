@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: last_stand/scripts/common/last_stand_common/ls_account_commands.py
+from __future__ import absolute_import
 CMD_LS_UNLOCK_TOKEN = 30200
 CMD_LS_LOCK_TOKEN = 30201
 CMD_LS_ARTEFACT_OPEN = 30202

@@ -34,6 +34,7 @@ class HANGAR_ALIASES(object):
     RESOURCE_WELL_EVENT_BANNER = 'resourceWellEventBanner'
     BATTLE_MATTERS_ENTRY_POINT = 'battleMattersEntryPoint'
     LIVE_OPS_WEB_EVENTS_ENTRY_POINT = 'liveOpsWebEventsEntryPoint'
+    CHALLENGES_EVENT_BANNER = 'ChallengesEventBanner'
     AMMUNITION_SETUP_VIEW_VEHICLE_PARAMS = 'ammunitionSetupViewVehicleParams'
     AMMUNITION_PANEL_INJECT = 'ammunitionPanelInject'
     AMMUNITION_SETUP_VIEW_INJECT = 'ammunitionSetupViewInject'

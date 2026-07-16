@@ -30,6 +30,6 @@ class LSBuffNitroComponent(DynamicScriptComponent):
         appearance = self._appearanceRef()
         if appearance is not None:
             effectMgr = appearance.customEffectManager
-            if effectMgr is not None:
+            if effectMgr:
                 effectMgr.variables['Nitro'] = nitro
         return

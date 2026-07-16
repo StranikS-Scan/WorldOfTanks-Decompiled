@@ -1,17 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/shared_utils/account_helpers/BattleResultsCache.py
+from __future__ import absolute_import
 import os
-import cPickle
 import zlib
-import base64
 from functools import partial
+from future.moves import pickle
+from future.utils import viewitems
 import BigWorld
 import AccountCommands
+import constants
 from battle_results_shared import VehicleInteractionDetails
 from battle_results import unpackClientBattleResults
 from debug_utils import LOG_CURRENT_EXCEPTION
-import constants
 from external_strings_utils import unicode_from_utf8
+from py2to3.compat import base64compat
 BATTLE_RESULTS_VERSION = 1
 CACHE_DIR = os.path.join(os.path.dirname(unicode_from_utf8(BigWorld.wg_getPreferencesFilePath() if not constants.IS_BOT else '.')[1]), 'battle_results')
 
@@ -79,7 +81,7 @@ class BattleResultsCache(object):
         self.__waiting = False
         try:
             isSelfResults = resultsSubUrl is None
-            battleResults = cPickle.loads(zlib.decompress(data))
+            battleResults = pickle.loads(zlib.decompress(data))
             folderName = self.__account.name if isSelfResults else resultsSubUrl
             save(folderName, battleResults)
             if callback is not None:
@@ -103,7 +105,7 @@ def save(accountName, battleResults):
             os.makedirs(folderName)
         fileName = os.path.join(folderName, '%s.dat' % arenaUniqueID)
         fileHandler = open(fileName, 'wb')
-        cPickle.dump((BATTLE_RESULTS_VERSION, battleResults), fileHandler, -1)
+        pickle.dump((BATTLE_RESULTS_VERSION, battleResults), fileHandler, -1)
     except Exception:
         LOG_CURRENT_EXCEPTION()
 
@@ -119,7 +121,7 @@ def load(uniqueFolderName, arenaUniqueID):
         if not os.path.isfile(fileName):
             return
         fileHandler = open(fileName, 'rb')
-        version, battleResults = cPickle.load(fileHandler)
+        version, battleResults = pickle.load(fileHandler)
     except Exception:
         LOG_CURRENT_EXCEPTION()
 
@@ -129,9 +131,8 @@ def load(uniqueFolderName, arenaUniqueID):
 
 
 def getFolderName(uniqueFolderName, arenaUniqueID):
-    battleStartTime = arenaUniqueID & 4294967295L
-    battleStartDay = battleStartTime / 86400
-    return os.path.join(CACHE_DIR, base64.b32encode('%s;%s' % (uniqueFolderName, battleStartDay)))
+    battleStartDay = (arenaUniqueID & 4294967295L) // 86400
+    return os.path.join(CACHE_DIR, base64compat.b32encode('%s;%s' % (uniqueFolderName, battleStartDay)))
 
 
 def clean():
@@ -149,8 +150,8 @@ def clean():
 
 def convertToFullForm(compactForm):
     arenaUniqueID, avatarResults, vehicleResults, otherResults = compactForm
-    vehicleResults = cPickle.loads(zlib.decompress(vehicleResults))
-    avatarResults = cPickle.loads(zlib.decompress(avatarResults))
+    vehicleResults = pickle.loads(zlib.decompress(vehicleResults))
+    avatarResults = pickle.loads(zlib.decompress(avatarResults))
     personal = {}
     fullForm = {'arenaUniqueID': arenaUniqueID,
      'personal': personal,
@@ -159,23 +160,23 @@ def convertToFullForm(compactForm):
      'vehicles': {},
      'avatars': {}}
     personal['avatar'] = unpackClientBattleResults(avatarResults)
-    for vehTypeCompDescr, ownResults in vehicleResults.iteritems():
+    for vehTypeCompDescr, ownResults in viewitems(vehicleResults):
         vehPersonal = personal[vehTypeCompDescr] = unpackClientBattleResults(ownResults)
         if vehPersonal is None:
             continue
         vehPersonal['details'] = VehicleInteractionDetails.fromPacked(vehPersonal['details']).toDict()
 
-    commonAsList, playersAsList, vehiclesAsList, avatarsAsList = cPickle.loads(zlib.decompress(otherResults))
+    commonAsList, playersAsList, vehiclesAsList, avatarsAsList = pickle.loads(zlib.decompress(otherResults))
     fullForm['common'] = unpackClientBattleResults(commonAsList)
-    for accountDBID, playerAsList in playersAsList.iteritems():
+    for accountDBID, playerAsList in viewitems(playersAsList):
         fullForm['players'][accountDBID] = unpackClientBattleResults(playerAsList)
 
-    for accountDBID, avatarAsList in avatarsAsList.iteritems():
+    for accountDBID, avatarAsList in viewitems(avatarsAsList):
         fullForm['avatars'][accountDBID] = unpackClientBattleResults(avatarAsList)
 
-    for vehicleID, vehiclesInfo in vehiclesAsList.iteritems():
+    for vehicleID, vehiclesInfo in viewitems(vehiclesAsList):
         fullForm['vehicles'][vehicleID] = []
-        for vehTypeCompDescr, vehicleInfo in vehiclesInfo.iteritems():
+        for vehTypeCompDescr, vehicleInfo in viewitems(vehiclesInfo):
             fullForm['vehicles'][vehicleID].append(unpackClientBattleResults(vehicleInfo))
 
     return fullForm

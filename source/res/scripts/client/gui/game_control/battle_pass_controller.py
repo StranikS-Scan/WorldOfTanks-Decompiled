@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/battle_pass_controller.py
+from __future__ import absolute_import, division
 import bisect
 import logging
 from collections import namedtuple
 from copy import deepcopy
-from future.utils import iteritems
+from builtins import range, zip
+from future.utils import iteritems, itervalues, viewitems, viewvalues
 from itertools import groupby
 import typing
 from Event import Event, EventManager
@@ -174,13 +176,13 @@ class BattlePassController(IBattlePassController, EventsHandler):
 
     def getVisibleGameModes(self):
         modes = self.__getConfig().points
-        return [ mode for mode, modeInfo in modes.iteritems() if modeInfo.get('visible', False) ]
+        return [ mode for mode, modeInfo in iteritems(modes) if modeInfo.get('visible', False) ]
 
     def isCompleted(self):
         return self.getState() == BattlePassState.COMPLETED
 
     def getSupportedArenaBonusTypes(self):
-        return [ arenaBonusType for arenaBonusType in self.__getConfig().points ]
+        return list(self.__getConfig().points)
 
     def getMaxLevelInChapter(self, chapterId):
         return self.__getConfig().getMaxChapterLevel(chapterId)
@@ -310,7 +312,7 @@ class BattlePassController(IBattlePassController, EventsHandler):
         else:
             for bonus in bonuses:
                 if bonus.getName() == BATTLE_PASS_SELECT_BONUS_NAME:
-                    for tokenID in bonus.getTokens().iterkeys():
+                    for tokenID in bonus.getTokens():
                         if self.__itemsCache.items.tokens.getToken(tokenID) is not None:
                             return True
 
@@ -322,13 +324,13 @@ class BattlePassController(IBattlePassController, EventsHandler):
             if bonus.getName() == BATTLE_PASS_SELECT_BONUS_NAME:
                 bonus.updateContext({'isReceived': False})
                 hasGift = False
-                for tokenID in bonus.getTokens().iterkeys():
+                for tokenID in bonus.getTokens():
                     offerToken = getOfferTokenByGift(tokenID)
                     offer = self.__offersProvider.getOfferByToken(offerToken)
                     if offer is not None:
                         receivedGifts = self.__offersProvider.getReceivedGifts(offer.id)
                         if receivedGifts:
-                            for giftId, count in receivedGifts.iteritems():
+                            for giftId, count in receivedGifts.items():
                                 if count > 0:
                                     gift = offer.getGift(giftId)
                                     if gift is not None:
@@ -348,14 +350,14 @@ class BattlePassController(IBattlePassController, EventsHandler):
             bonuses = self.getSingleAward(chapterId, level, awardType)
             for bonus in bonuses:
                 if bonus.getName() == BATTLE_PASS_SELECT_BONUS_NAME:
-                    for tokenID in bonus.getTokens().iterkeys():
+                    for tokenID in bonus.getTokens():
                         if self.__itemsCache.items.tokens.getToken(tokenID) is not None:
                             return self.isOfferEnabled() and self.__offersProvider.getOfferByToken(getOfferTokenByGift(tokenID)) is not None
 
             return False
 
     def canChooseAnyReward(self):
-        return self.isOfferEnabled() and any((token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS) for token in self.__itemsCache.items.tokens.getTokens().iterkeys() if self.__offersProvider.getOfferByToken(getOfferTokenByGift(token)) is not None))
+        return self.isOfferEnabled() and any((token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS) for token in self.__itemsCache.items.tokens.getTokens() if self.__offersProvider.getOfferByToken(getOfferTokenByGift(token)) is not None))
 
     def getChapterIndex(self, chapterID):
         sortedChapterIDs = sorted(self.getChapterIDs())
@@ -468,7 +470,7 @@ class BattlePassController(IBattlePassController, EventsHandler):
         return (levelPoints, limitPoints)
 
     def getCompletedCyclesCount(self, chapterID):
-        return 0 if not isPostProgressionChapter(chapterID) else self.getPointsInChapter(chapterID) / self.getLevelsConfig(chapterID)[-1]
+        return 0 if not isPostProgressionChapter(chapterID) else self.getPointsInChapter(chapterID) // self.getLevelsConfig(chapterID)[-1]
 
     def getPerBattlePoints(self, gameMode=ARENA_BONUS_TYPE.REGULAR, vehCompDesc=None):
         winList = self.__getPackedBonusPointsList(vehTypeCompDescr=vehCompDesc, gameMode=gameMode)
@@ -572,14 +574,14 @@ class BattlePassController(IBattlePassController, EventsHandler):
         return self.__getConfig().finalOfferTime
 
     def getStylesConfig(self):
-        return {chapterID:chapterInfo.get('styleId') for chapterID, chapterInfo in self.__getConfig().chapters.iteritems()}
+        return {chapterID:chapterInfo.get('styleId') for chapterID, chapterInfo in viewitems(self.__getConfig().chapters)}
 
     def getNotChosenRewardCount(self):
         return sum((1 for _ in self.getNotChosenRewardsIter()))
 
     def getNotChosenRewardsIter(self):
         isOfferEnabled = self.isOfferEnabled()
-        for token in self.__itemsCache.items.tokens.getTokens().iterkeys():
+        for token in self.__itemsCache.items.tokens.getTokens():
             if not token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS):
                 continue
             isReward = not isOfferEnabled
@@ -590,7 +592,7 @@ class BattlePassController(IBattlePassController, EventsHandler):
         return
 
     def hasAnyOfferGiftToken(self):
-        return any((token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS) for token in self.__itemsCache.items.tokens.getTokens().iterkeys()))
+        return any((token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS) for token in self.__itemsCache.items.tokens.getTokens()))
 
     def takeRewardForLevel(self, chapterID, level):
         isBought = self.isBought(chapterID=chapterID)
@@ -602,12 +604,12 @@ class BattlePassController(IBattlePassController, EventsHandler):
         for bonus in bonuses:
             bonusName = bonus.getName()
             if bonusName == BATTLE_PASS_SELECT_BONUS_NAME and isOfferEnabled:
-                for tokenID in bonus.getTokens().iterkeys():
+                for tokenID in bonus.getTokens():
                     if self.__itemsCache.items.tokens.getToken(tokenID) is not None and self.__offersProvider.getOfferByToken(getOfferTokenByGift(tokenID)) is not None:
                         rewardsToChoose.append(tokenID)
 
             if bonusName == BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME:
-                for tokenID in bonus.getTokens().iterkeys():
+                for tokenID in bonus.getTokens():
                     if self.__itemsCache.items.tokens.getToken(tokenID) is not None:
                         chapter = bonus.getChapter()
                         if chapter not in stylesToChoose:
@@ -619,7 +621,7 @@ class BattlePassController(IBattlePassController, EventsHandler):
 
     def takeAllRewards(self):
         if self.isOfferEnabled():
-            rewardsToChoose = [ token for token in self.__itemsCache.items.tokens.getTokens().iterkeys() if token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS) and self.__offersProvider.getOfferByToken(getOfferTokenByGift(token)) is not None ]
+            rewardsToChoose = [ token for token in self.__itemsCache.items.tokens.getTokens() if token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS) and self.__offersProvider.getOfferByToken(getOfferTokenByGift(token)) is not None ]
             rewardsToChoose.sort(key=lambda x: (int(x.split(':')[-1]), x.split(':')[-2]))
         else:
             rewardsToChoose = []
@@ -627,7 +629,7 @@ class BattlePassController(IBattlePassController, EventsHandler):
         return
 
     def getChapterStyleProgress(self, chapter):
-        return getMaxAvalable3DStyleProgressInChapter(self.getSeasonID(), chapter, self.__itemsCache.items.tokens.getTokens().keys())
+        return getMaxAvalable3DStyleProgressInChapter(self.getSeasonID(), chapter, list(self.__itemsCache.items.tokens.getTokens()))
 
     def isVoicedTankman(self, tankmanGroupName):
         return tankmanGroupName in self.__voicedTankmenGroupNames
@@ -666,30 +668,30 @@ class BattlePassController(IBattlePassController, EventsHandler):
                 self.onBattlePassIsBought()
                 break
 
-        if any((tokenID.startswith(BATTLE_PASS_OFFER_TOKEN_PREFIX) for tokenID, token in tokens.iteritems())):
+        if any((tokenID.startswith(BATTLE_PASS_OFFER_TOKEN_PREFIX) for tokenID in tokens)):
             self.onSelectTokenUpdated()
         if self.getTankmenScreens():
-            for tokenID in tokens.iterkeys():
+            for tokenID in tokens:
                 if self.__isBPTankmanToken(tokenID):
                     self.tankmenCacheUpdate(isWaiting=True)
                     break
 
     def __isBPTankmanToken(self, tokenID):
-        return tokenID in self.getSpecialTankmen().iterkeys()
+        return tokenID in self.getSpecialTankmen()
 
     def __getTankmenTagForRequest(self):
         return '{}_{}'.format(BP_TANKMEN_ENTITLEMENT_TAG_PREFIX, self.getSeasonNum())
 
     def __updateChapterToTankmenScreen(self):
         self.__chapterToTankmenScreen = {}
-        for screenID, screen in self.getTankmenScreens().iteritems():
+        for screenID, screen in iteritems(self.getTankmenScreens()):
             for chapterID in screen['chapters']:
                 if chapterID in self.__getConfig().getChapterIDs():
                     self.__chapterToTankmenScreen[chapterID] = screenID
 
     def __updateSpecialTankmen(self):
         self.__specialTankmen = {}
-        for screenID in set(self.__chapterToTankmenScreen.itervalues()):
+        for screenID in set(viewvalues(self.__chapterToTankmenScreen)):
             self.__specialTankmen.update(self.getTankmenScreens().get(screenID, {}).get('tankmen', {}))
 
     def __updateVoicedTankmenGroupNames(self):
@@ -701,16 +703,16 @@ class BattlePassController(IBattlePassController, EventsHandler):
                 self.__voicedTankmenGroupNames.add(groupName)
             return
 
-        for chapterRewards in self.__getConfig().getSeasonRewards().itervalues():
-            for rewards in chapterRewards.itervalues():
-                for bonus, _ in rewards.itervalues():
+        for chapterRewards in itervalues(self.__getConfig().getSeasonRewards()):
+            for rewards in itervalues(chapterRewards):
+                for bonus, _ in itervalues(rewards):
                     for token in bonus.get('tokens', {}):
                         if token.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
                             recruitInfo = getRecruitInfo(token)
                             if recruitInfo is not None:
                                 checkHasTankmanVoiceover(recruitInfo.getGroupName())
 
-        for tankman in self.getSpecialTankmen().iterkeys():
+        for tankman in self.getSpecialTankmen():
             recruitInfo = getRecruitInfo(tankman)
             if recruitInfo is not None:
                 checkHasTankmanVoiceover(recruitInfo.getGroupName())

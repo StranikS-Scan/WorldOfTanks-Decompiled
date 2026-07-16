@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dog_tags_common/number_formatter.py
+from __future__ import absolute_import, division
 import re
 from collections import defaultdict
 from math import floor

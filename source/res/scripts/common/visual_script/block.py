@@ -1,15 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/block.py
+from __future__ import absolute_import
+from builtins import map
 from typing import List, Any, Sequence
-from misc import ASPECT, BLOCK_MODE, EDITOR_TYPE
-from itertools import imap
+from visual_script.misc import ASPECT, BLOCK_MODE
 
 def buildStrKeysValue(*args):
     return ';'.join(args)
 
 
 def makeResEditorData(path, *extensions):
-    return [path, ';;'.join(imap(lambda ext: '*.%s' % ext, extensions))]
+    return [path, ';;'.join(map(lambda ext: '*.%s' % ext, extensions))]
 
 
 class InitParam(object):

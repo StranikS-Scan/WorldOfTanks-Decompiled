@@ -4,13 +4,13 @@ from __future__ import absolute_import
 from frameworks.wulf import ViewSettings, WindowLayer, WindowFlags
 from open_bundle.gui.impl.gen.view_models.views.lobby.attachments_preview_model import AttachmentsPreviewModel
 from open_bundle.gui.impl.gen.view_models.views.lobby.bonus_model import BonusModel
-from open_bundle.helpers.bonuses.bonus_packers import parseAttachmentToken
 from open_bundle.skeletons.open_bundle_controller import IOpenBundleController
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.backport import createTooltipData
 from gui.impl.gen import R
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.pub import ViewImpl, WindowImpl
+from gui.server_events.bonuses import parseAttachmentsSetToken
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization import CustomizationTooltipContext
 from gui.shared.missions.packers.bonus import BACKPORT_TOOLTIP_CONTENT_ID
@@ -48,7 +48,7 @@ class AttachmentsPreview(ViewImpl):
     def __fillModel(self):
         with self.viewModel.transaction() as model:
             model.setBundleType(self.__openBundle.config.getBundle(self.__bundleID).type)
-            name, attachmentsIDs = parseAttachmentToken(self.__attachmentsToken)
+            name, attachmentsIDs = parseAttachmentsSetToken(self.__attachmentsToken)
             model.setName(name)
             sortedIDs = sorted(attachmentsIDs, key=lambda attachmentID: RARITY_PRIORITY.get(self.__customization.getItemByID(GUI_ITEM_TYPE.ATTACHMENT, int(attachmentID)).rarity, len(RARITY_PRIORITY)))
             for attachmentID in sortedIDs:

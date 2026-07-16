@@ -2,6 +2,7 @@
 # Embedded file name: story_mode/scripts/client/story_mode/avatar_input_handler/map_case_mode.py
 import BigWorld
 from typing import Optional, Any
+from story_mode.cgf_components.bunkers import BunkersSystem
 from BunkerLogicComponent import BunkerLogicComponent
 import CGF
 from AvatarInputHandler import MapCaseMode
@@ -38,14 +39,15 @@ class StrikeSelector(MapCaseMode._ArcadeBomberStrikeSelector):
 
     def _clearEdgedDestructibles(self):
         for bunkerComponent in self._edgedBunkers:
-            bunkerComponent.highlightBunker(False)
+            if bunkerComponent:
+                bunkerComponent.highlightBunker(False)
 
         self._edgedBunkers = []
 
     @staticmethod
     def _getBunkerComponent(destructibleEntityID):
-        bunkerQuery = CGF.Query(BigWorld.player().spaceID, (CGF.GameObject, BunkerLogicComponent))
-        return next((bunker for _, bunker in bunkerQuery if bunker.destructibleEntityId == destructibleEntityID), None)
+        bunkersSystem = CGF.getSystem(BigWorld.player().spaceID, BunkersSystem)
+        return bunkersSystem.findActiveBunkerLink(destructibleEntityID)
 
 
 class NavMeshCheckingSelector(MapCaseMode._ArenaBoundsAreaStrikeSelector):

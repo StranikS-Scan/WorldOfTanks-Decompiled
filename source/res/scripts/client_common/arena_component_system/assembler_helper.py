@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/arena_component_system/assembler_helper.py
+from __future__ import absolute_import
 from battleground.airdrops import AirdropsComponent
 from battleground.berserker_effect import BerserkerEffectComponent
 from constants import ARENA_BONUS_TYPE

@@ -1,22 +1,33 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/gui_item.py
+from __future__ import absolute_import
 import typing
+from functools import total_ordering
+from past.builtins import cmp
 import nations
 from gui.impl import backport
 from gui.impl.gen import R
 from items import ITEM_TYPE_NAMES, vehicles
-from gui import nationCompareByIndex
+from gui import nationSortKeyByIndex
 from helpers import dependency
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from soft_exception import SoftException
 
+@total_ordering
 class HasIntCD(object):
     __slots__ = ('intCompactDescr', 'itemTypeID', 'nationID', 'innationID')
+    __hash__ = None
 
     def __init__(self, intCompactDescr):
         super(HasIntCD, self).__init__()
         self.intCompactDescr = intCompactDescr
         self.itemTypeID, self.nationID, self.innationID = self._parseIntCompDescr(self.intCompactDescr)
+
+    def __eq__(self, other):
+        return self.__compare(other) == 0
+
+    def __lt__(self, other):
+        return self.__compare(other) < 0
 
     @property
     def intCD(self):
@@ -37,11 +48,8 @@ class HasIntCD(object):
     def _parseIntCompDescr(self, intCompactDescr):
         return vehicles.parseIntCompactDescr(intCompactDescr)
 
-    def __cmp__(self, other):
-        if self is other:
-            return 1
-        res = nationCompareByIndex(self.nationID, other.nationID)
-        return res if res else 0
+    def __compare(self, other):
+        return 0 if self is other else cmp(nationSortKeyByIndex(self.nationID), nationSortKeyByIndex(other.nationID))
 
 
 class HasStrCD(object):
@@ -56,8 +64,10 @@ class HasStrCD(object):
         return self.strCompactDescr
 
 
+@total_ordering
 class GUIItem(object):
     __slots__ = ('_intCD', '_strCD')
+    __hash__ = None
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
 
     def __init__(self, intCD=None, strCD=None):
@@ -68,8 +78,11 @@ class GUIItem(object):
     def __repr__(self):
         return '{}(intCD={}, strCD={})'.format(self.__class__.__name__, self._intCD, self._strCD)
 
-    def __cmp__(self, other):
-        return cmp(self._intCD, other.intCDO) if self._intCD is not None else super(GUIItem, self).__cmp__(other)
+    def __eq__(self, other):
+        return self._compare(other) == 0
+
+    def __lt__(self, other):
+        return self._compare(other) < 0
 
     @property
     def intCDO(self):
@@ -114,3 +127,6 @@ class GUIItem(object):
     @property
     def nationUserName(self):
         return self._intCD.nationUserName if self._intCD is not None else ''
+
+    def _compare(self, other):
+        return cmp(self._intCD, other.intCDO) if self._intCD is not None else cmp(super(GUIItem, self), other)

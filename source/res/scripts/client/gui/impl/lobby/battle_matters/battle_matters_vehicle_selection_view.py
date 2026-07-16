@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_matters/battle_matters_vehicle_selection_view.py
+from __future__ import absolute_import
 from collections import OrderedDict
 from functools import partial
+from future.utils import iteritems, itervalues, viewitems
 from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus
 from gui import GUI_NATIONS_ORDER_INDEX, GUI_NATIONS
 from gui.impl.gen import R
@@ -35,22 +37,19 @@ def _sortByType(vehicleTuple):
     return _TYPES_ORDER.index(vehicleType)
 
 
-def _sortByName(firstVehicleTuple, secondVehicleTuple):
-    _, firstVehicleDict = firstVehicleTuple
-    _, secondVehicleDict = secondVehicleTuple
-    firstUserName = firstVehicleDict['vehicle'].displayedItem.userName
-    secondUserName = secondVehicleDict['vehicle'].displayedItem.userName
-    return cmp(firstUserName, secondUserName)
+def _sortByName(vehicleTuple):
+    _, vehicleDict = vehicleTuple
+    return vehicleDict['vehicle'].displayedItem.userName
 
 
 def _sortVehicles(vehicles):
-    vehicleSortedByNations = sorted(vehicles.iteritems(), key=_sortByNation)
+    vehicleSortedByNations = sorted(viewitems(vehicles), key=_sortByNation)
     sortedVehicles = []
     for nation in GUI_NATIONS:
         sortedByType = sorted([ (cd, veh) for cd, veh in vehicleSortedByNations if veh['vehicle'].displayedItem.nationName == nation ], key=_sortByType)
         finallySortedByType = []
         for vehicleType in _TYPES_ORDER:
-            sortedByName = sorted([ (cd, veh) for cd, veh in sortedByType if veh['vehicle'].displayedItem.type == vehicleType ], cmp=_sortByName)
+            sortedByName = sorted([ (cd, veh) for cd, veh in sortedByType if veh['vehicle'].displayedItem.type == vehicleType ], key=_sortByName)
             finallySortedByType += sortedByName
 
         sortedVehicles += finallySortedByType
@@ -72,7 +71,7 @@ class BattleMattersVehicleSelectionView(ViewImpl):
         self.__selectableBonus = first(self._selectableBonusManager.getAvailableSelectableBonuses())
         bonuses = self._selectableBonusManager.getBonusOptions(self.__selectableBonus)
         vehicles = {v['option'].displayedItem.intCD:{'vehicle': v['option'],
-         'giftID': k} for k, v in bonuses.iteritems() if not (v['option'].displayedItem.isUnlocked or v['option'].displayedItem.isCollectible)}
+         'giftID': k} for k, v in viewitems(bonuses) if not (v['option'].displayedItem.isUnlocked or v['option'].displayedItem.isCollectible)}
         self.__vehicles = OrderedDict(_sortVehicles(vehicles))
         self.__filterPopover = None
         self.__filters = {}
@@ -138,7 +137,7 @@ class BattleMattersVehicleSelectionView(ViewImpl):
         isNationsFilterEmpty = self.__isFilterEmpty(_NATIONS_KEY_NAME)
         isTypesFilterEmpty = self.__isFilterEmpty(_TYPES_KEY_NAME)
         vm.clear()
-        for vehCD, vehicleDict in self.__vehicles.iteritems():
+        for vehCD, vehicleDict in iteritems(self.__vehicles):
             if isNationsFilterEmpty and isTypesFilterEmpty or isTypesFilterEmpty and self.__nationFit(vehCD) or isNationsFilterEmpty and self.__typeFit(vehCD) or self.__nationFit(vehCD) and self.__typeFit(vehCD):
                 vm.addViewModel(BattleMattersVehiclesBonusUIPacker.pack(vehicleDict['vehicle'])[0])
 
@@ -161,7 +160,7 @@ class BattleMattersVehicleSelectionView(ViewImpl):
         return self.__vehicles.get(vehCD, {}).get('giftID', -1)
 
     def __isFilterEmpty(self, key):
-        return not any((value for value in self.__filters[key].itervalues()))
+        return not any((value for value in itervalues(self.__filters[key])))
 
     def __nationFit(self, vehCD):
         return self.__filters[_NATIONS_KEY_NAME][self.__vehicles[vehCD]['vehicle'].displayedItem.nationName]

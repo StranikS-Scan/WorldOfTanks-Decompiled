@@ -36,7 +36,19 @@ class CGFClientMeta(CGFMeta):
         return [ASPECT.CLIENT, ASPECT.HANGAR]
 
 
-class GetVehicleAppearanceGameObject(Block, CGFClientMeta):
+class HierarchySingletonMixin(object):
+
+    def __init__(self):
+        self._hierarchySingleton = None
+        return
+
+    def _setHierarchySingleton(self, go):
+        if self._hierarchySingleton is None and go is not None:
+            self._hierarchySingleton = CGF.findHierarchySingleton(go.spaceID)
+        return
+
+
+class GetVehicleAppearanceGameObject(Block, CGFClientMeta, HierarchySingletonMixin):
 
     def __init__(self, *args, **kwargs):
         super(GetVehicleAppearanceGameObject, self).__init__(*args, **kwargs)
@@ -46,11 +58,15 @@ class GetVehicleAppearanceGameObject(Block, CGFClientMeta):
     def validate(self):
         return 'GameObject is required' if not self._object.hasValue() else super(GetVehicleAppearanceGameObject, self).validate()
 
+    def onStartScript(self):
+        currentGO = self._object.getValue()
+        self._setHierarchySingleton(currentGO)
+
     def _exec(self):
         currentGO = self._object.getValue()
-        hierarchy = CGF.HierarchyManager(currentGO.spaceID)
-        topGO = hierarchy.getTopMostParent(currentGO)
-        currentGO = hierarchy.findFirstNode(topGO, tankStructure.CgfTankNodes.TANK_ROOT)
+        self._setHierarchySingleton(currentGO)
+        topGO = self._hierarchySingleton.getTopMostParent(currentGO)
+        currentGO = self._hierarchySingleton.findFirstNodeByName(topGO, tankStructure.CgfTankNodes.TANK_ROOT)
         if currentGO is not None:
             goWrapper = GameObjectWrapper(currentGO)
             self._appObject.setValue(weakref.proxy(goWrapper))
@@ -59,7 +75,7 @@ class GetVehicleAppearanceGameObject(Block, CGFClientMeta):
         return
 
 
-class GetVehicleGameObject(Block, CGFClientMeta):
+class GetVehicleGameObject(Block, CGFClientMeta, HierarchySingletonMixin):
 
     def __init__(self, *args, **kwargs):
         super(GetVehicleGameObject, self).__init__(*args, **kwargs)
@@ -69,13 +85,17 @@ class GetVehicleGameObject(Block, CGFClientMeta):
     def validate(self):
         return 'GameObject is required' if not self._object.hasValue() else super(GetVehicleGameObject, self).validate()
 
+    def onStartScript(self):
+        currentGO = self._object.getValue()
+        self._setHierarchySingleton(currentGO)
+
     def _exec(self):
         currentGO = self._object.getValue()
-        hierarchy = CGF.HierarchyManager(currentGO.spaceID)
-        topGO = hierarchy.getTopMostParent(currentGO)
-        isVehicle = topGO.findComponentByType(Vehicle.Vehicle) is not None
+        self._setHierarchySingleton(currentGO)
+        topGO = self._hierarchySingleton.getTopMostParent(currentGO)
+        isVehicle = topGO.hasComponent(Vehicle.Vehicle) is not None
         if not isVehicle:
-            isVehicle = topGO.findComponentByType(SimulatedVehicle.SimulatedVehicle) is not None
+            isVehicle = topGO.hasComponent(SimulatedVehicle.SimulatedVehicle) is not None
         if isVehicle:
             goWrapper = GameObjectWrapper(topGO)
             self._vehicleObject.setValue(weakref.proxy(goWrapper))
@@ -177,10 +197,10 @@ class RocketAcceleratorSettings(Block, CGFClientMeta):
 
 def _extractRACComponent(gameObjectLink):
     go = gameObjectLink.getValue()
-    if not go.isValid():
+    if not go:
         return (None, None, 'Input game object is not valid')
     else:
-        provider = go.findComponentByType(RAC.RocketAccelerationController)
+        provider = go.findWrite(RAC.RocketAccelerationController)
         return (None, None, 'No RocketAccelerationController can be found') if provider is None else (go, provider, None)
 
 

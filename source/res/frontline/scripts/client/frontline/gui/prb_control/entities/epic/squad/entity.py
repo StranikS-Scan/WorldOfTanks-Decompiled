@@ -2,13 +2,13 @@
 # Embedded file name: frontline/scripts/client/frontline/gui/prb_control/entities/epic/squad/entity.py
 from frontline.gui.prb_control.entities.epic.pre_queue.vehicles_watcher import EpicVehiclesWatcher
 from frontline.gui.prb_control.entities.epic.squad.actions_validator import EpicSquadActionsValidator
-from frontline.gui.prb_control.entities.epic.squad.components import EpicRestrictedRoleTagDataProvider
+from frontline.gui.prb_control.entities.epic.squad.components import EpicSquadRestrictionsProvider
 import account_helpers
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.prb_control.entities.base.squad.ctx import SquadSettingsCtx
 from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEntity
-from gui.prb_control.entities.base.squad.mixins import RestrictedRoleTagMixin
+from gui.prb_control.entities.base.squad.mixins import SquadRestrictionsMixin
 from gui.prb_control.entities.random.squad.actions_handler import BalancedSquadActionsHandler
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
 from gui.prb_control.storages import prequeue_storage_getter
@@ -28,7 +28,7 @@ class EpicSquadEntryPoint(SquadEntryPoint):
         unitMgr.createEpicSquad()
 
 
-class EpicSquadEntity(SquadEntity, RestrictedRoleTagMixin):
+class EpicSquadEntity(SquadEntity, SquadRestrictionsMixin):
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
@@ -96,8 +96,8 @@ class EpicSquadEntity(SquadEntity, RestrictedRoleTagMixin):
         return self.lobbyContext.getServerSettings().epicBattles.squadRestrictions
 
     @classmethod
-    def _createRestrictedRoleTagDataProvider(cls):
-        return EpicRestrictedRoleTagDataProvider()
+    def _createSquadRestrictionsProvider(cls):
+        return EpicSquadRestrictionsProvider()
 
     def _createActionsHandler(self):
         return BalancedSquadActionsHandler(self)
@@ -106,7 +106,7 @@ class EpicSquadEntity(SquadEntity, RestrictedRoleTagMixin):
         return EpicSquadActionsValidator(self)
 
     def _vehicleStateCondition(self, v):
-        return self.isTagVehicleAvailable(v.tags) if self.isRoleRestrictionValid() else super(EpicSquadEntity, self)._vehicleStateCondition(v)
+        return self.isVehicleSuitableForSquad(v) if self.isSquadRestrictionValid() else super(EpicSquadEntity, self)._vehicleStateCondition(v)
 
     def _onServerSettingChanged(self, *args, **kwargs):
         self._switchActionsValidator()

@@ -2,11 +2,12 @@
 # Embedded file name: scripts/client/battleground/kill_cam_visuals.py
 import math
 import logging
+import typing
 import BigWorld
 import CGF
-import GenericComponents
 import Math
 import math_utils
+from typing import List
 from cgf_components.highlight_component import HighlightComponent
 from cgf_components.visual_effect_component_manager import ImpactZoneComponent
 from dyn_objects_cache import _KillCamEffectDynObjects
@@ -28,8 +29,10 @@ class EffectsController(CallbackDelayer):
         super(EffectsController, self).__init__()
         self.gameObjects = []
         self.__isActive = False
+        self.__spaceID = None
         dynObjectsCache = dependency.instance(IBattleDynamicObjectsCache)
         self.__effectsPathsConfig = dynObjectsCache.getFeaturesConfig(_KillCamEffectDynObjects.CONFIG_NAME)
+        return
 
     def destroy(self):
         _logger.info('[EffectsController] Destroy Kill Cam Effects')
@@ -43,6 +46,7 @@ class EffectsController(CallbackDelayer):
     def displayKillCamEffects(self, vehicleAppearance, maxComponentIndex, hasProjectilePierced, hasNonPiercedDamage, isSPG, isSpotted, isShellHE, explosionRadius, trajectoryPoints, segments, impactPoint, isRicochet):
         _logger.info('displayKillCamEffects (params): %s %s %s %s %s %s %s %s %s %s %s', vehicleAppearance, maxComponentIndex, hasProjectilePierced, hasNonPiercedDamage, isSPG, isSpotted, isShellHE, explosionRadius, trajectoryPoints, segments, impactPoint)
         self.__isActive = True
+        self.__spaceID = BigWorld.player().spaceID
         if trajectoryPoints[-1] != impactPoint:
             self.__spawnSpacedArmorLine(trajectoryPoints[-1], impactPoint)
             self.__spawnSpacedArmorImpactPoint(trajectoryPoints[-1])
@@ -64,54 +68,47 @@ class EffectsController(CallbackDelayer):
 
     def __removeEdgeDrawer(self):
         for go in self.gameObjects:
-            highlightComponent = go.findComponentByType(HighlightComponent)
-            if highlightComponent:
-                go.removeComponentByType(HighlightComponent)
+            if go.hasComponent(HighlightComponent):
+                go.removeComponent(HighlightComponent)
 
     def __removeGameObjects(self):
         for go in self.gameObjects:
             _logger.info('[EffectsController] Remove - %s', go)
-            CGF.removeGameObject(go)
+            go.destroy()
 
         self.gameObjects = []
 
-    def __tryAddGameObject(self, go):
-        if go is None or not go.isValid():
-            return False
-        elif not self.__isActive:
-            CGF.removeGameObject(go)
-            return False
-        else:
-            self.gameObjects.append(go)
-            return True
-
     def __getLoadCallback(self, callback):
 
-        def callbackWrapper(go):
-            if not self.__tryAddGameObject(go):
-                return
-            callback(go)
+        def callbackWrapper(objects, queue):
+            root = objects[0]
+            if not self.__isActive:
+                return False
+            self.gameObjects.append(queue.gameObject(root))
+            callback(objects, queue)
+            return True
 
         return callbackWrapper
 
     def __spawnHitCone(self, hitPosition, originPosition):
 
-        def cbHitCone(go):
+        def cbHitCone(objects, queue):
+            root = objects[0]
             direction = Math.Vector3(hitPosition - originPosition)
             rotation = Math.Vector3(direction.yaw, direction.pitch, 0)
             maximumPitch = math.radians(_UNSPOTTED_CONE_MAX_PITCH)
             pitch = math_utils.clamp(-maximumPitch, 0, rotation.y)
             rotation = Math.Vector3(rotation.x, pitch, rotation.z)
-            self.__setTransformToGameObject(go, (1, 1, 1), rotation, originPosition)
+            self.__setTransformToGameObject(root, queue, (1, 1, 1), rotation, originPosition)
 
-        CGF.loadGameObject(self.__effectsPathsConfig.cone, BigWorld.player().spaceID, Math.Vector3(0, 0, 0), self.__getLoadCallback(cbHitCone))
+        CGF.loadAndCreatePrefab(self.__effectsPathsConfig.cone, self.__spaceID, Math.Vector3(0, 0, 0), self.__getLoadCallback(cbHitCone))
 
     def __spawnShellTrajectory(self, points, isSpgShot=False, isRicochet=False):
 
-        def cbEmptyTrajectory(go):
+        def cbEmptyTrajectory(objects, queue):
 
-            def cbTrajectoryModel(scale, rotation, position, go):
-                self.__setTransformToGameObject(go, scale, rotation, position)
+            def cbTrajectoryModel(scale, rotation, position, objects, queue):
+                self.__setTransformToGameObject(objects[0], queue, scale, rotation, position)
 
             if not isSpgShot and not isRicochet:
                 lastPoint = points[-1]
@@ -119,65 +116,70 @@ class EffectsController(CallbackDelayer):
                 gradientPoint = (prevPoint - lastPoint) * 0.1 + lastPoint
                 points.insert(-1, gradientPoint)
             ptsLen = len(points)
+            root = objects[0]
+            parentUUID = queue.gameObjectUuid(root)
             for i in range(ptsLen - 1):
                 direction = Math.Vector3(points[i + 1] - points[i])
                 translation = points[i]
                 scale = (LINE_WIDTH, LINE_WIDTH, direction.length / _LENGTH_FACTOR)
                 rotation = Math.Vector3(direction.yaw, direction.pitch, 0)
                 modelPath = self.__effectsPathsConfig.trajectoryGradient if ptsLen - 2 == i else self.__effectsPathsConfig.trajectoryRed
-                CGF.loadGameObjectIntoHierarchy(modelPath, go, Math.Vector3(0, 0, 0), self.__getLoadCallback(partial(cbTrajectoryModel, scale, rotation, translation)))
+                CGF.loadAndCreatePrefabWithParentUUID(modelPath, self.__spaceID, parentUUID, Math.Vector3(0, 0, 0), self.__getLoadCallback(partial(cbTrajectoryModel, scale, rotation, translation)))
 
-        CGF.loadGameObject(self.__effectsPathsConfig.emptyGO, BigWorld.player().spaceID, Math.Vector3(0, 0, 0), self.__getLoadCallback(cbEmptyTrajectory))
+        CGF.loadAndCreatePrefab(self.__effectsPathsConfig.emptyGO, self.__spaceID, Math.Vector3(0, 0, 0), self.__getLoadCallback(cbEmptyTrajectory))
 
     def __spawnImpactPoint(self, hitPosition):
 
-        def cbImpactPoint(go):
-            self.__setTransformToGameObject(go, (1, 1, 1), (0, 0, 0), hitPosition)
+        def cbImpactPoint(objects, queue):
+            self.__setTransformToGameObject(objects[0], queue, (1, 1, 1), (0, 0, 0), hitPosition)
 
-        CGF.loadGameObject(self.__effectsPathsConfig.impactPoint, BigWorld.player().spaceID, Math.Vector3(0, 0, 0), self.__getLoadCallback(cbImpactPoint))
+        CGF.loadAndCreatePrefab(self.__effectsPathsConfig.impactPoint, self.__spaceID, Math.Vector3(0, 0, 0), self.__getLoadCallback(cbImpactPoint))
 
     def __spawnSpacedArmorImpactPoint(self, hitPosition):
 
-        def cbSpacedArmorImpactPoint(go):
-            self.__setTransformToGameObject(go, (1, 1, 1), (0, 0, 0), hitPosition)
+        def cbSpacedArmorImpactPoint(objects, queue):
+            self.__setTransformToGameObject(objects[0], queue, (1, 1, 1), (0, 0, 0), hitPosition)
 
-        CGF.loadGameObject(self.__effectsPathsConfig.spacedArmorImpactPoint, BigWorld.player().spaceID, Math.Vector3(0, 0, 0), self.__getLoadCallback(cbSpacedArmorImpactPoint))
+        CGF.loadAndCreatePrefab(self.__effectsPathsConfig.spacedArmorImpactPoint, self.__spaceID, Math.Vector3(0, 0, 0), self.__getLoadCallback(cbSpacedArmorImpactPoint))
 
     def __spawnSpacedArmorLine(self, originPosition, hitPosition):
 
-        def cbSpacedArmorLine(go):
+        def cbSpacedArmorLine(objects, queue):
             numberOfDots = originPosition.distTo(hitPosition) / _DOTS_SPACING
             spacingVector = (hitPosition - originPosition) / numberOfDots
 
-            def cbSpacedArmorPoint(go):
-                transformComponent = go.findComponentByType(GenericComponents.TransformComponent)
-                self.__setTransformToGameObject(go, (1, 1, 1), (0, 0, 0), transformComponent.position)
+            def cbSpacedArmorPoint(objects, queue):
+                root = objects[0]
+                transformComponent = queue.component(root, CGF.TransformComponent)
+                self.__setTransformToGameObject(root, queue, (1, 1, 1), (0, 0, 0), transformComponent.position)
 
+            parentUUID = queue.gameObjectUuid(objects[0])
             for dotIndex in range(int(numberOfDots)):
                 finalPosition = originPosition + spacingVector * (dotIndex + 1)
-                CGF.loadGameObjectIntoHierarchy(self.__effectsPathsConfig.spacedArmorLinePoint, go, finalPosition, self.__getLoadCallback(cbSpacedArmorPoint))
+                CGF.loadAndCreatePrefabWithParentUUID(self.__effectsPathsConfig.spacedArmorLinePoint, self.__spaceID, parentUUID, finalPosition, self.__getLoadCallback(cbSpacedArmorPoint))
 
-        CGF.loadGameObject(self.__effectsPathsConfig.emptyGO, BigWorld.player().spaceID, Math.Vector3(0, 0, 0), self.__getLoadCallback(cbSpacedArmorLine))
+        CGF.loadAndCreatePrefab(self.__effectsPathsConfig.emptyGO, self.__spaceID, Math.Vector3(0, 0, 0), self.__getLoadCallback(cbSpacedArmorLine))
 
     def __spawnExplosionSphere(self, position, radius):
 
-        def cbExplosionSphere(go):
+        def cbExplosionSphere(objects, queue):
             BigWorld.setEdgeDrawerImpenetratableZoneOverlay(0)
             BigWorld.setEdgeDrawerPenetratableZoneOverlay(0)
-            self.__setTransformToGameObject(go, (radius, radius, radius), (0, 0, 0), position)
+            self.__setTransformToGameObject(objects[0], queue, (radius, radius, radius), (0, 0, 0), position)
 
-        CGF.loadGameObject(self.__effectsPathsConfig.explosionSphere, BigWorld.player().spaceID, Math.Vector3(0, 0, 0), self.__getLoadCallback(cbExplosionSphere))
+        CGF.loadAndCreatePrefab(self.__effectsPathsConfig.explosionSphere, self.__spaceID, Math.Vector3(0, 0, 0), self.__getLoadCallback(cbExplosionSphere))
 
     def __spawnImpactZone(self, segments, vehicleAppearance, maxComponentIndex):
 
-        def cbImpactZone(go):
-            go.createComponent(ImpactZoneComponent, segments, vehicleAppearance, maxComponentIndex)
+        def cbImpactZone(objects, queue):
+            root = objects[0]
+            queue.createComponent(root, ImpactZoneComponent, segments, vehicleAppearance, maxComponentIndex)
 
-        CGF.loadGameObject(self.__effectsPathsConfig.emptyGO, BigWorld.player().spaceID, Math.Vector3(0, 0, 0), self.__getLoadCallback(cbImpactZone))
+        CGF.loadAndCreatePrefab(self.__effectsPathsConfig.emptyGO, self.__spaceID, Math.Vector3(0, 0, 0), self.__getLoadCallback(cbImpactZone))
 
     @staticmethod
-    def __setTransformToGameObject(go, scale, rotationYPR, position):
-        transformComponent = go.findComponentByType(GenericComponents.TransformComponent)
+    def __setTransformToGameObject(pending, queue, scale, rotationYPR, position):
+        transformComponent = queue.component(pending, CGF.TransformComponent)
         transformComponent.position = position
         transformComponent.scale = scale
         transformComponent.rotationYPR = rotationYPR

@@ -1,20 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/cgf_components/zone_components.py
+from __future__ import absolute_import, division
 import functools
 import logging
 import BigWorld
 import CGF
-import GenericComponents
 import Triggers
 import UIComponents
-from cgf_script.component_meta_class import ComponentProperty as CompProp, CGFMetaTypes, registerComponent
-from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery, onProcessQuery, autoregister
-from constants import IS_CLIENT, IS_CGF_DUMP
+from cgf_script.registration import ComponentProperty as CompProp, registerComponent
+from constants import IS_CLIENT, IS_CGF_DUMP, IS_EDITOR
 from helpers import dependency
 from hints.battle import manager as battleHintsModelsMgr
-from cgf_common.cgf_helpers import getVehicleEntityByGameObject
 from PlayerEvents import g_playerEvents
 from helpers import isPlayerAvatar
+from GenericComponents import TimedActivatedComponent
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from typing import Optional
 if IS_CLIENT:
     from skeletons.gui.battle_session import IBattleSessionProvider
     from gui.battle_control import avatar_getter
@@ -25,6 +27,14 @@ else:
         pass
 
 
+if IS_EDITOR or IS_CGF_DUMP:
+
+    class Vehicle(object):
+        pass
+
+
+else:
+    from Vehicle import Vehicle
 _logger = logging.getLogger(__name__)
 
 def _isAvatarReady():
@@ -50,11 +60,11 @@ class WeatherZoneUINotificationType(object):
 @registerComponent
 class ZoneMarker(object):
     category = 'UI'
-    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
     editorTitle = 'Zone Marker'
-    isVisibleOnMinimap = CompProp(type=CGFMetaTypes.BOOL, value=True, editorName='Visible on minimap')
-    isVisibleOn3DScene = CompProp(type=CGFMetaTypes.BOOL, value=False, editorName='Visible on 3D scene')
-    reduceDuration = CompProp(type=CGFMetaTypes.FLOAT, value=0.0, editorName='Duration reduce')
+    domain = CGF.Domain.ClientEditor
+    isVisibleOnMinimap = CompProp(type=CGF.PropertyType.Bool, value=True, editorName='Visible on minimap')
+    isVisibleOn3DScene = CompProp(type=CGF.PropertyType.Bool, value=False, editorName='Visible on 3D scene')
+    reduceDuration = CompProp(type=CGF.PropertyType.Float, value=0.0, editorName='Duration reduce')
 
     def __init__(self):
         super(ZoneMarker, self).__init__()
@@ -81,10 +91,10 @@ class ZoneMarker(object):
 @registerComponent
 class WeatherZoneUINotification(object):
     category = 'UI'
-    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
     editorTitle = 'Zone with weather UI Notification'
-    trigger = CompProp(type=CGFMetaTypes.LINK, editorName='Trigger', value=Triggers.AreaTriggerComponent)
-    zoneType = CompProp(type=CGFMetaTypes.STRING, editorName='Zone Type', value=WeatherZoneUINotificationType.BLIZZARD_ZONE, annotations={'comboBox': {WeatherZoneUINotificationType.BLIZZARD_ZONE: WeatherZoneUINotificationType.BLIZZARD_ZONE,
+    domain = CGF.Domain.ClientEditor
+    trigger = CompProp(type=CGF.PropertyType.Link, editorName='Trigger', value=Triggers.AreaTriggerComponent)
+    zoneType = CompProp(type=CGF.PropertyType.String, editorName='Zone Type', value=WeatherZoneUINotificationType.BLIZZARD_ZONE, annotations={'comboBox': {WeatherZoneUINotificationType.BLIZZARD_ZONE: WeatherZoneUINotificationType.BLIZZARD_ZONE,
                   WeatherZoneUINotificationType.FIRE_ZONE: WeatherZoneUINotificationType.FIRE_ZONE,
                   WeatherZoneUINotificationType.FOG_ZONE: WeatherZoneUINotificationType.FOG_ZONE,
                   WeatherZoneUINotificationType.RAIN_ZONE: WeatherZoneUINotificationType.RAIN_ZONE,
@@ -103,7 +113,7 @@ class WeatherZoneUINotification(object):
 
 def getHints():
     if IS_CGF_DUMP:
-        return dict()
+        return {}
     battleHintsModelsMgr.init()
     return {v.uniqueName:v.uniqueName for v in battleHintsModelsMgr.get().getAll()}
 
@@ -111,10 +121,10 @@ def getHints():
 @registerComponent
 class ZoneHint(object):
     category = 'UI'
-    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
     editorTitle = 'Zone hint'
-    trigger = CompProp(type=CGFMetaTypes.LINK, editorName='Trigger', value=Triggers.AreaTriggerComponent)
-    hintUniqName = CompProp(type=CGFMetaTypes.STRING, editorName='zone battle hint', value='', annotations={'comboBox': getHints()})
+    domain = CGF.Domain.ClientEditor
+    trigger = CompProp(type=CGF.PropertyType.Link, editorName='Trigger', value=Triggers.AreaTriggerComponent)
+    hintUniqName = CompProp(type=CGF.PropertyType.String, editorName='zone battle hint', value='', annotations={'comboBox': getHints()})
 
     def __init__(self):
         super(ZoneHint, self).__init__()
@@ -128,10 +138,10 @@ class ZoneHint(object):
 @registerComponent
 class RandomEventZoneUINotification(object):
     category = 'UI'
-    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
     editorTitle = 'Zone with timer UI Notification'
-    trigger = CompProp(type=CGFMetaTypes.LINK, editorName='Trigger', value=Triggers.AreaTriggerComponent)
-    zoneType = CompProp(type=CGFMetaTypes.STRING, editorName='Zone Type', value=RandomEventZoneUINotificationType.DANGER_ZONE, annotations={'comboBox': {RandomEventZoneUINotificationType.WARNING_ZONE: RandomEventZoneUINotificationType.WARNING_ZONE,
+    domain = CGF.Domain.ClientEditor
+    trigger = CompProp(type=CGF.PropertyType.Link, editorName='Trigger', value=Triggers.AreaTriggerComponent)
+    zoneType = CompProp(type=CGF.PropertyType.String, editorName='Zone Type', value=RandomEventZoneUINotificationType.DANGER_ZONE, annotations={'comboBox': {RandomEventZoneUINotificationType.WARNING_ZONE: RandomEventZoneUINotificationType.WARNING_ZONE,
                   RandomEventZoneUINotificationType.DANGER_ZONE: RandomEventZoneUINotificationType.DANGER_ZONE,
                   RandomEventZoneUINotificationType.MAP_DEATH_ZONE: RandomEventZoneUINotificationType.MAP_DEATH_ZONE}})
 
@@ -149,122 +159,134 @@ class RandomEventZoneUINotification(object):
         return self.finishTime >= BigWorld.serverTime()
 
 
-@autoregister(presentInAllWorlds=True, domain=CGF.DomainOption.DomainClient)
-class MapZoneManager(CGF.ComponentManager):
+class MapZoneSystem(CGF.System):
     __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
-    queryRandomEventUINotifications = CGF.QueryConfig(RandomEventZoneUINotification)
-    queryWeatherUINotifications = CGF.QueryConfig(WeatherZoneUINotification)
-    queryZoneHints = CGF.QueryConfig(ZoneHint)
+    RandomEventUINotificationsActivated = CGF.ActivateReaction(CGF.GameObject, CGF.ReactRw(RandomEventZoneUINotification))
+    RandomEventUINotificationsDeactivated = CGF.DeactivateReaction(CGF.ReactRw(RandomEventZoneUINotification))
+    RandomEventUINotificationsIterate = CGF.IterateReaction(CGF.ActiveOnly, CGF.Rw(RandomEventZoneUINotification))
+    RandomEventUIAndTimerActivated = CGF.ActivateReaction(CGF.Rw(RandomEventZoneUINotification), CGF.ReactRo(TimedActivatedComponent))
+    RandomEventUINotificationsAccess = CGF.AccessReaction(CGF.Rw(RandomEventZoneUINotification))
+    WeatherUINotificationsActivated = CGF.ActivateReaction(CGF.GameObject, CGF.ReactRw(WeatherZoneUINotification))
+    WeatherUINotificationsDeactivated = CGF.DeactivateReaction(CGF.ReactRw(WeatherZoneUINotification))
+    WeatherUINotificationsIterate = CGF.IterateReaction(CGF.ActiveOnly, CGF.Rw(WeatherZoneUINotification))
+    WeatherUINotificationsAccess = CGF.AccessReaction(CGF.Rw(WeatherZoneUINotification))
+    ZoneHintsIterate = CGF.IterateReaction(CGF.ActiveOnly, CGF.Rw(ZoneHint))
+    ZoneHintsActivated = CGF.ActivateReaction(CGF.GameObject, CGF.ReactRw(ZoneHint))
+    ZoneHintsDeactivated = CGF.DeactivateReaction(CGF.ReactRw(ZoneHint))
+    ZoneHintsAccess = CGF.AccessReaction(CGF.Rw(ZoneHint))
+    ZoneMarkerActivated = CGF.ActivateReaction(CGF.GameObject, CGF.ReactRw(ZoneMarker), CGF.TransformComponent)
+    ZoneMarkerDeactivated = CGF.DeactivateReaction(CGF.ReactRw(ZoneMarker))
+    ZoneMarkerIterate = CGF.IterateReaction(CGF.ActiveOnly, CGF.Rw(ZoneMarker))
+    ZoneMarkerAndTimerActivated = CGF.ActivateReaction(CGF.Rw(ZoneMarker), CGF.ReactRo(TimedActivatedComponent))
+    ZoneMarkerAccess = CGF.AccessReaction(CGF.Rw(ZoneMarker))
+    MinimapChangerActivated = CGF.ActivateReaction(CGF.GameObject, CGF.ReactRw(UIComponents.MinimapChangerComponent))
+    MinimapChangerDeactivated = CGF.DeactivateReaction(CGF.ReactRw(UIComponents.MinimapChangerComponent))
+    MinimapChangerAccess = CGF.AccessReaction(CGF.Rw(UIComponents.MinimapChangerComponent))
+    VehicleAccess = CGF.AccessReaction(CGF.Rw(Vehicle))
+    AreaTriggerAccess = CGF.AccessReaction(CGF.Rw(Triggers.AreaTriggerComponent))
+    Reactions = CGF.Reactions(RandomEventUINotificationsIterate, WeatherUINotificationsIterate, ZoneHintsIterate, ZoneMarkerActivated, ZoneMarkerDeactivated, ZoneMarkerIterate, ZoneMarkerAccess, RandomEventUINotificationsActivated, RandomEventUINotificationsDeactivated, RandomEventUINotificationsAccess, WeatherUINotificationsActivated, WeatherUINotificationsDeactivated, WeatherUINotificationsAccess, ZoneHintsActivated, ZoneHintsDeactivated, ZoneHintsAccess, MinimapChangerActivated, MinimapChangerDeactivated, MinimapChangerAccess, RandomEventUIAndTimerActivated, ZoneMarkerAndTimerActivated, VehicleAccess, AreaTriggerAccess)
 
     def __init__(self):
-        super(MapZoneManager, self).__init__()
+        super(MapZoneSystem, self).__init__()
         self.__subscriptionsCount = 0
 
-    def activate(self):
+    def onMappingLoaded(self):
         if _isAvatarReady():
             self.__onAvatarReady()
         else:
             g_playerEvents.onAvatarReady += self.__onAvatarReady
 
-    def deactivate(self):
+    def onMappingUnloaded(self):
         self.__subscriptionsCount = 0
         g_playerEvents.onAvatarReady -= self.__onAvatarReady
         if BigWorld.player() and isPlayerAvatar():
             BigWorld.player().onVehicleLeaveWorld -= self.__onVehicleLeaveWorld
 
-    @onAddedQuery(CGF.GameObject, ZoneMarker, GenericComponents.TransformComponent, tickGroup='PostHierarchy')
-    def onMarkerToZoneAdded(self, go, zoneMarker, transform):
-        _logger.debug('on marker to zone added')
-        zoneMarker.id = go.id
-        mapZones = self.__guiSessionProvider.shared.mapZones
-        if mapZones:
-            mapZones.addMarkerToZone(zoneMarker, transform.worldTransform)
+    def commonUpdate(self):
+        triggerAccess = self.reaction(self.AreaTriggerAccess)
+        for marker in self.reaction(self.ZoneMarkerDeactivated):
+            _logger.debug('on maker from zone removed')
+            mapZones = self.__guiSessionProvider.shared.mapZones
+            if mapZones:
+                mapZones.removeMarkerFromZone(marker)
 
-    @onRemovedQuery(ZoneMarker)
-    def onMakerFromZoneRemoved(self, zoneMarker):
-        _logger.debug('on maker from zone removed')
-        mapZones = self.__guiSessionProvider.shared.mapZones
-        if mapZones:
-            mapZones.removeMarkerFromZone(zoneMarker)
+        for notification in self.reaction(self.RandomEventUINotificationsDeactivated):
+            _logger.debug('on random event zone removed')
+            self.__unsubscribeTrigger(notification, triggerAccess)
+            mapZones = self.__guiSessionProvider.shared.mapZones
+            if mapZones:
+                mapZones.removeRandomEventZone(notification)
 
-    @onProcessQuery(ZoneMarker, tickGroup='Simulation', period=1.0)
-    def onMarkerUpdated(self, zoneMarker):
-        _logger.debug('on marker updated')
-        mapZones = self.__guiSessionProvider.shared.mapZones
-        if mapZones:
-            mapZones.onMarkerProgressUpdated(zoneMarker)
+        for notification in self.reaction(self.WeatherUINotificationsDeactivated):
+            _logger.debug('on weather zone removed')
+            self.__unsubscribeTrigger(notification, triggerAccess)
+            mapZones = self.__guiSessionProvider.shared.mapZones
+            if mapZones:
+                mapZones.removeWeatherZone(notification)
 
-    @onAddedQuery(CGF.GameObject, RandomEventZoneUINotification)
-    def onRandomEventZoneUINotificationAdded(self, go, randomEventZoneUINotification):
-        _logger.debug('on random event zone added')
-        self.__subscribeTrigger(go, randomEventZoneUINotification, self.__onEnterRandomEventZone, self.__onExitRandomEventZone)
+        for hint in self.reaction(self.ZoneHintsDeactivated):
+            _logger.debug('on zone hint removed')
+            self.__unsubscribeTrigger(hint, triggerAccess)
 
-    @onRemovedQuery(RandomEventZoneUINotification)
-    def onRandomEventZoneUINotificationRemoved(self, randomEventZoneUINotification):
-        _logger.debug('on random event zone removed')
-        self.__unsubscribeTrigger(randomEventZoneUINotification)
-        mapZones = self.__guiSessionProvider.shared.mapZones
-        if mapZones:
-            mapZones.removeRandomEventZone(randomEventZoneUINotification)
+        for changer in self.reaction(self.MinimapChangerDeactivated):
+            _logger.debug('on transformed zone removed: %s', changer.layerId)
+            mapZones = self.__guiSessionProvider.shared.mapZones
+            if mapZones:
+                mapZones.removeTransformedZone(changer)
 
-    @onAddedQuery(CGF.GameObject, WeatherZoneUINotification)
-    def onWeatherZoneUINotificationAdded(self, go, weatherEventZoneUINotification):
-        _logger.debug('on weather zone added')
-        self.__subscribeTrigger(go, weatherEventZoneUINotification, self.__onEnterWeatherZone, self.__onExitWeatherZone)
+        minimapChangerAccess = self.reaction(self.MinimapChangerAccess)
+        for go, changer in self.reaction(self.MinimapChangerActivated):
+            _logger.debug('on transformed zone added: %s', changer.layerId)
+            mapZones = self.__guiSessionProvider.shared.mapZones
+            if mapZones:
+                mapZones.addTransformedZone(lambda go=go: minimapChangerAccess.find(go))
 
-    @onRemovedQuery(WeatherZoneUINotification)
-    def onWeatherZoneUINotificationRemoved(self, weatherEventZoneUINotification):
-        _logger.debug('on weather zone removed')
-        self.__unsubscribeTrigger(weatherEventZoneUINotification)
-        mapZones = self.__guiSessionProvider.shared.mapZones
-        if mapZones:
-            mapZones.removeWeatherZone(weatherEventZoneUINotification)
+        for zone, timed in self.reaction(self.ZoneMarkerAndTimerActivated):
+            reduce = max(zone.reduceDuration, 0.0)
+            zone.startTime = timed.serverStartTime
+            zone.finishTime = max(timed.serverStartTime, timed.serverEndTime - reduce)
 
-    @onAddedQuery(CGF.GameObject, ZoneHint)
-    def onZoneHintAdded(self, go, zoneHint):
-        _logger.debug('on zone hint added')
-        self.__subscribeTrigger(go, zoneHint, self.__onEnterZoneHint, self.__onExitZoneHint)
+        for zone, timed in self.reaction(self.RandomEventUIAndTimerActivated):
+            zone.startTime = timed.serverStartTime
+            zone.finishTime = timed.serverEndTime
 
-    @onRemovedQuery(ZoneHint)
-    def onZoneHintRemoved(self, zoneHint):
-        _logger.debug('on zone hint removed')
-        self.__unsubscribeTrigger(zoneHint)
+        for go, hint in self.reaction(self.ZoneHintsActivated):
+            _logger.debug('on zone hint added')
+            self.__subscribeTrigger(go, hint, self.ZoneHintsAccess, triggerAccess, self.__onEnterZoneHint, self.__onExitZoneHint)
 
-    @onAddedQuery(UIComponents.MinimapChangerComponent)
-    def onTransformedZoneAdded(self, changer):
-        _logger.debug('on transformed zone added: %s', changer.layerId)
-        mapZones = self.__guiSessionProvider.shared.mapZones
-        if mapZones:
-            mapZones.addTransformedZone(changer)
+        for go, notification in self.reaction(self.WeatherUINotificationsActivated):
+            _logger.debug('on weather zone added')
+            self.__subscribeTrigger(go, notification, self.WeatherUINotificationsAccess, triggerAccess, self.__onEnterWeatherZone, self.__onExitWeatherZone)
 
-    @onRemovedQuery(UIComponents.MinimapChangerComponent)
-    def onTransformedZoneRemoved(self, changer):
-        _logger.debug('on transformed zone removed: %s', changer.layerId)
-        mapZones = self.__guiSessionProvider.shared.mapZones
-        if mapZones:
-            mapZones.removeTransformedZone(changer)
+        for go, notification in self.reaction(self.RandomEventUINotificationsActivated):
+            _logger.debug('on random event zone added')
+            self.__subscribeTrigger(go, notification, self.RandomEventUINotificationsAccess, triggerAccess, self.__onEnterRandomEventZone, self.__onExitRandomEventZone)
 
-    @onAddedQuery(ZoneMarker, GenericComponents.TimedActivatedComponent)
-    def onActivationAndZone(self, marker, activator):
-        reduce = max(marker.reduceDuration, 0.0)
-        marker.startTime = activator.serverStartTime
-        marker.finishTime = max(activator.serverStartTime, activator.serverEndTime - reduce)
+        zoneMarkerAccess = self.reaction(self.ZoneMarkerAccess)
+        for go, marker, tr in self.reaction(self.ZoneMarkerActivated):
+            _logger.debug('on marker to zone added')
+            marker.id = go.id
+            mapZones = self.__guiSessionProvider.shared.mapZones
+            if mapZones:
+                mapZones.addMarkerToZone(lambda go=go: zoneMarkerAccess.find(go), tr.worldTransform)
 
-    @onAddedQuery(RandomEventZoneUINotification, GenericComponents.TimedActivatedComponent)
-    def onActivationMarker(self, zone, activator):
-        zone.startTime = activator.serverStartTime
-        zone.finishTime = activator.serverEndTime
+    def periodUpdate(self):
+        for marker in self.reaction(self.ZoneMarkerIterate):
+            _logger.debug('on marker updated')
+            mapZones = self.__guiSessionProvider.shared.mapZones
+            if mapZones:
+                mapZones.onMarkerProgressUpdated(marker)
 
-    def __subscribeTrigger(self, go, zone, enterCallback, exitCallback):
+    def __subscribeTrigger(self, go, zone, zoneAccessType, triggerAccess, enterCallback, exitCallback):
         zone.id = go.id
-        trigger = zone.trigger()
+        trigger = triggerAccess.find(zone.trigger)
         if trigger:
             self.__subscribeVehicleChanges()
-            zone.enterReactionID = trigger.addEnterReaction(functools.partial(self.__onEnterZone, zone, enterCallback))
-            zone.exitReactionID = trigger.addExitReaction(functools.partial(self.__onExitZone, zone, exitCallback))
+            zone.enterReactionID = trigger.addEnterReaction(functools.partial(self.__onEnterZone, go, enterCallback, zoneAccessType))
+            zone.exitReactionID = trigger.addExitReaction(functools.partial(self.__onExitZone, go, exitCallback, zoneAccessType))
 
-    def __unsubscribeTrigger(self, zone):
-        trigger = zone.trigger()
+    def __unsubscribeTrigger(self, zone, triggerAccess):
+        trigger = triggerAccess.find(zone.trigger)
         if trigger:
             self.__unsubscribeVehicleChanges()
             if zone.enterReactionID:
@@ -272,19 +294,27 @@ class MapZoneManager(CGF.ComponentManager):
             if zone.exitReactionID:
                 trigger.removeExitReaction(zone.exitReactionID)
 
-    def __onEnterZone(self, zoneNotification, enterCallback, go, _):
-        vehicle = getVehicleEntityByGameObject(go)
-        if vehicle:
-            zoneNotification.inZoneVehicles.add(vehicle.id)
+    def __onEnterZone(self, go, enterCallback, zoneAccessType, who, _):
+        zoneAccess = self.reaction(zoneAccessType)
+        vehicleAccess = self.reaction(self.VehicleAccess)
+        vehicle = CGF.findParentWithReaction(who, vehicleAccess)
+        zone = zoneAccess.find(go)
+        if vehicle and zone and zone is not None:
+            zone.inZoneVehicles.add(vehicle.id)
             if vehicle.id == avatar_getter.getVehicleIDAttached() and vehicle.isAlive():
-                enterCallback(zoneNotification)
+                enterCallback(zone)
+        return
 
-    def __onExitZone(self, zoneNotification, exitCallback, go, _):
-        vehicle = getVehicleEntityByGameObject(go)
-        if vehicle:
-            zoneNotification.inZoneVehicles.discard(vehicle.id)
+    def __onExitZone(self, go, exitCallback, zoneAccessType, who, _):
+        zoneAccess = self.reaction(zoneAccessType)
+        vehicleAccess = self.reaction(self.VehicleAccess)
+        vehicle = CGF.findParentWithReaction(who, vehicleAccess)
+        zone = zoneAccess.find(go)
+        if vehicle and zone and zone is not None:
+            zone.inZoneVehicles.discard(vehicle.id)
             if vehicle.id == avatar_getter.getVehicleIDAttached():
-                exitCallback(zoneNotification)
+                exitCallback(zone)
+        return
 
     def __onEnterRandomEventZone(self, zoneNotification):
         _logger.debug('on enter random event zone')
@@ -348,11 +378,11 @@ class MapZoneManager(CGF.ComponentManager):
         if avatarVehicle is None or not avatarVehicle.isAlive() or mapZones is None:
             return
         else:
-            for reZone in sorted([ zone for zone in self.queryRandomEventUINotifications ], key=lambda z: z.zoneType == RandomEventZoneUINotificationType.DANGER_ZONE, reverse=True):
+            for reZone in sorted(self.reaction(self.RandomEventUINotificationsIterate), key=lambda z: z.zoneType == RandomEventZoneUINotificationType.DANGER_ZONE, reverse=True):
                 if avatarVehicle.id in reZone.inZoneVehicles:
                     mapZones.enterRandomEventZone(reZone)
 
-            for wZone in self.queryWeatherUINotifications:
+            for wZone in self.reaction(self.WeatherUINotificationsIterate):
                 if avatarVehicle.id in wZone.inZoneVehicles:
                     mapZones.enterWeatherZone(wZone)
 
@@ -362,11 +392,11 @@ class MapZoneManager(CGF.ComponentManager):
         BigWorld.player().onVehicleLeaveWorld += self.__onVehicleLeaveWorld
 
     def __onVehicleLeaveWorld(self, vehicle):
-        for reZone in self.queryRandomEventUINotifications:
+        for reZone in self.reaction(self.RandomEventUINotificationsIterate):
             reZone.inZoneVehicles.discard(vehicle.id)
 
-        for wZone in self.queryWeatherUINotifications:
+        for wZone in self.reaction(self.WeatherUINotificationsIterate):
             wZone.inZoneVehicles.discard(vehicle.id)
 
-        for hintZone in self.queryZoneHints:
+        for hintZone in self.reaction(self.ZoneHintsIterate):
             hintZone.inZoneVehicles.discard(vehicle.id)

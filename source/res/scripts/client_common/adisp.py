@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/adisp.py
+from __future__ import absolute_import
 import os
 import types
 from functools import partial, wraps
@@ -13,7 +14,7 @@ class CallbackDispatcher(object):
         self.g = generator
         self.stepCallback = stepCallback
         try:
-            self.call(self.g.next())
+            self.call(next(self.g))
         except StopIteration:
             self.stepCallback(True)
 

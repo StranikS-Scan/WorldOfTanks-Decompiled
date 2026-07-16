@@ -1344,6 +1344,9 @@ class QUESTS(object):
     BONUSNAME_BADGES = '#quests:bonusName/badges'
     BONUSNAME_ADDITIONAL_BONUSES = '#quests:bonusName/additional_bonuses'
     BONUSNAME_OPTIONAL_DEVICES_ASSISTANT = '#quests:bonusName/optional_devices_assistant'
+    BONUSNAME_ATTACHMENTS_SET_DEFAULT = '#quests:bonusName/attachments_set/default'
+    BONUSNAME_ATTACHMENTS_SET_OCEANICSENTINEL = '#quests:bonusName/attachments_set/oceanicSentinel'
+    BONUSNAME_ATTACHMENTS_SET_CHALLENGERSBOUNTY = '#quests:bonusName/attachments_set/challengersBounty'
     ACTION_AUTO_CALENDAR = '#quests:action/auto/calendar'
     ACTION_FULL_CALENDAR = '#quests:action/full/calendar'
     ACTION_HERO_FULL_CALENDAR = '#quests:action/hero/full/calendar'
@@ -1842,7 +1845,10 @@ class QUESTS(object):
      BONUSNAME_BATTLE_BONUSES,
      BONUSNAME_BADGES,
      BONUSNAME_ADDITIONAL_BONUSES,
-     BONUSNAME_OPTIONAL_DEVICES_ASSISTANT)
+     BONUSNAME_OPTIONAL_DEVICES_ASSISTANT,
+     BONUSNAME_ATTACHMENTS_SET_DEFAULT,
+     BONUSNAME_ATTACHMENTS_SET_OCEANICSENTINEL,
+     BONUSNAME_ATTACHMENTS_SET_CHALLENGERSBOUNTY)
     ACTION_ENUM = (ACTION_AUTO_CALENDAR,
      ACTION_FULL_CALENDAR,
      ACTION_HERO_FULL_CALENDAR,

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/sound_ctrls/stronghold_battle_sounds.py
+from __future__ import absolute_import
 import random
 import typing
 import BigWorld
@@ -199,7 +200,8 @@ class _AOEZoneSoundPlayer(VehicleStateSoundPlayer, CallbackDelayer):
             if isinstance(equipment, artefacts.AttackArtilleryFortEquipment):
                 if longestZone is None:
                     longestZone = zone
-                elif longestZone['endTime'] < zone['endTime']:
+                    continue
+                if longestZone['endTime'] < zone['endTime']:
                     longestZone = zone
 
         return longestZone

@@ -3,11 +3,9 @@
 import BigWorld
 import CGF
 import Math
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
+from typing import List, Any
 from battle_royale.gui.constants import BattleRoyaleEquipments
-from cgf_script.bonus_caps_rules import bonusCapsManager
-from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
-from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery
+from cgf_script.registration import ComponentProperty, registerComponent
 from constants import IS_CLIENT
 from Event import EventsSubscriber
 from helpers import dependency
@@ -41,38 +39,48 @@ _NODE_NAME_IDX = {TankNodeNames.TURRET_JOINT: 0,
 @registerComponent
 class ShotPassionComponent(object):
     editorTitle = 'Shot Passion Component'
-    category = 'Abilities'
-    domain = CGF.DomainOption.DomainClient
-    turretNode = ComponentProperty(type=CGFMetaTypes.LINK, value=CGF.GameObject, editorName='Turret Node')
-    gunNode = ComponentProperty(type=CGFMetaTypes.LINK, value=CGF.GameObject, editorName='Gun Node')
+    group = 'Abilities'
+    domain = CGF.Domain.Client
+    turretNode = ComponentProperty(type=CGF.PropertyType.Link, value=CGF.GameObject, editorName='Turret Node')
+    gunNode = ComponentProperty(type=CGF.PropertyType.Link, value=CGF.GameObject, editorName='Gun Node')
 
 
 @registerComponent
 class ShotPassionNodeComponent(object):
     editorTitle = 'Shot Passion Node Component'
-    category = 'Abilities'
-    domain = CGF.DomainOption.DomainClient
-    effectTemplate = ComponentProperty(type=CGFMetaTypes.STRING, value='', editorName='Effect Template')
-    maxAnimationStage = ComponentProperty(type=CGFMetaTypes.INT, value=0, editorName='Max animation stage')
+    group = 'Abilities'
+    domain = CGF.Domain.Client
+    effectTemplate = ComponentProperty(type=CGF.PropertyType.String, value='', editorName='Effect Template')
+    maxAnimationStage = ComponentProperty(type=CGF.PropertyType.Int, value=0, editorName='Max animation stage')
 
 
-@bonusCapsManager(ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, CGF.DomainOption.DomainClient)
-class ShotPassionManager(CGF.ComponentManager):
+class ShotPassionSystem(CGF.System):
     __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
+    VehicleShotPassionActivated = CGF.ActivateReaction(CGF.ReactRw(VehicleShotPassionComponent))
+    UpgradeDeactivated = CGF.DeactivateReaction(CGF.ReactRo(UpgradeInProgressComponent), CGF.Rw(VehicleShotPassionComponent))
+    ShotPassionAccess = CGF.AccessReaction(CGF.Rw(ShotPassionComponent))
+    ShotPassionNodeAccess = CGF.AccessReaction(CGF.Rw(ShotPassionNodeComponent))
+    Reactions = CGF.Reactions(VehicleShotPassionActivated, UpgradeDeactivated, ShotPassionAccess, ShotPassionNodeAccess)
+
+    def update(self):
+        for _, shotPassionComponent in self.reaction(self.UpgradeDeactivated):
+            self.inBattleUpgradeCompleted(shotPassionComponent)
+
+        for shotPassionComponent in self.reaction(self.VehicleShotPassionActivated):
+            self.visualizeShotPassion(shotPassionComponent)
 
     def __init__(self):
-        super(ShotPassionManager, self).__init__()
+        super(ShotPassionSystem, self).__init__()
         self.__eventSubscriber = None
         return
 
-    def deactivate(self):
+    def onMappingUnloaded(self):
         if self.__eventSubscriber is not None:
             self.__eventSubscriber.unsubscribeFromAllEvents()
             self.__eventSubscriber = None
         return
 
-    @onAddedQuery(VehicleShotPassionComponent, CGF.GameObject)
-    def visualizeShotPassion(self, shotPassionComponent, go):
+    def visualizeShotPassion(self, shotPassionComponent):
         if self.__eventSubscriber is None:
             self.__eventSubscriber = EventsSubscriber()
             self.__eventSubscriber.subscribeToContextEvent(self.__guiSessionProvider.shared.vehicleState.onEquipmentComponentUpdated, self.__onEquipmentComponentUpdated, VehicleShotPassionComponent.EQUIPMENT_NAME)
@@ -81,59 +89,87 @@ class ShotPassionManager(CGF.ComponentManager):
 
     def endShotPassion(self, vehicle):
 
-        def postloadSetup(go):
-            go.createComponent(GenericComponents.RedirectorComponent, vehicle.appearance.gameObject)
+        def postloadSetup(objects, queue):
+            root = objects[0]
+            queue.createComponent(root, GenericComponents.RedirectorComponent, vehicle.appearance.gameObject)
 
         if vehicle is not None and vehicle.isAlive() and vehicle.appearance:
             equipmentID = vehicles.g_cache.equipmentIDs().get(VehicleShotPassionComponent.EQUIPMENT_NAME)
             equipment = vehicles.g_cache.equipments()[equipmentID]
-            CGF.loadGameObjectIntoHierarchy(equipment.posteffectPrefab, vehicle.appearance.partsGameObjects.getPartGameObject(TankNodeNames.GUN_INCLINATION, vehicle.appearance.gameObject.spaceID, vehicle.appearance.gameObject), Math.Vector3(0, 0, 0), postloadSetup)
+            CGF.loadAndCreatePrefabWithParent(equipment.posteffectPrefab, vehicle.appearance.partsGameObjects.getPartGameObject(TankNodeNames.GUN_INCLINATION, vehicle.appearance.gameObject.spaceID, vehicle.appearance.gameObject), Math.Vector3(0, 0, 0), postloadSetup)
         return
 
     def __launch(self, vehicleShotPassionComponent):
-        appearance = vehicleShotPassionComponent.entity.appearance
+        vehicle = vehicleShotPassionComponent.entity
+        if vehicle.isDestroyed:
+            return
+        appearance = vehicle.appearance
+        stage = vehicleShotPassionComponent.stage
+        finishTime = vehicleShotPassionComponent.finishTime
 
-        def postloadSetup(go):
-            shotPassionComponent = go.findComponentByType(ShotPassionComponent)
-            stage = vehicleShotPassionComponent.stage
-            self.__setupVFX(shotPassionComponent.gunNode, stage, appearance, TankPartNames.GUN)
-            self.__setupVFX(shotPassionComponent.turretNode, stage, appearance, TankPartNames.TURRET)
-            go.createComponent(GenericComponents.RemoveGoDelayedComponent, vehicleShotPassionComponent.finishTime - BigWorld.serverTime())
+        def postloadSetup(root, _, queue):
+            shotPassionComponent = queue.component(root, ShotPassionComponent)
+            gun = queue.pendingGameObject(shotPassionComponent.gunNode)
+            turret = queue.pendingGameObject(shotPassionComponent.turretNode)
+            self.__setupPostLoadVFX(gun, stage, appearance, TankPartNames.GUN, queue)
+            self.__setupPostLoadVFX(turret, stage, appearance, TankPartNames.TURRET, queue)
+            queue.createComponent(root, GenericComponents.RemoveGoDelayedComponent, finishTime - BigWorld.serverTime())
 
         equipmentID = vehicles.g_cache.equipmentIDs().get(VehicleShotPassionComponent.EQUIPMENT_NAME)
         equipment = vehicles.g_cache.equipments()[equipmentID]
-        loadAppearancePrefab(equipment.usagePrefab, appearance, postloadSetup)
+        loadAppearancePrefab(equipment.usagePrefab, appearance, postloadSetup, False)
 
-    def __setupVFX(self, nodeGO, stage, appearance, nodeType):
-        nodeComponent = nodeGO.findComponentByType(ShotPassionNodeComponent)
+    def __setupPostLoadVFX(self, nodeGO, stage, appearance, nodeType, queue):
+        nodeComponent = queue.component(nodeGO, ShotPassionNodeComponent)
         effectTemplate = nodeComponent.effectTemplate
         stageClamp = math_utils.clamp(0, nodeComponent.maxAnimationStage, stage)
         if nodeType == TankPartNames.GUN:
             effectPath = effectTemplate.format(stage=stageClamp, length=getEffectSuffixForGunLength(_GUN_LENGTH_RANGES, appearance))
         else:
             effectPath = effectTemplate.format(stage=stageClamp)
-        nodeGO.removeComponentByType(GenericComponents.AnimatorComponent)
-        nodeGO.createComponent(GenericComponents.AnimatorComponent, effectPath, 0, 1, -1, True, '')
-        nodeGO.deactivate()
-        nodeGO.activate()
+        if queue.hasComponent(nodeGO, GenericComponents.AnimatorComponent):
+            queue.removeComponent(nodeGO, GenericComponents.AnimatorComponent)
+        queue.createComponent(nodeGO, GenericComponents.AnimatorComponent, effectPath, 0, 1, -1, True, '')
 
     def __onEquipmentComponentUpdated(self, _, vehicleID, data):
         vehicle = BigWorld.entity(vehicleID)
         duration = data.get('duration', 0)
         if duration > 0:
             effectGO = self.getEffectGO(vehicle.entityGameObject)
-            if not effectGO.isValid():
+            if not effectGO.valid:
                 return
             stage = data.get('stage', 0)
-            shotPassionComponent = effectGO.findComponentByType(ShotPassionComponent)
-            self.__setupVFX(shotPassionComponent.turretNode, stage, vehicle.appearance, TankPartNames.TURRET)
-            self.__setupVFX(shotPassionComponent.gunNode, stage, vehicle.appearance, TankPartNames.GUN)
+            shotPassionAccess = self.reaction(self.ShotPassionAccess)
+            shotPassionNodeAccess = self.reaction(self.ShotPassionNodeAccess)
+            shotPassionComponent = shotPassionAccess.find(effectGO)
+            manager = self.gom
+            q = CGF.CommandQueue(manager)
+            turret = manager.gameObject(shotPassionComponent.turretNode)
+            gun = manager.gameObject(shotPassionComponent.gunNode)
+            self.__setupVFX(turret, q, stage, vehicle.appearance, TankPartNames.TURRET, shotPassionNodeAccess)
+            self.__setupVFX(gun, q, stage, vehicle.appearance, TankPartNames.GUN, shotPassionNodeAccess)
         else:
             self.endShotPassion(vehicle)
 
-    def getEffectGO(self, partGO):
-        return CGF.HierarchyManager(partGO.spaceID).findFirstNode(partGO, BattleRoyaleEquipments.SHOT_PASSION)
+    def __setupVFX(self, nodeGO, queue, stage, appearance, nodeType, nodeAccess):
+        nodeComponent = nodeAccess.find(nodeGO)
+        if not nodeComponent or nodeComponent is None:
+            return
+        else:
+            effectTemplate = nodeComponent.effectTemplate
+            stageClamp = math_utils.clamp(0, nodeComponent.maxAnimationStage, stage)
+            if nodeType == TankPartNames.GUN:
+                effectPath = effectTemplate.format(stage=stageClamp, length=getEffectSuffixForGunLength(_GUN_LENGTH_RANGES, appearance))
+            else:
+                effectPath = effectTemplate.format(stage=stageClamp)
+            queue.removeComponent(nodeGO, GenericComponents.AnimatorComponent)
+            queue.createComponent(nodeGO, GenericComponents.AnimatorComponent, effectPath, 0, 1, -1, True, '')
+            nodeGO.deactivate()
+            nodeGO.activate()
+            return
 
-    @onRemovedQuery(VehicleShotPassionComponent, CGF.GameObject, UpgradeInProgressComponent)
-    def inBattleUpgradeCompleted(self, shotPassionComponent, gameObject, _):
+    def getEffectGO(self, partGO):
+        return self.hierarchy.findFirstNodeByName(partGO, BattleRoyaleEquipments.SHOT_PASSION)
+
+    def inBattleUpgradeCompleted(self, shotPassionComponent):
         self.__launch(shotPassionComponent)

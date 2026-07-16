@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/consumables_panel.py
+from __future__ import absolute_import, division
+from past.utils import old_div
 from typing import TYPE_CHECKING
 from battle_modifiers_common import BattleParams
 from constants import DAMAGE_INTERPOLATION_DIST_FIRST, DAMAGE_INTERPOLATION_DIST_LAST
@@ -42,7 +44,7 @@ def _formatPairOfValues(value1, value2, formattingFunc=backport.getNiceNumberFor
 def makeShellTooltip(intCD, lobbyContext=None, battleSessionProvider=None):
     gunSettings = battleSessionProvider.shared.ammo.getGunSettings()
     descriptor = gunSettings.getShellDescriptor(intCD)
-    piercingPower = int(round(gunSettings.getPiercingPower(intCD)))
+    piercingPower = round_py2_style_int(gunSettings.getPiercingPower(intCD))
     shotSpeed = gunSettings.getShotSpeed(intCD)
     kind = descriptor.kind
     projSpeedFactor = vehicles.g_cache.commonConfig['miscParams']['projectileSpeedFactor']
@@ -79,7 +81,7 @@ def makeShellTooltip(intCD, lobbyContext=None, battleSessionProvider=None):
                     note = ASTERISK if not showDistanceAsterisk else ASTERISK * 2
                     footNotes.append(note + backport.text(R.strings.menu.moduleInfo.params.noPiercingDistance.footnote()))
                 params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.piercingPower(), value=value) + note)
-            params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.shotSpeed(), value=backport.getIntegralFormat(int(round(shotSpeed / projSpeedFactor)))))
+            params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.shotSpeed(), value=backport.getIntegralFormat(round_py2_style_int(old_div(shotSpeed, projSpeedFactor)))))
             if kind == SHELL_TYPES.HIGH_EXPLOSIVE and descriptor.type.explosionRadius > 0.0:
                 params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.explosionRadius(), value=backport.getNiceNumberFormat(descriptor.type.explosionRadius)))
             if descriptor.hasStun and lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():

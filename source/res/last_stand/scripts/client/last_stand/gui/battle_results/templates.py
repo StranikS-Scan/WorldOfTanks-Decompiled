@@ -15,7 +15,8 @@ LS_TOTAL_VO_META = base.DictMeta({'common': {},
  'rewards': {},
  'prevBestMissionsCount': 0,
  'time': -1,
- 'completedDifficultyMissions': []})
+ 'completedDifficultyMissions': [],
+ 'geometryId': 0})
 LS_TEAM_ITEM_VO_META = base.PropertyMeta((('playerDBID', 0, 'playerDBID'),
  ('playerName', '', 'playerName'),
  ('vehicleName', '', 'vehicleName'),
@@ -50,6 +51,7 @@ LS_BATTLE_COMMON_STATS_BLOCK = regular.REGULAR_COMMON_STATS_BLOCK.clone(7)
 regular.FINISH_RESULT_VO_META.bind(ex.LSBattleFinishResultBlock)
 LS_TOTAL_RESULTS_BLOCK.addNextComponent(LS_BATTLE_COMMON_STATS_BLOCK)
 LS_BATTLE_COMMON_STATS_BLOCK.addComponent(7, ex.LSBattleFinishResultBlock())
+LS_TOTAL_RESULTS_BLOCK.addNextComponent(ex.LSGeometryIdItem('geometryId', _RECORD.COMMON))
 LS_TOTAL_RESULTS_BLOCK.addNextComponent(ex.LSPrevBestMissionsCountItem('prevBestMissionsCount', _RECORD.PERSONAL))
 LS_TOTAL_RESULTS_BLOCK.addNextComponent(ex.LSTimeItem('time', _RECORD.COMMON, 'duration'))
 LS_TOTAL_RESULTS_BLOCK.addNextComponent(ex.LSCompletedDifficultyMissions('completedDifficultyMissions', _RECORD.PERSONAL))

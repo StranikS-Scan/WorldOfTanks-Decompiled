@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/spam_protection/cooldown_manager.py
+from __future__ import absolute_import
 import typing
 import BigWorld
 from gui.battle_control.controllers.spam_protection.spam_constants import DEFAULT_COOLDOWN

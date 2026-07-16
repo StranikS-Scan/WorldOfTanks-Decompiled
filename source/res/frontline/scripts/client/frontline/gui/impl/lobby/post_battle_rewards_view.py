@@ -10,7 +10,8 @@ from frontline.gui.impl.gen.view_models.views.lobby.views.post_battle_rewards_vi
 from gui.impl.gen import R
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
-from gui.impl.pub import ViewImpl, WindowImpl
+from gui.impl.pub import ViewImpl
+from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events.bonuses import mergeBonuses
 from gui.shared.event_dispatcher import showEpicRewardsSelectionWindow, showFrontlineAwards
@@ -269,7 +270,7 @@ class PostBattleRewardsView(ViewImpl, IGlobalListener):
             self.__isProgressBarAnimating = False
 
 
-class PostBattleRewardsWindow(WindowImpl):
+class PostBattleRewardsWindow(LobbyNotificationWindow):
 
     def __init__(self, ctx=None, parent=None):
         super(PostBattleRewardsWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=PostBattleRewardsView(ctx=ctx), layer=WindowLayer.WINDOW, parent=parent)

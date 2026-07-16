@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/xml_reader.py
+from __future__ import absolute_import
 import resource_helper
 from future.utils import iteritems
 _SIMPLIFIED_COEFFICIENTS_PATH = 'gui/params_coefficients.xml'

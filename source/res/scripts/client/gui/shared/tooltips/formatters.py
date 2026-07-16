@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/formatters.py
+from __future__ import absolute_import
 from gui import makeHtmlString
 from gui.Scaleform.genConsts.ACTION_PRICE_CONSTANTS import ACTION_PRICE_CONSTANTS
 from gui.Scaleform.genConsts.BATTLE_RESULT_TYPES import BATTLE_RESULT_TYPES
@@ -440,7 +441,7 @@ def packItemActionTooltipData(item, isBuying=True):
 
 
 def packActionTooltipData(actionType, key, isBuying, price, oldPrice, altPrice=MONEY_UNDEFINED, oldAltPrice=MONEY_UNDEFINED):
-    states = list()
+    states = []
     if altPrice.isDefined():
         price = price + altPrice
     if oldAltPrice.isDefined():
@@ -544,7 +545,7 @@ def getActionPriceData(item):
 
 
 def getLimitExceededPremiumTooltip():
-    return makeTooltip(i18n.makeString(TOOLTIPS.LOBBY_HEADER_BUYPREMIUMACCOUNT_DISABLED_HEADER), i18n.makeString(TOOLTIPS.LOBBY_HEADER_BUYPREMIUMACCOUNT_DISABLED_BODY, number=time_utils.ONE_YEAR / time_utils.ONE_DAY))
+    return makeTooltip(i18n.makeString(TOOLTIPS.LOBBY_HEADER_BUYPREMIUMACCOUNT_DISABLED_HEADER), i18n.makeString(TOOLTIPS.LOBBY_HEADER_BUYPREMIUMACCOUNT_DISABLED_BODY, number=time_utils.ONE_YEAR // time_utils.ONE_DAY))
 
 
 def packCounterTextBlockData(countLabel, desc, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_COUNTER_TEXT_BLOCK_LINKAGE, padding=None):
@@ -568,13 +569,12 @@ def packMoneyAndXpValueBlock(value, icon, iconYoffset, paddingBottom=15, valueWi
 
 
 def packMoneyAndXpBlocks(tooltipBlocks, btnType, valueBlocks, alternativeData=None, hideActionBlock=False):
-    titleBlocks = list()
     alternativeData = alternativeData or {}
-    titleBlocks.append(packTitleDescBlock(text_styles.highTitle(TOOLTIPS.getHeaderBtnTitle(alternativeData.get('title') or btnType)), None, padding=packPadding(bottom=15)))
+    titleBlocks = [packTitleDescBlock(text_styles.highTitle(TOOLTIPS.getHeaderBtnTitle(alternativeData.get('title') or btnType)), None, padding=packPadding(bottom=15))]
     tooltipBlocks.append(packBuildUpBlockData(titleBlocks))
     if valueBlocks is not None:
         tooltipBlocks.append(packBuildUpBlockData(valueBlocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
-    decsBlocks = list()
+    decsBlocks = []
     descLinkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE
     if btnType == CURRENCIES_CONSTANTS.CRYSTAL:
         descLinkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILD_BLOCK_VIOLET_BIG_LINKAGE
@@ -597,8 +597,7 @@ def packMoneyAndXpBlocks(tooltipBlocks, btnType, valueBlocks, alternativeData=No
     tooltipBlocks.append(packBuildUpBlockData(decsBlocks, linkage=descLinkage))
     if not hideActionBlock:
         if btnType != CURRENCIES_CONSTANTS.CRYSTAL:
-            actionBlocks = list()
-            actionBlocks.append(packAlignedTextBlockData(text=text_styles.standard(TOOLTIPS.getHeaderBtnClickDesc(alternativeData.get('btnClickDesc') or btnType)), align=alternativeData.get('btnClickDescAlign') or BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
+            actionBlocks = [packAlignedTextBlockData(text=text_styles.standard(TOOLTIPS.getHeaderBtnClickDesc(alternativeData.get('btnClickDesc') or btnType)), align=alternativeData.get('btnClickDescAlign') or BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER)]
             tooltipBlocks.append(packBuildUpBlockData(actionBlocks))
     return tooltipBlocks
 

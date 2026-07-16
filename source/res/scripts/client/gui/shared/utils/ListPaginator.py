@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/ListPaginator.py
+from __future__ import absolute_import
 import weakref
+from past.utils import old_div
 import Event
 
 class ListPaginator(object):
@@ -12,7 +14,7 @@ class ListPaginator(object):
         if offset is not None:
             self.__initialOffset = offset
         else:
-            self.__initialOffset = -count / 2
+            self.__initialOffset = old_div(-count, 2)
         self._offset = self.__initialOffset
         self._prevOffset = self._offset
         self._count = count

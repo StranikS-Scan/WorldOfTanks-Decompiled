@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/bonus_helper.py
+from __future__ import absolute_import
 import copy
 import typing
 from future.utils import itervalues
@@ -16,6 +17,7 @@ from post_progression_common import ACTION_TYPES
 from shared_utils import findFirst
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
+    import gui
     from gui.shared.gui_items.Vehicle import Vehicle
     from items.vehicle_items import Gun
 

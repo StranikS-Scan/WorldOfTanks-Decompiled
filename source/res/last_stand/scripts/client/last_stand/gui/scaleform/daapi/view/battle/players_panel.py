@@ -5,6 +5,7 @@ import BigWorld
 import BattleReplay
 from PlayerEvents import g_playerEvents
 from helpers.CallbackDelayer import CallbackDelayer
+from last_stand.gui.scaleform.daapi.view.battle.voip_helper import LSVoipHelper
 from gui.Scaleform.settings import ICONS_SIZES
 from gui.shared.badges import buildBadge
 from gui.battle_control import avatar_getter
@@ -20,6 +21,7 @@ class LSPlayersPanel(LSPlayersPanelMeta):
         self._callbackDelayer = CallbackDelayer()
         self.__isPostmortem = False
         self.__vehsCache = {}
+        self.__voipHelper = LSVoipHelper(component=self)
 
     @property
     def arenaPhases(self):
@@ -31,6 +33,7 @@ class LSPlayersPanel(LSPlayersPanelMeta):
 
     def _populate(self):
         super(LSPlayersPanel, self)._populate()
+        self.__voipHelper.populate()
         if self.teamInfoStats:
             self.teamInfoStats.onTeamHealthUpdated += self.__updateTeamPanel
         ctrl = self.sessionProvider.shared.vehicleState
@@ -40,7 +43,18 @@ class LSPlayersPanel(LSPlayersPanelMeta):
         g_playerEvents.onAvatarReady += self.__onAvatarReady
         return
 
+    def onVoiceChatClick(self):
+        self.__voipHelper.toggleChannelConnection()
+
+    def onTalkDown(self):
+        self.__voipHelper.toggleMute(False)
+
+    def onTalkUp(self):
+        self.__voipHelper.toggleMute(True)
+
     def _dispose(self):
+        self.__voipHelper.dispose()
+        self.__voipHelper = None
         if self.teamInfoStats:
             self.teamInfoStats.onTeamHealthUpdated -= self.__updateTeamPanel
         ctrl = self.sessionProvider.shared.vehicleState
@@ -49,6 +63,7 @@ class LSPlayersPanel(LSPlayersPanelMeta):
             ctrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
         g_playerEvents.onAvatarReady -= self.__onAvatarReady
         self._callbackDelayer.destroy()
+        self._callbackDelayer = None
         self.__vehsCache.clear()
         super(LSPlayersPanel, self)._dispose()
         return

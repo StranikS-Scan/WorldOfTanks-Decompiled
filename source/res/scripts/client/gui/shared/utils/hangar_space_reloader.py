@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/hangar_space_reloader.py
+from __future__ import absolute_import
 import logging
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpaceReloader

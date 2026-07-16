@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/BattleRoyaleRequester.py
+from __future__ import absolute_import
 import BigWorld
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from skeletons.gui.shared.utils.requesters import IBattleRoyaleRequester
@@ -33,4 +34,4 @@ class BattleRoyaleRequester(AbstractSyncDataRequester, IBattleRoyaleRequester):
         BigWorld.player().battleRoyale.getCache(lambda resID, value: self._response(resID, value, callback))
 
     def _preprocessValidData(self, data):
-        return dict(data['battleRoyale']) if 'battleRoyale' in data else dict()
+        return dict(data['battleRoyale']) if 'battleRoyale' in data else {}

@@ -31,7 +31,7 @@ def AutoInvitesIterator():
 
 
 class PrbListItem(object):
-    __slots__ = ('prbID', 'time', 'arenaTypeID', 'creator', 'clanAbbrev', 'playersCount', 'isOpened', 'comment', 'creatorIgrType', 'creatorDbId', 'badges')
+    __slots__ = ('prbID', 'time', 'arenaTypeID', 'creator', 'clanAbbrev', 'playersCount', 'isOpened', 'comment', 'creatorIgrType', 'creatorDbId', 'badges', 'prbClusterID')
 
     def __init__(self, t, prbID, info):
         super(PrbListItem, self).__init__()
@@ -65,6 +65,9 @@ class PrbListItem(object):
         if PREBATTLE_CACHE_KEY.CREATOR_BADGES in info:
             creatorBadges = info[PREBATTLE_CACHE_KEY.CREATOR_BADGES]
         self.badges = BadgesHelper(creatorBadges)
+        self.prbClusterID = 0
+        if PREBATTLE_CACHE_KEY.CLUSTER_ID in info:
+            self.prbClusterID = info[PREBATTLE_CACHE_KEY.CLUSTER_ID]
 
     def __repr__(self):
         return 'PrbListItem(prbID = {0:n}, arenaTypeID = {1:n}, creator = {2:>s}, playersCount = {3:n}, isOpened = {4!r:s}, time = {5:n}, creatorIgrType = {6:n}, creatorDbId = {7:n})'.format(self.prbID, self.arenaTypeID, self.getCreatorFullName(), self.playersCount, self.isOpened, self.time, self.creatorIgrType, self.creatorDbId)

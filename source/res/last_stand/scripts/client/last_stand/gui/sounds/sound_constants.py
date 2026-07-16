@@ -75,7 +75,10 @@ BOTS_SPAWN = {'germany:G00_Bomber_LS_BOT': 'ev_gp_bot_bomber_spawn',
 BOTS_ENGINE = {'usa:A100_T49_LS_BOT': 'ev_gp_bot_lost_engine',
  'germany:G00_Obelisk_01_LS_bot': 'ev_gp_bot_obelisk_engine',
  'germany:G00_Obelisk_02_LS_bot': 'ev_gp_bot_obelisk_engine',
- 'germany:G00_Obelisk_03_LS_bot': 'ev_gp_bot_obelisk_engine'}
+ 'germany:G00_Obelisk_03_LS_bot': 'ev_gp_bot_obelisk_engine',
+ 'uk:GB99_Turtle_Mk1_EASY_LS_BOT': 'ev_gp_bot_bastion_engine',
+ 'uk:GB99_Turtle_Mk1_MEDIUM_LS_BOT': 'ev_gp_bot_bastion_engine',
+ 'uk:GB99_Turtle_Mk1_HARD_LS_BOT': 'ev_gp_bot_bastion_engine'}
 BOTS_EXPLOSION = {'germany:G00_Bomber_LS_BOT': 'ev_gp_bot_bomber_explosion',
  'germany:G00_Alpha_Bomber_LS_BOT': 'ev_gp_bot_alpha_bomber_explosion',
  'usa:A100_T49_LS_BOT': 'ev_gp_bot_lost_explosion',
@@ -95,7 +98,10 @@ BOTS_EXPLOSION = {'germany:G00_Bomber_LS_BOT': 'ev_gp_bot_bomber_explosion',
  'germany:G187_Taschenratte_LS_BOT': 'ev_gp_bot_boss_zero_explosion',
  'germany:G00_Obelisk_01_LS_bot': 'ev_gp_bot_obelisk_explosion',
  'germany:G00_Obelisk_02_LS_bot': 'ev_gp_bot_obelisk_explosion',
- 'germany:G00_Obelisk_03_LS_bot': 'ev_gp_bot_obelisk_explosion'}
+ 'germany:G00_Obelisk_03_LS_bot': 'ev_gp_bot_obelisk_explosion',
+ 'uk:GB99_Turtle_Mk1_EASY_LS_BOT': 'ev_gp_bot_bastion_explosion',
+ 'uk:GB99_Turtle_Mk1_MEDIUM_LS_BOT': 'ev_gp_bot_bastion_explosion',
+ 'uk:GB99_Turtle_Mk1_HARD_LS_BOT': 'ev_gp_bot_bastion_explosion'}
 BATTLE_START = 'ev_last_stand_gameplay_start'
 BATTLE_FINISH = 'ev_last_stand_gameplay_stop'
 CONVOY_PROGRESS_RTPC = 'RTPC_ext_ls_boss_bomber'

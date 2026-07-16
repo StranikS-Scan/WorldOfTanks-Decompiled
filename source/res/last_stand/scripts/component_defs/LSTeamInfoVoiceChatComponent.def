@@ -1,0 +1,20 @@
+<LSTeamInfoVoiceChatComponent.def>
+  <CellMethods>
+    <setVivoxPresence>
+      <Arg>	BOOL	</Arg>
+      <Exposed></Exposed>
+    </setVivoxPresence>
+  </CellMethods>
+  <ClientMethods></ClientMethods>
+  <Properties>
+    <teamVivoxChannel>
+      <Type>	PYTHON	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+      <Default>	{}	</Default>
+    </teamVivoxChannel>
+  </Properties>
+  <ofEntity>
+    <TeamInfo></TeamInfo>
+  </ofEntity>
+</LSTeamInfoVoiceChatComponent.def>

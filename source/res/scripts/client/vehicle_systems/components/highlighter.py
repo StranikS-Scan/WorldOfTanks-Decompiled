@@ -1,13 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/components/highlighter.py
 import weakref
+from collections import namedtuple
 import BigWorld
+import CGF
+from cgf_script.registration import registerComponent
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from EdgeDrawer import EdgeHighlightComponent
-import cgf_obsolete_script.py_component
+EdgeHighlightComponentArgs = namedtuple('EdgeHighlightComponentArgs', ['colorIndex',
+ 'drawMode',
+ 'filled',
+ 'isPlayer'])
 
-class Highlighter(cgf_obsolete_script.py_component.Component):
+@registerComponent
+class Highlighter(object):
+    domain = CGF.Domain.ClientEditor
+    userVisible = False
+    vseVisible = False
     HIGHLIGHT_OFF = 0
     HIGHLIGHT_SIMPLE = 1
     HIGHLIGHT_ON = 2
@@ -27,12 +37,10 @@ class Highlighter(cgf_obsolete_script.py_component.Component):
     def isSimpleEdge(self):
         return self.isOn and self.__highlightStatus & self.HIGHLIGHT_SIMPLE
 
-    def __init__(self, enabled, collisions):
-        super(Highlighter, self).__init__()
+    def __init__(self, enabled):
         self.__vehicleRef = None
         self.__highlightStatus = self.HIGHLIGHT_OFF if enabled else self.HIGHLIGHT_DISABLED
         self.__isPlayersVehicle = False
-        self.__collisions = collisions
         return
 
     def setVehicle(self, vehicle):
@@ -55,12 +63,11 @@ class Highlighter(cgf_obsolete_script.py_component.Component):
                 self.highlight(self.__isPlayersVehicle)
             return
 
-    def activate(self):
+    def activate(self, collisions):
         self.__highlightStatus &= ~self.HIGHLIGHT_DISABLED
         vehicle = self.__getVehicle()
-        if self.__isPlayersVehicle and vehicle is not None:
-            BigWorld.wgAddIgnoredCollisionEntity(vehicle, self.__collisions)
-        return
+        if self.__isPlayersVehicle and vehicle:
+            BigWorld.wgAddIgnoredCollisionEntity(vehicle, collisions)
 
     def deactivate(self):
         self.removeHighlight()
@@ -92,40 +99,26 @@ class Highlighter(cgf_obsolete_script.py_component.Component):
                 return
             if self.isOn:
                 BigWorld.wgDelEdgeDetectEntity(vehicle)
-            args = (0,
-             False,
-             1,
-             True)
+            args = EdgeHighlightComponentArgs(0, 1, False, True)
             if enable:
                 self.__highlightStatus |= self.HIGHLIGHT_ON
                 if self.__isPlayersVehicle:
                     if forceSimpleEdge:
                         self.__highlightStatus |= self.HIGHLIGHT_SIMPLE
-                        args = (0,
-                         False,
-                         0,
-                         False)
+                        args = EdgeHighlightComponentArgs(0, 0, False, False)
                     else:
-                        args = (0,
-                         False,
-                         1,
-                         True)
+                        args = EdgeHighlightComponentArgs(0, 1, False, True)
                 else:
                     arenaDP = self.sessionProvider.getArenaDP()
                     isAllyTeam = arenaDP.isAllyTeam(vehicle.publicInfo['team'])
-                    args = (2,
-                     False,
-                     0,
-                     False) if isAllyTeam else (1,
-                     False,
-                     0,
-                     False)
+                    teamNum = 2 if isAllyTeam else 1
+                    args = EdgeHighlightComponentArgs(teamNum, 0, False, False)
             else:
                 if self.__isPlayersVehicle and forceSimpleEdge:
                     self.__highlightStatus &= ~self.HIGHLIGHT_SIMPLE
                     args = (0,
-                     False,
                      1,
+                     False,
                      True)
                 self.__highlightStatus &= ~self.HIGHLIGHT_ON
             self.__doHighlightOperation(vehicle, self.__highlightStatus, args)
@@ -144,11 +137,12 @@ class Highlighter(cgf_obsolete_script.py_component.Component):
         if appearance is not None:
             isOn = status & self.HIGHLIGHT_ON
             root = appearance.gameObject
-            if root is None or not root.isValid():
+            if root is None or not root.valid:
                 return
-            highlight = root.findComponentByType(EdgeHighlightComponent)
+            highlight = root.findRead(EdgeHighlightComponent)
             if highlight is not None:
                 root.removeComponent(highlight)
             if isOn:
-                root.createComponent(EdgeHighlightComponent, args[0], args[1], args[2], args[3])
+                queue = CGF.CommandQueue(root.spaceID)
+                queue.createComponent(root, EdgeHighlightComponent, *args)
         return

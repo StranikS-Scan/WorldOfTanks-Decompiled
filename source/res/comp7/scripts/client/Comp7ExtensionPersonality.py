@@ -114,6 +114,11 @@ class ClientComp7BattleMode(Comp7BattleMode):
         return Comp7MembersView
 
     @property
+    def _client_unitMembersOrderKey(self):
+        from gui.game_control.platoon_controller import _unitMembersDisplayOrder
+        return _unitMembersDisplayOrder
+
+    @property
     def _client_platoonWelcomeViewClass(self):
         from comp7.gui.impl.lobby.platoon.view.comp7_platoon_welcome_view import Comp7WelcomeView
         return Comp7WelcomeView

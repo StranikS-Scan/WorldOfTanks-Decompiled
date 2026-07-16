@@ -4,13 +4,13 @@ import typing
 import enum
 import logging
 import Math
-from cgf_modules.variable_components import VariableStorageComponent, modifyVariable
+import CGF
+from cgf_modules.variable_components import VariableStorageComponent
 from constants import VEHICLE_CLASSES, VEHICLE_CLASS_INDICES
 from vehicle_systems.tankStructure import TankPartIndexes
 if typing.TYPE_CHECKING:
-    import CGF
     from Vehicle import Vehicle
-    from common_tank_appearance import CommonTankAppearance
+    from vehicle_appearance.common_tank_appearance import CommonTankAppearance
     from gui.hangar_vehicle_appearance import HangarVehicleAppearance
     from items.vehicles import VehicleDescriptor
     from items.vehicle_items import Gun, Shell
@@ -30,33 +30,35 @@ class VehicleGunVars(enum.Enum):
     TIME_BETWEEN_SHOTS = 'vehicle/gun/timeBetweenShots'
 
 
-def createForRoot(vehicle):
-    vehicle.entityGameObject.removeComponentByType(VariableStorageComponent)
-    varStorage = vehicle.entityGameObject.createComponent(VariableStorageComponent)
+def createForRoot(vehicle, queue=None):
+    vehicleObject = vehicle.entityGameObject
+    queue = queue or CGF.CommandQueue(vehicleObject.spaceID)
     vehDescr = vehicle.typeDescriptor
     vehType = set(VEHICLE_CLASSES).intersection(vehDescr.type.tags).pop()
     vehTypeIdx = VEHICLE_CLASS_INDICES[vehType]
-    modifyVariable(vehicle.entityGameObject, varStorage, VehicleRootVars.TYPE.value, vehTypeIdx)
-    modifyVariable(vehicle.entityGameObject, varStorage, VehicleRootVars.MAX_HEALTH.value, vehicle.maxHealth)
+    vars = [(VehicleRootVars.TYPE.value, vehTypeIdx), (VehicleRootVars.MAX_HEALTH.value, vehicle.maxHealth)]
+    queue.removeComponent(vehicleObject, VariableStorageComponent)
+    queue.createComponent(vehicleObject, VariableStorageComponent, vars)
 
 
 def createForGun(appearance, gunGO):
-    gunGO.removeComponentByType(VariableStorageComponent)
-    storageComponent = gunGO.createComponent(VariableStorageComponent)
+    queue = CGF.CommandQueue(gunGO.spaceID)
     shellDescr = appearance.typeDescriptor.shot.shell
     gunDescr = appearance.typeDescriptor.gun
     gunBB = Math.Matrix(appearance.compoundModel.getBoundsForPart(TankPartIndexes.GUN))
     gunLength = gunBB.applyVector(Math.Vector3(0.0, 0.0, 1.0)).length
-    modifyVariable(gunGO, storageComponent, VehicleGunVars.MUZZLE_BRAKE.value, gunDescr.muzzleBrake.value)
-    modifyVariable(gunGO, storageComponent, VehicleGunVars.GUN_LENGTH.value, gunLength)
-    modifyVariable(gunGO, storageComponent, VehicleGunVars.GUN_CALIBER.value, shellDescr.caliber)
     timeBetweenShots = gunDescr.clip[1] if 'clip' in gunDescr.tags else gunDescr.reloadTime
-    modifyVariable(gunGO, storageComponent, VehicleGunVars.TIME_BETWEEN_SHOTS.value, timeBetweenShots)
+    vars = [(VehicleGunVars.MUZZLE_BRAKE.value, gunDescr.muzzleBrake.value),
+     (VehicleGunVars.GUN_LENGTH.value, gunLength),
+     (VehicleGunVars.GUN_CALIBER.value, shellDescr.caliber),
+     (VehicleGunVars.TIME_BETWEEN_SHOTS.value, timeBetweenShots)]
+    queue.removeComponent(gunGO, VariableStorageComponent)
+    queue.createComponent(gunGO, VariableStorageComponent, vars)
 
 
 def update(go, varName, value):
-    varStorage = go.findComponentByType(VariableStorageComponent)
+    varStorage = go.findWrite(VariableStorageComponent)
     if not varStorage:
         _logger.error("Can't find variable storage for: %s", go.name)
         return
-    modifyVariable(go, varStorage, varName, value)
+    varStorage.modify(go, varName, value)

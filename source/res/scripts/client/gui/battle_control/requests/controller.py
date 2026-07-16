@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/requests/controller.py
+from __future__ import absolute_import
 from collections import namedtuple
 import BigWorld
 import AccountCommands
@@ -42,7 +43,7 @@ class _AvatarRequester(RequestsByIDProcessor):
         return BigWorld.player().prebattleInvitations
 
     def _doCall(self, method, *args, **kwargs):
-        requestID = self._idsGenerator.next()
+        requestID = next(self._idsGenerator)
 
         def _callback(code, errStr, data):
             ctx = self._requests.get(requestID)

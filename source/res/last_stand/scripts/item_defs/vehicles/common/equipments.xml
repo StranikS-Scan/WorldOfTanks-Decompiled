@@ -31,7 +31,7 @@
     <shortDescriptionSpecial>	#last_stand.artefacts.extend:LS_nitro/short_special	</shortDescriptionSpecial>
     <icon>	ls_nitro 0 0	</icon>
     <price>	10000	</price>
-    <notInShop>	false	</notInShop>
+    <notInShop>	true	</notInShop>
     <tags>	LS_equipment notForRegularSlot dynComponentsGroup notForSale	</tags>
     <vehicleFilter>
       <include>
@@ -41,8 +41,8 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	last_stand_common.items.ls_artefacts.LSEquipment	  <durationSeconds>	5	</durationSeconds>
-      <cooldownSeconds>	7	</cooldownSeconds>
+    <script>	last_stand_common.items.ls_artefacts.LSEquipment	  <durationSeconds>	6	</durationSeconds>
+      <cooldownSeconds>	3	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
       <usageCost>	25	</usageCost>
       <dynComponentsGroups>	LS_nitro	</dynComponentsGroups>
@@ -50,8 +50,8 @@
       <variants>
         <variant>
           <id>	hasHydraulicChassis	</id>
-          <cooldownSeconds>	7	</cooldownSeconds>
-          <durationSeconds>	5	</durationSeconds>
+          <cooldownSeconds>	3	</cooldownSeconds>
+          <durationSeconds>	6	</durationSeconds>
           <usageCost>	25	</usageCost>
           <equipmentItem>	LS_nitro	</equipmentItem>
           <dynComponentsGroups>	LS_nitro_siege	</dynComponentsGroups>
@@ -92,7 +92,7 @@
     <shortDescriptionSpecial>	#last_stand.artefacts.extend:LS_teamRepair/short_special	</shortDescriptionSpecial>
     <icon>	ls_teamRepairKit 0 0	</icon>
     <price>	3000	</price>
-    <notInShop>	false	</notInShop>
+    <notInShop>	true	</notInShop>
     <tags>	LS_equipment notForRegularSlot dynComponentsGroup notForSale	</tags>
     <vehicleFilter>
       <include>
@@ -117,7 +117,7 @@
     <shortDescriptionSpecial>	#last_stand.artefacts.extend:LS_damageShield/short_special	</shortDescriptionSpecial>
     <icon>	ls_damageShield 0 0	</icon>
     <price>	10000	</price>
-    <notInShop>	false	</notInShop>
+    <notInShop>	true	</notInShop>
     <tags>	LS_equipment notForRegularSlot dynComponentsGroup notForSale	</tags>
     <vehicleFilter>
       <include>
@@ -128,7 +128,7 @@
       </include>
     </vehicleFilter>
     <script>	last_stand_common.items.ls_artefacts.LSEquipment	  <cooldownSeconds>	3	</cooldownSeconds>
-      <durationSeconds>	7	</durationSeconds>
+      <durationSeconds>	10	</durationSeconds>
       <reuseCount>	-1	</reuseCount>
       <usageCost>	50	</usageCost>
       <dynComponentsGroups>	LS_damageShield	</dynComponentsGroups>
@@ -142,7 +142,7 @@
     <shortDescriptionSpecial>	#last_stand.artefacts.extend:LS_fastReload/short_special	</shortDescriptionSpecial>
     <icon>	ls_fastReload	</icon>
     <price>	10000	</price>
-    <notInShop>	false	</notInShop>
+    <notInShop>	true	</notInShop>
     <tags>	LS_equipment notForRegularSlot dynComponentsGroup notForSale	</tags>
     <vehicleFilter>
       <include>
@@ -195,7 +195,7 @@
     <shortDescriptionSpecial>	#last_stand.artefacts.extend:LS_invisibility/short_special	</shortDescriptionSpecial>
     <icon>	ls_invisibility 0 0	</icon>
     <price>	10000	</price>
-    <notInShop>	false	</notInShop>
+    <notInShop>	true	</notInShop>
     <tags>	LS_equipment notForRegularSlot dynComponentsGroup notForSale	</tags>
     <vehicleFilter>
       <include>
@@ -220,7 +220,7 @@
     <shortDescriptionSpecial>	#last_stand.artefacts.extend:LS_aoeDamageInstantShot/short_special	</shortDescriptionSpecial>
     <icon>	ls_aoeDamageInstantShot 0 0	</icon>
     <price>	10000	</price>
-    <notInShop>	false	</notInShop>
+    <notInShop>	true	</notInShop>
     <tags>	LS_equipment notForRegularSlot dynComponentsGroup notForSale	</tags>
     <vehicleFilter>
       <include>
@@ -245,7 +245,7 @@
     <shortDescriptionSpecial>	#last_stand.artefacts.extend:LS_aoeDrainEnemyHpInstantShot/short_special	</shortDescriptionSpecial>
     <icon>	ls_aoeDrainEnemyHpInstantShot 0 0	</icon>
     <price>	10000	</price>
-    <notInShop>	false	</notInShop>
+    <notInShop>	true	</notInShop>
     <tags>	LS_equipment notForRegularSlot dynComponentsGroup notForSale	</tags>
     <vehicleFilter>
       <include>
@@ -270,7 +270,7 @@
     <shortDescriptionSpecial>	#last_stand.artefacts.extend:LS_aoeStunInstantShot/short_special	</shortDescriptionSpecial>
     <icon>	ls_aoeStunInstantShot 0 0	</icon>
     <price>	10000	</price>
-    <notInShop>	false	</notInShop>
+    <notInShop>	true	</notInShop>
     <tags>	LS_equipment notForRegularSlot dynComponentsGroup notForSale	</tags>
     <vehicleFilter>
       <include>
@@ -295,7 +295,7 @@
     <shortDescriptionSpecial>	#last_stand.artefacts.extend:LS_doubleDamage/short_special	</shortDescriptionSpecial>
     <icon>	ls_doubleDamage 0 0	</icon>
     <price>	10000	</price>
-    <notInShop>	false	</notInShop>
+    <notInShop>	true	</notInShop>
     <tags>	LS_equipment notForRegularSlot dynComponentsGroup notForSale	</tags>
     <vehicleFilter>
       <include>

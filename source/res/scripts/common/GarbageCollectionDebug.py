@@ -7,6 +7,7 @@ import itertools
 from bwdebug import DEBUG_MSG
 from bwdebug import ERROR_MSG
 import objgraph
+from py2to3.compat.ioCompat import UnicodeFileAdapter
 LIMIT_LEN = False
 MAX_LEN = 5
 MAX_DEPTH = 1
@@ -333,15 +334,17 @@ def getObjectReferrers(obj, ignore):
 def saveOptimizedGarbage(path):
     import gc
     import inspect
+    from builtins import open
     delimiter = '=-=' * 100 + '\n'
     logPattern = '{}Representation str(garbageObject):\n{}\nObject type: {}\nRef count: {}\nModule of object: {}\n'
     gc.collect()
     gcGarbageCopy = gc.garbage[:]
     del gc.garbage[:]
-    with open(path, 'w') as f:
+    with open(path, 'w', encoding='utf-8') as f:
+        output = UnicodeFileAdapter(f)
         for garbageObject in gcGarbageCopy:
             try:
-                f.write(logPattern.format(delimiter, str(garbageObject), type(garbageObject), sys.getrefcount(garbageObject), inspect.getmodule(garbageObject)))
+                output.write(logPattern.format(delimiter, str(garbageObject), type(garbageObject), sys.getrefcount(garbageObject), inspect.getmodule(garbageObject)))
             except:
                 continue
 

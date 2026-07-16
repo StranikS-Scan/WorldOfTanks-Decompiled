@@ -1,12 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/common/DossierBlocks.py
+from __future__ import absolute_import
 import struct
 import weakref
 from array import array
-from itertools import izip
+from builtins import range, zip
+from future.utils import viewitems, viewvalues
+from past.builtins import xrange
 from typing import Type, Dict, Tuple, TYPE_CHECKING, Callable, Any, Iterable
 from debug_utils import LOG_ERROR
-from serialization import ComponentBinSerializer, SerializableComponent, parseCompDescr
+from serialization import ComponentBinSerializer, SerializableComponent
 from serialization.serializable_component import SerializableComponentChildType
 if TYPE_CHECKING:
     from dossiers2.common.DossierDescr import DossierDescr
@@ -92,7 +95,7 @@ class StaticDossierBlockDescr(DossierBlockDescrInterface):
         if self.__isExpanded:
             return self
         values = struct.unpack(self.__format, self.__initialCompDescr)
-        data = dict([ (key, value) for value, (key, _) in izip(values, self.__recordsLayout) ])
+        data = {key:value for value, (key, _) in zip(values, self.__recordsLayout)}
         data.update(self.__data)
         self.__data = data
         self.__isExpanded = True
@@ -202,7 +205,7 @@ class DictDossierBlockDescr(DossierBlockDescrInterface):
         return len(self.__data)
 
     def __iter__(self):
-        return self.__data.iterkeys()
+        return iter(self.__data)
 
     def __str__(self):
         return str(self.__data)
@@ -227,13 +230,13 @@ class DictDossierBlockDescr(DossierBlockDescrInterface):
             return value
 
     def iteritems(self):
-        return self.__data.iteritems()
+        return iter(viewitems(self.__data))
 
     def iterkeys(self):
-        return self.__data.iterkeys()
+        return iter(self.__data)
 
     def itervalues(self):
-        return self.__data.itervalues()
+        return iter(viewvalues(self.__data))
 
     def items(self):
         return self.__data.items()
@@ -260,7 +263,7 @@ class DictDossierBlockDescr(DossierBlockDescrInterface):
         if self.__isExpanded:
             fmt = '<' + itemFormat * length
             values = []
-            for key, value in data.iteritems():
+            for key, value in viewitems(data):
                 values += itemToList(key, value)
 
             if newSize == size:
@@ -290,7 +293,7 @@ class DictDossierBlockDescr(DossierBlockDescrInterface):
 
     def __unpack(self, compDescr):
         itemSize = self.__itemSize
-        length = len(compDescr) / itemSize
+        length = len(compDescr) // itemSize
         if length == 0:
             return ({}, {})
         data, offsets = {}, {}
@@ -388,7 +391,7 @@ class ListDossierBlockDescr(DossierBlockDescrInterface):
 
     def updateDossierCompDescr(self, dossierCompDescrArray, offset, size):
         itemSize = self.__itemSize
-        length = size / itemSize
+        length = size // itemSize
         selfList = self.__list
         newLength = len(selfList)
         newSize = newLength * itemSize
@@ -422,14 +425,14 @@ class ListDossierBlockDescr(DossierBlockDescrInterface):
 
     def __unpack(self, compDescr):
         data = []
-        length = len(compDescr) / self.__itemSize
+        length = len(compDescr) // self.__itemSize
         if length == 0:
             return []
         fmt = '<' + self.__itemFormat * length
         values = struct.unpack(fmt, compDescr)
         itemLength = len(self.__itemFormat)
         idx = 0
-        for i in xrange(length):
+        for _ in xrange(length):
             data.append(self.__listToItem(values, idx))
             idx += itemLength
 
@@ -625,12 +628,12 @@ class SerializableBlockDescr(DossierBlockDescrInterface):
         self.expand()
         return self.__data[key] if key in self.__data else default
 
-    def updateDossierCompDescr(self, dossierCompDescrArray, offset, currentSize):
+    def updateDossierCompDescr(self, dossierCompDescrArray, offset, size):
         data = ''
         if self.__data:
             data = ComponentBinSerializer().serialize(self.__serializableComponentClass(**self.__data))
         self.__changed.clear()
-        return (dossierCompDescrArray[:offset] + array('c', data) + dossierCompDescrArray[offset + currentSize:], len(data))
+        return (dossierCompDescrArray[:offset] + array('c', data) + dossierCompDescrArray[offset + size:], len(data))
 
 
 def _callEventHandlers(eventsEnabled, handlers, dossierDescr, dossierBlockDescr, args):

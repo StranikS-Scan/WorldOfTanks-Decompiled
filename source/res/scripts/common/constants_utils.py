@@ -4,13 +4,14 @@ from __future__ import absolute_import
 import types
 import typing
 from past.builtins import long
-from future.utils import viewitems, viewvalues, with_metaclass
+from future.utils import viewitems, viewvalues
 import arena_bonus_type_caps
 import constants
-from UnitBase import CMD_NAMES, ROSTER_TYPE, PREBATTLE_TYPE_BY_UNIT_MGR_ROSTER, PREBATTLE_TYPE_BY_UNIT_MGR_ROSTER_EXT, ROSTER_TYPE_TO_CLASS, UNIT_MGR_FLAGS_TO_PREBATTLE_TYPE, UNIT_MGR_FLAGS_TO_UNIT_MGR_ENTITY_NAME, UNIT_MGR_FLAGS_TO_INVITATION_TYPE, QUEUE_TYPE_BY_UNIT_MGR_ROSTER, UNIT_ERROR, VEHICLE_TAGS_GROUP_BY_UNIT_MGR_FLAGS
+from UnitBase import CMD_NAMES, ROSTER_TYPE, PREBATTLE_TYPE_BY_UNIT_MGR_ROSTER, PREBATTLE_TYPE_BY_UNIT_MGR_ROSTER_EXT, ROSTER_TYPE_TO_CLASS, UNIT_MGR_FLAGS_TO_PREBATTLE_TYPE, UNIT_MGR_FLAGS_TO_UNIT_MGR_ENTITY_NAME, UNIT_MGR_FLAGS_TO_INVITATION_TYPE, QUEUE_TYPE_BY_UNIT_MGR_ROSTER, UNIT_ERROR, VEHICLE_TAGS_GROUP_BY_UNIT_MGR_FLAGS, UNIT_ASSEMBLER_IMPL_TO_CONFIG, PREBATTLE_TYPE_TO_UNIT_ASSEMBLER, UNIT_ASSEMBLER_IMPL_NAMES, UNIT_ASSEMBLER_IMPL_IDS
 from constants import ARENA_GUI_TYPE, ARENA_GUI_TYPE_LABEL, ARENA_BONUS_TYPE, ARENA_BONUS_TYPE_NAMES, ARENA_BONUS_TYPE_IDS, ARENA_BONUS_MASK, QUEUE_TYPE, QUEUE_TYPE_NAMES, PREBATTLE_TYPE, PREBATTLE_TYPE_NAMES, INVITATION_TYPE, BATTLE_MODE_VEHICLE_TAGS, SEASON_TYPE_BY_NAME, SEASON_NAME_BY_TYPE, QUEUE_TYPE_IDS, ARENA_BONUS_TYPE_TO_QUEUE_TYPE, ATTACK_REASONS, ATTACK_REASON_INDICES, DAMAGE_INFO_CODES, DAMAGE_INFO_INDICES, DAMAGE_INFO_CODES_PER_ATTACK_REASON, IS_CLIENT, INBATTLE_CONFIGS
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE
 from debug_utils import LOG_DEBUG
+from py2to3.patched_future import with_metaclass
 from soft_exception import SoftException
 
 class ConstInjectorMeta(type):
@@ -241,6 +242,20 @@ def addBattleResultsConfig(arenaBonusType, config):
         return
 
 
+def addBattleChatCommands(commands):
+    import messenger_common_chat2
+    from chat_commands_consts import extendCommandMarkerTypes
+    from chat_shared import CHAT_COMMANDS
+    for command in commands:
+        CHAT_COMMANDS.inject([(command.name, {'battleCmd': 1})])
+        extendCommandMarkerTypes(command)
+        messenger_common_chat2.addBattleChatCommand(command)
+
+    if constants.IS_BASEAPP:
+        from messenger_helpers_chat2 import ArenaChat
+        ArenaChat.addExtendedBattleChatCommands(commands)
+
+
 def initCommonTypes(extConstants, personality):
     addArenaGuiTypesFromExtension(extConstants.ARENA_GUI_TYPE, personality)
     addArenaBonusCapsFromExtension(extConstants.ARENA_BONUS_TYPE_CAPS, personality)
@@ -254,6 +269,20 @@ def initSquadCommonTypes(extConstants, personality):
     addRosterTypes(extConstants.ROSTER_TYPE, personality)
     addInvitationTypes(extConstants.INVITATION_TYPE, personality)
     addClientUnitCmd(extConstants.CLIENT_UNIT_CMD, personality)
+
+
+def initSquadAssemblerCommonTypes(extConstants, personality):
+    extraAttrs = extConstants.UnitAssemblerImplType.getExtraAttrs()
+    extraAttrs = {k.lower():v for k, v in viewitems(extraAttrs)}
+    extConstants.UnitAssemblerImplType.inject(personality)
+    UNIT_ASSEMBLER_IMPL_NAMES.update(extraAttrs)
+    UNIT_ASSEMBLER_IMPL_IDS.update({value:attr for attr, value in viewitems(extraAttrs)})
+    UNIT_ASSEMBLER_IMPL_TO_CONFIG.update(extConstants.UNIT_ASSEMBLER_IMPL_TO_CONFIG)
+    msg = 'UNIT_ASSEMBLER_IMPL_TO_CONFIG:{data} was added to UNIT_ASSEMBLER_IMPL_TO_CONFIG. Personality: {p}'.format(data=extConstants.UNIT_ASSEMBLER_IMPL_TO_CONFIG, p=personality)
+    LOG_DEBUG(msg)
+    PREBATTLE_TYPE_TO_UNIT_ASSEMBLER.update(extConstants.PREBATTLE_TYPE_TO_UNIT_ASSEMBLER)
+    msg = 'PREBATTLE_TYPE_TO_UNIT_ASSEMBLER:{data} was added to PREBATTLE_TYPE_TO_UNIT_ASSEMBLER. Personality: {p}'.format(data=extConstants.PREBATTLE_TYPE_TO_UNIT_ASSEMBLER, p=personality)
+    LOG_DEBUG(msg)
 
 
 def getUsedInReplaysConfigKeys():
@@ -307,11 +336,11 @@ class AbstractBattleMode(object):
 
     @property
     def _battleMgrConfig(self):
-        from server_constants import SINGLETON_DEFAULT_GROUP
+        from server_constants import SINGLETON_DEFAULT_GROUP, SERVER_MODES
         return (self._BATTLE_MGR_NAME,
          0.2,
          SINGLETON_DEFAULT_GROUP,
-         ('periphery', 'standalone'))
+         (SERVER_MODES.META, SERVER_MODES.STANDALONE))
 
     @property
     def _client_prbEntityClass(self):
@@ -366,7 +395,15 @@ class AbstractBattleMode(object):
         return None
 
     @property
+    def _client_platoonSearchViewClass(self):
+        return None
+
+    @property
     def _client_platoonLayouts(self):
+        return None
+
+    @property
+    def _client_unitMembersOrderKey(self):
         return None
 
     @property
@@ -527,6 +564,18 @@ class AbstractBattleMode(object):
         return []
 
     @property
+    def _server_unitAssemblerImpl(self):
+        return []
+
+    @property
+    def _server_unitAssemblerImplToQueue(self):
+        return []
+
+    @property
+    def _server_unitAssemblerImplToChecker(self):
+        return []
+
+    @property
     def _server_unitMethodRoles(self):
         return []
 
@@ -635,6 +684,12 @@ class AbstractBattleMode(object):
             scu.addUnitCmdHandlers(self._server_unitCmdHandlers, self._personality)
         if self._server_unitMethodRoles:
             scu.addUnitMethodRoles(self._server_unitMethodRoles, self._personality)
+        if self._server_unitAssemblerImpl:
+            scu.addUnitAssemblerImpl(self._server_unitAssemblerImpl, self._personality)
+        if self._server_unitAssemblerImplToQueue:
+            scu.addUnitAssemblerImplToQueue(self._server_unitAssemblerImplToQueue, self._personality)
+        if self._server_unitAssemblerImplToChecker:
+            scu.addUnitAssemblerImplTypeToVehicleChecker(self._server_unitAssemblerImplToChecker, self._personality)
 
     def registerClient(self):
         from gui.prb_control import prb_utils
@@ -672,9 +727,14 @@ class AbstractBattleMode(object):
     def registerClientPlatoon(self):
         from gui.impl.lobby.platoon import platoon_config
         platoon_config.addQueueTypeToPrbSquadActionName(self._QUEUE_TYPE, self._CLIENT_PRB_ACTION_NAME_SQUAD, self._personality)
-        platoon_config.addPlatoonViewByPrbType(self._PREBATTLE_TYPE, self._client_platoonViewClass, self._personality)
-        platoon_config.addPlatoonWelcomeViewByPrbType(self._PREBATTLE_TYPE, self._client_platoonWelcomeViewClass, self._personality)
-        platoon_config.addPlatoonLayoutData(self._PREBATTLE_TYPE, self._client_platoonLayouts, self._personality)
+        if self._client_platoonViewClass:
+            platoon_config.addPlatoonViewByPrbType(self._PREBATTLE_TYPE, self._client_platoonViewClass, self._personality)
+        if self._client_platoonWelcomeViewClass:
+            platoon_config.addPlatoonWelcomeViewByPrbType(self._PREBATTLE_TYPE, self._client_platoonWelcomeViewClass, self._personality)
+        if self._client_platoonSearchViewClass:
+            platoon_config.addPlatoonSearchViewByPrbType(self._PREBATTLE_TYPE, self._client_platoonSearchViewClass, self._personality)
+        if self._client_platoonLayouts:
+            platoon_config.addPlatoonLayoutData(self._PREBATTLE_TYPE, self._client_platoonLayouts, self._personality)
 
     def registerClientSquadSelector(self):
         from gui.prb_control import prb_utils
@@ -687,6 +747,9 @@ class AbstractBattleMode(object):
         if self._client_readyVehicleCheckers:
             from gui.shared.system_factory import registerReadyVehicleChekers
             registerReadyVehicleChekers(self._QUEUE_TYPE, self._client_readyVehicleCheckers)
+        if self._client_unitMembersOrderKey:
+            from gui.shared.system_factory import registerUnitMembersOrderKey
+            registerUnitMembersOrderKey(self._QUEUE_TYPE, self._client_unitMembersOrderKey)
 
     def registerClientSquadFinder(self):
         from gui.prb_control import prb_utils

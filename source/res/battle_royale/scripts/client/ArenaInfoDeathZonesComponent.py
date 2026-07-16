@@ -10,7 +10,7 @@ class ArenaInfoDeathZonesComponent(DynamicScriptComponent):
     def __init__(self):
         super(ArenaInfoDeathZonesComponent, self).__init__()
         prefab = 'content/CGFPrefabs/steel_hunter/death_zones_rules.prefab'
-        CGF.loadGameObject(prefab, self.entity.spaceID, Math.Vector3(0, 0, 0))
+        CGF.loadAndCreatePrefab(prefab, self.entity.spaceID, Math.Vector3(0, 0, 0))
         self.visibilityMskZones = [ 0 for _ in enumerate(DEATH_ZONE_IDS) ]
         self.updatedZones = []
 

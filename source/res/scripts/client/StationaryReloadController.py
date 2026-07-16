@@ -35,6 +35,9 @@ class StationaryReloadAmmoState(DefaultComponentAmmoState):
     def __eq__(self, other):
         return isinstance(other, StationaryReloadAmmoState) and self.__state == other.stationaryReloadState and self.__baseTime == other.stationaryBaseTime and self.__timeLeft == other.stationaryTimeLeft
 
+    def __ne__(self, other):
+        return not self == other
+
     def __hash__(self):
         return hash((self.__state, self.__baseTime, self.__timeLeft))
 
@@ -134,7 +137,6 @@ class StationaryReloadController(VehicleDynamicComponent, IGunMechanicComponent,
 
     def _onAppearanceReady(self):
         super(StationaryReloadController, self)._onAppearanceReady()
-        self.__mechanicPrefabSpawner.loadAppearancePrefab()
         self.__statesEvents.processStatePrepared()
 
     def _onComponentAppearanceUpdate(self, **kwargs):

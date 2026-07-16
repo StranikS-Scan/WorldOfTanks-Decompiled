@@ -134,8 +134,8 @@ class SoundModes(object):
             return
         else:
             soundModes, nationalPresets = self.__readSoundModesConfig(modesSettingsSection, self.__nationalPresets)
-            self.__modes = dict(((soundMode.name, soundMode) for soundMode in soundModes))
-            self.__nationalPresets = dict(((preset.name, preset) for preset in nationalPresets))
+            self.__modes = {soundMode.name:soundMode for soundMode in soundModes}
+            self.__nationalPresets = {preset.name:preset for preset in nationalPresets}
             if SoundModes.DEFAULT_MODE_NAME not in self.__modes:
                 LOG_ERROR('Default sound mode is not found!')
             folderSection = ResMgr.openSection(SoundModes.__MODES_FOLDER)

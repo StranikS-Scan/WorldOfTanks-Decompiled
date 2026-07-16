@@ -69,12 +69,13 @@ class _TrajectoryDrawerImpl(object):
 
     def __setEnabled(self, value):
         self.__isEnabled = self.__castBool(value)
+        queue = CGF.CommandQueue(self.__spaceID)
         if self.__isEnabled:
             if self.__gameObject is None:
-                self.__gameObject = CGF.GameObject(self.__spaceID, 'TrajectoryDrawer')
+                self.__gameObject = queue.createGameObject('TrajectoryDrawer')
             if self.__drawer is None:
-                self.__drawer = self.__gameObject.createComponent(BigWorld.TrajectoryDrawer)
-            self.__gameObject.activate()
+                self.__drawer = queue.createComponent(self.__gameObject, BigWorld.TrajectoryDrawer)
+            queue.activateGameObject(self.__gameObject)
         else:
-            self.__gameObject.deactivate()
+            queue.deactivateGameObject(self.__gameObject)
         return

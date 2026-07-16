@@ -61,6 +61,10 @@ class LastStandSquadActionsHandler(SquadActionsHandler):
             result = yield await_callback(checkVehicleAbilitiesFull)(vehicle)
         raise AsyncReturn(result)
 
+    @staticmethod
+    def _isSquadHavePlayersInBattle(slotPlayer, playerInfo):
+        return slotPlayer.isInArena() or playerInfo.isInQueue()
+
 
 class LastStandStateValidator(SquadVehiclesValidator):
     lsCtrl = dependency.descriptor(ILSController)

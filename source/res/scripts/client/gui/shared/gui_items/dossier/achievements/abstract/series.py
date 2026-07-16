@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/abstract/series.py
-from regular import RegularAchievement
+from __future__ import absolute_import
 from gui.impl import backport
+from gui.shared.gui_items.dossier.achievements.abstract.regular import RegularAchievement
 
 class SeriesAchievement(RegularAchievement):
     __slots__ = ()

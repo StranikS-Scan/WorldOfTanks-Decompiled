@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/recycle_bin_requester.py
+from __future__ import absolute_import
 from collections import namedtuple
+from future.utils import viewitems
 import BigWorld
 from ItemRestore import RESTORE_VEHICLE_TYPE
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
@@ -51,12 +53,12 @@ class RecycleBinRequester(AbstractSyncDataRequester, IRecycleBinRequester):
             return None
 
     def getVehiclesIntCDs(self):
-        return self.vehiclesBuffer.keys()
+        return list(self.vehiclesBuffer)
 
     def getTankmen(self, maxDuration):
         filteredBuffer = {}
         tankmenBuffer = self.recycleBin.get('tankmen', {}).get('buffer', {})
-        for tankmanId, (strCD, dismissedAt) in tankmenBuffer.iteritems():
+        for tankmanId, (strCD, dismissedAt) in viewitems(tankmenBuffer):
             if time_utils.getTimeDeltaTillNow(dismissedAt) < maxDuration:
                 filteredBuffer[tankmanId] = (strCD, dismissedAt)
 

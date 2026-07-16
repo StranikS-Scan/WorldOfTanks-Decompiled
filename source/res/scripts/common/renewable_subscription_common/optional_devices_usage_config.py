@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/renewable_subscription_common/optional_devices_usage_config.py
+from __future__ import absolute_import
 import logging
 import typing
 from collections import namedtuple
 from enum import Enum
+from future.utils import lmap, viewitems
 from items import vehicles
 from renewable_subscription_common.settings_constants import OptionalDevicesUsageConst
 from soft_exception import SoftException
@@ -65,7 +67,7 @@ EQUIPMENT_NAME_TO_GENERIC_OPTIONAL_DEVICE_MAP = {'stereoscope': GenericOptionalD
  'modernizedAimDrivesAimingStabilizer': GenericOptionalDevice.MODERNIZED_AIM_DRIVES_AIMING_STABILIZER,
  'modernizedTurbochargerRotationMechanism': GenericOptionalDevice.MODERNIZED_TURBOCHARGER_ROTATION_MECHANISM,
  'modernizedImprovedSightsEnhancedAimDrives': GenericOptionalDevice.MODERNIZED_IMPROVED_SIGHTS_ENHANCED_AIM_DRIVES}
-GENERIC_OPTIONAL_DEVICE_MAP_TO_EQUIPMENT_NAME = {v:k for k, v in EQUIPMENT_NAME_TO_GENERIC_OPTIONAL_DEVICE_MAP.iteritems()}
+GENERIC_OPTIONAL_DEVICE_MAP_TO_EQUIPMENT_NAME = {v:k for k, v in viewitems(EQUIPMENT_NAME_TO_GENERIC_OPTIONAL_DEVICE_MAP)}
 
 def _readOptionalDevicesUsage(section):
     tempConfig = {}
@@ -83,7 +85,7 @@ def _parseDevicesLoadouts(reader):
         for device in values.readString('devices').split():
             device = device.strip()
             if device not in EQUIPMENT_NAME_TO_GENERIC_OPTIONAL_DEVICE_MAP:
-                _logger.warning('Unknown device %s in optional device assistant config.' % device)
+                _logger.warning('Unknown device %s in optional device assistant config.', device)
                 continue
             devices.append(EQUIPMENT_NAME_TO_GENERIC_OPTIONAL_DEVICE_MAP.get(device).value)
 
@@ -97,15 +99,15 @@ def _getVehicleTypeCompDescr(vehicleName):
     try:
         return vehicles.makeVehicleTypeCompDescrByName(vehicleName)
     except SoftException:
-        _logger.warning('Vehicle %s does not exist! Check optional devices assistant configs to fix it.' % vehicleName)
+        _logger.warning('Vehicle %s does not exist! Check optional devices assistant configs to fix it.', vehicleName)
 
 
 def convertServerDiffToRichTypes(configDict):
     updateConfig = configDict.get(OptionalDevicesUsageConst.UPDATE, {})
-    for vehicle, loadoutList in updateConfig.iteritems():
+    for vehicle, loadoutList in viewitems(updateConfig):
         newLoadoutList = []
         for loadout in loadoutList:
-            devicesList = map(GenericOptionalDevice, loadout[0])
+            devicesList = lmap(GenericOptionalDevice, loadout[0])
             percentage = loadout[1]
             newLoadoutList.append(VehicleLoadout(devicesList, percentage))
 
@@ -123,14 +125,14 @@ def _validateOverrideConfig(configDict):
         raise SoftException('There is at least one nonexistent vehicle in optional_devices_usage_override_config.xml. See warnings.')
     removedUpdated = removedVehicles.intersection(updatedEquipmentUsages)
     if removedUpdated:
-        raise SoftException('There are removed AND updated vehicles in optional_devices_usage_override_config.xml. %s', [ vehicles.getVehicleType(removedVehicle).name for removedVehicle in removedUpdated ])
+        raise SoftException('There are removed AND updated vehicles in optional_devices_usage_override_config.xml. {}'.format([ vehicles.getVehicleType(removedVehicle).name for removedVehicle in removedUpdated ]))
     removedCopied = removedVehicles.intersection(copiedVehiclesFrom)
     if removedCopied:
-        raise SoftException('There are removed vehicles as "vehicleFrom" in copy config. %s', [ vehicles.getVehicleType(removedVehicle).name for removedVehicle in removedCopied ])
+        raise SoftException('There are removed vehicles as "vehicleFrom" in copy config. {}'.format([ vehicles.getVehicleType(removedVehicle).name for removedVehicle in removedCopied ]))
     wrongDeviceLenVehicles = []
     for vehicleCD, data in configDict.get(OptionalDevicesUsageConst.UPDATE, {}).items():
         if len(data) > 3:
             wrongDeviceLenVehicles.append(vehicleCD)
 
     if wrongDeviceLenVehicles:
-        raise SoftException('Invalid number of popular setups for vehicles: %s', [ vehicles.getVehicleType(vehicle).name for vehicle in wrongDeviceLenVehicles ])
+        raise SoftException('Invalid number of popular setups for vehicles: {}'.format([ vehicles.getVehicleType(vehicle).name for vehicle in wrongDeviceLenVehicles ]))

@@ -14,7 +14,7 @@ class NetworkEntity(BigWorld.Entity):
         return
 
     def onEnterWorld(self, _):
-        if CGF.addNetworkEntity(self.spaceID, self, self.unique_id, self.prefab_path):
+        if CGF.addNetworkEntity(self, self.unique_id, self.prefab_path):
             direction = (self.yaw, self.pitch, self.roll)
             LOG_DEBUG_DEV('New NetworkEntity [{}][{}] position {} rotation {} scale {}'.format(self.id, self.unique_id, self.position, direction, self.scale))
 
@@ -22,7 +22,7 @@ class NetworkEntity(BigWorld.Entity):
         if self.entityGameObject and self.prefab_path:
             CGF.removeGameObject(self.entityGameObject)
         self.entityGameObject = None
-        if CGF.removeNetworkEntity(self.spaceID, self, self.unique_id):
+        if CGF.removeNetworkEntity(self, self.unique_id):
             LOG_DEBUG_DEV('Removed NetworkEntity [{}]'.format(self.id))
         return
 
@@ -46,18 +46,14 @@ class NetworkEntity(BigWorld.Entity):
 
     @staticmethod
     def __processAddComponent(go, component):
-        if not go.isValid():
+        if not go.valid:
             return
-        else:
-            existing = go.findComponentByType(type(component))
-            if existing is None:
-                go.addComponent(component)
-            return
+        if not go.hasComponent(type(component)):
+            go.assignComponent(component)
 
     @staticmethod
     def __processRemoveComponent(go, component):
-        if not go.isValid():
+        if not go.valid:
             return
-        existing = go.findComponentByType(type(component))
-        if existing is component:
+        if go.hasComponent(type(component)):
             go.removeComponent(component)

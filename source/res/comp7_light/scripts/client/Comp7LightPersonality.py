@@ -13,7 +13,7 @@ from comp7_light_constants import ARENA_GUI_TYPE, GameSeasonType
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.override_scaleform_views_manager import g_overrideScaleFormViewsConfig
 from gui.prb_control.prb_utils import initGuiTypes
-_LOBBY_EXT_PACKAGES = ['comp7_light.gui.impl.lobby.hangar']
+_LOBBY_EXT_PACKAGES = ['comp7_light.gui.impl.lobby.hangar', 'comp7_light.gui.impl.lobby.battle_results']
 _BATTLE_EXT_PACKAGES = ['comp7_light.gui.Scaleform.daapi.view.battle.shared']
 
 class ClientComp7LightBattleMode(Comp7LightBattleMode):
@@ -128,6 +128,11 @@ class ClientComp7LightBattleMode(Comp7LightBattleMode):
         return Comp7LightMembersView
 
     @property
+    def _client_unitMembersOrderKey(self):
+        from gui.game_control.platoon_controller import _unitMembersDisplayOrder
+        return _unitMembersDisplayOrder
+
+    @property
     def _client_LobbyContextMenuOptions(self):
         from comp7_light.gui.Scaleform.daapi.view.lobby.lobby_constants import USER
         from comp7_light.gui.Scaleform.daapi.view.lobby.user_cm_handlers import createComp7LightSquad, addComp7LightSquadInfo
@@ -163,6 +168,11 @@ class ClientComp7LightBattleMode(Comp7LightBattleMode):
     def _client_battleResultStatsCtrlClass(self):
         from comp7_light.gui.battle_results.composer import Comp7LightStatsComposer
         return Comp7LightStatsComposer
+
+    @property
+    def _client_battleResultsEntryState(self):
+        from comp7_light.gui.impl.lobby.battle_results.states import Comp7LightPostBattleResultsEntryState
+        return Comp7LightPostBattleResultsEntryState
 
     @property
     def _client_battleResultsReusables(self):
@@ -207,6 +217,7 @@ def preInit():
     battleMode.registerSystemMessagesTypes()
     battleMode.registerBattleResultSysMsgType()
     battleMode.registerBattleResultsConfig()
+    battleMode.registerBattleResultsEntryState()
     battleMode.registerClientBattleResultsCtrl()
     battleMode.registerClientBattleResultReusabled()
     battleMode.registerClientNotificationHandlers()

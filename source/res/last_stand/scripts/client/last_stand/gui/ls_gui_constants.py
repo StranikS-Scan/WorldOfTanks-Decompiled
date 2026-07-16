@@ -6,7 +6,7 @@ from constants_utils import ConstInjector
 from gui.battle_control.controllers.battle_hints.queues import BattleHintQueueParams
 from gui.prb_control import settings
 from gui.Scaleform.daapi.settings import views
-from last_stand_common.last_stand_constants import DifficultyLevelToken, QUEUE_TYPE, LS_CHAT_CHANNEL
+from last_stand_common.last_stand_constants import DifficultyLevelToken, QUEUE_TYPE, LS_CHAT_CHANNELS
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _FET, BATTLE_CTRL_ID as _BASE_CTRL_ID
 from messenger.m_constants import LAZY_CHANNEL as CHANNEL
 
@@ -61,6 +61,7 @@ class FEEDBACK_EVENT_ID(_FET, ConstInjector):
 
 class BATTLE_CTRL_ID(_BASE_CTRL_ID, ConstInjector):
     LS_BATTLE_GUI_CTRL = 104
+    LS_VOIP_CTRL = 106
 
 
 LS_RENT_VEHICLE_TOOLTIP = 'lsRentVehicle'
@@ -76,7 +77,10 @@ LS_INTRO_VIDEO_KEY = 'lsIntroVideo'
 
 class LAZY_CHANNEL(CHANNEL, ConstInjector):
     _const_type = str
-    LAST_STAND_GLOBAL_CHANNEL = LS_CHAT_CHANNEL
+    LAST_STAND_GLOBAL_CHANNEL = LS_CHAT_CHANNELS.LS_CHAT_CHANNEL
+    LAST_STAND_GLOBAL_CHANNEL_EASY = LS_CHAT_CHANNELS.LS_CHAT_CHANNEL_EASY
+    LAST_STAND_GLOBAL_CHANNEL_MEDIUM = LS_CHAT_CHANNELS.LS_CHAT_CHANNEL_MEDIUM
+    LAST_STAND_GLOBAL_CHANNEL_HARD = LS_CHAT_CHANNELS.LS_CHAT_CHANNEL_HARD
 
 
 LS_BATTLE_HINTS_QUEUE_ID = BattleHintQueueParams(name='last_stand', withFadeOut=True)

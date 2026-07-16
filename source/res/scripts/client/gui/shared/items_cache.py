@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_cache.py
-from Event import Event
+from __future__ import absolute_import
+from builtins import range
+from Event import SafeEvent
 from debug_utils import LOG_DEBUG
 from PlayerEvents import g_playerEvents
+from gui.challenges.challenges_requester import ChallengesRequester
 from gui.server_events.events_helpers import isSuitableForPM
 from gui.pet_system.requester import PetRequesterRequester
 from gui.shared.utils.requesters import DossierRequester, GoodiesRequester, InventoryRequester, ItemsRequester, RecycleBinRequester, ShopRequester, StatsRequester, TokensRequester, VehicleRotationRequester
@@ -35,14 +38,14 @@ class ItemsCache(IItemsCache):
         goodies = GoodiesRequester()
         self.__isForPMSync = False
         self.__needCommonSync = False
-        self.__items = ItemsRequester.ItemsRequester(InventoryRequester(), StatsRequester(), DossierRequester(), goodies, ShopRequester(goodies), RecycleBinRequester(), VehicleRotationRequester(), RankedRequester(), BattleRoyaleRequester(), BadgesRequester(), EpicMetaGameRequester(), TokensRequester(), dependency.instance(IFestivityFactory).getRequester(), BlueprintsRequester(), SessionStatsRequester(), AnonymizerRequester(), BattlePassRequester(), GiftSystemRequester(), GameRestrictionsRequester(), Achievements20Requester(), PetRequesterRequester())
+        self.__items = ItemsRequester.ItemsRequester(InventoryRequester(), StatsRequester(), DossierRequester(), goodies, ShopRequester(goodies), RecycleBinRequester(), VehicleRotationRequester(), RankedRequester(), BattleRoyaleRequester(), BadgesRequester(), EpicMetaGameRequester(), TokensRequester(), dependency.instance(IFestivityFactory).getRequester(), BlueprintsRequester(), SessionStatsRequester(), AnonymizerRequester(), BattlePassRequester(), GiftSystemRequester(), GameRestrictionsRequester(), Achievements20Requester(), PetRequesterRequester(), ChallengesRequester())
         self.__compatVehiclesCache = CompatVehiclesCache()
         self.__waitForSync = False
         self.__syncFailed = False
-        self.onSyncStarted = Event()
-        self.onSyncCompleted = Event()
-        self.onSyncFailed = Event()
-        self.onPMSyncCompleted = Event()
+        self.onSyncStarted = SafeEvent()
+        self.onSyncCompleted = SafeEvent()
+        self.onSyncFailed = SafeEvent()
+        self.onPMSyncCompleted = SafeEvent()
 
     def init(self):
         g_playerEvents.onInventoryResync += self.__pe_onInventoryResync

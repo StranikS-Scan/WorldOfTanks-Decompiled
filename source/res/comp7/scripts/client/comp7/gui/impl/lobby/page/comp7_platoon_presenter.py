@@ -3,7 +3,6 @@
 from __future__ import absolute_import
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl.lobby.page.platoon_presenter import PlatoonPresenter
-from gui.prb_control import prb_getters
 from helpers import dependency
 from skeletons.gui.game_control import IPlatoonController, IComp7Controller
 
@@ -12,12 +11,7 @@ class Comp7PlatoonPresenter(PlatoonPresenter):
     __comp7Controller = dependency.descriptor(IComp7Controller)
 
     def _getEvents(self):
-        events = [(self.__comp7Controller.onQualificationStateUpdated, self._onUpdatePlatoon), (self.__comp7Controller.onModeConfigChanged, self._onUpdatePlatoon), (self.__comp7Controller.onBanUpdated, self._onUpdatePlatoon)]
-        unitMgr = prb_getters.getClientUnitMgr()
-        if unitMgr is not None and unitMgr.unit is not None:
-            events.append((unitMgr.unit.onSquadSizeChanged, self._onUpdatePlatoon))
-        events.extend(super(Comp7PlatoonPresenter, self)._getEvents())
-        return events
+        return super(Comp7PlatoonPresenter, self)._getEvents() + ((self.__comp7Controller.onQualificationStateUpdated, self._onUpdatePlatoon), (self.__comp7Controller.onModeConfigChanged, self._onUpdatePlatoon), (self.__comp7Controller.onBanUpdated, self._onUpdatePlatoon))
 
     def _initialize(self, *args, **kwargs):
         super(Comp7PlatoonPresenter, self)._initialize(args, kwargs)

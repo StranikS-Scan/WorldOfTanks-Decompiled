@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/area_marker_ctrl.py
+from __future__ import absolute_import
 import logging
+from future.utils import viewvalues
 import BigWorld
 from helpers import dependency
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
@@ -45,7 +47,7 @@ class AreaMarkersController(BaseMarkerController):
         else:
             vehicle = player.getVehicleAttached()
             observableVehiclePosition = vehicle.position if vehicle else None
-            for marker in self._markers.itervalues():
+            for marker in viewvalues(self._markers):
                 if marker.isEmpty():
                     continue
                 distanceToArea = marker.getDistanceToArea(observableVehiclePosition)

@@ -53,7 +53,7 @@ _PREM_TYPE_TO_FACTOR100_NAMES = {PREM_BONUS_TYPES.CREDITS: {PREMIUM_TYPE.BASIC: 
                                    PREMIUM_TYPE.PLUS: 'premiumPlusFactor100',
                                    PREMIUM_TYPE.VIP: 'premiumVipFactor100'}}
 
-class UNIT_CLAN_MEMBERSHIP:
+class UNIT_CLAN_MEMBERSHIP(object):
     NONE = 0
     ANY = 1
     SAME = 2
@@ -69,8 +69,8 @@ def dictToList(indices, d):
 
 def listToDict(names, l):
     d = {}
-    for x in enumerate(names):
-        d[x[1]] = l[x[0]]
+    for name in enumerate(names):
+        d[name[1]] = l[name[0]]
 
     return d
 

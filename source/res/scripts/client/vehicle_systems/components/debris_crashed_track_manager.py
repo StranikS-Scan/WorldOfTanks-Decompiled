@@ -4,24 +4,89 @@ import logging
 import random
 import CGF
 import Vehicular
-from cgf_script.managers_registrator import autoregister, onAddedQuery, onRemovedQuery
 from items.components.component_constants import MAIN_TRACK_PAIR_IDX
 from items.vehicle_items import CHASSIS_ITEM_TYPE
 from vehicle_systems import tankStructure
 import math_utils
+from vehicle_systems.components.CrashedTracks import CrashedTracksController
 from vehicle_systems.components.vehicle_pickup_component import VehiclePickupComponent
 from vehicle_systems.components.debris_crashed_track_component import DebrisCrashedTrackComponent, NodeRemapperComponent
 from vehicle_systems.tankStructure import TankSoundObjectsIndexes
-import GenericComponents
 from constants import IS_CGF_DUMP, IS_EDITOR
+from functools import partial
 if not IS_CGF_DUMP:
     from CustomEffectManager import CustomEffectManager
 _logger = logging.getLogger(__name__)
 
-@autoregister(presentInAllWorlds=True, domain=CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor)
-class DebrisCrashedTrackManager(CGF.ComponentManager):
+class DebrisCrashedTrackSystem(CGF.System):
     RTPC_OUTER_TRACK_STATE = 'RTPC_ext_treads_outer'
     DEBRIS_MAX_LIFETIME = 10
+    Activated = CGF.ActivateReaction(CGF.Rw(Vehicular.CompositeTrack), CGF.ReactRw(DebrisCrashedTrackComponent))
+    Deactivated = CGF.DeactivateReaction(CGF.Rw(Vehicular.CompositeTrack), CGF.ReactRw(DebrisCrashedTrackComponent))
+    PickupActivated = CGF.ActivateReaction(CGF.ReactRw(VehiclePickupComponent))
+    PickupDeactivated = CGF.DeactivateReaction(CGF.ReactRw(VehiclePickupComponent))
+    TrackDebrisAccess = CGF.AccessReaction(CGF.Rw(DebrisCrashedTrackComponent))
+    CompositeTrackAccess = CGF.AccessReaction(CGF.Rw(Vehicular.CompositeTrack))
+    WheelsAccess = CGF.AccessReaction(CGF.Rw(Vehicular.GeneralWheelsAnimator))
+    TrackAccess = CGF.AccessReaction(CGF.Rw(Vehicular.VehicleTracks))
+    SuspensionAccess = CGF.AccessReaction(CGF.Rw(Vehicular.Suspension))
+    NodeAccess = CGF.AccessReaction(CGF.Rw(NodeRemapperComponent))
+    AuditionAccess = CGF.AccessReaction(CGF.Rw(Vehicular.VehicleAudition))
+    CrashedTracksControllerAccess = CGF.AccessReaction(CGF.Rw(CrashedTracksController))
+    if not IS_CGF_DUMP:
+        EffectActivated = CGF.ActivateReaction(CGF.ReactRw(NodeRemapperComponent), CustomEffectManager)
+        EffectDeactivated = CGF.ActivateReaction(CGF.ReactRw(NodeRemapperComponent), CustomEffectManager)
+        Reactions = CGF.Reactions(Activated, Deactivated, PickupActivated, PickupDeactivated, CompositeTrackAccess, TrackDebrisAccess, EffectActivated, EffectDeactivated, WheelsAccess, TrackAccess, SuspensionAccess, NodeAccess, AuditionAccess, CrashedTracksControllerAccess)
+    else:
+        Reactions = CGF.Reactions(Activated, Deactivated, PickupActivated, PickupDeactivated, CompositeTrackAccess, TrackDebrisAccess, WheelsAccess, TrackAccess, SuspensionAccess, NodeAccess, AuditionAccess, CrashedTracksControllerAccess)
+
+    def update(self):
+        debrisTrackAccess = self.reaction(self.TrackDebrisAccess)
+        compositeTrackAccess = self.reaction(self.CompositeTrackAccess)
+        wheelsAccess = self.reaction(self.WheelsAccess)
+        tracksAccess = self.reaction(self.TrackAccess)
+        suspensionAccess = self.reaction(self.SuspensionAccess)
+        remapperAccess = self.reaction(self.NodeAccess)
+        auditionAccess = self.reaction(self.AuditionAccess)
+        crashedTracksControllerAccess = self.reaction(self.CrashedTracksControllerAccess)
+        queue = CGF.CommandQueue(self.gom)
+        for track, debris in self.reaction(self.Deactivated):
+            self.__unmapNodes(debris, queue, remapperAccess)
+            amountOfBrokenTracks = self.__switchVehicleTrackVisibility(track, debris, True, wheelsAccess, tracksAccess, compositeTrackAccess, debrisTrackAccess, suspensionAccess)
+            self.__adjustTrackAudition(amountOfBrokenTracks, debris.wheelsGameObject, auditionAccess)
+            debris.removeDebrisGameObject()
+            if debris.shouldCreateDebris:
+                DebrisCrashedTrackComponent.CURRENT_DEBRIS_COUNT -= 1
+
+        for pickup in self.reaction(self.PickupDeactivated):
+            if pickup.appearance is not None:
+                self.__recreatePhysicalDestroyedTracks(pickup.appearance, queue, compositeTrackAccess, debrisTrackAccess, tracksAccess)
+
+        for pickup in self.reaction(self.PickupActivated):
+            if pickup.appearance is not None:
+                self.__removePhysicalDestroyedTracks(pickup.appearance, debrisTrackAccess)
+
+        for track, debris in self.reaction(self.Activated):
+            self.__createDebris(track, debris, queue, tracksAccess)
+            amountOfBrokenTracks = self.__switchVehicleTrackVisibility(track, debris, False, wheelsAccess, tracksAccess, compositeTrackAccess, debrisTrackAccess, suspensionAccess)
+            self.__adjustTrackAudition(amountOfBrokenTracks, debris.wheelsGameObject, auditionAccess)
+            self.__generateDestructionEffect(debris)
+            self.__remapNodes(debris, queue, remapperAccess)
+            controller = crashedTracksControllerAccess.find(debris.wheelsGameObject)
+            if controller and not controller.hasDebris(debris.isLeft, debris.pairIndex):
+                queue.removeComponent(debris.object, DebrisCrashedTrackComponent)
+
+        if not IS_CGF_DUMP:
+            for node, effect in self.reaction(self.EffectDeactivated):
+                for fromNode, _ in node.nodes.iteritems():
+                    effect.remapNode(fromNode, '')
+
+            for node, effect in self.reaction(self.EffectActivated):
+                for fromNode, toNode in node.nodes.iteritems():
+                    effect.remapNode(fromNode, toNode)
+
+        queue.submit()
+        return
 
     def __forEachValidTrackGameObject(self, appearance, predicate):
         if appearance is None or appearance.typeDescriptor is None or appearance.tracks is None:
@@ -35,37 +100,37 @@ class DebrisCrashedTrackManager(CGF.ComponentManager):
             for idx in indices:
                 for isLeft in (True, False):
                     trackGO = appearance.tracks.getTrackGameObject(isLeft, idx)
-                    if trackGO.isValid():
+                    if trackGO.valid:
                         predicate(trackGO)
 
             return
 
-    def __removePhysicalDestroyedTrack(self, trackGO):
-        debris = trackGO.findComponentByType(DebrisCrashedTrackComponent)
+    def __removePhysicalDestroyedTrack(self, debrisTrackAccess, trackGO):
+        debris = debrisTrackAccess.find(trackGO)
         if debris is not None:
             debris.removeDebrisGameObject()
         return
 
-    def __removePhysicalDestroyedTracks(self, appearance):
-        self.__forEachValidTrackGameObject(appearance, self.__removePhysicalDestroyedTrack)
+    def __removePhysicalDestroyedTracks(self, appearance, debrisTrackAccess):
+        self.__forEachValidTrackGameObject(appearance, partial(self.__removePhysicalDestroyedTrack, debrisTrackAccess))
 
-    def __recreatePhysicalDestroyedTrack(self, trackGO):
-        compositeTrack = trackGO.findComponentByType(Vehicular.CompositeTrack)
-        debris = trackGO.findComponentByType(DebrisCrashedTrackComponent)
+    def __recreatePhysicalDestroyedTrack(self, queue, compositeTrackAccess, debrisTrackAccess, tracksAccess, trackGO):
+        compositeTrack = compositeTrackAccess.find(trackGO)
+        debris = debrisTrackAccess.find(trackGO)
         if debris is not None and compositeTrack is not None:
-            self.__createDebris(compositeTrack, debris)
+            self.__createDebris(compositeTrack, debris, queue, tracksAccess)
         return
 
-    def __recreatePhysicalDestroyedTracks(self, appearance):
-        self.__forEachValidTrackGameObject(appearance, self.__recreatePhysicalDestroyedTrack)
+    def __recreatePhysicalDestroyedTracks(self, appearance, queue, compositeTrackAccess, debrisTrackAccess, tracksAccess):
+        self.__forEachValidTrackGameObject(appearance, partial(self.__recreatePhysicalDestroyedTrack, queue, compositeTrackAccess, debrisTrackAccess, tracksAccess))
 
-    def __switchVehicleTrackVisibility(self, track, debris, isVisible):
+    def __switchVehicleTrackVisibility(self, track, debris, isVisible, wheelsAccess, tracksAccess, compositeTrackAccess, debrisTrackAccess, suspensionAccess):
         amountOfBrokenTracks = 0 if isVisible else 1
         track.disableTrack(not isVisible)
-        if not debris.wheelsGameObject.isValid():
+        if not debris.wheelsGameObject.valid:
             return amountOfBrokenTracks
         else:
-            animator = debris.wheelsGameObject.findComponentByType(Vehicular.GeneralWheelsAnimator)
+            animator = wheelsAccess.find(debris.wheelsGameObject)
             chassisType = debris.vehicleDescriptor.chassis.chassisType
             isYohMechanics = chassisType == CHASSIS_ITEM_TYPE.TRACK_WITHIN_TRACK and debris.pairIndex != MAIN_TRACK_PAIR_IDX
             if animator is not None and isYohMechanics:
@@ -74,23 +139,24 @@ class DebrisCrashedTrackManager(CGF.ComponentManager):
                         animator.relinkTrack(wheelIdx, track.trackThickness)
                     animator.unlinkFromTrack(wheelIdx, track.trackThickness)
 
-            vehicleTracks = debris.wheelsGameObject.findComponentByType(Vehicular.VehicleTracks)
+            vehicleTracks = tracksAccess.find(debris.wheelsGameObject)
             amountOfBrokenTracks = 0
             if vehicleTracks is not None:
                 for otherTrackIdx in xrange(vehicleTracks.getPairsCount()):
                     otherTrackGo = vehicleTracks.getTrackGameObject(track.isLeft, otherTrackIdx)
-                    otherTrack = otherTrackGo.findComponentByType(Vehicular.CompositeTrack)
+                    otherTrack = compositeTrackAccess.find(otherTrackGo)
                     thicknessAdjustment = 0 if isVisible else -track.trackThickness
                     otherTrack.adjustTrackThickness(thicknessAdjustment)
-                    otherTrack.forceSendLeadingWheelScrollLinks(animator)
-                    if otherTrackGo.findComponentByType(DebrisCrashedTrackComponent) is not None:
+                    if animator is not None:
+                        otherTrack.forceSendWheelScrollLinks(animator)
+                    if debrisTrackAccess.contains(otherTrackGo):
                         amountOfBrokenTracks += 1
                     otherTrackGo = vehicleTracks.getTrackGameObject(not track.isLeft, otherTrackIdx)
-                    if otherTrackGo.findComponentByType(DebrisCrashedTrackComponent) is not None:
+                    if debrisTrackAccess.contains(otherTrackGo):
                         amountOfBrokenTracks += 1
 
-            suspension = debris.wheelsGameObject.findComponentByType(Vehicular.Suspension)
-            if suspension is not None:
+            suspension = suspensionAccess.find(debris.wheelsGameObject)
+            if suspension:
                 suspension.forceCorrectionRecalculation()
             return amountOfBrokenTracks
 
@@ -105,110 +171,67 @@ class DebrisCrashedTrackManager(CGF.ComponentManager):
                 debris.boundEffects.addNewToNode(tankStructure.TankPartNames.CHASSIS, math_utils.createIdentityMatrix(), effects, keyPoints, isPlayerVehicle=debris.isPlayer)
             return
 
-    def __remapNodes(self, debris):
+    def __remapNodes(self, debris, queue, remapperAccess):
         if debris.trackPairDesc.tracksDebris is None:
             return
         else:
             go = debris.wheelsGameObject
-            if IS_EDITOR and not go.isValid():
+            if IS_EDITOR and not go.valid:
                 return
             debrisDesc = debris.debrisDesc
             nodes = {}
-            existingRemap = go.findComponentByType(NodeRemapperComponent)
-            if existingRemap is not None:
+            existingRemap = remapperAccess.find(go)
+            if not existingRemap and queue.hasComponent(go, NodeRemapperComponent):
+                existingRemap = queue.component(go, NodeRemapperComponent)
+            if existingRemap:
                 nodes = dict(existingRemap.nodes)
-                go.removeComponentByType(NodeRemapperComponent)
+                queue.removeComponent(go, NodeRemapperComponent)
             for fromNode, toNode in debrisDesc.nodesRemap.iteritems():
                 nodes[fromNode] = toNode
 
-            go.createComponent(NodeRemapperComponent, nodes)
+            queue.assignComponent(go, NodeRemapperComponent(nodes))
             return
 
-    def __unmapNodes(self, debris):
+    def __unmapNodes(self, debris, queue, remapperAccess):
         go = debris.wheelsGameObject
-        if not go.isValid():
+        if not go.valid:
+            return
+        existingRemap = remapperAccess.find(go)
+        if not existingRemap:
+            return
+        nodes = dict(existingRemap.nodes)
+        debrisDesc = debris.debrisDesc
+        for fromNode, _ in debrisDesc.nodesRemap.iteritems():
+            del nodes[fromNode]
+
+        queue.removeComponent(go, NodeRemapperComponent)
+        if nodes:
+            queue.assignComponent(go, NodeRemapperComponent(nodes))
+
+    def __adjustTrackAudition(self, amountOfBrokenTracks, appearanceGo, auditionAccess):
+        if not appearanceGo.valid:
             return
         else:
-            existingRemap = go.findComponentByType(NodeRemapperComponent)
-            if existingRemap is None:
-                return
-            nodes = dict(existingRemap.nodes)
-            debrisDesc = debris.debrisDesc
-            for fromNode, _ in debrisDesc.nodesRemap.iteritems():
-                del nodes[fromNode]
-
-            go.removeComponentByType(NodeRemapperComponent)
-            if nodes:
-                go.createComponent(NodeRemapperComponent, nodes)
-            return
-
-    def __adjustTrackAudition(self, amountOfBrokenTracks, appearanceGo):
-        if not appearanceGo.isValid():
-            return
-        else:
-            audition = appearanceGo.findComponentByType(Vehicular.VehicleAudition)
+            audition = auditionAccess.find(appearanceGo)
             if audition is None:
                 return
             soundObject = audition.getSoundObject(TankSoundObjectsIndexes.CHASSIS)
             rtpcValue = 0 if amountOfBrokenTracks == 0 else 1
-            soundObject.setRTPC(DebrisCrashedTrackManager.RTPC_OUTER_TRACK_STATE, rtpcValue)
+            soundObject.setRTPC(DebrisCrashedTrackSystem.RTPC_OUTER_TRACK_STATE, rtpcValue)
             return
 
-    def __createDebris(self, track, debrisComponent):
+    def __createDebris(self, track, debrisComponent, queue, tracksAccess):
         if not debrisComponent.shouldCreateDebris:
             return
-        elif debrisComponent.trackPairDesc.tracksDebris is None or debrisComponent.debrisDesc.physicalParams is None or not debrisComponent.wheelsGameObject.isValid():
+        elif debrisComponent.trackPairDesc.tracksDebris is None or debrisComponent.debrisDesc.physicalParams is None or not debrisComponent.wheelsGameObject.valid:
             return
         else:
-            vehicleTracks = debrisComponent.wheelsGameObject.findComponentByType(Vehicular.VehicleTracks)
+            vehicleTracks = tracksAccess.find(debrisComponent.wheelsGameObject)
             if vehicleTracks is None:
                 return
             trackGO = vehicleTracks.getTrackGameObject(debrisComponent.isLeft, debrisComponent.pairIndex)
-            go = debrisComponent.createDebrisGameObject(self.spaceID)
-            go.createComponent(GenericComponents.HierarchyComponent, trackGO)
-            track.createDebris(go, debrisComponent.hitPoint, debrisComponent.vehicleFilter, debrisComponent.debrisDesc.physicalParams, debrisComponent.modelsSet, debrisComponent.isPlayer)
-            go.activate()
+            go = debrisComponent.createDebrisGameObject(queue)
+            queue.createComponent(go, CGF.HierarchyComponent, trackGO)
+            track.createDebris(queue, go, debrisComponent.hitPoint, debrisComponent.vehicleFilter, debrisComponent.debrisDesc.physicalParams, debrisComponent.modelsSet, debrisComponent.isPlayer)
+            queue.activateGameObject(go)
             return
-
-    @onAddedQuery(Vehicular.CompositeTrack, DebrisCrashedTrackComponent)
-    def processCrash(self, track, debris):
-        self.__createDebris(track, debris)
-        amountOfBrokenTracks = self.__switchVehicleTrackVisibility(track, debris, False)
-        self.__adjustTrackAudition(amountOfBrokenTracks, debris.wheelsGameObject)
-        self.__generateDestructionEffect(debris)
-        self.__remapNodes(debris)
-
-    @onRemovedQuery(Vehicular.CompositeTrack, DebrisCrashedTrackComponent)
-    def processRepair(self, track, debris):
-        self.__unmapNodes(debris)
-        amountOfBrokenTracks = self.__switchVehicleTrackVisibility(track, debris, True)
-        self.__adjustTrackAudition(amountOfBrokenTracks, debris.wheelsGameObject)
-        debris.removeDebrisGameObject()
-        if debris.shouldCreateDebris:
-            DebrisCrashedTrackComponent.CURRENT_DEBRIS_COUNT -= 1
-
-    @onAddedQuery(VehiclePickupComponent)
-    def onVehiclePickupStarted(self, pickup):
-        if pickup.appearance is not None:
-            self.__removePhysicalDestroyedTracks(pickup.appearance)
-        return
-
-    @onRemovedQuery(VehiclePickupComponent)
-    def onVehiclePickupComplete(self, pickup):
-        if pickup.appearance is not None:
-            self.__recreatePhysicalDestroyedTracks(pickup.appearance)
-        return
-
-
-if not IS_CGF_DUMP:
-
-    @onAddedQuery(NodeRemapperComponent, CustomEffectManager)
-    def performNodeRemap(self, nodeRemapper, customEffectManager):
-        for fromNode, toNode in nodeRemapper.nodes.iteritems():
-            customEffectManager.remapNode(fromNode, toNode)
-
-
-    @onRemovedQuery(NodeRemapperComponent, CustomEffectManager)
-    def performNodeUnmap(self, nodeRemapper, customEffectManager):
-        for fromNode, _ in nodeRemapper.nodes.iteritems():
-            customEffectManager.remapNode(fromNode, '')

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/arena_component_system/arena_sync_object.py
+from __future__ import absolute_import
 from collections import defaultdict
+from future.utils import viewitems
 from debug_utils import LOG_ERROR
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
 
@@ -67,7 +69,7 @@ class ArenaSyncObject(object):
             return cache
 
     def __processChangeList(self, changeList):
-        for handler, diffpaths in self.__callbacks.iteritems():
+        for handler, diffpaths in viewitems(self.__callbacks):
             for diffpath in diffpaths:
                 isFire, args = self.__processDiffPath(diffpath, changeList)
                 if isFire:

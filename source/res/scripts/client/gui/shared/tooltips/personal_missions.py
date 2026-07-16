@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/personal_missions.py
 from __future__ import absolute_import
 import typing
+from future.utils import iteritems, itervalues
 from CurrentVehicle import g_currentVehicle
 from gui import GUI_NATIONS
 from gui.Scaleform import getNationsFilterAssetPath
@@ -539,13 +540,13 @@ class PersonalMissionPreviewTooltipData(PersonalMissionsMapRegionTooltipData):
         vehicleType = vehicle.descriptor.type
         branch = HANGAR_HEADER_QUESTS_TO_PM_BRANCH.get(questType, None)
         if branch is not None:
-            for operation in self.context.eventsCache.getPersonalMissions().getOperationsForBranch(branch).itervalues():
+            for operation in itervalues(self.context.eventsCache.getPersonalMissions().getOperationsForBranch(branch)):
                 if not operation.isUnlocked():
                     continue
-                for chainID, chain in operation.getQuests().iteritems():
+                for chainID, chain in iteritems(operation.getQuests()):
                     if not operation.getChainClassifier(chainID).matchVehicle(vehicleType):
                         continue
-                    for quest in chain.itervalues():
+                    for quest in itervalues(chain):
                         if vehicleLvl < quest.getVehMinLevel():
                             continue
                         if quest.isInProgress():

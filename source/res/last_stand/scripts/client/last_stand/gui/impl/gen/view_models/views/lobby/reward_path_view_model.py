@@ -6,7 +6,7 @@ from last_stand.gui.impl.gen.view_models.views.lobby.reward_path_artefact_view_m
 class RewardPathViewModel(ViewModel):
     __slots__ = ('onClose', 'onViewLoaded', 'onAbout', 'onShowIntro', 'goToMission')
 
-    def __init__(self, properties=3, commands=5):
+    def __init__(self, properties=4, commands=5):
         super(RewardPathViewModel, self).__init__(properties=properties, commands=commands)
 
     def getArtefacts(self):
@@ -31,11 +31,18 @@ class RewardPathViewModel(ViewModel):
     def setCurrentArtefactID(self, value):
         self._setString(2, value)
 
+    def getOpenFromQuestCard(self):
+        return self._getBool(3)
+
+    def setOpenFromQuestCard(self, value):
+        self._setBool(3, value)
+
     def _initialize(self):
         super(RewardPathViewModel, self)._initialize()
         self._addArrayProperty('artefacts', Array())
         self._addNumberProperty('points', 0)
         self._addStringProperty('currentArtefactID', '')
+        self._addBoolProperty('openFromQuestCard', False)
         self.onClose = self._addCommand('onClose')
         self.onViewLoaded = self._addCommand('onViewLoaded')
         self.onAbout = self._addCommand('onAbout')

@@ -1,20 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/ClientArena.py
-import cPickle
+from __future__ import absolute_import, division
+import logging
 import zlib
 import weakref
 from collections import namedtuple, defaultdict
+from future.moves import pickle
+from future.utils import viewitems, viewvalues
 from typing import Dict
 import ArenaType
 import BigWorld
-import CGF
 import Event
 import Math
 import arena_component_system.client_arena_component_assembler as assembler
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from battle_modifiers_common import BattleModifiers, EXT_DATA_MODIFIERS_KEY
 from constants import ARENA_PERIOD, ARENA_UPDATE, ATTACK_REASON
-from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
 from helpers.bots import preprocessBotName
 from items import vehicles
 from PlayerEvents import g_playerEvents
@@ -23,6 +24,7 @@ from visual_script.misc import ASPECT
 from visual_script.multi_plan_provider import makeMultiPlanProvider, CallableProviderType
 from arena_vscript_config import config as arenaVScriptsConfig
 from wg_async import wg_async, wg_await, AsyncEvent, AsyncScope, BrokenPromiseError
+_logger = logging.getLogger(__name__)
 TeamBaseProvider = namedtuple('TeamBaseProvider', ('points', 'invadersCnt', 'capturingStopped'))
 
 class _ArenaVehiclesAwaiter(AsyncEvent):
@@ -104,35 +106,35 @@ class ClientArena(object):
         self.__settings = {}
         self.__eventManager = Event.EventManager()
         em = self.__eventManager
-        self.onArenaSettingsReceived = Event.Event(em)
-        self.onNewVehicleListReceived = Event.Event(em)
-        self.onVehicleAdded = Event.Event(em)
-        self.onVehicleUpdated = Event.Event(em)
-        self.onPositionsUpdated = Event.Event(em)
-        self.onPeriodChange = Event.Event(em)
-        self.onNewStatisticsReceived = Event.Event(em)
-        self.onVehicleStatisticsUpdate = Event.Event(em)
-        self.onVehicleKilled = Event.Event(em)
-        self.onVehicleHealthChanged = Event.Event(em)
-        self.onVehicleRecovered = Event.Event(em)
-        self.onAvatarReady = Event.Event(em)
-        self.onTeamBasePointsUpdate = Event.Event(em)
-        self.onTeamBasePointsUpdateAlt = Event.Event(em)
-        self.onTeamBaseCaptured = Event.Event(em)
-        self.onTeamKiller = Event.Event(em)
-        self.onCombatEquipmentUsed = Event.Event(em)
-        self.onInteractiveStats = Event.Event(em)
-        self.onGameModeSpecificStats = Event.Event(em)
-        self.onViewPoints = Event.Event(em)
-        self.onFogOfWarEnabled = Event.Event(em)
-        self.onFogOfWarHiddenVehiclesSet = Event.Event(em)
-        self.onTeamHealthPercentUpdate = Event.Event(em)
-        self.onChatCommandTargetUpdate = Event.Event(em)
-        self.onChatCommandTriggered = Event.Event(em)
-        self.onUpdatePriorityChatCommand = Event.Event(em)
-        self.onRadarInfoReceived = Event.Event(em)
-        self.onTeamInfoRegistered = Event.Event(em)
-        self.onTeamInfoUnregistered = Event.Event(em)
+        self.onArenaSettingsReceived = Event.SafeEvent(em)
+        self.onNewVehicleListReceived = Event.SafeEvent(em)
+        self.onVehicleAdded = Event.SafeEvent(em)
+        self.onVehicleUpdated = Event.SafeEvent(em)
+        self.onPositionsUpdated = Event.SafeEvent(em)
+        self.onPeriodChange = Event.SafeEvent(em)
+        self.onNewStatisticsReceived = Event.SafeEvent(em)
+        self.onVehicleStatisticsUpdate = Event.SafeEvent(em)
+        self.onVehicleKilled = Event.SafeEvent(em)
+        self.onVehicleHealthChanged = Event.SafeEvent(em)
+        self.onVehicleRecovered = Event.SafeEvent(em)
+        self.onAvatarReady = Event.SafeEvent(em)
+        self.onTeamBasePointsUpdate = Event.SafeEvent(em)
+        self.onTeamBasePointsUpdateAlt = Event.SafeEvent(em)
+        self.onTeamBaseCaptured = Event.SafeEvent(em)
+        self.onTeamKiller = Event.SafeEvent(em)
+        self.onCombatEquipmentUsed = Event.SafeEvent(em)
+        self.onInteractiveStats = Event.SafeEvent(em)
+        self.onGameModeSpecificStats = Event.SafeEvent(em)
+        self.onViewPoints = Event.SafeEvent(em)
+        self.onFogOfWarEnabled = Event.SafeEvent(em)
+        self.onFogOfWarHiddenVehiclesSet = Event.SafeEvent(em)
+        self.onTeamHealthPercentUpdate = Event.SafeEvent(em)
+        self.onChatCommandTargetUpdate = Event.SafeEvent(em)
+        self.onChatCommandTriggered = Event.SafeEvent(em)
+        self.onUpdatePriorityChatCommand = Event.SafeEvent(em)
+        self.onRadarInfoReceived = Event.SafeEvent(em)
+        self.onTeamInfoRegistered = Event.SafeEvent(em)
+        self.onTeamInfoUnregistered = Event.SafeEvent(em)
         self.arenaUniqueID = arenaUniqueID
         self._vsePlans = makeMultiPlanProvider(ASPECT.CLIENT, CallableProviderType.ARENA, arenaBonusType)
         self.arenaType = ArenaType.g_cache.get(arenaTypeID, None)
@@ -143,9 +145,6 @@ class ClientArena(object):
         self.bonusCapsOverrides = self.extraData.get('bonusCapsOverrides')
         self.__arenaBBCollider = None
         self.__spaceBBCollider = None
-        if spaceID == 0:
-            spaceID = self.DEFAULT_ARENA_WORLD_ID
-        self.gameSpace = CGF.World(spaceID)
         self.componentSystem = assembler.createComponentSystem(self, self.bonusType, self.arenaType)
         self._awaitVehiclesScope = AsyncScope()
         self.__avatar = avatar
@@ -162,7 +161,7 @@ class ClientArena(object):
     viewPoints = property(lambda self: self.__viewPoints)
     isFogOfWarEnabled = property(lambda self: self.__isFogOfWarEnabled)
     hasFogOfWarHiddenVehicles = property(lambda self: self.__hasFogOfWarHiddenVehicles)
-    hasObservers = property(lambda self: any(('observer' in v['vehicleType'].type.tags for v in self.__vehicles.itervalues() if v['vehicleType'] is not None)) or self.hasBonusCap(BONUS_CAPS.SERVER_REPLAY))
+    hasObservers = property(lambda self: any(('observer' in v['vehicleType'].type.tags for v in viewvalues(self.__vehicles) if v['vehicleType'] is not None)) or self.hasBonusCap(BONUS_CAPS.SERVER_REPLAY))
     teamBasesData = property(lambda self: self.__teamBasesData)
     arenaInfo = property(lambda self: self.__arenaInfo)
     arenaObserverInfo = property(lambda self: self.__arenaObserverInfo)
@@ -253,23 +252,23 @@ class ClientArena(object):
         return True
 
     def __onArenaSettingsUpdate(self, argStr):
-        arenaSettings = cPickle.loads(argStr)
-        LOG_DEBUG_DEV('__onArenaSettingsUpdate', arenaSettings)
+        arenaSettings = pickle.loads(argStr)
+        _logger.debug('__onArenaSettingsUpdate %s', arenaSettings)
         self.__settings = arenaSettings
         self.onArenaSettingsReceived()
 
     def __onPeriodInfoUpdate(self, argStr):
-        self.__periodInfo = cPickle.loads(zlib.decompress(argStr))
+        self.__periodInfo = pickle.loads(zlib.decompress(argStr))
         self.onPeriodChange(*self.__periodInfo)
         g_playerEvents.onArenaPeriodChange(*self.__periodInfo)
 
     def __onViewPoints(self, argStr):
-        self.__viewPoints = cPickle.loads(zlib.decompress(argStr))
-        LOG_DEBUG('[VIEW POINTS] received view points', self.__viewPoints)
+        self.__viewPoints = pickle.loads(zlib.decompress(argStr))
+        _logger.debug('__onViewPoints %s', self.__viewPoints)
         self.onViewPoints(self.__viewPoints)
 
     def __onRadarInfoReceived(self, argStr):
-        status = cPickle.loads(argStr)
+        status = pickle.loads(argStr)
         self.onRadarInfoReceived(status)
 
     def __getArenaPlans(self):
@@ -287,7 +286,7 @@ class ClientArena(object):
         return
 
     def __onBasePointsUpdate(self, argStr):
-        team, baseID, points, timeLeft, invadersCnt, capturingStopped = cPickle.loads(argStr)
+        team, baseID, points, timeLeft, invadersCnt, capturingStopped = pickle.loads(argStr)
         self.onTeamBasePointsUpdate(team, baseID, points, timeLeft, invadersCnt, capturingStopped)
         teamBases = self.__teamBasesData[team]
         lastData = teamBases.get(baseID, TeamBaseProvider(0, 0, False))
@@ -295,11 +294,11 @@ class ClientArena(object):
         self.onTeamBasePointsUpdateAlt(team, baseID, lastData, currData)
 
     def __onBaseCaptured(self, argStr):
-        team, baseID = cPickle.loads(argStr)
+        team, baseID = pickle.loads(argStr)
         self.onTeamBaseCaptured(team, baseID)
 
     def __onCombatEquipmentUsed(self, argStr):
-        shooterID, equipmentID = cPickle.loads(argStr)
+        shooterID, equipmentID = pickle.loads(argStr)
         self.onCombatEquipmentUsed(shooterID, equipmentID)
 
     def __onFlagTeamsReceived(self, argStr):
@@ -318,9 +317,9 @@ class ClientArena(object):
         pass
 
     def __onInteractiveStats(self, argStr):
-        stats = cPickle.loads(zlib.decompress(argStr))
+        stats = pickle.loads(zlib.decompress(argStr))
+        _logger.debug('__onInteractiveStats %s', stats)
         self.onInteractiveStats(stats)
-        LOG_DEBUG_DEV('[RESPAWN] onInteractiveStats', stats)
 
     def runVsePlan(self, planName, params, key='', context=None):
         if self._vsePlans is not None:
@@ -370,6 +369,7 @@ class ClientArena(object):
         for vehInfo in vehInfoList:
             self.addVehInfo(vehInfo, False)
 
+        _logger.info('updateVehiclesList %s', [ vInfo['vehicleID'] for vInfo in vehInfoList ])
         self.onNewStatisticsReceived()
         self.onNewVehicleListReceived()
 
@@ -380,6 +380,7 @@ class ClientArena(object):
         self.__statistics[vehID] = {'frags': vehInfo['frags'],
          'tkills': vehInfo['tkills']}
         if notify:
+            _logger.info('addVehInfo %s', vehID)
             self.onVehicleAdded(vehID)
         self.onVehicleStatisticsUpdate(vehID)
 
@@ -402,7 +403,7 @@ class ClientArena(object):
         self.onFogOfWarHiddenVehiclesSet(self.__hasFogOfWarHiddenVehicles)
 
     def invalidateVehiclesPosition(self):
-        for vehID, vehInfo in self.__vehicles.iteritems():
+        for vehID, vehInfo in viewitems(self.__vehicles):
             self.__setVehiclePosition(vehID, vehInfo['position'])
 
         self.onPositionsUpdated()
@@ -467,7 +468,7 @@ class _BBCollider(object):
         self.__min = Math.Vector3(bb[0][0], heightLimits[0], bb[0][1])
         self.__max = Math.Vector3(bb[1][0], heightLimits[1], bb[1][1])
         self.__center = Math.Vector3((self.__min + self.__max) * 0.5)
-        self.__planes = list()
+        self.__planes = []
         self.__planes.append(Plane(Math.Vector3(0.0, 0.0, 1.0), self.__min.z))
         self.__planes.append(Plane(Math.Vector3(0.0, 0.0, -1.0), -self.__max.z))
         self.__planes.append(Plane(Math.Vector3(1.0, 0.0, 0.0), self.__min.x))

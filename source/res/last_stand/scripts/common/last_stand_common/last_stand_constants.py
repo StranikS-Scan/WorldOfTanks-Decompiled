@@ -5,9 +5,11 @@ import enum
 import constants
 import UnitBase
 import arena_bonus_type_caps
+from chat_commands_consts import MarkerType, BattleChatCommandExtProcessorType
 from constants_utils import ConstInjector, AbstractBattleMode
 from last_stand_common.battle_results import ls_results
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE as BET
+from messenger_common_chat2 import ExtBattleChatCommand
 
 class ARENA_GUI_TYPE(constants.ARENA_GUI_TYPE, ConstInjector):
     LAST_STAND = 102
@@ -49,6 +51,17 @@ class CLIENT_UNIT_CMD(UnitBase.CLIENT_UNIT_CMD, ConstInjector):
     SET_LS_UNIT_DIFFICULTY_LEVEL = 2002
 
 
+class UnitAssemblerImplType(UnitBase.UnitAssemblerImplType, ConstInjector):
+    LAST_STAND = 107
+    LAST_STAND_MEDIUM = 108
+    LAST_STAND_HARD = 109
+
+
+UNIT_ASSEMBLER_CONFIG_NAME = 'last_stand'
+UNIT_ASSEMBLER_IMPL_TO_CONFIG = {UnitAssemblerImplType.LAST_STAND: UNIT_ASSEMBLER_CONFIG_NAME,
+ UnitAssemblerImplType.LAST_STAND_MEDIUM: UNIT_ASSEMBLER_CONFIG_NAME,
+ UnitAssemblerImplType.LAST_STAND_HARD: UNIT_ASSEMBLER_CONFIG_NAME}
+PREBATTLE_TYPE_TO_UNIT_ASSEMBLER = {PREBATTLE_TYPE.LAST_STAND: UnitAssemblerImplType.LAST_STAND}
 UNIT_LS_EXTRA_DATA_KEY = 'LS_Data'
 UNIT_DIFFICULTY_LEVELS_KEY = 'LS_difficultyLevels'
 UNIT_INFO_BOOSTERS_KEY = 'LS_boostersInfo'
@@ -74,6 +87,7 @@ class ATTACK_REASON(constants.ATTACK_REASON, ConstInjector):
     LS_SHOT_AOE_DRAIN_ENEMY_HP = 'ls_shot_aoe_drain_enemy_hp'
     LS_SHOT_AOE_STUN = 'ls_shot_aoe_stun'
     LS_EXTRA_DAMAGE_SITUATIONAL = 'ls_extra_damage_situational'
+    LS_OBELISK_DAMAGE_TRANSFER = 'ls_obelisk_damage_transfer'
 
 
 DAMAGE_INFO_CODES_PER_ATTACK_REASON = {ATTACK_REASON.LS_BOMBER_EXPLOSION: 'DEATH_FROM_LS_BOMBER_EXPLOSION',
@@ -96,8 +110,10 @@ class ARENA_BONUS_TYPE_CAPS(arena_bonus_type_caps.ARENA_BONUS_TYPE_CAPS, ConstIn
 
 
 LAST_STAND_GAME_PARAMS_KEY = 'last_stand_config'
+LAST_STAND_BATTLE_PARAMS_KEY = 'last_stand_battle_config'
 ENEMY_ROLE_TAG_PREFIX = 'lsrole_'
 OBELISK_ROLE_TAG = 'lsrole_obelisk'
+LS_BOSS_ROLE_TAG = 'lsrole_boss'
 CONTINUOUS_TURRET_ROTATION_TAG = 'ls_continuous_turret_rotation'
 LS_ROLE_PREFIX = 'ls_'
 LS_BOMBER_ACTIVATE_REASON = (ATTACK_REASON.SHOT,
@@ -120,6 +136,7 @@ class LastStandBattleMode(AbstractBattleMode):
     _UNIT_MGR_FLAGS = UNIT_MGR_FLAGS.LAST_STAND
     _ROSTER_TYPE = ROSTER_TYPE.LAST_STAND
     _GAME_PARAMS_KEY = LAST_STAND_GAME_PARAMS_KEY
+    _BATTLE_PARAMS_KEY = LAST_STAND_BATTLE_PARAMS_KEY
     _BATTLE_RESULTS_CONFIG = ls_results
     _REQUIRED_VEHICLE_TAGS = REQUIRED_VEHICLE_TAGS
     _FORBIDDEN_VEHICLE_TAGS = FORBIDDEN_VEHICLE_TAGS
@@ -155,7 +172,8 @@ class LastStandBattleMode(AbstractBattleMode):
          ATTACK_REASON.getIndex(ATTACK_REASON.LS_DEATH_PIT): 'DEATH_FROM_LS_DEATH_PIT',
          ATTACK_REASON.getIndex(ATTACK_REASON.LS_PHASE_TIMER): 'DEATH_FROM_LS_PHASE_TIMER',
          ATTACK_REASON.getIndex(ATTACK_REASON.LS_LEAVER): 'DEATH_FROM_LS_PHASE_TIMER',
-         ATTACK_REASON.getIndex(ATTACK_REASON.LS_EXTRA_DAMAGE_SITUATIONAL): 'DEATH_FROM_SHOT'}
+         ATTACK_REASON.getIndex(ATTACK_REASON.LS_EXTRA_DAMAGE_SITUATIONAL): 'DEATH_FROM_SHOT',
+         ATTACK_REASON.getIndex(ATTACK_REASON.LS_OBELISK_DAMAGE_TRANSFER): 'DEATH_FROM_SHOT'}
 
 
 def registerLoggingParams(personality):
@@ -187,7 +205,7 @@ ARENA_BONUS_TYPE_TO_LEVEL = {ARENA_BONUS_TYPE.LAST_STAND: 1,
  ARENA_BONUS_TYPE.LAST_STAND_HARD: 3}
 
 class ShopSettings(object):
-    SHOP_BUNDLE_PREFFIX = 'ls26_1_bundle'
+    SHOP_BUNDLE_PREFFIX = 'ls_bundle'
     PURCHASED_SUFFIX = ':purchased'
     WG_MONEY_CALLBACK = 'lsPurchaseEventShopBundleWGMoney'
     TOKEN_TTL = 720
@@ -270,6 +288,7 @@ class LSSoulsChangeReason(object):
     PHASE_START = 9
     RESPAWN = 10
     CAPACITY = 11
+    INITIAL_GRANT = 12
 
 
 class LSBuffSequenceVisibilityMode(enum.IntEnum):
@@ -347,7 +366,13 @@ class BOOSTER_FACTOR_OPERATIONS(object):
     ALL = (ADD, ADD_PERCENT)
 
 
-LS_CHAT_CHANNEL = '#last_stand.last_stand_chat:channels/last_stand'
+class LS_CHAT_CHANNELS(object):
+    LS_CHAT_CHANNEL = '#last_stand.last_stand_chat:channels/last_stand'
+    LS_CHAT_CHANNEL_EASY = '#last_stand.last_stand_chat:channels/last_stand_easy'
+    LS_CHAT_CHANNEL_MEDIUM = '#last_stand.last_stand_chat:channels/last_stand_medium'
+    LS_CHAT_CHANNEL_HARD = '#last_stand.last_stand_chat:channels/last_stand_hard'
+
+
 LS_INVENTORY_PDATA_KEY = 'LS_inventory'
 LS_INFO_PDATA_KEY = 'LS_info'
 LS_EMPTY_SLOTS_EQ = ('LS_emptySlot0', 'LS_emptySlot1', 'LS_emptySlot2')
@@ -358,3 +383,12 @@ INVALID_PHASE = 0
 LS_QUESTS_PREFIX = 'ls_'
 LS_TOKENS_PREFIX = 'ls_'
 DEFAULT_DIFFICULTY_MODIFIER = 1
+
+class LS_BATTLE_CHAT_COMMANDS(object):
+    LS_OBELISK = 'lsObelisk'
+    LS_OBELISK_HELP = 'lsObeliskHelp'
+
+
+LS_OBELISK_ACTIVE_TIME = 10.0
+LS_OBELISK_VEH_MARKER = 'lsObelisk'
+LS_BATTLE_CHAT_COMMAND_SETTINGS = (ExtBattleChatCommand(name=LS_BATTLE_CHAT_COMMANDS.LS_OBELISK, markerType=MarkerType.VEHICLE_MARKER_TYPE, cooldownPeriod=5.0, processorType=BattleChatCommandExtProcessorType.TEAM_BROADCAST, msgText='lsObelisk', vehMarker=LS_OBELISK_VEH_MARKER, soundNotification='ibc_ping_action'), ExtBattleChatCommand(name=LS_BATTLE_CHAT_COMMANDS.LS_OBELISK_HELP, markerType=MarkerType.VEHICLE_MARKER_TYPE, cooldownPeriod=5.0, processorType=BattleChatCommandExtProcessorType.TEAM_BROADCAST, msgText='lsObeliskHelp', soundNotification='ibc_ping_request'))

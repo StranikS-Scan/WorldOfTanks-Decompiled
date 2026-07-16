@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/bonus_readers.py
 from __future__ import absolute_import, division
-import base64
 import time
 from future.utils import lmap, viewitems
 from past.builtins import xrange
@@ -24,6 +23,7 @@ from items.components.skills_constants import ROLES_BY_SKILLS
 from constants import DOSSIER_TYPE, SEASON_TYPE_BY_NAME, EVENT_TYPE, INVOICE_LIMITS, ENTITLEMENT_OPS, DailyQuestsLevels, MAX_LOG_EXT_INFO_LEN
 from soft_exception import SoftException
 from customization_quests_common import validateCustomizationQuestToken
+from py2to3.compat import base64compat
 if TYPE_CHECKING:
     from ResMgr import DataSection
 __all__ = ['readBonusSection', 'readUTC', 'SUPPORTED_BONUSES']
@@ -452,7 +452,7 @@ def __readBonus_item(bonus, _name, section, eventType, checkLimit):
 def __readBonus_vehicle(bonus, _name, section, eventType, checkLimit):
     vehCompDescr = None
     if section.has_key('vehCompDescr'):
-        vehCompDescr = base64.b64decode(section['vehCompDescr'].asString)
+        vehCompDescr = base64compat.b64decode(section['vehCompDescr'].asString)
         vehTypeCompDescr = vehicles.VehicleDescr(vehCompDescr).type.compactDescr
     elif section.has_key('vehTypeCompDescr'):
         vehTypeCompDescr = section['vehTypeCompDescr'].asInt
@@ -636,7 +636,7 @@ def __readBonus_outfits(bonus, _name, section):
      'desert': SeasonType.DESERT,
      'event': SeasonType.EVENT}):
         if section.has_key(seasonTypeName):
-            outfits[seasonTypeID] = base64.b64decode(section[seasonTypeName].asString)
+            outfits[seasonTypeID] = base64compat.b64decode(section[seasonTypeName].asString)
 
     bonus['outfits'] = outfits
 

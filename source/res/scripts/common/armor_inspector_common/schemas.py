@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/armor_inspector_common/schemas.py
+from __future__ import absolute_import
 from armor_inspector_common.models import ArmorInspectorConfigModel
 from game_params_common.schema import GameParamsSchema
 from dict2model import fields

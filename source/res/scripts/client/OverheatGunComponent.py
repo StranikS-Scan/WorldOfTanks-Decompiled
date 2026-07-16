@@ -55,7 +55,6 @@ class OverheatGunComponent(VehicleDynamicComponent, IGunMechanicComponent, IMech
     def _onAppearanceReady(self):
         super(OverheatGunComponent, self)._onAppearanceReady()
         self.__updateMechanicState()
-        self.__mechanicPrefabSpawner.loadAppearancePrefab()
         self.__statesEvents.processStatePrepared()
 
     def _onComponentAppearanceUpdate(self, **kwargs):

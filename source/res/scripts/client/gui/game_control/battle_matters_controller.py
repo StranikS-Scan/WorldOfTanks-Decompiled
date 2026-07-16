@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/battle_matters_controller.py
+from __future__ import absolute_import
 import itertools
 import typing
+from collections import OrderedDict
 from enum import Enum
 import BigWorld
-from collections import OrderedDict
 from Event import Event, EventManager
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import BattleMatters

@@ -97,7 +97,6 @@ class TargetDesignatorController(VehicleDynamicComponent, IMechanicComponent, IM
     def _onAppearanceReady(self):
         super(TargetDesignatorController, self)._onAppearanceReady()
         self.__state = self.__updateState()
-        self.__mechanicPrefabSpawner.loadAppearancePrefab()
         self.__statesEvents.processStatePrepared()
 
     def _onComponentAppearanceUpdate(self, **kwargs):

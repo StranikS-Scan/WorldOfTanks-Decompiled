@@ -1,6 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/__init__.py
+from __future__ import absolute_import
 import typing
+from functools import reduce
+from future.utils import viewitems
+from past.builtins import intern, long
 import nations
 from constants import IS_CLIENT, ITEM_DEFS_PATH
 from extension_utils import ResMgr
@@ -13,10 +17,10 @@ _g_itemTypes = None
 UNDEFINED_ITEM_CD = 0
 ITEM_TYPE_NAMES = ('_reserved', 'vehicle', 'vehicleChassis', 'vehicleTurret', 'vehicleGun', 'vehicleEngine', 'vehicleFuelTank', 'vehicleRadio', 'tankman', 'optionalDevice', 'shell', 'equipment', 'customizationItem', 'crewSkin', 'crewBook', 'pet')
 
-class ITEM_TYPES(dict):
+class ITEM_TYPES(typing.Dict[str, int]):
 
     def __init__(self):
-        super(dict, self).__init__()
+        super(ITEM_TYPES, self).__init__()
         for idx, name in enumerate(ITEM_TYPE_NAMES):
             if not name.startswith('_'):
                 self[name] = idx
@@ -31,10 +35,10 @@ VEHICLE_COMPONENT_TYPE_NAMES = ('vehicleChassis', 'vehicleTurret', 'vehicleGun',
 VEHICLE_COMPONENT_TYPE_INDICES = tuple((ITEM_TYPE_INDICES[x] for x in VEHICLE_COMPONENT_TYPE_NAMES))
 EQUIPMENT_TYPE_NAMES = ('regular', 'battleBoosters', 'battleAbilities')
 
-class EQUIPMENT_TYPES(dict):
+class EQUIPMENT_TYPES(typing.Dict[str, int]):
 
     def __init__(self):
-        super(dict, self).__init__()
+        super(EQUIPMENT_TYPES, self).__init__()
         for idx, name in enumerate(EQUIPMENT_TYPE_NAMES):
             self[name] = idx
             setattr(self, name, idx)
@@ -95,21 +99,23 @@ class ItemsPrices(object):
     def __eq__(self, obj):
         return isinstance(obj, ItemsPrices) and obj._itemsPriceInfo == self._itemsPriceInfo
 
+    __hash__ = None
+
     def get(self, key, defaultValue=None):
         return self.__getitem__(key) if key in self._itemsPriceInfo else defaultValue
 
     def items(self):
-        return [ (compDescr, self._tuplePrice(prices)) for compDescr, prices in self._itemsPriceInfo.iteritems() ]
+        return [ (compDescr, self._tuplePrice(prices)) for compDescr, prices in viewitems(self._itemsPriceInfo) ]
 
     def update(self, other):
-        for d, p in other.iteritems():
+        for d, p in viewitems(other):
             self.__setitem__(d, p)
 
     def copy(self):
         return ItemsPrices(self._itemsPriceInfo)
 
     def getSpecialItemPrices(self, currencyCode):
-        return {compDescr:prices for compDescr, prices in self._itemsPriceInfo.iteritems() if currencyCode in prices}
+        return {compDescr:prices for compDescr, prices in viewitems(self._itemsPriceInfo) if currencyCode in prices}
 
     @staticmethod
     def _tuplePrice(priceInfo):
@@ -136,7 +142,7 @@ class ItemsPrices(object):
     def intersect(self, other):
         otherStorage = other._itemsPriceInfo
         result = {}
-        for k, v in self._itemsPriceInfo.iteritems():
+        for k, v in viewitems(self._itemsPriceInfo):
             if k in otherStorage and otherStorage[k] != v:
                 result[k] = v
 
@@ -146,7 +152,7 @@ class ItemsPrices(object):
         myStorage = self._itemsPriceInfo
         otherStorage = other._itemsPriceInfo if other else {}
         result = {}
-        for compDescr, priceInfo in myStorage.iteritems():
+        for compDescr, priceInfo in viewitems(myStorage):
             if compDescr in otherStorage:
                 result[compDescr] = otherStorage[compDescr]
             if compDescr in itemToPriceGroup and itemToPriceGroup[compDescr] in otherStorage:
@@ -167,10 +173,10 @@ def init(preloadEverything, pricesToCollect=None, step=None):
         pricesToCollect['vehiclesToSellForGold'] = set()
         pricesToCollect['vehicleSellPriceFactors'] = {}
         pricesToCollect['vehicleCamouflagePriceFactors'] = {}
-        pricesToCollect['camouflagePriceFactors'] = [ {} for x in nations.NAMES ]
-        pricesToCollect['notInShopCamouflages'] = [ set() for x in nations.NAMES ]
-        pricesToCollect['inscriptionGroupPriceFactors'] = [ {} for x in nations.NAMES ]
-        pricesToCollect['notInShopInscriptionGroups'] = [ set() for x in nations.NAMES ]
+        pricesToCollect['camouflagePriceFactors'] = [ {} for _ in nations.NAMES ]
+        pricesToCollect['notInShopCamouflages'] = [ set() for _ in nations.NAMES ]
+        pricesToCollect['inscriptionGroupPriceFactors'] = [ {} for _ in nations.NAMES ]
+        pricesToCollect['notInShopInscriptionGroups'] = [ set() for _ in nations.NAMES ]
         pricesToCollect['playerEmblemGroupPriceFactors'] = {}
         pricesToCollect['notInShopPlayerEmblemGroups'] = set()
         pricesToCollect['operationPrices'] = {}
@@ -264,7 +270,6 @@ def _readItemTypes():
         if name.startswith('_'):
             continue
         itemSection = _xml.getSubsection(xmlCtx, section, name)
-        ctx = (xmlCtx, name)
         tagNames = []
         tags = {}
         if itemSection.has_key('tags'):

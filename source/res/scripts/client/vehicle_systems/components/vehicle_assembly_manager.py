@@ -7,42 +7,59 @@ import CGF
 import GenericComponents
 import GpuDecals
 import Vehicular
-import DataLinks
-import math_utils
 import Compound
-from cgf_components.client_worlds_helpers import ClientWorld, clientWorldsManager, getClientWorld
-from cgf_script.managers_registrator import autoregister, onAddedQuery
+from cgf_components.client_worlds_helpers import ClientWorld, getClientWorld
+from cgf_modules.variable_components import VariableStorageComponent
 from constants import IS_UE_EDITOR
 from vehicle_systems import vehicle_composition as veh_comp
 from vehicle_systems.components import vehicle_variable_storage
 from vehicle_systems.tankStructure import TankPartNames, TankRenderMode, ModelStates
 if typing.TYPE_CHECKING:
-    from common_tank_appearance import CommonTankAppearance
+    from GenericComponents import SlotMarkerComponent
+    from vehicle_appearance.common_tank_appearance import CommonTankAppearance
     from gui.hangar_vehicle_appearance import HangarVehicleAppearance
     from vehicle_systems.components.vehicle_variable_storage import VariableType
     TAppearance = typing.Union[HangarVehicleAppearance, CommonTankAppearance]
 _logger = logging.getLogger(__name__)
 
+def _isAlive(appearance):
+    if IS_UE_EDITOR:
+        return appearance is not None
+    else:
+        vehicle = appearance.getVehicle() if appearance is not None else None
+        return vehicle is not None and vehicle.isAlive()
+
+
 class Assembler(object):
+    NodeFollowerAccess = CGF.AccessReaction(CGF.Ro(Compound.LocalTransformNodeFollower))
+    AccessReactions = tuple()
 
     def checkSlotMarker(self, slotMarker):
         raise NotImplementedError
 
-    def assemble(self, gameObject, slotMarker):
+    @typing.overload
+    def assemble(self, gameObject, slotMarker, queue, *accessors):
+        pass
+
+    @typing.overload
+    def assemble(self, gameObject, slotMarker, queue):
+        pass
+
+    def assemble(self, *args):
         raise NotImplementedError
 
     @staticmethod
-    def _replaceWithNodeDriver(go, appearance):
-        followerComponent = go.findComponentByType(Compound.LocalTransformNodeFollower)
-        if followerComponent is not None:
+    def _replaceWithNodeDriver(go, appearance, queue, nodeFollowerAccess):
+        followerComponent = nodeFollowerAccess.find(go)
+        if followerComponent:
             node = appearance.compoundModel.nodeByHandle(followerComponent.nodeHandle)
             if node is None:
                 return
-            go.removeComponentByType(GenericComponents.TransformComponent)
-            go.createComponent(GenericComponents.TransformComponent, node.localMatrix)
-            go.removeComponentByType(Compound.NodeLeaderComponent)
-            go.createComponent(Compound.NodeLeaderComponent, node.name)
-            go.removeComponentByType(Compound.LocalTransformNodeFollower)
+            queue.removeComponent(go, CGF.TransformComponent)
+            queue.createComponent(go, CGF.TransformComponent, node.localMatrix)
+            queue.removeComponent(go, Compound.NodeLeaderComponent)
+            queue.createComponent(go, Compound.NodeLeaderComponent, node.name)
+            queue.removeComponent(go, Compound.LocalTransformNodeFollower)
         return
 
 
@@ -52,18 +69,22 @@ class TurretGunRotationAssembler(Assembler):
      veh_comp.VehicleSlots.GUN_INCLINATION.value,
      veh_comp.VehicleSlots.TURRET_COLLISION.value,
      veh_comp.VehicleSlots.GUN_COLLISION.value)
+    AccessReactions = (Assembler.NodeFollowerAccess,)
 
     def checkSlotMarker(self, slotMarker):
         return slotMarker.slotName in self._SLOTS
 
-    def assemble(self, gameObject, slotMarker):
+    def assemble(self, gameObject, slotMarker, queue, nodeFollowerAccess):
         appearance = veh_comp.findParentVehicleAppearance(gameObject)
-        if appearance is not None:
+        if _isAlive(appearance):
             matrixProvider = self.__getMatrixProvider(slotMarker.slotName, appearance)
             if matrixProvider is not None:
-                self._replaceWithNodeDriver(gameObject, appearance)
-                gameObject.removeComponentByType(GenericComponents.MatrixProviderFollowerComponent)
-                gameObject.createComponent(GenericComponents.MatrixProviderFollowerComponent, matrixProvider)
+                self._replaceWithNodeDriver(gameObject, appearance, queue, nodeFollowerAccess)
+                queue.removeComponent(gameObject, GenericComponents.MatrixProviderFollowerComponent)
+                queue.createComponent(gameObject, GenericComponents.MatrixProviderFollowerComponent, matrixProvider)
+        elif appearance is not None and not appearance.isTurretDetached:
+            appearance.compoundModel.node(TankPartNames.TURRET).localMatrix = appearance.turretMatrix
+            appearance.compoundModel.node(TankPartNames.GUN).localMatrix = appearance.gunMatrix
         return
 
     def __getMatrixProvider(self, slotName, appearance):
@@ -86,27 +107,28 @@ class TurretGunRotationAssembler(Assembler):
 
 class RecoilAssembler(Assembler):
     _SLOTS = (veh_comp.VehicleSlots.GUN_RECOIL.value,)
+    AccessReactions = (Assembler.NodeFollowerAccess,)
 
     def checkSlotMarker(self, slotMarker):
         return slotMarker.slotName in self._SLOTS
 
-    def assemble(self, gameObject, _):
+    def assemble(self, gameObject, _, queue, nodeFollowerAccess):
         appearance = veh_comp.findParentVehicleAppearance(gameObject)
-        if appearance is None:
+        if not _isAlive(appearance):
             return
         else:
-            if self._createComponent(gameObject, appearance) is not None:
+            if self._createComponent(gameObject, appearance, queue, nodeFollowerAccess) is not None:
                 appearance.setGunRecoil(gameObject)
             return
 
-    def _createComponent(self, gameObject, appearance):
+    def _createComponent(self, gameObject, appearance, queue, nodeFollowerAccess):
         recoil = appearance.typeDescriptor.gun.recoil
         if recoil is None:
             return
         else:
-            self._replaceWithNodeDriver(gameObject, appearance)
-            gameObject.removeComponentByType(Vehicular.GunRecoilComponent)
-            return gameObject.createComponent(Vehicular.GunRecoilComponent, recoil.backoffTime, recoil.returnTime, recoil.amplitude, False)
+            self._replaceWithNodeDriver(gameObject, appearance, queue, nodeFollowerAccess)
+            queue.removeComponent(gameObject, Vehicular.RecoilComponent)
+            return queue.createComponent(gameObject, Vehicular.RecoilComponent, recoil.backoffTime, recoil.returnTime, recoil.amplitude, False)
 
 
 class MultiGunRecoilAssembler(RecoilAssembler):
@@ -115,9 +137,9 @@ class MultiGunRecoilAssembler(RecoilAssembler):
     def checkSlotMarker(self, slotMarker):
         return slotMarker.slotName in self._SLOTS
 
-    def assemble(self, gameObject, slotMarker):
+    def assemble(self, gameObject, slotMarker, queue, nodeFollowerAccess):
         appearance = veh_comp.findParentVehicleAppearance(gameObject)
-        if appearance is None or appearance.damageState.isCurrentModelDamaged:
+        if not _isAlive(appearance):
             return
         else:
             gunIndex = -1
@@ -126,44 +148,48 @@ class MultiGunRecoilAssembler(RecoilAssembler):
                     gunIndex = i
                     break
 
-            if gunIndex >= 0 and self._createComponent(gameObject, appearance) is not None:
+            if gunIndex >= 0 and self._createComponent(gameObject, appearance, queue, nodeFollowerAccess) is not None:
                 appearance.gunAnimators.set(gunIndex, gameObject)
             return
 
 
 class SwingingAnimationManager(Assembler):
+    LodCalculatorAccess = CGF.AccessReaction(CGF.Ro(Vehicular.LodCalculator))
+    TransformAccess = CGF.AccessReaction(CGF.Rw(CGF.TransformComponent))
+    AccessReactions = (LodCalculatorAccess, TransformAccess, Assembler.NodeFollowerAccess)
 
     def checkSlotMarker(self, slotMarker):
         return slotMarker.slotName == veh_comp.VehicleSlots.HULL.value
 
-    def assemble(self, gameObject, slotMarker):
+    def assemble(self, gameObject, slotMarker, queue, lodCalculatorAccess, transformAccess, nodeFollowerAccess):
         appearance = veh_comp.findParentVehicleAppearance(gameObject)
-        if appearance is not None:
-            self.__assembleSwinging(gameObject, appearance)
-        return
+        if _isAlive(appearance):
+            self.__assembleSwinging(gameObject, appearance, queue, lodCalculatorAccess, transformAccess, nodeFollowerAccess)
 
-    def __assembleSwinging(self, gameObject, appearance):
+    def __assembleSwinging(self, gameObject, appearance, queue, lodCalculatorAccess, transformAccess, nodeFollowerAccess):
         hullNode = appearance.compoundModel.node(TankPartNames.HULL)
         if hullNode is None:
             _logger.error('Could not create SwingingAnimator: failed to find hull node')
             return
         else:
-            lodLink = DataLinks.createFloatLink(appearance.lodCalculator, 'lodDistance')
-            self._replaceWithNodeDriver(gameObject, appearance)
-            swingingAnimator = self.__createSwingingAnimator(gameObject, appearance.typeDescriptor, hullNode.localMatrix, appearance.compoundModel.matrix, lodLink)
+            lodCalculator = lodCalculatorAccess.find(appearance.gameObject)
+            if not lodCalculator:
+                _logger.error('Could not create SwingingAnimator: failed to find Vehicular.LodCalculator')
+                return
+            lodLink = CGF.createFloatLink(lodCalculator, 'lodDistance')
+            self._replaceWithNodeDriver(gameObject, appearance, queue, nodeFollowerAccess)
+            swingingAnimator = self.__createSwingingAnimator(queue, gameObject, transformAccess, appearance.typeDescriptor, hullNode.localMatrix, appearance.gameObject, lodLink)
             if hasattr(appearance.filter, 'placingCompensationMatrix'):
                 swingingAnimator.placingCompensationMatrix = appearance.filter.placingCompensationMatrix
-                swingingAnimator.worldMatrix = appearance.compoundModel.matrix
+                swingingAnimator.worldMatrixGo = appearance.gameObject
             appearance.setSwingingAnimator(gameObject)
-            if appearance.burnoutProcessor is not None:
-                appearance.burnoutProcessor.setSwingingAnimator(gameObject)
             return swingingAnimator
 
-    def __createSwingingAnimator(self, gameObject, vehicleDesc, basisMatrix, worldMProv=None, lodLink=None):
-        gameObject.removeComponentByType(Vehicular.SwingingAnimator)
-        swingingAnimator = gameObject.createComponent(Vehicular.SwingingAnimator)
-        transformComponent = gameObject.findComponentByType(GenericComponents.TransformComponent)
-        if transformComponent is not None:
+    def __createSwingingAnimator(self, queue, gameObject, transformAccess, vehicleDesc, basisMatrix, appearanceGo, lodLink=None):
+        queue.removeComponent(gameObject, Vehicular.SwingingAnimator)
+        swingingAnimator = queue.createComponent(gameObject, Vehicular.SwingingAnimator)
+        transformComponent = transformAccess.find(gameObject)
+        if transformComponent:
             transformComponent.transform = basisMatrix
         else:
             _logger.error("Can't find TransformComponent to create SwingingAnimator")
@@ -174,7 +200,7 @@ class SwingingAnimationManager(Assembler):
         swingingAnimator.setupShotSwinging(swingingCfg.sensitivityToImpulse)
         swingingAnimator.maxMovementSpeed = vehicleDesc.physics['speedLimits'][0]
         swingingAnimator.lodSetting = swingingCfg.lodDist
-        swingingAnimator.worldMatrix = worldMProv if worldMProv is not None else math_utils.createIdentityMatrix()
+        swingingAnimator.worldMatrixGo = appearanceGo
         swingingAnimator.lodLink = lodLink
         return swingingAnimator
 
@@ -185,7 +211,7 @@ class DecalsAssembler(Assembler):
     def checkSlotMarker(self, slotMarker):
         return slotMarker.slotName in self._SLOTS
 
-    def assemble(self, gameObject, slotMarker):
+    def assemble(self, gameObject, slotMarker, queue):
         appearance = veh_comp.findParentVehicleAppearance(gameObject)
         if appearance is not None:
             if hasattr(appearance, 'damageState') and appearance.damageState.isCurrentModelDamaged:
@@ -196,10 +222,10 @@ class DecalsAssembler(Assembler):
             fashion = getattr(appearance.fashions, slotMarker.slotName, None)
             if fashion is None:
                 return _logger.error('Failed to setup GPU Decals receiver for game object: %s. Missing fashion for part: %s', gameObject.name, slotMarker.slotName)
-            if gameObject.findComponentByType(GenericComponents.FashionComponent) is None:
-                gameObject.createComponent(GenericComponents.FashionComponent, fashion, partIdx)
-            if gameObject.findComponentByType(GpuDecals.GpuDecalsReceiverComponent) is None:
-                gameObject.createComponent(GpuDecals.GpuDecalsReceiverComponent)
+            queue.removeComponent(gameObject, GenericComponents.FashionComponent)
+            queue.createComponent(gameObject, GenericComponents.FashionComponent, fashion, partIdx)
+            queue.removeComponent(gameObject, GpuDecals.GpuDecalsReceiverComponent)
+            queue.createComponent(gameObject, GpuDecals.GpuDecalsReceiverComponent)
         return
 
 
@@ -209,7 +235,7 @@ class GunInfoAssembler(Assembler):
     def checkSlotMarker(self, slotMarker):
         return slotMarker.slotName in self._SLOTS
 
-    def assemble(self, gameObject, slotMarker):
+    def assemble(self, gameObject, slotMarker, queue):
         appearance = veh_comp.findParentVehicleAppearance(gameObject)
         if appearance is not None:
             if appearance.compoundModel.node(TankPartNames.GUN) is None:
@@ -229,8 +255,13 @@ class GunInfoAssembler(Assembler):
             return
         else:
             gunGo = GenericComponents.findSlot(appearance.gameObject, veh_comp.VehicleSlots.GUN.value)
-            if gunGo.isValid():
-                vehicle_variable_storage.update(gunGo, varName, value)
+            if gunGo.valid:
+                if gunGo.hasComponent(VariableStorageComponent):
+                    vehicle_variable_storage.update(gunGo, varName, value)
+                else:
+                    queue = CGF.CommandQueue(gunGo.spaceID)
+                    vars = [(varName, value)]
+                    queue.createComponent(gunGo, VariableStorageComponent, vars)
             return
 
     @staticmethod
@@ -243,7 +274,7 @@ class CompositionReadinessNotifier(Assembler):
     def checkSlotMarker(self, slotMarker):
         return slotMarker.slotName == GenericComponents.COMPOSITION_ROOT_SLOT_NAME
 
-    def assemble(self, gameObject, slotMarker):
+    def assemble(self, gameObject, slotMarker, queue):
         appearance = veh_comp.findParentVehicleAppearance(gameObject)
         if appearance is not None:
             appearance.setCompositionReady(True)
@@ -252,45 +283,50 @@ class CompositionReadinessNotifier(Assembler):
 
 _AssemblerData = namedtuple('_AssemblerData', ('worldFlags', 'assembler'))
 
-@autoregister(presentInAllWorlds=True, domain=CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor)
-class VehicleAssemblyManager(CGF.ComponentManager):
+class VehicleAssemblySystem(CGF.System):
+    MarkerActivated = CGF.ActivateReaction(CGF.GameObject, CGF.ReactRo(GenericComponents.SlotMarkerComponent))
     _assemblers = (_AssemblerData(ClientWorld.BATTLE | ClientWorld.EDITOR, TurretGunRotationAssembler),
      _AssemblerData(ClientWorld.BATTLE | ClientWorld.EDITOR, RecoilAssembler),
      _AssemblerData(ClientWorld.BATTLE | ClientWorld.EDITOR, MultiGunRecoilAssembler),
-     _AssemblerData(ClientWorld.BATTLE | ClientWorld.EDITOR, SwingingAnimationManager),
      _AssemblerData(ClientWorld.AllWorlds, DecalsAssembler),
      _AssemblerData(ClientWorld.BATTLE | ClientWorld.EDITOR, GunInfoAssembler),
+     _AssemblerData(ClientWorld.BATTLE | ClientWorld.EDITOR, SwingingAnimationManager),
      _AssemblerData(ClientWorld.AllWorlds, CompositionReadinessNotifier))
+    _assemblerReactions = tuple((accessReact for assemblerData in _assemblers for accessReact in assemblerData.assembler.AccessReactions))
+    Reactions = CGF.Reactions(MarkerActivated, *_assemblerReactions)
 
     def __init__(self):
-        super(VehicleAssemblyManager, self).__init__()
+        super(VehicleAssemblySystem, self).__init__()
         clientWorld = getClientWorld()
         if clientWorld != ClientWorld.NONE:
-            self.__assemblers = [ assemblerData.assembler() for assemblerData in VehicleAssemblyManager._assemblers if assemblerData.worldFlags & clientWorld ]
+            self.__assemblers = [ assemblerData.assembler() for assemblerData in VehicleAssemblySystem._assemblers if assemblerData.worldFlags & clientWorld ]
         else:
             _logger.warning("Can't recognize client world")
             self.__assemblers = []
 
-    @onAddedQuery(CGF.GameObject, GenericComponents.SlotMarkerComponent)
-    def onAddedSlotMarker(self, gameObject, slotMarker):
-        for assembler in self.__assemblers:
-            if assembler.checkSlotMarker(slotMarker):
-                assembler.assemble(gameObject, slotMarker)
+    def update(self):
+        queue = CGF.CommandQueue(self.gom)
+        for go, slot in self.reaction(self.MarkerActivated):
+            for assembler in self.__assemblers:
+                if assembler.checkSlotMarker(slot):
+                    accessors = tuple((self.reaction(r) for r in assembler.AccessReactions))
+                    assembler.assemble(go, slot, queue, *accessors)
 
 
-@clientWorldsManager(ClientWorld.HANGAR | ClientWorld.EDITOR)
-class HangarVehicleStateSwitcherManager(CGF.ComponentManager):
+class HangarVehicleStateSwitcherSystem(CGF.System):
+    SwitcherActivated = CGF.ActivateReaction(CGF.GameObject, CGF.ReactRo(GenericComponents.StateSwitcherComponent))
+    Reactions = CGF.Reactions(SwitcherActivated)
 
-    @onAddedQuery(CGF.GameObject, GenericComponents.StateSwitcherComponent)
-    def onAddedVehicleStateSwitcher(self, go, switcher):
-        appearance = veh_comp.findParentVehicleAppearance(go)
-        if not appearance:
-            return
-        if IS_UE_EDITOR:
-            state = appearance.damageState.modelState
-        else:
-            state = appearance.vehicleState
-        if state == ModelStates.UNDAMAGED:
-            switcher.requestState(GenericComponents.StateSwitcherComponent.NORMAL_STATE)
-        elif state in (ModelStates.DESTROYED, ModelStates.EXPLODED):
-            switcher.requestState(GenericComponents.StateSwitcherComponent.DAMAGED_STATE)
+    def update(self):
+        for go, switcher in self.reaction(self.SwitcherActivated):
+            appearance = veh_comp.findParentVehicleAppearance(go)
+            if not appearance:
+                return
+            if IS_UE_EDITOR:
+                state = appearance.damageState.modelState
+            else:
+                state = appearance.vehicleState
+            if state == ModelStates.UNDAMAGED:
+                switcher.requestState(GenericComponents.StateSwitcherComponent.NORMAL_STATE)
+            if state in (ModelStates.DESTROYED, ModelStates.EXPLODED):
+                switcher.requestState(GenericComponents.StateSwitcherComponent.DAMAGED_STATE)

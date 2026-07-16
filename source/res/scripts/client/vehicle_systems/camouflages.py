@@ -9,6 +9,7 @@ import typing
 from backports.functools_lru_cache import lru_cache
 import BigWorld
 import Math
+import CGF
 import Vehicular
 import AnimationSequence
 from emission_params import getEmissionParams
@@ -114,28 +115,29 @@ def prepareFashions(isDamaged):
     return VehiclePartsTuple(*fashions)
 
 
-def updateFashions(appearance):
-    isDamaged = not appearance.isAlive
+def updateFashions(appearance, cgfQueue=None):
+    isDamaged = appearance.isDestroyed
     if isDamaged:
         return
     else:
+        cgfQueue = cgfQueue or CGF.CommandQueue(appearance.spaceID)
         fashions = list(appearance.fashions)
         if not all(fashions):
             _logger.warning('Skipping attempt to create C11nComponent for appearance with a missing fashion.')
-            appearance.c11nComponent = None
+            cgfQueue.removeComponent(appearance.gameObject, Vehicular.C11nComponent)
             return
         if IS_EDITOR:
             setMaterialsVisibility(appearance, appearance.availableMaterials, False)
         vDesc = appearance.typeDescriptor
         outfit = appearance.outfit
         outfitData = getOutfitData(appearance, outfit, vDesc, isDamaged)
-        appearance.c11nComponent = None
+        cgfQueue.removeComponent(appearance.gameObject, Vehicular.C11nComponent)
         if outfit and outfit.style and outfit.style.isProgression:
             changeStyleProgression(style=outfit.style, appearance=appearance, level=outfit.progressionLevel)
         if IS_EDITOR:
             if outfit.style is not None and outfit.style.modelsSet != appearance.currentModelsSet:
                 setMaterialsVisibility(appearance, appearance.availableMaterials, False)
-        appearance.c11nComponent = appearance.createComponent(Vehicular.C11nComponent, fashions, appearance.compoundModel, outfitData)
+        cgfQueue.createComponent(appearance.gameObject, Vehicular.C11nComponent, fashions, appearance.compoundModel, outfitData)
         return
 
 

@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/goodies/Goodies.py
+from __future__ import absolute_import
 import collections
+from future.utils import viewitems, viewvalues
 from typing import TYPE_CHECKING
 from WeakMethod import WeakMethod
 from debug_utils import LOG_WARNING, LOG_DEBUG_DEV
-from goodie_constants import GOODIE_STATE, MAX_ACTIVE_BOOSTERS, ACTION_REASON_ID
+from goodies.goodie_constants import GOODIE_STATE, MAX_ACTIVE_BOOSTERS, ACTION_REASON_ID
 from soft_exception import SoftException
-from GoodieResources import GoodieResource
-from GoodieTargets import GoodieTarget
-from Goodie import decrementExpirationsInOrder, mergeExpirationsInto
+from goodies.GoodieResources import GoodieResource
+from goodies.GoodieTargets import GoodieTarget
+from goodies.Goodie import decrementExpirationsInOrder, mergeExpirationsInto
 if TYPE_CHECKING:
     from goodies.GoodieConditions import GoodieConditionType
     from goodies.GoodieTargets import GoodieTargetType
@@ -75,7 +77,7 @@ class _ActualGoodiesDict(collections.MutableMapping, dict):
         if resourceTuple is None:
             return
         else:
-            resource, value = resourceTuple
+            resource, _ = resourceTuple
             anotherGoodieID = self._resourceIndexDict.get(resource)
             return anotherGoodieID if anotherGoodieID is not None else None
 
@@ -146,9 +148,9 @@ class Goodies(object):
             if not expiredTimestamps:
                 return
             if goodie.isActive():
-                closestExpiration = min(expiredTimestamps.iterkeys())
+                closestExpiration = min(expiredTimestamps)
                 newExpirations[closestExpiration] = 1
-            newCounter = sum(newExpirations.itervalues())
+            newCounter = sum(viewvalues(newExpirations))
             if newCounter == goodie.counter:
                 return
             if newCounter <= 0:
@@ -221,14 +223,14 @@ class Goodies(object):
         return toUpdate
 
     def actual(self):
-        return self.actualGoodies.itervalues()
+        return iter(viewvalues(self.actualGoodies))
 
     def actualIds(self):
-        return set(self.actualGoodies.iterkeys())
+        return set(self.actualGoodies)
 
     def __getBestAvailableGoodie(self, target, resource, applyToZero):
         bestGoodieDef, bestDelta = (None, None)
-        for goodie in self.actualGoodies.itervalues():
+        for goodie in viewvalues(self.actualGoodies):
             goodieDefinition = self.definedGoodies[goodie.uid]
             if goodieDefinition.isActivatable() and not goodie.isActive():
                 continue
@@ -240,7 +242,7 @@ class Goodies(object):
         return (bestGoodieDef, bestDelta)
 
     def getFirstGoodie(self, target, resource):
-        for goodie in self.actualGoodies.itervalues():
+        for goodie in viewvalues(self.actualGoodies):
             goodieDefinition = self.definedGoodies[goodie.uid]
             if goodieDefinition.target == target and goodieDefinition.resource == resource:
                 return goodie
@@ -248,7 +250,7 @@ class Goodies(object):
         return None
 
     def isGoodieEnabled(self, target, resource):
-        for goodieDefinition in self.definedGoodies.itervalues():
+        for goodieDefinition in viewvalues(self.definedGoodies):
             if goodieDefinition.target == target and goodieDefinition.resource == resource:
                 return goodieDefinition.enabled
 
@@ -297,7 +299,7 @@ class Goodies(object):
 
     def evaluate(self, condition):
         result = []
-        for defined in self.definedGoodies.itervalues():
+        for defined in viewvalues(self.definedGoodies):
             if defined.uid in self.actualGoodies:
                 continue
             if defined.condition is not None and defined.condition.check(condition):
@@ -310,7 +312,7 @@ class Goodies(object):
         toWithdraw = []
         toExpire = []
         toErase = []
-        for goodieID, goodie in self.actualGoodies.iteritems():
+        for goodieID, goodie in viewitems(self.actualGoodies):
             defined = self.definedGoodies[goodieID]
             if defined.isTimeLimited() or goodie.isExpirable():
                 if goodie.isActive() and goodie.isEffectFinished():
@@ -331,7 +333,7 @@ class Goodies(object):
 
     def activeGoodiesCount(self):
         result = 0
-        for goodie in self.actualGoodies.itervalues():
+        for goodie in viewvalues(self.actualGoodies):
             if goodie.isActive():
                 result += 1
 
@@ -366,7 +368,7 @@ class Goodies(object):
             return goodie
 
     def deactivateAll(self):
-        active_goodies = [ (goodieID, goodie) for goodieID, goodie in self.actualGoodies.iteritems() if goodie.isActive() ]
+        active_goodies = [ (goodieID, goodie) for goodieID, goodie in viewitems(self.actualGoodies) if goodie.isActive() ]
         for goodieID, goodie in active_goodies:
             defined = self.definedGoodies[goodieID]
             self.__updateActual(defined, newState=GOODIE_STATE.INACTIVE, newFinishTime=None, newCounter=goodie.counter, newExpirations=goodie.expirations, reasonID=ACTION_REASON_ID.DEACTIVATION)
@@ -374,7 +376,7 @@ class Goodies(object):
         return
 
     def activeIds(self):
-        return set(self.__resourceIndex.itervalues())
+        return set(viewvalues(self.__resourceIndex))
 
     def erase(self, goodieID):
         self.__erase(goodieID, ACTION_REASON_ID.EXTERNAL)

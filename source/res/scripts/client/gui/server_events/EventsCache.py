@@ -10,7 +10,7 @@ import customization_quests
 import nations
 import static_quests
 from BWUtil import AsyncReturn
-from Event import Event, EventManager
+from Event import SafeEvent, EventManager
 from PlayerEvents import g_playerEvents
 from constants import EVENT_CLIENT_DATA, EVENT_TYPE
 from debug_utils import LOG_DEBUG
@@ -114,14 +114,14 @@ class EventsCache(IEventsCache):
         self.__questsProgressRequester = QuestsProgressRequester()
         self.__em = EventManager()
         self.__prefetcher = Prefetcher(self)
-        self.onSyncStarted = Event(self.__em)
-        self.onSyncCompleted = Event(self.__em)
-        self.onPMSyncCompleted = Event(self.__em)
-        self.onProgressUpdated = Event(self.__em)
-        self.onMissionVisited = Event(self.__em)
-        self.onEventsVisited = Event(self.__em)
-        self.onProfileVisited = Event(self.__em)
-        self.onPersonalQuestsVisited = Event(self.__em)
+        self.onSyncStarted = SafeEvent(self.__em)
+        self.onSyncCompleted = SafeEvent(self.__em)
+        self.onPMSyncCompleted = SafeEvent(self.__em)
+        self.onProgressUpdated = SafeEvent(self.__em)
+        self.onMissionVisited = SafeEvent(self.__em)
+        self.onEventsVisited = SafeEvent(self.__em)
+        self.onProfileVisited = SafeEvent(self.__em)
+        self.onPersonalQuestsVisited = SafeEvent(self.__em)
         self.__lockedQuestIds = {}
         self.__dailyQuests = None
         self.__weeklyQuests = None

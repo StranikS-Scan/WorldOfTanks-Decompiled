@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/team_health_bar_ctrl.py
+from __future__ import absolute_import, division
 import weakref
+from builtins import range
+from past.utils import old_div
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.view_components import ViewComponentsController
@@ -67,4 +70,4 @@ class TeamHealthBarController(ViewComponentsController):
             enemyPercentage += percentages[i]
 
         for viewCmp in self._viewComponents:
-            viewCmp.updateTeamHealthPercent(allyPercentage, enemyPercentage / (listLength - 1))
+            viewCmp.updateTeamHealthPercent(allyPercentage, old_div(enemyPercentage, listLength - 1))

@@ -90,7 +90,7 @@ class QuestsCardPresenter(ViewComponent[QuestsViewModel]):
             return
 
     def __onClick(self):
-        showRewardPathView()
+        showRewardPathView(openFromQuestCard=True)
 
     def __onMarkAsViewed(self):
         with self.getViewModel().transaction() as tx:

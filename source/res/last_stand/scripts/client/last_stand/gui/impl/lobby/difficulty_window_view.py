@@ -6,12 +6,11 @@ from frameworks.wulf import ViewSettings, WindowFlags
 from gui.impl.backport import BackportTooltipWindow, createTooltipData
 from gui.impl.gen import R
 from gui.impl.lobby.common.tooltips.extended_text_tooltip import ExtendedTextTooltip
-from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from helpers import dependency
 from ids_generators import SequenceIDGenerator
 from last_stand_common.last_stand_constants import DEFAULT_DIFFICULTY_MODIFIER
 from last_stand.gui.impl.gen.view_models.views.lobby.difficulty_window_view_model import DifficultyWindowViewModel
-from last_stand.gui.impl.lobby.base_view import BaseView
+from last_stand.gui.impl.lobby.base_view import BaseView, EventLobbyNotificationWindow
 from last_stand.gui.impl.lobby.ls_helpers import fillRewards
 from last_stand.gui.sounds import playSound
 from last_stand.gui.sounds.sound_constants import DifficultyWindowState, DIFFICULTY_SCREEN
@@ -78,7 +77,7 @@ class DifficultyWindowView(BaseView):
         return [(self.viewModel.onClose, self._onClose), (self.lsCtrl.onSettingsUpdate, self._fillViewModel)]
 
 
-class DifficultyWindow(LobbyNotificationWindow):
+class DifficultyWindow(EventLobbyNotificationWindow):
 
     def __init__(self, layoutID, difficultyLevel, parent=None):
         super(DifficultyWindow, self).__init__(wndFlags=WindowFlags.WINDOW_FULLSCREEN | WindowFlags.WINDOW, content=DifficultyWindowView(layoutID=layoutID, difficultyLevel=difficultyLevel), parent=parent)

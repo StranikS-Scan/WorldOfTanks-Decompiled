@@ -1,8 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: server_side_replay/scripts/client/server_side_replay/gui/impl/lobby/filter/state.py
-from collections import defaultdict, Iterable
+from __future__ import absolute_import
+from collections import defaultdict
+from future.utils import viewitems
+from past.builtins import basestring, unicode
+from py2to3.moves.collections.abc import Iterable
 from Event import Event
-from ...gen.view_models.views.lobby.filter_toggle_group_model import ToggleGroupType
+from server_side_replay.gui.impl.gen.view_models.views.lobby.filter_toggle_group_model import ToggleGroupType
 
 class FilterState(object):
     GROUPS = ToggleGroupType
@@ -60,7 +64,7 @@ class FilterState(object):
         if not self._initialState:
             return
         else:
-            for groupID, value in self._initialState.iteritems():
+            for groupID, value in viewitems(self._initialState):
                 if isinstance(value, Iterable) and not isinstance(value, basestring):
                     for item in value:
                         self._state[groupID].add(item)

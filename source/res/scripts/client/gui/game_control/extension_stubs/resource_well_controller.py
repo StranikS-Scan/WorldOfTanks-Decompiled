@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/extension_stubs/resource_well_controller.py
+from __future__ import absolute_import
 from collections import namedtuple
 from typing import Dict, Optional, Set, TYPE_CHECKING, List
 from Event import EventManager, Event

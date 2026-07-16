@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/battle_hints/component.py
+from __future__ import absolute_import
 import typing
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -12,7 +13,7 @@ _logger = getLogger('Component')
 
 class IBattleHintView(object):
 
-    def showHint(self, hint, data):
+    def showHint(self, model, params):
         pass
 
     def hideHint(self, hint=None):
